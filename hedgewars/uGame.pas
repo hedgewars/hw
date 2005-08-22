@@ -62,10 +62,9 @@ if CurrentTeam.ExtDriven then
    inc(SendEmptyPacketTicks, Lag)
    end;
 
-// если тачка слабая, то Lag с каждым кадром стремится в бесконечность
 if Lag > 100 then Lag:= 100;
 
-for i:= 0 to Lag do
+for i:= 1 to Lag do
     if not CurrentTeam.ExtDriven then
        begin
        with CurrentTeam^ do
