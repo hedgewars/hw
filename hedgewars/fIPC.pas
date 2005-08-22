@@ -90,6 +90,7 @@ SendIPC('WFrontend svn ' + cRevision);
 SendIPC(format('e$sound %d',[SendMessage(HSetSndCheck, BM_GETCHECK, 0, 0)]));
 case GameType of
     gtLocal: begin
+             SendIPC(format('e$gmflags %d',[0]));
              SendIPC('eaddteam');
              ExecCFG(Pathz[ptTeams] + 'unC0Rr.cfg');
              SendIPC('ecolor 65535');

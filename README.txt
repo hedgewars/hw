@@ -5,6 +5,7 @@ Source,
 images in Data/Graphics, 
 sounds in Data/Sounds,
 themes "avematan", "bubbles", "tibet"
+fort "Barrelhouse"
 (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
 
 Fonts  

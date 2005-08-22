@@ -43,6 +43,7 @@ var isCursorVisible : boolean = false;
 
     GameState     : TGameState = gsLandGen;
     GameType      : TGameType = gmtLocal;
+    GameFlags     : Longword = 0;
     TurnTimeLeft  : Longword = 0;
     cHedgehogTurnTime: Longword = 30000;
 

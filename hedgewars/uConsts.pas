@@ -101,6 +101,8 @@ const
 
       cInactDelay = 1500;
 
+      gfForts = $00000001;
+
       gstDrowning       = $00000001;
       gstHHDriven       = $00000002;
       gstMoving         = $00000004;
