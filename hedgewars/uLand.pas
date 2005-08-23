@@ -47,7 +47,7 @@ procedure GetHHPoint(out _x, _y: integer);
 procedure RandomizeHHPoints;
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO;
 
 type TPixAr = record
               Count: Longword;
@@ -442,14 +442,15 @@ with PixelFormat^ do
 tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'L.png');
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
+LoadFortPoints(p.FortName, false, TeamSize(p));
 p:= p.Next;
 TryDo(p <> nil, 'Only one team on map!', true);
 tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'R.png');
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
+LoadFortPoints(p.FortName, true, TeamSize(p));
 p:= p.Next;
 TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
-AddHHPoints
 end;
 
 procedure AddHHPoint(_x, _y: integer);

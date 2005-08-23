@@ -44,9 +44,10 @@ procedure IPCCheckSock;
 procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
+procedure LoadFortPoints(Fort: shortstring; isRight: boolean; Count: Longword);
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc;
+uses uConsole, uConsts, uWorld, uMisc, uRandom, uLand;
 const isPonged: boolean = false;
 var  IPCSock: PTCPSocket;
      fds: PSDLNet_SocketSet;
@@ -203,6 +204,46 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
    inc(cmdcurpos)
    end;
 isInLag:= (cmdcurpos > cmdendpos) and tmpflag
+end;
+
+procedure LoadFortPoints(Fort: shortstring; isRight: boolean; Count: Longword);
+const cMAXFORTPOINTS = 20;
+var f: textfile;
+    i, t: integer;
+    cnt: Longword;
+    ar: array[0..Pred(cMAXFORTPOINTS)] of TPoint;
+    p: TPoint;
+begin
+if isRight then Fort:= Pathz[ptForts] + Fort + 'R.txt'
+           else Fort:= Pathz[ptForts] + Fort + 'L.txt';
+WriteToConsole(msgLoading + Fort + ' ');
+{$I-}
+AssignFile(f, Fort);
+Reset(f);
+cnt:= 0;
+while not (eof(f) or (cnt = cMAXFORTPOINTS)) do
+      begin
+      Readln(f, ar[cnt].x, ar[cnt].y);
+      if isRight then inc(ar[cnt].x, 1024);
+      inc(cnt);
+      end;
+Closefile(f);
+{$I+}
+TryDo(IOResult = 0, msgFailed, true);
+WriteLnToConsole(msgOK);
+TryDo(Count < cnt, 'Fort doesn''t contain needed spawn points', true);
+for i:= 0 to Pred(cnt) do
+    begin
+    t:= GetRandom(cnt);
+    if i <> t then
+       begin
+       p:= ar[i];
+       ar[i]:= ar[t];
+       ar[t]:= p
+       end
+    end;
+for i:= 0 to Pred(Count) do
+    AddHHPoint(ar[i].x, ar[i].y);
 end;
 
 end.

@@ -74,6 +74,7 @@ procedure ApplyAmmoChanges(Hedgehog: PHedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
+function  TeamSize(p: PTeam): Longword;
 
 implementation
 uses uMisc, uStore, uWorld, uIO, uAIActions;
@@ -257,6 +258,14 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
              if Count = 0 then PackAmmo(Ammo, CurSlot)
              end
      end
+end;
+
+function  TeamSize(p: PTeam): Longword;
+var i: Longword;
+begin
+Result:= 0;
+for i:= 0 to cMaxHHIndex do
+    if p.Hedgehogs[i].Gear <> nil then inc(Result)
 end;
 
 initialization

@@ -564,7 +564,7 @@ begin
 if Step = 0 then
    begin
    WriteToConsole(msgLoading + 'progress sprite... ');
-   ProgrSurf:= IMG_Load(PChar(string('Data\Graphics\BigDigits.png')));
+   ProgrSurf:= IMG_Load(PChar(string('Data/Graphics/BigDigits.png')));
    SDLTry(ProgrSurf <> nil, true);
    WriteLnToConsole(msgOK)
    end;

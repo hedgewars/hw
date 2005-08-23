@@ -47,6 +47,7 @@ end;
 procedure SendConfig;
 begin
 Send('TL');
+Send('e$gmflags 1');
 Send('eaddteam');
 Send('ename team "C0CuCKAzZz"');
 Send('ename hh0 "Éîæûê"');
@@ -82,6 +83,7 @@ Send('ebind 4 "timer 4"');
 Send('ebind 5 "timer 5"');
 Send('ebind mousel "put"');
 Send('egrave "coffin"');
+Send('efort "Barrelhouse"');
 Send('ecolor 65535');
 Send('eadd hh0 0');
 Send('eadd hh1 0');
@@ -103,6 +105,7 @@ Send('eadd hh0 1');
 Send('eadd hh1 1');
 Send('eadd hh2 1');
 Send('eadd hh3 1');
+Send('efort Barrelhouse');
 end;
 
 procedure ParseCmd(s: shortstring);
@@ -119,8 +122,9 @@ var s: shortstring;
     i: integer;
 begin
 i:= SDLNet_TCP_Recv(clsock, @s[1], 255);
-if i = -2  then
+if i <= 0  then
    begin
+   if i = -1 then exit;
    SDLNet_TCP_Close(clsock);
    clsock:= nil;
    ss:= '';
@@ -149,6 +153,7 @@ repeat
   if clsock <> nil then
      DoIt;
   SDL_PollEvent(@event);
+  SDL_Delay(1)
 until event.type_ = SDL_QUITEV;
 SDLNet_Quit;
 SDL_Quit
