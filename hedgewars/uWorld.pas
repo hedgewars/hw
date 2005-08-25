@@ -78,7 +78,7 @@ var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
 begin
-// синее небо
+// Sky
 inc(RealTicks, Lag);
 r.h:= WorldDy;
 if r.h > 0 then
@@ -89,22 +89,21 @@ if r.h > 0 then
    r.w:= cScreenWidth;
    SDL_FillRect(Surface, @r, cSkyColor)
    end;
-// задний фон
+// background
 for i:= 0 to (cScreenWidth shr 6) do
     DrawGear(sSky, i*64, WorldDy, Surface);
 
-for i:= -1 to 3 do // горизонт
+for i:= -1 to 3 do
     DrawGear(sHorizont, i * 512 + (((WorldDx * 3) div 5) and $1FF), cWaterLine - 256 + WorldDy, Surface);
 
-// волны
+// Waves
 {$WARNINGS OFF}
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 40, (((GameTicks shr 7) + 2) mod 12), Surface);
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 30, (((GameTicks shr 7) + 8) mod 12), Surface);
 {$WARNINGS ON}
 
-// поле
 DrawLand(WorldDx, WorldDy, Surface);
-// вода
+// Water
 r.y:= WorldDy + cWaterLine + 32;
 if r.y < cScreenHeight then
    begin
@@ -123,7 +122,7 @@ while team<>nil do
           with team.Hedgehogs[i] do
                if Gear<>nil then
                   if Gear.State = 0 then
-                     begin // Єжик не находитс€ под управлением
+                     begin
                      DrawCaption( round(Gear.X) + WorldDx,
                                   round(Gear.Y) - cHHHalfHeight - 30 + WorldDy,
                                   HealthRect, Surface, true);
@@ -133,9 +132,9 @@ while team<>nil do
 //                     DrawCaption( round(Gear.X) + WorldDx,
 //                                  round(Gear.Y) - Gear.HalfHeight - 60 + WorldDy,
 //                                  Team.NameRect, Surface);
-                     end else // Єжик, которым счас управл€ем
+                     end else // Current hedgehog
                      begin
-                     if (Gear.State and (gstMoving or gstAttacked or gstDrowning or gstFalling))=0 then // рисуем прицел и, если бот думает, знак вопроса
+                     if (Gear.State and (gstMoving or gstAttacked or gstDrowning or gstFalling))=0 then
                         if (Gear.State and gstHHThinking) <> 0 then
                            DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHHalfHeight - 34 + WorldDy, Surface)
                         else
@@ -146,7 +145,7 @@ while team<>nil do
       team:= team.Next
       end;
 
-// волны
+// Waves
 {$WARNINGS OFF}
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 20, (((GameTicks shr 7) + 4 ) mod 12), Surface);
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 10, (((GameTicks shr 7) + 10) mod 12), Surface);
@@ -179,7 +178,7 @@ if CurrentTeam <> nil then
            end;
         end;
 
-// ”казатель на цель
+// Target
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
 
 // Captions
@@ -197,10 +196,36 @@ while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
     Captions[Pred(cMaxCaptions)].EndTime:= 0
     end;
 
-// ”казание на лаг
+// Lag alert
 if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 7, Surface);
 
-//  урсор
+// Wind bar
+DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
+if cWindSpeed > 0 then
+   begin
+   t:= round(72 * cWindSpeed / cMaxWindSpeed);
+   with StuffPoz[sWindR] do
+        begin
+        r.x:= x + 8 - (RealTicks shr 6) mod 8;
+        r.y:= y;
+        r.w:= t;
+        r.h:= 13;
+        end;
+   DrawSpriteFromRect(r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
+   end else
+   begin
+   t:= - round(72 * cWindSpeed / cMaxWindSpeed);
+   with StuffPoz[sWindL] do
+        begin
+        r.x:= x + (RealTicks shr 6) mod 8;
+        r.y:= y;
+        r.w:= t;
+        r.h:= 13;
+        end;
+   DrawSpriteFromRect(r, cScreenWidth - 106 - t, cScreenHeight - 28, 13, 0, Surface);
+   end;
+
+// Cursor
 if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface);
 
 {$IFDEF COUNTTICKS}

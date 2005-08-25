@@ -35,7 +35,8 @@ unit uConsts;
 interface
 uses SDLh;
 {$INCLUDE options.inc}
-type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion);
+type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
+                   sWindL, sWindR);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
      TGameType  = (gmtLocal, gmtDemo, gmtNet);
      TPathType  = (ptData, ptGraphics, ptThemes, ptThemeCurrent, ptTeams, ptMaps,
@@ -186,14 +187,20 @@ const
                                      (FileName:      'Sky.png'; Path: ptThemeCurrent ),    // sSky
                                      (FileName:  'Console.png'; Path: ptGraphics     ),    // sConsoleBG
                                      (FileName: 'PowerBar.png'; Path: ptGraphics     ),    // sPowerBar
-                                     (FileName: 'thinking.png'; Path: ptGraphics     )     // sQuestion
+                                     (FileName: 'thinking.png'; Path: ptGraphics     ),    // sQuestion
+                                     (FileName:  'WindBar.png'; Path: ptGraphics     ),    // sWindBar
+                                     (FileName:    'WindL.png'; Path: ptGraphics     ),    // sWindL
+                                     (FileName:    'WindR.png'; Path: ptGraphics     )     // sWindR
                                      );
       StuffPoz: array[TStuff] of TSDL_Rect = (
                                       (x:   0; y:   0; w: 512; h: 256), // sHorizont
                                       (x: 512; y:   0; w:  64; h:1024), // sSky
                                       (x: 256; y: 256; w: 256; h: 256), // sConsoleBG
                                       (x: 256; y: 768; w: 256; h:  32), // sPowerBar
-                                      (x: 256; y: 512; w:  32; h:  32)  // sQuestion
+                                      (x: 256; y: 512; w:  32; h:  32), // sQuestion
+                                      (x: 256; y: 800; w: 151; h:  17), // sWindBar
+                                      (x: 256; y: 817; w:  80; h:  13), // sWindL
+                                      (x: 336; y: 817; w:  80; h:  13)  // sWindR
                                       );
       SpritesData: array[TSprite] of record
                                          FileName: String[31];

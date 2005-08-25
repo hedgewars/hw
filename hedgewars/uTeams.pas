@@ -48,7 +48,7 @@ type PHedgehog = ^THedgehog;
                  Team: PTeam;
                  AttacksNum: Longword;
                  visStepPos: LongWord;
-                 BotLevel  : LongWord; // 0 - человек
+                 BotLevel  : LongWord; // 0 - Human player
                  end;
      THHAmmo   = array[0..cMaxSlot, 0..cMaxSlotAmmo] of TAmmo;
      TTeam = record
