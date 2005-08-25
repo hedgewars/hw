@@ -42,7 +42,9 @@ if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    begin
    if ((Gear.State and (gstMoving or gstFalling)) = 0)
       and (CurAmmoGear = nil) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
-   {$WARNINGS OFF}Gear.State:= Gear.State and not gstHHDriven;{$WARNINGS ON}
+   Gear.State:= Gear.State and not gstHHDriven;
+   if Gear.Damage > 0 then
+      Gear.State:= Gear.State and not gstHHJumping;
    exit
    end;
 
@@ -76,13 +78,15 @@ if (Gear.Message and gm_Attack)<>0 then
 
 if (Gear.State and gstFalling) <> 0 then
    begin
+   // it could be the source to trick: double-backspace jump -> vertical wall
+   // collision - > (abs(Gear.dX) < 0.0000002) -> backspace -> even more high jump
    if ((Gear.Message and gm_HJump) <> 0) and ((Gear.State and gstHHJumping) <> 0) then
       if (abs(Gear.dX) < 0.0000002) and (Gear.dY < -0.02) then
          begin
          Gear.dY:= -0.25;
          Gear.dX:= Sign(Gear.dX) * 0.02
          end;
-   Gear.Message:= Gear.Message and not (gm_LJump or gm_HJump);
+   Gear.Message:= Gear.Message and not (gm_LJump or gm_HJump);     
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
    Gear.X:= Gear.X + Gear.dX;
    Gear.dY:= Gear.dY + cGravity;
@@ -203,8 +207,10 @@ if not HHTestCollisionYwithGear(Gear, 1) then
    Gear.dY:= Gear.dY + cGravity
    end else begin
    CheckHHDamage(Gear);
+   if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
+      and ((Gear.State and gstHHJumping) <> 0) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
+   Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
    if Gear.dY > 0    then Gear.dY:= 0;
-   Gear.State:= Gear.State and not gstFalling;
    if ((Gear.State and gstMoving) <> 0) then Gear.dX:= Gear.dX * Gear.Friction
    end;
 
@@ -251,7 +257,7 @@ if (Gear.State and gstMoving) <> 0 then
          DeleteGear(Gear);
          SetAllToActive
          end;
-      AllInactive:= false;  (* почему этого тут не было? *)
+      AllInactive:= false;  
       exit
       end;
 
