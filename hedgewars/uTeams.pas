@@ -122,6 +122,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      end;
 ResetKbd;
 cWindSpeed:= (GetRandom * 2 - 1) * cMaxWindSpeed;
+AddGear(0, 0, gtActionTimer, gtsSmoothWindCh).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(@CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
 TurnTimeLeft:= cHedgehogTurnTime

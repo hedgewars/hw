@@ -267,13 +267,22 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepActionTimer(Gear: PGear);
 begin
-dec(Gear.Timer);
 case Gear.State of
      gtsStartGame: begin
+                   dec(Gear.Timer);
                    AllInactive:= false;
                    if Gear.Timer > 0 then exit;
                    AddCaption('Let''s fight!', $FFFFFF, capgrpStartGame);
                    DeleteGear(Gear)
+                   end;
+  gtsSmoothWindCh: begin
+                   if Gear.Timer = 0 then
+                      begin
+                      Gear.Timer:= 10;
+                      if WindBarWidth < Gear.Tag then inc(WindBarWidth)
+                         else if WindBarWidth > Gear.Tag then dec(WindBarWidth)
+                         else DeleteGear(Gear)
+                      end else dec(Gear.Timer)
                    end;
      end;
 end;

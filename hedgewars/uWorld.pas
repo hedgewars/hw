@@ -48,6 +48,7 @@ procedure AdjustMPoint;
 var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
+    WindBarWidth: integer = 0;
 
 implementation
 uses uStore, uMisc, uConsts, uTeams, uIO;
@@ -201,28 +202,31 @@ if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod
 
 // Wind bar
 DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
-if cWindSpeed > 0 then
+if WindBarWidth > 0 then
    begin
-   t:= round(72 * cWindSpeed / cMaxWindSpeed);
    with StuffPoz[sWindR] do
         begin
+        {$WARNINGS OFF}
         r.x:= x + 8 - (RealTicks shr 6) mod 8;
+        {$WARNINGS ON}
         r.y:= y;
-        r.w:= t;
+        r.w:= WindBarWidth;
         r.h:= 13;
         end;
    DrawSpriteFromRect(r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
    end else
+ if WindBarWidth < 0 then
    begin
-   t:= - round(72 * cWindSpeed / cMaxWindSpeed);
    with StuffPoz[sWindL] do
         begin
-        r.x:= x + (RealTicks shr 6) mod 8;
+        {$WARNINGS OFF}
+        r.x:= x + (WindBarWidth + RealTicks shr 6) mod 8;
+        {$WARNINGS ON}
         r.y:= y;
-        r.w:= t;
+        r.w:= - WindBarWidth;
         r.h:= 13;
         end;
-   DrawSpriteFromRect(r, cScreenWidth - 106 - t, cScreenHeight - 28, 13, 0, Surface);
+   DrawSpriteFromRect(r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
    end;
 
 // Cursor

@@ -118,6 +118,7 @@ const
       gstHHThinking     = $00000800;
 
       gtsStartGame      = 1;
+      gtsSmoothWindCh   = 2;
 
       gm_Left   = $00000001;
       gm_Right  = $00000002;

@@ -59,7 +59,7 @@ type PGear = ^TGear;
              Hedgehog: pointer;
              Health, Damage: LongWord;
              CollIndex: Longword;
-             Tag: Longword;
+             Tag: integer;
              end;
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
