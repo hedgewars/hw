@@ -337,7 +337,7 @@ var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: integer;
     r, rr: TSDL_Rect;
 
-    function CountZeroz(x, y: integer): Longword;
+    function CountNonZeroz(x, y: integer): Longword;
     var i: integer;
     begin
     Result:= 0;
@@ -351,19 +351,19 @@ repeat
   inc(y, 24);
   x1:= 1024;
   x2:= 1024;
-  while (x1 > 100) and (CountZeroz(x1, y) = 0) do dec(x1, 2);
+  while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
   i:= x1 - 12;
   repeat
-    k:= CountZeroz(x1, y);
+    k:= CountNonZeroz(x1, y);
     dec(x1, 2)
   until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
   inc(x1, 2);
   if k = 16 then
      begin
-     while (x2 < 1900) and (CountZeroz(x2, y) = 0) do inc(x2, 2);
+     while (x2 < 1900) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
      i:= x2 + 12;
      repeat
-       k:= CountZeroz(x2, y);
+       k:= CountNonZeroz(x2, y);
        inc(x2, 2)
      until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
      if (x2 < 1900) and (k = 16) and (x2 - x1 > 250) then break;
@@ -392,17 +392,35 @@ if x1 > 0 then
 end;
 
 procedure AddHHPoints;
-var i, x, y: integer;
+var i, x, y, t: integer;
+
+    function CountNonZeroz(x, y: integer): integer;
+    var i: integer;
+    begin
+    Result:= 0;
+    if (y and $FFFFFC00) <> 0 then exit;
+    for i:= max(x - 6, 0) to min(x + 6, 2043) do
+        if Land[y, i] <> 0 then inc(Result)
+    end;
+
 begin
 for i:= 0 to 9 do
     begin
-    y:= 0;
+    y:= -24;
     x:= i * 160 + 300;
-    repeat
-    inc(y, 2);
-    until (y > 1023) or (Land[y, x - 6] <> 0) or (Land[y, x - 3] <> 0) or (Land[y, x] <> 0)
-                     or (Land[y, x + 3] <> 0) or (Land[y, x + 6] <> 0);
-    AddHHPoint(x, y - 12)
+    while y < 1023 do
+          begin
+          repeat
+          inc(y, 2);
+          until (y > 1023) or (CountNonZeroz(x, y) = 0);
+          t:= 0;
+          repeat
+          inc(y, 2);
+          inc(t, 2)
+          until (y > 1023) or (CountNonZeroz(x, y) <> 0);
+          if (t > 22) and (y < 1023) then AddHHPoint(x, y - 12);
+          inc(y, 100)
+          end;
     end;
 end;
 
