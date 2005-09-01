@@ -551,9 +551,21 @@ inc(Gear.Timer);
 if Gear.Timer > 64 then
    begin
    Gear.Timer:= 0;
-   dec(Gear.Tag)
+   dec(Gear.State)
    end;
 Gear.dX:= Gear.dX + cWindSpeed;
 Gear.X:= Gear.X + Gear.dX;
-if Gear.Tag = 0 then DeleteGear(Gear)
+if Gear.State = 0 then DeleteGear(Gear)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepExplosion(Gear: PGear);
+begin
+inc(Gear.Timer);
+if Gear.Timer > 75 then
+   begin
+   inc(Gear.State);
+   Gear.Timer:= 0;
+   if Gear.State > 5 then DeleteGear(Gear)
+   end;
 end;

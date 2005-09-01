@@ -104,7 +104,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepActionTimer,
                                                                doStepPickHammer,
                                                                doStepRope,
-                                                               doStepSmokeTrace
+                                                               doStepSmokeTrace,
+                                                               doStepExplosion
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -170,13 +171,19 @@ gtAmmo_Grenade: begin
                 Result.Timer:= 4000
                 end;
   gtSmokeTrace: begin
-                Result.Tag:= 8
+                Result.X:= Result.X - 16;
+                Result.Y:= Result.Y - 16;
+                Result.State:= 8
                 end;
         gtRope: begin
                 Result.HalfWidth:= 3;
                 Result.HalfHeight:= 3;
                 Result.Friction:= 500;
                 RopePoints.Count:= 0;
+                end;
+   gtExplosion: begin
+                Result.X:= Result.X - 25;
+                Result.Y:= Result.Y - 25;
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -406,7 +413,7 @@ while Gear<>nil do
        gtHealthTag: DrawCaption(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, PHedgehog(Gear.Hedgehog).HealthTagRect, Surface, true);
            gtGrave: DrawSpriteFromRect(PHedgehog(Gear.Hedgehog).Team.GraveRect, Round(Gear.X) + WorldDx - 16, Round(Gear.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
              gtUFO: DrawSprite(sprUFO, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
-      gtSmokeTrace: if Gear.Tag < 8 then DrawSprite(sprSmokeTrace, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, Gear.Tag, Surface);
+      gtSmokeTrace: if Gear.State < 8 then DrawSprite(sprSmokeTrace, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
             gtRope: begin
                     DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
                                  Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
@@ -425,6 +432,7 @@ while Gear<>nil do
                        end else
                        DrawSprite(sprRopeHook, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
                     end;
+       gtExplosion: DrawSprite(sprExplosion50, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
               end;
       Gear:= Gear.NextGear
       end;
@@ -459,6 +467,7 @@ begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 DrawExplosion(X, Y, Radius);
+if Radius = 50 then AddGear(X, Y, gtExplosion, 0);
 if (Mask and EXPLAutoSound)<>0 then PlaySound(sndExplosion);
 if (Mask and EXPLNoDamage)<>0 then exit;
 if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;

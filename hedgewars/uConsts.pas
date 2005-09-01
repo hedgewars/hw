@@ -43,10 +43,10 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts);
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
-                   sprSmokeTrace, sprRopeHook);
+                   sprSmokeTrace, sprRopeHook, sprExplosion50);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
-                   gtSmokeTrace);
+                   gtSmokeTrace, gtExplosion);
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope);
@@ -220,7 +220,8 @@ const
                                          (FileName:   'Targetp.png'; Path: ptGraphics; Width:  32; Height: 32),// sprTargetP
                                          (FileName:       'UFO.png'; Path: ptGraphics; Width:  32; Height: 32),// sprUFO
                                          (FileName:'SmokeTrace.png'; Path: ptGraphics; Width:  32; Height: 32),// sprSmokeTrace
-                                         (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32) // sprRopeHook
+                                         (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32),// sprRopeHook
+                                         (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64) // sprExplosion50
                                          );
       Soundz: array[TSound] of record
                                        FileName: String[31];
