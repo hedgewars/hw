@@ -68,6 +68,9 @@ const AmmoTests: array[TAmmoType] of
                     ),
                     ( Test: nil;
                       Flags: 0;
+                    ),
+                    ( Test: nil;
+                      Flags: 0;
                     )
                     );
 

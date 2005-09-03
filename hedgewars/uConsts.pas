@@ -43,13 +43,15 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts);
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
-                   sprSmokeTrace, sprRopeHook, sprExplosion50);
+                   sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
+                   sprMineOn);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
-                   gtSmokeTrace, gtExplosion);
+                   gtSmokeTrace, gtExplosion, gtMine);
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact);
-     TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope);
+     TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
+                   amMine);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
                   Handle: PTTF_Font;
@@ -130,8 +132,8 @@ const
       gm_HJump  = $00000080;
       gm_Destroy= $00000100;
 
-      cMaxSlot            = 4;
-      cMaxSlotAmmo        = 1;
+      cMaxSlotIndex       = 6;
+      cMaxSlotAmmoIndex   = 1;
 
       ammoprop_Timerable    = $00000001;
       ammoprop_Power        = $00000002;
@@ -221,7 +223,9 @@ const
                                          (FileName:       'UFO.png'; Path: ptGraphics; Width:  32; Height: 32),// sprUFO
                                          (FileName:'SmokeTrace.png'; Path: ptGraphics; Width:  32; Height: 32),// sprSmokeTrace
                                          (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32),// sprRopeHook
-                                         (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64) // sprExplosion50
+                                         (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64),// sprExplosion50
+                                         (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16),// sprMineOff
+                                         (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16) // sprMineOn
                                          );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -250,7 +254,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 3000;
                                           AmmoType: amGrenade);
-                                   Slot: 0;
+                                   Slot: 1;
                                    TimeAfterTurn: 3000),
                                   (Name: 'Bazooka';
                                    Ammo: (Propz: ammoprop_Power;
@@ -258,7 +262,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amBazooka);
-                                   Slot: 1;
+                                   Slot: 0;
                                    TimeAfterTurn: 3000),
                                   (Name: 'UFO';
                                    Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget;
@@ -282,7 +286,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amPickHammer);
-                                   Slot: 3;
+                                   Slot: 4;
                                    TimeAfterTurn: 0),
                                   (Name: 'Skip turn';
                                    Ammo: (Propz: 0;
@@ -290,7 +294,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amSkip);
-                                   Slot: 4;
+                                   Slot: 6;
                                    TimeAfterTurn: 0),
                                   (Name: 'Rope';
                                    Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
@@ -298,8 +302,16 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amRope);
+                                   Slot: 5;
+                                   TimeAfterTurn: 0),
+                                  (Name: 'Mine';
+                                   Ammo: (Propz: 0;
+                                          Count: 5;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          AmmoType: amMine);
                                    Slot: 3;
-                                   TimeAfterTurn: 0)
+                                   TimeAfterTurn: 3000)
                                   );
                                   
       Resolutions: array[0..3] of String = (

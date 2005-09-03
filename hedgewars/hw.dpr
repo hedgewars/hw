@@ -76,6 +76,7 @@ case GameState of
               end;
      gsStart: begin
               AssignHHCoords;
+              AddMiscGears;
               AdjustColor(cColorNearBlack);
               AdjustColor(cWhiteColor);
               StoreLoad;
@@ -195,7 +196,6 @@ WriteLnToConsole('HedgeWars 0.1, svn '+cRevision);
 WriteLnToConsole('  -= by unC0Rr =-  ');
 GetParams;
 Randomize;
-InitGears;
 
 WriteToConsole('Init SDL... ');
 SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);

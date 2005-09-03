@@ -50,7 +50,7 @@ type PHedgehog = ^THedgehog;
                  visStepPos: LongWord;
                  BotLevel  : LongWord; // 0 - Human player
                  end;
-     THHAmmo   = array[0..cMaxSlot, 0..cMaxSlotAmmo] of TAmmo;
+     THHAmmo   = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
      TTeam = record
              Next: PTeam;
              Color: Cardinal;
@@ -168,6 +168,19 @@ while tt<>nil do
       end;
 end;
 
+procedure FillAmmoGroup(Ammo: PHHAmmo);
+var mi: array[0..cMaxSlotIndex] of byte;
+    a: TAmmoType;
+begin
+FillChar(mi, sizeof(mi), 0);
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    begin
+    TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
+    Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
+    inc(mi[Ammoz[a].Slot])
+    end;
+end;
+
 procedure InitTeams;
 var p: PTeam;
     i: integer;
@@ -175,20 +188,13 @@ begin
 p:= TeamsList;
 while p <> nil do
       begin
+      FillAmmoGroup(@p.Ammos[0]);
       for i:= 0 to cMaxHHIndex do
           if p.Hedgehogs[i].Gear <> nil then
              begin
-             p.Ammos[i][0, 0]:= Ammoz[amGrenade].Ammo;
-             p.Ammos[i][0, 1]:= Ammoz[amUFO].Ammo;
-             p.Ammos[i][1, 0]:= Ammoz[amBazooka].Ammo;
-             p.Ammos[i][2, 0]:= Ammoz[amShotgun].Ammo;
-             p.Ammos[i][3, 0]:= Ammoz[amPickHammer].Ammo;
-             p.Ammos[i][3, 1]:= Ammoz[amRope].Ammo;
-             p.Ammos[i][4, 0]:= Ammoz[amSkip].Ammo;
              p.Hedgehogs[i].Gear.Health:= 100;
-             p.Hedgehogs[i].Ammo:= @p.Ammos[0]
-             {0 - общее на всех оружие, i - у каждого своё
-             можно группировать ёжиков, чтобы у каждой группы было своё оружие}
+             p.Hedgehogs[i].Ammo:= @p.Ammos[0] // 0 means all hedgehogs
+             // will have common set of ammo
              end;
       p:= p.Next
       end;
@@ -203,7 +209,7 @@ with Hedgehog^ do
      if Ammo[CurSlot, CurAmmo].Count = 0 then
         begin
         CurAmmo:= 0;
-        while (CurAmmo <= cMaxSlotAmmo) and (Ammo[CurSlot, CurAmmo].Count = 0) do inc(CurAmmo)
+        while (CurAmmo <= cMaxSlotAmmoIndex) and (Ammo[CurSlot, CurAmmo].Count = 0) do inc(CurAmmo)
         end;
 
 with Ammo[CurSlot, CurAmmo] do
@@ -234,7 +240,7 @@ begin
     repeat
       b:= false;
       ami:= 0;
-      while (not b) and (ami < cMaxSlotAmmo) do
+      while (not b) and (ami < cMaxSlotAmmoIndex) do
           if (Ammo[slot, ami].Count = 0)
              and (Ammo[slot, ami + 1].Count > 0) then b:= true
                                                  else inc(ami);

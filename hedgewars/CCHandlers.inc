@@ -261,6 +261,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
                          amSkip: TurnTimeLeft:= 0;
                    amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
+                         amMine: AddGear(round(X) + Sign(dX) + 7, round(Y), gtMine, 0, Sign(dX) * 0.01);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
@@ -320,7 +321,7 @@ var slot: LongWord;
 begin
 if (s[0] <> #1) or (CurrentTeam = nil) then exit;
 slot:= byte(s[1]) - 49;
-if slot > cMaxSlot then exit;
+if slot > cMaxSlotIndex then exit;
 if not CurrentTeam.ExtDriven then SendIPC(char(byte(s[1]) + 79));
 with CurrentTeam^ do
      begin
@@ -333,7 +334,7 @@ with CurrentTeam^ do
           if caSlot^ = slot then
              begin
              inc(caAmmo^);
-             if (caAmmo^ > cMaxSlotAmmo) or (Ammo[slot, caAmmo^].Count = 0) then caAmmo^:= 0
+             if (caAmmo^ > cMaxSlotAmmoIndex) or (Ammo[slot, caAmmo^].Count = 0) then caAmmo^:= 0
              end else
              if Ammo[slot, 0].Count > 0 then
                 begin

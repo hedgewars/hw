@@ -569,3 +569,28 @@ if Gear.Timer > 75 then
    if Gear.State > 5 then DeleteGear(Gear)
    end;
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepMine(Gear: PGear);
+begin
+if (Gear.dX <> 0) or (Gear.dY <> 0) then
+   begin
+   doStepFallingGear(Gear);
+   AllInactive:= false
+   end;
+CalcRotationDirAngle(Gear);
+if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
+if ((Gear.State and gsttmpFlag) <> 0) then
+   if ((Gear.State and gstAttacking) = 0) then
+      if isGearNear(Gear, gtHedgehog, 42, 25) then Gear.State:= Gear.State or gstAttacking else
+      else // gstAttacking <> 0
+      begin
+      AllInactive:= false;
+      dec(Gear.Timer);
+      if Gear.Timer = 0 then
+         begin
+         doMakeExplosion(round(Gear.X), round(Gear.Y), 50, 0);
+         DeleteGear(Gear)
+         end;
+      end;
+end;

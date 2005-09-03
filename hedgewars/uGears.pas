@@ -68,7 +68,7 @@ procedure SetAllToActive;
 procedure SetAllHHToActive;
 procedure DrawGears(Surface: PSDL_Surface);
 procedure FreeGearsList;
-procedure InitGears;
+procedure AddMiscGears;
 procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
@@ -88,6 +88,7 @@ var GearsList: PGear = nil;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
+function  isGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): boolean; forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -105,7 +106,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepPickHammer,
                                                                doStepRope,
                                                                doStepSmokeTrace,
-                                                               doStepExplosion
+                                                               doStepExplosion,
+                                                               doStepMine
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -184,6 +186,13 @@ gtAmmo_Grenade: begin
    gtExplosion: begin
                 Result.X:= Result.X - 25;
                 Result.Y:= Result.Y - 25;
+                end;
+        gtMine: begin
+                Result.HalfWidth:= 3;
+                Result.HalfHeight:= 3;
+                Result.Elasticity:= 0.55;
+                Result.Friction:= 0.995;
+                Result.Timer:= 3000;
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -433,6 +442,9 @@ while Gear<>nil do
                        DrawSprite(sprRopeHook, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
                     end;
        gtExplosion: DrawSprite(sprExplosion50, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
+            gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
+                       then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
+                       else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
               end;
       Gear:= Gear.NextGear
       end;
@@ -453,11 +465,16 @@ while tt<>nil do
       end;
 end;
 
-procedure InitGears;
-var i: integer;
+procedure AddMiscGears;
+var i, x, y: integer;
 begin
 for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
+for i:= 0 to 3 do
+    begin
+    GetHHPoint(x, y);
+    AddGear(X, Y + 9, gtMine, 0);
+    end;
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);
@@ -479,7 +496,8 @@ while Gear <> nil do
          begin
          dmg:= dmg shr 1;
          case Gear.Kind of
-              gtHedgehog: begin
+              gtHedgehog,
+                  gtMine: begin
                           inc(Gear.Damage, dmg);
                           Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
                           Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
@@ -507,6 +525,25 @@ while Gear <> nil do
          end;
       Gear:= Gear.NextGear
       end
+end;
+
+function isGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): boolean;
+var t: PGear;
+begin
+t:= GearsList;
+rX:= sqr(rX);
+rY:= sqr(rY);
+while t <> nil do
+      begin
+      if (t <> Gear) and (t.Kind = Kind) then
+         if sqr(Gear.X - t.X) / rX + sqr(Gear.Y - t.Y) / rY <= 1 then
+            begin
+            Result:= true;
+            exit
+            end;
+      t:= t.NextGear
+      end;
+Result:= false
 end;
 
 initialization

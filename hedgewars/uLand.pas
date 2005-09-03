@@ -392,7 +392,7 @@ if x1 > 0 then
 end;
 
 procedure AddHHPoints;
-var i, x, y, t: integer;
+var x, y, t: integer;
 
     function CountNonZeroz(x, y: integer): integer;
     var i: integer;
@@ -404,10 +404,10 @@ var i, x, y, t: integer;
     end;
 
 begin
-for i:= 0 to 9 do
+x:= 40;
+while x < 2010 do
     begin
     y:= -24;
-    x:= i * 160 + 300;
     while y < 1023 do
           begin
           repeat
@@ -421,6 +421,7 @@ for i:= 0 to 9 do
           if (t > 22) and (y < 1023) then AddHHPoint(x, y - 12);
           inc(y, 100)
           end;
+    inc(x, 160)
     end;
 end;
 
