@@ -75,6 +75,8 @@ const {$IFDEF WIN32}
       SDL_QUITEV      = 12;
 
       SDL_INIT_VIDEO  = $00000020;
+      SDL_INIT_AUDIO  = $00000010;
+      
 type PSDL_Rect = ^TSDL_Rect;
      TSDL_Rect = record
                  x, y: SmallInt;
@@ -305,6 +307,7 @@ procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
 function  Mix_VolumeMusic(volume: integer): integer; cdecl; external SDL_MixerLibName;
 
+function Mix_AllocateChannels(numchans: integer): integer; cdecl; external SDL_MixerLibName;
 procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
 procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
 

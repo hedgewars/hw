@@ -51,9 +51,12 @@ procedure InitSound;
 begin
 if not isSoundEnabled then exit;
 WriteToConsole('Init sound...');
-isSoundEnabled:= Mix_OpenAudio(22050, $8010, 2, 512) = 0;
+isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
+if isSoundEnabled then
+   isSoundEnabled:= Mix_OpenAudio(22050, $8010, 2, 512) = 0;
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
+Mix_AllocateChannels(Succ(ord(High(TSound))));
 Mix_VolumeMusic(48)
 end;
 
