@@ -100,6 +100,8 @@ function CheckGearsCollision(Gear: PGear; Dir: integer; forX: boolean): boolean;
 var x1, x2, y1, y2: integer;
     i: Longword;
 begin
+Result:= false;
+if Count = 0 then exit;
 x1:= round(Gear.X);
 y1:= round(Gear.Y);
 {if (Gear.State and gstOutOfHH) = 0 then
@@ -111,7 +113,6 @@ y1:= round(Gear.Y);
       or (y1 - Gear.HalfHeight > round(p.Y) + p.HalfHeight)
       or (y1 + Gear.HalfHeight < round(p.Y) - p.HalfHeight)) then Gear.State:= Gear.State or gstOutOfHH;
    end; }
-Result:= false;
 if forX then
    begin
    x1:= x1 + Dir*Gear.HalfWidth;
