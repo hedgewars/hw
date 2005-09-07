@@ -576,21 +576,28 @@ begin
 if (Gear.dX <> 0) or (Gear.dY <> 0) then
    begin
    doStepFallingGear(Gear);
+   if Gear.Active = false then
+      begin
+      Gear.dX:= 0;
+      Gear.dY:= 0
+      end;
+   CalcRotationDirAngle(Gear);
    AllInactive:= false
    end;
-CalcRotationDirAngle(Gear);
-if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
 if ((Gear.State and gsttmpFlag) <> 0) then
    if ((Gear.State and gstAttacking) = 0) then
-      if isGearNear(Gear, gtHedgehog, 42, 25) then Gear.State:= Gear.State or gstAttacking else
+      if isGearNear(Gear, gtHedgehog, 46, 32) then Gear.State:= Gear.State or gstAttacking else
       else // gstAttacking <> 0
       begin
       AllInactive:= false;
-      dec(Gear.Timer);
+      if (Gear.Timer and $1FF) = 0 then PlaySound(sndMineTick);
       if Gear.Timer = 0 then
          begin
-         doMakeExplosion(round(Gear.X), round(Gear.Y), 50, 0);
+         doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
+         SetAllToActive;
          DeleteGear(Gear)
          end;
-      end;
+      dec(Gear.Timer);
+      end else // gsttmpFlag = 0
+   if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
 end;

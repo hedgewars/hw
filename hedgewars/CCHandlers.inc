@@ -245,7 +245,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
         begin
         if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
            begin
-           StopSound(sndThrowPowerUp);
+           StopTPUSound;
            PlaySound(sndThrowRelease);
            end;
         xx:= Sign(dX)*Sin(Angle*pi/cMaxAngle);
@@ -261,7 +261,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
                          amSkip: TurnTimeLeft:= 0;
                    amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
-                         amMine: AddGear(round(X) + Sign(dX) + 7, round(Y), gtMine, 0, Sign(dX) * 0.01);
+                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.01, 0, 3000);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then

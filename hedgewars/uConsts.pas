@@ -49,7 +49,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine);
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
-                   sndShotgunReload, sndShotgunFire, sndGraveImpact);
+                   sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
                    amMine);
      THWFont    = (fnt16, fntBig);
@@ -141,6 +141,7 @@ const
       ammoprop_ForwMsgs     = $00000008;
       ammoprop_AttackInFall = $00000010;
       ammoprop_AttackInJump = $00000020;
+      ammoprop_NoCrosshair  = $00000040;
       AMMO_INFINITE = High(LongWord);
 
       capgrpStartGame     = 0;
@@ -239,7 +240,8 @@ const
                                        (FileName:        'splash.ogg'; Path: ptSounds  ),// sndSplash
                                        (FileName: 'shotgunreload.ogg'; Path: ptSounds  ),// sndShotgunReload
                                        (FileName:   'shotgunfire.ogg'; Path: ptSounds  ),// sndShotgunFire
-                                       (FileName:   'graveimpact.ogg'; Path: ptSounds  ) // sndGraveImpact
+                                       (FileName:   'graveimpact.ogg'; Path: ptSounds  ),// sndGraveImpact
+                                       (FileName:      'minetick.ogg'; Path: ptSounds  ) // sndMineTicks
                                        );
 
       Ammoz: array [TAmmoType] of record
@@ -305,7 +307,7 @@ const
                                    Slot: 5;
                                    TimeAfterTurn: 0),
                                   (Name: 'Mine';
-                                   Ammo: (Propz: 0;
+                                   Ammo: (Propz: ammoprop_NoCrosshair;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;

@@ -85,6 +85,7 @@ const
 var
     cSendEmptyPacketTime : LongWord = 2000;
     cSendCursorPosTime   : LongWord = 50;
+    ShowCrosshair  : boolean;
 
     flagMakeCapture: boolean = false;
 

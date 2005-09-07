@@ -41,10 +41,11 @@ procedure ReleaseSound;
 procedure SoundLoad;
 procedure PlaySound(snd: TSound);
 procedure PlayMusic;
-procedure StopSound(snd: TSound);
+procedure StopTPUSound;
 
 implementation
 uses uMisc, uConsole;
+const chanTPU = 12;
 var Mus: PMixMusic;
 
 procedure InitSound;
@@ -56,7 +57,7 @@ if isSoundEnabled then
    isSoundEnabled:= Mix_OpenAudio(22050, $8010, 2, 512) = 0;
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
-Mix_AllocateChannels(Succ(ord(High(TSound))));
+Mix_AllocateChannels(Succ(chanTPU));
 Mix_VolumeMusic(48)
 end;
 
@@ -93,15 +94,15 @@ end;
 procedure PlaySound(snd: TSound);
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(ord(snd)) = 0 then
-   Mix_PlayChannelTimed(ord(snd), Soundz[snd].id, 0, -1)
+if snd <> sndThrowPowerUp then Mix_PlayChannelTimed(-1, Soundz[snd].id, 0, -1)
+                          else Mix_PlayChannelTimed(chanTPU, Soundz[snd].id, 0, -1)
 end;
 
-procedure StopSound(snd: TSound);
+procedure StopTPUSound;
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(ord(snd)) <> 0 then
-   Mix_HaltChannel(ord(snd))
+if Mix_Playing(chanTPU) <> 0 then
+   Mix_HaltChannel(chanTPU)
 end;
 
 procedure PlayMusic;

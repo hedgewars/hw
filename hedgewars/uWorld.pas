@@ -139,6 +139,7 @@ while team<>nil do
                         if (Gear.State and gstHHThinking) <> 0 then
                            DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHHalfHeight - 34 + WorldDy, Surface)
                         else
+                        if ShowCrosshair then
                            DrawCaption(Round(Gear.X + Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
                                        Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 5,
                                        Team.CrossHairRect, Surface)
