@@ -107,7 +107,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepRope,
                                                                doStepSmokeTrace,
                                                                doStepExplosion,
-                                                               doStepMine
+                                                               doStepMine,
+                                                               doStepCase
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -193,6 +194,11 @@ gtAmmo_Grenade: begin
                 Result.Elasticity:= 0.55;
                 Result.Friction:= 0.995;
                 Result.Timer:= 3000;
+                end;
+        gtCase: begin
+                Result.HalfWidth:= 10;
+                Result.HalfHeight:= 10;
+                Result.Elasticity:= 0.6
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -445,6 +451,7 @@ while Gear<>nil do
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
+            gtCase: DrawSprite(sprCase, Round(Gear.X) - 12 + WorldDx, Round(Gear.Y) - 12 + WorldDy, 0, Surface);
               end;
       Gear:= Gear.NextGear
       end;
@@ -470,10 +477,16 @@ var i, x, y: integer;
 begin
 for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
-for i:= 0 to 3 do
+for i:= 0 to 2 do
     begin
     GetHHPoint(x, y);
     AddGear(X, Y + 9, gtMine, 0);
+    end;
+
+for i:= 0 to 0 do
+    begin
+    GetHHPoint(x, y);
+    AddGear(X, Y, gtCase, 0)
     end;
 end;
 
@@ -497,7 +510,8 @@ while Gear <> nil do
          dmg:= dmg shr 1;
          case Gear.Kind of
               gtHedgehog,
-                  gtMine: begin
+                  gtMine,
+                  gtCase: begin
                           inc(Gear.Damage, dmg);
                           Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
                           Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);

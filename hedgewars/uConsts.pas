@@ -44,10 +44,10 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-                   sprMineOn);
+                   sprMineOn, sprCase);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
-                   gtSmokeTrace, gtExplosion, gtMine);
+                   gtSmokeTrace, gtExplosion, gtMine, gtCase);
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
@@ -226,7 +226,8 @@ const
                                          (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32),// sprRopeHook
                                          (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64),// sprExplosion50
                                          (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16),// sprMineOff
-                                         (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16) // sprMineOn
+                                         (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16),// sprMineOn
+                                         (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32) // sprCase
                                          );
       Soundz: array[TSound] of record
                                        FileName: String[31];

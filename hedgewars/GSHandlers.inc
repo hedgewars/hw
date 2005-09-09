@@ -586,8 +586,13 @@ if (Gear.dX <> 0) or (Gear.dY <> 0) then
    end;
 if ((Gear.State and gsttmpFlag) <> 0) then
    if ((Gear.State and gstAttacking) = 0) then
-      if isGearNear(Gear, gtHedgehog, 46, 32) then Gear.State:= Gear.State or gstAttacking else
-      else // gstAttacking <> 0
+      begin
+      if (Gear.Tag = 0) then
+         begin
+         Gear.Tag:= 10;
+         if isGearNear(Gear, gtHedgehog, 46, 32) then Gear.State:= Gear.State or gstAttacking
+         end else dec(Gear.Tag)
+      end else // gstAttacking <> 0
       begin
       AllInactive:= false;
       if (Gear.Timer and $1FF) = 0 then PlaySound(sndMineTick);
@@ -600,4 +605,42 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       dec(Gear.Timer);
       end else // gsttmpFlag = 0
    if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
+end;
+
+procedure doStepCase(Gear: PGear);
+begin
+if (Gear.dY <> 0) or (not TestCollisionY(Gear, 1)) then
+   begin
+   AllInactive:= false;
+   Gear.dY:= Gear.dY + cGravity;
+   Gear.Y:= Gear.Y + Gear.dY;
+   if (Gear.dY < 0) and TestCollisionY(Gear, -1) then Gear.dY:= 0 else
+   if (Gear.dY >= 0) and TestCollisionY(Gear, 1) then
+      begin
+      Gear.dY:= - Gear.dY * Gear.Elasticity;
+      if Gear.dY > - 0.001 then Gear.dY:= 0
+         else if Gear.dY < - 0.03 then PlaySound(sndGraveImpact);
+      end;
+   CheckGearDrowning(Gear);
+   end;
+
+if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCR(Gear)
+   else if (Gear.CollIndex < High(Longword)) and (Gear.dY <> 0) then DeleteCR(Gear);
+
+if (Gear.Tag = 0) then
+   begin
+   Gear.Tag:= 10;
+   if isGearNear(Gear, gtHedgehog, 25, 25) then
+      begin
+      ;//give ammo to hedgehog
+      DeleteGear(Gear);
+      SetAllToActive;
+      end;
+   end else dec(Gear.Tag);
+
+if Gear.Damage > 0 then
+   begin
+   DeleteGear(Gear);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound)
+   end
 end;
