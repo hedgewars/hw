@@ -50,7 +50,7 @@ if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    end;
    
 // check for case with ammo
-t:= CheckGearNear(Gear, gtCase, 25, 25);
+t:= CheckGearNear(Gear, gtCase, 30, 30);
 if t <> nil then
    begin
    t.Message:= gm_Destroy;

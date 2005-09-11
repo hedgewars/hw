@@ -48,6 +48,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase);
+     TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,

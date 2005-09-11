@@ -637,6 +637,6 @@ if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCR(Gear)
 if Gear.Damage > 0 then
    begin
    DeleteGear(Gear);
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound)
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 20, EXPLAutoSound)
    end
 end;

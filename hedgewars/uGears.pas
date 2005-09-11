@@ -197,8 +197,8 @@ gtAmmo_Grenade: begin
                 Result.Timer:= 3000;
                 end;
         gtCase: begin
-                Result.HalfWidth:= 10;
-                Result.HalfHeight:= 10;
+                Result.HalfWidth:= 14;
+                Result.HalfHeight:= 14;
                 Result.Elasticity:= 0.6
                 end;
      end;
@@ -463,7 +463,7 @@ while Gear<>nil do
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-            gtCase: DrawSprite(sprCase, Round(Gear.X) - 12 + WorldDx, Round(Gear.Y) - 12 + WorldDy, 0, Surface);
+            gtCase: DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
               end;
       Gear:= Gear.NextGear
       end;
@@ -489,16 +489,10 @@ var i, x, y: integer;
 begin
 for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
-for i:= 0 to 2 do
+for i:= 0 to 3 do
     begin
     GetHHPoint(x, y);
     AddGear(X, Y + 9, gtMine, 0);
-    end;
-
-for i:= 0 to 0 do
-    begin
-    GetHHPoint(x, y);
-    AddGear(X, Y, gtCase, 0)
     end;
 end;
 
@@ -572,8 +566,62 @@ while t <> nil do
 Result:= nil
 end;
 
-procedure SpawnBoxOfSmth;
+function CheckGearsNear(mX, mY: integer; Kind: TGearsType; rX, rY: integer): PGear;
+var t: PGear;
 begin
+t:= GearsList;
+rX:= sqr(rX);
+rY:= sqr(rY);
+while t <> nil do
+      begin
+      if t.Kind in Kind then
+         if sqr(mX - t.X) / rX + sqr(mY - t.Y) / rY <= 1 then
+            begin
+            Result:= t;
+            exit
+            end;
+      t:= t.NextGear
+      end;
+Result:= nil
+end;
+
+function CountGears(Kind: TGearType): Longword;
+var t: PGear;
+begin
+Result:= 0;
+t:= GearsList;
+while t <> nil do
+      begin
+      if t.Kind = Kind then inc(Result);
+      t:= t.NextGear
+      end;
+end;
+
+procedure SpawnBoxOfSmth;
+var i, x, y, k: integer;
+    b: boolean;
+begin
+if CountGears(gtCase) > 4 then exit;
+k:= 7;
+repeat
+  x:= getrandom(2000) + 24;
+  b:= false;
+  y:= -1;
+  while (y < 1024) and not b do
+        begin
+        inc(y);
+        i:= x - 14;
+        while (i <= x + 14) and not b do // 14 is gtCase HalfWidth
+              begin
+              if Land[y, i] <> 0 then b:= true;
+              inc(i)
+              end;
+        end;
+  if b then
+     b:= CheckGearsNear(x, y, [gtMine, gtHedgehog, gtCase], 70, 70) = nil;
+  dec(k)
+until (k = 0) or b;
+if b then FollowGear:= AddGear(x, -30, gtCase, 0)
 end;
 
 initialization
