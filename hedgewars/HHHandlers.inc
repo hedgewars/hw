@@ -35,6 +35,7 @@ procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
+var t: PGear;
 begin
 if isinMultiShoot and (Gear.Damage = 0) then exit;
 AllInactive:= false;
@@ -46,6 +47,14 @@ if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    if Gear.Damage > 0 then
       Gear.State:= Gear.State and not gstHHJumping;
    exit
+   end;
+   
+// check for case with ammo
+t:= CheckGearNear(Gear, gtCase, 25, 25);
+if t <> nil then
+   begin
+   t.Message:= gm_Destroy;
+   ; // take ammo from it
    end;
 
 if CurAmmoGear <> nil then

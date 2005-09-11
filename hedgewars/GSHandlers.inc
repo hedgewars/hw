@@ -590,7 +590,7 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       if (Gear.Tag = 0) then
          begin
          Gear.Tag:= 10;
-         if isGearNear(Gear, gtHedgehog, 46, 32) then Gear.State:= Gear.State or gstAttacking
+         if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear.State:= Gear.State or gstAttacking
          end else dec(Gear.Tag)
       end else // gstAttacking <> 0
       begin
@@ -607,8 +607,15 @@ if ((Gear.State and gsttmpFlag) <> 0) then
    if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepCase(Gear: PGear);
 begin
+if (Gear.Message and gm_Destroy) > 0 then
+   begin
+   DeleteGear(Gear);
+   exit
+   end;
+
 if (Gear.dY <> 0) or (not TestCollisionY(Gear, 1)) then
    begin
    AllInactive:= false;
@@ -626,17 +633,6 @@ if (Gear.dY <> 0) or (not TestCollisionY(Gear, 1)) then
 
 if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCR(Gear)
    else if (Gear.CollIndex < High(Longword)) and (Gear.dY <> 0) then DeleteCR(Gear);
-
-if (Gear.Tag = 0) then
-   begin
-   Gear.Tag:= 10;
-   if isGearNear(Gear, gtHedgehog, 25, 25) then
-      begin
-      ;//give ammo to hedgehog
-      DeleteGear(Gear);
-      SetAllToActive;
-      end;
-   end else dec(Gear.Tag);
 
 if Gear.Damage > 0 then
    begin

@@ -88,7 +88,8 @@ var GearsList: PGear = nil;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
-function  isGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): boolean; forward;
+function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
+procedure SpawnBoxOfSmth; forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -257,6 +258,7 @@ end;
 
 procedure ProcessGears;
 const delay: integer = cInactDelay;
+      step: (stDelay, stChDmg, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 {$IFDEF COUNTTICKS}
     tickcntA, tickcntB: LongWord;
@@ -283,17 +285,27 @@ while t<>nil do
       if Gear.Active then Gear.doStep(Gear);
       end;
 if AllInactive then
-   if (delay > 0)and not isInMultiShoot then
-      begin
-      if delay = cInactDelay then SetAllToActive;
-      dec(delay)
-      end
-   else begin
-   delay:= cInactDelay;
-   if CheckNoDamage then
-      if isInMultiShoot then isInMultiShoot:= false
-                        else ParseCommand('/nextturn');
-   end;
+   case step of
+        stDelay: begin
+                 dec(delay);
+                 if delay = 0 then
+                    begin
+                    inc(step);
+                    delay:= cInactDelay
+                    end
+                 end;
+        stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
+        stSpawn: begin
+                 if not isInMultiShoot then SpawnBoxOfSmth;
+                 inc(step)
+                 end;
+        stNTurn: begin
+                 if isInMultiShoot then isInMultiShoot:= false
+                                   else ParseCommand('/nextturn');
+                 step:= Low(step)
+                 end;
+        end;
+
 if TurnTimeLeft > 0 then
    if CurrentTeam <> nil then
       if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil then
@@ -541,7 +553,7 @@ while Gear <> nil do
       end
 end;
 
-function isGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): boolean;
+function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear;
 var t: PGear;
 begin
 t:= GearsList;
@@ -552,12 +564,16 @@ while t <> nil do
       if (t <> Gear) and (t.Kind = Kind) then
          if sqr(Gear.X - t.X) / rX + sqr(Gear.Y - t.Y) / rY <= 1 then
             begin
-            Result:= true;
+            Result:= t;
             exit
             end;
       t:= t.NextGear
       end;
-Result:= false
+Result:= nil
+end;
+
+procedure SpawnBoxOfSmth;
+begin
 end;
 
 initialization
