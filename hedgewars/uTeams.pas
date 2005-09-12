@@ -140,9 +140,8 @@ end;
 
 function AddTeam: PTeam;
 begin
-try
-   New(Result);
-except Result:= nil; OutError(errmsgDynamicVar, true) end;
+New(Result);
+TryDo(Result <> nil, 'AddTean: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
 Result.AttackBar:= 1;
 if TeamsList = nil then TeamsList:= Result
@@ -162,9 +161,7 @@ while tt<>nil do
       begin
       t:= tt;
       tt:= tt.Next;
-      try
       Dispose(t)
-      except OutError(errmsgDynamicVar) end;
       end;
 end;
 

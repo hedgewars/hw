@@ -62,7 +62,7 @@ type PGear = ^TGear;
              Tag: integer;
              end;
 
-function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
+function  AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -88,7 +88,7 @@ var GearsList: PGear = nil;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
-function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
+function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 
 {$INCLUDE GSHandlers.inc}
@@ -478,9 +478,7 @@ while tt<>nil do
       begin
       t:= tt;
       tt:= tt.NextGear;
-      try
       Dispose(t)
-      except OutError(errmsgDynamicVar) end;
       end;
 end;
 

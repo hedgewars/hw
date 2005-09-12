@@ -67,9 +67,8 @@ var   ConsoleLines: array[byte] of ShortString;
 
 function RegisterVariable(Name: string; VType: TVariableType; p: pointer): PVariable;
 begin
-try
-   New(Result);
-except Result:= nil; OutError(errmsgDynamicVar, true) end;
+New(Result);
+TryDo(Result <> nil, 'RegisterVariable: Result = nil', true);
 FillChar(Result^, sizeof(TVariable), 0);
 Result.Name:= Name;
 Result.VType:= VType;
@@ -90,9 +89,7 @@ while tt<>nil do
       begin
       t:= tt;
       tt:= tt.Next;
-      try
       Dispose(t)
-      except OutError(errmsgDynamicVar) end;
       end;
 end;
 

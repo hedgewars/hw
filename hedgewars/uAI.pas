@@ -39,11 +39,6 @@ procedure ProcessBot;
 implementation
 uses uAIActions, uAIMisc, uMisc, uTeams, uConsts, uAIAmmoTests, uGears, SDLh;
 
-function Go(Gear: PGear; Times: Longword): boolean;
-begin
-Result:= false
-end;
-
 procedure Think;
 var Targets: TTargets;
     Angle, Power: integer;

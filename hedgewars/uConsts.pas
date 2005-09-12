@@ -72,7 +72,6 @@ resourcestring
       errmsgCreateSurface   = 'Error creating DirectDraw7 surface';
       errmsgNoDesc          = 'Unknown error';
       errmsgTransparentSet  = 'Error setting transparent color';
-      errmsgDynamicVar      = 'Error working with dynamic memory';
       errmsgUnknownCommand  = 'Unknown command';
       errmsgUnknownVariable = 'Unknown variable';
       errmsgIncorrectUse    = 'Incorrect use';

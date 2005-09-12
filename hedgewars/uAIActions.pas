@@ -86,7 +86,7 @@ var ActionList,
 function AddAction(Action, Param, TimeDelta: Longword): PAction;
 begin
 New(Result);
-TryDo(Result <> nil, errmsgDynamicVar, true);
+TryDo(Result <> nil, 'AddAction: Result = nil', true);
 FillChar(Result^, sizeof(TAction), 0);
 Result.Action:= Action;
 Result.Param:= Param;

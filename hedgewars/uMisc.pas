@@ -202,6 +202,7 @@ end;
 initialization
 assignfile(f, 'debug.txt');
 rewrite(f);
+
 finalization
 writeln(f, '-= halt at ',GameTicks,' ticks =-');
 Flush(f);

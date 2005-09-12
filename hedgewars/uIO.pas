@@ -231,7 +231,7 @@ Closefile(f);
 {$I+}
 TryDo(IOResult = 0, msgFailed, true);
 WriteLnToConsole(msgOK);
-TryDo(Count < cnt, 'Fort doesn''t contain needed spawn points', true);
+TryDo(Count < cnt, 'Fort doesn''t contain needed amount of spawn points', true);
 for i:= 0 to Pred(cnt) do
     begin
     t:= GetRandom(cnt);
