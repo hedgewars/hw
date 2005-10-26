@@ -35,8 +35,8 @@
 #include <qdir.h>
 #include <qtextstream.h>
 #include <qregexp.h>
-#include "hwconsts.h"
 #include "game.h"
+#include "hwconsts.h"
 #include "sdlkeys.h"
 
 class QHostAddress;
@@ -200,23 +200,23 @@ void HWForm::ButtonDemos_clicked()
 
 void HWForm::NewTeam()
 {
-	HWTeam tmpTeam;
-	tmpTeam.ToPage( this );
+	HWTeam tmpTeam(this);
+	tmpTeam.ToPage();
 }
 
 
 void HWForm::EditTeam()
 {
-	HWTeam tmpTeam;
+	HWTeam tmpTeam(this);
 	tmpTeam.LoadFromFile(cfgdir.absPath() + "/team.cfg");
-	tmpTeam.ToPage( this );
+	tmpTeam.ToPage();
 }
 
 
 void HWForm::SaveTeamFromPage()
 {
-	HWTeam tmpTeam;
-	tmpTeam.FromPage( this );
+	HWTeam tmpTeam(this);
+	tmpTeam.FromPage();
 	tmpTeam.SaveToFile(cfgdir.absPath() + "/team.cfg");
 }
 

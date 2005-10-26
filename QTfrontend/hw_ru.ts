@@ -7,19 +7,19 @@
     </message>
     <message>
         <source>Options</source>
-        <translation>???�??????????????</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>Local game</source>
-        <translation>???????�?�?????�?? ???????�</translation>
+        <translation>Локальная игра</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>??????????</translation>
+        <translation>Выход</translation>
     </message>
     <message>
         <source>Back</source>
-        <translation>???�?�?�??</translation>
+        <translation>Назад</translation>
     </message>
     <message>
         <source>640x480</source>
@@ -39,15 +39,15 @@
     </message>
     <message>
         <source>Fatal error</source>
-        <translation>?????????????�?????�?? ???????�???�</translation>
+        <translation>Ошибкаа</translation>
     </message>
     <message>
         <source>Could not start engine.</source>
-        <translation>???� ???????? ?�?�?????????????? ???????�????.</translation>
+        <translation>Не могу запустить движок.</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation>??????????</translation>
+        <translation>Выход</translation>
     </message>
 </context>
 </TS>
