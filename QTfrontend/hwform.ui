@@ -1,0 +1,707 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>HWForm</class>
+ <widget class="QMainWindow" name="HWForm" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>450</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>640</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="maximumSize" >
+   <size>
+    <width>640</width>
+    <height>450</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>-= by unC0Rr =-</string>
+  </property>
+  <widget class="QWidget" name="centralWidget" >
+   <widget class="QStackedWidget" name="Pages" >
+    <property name="geometry" >
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>640</width>
+      <height>450</height>
+     </rect>
+    </property>
+    <property name="minimumSize" >
+     <size>
+      <width>640</width>
+      <height>450</height>
+     </size>
+    </property>
+    <property name="maximumSize" >
+     <size>
+      <width>640</width>
+      <height>450</height>
+     </size>
+    </property>
+    <property name="currentIndex" >
+     <number>2</number>
+    </property>
+    <widget class="QWidget" name="page" >
+     <widget class="QPushButton" name="BtnSPBack" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>170</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Back</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnSimpleGame" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>120</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Simple Game</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page" >
+     <widget class="QGroupBox" name="GBoxTeam" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Team</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnTeamSave" >
+      <property name="geometry" >
+       <rect>
+        <x>460</x>
+        <y>340</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Save</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnTeamDiscard" >
+      <property name="geometry" >
+       <rect>
+        <x>460</x>
+        <y>400</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Discard</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="GBoxHedgehogs" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>161</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Team Members</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="GBoxBinds" >
+      <property name="geometry" >
+       <rect>
+        <x>190</x>
+        <y>10</y>
+        <width>181</width>
+        <height>321</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Key binds</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="GBoxFort" >
+      <property name="geometry" >
+       <rect>
+        <x>390</x>
+        <y>110</y>
+        <width>181</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Fort</string>
+      </property>
+      <widget class="QComboBox" name="CBFort" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>161</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="currentIndex" >
+        <number>-1</number>
+       </property>
+       <property name="maxCount" >
+        <number>65535</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="FortPreview" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>161</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="pixmap" >
+        <pixmap/>
+       </property>
+       <property name="scaledContents" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="GBoxGrave" >
+      <property name="geometry" >
+       <rect>
+        <x>390</x>
+        <y>10</y>
+        <width>181</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Grave</string>
+      </property>
+      <widget class="QComboBox" name="CBGrave" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>161</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="currentIndex" >
+        <number>-1</number>
+       </property>
+       <property name="maxCount" >
+        <number>65535</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="GravePreview" >
+       <property name="geometry" >
+        <rect>
+         <x>80</x>
+         <y>50</y>
+         <width>32</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="scaledContents" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page" >
+     <widget class="QGroupBox" name="groupBox" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>591</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Teams</string>
+      </property>
+      <widget class="QComboBox" name="CBTeamName" >
+       <property name="geometry" >
+        <rect>
+         <x>200</x>
+         <y>30</y>
+         <width>171</width>
+         <height>22</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="BtnNewTeam" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>160</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="font" >
+        <font>
+         <family>MS Shell Dlg</family>
+         <pointsize>14</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="text" >
+        <string>New team</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="BtnEditTeam" >
+       <property name="geometry" >
+        <rect>
+         <x>400</x>
+         <y>20</y>
+         <width>160</width>
+         <height>40</height>
+        </rect>
+       </property>
+       <property name="font" >
+        <font>
+         <family>MS Shell Dlg</family>
+         <pointsize>14</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="text" >
+        <string>Edit team</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QComboBox" name="CBResolution" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>120</y>
+        <width>151</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text" >
+        <string>640x480</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>800x600</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>1024x768</string>
+       </property>
+      </item>
+      <item>
+       <property name="text" >
+        <string>1280x1024</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QCheckBox" name="CBEnableSound" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>180</y>
+        <width>101</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Enable sound</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="CBFullscreen" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>160</y>
+        <width>101</width>
+        <height>18</height>
+       </rect>
+      </property>
+      <property name="text" >
+       <string>Fullscreen</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnSetupBack" >
+      <property name="geometry" >
+       <rect>
+        <x>420</x>
+        <y>380</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Back</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnSaveOptions" >
+      <property name="geometry" >
+       <rect>
+        <x>30</x>
+        <y>380</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Save</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page" >
+     <widget class="QPushButton" name="BtnMPBack" >
+      <property name="geometry" >
+       <rect>
+        <x>240</x>
+        <y>180</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Back</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="pageMain" >
+     <widget class="QPushButton" name="BtnMultiplayer" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>160</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Multiplayer</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnDemos" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>260</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Demos</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnSetup" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>210</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Setup</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnExit" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>310</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Exit</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnSinglePlayer" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>110</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Single Player</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>BtnExit</sender>
+   <signal>clicked()</signal>
+   <receiver>HWForm</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>310</x>
+     <y>330</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>319</x>
+     <y>224</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

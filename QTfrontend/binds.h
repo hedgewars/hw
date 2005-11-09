@@ -31,14 +31,31 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <qstring.h>
-#include "team.h"
+#ifndef BINDS_H
+#define BINDS_H
 
-class QString;
+#include <QtGlobal>
 
-class HWGame
+#define BINDS_NUMBER 9
+
+struct BindAction
 {
-	public:
-		HWTeam Teams[5];
-	private:
+	QString action;
+	QString strbind;
+	QString name;
 };
+
+const BindAction cbinds[BINDS_NUMBER] =
+{
+	{"+up",	"up",	QT_TR_NOOP("up")},
+	{"+left",	"left",	QT_TR_NOOP("left")},
+	{"+right",	"right",	QT_TR_NOOP("right")},
+	{"+down",	"down",	QT_TR_NOOP("down")},
+	{"ljump",	"return",	QT_TR_NOOP("jump")},
+	{"hjump",	"backspace",	QT_TR_NOOP("jump")},
+	{"+attack",	"space",	QT_TR_NOOP("attack")},
+	{"switch",	"tab",	QT_TR_NOOP("switch")},
+	{"quit",	"F10",	QT_TR_NOOP("quit")}
+};
+
+#endif // BINDS_H
