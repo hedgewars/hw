@@ -1,6 +1,6 @@
-(*
+/*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -29,46 +29,22 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *)
+ */
 
-unit uRandom;
-interface
-uses uSHA;
+#ifndef RNDGEN_H
+#define RNDGEN_H
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-function  GetRandom: real; overload;
-function  GetRandom(m: LongWord): LongWord; overload;
+#include <QString>
+#include "sha1.h"
 
-implementation
-var  sc1, sc2: TSHA1Context;
-     Fill: shortstring;
+class RNDStr
+{
+public:
+	RNDStr();
+	
+	void GenRNDStr(QString & str, quint32 len);
+private:
+	sha1_ctxt ctx;
+};
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-begin
-SHA1Init(sc1);
-SHA1Update(sc1, @Seed, Length(Seed)+1);
-Fill:= FillBuf
-end;
-
-function GetRandom: real;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc2);
-Result:= frac( dig.LongWords[0]*0.0000731563977
-               + pi * dig.Words[6]
-               + 0.0109070019*dig.Words[9])
-end;
-
-function  GetRandom(m: LongWord): LongWord;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc1);
-Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m;
-sc1:= sc2
-end;
-
-end.
+#endif

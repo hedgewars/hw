@@ -50,7 +50,7 @@
      </size>
     </property>
     <property name="currentIndex" >
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page" >
      <widget class="QPushButton" name="BtnSPBack" >
@@ -115,19 +115,6 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page" >
-     <widget class="QGroupBox" name="GBoxTeam" >
-      <property name="geometry" >
-       <rect>
-        <x>20</x>
-        <y>10</y>
-        <width>161</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="title" >
-       <string>Team</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="BtnTeamSave" >
       <property name="geometry" >
        <rect>
@@ -307,6 +294,72 @@
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="GBoxTeam" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Team</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="GBoxPlayer" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
+        <y>340</y>
+        <width>161</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title" >
+       <string>Player</string>
+      </property>
+      <widget class="QComboBox" name="comboBox" >
+       <property name="geometry" >
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>141</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text" >
+         <string>Human</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CPU level 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CPU level 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CPU level 3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CPU level 4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text" >
+         <string>CPU level 5</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="page" >
      <widget class="QGroupBox" name="groupBox" >
@@ -321,16 +374,6 @@
       <property name="title" >
        <string>Teams</string>
       </property>
-      <widget class="QComboBox" name="CBTeamName" >
-       <property name="geometry" >
-        <rect>
-         <x>200</x>
-         <y>30</y>
-         <width>171</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
       <widget class="QPushButton" name="BtnNewTeam" >
        <property name="geometry" >
         <rect>
@@ -377,6 +420,16 @@
        </property>
        <property name="text" >
         <string>Edit team</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="CBTeamName" >
+       <property name="geometry" >
+        <rect>
+         <x>200</x>
+         <y>30</y>
+         <width>171</width>
+         <height>22</height>
+        </rect>
        </property>
       </widget>
      </widget>

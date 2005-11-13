@@ -1,6 +1,6 @@
-(*
+/*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -29,46 +29,52 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *)
+ */
 
-unit uRandom;
-interface
-uses uSHA;
+#ifndef GAME_H
+#define GAME_H
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-function  GetRandom: real; overload;
-function  GetRandom(m: LongWord): LongWord; overload;
+#include <QObject>
+#include <QDialog>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QByteArray>
+#include "team.h"
+#include "rndstr.h"
 
-implementation
-var  sc1, sc2: TSHA1Context;
-     Fill: shortstring;
+#define IPC_PORT 46631
+#define MAXMSGCHARS 255
+#define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-begin
-SHA1Init(sc1);
-SHA1Update(sc1, @Seed, Length(Seed)+1);
-Fill:= FillBuf
-end;
+class HWGame : public QDialog
+{
+	Q_OBJECT
+public:
+	HWGame();
+	void Start(int Resolution, bool Fullscreen);
+	void AddTeam(const QString & team);
+	
+private:
+	QTcpServer * IPCServer;
+	QTcpSocket * IPCSocket;
+	char msgbuf[MAXMSGCHARS];
+	unsigned char msgbufsize; 
+	unsigned char msgsize;
+	QString teams[5];
+	QString seed;
+	int TeamCount;
+	RNDStr seedgen;
+	
+	void SendConfig();
+	void SendTeamConfig(int index);
+	void ParseMessage();
+	void SendIPC(const char* msg, unsigned char len);
+	void SendIPC(const QByteArray buf);
 
-function GetRandom: real;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc2);
-Result:= frac( dig.LongWords[0]*0.0000731563977
-               + pi * dig.Words[6]
-               + 0.0109070019*dig.Words[9])
-end;
+private slots:
+	void NewConnection();
+	void ClientDisconnect();
+	void ClientRead();
+};
 
-function  GetRandom(m: LongWord): LongWord;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc1);
-Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m;
-sc1:= sc2
-end;
-
-end.
+#endif

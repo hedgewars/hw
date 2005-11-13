@@ -54,6 +54,7 @@ HWGame::HWGame()
 	connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
 	IPCSocket = 0;
 	TeamCount = 0;
+	seed = "seed";
 }
 
 void HWGame::NewConnection()
@@ -162,7 +163,8 @@ void HWGame::ClientRead()
 			readbytes = IPCSocket->read((char *)&msgsize, 1);
 		} else
 		{
-			msgbufsize += readbytes = IPCSocket->read((char *)&msgbuf[msgbufsize], msgsize - msgbufsize);
+			msgbufsize += 
+			readbytes = IPCSocket->read((char *)&msgbuf[msgbufsize], msgsize - msgbufsize);
 			if (msgbufsize = msgsize)
 			{
 				ParseMessage();
@@ -172,22 +174,23 @@ void HWGame::ClientRead()
 	}
 }
 
-void HWGame::Start(int Resolution)
+void HWGame::Start(int Resolution, bool Fullscreen)
 {
 	if (TeamCount < 2) return;
 	QProcess * process;
 	QStringList arguments;
+	seedgen.GenRNDStr(seed, 10);
 	process = new QProcess;
 	arguments << resolutions[0][Resolution];
 	arguments << resolutions[1][Resolution];
 	arguments << "avematan";
 	arguments << "46631";
-	arguments << "=seed=";
-	arguments << "1";
+	arguments << seed;
+	arguments << (Fullscreen ? "1" : "0");
 	process->start("hw", arguments);
 }
 
-void HWGame::AddTeam(const QString teamname)
+void HWGame::AddTeam(const QString & teamname)
 {
 	if (TeamCount == 5) return;
 	teams[TeamCount] = teamname;

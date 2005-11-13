@@ -31,53 +31,10 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef HWFORM_H
-#define HWFORM_H
-
-#include <QLabel>
-#include <QLineEdit>
-#include <QDir>
-#include "ui_hwform.h"
-#include "binds.h"
-#include "game.h"
-#include "team.h"
-
-class HWForm : public QMainWindow
+const char resolutions[2][4][5] = 
 {
-	Q_OBJECT
-
-public:
-	HWForm(QWidget *parent = 0);
-	Ui::HWForm ui;
-	QLineEdit * TeamNameEdit;
-	QLineEdit * HHNameEdit[8];
-	QComboBox * CBBind[BINDS_NUMBER];
-
-private slots:
-	void GoToMain();
-	void GoToSinglePlayer();
-	void GoToSetup();
-	void NewTeam();
-	void EditTeam();
-	void TeamSave();
-	void TeamDiscard();
-	void SimpleGame();
-	void SaveOptions();
-	
-public slots:
-	void CBGrave_activated(const QString & gravename);
-	void CBFort_activated(const QString & gravename);
-
-private:
-	QLabel * LBind[BINDS_NUMBER];
-	HWGame * game;
-	QDir cfgdir;
-	HWTeam * tmpTeam;
+	{"640", "800", "1024", "1280"},
+	{"480", "600",  "768", "1024"}
 };
 
-#define ID_PAGE_MAIN 4
-#define ID_PAGE_SINGLEPLAYER 0
-#define ID_PAGE_SETUP 2
-#define ID_PAGE_SETUP_TEAM 1
-
-#endif
+#define DATA_PATH "Data"

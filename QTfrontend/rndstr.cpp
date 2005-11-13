@@ -1,6 +1,6 @@
-(*
+/*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -29,46 +29,39 @@
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *)
+ */
 
-unit uRandom;
-interface
-uses uSHA;
+#include <QDateTime>
+#include "rndstr.h"
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-function  GetRandom: real; overload;
-function  GetRandom(m: LongWord): LongWord; overload;
+const char * letters = "qwertyuiopasdfghjklzxcvbnm" \
+                       "QWERTYUIOPASDFGHJKLZXCVBNM" \
+                       "0123456789";
+const quint8 letterscnt = 62;
 
-implementation
-var  sc1, sc2: TSHA1Context;
-     Fill: shortstring;
+const char * upd = "/hw!/";
+const quint8 updcnt = 5;
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
-begin
-SHA1Init(sc1);
-SHA1Update(sc1, @Seed, Length(Seed)+1);
-Fill:= FillBuf
-end;
-
-function GetRandom: real;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc2);
-Result:= frac( dig.LongWords[0]*0.0000731563977
-               + pi * dig.Words[6]
-               + 0.0109070019*dig.Words[9])
-end;
-
-function  GetRandom(m: LongWord): LongWord;
-var dig: TSHA1Digest;
-begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc1);
-Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m;
-sc1:= sc2
-end;
-
-end.
+RNDStr::RNDStr()
+{
+	SHA1Init(&ctx);
+	QDateTime now = QDateTime::currentDateTime();
+	QDateTime zero;
+	int secs = now.secsTo(zero);
+	SHA1Update(&ctx, (quint8 *)&secs, sizeof(int));
+}
+	
+void RNDStr::GenRNDStr(QString & str, quint32 len)
+{
+	str = "";
+	sha1_ctxt tmpctx;
+	caddr_t digest;
+	for(quint32 i = 0; i < len; i++)
+	{
+		SHA1Update(&ctx, (quint8 *)upd, updcnt);
+		qMemCopy(&tmpctx, &ctx, sizeof(sha1_ctxt));
+		SHA1Final(digest, &tmpctx);
+		int index = (digest[3] + digest[11] + digest[17]) % letterscnt;
+		str += letters[index];
+	}
+}

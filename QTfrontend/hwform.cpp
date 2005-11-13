@@ -104,6 +104,13 @@ HWForm::HWForm(QWidget *parent)
 	}
 	cfgdir.cd(".hedgewars");
 	
+	list = cfgdir.entryList(QStringList("*.cfg"));
+	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+	{
+		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg"), "\\1"));
+	}
+	
+	
 	QFile settings(cfgdir.absolutePath() + "/options");
 	if (!settings.open(QIODevice::ReadOnly))
 	{
@@ -161,24 +168,27 @@ void HWForm::GoToSetup()
 
 void HWForm::NewTeam()
 {
-	HWTeam tmpTeam(this);
-	tmpTeam.ToPage();
+	tmpTeam = new HWTeam();
+	tmpTeam->SetCfgDir(cfgdir.absolutePath());
+	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::EditTeam()
 {
-	HWTeam tmpTeam(this);
-	tmpTeam.LoadFromFile(cfgdir.absolutePath() + "/team.cfg");
-	tmpTeam.ToPage();
+	tmpTeam = new HWTeam();
+	tmpTeam->SetCfgDir(cfgdir.absolutePath());
+	tmpTeam->LoadFromFile();
+	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::TeamSave()
 {
-	HWTeam tmpTeam(this);
-	tmpTeam.FromPage();
-	tmpTeam.SaveToFile(cfgdir.absolutePath() + "/team.cfg");
+	tmpTeam = new HWTeam();
+	tmpTeam->GetFromPage(this);
+	tmpTeam->SaveToFile();
+	delete tmpTeam;
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
 }
 
@@ -192,7 +202,7 @@ void HWForm::SimpleGame()
 	game = new HWGame();
 	game->AddTeam(cfgdir.absolutePath() + "/team.cfg");
 	game->AddTeam(cfgdir.absolutePath() + "/team.cfg");
-	game->Start(ui.CBResolution->currentIndex());
+	game->Start(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
 }
 
 void HWForm::CBGrave_activated(const QString & gravename)

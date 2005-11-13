@@ -36,24 +36,23 @@
 #include "team.h"
 #include "hwform.h"
 
-HWTeam::HWTeam(HWForm * hwform)
+HWTeam::HWTeam()
 {
 	TeamName = "unnamed";
 	for (int i = 0; i < 8; i++) HHName[i].sprintf("hedgehog %d", i);
 	Grave = "Simple";
 	Fort = "Barrelhouse";
-	form = hwform;
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].action = cbinds[i].action;
 		binds[i].strbind = cbinds[i].strbind;
 	}
-	
+	dir = "";
 }
 	
-bool HWTeam::LoadFromFile(const QString & filename)
+bool HWTeam::LoadFromFile()
 {
-	QFile cfgfile(filename);
+	QFile cfgfile(dir + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::ReadOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");	
@@ -105,9 +104,9 @@ bool HWTeam::LoadFromFile(const QString & filename)
 	return true;
 }
 
-bool HWTeam::SaveToFile(const QString & filename)
+bool HWTeam::SaveToFile()
 {			
-	QFile cfgfile(filename);
+	QFile cfgfile(dir + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::WriteOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");
@@ -125,7 +124,7 @@ bool HWTeam::SaveToFile(const QString & filename)
 	return true;
 }
 
-void HWTeam::ToPage()
+void HWTeam::SetToPage(HWForm * hwform)
 {
 	form->TeamNameEdit->setText(TeamName);
 	for(int i = 0; i < 8; i++)
@@ -144,7 +143,7 @@ void HWTeam::ToPage()
 	}
 }
 
-void HWTeam::FromPage()
+void HWTeam::GetFromPage(HWForm * hwform)
 {
 	TeamName  = form->TeamNameEdit->text();
 	for(int i = 0; i < 8; i++)
@@ -158,4 +157,9 @@ void HWTeam::FromPage()
 	{
 		binds[i].strbind = form->CBBind[i]->currentText();
 	}
+}
+
+void HWTeam::SetCfgDir(const QString & dir)
+{
+	this->dir = dir;
 }
