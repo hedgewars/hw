@@ -51,12 +51,12 @@ uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO;
 
 type TPixAr = record
               Count: Longword;
-              ar: array[word] of TPoint;
+              ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
 
 var HHPoints: record
               First, Last: word;
-              ar: array[1..Pred(cMaxHHs)] of TPoint
+              ar: array[1..Pred(cMaxSpawnPoints)] of TPoint
               end = (First: 1);
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
@@ -110,41 +110,22 @@ if SDL_MustLock(Image) then
 WriteLnToConsole(msgOK)
 end;
 
-procedure GenEdge(out pa: TPixAr);
-var angle, r: real;
-    len1: Longword;
+procedure GenEdge(TemplateType: Longword; out pa: TPixAr);
+const Template0: array[0..4] of TPoint = (
+                                         (x:  500; y: 1500),
+                                         (x:  350; y:  400),
+                                         (x: 1023; y:  800),
+                                         (x: 1700; y:  400),
+                                         (x: 1550; y: 1500)
+                                         );
+var i: integer;
 begin
-len1:= 0;
-angle:= 5*pi/6;
-r:= 410;
-repeat
-  angle:= angle + 0.1 + getrandom * 0.1;
-  pa.ar[len1].X:= 544  + trunc(r*cos(angle));
-  pa.ar[len1].Y:= 1080 + trunc(1.5*r*sin(angle));
-  if r<380 then r:= r+getrandom*110
-           else r:= r - getrandom*80;
-  inc(len1);
-until angle > 7/4*pi;
-
-angle:= -pi/6;
-r:= 510;
-pa.ar[len1].X:= 644 + trunc(r*cos(angle));
-pa.ar[len1].Y:= 1080 + trunc(r*sin(angle));
-angle:= -pi;
-
-repeat
-  angle:= angle + 0.1 + getrandom*0.1;
-  pa.ar[len1].X:= 1504 + trunc(r*cos(angle));
-  pa.ar[len1].Y:= 880 + trunc(1.5*r*sin(angle));
-  if r<410 then r:= r + getrandom*80
-           else r:= r - getrandom*110;
-  inc(len1);
-until angle > 1/4*pi;
-pa.ar[len1]:= pa.ar[0];
-pa.Count:= Succ(len1)
+pa.Count:= Succ(High(Template0));
+for i:= 0 to High(Template0) do
+    pa.ar[i]:= Template0[i]
 end;
 
-procedure DrawBezierBorder(var pa: TPixAr);
+procedure DrawBezierEdge(var pa: TPixAr);
 var x, y, i: integer;
     tx, ty, vx, vy, vlen, t: real;
     r1, r2, r3, r4: real;
@@ -206,6 +187,73 @@ for i:= 0 to Count-2 do
     end;
 end;
 
+procedure BezierizeEdge(var pa: TPixAr; Delta: real);
+var x, y, i: integer;
+    tx, ty, vx, vy, vlen, t: real;
+    r1, r2, r3, r4: real;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: real;
+    opa: TPixAr;
+begin
+opa:= pa;
+pa.Count:= 0;
+vx:= 0;
+vy:= 0;
+with opa do
+for i:= 0 to Count-2 do
+    begin
+    vlen:= sqrt(sqr(ar[i + 1].x - ar[i    ].X) + sqr(ar[i + 1].y - ar[i    ].y));
+    t:=    sqrt(sqr(ar[i + 1].x - ar[i + 2].X) + sqr(ar[i + 1].y - ar[i + 2].y));
+    if t<vlen then vlen:= t;
+    vlen:= vlen/3;
+    tx:= ar[i+2].X - ar[i].X;
+    ty:= ar[i+2].y - ar[i].y;
+    t:= sqrt(sqr(tx)+sqr(ty));
+    if t = 0 then
+       begin
+       tx:= -tx * 100000;
+       ty:= -ty * 100000;
+       end else
+       begin
+       tx:= -tx/t;
+       ty:= -ty/t;
+       end;
+    t:= 1.0*vlen;
+    tx:= tx*t;
+    ty:= ty*t;
+    x1:= ar[i].x;
+    y1:= ar[i].y;
+    x2:= ar[i + 1].x;
+    y2:= ar[i + 1].y;
+    cx1:= ar[i].X   + trunc(vx);
+    cy1:= ar[i].y   + trunc(vy);
+    cx2:= ar[i+1].X + trunc(tx);
+    cy2:= ar[i+1].y + trunc(ty);
+    vx:= -tx;
+    vy:= -ty;
+    t:= 0;
+    while t <= 1.0 do
+          begin
+          tsq:= sqr(t);
+          tcb:= tsq * t;
+          r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
+          r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
+          r3:= (          3*tsq - 3*tcb) * cx2;
+          r4:= (                    tcb) * x2;
+          X:= round(r1 + r2 + r3 + r4);
+          r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
+          r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
+          r3:= (          3*tsq - 3*tcb) * cy2;
+          r4:= (                    tcb) * y2;
+          Y:= round(r1 + r2 + r3 + r4);
+          t:= t + Delta;
+          pa.ar[pa.Count].x:= X;
+          pa.ar[pa.Count].y:= Y;
+          inc(pa.Count);
+          TryDo(pa.Count < cMaxEdgePoints, 'Edge points overflow', true)
+          end;
+    end;
+end;
+
 procedure FillLand(x, y: integer);
 var Stack: record
            Count: Longword;
@@ -261,7 +309,11 @@ while Stack.Count > 0 do
                   Land[y, xl]:= $FFFFFF;
                   inc(xl)
                   end;
-            if x < xl then Push(x, Pred(xl), y, dir)
+            if x < xl then
+               begin
+               Push(x, Pred(xl), y, dir);
+               Push(x, Pred(xl), y,-dir);
+               end;
             end;
       end;
 end;
@@ -287,7 +339,8 @@ SDL_FreeSurface(tmpsurf);
 tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, $FF0000, $FF00, $FF, 0);
 SDLTry(tmpsurf <> nil, true);
 SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf.format, $FF, $FF, $FF));
-SDL_UpperBlit(tmpsurf, nil, Surface, nil)
+SDL_UpperBlit(tmpsurf, nil, Surface, nil);
+SDL_FreeSurface(tmpsurf)
 end;
 
 procedure AddBorder(Surface: PSDL_Surface);
@@ -421,17 +474,70 @@ while x < 2010 do
           if (t > 22) and (y < 1023) then AddHHPoint(x, y - 12);
           inc(y, 100)
           end;
-    inc(x, 160)
+    inc(x, 120)
     end;
+
+if HHPoints.Last < cMaxHHs then
+   begin
+   AddHHPoint(300, 800);
+   AddHHPoint(400, 800);
+   AddHHPoint(500, 800);
+   AddHHPoint(600, 800);
+   AddHHPoint(700, 800);
+   AddHHPoint(800, 800);
+   AddHHPoint(900, 800);
+   AddHHPoint(1000, 800);
+   AddHHPoint(1100, 800);
+   AddHHPoint(1200, 800);
+   AddHHPoint(1300, 800);
+   AddHHPoint(1400, 800);
+   end;
+end;
+
+procedure PointWave(var pa: TPixAr; PassesNum: Longword);
+const MAXPASSES = 8;
+var ar: array[0..Pred(MAXPASSES) - 1, 0..5] of real;
+    i, k: integer;
+    rx, ry, oy: real;
+begin
+TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
+for i:= 0 to Pred(PassesNum) do  // initialize random parameters
+    begin
+    ar[i, 0]:= 20 + getrandom(45);
+    ar[i, 1]:= 0.005 + getrandom * 0.015;
+    ar[i, 2]:= getrandom * pi * 2;
+    ar[i, 3]:= 20 + getrandom(45);
+    ar[i, 4]:= 0.005 + getrandom * 0.015;
+    ar[i, 5]:= getrandom * pi * 2;
+    end;
+
+for k:= 0 to Pred(pa.Count) do  // apply transformation
+    begin
+    rx:= pa.ar[k].x;
+    ry:= pa.ar[k].y;
+    for i:= 0 to Pred(PassesNum) do
+        begin
+        oy:= ry;
+        ry:= ry + ar[i, 0] * sin(ar[i, 1] * rx + ar[i, 2]);
+        rx:= rx + ar[i, 3] * sin(ar[i, 4] * oy + ar[i, 5]);
+        end;
+        pa.ar[k].x:= round(rx);
+        pa.ar[k].y:= round(ry);
+        end;
 end;
 
 procedure GenLandSurface;
 var pa: TPixAr;
     tmpsurf: PSDL_Surface;
 begin
-GenEdge(pa);
-DrawBezierBorder(pa);
+GenEdge(0, pa);
+BezierizeEdge(pa, 0.33334);
+BezierizeEdge(pa, 0.33334);
+BezierizeEdge(pa, 0.33334); 
+PointWave(pa, 3);
+DrawBezierEdge(pa);
 FillLand(1023, 1023);
+
 AddProgress;
 with PixelFormat^ do
      tmpsurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
@@ -477,7 +583,7 @@ begin
 with HHPoints do
      begin
      inc(Last);
-     TryDo(Last < cMaxHHs, 'HHs coords queue overflow', true);
+     TryDo(Last < cMaxSpawnPoints, 'HHs coords queue overflow', true);
      with ar[Last] do
           begin
           x:= _x;

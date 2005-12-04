@@ -487,11 +487,14 @@ var i, x, y: integer;
 begin
 for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
-for i:= 0 to 3 do
-    begin
-    GetHHPoint(x, y);
-    AddGear(X, Y + 9, gtMine, 0);
-    end;
+if (GameFlags and gfForts) = 0 then
+   begin
+   for i:= 0 to 3 do
+       begin
+       GetHHPoint(x, y);
+       AddGear(X, Y + 9, gtMine, 0);
+       end;
+   end;
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);
@@ -576,6 +579,7 @@ while t <> nil do
          if sqr(mX - t.X) / rX + sqr(mY - t.Y) / rY <= 1 then
             begin
             Result:= t;
+            {$IFDEF DEBUGFILE}AddFileLog('CheckGearsNear: near ('+inttostr(mx)+','+inttostr(my)+') is gear '+inttostr(integer(t)));{$ENDIF}
             exit
             end;
       t:= t.NextGear
@@ -599,19 +603,25 @@ procedure SpawnBoxOfSmth;
 var i, x, y, k: integer;
     b: boolean;
 begin
-if CountGears(gtCase) > 4 then exit;
+exit; // hack
+if CountGears(gtCase) > 2 then exit;
 k:= 7;
 repeat
   x:= getrandom(2000) + 24;
+  {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: check x = '+inttostr(x));{$ENDIF}
   b:= false;
   y:= -1;
-  while (y < 1024) and not b do
+  while (y < 1023) and not b do
         begin
         inc(y);
-        i:= x - 14;
-        while (i <= x + 14) and not b do // 14 is gtCase HalfWidth
+        i:= x - 13;
+        while (i <= x + 13) and not b do // 13 is gtCase HalfWidth-1
               begin
-              if Land[y, i] <> 0 then b:= true;
+              if Land[y, i] <> 0 then
+                 begin
+                 b:= true;
+                 {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: Land['+inttostr(y)+','+inttostr(i)+'] <> 0');{$ENDIF}
+                 end;
               inc(i)
               end;
         end;

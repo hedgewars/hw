@@ -88,7 +88,7 @@ end;
 procedure ParseIPCCommand(s: shortstring);
 begin
 case s[1] of
-     '!': isPonged:= true;
+     '!': begin {$IFDEF DEBUGFILE}AddFileLog('Ping? Pong!');{$ENDIF}isPonged:= true; end;
      '?': SendIPC('!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1));
      'E': OutError(copy(s, 2, Length(s) - 1), true);
@@ -145,8 +145,7 @@ end;
 procedure SendIPCAndWaitReply(s: shortstring);
 begin
 SendIPC(s);
-s:= '?';
-SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])));
+SendIPC('?');
 isPonged:= false;
 repeat
    IPCCheckSock;

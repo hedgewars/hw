@@ -66,9 +66,8 @@ var dig: TSHA1Digest;
 begin
 SHA1Update(sc1, @Fill[1], Length(Fill));
 sc2:= sc1;
-dig:= SHA1Final(sc1);
-Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m;
-sc1:= sc2
+dig:= SHA1Final(sc2);
+Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m
 end;
 
 end.

@@ -91,10 +91,13 @@ const
 
       cTransparentColor: Cardinal = $000000;
 
-      cMaxHHIndex = 9;
-      cMaxHHs     = 20;
+      cMaxHHIndex      = 9;
+      cMaxHHs          = 20;
+      cMaxSpawnPoints  = 64;
       cHHSurfaceWidth     = 512;
       cHHSurfaceHeigth    = 256;
+
+      cMaxEdgePoints = 16384;
 
       cHHHalfHeight = 11;
 
