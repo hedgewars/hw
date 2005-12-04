@@ -405,8 +405,6 @@ if flCheck then  // check whether rope needs dividing
          begin
          tx:= cc*len;
          ty:= cs*len;
-//         if   TestCollisionXwithXYShift(Gear, round(tx), round(ty), Sign(HHGear.dX))
-///           or TestCollisionYwithXYShift(Gear, round(tx), round(ty), Sign(HHGear.dY)) then
          lx:= round(Gear.X + tx) + sign(HHGear.dX);
          ly:= round(Gear.Y + ty) + sign(HHGear.dY);
          if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0)and (Land[ly, lx] <> 0) then
@@ -573,7 +571,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 begin
-if (Gear.dX <> 0) or (Gear.dY <> 0) then
+if (Gear.dX <> 0) or (Gear.dY <> 0) {or not TestCollisionY(Gear, 1)} then
    begin
    doStepFallingGear(Gear);
    if Gear.Active = false then

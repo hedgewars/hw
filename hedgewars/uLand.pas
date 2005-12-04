@@ -47,7 +47,7 @@ procedure GetHHPoint(out _x, _y: integer);
 procedure RandomizeHHPoints;
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates;
 
 type TPixAr = record
               Count: Longword;
@@ -108,21 +108,6 @@ case bpp of
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 WriteLnToConsole(msgOK)
-end;
-
-procedure GenEdge(TemplateType: Longword; out pa: TPixAr);
-const Template0: array[0..4] of TPoint = (
-                                         (x:  500; y: 1500),
-                                         (x:  350; y:  400),
-                                         (x: 1023; y:  800),
-                                         (x: 1700; y:  400),
-                                         (x: 1550; y: 1500)
-                                         );
-var i: integer;
-begin
-pa.Count:= Succ(High(Template0));
-for i:= 0 to High(Template0) do
-    pa.ar[i]:= Template0[i]
 end;
 
 procedure DrawBezierEdge(var pa: TPixAr);
@@ -294,7 +279,8 @@ begin
 Stack.Count:= 0;
 xl:= x - 1;
 xr:= x;
-Push(xl, xr, 1024, -1);
+Push(xl, xr, y, -1);
+Push(xl, xr, y,  1);
 while Stack.Count > 0 do
       begin
       Pop(xl, xr, y, dir);
@@ -452,7 +438,7 @@ var x, y, t: integer;
     begin
     Result:= 0;
     if (y and $FFFFFC00) <> 0 then exit;
-    for i:= max(x - 6, 0) to min(x + 6, 2043) do
+    for i:= max(x - 5, 0) to min(x + 5, 2043) do
         if Land[y, i] <> 0 then inc(Result)
     end;
 
@@ -494,28 +480,33 @@ if HHPoints.Last < cMaxHHs then
    end;
 end;
 
-procedure PointWave(var pa: TPixAr; PassesNum: Longword);
-const MAXPASSES = 8;
-var ar: array[0..Pred(MAXPASSES) - 1, 0..5] of real;
+procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
+const MAXPASSES = 16;
+var ar: array[0..MAXPASSES, 0..5] of real;
     i, k: integer;
     rx, ry, oy: real;
+    PassesNum: Longword;
 begin
-TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
-for i:= 0 to Pred(PassesNum) do  // initialize random parameters
-    begin
-    ar[i, 0]:= 20 + getrandom(45);
-    ar[i, 1]:= 0.005 + getrandom * 0.015;
-    ar[i, 2]:= getrandom * pi * 2;
-    ar[i, 3]:= 20 + getrandom(45);
-    ar[i, 4]:= 0.005 + getrandom * 0.015;
-    ar[i, 5]:= getrandom * pi * 2;
-    end;
+with Template do
+     begin
+     PassesNum:= PassMin + getrandom(PassDelta);
+     TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
+     for i:= 1 to PassesNum do  // initialize random parameters
+         begin
+         ar[i, 0]:= WaveAmplMin + getrandom * WaveAmplDelta;
+         ar[i, 1]:= WaveFreqMin + getrandom * WaveFreqDelta;
+         ar[i, 2]:= getrandom * pi * 2;
+         ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
+         ar[i, 4]:= WaveFreqMin + getrandom * WaveFreqDelta;
+         ar[i, 5]:= getrandom * pi * 2;
+         end;
+     end;
 
 for k:= 0 to Pred(pa.Count) do  // apply transformation
     begin
     rx:= pa.ar[k].x;
     ry:= pa.ar[k].y;
-    for i:= 0 to Pred(PassesNum) do
+    for i:= 0 to PassesNum do
         begin
         oy:= ry;
         ry:= ry + ar[i, 0] * sin(ar[i, 1] * rx + ar[i, 2]);
@@ -526,17 +517,32 @@ for k:= 0 to Pred(pa.Count) do  // apply transformation
         end;
 end;
 
-procedure GenLandSurface;
+procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
-    tmpsurf: PSDL_Surface;
+    i: Longword;
 begin
-GenEdge(0, pa);
-BezierizeEdge(pa, 0.33334);
-BezierizeEdge(pa, 0.33334);
-BezierizeEdge(pa, 0.33334); 
-PointWave(pa, 3);
-DrawBezierEdge(pa);
-FillLand(1023, 1023);
+with Template do
+     begin
+     pa.Count:= BasePointsCount;
+     for i:= 0 to pred(pa.Count) do
+         pa.ar[i]:= BasePoints^[i];
+
+     for i:= 1 to BezPassCnt do
+         BezierizeEdge(pa, 0.33333334);
+
+     PointWave(Template, pa);
+     DrawBezierEdge(pa);
+
+     for i:= 0 to pred(FillPointsCount) do
+         with FillPoints^[i] do
+              FillLand(x, y)
+     end;
+end;
+
+procedure GenLandSurface;
+var tmpsurf: PSDL_Surface;
+begin
+GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 AddProgress;
 with PixelFormat^ do

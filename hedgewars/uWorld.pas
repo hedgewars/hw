@@ -108,6 +108,7 @@ DrawLand(WorldDx, WorldDy, Surface);
 r.y:= WorldDy + cWaterLine + 32;
 if r.y < cScreenHeight then
    begin
+   if r.y < 0 then r.y:= 0;
    r.h:= cScreenHeight - r.y;
    r.x:= 0;
    r.w:= cScreenWidth;

@@ -52,7 +52,8 @@ uses
   uAIMisc in 'uAIMisc.pas',
   uAIAmmoTests in 'uAIAmmoTests.pas',
   uCollisions in 'uCollisions.pas',
-  uLand in 'uLand.pas';
+  uLand in 'uLand.pas',
+  uLandTemplates in 'uLandTemplates.pas';
 
 {$INCLUDE options.inc}
 
