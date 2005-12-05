@@ -603,7 +603,7 @@ procedure SpawnBoxOfSmth;
 var i, x, y, k: integer;
     b: boolean;
 begin
-exit; // hack
+exit; // temp hack until boxes are fully implemented
 if CountGears(gtCase) > 2 then exit;
 k:= 7;
 repeat

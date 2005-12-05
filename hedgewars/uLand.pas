@@ -47,7 +47,7 @@ procedure GetHHPoint(out _x, _y: integer);
 procedure RandomizeHHPoints;
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects;
 
 type TPixAr = record
               Count: Longword;
@@ -58,57 +58,6 @@ var HHPoints: record
               First, Last: word;
               ar: array[1..Pred(cMaxSpawnPoints)] of TPoint
               end = (First: 1);
-
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
-var i, p: LongWord;
-    x, y: Longword;
-    bpp: integer;
-    r: TSDL_Rect;
-begin
-r.x:= cpX;
-r.y:= cpY;
-SDL_UpperBlit(Image, nil, Surface, @r);
-WriteToConsole('Generating collision info... ');
-
-if SDL_MustLock(Image) then
-   SDLTry(SDL_LockSurface(Image) >= 0, true);
-
-bpp:= Image.format.BytesPerPixel;
-WriteToConsole('('+inttostr(bpp)+') ');
-p:= LongWord(Image.pixels);
-case bpp of
-     1: OutError('We don''t work with 8 bit surfaces', true);
-     2: for y:= 0 to Pred(Image.h) do
-            begin
-            i:= Longword(@Land[cpY + y, cpX]);
-            for x:= 0 to Pred(Image.w) do
-                if PWord(p + x * 2)^ = 0 then PLongWord(i + x * 4)^:= 0
-                                         else PLongWord(i + x * 4)^:= 1;
-            inc(p, Image.pitch);
-            end;
-     3: for y:= 0 to Pred(Image.h) do
-            begin
-            i:= Longword(@Land[cpY + y, cpX]);
-            for x:= 0 to Pred(Image.w) do
-                if  (PByte(p + x * 3 + 0)^ = 0)
-                and (PByte(p + x * 3 + 1)^ = 0)
-                and (PByte(p + x * 3 + 2)^ = 0) then PLongWord(i + x * 4)^:= 0
-                                                else PLongWord(i + x * 4)^:= 1;
-            inc(p, Image.pitch);
-            end;
-     4: for y:= 0 to Pred(Image.h) do
-            begin
-            i:= Longword(@Land[cpY + y, cpX]);
-            for x:= 0 to Pred(Image.w) do
-                if PLongword(p + x * 4)^ = 0 then PLongWord(i + x * 4)^:= 0
-                                             else PLongWord(i + x * 4)^:= 1;
-            inc(p, Image.pitch);
-            end;
-     end;
-if SDL_MustLock(Image) then
-   SDL_UnlockSurface(Image);
-WriteLnToConsole(msgOK)
-end;
 
 procedure DrawBezierEdge(var pa: TPixAr);
 var x, y, i: integer;
@@ -371,65 +320,6 @@ for x:= 0 to 2047 do
     end;
 end;
 
-procedure AddGirders(Surface: PSDL_Surface);
-var tmpsurf: PSDL_Surface;
-    x1, x2, y, k, i: integer;
-    r, rr: TSDL_Rect;
-
-    function CountNonZeroz(x, y: integer): Longword;
-    var i: integer;
-    begin
-    Result:= 0;
-    for i:= y to y + 15 do
-        if Land[i, x] <> 0 then inc(Result)
-    end;
-
-begin
-y:= 256;
-repeat
-  inc(y, 24);
-  x1:= 1024;
-  x2:= 1024;
-  while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
-  i:= x1 - 12;
-  repeat
-    k:= CountNonZeroz(x1, y);
-    dec(x1, 2)
-  until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
-  inc(x1, 2);
-  if k = 16 then
-     begin
-     while (x2 < 1900) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
-     i:= x2 + 12;
-     repeat
-       k:= CountNonZeroz(x2, y);
-       inc(x2, 2)
-     until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
-     if (x2 < 1900) and (k = 16) and (x2 - x1 > 250) then break;
-     end;
-x1:= 0;
-until y > 900;
-if x1 > 0 then
-   begin
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + 'Girder.png');
-   rr.x:= x1;
-   rr.y:= y;
-   while rr.x + 100 < x2 do
-         begin
-         SDL_UpperBlit(tmpsurf, nil, Surface, @rr);
-         inc(rr.x, 100);
-         end;
-   r.x:= 0;
-   r.y:= 0;
-   r.w:= x2 - rr.x;
-   r.h:= 16;
-   SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-   SDL_FreeSurface(tmpsurf);
-   for k:= y to y + 15 do
-       for i:= x1 to x2 do Land[k, i]:= $FFFFFF
-   end
-end;
-
 procedure AddHHPoints;
 var x, y, t: integer;
 
@@ -482,7 +372,7 @@ end;
 
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
 const MAXPASSES = 16;
-var ar: array[0..MAXPASSES, 0..5] of real;
+var ar: array[1..MAXPASSES, 0..5] of real;
     i, k: integer;
     rx, ry, oy: real;
     PassesNum: Longword;
@@ -506,15 +396,15 @@ for k:= 0 to Pred(pa.Count) do  // apply transformation
     begin
     rx:= pa.ar[k].x;
     ry:= pa.ar[k].y;
-    for i:= 0 to PassesNum do
+    for i:= 1 to PassesNum do
         begin
         oy:= ry;
         ry:= ry + ar[i, 0] * sin(ar[i, 1] * rx + ar[i, 2]);
         rx:= rx + ar[i, 3] * sin(ar[i, 4] * oy + ar[i, 5]);
         end;
-        pa.ar[k].x:= round(rx);
-        pa.ar[k].y:= round(ry);
-        end;
+    pa.ar[k].x:= round(rx);
+    pa.ar[k].y:= round(ry);
+    end;
 end;
 
 procedure GenBlank(var Template: TEdgeTemplate);
@@ -553,7 +443,9 @@ AddBorder(tmpsurf);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
 SDL_FillRect(LandSurface, nil, 0);
-AddGirders(LandSurface);
+
+AddObjects(LandSurface);
+
 SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
 SDL_UpperBlit(tmpsurf, nil, LandSurface, nil);
 SDL_FreeSurface(tmpsurf);

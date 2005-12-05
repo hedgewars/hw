@@ -53,7 +53,8 @@ uses
   uAIAmmoTests in 'uAIAmmoTests.pas',
   uCollisions in 'uCollisions.pas',
   uLand in 'uLand.pas',
-  uLandTemplates in 'uLandTemplates.pas';
+  uLandTemplates in 'uLandTemplates.pas',
+  uLandObjects in 'uLandObjects.pas';
 
 {$INCLUDE options.inc}
 

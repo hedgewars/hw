@@ -77,7 +77,7 @@ const EdgeTemplates: array[0..2] of TEdgeTemplate =
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
         BezPassCnt: 4;
-        PassMin: 5; PassDelta: 1;
+        PassMin: 4; PassDelta: 1;
         WaveAmplMin:    27; WaveAmplDelta: 22;
         WaveFreqMin: 0.010; WaveFreqDelta: 0.015;
         FillPoints: @Template0FPoints;
@@ -86,7 +86,7 @@ const EdgeTemplates: array[0..2] of TEdgeTemplate =
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
         BezPassCnt: 4;
-        PassMin: 6; PassDelta: 2;
+        PassMin: 5; PassDelta: 2;
         WaveAmplMin:    20; WaveAmplDelta: 10;
         WaveFreqMin: 0.015; WaveFreqDelta: 0.020;
         FillPoints: @Template1FPoints;
@@ -95,7 +95,7 @@ const EdgeTemplates: array[0..2] of TEdgeTemplate =
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
         BezPassCnt: 2;
-        PassMin: 4; PassDelta: 1;
+        PassMin: 3; PassDelta: 2;
         WaveAmplMin:    30; WaveAmplDelta: 15;
         WaveFreqMin: 0.010; WaveFreqDelta: 0.015;
         FillPoints: @Template2FPoints;

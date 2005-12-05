@@ -104,6 +104,7 @@ function DxDy2Angle32(const _dY, _dX: Extended): integer;
 procedure AdjustColor(var Color: Longword);
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
+function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
 
 var CursorPoint: TPoint;
@@ -138,7 +139,7 @@ if isFatalError then
    begin
    WriteLn(Msg);
    SDL_Quit;
-   Readln;
+//   Readln;
    halt(1)
    end else WriteLnToConsole(Msg)
 end;
@@ -197,6 +198,11 @@ procedure AddFileLog(s: shortstring);
 begin
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
+end;
+
+function RectToStr(Rect: TSDL_Rect): shortstring;
+begin
+Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
 initialization
