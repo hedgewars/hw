@@ -44,6 +44,7 @@
 #include "hwform.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
+//#include "gamecmds.h"
 
 HWForm::HWForm(QWidget *parent)
 	: QMainWindow(parent)
@@ -58,13 +59,13 @@ HWForm::HWForm(QWidget *parent)
 		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
 		HHNameEdit[i]->setMaxLength(15);
 	}
-	
+
 	QStringList binds;
 	for(int i = 0; strlen(sdlkeys[i][1]) > 0; i++)
 	{
 		binds << sdlkeys[i][1];
 	}
-	
+
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		LBind[i] = new QLabel(ui.GBoxBinds);
@@ -75,14 +76,14 @@ HWForm::HWForm(QWidget *parent)
 		CBBind[i]->setGeometry(QRect(80, 20 + i * 30, 80, 20));
 		CBBind[i]->addItems(binds);
 	}
-	
+
 	QDir tmpdir;
 	tmpdir.cd(DATA_PATH);
 	tmpdir.cd("Forts");
 	tmpdir.setFilter(QDir::Files);
-	
+
 	ui.CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L.png"), "\\1"));
-	
+
 	tmpdir.cd("../Graphics/Graves");
 	QStringList list = tmpdir.entryList(QStringList("*.png"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
@@ -95,7 +96,7 @@ HWForm::HWForm(QWidget *parent)
 	{
 		if (!cfgdir.mkdir(".hedgewars"))
 		{
-			QMessageBox::critical(this, 
+			QMessageBox::critical(this,
 					tr("Error"),
 					tr("Cannot create directory %s").arg("/.hedgewars"),
 					tr("Quit"));
@@ -103,43 +104,44 @@ HWForm::HWForm(QWidget *parent)
 		return ;
 	}
 	cfgdir.cd(".hedgewars");
-	
+
 	list = cfgdir.entryList(QStringList("*.cfg"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
 		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg"), "\\1"));
 	}
-	
-	
+
+
 	QFile settings(cfgdir.absolutePath() + "/options");
-	if (!settings.open(QIODevice::ReadOnly))
+	if (settings.open(QIODevice::ReadOnly))
 	{
-		return ;
-	}
-	QTextStream stream(&settings);
-	stream.setCodec("UTF-8");	
-	QString str;
-	
-	while (!stream.atEnd())
-	{
-		str = stream.readLine();
-		if (str.startsWith(";")) continue;
-		if (str.startsWith("resolution "))
+		QTextStream stream(&settings);
+		stream.setCodec("UTF-8");
+		QString str;
+
+		while (!stream.atEnd())
 		{
-			str.remove(0, 11);
-			ui.CBResolution->setCurrentIndex(str.toLong());
-		} else
-		if (str.startsWith("fullscreen "))
-		{
-			str.remove(0, 11);
-			ui.CBFullscreen->setChecked(str.toLong());
+			str = stream.readLine();
+			if (str.startsWith(";")) continue;
+			if (str.startsWith("resolution "))
+			{
+				str.remove(0, 11);
+				ui.CBResolution->setCurrentIndex(str.toLong());
+			} else
+			if (str.startsWith("fullscreen "))
+			{
+				str.remove(0, 11);
+				ui.CBFullscreen->setChecked(str.toLong());
+			}
 		}
+		settings.close();
 	}
-	settings.close();
 	connect(ui.BtnSPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
 	connect(ui.BtnSetupBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
+	connect(ui.BtnMPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
 	connect(ui.BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
 	connect(ui.BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
+	connect(ui.BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
 	connect(ui.BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
 	connect(ui.BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
 	connect(ui.BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
@@ -166,9 +168,13 @@ void HWForm::GoToSetup()
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
 }
 
+void HWForm::GoToMultiplayer()
+{
+	ui.Pages->setCurrentIndex(ID_PAGE_MULTIPLAYER);
+}
 void HWForm::NewTeam()
 {
-	tmpTeam = new HWTeam();
+	tmpTeam = new HWTeam("unnamed");
 	tmpTeam->SetCfgDir(cfgdir.absolutePath());
 	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
@@ -176,7 +182,7 @@ void HWForm::NewTeam()
 
 void HWForm::EditTeam()
 {
-	tmpTeam = new HWTeam();
+	tmpTeam = new HWTeam(ui.CBTeamName->currentText());
 	tmpTeam->SetCfgDir(cfgdir.absolutePath());
 	tmpTeam->LoadFromFile();
 	tmpTeam->SetToPage(this);
@@ -185,7 +191,6 @@ void HWForm::EditTeam()
 
 void HWForm::TeamSave()
 {
-	tmpTeam = new HWTeam();
 	tmpTeam->GetFromPage(this);
 	tmpTeam->SaveToFile();
 	delete tmpTeam;
@@ -222,7 +227,7 @@ void HWForm::SaveOptions()
 	QFile settings(cfgdir.absolutePath() + "/options");
 	if (!settings.open(QIODevice::WriteOnly))
 	{
-		QMessageBox::critical(this, 
+		QMessageBox::critical(this,
 				tr("Error"),
 				tr("Cannot save options to file %s").arg(settings.fileName()),
 				tr("Quit"));

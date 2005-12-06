@@ -50,7 +50,7 @@
      </size>
     </property>
     <property name="currentIndex" >
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page" >
      <widget class="QPushButton" name="BtnSPBack" >
@@ -555,7 +555,7 @@
       <property name="geometry" >
        <rect>
         <x>240</x>
-        <y>180</y>
+        <y>340</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -581,13 +581,56 @@
        <bool>false</bool>
       </property>
      </widget>
+     <widget class="QListWidget" name="listWidget" >
+      <property name="geometry" >
+       <rect>
+        <x>160</x>
+        <y>50</y>
+        <width>221</width>
+        <height>211</height>
+       </rect>
+      </property>
+      <property name="modelColumn" >
+       <number>0</number>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="pageMain" >
+     <widget class="QPushButton" name="BtnSinglePlayer" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>70</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Single Player</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
      <widget class="QPushButton" name="BtnMultiplayer" >
       <property name="geometry" >
        <rect>
         <x>230</x>
-        <y>160</y>
+        <y>120</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -613,41 +656,11 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="BtnDemos" >
-      <property name="geometry" >
-       <rect>
-        <x>230</x>
-        <y>260</y>
-        <width>161</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font" >
-       <font>
-        <family>MS Shell Dlg</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <underline>false</underline>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="text" >
-       <string>Demos</string>
-      </property>
-      <property name="checkable" >
-       <bool>false</bool>
-      </property>
-      <property name="checked" >
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="BtnSetup" >
       <property name="geometry" >
        <rect>
         <x>230</x>
-        <y>210</y>
+        <y>220</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -673,11 +686,41 @@
        <bool>false</bool>
       </property>
      </widget>
+     <widget class="QPushButton" name="BtnDemos" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>270</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Demos</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
      <widget class="QPushButton" name="BtnExit" >
       <property name="geometry" >
        <rect>
         <x>230</x>
-        <y>310</y>
+        <y>320</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -703,11 +746,11 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="BtnSinglePlayer" >
+     <widget class="QPushButton" name="BtnNetwork" >
       <property name="geometry" >
        <rect>
         <x>230</x>
-        <y>110</y>
+        <y>170</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -724,7 +767,7 @@
        </font>
       </property>
       <property name="text" >
-       <string>Single Player</string>
+       <string>Net game</string>
       </property>
       <property name="checkable" >
        <bool>false</bool>

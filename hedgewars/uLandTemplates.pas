@@ -94,7 +94,7 @@ const EdgeTemplates: array[0..2] of TEdgeTemplate =
        ),
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
-        BezPassCnt: 2;
+        BezPassCnt: 3;
         PassMin: 3; PassDelta: 2;
         WaveAmplMin:    30; WaveAmplDelta: 15;
         WaveFreqMin: 0.010; WaveFreqDelta: 0.015;

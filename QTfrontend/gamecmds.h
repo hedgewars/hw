@@ -31,54 +31,21 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAMECMDS_H
+#define GAMECMDS_H
 
-#include <QObject>
-#include <QDialog>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QByteArray>
-#include <QString>
-#include "team.h"
-#include "rndstr.h"
+#include <QWidget>
 
-#define IPC_PORT 46631
-#define MAXMSGCHARS 255
-#define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
-
-class HWGame : public QDialog
+class GameCMDs : public QWidget
 {
 	Q_OBJECT
+
 public:
-	HWGame();
-	void Start(int Resolution, bool Fullscreen);
-	void AddTeam(const QString & team);
+	GameCMDs(QWidget * parent = 0);
 
 private:
-	QTcpServer * IPCServer;
-	QTcpSocket * IPCSocket;
-	char msgbuf[MAXMSGCHARS];
-	quint8 msgbufsize;
-	quint8 msgsize;
-	QString teams[5];
-	QString seed;
-	int TeamCount;
-	RNDStr seedgen;
-	QByteArray * demo;
+	
 
-	void SendConfig();
-	void SendTeamConfig(int index);
-	void ParseMessage();
-	void SendIPC(const char * msg, quint8 len);
-	void SendIPC(const QByteArray & buf);
-	void SaveDemo(const QString & filename);
-	QString GetThemeBySeed();
-
-private slots:
-	void NewConnection();
-	void ClientDisconnect();
-	void ClientRead();
 };
 
 #endif

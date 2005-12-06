@@ -41,9 +41,8 @@ class HWForm;
 class HWTeam
 {
 	public:
-		HWTeam();
+		HWTeam(const QString & teamname);
 		
-		HWForm * form;
 		QString TeamName;
 		QString HHName[8];
 		QString	Grave;

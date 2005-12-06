@@ -34,10 +34,10 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
-#include <QFile>
 #include <QString>
 #include <QByteArray>
 #include <QTextStream>
+#include <QFile>
 #include "game.h"
 #include "hwconsts.h"
 
@@ -45,7 +45,7 @@ HWGame::HWGame()
 {
 	IPCServer = new QTcpServer(this);
 	IPCServer->setMaxPendingConnections(1);
-	if (!IPCServer->listen(QHostAddress("127.0.0.1"), IPC_PORT)) 
+	if (!IPCServer->listen(QHostAddress("127.0.0.1"), IPC_PORT))
 	{
 		QMessageBox::critical(this, tr("Error"),
 				tr("Unable to start the server: %1.")
@@ -76,6 +76,7 @@ void HWGame::NewConnection()
 void HWGame::ClientDisconnect()
 {
 	IPCSocket = 0;
+	SaveDemo("demo.hwd_1");
 	delete this;
 }
 
@@ -87,13 +88,13 @@ void HWGame::SendTeamConfig(int index)
 		return ;
 	}
 	QTextStream stream(&teamcfg);
-	stream.setCodec("UTF-8");	
+	stream.setCodec("UTF-8");
 	QString str;
-	
+
 	while (!stream.atEnd())
 	{
 		str = stream.readLine();
-		if (str.startsWith(";")) continue;
+		if (str.startsWith(";") || (str.length() > 254)) continue;
 		str.prepend("e");
 		SendIPC(str.toLocal8Bit());
 	}
@@ -122,48 +123,63 @@ void HWGame::SendConfig()
 
 void HWGame::ParseMessage()
 {
-	switch(msgsize) {
-		case 1: switch(msgbuf[0]) {
-			case '?': {
-				SENDIPC("!");
-				break;
-			}
+	switch(msgbuf[0])
+	{
+		case '?':
+		{
+			SENDIPC("!");
+			break;
 		}
-		case 5: switch(msgbuf[0]) {
-			case 'C': {
-				SendConfig();
-				break;
-			}
+		case 'C':
+		{
+			SendConfig();
+			break;
+		}
+		case '+':
+		{
+			break;
+		}
+		default:
+		{
+			demo->append(msgsize);
+			demo->append(QByteArray::fromRawData(msgbuf, msgsize));
 		}
 	}
 }
 
-void HWGame::SendIPC(const char* msg, unsigned char len)
+void HWGame::SendIPC(const char * msg, quint8 len)
 {
 	IPCSocket->write((char *)&len, 1);
 	IPCSocket->write(msg, len);
+	if ((len > 5) && !((msg[0] == 'e') && (msg[1] == 'b')))
+	{
+		demo->append(len);
+		demo->append(QByteArray::fromRawData(msg, len));
+	}
 }
 
-void HWGame::SendIPC(const QByteArray buf)
+void HWGame::SendIPC(const QByteArray & buf)
 {
 	if (buf.size() > 255) return;
-	unsigned char len = buf.size();
+	quint8 len = buf.size();
 	IPCSocket->write((char *)&len, 1);
 	IPCSocket->write(buf);
+	demo->append(len);
+	demo->append(buf);
 }
 
 void HWGame::ClientRead()
 {
 	qint64 readbytes = 1;
-	while (readbytes > 0) 
+	while (readbytes > 0)
 	{
-		if (msgsize == 0) 
+		if (msgsize == 0)
 		{
 			msgbufsize = 0;
 			readbytes = IPCSocket->read((char *)&msgsize, 1);
 		} else
 		{
-			msgbufsize += 
+			msgbufsize +=
 			readbytes = IPCSocket->read((char *)&msgbuf[msgbufsize], msgsize - msgbufsize);
 			if (msgbufsize = msgsize)
 			{
@@ -183,11 +199,14 @@ void HWGame::Start(int Resolution, bool Fullscreen)
 	process = new QProcess;
 	arguments << resolutions[0][Resolution];
 	arguments << resolutions[1][Resolution];
-	arguments << "avematan";
+	arguments << GetThemeBySeed();
 	arguments << "46631";
 	arguments << seed;
 	arguments << (Fullscreen ? "1" : "0");
 	process->start("hw", arguments);
+	demo = new QByteArray;
+	demo->append(seed.toLocal8Bit());
+	demo->append(10);
 }
 
 void HWGame::AddTeam(const QString & teamname)
@@ -195,4 +214,53 @@ void HWGame::AddTeam(const QString & teamname)
 	if (TeamCount == 5) return;
 	teams[TeamCount] = teamname;
 	TeamCount++;
+}
+
+QString HWGame::GetThemeBySeed()
+{
+	QFile themesfile("Data/Themes/themes.cfg");
+	QStringList themes;
+	if (themesfile.open(QIODevice::ReadOnly))
+	{
+		QTextStream stream(&themesfile);
+		QString str;
+		while (!stream.atEnd())
+		{
+			themes << stream.readLine();
+		}
+		themesfile.close();
+	}
+	quint32 len = themes.size();
+	if (len == 0)
+	{
+		QMessageBox::critical(this, "Error", "Cannot access themes.cfg or bad data", "OK");
+		return "avematan";
+	}
+	if (seed.isEmpty())
+	{
+		QMessageBox::critical(this, "Error", "seed not defined", "OK");
+		return "avematan";
+	}
+	quint32 k = 0;
+	for (int i = 0; i < seed.length(); i++)
+	{
+		k += seed[i].unicode();
+	}
+	return themes[k % len];
+}
+
+void HWGame::SaveDemo(const QString & filename)
+{
+	QFile demofile(filename);
+	if (!demofile.open(QIODevice::WriteOnly))
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Cannot save demo to file %s").arg(filename),
+				tr("Quit"));
+		return ;
+	}
+	QDataStream stream(&demofile);
+	stream.writeRawData(demo->constData(), demo->size());
+	demofile.close();
 }

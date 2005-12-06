@@ -57,6 +57,7 @@ private slots:
 	void GoToMain();
 	void GoToSinglePlayer();
 	void GoToSetup();
+	void GoToMultiplayer();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -79,5 +80,6 @@ private:
 #define ID_PAGE_SINGLEPLAYER 0
 #define ID_PAGE_SETUP 2
 #define ID_PAGE_SETUP_TEAM 1
+#define ID_PAGE_MULTIPLAYER 3
 
 #endif

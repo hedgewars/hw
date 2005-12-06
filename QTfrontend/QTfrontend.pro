@@ -10,6 +10,6 @@ INCLUDEPATH += .
 QT += network
 
 # Input
-HEADERS += binds.h game.h hwform.h sdlkeys.h team.h rndstr.h sha1.h
+HEADERS += binds.h game.h hwform.h sdlkeys.h team.h rndstr.h sha1.h gamecmds.h
 FORMS += hwform.ui
-SOURCES += game.cpp main.cpp hwform.cpp team.cpp rndstr.cpp sha1.cpp
+SOURCES += game.cpp main.cpp hwform.cpp team.cpp rndstr.cpp sha1.cpp gamecmds.cpp
