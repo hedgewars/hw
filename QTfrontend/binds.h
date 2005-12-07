@@ -36,26 +36,36 @@
 
 #include <QtGlobal>
 
-#define BINDS_NUMBER 9
+#define BINDS_NUMBER 18
 
 struct BindAction
 {
 	QString action;
 	QString strbind;
 	QString name;
+	bool chwidget;
 };
 
 const BindAction cbinds[BINDS_NUMBER] =
 {
-	{"+up",	"up",	QT_TR_NOOP("up")},
-	{"+left",	"left",	QT_TR_NOOP("left")},
-	{"+right",	"right",	QT_TR_NOOP("right")},
-	{"+down",	"down",	QT_TR_NOOP("down")},
-	{"ljump",	"return",	QT_TR_NOOP("jump")},
-	{"hjump",	"backspace",	QT_TR_NOOP("jump")},
-	{"+attack",	"space",	QT_TR_NOOP("attack")},
-	{"switch",	"tab",	QT_TR_NOOP("switch")},
-	{"quit",	"F10",	QT_TR_NOOP("quit")}
+	{"+up",	"up",	QT_TR_NOOP("up"),	false},
+	{"+left",	"left",	QT_TR_NOOP("left"),	false},
+	{"+right",	"right",	QT_TR_NOOP("right"),	false},
+	{"+down",	"down",	QT_TR_NOOP("down"),	false},
+	{"ljump",	"return",	QT_TR_NOOP("jump"),	false},
+	{"hjump",	"backspace",	QT_TR_NOOP("jump"),	false},
+	{"+attack",	"space",	QT_TR_NOOP("attack"),	false},
+	{"switch",	"tab",	QT_TR_NOOP("switch"),	true},
+	{"slot 1",	"f1",	QT_TR_NOOP("slot 1"),	false},
+	{"slot 2",	"f2",	QT_TR_NOOP("slot 2"),	false},
+	{"slot 3",	"f3",	QT_TR_NOOP("slot 3"),	false},
+	{"slot 4",	"f4",	QT_TR_NOOP("slot 4"),	false},
+	{"slot 5",	"f5",	QT_TR_NOOP("slot 5"),	false},
+	{"slot 6",	"f6",	QT_TR_NOOP("slot 6"),	false},
+	{"slot 7",	"f7",	QT_TR_NOOP("slot 7"),	false},
+	{"slot 8",	"f8",	QT_TR_NOOP("slot 8"),	true},
+	{"capture",	"f11",	QT_TR_NOOP("capture"),	false},
+	{"quit",	"f10",	QT_TR_NOOP("quit"),	false}
 };
 
 #endif // BINDS_H

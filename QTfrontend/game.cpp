@@ -41,8 +41,10 @@
 #include "game.h"
 #include "hwconsts.h"
 
-HWGame::HWGame()
+HWGame::HWGame(int Resolution, bool Fullscreen)
 {
+	vid_Resolution = Resolution;
+	vid_Fullscreen = Fullscreen;
 	IPCServer = new QTcpServer(this);
 	IPCServer->setMaxPendingConnections(1);
 	if (!IPCServer->listen(QHostAddress("127.0.0.1"), IPC_PORT))
@@ -54,7 +56,7 @@ HWGame::HWGame()
 	connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
 	IPCSocket = 0;
 	TeamCount = 0;
-	seed = "seed";
+	seed = "";
 }
 
 void HWGame::NewConnection()
@@ -103,6 +105,13 @@ void HWGame::SendTeamConfig(int index)
 
 void HWGame::SendConfig()
 {
+	if (gameType == gtDemo)
+	{
+		SENDIPC("TD");
+		SendIPCRaw(toSendBuf->constData(), toSendBuf->size());
+		delete toSendBuf;
+		return ;
+	}
 	SENDIPC("TL");
 	SENDIPC("e$gmflags 0");
 	SENDIPC("eaddteam");
@@ -168,6 +177,12 @@ void HWGame::SendIPC(const QByteArray & buf)
 	demo->append(buf);
 }
 
+void HWGame::SendIPCRaw(const char * msg, quint32 len)
+{
+	IPCSocket->write(msg, len);
+	demo->append(QByteArray::fromRawData(msg, len));
+}
+
 void HWGame::ClientRead()
 {
 	qint64 readbytes = 1;
@@ -190,19 +205,20 @@ void HWGame::ClientRead()
 	}
 }
 
-void HWGame::Start(int Resolution, bool Fullscreen)
+void HWGame::Start()
 {
+	gameType = gtLocal;
 	if (TeamCount < 2) return;
 	QProcess * process;
 	QStringList arguments;
 	seedgen.GenRNDStr(seed, 10);
 	process = new QProcess;
-	arguments << resolutions[0][Resolution];
-	arguments << resolutions[1][Resolution];
+	arguments << resolutions[0][vid_Resolution];
+	arguments << resolutions[1][vid_Resolution];
 	arguments << GetThemeBySeed();
 	arguments << "46631";
 	arguments << seed;
-	arguments << (Fullscreen ? "1" : "0");
+	arguments << (vid_Fullscreen ? "1" : "0");
 	process->start("hw", arguments);
 	demo = new QByteArray;
 	demo->append(seed.toLocal8Bit());
@@ -218,7 +234,7 @@ void HWGame::AddTeam(const QString & teamname)
 
 QString HWGame::GetThemeBySeed()
 {
-	QFile themesfile("Data/Themes/themes.cfg");
+	QFile themesfile(QString(DATA_PATH) + "/Themes/themes.cfg");
 	QStringList themes;
 	if (themesfile.open(QIODevice::ReadOnly))
 	{
@@ -263,4 +279,58 @@ void HWGame::SaveDemo(const QString & filename)
 	QDataStream stream(&demofile);
 	stream.writeRawData(demo->constData(), demo->size());
 	demofile.close();
+	delete demo;
+}
+
+void HWGame::PlayDemo(const QString & demofilename)
+{
+	gameType = gtDemo;
+	QFile demofile(demofilename);
+	if (!demofile.open(QIODevice::ReadOnly))
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Cannot open demofile %s").arg(demofilename),
+				tr("Quit"));
+		return ;
+	}
+
+	// read demo
+	QDataStream stream(&demofile);
+	toSendBuf = new QByteArray();
+	char buf[512];
+	quint32 readbytes;
+	do
+	{
+		readbytes = stream.readRawData((char *)&buf, 512);
+		toSendBuf -> append(QByteArray((char *)&buf, readbytes));
+
+	} while (readbytes > 0);
+	demofile.close();
+
+	// cut seed
+	quint32 index = toSendBuf->indexOf(10);
+	if (!index)
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Corrupted demo file %s").arg(demofilename),
+				tr("Quit"));
+		return ;
+	}
+	seed = QString(toSendBuf->left(index++));
+	toSendBuf->remove(0, index);
+
+	// run engine
+	QProcess * process;
+	QStringList arguments;
+	process = new QProcess;
+	arguments << resolutions[0][vid_Resolution];
+	arguments << resolutions[1][vid_Resolution];
+	arguments << GetThemeBySeed();
+	arguments << "46631";
+	arguments << seed;
+	arguments << (vid_Fullscreen ? "1" : "0");
+	process->start("hw", arguments);
+	demo = new QByteArray;
 }

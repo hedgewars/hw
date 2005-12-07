@@ -51,12 +51,18 @@ class HWGame : public QDialog
 {
 	Q_OBJECT
 public:
-	HWGame();
-	void Start(int Resolution, bool Fullscreen);
+	HWGame(int Resolution, bool Fullscreen);
+	void Start();
 	void AddTeam(const QString & team);
+	void PlayDemo(const QString & demofilename);
 
 private:
-	QTcpServer * IPCServer;
+    enum GameType {
+        gtLocal = 1,
+        gtDemo  = 2,
+        gtNet   = 3
+    };
+    QTcpServer * IPCServer;
 	QTcpSocket * IPCSocket;
 	char msgbuf[MAXMSGCHARS];
 	quint8 msgbufsize;
@@ -66,12 +72,17 @@ private:
 	int TeamCount;
 	RNDStr seedgen;
 	QByteArray * demo;
+	QByteArray * toSendBuf;
+	int vid_Resolution;
+	bool vid_Fullscreen;
+	GameType gameType;
 
 	void SendConfig();
 	void SendTeamConfig(int index);
 	void ParseMessage();
 	void SendIPC(const char * msg, quint8 len);
 	void SendIPC(const QByteArray & buf);
+	void SendIPCRaw(const char * msg, quint32 len);
 	void SaveDemo(const QString & filename);
 	QString GetThemeBySeed();
 

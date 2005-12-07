@@ -66,15 +66,24 @@ HWForm::HWForm(QWidget *parent)
 		binds << sdlkeys[i][1];
 	}
 
-	for(int i = 0; i < BINDS_NUMBER; i++)
+	quint16 widind = 0, top = 0;
+	for(quint8 i = 0; i < BINDS_NUMBER; i++)
 	{
-		LBind[i] = new QLabel(ui.GBoxBinds);
-		LBind[i]->setGeometry(QRect(10, 23 + i * 30, 60, 20));
+		LBind[i] = new QLabel(ui.BindsBox->widget(widind));
+		LBind[i]->setGeometry(QRect(10, top + 3, 60, 20));
 		LBind[i]->setText(cbinds[i].name);
 		LBind[i]->setAlignment(Qt::AlignRight);
-		CBBind[i] = new QComboBox(ui.GBoxBinds);
-		CBBind[i]->setGeometry(QRect(80, 20 + i * 30, 80, 20));
+		CBBind[i] = new QComboBox(ui.BindsBox->widget(widind));
+		CBBind[i]->setGeometry(QRect(80, top, 80, 20));
 		CBBind[i]->addItems(binds);
+		if (cbinds[i].chwidget)
+		{
+			top = 0;
+			widind++;
+		} else
+		{
+			top += 30;
+		}
 	}
 
 	QDir tmpdir;
@@ -136,18 +145,22 @@ HWForm::HWForm(QWidget *parent)
 		}
 		settings.close();
 	}
+
 	connect(ui.BtnSPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
+	connect(ui.BtnDemosBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
 	connect(ui.BtnSetupBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
 	connect(ui.BtnMPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
 	connect(ui.BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
 	connect(ui.BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
 	connect(ui.BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
+	connect(ui.BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
 	connect(ui.BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
 	connect(ui.BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
 	connect(ui.BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
 	connect(ui.BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
 	connect(ui.BtnSimpleGame, SIGNAL(clicked()), this, SLOT(SimpleGame()));
 	connect(ui.BtnSaveOptions, SIGNAL(clicked()), this, SLOT(SaveOptions()));
+	connect(ui.BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
 	connect(ui.CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));
 	connect(ui.CBFort, SIGNAL(activated(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
@@ -172,6 +185,17 @@ void HWForm::GoToMultiplayer()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_MULTIPLAYER);
 }
+
+void HWForm::GoToDemos()
+{
+	QDir tmpdir;
+	tmpdir.cd(DATA_PATH);
+	tmpdir.cd("Demos");
+	tmpdir.setFilter(QDir::Files);
+	ui.DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_1")).replaceInStrings(QRegExp("^(.*).hwd_1"), "\\1"));
+	ui.Pages->setCurrentIndex(ID_PAGE_DEMOS);
+}
+
 void HWForm::NewTeam()
 {
 	tmpTeam = new HWTeam("unnamed");
@@ -204,10 +228,10 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	game = new HWGame();
+	game = new HWGame(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
 	game->AddTeam(cfgdir.absolutePath() + "/team.cfg");
 	game->AddTeam(cfgdir.absolutePath() + "/team.cfg");
-	game->Start(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
+	game->Start();
 }
 
 void HWForm::CBGrave_activated(const QString & gravename)
@@ -240,3 +264,20 @@ void HWForm::SaveOptions()
 	stream << "fullscreen " << ui.CBFullscreen->isChecked() << endl;
 	settings.close();
 }
+
+void HWForm::PlayDemo()
+{
+	QListWidgetItem * curritem = ui.DemosList->currentItem();
+	if (!curritem)
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Please, select demo from the list above"),
+				tr("OK"));
+		return ;
+	}
+	game = new HWGame(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
+	game->PlayDemo(QString(DATA_PATH) + "/Demos/" + curritem->text() + ".hwd_1");
+}
+
+

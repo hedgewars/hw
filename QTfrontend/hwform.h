@@ -58,13 +58,15 @@ private slots:
 	void GoToSinglePlayer();
 	void GoToSetup();
 	void GoToMultiplayer();
+	void GoToDemos();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
 	void TeamDiscard();
 	void SimpleGame();
 	void SaveOptions();
-	
+	void PlayDemo();
+
 public slots:
 	void CBGrave_activated(const QString & gravename);
 	void CBFort_activated(const QString & gravename);
@@ -76,10 +78,11 @@ private:
 	HWTeam * tmpTeam;
 };
 
-#define ID_PAGE_MAIN 4
 #define ID_PAGE_SINGLEPLAYER 0
-#define ID_PAGE_SETUP 2
 #define ID_PAGE_SETUP_TEAM 1
+#define ID_PAGE_SETUP 2
 #define ID_PAGE_MULTIPLAYER 3
+#define ID_PAGE_DEMOS 4
+#define ID_PAGE_MAIN 5
 
 #endif
