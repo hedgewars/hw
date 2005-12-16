@@ -348,9 +348,9 @@ while x < 2010 do
           inc(t, 2)
           until (y > 1023) or (CountNonZeroz(x, y) <> 0);
           if (t > 22) and (y < 1023) then AddHHPoint(x, y - 12);
-          inc(y, 100)
+          inc(y, 80)
           end;
-    inc(x, 120)
+    inc(x, 100)
     end;
 
 if HHPoints.Last < cMaxHHs then
@@ -371,8 +371,8 @@ if HHPoints.Last < cMaxHHs then
 end;
 
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
-const MAXPASSES = 16;
-var ar: array[1..MAXPASSES, 0..5] of real;
+const MAXPASSES = 32;
+var ar: array[0..MAXPASSES, 0..5] of real;
     i, k: integer;
     rx, ry, oy: real;
     PassesNum: Longword;
@@ -381,13 +381,15 @@ with Template do
      begin
      PassesNum:= PassMin + getrandom(PassDelta);
      TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
+     ar[0, 1]:= WaveFreqMin;
+     ar[0, 4]:= WaveFreqMin;
      for i:= 1 to PassesNum do  // initialize random parameters
          begin
          ar[i, 0]:= WaveAmplMin + getrandom * WaveAmplDelta;
-         ar[i, 1]:= WaveFreqMin + getrandom * WaveFreqDelta;
+         ar[i, 1]:= ar[i - 1, 1] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
          ar[i, 2]:= getrandom * pi * 2;
          ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
-         ar[i, 4]:= WaveFreqMin + getrandom * WaveFreqDelta;
+         ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
          ar[i, 5]:= getrandom * pi * 2;
          end;
      end;
@@ -413,6 +415,24 @@ var pa: TPixAr;
 begin
 with Template do
      begin
+     if canMirror then
+        if getrandom(16) < 8 then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               BasePoints^[i].x:= 2047 - BasePoints^[i].x;
+           for i:= 0 to pred(FillPointsCount) do
+               FillPoints^[i].x:= 2047 - FillPoints^[i].x;
+           end;
+
+     if canFlip then
+        if getrandom(16) < 8 then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               BasePoints^[i].y:= 1023 - BasePoints^[i].y;
+           for i:= 0 to pred(FillPointsCount) do
+               FillPoints^[i].y:= 1023 - FillPoints^[i].y;
+           end;
+
      pa.Count:= BasePointsCount;
      for i:= 0 to pred(pa.Count) do
          pa.ar[i]:= BasePoints^[i];
@@ -443,6 +463,7 @@ AddBorder(tmpsurf);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
 SDL_FillRect(LandSurface, nil, 0);
+AddProgress;
 
 AddObjects(LandSurface);
 

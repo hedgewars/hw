@@ -8,8 +8,8 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: 
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom;
-const MaxRects = 1024;
-      MAXOBJECTRECTS = 32;
+const MaxRects = 256;
+      MAXOBJECTRECTS = 16;
 type  PRectArray = ^TRectsArray;
       TRectsArray = array[0..MaxRects] of TSDL_rect;
 
@@ -110,7 +110,7 @@ if RectCount > 0 then
    until (i = RectCount) or (Result)
 end;
 
-procedure AddGirders(Surface: PSDL_Surface);
+function AddGirder(gX: integer; Surface: PSDL_Surface): boolean;
 var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: integer;
     r, rr: TSDL_Rect;
@@ -124,11 +124,11 @@ var tmpsurf: PSDL_Surface;
     end;
 
 begin
-y:= 256;
+y:= 150;
 repeat
   inc(y, 24);
-  x1:= 1024;
-  x2:= 1024;
+  x1:= gX;
+  x2:= gX;
   while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
   i:= x1 - 12;
   repeat
@@ -151,6 +151,7 @@ x1:= 0;
 until y > 900;
 if x1 > 0 then
    begin
+   Result:= true;
    tmpsurf:= LoadImage(Pathz[ptGraphics] + 'Girder.png');
    rr.x:= x1;
    rr.y:= y;
@@ -165,10 +166,10 @@ if x1 > 0 then
    r.h:= 16;
    SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
    SDL_FreeSurface(tmpsurf);
-   AddRect(x1 - 8, y - 8, x2 - x1 + 8, 32);
+   AddRect(x1 - 8, y - 8, x2 - x1 + 16, 72);
    for k:= y to y + 15 do
        for i:= x1 to x2 do Land[k, i]:= $FFFFFF
-   end
+   end else Result:= false
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
@@ -187,7 +188,7 @@ while (i <= rect.w) and Result do
 i:= 0;
 while (i <= rect.h) and Result do
       begin
-      Result:= (Land[rect.y + i, rect.x] = Color) or (Land[rect.y + i, rect.x + rect.w] = Color);
+      Result:= (Land[rect.y + i, rect.x] = Color) and (Land[rect.y + i, rect.x + rect.w] = Color);
       inc(i)
       end;
 {$WARNINGS ON}
@@ -236,9 +237,9 @@ with Obj do
                    x:= 5000;
                    end
                 end;
-             inc(y, 2);
+             inc(y, 3);
          until y > 1023 - Height;
-         inc(x, getrandom(8) + 2)
+         inc(x, getrandom(6) + 3)
      until x > 2047 - Width;
      Result:= cnt <> 0;
      if Result then
@@ -251,7 +252,7 @@ with Obj do
 end;
 
 procedure AddThemeObjects(Surface: PSDL_Surface; MaxCount: Longword);
-const MAXTHEMEOBJECTS = 16;
+const MAXTHEMEOBJECTS = 32;
 var f: textfile;
     s: string;
     ThemeObjects: array[1..MAXTHEMEOBJECTS] of TThemeObject;
@@ -301,8 +302,11 @@ end;
 procedure AddObjects(Surface: PSDL_Surface);
 begin
 InitRects;
-AddGirders(Surface);
-AddThemeObjects(Surface, 5);
+AddGirder(512, Surface);
+AddGirder(1024, Surface);
+AddGirder(1300, Surface);
+AddGirder(1536, Surface);
+AddThemeObjects(Surface, 8);
 FreeRects
 end;
 
