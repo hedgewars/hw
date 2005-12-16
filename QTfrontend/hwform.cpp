@@ -146,23 +146,27 @@ HWForm::HWForm(QWidget *parent)
 		settings.close();
 	}
 
-	connect(ui.BtnSPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
-	connect(ui.BtnDemosBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
-	connect(ui.BtnSetupBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
-	connect(ui.BtnMPBack, SIGNAL(clicked()), this, SLOT(GoToMain()));
-	connect(ui.BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
-	connect(ui.BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
-	connect(ui.BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
-	connect(ui.BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
-	connect(ui.BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
-	connect(ui.BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
-	connect(ui.BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
-	connect(ui.BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
-	connect(ui.BtnSimpleGame, SIGNAL(clicked()), this, SLOT(SimpleGame()));
-	connect(ui.BtnSaveOptions, SIGNAL(clicked()), this, SLOT(SaveOptions()));
-	connect(ui.BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
-	connect(ui.CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));
-	connect(ui.CBFort, SIGNAL(activated(const QString &)), this, SLOT(CBFort_activated(const QString &)));
+	connect(ui.BtnSPBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.BtnDemosBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.BtnSetupBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.BtnMPBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.BtnNetBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
+	connect(ui.BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
+	connect(ui.BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
+	connect(ui.BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
+	connect(ui.BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
+	connect(ui.BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));
+	connect(ui.BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
+	connect(ui.BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
+	connect(ui.BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
+	connect(ui.BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
+	connect(ui.BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(SaveOptions()));
+	connect(ui.BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
+	connect(ui.BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
+	connect(ui.BtnNetChatDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
+	connect(ui.CBGrave,	SIGNAL(activated(const QString &)),	this, SLOT(CBGrave_activated(const QString &)));
+	connect(ui.CBFort,	SIGNAL(activated(const QString &)),	this, SLOT(CBFort_activated(const QString &)));
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
 }
 
@@ -192,8 +196,19 @@ void HWForm::GoToDemos()
 	tmpdir.cd(DATA_PATH);
 	tmpdir.cd("Demos");
 	tmpdir.setFilter(QDir::Files);
+	ui.DemosList->clear();
 	ui.DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_1")).replaceInStrings(QRegExp("^(.*).hwd_1"), "\\1"));
 	ui.Pages->setCurrentIndex(ID_PAGE_DEMOS);
+}
+
+void HWForm::GoToNet()
+{
+	ui.Pages->setCurrentIndex(ID_PAGE_NET);
+}
+
+void HWForm::GoToNetChat()
+{
+	ui.Pages->setCurrentIndex(ID_PAGE_NETCHAT);
 }
 
 void HWForm::NewTeam()
@@ -280,4 +295,21 @@ void HWForm::PlayDemo()
 	game->PlayDemo(QString(DATA_PATH) + "/Demos/" + curritem->text() + ".hwd_1");
 }
 
+void HWForm::NetConnect()
+{
+	hwnet = new HWNet();
+	hwnet->Connect("localhost", 6667);
+	connect(hwnet, SIGNAL(Connected()), this, SLOT(GoToNetChat()));
+	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
+}
 
+void HWForm::NetDisconnect()
+{
+	hwnet->Disconnect();
+	GoToNet();
+}
+
+void HWForm::AddGame(const QString & chan)
+{
+	ui.ChannelsList->addItem(chan);
+}

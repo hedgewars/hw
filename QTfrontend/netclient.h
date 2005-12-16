@@ -31,64 +31,51 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef NET_H
+#define NET_H
 
 #include <QObject>
-#include <QTcpServer>
 #include <QTcpSocket>
-#include <QByteArray>
-#include <QString>
-#include "team.h"
-#include "rndstr.h"
+#include <QRegExp>
 
-#define IPC_PORT 46631
-#define MAXMSGCHARS 255
-#define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
-
-class HWGame : public QObject
+class HWNet : public QObject
 {
 	Q_OBJECT
+
 public:
-	HWGame(int Resolution, bool Fullscreen);
-	void Start();
-	void AddTeam(const QString & team);
-	void PlayDemo(const QString & demofilename);
+    HWNet();
+	void Connect(const QString & hostName, quint16 port);
+	void Disconnect();
+	void SendNet(const QString & buf);
+	void SendNet(const QByteArray & buf);
+
+signals:
+	void Connected();
+	void AddGame(const QString & chan);
 
 private:
-    enum GameType {
-        gtLocal = 1,
-        gtDemo  = 2,
-        gtNet   = 3
-    };
-    QTcpServer * IPCServer;
-	QTcpSocket * IPCSocket;
-	char msgbuf[MAXMSGCHARS];
-	quint8 msgbufsize;
-	quint8 msgsize;
-	QString teams[5];
-	QString seed;
-	int TeamCount;
-	RNDStr seedgen;
-	QByteArray * demo;
-	QByteArray * toSendBuf;
-	int vid_Resolution;
-	bool vid_Fullscreen;
-	GameType gameType;
+	enum NetState {
+		nsDisconnected = 0,
+		nsConnecting   = 1,
+		nsConnected    = 3,
+		nsQuitting     = 5
+	};
 
-	void SendConfig();
-	void SendTeamConfig(int index);
-	void ParseMessage();
-	void SendIPC(const char * msg, quint8 len);
-	void SendIPC(const QByteArray & buf);
-	void SendIPCRaw(const char * msg, quint32 len);
-	void SaveDemo(const QString & filename);
-	QString GetThemeBySeed();
+	QTcpSocket NetSocket;
+	NetState state;
+	QRegExp * IRCmsg_cmd_param;
+	QRegExp * IRCmsg_number_param;
+
+	void ParseLine(const QString & msg);
+	void msgcmd_paramHandler(const QString & msg);
+	void msgnumber_paramHandler(const QString & msg);
 
 private slots:
-	void NewConnection();
-	void ClientDisconnect();
 	void ClientRead();
+	void OnConnect();
+	void OnDisconnect();
+	void Perform();
+	void displayError(QAbstractSocket::SocketError socketError);
 };
 
 #endif

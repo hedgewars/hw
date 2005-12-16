@@ -49,7 +49,7 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 	IPCServer->setMaxPendingConnections(1);
 	if (!IPCServer->listen(QHostAddress("127.0.0.1"), IPC_PORT))
 	{
-		QMessageBox::critical(this, tr("Error"),
+		QMessageBox::critical(0, tr("Error"),
 				tr("Unable to start the server: %1.")
 				.arg(IPCServer->errorString()));
 	}
@@ -121,6 +121,7 @@ void HWGame::SendConfig()
 	SENDIPC("eadd hh1 0");
 	SENDIPC("eadd hh2 0");
 	SENDIPC("eadd hh3 0");
+	SENDIPC("eadd hh4 0");
 	SENDIPC("eaddteam");
 	SendTeamConfig(1);
 	SENDIPC("ecolor 16776960");
@@ -128,6 +129,7 @@ void HWGame::SendConfig()
 	SENDIPC("eadd hh1 1");
 	SENDIPC("eadd hh2 1");
 	SENDIPC("eadd hh3 1");
+	SENDIPC("eadd hh4 1");
 }
 
 void HWGame::ParseMessage()
@@ -169,7 +171,7 @@ void HWGame::SendIPC(const char * msg, quint8 len)
 
 void HWGame::SendIPC(const QByteArray & buf)
 {
-	if (buf.size() > 255) return;
+	if (buf.size() > MAXMSGCHARS) return;
 	quint8 len = buf.size();
 	IPCSocket->write((char *)&len, 1);
 	IPCSocket->write(buf);
@@ -249,12 +251,12 @@ QString HWGame::GetThemeBySeed()
 	quint32 len = themes.size();
 	if (len == 0)
 	{
-		QMessageBox::critical(this, "Error", "Cannot access themes.cfg or bad data", "OK");
+		QMessageBox::critical(0, "Error", "Cannot access themes.cfg or bad data", "OK");
 		return "avematan";
 	}
 	if (seed.isEmpty())
 	{
-		QMessageBox::critical(this, "Error", "seed not defined", "OK");
+		QMessageBox::critical(0, "Error", "seed not defined", "OK");
 		return "avematan";
 	}
 	quint32 k = 0;
@@ -270,7 +272,7 @@ void HWGame::SaveDemo(const QString & filename)
 	QFile demofile(filename);
 	if (!demofile.open(QIODevice::WriteOnly))
 	{
-		QMessageBox::critical(this,
+		QMessageBox::critical(0,
 				tr("Error"),
 				tr("Cannot save demo to file %s").arg(filename),
 				tr("Quit"));
@@ -288,7 +290,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	QFile demofile(demofilename);
 	if (!demofile.open(QIODevice::ReadOnly))
 	{
-		QMessageBox::critical(this,
+		QMessageBox::critical(0,
 				tr("Error"),
 				tr("Cannot open demofile %s").arg(demofilename),
 				tr("Quit"));
@@ -312,7 +314,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	quint32 index = toSendBuf->indexOf(10);
 	if (!index)
 	{
-		QMessageBox::critical(this,
+		QMessageBox::critical(0,
 				tr("Error"),
 				tr("Corrupted demo file %s").arg(demofilename),
 				tr("Quit"));

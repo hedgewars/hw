@@ -41,6 +41,7 @@
 #include "binds.h"
 #include "game.h"
 #include "team.h"
+#include "netclient.h"
 
 class HWForm : public QMainWindow
 {
@@ -59,6 +60,8 @@ private slots:
 	void GoToSetup();
 	void GoToMultiplayer();
 	void GoToDemos();
+	void GoToNet();
+	void GoToNetChat();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -66,6 +69,9 @@ private slots:
 	void SimpleGame();
 	void SaveOptions();
 	void PlayDemo();
+	void NetConnect();
+	void NetDisconnect();
+	void AddGame(const QString & chan);
 
 public slots:
 	void CBGrave_activated(const QString & gravename);
@@ -76,6 +82,7 @@ private:
 	HWGame * game;
 	QDir cfgdir;
 	HWTeam * tmpTeam;
+	HWNet * hwnet;
 };
 
 #define ID_PAGE_SINGLEPLAYER 0
@@ -83,6 +90,8 @@ private:
 #define ID_PAGE_SETUP 2
 #define ID_PAGE_MULTIPLAYER 3
 #define ID_PAGE_DEMOS 4
-#define ID_PAGE_MAIN 5
+#define ID_PAGE_NET 5
+#define ID_PAGE_NETCHAT 6
+#define ID_PAGE_MAIN 7
 
 #endif

@@ -50,7 +50,7 @@
      </size>
     </property>
     <property name="currentIndex" >
-     <number>1</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="page" >
      <widget class="QPushButton" name="BtnSimpleGame" >
@@ -372,7 +372,7 @@
         <number>0</number>
        </property>
        <property name="currentIndex" >
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page" >
         <property name="geometry" >
@@ -380,7 +380,7 @@
           <x>0</x>
           <y>0</y>
           <width>181</width>
-          <height>297</height>
+          <height>270</height>
          </rect>
         </property>
         <attribute name="label" >
@@ -397,8 +397,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>163</width>
-          <height>252</height>
+          <width>99</width>
+          <height>29</height>
          </rect>
         </property>
         <attribute name="label" >
@@ -673,6 +673,16 @@
        <bool>false</bool>
       </property>
      </widget>
+     <widget class="QListWidget" name="DemosList" >
+      <property name="geometry" >
+       <rect>
+        <x>170</x>
+        <y>10</y>
+        <width>311</width>
+        <height>311</height>
+       </rect>
+      </property>
+     </widget>
      <widget class="QPushButton" name="BtnDemosBack" >
       <property name="geometry" >
        <rect>
@@ -703,13 +713,167 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QListWidget" name="DemosList" >
+    </widget>
+    <widget class="QWidget" name="page" >
+     <widget class="QPushButton" name="BtnNetConnect" >
       <property name="geometry" >
        <rect>
-        <x>170</x>
+        <x>250</x>
+        <y>140</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Connect</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnNetBack" >
+      <property name="geometry" >
+       <rect>
+        <x>250</x>
+        <y>390</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Back</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page" >
+     <widget class="QPushButton" name="BtnNetChatJoin" >
+      <property name="geometry" >
+       <rect>
+        <x>460</x>
+        <y>290</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Join</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnNetChatCreate" >
+      <property name="geometry" >
+       <rect>
+        <x>460</x>
+        <y>340</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Create</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnNetChatDisconnect" >
+      <property name="geometry" >
+       <rect>
+        <x>460</x>
+        <y>390</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Disconnect</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="ChannelsList" >
+      <property name="geometry" >
+       <rect>
+        <x>20</x>
         <y>10</y>
-        <width>311</width>
-        <height>311</height>
+        <width>201</width>
+        <height>331</height>
        </rect>
       </property>
      </widget>
@@ -835,36 +999,6 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QPushButton" name="BtnNetwork" >
-      <property name="geometry" >
-       <rect>
-        <x>230</x>
-        <y>170</y>
-        <width>161</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="font" >
-       <font>
-        <family>MS Shell Dlg</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <underline>false</underline>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="text" >
-       <string>Net game</string>
-      </property>
-      <property name="checkable" >
-       <bool>false</bool>
-      </property>
-      <property name="checked" >
-       <bool>false</bool>
-      </property>
-     </widget>
      <widget class="QPushButton" name="BtnDemos" >
       <property name="geometry" >
        <rect>
@@ -887,6 +1021,36 @@
       </property>
       <property name="text" >
        <string>Demos</string>
+      </property>
+      <property name="checkable" >
+       <bool>false</bool>
+      </property>
+      <property name="checked" >
+       <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="BtnNet" >
+      <property name="geometry" >
+       <rect>
+        <x>230</x>
+        <y>170</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font" >
+       <font>
+        <family>MS Shell Dlg</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <underline>false</underline>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="text" >
+       <string>Net game</string>
       </property>
       <property name="checkable" >
        <bool>false</bool>
