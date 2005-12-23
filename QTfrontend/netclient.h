@@ -44,7 +44,7 @@ class HWNet : public QObject
 
 public:
     HWNet();
-	void Connect(const QString & hostName, quint16 port);
+	void Connect(const QString & hostName, quint16 port, const QString & nick);
 	void Disconnect();
 	void SendNet(const QString & buf);
 	void SendNet(const QByteArray & buf);
@@ -65,10 +65,18 @@ private:
 	NetState state;
 	QRegExp * IRCmsg_cmd_param;
 	QRegExp * IRCmsg_number_param;
+	QRegExp * IRCmsg_who_cmd_param;
+	QRegExp * IRCmsg_who_cmd_param_text;
+	QString mynick;
+	QString opnick;
+	bool isOp;
+	quint32 opCount;
 
 	void ParseLine(const QString & msg);
 	void msgcmd_paramHandler(const QString & msg);
 	void msgnumber_paramHandler(const QString & msg);
+	void msgwho_cmd_paramHandler(const QString & msg);
+	void msgwho_cmd_param_textHandler(const QString & msg);
 
 private slots:
 	void ClientRead();

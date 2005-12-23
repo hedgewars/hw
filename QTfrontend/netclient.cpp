@@ -40,6 +40,9 @@ HWNet::HWNet()
 	state = nsDisconnected;
 	IRCmsg_cmd_param = new QRegExp("^[A-Z]+ :.+$");
 	IRCmsg_number_param = new QRegExp("^:\\S+ [0-9]{3} .+$");
+	IRCmsg_who_cmd_param = new QRegExp("^:\\S+ [A-Z]+ \\S+");
+	IRCmsg_who_cmd_param_text = new QRegExp("^:\\S+ [A-Z]+ \\S+ :.+$");
+	isOp = false;
 
 	connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
 	connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -76,10 +79,13 @@ void HWNet::displayError(QAbstractSocket::SocketError socketError)
     }
 }
 
-void HWNet::Connect(const QString & hostName, quint16 port)
+void HWNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
 	state = nsConnecting;
 	NetSocket.connectToHost(hostName, port);
+	mynick = nick;
+	opnick = "";
+	opCount = 0;
 }
 
 
@@ -87,7 +93,7 @@ void HWNet::OnConnect()
 {
 	state = nsConnected;
 	SendNet(QString("USER hwgame 1 2 Hedgewars game"));
-	SendNet(QString("NICK Hedgewars"));
+	SendNet(QString("NICK %1").arg(mynick));
 }
 
 void HWNet::OnDisconnect()
@@ -97,8 +103,8 @@ void HWNet::OnDisconnect()
 
 void HWNet::Perform()
 {
-	SendNet(QString("LIST"));
-	SendNet(QString("JOIN #hw"));
+//	SendNet(QString("LIST"));
+	SendNet(QString("JOIN #alex"));
 }
 
 void HWNet::Disconnect()
@@ -137,6 +143,7 @@ void HWNet::SendNet(const QByteArray & buf)
 
 void HWNet::ParseLine(const QString & msg)
 {
+	//QMessageBox::information(0, "", msg);
 	if (IRCmsg_cmd_param->exactMatch(msg))
 	{
 		msgcmd_paramHandler(msg);
@@ -144,6 +151,14 @@ void HWNet::ParseLine(const QString & msg)
 	if (IRCmsg_number_param->exactMatch(msg))
 	{
 		msgnumber_paramHandler(msg);
+	} else
+	if (IRCmsg_who_cmd_param->exactMatch(msg))
+	{
+		msgwho_cmd_paramHandler(msg);
+	} else
+	if (IRCmsg_who_cmd_param_text->exactMatch(msg))
+	{
+		msgwho_cmd_param_textHandler(msg);
 	}
 }
 
@@ -158,7 +173,9 @@ void HWNet::msgcmd_paramHandler(const QString & msg)
 
 void HWNet::msgnumber_paramHandler(const QString & msg)
 {
-	QStringList list = msg.split(" ");
+	int pos = msg.indexOf(" :");
+	QString text = msg.mid(pos + 2);
+	QStringList list = msg.mid(0, pos).split(" ");
 	bool ok;
 	quint16 number = list[1].toInt(&ok);
 	if (!ok)
@@ -171,9 +188,60 @@ void HWNet::msgnumber_paramHandler(const QString & msg)
 			emit Connected();
 			break;
 		}
-		case 322 :
+		case 322 : // RPL_LIST
 		{
 			emit AddGame(list[3]);
+			break;
 		}
+		case 353 : // RPL_NAMREPLY
+		{
+			QStringList ops = text.split(" ").filter(QRegExp("^@\\S+$"));
+			opCount += ops.size();
+			if (ops.size() == 1)
+			{
+				opnick = ops[0].mid(1);
+			}
+			break;
+		}
+		case 366 : // RPL_ENDOFNAMES
+		{
+			if (opCount != 1)
+			{
+				opnick = "";
+			}
+			SendNet(QString("PRIVMSG #alex :%1 ops here").arg(opCount));
+			opCount = 0;
+			break;
+		}
+		case 432 : // ERR_ERRONEUSNICKNAME
+		case 433 : // ERR_NICKNAMEINUSE
+		{
+			// ask for another nick
+		}
+	}
+}
+
+void HWNet::msgwho_cmd_paramHandler(const QString & msg)
+{
+	QStringList list = msg.split(" ");
+	QString who = list[0].mid(1).split("!")[0];
+	if (list[1] == "NICK")
+	{
+		if (mynick == who)
+			mynick = list[2];
+		if (opnick == who)
+			opnick = list[2];
+	}
+}
+
+void HWNet::msgwho_cmd_param_textHandler(const QString & msg)
+{
+	int pos = msg.indexOf(" :");
+	QString text = msg.mid(pos + 2);
+	QStringList list = msg.mid(0, pos).split(" ");
+	QString who = list[0].mid(1).split("!")[0];
+	if (list[1] == "PRIVMSG")
+	{
+		SendNet(QString("PRIVMSG #alex :%1 said \"%2\" to %3").arg(who, text, list[2]));
 	}
 }
