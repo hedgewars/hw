@@ -145,7 +145,7 @@ repeat
        inc(x2, 2)
      until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
      if (x2 < 1900) and (k = 16) and (x2 - x1 > 250)
-        and not CheckIntersect(x1, y, x2 - x1, 16) then break;
+        and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
      end;
 x1:= 0;
 until y > 900;
@@ -166,7 +166,7 @@ if x1 > 0 then
    r.h:= 16;
    SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
    SDL_FreeSurface(tmpsurf);
-   AddRect(x1 - 8, y - 8, x2 - x1 + 16, 72);
+   AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
    for k:= y to y + 15 do
        for i:= x1 to x2 do Land[k, i]:= $FFFFFF
    end else Result:= false

@@ -539,7 +539,7 @@ SDL_FreeSurface(StoreSurface )
 end;
 
 procedure RenderHealth(var Hedgehog: THedgehog);
-var s: string;
+var s: string[15];
 begin
 str(Hedgehog.Gear.Health, s);
 Hedgehog.HealthRect:= WriteInRoundRect(TempSurface, Hedgehog.HealthRect.x, Hedgehog.HealthRect.y, Hedgehog.Team.Color, fnt16, s);
@@ -584,10 +584,16 @@ if Step = MaxCalls then
 end;
 
 function  LoadImage(filename: string): PSDL_Surface;
+var tmpsurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
-Result:= IMG_Load(PChar(filename));
-TryDo(Result <> nil, msgFailed, true);
+tmpsurf:= IMG_Load(PChar(filename));
+TryDo(tmpsurf <> nil, msgFailed, true);
+if cFullScreen then
+   begin
+   Result:= SDL_DisplayFormat(tmpsurf);
+   SDL_FreeSurface(tmpsurf);
+   end else Result:= tmpsurf;
 WriteLnToConsole(msgOK)
 end;
 

@@ -30,12 +30,18 @@ const Template0Points: array[0..4] of TPoint =
        (x: 1023; y: 1023)
       );
 
-const Template1Points: array[0..6] of TPoint =
+const Template1Points: array[0..12] of TPoint =
       (
        (x:  300; y: 1500),
        (x:  300; y: 1000),
        (x:  250; y:  750),
+       (x:  550; y:  480),
+       (x:  650; y:  780),
+       (x:  810; y:  780),
+       (x:  800; y:  500),
        (x: 1200; y:  500),
+       (x: 1300; y:  800),
+       (x: 1500; y:  500),
        (x: 1800; y:  750),
        (x: 1750; y: 1000),
        (x: 1750; y: 1500)
@@ -45,7 +51,7 @@ const Template1Points: array[0..6] of TPoint =
        (x: 1023; y: 1023)
       );
 
-const Template2Points: array[0..21] of TPoint =
+const Template2Points: array[0..28] of TPoint =
       (
        (x:  350; y: 1500),
        (x:  350; y: 1000),
@@ -54,21 +60,28 @@ const Template2Points: array[0..21] of TPoint =
        (x:  520; y:  450),
        (x:  190; y:  600),
        (x:  210; y:  260),
-       (x: 1650; y:  220),
-       (x: 1650; y:  460),
-       (x:  900; y:  410),
+       (x:  800; y:  310),
+       (x: 1350; y:  220),
+       (x: 1250; y:  360),
+       (x: 1550; y:  520),
+       (x: 1100; y:  400),
+       (x:  900; y:  470),
        (x:  650; y:  400),
+       (x:  900; y:  750),
+       (x:  600; y:  750),
+       (x:  600; y:  850),
+       (x: 1100; y:  900),
        (x: 1200; y: 1000),
-       (x: 1200; y: 1200),
-       (x: 1400; y: 1200),
+       (x: 1200; y: 1300),
+       (x: 1400; y: 1300),
        (x: 1400; y: 1000),
-       (x: 1280; y:  750),
-       (x: 1150; y:  530),
-       (x: 1700; y:  750),
+       (x: 1280; y:  850),
+       (x: 1150; y:  630),
+       (x: 1600; y:  850),
        (x: 1800; y:  600),
        (x: 1900; y:  600),
        (x: 1700; y: 1010),
-       (x: 1700; y: 1200)
+       (x: 1700; y: 1500)
       );
       Template2FPoints: array[0..1] of TPoint =
       (
@@ -156,8 +169,27 @@ const Template4Points: array[0..38] of TPoint =
        (x:  500; y: 1023),
        (x: 1500; y: 1023)
       );
+    
+const Template5Points: array[0..10] of TPoint =
+      (
+       (x:  225; y: 1260),
+       (x:  254; y:  226),
+       (x:  729; y:  238),
+       (x:  658; y:  441),
+       (x:  661; y:  651),
+       (x: 1023; y:  759),
+       (x: 1374; y:  648),
+       (x: 1473; y:  285),
+       (x: 1803; y:  207),
+       (x: 1839; y:  801),
+       (x: 1674; y: 1239)
+      );
+      Template5FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y: 1023)
+      );
 
-const EdgeTemplates: array[0..4] of TEdgeTemplate =
+const EdgeTemplates: array[0..5] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -171,7 +203,7 @@ const EdgeTemplates: array[0..4] of TEdgeTemplate =
        ),
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
-        BezPassCnt: 4;
+        BezPassCnt: 3;
         PassMin: 10; PassDelta: 2;
         WaveAmplMin:    25; WaveAmplDelta: 15;
         WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
@@ -208,8 +240,21 @@ const EdgeTemplates: array[0..4] of TEdgeTemplate =
         FillPoints: @Template4FPoints;
         FillPointsCount: Succ(High(Template4FPoints));
         canMirror: true; canFlip: false;
+       ),       
+       (BasePoints: @Template5Points;
+        BasePointsCount: Succ(High(Template5Points));
+        BezPassCnt: 4;
+        PassMin: 15; PassDelta: 1;
+        WaveAmplMin:    15; WaveAmplDelta: 14;
+        WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+        FillPoints: @Template5FPoints;
+        FillPointsCount: Succ(High(Template5FPoints));
+        canMirror: true; canFlip: false;
        )
+       
       );
+
+
 
 implementation
 
