@@ -57,6 +57,8 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 	IPCSocket = 0;
 	TeamCount = 0;
 	seed = "";
+	cfgdir.setPath(cfgdir.homePath());
+	cfgdir.cd(".hedgewars");
 }
 
 void HWGame::NewConnection()
@@ -84,23 +86,7 @@ void HWGame::ClientDisconnect()
 
 void HWGame::SendTeamConfig(int index)
 {
-	QFile teamcfg(teams[index]);
-	if (!teamcfg.open(QIODevice::ReadOnly))
-	{
-		return ;
-	}
-	QTextStream stream(&teamcfg);
-	stream.setCodec("UTF-8");
-	QString str;
-
-	while (!stream.atEnd())
-	{
-		str = stream.readLine();
-		if (str.startsWith(";") || (str.length() > 254)) continue;
-		str.prepend("e");
-		SendIPC(str.toLocal8Bit());
-	}
-	teamcfg.close();
+	LocalCFG(teams[index]);
 }
 
 void HWGame::SendConfig()
@@ -108,14 +94,15 @@ void HWGame::SendConfig()
 	if (gameType == gtDemo)
 	{
 		SENDIPC("TD");
-		SendIPCRaw(toSendBuf->constData(), toSendBuf->size());
+		RawSendIPC(*toSendBuf);
 		delete toSendBuf;
 		return ;
 	}
 	SENDIPC("TL");
-	SENDIPC("e$gmflags 0");
+//	SENDIPC("e$gmflags 0");
 	SENDIPC("eaddteam");
 	SendTeamConfig(0);
+//	if () SENDIPC("rdriven");
 	SENDIPC("ecolor 65535");
 	SENDIPC("eadd hh0 0");
 	SENDIPC("eadd hh1 0");
@@ -138,12 +125,21 @@ void HWGame::ParseMessage()
 	{
 		case '?':
 		{
-			SENDIPC("!");
+			if (gameType == gtNet)
+				emit SendNet(QByteArray("\x01""?"));
+			else
+				SENDIPC("!");
 			break;
 		}
 		case 'C':
 		{
-			SendConfig();
+			if (gameType == gtNet)
+			{
+				SENDIPC("TN");
+				emit SendNet(QByteArray("\x01""C"));
+			}
+			else
+				SendConfig();
 			break;
 		}
 		case '+':
@@ -152,6 +148,10 @@ void HWGame::ParseMessage()
 		}
 		default:
 		{
+			if (gameType == gtNet)
+			{
+				emit SendNet(QByteArray::fromRawData(msgbuf, msgsize));
+			}
 			demo->append(msgsize);
 			demo->append(QByteArray::fromRawData(msgbuf, msgsize));
 		}
@@ -179,10 +179,16 @@ void HWGame::SendIPC(const QByteArray & buf)
 	demo->append(buf);
 }
 
-void HWGame::SendIPCRaw(const char * msg, quint32 len)
+void HWGame::RawSendIPC(const QByteArray & buf)
 {
-	IPCSocket->write(msg, len);
-	demo->append(QByteArray::fromRawData(msg, len));
+	IPCSocket->write(buf);
+	demo->append(buf);
+}
+
+void HWGame::FromNet(const QByteArray & msg)
+{
+	// ?local config?
+	RawSendIPC(msg);
 }
 
 void HWGame::ClientRead()
@@ -209,11 +215,8 @@ void HWGame::ClientRead()
 
 void HWGame::Start()
 {
-	gameType = gtLocal;
-	if (TeamCount < 2) return;
 	QProcess * process;
 	QStringList arguments;
-	seedgen.GenRNDStr(seed, 10);
 	process = new QProcess;
 	arguments << resolutions[0][vid_Resolution];
 	arguments << resolutions[1][vid_Resolution];
@@ -222,9 +225,6 @@ void HWGame::Start()
 	arguments << seed;
 	arguments << (vid_Fullscreen ? "1" : "0");
 	process->start("hw", arguments);
-	demo = new QByteArray;
-	demo->append(seed.toLocal8Bit());
-	demo->append(10);
 }
 
 void HWGame::AddTeam(const QString & teamname)
@@ -335,4 +335,46 @@ void HWGame::PlayDemo(const QString & demofilename)
 	arguments << (vid_Fullscreen ? "1" : "0");
 	process->start("hw", arguments);
 	demo = new QByteArray;
+}
+
+void HWGame::StartNet(const QString & netseed)
+{
+	gameType = gtNet;
+	seed = netseed;
+	Start();
+	demo = new QByteArray;
+	demo->append(seed.toLocal8Bit());
+	demo->append(10);
+}
+
+void HWGame::StartLocal()
+{
+	gameType = gtLocal;
+	if (TeamCount < 2) return;
+	seedgen.GenRNDStr(seed, 10);
+	Start();
+	demo = new QByteArray;
+	demo->append(seed.toLocal8Bit());
+	demo->append(10);
+}
+
+void HWGame::LocalCFG(const QString & teamname)
+{
+	QFile teamcfg(cfgdir.absolutePath() + "/" + teamname + ".cfg");
+	if (!teamcfg.open(QIODevice::ReadOnly))
+	{
+		return ;
+	}
+	QTextStream stream(&teamcfg);
+	stream.setCodec("UTF-8");
+	QString str;
+
+	while (!stream.atEnd())
+	{
+		str = stream.readLine();
+		if (str.startsWith(";") || (str.length() > 254)) continue;
+		str.prepend("e");
+		SendIPC(str.toLocal8Bit());
+	}
+	teamcfg.close();
 }

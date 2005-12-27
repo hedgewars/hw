@@ -37,46 +37,89 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QRegExp>
+#include <QStringList>
+#include "team.h"
+#include "rndstr.h"
+
+#define MAGIC_CHAR "\x02"
+
+struct netTeam
+{
+	QString nick;
+	QStringList hhs;
+};
 
 class HWNet : public QObject
 {
 	Q_OBJECT
 
 public:
-    HWNet();
+    HWNet(int Resolution, bool Fullscreen);
 	void Connect(const QString & hostName, quint16 port, const QString & nick);
 	void Disconnect();
-	void SendNet(const QString & buf);
-	void SendNet(const QByteArray & buf);
+	void JoinGame(const QString & game);
+	void AddTeam(const HWTeam & team);
+	void StartGame();
 
 signals:
 	void Connected();
 	void AddGame(const QString & chan);
+	void EnteredGame();
+	void FromNet(const QByteArray & buf);
+	void LocalCFG(const QString & team);
+
+public slots:
+	void SendNet(const QByteArray & buf);
 
 private:
 	enum NetState {
-		nsDisconnected = 0,
-		nsConnecting   = 1,
-		nsConnected    = 3,
-		nsQuitting     = 5
+		nsDisconnected	= 0,
+		nsConnecting	= 1,
+		nsConnected	= 3,
+		nsJoining	= 4,
+		nsJoined	= 5,
+		nsStarting	= 6,
+		nsGaming	= 7,
+		nsQuitting	= 8
 	};
 
 	QTcpSocket NetSocket;
 	NetState state;
-	QRegExp * IRCmsg_cmd_param;
+	QRegExp * IRCmsg_cmd_text;
 	QRegExp * IRCmsg_number_param;
-	QRegExp * IRCmsg_who_cmd_param;
-	QRegExp * IRCmsg_who_cmd_param_text;
+	QRegExp * IRCmsg_who_cmd_target;
+	QRegExp * IRCmsg_who_cmd_target_text;
+	QRegExp * IRCmsg_who_cmd_text;
 	QString mynick;
 	QString opnick;
+	QString channel;
 	bool isOp;
 	quint32 opCount;
+	netTeam teams[5];
+	quint8 teamsCount;
+	int gameResolution;
+	bool gameFullscreen;
+	RNDStr seedgen;
+	int playerscnt;
+	int configasks;
+
+	void RawSendNet(const QString & buf);
+	void RawSendNet(const QByteArray & buf);
 
 	void ParseLine(const QString & msg);
-	void msgcmd_paramHandler(const QString & msg);
+	void msgcmd_textHandler(const QString & msg);
 	void msgnumber_paramHandler(const QString & msg);
-	void msgwho_cmd_paramHandler(const QString & msg);
-	void msgwho_cmd_param_textHandler(const QString & msg);
+	void msgwho_cmd_targetHandler(const QString & msg);
+	void msgwho_cmd_textHandler(const QString & msg);
+	void msgwho_cmd_target_textHandler(const QString & msg);
+
+	void hwp_opmsg(const QString & who, const QString & msg);
+	void hwp_chanmsg(const QString & who, const QString & msg);
+	void ConfigAsked();
+	void NetTeamAdded(const QString & msg);
+
+	void RunGame(const QString & seed);
+
 
 private slots:
 	void ClientRead();
@@ -85,5 +128,22 @@ private slots:
 	void Perform();
 	void displayError(QAbstractSocket::SocketError socketError);
 };
+
+#define SENDCFGSTRNET(a)   {\
+							QByteArray strmsg; \
+							strmsg.append(a); \
+							quint8 sz = strmsg.size(); \
+							QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg; \
+							emit FromNet(enginemsg); \
+							RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, QString(enginemsg.toBase64()))); \
+						}
+
+#define SENDCFGSTRLOC(a)   {\
+							QByteArray strmsg; \
+							strmsg.append(a); \
+							quint8 sz = strmsg.size(); \
+							QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg; \
+							emit FromNet(enginemsg); \
+						}
 
 #endif

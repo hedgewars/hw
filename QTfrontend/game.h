@@ -39,6 +39,7 @@
 #include <QTcpSocket>
 #include <QByteArray>
 #include <QString>
+#include <QDir>
 #include "team.h"
 #include "rndstr.h"
 
@@ -51,9 +52,17 @@ class HWGame : public QObject
 	Q_OBJECT
 public:
 	HWGame(int Resolution, bool Fullscreen);
-	void Start();
 	void AddTeam(const QString & team);
 	void PlayDemo(const QString & demofilename);
+	void StartLocal();
+	void StartNet(const QString & netseed);
+
+signals:
+	void SendNet(const QByteArray & msg);
+
+public slots:
+	void FromNet(const QByteArray & msg);
+	void LocalCFG(const QString & teamname);
 
 private:
     enum GameType {
@@ -75,13 +84,15 @@ private:
 	int vid_Resolution;
 	bool vid_Fullscreen;
 	GameType gameType;
+	QDir cfgdir;
 
+	void Start();
 	void SendConfig();
 	void SendTeamConfig(int index);
 	void ParseMessage();
 	void SendIPC(const char * msg, quint8 len);
 	void SendIPC(const QByteArray & buf);
-	void SendIPCRaw(const char * msg, quint32 len);
+	void RawSendIPC(const QByteArray & buf);
 	void SaveDemo(const QString & filename);
 	QString GetThemeBySeed();
 

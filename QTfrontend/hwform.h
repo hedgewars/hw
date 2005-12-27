@@ -71,7 +71,12 @@ private slots:
 	void PlayDemo();
 	void NetConnect();
 	void NetDisconnect();
+	void NetJoin();
+	void NetCreate();
 	void AddGame(const QString & chan);
+	void NetAddTeam();
+	void NetGameEnter();
+	void NetStartGame();
 
 public slots:
 	void CBGrave_activated(const QString & gravename);
@@ -92,6 +97,7 @@ private:
 #define ID_PAGE_DEMOS 4
 #define ID_PAGE_NET 5
 #define ID_PAGE_NETCHAT 6
-#define ID_PAGE_MAIN 7
+#define ID_PAGE_NETCFG 7
+#define ID_PAGE_MAIN 8
 
 #endif
