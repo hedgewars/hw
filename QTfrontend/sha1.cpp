@@ -179,7 +179,7 @@ void sha1_loop(struct sha1_ctxt *ctxt, const quint8 *input, size_t len)
 	}
 }
 
-void sha1_result(struct sha1_ctxt *ctxt, caddr_t digest0)
+void sha1_result(struct sha1_ctxt *ctxt, sha1_digest digest0)
 {
 	quint8 *digest;
 

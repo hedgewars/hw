@@ -39,7 +39,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-typedef unsigned char caddr_t[20];
+typedef unsigned char sha1_digest[20];
 
 struct sha1_ctxt {
 	union {
@@ -60,7 +60,7 @@ struct sha1_ctxt {
 void sha1_init(struct sha1_ctxt *ctxt);
 void sha1_pad(struct sha1_ctxt *ctxt);
 extern void sha1_loop(struct sha1_ctxt *ctxt, const quint8 *input, size_t len);
-extern void sha1_result(struct sha1_ctxt *ctxt, caddr_t digest0);
+extern void sha1_result(struct sha1_ctxt *ctxt, sha1_digest digest0);
 #ifdef __cplusplus
 }
 #endif

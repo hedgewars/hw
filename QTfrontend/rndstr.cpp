@@ -50,12 +50,12 @@ RNDStr::RNDStr()
 	int secs = now.secsTo(zero);
 	SHA1Update(&ctx, (quint8 *)&secs, sizeof(int));
 }
-	
+
 void RNDStr::GenRNDStr(QString & str, quint32 len)
 {
 	str = "";
 	sha1_ctxt tmpctx;
-	caddr_t digest;
+	sha1_digest digest;
 	for(quint32 i = 0; i < len; i++)
 	{
 		SHA1Update(&ctx, (quint8 *)upd, updcnt);
