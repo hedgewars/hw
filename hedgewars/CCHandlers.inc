@@ -218,6 +218,8 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
      if ((State and gstHHDriven)<>0)and((State and (gstAttacked or gstHHChooseTarget or gstMoving)) = 0) then
         begin
         FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear;
+        if (State and (gstAttacked or gstHHChooseTarget) = 0)and(CurAmmoGear = nil) then
+           State:= State or gstAttacking;
         if not CurrentTeam.ExtDriven then SendIPC('A');
         Message:= Message or gm_Attack
         end
@@ -225,56 +227,14 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
 end;
 
 procedure chAttack_m(var s: shortstring);
-var xx, yy: real;
 begin
 if CheckNoTeamOrHH then exit;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
      CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      begin
      {$IFDEF DEBUGFILE}AddFileLog('/-attack: Gear.State = '+inttostr(State)+' CurAmmoGear = '+inttostr(longword(CurAmmoGear)));{$ENDIF}
-     if CurAmmoGear <> nil then
-        begin
-        Message:= Message and not gm_Attack;
-        if not CurrentTeam.ExtDriven then SendIPC('a')
-        end;
-     if (((State and (gstHHDriven or gstAttacking)) = (gstHHDriven or gstAttacking))and
-        ((State and (gstAttacked or gstMoving or gstHHChooseTarget)) = 0)and
-        (((State and gstFalling  ) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInFall) <> 0))and
-        (((State and gstHHJumping) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0)))and
-        (CurAmmoGear = nil) then
-        begin
-        if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
-           begin
-           StopTPUSound;
-           PlaySound(sndThrowRelease);
-           end;
-        xx:= Sign(dX)*Sin(Angle*pi/cMaxAngle);
-        yy:= -Cos(Angle*pi/cMaxAngle);
-             case Ammo[CurSlot, CurAmmo].AmmoType of
-                      amBazooka: FollowGear:= AddGear(round(X), round(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
-                      amGrenade: FollowGear:= AddGear(round(X), round(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo[CurSlot, CurAmmo].Timer);
-                          amUFO: FollowGear:= AddGear(round(X), round(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
-                      amShotgun: begin
-                                 PlaySound(sndShotgunReload);
-                                 FollowGear:= AddGear(round(X + xx*20), round(Y + yy*20), gtShotgunShot,  0, xx * 0.5, 0.5 * yy);
-                                 end;
-                         amSkip: TurnTimeLeft:= 0;
-                   amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
-                         amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
-                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.01, 0, 3000);
-                  end;
-        Power:= 0;
-        if CurAmmoGear <> nil then
-           begin
-           CurAmmoGear.Message:= Gear.Message;
-           exit
-           end else
-           begin
-           Message:= Message and not gm_Attack;
-           if not CurrentTeam.ExtDriven then SendIPC('a')
-           end;
-        AfterAttack
-        end
+      Message:= Message and not gm_Attack;
+      if not CurrentTeam.ExtDriven then SendIPC('a')
      end
 end;
 

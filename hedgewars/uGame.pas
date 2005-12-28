@@ -53,6 +53,7 @@ if CurrentTeam.ExtDriven then
       ProcessKbdDemo;
    end
    else begin
+   ProcessKbd;
    NetGetNextCmd; // на случай, если что-то сказано
    if SendEmptyPacketTicks >= cSendEmptyPacketTime then
       begin

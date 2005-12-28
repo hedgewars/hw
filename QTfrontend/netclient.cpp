@@ -35,10 +35,6 @@
 #include "netclient.h"
 #include "game.h"
 
-#include <QtDebug>
-
-#define chkp qDebug() << "hw chkp in " << __FILE__ << ":" << __LINE__
-
 HWNet::HWNet(int Resolution, bool Fullscreen)
 	: QObject()
 {
@@ -160,9 +156,13 @@ void HWNet::SendNet(const QByteArray & buf)
 	if ((state == nsGaming) || (state == nsStarting))
 	{
 		QString msg = QString(buf.toBase64());
-		if (msg == "AUM=")
+		if ((msg == "AUM=") && (mynick == opnick))
 		{
 			ConfigAsked();
+		} else
+		if (msg == "AT8=")
+		{
+			// its ping ("?")
 		} else
 		{
 			RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, msg));
@@ -325,7 +325,9 @@ void HWNet::hwp_opmsg(const QString & who, const QString & msg)
 				teamnames += MAGIC_CHAR;
 				teamnames += teams[i].hhs[0];
 			}
-			RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR"Teams%2").arg(channel, teamnames));
+			QString tmsg = QString(MAGIC_CHAR"=%2").arg(teamnames);
+			RawSendNet(QString("PRIVMSG %1 :").arg(channel) + tmsg);
+			hwp_chanmsg(mynick, tmsg);
 		}
 	}
 }
@@ -338,7 +340,6 @@ void HWNet::ConfigAsked()
 		quint32 color = 65535;
 		for (int i = 0; i < teamsCount; i++)
 		{
-chkp;			SENDCFGSTRNET("eaddteam");
 			QString msg;
 			msg = MAGIC_CHAR "T" MAGIC_CHAR + teams[i].nick + MAGIC_CHAR + teams[i].hhs.join(MAGIC_CHAR);
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
@@ -349,7 +350,8 @@ chkp;			SENDCFGSTRNET("eaddteam");
 			SENDCFGSTRNET("eadd hh2 0");
 			color <<= 8;
 		}
-chkp;		SENDCFGSTRNET("!");
+		SENDCFGSTRNET("!");
+		state = nsGaming;
 	}
 }
 
@@ -359,28 +361,43 @@ void HWNet::hwp_chanmsg(const QString & who, const QString & msg)
 	{
 		return ;
 	}
-	if ((state == nsJoined) && (msg.startsWith(MAGIC_CHAR"Start!"MAGIC_CHAR)) && (who == opnick))
+	if (state == nsJoined)
 	{
-		state = nsStarting;
-		RunGame(msg.mid(7));
-		return ;
+		if (msg.startsWith(MAGIC_CHAR"Start!"MAGIC_CHAR) && (who == opnick))
+		{
+			state = nsStarting;
+			RunGame(msg.mid(7));
+			return ;
+		}
+		if (msg.startsWith(MAGIC_CHAR"="MAGIC_CHAR) && (who == opnick))
+		{
+			emit ChangeInTeams(msg.mid(3).split(MAGIC_CHAR));
+		}
 	}
-	if ((state == nsStarting) && (msg == MAGIC_CHAR MAGIC_CHAR "AUM="))
+	if (state == nsStarting)
 	{
-		if (mynick == opnick) ConfigAsked();
-		return ;
+		if (msg == MAGIC_CHAR MAGIC_CHAR "AUM=")
+		{
+			if (mynick == opnick) ConfigAsked();
+			return ;
+		}
+		if (msg == MAGIC_CHAR MAGIC_CHAR "ASE=")
+		{
+			state = nsGaming;
+		}
+		if (msg.startsWith(MAGIC_CHAR"T"MAGIC_CHAR))
+		{
+			NetTeamAdded(msg.mid(3));
+		}
 	}
-	if ((state == nsStarting) && (msg.startsWith(MAGIC_CHAR"T"MAGIC_CHAR)))
-	{
-		NetTeamAdded(msg.mid(3));
-	}
-	if (state != nsGaming)
+	if ((state != nsGaming) && (state != nsStarting))
 	{
 		return;
 	}
 	if (msg.startsWith(MAGIC_CHAR MAGIC_CHAR)) // HWP message
 	{
-		emit FromNet(QByteArray::fromBase64(msg.mid(2).toLocal8Bit()));
+		QByteArray em = QByteArray::fromBase64(msg.mid(2).toLocal8Bit());
+		emit FromNet(em);
 	} else // smth other
 	{
 
@@ -392,18 +409,19 @@ void HWNet::NetTeamAdded(const QString & msg)
 	QStringList list = msg.split(MAGIC_CHAR, QString::SkipEmptyParts);
 	if (list.size() != 10)
 		return ;
+	SENDCFGSTRLOC("eaddteam");
 	if (list[0] == mynick)
 	{
-chkp;		emit LocalCFG(list[1]);
+		emit LocalCFG(list[1]);
 	} else
 	{
-chkp;		SENDCFGSTRLOC("erdriven");
-		SENDCFGSTRLOC(QString("ename team %1").arg(list[2]));
+		SENDCFGSTRLOC("erdriven");
+		SENDCFGSTRLOC(QString("ename team %1").arg(list[1]));
 		for (int i = 0; i < 8; i++)
 		{
-			SENDCFGSTRLOC(QString("ename hh%1").arg(i) + list[i + 3]);
+			SENDCFGSTRLOC(QString("ename hh%1 ").arg(i) + list[i + 2]);
 		}
-chkp;	}
+	}
 }
 
 void HWNet::AddTeam(const HWTeam & team)

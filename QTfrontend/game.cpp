@@ -70,6 +70,8 @@ void HWGame::NewConnection()
 		connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
 		connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
 		msgsize = 0;
+		if (toSendBuf.size() > 0)
+			SENDIPC("?");
 	} else
 	{
 		client->disconnectFromHost();
@@ -91,13 +93,6 @@ void HWGame::SendTeamConfig(int index)
 
 void HWGame::SendConfig()
 {
-	if (gameType == gtDemo)
-	{
-		SENDIPC("TD");
-		RawSendIPC(*toSendBuf);
-		delete toSendBuf;
-		return ;
-	}
 	SENDIPC("TL");
 //	SENDIPC("e$gmflags 0");
 	SENDIPC("eaddteam");
@@ -139,7 +134,10 @@ void HWGame::ParseMessage()
 				emit SendNet(QByteArray("\x01""C"));
 			}
 			else
-				SendConfig();
+			{
+				if (gameType == gtLocal)
+				 	SendConfig();
+			}
 			break;
 		}
 		case '+':
@@ -148,46 +146,53 @@ void HWGame::ParseMessage()
 		}
 		default:
 		{
+			QByteArray tmpbuf = QByteArray::fromRawData((char *)&msgsize, 1) + QByteArray::fromRawData(msgbuf, msgsize);
 			if (gameType == gtNet)
 			{
-				emit SendNet(QByteArray::fromRawData(msgbuf, msgsize));
+				emit SendNet(tmpbuf);
 			}
-			demo->append(msgsize);
-			demo->append(QByteArray::fromRawData(msgbuf, msgsize));
+			demo->append(tmpbuf);
 		}
 	}
 }
 
 void HWGame::SendIPC(const char * msg, quint8 len)
 {
-	IPCSocket->write((char *)&len, 1);
-	IPCSocket->write(msg, len);
-	if ((len > 5) && !((msg[0] == 'e') && (msg[1] == 'b')))
-	{
-		demo->append(len);
-		demo->append(QByteArray::fromRawData(msg, len));
-	}
+	SendIPC(QByteArray::fromRawData(msg, len));
 }
 
 void HWGame::SendIPC(const QByteArray & buf)
 {
 	if (buf.size() > MAXMSGCHARS) return;
-	quint8 len = buf.size();
-	IPCSocket->write((char *)&len, 1);
-	IPCSocket->write(buf);
-	demo->append(len);
-	demo->append(buf);
+	if (!IPCSocket)
+	{
+		toSendBuf += buf;
+	} else
+	{
+		quint8 len = buf.size();
+		RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
+	}
 }
 
 void HWGame::RawSendIPC(const QByteArray & buf)
 {
-	IPCSocket->write(buf);
-	demo->append(buf);
+	if (!IPCSocket)
+	{
+		toSendBuf += buf;
+	} else
+	{
+		if (toSendBuf.size() > 0)
+		{
+			IPCSocket->write(toSendBuf);
+			demo->append(toSendBuf);
+		}
+		IPCSocket->write(buf);
+		demo->append(buf);
+	}
 }
 
 void HWGame::FromNet(const QByteArray & msg)
 {
-	// ?local config?
 	RawSendIPC(msg);
 }
 
@@ -299,52 +304,43 @@ void HWGame::PlayDemo(const QString & demofilename)
 
 	// read demo
 	QDataStream stream(&demofile);
-	toSendBuf = new QByteArray();
 	char buf[512];
 	quint32 readbytes;
 	do
 	{
 		readbytes = stream.readRawData((char *)&buf, 512);
-		toSendBuf -> append(QByteArray((char *)&buf, readbytes));
+		toSendBuf.append(QByteArray((char *)&buf, readbytes));
 
 	} while (readbytes > 0);
 	demofile.close();
 
 	// cut seed
-	quint32 index = toSendBuf->indexOf(10);
-	if (!index)
+	quint32 index = toSendBuf.indexOf(10);
+	if ((index < 3) || (index > 20))
 	{
 		QMessageBox::critical(0,
 				tr("Error"),
-				tr("Corrupted demo file %s").arg(demofilename),
+				tr("Corrupted demo file %1").arg(demofilename),
 				tr("Quit"));
 		return ;
 	}
-	seed = QString(toSendBuf->left(index++));
-	toSendBuf->remove(0, index);
+	seed = QString(toSendBuf.left(index++));
+	toSendBuf.remove(0, index);
 
+	toSendBuf = QByteArray::fromRawData("\x02TD", 3) + toSendBuf;
 	// run engine
-	QProcess * process;
-	QStringList arguments;
-	process = new QProcess;
-	arguments << resolutions[0][vid_Resolution];
-	arguments << resolutions[1][vid_Resolution];
-	arguments << GetThemeBySeed();
-	arguments << "46631";
-	arguments << seed;
-	arguments << (vid_Fullscreen ? "1" : "0");
-	process->start("hw", arguments);
 	demo = new QByteArray;
+	Start();
 }
 
 void HWGame::StartNet(const QString & netseed)
 {
 	gameType = gtNet;
 	seed = netseed;
-	Start();
 	demo = new QByteArray;
 	demo->append(seed.toLocal8Bit());
 	demo->append(10);
+	Start();
 }
 
 void HWGame::StartLocal()
@@ -352,10 +348,10 @@ void HWGame::StartLocal()
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
 	seedgen.GenRNDStr(seed, 10);
-	Start();
 	demo = new QByteArray;
 	demo->append(seed.toLocal8Bit());
 	demo->append(10);
+	Start();
 }
 
 void HWGame::LocalCFG(const QString & teamname)

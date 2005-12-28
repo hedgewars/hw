@@ -44,7 +44,6 @@ procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure KeyPressConsole(Key: Longword);
 procedure ParseCommand(CmdStr: shortstring);
-procedure AfterAttack; // экспортируется только для вызова из CurrAmmoGear
 
 implementation
 {$J+}
@@ -234,23 +233,6 @@ case Key of
 end;
 
 {$INCLUDE CCHandlers.inc}
-
-procedure AfterAttack;
-begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
-     CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     begin
-        Inc(AttacksNum);
-        State:= State and not gstAttacking;
-        if Ammo[CurSlot, CurAmmo].NumPerTurn >= AttacksNum then isInMultiShoot:= true
-           else begin
-           TurnTimeLeft:= Ammoz[Ammo[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
-           State:= State or gstAttacked;
-           OnUsedAmmo(Ammo)
-           end;
-     AttackBar:= 0
-     end
-end;
 
 initialization
 InitConsole;

@@ -251,8 +251,8 @@ void HWForm::TeamDiscard()
 void HWForm::SimpleGame()
 {
 	game = new HWGame(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
-	game->AddTeam("team.cfg");
-	game->AddTeam("team.cfg");
+	game->AddTeam("team");
+	game->AddTeam("team");
 	game->StartLocal();
 }
 
@@ -310,6 +310,7 @@ void HWForm::NetConnect()
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(GoToNetChat()));
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
+	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
 }
 
 void HWForm::NetDisconnect()
@@ -350,3 +351,10 @@ void HWForm::NetStartGame()
 {
 	hwnet->StartGame();
 }
+
+void HWForm::ChangeInNetTeams(const QStringList & teams)
+{
+	ui.listNetTeams->clear();
+	ui.listNetTeams->addItems(teams);
+}
+

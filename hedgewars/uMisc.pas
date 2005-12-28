@@ -70,7 +70,7 @@ var isCursorVisible : boolean = false;
     cExplosionBorderColor : LongWord = $808080;
 
     cDrownSpeed   : Real = 0.06;
-    cMaxWindSpeed : Real = 0.0003;
+    cMaxWindSpeed : Real = 0.0005;
     cWindSpeed    : Real = 0.0001;
     cGravity      : Real = 0.0005;
 

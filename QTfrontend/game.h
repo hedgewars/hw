@@ -80,7 +80,7 @@ private:
 	int TeamCount;
 	RNDStr seedgen;
 	QByteArray * demo;
-	QByteArray * toSendBuf;
+	QByteArray toSendBuf;
 	int vid_Resolution;
 	bool vid_Fullscreen;
 	GameType gameType;

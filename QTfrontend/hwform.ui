@@ -50,7 +50,7 @@
      </size>
     </property>
     <property name="currentIndex" >
-     <number>2</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="page" >
      <widget class="QPushButton" name="BtnSimpleGame" >
@@ -379,8 +379,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>99</width>
-          <height>29</height>
+          <width>181</width>
+          <height>270</height>
          </rect>
         </property>
         <attribute name="label" >
@@ -996,6 +996,16 @@
       </property>
       <property name="checked" >
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="listNetTeams" >
+      <property name="geometry" >
+       <rect>
+        <x>270</x>
+        <y>30</y>
+        <width>120</width>
+        <height>80</height>
+       </rect>
       </property>
      </widget>
     </widget>

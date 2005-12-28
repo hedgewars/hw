@@ -115,7 +115,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      AttacksNum:= 0;
      with Gear^ do
           begin
-          State:= State or gstHHDriven;
+          State:= gstHHDriven;
           Active:= true
           end;
      FollowGear:= Gear

@@ -77,6 +77,7 @@ private slots:
 	void NetAddTeam();
 	void NetGameEnter();
 	void NetStartGame();
+	void ChangeInNetTeams(const QStringList & teams);
 
 public slots:
 	void CBGrave_activated(const QString & gravename);
