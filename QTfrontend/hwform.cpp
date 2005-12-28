@@ -109,8 +109,8 @@ HWForm::HWForm(QWidget *parent)
 					tr("Error"),
 					tr("Cannot create directory %s").arg("/.hedgewars"),
 					tr("Quit"));
+			return ;
 		}
-		return ;
 	}
 	cfgdir.cd(".hedgewars");
 
