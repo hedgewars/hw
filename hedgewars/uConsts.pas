@@ -36,7 +36,7 @@ interface
 uses SDLh;
 {$INCLUDE options.inc}
 type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
-                   sWindL, sWindR);
+                   sWindL, sWindR, sRopeNode);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
      TGameType  = (gmtLocal, gmtDemo, gmtNet);
      TPathType  = (ptData, ptGraphics, ptThemes, ptThemeCurrent, ptTeams, ptMaps,
@@ -197,7 +197,8 @@ const
                                      (FileName: 'thinking.png'; Path: ptGraphics     ),    // sQuestion
                                      (FileName:  'WindBar.png'; Path: ptGraphics     ),    // sWindBar
                                      (FileName:    'WindL.png'; Path: ptGraphics     ),    // sWindL
-                                     (FileName:    'WindR.png'; Path: ptGraphics     )     // sWindR
+                                     (FileName:    'WindR.png'; Path: ptGraphics     ),    // sWindR
+                                     (FileName: 'RopeNode.png'; Path: ptGraphics     )     // sRopeNode
                                      );
       StuffPoz: array[TStuff] of TSDL_Rect = (
                                       (x:   0; y:   0; w: 512; h: 256), // sHorizont
@@ -207,31 +208,33 @@ const
                                       (x: 256; y: 512; w:  32; h:  32), // sQuestion
                                       (x: 256; y: 800; w: 151; h:  17), // sWindBar
                                       (x: 256; y: 817; w:  80; h:  13), // sWindL
-                                      (x: 336; y: 817; w:  80; h:  13)  // sWindR
+                                      (x: 336; y: 817; w:  80; h:  13), // sWindR
+                                      (x: 256; y: 544; w:   6; h:   6)  // sRopeNode
                                       );
       SpritesData: array[TSprite] of record
-                                         FileName: String[31];
-                                         Path    : TPathType;
-                                         Surface : PSDL_Surface;
-                                         Width, Height: integer;
-                                         end = (
-                                         (FileName: 'BlueWater.png'; Path: ptGraphics; Width: 256; Height: 48),// sprWater
-                                         (FileName:    'Clouds.png'; Path: ptGraphics; Width: 256; Height:128),// sprCloud
-                                         (FileName:      'Bomb.png'; Path: ptGraphics; Width:  16; Height: 16),// sprBomb
-                                         (FileName: 'BigDigits.png'; Path: ptGraphics; Width:  32; Height: 32),// sprBigDigit
-                                         (FileName:     'Frame.png'; Path: ptGraphics; Width:   4; Height: 32),// sprFrame
-                                         (FileName:       'Lag.png'; Path: ptGraphics; Width:  64; Height: 64),// sprLag
-                                         (FileName:     'Arrow.png'; Path: ptGraphics; Width:  16; Height: 16),// sprCursor
-                                         (FileName:   'Grenade.png'; Path: ptGraphics; Width:  32; Height: 32),// sprGrenade
-                                         (FileName:   'Targetp.png'; Path: ptGraphics; Width:  32; Height: 32),// sprTargetP
-                                         (FileName:       'UFO.png'; Path: ptGraphics; Width:  32; Height: 32),// sprUFO
-                                         (FileName:'SmokeTrace.png'; Path: ptGraphics; Width:  32; Height: 32),// sprSmokeTrace
-                                         (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32),// sprRopeHook
-                                         (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64),// sprExplosion50
-                                         (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16),// sprMineOff
-                                         (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16),// sprMineOn
-                                         (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32) // sprCase
-                                         );
+                     FileName: String[31];
+                     Path    : TPathType;
+                     Surface : PSDL_Surface;
+                     Width, Height: integer;
+                     hasAlpha: boolean;
+                     end = (
+                     (FileName: 'BlueWater.png'; Path: ptGraphics; Width: 256; Height: 48; hasAlpha: false),// sprWater
+                     (FileName:    'Clouds.png'; Path: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
+                     (FileName:      'Bomb.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprBomb
+                     (FileName: 'BigDigits.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
+                     (FileName:     'Frame.png'; Path: ptGraphics; Width:   4; Height: 32; hasAlpha:  true),// sprFrame
+                     (FileName:       'Lag.png'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprLag
+                     (FileName:     'Arrow.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprCursor
+                     (FileName:   'Grenade.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprGrenade
+                     (FileName:   'Targetp.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprTargetP
+                     (FileName:       'UFO.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprUFO
+                     (FileName:'SmokeTrace.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
+                     (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
+                     (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
+                     (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
+                     (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
+                     (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprCase
+                     );
       Soundz: array[TSound] of record
                                        FileName: String[31];
                                        Path    : TPathType;

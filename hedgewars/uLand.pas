@@ -257,7 +257,7 @@ procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
 begin
-tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + 'LandTex.png');
+tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + 'LandTex.png', false);
 r.y:= 0;
 while r.y < 1024 do
       begin
@@ -283,7 +283,7 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: integer;
 begin
-tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + 'Border.png');
+tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + 'Border.png', false);
 for x:= 0 to 2047 do
     begin
     yd:= 1023;
@@ -483,13 +483,13 @@ p:= TeamsList;
 TryDo(p <> nil, 'No teams on map!', true);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
-tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'L.png');
+tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'L.png', false);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 LoadFortPoints(p.FortName, false, TeamSize(p));
 p:= p.Next;
 TryDo(p <> nil, 'Only one team on map!', true);
-tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'R.png');
+tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'R.png', false);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 LoadFortPoints(p.FortName, true, TeamSize(p));

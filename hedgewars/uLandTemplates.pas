@@ -189,7 +189,36 @@ const Template5Points: array[0..10] of TPoint =
        (x: 1023; y: 1023)
       );
 
-const EdgeTemplates: array[0..5] of TEdgeTemplate =
+const Template6Points: array[0..20] of TPoint =
+      (
+       (x:  318; y: 1494),
+       (x:  270; y: 1023),
+       (x:  252; y:  921),
+       (x:  480; y:  888),
+       (x:  492; y:  753),
+       (x:  654; y:  756),
+       (x:  687; y:  630),
+       (x:  906; y:  627),
+       (x:  987; y:  813),
+       (x: 1125; y:  825),
+       (x: 1134; y:  645),
+       (x: 1236; y:  558),
+       (x: 1260; y:  438),
+       (x: 1467; y:  462),
+       (x: 1536; y:  348),
+       (x: 1680; y:  402),
+       (x: 1713; y:  594),
+       (x: 1593; y:  693),
+       (x: 1707; y:  774),
+       (x: 1728; y:  894),
+       (x: 1788; y: 1491)
+      );
+      Template6FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y: 1023)
+      );
+
+const EdgeTemplates: array[0..6] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -250,7 +279,17 @@ const EdgeTemplates: array[0..5] of TEdgeTemplate =
         FillPoints: @Template5FPoints;
         FillPointsCount: Succ(High(Template5FPoints));
         canMirror: true; canFlip: false;
-       )
+       ),
+      (BasePoints: @Template6Points;
+       BasePointsCount: Succ(High(Template6Points));
+       BezPassCnt: 3;
+       PassMin: 15; PassDelta: 1;
+       WaveAmplMin:    15; WaveAmplDelta: 10;
+       WaveFreqMin: 0.010; WaveFreqDelta: 0.0015;
+       FillPoints: @Template6FPoints;
+       FillPointsCount: Succ(High(Template6FPoints));
+       canMirror: true; canFlip: false;
+      )
        
       );
 

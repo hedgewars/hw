@@ -152,7 +152,7 @@ until y > 900;
 if x1 > 0 then
    begin
    Result:= true;
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + 'Girder.png');
+   tmpsurf:= LoadImage(Pathz[ptGraphics] + 'Girder.png', false);
    rr.x:= x1;
    rr.y:= y;
    while rr.x + 100 < x2 do
@@ -271,7 +271,7 @@ for i:= 1 to n do
     Readln(f, s); // filename
     with ThemeObjects[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + s + '.png');
+         Surf:= LoadImage(Pathz[ptThemeCurrent] + s + '.png', false);
          Read(f, Width, Height);
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);

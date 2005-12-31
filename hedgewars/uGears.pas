@@ -362,11 +362,12 @@ end;
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
+    roplen: real;
 
     procedure DrawRopeLine(X1, Y1, X2, Y2: integer);
-    var i: integer;
-        t, k: real;
-        r: TSDL_Rect;
+    const nodlen = 5;
+    var i, x, y: integer;
+        t, k, ladd: real;
     begin
     if abs(X1 - X2) > abs(Y1 - Y2) then
        begin
@@ -380,22 +381,23 @@ var Gear: PGear;
           Y2:= i
           end;
        k:= (Y2 - Y1) / (X2 - X1);
+       ladd:= sqrt(1 + sqr(k));
        if X1 < 0 then
           begin
           t:= Y1 - 2 - k * X1;
           X1:= 0
           end else t:= Y1 - 2;
        if X2 > cScreenWidth then X2:= cScreenWidth;
-       r.x:= X1;
-       while r.x <= X2 do
-             begin
-             r.y:= round(t);
-             r.w:= 4;
-             r.h:= 4;
-             SDL_FillRect(Surface, @r, cWhiteColor);
-             t:= t + k*3;
-             inc(r.x, 3)
-             end;
+       for x:= X1 to X2 do
+           begin
+           roplen:= roplen + ladd;
+           if roplen > nodlen then
+              begin
+              DrawGear(sRopeNode, x - 2, round(t) - 2, Surface);
+              roplen:= roplen - nodlen;
+              end;
+           t:= t + k;
+           end;
        end else
        begin
        if Y1 > Y2 then
@@ -408,22 +410,23 @@ var Gear: PGear;
           Y2:= i
           end;
        k:= (X2 - X1) / (Y2 - Y1);
+       ladd:= sqrt(1 + sqr(k));
        if Y1 < 0 then
           begin
           t:= X1 - 2 - k * Y1;
           Y1:= 0
           end else t:= X1 - 2;
        if Y2 > cScreenHeight then Y2:= cScreenHeight;
-       r.y:= Y1;
-       while r.y <= Y2 do
-             begin
-             r.x:= round(t);
-             r.w:= 4;
-             r.h:= 4;
-             SDL_FillRect(Surface, @r, cWhiteColor);
-             t:= t + k*3;
-             inc(r.y, 3)
-             end;
+       for y:= Y1 to Y2 do
+           begin
+           roplen:= roplen + ladd;
+           if roplen > nodlen then
+              begin
+              DrawGear(sRopeNode, round(t) - 2, y - 2, Surface);
+              roplen:= roplen - nodlen;
+              end;
+           t:= t + k;
+           end;
        end
     end;
 
@@ -443,8 +446,7 @@ while Gear<>nil do
              gtUFO: DrawSprite(sprUFO, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
       gtSmokeTrace: if Gear.State < 8 then DrawSprite(sprSmokeTrace, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
             gtRope: begin
-                    DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
-                                 Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
+                    roplen:= 0;
                     if RopePoints.Count > 0 then
                        begin
                        i:= 0;
@@ -456,9 +458,15 @@ while Gear<>nil do
                              end;
                        DrawRopeLine(Round(RopePoints.ar[i].X) + WorldDx, Round(RopePoints.ar[i].Y) + WorldDy,
                                     Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy);
+                       DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
+                                    Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
                        DrawSprite(sprRopeHook, Round(RopePoints.ar[0].X) + WorldDx - 16, Round(RopePoints.ar[0].Y) + WorldDy - 16, RopePoints.HookAngle, Surface);
                        end else
+                       begin
+                       DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
+                                    Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
                        DrawSprite(sprRopeHook, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
+                       end;
                     end;
        gtExplosion: DrawSprite(sprExplosion50, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)

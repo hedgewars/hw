@@ -56,7 +56,7 @@ procedure DrawLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; 
 procedure RenderHealth(var Hedgehog: THedgehog);
 function  RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
 procedure AddProgress;
-function  LoadImage(filename: string): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean): PSDL_Surface;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
@@ -189,9 +189,15 @@ if SDL_MustLock(LandSurface) then
 end;
 
 procedure StoreInit;
+var r: TSDL_Rect;
 begin
 StoreSurface  := SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
+r.x:= 0;
+r.y:= 0;
+r.w:= 576;
+r.h:= 1024;
+SDL_FillRect(StoreSurface, @r, 0);
 
 TempSurface   := SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 320, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo(  TempSurface <> nil, errmsgCreateSurface + ': temp'  , true);
@@ -205,7 +211,7 @@ procedure LoadToSurface(Filename: String; Surface: PSDL_Surface; X, Y: integer);
 var tmpsurf: PSDL_Surface;
     rr: TSDL_Rect;
 begin
-  tmpsurf:= LoadImage(Filename);
+  tmpsurf:= LoadImage(Filename, false);
   rr.x:= X;
   rr.y:= Y;
   SDL_UpperBlit(tmpsurf, nil, Surface, @rr);
@@ -406,8 +412,8 @@ for fi:= Low(THWFont) to High(THWFont) do
          WriteLnToConsole(msgOK)
          end;
 AddProgress;
-s:= Pathz[ptMapCurrent] + cLandFileName;
-WriteToConsole(msgLoading + s + ' ');         // загружаем текущее поле
+//s:= Pathz[ptMapCurrent] + cLandFileName;
+//WriteToConsole(msgLoading + s + ' ');         
 //tmpsurf:= IMG_Load(PChar(s));
 tmpsurf:= LandSurface;
 TryDo(tmpsurf <> nil, msgFailed, true);
@@ -416,7 +422,7 @@ if cFullScreen then
    LandSurface:= SDL_DisplayFormat(tmpsurf);
    SDL_FreeSurface(tmpsurf);
    end else LandSurface:= tmpsurf;
-TryDo(SDL_SetColorKey(LandSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
+TryDo(SDL_SetColorKey(LandSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 WriteLnToConsole(msgOK);
 
 GetExplosionBorderColor;
@@ -435,16 +441,13 @@ GetSkyColor;
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
-         begin
-         Surface:= LoadImage(Pathz[Path] + FileName);
-         TryDo(SDL_SetColorKey(Surface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true)
-         end;
+         Surface:= LoadImage(Pathz[Path] + FileName, hasAlpha);
 
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptGraphics] + cHHFileName);
+tmpsurf:= LoadImage(Pathz[ptGraphics] + cHHFileName, false);
+TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 HHSurface:= SDL_DisplayFormat(tmpsurf);
 SDL_FreeSurface(tmpsurf);
-TryDo(SDL_SetColorKey(HHSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 
 InitHealth;
 
@@ -583,15 +586,17 @@ if Step = MaxCalls then
    end;
 end;
 
-function  LoadImage(filename: string): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
 tmpsurf:= IMG_Load(PChar(filename));
 TryDo(tmpsurf <> nil, msgFailed, true);
+TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 if cFullScreen then
    begin
-   Result:= SDL_DisplayFormat(tmpsurf);
+   if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
+               else Result:= SDL_DisplayFormat(tmpsurf);
    SDL_FreeSurface(tmpsurf);
    end else Result:= tmpsurf;
 WriteLnToConsole(msgOK)
