@@ -306,11 +306,11 @@ void HWForm::PlayDemo()
 void HWForm::NetConnect()
 {
 	hwnet = new HWNet(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
-	hwnet->Connect("172.19.5.168", 6667, ui.editNetNick->text());
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(GoToNetChat()));
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
+	hwnet->Connect("172.19.5.168", 6667, ui.editNetNick->text());
 }
 
 void HWForm::NetDisconnect()

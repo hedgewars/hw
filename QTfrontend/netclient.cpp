@@ -165,8 +165,23 @@ void HWNet::SendNet(const QByteArray & buf)
 			// its ping ("?")
 		} else
 		{
-			RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, msg));
+			if (state == nsGaming)
+			{
+				NetBuffer += buf;
+			} else
+			{
+				RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, msg));
+			}
 		}
+	}
+}
+
+void HWNet::FlushNetBuf()
+{
+	if (NetBuffer.size() > 0)
+	{
+		RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, QString(NetBuffer.toBase64())));
+		NetBuffer.clear();
 	}
 }
 
@@ -344,14 +359,27 @@ void HWNet::ConfigAsked()
 			msg = MAGIC_CHAR "T" MAGIC_CHAR + teams[i].nick + MAGIC_CHAR + teams[i].hhs.join(MAGIC_CHAR);
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
 			hwp_chanmsg(mynick, msg);
-			SENDCFGSTRNET(QString("ecolor %1").arg(color));
-			SENDCFGSTRNET("eadd hh0 0");
-			SENDCFGSTRNET("eadd hh1 0");
-			SENDCFGSTRNET("eadd hh2 0");
+			QByteArray cache;
+			#define ADD(a) { \
+							QByteArray strmsg; \
+							strmsg.append(a); \
+							quint8 sz = strmsg.size(); \
+							cache.append(QByteArray((char *)&sz, 1)); \
+							cache.append(strmsg); \
+							}
+			ADD(QString("ecolor %1").arg(color));
+			ADD("eadd hh0 0");
+			ADD("eadd hh1 0");
+			ADD("eadd hh2 0");
+			ADD("eadd hh3 0");
+			ADD("eadd hh4 0");
+			#undef ADD
+			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
+			hwp_chanmsg(mynick, _msg);
+			RawSendNet(QString("PRIVMSG %1 :").arg(channel) + _msg);
 			color <<= 8;
 		}
 		SENDCFGSTRNET("!");
-		state = nsGaming;
 	}
 }
 
@@ -384,13 +412,16 @@ void HWNet::hwp_chanmsg(const QString & who, const QString & msg)
 		if (msg == MAGIC_CHAR MAGIC_CHAR "ASE=")
 		{
 			state = nsGaming;
+			TimerFlusher = new QTimer();
+			connect(TimerFlusher, SIGNAL(timeout()), this, SLOT(FlushNetBuf()));
+			TimerFlusher->start(2000);
 		}
 		if (msg.startsWith(MAGIC_CHAR"T"MAGIC_CHAR))
 		{
 			NetTeamAdded(msg.mid(3));
 		}
 	}
-	if ((state != nsGaming) && (state != nsStarting))
+	if ((state < nsStarting) || (state > nsGaming))
 	{
 		return;
 	}

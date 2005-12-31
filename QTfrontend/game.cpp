@@ -142,6 +142,11 @@ void HWGame::ParseMessage()
 		}
 		case '+':
 		{
+			if (gameType == gtNet)
+			{
+				QByteArray tmpbuf = QByteArray::fromRawData((char *)&msgsize, 1) + QByteArray::fromRawData(msgbuf, msgsize);
+				emit SendNet(tmpbuf);
+			}
 			break;
 		}
 		default:

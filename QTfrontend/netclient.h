@@ -38,6 +38,7 @@
 #include <QTcpSocket>
 #include <QRegExp>
 #include <QStringList>
+#include <QTimer>
 #include "team.h"
 #include "rndstr.h"
 
@@ -103,6 +104,8 @@ private:
 	RNDStr seedgen;
 	int playerscnt;
 	int configasks;
+	QByteArray NetBuffer;
+	QTimer * TimerFlusher;
 
 	void RawSendNet(const QString & buf);
 	void RawSendNet(const QByteArray & buf);
@@ -128,6 +131,7 @@ private slots:
 	void OnDisconnect();
 	void Perform();
 	void displayError(QAbstractSocket::SocketError socketError);
+	void FlushNetBuf();
 };
 
 #define SENDCFGSTRNET(a)   {\
@@ -135,8 +139,9 @@ private slots:
 							strmsg.append(a); \
 							quint8 sz = strmsg.size(); \
 							QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg; \
-							emit FromNet(enginemsg); \
-							RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, QString(enginemsg.toBase64()))); \
+							QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(enginemsg.toBase64()); \
+							hwp_chanmsg(mynick, _msg); \
+							RawSendNet(QString("PRIVMSG %1 :").arg(channel) + _msg); \
 						}
 
 #define SENDCFGSTRLOC(a)   {\
