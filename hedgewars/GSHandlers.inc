@@ -53,7 +53,7 @@ end;
 
 procedure CheckHHDamage(Gear: PGear);
 begin
-if Gear.dY > 0.35 then Gear.Damage:= Gear.Damage + round(25 * (abs(Gear.dY) - 0.35));
+if Gear.dY > 0.35 then Gear.Damage:= Gear.Damage + round(75 * (abs(Gear.dY) - 0.35));
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -131,7 +131,6 @@ if Gear.Timer = 0 then
    begin
    doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
-   SetAllToActive;
    exit
    end;
 CalcRotationDirAngle(Gear);
@@ -148,7 +147,6 @@ if (Gear.State and gstCollision) <> 0 then
    begin
    doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
-   SetAllToActive;
    exit
    end;
 if (GameTicks and $3F) = 0 then
@@ -209,7 +207,6 @@ if ((Gear.State and gstCollision) <> 0) or (Gear.Timer = 0) then
    begin
    doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
-   SetAllToActive
    end;
 end;
 
@@ -224,7 +221,6 @@ if (Gear.State and gstCollision) <> 0 then
    begin
    doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
-   SetAllToActive;
    exit
    end;
 dec(Gear.Timer);
@@ -238,6 +234,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepShotgunShot(Gear: PGear);
 var i: LongWord;
+    t: PGear;
 begin
 AllInactive:= false;
 if Gear.Timer > 0 then
@@ -253,9 +250,12 @@ Gear.Y:= Gear.Y + Gear.dY;
 CheckCollision(Gear);
 if (Gear.State and gstCollision) <> 0 then
    begin
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLAllDamageInRadius);
+   t:= CheckGearsCollision(Gear, Sign(Gear.dX), true);
+   if t = nil then t:= CheckGearsCollision(Gear, Sign(Gear.dY), false);
+   if t <> nil then
+      AmmoShove(Gear, t, 25);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLNoDamage);
    DeleteGear(Gear);
-   SetAllToActive;
    exit
    end;
 dec(i)
@@ -265,23 +265,38 @@ if (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDEagleShot(Gear: PGear);    // сама идея такова, что должна как то образовываться выбоина от выстрела :)
-var i: LongWord;                            // пуля и в африке пуля.. и демаж совсем другой.. и эксплоза никакого, можно даже
-begin                                       // навылет сделать, типа через одного пролетела и в другого попала... опять же
-AllInactive:= false;                        // дальше летишь меньше урон.. ой скока сразу мыслей то :))
+procedure doStepDEagleShot(Gear: PGear);
+var i, x, y: LongWord;
+    oX, oY: real;
+    t: PGear;
+begin
+AllInactive:= false;
 i:= 80;
+oX:= Gear.X;
+oY:= Gear.Y;
 repeat
-Gear.X:= Gear.X + Gear.dX;
-Gear.Y:= Gear.Y + Gear.dY;
-CheckCollision(Gear);
-if (Gear.State and gstCollision) <> 0 then
+  Gear.X:= Gear.X + Gear.dX;
+  Gear.Y:= Gear.Y + Gear.dY;
+  x:= round(Gear.X);
+  y:= round(Gear.Y);
+  if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0)
+     and (Land[y, x] <> 0) then inc(Gear.Damage);
+  t:= CheckGearsCollision(Gear, Sign(Gear.dX), true);
+  if t = nil then t:= CheckGearsCollision(Gear, Sign(Gear.dY), false);
+  if t <> nil then
+     begin
+     AmmoShove(Gear, t, 12);
+     if t.CollIndex < High(Longword) then DeleteCR(t)
+     end;
+  dec(i)
+until (i = 0) or (Gear.Damage > Gear.Health);
+if Gear.Damage > 0 then
    begin
-   inc(Gear.Damage);
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 2, EXPLAllDamageInRadius);
+   DrawTunnel(oX, oY, Gear.dX, Gear.dY, 82 - i, 1);
+   dec(Gear.Health, Gear.Damage);
+   Gear.Damage:= 0
    end;
-dec(i)
-until i = 0;
-if (Gear.Damage > 20) or (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
+if (Gear.Health <= 0) or (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
    DeleteGear(Gear)
 end;
 
@@ -319,7 +334,6 @@ if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0) then
    begin
    DeleteGear(Gear);
    AfterAttack;
-   SetAllToActive;
    exit
    end;
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
@@ -332,7 +346,6 @@ if (Gear.Timer and $3F) = 0 then
          doMakeExplosion(i, round(Gear.Y) + 3, 3, 0);
          inc(i, 1)
          end;
-   SetAllToActive;
    Gear.X:= Gear.X + Gear.dX;
    Gear.Y:= Gear.Y + 1.9
    end;
@@ -373,7 +386,7 @@ while y < round(Gear.Y) do
    inc(y, 2);
    inc(i)
    end;
-DrawLineExplosions(@ar, 3, round(Gear.Y) - cHHHalfHeight*2, 2, Pred(i));
+DrawHLineExplosions(@ar, 3, round(Gear.Y) - cHHHalfHeight*2, 2, Pred(i));
 Gear.dY:= PHedgehog(Gear.Hedgehog).Gear.dY;
 doStepPickHammerWork(Gear);
 Gear.doStep:= doStepPickHammerWork
@@ -618,7 +631,6 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       if Gear.Timer = 0 then
          begin
          doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
-         SetAllToActive;
          DeleteGear(Gear)
          end;
       dec(Gear.Timer);

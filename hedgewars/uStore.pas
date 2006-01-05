@@ -52,7 +52,8 @@ procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surfa
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
 procedure DrawExplosion(X, Y, Radius: integer);
-procedure DrawLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
+procedure DrawHLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
+procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 function  RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
 procedure AddProgress;
@@ -69,8 +70,7 @@ var StoreSurface,
        HHSurface: PSDL_Surface;
 
 procedure DrawExplosion(X, Y, Radius: integer);
-var ty, tx: integer;
-    p: integer;
+var ty, tx, p: integer;
 begin
 for ty:= max(-Radius, -y) to min(radius, 1023 - y) do
     for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
@@ -79,7 +79,7 @@ for ty:= max(-Radius, -y) to min(radius, 1023 - y) do
 if SDL_MustLock(LandSurface) then
    SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-p:= Longword(LandSurface.pixels);
+p:= integer(LandSurface.pixels);
 case LandSurface.format.BytesPerPixel of
      1: ;// not supported
      2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
@@ -103,21 +103,19 @@ case LandSurface.format.BytesPerPixel of
      1: ;// not supported
      2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^ <> 0 then
+               if Land[y + ty, tx] <> 0 then
                   PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= cExplosionBorderColor;
      3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-                if (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^ <> 0)
-                or (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^ <> 0)
-                or (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^ <> 0)
-                then begin
+               if Land[y + ty, tx] <> 0 then
+                begin
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= cExplosionBorderColor and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^:= (cExplosionBorderColor shr 16);
                 end;
      4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-                if PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^ <> 0 then
+               if Land[y + ty, tx] <> 0 then
                    PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= cExplosionBorderColor;
      end;
 
@@ -127,13 +125,13 @@ if SDL_MustLock(LandSurface) then
 SDL_UpdateRect(LandSurface, X - Radius, Y - Radius, Radius * 2, Radius * 2)
 end;
 
-procedure DrawLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
+procedure DrawHLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
 var tx, ty, i, p: integer;
 begin
 if SDL_MustLock(LandSurface) then
    SDL_LockSurface(LandSurface);
 
-p:= Longword(LandSurface.pixels);
+p:= integer(LandSurface.pixels);
 for i:= 0 to Pred(Count) do
     begin
     case LandSurface.format.BytesPerPixel of
@@ -164,21 +162,19 @@ for i:= 0 to Pred(Count) do
      1: ;
      2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-               if PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^ <> 0 then
+               if Land[y + ty, tx] <> 0 then
                   PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= cExplosionBorderColor;
      3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-                if (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^ <> 0)
-                or (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^ <> 0)
-                or (PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^ <> 0)
-                then begin
+               if Land[y + ty, tx] <> 0 then
+                begin
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= cExplosionBorderColor and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^:= (cExplosionBorderColor shr 16);
                 end;
      4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-                if PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^ <> 0 then
+               if Land[y + ty, tx] <> 0 then
                    PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= cExplosionBorderColor;
      end;
     inc(y, dY)
@@ -186,6 +182,79 @@ for i:= 0 to Pred(Count) do
 
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
+end;
+
+//
+//  - (dX, dY) - direction, vector of length = 0.5
+//
+procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
+var nx, ny: real;
+    i, t, tx, ty, p: integer;
+begin  // (-dY, dX) is (dX, dY) turned by PI/2
+if SDL_MustLock(LandSurface) then
+   SDL_LockSurface(LandSurface);
+
+nx:= X + dY * (HalfWidth + 8);
+ny:= Y - dX * (HalfWidth + 8);
+p:= integer(LandSurface.pixels);
+
+for i:= 0 to 7 do
+    begin
+    X:= nx - 8 * dX;
+    Y:= ny - 8 * dY;
+    for t:= -8 to ticks + 8 do
+        {$include tunsetborder.inc}
+    nx:= nx - dY;
+    ny:= ny + dX;
+    end;
+
+for i:= -HalfWidth to HalfWidth do
+    begin
+    X:= nx - dX * 8;
+    Y:= ny - dY * 8;
+    for t:= 0 to 7 do
+        {$include tunsetborder.inc}
+    X:= nx;
+    Y:= ny;
+    for t:= 0 to ticks do
+        begin
+        X:= X + dX;
+        Y:= Y + dY;
+        tx:= round(X);
+        ty:= round(Y);
+        if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0) then
+           begin
+           Land[ty, tx]:= 0;
+           case LandSurface.format.BytesPerPixel of
+                1: ;
+                2: PWord(p + LandSurface.pitch * ty + tx * 2)^:= 0;
+                3: begin
+                   PByte(p + LandSurface.pitch * ty + tx * 3 + 0)^:= 0;
+                   PByte(p + LandSurface.pitch * ty + tx * 3 + 1)^:= 0;
+                   PByte(p + LandSurface.pitch * ty + tx * 3 + 2)^:= 0;
+                   end;
+                4: PLongword(p + LandSurface.pitch * ty + tx * 4)^:= 0;
+                end
+           end
+        end;
+    for t:= 0 to 7 do
+        {$include tunsetborder.inc}
+    nx:= nx - dY;
+    ny:= ny + dX;
+    end;
+
+for i:= 0 to 7 do
+    begin
+    X:= nx - 8 * dX;
+    Y:= ny - 8 * dY;
+    for t:= -8 to ticks + 8 do
+        {$include tunsetborder.inc}
+    nx:= nx - dY;
+    ny:= ny + dX;
+    end;
+
+if SDL_MustLock(LandSurface) then
+   SDL_UnlockSurface(LandSurface)
 end;
 
 procedure StoreInit;

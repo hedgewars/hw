@@ -57,7 +57,7 @@ type PGear = ^TGear;
              Friction  : Real;
              Message : Longword;
              Hedgehog: pointer;
-             Health, Damage: LongWord;
+             Health, Damage: integer;
              CollIndex: Longword;
              Tag: integer;
              end;
@@ -88,6 +88,7 @@ var GearsList: PGear = nil;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
+procedure AmmoShove(Ammo, Gear: PGear; Power: Longword); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -205,7 +206,8 @@ gtAmmo_Grenade: begin
                 end;
   gtDEagleShot: begin
                 Result.HalfWidth:= 1;
-                Result.HalfHeight:= 1
+                Result.HalfHeight:= 1;
+                Result.Health:= 50
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -541,6 +543,7 @@ while Gear <> nil do
                           inc(Gear.Damage, dmg);
                           Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
                           Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
+                          Gear.Active:= true;
                           FollowGear:= Gear
                           end;
                  gtGrave: Gear.dY:= - dmg / 250;
@@ -548,6 +551,19 @@ while Gear <> nil do
          end;
       Gear:= Gear.NextGear
       end
+end;
+
+procedure AmmoShove(Ammo, Gear: PGear; Power: Longword);
+begin
+case Gear.Kind of
+     gtHedgehog: begin
+                 inc(Gear.Damage, Power);
+                 Gear.dX:= Ammo.dX * Power * 0.01;
+                 Gear.dY:= Ammo.dY * Power * 0.01;
+                 Gear.Active:= true;
+                 FollowGear:= Gear
+                 end;
+     end;
 end;
 
 procedure AssignHHCoords;

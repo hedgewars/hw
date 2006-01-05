@@ -126,10 +126,10 @@ with Gear^,
                           amUFO: FollowGear:= AddGear(round(X), round(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
-                                 FollowGear:= AddGear(round(X + xx*20), round(Y + yy*20), gtShotgunShot,  0, xx * 0.5, 0.5 * yy);
+                                 FollowGear:= AddGear(round(X), round(Y), gtShotgunShot,  0, xx * 0.5, yy * 0.5);
                                  end;
                        amDEagle: begin
-                                 FollowGear:= AddGear(round(X + xx*20), round(Y + yy*20), gtDEagleShot,  0, xx * 0.5, 0.5 * yy);
+                                 FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
                                  end;
                          amSkip: TurnTimeLeft:= 0;
                    amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
@@ -209,7 +209,8 @@ if (Gear.Message and gm_Attack)<>0 then
             Gear.State:= Gear.State or gstAttacking;
             if Gear.Power = cMaxPower then Gear.Message:= Gear.Message and not gm_Attack
                else
-               if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) = 0 then Attack(Gear)
+               if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) = 0 then
+                  Gear.Message:= Gear.Message and not gm_Attack
                   else begin
                   if Gear.Power = 0 then
                      begin
@@ -225,6 +226,7 @@ if ((Gear.State and gstAttacking) <> 0) and ((Gear.Message and gm_Attack) = 0) t
    begin
    RemoveIntersectorsCR(Gear);
    Attack(Gear);
+   StepTicks:= 40
    end;
 
 if (Gear.State and gstFalling) <> 0 then
@@ -355,7 +357,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
 begin
-if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
 if not HHTestCollisionYwithGear(Gear, 1) then
    begin
    if (Gear.dY < 0) and HHTestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
@@ -369,6 +370,8 @@ if not HHTestCollisionYwithGear(Gear, 1) then
    if Gear.dY > 0    then Gear.dY:= 0;
    if ((Gear.State and gstMoving) <> 0) then Gear.dX:= Gear.dX * Gear.Friction
    end;
+
+if (Gear.State <> 0) and (Gear.CollIndex < High(Longword)) then DeleteCR(Gear);
 
 
 if (Gear.State and gstMoving) <> 0 then

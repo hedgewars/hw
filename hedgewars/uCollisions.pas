@@ -44,7 +44,7 @@ type TCollisionEntry = record
 procedure AddGearCR(Gear: PGear);
 procedure UpdateCR(NewX, NewY: integer; Index: Longword);
 procedure DeleteCR(Gear: PGear);
-function  CheckGearsCollision(Gear: PGear; Dir: integer; forX: boolean): boolean;
+function  CheckGearsCollision(Gear: PGear; Dir: integer; forX: boolean): PGear;
 function  HHTestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
@@ -94,11 +94,11 @@ Gear.CollIndex:= High(Longword);
 dec(Count)
 end;
 
-function CheckGearsCollision(Gear: PGear; Dir: integer; forX: boolean): boolean;
+function CheckGearsCollision(Gear: PGear; Dir: integer; forX: boolean): PGear;
 var x1, x2, y1, y2: integer;
     i: Longword;
 begin
-Result:= false;
+Result:= nil;
 if Count = 0 then exit;
 x1:= round(Gear.X);
 y1:= round(Gear.Y);
@@ -125,7 +125,7 @@ for i:= 0 to Pred(Count) do
          and (y1 <= Y + HHeight)
          and (y2 >= Y - HHeight) then
              begin
-             Result:= true;
+             Result:= crects[i].cGear;
              exit
              end;
 end;
@@ -159,7 +159,7 @@ if (y and $FFFFFC00) = 0 then
    until (x > i) or Result;
    if Result then exit;
 
-   Result:= CheckGearsCollision(Gear, Dir, false)
+   Result:= CheckGearsCollision(Gear, Dir, false) <> nil
    end
 end;
 
@@ -179,7 +179,7 @@ if (x and $FFFFF800) = 0 then
      inc(y)
    until (y > i) or Result;
    if Result then exit;
-   Result:= CheckGearsCollision(Gear, Dir, true)
+   Result:= CheckGearsCollision(Gear, Dir, true) <> nil
    end
 end;
 
@@ -208,7 +208,7 @@ if (y and $FFFFFC00) = 0 then
      inc(x)
    until (x > i) or Result;
    if Result then exit;
-   Result:= CheckGearsCollision(Gear, Dir, false);
+   Result:= CheckGearsCollision(Gear, Dir, false) <> nil;
    end
 end;
 
