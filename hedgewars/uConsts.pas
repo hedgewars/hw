@@ -47,12 +47,12 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprMineOn, sprCase);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
-                   gtSmokeTrace, gtExplosion, gtMine, gtCase);
+                   gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
-                   amMine);
+                   amMine, amDEagle);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
                   Handle: PTTF_Font;
@@ -119,7 +119,6 @@ const
       gstFalling        = $00000080;
       gstHHJumping      = $00000100;
       gsttmpFlag        = $00000200;
-      gstOutOfHH        = $00000400;
       gstHHThinking     = $00000800;
 
       gtsStartGame      = 1;
@@ -320,9 +319,19 @@ const
                                           Timer: 0;
                                           AmmoType: amMine);
                                    Slot: 3;
-                                   TimeAfterTurn: 3000)
-                                  );
-                                  
+                                   TimeAfterTurn: 3000),
+                                  (Name: 'Desert Eagle';
+                                   Ammo: (Propz: 0;
+                                          Count: AMMO_INFINITE;
+                                          NumPerTurn: 3;
+                                          Timer: 0;
+                                          AmmoType: amDEagle);
+                                   Slot: 2;
+                                   TimeAfterTurn: 3000));
+
+
+
+
       Resolutions: array[0..3] of String = (
                                            '640 480',
                                            '800 600',

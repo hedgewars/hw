@@ -40,14 +40,13 @@ type TLandArray = packed array[0..1023, 0..2047] of LongWord;
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
 
-procedure GenLandSurface;
-procedure MakeFortsMap;
 procedure AddHHPoint(_x, _y: integer);
 procedure GetHHPoint(out _x, _y: integer);
 procedure RandomizeHHPoints;
+procedure GenMap;
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects, uSHA;
 
 type TPixAr = record
               Count: Longword;
@@ -58,6 +57,18 @@ var HHPoints: record
               First, Last: word;
               ar: array[1..Pred(cMaxSpawnPoints)] of TPoint
               end = (First: 1);
+
+procedure LogLandDigest;
+var ctx: TSHA1Context;
+    dig: TSHA1Digest;
+begin
+SHA1Init(ctx);
+SHA1Update(ctx, @Land, sizeof(Land));
+dig:= SHA1Final(ctx);
+AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
+           +inttostr(dig.LongWords[1])+':'+inttostr(dig.LongWords[2])+':'
+           +inttostr(dig.LongWords[3])+':'+inttostr(dig.LongWords[4])+'}');
+end;
 
 procedure DrawBezierEdge(var pa: TPixAr);
 var x, y, i: integer;
@@ -483,6 +494,7 @@ p:= TeamsList;
 TryDo(p <> nil, 'No teams on map!', true);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+SDL_FillRect(LandSurface, nil, 0);
 tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'L.png', false);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
@@ -495,6 +507,14 @@ SDL_FreeSurface(tmpsurf);
 LoadFortPoints(p.FortName, true, TeamSize(p));
 p:= p.Next;
 TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
+end;
+
+procedure GenMap;
+begin
+if (GameFlags and gfForts) = 0 then GenLandSurface
+                               else MakeFortsMap;
+AddProgress;
+{$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}
 end;
 
 procedure AddHHPoint(_x, _y: integer);

@@ -265,6 +265,27 @@ if (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepDEagleShot(Gear: PGear);    // сама идея такова, что должна как то образовываться выбоина от выстрела :)
+var i: LongWord;                            // пуля и в африке пуля.. и демаж совсем другой.. и эксплоза никакого, можно даже
+begin                                       // навылет сделать, типа через одного пролетела и в другого попала... опять же
+AllInactive:= false;                        // дальше летишь меньше урон.. ой скока сразу мыслей то :))
+i:= 80;
+repeat
+Gear.X:= Gear.X + Gear.dX;
+Gear.Y:= Gear.Y + Gear.dY;
+CheckCollision(Gear);
+if (Gear.State and gstCollision) <> 0 then
+   begin
+   inc(Gear.Damage);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 2, EXPLAllDamageInRadius);
+   end;
+dec(i)
+until i = 0;
+if (Gear.Damage > 20) or (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
+   DeleteGear(Gear)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepActionTimer(Gear: PGear);
 begin
 case Gear.State of
@@ -593,7 +614,7 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       end else // gstAttacking <> 0
       begin
       AllInactive:= false;
-      if (Gear.Timer and $1FF) = 0 then PlaySound(sndMineTick);
+      if (Gear.Timer and $FF) = 0 then PlaySound(sndMineTick);
       if Gear.Timer = 0 then
          begin
          doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);

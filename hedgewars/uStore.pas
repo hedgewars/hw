@@ -189,15 +189,10 @@ if SDL_MustLock(LandSurface) then
 end;
 
 procedure StoreInit;
-var r: TSDL_Rect;
 begin
 StoreSurface  := SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
-r.x:= 0;
-r.y:= 0;
-r.w:= 576;
-r.h:= 1024;
-SDL_FillRect(StoreSurface, @r, 0);
+SDL_FillRect(StoreSurface, nil, 0);
 
 TempSurface   := SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 320, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo(  TempSurface <> nil, errmsgCreateSurface + ': temp'  , true);

@@ -117,7 +117,7 @@ HWForm::HWForm(QWidget *parent)
 	list = cfgdir.entryList(QStringList("*.cfg"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
-		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg"), "\\1"));
+		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg$"), "\\1"));
 	}
 
 

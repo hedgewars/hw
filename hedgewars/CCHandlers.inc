@@ -232,7 +232,6 @@ if CheckNoTeamOrHH then exit;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
      CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      begin
-     {$IFDEF DEBUGFILE}AddFileLog('/-attack: Gear.State = '+inttostr(State)+' CurAmmoGear = '+inttostr(longword(CurAmmoGear)));{$ENDIF}
       Message:= Message and not gm_Attack;
       if not CurrentTeam.ExtDriven then SendIPC('a')
      end

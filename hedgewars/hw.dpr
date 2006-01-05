@@ -72,8 +72,7 @@ var s: string;
 begin
 case GameState of
    gsLandGen: begin
-              if (GameFlags and gfForts) = 0 then GenLandSurface
-                                             else MakeFortsMap;
+              GenMap;
               GameState:= gsStart;
               end;
      gsStart: begin

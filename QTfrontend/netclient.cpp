@@ -394,7 +394,7 @@ void HWNet::hwp_chanmsg(const QString & who, const QString & msg)
 		if (msg.startsWith(MAGIC_CHAR"Start!"MAGIC_CHAR) && (who == opnick))
 		{
 			state = nsStarting;
-			RunGame(msg.mid(7));
+			RunGame(msg.mid(8));
 			return ;
 		}
 		if (msg.startsWith(MAGIC_CHAR"="MAGIC_CHAR) && (who == opnick))

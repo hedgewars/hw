@@ -61,7 +61,6 @@ var Count: Longword = 0;
 
 procedure AddGearCR(Gear: PGear);
 begin
-{$IFDEF DEBUGFILE}AddFileLog('AddCR crects count = ' + inttostr(Count));{$ENDIF}
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with crects[Count] do
      begin
@@ -86,7 +85,6 @@ end;
 
 procedure DeleteCR(Gear: PGear);
 begin
-{$IFDEF DEBUGFILE}AddFileLog('DelCR crects count = ' + inttostr(Count) + ' deleting ' + inttostr(Gear.CollIndex));{$ENDIF}
 if Gear.CollIndex < Pred(Count) then
    begin
    crects[Gear.CollIndex]:= crects[Pred(Count)];
@@ -104,15 +102,7 @@ Result:= false;
 if Count = 0 then exit;
 x1:= round(Gear.X);
 y1:= round(Gear.Y);
-{if (Gear.State and gstOutOfHH) = 0 then
-   begin
-   p:= PHedgehog(Gear.Hedgehog)^.Gear;
-   if (p <> nil) and
-        ((x1 + Gear.HalfWidth < round(p.X) - p.HalfWidth)
-      or (x1 - Gear.HalfWidth > round(p.X) + p.HalfWidth)
-      or (y1 - Gear.HalfHeight > round(p.Y) + p.HalfHeight)
-      or (y1 + Gear.HalfHeight < round(p.Y) - p.HalfHeight)) then Gear.State:= Gear.State or gstOutOfHH;
-   end; }
+
 if forX then
    begin
    x1:= x1 + Dir*Gear.HalfWidth;
@@ -130,7 +120,6 @@ if forX then
 for i:= 0 to Pred(Count) do
    with crects[i] do
       if  (Gear.CollIndex <> i)
-//      if ((p.Kind = gtHedgehog) and ((p.Hedgehog <> Gear.Hedgehog) or ((Gear.State and gstOutOfHH) <> 0)))
          and (x1 <= X + HWidth)
          and (x2 >= X - HWidth)
          and (y1 <= Y + HHeight)

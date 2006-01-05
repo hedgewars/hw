@@ -110,7 +110,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepSmokeTrace,
                                                                doStepExplosion,
                                                                doStepMine,
-                                                               doStepCase
+                                                               doStepCase,
+                                                               doStepDEagleShot
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -201,6 +202,10 @@ gtAmmo_Grenade: begin
                 Result.HalfWidth:= 14;
                 Result.HalfHeight:= 14;
                 Result.Elasticity:= 0.6
+                end;
+  gtDEagleShot: begin
+                Result.HalfWidth:= 1;
+                Result.HalfHeight:= 1
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -369,6 +374,11 @@ var Gear: PGear;
     var i, x, y: integer;
         t, k, ladd: real;
     begin
+    if (X1 = X2) and (Y1 = Y2) then
+       begin
+       {$IFDEF DEBUGFILE}AddFileLog('zero length rope line!!!!!');{$ENDIF}
+       exit
+       end;
     if abs(X1 - X2) > abs(Y1 - Y2) then
        begin
        if X1 > X2 then
@@ -550,6 +560,7 @@ while Gear <> nil do
       if Gear.Kind = gtHedgehog then
          begin
          GetHHPoint(pX, pY);
+         {$IFDEF DEBUGFILE}AddFileLog('HH at ('+inttostr(pX)+','+inttostr(pY)+')');{$ENDIF}
          Gear.X:= pX;
          Gear.Y:= pY
          end;

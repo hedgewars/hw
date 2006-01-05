@@ -171,19 +171,19 @@ tmpflag:= true;
 while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
    begin
    case extcmd[cmdcurpos].cmd of
-        'L': ParseCommand('/+left');
-        'l': ParseCommand('/-left');
-        'R': ParseCommand('/+right');
-        'r': ParseCommand('/-right');
-        'U': ParseCommand('/+up');
-        'u': ParseCommand('/-up');
-        'D': ParseCommand('/+down');
-        'd': ParseCommand('/-down');
-        'A': ParseCommand('/+attack');
-        'a': ParseCommand('/-attack');
-        'S': ParseCommand('/switch');
-        'j': ParseCommand('/ljump');
-        'J': ParseCommand('/hjump');
+        'L': ParseCommand('+left');
+        'l': ParseCommand('-left');
+        'R': ParseCommand('+right');
+        'r': ParseCommand('-right');
+        'U': ParseCommand('+up');
+        'u': ParseCommand('-up');
+        'D': ParseCommand('+down');
+        'd': ParseCommand('-down');
+        'A': ParseCommand('+attack');
+        'a': ParseCommand('-attack');
+        'S': ParseCommand('switch');
+        'j': ParseCommand('ljump');
+        'J': ParseCommand('hjump');
         'N': begin
              tmpflag:= false;
              {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}
@@ -191,14 +191,14 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
         'p': begin
              TargetPoint.X:= extcmd[cmdcurpos].X;
              TargetPoint.Y:= extcmd[cmdcurpos].Y;
-             ParseCommand('/put')
+             ParseCommand('put')
              end;
         'P': begin
              CursorPoint.X:= extcmd[cmdcurpos].X + WorldDx;
              CursorPoint.Y:= extcmd[cmdcurpos].Y + WorldDy;
              end;
-        '1'..'5': ParseCommand('/timer ' + extcmd[cmdcurpos].cmd);
-        #128..#134: ParseCommand('/slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))
+        '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd);
+        #128..#134: ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))
         end;
    inc(cmdcurpos)
    end;
