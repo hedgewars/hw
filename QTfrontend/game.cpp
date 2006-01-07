@@ -45,15 +45,14 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 {
 	vid_Resolution = Resolution;
 	vid_Fullscreen = Fullscreen;
-	IPCServer = new QTcpServer(this);
-	IPCServer->setMaxPendingConnections(1);
-	if (!IPCServer->listen(QHostAddress("127.0.0.1"), IPC_PORT))
+	IPCServer.setMaxPendingConnections(1);
+	if (!IPCServer.listen(QHostAddress::LocalHost, IPC_PORT))
 	{
 		QMessageBox::critical(0, tr("Error"),
 				tr("Unable to start the server: %1.")
-				.arg(IPCServer->errorString()));
+				.arg(IPCServer.errorString()));
 	}
-	connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+	connect(&IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
 	IPCSocket = 0;
 	TeamCount = 0;
 	seed = "";
@@ -63,7 +62,7 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 
 void HWGame::NewConnection()
 {
-	QTcpSocket * client = IPCServer->nextPendingConnection();
+	QTcpSocket * client = IPCServer.nextPendingConnection();
 	if(!IPCSocket)
 	{
 		IPCSocket = client;
@@ -97,7 +96,6 @@ void HWGame::SendConfig()
 //	SENDIPC("e$gmflags 0");
 	SENDIPC("eaddteam");
 	SendTeamConfig(0);
-//	if () SENDIPC("rdriven");
 	SENDIPC("ecolor 65535");
 	SENDIPC("eadd hh0 0");
 	SENDIPC("eadd hh1 0");
@@ -169,14 +167,8 @@ void HWGame::SendIPC(const char * msg, quint8 len)
 void HWGame::SendIPC(const QByteArray & buf)
 {
 	if (buf.size() > MAXMSGCHARS) return;
-	if (!IPCSocket)
-	{
-		toSendBuf += buf;
-	} else
-	{
-		quint8 len = buf.size();
-		RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
-	}
+	quint8 len = buf.size();
+	RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
 }
 
 void HWGame::RawSendIPC(const QByteArray & buf)
@@ -190,6 +182,7 @@ void HWGame::RawSendIPC(const QByteArray & buf)
 		{
 			IPCSocket->write(toSendBuf);
 			demo->append(toSendBuf);
+			toSendBuf.clear();
 		}
 		IPCSocket->write(buf);
 		demo->append(buf);

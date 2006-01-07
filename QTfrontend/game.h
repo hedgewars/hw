@@ -70,7 +70,7 @@ private:
         gtDemo  = 2,
         gtNet   = 3
     };
-    QTcpServer * IPCServer;
+    QTcpServer IPCServer;
 	QTcpSocket * IPCSocket;
 	char msgbuf[MAXMSGCHARS];
 	quint8 msgbufsize;

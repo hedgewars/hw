@@ -36,7 +36,7 @@
 
 #include <QtGlobal>
 
-#define BINDS_NUMBER 18
+#define BINDS_NUMBER 24
 
 struct BindAction
 {
@@ -55,6 +55,7 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"ljump",	"return",	QT_TR_NOOP("jump"),	false},
 	{"hjump",	"backspace",	QT_TR_NOOP("jump"),	false},
 	{"+attack",	"space",	QT_TR_NOOP("attack"),	false},
+	{"put",	"mousel",	QT_TR_NOOP("put"),	false},
 	{"switch",	"tab",	QT_TR_NOOP("switch"),	true},
 	{"slot 1",	"f1",	QT_TR_NOOP("slot 1"),	false},
 	{"slot 2",	"f2",	QT_TR_NOOP("slot 2"),	false},
@@ -64,6 +65,11 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"slot 6",	"f6",	QT_TR_NOOP("slot 6"),	false},
 	{"slot 7",	"f7",	QT_TR_NOOP("slot 7"),	false},
 	{"slot 8",	"f8",	QT_TR_NOOP("slot 8"),	true},
+	{"timer 1",	"1",	QT_TR_NOOP("timer 1 sec"),	false},
+	{"timer 2",	"2",	QT_TR_NOOP("timer 2 sec"),	false},
+	{"timer 3",	"3",	QT_TR_NOOP("timer 3 sec"),	false},
+	{"timer 4",	"4",	QT_TR_NOOP("timer 4 sec"),	false},
+	{"timer 5",	"5",	QT_TR_NOOP("timer 5 sec"),	true},
 	{"capture",	"f11",	QT_TR_NOOP("capture"),	false},
 	{"quit",	"f10",	QT_TR_NOOP("quit"),	false}
 };

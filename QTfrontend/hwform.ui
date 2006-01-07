@@ -50,9 +50,9 @@
      </size>
     </property>
     <property name="currentIndex" >
-     <number>7</number>
+     <number>8</number>
     </property>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageLG" >
      <widget class="QPushButton" name="BtnSimpleGame" >
       <property name="geometry" >
        <rect>
@@ -114,7 +114,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageET" >
      <widget class="QGroupBox" name="GBoxHedgehogs" >
       <property name="geometry" >
        <rect>
@@ -374,31 +374,36 @@
        <property name="currentIndex" >
         <number>0</number>
        </property>
-       <widget class="QWidget" name="page" >
+       <widget class="QWidget" name="page_A" >
         <property name="geometry" >
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>181</width>
-          <height>270</height>
+          <width>163</width>
+          <height>221</height>
          </rect>
         </property>
         <attribute name="label" >
          <string>Actions</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="page" >
+       <widget class="QWidget" name="page_W" >
         <attribute name="label" >
          <string>Weapons</string>
         </attribute>
        </widget>
-       <widget class="QWidget" name="page" >
+       <widget class="QWidget" name="page_WP" >
+        <attribute name="label" >
+         <string>Weapon properties</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="page_O" >
         <property name="geometry" >
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>99</width>
-          <height>29</height>
+          <width>163</width>
+          <height>221</height>
          </rect>
         </property>
         <attribute name="label" >
@@ -408,7 +413,7 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageOpt" >
      <widget class="QGroupBox" name="groupBox" >
       <property name="geometry" >
        <rect>
@@ -671,7 +676,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pagePDemo" >
      <widget class="QPushButton" name="BtnPlayDemo" >
       <property name="geometry" >
        <rect>
@@ -743,7 +748,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageNet" >
      <widget class="QPushButton" name="BtnNetConnect" >
       <property name="geometry" >
        <rect>
@@ -805,7 +810,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageNetChat" >
      <widget class="QPushButton" name="BtnNetChatDisconnect" >
       <property name="geometry" >
        <rect>
@@ -907,7 +912,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page" >
+    <widget class="QWidget" name="pageNetGame" >
      <widget class="QPushButton" name="BtnNetCFGBack" >
       <property name="geometry" >
        <rect>
