@@ -54,7 +54,8 @@ while (t <> nil) do
                begin
                ar[cnt]:= t;
                inc(cnt)
-               end else b:= true;
+               end else
+               if not (t.Kind in [gtGrave, gtMine]) then b:= true;
       t:= t.NextGear
       end;
 ar[cnt]:= Gear;
@@ -135,10 +136,12 @@ with Gear^,
                    amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
                          amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.01, 0, 3000);
+                     amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.01, 0, 5000); 
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
            begin
+           Gear.Message:= Gear.Message or gm_Attack;
            CurAmmoGear.Message:= Gear.Message;
            exit
            end else
@@ -176,7 +179,11 @@ procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
 var t: PGear;
 begin
-if isinMultiShoot and (Gear.Damage = 0) then exit;
+if isinMultiShoot and (Gear.Damage = 0) then
+   begin
+   if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
+   exit
+   end;
 AllInactive:= false;
 if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    begin
@@ -251,7 +258,7 @@ if (Gear.State and gstFalling) <> 0 then
       if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
          and ((Gear.State and gstHHJumping) <> 0) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
       Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
-      StepTicks:= 300;   writelntoconsole(inttostr(gameticks)+'ooo');
+      StepTicks:= 300; 
       Gear.dY:= 0
       end;
    CheckGearDrowning(Gear);

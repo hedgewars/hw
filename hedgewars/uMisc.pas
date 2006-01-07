@@ -41,7 +41,7 @@ var isCursorVisible : boolean = false;
     isSoundEnabled  : boolean = true;
     isInMultiShoot  : boolean = false;
 
-    GameState     : TGameState = gsLandGen;
+    GameState     : TGameState = Low(TGameState);
     GameType      : TGameType = gmtLocal;
     GameFlags     : Longword = 0;
     TurnTimeLeft  : Longword = 0;
@@ -51,7 +51,7 @@ var isCursorVisible : boolean = false;
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;
     cConsoleYAdd     : integer = 0; 
-    cTimerInterval   : Cardinal = 15;
+    cTimerInterval   : Cardinal = 5;
     cScreenWidth     : integer = 1024;
     cScreenHeight    : integer = 768;
     cBits            : integer = 16;

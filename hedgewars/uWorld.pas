@@ -142,7 +142,7 @@ while team<>nil do
                         else
                         if ShowCrosshair then
                            DrawCaption(Round(Gear.X + Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
-                                       Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 5,
+                                       Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 4,
                                        Team.CrossHairRect, Surface)
                      end;
       team:= team.Next

@@ -47,12 +47,12 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprMineOn, sprCase);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
-                   gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot);
+                   gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
-                   amMine, amDEagle);
+                   amMine, amDEagle, amDynamite);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
                   Handle: PTTF_Font;
@@ -327,7 +327,15 @@ const
                                           Timer: 0;
                                           AmmoType: amDEagle);
                                    Slot: 2;
-                                   TimeAfterTurn: 3000));
+                                   TimeAfterTurn: 3000),
+                                   (Name: 'Dynamite';
+                                    Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                           Count: 5;
+                                           NumPerTurn: 0;
+                                           Timer: 0;
+                                           AmmoType: amDynamite);
+                                    Slot: 3;
+                                    TimeAfterTurn: 5000));
 
 
 

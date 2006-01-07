@@ -112,7 +112,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepExplosion,
                                                                doStepMine,
                                                                doStepCase,
-                                                               doStepDEagleShot
+                                                               doStepDEagleShot,
+                                                               doStepDynamite
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -208,6 +209,13 @@ gtAmmo_Grenade: begin
                 Result.HalfWidth:= 1;
                 Result.HalfHeight:= 1;
                 Result.Health:= 50
+                end;
+    gtDynamite: begin
+                Result.HalfWidth:= 3;
+                Result.HalfHeight:= 3;
+                Result.Elasticity:= 0.03;
+                Result.Friction:= 0.03;
+                Result.Timer:= 5000;
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -484,6 +492,11 @@ while Gear<>nil do
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
+        //!!!              ACHTUNG!!!!
+        gtDynamite: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
+                       then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
+                       else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
+        //!!!              ACHTUNG!!!!                     
             gtCase: DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
               end;
       Gear:= Gear.NextGear
@@ -527,7 +540,6 @@ TargetPoint.X:= NoPointX;
 DrawExplosion(X, Y, Radius);
 if Radius = 50 then AddGear(X, Y, gtExplosion, 0);
 if (Mask and EXPLAutoSound)<>0 then PlaySound(sndExplosion);
-if (Mask and EXPLNoDamage)<>0 then exit;
 if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;
 Gear:= GearsList;
 while Gear <> nil do
@@ -540,7 +552,7 @@ while Gear <> nil do
               gtHedgehog,
                   gtMine,
                   gtCase: begin
-                          inc(Gear.Damage, dmg);
+                          if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
                           Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
                           Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
                           Gear.Active:= true;

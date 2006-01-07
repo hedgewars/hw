@@ -243,6 +243,7 @@ RegisterVariable('rdriven' , vtCommand, @chTeamLocal    );
 //RegisterVariable('gravity' , vtReal   , @cGravity       ); гравитация не должна быть доступна вообще
 RegisterVariable('c_height', vtInteger, @cConsoleHeight );
 RegisterVariable('gmflags' , vtInteger, @GameFlags      );
+RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime);
 RegisterVariable('showfps' , vtBoolean, @cShowFPS       );
 RegisterVariable('sound'   , vtBoolean, @isSoundEnabled );
 RegisterVariable('name'    , vtCommand, @chName         );

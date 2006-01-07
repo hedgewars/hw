@@ -41,6 +41,7 @@ const ctfNotFull = $00000001;
 function TestGrenade(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 function TestBazooka(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 function TestShotgun(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
+function TestDEagle(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 
 type TAmmoTestProc = function (Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 const AmmoTests: array[TAmmoType] of
@@ -72,13 +73,16 @@ const AmmoTests: array[TAmmoType] of
                     ( Test: nil;
                       Flags: 0;
                     ),
+                    ( Test: TestDEagle;
+                      Flags: 0;
+                    ),
                     ( Test: nil;
                       Flags: 0;
                     )
                     );
 
 implementation
-uses uMisc, uAIMisc;
+uses uMisc, uAIMisc, uLand;
 
 function TestGrenade(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 var Vx, Vy, r: real;
@@ -198,5 +202,25 @@ until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048
 Result:= true
 end;
 
+function TestDEagle(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
+var Vx, Vy, x, y: real;
+    d: Longword;
+begin
+Time:= 0;
+Power:= 1;
+Vx:= (Targ.X - Me.X)/1024;
+Vy:= (Targ.Y - Me.Y)/1024;
+x:= Me.X;
+y:= Me.Y;
+Angle:= DxDy2Angle(Vx, -Vy);
+d:= 0;
+repeat
+  x:= x + vX;
+  y:= y + vY;
+  if ((round(x) and $FFFFF800) = 0)and((round(y) and $FFFFFC00) = 0)
+     and (Land[round(y), round(x)] <> 0) then inc(d);
+until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
+Result:= d < 50
+end;
 
 end.

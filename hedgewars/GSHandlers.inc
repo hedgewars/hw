@@ -286,6 +286,7 @@ repeat
   if t <> nil then
      begin
      AmmoShove(Gear, t, 12);
+     inc(Gear.Damage, 10);
      if t.CollIndex < High(Longword) then DeleteCR(t)
      end;
   dec(i)
@@ -605,25 +606,25 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 begin
-if (Gear.dX <> 0) or (Gear.dY <> 0) {or not TestCollisionY(Gear, 1)} then
+if (Gear.dX <> 0) or (Gear.dY <> 0) then
    begin
+   if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
    doStepFallingGear(Gear);
    if Gear.Active = false then
       begin
+      if Gear.CollIndex = High(Longword) then AddGearCR(Gear);
       Gear.dX:= 0;
       Gear.dY:= 0
       end;
    CalcRotationDirAngle(Gear);
    AllInactive:= false
    end;
+   
 if ((Gear.State and gsttmpFlag) <> 0) then
    if ((Gear.State and gstAttacking) = 0) then
       begin
-      if (Gear.Tag = 0) then
-         begin
-         Gear.Tag:= 10;
+      if ((GameTicks and $F) = 0) then
          if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear.State:= Gear.State or gstAttacking
-         end else dec(Gear.Tag)
       end else // gstAttacking <> 0
       begin
       AllInactive:= false;
@@ -636,6 +637,34 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       dec(Gear.Timer);
       end else // gsttmpFlag = 0
    if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
+end;
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepDynamite(Gear: PGear);
+begin
+if (Gear.dX <> 0) or (Gear.dY <> 0) {or not TestCollisionY(Gear, 1)} then
+   begin
+   doStepFallingGear(Gear);
+   if Gear.Active = false then
+      begin
+      Gear.dX:= 0;
+      Gear.dY:= 0
+      end;
+//   CalcRotationDirAngle(Gear);
+   AllInactive:= false
+   end;
+//if ((Gear.State and gsttmpFlag) <> 0) then
+//   if ((Gear.State  and gstAttacking) = 0) then
+      begin
+  //    AllInactive:= true;
+      if (Gear.Timer and $FF) = 0 then PlaySound(sndMineTick);
+      if Gear.Timer = 0 then
+         begin
+         doMakeExplosion(round(Gear.X), round(Gear.Y), 85, EXPLAutoSound);
+         DeleteGear(Gear)
+         end;
+      dec(Gear.Timer);
+      end;{ else // gsttmpFlag = 0
+   if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
