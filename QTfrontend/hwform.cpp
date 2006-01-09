@@ -70,11 +70,11 @@ HWForm::HWForm(QWidget *parent)
 	for(quint8 i = 0; i < BINDS_NUMBER; i++)
 	{
 		LBind[i] = new QLabel(ui.BindsBox->widget(widind));
-		LBind[i]->setGeometry(QRect(10, top + 3, 60, 20));
+		LBind[i]->setGeometry(QRect(10, top + 3, 70, 20));
 		LBind[i]->setText(cbinds[i].name);
 		LBind[i]->setAlignment(Qt::AlignRight);
 		CBBind[i] = new QComboBox(ui.BindsBox->widget(widind));
-		CBBind[i]->setGeometry(QRect(80, top, 80, 20));
+		CBBind[i]->setGeometry(QRect(90, top, 80, 20));
 		CBBind[i]->addItems(binds);
 		if (cbinds[i].chwidget)
 		{
@@ -82,7 +82,7 @@ HWForm::HWForm(QWidget *parent)
 			widind++;
 		} else
 		{
-			top += 30;
+			top += 28;
 		}
 	}
 

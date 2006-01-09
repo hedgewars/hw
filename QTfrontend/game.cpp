@@ -45,15 +45,6 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 {
 	vid_Resolution = Resolution;
 	vid_Fullscreen = Fullscreen;
-	IPCServer.setMaxPendingConnections(1);
-	if (!IPCServer.listen(QHostAddress::LocalHost, IPC_PORT))
-	{
-		QMessageBox::critical(0, tr("Error"),
-				tr("Unable to start the server: %1.")
-				.arg(IPCServer.errorString()));
-	}
-	connect(&IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-	IPCSocket = 0;
 	TeamCount = 0;
 	seed = "";
 	cfgdir.setPath(cfgdir.homePath());
@@ -62,9 +53,10 @@ HWGame::HWGame(int Resolution, bool Fullscreen)
 
 void HWGame::NewConnection()
 {
-	QTcpSocket * client = IPCServer.nextPendingConnection();
+	QTcpSocket * client = IPCServer->nextPendingConnection();
 	if(!IPCSocket)
 	{
+		IPCServer->close();
 		IPCSocket = client;
 		connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
 		connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
@@ -73,16 +65,17 @@ void HWGame::NewConnection()
 			SENDIPC("?");
 	} else
 	{
+		qWarning("2nd IPC client?!");
 		client->disconnectFromHost();
-		delete client;
 	}
 }
 
 void HWGame::ClientDisconnect()
 {
-	IPCSocket = 0;
 	SaveDemo("demo.hwd_1");
-	delete this;
+    IPCSocket->deleteLater();
+	IPCSocket = 0;
+	deleteLater();
 }
 
 void HWGame::SendTeamConfig(int index)
@@ -218,6 +211,17 @@ void HWGame::ClientRead()
 
 void HWGame::Start()
 {
+	IPCServer = new QTcpServer(this);
+	connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+	IPCServer->setMaxPendingConnections(1);
+	IPCSocket = 0;
+	if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT))
+	{
+		QMessageBox::critical(0, tr("Error"),
+				tr("Unable to start the server: %1.")
+				.arg(IPCServer->errorString()));
+	}
+
 	QProcess * process;
 	QStringList arguments;
 	process = new QProcess;
@@ -227,7 +231,7 @@ void HWGame::Start()
 	arguments << "46631";
 	arguments << seed;
 	arguments << (vid_Fullscreen ? "1" : "0");
-	process->start("hw", arguments);
+	process->start("./hw", arguments);
 }
 
 void HWGame::AddTeam(const QString & teamname)
@@ -265,7 +269,7 @@ QString HWGame::GetThemeBySeed()
 	quint32 k = 0;
 	for (int i = 0; i < seed.length(); i++)
 	{
-		k += seed[i].unicode();
+		k += seed[i].cell();
 	}
 	return themes[k % len];
 }
