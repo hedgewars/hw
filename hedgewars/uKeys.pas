@@ -60,6 +60,7 @@ var  i: integer;
      pkbd: PByteArray;
 begin
 if (CurrentTeam = nil)
+   or (GameState = gsConsole)
    or (CurrentTeam.ExtDriven)
    or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].BotLevel <> 0) then exit;
 pkbd:= SDL_GetKeyState(nil);

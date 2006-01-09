@@ -44,7 +44,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-                   sprMineOn, sprCase);
+                   sprMineOn, sprCase, sprFAid);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite);
@@ -150,9 +150,13 @@ const
       capgrpAmmoinfo      = 1;
       capgrpNetSay        = 2;
 
-      EXPLAllDamageInRadius = 1;
-      EXPLAutoSound         = 2;
-      EXPLNoDamage          = 4;
+      EXPLAllDamageInRadius = $00000001;
+      EXPLAutoSound         = $00000002;
+      EXPLNoDamage          = $00000004;
+      EXPLDoNotTouchHH      = $00000008;
+
+      posCaseAmmo    = $00000001;
+      posCaseHealth  = $00000002;
 
       cToggleConsoleKey     = 39;
 
@@ -232,7 +236,8 @@ const
                      (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
                      (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
                      (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
-                     (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprCase
+                     (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
+                     (FileName:  'FirstAid.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprFAid
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];

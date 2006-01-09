@@ -47,15 +47,14 @@ b:= false;
 cnt:= 0;
 while (t <> nil) do
       begin
-      if (t <> Gear) then
+      if (t <> Gear) and not (t.Kind in [gtGrave, gtMine]) then
          if (x < t.X + t.HalfWidth ) and (t.X - t.HalfWidth  < xw) and
             (y < t.Y + t.HalfHeight) and (t.Y - t.HalfHeight < yh) then
             if t.Kind = gtHedgehog then
                begin
                ar[cnt]:= t;
                inc(cnt)
-               end else
-               if not (t.Kind in [gtGrave, gtMine]) then b:= true;
+               end else b:= true;
       t:= t.NextGear
       end;
 ar[cnt]:= Gear;
@@ -171,12 +170,22 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
      end
 end;
 
-
+////////////////////////////////////////////////////////////////////////////////
+procedure PickUp(HH, Gear: PGear);
+begin
+case Gear.Pos of
+     posCaseHealth: begin
+                    inc(HH.Health, Gear.Health);
+                    RenderHealth(PHedgehog(HH.Hedgehog)^)
+                    end;
+     end;
+end;
 
 procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
+      cStepTicks = 38;
 var t: PGear;
 begin
 if isinMultiShoot and (Gear.Damage = 0) then
@@ -194,13 +203,16 @@ if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
       Gear.State:= Gear.State and not gstHHJumping;
    exit
    end;
-
-// check for case with ammo
-t:= CheckGearNear(Gear, gtCase, 30, 30);
-if t <> nil then
+if ((Gear.State and gstFalling) <> 0) or (StepTicks = cStepTicks)
+   or (CurAmmoGear <> nil) then // we're moving
    begin
-   t.Message:= gm_Destroy;
-   ; // take ammo from it
+   // check for case with ammo
+   t:= CheckGearNear(Gear, gtCase, 36, 36);
+   if t <> nil then
+      begin
+      t.Message:= gm_Destroy;
+      PickUp(Gear, t)
+      end;
    end;
 
 if CurAmmoGear <> nil then
@@ -306,7 +318,7 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
    PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
-   StepTicks:= 40;
+   StepTicks:= cStepTicks;
    RemoveIntersectorsCR(Gear);
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       begin

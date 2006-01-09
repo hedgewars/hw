@@ -254,7 +254,7 @@ if (Gear.State and gstCollision) <> 0 then
    if t = nil then t:= CheckGearsCollision(Gear, Sign(Gear.dY), false);
    if t <> nil then
       AmmoShove(Gear, t, 25);
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLNoDamage);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLNoDamage or EXPLDoNotTouchHH);
    DeleteGear(Gear);
    exit
    end;
@@ -348,7 +348,8 @@ if (Gear.Timer and $3F) = 0 then
          inc(i, 1)
          end;
    Gear.X:= Gear.X + Gear.dX;
-   Gear.Y:= Gear.Y + 1.9
+   Gear.Y:= Gear.Y + 1.9;
+   SetAllHHToActive;
    end;
 if TestCollisionYwithGear(Gear, 1) then
    begin
@@ -387,7 +388,7 @@ while y < round(Gear.Y) do
    inc(y, 2);
    inc(i)
    end;
-DrawHLineExplosions(@ar, 3, round(Gear.Y) - cHHHalfHeight*2, 2, Pred(i));
+DrawHLinesExplosions(@ar, 3, round(Gear.Y) - cHHHalfHeight*2, 2, Pred(i));
 Gear.dY:= PHedgehog(Gear.Hedgehog).Gear.dY;
 doStepPickHammerWork(Gear);
 Gear.doStep:= doStepPickHammerWork

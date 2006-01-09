@@ -181,6 +181,11 @@ end;
 function TestShotgun(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out Angle, Power: integer): boolean;
 var Vx, Vy, x, y: real;
 begin
+if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
+   begin
+   Result:= false;
+   exit
+   end;
 Time:= 0;
 Power:= 1;
 Vx:= (Targ.X - Me.X)/1024;
@@ -206,6 +211,11 @@ function TestDEagle(Me, Targ: TPoint; Flags: Longword; out Time: Longword; out A
 var Vx, Vy, x, y: real;
     d: Longword;
 begin
+if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
+   begin
+   Result:= false;
+   exit
+   end;
 Time:= 0;
 Power:= 1;
 Vx:= (Targ.X - Me.X)/1024;

@@ -47,7 +47,8 @@ type PGear = ^TGear;
              Y : Real;
              dX: Real;
              dY: Real;
-             Kind  : TGearType;
+             Kind: TGearType;
+             Pos: Longword;
              doStep: TGearStepProcedure;
              HalfWidth, HalfHeight: integer;
              Angle, Power : Cardinal;
@@ -497,7 +498,10 @@ while Gear<>nil do
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
         //!!!              ACHTUNG!!!!                     
-            gtCase: DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
+            gtCase: case Gear.Pos of
+                         posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
+                         posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 6) and $F, Surface);
+                         end;
               end;
       Gear:= Gear.NextGear
       end;
@@ -553,10 +557,13 @@ while Gear <> nil do
                   gtMine,
                   gtCase: begin
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
-                          Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
-                          Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
-                          Gear.Active:= true;
-                          FollowGear:= Gear
+                          if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
+                             begin
+                             Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
+                             Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
+                             Gear.Active:= true;
+                             FollowGear:= Gear
+                             end;
                           end;
                  gtGrave: Gear.dY:= - dmg / 250;
               end;
@@ -568,7 +575,9 @@ end;
 procedure AmmoShove(Ammo, Gear: PGear; Power: Longword);
 begin
 case Gear.Kind of
-     gtHedgehog: begin
+     gtHedgehog,
+         gtMine,
+         gtCase: begin
                  inc(Gear.Damage, Power);
                  Gear.dX:= Ammo.dX * Power * 0.01;
                  Gear.dY:= Ammo.dY * Power * 0.01;
@@ -651,12 +660,11 @@ procedure SpawnBoxOfSmth;
 var i, x, y, k: integer;
     b: boolean;
 begin
-exit; // temp hack until boxes are fully implemented
 if CountGears(gtCase) > 2 then exit;
 k:= 7;
 repeat
   x:= getrandom(2000) + 24;
-  {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: check x = '+inttostr(x));{$ENDIF}
+//  {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: check x = '+inttostr(x));{$ENDIF}
   b:= false;
   y:= -1;
   while (y < 1023) and not b do
@@ -677,7 +685,12 @@ repeat
      b:= CheckGearsNear(x, y, [gtMine, gtHedgehog, gtCase], 70, 70) = nil;
   dec(k)
 until (k = 0) or b;
-if b then FollowGear:= AddGear(x, -30, gtCase, 0)
+if b then
+   begin
+   FollowGear:= AddGear(x, -30, gtCase, 0);
+   FollowGear.Health:= 25;
+   FollowGear.Pos:= posCaseHealth
+   end;
 end;
 
 initialization

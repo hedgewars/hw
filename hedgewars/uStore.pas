@@ -37,9 +37,9 @@ uses uConsts, uTeams, SDLh;
 {$INCLUDE options.inc}
 
 type PRangeArray = ^TRangeArray;
-     TRangeArray = array[byte] of record
-                                  Left, Right: integer;
-                                  end;
+     TRangeArray = array[0..31] of record
+                                   Left, Right: integer;
+                                   end;
 
 procedure StoreInit;
 procedure StoreLoad;
@@ -52,7 +52,7 @@ procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surfa
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
 procedure DrawExplosion(X, Y, Radius: integer);
-procedure DrawHLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
+procedure DrawHLinesExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 function  RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
@@ -125,7 +125,7 @@ if SDL_MustLock(LandSurface) then
 SDL_UpdateRect(LandSurface, X - Radius, Y - Radius, Radius * 2, Radius * 2)
 end;
 
-procedure DrawHLineExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
+procedure DrawHLinesExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
 var tx, ty, i, p: integer;
 begin
 if SDL_MustLock(LandSurface) then
