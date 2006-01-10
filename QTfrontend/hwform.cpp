@@ -115,11 +115,18 @@ HWForm::HWForm(QWidget *parent)
 	cfgdir.cd(".hedgewars");
 
 	list = cfgdir.entryList(QStringList("*.cfg"));
+
+	if(list.empty()) {
+	  HWTeam defaultTeam("DefaultTeam");
+	  defaultTeam.SetCfgDir(cfgdir.absolutePath());
+	  defaultTeam.SaveToFile();
+	  list.push_back("DefaultTeam");
+	}
+
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
 		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg$"), "\\1"));
 	}
-
 
 	QFile settings(cfgdir.absolutePath() + "/options");
 	if (settings.open(QIODevice::ReadOnly))
