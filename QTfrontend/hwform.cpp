@@ -258,8 +258,8 @@ void HWForm::TeamDiscard()
 void HWForm::SimpleGame()
 {
 	game = new HWGame(ui.CBResolution->currentIndex(), ui.CBFullscreen->isChecked());
-	game->AddTeam("team");
-	game->AddTeam("team");
+	game->AddTeam("DefaultTeam");
+	game->AddTeam("DefaultTeam");
 	game->StartLocal();
 }
 
@@ -348,7 +348,7 @@ void HWForm::NetCreate()
 
 void HWForm::NetAddTeam()
 {
-	HWTeam team("team");
+	HWTeam team("DefaultTeam");
 	team.SetCfgDir(cfgdir.absolutePath());
 	team.LoadFromFile();
 	hwnet->AddTeam(team);
