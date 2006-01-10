@@ -111,7 +111,7 @@ var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore;
+uses uConsole, uStore, uIO;
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
@@ -137,6 +137,7 @@ begin
 {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
 if isFatalError then
    begin
+   SendIPC('E' + Msg);
    WriteLn(Msg);
    SDL_Quit;
 //   Readln;

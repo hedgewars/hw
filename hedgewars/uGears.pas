@@ -493,11 +493,7 @@ while Gear<>nil do
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        //!!!              ACHTUNG!!!!
-        gtDynamite: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
-                       then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
-                       else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        //!!!              ACHTUNG!!!!                     
+        gtDynamite: DrawSprite2(sprDynamite, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, Gear.Tag and 1, Gear.Tag shr 1, Surface);
             gtCase: case Gear.Pos of
                          posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
                          posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 6) and $F, Surface);
@@ -660,7 +656,7 @@ procedure SpawnBoxOfSmth;
 var i, x, y, k: integer;
     b: boolean;
 begin
-if CountGears(gtCase) > 2 then exit;
+if (CountGears(gtCase) > 1) or (getrandom(3) <> 0) then exit;
 k:= 7;
 repeat
   x:= getrandom(2000) + 24;

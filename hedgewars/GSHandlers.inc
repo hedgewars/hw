@@ -642,30 +642,16 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDynamite(Gear: PGear);
 begin
-if (Gear.dX <> 0) or (Gear.dY <> 0) {or not TestCollisionY(Gear, 1)} then
+doStepFallingGear(Gear);
+AllInactive:= false;
+if Gear.Timer mod 166 = 0 then inc(Gear.Tag);
+if Gear.Timer = 0 then
    begin
-   doStepFallingGear(Gear);
-   if Gear.Active = false then
-      begin
-      Gear.dX:= 0;
-      Gear.dY:= 0
-      end;
-//   CalcRotationDirAngle(Gear);
-   AllInactive:= false
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 85, EXPLAutoSound);
+   DeleteGear(Gear);
+   exit
    end;
-//if ((Gear.State and gsttmpFlag) <> 0) then
-//   if ((Gear.State  and gstAttacking) = 0) then
-      begin
-  //    AllInactive:= true;
-      if (Gear.Timer and $FF) = 0 then PlaySound(sndMineTick);
-      if Gear.Timer = 0 then
-         begin
-         doMakeExplosion(round(Gear.X), round(Gear.Y), 85, EXPLAutoSound);
-         DeleteGear(Gear)
-         end;
-      dec(Gear.Timer);
-      end;{ else // gsttmpFlag = 0
-   if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;}
+dec(Gear.Timer);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -44,7 +44,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-                   sprMineOn, sprCase, sprFAid);
+                   sprMineOn, sprCase, sprFAid, sprDynamite);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite);
@@ -69,7 +69,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
 
 resourcestring
-      errmsgCreateSurface   = 'Error creating DirectDraw7 surface';
+      errmsgCreateSurface   = 'Error creating SDL surface';
       errmsgNoDesc          = 'Unknown error';
       errmsgTransparentSet  = 'Error setting transparent color';
       errmsgUnknownCommand  = 'Unknown command';
@@ -237,7 +237,8 @@ const
                      (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
                      (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
                      (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
-                     (FileName:  'FirstAid.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprFAid
+                     (FileName:  'FirstAid.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprFAid
+                     (FileName:  'dynamite.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprDynamite
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];

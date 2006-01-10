@@ -107,7 +107,7 @@ HWForm::HWForm(QWidget *parent)
 		{
 			QMessageBox::critical(this,
 					tr("Error"),
-					tr("Cannot create directory %s").arg("/.hedgewars"),
+					tr("Cannot create directory %1").arg("/.hedgewars"),
 					tr("Quit"));
 			return ;
 		}
@@ -275,7 +275,7 @@ void HWForm::SaveOptions()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Cannot save options to file %s").arg(settings.fileName()),
+				tr("Cannot save options to file %1").arg(settings.fileName()),
 				tr("Quit"));
 		return ;
 	}

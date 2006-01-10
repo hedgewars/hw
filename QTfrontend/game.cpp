@@ -60,7 +60,6 @@ void HWGame::NewConnection()
 		IPCSocket = client;
 		connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
 		connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-		msgsize = 0;
 		if (toSendBuf.size() > 0)
 			SENDIPC("?");
 	} else
@@ -105,9 +104,9 @@ void HWGame::SendConfig()
 	SENDIPC("eadd hh4 1");
 }
 
-void HWGame::ParseMessage()
+void HWGame::ParseMessage(const QByteArray & msg)
 {
-	switch(msgbuf[0])
+	switch(msg.data()[1])
 	{
 		case '?':
 		{
@@ -131,23 +130,31 @@ void HWGame::ParseMessage()
 			}
 			break;
 		}
+		case 'E':
+		{
+			QMessageBox::critical(0,
+					"Hedgewars: error message",
+					QString().append(msg.mid(2)).left(msg.size() - 6),
+					QMessageBox::Ok,
+					QMessageBox::NoButton,
+					QMessageBox::NoButton);
+			return;
+		}
 		case '+':
 		{
 			if (gameType == gtNet)
 			{
-				QByteArray tmpbuf = QByteArray::fromRawData((char *)&msgsize, 1) + QByteArray::fromRawData(msgbuf, msgsize);
-				emit SendNet(tmpbuf);
+				emit SendNet(msg);
 			}
 			break;
 		}
 		default:
 		{
-			QByteArray tmpbuf = QByteArray::fromRawData((char *)&msgsize, 1) + QByteArray::fromRawData(msgbuf, msgsize);
 			if (gameType == gtNet)
 			{
-				emit SendNet(tmpbuf);
+				emit SendNet(msg);
 			}
-			demo->append(tmpbuf);
+			demo->append(msg);
 		}
 	}
 }
@@ -189,23 +196,15 @@ void HWGame::FromNet(const QByteArray & msg)
 
 void HWGame::ClientRead()
 {
-	qint64 readbytes = 1;
-	while (readbytes > 0)
+	readbuffer.append(IPCSocket->readAll());
+	quint8 msglen;
+	quint32 bufsize;
+	while (((bufsize = readbuffer.size()) > 0) &&
+			((msglen = readbuffer.data()[0]) < bufsize))
 	{
-		if (msgsize == 0)
-		{
-			msgbufsize = 0;
-			readbytes = IPCSocket->read((char *)&msgsize, 1);
-		} else
-		{
-			msgbufsize +=
-			readbytes = IPCSocket->read((char *)&msgbuf[msgbufsize], msgsize - msgbufsize);
-			if (msgbufsize = msgsize)
-			{
-				ParseMessage();
-				msgsize = 0;
-			}
-		}
+		QByteArray msg = readbuffer.left(msglen + 1);
+		readbuffer.remove(0, msglen + 1);
+		ParseMessage(msg);
 	}
 }
 

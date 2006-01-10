@@ -73,8 +73,7 @@ private:
     QTcpServer * IPCServer;
 	QTcpSocket * IPCSocket;
 	char msgbuf[MAXMSGCHARS];
-	quint8 msgbufsize;
-	quint8 msgsize;
+	QByteArray readbuffer;
 	QString teams[5];
 	QString seed;
 	int TeamCount;
@@ -89,7 +88,7 @@ private:
 	void Start();
 	void SendConfig();
 	void SendTeamConfig(int index);
-	void ParseMessage();
+	void ParseMessage(const QByteArray & msg);
 	void SendIPC(const char * msg, quint8 len);
 	void SendIPC(const QByteArray & buf);
 	void RawSendIPC(const QByteArray & buf);

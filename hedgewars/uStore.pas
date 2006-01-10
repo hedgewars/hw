@@ -47,6 +47,7 @@ procedure StoreRelease;
 procedure DrawGear(Stuff : TStuff; X, Y: integer; Surface: PSDL_Surface);
 procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: integer; Surface: PSDL_Surface);
 procedure DrawSprite (Sprite: TSprite; X, Y, Position: integer; Surface: PSDL_Surface);
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
@@ -531,7 +532,7 @@ rr.w:= r.w;
 rr.h:= r.h;
 if SDL_UpperBlit(SourceSurface, r, DestSurface, @rr) < 0 then
    begin
-   Writeln('Blit: ', SDL_GetError);
+   OutError('Blit: ' + SDL_GetError, true);
    exit
    end;
 end;
@@ -554,6 +555,16 @@ begin
 r.x:= 0;
 r.w:= SpritesData[Sprite].Width;
 r.y:= Position * SpritesData[Sprite].Height;
+r.h:= SpritesData[Sprite].Height;
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
+end;
+
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
+var r: TSDL_Rect;
+begin
+r.x:= FrameX * SpritesData[Sprite].Width;
+r.w:= SpritesData[Sprite].Width;
+r.y:= FrameY * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
 end;
