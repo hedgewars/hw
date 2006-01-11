@@ -647,7 +647,7 @@ AllInactive:= false;
 if Gear.Timer mod 166 = 0 then inc(Gear.Tag);
 if Gear.Timer = 0 then
    begin
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 85, EXPLAutoSound);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 75, EXPLAutoSound);
    DeleteGear(Gear);
    exit
    end;

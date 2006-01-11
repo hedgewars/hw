@@ -493,7 +493,7 @@ while Gear<>nil do
             gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
                        then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
                        else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        gtDynamite: DrawSprite2(sprDynamite, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, Gear.Tag and 1, Gear.Tag shr 1, Surface);
+        gtDynamite: DrawSprite2(sprDynamite, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 25 + WorldDy, Gear.Tag and 1, Gear.Tag shr 1, Surface);
             gtCase: case Gear.Pos of
                          posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
                          posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 6) and $F, Surface);
@@ -632,7 +632,7 @@ while t <> nil do
          if sqr(mX - t.X) / rX + sqr(mY - t.Y) / rY <= 1 then
             begin
             Result:= t;
-            {$IFDEF DEBUGFILE}AddFileLog('CheckGearsNear: near ('+inttostr(mx)+','+inttostr(my)+') is gear '+inttostr(integer(t)));{$ENDIF}
+//            {$IFDEF DEBUGFILE}AddFileLog('CheckGearsNear: near ('+inttostr(mx)+','+inttostr(my)+') is gear '+inttostr(integer(t)));{$ENDIF}
             exit
             end;
       t:= t.NextGear
@@ -672,7 +672,7 @@ repeat
               if Land[y, i] <> 0 then
                  begin
                  b:= true;
-                 {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: Land['+inttostr(y)+','+inttostr(i)+'] <> 0');{$ENDIF}
+//                 {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: Land['+inttostr(y)+','+inttostr(i)+'] <> 0');{$ENDIF}
                  end;
               inc(i)
               end;

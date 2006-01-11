@@ -215,12 +215,40 @@ case c of
      else WriteLnToConsole(errmsgUnknownCommand  + ': "/' + CmdStr + '"') end
 end;
 
+procedure AutoComplete;
+var t: PVariable;
+    c: char;
+begin
+if InputStr[0] = #0 then exit;
+c:= InputStr[1];
+if c in ['/', '$'] then Delete(InputStr, 1, 1)
+                   else c:= #0;
+if InputStr[byte(InputStr[0])] = #32 then dec(InputStr[0]);
+t:= Variables;
+while t <> nil do
+      begin
+      if (c=#0) or ((t.VType =  vtCommand) and (c='/'))or
+                   ((t.VType <> vtCommand) and (c='$'))then
+         if copy(t.Name, 1, Length(InputStr)) = InputStr then
+            begin
+            if t.VType = vtCommand then InputStr:= '/' + t.Name + ' '
+                                   else InputStr:= '$' + t.Name + ' ';
+            exit
+            end;
+      t:= t.Next
+      end
+end;
+
 procedure KeyPressConsole(Key: Longword);
 begin
 case Key of
       8: if Length(InputStr)>0 then dec(InputStr[0]);
+      9: AutoComplete;
  13,271: begin
-         ParseCommand('/say ' + InputStr);
+         if InputStr[1] in ['/', '$'] then
+            ParseCommand(InputStr)
+         else
+            ParseCommand('/say ' + InputStr);
          InputStr:= ''
          end;
      96: begin
