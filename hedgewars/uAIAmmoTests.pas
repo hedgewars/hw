@@ -49,10 +49,10 @@ const AmmoTests: array[TAmmoType] of
                     Test: TAmmoTestProc;
                     Flags: Longword;
                     end = (
-                    ( Test: TestGrenade;
+                    ( Test: nil;//TestGrenade;
                       Flags: ctfNotFull;
                     ),
-                    ( Test: TestBazooka;
+                    ( Test: nil;//TestBazooka;
                       Flags: ctfNotFull or ctfBreach;
                     ),
                     ( Test: nil;

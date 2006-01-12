@@ -228,6 +228,7 @@ if GearsList = nil then GearsList:= Result
 end;
 
 procedure DeleteGear(Gear: PGear);
+var team: PTeam;
 begin
 if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
 if Gear.Kind = gtHedgehog then
@@ -239,8 +240,9 @@ if Gear.Kind = gtHedgehog then
       exit
       end else
       begin
-      RecountTeamHealth(PHedgehog(Gear.Hedgehog).Team);
+      team:= PHedgehog(Gear.Hedgehog).Team;
       PHedgehog(Gear.Hedgehog).Gear:= nil;
+      RecountTeamHealth(team);
       end;
 if CurAmmoGear = Gear then
    CurAmmoGear:= nil;

@@ -37,7 +37,7 @@ interface
 procedure ProcessBot;
 
 implementation
-uses uAIActions, uAIMisc, uMisc, uTeams, uConsts, uAIAmmoTests, uGears, SDLh;
+uses uAIActions, uAIMisc, uMisc, uTeams, uConsts, uAIAmmoTests, uGears, SDLh, uConsole;
 
 procedure Think;
 var Targets: TTargets;
@@ -56,7 +56,8 @@ var Targets: TTargets;
          Me.Y:= round(Gear.Y);
          end;
     repeat
-      if isInMultiShoot then with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+      if isInMultiShoot or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum > 0)
+                        then with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
                              a:= Ammo[CurSlot, CurAmmo].AmmoType
                         else a:= TAmmoType(random(ord(High(TAmmoType))));
       aa:= a;
@@ -71,7 +72,7 @@ var Targets: TTargets;
               end;
       if a = High(TAmmoType) then a:= Low(TAmmoType)
                              else inc(a)
-      until isInMultiShoot or (a = aa);
+      until isInMultiShoot or (a = aa) or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum > 0);
     inc(t)
     until (t >= Targets.Count)
     end;
@@ -112,7 +113,8 @@ var Targets: TTargets;
 
 begin
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     if ((Gear.State and (gstAttacked or gstAttacking or gstMoving or gstFalling)) <> 0) then exit;
+     if ((Gear.State and (gstAttacked or gstAttacking or gstMoving or gstFalling)) <> 0)
+        or isInMultiShoot then exit;
 
 FillTargets(Targets);
 
@@ -125,8 +127,11 @@ if IsActionListEmpty then
 
 if IsActionListEmpty then
    begin
-   AddAction(aia_Weapon, ord(amSkip), 1000);
-   AddAction(aia_Attack, aim_push, 1000);
+   if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum = 0 then
+      begin
+      AddAction(aia_Weapon, ord(amSkip), 1000);
+      AddAction(aia_Attack, aim_push, 1000);
+      end else ParseCommand('skip');
    exit
    end;
 

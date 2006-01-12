@@ -279,6 +279,7 @@ RegisterVariable('fort'    , vtCommand, @chFort         );
 RegisterVariable('grave'   , vtCommand, @chGrave        );
 RegisterVariable('bind'    , vtCommand, @chBind         );
 RegisterVariable('add'     , vtCommand, @chAdd          );
+RegisterVariable('skip'    , vtCommand, @chSkip         );
 RegisterVariable('say'     , vtCommand, @chSay          );
 RegisterVariable('+left'   , vtCommand, @chLeft_p       );
 RegisterVariable('-left'   , vtCommand, @chLeft_m       );

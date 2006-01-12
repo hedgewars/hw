@@ -184,6 +184,7 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
         'S': ParseCommand('switch');
         'j': ParseCommand('ljump');
         'J': ParseCommand('hjump');
+        ',': ParseCommand('skip');
         'N': begin
              tmpflag:= false;
              {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}

@@ -334,3 +334,9 @@ begin
 flagMakeCapture:= true
 end;
 
+procedure chSkip(var s: shortstring);
+begin
+if not CurrentTeam.ExtDriven then SendIPC(',');
+TurnTimeLeft:= 0
+end;
+
