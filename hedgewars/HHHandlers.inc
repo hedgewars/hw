@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -176,7 +176,8 @@ begin
 case Gear.Pos of
      posCaseHealth: begin
                     inc(HH.Health, Gear.Health);
-                    RenderHealth(PHedgehog(HH.Hedgehog)^)
+                    RenderHealth(PHedgehog(HH.Hedgehog)^);
+                    RecountTeamHealth(PHedgehog(HH.Hedgehog)^.Team)
                     end;
      end;
 end;

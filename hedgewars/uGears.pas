@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -237,7 +237,11 @@ if Gear.Kind = gtHedgehog then
       Gear.Message:= gm_Destroy;
       CurAmmoGear.Message:= gm_Destroy;
       exit
-      end else PHedgehog(Gear.Hedgehog).Gear:= nil;
+      end else
+      begin
+      RecountTeamHealth(PHedgehog(Gear.Hedgehog).Team);
+      PHedgehog(Gear.Hedgehog).Gear:= nil;
+      end;
 if CurAmmoGear = Gear then
    CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
@@ -266,6 +270,7 @@ while Gear <> nil do
                                          else dec(Gear.Health, Gear.Damage);
             AddGear(Round(Gear.X), Round(Gear.Y) - 32, gtHealthTag, Gear.Damage).Hedgehog:= Gear.Hedgehog;
             RenderHealth(PHedgehog(Gear.Hedgehog)^);
+            RecountTeamHealth(PHedgehog(Gear.Hedgehog)^.Team);
             
             Gear.Damage:= 0
             end;

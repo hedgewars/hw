@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -60,9 +60,11 @@ type PHedgehog = ^THedgehog;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              Ammos: array[0..cMaxHHIndex] of THHAmmo;
              CurrHedgehog: integer;
-             NameRect, CrossHairRect, GraveRect: TSDL_Rect;
+             NameRect, CrossHairRect,
+             GraveRect, HealthRect: TSDL_Rect;
              GraveName: string;
              FortName: string;
+             TeamHealth: integer;
              AttackBar: LongWord;
              end;
 
@@ -75,9 +77,11 @@ procedure SwitchHedgehog;
 procedure InitTeams;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
 function  TeamSize(p: PTeam): Longword;
+procedure RecountTeamHealth(team: PTeam);
 
 implementation
 uses uMisc, uStore, uWorld, uIO, uAIActions;
+const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;
 
@@ -178,31 +182,47 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     end;
 end;
 
-procedure InitTeams;
+procedure RecountAllTeamsHealth;
 var p: PTeam;
-    i: integer;
 begin
 p:= TeamsList;
 while p <> nil do
       begin
+      RecountTeamHealth(p);
+      p:= p.Next
+      end
+end;
+
+procedure InitTeams;
+var p: PTeam;
+    i: integer;
+    th: integer;
+begin
+p:= TeamsList;
+while p <> nil do
+      begin
+      th:= 0;
       FillAmmoGroup(@p.Ammos[0]);
       for i:= 0 to cMaxHHIndex do
           if p.Hedgehogs[i].Gear <> nil then
              begin
              p.Hedgehogs[i].Gear.Health:= 100;
+             inc(th, 100);
              p.Hedgehogs[i].Ammo:= @p.Ammos[0] // 0 means all hedgehogs
              // will have common set of ammo
              end;
+      if th > MaxTeamHealth then MaxTeamHealth:= th;
       p:= p.Next
       end;
 SetFirstTurnHedgehog;
+RecountAllTeamsHealth
 end;
 
 procedure ApplyAmmoChanges(Hedgehog: PHedgehog);
 var s: shortstring;
 begin
 with Hedgehog^ do
-     begin     
+     begin
      if Ammo[CurSlot, CurAmmo].Count = 0 then
         begin
         CurAmmo:= 0;
@@ -271,6 +291,23 @@ begin
 Result:= 0;
 for i:= 0 to cMaxHHIndex do
     if p.Hedgehogs[i].Gear <> nil then inc(Result)
+end;
+
+procedure RecountTeamHealth(team: PTeam);
+var i: integer;
+begin
+with team^ do
+     begin
+     TeamHealth:= 0;
+     for i:= 0 to cMaxHHIndex do
+         if Hedgehogs[i].Gear <> nil then
+            inc(TeamHealth, Hedgehogs[i].Gear.Health);
+     if TeamHealth > MaxTeamHealth then
+        begin
+        MaxTeamHealth:= TeamHealth;
+        RecountAllTeamsHealth;
+        end else TeamHealth:= (TeamHealth * cTeamHealthWidth) div MaxTeamHealth
+     end
 end;
 
 initialization

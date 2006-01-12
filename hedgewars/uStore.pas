@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -51,6 +51,7 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: P
 procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
+procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
 procedure DrawExplosion(X, Y, Radius: integer);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
@@ -283,6 +284,31 @@ begin
   SDL_FreeSurface(tmpsurf);
 end;
 
+procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface);
+var r: TSDL_Rect;
+begin
+r:= rect^;
+SDL_FillRect(Surface, @r, 0);
+r.y:= rect.y + 1;
+r.h:= rect.h - 2;
+SDL_FillRect(Surface, @r, BorderColor);
+r.x:= rect.x + 1;
+r.w:= rect.w - 2;
+r.y:= rect.y;
+r.h:= rect.h;
+SDL_FillRect(Surface, @r, BorderColor);
+r.x:= rect.x + 2;
+r.y:= rect.y + 1;
+r.w:= rect.w - 4;
+r.h:= rect.h - 2;
+SDL_FillRect(Surface, @r, FillColor);
+r.x:= rect.x + 1;
+r.y:= rect.y + 2;
+r.w:= rect.w - 2;
+r.h:= rect.h - 4;
+SDL_FillRect(Surface, @r, FillColor)
+end;
+
 function WriteInRoundRect(Surface: PSDL_Surface; X, Y: integer; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
 var w, h: integer;
     tmpsurf: PSDL_Surface;
@@ -293,24 +319,7 @@ Result.x:= X;
 Result.y:= Y;
 Result.w:= w + 6;
 Result.h:= h + 6;
-SDL_FillRect(Surface, @Result, 0);
-Result.w:= 1;
-Result.y:= Y + 1;
-Result.h:= h + 4;
-SDL_FillRect(Surface, @Result, cWhiteColor);
-Result.x:= X + w + 5;
-SDL_FillRect(Surface, @Result, cWhiteColor);
-Result.x:= X + 1;
-Result.w:= w + 4;
-Result.y:= Y;
-Result.h:= 1;
-SDL_FillRect(Surface, @Result, cWhiteColor);
-Result.y:= Y + h + 5;
-SDL_FillRect(Surface, @Result, cWhiteColor);
-Result.x:= X + 1;
-Result.y:= Y + 1;
-Result.h:= h + 4;
-SDL_FillRect(Surface, @Result, cColorNearBlack);
+DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface);
 SDL_GetRGB(Color, Surface.format, @clr.r, @clr.g, @clr.b);
 tmpsurf:= TTF_RenderText_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
@@ -333,16 +342,23 @@ var i: TStuff;
     procedure WriteNames(Font: THWFont);
     var Team: PTeam;
         i: integer;
-        r: TSDL_Rect;
+        r, rr: TSDL_Rect;
     begin
     r.x:= 0;
     r.y:= 272;
     Team:= TeamsList;
     while Team<>nil do
       begin
-      r.w:= 1968;
+      r.w:= 104;
       r:= WriteInRoundRect(StoreSurface, r.x, r.y, Team.Color, Font, Team.TeamName);
       Team.NameRect:= r;
+      inc(r.y, r.h);
+      r.w:= cTeamHealthWidth + 5;
+      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, StoreSurface);
+      Team.HealthRect:= r;
+      rr:= r;
+      inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
+      DrawRoundRect(@rr, Team.Color, Team.Color, StoreSurface);
       inc(r.y, r.h);
       for i:= 0 to 7 do
           if Team.Hedgehogs[i].Gear<>nil then
@@ -586,6 +602,11 @@ procedure DrawLand(X, Y: integer; Surface: PSDL_Surface);
 const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
 begin
 DrawFromRect(X, Y, @r, LandSurface, Surface)
+end;
+
+procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
+begin
+DrawFromRect(X, Y, Rect, StoreSurface, Surface)
 end;
 
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);

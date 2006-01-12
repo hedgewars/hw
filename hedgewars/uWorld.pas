@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -198,6 +198,25 @@ while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
         Captions[Pred(i)]:= Captions[i];
     Captions[Pred(cMaxCaptions)].EndTime:= 0
     end;
+
+// Teams Healths
+team:= TeamsList;
+i:= cSCreenHeight - 32;
+while team <> nil do
+      begin
+      DrawFromStoreRect(cScreenWidth div 2 - team.NameRect.w - 3, i,
+                        @team.NameRect, Surface);
+      r:= team.HealthRect;
+      r.w:= 3 + team.TeamHealth;
+      DrawFromStoreRect(cScreenWidth div 2, i,
+                        @r, Surface);
+      inc(r.x, cTeamHealthWidth + 3);
+      r.w:= 2;
+      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 3, i,
+                        @r, Surface);
+      dec(i, team.HealthRect.h + 2);
+      team:= team.Next
+      end;
 
 // Lag alert
 if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 7, Surface);

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -58,6 +58,7 @@ var isCursorVisible : boolean = false;
     cWaterLine       : integer = 1024;
     cVisibleWater    : integer = 64;
     cScreenEdgesDist : integer = 240;
+    cTeamHealthWidth : integer = 128;
 
     GameTicks     : LongWord = 0;
 
