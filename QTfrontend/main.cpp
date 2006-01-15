@@ -32,11 +32,20 @@
  */
 
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 #include "hwform.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+
+	Q_INIT_RESOURCE(hedgewars);
+
+	QTranslator Translator;
+	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
+	app.installTranslator(&Translator);
+
 	HWForm *Form = new HWForm;
 	Form->show();
 	return app.exec();

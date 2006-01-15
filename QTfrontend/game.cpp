@@ -230,7 +230,7 @@ void HWGame::Start()
 	arguments << "46631";
 	arguments << seed;
 	arguments << (vid_Fullscreen ? "1" : "0");
-	process->start("./hw", arguments);
+	process->start("./hwengine", arguments);
 }
 
 void HWGame::AddTeam(const QString & teamname)

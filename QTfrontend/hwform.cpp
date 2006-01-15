@@ -44,7 +44,6 @@
 #include "hwform.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
-//#include "gamecmds.h"
 #include "teamselect.h"
 
 HWForm::HWForm(QWidget *parent)
