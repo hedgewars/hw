@@ -338,6 +338,7 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
       end;
    if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.X:= Gear.X + Gear.dX;
 
+   AddIntersectorsCR(Gear);
    if not HHTestCollisionYwithGear(Gear, 1) then
    begin
    Gear.Y:= Gear.Y + 1;
@@ -369,7 +370,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    end
    end
    end;
-   AddIntersectorsCR(Gear);
    SetAllHHToActive
    end
 end;

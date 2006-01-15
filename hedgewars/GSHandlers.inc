@@ -687,3 +687,60 @@ if Gear.Damage > 0 then
    doMakeExplosion(round(Gear.X), round(Gear.Y), 20, EXPLAutoSound)
    end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+var thexchar: array[0..5] of record
+                             oy, ny: integer;
+                             team: PTeam;
+                             end;
+    thexchcnt: Longword;
+
+procedure doStepTeamHealthSorterWork(Gear: PGear);
+var i: integer;
+begin
+AllInactive:= false;
+dec(Gear.Timer);
+if (Gear.Timer and 15) = 0 then
+   for i:= 0 to Pred(thexchcnt) do
+       with thexchar[i] do
+            {$WARNINGS OFF}
+            team.DrawHealthY:= ny + (oy - ny) * Gear.Timer div 640;
+            {$WARNINGS ON}
+if Gear.Timer = 0 then
+   DeleteGear(Gear)
+end;
+
+procedure doStepTeamHealthSorter(Gear: PGear);
+var team: PTeam;
+    i, t: Longword;
+begin
+AllInactive:= false;
+team:= TeamsList;
+i:= 0;
+while team <> nil do
+      begin
+      thexchar[i].oy:= team.DrawHealthY;
+      thexchar[i].team:= team;
+      inc(i);
+      team:= team.Next
+      end;
+thexchcnt:= i;
+for i:= 1 to thexchcnt do
+    for t:= 0 to thexchcnt - 2 do
+        if thexchar[t].team.TeamHealth > thexchar[Succ(t)].team.TeamHealth then
+           begin
+           thexchar[5]:= thexchar[t];
+           thexchar[t]:= thexchar[Succ(t)];
+           thexchar[Succ(t)]:= thexchar[5]
+           end;
+t:= cScreenHeight - 4;
+for i:= 0 to Pred(thexchcnt) do
+    with thexchar[i] do
+         begin
+         dec(t, team.HealthRect.h + 2);
+         ny:= t
+         end;
+Gear.Timer:= 640;
+Gear.doStep:= doStepTeamHealthSorterWork
+end;
+

@@ -114,7 +114,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepMine,
                                                                doStepCase,
                                                                doStepDEagleShot,
-                                                               doStepDynamite
+                                                               doStepDynamite,
+                                                               doStepTeamHealthSorter
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -277,7 +278,7 @@ while Gear <> nil do
             Gear.Damage:= 0
             end;
       Gear:= Gear.NextGear
-      end;
+      end
 end;
 
 procedure ProcessGears;

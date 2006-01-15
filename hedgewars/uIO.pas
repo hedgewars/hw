@@ -49,7 +49,7 @@ procedure LoadFortPoints(Fort: shortstring; isRight: boolean; Count: Longword);
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uRandom, uLand;
 const isPonged: boolean = false;
-var  IPCSock: PTCPSocket;
+var  IPCSock: PTCPSocket = nil;
      fds: PSDLNet_SocketSet;
 
      extcmd: array[word] of packed record
@@ -134,12 +134,14 @@ end;
 
 procedure SendIPC(s: shortstring);
 begin
-//WriteLnToConsole(s);
-if s[0]>#251 then s[0]:= #251;
-PLongWord(@s[Succ(byte(s[0]))])^:= GameTicks;
-{$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s);{$ENDIF}
-inc(s[0],4);
-SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+if IPCSock <> nil then
+   begin
+   if s[0]>#251 then s[0]:= #251;
+   PLongWord(@s[Succ(byte(s[0]))])^:= GameTicks;
+   {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s);{$ENDIF}
+   inc(s[0],4);
+   SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+   end
 end;
 
 procedure SendIPCAndWaitReply(s: shortstring);

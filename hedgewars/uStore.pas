@@ -343,9 +343,11 @@ var i: TStuff;
     var Team: PTeam;
         i: integer;
         r, rr: TSDL_Rect;
+        drY: integer;
     begin
     r.x:= 0;
     r.y:= 272;
+    drY:= cSCreenHeight - 4;
     Team:= TeamsList;
     while Team<>nil do
       begin
@@ -360,6 +362,8 @@ var i: TStuff;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
       DrawRoundRect(@rr, Team.Color, Team.Color, StoreSurface);
       inc(r.y, r.h);
+      dec(drY, r.h + 2);
+      Team.DrawHealthY:= drY;
       for i:= 0 to 7 do
           if Team.Hedgehogs[i].Gear<>nil then
              begin

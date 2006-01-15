@@ -201,20 +201,21 @@ while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
 
 // Teams Healths
 team:= TeamsList;
-i:= cSCreenHeight - 32;
 while team <> nil do
       begin
-      DrawFromStoreRect(cScreenWidth div 2 - team.NameRect.w - 3, i,
+      DrawFromStoreRect(cScreenWidth div 2 - team.NameRect.w - 3,
+                        Team.DrawHealthY,
                         @team.NameRect, Surface);
       r:= team.HealthRect;
       r.w:= 3 + team.TeamHealth;
-      DrawFromStoreRect(cScreenWidth div 2, i,
+      DrawFromStoreRect(cScreenWidth div 2,
+                        Team.DrawHealthY,
                         @r, Surface);
       inc(r.x, cTeamHealthWidth + 3);
       r.w:= 2;
-      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 3, i,
+      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 3,
+                        Team.DrawHealthY,
                         @r, Surface);
-      dec(i, team.HealthRect.h + 2);
       team:= team.Next
       end;
 

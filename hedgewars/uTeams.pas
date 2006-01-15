@@ -65,6 +65,7 @@ type PHedgehog = ^THedgehog;
              GraveName: string;
              FortName: string;
              TeamHealth: integer;
+             DrawHealthY: integer;
              AttackBar: LongWord;
              end;
 
@@ -307,7 +308,8 @@ with team^ do
         MaxTeamHealth:= TeamHealth;
         RecountAllTeamsHealth;
         end else TeamHealth:= (TeamHealth * cTeamHealthWidth) div MaxTeamHealth
-     end
+     end;
+AddGear(0, 0, gtTeamHealthSorter, 0)
 end;
 
 initialization
