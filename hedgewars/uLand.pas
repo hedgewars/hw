@@ -56,7 +56,7 @@ type TPixAr = record
 var HHPoints: record
               First, Last: word;
               ar: array[1..Pred(cMaxSpawnPoints)] of TPoint
-              end = (First: 1);
+              end;
 
 procedure LogLandDigest;
 var ctx: TSHA1Context;
@@ -127,7 +127,7 @@ for i:= 0 to Count-2 do
           Y:= round(r1 + r2 + r3 + r4);
           t:= t + 0.001;
           if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
-                Land[y, x]:= $FFFFFF;
+                Land[y, x]:= 0;
           end;
     end;
 end;
@@ -244,15 +244,15 @@ Push(xl, xr, y,  1);
 while Stack.Count > 0 do
       begin
       Pop(xl, xr, y, dir);
-      while (xl > 0) and (Land[y, xl] = 0) do dec(xl);
-      while (xr < 2047) and (Land[y, xr] = 0) do inc(xr);
+      while (xl > 0) and (Land[y, xl] <> 0) do dec(xl);
+      while (xr < 2047) and (Land[y, xr] <> 0) do inc(xr);
       while (xl < xr) do
             begin
-            while (xl <= xr) and (Land[y, xl] <> 0) do inc(xl);
+            while (xl <= xr) and (Land[y, xl] = 0) do inc(xl);
             x:= xl;
-            while (xl <= xr) and (Land[y, xl] = 0) do
+            while (xl <= xr) and (Land[y, xl] <> 0) do
                   begin
-                  Land[y, xl]:= $FFFFFF;
+                  Land[y, xl]:= 0;
                   inc(xl)
                   end;
             if x < xl then
@@ -462,8 +462,11 @@ end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
+    i: Longword;
 begin
-GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
+for i:= 0 to sizeof(Land) div 4 do
+    PLongword(Longword(@Land) + i * 4)^:= $FFFFFF;
+GenBlank(EdgeTemplates[8{getrandom(Succ(High(EdgeTemplates)))}]);
 
 AddProgress;
 with PixelFormat^ do
@@ -563,5 +566,9 @@ with HHPoints do
          end
      end
 end;
+
+initialization
+
+HHPoints.First:= 1
 
 end.

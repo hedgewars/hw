@@ -1,3 +1,36 @@
+(*
+ * Hedgewars, a worms-like game
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * Distributed under the terms of the BSD-modified licence:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * with the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *)
+
 unit uLandTemplates;
 interface
 uses SDLh;
@@ -27,7 +60,7 @@ const Template0Points: array[0..4] of TPoint =
       );
       Template0FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template1Points: array[0..12] of TPoint =
@@ -48,7 +81,7 @@ const Template1Points: array[0..12] of TPoint =
       );
       Template1FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template2Points: array[0..28] of TPoint =
@@ -83,10 +116,9 @@ const Template2Points: array[0..28] of TPoint =
        (x: 1700; y: 1010),
        (x: 1700; y: 1500)
       );
-      Template2FPoints: array[0..1] of TPoint =
+      Template2FPoints: array[0..0] of TPoint =
       (
-       (x:  600; y: 1023),
-       (x: 1500; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template3Points: array[0..23] of TPoint =
@@ -116,10 +148,9 @@ const Template3Points: array[0..23] of TPoint =
        (x: 1900; y: 1010),
        (x: 1800; y: 1200)
       );
-      Template3FPoints: array[0..1] of TPoint =
+      Template3FPoints: array[0..0] of TPoint =
       (
-       (x:  500; y: 1023),
-       (x: 1500; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template4Points: array[0..38] of TPoint =
@@ -164,10 +195,9 @@ const Template4Points: array[0..38] of TPoint =
        (x: 1800; y: 1000),
        (x: 1800; y: 1500)
       );
-      Template4FPoints: array[0..1] of TPoint =
+      Template4FPoints: array[0..0] of TPoint =
       (
-       (x:  500; y: 1023),
-       (x: 1500; y: 1023)
+       (x: 1023; y:    0)
       );
     
 const Template5Points: array[0..10] of TPoint =
@@ -186,7 +216,7 @@ const Template5Points: array[0..10] of TPoint =
       );
       Template5FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template6Points: array[0..20] of TPoint =
@@ -215,7 +245,7 @@ const Template6Points: array[0..20] of TPoint =
       );
       Template6FPoints: array[0..0] of TPoint =
       (
-       (x: 1023; y: 1023)
+       (x: 1023; y:    0)
       );
 
 const Template7Points: array[0..43] of TPoint =
@@ -264,14 +294,44 @@ const Template7Points: array[0..43] of TPoint =
        (x: 1665; y:  831),
        (x: 1818; y:  951),
        (x: 1893; y: 1476)
-       );
-      Template7FPoints: array[0..1] of TPoint =
+      );
+      Template7FPoints: array[0..0] of TPoint =
       (
-       (x: 630; y: 1023),
-       (x:1655; y: 1023)
+       (x: 1023; y:    0)
       );
 
-const EdgeTemplates: array[0..7] of TEdgeTemplate =
+const Template8Points: array[0..23] of TPoint =
+      (
+       (x:  222; y: 1482),
+       (x:  354; y: 1023),
+       (x:  249; y:  783),
+       (x:  240; y:  421),
+       (x:  411; y:  401),
+       (x:  432; y:  777),
+       (x:  573; y:  777),
+       (x:  567; y:  300),
+       (x:  696; y:  250),
+       (x:  744; y:  683),
+       (x:  897; y:  698),
+       (x:  885; y:  450),
+       (x: 1032; y:  479),
+       (x: 1065; y:  698),
+       (x: 1200; y:  690),
+       (x: 1200; y:  218),
+       (x: 1326; y:  252),
+       (x: 1359; y:  786),
+       (x: 1470; y:  810),
+       (x: 1485; y:  379),
+       (x: 1608; y:  342),
+       (x: 1641; y:  819),
+       (x: 1719; y:  864),
+       (x: 1746; y: 1440)      );
+      Template8FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+
+const EdgeTemplates: array[0..8] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -352,8 +412,17 @@ const EdgeTemplates: array[0..7] of TEdgeTemplate =
        FillPoints: @Template7FPoints;
        FillPointsCount: Succ(High(Template7FPoints));
        canMirror: true; canFlip: false;
+      ),
+      (BasePoints: @Template8Points;
+       BasePointsCount: Succ(High(Template8Points));
+       BezPassCnt: 4;
+       PassMin:  9; PassDelta: 3;
+       WaveAmplMin:    18; WaveAmplDelta: 18;
+       WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
+       FillPoints: @Template8FPoints;
+       FillPointsCount: Succ(High(Template8FPoints));
+       canMirror: true; canFlip: false;
       )
-       
       );
 
 

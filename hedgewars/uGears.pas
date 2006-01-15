@@ -569,7 +569,10 @@ while Gear <> nil do
                              FollowGear:= Gear
                              end;
                           end;
-                 gtGrave: Gear.dY:= - dmg / 250;
+                 gtGrave: begin
+                          Gear.dY:= - dmg / 250;
+                          Gear.Active:= true;
+                          end;
               end;
          end;
       Gear:= Gear.NextGear
@@ -640,7 +643,6 @@ while t <> nil do
          if sqr(mX - t.X) / rX + sqr(mY - t.Y) / rY <= 1 then
             begin
             Result:= t;
-//            {$IFDEF DEBUGFILE}AddFileLog('CheckGearsNear: near ('+inttostr(mx)+','+inttostr(my)+') is gear '+inttostr(integer(t)));{$ENDIF}
             exit
             end;
       t:= t.NextGear
@@ -668,7 +670,6 @@ if (CountGears(gtCase) > 1) or (getrandom(3) <> 0) then exit;
 k:= 7;
 repeat
   x:= getrandom(2000) + 24;
-//  {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: check x = '+inttostr(x));{$ENDIF}
   b:= false;
   y:= -1;
   while (y < 1023) and not b do
@@ -680,7 +681,6 @@ repeat
               if Land[y, i] <> 0 then
                  begin
                  b:= true;
-//                 {$IFDEF DEBUGFILE}AddFileLog('SpawnBoxOfSmth: Land['+inttostr(y)+','+inttostr(i)+'] <> 0');{$ENDIF}
                  end;
               inc(i)
               end;
