@@ -11,5 +11,7 @@ QT += network
 
 # Input
 HEADERS += binds.h game.h hwform.h sdlkeys.h team.h rndstr.h sha1.h gamecmds.h netclient.h
+HEADERS += teamselect.h teamselhelper.h
 FORMS += hwform.ui
 SOURCES += game.cpp main.cpp hwform.cpp team.cpp rndstr.cpp sha1.cpp gamecmds.cpp netclient.cpp
+SOURCES += teamselect.cpp teamselhelper.cpp

@@ -37,11 +37,16 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QDir>
+
+#include <vector>
+
 #include "ui_hwform.h"
 #include "binds.h"
 #include "game.h"
 #include "team.h"
 #include "netclient.h"
+
+using namespace std;
 
 class HWForm : public QMainWindow
 {
@@ -89,6 +94,8 @@ private:
 	QDir cfgdir;
 	HWTeam * tmpTeam;
 	HWNet * hwnet;
+
+	vector<QString> m_teamNames;
 };
 
 #define ID_PAGE_SINGLEPLAYER 0

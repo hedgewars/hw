@@ -45,6 +45,7 @@
 #include "sdlkeys.h"
 #include "hwconsts.h"
 //#include "gamecmds.h"
+#include "teamselect.h"
 
 HWForm::HWForm(QWidget *parent)
 	: QMainWindow(parent)
@@ -125,7 +126,9 @@ HWForm::HWForm(QWidget *parent)
 
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
-		ui.CBTeamName->addItem((*it).replace(QRegExp("^(.*).cfg$"), "\\1"));
+	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
+	  m_teamNames.push_back(tmpTeamStr);
+	  ui.CBTeamName->addItem(tmpTeamStr);
 	}
 
 	QFile settings(cfgdir.absolutePath() + "/options");
@@ -192,6 +195,11 @@ void HWForm::GoToMain()
 void HWForm::GoToSinglePlayer()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_SINGLEPLAYER);
+
+	TeamSelWidget* pts=new TeamSelWidget(m_teamNames, ui.Pages->widget(ID_PAGE_SINGLEPLAYER));
+
+	pts->resize(500, 350);
+	pts->show();
 }
 
 void HWForm::GoToSetup()
