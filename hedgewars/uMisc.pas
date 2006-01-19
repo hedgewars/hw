@@ -136,14 +136,13 @@ end;
 procedure OutError(Msg: String; const isFatalError: boolean=false);
 begin
 {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
+WriteLnToConsole(Msg);
 if isFatalError then
    begin
-   SendIPC('E' + Msg);
-   WriteLn(Msg);
+   SendIPC('E' + GetLastConsoleLine);
    SDL_Quit;
-//   Readln;
    halt(1)
-   end else WriteLnToConsole(Msg)
+   end
 end;
 
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
@@ -168,7 +167,7 @@ end;
 
 function FloatToStr(n: real): shortstring;
 begin
-str(n, Result)
+str(n:5:5, Result)
 end;
 
 function arctan(const Y, X: real): real;

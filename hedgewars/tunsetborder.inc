@@ -3,7 +3,7 @@
         Y:= Y + dY;
         tx:= round(X);
         ty:= round(Y);
-        if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0)and (Land[ty, tx] <> 0) then
+        if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0)and (Land[ty, tx] = $FFFFFF) then
         case LandSurface.format.BytesPerPixel of
              1: ;
              2: PWord(p + LandSurface.pitch * ty + tx * 2)^:= cExplosionBorderColor;

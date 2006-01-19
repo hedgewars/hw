@@ -35,7 +35,7 @@ procedure doStepDrowningGear(Gear: PGear); forward;
 
 function CheckGearDrowning(Gear: PGear): boolean;
 begin
-Result:= Gear.Y + Gear.HalfHeight >= cWaterLine;
+Result:= Gear.Y + Gear.Radius >= cWaterLine;
 if Result then
    begin
    Gear.State:= gstDrowning;
@@ -73,7 +73,7 @@ procedure doStepDrowningGear(Gear: PGear);
 begin
 AllInactive:= false;
 Gear.Y:= Gear.Y + cDrownSpeed;
-if round(Gear.Y) > Gear.HalfHeight + cWaterLine + 48 + cVisibleWater then DeleteGear(Gear)
+if round(Gear.Y) > Gear.Radius + cWaterLine + 48 + cVisibleWater then DeleteGear(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -171,10 +171,10 @@ procedure doStepGrave(Gear: PGear);
 begin
 AllInactive:= false;
 if Gear.dY < 0 then
-   if TestCollisionY(Gear, -1) then Gear.dY:= 0;
+   if TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
 
 if Gear.dY >=0 then
-   if TestCollisionY(Gear, 1) then
+   if TestCollisionYwithGear(Gear, 1) then
       begin
       Gear.dY:= - Gear.dY * Gear.Elasticity;
       if Gear.dY > - 0.001 then
@@ -234,7 +234,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepShotgunShot(Gear: PGear);
 var i: LongWord;
-    t: PGear;
 begin
 AllInactive:= false;
 if Gear.Timer > 0 then
@@ -250,10 +249,7 @@ Gear.Y:= Gear.Y + Gear.dY;
 CheckCollision(Gear);
 if (Gear.State and gstCollision) <> 0 then
    begin
-   t:= CheckGearsCollision(Gear, Sign(Gear.dX), true);
-   if t = nil then t:= CheckGearsCollision(Gear, Sign(Gear.dY), false);
-   if t <> nil then
-      AmmoShove(Gear, t, 25);
+   AmmoShove(Gear, 25);
    doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLNoDamage or EXPLDoNotTouchHH);
    DeleteGear(Gear);
    exit
@@ -268,7 +264,6 @@ end;
 procedure doStepDEagleShot(Gear: PGear);
 var i, x, y: LongWord;
     oX, oY: real;
-    t: PGear;
 begin
 AllInactive:= false;
 i:= 80;
@@ -281,14 +276,7 @@ repeat
   y:= round(Gear.Y);
   if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0)
      and (Land[y, x] <> 0) then inc(Gear.Damage);
-  t:= CheckGearsCollision(Gear, Sign(Gear.dX), true);
-  if t = nil then t:= CheckGearsCollision(Gear, Sign(Gear.dY), false);
-  if t <> nil then
-     begin
-     AmmoShove(Gear, t, 12);
-     inc(Gear.Damage, 10);
-     if t.CollIndex < High(Longword) then DeleteCR(t)
-     end;
+  AmmoShove(Gear, 12);
   dec(i)
 until (i = 0) or (Gear.Damage > Gear.Health);
 if Gear.Damage > 0 then
@@ -340,8 +328,8 @@ if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0) then
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 if (Gear.Timer and $3F) = 0 then
    begin
-   i:= round(Gear.X) - Gear.HalfWidth  - GetRandom(2);
-   ei:= round(Gear.X) + Gear.HalfWidth + GetRandom(2);
+   i:= round(Gear.X) - Gear.Radius  - GetRandom(2);
+   ei:= round(Gear.X) + Gear.Radius + GetRandom(2);
    while i <= ei do
          begin
          doMakeExplosion(i, round(Gear.Y) + 3, 3, 0);
@@ -365,7 +353,7 @@ if TestCollisionYwithGear(Gear, 1) then
 
 Gear.X:= Gear.X + HHGear.dX;
 HHGear.X:= Gear.X;
-HHGear.Y:= Gear.Y - cHHHalfHeight;
+HHGear.Y:= Gear.Y - cHHRadius;
 
 if (Gear.Message and gm_Attack) <> 0 then
    if (Gear.State and gsttmpFlag) <> 0 then Gear.Timer:= 1 else else
@@ -380,15 +368,15 @@ var i, y: integer;
     ar: TRangeArray;
 begin
 i:= 0;
-y:= round(Gear.Y) - cHHHalfHeight*2;
+y:= round(Gear.Y) - cHHRadius*2;
 while y < round(Gear.Y) do
    begin
-   ar[i].Left := round(Gear.X) - Gear.HalfWidth - GetRandom(2);
-   ar[i].Right:= round(Gear.X) + Gear.HalfWidth + GetRandom(2);
+   ar[i].Left := round(Gear.X) - Gear.Radius - GetRandom(2);
+   ar[i].Right:= round(Gear.X) + Gear.Radius + GetRandom(2);
    inc(y, 2);
    inc(i)
    end;
-DrawHLinesExplosions(@ar, 3, round(Gear.Y) - cHHHalfHeight*2, 2, Pred(i));
+DrawHLinesExplosions(@ar, 3, round(Gear.Y) - cHHRadius*2, 2, Pred(i));
 Gear.dY:= PHedgehog(Gear.Hedgehog).Gear.dY;
 doStepPickHammerWork(Gear);
 Gear.doStep:= doStepPickHammerWork
@@ -609,11 +597,11 @@ procedure doStepMine(Gear: PGear);
 begin
 if (Gear.dX <> 0) or (Gear.dY <> 0) then
    begin
-   if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
+   if Gear.CollIndex < High(Longword) then DeleteCI(Gear);
    doStepFallingGear(Gear);
    if Gear.Active = false then
       begin
-      if Gear.CollIndex = High(Longword) then AddGearCR(Gear);
+      if Gear.CollIndex = High(Longword) then AddGearCI(Gear);
       Gear.dX:= 0;
       Gear.dY:= 0
       end;
@@ -663,13 +651,13 @@ if (Gear.Message and gm_Destroy) > 0 then
    exit
    end;
 
-if (Gear.dY <> 0) or (not TestCollisionY(Gear, 1)) then
+if (Gear.dY <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
    begin
    AllInactive:= false;
    Gear.dY:= Gear.dY + cGravity;
    Gear.Y:= Gear.Y + Gear.dY;
-   if (Gear.dY < 0) and TestCollisionY(Gear, -1) then Gear.dY:= 0 else
-   if (Gear.dY >= 0) and TestCollisionY(Gear, 1) then
+   if (Gear.dY < 0) and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0 else
+   if (Gear.dY >= 0) and TestCollisionYwithGear(Gear, 1) then
       begin
       Gear.dY:= - Gear.dY * Gear.Elasticity;
       if Gear.dY > - 0.001 then Gear.dY:= 0
@@ -678,8 +666,8 @@ if (Gear.dY <> 0) or (not TestCollisionY(Gear, 1)) then
    CheckGearDrowning(Gear);
    end;
 
-if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCR(Gear)
-   else if (Gear.CollIndex < High(Longword)) and (Gear.dY <> 0) then DeleteCR(Gear);
+if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCI(Gear)
+   else if (Gear.CollIndex < High(Longword)) and (Gear.dY <> 0) then DeleteCI(Gear);
 
 if Gear.Damage > 0 then
    begin

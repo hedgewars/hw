@@ -94,17 +94,17 @@ const
 
       cMaxHHIndex      = 9;
       cMaxHHs          = 20;
-      cMaxSpawnPoints  = 64;
+      cMaxSpawnPoints  = 1024;
       cHHSurfaceWidth     = 512;
       cHHSurfaceHeigth    = 256;
 
       cMaxEdgePoints = 16384;
 
-      cHHHalfHeight = 11;
+      cHHRadius = 9;
 
       cKeyMaxIndex = 322;
 
-      cMaxCaptions         = 4;
+      cMaxCaptions = 4;
 
       cInactDelay = 1500;
 
@@ -176,18 +176,18 @@ const
                                          );
 
       Pathz: array[TPathType] of string[ 64] = (
-                                               'Data/',                         // ptData
-                                               'Data/Graphics/',                // ptGraphics
-                                               'Data/Themes/',                  // ptThemes
-                                               'Data/Themes/Default/',          // ptThemeCurrent
-                                               'Data/Teams/',                   // ptTeams
-                                               'Data/Maps/',                    // ptMaps
-                                               'Data/Maps/Current/',            // ptMapCurrent
-                                               'Data/Demos/',                   // ptDemos
-                                               'Data/Sounds/',                  // ptSounds
-                                               'Data/Graphics/Graves/',         // ptGraves
-                                               'Data/Fonts/',                   // ptFonts
-                                               'Data/Forts/'                    // ptForts
+                                               'Data',                          // ptData
+                                               'Data/Graphics',                 // ptGraphics
+                                               'Data/Themes',                   // ptThemes
+                                               'Data/Themes/avematan',          // ptThemeCurrent
+                                               'Data/Teams',                    // ptTeams
+                                               'Data/Maps',                     // ptMaps
+                                               '',                              // ptMapCurrent
+                                               'Data/Demos',                    // ptDemos
+                                               'Data/Sounds',                   // ptSounds
+                                               'Data/Graphics/Graves',          // ptGraves
+                                               'Data/Fonts',                    // ptFonts
+                                               'Data/Forts'                     // ptForts
                                                );
 
       StuffLoadData: array[TStuff] of record

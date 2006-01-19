@@ -182,7 +182,7 @@ Result:= false;
 repeat
 pX:= round(Gear.X);
 pY:= round(Gear.Y);
-if pY + cHHHalfHeight >= cWaterLine then exit;
+if pY + cHHRadius >= cWaterLine then exit;
 if (Gear.State and gstFalling) <> 0 then
    begin
    Gear.dY:= Gear.dY + cGravity;

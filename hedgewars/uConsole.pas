@@ -44,6 +44,7 @@ procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure KeyPressConsole(Key: Longword);
 procedure ParseCommand(CmdStr: shortstring);
+function  GetLastConsoleLine: shortstring;
 
 implementation
 {$J+}
@@ -258,6 +259,12 @@ case Key of
          end;
      else InputStr:= InputStr + char(Key)
      end
+end;
+
+function GetLastConsoleLine: shortstring;
+begin
+if CurrLine = 0 then Result:= ConsoleLines[Pred(cLinesCount)]
+                else Result:= ConsoleLines[Pred(CurrLine)]
 end;
 
 {$INCLUDE CCHandlers.inc}

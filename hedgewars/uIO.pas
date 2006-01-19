@@ -216,8 +216,8 @@ var f: textfile;
     ar: array[0..Pred(cMAXFORTPOINTS)] of TPoint;
     p: TPoint;
 begin
-if isRight then Fort:= Pathz[ptForts] + Fort + 'R.txt'
-           else Fort:= Pathz[ptForts] + Fort + 'L.txt';
+if isRight then Fort:= Pathz[ptForts] + '/' + Fort + 'R.txt'
+           else Fort:= Pathz[ptForts] + '/' + Fort + 'L.txt';
 WriteToConsole(msgLoading + Fort + ' ');
 {$I-}
 AssignFile(f, Fort);

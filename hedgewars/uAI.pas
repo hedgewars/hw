@@ -156,8 +156,8 @@ end;
 
 procedure ProcessBot;
 begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     if (Gear <> nil)and((Gear.State and gstHHDriven) <> 0) then
+with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do          //HACK: v--- temp hack to make AI work
+     if (Gear <> nil)and((Gear.State and gstHHDriven) <> 0) and (TurnTimeLeft < 29990) then
         begin
         if IsActionListEmpty then Think;
         ProcessAction

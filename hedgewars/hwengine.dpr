@@ -156,6 +156,7 @@ end;
 ////////////////////
 procedure GetParams;
 var c: integer;
+    s: string;
 {$IFDEF DEBUGFILE}
     i: integer;
 begin
@@ -166,10 +167,12 @@ begin
 {$ENDIF}
 if ParamCount=6 then
    begin
-   //TODO: сделать передачу через IPC
    val(ParamStr(1), cScreenWidth, c);
    val(ParamStr(2), cScreenHeight, c);
-   Pathz[ptThemeCurrent]:= Pathz[ptThemes] + ParamStr(3)+'/';
+   // "/mapname" is map, "avematan" is theme
+   s:= ParamStr(3);
+   if (Length(s) > 0) and (s[1] = '/') then Pathz[ptMapCurrent]:= Pathz[ptMaps] + s
+                                       else Pathz[ptThemeCurrent]:= Pathz[ptThemes] + '/' + ParamStr(3);
    val(ParamStr(4), ipcPort, c);
    SetRandomParams(ParamStr(5), rndfillstr);
    cFullScreen:= ParamStr(6)[1] = '1'
@@ -190,10 +193,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// m a i n ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-{$INCLUDE revision.inc}
 
 begin
-WriteLnToConsole('HedgeWars 0.1, svn '+cRevision);
+WriteLnToConsole('HedgeWars 0.1 alpha');
 WriteLnToConsole('  -= by unC0Rr =-  ');
 GetParams;
 Randomize;

@@ -136,8 +136,8 @@ var Vx, Vy, r: real;
     var x, y, dX, dY: real;
         t: integer;
     begin
-    x:= Me.X + Vx*20;
-    y:= Me.Y + Vy*20;
+    x:= Me.X;
+    y:= Me.Y;
     dX:= Vx;
     dY:= -Vy;
     Result:= false;

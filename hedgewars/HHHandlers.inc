@@ -31,69 +31,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *)
 
-procedure AddIntersectorsCR(Gear: PGear);
-var t: PGear;
-    x, xw, y, yh: real;
-    ar: array[0..Pred(cMaxHHs)] of PGear;
-    cnt: Longword;
-    b: boolean;
-begin
-x:= Gear.X - Gear.HalfWidth;
-xw:= Gear.X + Gear.HalfWidth;
-y:= Gear.Y - Gear.HalfHeight;
-yh:= Gear.Y + Gear.HalfHeight;
-t:= GearsList;
-b:= false;
-cnt:= 0;
-while (t <> nil) do
-      begin
-      if (t <> Gear) and not (t.Kind in [gtGrave, gtMine]) then
-         if (x < t.X + t.HalfWidth ) and (t.X - t.HalfWidth  < xw) and
-            (y < t.Y + t.HalfHeight) and (t.Y - t.HalfHeight < yh) then
-            if t.Kind = gtHedgehog then
-               begin
-               ar[cnt]:= t;
-               inc(cnt)
-               end else b:= true;
-      t:= t.NextGear
-      end;
-ar[cnt]:= Gear;
-inc(cnt);
-if b then
-   begin
-   repeat
-     dec(cnt);
-     if ar[cnt].CollIndex < High(Longword) then DeleteCR(ar[cnt])
-   until cnt = 0;
-   end else
-   begin
-   repeat
-     dec(cnt);
-     if ar[cnt].CollIndex = High(Longword) then AddGearCR(ar[cnt])
-   until cnt = 0
-   end
-end;
-
-procedure RemoveIntersectorsCR(Gear: PGear);
-var t: PGear;
-    x, xw, y, yh: real;
-begin
-x:= Gear.X - Gear.HalfWidth;
-xw:= Gear.X + Gear.HalfWidth;
-y:= Gear.Y - Gear.HalfHeight;
-yh:= Gear.Y + Gear.HalfHeight;
-t:= GearsList;
-while (t <> nil) do
-      begin
-      if (t <> Gear) then
-         if (x < t.X + t.HalfWidth ) and (t.X - t.HalfWidth  < xw) and
-            (y < t.Y + t.HalfHeight) and (t.Y - t.HalfHeight < yh) then
-               if t.CollIndex < High(Longword) then DeleteCR(t);
-      t:= t.NextGear
-      end;
-if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
-end;
-
 ////////////////////////////////////////////////////////////////////////////////
 procedure Attack(Gear: PGear);
 var xx, yy: real;
@@ -132,7 +69,7 @@ with Gear^,
                                  FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
                                  end;
                          amSkip: TurnTimeLeft:= 0;
-                   amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHHalfHeight, gtPickHammer, 0);
+                   amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHRadius, gtPickHammer, 0);
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
                          amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.01, 0, 3000);
                      amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.01, 0, 5000); 
@@ -191,10 +128,10 @@ var t: PGear;
 begin
 if isinMultiShoot and (Gear.Damage = 0) then
    begin
-   if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
    exit
    end;
 AllInactive:= false;
+DeleteCI(Gear);
 if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    begin
    if ((Gear.State and (gstMoving or gstFalling)) = 0)
@@ -244,7 +181,6 @@ if (Gear.Message and gm_Attack)<>0 then
 
 if ((Gear.State and gstAttacking) <> 0) and ((Gear.Message and gm_Attack) = 0) then
    begin
-   RemoveIntersectorsCR(Gear);
    Attack(Gear);
    StepTicks:= 40
    end;
@@ -276,7 +212,7 @@ if (Gear.State and gstFalling) <> 0 then
       end;
    CheckGearDrowning(Gear);
    exit
-   end else if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
+   end ;//else if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
 
 if StepTicks > 0 then dec(StepTicks);
 
@@ -290,7 +226,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    if ((Gear.Message and gm_LJump )<>0) then
       begin
       Gear.Message:= 0;
-      RemoveIntersectorsCR(Gear);
       if not HHTestCollisionYwithGear(Gear, -1) then
          if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 2 else
          if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 1;
@@ -306,7 +241,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    if ((Gear.Message and gm_HJump )<>0) then
       begin
       Gear.Message:= 0;
-      RemoveIntersectorsCR(Gear);
       if not HHTestCollisionYwithGear(Gear, -1) then
          begin
          Gear.dY:= -0.20;
@@ -320,7 +254,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
    PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
    StepTicks:= cStepTicks;
-   RemoveIntersectorsCR(Gear);
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, 0, -6, Sign(Gear.dX))
@@ -338,7 +271,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
       end;
    if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.X:= Gear.X + Gear.dX;
 
-   AddIntersectorsCR(Gear);
    if not HHTestCollisionYwithGear(Gear, 1) then
    begin
    Gear.Y:= Gear.Y + 1;
@@ -391,8 +323,7 @@ if not HHTestCollisionYwithGear(Gear, 1) then
    if ((Gear.State and gstMoving) <> 0) then Gear.dX:= Gear.dX * Gear.Friction
    end;
 
-if (Gear.State <> 0) and (Gear.CollIndex < High(Longword)) then DeleteCR(Gear);
-
+if (Gear.State <> 0) then DeleteCI(Gear);
 
 if (Gear.State and gstMoving) <> 0 then
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
@@ -447,7 +378,7 @@ if (not CheckGearDrowning(Gear)) and
       begin
       Gear.State:= 0;
       Gear.Active:= false;
-      AddIntersectorsCR(Gear);
+      AddGearCI(Gear);
       exit
       end
 end;

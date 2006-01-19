@@ -402,6 +402,11 @@ with Template do
          ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
          ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
          ar[i, 5]:= getrandom * pi * 2;
+         {$IFDEF DEBUGFILE}
+         AddFileLog('Wave params ¹' + inttostr(i) + ':');
+         AddFileLog('X: ampl = ' + floattostr(ar[i, 0]) + '; freq = ' + floattostr(ar[i, 1]) + '; shift = ' + floattostr(ar[i, 2]));
+         AddFileLog('Y: ampl = ' + floattostr(ar[i, 3]) + '; freq = ' + floattostr(ar[i, 4]) + '; shift = ' + floattostr(ar[i, 5]));
+         {$ENDIF}
          end;
      end;
 
@@ -464,9 +469,10 @@ procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
     i: Longword;
 begin
+WriteLnToConsole('Generating land...');
 for i:= 0 to sizeof(Land) div 4 do
     PLongword(Longword(@Land) + i * 4)^:= $FFFFFF;
-GenBlank(EdgeTemplates[8{getrandom(Succ(High(EdgeTemplates)))}]);
+GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 AddProgress;
 with PixelFormat^ do
@@ -493,18 +499,19 @@ procedure MakeFortsMap;
 var p: PTeam;
     tmpsurf: PSDL_Surface;
 begin
+WriteLnToConsole('Generating forts land...');
 p:= TeamsList;
 TryDo(p <> nil, 'No teams on map!', true);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
 SDL_FillRect(LandSurface, nil, 0);
-tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'L.png', false);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'L.png', false);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 LoadFortPoints(p.FortName, false, TeamSize(p));
 p:= p.Next;
 TryDo(p <> nil, 'Only one team on map!', true);
-tmpsurf:= LoadImage(Pathz[ptForts] + p.FortName + 'R.png', false);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'R.png', false);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 LoadFortPoints(p.FortName, true, TeamSize(p));
@@ -512,9 +519,57 @@ p:= p.Next;
 TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
 end;
 
+procedure LoadMap;
+var p, x, y, i: Longword;
+begin
+WriteLnToConsole('Loading land from file...');
+AddProgress;
+LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map.png', false);
+TryDo((LandSurface.w = 2048) and (LandSurface.h = 1024), 'Map dimensions should be 2048x1024!', true);
+
+if SDL_MustLock(LandSurface) then
+   SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+
+p:= Longword(LandSurface.pixels);
+i:= Longword(@Land);
+case LandSurface.format.BytesPerPixel of
+     1: OutError('We don''t work with 8 bit surfaces', true);
+     2: for y:= 0 to 1023 do
+            begin
+            for x:= 0 to 2047 do
+                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+            inc(i, 2048 * 4);
+            inc(p, LandSurface.pitch);
+            end;
+     3: for y:= 0 to 1023 do
+            begin
+            for x:= 0 to 2047 do
+                if  (PByte(p + x * 3 + 0)^ <> 0)
+                 or (PByte(p + x * 3 + 1)^ <> 0)
+                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= $FFFFFF;
+            inc(i, 2048 * 4);
+            inc(p, LandSurface.pitch);
+            end;
+     4: for y:= 0 to 1023 do
+            begin
+            for x:= 0 to 2047 do
+                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+            inc(i, 2048 * 4);
+            inc(p, LandSurface.pitch);
+            end;
+     end;
+if SDL_MustLock(LandSurface) then
+   SDL_UnlockSurface(LandSurface);
+
+AddHHPoints;
+RandomizeHHPoints;
+end;
+
 procedure GenMap;
 begin
-if (GameFlags and gfForts) = 0 then GenLandSurface
+if (GameFlags and gfForts) = 0 then
+   if Pathz[ptMapCurrent] <> '' then LoadMap
+                                else GenLandSurface
                                else MakeFortsMap;
 AddProgress;
 {$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}

@@ -65,7 +65,7 @@ var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
 
 implementation
-uses uMisc, uIO, uConsole, uLand;
+uses uMisc, uIO, uConsole, uLand, uCollisions;
 
 var StoreSurface,
      TempSurface,
@@ -74,9 +74,7 @@ var StoreSurface,
 procedure DrawExplosion(X, Y, Radius: integer);
 var ty, tx, p: integer;
 begin
-for ty:= max(-Radius, -y) to min(radius, 1023 - y) do
-    for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-        Land[ty + y, tx]:= 0;
+FillRoundInLand(X, Y, Radius, 0);
 
 if SDL_MustLock(LandSurface) then
    SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
@@ -105,11 +103,11 @@ case LandSurface.format.BytesPerPixel of
      1: ;// not supported
      2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                   PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= cExplosionBorderColor;
      3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                 begin
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= cExplosionBorderColor and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
@@ -117,7 +115,7 @@ case LandSurface.format.BytesPerPixel of
                 end;
      4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                    PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= cExplosionBorderColor;
      end;
 
@@ -164,11 +162,11 @@ for i:= 0 to Pred(Count) do
      1: ;
      2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                   PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= cExplosionBorderColor;
      3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                 begin
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= cExplosionBorderColor and $FF;
                 PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
@@ -176,7 +174,7 @@ for i:= 0 to Pred(Count) do
                 end;
      4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
             for tx:= max(0, round(ar[i].Left - radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(ar[i].Right + radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] <> 0 then
+               if Land[y + ty, tx] = $FFFFFF then
                    PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= cExplosionBorderColor;
      end;
     inc(y, dY)
@@ -386,7 +384,7 @@ var i: TStuff;
     r.y:= 256;
     r.w:= 16;
     r.h:= 16;
-    s:= Pathz[ptGraphics] + cCHFileName;
+    s:= Pathz[ptGraphics] + '/' + cCHFileName;
     WriteToConsole(msgLoading + s + ' ');
     tmpsurf:= IMG_Load(PChar(s));
     TryDo(tmpsurf <> nil, msgFailed, true);
@@ -436,7 +434,7 @@ var i: TStuff;
           begin
           dec(l, 32);
           if p.GraveName = '' then p.GraveName:= 'Simple';
-          LoadToSurface(Pathz[ptGraves] + p.GraveName + '.png', StoreSurface, l, 512);
+          LoadToSurface(Pathz[ptGraves] + '/' + p.GraveName + '.png', StoreSurface, l, 512);
           p.GraveRect.x:= l;
           p.GraveRect.y:= 512;
           p.GraveRect.w:= 32;
@@ -465,7 +463,7 @@ var i: TStuff;
     var f: textfile;
         c: integer;
     begin
-    s:= Pathz[ptThemeCurrent] + cThemeCFGFilename;
+    s:= Pathz[ptThemeCurrent] + '/' + cThemeCFGFilename;
     WriteToConsole(msgLoading + s + ' ');
     AssignFile(f, s);
     {$I-}
@@ -490,16 +488,14 @@ begin
 for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
          begin
-         s:= Pathz[ptFonts] + Name;
+         s:= Pathz[ptFonts] + '/' + Name;
          WriteToConsole(msgLoading + s + ' ');
          Handle:= TTF_OpenFont(PChar(s), Height);
          TryDo(Handle <> nil, msgFailed, true);
          WriteLnToConsole(msgOK)
          end;
 AddProgress;
-//s:= Pathz[ptMapCurrent] + cLandFileName;
-//WriteToConsole(msgLoading + s + ' ');         
-//tmpsurf:= IMG_Load(PChar(s));
+
 tmpsurf:= LandSurface;
 TryDo(tmpsurf <> nil, msgFailed, true);
 if cFullScreen then
@@ -514,7 +510,7 @@ GetExplosionBorderColor;
 
 AddProgress;
 for i:= Low(TStuff) to High(TStuff) do
-    LoadToSurface(Pathz[StuffLoadData[i].Path] + StuffLoadData[i].FileName, StoreSurface, StuffPoz[i].x, StuffPoz[i].y);
+    LoadToSurface(Pathz[StuffLoadData[i].Path] + '/' + StuffLoadData[i].FileName, StoreSurface, StuffPoz[i].x, StuffPoz[i].y);
 
 AddProgress;
 WriteNames(fnt16);
@@ -526,10 +522,10 @@ GetSkyColor;
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
-         Surface:= LoadImage(Pathz[Path] + FileName, hasAlpha);
+         Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha);
 
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptGraphics] + cHHFileName, false);
+tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, false);
 TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 HHSurface:= SDL_DisplayFormat(tmpsurf);
 SDL_FreeSurface(tmpsurf);

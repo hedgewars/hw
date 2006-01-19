@@ -50,7 +50,7 @@ type PGear = ^TGear;
              Kind: TGearType;
              Pos: Longword;
              doStep: TGearStepProcedure;
-             HalfWidth, HalfHeight: integer;
+             Radius: integer;
              Angle, Power : Cardinal;
              DirAngle: real;
              Timer : LongWord;
@@ -89,7 +89,7 @@ var GearsList: PGear = nil;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
-procedure AmmoShove(Ammo, Gear: PGear; Power: Longword); forward;
+procedure AmmoShove(Ammo: PGear; Power: integer); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -137,47 +137,40 @@ if CurrentTeam <> nil then
    Result.Hedgehog:= @CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog];
 case Kind of
    gtAmmo_Bomb: begin
-                Result.HalfWidth:= 4;
-                Result.HalfHeight:= 4;
+                Result.Radius:= 4;
                 Result.Elasticity:= 0.6;
                 Result.Friction:= 0.995;
                 Result.Timer:= Timer
                 end;
     gtHedgehog: begin
-                Result.HalfWidth:= 6;
-                Result.HalfHeight:= cHHHalfHeight;
+                Result.Radius:= cHHRadius;
                 Result.Elasticity:= 0.002;
                 Result.Friction:= 0.999;
                 end;
 gtAmmo_Grenade: begin
-                Result.HalfWidth:= 4;
-                Result.HalfHeight:= 4;
+                Result.Radius:= 4;
                 end;
    gtHealthTag: begin
                 Result.Timer:= 1500;
                 end;
        gtGrave: begin
-                Result.HalfWidth:= 10;
-                Result.HalfHeight:= 10;
+                Result.Radius:= 10;
                 Result.Elasticity:= 0.6;
                 end;
          gtUFO: begin
-                Result.HalfWidth:= 5;
-                Result.HalfHeight:= 2;
+                Result.Radius:= 5;
                 Result.Timer:= 500;
                 Result.Elasticity:= 0.9
                 end;
  gtShotgunShot: begin
                 Result.Timer:= 900;
-                Result.HalfWidth:= 2;
-                Result.HalfHeight:= 2
+                Result.Radius:= 2
                 end;
  gtActionTimer: begin
                 Result.Timer:= Timer
                 end;
   gtPickHammer: begin
-                Result.HalfWidth:= 10;
-                Result.HalfHeight:= 2;
+                Result.Radius:= 10;
                 Result.Timer:= 4000
                 end;
   gtSmokeTrace: begin
@@ -186,8 +179,7 @@ gtAmmo_Grenade: begin
                 Result.State:= 8
                 end;
         gtRope: begin
-                Result.HalfWidth:= 3;
-                Result.HalfHeight:= 3;
+                Result.Radius:= 3;
                 Result.Friction:= 500;
                 RopePoints.Count:= 0;
                 end;
@@ -196,25 +188,22 @@ gtAmmo_Grenade: begin
                 Result.Y:= Result.Y - 25;
                 end;
         gtMine: begin
-                Result.HalfWidth:= 3;
-                Result.HalfHeight:= 3;
+                Result.Radius:= 3;
                 Result.Elasticity:= 0.55;
                 Result.Friction:= 0.995;
                 Result.Timer:= 3000;
                 end;
         gtCase: begin
-                Result.HalfWidth:= 14;
-                Result.HalfHeight:= 14;
+                Result.Radius:= 14;
                 Result.Elasticity:= 0.6
                 end;
   gtDEagleShot: begin
-                Result.HalfWidth:= 1;
-                Result.HalfHeight:= 1;
+                Result.Radius:= 1;
+                Result.Radius:= 1;
                 Result.Health:= 50
                 end;
     gtDynamite: begin
-                Result.HalfWidth:= 3;
-                Result.HalfHeight:= 3;
+                Result.Radius:= 3;
                 Result.Elasticity:= 0.03;
                 Result.Friction:= 0.03;
                 Result.Timer:= 5000;
@@ -231,7 +220,7 @@ end;
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
 begin
-if Gear.CollIndex < High(Longword) then DeleteCR(Gear);
+if Gear.CollIndex < High(Longword) then DeleteCI(Gear);
 if Gear.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
@@ -579,19 +568,28 @@ while Gear <> nil do
       end
 end;
 
-procedure AmmoShove(Ammo, Gear: PGear; Power: Longword);
+procedure AmmoShove(Ammo: PGear; Power: integer);
+var t: PGearArray;
+    i: integer;
 begin
-case Gear.Kind of
-     gtHedgehog,
-         gtMine,
-         gtCase: begin
-                 inc(Gear.Damage, Power);
-                 Gear.dX:= Ammo.dX * Power * 0.01;
-                 Gear.dY:= Ammo.dY * Power * 0.01;
-                 Gear.Active:= true;
-                 FollowGear:= Gear
-                 end;
-     end;
+t:= CheckGearsCollision(Ammo);
+i:= t.Count;
+while i > 0 do
+    begin
+    dec(i);
+    case t.ar[i].Kind of
+           gtHedgehog,
+               gtMine,
+               gtCase: begin
+                       inc(t.ar[i].Damage, Power);
+                       t.ar[i].dX:= Ammo.dX * Power * 0.01;
+                       t.ar[i].dY:= Ammo.dY * Power * 0.01;
+                       t.ar[i].Active:= true;
+                       DeleteCI(t.ar[i]);
+                       FollowGear:= t.ar[i]
+                       end;
+           end
+    end
 end;
 
 procedure AssignHHCoords;
@@ -676,7 +674,7 @@ repeat
         begin
         inc(y);
         i:= x - 13;
-        while (i <= x + 13) and not b do // 13 is gtCase HalfWidth-1
+        while (i <= x + 13) and not b do // 13 is gtCase Radius-1
               begin
               if Land[y, i] <> 0 then
                  begin

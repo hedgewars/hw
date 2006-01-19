@@ -126,19 +126,19 @@ while team<>nil do
                   if Gear.State = 0 then
                      begin
                      DrawCaption( round(Gear.X) + WorldDx,
-                                  round(Gear.Y) - cHHHalfHeight - 30 + WorldDy,
+                                  round(Gear.Y) - cHHRadius - 30 + WorldDy,
                                   HealthRect, Surface, true);
                      DrawCaption( round(Gear.X) + WorldDx,
-                                  round(Gear.Y) - cHHHalfHeight - 54 + WorldDy,
+                                  round(Gear.Y) - cHHRadius - 54 + WorldDy,
                                   NameRect, Surface);
 //                     DrawCaption( round(Gear.X) + WorldDx,
-//                                  round(Gear.Y) - Gear.HalfHeight - 60 + WorldDy,
+//                                  round(Gear.Y) - Gear.Radius - 60 + WorldDy,
 //                                  Team.NameRect, Surface);
                      end else // Current hedgehog
                      begin
                      if (Gear.State and (gstMoving or gstAttacked or gstDrowning or gstFalling))=0 then
                         if (Gear.State and gstHHThinking) <> 0 then
-                           DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHHalfHeight - 34 + WorldDy, Surface)
+                           DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
                         else
                         if ShowCrosshair then
                            DrawCaption(Round(Gear.X + Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
