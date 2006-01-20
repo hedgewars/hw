@@ -54,7 +54,8 @@ uses
   uCollisions in 'uCollisions.pas',
   uLand in 'uLand.pas',
   uLandTemplates in 'uLandTemplates.pas',
-  uLandObjects in 'uLandObjects.pas';
+  uLandObjects in 'uLandObjects.pas',
+  uLandGraphics in 'uLandGraphics.pas';
 
 {$INCLUDE options.inc}
 

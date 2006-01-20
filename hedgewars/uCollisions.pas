@@ -46,7 +46,6 @@ type TDirection = record
                   Count: Longword
                   end;
 
-procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 function CheckGearsCollision(Gear: PGear): PGearArray;
@@ -57,7 +56,7 @@ function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: in
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 
 implementation
-uses uMisc, uConsts, uLand;
+uses uMisc, uConsts, uLand, uGraphics;
 
 type TCollisionEntry = record
                        X, Y, Radius: integer;
@@ -69,17 +68,9 @@ var Count: Longword = 0;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
 
-procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
-var ty, tx: integer;
-begin
-for ty:= max(-Radius, -y) to min(radius, 1023 - y) do
-    for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047,round(x+radius*sqrt(1-sqr(ty/radius)))) do
-        Land[ty + y, tx]:= Value;
-end;
-
 procedure AddGearCI(Gear: PGear);
 begin
-if Gear.CollIndex < High(Longword) then exit; 
+if Gear.CollIndex < High(Longword) then exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
      begin

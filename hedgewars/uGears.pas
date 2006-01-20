@@ -75,7 +75,7 @@ procedure AssignHHCoords;
 var CurAmmoGear: PGear = nil;
 
 implementation
-uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO;
+uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uGraphics;
 var GearsList: PGear = nil;
     RopePoints: record
                 Count: Longword;

@@ -185,7 +185,7 @@ until y > 900;
 if x1 > 0 then
    begin
    Result:= true;
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + 'Girder.png', false);
+   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder.png', false);
    rr.x:= x1;
    rr.y:= y;
    while rr.x + 100 < x2 do
@@ -292,7 +292,7 @@ var f: textfile;
     i, ii, t, n: Longword;
     b: boolean;
 begin
-s:= Pathz[ptThemeCurrent] + cThemeCFGFilename;
+s:= Pathz[ptThemeCurrent] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Adding objects...');
 AssignFile(f, s);
 {$I-}
@@ -304,7 +304,7 @@ for i:= 1 to n do
     Readln(f, s); // filename
     with ThemeObjects[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + s + '.png', false);
+         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s + '.png', false);
          Read(f, Width, Height);
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);
@@ -315,7 +315,7 @@ for i:= 1 to n do
     end;
 Closefile(f);
 {$I+}
-TryDo(IOResult = 0, 'Bad data or cannot access file', true);
+TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
 
 // loaded objects, try to put on land
 if n = 0 then exit;
