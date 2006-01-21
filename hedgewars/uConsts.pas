@@ -84,11 +84,16 @@ resourcestring
       msgGettingConfig     = 'Getting game config...';
 
 const
-      cAppName  = 'hw';
-      cAppTitle = 'hw';
       cNetProtoVersion = 1;
 
       rndfillstr = 'hw';
+
+      cifRandomize = $00000001;
+      cifTheme     = $00000002;
+      cifMap       = $00000002; // either theme or map (or map+theme)
+      cifAllInited = cifRandomize or
+                     cifTheme or
+                     cifMap;
 
       cTransparentColor: Cardinal = $000000;
 

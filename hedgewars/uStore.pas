@@ -73,7 +73,6 @@ TempSurface   := SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 320, cBits, PixelForma
 TryDo(  TempSurface <> nil, errmsgCreateSurface + ': temp'  , true);
 
 TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-//TryDo(SDL_SetColorKey(SpriteSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 TryDo(SDL_SetColorKey(  TempSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 end;
 

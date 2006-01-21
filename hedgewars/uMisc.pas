@@ -90,6 +90,8 @@ var
 
     flagMakeCapture: boolean = false;
 
+    InitStepsFlags: Longword = 0;
+
     AttackBar     : integer = 0; // 0 - отсутствует, 1 - внизу, 2 - как в wwp
 
 function Sign(r: real): integer;

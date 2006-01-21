@@ -84,8 +84,11 @@ void HWGame::SendTeamConfig(int index)
 
 void HWGame::SendConfig()
 {
+	SendIPC(QString("eseed %1").arg(seed));
+	SendIPC(QString("etheme %1").arg(GetThemeBySeed()));
+	//SENDIPC("emap test");
 	SENDIPC("TL");
-//	SENDIPC("e$gmflags 0");
+	SENDIPC("e$gmflags 0");
 	SENDIPC("eaddteam");
 	SendTeamConfig(0);
 	SENDIPC("ecolor 65535");
@@ -164,6 +167,11 @@ void HWGame::SendIPC(const char * msg, quint8 len)
 	SendIPC(QByteArray::fromRawData(msg, len));
 }
 
+void HWGame::SendIPC(const QString & buf)
+{
+	SendIPC(QByteArray().append(buf));
+}
+
 void HWGame::SendIPC(const QByteArray & buf)
 {
 	if (buf.size() > MAXMSGCHARS) return;
@@ -221,15 +229,16 @@ void HWGame::Start()
 				.arg(IPCServer->errorString()));
 	}
 
+	demo = new QByteArray;
 	QProcess * process;
 	QStringList arguments;
 	process = new QProcess;
 	arguments << resolutions[0][vid_Resolution];
 	arguments << resolutions[1][vid_Resolution];
-	arguments << GetThemeBySeed();
+	arguments << "16";
 	arguments << "46631";
-	arguments << seed;
 	arguments << (vid_Fullscreen ? "1" : "0");
+	arguments << "1";
 	process->start("./hwengine", arguments);
 }
 
@@ -315,22 +324,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	} while (readbytes > 0);
 	demofile.close();
 
-	// cut seed
-	quint32 index = toSendBuf.indexOf(10);
-	if ((index < 3) || (index > 20))
-	{
-		QMessageBox::critical(0,
-				tr("Error"),
-				tr("Corrupted demo file %1").arg(demofilename),
-				tr("Quit"));
-		return ;
-	}
-	seed = QString(toSendBuf.left(index++));
-	toSendBuf.remove(0, index);
-
-	toSendBuf = QByteArray::fromRawData("\x02TD", 3) + toSendBuf;
 	// run engine
-	demo = new QByteArray;
 	Start();
 }
 
@@ -339,8 +333,6 @@ void HWGame::StartNet(const QString & netseed)
 	gameType = gtNet;
 	seed = netseed;
 	demo = new QByteArray;
-	demo->append(seed.toLocal8Bit());
-	demo->append(10);
 	Start();
 }
 
@@ -349,9 +341,6 @@ void HWGame::StartLocal()
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
 	seedgen.GenRNDStr(seed, 10);
-	demo = new QByteArray;
-	demo->append(seed.toLocal8Bit());
-	demo->append(10);
 	Start();
 }
 

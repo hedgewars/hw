@@ -48,7 +48,7 @@ function  GetLastConsoleLine: shortstring;
 
 implementation
 {$J+}
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uSound, uWorld, uLand;
+uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uSound, uWorld, uLand, uRandom;
 const cLineWidth: integer = 0;
       cLinesCount = 256;
       
@@ -275,12 +275,13 @@ RegisterVariable('quit'    , vtCommand, @chQuit         );
 RegisterVariable('capture' , vtCommand, @chCapture      );
 RegisterVariable('addteam' , vtCommand, @chAddTeam      );
 RegisterVariable('rdriven' , vtCommand, @chTeamLocal    );
-//RegisterVariable('gravity' , vtReal   , @cGravity       ); гравитация не должна быть доступна вообще
+RegisterVariable('map'     , vtCommand, @chSetMap       );
+RegisterVariable('theme'   , vtCommand, @chSetTheme     );
+RegisterVariable('seed'    , vtCommand, @chSetSeed      );
 RegisterVariable('c_height', vtInteger, @cConsoleHeight );
 RegisterVariable('gmflags' , vtInteger, @GameFlags      );
 RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime);
 RegisterVariable('showfps' , vtBoolean, @cShowFPS       );
-RegisterVariable('sound'   , vtBoolean, @isSoundEnabled );
 RegisterVariable('name'    , vtCommand, @chName         );
 RegisterVariable('fort'    , vtCommand, @chFort         );
 RegisterVariable('grave'   , vtCommand, @chGrave        );

@@ -157,7 +157,6 @@ end;
 ////////////////////
 procedure GetParams;
 var c: integer;
-    s: string;
 {$IFDEF DEBUGFILE}
     i: integer;
 begin
@@ -170,13 +169,10 @@ if ParamCount=6 then
    begin
    val(ParamStr(1), cScreenWidth, c);
    val(ParamStr(2), cScreenHeight, c);
-   // "/mapname" is map, "avematan" is theme
-   s:= ParamStr(3);
-   if (Length(s) > 0) and (s[1] = '/') then Pathz[ptMapCurrent]:= Pathz[ptMaps] + s
-                                       else Pathz[ptThemeCurrent]:= Pathz[ptThemes] + '/' + ParamStr(3);
+   val(ParamStr(3), cBits, c);
    val(ParamStr(4), ipcPort, c);
-   SetRandomParams(ParamStr(5), rndfillstr);
-   cFullScreen:= ParamStr(6)[1] = '1'
+   cFullScreen:= ParamStr(5) = '1';
+   isSoundEnabled:= ParamStr(6) = '1';
    end else OutError(errmsgShouldntRun, true);
 end;
 
@@ -223,6 +219,10 @@ InitWorld;
 StoreInit;
 
 isDeveloperMode:= false;
+
+TryDo(InitStepsFlags = cifAllInited,
+      'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
+      true);
 
 MainLoop
 

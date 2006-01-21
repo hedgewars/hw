@@ -91,6 +91,7 @@ private:
 	void ParseMessage(const QByteArray & msg);
 	void SendIPC(const char * msg, quint8 len);
 	void SendIPC(const QByteArray & buf);
+	void SendIPC(const QString & buf);
 	void RawSendIPC(const QByteArray & buf);
 	void SaveDemo(const QString & filename);
 	QString GetThemeBySeed();

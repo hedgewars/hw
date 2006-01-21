@@ -340,3 +340,30 @@ if not CurrentTeam.ExtDriven then SendIPC(',');
 TurnTimeLeft:= 0
 end;
 
+procedure chSetMap(var s: shortstring);
+begin
+if isDeveloperMode then
+   begin
+   Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+   InitStepsFlags:= InitStepsFlags or cifMap
+   end
+end;
+
+procedure chSetTheme(var s: shortstring);
+begin
+if isDeveloperMode then
+   begin
+   Pathz[ptThemeCurrent]:= Pathz[ptThemes] + '/' + s;
+   InitStepsFlags:= InitStepsFlags or cifTheme
+   end
+end;
+
+procedure chSetSeed(var s: shortstring);
+begin
+if isDeveloperMode then
+   begin
+   SetRandomParams(s, rndfillstr);
+   InitStepsFlags:= InitStepsFlags or cifRandomize
+   end
+end;
+
