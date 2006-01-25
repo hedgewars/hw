@@ -99,8 +99,8 @@ for i:= -1 to 3 do
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 40, (((GameTicks shr 7) + 2) mod 12), Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 30, (((GameTicks shr 7) + 8) mod 12), Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy, Surface);
@@ -150,9 +150,9 @@ while team<>nil do
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 20, (((GameTicks shr 7) + 4 ) mod 12), Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 10, (((GameTicks shr 7) + 10) mod 12), Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , (((GameTicks shr 7) + 6 ) mod 12), Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
 {$WARNINGS ON}
 
 if TurnTimeLeft <> 0 then

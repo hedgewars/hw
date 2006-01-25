@@ -80,6 +80,7 @@ case GameState of
               AssignHHCoords;
               AddMiscGears;
               AdjustColor(cColorNearBlack);
+              AdjustColor(cWaterColor);
               AdjustColor(cWhiteColor);
               StoreLoad;
               AdjustColor(cConsoleSplitterColor);

@@ -204,7 +204,7 @@ gtAmmo_Grenade: begin
                 end;
     gtDynamite: begin
                 Result.Radius:= 3;
-                Result.Elasticity:= 0.03;
+                Result.Elasticity:= 0.55;
                 Result.Friction:= 0.03;
                 Result.Timer:= 5000;
                 end;

@@ -71,8 +71,8 @@ with Gear^,
                          amSkip: TurnTimeLeft:= 0;
                    amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHRadius, gtPickHammer, 0);
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
-                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.01, 0, 3000);
-                     amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.01, 0, 5000); 
+                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.02, 0, 3000);
+                     amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.035, 0, 5000); 
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then

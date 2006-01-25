@@ -286,7 +286,7 @@ const
                                    TimeAfterTurn: 3000),
                                   (Name: 'UFO';
                                    Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget;
-                                          Count: 4;
+                                          Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amUFO);
@@ -326,7 +326,7 @@ const
                                    TimeAfterTurn: 0),
                                   (Name: 'Mine';
                                    Ammo: (Propz: ammoprop_NoCrosshair;
-                                          Count: 5;
+                                          Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amMine);
@@ -342,7 +342,7 @@ const
                                    TimeAfterTurn: 3000),
                                    (Name: 'Dynamite';
                                     Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInJump or ammoprop_AttackInFall;
-                                           Count: 5;
+                                           Count: 1;
                                            NumPerTurn: 0;
                                            Timer: 0;
                                            AmmoType: amDynamite);

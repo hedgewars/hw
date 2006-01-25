@@ -63,7 +63,7 @@ var isCursorVisible : boolean = false;
     GameTicks     : LongWord = 0;
 
     cSkyColor     : Cardinal = 0;
-    cWaterColor   : Cardinal = $32397A;
+    cWaterColor   : Cardinal = $005ACE;
     cMapBackColor : Cardinal = $FFFFFF;
     cWhiteColor   : Cardinal = $FFFFFF;
     cConsoleSplitterColor : Cardinal = $FF0000;

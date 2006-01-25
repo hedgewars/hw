@@ -52,6 +52,7 @@ type TThemeObject = record
                     outland: array[1..MAXOBJECTRECTS] of TSDL_Rect;
                     rectcnt: Longword;
                     Width, Height: Longword;
+                    Maxcnt: Longword;
                     end;
 
 var Rects: PRectArray;
@@ -255,6 +256,11 @@ begin
 cnt:= 0;
 with Obj do
      begin
+     if Maxcnt = 0 then
+        begin
+        Result:= false;
+        exit
+        end;
      x:= 0;
      repeat
          y:= 0;
@@ -280,7 +286,8 @@ with Obj do
         i:= getrandom(cnt);
         BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, Obj.Surf, Surface);
         AddRect(ar[i].x, ar[i].y, Width, Height);
-        end
+        dec(Maxcnt)
+        end else Maxcnt:= 0
      end
 end;
 
@@ -310,6 +317,7 @@ for i:= 1 to n do
          Read(f, rectcnt);
          for ii:= 1 to rectcnt do
              with outland[ii] do Read(f, x, y, w, h);
+         Maxcnt:= 2;
          ReadLn(f)
          end;
     end;
