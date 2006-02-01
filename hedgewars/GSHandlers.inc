@@ -627,6 +627,7 @@ if ((Gear.State and gsttmpFlag) <> 0) then
       end else // gsttmpFlag = 0
    if TurnTimeLeft = 0 then Gear.State:= Gear.State or gsttmpFlag;
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDynamite(Gear: PGear);
 begin

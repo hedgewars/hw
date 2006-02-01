@@ -42,7 +42,6 @@ procedure InitWorld;
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 procedure AddCaption(s: shortstring; Color, Group: LongWord);
 procedure MoveWorld;
-procedure AdjustMPoint;
 
 {$IFDEF COUNTTICKS}
 var cntTicks: LongWord;
@@ -312,12 +311,10 @@ const PrevSentPointTime: LongWord = 0;
 var s: string[9];
 begin
 if not (CurrentTeam.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
-
 if (FollowGear <> nil) then
-   if abs(CursorPoint.X - prevPoint.X + CursorPoint.Y - prevpoint.Y) > 4 then
+   if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
       begin
       FollowGear:= nil;
-      AdjustMPoint;
       exit
       end
       else begin
@@ -374,13 +371,6 @@ if WorldDy < cScreenHeight - cLandYShift - cVisibleWater then WorldDy:= cScreenH
 if WorldDy >  2048 then WorldDy:=  2048;
 if WorldDx < -2048 then WorldDx:= -2048;
 if WorldDx > cScreenWidth then WorldDx:=  cScreenWidth;
-end;
-
-procedure AdjustMPoint;
-begin
-prevPoint.x:= cScreenWidth div 2;
-prevPoint.y:= cScreenHeight div 2;
-SDL_WarpMouse(prevPoint.X, prevPoint.Y);
 end;
 
 initialization

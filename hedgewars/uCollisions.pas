@@ -56,7 +56,7 @@ function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: in
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 
 implementation
-uses uMisc, uConsts, uLand, uGraphics;
+uses uMisc, uConsts, uLand, uLandGraphics;
 
 type TCollisionEntry = record
                        X, Y, Radius: integer;

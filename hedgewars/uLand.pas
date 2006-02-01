@@ -65,9 +65,11 @@ begin
 SHA1Init(ctx);
 SHA1Update(ctx, @Land, sizeof(Land));
 dig:= SHA1Final(ctx);
+{$IFDEF DEBUGFILE}
 AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
            +inttostr(dig.LongWords[1])+':'+inttostr(dig.LongWords[2])+':'
            +inttostr(dig.LongWords[3])+':'+inttostr(dig.LongWords[4])+'}');
+{$ENDIF}
 end;
 
 procedure DrawBezierEdge(var pa: TPixAr);

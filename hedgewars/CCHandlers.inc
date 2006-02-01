@@ -324,7 +324,6 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
            PInteger(@s[6])^:= TargetPoint.Y;
            SendIPC(s)
            end;
-        AdjustMPoint;
         State:= State and not gstHHChooseTarget;
         end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', true)
 end;

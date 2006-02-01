@@ -244,7 +244,6 @@ with Ammo[CurSlot, CurAmmo] do
         isCursorVisible:= true
         end else begin
         Gear.State:= Gear.State and not gstHHChooseTarget;
-        AdjustMPoint;
         isCursorVisible:= false
         end;
      ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0

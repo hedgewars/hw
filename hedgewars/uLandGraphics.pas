@@ -47,58 +47,110 @@ begin
   if (dx = dy) then FillCircleLines(x, y, dx, dy, Value);
 end;
 
+procedure ClearLandPixel(y, x: integer);
+var p: integer;
+begin
+p:= integer(LandSurface.pixels);
+case LandSurface.format.BytesPerPixel of
+     1: ;// not supported
+     2: PWord(p + LandSurface.pitch*y + x * 2)^:= 0;
+     3: begin
+        PByte(p + LandSurface.pitch*y + x * 3 + 0)^:= 0;
+        PByte(p + LandSurface.pitch*y + x * 3 + 1)^:= 0;
+        PByte(p + LandSurface.pitch*y + x * 3 + 2)^:= 0;
+        end;
+     4: PLongword(p + LandSurface.pitch*y + x * 4)^:= 0;
+     end;
+end;
+
+procedure SetLandPixel(y, x: integer);
+var p: integer;
+begin
+p:= integer(LandSurface.pixels);
+case LandSurface.format.BytesPerPixel of
+     1: ;// not supported
+     2: PWord(p + LandSurface.pitch*y + x * 2)^:= cExplosionBorderColor;
+     3: begin
+     PByte(p + LandSurface.pitch*y + x * 3 + 0)^:= cExplosionBorderColor and $FF;
+     PByte(p + LandSurface.pitch*y + x * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
+     PByte(p + LandSurface.pitch*y + x * 3 + 2)^:= (cExplosionBorderColor shr 16);
+        end;
+     4: PLongword(p + LandSurface.pitch*y + x * 4)^:= cExplosionBorderColor;
+     end;
+end;
+
+procedure FillLandCircleLines0(x, y, dx, dy: integer);
+var i: integer;
+begin
+if ((y + dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do ClearLandPixel(y + dy, i);
+if ((y - dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do ClearLandPixel(y - dy, i);
+if ((y + dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do ClearLandPixel(y + dx, i);
+if ((y - dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do ClearLandPixel(y - dx, i);
+end;
+
+procedure FillLandCircleLinesEBC(x, y, dx, dy: integer);
+var i: integer;
+begin
+if ((y + dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do
+       if Land[y + dy, i] <> 0 then SetLandPixel(y + dy, i);
+if ((y - dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do
+       if Land[y - dy, i] <> 0 then SetLandPixel(y - dy, i);
+if ((y + dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do
+       if Land[y + dx, i] <> 0 then SetLandPixel(y + dx, i);
+if ((y - dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do
+       if Land[y - dx, i] <> 0 then SetLandPixel(y - dx, i);
+end;
+
 procedure DrawExplosion(X, Y, Radius: integer);
-var ty, tx, p: integer;
+var dx, dy, d: integer;
 begin
 FillRoundInLand(X, Y, Radius, 0);
 
 if SDL_MustLock(LandSurface) then
    SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-p:= integer(LandSurface.pixels);
-case LandSurface.format.BytesPerPixel of
-     1: ;// not supported
-     2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-                PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= 0;
-     3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-                begin
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= 0;
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= 0;
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^:= 0;
-                end;
-     4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-                PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= 0;
+  dx:= 0;
+  dy:= Radius;
+  d:= 3 - 2 * Radius;
+  while (dx < dy) do
+     begin
+     FillLandCircleLines0(x, y, dx, dy);
+     if (d < 0)
+     then d:= d + 4 * dx + 6
+     else begin
+          d:= d + 4 * (dx - dy) + 10;
+          dec(dy)
+          end;
+     inc(dx)
      end;
-
-inc(Radius, 4);
-
-case LandSurface.format.BytesPerPixel of
-     1: ;// not supported
-     2: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] = $FFFFFF then
-                  PWord(p + LandSurface.pitch*(y + ty) + tx * 2)^:= cExplosionBorderColor;
-     3: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] = $FFFFFF then
-                begin
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 0)^:= cExplosionBorderColor and $FF;
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 1)^:= (cExplosionBorderColor shr 8) and $FF;
-                PByte(p + LandSurface.pitch*(y + ty) + tx * 3 + 2)^:= (cExplosionBorderColor shr 16);
-                end;
-     4: for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
-            for tx:= max(0, round(x-radius*sqrt(1-sqr(ty/radius)))) to min(2047, round(x+radius*sqrt(1-sqr(ty/radius)))) do
-               if Land[y + ty, tx] = $FFFFFF then
-                   PLongword(p + LandSurface.pitch*(y + ty) + tx * 4)^:= cExplosionBorderColor;
+  if (dx = dy) then FillLandCircleLines0(x, y, dx, dy);
+  inc(Radius, 4);
+  dx:= 0;
+  dy:= Radius;
+  d:= 3 - 2 * Radius;
+  while (dx < dy) do
+     begin
+     FillLandCircleLinesEBC(x, y, dx, dy);
+     if (d < 0)
+     then d:= d + 4 * dx + 6
+     else begin
+          d:= d + 4 * (dx - dy) + 10;
+          dec(dy)
+          end;
+     inc(dx)
      end;
-
+  if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);  
+  
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
-
-SDL_UpdateRect(LandSurface, X - Radius, Y - Radius, Radius * 2, Radius * 2)
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: Longword; y, dY: integer; Count: Byte);
