@@ -38,15 +38,12 @@
 #include <QLineEdit>
 #include <QDir>
 
-#include <vector>
-
 #include "ui_hwform.h"
 #include "binds.h"
 #include "game.h"
 #include "team.h"
 #include "netclient.h"
-
-using namespace std;
+#include "teamselect.h"
 
 class HWForm : public QMainWindow
 {
@@ -95,7 +92,7 @@ private:
 	HWTeam * tmpTeam;
 	HWNet * hwnet;
 
-	vector<QString> m_teamNames;
+	TeamSelWidget* pts;
 };
 
 #define ID_PAGE_SINGLEPLAYER 0

@@ -44,7 +44,6 @@
 #include "hwform.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
-#include "teamselect.h"
 
 HWForm::HWForm(QWidget *parent)
 	: QMainWindow(parent)
@@ -123,10 +122,12 @@ HWForm::HWForm(QWidget *parent)
 	  list.push_back("DefaultTeam");
 	}
 
+	pts=new TeamSelWidget(ui.Pages->widget(ID_PAGE_SINGLEPLAYER));
+
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
 	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
-	  m_teamNames.push_back(tmpTeamStr);
+	  pts->addTeam(tmpTeamStr);
 	  ui.CBTeamName->addItem(tmpTeamStr);
 	}
 
@@ -194,8 +195,6 @@ void HWForm::GoToMain()
 void HWForm::GoToSinglePlayer()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_SINGLEPLAYER);
-
-	TeamSelWidget* pts=new TeamSelWidget(m_teamNames, ui.Pages->widget(ID_PAGE_SINGLEPLAYER));
 
 	pts->resize(500, 350);
 	pts->show();
