@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QFrame>
 
 #include <list>
 #include <map>
@@ -27,7 +28,7 @@ class TeamSelWidget : public QWidget
   Q_OBJECT
  
  public:
-  TeamSelWidget(const vector<QString>& teams, QWidget* parent=0);
+  TeamSelWidget(QWidget* parent=0);
   void addTeam(tmprop team);
   void removeTeam(tmprop team);
 
@@ -36,8 +37,11 @@ private slots:
 
  private:
   QVBoxLayout mainLayout;
-  QGridLayout playingLayout;
-  QGridLayout dontPlayingLayout;
+
+  QFrame* playingColorFrame;
+  QFrame* dontPlayingColorFrame;
+  QGridLayout* playingLayout;
+  QGridLayout* dontPlayingLayout;
 
   list<tmprop> curPlayingTeams;
   list<tmprop> curDontPlayingTeams;

@@ -11,7 +11,7 @@ void TeamSelWidget::addTeam(tmprop team)
 {
   curDontPlayingTeams.push_back(team);
   TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team);
-  dontPlayingLayout.addWidget(pTeamShowWidget);
+  dontPlayingLayout->addWidget(pTeamShowWidget);
 
   teamToWidget.insert(make_pair(team, pTeamShowWidget));
 
@@ -38,20 +38,38 @@ void TeamSelWidget::changeTeamStatus(tmprop team)
     curDontPlayingTeams.erase(itDontPlay);
   }
 
-  QGridLayout* pRemoveGrid = itDontPlay==curDontPlayingTeams.end() ? &playingLayout : &dontPlayingLayout;
-  QGridLayout* pAddGrid = itDontPlay==curDontPlayingTeams.end() ? &dontPlayingLayout : &playingLayout;
+  QGridLayout* pRemoveGrid;
+  QGridLayout* pAddGrid;
+  QWidget* newParent;
+  if(itDontPlay==curDontPlayingTeams.end()) {
+    pRemoveGrid=playingLayout;
+    pAddGrid=dontPlayingLayout;
+    newParent=dontPlayingColorFrame;
+  } else {
+    pRemoveGrid=dontPlayingLayout;
+    pAddGrid=playingLayout;
+    newParent=playingColorFrame;
+  }
 
   pRemoveGrid->removeWidget(teamToWidget[team]);
+  teamToWidget[team]->setParent(newParent);
   pAddGrid->addWidget(teamToWidget[team]);
 }
 
-TeamSelWidget::TeamSelWidget(const vector<QString>& teams, QWidget* parent) :
+TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
-  mainLayout.addLayout(&playingLayout);
-  mainLayout.addLayout(&dontPlayingLayout);
+  playingColorFrame = new QFrame;
+  QPalette newPalette = palette();
+  newPalette.setColor(QPalette::Background, QColor("DarkTurquoise"));
+  playingColorFrame->setPalette(newPalette);
+  mainLayout.addWidget(playingColorFrame);
 
-  for(vector<QString>::const_iterator it=teams.begin(); it!=teams.end(); ++it) {
-    addTeam(*it);
-  }
+  dontPlayingColorFrame = new QFrame;
+  newPalette.setColor(QPalette::Background, QColor("LightGoldenrodYellow")); //BlanchedAlmond MistyRose honeydew PeachPuff LightCoral
+  dontPlayingColorFrame->setPalette(newPalette);
+  mainLayout.addWidget(dontPlayingColorFrame);
+  
+  playingLayout = new QGridLayout(playingColorFrame);
+  dontPlayingLayout = new QGridLayout(dontPlayingColorFrame);
 }

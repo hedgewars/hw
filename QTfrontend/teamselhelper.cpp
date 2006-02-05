@@ -8,8 +8,8 @@ void TeamLabel::teamButtonClicked()
   emit teamActivated(text());
 }
 
-TeamShowWidget::TeamShowWidget(tmprop team) :
-  mainLayout(this), m_team(team)
+TeamShowWidget::TeamShowWidget(tmprop team, QWidget * parent) :
+  QWidget(parent), mainLayout(this), m_team(team)
 {
   QLabel* pixlbl=new QLabel();
   pixlbl->setPixmap(QPixmap("./Data/Graphics/thinking.png"));

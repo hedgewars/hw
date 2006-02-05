@@ -30,7 +30,7 @@ class TeamShowWidget : public QWidget
  void activateTeam();
 
  public:
- TeamShowWidget(tmprop team);
+ TeamShowWidget(tmprop team, QWidget * parent = 0);
  
  private:
  QHBoxLayout mainLayout;
