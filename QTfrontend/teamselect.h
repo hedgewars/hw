@@ -3,16 +3,19 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QFrame>
+class QFrame;
 
 #include <list>
 #include <map>
+
+class TeamSelWidget;
+class FrameTeams;
 
 using namespace std;
 
 struct tmprop
 {
-  tmprop(QString nm) : teamName(nm){};
+  tmprop(QString nm) : teamName(nm) {};
   QString teamName;
   QString pixmapFileName;
   bool operator==(const tmprop& t1) const {
@@ -36,16 +39,14 @@ private slots:
   void changeTeamStatus(tmprop team);
 
  private:
-  QVBoxLayout mainLayout;
+  void addScrArea(FrameTeams* pfteams, QColor color);
+  FrameTeams* frameDontPlaying;
+  FrameTeams* framePlaying;
 
-  QFrame* playingColorFrame;
-  QFrame* dontPlayingColorFrame;
-  QGridLayout* playingLayout;
-  QGridLayout* dontPlayingLayout;
+  QVBoxLayout mainLayout;
 
   list<tmprop> curPlayingTeams;
   list<tmprop> curDontPlayingTeams;
-  map<tmprop, QWidget*> teamToWidget;
 };
 
 #endif // _TEAM_SELECT_INCLUDED

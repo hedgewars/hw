@@ -19,7 +19,9 @@ HEADERS += binds.h \
            sha1.h \
            netclient.h \
            teamselect.h \
-           teamselhelper.h 
+           teamselhelper.h \
+           frameTeam.h \
+           vertScrollArea.h
            
 FORMS += hwform.ui
 
@@ -31,7 +33,9 @@ SOURCES += game.cpp \
            sha1.cpp \
            netclient.cpp \
            teamselect.cpp \
-           teamselhelper.cpp
+           teamselhelper.cpp \
+           frameTeam.cpp \
+           vertScrollArea.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

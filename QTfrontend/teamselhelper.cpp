@@ -3,6 +3,8 @@
 #include <QPixmap>
 #include <QPushButton>
 
+#include <iostream>
+
 void TeamLabel::teamButtonClicked()
 {
   emit teamActivated(text());
@@ -14,7 +16,7 @@ TeamShowWidget::TeamShowWidget(tmprop team, QWidget * parent) :
   QLabel* pixlbl=new QLabel();
   pixlbl->setPixmap(QPixmap("./Data/Graphics/thinking.png"));
   mainLayout.addWidget(pixlbl);
-  
+
   TeamLabel* lbl=new TeamLabel(team.teamName);
   mainLayout.addWidget(lbl);
 

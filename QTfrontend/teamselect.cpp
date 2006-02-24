@@ -1,26 +1,26 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPushButton>
+#include <QFrame>
 
 #include <algorithm>
 
+#include <vertScrollArea.h>
 #include "teamselect.h"
 #include "teamselhelper.h"
+#include "frameTeam.h"
 
 void TeamSelWidget::addTeam(tmprop team)
 {
+  frameDontPlaying->addTeam(team);
   curDontPlayingTeams.push_back(team);
-  TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team);
-  dontPlayingLayout->addWidget(pTeamShowWidget);
-
-  teamToWidget.insert(make_pair(team, pTeamShowWidget));
-
-  QObject::connect(pTeamShowWidget, SIGNAL(teamStatusChanged(tmprop)), this, SLOT(changeTeamStatus(tmprop)));
+  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)), 
+		   this, SLOT(changeTeamStatus(tmprop)));
 }
 
 void TeamSelWidget::removeTeam(tmprop team)
 {
-  curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
+  //curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
 }
 
 void TeamSelWidget::changeTeamStatus(tmprop team)
@@ -38,38 +38,32 @@ void TeamSelWidget::changeTeamStatus(tmprop team)
     curDontPlayingTeams.erase(itDontPlay);
   }
 
-  QGridLayout* pRemoveGrid;
-  QGridLayout* pAddGrid;
-  QWidget* newParent;
+  FrameTeams* pRemoveTeams;
+  FrameTeams* pAddTeams;
   if(itDontPlay==curDontPlayingTeams.end()) {
-    pRemoveGrid=playingLayout;
-    pAddGrid=dontPlayingLayout;
-    newParent=dontPlayingColorFrame;
+    pRemoveTeams=framePlaying;
+    pAddTeams=frameDontPlaying;
   } else {
-    pRemoveGrid=dontPlayingLayout;
-    pAddGrid=playingLayout;
-    newParent=playingColorFrame;
+    pRemoveTeams=frameDontPlaying;
+    pAddTeams=framePlaying;
   }
 
-  pRemoveGrid->removeWidget(teamToWidget[team]);
-  teamToWidget[team]->setParent(newParent);
-  pAddGrid->addWidget(teamToWidget[team]);
+  pAddTeams->addTeam(team);
+  pRemoveTeams->removeTeam(team);
+}
+
+void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
+{
+  VertScrArea* area=new VertScrArea(color);
+  area->setWidget(pfteams);
+  mainLayout.addWidget(area, 50);
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
-  playingColorFrame = new QFrame;
-  QPalette newPalette = palette();
-  newPalette.setColor(QPalette::Background, QColor("DarkTurquoise"));
-  playingColorFrame->setPalette(newPalette);
-  mainLayout.addWidget(playingColorFrame);
-
-  dontPlayingColorFrame = new QFrame;
-  newPalette.setColor(QPalette::Background, QColor("LightGoldenrodYellow")); //BlanchedAlmond MistyRose honeydew PeachPuff LightCoral
-  dontPlayingColorFrame->setPalette(newPalette);
-  mainLayout.addWidget(dontPlayingColorFrame);
-  
-  playingLayout = new QGridLayout(playingColorFrame);
-  dontPlayingLayout = new QGridLayout(dontPlayingColorFrame);
+  framePlaying=new FrameTeams();
+  frameDontPlaying=new FrameTeams();
+  addScrArea(framePlaying, QColor("DarkTurquoise"));
+  addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
 }
