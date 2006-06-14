@@ -48,14 +48,14 @@ uses
   uSound in 'uSound.pas',
   uRandom in 'uRandom.pas',
   uAI in 'uAI.pas',
-  uAIActions in 'uAIActions.pas',
-  uAIMisc in 'uAIMisc.pas',
-  uAIAmmoTests in 'uAIAmmoTests.pas',
   uCollisions in 'uCollisions.pas',
   uLand in 'uLand.pas',
   uLandTemplates in 'uLandTemplates.pas',
   uLandObjects in 'uLandObjects.pas',
-  uLandGraphics in 'uLandGraphics.pas';
+  uLandGraphics in 'uLandGraphics.pas',
+  uAIMisc in 'uAIMisc.pas',
+  uAIAmmoTests in 'uAIAmmoTests.pas',
+  uAIActions in 'uAIActions.pas';
 
 {$INCLUDE options.inc}
 

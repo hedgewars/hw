@@ -473,7 +473,7 @@ var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Generating land...');
 for i:= 0 to sizeof(Land) div 4 do
-    PLongword(Longword(@Land) + i * 4)^:= $FFFFFF;
+    PLongword(Longword(@Land) + i * 4)^:= COLOR_LAND;
 GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 AddProgress;
@@ -539,7 +539,7 @@ case LandSurface.format.BytesPerPixel of
      2: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(i, 2048 * 4);
             inc(p, LandSurface.pitch);
             end;
@@ -548,14 +548,14 @@ case LandSurface.format.BytesPerPixel of
             for x:= 0 to 2047 do
                 if  (PByte(p + x * 3 + 0)^ <> 0)
                  or (PByte(p + x * 3 + 1)^ <> 0)
-                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= $FFFFFF;
+                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(i, 2048 * 4);
             inc(p, LandSurface.pitch);
             end;
      4: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(i, 2048 * 4);
             inc(p, LandSurface.pitch);
             end;

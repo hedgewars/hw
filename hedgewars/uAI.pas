@@ -35,132 +35,79 @@ unit uAI;
 interface
 {$INCLUDE options.inc}
 procedure ProcessBot;
+procedure FreeActionsList;
 
 implementation
-uses uAIActions, uAIMisc, uMisc, uTeams, uConsts, uAIAmmoTests, uGears, SDLh, uConsole;
+uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc;
 
-procedure Think;
 var Targets: TTargets;
-    Angle, Power: integer;
-    Time: Longword;
+    Actions, BestActions: TActions;
 
-    procedure FindTarget(Flags: Longword);
-    var t: integer;
-        a, aa: TAmmoType;
-        Me: TPoint;
-    begin
-    t:= 0;
-    with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-         begin
-         Me.X:= round(Gear.X);
-         Me.Y:= round(Gear.Y);
-         end;
-    repeat
-      if isInMultiShoot or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum > 0)
-                        then with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-                             a:= Ammo[CurSlot, CurAmmo].AmmoType
-                        else a:= TAmmoType(random(ord(High(TAmmoType))));
-      aa:= a;
-      repeat
-        if Assigned(AmmoTests[a].Test)
-           and ((Flags = 0) or ((Flags and AmmoTests[a].Flags) <> 0)) then
-           if AmmoTests[a].Test(Me, Targets.ar[t], Flags, Time, Angle, Power) then
-              begin
-              AddAction(aia_Weapon, ord(a), 1000);
-              if Time <> 0 then AddAction(aia_Timer, Time div 1000, 400);
-              exit
-              end;
-      if a = High(TAmmoType) then a:= Low(TAmmoType)
-                             else inc(a)
-      until isInMultiShoot or (a = aa) or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum > 0);
-    inc(t)
-    until (t >= Targets.Count)
-    end;
-
-    procedure TryGo(lvl, Flags: Longword);
-    var tmpGear: TGear;
-        i, t: integer;
-    begin
-    with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-    for t:= aia_Left to aia_Right do
-        if IsActionListEmpty then
-           begin
-           tmpGear:= Gear^;
-           i:= 0;
-           Gear.Message:= t;
-           while HHGo(Gear) do
-                 begin
-                 if (i mod 5 = 0) then
-                    begin
-                    FindTarget(Flags);
-                    if not IsActionListEmpty then
-                       begin
-                       if i > 0 then
-                          begin
-                          AddAction(t, aim_push, 1000);
-                          AddAction(aia_WaitX, round(Gear.X), 0);
-                          AddAction(t, aim_release, 0)
-                          end;
-                       Gear^:= tmpGear;
-                       exit
-                       end
-                    end;
-                 inc(i)
-                 end;
-           Gear^:= tmpGear
-           end
-    end;
-
+procedure FreeActionsList;
 begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     if ((Gear.State and (gstAttacked or gstAttacking or gstMoving or gstFalling)) <> 0)
-        or isInMultiShoot then exit;
+BestActions.Count:= 0;
+BestActions.Pos:= 0;
+end;
 
-FillTargets(Targets);
-
-TryGo(0, 0);
-
-if IsActionListEmpty then
-   TryGo(0, ctfNotFull);
-if IsActionListEmpty then
-   TryGo(0, ctfBreach);
-
-if IsActionListEmpty then
+procedure TestAmmos(Me: PGear);
+var MyPoint: TPoint;
+    Time: Longword;
+    Angle, Power, Score: integer;
+    i: integer;
+begin
+Mypoint.x:= round(Me.X);
+Mypoint.y:= round(Me.Y);
+for i:= 0 to Pred(Targets.Count) do
+  begin
+  Score:= TestBazooka(MyPoint, Targets.ar[i].Point, Time, Angle, Power);
+  if Actions.Score + Score + Targets.ar[i].Score > BestActions.Score then
    begin
-   if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum = 0 then
+   BestActions:= Actions;
+   inc(BestActions.Score, Score + Targets.ar[i].Score);
+   AddAction(BestActions, aia_Weapon, Longword(amBazooka), 500);
+   if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
+   else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200);
+   Angle:= integer(Me.Angle) - Abs(Angle);
+   if Angle > 0 then
       begin
-      AddAction(aia_Weapon, ord(amSkip), 1000);
-      AddAction(aia_Attack, aim_push, 1000);
-      end else ParseCommand('skip');
-   exit
-   end;
+      AddAction(BestActions, aia_Up, aim_push, 500);
+      AddAction(BestActions, aia_Up, aim_release, Angle)
+      end else if Angle < 0 then
+      begin
+      AddAction(BestActions, aia_Down, aim_push, 500);
+      AddAction(BestActions, aia_Down, aim_release, -Angle)
+      end;
+   AddAction(BestActions, aia_attack, aim_push, 300);
+   AddAction(BestActions, aia_attack, aim_release, Power);
+   end
+  end
+end;
 
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     begin
-     if (Angle > 0) then AddAction(aia_LookRight, 0, 200)
-        else if (Angle < 0) then AddAction(aia_LookLeft, 0, 200);
-     Angle:= integer(Gear.Angle) - Abs(Angle);
-     if Angle > 0 then
-        begin
-        AddAction(aia_Up, aim_push, 500);
-        AddAction(aia_Up, aim_release, Angle)
-        end else if Angle < 0 then
-        begin
-        AddAction(aia_Down, aim_push, 500);
-        AddAction(aia_Down, aim_release, -Angle)
-        end;
-     AddAction(aia_attack, aim_push, 300);
-     AddAction(aia_attack, aim_release, Power);
-     end
+procedure Walk(Me: PGear);
+begin
+TestAmmos(Me)
+end;
+
+procedure Think(Me: PGear);
+begin
+FillTargets(Targets);
+Actions.Score:= 0;
+Actions.Count:= 0;
+Actions.Pos:= 0;
+BestActions.Score:= Low(integer);
+if Targets.Count > 0 then
+   Walk(Me)
 end;
 
 procedure ProcessBot;
+var Me: PGear;
 begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do          //HACK: v--- temp hack to make AI work
+with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)and((Gear.State and gstHHDriven) <> 0) and (TurnTimeLeft < 29990) then
         begin
-        if IsActionListEmpty then Think;
-        ProcessAction
+        Me:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear;
+        if BestActions.Count = BestActions.Pos then Think(Me);
+        ProcessAction(BestActions, Me)
         end
 end;
 

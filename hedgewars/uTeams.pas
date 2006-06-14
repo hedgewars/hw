@@ -81,7 +81,7 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 
 implementation
-uses uMisc, uStore, uWorld, uIO, uAIActions;
+uses uMisc, uStore, uWorld, uIO, uAI;
 const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;

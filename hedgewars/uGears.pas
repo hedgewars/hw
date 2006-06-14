@@ -146,6 +146,7 @@ case Kind of
                 Result.Radius:= cHHRadius;
                 Result.Elasticity:= 0.002;
                 Result.Friction:= 0.999;
+                Result.Angle:= cMaxAngle div 2;
                 end;
 gtAmmo_Grenade: begin
                 Result.Radius:= 4;
@@ -571,6 +572,7 @@ end;
 procedure AmmoShove(Ammo: PGear; Power: integer);
 var t: PGearArray;
     i: integer;
+    Gear: PGear;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t.Count;
@@ -589,7 +591,14 @@ while i > 0 do
                        FollowGear:= t.ar[i]
                        end;
            end
-    end
+    end;
+Gear:= GearsList;
+while Gear <> nil do
+      begin
+      if Round(sqrt(sqr(Gear.X - Ammo.X) + sqr(Gear.Y - Ammo.Y))) < 50 then // why 50?
+         Gear.Active:= true;
+      Gear:= Gear.NextGear
+      end
 end;
 
 procedure AssignHHCoords;

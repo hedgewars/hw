@@ -88,6 +88,8 @@ const
 
       rndfillstr = 'hw';
 
+      COLOR_LAND = $00FFFFFF;
+
       cifRandomize = $00000001;
       cifTheme     = $00000002;
       cifMap       = $00000002; // either theme or map (or map+theme)

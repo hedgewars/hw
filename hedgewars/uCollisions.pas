@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -151,12 +151,12 @@ var x, y, i: integer;
 begin
 Result:= false;
 x:= round(Gear.X);
-if Dir < 0 then x:= x - Gear.Radius
-           else x:= x + Gear.Radius;
+if Dir < 0 then x:= x - Gear.Radius - 1
+           else x:= x + Gear.Radius + 1;
 if (x and $FFFFF800) = 0 then
    begin
-   y:= round(Gear.Y) - Gear.Radius + 1; {*}
-   i:= y + Gear.Radius * 2 - 2;         {*}
+   y:= round(Gear.Y) - Gear.Radius + 1;
+   i:= y + Gear.Radius * 2 - 2;
    repeat
      if (y and $FFFFFC00) = 0 then Result:= Land[y, x]<>0;
      inc(y)
@@ -182,8 +182,8 @@ if Dir < 0 then y:= y - Gear.Radius
            else y:= y + Gear.Radius;
 if (y and $FFFFFC00) = 0 then
    begin
-   x:= round(Gear.X) - Gear.Radius + 1;    {*}
-   i:= x + Gear.Radius * 2 - 2;            {*}
+   x:= round(Gear.X) - Gear.Radius + 1;
+   i:= x + Gear.Radius * 2 - 2;            
    repeat
      if (x and $FFFFF800) = 0 then Result:= Land[y, x]<>0;
      inc(x)

@@ -12,7 +12,7 @@ procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
 procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
 
 implementation
-uses SDLh, uStore, uMisc, uLand;
+uses SDLh, uStore, uMisc, uLand, uConsts;
 
 procedure FillCircleLines(x, y, dx, dy: integer; Value: Longword);
 var i: integer;
@@ -97,16 +97,16 @@ var i: integer;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y + dy, i] <> 0 then SetLandPixel(y + dy, i);
+       if Land[y + dy, i] = COLOR_LAND then SetLandPixel(y + dy, i);
 if ((y - dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y - dy, i] <> 0 then SetLandPixel(y - dy, i);
+       if Land[y - dy, i] = COLOR_LAND then SetLandPixel(y - dy, i);
 if ((y + dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y + dx, i] <> 0 then SetLandPixel(y + dx, i);
+       if Land[y + dx, i] = COLOR_LAND then SetLandPixel(y + dx, i);
 if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y - dx, i] <> 0 then SetLandPixel(y - dx, i);
+       if Land[y - dx, i] = COLOR_LAND then SetLandPixel(y - dx, i);
 end;
 
 procedure DrawExplosion(X, Y, Radius: integer);
