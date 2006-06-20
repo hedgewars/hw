@@ -171,10 +171,10 @@ procedure doStepGrave(Gear: PGear);
 begin
 AllInactive:= false;
 if Gear.dY < 0 then
-   if TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
+   if TestCollisionY(Gear, -1) then Gear.dY:= 0;
 
 if Gear.dY >=0 then
-   if TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionY(Gear, 1) then
       begin
       Gear.dY:= - Gear.dY * Gear.Elasticity;
       if Gear.dY > - 0.001 then
@@ -508,7 +508,7 @@ Gear.Y:= Gear.Y + Gear.dY;
 Gear.Elasticity:= Gear.Elasticity + 1.0;
 HHGear:= PHedgehog(Gear.Hedgehog)^.Gear;
 if (HHGear.State and gstFalling) <> 0 then
-   if HHTestCollisionYwithGear(HHGear, 1) then
+   if TestCollisionYwithGear(HHGear, 1) then
       begin
       HHGear.dY:= 0;
       CheckHHDamage(HHGear);

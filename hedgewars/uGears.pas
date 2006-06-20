@@ -73,11 +73,11 @@ procedure AddMiscGears;
 procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
-
+    GearsList: PGear = nil;
+    
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics;
-var GearsList: PGear = nil;
-    RopePoints: record
+var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
                 ar: array[0..300] of record
@@ -145,7 +145,7 @@ case Kind of
     gtHedgehog: begin
                 Result.Radius:= cHHRadius;
                 Result.Elasticity:= 0.002;
-                Result.Friction:= 0.999;
+                Result.Friction:= 0.9985;
                 Result.Angle:= cMaxAngle div 2;
                 end;
 gtAmmo_Grenade: begin

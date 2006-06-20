@@ -49,9 +49,9 @@ type TDirection = record
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 function CheckGearsCollision(Gear: PGear): PGearArray;
-function  HHTestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
+function TestCollisionY(Gear: PGear; Dir: integer): boolean;
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 
@@ -116,43 +116,13 @@ for i:= 0 to Pred(Count) do
              end;
 end;
 
-function HHTestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
-var x, y, i: integer;
-begin
-Result:= false;
-y:= round(Gear.Y);
-if Dir < 0 then y:= y - Gear.Radius
-           else y:= y + Gear.Radius;
-           
-if ((y - Dir) and $FFFFFC00) = 0 then
-   begin
-   x:= round(Gear.X);
-   if (((x - Gear.Radius) and $FFFFF800) = 0)and(Land[y - Dir, x - Gear.Radius] <> 0)
-    or(((x + Gear.Radius) and $FFFFF800) = 0)and(Land[y - Dir, x + Gear.Radius] <> 0) then
-      begin
-      Result:= true;
-      exit
-      end
-    end;
-
-if (y and $FFFFFC00) = 0 then
-   begin
-   x:= round(Gear.X) - Gear.Radius + 1;
-   i:= x + Gear.Radius * 2 - 2;
-   repeat
-     if (x and $FFFFF800) = 0 then Result:= Land[y, x]<>0;
-     inc(x)
-   until (x > i) or Result
-   end
-end;
-
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 var x, y, i: integer;
 begin
 Result:= false;
 x:= round(Gear.X);
-if Dir < 0 then x:= x - Gear.Radius - 1
-           else x:= x + Gear.Radius + 1;
+if Dir < 0 then x:= x - Gear.Radius
+           else x:= x + Gear.Radius;
 if (x and $FFFFF800) = 0 then
    begin
    y:= round(Gear.Y) - Gear.Radius + 1;
@@ -183,9 +153,27 @@ if Dir < 0 then y:= y - Gear.Radius
 if (y and $FFFFFC00) = 0 then
    begin
    x:= round(Gear.X) - Gear.Radius + 1;
-   i:= x + Gear.Radius * 2 - 2;            
+   i:= x + Gear.Radius * 2 - 2;
    repeat
      if (x and $FFFFF800) = 0 then Result:= Land[y, x]<>0;
+     inc(x)
+   until (x > i) or Result;
+   end
+end;
+
+function TestCollisionY(Gear: PGear; Dir: integer): boolean;
+var x, y, i: integer;
+begin
+Result:= false;
+y:= round(Gear.Y);
+if Dir < 0 then y:= y - Gear.Radius
+           else y:= y + Gear.Radius;
+if (y and $FFFFFC00) = 0 then
+   begin
+   x:= round(Gear.X) - Gear.Radius + 1;
+   i:= x + Gear.Radius * 2 - 2;
+   repeat
+     if (x and $FFFFF800) = 0 then Result:= Land[y, x] = COLOR_LAND;
      inc(x)
    until (x > i) or Result;
    end
