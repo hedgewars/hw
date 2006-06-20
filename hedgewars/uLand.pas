@@ -427,6 +427,54 @@ for k:= 0 to Pred(pa.Count) do  // apply transformation
     end;
 end;
 
+procedure NormalizePoints(var pa: TPixAr);
+const brd = 32;
+var isUP: boolean;  // HACK: transform for Y should be exact as one for X  
+    Left, Right, Top, Bottom,
+    OWidth, Width, OHeight, Height,
+    OLeft: integer;
+    i: integer;
+begin
+TryDo((pa.ar[0].y < 0) or (pa.ar[0].y > 1023), 'Bad land generated', true);
+isUP:= pa.ar[0].y > 0;
+Left:= 1023;
+Right:= Left;
+Top:= pa.ar[0].y;
+Bottom:= Top;
+
+for i:= 1 to Pred(pa.Count) do
+    with pa.ar[i] do
+         begin
+         if (y and $FFFFFC00) = 0 then
+            if x < Left then Left:= x else
+            if x > Right then Right:= x;
+         if y < Top then Top:= y else
+         if y > Bottom then Bottom:= y
+         end;
+
+if (Left < brd) or (Right > 2047 - brd) then
+   begin
+   OLeft:= Left;
+   OWidth:= Right - OLeft;
+   if Left < brd then Left:= brd;
+   if Right > 2047 - brd then Right:= 2047 - brd;
+   Width:= Right - Left;
+   for i:= 0 to Pred(pa.Count) do
+       with pa.ar[i] do
+            x:= round((x - OLeft) * Width div OWidth + Left)
+   end;
+
+if isUp then // FIXME: remove hack
+   if Top < brd then
+      begin
+      OHeight:= 1023 - Top;
+      Height:= 1023 - brd;
+      for i:= 0 to Pred(pa.Count) do
+          with pa.ar[i] do
+               y:= round((y - 1023) * Height div OHeight + 1023)
+   end;
+end;
+
 procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
     i: Longword;
@@ -459,6 +507,7 @@ with Template do
          BezierizeEdge(pa, 0.33333334);
 
      PointWave(Template, pa);
+     NormalizePoints(pa);
      DrawBezierEdge(pa);
 
      for i:= 0 to pred(FillPointsCount) do
@@ -479,11 +528,13 @@ GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 AddProgress;
 with PixelFormat^ do
      tmpsurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
 AddProgress;
 AddBorder(tmpsurf);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
 

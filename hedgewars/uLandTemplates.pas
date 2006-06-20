@@ -364,7 +364,47 @@ const Template9Points: array[0..23] of TPoint =
        (x: 1023; y:    0)
       );
 
-const EdgeTemplates: array[0..9] of TEdgeTemplate =
+const Template10Points: array[0..13] of TPoint =
+      (
+       (x:  336; y: 1476),
+       (x:  303; y: 1026),
+       (x:  225; y:  921),
+       (x:  216; y:  741),
+       (x:  774; y:  810),
+       (x:  687; y:  336),
+       (x:  975; y:  192),
+       (x: 1350; y:  324),
+       (x: 1230; y:  681),
+       (x: 1257; y:  855),
+       (x: 1623; y:  846),
+       (x: 1821; y:  657),
+       (x: 1911; y:  897),
+       (x: 1704; y: 1446)
+      );
+      Template10FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+
+const Template11Points: array[0..9] of TPoint =
+      (
+       (x:  270; y: 1407),
+       (x:  180; y:  795),
+       (x:  453; y:  753),
+       (x:  537; y:  900),
+       (x:  822; y:  729),
+       (x: 1128; y:  882),
+       (x: 1269; y:  657),
+       (x: 1560; y:  915),
+       (x: 1812; y:  867),
+       (x: 1854; y: 1347)
+      );
+      Template11FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+
+const EdgeTemplates: array[0..11] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -457,13 +497,33 @@ const EdgeTemplates: array[0..9] of TEdgeTemplate =
        canMirror: true; canFlip: false;
       ),
       (BasePoints: @Template9Points;
-       BasePointsCount: Succ(High(Template8Points));
+       BasePointsCount: Succ(High(Template9Points));
        BezPassCnt: 4;
        PassMin: 17; PassDelta: 3;
        WaveAmplMin:    10; WaveAmplDelta: 10;
        WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
        FillPoints: @Template9FPoints;
        FillPointsCount: Succ(High(Template9FPoints));
+       canMirror: true; canFlip: false;
+      ),
+      (BasePoints: @Template10Points;
+       BasePointsCount: Succ(High(Template10Points));
+       BezPassCnt: 4;
+       PassMin: 15; PassDelta: 2;
+       WaveAmplMin:    15; WaveAmplDelta: 10;
+       WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+       FillPoints: @Template10FPoints;
+       FillPointsCount: Succ(High(Template10FPoints));
+       canMirror: false; canFlip: false;
+      ),
+      (BasePoints: @Template11Points;
+       BasePointsCount: Succ(High(Template11Points));
+       BezPassCnt: 4;
+       PassMin: 15; PassDelta: 1;
+       WaveAmplMin:    10; WaveAmplDelta: 10;
+       WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+       FillPoints: @Template11FPoints;
+       FillPointsCount: Succ(High(Template11FPoints));
        canMirror: true; canFlip: false;
       )
       );
