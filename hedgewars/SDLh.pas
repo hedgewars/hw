@@ -196,6 +196,8 @@ type PSDL_Rect = ^TSDL_Rect;
      PByteArray = ^TByteArray;
      TByteArray = array[0..32767] of Byte;
 
+     PSDL_Thread = Pointer;
+
 function  SDL_Init(flags: Longword): Integer; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
@@ -238,6 +240,9 @@ function  SDL_PollEvent(event: PSDL_Event): Integer; cdecl; external SDLLibName;
 function  SDL_ShowCursor(toggle: Integer): Integer; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
+
+function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
+procedure SDL_WaitThread(thread: PSDL_Thread; status: PInteger); cdecl; external SDLLibName;
 
 (*  TTF  *)
 

@@ -54,7 +54,7 @@ with Actions do
      begin
      actions[Count].Action:= Action;
      actions[Count].Param:= Param;
-     if Count > 0 then actions[Count].Time:= actions[Pred(Count)].Time + TimeDelta
+     if Count > 0 then actions[Count].Time:= TimeDelta
                   else actions[Count].Time:= GameTicks + TimeDelta;
      inc(Count);
      TryDo(Count < MAXACTIONS, 'AI: actions overflow', true);
@@ -105,7 +105,9 @@ with Actions.actions[Actions.Pos] do
         ParseCommand(s)
         end
      end;
-inc(Actions.Pos)
+inc(Actions.Pos);
+if Actions.Pos <= Actions.Count then
+   inc(Actions.actions[Actions.Pos].Time, GameTicks)
 end;
 
 end.
