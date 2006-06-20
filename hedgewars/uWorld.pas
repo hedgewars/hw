@@ -135,11 +135,11 @@ while team<>nil do
 //                                  Team.NameRect, Surface);
                      end else // Current hedgehog
                      begin
-                     if (Gear.State and (gstMoving or gstAttacked or gstDrowning or gstFalling))=0 then
+                     if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
                         if (Gear.State and gstHHThinking) <> 0 then
                            DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
                         else
-                        if ShowCrosshair then
+                        if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
                            DrawCaption(Round(Gear.X + Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
                                        Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 4,
                                        Team.CrossHairRect, Surface)
