@@ -317,7 +317,7 @@ procedure doStepPickHammerWork(Gear: PGear);
 var i, ei: integer;
     HHGear: PGear;
 begin
-Allinactive:= false;
+AllInactive:= false;
 dec(Gear.Timer);
 if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0) then
    begin
@@ -384,8 +384,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepRopeWork(Gear: PGear);
-const pidiv2: real = pi/2;
-      flCheck: boolean = false;
+const flCheck: boolean = false;
 var HHGear: PGear;
     len, cs, cc, tx, ty: real;
     lx, ly: integer;
@@ -399,7 +398,7 @@ var HHGear: PGear;
            end;
       DeleteGear(Gear);
       OnUsedAmmo(PHedgehog(Gear.Hedgehog)^.Ammo);
-      ApplyAmmoChanges(PHedgehog(Gear.Hedgehog))
+      ApplyAmmoChanges(PHedgehog(Gear.Hedgehog)^)
     end;
 
 begin
@@ -429,8 +428,8 @@ if flCheck then  // check whether rope needs dividing
          begin
          tx:= cc*len;
          ty:= cs*len;
-         lx:= round(Gear.X + tx) + sign(HHGear.dX);
-         ly:= round(Gear.Y + ty) + sign(HHGear.dY);
+         lx:= round(Gear.X + tx) + Sign(HHGear.dX);
+         ly:= round(Gear.Y + ty) + Sign(HHGear.dY);
          if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0)and (Land[ly, lx] <> 0) then
            begin
            with RopePoints.ar[RopePoints.Count] do

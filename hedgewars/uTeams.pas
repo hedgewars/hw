@@ -73,7 +73,7 @@ var CurrentTeam: PTeam = nil;
     TeamsList: PTeam = nil;
 
 function AddTeam: PTeam;
-procedure ApplyAmmoChanges(Hedgehog: PHedgehog);
+procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
@@ -129,7 +129,7 @@ ResetKbd;
 cWindSpeed:= (GetRandom * 2 - 1) * cMaxWindSpeed;
 AddGear(0, 0, gtActionTimer, gtsSmoothWindCh).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
-ApplyAmmoChanges(@CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
+ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 
@@ -219,10 +219,10 @@ SetFirstTurnHedgehog;
 RecountAllTeamsHealth
 end;
 
-procedure ApplyAmmoChanges(Hedgehog: PHedgehog);
+procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-with Hedgehog^ do
+with Hedgehog do
      begin
      if Ammo[CurSlot, CurAmmo].Count = 0 then
         begin
@@ -259,12 +259,12 @@ begin
       b:= false;
       ami:= 0;
       while (not b) and (ami < cMaxSlotAmmoIndex) do
-          if (Ammo[slot, ami].Count = 0)
-             and (Ammo[slot, ami + 1].Count > 0) then b:= true
+          if (Ammo[Slot, ami].Count = 0)
+             and (Ammo[Slot, ami + 1].Count > 0) then b:= true
                                                  else inc(ami);
       if b then // есть пустое место
          begin
-         Ammo[slot, ami]:= Ammo[slot, ami + 1]
+         Ammo[Slot, ami]:= Ammo[Slot, ami + 1]
          end
     until not b;
 end;

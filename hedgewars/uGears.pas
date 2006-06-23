@@ -74,7 +74,7 @@ procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
-    
+
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics;
 var RopePoints: record
@@ -93,6 +93,7 @@ procedure AmmoShove(Ammo: PGear; Power: integer); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
+procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -145,7 +146,7 @@ case Kind of
     gtHedgehog: begin
                 Result.Radius:= cHHRadius;
                 Result.Elasticity:= 0.002;
-                Result.Friction:= 0.9985;
+                Result.Friction:= 0.999;
                 Result.Angle:= cMaxAngle div 2;
                 end;
 gtAmmo_Grenade: begin
@@ -515,18 +516,13 @@ while tt<>nil do
 end;
 
 procedure AddMiscGears;
-var i, x, y: integer;
+var i: integer;
 begin
 for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
 if (GameFlags and gfForts) = 0 then
-   begin
    for i:= 0 to 3 do
-       begin
-       GetHHPoint(x, y);
-       AddGear(X, Y + 9, gtMine, 0);
-       end;
-   end;
+       FindPlace(AddGear(0, 0, gtMine, 0), false, 0, 2048);
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);
@@ -553,8 +549,8 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
                              begin
-                             Gear.dX:= Gear.dX + dmg / 200 * sign(Gear.X - X);
-                             Gear.dY:= Gear.dY + dmg / 200 * sign(Gear.Y - Y);
+                             Gear.dX:= Gear.dX + dmg / 200 * Sign(Gear.X - X);
+                             Gear.dY:= Gear.dY + dmg / 200 * Sign(Gear.Y - Y);
                              Gear.Active:= true;
                              FollowGear:= Gear
                              end;
@@ -603,18 +599,12 @@ end;
 
 procedure AssignHHCoords;
 var Gear: PGear;
-    pX, pY: integer;
 begin
 Gear:= GearsList;
 while Gear <> nil do
       begin
       if Gear.Kind = gtHedgehog then
-         begin
-         GetHHPoint(pX, pY);
-         {$IFDEF DEBUGFILE}AddFileLog('HH at ('+inttostr(pX)+','+inttostr(pY)+')');{$ENDIF}
-         Gear.X:= pX;
-         Gear.Y:= pY
-         end;
+         FindPlace(Gear, false, 0, 2048);
       Gear:= Gear.NextGear
       end
 end;
@@ -670,38 +660,76 @@ while t <> nil do
 end;
 
 procedure SpawnBoxOfSmth;
-var i, x, y, k: integer;
-    b: boolean;
 begin
-if (CountGears(gtCase) > 1) or (getrandom(3) <> 0) then exit;
-k:= 7;
+if (CountGears(gtCase) > 2) or (getrandom(3) <> 0) then exit;
+FollowGear:= AddGear(0, 0, gtCase, 0);
+FollowGear.Health:= 25;
+FollowGear.Pos:= posCaseHealth;
+FindPlace(FollowGear, true, 0, 2048)
+end;
+
+procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer);
+
+    function CountNonZeroz(x, y, r: integer): integer;
+    var i: integer;
+    begin
+    Result:= 0;
+    if (y and $FFFFFC00) <> 0 then exit;
+    for i:= max(x - r, 0) to min(x + r, 2043) do
+        if Land[y, i] <> 0 then inc(Result)
+    end;
+
+var fx, x: integer;
+    y, sy: integer;
+    ar: array[0..512] of TPoint;
+    cnt, delta: Longword;
+begin
+fx:= Left + integer(GetRandom(Right - Left));
+x:= fx;
+delta:= 130;
 repeat
-  x:= getrandom(2000) + 24;
-  b:= false;
-  y:= -1;
-  while (y < 1023) and not b do
+  repeat
+     inc(x, Gear.Radius);
+     if x > Right then x:= Left + (x mod (Right - left));
+     cnt:= 0;
+     y:= -Gear.Radius * 2;
+     while y < 1023 do
         begin
-        inc(y);
-        i:= x - 13;
-        while (i <= x + 13) and not b do // 13 is gtCase Radius-1
-              begin
-              if Land[y, i] <> 0 then
-                 begin
-                 b:= true;
-                 end;
-              inc(i)
-              end;
+        repeat
+          inc(y, 2);
+        until (y > 1023) or (CountNonZeroz(x, y, Gear.Radius - 1) = 0);
+        sy:= y;
+        repeat
+          inc(y);
+        until (y > 1023) or (CountNonZeroz(x, y, Gear.Radius - 1) <> 0);
+        if (y - sy > Gear.Radius * 2)
+        and (y < 1023)
+        and (CheckGearsNear(x, y - Gear.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
+           begin
+           ar[cnt].X:= x;
+           if withFall then ar[cnt].Y:= sy + Gear.Radius
+                       else ar[cnt].Y:= y - Gear.Radius;
+           inc(cnt)
+           end;
+        inc(y, 80)
         end;
-  if b then
-     b:= CheckGearsNear(x, y, [gtMine, gtHedgehog, gtCase], 70, 70) = nil;
-  dec(k)
-until (k = 0) or b;
-if b then
-   begin
-   FollowGear:= AddGear(x, -30, gtCase, 0);
-   FollowGear.Health:= 25;
-   FollowGear.Pos:= posCaseHealth
-   end;
+     if cnt > 0 then
+        with ar[GetRandom(cnt)] do
+          begin
+          Gear.X:= x;
+          Gear.Y:= y;
+         {$IFDEF DEBUGFILE}
+         AddFileLog('Assigned Gear ' + inttostr(integer(Gear)) +
+                    ' coordinates (' + inttostr(x) +
+                    ',' + inttostr(y) + ')');
+         {$ENDIF}
+          exit
+          end
+  until (x - Gear.Radius < fx) and (x + Gear.Radius > fx);
+dec(Delta, 20)
+until (Delta < 70);
+OutError('Couldn''t find place for Gear ' + inttostr(integer(Gear)), false);
+DeleteGear(Gear)
 end;
 
 initialization

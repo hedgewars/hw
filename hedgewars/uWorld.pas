@@ -318,8 +318,8 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x + (round(FollowGear.X + Sign(FollowGear.dX) * 100) + WorldDx)) div 2;
-      CursorPoint.y:= (CursorPoint.y + (round(FollowGear.Y) + WorldDy)) div 2
+      CursorPoint.x:= (CursorPoint.x * 3 + (round(FollowGear.X + Sign(FollowGear.dX) * 100) + WorldDx)) div 4;
+      CursorPoint.y:= (CursorPoint.y * 3 + (round(FollowGear.Y) + WorldDy)) div 4
       end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
@@ -360,8 +360,8 @@ if isCursorVisible or (FollowGear <> nil) then
          end;
    end else
    begin
-      WorldDx:= WorldDx - CursorPoint.X + (cScreenWidth  shr 1);
-      WorldDy:= WorldDy - CursorPoint.Y + (cScreenHeight shr 1);
+      WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
+      WorldDy:= WorldDy - CursorPoint.Y + prevPoint.Y;
       CursorPoint.X:= (cScreenWidth  shr 1);
       CursorPoint.Y:= (cScreenHeight shr 1);
    end;

@@ -68,7 +68,6 @@ procedure OnDestroy; forward;
 
 ////////////////////////////////
 procedure DoTimer(Lag: integer);  // - обработка таймера
-const cCons: boolean = false;
 var s: string;
 begin
 case GameState of

@@ -269,7 +269,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
         begin
         Ammo[CurSlot, CurAmmo].Timer:= 1000 * (byte(s[1]) - 48);
         with CurrentTeam^ do
-             ApplyAmmoChanges(@Hedgehogs[CurrHedgehog]);
+             ApplyAmmoChanges(Hedgehogs[CurrHedgehog]);
         if not CurrentTeam.ExtDriven then SendIPC(s);
         end
 end;
@@ -302,7 +302,7 @@ with CurrentTeam^ do
                 end;
           TargetPoint.X:= NoPointX;
           end;
-     ApplyAmmoChanges(@Hedgehogs[CurrHedgehog])
+     ApplyAmmoChanges(Hedgehogs[CurrHedgehog])
      end
 end;
 

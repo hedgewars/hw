@@ -64,7 +64,6 @@ var isCursorVisible : boolean = false;
 
     cSkyColor     : Cardinal = 0;
     cWaterColor   : Cardinal = $005ACE;
-    cMapBackColor : Cardinal = $FFFFFF;
     cWhiteColor   : Cardinal = $FFFFFF;
     cConsoleSplitterColor : Cardinal = $FF0000;
     cColorNearBlack       : Cardinal = 16;
@@ -149,7 +148,7 @@ end;
 
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 begin
-if not Assert then OutError(msg, isFatal)
+if not Assert then OutError(Msg, isFatal)
 end;
 
 procedure SDLTry(Assert: boolean; isFatal: boolean);

@@ -6,10 +6,9 @@ const MAXACTIONS = 256;
       aia_Left       = 1;
       aia_Right      = 2;
       aia_Timer      = 3;
-      aia_Slot       = 4;
-      aia_attack     = 5;
-      aia_Up         = 6;
-      aia_Down       = 7;
+      aia_attack     = 4;
+      aia_Up         = 5;
+      aia_Down       = 6;
 
       aia_Weapon     = $80000000;
       aia_WaitX      = $80000001;
@@ -37,12 +36,11 @@ procedure ProcessAction(var Actions: TActions; Me: PGear);
 implementation
 uses uMisc, uTeams, uConsts, uConsole;
 
-const ActionIdToStr: array[0..7] of string[16] = (
+const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',
 {aia_Right}          'right',
 {aia_Timer}          'timer',
-{aia_slot}           'slot',
 {aia_attack}         'attack',
 {aia_Up}             'up',
 {aia_Down}           'down'
@@ -65,7 +63,7 @@ procedure SetWeapon(weap: Longword);
 begin
 with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
-          while Ammo[CurSlot, CurAmmo].AmmoType <> TAmmotype(weap) do
+          while Ammo[CurSlot, CurAmmo].AmmoType <> TAmmoType(weap) do
                 ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
 end;
 

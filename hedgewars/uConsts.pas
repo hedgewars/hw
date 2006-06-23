@@ -71,7 +71,6 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
 resourcestring
       errmsgCreateSurface   = 'Error creating SDL surface';
-      errmsgNoDesc          = 'Unknown error';
       errmsgTransparentSet  = 'Error setting transparent color';
       errmsgUnknownCommand  = 'Unknown command';
       errmsgUnknownVariable = 'Unknown variable';
@@ -103,11 +102,12 @@ const
       cMaxHHs          = 20;
       cMaxSpawnPoints  = 1024;
       cHHSurfaceWidth     = 512;
-      cHHSurfaceHeigth    = 256;
+     // cHHSurfaceHeigth    = 256;
 
       cMaxEdgePoints = 16384;
 
       cHHRadius = 9;
+      cHHStepTicks = 38;
 
       cKeyMaxIndex = 322;
 
@@ -166,11 +166,8 @@ const
       posCaseAmmo    = $00000001;
       posCaseHealth  = $00000002;
 
-      cToggleConsoleKey     = 39;
-
       NoPointX = Low(Integer); // константа для TargetPoint, показывает, что цель не указана
 
-      cLandFileName = 'Land.bmp';
       cHHFileName   = 'Hedgehog.png';
       cCHFileName   = 'Crosshair.png';
       cThemeCFGFilename = 'theme.cfg';
@@ -350,16 +347,6 @@ const
                                            AmmoType: amDynamite);
                                     Slot: 3;
                                     TimeAfterTurn: 5000));
-
-
-
-
-      Resolutions: array[0..3] of String = (
-                                           '640 480',
-                                           '800 600',
-                                           '1024 768',
-                                           '1280 1024'
-                                           );
 
 implementation
 

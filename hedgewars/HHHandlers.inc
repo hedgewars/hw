@@ -124,10 +124,9 @@ procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
-      cStepTicks = 38;
 var t: PGear;
 begin
-if isinMultiShoot and (Gear.Damage = 0) then
+if isInMultiShoot and (Gear.Damage = 0) then
    begin
    exit
    end;
@@ -142,7 +141,7 @@ if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
       Gear.State:= Gear.State and not gstHHJumping;
    exit
    end;
-if ((Gear.State and gstFalling) <> 0) or (StepTicks = cStepTicks)
+if ((Gear.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
    or (CurAmmoGear <> nil) then // we're moving
    begin
    // check for case with ammo
@@ -251,7 +250,7 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
    PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
-   StepTicks:= cStepTicks;
+   StepTicks:= cHHStepTicks;
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, 0, -6, Sign(Gear.dX))

@@ -77,7 +77,7 @@ begin
 if not isSoundEnabled then exit;
 for i:= Low(TSound) to High(TSound) do
     begin
-    s:= Pathz[ptSounds] + '/' + Soundz[i].FileName;
+    s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
     WriteToConsole(msgLoading + s + ' ');
     Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(PChar(s), 'rb'), 1);
     TryDo(Soundz[i].id <> nil, msgFailed, true);

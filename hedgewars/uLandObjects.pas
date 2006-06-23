@@ -36,24 +36,38 @@ interface
 uses SDLh;
 {$include options.inc}
 
-procedure AddObjects(Surface: PSDL_Surface);
+procedure AddObjects(InSurface, Surface: PSDL_Surface);
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom;
 const MaxRects = 256;
       MAXOBJECTRECTS = 16;
-type  PRectArray = ^TRectsArray;
-      TRectsArray = array[0..MaxRects] of TSDL_rect;
+      MAXTHEMEOBJECTS = 32;
 
-type TThemeObject = record
+type PRectArray = ^TRectsArray;
+     TRectsArray = array[0..MaxRects] of TSDL_Rect;
+     TThemeObject = record
                     Surf: PSDL_Surface;
                     inland: TSDL_Rect;
-                    outland: array[1..MAXOBJECTRECTS] of TSDL_Rect;
+                    outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                     rectcnt: Longword;
                     Width, Height: Longword;
                     Maxcnt: Longword;
                     end;
+     TThemeObjects = record
+                     Count: integer;
+                     objs: array[0..Pred(MAXTHEMEOBJECTS)] of TThemeObject;
+                     end;
+     TSprayObject = record
+                    Surf: PSDL_Surface;
+                    Width, Height: Longword;
+                    Maxcnt: Longword;
+                    end;
+     TSprayObjects = record
+                     Count: integer;
+                     objs: array[0..Pred(MAXTHEMEOBJECTS)] of TSprayObject
+                     end;
 
 var Rects: PRectArray;
     RectCount: Longword;
@@ -81,7 +95,7 @@ case bpp of
             begin
             i:= Longword(@Land[cpY + y, cpX]);
             for x:= 0 to Pred(Image.w) do
-                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(p, Image.pitch);
             end;
      3: for y:= 0 to Pred(Image.h) do
@@ -90,14 +104,14 @@ case bpp of
             for x:= 0 to Pred(Image.w) do
                 if  (PByte(p + x * 3 + 0)^ <> 0)
                  or (PByte(p + x * 3 + 1)^ <> 0)
-                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= $FFFFFF;
+                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(p, Image.pitch);
             end;
      4: for y:= 0 to Pred(Image.h) do
             begin
             i:= Longword(@Land[cpY + y, cpX]);
             for x:= 0 to Pred(Image.w) do
-                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= $FFFFFF;
+                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
             inc(p, Image.pitch);
             end;
      end;
@@ -247,7 +261,7 @@ with Obj do
         Result:= false
 end;
 
-function TryPut(var Obj: TThemeObject; Surface: PSDL_Surface): boolean;
+function TryPut(var Obj: TThemeObject; Surface: PSDL_Surface): boolean; overload;
 const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
@@ -291,25 +305,76 @@ with Obj do
      end
 end;
 
-procedure AddThemeObjects(Surface: PSDL_Surface; MaxCount: Longword);
-const MAXTHEMEOBJECTS = 32;
-var f: textfile;
-    s: string;
-    ThemeObjects: array[1..MAXTHEMEOBJECTS] of TThemeObject;
-    i, ii, t, n: Longword;
-    b: boolean;
+function TryPut(var Obj: TSprayObject; Surface: PSDL_Surface): boolean; overload;
+const MaxPointsIndex = 8095;
+var x, y: Longword;
+    ar: array[0..MaxPointsIndex] of TPoint;
+    cnt, i: Longword;
+    r: TSDL_Rect;
+begin
+cnt:= 0;
+with Obj do
+     begin
+     if Maxcnt = 0 then
+        begin
+        Result:= false;
+        exit
+        end;
+     x:= 0;
+     r.x:= 0;
+     r.y:= 0;
+     r.w:= Width;
+     r.h:= Height + 16;
+     repeat
+         y:= 8;
+         repeat
+             if CheckLand(r, x, y - 8, $FFFFFF)
+                and not CheckIntersect(x, y, Width, Height) then
+                begin
+                ar[cnt].x:= x;
+                ar[cnt].y:= y;
+                inc(cnt);
+                if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+                   begin
+                   y:= 5000;
+                   x:= 5000;
+                   end
+                end;
+             inc(y, 12);
+         until y > 1023 - Height - 8;
+         inc(x, getrandom(12) + 12)
+     until x > 2047 - Width;
+     Result:= cnt <> 0;
+     if Result then
+        begin
+        i:= getrandom(cnt);
+        r.x:= ar[i].X;
+        r.y:= ar[i].Y;
+        r.w:= Width;
+        r.h:= Height;
+        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+        AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
+        dec(Maxcnt)
+        end else Maxcnt:= 0
+     end
+end;
+
+procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
+var s: string;
+    f: textfile;
+    i, ii: integer;
 begin
 s:= Pathz[ptThemeCurrent] + '/' + cThemeCFGFilename;
-WriteLnToConsole('Adding objects...');
+WriteLnToConsole('Reading objects info...');
 AssignFile(f, s);
 {$I-}
 Reset(f);
 Readln(f, s); // skip color
-Readln(f, n);
-for i:= 1 to n do
+Readln(f, ThemeObjects.Count);
+for i:= 0 to Pred(ThemeObjects.Count) do
     begin
     Readln(f, s); // filename
-    with ThemeObjects[i] do
+    with ThemeObjects.objs[i] do
          begin
          Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s + '.png', false);
          Read(f, Width, Height);
@@ -317,37 +382,84 @@ for i:= 1 to n do
          Read(f, rectcnt);
          for ii:= 1 to rectcnt do
              with outland[ii] do Read(f, x, y, w, h);
-         Maxcnt:= 2;
+         Maxcnt:= 3;
          ReadLn(f)
+         end;
+    end;
+
+Readln(f, SprayObjects.Count);
+for i:= 0 to Pred(SprayObjects.Count) do
+    begin
+    Readln(f, s); // filename
+    with SprayObjects.objs[i] do
+         begin
+         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s + '.png', false);
+         Width:= Surf.w;
+         Height:= Surf.h;
+         ReadLn(f, Maxcnt)
          end;
     end;
 Closefile(f);
 {$I+}
-TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
+TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
+end;
 
-// loaded objects, try to put on land
-if n = 0 then exit;
+procedure AddThemeObjects(Surface: PSDL_Surface; var ThemeObjects: TThemeObjects; MaxCount: integer);
+var i, ii, t: integer;
+    b: boolean;
+begin
+if ThemeObjects.Count = 0 then exit;
+WriteLnToConsole('Adding theme objects...');
 i:= 1;
 repeat
-    t:= getrandom(n) + 1;
+    t:= getrandom(ThemeObjects.Count);
     ii:= t;
     repeat
       inc(ii);
-      if ii > n then ii:= 1;
-      b:= TryPut(ThemeObjects[ii], Surface)
+      if ii = ThemeObjects.Count then ii:= 0;
+      b:= TryPut(ThemeObjects.objs[ii], Surface)
     until b or (ii = t);
-inc(i)
-until (i > MaxCount) or not b
+    inc(i)
+until (i > MaxCount) or not b;
 end;
 
-procedure AddObjects(Surface: PSDL_Surface);
+procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects; MaxCount: Longword);
+var i: Longword;
+    ii, t: integer;
+    b: boolean;
+begin
+if SprayObjects.Count = 0 then exit;
+WriteLnToConsole('Adding spray objects...');
+i:= 1;
+repeat
+    t:= getrandom(SprayObjects.Count);
+    ii:= t;
+    repeat
+      inc(ii);
+      if ii = SprayObjects.Count then ii:= 0;
+      b:= TryPut(SprayObjects.objs[ii], Surface)
+    until b or (ii = t);
+    inc(i)
+until (i > MaxCount) or not b;
+end;
+
+procedure AddObjects(InSurface, Surface: PSDL_Surface);
+var ThemeObjects: TThemeObjects;
+    SprayObjects: TSprayObjects;
 begin
 InitRects;
+AddGirder(256, Surface);
 AddGirder(512, Surface);
+AddGirder(768, Surface);
 AddGirder(1024, Surface);
-AddGirder(1300, Surface);
+AddGirder(1280, Surface);
 AddGirder(1536, Surface);
-AddThemeObjects(Surface, 8);
+AddGirder(1792, Surface);
+ReadThemeInfo(ThemeObjects, SprayObjects);
+AddThemeObjects(Surface, ThemeObjects, 8);
+AddProgress;
+SDL_UpperBlit(InSurface, nil, Surface, nil);
+AddSprayObjects(Surface, SprayObjects, 10);
 FreeRects
 end;
 

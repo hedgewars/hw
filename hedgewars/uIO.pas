@@ -44,7 +44,6 @@ procedure IPCCheckSock;
 procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
-procedure LoadFortPoints(Fort: shortstring; isRight: boolean; Count: Longword);
 
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uRandom, uLand;
@@ -166,8 +165,11 @@ while (cmdcurpos <= cmdendpos)and(extcmd[cmdcurpos].cmd = 's') do
       end;
          
 if cmdcurpos <= cmdendpos then
-   if GameTicks > extcmd[cmdcurpos].Time then
-      outerror('oops, queue error. in buffer: '+extcmd[cmdcurpos].cmd+' ('+inttostr(GameTicks)+' > '+inttostr(extcmd[cmdcurpos].Time)+')', true);
+   TryDo(GameTicks <= extcmd[cmdcurpos].Time,
+         'oops, queue error. in buffer: ' + extcmd[cmdcurpos].cmd +
+         ' (' + inttostr(GameTicks) + ' > ' +
+         inttostr(extcmd[cmdcurpos].Time) + ')',
+         true);
 
 tmpflag:= true;
 while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
@@ -206,46 +208,6 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
    inc(cmdcurpos)
    end;
 isInLag:= (cmdcurpos > cmdendpos) and tmpflag
-end;
-
-procedure LoadFortPoints(Fort: shortstring; isRight: boolean; Count: Longword);
-const cMAXFORTPOINTS = 20;
-var f: textfile;
-    i, t: integer;
-    cnt: Longword;
-    ar: array[0..Pred(cMAXFORTPOINTS)] of TPoint;
-    p: TPoint;
-begin
-if isRight then Fort:= Pathz[ptForts] + '/' + Fort + 'R.txt'
-           else Fort:= Pathz[ptForts] + '/' + Fort + 'L.txt';
-WriteToConsole(msgLoading + Fort + ' ');
-{$I-}
-AssignFile(f, Fort);
-Reset(f);
-cnt:= 0;
-while not (eof(f) or (cnt = cMAXFORTPOINTS)) do
-      begin
-      Readln(f, ar[cnt].x, ar[cnt].y);
-      if isRight then inc(ar[cnt].x, 1024);
-      inc(cnt);
-      end;
-Closefile(f);
-{$I+}
-TryDo(IOResult = 0, msgFailed, true);
-WriteLnToConsole(msgOK);
-TryDo(Count < cnt, 'Fort doesn''t contain needed amount of spawn points', true);
-for i:= 0 to Pred(cnt) do
-    begin
-    t:= GetRandom(cnt);
-    if i <> t then
-       begin
-       p:= ar[i];
-       ar[i]:= ar[t];
-       ar[t]:= p
-       end
-    end;
-for i:= 0 to Pred(Count) do
-    AddHHPoint(ar[i].x, ar[i].y);
 end;
 
 end.

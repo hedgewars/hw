@@ -37,10 +37,7 @@ uses uGears;
 {$INCLUDE options.inc}
 const cMaxGearArrayInd = 255;
 
-type TDirection = record
-                  dX, dY: integer
-                  end;
-     PGearArray = ^TGearArray;
+type PGearArray = ^TGearArray;
      TGearArray = record
                   ar: array[0..cMaxGearArrayInd] of PGear;
                   Count: Longword

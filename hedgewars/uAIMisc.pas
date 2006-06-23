@@ -12,8 +12,8 @@ type TTarget = record
                 end;
 
 procedure FillTargets;
-procedure FillBonuses;
-function CheckBonuses(Gear: PGear): integer;
+procedure FillBonuses(isAfterAttack: boolean);
+function RatePlace(Gear: PGear): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
@@ -29,7 +29,7 @@ const KillScore = 200;
       
 type TBonus = record
               X, Y: integer;
-              Radius: Longword;
+              Radius: integer;
               Score: integer;
               end;
 var bonuses: record
@@ -62,8 +62,9 @@ while t <> nil do
       end
 end;
 
-procedure FillBonuses;
+procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
+    MyColor: Longword;
 
     procedure AddBonus(x, y: integer; r: Longword; s: integer);
     begin
@@ -77,27 +78,36 @@ var Gear: PGear;
 
 begin
 bonuses.Count:= 0;
+MyColor:= PHedgehog(ThinkingHH.Hedgehog).Team.Color;
 Gear:= GearsList;
 while Gear <> nil do
       begin
       case Gear.Kind of
-           gtCase: AddBonus(round(Gear.X), round(Gear.Y), 32, 25);
-           gtMine: AddBonus(round(Gear.X), round(Gear.Y), 45, -50);
-           gtAmmo_Bomb: AddBonus(round(Gear.X), round(Gear.Y), 50, -100);
-           gtHedgehog: if Gear.Damage >= Gear.Health then AddBonus(round(Gear.X), round(Gear.Y), 50, -25);
+           gtCase: AddBonus(round(Gear.X), round(Gear.Y), 33, 25);
+           gtMine: AddBonus(round(Gear.X), round(Gear.Y), 46, -50);
+           gtDynamite: AddBonus(round(Gear.X), round(Gear.Y), 150, -75);
+           gtHedgehog: begin
+                       if Gear.Damage >= Gear.Health then AddBonus(round(Gear.X), round(Gear.Y), 50, -25);
+                       if isAfterAttack
+                          and (ThinkingHH.Hedgehog <> Gear.Hedgehog)
+                          and (MyColor = PHedgehog(Gear.Hedgehog).Team.Color) then AddBonus(round(Gear.X), round(Gear.Y), 100, -1);
+                       end;
            end;
       Gear:= Gear.NextGear
       end
 end;
 
-function CheckBonuses(Gear: PGear): integer;
-var i: integer;
+function RatePlace(Gear: PGear): integer;
+var i, r: integer;
 begin
 Result:= 0;
 for i:= 0 to Pred(bonuses.Count) do
     with bonuses.ar[i] do
-         if sqrt(sqr(Gear.X - X) + sqr(Gear.Y - y)) <= Radius then
-            inc(Result, Score) 
+         begin
+         r:= round(sqrt(sqr(Gear.X - X) + sqr(Gear.Y - y)));
+         if r < Radius then
+            inc(Result, Score * (Radius - r))
+         end;
 end;
 
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
@@ -151,6 +161,7 @@ for i:= 0 to Targets.Count do
                             else dec(Result, dmg * 3)
             end;
          end;
+Result:= Result * 1024
 end;
 
 function HHGo(Gear: PGear): boolean;

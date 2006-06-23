@@ -150,7 +150,7 @@ var i: TStuff;
     begin
     r.x:= 0;
     r.y:= 272;
-    drY:= cSCreenHeight - 4;
+    drY:= cScreenHeight - 4;
     Team:= TeamsList;
     while Team<>nil do
       begin
@@ -319,7 +319,7 @@ for i:= Low(TStuff) to High(TStuff) do
 
 AddProgress;
 WriteNames(fnt16);
-MakeCrosshairs;
+MakeCrossHairs;
 LoadGraves;
 
 GetSkyColor;

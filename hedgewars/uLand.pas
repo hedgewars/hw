@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -33,16 +33,13 @@
 
 unit uLand;
 interface
-uses SDLh;
+uses SDLh, uGears;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
 
-procedure AddHHPoint(_x, _y: integer);
-procedure GetHHPoint(out _x, _y: integer);
-procedure RandomizeHHPoints;
 procedure GenMap;
 
 implementation
@@ -51,11 +48,6 @@ uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLa
 type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
-              end;
-
-var HHPoints: record
-              First, Last: word;
-              ar: array[1..Pred(cMaxSpawnPoints)] of TPoint
               end;
 
 procedure LogLandDigest;
@@ -333,56 +325,6 @@ for x:= 0 to 2047 do
     end;
 end;
 
-procedure AddHHPoints;
-var x, y, t: integer;
-
-    function CountNonZeroz(x, y: integer): integer;
-    var i: integer;
-    begin
-    Result:= 0;
-    if (y and $FFFFFC00) <> 0 then exit;
-    for i:= max(x - 5, 0) to min(x + 5, 2043) do
-        if Land[y, i] <> 0 then inc(Result)
-    end;
-
-begin
-x:= 40;
-while x < 2010 do
-    begin
-    y:= -24;
-    while y < 1023 do
-          begin
-          repeat
-          inc(y, 2);
-          until (y > 1023) or (CountNonZeroz(x, y) = 0);
-          t:= 0;
-          repeat
-          inc(y, 2);
-          inc(t, 2)
-          until (y > 1023) or (CountNonZeroz(x, y) <> 0);
-          if (t > 22) and (y < 1023) then AddHHPoint(x, y - 12);
-          inc(y, 80)
-          end;
-    inc(x, 100)
-    end;
-
-if HHPoints.Last < cMaxHHs then
-   begin
-   AddHHPoint(300, 800);
-   AddHHPoint(400, 800);
-   AddHHPoint(500, 800);
-   AddHHPoint(600, 800);
-   AddHHPoint(700, 800);
-   AddHHPoint(800, 800);
-   AddHHPoint(900, 800);
-   AddHHPoint(1000, 800);
-   AddHHPoint(1100, 800);
-   AddHHPoint(1200, 800);
-   AddHHPoint(1300, 800);
-   AddHHPoint(1400, 800);
-   end;
-end;
-
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
 const MAXPASSES = 32;
 var ar: array[0..MAXPASSES, 0..5] of real;
@@ -538,14 +480,11 @@ TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
 
-AddObjects(LandSurface);
-
 SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
-SDL_UpperBlit(tmpsurf, nil, LandSurface, nil);
+AddObjects(tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-AddProgress;
-AddHHPoints;
-RandomizeHHPoints;
+
+AddProgress
 end;
 
 procedure MakeFortsMap;
@@ -561,13 +500,11 @@ SDL_FillRect(LandSurface, nil, 0);
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'L.png', false);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-LoadFortPoints(p.FortName, false, TeamSize(p));
 p:= p.Next;
 TryDo(p <> nil, 'Only one team on map!', true);
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'R.png', false);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-LoadFortPoints(p.FortName, true, TeamSize(p));
 p:= p.Next;
 TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
 end;
@@ -613,9 +550,6 @@ case LandSurface.format.BytesPerPixel of
      end;
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
-
-AddHHPoints;
-RandomizeHHPoints;
 end;
 
 procedure GenMap;
@@ -628,55 +562,6 @@ AddProgress;
 {$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}
 end;
 
-procedure AddHHPoint(_x, _y: integer);
-begin
-with HHPoints do
-     begin
-     inc(Last);
-     TryDo(Last < cMaxSpawnPoints, 'HHs coords queue overflow', true);
-     with ar[Last] do
-          begin
-          x:= _x;
-          y:= _y
-          end
-     end
-end;
-
-procedure GetHHPoint(out _x, _y: integer);
-begin
-with HHPoints do
-     begin
-     TryDo(First <= Last, 'HHs coords queue underflow ' + inttostr(First), true);
-     with ar[First] do
-          begin
-          _x:= x;
-          _y:= y
-          end;
-     inc(First)
-     end
-end;
-
-procedure RandomizeHHPoints;
-var i, t: integer;
-    p: TPoint;
-begin
-with HHPoints do
-     begin
-     for i:= First to Last do
-         begin
-         t:= GetRandom(Last - First + 1) + First;
-         if i <> t then
-            begin
-            p:= ar[i];
-            ar[i]:= ar[t];
-            ar[t]:= p
-            end
-         end
-     end
-end;
-
 initialization
-
-HHPoints.First:= 1
 
 end.

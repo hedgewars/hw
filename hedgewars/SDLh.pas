@@ -84,8 +84,8 @@ type PSDL_Rect = ^TSDL_Rect;
                  end;
 
      TPoint = record
-              x: Integer;
-              y: Integer;
+              X: Integer;
+              Y: Integer;
               end;
 
      PSDL_PixelFormat = ^TSDL_PixelFormat;
