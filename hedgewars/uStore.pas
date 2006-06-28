@@ -462,7 +462,7 @@ end;
 procedure AddProgress;
 const Step: Longword = 0;
       ProgrSurf: PSDL_Surface = nil;
-      MaxCalls = 10; // MaxCalls should be the count of calls to AddProgress to prevent memory leakage
+      MaxCalls = 11; // MaxCalls should be the count of calls to AddProgress to prevent memory leakage
 var r: TSDL_Rect;
 begin
 if Step = 0 then
@@ -476,7 +476,7 @@ SDL_FillRect(SDLPrimSurface, nil, 0);
 r.x:= 0;
 r.w:= 32;
 r.h:= 32;
-r.y:= Step * 32;
+r.y:= (Step mod 10) * 32;
 DrawFromRect(cScreenWidth div 2 - 16, cScreenHeight div 2 - 16, @r, ProgrSurf, SDLPrimSurface);
 SDL_Flip(SDLPrimSurface);
 inc(Step);

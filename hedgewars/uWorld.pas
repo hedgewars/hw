@@ -318,8 +318,8 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x * 3 + (round(FollowGear.X + Sign(FollowGear.dX) * 100) + WorldDx)) div 4;
-      CursorPoint.y:= (CursorPoint.y * 3 + (round(FollowGear.Y) + WorldDy)) div 4
+      CursorPoint.x:= (CursorPoint.x * 7 + (round(FollowGear.X + Sign(FollowGear.dX) * 100) + WorldDx)) div 8;
+      CursorPoint.y:= (CursorPoint.y * 7 + (round(FollowGear.Y) + WorldDy)) div 8
       end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;

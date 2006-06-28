@@ -53,7 +53,7 @@ end;
 
 procedure CheckHHDamage(Gear: PGear);
 begin
-if Gear.dY > 0.35 then Gear.Damage:= Gear.Damage + round(75 * (abs(Gear.dY) - 0.35));
+if Gear.dY > 0.40 then Gear.Damage:= Gear.Damage + 1 + round(70 * (abs(Gear.dY) - 0.40));
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

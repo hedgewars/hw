@@ -192,7 +192,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('HedgeWars 0.1 alpha');
+WriteLnToConsole('HedgeWars 0.2');
 WriteLnToConsole('  -= by unC0Rr =-  ');
 GetParams;
 Randomize;

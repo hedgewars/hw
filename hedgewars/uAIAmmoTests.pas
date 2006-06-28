@@ -1,12 +1,45 @@
+(*
+ * Hedgewars, a worms-like game
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * Distributed under the terms of the BSD-modified licence:
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * with the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ * 3. The name of the author may not be used to endorse or promote products
+ *    derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+ * EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *)
+
 unit uAIAmmoTests;
 interface
 uses SDLh, uGears, uConsts;
 
-function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
-function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
-function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 
-type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
+type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
 {amGrenade}       TestGrenade,
@@ -30,10 +63,10 @@ begin
 Result:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
-function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, r: real;
     rTime: real;
-    Score: integer;
+    Score, EX, EY: integer;
 
     function CheckTrace: integer;
     var x, y, dX, dY: real;
@@ -51,6 +84,8 @@ var Vx, Vy, r: real;
       dY:= dY + cGravity;
       dec(t)
     until TestColl(round(x), round(y), 5) or (t <= 0);
+    EX:= round(x);
+    EY:= round(y);
     Result:= RateExplosion(Me, round(x), round(y), 101);
     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64
     end;
@@ -58,6 +93,7 @@ var Vx, Vy, r: real;
 begin
 Time:= 0;
 rTime:= 10;
+ExplR:= 0;
 Result:= BadTurn;
 repeat
   rTime:= rTime + 100 + random*250;
@@ -72,16 +108,19 @@ repeat
         r:= sqrt(r);
         Angle:= DxDy2AttackAngle(Vx, Vy);
         Power:= round(r * cMaxPower);
+        ExplR:= 50;
+        ExplX:= EX;
+        ExplY:= EY;
         Result:= Score
         end;
      end
 until (rTime >= 5000)
 end;
 
-function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
+function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const tDelta = 24;
 var Vx, Vy, r: real;
-    Score: integer;
+    Score, EX, EY: integer;
     TestTime: Longword;
 
     function CheckTrace: integer;
@@ -98,6 +137,8 @@ var Vx, Vy, r: real;
       dY:= dY + cGravity;
       dec(t)
     until TestColl(round(x), round(y), 5) or (t = 0);
+    EX:= round(x);
+    EY:= round(y);
     if t < 50 then Result:= RateExplosion(Me, round(x), round(y), 101)
               else Result:= Low(integer)
     end;
@@ -105,6 +146,7 @@ var Vx, Vy, r: real;
 begin
 Result:= BadTurn;
 TestTime:= 0;
+ExplR:= 0;
 repeat
   inc(TestTime, 1000);
   Vx:= (Targ.X - Me.X) / (TestTime + tDelta);
@@ -119,13 +161,16 @@ repeat
         Angle:= DxDy2AttackAngle(Vx, Vy);
         Power:= round(r * cMaxPower);
         Time:= TestTime;
+        ExplR:= 50;
+        ExplX:= EX;
+        ExplY:= EY;
         Result:= Score
         end;
      end
 until (TestTime = 5000)
 end;
 
-function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer): integer;
+function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, x, y: real;
 begin
 if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
@@ -135,6 +180,7 @@ if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
    end;
 Time:= 0;
 Power:= 1;
+ExplR:= 0;
 Vx:= (Targ.X - Me.X)/1024;
 Vy:= (Targ.Y - Me.Y)/1024;
 x:= Me.X;

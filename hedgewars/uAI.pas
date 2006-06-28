@@ -58,7 +58,7 @@ end;
 
 procedure TestAmmos(var Actions: TActions; Me: PGear);
 var Time: Longword;
-    Angle, Power, Score: integer;
+    Angle, Power, Score, ExplX, ExplY, ExplR: integer;
     i: integer;
     a, aa: TAmmoType;
 begin
@@ -73,7 +73,7 @@ for i:= 0 to Pred(Targets.Count) do
        repeat
         if Assigned(AmmoTests[a]) then
            begin
-           Score:= AmmoTests[a](Me, Targets.ar[i].Point, Time, Angle, Power);
+           Score:= AmmoTests[a](Me, Targets.ar[i].Point, Time, Angle, Power, ExplX, ExplY, ExplR);
            if Actions.Score + Score + Targets.ar[i].Score > BestActions.Score then
               begin
               BestActions:= Actions;
@@ -94,6 +94,8 @@ for i:= 0 to Pred(Targets.Count) do
                  end;
               AddAction(BestActions, aia_attack, aim_push, 800);
               AddAction(BestActions, aia_attack, aim_release, Power);
+              if ExplR > 0 then
+                 AddAction(BestActions, aia_AwareExpl, ExplR, 10, ExplX, ExplY);
               end
            end;
         if a = High(TAmmoType) then a:= Low(TAmmoType)
