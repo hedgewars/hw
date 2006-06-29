@@ -96,6 +96,7 @@ case s[1] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;
                'N': GameType:= gmtNet;
+               'S': GameType:= gmtSave;
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
      inc(cmdendpos);

@@ -38,7 +38,7 @@ uses SDLh;
 type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sWindL, sWindR, sRopeNode);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
-     TGameType  = (gmtLocal, gmtDemo, gmtNet);
+     TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave);
      TPathType  = (ptData, ptGraphics, ptThemes, ptThemeCurrent, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts);
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,

@@ -39,6 +39,7 @@ var isCursorVisible : boolean = false;
     isTerminated    : boolean = false;
     isInLag         : boolean = false;
     isSoundEnabled  : boolean = true;
+    isSEBackup      : boolean = true;
     isInMultiShoot  : boolean = false;
 
     GameState     : TGameState = Low(TGameState);

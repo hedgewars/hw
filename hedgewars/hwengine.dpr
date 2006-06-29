@@ -86,6 +86,11 @@ case GameState of
               ResetKbd;
               SoundLoad;
               PlayMusic;
+              if GameType = gmtSave then
+                 begin
+                 isSEBackup:= isSoundEnabled;
+                 isSoundEnabled:= false
+                 end;
               GameState:= gsGame
               end;
      gsGame : begin

@@ -79,6 +79,7 @@ procedure InitTeams;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
+procedure RestoreTeamsFromSave;
 
 implementation
 uses uMisc, uStore, uWorld, uIO, uAI;
@@ -309,6 +310,17 @@ with team^ do
         end else TeamHealth:= (TeamHealth * cTeamHealthWidth) div MaxTeamHealth
      end;
 AddGear(0, 0, gtTeamHealthSorter, 0)
+end;
+
+procedure RestoreTeamsFromSave;
+var p: PTeam;
+begin
+p:= TeamsList;
+while p <> nil do
+      begin
+      p.ExtDriven:= false;
+      p:= p.Next
+      end;
 end;
 
 initialization

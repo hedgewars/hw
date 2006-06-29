@@ -49,7 +49,7 @@ end;
 procedure chAddTeam(var s: shortstring);
 begin
 if isDeveloperMode then AddTeam;
-if GameType = gmtDemo then CurrentTeam.ExtDriven:= true
+if GameType in [gmtDemo, gmtSave] then CurrentTeam.ExtDriven:= true
 end;
 
 procedure chTeamLocal(var s: shortstring);

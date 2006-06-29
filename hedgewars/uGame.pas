@@ -41,7 +41,7 @@ procedure DoGameTick(Lag: integer);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears;
+uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears, uConsole;
 
 procedure DoGameTick(Lag: integer);
 const SendEmptyPacketTicks: LongWord = 0;
@@ -63,7 +63,8 @@ if CurrentTeam.ExtDriven then
    inc(SendEmptyPacketTicks, Lag)
    end;
 
-if Lag > 100 then Lag:= 100;
+if Lag > 100 then Lag:= 100
+else if GameType = gmtSave then Lag:= 1000;
 
 for i:= 1 to Lag do
     if not CurrentTeam.ExtDriven then
@@ -78,10 +79,15 @@ for i:= 1 to Lag do
           case GameType of
                gmtNet: break;
                gmtDemo: begin
-                        SendIPC('q');
+                        ParseCommand('/quit');
                         GameState:= gsExit;
                         exit
-                        end
+                        end;
+               gmtSave: begin
+                        RestoreTeamsFromSave;
+                        isSoundEnabled:= isSEBackup;
+                        GameType:= gmtLocal
+                        end;
                end
           else ProcessGears
        end;
