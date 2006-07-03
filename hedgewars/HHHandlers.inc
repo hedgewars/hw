@@ -308,6 +308,7 @@ procedure doStepHedgehogFree(Gear: PGear);
 begin
 //DeleteCI(Gear);
 if not TestCollisionYwithGear(Gear, 1) then
+   if TestCollisionYwithXYShift(Gear, 0, 1, 1) then Gear.Y:= Gear.Y + 1 else
    begin
    if (Gear.dY < 0) and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
    Gear.State:= Gear.State or gstFalling or gstMoving;
@@ -327,12 +328,12 @@ if (Gear.State and gstMoving) <> 0 then
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       if ((Gear.State and gstFalling) = 0) then
          if abs(Gear.dX) > 0.01 then
-            if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.90; Gear.Y:= Gear.Y - 1 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.88; Gear.Y:= Gear.Y - 2 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -3, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.84; Gear.Y:= Gear.Y - 3 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -4, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.81; Gear.Y:= Gear.Y - 4 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -5, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.78; Gear.Y:= Gear.Y - 5 end else
-            if abs(Gear.dX) > 0.02 then Gear.dX:= -0.5 * Gear.dX
+            if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.99; Gear.Y:= Gear.Y - 1 end else
+            if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.98; Gear.Y:= Gear.Y - 2 end else
+            if not TestCollisionXwithXYShift(Gear, 0, -3, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.97; Gear.Y:= Gear.Y - 3 end else
+            if not TestCollisionXwithXYShift(Gear, 0, -4, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.96; Gear.Y:= Gear.Y - 4 end else
+            if not TestCollisionXwithXYShift(Gear, 0, -5, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.95; Gear.Y:= Gear.Y - 5 end else
+            if abs(Gear.dX) > 0.02 then Gear.dX:= -0.3 * Gear.dX
                                    else begin
                                         Gear.State:= Gear.State and not gstMoving;
                                         Gear.dX:= 0.0000001 * Sign(Gear.dX)
@@ -349,7 +350,7 @@ if ((Gear.State and gstFalling) = 0)and
    Gear.State:= Gear.State and not gstMoving;
    Gear.dX:= 0.0000001 * Sign(Gear.dX);
    Gear.dY:= 0
-   end else Gear.State:= Gear.State or      gstMoving;
+   end else Gear.State:= Gear.State or gstMoving;
 
 if (Gear.State and gstMoving) <> 0 then
    begin
