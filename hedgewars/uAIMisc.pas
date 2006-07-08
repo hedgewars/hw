@@ -90,8 +90,8 @@ while t <> nil do
                   begin
                   Point.X:= Round(Gear.X);
                   Point.Y:= Round(Gear.Y);
-                  if t <> CurrentTeam then Score:=  Gear.Health
-                                      else Score:= -Gear.Health
+                  if t.Color <> CurrentTeam.Color then Score:=  Gear.Health
+                                                  else Score:= -Gear.Health
                   end;
              inc(Targets.Count)
              end;
@@ -121,23 +121,21 @@ while Gear <> nil do
       begin
       case Gear.Kind of
            gtCase: AddBonus(round(Gear.X), round(Gear.Y), 33, 25);
-           gtMine: AddBonus(round(Gear.X), round(Gear.Y), 46, -50);
+           gtMine: if (Gear.State and gstAttacking) = 0 then AddBonus(round(Gear.X), round(Gear.Y), 50, -50)
+                                                        else AddBonus(round(Gear.X), round(Gear.Y), 100, -50); // mine is on
            gtDynamite: AddBonus(round(Gear.X), round(Gear.Y), 150, -75);
            gtHedgehog: begin
-                       if Gear.Damage >= Gear.Health then AddBonus(round(Gear.X), round(Gear.Y), 50, -25);
-                       if isAfterAttack
-                          and (ThinkingHH.Hedgehog <> Gear.Hedgehog)
-                          and (MyColor = PHedgehog(Gear.Hedgehog).Team.Color) then AddBonus(round(Gear.X), round(Gear.Y), 100, -1);
+                       if Gear.Damage >= Gear.Health then AddBonus(round(Gear.X), round(Gear.Y), 60, -25) else
+                          if isAfterAttack and (ThinkingHH.Hedgehog <> Gear.Hedgehog) then
+                             if (MyColor = PHedgehog(Gear.Hedgehog).Team.Color) then AddBonus(round(Gear.X), round(Gear.Y), 150, -3) // hedgehog-friend
+                                                                                else AddBonus(round(Gear.X), round(Gear.Y), 100, 3)
                        end;
            end;
       Gear:= Gear.NextGear
       end;
 if isAfterAttack and (KnownExplosion.Radius > 0) then
    with KnownExplosion do
-        begin
-        AddBonus(X, Y, Radius, -Radius);
-        Radius:= 0
-        end
+        AddBonus(X, Y, Radius + 10, -Radius);
 end;
 
 procedure AwareOfExplosion(x, y, r: integer);

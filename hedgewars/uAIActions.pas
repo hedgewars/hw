@@ -34,7 +34,7 @@
 unit uAIActions;
 interface
 uses uGears;
-const MAXACTIONS = 256;
+const MAXACTIONS = 32;
       aia_none       = 0;
       aia_Left       = 1;
       aia_Right      = 2;

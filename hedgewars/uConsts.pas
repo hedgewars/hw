@@ -44,7 +44,7 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-                   sprMineOn, sprCase, sprFAid, sprDynamite);
+                   sprMineOn, sprCase, sprFAid, sprDynamite, sprPower);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
@@ -86,6 +86,8 @@ const
       cNetProtoVersion = 1;
 
       rndfillstr = 'hw';
+
+      MAXNAMELEN = 32;
 
       COLOR_LAND = $00FFFFFF;
 
@@ -168,15 +170,15 @@ const
 
       NoPointX = Low(Integer); // константа для TargetPoint, показывает, что цель не указана
 
-      cHHFileName   = 'Hedgehog.png';
-      cCHFileName   = 'Crosshair.png';
+      cHHFileName   = 'Hedgehog';
+      cCHFileName   = 'Crosshair';
       cThemeCFGFilename = 'theme.cfg';
 
       Fontz: array[THWFont] of THHFont = (
                                          (Height: 12;
-                                          Name: 'UN1251N.TTF'),
+                                          Name: 'DejaVuSans.ttf'),
                                          (Height: 24;
-                                          Name: 'UN1251N.TTF')
+                                          Name: 'DejaVuSans.ttf')
                                          );
 
       Pathz: array[TPathType] of string[ 64] = (
@@ -198,15 +200,15 @@ const
                                      FileName: String[31];
                                      Path    : TPathType;
                                      end = (
-                                     (FileName: 'horizont.png'; Path: ptThemeCurrent ),    // sHorizont
-                                     (FileName:      'Sky.png'; Path: ptThemeCurrent ),    // sSky
-                                     (FileName:  'Console.png'; Path: ptGraphics     ),    // sConsoleBG
-                                     (FileName: 'PowerBar.png'; Path: ptGraphics     ),    // sPowerBar
-                                     (FileName: 'thinking.png'; Path: ptGraphics     ),    // sQuestion
-                                     (FileName:  'WindBar.png'; Path: ptGraphics     ),    // sWindBar
-                                     (FileName:    'WindL.png'; Path: ptGraphics     ),    // sWindL
-                                     (FileName:    'WindR.png'; Path: ptGraphics     ),    // sWindR
-                                     (FileName: 'RopeNode.png'; Path: ptGraphics     )     // sRopeNode
+                                     (FileName: 'horizont'; Path: ptThemeCurrent ),    // sHorizont
+                                     (FileName:      'Sky'; Path: ptThemeCurrent ),    // sSky
+                                     (FileName:  'Console'; Path: ptGraphics     ),    // sConsoleBG
+                                     (FileName: 'PowerBar'; Path: ptGraphics     ),    // sPowerBar
+                                     (FileName: 'thinking'; Path: ptGraphics     ),    // sQuestion
+                                     (FileName:  'WindBar'; Path: ptGraphics     ),    // sWindBar
+                                     (FileName:    'WindL'; Path: ptGraphics     ),    // sWindL
+                                     (FileName:    'WindR'; Path: ptGraphics     ),    // sWindR
+                                     (FileName: 'RopeNode'; Path: ptGraphics     )     // sRopeNode
                                      );
       StuffPoz: array[TStuff] of TSDL_Rect = (
                                       (x:   0; y:   0; w: 512; h: 256), // sHorizont
@@ -226,24 +228,25 @@ const
                      Width, Height: integer;
                      hasAlpha: boolean;
                      end = (
-                     (FileName: 'BlueWater.png'; Path: ptGraphics; Width: 256; Height: 48; hasAlpha: false),// sprWater
-                     (FileName:    'Clouds.png'; Path: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
-                     (FileName:      'Bomb.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprBomb
-                     (FileName: 'BigDigits.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
-                     (FileName:     'Frame.png'; Path: ptGraphics; Width:   4; Height: 32; hasAlpha:  true),// sprFrame
-                     (FileName:       'Lag.png'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprLag
-                     (FileName:     'Arrow.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprCursor
-                     (FileName:   'Grenade.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprGrenade
-                     (FileName:   'Targetp.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprTargetP
-                     (FileName:       'UFO.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprUFO
-                     (FileName:'SmokeTrace.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
-                     (FileName:  'RopeHook.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
-                     (FileName:    'Expl50.png'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
-                     (FileName:   'MineOff.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
-                     (FileName:    'MineOn.png'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
-                     (FileName:      'Case.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
-                     (FileName:  'FirstAid.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprFAid
-                     (FileName:  'dynamite.png'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprDynamite
+                     (FileName: 'BlueWater'; Path: ptGraphics; Width: 256; Height: 48; hasAlpha: false),// sprWater
+                     (FileName:    'Clouds'; Path: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
+                     (FileName:      'Bomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprBomb
+                     (FileName: 'BigDigits'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
+                     (FileName:     'Frame'; Path: ptGraphics; Width:   4; Height: 32; hasAlpha:  true),// sprFrame
+                     (FileName:       'Lag'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprLag
+                     (FileName:     'Arrow'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprCursor
+                     (FileName:   'Grenade'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprGrenade
+                     (FileName:   'Targetp'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprTargetP
+                     (FileName:       'UFO'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprUFO
+                     (FileName:'SmokeTrace'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
+                     (FileName:  'RopeHook'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
+                     (FileName:    'Expl50'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
+                     (FileName:   'MineOff'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
+                     (FileName:    'MineOn'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
+                     (FileName:      'Case'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
+                     (FileName:  'FirstAid'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprFAid
+                     (FileName:  'dynamite'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprDynamite
+                     (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true) // sprPower
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];

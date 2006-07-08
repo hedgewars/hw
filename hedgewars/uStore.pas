@@ -65,11 +65,11 @@ var StoreSurface,
 
 procedure StoreInit;
 begin
-StoreSurface  := SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
+StoreSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
 SDL_FillRect(StoreSurface, nil, 0);
 
-TempSurface   := SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 320, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
+TempSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 900, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo(  TempSurface <> nil, errmsgCreateSurface + ': temp'  , true);
 
 TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
@@ -117,22 +117,22 @@ var w, h: integer;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
 begin
-TTF_SizeText(Fontz[Font].Handle, PChar(s), w, h);
+TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), w, h);
 Result.x:= X;
 Result.y:= Y;
 Result.w:= w + 6;
-Result.h:= h + 6;
+Result.h:= h + 2;
 DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface);
 SDL_GetRGB(Color, Surface.format, @clr.r, @clr.g, @clr.b);
-tmpsurf:= TTF_RenderText_Blended(Fontz[Font].Handle, PChar(s), clr);
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
-Result.y:= Y + 3;
+Result.y:= Y + 1;
 SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
 SDL_FreeSurface(tmpsurf);
 Result.x:= X;
 Result.y:= Y;
 Result.w:= w + 6;
-Result.h:= h + 6
+Result.h:= h + 2
 end;
 
 procedure StoreLoad;
@@ -190,10 +190,7 @@ var i: TStuff;
     r.w:= 16;
     r.h:= 16;
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
-    WriteToConsole(msgLoading + s + ' ');
-    tmpsurf:= IMG_Load(PChar(s));
-    TryDo(tmpsurf <> nil, msgFailed, true);
-    WriteLnToConsole(msgOK);
+    tmpsurf:= LoadImage(PChar(s), false);
     TransColor:= SDL_MapRGB(tmpsurf.format, $FF, $FF, $FF);
     TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, TransColor) = 0, errmsgTransparentSet, true);
 
@@ -239,7 +236,7 @@ var i: TStuff;
           begin
           dec(l, 32);
           if p.GraveName = '' then p.GraveName:= 'Simple';
-          LoadToSurface(Pathz[ptGraves] + '/' + p.GraveName + '.png', StoreSurface, l, 512);
+          LoadToSurface(Pathz[ptGraves] + '/' + p.GraveName, StoreSurface, l, 512);
           p.GraveRect.x:= l;
           p.GraveRect.y:= 512;
           p.GraveRect.w:= 32;
@@ -398,7 +395,7 @@ begin
 r.x:= X;
 r.y:= Y;
 SDL_GetRGB(cWhiteColor, PixelFormat, @clr.r, @clr.g, @clr.b);
-tmpsurf:= TTF_RenderText_Solid(Fontz[Font].Handle, PChar(s), clr);
+tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -491,7 +488,9 @@ function  LoadImage(filename: string; hasAlpha: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
-tmpsurf:= IMG_Load(PChar(filename));
+tmpsurf:= IMG_Load(PChar(filename + '.' + cBitsStr + '.png'));
+if tmpsurf = nil then
+   tmpsurf:= IMG_Load(PChar(filename + '.png'));
 TryDo(tmpsurf <> nil, msgFailed, true);
 TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 if cFullScreen then

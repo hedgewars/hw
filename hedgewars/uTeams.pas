@@ -39,7 +39,7 @@ type PHedgehog = ^THedgehog;
      PTeam     = ^TTeam;
      PHHAmmo   = ^THHAmmo;
      THedgehog = record
-                 Name: string[15];
+                 Name: string[MAXNAMELEN];
                  Gear: PGear;
                  NameRect, HealthRect, HealthTagRect: TSDL_Rect;
                  Ammo: PHHAmmo;
@@ -54,7 +54,7 @@ type PHedgehog = ^THedgehog;
      TTeam = record
              Next: PTeam;
              Color: Cardinal;
-             TeamName: string[15];
+             TeamName: string[MAXNAMELEN];
              ExtDriven: boolean;
              Aliases: array[0..cKeyMaxIndex] of shortstring;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
@@ -149,7 +149,7 @@ begin
 New(Result);
 TryDo(Result <> nil, 'AddTean: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
-Result.AttackBar:= 1;
+Result.AttackBar:= 2;
 if TeamsList = nil then TeamsList:= Result
                    else begin
                         Result.Next:= TeamsList;

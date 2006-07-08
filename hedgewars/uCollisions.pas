@@ -49,7 +49,7 @@ function CheckGearsCollision(Gear: PGear): PGearArray;
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionY(Gear: PGear; Dir: integer): boolean;
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: real; Dir: integer): boolean;
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 
 implementation
@@ -131,7 +131,7 @@ if (x and $FFFFF800) = 0 then
    end
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: real; Dir: integer): boolean;
 begin
 Gear.X:= Gear.X + ShiftX;
 Gear.Y:= Gear.Y + ShiftY;

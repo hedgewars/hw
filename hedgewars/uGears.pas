@@ -76,7 +76,7 @@ var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
 
 implementation
-uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics;
+uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics, uAIMisc;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
@@ -316,6 +316,7 @@ if AllInactive then
                  inc(step)
                  end;
         stNTurn: begin
+                 AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
                                    else ParseCommand('/nextturn');
                  step:= Low(step)
@@ -327,6 +328,7 @@ if TurnTimeLeft > 0 then
       if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil then
          if ((CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
+            
 inc(GameTicks);
 {$IFDEF COUNTTICKS}
 asm
@@ -518,7 +520,9 @@ end;
 procedure AddMiscGears;
 var i: integer;
 begin
-for i:= 0 to cCloudsNumber do AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -128, gtCloud, random(4), (0.5-random)*0.01);
+for i:= 0 to cCloudsNumber do
+    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
+             (0.5-random)*0.02, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random));
 AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do

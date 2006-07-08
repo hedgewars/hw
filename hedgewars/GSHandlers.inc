@@ -117,7 +117,10 @@ end;
 procedure doStepCloud(Gear: PGear);
 begin
 Gear.X:= Gear.X + cWindSpeed * 200 + Gear.dX;
-if Gear.X < -cScreenWidth-256 then Gear.X:= cScreenWidth + 2048 else
+if Gear.Y > -160 then Gear.dY:= Gear.dY - 0.00002
+                 else Gear.dY:= Gear.dY + 0.00002;
+Gear.Y:= Gear.Y + Gear.dY;
+if Gear.X < -cScreenWidth - 256 then Gear.X:= cScreenWidth + 2048 else
 if Gear.X > cScreenWidth + 2048 then Gear.X:= -cScreenWidth - 256
 end;
 

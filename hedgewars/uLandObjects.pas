@@ -200,7 +200,7 @@ until y > 900;
 if x1 > 0 then
    begin
    Result:= true;
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder.png', false);
+   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false);
    rr.x:= x1;
    rr.y:= y;
    while rr.x + 100 < x2 do
@@ -376,7 +376,7 @@ for i:= 0 to Pred(ThemeObjects.Count) do
     Readln(f, s); // filename
     with ThemeObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s + '.png', false);
+         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s, false);
          Read(f, Width, Height);
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);
@@ -393,7 +393,7 @@ for i:= 0 to Pred(SprayObjects.Count) do
     Readln(f, s); // filename
     with SprayObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s + '.png', false);
+         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s, false);
          Width:= Surf.w;
          Height:= Surf.h;
          ReadLn(f, Maxcnt)

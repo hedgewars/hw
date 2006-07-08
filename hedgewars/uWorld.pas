@@ -70,13 +70,20 @@ var cWaterSprCount: integer;
 procedure InitWorld;
 begin
 cLandYShift:= cWaterLine + 64;
-cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width)
+cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width);
+cScreenEdgesDist:= Min(cScreenWidth div 4, cScreenHeight div 4);
+SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
+prevPoint.X:= cScreenWidth div 2;
+prevPoint.Y:= cScreenHeight div 2;
+WorldDx:=  - 1024 + cScreenWidth div 2;
+WorldDy:=  - 512 + cScreenHeight div 2
 end;
 
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
+    tdx, tdy: real;
 begin
 // Sky
 inc(RealTicks, Lag);
@@ -178,6 +185,15 @@ if CurrentTeam <> nil then
            {$WARNINGS ON}
            DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
            end;
+        2: with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+                begin
+                tdx:= Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle);
+                tdy:= - Cos(Gear.Angle*pi/cMaxAngle);
+                for i:= (Gear.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower, round(Gear.X + WorldDx + tdx * (32 + i * 2)) - 16,
+                                         round(Gear.Y + WorldDy + tdy * (32 + i * 2)) - 12,
+                                         i, Surface)
+                end
         end;
 
 // Target

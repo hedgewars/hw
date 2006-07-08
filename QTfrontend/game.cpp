@@ -360,7 +360,7 @@ void HWGame::LocalCFG(const QString & teamname)
 		str = stream.readLine();
 		if (str.startsWith(";") || (str.length() > 254)) continue;
 		str.prepend("e");
-		SendIPC(str.toLocal8Bit());
+		SendIPC(str.toUtf8());
 	}
 	teamcfg.close();
 }

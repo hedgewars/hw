@@ -115,7 +115,7 @@ Actions.Count:= 0;
 Actions.Pos:= 0;
 BestActions.Count:= 0;
 if (Me.State and gstAttacked) = 0 then maxsteps:= (TurnTimeLeft - 4000) div cHHStepTicks
-                                  else maxsteps:= 3000;
+                                  else maxsteps:= TurnTimeLeft div cHHStepTicks;
 BackMe:= Me^;
 if (Me.State and gstAttacked) = 0 then TestAmmos(Actions, Me);
 BestRate:= RatePlace(Me);
@@ -135,7 +135,7 @@ for Dir:= aia_Left to aia_Right do
           begin
           BestActions:= Actions;
           BestRate:= Rate;
-          Me.State:= Me.State or gstAttacked // we have better place, go to it and don't use ammo
+          Me.State:= Me.State or gstAttacked // we have better place, go there and don't use ammo
           end
        else if Rate < BestRate then
                if BestRate > 0 then exit
@@ -149,20 +149,34 @@ for Dir:= aia_Left to aia_Right do
 end;
 
 procedure Think(Me: PGear); cdecl;
-var BackMe: TGear;
+var BackMe, WalkMe: TGear;
     StartTicks: Longword;
 begin
 StartTicks:= GameTicks;
+BestActions.Count:= 0;
+BestActions.Pos:= 0;
 BestActions.Score:= Low(integer);
-if Targets.Count > 0 then
-   begin
-   BackMe:= Me^;
-   Walk(@BackMe);
-   end;
-if ((Me.State and gstAttacked) = 0)
-    and (StartTicks > GameTicks - 1000) then SDL_Delay(1000);
-    
-if BestActions.Count > 0 then Me.State:= Me.State and not gstHHThinking;
+BackMe:= Me^;
+WalkMe:= BackMe;
+if (Me.State and gstAttacked) = 0 then
+   if Targets.Count > 0 then
+      begin
+      Walk(@WalkMe);
+      if (StartTicks > GameTicks - 1500) then SDL_Delay(2000);
+      end else OutError('AI: no targets!?')
+else begin
+      Walk(@WalkMe);
+      while (not StopThinking) and (BestActions.Count = 0) do
+            begin
+            SDL_Delay(100);
+            FillBonuses(true);
+            WalkMe:= BackMe;
+            Walk(@WalkMe)
+            end;
+      AwareOfExplosion(0, 0, 0)
+      end;
+
+Me.State:= Me.State and not gstHHThinking;
 ThinkThread:= nil
 end;
 

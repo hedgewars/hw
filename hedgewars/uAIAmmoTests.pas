@@ -108,7 +108,7 @@ repeat
         r:= sqrt(r);
         Angle:= DxDy2AttackAngle(Vx, Vy);
         Power:= round(r * cMaxPower);
-        ExplR:= 50;
+        ExplR:= 100;
         ExplX:= EX;
         ExplY:= EY;
         Result:= Score
@@ -161,7 +161,7 @@ repeat
         Angle:= DxDy2AttackAngle(Vx, Vy);
         Power:= round(r * cMaxPower);
         Time:= TestTime;
-        ExplR:= 50;
+        ExplR:= 100;
         ExplX:= EX;
         ExplY:= EY;
         Result:= Score

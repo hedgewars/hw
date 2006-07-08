@@ -174,7 +174,8 @@ if ParamCount=6 then
    begin
    val(ParamStr(1), cScreenWidth, c);
    val(ParamStr(2), cScreenHeight, c);
-   val(ParamStr(3), cBits, c);
+   cBitsStr:= ParamStr(3);
+   val(cBitsStr, cBits, c);
    val(ParamStr(4), ipcPort, c);
    cFullScreen:= ParamStr(5) = '1';
    isSoundEnabled:= ParamStr(6) = '1';
@@ -197,7 +198,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('HedgeWars 0.2');
+WriteLnToConsole('-= HedgeWars 0.2 =-');
 WriteLnToConsole('  -= by unC0Rr =-  ');
 GetParams;
 Randomize;

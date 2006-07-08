@@ -125,6 +125,7 @@ procedure doStepHedgehog(Gear: PGear); forward;
 procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
 var t: PGear;
+    PrevdX: integer;
 begin
 if isInMultiShoot and (Gear.Damage = 0) then
    begin
@@ -247,10 +248,12 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
          exit
          end;
       end;
+   PrevdX:= Sign(Gear.dX);
    if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
-   PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
    StepTicks:= cHHStepTicks;
+   if PrevdX <> Sign(Gear.dX) then exit;
+   PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, 0, -6, Sign(Gear.dX))
@@ -308,7 +311,6 @@ procedure doStepHedgehogFree(Gear: PGear);
 begin
 //DeleteCI(Gear);
 if not TestCollisionYwithGear(Gear, 1) then
-   if TestCollisionYwithXYShift(Gear, 0, 1, 1) then Gear.Y:= Gear.Y + 1 else
    begin
    if (Gear.dY < 0) and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
    Gear.State:= Gear.State or gstFalling or gstMoving;
@@ -318,7 +320,7 @@ if not TestCollisionYwithGear(Gear, 1) then
    if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
       and ((Gear.State and gstHHJumping) <> 0) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
    Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
-   if Gear.dY > 0    then Gear.dY:= 0;
+   if Gear.dY > 0 then Gear.dY:= 0;
    if ((Gear.State and gstMoving) <> 0) then Gear.dX:= Gear.dX * Gear.Friction
    end;
 
@@ -328,12 +330,12 @@ if (Gear.State and gstMoving) <> 0 then
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
       if ((Gear.State and gstFalling) = 0) then
          if abs(Gear.dX) > 0.01 then
-            if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.99; Gear.Y:= Gear.Y - 1 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.98; Gear.Y:= Gear.Y - 2 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -3, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.97; Gear.Y:= Gear.Y - 3 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -4, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.96; Gear.Y:= Gear.Y - 4 end else
-            if not TestCollisionXwithXYShift(Gear, 0, -5, Sign(Gear.dX)) then begin Gear.dX:= Gear.dX * 0.95; Gear.Y:= Gear.Y - 5 end else
-            if abs(Gear.dX) > 0.02 then Gear.dX:= -0.3 * Gear.dX
+            if not TestCollisionXwithXYShift(Gear, Sign(Gear.dX) - Gear.dX, -1, Sign(Gear.dX)) then begin Gear.X:= Gear.X + Gear.dX; Gear.dX:= Gear.dX * 0.96; Gear.Y:= Gear.Y - 1 end else
+            if not TestCollisionXwithXYShift(Gear, Sign(Gear.dX) - Gear.dX, -2, Sign(Gear.dX)) then begin Gear.X:= Gear.X + Gear.dX; Gear.dX:= Gear.dX * 0.93; Gear.Y:= Gear.Y - 2 end else
+            if not TestCollisionXwithXYShift(Gear, Sign(Gear.dX) - Gear.dX, -3, Sign(Gear.dX)) then begin Gear.X:= Gear.X + Gear.dX; Gear.dX:= Gear.dX * 0.90; Gear.Y:= Gear.Y - 3 end else
+            if not TestCollisionXwithXYShift(Gear, Sign(Gear.dX) - Gear.dX, -4, Sign(Gear.dX)) then begin Gear.X:= Gear.X + Gear.dX; Gear.dX:= Gear.dX * 0.87; Gear.Y:= Gear.Y - 4 end else
+            if not TestCollisionXwithXYShift(Gear, Sign(Gear.dX) - Gear.dX, -5, Sign(Gear.dX)) then begin Gear.X:= Gear.X + Gear.dX; Gear.dX:= Gear.dX * 0.84; Gear.Y:= Gear.Y - 5 end else
+            if abs(Gear.dX) > 0.02 then Gear.dX:= -0.5 * Gear.dX
                                    else begin
                                         Gear.State:= Gear.State and not gstMoving;
                                         Gear.dX:= 0.0000001 * Sign(Gear.dX)
@@ -342,7 +344,7 @@ if (Gear.State and gstMoving) <> 0 then
                                         Gear.State:= Gear.State and not gstMoving;
                                         Gear.dX:= 0.0000001 * Sign(Gear.dX)
                                         end
-         else Gear.dX:= -0.8 * Gear.dX;
+         else Gear.dX:= -Gear.dX;
 
 if ((Gear.State and gstFalling) = 0)and
    (sqr(Gear.dX) + sqr(Gear.dY) < 0.0008) then
@@ -355,7 +357,12 @@ if ((Gear.State and gstFalling) = 0)and
 if (Gear.State and gstMoving) <> 0 then
    begin
    Gear.X:= Gear.X + Gear.dX;
-   Gear.Y:= Gear.Y + Gear.dY
+   Gear.Y:= Gear.Y + Gear.dY;
+   if (Gear.dY > 0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
+      begin
+      Gear.dY:= 0;
+      Gear.Y:= Gear.Y + 1
+      end;
    end else
    if Gear.Health = 0 then
       begin
