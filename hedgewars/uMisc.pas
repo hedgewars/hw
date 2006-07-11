@@ -48,7 +48,6 @@ var isCursorVisible : boolean = false;
     TurnTimeLeft  : Longword = 0;
     cHedgehogTurnTime: Longword = 30000;
 
-    cLandYShift      : integer = 1088;
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;
     cConsoleYAdd     : integer = 0; 
@@ -59,7 +58,7 @@ var isCursorVisible : boolean = false;
     cBitsStr         : string[2] = '16';
 
     cWaterLine       : integer = 1024;
-    cVisibleWater    : integer = 64;
+    cVisibleWater    : integer = 128;
     cScreenEdgesDist : integer = 240;
     cTeamHealthWidth : integer = 128;
 

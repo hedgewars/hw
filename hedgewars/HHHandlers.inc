@@ -63,7 +63,7 @@ with Gear^,
                           amUFO: FollowGear:= AddGear(round(X), round(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
-                                 FollowGear:= AddGear(round(X), round(Y), gtShotgunShot,  0, xx * 0.5, yy * 0.5);
+                                 CurAmmoGear:= AddGear(round(X), round(Y), gtShotgunShot,  0, xx * 0.5, yy * 0.5);
                                  end;
                        amDEagle: begin
                                  FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
@@ -135,6 +135,7 @@ AllInactive:= false;
 DeleteCI(Gear);
 if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    begin
+   TurnTimeLeft:= 0;
    if ((Gear.State and (gstMoving or gstFalling)) = 0)
       and (CurAmmoGear = nil) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
    Gear.State:= Gear.State and not gstHHDriven;
@@ -180,7 +181,7 @@ if (Gear.Message and gm_Attack)<>0 then
 if ((Gear.State and gstAttacking) <> 0) and ((Gear.Message and gm_Attack) = 0) then
    begin
    Attack(Gear);
-   StepTicks:= 40
+   StepTicks:= cHHStepTicks
    end;
 
 if (Gear.State and gstFalling) <> 0 then

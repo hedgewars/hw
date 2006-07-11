@@ -203,6 +203,7 @@ var Stack: record
 
     procedure Push(_xl, _xr, _y, _dir: integer);
     begin
+    TryDo(Stack.Count <= 8192, 'FillLand: stack overflow', true);
     _y:= _y + _dir;
     if (_y < 0) or (_y > 1023) then exit;
     with Stack.points[Stack.Count] do
@@ -212,8 +213,7 @@ var Stack: record
          y:= _y;
          dir:= _dir
          end;
-    inc(Stack.Count);
-    TryDo(Stack.Count < 8192, 'stack overflow', true)
+    inc(Stack.Count)
     end;
 
     procedure Pop(out _xl, _xr, _y, _dir: integer);

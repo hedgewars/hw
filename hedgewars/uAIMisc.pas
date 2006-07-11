@@ -43,6 +43,10 @@ type TTarget = record
                 Count: Longword;
                 ar: array[0..cMaxHHIndex*5] of TTarget;
                 end;
+     TGoInfo = record
+               Ticks: Longword;
+               FallTicks: Longword;
+               end;
 
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
@@ -51,7 +55,7 @@ function RatePlace(Gear: PGear): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
-function HHGo(Gear: PGear): boolean;
+function HHGo(Gear: PGear; out GoInfo: TGoInfo): boolean;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -212,23 +216,34 @@ for i:= 0 to Targets.Count do
 Result:= Result * 1024
 end;
 
-function HHGo(Gear: PGear): boolean;
+function HHGo(Gear: PGear; out GoInfo: TGoInfo): boolean;
 var pX, pY: integer;
 begin
 Result:= false;
+GoInfo.Ticks:= 0;
+GoInfo.FallTicks:= 0;
 repeat
 pX:= round(Gear.X);
 pY:= round(Gear.Y);
 if pY + cHHRadius >= cWaterLine then exit;
 if (Gear.State and gstFalling) <> 0 then
    begin
+   inc(GoInfo.Ticks);
    Gear.dY:= Gear.dY + cGravity;
-   if Gear.dY > 0.40 then exit;
+   if Gear.dY > 0.40 then
+      begin
+      Goinfo.FallTicks:= 0;
+      exit
+      end;
    Gear.Y:= Gear.Y + Gear.dY;
+   if round(Gear.Y) > pY then inc(GoInfo.FallTicks);
    if TestCollisionYwithGear(Gear, 1) then
       begin
+      inc(GoInfo.Ticks, 300);
       Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
-      Gear.dY:= 0
+      Gear.dY:= 0;
+      Result:= true;
+      exit
       end;
    continue
    end;
@@ -265,7 +280,11 @@ if (Gear.State and gstFalling) <> 0 then
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
       end;
 
-   if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.X:= Gear.X + Gear.dX;
+   if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
+      begin
+      Gear.X:= Gear.X + Gear.dX;
+      inc(GoInfo.Ticks, cHHStepTicks)
+      end;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
    Gear.Y:= Gear.Y + 1;
@@ -297,11 +316,11 @@ if (Gear.State and gstFalling) <> 0 then
    end
    end
    end;
-if (pX <> round(Gear.X))and ((Gear.State and gstFalling) = 0) then
+if (pX <> round(Gear.X)) and ((Gear.State and gstFalling) = 0) then
    begin
    Result:= true;
    exit
-   end;
+   end
 until (pX = round(Gear.X)) and (pY = round(Gear.Y)) and ((Gear.State and gstFalling) = 0);
 end;
 

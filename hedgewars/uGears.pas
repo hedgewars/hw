@@ -89,7 +89,7 @@ var RopePoints: record
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
-procedure AmmoShove(Ammo: PGear; Power: integer); forward;
+procedure AmmoShove(Ammo: PGear; Damage, Power: integer); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -196,7 +196,7 @@ gtAmmo_Grenade: begin
                 Result.Timer:= 3000;
                 end;
         gtCase: begin
-                Result.Radius:= 14;
+                Result.Radius:= 16;
                 Result.Elasticity:= 0.6
                 end;
   gtDEagleShot: begin
@@ -497,7 +497,7 @@ while Gear<>nil do
         gtDynamite: DrawSprite2(sprDynamite, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 25 + WorldDy, Gear.Tag and 1, Gear.Tag shr 1, Surface);
             gtCase: case Gear.Pos of
                          posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
-                         posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 6) and $F, Surface);
+                         posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 24 + WorldDx, Round(Gear.Y) - 24 + WorldDy, (GameTicks shr 6) mod 13, Surface);
                          end;
               end;
       Gear:= Gear.NextGear
@@ -569,7 +569,7 @@ while Gear <> nil do
       end
 end;
 
-procedure AmmoShove(Ammo: PGear; Power: integer);
+procedure AmmoShove(Ammo: PGear; Damage, Power: integer);
 var t: PGearArray;
     i: integer;
     Gear: PGear;
@@ -583,7 +583,7 @@ while i > 0 do
            gtHedgehog,
                gtMine,
                gtCase: begin
-                       inc(t.ar[i].Damage, Power);
+                       inc(t.ar[i].Damage, Damage);
                        t.ar[i].dX:= Ammo.dX * Power * 0.01;
                        t.ar[i].dY:= Ammo.dY * Power * 0.01;
                        t.ar[i].Active:= true;

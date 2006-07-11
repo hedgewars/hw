@@ -244,7 +244,7 @@ const
                      (FileName:   'MineOff'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
                      (FileName:    'MineOn'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
                      (FileName:      'Case'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
-                     (FileName:  'FirstAid'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprFAid
+                     (FileName:  'FirstAid'; Path: ptGraphics; Width:  48; Height: 48; hasAlpha: false),// sprFAid
                      (FileName:  'dynamite'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprDynamite
                      (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true) // sprPower
                      );
@@ -336,7 +336,7 @@ const
                                    TimeAfterTurn: 3000),
                                   (Name: 'Desert Eagle';
                                    Ammo: (Propz: 0;
-                                          Count: AMMO_INFINITE;
+                                          Count: 3;
                                           NumPerTurn: 3;
                                           Timer: 0;
                                           AmmoType: amDEagle);

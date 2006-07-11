@@ -77,6 +77,7 @@ procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
+function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
@@ -284,6 +285,20 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
              if Count = 0 then PackAmmo(Ammo, CurSlot)
              end
      end
+end;
+
+function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
+var slot, ami: integer;
+begin
+Slot:= Ammoz[Ammo].Slot;
+ami:= 0;
+Result:= false;
+while (not Result) and (ami <= cMaxSlotAmmoIndex) do
+      begin
+      with  Hedgehog.Ammo[Slot, ami] do
+            if (AmmoType = Ammo) and (Count > 0) then Result:= true;
+      inc(ami)
+      end
 end;
 
 function  TeamSize(p: PTeam): Longword;

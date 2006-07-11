@@ -38,6 +38,7 @@ uses SDLh, uGears, uConsts;
 function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
@@ -50,12 +51,12 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amSkip}          nil,
 {amRope}          nil,
 {amMine}          nil,
-{amDEagle}        nil,
+{amDEagle}        TestDesertEagle,
 {amDynamite}      nil
                   );
 
 implementation
-uses uMisc, uAIMisc;
+uses uMisc, uAIMisc, uLand;
 const BadTurn = Low(integer);
 
 function Metric(x1, y1, x2, y2: integer): integer;
@@ -197,6 +198,35 @@ repeat
      end
 until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
 Result:= BadTurn
+end;
+
+function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+var Vx, Vy, x, y, t: real;
+    d: Longword;
+begin
+if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
+   begin
+   Result:= BadTurn;
+   exit
+   end;
+Time:= 0;
+Power:= 1;
+ExplR:= 0;
+t:= sqrt(sqr(Targ.X - Me.X) + sqr(Targ.Y - Me.Y)) * 2;
+Vx:= (Targ.X - Me.X) / t;
+Vy:= (Targ.Y - Me.Y) / t;
+x:= Me.X;
+y:= Me.Y;
+Angle:= DxDy2AttackAngle(Vx, -Vy);
+d:= 0;
+repeat
+  x:= x + vX;
+  y:= y + vY;
+  if ((round(x) and $FFFFF800) = 0)and((round(y) and $FFFFFC00) = 0)
+     and (Land[round(y), round(x)] <> 0) then inc(d);
+until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024) or (d > 200);
+if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
+                                         else Result:= Low(integer)
 end;
 
 end.

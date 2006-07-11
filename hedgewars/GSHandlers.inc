@@ -73,7 +73,7 @@ procedure doStepDrowningGear(Gear: PGear);
 begin
 AllInactive:= false;
 Gear.Y:= Gear.Y + cDrownSpeed;
-if round(Gear.Y) > Gear.Radius + cWaterLine + 48 + cVisibleWater then DeleteGear(Gear)
+if round(Gear.Y) > Gear.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -252,9 +252,10 @@ Gear.Y:= Gear.Y + Gear.dY;
 CheckCollision(Gear);
 if (Gear.State and gstCollision) <> 0 then
    begin
-   AmmoShove(Gear, 25);
+   AmmoShove(Gear, 25, 25);
    doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLNoDamage or EXPLDoNotTouchHH);
    DeleteGear(Gear);
+   AfterAttack;
    exit
    end;
 dec(i)
@@ -279,7 +280,7 @@ repeat
   y:= round(Gear.Y);
   if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0)
      and (Land[y, x] <> 0) then inc(Gear.Damage);
-  AmmoShove(Gear, 12);
+  AmmoShove(Gear, 7, 20);
   dec(i)
 until (i = 0) or (Gear.Damage > Gear.Health);
 if Gear.Damage > 0 then
@@ -491,9 +492,9 @@ HHGear.dX:= HHGear.X - HHGear.dX;
 HHGear.dY:= HHGear.Y - HHGear.dY;
 
 if TestCollisionXwithGear(HHGear, Sign(HHGear.dX)) then
-   HHGear.dX:= -0.9 * HHGear.dX;
+   HHGear.dX:= -0.6 * HHGear.dX;
 if TestCollisionYwithGear(HHGear, Sign(HHGear.dY)) then
-   HHGear.dY:= -0.9 * HHGear.dY;
+   HHGear.dY:= -0.6 * HHGear.dY;
 
 if (Gear.Message and gm_Attack) <> 0 then
    if (Gear.State and gsttmpFlag) <> 0 then DeleteMe else

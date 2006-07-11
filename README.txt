@@ -5,12 +5,11 @@ Source,
 images in Data/Graphics, 
 sounds in Data/Sounds,
 themes "avematan", "bubbles", "tibet"
-fort "Barrelhouse"
-(c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+Copyright 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
 
 Fonts  
-(c) 1995 Gavin Helf <ghelf@violet.berkeley.edu>, <gh22@cornell.edu>
+See Fonts_LICENSE.txt
 
 Images in Data/Front, Data/Graphics/Graves, 
 themes "ethereal", "norsk", "wood", "xtheme"
-(c) 2005 Alexey Andreev <grayfox@inbox.ru>
+Copyright 2005 Alexey Andreev <grayfox@inbox.ru>

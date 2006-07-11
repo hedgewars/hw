@@ -69,7 +69,6 @@ var cWaterSprCount: integer;
 
 procedure InitWorld;
 begin
-cLandYShift:= cWaterLine + 64;
 cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width);
 cScreenEdgesDist:= Min(cScreenWidth div 4, cScreenHeight div 4);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
@@ -190,8 +189,8 @@ if CurrentTeam <> nil then
                 tdx:= Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle);
                 tdy:= - Cos(Gear.Angle*pi/cMaxAngle);
                 for i:= (Gear.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower, round(Gear.X + WorldDx + tdx * (32 + i * 2)) - 16,
-                                         round(Gear.Y + WorldDy + tdy * (32 + i * 2)) - 12,
+                    DrawSprite(sprPower, round(Gear.X + WorldDx + tdx * (24 + i * 2)) - 16,
+                                         round(Gear.Y + WorldDy + tdy * (24 + i * 2)) - 12,
                                          i, Surface)
                 end
         end;
@@ -383,7 +382,7 @@ if isCursorVisible or (FollowGear <> nil) then
    end;
 SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
 prevPoint:= CursorPoint;
-if WorldDy < cScreenHeight - cLandYShift - cVisibleWater then WorldDy:= cScreenHeight - cLandYShift - cVisibleWater;
+if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy >  2048 then WorldDy:=  2048;
 if WorldDx < -2048 then WorldDx:= -2048;
 if WorldDx > cScreenWidth then WorldDx:=  cScreenWidth;

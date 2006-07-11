@@ -43,6 +43,7 @@ uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc;
 var BestActions: TActions;
     ThinkThread: PSDL_Thread = nil;
     StopThinking: boolean;
+    CanUseAmmo: array [TAmmoType] of boolean;
 
 procedure FreeActionsList;
 begin
@@ -65,13 +66,11 @@ begin
 for i:= 0 to Pred(Targets.Count) do
     if Targets.ar[i].Score >= 0 then
        begin
-       if (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].AttacksNum > 0)
-          then with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-                    a:= Ammo[CurSlot, CurAmmo].AmmoType
-          else a:= Low(TAmmoType);
+       with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+            a:= Ammo[CurSlot, CurAmmo].AmmoType;
        aa:= a;
        repeat
-        if Assigned(AmmoTests[a]) then
+        if CanUseAmmo[a] then
            begin
            Score:= AmmoTests[a](Me, Targets.ar[i].Point, Time, Angle, Power, ExplX, ExplY, ExplR);
            if Actions.Score + Score + Targets.ar[i].Score > BestActions.Score then
@@ -105,31 +104,79 @@ for i:= 0 to Pred(Targets.Count) do
 end;
 
 procedure Walk(Me: PGear);
+const FallTicksForBranching = cHHRadius * 2 + 8;
+      cBranchStackSize = 8;
+      
+type TStackEntry = record
+                   WastedTicks: Longword;
+                   MadeActions: TActions;
+                   Hedgehog: TGear;
+                   end;
+                   
+var Stack: record
+           Count: Longword;
+           States: array[0..Pred(cBranchStackSize)] of TStackEntry;
+           end;
+
+    procedure Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer);
+    begin
+    if Stack.Count < cBranchStackSize then
+       with Stack.States[Stack.Count] do
+            begin
+            WastedTicks:= Ticks;
+            MadeActions:= Actions;
+            Hedgehog:= Me;
+            Hedgehog.Message:= Dir;
+            inc(Stack.Count)
+            end
+    end;
+
+    procedure Pop(out Ticks: Longword; out Actions: TActions; out Me: TGear);
+    begin
+    dec(Stack.Count);
+    with Stack.States[Stack.Count] do
+         begin
+         Ticks:= WastedTicks;
+         Actions:= MadeActions;
+         Me:= Hedgehog
+         end
+    end;
+
+
 var Actions: TActions;
-    BackMe: TGear;
-    Dir, steps, maxsteps: integer;
-    BestRate, Rate: integer;
+    ticks, maxticks, steps: Longword;
+    BaseRate, BestRate, Rate: integer;
+    GoInfo: TGoInfo;
 begin
-Actions.Score:= 0;
 Actions.Count:= 0;
 Actions.Pos:= 0;
-BestActions.Count:= 0;
-if (Me.State and gstAttacked) = 0 then maxsteps:= (TurnTimeLeft - 4000) div cHHStepTicks
-                                  else maxsteps:= TurnTimeLeft div cHHStepTicks;
-BackMe:= Me^;
+Actions.Score:= 0;
+Stack.Count:= 0;
+
+Push(0, Actions, Me^, aia_Left);
+Push(0, Actions, Me^, aia_Right);
+
+if (Me.State and gstAttacked) = 0 then maxticks:= TurnTimeLeft - 5000
+                                  else maxticks:= TurnTimeLeft;
+
 if (Me.State and gstAttacked) = 0 then TestAmmos(Actions, Me);
 BestRate:= RatePlace(Me);
-for Dir:= aia_Left to aia_Right do
+BaseRate:= max(BestRate, 0);
+
+while (Stack.Count > 0) and not StopThinking do
     begin
-    Me.Message:= Dir;
+    Pop(ticks, Actions, Me^);
+    AddAction(Actions, Me.Message, aim_push, 250);
+    AddAction(Actions, aia_WaitX, round(Me.X), 0);
+    AddAction(Actions, Me.Message, aim_release, 0);
     steps:= 0;
-    while HHGo(Me) and (steps < maxsteps) do
+    
+    while HHGo(Me, GoInfo) do
        begin
+       inc(ticks, GoInfo.Ticks);
+       if ticks > maxticks then break;
        inc(steps);
-       Actions.Count:= 0;
-       AddAction(Actions, Dir, aim_push, 250);
-       AddAction(Actions, aia_WaitX, round(Me.X), 0);
-       AddAction(Actions, Dir, aim_release, 0);
+       Actions.actions[Actions.Count - 2].Param:= round(Me.X);
        Rate:= RatePlace(Me);
        if Rate > BestRate then
           begin
@@ -137,14 +184,15 @@ for Dir:= aia_Left to aia_Right do
           BestRate:= Rate;
           Me.State:= Me.State or gstAttacked // we have better place, go there and don't use ammo
           end
-       else if Rate < BestRate then
-               if BestRate > 0 then exit
-                               else break;
+       else if Rate < BestRate then break;
        if ((Me.State and gstAttacked) = 0)
            and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
-       if StopThinking then exit;
+       if GoInfo.FallTicks >= FallTicksForBranching then
+          Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
+       if StopThinking then exit
        end;
-    Me^:= BackMe
+
+    if BestRate > BaseRate then exit
     end
 end;
 
@@ -172,8 +220,7 @@ else begin
             FillBonuses(true);
             WalkMe:= BackMe;
             Walk(@WalkMe)
-            end;
-      AwareOfExplosion(0, 0, 0)
+            end
       end;
 
 Me.State:= Me.State and not gstHHThinking;
@@ -181,6 +228,7 @@ ThinkThread:= nil
 end;
 
 procedure StartThink(Me: PGear);
+var a: TAmmoType;
 begin
 if ((Me.State and gstAttacking) <> 0) or isInMultiShoot then exit;
 Me.State:= Me.State or gstHHThinking;
@@ -188,6 +236,8 @@ StopThinking:= false;
 ThinkingHH:= Me;
 FillTargets;
 FillBonuses((Me.State and gstAttacked) <> 0);
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me.Hedgehog), a);
 {$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
 ThinkThread:= SDL_CreateThread(@Think, Me)
 end;
@@ -199,8 +249,8 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
         and ((Gear.State and gstHHDriven) <> 0)
         and (TurnTimeLeft < 29990)
         and ((Gear.State and gstHHThinking) = 0) then
-           if (BestActions.Pos = BestActions.Count) then StartThink(Gear)
-                                                    else ProcessAction(BestActions, Gear)
+           if (BestActions.Pos >= BestActions.Count) then StartThink(Gear)
+                                                     else ProcessAction(BestActions, Gear)
 end;
 
 end.
