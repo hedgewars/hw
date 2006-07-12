@@ -116,7 +116,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepCase,
                                                                doStepDEagleShot,
                                                                doStepDynamite,
-                                                               doStepTeamHealthSorter
+                                                               doStepTeamHealthSorter,
+                                                               doStepBomb,
+                                                               doStepCluster
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -209,6 +211,12 @@ gtAmmo_Grenade: begin
                 Result.Elasticity:= 0.55;
                 Result.Friction:= 0.03;
                 Result.Timer:= 5000;
+                end;
+ gtClusterBomb: begin
+                Result.Radius:= 4;
+                Result.Elasticity:= 0.6;
+                Result.Friction:= 0.995;
+                Result.Timer:= Timer
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -499,6 +507,8 @@ while Gear<>nil do
                          posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
                          posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 24 + WorldDx, Round(Gear.Y) - 24 + WorldDy, (GameTicks shr 6) mod 13, Surface);
                          end;
+     gtClusterBomb: DrawSprite(sprClusterBomb, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
+         gtCluster: DrawSprite(sprClusterParticle, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, 0, Surface);
               end;
       Gear:= Gear.NextGear
       end;

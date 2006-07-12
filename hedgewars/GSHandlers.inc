@@ -126,18 +126,40 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBomb(Gear: PGear);
+var i: integer;
 begin
 AllInactive:= false;
 doStepFallingGear(Gear);
 dec(Gear.Timer);
 if Gear.Timer = 0 then
    begin
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
+   case Gear.Kind of
+        gtAmmo_Bomb: doMakeExplosion(round(Gear.X), round(Gear.Y), 50, EXPLAutoSound);
+      gtClusterBomb: begin
+                     doMakeExplosion(round(Gear.X), round(Gear.Y), 30, EXPLAutoSound);
+                     for i:= 0 to 4 do
+                         AddGear(round(Gear.X), round(Gear.Y), gtCluster, 0, (getrandom - 0.5)*0.2, (getrandom - 2) * 0.2);
+                     end
+        end;
    DeleteGear(Gear);
    exit
    end;
 CalcRotationDirAngle(Gear);
 if (Gear.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then PlaySound(sndGrenadeImpact)
+end;
+
+procedure doStepCluster(Gear: PGear);
+begin
+AllInactive:= false;
+doStepFallingGear(Gear);
+if (Gear.State and gstCollision) <> 0 then
+   begin
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 20, EXPLAutoSound);
+   DeleteGear(Gear);
+   exit
+   end;
+if (GameTicks and $1F) = 0 then
+   AddGear(round(Gear.X), round(Gear.Y), gtSmokeTrace, 0)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

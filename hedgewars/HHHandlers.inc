@@ -58,21 +58,22 @@ with Gear^,
         xx:= Sign(dX)*Sin(Angle*pi/cMaxAngle);
         yy:= -Cos(Angle*pi/cMaxAngle);
              case Ammo[CurSlot, CurAmmo].AmmoType of
-                      amBazooka: FollowGear:= AddGear(round(X), round(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
                       amGrenade: FollowGear:= AddGear(round(X), round(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo[CurSlot, CurAmmo].Timer);
+                  amClusterBomb: FollowGear:= AddGear(round(X), round(Y), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo[CurSlot, CurAmmo].Timer);
+                      amBazooka: FollowGear:= AddGear(round(X), round(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
                           amUFO: FollowGear:= AddGear(round(X), round(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
                                  CurAmmoGear:= AddGear(round(X), round(Y), gtShotgunShot,  0, xx * 0.5, yy * 0.5);
                                  end;
+                   amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHRadius, gtPickHammer, 0);
+                         amSkip: TurnTimeLeft:= 0;
+                         amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
+                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.02, 0, 3000);
                        amDEagle: begin
                                  FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
                                  end;
-                         amSkip: TurnTimeLeft:= 0;
-                   amPickHammer: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y) + cHHRadius, gtPickHammer, 0);
-                         amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
-                         amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.02, 0, 3000);
-                     amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.035, 0, 5000); 
+                     amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.035, 0, 5000);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then

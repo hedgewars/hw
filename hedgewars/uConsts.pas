@@ -44,15 +44,16 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-                   sprMineOn, sprCase, sprFAid, sprDynamite, sprPower);
+                   sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
+                   sprClusterBomb, sprClusterParticle);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
-                   gtTeamHealthSorter);
+                   gtTeamHealthSorter, gtClusterBomb, gtCluster);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
-     TAmmoType  = (amGrenade, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
+     TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
                    amMine, amDEagle, amDynamite);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
@@ -246,7 +247,9 @@ const
                      (FileName:      'Case'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
                      (FileName:  'FirstAid'; Path: ptGraphics; Width:  48; Height: 48; hasAlpha: false),// sprFAid
                      (FileName:  'dynamite'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprDynamite
-                     (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true) // sprPower
+                     (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprPower
+                     (FileName:    'ClBomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
+                     (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false) // sprClusterParticle
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -276,6 +279,14 @@ const
                                           NumPerTurn: 0;
                                           Timer: 3000;
                                           AmmoType: amGrenade);
+                                   Slot: 1;
+                                   TimeAfterTurn: 3000),
+                                  (Name: 'Cluster Bomb';
+                                   Ammo: (Propz: ammoprop_Timerable or ammoprop_Power;
+                                          Count: 5;
+                                          NumPerTurn: 0;
+                                          Timer: 3000;
+                                          AmmoType: amClusterBomb);
                                    Slot: 1;
                                    TimeAfterTurn: 3000),
                                   (Name: 'Bazooka';
