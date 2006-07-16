@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -138,7 +138,7 @@ if Gear.Timer = 0 then
       gtClusterBomb: begin
                      doMakeExplosion(round(Gear.X), round(Gear.Y), 30, EXPLAutoSound);
                      for i:= 0 to 4 do
-                         AddGear(round(Gear.X), round(Gear.Y), gtCluster, 0, (getrandom - 0.5)*0.2, (getrandom - 2) * 0.2);
+                         AddGear(round(Gear.X), round(Gear.Y), gtCluster, 0, (getrandom - 0.5)*0.2, (getrandom - 3) * 0.08);
                      end
         end;
    DeleteGear(Gear);
@@ -670,10 +670,20 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCase(Gear: PGear);
+var i: integer;
 begin
 if (Gear.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
+   exit
+   end;
+
+if Gear.Damage > 0 then
+   begin
+   DeleteGear(Gear);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLAutoSound);
+   for i:= 0 to 63 do
+       AddGear(round(Gear.X), round(Gear.Y), gtFlame, 0);
    exit
    end;
 
@@ -694,12 +704,6 @@ if (Gear.dY <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 
 if (Gear.CollIndex = High(Longword)) and (Gear.dY = 0) then AddGearCI(Gear)
    else if (Gear.CollIndex < High(Longword)) and (Gear.dY <> 0) then DeleteCI(Gear);
-
-if Gear.Damage > 0 then
-   begin
-   DeleteGear(Gear);
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 20, EXPLAutoSound)
-   end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -758,3 +762,46 @@ Gear.Timer:= 640;
 Gear.doStep:= doStepTeamHealthSorterWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepShover(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear.Hedgehog)^.Gear;
+HHGear.State:= HHGear.State or gstNoDamage;
+AmmoShove(Gear, 30, 115);
+HHGear.State:= HHGear.State and not gstNoDamage;
+DeleteGear(Gear)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepFlame(Gear: PGear);
+begin
+AllInactive:= false;
+if not TestCollisionYwithGear(Gear, 1) then
+   begin
+   Gear.dX:= Gear.dX + cWindSpeed;
+   Gear.dY:= Gear.dY + cGravity;
+   if abs(Gear.dX) > 0.12 then Gear.dX:= Gear.dX * 0.5;
+   if Gear.dY > 0.12 then Gear.dY:= Gear.dY * 0.995;
+   Gear.X:= Gear.X + Gear.dX;
+   Gear.Y:= Gear.Y + Gear.dY;
+   if Gear.Y > 1023 then
+      begin
+      DeleteGear(Gear);
+      exit
+      end
+   end else begin
+   if Gear.Timer > 0 then dec(Gear.Timer)
+      else begin
+      doMakeExplosion(round(Gear.X), round(Gear.Y), 2, 0);
+      dec(Gear.Health);
+      Gear.Timer:= 1250 - Gear.Angle * 12
+      end
+   end;
+
+if (((GameTicks div 8) mod 64) = Gear.Angle) then
+   AmmoFlameWork(Gear);
+
+if Gear.Health = 0 then 
+   DeleteGear(Gear)
+end;

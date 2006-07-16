@@ -45,16 +45,16 @@ type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
                    sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
-                   sprClusterBomb, sprClusterParticle);
+                   sprClusterBomb, sprClusterParticle, sprFlame);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
-                   gtTeamHealthSorter, gtClusterBomb, gtCluster);
+                   gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
-                   amMine, amDEagle, amDynamite);
+                   amMine, amDEagle, amDynamite, amBaseballBat);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
                   Handle: PTTF_Font;
@@ -131,6 +131,7 @@ const
       gstHHJumping      = $00000100;
       gsttmpFlag        = $00000200;
       gstHHThinking     = $00000800;
+      gstNoDamage       = $00001000;
 
       gtsStartGame      = 1;
       gtsSmoothWindCh   = 2;
@@ -145,7 +146,7 @@ const
       gm_HJump  = $00000080;
       gm_Destroy= $00000100;
 
-      cMaxSlotIndex       = 6;
+      cMaxSlotIndex       = 7;
       cMaxSlotAmmoIndex   = 1;
 
       ammoprop_Timerable    = $00000001;
@@ -169,7 +170,7 @@ const
       posCaseAmmo    = $00000001;
       posCaseHealth  = $00000002;
 
-      NoPointX = Low(Integer); // константа для TargetPoint, показывает, что цель не указана
+      NoPointX = Low(Integer);
 
       cHHFileName   = 'Hedgehog';
       cCHFileName   = 'Crosshair';
@@ -249,7 +250,8 @@ const
                      (FileName:  'dynamite'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprDynamite
                      (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprPower
                      (FileName:    'ClBomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
-                     (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false) // sprClusterParticle
+                     (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
+                     (FileName:     'Flame'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false) // sprFlame
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -319,7 +321,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amPickHammer);
-                                   Slot: 4;
+                                   Slot: 5;
                                    TimeAfterTurn: 0),
                                   (Name: 'Skip turn';
                                    Ammo: (Propz: 0;
@@ -327,7 +329,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amSkip);
-                                   Slot: 6;
+                                   Slot: 7;
                                    TimeAfterTurn: 0),
                                   (Name: 'Rope';
                                    Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
@@ -335,7 +337,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amRope);
-                                   Slot: 5;
+                                   Slot: 6;
                                    TimeAfterTurn: 0),
                                   (Name: 'Mine';
                                    Ammo: (Propz: ammoprop_NoCrosshair;
@@ -343,8 +345,8 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amMine);
-                                   Slot: 3;
-                                   TimeAfterTurn: 3000),
+                                   Slot: 4;
+                                   TimeAfterTurn: 5000),
                                   (Name: 'Desert Eagle';
                                    Ammo: (Propz: 0;
                                           Count: 3;
@@ -359,6 +361,14 @@ const
                                            NumPerTurn: 0;
                                            Timer: 0;
                                            AmmoType: amDynamite);
+                                    Slot: 4;
+                                    TimeAfterTurn: 5000),
+                                   (Name: 'Baseball Bat';
+                                    Ammo: (Propz: 0;
+                                           Count: 1;
+                                           NumPerTurn: 0;
+                                           Timer: 0;
+                                           AmmoType: amBaseballBat);
                                     Slot: 3;
                                     TimeAfterTurn: 5000));
 

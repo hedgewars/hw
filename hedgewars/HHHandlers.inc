@@ -74,6 +74,7 @@ with Gear^,
                                  FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
                                  end;
                      amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.035, 0, 5000);
+                  amBaseballBat: AddGear(round(X) + Sign(dX) * 10, round(Y), gtShover, 0, xx * 0.5, yy * 0.5).Radius:= 15
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then

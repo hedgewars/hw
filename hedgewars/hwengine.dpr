@@ -48,14 +48,14 @@ uses
   uSound in 'uSound.pas',
   uRandom in 'uRandom.pas',
   uAI in 'uAI.pas',
+  uAIMisc in 'uAIMisc.pas',
+  uAIAmmoTests in 'uAIAmmoTests.pas',
+  uAIActions in 'uAIActions.pas',
   uCollisions in 'uCollisions.pas',
   uLand in 'uLand.pas',
   uLandTemplates in 'uLandTemplates.pas',
   uLandObjects in 'uLandObjects.pas',
-  uLandGraphics in 'uLandGraphics.pas',
-  uAIMisc in 'uAIMisc.pas',
-  uAIAmmoTests in 'uAIAmmoTests.pas',
-  uAIActions in 'uAIActions.pas';
+  uLandGraphics in 'uLandGraphics.pas';
 
 {$INCLUDE options.inc}
 
@@ -67,7 +67,7 @@ uses
 procedure OnDestroy; forward;
 
 ////////////////////////////////
-procedure DoTimer(Lag: integer);  // - обработка таймера
+procedure DoTimer(Lag: integer);
 var s: string;
 begin
 case GameState of
@@ -118,7 +118,7 @@ if flagMakeCapture then
 end;
 
 ////////////////////
-procedure OnDestroy;   // - очищаем память
+procedure OnDestroy;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('Freeing resources...');{$ENDIF}
 if isSoundEnabled then ReleaseSound;

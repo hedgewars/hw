@@ -93,7 +93,7 @@ var
 
     InitStepsFlags: Longword = 0;
 
-    AttackBar     : integer = 0; // 0 - отсутствует, 1 - внизу, 2 - как в wwp
+    AttackBar: integer = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 function Sign(r: real): integer;
 function Min(a, b: integer): integer;

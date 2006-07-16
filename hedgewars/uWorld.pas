@@ -41,7 +41,7 @@ const WorldDx: integer = -512;
 procedure InitWorld;
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 procedure AddCaption(s: shortstring; Color, Group: LongWord);
-procedure MoveWorld;
+procedure MoveCamera;
 
 {$IFDEF COUNTTICKS}
 var cntTicks: LongWord;
@@ -160,6 +160,7 @@ for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (Re
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
 {$WARNINGS ON}
 
+// Turn time
 if TurnTimeLeft <> 0 then
    begin
    i:= Succ(Pred(TurnTimeLeft) div 1000);
@@ -175,6 +176,8 @@ if TurnTimeLeft <> 0 then
          end;
    DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
    end;
+
+// Attack bar
 if CurrentTeam <> nil then
    case AttackBar of
         1: begin
@@ -321,7 +324,7 @@ Captions[m].Group:= Group;
 Captions[m].EndTime:= RealTicks + 1200
 end;
 
-procedure MoveWorld;
+procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var s: string[9];
 begin

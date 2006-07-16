@@ -281,7 +281,6 @@ RegisterVariable('seed'    , vtCommand, @chSetSeed      );
 RegisterVariable('c_height', vtInteger, @cConsoleHeight );
 RegisterVariable('gmflags' , vtInteger, @GameFlags      );
 RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime);
-RegisterVariable('showfps' , vtBoolean, @cShowFPS       );
 RegisterVariable('name'    , vtCommand, @chName         );
 RegisterVariable('fort'    , vtCommand, @chFort         );
 RegisterVariable('grave'   , vtCommand, @chGrave        );

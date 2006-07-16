@@ -55,6 +55,7 @@ function RatePlace(Gear: PGear): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
+function RateShove(Me: PGear; x, y, r, power: integer): integer;
 function HHGo(Gear: PGear; out GoInfo: TGoInfo): boolean;
 
 var ThinkingHH: PGear;
@@ -211,6 +212,27 @@ for i:= 0 to Targets.Count do
             else
                if Score > 0 then inc(Result, dmg)
                             else dec(Result, dmg * 3)
+            end;
+         end;
+Result:= Result * 1024
+end;
+
+function RateShove(Me: PGear; x, y, r, power: integer): integer;
+var i, dmg: integer;
+begin
+Result:= 0;
+for i:= 0 to Targets.Count do
+    with Targets.ar[i] do
+         begin
+         dmg:= r - Round(sqrt(sqr(Point.x - x) + sqr(Point.y - y)));
+         if dmg > 0 then
+            begin
+            if power > abs(Score) then
+               if Score > 0 then inc(Result, KillScore)
+                            else dec(Result, KillScore * 3)
+            else
+               if Score > 0 then inc(Result, power)
+                            else dec(Result, power * 3)
             end;
          end;
 Result:= Result * 1024

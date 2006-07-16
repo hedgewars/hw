@@ -54,7 +54,7 @@ if CurrentTeam.ExtDriven then
    end
    else begin
    ProcessKbd;
-   NetGetNextCmd; // на случай, если что-то сказано
+   NetGetNextCmd; // its for the case when receiving /say message
    if SendEmptyPacketTicks >= cSendEmptyPacketTime then
       begin
       SendIPC('+');
@@ -92,7 +92,7 @@ for i:= 1 to Lag do
        end;
 if not CurrentTeam.ExtDriven then isInLag:= false;
 
-MoveWorld
+MoveCamera
 end;
 
 end.

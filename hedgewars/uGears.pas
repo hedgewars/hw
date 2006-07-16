@@ -90,6 +90,7 @@ var RopePoints: record
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: integer); forward;
+procedure AmmoFlameWork(Ammo: PGear); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -118,11 +119,15 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepDynamite,
                                                                doStepTeamHealthSorter,
                                                                doStepBomb,
-                                                               doStepCluster
+                                                               doStepCluster,
+                                                               doStepShover,
+                                                               doStepFlame
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
+const Counter: Longword = 0;
 begin
+inc(Counter);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+')');{$ENDIF}
 New(Result);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: handle = '+inttostr(integer(Result)));{$ENDIF}
@@ -217,6 +222,13 @@ gtAmmo_Grenade: begin
                 Result.Elasticity:= 0.6;
                 Result.Friction:= 0.995;
                 Result.Timer:= Timer
+                end;
+       gtFlame: begin
+                Result.Angle:= Counter mod 64;
+                Result.Radius:= 1;
+                Result.Health:= 2;
+                Result.dY:= (getrandom - 0.8) * 0.03;
+                Result.dX:= (getrandom - 0.5) * 0.4
                 end;
      end;
 if GearsList = nil then GearsList:= Result
@@ -509,6 +521,7 @@ while Gear<>nil do
                          end;
      gtClusterBomb: DrawSprite(sprClusterBomb, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
          gtCluster: DrawSprite(sprClusterParticle, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, 0, Surface);
+           gtFlame: DrawSprite(sprFlame, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy,(GameTicks div 128 + Gear.Angle) mod 8, Surface);
               end;
       Gear:= Gear.NextGear
       end;
@@ -559,7 +572,8 @@ while Gear <> nil do
          case Gear.Kind of
               gtHedgehog,
                   gtMine,
-                  gtCase: begin
+                  gtCase,
+                 gtFlame: begin
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
                              begin
@@ -582,14 +596,14 @@ end;
 procedure AmmoShove(Ammo: PGear; Damage, Power: integer);
 var t: PGearArray;
     i: integer;
-    Gear: PGear;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t.Count;
 while i > 0 do
     begin
     dec(i);
-    case t.ar[i].Kind of
+    if (t.ar[i].State and gstNoDamage) = 0 then
+       case t.ar[i].Kind of
            gtHedgehog,
                gtMine,
                gtCase: begin
@@ -601,14 +615,7 @@ while i > 0 do
                        FollowGear:= t.ar[i]
                        end;
            end
-    end;
-Gear:= GearsList;
-while Gear <> nil do
-      begin
-      if Round(sqrt(sqr(Gear.X - Ammo.X) + sqr(Gear.Y - Ammo.Y))) < 50 then // why 50?
-         Gear.Active:= true;
-      Gear:= Gear.NextGear
-      end
+    end
 end;
 
 procedure AssignHHCoords;
@@ -640,6 +647,26 @@ while t <> nil do
       t:= t.NextGear
       end;
 Result:= nil
+end;
+
+procedure AmmoFlameWork(Ammo: PGear);
+var t: PGear;
+begin
+t:= GearsList;
+while t <> nil do
+      begin
+      if (t.Kind = gtHedgehog) and (t.Y < Ammo.Y) then
+         if sqr(Ammo.X - t.X) + sqr(Ammo.Y - t.Y - cHHRadius) * 2 <= sqr(4) then
+            begin
+            inc(t.Damage, 5);
+            t.dX:= t.dX + (t.X - Ammo.X) * 0.02;
+            t.dY:= - 0.25;
+            t.Active:= true;
+            DeleteCI(t);
+            FollowGear:= t
+            end;
+      t:= t.NextGear
+      end;
 end;
 
 function CheckGearsNear(mX, mY: integer; Kind: TGearsType; rX, rY: integer): PGear;

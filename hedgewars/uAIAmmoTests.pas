@@ -39,6 +39,7 @@ function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Pow
 function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestBaseballBat(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
@@ -53,7 +54,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amRope}          nil,
 {amMine}          nil,
 {amDEagle}        TestDesertEagle,
-{amDynamite}      nil
+{amDynamite}      nil,
+{amBaseballBat}   TestBaseballBat
                   );
 
 implementation
@@ -175,6 +177,7 @@ end;
 function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, x, y: real;
 begin
+ExplR:= 0;
 if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
    begin
    Result:= BadTurn;
@@ -182,7 +185,6 @@ if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
    end;
 Time:= 0;
 Power:= 1;
-ExplR:= 0;
 Vx:= (Targ.X - Me.X)/1024;
 Vy:= (Targ.Y - Me.Y)/1024;
 x:= Me.X;
@@ -193,7 +195,7 @@ repeat
   y:= y + vY;
   if TestColl(round(x), round(y), 2) then
      begin
-     Result:= RateExplosion(Me, round(x), round(y), 25) * 2;
+     Result:= RateShove(Me, round(x), round(y), 25, 25) * 1024;
      if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64;
      exit
      end
@@ -205,6 +207,7 @@ function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle,
 var Vx, Vy, x, y, t: real;
     d: Longword;
 begin
+ExplR:= 0;
 if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
    begin
    Result:= BadTurn;
@@ -212,7 +215,6 @@ if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
    end;
 Time:= 0;
 Power:= 1;
-ExplR:= 0;
 t:= sqrt(sqr(Targ.X - Me.X) + sqr(Targ.Y - Me.Y)) * 2;
 Vx:= (Targ.X - Me.X) / t;
 Vy:= (Targ.Y - Me.Y) / t;
@@ -228,6 +230,20 @@ repeat
 until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024) or (d > 200);
 if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
                                          else Result:= Low(integer)
+end;
+
+function TestBaseballBat(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+begin
+ExplR:= 0;
+if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25 then
+   begin
+   Result:= BadTurn;
+   exit
+   end;
+Time:= 0;
+Power:= 1;
+Angle:= DxDy2AttackAngle(Sign(Targ.X - Me.X), 1);
+Result:= RateShove(Me, round(Me.X) + 10 * Sign(Targ.X - Me.X), round(Me.Y), 15, 30)
 end;
 
 end.
