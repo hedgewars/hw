@@ -281,23 +281,23 @@
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot save demo to file %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка при запуске сервера: %1.</translation>
     </message>
     <message>
         <source>Quit</source>
+        <translation>Выход</translation>
+    </message>
+    <message>
+        <source>en.txt</source>
+        <translation>ru.txt</translation>
+    </message>
+    <message>
+        <source>Cannot save demo to file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cannot open demofile %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted demo file %1</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot open demofile %1</source>
+        <translation>Не могу сохранить демо в файл %1</translation>
     </message>
 </context>
 <context>
@@ -316,3 +316,4 @@
     </message>
 </context>
 </TS>
+ 

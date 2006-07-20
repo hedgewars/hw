@@ -51,7 +51,7 @@ procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface
 procedure RenderHealth(var Hedgehog: THedgehog);
 function  RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
 procedure AddProgress;
-function  LoadImage(filename: string; hasAlpha: boolean): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
@@ -248,24 +248,24 @@ var i: TStuff;
     procedure GetSkyColor;
     var p: Longword;
     begin
-    if SDL_MustLock(StoreSurface) then
-       SDLTry(SDL_LockSurface(StoreSurface) >= 0, true);
-    p:= Longword(StoreSurface.pixels) + Word(StuffPoz[sSky].x) * StoreSurface.format.BytesPerPixel;
-    case StoreSurface.format.BytesPerPixel of
+    if SDL_MustLock(SpritesData[sprSky].Surface) then
+       SDLTry(SDL_LockSurface(SpritesData[sprSky].Surface) >= 0, true);
+    p:= Longword(SpritesData[sprSky].Surface.pixels);
+    case SpritesData[sprSky].Surface.format.BytesPerPixel of
          1: cSkyColor:= PByte(p)^;
          2: cSkyColor:= PWord(p)^;
          3: cSkyColor:= (PByte(p)^) or (PByte(p + 1)^ shl 8) or (PByte(p + 2)^ shl 16);
          4: cSkyColor:= PLongword(p)^;
          end;
-    if SDL_MustLock(StoreSurface) then
-       SDL_UnlockSurface(StoreSurface)
+    if SDL_MustLock(SpritesData[sprSky].Surface) then
+       SDL_UnlockSurface(SpritesData[sprSky].Surface)
     end;
 
     procedure GetExplosionBorderColor;
     var f: textfile;
         c: integer;
     begin
-    s:= Pathz[ptThemeCurrent] + '/' + cThemeCFGFilename;
+    s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
     WriteToConsole(msgLoading + s + ' ');
     AssignFile(f, s);
     {$I-}
@@ -319,12 +319,22 @@ WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
 
-GetSkyColor;
-
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
-         Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha);
+         begin
+         if AltPath = ptNone then
+            Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha)
+         else begin
+            Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, false);
+            if Surface = nil then
+               Surface:= LoadImage(Pathz[AltPath] + '/' + FileName, hasAlpha)
+            end;
+         if Width = 0 then Width:= Surface.w;
+         if Height = 0 then Height:= Surface.h
+         end;
+
+GetSkyColor;
 
 AddProgress;
 tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, false);
@@ -484,21 +494,25 @@ if Step = MaxCalls then
    end;
 end;
 
-function  LoadImage(filename: string; hasAlpha: boolean): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
 tmpsurf:= IMG_Load(PChar(filename + '.' + cBitsStr + '.png'));
 if tmpsurf = nil then
    tmpsurf:= IMG_Load(PChar(filename + '.png'));
-TryDo(tmpsurf <> nil, msgFailed, true);
+
+if tmpsurf = nil then
+   if critical then OutError(msgFailed, true)
+      else begin
+      WriteLnToConsole(msgFailed);
+      Result:= nil;
+      exit
+      end;
+      
 TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-if cFullScreen then
-   begin
-   if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
-               else Result:= SDL_DisplayFormat(tmpsurf);
-   SDL_FreeSurface(tmpsurf);
-   end else Result:= tmpsurf;
+if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
+            else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole(msgOK)
 end;
 

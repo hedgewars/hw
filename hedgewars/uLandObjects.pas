@@ -364,7 +364,7 @@ var s: string;
     f: textfile;
     i, ii: integer;
 begin
-s:= Pathz[ptThemeCurrent] + '/' + cThemeCFGFilename;
+s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 AssignFile(f, s);
 {$I-}
@@ -376,7 +376,7 @@ for i:= 0 to Pred(ThemeObjects.Count) do
     Readln(f, s); // filename
     with ThemeObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s, false);
+         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false);
          Read(f, Width, Height);
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);
@@ -393,7 +393,7 @@ for i:= 0 to Pred(SprayObjects.Count) do
     Readln(f, s); // filename
     with SprayObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptThemeCurrent] + '/' + s, false);
+         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false);
          Width:= Surf.w;
          Height:= Surf.h;
          ReadLn(f, Maxcnt)

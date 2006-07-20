@@ -239,6 +239,7 @@ void HWGame::Start()
 	arguments << "46631";
 	arguments << (vid_Fullscreen ? "1" : "0");
 	arguments << "1";
+	arguments << tr("en.txt");
 	process->start("./hwengine", arguments);
 }
 
@@ -289,7 +290,7 @@ void HWGame::SaveDemo(const QString & filename)
 	{
 		QMessageBox::critical(0,
 				tr("Error"),
-				tr("Cannot save demo to file %s").arg(filename),
+				tr("Cannot save demo to file %1").arg(filename),
 				tr("Quit"));
 		return ;
 	}
@@ -307,7 +308,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	{
 		QMessageBox::critical(0,
 				tr("Error"),
-				tr("Cannot open demofile %s").arg(demofilename),
+				tr("Cannot open demofile %1").arg(demofilename),
 				tr("Quit"));
 		return ;
 	}

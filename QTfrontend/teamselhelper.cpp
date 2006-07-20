@@ -3,8 +3,6 @@
 #include <QPixmap>
 #include <QPushButton>
 
-#include <iostream>
-
 void TeamLabel::teamButtonClicked()
 {
   emit teamActivated(text());

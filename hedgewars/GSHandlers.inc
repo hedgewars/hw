@@ -429,7 +429,8 @@ var HHGear: PGear;
 
 begin
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
-if (HHGear.State and gstHHDriven) = 0 then
+if ((HHGear.State and gstHHDriven) = 0)
+   or (CheckGearDrowning(HHGear)) then
    begin
    DeleteMe;
    exit

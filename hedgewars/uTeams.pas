@@ -83,7 +83,7 @@ procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 
 implementation
-uses uMisc, uStore, uWorld, uIO, uAI;
+uses uMisc, uStore, uWorld, uIO, uAI, uLocale;
 const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;
@@ -148,7 +148,7 @@ end;
 function AddTeam: PTeam;
 begin
 New(Result);
-TryDo(Result <> nil, 'AddTean: Result = nil', true);
+TryDo(Result <> nil, 'AddTeam: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
 Result.AttackBar:= 2;
 if TeamsList = nil then TeamsList:= Result
@@ -234,7 +234,7 @@ with Hedgehog do
 
 with Ammo[CurSlot, CurAmmo] do
      begin
-     s:= Ammoz[AmmoType].Name;
+     s:= trammo[Ammoz[AmmoType].NameId];
      if Count <> AMMO_INFINITE then
         s:= s + ' (' + IntToStr(Count) + ')';
      if (Propz and ammoprop_Timerable) <> 0 then

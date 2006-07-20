@@ -590,7 +590,8 @@ while Gear <> nil do
               end;
          end;
       Gear:= Gear.NextGear
-      end
+      end;
+uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: integer);

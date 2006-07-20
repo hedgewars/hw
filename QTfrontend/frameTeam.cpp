@@ -4,7 +4,6 @@
 #include <QResizeEvent>
 #include <QCoreApplication>
 
-#include <iostream>
 using namespace std;
 
 FrameTeams::FrameTeams(QWidget* parent) :

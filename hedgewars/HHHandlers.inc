@@ -224,7 +224,7 @@ if ((Gear.State and (gstMoving or gstFalling)) = 0) then
 
 if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks = 0) then
    begin
-   if ((Gear.Message and gm_LJump )<>0) then
+   if ((Gear.Message and gm_LJump ) <> 0) then
       begin
       Gear.Message:= 0;
       if not TestCollisionYwithGear(Gear, -1) then
@@ -239,14 +239,14 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
          exit
          end;
       end;
-   if ((Gear.Message and gm_HJump )<>0) then
+   if ((Gear.Message and gm_HJump ) <> 0) then
       begin
       Gear.Message:= 0;
       if not TestCollisionYwithGear(Gear, -1) then
          begin
          Gear.dY:= -0.20;
          Gear.dX:= 0.0000001 * Sign(Gear.dX);
-         Gear.X:= Gear.X - Sign(Gear.dX)*0.00008; // компенсация сдвига %)
+         Gear.X:= Gear.X - Sign(Gear.dX)*0.00008; // shift compensation
          Gear.State:= Gear.State or gstFalling or gstHHJumping;
          exit
          end;

@@ -55,7 +55,8 @@ uses
   uLand in 'uLand.pas',
   uLandTemplates in 'uLandTemplates.pas',
   uLandObjects in 'uLandObjects.pas',
-  uLandGraphics in 'uLandGraphics.pas';
+  uLandGraphics in 'uLandGraphics.pas',
+  uLocale in 'uLocale.pas';
 
 {$INCLUDE options.inc}
 
@@ -170,7 +171,7 @@ for i:= 0 to ParamCount do
 {$ELSE}
 begin
 {$ENDIF}
-if ParamCount=6 then
+if ParamCount = 7 then
    begin
    val(ParamStr(1), cScreenWidth, c);
    val(ParamStr(2), cScreenHeight, c);
@@ -179,6 +180,7 @@ if ParamCount=6 then
    val(ParamStr(4), ipcPort, c);
    cFullScreen:= ParamStr(5) = '1';
    isSoundEnabled:= ParamStr(6) = '1';
+   cLocaleFName:= ParamStr(7);
    end else OutError(errmsgShouldntRun, true);
 end;
 
@@ -216,7 +218,10 @@ ShowMainWindow;
 InitKbdKeyTable;
 InitIPC;
 WriteLnToConsole(msgGettingConfig);
-SendIPCAndWaitReply('C');        // запрос конфига игры
+
+LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
+
+SendIPCAndWaitReply('C');        // ask for game config
 InitTeams;
 
 if isSoundEnabled then InitSound;

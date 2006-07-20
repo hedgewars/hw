@@ -352,7 +352,7 @@ procedure chSetTheme(var s: shortstring);
 begin
 if isDeveloperMode then
    begin
-   Pathz[ptThemeCurrent]:= Pathz[ptThemes] + '/' + s;
+   Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
    InitStepsFlags:= InitStepsFlags or cifTheme
    end
 end;

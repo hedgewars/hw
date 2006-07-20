@@ -195,7 +195,7 @@ repeat
   y:= y + vY;
   if TestColl(round(x), round(y), 2) then
      begin
-     Result:= RateShove(Me, round(x), round(y), 25, 25) * 1024;
+     Result:= RateShove(Me, round(x), round(y), 25, 25);
      if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64;
      exit
      end

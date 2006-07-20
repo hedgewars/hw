@@ -1,0 +1,14 @@
+; English locale
+
+00:00=Grenade
+00:01=ClusterBomb
+00:02=Bazooka
+00:03=UFO
+00:04=Shotgun
+00:05=PickHammer
+00:06=Skip
+00:07=Rope
+00:08=Mine
+00:09=DEagle
+00:10=Dynamite
+00:11=BaseballBat

@@ -262,7 +262,7 @@ procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
 begin
-tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + '/LandTex', false);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false);
 r.y:= 0;
 while r.y < 1024 do
       begin
@@ -288,7 +288,7 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: integer;
 begin
-tmpsurf:= LoadImage(Pathz[ptThemeCurrent] + '/Border', false);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false);
 for x:= 0 to 2047 do
     begin
     yd:= 1023;

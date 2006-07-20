@@ -83,6 +83,19 @@ var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
     tdx, tdy: real;
+
+    procedure DrawRepeated(spr: TSprite);
+    var i, w: integer;
+    begin
+    w:= SpritesData[spr].Width;
+    i:= WorldDx mod w;
+    if i > 0 then dec(i, w);
+    repeat
+      DrawSprite(spr, i, WorldDy + 1024 - SpritesData[spr].Height, 0, Surface);
+      inc(i, w)
+    until i > cScreenWidth
+    end;
+
 begin
 // Sky
 inc(RealTicks, Lag);
@@ -96,11 +109,8 @@ if r.h > 0 then
    SDL_FillRect(Surface, @r, cSkyColor)
    end;
 // background
-for i:= 0 to (cScreenWidth shr 6) do
-    DrawGear(sSky, i*64, WorldDy, Surface);
-
-for i:= -1 to 3 do
-    DrawGear(sHorizont, i * 512 + (((WorldDx * 3) div 5) and $1FF), cWaterLine - 256 + WorldDy, Surface);
+DrawRepeated(sprSky);
+DrawRepeated(sprHorizont);
 
 // Waves
 {$WARNINGS OFF}

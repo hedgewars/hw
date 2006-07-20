@@ -64,7 +64,7 @@ var Time: Longword;
     a, aa: TAmmoType;
 begin
 for i:= 0 to Pred(Targets.Count) do
-    if Targets.ar[i].Score >= 0 then
+    if (Targets.ar[i].Score >= 0) then
        begin
        with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
             a:= Ammo[CurSlot, CurAmmo].AmmoType;
@@ -104,8 +104,8 @@ for i:= 0 to Pred(Targets.Count) do
 end;
 
 procedure Walk(Me: PGear);
-const FallTicksForBranching = cHHRadius * 2 + 8;
-      cBranchStackSize = 8;
+const FallPixForBranching = cHHRadius * 2 + 8;
+      cBranchStackSize = 12;
       
 type TStackEntry = record
                    WastedTicks: Longword;
@@ -118,9 +118,10 @@ var Stack: record
            States: array[0..Pred(cBranchStackSize)] of TStackEntry;
            end;
 
-    procedure Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer);
+    function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
     begin
-    if Stack.Count < cBranchStackSize then
+    Result:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
+    if Result then
        with Stack.States[Stack.Count] do
             begin
             WastedTicks:= Ticks;
@@ -147,6 +148,8 @@ var Actions: TActions;
     ticks, maxticks, steps: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
+    CanGo: boolean;
+    AltMe: TGear;
 begin
 Actions.Count:= 0;
 Actions.Pos:= 0;
@@ -156,7 +159,7 @@ Stack.Count:= 0;
 Push(0, Actions, Me^, aia_Left);
 Push(0, Actions, Me^, aia_Right);
 
-if (Me.State and gstAttacked) = 0 then maxticks:= TurnTimeLeft - 5000
+if (Me.State and gstAttacked) = 0 then maxticks:= max(0, integer(TurnTimeLeft) - 10000)
                                   else maxticks:= TurnTimeLeft;
 
 if (Me.State and gstAttacked) = 0 then TestAmmos(Actions, Me);
@@ -171,10 +174,23 @@ while (Stack.Count > 0) and not StopThinking do
     AddAction(Actions, Me.Message, aim_release, 0);
     steps:= 0;
     
-    while HHGo(Me, GoInfo) do
+    while true do
        begin
+       CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
+       if GoInfo.JumpType = jmpHJump then // hjump support
+          if Push(ticks, Actions, AltMe, Me^.Message) then
+             with Stack.States[Pred(Stack.Count)] do
+                  begin
+                  AddAction(MadeActions, aia_HJump, 0, 305);
+                  AddAction(MadeActions, aia_HJump, 0, 350);
+                  end;
+       if GoInfo.JumpType = jmpLJump then // ljump support
+          if Push(ticks, Actions, AltMe, Me^.Message) then
+             with Stack.States[Pred(Stack.Count)] do
+                  AddAction(MadeActions, aia_LJump, 0, 305);
+       if not CanGo then break;
        inc(steps);
        Actions.actions[Actions.Count - 2].Param:= round(Me.X);
        Rate:= RatePlace(Me);
@@ -187,7 +203,7 @@ while (Stack.Count > 0) and not StopThinking do
        else if Rate < BestRate then break;
        if ((Me.State and gstAttacked) = 0)
            and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
-       if GoInfo.FallTicks >= FallTicksForBranching then
+       if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
        if StopThinking then exit
        end;
@@ -211,7 +227,7 @@ if (Me.State and gstAttacked) = 0 then
       begin
       Walk(@WalkMe);
       if (StartTicks > GameTicks - 1500) then SDL_Delay(2000);
-      end else OutError('AI: no targets!?')
+      end else
 else begin
       Walk(@WalkMe);
       while (not StopThinking) and (BestActions.Count = 0) do
@@ -235,6 +251,11 @@ Me.State:= Me.State or gstHHThinking;
 StopThinking:= false;
 ThinkingHH:= Me;
 FillTargets;
+if Targets.Count = 0 then
+   begin
+   OutError('AI: no targets!?');
+   exit
+   end;
 FillBonuses((Me.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me.Hedgehog), a);

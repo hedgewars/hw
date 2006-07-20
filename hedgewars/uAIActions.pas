@@ -34,6 +34,7 @@
 unit uAIActions;
 interface
 uses uGears;
+{$INCLUDE options.inc}
 const MAXACTIONS = 96;
       aia_none       = 0;
       aia_Left       = 1;
@@ -49,6 +50,8 @@ const MAXACTIONS = 96;
       aia_LookLeft   = $80000003;
       aia_LookRight  = $80000004;
       aia_AwareExpl  = $80000005;
+      aia_HJump      = $80000006;
+      aia_LJump      = $80000007;
 
       aim_push       = $80000000;
       aim_release    = $80000001;
@@ -81,6 +84,30 @@ const ActionIdToStr: array[0..6] of string[16] = (
 {aia_Down}           'down'
                      );
 
+{$IFDEF TRACEAIACTIONS}
+const SpecActionIdToStr: array[$80000000..$80000006] of string[16] = (
+{aia_Weapon}             'aia_Weapon',
+{aia_WaitX}              'aia_WaitX',
+{aia_WaitY}              'aia_WaitY',
+{aia_LookLeft}           'aia_LookLeft',
+{aia_LookRight}          'aia_LookRight',
+{aia_AwareExpl}          'aia_AwareExpl',
+{aia_HJump}              'aia_HJump',
+{aia_LJump}              'aia_LJump'
+);
+
+procedure DumpAction(Action: TAction; Me: PGear);
+begin
+if (Action.Action and ai_specmask) = 0 then
+   WriteLnToConsole('AI action: '+ActionIdToStr[Action.Action])
+else begin
+   WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
+   if Action.Action = aia_WaitX then
+      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(round(Me.X)));
+   end
+end;
+{$ENDIF}
+
 procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; const X: integer = 0; Y: integer = 0);
 begin
 with Actions do
@@ -111,6 +138,9 @@ if Actions.Pos >= Actions.Count then exit;
 with Actions.actions[Actions.Pos] do
      begin
      if Time > GameTicks then exit;
+     {$IFDEF TRACEAIACTIONS}
+     DumpAction(Actions.actions[Actions.Pos], Me);
+     {$ENDIF}
      if (Action and ai_specmask) <> 0 then
         case Action of
            aia_Weapon: SetWeapon(Param);
@@ -129,6 +159,8 @@ with Actions.actions[Actions.Pos] do
                           exit
                           end else ParseCommand('-right');
         aia_AwareExpl: AwareOfExplosion(X, Y, Param);
+            aia_HJump: ParseCommand('hjump');
+            aia_LJump: ParseCommand('ljump');
              end else
         begin
         s:= ActionIdToStr[Action];

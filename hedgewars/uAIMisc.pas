@@ -34,6 +34,7 @@
 unit uAIMisc;
 interface
 uses SDLh, uConsts, uGears;
+{$INCLUDE options.inc}
 
 type TTarget = record
                Point: TPoint;
@@ -43,9 +44,11 @@ type TTarget = record
                 Count: Longword;
                 ar: array[0..cMaxHHIndex*5] of TTarget;
                 end;
+     TJumpType = (jmpNone, jmpHJump, jmpLJump);
      TGoInfo = record
                Ticks: Longword;
-               FallTicks: Longword;
+               FallPix: Longword;
+               JumpType: TJumpType;
                end;
 
 procedure FillTargets;
@@ -56,7 +59,7 @@ function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
 function RateShove(Me: PGear; x, y, r, power: integer): integer;
-function HHGo(Gear: PGear; out GoInfo: TGoInfo): boolean;
+function HHGo(Gear, AltGear: PGear; out GoInfo: TGoInfo): boolean;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -238,12 +241,88 @@ for i:= 0 to Targets.Count do
 Result:= Result * 1024
 end;
 
-function HHGo(Gear: PGear; out GoInfo: TGoInfo): boolean;
-var pX, pY: integer;
+function HHJump(Gear: PGear; JumpType: TJumpType; out GoInfo: TGoInfo): boolean;
+var bX, bY: integer;
 begin
 Result:= false;
 GoInfo.Ticks:= 0;
-GoInfo.FallTicks:= 0;
+GoInfo.FallPix:= 0;
+GoInfo.JumpType:= jmpNone;
+bX:= round(Gear.X);
+bY:= round(Gear.Y);
+case JumpType of
+     jmpNone: exit;
+    jmpHJump: if not TestCollisionYwithGear(Gear, -1) then
+                 begin
+                 Gear.dY:= -0.20;
+                 Gear.dX:= 0.0000001 * Sign(Gear.dX);
+                 Gear.X:= Gear.X - Sign(Gear.dX)*0.00008; // shift compensation
+                 Gear.State:= Gear.State or gstFalling or gstHHJumping;
+                 end else exit;
+    jmpLJump: begin
+              if not TestCollisionYwithGear(Gear, -1) then
+                 if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 2 else
+                 if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 1;
+              if not (TestCollisionXwithGear(Gear, Sign(Gear.dX))
+                 or   TestCollisionYwithGear(Gear, -1)) then
+                 begin
+                 Gear.dY:= -0.15;
+                 Gear.dX:= Sign(Gear.dX) * 0.15;
+                 Gear.State:= Gear.State or gstFalling or gstHHJumping
+                 end
+              end
+    end;
+    
+repeat
+if Gear.Y + cHHRadius >= cWaterLine then exit;
+if (Gear.State and gstFalling) <> 0 then
+   begin
+   if (GoInfo.Ticks = 350) then
+      if (abs(Gear.dX) < 0.0000002) and (Gear.dY < -0.02) then
+         begin
+         Gear.dY:= -0.25;
+         Gear.dX:= Sign(Gear.dX) * 0.02
+         end;
+   if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
+   Gear.X:= Gear.X + Gear.dX;
+   inc(GoInfo.Ticks);
+   Gear.dY:= Gear.dY + cGravity;
+   if Gear.dY > 0.40 then exit;
+   if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0; 
+   Gear.Y:= Gear.Y + Gear.dY;
+   if (Gear.dY >= 0)and TestCollisionYwithGear(Gear, 1) then
+      begin
+      Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
+      Gear.dY:= 0;
+      case JumpType of
+           jmpHJump: if (bY - Gear.Y > 5) then
+                        begin
+                        Result:= true;
+                        GoInfo.JumpType:= jmpHJump;
+                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
+                        end;
+           jmpLJump: if abs(bX - Gear.X) > 30 then
+                        begin
+                        Result:= true;
+                        GoInfo.JumpType:= jmpLJump;
+                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
+                        end;
+           end;
+      exit
+      end;
+   end;
+until false;
+end;
+
+function HHGo(Gear, AltGear: PGear; out GoInfo: TGoInfo): boolean;
+var pX, pY: integer;
+begin
+Result:= false;
+AltGear^:= Gear^;
+
+GoInfo.Ticks:= 0;
+GoInfo.FallPix:= 0;
+GoInfo.JumpType:= jmpNone;
 repeat
 pX:= round(Gear.X);
 pY:= round(Gear.Y);
@@ -254,36 +333,23 @@ if (Gear.State and gstFalling) <> 0 then
    Gear.dY:= Gear.dY + cGravity;
    if Gear.dY > 0.40 then
       begin
-      Goinfo.FallTicks:= 0;
+      Goinfo.FallPix:= 0;
+      HHJump(AltGear, jmpLJump, GoInfo);
       exit
       end;
    Gear.Y:= Gear.Y + Gear.dY;
-   if round(Gear.Y) > pY then inc(GoInfo.FallTicks);
+   if round(Gear.Y) > pY then inc(GoInfo.FallPix);
    if TestCollisionYwithGear(Gear, 1) then
       begin
       inc(GoInfo.Ticks, 300);
       Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
       Gear.dY:= 0;
       Result:= true;
+      HHJump(AltGear, jmpLJump, GoInfo);
       exit
       end;
    continue
    end;
-   {if ((Gear.Message and gm_LJump )<>0) then
-      begin
-      Gear.Message:= 0;
-      if not HHTestCollisionYwithGear(Gear, -1) then
-         if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 2 else
-         if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithGear(Gear, Sign(Gear.dX))
-         or   HHTestCollisionYwithGear(Gear, -1)) then
-         begin
-         Gear.dY:= -0.15;
-         Gear.dX:= Sign(Gear.dX) * 0.15;
-         Gear.State:= Gear.State or gstFalling or gstHHJumping;
-         exit
-         end;
-      end;}
    if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
@@ -344,6 +410,7 @@ if (pX <> round(Gear.X)) and ((Gear.State and gstFalling) = 0) then
    exit
    end
 until (pX = round(Gear.X)) and (pY = round(Gear.Y)) and ((Gear.State and gstFalling) = 0);
+HHJump(AltGear, jmpHJump, GoInfo)
 end;
 
 end.

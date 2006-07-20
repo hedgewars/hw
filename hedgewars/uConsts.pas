@@ -33,19 +33,21 @@
 
 unit uConsts;
 interface
-uses SDLh;
+uses SDLh, uLocale;
 {$INCLUDE options.inc}
-type TStuff     = (sHorizont, sSky, sConsoleBG, sPowerBar, sQuestion, sWindBar,
+type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sWindL, sWindR, sRopeNode);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
      TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave);
-     TPathType  = (ptData, ptGraphics, ptThemes, ptThemeCurrent, ptTeams, ptMaps,
-                   ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts);
+     TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
+                   ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
+                   ptLocale);
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
                    sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
-                   sprClusterBomb, sprClusterParticle, sprFlame);
+                   sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
+                   sprSky);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
@@ -184,10 +186,11 @@ const
                                          );
 
       Pathz: array[TPathType] of string[ 64] = (
+                                               '',                              // ptNone      
                                                'Data',                          // ptData
                                                'Data/Graphics',                 // ptGraphics
                                                'Data/Themes',                   // ptThemes
-                                               'Data/Themes/avematan',          // ptThemeCurrent
+                                               'Data/Themes/avematan',          // ptCurrTheme
                                                'Data/Teams',                    // ptTeams
                                                'Data/Maps',                     // ptMaps
                                                '',                              // ptMapCurrent
@@ -195,15 +198,14 @@ const
                                                'Data/Sounds',                   // ptSounds
                                                'Data/Graphics/Graves',          // ptGraves
                                                'Data/Fonts',                    // ptFonts
-                                               'Data/Forts'                     // ptForts
+                                               'Data/Forts',                    // ptForts
+                                               'Data/Locale'                    // ptLocale
                                                );
 
       StuffLoadData: array[TStuff] of record
                                      FileName: String[31];
                                      Path    : TPathType;
                                      end = (
-                                     (FileName: 'horizont'; Path: ptThemeCurrent ),    // sHorizont
-                                     (FileName:      'Sky'; Path: ptThemeCurrent ),    // sSky
                                      (FileName:  'Console'; Path: ptGraphics     ),    // sConsoleBG
                                      (FileName: 'PowerBar'; Path: ptGraphics     ),    // sPowerBar
                                      (FileName: 'thinking'; Path: ptGraphics     ),    // sQuestion
@@ -213,8 +215,6 @@ const
                                      (FileName: 'RopeNode'; Path: ptGraphics     )     // sRopeNode
                                      );
       StuffPoz: array[TStuff] of TSDL_Rect = (
-                                      (x:   0; y:   0; w: 512; h: 256), // sHorizont
-                                      (x: 512; y:   0; w:  64; h:1024), // sSky
                                       (x: 256; y: 256; w: 256; h: 256), // sConsoleBG
                                       (x: 256; y: 768; w: 256; h:  32), // sPowerBar
                                       (x: 256; y: 512; w:  32; h:  32), // sQuestion
@@ -225,13 +225,14 @@ const
                                       );
       SpritesData: array[TSprite] of record
                      FileName: String[31];
-                     Path    : TPathType;
+                     Path, AltPath: TPathType;
                      Surface : PSDL_Surface;
                      Width, Height: integer;
                      hasAlpha: boolean;
                      end = (
                      (FileName: 'BlueWater'; Path: ptGraphics; Width: 256; Height: 48; hasAlpha: false),// sprWater
-                     (FileName:    'Clouds'; Path: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
+                     (FileName:    'Clouds'; Path: ptCurrTheme;
+                                          AltPath: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
                      (FileName:      'Bomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprBomb
                      (FileName: 'BigDigits'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
                      (FileName:     'Frame'; Path: ptGraphics; Width:   4; Height: 32; hasAlpha:  true),// sprFrame
@@ -251,7 +252,9 @@ const
                      (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprPower
                      (FileName:    'ClBomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
                      (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
-                     (FileName:     'Flame'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false) // sprFlame
+                     (FileName:     'Flame'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprFlame
+                     (FileName:  'horizont'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false),// sprHorizont
+                     (FileName:       'Sky'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false) // sprSky
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -270,12 +273,12 @@ const
                                        );
 
       Ammoz: array [TAmmoType] of record
-                                  Name: string[32];
+                                  NameId: TAmmoStrId;
                                   Ammo: TAmmo;
                                   Slot: Longword;
                                   TimeAfterTurn: Longword;
                                   end = (
-                                  (Name: 'Grenade';
+                                  (NameId: sidGrenade;
                                    Ammo: (Propz: ammoprop_Timerable or ammoprop_Power;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
@@ -283,7 +286,7 @@ const
                                           AmmoType: amGrenade);
                                    Slot: 1;
                                    TimeAfterTurn: 3000),
-                                  (Name: 'Cluster Bomb';
+                                  (NameId: sidClusterBomb;
                                    Ammo: (Propz: ammoprop_Timerable or ammoprop_Power;
                                           Count: 5;
                                           NumPerTurn: 0;
@@ -291,7 +294,7 @@ const
                                           AmmoType: amClusterBomb);
                                    Slot: 1;
                                    TimeAfterTurn: 3000),
-                                  (Name: 'Bazooka';
+                                  (NameId: sidBazooka;
                                    Ammo: (Propz: ammoprop_Power;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
@@ -299,7 +302,7 @@ const
                                           AmmoType: amBazooka);
                                    Slot: 0;
                                    TimeAfterTurn: 3000),
-                                  (Name: 'UFO';
+                                  (NameId: sidUFO;
                                    Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget;
                                           Count: 2;
                                           NumPerTurn: 0;
@@ -307,7 +310,7 @@ const
                                           AmmoType: amUFO);
                                    Slot: 0;
                                    TimeAfterTurn: 3000),
-                                  (Name: 'Shotgun';
+                                  (NameId: sidShotgun;
                                    Ammo: (Propz: 0;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 1;
@@ -315,7 +318,7 @@ const
                                           AmmoType: amShotgun);
                                    Slot: 2;
                                    TimeAfterTurn: 3000),
-                                  (Name: 'Pneumatic pick';
+                                  (NameId: sidPickHammer;
                                    Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
                                           Count: 2;
                                           NumPerTurn: 0;
@@ -323,7 +326,7 @@ const
                                           AmmoType: amPickHammer);
                                    Slot: 5;
                                    TimeAfterTurn: 0),
-                                  (Name: 'Skip turn';
+                                  (NameId: sidSkip;
                                    Ammo: (Propz: 0;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
@@ -331,7 +334,7 @@ const
                                           AmmoType: amSkip);
                                    Slot: 7;
                                    TimeAfterTurn: 0),
-                                  (Name: 'Rope';
+                                  (NameId: sidRope;
                                    Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
                                           Count: 5;
                                           NumPerTurn: 0;
@@ -339,7 +342,7 @@ const
                                           AmmoType: amRope);
                                    Slot: 6;
                                    TimeAfterTurn: 0),
-                                  (Name: 'Mine';
+                                  (NameId: sidMine;
                                    Ammo: (Propz: ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;
@@ -347,7 +350,7 @@ const
                                           AmmoType: amMine);
                                    Slot: 4;
                                    TimeAfterTurn: 5000),
-                                  (Name: 'Desert Eagle';
+                                  (NameId: sidDEagle;
                                    Ammo: (Propz: 0;
                                           Count: 3;
                                           NumPerTurn: 3;
@@ -355,7 +358,7 @@ const
                                           AmmoType: amDEagle);
                                    Slot: 2;
                                    TimeAfterTurn: 3000),
-                                   (Name: 'Dynamite';
+                                   (NameId: sidDynamite;
                                     Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInJump or ammoprop_AttackInFall;
                                            Count: 1;
                                            NumPerTurn: 0;
@@ -363,7 +366,7 @@ const
                                            AmmoType: amDynamite);
                                     Slot: 4;
                                     TimeAfterTurn: 5000),
-                                   (Name: 'Baseball Bat';
+                                   (NameId: sidBaseballBat;
                                     Ammo: (Propz: 0;
                                            Count: 1;
                                            NumPerTurn: 0;
