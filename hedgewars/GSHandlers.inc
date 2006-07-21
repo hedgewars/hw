@@ -323,7 +323,7 @@ case Gear.State of
                    dec(Gear.Timer);
                    AllInactive:= false;
                    if Gear.Timer > 0 then exit;
-                   AddCaption('Let''s fight!', $FFFFFF, capgrpStartGame);
+                   AddCaption(trmsg[sidStartFight], $FFFFFF, capgrpStartGame);
                    DeleteGear(Gear)
                    end;
   gtsSmoothWindCh: begin

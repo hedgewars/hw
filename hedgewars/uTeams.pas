@@ -238,7 +238,7 @@ with Ammo[CurSlot, CurAmmo] do
      if Count <> AMMO_INFINITE then
         s:= s + ' (' + IntToStr(Count) + ')';
      if (Propz and ammoprop_Timerable) <> 0 then
-        s:= s + ', ' + inttostr(Timer div 1000) + ' sec';
+        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trmsg[sidSeconds];
      AddCaption(s, Team.Color, capgrpAmmoinfo);
      if (Propz and ammoprop_NeedTarget) <> 0
         then begin

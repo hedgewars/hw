@@ -36,7 +36,9 @@ interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
                    sidDynamite, sidBaseballBat);
+     TMsgStrId = (sidStartFight, sidSeconds);
 var trammo: array[TAmmoStrId] of shortstring;
+    trmsg: array[TMsgStrId] of shortstring;
 
 procedure LoadLocale(FileName: string);
 
@@ -67,6 +69,7 @@ while not eof(f) do
       Delete(s, 1, 6);
       case a of
            0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
+           1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
            end;
       end;
 closefile(f)

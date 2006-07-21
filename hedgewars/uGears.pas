@@ -76,7 +76,8 @@ var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
 
 implementation
-uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics, uAIMisc;
+uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;

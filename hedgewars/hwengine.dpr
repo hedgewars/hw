@@ -112,7 +112,7 @@ SDL_Flip(SDLPrimSurface);
 if flagMakeCapture then
    begin
    flagMakeCapture:= false;
-   s:= 'hw_' + ParamStr(5) + '_' + inttostr(GameTicks) + '.bmp';
+   s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.bmp';
    WriteLnToConsole('Saving ' + s);
    SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(PChar(s), 'wb'), 1)
    end;

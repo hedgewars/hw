@@ -79,6 +79,7 @@ var isCursorVisible : boolean = false;
     cShowFPS      : boolean = true;
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
+    cSeed         : shortstring = '';
 
 const
     cMaxPower     = 1500;

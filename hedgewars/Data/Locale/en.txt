@@ -12,3 +12,6 @@
 00:09=DEagle
 00:10=Dynamite
 00:11=BaseballBat
+
+01:00=Let's fight!
+01:01=sec

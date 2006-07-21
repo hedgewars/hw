@@ -362,6 +362,7 @@ begin
 if isDeveloperMode then
    begin
    SetRandomParams(s, rndfillstr);
+   cSeed:= s;
    InitStepsFlags:= InitStepsFlags or cifRandomize
    end
 end;
