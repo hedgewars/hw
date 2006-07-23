@@ -51,12 +51,14 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
-                   gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame);
+                   gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
+                   gtFirePunch);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
-     TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer, amSkip, amRope,
-                   amMine, amDEagle, amDynamite, amBaseballBat);
+     TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
+                   amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
+                   amBaseballBat);
      THWFont    = (fnt16, fntBig);
      THHFont    = record
                   Handle: PTTF_Font;
@@ -366,6 +368,14 @@ const
                                            AmmoType: amDynamite);
                                     Slot: 4;
                                     TimeAfterTurn: 5000),
+                                   (NameId: sidFirePunch;
+                                    Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                           Count: AMMO_INFINITE;
+                                           NumPerTurn: 0;
+                                           Timer: 0;
+                                           AmmoType: amFirePunch);
+                                    Slot: 3;
+                                    TimeAfterTurn: 3000),
                                    (NameId: sidBaseballBat;
                                     Ammo: (Propz: 0;
                                            Count: 1;

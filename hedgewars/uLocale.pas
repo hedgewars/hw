@@ -35,7 +35,7 @@ unit uLocale;
 interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-                   sidDynamite, sidBaseballBat);
+                   sidDynamite, sidBaseballBat, sidFirePunch);
      TMsgStrId = (sidStartFight, sidSeconds);
 var trammo: array[TAmmoStrId] of shortstring;
     trmsg: array[TMsgStrId] of shortstring;

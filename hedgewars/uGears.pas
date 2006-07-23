@@ -122,7 +122,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepBomb,
                                                                doStepCluster,
                                                                doStepShover,
-                                                               doStepFlame
+                                                               doStepFlame,
+                                                               doStepFirePunch
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -231,6 +232,10 @@ gtAmmo_Grenade: begin
                 Result.dY:= (getrandom - 0.8) * 0.03;
                 Result.dX:= (getrandom - 0.5) * 0.4
                 end;
+   gtFirePunch: begin
+                Result.Radius:= 15;
+                Result.Tag:= Y
+                end;
      end;
 if GearsList = nil then GearsList:= Result
                    else begin
@@ -257,8 +262,7 @@ if Gear.Kind = gtHedgehog then
       PHedgehog(Gear.Hedgehog).Gear:= nil;
       RecountTeamHealth(team);
       end;
-if CurAmmoGear = Gear then
-   CurAmmoGear:= nil;
+if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
 if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
@@ -621,14 +625,20 @@ while i > 0 do
 end;
 
 procedure AssignHHCoords;
-var Gear: PGear;
+var Team: PTeam;
+    i, t: integer;
 begin
-Gear:= GearsList;
-while Gear <> nil do
+Team:= TeamsList;
+t:= 0;
+while Team <> nil do
       begin
-      if Gear.Kind = gtHedgehog then
-         FindPlace(Gear, false, 0, 2048);
-      Gear:= Gear.NextGear
+      for i:= 0 to cMaxHHIndex do
+          with Team.Hedgehogs[i] do
+               if Gear <> nil then
+                  if (GameFlags and gfForts) = 0 then FindPlace(Gear, false, 0, 2048)
+                                                 else FindPlace(Gear, false, t, t + 1024);
+      inc(t, 1024);
+      Team:= Team.Next
       end
 end;
 

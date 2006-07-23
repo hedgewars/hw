@@ -84,11 +84,11 @@ var i, t: integer;
     team: PTeam;
     tdx, tdy: real;
 
-    procedure DrawRepeated(spr: TSprite);
+    procedure DrawRepeated(spr: TSprite; Shift: integer);
     var i, w: integer;
     begin
     w:= SpritesData[spr].Width;
-    i:= WorldDx mod w;
+    i:= Shift mod w;
     if i > 0 then dec(i, w);
     repeat
       DrawSprite(spr, i, WorldDy + 1024 - SpritesData[spr].Height, 0, Surface);
@@ -109,8 +109,8 @@ if r.h > 0 then
    SDL_FillRect(Surface, @r, cSkyColor)
    end;
 // background
-DrawRepeated(sprSky);
-DrawRepeated(sprHorizont);
+DrawRepeated(sprSky, WorldDx * 3 div 8);
+DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
 // Waves
 {$WARNINGS OFF}

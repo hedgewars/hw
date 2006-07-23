@@ -40,6 +40,7 @@ function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Pow
 function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestBaseballBat(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestFirePunch(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
@@ -55,7 +56,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amMine}          nil,
 {amDEagle}        TestDesertEagle,
 {amDynamite}      nil,
-{amBaseballBat}   TestBaseballBat
+{amBaseballBat}   TestBaseballBat,
+{amFirePunch}     TestFirePunch
                   );
 
 implementation
@@ -96,11 +98,11 @@ var Vx, Vy, r: real;
 
 begin
 Time:= 0;
-rTime:= 10;
+rTime:= 50;
 ExplR:= 0;
 Result:= BadTurn;
 repeat
-  rTime:= rTime + 100 + random*250;
+  rTime:= rTime + 150 + random*250;
   Vx:= - cWindSpeed * rTime / 2 + (Targ.X - Me.X) / rTime;
   Vy:= cGravity * rTime / 2 - (Targ.Y - Me.Y) / rTime;
   r:= sqr(Vx) + sqr(Vy);
@@ -118,7 +120,7 @@ repeat
         Result:= Score
         end;
      end
-until (rTime >= 5000)
+until (rTime >= 4500)
 end;
 
 function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
@@ -244,6 +246,23 @@ Time:= 0;
 Power:= 1;
 Angle:= DxDy2AttackAngle(Sign(Targ.X - Me.X), 1);
 Result:= RateShove(Me, round(Me.X) + 10 * Sign(Targ.X - Me.X), round(Me.Y), 15, 30)
+end;
+
+function TestFirePunch(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+var i: integer;
+begin
+ExplR:= 0;
+if (abs(Me.X - Targ.X) > 25) or (abs(Me.Y - 50 - Targ.Y) > 50) then
+   begin
+   Result:= BadTurn;
+   exit
+   end;
+Time:= 0;
+Power:= 1;
+Angle:= DxDy2AttackAngle(Sign(Targ.X - Me.X), 1);
+Result:= 0;
+for i:= 0 to 4 do
+    Result:= Result + RateShove(Me, round(Me.X) + 10 * Sign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30)
 end;
 
 end.

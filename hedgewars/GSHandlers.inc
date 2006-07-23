@@ -803,6 +803,58 @@ if not TestCollisionYwithGear(Gear, 1) then
 if (((GameTicks div 8) mod 64) = Gear.Angle) then
    AmmoFlameWork(Gear);
 
-if Gear.Health = 0 then 
+if Gear.Health = 0 then
    DeleteGear(Gear)
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepFirePunchWork(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+if ((Gear.Message and gm_Destroy) <> 0) then
+   begin
+   DeleteGear(Gear);
+   AfterAttack;
+   exit
+   end;
+
+HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+if round(HHGear.Y) <= Gear.Tag - 2 then
+   begin
+   Gear.Tag:= round(HHGear.Y);
+   DrawTunnel(HHGear.X - cHHRadius, HHGear.Y - 1, 0.5, 0.0, cHHRadius * 4, 2);
+   HHGear.State:= HHGear.State or gstNoDamage;
+   Gear.Y:= HHGear.Y;
+   AmmoShove(Gear, 30, 40);
+   HHGear.State:= HHGear.State and not gstNoDamage
+   end;
+   
+HHGear.dY:= HHGear.dY + cGravity;
+if HHGear.dY >= 0 then
+   begin
+   HHGear.State:= HHGear.State or gstFalling;
+   DeleteGear(Gear);
+   AfterAttack;
+   exit
+   end;
+HHGear.Y:= HHGear.Y + HHGear.dY
+end;
+
+procedure doStepFirePunch(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+HHGear.X:= round(HHGear.X) - 0.5;
+HHGear.dX:= 0.0000001 * Sign(HHGear.dX);
+HHGear.dY:= -0.30;
+
+Gear.X:= HHGear.X;
+Gear.dX:= Sign(HHGear.dX)* 0.45;
+Gear.dY:= -0.9;
+Gear.doStep:= doStepFirePunchWork;
+DrawTunnel(HHGear.X - cHHRadius, HHGear.Y + 1, 0.5, 0.0, cHHRadius * 4, 5);
+end;
+
+

@@ -269,7 +269,7 @@ case JumpType of
                  Gear.dY:= -0.15;
                  Gear.dX:= Sign(Gear.dX) * 0.15;
                  Gear.State:= Gear.State or gstFalling or gstHHJumping
-                 end
+                 end else exit
               end
     end;
     
@@ -334,7 +334,7 @@ if (Gear.State and gstFalling) <> 0 then
    if Gear.dY > 0.40 then
       begin
       Goinfo.FallPix:= 0;
-      HHJump(AltGear, jmpLJump, GoInfo);
+      HHJump(AltGear, jmpLJump, GoInfo); // try ljump enstead of fall with damage
       exit
       end;
    Gear.Y:= Gear.Y + Gear.dY;
@@ -345,7 +345,7 @@ if (Gear.State and gstFalling) <> 0 then
       Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
       Gear.dY:= 0;
       Result:= true;
-      HHJump(AltGear, jmpLJump, GoInfo);
+      HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
       exit
       end;
    continue

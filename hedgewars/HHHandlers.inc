@@ -38,17 +38,12 @@ begin
 with Gear^,
      CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      begin
-     {$IFDEF DEBUGFILE}AddFileLog('Attack: Gear.State = '+inttostr(State)+' CurAmmoGear = '+inttostr(longword(CurAmmoGear)));{$ENDIF}
-     if CurAmmoGear <> nil then
-        begin
-        Message:= Message and not gm_Attack;
-        if not CurrentTeam.ExtDriven then SendIPC('a')
-        end;
+     {$IFDEF DEBUGFILE}AddFileLog('Attack: Gear.State = '+inttostr(State));{$ENDIF}
+
      if (((State and (gstHHDriven or gstAttacking)) = (gstHHDriven or gstAttacking))and
         ((State and (gstAttacked or gstMoving or gstHHChooseTarget)) = 0)and
         (((State and gstFalling  ) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInFall) <> 0))and
-        (((State and gstHHJumping) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0)))and
-        (CurAmmoGear = nil) then
+        (((State and gstHHJumping) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0))) then
         begin
         if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
            begin
@@ -70,24 +65,20 @@ with Gear^,
                          amSkip: TurnTimeLeft:= 0;
                          amRope: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtRope, 0, xx, yy);
                          amMine: AddGear(round(X) + Sign(dX) * 7, round(Y), gtMine, 0, Sign(dX) * 0.02, 0, 3000);
-                       amDEagle: begin
-                                 FollowGear:= AddGear(round(X), round(Y), gtDEagleShot,   0, xx * 0.5, yy * 0.5);
-                                 end;
+                       amDEagle: AddGear(round(X), round(Y), gtDEagleShot, 0, xx * 0.5, yy * 0.5);
                      amDynamite: AddGear(round(X) + Sign(dX) * 7, round(Y), gtDynamite, 0, Sign(dX) * 0.035, 0, 5000);
-                  amBaseballBat: AddGear(round(X) + Sign(dX) * 10, round(Y), gtShover, 0, xx * 0.5, yy * 0.5).Radius:= 15
+                  amBaseballBat: AddGear(round(X) + Sign(dX) * 10, round(Y), gtShover, 0, xx * 0.5, yy * 0.5).Radius:= 20;
+                    amFirePunch: CurAmmoGear:= AddGear(round(X) + Sign(dX) * 10, round(Y), gtFirePunch, 0);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
            begin
-           Gear.Message:= Gear.Message or gm_Attack;
-           CurAmmoGear.Message:= Gear.Message;
-           exit
-           end else
-           begin
-           Message:= Message and not gm_Attack;
-           if not CurrentTeam.ExtDriven then SendIPC('a')
-           end;
-        AfterAttack
+           Message:= Message or gm_Attack;
+           CurAmmoGear.Message:= Message
+           end else begin
+           if not CurrentTeam.ExtDriven then SendIPC('a');
+           AfterAttack
+           end
         end
      end
 end;
@@ -200,7 +191,7 @@ if (Gear.State and gstFalling) <> 0 then
    if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
    Gear.X:= Gear.X + Gear.dX;
    Gear.dY:= Gear.dY + cGravity;
-   if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0; 
+   if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
    Gear.Y:= Gear.Y + Gear.dY;
    if (Gear.dY >= 0)and TestCollisionYwithGear(Gear, 1) then
       begin
@@ -273,6 +264,7 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
       end;
    if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.X:= Gear.X + Gear.dX;
+   Gear.dX:= 0.0000001 * Sign(Gear.dX);
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then
@@ -363,6 +355,7 @@ if (Gear.State and gstMoving) <> 0 then
    Gear.Y:= Gear.Y + Gear.dY;
    if (Gear.dY > 0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
       begin
+      CheckHHDamage(Gear);
       Gear.dY:= 0;
       Gear.Y:= Gear.Y + 1
       end;

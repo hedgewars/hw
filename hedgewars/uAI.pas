@@ -143,6 +143,19 @@ var Stack: record
          end
     end;
 
+    function PosInThinkStack(Me: PGear): boolean;
+    var i: Longword;
+    begin
+    i:= 0;
+    Result:= false;
+    while (i < Stack.Count) and not Result do
+          begin
+          Result:= abs(Stack.States[i].Hedgehog.X - Me.X) +
+                   abs(Stack.States[i].Hedgehog.Y - Me.Y) <= 2;
+          inc(i)
+          end
+    end;
+
 
 var Actions: TActions;
     ticks, maxticks, steps: Longword;
@@ -173,8 +186,8 @@ while (Stack.Count > 0) and not StopThinking do
     AddAction(Actions, aia_WaitX, round(Me.X), 0);
     AddAction(Actions, Me.Message, aim_release, 0);
     steps:= 0;
-    
-    while true do
+
+    while (not StopThinking) and (not PosInThinkStack(Me)) do
        begin
        CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
@@ -205,7 +218,6 @@ while (Stack.Count > 0) and not StopThinking do
            and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
        if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
-       if StopThinking then exit
        end;
 
     if BestRate > BaseRate then exit
@@ -226,7 +238,7 @@ if (Me.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
       Walk(@WalkMe);
-      if (StartTicks > GameTicks - 1500) then SDL_Delay(2000);
+      if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
       end else
 else begin
       Walk(@WalkMe);
