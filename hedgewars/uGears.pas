@@ -109,7 +109,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepGrave,
                                                                doStepUFO,
                                                                doStepShotgunShot,
-                                                               doStepActionTimer,
                                                                doStepPickHammer,
                                                                doStepRope,
                                                                doStepSmokeTrace,
@@ -123,7 +122,10 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepCluster,
                                                                doStepShover,
                                                                doStepFlame,
-                                                               doStepFirePunch
+                                                               doStepFirePunch,
+                                                               doStepActionTimer,
+                                                               doStepActionTimer,
+                                                               doStepActionTimer
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -143,6 +145,7 @@ Result.dX:= dX;
 Result.dY:= dY;
 Result.doStep:= doStepHandlers[Kind];
 Result.CollIndex:= High(Longword);
+Result.Timer:= Timer;
 if CurrentTeam <> nil then
    Result.Hedgehog:= @CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog];
 case Kind of
@@ -150,7 +153,6 @@ case Kind of
                 Result.Radius:= 4;
                 Result.Elasticity:= 0.6;
                 Result.Friction:= 0.995;
-                Result.Timer:= Timer
                 end;
     gtHedgehog: begin
                 Result.Radius:= cHHRadius;
@@ -176,9 +178,6 @@ gtAmmo_Grenade: begin
  gtShotgunShot: begin
                 Result.Timer:= 900;
                 Result.Radius:= 2
-                end;
- gtActionTimer: begin
-                Result.Timer:= Timer
                 end;
   gtPickHammer: begin
                 Result.Radius:= 10;
@@ -223,7 +222,6 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 4;
                 Result.Elasticity:= 0.6;
                 Result.Friction:= 0.995;
-                Result.Timer:= Timer
                 end;
        gtFlame: begin
                 Result.Angle:= Counter mod 64;
@@ -294,7 +292,8 @@ while Gear <> nil do
             Gear.Damage:= 0
             end;
       Gear:= Gear.NextGear
-      end
+      end;
+CheckForWin
 end;
 
 procedure ProcessGears;
@@ -413,7 +412,7 @@ var Gear: PGear;
     begin
     if (X1 = X2) and (Y1 = Y2) then
        begin
-       {$IFDEF DEBUGFILE}AddFileLog('zero length rope line!!!!!');{$ENDIF}
+       OutError('WARNING: zero length rope line!');
        exit
        end;
     if abs(X1 - X2) > abs(Y1 - Y2) then
@@ -551,7 +550,7 @@ begin
 for i:= 0 to cCloudsNumber do
     AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
              (0.5-random)*0.02, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random));
-AddGear(0, 0, gtActionTimer, gtsStartGame, 0, 0, 2000).Health:= 3;
+AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do
        FindPlace(AddGear(0, 0, gtMine, 0), false, 0, 2048);

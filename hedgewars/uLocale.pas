@@ -35,12 +35,13 @@ unit uLocale;
 interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-                   sidDynamite, sidBaseballBat, sidFirePunch);
-     TMsgStrId = (sidStartFight, sidSeconds);
+                   sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds);
+     TMsgStrId = (sidStartFight, sidDraw, sidWinner);
 var trammo: array[TAmmoStrId] of shortstring;
     trmsg: array[TMsgStrId] of shortstring;
 
 procedure LoadLocale(FileName: string);
+function Format(fmt: shortstring; var arg: shortstring): shortstring;
 
 implementation
 uses uMisc;
@@ -74,6 +75,14 @@ while not eof(f) do
       end;
 closefile(f)
 {$I+}
+end;
+
+function Format(fmt: shortstring; var arg: shortstring): shortstring;
+var i: integer;
+begin
+i:= Pos('%1', fmt);
+if i = 0 then Result:= fmt
+         else Result:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 end.

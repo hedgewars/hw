@@ -49,7 +49,7 @@ procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; con
 procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
 procedure RenderHealth(var Hedgehog: THedgehog);
-function  RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
+function  RenderString(var s: shortstring; Color, Pos: integer): PSDL_Surface;
 procedure AddProgress;
 function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
 
@@ -87,11 +87,11 @@ begin
   SDL_FreeSurface(tmpsurf);
 end;
 
-procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface);
+procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; const Clear: boolean = true);
 var r: TSDL_Rect;
 begin
 r:= rect^;
-SDL_FillRect(Surface, @r, 0);
+if Clear then SDL_FillRect(Surface, @r, 0);
 r.y:= rect.y + 1;
 r.h:= rect.h - 2;
 SDL_FillRect(Surface, @r, BorderColor);
@@ -163,7 +163,7 @@ var i: TStuff;
       Team.HealthRect:= r;
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Team.Color, Team.Color, StoreSurface);
+      DrawRoundRect(@rr, Team.Color, Team.Color, StoreSurface, false);
       inc(r.y, r.h);
       dec(drY, r.h + 2);
       Team.DrawHealthY:= drY;
@@ -461,9 +461,13 @@ if Hedgehog.Gear.Damage > 0 then
    end;
 end;
 
-function RenderString(var s: shortstring; Color, Pos: integer): TSDL_Rect;
+function RenderString(var s: shortstring; Color, Pos: integer): PSDL_Surface;
+var w, h: integer;
 begin
-Result:= WriteInRoundRect(TempSurface, 64, Pos * Fontz[fntBig].Height, Color, fntBig, s);
+TTF_SizeUTF8(Fontz[fntBig].Handle, PChar(String(s)), w, h);
+Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + 6, h + 2, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
+WriteInRoundRect(Result, 0, 0, Color, fntBig, s);
+TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true)
 end;
 
 procedure AddProgress;

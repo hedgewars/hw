@@ -81,12 +81,44 @@ function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
+procedure CheckForWin;
 
 implementation
 uses uMisc, uStore, uWorld, uIO, uAI, uLocale;
 const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;
+
+procedure CheckForWin;
+var team, AliveTeam: PTeam;
+    AliveCount: Longword;
+begin
+AliveCount:= 0;
+AliveTeam:= nil;
+team:= TeamsList;
+while team <> nil do
+      begin
+      if team.TeamHealth > 0 then
+         begin
+         inc(AliveCount);
+         AliveTeam:= team
+         end;
+      team:= team.Next
+      end;
+
+if AliveCount >= 2 then exit;
+
+TurnTimeLeft:= 0;
+if AliveCount = 0 then
+   begin // draw
+   AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
+   AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
+   end else // win
+   begin
+   AddCaption(Format(trmsg[sidWinner], AliveTeam.TeamName), $FFFFFF, capgrpGameState);
+   AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
+   end;
+end;
 
 procedure SwitchHedgehog;
 var tteam: PTeam;
@@ -104,19 +136,12 @@ repeat
   if CurrentTeam = nil then CurrentTeam:= TeamsList;
   th:= CurrentTeam.CurrHedgehog;
   repeat
-    CurrentTeam.CurrHedgehog:= Succ(CurrentTeam.CurrHedgehog) mod cMaxHHIndex;
+    CurrentTeam.CurrHedgehog:= Succ(CurrentTeam.CurrHedgehog) mod (cMaxHHIndex + 1);
   until (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil) or (CurrentTeam.CurrHedgehog = th)
 until (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil) or (CurrentTeam = tteam);
 
-if (CurrentTeam = tteam) then
-   begin
-   if GameType = gmtDemo then
-      begin
-      SendIPC('q');
-      GameState:= gsExit;
-      exit
-      end else OutError('There''s only one team on map!', true);
-   end;
+TryDo(CurrentTeam <> tteam, 'Switch hedgehog: only one team?!', true);
+
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      begin
      AttacksNum:= 0;
@@ -129,20 +154,10 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      end;
 ResetKbd;
 cWindSpeed:= (GetRandom * 2 - 1) * cMaxWindSpeed;
-AddGear(0, 0, gtActionTimer, gtsSmoothWindCh).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
+AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
 TurnTimeLeft:= cHedgehogTurnTime
-end;
-
-procedure SetFirstTurnHedgehog;
-var i: integer;
-begin
-if CurrentTeam=nil then OutError('nil Team (SetFirstTurnHedgehog)', true);
-i:= 0;
-while (i<cMaxHHIndex)and(CurrentTeam.Hedgehogs[i].Gear=nil) do inc(i);
-if CurrentTeam.Hedgehogs[i].Gear = nil then OutError(errmsgIncorrectUse + ' (sfth)', true);
-CurrentTeam.CurrHedgehog:= i;
 end;
 
 function AddTeam: PTeam;
@@ -151,6 +166,7 @@ New(Result);
 TryDo(Result <> nil, 'AddTeam: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
 Result.AttackBar:= 2;
+Result.CurrHedgehog:= cMaxHHIndex;
 if TeamsList = nil then TeamsList:= Result
                    else begin
                         Result.Next:= TeamsList;
@@ -217,7 +233,6 @@ while p <> nil do
       if th > MaxTeamHealth then MaxTeamHealth:= th;
       p:= p.Next
       end;
-SetFirstTurnHedgehog;
 RecountAllTeamsHealth
 end;
 
@@ -238,7 +253,7 @@ with Ammo[CurSlot, CurAmmo] do
      if Count <> AMMO_INFINITE then
         s:= s + ' (' + IntToStr(Count) + ')';
      if (Propz and ammoprop_Timerable) <> 0 then
-        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trmsg[sidSeconds];
+        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
      AddCaption(s, Team.Color, capgrpAmmoinfo);
      if (Propz and ammoprop_NeedTarget) <> 0
         then begin

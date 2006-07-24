@@ -67,7 +67,8 @@ SplitBySpace(id, s);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 if id = 'team' then CurrentTeam.TeamName:= s
-else if (id[1]='h')and(id[2]='h')and(id[3]>='0')and(id[3]<='7') then
+else if (id[1] = 'h') and (id[2] = 'h')
+     and (id[3] >= '0') and (id[3] <= chr(ord('0')+cMaxHHIndex)) then
    CurrentTeam.Hedgehogs[byte(id[3])-48].Name:= s
 else OutError(errmsgUnknownVariable + ' "' + id + '"')
 end;

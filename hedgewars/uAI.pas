@@ -81,15 +81,18 @@ for i:= 0 to Pred(Targets.Count) do
               if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400);
               if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
               else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200);
-              Angle:= integer(Me.Angle) - Abs(Angle);
-              if Angle > 0 then
+              if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                  begin
-                 AddAction(BestActions, aia_Up, aim_push, 500);
-                 AddAction(BestActions, aia_Up, aim_release, Angle)
-                 end else if Angle < 0 then
-                 begin
-                 AddAction(BestActions, aia_Down, aim_push, 500);
-                 AddAction(BestActions, aia_Down, aim_release, -Angle)
+                 Angle:= integer(Me.Angle) - Abs(Angle);
+                 if Angle > 0 then
+                    begin
+                    AddAction(BestActions, aia_Up, aim_push, 500);
+                    AddAction(BestActions, aia_Up, aim_release, Angle)
+                    end else if Angle < 0 then
+                    begin
+                    AddAction(BestActions, aia_Down, aim_push, 500);
+                    AddAction(BestActions, aia_Down, aim_release, -Angle)
+                    end
                  end;
               AddAction(BestActions, aia_attack, aim_push, 800);
               AddAction(BestActions, aia_attack, aim_release, Power);
@@ -150,8 +153,9 @@ var Stack: record
     Result:= false;
     while (i < Stack.Count) and not Result do
           begin
-          Result:= abs(Stack.States[i].Hedgehog.X - Me.X) +
-                   abs(Stack.States[i].Hedgehog.Y - Me.Y) <= 2;
+          Result:= (abs(Stack.States[i].Hedgehog.X - Me.X) +
+                    abs(Stack.States[i].Hedgehog.Y - Me.Y) <= 2)
+                    and (Stack.States[i].Hedgehog.Message = Me.Message);
           inc(i)
           end
     end;

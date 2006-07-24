@@ -33,14 +33,14 @@
 
 unit uWorld;
 interface
-uses SDLh, uGears;
+uses SDLh, uGears, uConsts;
 {$INCLUDE options.inc}
 const WorldDx: integer = -512;
       WorldDy: integer = -256;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
-procedure AddCaption(s: shortstring; Color, Group: LongWord);
+procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure MoveCamera;
 
 {$IFDEF COUNTTICKS}
@@ -50,7 +50,7 @@ var FollowGear: PGear = nil;
     WindBarWidth: integer = 0;
 
 implementation
-uses uStore, uMisc, uConsts, uTeams, uIO;
+uses uStore, uMisc, uTeams, uIO, uConsole;
 const RealTicks: Longword = 0;
       Frames: Longword = 0;
       FPS: Longword = 0;
@@ -58,9 +58,9 @@ const RealTicks: Longword = 0;
       prevPoint: TPoint = (X: 0; Y: 0);
       
 type TCaptionStr = record
-                   r: TSDL_Rect;
-                   StorePos,
-                   Group,
+                   Surf: PSDL_Surface;
+                   StorePos: Longword;
+                   Group: TCapGroup;
                    EndTime: LongWord;
                    end;
 
@@ -216,11 +216,19 @@ i:= 0;
 while (i < cMaxCaptions) do
     begin
     with Captions[i] do
-         if EndTime > 0 then DrawCaption(cScreenWidth div 2, 8 + i * 32 + cConsoleYAdd, r, Surface, true);
+         if EndTime > 0 then
+            begin
+            r.x:= (cScreenWidth - Surf.w) div 2;
+            r.y:= 8 + i * (Surf.h + 2) + cConsoleYAdd;
+            r.w:= Surf.w;
+            r.h:= Surf.h;
+            SDL_UpperBlit(Surf, nil, Surface, @r)
+            end;
     inc(i)
     end;
 while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
     begin
+    SDL_FreeSurface(Captions[0].Surf);
     for i:= 1 to Pred(cMaxCaptions) do
         Captions[Pred(i)]:= Captions[i];
     Captions[Pred(cMaxCaptions)].EndTime:= 0
@@ -234,13 +242,13 @@ while team <> nil do
                         Team.DrawHealthY,
                         @team.NameRect, Surface);
       r:= team.HealthRect;
-      r.w:= 3 + team.TeamHealth;
+      r.w:= 2 + team.TeamHealth;
       DrawFromStoreRect(cScreenWidth div 2,
                         Team.DrawHealthY,
                         @r, Surface);
-      inc(r.x, cTeamHealthWidth + 3);
-      r.w:= 2;
-      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 3,
+      inc(r.x, cTeamHealthWidth + 2);
+      r.w:= 3;
+      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 2,
                         Team.DrawHealthY,
                         @r, Surface);
       team:= team.Next
@@ -296,11 +304,12 @@ if CountTicks >= 1000 then
 if cShowFPS then DXOutText(cScreenWidth - 50, 10, fnt16, inttostr(FPS) + ' fps', Surface)
 end;
 
-procedure AddCaption(s: shortstring; Color, Group: LongWord);
+procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 var i, t, m, k: LongWord;
 begin
+if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
 i:= 0;
-while (i < cMaxCaptions) and (Captions[i].Group <> Group)do inc(i);
+while (i < cMaxCaptions) and (Captions[i].Group <> Group) do inc(i);
 if i < cMaxCaptions then
    begin
    while (i < Pred(cMaxCaptions)) do
@@ -326,9 +335,9 @@ if Captions[Pred(cMaxCaptions)].EndTime > 0 then
 k:= 0;
 for i:= 0 to Pred(cMaxCaptions) do
     for t:= 0 to Pred(cMaxCaptions) do
-        if (Captions[t].EndTime > 0)and(Captions[t].StorePos = k) then inc(k);
+        if (Captions[t].EndTime > 0) and (Captions[t].StorePos = k) then inc(k);
 
-Captions[m].r:= RenderString(s, Color, k);
+Captions[m].Surf:= RenderString(s, Color, k);
 Captions[m].StorePos:= k;
 Captions[m].Group:= Group;
 Captions[m].EndTime:= RealTicks + 1200

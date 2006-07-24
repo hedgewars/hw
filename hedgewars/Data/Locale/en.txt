@@ -13,6 +13,8 @@
 00:10=Dynamite
 00:11=BaseballBat
 00:12=Fire Punch
+00:13=sec
 
 01:00=Let's fight!
-01:01=sec
+01:01=Round draw
+01:02=%1 wins!

@@ -49,10 +49,10 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
-                   gtGrave, gtUFO, gtShotgunShot, gtActionTimer, gtPickHammer, gtRope,
+                   gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
-                   gtFirePunch);
+                   gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
@@ -60,6 +60,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
                    amBaseballBat);
      THWFont    = (fnt16, fntBig);
+     TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay);
      THHFont    = record
                   Handle: PTTF_Font;
                   Height: integer;
@@ -137,9 +138,6 @@ const
       gstHHThinking     = $00000800;
       gstNoDamage       = $00001000;
 
-      gtsStartGame      = 1;
-      gtsSmoothWindCh   = 2;
-
       gm_Left   = $00000001;
       gm_Right  = $00000002;
       gm_Up     = $00000004;
@@ -161,10 +159,6 @@ const
       ammoprop_AttackInJump = $00000020;
       ammoprop_NoCrosshair  = $00000040;
       AMMO_INFINITE = High(LongWord);
-
-      capgrpStartGame     = 0;
-      capgrpAmmoinfo      = 1;
-      capgrpNetSay        = 2;
 
       EXPLAllDamageInRadius = $00000001;
       EXPLAutoSound         = $00000002;

@@ -318,24 +318,28 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepActionTimer(Gear: PGear);
 begin
-case Gear.State of
-     gtsStartGame: begin
-                   dec(Gear.Timer);
+dec(Gear.Timer);
+case Gear.Kind of
+    gtATStartGame: begin
                    AllInactive:= false;
-                   if Gear.Timer > 0 then exit;
-                   AddCaption(trmsg[sidStartFight], $FFFFFF, capgrpStartGame);
-                   DeleteGear(Gear)
+                   if Gear.Timer = 0 then
+                      AddCaption(trmsg[sidStartFight], $FFFFFF, capgrpGameState);
                    end;
-  gtsSmoothWindCh: begin
+ gtATSmoothWindCh: begin
                    if Gear.Timer = 0 then
                       begin
-                      Gear.Timer:= 10;
                       if WindBarWidth < Gear.Tag then inc(WindBarWidth)
-                         else if WindBarWidth > Gear.Tag then dec(WindBarWidth)
-                         else DeleteGear(Gear)
-                      end else dec(Gear.Timer)
+                         else if WindBarWidth > Gear.Tag then dec(WindBarWidth);
+                      if WindBarWidth <> Gear.Tag then Gear.Timer:= 10;
+                      end
+                   end;
+   gtATFinishGame: begin
+                   AllInactive:= false;
+                   if Gear.Timer = 0 then
+                      GameState:= gsExit
                    end;
      end;
+if Gear.Timer = 0 then DeleteGear(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
