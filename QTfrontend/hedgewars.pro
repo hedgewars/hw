@@ -21,10 +21,10 @@ HEADERS += binds.h \
            teamselect.h \
            teamselhelper.h \
            frameTeam.h \
-           vertScrollArea.h
+           vertScrollArea.h \
+           gameconfig.h \
+           ui_hwform.h
            
-FORMS += hwform.ui
-
 SOURCES += game.cpp \
            main.cpp \
            hwform.cpp \
@@ -35,7 +35,9 @@ SOURCES += game.cpp \
            teamselect.cpp \
            teamselhelper.cpp \
            frameTeam.cpp \
-           vertScrollArea.cpp
+           vertScrollArea.cpp \
+           gameconfig.cpp \
+           ui_hwform.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

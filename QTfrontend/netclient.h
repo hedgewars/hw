@@ -50,12 +50,14 @@ struct netTeam
 	QStringList hhs;
 };
 
+class GameConfig;
+
 class HWNet : public QObject
 {
 	Q_OBJECT
 
 public:
-    HWNet(int Resolution, bool Fullscreen);
+    HWNet(GameConfig * config);
 	void Connect(const QString & hostName, quint16 port, const QString & nick);
 	void Disconnect();
 	void JoinGame(const QString & game);
@@ -99,13 +101,12 @@ private:
 	quint32 opCount;
 	netTeam teams[5];
 	quint8 teamsCount;
-	int gameResolution;
-	bool gameFullscreen;
 	RNDStr seedgen;
 	int playerscnt;
 	int configasks;
 	QByteArray NetBuffer;
 	QTimer * TimerFlusher;
+	GameConfig * config;
 
 	void RawSendNet(const QString & buf);
 	void RawSendNet(const QByteArray & buf);

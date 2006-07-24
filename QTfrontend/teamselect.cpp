@@ -14,7 +14,7 @@ void TeamSelWidget::addTeam(tmprop team)
 {
   frameDontPlaying->addTeam(team);
   curDontPlayingTeams.push_back(team);
-  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)), 
+  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)),
 		   this, SLOT(changeTeamStatus(tmprop)));
 }
 
@@ -56,7 +56,7 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
 {
   VertScrArea* area=new VertScrArea(color);
   area->setWidget(pfteams);
-  mainLayout.addWidget(area, 50);
+  mainLayout.addWidget(area, 30);
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :

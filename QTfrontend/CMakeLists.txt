@@ -13,7 +13,9 @@ set(hwfr_src
 	teamselect.cpp
 	teamselhelper.cpp
 	frameTeam.cpp
-	vertScrollArea.cpp)
+	vertScrollArea.cpp
+	gameconfig.cpp
+	ui_hwform.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -26,16 +28,13 @@ set(hwfr_moc_hdrs
 	teamselect.h
 	teamselhelper.h
 	frameTeam.h
-	vertScrollArea.h)
+	vertScrollArea.h
+	gameconfig.h
+	ui_hwform.h)
 
-set(hwfr_uis
-	hwform.ui)
 
 set(hwfr_rez
 	hedgewars.qrc)
-
-qt4_wrap_ui(hwfr_uis_h
-	${hwfr_uis})
 
 qt4_add_resources(hwfr_rez_src
 	${hwfr_rez})

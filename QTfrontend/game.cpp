@@ -40,15 +40,13 @@
 #include <QFile>
 #include "game.h"
 #include "hwconsts.h"
+#include "gameconfig.h"
 
-HWGame::HWGame(int Resolution, bool Fullscreen)
+HWGame::HWGame(GameConfig * config)
 {
-	vid_Resolution = Resolution;
-	vid_Fullscreen = Fullscreen;
+	this->config = config;
 	TeamCount = 0;
 	seed = "";
-	cfgdir.setPath(cfgdir.homePath());
-	cfgdir.cd(".hedgewars");
 }
 
 void HWGame::NewConnection()
@@ -92,11 +90,14 @@ void HWGame::SendConfig()
 	SENDIPC("eaddteam");
 	SendTeamConfig(0);
 	SENDIPC("ecolor 65535");
-	SENDIPC("eadd hh0 0");
-	SENDIPC("eadd hh1 0");
-	SENDIPC("eadd hh2 0");
-	SENDIPC("eadd hh3 0");
-	SENDIPC("eadd hh4 0");
+	SENDIPC("eadd hh0 1");
+	SENDIPC("eadd hh1 1");
+	SENDIPC("eadd hh2 1");
+	SENDIPC("eadd hh3 1");
+	SENDIPC("eadd hh4 1");
+	SENDIPC("eadd hh5 1");
+	SENDIPC("eadd hh6 1");
+	SENDIPC("eadd hh7 1");
 	SENDIPC("eaddteam");
 	SendTeamConfig(1);
 	SENDIPC("ecolor 16776960");
@@ -105,6 +106,20 @@ void HWGame::SendConfig()
 	SENDIPC("eadd hh2 1");
 	SENDIPC("eadd hh3 1");
 	SENDIPC("eadd hh4 1");
+	SENDIPC("eadd hh5 1");
+	SENDIPC("eadd hh6 1");
+	SENDIPC("eadd hh7 1");
+	SENDIPC("eaddteam");
+	SendTeamConfig(1);
+	SENDIPC("ecolor 255");
+	SENDIPC("eadd hh0 1");
+	SENDIPC("eadd hh1 1");
+	SENDIPC("eadd hh2 1");
+	SENDIPC("eadd hh3 1");
+	SENDIPC("eadd hh4 1");
+	SENDIPC("eadd hh5 1");
+	SENDIPC("eadd hh6 1");
+	SENDIPC("eadd hh7 1");
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -233,12 +248,12 @@ void HWGame::Start()
 	QProcess * process;
 	QStringList arguments;
 	process = new QProcess;
-	arguments << resolutions[0][vid_Resolution];
-	arguments << resolutions[1][vid_Resolution];
+	arguments << resolutions[0][config->vid_Resolution()];
+	arguments << resolutions[1][config->vid_Resolution()];
 	arguments << "16";
 	arguments << "46631";
-	arguments << (vid_Fullscreen ? "1" : "0");
-	arguments << "1";
+	arguments << (config->vid_Fullscreen() ? "1" : "0");
+	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
 	process->start("./hwengine", arguments);
 }
@@ -347,7 +362,7 @@ void HWGame::StartLocal()
 
 void HWGame::LocalCFG(const QString & teamname)
 {
-	QFile teamcfg(cfgdir.absolutePath() + "/" + teamname + ".cfg");
+	QFile teamcfg(config->cfgdir.absolutePath() + "/" + teamname + ".cfg");
 	if (!teamcfg.open(QIODevice::ReadOnly))
 	{
 		return ;

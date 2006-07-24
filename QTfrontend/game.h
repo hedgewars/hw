@@ -47,11 +47,13 @@
 #define MAXMSGCHARS 255
 #define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
 
+class GameConfig;
+
 class HWGame : public QObject
 {
 	Q_OBJECT
 public:
-	HWGame(int Resolution, bool Fullscreen);
+	HWGame(GameConfig * config);
 	void AddTeam(const QString & team);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
@@ -80,10 +82,8 @@ private:
 	RNDStr seedgen;
 	QByteArray * demo;
 	QByteArray toSendBuf;
-	int vid_Resolution;
-	bool vid_Fullscreen;
+	GameConfig * config;
 	GameType gameType;
-	QDir cfgdir;
 
 	void Start();
 	void SendConfig();
