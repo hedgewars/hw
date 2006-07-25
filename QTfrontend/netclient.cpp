@@ -35,7 +35,7 @@
 #include "netclient.h"
 #include "game.h"
 
-HWNet::HWNet(GameConfig * config)
+HWNet::HWNet(GameUIConfig * config)
 	: QObject()
 {
 	this->config = config;
@@ -492,7 +492,7 @@ void HWNet::StartGame()
 
 void HWNet::RunGame(const QString & seed)
 {
-	HWGame * game = new HWGame(config);
+	HWGame * game = new HWGame(config, 0);
 	connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
 	connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
 	connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));

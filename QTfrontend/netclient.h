@@ -50,14 +50,14 @@ struct netTeam
 	QStringList hhs;
 };
 
-class GameConfig;
+class GameUIConfig;
 
 class HWNet : public QObject
 {
 	Q_OBJECT
 
 public:
-    HWNet(GameConfig * config);
+    HWNet(GameUIConfig * config);
 	void Connect(const QString & hostName, quint16 port, const QString & nick);
 	void Disconnect();
 	void JoinGame(const QString & game);
@@ -106,7 +106,7 @@ private:
 	int configasks;
 	QByteArray NetBuffer;
 	QTimer * TimerFlusher;
-	GameConfig * config;
+	GameUIConfig * config;
 
 	void RawSendNet(const QString & buf);
 	void RawSendNet(const QByteArray & buf);

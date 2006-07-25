@@ -39,12 +39,12 @@
 #include <QStringList>
 #include "hwform.h"
 
-class GameConfig : public QObject
+class GameUIConfig : public QObject
 {
 	Q_OBJECT
 
 public:
-	GameConfig(HWForm * FormWidgets);
+	GameUIConfig(HWForm * FormWidgets);
 	QStringList GetTeamsList();
 	QDir cfgdir;
 	int vid_Resolution();

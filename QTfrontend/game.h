@@ -47,13 +47,14 @@
 #define MAXMSGCHARS 255
 #define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
 
-class GameConfig;
+class GameUIConfig;
+class GameCFGWidget;
 
 class HWGame : public QObject
 {
 	Q_OBJECT
 public:
-	HWGame(GameConfig * config);
+	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg);
 	void AddTeam(const QString & team);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
@@ -82,7 +83,8 @@ private:
 	RNDStr seedgen;
 	QByteArray * demo;
 	QByteArray toSendBuf;
-	GameConfig * config;
+	GameUIConfig * config;
+	GameCFGWidget * gamecfg;
 	GameType gameType;
 
 	void Start();

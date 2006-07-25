@@ -40,11 +40,12 @@
 #include <QFile>
 #include "game.h"
 #include "hwconsts.h"
-#include "gameconfig.h"
+#include "gameuiconfig.h"
 
-HWGame::HWGame(GameConfig * config)
+HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg)
 {
 	this->config = config;
+	this->gamecfg = gamecfg;
 	TeamCount = 0;
 	seed = "";
 }
@@ -86,7 +87,7 @@ void HWGame::SendConfig()
 	SendIPC(QString("etheme %1").arg(GetThemeBySeed()));
 	//SENDIPC("emap test");
 	SENDIPC("TL");
-	SENDIPC("e$gmflags 0");
+	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
 	SENDIPC("eaddteam");
 	SendTeamConfig(0);
 	SENDIPC("ecolor 65535");

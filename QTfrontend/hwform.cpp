@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -44,7 +44,7 @@
 #include "hwform.h"
 #include "sdlkeys.h"
 #include "hwconsts.h"
-#include "gameconfig.h"
+#include "gameuiconfig.h"
 
 HWForm::HWForm(QWidget *parent)
 	: QMainWindow(parent)
@@ -100,7 +100,7 @@ HWForm::HWForm(QWidget *parent)
 		ui.CBGrave->addItem((*it).replace(QRegExp("^(.*).png"), "\\1"));
 	}
 
-	config = new GameConfig(this);
+	config = new GameUIConfig(this);
 
 	QStringList teamslist = config->GetTeamsList();
 
@@ -111,12 +111,10 @@ HWForm::HWForm(QWidget *parent)
 	  teamslist.push_back("DefaultTeam");
 	}
 
-	pts=new TeamSelWidget(ui.Pages->widget(ID_PAGE_SINGLEPLAYER));
-
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
 	{
 	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
-	  pts->addTeam(tmpTeamStr);
+	  ui.PageLGTeamsSelect->addTeam(tmpTeamStr);
 	  ui.CBTeamName->addItem(tmpTeamStr);
 	}
 
@@ -157,9 +155,6 @@ void HWForm::GoToMain()
 void HWForm::GoToSinglePlayer()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_SINGLEPLAYER);
-
-	pts->resize(500, 350);
-	pts->show();
 }
 
 void HWForm::GoToSetup()
@@ -225,7 +220,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	game = new HWGame(config);
+	game = new HWGame(config, ui.pageLGGameCFG);
 	game->AddTeam("DefaultTeam");
 	game->AddTeam("DefaultTeam");
 	game->StartLocal();
@@ -254,7 +249,7 @@ void HWForm::PlayDemo()
 				tr("OK"));
 		return ;
 	}
-	game = new HWGame(config);
+	game = new HWGame(config, 0);
 	game->PlayDemo(QString(DATA_PATH) + "/Demos/" + curritem->text() + ".hwd_1");
 }
 

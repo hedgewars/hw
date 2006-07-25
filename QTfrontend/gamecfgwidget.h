@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -31,77 +31,28 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef HWFORM_H
-#define HWFORM_H
+#ifndef GAMECONFIGWIDGET_H
+#define GAMECONFIGWIDGET_H
 
-#include <QLabel>
-#include <QLineEdit>
-#include <QDir>
+#include <QWidget>
+#include <QCheckBox>
 
-#include "ui_hwform.h"
-#include "binds.h"
-#include "game.h"
-#include "team.h"
-#include "netclient.h"
-#include "teamselect.h"
 
-class GameUIConfig;
-
-class HWForm : public QMainWindow
+class GameCFGWidget : public QWidget
 {
 	Q_OBJECT
 
 public:
-	HWForm(QWidget *parent = 0);
-	Ui::HWForm ui;
-	QLineEdit * TeamNameEdit;
-	QLineEdit * HHNameEdit[8];
-	QComboBox * CBBind[BINDS_NUMBER];
+	GameCFGWidget(QWidget* parent=0);
+	quint32 getGameFlags();
 
 private slots:
-	void GoToMain();
-	void GoToSinglePlayer();
-	void GoToSetup();
-	void GoToMultiplayer();
-	void GoToDemos();
-	void GoToNet();
-	void GoToNetChat();
-	void NewTeam();
-	void EditTeam();
-	void TeamSave();
-	void TeamDiscard();
-	void SimpleGame();
-	void PlayDemo();
-	void NetConnect();
-	void NetDisconnect();
-	void NetJoin();
-	void NetCreate();
-	void AddGame(const QString & chan);
-	void NetAddTeam();
-	void NetGameEnter();
-	void NetStartGame();
-	void ChangeInNetTeams(const QStringList & teams);
-
-public slots:
-	void CBGrave_activated(const QString & gravename);
-	void CBFort_activated(const QString & gravename);
 
 private:
-	QLabel * LBind[BINDS_NUMBER];
-	HWGame * game;
-	HWTeam * tmpTeam;
-	HWNet * hwnet;
-	GameUIConfig * config;
+	QCheckBox * CB_mode_Forts;
+
+protected:
+	void resizeEvent(QResizeEvent * event);
 };
 
-#define ID_PAGE_SINGLEPLAYER 0
-#define ID_PAGE_SETUP_TEAM 1
-#define ID_PAGE_SETUP 2
-#define ID_PAGE_MULTIPLAYER 3
-#define ID_PAGE_DEMOS 4
-#define ID_PAGE_NET 5
-#define ID_PAGE_NETCHAT 6
-#define ID_PAGE_NETCFG 7
-#define ID_PAGE_MAIN 8
-
-#endif
+#endif // GAMECONFIGWIDGET_H

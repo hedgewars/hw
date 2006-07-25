@@ -17,6 +17,8 @@
 #include <QtGui/QToolBox>
 #include <QtGui/QWidget>
 #include <QStackedLayout>
+#include "teamselect.h"
+#include "gamecfgwidget.h"
 
 class Ui_HWForm
 {
@@ -84,6 +86,8 @@ public:
 
 	QStackedLayout *Pages;
 	QFont *font14;
+	TeamSelWidget *PageLGTeamsSelect;
+	GameCFGWidget *pageLGGameCFG;
 
 	void setupUi(QMainWindow *HWForm);
 	void SetupFonts();

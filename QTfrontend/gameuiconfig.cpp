@@ -33,9 +33,9 @@
 
 #include <QMessageBox>
 #include <QTextStream>
-#include "gameconfig.h"
+#include "gameuiconfig.h"
 
-GameConfig::GameConfig(HWForm * FormWidgets)
+GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 	: QObject()
 {
 	Form = FormWidgets;
@@ -86,12 +86,12 @@ GameConfig::GameConfig(HWForm * FormWidgets)
 	}
 }
 
-QStringList GameConfig::GetTeamsList()
+QStringList GameUIConfig::GetTeamsList()
 {
 	return cfgdir.entryList(QStringList("*.cfg"));
 }
 
-void GameConfig::SaveOptions()
+void GameUIConfig::SaveOptions()
 {
 	QFile settings(cfgdir.absolutePath() + "/options");
 	if (!settings.open(QIODevice::WriteOnly))
@@ -112,17 +112,17 @@ void GameConfig::SaveOptions()
 	settings.close();
 }
 
-int GameConfig::vid_Resolution()
+int GameUIConfig::vid_Resolution()
 {
 	return Form->ui.CBResolution->currentIndex();
 }
 
-bool GameConfig::vid_Fullscreen()
+bool GameUIConfig::vid_Fullscreen()
 {
 	return Form->ui.CBFullscreen->isChecked();
 }
 
-bool GameConfig::isSoundEnabled()
+bool GameUIConfig::isSoundEnabled()
 {
 	return Form->ui.CBEnableSound->isChecked();
 }

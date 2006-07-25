@@ -3,8 +3,6 @@
 #include <QPushButton>
 #include <QFrame>
 
-#include <algorithm>
-
 #include <vertScrollArea.h>
 #include "teamselect.h"
 #include "teamselhelper.h"

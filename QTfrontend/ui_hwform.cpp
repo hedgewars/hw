@@ -7,7 +7,7 @@ void Ui_HWForm::setupUi(QMainWindow *HWForm)
 	SetupFonts();
 
 	HWForm->setObjectName(QString::fromUtf8("HWForm"));
-	HWForm->resize(QSize(640, 450).expandedTo(HWForm->minimumSizeHint()));
+	HWForm->resize(QSize(620, 430).expandedTo(HWForm->minimumSizeHint()));
 	HWForm->setMinimumSize(QSize(620, 430));
 
 	centralWidget = new QWidget(HWForm);
@@ -83,17 +83,17 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 void Ui_HWForm::SetupPageLocalGame(QWidget *Parent)
 {
-	BtnSimpleGame = new	QPushButton(Parent);
-	BtnSimpleGame->setGeometry(QRect(330, 380, 161, 41));
-	BtnSimpleGame->setFont(*font14);
-	BtnSimpleGame->setCheckable(false);
-	BtnSimpleGame->setChecked(false);
+	QGridLayout * PageLGLayout = new QGridLayout(Parent);
 	BtnSPBack =	new QPushButton(Parent);
-	BtnSPBack->setGeometry(QRect(120, 380, 161,	41));
 	BtnSPBack->setFont(*font14);
-	BtnSPBack->setCheckable(false);
-	BtnSPBack->setChecked(false);
-
+	PageLGLayout->addWidget(BtnSPBack, 1, 0);
+	BtnSimpleGame = new	QPushButton(Parent);
+	BtnSimpleGame->setFont(*font14);
+	PageLGLayout->addWidget(BtnSimpleGame, 1, 3);
+	pageLGGameCFG = new GameCFGWidget(Parent);
+	PageLGLayout->addWidget(pageLGGameCFG, 0, 0, 1, 2);
+	PageLGTeamsSelect = new TeamSelWidget(Parent);
+	PageLGLayout->addWidget(PageLGTeamsSelect, 0, 2, 1, 2);
 }
 
 void Ui_HWForm::SetupPageEditTeam(QWidget *Parent)
@@ -271,25 +271,39 @@ void Ui_HWForm::SetupPageNetGame(QWidget *Parent)
 void Ui_HWForm::SetupPageMain(QWidget *Parent)
 {
 	QGridLayout * PageMainLayout = new QGridLayout(Parent);
-	PageMainLayout->setMargin(15);
+	PageMainLayout->setMargin(25);
+	PageMainLayout->setColumnStretch(0, 1);
+	PageMainLayout->setColumnStretch(1, 2);
+	PageMainLayout->setColumnStretch(2, 1);
 	BtnSinglePlayer = new QPushButton(Parent);
+	BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnSinglePlayer->setFont(*font14);
-	PageMainLayout->addWidget(BtnSinglePlayer, 0, 0);
+	PageMainLayout->addWidget(BtnSinglePlayer, 1, 1);
+
 	BtnMultiplayer = new QPushButton(Parent);
+	BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnMultiplayer->setFont(*font14);
-	PageMainLayout->addWidget(BtnMultiplayer, 0, 1);
+	PageMainLayout->addWidget(BtnMultiplayer, 2, 1);
+
 	BtnNet = new QPushButton(Parent);
+	BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnNet->setFont(*font14);
-	PageMainLayout->addWidget(BtnNet, 1, 0);
-	BtnSetup = new QPushButton(Parent);
-	BtnSetup->setFont(*font14);
-	PageMainLayout->addWidget(BtnSetup, 1, 1);
+	PageMainLayout->addWidget(BtnNet, 3, 1);
+
 	BtnDemos = new QPushButton(Parent);
+	BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnDemos->setFont(*font14);
-	PageMainLayout->addWidget(BtnDemos, 2, 0);
+	PageMainLayout->addWidget(BtnDemos, 4, 1);
+
+	BtnSetup = new QPushButton(Parent);
+	BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	BtnSetup->setFont(*font14);
+	PageMainLayout->addWidget(BtnSetup, 5, 1);
+
 	BtnExit = new QPushButton(Parent);
+	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnExit->setFont(*font14);
-	PageMainLayout->addWidget(BtnExit, 2, 1);
+	PageMainLayout->addWidget(BtnExit, 6, 1);
 }
 
 void Ui_HWForm::retranslateUi(QMainWindow *HWForm)

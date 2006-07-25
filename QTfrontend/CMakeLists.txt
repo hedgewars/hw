@@ -14,8 +14,9 @@ set(hwfr_src
 	teamselhelper.cpp
 	frameTeam.cpp
 	vertScrollArea.cpp
-	gameconfig.cpp
-	ui_hwform.cpp)
+	gameuiconfig.cpp
+	ui_hwform.cpp
+	gamecfgwidget.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -29,8 +30,9 @@ set(hwfr_moc_hdrs
 	teamselhelper.h
 	frameTeam.h
 	vertScrollArea.h
-	gameconfig.h
-	ui_hwform.h)
+	gameuiconfig.h
+	ui_hwform.h
+	gamecfgwidget.h)
 
 
 set(hwfr_rez
