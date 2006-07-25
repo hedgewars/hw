@@ -105,10 +105,9 @@ HWForm::HWForm(QWidget *parent)
 	QStringList teamslist = config->GetTeamsList();
 
 	if(teamslist.empty()) {
-	  HWTeam defaultTeam("DefaultTeam");
-	  defaultTeam.SetCfgDir(config->cfgdir.absolutePath());
-	  defaultTeam.SaveToFile();
-	  teamslist.push_back("DefaultTeam");
+		HWTeam defaultTeam("DefaultTeam", config);
+		defaultTeam.SaveToFile();
+		teamslist.push_back("DefaultTeam");
 	}
 
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
@@ -190,16 +189,14 @@ void HWForm::GoToNetChat()
 
 void HWForm::NewTeam()
 {
-	tmpTeam = new HWTeam("unnamed");
-	tmpTeam->SetCfgDir(config->cfgdir.absolutePath());
-	tmpTeam->SetToPage(this);
+	tmpTeam = new HWTeam("unnamed", config);
+
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::EditTeam()
 {
-	tmpTeam = new HWTeam(ui.CBTeamName->currentText());
-	tmpTeam->SetCfgDir(config->cfgdir.absolutePath());
+	tmpTeam = new HWTeam(ui.CBTeamName->currentText(), config);
 	tmpTeam->LoadFromFile();
 	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
@@ -221,9 +218,7 @@ void HWForm::TeamDiscard()
 void HWForm::SimpleGame()
 {
 	game = new HWGame(config, ui.pageLGGameCFG);
-	game->AddTeam("DefaultTeam");
-	game->AddTeam("DefaultTeam");
-	game->StartLocal();
+	game->StartQuick();
 }
 
 void HWForm::CBGrave_activated(const QString & gravename)
@@ -291,8 +286,7 @@ void HWForm::NetCreate()
 
 void HWForm::NetAddTeam()
 {
-	HWTeam team("DefaultTeam");
-	team.SetCfgDir(config->cfgdir.absolutePath());
+	HWTeam team("DefaultTeam", config);
 	team.LoadFromFile();
 	hwnet->AddTeam(team);
 }

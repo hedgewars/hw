@@ -35,9 +35,12 @@
 #include <QTextStream>
 #include "team.h"
 #include "hwform.h"
+#include "gameuiconfig.h"
+#include "predefteams.h"
 
-HWTeam::HWTeam(const QString & teamname)
+HWTeam::HWTeam(const QString & teamname, GameUIConfig * config)
 {
+	this->config = config;
 	TeamName = teamname;
 	for (int i = 0; i < 8; i++) HHName[i].sprintf("hedgehog %d", i);
 	Grave = "Simple";
@@ -47,12 +50,29 @@ HWTeam::HWTeam(const QString & teamname)
 		binds[i].action = cbinds[i].action;
 		binds[i].strbind = cbinds[i].strbind;
 	}
-	dir = "";
 }
+
+HWTeam::HWTeam(quint8 num, GameUIConfig * config)
+{
+	this->config = config;
+	num %= PREDEFTEAMS_COUNT;
+	TeamName = pteams[num].TeamName;
+	HHName[0] = pteams[num].hh0name;
+	HHName[1] = pteams[num].hh1name;
+	HHName[2] = pteams[num].hh2name;
+	HHName[3] = pteams[num].hh3name;
+	HHName[4] = pteams[num].hh4name;
+	HHName[5] = pteams[num].hh5name;
+	HHName[6] = pteams[num].hh6name;
+	HHName[7] = pteams[num].hh7name;
+	Grave = pteams[num].Grave;
+	Fort = pteams[num].Fort;
+}
+
 
 bool HWTeam::LoadFromFile()
 {
-	QFile cfgfile(dir + "/" + TeamName + ".cfg");
+	QFile cfgfile(config->cfgdir.absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::ReadOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");
@@ -106,7 +126,7 @@ bool HWTeam::LoadFromFile()
 
 bool HWTeam::SaveToFile()
 {
-	QFile cfgfile(dir + "/" + TeamName + ".cfg");
+	QFile cfgfile(config->cfgdir.absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::WriteOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");
@@ -159,7 +179,26 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	}
 }
 
-void HWTeam::SetCfgDir(const QString & dir)
+QByteArray HWTeam::IPCTeamInfo() const
 {
-	this->dir = dir;
+	QByteArray buf;
+	#define ADD(a) { \
+					QByteArray strmsg = a.toUtf8(); \
+					quint8 sz = strmsg.size(); \
+					buf.append(QByteArray((char *)&sz, 1)); \
+					buf.append(strmsg); \
+					}
+
+	ADD(QString("ename team " + TeamName));
+	for (int i = 0; i < 8; i++)
+		ADD(QString("ename hh%1 ").arg(i).append(HHName[i]));
+	ADD(QString("egrave " + Grave));
+	ADD(QString("efort " + Fort));
+	for(int i = 0; i < BINDS_NUMBER; i++)
+	{
+		ADD(QString("ebind " + binds[i].strbind + " " + binds[i].action));
+	}
+	#undef ADD
+	return buf;
 }
+

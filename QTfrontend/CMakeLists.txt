@@ -32,7 +32,8 @@ set(hwfr_moc_hdrs
 	vertScrollArea.h
 	gameuiconfig.h
 	ui_hwform.h
-	gamecfgwidget.h)
+	gamecfgwidget.h
+	predefteams.h)
 
 
 set(hwfr_rez

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -31,79 +31,47 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GAME_H
-#define GAME_H
+#ifndef PREDEFTEAMS_H
+#define PREDEFTEAMS_H
 
-#include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
-#include <QByteArray>
-#include <QString>
-#include <QDir>
-#include "team.h"
-#include "rndstr.h"
+#include <QtGlobal>
 
-#define IPC_PORT 46631
-#define MAXMSGCHARS 255
-#define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
+#define PREDEFTEAMS_COUNT 2
 
-class GameUIConfig;
-class GameCFGWidget;
-
-class HWGame : public QObject
+struct PredefinedTeam
 {
-	Q_OBJECT
-public:
-	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg);
-	void AddTeam(const QString & team);
-	void PlayDemo(const QString & demofilename);
-	void StartLocal();
-	void StartQuick();
-	void StartNet(const QString & netseed);
-
-signals:
-	void SendNet(const QByteArray & msg);
-
-public slots:
-	void FromNet(const QByteArray & msg);
-	void LocalCFG(const QString & teamname);
-	void LocalCFG(quint8 num);
-
-private:
-    enum GameType {
-        gtLocal = 1,
-        gtDemo  = 2,
-        gtNet   = 3
-    };
-    QTcpServer * IPCServer;
-	QTcpSocket * IPCSocket;
-	char msgbuf[MAXMSGCHARS];
-	QByteArray readbuffer;
-	QString teams[5];
-	QString seed;
-	int TeamCount;
-	RNDStr seedgen;
-	QByteArray * demo;
-	QByteArray toSendBuf;
-	GameUIConfig * config;
-	GameCFGWidget * gamecfg;
-	GameType gameType;
-
-	void Start();
-	void SendConfig();
-	void SendTeamConfig(int index);
-	void ParseMessage(const QByteArray & msg);
-	void SendIPC(const char * msg, quint8 len);
-	void SendIPC(const QByteArray & buf);
-	void SendIPC(const QString & buf);
-	void RawSendIPC(const QByteArray & buf);
-	void SaveDemo(const QString & filename);
-	QString GetThemeBySeed();
-
-private slots:
-	void NewConnection();
-	void ClientDisconnect();
-	void ClientRead();
+	QString TeamName;
+	QString hh0name;
+	QString hh1name;
+	QString hh2name;
+	QString hh3name;
+	QString hh4name;
+	QString hh5name;
+	QString hh6name;
+	QString hh7name;
+	QString Grave;
+	QString Fort;
 };
 
-#endif
+
+const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
+{
+	{
+		QT_TR_NOOP("Hedgehogs"),
+		QT_TR_NOOP("hedgehog 1"), QT_TR_NOOP("hedgehog 2"),
+		QT_TR_NOOP("hedgehog 3"), QT_TR_NOOP("hedgehog 4"),
+		QT_TR_NOOP("hedgehog 5"), QT_TR_NOOP("hedgehog 6"),
+		QT_TR_NOOP("hedgehog 7"), QT_TR_NOOP("hedgehog 8"),
+		"Simple", "Island"
+	},
+	{
+		QT_TR_NOOP("Goddess"),
+		QT_TR_NOOP("Isis"), QT_TR_NOOP("Astarte"),
+		QT_TR_NOOP("Diana"), QT_TR_NOOP("Aphrodite"),
+		QT_TR_NOOP("Hecate"), QT_TR_NOOP("Demeter"),
+		QT_TR_NOOP("Kali"), QT_TR_NOOP("Inanna"),
+		"Bone", "Island"
+	}
+};
+
+#endif // PREDEFTEAMS_H

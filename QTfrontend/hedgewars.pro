@@ -24,7 +24,8 @@ HEADERS += binds.h \
            vertScrollArea.h \
            gameuiconfig.h \
            ui_hwform.h \
-           gamecfgwidget.h
+           gamecfgwidget.h \
+           predefteams.h
            
 SOURCES += game.cpp \
            main.cpp \

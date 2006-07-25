@@ -36,8 +36,9 @@
 #include <QTimer>
 #include <QString>
 #include <QByteArray>
-#include <QTextStream>
 #include <QFile>
+#include <QTextStream>
+
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
@@ -85,42 +86,22 @@ void HWGame::SendConfig()
 {
 	SendIPC(QString("eseed %1").arg(seed));
 	SendIPC(QString("etheme %1").arg(GetThemeBySeed()));
-	//SENDIPC("emap test");
 	SENDIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
 	SENDIPC("eaddteam");
-	SendTeamConfig(0);
+	LocalCFG(0);
 	SENDIPC("ecolor 65535");
-	SENDIPC("eadd hh0 1");
-	SENDIPC("eadd hh1 1");
-	SENDIPC("eadd hh2 1");
-	SENDIPC("eadd hh3 1");
-	SENDIPC("eadd hh4 1");
-	SENDIPC("eadd hh5 1");
-	SENDIPC("eadd hh6 1");
-	SENDIPC("eadd hh7 1");
+	SENDIPC("eadd hh0 0");
+	SENDIPC("eadd hh1 0");
+	SENDIPC("eadd hh2 0");
+	SENDIPC("eadd hh3 0");
 	SENDIPC("eaddteam");
-	SendTeamConfig(1);
+	LocalCFG(1);
 	SENDIPC("ecolor 16776960");
 	SENDIPC("eadd hh0 1");
 	SENDIPC("eadd hh1 1");
 	SENDIPC("eadd hh2 1");
 	SENDIPC("eadd hh3 1");
-	SENDIPC("eadd hh4 1");
-	SENDIPC("eadd hh5 1");
-	SENDIPC("eadd hh6 1");
-	SENDIPC("eadd hh7 1");
-	SENDIPC("eaddteam");
-	SendTeamConfig(1);
-	SENDIPC("ecolor 255");
-	SENDIPC("eadd hh0 1");
-	SENDIPC("eadd hh1 1");
-	SENDIPC("eadd hh2 1");
-	SENDIPC("eadd hh3 1");
-	SENDIPC("eadd hh4 1");
-	SENDIPC("eadd hh5 1");
-	SENDIPC("eadd hh6 1");
-	SENDIPC("eadd hh7 1");
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -361,23 +342,31 @@ void HWGame::StartLocal()
 	Start();
 }
 
+void HWGame::StartQuick()
+{
+	gameType = gtLocal;
+	seedgen.GenRNDStr(seed, 10);
+	Start();
+}
+
+
 void HWGame::LocalCFG(const QString & teamname)
 {
-	QFile teamcfg(config->cfgdir.absolutePath() + "/" + teamname + ".cfg");
-	if (!teamcfg.open(QIODevice::ReadOnly))
-	{
-		return ;
+	HWTeam team(teamname, config);
+	if (!team.LoadFromFile()) {
+		QMessageBox::critical(0,
+				"Error",
+				QString("Cannot load team config ""%1""").arg(teamname),
+				QMessageBox::Ok,
+				QMessageBox::NoButton,
+				QMessageBox::NoButton);
+		return;
 	}
-	QTextStream stream(&teamcfg);
-	stream.setCodec("UTF-8");
-	QString str;
+	RawSendIPC(team.IPCTeamInfo());
+}
 
-	while (!stream.atEnd())
-	{
-		str = stream.readLine();
-		if (str.startsWith(";") || (str.length() > 254)) continue;
-		str.prepend("e");
-		SendIPC(str.toUtf8());
-	}
-	teamcfg.close();
+void HWGame::LocalCFG(quint8 num)
+{
+	HWTeam team(num, config);
+	RawSendIPC(team.IPCTeamInfo());
 }

@@ -38,24 +38,27 @@
 #include "binds.h"
 
 class HWForm;
+class GameUIConfig;
+
 class HWTeam
 {
 	public:
-		HWTeam(const QString & teamname);
-		
+		HWTeam(const QString & teamname, GameUIConfig * config);
+		HWTeam(quint8 num, GameUIConfig * config);
+
 		QString TeamName;
 		QString HHName[8];
 		QString	Grave;
 		QString Fort;
-		QString dir;
 		BindAction binds[BINDS_NUMBER];
-		
-		void SetCfgDir(const QString & dir);
+
 		bool LoadFromFile();
 		bool SaveToFile();
 		void SetToPage(HWForm * hwform);
 		void GetFromPage(HWForm * hwform);
+		QByteArray IPCTeamInfo() const;
 	private:
+		GameUIConfig * config;
 };
 
 #endif
