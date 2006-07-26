@@ -1,6 +1,239 @@
 <!DOCTYPE TS><TS>
 <context>
-    <name>@default</name>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Cannot create directory %1</source>
+        <translation>Не могу создать папку %1</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Выход</translation>
+    </message>
+    <message>
+        <source>Cannot save options to file %1</source>
+        <translation>Ошибка при сохранении настроек в файл %1</translation>
+    </message>
+</context>
+<context>
+    <name>HWForm</name>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Please, select demo from the list above</source>
+        <translation>Выберите демо из списка</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>ОК</translation>
+    </message>
+</context>
+<context>
+    <name>HWGame</name>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation>Ошибка запуска сервера: %1.</translation>
+    </message>
+    <message>
+        <source>en.txt</source>
+        <translation>ru.txt</translation>
+    </message>
+    <message>
+        <source>Cannot save demo to file %1</source>
+        <translation>Ошибка сохранения демо в файл %1</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Выход</translation>
+    </message>
+    <message>
+        <source>Cannot open demofile %1</source>
+        <translation>Не могу открыть демо %1</translation>
+    </message>
+</context>
+<context>
+    <name>HWNet</name>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>The host was not found. Please check the host name and port settings.</source>
+        <translation>Ошибка подключения. Проверьте имя сервера и номер порта.</translation>
+    </message>
+    <message>
+        <source>Connection refused</source>
+        <translation>Отказано в соединении</translation>
+    </message>
+</context>
+<context>
+    <name>QCheckBox</name>
+    <message>
+        <source>Enable sound</source>
+        <translation>Включить звук</translation>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation>Полный экран</translation>
+    </message>
+</context>
+<context>
+    <name>QGroupBox</name>
+    <message>
+        <source>Team Members</source>
+        <translation>Состав команды</translation>
+    </message>
+    <message>
+        <source>Team</source>
+        <translation>Команда</translation>
+    </message>
+    <message>
+        <source>Fort</source>
+        <translation>Форт</translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation>Надгробие</translation>
+    </message>
+    <message>
+        <source>Key binds</source>
+        <translation>Привязки клавиш</translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation>Команды</translation>
+    </message>
+</context>
+<context>
+    <name>QLabel</name>
+    <message>
+        <source>Net nick</source>
+        <translation>Имя игрока</translation>
+    </message>
+</context>
+<context>
+    <name>QLineEdit</name>
+    <message>
+        <source>unnamed</source>
+        <translation>безымянный</translation>
+    </message>
+</context>
+<context>
+    <name>QMainWindow</name>
+    <message>
+        <source>-= by unC0Rr =-</source>
+        <translation>-= by unC0Rr =-</translation>
+    </message>
+</context>
+<context>
+    <name>QPushButton</name>
+    <message>
+        <source>Single Player</source>
+        <translation>Одиночная игра</translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation>Схватка</translation>
+    </message>
+    <message>
+        <source>Net game</source>
+        <translation>Сетевая игра</translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation>Демки</translation>
+    </message>
+    <message>
+        <source>Setup</source>
+        <translation>Настройка</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation>Выход</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <source>Simple Game</source>
+        <translation>Быстрый старт</translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation>Отменить</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <source>Play demo</source>
+        <translation>Играть демку</translation>
+    </message>
+    <message>
+        <source>New team</source>
+        <translation>Новая команда</translation>
+    </message>
+    <message>
+        <source>Edit team</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>Соединить</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>Разъединить</translation>
+    </message>
+    <message>
+        <source>Join</source>
+        <translation>Присоединиться</translation>
+    </message>
+    <message>
+        <source>Create</source>
+        <translation>Создать</translation>
+    </message>
+    <message>
+        <source>Add Team</source>
+        <translation>Добавить команду</translation>
+    </message>
+    <message>
+        <source>Go!</source>
+        <translation>Вперёд!</translation>
+    </message>
+</context>
+<context>
+    <name>QToolBox</name>
+    <message>
+        <source>Actions</source>
+        <translation>Действия</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation>Оружие</translation>
+    </message>
+    <message>
+        <source>Weapon properties</source>
+        <translation>Настройки оружия</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Разное</translation>
+    </message>
+</context>
+<context>
+    <name>binds</name>
     <message>
         <source>up</source>
         <translation>вверх</translation>
@@ -23,297 +256,150 @@
     </message>
     <message>
         <source>attack</source>
-        <translation type="unfinished"></translation>
+        <translation>атака</translation>
     </message>
     <message>
         <source>put</source>
-        <translation type="unfinished"></translation>
+        <translation>указать</translation>
     </message>
     <message>
         <source>switch</source>
-        <translation type="unfinished"></translation>
+        <translation>переключить</translation>
     </message>
     <message>
         <source>slot 1</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 1</translation>
     </message>
     <message>
         <source>slot 2</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 2</translation>
     </message>
     <message>
         <source>slot 3</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 3</translation>
     </message>
     <message>
         <source>slot 4</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 4</translation>
     </message>
     <message>
         <source>slot 5</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 5</translation>
     </message>
     <message>
         <source>slot 6</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 6</translation>
     </message>
     <message>
         <source>slot 7</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 7</translation>
     </message>
     <message>
         <source>slot 8</source>
-        <translation type="unfinished"></translation>
+        <translation>слот 8</translation>
     </message>
     <message>
         <source>timer 1 sec</source>
-        <translation type="unfinished"></translation>
+        <translation>таймер на 1 сек</translation>
     </message>
     <message>
         <source>timer 2 sec</source>
-        <translation type="unfinished"></translation>
+        <translation>таймер на 2 сек</translation>
     </message>
     <message>
         <source>timer 3 sec</source>
-        <translation type="unfinished"></translation>
+        <translation>таймер на 3 сек</translation>
     </message>
     <message>
         <source>timer 4 sec</source>
-        <translation type="unfinished"></translation>
+        <translation>таймер на 4 сек</translation>
     </message>
     <message>
         <source>timer 5 sec</source>
-        <translation type="unfinished"></translation>
+        <translation>таймер на 5 сек</translation>
     </message>
     <message>
         <source>capture</source>
-        <translation type="unfinished"></translation>
+        <translation>снимок</translation>
     </message>
     <message>
         <source>quit</source>
-        <translation type="unfinished"></translation>
+        <translation>выход</translation>
     </message>
 </context>
 <context>
-    <name>HWForm</name>
+    <name>teams</name>
     <message>
-        <source>-= by unC0Rr =-</source>
-        <translation type="unfinished"></translation>
+        <source>Hedgehogs</source>
+        <translation>Ёжики</translation>
     </message>
     <message>
-        <source>Simple Game</source>
-        <translation type="unfinished"></translation>
+        <source>hedgehog 1</source>
+        <translation>ёжик 1</translation>
     </message>
     <message>
-        <source>Back</source>
-        <translation>Назад</translation>
+        <source>hedgehog 2</source>
+        <translation>ёжик 2</translation>
     </message>
     <message>
-        <source>Team Members</source>
-        <translation type="unfinished"></translation>
+        <source>hedgehog 3</source>
+        <translation>ёжик 3</translation>
     </message>
     <message>
-        <source>Team</source>
-        <translation>Команда</translation>
+        <source>hedgehog 4</source>
+        <translation>ёжик 4</translation>
     </message>
     <message>
-        <source>Fort</source>
-        <translation>Форт</translation>
+        <source>hedgehog 5</source>
+        <translation>ёжик 5</translation>
     </message>
     <message>
-        <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <source>hedgehog 6</source>
+        <translation>ёжик 6</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="unfinished"></translation>
+        <source>hedgehog 7</source>
+        <translation>ёжик 7</translation>
     </message>
     <message>
-        <source>Actions</source>
-        <translation type="unfinished"></translation>
+        <source>hedgehog 8</source>
+        <translation>ёжик 8</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation type="unfinished"></translation>
+        <source>Goddess</source>
+        <translation>Богини</translation>
     </message>
     <message>
-        <source>Weapon properties</source>
-        <translation type="unfinished"></translation>
+        <source>Isis</source>
+        <translation>Изида</translation>
     </message>
     <message>
-        <source>Other</source>
-        <translation type="unfinished"></translation>
+        <source>Astarte</source>
+        <translation>Астарта</translation>
     </message>
     <message>
-        <source>Discard</source>
-        <translation type="unfinished"></translation>
+        <source>Diana</source>
+        <translation>Диана</translation>
     </message>
     <message>
-        <source>Save</source>
-        <translation>Сохранить</translation>
+        <source>Aphrodite</source>
+        <translation>Афродита</translation>
     </message>
     <message>
-        <source>Teams</source>
-        <translation>Команды</translation>
+        <source>Hecate</source>
+        <translation>Геката</translation>
     </message>
     <message>
-        <source>New team</source>
-        <translation>Создать команду</translation>
+        <source>Demeter</source>
+        <translation>Деметра</translation>
     </message>
     <message>
-        <source>Edit team</source>
-        <translation>Редактировать команду</translation>
+        <source>Kali</source>
+        <translation>Кали</translation>
     </message>
     <message>
-        <source>640x480</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>800x600</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1024x768</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1280x1024</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fullscreen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>unnamed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play demo</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation>Соединить</translation>
-    </message>
-    <message>
-        <source>Disconnect</source>
-        <translation>Разъединить</translation>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Create</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Go!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Single Player</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Multiplayer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Setup</source>
-        <translation>Настройки</translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation>Выход</translation>
-    </message>
-    <message>
-        <source>Demos</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Net game</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation>Не могу создать папку %1</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation>Выход</translation>
-    </message>
-    <message>
-        <source>Cannot save options to file %1</source>
-        <translation>Не могу сохранить настройки в файл %1</translation>
-    </message>
-    <message>
-        <source>Please, select demo from the list above</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">OK</translation>
-    </message>
-</context>
-<context>
-    <name>HWGame</name>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation>Ошибка при запуске сервера: %1.</translation>
-    </message>
-    <message>
-        <source>Quit</source>
-        <translation>Выход</translation>
-    </message>
-    <message>
-        <source>en.txt</source>
-        <translation>ru.txt</translation>
-    </message>
-    <message>
-        <source>Cannot save demo to file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot open demofile %1</source>
-        <translation>Не могу сохранить демо в файл %1</translation>
-    </message>
-</context>
-<context>
-    <name>HWNet</name>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The host was not found. Please check the host name and port settings.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Connection refused</source>
-        <translation type="unfinished"></translation>
+        <source>Inanna</source>
+        <translation>Инанна</translation>
     </message>
 </context>
 </TS>
- 

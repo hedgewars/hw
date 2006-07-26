@@ -35,6 +35,7 @@
 #define BINDS_H
 
 #include <QString>
+#include <QtGlobal>
 
 #define BINDS_NUMBER 24
 
@@ -48,30 +49,30 @@ struct BindAction
 
 const BindAction cbinds[BINDS_NUMBER] =
 {
-	{"+up",	"up",	QT_TR_NOOP("up"),	false},
-	{"+left",	"left",	QT_TR_NOOP("left"),	false},
-	{"+right",	"right",	QT_TR_NOOP("right"),	false},
-	{"+down",	"down",	QT_TR_NOOP("down"),	false},
-	{"ljump",	"return",	QT_TR_NOOP("jump"),	false},
-	{"hjump",	"backspace",	QT_TR_NOOP("jump"),	false},
-	{"+attack",	"space",	QT_TR_NOOP("attack"),	false},
-	{"put",	"mousel",	QT_TR_NOOP("put"),	false},
-	{"switch",	"tab",	QT_TR_NOOP("switch"),	true},
-	{"slot 1",	"f1",	QT_TR_NOOP("slot 1"),	false},
-	{"slot 2",	"f2",	QT_TR_NOOP("slot 2"),	false},
-	{"slot 3",	"f3",	QT_TR_NOOP("slot 3"),	false},
-	{"slot 4",	"f4",	QT_TR_NOOP("slot 4"),	false},
-	{"slot 5",	"f5",	QT_TR_NOOP("slot 5"),	false},
-	{"slot 6",	"f6",	QT_TR_NOOP("slot 6"),	false},
-	{"slot 7",	"f7",	QT_TR_NOOP("slot 7"),	false},
-	{"slot 8",	"f8",	QT_TR_NOOP("slot 8"),	true},
-	{"timer 1",	"1",	QT_TR_NOOP("timer 1 sec"),	false},
-	{"timer 2",	"2",	QT_TR_NOOP("timer 2 sec"),	false},
-	{"timer 3",	"3",	QT_TR_NOOP("timer 3 sec"),	false},
-	{"timer 4",	"4",	QT_TR_NOOP("timer 4 sec"),	false},
-	{"timer 5",	"5",	QT_TR_NOOP("timer 5 sec"),	true},
-	{"capture",	"f11",	QT_TR_NOOP("capture"),	false},
-	{"quit",	"f10",	QT_TR_NOOP("quit"),	false}
+	{"+up",	"up",	QT_TRANSLATE_NOOP("binds", "up"),	false},
+	{"+left",	"left",	QT_TRANSLATE_NOOP("binds", "left"),	false},
+	{"+right",	"right",	QT_TRANSLATE_NOOP("binds", "right"),	false},
+	{"+down",	"down",	QT_TRANSLATE_NOOP("binds", "down"),	false},
+	{"ljump",	"return",	QT_TRANSLATE_NOOP("binds", "jump"),	false},
+	{"hjump",	"backspace",	QT_TRANSLATE_NOOP("binds", "jump"),	false},
+	{"+attack",	"space",	QT_TRANSLATE_NOOP("binds", "attack"),	false},
+	{"put",	"mousel",	QT_TRANSLATE_NOOP("binds", "put"),	false},
+	{"switch",	"tab",	QT_TRANSLATE_NOOP("binds", "switch"),	true},
+	{"slot 1",	"f1",	QT_TRANSLATE_NOOP("binds", "slot 1"),	false},
+	{"slot 2",	"f2",	QT_TRANSLATE_NOOP("binds", "slot 2"),	false},
+	{"slot 3",	"f3",	QT_TRANSLATE_NOOP("binds", "slot 3"),	false},
+	{"slot 4",	"f4",	QT_TRANSLATE_NOOP("binds", "slot 4"),	false},
+	{"slot 5",	"f5",	QT_TRANSLATE_NOOP("binds", "slot 5"),	false},
+	{"slot 6",	"f6",	QT_TRANSLATE_NOOP("binds", "slot 6"),	false},
+	{"slot 7",	"f7",	QT_TRANSLATE_NOOP("binds", "slot 7"),	false},
+	{"slot 8",	"f8",	QT_TRANSLATE_NOOP("binds", "slot 8"),	true},
+	{"timer 1",	"1",	QT_TRANSLATE_NOOP("binds", "timer 1 sec"),	false},
+	{"timer 2",	"2",	QT_TRANSLATE_NOOP("binds", "timer 2 sec"),	false},
+	{"timer 3",	"3",	QT_TRANSLATE_NOOP("binds", "timer 3 sec"),	false},
+	{"timer 4",	"4",	QT_TRANSLATE_NOOP("binds", "timer 4 sec"),	false},
+	{"timer 5",	"5",	QT_TRANSLATE_NOOP("binds", "timer 5 sec"),	true},
+	{"capture",	"f11",	QT_TRANSLATE_NOOP("binds", "capture"),	false},
+	{"quit",	"f10",	QT_TRANSLATE_NOOP("binds", "quit"),	false}
 };
 
 #endif // BINDS_H

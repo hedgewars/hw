@@ -40,6 +40,7 @@
 #include <QToolBox>
 #include <QLineEdit>
 #include <QListWidget>
+#include <QApplication>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -184,7 +185,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	{
 		LBind[i] = new QLabel(BindsBox->widget(widind));
 		LBind[i]->setGeometry(QRect(10, top + 3, 70, 20));
-		LBind[i]->setText(tr(cbinds[i].name));
+		LBind[i]->setText(QApplication::translate("binds", cbinds[i].name));
 		LBind[i]->setAlignment(Qt::AlignRight);
 		CBBind[i] = new QComboBox(BindsBox->widget(widind));
 		CBBind[i]->setGeometry(QRect(90, top, 80, 20));

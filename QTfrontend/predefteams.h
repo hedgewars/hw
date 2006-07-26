@@ -57,19 +57,27 @@ struct PredefinedTeam
 const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 {
 	{
-		QT_TR_NOOP("Hedgehogs"),
-		QT_TR_NOOP("hedgehog 1"), QT_TR_NOOP("hedgehog 2"),
-		QT_TR_NOOP("hedgehog 3"), QT_TR_NOOP("hedgehog 4"),
-		QT_TR_NOOP("hedgehog 5"), QT_TR_NOOP("hedgehog 6"),
-		QT_TR_NOOP("hedgehog 7"), QT_TR_NOOP("hedgehog 8"),
+		QT_TRANSLATE_NOOP("teams", "Hedgehogs"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 1"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 2"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 3"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 4"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 5"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 6"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 7"),
+		QT_TRANSLATE_NOOP("teams", "hedgehog 8"),
 		"Simple", "Island"
 	},
 	{
-		QT_TR_NOOP("Goddess"),
-		QT_TR_NOOP("Isis"), QT_TR_NOOP("Astarte"),
-		QT_TR_NOOP("Diana"), QT_TR_NOOP("Aphrodite"),
-		QT_TR_NOOP("Hecate"), QT_TR_NOOP("Demeter"),
-		QT_TR_NOOP("Kali"), QT_TR_NOOP("Inanna"),
+		QT_TRANSLATE_NOOP("teams", "Goddess"),
+		QT_TRANSLATE_NOOP("teams", "Isis"),
+		QT_TRANSLATE_NOOP("teams", "Astarte"),
+		QT_TRANSLATE_NOOP("teams", "Diana"),
+		QT_TRANSLATE_NOOP("teams", "Aphrodite"),
+		QT_TRANSLATE_NOOP("teams", "Hecate"),
+		QT_TRANSLATE_NOOP("teams", "Demeter"),
+		QT_TRANSLATE_NOOP("teams", "Kali"),
+		QT_TRANSLATE_NOOP("teams", "Inanna"),
 		"Bone", "Island"
 	}
 };

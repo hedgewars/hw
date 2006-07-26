@@ -33,6 +33,7 @@
 
 #include <QFile>
 #include <QTextStream>
+#include <QApplication>
 #include "team.h"
 #include "hwform.h"
 #include "gameuiconfig.h"
@@ -57,15 +58,15 @@ HWTeam::HWTeam(quint8 num, GameUIConfig * config)
 {
 	this->config = config;
 	num %= PREDEFTEAMS_COUNT;
-	TeamName = QObject::tr(pteams[num].TeamName);
-	HHName[0] = QObject::tr(pteams[num].hh0name);
-	HHName[1] = QObject::tr(pteams[num].hh1name);
-	HHName[2] = QObject::tr(pteams[num].hh2name);
-	HHName[3] = QObject::tr(pteams[num].hh3name);
-	HHName[4] = QObject::tr(pteams[num].hh4name);
-	HHName[5] = QObject::tr(pteams[num].hh5name);
-	HHName[6] = QObject::tr(pteams[num].hh6name);
-	HHName[7] = QObject::tr(pteams[num].hh7name);
+	TeamName = QApplication::translate("teams", pteams[num].TeamName);
+	HHName[0] = QApplication::translate("teams", pteams[num].hh0name);
+	HHName[1] = QApplication::translate("teams", pteams[num].hh1name);
+	HHName[2] = QApplication::translate("teams", pteams[num].hh2name);
+	HHName[3] = QApplication::translate("teams", pteams[num].hh3name);
+	HHName[4] = QApplication::translate("teams", pteams[num].hh4name);
+	HHName[5] = QApplication::translate("teams", pteams[num].hh5name);
+	HHName[6] = QApplication::translate("teams", pteams[num].hh6name);
+	HHName[7] = QApplication::translate("teams", pteams[num].hh7name);
 	Grave = pteams[num].Grave;
 	Fort = pteams[num].Fort;
 	for(int i = 0; i < BINDS_NUMBER; i++)
