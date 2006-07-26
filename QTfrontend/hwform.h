@@ -39,12 +39,10 @@
 #include <QDir>
 
 #include "ui_hwform.h"
-#include "binds.h"
-#include "game.h"
-#include "team.h"
-#include "netclient.h"
-#include "teamselect.h"
 
+class HWGame;
+class HWTeam;
+class HWNet;
 class GameUIConfig;
 
 class HWForm : public QMainWindow
@@ -53,10 +51,7 @@ class HWForm : public QMainWindow
 
 public:
 	HWForm(QWidget *parent = 0);
-	Ui::HWForm ui;
-	QLineEdit * TeamNameEdit;
-	QLineEdit * HHNameEdit[8];
-	QComboBox * CBBind[BINDS_NUMBER];
+	Ui_HWForm ui;
 
 private slots:
 	void GoToMain();
@@ -82,12 +77,7 @@ private slots:
 	void NetStartGame();
 	void ChangeInNetTeams(const QStringList & teams);
 
-public slots:
-	void CBGrave_activated(const QString & gravename);
-	void CBFort_activated(const QString & gravename);
-
 private:
-	QLabel * LBind[BINDS_NUMBER];
 	HWGame * game;
 	HWTeam * tmpTeam;
 	HWNet * hwnet;

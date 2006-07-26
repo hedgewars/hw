@@ -14,7 +14,7 @@ FrameTeams::FrameTeams(QWidget* parent) :
 void FrameTeams::addTeam(tmprop team)
 {
   TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team, this);
-  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
+//  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
   teamToWidget.insert(make_pair(team, pTeamShowWidget));
   mainLayout.addWidget(pTeamShowWidget);
   QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());

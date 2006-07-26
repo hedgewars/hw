@@ -50,9 +50,6 @@ private slots:
 
 private:
 	QCheckBox * CB_mode_Forts;
-
-protected:
-	void resizeEvent(QResizeEvent * event);
 };
 
 #endif // GAMECONFIGWIDGET_H

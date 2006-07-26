@@ -40,15 +40,15 @@
 
 struct PredefinedTeam
 {
-	QString TeamName;
-	QString hh0name;
-	QString hh1name;
-	QString hh2name;
-	QString hh3name;
-	QString hh4name;
-	QString hh5name;
-	QString hh6name;
-	QString hh7name;
+	const char * TeamName;
+	const char * hh0name;
+	const char * hh1name;
+	const char *  hh2name;
+	const char *  hh3name;
+	const char *  hh4name;
+	const char *  hh5name;
+	const char *  hh6name;
+	const char *  hh7name;
 	QString Grave;
 	QString Fort;
 };

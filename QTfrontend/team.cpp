@@ -37,6 +37,7 @@
 #include "hwform.h"
 #include "gameuiconfig.h"
 #include "predefteams.h"
+#include "pages.h"
 
 HWTeam::HWTeam(const QString & teamname, GameUIConfig * config)
 {
@@ -56,17 +57,22 @@ HWTeam::HWTeam(quint8 num, GameUIConfig * config)
 {
 	this->config = config;
 	num %= PREDEFTEAMS_COUNT;
-	TeamName = pteams[num].TeamName;
-	HHName[0] = pteams[num].hh0name;
-	HHName[1] = pteams[num].hh1name;
-	HHName[2] = pteams[num].hh2name;
-	HHName[3] = pteams[num].hh3name;
-	HHName[4] = pteams[num].hh4name;
-	HHName[5] = pteams[num].hh5name;
-	HHName[6] = pteams[num].hh6name;
-	HHName[7] = pteams[num].hh7name;
+	TeamName = QObject::tr(pteams[num].TeamName);
+	HHName[0] = QObject::tr(pteams[num].hh0name);
+	HHName[1] = QObject::tr(pteams[num].hh1name);
+	HHName[2] = QObject::tr(pteams[num].hh2name);
+	HHName[3] = QObject::tr(pteams[num].hh3name);
+	HHName[4] = QObject::tr(pteams[num].hh4name);
+	HHName[5] = QObject::tr(pteams[num].hh5name);
+	HHName[6] = QObject::tr(pteams[num].hh6name);
+	HHName[7] = QObject::tr(pteams[num].hh7name);
 	Grave = pteams[num].Grave;
 	Fort = pteams[num].Fort;
+	for(int i = 0; i < BINDS_NUMBER; i++)
+	{
+		binds[i].action = cbinds[i].action;
+		binds[i].strbind = cbinds[i].strbind;
+	}
 }
 
 
@@ -146,36 +152,36 @@ bool HWTeam::SaveToFile()
 
 void HWTeam::SetToPage(HWForm * hwform)
 {
-	hwform->TeamNameEdit->setText(TeamName);
+	hwform->ui.pageEditTeam->TeamNameEdit->setText(TeamName);
 	for(int i = 0; i < 8; i++)
 	{
-		hwform->HHNameEdit[i]->setText(HHName[i]);
+		hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
 	}
-	hwform->ui.CBGrave->setCurrentIndex(hwform->ui.CBGrave->findText(Grave));
-	hwform->CBGrave_activated(Grave);
+	hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
+	hwform->ui.pageEditTeam->CBGrave_activated(Grave);
 
-	hwform->ui.CBFort->setCurrentIndex(hwform->ui.CBFort->findText(Fort));
-	hwform->CBFort_activated(Fort);
+	hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(Fort));
+	hwform->ui.pageEditTeam->CBFort_activated(Fort);
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
-		hwform->CBBind[i]->setCurrentIndex(hwform->CBBind[i]->findText(binds[i].strbind));
+		hwform->ui.pageEditTeam->CBBind[i]->setCurrentIndex(hwform->ui.pageEditTeam->CBBind[i]->findText(binds[i].strbind));
 	}
 }
 
 void HWTeam::GetFromPage(HWForm * hwform)
 {
-	TeamName  = hwform->TeamNameEdit->text();
+	TeamName  = hwform->ui.pageEditTeam->TeamNameEdit->text();
 	for(int i = 0; i < 8; i++)
 	{
-		HHName[i] = hwform->HHNameEdit[i]->text();
+		HHName[i] = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
 	}
 
-	Grave = hwform->ui.CBGrave->currentText();
-	Fort = hwform->ui.CBFort->currentText();
+	Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
+	Fort = hwform->ui.pageEditTeam->CBFort->currentText();
 	for(int i = 0; i < 8; i++)
 	{
-		binds[i].strbind = hwform->CBBind[i]->currentText();
+		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->currentText();
 	}
 }
 

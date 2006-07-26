@@ -42,63 +42,18 @@
 #include <QTextStream>
 
 #include "hwform.h"
-#include "sdlkeys.h"
-#include "hwconsts.h"
+#include "game.h"
+#include "team.h"
+#include "netclient.h"
+#include "teamselect.h"
 #include "gameuiconfig.h"
+#include "pages.h"
+#include "hwconsts.h"
 
 HWForm::HWForm(QWidget *parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
-	TeamNameEdit = new QLineEdit(ui.GBoxTeam);
-	TeamNameEdit->setGeometry(QRect(10, 20, 141, 20));
-	TeamNameEdit->setMaxLength(15);
-	for(int i = 0; i < 8; i++)
-	{
-		HHNameEdit[i] = new QLineEdit(ui.GBoxHedgehogs);
-		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
-		HHNameEdit[i]->setMaxLength(15);
-	}
-
-	QStringList binds;
-	for(int i = 0; strlen(sdlkeys[i][1]) > 0; i++)
-	{
-		binds << sdlkeys[i][1];
-	}
-
-	quint16 widind = 0, top = 0;
-	for(quint8 i = 0; i < BINDS_NUMBER; i++)
-	{
-		LBind[i] = new QLabel(ui.BindsBox->widget(widind));
-		LBind[i]->setGeometry(QRect(10, top + 3, 70, 20));
-		LBind[i]->setText(cbinds[i].name);
-		LBind[i]->setAlignment(Qt::AlignRight);
-		CBBind[i] = new QComboBox(ui.BindsBox->widget(widind));
-		CBBind[i]->setGeometry(QRect(90, top, 80, 20));
-		CBBind[i]->addItems(binds);
-		if (cbinds[i].chwidget)
-		{
-			top = 0;
-			widind++;
-		} else
-		{
-			top += 28;
-		}
-	}
-
-	QDir tmpdir;
-	tmpdir.cd(DATA_PATH);
-	tmpdir.cd("Forts");
-	tmpdir.setFilter(QDir::Files);
-
-	ui.CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L.png"), "\\1"));
-
-	tmpdir.cd("../Graphics/Graves");
-	QStringList list = tmpdir.entryList(QStringList("*.png"));
-	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-	{
-		ui.CBGrave->addItem((*it).replace(QRegExp("^(.*).png"), "\\1"));
-	}
 
 	config = new GameUIConfig(this);
 
@@ -113,36 +68,44 @@ HWForm::HWForm(QWidget *parent)
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
 	{
 	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
-	  ui.PageLGTeamsSelect->addTeam(tmpTeamStr);
-	  ui.CBTeamName->addItem(tmpTeamStr);
+	  ui.pageMultiplayer->teamsSelect->addTeam(tmpTeamStr);
+	  ui.pageOptions->CBTeamName->addItem(tmpTeamStr);
 	}
 
-	connect(ui.BtnSPBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
-	connect(ui.BtnDemosBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
-	connect(ui.BtnSetupBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
-	connect(ui.BtnMPBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
-	connect(ui.BtnNetBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
-	connect(ui.BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
-	connect(ui.BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
-	connect(ui.BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
-	connect(ui.BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
-	connect(ui.BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
-	connect(ui.BtnNetCFGBack,	SIGNAL(clicked()),	this, SLOT(GoToNetChat()));
-	connect(ui.BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));
-	connect(ui.BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
-	connect(ui.BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
-	connect(ui.BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
-	connect(ui.BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
-	connect(ui.BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
-	connect(ui.BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
-	connect(ui.BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
-	connect(ui.BtnNetChatDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
-	connect(ui.BtnNetChatJoin,	SIGNAL(clicked()),	this, SLOT(NetJoin()));
-	connect(ui.BtnNetChatCreate,	SIGNAL(clicked()),	this, SLOT(NetCreate()));
-	connect(ui.BtnNetCFGAddTeam,	SIGNAL(clicked()),	this, SLOT(NetAddTeam()));
-	connect(ui.BtnNetCFGGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
-	connect(ui.CBGrave,	SIGNAL(activated(const QString &)),	this, SLOT(CBGrave_activated(const QString &)));
-	connect(ui.CBFort,	SIGNAL(activated(const QString &)),	this, SLOT(CBFort_activated(const QString &)));
+	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
+	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
+	connect(ui.pageMain->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
+	connect(ui.pageMain->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
+	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
+	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(close()));
+
+	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageLocalGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
+
+	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
+	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
+
+	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+
+	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
+
+	connect(ui.pageOptions->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageOptions->BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));
+	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
+	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
+
+	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
+
+	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToNetChat()));
+	connect(ui.pageNetGame->BtnAddTeam,	SIGNAL(clicked()),	this, SLOT(NetAddTeam()));
+	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
+
+	connect(ui.pageNetChat->BtnDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
+	connect(ui.pageNetChat->BtnJoin,	SIGNAL(clicked()),	this, SLOT(NetJoin()));
+	connect(ui.pageNetChat->BtnCreate,	SIGNAL(clicked()),	this, SLOT(NetCreate()));
+
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
 }
 
@@ -172,8 +135,8 @@ void HWForm::GoToDemos()
 	tmpdir.cd(DATA_PATH);
 	tmpdir.cd("Demos");
 	tmpdir.setFilter(QDir::Files);
-	ui.DemosList->clear();
-	ui.DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_1")).replaceInStrings(QRegExp("^(.*).hwd_1"), "\\1"));
+	ui.pagePlayDemo->DemosList->clear();
+	ui.pagePlayDemo->DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_1")).replaceInStrings(QRegExp("^(.*).hwd_1"), "\\1"));
 	ui.Pages->setCurrentIndex(ID_PAGE_DEMOS);
 }
 
@@ -196,7 +159,7 @@ void HWForm::NewTeam()
 
 void HWForm::EditTeam()
 {
-	tmpTeam = new HWTeam(ui.CBTeamName->currentText(), config);
+	tmpTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText(), config);
 	tmpTeam->LoadFromFile();
 	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
@@ -217,25 +180,13 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	game = new HWGame(config, ui.pageLGGameCFG);
+	game = new HWGame(config, ui.pageLocalGame->gameCFG);
 	game->StartQuick();
-}
-
-void HWForm::CBGrave_activated(const QString & gravename)
-{
-	QPixmap pix(QString(DATA_PATH) + "/Graphics/Graves/" + gravename + ".png");
-	ui.GravePreview->setPixmap(pix.copy(0, 0, 32, 32));
-}
-
-void HWForm::CBFort_activated(const QString & fortname)
-{
-	QPixmap pix(QString(DATA_PATH) + "/Forts/" + fortname + "L.png");
-	ui.FortPreview->setPixmap(pix);
 }
 
 void HWForm::PlayDemo()
 {
-	QListWidgetItem * curritem = ui.DemosList->currentItem();
+	QListWidgetItem * curritem = ui.pagePlayDemo->DemosList->currentItem();
 	if (!curritem)
 	{
 		QMessageBox::critical(this,
@@ -255,7 +206,7 @@ void HWForm::NetConnect()
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
-	hwnet->Connect("172.19.5.168", 6667, ui.editNetNick->text());
+	hwnet->Connect("172.19.5.168", 6667, ui.pageOptions->editNetNick->text());
 }
 
 void HWForm::NetDisconnect()
@@ -266,7 +217,7 @@ void HWForm::NetDisconnect()
 
 void HWForm::AddGame(const QString & chan)
 {
-	ui.ChannelsList->addItem(chan);
+	ui.pageNetChat->ChannelsList->addItem(chan);
 }
 
 void HWForm::NetGameEnter()
@@ -298,7 +249,7 @@ void HWForm::NetStartGame()
 
 void HWForm::ChangeInNetTeams(const QStringList & teams)
 {
-	ui.listNetTeams->clear();
-	ui.listNetTeams->addItems(teams);
+	ui.pageNetGame->listNetTeams->clear();
+	ui.pageNetGame->listNetTeams->addItems(teams);
 }
 

@@ -34,7 +34,7 @@
 #ifndef BINDS_H
 #define BINDS_H
 
-#include <QtGlobal>
+#include <QString>
 
 #define BINDS_NUMBER 24
 
@@ -42,7 +42,7 @@ struct BindAction
 {
 	QString action;
 	QString strbind;
-	QString name;
+	const char * name;
 	bool chwidget;
 };
 

@@ -37,7 +37,8 @@
 #include <QObject>
 #include <QDir>
 #include <QStringList>
-#include "hwform.h"
+
+class HWForm;
 
 class GameUIConfig : public QObject
 {

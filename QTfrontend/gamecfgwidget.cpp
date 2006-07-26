@@ -43,11 +43,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) : QWidget(parent)
 	CB_mode_Forts->setText("Forts mode");
 }
 
-void GameCFGWidget::resizeEvent(QResizeEvent * event)
-{
-	resize(event->size());
-}
-
 quint32 GameCFGWidget::getGameFlags()
 {
 	quint32 result = 0;

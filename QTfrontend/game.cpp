@@ -42,6 +42,7 @@
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
+#include "gamecfgwidget.h"
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg)
 {
