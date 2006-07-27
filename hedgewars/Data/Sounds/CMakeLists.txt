@@ -1,0 +1,11 @@
+install(FILES
+	explosion.ogg
+	graveimpact.ogg
+	grenadeimpact.ogg
+	minetick.ogg
+	shotgunfire.ogg
+	shotgunreload.ogg
+	splash.ogg
+	throwpowerup.ogg
+	throwrelease.ogg
+	DESTINATION Data/Sounds)

@@ -324,6 +324,7 @@ while t<>nil do
       t:= Gear.NextGear;
       if Gear.Active then Gear.doStep(Gear);
       end;
+
 if AllInactive then
    case step of
         stDelay: begin

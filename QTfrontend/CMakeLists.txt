@@ -16,7 +16,8 @@ set(hwfr_src
 	vertScrollArea.cpp
 	gameuiconfig.cpp
 	ui_hwform.cpp
-	gamecfgwidget.cpp)
+	gamecfgwidget.cpp
+	pages.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -33,7 +34,8 @@ set(hwfr_moc_hdrs
 	gameuiconfig.h
 	ui_hwform.h
 	gamecfgwidget.h
-	predefteams.h)
+	predefteams.h
+	pages.h)
 
 
 set(hwfr_rez
@@ -56,4 +58,4 @@ target_link_libraries(hedgewars
 	${QT_QTNETWORK_LIBRARY}
 	${QT_QTMAIN_LIBRARY})
 
-install_targets(/bin hedgewars)
+install(PROGRAMS "hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)

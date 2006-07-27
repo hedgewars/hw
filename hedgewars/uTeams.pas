@@ -126,7 +126,7 @@ var tteam: PTeam;
 begin
 FreeActionsList;
 TargetPoint.X:= NoPointX;
-if CurrentTeam = nil then OutError('nil Team', true);
+TryDo(CurrentTeam <> nil, 'nil Team', true);
 tteam:= CurrentTeam;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if Gear <> nil then Gear.Message:= 0;

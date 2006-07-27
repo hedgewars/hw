@@ -675,7 +675,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepCase(Gear: PGear);
-var i: integer;
+var i, x, y: integer;
 begin
 if (Gear.Message and gm_Destroy) > 0 then
    begin
@@ -685,10 +685,12 @@ if (Gear.Message and gm_Destroy) > 0 then
 
 if Gear.Damage > 0 then
    begin
+   x:= round(Gear.X);
+   y:= round(Gear.Y);
    DeleteGear(Gear);
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 25, EXPLAutoSound);
+   doMakeExplosion(x, y, 25, EXPLAutoSound);
    for i:= 0 to 63 do
-       AddGear(round(Gear.X), round(Gear.Y), gtFlame, 0);
+       AddGear(x, y, gtFlame, 0);
    exit
    end;
 

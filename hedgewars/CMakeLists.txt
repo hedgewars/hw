@@ -39,7 +39,6 @@ if (NOT pascal_compiler)
 	message(FATAL_ERROR "No Pascal compiler found!")
 endif (NOT pascal_compiler)
 
-add_custom_target(hwengine ALL
-	${pascal_compiler} ${pascal_compiler_flags})
+add_custom_command(COMMAND ${pascal_compiler} TARGET hwengine OUTPUTS hwengine ARGS ${pascal_compiler_flags})
 
-install_targets(/bin hwengine)
+install(PROGRAMS "hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)

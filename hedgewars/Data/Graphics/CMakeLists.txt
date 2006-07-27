@@ -1,0 +1,35 @@
+add_subdirectory(Graves)
+install(FILES
+	Arrow.png
+	BigDigits.png
+	BlueWater.png
+	Bomb.png
+	Case.png
+	ClBomb.png
+	Clouds.png
+	ClParticle.png
+	Console.png
+	Crosshair.png
+	dynamite.png
+	Expl50.png
+	FirstAid.png
+	Flame.png
+	Frame.png
+	Girder.png
+	Grenade.png
+	Hedgehog.png
+	Lag.png
+	MineOff.png
+	MineOn.png
+	Power.png
+	PowerBar.png
+	RopeHook.png
+	RopeNode.png
+	SmokeTrace.png
+	Targetp.png
+	thinking.png
+	UFO.png
+	WindBar.png
+	WindL.png
+	WindR.png
+	DESTINATION Data/Graphics)

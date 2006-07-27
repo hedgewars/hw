@@ -64,7 +64,7 @@ AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
 {$ENDIF}
 end;
 
-procedure DrawBezierEdge(var pa: TPixAr);
+procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);
 var x, y, i: integer;
     tx, ty, vx, vy, vlen, t: real;
     r1, r2, r3, r4: real;
@@ -121,7 +121,7 @@ for i:= 0 to Count-2 do
           Y:= round(r1 + r2 + r3 + r4);
           t:= t + 0.001;
           if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
-                Land[y, x]:= 0;
+                Land[y, x]:= Color;
           end;
     end;
 end;
@@ -450,11 +450,13 @@ with Template do
 
      PointWave(Template, pa);
      NormalizePoints(pa);
-     DrawBezierEdge(pa);
+     DrawBezierEdge(pa, 0);
 
      for i:= 0 to pred(FillPointsCount) do
          with FillPoints^[i] do
-              FillLand(x, y)
+              FillLand(x, y);
+
+     DrawBezierEdge(pa, COLOR_LAND);
      end;
 end;
 

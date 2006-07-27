@@ -66,7 +66,9 @@ if CurrentTeam.ExtDriven then
 if Lag > 100 then Lag:= 100
 else if GameType = gmtSave then Lag:= 2500;
 
-for i:= 1 to Lag do
+i:= 1;
+while (GameState <> gsExit) and (i <= Lag) do
+    begin
     if not CurrentTeam.ExtDriven then
        begin
        with CurrentTeam^ do
@@ -90,6 +92,8 @@ for i:= 1 to Lag do
                end
           else ProcessGears
        end;
+    inc(i)
+    end;
 if not CurrentTeam.ExtDriven then isInLag:= false;
 
 MoveCamera
