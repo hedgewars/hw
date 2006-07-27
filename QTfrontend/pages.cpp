@@ -114,65 +114,56 @@ PageLocalGame::PageLocalGame(QWidget* parent) : QWidget(parent)
 PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	GBoxHedgehogs = new	QGroupBox(this);
-	GBoxHedgehogs->setGeometry(QRect(20, 70, 161, 261));
-	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 100);
+	pageLayout->setColumnMinimumWidth(0, 150);
+	pageLayout->setColumnStretch(1, 100);
+	pageLayout->setColumnMinimumWidth(1, 200);
+	pageLayout->setColumnStretch(2, 250);
+	pageLayout->setColumnMinimumWidth(2, 250);
+
 	GBoxTeam = new QGroupBox(this);
-	GBoxTeam->setGeometry(QRect(20, 10,	161, 51));
 	GBoxTeam->setTitle(QGroupBox::tr("Team"));
-	GBoxFort = new QGroupBox(this);
-	GBoxFort->setGeometry(QRect(420, 110, 181, 221));
-	GBoxFort->setTitle(QGroupBox::tr("Fort"));
-	CBFort = new QComboBox(GBoxFort);
-	CBFort->setGeometry(QRect(10, 20, 161, 21));
-	CBFort->setMaxCount(65535);
-	FortPreview	= new QLabel(GBoxFort);
-	FortPreview->setGeometry(QRect(10, 50, 161,	161));
-	FortPreview->setPixmap(QPixmap());
-	FortPreview->setScaledContents(true);
-	GBoxGrave =	new QGroupBox(this);
-	GBoxGrave->setGeometry(QRect(420, 10, 181, 91));
-	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
-	CBGrave = new QComboBox(GBoxGrave);
-	CBGrave->setGeometry(QRect(10, 20, 161, 21));
-	CBGrave->setMaxCount(65535);
-	GravePreview = new QLabel(GBoxGrave);
-	GravePreview->setGeometry(QRect(80,	50, 32,	32));
-	GravePreview->setScaledContents(true);
+	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	QGridLayout * GBTLayout = new QGridLayout(GBoxTeam);
+	TeamNameEdit = new QLineEdit(GBoxTeam);
+	TeamNameEdit->setMaxLength(15);
+	GBTLayout->addWidget(TeamNameEdit);
+	pageLayout->addWidget(GBoxTeam, 0, 0);
+
+	GBoxHedgehogs = new	QGroupBox(this);
+	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
+	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
+	for(int i = 0; i < 8; i++)
+	{
+		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
+		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
+		HHNameEdit[i]->setMaxLength(15);
+		GBHLayout->addWidget(HHNameEdit[i]);
+	}
+	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
+
+	BtnTeamDiscard = new QPushButton(this);
+	BtnTeamDiscard->setFont(*font14);
+	BtnTeamDiscard->setText(QPushButton::tr("Discard"));
+	pageLayout->addWidget(BtnTeamDiscard, 4, 0);
+
 	GBoxBinds =	new QGroupBox(this);
-	GBoxBinds->setGeometry(QRect(200, 10, 201, 431));
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
+	QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
 	BindsBox = new QToolBox(GBoxBinds);
-	BindsBox->setGeometry(QRect(10, 20,	181, 401));
 	BindsBox->setLineWidth(0);
+	GBBLayout->addWidget(BindsBox);
 	page_A = new QWidget();
-	page_A->setGeometry(QRect(0, 0, 96,	26));
 	BindsBox->addItem(page_A, QToolBox::tr("Actions"));
 	page_W = new QWidget();
 	BindsBox->addItem(page_W, QToolBox::tr("Weapons"));
 	page_WP = new QWidget();
 	BindsBox->addItem(page_WP, QToolBox::tr("Weapon properties"));
 	page_O = new QWidget();
-	page_O->setGeometry(QRect(0, 0, 96,	26));
 	BindsBox->addItem(page_O, QToolBox::tr("Other"));
-	BtnTeamDiscard = new QPushButton(this);
-	BtnTeamDiscard->setGeometry(QRect(440, 380,	161, 41));
-	BtnTeamDiscard->setFont(*font14);
-	BtnTeamDiscard->setText(QPushButton::tr("Discard"));
-	BtnTeamSave	= new QPushButton(this);
-	BtnTeamSave->setGeometry(QRect(20, 380, 161, 41));
-	BtnTeamSave->setFont(*font14);
-	BtnTeamSave->setText(QPushButton::tr("Save"));
-
-	TeamNameEdit = new QLineEdit(GBoxTeam);
-	TeamNameEdit->setGeometry(QRect(10, 20, 141, 20));
-	TeamNameEdit->setMaxLength(15);
-	for(int i = 0; i < 8; i++)
-	{
-		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
-		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
-		HHNameEdit[i]->setMaxLength(15);
-	}
+	pageLayout->addWidget(GBoxBinds, 0, 1, 5, 1);
 
 	QStringList binds;
 	for(int i = 0; strlen(sdlkeys[i][1]) > 0; i++)
@@ -180,25 +171,53 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 		binds << sdlkeys[i][1];
 	}
 
-	quint16 widind = 0, top = 0;
-	for(quint8 i = 0; i < BINDS_NUMBER; i++)
-	{
-		LBind[i] = new QLabel(BindsBox->widget(widind));
-		LBind[i]->setGeometry(QRect(10, top + 3, 70, 20));
-		LBind[i]->setText(QApplication::translate("binds", cbinds[i].name));
-		LBind[i]->setAlignment(Qt::AlignRight);
-		CBBind[i] = new QComboBox(BindsBox->widget(widind));
-		CBBind[i]->setGeometry(QRect(90, top, 80, 20));
-		CBBind[i]->addItems(binds);
-		if (cbinds[i].chwidget)
-		{
-			top = 0;
-			widind++;
-		} else
-		{
-			top += 28;
-		}
+	quint16 widind = 0, i = 0;
+	while (i < BINDS_NUMBER) {
+		quint16 num = 0;
+		QGridLayout * pagelayout = new QGridLayout(BindsBox->widget(widind));
+		do {
+			LBind[i] = new QLabel(BindsBox->widget(widind));
+			LBind[i]->setText(QApplication::translate("binds", cbinds[i].name));
+			LBind[i]->setAlignment(Qt::AlignRight);
+			pagelayout->addWidget(LBind[i], num, 0);
+			CBBind[i] = new QComboBox(BindsBox->widget(widind));
+			CBBind[i]->addItems(binds);
+			pagelayout->addWidget(CBBind[i], num, 1);
+			num++;
+		} while (!cbinds[i++].chwidget);
+		pagelayout->addWidget(new QWidget(BindsBox->widget(widind)), num, 0, 1, 2);
+		widind++;
 	}
+
+	GBoxGrave =	new QGroupBox(this);
+	GBoxGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
+	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
+	CBGrave = new QComboBox(GBoxGrave);
+	CBGrave->setMaxCount(65535);
+	GBGLayout->addWidget(CBGrave, 0, 0, 1, 3);
+	GravePreview = new QLabel(GBoxGrave);
+	GravePreview->setScaledContents(false);
+	GBGLayout->addWidget(GravePreview, 1, 1);
+	pageLayout->addWidget(GBoxGrave, 0, 2, 2, 1);
+
+	GBoxFort = new QGroupBox(this);
+	GBoxFort->setTitle(QGroupBox::tr("Fort"));
+	QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
+	CBFort = new QComboBox(GBoxFort);
+	CBFort->setMaxCount(65535);
+	GBFLayout->addWidget(CBFort, 0, 0);
+	FortPreview	= new QLabel(GBoxFort);
+	FortPreview->setPixmap(QPixmap());
+	FortPreview->setScaledContents(true);
+	GBFLayout->addWidget(FortPreview, 1, 0);
+	pageLayout->addWidget(GBoxFort, 2, 2, 1, 1);
+
+	BtnTeamSave	= new QPushButton(this);
+	BtnTeamSave->setFont(*font14);
+	BtnTeamSave->setText(QPushButton::tr("Save"));
+	pageLayout->addWidget(BtnTeamSave, 4, 2);
+
 
 	QDir tmpdir;
 	tmpdir.cd(DATA_PATH);
