@@ -293,12 +293,11 @@ while Gear <> nil do
             end;
       Gear:= Gear.NextGear
       end;
-CheckForWin
 end;
 
 procedure ProcessGears;
 const delay: integer = cInactDelay;
-      step: (stDelay, stChDmg, stSpawn, stNTurn) = stDelay;
+      step: (stDelay, stChDmg, stChWin, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 {$IFDEF COUNTTICKS}
     tickcntA, tickcntB: LongWord;
@@ -336,6 +335,7 @@ if AllInactive then
                     end
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
+        stChWin: if not CheckForWin then inc(step) else step:= stDelay; 
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)

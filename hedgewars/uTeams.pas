@@ -81,7 +81,7 @@ function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
-procedure CheckForWin;
+function CheckForWin: boolean;
 
 implementation
 uses uMisc, uStore, uWorld, uIO, uAI, uLocale;
@@ -89,10 +89,11 @@ const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;
 
-procedure CheckForWin;
+function CheckForWin: boolean;
 var team, AliveTeam: PTeam;
     AliveCount: Longword;
 begin
+Result:= false;
 AliveCount:= 0;
 AliveTeam:= nil;
 team:= TeamsList;
@@ -107,6 +108,7 @@ while team <> nil do
       end;
 
 if AliveCount >= 2 then exit;
+Result:= true;
 
 TurnTimeLeft:= 0;
 if AliveCount = 0 then
