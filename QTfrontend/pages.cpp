@@ -48,6 +48,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "gamecfgwidget.h"
+#include "SquareLabel.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -207,7 +208,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	CBFort = new QComboBox(GBoxFort);
 	CBFort->setMaxCount(65535);
 	GBFLayout->addWidget(CBFort, 0, 0);
-	FortPreview	= new QLabel(GBoxFort);
+	FortPreview	= new SquareLabel(GBoxFort);
 	FortPreview->setPixmap(QPixmap());
 	FortPreview->setScaledContents(true);
 	GBFLayout->addWidget(FortPreview, 1, 0);

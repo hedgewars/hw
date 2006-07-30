@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>Quit</source>
-        <translation>Выход</translation>
+        <translation>Выйти</translation>
     </message>
     <message>
         <source>Cannot save options to file %1</source>

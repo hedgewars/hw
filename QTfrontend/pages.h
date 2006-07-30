@@ -49,6 +49,7 @@ class TeamSelWidget;
 class DemosList;
 class QListWidget;
 class QCheckBox;
+class SquareLabel;
 
 class PageMain : public QWidget
 {
@@ -87,7 +88,7 @@ public:
 	QGroupBox *GBoxTeam;
 	QGroupBox *GBoxFort;
 	QComboBox *CBFort;
-	QLabel *FortPreview;
+	SquareLabel *FortPreview;
 	QGroupBox *GBoxGrave;
 	QComboBox *CBGrave;
 	QLabel *GravePreview;

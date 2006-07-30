@@ -17,7 +17,8 @@ set(hwfr_src
 	gameuiconfig.cpp
 	ui_hwform.cpp
 	gamecfgwidget.cpp
-	pages.cpp)
+	pages.cpp
+	SquareLabel.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -35,7 +36,8 @@ set(hwfr_moc_hdrs
 	ui_hwform.h
 	gamecfgwidget.h
 	predefteams.h
-	pages.h)
+	pages.h
+	SquareLabel.h)
 
 
 set(hwfr_rez
