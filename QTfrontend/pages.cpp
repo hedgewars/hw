@@ -290,55 +290,73 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
 	groupBox = new QGroupBox(this);
-	groupBox->setGeometry(QRect(20, 10,	591, 71));
+	groupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	groupBox->setTitle(QGroupBox::tr("Teams"));
+	pageLayout->addWidget(groupBox, 0, 0, 1, 3);
 
+	QGridLayout * GBTlayout = new QGridLayout(groupBox);
 	BtnNewTeam = new QPushButton(groupBox);
-	BtnNewTeam->setGeometry(QRect(10, 20, 160, 40));
 	BtnNewTeam->setFont(*font14);
 	BtnNewTeam->setText(QPushButton::tr("New team"));
-
-	BtnEditTeam	= new QPushButton(groupBox);
-	BtnEditTeam->setGeometry(QRect(400,	20, 160, 40));
-	BtnEditTeam->setFont(*font14);
-	BtnEditTeam->setText(QPushButton::tr("Edit team"));
+	GBTlayout->addWidget(BtnNewTeam, 0, 0);
 
 	CBTeamName = new QComboBox(groupBox);
-	CBTeamName->setGeometry(QRect(200, 30, 171,	22));
-	CBResolution = new QComboBox(this);
+	GBTlayout->addWidget(CBTeamName, 0, 1);
+
+	BtnEditTeam	= new QPushButton(groupBox);
+	BtnEditTeam->setFont(*font14);
+	BtnEditTeam->setText(QPushButton::tr("Edit team"));
+	GBTlayout->addWidget(BtnEditTeam, 0, 2);
+
+	AGGroupBox = new QGroupBox(this);
+	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
+	pageLayout->addWidget(AGGroupBox, 1, 0, 1, 3);
+
+	QGridLayout * GBAlayout = new QGridLayout(AGGroupBox);
+	CBResolution = new QComboBox(AGGroupBox);
 	CBResolution->addItem("640x480");
 	CBResolution->addItem("800x600");
 	CBResolution->addItem("1024x768");
 	CBResolution->addItem("1280x1024");
-	CBResolution->setGeometry(QRect(20,	120, 151, 22));
+	GBAlayout->addWidget(CBResolution, 0, 0);
 
-	CBEnableSound = new	QCheckBox(this);
-	CBEnableSound->setGeometry(QRect(20, 180, 101, 18));
-	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-
-	CBFullscreen = new QCheckBox(this);
-	CBFullscreen->setGeometry(QRect(20,	160, 101, 18));
+	CBFullscreen = new QCheckBox(AGGroupBox);
 	CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
+	GBAlayout->addWidget(CBFullscreen, 0, 1);
 
-	label = new	QLabel(this);
-	label->setGeometry(QRect(10, 233, 47, 13));
+	CBEnableSound = new	QCheckBox(AGGroupBox);
+	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
+	GBAlayout->addWidget(CBEnableSound, 0, 2);
+
+	NNGroupBox = new QGroupBox(this);
+	NNGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	NNGroupBox->setTitle(QGroupBox::tr("Net nick"));
+	pageLayout->addWidget(NNGroupBox, 2, 0, 1, 3);
+
+	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
+	label = new	QLabel(NNGroupBox);
 	label->setText(QLabel::tr("Net nick"));
+	GBNlayout->addWidget(label, 0, 0);
 
-	editNetNick	= new QLineEdit(this);
-	editNetNick->setGeometry(QRect(60, 230, 113, 20));
+	editNetNick	= new QLineEdit(NNGroupBox);
 	editNetNick->setMaxLength(30);
 	editNetNick->setText(QLineEdit::tr("unnamed"));
+	GBNlayout->addWidget(editNetNick, 0, 1);
+
+	pageLayout->addWidget(new QWidget(), 3, 0, 1, 3);
 
 	BtnSaveOptions = new QPushButton(this);
-	BtnSaveOptions->setGeometry(QRect(20, 380, 161, 41));
 	BtnSaveOptions->setFont(*font14);
 	BtnSaveOptions->setText(QPushButton::tr("Save"));
+	pageLayout->addWidget(BtnSaveOptions, 4, 2);
 
 	BtnBack = new QPushButton(this);
-	BtnBack->setGeometry(QRect(440, 380, 161, 41));
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 4, 0);
 }
 
 PageNet::PageNet(QWidget* parent) : QWidget(parent)

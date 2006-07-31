@@ -148,6 +148,8 @@ public:
 	QPushButton *BtnNewTeam;
 	QPushButton *BtnEditTeam;
 	QComboBox *CBTeamName;
+	QGroupBox *AGGroupBox;
+	QGroupBox *NNGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBFullscreen;
