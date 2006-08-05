@@ -56,7 +56,7 @@ var  IPCSock: PTCPSocket = nil;
                                    case byte of
                                         1: (len: byte;
                                             cmd: Char;
-                                            X, Y: integer;);
+                                            X, Y: SmallInt);
                                         2: (str: shortstring);
                                    end;
      cmdcurpos: integer = 0;

@@ -41,7 +41,7 @@ type PHedgehog = ^THedgehog;
      THedgehog = record
                  Name: string[MAXNAMELEN];
                  Gear: PGear;
-                 NameRect, HealthRect, HealthTagRect: TSDL_Rect;
+                 NameTag, HealthTag: PSDL_Surface;
                  Ammo: PHHAmmo;
                  CurSlot, CurAmmo: LongWord;
                  AltSlot, AltAmmo: LongWord;
@@ -60,7 +60,8 @@ type PHedgehog = ^THedgehog;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              Ammos: array[0..cMaxHHIndex] of THHAmmo;
              CurrHedgehog: integer;
-             NameRect, CrossHairRect,
+             NameTag: PSDL_Surface;
+             CrossHairRect,
              GraveRect, HealthRect: TSDL_Rect;
              GraveName: string;
              FortName: string;

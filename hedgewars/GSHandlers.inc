@@ -179,7 +179,7 @@ if (GameTicks and $3F) = 0 then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepHealthTag(Gear: PGear);
+procedure doStepHealthTagWork(Gear: PGear);
 begin
 AllInactive:= false;
 dec(Gear.Timer);
@@ -189,6 +189,15 @@ if Gear.Timer = 0 then
    PHedgehog(Gear.Hedgehog).Gear.Active:= true;
    DeleteGear(Gear)
    end
+end;
+
+procedure doStepHealthTag(Gear: PGear);
+var s: shortstring;
+begin
+AllInactive:= false;
+str(Gear.State, s);
+Gear.Surf:= RenderString(s, PHedgehog(Gear.Hedgehog).Team.Color, fnt16);
+Gear.doStep:= doStepHealthTagWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +273,7 @@ AllInactive:= false;
 if Gear.Timer > 0 then
    begin
    dec(Gear.Timer);
-   if Gear.Timer = 1 then PlaySound(sndShotgunFire);
+   if Gear.Timer = 0 then PlaySound(sndShotgunFire);
    exit
    end;
 i:= 200;
@@ -283,7 +292,10 @@ if (Gear.State and gstCollision) <> 0 then
 dec(i)
 until i = 0;
 if (Gear.X < 0) or (Gear.Y < 0) or (Gear.X > 2048) or (Gear.Y > 1024) then
-   DeleteGear(Gear)
+   begin
+   DeleteGear(Gear);
+   AfterAttack
+   end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

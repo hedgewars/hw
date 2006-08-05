@@ -60,12 +60,11 @@ const RealTicks: Longword = 0;
 type TCaptionStr = record
                    Surf: PSDL_Surface;
                    StorePos: Longword;
-                   Group: TCapGroup;
                    EndTime: LongWord;
                    end;
 
 var cWaterSprCount: integer;
-    Captions: array[0..Pred(cMaxCaptions)] of TCaptionStr;
+    Captions: array[TCapGroup] of TCaptionStr;
 
 procedure InitWorld;
 begin
@@ -132,23 +131,23 @@ if r.y < cScreenHeight then
 
 DrawGears(Surface);
 
-team:= TeamsList;
-while team<>nil do
+if CurrentTeam <> nil then
+   begin
+   team:= TeamsList;
+   while team<>nil do
       begin
       for i:= 0 to 7 do
           with team.Hedgehogs[i] do
                if Gear<>nil then
                   if Gear.State = 0 then
                      begin
-                     DrawCaption( round(Gear.X) + WorldDx,
-                                  round(Gear.Y) - cHHRadius - 30 + WorldDy,
-                                  HealthRect, Surface, true);
-                     DrawCaption( round(Gear.X) + WorldDx,
-                                  round(Gear.Y) - cHHRadius - 54 + WorldDy,
-                                  NameRect, Surface);
-//                     DrawCaption( round(Gear.X) + WorldDx,
-//                                  round(Gear.Y) - Gear.Radius - 60 + WorldDy,
-//                                  Team.NameRect, Surface);
+                     t:= round(Gear.Y) - cHHRadius - 10 + WorldDy;
+                     dec(t, HealthTag.h + 2);
+                     DrawCentered(round(Gear.X) + WorldDx, t, HealthTag, Surface);
+                     dec(t, NameTag.h + 2);
+                     DrawCentered(round(Gear.X) + WorldDx, t, NameTag, Surface);
+                     dec(t, Team.NameTag.h + 2);
+                     DrawCentered(round(Gear.X) + WorldDx, t, Team.NameTag, Surface)
                      end else // Current hedgehog
                      begin
                      if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
@@ -162,6 +161,8 @@ while team<>nil do
                      end;
       team:= team.Next
       end;
+   end;
+
 
 // Waves
 {$WARNINGS OFF}
@@ -217,18 +218,13 @@ while (i < cMaxCaptions) do
     begin
     with Captions[i] do
          if EndTime > 0 then
-            begin
-            r.x:= (cScreenWidth - Surf.w) div 2;
-            r.y:= 8 + i * (Surf.h + 2) + cConsoleYAdd;
-            r.w:= Surf.w;
-            r.h:= Surf.h;
-            SDL_UpperBlit(Surf, nil, Surface, @r)
-            end;
+            DrawCentered(cScreenWidth div 2, 8 + i * (Surf.h + 2) + cConsoleYAdd, Surf, Surface);
     inc(i)
     end;
 while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
     begin
     SDL_FreeSurface(Captions[0].Surf);
+    Captions[0].Surf:= nil;
     for i:= 1 to Pred(cMaxCaptions) do
         Captions[Pred(i)]:= Captions[i];
     Captions[Pred(cMaxCaptions)].EndTime:= 0
@@ -238,9 +234,11 @@ while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
 team:= TeamsList;
 while team <> nil do
       begin
-      DrawFromStoreRect(cScreenWidth div 2 - team.NameRect.w - 3,
-                        Team.DrawHealthY,
-                        @team.NameRect, Surface);
+      r.x:= cScreenWidth div 2 - team.NameTag.w - 3;
+      r.y:= team.DrawHealthY;
+      r.w:= team.NameTag.w;
+      r.h:= team.NameTag.h;
+      SDL_UpperBlit(team.NameTag, nil, Surface, @r);
       r:= team.HealthRect;
       r.w:= 2 + team.TeamHealth;
       DrawFromStoreRect(cScreenWidth div 2,
@@ -312,6 +310,7 @@ i:= 0;
 while (i < cMaxCaptions) and (Captions[i].Group <> Group) do inc(i);
 if i < cMaxCaptions then
    begin
+   SDL_FreeSurface(Captions[i].Surf);
    while (i < Pred(cMaxCaptions)) do
          begin
          Captions[i]:= Captions[Succ(i)];
@@ -322,6 +321,7 @@ if i < cMaxCaptions then
    
 if Captions[Pred(cMaxCaptions)].EndTime > 0 then
    begin
+   SDL_FreeSurface(Captions[0].Surf);
    m:= Pred(cMaxCaptions);
    for i:= 1 to m do
        Captions[Pred(i)]:= Captions[i];
@@ -337,7 +337,7 @@ for i:= 0 to Pred(cMaxCaptions) do
     for t:= 0 to Pred(cMaxCaptions) do
         if (Captions[t].EndTime > 0) and (Captions[t].StorePos = k) then inc(k);
 
-Captions[m].Surf:= RenderString(s, Color, k);
+Captions[m].Surf:= RenderString(s, Color, fntBig);
 Captions[m].StorePos:= k;
 Captions[m].Group:= Group;
 Captions[m].EndTime:= RealTicks + 1200
@@ -367,8 +367,8 @@ if isCursorVisible then
       begin
       s[0]:= #9;
       s[1]:= 'P';
-      PInteger(@s[2])^:= CursorPoint.X - WorldDx;
-      PInteger(@s[6])^:= CursorPoint.Y - WorldDy;
+      PSmallInt(@s[2])^:= CursorPoint.X - WorldDx;
+      PSmallInt(@s[4])^:= CursorPoint.Y - WorldDy;
       SendIPC(s);
       PrevSentPointTime:= GameTicks
       end;

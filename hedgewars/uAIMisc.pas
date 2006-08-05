@@ -124,6 +124,7 @@ var Gear: PGear;
 begin
 bonuses.Count:= 0;
 MyColor:= PHedgehog(ThinkingHH.Hedgehog).Team.Color;
+SDL_LockMutex(GearsListMutex);
 Gear:= GearsList;
 while Gear <> nil do
       begin
@@ -141,6 +142,7 @@ while Gear <> nil do
            end;
       Gear:= Gear.NextGear
       end;
+SDL_UnlockMutex(GearsListMutex);
 if isAfterAttack and (KnownExplosion.Radius > 0) then
    with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);

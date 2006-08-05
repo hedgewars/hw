@@ -45,11 +45,12 @@ procedure DrawSprite (Sprite: TSprite; X, Y, Position: integer; Surface: PSDL_Su
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
-procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
+procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
+procedure DrawCentered(X, Top: integer; Source, Surface: PSDL_Surface);
 procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
+function  RenderString(var s: shortstring; Color: integer; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
-function  RenderString(var s: shortstring; Color, Pos: integer): PSDL_Surface;
 procedure AddProgress;
 function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
 
@@ -60,7 +61,6 @@ implementation
 uses uMisc, uIO, uConsole, uLand, uCollisions;
 
 var StoreSurface,
-     TempSurface,
        HHSurface: PSDL_Surface;
 
 procedure StoreInit;
@@ -69,11 +69,7 @@ StoreSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat
 TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
 SDL_FillRect(StoreSurface, nil, 0);
 
-TempSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 724, 900, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
-TryDo(  TempSurface <> nil, errmsgCreateSurface + ': temp'  , true);
-
 TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-TryDo(SDL_SetColorKey(  TempSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 end;
 
 procedure LoadToSurface(Filename: String; Surface: PSDL_Surface; X, Y: integer);
@@ -155,10 +151,9 @@ var i: TStuff;
     while Team<>nil do
       begin
       r.w:= 104;
-      r:= WriteInRoundRect(StoreSurface, r.x, r.y, Team.Color, Font, Team.TeamName);
-      Team.NameRect:= r;
-      inc(r.y, r.h);
+      Team.NameTag:= RenderString(Team.TeamName, Team.Color, Font);
       r.w:= cTeamHealthWidth + 5;
+      r.h:= Team.NameTag.h;
       DrawRoundRect(@r, cWhiteColor, cColorNearBlack, StoreSurface);
       Team.HealthRect:= r;
       rr:= r;
@@ -168,12 +163,9 @@ var i: TStuff;
       dec(drY, r.h + 2);
       Team.DrawHealthY:= drY;
       for i:= 0 to 7 do
-          if Team.Hedgehogs[i].Gear<>nil then
-             begin
-             r:= WriteInRoundRect(StoreSurface, r.x, r.y, Team.Color, Font, Team.Hedgehogs[i].Name);
-             Team.Hedgehogs[i].NameRect:= r;
-             inc(r.y, r.h)
-             end;
+          with Team.Hedgehogs[i] do
+               if Gear <> nil then
+                  NameTag:= RenderString(Name, Team.Color, fnt16);
       Team:= Team.Next
       end;
     end;
@@ -209,19 +201,14 @@ var i: TStuff;
 
     procedure InitHealth;
     var p: PTeam;
-        i, t: integer;
+        i: integer;
     begin
     p:= TeamsList;
-    t:= 0;
     while p <> nil do
           begin
           for i:= 0 to cMaxHHIndex do
               if p.Hedgehogs[i].Gear <> nil then
-                 begin
-                 p.Hedgehogs[i].HealthRect.y:= t;
                  RenderHealth(p.Hedgehogs[i]);
-                 inc(t, p.Hedgehogs[i].HealthRect.h)
-                 end;
           p:= p.Next
           end
     end;
@@ -347,7 +334,6 @@ InitHealth;
 {$IFDEF DUMP}
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
 SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
-SDL_SaveBMP_RW(TempSurface, SDL_RWFromFile('TempSurface.bmp', 'wb'), 1);
 {$ENDIF}
 end;
 
@@ -421,10 +407,19 @@ begin
 DrawFromRect(X, Y, Rect, StoreSurface, Surface)
 end;
 
-procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface; const fromTempSurf: boolean = false);
+procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
 begin
-if fromTempSurf then DrawFromRect(X - (Rect.w) div 2, Y, @Rect, TempSurface,  Surface)
-                else DrawFromRect(X - (Rect.w) div 2, Y, @Rect, StoreSurface, Surface)
+DrawFromRect(X - (Rect.w) div 2, Y, @Rect, StoreSurface, Surface)
+end;
+
+procedure DrawCentered(X, Top: integer; Source, Surface: PSDL_Surface);
+var r: TSDL_Rect;
+begin
+r.x:= X - Source.w div 2;
+r.y:= Top;
+r.w:= Source.w;
+r.h:= Source.h;
+SDL_UpperBlit(Source, nil, Surface, @r)
 end;
 
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
@@ -444,30 +439,25 @@ begin
 for ii:= Low(TSprite) to High(TSprite) do
     SDL_FreeSurface(SpritesData[ii].Surface);
 SDL_FreeSurface(  HHSurface  );
-SDL_FreeSurface(TempSurface  );
 SDL_FreeSurface(LandSurface  );
 SDL_FreeSurface(StoreSurface )
 end;
 
-procedure RenderHealth(var Hedgehog: THedgehog);
-var s: string[15];
-begin
-str(Hedgehog.Gear.Health, s);
-Hedgehog.HealthRect:= WriteInRoundRect(TempSurface, Hedgehog.HealthRect.x, Hedgehog.HealthRect.y, Hedgehog.Team.Color, fnt16, s);
-if Hedgehog.Gear.Damage > 0 then
-   begin
-   str(Hedgehog.Gear.Damage, s);
-   Hedgehog.HealthTagRect:= WriteInRoundRect(TempSurface, Hedgehog.HealthRect.x + Hedgehog.HealthRect.w, Hedgehog.HealthRect.y, Hedgehog.Team.Color, fnt16, s)
-   end;
-end;
-
-function RenderString(var s: shortstring; Color, Pos: integer): PSDL_Surface;
+function RenderString(var s: shortstring; Color: integer; font: THWFont): PSDL_Surface;
 var w, h: integer;
 begin
-TTF_SizeUTF8(Fontz[fntBig].Handle, PChar(String(s)), w, h);
+TTF_SizeUTF8(Fontz[font].Handle, PChar(String(s)), w, h);
 Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + 6, h + 2, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
-WriteInRoundRect(Result, 0, 0, Color, fntBig, s);
+WriteInRoundRect(Result, 0, 0, Color, font, s);
 TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true)
+end;
+
+procedure RenderHealth(var Hedgehog: THedgehog);
+var s: shortstring;
+begin
+str(Hedgehog.Gear.Health, s);
+if Hedgehog.HealthTag <> nil then SDL_FreeSurface(Hedgehog.HealthTag);
+Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Color, fnt16)
 end;
 
 procedure AddProgress;

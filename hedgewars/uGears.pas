@@ -61,6 +61,7 @@ type PGear = ^TGear;
              Health, Damage: integer;
              CollIndex: Longword;
              Tag: integer;
+             Surf: PSDL_Surface;
              end;
 
 function  AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
@@ -74,6 +75,7 @@ procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
+    GearsListMutex: PSDL_mutex;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -235,18 +237,21 @@ gtAmmo_Grenade: begin
                 Result.Tag:= Y
                 end;
      end;
+SDL_LockMutex(GearsListMutex);
 if GearsList = nil then GearsList:= Result
                    else begin
                    GearsList.PrevGear:= Result;
                    Result.NextGear:= GearsList;
                    GearsList:= Result
-                   end
+                   end;
+SDL_UnlockMutex(GearsListMutex)
 end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
 begin
 if Gear.CollIndex < High(Longword) then DeleteCI(Gear);
+if Gear.Surf <> nil then SDL_FreeSurface(Gear.Surf);
 if Gear.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
@@ -260,15 +265,17 @@ if Gear.Kind = gtHedgehog then
       PHedgehog(Gear.Hedgehog).Gear:= nil;
       RecountTeamHealth(team);
       end;
+{$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
+SDL_LockMutex(GearsListMutex);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
-{$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
 if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
 if Gear.PrevGear <> nil then Gear.PrevGear.NextGear:= Gear.NextGear
                         else begin
                         GearsList:= Gear^.NextGear;
                         if GearsList <> nil then GearsList.PrevGear:= nil
                         end;
+SDL_UnlockMutex(GearsListMutex);
 Dispose(Gear)
 end;
 
@@ -488,7 +495,7 @@ while Gear<>nil do
                                  0, PHedgehog(Gear.Hedgehog).visStepPos div 2,
                                  Surface);
     gtAmmo_Grenade: DrawSprite(sprGrenade , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
-       gtHealthTag: DrawCaption(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, PHedgehog(Gear.Hedgehog).HealthTagRect, Surface, true);
+       gtHealthTag: if Gear.Surf <> nil then DrawCentered(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.Surf, Surface);
            gtGrave: DrawSpriteFromRect(PHedgehog(Gear.Hedgehog).Team.GraveRect, Round(Gear.X) + WorldDx - 16, Round(Gear.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
              gtUFO: DrawSprite(sprUFO, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
       gtSmokeTrace: if Gear.State < 8 then DrawSprite(sprSmokeTrace, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
@@ -550,7 +557,7 @@ var i: integer;
 begin
 for i:= 0 to cCloudsNumber do
     AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
-             (0.5-random)*0.02, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random));
+             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random));
 AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do
@@ -786,8 +793,10 @@ DeleteGear(Gear)
 end;
 
 initialization
+GearsListMutex:= SDL_CreateMutex;
 
 finalization
-FreeGearsList
+FreeGearsList;
+SDL_DestroyMutex(GearsListMutex);
 
 end.

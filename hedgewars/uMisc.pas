@@ -46,7 +46,7 @@ var isCursorVisible : boolean = false;
     GameType      : TGameType = gmtLocal;
     GameFlags     : Longword = 0;
     TurnTimeLeft  : Longword = 0;
-    cHedgehogTurnTime: Longword = 30000;
+    cHedgehogTurnTime: Longword = 45000;
 
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;

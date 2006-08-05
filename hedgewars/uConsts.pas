@@ -119,8 +119,6 @@ const
 
       cKeyMaxIndex = 322;
 
-      cMaxCaptions = 4;
-
       cInactDelay = 1500;
 
       gfForts = $00000001;
@@ -307,7 +305,7 @@ const
                                    Slot: 0;
                                    TimeAfterTurn: 3000),
                                   (NameId: sidShotgun;
-                                   Ammo: (Propz: 0;
+                                   Ammo: (Propz: ammoprop_ForwMsgs;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 1;
                                           Timer: 0;

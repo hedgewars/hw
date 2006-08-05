@@ -219,8 +219,6 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
      if ((State and gstHHDriven)<>0)and((State and (gstAttacked or gstHHChooseTarget or gstMoving)) = 0) then
         begin
         FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear;
-        if (State and (gstAttacked or gstHHChooseTarget) = 0)and(CurAmmoGear = nil) then
-           State:= State or gstAttacking;
         if not CurrentTeam.ExtDriven then SendIPC('A');
         Message:= Message or gm_Attack
         end
@@ -230,11 +228,11 @@ end;
 procedure chAttack_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
-     CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
      begin
-      Message:= Message and not gm_Attack;
-      if not CurrentTeam.ExtDriven then SendIPC('a')
+     if not CurrentTeam.ExtDriven and
+        ((Message and gm_Attack) <> 0) then SendIPC('a');
+     Message:= Message and not gm_Attack
      end
 end;
 
@@ -279,7 +277,7 @@ procedure chSlot(var s: shortstring);
 var slot: LongWord;
     caSlot, caAmmo: PLongword;
 begin
-if (s[0] <> #1) or (CurrentTeam = nil) then exit;
+if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
 if not CurrentTeam.ExtDriven then SendIPC(char(byte(s[1]) + 79));
@@ -321,12 +319,12 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
            dec(TargetPoint.Y, WorldDy);
            s[0]:= #9;
            s[1]:= 'p';
-           PInteger(@s[2])^:= TargetPoint.X;
-           PInteger(@s[6])^:= TargetPoint.Y;
+           PSmallInt(@s[2])^:= TargetPoint.X;
+           PSmallInt(@s[4])^:= TargetPoint.Y;
            SendIPC(s)
            end;
         State:= State and not gstHHChooseTarget;
-        end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', true)
+        end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', false)
 end;
 
 procedure chCapture(var s: shortstring);

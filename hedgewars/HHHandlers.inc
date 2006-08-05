@@ -36,15 +36,28 @@ procedure Attack(Gear: PGear);
 var xx, yy: real;
 begin
 with Gear^,
-     CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+     PHedgehog(Gear.Hedgehog)^ do
      begin
-     {$IFDEF DEBUGFILE}AddFileLog('Attack: Gear.State = '+inttostr(State));{$ENDIF}
-
-     if (((State and (gstHHDriven or gstAttacking)) = (gstHHDriven or gstAttacking))and
+     if ((State and gstHHDriven) <> 0)and
+ //       (((State and gstAttacking) <> 0) or ((Message and gm_Attack) <> 0))and
         ((State and (gstAttacked or gstMoving or gstHHChooseTarget)) = 0)and
         (((State and gstFalling  ) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInFall) <> 0))and
-        (((State and gstHHJumping) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0))) then
+        (((State and gstHHJumping) = 0)or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0))and
+          ((TargetPoint.X <> NoPointX) or((Ammo[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
+        State:= State or gstAttacking;
+        if Power = cMaxPower then Message:= Message and not gm_Attack
+        else if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) = 0 then Message:= Message and not gm_Attack
+        else begin
+             if Power = 0 then
+                begin
+                AttackBar:= CurrentTeam.AttackBar;
+                PlaySound(sndThrowPowerUp)
+                end;
+             inc(Power)
+             end;
+        if ((Message and gm_Attack) <> 0) then exit;
+        
         if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
            begin
            StopTPUSound;
@@ -76,10 +89,11 @@ with Gear^,
            Message:= Message or gm_Attack;
            CurAmmoGear.Message:= Message
            end else begin
-           if not CurrentTeam.ExtDriven then SendIPC('a');
+           if not CurrentTeam.ExtDriven and
+             ((Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0) then SendIPC('a');
            AfterAttack
            end
-        end
+        end else Message:= Message and not gm_Attack
      end
 end;
 
@@ -96,7 +110,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
            State:= State or gstAttacked;
            OnUsedAmmo(Ammo)
            end;
-     AttackBar:= 0
+     AttackBar:= 0;
      end
 end;
 
@@ -151,31 +165,8 @@ if CurAmmoGear <> nil then
    exit
    end;
 
-if (Gear.Message and gm_Attack)<>0 then
-   if (Gear.State and (gstAttacked or gstHHChooseTarget) = 0) then
-      with PHedgehog(Gear.Hedgehog)^ do
-            begin
-            Gear.State:= Gear.State or gstAttacking;
-            if Gear.Power = cMaxPower then Gear.Message:= Gear.Message and not gm_Attack
-               else
-               if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) = 0 then
-                  Gear.Message:= Gear.Message and not gm_Attack
-                  else begin
-                  if Gear.Power = 0 then
-                     begin
-                     AttackBar:= CurrentTeam.AttackBar;
-                     PlaySound(sndThrowPowerUp)
-                     end;
-                  inc(Gear.Power)
-                  end
-            end
-      else Gear.Message:= Gear.Message and not gm_Attack;
-
-if ((Gear.State and gstAttacking) <> 0) and ((Gear.Message and gm_Attack) = 0) then
-   begin
-   Attack(Gear);
-   StepTicks:= cHHStepTicks
-   end;
+if ((Gear.Message and gm_Attack) <> 0) or
+   ((Gear.State and gstAttacking) <> 0)then Attack(Gear);
 
 if (Gear.State and gstFalling) <> 0 then
    begin

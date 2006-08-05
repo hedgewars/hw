@@ -284,7 +284,7 @@ begin
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear.State and gstHHDriven) <> 0)
-        and (TurnTimeLeft < 29990)
+        and (TurnTimeLeft < cHedgehogTurnTime - 5)
         and ((Gear.State and gstHHThinking) = 0) then
            if (BestActions.Pos >= BestActions.Count) then StartThink(Gear)
                                                      else ProcessAction(BestActions, Gear)
