@@ -61,3 +61,15 @@ target_link_libraries(hedgewars
 	${QT_QTMAIN_LIBRARY})
 
 install(PROGRAMS "hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
+
+
+if(WIN32 AND NOT UNIX)
+	string(REPLACE "\\" "/" QT_BIN_DIR $ENV{QTDIR}/bin)
+
+	install(FILES
+		"${QT_BIN_DIR}/QtNetwork4.dll"
+		"${QT_BIN_DIR}/QtGui4.dll"
+		"${QT_BIN_DIR}/QtCore4.dll"
+		"${QT_BIN_DIR}/mingwm10.dll"
+		DESTINATION bin)
+endif(WIN32 AND NOT UNIX)

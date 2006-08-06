@@ -8,6 +8,10 @@ add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)
 
+if(WIN32 AND NOT UNIX)
+	add_subdirectory(bin)
+endif(WIN32 AND NOT UNIX)
+
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a turn-based strategy")
 set(CPACK_PACKAGE_VENDOR "Hedgewars")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")

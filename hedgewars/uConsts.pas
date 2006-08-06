@@ -181,8 +181,8 @@ const
                                           Name: 'DejaVuSans.ttf')
                                          );
 
-      PathPrefix: shortstring = './';
-      Pathz: array[TPathType] of string[ 64] = (
+      PathPrefix: string = './';
+      Pathz: array[TPathType] of string      = (
                                                '',                              // ptNone      
                                                'Data',                          // ptData
                                                'Data/Graphics',                 // ptGraphics
