@@ -51,11 +51,7 @@ procedure SHA1Update(var Context: TSHA1Context; Buf: Pointer; Length: LongWord);
 function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 
 implementation
-
-function _bswap(X: LongWord): LongWord;
-begin
-  Result:= (X shr 24) or ((X shr 8) and $FF00) or ((X shl 8) and $FF0000) or (X shl 24)
-end;
+uses SDLh;
 
 function rol(x: LongWord; y: Byte): LongWord;
 begin
@@ -90,8 +86,12 @@ var S: array[0..4 ] of LongWord;
     i, t: LongWord;
 begin
 move(Context.H, S, sizeof(S));
-for i:= 0 to 15 do
-    W[i]:= _bswap(PLongWord(LongWord(@Context.Buf)+i*4)^);
+for i:= 0 to 3 do
+    begin
+    t:= i * 4;
+    with Context do
+         W[i]:= Buf[t + 3] or (Buf[t + 2] shl 8) or (Buf[t + 1] shl 16) or (Buf[t] shl 24);
+    end;
 for i := 16 to 79 do
     W[i] := rol(W[i - 3] xor W[i - 8] xor W[i - 14] xor W[i - 16], 1);
 for i := 0 to 79 do
@@ -124,11 +124,10 @@ end;
 procedure SHA1Update(var Context: TSHA1Context; Buf: Pointer; Length: LongWord);
 var i: integer;
 begin
-for i:= 1 to Length do
+for i:= 0 to Pred(Length) do
     begin
-    Context.Buf[Context.CurrLength]:= PByte(Buf)^;
+    Context.Buf[Context.CurrLength]:= PByteArray(Buf)^[i];
     inc(Context.CurrLength);
-    inc(LongWord(Buf));
     if Context.CurrLength=64 then
        begin
        SHA1Hash(Context);
