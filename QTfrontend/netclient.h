@@ -42,7 +42,7 @@
 #include "team.h"
 #include "rndstr.h"
 
-#define MAGIC_CHAR "\x02"
+#define MAGIC_CHAR "\x2f"
 
 struct netTeam
 {
@@ -97,6 +97,7 @@ private:
 	QString mynick;
 	QString opnick;
 	QString channel;
+	QString seed;
 	bool isOp;
 	quint32 opCount;
 	netTeam teams[5];
@@ -123,7 +124,7 @@ private:
 	void ConfigAsked();
 	void NetTeamAdded(const QString & msg);
 
-	void RunGame(const QString & seed);
+	void RunGame();
 
 
 private slots:

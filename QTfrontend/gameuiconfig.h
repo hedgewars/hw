@@ -47,7 +47,6 @@ class GameUIConfig : public QObject
 public:
 	GameUIConfig(HWForm * FormWidgets);
 	QStringList GetTeamsList();
-	QDir cfgdir;
 	int vid_Resolution();
 	bool vid_Fullscreen();
 	bool isSoundEnabled();

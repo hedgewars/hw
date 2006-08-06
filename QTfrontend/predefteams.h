@@ -36,19 +36,19 @@
 
 #include <QtGlobal>
 
-#define PREDEFTEAMS_COUNT 2
+#define PREDEFTEAMS_COUNT 3
 
 struct PredefinedTeam
 {
 	const char * TeamName;
 	const char * hh0name;
 	const char * hh1name;
-	const char *  hh2name;
-	const char *  hh3name;
-	const char *  hh4name;
-	const char *  hh5name;
-	const char *  hh6name;
-	const char *  hh7name;
+	const char * hh2name;
+	const char * hh3name;
+	const char * hh4name;
+	const char * hh5name;
+	const char * hh6name;
+	const char * hh7name;
 	QString Grave;
 	QString Fort;
 };
@@ -79,6 +79,18 @@ const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 		QT_TRANSLATE_NOOP("teams", "Kali"),
 		QT_TRANSLATE_NOOP("teams", "Inanna"),
 		"Bone", "Island"
+	},
+	{
+		QT_TRANSLATE_NOOP("teams", "Fruits"),
+		QT_TRANSLATE_NOOP("teams", "Banana"),
+		QT_TRANSLATE_NOOP("teams", "Apple"),
+		QT_TRANSLATE_NOOP("teams", "Orange"),
+		QT_TRANSLATE_NOOP("teams", "Lemon"),
+		QT_TRANSLATE_NOOP("teams", "Pineapple"),
+		QT_TRANSLATE_NOOP("teams", "Mango"),
+		QT_TRANSLATE_NOOP("teams", "Peach"),
+		QT_TRANSLATE_NOOP("teams", "Plum"),
+		"coffin", "Barrelhouse"
 	}
 };
 

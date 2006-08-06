@@ -112,6 +112,14 @@
         <source>Teams</source>
         <translation>Команды</translation>
     </message>
+    <message>
+        <source>Audio/Graphic options</source>
+        <translation>Настройки звука и графики</translation>
+    </message>
+    <message>
+        <source>Net nick</source>
+        <translation>Имя игрока</translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -400,6 +408,42 @@
     <message>
         <source>Inanna</source>
         <translation>Инанна</translation>
+    </message>
+    <message>
+        <source>Fruits</source>
+        <translation>Фрукты</translation>
+    </message>
+    <message>
+        <source>Banana</source>
+        <translation>Банан</translation>
+    </message>
+    <message>
+        <source>Apple</source>
+        <translation>Яблоко</translation>
+    </message>
+    <message>
+        <source>Orange</source>
+        <translation>Апельсин</translation>
+    </message>
+    <message>
+        <source>Lemon</source>
+        <translation>Лимон</translation>
+    </message>
+    <message>
+        <source>Pineapple</source>
+        <translation>Ананас</translation>
+    </message>
+    <message>
+        <source>Mango</source>
+        <translation>Манго</translation>
+    </message>
+    <message>
+        <source>Peach</source>
+        <translation>Персик</translation>
+    </message>
+    <message>
+        <source>Plum</source>
+        <translation>Слива</translation>
     </message>
 </context>
 </TS>

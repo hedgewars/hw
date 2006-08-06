@@ -119,6 +119,8 @@ const
 
       cKeyMaxIndex = 322;
 
+      cMaxCaptions = 4;
+
       cInactDelay = 1500;
 
       gfForts = $00000001;
@@ -179,6 +181,7 @@ const
                                           Name: 'DejaVuSans.ttf')
                                          );
 
+      PathPrefix: shortstring = './';
       Pathz: array[TPathType] of string[ 64] = (
                                                '',                              // ptNone      
                                                'Data',                          // ptData

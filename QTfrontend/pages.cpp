@@ -221,7 +221,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 
 
 	QDir tmpdir;
-	tmpdir.cd(DATA_PATH);
+	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Forts");
 	tmpdir.setFilter(QDir::Files);
 
@@ -239,13 +239,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 
 void PageEditTeam::CBGrave_activated(const QString & gravename)
 {
-	QPixmap pix(QString(DATA_PATH) + "/Graphics/Graves/" + gravename + ".png");
+	QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + gravename + ".png");
 	GravePreview->setPixmap(pix.copy(0, 0, 32, 32));
 }
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-	QPixmap pix(QString(DATA_PATH) + "/Forts/" + fortname + "L.png");
+	QPixmap pix(datadir->absolutePath() + "/Forts/" + fortname + "L.png");
 	FortPreview->setPixmap(pix);
 }
 

@@ -60,11 +60,12 @@ const RealTicks: Longword = 0;
 type TCaptionStr = record
                    Surf: PSDL_Surface;
                    StorePos: Longword;
+                   Group: TCapGroup;
                    EndTime: LongWord;
                    end;
 
 var cWaterSprCount: integer;
-    Captions: array[TCapGroup] of TCaptionStr;
+    Captions: array[0..Pred(cMaxCaptions)] of TCaptionStr;
 
 procedure InitWorld;
 begin

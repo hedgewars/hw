@@ -59,7 +59,7 @@ public:
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
 	void StartQuick();
-	void StartNet(const QString & netseed);
+	void StartNet();
 
 signals:
 	void SendNet(const QByteArray & msg);

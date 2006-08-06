@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = hedgewars
 DEPENDPATH += .
 INCLUDEPATH += .
-DESTDIR	= ../hedgewars
+DESTDIR	= ../bin
 
 win32 {
 	RC_FILE	= ./res/hedgewars.rc

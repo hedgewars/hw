@@ -163,9 +163,24 @@ end;
 ////////////////////
 procedure GetParams;
 var c: integer;
-{$IFDEF DEBUGFILE}
     i: integer;
+    p: TPathType;
 begin
+PathPrefix:= ParamStr(0);
+for i:= 1 to Length(PathPrefix) do
+    if PathPrefix[i] = '\' then PathPrefix[i]:= '/';
+i:= Length(PathPrefix);
+while (i > 0) and not (PathPrefix[i] = '/') do dec(i);
+Delete(PathPrefix, i, Length(PathPrefix) - i + 1);
+dec(i);
+while (i > 0) and not (PathPrefix[i] = '/') do dec(i);
+Delete(PathPrefix, i, Length(PathPrefix) - i + 1);
+PathPrefix:= PathPrefix + '/share/hedgewars/';
+for p:= Low(TPathType) to High(TPathType) do
+    if p <> ptMapCurrent then Pathz[p]:= PathPrefix + Pathz[p];
+
+{$IFDEF DEBUGFILE}
+AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
     AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$ELSE}
@@ -181,7 +196,7 @@ if ParamCount = 7 then
    cFullScreen:= ParamStr(5) = '1';
    isSoundEnabled:= ParamStr(6) = '1';
    cLocaleFName:= ParamStr(7);
-   end else OutError(errmsgShouldntRun, true);
+   end else OutError(errmsgShouldntRun, true)
 end;
 
 procedure ShowMainWindow;

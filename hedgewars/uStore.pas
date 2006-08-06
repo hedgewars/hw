@@ -468,10 +468,8 @@ var r: TSDL_Rect;
 begin
 if Step = 0 then
    begin
-   WriteToConsole(msgLoading + 'progress sprite... ');
-   ProgrSurf:= IMG_Load(PChar(string('Data/Graphics/BigDigits.png')));
-   SDLTry(ProgrSurf <> nil, true);
-   WriteLnToConsole(msgOK)
+   WriteToConsole(msgLoading + 'progress sprite: ');
+   ProgrSurf:= LoadImage(Pathz[ptGraphics] + '/BigDigits', false);
    end;
 SDL_FillRect(SDLPrimSurface, nil, 0);
 r.x:= 0;

@@ -97,7 +97,7 @@ void HWGame::SendConfig()
 	SENDIPC("eadd hh2 0");
 	SENDIPC("eadd hh3 0");
 	SENDIPC("eaddteam");
-	LocalCFG(1);
+	LocalCFG(2);
 	SENDIPC("ecolor 16776960");
 	SENDIPC("eadd hh0 1");
 	SENDIPC("eadd hh1 1");
@@ -238,7 +238,7 @@ void HWGame::Start()
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
-	process->start("./hwengine", arguments);
+	process->start(bindir->absolutePath() + "/hwengine", arguments);
 }
 
 void HWGame::AddTeam(const QString & teamname)
@@ -250,7 +250,7 @@ void HWGame::AddTeam(const QString & teamname)
 
 QString HWGame::GetThemeBySeed()
 {
-	QFile themesfile(QString(DATA_PATH) + "/Themes/themes.cfg");
+	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
 	QStringList themes;
 	if (themesfile.open(QIODevice::ReadOnly))
 	{
@@ -327,10 +327,9 @@ void HWGame::PlayDemo(const QString & demofilename)
 	Start();
 }
 
-void HWGame::StartNet(const QString & netseed)
+void HWGame::StartNet()
 {
 	gameType = gtNet;
-	seed = netseed;
 	demo = new QByteArray;
 	Start();
 }

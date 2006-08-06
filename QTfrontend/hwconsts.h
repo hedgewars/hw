@@ -31,10 +31,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-const char resolutions[2][4][5] = 
+#include <QDir>
+
+const char resolutions[2][4][5] =
 {
 	{"640", "800", "1024", "1280"},
 	{"480", "600",  "768", "1024"}
 };
 
-#define DATA_PATH "Data"
+extern QDir * cfgdir;
+extern QDir * datadir;
+extern QDir * bindir;

@@ -34,11 +34,38 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
+#include <QMessageBox>
+#include <QFileInfo>
 #include "hwform.h"
+#include "hwconsts.h"
+
+QDir * bindir;
+QDir * cfgdir;
+QDir * datadir;
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+
+	QDir mydir = QFileInfo(argv[0]).dir();
+	bindir = new QDir(mydir);
+	cfgdir = new QDir();
+
+	cfgdir->setPath(cfgdir->homePath());
+	if (!cfgdir->exists(".hedgewars"))
+	{
+		if (!cfgdir->mkdir(".hedgewars"))
+		{
+			QMessageBox::critical(0,
+					QObject::tr("Error"),
+					QObject::tr("Cannot create directory %1").arg("/.hedgewars"),
+					QObject::tr("Quit"));
+		}
+	}
+	cfgdir->cd(".hedgewars");
+
+	datadir = new QDir(mydir);
+	datadir->cd("../share/hedgewars/Data");
 
 	Q_INIT_RESOURCE(hedgewars);
 
@@ -46,7 +73,7 @@ int main(int argc, char *argv[])
 	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
 	app.installTranslator(&Translator);
 
-	HWForm *Form = new HWForm;
+	HWForm *Form = new HWForm();
 	Form->show();
 	return app.exec();
 }

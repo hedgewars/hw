@@ -36,27 +36,14 @@
 #include "gameuiconfig.h"
 #include "hwform.h"
 #include "pages.h"
+#include "hwconsts.h"
 
 GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 	: QObject()
 {
 	Form = FormWidgets;
 
-	cfgdir.setPath(cfgdir.homePath());
-	if (!cfgdir.exists(".hedgewars"))
-	{
-		if (!cfgdir.mkdir(".hedgewars"))
-		{
-			QMessageBox::critical(0,
-					tr("Error"),
-					tr("Cannot create directory %1").arg("/.hedgewars"),
-					tr("Quit"));
-			return ;
-		}
-	}
-	cfgdir.cd(".hedgewars");
-
-	QFile settings(cfgdir.absolutePath() + "/options");
+	QFile settings(cfgdir->absolutePath() + "/options");
 	if (settings.open(QIODevice::ReadOnly))
 	{
 		QTextStream stream(&settings);
@@ -90,12 +77,12 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 
 QStringList GameUIConfig::GetTeamsList()
 {
-	return cfgdir.entryList(QStringList("*.cfg"));
+	return cfgdir->entryList(QStringList("*.cfg"));
 }
 
 void GameUIConfig::SaveOptions()
 {
-	QFile settings(cfgdir.absolutePath() + "/options");
+	QFile settings(cfgdir->absolutePath() + "/options");
 	if (!settings.open(QIODevice::WriteOnly))
 	{
 		QMessageBox::critical(0,

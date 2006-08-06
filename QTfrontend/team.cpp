@@ -39,6 +39,7 @@
 #include "gameuiconfig.h"
 #include "predefteams.h"
 #include "pages.h"
+#include "hwconsts.h"
 
 HWTeam::HWTeam(const QString & teamname, GameUIConfig * config)
 {
@@ -79,7 +80,7 @@ HWTeam::HWTeam(quint8 num, GameUIConfig * config)
 
 bool HWTeam::LoadFromFile()
 {
-	QFile cfgfile(config->cfgdir.absolutePath() + "/" + TeamName + ".cfg");
+	QFile cfgfile(cfgdir->absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::ReadOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");
@@ -133,7 +134,7 @@ bool HWTeam::LoadFromFile()
 
 bool HWTeam::SaveToFile()
 {
-	QFile cfgfile(config->cfgdir.absolutePath() + "/" + TeamName + ".cfg");
+	QFile cfgfile(cfgdir->absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::WriteOnly)) return false;
 	QTextStream stream(&cfgfile);
 	stream.setCodec("UTF-8");

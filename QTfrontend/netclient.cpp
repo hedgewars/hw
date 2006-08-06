@@ -140,7 +140,7 @@ void HWNet::Disconnect()
 
 void HWNet::RawSendNet(const QString & str)
 {
-	RawSendNet(str.toLatin1());
+	RawSendNet(str.toUtf8());
 }
 
 void HWNet::RawSendNet(const QByteArray & buf)
@@ -262,6 +262,7 @@ void HWNet::msgnumber_paramHandler(const QString & msg)
 		case 432 : // ERR_ERRONEUSNICKNAME
 		case 433 : // ERR_NICKNAMEINUSE
 		{
+			QMessageBox::information(0, "Your net nickname is in use or cannot be used", msg);
 			// ask for another nick
 		}
 	}
@@ -352,13 +353,6 @@ void HWNet::ConfigAsked()
 	if (configasks == playerscnt)
 	{
 		quint32 color = 65535;
-		for (int i = 0; i < teamsCount; i++)
-		{
-			QString msg;
-			msg = MAGIC_CHAR "T" MAGIC_CHAR + teams[i].nick + MAGIC_CHAR + teams[i].hhs.join(MAGIC_CHAR);
-			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
-			hwp_chanmsg(mynick, msg);
-			QByteArray cache;
 			#define ADD(a) { \
 							QByteArray strmsg; \
 							strmsg.append(a); \
@@ -366,6 +360,22 @@ void HWNet::ConfigAsked()
 							cache.append(QByteArray((char *)&sz, 1)); \
 							cache.append(strmsg); \
 							}
+		{
+			QByteArray cache;
+			ADD("eseed " + seed);
+			ADD("e$gmflags 0");
+			ADD("etheme steel");
+			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
+			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
+			hwp_chanmsg(mynick, _msg);
+		}
+		for (int i = 0; i < teamsCount; i++)
+		{
+			QString msg;
+			msg = MAGIC_CHAR "T" MAGIC_CHAR + teams[i].nick + MAGIC_CHAR + teams[i].hhs.join(MAGIC_CHAR);
+			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
+			hwp_chanmsg(mynick, msg);
+			QByteArray cache;
 			ADD(QString("ecolor %1").arg(color));
 			ADD("eadd hh0 0");
 			ADD("eadd hh1 0");
@@ -374,8 +384,8 @@ void HWNet::ConfigAsked()
 			ADD("eadd hh4 0");
 			#undef ADD
 			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
+			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
 			hwp_chanmsg(mynick, _msg);
-			RawSendNet(QString("PRIVMSG %1 :").arg(channel) + _msg);
 			color <<= 8;
 		}
 		SENDCFGSTRNET("!");
@@ -390,10 +400,10 @@ void HWNet::hwp_chanmsg(const QString & who, const QString & msg)
 	}
 	if (state == nsJoined)
 	{
-		if (msg.startsWith(MAGIC_CHAR"Start!"MAGIC_CHAR) && (who == opnick))
+		if (msg.startsWith(MAGIC_CHAR"Start!") && (who == opnick))
 		{
 			state = nsStarting;
-			RunGame(msg.mid(8));
+			RunGame();
 			return ;
 		}
 		if (msg.startsWith(MAGIC_CHAR"="MAGIC_CHAR) && (who == opnick))
@@ -426,7 +436,7 @@ void HWNet::hwp_chanmsg(const QString & who, const QString & msg)
 	}
 	if (msg.startsWith(MAGIC_CHAR MAGIC_CHAR)) // HWP message
 	{
-		QByteArray em = QByteArray::fromBase64(msg.mid(2).toLocal8Bit());
+		QByteArray em = QByteArray::fromBase64(msg.mid(2).toAscii());
 		emit FromNet(em);
 	} else // smth other
 	{
@@ -483,18 +493,17 @@ void HWNet::StartGame()
 	playerscnt = players.size();
 	configasks = 0;
 
-	QString seed;
 	seedgen.GenRNDStr(seed, 10);
-	QString msg = QString(MAGIC_CHAR"Start!"MAGIC_CHAR"%1").arg(seed);
+	QString msg = QString(MAGIC_CHAR"Start!");
 	RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
 	hwp_chanmsg(mynick, msg);
 }
 
-void HWNet::RunGame(const QString & seed)
+void HWNet::RunGame()
 {
 	HWGame * game = new HWGame(config, 0);
 	connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
 	connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
 	connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
-	game->StartNet(seed);
+	game->StartNet();
 }
