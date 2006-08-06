@@ -1,5 +1,3 @@
-add_subdirectory(Data)
-
 set(dcc32_tryexe dcc32.exe)
 set(ppc386_tryexe ppc386)
 set(hwengine_project "hwengine.dpr")

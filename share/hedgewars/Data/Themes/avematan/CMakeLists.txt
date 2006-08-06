@@ -8,4 +8,4 @@ install(FILES
 	Sky.png
 	sqrt.png
 	theme.cfg
-	DESTINATION Data/Themes/avematan)
+	DESTINATION ${SHAREPATH}Data/Themes/avematan)

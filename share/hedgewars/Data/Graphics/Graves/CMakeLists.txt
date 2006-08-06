@@ -3,4 +3,4 @@ install(FILES
 	coffin.png
 	Rip.png
 	Simple.png
-	DESTINATION Data/Graphics/Graves)
+	DESTINATION ${SHAREPATH}Data/Graphics/Graves)

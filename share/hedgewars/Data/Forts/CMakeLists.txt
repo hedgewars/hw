@@ -3,4 +3,4 @@ install(FILES
 	BarrelhouseR.png
 	IslandL.png
 	IslandR.png
-	DESTINATION Data/Forts)
+	DESTINATION ${SHAREPATH}Data/Forts)

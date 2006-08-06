@@ -1,4 +1,4 @@
 install(FILES
 	en.txt
 	ru.txt
-	DESTINATION Data/Locale)
+	DESTINATION ${SHAREPATH}Data/Locale)

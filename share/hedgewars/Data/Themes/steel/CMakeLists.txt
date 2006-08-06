@@ -9,4 +9,4 @@ install(FILES
 	Sky.16.png
 	Sky.32.png
 	theme.cfg
-	DESTINATION Data/Themes/steel)
+	DESTINATION ${SHAREPATH}Data/Themes/steel)

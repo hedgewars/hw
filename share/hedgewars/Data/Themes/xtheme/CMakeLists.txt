@@ -5,4 +5,4 @@ install(FILES
 	plant1.png
 	Sky.png
 	theme.cfg
-	DESTINATION Data/Themes/xtheme)
+	DESTINATION ${SHAREPATH}Data/Themes/xtheme)

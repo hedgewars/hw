@@ -8,4 +8,4 @@ install(FILES
 	splash.ogg
 	throwpowerup.ogg
 	throwrelease.ogg
-	DESTINATION Data/Sounds)
+	DESTINATION ${SHAREPATH}Data/Sounds)

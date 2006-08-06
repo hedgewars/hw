@@ -9,4 +9,4 @@ install(FILES
 	Sky.png
 	ta1.png
 	theme.cfg
-	DESTINATION Data/Themes/tibet)
+	DESTINATION ${SHAREPATH}Data/Themes/tibet)

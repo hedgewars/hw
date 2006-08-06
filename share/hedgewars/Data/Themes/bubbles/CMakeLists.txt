@@ -5,4 +5,4 @@ install(FILES
 	round.png
 	Sky.png
 	theme.cfg
-	DESTINATION Data/Themes/bubbles)
+	DESTINATION ${SHAREPATH}Data/Themes/bubbles)

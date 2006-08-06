@@ -8,4 +8,4 @@ install(FILES
 	Sky.png
 	tree.png
 	theme.cfg
-	DESTINATION Data/Themes/wood)
+	DESTINATION ${SHAREPATH}Data/Themes/wood)

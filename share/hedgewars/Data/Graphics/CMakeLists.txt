@@ -32,4 +32,4 @@ install(FILES
 	WindBar.png
 	WindL.png
 	WindR.png
-	DESTINATION Data/Graphics)
+	DESTINATION ${SHAREPATH}Data/Graphics)

@@ -2,8 +2,11 @@ project(hedgewars)
 
 cmake_minimum_required(VERSION 2.4.0)
 
+set(SHAREPATH share/hedgewars/)
+
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
+add_subdirectory(share)
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a turn-based strategy")
 set(CPACK_PACKAGE_VENDOR "Hedgewars")
