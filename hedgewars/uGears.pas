@@ -79,7 +79,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale{$IFDEF FPC}, Math{$ENDIF};
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;

@@ -105,19 +105,22 @@ procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: integer): shortstring;
 function FloatToStr(n: real): shortstring;
-function arctan(const Y, X: real): real;
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
+function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 procedure AdjustColor(var Color: Longword);
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 function RectToStr(Rect: TSDL_Rect): shortstring;
+{$ENDIF}
+{$IFNDEF FPC}
+function arctan2(const Y, X: real): real;
 {$ENDIF}
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore, uIO;
+uses uConsole, uStore, uIO{$IFDEF FPC}, Math{$ENDIF};
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
@@ -175,29 +178,27 @@ begin
 str(n:5:5, Result)
 end;
 
-function arctan(const Y, X: real): real;
+{$IFNDEF FPC}
+function arctan2(const Y, X: real): real;
 asm
         fld     Y
         fld     X
         fpatan
         fwait
 end;
+{$ENDIF}
 
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
-const piDIV32: Extended = pi/32;
-asm
-        fld     _dY
-        fld     _dX
-        fpatan
-        fld     piDIV32
-        fdiv
-        sub     esp, 4
-        fistp   dword ptr [esp]
-        pop     eax
-        shr     eax, 1
-        and     eax, $1F
+const _16divPI: Extended = 16/pi;
+begin
+Result:= trunc(arctan2(_dY, _dX) * _16divPI) and $1f
 end;
 
+function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
+const MaxAngleDivPI: Extended = cMaxAngle/pi;
+begin
+Result:= trunc(arctan2(_dY, _dX) * MaxAngleDivPI) mod cMaxAngle
+end;
 
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);

@@ -52,15 +52,14 @@ function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 
 implementation
 
-function _bswap(X: LongWord): LongWord; assembler;
-asm
-  bswap eax
+function _bswap(X: LongWord): LongWord;
+begin
+  Result:= (X shr 24) or ((X shr 8) and $FF00) or ((X shl 8) and $FF0000) or (X shl 24)
 end;
 
-function rol(x: LongWord; y: Byte): LongWord; assembler;
-asm
-  mov   cl,dl
-  rol   eax,cl
+function rol(x: LongWord; y: Byte): LongWord;
+begin
+  Result:= (X shl y) or (X shr (32 - y))
 end;
 
 function Ft(t, b, c, d: LongWord): LongWord;

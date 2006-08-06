@@ -55,7 +55,6 @@ procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: integer);
 function RatePlace(Gear: PGear): integer;
-function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
 function RateShove(Me: PGear; x, y, r, power: integer): integer;
@@ -166,19 +165,6 @@ for i:= 0 to Pred(bonuses.Count) do
          if r < Radius then
             inc(Result, Score * (Radius - r))
          end;
-end;
-
-function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
-const piDIVMaxAngle: Extended = pi/cMaxAngle;
-asm
-        fld     _dY
-        fld     _dX
-        fpatan
-        fld     piDIVMaxAngle
-        fdiv
-        sub     esp, 4
-        fistp   dword ptr [esp]
-        pop     eax
 end;
 
 function TestColl(x, y, r: integer): boolean;

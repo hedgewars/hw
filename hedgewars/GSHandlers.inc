@@ -459,7 +459,7 @@ if (Gear.Message and gm_Right <> 0) then HHGear.dX:= HHGear.dX + 0.0002;
 
 if not TestCollisionYwithGear(HHGear, 1) then HHGear.dY:= HHGear.dY + cGravity;
 
-HHGear.DirAngle:= arctan(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
+HHGear.DirAngle:= arctan2(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
 cs:= sin(HHGear.DirAngle);
 cc:= cos(HHGear.DirAngle);
 
@@ -509,7 +509,7 @@ if flCheck then  // check whether rope needs dividing
 
 Gear.dX:= HHGear.X - Gear.X;
 Gear.dY:= HHGear.Y - Gear.Y;
-HHGear.DirAngle:= arctan(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
+HHGear.DirAngle:= arctan2(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
 cs:= sin(HHGear.DirAngle);
 cc:= cos(HHGear.DirAngle);
 
