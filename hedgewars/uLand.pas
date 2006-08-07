@@ -43,7 +43,7 @@ var  Land: TLandArray;
 procedure GenMap;
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects, uSHA;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects;
 
 type TPixAr = record
               Count: Longword;
@@ -51,16 +51,16 @@ type TPixAr = record
               end;
 
 procedure LogLandDigest;
-var ctx: TSHA1Context;
-    dig: TSHA1Digest;
+//var ctx: TSHA1Context;
+//    dig: TSHA1Digest;
 begin
-SHA1Init(ctx);
-SHA1Update(ctx, @Land, sizeof(Land));
-dig:= SHA1Final(ctx);
+//SHA1Init(ctx);
+//SHA1Update(ctx, @Land, sizeof(Land));
+//dig:= SHA1Final(ctx);
 {$IFDEF DEBUGFILE}
-AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
-           +inttostr(dig.LongWords[1])+':'+inttostr(dig.LongWords[2])+':'
-           +inttostr(dig.LongWords[3])+':'+inttostr(dig.LongWords[4])+'}');
+//AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
+//           +inttostr(dig.LongWords[1])+':'+inttostr(dig.LongWords[2])+':'
+//           +inttostr(dig.LongWords[3])+':'+inttostr(dig.LongWords[4])+'}');
 {$ENDIF}
 end;
 

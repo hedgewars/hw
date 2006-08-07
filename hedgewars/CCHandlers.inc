@@ -360,7 +360,7 @@ procedure chSetSeed(var s: shortstring);
 begin
 if isDeveloperMode then
    begin
-   SetRandomParams(s, rndfillstr);
+   SetRandomSeed(s);
    cSeed:= s;
    InitStepsFlags:= InitStepsFlags or cifRandomize
    end

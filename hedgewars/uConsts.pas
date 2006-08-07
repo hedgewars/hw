@@ -91,8 +91,6 @@ resourcestring
 const
       cNetProtoVersion = 1;
 
-      rndfillstr = 'hw';
-
       MAXNAMELEN = 32;
 
       COLOR_LAND = $00FFFFFF;

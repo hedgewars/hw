@@ -33,41 +33,46 @@
 
 unit uRandom;
 interface
-uses uSHA;
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
+procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: real; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
-var  sc1, sc2: TSHA1Context;
-     Fill: shortstring;
+const rndM = 2147483578;
+var cirbuf: array[0..63] of Longword;
+    n: byte;
 
-procedure SetRandomParams(Seed: shortstring; FillBuf: shortstring);
+function GetNext: Longword;
 begin
-SHA1Init(sc1);
-SHA1Update(sc1, @Seed, Length(Seed)+1);
-Fill:= FillBuf
+n:= (n + 1) and $3F;
+cirbuf[n]:=
+           (cirbuf[(n + 40) and $3F] +           {== n - 24 mod 64}
+            cirbuf[(n +  9) and $3F]) mod rndM;  {== n - 55 mod 64}
+            
+Result:= cirbuf[n]
+end;
+
+procedure SetRandomSeed(Seed: shortstring);
+var i: Longword;
+begin
+for i:= 0 to pred(Length(Seed)) do
+    cirbuf[i]:= byte(Seed[i + 1]) * 35791253;
+
+for i:= Length(Seed) to 63 do
+    cirbuf[i]:= i * 23860799;
+
+for i:= 0 to 1024 do GetNext;
 end;
 
 function GetRandom: real;
-var dig: TSHA1Digest;
 begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc2);
-Result:= frac( dig.LongWords[0]*0.0000731563977
-               + pi * dig.Words[6]
-               + 0.0109070019*dig.Words[9])
+Result:= frac( GetNext * 0.0007301 + GetNext * 0.003019)
 end;
 
-function  GetRandom(m: LongWord): LongWord;
-var dig: TSHA1Digest;
+function GetRandom(m: LongWord): LongWord;
 begin
-SHA1Update(sc1, @Fill[1], Length(Fill));
-sc2:= sc1;
-dig:= SHA1Final(sc2);
-Result:= (dig.LongWords[0] + dig.LongWords[2] + dig.LongWords[3]) mod m
+Result:= GetNext mod m
 end;
 
 end.
