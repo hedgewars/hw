@@ -75,7 +75,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
              end;
 
 
-resourcestring
+const
       errmsgCreateSurface   = 'Error creating SDL surface';
       errmsgTransparentSet  = 'Error setting transparent color';
       errmsgUnknownCommand  = 'Unknown command';

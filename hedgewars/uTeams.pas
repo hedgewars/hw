@@ -340,6 +340,7 @@ with team^ do
         RecountAllTeamsHealth;
         end else TeamHealth:= (TeamHealth * cTeamHealthWidth) div MaxTeamHealth
      end;
+// FIXME: at the game init, gtTeamHealthSorters are created for each team, and they work simultaneously
 AddGear(0, 0, gtTeamHealthSorter, 0)
 end;
 

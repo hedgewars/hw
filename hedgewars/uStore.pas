@@ -285,6 +285,7 @@ for fi:= Low(THWFont) to High(THWFont) do
          end;
 AddProgress;
 
+WriteToConsole('LandSurface tuning... ');
 tmpsurf:= LandSurface;
 TryDo(tmpsurf <> nil, msgFailed, true);
 if cFullScreen then

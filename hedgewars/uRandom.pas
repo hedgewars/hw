@@ -39,7 +39,6 @@ function  GetRandom: real; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
-const rndM = 2147483578;
 var cirbuf: array[0..63] of Longword;
     n: byte;
 
@@ -47,8 +46,9 @@ function GetNext: Longword;
 begin
 n:= (n + 1) and $3F;
 cirbuf[n]:=
-           (cirbuf[(n + 40) and $3F] +           {== n - 24 mod 64}
-            cirbuf[(n +  9) and $3F]) mod rndM;  {== n - 55 mod 64}
+           (cirbuf[(n + 40) and $3F] +           {n - 24 mod 64}
+            cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
+            and $7FFFFFFF;                       {mod 2^31}
             
 Result:= cirbuf[n]
 end;
@@ -56,6 +56,7 @@ end;
 procedure SetRandomSeed(Seed: shortstring);
 var i: Longword;
 begin
+if Length(Seed) > 60 then Seed:= copy(Seed, 1, 60); // not 64 to ensure we have even numbers in cirbuf
 for i:= 0 to pred(Length(Seed)) do
     cirbuf[i]:= byte(Seed[i + 1]) * 35791253;
 
@@ -72,6 +73,7 @@ end;
 
 function GetRandom(m: LongWord): LongWord;
 begin
+GetNext;
 Result:= GetNext mod m
 end;
 

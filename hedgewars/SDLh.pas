@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -42,7 +42,7 @@ interface
 
 {$IFDEF UNIX}
 {$linklib c}
-{$linklib pthread}  // кажется, это только для FreeBSD, не уверен
+{$linklib pthread}
 {$ENDIF}
 
 {$IFDEF FPC}
@@ -84,8 +84,8 @@ type PSDL_Rect = ^TSDL_Rect;
                  end;
 
      TPoint = record
-              X: Integer;
-              Y: Integer;
+              X: LongInt;
+              Y: LongInt;
               end;
 
      PSDL_PixelFormat = ^TSDL_PixelFormat;
@@ -114,17 +114,17 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_Surface = record
                     flags : Longword;
                     format: PSDL_PixelFormat;
-                    w, h  : Integer;
+                    w, h  : LongInt;
                     pitch : Word;
                     pixels: Pointer;
-                    offset: Integer;
+                    offset: LongInt;
                     hwdata: Pointer;
                     clip_rect: TSDL_Rect;
                     unused1,
                     locked   : Longword;
                     Blitmap  : Pointer;
                     format_version: Longword;
-                    refcount : Integer;
+                    refcount : LongInt;
                     end;
 
      PSDL_Color = ^TSDL_Color;
@@ -136,13 +136,13 @@ type PSDL_Rect = ^TSDL_Rect;
                   end;
 
      PSDL_RWops = ^TSDL_RWops;
-     TSeek = function( context: PSDL_RWops; offset: Integer; whence: Integer ): Integer; cdecl;
-     TRead = function( context: PSDL_RWops; Ptr: Pointer; size: Integer; maxnum : Integer ): Integer;  cdecl;
-     TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: Integer; num: Integer ): Integer; cdecl;
-     TClose = function( context: PSDL_RWops ): Integer; cdecl;
+     TSeek = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
+     TRead = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
+     TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
+     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 
      TStdio = record
-              autoclose: Integer;
+              autoclose: LongInt;
               fp: pointer;
               end;
 
@@ -199,55 +199,55 @@ type PSDL_Rect = ^TSDL_Rect;
      PSDL_Thread = Pointer;
      PSDL_mutex = Pointer;
 
-function  SDL_Init(flags: Longword): Integer; cdecl; external SDLLibName;
+function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
 procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
 function  SDL_GetTicks: Longword; cdecl; external SDLLibName;
 
 function  SDL_MustLock(Surface: PSDL_Surface): Boolean;
-function  SDL_LockSurface(Surface: PSDL_Surface): Integer; cdecl; external SDLLibName;
+function  SDL_LockSurface(Surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 procedure SDL_UnlockSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 
 function  SDL_GetError: PChar; cdecl; external SDLLibName;
 
-function  SDL_SetVideoMode(width, height, bpp: Integer; flags: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: Integer; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: Integer; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_SetVideoMode(width, height, bpp: LongInt; flags: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
-function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): Integer; cdecl; external SDLLibName;
+function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
 
-function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): Integer; cdecl; external SDLLibName;
-function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): Integer; cdecl; external SDLLibName;
-procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: Integer; w, h: Longword); cdecl; external SDLLibName;
-function  SDL_Flip(Screen: PSDL_Surface): Integer; cdecl; external SDLLibName;
+function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
+function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): LongInt; cdecl; external SDLLibName;
+procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: LongInt; w, h: Longword); cdecl; external SDLLibName;
+function  SDL_Flip(Screen: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_GetRGB(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
-function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): Integer; cdecl; external SDLLibName;
+function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): LongInt; cdecl; external SDLLibName;
 
 function  SDL_DisplayFormat(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
 function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDLLibName;
-function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: Integer): Integer; cdecl; external SDLLibName;
+function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
-function  SDL_GetKeyState(numkeys: PInteger): PByteArray; cdecl; external SDLLibName;
-function  SDL_GetMouseState(x, y: PInteger): Byte; cdecl; external SDLLibName;
+function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
+function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
-function  SDL_PollEvent(event: PSDL_Event): Integer; cdecl; external SDLLibName;
+function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 
-function  SDL_ShowCursor(toggle: Integer): Integer; cdecl; external SDLLibName;
+function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 
 function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
-procedure SDL_WaitThread(thread: PSDL_Thread; status: PInteger); cdecl; external SDLLibName;
+procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
-function  SDL_LockMutex(mutex: PSDL_mutex): integer; cdecl; external SDLLibName name 'SDL_mutexP';
-function  SDL_UnlockMutex(mutex: PSDL_mutex): integer; cdecl; external SDLLibName name 'SDL_mutexV';
+function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';
+function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexV';
 
 (*  TTF  *)
 
@@ -263,14 +263,14 @@ type PTTF_Font = ^TTTF_font;
      TTTF_Font = record
                  end;
 
-function TTF_Init: integer; cdecl; external SDL_TTFLibName;
+function TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
 
-function TTF_SizeUTF8(font : PTTF_Font; const text: PChar; var w, h: integer): Integer; cdecl; external SDL_TTFLibName;
+function TTF_SizeUTF8(font : PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 function TTF_RenderUTF8_Solid(font : PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function TTF_RenderUTF8_Blended(font : PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_OpenFont(const filename: Pchar; size: integer): PTTF_Font; cdecl; external SDL_TTFLibName;
+function TTF_OpenFont(const filename: Pchar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer *)
 
@@ -292,7 +292,7 @@ type PMixChunk = ^TMixChunk;
      TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
 
      TMidiSong = record
-               samples : Integer;
+               samples : LongInt;
                events  : pointer;
                end;
 
@@ -310,27 +310,27 @@ type PMixChunk = ^TMixChunk;
                  fade_volume,
                  fade_step,
                  fade_steps,
-                 error  : integer;
+                 error  : LongInt;
                  end;
 
-function  Mix_OpenAudio(frequency: integer; format: Word; channels: integer; chunksize: integer): integer; cdecl; external SDL_MixerLibName;
+function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
-function  Mix_VolumeMusic(volume: integer): integer; cdecl; external SDL_MixerLibName;
+function  Mix_VolumeMusic(volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
-function Mix_AllocateChannels(numchans: integer): integer; cdecl; external SDL_MixerLibName;
+function Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
 procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
 
-function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: integer): PMixChunk; cdecl; external SDL_MixerLibName;
+function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: LongInt): PMixChunk; cdecl; external SDL_MixerLibName;
 function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_MixerLibName;
 
-function  Mix_Playing(channel: integer): integer; cdecl; external SDL_MixerLibName;
-function  Mix_PlayingMusic: integer; cdecl; external SDL_MixerLibName;
+function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
 
-function  Mix_PlayChannelTimed(channel: integer; chunk: PMixChunk; loops: integer; ticks: integer): integer; cdecl; external SDL_MixerLibName;
-function  Mix_PlayMusic(music: PMixMusic; loops: integer): integer; cdecl; external SDL_MixerLibName;
-function  Mix_HaltChannel(channel: integer): integer; cdecl; external SDL_MixerLibName;
+function  Mix_PlayChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PlayMusic(music: PMixMusic; loops: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 (*  SDL_image *)
 
@@ -360,31 +360,31 @@ type TIPAddress = record
      PTCPSocket = ^TTCPSocket;
      TTCPSocket = record
                   ready,
-                  channel: integer;
+                  channel: LongInt;
                   remoteAddress,
                   localAddress: TIPaddress;
-                  sflag: integer;
+                  sflag: LongInt;
                   end;
      PSDLNet_SocketSet = ^TSDLNet_SocketSet;
      TSDLNet_SocketSet = record
                          numsockets,
-                         maxsockets: integer;
+                         maxsockets: LongInt;
                          sockets: PTCPSocket;
                          end;
 
-function SDLNet_Init: integer; cdecl; external SDL_NetLibName;
+function SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
 
-function SDLNet_AllocSocketSet(maxsockets: integer): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
-function SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): integer; cdecl; external SDL_NetLibName;
+function SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
+function SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
 function SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
 function SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: integer): integer; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: integer): integer; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
 procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
-function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): integer; cdecl; external SDL_NetLibName;
-function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: integer): integer; cdecl; external SDL_NetLibName;
+function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
+function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
 
 implementation
