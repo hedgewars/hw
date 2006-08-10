@@ -114,17 +114,10 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_Surface = record
                     flags : Longword;
                     format: PSDL_PixelFormat;
-                    w, h  : LongInt;
+                    w, h  : integer;
                     pitch : Word;
                     pixels: Pointer;
                     offset: LongInt;
-                    hwdata: Pointer;
-                    clip_rect: TSDL_Rect;
-                    unused1,
-                    locked   : Longword;
-                    Blitmap  : Pointer;
-                    format_version: Longword;
-                    refcount : LongInt;
                     end;
 
      PSDL_Color = ^TSDL_Color;
@@ -170,7 +163,7 @@ type PSDL_Rect = ^TSDL_Rect;
 
      TSDL_KeySym = record
                    scancode: Byte;
-                   sym,
+                   sym: Longword;
                    modifier: Longword;
                    unicode: Word;
                    end;
@@ -287,7 +280,7 @@ type PMixChunk = ^TMixChunk;
                  abuf     : PByte;
                  alen     : Longword;
                  volume   : PByte;
-                  end;
+                 end;
      TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
      TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
 
@@ -304,13 +297,6 @@ type PMixChunk = ^TMixChunk;
 
      PMixMusic = ^TMixMusic;
      TMixMusic = record
-                 type_  : TMusic;
-                 data   : TMusicUnion;
-                 fading : TMix_Fading;
-                 fade_volume,
-                 fade_step,
-                 fade_steps,
-                 error  : LongInt;
                  end;
 
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
@@ -359,9 +345,9 @@ type TIPAddress = record
 
      PTCPSocket = ^TTCPSocket;
      TTCPSocket = record
-                  ready,
+                  ready: LongInt;
                   channel: LongInt;
-                  remoteAddress,
+                  remoteAddress: TIPaddress;
                   localAddress: TIPaddress;
                   sflag: LongInt;
                   end;
