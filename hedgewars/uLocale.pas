@@ -37,8 +37,8 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
                    sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds);
      TMsgStrId = (sidStartFight, sidDraw, sidWinner);
-var trammo: array[TAmmoStrId] of shortstring;
-    trmsg: array[TMsgStrId] of shortstring;
+var trammo: array[TAmmoStrId] of string;
+    trmsg: array[TMsgStrId] of string;
 
 procedure LoadLocale(FileName: string);
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
@@ -52,7 +52,7 @@ var s: shortstring;
     a, b, c: integer;
 begin
 {$I-}
-assignfile(f, FileName);
+AssignFile(f, FileName);
 reset(f);
 TryDo(IOResult = 0, 'Cannot load locale "' + FileName + '"', true);
 while not eof(f) do

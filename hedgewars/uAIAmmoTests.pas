@@ -244,8 +244,8 @@ if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25 then
    end;
 Time:= 0;
 Power:= 1;
-Angle:= DxDy2AttackAngle(Sign(Targ.X - Me.X), 1);
-Result:= RateShove(Me, round(Me.X) + 10 * Sign(Targ.X - Me.X), round(Me.Y), 15, 30)
+Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
+Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15, 30)
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
@@ -259,10 +259,10 @@ if (abs(Me.X - Targ.X) > 25) or (abs(Me.Y - 50 - Targ.Y) > 50) then
    end;
 Time:= 0;
 Power:= 1;
-Angle:= DxDy2AttackAngle(Sign(Targ.X - Me.X), 1);
+Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
 Result:= 0;
 for i:= 0 to 4 do
-    Result:= Result + RateShove(Me, round(Me.X) + 10 * Sign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30)
+    Result:= Result + RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30)
 end;
 
 end.

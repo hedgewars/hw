@@ -36,7 +36,7 @@ interface
 uses SDLh;
 {$INCLUDE options.inc}
 const isDeveloperMode: boolean = true;
-type TVariableType = (vtCommand, vtInteger, vtReal, vtBoolean);
+type TVariableType = (vtCommand, vtInteger, vtDouble, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
 procedure DrawConsole(Surface: PSDL_Surface);
@@ -163,7 +163,7 @@ for i:= 0 to Pred(cLinesCount) do PLongWord(@ConsoleLines[i])^:= 0
 end;
 
 procedure ParseCommand(CmdStr: shortstring);
-type PReal = ^Double;
+type PDouble = ^Double;
 var i, ii: integer;
     s: shortstring;
     t: PVariable;
@@ -191,12 +191,12 @@ while t <> nil do
                             str(PInteger(t.Handler)^, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
                             end else val(s, PInteger(t.Handler)^, i);
-                 vtReal: if c='$' then
+                 vtDouble: if c='$' then
                          if s[0]=#0 then
                             begin
-                            str(PReal(t.Handler)^:4:6, s);
+                            str(PDouble(t.Handler)^:4:6, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PReal(t.Handler)^   , i);
+                            end else val(s, PDouble(t.Handler)^   , i);
              vtBoolean: if c='$' then
                          if s[0]=#0 then
                             begin

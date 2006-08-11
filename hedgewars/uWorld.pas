@@ -40,7 +40,7 @@ const WorldDx: integer = -512;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 procedure MoveCamera;
 
 {$IFDEF COUNTTICKS}
@@ -156,7 +156,7 @@ if CurrentTeam <> nil then
                            DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
                         else
                         if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
-                           DrawCaption(Round(Gear.X + Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
+                           DrawCaption(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
                                        Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 4,
                                        Team.CrossHairRect, Surface)
                      end;
@@ -201,7 +201,7 @@ if CurrentTeam <> nil then
            end;
         2: with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
                 begin
-                tdx:= Sign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle);
+                tdx:= hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle);
                 tdy:= - Cos(Gear.Angle*pi/cMaxAngle);
                 for i:= (Gear.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower, round(Gear.X + WorldDx + tdx * (24 + i * 2)) - 16,
@@ -303,7 +303,7 @@ if CountTicks >= 1000 then
 if cShowFPS then DXOutText(cScreenWidth - 50, 10, fnt16, inttostr(FPS) + ' fps', Surface)
 end;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 var i, t, m, k: LongWord;
 begin
 if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
@@ -356,7 +356,7 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x * 7 + (round(FollowGear.X + Sign(FollowGear.dX) * 100) + WorldDx)) div 8;
+      CursorPoint.x:= (CursorPoint.x * 7 + (round(FollowGear.X + hwSign(FollowGear.dX) * 100) + WorldDx)) div 8;
       CursorPoint.y:= (CursorPoint.y * 7 + (round(FollowGear.Y) + WorldDy)) div 8
       end;
 

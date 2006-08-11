@@ -243,19 +243,19 @@ case JumpType of
     jmpHJump: if not TestCollisionYwithGear(Gear, -1) then
                  begin
                  Gear.dY:= -0.20;
-                 Gear.dX:= 0.0000001 * Sign(Gear.dX);
-                 Gear.X:= Gear.X - Sign(Gear.dX)*0.00008; // shift compensation
+                 Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+                 Gear.X:= Gear.X - hwSign(Gear.dX)*0.00008; // shift compensation
                  Gear.State:= Gear.State or gstFalling or gstHHJumping;
                  end else exit;
     jmpLJump: begin
               if not TestCollisionYwithGear(Gear, -1) then
-                 if not TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 2 else
-                 if not TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX)) then Gear.Y:= Gear.Y - 1;
-              if not (TestCollisionXwithGear(Gear, Sign(Gear.dX))
+                 if not TestCollisionXwithXYShift(Gear, 0, -2, hwSign(Gear.dX)) then Gear.Y:= Gear.Y - 2 else
+                 if not TestCollisionXwithXYShift(Gear, 0, -1, hwSign(Gear.dX)) then Gear.Y:= Gear.Y - 1;
+              if not (TestCollisionXwithGear(Gear, hwSign(Gear.dX))
                  or   TestCollisionYwithGear(Gear, -1)) then
                  begin
                  Gear.dY:= -0.15;
-                 Gear.dX:= Sign(Gear.dX) * 0.15;
+                 Gear.dX:= hwSign(Gear.dX) * 0.15;
                  Gear.State:= Gear.State or gstFalling or gstHHJumping
                  end else exit
               end
@@ -269,9 +269,9 @@ if (Gear.State and gstFalling) <> 0 then
       if (abs(Gear.dX) < 0.0000002) and (Gear.dY < -0.02) then
          begin
          Gear.dY:= -0.25;
-         Gear.dX:= Sign(Gear.dX) * 0.02
+         Gear.dX:= hwSign(Gear.dX) * 0.02
          end;
-   if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then Gear.dX:= 0.0000001 * Sign(Gear.dX);
+   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then Gear.dX:= 0.0000001 * hwSign(Gear.dX);
    Gear.X:= Gear.X + Gear.dX;
    inc(GoInfo.Ticks);
    Gear.dY:= Gear.dY + cGravity;
@@ -340,23 +340,23 @@ if (Gear.State and gstFalling) <> 0 then
    end;
    if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
    if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
-   if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
+   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then
       begin
-      if not (TestCollisionXwithXYShift(Gear, 0, -6, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -6, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -5, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -5, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -4, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -4, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -3, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -3, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -2, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -2, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -1, Sign(Gear.dX))
+      if not (TestCollisionXwithXYShift(Gear, 0, -1, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
       end;
 
-   if not TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
+   if not TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then
       begin
       Gear.X:= Gear.X + Gear.dX;
       inc(GoInfo.Ticks, cHHStepTicks)
@@ -383,7 +383,7 @@ if (Gear.State and gstFalling) <> 0 then
       begin
       Gear.Y:= Gear.Y - 6;
       Gear.dY:= 0;
-      Gear.dX:= 0.0000001 * Sign(Gear.dX);
+      Gear.dX:= 0.0000001 * hwSign(Gear.dX);
       Gear.State:= Gear.State or gstFalling
       end
    end

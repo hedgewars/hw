@@ -43,10 +43,10 @@ type PGear = ^TGear;
              NextGear, PrevGear: PGear;
              Active: Boolean;
              State : Cardinal;
-             X : Real;
-             Y : Real;
-             dX: Real;
-             dY: Real;
+             X : Double;
+             Y : Double;
+             dX: Double;
+             dY: Double;
              Kind: TGearType;
              Pos: Longword;
              doStep: TGearStepProcedure;
@@ -54,8 +54,8 @@ type PGear = ^TGear;
              Angle, Power : Cardinal;
              DirAngle: Double;
              Timer : LongWord;
-             Elasticity: Real;
-             Friction  : Real;
+             Elasticity: Double;
+             Friction  : Double;
              Message : Longword;
              Hedgehog: pointer;
              Health, Damage: integer;
@@ -79,7 +79,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale{$IFDEF FPC}, Math{$ENDIF};
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
@@ -134,7 +134,7 @@ function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: Doub
 const Counter: Longword = 0;
 begin
 inc(Counter);
-{$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+')');{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
 New(Result);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: handle = '+inttostr(integer(Result)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
@@ -491,7 +491,7 @@ while Gear<>nil do
       case Gear.Kind of
            gtCloud: DrawSprite(sprCloud   , Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
        gtAmmo_Bomb: DrawSprite(sprBomb , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        gtHedgehog: DrawHedgehog(Round(Gear.X) - 14 + WorldDx, Round(Gear.Y) - 18 + WorldDy, Sign(Gear.dX),
+        gtHedgehog: DrawHedgehog(Round(Gear.X) - 14 + WorldDx, Round(Gear.Y) - 18 + WorldDy, hwSign(Gear.dX),
                                  0, PHedgehog(Gear.Hedgehog).visStepPos div 2,
                                  Surface);
     gtAmmo_Grenade: DrawSprite(sprGrenade , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
@@ -589,8 +589,8 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
                              begin
-                             Gear.dX:= Gear.dX + dmg / 200 * Sign(Gear.X - X);
-                             Gear.dY:= Gear.dY + dmg / 200 * Sign(Gear.Y - Y);
+                             Gear.dX:= Gear.dX + dmg / 200 * hwSign(Gear.X - X);
+                             Gear.dY:= Gear.dY + dmg / 200 * hwSign(Gear.Y - Y);
                              Gear.Active:= true;
                              FollowGear:= Gear
                              end;

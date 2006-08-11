@@ -46,7 +46,7 @@ end;
 
 procedure CheckCollision(Gear: PGear);
 begin
-if TestCollisionXwithGear(Gear, Sign(Gear.X)) or TestCollisionYwithGear(Gear, Sign(Gear.Y))
+if TestCollisionXwithGear(Gear, hwSign(Gear.X)) or TestCollisionYwithGear(Gear, hwSign(Gear.Y))
    then Gear.State:= Gear.State or      gstCollision
    else Gear.State:= Gear.State and not gstCollision
 end;
@@ -80,13 +80,13 @@ end;
 procedure doStepFallingGear(Gear: PGear);
 var b: boolean;
 begin
-if TestCollisionYwithGear(Gear, Sign(Gear.dY)) then
+if TestCollisionYwithGear(Gear, hwSign(Gear.dY)) then
    begin
    Gear.dX:=   Gear.dX * Gear.Friction;
    Gear.dY:= - Gear.dY * Gear.Elasticity;
    b:= false
    end else b:= true;
-if TestCollisionXwithGear(Gear, Sign(Gear.dX)) then
+if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then
    begin
    Gear.dX:= - Gear.dX * Gear.Elasticity;
 //   Gear.dY:=   Gear.dY;
@@ -384,7 +384,7 @@ if (Gear.Timer and $3F) = 0 then
 if TestCollisionYwithGear(Gear, 1) then
    begin
    Gear.dY:= 0;
-   HHGear.dX:= 0.0000001 * Sign(PGear(Gear.Hedgehog).dX);
+   HHGear.dX:= 0.0000001 * hwSign(PGear(Gear.Hedgehog).dX);
    HHGear.dY:= 0;
    end else
    begin
@@ -429,7 +429,7 @@ procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;
     len, cs, cc, tx, ty: Double;
-    lx, ly: integer;
+    lx, ly: LongInt;
 
     procedure DeleteMe;
     begin
@@ -445,6 +445,7 @@ var HHGear: PGear;
 
 begin
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+
 if ((HHGear.State and gstHHDriven) = 0)
    or (CheckGearDrowning(HHGear)) then
    begin
@@ -459,9 +460,11 @@ if (Gear.Message and gm_Right <> 0) then HHGear.dX:= HHGear.dX + 0.0002;
 
 if not TestCollisionYwithGear(HHGear, 1) then HHGear.dY:= HHGear.dY + cGravity;
 
-HHGear.DirAngle:= arctan2(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
-cs:= sin(HHGear.DirAngle);
-cc:= cos(HHGear.DirAngle);
+cs:= Gear.dY + HHGear.dY;
+cc:= Gear.dX + HHGear.dX;
+len:= 1 / sqrt(sqr(cc)+sqr(cs));
+cc:= cc * len;
+cs:= cs * len;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
@@ -471,8 +474,8 @@ if flCheck then  // check whether rope needs dividing
          begin
          tx:= cc*len;
          ty:= cs*len;
-         lx:= round(Gear.X + tx) + Sign(HHGear.dX);
-         ly:= round(Gear.Y + ty) + Sign(HHGear.dY);
+         lx:= round(Gear.X + tx) + hwSign(HHGear.dX);
+         ly:= round(Gear.Y + ty) + hwSign(HHGear.dY);
          if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0)and (Land[ly, lx] <> 0) then
            begin
            with RopePoints.ar[RopePoints.Count] do
@@ -509,30 +512,40 @@ if flCheck then  // check whether rope needs dividing
 
 Gear.dX:= HHGear.X - Gear.X;
 Gear.dY:= HHGear.Y - Gear.Y;
-HHGear.DirAngle:= arctan2(Gear.dY + HHGear.dY, Gear.dX + HHGear.dX);
-cs:= sin(HHGear.DirAngle);
-cc:= cos(HHGear.DirAngle);
+
+cs:= Gear.dY + HHGear.dY;
+cc:= Gear.dX + HHGear.dX;
+len:= 1 / sqrt(sqr(cc)+sqr(cs));
+cc:= cc * len;
+cs:= cs * len;
 
 HHGear.dX:= HHGear.X;
 HHGear.dY:= HHGear.Y;
 
 if ((Gear.Message and gm_Down) <> 0) and (Gear.Elasticity < Gear.Friction) then
-   if not (TestCollisionXwithGear(HHGear, Sign(Gear.dX))
-        or TestCollisionYwithGear(HHGear, Sign(Gear.dY))) then Gear.Elasticity:= Gear.Elasticity + 0.3;
+   if not (TestCollisionXwithGear(HHGear, hwSign(Gear.dX))
+        or TestCollisionYwithGear(HHGear, hwSign(Gear.dY))) then Gear.Elasticity:= Gear.Elasticity + 0.3;
 
 if ((Gear.Message and gm_Up) <> 0) and (Gear.Elasticity > 30) then
-   if not (TestCollisionXwithGear(HHGear, -Sign(Gear.dX))
-        or TestCollisionYwithGear(HHGear, -Sign(Gear.dY))) then Gear.Elasticity:= Gear.Elasticity - 0.3;
+   if not (TestCollisionXwithGear(HHGear, -hwSign(Gear.dX))
+        or TestCollisionYwithGear(HHGear, -hwSign(Gear.dY))) then Gear.Elasticity:= Gear.Elasticity - 0.3;
 
 HHGear.X:= Gear.X + cc*Gear.Elasticity;
 HHGear.Y:= Gear.Y + cs*Gear.Elasticity;
 
+if (GameTicks >= 165118) and (GameTicks <= 165121) then
+   begin
+   AddFileLog('==9==> ('+floattostr(cc)+','+floattostr(cs)+')');
+   AddFileLog('==a==>  '+floattostr(Gear.Elasticity));
+   AddFileLog('==b==> ('+floattostr(HHGear.X)+','+floattostr(HHGear.Y)+')');
+   end;
+
 HHGear.dX:= HHGear.X - HHGear.dX;
 HHGear.dY:= HHGear.Y - HHGear.dY;
 
-if TestCollisionXwithGear(HHGear, Sign(HHGear.dX)) then
+if TestCollisionXwithGear(HHGear, hwSign(HHGear.dX)) then
    HHGear.dX:= -0.6 * HHGear.dX;
-if TestCollisionYwithGear(HHGear, Sign(HHGear.dY)) then
+if TestCollisionYwithGear(HHGear, hwSign(HHGear.dY)) then
    HHGear.dY:= -0.6 * HHGear.dY;
 
 if (Gear.Message and gm_Attack) <> 0 then
@@ -557,7 +570,7 @@ if (HHGear.State and gstFalling) <> 0 then
       HHGear.State:= HHGear.State and not (gstFalling or gstHHJumping);
       end else
       begin
-      if TestCollisionXwithGear(HHGear, Sign(HHGear.dX)) then HHGear.dX:= 0.0000001 * Sign(HHGear.dX);
+      if TestCollisionXwithGear(HHGear, hwSign(HHGear.dX)) then HHGear.dX:= 0.0000001 * hwSign(HHGear.dX);
       HHGear.X:= HHGear.X + HHGear.dX;
       HHGear.Y:= HHGear.Y + HHGear.dY;
       Gear.X:= Gear.X + HHGear.dX;
@@ -568,8 +581,8 @@ if (HHGear.State and gstFalling) <> 0 then
       ty:= 0;
       while tt > 20 do
             begin
-            if  TestCollisionXwithXYShift(Gear, round(tx), round(ty), Sign(Gear.dX))
-             or TestCollisionYwithXYShift(Gear, round(tx), round(ty), Sign(Gear.dY)) then
+            if  TestCollisionXwithXYShift(Gear, round(tx), round(ty), hwSign(Gear.dX))
+             or TestCollisionYwithXYShift(Gear, round(tx), round(ty), hwSign(Gear.dY)) then
                 begin
                 Gear.X:= Gear.X + tx;
                 Gear.Y:= Gear.Y + ty;
@@ -865,11 +878,11 @@ begin
 AllInactive:= false;
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 HHGear.X:= round(HHGear.X) - 0.5;
-HHGear.dX:= 0.0000001 * Sign(HHGear.dX);
+HHGear.dX:= 0.0000001 * hwSign(HHGear.dX);
 HHGear.dY:= -0.30;
 
 Gear.X:= HHGear.X;
-Gear.dX:= Sign(HHGear.dX)* 0.45;
+Gear.dX:= hwSign(HHGear.dX)* 0.45;
 Gear.dY:= -0.9;
 Gear.doStep:= doStepFirePunchWork;
 DrawTunnel(HHGear.X - cHHRadius, HHGear.Y + 1, 0.5, 0.0, cHHRadius * 4, 5);

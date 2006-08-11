@@ -71,10 +71,10 @@ var isCursorVisible : boolean = false;
     cColorNearBlack       : Cardinal = 16;
     cExplosionBorderColor : LongWord = $808080;
 
-    cDrownSpeed   : Real = 0.06;
-    cMaxWindSpeed : Real = 0.0005;
-    cWindSpeed    : Real = 0.0001;
-    cGravity      : Real = 0.0005;
+    cDrownSpeed   : Double = 0.06;
+    cMaxWindSpeed : Double = 0.0005;
+    cWindSpeed    : Double = 0.0001;
+    cGravity      : Double = 0.0005;
 
     cShowFPS      : boolean = true;
     cFullScreen   : boolean = true;
@@ -97,7 +97,7 @@ var
 
     AttackBar: integer = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-function Sign(r: Double): integer;
+function hwSign(r: Double): integer;
 function Min(a, b: integer): integer;
 function Max(a, b: integer): integer;
 procedure OutError(Msg: String; const isFatalError: boolean=false);
@@ -112,9 +112,6 @@ procedure AdjustColor(var Color: Longword);
 procedure AddFileLog(s: shortstring);
 function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
-{$IFNDEF FPC}
-function arctan2(const Y, X: Double): Double;
-{$ENDIF}
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -126,7 +123,7 @@ var f: textfile;
 {$ENDIF}
 
 
-function Sign(r: Double): integer;
+function hwSign(r: Double): integer;
 begin
 if r < 0 then Result:= -1 else Result:= 1
 end;
@@ -213,7 +210,7 @@ Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + intt
 end;
 
 initialization
-assignfile(f, 'debug.txt');
+AssignFile(f, 'debug.txt');
 rewrite(f);
 
 finalization

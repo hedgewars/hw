@@ -49,7 +49,7 @@ procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: integer; Source, Surface: PSDL_Surface);
 procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
-function  RenderString(var s: shortstring; Color: integer; font: THWFont): PSDL_Surface;
+function  RenderString(s: string; Color: integer; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
@@ -444,10 +444,10 @@ SDL_FreeSurface(LandSurface  );
 SDL_FreeSurface(StoreSurface )
 end;
 
-function RenderString(var s: shortstring; Color: integer; font: THWFont): PSDL_Surface;
+function  RenderString(s: string; Color: integer; font: THWFont): PSDL_Surface;
 var w, h: integer;
 begin
-TTF_SizeUTF8(Fontz[font].Handle, PChar(String(s)), w, h);
+TTF_SizeUTF8(Fontz[font].Handle, PChar(s), w, h);
 Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + 6, h + 2, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
 TryDo(Result <> nil, 'RenderString: fail to create surface', true);
 WriteInRoundRect(Result, 0, 0, Color, font, s);
