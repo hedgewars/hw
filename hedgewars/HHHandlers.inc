@@ -33,7 +33,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure Attack(Gear: PGear);
-var xx, yy: real;
+var xx, yy: Double;
 begin
 with Gear^,
      PHedgehog(Gear.Hedgehog)^ do

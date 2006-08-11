@@ -97,14 +97,14 @@ var
 
     AttackBar: integer = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-function Sign(r: real): integer;
+function Sign(r: Double): integer;
 function Min(a, b: integer): integer;
 function Max(a, b: integer): integer;
 procedure OutError(Msg: String; const isFatalError: boolean=false);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: integer): shortstring;
-function FloatToStr(n: real): shortstring;
+function FloatToStr(n: Double): shortstring;
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 procedure AdjustColor(var Color: Longword);
@@ -113,7 +113,7 @@ procedure AddFileLog(s: shortstring);
 function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
 {$IFNDEF FPC}
-function arctan2(const Y, X: real): real;
+function arctan2(const Y, X: Double): Double;
 {$ENDIF}
 
 var CursorPoint: TPoint;
@@ -126,7 +126,7 @@ var f: textfile;
 {$ENDIF}
 
 
-function Sign(r: real): integer;
+function Sign(r: Double): integer;
 begin
 if r < 0 then Result:= -1 else Result:= 1
 end;
@@ -173,13 +173,13 @@ begin
 str(n, Result)
 end;
 
-function FloatToStr(n: real): shortstring;
+function FloatToStr(n: Double): shortstring;
 begin
 str(n:5:5, Result)
 end;
 
 {$IFNDEF FPC}
-function arctan2(const Y, X: real): real;
+function arctan2(const Y, X: Double): Double;
 asm
         fld     Y
         fld     X

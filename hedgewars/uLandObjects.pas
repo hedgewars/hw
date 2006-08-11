@@ -73,7 +73,7 @@ var Rects: PRectArray;
     RectCount: Longword;
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
-var i, p: LongWord;
+var p: PByteArray;
     x, y: Longword;
     bpp: integer;
     r: TSDL_Rect;
@@ -88,31 +88,28 @@ if SDL_MustLock(Image) then
 
 bpp:= Image.format.BytesPerPixel;
 WriteToConsole('('+inttostr(bpp)+') ');
-p:= LongWord(Image.pixels);
+p:= Image.pixels;
 case bpp of
      1: OutError('We don''t work with 8 bit surfaces', true);
      2: for y:= 0 to Pred(Image.h) do
             begin
-            i:= Longword(@Land[cpY + y, cpX]);
             for x:= 0 to Pred(Image.w) do
-                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(p, Image.pitch);
+                if PWord(@p[x * 2])^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @p[Image.pitch];
             end;
      3: for y:= 0 to Pred(Image.h) do
             begin
-            i:= Longword(@Land[cpY + y, cpX]);
             for x:= 0 to Pred(Image.w) do
-                if  (PByte(p + x * 3 + 0)^ <> 0)
-                 or (PByte(p + x * 3 + 1)^ <> 0)
-                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(p, Image.pitch);
+                if  (p[x * 3 + 0] <> 0)
+                 or (p[x * 3 + 1] <> 0)
+                 or (p[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @p[Image.pitch];
             end;
      4: for y:= 0 to Pred(Image.h) do
             begin
-            i:= Longword(@Land[cpY + y, cpX]);
             for x:= 0 to Pred(Image.w) do
-                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(p, Image.pitch);
+                if PLongword(@p[x * 4])^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @p[Image.pitch];
             end;
      end;
 if SDL_MustLock(Image) then

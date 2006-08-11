@@ -35,7 +35,7 @@ unit uRandom;
 interface
 
 procedure SetRandomSeed(Seed: shortstring);
-function  GetRandom: real; overload;
+function  GetRandom: Double; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
@@ -66,7 +66,7 @@ for i:= Length(Seed) to 63 do
 for i:= 0 to 1024 do GetNext;
 end;
 
-function GetRandom: real;
+function GetRandom: Double;
 begin
 Result:= frac( GetNext * 0.0007301 + GetNext * 0.003019)
 end;

@@ -52,7 +52,7 @@ type PGear = ^TGear;
              doStep: TGearStepProcedure;
              Radius: integer;
              Angle, Power : Cardinal;
-             DirAngle: real;
+             DirAngle: Double;
              Timer : LongWord;
              Elasticity: Real;
              Friction  : Real;
@@ -64,7 +64,7 @@ type PGear = ^TGear;
              Surf: PSDL_Surface;
              end;
 
-function  AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
+function  AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -84,8 +84,8 @@ var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
                 ar: array[0..300] of record
-                                  X, Y: real;
-                                  dLen: real;
+                                  X, Y: Double;
+                                  dLen: Double;
                                   b: boolean;
                                   end;
                  end;
@@ -130,7 +130,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepActionTimer
                                                                );
 
-function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: real=0.0; dY: real=0.0; Timer: LongWord=0): PGear;
+function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 const Counter: Longword = 0;
 begin
 inc(Counter);
@@ -411,12 +411,12 @@ end;
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
-    roplen: real;
+    roplen: Double;
 
     procedure DrawRopeLine(X1, Y1, X2, Y2: integer);
     const nodlen = 5;
     var i, x, y: integer;
-        t, k, ladd: real;
+        t, k, ladd: Double;
     begin
     if (X1 = X2) and (Y1 = Y2) then
        begin

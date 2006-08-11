@@ -70,12 +70,12 @@ Result:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, r: real;
-    rTime: real;
+var Vx, Vy, r: Double;
+    rTime: Double;
     Score, EX, EY: integer;
 
     function CheckTrace: integer;
-    var x, y, dX, dY: real;
+    var x, y, dX, dY: Double;
         t: integer;
     begin
     x:= Me.X;
@@ -125,12 +125,12 @@ end;
 
 function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const tDelta = 24;
-var Vx, Vy, r: real;
+var Vx, Vy, r: Double;
     Score, EX, EY: integer;
     TestTime: Longword;
 
     function CheckTrace: integer;
-    var x, y, dY: real;
+    var x, y, dY: Double;
         t: integer;
     begin
     x:= Me.X;
@@ -177,7 +177,7 @@ until (TestTime = 5000)
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, x, y: real;
+var Vx, Vy, x, y: Double;
 begin
 ExplR:= 0;
 if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
@@ -206,7 +206,7 @@ Result:= BadTurn
 end;
 
 function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, x, y, t: real;
+var Vx, Vy, x, y, t: Double;
     d: Longword;
 begin
 ExplR:= 0;

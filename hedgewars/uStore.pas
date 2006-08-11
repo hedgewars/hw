@@ -233,15 +233,15 @@ var i: TStuff;
     end;
 
     procedure GetSkyColor;
-    var p: Longword;
+    var p: PByteArray;
     begin
     if SDL_MustLock(SpritesData[sprSky].Surface) then
        SDLTry(SDL_LockSurface(SpritesData[sprSky].Surface) >= 0, true);
-    p:= Longword(SpritesData[sprSky].Surface.pixels);
+    p:= SpritesData[sprSky].Surface.pixels;
     case SpritesData[sprSky].Surface.format.BytesPerPixel of
          1: cSkyColor:= PByte(p)^;
          2: cSkyColor:= PWord(p)^;
-         3: cSkyColor:= (PByte(p)^) or (PByte(p + 1)^ shl 8) or (PByte(p + 2)^ shl 16);
+         3: cSkyColor:= (p^[0]) or (p^[1] shl 8) or (p^[2] shl 16);
          4: cSkyColor:= PLongword(p)^;
          end;
     if SDL_MustLock(SpritesData[sprSky].Surface) then
@@ -449,6 +449,7 @@ var w, h: integer;
 begin
 TTF_SizeUTF8(Fontz[font].Handle, PChar(String(s)), w, h);
 Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + 6, h + 2, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, 0);
+TryDo(Result <> nil, 'RenderString: fail to create surface', true);
 WriteInRoundRect(Result, 0, 0, Color, font, s);
 TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true)
 end;

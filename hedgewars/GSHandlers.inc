@@ -59,7 +59,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 procedure CalcRotationDirAngle(Gear: PGear);
-var dAngle: real;
+var dAngle: Double;
 begin
 dAngle:= (abs(Gear.dX) + abs(Gear.dY))*0.1;
 if Gear.dX >= 0 then Gear.DirAngle:= Gear.DirAngle + dAngle
@@ -224,7 +224,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepUFOWork(Gear: PGear);
-var t: real;
+var t: Double;
 begin
 AllInactive:= false;
 t:= sqrt(sqr(Gear.dX) + sqr(Gear.dY));
@@ -301,7 +301,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDEagleShot(Gear: PGear);
 var i, x, y: LongWord;
-    oX, oY: real;
+    oX, oY: Double;
 begin
 AllInactive:= false;
 i:= 80;
@@ -428,7 +428,7 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;
-    len, cs, cc, tx, ty: real;
+    len, cs, cc, tx, ty: Double;
     lx, ly: integer;
 
     procedure DeleteMe;
@@ -543,7 +543,7 @@ end;
 
 procedure doStepRopeAttach(Gear: PGear);
 var HHGear: PGear;
-    tx, ty, tt: real;
+    tx, ty, tt: Double;
 begin
 Gear.X:= Gear.X + Gear.dX;
 Gear.Y:= Gear.Y + Gear.dY;

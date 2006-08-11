@@ -66,9 +66,9 @@ end;
 
 procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);
 var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: real;
-    r1, r2, r3, r4: real;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: real;
+    tx, ty, vx, vy, vlen, t: Double;
+    r1, r2, r3, r4: Double;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: Double;
 begin
 vx:= 0;
 vy:= 0;
@@ -126,11 +126,11 @@ for i:= 0 to Count-2 do
     end;
 end;
 
-procedure BezierizeEdge(var pa: TPixAr; Delta: real);
+procedure BezierizeEdge(var pa: TPixAr; Delta: Double);
 var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: real;
-    r1, r2, r3, r4: real;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: real;
+    tx, ty, vx, vy, vlen, t: Double;
+    r1, r2, r3, r4: Double;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: Double;
     opa: TPixAr;
 begin
 opa:= pa;
@@ -327,9 +327,9 @@ end;
 
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
 const MAXPASSES = 32;
-var ar: array[0..MAXPASSES, 0..5] of real;
+var ar: array[0..MAXPASSES, 0..5] of Double;
     i, k: integer;
-    rx, ry, oy: real;
+    rx, ry, oy: Double;
     PassesNum: Longword;
 begin
 with Template do
@@ -512,7 +512,8 @@ TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
 end;
 
 procedure LoadMap;
-var p, x, y, i: Longword;
+var x, y: Longword;
+    p: PByteArray;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
@@ -522,32 +523,28 @@ TryDo((LandSurface.w = 2048) and (LandSurface.h = 1024), 'Map dimensions should 
 if SDL_MustLock(LandSurface) then
    SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-p:= Longword(LandSurface.pixels);
-i:= Longword(@Land);
+p:= LandSurface.pixels;
 case LandSurface.format.BytesPerPixel of
      1: OutError('We don''t work with 8 bit surfaces', true);
      2: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PWord(p + x * 2)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(i, 2048 * 4);
-            inc(p, LandSurface.pitch);
+                if PWord(@p[x * 2])^ <> 0 then Land[y, x]:= COLOR_LAND;
+            p:= @p[LandSurface.pitch];
             end;
      3: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if  (PByte(p + x * 3 + 0)^ <> 0)
-                 or (PByte(p + x * 3 + 1)^ <> 0)
-                 or (PByte(p + x * 3 + 2)^ <> 0) then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(i, 2048 * 4);
-            inc(p, LandSurface.pitch);
+                if  (p[x * 3 + 0] <> 0)
+                 or (p[x * 3 + 1] <> 0)
+                 or (p[x * 3 + 2] <> 0) then Land[y, x]:= COLOR_LAND;
+            p:= @p[LandSurface.pitch];
             end;
      4: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PLongword(p + x * 4)^ <> 0 then PLongWord(i + x * 4)^:= COLOR_LAND;
-            inc(i, 2048 * 4);
-            inc(p, LandSurface.pitch);
+                if PLongword(@p[x * 4])^ <> 0 then Land[y, x]:= COLOR_LAND;
+            p:= @p[LandSurface.pitch];
             end;
      end;
 if SDL_MustLock(LandSurface) then

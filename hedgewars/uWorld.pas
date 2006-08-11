@@ -82,7 +82,7 @@ procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
-    tdx, tdy: real;
+    tdx, tdy: Double;
 
     procedure DrawRepeated(spr: TSprite; Shift: integer);
     var i, w: integer;

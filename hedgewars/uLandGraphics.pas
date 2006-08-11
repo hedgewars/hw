@@ -8,7 +8,7 @@ type PRangeArray = ^TRangeArray;
 
 procedure DrawExplosion(X, Y, Radius: integer);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: integer; y, dY: integer; Count: Byte);
-procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
+procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
 procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
 
 implementation
@@ -186,8 +186,8 @@ end;
 //
 //  - (dX, dY) - direction, vector of length = 0.5
 //
-procedure DrawTunnel(X, Y, dX, dY: real; ticks, HalfWidth: integer);
-var nx, ny: real;
+procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
+var nx, ny: Double;
     i, t, tx, ty: integer;
 begin  // (-dY, dX) is (dX, dY) turned by PI/2
 if SDL_MustLock(LandSurface) then

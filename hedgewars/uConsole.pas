@@ -163,7 +163,7 @@ for i:= 0 to Pred(cLinesCount) do PLongWord(@ConsoleLines[i])^:= 0
 end;
 
 procedure ParseCommand(CmdStr: shortstring);
-type PReal = ^real;
+type PReal = ^Double;
 var i, ii: integer;
     s: shortstring;
     t: PVariable;
