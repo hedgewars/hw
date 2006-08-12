@@ -104,7 +104,7 @@ const
 
       cTransparentColor: Cardinal = $000000;
 
-      cMaxHHIndex      = 9;
+      cMaxHHIndex      = 7;
       cMaxHHs          = 20;
       cMaxSpawnPoints  = 1024;
       cHHSurfaceWidth     = 512;
@@ -115,7 +115,7 @@ const
       cHHRadius = 9;
       cHHStepTicks = 38;
 
-      cKeyMaxIndex = 322;
+      cKeyMaxIndex = 1023;
 
       cMaxCaptions = 4;
 

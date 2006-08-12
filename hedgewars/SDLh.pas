@@ -47,7 +47,7 @@ interface
 
 {$IFDEF FPC}
   {$MODE Delphi}
-  {$PACKRECORDS 4}
+  { $PACKRECORDS 4}
 {$ENDIF}
 
 (*  SDL *)

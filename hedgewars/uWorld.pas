@@ -99,10 +99,10 @@ var i, t: integer;
 begin
 // Sky
 inc(RealTicks, Lag);
-r.h:= WorldDy;
-if r.h > 0 then
+if WorldDy > 0 then
    begin
-   if r.h > cScreenHeight then r.h:= cScreenHeight;
+   if WorldDy > cScreenHeight then r.h:= cScreenHeight
+                              else r.h:= WorldDy;
    r.x:= 0;
    r.y:= 0;
    r.w:= cScreenWidth;

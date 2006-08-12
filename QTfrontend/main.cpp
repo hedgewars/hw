@@ -47,6 +47,12 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
+	Q_INIT_RESOURCE(hedgewars);
+
+	QTranslator Translator;
+	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
+	app.installTranslator(&Translator);
+
 	QDir mydir = QFileInfo(argv[0]).dir();
 	bindir = new QDir(mydir);
 	cfgdir = new QDir();
@@ -66,12 +72,6 @@ int main(int argc, char *argv[])
 
 	datadir = new QDir(mydir);
 	datadir->cd("../share/hedgewars/Data");
-
-	Q_INIT_RESOURCE(hedgewars);
-
-	QTranslator Translator;
-	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
-	app.installTranslator(&Translator);
 
 	HWForm *Form = new HWForm();
 	Form->show();

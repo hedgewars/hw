@@ -229,7 +229,7 @@ var Stack: record
     end;
 
 var xl, xr, dir: integer;
-begin
+begin     
 Stack.Count:= 0;
 xl:= x - 1;
 xr:= x;
@@ -462,11 +462,12 @@ end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
-    i: Longword;
+    y, x: Longword;
 begin
 WriteLnToConsole('Generating land...');
-for i:= 0 to sizeof(Land) div 4 do
-    PLongword(Longword(@Land) + i * 4)^:= COLOR_LAND;
+for y:= 0 to 1023 do
+    for x:= 0 to 2047 do
+        Land[y, x]:= COLOR_LAND;
 GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 AddProgress;

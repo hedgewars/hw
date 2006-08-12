@@ -154,7 +154,7 @@ if SDL_MustLock(LandSurface) then
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: integer; y, dY: integer; Count: Byte);
-var tx, ty, i: integer;
+var tx, ty, i: LongInt;
 begin
 if SDL_MustLock(LandSurface) then
    SDL_LockSurface(LandSurface);
@@ -188,8 +188,8 @@ end;
 //
 procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
 var nx, ny: Double;
-    i, t, tx, ty: integer;
-begin  // (-dY, dX) is (dX, dY) turned by PI/2
+    i, t, tx, ty: Longint;
+begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 if SDL_MustLock(LandSurface) then
    SDL_LockSurface(LandSurface);
 

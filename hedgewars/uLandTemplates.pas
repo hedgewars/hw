@@ -37,7 +37,7 @@ uses SDLh;
 {$INCLUDE options.inc}
 
 type PPointArray = ^TPointArray;
-     TPointArray = array[0..0] of TPoint;
+     TPointArray = array[0..64] of TPoint;
      TEdgeTemplate = record
                      BasePoints: PPointArray;
                      BasePointsCount: Longword;

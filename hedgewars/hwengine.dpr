@@ -183,8 +183,6 @@ for p:= Low(TPathType) to High(TPathType) do
 AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
     AddFileLog(inttostr(i) + ': ' + ParamStr(i));
-{$ELSE}
-begin
 {$ENDIF}
 if ParamCount = 7 then
    begin

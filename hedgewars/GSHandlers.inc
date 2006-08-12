@@ -533,13 +533,6 @@ if ((Gear.Message and gm_Up) <> 0) and (Gear.Elasticity > 30) then
 HHGear.X:= Gear.X + cc*Gear.Elasticity;
 HHGear.Y:= Gear.Y + cs*Gear.Elasticity;
 
-if (GameTicks >= 165118) and (GameTicks <= 165121) then
-   begin
-   AddFileLog('==9==> ('+floattostr(cc)+','+floattostr(cs)+')');
-   AddFileLog('==a==>  '+floattostr(Gear.Elasticity));
-   AddFileLog('==b==> ('+floattostr(HHGear.X)+','+floattostr(HHGear.Y)+')');
-   end;
-
 HHGear.dX:= HHGear.X - HHGear.dX;
 HHGear.dY:= HHGear.Y - HHGear.dY;
 

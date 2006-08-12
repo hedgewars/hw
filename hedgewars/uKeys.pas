@@ -43,8 +43,8 @@ procedure InitKbdKeyTable;
 
 implementation
 uses SDLh, uTeams, uConsole, uConsts, uMisc;
-
-type TKeyboardState = array[0..322] of Byte;
+const KeyNumber = 1024;
+type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 var tkbd: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
 
@@ -101,6 +101,7 @@ var i, t: integer;
     pkbd: PByteArray;
 begin
 pkbd:= PByteArray(SDL_GetKeyState(@i));
+TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
 for t:= 0 to Pred(i) do
     tkbd[i]:= pkbd^[i]
 end;
