@@ -317,7 +317,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
            SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
            dec(TargetPoint.X, WorldDx);
            dec(TargetPoint.Y, WorldDy);
-           s[0]:= #9;
+           s[0]:= #5;
            s[1]:= 'p';
            PSmallInt(@s[2])^:= TargetPoint.X;
            PSmallInt(@s[4])^:= TargetPoint.Y;

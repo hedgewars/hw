@@ -40,6 +40,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QDir>
+#include <QProcess>
 #include "team.h"
 #include "rndstr.h"
 
@@ -104,6 +105,7 @@ private slots:
 	void NewConnection();
 	void ClientDisconnect();
 	void ClientRead();
+	void StartProcessError(QProcess::ProcessError error);
 };
 
 #endif

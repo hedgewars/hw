@@ -231,6 +231,7 @@ void HWGame::Start()
 	QProcess * process;
 	QStringList arguments;
 	process = new QProcess;
+	connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
 	arguments << resolutions[0][config->vid_Resolution()];
 	arguments << resolutions[1][config->vid_Resolution()];
 	arguments << "16";
@@ -239,6 +240,13 @@ void HWGame::Start()
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
 	process->start(bindir->absolutePath() + "/hwengine", arguments);
+}
+
+void HWGame::StartProcessError(QProcess::ProcessError error)
+{
+	QMessageBox::critical(0, tr("Error"),
+				tr("Unable to run engine: %1 (")
+				.arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
 void HWGame::AddTeam(const QString & teamname)

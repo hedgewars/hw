@@ -366,7 +366,7 @@ if isCursorVisible then
    begin
    if (not CurrentTeam.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
       begin
-      s[0]:= #9;
+      s[0]:= #5;
       s[1]:= 'P';
       PSmallInt(@s[2])^:= CursorPoint.X - WorldDx;
       PSmallInt(@s[4])^:= CursorPoint.Y - WorldDy;
