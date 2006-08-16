@@ -204,7 +204,7 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
              CursorPoint.Y:= extcmd[cmdcurpos].Y + WorldDy;
              end;
         '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd);
-        #128..#134: ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))
+        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))
         end;
    inc(cmdcurpos)
    end;

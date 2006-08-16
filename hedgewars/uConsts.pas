@@ -270,7 +270,7 @@ const
       Ammoz: array [TAmmoType] of record
                                   NameId: TAmmoStrId;
                                   Ammo: TAmmo;
-                                  Slot: Longword;
+                                  Slot: 0..cMaxSlotIndex;
                                   TimeAfterTurn: Longword;
                                   end = (
                                   (NameId: sidGrenade;
