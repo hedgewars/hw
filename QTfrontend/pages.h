@@ -149,12 +149,9 @@ public:
 	QPushButton *BtnEditTeam;
 	QComboBox *CBTeamName;
 	QGroupBox *AGGroupBox;
-	QGroupBox *NNGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBFullscreen;
-	QLabel *label;
-	QLineEdit *editNetNick;
 	QPushButton *BtnSaveOptions;
 };
 
@@ -167,6 +164,11 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnNetConnect;
+	QGroupBox *NNGroupBox;
+	QLabel *labelNN;
+	QLineEdit *editNetNick;
+	QLabel *labelIP;
+	QLineEdit * editIP;
 };
 
 class PageNetChat : public QWidget

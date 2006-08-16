@@ -206,7 +206,8 @@ void HWForm::NetConnect()
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
-	hwnet->Connect("172.19.5.168", 6667, ui.pageOptions->editNetNick->text());
+	hwnet->Connect(ui.pageNet->editIP->text(), 6667, ui.pageNet->editNetNick->text());
+	config->SaveOptions();
 }
 
 void HWForm::NetDisconnect()

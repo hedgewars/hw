@@ -331,21 +331,6 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 	GBAlayout->addWidget(CBEnableSound, 0, 2);
 
-	NNGroupBox = new QGroupBox(this);
-	NNGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	NNGroupBox->setTitle(QGroupBox::tr("Net nick"));
-	pageLayout->addWidget(NNGroupBox, 2, 0, 1, 3);
-
-	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
-	label = new	QLabel(NNGroupBox);
-	label->setText(QLabel::tr("Net nick"));
-	GBNlayout->addWidget(label, 0, 0);
-
-	editNetNick	= new QLineEdit(NNGroupBox);
-	editNetNick->setMaxLength(30);
-	editNetNick->setText(QLineEdit::tr("unnamed"));
-	GBNlayout->addWidget(editNetNick, 0, 1);
-
 	pageLayout->addWidget(new QWidget(), 3, 0, 1, 3);
 
 	BtnSaveOptions = new QPushButton(this);
@@ -362,14 +347,43 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 PageNet::PageNet(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
+	NNGroupBox = new QGroupBox(this);
+	NNGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
+	pageLayout->addWidget(NNGroupBox, 1, 1);
+
+	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
+	labelNN = new QLabel(NNGroupBox);
+	labelNN->setText(QLabel::tr("Net nick"));
+	GBNlayout->addWidget(labelNN, 0, 0);
+
+	editNetNick	= new QLineEdit(NNGroupBox);
+	editNetNick->setMaxLength(20);
+	editNetNick->setText(QLineEdit::tr("unnamed"));
+	GBNlayout->addWidget(editNetNick, 0, 1);
+
+	labelIP = new QLabel(NNGroupBox);
+	labelIP->setText(QLabel::tr("Server address"));
+	GBNlayout->addWidget(labelIP, 1, 0);
+
+	editIP = new QLineEdit(NNGroupBox);
+	editIP->setMaxLength(50);
+	GBNlayout->addWidget(editIP, 1, 1);
+
 	BtnNetConnect = new	QPushButton(this);
-	BtnNetConnect->setGeometry(QRect(250, 140, 161, 41));
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
+	pageLayout->addWidget(BtnNetConnect, 2, 2);
+
 	BtnBack = new QPushButton(this);
-	BtnBack->setGeometry(QRect(250, 390, 161, 41));
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 2, 0);
 }
 
 PageNetChat::PageNetChat(QWidget* parent) : QWidget(parent)

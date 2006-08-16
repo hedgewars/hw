@@ -255,8 +255,7 @@ else begin
             end
       end;
 
-Me.State:= Me.State and not gstHHThinking;
-ThinkThread:= nil
+Me.State:= Me.State and not gstHHThinking
 end;
 
 procedure StartThink(Me: PGear);

@@ -68,7 +68,11 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 			} else
 			if (str.startsWith("nick "))
 			{
-				Form->ui.pageOptions->editNetNick->setText(str.mid(5));
+				Form->ui.pageNet->editNetNick->setText(str.mid(5));
+			} else
+			if (str.startsWith("ip "))
+			{
+				Form->ui.pageNet->editIP->setText(str.mid(3));
 			}
 		}
 		settings.close();
@@ -97,7 +101,8 @@ void GameUIConfig::SaveOptions()
 	stream << "resolution " << Form->ui.pageOptions->CBResolution->currentIndex() << endl;
 	stream << "fullscreen " << Form->ui.pageOptions->CBFullscreen->isChecked() << endl;
 	stream << "sound " << Form->ui.pageOptions->CBEnableSound->isChecked() << endl;
-	stream << "nick " << Form->ui.pageOptions->editNetNick->text() << endl;
+	stream << "nick " << Form->ui.pageNet->editNetNick->text() << endl;
+	stream << "ip " << Form->ui.pageNet->editIP->text() << endl;
 	settings.close();
 }
 
