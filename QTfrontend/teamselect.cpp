@@ -2,6 +2,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QFrame>
+#include <QDebug>
 
 #include <vertScrollArea.h>
 #include "teamselect.h"
@@ -48,6 +49,8 @@ void TeamSelWidget::changeTeamStatus(tmprop team)
 
   pAddTeams->addTeam(team);
   pRemoveTeams->removeTeam(team);
+  QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)),
+		   this, SLOT(changeTeamStatus(tmprop)));
 }
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
