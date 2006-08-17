@@ -7,7 +7,7 @@
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Не могу создать папку %1</translation>
+        <translation type="obsolete">Не могу создать папку %1</translation>
     </message>
     <message>
         <source>Quit</source>
@@ -58,6 +58,10 @@
     <message>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
+    </message>
+    <message>
+        <source>Unable to run engine: %1 (</source>
+        <translation>Ошибка запуска движка: %1 (</translation>
     </message>
 </context>
 <context>
@@ -118,7 +122,11 @@
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Имя игрока</translation>
+        <translation type="obsolete">Имя игрока</translation>
+    </message>
+    <message>
+        <source>Net options</source>
+        <translation>Настройки сети</translation>
     </message>
 </context>
 <context>
@@ -126,6 +134,10 @@
     <message>
         <source>Net nick</source>
         <translation>Имя игрока</translation>
+    </message>
+    <message>
+        <source>Server address</source>
+        <translation>Адрес сервера</translation>
     </message>
 </context>
 <context>
@@ -140,6 +152,21 @@
     <message>
         <source>-= by unC0Rr =-</source>
         <translation>-= by unC0Rr =-</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <source>Cannot create directory %1</source>
+        <translation>Не могу создать папку %1</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>Выйти</translation>
     </message>
 </context>
 <context>

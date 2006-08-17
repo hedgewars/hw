@@ -54,13 +54,14 @@ if CurrentTeam.ExtDriven then
    end
    else begin
    ProcessKbd;
-   NetGetNextCmd; // its for the case when receiving /say message
+   NetGetNextCmd; // its for the case when receiving "/say" message
+   isInLag:= false;
+   inc(SendEmptyPacketTicks, Lag);
    if SendEmptyPacketTicks >= cSendEmptyPacketTime then
       begin
-      SendIPC('+');
+      SendIPC('N');
       SendEmptyPacketTicks:= 0
-      end;
-   inc(SendEmptyPacketTicks, Lag)
+      end
    end;
 
 if Lag > 100 then Lag:= 100
@@ -79,7 +80,7 @@ while (GameState <> gsExit) and (i <= Lag) do
        NetGetNextCmd;
        if isInLag then
           case GameType of
-               gmtNet: break;
+                gmtNet: break;
                gmtDemo: begin
                         GameState:= gsExit;
                         exit
@@ -94,7 +95,6 @@ while (GameState <> gsExit) and (i <= Lag) do
        end;
     inc(i)
     end;
-if not CurrentTeam.ExtDriven then isInLag:= false;
 
 MoveCamera
 end;

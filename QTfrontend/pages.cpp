@@ -355,7 +355,9 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
-	pageLayout->addWidget(NNGroupBox, 1, 1);
+	pageLayout->addWidget(NNGroupBox, 0, 1);
+
+	pageLayout->addWidget(new QWidget(), 1, 1);
 
 	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
 	labelNN = new QLabel(NNGroupBox);

@@ -348,7 +348,10 @@ case Gear.Kind of
    gtATFinishGame: begin
                    AllInactive:= false;
                    if Gear.Timer = 0 then
+                      begin
+                      SendIPC('N');
                       GameState:= gsExit
+                      end
                    end;
      end;
 if Gear.Timer = 0 then DeleteGear(Gear)
@@ -439,8 +442,8 @@ var HHGear: PGear;
            State:= State or gstFalling;
            end;
       DeleteGear(Gear);
-      OnUsedAmmo(PHedgehog(Gear.Hedgehog)^.Ammo);
-      ApplyAmmoChanges(PHedgehog(Gear.Hedgehog)^)
+      OnUsedAmmo(PHedgehog(HHGear.Hedgehog)^.Ammo);
+      ApplyAmmoChanges(PHedgehog(HHGear.Hedgehog)^)
     end;
 
 begin
@@ -551,8 +554,8 @@ procedure doStepRopeAttach(Gear: PGear);
 var HHGear: PGear;
     tx, ty, tt: Double;
 begin
-Gear.X:= Gear.X + Gear.dX;
-Gear.Y:= Gear.Y + Gear.dY;
+Gear.X:= Gear.X - Gear.dX;
+Gear.Y:= Gear.Y - Gear.dY;
 Gear.Elasticity:= Gear.Elasticity + 1.0;
 HHGear:= PHedgehog(Gear.Hedgehog)^.Gear;
 if (HHGear.State and gstFalling) <> 0 then
@@ -584,8 +587,8 @@ if (HHGear.State and gstFalling) <> 0 then
                 with HHGear^ do State:= State and not gstAttacking;
                 tt:= 0
                 end;
-            tx:= tx - Gear.dX - Gear.dX;
-            ty:= ty - Gear.dY - Gear.dY;
+            tx:= tx + Gear.dX - Gear.dX;
+            ty:= ty + Gear.dY - Gear.dY;
             tt:= tt - 2.0;
             end;
       end;
@@ -611,6 +614,8 @@ end;
 
 procedure doStepRope(Gear: PGear);
 begin
+Gear.dX:= - Gear.dX;
+Gear.dY:= - Gear.dY;
 Gear.doStep:= doStepRopeAttach
 end;
 
