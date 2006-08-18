@@ -13,7 +13,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
 {
   this->setMaximumHeight(40);
   QLabel* pixlbl=new QLabel();
-  pixlbl->setPixmap(QPixmap("../share/hedgewars/Data/Graphics/thinking.png"));
+  pixlbl->setPixmap(QPixmap(QString("../share/hedgewars/Data/Forts/")+m_team.Fort+"L.png").scaledToHeight(30));
   mainLayout.addWidget(pixlbl);
 
   TeamLabel* lbl=new TeamLabel(team.TeamName);
