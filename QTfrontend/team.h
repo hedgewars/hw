@@ -57,7 +57,9 @@ class HWTeam
 		void SetToPage(HWForm * hwform);
 		void GetFromPage(HWForm * hwform);
 		QByteArray IPCTeamInfo() const;
-	private:
+
+		bool operator==(const HWTeam& t1) const;
+		bool operator<(const HWTeam& t1) const;
 };
 
 #endif

@@ -9,23 +9,23 @@
 #include "teamselhelper.h"
 #include "frameTeam.h"
 
-void TeamSelWidget::addTeam(tmprop team)
+void TeamSelWidget::addTeam(HWTeam team)
 {
   frameDontPlaying->addTeam(team);
   curDontPlayingTeams.push_back(team);
-  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)),
-		   this, SLOT(changeTeamStatus(tmprop)));
+  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+		   this, SLOT(changeTeamStatus(HWTeam)));
 }
 
-void TeamSelWidget::removeTeam(tmprop team)
-{
+//void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
+//{
   //curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
-}
+//}
 
-void TeamSelWidget::changeTeamStatus(tmprop team)
+void TeamSelWidget::changeTeamStatus(HWTeam team)
 {
-  list<tmprop>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
-  list<tmprop>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  list<HWTeam>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
+  list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
   if(itDontPlay==curDontPlayingTeams.end()) {
     // playing team => dont playing
@@ -49,8 +49,8 @@ void TeamSelWidget::changeTeamStatus(tmprop team)
 
   pAddTeams->addTeam(team);
   pRemoveTeams->removeTeam(team);
-  QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(tmprop)),
-		   this, SLOT(changeTeamStatus(tmprop)));
+  QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+		   this, SLOT(changeTeamStatus(HWTeam)));
 }
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)

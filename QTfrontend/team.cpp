@@ -36,7 +36,6 @@
 #include <QApplication>
 #include "team.h"
 #include "hwform.h"
-#include "gameuiconfig.h"
 #include "predefteams.h"
 #include "pages.h"
 #include "hwconsts.h"
@@ -208,3 +207,10 @@ QByteArray HWTeam::IPCTeamInfo() const
 	return buf;
 }
 
+bool HWTeam::operator==(const HWTeam& t1) const {
+  return TeamName==t1.TeamName;
+}
+
+bool HWTeam::operator<(const HWTeam& t1) const {
+  return TeamName<t1.TeamName;
+}

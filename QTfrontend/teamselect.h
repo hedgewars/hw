@@ -8,23 +8,12 @@ class QFrame;
 #include <list>
 #include <map>
 
+#include "team.h"
+
 class TeamSelWidget;
 class FrameTeams;
 
 using namespace std;
-
-struct tmprop
-{
-  tmprop(QString nm) : teamName(nm) {};
-  QString teamName;
-  QString pixmapFileName;
-  bool operator==(const tmprop& t1) const {
-    return teamName==t1.teamName;
-  };
-  bool operator<(const tmprop& t1) const {
-    return teamName<t1.teamName;
-  };
-};
 
 class TeamSelWidget : public QWidget
 {
@@ -32,11 +21,11 @@ class TeamSelWidget : public QWidget
  
  public:
   TeamSelWidget(QWidget* parent=0);
-  void addTeam(tmprop team);
-  void removeTeam(tmprop team);
+  void addTeam(HWTeam team);
+  //void removeTeam(HWTeam team);
 
 private slots:
-  void changeTeamStatus(tmprop team);
+  void changeTeamStatus(HWTeam team);
 
  private:
   void addScrArea(FrameTeams* pfteams, QColor color);
@@ -45,8 +34,8 @@ private slots:
 
   QVBoxLayout mainLayout;
 
-  list<tmprop> curPlayingTeams;
-  list<tmprop> curDontPlayingTeams;
+  list<HWTeam> curPlayingTeams;
+  list<HWTeam> curDontPlayingTeams;
 };
 
 #endif // _TEAM_SELECT_INCLUDED

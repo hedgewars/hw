@@ -30,14 +30,14 @@ class TeamShowWidget : public QWidget
  void activateTeam();
 
  public:
- TeamShowWidget(tmprop team, QWidget * parent = 0);
+ TeamShowWidget(HWTeam team, QWidget * parent = 0);
  
  private:
  QHBoxLayout mainLayout;
- tmprop m_team;
+ HWTeam m_team;
 
  signals:
- void teamStatusChanged(tmprop team);
+ void teamStatusChanged(HWTeam team);
 };
 
 #endif // _TEAMSEL_HELPER_INCLUDED

@@ -12,15 +12,15 @@ class FrameTeams : public QWidget
 
  public:
   FrameTeams(QWidget* parent=0);
-  QWidget* getTeamWidget(tmprop team);
+  QWidget* getTeamWidget(HWTeam team);
 
  public slots:
-  void addTeam(tmprop team);
-  void removeTeam(tmprop team);
+  void addTeam(HWTeam team);
+  void removeTeam(HWTeam team);
 
  private:
   QVBoxLayout mainLayout;
-  typedef map<tmprop, QWidget*> tmapTeamToWidget;
+  typedef map<HWTeam, QWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;
 };
 

@@ -11,7 +11,7 @@ FrameTeams::FrameTeams(QWidget* parent) :
 {
 }
 
-void FrameTeams::addTeam(tmprop team)
+void FrameTeams::addTeam(HWTeam team)
 {
   TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team, this);
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
@@ -21,7 +21,7 @@ void FrameTeams::addTeam(tmprop team)
   QCoreApplication::postEvent(parentWidget(), pevent);
 }
 
-void FrameTeams::removeTeam(tmprop team)
+void FrameTeams::removeTeam(HWTeam team)
 {
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   mainLayout.removeWidget(it->second);
@@ -29,7 +29,7 @@ void FrameTeams::removeTeam(tmprop team)
   teamToWidget.erase(team);
 }
 
-QWidget* FrameTeams::getTeamWidget(tmprop team)
+QWidget* FrameTeams::getTeamWidget(HWTeam team)
 {
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   QWidget* ret = it!=teamToWidget.end() ? it->second : 0;

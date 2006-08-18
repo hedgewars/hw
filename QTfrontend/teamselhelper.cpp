@@ -8,7 +8,7 @@ void TeamLabel::teamButtonClicked()
   emit teamActivated(text());
 }
 
-TeamShowWidget::TeamShowWidget(tmprop team, QWidget * parent) :
+TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team)
 {
   this->setMaximumHeight(40);
@@ -16,7 +16,7 @@ TeamShowWidget::TeamShowWidget(tmprop team, QWidget * parent) :
   pixlbl->setPixmap(QPixmap("../share/hedgewars/Data/Graphics/thinking.png"));
   mainLayout.addWidget(pixlbl);
 
-  TeamLabel* lbl=new TeamLabel(team.teamName);
+  TeamLabel* lbl=new TeamLabel(team.TeamName);
   mainLayout.addWidget(lbl);
 
   QPushButton* butt=new QPushButton("o");
