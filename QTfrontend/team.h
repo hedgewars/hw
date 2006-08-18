@@ -43,8 +43,8 @@ class GameUIConfig;
 class HWTeam
 {
 	public:
-		HWTeam(const QString & teamname, GameUIConfig * config);
-		HWTeam(quint8 num, GameUIConfig * config);
+		HWTeam(const QString & teamname);
+		HWTeam(quint8 num);
 
 		QString TeamName;
 		QString HHName[8];
@@ -58,7 +58,6 @@ class HWTeam
 		void GetFromPage(HWForm * hwform);
 		QByteArray IPCTeamInfo() const;
 	private:
-		GameUIConfig * config;
 };
 
 #endif

@@ -41,9 +41,8 @@
 #include "pages.h"
 #include "hwconsts.h"
 
-HWTeam::HWTeam(const QString & teamname, GameUIConfig * config)
+HWTeam::HWTeam(const QString & teamname)
 {
-	this->config = config;
 	TeamName = teamname;
 	for (int i = 0; i < 8; i++) HHName[i].sprintf("hedgehog %d", i);
 	Grave = "Simple";
@@ -55,9 +54,8 @@ HWTeam::HWTeam(const QString & teamname, GameUIConfig * config)
 	}
 }
 
-HWTeam::HWTeam(quint8 num, GameUIConfig * config)
+HWTeam::HWTeam(quint8 num)
 {
-	this->config = config;
 	num %= PREDEFTEAMS_COUNT;
 	TeamName = QApplication::translate("teams", pteams[num].TeamName);
 	HHName[0] = QApplication::translate("teams", pteams[num].hh0name);

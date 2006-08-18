@@ -360,7 +360,7 @@ void HWGame::StartQuick()
 
 void HWGame::LocalCFG(const QString & teamname)
 {
-	HWTeam team(teamname, config);
+	HWTeam team(teamname);
 	if (!team.LoadFromFile()) {
 		QMessageBox::critical(0,
 				"Error",
@@ -375,6 +375,6 @@ void HWGame::LocalCFG(const QString & teamname)
 
 void HWGame::LocalCFG(quint8 num)
 {
-	HWTeam team(num, config);
+	HWTeam team(num);
 	RawSendIPC(team.IPCTeamInfo());
 }

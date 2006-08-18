@@ -60,7 +60,7 @@ HWForm::HWForm(QWidget *parent)
 	QStringList teamslist = config->GetTeamsList();
 
 	if(teamslist.empty()) {
-		HWTeam defaultTeam("DefaultTeam", config);
+		HWTeam defaultTeam("DefaultTeam");
 		defaultTeam.SaveToFile();
 		teamslist.push_back("DefaultTeam");
 	}
@@ -152,14 +152,14 @@ void HWForm::GoToNetChat()
 
 void HWForm::NewTeam()
 {
-	tmpTeam = new HWTeam("unnamed", config);
+	tmpTeam = new HWTeam("unnamed");
 
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::EditTeam()
 {
-	tmpTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText(), config);
+	tmpTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
 	tmpTeam->LoadFromFile();
 	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
@@ -238,7 +238,7 @@ void HWForm::NetCreate()
 
 void HWForm::NetAddTeam()
 {
-	HWTeam team("DefaultTeam", config);
+	HWTeam team("DefaultTeam");
 	team.LoadFromFile();
 	hwnet->AddTeam(team);
 }
