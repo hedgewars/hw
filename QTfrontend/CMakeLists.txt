@@ -2,6 +2,15 @@ find_package(Qt4 REQUIRED)
 
 include_directories(${QT_INCLUDES} .)
 
+if(WIN32 AND NOT UNIX)
+	set(HEDGEWARS_BINDIR ".")
+else(WIN32 AND NOT UNIX)
+	set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
+endif(WIN32 AND NOT UNIX)
+
+configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp.in 
+	${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp)
+
 set(hwfr_src 
 	game.cpp
 	main.cpp

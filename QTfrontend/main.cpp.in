@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
 	app.installTranslator(&Translator);
 
-	QDir mydir(".");
+	QDir mydir("${HEDGEWARS_BINDIR}");
 	bindir = new QDir(mydir);
 	cfgdir = new QDir();
 
