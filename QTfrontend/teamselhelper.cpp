@@ -12,19 +12,24 @@ TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team)
 {
   this->setMaximumHeight(40);
-  QLabel* pixlbl=new QLabel();
-  pixlbl->setPixmap(QPixmap(QString("../share/hedgewars/Data/Forts/")+m_team.Fort+"L.png").scaledToHeight(30));
-  mainLayout.addWidget(pixlbl);
+  QPixmap* px=new QPixmap(QPixmap(QString("../share/hedgewars/Data/Forts/")+m_team.Fort+"L.png").scaled(40, 40));
 
-  TeamLabel* lbl=new TeamLabel(team.TeamName);
-  mainLayout.addWidget(lbl);
-
-  QPushButton* butt=new QPushButton("o");
-  butt->setGeometry(0, 0, 25, 25);
+  QPushButton* butt=new QPushButton(*px, "", this);
+  butt->setFlat(true);
+  butt->setGeometry(0, 0, 30, 30);
   butt->setMaximumWidth(30);
   mainLayout.addWidget(butt);
+  butt->setIconSize(butt->size());
+
+  QPushButton* bText=new QPushButton(team.TeamName, this);
+  QPalette newPalette = palette();
+  newPalette.setColor(QPalette::Button, palette().color(backgroundRole()));
+  bText->setPalette(newPalette);
+  bText->setFlat(true);
+  mainLayout.addWidget(bText);
 
   QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
+  QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 
 void TeamShowWidget::activateTeam()
