@@ -2,6 +2,7 @@
 
 #include <QPixmap>
 #include <QPushButton>
+#include "hwconsts.h"
 
 void TeamLabel::teamButtonClicked()
 {
@@ -12,7 +13,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team)
 {
   this->setMaximumHeight(40);
-  QPixmap* px=new QPixmap(QPixmap(QString("../share/hedgewars/Data/Forts/")+m_team.Fort+"L.png").scaled(40, 40));
+  QPixmap* px=new QPixmap(QPixmap(datadir->absolutePath() + "/Forts/" + m_team.Fort + "L.png").scaled(40, 40));
 
   QPushButton* butt=new QPushButton(*px, "", this);
   butt->setFlat(true);

@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
 	app.installTranslator(&Translator);
 
 	QDir mydir(".");
+	mydir.cd("bin");
+	
 	bindir = new QDir(mydir);
 	cfgdir = new QDir();
 

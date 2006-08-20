@@ -36,9 +36,6 @@
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) : QWidget(parent)
 {
-	QPalette newPalette = palette();
-	newPalette.setColor(QPalette::Background, QColor(0, 128, 0));
-	setPalette(newPalette);
 	CB_mode_Forts = new QCheckBox(this);
 	CB_mode_Forts->setText("Forts mode");
 }
