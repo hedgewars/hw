@@ -51,6 +51,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   pRemoveTeams->removeTeam(team);
   QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));
+  resize(sizeHint());
 }
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
