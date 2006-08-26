@@ -112,7 +112,7 @@ private:
 	void RawSendNet(const QString & buf);
 	void RawSendNet(const QByteArray & buf);
 
-	void ParseLine(const QString & msg);
+	void ParseLine(const QByteArray & line);
 	void msgcmd_textHandler(const QString & msg);
 	void msgnumber_paramHandler(const QString & msg);
 	void msgwho_cmd_targetHandler(const QString & msg);

@@ -184,8 +184,9 @@ void HWNet::FlushNetBuf()
 	}
 }
 
-void HWNet::ParseLine(const QString & msg)
+void HWNet::ParseLine(const QByteArray & line)
 {
+	QString msg = QString::fromUtf8 (line.data(), line.size());
 	//QMessageBox::information(0, "", msg);
 	if (IRCmsg_cmd_text->exactMatch(msg))
 	{
