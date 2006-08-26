@@ -33,14 +33,16 @@
 
 unit uRandom;
 interface
+{$INCLUDE options.inc}
 
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: Double; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
+uses uMisc;
 var cirbuf: array[0..63] of Longword;
-    n: byte;
+    n: byte = 54;
 
 function GetNext: Longword;
 begin
@@ -56,19 +58,18 @@ end;
 procedure SetRandomSeed(Seed: shortstring);
 var i: Longword;
 begin
-if Length(Seed) > 60 then Seed:= copy(Seed, 1, 60); // not 64 to ensure we have even numbers in cirbuf
+if Length(Seed) > 54 then Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
+
 for i:= 0 to pred(Length(Seed)) do
-    cirbuf[i]:= byte(Seed[i + 1]) * 35791253;
+    cirbuf[i]:= byte(Seed[i + 1]) * (i + 1);
 
-for i:= Length(Seed) to 63 do
-    cirbuf[i]:= i * 23860799;
-
-for i:= 0 to 1024 do GetNext;
+for i:= Length(Seed) to 54 do
+    cirbuf[i]:= i * 7 + 1
 end;
 
 function GetRandom: Double;
 begin
-Result:= frac( GetNext * 0.0007301 + GetNext * 0.003019)
+Result:= frac( GetNext * 0.00073 + GetNext * 0.00301)
 end;
 
 function GetRandom(m: LongWord): LongWord;
