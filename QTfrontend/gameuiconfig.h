@@ -50,6 +50,7 @@ public:
 	int vid_Resolution();
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
+	QString GetRandomTheme();
 
 private slots:
 
@@ -58,6 +59,7 @@ public slots:
 
 private:
 	HWForm * Form;
+	QStringList Themes;
 };
 
 #endif

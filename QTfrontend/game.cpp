@@ -38,6 +38,7 @@
 #include <QByteArray>
 #include <QFile>
 #include <QTextStream>
+#include <QUuid>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -86,7 +87,7 @@ void HWGame::SendTeamConfig(int index)
 void HWGame::SendConfig()
 {
 	SendIPC(QString("eseed %1").arg(seed));
-	SendIPC(QString("etheme %1").arg(GetThemeBySeed()));
+	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()));
 	SENDIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
 	SENDIPC("eaddteam");
@@ -256,39 +257,6 @@ void HWGame::AddTeam(const QString & teamname)
 	TeamCount++;
 }
 
-QString HWGame::GetThemeBySeed()
-{
-	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
-	QStringList themes;
-	if (themesfile.open(QIODevice::ReadOnly))
-	{
-		QTextStream stream(&themesfile);
-		QString str;
-		while (!stream.atEnd())
-		{
-			themes << stream.readLine();
-		}
-		themesfile.close();
-	}
-	quint32 len = themes.size();
-	if (len == 0)
-	{
-		QMessageBox::critical(0, "Error", "Cannot access themes.cfg or bad data", "OK");
-		return "avematan";
-	}
-	if (seed.isEmpty())
-	{
-		QMessageBox::critical(0, "Error", "seed not defined", "OK");
-		return "avematan";
-	}
-	quint32 k = 0;
-	for (int i = 0; i < seed.length(); i++)
-	{
-		k += seed[i].cell();
-	}
-	return themes[k % len];
-}
-
 void HWGame::SaveDemo(const QString & filename)
 {
 	QFile demofile(filename);
@@ -346,14 +314,14 @@ void HWGame::StartLocal()
 {
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
-	seedgen.GenRNDStr(seed, 10);
+	seed = QUuid::createUuid().toString();
 	Start();
 }
 
 void HWGame::StartQuick()
 {
 	gameType = gtLocal;
-	seedgen.GenRNDStr(seed, 10);
+	seed = QUuid::createUuid().toString();
 	Start();
 }
 

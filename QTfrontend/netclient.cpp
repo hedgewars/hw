@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -32,8 +32,10 @@
  */
 
 #include <QMessageBox>
+#include <QUuid>
 #include "netclient.h"
 #include "game.h"
+#include "gameuiconfig.h"
 
 HWNet::HWNet(GameUIConfig * config)
 	: QObject()
@@ -365,7 +367,7 @@ void HWNet::ConfigAsked()
 			QByteArray cache;
 			ADD("eseed " + seed);
 			ADD("e$gmflags 0");
-			ADD("etheme steel");
+			ADD(QString("etheme %1").arg(config->GetRandomTheme()));
 			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
 			hwp_chanmsg(mynick, _msg);
@@ -494,7 +496,7 @@ void HWNet::StartGame()
 	playerscnt = players.size();
 	configasks = 0;
 
-	seedgen.GenRNDStr(seed, 10);
+	seed = QUuid::createUuid().toString();
 	QString msg = QString(MAGIC_CHAR"Start!");
 	RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
 	hwp_chanmsg(mynick, msg);

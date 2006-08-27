@@ -16,8 +16,6 @@ set(hwfr_src
 	main.cpp
 	hwform.cpp 
 	team.cpp
-	rndstr.cpp
-	sha1.cpp
 	netclient.cpp
 	teamselect.cpp
 	teamselhelper.cpp

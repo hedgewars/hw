@@ -77,6 +77,19 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 		}
 		settings.close();
 	}
+
+	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
+	if (themesfile.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&themesfile);
+		QString str;
+		while (!stream.atEnd())
+		{
+			Themes << stream.readLine();
+		}
+		themesfile.close();
+	} else {
+		QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
+	}
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -119,4 +132,9 @@ bool GameUIConfig::vid_Fullscreen()
 bool GameUIConfig::isSoundEnabled()
 {
 	return Form->ui.pageOptions->CBEnableSound->isChecked();
+}
+
+QString GameUIConfig::GetRandomTheme()
+{
+	return (Themes.size() > 0) ? Themes[rand() % Themes.size()] : QString("steel");
 }

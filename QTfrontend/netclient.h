@@ -40,7 +40,6 @@
 #include <QStringList>
 #include <QTimer>
 #include "team.h"
-#include "rndstr.h"
 
 #define MAGIC_CHAR "\x2f"
 
@@ -102,7 +101,6 @@ private:
 	quint32 opCount;
 	netTeam teams[5];
 	quint8 teamsCount;
-	RNDStr seedgen;
 	int playerscnt;
 	int configasks;
 	QByteArray NetBuffer;

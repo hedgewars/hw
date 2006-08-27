@@ -42,7 +42,6 @@
 #include <QDir>
 #include <QProcess>
 #include "team.h"
-#include "rndstr.h"
 
 #define IPC_PORT 46631
 #define MAXMSGCHARS 255
@@ -83,7 +82,6 @@ private:
 	QString teams[5];
 	QString seed;
 	int TeamCount;
-	RNDStr seedgen;
 	QByteArray * demo;
 	QByteArray toSendBuf;
 	GameUIConfig * config;
@@ -99,7 +97,6 @@ private:
 	void SendIPC(const QString & buf);
 	void RawSendIPC(const QByteArray & buf);
 	void SaveDemo(const QString & filename);
-	QString GetThemeBySeed();
 
 private slots:
 	void NewConnection();

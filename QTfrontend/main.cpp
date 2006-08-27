@@ -36,6 +36,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QFileInfo>
+#include <QDateTime>
 #include "hwform.h"
 #include "hwconsts.h"
 
@@ -47,6 +48,10 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
+	QDateTime now = QDateTime::currentDateTime();
+	QDateTime zero;
+	srand(now.secsTo(zero));
+
 	Q_INIT_RESOURCE(hedgewars);
 
 	QTranslator Translator;
@@ -55,7 +60,7 @@ int main(int argc, char *argv[])
 
 	QDir mydir(".");
 	mydir.cd("bin");
-	
+
 	bindir = new QDir(mydir);
 	cfgdir = new QDir();
 

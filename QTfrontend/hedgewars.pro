@@ -15,8 +15,6 @@ HEADERS += binds.h \
            hwform.h \
            sdlkeys.h \
            team.h \
-           rndstr.h \
-           sha1.h \
            netclient.h \
            teamselect.h \
            teamselhelper.h \
@@ -33,8 +31,6 @@ SOURCES += game.cpp \
            main.cpp \
            hwform.cpp \
            team.cpp \
-           rndstr.cpp \
-           sha1.cpp \
            netclient.cpp \
            teamselect.cpp \
            teamselhelper.cpp \
