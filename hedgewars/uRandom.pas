@@ -40,7 +40,6 @@ function  GetRandom: Double; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
-uses uMisc;
 var cirbuf: array[0..63] of Longword;
     n: byte = 54;
 
@@ -51,7 +50,6 @@ cirbuf[n]:=
            (cirbuf[(n + 40) and $3F] +           {n - 24 mod 64}
             cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
             and $7FFFFFFF;                       {mod 2^31}
-            
 Result:= cirbuf[n]
 end;
 
@@ -64,7 +62,9 @@ for i:= 0 to pred(Length(Seed)) do
     cirbuf[i]:= byte(Seed[i + 1]) * (i + 1);
 
 for i:= Length(Seed) to 54 do
-    cirbuf[i]:= i * 7 + 1
+    cirbuf[i]:= i * 7 + 1;
+
+for i:= 0 to 1023 do GetNext
 end;
 
 function GetRandom: Double;
