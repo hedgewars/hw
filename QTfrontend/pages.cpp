@@ -391,41 +391,54 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 PageNetChat::PageNetChat(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
 	BtnDisconnect = new QPushButton(this);
-	BtnDisconnect->setGeometry(QRect(460, 390, 161, 41));
 	BtnDisconnect->setFont(*font14);
 	BtnDisconnect->setText(QPushButton::tr("Disconnect"));
+	pageLayout->addWidget(BtnDisconnect, 2, 0);
+
 	ChannelsList = new QListWidget(this);
-	ChannelsList->setGeometry(QRect(20,	10, 201, 331));
+	pageLayout->addWidget(ChannelsList, 0, 1);
+
 	BtnJoin = new QPushButton(this);
-	BtnJoin->setGeometry(QRect(460, 290,	161, 41));
 	BtnJoin->setFont(*font14);
 	BtnJoin->setText(QPushButton::tr("Join"));
+	pageLayout->addWidget(BtnJoin, 2, 2);
+
 	BtnCreate = new QPushButton(this);
-	BtnCreate->setGeometry(QRect(460, 340, 161, 41));
 	BtnCreate->setFont(*font14);
 	BtnCreate->setText(QPushButton::tr("Create"));
+	pageLayout->addWidget(BtnCreate, 1, 2);
 }
 
 
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
 	BtnBack = new QPushButton(this);
-	BtnBack->setGeometry(QRect(260, 390, 161, 41));
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 2, 0);
 
 	BtnAddTeam = new QPushButton(this);
-	BtnAddTeam->setGeometry(QRect(260, 290, 161, 41));
 	BtnAddTeam->setFont(*font14);
 	BtnAddTeam->setText(QPushButton::tr("Add Team"));
+	pageLayout->addWidget(BtnAddTeam, 1, 1);
 
 	BtnGo	= new QPushButton(this);
-	BtnGo->setGeometry(QRect(260,	340, 161, 41));
 	BtnGo->setFont(*font14);
 	BtnGo->setText(QPushButton::tr("Go!"));
+	pageLayout->addWidget(BtnGo, 2, 2);
 
 	listNetTeams = new QListWidget(this);
-	listNetTeams->setGeometry(QRect(270, 30, 120, 80));
+	pageLayout->addWidget(listNetTeams, 0, 1);
 }
