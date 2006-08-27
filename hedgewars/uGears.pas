@@ -628,7 +628,8 @@ while i > 0 do
                        FollowGear:= t.ar[i]
                        end;
            end
-    end
+    end;
+SetAllToActive
 end;
 
 procedure AssignHHCoords;
