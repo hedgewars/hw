@@ -51,15 +51,12 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   pRemoveTeams->removeTeam(team);
   QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));
-  QSize szh=sizeHint();
-  if(szh.isValid()) resize(szh);
-  else {
-    szh=pAddTeams->sizeHint();
-    QSize szh1=pRemoveTeams->sizeHint();
-    if(szh.isValid() && szh1.isValid()) {
-      pAddTeams->resize(szh);
-      pRemoveTeams->resize(szh1);
-    }
+
+  QSize szh=pAddTeams->sizeHint();
+  QSize szh1=pRemoveTeams->sizeHint();
+  if(szh.isValid() && szh1.isValid()) {
+    pAddTeams->resize(pAddTeams->size().width(), szh.height());
+    pRemoveTeams->resize(pRemoveTeams->size().width(), szh1.height());
   }
 }
 
