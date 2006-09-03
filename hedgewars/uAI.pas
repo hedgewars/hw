@@ -75,7 +75,7 @@ for i:= 0 to Pred(Targets.Count) do
         if CanUseAmmo[a] then
            begin
            Score:= AmmoTests[a](Me, Targets.ar[i].Point, BotLevel, Time, Angle, Power, ExplX, ExplY, ExplR);
-           if Actions.Score + Score + Targets.ar[i].Score > BestActions.Score then
+           if Actions.Score + Score > BestActions.Score then
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
