@@ -257,7 +257,7 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
 
 void HWForm::StartMPGame()
 {
-	game = new HWGame(config, ui.pageLocalGame->gameCFG);
+	game = new HWGame(config, ui.pageMultiplayer->gameCFG);
 	game->AddTeam("DefaultTeam");
 	game->AddTeam("DefaultTeam");
 	game->StartLocal();
