@@ -35,14 +35,14 @@ unit uAIAmmoTests;
 interface
 uses SDLh, uGears, uConsts;
 
-function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-function TestBaseballBat(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-function TestFirePunch(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 
-type TAmmoTestProc = function (Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
 {amGrenade}       TestGrenade,
@@ -69,7 +69,7 @@ begin
 Result:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
-function TestBazooka(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, r: Double;
     rTime: Double;
     Score, EX, EY: integer;
@@ -102,7 +102,7 @@ rTime:= 50;
 ExplR:= 0;
 Result:= BadTurn;
 repeat
-  rTime:= rTime + 150 + random*250;
+  rTime:= rTime + 150 + Level * 25 + random * 250;
   Vx:= - cWindSpeed * rTime / 2 + (Targ.X - Me.X) / rTime;
   Vy:= cGravity * rTime / 2 - (Targ.Y - Me.Y) / rTime;
   r:= sqr(Vx) + sqr(Vy);
@@ -112,18 +112,18 @@ repeat
      if Result <= Score then
         begin
         r:= sqrt(r);
-        Angle:= DxDy2AttackAngle(Vx, Vy);
-        Power:= round(r * cMaxPower);
+        Angle:= DxDy2AttackAngle(Vx, Vy) + rndSign(random((Level - 1) * 8) + 1);
+        Power:= round(r * cMaxPower) - random((Level - 1) * 15 + 1);
         ExplR:= 100;
         ExplX:= EX;
         ExplY:= EY;
-        Result:= Score
+        Result:= Score - random((Level - 1) * 2500)
         end;
      end
 until (rTime >= 4500)
 end;
 
-function TestGrenade(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const tDelta = 24;
 var Vx, Vy, r: Double;
     Score, EX, EY: integer;
@@ -164,8 +164,8 @@ repeat
      if Result < Score then
         begin
         r:= sqrt(r);
-        Angle:= DxDy2AttackAngle(Vx, Vy);
-        Power:= round(r * cMaxPower);
+        Angle:= DxDy2AttackAngle(Vx, Vy) + rndSign(random(Level));
+        Power:= round(r * cMaxPower) + rndSign(random(Level) * 12);
         Time:= TestTime;
         ExplR:= 100;
         ExplX:= EX;
@@ -176,9 +176,9 @@ repeat
 until (TestTime = 5000)
 end;
 
-function TestShotgun(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, x, y: Double;
-begin
+begin       
 ExplR:= 0;
 if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
    begin
@@ -197,7 +197,7 @@ repeat
   y:= y + vY;
   if TestColl(round(x), round(y), 2) then
      begin
-     Result:= RateShove(Me, round(x), round(y), 25, 25);
+     Result:= RateShove(Me, round(x), round(y), 25, 25) * 2 - Level * 4000;
      if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64;
      exit
      end
@@ -205,7 +205,7 @@ until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048
 Result:= BadTurn
 end;
 
-function TestDesertEagle(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var Vx, Vy, x, y, t: Double;
     d: Longword;
 begin
@@ -234,10 +234,10 @@ if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7
                                          else Result:= Low(integer)
 end;
 
-function TestBaseballBat(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 begin
 ExplR:= 0;
-if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25 then
+if (Level < 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
    begin
    Result:= BadTurn;
    exit
@@ -248,7 +248,7 @@ Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
 Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15, 30)
 end;
 
-function TestFirePunch(Me: PGear; Targ: TPoint; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 var i: integer;
 begin
 ExplR:= 0;

@@ -58,11 +58,13 @@ BestActions.Pos:= 0
 end;
 
 procedure TestAmmos(var Actions: TActions; Me: PGear);
-var Time: Longword;
+var Time, BotLevel: Longword;
     Angle, Power, Score, ExplX, ExplY, ExplR: integer;
     i: integer;
     a, aa: TAmmoType;
 begin
+BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
+
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) then
        begin
@@ -72,11 +74,11 @@ for i:= 0 to Pred(Targets.Count) do
        repeat
         if CanUseAmmo[a] then
            begin
-           Score:= AmmoTests[a](Me, Targets.ar[i].Point, Time, Angle, Power, ExplX, ExplY, ExplR);
+           Score:= AmmoTests[a](Me, Targets.ar[i].Point, BotLevel, Time, Angle, Power, ExplX, ExplY, ExplR);
            if Actions.Score + Score + Targets.ar[i].Score > BestActions.Score then
               begin
               BestActions:= Actions;
-              inc(BestActions.Score, Score + Targets.ar[i].Score);
+              inc(BestActions.Score, Score);
               AddAction(BestActions, aia_Weapon, Longword(a), 500);
               if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400);
               if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
@@ -162,7 +164,7 @@ var Stack: record
 
 
 var Actions: TActions;
-    ticks, maxticks, steps: Longword;
+    ticks, maxticks, steps, BotLevel: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
@@ -172,11 +174,12 @@ Actions.Count:= 0;
 Actions.Pos:= 0;
 Actions.Score:= 0;
 Stack.Count:= 0;
+BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
 
 Push(0, Actions, Me^, aia_Left);
 Push(0, Actions, Me^, aia_Right);
 
-if (Me.State and gstAttacked) = 0 then maxticks:= max(0, integer(TurnTimeLeft) - 10000)
+if (Me.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
                                   else maxticks:= TurnTimeLeft;
 
 if (Me.State and gstAttacked) = 0 then TestAmmos(Actions, Me);
@@ -196,14 +199,14 @@ while (Stack.Count > 0) and not StopThinking do
        CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
-       if GoInfo.JumpType = jmpHJump then // hjump support
+       if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
                   begin
                   AddAction(MadeActions, aia_HJump, 0, 305);
                   AddAction(MadeActions, aia_HJump, 0, 350);
                   end;
-       if GoInfo.JumpType = jmpLJump then // ljump support
+       if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
                   AddAction(MadeActions, aia_LJump, 0, 305);

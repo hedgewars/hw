@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2006 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * Distributed under the terms of the BSD-modified licence:
  *
@@ -50,6 +50,7 @@ cirbuf[n]:=
            (cirbuf[(n + 40) and $3F] +           {n - 24 mod 64}
             cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
             and $7FFFFFFF;                       {mod 2^31}
+
 Result:= cirbuf[n]
 end;
 

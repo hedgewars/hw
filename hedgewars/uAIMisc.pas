@@ -59,6 +59,7 @@ function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
 function RateShove(Me: PGear; x, y, r, power: integer): integer;
 function HHGo(Gear, AltGear: PGear; out GoInfo: TGoInfo): boolean;
+function rndSign(num: integer): integer;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -399,6 +400,12 @@ if (pX <> round(Gear.X)) and ((Gear.State and gstFalling) = 0) then
    end
 until (pX = round(Gear.X)) and (pY = round(Gear.Y)) and ((Gear.State and gstFalling) = 0);
 HHJump(AltGear, jmpHJump, GoInfo)
+end;
+
+function rndSign(num: integer): integer;
+begin
+if random(2) = 0 then Result:=   num
+                 else Result:= - num
 end;
 
 end.
