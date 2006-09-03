@@ -15,7 +15,7 @@ class FrameTeams : public QWidget
   QWidget* getTeamWidget(HWTeam team);
 
  public slots:
-  void addTeam(HWTeam team);
+  void addTeam(HWTeam team, bool willPlay);
   void removeTeam(HWTeam team);
 
  private:

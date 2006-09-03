@@ -11,7 +11,7 @@
 
 void TeamSelWidget::addTeam(HWTeam team)
 {
-  frameDontPlaying->addTeam(team);
+  frameDontPlaying->addTeam(team, false);
   curDontPlayingTeams.push_back(team);
   QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));
@@ -27,7 +27,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   list<HWTeam>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
   list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
-  if(itDontPlay==curDontPlayingTeams.end()) {
+  bool willBePlaying=itDontPlay!=curDontPlayingTeams.end();
+
+  if(!willBePlaying) {
     // playing team => dont playing
     curDontPlayingTeams.push_back(*itPlay);
     curPlayingTeams.erase(itPlay);
@@ -39,7 +41,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
 
   FrameTeams* pRemoveTeams;
   FrameTeams* pAddTeams;
-  if(itDontPlay==curDontPlayingTeams.end()) {
+  if(!willBePlaying) {
     pRemoveTeams=framePlaying;
     pAddTeams=frameDontPlaying;
   } else {
@@ -47,7 +49,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     pAddTeams=framePlaying;
   }
 
-  pAddTeams->addTeam(team);
+  pAddTeams->addTeam(team, willBePlaying);
   pRemoveTeams->removeTeam(team);
   QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));

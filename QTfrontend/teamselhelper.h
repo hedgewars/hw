@@ -30,11 +30,13 @@ class TeamShowWidget : public QWidget
  void activateTeam();
 
  public:
- TeamShowWidget(HWTeam team, QWidget * parent = 0);
+ TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent = 0);
+ void setPlaying(bool isPlaying);
  
  private:
  QHBoxLayout mainLayout;
  HWTeam m_team;
+ bool m_isPlaying;
 
  signals:
  void teamStatusChanged(HWTeam team);

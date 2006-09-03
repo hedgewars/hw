@@ -25,7 +25,8 @@ HEADERS += binds.h \
            gamecfgwidget.h \
            predefteams.h \
            pages.h \
-           SquareLabel.h
+           SquareLabel.h \
+           hedgehogerWidget.h
            
 SOURCES += game.cpp \
            main.cpp \
@@ -40,7 +41,8 @@ SOURCES += game.cpp \
            ui_hwform.cpp \
            gamecfgwidget.cpp \
            pages.cpp \
-           SquareLabel.cpp
+           SquareLabel.cpp \
+           hedgehogerWidget.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

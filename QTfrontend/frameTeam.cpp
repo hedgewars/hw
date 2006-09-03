@@ -11,9 +11,9 @@ FrameTeams::FrameTeams(QWidget* parent) :
 {
 }
 
-void FrameTeams::addTeam(HWTeam team)
+void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
-  TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team, this);
+  TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team, willPlay, this);
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
   teamToWidget.insert(make_pair(team, pTeamShowWidget));
   mainLayout.addWidget(pTeamShowWidget);

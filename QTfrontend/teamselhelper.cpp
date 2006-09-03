@@ -1,16 +1,19 @@
 #include "teamselhelper.h"
+#include "hwconsts.h"
 
 #include <QPixmap>
 #include <QPushButton>
-#include "hwconsts.h"
+#include <QPainter>
+
+#include "hedgehogerWidget.h"
 
 void TeamLabel::teamButtonClicked()
 {
   emit teamActivated(text());
 }
 
-TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
-  QWidget(parent), mainLayout(this), m_team(team)
+TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
+  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying)
 {
   this->setMaximumHeight(40);
   QPixmap* px=new QPixmap(QPixmap(datadir->absolutePath() + "/Forts/" + m_team.Fort + "L.png").scaled(40, 40));
@@ -28,6 +31,11 @@ TeamShowWidget::TeamShowWidget(HWTeam team, QWidget * parent) :
   bText->setPalette(newPalette);
   bText->setFlat(true);
   mainLayout.addWidget(bText);
+
+  if(m_isPlaying) {
+    CHedgehogerWidget* phhoger=new CHedgehogerWidget(this);
+    mainLayout.addWidget(phhoger);
+  }
 
   QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
   QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
