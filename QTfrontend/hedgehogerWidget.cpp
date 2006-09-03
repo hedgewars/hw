@@ -12,10 +12,10 @@ void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 {
   if(event->button()==Qt::LeftButton) {
     event->accept();
-    numHedgedogs++;
+    if(numHedgedogs < 8) numHedgedogs++;
   } else if (event->button()==Qt::RightButton) {
     event->accept();
-    if(numHedgedogs!=0) numHedgedogs--;
+    if(numHedgedogs > 3) numHedgedogs--;
   } else {
     event->ignore();
     return;
@@ -25,13 +25,12 @@ void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 
 void CHedgehogerWidget::paintEvent(QPaintEvent* event)
 {
-  QRectF source(0.0, 0.0, 32.0, 32.0);
-  QImage image("../share/hedgewars/Data/Graphics/Hedgehog.png");
+  QImage image(":/res/hh25x25.png");
 
   QPainter painter(this);
 
   for(int i=0; i<numHedgedogs; i++) {
-    QRectF target(0.0+12.5*i, 0.0, 25.0, 25.0);
-    painter.drawImage(target, image, source);
+    QRect target(11 * i, i % 2, 25, 25);
+    painter.drawImage(target, image);
   }
 }

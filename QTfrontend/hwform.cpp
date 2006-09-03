@@ -86,6 +86,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
 
 	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
 
 	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
 	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
@@ -254,3 +255,10 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
 	ui.pageNetGame->listNetTeams->addItems(teams);
 }
 
+void HWForm::StartMPGame()
+{
+	game = new HWGame(config, ui.pageLocalGame->gameCFG);
+	game->AddTeam("DefaultTeam");
+	game->AddTeam("DefaultTeam");
+	game->StartLocal();
+}

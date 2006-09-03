@@ -76,6 +76,7 @@ private slots:
 	void NetGameEnter();
 	void NetStartGame();
 	void ChangeInNetTeams(const QStringList & teams);
+	void StartMPGame();
 
 private:
 	HWGame * game;

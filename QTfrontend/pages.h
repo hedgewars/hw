@@ -122,6 +122,7 @@ public:
 	QPushButton *BtnBack;
 	GameCFGWidget *gameCFG;
 	TeamSelWidget *teamsSelect;
+	QPushButton *BtnStartMPGame;
 };
 
 class PagePlayDemo : public QWidget

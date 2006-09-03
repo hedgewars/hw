@@ -253,14 +253,21 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
+
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
+
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 	teamsSelect = new TeamSelWidget(this);
 	pageLayout->addWidget(teamsSelect, 0, 2, 1, 2);
+
+	BtnStartMPGame = new QPushButton(this);
+	BtnStartMPGame->setFont(*font14);
+	BtnStartMPGame->setText(QPushButton::tr("Start"));
+	pageLayout->addWidget(BtnStartMPGame, 1, 3);
 }
 
 PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)

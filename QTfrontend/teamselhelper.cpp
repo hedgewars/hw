@@ -15,7 +15,7 @@ void TeamLabel::teamButtonClicked()
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying)
 {
-  this->setMaximumHeight(40);
+  this->setMaximumHeight(45);
   QPixmap* px=new QPixmap(QPixmap(datadir->absolutePath() + "/Forts/" + m_team.Fort + "L.png").scaled(40, 40));
 
   QPushButton* butt=new QPushButton(*px, "", this);

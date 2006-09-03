@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
     <file>translations/hedgewars_ru.qm</file>
+    <file>res/hh25x25.png</file>
 </qresource>
 </RCC>
