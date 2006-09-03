@@ -89,6 +89,10 @@
         <source>Fullscreen</source>
         <translation>Полный экран</translation>
     </message>
+    <message>
+        <source>Forts mode</source>
+        <translation>Режим фортов</translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -246,6 +250,10 @@
     <message>
         <source>Go!</source>
         <translation>Вперёд!</translation>
+    </message>
+    <message>
+        <source>Start</source>
+        <translation>Старт</translation>
     </message>
 </context>
 <context>

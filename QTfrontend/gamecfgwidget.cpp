@@ -37,7 +37,7 @@
 GameCFGWidget::GameCFGWidget(QWidget* parent) : QWidget(parent)
 {
 	CB_mode_Forts = new QCheckBox(this);
-	CB_mode_Forts->setText("Forts mode");
+	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
 }
 
 quint32 GameCFGWidget::getGameFlags()
