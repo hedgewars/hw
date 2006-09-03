@@ -4,7 +4,7 @@
 #include <QPainter>
 
 CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
-  QWidget(parent), numHedgedogs(3)
+  QWidget(parent), numHedgedogs(4)
 {
 }
 

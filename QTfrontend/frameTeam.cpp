@@ -9,6 +9,7 @@ using namespace std;
 FrameTeams::FrameTeams(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
+  mainLayout.setSpacing(1);
 }
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
