@@ -34,6 +34,5 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
 {
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   QWidget* ret = it!=teamToWidget.end() ? it->second : 0;
-  if(!ret) throw; // FIXME: this is debug exception
   return ret;
 }

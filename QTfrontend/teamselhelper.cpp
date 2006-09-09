@@ -5,15 +5,13 @@
 #include <QPushButton>
 #include <QPainter>
 
-#include "hedgehogerWidget.h"
-
 void TeamLabel::teamButtonClicked()
 {
   emit teamActivated(text());
 }
 
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
-  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying)
+  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0)
 {
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
@@ -37,7 +35,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   mainLayout.addWidget(bText);
 
   if(m_isPlaying) {
-    CHedgehogerWidget* phhoger=new CHedgehogerWidget(this);
+    phhoger=new CHedgehogerWidget(this);
     mainLayout.addWidget(phhoger);
   }
 
@@ -48,4 +46,9 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 void TeamShowWidget::activateTeam()
 {
   emit teamStatusChanged(m_team);
+}
+
+unsigned char TeamShowWidget::getHedgehogsNum()
+{
+  return phhoger ? phhoger->getHedgehogsNum() : 0;
 }

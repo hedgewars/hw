@@ -250,11 +250,12 @@ void HWGame::StartProcessError(QProcess::ProcessError error)
 				.arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
-void HWGame::AddTeam(const QString & teamname)
+void HWGame::AddTeam(const QString & teamname, unsigned char numHedgedogs)
 {
 	if (TeamCount == 5) return;
 	teams[TeamCount] = teamname;
 	TeamCount++;
+	hdNum[teamname]=numHedgedogs;
 }
 
 void HWGame::SaveDemo(const QString & filename)

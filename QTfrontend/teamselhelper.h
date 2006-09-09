@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "teamselect.h"
+#include "hedgehogerWidget.h"
 
 class TeamLabel : public QLabel
 {
@@ -32,11 +33,13 @@ class TeamShowWidget : public QWidget
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent = 0);
  void setPlaying(bool isPlaying);
+ unsigned char getHedgehogsNum();
  
  private:
  QHBoxLayout mainLayout;
  HWTeam m_team;
  bool m_isPlaying;
+ CHedgehogerWidget* phhoger;
 
  signals:
  void teamStatusChanged(HWTeam team);

@@ -77,3 +77,19 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   addScrArea(framePlaying, QColor("DarkTurquoise"));
   addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
 }
+
+void TeamSelWidget::resetPlayingTeams()
+{
+}
+
+bool TeamSelWidget::isPlaying(HWTeam team)
+{
+  return std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team)!=curPlayingTeams.end();
+}
+
+unsigned char TeamSelWidget::numHedgedogs(HWTeam team)
+{
+  TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
+  if(!tsw) return 0;
+  return tsw->getHedgehogsNum();
+}

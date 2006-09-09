@@ -67,9 +67,8 @@ HWForm::HWForm(QWidget *parent)
 
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
 	{
-	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
-	  ui.pageMultiplayer->teamsSelect->addTeam(tmpTeamStr);
-	  ui.pageOptions->CBTeamName->addItem(tmpTeamStr);
+	  ui.pageMultiplayer->teamsSelect->addTeam(*it);
+	  ui.pageOptions->CBTeamName->addItem(*it);
 	}
 
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
@@ -258,7 +257,11 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
 void HWForm::StartMPGame()
 {
 	game = new HWGame(config, ui.pageMultiplayer->gameCFG);
-	game->AddTeam("DefaultTeam");
-	game->AddTeam("DefaultTeam");
+	QStringList teamslist = config->GetTeamsList();
+	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
+	  if(ui.pageMultiplayer->teamsSelect->isPlaying(*it)) {
+	    game->AddTeam(*it, ui.pageMultiplayer->teamsSelect->numHedgedogs(*it));
+	  }
+	}
 	game->StartLocal();
 }

@@ -4,7 +4,7 @@
 #include <QPainter>
 
 CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
-  QWidget(parent), numHedgedogs(4)
+  QWidget(parent), numHedgehogs(4)
 {
 }
 
@@ -12,10 +12,10 @@ void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 {
   if(event->button()==Qt::LeftButton) {
     event->accept();
-    if(numHedgedogs < 8) numHedgedogs++;
+    if(numHedgehogs < 8) numHedgehogs++;
   } else if (event->button()==Qt::RightButton) {
     event->accept();
-    if(numHedgedogs > 3) numHedgedogs--;
+    if(numHedgehogs > 3) numHedgehogs--;
   } else {
     event->ignore();
     return;
@@ -29,8 +29,13 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
 
   QPainter painter(this);
 
-  for(int i=0; i<numHedgedogs; i++) {
+  for(int i=0; i<numHedgehogs; i++) {
     QRect target(11 * i, i % 2, 25, 25);
     painter.drawImage(target, image);
   }
+}
+
+unsigned char CHedgehogerWidget::getHedgehogsNum()
+{
+  return numHedgehogs;
 }

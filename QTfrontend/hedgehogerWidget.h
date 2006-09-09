@@ -9,13 +9,14 @@ class CHedgehogerWidget : public QWidget
 
  public:
   CHedgehogerWidget(QWidget * parent = 0);
+  unsigned char getHedgehogsNum();
 
  protected:
   virtual void paintEvent(QPaintEvent* event);
   virtual void mousePressEvent ( QMouseEvent * event );
   
  private:
-  unsigned char numHedgedogs;
+  unsigned char numHedgehogs;
 };
 
 #endif // _HEDGEHOGER_WIDGET

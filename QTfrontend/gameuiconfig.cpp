@@ -94,7 +94,13 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets)
 
 QStringList GameUIConfig::GetTeamsList()
 {
-	return cfgdir->entryList(QStringList("*.cfg"));
+	QStringList teamslist = cfgdir->entryList(QStringList("*.cfg"));
+	QStringList cleanedList;
+	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
+	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
+	  cleanedList.push_back(tmpTeamStr);
+	}
+	return cleanedList;
 }
 
 void GameUIConfig::SaveOptions()

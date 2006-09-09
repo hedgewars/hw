@@ -43,6 +43,8 @@
 #include <QProcess>
 #include "team.h"
 
+#include <map>
+
 #define IPC_PORT 46631
 #define MAXMSGCHARS 255
 #define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
@@ -55,7 +57,7 @@ class HWGame : public QObject
 	Q_OBJECT
 public:
 	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg);
-	void AddTeam(const QString & team);
+	void AddTeam(const QString & team, unsigned char numHedgedogs);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
 	void StartQuick();
@@ -80,6 +82,7 @@ private:
 	char msgbuf[MAXMSGCHARS];
 	QByteArray readbuffer;
 	QString teams[5];
+	std::map<QString, unsigned char> hdNum;
 	QString seed;
 	int TeamCount;
 	QByteArray * demo;
