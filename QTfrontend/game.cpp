@@ -90,6 +90,23 @@ void HWGame::SendConfig()
 	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()));
 	SENDIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
+
+	for (int i = 0; i < TeamCount; i++)
+	{
+		SENDIPC("eaddteam");
+		LocalCFG(teams[i]);
+		SendIPC(QString("ecolor %1").arg(65535 << i * 8));
+		for (int t = 0; t < hdNum[teams[i]]; t++)
+			SendIPC(QString("eadd hh%1 0").arg(t));
+	}
+}
+
+void HWGame::SendQuickConfig()
+{
+	SendIPC(QString("eseed %1").arg(seed));
+	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()));
+	SENDIPC("TL");
+	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
 	SENDIPC("eaddteam");
 	LocalCFG(0);
 	SENDIPC("ecolor 65535");
@@ -108,32 +125,31 @@ void HWGame::SendConfig()
 
 void HWGame::ParseMessage(const QByteArray & msg)
 {
-	switch(msg.data()[1])
-	{
-		case '?':
-		{
+	switch(msg.data()[1]) {
+		case '?': {
 			if (gameType == gtNet)
 				emit SendNet(QByteArray("\x01""?"));
 			else
 				SENDIPC("!");
 			break;
 		}
-		case 'C':
-		{
-			if (gameType == gtNet)
-			{
-				SENDIPC("TN");
-				emit SendNet(QByteArray("\x01""C"));
-			}
-			else
-			{
-				if (gameType == gtLocal)
+		case 'C': {
+			switch (gameType) {
+				case gtLocal:
+				case gtQLocal: {
 				 	SendConfig();
+					break;
+				}
+				case gtDemo: break;
+				case gtNet: {
+					SENDIPC("TN");
+					emit SendNet(QByteArray("\x01""C"));
+					break;
+				}
 			}
 			break;
 		}
-		case 'E':
-		{
+		case 'E': {
 			QMessageBox::critical(0,
 					"Hedgewars: error message",
 					QString().append(msg.mid(2)).left(msg.size() - 6),
@@ -142,16 +158,14 @@ void HWGame::ParseMessage(const QByteArray & msg)
 					QMessageBox::NoButton);
 			return;
 		}
-		case '+':
-		{
+		case '+': {
 			if (gameType == gtNet)
 			{
 				emit SendNet(msg);
 			}
 			break;
 		}
-		default:
-		{
+		default: {
 			if (gameType == gtNet)
 			{
 				emit SendNet(msg);
@@ -321,7 +335,7 @@ void HWGame::StartLocal()
 
 void HWGame::StartQuick()
 {
-	gameType = gtLocal;
+	gameType = gtQLocal;
 	seed = QUuid::createUuid().toString();
 	Start();
 }

@@ -73,9 +73,10 @@ public slots:
 
 private:
     enum GameType {
-        gtLocal = 1,
-        gtDemo  = 2,
-        gtNet   = 3
+        gtLocal  = 1,
+        gtQLocal = 2,
+        gtDemo   = 3,
+        gtNet    = 4
     };
     QTcpServer * IPCServer;
 	QTcpSocket * IPCSocket;
@@ -93,6 +94,7 @@ private:
 
 	void Start();
 	void SendConfig();
+	void SendQuickConfig();
 	void SendTeamConfig(int index);
 	void ParseMessage(const QByteArray & msg);
 	void SendIPC(const char * msg, quint8 len);

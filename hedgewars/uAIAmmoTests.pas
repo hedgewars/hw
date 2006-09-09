@@ -112,7 +112,7 @@ repeat
      if Result <= Score then
         begin
         r:= sqrt(r);
-        Angle:= DxDy2AttackAngle(Vx, Vy) + rndSign(random((Level - 1) * 8) + 1);
+        Angle:= DxDy2AttackAngle(Vx, Vy) + rndSign(random((Level - 1) * 8));
         Power:= round(r * cMaxPower) - random((Level - 1) * 15 + 1);
         ExplR:= 100;
         ExplX:= EX;
