@@ -52,6 +52,7 @@ const MAXACTIONS = 96;
       aia_AwareExpl  = $80000005;
       aia_HJump      = $80000006;
       aia_LJump      = $80000007;
+      aia_Skip       = $80000008;
 
       aim_push       = $80000000;
       aim_release    = $80000001;
@@ -161,6 +162,7 @@ with Actions.actions[Actions.Pos] do
         aia_AwareExpl: AwareOfExplosion(X, Y, Param);
             aia_HJump: ParseCommand('hjump');
             aia_LJump: ParseCommand('ljump');
+             aia_Skip: ParseCommand('skip');
              end else
         begin
         s:= ActionIdToStr[Action];

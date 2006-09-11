@@ -742,6 +742,7 @@ var thexchar: array[0..5] of record
                              team: PTeam;
                              end;
     thexchcnt: Longword;
+    currsorter: PGear;
 
 procedure doStepTeamHealthSorterWork(Gear: PGear);
 var i: integer;
@@ -754,8 +755,11 @@ if (Gear.Timer and 15) = 0 then
             {$WARNINGS OFF}
             team.DrawHealthY:= ny + (oy - ny) * Gear.Timer div 640;
             {$WARNINGS ON}
-if Gear.Timer = 0 then
+if (Gear.Timer = 0) or (currsorter <> Gear) then
+   begin
+   if currsorter = Gear then currsorter:= nil;
    DeleteGear(Gear)
+   end
 end;
 
 procedure doStepTeamHealthSorter(Gear: PGear);
@@ -789,7 +793,8 @@ for i:= 0 to Pred(thexchcnt) do
          ny:= t
          end;
 Gear.Timer:= 640;
-Gear.doStep:= doStepTeamHealthSorterWork
+Gear.doStep:= doStepTeamHealthSorterWork;
+currsorter:= Gear
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

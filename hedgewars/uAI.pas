@@ -246,6 +246,7 @@ if (Me.State and gstAttacked) = 0 then
       begin
       Walk(@WalkMe);
       if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
+      if BestActions.Score = BadTurn then AddAction(BestActions, aia_Skip, 0, 250);
       end else
 else begin
       Walk(@WalkMe);
@@ -282,14 +283,19 @@ ThinkThread:= SDL_CreateThread(@Think, Me)
 end;
 
 procedure ProcessBot;
+const StartTicks: Longword = 0;
 begin
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear.State and gstHHDriven) <> 0)
-        and (TurnTimeLeft < cHedgehogTurnTime - 5)
-        and ((Gear.State and gstHHThinking) = 0) then
-           if (BestActions.Pos >= BestActions.Count) then StartThink(Gear)
-                                                     else ProcessAction(BestActions, Gear)
+        and (TurnTimeLeft < cHedgehogTurnTime - 5) then
+        if ((Gear.State and gstHHThinking) = 0) then
+           if (BestActions.Pos >= BestActions.Count) then
+              begin
+              StartThink(Gear);
+              StartTicks:= GameTicks
+              end else ProcessAction(BestActions, Gear)
+        else if (GameTicks - StartTicks) > cMaxAIThinkTime then StopThinking:= true
 end;
 
 end.

@@ -59,7 +59,7 @@ if CurrentTeam.ExtDriven then
    inc(SendEmptyPacketTicks, Lag);
    if SendEmptyPacketTicks >= cSendEmptyPacketTime then
       begin
-      SendIPC('N');
+      SendIPC('+');
       SendEmptyPacketTicks:= 0
       end
    end;

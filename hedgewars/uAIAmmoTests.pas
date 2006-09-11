@@ -56,13 +56,14 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amMine}          nil,
 {amDEagle}        TestDesertEagle,
 {amDynamite}      nil,
-{amBaseballBat}   TestBaseballBat,
-{amFirePunch}     TestFirePunch
+{amFirePunch}     TestFirePunch,
+{amBaseballBat}   TestBaseballBat
                   );
+
+const BadTurn = Low(integer);
 
 implementation
 uses uMisc, uAIMisc, uLand;
-const BadTurn = Low(integer);
 
 function Metric(x1, y1, x2, y2: integer): integer;
 begin
@@ -117,7 +118,7 @@ repeat
         ExplR:= 100;
         ExplX:= EX;
         ExplY:= EY;
-        Result:= Score - random((Level - 1) * 2500)
+        Result:= Score
         end;
      end
 until (rTime >= 4500)
@@ -197,8 +198,9 @@ repeat
   y:= y + vY;
   if TestColl(round(x), round(y), 2) then
      begin
-     Result:= RateShove(Me, round(x), round(y), 25, 25) * 2 - Level * 4000;
-     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64;
+     Result:= RateShove(Me, round(x), round(y), 25, 25) * 2;
+     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64
+                   else dec(Result, Level * 4000);
      exit
      end
 until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
@@ -237,7 +239,7 @@ end;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 begin
 ExplR:= 0;
-if (Level < 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
+if (Level > 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
    begin
    Result:= BadTurn;
    exit
@@ -245,7 +247,8 @@ if (Level < 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
 Time:= 0;
 Power:= 1;
 Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
-Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15, 30)
+Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15, 30);
+if Result <= 0 then Result:= BadTurn
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
@@ -262,7 +265,8 @@ Power:= 1;
 Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
 Result:= 0;
 for i:= 0 to 4 do
-    Result:= Result + RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30)
+    Result:= Result + RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30);
+if Result <= 0 then Result:= BadTurn
 end;
 
 end.
