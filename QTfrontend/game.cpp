@@ -135,9 +135,12 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 'C': {
 			switch (gameType) {
-				case gtLocal:
-				case gtQLocal: {
+				case gtLocal: {
 				 	SendConfig();
+					break;
+				}
+				case gtQLocal: {
+				 	SendQuickConfig();
 					break;
 				}
 				case gtDemo: break;
@@ -305,7 +308,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	// read demo
 	QDataStream stream(&demofile);
 	char buf[512];
-	quint32 readbytes;
+	int readbytes;
 	do
 	{
 		readbytes = stream.readRawData((char *)&buf, 512);
