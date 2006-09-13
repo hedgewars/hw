@@ -153,7 +153,7 @@ void HWForm::GoToNetChat()
 void HWForm::NewTeam()
 {
 	tmpTeam = new HWTeam("unnamed");
-
+	tmpTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 

@@ -86,7 +86,7 @@ const ActionIdToStr: array[0..6] of string[16] = (
                      );
 
 {$IFDEF TRACEAIACTIONS}
-const SpecActionIdToStr: array[$80000000..$80000006] of string[16] = (
+const SpecActionIdToStr: array[$80000000..$80000008] of string[16] = (
 {aia_Weapon}             'aia_Weapon',
 {aia_WaitX}              'aia_WaitX',
 {aia_WaitY}              'aia_WaitY',
@@ -94,7 +94,8 @@ const SpecActionIdToStr: array[$80000000..$80000006] of string[16] = (
 {aia_LookRight}          'aia_LookRight',
 {aia_AwareExpl}          'aia_AwareExpl',
 {aia_HJump}              'aia_HJump',
-{aia_LJump}              'aia_LJump'
+{aia_LJump}              'aia_LJump',
+{aia_Skip}               'aia_Skip'
 );
 
 procedure DumpAction(Action: TAction; Me: PGear);

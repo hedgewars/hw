@@ -164,7 +164,7 @@ var Stack: record
 
 
 var Actions: TActions;
-    ticks, maxticks, steps, BotLevel: Longword;
+    ticks, maxticks, steps, BotLevel, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
@@ -176,8 +176,9 @@ Actions.Score:= 0;
 Stack.Count:= 0;
 BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
 
-Push(0, Actions, Me^, aia_Left);
-Push(0, Actions, Me^, aia_Right);
+tmp:= random(2) + 1;
+Push(0, Actions, Me^, tmp);
+Push(0, Actions, Me^, tmp xor 3);
 
 if (Me.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
                                   else maxticks:= TurnTimeLeft;
@@ -189,6 +190,7 @@ BaseRate:= max(BestRate, 0);
 while (Stack.Count > 0) and not StopThinking do
     begin
     Pop(ticks, Actions, Me^);
+
     AddAction(Actions, Me.Message, aim_push, 250);
     AddAction(Actions, aia_WaitX, round(Me.X), 0);
     AddAction(Actions, Me.Message, aim_release, 0);
@@ -199,6 +201,7 @@ while (Stack.Count > 0) and not StopThinking do
        CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
+       
        if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
@@ -210,6 +213,7 @@ while (Stack.Count > 0) and not StopThinking do
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
                   AddAction(MadeActions, aia_LJump, 0, 305);
+
        if not CanGo then break;
        inc(steps);
        Actions.actions[Actions.Count - 2].Param:= round(Me.X);
@@ -267,6 +271,7 @@ var a: TAmmoType;
 begin
 if ((Me.State and gstAttacking) <> 0) or isInMultiShoot then exit;
 Me.State:= Me.State or gstHHThinking;
+Me.Message:= 0;
 StopThinking:= false;
 ThinkingHH:= Me;
 FillTargets;
@@ -288,7 +293,7 @@ begin
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear.State and gstHHDriven) <> 0)
-        and (TurnTimeLeft < cHedgehogTurnTime - 5) then
+        and (TurnTimeLeft < cHedgehogTurnTime - 50) then
         if ((Gear.State and gstHHThinking) = 0) then
            if (BestActions.Pos >= BestActions.Count) then
               begin
