@@ -47,8 +47,15 @@ GameState:= gsExit
 end;
 
 procedure chAddTeam(var s: shortstring);
+const TeamsCount: Longword = 0;
 begin
-if isDeveloperMode then AddTeam;
+if isDeveloperMode then
+   begin
+   inc(TeamsCount);
+   TryDo(TeamsCount <= 5, 'Too many teams', true);
+   AddTeam
+   end;
+   
 if GameType in [gmtDemo, gmtSave] then CurrentTeam.ExtDriven:= true
 end;
 

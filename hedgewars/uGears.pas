@@ -79,7 +79,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
@@ -207,7 +207,7 @@ gtAmmo_Grenade: begin
                 end;
         gtCase: begin
                 Result.Radius:= 16;
-                Result.Elasticity:= 0.6
+                Result.Elasticity:= 0.4
                 end;
   gtDEagleShot: begin
                 Result.Radius:= 1;
@@ -263,6 +263,8 @@ if Gear.Kind = gtHedgehog then
       begin
       team:= PHedgehog(Gear.Hedgehog).Team;
       PHedgehog(Gear.Hedgehog).Gear:= nil;
+      if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = Gear then
+         FreeActionsList; // to avoid ThinkThread on drawned gear
       RecountTeamHealth(team);
       end;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
