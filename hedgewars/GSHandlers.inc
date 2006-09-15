@@ -779,7 +779,7 @@ while team <> nil do
 thexchcnt:= i;
 for i:= 1 to thexchcnt do
     for t:= 0 to thexchcnt - 2 do
-        if thexchar[t].team.TeamHealth > thexchar[Succ(t)].team.TeamHealth then
+        if thexchar[t].team.TeamHealthBarWidth > thexchar[Succ(t)].team.TeamHealthBarWidth then
            begin
            thexchar[5]:= thexchar[t];
            thexchar[t]:= thexchar[Succ(t)];

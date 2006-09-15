@@ -79,6 +79,7 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
+              
               AddAction(BestActions, aia_Weapon, Longword(a), 500);
               if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400);
               if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
@@ -250,7 +251,11 @@ if (Me.State and gstAttacked) = 0 then
       begin
       Walk(@WalkMe);
       if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
-      if BestActions.Score = BadTurn then AddAction(BestActions, aia_Skip, 0, 250);
+      if BestActions.Score < -1023 then
+         begin
+         BestActions.Count:= 0;
+         AddAction(BestActions, aia_Skip, 0, 250);
+         end;
       end else
 else begin
       Walk(@WalkMe);
@@ -262,7 +267,6 @@ else begin
             Walk(@WalkMe)
             end
       end;
-
 Me.State:= Me.State and not gstHHThinking
 end;
 

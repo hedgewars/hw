@@ -241,13 +241,13 @@ while team <> nil do
       r.h:= team.NameTag.h;
       SDL_UpperBlit(team.NameTag, nil, Surface, @r);
       r:= team.HealthRect;
-      r.w:= 2 + team.TeamHealth;
+      r.w:= 2 + team.TeamHealthBarWidth;
       DrawFromStoreRect(cScreenWidth div 2,
                         Team.DrawHealthY,
                         @r, Surface);
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealth + 2,
+      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealthBarWidth + 2,
                         Team.DrawHealthY,
                         @r, Surface);
       team:= team.Next
