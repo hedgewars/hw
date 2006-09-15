@@ -44,6 +44,21 @@ QDir * bindir;
 QDir * cfgdir;
 QDir * datadir;
 
+bool checkForDir(const QString & dir)
+{
+	QDir tmpdir;
+	if (!tmpdir.exists(dir))
+		if (!tmpdir.mkdir(dir))
+		{
+			QMessageBox::critical(0,
+					QObject::tr("Error"),
+					QObject::tr("Cannot create directory %1").arg(dir),
+					QObject::tr("OK"));
+			return false;
+		}
+	return true;
+}
+
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
@@ -65,15 +80,9 @@ int main(int argc, char *argv[])
 	cfgdir = new QDir();
 
 	cfgdir->setPath(cfgdir->homePath());
-	if (!cfgdir->exists(".hedgewars"))
+	if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
 	{
-		if (!cfgdir->mkdir(".hedgewars"))
-		{
-			QMessageBox::critical(0,
-					QObject::tr("Error"),
-					QObject::tr("Cannot create directory %1").arg("/.hedgewars"),
-					QObject::tr("Quit"));
-		}
+		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
 	}
 	cfgdir->cd(".hedgewars");
 
