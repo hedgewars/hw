@@ -9,6 +9,7 @@ class CHedgehogerWidget : public QWidget
 
  public:
   CHedgehogerWidget(QWidget * parent = 0);
+  ~CHedgehogerWidget();
   unsigned char getHedgehogsNum();
 
  protected:

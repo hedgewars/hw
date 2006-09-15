@@ -3,19 +3,33 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+int overallHedgehogs=0;
+
 CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
   QWidget(parent), numHedgehogs(4)
 {
+  overallHedgehogs+=numHedgehogs;
+}
+
+CHedgehogerWidget::~CHedgehogerWidget()
+{
+  overallHedgehogs-=numHedgehogs;
 }
 
 void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 {
   if(event->button()==Qt::LeftButton) {
     event->accept();
-    if(numHedgehogs < 8) numHedgehogs++;
+    if(numHedgehogs < 8 && overallHedgehogs<18) {
+      numHedgehogs++;
+      overallHedgehogs++;
+    }
   } else if (event->button()==Qt::RightButton) {
     event->accept();
-    if(numHedgehogs > 3) numHedgehogs--;
+    if(numHedgehogs > 3) {
+      numHedgehogs--;
+      overallHedgehogs--;
+    }
   } else {
     event->ignore();
     return;
