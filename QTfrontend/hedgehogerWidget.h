@@ -3,12 +3,14 @@
 
 #include <QWidget>
 
+class FrameTeams;
+
 class CHedgehogerWidget : public QWidget
 {
   Q_OBJECT
 
  public:
-  CHedgehogerWidget(QWidget * parent = 0);
+  CHedgehogerWidget(QWidget * parent);
   ~CHedgehogerWidget();
   unsigned char getHedgehogsNum();
 
@@ -17,7 +19,9 @@ class CHedgehogerWidget : public QWidget
   virtual void mousePressEvent ( QMouseEvent * event );
   
  private:
+  CHedgehogerWidget();
   unsigned char numHedgehogs;
+  FrameTeams* pOurFrameTeams;
 };
 
 #endif // _HEDGEHOGER_WIDGET

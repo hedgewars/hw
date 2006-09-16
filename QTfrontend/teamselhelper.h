@@ -31,11 +31,12 @@ class TeamShowWidget : public QWidget
  void activateTeam();
 
  public:
- TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent = 0);
+ TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
  unsigned char getHedgehogsNum();
  
  private:
+ TeamShowWidget();
  QHBoxLayout mainLayout;
  HWTeam m_team;
  bool m_isPlaying;

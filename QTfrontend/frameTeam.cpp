@@ -7,7 +7,7 @@
 using namespace std;
 
 FrameTeams::FrameTeams(QWidget* parent) :
-  QWidget(parent), mainLayout(this)
+  QWidget(parent), maxHedgehogsPerGame(18), mainLayout(this)
 {
   mainLayout.setSpacing(1);
 }
@@ -35,4 +35,9 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   QWidget* ret = it!=teamToWidget.end() ? it->second : 0;
   return ret;
+}
+
+bool FrameTeams::isFullTeams() const
+{
+  return overallHedgehogs==maxHedgehogsPerGame;
 }

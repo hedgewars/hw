@@ -35,7 +35,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     curPlayingTeams.erase(itPlay);
   } else {
     // return if max playing teams reached
-    if(curPlayingTeams.size()>2) return;
+    if(framePlaying->isFullTeams()) return;
     // dont playing team => playing
     curPlayingTeams.push_back(*itDontPlay);
     curDontPlayingTeams.erase(itDontPlay);

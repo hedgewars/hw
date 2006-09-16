@@ -3,32 +3,38 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-int overallHedgehogs=0;
+#include "frameTeam.h"
 
 CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
-  QWidget(parent), numHedgehogs(4)
+  QWidget(parent)
 {
-  overallHedgehogs+=numHedgehogs;
+  if(parent) {
+    pOurFrameTeams=dynamic_cast<FrameTeams*>(parent->parentWidget());
+  }
+  if(pOurFrameTeams->overallHedgehogs+4>pOurFrameTeams->maxHedgehogsPerGame) {
+    numHedgehogs=pOurFrameTeams->maxHedgehogsPerGame-pOurFrameTeams->overallHedgehogs;
+  } else numHedgehogs=4;
+  pOurFrameTeams->overallHedgehogs+=numHedgehogs;
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()
 {
-  overallHedgehogs-=numHedgehogs;
+  pOurFrameTeams->overallHedgehogs-=numHedgehogs;
 }
 
 void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 {
   if(event->button()==Qt::LeftButton) {
     event->accept();
-    if(numHedgehogs < 8 && overallHedgehogs<18) {
+    if(numHedgehogs < 8 && pOurFrameTeams->overallHedgehogs<18) {
       numHedgehogs++;
-      overallHedgehogs++;
+      pOurFrameTeams->overallHedgehogs++;
     }
   } else if (event->button()==Qt::RightButton) {
     event->accept();
     if(numHedgehogs > 3) {
       numHedgehogs--;
-      overallHedgehogs--;
+      pOurFrameTeams->overallHedgehogs--;
     }
   } else {
     event->ignore();
