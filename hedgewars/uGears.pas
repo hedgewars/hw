@@ -158,7 +158,7 @@ case Kind of
                 end;
     gtHedgehog: begin
                 Result.Radius:= cHHRadius;
-                Result.Elasticity:= 0.002;
+                Result.Elasticity:= 0.35;
                 Result.Friction:= 0.999;
                 Result.Angle:= cMaxAngle div 2;
                 end;

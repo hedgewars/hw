@@ -97,7 +97,7 @@ void HWGame::SendConfig()
 		LocalCFG(teams[i]);
 		SendIPC(QString("ecolor %1").arg(65535 << i * 8));
 		for (int t = 0; t < hdNum[teams[i]]; t++)
-			SendIPC(QString("eadd hh%1 1").arg(t));
+			SendIPC(QString("eadd hh%1 0").arg(t));
 	}
 }
 
