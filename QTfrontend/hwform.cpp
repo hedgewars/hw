@@ -126,6 +126,7 @@ void HWForm::GoToSetup()
 
 void HWForm::GoToMultiplayer()
 {
+	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(config->GetTeamsList());
 	ui.Pages->setCurrentIndex(ID_PAGE_MULTIPLAYER);
 }
 

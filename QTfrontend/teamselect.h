@@ -23,7 +23,7 @@ class TeamSelWidget : public QWidget
   TeamSelWidget(QWidget* parent=0);
   void addTeam(HWTeam team);
   //void removeTeam(HWTeam team);
-  void resetPlayingTeams();
+  void resetPlayingTeams(const QStringList& teamslist);
   bool isPlaying(HWTeam team);
   unsigned char numHedgedogs(HWTeam team);
 
