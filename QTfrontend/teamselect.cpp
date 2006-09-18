@@ -97,14 +97,19 @@ void TeamSelWidget::resetPlayingTeams(const QStringList& teamslist)
   }
 }
 
-bool TeamSelWidget::isPlaying(HWTeam team)
+bool TeamSelWidget::isPlaying(HWTeam team) const
 {
   return std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team)!=curPlayingTeams.end();
 }
 
-unsigned char TeamSelWidget::numHedgedogs(HWTeam team)
+list<HWTeam> TeamSelWidget::getPlayingTeams() const
 {
-  TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
+  return curPlayingTeams;
+}
+
+unsigned char TeamSelWidget::numHedgedogs(HWTeam team) const
+{
+  const TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
   if(!tsw) return 0;
   return tsw->getHedgehogsNum();
 }

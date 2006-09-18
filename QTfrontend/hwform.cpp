@@ -258,11 +258,9 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
 void HWForm::StartMPGame()
 {
 	game = new HWGame(config, ui.pageMultiplayer->gameCFG);
-	QStringList teamslist = config->GetTeamsList();
-	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-	  if(ui.pageMultiplayer->teamsSelect->isPlaying(*it)) {
-	    game->AddTeam(*it, ui.pageMultiplayer->teamsSelect->numHedgedogs(*it));
-	  }
+	list<HWTeam> teamslist=ui.pageMultiplayer->teamsSelect->getPlayingTeams();
+	for (list<HWTeam>::const_iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
+	  game->AddTeam(it->TeamName, ui.pageMultiplayer->teamsSelect->numHedgedogs(it->TeamName));
 	}
 	game->StartLocal();
 }

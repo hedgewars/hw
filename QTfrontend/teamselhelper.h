@@ -33,7 +33,7 @@ class TeamShowWidget : public QWidget
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
- unsigned char getHedgehogsNum();
+ unsigned char getHedgehogsNum() const;
  
  private:
  TeamShowWidget();

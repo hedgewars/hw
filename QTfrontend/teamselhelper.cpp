@@ -48,7 +48,7 @@ void TeamShowWidget::activateTeam()
   emit teamStatusChanged(m_team);
 }
 
-unsigned char TeamShowWidget::getHedgehogsNum()
+unsigned char TeamShowWidget::getHedgehogsNum() const
 {
   return phhoger ? phhoger->getHedgehogsNum() : 0;
 }

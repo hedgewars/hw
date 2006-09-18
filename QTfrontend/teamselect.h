@@ -24,8 +24,9 @@ class TeamSelWidget : public QWidget
   void addTeam(HWTeam team);
   //void removeTeam(HWTeam team);
   void resetPlayingTeams(const QStringList& teamslist);
-  bool isPlaying(HWTeam team);
-  unsigned char numHedgedogs(HWTeam team);
+  bool isPlaying(HWTeam team) const;
+  unsigned char numHedgedogs(HWTeam team) const;
+  list<HWTeam> getPlayingTeams() const;
 
 private slots:
   void changeTeamStatus(HWTeam team);
