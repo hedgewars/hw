@@ -39,6 +39,7 @@ uses SDLh;
 const ipcPort: Word = 0;
 
 procedure SendIPC(s: shortstring);
+procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCAndWaitReply(s: shortstring);
 procedure IPCCheckSock;
 procedure InitIPC;
@@ -100,7 +101,7 @@ case s[1] of
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
      inc(cmdendpos);
-     extcmd[cmdendpos].Time := PLongWord(@s[byte(s[0]) - 3])^;
+     extcmd[cmdendpos].Time := SDLNet_Read32(@s[byte(s[0]) - 3]);
      extcmd[cmdendpos].str  := s;
      {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(extcmd[cmdendpos].Time)+' at '+inttostr(cmdendpos));{$ENDIF}
      dec(extcmd[cmdendpos].len, 4)
@@ -137,11 +138,21 @@ begin
 if IPCSock <> nil then
    begin
    if s[0]>#251 then s[0]:= #251;
-   PLongWord(@s[Succ(byte(s[0]))])^:= GameTicks;
+   SDLNet_Write32(GameTicks, @s[Succ(byte(s[0]))]);
    {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s);{$ENDIF}
    inc(s[0],4);
    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
    end
+end;
+
+procedure SendIPCXY(cmd: char; X, Y: SmallInt);
+var s: shortstring;
+begin
+s[0]:= #5;
+s[1]:= cmd;
+SDLNet_Write16(X, @s[2]);
+SDLNet_Write16(Y, @s[4]);
+SendIPC(s)
 end;
 
 procedure SendIPCAndWaitReply(s: shortstring);
@@ -195,13 +206,13 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
              {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}
              end;
         'p': begin
-             TargetPoint.X:= extcmd[cmdcurpos].X;
-             TargetPoint.Y:= extcmd[cmdcurpos].Y;
+             TargetPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X);
+             TargetPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y);
              ParseCommand('put')
              end;
         'P': begin
-             CursorPoint.X:= extcmd[cmdcurpos].X + WorldDx;
-             CursorPoint.Y:= extcmd[cmdcurpos].Y + WorldDy;
+             CursorPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X) + WorldDx;
+             CursorPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y) + WorldDy;
              end;
         '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd);
         #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))

@@ -346,7 +346,6 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
-var s: string[9];
 begin
 if not (CurrentTeam.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 if (FollowGear <> nil) then
@@ -366,11 +365,7 @@ if isCursorVisible then
    begin
    if (not CurrentTeam.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
       begin
-      s[0]:= #5;
-      s[1]:= 'P';
-      PSmallInt(@s[2])^:= CursorPoint.X - WorldDx;
-      PSmallInt(@s[4])^:= CursorPoint.Y - WorldDy;
-      SendIPC(s);
+      SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
       PrevSentPointTime:= GameTicks
       end;
    end;

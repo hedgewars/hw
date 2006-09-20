@@ -372,6 +372,10 @@ procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_Net
 function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
+procedure SDLNet_Write16(value: SmallInt; buf: pointer); cdecl; external SDL_NetLibName;
+procedure SDLNet_Write32(value: LongInt; buf: pointer); cdecl; external SDL_NetLibName;
+function SDLNet_Read16(buf: pointer): SmallInt; cdecl; external SDL_NetLibName;
+function SDLNet_Read32(buf: pointer): LongInt; cdecl; external SDL_NetLibName;
 
 implementation
 

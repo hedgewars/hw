@@ -324,11 +324,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
            SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
            dec(TargetPoint.X, WorldDx);
            dec(TargetPoint.Y, WorldDy);
-           s[0]:= #5;
-           s[1]:= 'p';
-           PSmallInt(@s[2])^:= TargetPoint.X;
-           PSmallInt(@s[4])^:= TargetPoint.Y;
-           SendIPC(s)
+           SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
            end;
         State:= State and not gstHHChooseTarget;
         end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', false)
