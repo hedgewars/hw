@@ -184,17 +184,25 @@ AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
     AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$ENDIF}
-if ParamCount = 7 then
-   begin
-   val(ParamStr(1), cScreenWidth, c);
-   val(ParamStr(2), cScreenHeight, c);
-   cBitsStr:= ParamStr(3);
-   val(cBitsStr, cBits, c);
-   val(ParamStr(4), ipcPort, c);
-   cFullScreen:= ParamStr(5) = '1';
-   isSoundEnabled:= ParamStr(6) = '1';
-   cLocaleFName:= ParamStr(7);
-   end else OutError(errmsgShouldntRun, true)
+case ParamCount of
+  7: begin
+     val(ParamStr(1), cScreenWidth, c);
+     val(ParamStr(2), cScreenHeight, c);
+     cBitsStr:= ParamStr(3);
+     val(cBitsStr, cBits, c);
+     val(ParamStr(4), ipcPort, c);
+     cFullScreen:= ParamStr(5) = '1';
+     isSoundEnabled:= ParamStr(6) = '1';
+     cLocaleFName:= ParamStr(7);
+     end;
+  2: begin
+     val(ParamStr(1), ipcPort, c);
+     GameType:= gmtLandPreview;
+     if ParamStr(2) <> 'landpreview' then OutError(errmsgShouldntRun, true);
+     end
+   else
+   OutError(errmsgShouldntRun, true)
+   end
 end;
 
 procedure ShowMainWindow;
@@ -208,16 +216,10 @@ TryDo(SDLPrimSurface <> nil, errmsgCreateSurface, true);
 PixelFormat:= SDLPrimSurface.format;
 SDL_ShowCursor(0);
 end;
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// m a i n ////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////
+procedure Game;
 begin
-WriteLnToConsole('-= HedgeWars 0.2 =-');
-WriteLnToConsole('  -= by unC0Rr =-  ');
-GetParams;
-Randomize;
-
 WriteToConsole('Init SDL... ');
 SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
 WriteLnToConsole(msgOK);
@@ -249,5 +251,30 @@ TryDo(InitStepsFlags = cifAllInited,
       true);
 
 MainLoop
+end;
 
+procedure GenLandPreview;
+begin
+InitIPC;
+SendIPCAndWaitReply('C');
+TryDo(InitStepsFlags = cifRandomize,
+      'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
+      true);
+GenPreview;
+SendIPCRaw(@Preview, sizeof(Preview));
+SendIPCAndWaitReply('+');
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// m a i n ////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+begin
+WriteLnToConsole('-= HedgeWars 0.2 =-');
+WriteLnToConsole('  -= by unC0Rr =-  ');
+GetParams;
+Randomize;
+
+if GameType = gmtLandPreview then GenLandPreview
+                             else Game
 end.

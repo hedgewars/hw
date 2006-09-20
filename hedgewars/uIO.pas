@@ -40,6 +40,7 @@ const ipcPort: Word = 0;
 
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
+procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
 procedure IPCCheckSock;
 procedure InitIPC;
@@ -143,6 +144,11 @@ if IPCSock <> nil then
    inc(s[0],4);
    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
    end
+end;
+
+procedure SendIPCRaw(p: pointer; len: Longword);
+begin
+SDLNet_TCP_Send(IPCSock, p, len)
 end;
 
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);

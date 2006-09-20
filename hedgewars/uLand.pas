@@ -33,17 +33,21 @@
 
 unit uLand;
 interface
-uses SDLh, uGears;
+uses SDLh, uGears, uLandTemplates;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
+     TPreview = packed array[0..127, 0..31] of byte;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
+     Preview: TPreview;
 
 procedure GenMap;
+procedure GenPreview;
+
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandTemplates, uLandObjects;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandObjects;
 
 type TPixAr = record
               Count: Longword;
@@ -420,7 +424,12 @@ end;
 procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
     i: Longword;
+    y, x: Longword;
 begin
+for y:= 0 to 1023 do
+    for x:= 0 to 2047 do
+        Land[y, x]:= COLOR_LAND;
+
 with Template do
      begin
      if canMirror then
@@ -462,12 +471,9 @@ end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
-    y, x: Longword;
 begin
 WriteLnToConsole('Generating land...');
-for y:= 0 to 1023 do
-    for x:= 0 to 2047 do
-        Land[y, x]:= COLOR_LAND;
+
 GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 AddProgress;
@@ -560,6 +566,26 @@ if (GameFlags and gfForts) = 0 then
                                else MakeFortsMap;
 AddProgress;
 {$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}
+end;
+
+procedure GenPreview;
+var x, y, xx, yy, t, bit: integer;
+begin
+GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
+
+for y:= 0 to 127 do
+    for x:= 0 to 31 do
+        begin
+        Preview[y, x]:= 0;
+        for bit:= 0 to 7 do
+            begin
+            t:= 0;
+            for yy:= y * 8 to y * 8 + 7 do
+                for xx:= x * 64 + bit * 8 to x * 64 + bit * 8 + 7 do
+                    if Land[yy, xx] <> 0 then inc(t);
+            if t > 31 then Preview[y, x]:= Preview[y, x] or ($80 shr bit) 
+            end
+        end
 end;
 
 initialization

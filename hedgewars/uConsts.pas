@@ -38,7 +38,7 @@ uses SDLh, uLocale;
 type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sWindL, sWindR, sRopeNode);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
-     TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave);
+     TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
                    ptLocale);
