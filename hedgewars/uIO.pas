@@ -42,6 +42,7 @@ procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
+procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure InitIPC;
 procedure CloseIPC;
@@ -161,15 +162,20 @@ SDLNet_Write16(Y, @s[4]);
 SendIPC(s)
 end;
 
-procedure SendIPCAndWaitReply(s: shortstring);
+procedure IPCWaitPongEvent;
 begin
-SendIPC(s);
-SendIPC('?');
 isPonged:= false;
 repeat
    IPCCheckSock;
    SDL_Delay(1)
 until isPonged
+end;
+
+procedure SendIPCAndWaitReply(s: shortstring);
+begin
+SendIPC(s);
+SendIPC('?');
+IPCWaitPongEvent
 end;
 
 procedure NetGetNextCmd;

@@ -256,12 +256,15 @@ end;
 procedure GenLandPreview;
 begin
 InitIPC;
-SendIPCAndWaitReply('C');
+IPCWaitPongEvent;
 TryDo(InitStepsFlags = cifRandomize,
       'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
       true);
+WriteLnToConsole('Generating preview...');
 GenPreview;
+WriteLnToConsole('Sending preview...');
 SendIPCRaw(@Preview, sizeof(Preview));
+WriteLnToConsole('Preview sent, disconnect');
 CloseIPC
 end;
 
