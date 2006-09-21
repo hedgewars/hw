@@ -262,7 +262,7 @@ TryDo(InitStepsFlags = cifRandomize,
       true);
 GenPreview;
 SendIPCRaw(@Preview, sizeof(Preview));
-SendIPCAndWaitReply('+');
+CloseIPC
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
