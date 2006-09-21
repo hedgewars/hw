@@ -133,7 +133,7 @@ void HWForm::GoToMultiplayer()
 void HWForm::GoToDemos()
 {
 	QDir tmpdir;
-	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd(cfgdir->absolutePath());
 	tmpdir.cd("Demos");
 	tmpdir.setFilter(QDir::Files);
 	ui.pagePlayDemo->DemosList->clear();
@@ -197,7 +197,7 @@ void HWForm::PlayDemo()
 		return ;
 	}
 	game = new HWGame(config, 0);
-	game->PlayDemo(datadir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_1");
+	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_1");
 }
 
 void HWForm::NetConnect()

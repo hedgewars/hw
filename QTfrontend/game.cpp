@@ -73,7 +73,7 @@ void HWGame::NewConnection()
 
 void HWGame::ClientDisconnect()
 {
-	SaveDemo(cfgdir->absolutePath() + "/Demos/demo.hwd_1");
+	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_1");
     IPCSocket->deleteLater();
 	IPCSocket = 0;
 	deleteLater();
@@ -277,6 +277,9 @@ void HWGame::AddTeam(const QString & teamname, unsigned char numHedgedogs)
 
 void HWGame::SaveDemo(const QString & filename)
 {
+	demo->replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
+	demo->replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
+
 	QFile demofile(filename);
 	if (!demofile.open(QIODevice::WriteOnly))
 	{
