@@ -192,7 +192,7 @@ for i:= 0 to Count-2 do
           pa.ar[pa.Count].x:= X;
           pa.ar[pa.Count].y:= Y;
           inc(pa.Count);
-          TryDo(pa.Count < cMaxEdgePoints, 'Edge points overflow', true)
+          TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
           end;
     end;
 end;
@@ -382,6 +382,7 @@ var isUP: boolean;  // HACK: transform for Y should be exact as one for X
     i: integer;
 begin
 TryDo((pa.ar[0].y < 0) or (pa.ar[0].y > 1023), 'Bad land generated', true);
+TryDo((pa.ar[Pred(pa.Count)].y < 0) or (pa.ar[Pred(pa.Count)].y > 1023), 'Bad land generated', true);
 isUP:= pa.ar[0].y > 0;
 Left:= 1023;
 Right:= Left;
@@ -571,6 +572,7 @@ end;
 procedure GenPreview;
 var x, y, xx, yy, t, bit: integer;
 begin
+WriteLnToConsole('Generating preview...');
 GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
 
 for y:= 0 to 127 do
@@ -583,7 +585,7 @@ for y:= 0 to 127 do
             for yy:= y * 8 to y * 8 + 7 do
                 for xx:= x * 64 + bit * 8 to x * 64 + bit * 8 + 7 do
                     if Land[yy, xx] <> 0 then inc(t);
-            if t > 31 then Preview[y, x]:= Preview[y, x] or ($80 shr bit) 
+            if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit) 
             end
         end
 end;

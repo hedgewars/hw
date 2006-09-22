@@ -453,7 +453,7 @@ const Template12Points: array[0..38] of TPoint =
 
 const Template13Points: array[0..13] of TPoint =
       (
-       (x:  645; y: 1282),
+       (x:  645; y: 1400),
        (x:  198; y:  732),
        (x:  402; y:  648),
        (x:  609; y:  763),
@@ -466,14 +466,45 @@ const Template13Points: array[0..13] of TPoint =
        (x: 1038; y:  576),
        (x: 1017; y:  756),
        (x: 1803; y:  728),
-       (x: 1503; y: 1256)
+       (x: 1503; y: 1400)
       );
       Template13FPoints: array[0..0] of TPoint =
       (
        (x: 1023; y:    0)
       );
 
-const EdgeTemplates: array[0..13] of TEdgeTemplate =
+const Template14Points: array[0..22] of TPoint =
+      (
+       (x:  177; y: 1408),
+       (x:  262; y: 1026),
+       (x:  259; y:  303),
+       (x:  765; y:  162),
+       (x:  789; y:  357),
+       (x:  517; y:  420),
+       (x:  658; y:  690),
+       (x:  448; y:  762),
+       (x:  663; y: 1029),
+       (x:  765; y: 1440),
+       (x: 1446; y: 1431),
+       (x: 1439; y: 1026),
+       (x: 1416; y:  825),
+       (x: 1253; y:  840),
+       (x: 1253; y:  600),
+       (x: 1551; y:  573),
+       (x: 1506; y:  390),
+       (x: 1065; y:  366),
+       (x: 1077; y:  171),
+       (x: 1656; y:  156),
+       (x: 1821; y:  396),
+       (x: 1716; y:  768),
+       (x: 1926; y: 1437)
+      );
+      Template14FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+
+const EdgeTemplates: array[0..14] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -609,10 +640,20 @@ const EdgeTemplates: array[0..13] of TEdgeTemplate =
        BasePointsCount: Succ(High(Template13Points));
        BezPassCnt: 5;
        PassMin: 15; PassDelta: 3;
-       WaveAmplMin:    20; WaveAmplDelta: 15;
-       WaveFreqMin: 0.003; WaveFreqDelta: 0.002;
+       WaveAmplMin:    18; WaveAmplDelta: 15;
+       WaveFreqMin: 0.0028; WaveFreqDelta: 0.002;
        FillPoints: @Template13FPoints;
        FillPointsCount: Succ(High(Template13FPoints));
+       canMirror: true; canFlip: false;
+      ),
+      (BasePoints: @Template14Points;
+       BasePointsCount: Succ(High(Template14Points));
+       BezPassCnt: 4;
+       PassMin: 14; PassDelta: 3;
+       WaveAmplMin:    20; WaveAmplDelta: 15;
+       WaveFreqMin: 0.003; WaveFreqDelta: 0.002;
+       FillPoints: @Template14FPoints;
+       FillPointsCount: Succ(High(Template14FPoints));
        canMirror: true; canFlip: false;
       )
       );

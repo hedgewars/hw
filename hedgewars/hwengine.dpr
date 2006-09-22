@@ -217,7 +217,7 @@ PixelFormat:= SDLPrimSurface.format;
 SDL_ShowCursor(0);
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////
 procedure Game;
 begin
 WriteToConsole('Init SDL... ');
@@ -253,6 +253,7 @@ TryDo(InitStepsFlags = cifAllInited,
 MainLoop
 end;
 
+/////////////////////////
 procedure GenLandPreview;
 begin
 InitIPC;
@@ -260,7 +261,7 @@ IPCWaitPongEvent;
 TryDo(InitStepsFlags = cifRandomize,
       'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
       true);
-WriteLnToConsole('Generating preview...');
+
 GenPreview;
 WriteLnToConsole('Sending preview...');
 SendIPCRaw(@Preview, sizeof(Preview));
