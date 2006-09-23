@@ -288,6 +288,7 @@ RegisterVariable('bind'    , vtCommand, @chBind         );
 RegisterVariable('add'     , vtCommand, @chAdd          );
 RegisterVariable('skip'    , vtCommand, @chSkip         );
 RegisterVariable('say'     , vtCommand, @chSay          );
+RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     );
 RegisterVariable('+left'   , vtCommand, @chLeft_p       );
 RegisterVariable('-left'   , vtCommand, @chLeft_m       );
 RegisterVariable('+right'  , vtCommand, @chRight_p      );

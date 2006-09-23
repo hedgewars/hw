@@ -369,3 +369,16 @@ if isDeveloperMode then
    end
 end;
 
+procedure chAmmoMenu(var s: shortstring);
+begin
+if CheckNoTeamOrHH then exit;
+with CurrentTeam^ do
+     with Hedgehogs[CurrHedgehog] do
+          begin
+          if bShowAmmoMenu then bShowAmmoMenu:= false
+          else if ((Gear.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
+               or ((Gear.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+          end
+end;
+
+

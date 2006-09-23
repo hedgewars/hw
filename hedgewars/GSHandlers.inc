@@ -363,14 +363,14 @@ var i, ei: integer;
     HHGear: PGear;
 begin
 AllInactive:= false;
+HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 dec(Gear.Timer);
-if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0) then
+if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0)or((HHGear.State and gstHHDriven) = 0) then
    begin
    DeleteGear(Gear);
    AfterAttack;
    exit
    end;
-HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 if (Gear.Timer and $3F) = 0 then
    begin
    i:= round(Gear.X) - Gear.Radius  - GetRandom(2);

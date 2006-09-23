@@ -1,4 +1,5 @@
 add_subdirectory(Graves)
+add_subdirectory(AmmoMenu)
 install(FILES
 	Arrow.png
 	BigDigits.png

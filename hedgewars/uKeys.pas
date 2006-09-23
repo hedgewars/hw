@@ -41,6 +41,8 @@ procedure ResetKbd;
 procedure ProcessKbdDemo;
 procedure InitKbdKeyTable;
 
+var KbdKeyPressed: boolean;
+
 implementation
 uses SDLh, uTeams, uConsole, uConsts, uMisc;
 const KeyNumber = 1024;
@@ -51,7 +53,7 @@ var tkbd: TKeyboardState;
 function KeyNameToCode(name: string): word;
 begin
 Result:= cKeyMaxIndex;
-while (Result>0)and(KeyNames[Result]<>name) do dec(Result)
+while (Result > 0) and (KeyNames[Result] <> name) do dec(Result)
 end;
 
 procedure ProcessKbd;
@@ -63,15 +65,18 @@ if (CurrentTeam = nil)
    or (GameState = gsConsole)
    or (CurrentTeam.ExtDriven)
    or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].BotLevel <> 0) then exit;
+
+KbdKeyPressed:= false;
 pkbd:= SDL_GetKeyState(nil);
 i:= SDL_GetMouseState(nil, nil);
 pkbd^[1]:= (i and 1);
-pkbd^[2]:= ((i shl 1) and 1);
-pkbd^[3]:= ((i shl 2) and 1);
+pkbd^[2]:= ((i shr 1) and 1);
+pkbd^[3]:= ((i shr 2) and 1);
 for i:= 1 to cKeyMaxIndex do
-    if CurrentTeam.Aliases[i][0]<>#0 then
-       begin
-       if CurrentTeam.Aliases[i][1]='+' then
+    if CurrentTeam.Aliases[i][0] <> #0 then
+      begin
+      if (i > 3) and (pkbd^[i] <> 0) then KbdKeyPressed:= true;
+      if CurrentTeam.Aliases[i][1] = '+' then
           begin
           if (pkbd^[i] <> 0)and(tkbd[i]  = 0) then ParseCommand(CurrentTeam.Aliases[i]) else
           if (pkbd^[i] =  0)and(tkbd[i] <> 0) then

@@ -95,7 +95,6 @@ case GameState of
               GameState:= gsGame
               end;
      gsGame : begin
-              ProcessKbd;
               DoGameTick(Lag);
               DrawWorld(Lag, SDLPrimSurface);
               end;

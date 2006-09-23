@@ -48,15 +48,16 @@ var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
     WindBarWidth: integer = 0;
+    bShowAmmoMenu: boolean = false;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys;
 const RealTicks: Longword = 0;
       Frames: Longword = 0;
       FPS: Longword = 0;
       CountTicks: Longword = 0;
       prevPoint: TPoint = (X: 0; Y: 0);
-      
+
 type TCaptionStr = record
                    Surf: PSDL_Surface;
                    StorePos: Longword;
@@ -66,6 +67,7 @@ type TCaptionStr = record
 
 var cWaterSprCount: integer;
     Captions: array[0..Pred(cMaxCaptions)] of TCaptionStr;
+    AMxLeft, AMxCurr: integer;
 
 procedure InitWorld;
 begin
@@ -75,7 +77,47 @@ SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - 1024 + cScreenWidth div 2;
-WorldDy:=  - 512 + cScreenHeight div 2
+WorldDy:=  - 512 + cScreenHeight div 2;
+AMxLeft:= cScreenWidth - 210;
+AMxCurr:= cScreenWidth
+end;
+
+procedure ShowAmmoMenu(Surface: PSDL_Surface);
+const MENUSPEED = 15;
+var x, y, i, t: integer;
+begin
+if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
+if      bShowAmmoMenu  and (AMxCurr > AMxLeft)      then dec(AMxCurr, MENUSPEED);
+if (not bShowAmmoMenu) and (AMxCurr < cScreenWidth) then inc(AMxCurr, MENUSPEED);
+
+if CurrentTeam = nil then exit;
+with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+     begin
+     if Ammo = nil then exit;
+     x:= AMxCurr;
+     y:= cScreenHeight - 40;
+     dec(y);
+     DrawSprite(sprAMBorders, x, y, 0, Surface);
+     dec(y);
+     DrawSprite(sprAMBorders, x, y, 1, Surface);
+     dec(y, 33);
+     DrawSprite(sprAMSlotName, x, y, 0, Surface);
+     for i:= cMaxSlotIndex downto 0 do
+         if Ammo[i, 0].Count > 0 then
+            begin
+            dec(y, 33);
+            DrawSprite(sprAMSlot, x, y, 0, Surface);
+            DrawSprite(sprAMSlotKeys, x + 2, y + 1, i, Surface);
+            t:= 0;
+            while (t <= cMaxSlotAmmoIndex) and (Ammo[i, t].Count > 0) do
+                  begin
+                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, integer(Ammo[i, t].AmmoType), Surface);
+                  inc(t)
+                  end
+            end;
+     dec(y, 1);
+     DrawSprite(sprAMBorders, x, y, 0, Surface)
+     end
 end;
 
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
@@ -284,6 +326,9 @@ if WindBarWidth > 0 then
         end;
    DrawSpriteFromRect(r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
    end;
+
+// AmmoMenu
+if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 
 // Cursor
 if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface);

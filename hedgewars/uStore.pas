@@ -41,7 +41,7 @@ procedure StoreLoad;
 procedure StoreRelease;
 procedure DrawGear(Stuff : TStuff; X, Y: integer; Surface: PSDL_Surface);
 procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: integer; Surface: PSDL_Surface);
-procedure DrawSprite (Sprite: TSprite; X, Y, Position: integer; Surface: PSDL_Surface);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -364,12 +364,12 @@ r.h:= Height;
 DrawFromRect(X, Y, @r, StoreSurface, Surface)
 end;
 
-procedure DrawSprite(Sprite: TSprite; X, Y, Position: integer; Surface: PSDL_Surface);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
 r.x:= 0;
 r.w:= SpritesData[Sprite].Width;
-r.y:= Position * SpritesData[Sprite].Height;
+r.y:= Frame * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
 end;

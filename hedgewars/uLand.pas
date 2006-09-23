@@ -470,12 +470,17 @@ with Template do
      end;
 end;
 
+function SelectTemplate: integer;
+begin
+Result:= getrandom(Succ(High(EdgeTemplates)))
+end;
+
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Generating land...');
 
-GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
+GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
 with PixelFormat^ do
@@ -573,7 +578,7 @@ procedure GenPreview;
 var x, y, xx, yy, t, bit: integer;
 begin
 WriteLnToConsole('Generating preview...');
-GenBlank(EdgeTemplates[getrandom(Succ(High(EdgeTemplates)))]);
+GenBlank(EdgeTemplates[SelectTemplate]);
 
 for y:= 0 to 127 do
     for x:= 0 to 31 do

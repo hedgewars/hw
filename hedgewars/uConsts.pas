@@ -41,13 +41,14 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-                   ptLocale);
+                   ptLocale, ptAmmoMenu);
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
                    sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
-                   sprSky);
+                   sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
+                   sprAMSlotKeys);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
@@ -194,7 +195,8 @@ const
                                                'Data/Graphics/Graves',          // ptGraves
                                                'Data/Fonts',                    // ptFonts
                                                'Data/Forts',                    // ptForts
-                                               'Data/Locale'                    // ptLocale
+                                               'Data/Locale',                   // ptLocale
+                                               'Data/Graphics/AmmoMenu'          // ptAmmoMenu
                                                );
 
       StuffLoadData: array[TStuff] of record
@@ -249,7 +251,12 @@ const
                      (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
                      (FileName:     'Flame'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprFlame
                      (FileName:  'horizont'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false),// sprHorizont
-                     (FileName:       'Sky'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false) // sprSky
+                     (FileName:       'Sky'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false),// sprSky
+                     (FileName: 'BrdrLines'; Path: ptAmmoMenu; Width: 202; Height:  1; hasAlpha: false),// sprAMBorders
+                     (FileName:      'Slot'; Path: ptAmmoMenu; Width: 202; Height: 33; hasAlpha: false),// sprAMSlot
+                     (FileName:  'AmmoName'; Path: ptAmmoMenu; Width: 202; Height: 33; hasAlpha: false),// sprAMSlotName
+                     (FileName:     'Ammos'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMAmmos
+                     (FileName:  'SlotKeys'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false) // sprAMSlotKeys
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
