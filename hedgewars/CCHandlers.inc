@@ -306,7 +306,6 @@ with CurrentTeam^ do
                 caSlot^:= slot;
                 caAmmo^:= 0;
                 end;
-          TargetPoint.X:= NoPointX;
           end;
      ApplyAmmoChanges(Hedgehogs[CurrHedgehog])
      end
@@ -315,6 +314,11 @@ end;
 procedure chPut(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+if bShowAmmoMenu then
+   begin
+   bSelected:= true;
+   exit
+   end;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
      if (State and gstHHChooseTarget) <> 0 then
         begin
@@ -375,6 +379,7 @@ if CheckNoTeamOrHH then exit;
 with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
           begin
+          bSelected:= false;
           if bShowAmmoMenu then bShowAmmoMenu:= false
           else if ((Gear.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
                or ((Gear.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true

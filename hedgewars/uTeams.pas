@@ -243,6 +243,8 @@ end;
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
+TargetPoint.X:= NoPointX;
+
 with Hedgehog do
      begin
      if Ammo[CurSlot, CurAmmo].Count = 0 then

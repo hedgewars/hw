@@ -41,7 +41,6 @@ const WorldDx: integer = -512;
 procedure InitWorld;
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
-procedure MoveCamera;
 
 {$IFDEF COUNTTICKS}
 var cntTicks: LongWord;
@@ -49,9 +48,10 @@ var cntTicks: LongWord;
 var FollowGear: PGear = nil;
     WindBarWidth: integer = 0;
     bShowAmmoMenu: boolean = false;
+    bSelected: boolean = false;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale;
 const RealTicks: Longword = 0;
       Frames: Longword = 0;
       FPS: Longword = 0;
@@ -67,7 +67,7 @@ type TCaptionStr = record
 
 var cWaterSprCount: integer;
     Captions: array[0..Pred(cMaxCaptions)] of TCaptionStr;
-    AMxLeft, AMxCurr: integer;
+    AMxLeft, AMxCurr, SlotsNum: integer;
 
 procedure InitWorld;
 begin
@@ -85,15 +85,19 @@ end;
 procedure ShowAmmoMenu(Surface: PSDL_Surface);
 const MENUSPEED = 15;
 var x, y, i, t: integer;
+    Slot, Pos: integer;
 begin
 if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
 if      bShowAmmoMenu  and (AMxCurr > AMxLeft)      then dec(AMxCurr, MENUSPEED);
 if (not bShowAmmoMenu) and (AMxCurr < cScreenWidth) then inc(AMxCurr, MENUSPEED);
 
 if CurrentTeam = nil then exit;
+Slot:= 0;
+Pos:= -1;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      begin
      if Ammo = nil then exit;
+     SlotsNum:= 0;
      x:= AMxCurr;
      y:= cScreenHeight - 40;
      dec(y);
@@ -105,20 +109,47 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      for i:= cMaxSlotIndex downto 0 do
          if Ammo[i, 0].Count > 0 then
             begin
+            if (CursorPoint.Y >= y - 33) and (CursorPoint.Y < y) then Slot:= i;
             dec(y, 33);
+            inc(SlotsNum);
             DrawSprite(sprAMSlot, x, y, 0, Surface);
             DrawSprite(sprAMSlotKeys, x + 2, y + 1, i, Surface);
             t:= 0;
             while (t <= cMaxSlotAmmoIndex) and (Ammo[i, t].Count > 0) do
                   begin
                   DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, integer(Ammo[i, t].AmmoType), Surface);
+                  if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
+                     begin
+                     DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0, Surface);
+                     Pos:= t;
+                     end;
                   inc(t)
                   end
             end;
      dec(y, 1);
-     DrawSprite(sprAMBorders, x, y, 0, Surface)
-     end
+     DrawSprite(sprAMBorders, x, y, 0, Surface);
+
+     if (Pos >= 0) then
+        if Ammo[Slot, Pos].Count > 0 then
+           begin
+           DXOutText(AMxCurr + 10, cScreenHeight - 68, fnt16, trAmmo[Ammoz[Ammo[Slot, Pos].AmmoType].NameId], Surface);
+           if Ammo[Slot, Pos].Count < 10 then
+              DXOutText(AMxCurr + 175, cScreenHeight - 68, fnt16, chr(Ammo[Slot, Pos].Count + 48) + 'x', Surface);
+           if bSelected then
+              begin
+              CurSlot:= Slot;
+              CurAmmo:= Pos;
+              ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
+              bShowAmmoMenu:= false
+              end;
+           end;
+     end;
+
+bSelected:= false;
+DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
 end;
+
+procedure MoveCamera; forward;
 
 procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
 var i, t: integer;
@@ -139,6 +170,8 @@ var i, t: integer;
     end;
 
 begin
+MoveCamera;
+
 // Sky
 inc(RealTicks, Lag);
 if WorldDy > 0 then
@@ -405,6 +438,17 @@ if (FollowGear <> nil) then
       end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
+
+if AMxCurr < cScreenWidth then
+   begin
+   if CursorPoint.X < AMxCurr + 35 then CursorPoint.X:= AMxCurr + 35;
+   if CursorPoint.X > AMxCurr + 200 then CursorPoint.X:= AMxCurr + 200;
+   if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
+   if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
+   prevPoint:= CursorPoint;
+   SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+   exit
+   end;
 
 if isCursorVisible then
    begin

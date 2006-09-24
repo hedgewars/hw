@@ -94,9 +94,7 @@ while (GameState <> gsExit) and (i <= Lag) do
           else ProcessGears
        end;
     inc(i)
-    end;
-
-MoveCamera
+    end
 end;
 
 end.
