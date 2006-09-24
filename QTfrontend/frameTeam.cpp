@@ -40,7 +40,7 @@
 using namespace std;
 
 FrameTeams::FrameTeams(QWidget* parent) :
-  QWidget(parent), maxHedgehogsPerGame(18), mainLayout(this)
+  QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this)
 {
   mainLayout.setSpacing(1);
 }
