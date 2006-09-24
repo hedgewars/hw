@@ -88,8 +88,21 @@ var x, y, i, t: integer;
     Slot, Pos: integer;
 begin
 if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
-if      bShowAmmoMenu  and (AMxCurr > AMxLeft)      then dec(AMxCurr, MENUSPEED);
-if (not bShowAmmoMenu) and (AMxCurr < cScreenWidth) then inc(AMxCurr, MENUSPEED);
+if bShowAmmoMenu then
+   begin
+   if AMxCurr = cScreenWidth then prevPoint.X:= 0;
+   if AMxCurr > AMxLeft then dec(AMxCurr, MENUSPEED);
+   end else
+   begin
+   if AMxCurr = AMxLeft then
+      begin
+      CursorPoint.X:= cScreenWidth div 2;
+      CursorPoint.Y:= cScreenHeight div 2;
+      prevPoint:= CursorPoint;
+      SDL_WarpMouse(CursorPoint.X, CursorPoint.Y)
+      end;
+   if AMxCurr < cScreenWidth then inc(AMxCurr, MENUSPEED);
+   end;
 
 if CurrentTeam = nil then exit;
 Slot:= 0;
@@ -137,16 +150,16 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
               DXOutText(AMxCurr + 175, cScreenHeight - 68, fnt16, chr(Ammo[Slot, Pos].Count + 48) + 'x', Surface);
            if bSelected then
               begin
-              CurSlot:= Slot;
-              CurAmmo:= Pos;
-              ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
-              bShowAmmoMenu:= false
+              bShowAmmoMenu:= false;
+              SetWeapon(Ammo[Slot, Pos].AmmoType);
+              bSelected:= false;
+              exit
               end;
            end;
      end;
 
 bSelected:= false;
-DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
 end;
 
 procedure MoveCamera; forward;

@@ -37,6 +37,7 @@ endif (WIN32)
 set(hwfr_moc_hdrs
 	game.h
 	hwform.h
+	binds.h
 	netclient.h
 	teamselect.h
 	teamselhelper.h

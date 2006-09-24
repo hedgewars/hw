@@ -84,9 +84,10 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function CheckForWin: boolean;
+procedure SetWeapon(weap: TAmmoType);
 
 implementation
-uses uMisc, uStore, uWorld, uIO, uAI, uLocale;
+uses uMisc, uStore, uWorld, uIO, uAI, uLocale, uConsole;
 const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;
@@ -357,6 +358,14 @@ while p <> nil do
       p.ExtDriven:= false;
       p:= p.Next
       end;
+end;
+
+procedure SetWeapon(weap: TAmmoType);
+begin
+with CurrentTeam^ do
+     with Hedgehogs[CurrHedgehog] do
+          while Ammo[CurSlot, CurAmmo].AmmoType <> weap do
+                ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
 end;
 
 initialization

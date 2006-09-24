@@ -125,14 +125,6 @@ with Actions do
      end
 end;
 
-procedure SetWeapon(weap: Longword);
-begin
-with CurrentTeam^ do
-     with Hedgehogs[CurrHedgehog] do
-          while Ammo[CurSlot, CurAmmo].AmmoType <> TAmmoType(weap) do
-                ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
-end;
-
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 var s: shortstring;
 begin
@@ -145,7 +137,7 @@ with Actions.actions[Actions.Pos] do
      {$ENDIF}
      if (Action and ai_specmask) <> 0 then
         case Action of
-           aia_Weapon: SetWeapon(Param);
+           aia_Weapon: SetWeapon(TAmmoType(Param));
             aia_WaitX: if round(Me.X) = Param then Time:= GameTicks
                                               else exit;
             aia_WaitY: if round(Me.Y) = Param then Time:= GameTicks
