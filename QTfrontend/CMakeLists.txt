@@ -26,7 +26,9 @@ set(hwfr_src
 	gamecfgwidget.cpp
 	pages.cpp
 	SquareLabel.cpp
-	hedgehogerWidget.cpp)
+	hedgehogerWidget.cpp
+	hwmap.cpp
+	mapContainer.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -46,7 +48,9 @@ set(hwfr_moc_hdrs
 	predefteams.h
 	pages.h
 	SquareLabel.h
-	hedgehogerWidget.h)
+	hedgehogerWidget.h
+	hwmap.h
+	mapContainer.h)
 
 
 set(hwfr_rez

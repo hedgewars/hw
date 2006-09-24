@@ -49,6 +49,7 @@
 #include "teamselect.h"
 #include "gamecfgwidget.h"
 #include "SquareLabel.h"
+#include "mapContainer.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -258,6 +259,9 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
+	
+	//HWMapContainer* pMapContainer=new HWMapContainer(this);
+	//pageLayout->addWidget(pMapContainer, 1, 1);
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);

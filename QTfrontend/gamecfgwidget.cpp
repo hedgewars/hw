@@ -34,10 +34,14 @@
 #include <QResizeEvent>
 #include "gamecfgwidget.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent) : QWidget(parent)
+GameCFGWidget::GameCFGWidget(QWidget* parent) : 
+  QWidget(parent), mainLayout(this)
 {
 	CB_mode_Forts = new QCheckBox(this);
 	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
+	mainLayout.addWidget(CB_mode_Forts);
+	pMapContainer=new HWMapContainer(this);
+	mainLayout.addWidget(pMapContainer, 80);
 }
 
 quint32 GameCFGWidget::getGameFlags()
@@ -46,4 +50,9 @@ quint32 GameCFGWidget::getGameFlags()
 	if (CB_mode_Forts->isChecked())
 		result |= 1;
 	return result;
+}
+
+QString GameCFGWidget::getCurrentSeed() const
+{
+  return pMapContainer->getCurrentSeed();
 }

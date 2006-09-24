@@ -36,7 +36,9 @@
 
 #include <QWidget>
 #include <QCheckBox>
+#include <QVBoxLayout>
 
+#include "mapContainer.h"
 
 class GameCFGWidget : public QWidget
 {
@@ -45,11 +47,14 @@ class GameCFGWidget : public QWidget
 public:
 	GameCFGWidget(QWidget* parent=0);
 	quint32 getGameFlags();
+	QString getCurrentSeed() const;
 
 private slots:
 
 private:
 	QCheckBox * CB_mode_Forts;
+	QVBoxLayout mainLayout;
+	HWMapContainer* pMapContainer;
 };
 
 #endif // GAMECONFIGWIDGET_H
