@@ -205,15 +205,9 @@ case ParamCount of
 end;
 
 procedure ShowMainWindow;
-var flags: Longword;
 begin
-flags:= SDL_HWSURFACE or SDL_DOUBLEBUF or SDL_HWACCEL;
-if cFullScreen then flags:= flags or SDL_FULLSCREEN
-               else SDL_WM_SetCaption('Hedgewars', nil);
-SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
-TryDo(SDLPrimSurface <> nil, errmsgCreateSurface, true);
-PixelFormat:= SDLPrimSurface.format;
-SDL_ShowCursor(0);
+if cFullScreen then ParseCommand('fullscr 1')
+               else ParseCommand('fullscr 0')
 end;
 
 ///////////////

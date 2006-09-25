@@ -307,6 +307,7 @@ RegisterVariable('slot'    , vtCommand, @chSlot         );
 RegisterVariable('put'     , vtCommand, @chPut          );
 RegisterVariable('ljump'   , vtCommand, @chLJump        );
 RegisterVariable('hjump'   , vtCommand, @chHJump        );
+RegisterVariable('fullscr' , vtCommand, @chFullScr      );
 
 finalization
 FreeVariablesList

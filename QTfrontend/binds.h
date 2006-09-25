@@ -37,7 +37,7 @@
 #include <QString>
 #include <QtGlobal>
 
-#define BINDS_NUMBER 25
+#define BINDS_NUMBER 26
 
 struct BindAction
 {
@@ -72,6 +72,7 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"timer 3",	"3",	QT_TRANSLATE_NOOP("binds", "timer 3 sec"),	false},
 	{"timer 4",	"4",	QT_TRANSLATE_NOOP("binds", "timer 4 sec"),	false},
 	{"timer 5",	"5",	QT_TRANSLATE_NOOP("binds", "timer 5 sec"),	true},
+	{"fullscr",	"f",	QT_TRANSLATE_NOOP("binds", "change mode"),	false},
 	{"capture",	"f11",	QT_TRANSLATE_NOOP("binds", "capture"),	false},
 	{"quit",	"f10",	QT_TRANSLATE_NOOP("binds", "quit"),	true}
 };
