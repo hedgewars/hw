@@ -61,7 +61,6 @@ class HWMap : public QObject
   void isReadyNow();
 
  private:
-  static int isBusy;
   void RealStart();
 
   bool m_isStarted;

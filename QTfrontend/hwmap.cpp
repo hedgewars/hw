@@ -8,7 +8,6 @@
 
 #include <QList>
 
-int HWMap::isBusy(0); // initialize static variable
 QList<HWMap*> srvsList;
 QMutex tcpSrvMut;
 
@@ -42,11 +41,9 @@ void HWMap::ClientDisconnect()
   //deleteLater();
 
 
-  tcpSrvMut.lock();
-  if(isBusy) --isBusy;
-  tcpSrvMut.unlock();
   emit ImageReceived(im);
   readbuffer.clear();
+  if(srvsList.size()==1) srvsList.pop_front();
   emit isReadyNow();
 }
 
@@ -100,14 +97,12 @@ void HWMap::tcpServerReady()
 void HWMap::Start()
 {
   tcpSrvMut.lock();
-  if(!isBusy) {
-    ++isBusy;
+  if(srvsList.isEmpty()) {
     srvsList.push_back(this);
     tcpSrvMut.unlock();
   } else {
     connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
     srvsList.push_back(this);
-    //deleteLater();
     tcpSrvMut.unlock();
     return;
   }
