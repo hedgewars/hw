@@ -4,8 +4,21 @@
 
 #include <QMessageBox>
 
+#include <QMutex>
+#include <QDebug>
+
+#include <QList>
+
+int HWMap::isBusy(0); // initialize static variable
+QList<HWMap*> srvsList;
+QMutex tcpSrvMut;
+
 HWMap::HWMap() :
   m_isStarted(false)
+{
+}
+
+HWMap::~HWMap()
 {
 }
 
@@ -24,9 +37,17 @@ void HWMap::ClientDisconnect()
   IPCSocket->deleteLater();
   IPCSocket = 0;
   IPCServer->close();
-  deleteLater();
-  
+  //deleteLater();
+
+
+  tcpSrvMut.lock();
+  if(isBusy) --isBusy;
+  //if(!isBusy) srvsList.pop_front();//lastStarted=0;
+  tcpSrvMut.unlock();
+  qDebug() << "image emitted with seed " << QString(m_seed.c_str());
   emit ImageReceived(im);
+  readbuffer.clear();
+  emit isReadyNow();
 }
 
 void HWMap::ClientRead()
@@ -66,7 +87,39 @@ void HWMap::StartProcessError(QProcess::ProcessError error)
 			.arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
+void HWMap::tcpServerReady()
+{
+  qDebug() << "received signal, i am " << this << ";";
+  qDebug() << srvsList.front() << " disconnected from " << *(++srvsList.begin());
+  tcpSrvMut.lock();
+  disconnect(srvsList.front(), SIGNAL(isReadyNow()), *(++srvsList.begin()), SLOT(tcpServerReady()));
+  srvsList.pop_front();
+  tcpSrvMut.unlock();
+
+  RealStart();
+}
+
 void HWMap::Start()
+{
+  tcpSrvMut.lock();
+  if(!isBusy) {
+    qDebug() << "notBusy, i am " << this;
+    ++isBusy;
+    srvsList.push_back(this);
+    tcpSrvMut.unlock();
+  } else {
+    qDebug() << "Busy, connected " << srvsList.back() << " to " << this;
+    connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+    srvsList.push_back(this);
+    //deleteLater();
+    tcpSrvMut.unlock();
+    return;
+  }
+  
+  RealStart();
+}
+
+void HWMap::RealStart()
 {
   IPCServer = new QTcpServer(this);
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));

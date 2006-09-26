@@ -53,12 +53,17 @@ class HWMap : public QObject
     
  public:
   HWMap();
+  virtual ~HWMap();
   void getImage(std::string seed);
 
  signals:
   void ImageReceived(const QImage newImage);
+  void isReadyNow();
 
  private:
+  static int isBusy;
+  void RealStart();
+
   bool m_isStarted;
   std::string m_seed;
   QTcpServer * IPCServer;
@@ -75,6 +80,8 @@ class HWMap : public QObject
   void ClientDisconnect();
   void ClientRead();
   void StartProcessError(QProcess::ProcessError error);
+
+  void tcpServerReady();
 };
 
 #endif // _HWMAP_INCLUDED

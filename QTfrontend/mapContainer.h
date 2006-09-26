@@ -61,7 +61,7 @@ class HWMapContainer : public QWidget
  private:
   QVBoxLayout mainLayout;
   QPushButton* imageButt;
-  HWMap* pMap;
+  HWMap m_hwmap;
   QString m_seed;
 };
 
