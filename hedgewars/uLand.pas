@@ -329,11 +329,18 @@ for x:= 0 to 2047 do
     end;
 end;
 
+function rndSign(num: Double): Double;
+begin
+if getrandom(2) = 0 then Result:=   num
+                    else Result:= - num
+end;
+
+
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
 const MAXPASSES = 32;
-var ar: array[0..MAXPASSES, 0..5] of Double;
+var ar: array[0..MAXPASSES, 0..9] of Double;
     i, k: integer;
-    rx, ry, oy: Double;
+    rx, ry, ox, oy: Double;
     PassesNum: Longword;
 begin
 with Template do
@@ -350,11 +357,10 @@ with Template do
          ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
          ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
          ar[i, 5]:= getrandom * pi * 2;
-         {$IFDEF DEBUGFILE}
-         AddFileLog('Wave params ¹' + inttostr(i) + ':');
-         AddFileLog('X: ampl = ' + floattostr(ar[i, 0]) + '; freq = ' + floattostr(ar[i, 1]) + '; shift = ' + floattostr(ar[i, 2]));
-         AddFileLog('Y: ampl = ' + floattostr(ar[i, 3]) + '; freq = ' + floattostr(ar[i, 4]) + '; shift = ' + floattostr(ar[i, 5]));
-         {$ENDIF}
+         ar[i, 6]:= ar[i, 1] * (getrandom * 2 - 1);
+         ar[i, 7]:= ar[i, 1] * rndSign(sqrt(1 - sqr(ar[i, 6])));
+         ar[i, 8]:= ar[i, 4] * (getrandom * 2 - 1);
+         ar[i, 9]:= ar[i, 4] * rndSign(sqrt(1 - sqr(ar[i, 8])));
          end;
      end;
 
@@ -364,9 +370,10 @@ for k:= 0 to Pred(pa.Count) do  // apply transformation
     ry:= pa.ar[k].y;
     for i:= 1 to PassesNum do
         begin
+        ox:= rx;
         oy:= ry;
-        ry:= ry + ar[i, 0] * sin(ar[i, 1] * rx + ar[i, 2]);
-        rx:= rx + ar[i, 3] * sin(ar[i, 4] * oy + ar[i, 5]);
+        ry:= ry + ar[i, 0] * sin(ox * ar[i, 6] + oy * ar[i, 7] + ar[i, 2]);
+        rx:= rx + ar[i, 3] * sin(ox * ar[i, 8] + oy * ar[i, 9] + ar[i, 5]);
         end;
     pa.ar[k].x:= round(rx);
     pa.ar[k].y:= round(ry);
