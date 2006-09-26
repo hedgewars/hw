@@ -73,8 +73,8 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"timer 4",	"4",	QT_TRANSLATE_NOOP("binds", "timer 4 sec"),	false},
 	{"timer 5",	"5",	QT_TRANSLATE_NOOP("binds", "timer 5 sec"),	true},
 	{"fullscr",	"f",	QT_TRANSLATE_NOOP("binds", "change mode"),	false},
-	{"capture",	"f11",	QT_TRANSLATE_NOOP("binds", "capture"),	false},
-	{"quit",	"f10",	QT_TRANSLATE_NOOP("binds", "quit"),	true}
+	{"capture",	"c",	QT_TRANSLATE_NOOP("binds", "capture"),	false},
+	{"quit",	"escape",	QT_TRANSLATE_NOOP("binds", "quit"),	true}
 };
 
 #endif // BINDS_H

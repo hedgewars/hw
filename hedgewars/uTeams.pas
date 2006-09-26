@@ -56,7 +56,7 @@ type PHedgehog = ^THedgehog;
              Color: Cardinal;
              TeamName: string[MAXNAMELEN];
              ExtDriven: boolean;
-             Aliases: array[0..cKeyMaxIndex] of shortstring;
+             Binds: TBinds;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              Ammos: array[0..cMaxHHIndex] of THHAmmo;
              CurrHedgehog: integer;
@@ -162,6 +162,8 @@ cWindSpeed:= (GetRandom * 2 - 1) * cMaxWindSpeed;
 AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
+if CurrentTeam.ExtDriven then SetDefaultBinds
+                         else SetBinds(CurrentTeam.Binds);
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 

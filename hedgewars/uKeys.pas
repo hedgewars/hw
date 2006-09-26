@@ -34,21 +34,28 @@
 unit uKeys;
 interface
 {$INCLUDE options.inc}
+uses uConsts;
+
+type TBinds = array[0..cKeyMaxIndex] of shortstring;
 
 function KeyNameToCode(name: string): word;
 procedure ProcessKbd;
 procedure ResetKbd;
-procedure ProcessKbdDemo;
 procedure InitKbdKeyTable;
+
+procedure SetBinds(var binds: TBinds);
+procedure SetDefaultBinds;
 
 var KbdKeyPressed: boolean;
 
 implementation
-uses SDLh, uTeams, uConsole, uConsts, uMisc;
+uses SDLh, uTeams, uConsole, uMisc;
 const KeyNumber = 1024;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
+
 var tkbd: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
+    DefaultBinds, CurrentBinds: TBinds;
 
 function KeyNameToCode(name: string): word;
 begin
@@ -60,45 +67,35 @@ procedure ProcessKbd;
 var  i: integer;
      s: shortstring;
      pkbd: PByteArray;
+     Trusted: boolean;
 begin
-if (CurrentTeam = nil)
-   or (GameState = gsConsole)
-   or (CurrentTeam.ExtDriven)
-   or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].BotLevel <> 0) then exit;
-
 KbdKeyPressed:= false;
+Trusted:= (CurrentTeam <> nil)
+          and (not CurrentTeam.ExtDriven)
+          and (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].BotLevel = 0);
+
 pkbd:= SDL_GetKeyState(nil);
 i:= SDL_GetMouseState(nil, nil);
 pkbd^[1]:= (i and 1);
 pkbd^[2]:= ((i shr 1) and 1);
 pkbd^[3]:= ((i shr 2) and 1);
 for i:= 1 to cKeyMaxIndex do
-    if CurrentTeam.Aliases[i][0] <> #0 then
+    if CurrentBinds[i][0] <> #0 then
       begin
       if (i > 3) and (pkbd^[i] <> 0) then KbdKeyPressed:= true;
-      if CurrentTeam.Aliases[i][1] = '+' then
+      if CurrentBinds[i][1] = '+' then
           begin
-          if (pkbd^[i] <> 0)and(tkbd[i]  = 0) then ParseCommand(CurrentTeam.Aliases[i]) else
+          if (pkbd^[i] <> 0)and(tkbd[i]  = 0) then ParseCommand(CurrentBinds[i], Trusted) else
           if (pkbd^[i] =  0)and(tkbd[i] <> 0) then
              begin
-             s:= CurrentTeam.Aliases[i];
+             s:= CurrentBinds[i];
              s[1]:= '-';
              ParseCommand(s)
              end;
           end else
-          if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentTeam.Aliases[i]);
+          if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted);
        tkbd[i]:= pkbd^[i]
        end
-end;
-
-procedure ProcessKbdDemo;
-var pkbd: PByteArray;
-begin
-pkbd:= PByteArray(SDL_GetKeyState(nil));
-if pkbd^[27] <> 0 then
-   begin
-   ParseCommand('/quit');
-   end;
 end;
 
 procedure ResetKbd;
@@ -127,8 +124,24 @@ for i:= 4 to cKeyMaxIndex do
            if s[t] = ' ' then s[t]:= '_';
        KeyNames[i]:= s
        end;
-    end
+    end;
+
+DefaultBinds[ 27]:= 'quit';
+DefaultBinds[ 99]:= 'capture';
+DefaultBinds[102]:= 'fullscr';
+SetDefaultBinds
 end;
+
+procedure SetBinds(var binds: TBinds);
+begin
+CurrentBinds:= binds
+end;
+
+procedure SetDefaultBinds;
+begin
+CurrentBinds:= DefaultBinds
+end;
+
 
 initialization
 

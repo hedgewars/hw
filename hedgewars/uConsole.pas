@@ -43,7 +43,7 @@ procedure DrawConsole(Surface: PSDL_Surface);
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure KeyPressConsole(Key: Longword);
-procedure ParseCommand(CmdStr: shortstring);
+procedure ParseCommand(CmdStr: shortstring; const TrustedSource: boolean = true);
 function  GetLastConsoleLine: shortstring;
 
 implementation
@@ -58,6 +58,7 @@ type  PVariable = ^TVariable;
                      Name: string[15];
                     VType: TVariableType;
                   Handler: pointer;
+                  Trusted: boolean;
                   end;
 
 var   ConsoleLines: array[byte] of ShortString;
@@ -65,7 +66,7 @@ var   ConsoleLines: array[byte] of ShortString;
       InputStr: shortstring;
       Variables: PVariable = nil;
 
-function RegisterVariable(Name: string; VType: TVariableType; p: pointer): PVariable;
+function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
 begin
 New(Result);
 TryDo(Result <> nil, 'RegisterVariable: Result = nil', true);
@@ -73,6 +74,8 @@ FillChar(Result^, sizeof(TVariable), 0);
 Result.Name:= Name;
 Result.VType:= VType;
 Result.Handler:= p;
+Result.Trusted:= Trusted;
+
 if Variables = nil then Variables:= Result
                    else begin
                         Result.Next:= Variables;
@@ -162,7 +165,7 @@ if cLineWidth > 255 then cLineWidth:= 255;
 for i:= 0 to Pred(cLinesCount) do PLongWord(@ConsoleLines[i])^:= 0
 end;
 
-procedure ParseCommand(CmdStr: shortstring);
+procedure ParseCommand(CmdStr: shortstring; const TrustedSource: boolean = true);
 type PDouble = ^Double;
 var i, ii: integer;
     s: shortstring;
@@ -180,7 +183,8 @@ while t <> nil do
       begin
       if t.Name = CmdStr then
          begin
-         case t.VType of
+         if TrustedSource or t.Trusted then
+            case t.VType of
               vtCommand: if c='/' then
                          begin
                          TCommandHandler(t.Handler)(s);
@@ -247,9 +251,9 @@ case Key of
       9: AutoComplete;
  13,271: begin
          if InputStr[1] in ['/', '$'] then
-            ParseCommand(InputStr)
+            ParseCommand(InputStr, false)
          else
-            ParseCommand('/say ' + InputStr);
+            ParseCommand('/say ' + InputStr, false);
          InputStr:= ''
          end;
      96: begin
@@ -271,43 +275,43 @@ end;
 
 initialization
 InitConsole;
-RegisterVariable('quit'    , vtCommand, @chQuit         );
-RegisterVariable('capture' , vtCommand, @chCapture      );
-RegisterVariable('addteam' , vtCommand, @chAddTeam      );
-RegisterVariable('rdriven' , vtCommand, @chTeamLocal    );
-RegisterVariable('map'     , vtCommand, @chSetMap       );
-RegisterVariable('theme'   , vtCommand, @chSetTheme     );
-RegisterVariable('seed'    , vtCommand, @chSetSeed      );
-RegisterVariable('c_height', vtInteger, @cConsoleHeight );
-RegisterVariable('gmflags' , vtInteger, @GameFlags      );
-RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime);
-RegisterVariable('name'    , vtCommand, @chName         );
-RegisterVariable('fort'    , vtCommand, @chFort         );
-RegisterVariable('grave'   , vtCommand, @chGrave        );
-RegisterVariable('bind'    , vtCommand, @chBind         );
-RegisterVariable('add'     , vtCommand, @chAdd          );
-RegisterVariable('skip'    , vtCommand, @chSkip         );
-RegisterVariable('say'     , vtCommand, @chSay          );
-RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     );
-RegisterVariable('+left'   , vtCommand, @chLeft_p       );
-RegisterVariable('-left'   , vtCommand, @chLeft_m       );
-RegisterVariable('+right'  , vtCommand, @chRight_p      );
-RegisterVariable('-right'  , vtCommand, @chRight_m      );
-RegisterVariable('+up'     , vtCommand, @chUp_p         );
-RegisterVariable('-up'     , vtCommand, @chUp_m         );
-RegisterVariable('+down'   , vtCommand, @chDown_p       );
-RegisterVariable('-down'   , vtCommand, @chDown_m       );
-RegisterVariable('+attack' , vtCommand, @chAttack_p     );
-RegisterVariable('-attack' , vtCommand, @chAttack_m     );
-RegisterVariable('color'   , vtCommand, @chColor        );
-RegisterVariable('switch'  , vtCommand, @chSwitch       );
-RegisterVariable('nextturn', vtCommand, @chNextTurn     );
-RegisterVariable('timer'   , vtCommand, @chTimer        );
-RegisterVariable('slot'    , vtCommand, @chSlot         );
-RegisterVariable('put'     , vtCommand, @chPut          );
-RegisterVariable('ljump'   , vtCommand, @chLJump        );
-RegisterVariable('hjump'   , vtCommand, @chHJump        );
-RegisterVariable('fullscr' , vtCommand, @chFullScr      );
+RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+RegisterVariable('capture' , vtCommand, @chCapture      , true );
+RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
+RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
+RegisterVariable('map'     , vtCommand, @chSetMap       , false);
+RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
+RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
+RegisterVariable('c_height', vtInteger, @cConsoleHeight , false);
+RegisterVariable('gmflags' , vtInteger, @GameFlags      , false);
+RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime, false);
+RegisterVariable('name'    , vtCommand, @chName         , false);
+RegisterVariable('fort'    , vtCommand, @chFort         , false);
+RegisterVariable('grave'   , vtCommand, @chGrave        , false);
+RegisterVariable('bind'    , vtCommand, @chBind         , true );
+RegisterVariable('add'     , vtCommand, @chAdd          , false);
+RegisterVariable('skip'    , vtCommand, @chSkip         , false);
+RegisterVariable('say'     , vtCommand, @chSay          , true );
+RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
+RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
+RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
+RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
+RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
+RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
+RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
+RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
+RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
+RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
+RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
+RegisterVariable('color'   , vtCommand, @chColor        , false);
+RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
+RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
+RegisterVariable('timer'   , vtCommand, @chTimer        , false);
+RegisterVariable('slot'    , vtCommand, @chSlot         , false);
+RegisterVariable('put'     , vtCommand, @chPut          , false);
+RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
+RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
+RegisterVariable('fullscr' , vtCommand, @chFullScr      , true );
 
 finalization
 FreeVariablesList

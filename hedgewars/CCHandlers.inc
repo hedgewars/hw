@@ -134,7 +134,7 @@ if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 b:= KeyNameToCode(id);
 if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"')
-         else CurrentTeam.Aliases[b]:= s
+         else CurrentTeam.Binds[b]:= s
 end;
 
 procedure chLeft_p(var s: shortstring);

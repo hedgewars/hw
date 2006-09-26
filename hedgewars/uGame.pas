@@ -47,13 +47,8 @@ procedure DoGameTick(Lag: integer);
 const SendEmptyPacketTicks: LongWord = 0;
 var i: integer;
 begin
-if CurrentTeam.ExtDriven then
+if not CurrentTeam.ExtDriven then
    begin
-   if (GameType = gmtDemo) then
-      ProcessKbdDemo;
-   end
-   else begin
-   ProcessKbd;
    NetGetNextCmd; // its for the case when receiving "/say" message
    isInLag:= false;
    inc(SendEmptyPacketTicks, Lag);
