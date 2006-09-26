@@ -5,7 +5,6 @@
 #include <QMessageBox>
 
 #include <QMutex>
-#include <QDebug>
 
 #include <QList>
 
@@ -16,6 +15,9 @@ QMutex tcpSrvMut;
 HWMap::HWMap() :
   m_isStarted(false)
 {
+  IPCServer = new QTcpServer(this);
+  connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+  IPCServer->setMaxPendingConnections(1);
 }
 
 HWMap::~HWMap()
@@ -34,17 +36,15 @@ void HWMap::ClientDisconnect()
   im.setNumColors(2);
 
   IPCSocket->close();
-  IPCSocket->deleteLater();
-  IPCSocket = 0;
+  //IPCSocket->deleteLater();
+  //IPCSocket = 0;
   IPCServer->close();
   //deleteLater();
 
 
   tcpSrvMut.lock();
   if(isBusy) --isBusy;
-  //if(!isBusy) srvsList.pop_front();//lastStarted=0;
   tcpSrvMut.unlock();
-  qDebug() << "image emitted with seed " << QString(m_seed.c_str());
   emit ImageReceived(im);
   readbuffer.clear();
   emit isReadyNow();
@@ -89,8 +89,6 @@ void HWMap::StartProcessError(QProcess::ProcessError error)
 
 void HWMap::tcpServerReady()
 {
-  qDebug() << "received signal, i am " << this << ";";
-  qDebug() << srvsList.front() << " disconnected from " << *(++srvsList.begin());
   tcpSrvMut.lock();
   disconnect(srvsList.front(), SIGNAL(isReadyNow()), *(++srvsList.begin()), SLOT(tcpServerReady()));
   srvsList.pop_front();
@@ -103,12 +101,10 @@ void HWMap::Start()
 {
   tcpSrvMut.lock();
   if(!isBusy) {
-    qDebug() << "notBusy, i am " << this;
     ++isBusy;
     srvsList.push_back(this);
     tcpSrvMut.unlock();
   } else {
-    qDebug() << "Busy, connected " << srvsList.back() << " to " << this;
     connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
     srvsList.push_back(this);
     //deleteLater();
@@ -121,9 +117,6 @@ void HWMap::Start()
 
 void HWMap::RealStart()
 {
-  IPCServer = new QTcpServer(this);
-  connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-  IPCServer->setMaxPendingConnections(1);
   IPCSocket = 0;
   if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT)) {
     QMessageBox::critical(0, tr("Error"),

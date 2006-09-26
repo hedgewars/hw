@@ -37,8 +37,6 @@
 #include <QBuffer>
 #include <QUuid>
 
-#include <QDebug>
-
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
@@ -46,13 +44,11 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   imageButt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(changeImage()));
-  connect(&m_hwmap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
   changeImage();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
 {
-  qDebug() << "image received";
   // unfortunately QPixmap::fromImage doesn't work 
   // with this image in current (4.1.4) version of QT
   QByteArray ba;
@@ -68,9 +64,10 @@ void HWMapContainer::setImage(const QImage newImage)
 
 void HWMapContainer::changeImage()
 {
+  pMap=new HWMap();
+  connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
   m_seed = QUuid::createUuid().toString();
-  //pMap=new HWMap();
-  m_hwmap.getImage(m_seed.toStdString());
+  pMap->getImage(m_seed.toStdString());
 }
 
 QString HWMapContainer::getCurrentSeed() const
