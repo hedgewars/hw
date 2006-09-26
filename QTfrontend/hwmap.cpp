@@ -9,7 +9,6 @@
 #include <QList>
 
 QList<HWMap*> srvsList;
-QMutex tcpSrvMut;
 
 HWMap::HWMap() :
   m_isStarted(false)
@@ -35,11 +34,7 @@ void HWMap::ClientDisconnect()
   im.setNumColors(2);
 
   IPCSocket->close();
-  //IPCSocket->deleteLater();
-  //IPCSocket = 0;
   IPCServer->close();
-  //deleteLater();
-
 
   emit ImageReceived(im);
   readbuffer.clear();
@@ -86,24 +81,19 @@ void HWMap::StartProcessError(QProcess::ProcessError error)
 
 void HWMap::tcpServerReady()
 {
-  tcpSrvMut.lock();
   disconnect(srvsList.front(), SIGNAL(isReadyNow()), *(++srvsList.begin()), SLOT(tcpServerReady()));
   srvsList.pop_front();
-  tcpSrvMut.unlock();
 
   RealStart();
 }
 
 void HWMap::Start()
 {
-  tcpSrvMut.lock();
   if(srvsList.isEmpty()) {
     srvsList.push_back(this);
-    tcpSrvMut.unlock();
   } else {
     connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
     srvsList.push_back(this);
-    tcpSrvMut.unlock();
     return;
   }
   
