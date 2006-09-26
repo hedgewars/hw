@@ -335,14 +335,14 @@ void HWGame::StartLocal()
 {
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
-	seed = QUuid::createUuid().toString();
+	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
 	Start();
 }
 
 void HWGame::StartQuick()
 {
 	gameType = gtQLocal;
-	seed = QUuid::createUuid().toString();
+	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
 	Start();
 }
 

@@ -41,6 +41,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
   imageButt=new QPushButton(this);
+  imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(changeImage()));
