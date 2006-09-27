@@ -127,6 +127,8 @@ for i:= 4 to cKeyMaxIndex do
     end;
 
 DefaultBinds[ 27]:= 'quit';
+DefaultBinds[ 48]:= '+volup';
+DefaultBinds[ 57]:= '+voldown';
 DefaultBinds[ 99]:= 'capture';
 DefaultBinds[102]:= 'fullscr';
 SetDefaultBinds

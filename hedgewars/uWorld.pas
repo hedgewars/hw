@@ -61,12 +61,11 @@ const RealTicks: Longword = 0;
 
 type TCaptionStr = record
                    Surf: PSDL_Surface;
-                   Group: TCapGroup;
                    EndTime: LongWord;
                    end;
 
 var cWaterSprCount: integer;
-    Captions: array[0..Pred(cMaxCaptions)] of TCaptionStr;
+    Captions: array[TCapGroup] of TCaptionStr;
     AMxLeft, AMxCurr, SlotsNum: integer;
 
 procedure InitWorld;
@@ -169,6 +168,7 @@ var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
     tdx, tdy: Double;
+    grp: TCapGroup;
     s: string[15];
 
     procedure DrawRepeated(spr: TSprite; Shift: integer);
@@ -303,22 +303,20 @@ if CurrentTeam <> nil then
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
 
 // Captions
-i:= 0;
-while (i < cMaxCaptions) do
-    begin
-    with Captions[i] do
+i:= 8;
+for grp:= Low(TCapGroup) to High(TCapGroup) do
+    with Captions[grp] do
          if EndTime > 0 then
-            DrawCentered(cScreenWidth div 2, 8 + i * (Surf.h + 2) + cConsoleYAdd, Surf, Surface);
-    inc(i)
-    end;
-while (Captions[0].EndTime > 0) and (Captions[0].EndTime <= RealTicks) do
-    begin
-    SDL_FreeSurface(Captions[0].Surf);
-    Captions[0].Surf:= nil;
-    for i:= 1 to Pred(cMaxCaptions) do
-        Captions[Pred(i)]:= Captions[i];
-    Captions[Pred(cMaxCaptions)].EndTime:= 0
-    end;
+            begin
+            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
+            inc(i, Surf.h + 2);
+            if EndTime <= RealTicks then
+               begin
+               SDL_FreeSurface(Surf);
+               Surf:= nil;
+               EndTime:= 0
+               end
+            end;
 
 // Teams Healths
 team:= TeamsList;
@@ -401,45 +399,18 @@ if SoundTimerTicks >= 50 then
    if cVolumeDelta <> 0 then
       begin
       str(ChangeVolume(cVolumeDelta), s);
-      AddCaption(Format('Volume %1%', s), $FFFFFF, capgrpVolume)
+      AddCaption(Format(trmsg[sidVolume], s), $FFFFFF, capgrpVolume)
       end
    end
 end;
 
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
-var i, m: LongWord;
 begin
 if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
-i:= 0;
-while (i < cMaxCaptions) and (Captions[i].Group <> Group) do inc(i);
-if i < cMaxCaptions then
-   begin
-   SDL_FreeSurface(Captions[i].Surf);
-   while (i < Pred(cMaxCaptions)) do
-         begin
-         Captions[i]:= Captions[Succ(i)];
-         inc(i)
-         end;
-   Captions[Pred(cMaxCaptions)].EndTime:= 0
-   end;
-   
-if Captions[Pred(cMaxCaptions)].EndTime > 0 then
-   begin
-   SDL_FreeSurface(Captions[0].Surf);
-   m:= Pred(cMaxCaptions);
-   for i:= 1 to m do
-       Captions[Pred(i)]:= Captions[i];
-   Captions[m].EndTime:= 0
-   end else
-   begin
-   m:= 0;
-   while (m < cMaxCaptions)and(Captions[m].EndTime > 0) do inc(m)
-   end;
+if Captions[Group].Surf <> nil then SDL_FreeSurface(Captions[Group].Surf);
 
-
-Captions[m].Surf:= RenderString(s, Color, fntBig);
-Captions[m].Group:= Group;
-Captions[m].EndTime:= RealTicks + 1200
+Captions[Group].Surf:= RenderString(s, Color, fntBig);
+Captions[Group].EndTime:= RealTicks + 1200
 end;
 
 procedure MoveCamera;

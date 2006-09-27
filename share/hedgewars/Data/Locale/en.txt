@@ -18,3 +18,4 @@
 01:00=Let's fight!
 01:01=Round draw
 01:02=%1 wins!
+01:03=Volume %1%

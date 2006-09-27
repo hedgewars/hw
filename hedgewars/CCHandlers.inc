@@ -402,23 +402,13 @@ PixelFormat:= SDLPrimSurface.format;
 SDL_ShowCursor(0)
 end;
 
-procedure chVolUp_p(var s: shortstring);
+procedure chVol_p(var s: shortstring);
 begin
-cVolumeDelta:= 3
+inc(cVolumeDelta, 3)
 end;
 
-procedure chVolUp_m(var s: shortstring);
+procedure chVol_m(var s: shortstring);
 begin
-cVolumeDelta:= 0
-end;
-
-procedure chVolDown_p(var s: shortstring);
-begin
-cVolumeDelta:= -3
-end;
-
-procedure chVolDown_m(var s: shortstring);
-begin
-cVolumeDelta:= 0
+dec(cVolumeDelta, 3)
 end;
 

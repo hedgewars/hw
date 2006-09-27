@@ -36,7 +36,7 @@ interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
                    sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds);
-     TMsgStrId = (sidStartFight, sidDraw, sidWinner);
+     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume);
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
 

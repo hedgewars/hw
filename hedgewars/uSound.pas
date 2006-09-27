@@ -122,7 +122,9 @@ function ChangeVolume(voldelta: integer): integer;
 begin
 inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
-Volume:= Mix_Volume(-1, Volume);
+Mix_Volume(-1, Volume);
+Volume:= Mix_Volume(-1, -1);
+Mix_VolumeMusic(Volume * 3 div 8);
 Result:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
