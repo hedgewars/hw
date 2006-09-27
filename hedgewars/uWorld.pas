@@ -51,16 +51,16 @@ var FollowGear: PGear = nil;
     bSelected: boolean = false;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
 const RealTicks: Longword = 0;
       Frames: Longword = 0;
       FPS: Longword = 0;
       CountTicks: Longword = 0;
+      SoundTimerTicks: Longword = 0;
       prevPoint: TPoint = (X: 0; Y: 0);
 
 type TCaptionStr = record
                    Surf: PSDL_Surface;
-                   StorePos: Longword;
                    Group: TCapGroup;
                    EndTime: LongWord;
                    end;
@@ -169,6 +169,7 @@ var i, t: integer;
     r: TSDL_Rect;
     team: PTeam;
     tdx, tdy: Double;
+    s: string[15];
 
     procedure DrawRepeated(spr: TSprite; Shift: integer);
     var i, w: integer;
@@ -391,11 +392,22 @@ if CountTicks >= 1000 then
    Frames:= 0;
    CountTicks:= 0;
    end;
-if cShowFPS then DXOutText(cScreenWidth - 50, 10, fnt16, inttostr(FPS) + ' fps', Surface)
+if cShowFPS then DXOutText(cScreenWidth - 50, 10, fnt16, inttostr(FPS) + ' fps', Surface);
+
+inc(SoundTimerTicks, Lag);
+if SoundTimerTicks >= 50 then
+   begin
+   SoundTimerTicks:= 0;
+   if cVolumeDelta <> 0 then
+      begin
+      str(ChangeVolume(cVolumeDelta), s);
+      AddCaption(Format('Volume %1%', s), $FFFFFF, capgrpVolume)
+      end
+   end
 end;
 
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
-var i, t, m, k: LongWord;
+var i, m: LongWord;
 begin
 if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
 i:= 0;
@@ -424,13 +436,8 @@ if Captions[Pred(cMaxCaptions)].EndTime > 0 then
    while (m < cMaxCaptions)and(Captions[m].EndTime > 0) do inc(m)
    end;
 
-k:= 0;
-for i:= 0 to Pred(cMaxCaptions) do
-    for t:= 0 to Pred(cMaxCaptions) do
-        if (Captions[t].EndTime > 0) and (Captions[t].StorePos = k) then inc(k);
 
 Captions[m].Surf:= RenderString(s, Color, fntBig);
-Captions[m].StorePos:= k;
 Captions[m].Group:= Group;
 Captions[m].EndTime:= RealTicks + 1200
 end;

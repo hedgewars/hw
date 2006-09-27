@@ -81,6 +81,8 @@ var isCursorVisible : boolean = false;
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
     cSeed         : shortstring = '';
+    cInitVolume   : integer = 128;
+    cVolumeDelta  : integer = 0;
 
 const
     cMaxPower     = 1500;

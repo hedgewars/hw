@@ -61,7 +61,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
                    amBaseballBat);
      THWFont    = (fnt16, fntBig);
-     TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay);
+     TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
      THHFont    = record
                   Handle: PTTF_Font;
                   Height: integer;

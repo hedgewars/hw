@@ -42,11 +42,13 @@ procedure SoundLoad;
 procedure PlaySound(snd: TSound);
 procedure PlayMusic;
 procedure StopTPUSound;
+function  ChangeVolume(voldelta: integer): integer;
 
 implementation
 uses uMisc, uConsole;
 const chanTPU = 12;
 var Mus: PMixMusic;
+    Volume: integer;
 
 procedure InitSound;
 begin
@@ -58,7 +60,11 @@ if isSoundEnabled then
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 Mix_AllocateChannels(Succ(chanTPU));
-Mix_VolumeMusic(48)
+Mix_VolumeMusic(48);
+
+Volume:= cInitVolume;
+if Volume < 0 then Volume:= 0;
+Volume:= Mix_Volume(-1, Volume)
 end;
 
 procedure ReleaseSound;
@@ -110,6 +116,14 @@ begin
 if not isSoundEnabled then exit;
 if Mix_PlayingMusic = 0 then
    Mix_PlayMusic(Mus, -1)
+end;
+
+function ChangeVolume(voldelta: integer): integer;
+begin
+inc(Volume, voldelta);
+if Volume < 0 then Volume:= 0;
+Volume:= Mix_Volume(-1, Volume);
+Result:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
 end.

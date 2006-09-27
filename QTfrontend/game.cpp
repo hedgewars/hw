@@ -257,6 +257,7 @@ void HWGame::Start()
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
+	arguments << "128";
 	process->start(bindir->absolutePath() + "/hwengine", arguments);
 }
 

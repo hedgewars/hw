@@ -312,6 +312,10 @@ RegisterVariable('put'     , vtCommand, @chPut          , false);
 RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
 RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
 RegisterVariable('fullscr' , vtCommand, @chFullScr      , true );
+RegisterVariable('+volup'  , vtCommand, @chVolUp_p      , true );
+RegisterVariable('-volup'  , vtCommand, @chVolUp_m      , true );
+RegisterVariable('+voldown', vtCommand, @chVolDown_p    , true );
+RegisterVariable('-voldown', vtCommand, @chVolDown_m    , true );
 
 finalization
 FreeVariablesList

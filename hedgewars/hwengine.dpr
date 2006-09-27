@@ -185,7 +185,7 @@ for i:= 0 to ParamCount do
     AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$ENDIF}
 case ParamCount of
-  7: begin
+  8: begin
      val(ParamStr(1), cScreenWidth, c);
      val(ParamStr(2), cScreenHeight, c);
      cBitsStr:= ParamStr(3);
@@ -194,6 +194,7 @@ case ParamCount of
      cFullScreen:= ParamStr(5) = '1';
      isSoundEnabled:= ParamStr(6) = '1';
      cLocaleFName:= ParamStr(7);
+     val(ParamStr(8), cInitVolume, c);
      end;
   2: begin
      val(ParamStr(1), ipcPort, c);

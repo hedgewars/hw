@@ -274,6 +274,8 @@ const {$IFDEF WIN32}
       SDL_MixerLibName = 'libSDL_mixer.so';
       {$ENDIF}
 
+const MIX_MAX_VOLUME = 128;
+
 type PMixChunk = ^TMixChunk;
      TMixChunk = record
                  allocated: Longword;
@@ -302,9 +304,11 @@ type PMixChunk = ^TMixChunk;
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
+function  Mix_Volume(channel: LongInt; volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt;  cdecl; external SDL_MixerLibName;
 function  Mix_VolumeMusic(volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
-function Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
 procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
 
