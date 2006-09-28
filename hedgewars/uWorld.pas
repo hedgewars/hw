@@ -49,6 +49,7 @@ var FollowGear: PGear = nil;
     WindBarWidth: integer = 0;
     bShowAmmoMenu: boolean = false;
     bSelected: boolean = false;
+    bShowFinger: boolean = false;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
@@ -240,6 +241,8 @@ if CurrentTeam <> nil then
                      DrawCentered(round(Gear.X) + WorldDx, t, Team.NameTag, Surface)
                      end else // Current hedgehog
                      begin
+                     if bShowFinger
+                        and ((Gear.State and gstHHDriven) <> 0) then DrawSprite(sprFinger, round(Gear.X) - 16 + WorldDx, round(Gear.Y) - 64 + WorldDy, RealTicks div 32 mod 16, Surface);
                      if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
                         if (Gear.State and gstHHThinking) <> 0 then
                            DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)

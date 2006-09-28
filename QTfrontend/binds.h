@@ -37,7 +37,7 @@
 #include <QString>
 #include <QtGlobal>
 
-#define BINDS_NUMBER 28
+#define BINDS_NUMBER 29
 
 struct BindAction
 {
@@ -57,7 +57,8 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"hjump",	"backspace",	QT_TRANSLATE_NOOP("binds", "jump"),	false},
 	{"+attack",	"space",	QT_TRANSLATE_NOOP("binds", "attack"),	false},
 	{"put",	"mousel",	QT_TRANSLATE_NOOP("binds", "put"),	false},
-	{"switch",	"tab",	QT_TRANSLATE_NOOP("binds", "switch"),	true},
+	{"switch",	"tab",	QT_TRANSLATE_NOOP("binds", "switch"),	false},
+	{"findhh",	"h",	QT_TRANSLATE_NOOP("binds", "find hedgehog"),	true},
 	{"ammomenu",	"mouser",	QT_TRANSLATE_NOOP("binds", "ammo menu"),	false},
 	{"slot 1",	"f1",	QT_TRANSLATE_NOOP("binds", "slot 1"),	false},
 	{"slot 2",	"f2",	QT_TRANSLATE_NOOP("binds", "slot 2"),	false},

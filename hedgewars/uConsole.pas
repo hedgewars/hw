@@ -316,6 +316,7 @@ RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
 RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
 RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
 RegisterVariable('-voldown', vtCommand, @chVol_p        , true );
+RegisterVariable('findhh'  , vtCommand, @chFindhh       , true );
 
 finalization
 FreeVariablesList

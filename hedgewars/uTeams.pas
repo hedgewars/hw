@@ -164,6 +164,7 @@ AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1).Tag:= round(72 * cWindSpeed / cMaxWi
 ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
 if CurrentTeam.ExtDriven then SetDefaultBinds
                          else SetBinds(CurrentTeam.Binds);
+bShowFinger:= true;
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 

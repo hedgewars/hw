@@ -140,6 +140,7 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('L');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_Left
@@ -156,6 +157,7 @@ end;
 procedure chRight_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('R');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_Right
@@ -172,6 +174,7 @@ end;
 procedure chUp_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('U');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_Up
@@ -188,6 +191,7 @@ end;
 procedure chDown_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('D');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_Down
@@ -204,6 +208,7 @@ end;
 procedure chLJump(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('j');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_LJump
@@ -212,6 +217,7 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 if not CurrentTeam.ExtDriven then SendIPC('J');
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
     Message:= Message or gm_HJump
@@ -220,6 +226,7 @@ end;
 procedure chAttack_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
      begin
      {$IFDEF DEBUGFILE}AddFileLog('/+attack: Gear.State = '+inttostr(State));{$ENDIF}
@@ -270,6 +277,7 @@ end;
 procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or (CurrentTeam = nil) then exit;
+bShowFinger:= false;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0 then
         begin
@@ -285,6 +293,7 @@ var slot: LongWord;
     caSlot, caAmmo: PLongword;
 begin
 if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+bShowFinger:= false;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
 if not CurrentTeam.ExtDriven then SendIPC(char(byte(s[1]) + 79));
@@ -410,5 +419,12 @@ end;
 procedure chVol_m(var s: shortstring);
 begin
 dec(cVolumeDelta, 3)
+end;
+
+procedure chFindhh(var s: shortstring);
+begin
+if CheckNoTeamOrHH then exit;
+bShowFinger:= true;
+FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear
 end;
 

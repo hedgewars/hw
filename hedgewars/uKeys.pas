@@ -131,6 +131,7 @@ DefaultBinds[ 48]:= '+volup';
 DefaultBinds[ 57]:= '+voldown';
 DefaultBinds[ 99]:= 'capture';
 DefaultBinds[102]:= 'fullscr';
+DefaultBinds[104]:= 'findhh';
 SetDefaultBinds
 end;
 
