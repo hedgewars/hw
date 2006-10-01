@@ -53,7 +53,7 @@
 class GameUIConfig;
 class GameCFGWidget;
 
-class HWGame : public QObject
+class HWGame : public TCPBase
 {
 	Q_OBJECT
 public:
@@ -67,6 +67,7 @@ public:
  protected:
 	virtual QStringList setArguments();
 	virtual void onClientRead();
+	virtual void onClientDisconnect();
 
 signals:
 	void SendNet(const QByteArray & msg);
@@ -83,10 +84,7 @@ private:
         gtDemo   = 3,
         gtNet    = 4
     };
-    QTcpServer * IPCServer;
-	QTcpSocket * IPCSocket;
 	char msgbuf[MAXMSGCHARS];
-	QByteArray readbuffer;
 	QString teams[5];
 	std::map<QString, unsigned char> hdNum;
 	QString seed;
@@ -97,7 +95,6 @@ private:
 	GameCFGWidget * gamecfg;
 	GameType gameType;
 
-	void Start();
 	void SendConfig();
 	void SendQuickConfig();
 	void SendTeamConfig(int index);
@@ -107,12 +104,6 @@ private:
 	void SendIPC(const QString & buf);
 	void RawSendIPC(const QByteArray & buf);
 	void SaveDemo(const QString & filename);
-
-private slots:
-	void NewConnection();
-	void ClientDisconnect();
-	void ClientRead();
-	void StartProcessError(QProcess::ProcessError error);
 };
 
 #endif

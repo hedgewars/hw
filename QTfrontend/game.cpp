@@ -53,30 +53,9 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg)
 	seed = "";
 }
 
-void HWGame::NewConnection()
-{
-	QTcpSocket * client = IPCServer->nextPendingConnection();
-	if(!IPCSocket)
-	{
-		IPCServer->close();
-		IPCSocket = client;
-		connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-		connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-		if (toSendBuf.size() > 0)
-			SENDIPC("?");
-	} else
-	{
-		qWarning("2nd IPC client?!");
-		client->disconnectFromHost();
-	}
-}
-
-void HWGame::ClientDisconnect()
+void HWGame::onClientDisconnect()
 {
 	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_1");
-    IPCSocket->deleteLater();
-	IPCSocket = 0;
-	deleteLater();
 }
 
 void HWGame::SendTeamConfig(int index)
@@ -218,12 +197,6 @@ void HWGame::FromNet(const QByteArray & msg)
 	RawSendIPC(msg);
 }
 
-void HWGame::ClientRead()
-{
-	readbuffer.append(IPCSocket->readAll());
-	onClientRead();
-}
-
 void HWGame::onClientRead()
 {
 	quint8 msglen;
@@ -235,27 +208,6 @@ void HWGame::onClientRead()
 		readbuffer.remove(0, msglen + 1);
 		ParseMessage(msg);
 	}
-}
-
-void HWGame::Start()
-{
-	IPCServer = new QTcpServer(this);
-	connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-	IPCServer->setMaxPendingConnections(1);
-	IPCSocket = 0;
-	if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT))
-	{
-		QMessageBox::critical(0, tr("Error"),
-				tr("Unable to start the server: %1.")
-				.arg(IPCServer->errorString()));
-	}
-
-	demo = new QByteArray;
-	QProcess * process;
-	process = new QProcess;
-	connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
-	QStringList arguments=setArguments();
-	process->start(bindir->absolutePath() + "/hwengine", arguments);
 }
 
 QStringList HWGame::setArguments()
@@ -270,13 +222,6 @@ QStringList HWGame::setArguments()
 	arguments << tr("en.txt");
 	arguments << "128";
 	return arguments;
-}
-
-void HWGame::StartProcessError(QProcess::ProcessError error)
-{
-	QMessageBox::critical(0, tr("Error"),
-				tr("Unable to run engine: %1 (")
-				.arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
 void HWGame::AddTeam(const QString & teamname, unsigned char numHedgedogs)
@@ -333,6 +278,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	demofile.close();
 
 	// run engine
+	demo = new QByteArray;
 	Start();
 }
 
@@ -348,6 +294,7 @@ void HWGame::StartLocal()
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
 	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
+	demo = new QByteArray;
 	Start();
 }
 
@@ -355,6 +302,7 @@ void HWGame::StartQuick()
 {
 	gameType = gtQLocal;
 	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
+	demo = new QByteArray;
 	Start();
 }
 
