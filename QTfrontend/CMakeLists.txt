@@ -28,7 +28,8 @@ set(hwfr_src
 	SquareLabel.cpp
 	hedgehogerWidget.cpp
 	hwmap.cpp
-	mapContainer.cpp)
+	mapContainer.cpp
+	tcpBase.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -51,7 +52,8 @@ set(hwfr_moc_hdrs
 	SquareLabel.h
 	hedgehogerWidget.h
 	hwmap.h
-	mapContainer.h)
+	mapContainer.h
+	tcpBase.h)
 
 
 set(hwfr_rez

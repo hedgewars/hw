@@ -45,7 +45,8 @@
 
 #include <map>
 
-#define IPC_PORT 46631
+#include "tcpBase.h"
+
 #define MAXMSGCHARS 255
 #define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
 
@@ -62,6 +63,10 @@ public:
 	void StartLocal();
 	void StartQuick();
 	void StartNet();
+
+ protected:
+	virtual QStringList setArguments();
+	virtual void onClientRead();
 
 signals:
 	void SendNet(const QByteArray & msg);

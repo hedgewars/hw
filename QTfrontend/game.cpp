@@ -221,6 +221,11 @@ void HWGame::FromNet(const QByteArray & msg)
 void HWGame::ClientRead()
 {
 	readbuffer.append(IPCSocket->readAll());
+	onClientRead();
+}
+
+void HWGame::onClientRead()
+{
 	quint8 msglen;
 	quint32 bufsize;
 	while (((bufsize = readbuffer.size()) > 0) &&
@@ -247,9 +252,15 @@ void HWGame::Start()
 
 	demo = new QByteArray;
 	QProcess * process;
-	QStringList arguments;
 	process = new QProcess;
 	connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
+	QStringList arguments=setArguments();
+	process->start(bindir->absolutePath() + "/hwengine", arguments);
+}
+
+QStringList HWGame::setArguments()
+{
+	QStringList arguments;
 	arguments << resolutions[0][config->vid_Resolution()];
 	arguments << resolutions[1][config->vid_Resolution()];
 	arguments << "16";
@@ -258,7 +269,7 @@ void HWGame::Start()
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
 	arguments << "128";
-	process->start(bindir->absolutePath() + "/hwengine", arguments);
+	return arguments;
 }
 
 void HWGame::StartProcessError(QProcess::ProcessError error)

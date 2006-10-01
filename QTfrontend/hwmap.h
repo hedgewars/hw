@@ -43,11 +43,11 @@
 #include <QProcess>
 #include <QImage>
 
-#include "game.h"
+#include "tcpBase.h"
 
 #include <string>
 
-class HWMap : public QObject
+class HWMap : public TCPBase
 {
   Q_OBJECT
     
@@ -56,31 +56,18 @@ class HWMap : public QObject
   virtual ~HWMap();
   void getImage(std::string seed);
 
+ protected:
+  virtual QStringList setArguments();
+  virtual void onClientDisconnect();
+  virtual void SendToClientFirst();
+
  signals:
   void ImageReceived(const QImage newImage);
-  void isReadyNow();
 
  private:
-  void RealStart();
-
-  bool m_isStarted;
   std::string m_seed;
-  QTcpServer * IPCServer;
-  QTcpSocket * IPCSocket;
-  
-  QByteArray readbuffer;
-
-  void Start();
-
-  void SendToClientFirst();
 
  private slots:
-  void NewConnection();
-  void ClientDisconnect();
-  void ClientRead();
-  void StartProcessError(QProcess::ProcessError error);
-
-  void tcpServerReady();
 };
 
 #endif // _HWMAP_INCLUDED
