@@ -45,7 +45,8 @@
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
 
-HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg)
+HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
+  TCPBase(true)
 {
 	this->config = config;
 	this->gamecfg = gamecfg;
@@ -65,41 +66,41 @@ void HWGame::SendTeamConfig(int index)
 
 void HWGame::SendConfig()
 {
-	SendIPC(QString("eseed %1").arg(seed));
-	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()));
-	SENDIPC("TL");
-	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
+	SendIPC(QString("eseed %1").arg(seed).toAscii());
+	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
+	SendIPC("TL");
+	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
 
 	for (int i = 0; i < TeamCount; i++)
 	{
-		SENDIPC("eaddteam");
+		SendIPC("eaddteam");
 		LocalCFG(teams[i]);
-		SendIPC(QString("ecolor %1").arg(65535 << i * 8));
+		SendIPC(QString("ecolor %1").arg(65535 << i * 8).toAscii());
 		for (int t = 0; t < hdNum[teams[i]]; t++)
-			SendIPC(QString("eadd hh%1 0").arg(t));
+			SendIPC(QString("eadd hh%1 0").arg(t).toAscii());
 	}
 }
 
 void HWGame::SendQuickConfig()
 {
-	SendIPC(QString("eseed %1").arg(seed));
-	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()));
-	SENDIPC("TL");
-	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()));
-	SENDIPC("eaddteam");
+	SendIPC(QString("eseed %1").arg(seed).toAscii());
+	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
+	SendIPC("TL");
+	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
+	SendIPC("eaddteam");
 	LocalCFG(0);
-	SENDIPC("ecolor 65535");
-	SENDIPC("eadd hh0 0");
-	SENDIPC("eadd hh1 0");
-	SENDIPC("eadd hh2 0");
-	SENDIPC("eadd hh3 0");
-	SENDIPC("eaddteam");
+	SendIPC("ecolor 65535");
+	SendIPC("eadd hh0 0");
+	SendIPC("eadd hh1 0");
+	SendIPC("eadd hh2 0");
+	SendIPC("eadd hh3 0");
+	SendIPC("eaddteam");
 	LocalCFG(2);
-	SENDIPC("ecolor 16776960");
-	SENDIPC("eadd hh0 1");
-	SENDIPC("eadd hh1 1");
-	SENDIPC("eadd hh2 1");
-	SENDIPC("eadd hh3 1");
+	SendIPC("ecolor 16776960");
+	SendIPC("eadd hh0 1");
+	SendIPC("eadd hh1 1");
+	SendIPC("eadd hh2 1");
+	SendIPC("eadd hh3 1");
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -109,7 +110,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			if (gameType == gtNet)
 				emit SendNet(QByteArray("\x01""?"));
 			else
-				SENDIPC("!");
+				SendIPC("!");
 			break;
 		}
 		case 'C': {
@@ -124,7 +125,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 				}
 				case gtDemo: break;
 				case gtNet: {
-					SENDIPC("TN");
+					SendIPC("TN");
 					emit SendNet(QByteArray("\x01""C"));
 					break;
 				}
@@ -154,41 +155,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			}
 			demo->append(msg);
 		}
-	}
-}
-
-void HWGame::SendIPC(const char * msg, quint8 len)
-{
-	SendIPC(QByteArray::fromRawData(msg, len));
-}
-
-void HWGame::SendIPC(const QString & buf)
-{
-	SendIPC(QByteArray().append(buf));
-}
-
-void HWGame::SendIPC(const QByteArray & buf)
-{
-	if (buf.size() > MAXMSGCHARS) return;
-	quint8 len = buf.size();
-	RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
-}
-
-void HWGame::RawSendIPC(const QByteArray & buf)
-{
-	if (!IPCSocket)
-	{
-		toSendBuf += buf;
-	} else
-	{
-		if (toSendBuf.size() > 0)
-		{
-			IPCSocket->write(toSendBuf);
-			demo->append(toSendBuf);
-			toSendBuf.clear();
-		}
-		IPCSocket->write(buf);
-		demo->append(buf);
 	}
 }
 
@@ -273,6 +239,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	{
 		readbytes = stream.readRawData((char *)&buf, 512);
 		toSendBuf.append(QByteArray((char *)&buf, readbytes));
+		//SendIPC(QByteArray((char *)&buf, readbytes));
 
 	} while (readbytes > 0);
 	demofile.close();

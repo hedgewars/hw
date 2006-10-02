@@ -45,13 +45,14 @@
 #include <QImage>
 
 #define IPC_PORT 46631
+#define MAXMSGCHARS 255
 
 class TCPBase : public QObject
 {
   Q_OBJECT
     
  public:
-  TCPBase();
+  TCPBase(bool demoMode);
 
  signals:
   void isReadyNow();
@@ -59,18 +60,24 @@ class TCPBase : public QObject
  protected:
   void Start();
 
-  QTcpSocket * IPCSocket;
   QByteArray readbuffer;
+
+  QByteArray toSendBuf;
+  QByteArray * demo;
+
+  void SendIPC(const QByteArray & buf);
+  void RawSendIPC(const QByteArray & buf);
 
   virtual QStringList setArguments()=0;
   virtual void onClientRead();
   virtual void onClientDisconnect();
   virtual void SendToClientFirst();
-  
 
  private:
+  bool m_isDemoMode;
   void RealStart();
   QTcpServer * IPCServer;
+  QTcpSocket * IPCSocket;
 
  private slots:
   void NewConnection();

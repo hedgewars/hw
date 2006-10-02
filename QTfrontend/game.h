@@ -35,20 +35,13 @@
 #define GAME_H
 
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QByteArray>
 #include <QString>
-#include <QDir>
-#include <QProcess>
 #include "team.h"
 
 #include <map>
 
 #include "tcpBase.h"
-
-#define MAXMSGCHARS 255
-#define SENDIPC(a) SendIPC(a, sizeof(a) - 1)
 
 class GameUIConfig;
 class GameCFGWidget;
@@ -89,8 +82,6 @@ private:
 	std::map<QString, unsigned char> hdNum;
 	QString seed;
 	int TeamCount;
-	QByteArray * demo;
-	QByteArray toSendBuf;
 	GameUIConfig * config;
 	GameCFGWidget * gamecfg;
 	GameType gameType;
@@ -99,10 +90,6 @@ private:
 	void SendQuickConfig();
 	void SendTeamConfig(int index);
 	void ParseMessage(const QByteArray & msg);
-	void SendIPC(const char * msg, quint8 len);
-	void SendIPC(const QByteArray & buf);
-	void SendIPC(const QString & buf);
-	void RawSendIPC(const QByteArray & buf);
 	void SaveDemo(const QString & filename);
 };
 

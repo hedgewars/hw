@@ -42,7 +42,8 @@
 
 QList<TCPBase*> srvsList;
 
-TCPBase::TCPBase() 
+TCPBase::TCPBase(bool demoMode) :
+  m_isDemoMode(demoMode)
 {
   IPCServer = new QTcpServer(this);
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
@@ -137,4 +138,29 @@ void TCPBase::onClientDisconnect()
 
 void TCPBase::SendToClientFirst()
 {
+}
+
+void TCPBase::SendIPC(const QByteArray & buf)
+{
+	if (buf.size() > MAXMSGCHARS) return;
+	quint8 len = buf.size();
+	RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
+}
+
+void TCPBase::RawSendIPC(const QByteArray & buf)
+{
+	if (!IPCSocket)
+	{
+		toSendBuf += buf;
+	} else
+	{
+		if (toSendBuf.size() > 0)
+		{
+			IPCSocket->write(toSendBuf);
+			if(m_isDemoMode) demo->append(toSendBuf);
+			toSendBuf.clear();
+		}
+		IPCSocket->write(buf);
+		if(m_isDemoMode) demo->append(buf);
+	}
 }

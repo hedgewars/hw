@@ -34,13 +34,8 @@
 #ifndef _HWMAP_INCLUDED
 #define _HWMAP_INCLUDED
 
-#include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 #include <QByteArray>
 #include <QString>
-#include <QDir>
-#include <QProcess>
 #include <QImage>
 
 #include "tcpBase.h"

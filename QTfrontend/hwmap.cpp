@@ -33,7 +33,8 @@
 
 #include "hwmap.h"
 
-HWMap::HWMap()
+HWMap::HWMap() :
+  TCPBase(false)
 {
 }
 
@@ -65,9 +66,6 @@ void HWMap::onClientDisconnect()
 void HWMap::SendToClientFirst()
 {
   std::string toSend=std::string("eseed ")+m_seed;
-  char ln=(char)toSend.length();
-  IPCSocket->write(&ln, 1);
-  IPCSocket->write(toSend.c_str(), ln);
-
-  IPCSocket->write("\x01!", 2);
+  SendIPC(toSend.c_str());
+  SendIPC("!");
 }
