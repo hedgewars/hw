@@ -146,7 +146,7 @@ const Template3Points: array[0..23] of TPoint =
        (x: 1800; y:  200),
        (x: 1700; y:  600),
        (x: 1900; y: 1010),
-       (x: 1800; y: 1200)
+       (x: 1800; y: 1500)
       );
       Template3FPoints: array[0..0] of TPoint =
       (
@@ -202,7 +202,7 @@ const Template4Points: array[0..38] of TPoint =
     
 const Template5Points: array[0..10] of TPoint =
       (
-       (x:  225; y: 1260),
+       (x:  225; y: 1500),
        (x:  254; y:  226),
        (x:  729; y:  238),
        (x:  658; y:  441),
@@ -212,7 +212,7 @@ const Template5Points: array[0..10] of TPoint =
        (x: 1473; y:  285),
        (x: 1803; y:  207),
        (x: 1839; y:  801),
-       (x: 1674; y: 1239)
+       (x: 1674; y: 1500)
       );
       Template5FPoints: array[0..0] of TPoint =
       (
@@ -221,7 +221,7 @@ const Template5Points: array[0..10] of TPoint =
 
 const Template6Points: array[0..20] of TPoint =
       (
-       (x:  318; y: 1494),
+       (x:  318; y: 1500),
        (x:  270; y: 1023),
        (x:  252; y:  921),
        (x:  480; y:  888),
@@ -241,7 +241,7 @@ const Template6Points: array[0..20] of TPoint =
        (x: 1593; y:  693),
        (x: 1707; y:  774),
        (x: 1728; y:  894),
-       (x: 1788; y: 1491)
+       (x: 1788; y: 1500)
       );
       Template6FPoints: array[0..0] of TPoint =
       (
@@ -250,7 +250,7 @@ const Template6Points: array[0..20] of TPoint =
 
 const Template7Points: array[0..43] of TPoint =
       (
-       (x:  180; y: 1485),
+       (x:  180; y: 1500),
        (x:  411; y: 1020),
        (x:  402; y:  912),
        (x:  141; y:  897),
@@ -293,7 +293,7 @@ const Template7Points: array[0..43] of TPoint =
        (x: 1683; y:  747),
        (x: 1665; y:  831),
        (x: 1818; y:  951),
-       (x: 1893; y: 1476)
+       (x: 1893; y: 1500)
       );
       Template7FPoints: array[0..0] of TPoint =
       (
@@ -302,7 +302,7 @@ const Template7Points: array[0..43] of TPoint =
 
 const Template8Points: array[0..23] of TPoint =
       (
-       (x:  222; y: 1482),
+       (x:  222; y: 1500),
        (x:  354; y: 1023),
        (x:  249; y:  783),
        (x:  240; y:  421),
@@ -325,7 +325,7 @@ const Template8Points: array[0..23] of TPoint =
        (x: 1608; y:  342),
        (x: 1641; y:  819),
        (x: 1719; y:  864),
-       (x: 1746; y: 1440)
+       (x: 1746; y: 1500)
       );
       Template8FPoints: array[0..0] of TPoint =
       (
@@ -334,7 +334,7 @@ const Template8Points: array[0..23] of TPoint =
 
 const Template9Points: array[0..23] of TPoint =
       (
-       (x:  384; y: 1488),
+       (x:  384; y: 1500),
        (x:  210; y: 1023),
        (x:  213; y:  891),
        (x:  501; y:  861),
@@ -357,7 +357,7 @@ const Template9Points: array[0..23] of TPoint =
        (x: 1833; y:  714),
        (x: 1674; y:  837),
        (x: 1800; y: 1020),
-       (x: 1632; y: 1491)
+       (x: 1632; y: 1500)
       );
       Template9FPoints: array[0..0] of TPoint =
       (
@@ -366,7 +366,7 @@ const Template9Points: array[0..23] of TPoint =
 
 const Template10Points: array[0..13] of TPoint =
       (
-       (x:  336; y: 1476),
+       (x:  336; y: 1500),
        (x:  303; y: 1026),
        (x:  225; y:  921),
        (x:  216; y:  741),
@@ -379,7 +379,7 @@ const Template10Points: array[0..13] of TPoint =
        (x: 1623; y:  846),
        (x: 1821; y:  657),
        (x: 1911; y:  897),
-       (x: 1704; y: 1446)
+       (x: 1704; y: 1500)
       );
       Template10FPoints: array[0..0] of TPoint =
       (
@@ -388,7 +388,7 @@ const Template10Points: array[0..13] of TPoint =
 
 const Template11Points: array[0..9] of TPoint =
       (
-       (x:  270; y: 1407),
+       (x:  270; y: 1500),
        (x:  180; y:  795),
        (x:  453; y:  753),
        (x:  537; y:  900),
@@ -397,7 +397,7 @@ const Template11Points: array[0..9] of TPoint =
        (x: 1269; y:  657),
        (x: 1560; y:  915),
        (x: 1812; y:  867),
-       (x: 1854; y: 1347)
+       (x: 1854; y: 1500)
       );
       Template11FPoints: array[0..0] of TPoint =
       (
@@ -406,7 +406,7 @@ const Template11Points: array[0..9] of TPoint =
 
 const Template12Points: array[0..38] of TPoint =
       (
-       (x:  201; y: 1224),
+       (x:  201; y: 1500),
        (x:  207; y:  920),
        (x:  360; y:  901),
        (x:  345; y:  822),
@@ -444,7 +444,7 @@ const Template12Points: array[0..38] of TPoint =
        (x: 1773; y:  726),
        (x: 1578; y:  836),
        (x: 1746; y:  918),
-       (x: 1662; y: 1220)
+       (x: 1662; y: 1500)
       );
       Template12FPoints: array[0..0] of TPoint =
       (
@@ -453,7 +453,7 @@ const Template12Points: array[0..38] of TPoint =
 
 const Template13Points: array[0..13] of TPoint =
       (
-       (x:  645; y: 1400),
+       (x:  645; y: 1500),
        (x:  198; y:  732),
        (x:  402; y:  648),
        (x:  609; y:  763),
@@ -466,7 +466,7 @@ const Template13Points: array[0..13] of TPoint =
        (x: 1038; y:  576),
        (x: 1017; y:  756),
        (x: 1803; y:  728),
-       (x: 1503; y: 1400)
+       (x: 1503; y: 1500)
       );
       Template13FPoints: array[0..0] of TPoint =
       (
@@ -475,7 +475,7 @@ const Template13Points: array[0..13] of TPoint =
 
 const Template14Points: array[0..22] of TPoint =
       (
-       (x:  177; y: 1408),
+       (x:  177; y: 1500),
        (x:  262; y: 1026),
        (x:  259; y:  303),
        (x:  765; y:  162),
@@ -497,7 +497,7 @@ const Template14Points: array[0..22] of TPoint =
        (x: 1656; y:  156),
        (x: 1821; y:  396),
        (x: 1716; y:  768),
-       (x: 1926; y: 1437)
+       (x: 1926; y: 1500)
       );
       Template14FPoints: array[0..0] of TPoint =
       (

@@ -13,6 +13,7 @@ install(FILES
 	Crosshair.png
 	dynamite.png
 	Expl50.png
+	Finger.png
 	FirstAid.png
 	Flame.png
 	Frame.png

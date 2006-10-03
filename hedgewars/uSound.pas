@@ -120,6 +120,11 @@ end;
 
 function ChangeVolume(voldelta: integer): integer;
 begin
+if not isSoundEnabled then
+   begin
+   Result:= 0;
+   exit
+   end;
 inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
 Mix_Volume(-1, Volume);
