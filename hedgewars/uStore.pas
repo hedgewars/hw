@@ -104,7 +104,10 @@ Result.y:= Y;
 Result.w:= w + 6;
 Result.h:= h + 2;
 DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface);
-SDL_GetRGB(Color, Surface.format, @clr.r, @clr.g, @clr.b);
+clr.r:= Color shr 16;
+clr.g:= (Color shr 8) and $FF;
+clr.b:= Color and $FF;
+clr.a:= 0;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
 Result.y:= Y + 1;
@@ -143,7 +146,7 @@ var i: TStuff;
       Team.HealthRect:= r;
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Team.Color, Team.Color, StoreSurface, false);
+      DrawRoundRect(@rr, Team.AdjColor, Team.AdjColor, StoreSurface, false);
       inc(r.y, r.h);
       dec(drY, r.h + 2);
       Team.DrawHealthY:= drY;
@@ -174,7 +177,7 @@ var i: TStuff;
     Team:= TeamsList;
     while Team<>nil do
       begin
-      SDL_FillRect(StoreSurface, @r, Team.Color);
+      SDL_FillRect(StoreSurface, @r, Team.AdjColor);
       SDL_UpperBlit(tmpsurf, nil, StoreSurface, @r);
       Team.CrossHairRect:= r;
       inc(r.x, 16);
@@ -376,7 +379,10 @@ var clr: TSDL_Color;
 begin
 r.x:= X;
 r.y:= Y;
-SDL_GetRGB(cWhiteColor, PixelFormat, @clr.r, @clr.g, @clr.b);
+clr.r:= $FF;
+clr.g:= $FF;
+clr.b:= $FF;
+clr.a:= 0;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)

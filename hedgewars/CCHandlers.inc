@@ -86,7 +86,8 @@ var c: integer;
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
 val(id, CurrentTeam.Color, c);
-AdjustColor(CurrentTeam.Color)
+CurrentTeam.AdjColor:= CurrentTeam.Color;
+AdjustColor(CurrentTeam.AdjColor)
 end;
 
 procedure chAdd(var id: shortstring);
