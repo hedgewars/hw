@@ -26,14 +26,13 @@
 #include "hwconsts.h"
 
 QList<TCPBase*> srvsList;
-int TCPBase::isIPCServerStarted=0;
 QTcpServer* TCPBase::IPCServer(0);
 
 TCPBase::TCPBase(bool demoMode) :
   m_isDemoMode(demoMode),
   IPCSocket(0)
 {
-  if(!isIPCServerStarted++) {
+  if(!IPCServer) {
     IPCServer = new QTcpServer(this);
     IPCServer->setMaxPendingConnections(1);
     if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT)) {
@@ -73,7 +72,6 @@ void TCPBase::RealStart()
 void TCPBase::ClientDisconnect()
 {
   IPCSocket->close();
-  //IPCServer->close();
 
   onClientDisconnect();
 

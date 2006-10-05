@@ -59,7 +59,6 @@ class TCPBase : public QObject
   virtual void SendToClientFirst();
 
  private:
-  static int isIPCServerStarted;
   static QTcpServer* IPCServer;
 
   bool m_isDemoMode;
