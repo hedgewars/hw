@@ -61,6 +61,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
 	connect(ui.pageMain->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
 	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
+	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(close()));
 
 	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
@@ -91,6 +92,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetChat->BtnJoin,	SIGNAL(clicked()),	this, SLOT(NetJoin()));
 	connect(ui.pageNetChat->BtnCreate,	SIGNAL(clicked()),	this, SLOT(NetCreate()));
 
+	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
 }
 
@@ -107,6 +110,11 @@ void HWForm::GoToSinglePlayer()
 void HWForm::GoToSetup()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
+}
+
+void HWForm::GoToInfo()
+{
+	ui.Pages->setCurrentIndex(ID_PAGE_INFO);
 }
 
 void HWForm::GoToMultiplayer()

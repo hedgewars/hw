@@ -28,10 +28,7 @@ void Ui_HWForm::setupUi(QMainWindow *HWForm)
 	HWForm->setObjectName(QString::fromUtf8("HWForm"));
 	HWForm->resize(QSize(620, 430).expandedTo(HWForm->minimumSizeHint()));
 	HWForm->setMinimumSize(QSize(620, 430));
-	HWForm->setWindowTitle(QMainWindow::tr("-= by unC0Rr =-"));
-	centralWidget = new QWidget(HWForm);
-	centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
-
+	HWForm->setWindowTitle(QMainWindow::tr("Hedgewars"));
 	centralWidget = new QWidget(HWForm);
 	centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
 
@@ -76,6 +73,9 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageNetGame	= new PageNetGame();
 	Pages->addWidget(pageNetGame);
+
+	pageInfo = new PageInfo();
+	Pages->addWidget(pageInfo);
 
 	pageMain = new PageMain();
 	Pages->addWidget(pageMain);

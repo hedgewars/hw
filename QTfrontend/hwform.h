@@ -46,6 +46,7 @@ private slots:
 	void GoToDemos();
 	void GoToNet();
 	void GoToNetChat();
+	void GoToInfo();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -64,20 +65,22 @@ private slots:
 	void StartMPGame();
 
 private:
+	enum PageIDs {
+		ID_PAGE_SINGLEPLAYER	= 0,
+		ID_PAGE_SETUP_TEAM	= 1,
+		ID_PAGE_SETUP	= 2,
+		ID_PAGE_MULTIPLAYER	= 3,
+		ID_PAGE_DEMOS	= 4,
+		ID_PAGE_NET	= 5,
+		ID_PAGE_NETCHAT	= 6,
+		ID_PAGE_NETCFG	= 7,
+		ID_PAGE_INFO	= 8,
+		ID_PAGE_MAIN	= 9
+		};
 	HWGame * game;
 	HWTeam * tmpTeam;
 	HWNet * hwnet;
 	GameUIConfig * config;
 };
-
-#define ID_PAGE_SINGLEPLAYER 0
-#define ID_PAGE_SETUP_TEAM 1
-#define ID_PAGE_SETUP 2
-#define ID_PAGE_MULTIPLAYER 3
-#define ID_PAGE_DEMOS 4
-#define ID_PAGE_NET 5
-#define ID_PAGE_NETCHAT 6
-#define ID_PAGE_NETCFG 7
-#define ID_PAGE_MAIN 8
 
 #endif

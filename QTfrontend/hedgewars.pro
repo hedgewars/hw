@@ -29,7 +29,8 @@ HEADERS += binds.h \
            hedgehogerWidget.h \
            hwmap.h \
            mapContainer.h \
-           tcpBase.h
+           tcpBase.h \
+           about.h
            
 SOURCES += game.cpp \
            main.cpp \
@@ -48,7 +49,8 @@ SOURCES += game.cpp \
            hedgehogerWidget.cpp \
            hwmap.cpp \
            mapContainer.cpp \
-           tcpBase.cpp
+           tcpBase.cpp \
+           about.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

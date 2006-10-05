@@ -35,6 +35,7 @@ class DemosList;
 class QListWidget;
 class QCheckBox;
 class SquareLabel;
+class About;
 
 class PageMain : public QWidget
 {
@@ -48,6 +49,7 @@ public:
 	QPushButton *BtnNet;
 	QPushButton *BtnSetup;
 	QPushButton *BtnDemos;
+	QPushButton *BtnInfo;
 	QPushButton *BtnExit;
 };
 
@@ -181,6 +183,17 @@ public:
 	QPushButton *BtnAddTeam;
 	QPushButton *BtnGo;
 	QListWidget *listNetTeams;
+};
+
+class PageInfo : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageInfo(QWidget* parent = 0);
+
+	QPushButton *BtnBack;
+	About *about;
 };
 
 #endif // PAGES_H

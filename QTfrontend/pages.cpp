@@ -35,6 +35,7 @@
 #include "gamecfgwidget.h"
 #include "SquareLabel.h"
 #include "mapContainer.h"
+#include "about.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -75,11 +76,17 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	BtnSetup->setText(QPushButton::tr("Setup"));
 	pageLayout->addWidget(BtnSetup, 5, 1);
 
+	BtnInfo = new QPushButton(this);
+	BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	BtnInfo->setFont(*font14);
+	BtnInfo->setText(QPushButton::tr("About"));
+	pageLayout->addWidget(BtnInfo, 6, 1);
+
 	BtnExit = new QPushButton(parent);
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnExit->setFont(*font14);
 	BtnExit->setText(QPushButton::tr("Exit"));
-	pageLayout->addWidget(BtnExit, 6, 1);
+	pageLayout->addWidget(BtnExit, 7, 1);
 }
 
 PageLocalGame::PageLocalGame(QWidget* parent) : QWidget(parent)
@@ -244,7 +251,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
-	
+
 	//HWMapContainer* pMapContainer=new HWMapContainer(this);
 	//pageLayout->addWidget(pMapContainer, 1, 1);
 
@@ -411,7 +418,6 @@ PageNetChat::PageNetChat(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnCreate, 1, 2);
 }
 
-
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
@@ -437,4 +443,21 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 
 	listNetTeams = new QListWidget(this);
 	pageLayout->addWidget(listNetTeams, 0, 1);
+}
+
+PageInfo::PageInfo(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 1, 0);
+
+	about = new About(this);
+	pageLayout->addWidget(about, 0, 0, 1, 3);
 }
