@@ -36,11 +36,16 @@
 #include <QPushButton>
 #include <QBuffer>
 #include <QUuid>
+#include <QBitmap>
+#include <QPainter>
+#include <QLinearGradient>
+#include <QColor>
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
   imageButt=new QPushButton(this);
+  imageButt->setMaximumSize(256, 128);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
@@ -50,17 +55,23 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
 void HWMapContainer::setImage(const QImage newImage)
 {
-  // unfortunately QPixmap::fromImage doesn't work 
-  // with this image in current (4.1.4) version of QT
-  QByteArray ba;
-  QBuffer buffer(&ba);
-  buffer.open(QIODevice::ReadWrite);
-  newImage.save(&buffer, "XBM");  
-  QPixmap px;
-  px.loadFromData(buffer.data(), "XBM");
+  QPixmap px(256, 128);
+  QPixmap pxres(256, 128);
+  QPainter p(&pxres);
 
-  imageButt->setIcon(px);
-  imageButt->setIconSize(QSize(128, 256));
+  px.fill(Qt::yellow);
+  QBitmap bm = QBitmap::fromImage(newImage);
+  px.setMask(bm);
+
+  QLinearGradient linearGrad(QPoint(128, 0), QPoint(128, 128));
+  linearGrad.setColorAt(0, QColor(0, 0, 192));
+  linearGrad.setColorAt(1, QColor(0, 0, 64));
+  p.fillRect(QRect(0, 0, 256, 128), linearGrad);
+  p.drawPixmap(QPoint(0, 0), px);
+
+
+  imageButt->setIcon(pxres);
+  imageButt->setIconSize(QSize(256, 128));
 }
 
 void HWMapContainer::changeImage()
