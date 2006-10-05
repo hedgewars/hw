@@ -107,7 +107,7 @@ DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
-clr.a:= 0;
+clr.a:= $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
 Result.y:= Y + 1;
@@ -382,7 +382,7 @@ r.y:= Y;
 clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
-clr.a:= 0;
+clr.a:= $FF;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
