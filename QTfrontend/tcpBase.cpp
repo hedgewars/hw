@@ -22,44 +22,47 @@
 #include <QList>
 
 #include <QImage>
-#include <QTimer>
 
 #include "hwconsts.h"
 
 QList<TCPBase*> srvsList;
+int TCPBase::isIPCServerStarted=0;
+QTcpServer* TCPBase::IPCServer(0);
 
 TCPBase::TCPBase(bool demoMode) :
-  m_isDemoMode(demoMode)
+  m_isDemoMode(demoMode),
+  IPCSocket(0)
 {
-  IPCServer = new QTcpServer(this);
+  if(!isIPCServerStarted++) {
+    IPCServer = new QTcpServer(this);
+    IPCServer->setMaxPendingConnections(1);
+    if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT)) {
+      QMessageBox::critical(0, tr("Error"),
+			    tr("Unable to start the server: %1.")
+			    .arg(IPCServer->errorString()));
+    }
+  }
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-  IPCServer->setMaxPendingConnections(1);
 }
 
 void TCPBase::NewConnection()
 {
-  QTcpSocket * client = IPCServer->nextPendingConnection();
-  if(!IPCSocket) {
-    IPCServer->close();
-    IPCSocket = client;
-    connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-    connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-    SendToClientFirst();
-  } else {
-    qWarning("2nd IPC client?!");
-    client->disconnectFromHost();
+  if(IPCSocket) {
+    // connection should be already finished
+    return;
   }
+  QTcpSocket * client = IPCServer->nextPendingConnection();
+  if(!client) return;
+  IPCSocket = client;
+  connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
+  connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+  SendToClientFirst();
 }
 
 void TCPBase::RealStart()
 {
   IPCSocket = 0;
-  if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT)) {
-    QMessageBox::critical(0, tr("Error"),
-			  tr("Unable to start the server: %1.")
-			  .arg(IPCServer->errorString()));
-  }
-
+  
   QProcess * process;
   process = new QProcess;
   connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
@@ -70,7 +73,7 @@ void TCPBase::RealStart()
 void TCPBase::ClientDisconnect()
 {
   IPCSocket->close();
-  IPCServer->close();
+  //IPCServer->close();
 
   onClientDisconnect();
 
@@ -98,7 +101,7 @@ void TCPBase::tcpServerReady()
   disconnect(srvsList.front(), SIGNAL(isReadyNow()), *(++srvsList.begin()), SLOT(tcpServerReady()));
   srvsList.pop_front();
 
-  QTimer::singleShot(150, this, SLOT(RealStart()));
+  RealStart();
 }
 
 void TCPBase::Start()
@@ -110,6 +113,7 @@ void TCPBase::Start()
     srvsList.push_back(this);
     return;
   }
+  
   RealStart();
 }
 

@@ -35,7 +35,7 @@
 class TCPBase : public QObject
 {
   Q_OBJECT
-
+    
  public:
   TCPBase(bool demoMode);
 
@@ -59,12 +59,14 @@ class TCPBase : public QObject
   virtual void SendToClientFirst();
 
  private:
+  static int isIPCServerStarted;
+  static QTcpServer* IPCServer;
+
   bool m_isDemoMode;
-  QTcpServer * IPCServer;
+  void RealStart();
   QTcpSocket * IPCSocket;
 
  private slots:
-  void RealStart();
   void NewConnection();
   void ClientDisconnect();
   void ClientRead();
