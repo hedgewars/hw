@@ -27,7 +27,7 @@ type PGear = ^TGear;
      TGear = record
              NextGear, PrevGear: PGear;
              Active: Boolean;
-             State : Cardinal;
+             State : Longword;
              X : Double;
              Y : Double;
              dX: Double;
@@ -36,7 +36,7 @@ type PGear = ^TGear;
              Pos: Longword;
              doStep: TGearStepProcedure;
              Radius: integer;
-             Angle, Power : Cardinal;
+             Angle, Power : Longword;
              DirAngle: Double;
              Timer : LongWord;
              Elasticity: Double;
@@ -49,7 +49,7 @@ type PGear = ^TGear;
              Surf: PSDL_Surface;
              end;
 
-function  AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
+function  AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -115,7 +115,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepActionTimer
                                                                );
 
-function AddGear(X, Y: integer; Kind: TGearType; State: Cardinal; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
+function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 const Counter: Longword = 0;
 begin
 inc(Counter);

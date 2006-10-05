@@ -118,7 +118,7 @@ end;
 ///////////////////
 procedure MainLoop;
 var PrevTime,
-    CurrTime: Cardinal;
+    CurrTime: Longword;
     event: TSDL_Event;
 begin
 PrevTime:= SDL_GetTicks;

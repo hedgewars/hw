@@ -88,7 +88,7 @@ const
                      cifTheme or
                      cifMap;
 
-      cTransparentColor: Cardinal = $000000;
+      cTransparentColor: Longword = $000000;
 
       cMaxHHIndex      = 7;
       cMaxHHs          = 20;

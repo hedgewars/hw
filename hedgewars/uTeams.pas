@@ -38,7 +38,7 @@ type PHedgehog = ^THedgehog;
      THHAmmo   = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
      TTeam = record
              Next: PTeam;
-             Color: Cardinal;
+             Color: Longword;
              TeamName: string[MAXNAMELEN];
              ExtDriven: boolean;
              Binds: TBinds;

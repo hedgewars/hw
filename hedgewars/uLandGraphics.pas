@@ -161,9 +161,9 @@ if SDL_MustLock(LandSurface) then
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
+    for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
         for tx:= max(0, ar[i].Left - Radius) to min(2047, ar[i].Right + Radius) do
-            ClearLandPixel(y + ty, tx);
+            ClearLandPixel(ty, tx);
     inc(y, dY)
     end;
 
@@ -172,10 +172,10 @@ dec(y, Count*dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(-Radius, -y) to min(Radius, 1023 - y) do
+    for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
         for tx:= max(0, ar[i].Left - Radius) to min(2047, ar[i].Right + Radius) do
-            if Land[y + ty, tx] = $FFFFFF then
-                  SetLandPixel(y + ty, tx);
+            if Land[ty, tx] = $FFFFFF then
+                  SetLandPixel(ty, tx);
     inc(y, dY)
     end;
 

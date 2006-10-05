@@ -37,7 +37,7 @@ var isCursorVisible : boolean = false;
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;
     cConsoleYAdd     : integer = 0; 
-    cTimerInterval   : Cardinal = 5;
+    cTimerInterval   : Longword = 5;
     cScreenWidth     : integer = 1024;
     cScreenHeight    : integer = 768;
     cBits            : integer = 16;
@@ -50,11 +50,11 @@ var isCursorVisible : boolean = false;
 
     GameTicks     : LongWord = 0;
 
-    cSkyColor     : Cardinal = 0;
-    cWaterColor   : Cardinal = $005ACE;
-    cWhiteColor   : Cardinal = $FFFFFF;
-    cConsoleSplitterColor : Cardinal = $FF0000;
-    cColorNearBlack       : Cardinal = 16;
+    cSkyColor     : Longword = 0;
+    cWaterColor   : Longword = $005ACE;
+    cWhiteColor   : Longword = $FFFFFF;
+    cConsoleSplitterColor : Longword = $FF0000;
+    cColorNearBlack       : Longword = 16;
     cExplosionBorderColor : LongWord = $808080;
 
     cDrownSpeed   : Double = 0.06;
@@ -148,7 +148,7 @@ begin
 if not Assert then OutError(SDL_GetError, isFatal)
 end;
 
-procedure AdjustColor(var Color: Cardinal);
+procedure AdjustColor(var Color: Longword);
 begin
 Color:= SDL_MapRGB(PixelFormat, (Color shr 16) and $FF, (Color shr 8) and $FF, Color and $FF)
 end;
