@@ -1,5 +1,5 @@
 Hedgewars - a Worms-like game.
-Distributed under the terms of the BSD-modified licence.
+Distributed under the terms of the GPL licence.
 
 Source, 
 images in Data/Graphics, 
