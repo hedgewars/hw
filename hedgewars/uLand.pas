@@ -476,13 +476,13 @@ GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
 with PixelFormat^ do
-     tmpsurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+     tmpsurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
 AddProgress;
 AddBorder(tmpsurf);
 with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
 TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
@@ -502,7 +502,7 @@ WriteLnToConsole('Generating forts land...');
 p:= TeamsList;
 TryDo(p <> nil, 'No teams on map!', true);
 with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, 0);
+     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
 SDL_FillRect(LandSurface, nil, 0);
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'L', false);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);

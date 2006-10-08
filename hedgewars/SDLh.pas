@@ -110,7 +110,7 @@ type PSDL_Rect = ^TSDL_Rect;
                   r: Byte;
                   g: Byte;
                   b: Byte;
-                  a: Byte;
+                  unused: Byte;
                   end;
 
      PSDL_RWops = ^TSDL_RWops;
@@ -174,9 +174,6 @@ type PSDL_Rect = ^TSDL_Rect;
      PByteArray = ^TByteArray;
      TByteArray = array[0..32767] of Byte;
 
-     PSDL_Thread = Pointer;
-     PSDL_mutex = Pointer;
-
 function  SDL_Init(flags: Longword): integer; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 
@@ -219,13 +216,6 @@ function  SDL_PollEvent(event: PSDL_Event): integer; cdecl; external SDLLibName;
 function  SDL_ShowCursor(toggle: integer): integer; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
-
-function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
-procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
-function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
-procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
-function  SDL_LockMutex(mutex: PSDL_mutex): integer; cdecl; external SDLLibName name 'SDL_mutexP';
-function  SDL_UnlockMutex(mutex: PSDL_mutex): integer; cdecl; external SDLLibName name 'SDL_mutexV';
 
 (*  TTF  *)
 

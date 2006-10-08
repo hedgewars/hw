@@ -35,11 +35,11 @@ var FollowGear: PGear = nil;
     bShowAmmoMenu: boolean = false;
     bSelected: boolean = false;
     bShowFinger: boolean = false;
+    Frames: Longword = 0;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
 const RealTicks: Longword = 0;
-      Frames: Longword = 0;
       FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;

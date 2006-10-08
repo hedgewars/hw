@@ -48,7 +48,7 @@ procedure SendConfig;
 begin
 Send('TL');
 Send('e$gmflags 1');
-Send('eseed 31337');
+Send('eseed -=31337=-');
 Send('etheme steel');
 Send('eaddteam');
 Send('ename team "C0CuCKAzZz"');
@@ -143,7 +143,7 @@ while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
 end;
 
 begin
-WriteLn('run hwengine 640 480 16 46631 0 1 ru.txt');
+WriteLn('run hwengine 640 480 16 46631 0 1 ru.txt 128');
 SDL_Init(0);
 SDLNet_Init;
 ip.host:= 0;     

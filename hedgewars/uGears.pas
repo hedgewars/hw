@@ -60,7 +60,6 @@ procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
-    GearsListMutex: PSDL_mutex;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -222,14 +221,12 @@ gtAmmo_Grenade: begin
                 Result.Tag:= Y
                 end;
      end;
-SDL_LockMutex(GearsListMutex);
 if GearsList = nil then GearsList:= Result
                    else begin
                    GearsList.PrevGear:= Result;
                    Result.NextGear:= GearsList;
                    GearsList:= Result
-                   end;
-SDL_UnlockMutex(GearsListMutex)
+                   end
 end;
 
 procedure DeleteGear(Gear: PGear);
@@ -253,7 +250,6 @@ if Gear.Kind = gtHedgehog then
       RecountTeamHealth(team);
       end;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
-SDL_LockMutex(GearsListMutex);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
@@ -262,7 +258,6 @@ if Gear.PrevGear <> nil then Gear.PrevGear.NextGear:= Gear.NextGear
                         GearsList:= Gear^.NextGear;
                         if GearsList <> nil then GearsList.PrevGear:= nil
                         end;
-SDL_UnlockMutex(GearsListMutex);
 Dispose(Gear)
 end;
 
@@ -781,10 +776,8 @@ DeleteGear(Gear)
 end;
 
 initialization
-GearsListMutex:= SDL_CreateMutex;
 
 finalization
 FreeGearsList;
-SDL_DestroyMutex(GearsListMutex);
 
 end.
