@@ -383,15 +383,22 @@ end;
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword;
+{$IFDEF DEBUGFILE}
+    buf: array[byte] of char;
+{$ENDIF}
 begin
 if Length(s) = 0 then cFullScreen:= not cFullScreen
                  else cFullScreen:= s = '1';
-   
+
 flags:= SDL_HWSURFACE or SDL_DOUBLEBUF or SDL_HWACCEL;
 if cFullScreen then flags:= flags or SDL_FULLSCREEN
                else SDL_WM_SetCaption('Hedgewars', nil);
 SDL_FreeSurface(SDLPrimSurface);
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+
+{$IFDEF DEBUGFILE}
+AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
+{$ENDIF}
 TryDo(SDLPrimSurface <> nil, errmsgCreateSurface, true);
 PixelFormat:= SDLPrimSurface.format;
 SDL_ShowCursor(0)

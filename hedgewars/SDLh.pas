@@ -176,6 +176,7 @@ type PSDL_Rect = ^TSDL_Rect;
 
 function  SDL_Init(flags: Longword): integer; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
+function  SDL_VideoDriverName(var namebuf; maxlen: integer): PChar; cdecl; external SDLLibName;
 
 procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
 function  SDL_GetTicks: Longword; cdecl; external SDLLibName;
