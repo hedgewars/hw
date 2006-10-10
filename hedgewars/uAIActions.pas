@@ -30,14 +30,15 @@ const MAXACTIONS = 96;
       aia_Down       = 6;
 
       aia_Weapon     = $80000000;
-      aia_WaitX      = $80000001;
-      aia_WaitY      = $80000002;
+      aia_WaitXL     = $80000001;
+      aia_WaitXR     = $80000002;
       aia_LookLeft   = $80000003;
       aia_LookRight  = $80000004;
       aia_AwareExpl  = $80000005;
       aia_HJump      = $80000006;
       aia_LJump      = $80000007;
       aia_Skip       = $80000008;
+      aia_Wait       = $80000009;
 
       aim_push       = $80000000;
       aim_release    = $80000001;
@@ -71,7 +72,7 @@ const ActionIdToStr: array[0..6] of string[16] = (
                      );
 
 {$IFDEF TRACEAIACTIONS}
-const SpecActionIdToStr: array[$80000000..$80000008] of string[16] = (
+const SpecActionIdToStr: array[$80000000..$80000009] of string[16] = (
 {aia_Weapon}             'aia_Weapon',
 {aia_WaitX}              'aia_WaitX',
 {aia_WaitY}              'aia_WaitY',
@@ -80,7 +81,8 @@ const SpecActionIdToStr: array[$80000000..$80000008] of string[16] = (
 {aia_AwareExpl}          'aia_AwareExpl',
 {aia_HJump}              'aia_HJump',
 {aia_LJump}              'aia_LJump',
-{aia_Skip}               'aia_Skip'
+{aia_Skip}               'aia_Skip',
+{aia_Wait}               'aia_Wait'
 );
 
 procedure DumpAction(Action: TAction; Me: PGear);
@@ -89,7 +91,7 @@ if (Action.Action and ai_specmask) = 0 then
    WriteLnToConsole('AI action: '+ActionIdToStr[Action.Action])
 else begin
    WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
-   if Action.Action = aia_WaitX then
+   if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
       WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(round(Me.X)));
    end
 end;
@@ -123,10 +125,20 @@ with Actions.actions[Actions.Pos] do
      if (Action and ai_specmask) <> 0 then
         case Action of
            aia_Weapon: SetWeapon(TAmmoType(Param));
-            aia_WaitX: if round(Me.X) = Param then Time:= GameTicks
-                                              else exit;
-            aia_WaitY: if round(Me.Y) = Param then Time:= GameTicks
-                                              else exit;
+           aia_WaitXL: if round(Me.X) = Param then Time:= GameTicks
+                          else if Round(Me.X) < Param then
+                               begin
+                               OutError('AI: WaitXL assert');
+                               Actions.Count:= 0
+                               end
+                          else exit;
+           aia_WaitXR: if round(Me.X) = Param then Time:= GameTicks
+                          else if Round(Me.X) > Param then
+                               begin
+                               OutError('AI: WaitXR assert');
+                               Actions.Count:= 0
+                               end
+                          else exit;
          aia_LookLeft: if Me.dX >= 0 then
                           begin
                           ParseCommand('+left');
@@ -141,6 +153,9 @@ with Actions.actions[Actions.Pos] do
             aia_HJump: ParseCommand('hjump');
             aia_LJump: ParseCommand('ljump');
              aia_Skip: ParseCommand('skip');
+             aia_Wait: if Param > GameTicks then exit
+                          else with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+                                    Gear.State:= Gear.State and not gstHHThinking
              end else
         begin
         s:= ActionIdToStr[Action];

@@ -114,8 +114,11 @@ repeat
        isThinking:= false;
        exit
        end;
+    if ((Me.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
+
     AddAction(Actions, Me.Message, aim_push, 250);
-    AddAction(Actions, aia_WaitX, round(Me.X), 0);
+    if (Me.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, round(Me.X), 0)
+                                     else AddAction(Actions, aia_WaitXR, round(Me.X), 0);
     AddAction(Actions, Me.Message, aim_release, 0);
     steps:= 0;
 
@@ -123,12 +126,11 @@ repeat
        begin
        if SDL_GetTicks - AIThinkStart > 3 then
           begin
-          writetoconsole(inttostr(SDL_GetTicks - AIThinkStart) + ' ');
           dec(Actions.Count, 3);
           Push(ticks, Actions, Me^, Me^.Message);
           exit
           end;
-          
+
        CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
@@ -157,17 +159,17 @@ repeat
           exit
           end
        else if Rate < BaseRate then break;
-       if ((Me.State and gstAttacked) = 0)
-           and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
        if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
+
+       if ((Me.State and gstAttacked) = 0)
+           and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
        end;
 until false
 end;
 
 procedure Think(Me: PGear);
 var BackMe, WalkMe: TGear;
-//    StartTicks: Longword;
 begin
 AIThinkStart:= SDL_GetTicks;
 BackMe:= Me^;
@@ -183,12 +185,12 @@ if (Me.State and gstAttacked) = 0 then
             BestActions.Count:= 0;
             AddAction(BestActions, aia_Skip, 0, 250);
             end;
-         Me.State:= Me.State and not gstHHThinking
          end
       end else
 else begin
       FillBonuses(true);
-      Walk(@WalkMe)
+      Walk(@WalkMe);
+      AddAction(BestActions, aia_Wait, GameTicks + 100, 100);
       end
 end;
 
@@ -219,9 +221,11 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
 BestActions.Score:= 0;
+AddAction(BestActions, aia_Wait, GameTicks + 1500{ + Longword(random(1000))}, 1500);
 tmp:= random(2) + 1;
 Push(0, BestActions, Me^, tmp);
 Push(0, BestActions, Me^, tmp xor 3);
+BestActions.Count:= 0;
 BestActions.Score:= Low(integer);
 
 Think(Me)
@@ -230,8 +234,6 @@ end;
 procedure ProcessBot(FrameNo: Longword);
 const LastFrameNo: Longword = 0;
 begin
-if FrameNo = LastFrameNo then exit;
-LastFrameNo:= FrameNo;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear.State and gstHHDriven) <> 0)
@@ -239,7 +241,11 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
         if not isThinking then
            if (BestActions.Pos >= BestActions.Count) then StartThink(Gear)
                                                      else ProcessAction(BestActions, Gear)
-        else Think(Gear)
+        else if FrameNo <> LastFrameNo then
+                begin
+                LastFrameNo:= FrameNo;
+                Think(Gear)
+                end;
 end;
 
 end.
