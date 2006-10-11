@@ -115,6 +115,7 @@ end;
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 var s: shortstring;
 begin
+repeat
 if Actions.Pos >= Actions.Count then exit;
 with Actions.actions[Actions.Pos] do
      begin
@@ -153,9 +154,6 @@ with Actions.actions[Actions.Pos] do
             aia_HJump: ParseCommand('hjump');
             aia_LJump: ParseCommand('ljump');
              aia_Skip: ParseCommand('skip');
-             aia_Wait: if Param > GameTicks then exit
-                          else with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-                                    Gear.State:= Gear.State and not gstHHThinking
              end else
         begin
         s:= ActionIdToStr[Action];
@@ -170,7 +168,8 @@ with Actions.actions[Actions.Pos] do
      end;
 inc(Actions.Pos);
 if Actions.Pos <= Actions.Count then
-   inc(Actions.actions[Actions.Pos].Time, GameTicks)
+   inc(Actions.actions[Actions.Pos].Time, GameTicks);
+until false
 end;
 
 end.

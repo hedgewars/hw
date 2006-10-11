@@ -60,7 +60,7 @@ for i:= 0 to Pred(Targets.Count) do
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
-              
+
               AddAction(BestActions, aia_Weapon, Longword(a), 500);
               if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400);
               if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
@@ -105,8 +105,7 @@ BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
 if (Me.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
                                   else maxticks:= TurnTimeLeft;
 
-
-BaseRate:= max(RatePlace(Me), 0);
+BaseRate:= RatePlace(Me);
 
 repeat
     if not Pop(ticks, Actions, Me^) then
@@ -114,27 +113,20 @@ repeat
        isThinking:= false;
        exit
        end;
-    if ((Me.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
 
-    AddAction(Actions, Me.Message, aim_push, 250);
+    AddAction(Actions, Me.Message, aim_push, 10);
     if (Me.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, round(Me.X), 0)
                                      else AddAction(Actions, aia_WaitXR, round(Me.X), 0);
     AddAction(Actions, Me.Message, aim_release, 0);
     steps:= 0;
+    if ((Me.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
 
     while not PosInThinkStack(Me) do
        begin
-       if SDL_GetTicks - AIThinkStart > 3 then
-          begin
-          dec(Actions.Count, 3);
-          Push(ticks, Actions, Me^, Me^.Message);
-          exit
-          end;
-
        CanGo:= HHGo(Me, @AltMe, GoInfo);
        inc(ticks, GoInfo.Ticks);
        if ticks > maxticks then break;
-       
+
        if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with ThinkStack.States[Pred(ThinkStack.Count)] do
@@ -163,7 +155,16 @@ repeat
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
 
        if ((Me.State and gstAttacked) = 0)
-           and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
+           and ((steps mod 4) = 0) then
+           begin
+           if SDL_GetTicks - AIThinkStart > 3 then
+              begin
+              dec(Actions.Count, 3);
+              Push(ticks, Actions, Me^, Me^.Message);
+              exit
+              end;
+           TestAmmos(Actions, Me)
+           end
        end;
 until false
 end;
@@ -185,6 +186,7 @@ if (Me.State and gstAttacked) = 0 then
             BestActions.Count:= 0;
             AddAction(BestActions, aia_Skip, 0, 250);
             end;
+         Me.State:= Me.State and not gstHHThinking
          end
       end else
 else begin
@@ -221,11 +223,9 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
 BestActions.Score:= 0;
-AddAction(BestActions, aia_Wait, GameTicks + 1500{ + Longword(random(1000))}, 1500);
 tmp:= random(2) + 1;
 Push(0, BestActions, Me^, tmp);
 Push(0, BestActions, Me^, tmp xor 3);
-BestActions.Count:= 0;
 BestActions.Score:= Low(integer);
 
 Think(Me)
