@@ -29,20 +29,20 @@ const MAXACTIONS = 96;
       aia_Up         = 5;
       aia_Down       = 6;
 
-      aia_Weapon     = $80000000;
-      aia_WaitXL     = $80000001;
-      aia_WaitXR     = $80000002;
-      aia_LookLeft   = $80000003;
-      aia_LookRight  = $80000004;
-      aia_AwareExpl  = $80000005;
-      aia_HJump      = $80000006;
-      aia_LJump      = $80000007;
-      aia_Skip       = $80000008;
-      aia_Wait       = $80000009;
+      aia_Weapon     = $8000;
+      aia_WaitXL     = $8001;
+      aia_WaitXR     = $8002;
+      aia_LookLeft   = $8003;
+      aia_LookRight  = $8004;
+      aia_AwareExpl  = $8005;
+      aia_HJump      = $8006;
+      aia_LJump      = $8007;
+      aia_Skip       = $8008;
+      aia_Wait       = $8009;
 
-      aim_push       = $80000000;
-      aim_release    = $80000001;
-      ai_specmask    = $80000000;
+      aim_push       = $8000;
+      aim_release    = $8001;
+      ai_specmask    = $8000;
 
 type TAction = record
                Action, Param: Longword;
@@ -72,7 +72,7 @@ const ActionIdToStr: array[0..6] of string[16] = (
                      );
 
 {$IFDEF TRACEAIACTIONS}
-const SpecActionIdToStr: array[$80000000..$80000009] of string[16] = (
+const SpecActionIdToStr: array[$8000..$8009] of string[16] = (
 {aia_Weapon}             'aia_Weapon',
 {aia_WaitX}              'aia_WaitX',
 {aia_WaitY}              'aia_WaitY',
