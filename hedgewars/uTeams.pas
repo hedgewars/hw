@@ -72,7 +72,7 @@ function CheckForWin: boolean;
 procedure SetWeapon(weap: TAmmoType);
 
 implementation
-uses uMisc, uStore, uWorld, uIO, uAI, uLocale, uConsole;
+uses uMisc, uWorld, uAI, uLocale, uConsole;
 const MaxTeamHealth: integer = 0;
 
 procedure FreeTeamsList; forward;

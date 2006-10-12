@@ -18,7 +18,7 @@
 
 unit uLand;
 interface
-uses SDLh, uGears, uLandTemplates;
+uses SDLh, uLandTemplates;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
@@ -32,7 +32,7 @@ procedure GenPreview;
 
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uIO, uLandObjects;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects;
 
 type TPixAr = record
               Count: Longword;

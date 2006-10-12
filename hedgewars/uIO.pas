@@ -34,7 +34,7 @@ procedure CloseIPC;
 procedure NetGetNextCmd;
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc, uRandom, uLand;
+uses uConsole, uConsts, uWorld, uMisc, uLand;
 const isPonged: boolean = false;
 var  IPCSock: PTCPSocket = nil;
      fds: PSDLNet_SocketSet;

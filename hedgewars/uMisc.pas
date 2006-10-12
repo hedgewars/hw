@@ -110,7 +110,6 @@ uses uConsole, uStore, uIO{$IFDEF FPC}, Math{$ENDIF};
 var f: textfile;
 {$ENDIF}
 
-
 function hwSign(r: Double): integer;
 begin
 if r < 0 then Result:= -1 else Result:= 1

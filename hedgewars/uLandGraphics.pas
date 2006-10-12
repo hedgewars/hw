@@ -12,7 +12,7 @@ procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
 procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
 
 implementation
-uses SDLh, uStore, uMisc, uLand, uConsts;
+uses SDLh, uMisc, uLand, uConsts;
 
 procedure FillCircleLines(x, y, dx, dy: integer; Value: Longword);
 var i: integer;

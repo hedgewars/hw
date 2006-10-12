@@ -43,7 +43,7 @@ var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
 
 implementation
-uses uMisc, uIO, uConsole, uLand, uCollisions;
+uses uMisc, uConsole, uLand;
 
 var StoreSurface,
        HHSurface: PSDL_Surface;

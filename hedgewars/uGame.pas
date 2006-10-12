@@ -18,7 +18,6 @@
 
 unit uGame;
 interface
-uses SDLh;
 {$INCLUDE options.inc}
 
 procedure DoGameTick(Lag: integer);

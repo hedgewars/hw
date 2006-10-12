@@ -33,7 +33,7 @@ function  GetLastConsoleLine: shortstring;
 
 implementation
 {$J+}
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uSound, uWorld, uLand, uRandom;
+uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand, uRandom;
 const cLineWidth: integer = 0;
       cLinesCount = 256;
       

@@ -24,7 +24,7 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAIThinkStack, uConsole;
+     uAIThinkStack;
 
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
