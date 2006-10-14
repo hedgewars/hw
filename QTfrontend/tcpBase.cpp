@@ -41,7 +41,6 @@ TCPBase::TCPBase(bool demoMode) :
 			    .arg(IPCServer->errorString()));
     }
   }
-  connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
 }
 
 void TCPBase::NewConnection()
@@ -60,6 +59,7 @@ void TCPBase::NewConnection()
 
 void TCPBase::RealStart()
 {
+  connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
   IPCSocket = 0;
   
   QProcess * process;
