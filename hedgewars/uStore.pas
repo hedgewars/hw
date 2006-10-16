@@ -253,9 +253,9 @@ for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
          begin
          s:= Pathz[ptFonts] + '/' + Name;
-         WriteToConsole(msgLoading + s + ' ');
+         WriteToConsole(msgLoading + s + '... ');
          Handle:= TTF_OpenFont(PChar(s), Height);
-         TryDo(Handle <> nil, msgFailed, true);
+         SDLTry(Handle <> nil, true);
          WriteLnToConsole(msgOK)
          end;
 AddProgress;

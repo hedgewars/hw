@@ -205,7 +205,7 @@ SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
 WriteLnToConsole(msgOK);
 
 WriteToConsole('Init SDL_ttf... ');
-SDLTry(TTF_Init >= 0, true);
+SDLTry(TTF_Init <> -1, true);
 WriteLnToConsole(msgOK);
 
 ShowMainWindow;
