@@ -88,7 +88,7 @@ rTime:= 50;
 ExplR:= 0;
 Result:= BadTurn;
 repeat
-  rTime:= rTime + 150 + Level * 25 + random * 250;
+  rTime:= rTime + 300 + Level * 50 + random * 200;
   Vx:= - cWindSpeed * rTime / 2 + (Targ.X - Me.X) / rTime;
   Vy:= cGravity * rTime / 2 - (Targ.Y - Me.Y) / rTime;
   r:= sqr(Vx) + sqr(Vy);

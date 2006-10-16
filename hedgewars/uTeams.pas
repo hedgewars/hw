@@ -46,7 +46,7 @@ type PHedgehog = ^THedgehog;
              Ammos: array[0..cMaxHHIndex] of THHAmmo;
              CurrHedgehog: integer;
              NameTag: PSDL_Surface;
-             CrossHairRect,
+             CrosshairSurf: PSDL_Surface;
              GraveRect, HealthRect: TSDL_Rect;
              GraveName: string;
              FortName: string;

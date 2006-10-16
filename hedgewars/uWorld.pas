@@ -230,12 +230,13 @@ if CurrentTeam <> nil then
                         and ((Gear.State and gstHHDriven) <> 0) then DrawSprite(sprFinger, round(Gear.X) - 16 + WorldDx, round(Gear.Y) - 64 + WorldDy, RealTicks div 32 mod 16, Surface);
                      if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
                         if (Gear.State and gstHHThinking) <> 0 then
-                           DrawGear(sQuestion, Round(Gear.X)  - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
+                           DrawGear(sQuestion, Round(Gear.X) - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
                         else
                         if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
-                           DrawCaption(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx,
-                                       Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 4,
-                                       Team.CrossHairRect, Surface)
+                           DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 8,
+                                          Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
+                                          24, 0,
+                                          Team.CrosshairSurf, Surface);
                      end;
       team:= team.Next
       end;

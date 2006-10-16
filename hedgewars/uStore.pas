@@ -28,6 +28,7 @@ procedure DrawGear(Stuff : TStuff; X, Y: integer; Surface: PSDL_Surface);
 procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: integer; Surface: PSDL_Surface);
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: integer; Source, Surface: PSDL_Surface);
 procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
@@ -37,7 +38,7 @@ procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface
 function  RenderString(s: string; Color: integer; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
-function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true; const setTransparent: boolean = true): PSDL_Surface;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
@@ -110,6 +111,7 @@ clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
 Result.y:= Y + 1;
+TryDo(tmpsurf <> nil, errmsgRenderText, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
 SDL_FreeSurface(tmpsurf);
 Result.x:= X;
@@ -159,27 +161,20 @@ var i: TStuff;
 
     procedure MakeCrossHairs;
     var Team: PTeam;
-        r: TSDL_Rect;
         tmpsurf: PSDL_Surface;
         s: string;
-        TransColor: Longword;
     begin
-    r.x:= 0;
-    r.y:= 256;
-    r.w:= 16;
-    r.h:= 16;
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
-    tmpsurf:= LoadImage(PChar(s), false);
-    TransColor:= SDL_MapRGB(tmpsurf.format, $FF, $FF, $FF);
-    TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, TransColor) = 0, errmsgTransparentSet, true);
+    tmpsurf:= LoadImage(PChar(s), true, true, false);
 
     Team:= TeamsList;
     while Team<>nil do
       begin
-      SDL_FillRect(StoreSurface, @r, Team.AdjColor);
-      SDL_UpperBlit(tmpsurf, nil, StoreSurface, @r);
-      Team.CrossHairRect:= r;
-      inc(r.x, 16);
+      Team.CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 24, 360, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, PixelFormat.AMask);
+      TryDo(Team.CrosshairSurf <> nil, errmsgCreateSurface, true);
+      SDL_FillRect(Team.CrosshairSurf, nil, Team.AdjColor);
+      SDL_UpperBlit(tmpsurf, nil, Team.CrosshairSurf, nil);
+      TryDo(SDL_SetColorKey(Team.CrosshairSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
       Team:= Team.Next
       end;
       
@@ -345,13 +340,8 @@ DrawFromRect(X, Y, @r, StoreSurface, Surface)
 end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
-var r: TSDL_Rect;
 begin
-r.x:= 0;
-r.w:= SpritesData[Sprite].Width;
-r.y:= Frame * SpritesData[Sprite].Height;
-r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
+DrawSurfSprite(X, Y, SpritesData[Sprite].Height, Frame, SpritesData[Sprite].Surface, Surface)
 end;
 
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
@@ -362,6 +352,16 @@ r.w:= SpritesData[Sprite].Width;
 r.y:= FrameY * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
+end;
+
+procedure DrawSurfSprite(X, Y, Height, Frame: integer; Source, Surface: PSDL_Surface);
+var r: TSDL_Rect;
+begin
+r.x:= 0;
+r.w:= Source.w;
+r.y:= Frame * Height;
+r.h:= Height;
+DrawFromRect(X, Y, @r, Source, Surface)
 end;
 
 procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -375,6 +375,7 @@ clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
+TryDo(tmpsurf <> nil, errmsgRenderText, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -470,7 +471,7 @@ if Step = MaxCalls then
    end;
 end;
 
-function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true): PSDL_Surface;
+function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean = true; const setTransparent: boolean = true): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
@@ -486,7 +487,7 @@ if tmpsurf = nil then
       exit
       end;
       
-TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
+if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
             else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole(msgOK)
