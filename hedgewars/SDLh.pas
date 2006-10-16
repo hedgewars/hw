@@ -110,7 +110,7 @@ type PSDL_Rect = ^TSDL_Rect;
                   r: Byte;
                   g: Byte;
                   b: Byte;
-                  unused: Byte;
+                  a: Byte;
                   end;
 
      PSDL_RWops = ^TSDL_RWops;
