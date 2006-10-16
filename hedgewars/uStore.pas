@@ -111,7 +111,7 @@ clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
 Result.x:= X + 3;
 Result.y:= Y + 1;
-TryDo(tmpsurf <> nil, errmsgRenderText, true);
+SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
 SDL_FreeSurface(tmpsurf);
 Result.x:= X;
@@ -375,7 +375,7 @@ clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
-TryDo(tmpsurf <> nil, errmsgRenderText, true);
+SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;

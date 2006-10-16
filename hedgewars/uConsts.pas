@@ -68,7 +68,6 @@ const
       errmsgUnknownVariable = 'Unknown variable';
       errmsgIncorrectUse    = 'Incorrect use';
       errmsgShouldntRun     = 'This program shouldn''t be run manually';
-      errmsgRenderText      = 'Cannot render text';
 
       msgLoading           = 'Loading ';
       msgOK                = 'ok';
