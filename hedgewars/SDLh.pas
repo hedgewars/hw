@@ -110,7 +110,7 @@ type PSDL_Rect = ^TSDL_Rect;
                   r: Byte;
                   g: Byte;
                   b: Byte;
-                  a: Byte;
+                  unused: Byte;
                   end;
 
      PSDL_RWops = ^TSDL_RWops;
@@ -226,7 +226,9 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
       SDL_TTFLibName = 'libSDL_ttf.so';
       {$ENDIF}
-
+      TTF_STYLE_NORMAL = 0;
+      TTF_STYLE_BOLD   = 1;
+      TTF_STYLE_ITALIC = 2;
 
 type PTTF_Font = ^TTTF_font;
      TTTF_Font = record
@@ -240,6 +242,7 @@ function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: integer): in
 function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function TTF_OpenFont(const filename: PChar; size: integer): PTTF_Font; cdecl; external SDL_TTFLibName;
+procedure TTF_SetFontStyle(font: PTTF_Font; style: integer); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer *)
 

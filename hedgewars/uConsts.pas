@@ -50,6 +50,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
      THHFont    = record
                   Handle: PTTF_Font;
                   Height: integer;
+                  style: integer;
                   Name: string[15];
                   end;
      TAmmo = record
@@ -160,10 +161,14 @@ const
 
       Fontz: array[THWFont] of THHFont = (
                                          (Height: 12;
+                                          style: TTF_STYLE_NORMAL;
                                           Name: 'DejaVuSans.ttf'),
                                          (Height: 24;
+                                          style: TTF_STYLE_NORMAL;
                                           Name: 'DejaVuSans.ttf')
                                          );
+
+      FontBorder = 2;
 
       PathPrefix: string = './';
       Pathz: array[TPathType] of string      = (

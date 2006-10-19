@@ -102,23 +102,22 @@ begin
 TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), w, h);
 Result.x:= X;
 Result.y:= Y;
-Result.w:= w + 6;
-Result.h:= h + 2;
+Result.w:= w + FontBorder * 2 + 4;
+Result.h:= h + FontBorder * 2;
 DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
-clr.a:= $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
-Result.x:= X + 3;
-Result.y:= Y + 1;
+Result.x:= X + FontBorder + 2;
+Result.y:= Y + FontBorder;
 SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
 SDL_FreeSurface(tmpsurf);
 Result.x:= X;
 Result.y:= Y;
-Result.w:= w + 6;
-Result.h:= h + 2
+Result.w:= w + FontBorder * 2 + 4;
+Result.h:= h + FontBorder * 2
 end;
 
 procedure StoreLoad;
@@ -257,6 +256,7 @@ for fi:= Low(THWFont) to High(THWFont) do
          WriteToConsole(msgLoading + s + '... ');
          Handle:= TTF_OpenFont(PChar(s), Height);
          SDLTry(Handle <> nil, true);
+         TTF_SetFontStyle(Handle, style);
          WriteLnToConsole(msgOK)
          end;
 AddProgress;
@@ -375,7 +375,6 @@ r.y:= Y;
 clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
-clr.a:= $FF;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr);
 SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
@@ -433,7 +432,8 @@ function  RenderString(s: string; Color: integer; font: THWFont): PSDL_Surface;
 var w, h: integer;
 begin
 TTF_SizeUTF8(Fontz[font].Handle, PChar(s), w, h);
-Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + 6, h + 2, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, PixelFormat.AMask);
+Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
+         cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, PixelFormat.AMask);
 TryDo(Result <> nil, 'RenderString: fail to create surface', true);
 WriteInRoundRect(Result, 0, 0, Color, font, s);
 TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true)
