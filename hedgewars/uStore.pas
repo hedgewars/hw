@@ -170,7 +170,7 @@ var i: TStuff;
     Team:= TeamsList;
     while Team<>nil do
       begin
-      Team.CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 24, 360, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, PixelFormat.AMask);
+      Team.CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, tmpsurf.w, tmpsurf.h, cBits, PixelFormat.RMask, PixelFormat.GMask, PixelFormat.BMask, PixelFormat.AMask);
       TryDo(Team.CrosshairSurf <> nil, errmsgCreateSurface, true);
       SDL_FillRect(Team.CrosshairSurf, nil, Team.AdjColor);
       SDL_UpperBlit(tmpsurf, nil, Team.CrosshairSurf, nil);
