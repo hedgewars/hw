@@ -199,6 +199,7 @@ end;
 
 ///////////////
 procedure Game;
+var s: shortstring;
 begin
 WriteToConsole('Init SDL... ');
 SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
@@ -217,6 +218,10 @@ WriteLnToConsole(msgGettingConfig);
 LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 
 SendIPCAndWaitReply('C');        // ask for game config
+
+s:= 'eproto ' + inttostr(cNetProtoVersion);
+SendIPCRaw(@s[0], Length(s) + 1); // send proto version
+
 InitTeams;
 
 if isSoundEnabled then InitSound;
@@ -254,7 +259,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('-= HedgeWars 0.2 =-');
+WriteLnToConsole('-= HedgeWars 0.8 =-');
 WriteLnToConsole('  -= by unC0Rr =-  ');
 GetParams;
 Randomize;

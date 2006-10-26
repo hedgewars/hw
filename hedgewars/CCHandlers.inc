@@ -31,6 +31,18 @@ begin
 GameState:= gsExit
 end;
 
+procedure chCheckProto(var s: shortstring);
+var i, c: integer;
+begin
+if isDeveloperMode then
+   begin
+   val(s, i, c);
+   if (c <> 0) or (i = 0) then exit;
+   TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old', true);
+   TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new', true)
+   end
+end;
+
 procedure chAddTeam(var s: shortstring);
 const TeamsCount: Longword = 0;
 begin

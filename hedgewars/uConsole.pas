@@ -261,6 +261,7 @@ end;
 initialization
 InitConsole;
 RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
 RegisterVariable('capture' , vtCommand, @chCapture      , true );
 RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
 RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
