@@ -28,6 +28,20 @@ FrameTeams::FrameTeams(QWidget* parent) :
   QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this)
 {
   mainLayout.setSpacing(1);
+
+  availableColors.push_back(QColor(0, 0, 255));
+  availableColors.push_back(QColor(0, 255, 0));
+  availableColors.push_back(QColor(0, 255, 255));
+  availableColors.push_back(QColor(255, 0, 0));
+  availableColors.push_back(QColor(255, 0, 255));
+  availableColors.push_back(QColor(255, 255, 0));
+
+  resetColors();
+}
+
+void FrameTeams::resetColors()
+{
+  currentColor=availableColors.begin();
 }
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)

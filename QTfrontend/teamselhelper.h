@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QString>
+#include <QPushButton>
 
 #include "teamselect.h"
 #include "hedgehogerWidget.h"
@@ -47,11 +48,12 @@ class TeamShowWidget : public QWidget
 
  private slots:
  void activateTeam();
+ void changeTeamColor();
 
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
- unsigned char getHedgehogsNum() const;
+ HWTeamTempParams getTeamParams() const;
  
  private:
  TeamShowWidget();
@@ -59,6 +61,7 @@ class TeamShowWidget : public QWidget
  HWTeam m_team;
  bool m_isPlaying;
  CHedgehogerWidget* phhoger;
+ QPushButton* colorButt;
 
  signals:
  void teamStatusChanged(HWTeam team);

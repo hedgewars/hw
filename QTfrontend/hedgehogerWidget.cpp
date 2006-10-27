@@ -73,7 +73,7 @@ void CHedgehogerWidget::paintEvent(QPaintEvent* event)
   }
 }
 
-unsigned char CHedgehogerWidget::getHedgehogsNum()
+unsigned char CHedgehogerWidget::getHedgehogsNum() const
 {
   return numHedgehogs;
 }

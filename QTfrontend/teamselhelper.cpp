@@ -20,8 +20,9 @@
 #include "hwconsts.h"
 
 #include <QPixmap>
-#include <QPushButton>
 #include <QPainter>
+
+#include "frameTeam.h"
 
 void TeamLabel::teamButtonClicked()
 {
@@ -29,7 +30,7 @@ void TeamLabel::teamButtonClicked()
 }
 
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
-  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0)
+  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0), colorButt(0)
 {
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
@@ -39,6 +40,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   QPalette newPalette = palette();
   newPalette.setColor(QPalette::Button, palette().color(backgroundRole()));
 
+  // team fort
   QPushButton* butt=new QPushButton(*px, "", this);
   butt->setFlat(true);
   butt->setGeometry(0, 0, 30, 30);
@@ -47,12 +49,22 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   mainLayout.addWidget(butt);
   butt->setIconSize(butt->size());
 
+  // team name
   QPushButton* bText=new QPushButton(team.TeamName, this);
   bText->setPalette(newPalette);
   bText->setFlat(true);
   mainLayout.addWidget(bText);
 
   if(m_isPlaying) {
+    // team color
+    colorButt=new QPushButton(this);
+    colorButt->setMaximumWidth(30);
+    colorButt->setGeometry(0, 0, 30, 30);
+    changeTeamColor();
+    connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
+    mainLayout.addWidget(colorButt);
+
+    // hedgehogs num
     phhoger=new CHedgehogerWidget(this);
     mainLayout.addWidget(phhoger);
   }
@@ -66,7 +78,23 @@ void TeamShowWidget::activateTeam()
   emit teamStatusChanged(m_team);
 }
 
-unsigned char TeamShowWidget::getHedgehogsNum() const
+HWTeamTempParams TeamShowWidget::getTeamParams() const
 {
-  return phhoger ? phhoger->getHedgehogsNum() : 0;
+  if(!phhoger) throw;
+  HWTeamTempParams params;
+  params.numHedgehogs=phhoger->getHedgehogsNum();
+  params.teamColor=colorButt->palette().color(QPalette::Button);
+  return params;
+}
+
+void TeamShowWidget::changeTeamColor()
+{
+  FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
+  if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
+    pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+  }
+  
+  QPalette newPalette = palette();
+  newPalette.setColor(QPalette::Button, QColor(*pOurFrameTeams->currentColor));
+  colorButt->setPalette(newPalette);
 }

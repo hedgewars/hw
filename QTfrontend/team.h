@@ -19,6 +19,7 @@
 #ifndef TEAM_H
 #define TEAM_H
 
+#include <QColor>
 #include <QString>
 #include "binds.h"
 
@@ -45,6 +46,13 @@ class HWTeam
 
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
+};
+
+class HWTeamTempParams
+{
+ public:
+  unsigned char numHedgehogs;
+  QColor teamColor;
 };
 
 #endif

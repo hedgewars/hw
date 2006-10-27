@@ -20,6 +20,8 @@
 #define _FRAME_TEAM_INCLUDED
 
 #include <QWidget>
+#include <QList>
+#include <QColor>
 
 #include "teamselect.h"
 #include <map>
@@ -29,11 +31,13 @@ class FrameTeams : public QWidget
   Q_OBJECT
 
  friend class CHedgehogerWidget;
+ friend class TeamShowWidget;
 
  public:
   FrameTeams(QWidget* parent=0);
   QWidget* getTeamWidget(HWTeam team);
   bool isFullTeams() const;
+  void resetColors();
 
  public slots:
   void addTeam(HWTeam team, bool willPlay);
@@ -42,6 +46,9 @@ class FrameTeams : public QWidget
  private:
   const int maxHedgehogsPerGame;
   int overallHedgehogs;
+  QList<QColor> availableColors;
+  QList<QColor>::Iterator currentColor;
+    
   QVBoxLayout mainLayout;
   typedef map<HWTeam, QWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;

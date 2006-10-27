@@ -20,7 +20,6 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QFrame>
-#include <QDebug>
 
 #include <vertScrollArea.h>
 #include "teamselect.h"
@@ -104,6 +103,7 @@ void TeamSelWidget::resetPlayingTeams(const QStringList& teamslist)
   for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
     framePlaying->removeTeam(*it);
   }
+  framePlaying->resetColors();
   curPlayingTeams.clear();
   for(it=curDontPlayingTeams.begin(); it!=curDontPlayingTeams.end(); it++) {
     frameDontPlaying->removeTeam(*it);
@@ -125,9 +125,9 @@ list<HWTeam> TeamSelWidget::getPlayingTeams() const
   return curPlayingTeams;
 }
 
-unsigned char TeamSelWidget::numHedgedogs(HWTeam team) const
+HWTeamTempParams TeamSelWidget::getTeamParams(HWTeam team) const
 {
   const TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
-  if(!tsw) return 0;
-  return tsw->getHedgehogsNum();
+  if(!tsw) throw;
+  return tsw->getTeamParams();
 }

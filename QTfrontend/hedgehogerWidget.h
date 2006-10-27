@@ -30,7 +30,7 @@ class CHedgehogerWidget : public QWidget
  public:
   CHedgehogerWidget(QWidget * parent);
   ~CHedgehogerWidget();
-  unsigned char getHedgehogsNum();
+  unsigned char getHedgehogsNum() const;
 
  protected:
   virtual void paintEvent(QPaintEvent* event);
