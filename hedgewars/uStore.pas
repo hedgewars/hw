@@ -376,7 +376,11 @@ clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
 tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, PChar(s), clr.value);
-SDLTry(tmpsurf <> nil, true);
+if tmpsurf = nil then
+   begin
+   SetKB(1);
+   exit
+   end;
 SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;

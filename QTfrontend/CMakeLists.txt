@@ -55,7 +55,8 @@ set(hwfr_moc_hdrs
 	hwmap.h
 	mapContainer.h
 	tcpBase.h
-	about.h)
+	about.h
+	KB.h)
 
 
 set(hwfr_rez

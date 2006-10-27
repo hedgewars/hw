@@ -134,7 +134,10 @@ end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
-SDLNet_TCP_Send(IPCSock, p, len)
+if IPCSock <> nil then
+   begin
+   SDLNet_TCP_Send(IPCSock, p, len)
+   end
 end;
 
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);

@@ -100,12 +100,15 @@ procedure AdjustColor(var Color: Longword);
 procedure AddFileLog(s: shortstring);
 function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
+procedure SetKB(n: Longword);
+procedure SendKB;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
 uses uConsole, uStore, uIO{$IFDEF FPC}, Math{$ENDIF};
+var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
@@ -182,6 +185,21 @@ function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
 begin
 Result:= trunc(arctan2(_dY, _dX) * MaxAngleDivPI) mod cMaxAngle
+end;
+
+procedure SetKB(n: Longword);
+begin
+KBnum:= n
+end;
+
+procedure SendKB;
+var s: shortstring;
+begin
+if KBnum <> 0 then
+   begin
+   s:= 'K' + inttostr(KBnum);
+   SendIPCRaw(@s, Length(s) + 1)
+   end
 end;
 
 {$IFDEF DEBUGFILE}

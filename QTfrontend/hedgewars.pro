@@ -30,7 +30,8 @@ HEADERS += binds.h \
            hwmap.h \
            mapContainer.h \
            tcpBase.h \
-           about.h
+           about.h \
+           KB.h
            
 SOURCES += game.cpp \
            main.cpp \

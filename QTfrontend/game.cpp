@@ -29,6 +29,7 @@
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
+#include "kb.h"
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
   TCPBase(true)
@@ -124,6 +125,19 @@ void HWGame::ParseMessage(const QByteArray & msg)
 					QMessageBox::Ok,
 					QMessageBox::NoButton,
 					QMessageBox::NoButton);
+			return;
+		}
+		case 'K': {
+			ulong kb = msg.mid(2).toULong();
+			if (kb && kb <= KBmsgsCount)
+			{
+				QMessageBox::information(0,
+						"Hedgewars: information",
+						KBMessages[kb - 1],
+						QMessageBox::Ok,
+						QMessageBox::NoButton,
+						QMessageBox::NoButton);
+			}
 			return;
 		}
 		case '+': {
