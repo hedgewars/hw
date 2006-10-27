@@ -107,10 +107,15 @@ type PSDL_Rect = ^TSDL_Rect;
 
      PSDL_Color = ^TSDL_Color;
      TSDL_Color = record
-                  r: Byte;
-                  g: Byte;
-                  b: Byte;
-                  unused: Byte;
+                  case byte of
+                       0: (r: Byte;
+                           g: Byte;
+                           b: Byte;
+                           unused: Byte;
+                          );
+(* workaround over freepascal bug.
+   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
+                       1: (value: Longword);
                   end;
 
      PSDL_RWops = ^TSDL_RWops;
@@ -239,8 +244,11 @@ procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
 
 function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: integer): integer; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
+(* TSDL_Color -> Longword conversion is workaround over freepascal bug.
+   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
+function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+
 function TTF_OpenFont(const filename: PChar; size: integer): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: integer); cdecl; external SDL_TTFLibName;
 
