@@ -29,7 +29,7 @@
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
-#include "kb.h"
+#include "KB.h"
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
   TCPBase(true)
