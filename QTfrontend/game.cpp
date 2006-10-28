@@ -62,7 +62,7 @@ void HWGame::SendConfig()
 		SendIPC("eaddteam");
 		LocalCFG(teams[i]);
 		QColor clr=m_teamsParams[teams[i]].teamColor;
-		SendIPC(QString("ecolor %1").arg(clr.rgb()).toAscii());//&0xFFFFFF
+		SendIPC(QString("ecolor %1").arg(clr.rgb()&0xFFFFFF).toAscii());
 		for (int t = 0; t < m_teamsParams[teams[i]].numHedgehogs; t++)
 			SendIPC(QString("eadd hh%1 0").arg(t).toAscii());
 	}
