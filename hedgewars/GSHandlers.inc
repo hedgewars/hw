@@ -880,8 +880,11 @@ procedure doStepParachute(Gear: PGear);
 var HHGear: PGear;
 begin
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+HHGear.State:= HHGear.State and not gstAttacking;
 
-if TestCollisionYwithGear(HHGear, 1) or ((HHGear.State and gstHHDriven) = 0) then
+if TestCollisionYwithGear(HHGear, 1)
+   or ((HHGear.State and gstHHDriven) = 0)
+   or CheckGearDrowning(HHGear) then
    begin
    with HHGear^ do
         begin
