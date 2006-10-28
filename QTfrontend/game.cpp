@@ -61,8 +61,9 @@ void HWGame::SendConfig()
 	{
 		SendIPC("eaddteam");
 		LocalCFG(teams[i]);
-		SendIPC(QString("ecolor %1").arg(65535 << i * 8).toAscii());
-		for (int t = 0; t < hdNum[teams[i]]; t++)
+		QColor clr=m_teamsParams[teams[i]].teamColor;
+		SendIPC(QString("ecolor %1").arg(clr.rgb()).toAscii());//&0xFFFFFF
+		for (int t = 0; t < m_teamsParams[teams[i]].numHedgehogs; t++)
 			SendIPC(QString("eadd hh%1 0").arg(t).toAscii());
 	}
 }
@@ -189,12 +190,12 @@ QStringList HWGame::setArguments()
 	return arguments;
 }
 
-void HWGame::AddTeam(const QString & teamname, unsigned char numHedgedogs)
+void HWGame::AddTeam(const QString & teamname, HWTeamTempParams teamParams)
 {
 	if (TeamCount == 5) return;
 	teams[TeamCount] = teamname;
 	TeamCount++;
-	hdNum[teamname]=numHedgedogs;
+	m_teamsParams[teamname]=teamParams;
 }
 
 void HWGame::SaveDemo(const QString & filename)

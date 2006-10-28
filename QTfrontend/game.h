@@ -36,7 +36,7 @@ class HWGame : public TCPBase
 	Q_OBJECT
 public:
 	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg);
-	void AddTeam(const QString & team, unsigned char numHedgedogs);
+	void AddTeam(const QString & team, HWTeamTempParams teamParams);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
 	void StartQuick();
@@ -64,7 +64,7 @@ private:
     };
 	char msgbuf[MAXMSGCHARS];
 	QString teams[5];
-	std::map<QString, unsigned char> hdNum;
+	std::map<QString, HWTeamTempParams> m_teamsParams;
 	QString seed;
 	int TeamCount;
 	GameUIConfig * config;

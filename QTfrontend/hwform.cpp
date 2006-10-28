@@ -254,7 +254,7 @@ void HWForm::StartMPGame()
 	list<HWTeam> teamslist=ui.pageMultiplayer->teamsSelect->getPlayingTeams();
 	for (list<HWTeam>::const_iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
 	  HWTeamTempParams params=ui.pageMultiplayer->teamsSelect->getTeamParams(it->TeamName);
-	  game->AddTeam(it->TeamName, params.numHedgehogs);
+	  game->AddTeam(it->TeamName, params);
 	}
 	game->StartLocal();
 }
