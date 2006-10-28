@@ -2,5 +2,11 @@
 <qresource>
     <file>translations/hedgewars_ru.qm</file>
     <file>res/hh25x25.png</file>
+    <file>res/botlevels/0.png</file>
+    <file>res/botlevels/1.png</file>
+    <file>res/botlevels/2.png</file>
+    <file>res/botlevels/3.png</file>
+    <file>res/botlevels/4.png</file>
+    <file>res/botlevels/5.png</file>
 </qresource>
 </RCC>
