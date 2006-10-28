@@ -111,7 +111,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepFirePunch,
                                                                doStepActionTimer,
                                                                doStepActionTimer,
-                                                               doStepActionTimer
+                                                               doStepActionTimer,
+                                                               doStepParachute
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;

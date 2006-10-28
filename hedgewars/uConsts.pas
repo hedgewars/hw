@@ -38,13 +38,14 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
-                   gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame);
+                   gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
+                   gtParachute);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
-                   amBaseballBat);
+                   amBaseballBat, amParachute);
      THWFont    = (fnt16, fntBig);
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
      THHFont    = record
@@ -375,7 +376,15 @@ const
                                            Timer: 0;
                                            AmmoType: amBaseballBat);
                                     Slot: 3;
-                                    TimeAfterTurn: 5000));
+                                    TimeAfterTurn: 5000),
+                                  (NameId: sidParachute;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                          Count: 2;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          AmmoType: amParachute);
+                                   Slot: 6;
+                                   TimeAfterTurn: 0));
 
 implementation
 

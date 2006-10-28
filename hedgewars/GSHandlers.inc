@@ -876,4 +876,37 @@ Gear.doStep:= doStepFirePunchWork;
 DrawTunnel(HHGear.X - cHHRadius, HHGear.Y + 1, 0.5, 0.0, cHHRadius * 4, 5);
 end;
 
+procedure doStepParachute(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+
+if TestCollisionYwithGear(HHGear, 1) or ((HHGear.State and gstHHDriven) = 0) then
+   begin
+   with HHGear^ do
+        begin
+        Message:= 0;
+        dx:= 0.0000001 * hwSign(dX);
+        dY:= 0;
+        State:= State and not (gstAttacking or gstAttacked);
+        State:= State or gstFalling;
+        end;
+   DeleteGear(Gear);
+   OnUsedAmmo(PHedgehog(HHGear.Hedgehog)^.Ammo);
+   ApplyAmmoChanges(PHedgehog(HHGear.Hedgehog)^);
+   exit
+   end;
+
+if not TestCollisionXwithGear(HHGear, hwSign(HHGear.dX)) then
+   HHGear.X:= HHGear.X + cWindSpeed * 200;
+
+if (Gear.Message and gm_Left) <> 0 then HHGear.X:= HHGear.X - cMaxWindSpeed * 40
+else if (Gear.Message and gm_Right) <> 0 then HHGear.X:= HHGear.X + cMaxWindSpeed * 40;
+if (Gear.Message and gm_Up) <> 0 then HHGear.Y:= HHGear.Y - cGravity * 40
+else if (Gear.Message and gm_Down) <> 0 then HHGear.Y:= HHGear.Y + cGravity * 40;
+
+HHGear.Y:= HHGear.Y + cGravity * 100;
+
+end;
+
 

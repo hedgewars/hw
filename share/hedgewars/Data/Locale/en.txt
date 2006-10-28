@@ -14,6 +14,7 @@
 00:11=BaseballBat
 00:12=Fire Punch
 00:13=sec
+00:14=Parachute
 
 01:00=Let's fight!
 01:01=Round draw

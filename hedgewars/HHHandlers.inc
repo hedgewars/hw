@@ -67,6 +67,7 @@ with Gear^,
                      amDynamite: AddGear(round(X) + hwSign(dX) * 7, round(Y), gtDynamite, 0, hwSign(dX) * 0.035, 0, 5000);
                   amBaseballBat: AddGear(round(X) + hwSign(dX) * 10, round(Y), gtShover, 0, xx * 0.5, yy * 0.5).Radius:= 20;
                     amFirePunch: CurAmmoGear:= AddGear(round(X) + hwSign(dX) * 10, round(Y), gtFirePunch, 0);
+                    amParachute: CurAmmoGear:= AddGear(round(X), round(Y), gtParachute, 0)
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
