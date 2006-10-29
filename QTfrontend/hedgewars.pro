@@ -8,7 +8,7 @@ win32 {
 	RC_FILE	= ./res/hedgewars.rc
 }
 
-QT += network
+QT += network svg
 
 HEADERS += binds.h \
            game.h \

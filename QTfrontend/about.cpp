@@ -16,10 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QGridLayout>
+#include <QSvgWidget>
 #include "about.h"
 
 About::About(QWidget * parent) :
   QWidget(parent)
 {
-
+	QGridLayout *mainLayout = new QGridLayout(this);
+	QSvgWidget *hedgehog = new QSvgWidget(":/res/Hedgehog.svg", this);
+	hedgehog->setFixedSize(300, 329);
+	mainLayout->addWidget(hedgehog);
 }
