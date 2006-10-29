@@ -17,16 +17,35 @@
  */
 
 #include <QResizeEvent>
+#include <QGroupBox>
+#include <QHBoxLayout>
 #include "gamecfgwidget.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent) : 
+GameCFGWidget::GameCFGWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
-	CB_mode_Forts = new QCheckBox(this);
+	QGroupBox *GBoxMap = new QGroupBox(this);
+	GBoxMap->setTitle(QGroupBox::tr("Landscape"));
+	GBoxMap->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	mainLayout.addWidget(GBoxMap);
+
+	QHBoxLayout *GBoxMapLayout = new QHBoxLayout(GBoxMap);
+	pMapContainer = new HWMapContainer(GBoxMap);
+	GBoxMapLayout->addWidget(new QWidget);
+	GBoxMapLayout->addWidget(pMapContainer);
+	GBoxMapLayout->addWidget(new QWidget);
+
+	QGroupBox *GBoxOptions = new QGroupBox(this);
+	GBoxOptions->setTitle(QGroupBox::tr("Game scheme"));
+	GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+	mainLayout.addWidget(GBoxOptions);
+
+	QVBoxLayout *GBoxOptionsLayout = new QVBoxLayout(GBoxOptions);
+	CB_mode_Forts = new QCheckBox(GBoxOptions);
 	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
-	mainLayout.addWidget(CB_mode_Forts);
-	pMapContainer=new HWMapContainer(this);
-	mainLayout.addWidget(pMapContainer, 80);
+	GBoxOptionsLayout->addWidget(CB_mode_Forts);
+
+	mainLayout.addWidget(new QWidget, 100);
 }
 
 quint32 GameCFGWidget::getGameFlags()
