@@ -49,8 +49,8 @@ void HWMapContainer::setImage(const QImage newImage)
   px.setMask(bm);
 
   QLinearGradient linearGrad(QPoint(128, 0), QPoint(128, 128));
-  linearGrad.setColorAt(0, QColor(0, 0, 192));
-  linearGrad.setColorAt(1, QColor(0, 0, 64));
+  linearGrad.setColorAt(1, QColor(0, 0, 192));
+  linearGrad.setColorAt(0, QColor(66, 115, 225));
   p.fillRect(QRect(0, 0, 256, 128), linearGrad);
   p.drawPixmap(QPoint(0, 0), px);
 
