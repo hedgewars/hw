@@ -96,5 +96,6 @@ void TeamShowWidget::changeTeamColor()
   
   QPalette newPalette = palette();
   newPalette.setColor(QPalette::Button, QColor(*pOurFrameTeams->currentColor));
-  colorButt->setPalette(newPalette);
+  colorButt->setStyleSheet(QString("background-color : ")+pOurFrameTeams->currentColor->name());
+  //colorButt->setPalette(newPalette);
 }
