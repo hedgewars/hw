@@ -1,4 +1,4 @@
-set(dcc32_tryexe dcc132.exe)
+set(dcc32_tryexe dcc32.exe)
 set(fpc_tryexe fpc)
 set(hwengine_project "hwengine.dpr")
 
