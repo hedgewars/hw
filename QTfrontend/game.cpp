@@ -53,6 +53,7 @@ void HWGame::SendTeamConfig(int index)
 void HWGame::SendConfig()
 {
 	SendIPC(QString("eseed %1").arg(seed).toAscii());
+//	SendIPC(QString("emap %1").arg("mushrooms").toAscii());
 	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
 	SendIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
@@ -84,10 +85,10 @@ void HWGame::SendQuickConfig()
 	SendIPC("eaddteam");
 	LocalCFG(2);
 	SendIPC("ecolor 16776960");
-	SendIPC("eadd hh0 1");
-	SendIPC("eadd hh1 1");
-	SendIPC("eadd hh2 1");
-	SendIPC("eadd hh3 1");
+	SendIPC("eadd hh0 5");
+	SendIPC("eadd hh1 4");
+	SendIPC("eadd hh2 4");
+	SendIPC("eadd hh3 3");
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
