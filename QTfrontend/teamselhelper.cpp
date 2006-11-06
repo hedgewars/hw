@@ -21,6 +21,7 @@
 
 #include <QPixmap>
 #include <QPainter>
+#include <QStyleFactory>
 
 #include "frameTeam.h"
 
@@ -96,6 +97,7 @@ void TeamShowWidget::changeTeamColor()
   
   QPalette newPalette = palette();
   newPalette.setColor(QPalette::Button, QColor(*pOurFrameTeams->currentColor));
-  colorButt->setStyleSheet(QString("background-color : ")+pOurFrameTeams->currentColor->name());
-  //colorButt->setPalette(newPalette);
+  //colorButt->setStyleSheet(QString("background-color : ")+pOurFrameTeams->currentColor->name());
+  colorButt->setStyle(QStyleFactory::create("plastique"));
+  colorButt->setPalette(newPalette);
 }
