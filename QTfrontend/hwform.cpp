@@ -119,7 +119,14 @@ void HWForm::GoToInfo()
 
 void HWForm::GoToMultiplayer()
 {
-	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(config->GetTeamsList());
+	QStringList tmNames=config->GetTeamsList();
+	QList<HWTeam> teamsList;
+	for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
+	  HWTeam team(*it);
+	  team.LoadFromFile();
+	  teamsList.push_back(team);
+	}
+	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
 	ui.Pages->setCurrentIndex(ID_PAGE_MULTIPLAYER);
 }
 

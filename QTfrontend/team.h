@@ -36,6 +36,7 @@ class HWTeam
 		QString HHName[8];
 		QString	Grave;
 		QString Fort;
+		unsigned int difficulty;
 		BindAction binds[BINDS_NUMBER];
 
 		bool LoadFromFile();

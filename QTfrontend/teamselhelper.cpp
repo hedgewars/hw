@@ -36,13 +36,14 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
   this->setMaximumHeight(35);
-  QPixmap* px=new QPixmap(QPixmap(datadir->absolutePath() + "/Forts/" + m_team.Fort + "L.png").scaled(40, 40));
+  //QPixmap* px=new QPixmap(QPixmap(datadir->absolutePath() + "/Forts/" + m_team.Fort + "L.png").scaled(40, 40));
+  QIcon difficultyIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
   QPalette newPalette = palette();
   newPalette.setColor(QPalette::Button, palette().color(backgroundRole()));
 
   // team fort
-  QPushButton* butt=new QPushButton(*px, "", this);
+  QPushButton* butt=new QPushButton(difficultyIcon, "", this); // *px
   butt->setFlat(true);
   butt->setGeometry(0, 0, 30, 30);
   butt->setMaximumWidth(30);

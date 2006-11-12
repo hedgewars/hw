@@ -36,6 +36,7 @@ class QListWidget;
 class QCheckBox;
 class SquareLabel;
 class About;
+class QSpinBox;
 
 class PageMain : public QWidget
 {
@@ -88,6 +89,7 @@ public:
 	QPushButton *BtnTeamDiscard;
 	QPushButton *BtnTeamSave;
 	QLineEdit * TeamNameEdit;
+	QSpinBox* difficultyBox;
 	QLineEdit * HHNameEdit[8];
 	QComboBox * CBBind[BINDS_NUMBER];
 

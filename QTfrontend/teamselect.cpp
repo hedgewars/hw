@@ -97,7 +97,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
 }
 
-void TeamSelWidget::resetPlayingTeams(const QStringList& teamslist)
+void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
 {
   list<HWTeam>::iterator it;
   for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
@@ -110,7 +110,7 @@ void TeamSelWidget::resetPlayingTeams(const QStringList& teamslist)
   }
   curDontPlayingTeams.clear();
 
-  for (QStringList::ConstIterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
+  for (QList<HWTeam>::ConstIterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
     addTeam(*it);
   }
 }

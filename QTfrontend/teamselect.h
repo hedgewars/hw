@@ -41,7 +41,7 @@ class TeamSelWidget : public QWidget
   TeamSelWidget(QWidget* parent=0);
   void addTeam(HWTeam team);
   //void removeTeam(HWTeam team);
-  void resetPlayingTeams(const QStringList& teamslist);
+  void resetPlayingTeams(const QList<HWTeam>& teamslist);
   bool isPlaying(HWTeam team) const;
   HWTeamTempParams getTeamParams(HWTeam team) const;
   list<HWTeam> getPlayingTeams() const;

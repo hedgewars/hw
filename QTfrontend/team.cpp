@@ -19,13 +19,15 @@
 #include <QFile>
 #include <QTextStream>
 #include <QApplication>
+#include <QSpinBox>
 #include "team.h"
 #include "hwform.h"
 #include "predefteams.h"
 #include "pages.h"
 #include "hwconsts.h"
 
-HWTeam::HWTeam(const QString & teamname)
+HWTeam::HWTeam(const QString & teamname) :
+  difficulty(0)
 {
 	TeamName = teamname;
 	for (int i = 0; i < 8; i++) HHName[i].sprintf("hedgehog %d", i);
@@ -38,7 +40,8 @@ HWTeam::HWTeam(const QString & teamname)
 	}
 }
 
-HWTeam::HWTeam(quint8 num)
+HWTeam::HWTeam(quint8 num) :
+  difficulty(0)
 {
 	num %= PREDEFTEAMS_COUNT;
 	TeamName = QApplication::translate("teams", pteams[num].TeamName);
@@ -108,6 +111,12 @@ bool HWTeam::LoadFromFile()
 					binds[i].strbind = str;
 					break;
 				}
+		} else 
+		if (str.startsWith("difficulty "))
+		{
+		  str.remove(0, 11);
+		  difficulty=str.toUInt();
+		  if (difficulty>5) difficulty=0; // this shouldn't normally happen
 		}
 	}
 	cfgfile.close();
@@ -130,6 +139,7 @@ bool HWTeam::SaveToFile()
 	{
 		stream << "bind " << binds[i].strbind << " " << binds[i].action << endl;
 	}
+	stream << "difficulty " << difficulty << endl;
 	cfgfile.close();
 	return true;
 }
@@ -137,6 +147,7 @@ bool HWTeam::SaveToFile()
 void HWTeam::SetToPage(HWForm * hwform)
 {
 	hwform->ui.pageEditTeam->TeamNameEdit->setText(TeamName);
+	hwform->ui.pageEditTeam->difficultyBox->setValue(difficulty);
 	for(int i = 0; i < 8; i++)
 	{
 		hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
@@ -156,6 +167,7 @@ void HWTeam::SetToPage(HWForm * hwform)
 void HWTeam::GetFromPage(HWForm * hwform)
 {
 	TeamName  = hwform->ui.pageEditTeam->TeamNameEdit->text();
+	difficulty = hwform->ui.pageEditTeam->difficultyBox->value();
 	for(int i = 0; i < 8; i++)
 	{
 		HHName[i] = hwform->ui.pageEditTeam->HHNameEdit[i]->text();

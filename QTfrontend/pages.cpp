@@ -26,6 +26,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QApplication>
+#include <QSpinBox>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -122,7 +123,17 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	QGridLayout * GBTLayout = new QGridLayout(GBoxTeam);
 	TeamNameEdit = new QLineEdit(GBoxTeam);
 	TeamNameEdit->setMaxLength(15);
-	GBTLayout->addWidget(TeamNameEdit);
+	GBTLayout->addWidget(TeamNameEdit, 0, 0, 1, 0);
+
+	QLabel* difficultyLabel=new QLabel(GBoxTeam);
+	difficultyLabel->setText("difficulty:");
+	difficultyBox=new QSpinBox(GBoxTeam);
+	difficultyBox->setRange(0, 5);
+	difficultyBox->setSingleStep(1);
+	difficultyBox->setValue(0);
+	GBTLayout->addWidget(difficultyLabel, 1, 0);
+	GBTLayout->addWidget(difficultyBox, 1, 1);
+	
 	pageLayout->addWidget(GBoxTeam, 0, 0);
 
 	GBoxHedgehogs = new	QGroupBox(this);
