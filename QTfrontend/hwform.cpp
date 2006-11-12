@@ -124,6 +124,7 @@ void HWForm::GoToMultiplayer()
 	for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
 	  HWTeam team(*it);
 	  team.LoadFromFile();
+	  team.TeamName=*it; // FIXME: we can have different different teamnames in config files
 	  teamsList.push_back(team);
 	}
 	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
