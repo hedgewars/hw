@@ -33,10 +33,10 @@ About::About(QWidget * parent) :
 
 	lbl1->setOpenExternalLinks(true);
 	lbl1->setText(
-			"<div align=\"center\"><h1>Hedgewars</h1>"
-			"<h3>Version 0.8</h3>"
-			"<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>"
-			"This program is distributed under the GNU General Public License"
+			"<div align=\"center\"><h1>Hedgewars</h1>" +
+			QLabel::tr("<h3>Version 0.8</h3>") +
+			"<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
+			QLabel::tr("This program is distributed under the GNU General Public License") +
 			"</div>"
 			);
 	lbl1->setWordWrap(true);
@@ -46,11 +46,12 @@ About::About(QWidget * parent) :
 
 	lbl2->setOpenExternalLinks(true);
 	lbl2->setText(
-			"<h2>Developers:</h2><p>"
+			QLabel::tr("<h2>Developers:</h2>") +
+			"<p>"
 			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Igor Ulyanov &lt;<a href=\"mailto:iulyanov@gmail.com\">iulyanov@gmail.com</a>&gt;"
-			"</p>"
-			"<h2>Translations:</h2>"
+			"</p>" +
+			QLabel::tr("<h2>Translations:</h2>") +
 			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;"
 			);
