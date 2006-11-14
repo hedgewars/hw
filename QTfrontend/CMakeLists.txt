@@ -93,6 +93,7 @@ if(WIN32 AND NOT UNIX)
 		"${QT_BIN_DIR}/QtGui4.dll"
 		"${QT_BIN_DIR}/QtCore4.dll"
 		"${QT_BIN_DIR}/QtSvg4.dll"
+		"${QT_BIN_DIR}/QtXml4.dll"
 		"${QT_BIN_DIR}/mingwm10.dll"
 		DESTINATION bin)
 endif(WIN32 AND NOT UNIX)
