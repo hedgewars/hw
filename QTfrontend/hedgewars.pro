@@ -31,7 +31,8 @@ HEADERS += binds.h \
            mapContainer.h \
            tcpBase.h \
            about.h \
-           KB.h
+           KB.h \
+           proto.h
            
 SOURCES += game.cpp \
            main.cpp \
@@ -51,7 +52,8 @@ SOURCES += game.cpp \
            hwmap.cpp \
            mapContainer.cpp \
            tcpBase.cpp \
-           about.cpp
+           about.cpp \
+           proto.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

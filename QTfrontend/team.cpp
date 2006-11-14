@@ -111,7 +111,7 @@ bool HWTeam::LoadFromFile()
 					binds[i].strbind = str;
 					break;
 				}
-		} else 
+		} else
 		if (str.startsWith("difficulty "))
 		{
 		  str.remove(0, 11);
@@ -181,27 +181,24 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	}
 }
 
-QByteArray HWTeam::IPCTeamInfo() const
+QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs) const
 {
-	QByteArray buf;
-	#define ADD(a) { \
-					QByteArray strmsg = a.toUtf8(); \
-					quint8 sz = strmsg.size(); \
-					buf.append(QByteArray((char *)&sz, 1)); \
-					buf.append(strmsg); \
-					}
-
-	ADD(QString("ename team " + TeamName));
+	QStringList sl;
+	sl.push_back("eaddteam");
+	sl.push_back(QString("ecolor %1").arg(color));
+	sl.push_back("ename team " + TeamName);
 	for (int i = 0; i < 8; i++)
-		ADD(QString("ename hh%1 ").arg(i).append(HHName[i]));
-	ADD(QString("egrave " + Grave));
-	ADD(QString("efort " + Fort));
+		sl.push_back(QString("ename hh%1 ").arg(i).append(HHName[i]));
+	sl.push_back(QString("egrave " + Grave));
+	sl.push_back(QString("efort " + Fort));
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
-		ADD(QString("ebind " + binds[i].strbind + " " + binds[i].action));
+		sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 	}
-	#undef ADD
-	return buf;
+	for (int t = 0; t < hedgehogs; t++)
+		sl.push_back(QString("eadd hh%1 %2")
+				.arg(QString::number(t), QString::number(difficulty)));
+	return sl;
 }
 
 bool HWTeam::operator==(const HWTeam& t1) const {

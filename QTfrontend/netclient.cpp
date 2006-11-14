@@ -21,6 +21,7 @@
 #include "netclient.h"
 #include "game.h"
 #include "gameuiconfig.h"
+#include "proto.h"
 
 HWNet::HWNet(GameUIConfig * config)
 	: QObject()
@@ -341,18 +342,11 @@ void HWNet::ConfigAsked()
 	if (configasks == playerscnt)
 	{
 		quint32 color = 65535;
-			#define ADD(a) { \
-							QByteArray strmsg; \
-							strmsg.append(a); \
-							quint8 sz = strmsg.size(); \
-							cache.append(QByteArray((char *)&sz, 1)); \
-							cache.append(strmsg); \
-							}
 		{
 			QByteArray cache;
-			ADD("eseed " + seed);
-			ADD("e$gmflags 0");
-			ADD(QString("etheme %1").arg(config->GetRandomTheme()));
+			HWProto::addStringToBuffer(cache, "eseed " + seed);
+			HWProto::addStringToBuffer(cache, "e$gmflags 0");
+			HWProto::addStringToBuffer(cache, QString("etheme %1").arg(config->GetRandomTheme()));
 			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
 			hwp_chanmsg(mynick, _msg);
@@ -364,13 +358,12 @@ void HWNet::ConfigAsked()
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, msg));
 			hwp_chanmsg(mynick, msg);
 			QByteArray cache;
-			ADD(QString("ecolor %1").arg(color));
-			ADD("eadd hh0 0");
-			ADD("eadd hh1 0");
-			ADD("eadd hh2 0");
-			ADD("eadd hh3 0");
-			ADD("eadd hh4 0");
-			#undef ADD
+			HWProto::addStringToBuffer(cache, QString("ecolor %1").arg(color));
+			HWProto::addStringToBuffer(cache, "eadd hh0 0");
+			HWProto::addStringToBuffer(cache, "eadd hh1 0");
+			HWProto::addStringToBuffer(cache, "eadd hh2 0");
+			HWProto::addStringToBuffer(cache, "eadd hh3 0");
+			HWProto::addStringToBuffer(cache, "eadd hh4 0");
 			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
 			hwp_chanmsg(mynick, _msg);

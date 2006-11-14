@@ -43,7 +43,7 @@ class HWTeam
 		bool SaveToFile();
 		void SetToPage(HWForm * hwform);
 		void GetFromPage(HWForm * hwform);
-		QByteArray IPCTeamInfo() const;
+		QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs) const;
 
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;

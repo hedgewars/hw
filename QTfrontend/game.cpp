@@ -30,6 +30,7 @@
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
 #include "KB.h"
+#include "proto.h"
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
   TCPBase(true)
@@ -60,12 +61,14 @@ void HWGame::SendConfig()
 
 	for (int i = 0; i < TeamCount; i++)
 	{
-		SendIPC("eaddteam");
-		LocalCFG(teams[i]);
-		QColor clr=m_teamsParams[teams[i]].teamColor;
-		SendIPC(QString("ecolor %1").arg(clr.rgb()&0xFFFFFF).toAscii());
-		for (int t = 0; t < m_teamsParams[teams[i]].numHedgehogs; t++)
-			SendIPC(QString("eadd hh%1 0").arg(t).toAscii());
+		HWTeam team(teams[i]);
+		team.LoadFromFile();
+
+		QColor clr = m_teamsParams[teams[i]].teamColor;
+		QByteArray buf;
+		QStringList sl = team.TeamGameConfig(clr.rgb()&0xFFFFFF, m_teamsParams[teams[i]].numHedgehogs);
+		HWProto::addStringListToBuffer(buf, sl);
+		RawSendIPC(buf);
 	}
 }
 
@@ -75,20 +78,15 @@ void HWGame::SendQuickConfig()
 	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
 	SendIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
-	SendIPC("eaddteam");
-	LocalCFG(0);
-	SendIPC("ecolor 65535");
-	SendIPC("eadd hh0 0");
-	SendIPC("eadd hh1 0");
-	SendIPC("eadd hh2 0");
-	SendIPC("eadd hh3 0");
-	SendIPC("eaddteam");
-	LocalCFG(2);
-	SendIPC("ecolor 16776960");
-	SendIPC("eadd hh0 5");
-	SendIPC("eadd hh1 4");
-	SendIPC("eadd hh2 4");
-	SendIPC("eadd hh3 3");
+
+	QByteArray teamscfg;
+	HWTeam team1(0);
+	team1.difficulty = 0;
+	HWProto::addStringListToBuffer(teamscfg, team1.TeamGameConfig(65535, 4));
+
+	HWTeam team2(2);
+	team2.difficulty = 4;
+	RawSendIPC(HWProto::addStringListToBuffer(teamscfg, team2.TeamGameConfig(16776960, 4)));
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -261,7 +259,7 @@ void HWGame::StartLocal()
 {
 	gameType = gtLocal;
 	if (TeamCount < 2) return;
-	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
+	seed = gamecfg->getCurrentSeed();
 	demo = new QByteArray;
 	Start();
 }
@@ -269,7 +267,7 @@ void HWGame::StartLocal()
 void HWGame::StartQuick()
 {
 	gameType = gtQLocal;
-	seed = gamecfg->getCurrentSeed();//QUuid::createUuid().toString();
+	seed = gamecfg->getCurrentSeed();
 	demo = new QByteArray;
 	Start();
 }
@@ -277,21 +275,8 @@ void HWGame::StartQuick()
 
 void HWGame::LocalCFG(const QString & teamname)
 {
+	QByteArray teamcfg;
 	HWTeam team(teamname);
-	if (!team.LoadFromFile()) {
-		QMessageBox::critical(0,
-				"Error",
-				QString("Cannot load team config ""%1""").arg(teamname),
-				QMessageBox::Ok,
-				QMessageBox::NoButton,
-				QMessageBox::NoButton);
-		return;
-	}
-	RawSendIPC(team.IPCTeamInfo());
+	RawSendIPC(HWProto::addStringListToBuffer(teamcfg, team.TeamGameConfig(16776960, 4)));
 }
 
-void HWGame::LocalCFG(quint8 num)
-{
-	HWTeam team(num);
-	RawSendIPC(team.IPCTeamInfo());
-}

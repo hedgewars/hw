@@ -53,7 +53,6 @@ signals:
 public slots:
 	void FromNet(const QByteArray & msg);
 	void LocalCFG(const QString & teamname);
-	void LocalCFG(quint8 num);
 
 private:
     enum GameType {

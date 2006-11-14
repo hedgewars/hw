@@ -30,7 +30,8 @@ set(hwfr_src
 	hwmap.cpp
 	mapContainer.cpp
 	tcpBase.cpp
-	about.cpp)
+	about.cpp
+	proto.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -56,7 +57,8 @@ set(hwfr_moc_hdrs
 	mapContainer.h
 	tcpBase.h
 	about.h
-	KB.h)
+	KB.h
+	proto.h)
 
 
 set(hwfr_rez
