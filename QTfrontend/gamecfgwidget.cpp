@@ -24,12 +24,14 @@
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
+	mainLayout.setMargin(0);
 	QGroupBox *GBoxMap = new QGroupBox(this);
 	GBoxMap->setTitle(QGroupBox::tr("Landscape"));
 	GBoxMap->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	mainLayout.addWidget(GBoxMap);
 
 	QHBoxLayout *GBoxMapLayout = new QHBoxLayout(GBoxMap);
+	GBoxMapLayout->setMargin(0);
 	pMapContainer = new HWMapContainer(GBoxMap);
 	GBoxMapLayout->addWidget(new QWidget);
 	GBoxMapLayout->addWidget(pMapContainer);

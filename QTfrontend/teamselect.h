@@ -19,7 +19,7 @@
 #ifndef _TEAM_SELECT_INCLUDED
 #define _TEAM_SELECT_INCLUDED
 
-#include <QWidget>
+#include <QGroupBox>
 #include <QVBoxLayout>
 class QFrame;
 
@@ -33,10 +33,10 @@ class FrameTeams;
 
 using namespace std;
 
-class TeamSelWidget : public QWidget
+class TeamSelWidget : public QGroupBox
 {
   Q_OBJECT
- 
+
  public:
   TeamSelWidget(QWidget* parent=0);
   void addTeam(HWTeam team);

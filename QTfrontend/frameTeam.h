@@ -48,7 +48,7 @@ class FrameTeams : public QWidget
   int overallHedgehogs;
   QList<QColor> availableColors;
   QList<QColor>::Iterator currentColor;
-    
+
   QVBoxLayout mainLayout;
   typedef map<HWTeam, QWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;

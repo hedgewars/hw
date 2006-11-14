@@ -89,8 +89,9 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
-  QWidget(parent), mainLayout(this)
+  QGroupBox(parent), mainLayout(this)
 {
+  setTitle(QGroupBox::tr("Playing teams"));
   framePlaying=new FrameTeams();
   frameDontPlaying=new FrameTeams();
   addScrArea(framePlaying, QColor("DarkTurquoise"));
