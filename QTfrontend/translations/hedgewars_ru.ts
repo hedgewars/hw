@@ -44,7 +44,7 @@
 <context>
     <name>HWGame</name>
     <message>
-        <location filename="../game.cpp" line="229"/>
+        <location filename="../game.cpp" line="227"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -54,22 +54,22 @@
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="189"/>
+        <location filename="../game.cpp" line="187"/>
         <source>en.txt</source>
         <translation>ru.txt</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="212"/>
+        <location filename="../game.cpp" line="210"/>
         <source>Cannot save demo to file %1</source>
         <translation>Ошибка сохранения демо в файл %1</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="231"/>
+        <location filename="../game.cpp" line="229"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="230"/>
+        <location filename="../game.cpp" line="228"/>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
     </message>
@@ -82,17 +82,17 @@
 <context>
     <name>HWNet</name>
     <message>
-        <location filename="../netclient.cpp" line="68"/>
+        <location filename="../netclient.cpp" line="69"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../netclient.cpp" line="61"/>
+        <location filename="../netclient.cpp" line="62"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Ошибка подключения. Проверьте имя сервера и номер порта.</translation>
     </message>
     <message>
-        <location filename="../netclient.cpp" line="65"/>
+        <location filename="../netclient.cpp" line="66"/>
         <source>Connection refused</source>
         <translation>Отказано в соединении</translation>
     </message>
@@ -118,7 +118,7 @@
         <translation>Полный экран</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="45"/>
+        <location filename="../gamecfgwidget.cpp" line="47"/>
         <source>Forts mode</source>
         <translation>Режим фортов</translation>
     </message>
@@ -171,14 +171,19 @@
         <translation>Настройки сети</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="28"/>
+        <location filename="../gamecfgwidget.cpp" line="29"/>
         <source>Landscape</source>
         <translation>Ландшафт</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="39"/>
+        <location filename="../gamecfgwidget.cpp" line="41"/>
         <source>Game scheme</source>
         <translation>Настройки игры</translation>
+    </message>
+    <message>
+        <location filename="../teamselect.cpp" line="94"/>
+        <source>Playing teams</source>
+        <translation>Команды в игре</translation>
     </message>
 </context>
 <context>
