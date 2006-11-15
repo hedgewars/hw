@@ -51,9 +51,14 @@ About::About(QWidget * parent) :
 			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Igor Ulyanov &lt;<a href=\"mailto:iulyanov@gmail.com\">iulyanov@gmail.com</a>&gt;"
 			"</p>" +
-			QLabel::tr("<h2>Translations:</h2>") +
+			QLabel::tr("<h2>Translations:</h2><p>") +
 			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;"
+			"</p>" +
+			QLabel::tr("<h2>Special thanks:</h2><p>") +
+			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
+			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;"
+			"</p>"
 			);
 	lbl2->setWordWrap(true);
 	mainLayout->addWidget(lbl2, 1, 1);

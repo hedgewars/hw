@@ -226,12 +226,22 @@
     <message>
         <location filename="../about.cpp" line="55"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;</source>
-        <translation>&lt;h2&gt;Переводы:&lt;/h2&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="50"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Разработчики:&lt;/h2&gt;</translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="55"/>
+        <source>&lt;h2&gt;Translations:&lt;/h2&gt;&lt;p&gt;</source>
+        <translation>&lt;h2&gt;Переводы:&lt;/h2&gt;&lt;p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="59"/>
+        <source>&lt;h2&gt;Special thanks:&lt;/h2&gt;&lt;p&gt;</source>
+        <translation>&lt;h2&gt;Особая благодарность:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
 </context>
 <context>
