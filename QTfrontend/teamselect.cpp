@@ -94,8 +94,11 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   setTitle(QGroupBox::tr("Playing teams"));
   framePlaying=new FrameTeams();
   frameDontPlaying=new FrameTeams();
-  addScrArea(framePlaying, QColor("DarkTurquoise"));
-  addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
+//  addScrArea(framePlaying, QColor("DarkTurquoise"));
+//  addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
+  QPalette p;
+  addScrArea(framePlaying, p.color(QPalette::Window).light(105));
+  addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105));
 }
 
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)

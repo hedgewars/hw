@@ -233,7 +233,7 @@ if CurrentTeam <> nil then
                            DrawGear(sQuestion, Round(Gear.X) - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
                         else
                         if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
-                           DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 8,
+                           DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
                                           Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
                                           24, (18 + hwSign(Gear.dX) * integer(((Gear.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
                                           Team.CrosshairSurf, Surface);
