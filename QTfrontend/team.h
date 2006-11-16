@@ -47,6 +47,8 @@ class HWTeam
 
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
+	private:
+		QString OldTeamName;
 };
 
 class HWTeamTempParams

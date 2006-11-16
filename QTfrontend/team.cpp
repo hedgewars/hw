@@ -30,6 +30,7 @@ HWTeam::HWTeam(const QString & teamname) :
   difficulty(0)
 {
 	TeamName = teamname;
+	OldTeamName = TeamName;
 	for (int i = 0; i < 8; i++) HHName[i].sprintf("hedgehog %d", i);
 	Grave = "Simple";
 	Fort = "Barrelhouse";
@@ -76,11 +77,11 @@ bool HWTeam::LoadFromFile()
 	{
 		str = stream.readLine();
 		if (str.startsWith(";")) continue;
-		if (str.startsWith("name team "))
+		/*if (str.startsWith("name team "))
 		{
 			str.remove(0, 10);
 			TeamName = str;
-		} else
+		} else*/
 		if (str.startsWith("name hh"))
 		{
 			str.remove(0, 7);
@@ -125,6 +126,12 @@ bool HWTeam::LoadFromFile()
 
 bool HWTeam::SaveToFile()
 {
+	if (OldTeamName != TeamName)
+	{
+		QFile cfgfile(cfgdir->absolutePath() + "/" + OldTeamName + ".cfg");
+		cfgfile.remove();
+		OldTeamName = TeamName;
+	}
 	QFile cfgfile(cfgdir->absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::WriteOnly)) return false;
 	QTextStream stream(&cfgfile);

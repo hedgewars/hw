@@ -65,6 +65,7 @@ private slots:
 	void StartMPGame();
 
 private:
+	void UpdateTeamsLists();
 	enum PageIDs {
 		ID_PAGE_SINGLEPLAYER	= 0,
 		ID_PAGE_SETUP_TEAM	= 1,
@@ -78,7 +79,7 @@ private:
 		ID_PAGE_MAIN	= 9
 		};
 	HWGame * game;
-	HWTeam * tmpTeam;
+	HWTeam * editedTeam;
 	HWNet * hwnet;
 	GameUIConfig * config;
 };

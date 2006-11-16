@@ -42,19 +42,7 @@ HWForm::HWForm(QWidget *parent)
 
 	config = new GameUIConfig(this);
 
-	QStringList teamslist = config->GetTeamsList();
-
-	if(teamslist.empty()) {
-		HWTeam defaultTeam("DefaultTeam");
-		defaultTeam.SaveToFile();
-		teamslist.push_back("DefaultTeam");
-	}
-
-	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it )
-	{
-	  ui.pageMultiplayer->teamsSelect->addTeam(*it);
-	  ui.pageOptions->CBTeamName->addItem(*it);
-	}
+	UpdateTeamsLists();
 
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
@@ -97,6 +85,20 @@ HWForm::HWForm(QWidget *parent)
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
 }
 
+void HWForm::UpdateTeamsLists()
+{
+	QStringList teamslist = config->GetTeamsList();
+
+	if(teamslist.empty()) {
+		HWTeam defaultTeam("DefaultTeam");
+		defaultTeam.SaveToFile();
+		teamslist.push_back("DefaultTeam");
+	}
+
+	ui.pageOptions->CBTeamName->clear();
+	ui.pageOptions->CBTeamName->addItems(teamslist);
+}
+
 void HWForm::GoToMain()
 {
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
@@ -124,7 +126,6 @@ void HWForm::GoToMultiplayer()
 	for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
 	  HWTeam team(*it);
 	  team.LoadFromFile();
-	  team.TeamName=*it; // FIXME: we can have different different teamnames in config files
 	  teamsList.push_back(team);
 	}
 	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
@@ -154,29 +155,31 @@ void HWForm::GoToNetChat()
 
 void HWForm::NewTeam()
 {
-	tmpTeam = new HWTeam("unnamed");
-	tmpTeam->SetToPage(this);
+	editedTeam = new HWTeam("unnamed");
+	editedTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::EditTeam()
 {
-	tmpTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
-	tmpTeam->LoadFromFile();
-	tmpTeam->SetToPage(this);
+	editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
+	editedTeam->LoadFromFile();
+	editedTeam->SetToPage(this);
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::TeamSave()
 {
-	tmpTeam->GetFromPage(this);
-	tmpTeam->SaveToFile();
-	delete tmpTeam;
+	editedTeam->GetFromPage(this);
+	editedTeam->SaveToFile();
+	delete editedTeam;
+	UpdateTeamsLists();
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
 }
 
 void HWForm::TeamDiscard()
 {
+	delete editedTeam;
 	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
 }
 
