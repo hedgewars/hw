@@ -349,11 +349,16 @@ while p <> nil do
 end;
 
 procedure SetWeapon(weap: TAmmoType);
+var t: integer;
 begin
+t:= cMaxSlotAmmoIndex;
 with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
-          while Ammo[CurSlot, CurAmmo].AmmoType <> weap do
+          while (Ammo[CurSlot, CurAmmo].AmmoType <> weap) and (t > 0) do
+                begin
                 ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
+                dec(t)
+                end
 end;
 
 initialization

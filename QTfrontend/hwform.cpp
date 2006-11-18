@@ -63,6 +63,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
 	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
+	connect(ui.pagePlayDemo->DemosList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(PlayDemo()));
 
 	connect(ui.pageOptions->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
 	connect(ui.pageOptions->BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));

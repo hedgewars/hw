@@ -277,6 +277,7 @@ void HWGame::LocalCFG(const QString & teamname)
 {
 	QByteArray teamcfg;
 	HWTeam team(teamname);
+	team.LoadFromFile();
 	RawSendIPC(HWProto::addStringListToBuffer(teamcfg, team.TeamGameConfig(16776960, 4)));
 }
 

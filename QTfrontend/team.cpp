@@ -182,7 +182,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
 
 	Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
 	Fort = hwform->ui.pageEditTeam->CBFort->currentText();
-	for(int i = 0; i < 8; i++)
+	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->currentText();
 	}
@@ -194,7 +194,7 @@ QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs) const
 	sl.push_back("eaddteam");
 	sl.push_back(QString("ecolor %1").arg(color));
 	sl.push_back("ename team " + TeamName);
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < hedgehogs; i++)
 		sl.push_back(QString("ename hh%1 ").arg(i).append(HHName[i]));
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
