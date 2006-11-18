@@ -62,3 +62,13 @@ QString GameCFGWidget::getCurrentSeed() const
 {
   return pMapContainer->getCurrentSeed();
 }
+
+QString GameCFGWidget::getCurrentMap() const
+{
+  return pMapContainer->getCurrentMap();
+}
+
+QString GameCFGWidget::getCurrentTheme() const
+{
+  return pMapContainer->getCurrentTheme();
+}

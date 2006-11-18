@@ -54,8 +54,14 @@ void HWGame::SendTeamConfig(int index)
 void HWGame::SendConfig()
 {
 	SendIPC(QString("eseed %1").arg(seed).toAscii());
-//	SendIPC(QString("emap %1").arg("mushrooms").toAscii());
-	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
+	try {
+	  QString currentMap=gamecfg->getCurrentMap();
+	  SendIPC((QString("emap ")+currentMap).toAscii());
+	  SendIPC(QString("etheme %1").arg(gamecfg->getCurrentTheme()).toAscii());
+	}
+	catch(const MapFileErrorException& e) {
+	  SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
+	}
 	SendIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
 

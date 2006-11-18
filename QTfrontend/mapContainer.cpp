@@ -25,6 +25,9 @@
 #include <QPainter>
 #include <QLinearGradient>
 #include <QColor>
+#include <QTextStream>
+
+#include "hwconsts.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
@@ -36,6 +39,18 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   mainLayout.addWidget(imageButt);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(changeImage()));
   changeImage();
+
+  chooseMap=new QComboBox(this);
+  QDir tmpdir;
+  tmpdir.cd(datadir->absolutePath());
+  tmpdir.cd("Maps");
+  tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+  QStringList mapList=tmpdir.entryList(QStringList("*"));
+  mapList.push_front("generated map...");
+  chooseMap->addItems(mapList);
+  connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
+
+  mainLayout.addWidget(chooseMap);
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -54,9 +69,25 @@ void HWMapContainer::setImage(const QImage newImage)
   p.fillRect(QRect(0, 0, 256, 128), linearGrad);
   p.drawPixmap(QPoint(0, 0), px);
 
-
   imageButt->setIcon(pxres);
   imageButt->setIconSize(QSize(256, 128));
+  chooseMap->setCurrentIndex(0);
+}
+
+void HWMapContainer::mapChanged(int index)
+{
+  if(!index) {
+    changeImage();
+    return;
+  }
+
+  QPixmap mapImage;
+  if(!mapImage.load(datadir->absolutePath()+"/Maps/"+chooseMap->currentText()+"/map.png")) {
+    changeImage();
+    chooseMap->setCurrentIndex(0);
+    return;
+  }
+  imageButt->setIcon(mapImage.scaled(256,128));
 }
 
 void HWMapContainer::changeImage()
@@ -70,6 +101,28 @@ void HWMapContainer::changeImage()
 QString HWMapContainer::getCurrentSeed() const
 {
   return m_seed;
+}
+
+QString HWMapContainer::getCurrentMap() const
+{
+  if(!chooseMap->currentIndex()) throw MapFileErrorException();
+  return chooseMap->currentText();
+}
+
+QString HWMapContainer::getCurrentTheme() const
+{
+  if(!chooseMap->currentIndex()) throw MapFileErrorException();
+  QFile mapCfgFile(datadir->absolutePath()+"/Maps/"+chooseMap->currentText()+"/map.cfg");
+  if (mapCfgFile.open(QFile::ReadOnly)) {
+    QTextStream input(&mapCfgFile);
+    QString theme;
+    input >> theme;
+    if(theme.length()>256) throw MapFileErrorException(); // theme name too long
+    return theme;
+    mapCfgFile.close();
+  } else {
+    throw MapFileErrorException();
+  }
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )

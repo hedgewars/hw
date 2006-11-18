@@ -23,8 +23,13 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QComboBox>
 
 class QPushButton;
+
+class MapFileErrorException
+{
+};
 
 class HWMapContainer : public QWidget
 {
@@ -33,12 +38,15 @@ class HWMapContainer : public QWidget
  public:
   HWMapContainer(QWidget * parent=0);
   QString getCurrentSeed() const;
+  QString getCurrentMap() const;
+  QString getCurrentTheme() const;
 
  public slots:
   void changeImage();
 
  private slots:
   void setImage(const QImage newImage);
+  void mapChanged(int index);
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -46,6 +54,7 @@ class HWMapContainer : public QWidget
  private:
   QVBoxLayout mainLayout;
   QPushButton* imageButt;
+  QComboBox* chooseMap;
   HWMap* pMap;
   QString m_seed;
 };

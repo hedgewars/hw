@@ -33,6 +33,8 @@ public:
 	GameCFGWidget(QWidget* parent=0);
 	quint32 getGameFlags();
 	QString getCurrentSeed() const;
+	QString getCurrentMap() const;
+	QString getCurrentTheme() const;
 
 private slots:
 
