@@ -19,6 +19,7 @@
 #include <QGridLayout>
 #include <QSvgWidget>
 #include <QLabel>
+#include <QScrollArea>
 #include "about.h"
 
 About::About(QWidget * parent) :
@@ -42,6 +43,9 @@ About::About(QWidget * parent) :
 	lbl1->setWordWrap(true);
 	mainLayout->addWidget(lbl1, 0, 1);
 
+	QScrollArea *sa = new QScrollArea(this);
+	sa->setWidgetResizable(true);
+	sa->setFrameStyle(QFrame::NoFrame);
 	QLabel *lbl2 = new QLabel(this);
 
 	lbl2->setOpenExternalLinks(true);
@@ -61,5 +65,6 @@ About::About(QWidget * parent) :
 			"</p>"
 			);
 	lbl2->setWordWrap(true);
-	mainLayout->addWidget(lbl2, 1, 1);
+	sa->setWidget(lbl2);
+	mainLayout->addWidget(sa, 1, 1);
 }
