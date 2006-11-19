@@ -63,6 +63,7 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnNet->setFont(*font14);
 	BtnNet->setText(QPushButton::tr("Net game"));
+	BtnNet->setVisible(false);  // Temporary fix for 0.8 release due to broken net game support
 	pageLayout->addWidget(BtnNet, 3, 1);
 
 	BtnDemos = new QPushButton(this);
