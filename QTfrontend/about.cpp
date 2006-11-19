@@ -62,7 +62,8 @@ About::About(QWidget * parent) :
 			QLabel::tr("<h2>Special thanks:</h2><p>") +
 			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
 			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;"
-			"</p>"
+			"</p>" +
+			QLabel::tr("<h2></h2><p></p>")
 			);
 	lbl2->setWordWrap(true);
 	sa->setWidget(lbl2);
