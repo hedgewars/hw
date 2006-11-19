@@ -46,7 +46,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   tmpdir.cd("Maps");
   tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
   QStringList mapList=tmpdir.entryList(QStringList("*"));
-  mapList.push_front("generated map...");
+  mapList.push_front(QComboBox::tr("generated map..."));
   chooseMap->addItems(mapList);
   connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
 

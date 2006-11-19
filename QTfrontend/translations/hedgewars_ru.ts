@@ -26,17 +26,17 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../hwform.cpp" line="195"/>
+        <location filename="../hwform.cpp" line="199"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../hwform.cpp" line="196"/>
+        <location filename="../hwform.cpp" line="200"/>
         <source>Please, select demo from the list above</source>
         <translation>Выберите демо из списка</translation>
     </message>
     <message>
-        <location filename="../hwform.cpp" line="197"/>
+        <location filename="../hwform.cpp" line="201"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
@@ -44,7 +44,7 @@
 <context>
     <name>HWGame</name>
     <message>
-        <location filename="../game.cpp" line="227"/>
+        <location filename="../game.cpp" line="233"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -54,22 +54,22 @@
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="187"/>
+        <location filename="../game.cpp" line="193"/>
         <source>en.txt</source>
         <translation>ru.txt</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="210"/>
+        <location filename="../game.cpp" line="216"/>
         <source>Cannot save demo to file %1</source>
         <translation>Ошибка сохранения демо в файл %1</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="229"/>
+        <location filename="../game.cpp" line="235"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="228"/>
+        <location filename="../game.cpp" line="234"/>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
     </message>
@@ -121,6 +121,14 @@
         <location filename="../gamecfgwidget.cpp" line="47"/>
         <source>Forts mode</source>
         <translation>Режим фортов</translation>
+    </message>
+</context>
+<context>
+    <name>QComboBox</name>
+    <message>
+        <location filename="../mapContainer.cpp" line="49"/>
+        <source>generated map...</source>
+        <translation>случайная карта...</translation>
     </message>
 </context>
 <context>
@@ -214,12 +222,12 @@
         <translation>Уровень игры:</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="38"/>
+        <location filename="../about.cpp" line="39"/>
         <source>&lt;h3&gt;Version 0.8&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;Версия 0.8&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="40"/>
+        <location filename="../about.cpp" line="41"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Эта программа распространяется на условиях лицензии GNU (the GNU General Public License)</translation>
     </message>
@@ -229,17 +237,17 @@
         <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="50"/>
+        <location filename="../about.cpp" line="54"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Разработчики:&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="55"/>
+        <location filename="../about.cpp" line="59"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;&lt;p&gt;</source>
         <translation>&lt;h2&gt;Переводы:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
     <message>
-        <location filename="../about.cpp" line="59"/>
+        <location filename="../about.cpp" line="63"/>
         <source>&lt;h2&gt;Special thanks:&lt;/h2&gt;&lt;p&gt;</source>
         <translation>&lt;h2&gt;Особая благодарность:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
