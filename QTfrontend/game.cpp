@@ -51,7 +51,7 @@ void HWGame::SendTeamConfig(int index)
 	LocalCFG(teams[index]);
 }
 
-void HWGame::SendConfig()
+void HWGame::commonConfig()
 {
 	SendIPC(QString("eseed %1").arg(seed).toAscii());
 	try {
@@ -64,6 +64,11 @@ void HWGame::SendConfig()
 	}
 	SendIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
+}
+
+void HWGame::SendConfig()
+{
+	commonConfig();
 
 	for (int i = 0; i < TeamCount; i++)
 	{
@@ -80,10 +85,7 @@ void HWGame::SendConfig()
 
 void HWGame::SendQuickConfig()
 {
-	SendIPC(QString("eseed %1").arg(seed).toAscii());
-	SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
-	SendIPC("TL");
-	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
+	commonConfig();
 
 	QByteArray teamscfg;
 	HWTeam team1(0);

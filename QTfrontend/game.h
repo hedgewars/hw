@@ -70,6 +70,7 @@ private:
 	GameCFGWidget * gamecfg;
 	GameType gameType;
 
+	void commonConfig();
 	void SendConfig();
 	void SendQuickConfig();
 	void SendTeamConfig(int index);
