@@ -133,11 +133,17 @@ repeat
                   begin
                   AddAction(MadeActions, aia_HJump, 0, 305);
                   AddAction(MadeActions, aia_HJump, 0, 350);
+                  if (Me.dX < 0) then AddAction(MadeActions, aia_WaitXL, round(AltMe.X), 0)
+                                 else AddAction(MadeActions, aia_WaitXR, round(AltMe.X), 0);
                   end;
        if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with ThinkStack.States[Pred(ThinkStack.Count)] do
+                  begin
                   AddAction(MadeActions, aia_LJump, 0, 305);
+                  if (Me.dX < 0) then AddAction(MadeActions, aia_WaitXL, round(AltMe.X), 0)
+                                 else AddAction(MadeActions, aia_WaitXR, round(AltMe.X), 0);
+                  end;
 
        if not CanGo then break;
        inc(steps);
