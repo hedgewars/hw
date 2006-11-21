@@ -8,7 +8,7 @@ Copyright 2006 Ulyanov Igor <iulyanov@gmail.com>
 images in Data/Graphics, 
 sounds in Data/Sounds,
 themes "avematan", "bubbles", "tibet"
-Copyright 2004, 2005,2006 Andrey Korotaev <unC0Rr@gmail.com>
+Copyright 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
 
 Fonts  
 See Fonts_LICENSE.txt
