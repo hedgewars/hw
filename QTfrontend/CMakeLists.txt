@@ -1,3 +1,5 @@
+set(QT_MIN_VERSION "4.2.0")
+
 find_package(Qt4 REQUIRED)
 
 include_directories(${QT_INCLUDES} .)
