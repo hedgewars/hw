@@ -8,6 +8,7 @@ if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
 else(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
+	set(HEDGEWARS_DATADIR ${DATA_INSTALL_DIR})
 endif(WIN32 AND NOT UNIX)
 
 configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp.in 

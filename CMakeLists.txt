@@ -2,7 +2,7 @@ project(hedgewars)
 
 cmake_minimum_required(VERSION 2.4.0)
 
-set(SHAREPATH share/hedgewars/)
+set(SHAREPATH ${DATA_INSTALL_DIR}/hedgewars/)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 add_subdirectory(bin)
