@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
 	}
 	cfgdir->cd(".hedgewars");
 
-	datadir = new QDir(mydir);
-	datadir->cd("../share/hedgewars/Data");
+	datadir = new QDir("../share/");
+	datadir->cd("hedgewars/Data");
 
 	HWForm *Form = new HWForm();
 	Form->show();

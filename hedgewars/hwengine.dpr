@@ -148,29 +148,19 @@ end;
 ////////////////////
 procedure GetParams;
 var c: integer;
-    i: integer;
+{$IFDEF DEBUGFILE}
+    i: integer;    
+{$ENDIF}
     p: TPathType;
 begin
-PathPrefix:= ParamStr(0);
-for i:= 1 to Length(PathPrefix) do
-    if PathPrefix[i] = '\' then PathPrefix[i]:= '/';
-i:= Length(PathPrefix);
-while (i > 0) and not (PathPrefix[i] = '/') do dec(i);
-Delete(PathPrefix, i, Length(PathPrefix) - i + 1);
-dec(i);
-while (i > 0) and not (PathPrefix[i] = '/') do dec(i);
-Delete(PathPrefix, i, Length(PathPrefix) - i + 1);
-PathPrefix:= PathPrefix + '/share/hedgewars/';
-for p:= Low(TPathType) to High(TPathType) do
-    if p <> ptMapCurrent then Pathz[p]:= PathPrefix + Pathz[p];
-
 {$IFDEF DEBUGFILE}
 AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
     AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$ENDIF}
+
 case ParamCount of
-  8: begin
+  9: begin
      val(ParamStr(1), cScreenWidth, c);
      val(ParamStr(2), cScreenHeight, c);
      cBitsStr:= ParamStr(3);
@@ -180,6 +170,9 @@ case ParamCount of
      isSoundEnabled:= ParamStr(6) = '1';
      cLocaleFName:= ParamStr(7);
      val(ParamStr(8), cInitVolume, c);
+     PathPrefix:= ParamStr(9);
+     for p:= Succ(Low(TPathType)) to High(TPathType) do
+         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
      end;
   2: begin
      val(ParamStr(1), ipcPort, c);

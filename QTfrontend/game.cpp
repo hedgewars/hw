@@ -194,6 +194,7 @@ QStringList HWGame::setArguments()
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
 	arguments << "128";
+	arguments << datadir->absolutePath();
 	return arguments;
 }
 

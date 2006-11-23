@@ -175,20 +175,20 @@ const
       PathPrefix: string = './';
       Pathz: array[TPathType] of string      = (
                                                '',                              // ptNone      
-                                               'Data',                          // ptData
-                                               'Data/Graphics',                 // ptGraphics
-                                               'Data/Themes',                   // ptThemes
-                                               'Data/Themes/avematan',          // ptCurrTheme
-                                               'Data/Teams',                    // ptTeams
-                                               'Data/Maps',                     // ptMaps
+                                               '',                              // ptData
+                                               'Graphics',                      // ptGraphics
+                                               'Themes',                        // ptThemes
+                                               'Themes/avematan',               // ptCurrTheme
+                                               'Teams',                         // ptTeams
+                                               'Maps',                          // ptMaps
                                                '',                              // ptMapCurrent
-                                               'Data/Demos',                    // ptDemos
-                                               'Data/Sounds',                   // ptSounds
-                                               'Data/Graphics/Graves',          // ptGraves
-                                               'Data/Fonts',                    // ptFonts
-                                               'Data/Forts',                    // ptForts
-                                               'Data/Locale',                   // ptLocale
-                                               'Data/Graphics/AmmoMenu'          // ptAmmoMenu
+                                               'Demos',                         // ptDemos
+                                               'Sounds',                        // ptSounds
+                                               'Graphics/Graves',               // ptGraves
+                                               'Fonts',                         // ptFonts
+                                               'Forts',                         // ptForts
+                                               'Locale',                        // ptLocale
+                                               'Graphics/AmmoMenu'              // ptAmmoMenu
                                                );
 
       StuffLoadData: array[TStuff] of record
