@@ -33,19 +33,19 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
-                   sprAMSlotKeys, sprAMSelection, sprFinger);
+                   sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb);
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
-                   gtParachute);
+                   gtParachute, gtAirAttack, gtAirBomb);
      TGearsType = set of TGearType;
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
                    sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
-                   amBaseballBat, amParachute);
+                   amBaseballBat, amParachute, amAirAttack);
      THWFont    = (fnt16, fntBig);
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
      THHFont    = record
@@ -77,7 +77,7 @@ const
       msgGettingConfig     = 'Getting game config...';
 
 const
-      cNetProtoVersion = 1;
+      cNetProtoVersion = 2;
 
       MAXNAMELEN = 32;
 
@@ -134,7 +134,7 @@ const
       gm_HJump  = $00000080;
       gm_Destroy= $00000100;
 
-      cMaxSlotIndex       = 7;
+      cMaxSlotIndex       = 8;
       cMaxSlotAmmoIndex   = 1;
 
       ammoprop_Timerable    = $00000001;
@@ -144,6 +144,7 @@ const
       ammoprop_AttackInFall = $00000010;
       ammoprop_AttackInJump = $00000020;
       ammoprop_NoCrosshair  = $00000040;
+      ammoprop_AttackingPut = $00000080;
       AMMO_INFINITE = High(LongWord);
 
       EXPLAllDamageInRadius = $00000001;
@@ -249,7 +250,8 @@ const
                      (FileName:     'Ammos'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMAmmos
                      (FileName:  'SlotKeys'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSlotKeys
                      (FileName: 'Selection'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSelection
-                     (FileName:    'Finger'; Path: ptGraphics; Width:  32; Height: 48; hasAlpha: false) // sprFinger
+                     (FileName:    'Finger'; Path: ptGraphics; Width:  32; Height: 48; hasAlpha: false),// sprFinger
+                     (FileName:   'AirBomb'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprAirBomb
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -274,7 +276,8 @@ const
                                   TimeAfterTurn: Longword;
                                   end = (
                                   (NameId: sidGrenade;
-                                   Ammo: (Propz: ammoprop_Timerable or ammoprop_Power;
+                                   Ammo: (Propz: ammoprop_Timerable or
+                                                 ammoprop_Power;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 3000;
@@ -282,7 +285,8 @@ const
                                    Slot: 1;
                                    TimeAfterTurn: 3000),
                                   (NameId: sidClusterBomb;
-                                   Ammo: (Propz: ammoprop_Timerable or ammoprop_Power;
+                                   Ammo: (Propz: ammoprop_Timerable or
+                                                 ammoprop_Power;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 3000;
@@ -298,7 +302,8 @@ const
                                    Slot: 0;
                                    TimeAfterTurn: 3000),
                                   (NameId: sidUFO;
-                                   Ammo: (Propz: ammoprop_Power or ammoprop_NeedTarget;
+                                   Ammo: (Propz: ammoprop_Power or
+                                                 ammoprop_NeedTarget;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -314,12 +319,15 @@ const
                                    Slot: 2;
                                    TimeAfterTurn: 3000),
                                   (NameId: sidPickHammer;
-                                   Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_AttackInFall or
+                                                 ammoprop_AttackInJump or
+                                                 ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amPickHammer);
-                                   Slot: 5;
+                                   Slot: 6;
                                    TimeAfterTurn: 0),
                                   (NameId: sidSkip;
                                    Ammo: (Propz: 0;
@@ -327,15 +335,17 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amSkip);
-                                   Slot: 7;
+                                   Slot: 8;
                                    TimeAfterTurn: 0),
                                   (NameId: sidRope;
-                                   Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInFall or ammoprop_AttackInJump;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_AttackInFall or
+                                                 ammoprop_AttackInJump;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amRope);
-                                   Slot: 6;
+                                   Slot: 7;
                                    TimeAfterTurn: 0),
                                   (NameId: sidMine;
                                    Ammo: (Propz: ammoprop_NoCrosshair;
@@ -354,7 +364,9 @@ const
                                    Slot: 2;
                                    TimeAfterTurn: 3000),
                                    (NameId: sidDynamite;
-                                    Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                    Ammo: (Propz: ammoprop_NoCrosshair or
+                                                  ammoprop_AttackInJump or
+                                                  ammoprop_AttackInFall;
                                            Count: 1;
                                            NumPerTurn: 0;
                                            Timer: 0;
@@ -362,7 +374,10 @@ const
                                     Slot: 4;
                                     TimeAfterTurn: 5000),
                                    (NameId: sidFirePunch;
-                                    Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                    Ammo: (Propz: ammoprop_NoCrosshair or
+                                                  ammoprop_ForwMsgs or
+                                                  ammoprop_AttackInJump or
+                                                  ammoprop_AttackInFall;
                                            Count: AMMO_INFINITE;
                                            NumPerTurn: 0;
                                            Timer: 0;
@@ -378,12 +393,24 @@ const
                                     Slot: 3;
                                     TimeAfterTurn: 5000),
                                   (NameId: sidParachute;
-                                   Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInJump or ammoprop_AttackInFall;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_AttackInJump or
+                                                 ammoprop_AttackInFall;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amParachute);
-                                   Slot: 6;
+                                   Slot: 7;
+                                   TimeAfterTurn: 0),
+                                  (NameId: sidAirAttack;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_NeedTarget or
+                                                 ammoprop_AttackingPut;
+                                          Count: 3;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          AmmoType: amAirAttack);
+                                   Slot: 5;
                                    TimeAfterTurn: 0));
 
 implementation

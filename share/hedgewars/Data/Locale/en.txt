@@ -15,6 +15,7 @@
 00:12=Fire Punch
 00:13=sec
 00:14=Parachute
+00:15=Air Attack
 
 01:00=Let's fight!
 01:01=Round draw

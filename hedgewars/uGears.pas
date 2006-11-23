@@ -112,7 +112,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepActionTimer,
                                                                doStepActionTimer,
                                                                doStepActionTimer,
-                                                               doStepParachute
+                                                               doStepParachute,
+                                                               doStepAirAttack,
+                                                               doStepAirBomb
                                                                );
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
@@ -221,6 +223,9 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 15;
                 Result.Tag:= Y
                 end;
+    gtAirBomb: begin
+               Result.Radius:= 3;
+               end;
      end;
 if GearsList = nil then GearsList:= Result
                    else begin
@@ -244,10 +249,12 @@ if Gear.Kind = gtHedgehog then
       exit
       end else
       begin
+      if Gear.Y >= cWaterLine then
+         AddGear(Round(Gear.X), Round(Gear.Y), gtHealthTag, max(Gear.Damage, Gear.Health)).Hedgehog:= Gear.Hedgehog;
       team:= PHedgehog(Gear.Hedgehog).Team;
-      PHedgehog(Gear.Hedgehog).Gear:= nil;
       if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = Gear then
          FreeActionsList; // to avoid ThinkThread on drawned gear
+      PHedgehog(Gear.Hedgehog).Gear:= nil;
       RecountTeamHealth(team);
       end;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
@@ -517,6 +524,7 @@ while Gear<>nil do
      gtClusterBomb: DrawSprite(sprClusterBomb, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
          gtCluster: DrawSprite(sprClusterParticle, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, 0, Surface);
            gtFlame: DrawSprite(sprFlame, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy,(GameTicks div 128 + Gear.Angle) mod 8, Surface);
+         gtAirBomb: DrawSprite(sprAirBomb , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
               end;
       Gear:= Gear.NextGear
       end;

@@ -171,9 +171,17 @@ dec(Gear.Timer);
 Gear.Y:= Gear.Y - 0.07;
 if Gear.Timer = 0 then
    begin
-   PHedgehog(Gear.Hedgehog).Gear.Active:= true;
+   PHedgehog(Gear.Hedgehog).Gear.Active:= true; // to let current hh die
    DeleteGear(Gear)
    end
+end;
+
+procedure doStepHealthTagWorkUnderWater(Gear: PGear);
+begin
+AllInactive:= false;
+Gear.Y:= Gear.Y - 0.07;
+if Gear.Y <= cWaterLine + 10 then
+   DeleteGear(Gear)
 end;
 
 procedure doStepHealthTag(Gear: PGear);
@@ -182,7 +190,8 @@ begin
 AllInactive:= false;
 str(Gear.State, s);
 Gear.Surf:= RenderString(s, PHedgehog(Gear.Hedgehog).Team.Color, fnt16);
-Gear.doStep:= doStepHealthTagWork
+if Gear.Y < cWaterLine then Gear.doStep:= doStepHealthTagWork
+                       else Gear.doStep:= doStepHealthTagWorkUnderWater
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -876,6 +885,8 @@ Gear.doStep:= doStepFirePunchWork;
 DrawTunnel(HHGear.X - cHHRadius, HHGear.Y + 1, 0.5, 0.0, cHHRadius * 4, 5);
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+
 procedure doStepParachute(Gear: PGear);
 var HHGear: PGear;
 begin
@@ -909,7 +920,52 @@ if (Gear.Message and gm_Up) <> 0 then HHGear.Y:= HHGear.Y - cGravity * 40
 else if (Gear.Message and gm_Down) <> 0 then HHGear.Y:= HHGear.Y + cGravity * 40;
 
 HHGear.Y:= HHGear.Y + cGravity * 100;
+end;
 
+////////////////////////////////////////////////////////////////////////////////
+const cAirPlaneSpeed = 0.8;
+      cBombsDistance = 30;
+      cBombsSpeed = 0.1;
+
+procedure doStepAirAttackWork(Gear: PGear);
+begin
+AllInactive:= false;
+Gear.X:= Gear.X + cAirPlaneSpeed;
+if (Gear.Health > 0)and(Gear.X >= Gear.dX)and(Gear.X < Gear.dX + cAirPlaneSpeed) then
+   begin
+   dec(Gear.Health);
+   AddGear(round(Gear.X), round(Gear.Y), gtAirBomb, 0, cBombsSpeed, 0.0);
+   Gear.dX:= Gear.dX + cBombsDistance
+   end;
+if Gear.X > 2560 then DeleteGear(Gear)
+end;
+
+procedure doStepAirAttack(Gear: PGear);
+begin
+AllInactive:= false;
+Gear.X:= -512;
+Gear.Y:= -128;
+Gear.dX:= TargetPoint.X -
+          cBombsDistance * 5 / 2 - 
+          cBombsSpeed * sqrt(2 * (TargetPoint.Y - Gear.Y) / cGravity);
+Gear.Health:= 6;
+Gear.doStep:= doStepAirAttackWork
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepAirBomb(Gear: PGear);
+begin
+AllInactive:= false;
+doStepFallingGear(Gear);
+if (Gear.State and gstCollision) <> 0 then
+   begin
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 35, EXPLAutoSound);
+   DeleteGear(Gear);
+   exit
+   end;
+if (GameTicks and $3F) = 0 then
+   AddGear(round(Gear.X), round(Gear.Y), gtSmokeTrace, 0)
 end;
 
 

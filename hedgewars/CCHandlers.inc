@@ -326,7 +326,8 @@ if bShowAmmoMenu then
    bSelected:= true;
    exit
    end;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
+     CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (State and gstHHChooseTarget) <> 0 then
         begin
         isCursorVisible:= false;
@@ -338,6 +339,8 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
            end;
         State:= State and not gstHHChooseTarget;
+        if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
+           Message:= Message or gm_Attack;
         end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', false)
 end;
 
