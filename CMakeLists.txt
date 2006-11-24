@@ -9,6 +9,8 @@ else(DEFINED DATA_INSTALL_DIR)
 endif(DEFINED DATA_INSTALL_DIR)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+set(HEDGEWARS_PROTO_VER 3)
+
 add_subdirectory(bin)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)

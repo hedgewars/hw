@@ -43,7 +43,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
 
 void HWGame::onClientDisconnect()
 {
-	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_1");
+	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer);
 }
 
 void HWGame::SendTeamConfig(int index)

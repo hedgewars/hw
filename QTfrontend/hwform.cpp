@@ -140,7 +140,8 @@ void HWForm::GoToDemos()
 	tmpdir.cd("Demos");
 	tmpdir.setFilter(QDir::Files);
 	ui.pagePlayDemo->DemosList->clear();
-	ui.pagePlayDemo->DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_1")).replaceInStrings(QRegExp("^(.*).hwd_1"), "\\1"));
+	ui.pagePlayDemo->DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_" + cProtoVer))
+			.replaceInStrings(QRegExp("^(.*).hwd_" + cProtoVer), "\\1"));
 	ui.Pages->setCurrentIndex(ID_PAGE_DEMOS);
 }
 
@@ -202,7 +203,7 @@ void HWForm::PlayDemo()
 		return ;
 	}
 	game = new HWGame(config, 0);
-	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_1");
+	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
 }
 
 void HWForm::NetConnect()

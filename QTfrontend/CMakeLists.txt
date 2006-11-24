@@ -18,6 +18,8 @@ endif(WIN32 AND NOT UNIX)
 
 configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp.in 
 	${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp)
+configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.h.in 
+	${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.h)
 
 set(hwfr_src 
 	game.cpp

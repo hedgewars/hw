@@ -20,6 +20,7 @@ unit uConsts;
 interface
 uses SDLh, uLocale;
 {$INCLUDE options.inc}
+{$INCLUDE proto.inc}
 type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sWindL, sWindR, sRopeNode);
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
@@ -77,8 +78,6 @@ const
       msgGettingConfig     = 'Getting game config...';
 
 const
-      cNetProtoVersion = 2;
-
       MAXNAMELEN = 32;
 
       COLOR_LAND = $00FFFFFF;

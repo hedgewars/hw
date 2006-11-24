@@ -48,6 +48,7 @@ uses
 // also: GSHandlers.inc
 //       CCHandlers.inc
 //       HHHandlers.inc
+//       proto.inc
 
 
 procedure OnDestroy; forward;

@@ -1,3 +1,6 @@
+configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in 
+	${hedgewars_SOURCE_DIR}/hedgewars/proto.inc) 
+
 set(dcc32_tryexe dcc32.exe)
 set(fpc_tryexe fpc)
 set(hwengine_project "hwengine.dpr")
@@ -32,6 +35,7 @@ set(engine_sources
 	GSHandlers.inc
 	HHHandlers.inc
 	options.inc
+	proto.inc
 	tunsetborder.inc
 	)
 
