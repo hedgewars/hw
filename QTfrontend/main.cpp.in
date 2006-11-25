@@ -72,7 +72,13 @@ int main(int argc, char *argv[])
 	cfgdir->cd(".hedgewars");
 
 	datadir = new QDir("${HEDGEWARS_DATADIR}");
-	datadir->cd("hedgewars/Data");
+	if(!datadir->cd("hedgewars/Data")) {
+		QMessageBox::critical(0, QMessageBox::tr("Error"), 
+			QMessageBox::tr("Failed to open data directory:\n%1\n"
+					"Please check your installation").
+					arg(datadir->absolutePath()+"/hedgewars/Data"));
+		return 1;
+	}
 
 	HWForm *Form = new HWForm();
 	Form->show();
