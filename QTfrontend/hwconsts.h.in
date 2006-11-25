@@ -30,4 +30,3 @@ extern QDir * datadir;
 extern QDir * bindir;
 
 const QString cProtoVer("${HEDGEWARS_PROTO_VER}");
-const QString cBinDir("${HEDGEWARS_BINDIR}");
