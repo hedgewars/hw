@@ -1,0 +1,18 @@
+To compile and install you need:
+ - QT 4.2
+ - FreePascal 1.9.4
+ - SDL
+ - SDL_net
+ - SDL_mixer
+ - SDL_image
+ - SDL_ttf
+ - CMake 2.4.0
+ 
+To compile just type 
+# cmake . 
+or
+# cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir"
+then
+# make install
+
+That's all! Enjoy!
