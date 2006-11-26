@@ -114,6 +114,26 @@ end;
 
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 var s: shortstring;
+
+    procedure CheckHang;
+    const PrevX: integer = 0;
+          timedelta: Longword = 0;
+    begin
+    if Round(Me.X) <> PrevX then
+       begin
+       PrevX:= Round(Me.X);
+       timedelta:= 0
+       end else
+       begin
+       inc(timedelta);
+       if timedelta > 2500 then
+          begin
+          timedelta:= 0;
+          Actions.Count:= 0
+          end
+       end
+    end;
+
 begin
 repeat
 if Actions.Pos >= Actions.Count then exit;
@@ -132,14 +152,14 @@ with Actions.actions[Actions.Pos] do
                                OutError('AI: WaitXL assert');
                                Actions.Count:= 0
                                end
-                          else exit;
+                          else begin CheckHang; exit end;
            aia_WaitXR: if round(Me.X) = Param then Time:= GameTicks
                           else if Round(Me.X) > Param then
                                begin
                                OutError('AI: WaitXR assert');
                                Actions.Count:= 0
                                end
-                          else exit;
+                          else begin CheckHang; exit end;
          aia_LookLeft: if Me.dX >= 0 then
                           begin
                           ParseCommand('+left');
