@@ -359,7 +359,8 @@ for i:= 0 to Pred(ThemeObjects.Count) do
     with ThemeObjects.objs[i] do
          begin
          Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false);
-         Read(f, Width, Height);
+         Width:= Surf.w;
+         Height:= Surf.h;
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);
          for ii:= 1 to rectcnt do
