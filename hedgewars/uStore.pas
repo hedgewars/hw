@@ -42,9 +42,10 @@ function  LoadImage(filename: string; hasAlpha: boolean; const critical: boolean
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
+   PauseSurface: PSDL_Surface;
 
 implementation
-uses uMisc, uConsole, uLand;
+uses uMisc, uConsole, uLand, uLocale;
 
 var StoreSurface,
        HHSurface: PSDL_Surface;
@@ -307,6 +308,8 @@ HHSurface:= SDL_DisplayFormat(tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 InitHealth;
+
+PauseSurface:= RenderString(trmsg[sidPaused], $FFFF00, fntBig);
 
 {$IFDEF DUMP}
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);

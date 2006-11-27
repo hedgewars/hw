@@ -170,7 +170,7 @@ var i, t: integer;
     end;
 
 begin
-MoveCamera;
+if not isPaused then MoveCamera;
 
 // Sky
 inc(RealTicks, Lag);
@@ -370,6 +370,8 @@ if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (Real
 {$IFDEF COUNTTICKS}
 DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
 {$ENDIF}
+
+if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseSurface, Surface);
 
 inc(Frames);
 inc(CountTicks, Lag);

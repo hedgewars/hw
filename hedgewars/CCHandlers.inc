@@ -415,8 +415,7 @@ SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
 TryDo(SDLPrimSurface <> nil, errmsgCreateSurface, true);
-PixelFormat:= SDLPrimSurface.format;
-SDL_ShowCursor(0)
+PixelFormat:= SDLPrimSurface.format
 end;
 
 procedure chVol_p(var s: shortstring);
@@ -434,5 +433,11 @@ begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= true;
 FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear
+end;
+
+procedure chPause(var s: shortstring);
+begin
+isPaused:= not isPaused;
+SDL_ShowCursor(ord(isPaused))
 end;
 

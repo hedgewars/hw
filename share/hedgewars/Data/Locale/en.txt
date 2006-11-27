@@ -21,3 +21,4 @@
 01:01=Round draw
 01:02=%1 wins!
 01:03=Volume %1%
+01:04=Paused

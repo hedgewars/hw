@@ -23,6 +23,7 @@ uses uConsts, SDLh;
 var isCursorVisible : boolean = false;
     isTerminated    : boolean = false;
     isInLag         : boolean = false;
+    isPaused        : boolean = false;
     isSoundEnabled  : boolean = true;
     isSEBackup      : boolean = true;
     isInMultiShoot  : boolean = false;

@@ -31,6 +31,7 @@ procedure DoGameTick(Lag: integer);
 const SendEmptyPacketTicks: LongWord = 0;
 var i: integer;
 begin
+if isPaused then exit;
 if not CurrentTeam.ExtDriven then
    begin
    NetGetNextCmd; // its for the case when receiving "/say" message
@@ -42,7 +43,6 @@ if not CurrentTeam.ExtDriven then
       SendEmptyPacketTicks:= 0
       end
    end;
-
 if Lag > 100 then Lag:= 100
 else if GameType = gmtSave then Lag:= 2500;
 

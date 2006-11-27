@@ -188,7 +188,8 @@ end;
 procedure ShowMainWindow;
 begin
 if cFullScreen then ParseCommand('fullscr 1')
-               else ParseCommand('fullscr 0')
+               else ParseCommand('fullscr 0');
+SDL_ShowCursor(0)
 end;
 
 ///////////////
