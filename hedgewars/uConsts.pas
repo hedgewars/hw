@@ -38,7 +38,8 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
-                   sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb);
+                   sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
+                   sprAirplane);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -263,7 +264,8 @@ const
                      (FileName:  'SlotKeys'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSlotKeys
                      (FileName: 'Selection'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSelection
                      (FileName:    'Finger'; Path: ptGraphics; Width:  32; Height: 48; hasAlpha: false),// sprFinger
-                     (FileName:   'AirBomb'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false) // sprAirBomb
+                     (FileName:   'AirBomb'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprAirBomb
+                     (FileName:  'Airplane'; Path: ptGraphics; Width: 125; Height: 42; hasAlpha: false) // sprAirplane
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];

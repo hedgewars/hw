@@ -925,7 +925,7 @@ HHGear.Y:= HHGear.Y + cGravity * 100;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-const cAirPlaneSpeed = 0.8;
+const cAirPlaneSpeed = 1.1;
       cBombsDistance = 30;
       cBombsSpeed = 0.1;
 
@@ -939,13 +939,13 @@ if (Gear.Health > 0)and(Gear.X >= Gear.dX)and(Gear.X < Gear.dX + cAirPlaneSpeed)
    AddGear(round(Gear.X), round(Gear.Y), gtAirBomb, 0, cBombsSpeed, 0.0);
    Gear.dX:= Gear.dX + cBombsDistance
    end;
-if Gear.X > 2560 then DeleteGear(Gear)
+if Gear.X > 3072 then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
 begin
 AllInactive:= false;
-Gear.X:= -512;
+Gear.X:= -1024;
 Gear.Y:= -128;
 Gear.dX:= TargetPoint.X -
           cBombsDistance * 5 / 2 - 

@@ -525,6 +525,7 @@ while Gear<>nil do
          gtCluster: DrawSprite(sprClusterParticle, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, 0, Surface);
            gtFlame: DrawSprite(sprFlame, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy,(GameTicks div 128 + Gear.Angle) mod 8, Surface);
          gtAirBomb: DrawSprite(sprAirBomb , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
+       gtAirAttack: DrawSprite(sprAirplane, Round(Gear.X) - 60 + WorldDx, Round(Gear.Y) - 25 + WorldDy, 0, Surface);
               end;
       Gear:= Gear.NextGear
       end;
