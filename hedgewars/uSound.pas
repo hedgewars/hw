@@ -24,9 +24,9 @@ uses SDLh, uConsts;
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
-procedure PlaySound(snd: TSound);
+procedure PlaySound(snd: TSound; const infinite: boolean = false);
 procedure PlayMusic;
-procedure StopTPUSound;
+procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: integer): integer;
 
 implementation
@@ -82,18 +82,19 @@ TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK)
 end;
 
-procedure PlaySound(snd: TSound);
+procedure PlaySound(snd: TSound; const infinite: boolean = false);
+var loops: integer;
 begin
 if not isSoundEnabled then exit;
-if snd <> sndThrowPowerUp then Mix_PlayChannelTimed(-1, Soundz[snd].id, 0, -1)
-                          else Mix_PlayChannelTimed(chanTPU, Soundz[snd].id, 0, -1)
+if infinite then loops:= -1 else loops:= 0;
+Soundz[snd].lastChan:= Mix_PlayChannelTimed(-1, Soundz[snd].id, loops, -1)
 end;
 
-procedure StopTPUSound;
+procedure StopSound(snd: TSound);
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(chanTPU) <> 0 then
-   Mix_HaltChannel(chanTPU)
+if Mix_Playing(Soundz[snd].lastChan) <> 0 then
+   Mix_HaltChannel(Soundz[snd].lastChan)
 end;
 
 procedure PlayMusic;

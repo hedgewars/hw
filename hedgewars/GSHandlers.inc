@@ -361,6 +361,7 @@ HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 dec(Gear.Timer);
 if (Gear.Timer = 0)or((Gear.Message and gm_Destroy) <> 0)or((HHGear.State and gstHHDriven) = 0) then
    begin
+   StopSound(sndPickhammer);
    DeleteGear(Gear);
    AfterAttack;
    exit
@@ -417,6 +418,7 @@ while y < round(Gear.Y) do
    end;
 DrawHLinesExplosions(@ar, 3, round(Gear.Y) - cHHRadius*2, 2, Pred(i));
 Gear.dY:= PHedgehog(Gear.Hedgehog).Gear.dY;
+PlaySound(sndPickhammer, true);
 doStepPickHammerWork(Gear);
 Gear.doStep:= doStepPickHammerWork
 end;

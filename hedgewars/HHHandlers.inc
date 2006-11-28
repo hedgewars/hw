@@ -45,7 +45,7 @@ with Gear^,
         
         if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
            begin
-           StopTPUSound;
+           StopSound(sndThrowPowerUp);
            PlaySound(sndThrowRelease);
            end;
         xx:= hwSign(dX)*Sin(Angle*pi/cMaxAngle);

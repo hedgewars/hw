@@ -23,11 +23,15 @@ uses SDLh, uLocale;
 {$INCLUDE proto.inc}
 type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sWindL, sWindR, sRopeNode);
+
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
+
      TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
+
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
                    ptLocale, ptAmmoMenu);
+
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
                    sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
@@ -35,26 +39,35 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb);
+
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb);
+
      TGearsType = set of TGearType;
-     TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease, sndSplash,
-                   sndShotgunReload, sndShotgunFire, sndGraveImpact, sndMineTick);
+
+     TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
+                   sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
+                   sndMineTick, sndPickhammer);
+
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
                    amBaseballBat, amParachute, amAirAttack);
+
      THWFont    = (fnt16, fntBig);
+
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
+
      THHFont    = record
                   Handle: PTTF_Font;
                   Height: integer;
                   style: integer;
                   Name: string[15];
                   end;
+
      TAmmo = record
              Propz: LongWord;
              Count: LongWord;
@@ -256,6 +269,7 @@ const
                                        FileName: String[31];
                                        Path    : TPathType;
                                        id      : PMixChunk;
+                                       lastChan: LongInt;
                                        end = (
                                        (FileName: 'grenadeimpact.ogg'; Path: ptSounds  ),// sndGrenadeImpact
                                        (FileName:     'explosion.ogg'; Path: ptSounds  ),// sndExplosion
@@ -265,7 +279,8 @@ const
                                        (FileName: 'shotgunreload.ogg'; Path: ptSounds  ),// sndShotgunReload
                                        (FileName:   'shotgunfire.ogg'; Path: ptSounds  ),// sndShotgunFire
                                        (FileName:   'graveimpact.ogg'; Path: ptSounds  ),// sndGraveImpact
-                                       (FileName:      'minetick.ogg'; Path: ptSounds  ) // sndMineTicks
+                                       (FileName:      'minetick.ogg'; Path: ptSounds  ),// sndMineTicks
+                                       (FileName:    'pickhammer.ogg'; Path: ptSounds  ) // sndPickhammer
                                        );
 
       Ammoz: array [TAmmoType] of record

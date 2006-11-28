@@ -57,7 +57,7 @@ var cWaterSprCount: integer;
 procedure InitWorld;
 begin
 cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width);
-cScreenEdgesDist:= Min(cScreenWidth div 4, cScreenHeight div 4);
+cScreenEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
