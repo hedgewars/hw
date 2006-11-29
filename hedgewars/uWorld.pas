@@ -57,7 +57,7 @@ var cWaterSprCount: integer;
 procedure InitWorld;
 begin
 cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width);
-cScreenEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
+cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
@@ -406,6 +406,7 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
+var EdgesDist: integer;
 begin
 if not (CurrentTeam.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 if (FollowGear <> nil) then
@@ -440,27 +441,30 @@ if isCursorVisible then
       PrevSentPointTime:= GameTicks
       end;
    end;
+   
 if isCursorVisible or (FollowGear <> nil) then
    begin
-   if CursorPoint.X < cScreenEdgesDist then
+   if isCursorVisible then EdgesDist:= cCursorEdgesDist
+                      else EdgesDist:= cGearScrEdgesDist;
+   if CursorPoint.X < EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X + cScreenEdgesDist;
-         CursorPoint.X:= cScreenEdgesDist
+         WorldDx:= WorldDx - CursorPoint.X + EdgesDist;
+         CursorPoint.X:= EdgesDist
          end else
-      if CursorPoint.X > cScreenWidth - cScreenEdgesDist then
+      if CursorPoint.X > cScreenWidth - EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth - cScreenEdgesDist;
-         CursorPoint.X:= cScreenWidth - cScreenEdgesDist
+         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth - EdgesDist;
+         CursorPoint.X:= cScreenWidth - EdgesDist
          end;
-      if CursorPoint.Y < cScreenEdgesDist then
+      if CursorPoint.Y < EdgesDist then
          begin
-         WorldDy:= WorldDy - CursorPoint.Y + cScreenEdgesDist;
-         CursorPoint.Y:= cScreenEdgesDist
+         WorldDy:= WorldDy - CursorPoint.Y + EdgesDist;
+         CursorPoint.Y:= EdgesDist
          end else
-      if CursorPoint.Y > cScreenHeight - cScreenEdgesDist then
+      if CursorPoint.Y > cScreenHeight - EdgesDist then
          begin
-         WorldDy:= WorldDy - CursorPoint.Y + cScreenHeight - cScreenEdgesDist;
-         CursorPoint.Y:= cScreenHeight - cScreenEdgesDist
+         WorldDy:= WorldDy - CursorPoint.Y + cScreenHeight - EdgesDist;
+         CursorPoint.Y:= cScreenHeight - EdgesDist
          end;
    end else
    begin

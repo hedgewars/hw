@@ -46,7 +46,8 @@ var isCursorVisible : boolean = false;
 
     cWaterLine       : integer = 1024;
     cVisibleWater    : integer = 128;
-    cScreenEdgesDist : integer = 240;
+    cGearScrEdgesDist: integer = 240;
+    cCursorEdgesDist : integer = 40;
     cTeamHealthWidth : integer = 128;
 
     GameTicks     : LongWord = 0;
