@@ -56,7 +56,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
-                   amBaseballBat, amParachute, amAirAttack);
+                   amBaseballBat, amParachute, amAirAttack, amMineStrike);
 
      THWFont    = (fnt16, fntBig);
 
@@ -422,10 +422,20 @@ const
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
                                                  ammoprop_AttackingPut;
-                                          Count: 3;
+                                          Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           AmmoType: amAirAttack);
+                                   Slot: 5;
+                                   TimeAfterTurn: 0),
+                                  (NameId: sidMineStrike;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_NeedTarget or
+                                                 ammoprop_AttackingPut;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          AmmoType: amMineStrike);
                                    Slot: 5;
                                    TimeAfterTurn: 0));
 

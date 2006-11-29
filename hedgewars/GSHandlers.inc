@@ -925,7 +925,7 @@ HHGear.Y:= HHGear.Y + cGravity * 100;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-const cAirPlaneSpeed = 1.1;
+const cAirPlaneSpeed = 1.4;
       cBombsDistance = 30;
       cBombsSpeed = 0.1;
 
@@ -936,7 +936,10 @@ Gear.X:= Gear.X + cAirPlaneSpeed;
 if (Gear.Health > 0)and(Gear.X >= Gear.dX)and(Gear.X < Gear.dX + cAirPlaneSpeed) then
    begin
    dec(Gear.Health);
-   AddGear(round(Gear.X), round(Gear.Y), gtAirBomb, 0, cBombsSpeed, 0.0);
+   case Gear.State of
+        0: AddGear(round(Gear.X), round(Gear.Y), gtAirBomb, 0, cBombsSpeed, 0.0);
+        1: AddGear(round(Gear.X), round(Gear.Y), gtMine, 0, cBombsSpeed, 0.0);
+        end;
    Gear.dX:= Gear.dX + cBombsDistance
    end;
 if Gear.X > 3072 then DeleteGear(Gear)
@@ -962,7 +965,7 @@ AllInactive:= false;
 doStepFallingGear(Gear);
 if (Gear.State and gstCollision) <> 0 then
    begin
-   doMakeExplosion(round(Gear.X), round(Gear.Y), 35, EXPLAutoSound);
+   doMakeExplosion(round(Gear.X), round(Gear.Y), 30, EXPLAutoSound);
    DeleteGear(Gear);
    exit
    end;

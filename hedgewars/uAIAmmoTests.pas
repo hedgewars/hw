@@ -44,7 +44,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amFirePunch}     TestFirePunch,
 {amBaseballBat}   TestBaseballBat,
 {amParachute}     nil,
-{amAirAttack}     nil
+{amAirAttack}     nil,
+{amMineStrike}    nil
                   );
 
 const BadTurn = Low(integer);

@@ -16,6 +16,7 @@
 00:13=sec
 00:14=Parachute
 00:15=Air Attack
+00:16=Mine Strike
 
 01:00=Let's fight!
 01:01=Round draw
