@@ -275,7 +275,10 @@ begin
              and (Ammo[Slot, ami + 1].Count > 0) then b:= true
                                                  else inc(ami);
       if b then // there's a free item in ammo stack
-         Ammo[Slot, ami]:= Ammo[Slot, ami + 1]
+         begin
+         Ammo[Slot, ami]:= Ammo[Slot, ami + 1];
+         Ammo[Slot, ami + 1].Count:= 0
+         end;
     until not b;
 end;
 
