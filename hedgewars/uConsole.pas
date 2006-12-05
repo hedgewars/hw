@@ -33,7 +33,8 @@ function  GetLastConsoleLine: shortstring;
 
 implementation
 {$J+}
-uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand, uRandom;
+uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
+     uRandom, uAmmos;
 const cLineWidth: integer = 0;
       cLinesCount = 256;
       
@@ -276,6 +277,7 @@ RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('add'     , vtCommand, @chAdd          , false);
+RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
 RegisterVariable('say'     , vtCommand, @chSay          , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);

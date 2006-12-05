@@ -13,6 +13,7 @@ set(engine_sources
 	uAIAmmoTests.pas
 	uAIMisc.pas
 	uAIThinkStack.pas
+	uAmmos.pas
 	uCollisions.pas
 	uConsole.pas
 	uConsts.pas

@@ -117,9 +117,15 @@ if (id[1]='h')and(id[2]='h')and(id[3]>='0')and(id[3]<='7') then
    Gear:= AddGear(0, 0, gtHedgehog, 0);
    Gear.Hedgehog:= @CurrentTeam.Hedgehogs[b];
    PHedgehog(Gear.Hedgehog).Team:= CurrentTeam;
+   CurrentTeam.Hedgehogs[b].AmmoStore:= 0;
    CurrentTeam.Hedgehogs[b].Gear:= Gear
    end
 else OutError(errmsgUnknownVariable + ' "' + id + '"', true)
+end;
+
+procedure chAddAmmoStore(var descr: shortstring);
+begin
+AddAmmoStore(descr)
 end;
 
 procedure chBind(var id: shortstring);

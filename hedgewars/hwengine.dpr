@@ -41,7 +41,8 @@ uses
   uLandTemplates in 'uLandTemplates.pas',
   uLandObjects in 'uLandObjects.pas',
   uLandGraphics in 'uLandGraphics.pas',
-  uLocale in 'uLocale.pas';
+  uLocale in 'uLocale.pas',
+  uAmmos in 'uAmmos.pas';
 
 {$INCLUDE options.inc}
 
@@ -218,6 +219,8 @@ s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
 InitTeams;
+ParseCommand('ammstore 1111111111111119');
+AssignStores;
 
 if isSoundEnabled then InitSound;
 InitWorld;
