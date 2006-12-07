@@ -83,7 +83,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
-	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
+	GoToPage(ID_PAGE_MAIN);
 }
 
 void HWForm::UpdateTeamsLists()
@@ -130,7 +130,7 @@ void HWForm::GoToMultiplayer()
 	  teamsList.push_back(team);
 	}
 	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
-	ui.Pages->setCurrentIndex(ID_PAGE_MULTIPLAYER);
+	GoToPage(ID_PAGE_MULTIPLAYER);
 }
 
 void HWForm::GoToDemos()
@@ -142,7 +142,7 @@ void HWForm::GoToDemos()
 	ui.pagePlayDemo->DemosList->clear();
 	ui.pagePlayDemo->DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_" + cProtoVer))
 			.replaceInStrings(QRegExp("^(.*).hwd_" + cProtoVer), "\\1"));
-	ui.Pages->setCurrentIndex(ID_PAGE_DEMOS);
+	GoToPage(ID_PAGE_DEMOS);
 }
 
 void HWForm::GoToNet()
@@ -171,7 +171,7 @@ void HWForm::NewTeam()
 {
 	editedTeam = new HWTeam("unnamed");
 	editedTeam->SetToPage(this);
-	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
+	GoToPage(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::EditTeam()
@@ -179,7 +179,7 @@ void HWForm::EditTeam()
 	editedTeam = new HWTeam(ui.pageOptions->CBTeamName->currentText());
 	editedTeam->LoadFromFile();
 	editedTeam->SetToPage(this);
-	ui.Pages->setCurrentIndex(ID_PAGE_SETUP_TEAM);
+	GoToPage(ID_PAGE_SETUP_TEAM);
 }
 
 void HWForm::TeamSave()
@@ -188,13 +188,13 @@ void HWForm::TeamSave()
 	editedTeam->SaveToFile();
 	delete editedTeam;
 	UpdateTeamsLists();
-	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
+	GoBack();
 }
 
 void HWForm::TeamDiscard()
 {
 	delete editedTeam;
-	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
+	GoBack();
 }
 
 void HWForm::SimpleGame()
@@ -232,7 +232,7 @@ void HWForm::NetConnect()
 void HWForm::NetDisconnect()
 {
 	hwnet->Disconnect();
-	GoToNet();
+	GoBack();
 }
 
 void HWForm::AddGame(const QString & chan)
@@ -242,7 +242,7 @@ void HWForm::AddGame(const QString & chan)
 
 void HWForm::NetGameEnter()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_NETCFG);
+	GoToPage(ID_PAGE_NETCFG);
 }
 
 void HWForm::NetJoin()
