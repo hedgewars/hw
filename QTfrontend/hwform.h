@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QDir>
+#include <QStack>
 
 #include "ui_hwform.h"
 
@@ -47,6 +48,8 @@ private slots:
 	void GoToNet();
 	void GoToNetChat();
 	void GoToInfo();
+	void GoToPage(quint8 id);
+	void GoBack();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -82,6 +85,7 @@ private:
 	HWTeam * editedTeam;
 	HWNet * hwnet;
 	GameUIConfig * config;
+	QStack<quint8> PagesStack;
 };
 
 #endif

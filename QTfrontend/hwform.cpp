@@ -52,28 +52,28 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(close()));
 
-	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageLocalGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
 
 	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
 	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
 
-	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
 
-	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
 	connect(ui.pagePlayDemo->DemosList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(PlayDemo()));
 
-	connect(ui.pageOptions->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageOptions->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageOptions->BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));
 	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
 
-	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 
-	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToNetChat()));
+	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnAddTeam,	SIGNAL(clicked()),	this, SLOT(NetAddTeam()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
 
@@ -81,7 +81,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetChat->BtnJoin,	SIGNAL(clicked()),	this, SLOT(NetJoin()));
 	connect(ui.pageNetChat->BtnCreate,	SIGNAL(clicked()),	this, SLOT(NetCreate()));
 
-	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoToMain()));
+	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
 }
@@ -102,22 +102,22 @@ void HWForm::UpdateTeamsLists()
 
 void HWForm::GoToMain()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_MAIN);
+	GoToPage(ID_PAGE_MAIN);
 }
 
 void HWForm::GoToSinglePlayer()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_SINGLEPLAYER);
+	GoToPage(ID_PAGE_SINGLEPLAYER);
 }
 
 void HWForm::GoToSetup()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_SETUP);
+	GoToPage(ID_PAGE_SETUP);
 }
 
 void HWForm::GoToInfo()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_INFO);
+	GoToPage(ID_PAGE_INFO);
 }
 
 void HWForm::GoToMultiplayer()
@@ -147,12 +147,24 @@ void HWForm::GoToDemos()
 
 void HWForm::GoToNet()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_NET);
+	GoToPage(ID_PAGE_NET);
 }
 
 void HWForm::GoToNetChat()
 {
-	ui.Pages->setCurrentIndex(ID_PAGE_NETCHAT);
+	GoToPage(ID_PAGE_NETCHAT);
+}
+
+void HWForm::GoToPage(quint8 id)
+{
+	PagesStack.push(ui.Pages->currentIndex());
+	ui.Pages->setCurrentIndex(id);
+}
+
+void HWForm::GoBack()
+{
+	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
+	ui.Pages->setCurrentIndex(id);
 }
 
 void HWForm::NewTeam()
