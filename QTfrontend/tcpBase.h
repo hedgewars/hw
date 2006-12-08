@@ -29,7 +29,6 @@
 
 #include <QImage>
 
-#define IPC_PORT 46631
 #define MAXMSGCHARS 255
 
 class TCPBase : public QObject
@@ -43,6 +42,8 @@ class TCPBase : public QObject
   void isReadyNow();
 
  protected:
+  quint16 ipc_port;
+
   void Start();
 
   QByteArray readbuffer;

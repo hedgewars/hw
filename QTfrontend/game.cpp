@@ -189,7 +189,7 @@ QStringList HWGame::setArguments()
 	arguments << resolutions[0][config->vid_Resolution()];
 	arguments << resolutions[1][config->vid_Resolution()];
 	arguments << "16";
-	arguments << "46631";
+	arguments << QString("%1").arg(ipc_port);
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");

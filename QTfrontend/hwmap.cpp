@@ -35,7 +35,7 @@ void HWMap::getImage(std::string seed)
 QStringList HWMap::setArguments()
 {
   QStringList arguments;
-  arguments << "46631";
+  arguments << QString("%1").arg(ipc_port);
   arguments << "landpreview";
   return arguments;
 }

@@ -35,12 +35,14 @@ TCPBase::TCPBase(bool demoMode) :
   if(!IPCServer) {
     IPCServer = new QTcpServer(this);
     IPCServer->setMaxPendingConnections(1);
-    if (!IPCServer->listen(QHostAddress::LocalHost, IPC_PORT)) {
+    if (!IPCServer->listen(QHostAddress::LocalHost)) {
       QMessageBox::critical(0, tr("Error"),
 			    tr("Unable to start the server: %1.")
 			    .arg(IPCServer->errorString()));
+      exit(0); // FIXME - should be graceful exit here
     }
   }
+  ipc_port=IPCServer->serverPort();
 }
 
 void TCPBase::NewConnection()
