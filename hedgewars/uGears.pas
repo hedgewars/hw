@@ -398,6 +398,41 @@ while t<>nil do
       end
 end;
 
+procedure DrawHH(Gear: PGear; Surface: PSDL_Surface);
+var t: integer;
+begin
+DrawHedgehog(Round(Gear.X) - 14 + WorldDx, Round(Gear.Y) - 18 + WorldDy,
+             hwSign(Gear.dX), 0,
+             PHedgehog(Gear.Hedgehog).visStepPos div 2,
+             Surface);
+
+with PHedgehog(Gear.Hedgehog)^ do
+     if Gear.State = 0 then
+        begin
+        t:= round(Gear.Y) - cHHRadius - 10 + WorldDy;
+        dec(t, HealthTag.h + 2);
+        DrawCentered(round(Gear.X) + WorldDx, t, HealthTag, Surface);
+        dec(t, NameTag.h + 2);
+        DrawCentered(round(Gear.X) + WorldDx, t, NameTag, Surface);
+        dec(t, Team.NameTag.h + 2);
+        DrawCentered(round(Gear.X) + WorldDx, t, Team.NameTag, Surface)
+        end else // Current hedgehog
+        begin
+        if bShowFinger and ((Gear.State and gstHHDriven) <> 0) then
+           DrawSprite(sprFinger, round(Gear.X) - 16 + WorldDx, round(Gear.Y) - 64 + WorldDy,
+                      GameTicks div 32 mod 16, Surface);
+        if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
+           if (Gear.State and gstHHThinking) <> 0 then
+              DrawGear(sQuestion, Round(Gear.X) - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
+              else
+              if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
+                 DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
+                           Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
+                           24, (18 + hwSign(Gear.dX) * integer(((Gear.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
+                           Team.CrosshairSurf, Surface);
+        end;
+end;
+
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
@@ -481,9 +516,7 @@ while Gear<>nil do
       case Gear.Kind of
            gtCloud: DrawSprite(sprCloud   , Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
        gtAmmo_Bomb: DrawSprite(sprBomb , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        gtHedgehog: DrawHedgehog(Round(Gear.X) - 14 + WorldDx, Round(Gear.Y) - 18 + WorldDy, hwSign(Gear.dX),
-                                 0, PHedgehog(Gear.Hedgehog).visStepPos div 2,
-                                 Surface);
+        gtHedgehog: DrawHH(Gear, Surface);
     gtAmmo_Grenade: DrawSprite(sprGrenade , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
        gtHealthTag: if Gear.Surf <> nil then DrawCentered(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.Surf, Surface);
            gtGrave: DrawSpriteFromRect(PHedgehog(Gear.Hedgehog).Team.GraveRect, Round(Gear.X) + WorldDx - 16, Round(Gear.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);

@@ -207,42 +207,6 @@ if r.y < cScreenHeight then
 
 DrawGears(Surface);
 
-if CurrentTeam <> nil then
-   begin
-   team:= TeamsList;
-   while team<>nil do
-      begin
-      for i:= 0 to 7 do
-          with team.Hedgehogs[i] do
-               if Gear<>nil then
-                  if Gear.State = 0 then
-                     begin
-                     t:= round(Gear.Y) - cHHRadius - 10 + WorldDy;
-                     dec(t, HealthTag.h + 2);
-                     DrawCentered(round(Gear.X) + WorldDx, t, HealthTag, Surface);
-                     dec(t, NameTag.h + 2);
-                     DrawCentered(round(Gear.X) + WorldDx, t, NameTag, Surface);
-                     dec(t, Team.NameTag.h + 2);
-                     DrawCentered(round(Gear.X) + WorldDx, t, Team.NameTag, Surface)
-                     end else // Current hedgehog
-                     begin
-                     if bShowFinger
-                        and ((Gear.State and gstHHDriven) <> 0) then DrawSprite(sprFinger, round(Gear.X) - 16 + WorldDx, round(Gear.Y) - 64 + WorldDy, RealTicks div 32 mod 16, Surface);
-                     if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
-                        if (Gear.State and gstHHThinking) <> 0 then
-                           DrawGear(sQuestion, Round(Gear.X) - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
-                        else
-                        if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
-                           DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
-                                          Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
-                                          24, (18 + hwSign(Gear.dX) * integer(((Gear.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
-                                          Team.CrosshairSurf, Surface);
-                     end;
-      team:= team.Next
-      end;
-   end;
-
-
 // Waves
 {$WARNINGS OFF}
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
