@@ -47,6 +47,7 @@ type PGear = ^TGear;
              CollIndex: Longword;
              Tag: integer;
              Surf: PSDL_Surface;
+             Z: Longword;
              end;
 
 function  AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
@@ -56,6 +57,7 @@ procedure SetAllHHToActive;
 procedure DrawGears(Surface: PSDL_Surface);
 procedure FreeGearsList;
 procedure AddMiscGears;
+procedure AddClouds;
 procedure AssignHHCoords;
 
 var CurAmmoGear: PGear = nil;
@@ -119,11 +121,12 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 
 function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 const Counter: Longword = 0;
+var tmp: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
 New(Result);
-{$IFDEF DEBUGFILE}AddFileLog('AddGear: handle = '+inttostr(integer(Result)));{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('AddGear: type = '+inttostr(ord(Kind))+'; handle = '+inttostr(integer(Result)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
 Result.X:= X;
 Result.Y:= Y;
@@ -138,6 +141,7 @@ Result.Timer:= Timer;
 if CurrentTeam <> nil then
    Result.Hedgehog:= @CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog];
 case Kind of
+       gtCloud: Result.Z:= High(Result.Z);  
    gtAmmo_Bomb: begin
                 Result.Radius:= 4;
                 Result.Elasticity:= 0.6;
@@ -148,12 +152,14 @@ case Kind of
                 Result.Elasticity:= 0.35;
                 Result.Friction:= 0.999;
                 Result.Angle:= cMaxAngle div 2;
+                Result.Z:= 1000;
                 end;
 gtAmmo_Grenade: begin
                 Result.Radius:= 4;
                 end;
    gtHealthTag: begin
                 Result.Timer:= 1500;
+                Result.Z:= 2000;
                 end;
        gtGrave: begin
                 Result.Radius:= 10;
@@ -224,14 +230,22 @@ gtAmmo_Grenade: begin
                 Result.Tag:= Y
                 end;
     gtAirBomb: begin
-               Result.Radius:= 3;
+               Result.Radius:= 10;
                end;
      end;
+
 if GearsList = nil then GearsList:= Result
                    else begin
-                   GearsList.PrevGear:= Result;
-                   Result.NextGear:= GearsList;
-                   GearsList:= Result
+                   // WARNING: this code assumes that the first gears added to the list are clouds (have maximal Z)
+                   tmp:= GearsList;
+                   while (tmp <> nil) and (tmp.Z < Result.Z) do
+                         tmp:= tmp.NextGear;
+
+                   if tmp.PrevGear <> nil then tmp.PrevGear.NextGear:= Result;
+                   Result.PrevGear:= tmp.PrevGear;
+                   tmp.PrevGear:= Result;
+                   Result.NextGear:= tmp;
+                   if GearsList = tmp then GearsList:= Result
                    end
 end;
 
@@ -282,7 +296,8 @@ while Gear <> nil do
             Result:= false;
             if Gear.Health < Gear.Damage then Gear.Health:= 0
                                          else dec(Gear.Health, Gear.Damage);
-            AddGear(Round(Gear.X), Round(Gear.Y) - 32, gtHealthTag, Gear.Damage).Hedgehog:= Gear.Hedgehog;
+            AddGear(Round(Gear.X), round(Gear.Y) - cHHRadius - 12 - PHedgehog(Gear.Hedgehog)^.HealthTag.h,
+                    gtHealthTag, Gear.Damage).Hedgehog:= Gear.Hedgehog;
             RenderHealth(PHedgehog(Gear.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear.Hedgehog)^.Team);
             
@@ -580,13 +595,18 @@ end;
 procedure AddMiscGears;
 var i: integer;
 begin
-for i:= 0 to cCloudsNumber do
-    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
-             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random));
 AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do
        FindPlace(AddGear(0, 0, gtMine, 0), false, 0, 2048);
+end;
+
+procedure AddClouds;
+var i: integer;
+begin
+for i:= 0 to cCloudsNumber do
+    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
+             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random))
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);

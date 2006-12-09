@@ -175,6 +175,7 @@ case ParamCount of
      PathPrefix:= ParamStr(9);
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
+     AddClouds
      end;
   2: begin
      val(ParamStr(1), ipcPort, c);
