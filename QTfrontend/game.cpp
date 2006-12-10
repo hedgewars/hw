@@ -188,13 +188,15 @@ QStringList HWGame::setArguments()
 	QStringList arguments;
 	arguments << resolutions[0][config->vid_Resolution()];
 	arguments << resolutions[1][config->vid_Resolution()];
-	arguments << "16";
+	arguments << "16"; // bpp
 	arguments << QString("%1").arg(ipc_port);
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
-	arguments << "128";
+	arguments << "128"; // sound volume
+	arguments << "1024"; // max fps
 	arguments << datadir->absolutePath();
+	arguments << "1"; // show fps
 	return arguments;
 }
 

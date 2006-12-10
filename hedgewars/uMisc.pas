@@ -38,7 +38,6 @@ var isCursorVisible : boolean = false;
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;
     cConsoleYAdd     : integer = 0; 
-    cTimerInterval   : Longword = 5;
     cScreenWidth     : integer = 1024;
     cScreenHeight    : integer = 768;
     cBits            : integer = 16;
@@ -71,6 +70,7 @@ var isCursorVisible : boolean = false;
     cSeed         : shortstring = '';
     cInitVolume   : integer = 128;
     cVolumeDelta  : integer = 0;
+    cTimerInterval   : Longword = 5;
 
 const
     cMaxPower     = 1500;

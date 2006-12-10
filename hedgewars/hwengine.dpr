@@ -162,7 +162,7 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
-  9: begin
+11: begin
      val(ParamStr(1), cScreenWidth, c);
      val(ParamStr(2), cScreenHeight, c);
      cBitsStr:= ParamStr(3);
@@ -172,7 +172,10 @@ case ParamCount of
      isSoundEnabled:= ParamStr(6) = '1';
      cLocaleFName:= ParamStr(7);
      val(ParamStr(8), cInitVolume, c);
-     PathPrefix:= ParamStr(9);
+     val(ParamStr(9), cTimerInterval, c);
+     cTimerInterval:= 1024 div cTimerInterval;
+     PathPrefix:= ParamStr(10);
+     cShowFPS:= ParamStr(11) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
      AddClouds
