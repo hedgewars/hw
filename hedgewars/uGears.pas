@@ -59,6 +59,8 @@ procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AddClouds;
 procedure AssignHHCoords;
+procedure InsertGearToList(Gear: PGear);
+procedure RemoveGearFromList(Gear: PGear);
 
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
@@ -119,9 +121,37 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepAirBomb
                                                                );
 
+procedure InsertGearToList(Gear: PGear);
+var tmp: PGear;
+begin
+if GearsList = nil then
+   GearsList:= Gear
+   else begin
+   // WARNING: this code assumes that the first gears added to the list are clouds (have maximal Z)
+   tmp:= GearsList;
+   while (tmp <> nil) and (tmp.Z < Gear.Z) do
+          tmp:= tmp.NextGear;
+
+   if tmp.PrevGear <> nil then tmp.PrevGear.NextGear:= Gear;
+   Gear.PrevGear:= tmp.PrevGear;
+   tmp.PrevGear:= Gear;
+   Gear.NextGear:= tmp;
+   if GearsList = tmp then GearsList:= Gear
+   end
+end;
+
+procedure RemoveGearFromList(Gear: PGear);
+begin
+if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
+if Gear.PrevGear <> nil then Gear.PrevGear.NextGear:= Gear.NextGear
+   else begin
+   GearsList:= Gear.NextGear;
+   if GearsList <> nil then GearsList.PrevGear:= nil
+   end;
+end;
+
 function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
 const Counter: Longword = 0;
-var tmp: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
@@ -152,7 +182,7 @@ case Kind of
                 Result.Elasticity:= 0.35;
                 Result.Friction:= 0.999;
                 Result.Angle:= cMaxAngle div 2;
-                Result.Z:= 1000;
+                Result.Z:= cHHZ;
                 end;
 gtAmmo_Grenade: begin
                 Result.Radius:= 4;
@@ -233,20 +263,7 @@ gtAmmo_Grenade: begin
                Result.Radius:= 10;
                end;
      end;
-
-if GearsList = nil then GearsList:= Result
-                   else begin
-                   // WARNING: this code assumes that the first gears added to the list are clouds (have maximal Z)
-                   tmp:= GearsList;
-                   while (tmp <> nil) and (tmp.Z < Result.Z) do
-                         tmp:= tmp.NextGear;
-
-                   if tmp.PrevGear <> nil then tmp.PrevGear.NextGear:= Result;
-                   Result.PrevGear:= tmp.PrevGear;
-                   tmp.PrevGear:= Result;
-                   Result.NextGear:= tmp;
-                   if GearsList = tmp then GearsList:= Result
-                   end
+InsertGearToList(Result)
 end;
 
 procedure DeleteGear(Gear: PGear);
@@ -274,12 +291,7 @@ if Gear.Kind = gtHedgehog then
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
-if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
-if Gear.PrevGear <> nil then Gear.PrevGear.NextGear:= Gear.NextGear
-                        else begin
-                        GearsList:= Gear^.NextGear;
-                        if GearsList <> nil then GearsList.PrevGear:= nil
-                        end;
+RemoveGearFromList(Gear);
 Dispose(Gear)
 end;
 

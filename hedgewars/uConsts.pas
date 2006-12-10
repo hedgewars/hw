@@ -108,13 +108,13 @@ const
       cMaxHHIndex      = 7;
       cMaxHHs          = 20;
       cMaxSpawnPoints  = 1024;
-      cHHSurfaceWidth     = 512;
-     // cHHSurfaceHeigth    = 256;
 
       cMaxEdgePoints = 16384;
 
       cHHRadius = 9;
       cHHStepTicks = 38;
+      cHHZ = 1000;
+      cCurrHHZ = Succ(cHHZ);
 
       cKeyMaxIndex = 1023;
 

@@ -419,7 +419,7 @@ var r: TSDL_Rect;
 begin
 r.x:= Step * 32;
 r.y:= Pos * 32;
-if Dir = -1 then r.x:= cHHSurfaceWidth - 32 - r.x;
+if Dir = -1 then r.x:= HHSurface.w - 32 - r.x;
 r.w:= 32;
 r.h:= 32;
 DrawFromRect(X, Y, @r, HHSurface, Surface)

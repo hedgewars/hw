@@ -118,7 +118,11 @@ TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
 tteam:= CurrentTeam;
 with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     if Gear <> nil then Gear.Message:= 0;
+     if Gear <> nil then
+        begin
+        Gear.Message:= 0;
+        Gear.Z:= cHHZ
+        end;
 
 repeat
   CurrentTeam:= CurrentTeam.Next;
@@ -136,9 +140,12 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      AttacksNum:= 0;
      with Gear^ do
           begin
+          Z:= cCurrHHZ;
           State:= gstHHDriven;
           Active:= true
           end;
+     RemoveGearFromList(Gear);
+     InsertGearToList(Gear);
      FollowGear:= Gear
      end;
 ResetKbd;
