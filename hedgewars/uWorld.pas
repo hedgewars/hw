@@ -259,7 +259,7 @@ if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx
 i:= 8;
 for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
-         if EndTime > 0 then
+         if Surf <> nil then
             begin
             DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
             inc(i, Surf.h + 2);
@@ -365,7 +365,7 @@ if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
 if Captions[Group].Surf <> nil then SDL_FreeSurface(Captions[Group].Surf);
 
 Captions[Group].Surf:= RenderString(s, Color, fntBig);
-Captions[Group].EndTime:= RealTicks + 1200
+Captions[Group].EndTime:= RealTicks + 1500
 end;
 
 procedure MoveCamera;

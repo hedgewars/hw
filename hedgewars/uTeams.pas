@@ -42,7 +42,6 @@ type PHedgehog = ^THedgehog;
              ExtDriven: boolean;
              Binds: TBinds;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-             Ammos: array[0..cMaxHHIndex] of THHAmmo;
              CurrHedgehog: integer;
              NameTag: PSDL_Surface;
              CrosshairSurf: PSDL_Surface;
@@ -62,8 +61,6 @@ function AddTeam: PTeam;
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
-procedure OnUsedAmmo(Ammo: PHHAmmo);
-function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
@@ -252,55 +249,6 @@ with Ammo[CurSlot, CurAmmo] do
      ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
      end
      end
-end;
-
-procedure PackAmmo(Ammo: PHHAmmo; Slot: integer);
-var ami: integer;
-    b: boolean;
-begin
-    repeat
-      b:= false;
-      ami:= 0;
-      while (not b) and (ami < cMaxSlotAmmoIndex) do
-          if (Ammo[Slot, ami].Count = 0)
-             and (Ammo[Slot, ami + 1].Count > 0) then b:= true
-                                                 else inc(ami);
-      if b then // there's a free item in ammo stack
-         begin
-         Ammo[Slot, ami]:= Ammo[Slot, ami + 1];
-         Ammo[Slot, ami + 1].Count:= 0
-         end;
-    until not b;
-end;
-
-procedure OnUsedAmmo(Ammo: PHHAmmo);
-var s, a: Longword;
-begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     begin
-     if CurAmmoGear = nil then begin s:= CurSlot; a:= CurAmmo end
-                          else begin s:= AltSlot; a:= AltAmmo end;
-     with Ammo[s, a] do
-          if Count <> AMMO_INFINITE then
-             begin
-             dec(Count);
-             if Count = 0 then PackAmmo(Ammo, CurSlot)
-             end
-     end
-end;
-
-function  HHHasAmmo(Hedgehog: PHedgehog; Ammo: TAmmoType): boolean;
-var slot, ami: integer;
-begin
-Slot:= Ammoz[Ammo].Slot;
-ami:= 0;
-Result:= false;
-while (not Result) and (ami <= cMaxSlotAmmoIndex) do
-      begin
-      with  Hedgehog.Ammo[Slot, ami] do
-            if (AmmoType = Ammo) and (Count > 0) then Result:= true;
-      inc(ami)
-      end
 end;
 
 function  TeamSize(p: PTeam): Longword;

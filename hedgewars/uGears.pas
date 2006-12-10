@@ -67,7 +67,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
@@ -779,10 +779,18 @@ end;
 
 procedure SpawnBoxOfSmth;
 begin
-if (CountGears(gtCase) > 2) or (getrandom(3) <> 0) then exit;
+if (CountGears(gtCase) >= 5) or (getrandom(cCaseFactor) <> 0) then exit;
 FollowGear:= AddGear(0, 0, gtCase, 0);
-FollowGear.Health:= 25;
-FollowGear.Pos:= posCaseHealth;
+case getrandom(2) of
+     0: begin
+        FollowGear.Health:= 25;
+        FollowGear.Pos:= posCaseHealth
+        end;
+     1: begin
+        FollowGear.Pos:= posCaseAmmo;
+        FollowGear.State:= Longword(amMineStrike)
+        end;
+     end;
 FindPlace(FollowGear, true, 0, 2048)
 end;
 

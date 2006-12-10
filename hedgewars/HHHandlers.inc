@@ -104,11 +104,22 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure PickUp(HH, Gear: PGear);
+var s: shortstring;
+    a: TAmmoType;
 begin
 Gear.Message:= gm_Destroy;
 case Gear.Pos of
+       posCaseAmmo: begin
+                    a:= TAmmoType(Gear.State);
+                    AddAmmo(PHedgehog(HH.Hedgehog), a);
+                    s:= trammo[Ammoz[a].NameId];
+                    AddCaption(s, PHedgehog(HH.Hedgehog).Team.Color, capgrpAmmoinfo);
+                    end;
      posCaseHealth: begin
                     inc(HH.Health, Gear.Health);
+                    str(Gear.Health, s);
+                    s:= '+' + s;
+                    AddCaption(s, PHedgehog(HH.Hedgehog).Team.Color, capgrpAmmoinfo);
                     RenderHealth(PHedgehog(HH.Hedgehog)^);
                     RecountTeamHealth(PHedgehog(HH.Hedgehog)^.Team)
                     end;
