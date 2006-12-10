@@ -53,6 +53,7 @@ type TCaptionStr = record
 var cWaterSprCount: integer;
     Captions: array[TCapGroup] of TCaptionStr;
     AMxLeft, AMxCurr, SlotsNum: integer;
+    fpsSurface: PSDL_Surface;
 
 procedure InitWorld;
 begin
@@ -338,14 +339,22 @@ DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
 if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseSurface, Surface);
 
 inc(Frames);
-inc(CountTicks, Lag);
-if CountTicks >= 1000 then
+if cShowFPS then
    begin
-   FPS:= Frames;
-   Frames:= 0;
-   CountTicks:= 0;
+   inc(CountTicks, Lag);
+   if CountTicks >= 1000 then
+      begin
+      FPS:= Frames;
+      Frames:= 0;
+      CountTicks:= 0;
+      s:= inttostr(FPS) + ' fps';
+      if fpsSurface <> nil then SDL_FreeSurface(fpsSurface);
+      fpsSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, PChar(String(s)), $FFFFFF);
+      end;
+   r.x:= cScreenWidth - 50;
+   r.y:= 10;
+   SDL_UpperBlit(fpsSurface, nil, Surface, @r)
    end;
-if cShowFPS then DXOutText(cScreenWidth - 50, 10, fnt16, inttostr(FPS) + ' fps', Surface);
 
 inc(SoundTimerTicks, Lag);
 if SoundTimerTicks >= 50 then
