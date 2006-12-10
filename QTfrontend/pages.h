@@ -37,6 +37,7 @@ class QCheckBox;
 class SquareLabel;
 class About;
 class QSpinBox;
+class FPSEdit;
 
 class PageMain : public QWidget
 {
@@ -142,6 +143,8 @@ public:
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBFullscreen;
+	QCheckBox *CBShowFPS;
+	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 };
 

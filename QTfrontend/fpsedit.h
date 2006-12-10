@@ -16,37 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef GAMECONFIG_H
-#define GAMECONFIG_H
+#ifndef _FPSEDIT_H
+#define _FPSEDIT_H
 
-#include <QObject>
-#include <QDir>
-#include <QStringList>
+#include <QSpinBox>
 
-class HWForm;
-
-class GameUIConfig : public QObject
+class FPSEdit : public QSpinBox
 {
 	Q_OBJECT
 
 public:
-	GameUIConfig(HWForm * FormWidgets);
-	QStringList GetTeamsList();
-	int vid_Resolution();
-	bool vid_Fullscreen();
-	bool isSoundEnabled();
-	bool isShowFPSEnabled();
-	quint8 timerInterval();
-	QString GetRandomTheme();
+	FPSEdit(QWidget * parent = 0);
 
-private slots:
-
-public slots:
-	void SaveOptions();
-
-private:
-	HWForm * Form;
-	QStringList Themes;
+protected:
+	 QString textFromValue (int value) const;
 };
 
-#endif
+#endif // _FPSEDIT_H

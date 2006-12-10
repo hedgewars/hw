@@ -32,7 +32,9 @@ HEADERS += binds.h \
            tcpBase.h \
            about.h \
            KB.h \
-           proto.h
+           proto.h \
+           fpsedit.h
+           
            
 SOURCES += game.cpp \
            main.cpp \
@@ -53,7 +55,8 @@ SOURCES += game.cpp \
            mapContainer.cpp \
            tcpBase.cpp \
            about.cpp \
-           proto.cpp
+           proto.cpp \
+           fpsedit.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

@@ -194,9 +194,9 @@ QStringList HWGame::setArguments()
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
 	arguments << "128"; // sound volume
-	arguments << "1024"; // max fps
+	arguments << QString::number(config->timerInterval());
 	arguments << datadir->absolutePath();
-	arguments << "1"; // show fps
+	arguments << (config->isShowFPSEnabled() ? "1" : "0");
 	return arguments;
 }
 

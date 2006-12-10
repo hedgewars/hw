@@ -173,7 +173,6 @@ case ParamCount of
      cLocaleFName:= ParamStr(7);
      val(ParamStr(8), cInitVolume, c);
      val(ParamStr(9), cTimerInterval, c);
-     cTimerInterval:= 1024 div cTimerInterval;
      PathPrefix:= ParamStr(10);
      cShowFPS:= ParamStr(11) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do

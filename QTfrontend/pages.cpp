@@ -37,6 +37,7 @@
 #include "SquareLabel.h"
 #include "mapContainer.h"
 #include "about.h"
+#include "fpsedit.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -344,6 +345,13 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	CBEnableSound = new	QCheckBox(AGGroupBox);
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 	GBAlayout->addWidget(CBEnableSound, 0, 2);
+
+	CBShowFPS = new QCheckBox(AGGroupBox);
+	CBShowFPS->setText(QCheckBox::tr("Show FPS"));
+	GBAlayout->addWidget(CBShowFPS, 0, 3);
+
+	fpsedit = new FPSEdit(AGGroupBox);
+	GBAlayout->addWidget(fpsedit, 0, 4);
 
 	pageLayout->addWidget(new QWidget(), 3, 0, 1, 3);
 
