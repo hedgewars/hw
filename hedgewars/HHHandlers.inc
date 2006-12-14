@@ -142,8 +142,6 @@ DeleteCI(Gear);
 if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
    begin
    TurnTimeLeft:= 0;
-   if ((Gear.State and (gstMoving or gstFalling)) = 0)
-      and (CurAmmoGear = nil) then Gear.dX:= 0.0000001 * hwSign(Gear.dX);
    Gear.State:= Gear.State and not gstHHDriven;
    if Gear.Damage > 0 then
       Gear.State:= Gear.State and not gstHHJumping;
@@ -172,13 +170,13 @@ if (Gear.State and gstFalling) <> 0 then
    // it could be the source to trick: double-backspace jump -> vertical wall
    // collision - > (abs(Gear.dX) < 0.0000002) -> backspace -> even more high jump
    if ((Gear.Message and gm_HJump) <> 0) and ((Gear.State and gstHHJumping) <> 0) then
-      if (abs(Gear.dX) < 0.0000002) and (Gear.dY < -0.02) then
+      if (abs(Gear.dX) < 2 * cLittle) and (Gear.dY < -0.02) then
          begin
          Gear.dY:= -0.25;
          Gear.dX:= hwSign(Gear.dX) * 0.02
          end;
    Gear.Message:= Gear.Message and not (gm_LJump or gm_HJump);     
-   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then SetLittle(Gear.dX);
    Gear.X:= Gear.X + Gear.dX;
    Gear.dY:= Gear.dY + cGravity;
    if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
@@ -187,7 +185,7 @@ if (Gear.State and gstFalling) <> 0 then
       begin
       CheckHHDamage(Gear);
       if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
-         and ((Gear.State and gstHHJumping) <> 0) then Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+         and ((Gear.State and gstHHJumping) <> 0) then SetLittle(Gear.dX);
       Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
       StepTicks:= 300; 
       Gear.dY:= 0
@@ -233,8 +231,8 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
          end;
       end;
    PrevdX:= hwSign(Gear.dX);
-   if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -1.0 else
-   if (Gear.Message and gm_Right )<>0 then Gear.dX:=  1.0 else exit;
+   if (Gear.Message and gm_Left  )<>0 then Gear.dX:= -cLittle else
+   if (Gear.Message and gm_Right )<>0 then Gear.dX:=  cLittle else exit;
    StepTicks:= cHHStepTicks;
    if PrevdX <> hwSign(Gear.dX) then exit;
    PHedgehog(Gear.Hedgehog).visStepPos:= (PHedgehog(Gear.Hedgehog).visStepPos + 1) and 7;
@@ -253,8 +251,8 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
       if not (TestCollisionXwithXYShift(Gear, 0, -1, hwSign(Gear.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear.Y:= Gear.Y - 1;
       end;
-   if not TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then Gear.X:= Gear.X + Gear.dX;
-   Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+   if not TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then Gear.X:= Gear.X + hwSign(Gear.dX);
+
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then
@@ -279,7 +277,6 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
       begin
       Gear.Y:= Gear.Y - 6;
       Gear.dY:= 0;
-      Gear.dX:= 0.0000001 * hwSign(Gear.dX);
       Gear.State:= Gear.State or gstFalling
       end;
    end
@@ -303,7 +300,7 @@ if not TestCollisionYwithGear(Gear, 1) then
    end else begin
    CheckHHDamage(Gear);
    if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
-      and ((Gear.State and gstHHJumping) <> 0) then Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+      and ((Gear.State and gstHHJumping) <> 0) then SetLittle(Gear.dX);
    Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
    if Gear.dY > 0 then Gear.dY:= 0;
    if ((Gear.State and gstMoving) <> 0) then Gear.dX:= Gear.dX * Gear.Friction
@@ -323,11 +320,11 @@ if (Gear.State and gstMoving) <> 0 then
             if abs(Gear.dX) > 0.02 then Gear.dX:= -Gear.Elasticity * Gear.dX
                                    else begin
                                         Gear.State:= Gear.State and not gstMoving;
-                                        Gear.dX:= 0.0000001 * hwSign(Gear.dX)
+                                        SetLittle(Gear.dX)
                                         end
             else begin
                  Gear.State:= Gear.State and not gstMoving;
-                 Gear.dX:= 0.0000001 * hwSign(Gear.dX)
+                 SetLittle(Gear.dX)
                  end
          else Gear.dX:= -Gear.Elasticity * Gear.dX;
 
@@ -335,7 +332,7 @@ if ((Gear.State and gstFalling) = 0)and
    (sqr(Gear.dX) + sqr(Gear.dY) < 0.0008) then
    begin
    Gear.State:= Gear.State and not gstMoving;
-   Gear.dX:= 0.0000001 * hwSign(Gear.dX);
+   SetLittle(Gear.dX);
    Gear.dY:= 0
    end else Gear.State:= Gear.State or gstMoving;
 

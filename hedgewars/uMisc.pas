@@ -105,6 +105,7 @@ function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
 procedure SetKB(n: Longword);
 procedure SendKB;
+procedure SetLittle(var r: Double);
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -203,6 +204,11 @@ if KBnum <> 0 then
    s:= 'K' + inttostr(KBnum);
    SendIPCRaw(@s, Length(s) + 1)
    end
+end;
+
+procedure SetLittle(var r: Double);
+begin
+if r >= 0 then r:= cLittle else r:= - cLittle 
 end;
 
 {$IFDEF DEBUGFILE}

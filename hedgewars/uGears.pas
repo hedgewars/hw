@@ -646,8 +646,8 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
                              begin
-                             Gear.dX:= Gear.dX + dmg / 200 * hwSign(Gear.X - X);
-                             Gear.dY:= Gear.dY + dmg / 200 * hwSign(Gear.Y - Y);
+                             Gear.dX:= Gear.dX + (dmg / 200 + cHHKick)* hwSign(Gear.X - X);
+                             Gear.dY:= Gear.dY + (dmg / 200 + cHHKick)* hwSign(Gear.Y - Y);
                              Gear.Active:= true;
                              FollowGear:= Gear
                              end;

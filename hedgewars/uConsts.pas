@@ -115,6 +115,8 @@ const
       cHHStepTicks = 38;
       cHHZ = 1000;
       cCurrHHZ = Succ(cHHZ);
+      cHHKick = 0.03;
+      cLittle = 0.0000001;
 
       cKeyMaxIndex = 1023;
 

@@ -382,7 +382,7 @@ if (Gear.Timer and $3F) = 0 then
 if TestCollisionYwithGear(Gear, 1) then
    begin
    Gear.dY:= 0;
-   HHGear.dX:= 0.0000001 * hwSign(HHGear.dX);
+   SetLittle(HHGear.dX);
    HHGear.dY:= 0;
    end else
    begin
