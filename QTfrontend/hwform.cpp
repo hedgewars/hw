@@ -40,7 +40,7 @@ HWForm::HWForm(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	config = new GameUIConfig(this);
+	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
 	UpdateTeamsLists();
 

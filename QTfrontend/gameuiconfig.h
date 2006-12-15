@@ -19,18 +19,19 @@
 #ifndef GAMECONFIG_H
 #define GAMECONFIG_H
 
-#include <QObject>
+#include <QSettings>
 #include <QDir>
 #include <QStringList>
 
 class HWForm;
+class QSettings;
 
-class GameUIConfig : public QObject
+class GameUIConfig : public QSettings
 {
 	Q_OBJECT
 
 public:
-	GameUIConfig(HWForm * FormWidgets);
+	GameUIConfig(HWForm * FormWidgets, const QString & fileName);
 	QStringList GetTeamsList();
 	int vid_Resolution();
 	bool vid_Fullscreen();
