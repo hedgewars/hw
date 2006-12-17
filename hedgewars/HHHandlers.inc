@@ -70,6 +70,7 @@ with Gear^,
                     amParachute: CurAmmoGear:= AddGear(round(X), round(Y), gtParachute, 0);
                     amAirAttack: AddGear(0, 0, gtAirAttack, 0);
                    amMineStrike: AddGear(0, 0, gtAirAttack, 1);
+                    amBlowTorch: CurAmmoGear:= AddGear(round(Gear.X), round(Gear.Y), gtBlowTorch, 0, hwSign(Gear.dX) * 0.5);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
@@ -126,82 +127,12 @@ case Gear.Pos of
      end;
 end;
 
-procedure doStepHedgehog(Gear: PGear); forward;
-////////////////////////////////////////////////////////////////////////////////
-procedure doStepHedgehogDriven(Gear: PGear);
 const StepTicks: LongWord = 0;
-var t: PGear;
-    PrevdX: integer;
+
+procedure HedgehogStep(Gear: PGear);
+var PrevdX: integer;
 begin
-if isInMultiShoot and (Gear.Damage = 0) then
-   begin
-   exit
-   end;
-AllInactive:= false;
-DeleteCI(Gear);
-if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
-   begin
-   TurnTimeLeft:= 0;
-   Gear.State:= Gear.State and not gstHHDriven;
-   if Gear.Damage > 0 then
-      Gear.State:= Gear.State and not gstHHJumping;
-   exit
-   end;
-if ((Gear.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
-   or (CurAmmoGear <> nil) then // we're moving
-   begin
-   // check for case with ammo
-   t:= CheckGearNear(Gear, gtCase, 36, 36);
-   if t <> nil then
-      PickUp(Gear, t)
-   end;
-
-if CurAmmoGear <> nil then
-   begin
-   CurAmmoGear.Message:= Gear.Message;
-   exit
-   end;
-
-if ((Gear.Message and gm_Attack) <> 0) or
-   ((Gear.State and gstAttacking) <> 0)then Attack(Gear);
-
-if (Gear.State and gstFalling) <> 0 then
-   begin
-   // it could be the source to trick: double-backspace jump -> vertical wall
-   // collision - > (abs(Gear.dX) < 0.0000002) -> backspace -> even more high jump
-   if ((Gear.Message and gm_HJump) <> 0) and ((Gear.State and gstHHJumping) <> 0) then
-      if (abs(Gear.dX) < 2 * cLittle) and (Gear.dY < -0.02) then
-         begin
-         Gear.dY:= -0.25;
-         Gear.dX:= hwSign(Gear.dX) * 0.02
-         end;
-   Gear.Message:= Gear.Message and not (gm_LJump or gm_HJump);     
-   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then SetLittle(Gear.dX);
-   Gear.X:= Gear.X + Gear.dX;
-   Gear.dY:= Gear.dY + cGravity;
-   if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
-   Gear.Y:= Gear.Y + Gear.dY;
-   if (Gear.dY >= 0)and TestCollisionYwithGear(Gear, 1) then
-      begin
-      CheckHHDamage(Gear);
-      if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
-         and ((Gear.State and gstHHJumping) <> 0) then SetLittle(Gear.dX);
-      Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
-      StepTicks:= 300; 
-      Gear.dY:= 0
-      end;
-   CheckGearDrowning(Gear);
-   exit
-   end ;//else if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
-
-if StepTicks > 0 then dec(StepTicks);
-
-if ((Gear.State and (gstMoving or gstFalling)) = 0) then
-   if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > 0         then dec(Gear.Angle)
-      else else
-   if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < cMaxAngle then inc(Gear.Angle);
-
-if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks = 0) then
+if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    begin
    if ((Gear.Message and gm_LJump ) <> 0) then
       begin
@@ -286,6 +217,81 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0)and(StepTicks
    end
    end
    end
+end;
+
+procedure doStepHedgehog(Gear: PGear); forward;
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepHedgehogDriven(Gear: PGear);
+var t: PGear;
+begin
+if isInMultiShoot and (Gear.Damage = 0) then
+   begin
+   exit
+   end;
+AllInactive:= false;
+DeleteCI(Gear);
+if (TurnTimeLeft = 0) or (Gear.Damage > 0) then
+   begin
+   TurnTimeLeft:= 0;
+   Gear.State:= Gear.State and not gstHHDriven;
+   if Gear.Damage > 0 then
+      Gear.State:= Gear.State and not gstHHJumping;
+   exit
+   end;
+if ((Gear.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
+   or (CurAmmoGear <> nil) then // we're moving
+   begin
+   // check for case with ammo
+   t:= CheckGearNear(Gear, gtCase, 36, 36);
+   if t <> nil then
+      PickUp(Gear, t)
+   end;
+
+if CurAmmoGear <> nil then
+   begin
+   CurAmmoGear.Message:= Gear.Message;
+   exit
+   end;
+
+if ((Gear.Message and gm_Attack) <> 0) or
+   ((Gear.State and gstAttacking) <> 0)then Attack(Gear);
+
+if (Gear.State and gstFalling) <> 0 then
+   begin
+   // it could be the source to trick: double-backspace jump -> vertical wall
+   // collision - > (abs(Gear.dX) < 0.0000002) -> backspace -> even more high jump
+   if ((Gear.Message and gm_HJump) <> 0) and ((Gear.State and gstHHJumping) <> 0) then
+      if (abs(Gear.dX) < 2 * cLittle) and (Gear.dY < -0.02) then
+         begin
+         Gear.dY:= -0.25;
+         Gear.dX:= hwSign(Gear.dX) * 0.02
+         end;
+   Gear.Message:= Gear.Message and not (gm_LJump or gm_HJump);     
+   if TestCollisionXwithGear(Gear, hwSign(Gear.dX)) then SetLittle(Gear.dX);
+   Gear.X:= Gear.X + Gear.dX;
+   Gear.dY:= Gear.dY + cGravity;
+   if (Gear.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear.dY:= 0;
+   Gear.Y:= Gear.Y + Gear.dY;
+   if (Gear.dY >= 0)and TestCollisionYwithGear(Gear, 1) then
+      begin
+      CheckHHDamage(Gear);
+      if ((abs(Gear.dX) + abs(Gear.dY)) < 0.55)
+         and ((Gear.State and gstHHJumping) <> 0) then SetLittle(Gear.dX);
+      Gear.State:= Gear.State and not (gstFalling or gstHHJumping);
+      StepTicks:= 300; 
+      Gear.dY:= 0
+      end;
+   CheckGearDrowning(Gear);
+   exit
+   end ;//else if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
+
+   if ((Gear.State and (gstMoving or gstFalling)) = 0) then
+      if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > 0         then dec(Gear.Angle)
+         else else
+      if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < cMaxAngle then inc(Gear.Angle);
+
+   if StepTicks > 0 then dec(StepTicks);
+   if (StepTicks = 0) then HedgehogStep(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

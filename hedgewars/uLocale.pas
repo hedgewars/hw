@@ -21,7 +21,7 @@ interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
                    sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
-                   sidParachute, sidAirAttack, sidMineStrike);
+                   sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch);
 
      TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused);
 

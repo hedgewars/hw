@@ -86,6 +86,7 @@ function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; f
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer); forward;
+procedure HedgehogStep(Gear: PGear); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -118,7 +119,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                doStepActionTimer,
                                                                doStepParachute,
                                                                doStepAirAttack,
-                                                               doStepAirBomb
+                                                               doStepAirBomb,
+                                                               doStepBlowTorch
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -259,9 +261,12 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 15;
                 Result.Tag:= Y
                 end;
-    gtAirBomb: begin
-               Result.Radius:= 10;
-               end;
+     gtAirBomb: begin
+                Result.Radius:= 10;
+                end;
+   gtBlowTorch: begin
+                Result.Timer:= 6000;
+                end;
      end;
 InsertGearToList(Result)
 end;

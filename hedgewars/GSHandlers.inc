@@ -424,6 +424,32 @@ Gear.doStep:= doStepPickHammerWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepBlowTorch(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+dec(Gear.Timer);
+HHGear:= PHedgehog(Gear.Hedgehog).Gear;
+if Gear.Timer mod cHHStepTicks = 0 then
+   begin
+   DrawTunnel(HHGear.X, HHGear.Y - 1, Gear.dX, 0, cHHRadius * 2, cHHRadius * 2);
+   HHGear.State:= HHGear.State and not gstAttacking;
+   if Gear.dX < 0 then HHGear.Message:= gm_Left
+                  else HHGear.Message:= gm_Right;
+   HedgehogStep(HHGear);
+   if (HHGear.State and gstFalling) <> 0 then Gear.Timer:= 0
+   end;
+if Gear.Timer = 0 then
+   begin
+   HHGear.Message:= 0;
+   DeleteGear(Gear);
+   AfterAttack
+   end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
 procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;

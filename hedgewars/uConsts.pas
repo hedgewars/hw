@@ -46,7 +46,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
-                   gtParachute, gtAirAttack, gtAirBomb);
+                   gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch);
 
      TGearsType = set of TGearType;
 
@@ -56,7 +56,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
-                   amBaseballBat, amParachute, amAirAttack, amMineStrike);
+                   amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch);
 
      THWFont    = (fnt16, fntBig);
 
@@ -439,7 +439,15 @@ const
                                           Timer: 0;
                                           AmmoType: amMineStrike);
                                    Slot: 5;
-                                   TimeAfterTurn: 0));
+                                   TimeAfterTurn: 0),
+                                  (NameId: sidBlowTorch;
+                                   Ammo: (Propz: ammoprop_ForwMsgs;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          AmmoType: amBlowTorch);
+                                   Slot: 6;
+                                   TimeAfterTurn: 3000));
 
 implementation
 
