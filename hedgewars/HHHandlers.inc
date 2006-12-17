@@ -222,9 +222,9 @@ end;
 procedure HedgehogChAngle(Gear: PGear);
 begin
 if ((Gear.State and (gstMoving or gstFalling)) = 0) then
-   if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > 0         then dec(Gear.Angle)
+   if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > CurMinAngle then dec(Gear.Angle)
    else else
-   if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < cMaxAngle then inc(Gear.Angle);
+   if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < CurMaxAngle then inc(Gear.Angle);
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;

@@ -56,6 +56,7 @@ type PHedgehog = ^THedgehog;
 
 var CurrentTeam: PTeam = nil;
     TeamsList: PTeam = nil;
+    CurMinAngle, CurMaxAngle: Longword;
 
 function AddTeam: PTeam;
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
@@ -232,6 +233,15 @@ with Hedgehog do
 
 with Ammo[CurSlot, CurAmmo] do
      begin
+     CurMinAngle:= Ammoz[AmmoType].minAngle;
+     if Ammoz[AmmoType].maxAngle <> 0 then CurMaxAngle:= Ammoz[AmmoType].maxAngle
+                                      else CurMaxAngle:= cMaxAngle;
+     with Hedgehog.Gear^ do
+        begin
+        if Angle < CurMinAngle then Angle:= CurMinAngle;
+        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
+        end;
+        
      s:= trammo[Ammoz[AmmoType].NameId];
      if Count <> AMMO_INFINITE then
         s:= s + ' (' + IntToStr(Count) + ')';

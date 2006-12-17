@@ -92,6 +92,10 @@ const
       msgGettingConfig     = 'Getting game config...';
 
 const
+      cMaxPower     = 1500;
+      cMaxAngle     = 2048;
+      cPowerDivisor = 1500;
+      
       MAXNAMELEN = 32;
 
       COLOR_LAND = $00FFFFFF;
@@ -292,6 +296,7 @@ const
                                   Ammo: TAmmo;
                                   Slot: 0..cMaxSlotIndex;
                                   TimeAfterTurn: Longword;
+                                  minAngle, maxAngle: Longword;
                                   end = (
                                   (NameId: sidGrenade;
                                    Ammo: (Propz: ammoprop_Timerable or
@@ -364,7 +369,8 @@ const
                                           Timer: 0;
                                           AmmoType: amRope);
                                    Slot: 7;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   maxAngle: cMaxAngle div 2),
                                   (NameId: sidMine;
                                    Ammo: (Propz: ammoprop_NoCrosshair;
                                           Count: 2;
@@ -447,7 +453,9 @@ const
                                           Timer: 0;
                                           AmmoType: amBlowTorch);
                                    Slot: 6;
-                                   TimeAfterTurn: 3000));
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 510;
+                                   maxAngle: 1400));
 
 implementation
 

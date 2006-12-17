@@ -427,6 +427,7 @@ end;
 
 procedure doStepBlowTorchWork(Gear: PGear);
 var HHGear: PGear;
+    yy: Double;
 begin
 AllInactive:= false;
 dec(Gear.Timer);
@@ -436,16 +437,17 @@ HedgehogChAngle(HHGear);
 
 if Gear.Timer mod cHHStepTicks = 0 then
    begin
-   DrawTunnel(HHGear.X, HHGear.Y - 3,
-              Gear.dX, Cos(HHGear.Angle*pi/cMaxAngle) * (-0.5),
-              cHHRadius * 3, cHHRadius * 2 + 4);
+   yy:= Cos(HHGear.Angle*pi/cMaxAngle) * (-0.5);
+   DrawTunnel(HHGear.X, HHGear.Y - 2 + yy * cHHRadius,
+              Gear.dX, yy,
+              cHHRadius * 3, cHHRadius * 2 + 2);
    if Gear.dX < 0 then HHGear.Message:= (HHGear.Message or gm_Left) and not gm_Right
                   else HHGear.Message:= (HHGear.Message or gm_Right) and not gm_Left;
    HedgehogStep(HHGear);
    if (HHGear.State and gstFalling) <> 0 then Gear.Timer:= 0
    end;
    
-if Gear.Timer = 0 then
+if (Gear.Timer = 0) or ((HHGear.Message and gm_Attack) <> 0) then
    begin
    HHGear.Message:= 0;
    DeleteGear(Gear);
@@ -458,6 +460,7 @@ var HHGear: PGear;
 begin
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 HHGear.State:= HHGear.State and not gstAttacking;
+HHGear.Message:= 0;
 Gear.doStep:= doStepBlowTorchWork
 end;
 

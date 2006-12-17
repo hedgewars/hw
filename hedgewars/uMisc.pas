@@ -72,11 +72,6 @@ var isCursorVisible : boolean = false;
     cVolumeDelta  : integer = 0;
     cTimerInterval   : Longword = 5;
 
-const
-    cMaxPower     = 1500;
-    cMaxAngle     = 2048;
-    cPowerDivisor = 1500;
-
 var
     cSendEmptyPacketTime : LongWord = 2000;
     cSendCursorPosTime   : LongWord = 50;
