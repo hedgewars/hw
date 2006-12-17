@@ -219,6 +219,14 @@ if ((Gear.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    end
 end;
 
+procedure HedgehogChAngle(Gear: PGear);
+begin
+if ((Gear.State and (gstMoving or gstFalling)) = 0) then
+   if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > 0         then dec(Gear.Angle)
+   else else
+   if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < cMaxAngle then inc(Gear.Angle);
+end;
+
 procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogDriven(Gear: PGear);
@@ -285,11 +293,7 @@ if (Gear.State and gstFalling) <> 0 then
    exit
    end ;//else if Gear.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
 
-   if ((Gear.State and (gstMoving or gstFalling)) = 0) then
-      if (Gear.Message and gm_Up    )<>0 then if Gear.Angle > 0         then dec(Gear.Angle)
-         else else
-      if (Gear.Message and gm_Down  )<>0 then if Gear.Angle < cMaxAngle then inc(Gear.Angle);
-
+   HedgehogChAngle(Gear);
    if StepTicks > 0 then dec(StepTicks);
    if (StepTicks = 0) then HedgehogStep(Gear)
 end;

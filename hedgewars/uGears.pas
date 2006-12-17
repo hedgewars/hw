@@ -87,6 +87,7 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer); forward;
 procedure HedgehogStep(Gear: PGear); forward;
+procedure HedgehogChAngle(Gear: PGear); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -265,7 +266,7 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 10;
                 end;
    gtBlowTorch: begin
-                Result.Timer:= 6000;
+                Result.Timer:= 7500;
                 end;
      end;
 InsertGearToList(Result)
