@@ -424,10 +424,11 @@ Gear.doStep:= doStepPickHammerWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+var BTPrevAngle, BTSteps: Longword;
 
 procedure doStepBlowTorchWork(Gear: PGear);
 var HHGear: PGear;
-    yy: Double;
+    b: boolean;
 begin
 AllInactive:= false;
 dec(Gear.Timer);
@@ -435,18 +436,42 @@ HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 
 HedgehogChAngle(HHGear);
 
+b:= false;
+
+if (HHGear.Angle <> BTPrevAngle) then
+   begin
+   Gear.dX:= hwSign(HHGear.dX) * Sin(HHGear.Angle * pi / cMaxAngle) * 0.5;
+   Gear.dY:= Cos(HHGear.Angle * pi / cMaxAngle) * (-0.5);
+   BTPrevAngle:= HHGear.Angle;
+   b:= true
+   end;
+
 if Gear.Timer mod cHHStepTicks = 0 then
    begin
-   yy:= Cos(HHGear.Angle*pi/cMaxAngle) * (-0.5);
-   DrawTunnel(HHGear.X, HHGear.Y - 2 + yy * cHHRadius,
-              Gear.dX, yy,
-              cHHRadius * 3, cHHRadius * 2 + 2);
+   b:= true;
    if Gear.dX < 0 then HHGear.Message:= (HHGear.Message or gm_Left) and not gm_Right
                   else HHGear.Message:= (HHGear.Message or gm_Right) and not gm_Left;
    HedgehogStep(HHGear);
+
+   inc(BTSteps);
+   if BTSteps = 8 then
+      begin
+      BTSteps:= 0;
+      Gear.X:= HHGear.X + Gear.dX * cHHRadius * 2;
+      Gear.Y:= HHGear.Y + Gear.dY * cHHRadius * 2;
+      HHGear.State:= HHGear.State or gstNoDamage;
+      AmmoShove(Gear, 3, 14);
+      HHGear.State:= HHGear.State and not gstNoDamage
+      end;
+
    if (HHGear.State and gstFalling) <> 0 then Gear.Timer:= 0
    end;
-   
+
+if b then
+   DrawTunnel(HHGear.X - Gear.dX * cHHRadius, HHGear.Y - 4 - Gear.dY * cHHRadius + abs(Gear.dY) * 7,
+              Gear.dX, Gear.dY,
+              cHHRadius * 6, cHHRadius * 2 + 6);
+
 if (Gear.Timer = 0) or ((HHGear.Message and gm_Attack) <> 0) then
    begin
    HHGear.Message:= 0;
@@ -458,6 +483,8 @@ end;
 procedure doStepBlowTorch(Gear: PGear);
 var HHGear: PGear;
 begin
+BTPrevAngle:= High(Longword);
+BTSteps:= 0;
 HHGear:= PHedgehog(Gear.Hedgehog).Gear;
 HHGear.State:= HHGear.State and not gstAttacking;
 HHGear.Message:= 0;

@@ -170,6 +170,7 @@ const
       EXPLAutoSound         = $00000002;
       EXPLNoDamage          = $00000004;
       EXPLDoNotTouchHH      = $00000008;
+      EXPLDontDraw          = $00000010;
 
       posCaseAmmo    = $00000001;
       posCaseHealth  = $00000002;
@@ -454,8 +455,8 @@ const
                                           AmmoType: amBlowTorch);
                                    Slot: 6;
                                    TimeAfterTurn: 3000;
-                                   minAngle: 510;
-                                   maxAngle: 1400));
+                                   minAngle: 768;
+                                   maxAngle: 1280));
 
 implementation
 

@@ -266,6 +266,7 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 10;
                 end;
    gtBlowTorch: begin
+                Result.Radius:= cHHRadius + 6;
                 Result.Timer:= 7500;
                 end;
      end;
@@ -633,7 +634,7 @@ var Gear: PGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
-DrawExplosion(X, Y, Radius);
+if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
 if Radius = 50 then AddGear(X, Y, gtExplosion, 0);
 if (Mask and EXPLAutoSound)<>0 then PlaySound(sndExplosion);
 if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;
