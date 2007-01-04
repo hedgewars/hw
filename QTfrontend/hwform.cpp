@@ -290,13 +290,37 @@ void HWForm::StartMPGame()
 void HWForm::GameStateChanged(GameState gameState)
 {
 	if (gameState == gsStarted)
+	{
 		GoToPage(ID_PAGE_GAMESTATS);
+		ui.pageGameStats->labelGameStats->setText("");
+	}
+}
+
+void HWForm::AddStatText(const QString & msg)
+{
+	ui.pageGameStats->labelGameStats->setText(
+		ui.pageGameStats->labelGameStats->text() + msg);
 }
 
 void HWForm::GameStats(char type, const QString & info)
 {
 	switch(type) {
-		case 'r' : { ui.pageGameStats->labelGameResult->setText(info); break; }
+		case 'r' : {
+			AddStatText(QString("<h1 align=\"center\">%1</h1>").arg(info));
+			break;
+		}
+		case 'D' : {
+			int i = info.indexOf(' ');
+			QString message = QLabel::tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
+					.arg(info.mid(i + 1), info.left(i));
+			AddStatText(message);
+			break;
+		}
+		case 'K' : {
+			QString message = QLabel::tr("<p>A total of <b>%1</b> Hedgehog(s) were killed during this round.</p>").arg(info);
+			AddStatText(message);
+			break;
+		}
 	}
 }
 

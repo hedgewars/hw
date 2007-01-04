@@ -62,7 +62,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
-     TStatInfoType = (siGameResult);
+     TStatInfoType = (siGameResult, siMaxStepDamage, siKilledHHs);
 
      THHFont    = record
                   Handle: PTTF_Font;

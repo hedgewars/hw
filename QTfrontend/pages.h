@@ -209,7 +209,7 @@ public:
 	PageGameStats(QWidget* parent = 0);
 
 	QPushButton *BtnBack;
-	QLabel *labelGameResult;
+	QLabel *labelGameStats;
 };
 
 

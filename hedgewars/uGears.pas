@@ -64,6 +64,7 @@ procedure RemoveGearFromList(Gear: PGear);
 
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
+    KilledHHs: Longword = 0;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -77,6 +78,7 @@ var RopePoints: record
                                   b: boolean;
                                   end;
                  end;
+    StepDamage: Longword = 0;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
@@ -275,6 +277,7 @@ end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
+    t: Longword;
 begin
 if Gear.CollIndex < High(Longword) then DeleteCI(Gear);
 if Gear.Surf <> nil then SDL_FreeSurface(Gear.Surf);
@@ -288,11 +291,16 @@ if Gear.Kind = gtHedgehog then
       end else
       begin
       if Gear.Y >= cWaterLine then
-         AddGear(Round(Gear.X), Round(Gear.Y), gtHealthTag, max(Gear.Damage, Gear.Health)).Hedgehog:= Gear.Hedgehog;
+         begin
+         t:= max(Gear.Damage, Gear.Health);
+         AddGear(Round(Gear.X), Round(Gear.Y), gtHealthTag, t).Hedgehog:= Gear.Hedgehog;
+         inc(StepDamage, t)
+         end;
       team:= PHedgehog(Gear.Hedgehog).Team;
       if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = Gear then
          FreeActionsList; // to avoid ThinkThread on drawned gear
       PHedgehog(Gear.Hedgehog).Gear:= nil;
+      inc(KilledHHs);
       RecountTeamHealth(team);
       end;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
@@ -313,6 +321,7 @@ while Gear <> nil do
          if Gear.Damage <> 0 then
             begin
             Result:= false;
+            inc(StepDamage, Gear.Damage);
             if Gear.Health < Gear.Damage then Gear.Health:= 0
                                          else dec(Gear.Health, Gear.Damage);
             AddGear(Round(Gear.X), round(Gear.Y) - cHHRadius - 12 - PHedgehog(Gear.Hedgehog)^.HealthTag.h,
@@ -374,7 +383,12 @@ if AllInactive then
         stNTurn: begin
                  AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
-                                   else ParseCommand('/nextturn');
+                    else begin
+                    with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+                         if MaxStepDamage < StepDamage then MaxStepDamage:= StepDamage;
+                    StepDamage:= 0;
+                    ParseCommand('/nextturn');
+                    end;
                  step:= Low(step)
                  end;
         end;
@@ -673,9 +687,11 @@ end;
 procedure AmmoShove(Ammo: PGear; Damage, Power: integer);
 var t: PGearArray;
     i: integer;
+    hh: PHedgehog;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t.Count;
+hh:= Ammo.Hedgehog;
 while i > 0 do
     begin
     dec(i);
@@ -685,6 +701,7 @@ while i > 0 do
                gtMine,
                gtCase: begin
                        inc(t.ar[i].Damage, Damage);
+                       inc(hh.DamageGiven, Damage);
                        t.ar[i].dX:= Ammo.dX * Power * 0.01;
                        t.ar[i].dY:= Ammo.dY * Power * 0.01;
                        t.ar[i].Active:= true;

@@ -92,6 +92,7 @@ private:
 	QStack<quint8> PagesStack;
 
 	void CreateGame(GameCFGWidget * gamecfg);
+	void AddStatText(const QString & msg);
 };
 
 #endif

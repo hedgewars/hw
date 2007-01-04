@@ -220,7 +220,7 @@ Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + intt
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'r';
+const stc: array [TStatInfoType] of char = 'rDK';
 begin
 SendIPC('i' + stc[sit] + s)
 end;

@@ -34,6 +34,8 @@ type PHedgehog = ^THedgehog;
                  AttacksNum: Longword;
                  visStepPos: LongWord;
                  BotLevel  : LongWord; // 0 - Human player
+                 DamageGiven: Longword;
+                 MaxStepDamage: Longword;
                  end;
      TTeam = record
              Next: PTeam;
@@ -67,6 +69,7 @@ procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function CheckForWin: boolean;
 procedure SetWeapon(weap: TAmmoType);
+procedure SendStats;
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole;
@@ -109,6 +112,7 @@ if AliveCount = 0 then
    SendStat(siGameResult, s);
    AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
    end;
+SendStats
 end;
 
 procedure SwitchHedgehog;
@@ -315,6 +319,28 @@ with CurrentTeam^ do
                 ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
                 dec(t)
                 end
+end;
+
+procedure SendStats;
+var p: PTeam;
+    i: integer;
+    msd: Longword; msdhh: PHedgehog;
+begin
+msd:= 0; msdhh:= nil;
+p:= TeamsList;
+while p <> nil do
+      begin
+      for i:= 0 to cMaxHHIndex do
+          if p.Hedgehogs[i].MaxStepDamage > msd then
+             begin
+             msdhh:= @p.Hedgehogs[i];
+             msd:= p.Hedgehogs[i].MaxStepDamage
+             end;
+      p:= p.Next
+      end;
+if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msdhh.MaxStepDamage) + ' ' +
+                                               msdhh.Name + ' (' + msdhh.Team.TeamName + ')');
+if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 
 initialization

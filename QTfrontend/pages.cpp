@@ -494,7 +494,7 @@ PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
 
-	labelGameResult = new QLabel(this);
-	labelGameResult->setFont(*font14);
-	pageLayout->addWidget(labelGameResult, 0, 1);
+	labelGameStats = new QLabel(this);
+	labelGameStats->setTextFormat(Qt::RichText);
+	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
 }
