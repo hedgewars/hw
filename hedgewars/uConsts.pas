@@ -62,6 +62,8 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
+     TStatInfoType = (siGameResult);
+
      THHFont    = record
                   Handle: PTTF_Font;
                   Height: integer;

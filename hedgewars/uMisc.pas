@@ -101,6 +101,7 @@ function RectToStr(Rect: TSDL_Rect): shortstring;
 procedure SetKB(n: Longword);
 procedure SendKB;
 procedure SetLittle(var r: Double);
+procedure SendStat(sit: TStatInfoType; s: shortstring);
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -216,6 +217,12 @@ end;
 function RectToStr(Rect: TSDL_Rect): shortstring;
 begin
 Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
+end;
+
+procedure SendStat(sit: TStatInfoType; s: shortstring);
+const stc: array [TStatInfoType] of char = 'r';
+begin
+SendIPC('i' + stc[sit] + s)
 end;
 
 initialization

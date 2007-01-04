@@ -480,3 +480,21 @@ PageInfo::PageInfo(QWidget* parent) : QWidget(parent)
 	about = new About(this);
 	pageLayout->addWidget(about, 0, 0, 1, 3);
 }
+
+PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 1, 0);
+
+	labelGameResult = new QLabel(this);
+	labelGameResult->setFont(*font14);
+	pageLayout->addWidget(labelGameResult, 0, 1);
+}

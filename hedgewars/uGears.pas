@@ -266,7 +266,7 @@ gtAmmo_Grenade: begin
                 Result.Radius:= 10;
                 end;
    gtBlowTorch: begin
-                Result.Radius:= cHHRadius + 6;
+                Result.Radius:= cHHRadius;
                 Result.Timer:= 7500;
                 end;
      end;

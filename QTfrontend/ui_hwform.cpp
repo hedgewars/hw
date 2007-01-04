@@ -79,4 +79,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageMain = new PageMain();
 	Pages->addWidget(pageMain);
+
+	pageGameStats = new PageGameStats();
+	Pages->addWidget(pageGameStats);
 }

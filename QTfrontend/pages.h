@@ -201,4 +201,16 @@ public:
 	About *about;
 };
 
+class PageGameStats : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageGameStats(QWidget* parent = 0);
+
+	QPushButton *BtnBack;
+	QLabel *labelGameResult;
+};
+
+
 #endif // PAGES_H

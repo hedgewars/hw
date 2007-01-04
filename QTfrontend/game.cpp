@@ -44,6 +44,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
 void HWGame::onClientDisconnect()
 {
 	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer);
+	emit GameStateChanged(gsFinished);
 }
 
 void HWGame::SendTeamConfig(int index)
@@ -99,7 +100,7 @@ void HWGame::SendQuickConfig()
 
 void HWGame::ParseMessage(const QByteArray & msg)
 {
-	switch(msg.data()[1]) {
+	switch(msg.at(1)) {
 		case '?': {
 			if (gameType == gtNet)
 				emit SendNet(QByteArray("\x01""?"));
@@ -153,6 +154,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			{
 				emit SendNet(msg);
 			}
+			break;
+		}
+		case 'i': {
+			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
 			break;
 		}
 		default: {
@@ -257,6 +262,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	// run engine
 	demo = new QByteArray;
 	Start();
+	emit GameStateChanged(gsStarted);
 }
 
 void HWGame::StartNet()
@@ -264,6 +270,7 @@ void HWGame::StartNet()
 	gameType = gtNet;
 	demo = new QByteArray;
 	Start();
+	emit GameStateChanged(gsStarted);
 }
 
 void HWGame::StartLocal()
@@ -273,6 +280,7 @@ void HWGame::StartLocal()
 	seed = gamecfg->getCurrentSeed();
 	demo = new QByteArray;
 	Start();
+	emit GameStateChanged(gsStarted);
 }
 
 void HWGame::StartQuick()
@@ -281,6 +289,7 @@ void HWGame::StartQuick()
 	seed = gamecfg->getCurrentSeed();
 	demo = new QByteArray;
 	Start();
+	emit GameStateChanged(gsStarted);
 }
 
 

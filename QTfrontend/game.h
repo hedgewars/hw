@@ -31,6 +31,13 @@
 class GameUIConfig;
 class GameCFGWidget;
 
+enum GameState {
+	gsNotStarted = 0,
+	gsStarted  = 1,
+	gsFinished = 2
+};
+
+
 class HWGame : public TCPBase
 {
 	Q_OBJECT
@@ -49,6 +56,8 @@ public:
 
 signals:
 	void SendNet(const QByteArray & msg);
+	void GameStateChanged(GameState gameState);
+	void GameStats(char type, const QString & info);
 
 public slots:
 	void FromNet(const QByteArray & msg);

@@ -77,6 +77,7 @@ procedure FreeTeamsList; forward;
 function CheckForWin: boolean;
 var team, AliveTeam: PTeam;
     AliveCount: Longword;
+    s: shortstring;
 begin
 Result:= false;
 AliveCount:= 0;
@@ -99,10 +100,13 @@ TurnTimeLeft:= 0;
 if AliveCount = 0 then
    begin // draw
    AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
+   SendStat(siGameResult, trmsg[sidDraw]);
    AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
    end else // win
    begin
-   AddCaption(Format(trmsg[sidWinner], AliveTeam.TeamName), $FFFFFF, capgrpGameState);
+   s:= Format(trmsg[sidWinner], AliveTeam.TeamName);
+   AddCaption(s, $FFFFFF, capgrpGameState);
+   SendStat(siGameResult, s);
    AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
    end;
 end;

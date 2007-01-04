@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QStack>
 
+#include "game.h"
 #include "ui_hwform.h"
 
 class HWGame;
@@ -66,6 +67,8 @@ private slots:
 	void NetStartGame();
 	void ChangeInNetTeams(const QStringList & teams);
 	void StartMPGame();
+	void GameStateChanged(GameState gameState);
+	void GameStats(char type, const QString & info);
 
 private:
 	void UpdateTeamsLists();
@@ -79,13 +82,16 @@ private:
 		ID_PAGE_NETCHAT	= 6,
 		ID_PAGE_NETCFG	= 7,
 		ID_PAGE_INFO	= 8,
-		ID_PAGE_MAIN	= 9
+		ID_PAGE_MAIN	= 9,
+		ID_PAGE_GAMESTATS = 10
 		};
 	HWGame * game;
 	HWTeam * editedTeam;
 	HWNet * hwnet;
 	GameUIConfig * config;
 	QStack<quint8> PagesStack;
+
+	void CreateGame(GameCFGWidget * gamecfg);
 };
 
 #endif

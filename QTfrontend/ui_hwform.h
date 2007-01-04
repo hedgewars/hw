@@ -46,6 +46,7 @@ class PageNet;
 class PageNetChat;
 class PageNetGame;
 class PageInfo;
+class PageGameStats;
 
 class Ui_HWForm
 {
@@ -62,6 +63,7 @@ public:
 	PageNetChat *pageNetChat;
 	PageNetGame *pageNetGame;
 	PageInfo *pageInfo;
+	PageGameStats *pageGameStats;
 
 	QStackedLayout *Pages;
 	QFont *font14;

@@ -83,6 +83,8 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
+	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+
 	GoToPage(ID_PAGE_MAIN);
 }
 
@@ -199,7 +201,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	game = new HWGame(config, ui.pageLocalGame->gameCFG);
+	CreateGame(ui.pageLocalGame->gameCFG);
 	game->StartQuick();
 }
 
@@ -214,7 +216,7 @@ void HWForm::PlayDemo()
 				tr("OK"));
 		return ;
 	}
-	game = new HWGame(config, 0);
+	CreateGame(0);
 	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
 }
 
@@ -275,11 +277,32 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
 
 void HWForm::StartMPGame()
 {
-	game = new HWGame(config, ui.pageMultiplayer->gameCFG);
+	CreateGame(ui.pageMultiplayer->gameCFG);
+
 	list<HWTeam> teamslist=ui.pageMultiplayer->teamsSelect->getPlayingTeams();
 	for (list<HWTeam>::const_iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
 	  HWTeamTempParams params=ui.pageMultiplayer->teamsSelect->getTeamParams(it->TeamName);
 	  game->AddTeam(it->TeamName, params);
 	}
 	game->StartLocal();
+}
+
+void HWForm::GameStateChanged(GameState gameState)
+{
+	if (gameState == gsStarted)
+		GoToPage(ID_PAGE_GAMESTATS);
+}
+
+void HWForm::GameStats(char type, const QString & info)
+{
+	switch(type) {
+		case 'r' : { ui.pageGameStats->labelGameResult->setText(info); break; }
+	}
+}
+
+void HWForm::CreateGame(GameCFGWidget * gamecfg)
+{
+	game = new HWGame(config, gamecfg);
+	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
+	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 }

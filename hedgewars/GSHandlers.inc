@@ -454,7 +454,7 @@ if Gear.Timer mod cHHStepTicks = 0 then
    HedgehogStep(HHGear);
 
    inc(BTSteps);
-   if BTSteps = 8 then
+   if BTSteps = 11 then
       begin
       BTSteps:= 0;
       Gear.X:= HHGear.X + Gear.dX * cHHRadius * 2;
@@ -470,7 +470,7 @@ if Gear.Timer mod cHHStepTicks = 0 then
 if b then
    DrawTunnel(HHGear.X - Gear.dX * cHHRadius, HHGear.Y - 4 - Gear.dY * cHHRadius + abs(Gear.dY) * 7,
               Gear.dX, Gear.dY,
-              cHHRadius * 6, cHHRadius * 2 + 6);
+              cHHRadius * 5, cHHRadius * 2 + 6);
 
 if (Gear.Timer = 0) or ((HHGear.Message and gm_Attack) <> 0) then
    begin
