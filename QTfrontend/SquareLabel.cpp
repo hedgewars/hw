@@ -21,7 +21,7 @@
 #include "SquareLabel.h"
 
 SquareLabel::SquareLabel(QWidget * parent) :
-  QLabel(parent)
+	QWidget(parent)
 {
 
 }
@@ -37,5 +37,11 @@ void SquareLabel::paintEvent(QPaintEvent * event)
 		pixsize = width();
 		painter.translate(0, (height() - pixsize) / 2);
 	}
-	painter.drawPixmap(0, 0, pixsize, pixsize, pixmap()->scaled(pixsize, pixsize, Qt::KeepAspectRatio));
+	painter.drawPixmap(0, 0, pixsize, pixsize, pixmap.scaled(pixsize, pixsize, Qt::KeepAspectRatio));
+}
+
+void SquareLabel::setPixmap(const QPixmap & pixmap)
+{
+	this->pixmap = pixmap;
+	repaint();
 }

@@ -111,11 +111,11 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 100);
+	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnMinimumWidth(0, 150);
 	pageLayout->setColumnStretch(1, 100);
 	pageLayout->setColumnMinimumWidth(1, 200);
-	pageLayout->setColumnStretch(2, 250);
+	pageLayout->setColumnStretch(2, 150);
 	pageLayout->setColumnMinimumWidth(2, 250);
 
 	GBoxTeam = new QGroupBox(this);
@@ -214,8 +214,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	CBFort->setMaxCount(65535);
 	GBFLayout->addWidget(CBFort, 0, 0);
 	FortPreview	= new SquareLabel(GBoxFort);
+	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	FortPreview->setPixmap(QPixmap());
-	FortPreview->setScaledContents(true);
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	pageLayout->addWidget(GBoxFort, 2, 2, 1, 1);
 
