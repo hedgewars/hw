@@ -402,7 +402,7 @@ if AMxCurr < cScreenWidth then
    if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
    if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
    prevPoint:= CursorPoint;
-   SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+   if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
    exit
    end;
 
@@ -440,13 +440,15 @@ if isCursorVisible or (FollowGear <> nil) then
          CursorPoint.Y:= cScreenHeight - EdgesDist
          end;
    end else
-   begin
+   if cHasFocus then
+      begin
       WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
       WorldDy:= WorldDy - CursorPoint.Y + prevPoint.Y;
       CursorPoint.X:= (cScreenWidth  shr 1);
       CursorPoint.Y:= (cScreenHeight shr 1);
-   end;
-SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+      end;
+      
+if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
 prevPoint:= CursorPoint;
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy >  2048 then WorldDy:=  2048;

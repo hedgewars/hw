@@ -55,9 +55,12 @@ const {$IFDEF WIN32}
       SDL_RLEACCEL    = $00004000;
       
       SDL_NOEVENT     = 0;
+      SDL_ACTIVEEVENT = 1;
       SDL_KEYDOWN     = 2;
       SDL_KEYUP       = 3;
       SDL_QUITEV      = 12;
+
+      SDL_APPINPUTFOCUS = 2;
 
       SDL_INIT_VIDEO  = $00000020;
       SDL_INIT_AUDIO  = $00000010;
@@ -158,6 +161,12 @@ type PSDL_Rect = ^TSDL_Rect;
                    unicode: Word;
                    end;
 
+     TSDL_ActiveEvent = record
+	                type_: byte;
+                        gain: byte;
+                        state: byte;
+                        end;
+
      TSDL_KeyboardEvent = record
                           type_: Byte;
                           which: Byte;
@@ -172,6 +181,7 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_Event = record
                   case Byte of
                        SDL_NOEVENT: (type_: byte);
+                       SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
                        SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
                        end;

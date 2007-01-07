@@ -71,6 +71,7 @@ var isCursorVisible : boolean = false;
     cInitVolume   : integer = 128;
     cVolumeDelta  : integer = 0;
     cTimerInterval   : Longword = 5;
+    cHasFocus     : boolean = true;   
 
 var
     cSendEmptyPacketTime : LongWord = 2000;

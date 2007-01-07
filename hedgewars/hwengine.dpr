@@ -135,6 +135,8 @@ while SDL_PollEvent(@event) <> 0 do
                                         end;
                           gsConsole: KeyPressConsole(event.key.keysym.sym);
                              end;
+           SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+                               cHasFocus:= event.active.gain = 1;
            SDL_QUITEV: isTerminated:= true
            end;
 CurrTime:= SDL_GetTicks;
