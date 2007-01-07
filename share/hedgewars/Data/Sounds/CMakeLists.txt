@@ -3,6 +3,7 @@ install(FILES
 	graveimpact.ogg
 	grenadeimpact.ogg
 	minetick.ogg
+	pickhammer.ogg
 	shotgunfire.ogg
 	shotgunreload.ogg
 	splash.ogg

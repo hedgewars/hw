@@ -2,6 +2,7 @@ add_subdirectory(Graves)
 add_subdirectory(AmmoMenu)
 install(FILES
 	AirBomb.png
+	Airplane.png
 	Arrow.png
 	BigDigits.png
 	BlueWater.png
