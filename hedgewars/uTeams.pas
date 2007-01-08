@@ -54,6 +54,7 @@ type PHedgehog = ^THedgehog;
              TeamHealthBarWidth: integer;
              DrawHealthY: integer;
              AttackBar: LongWord;
+             HedgehogsNumber: byte;
              end;
 
 var CurrentTeam: PTeam = nil;
@@ -215,10 +216,7 @@ while p <> nil do
       th:= 0;
       for i:= 0 to cMaxHHIndex do
           if p.Hedgehogs[i].Gear <> nil then
-             begin
-             p.Hedgehogs[i].Gear.Health:= 100;
-             inc(th, 100);
-             end;
+             inc(th, p.Hedgehogs[i].Gear.Health);
       if th > MaxTeamHealth then MaxTeamHealth:= th;
       p:= p.Next
       end;

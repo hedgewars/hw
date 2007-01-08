@@ -188,7 +188,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	}
 }
 
-QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs) const
+QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs, quint32 InitHealth) const
 {
 	QStringList sl;
 	sl.push_back("eaddteam");
@@ -203,8 +203,9 @@ QStringList HWTeam::TeamGameConfig(quint32 color, int hedgehogs) const
 		sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 	}
 	for (int t = 0; t < hedgehogs; t++)
-		sl.push_back(QString("eadd hh%1 %2")
-				.arg(QString::number(t), QString::number(difficulty)));
+		sl.push_back(QString("eaddhh %1 %2")
+				.arg(QString::number(difficulty),
+				QString::number(InitHealth)));
 	return sl;
 }
 

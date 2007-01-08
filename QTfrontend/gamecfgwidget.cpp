@@ -61,7 +61,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 	SB_TurnTime->setSingleStep(15);
 	SB_InitHealth = new QSpinBox(GBoxOptions);
 	SB_InitHealth->setRange(50, 200);
-	SB_TurnTime->setValue(100);
+	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
 	GBoxOptionsLayout->addWidget(SB_TurnTime, 1, 1);
 	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
@@ -90,4 +90,14 @@ QString GameCFGWidget::getCurrentMap() const
 QString GameCFGWidget::getCurrentTheme() const
 {
   return pMapContainer->getCurrentTheme();
+}
+
+quint32 GameCFGWidget::getInitHealth() const
+{
+	return SB_InitHealth->value();
+}
+
+quint32 GameCFGWidget::getTurnTime() const
+{
+	return SB_TurnTime->value();
 }

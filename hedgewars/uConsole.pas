@@ -276,7 +276,7 @@ RegisterVariable('name'    , vtCommand, @chName         , false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );
-RegisterVariable('add'     , vtCommand, @chAdd          , false);
+RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
 RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
 RegisterVariable('say'     , vtCommand, @chSay          , true );

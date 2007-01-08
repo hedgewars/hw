@@ -65,6 +65,7 @@ void HWGame::commonConfig()
 	}
 	SendIPC("TL");
 	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
+	SendIPC(QString("e$turntime %1").arg(gamecfg->getTurnTime() * 1000).toAscii());
 }
 
 void HWGame::SendConfig()
@@ -78,7 +79,9 @@ void HWGame::SendConfig()
 
 		QColor clr = m_teamsParams[teams[i]].teamColor;
 		QByteArray buf;
-		QStringList sl = team.TeamGameConfig(clr.rgb()&0xFFFFFF, m_teamsParams[teams[i]].numHedgehogs);
+		QStringList sl = team.TeamGameConfig(clr.rgb()&0xFFFFFF,
+				m_teamsParams[teams[i]].numHedgehogs,
+				gamecfg->getInitHealth());
 		HWProto::addStringListToBuffer(buf, sl);
 		RawSendIPC(buf);
 	}
@@ -91,11 +94,13 @@ void HWGame::SendQuickConfig()
 	QByteArray teamscfg;
 	HWTeam team1(0);
 	team1.difficulty = 0;
-	HWProto::addStringListToBuffer(teamscfg, team1.TeamGameConfig(65535, 4));
+	HWProto::addStringListToBuffer(teamscfg,
+			team1.TeamGameConfig(65535, 4, gamecfg->getInitHealth()));
 
 	HWTeam team2(2);
 	team2.difficulty = 4;
-	RawSendIPC(HWProto::addStringListToBuffer(teamscfg, team2.TeamGameConfig(16776960, 4)));
+	RawSendIPC(HWProto::addStringListToBuffer(teamscfg,
+			team2.TeamGameConfig(16776960, 4, gamecfg->getInitHealth())));
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -298,6 +303,7 @@ void HWGame::LocalCFG(const QString & teamname)
 	QByteArray teamcfg;
 	HWTeam team(teamname);
 	team.LoadFromFile();
-	RawSendIPC(HWProto::addStringListToBuffer(teamcfg, team.TeamGameConfig(16776960, 4)));
+	RawSendIPC(HWProto::addStringListToBuffer(teamcfg,
+			team.TeamGameConfig(16776960, 4, gamecfg->getInitHealth())));
 }
 

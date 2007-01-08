@@ -102,25 +102,25 @@ CurrentTeam.AdjColor:= CurrentTeam.Color;
 AdjustColor(CurrentTeam.AdjColor)
 end;
 
-procedure chAdd(var id: shortstring);
+procedure chAddHH(var id: shortstring);
 var s: shortstring;
     c: integer;
     Gear: PGear;
-    b: byte;
 begin
 if (not isDeveloperMode)or(CurrentTeam=nil) then exit;
-SplitBySpace(id, s);
-if (id[1]='h')and(id[2]='h')and(id[3]>='0')and(id[3]<='7') then
-   begin
-   b:= byte(id[3])-48;
-   val(s, CurrentTeam.Hedgehogs[b].BotLevel, c);
-   Gear:= AddGear(0, 0, gtHedgehog, 0);
-   Gear.Hedgehog:= @CurrentTeam.Hedgehogs[b];
-   PHedgehog(Gear.Hedgehog).Team:= CurrentTeam;
-   CurrentTeam.Hedgehogs[b].AmmoStore:= 0;
-   CurrentTeam.Hedgehogs[b].Gear:= Gear
-   end
-else OutError(errmsgUnknownVariable + ' "' + id + '"', true)
+with CurrentTeam^ do
+     begin
+     SplitBySpace(id, s);
+     val(id, Hedgehogs[HedgehogsNumber].BotLevel, c);
+     Gear:= AddGear(0, 0, gtHedgehog, 0);
+     Gear.Hedgehog:= @Hedgehogs[HedgehogsNumber];
+     val(s, Gear.Health, c);
+     TryDo(Gear.Health > 0, 'Invalid hedgehog health', true);
+     PHedgehog(Gear.Hedgehog).Team:= CurrentTeam;
+     Hedgehogs[HedgehogsNumber].AmmoStore:= 0;
+     Hedgehogs[HedgehogsNumber].Gear:= Gear;
+     inc(HedgehogsNumber)
+     end
 end;
 
 procedure chAddAmmoStore(var descr: shortstring);

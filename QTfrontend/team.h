@@ -43,7 +43,7 @@ class HWTeam
 		bool SaveToFile();
 		void SetToPage(HWForm * hwform);
 		void GetFromPage(HWForm * hwform);
-		QStringList TeamGameConfig(quint32 color, int hedgehogs) const;
+		QStringList TeamGameConfig(quint32 color, int hedgehogs, quint32 InitHealth) const;
 
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;

@@ -38,6 +38,8 @@ public:
 	QString getCurrentSeed() const;
 	QString getCurrentMap() const;
 	QString getCurrentTheme() const;
+	quint32 getInitHealth() const;
+	quint32 getTurnTime() const;
 
 private slots:
 
