@@ -5,7 +5,7 @@
     <message>
         <location filename="../gameuiconfig.cpp" line="97"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
         <location filename="" line="7602286"/>
@@ -15,28 +15,28 @@
     <message>
         <location filename="../gameuiconfig.cpp" line="99"/>
         <source>Quit</source>
-        <translation>Выйти</translation>
+        <translation type="obsolete">Выйти</translation>
     </message>
     <message>
         <location filename="../gameuiconfig.cpp" line="98"/>
         <source>Cannot save options to file %1</source>
-        <translation>Ошибка при сохранении настроек в файл %1</translation>
+        <translation type="obsolete">Ошибка при сохранении настроек в файл %1</translation>
     </message>
 </context>
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../hwform.cpp" line="199"/>
+        <location filename="../hwform.cpp" line="225"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../hwform.cpp" line="200"/>
+        <location filename="../hwform.cpp" line="226"/>
         <source>Please, select demo from the list above</source>
         <translation>Выберите демо из списка</translation>
     </message>
     <message>
-        <location filename="../hwform.cpp" line="201"/>
+        <location filename="../hwform.cpp" line="227"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
@@ -44,7 +44,7 @@
 <context>
     <name>HWGame</name>
     <message>
-        <location filename="../game.cpp" line="233"/>
+        <location filename="../game.cpp" line="248"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -54,22 +54,22 @@
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="193"/>
+        <location filename="../game.cpp" line="205"/>
         <source>en.txt</source>
         <translation>ru.txt</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="216"/>
+        <location filename="../game.cpp" line="231"/>
         <source>Cannot save demo to file %1</source>
         <translation>Ошибка сохранения демо в файл %1</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="235"/>
+        <location filename="../game.cpp" line="250"/>
         <source>Quit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../game.cpp" line="234"/>
+        <location filename="../game.cpp" line="249"/>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
     </message>
@@ -108,19 +108,24 @@
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="../pages.cpp" line="345"/>
+        <location filename="../pages.cpp" line="347"/>
         <source>Enable sound</source>
         <translation>Включить звук</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="341"/>
+        <location filename="../pages.cpp" line="343"/>
         <source>Fullscreen</source>
         <translation>Полный экран</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="47"/>
+        <location filename="../gamecfgwidget.cpp" line="50"/>
         <source>Forts mode</source>
         <translation>Режим фортов</translation>
+    </message>
+    <message>
+        <location filename="../pages.cpp" line="351"/>
+        <source>Show FPS</source>
+        <translation>Показывать значение FPS</translation>
     </message>
 </context>
 <context>
@@ -134,37 +139,37 @@
 <context>
     <name>QGroupBox</name>
     <message>
-        <location filename="../pages.cpp" line="140"/>
+        <location filename="../pages.cpp" line="142"/>
         <source>Team Members</source>
         <translation>Состав команды</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="121"/>
+        <location filename="../pages.cpp" line="123"/>
         <source>Team</source>
         <translation>Команда</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="210"/>
+        <location filename="../pages.cpp" line="212"/>
         <source>Fort</source>
         <translation>Форт</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="199"/>
+        <location filename="../pages.cpp" line="201"/>
         <source>Grave</source>
         <translation>Надгробие</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="158"/>
+        <location filename="../pages.cpp" line="160"/>
         <source>Key binds</source>
         <translation>Привязки клавиш</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="310"/>
+        <location filename="../pages.cpp" line="312"/>
         <source>Teams</source>
         <translation>Команды</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="329"/>
+        <location filename="../pages.cpp" line="331"/>
         <source>Audio/Graphic options</source>
         <translation>Настройки звука и графики</translation>
     </message>
@@ -174,22 +179,22 @@
         <translation type="obsolete">Имя игрока</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="371"/>
+        <location filename="../pages.cpp" line="380"/>
         <source>Net options</source>
         <translation>Настройки сети</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="29"/>
+        <location filename="../gamecfgwidget.cpp" line="32"/>
         <source>Landscape</source>
         <translation>Ландшафт</translation>
     </message>
     <message>
-        <location filename="../gamecfgwidget.cpp" line="41"/>
+        <location filename="../gamecfgwidget.cpp" line="44"/>
         <source>Game scheme</source>
         <translation>Настройки игры</translation>
     </message>
     <message>
-        <location filename="../teamselect.cpp" line="94"/>
+        <location filename="../teamselect.cpp" line="96"/>
         <source>Playing teams</source>
         <translation>Команды в игре</translation>
     </message>
@@ -197,12 +202,12 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="../pages.cpp" line="378"/>
+        <location filename="../pages.cpp" line="387"/>
         <source>Net nick</source>
         <translation>Имя игрока</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="387"/>
+        <location filename="../pages.cpp" line="396"/>
         <source>Server address</source>
         <translation>Адрес сервера</translation>
     </message>
@@ -217,14 +222,14 @@
         <translation type="obsolete">&lt;h2&gt;Разработчики:&lt;/h2&gt;&lt;p&gt;Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Игорь Ульянов &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Перевод:&lt;/h2&gt;английский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;русский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="129"/>
+        <location filename="../pages.cpp" line="131"/>
         <source>difficulty:</source>
         <translation>Уровень игры:</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="39"/>
         <source>&lt;h3&gt;Version 0.8&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Версия 0.8&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Версия 0.8&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="41"/>
@@ -251,11 +256,41 @@
         <source>&lt;h2&gt;Special thanks:&lt;/h2&gt;&lt;p&gt;</source>
         <translation>&lt;h2&gt;Особая благодарность:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
+    <message>
+        <location filename="../about.cpp" line="39"/>
+        <source>&lt;h3&gt;Version 0.8.1&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Версия 0.8.1&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <location filename="../about.cpp" line="67"/>
+        <source>&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../gamecfgwidget.cpp" line="53"/>
+        <source>Turn time</source>
+        <translation>Продолжительность хода</translation>
+    </message>
+    <message>
+        <location filename="../gamecfgwidget.cpp" line="54"/>
+        <source>Initial health</source>
+        <translation>Начальный уровень здоровья</translation>
+    </message>
+    <message>
+        <location filename="../hwform.cpp" line="326"/>
+        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../hwform.cpp" line="331"/>
+        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;За этот раунд было убито &lt;b&gt;%1&lt;/b&gt; ежей.&lt;/p&gt;</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../pages.cpp" line="383"/>
+        <location filename="../pages.cpp" line="392"/>
         <source>unnamed</source>
         <translation>безымянный</translation>
     </message>
@@ -271,6 +306,23 @@
         <location filename="../ui_hwform.cpp" line="31"/>
         <source>Hedgewars</source>
         <translation>Hedgewars</translation>
+    </message>
+</context>
+<context>
+    <name>QMessageBox</name>
+    <message>
+        <location filename="../main.cpp" line="76"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../main.cpp" line="79"/>
+        <source>Failed to open data directory:
+%1
+Please check your installation</source>
+        <translation>Не могу найти папку с данными:
+%1
+Проверьте правильность установки</translation>
     </message>
 </context>
 <context>
@@ -299,107 +351,107 @@
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="../pages.cpp" line="53"/>
+        <location filename="../pages.cpp" line="55"/>
         <source>Single Player</source>
         <translation>Одиночная игра</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="59"/>
+        <location filename="../pages.cpp" line="61"/>
         <source>Multiplayer</source>
         <translation>Схватка</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="65"/>
+        <location filename="../pages.cpp" line="67"/>
         <source>Net game</source>
         <translation>Сетевая игра</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="71"/>
+        <location filename="../pages.cpp" line="73"/>
         <source>Demos</source>
         <translation>Демки</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="77"/>
+        <location filename="../pages.cpp" line="79"/>
         <source>Setup</source>
         <translation>Настройка</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="89"/>
+        <location filename="../pages.cpp" line="91"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="469"/>
+        <location filename="../pages.cpp" line="495"/>
         <source>Back</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="103"/>
+        <location filename="../pages.cpp" line="105"/>
         <source>Simple Game</source>
         <translation>Быстрый старт</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="154"/>
+        <location filename="../pages.cpp" line="156"/>
         <source>Discard</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="352"/>
+        <location filename="../pages.cpp" line="361"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="296"/>
+        <location filename="../pages.cpp" line="298"/>
         <source>Play demo</source>
         <translation>Играть демку</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="316"/>
+        <location filename="../teamselect.cpp" line="105"/>
         <source>New team</source>
         <translation>Новая команда</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="324"/>
+        <location filename="../pages.cpp" line="326"/>
         <source>Edit team</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="396"/>
+        <location filename="../pages.cpp" line="405"/>
         <source>Connect</source>
         <translation>Соединить</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="415"/>
+        <location filename="../pages.cpp" line="424"/>
         <source>Disconnect</source>
         <translation>Разъединить</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="423"/>
+        <location filename="../pages.cpp" line="432"/>
         <source>Join</source>
         <translation>Присоединиться</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="428"/>
+        <location filename="../pages.cpp" line="437"/>
         <source>Create</source>
         <translation>Создать</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="447"/>
+        <location filename="../pages.cpp" line="456"/>
         <source>Add Team</source>
         <translation>Добавить команду</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="452"/>
+        <location filename="../pages.cpp" line="461"/>
         <source>Go!</source>
         <translation>Вперёд!</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="276"/>
+        <location filename="../pages.cpp" line="278"/>
         <source>Start</source>
         <translation>Старт</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="83"/>
+        <location filename="../pages.cpp" line="85"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
@@ -407,22 +459,22 @@
 <context>
     <name>QToolBox</name>
     <message>
-        <location filename="../pages.cpp" line="164"/>
+        <location filename="../pages.cpp" line="166"/>
         <source>Actions</source>
         <translation>Действия</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="166"/>
+        <location filename="../pages.cpp" line="168"/>
         <source>Weapons</source>
         <translation>Оружие</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="168"/>
+        <location filename="../pages.cpp" line="170"/>
         <source>Weapon properties</source>
         <translation>Настройки оружия</translation>
     </message>
     <message>
-        <location filename="../pages.cpp" line="170"/>
+        <location filename="../pages.cpp" line="172"/>
         <source>Other</source>
         <translation>Разное</translation>
     </message>
@@ -430,7 +482,7 @@
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../tcpBase.cpp" line="92"/>
+        <location filename="../tcpBase.cpp" line="94"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
@@ -440,7 +492,7 @@
         <translation>Ошибка запуска сервера: %1.</translation>
     </message>
     <message>
-        <location filename="../tcpBase.cpp" line="94"/>
+        <location filename="../tcpBase.cpp" line="96"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Ошибка запуска движка: %1 (</translation>
     </message>
@@ -553,12 +605,12 @@
         <translation>таймер на 5 сек</translation>
     </message>
     <message>
-        <location filename="../binds.h" line="64"/>
+        <location filename="../binds.h" line="65"/>
         <source>capture</source>
         <translation>снимок</translation>
     </message>
     <message>
-        <location filename="../binds.h" line="65"/>
+        <location filename="../binds.h" line="66"/>
         <source>quit</source>
         <translation>выход</translation>
     </message>
@@ -573,19 +625,24 @@
         <translation>меню оружия</translation>
     </message>
     <message>
-        <location filename="../binds.h" line="61"/>
+        <location filename="../binds.h" line="62"/>
         <source>volume down</source>
         <translation>тише</translation>
     </message>
     <message>
-        <location filename="../binds.h" line="62"/>
+        <location filename="../binds.h" line="63"/>
         <source>volume up</source>
         <translation>громче</translation>
     </message>
     <message>
-        <location filename="../binds.h" line="63"/>
+        <location filename="../binds.h" line="64"/>
         <source>change mode</source>
         <translation>сменить режим</translation>
+    </message>
+    <message>
+        <location filename="../binds.h" line="61"/>
+        <source>pause</source>
+        <translation type="unfinished">пауза</translation>
     </message>
 </context>
 <context>
