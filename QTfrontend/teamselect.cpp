@@ -81,11 +81,13 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   }
 }
 
-void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color)
+void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
 {
   VertScrArea* area=new VertScrArea(color);
   area->setWidget(pfteams);
   mainLayout.addWidget(area, 30);
+  if (maxHeight > 0)
+  	area->setMaximumHeight(maxHeight);
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
@@ -97,8 +99,12 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 //  addScrArea(framePlaying, QColor("DarkTurquoise"));
 //  addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
   QPalette p;
-  addScrArea(framePlaying, p.color(QPalette::Window).light(105));
-  addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105));
+  addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
+  addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+  newTeam = new QPushButton(this);
+  newTeam->setText(QPushButton::tr("New team"));
+  connect(newTeam, SIGNAL(clicked()), this, SLOT(newTeamClicked()));
+  mainLayout.addWidget(newTeam);
 }
 
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
@@ -134,4 +140,9 @@ HWTeamTempParams TeamSelWidget::getTeamParams(HWTeam team) const
   const TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
   if(!tsw) throw;
   return tsw->getTeamParams();
+}
+
+void TeamSelWidget::newTeamClicked()
+{
+	emit NewTeam();
 }

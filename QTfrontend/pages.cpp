@@ -21,6 +21,7 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QLabel>
 #include <QToolBox>
 #include <QLineEdit>

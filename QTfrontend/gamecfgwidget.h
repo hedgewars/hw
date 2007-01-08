@@ -20,10 +20,13 @@
 #define GAMECONFIGWIDGET_H
 
 #include <QWidget>
-#include <QCheckBox>
-#include <QVBoxLayout>
 
 #include "mapContainer.h"
+
+class QCheckBox;
+class QVBoxLayout;
+class QSpinBox;
+class QLabel;
 
 class GameCFGWidget : public QWidget
 {
@@ -42,6 +45,10 @@ private:
 	QCheckBox * CB_mode_Forts;
 	QVBoxLayout mainLayout;
 	HWMapContainer* pMapContainer;
+	QSpinBox * SB_TurnTime;
+	QSpinBox * SB_InitHealth;
+	QLabel * L_TurnTime;
+	QLabel * L_InitHealth;
 };
 
 #endif // GAMECONFIGWIDGET_H

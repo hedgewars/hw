@@ -85,6 +85,8 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
+	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(NewTeam()), this, SLOT(NewTeam()));
+
 	GoToPage(ID_PAGE_MAIN);
 }
 
@@ -124,14 +126,6 @@ void HWForm::GoToInfo()
 
 void HWForm::GoToMultiplayer()
 {
-	QStringList tmNames=config->GetTeamsList();
-	QList<HWTeam> teamsList;
-	for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
-	  HWTeam team(*it);
-	  team.LoadFromFile();
-	  teamsList.push_back(team);
-	}
-	ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
 	GoToPage(ID_PAGE_MULTIPLAYER);
 }
 
@@ -157,15 +151,31 @@ void HWForm::GoToNetChat()
 	GoToPage(ID_PAGE_NETCHAT);
 }
 
+void HWForm::OnPageShown(quint8 id)
+{
+	if (id == ID_PAGE_MULTIPLAYER) {
+		QStringList tmNames=config->GetTeamsList();
+		QList<HWTeam> teamsList;
+		for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
+		  HWTeam team(*it);
+		  team.LoadFromFile();
+		  teamsList.push_back(team);
+		}
+		ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
+	}
+}
+
 void HWForm::GoToPage(quint8 id)
 {
 	PagesStack.push(ui.Pages->currentIndex());
+	OnPageShown(id);
 	ui.Pages->setCurrentIndex(id);
 }
 
 void HWForm::GoBack()
 {
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
+	OnPageShown(id);
 	ui.Pages->setCurrentIndex(id);
 }
 

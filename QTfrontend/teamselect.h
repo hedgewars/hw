@@ -21,7 +21,6 @@
 
 #include <QGroupBox>
 #include <QVBoxLayout>
-class QFrame;
 
 #include <list>
 #include <map>
@@ -30,6 +29,8 @@ class QFrame;
 
 class TeamSelWidget;
 class FrameTeams;
+class QFrame;
+class QPushButton;
 
 using namespace std;
 
@@ -46,15 +47,20 @@ class TeamSelWidget : public QGroupBox
   HWTeamTempParams getTeamParams(HWTeam team) const;
   list<HWTeam> getPlayingTeams() const;
 
+  signals:
+    void NewTeam();
+
 private slots:
   void changeTeamStatus(HWTeam team);
+  void newTeamClicked();
 
  private:
-  void addScrArea(FrameTeams* pfteams, QColor color);
+  void addScrArea(FrameTeams* pfteams, QColor color, int maxHeight);
   FrameTeams* frameDontPlaying;
   FrameTeams* framePlaying;
 
   QVBoxLayout mainLayout;
+  QPushButton * newTeam;
 
   list<HWTeam> curPlayingTeams;
   list<HWTeam> curDontPlayingTeams;

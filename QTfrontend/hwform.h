@@ -93,6 +93,7 @@ private:
 
 	void CreateGame(GameCFGWidget * gamecfg);
 	void AddStatText(const QString & msg);
+	void OnPageShown(quint8 id);
 };
 
 #endif

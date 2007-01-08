@@ -18,7 +18,10 @@
 
 #include <QResizeEvent>
 #include <QGroupBox>
-#include <QHBoxLayout>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QSpinBox>
+#include <QLabel>
 #include "gamecfgwidget.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
@@ -42,10 +45,26 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 	GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	mainLayout.addWidget(GBoxOptions);
 
-	QVBoxLayout *GBoxOptionsLayout = new QVBoxLayout(GBoxOptions);
+	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 	CB_mode_Forts = new QCheckBox(GBoxOptions);
 	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
-	GBoxOptionsLayout->addWidget(CB_mode_Forts);
+	GBoxOptionsLayout->addWidget(CB_mode_Forts, 0, 0, 1, 2);
+
+	L_TurnTime = new QLabel(QLabel::tr("Turn time"), GBoxOptions);
+	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
+	GBoxOptionsLayout->addWidget(L_TurnTime, 1, 0);
+	GBoxOptionsLayout->addWidget(L_InitHealth, 2, 0);
+
+	SB_TurnTime = new QSpinBox(GBoxOptions);
+	SB_TurnTime->setRange(15, 90);
+	SB_TurnTime->setValue(45);
+	SB_TurnTime->setSingleStep(15);
+	SB_InitHealth = new QSpinBox(GBoxOptions);
+	SB_InitHealth->setRange(50, 200);
+	SB_TurnTime->setValue(100);
+	SB_InitHealth->setSingleStep(25);
+	GBoxOptionsLayout->addWidget(SB_TurnTime, 1, 1);
+	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
 
 	mainLayout.addWidget(new QWidget, 100);
 }
