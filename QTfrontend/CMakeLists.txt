@@ -42,7 +42,9 @@ set(hwfr_src
 	tcpBase.cpp
 	about.cpp
 	proto.cpp
-	fpsedit.cpp)
+	fpsedit.cpp
+	netserver.cpp
+	newnetclient.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -70,7 +72,9 @@ set(hwfr_moc_hdrs
 	about.h
 	KB.h
 	proto.h
-	fpsedit.h)
+	fpsedit.h
+	netserver.h
+	newnetclient.h)
 
 
 set(hwfr_rez

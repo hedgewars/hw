@@ -157,6 +157,7 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnNetConnect;
+	QPushButton* BtnNetSvrStart;
 	QGroupBox *NNGroupBox;
 	QLabel *labelNN;
 	QLineEdit *editNetNick;

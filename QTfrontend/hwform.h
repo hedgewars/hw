@@ -24,12 +24,13 @@
 #include <QDir>
 #include <QStack>
 
+#include "netserver.h"
 #include "game.h"
 #include "ui_hwform.h"
 
 class HWGame;
 class HWTeam;
-class HWNet;
+class HWNewNet;
 class GameUIConfig;
 
 class HWForm : public QMainWindow
@@ -58,6 +59,7 @@ private slots:
 	void SimpleGame();
 	void PlayDemo();
 	void NetConnect();
+	void NetStartServer();
 	void NetDisconnect();
 	void NetJoin();
 	void NetCreate();
@@ -71,7 +73,9 @@ private slots:
 	void GameStats(char type, const QString & info);
 
 private:
+	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
 	void UpdateTeamsLists();
+	void CreateGame(GameCFGWidget * gamecfg);
 	enum PageIDs {
 		ID_PAGE_SINGLEPLAYER	= 0,
 		ID_PAGE_SETUP_TEAM	= 1,
@@ -87,11 +91,10 @@ private:
 		};
 	HWGame * game;
 	HWTeam * editedTeam;
-	HWNet * hwnet;
+	HWNewNet * hwnet;
 	GameUIConfig * config;
 	QStack<quint8> PagesStack;
-
-	void CreateGame(GameCFGWidget * gamecfg);
+	HWNetServer* pnetserver;
 	void AddStatText(const QString & msg);
 	void OnPageShown(quint8 id);
 };

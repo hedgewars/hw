@@ -376,7 +376,7 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(2, 1);
 
 	NNGroupBox = new QGroupBox(this);
-	NNGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
 	pageLayout->addWidget(NNGroupBox, 0, 1);
 
@@ -404,6 +404,11 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
 	pageLayout->addWidget(BtnNetConnect, 2, 2);
+
+	BtnNetSvrStart = new	QPushButton(this);
+	BtnNetSvrStart->setFont(*font14);
+	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
+	pageLayout->addWidget(BtnNetSvrStart, 2, 1);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);

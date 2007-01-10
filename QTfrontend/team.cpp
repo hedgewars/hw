@@ -26,6 +26,9 @@
 #include "pages.h"
 #include "hwconsts.h"
 
+#include <QStringList>
+#include <QDebug>
+
 HWTeam::HWTeam(const QString & teamname) :
   difficulty(0)
 {
@@ -39,6 +42,13 @@ HWTeam::HWTeam(const QString & teamname) :
 		binds[i].action = cbinds[i].action;
 		binds[i].strbind = cbinds[i].strbind;
 	}
+}
+
+HWTeam::HWTeam(const QStringList& strLst)
+{
+  if(strLst.size()<9) throw HWTeamConstructException();
+  TeamName=strLst[0];
+  for(int i = 0; i < 8; i++) HHName[i]=strLst[i+1];
 }
 
 HWTeam::HWTeam(quint8 num) :

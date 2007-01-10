@@ -34,9 +34,10 @@
 #include "gameuiconfig.h"
 #include "pages.h"
 #include "hwconsts.h"
+#include "newnetclient.h"
 
 HWForm::HWForm(QWidget *parent)
-	: QMainWindow(parent)
+  : QMainWindow(parent), pnetserver(0)
 {
 	ui.setupUi(this);
 
@@ -73,6 +74,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
+	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnAddTeam,	SIGNAL(clicked()),	this, SLOT(NetAddTeam()));
@@ -231,21 +233,40 @@ void HWForm::PlayDemo()
 	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
 }
 
-void HWForm::NetConnect()
+void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
-	hwnet = new HWNet(config);
+	hwnet = new HWNewNet(config);
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(GoToNetChat()));
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
-	hwnet->Connect(ui.pageNet->editIP->text(), 6667, ui.pageNet->editNetNick->text());
+	hwnet->Connect(hostName, port, nick);
 	config->SaveOptions();
+}
+
+void HWForm::NetConnect()
+{
+  _NetConnect(ui.pageNet->editIP->text(), 46631, ui.pageNet->editNetNick->text());
+}
+
+void HWForm::NetStartServer()
+{
+  pnetserver = new HWNetServer;
+  pnetserver->StartServer();
+  _NetConnect(pnetserver->getRunningHostName(), pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
 }
 
 void HWForm::NetDisconnect()
 {
-	hwnet->Disconnect();
-	GoBack();
+  hwnet->Disconnect();
+  GoBack();
+  delete hwnet;
+  hwnet=0;
+  if(pnetserver) {
+    pnetserver->StopServer();
+    delete pnetserver;
+    pnetserver=0;
+  }
 }
 
 void HWForm::AddGame(const QString & chan)

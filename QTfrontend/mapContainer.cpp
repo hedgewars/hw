@@ -117,9 +117,9 @@ QString HWMapContainer::getCurrentTheme() const
     QTextStream input(&mapCfgFile);
     QString theme;
     input >> theme;
+    mapCfgFile.close();
     if(theme.length()>256) throw MapFileErrorException(); // theme name too long
     return theme;
-    mapCfgFile.close();
   } else {
     throw MapFileErrorException();
   }

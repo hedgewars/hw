@@ -26,10 +26,15 @@
 class HWForm;
 class GameUIConfig;
 
+class HWTeamConstructException
+{
+};
+
 class HWTeam
 {
 	public:
 		HWTeam(const QString & teamname);
+		HWTeam(const QStringList& strLst);
 		HWTeam(quint8 num);
 
 		QString TeamName;
