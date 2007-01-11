@@ -32,7 +32,9 @@ class HWConnectedClient : public QObject
 {
   Q_OBJECT
 
- public:
+ friend class HWNetServer;
+
+ private:
   HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client);
   ~HWConnectedClient();
   QString getClientNick() const;
@@ -44,8 +46,8 @@ class HWConnectedClient : public QObject
 
   QString getHedgehogsDescription() const;
 
- private:
   bool readyToStart;
+  QStringList gameCfg;
   class ShouldDisconnectException {};
   
   QString client_nick;
@@ -75,6 +77,8 @@ class HWNetServer : public QObject
  public:
   void StartServer();
   void StopServer();
+  bool isCheefClient(HWConnectedClient* cl) const;
+  void startAll(QString gameCfg);
   bool haveNick(const QString& nick) const;
   QString getRunningHostName() const;
   quint16 getRunningPort() const;

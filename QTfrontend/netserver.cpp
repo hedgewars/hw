@@ -73,6 +73,14 @@ quint16 HWNetServer::getRunningPort() const
   return ds_port;
 }
 
+bool HWNetServer::isCheefClient(HWConnectedClient* cl) const
+{
+  for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+    if((*it)->getClientNick()!="" && *it==cl)  return true;
+  }
+  return false;
+}
+
 bool HWNetServer::haveNick(const QString& nick) const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
@@ -121,6 +129,13 @@ QString HWNetServer::prepareConfig(QStringList lst)
   }
   qDebug() << msg;
   return msg;
+}
+
+void HWNetServer::startAll(QString gameCfg)
+{
+  for(QList<HWConnectedClient*>::iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+    (*it)->RawSendNet(gameCfg);
+  }
 }
 
 HWConnectedClient::HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client) :
@@ -172,6 +187,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     qDebug() << "send connected";
     RawSendNet(QString("CONNECTED"));
     m_hwserver->teamChanged();
+    if(m_hwserver->isCheefClient(this)) RawSendNet(QString("CONFIGASKED"));
     return;
   }
   if(client_nick=="") return;
@@ -180,14 +196,14 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     readyToStart=true;
     if(m_hwserver->shouldStart(this)) {
       // start
-      RawSendNet(QString("CONFIGASKED"));
+      m_hwserver->startAll(QString("CONFIGURED")+delimeter+m_hwserver->prepareConfig(gameCfg)+delimeter+"!"+delimeter);
     }
     return;
   }
 
   if(lst[0]=="CONFIGANSWER") {
     lst.pop_front();
-    RawSendNet(QString("CONFIGURED")+QString(delimeter)+m_hwserver->prepareConfig(lst)+delimeter+"!"+delimeter);
+    gameCfg=lst;
     return;
   }
 
