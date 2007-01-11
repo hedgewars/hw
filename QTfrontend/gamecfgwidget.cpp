@@ -69,7 +69,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 	mainLayout.addWidget(new QWidget, 100);
 }
 
-quint32 GameCFGWidget::getGameFlags()
+quint32 GameCFGWidget::getGameFlags() const
 {
 	quint32 result = 0;
 	if (CB_mode_Forts->isChecked())
@@ -100,4 +100,21 @@ quint32 GameCFGWidget::getInitHealth() const
 quint32 GameCFGWidget::getTurnTime() const
 {
 	return SB_TurnTime->value();
+}
+
+QStringList GameCFGWidget::getFullConfig() const
+{
+	QStringList sl;
+	sl.append("eseed " + getCurrentSeed());
+	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
+	sl.append(QString("e$turntime %1").arg(getTurnTime() * 1000));
+	try {
+		QString currentMap = getCurrentMap();
+		sl.append("emap " + currentMap);
+		sl.append("etheme " + getCurrentTheme());
+	}
+	catch(const MapFileErrorException& e) {
+		sl.append(QString("etheme %1").arg("steel"));
+	}
+	return sl;
 }

@@ -20,6 +20,7 @@
 #define GAMECONFIGWIDGET_H
 
 #include <QWidget>
+#include <QStringList>
 
 #include "mapContainer.h"
 
@@ -33,13 +34,14 @@ class GameCFGWidget : public QWidget
 	Q_OBJECT
 
 public:
-	GameCFGWidget(QWidget* parent=0);
-	quint32 getGameFlags();
+	GameCFGWidget(QWidget* parent);
+	quint32 getGameFlags() const;
 	QString getCurrentSeed() const;
 	QString getCurrentMap() const;
 	QString getCurrentTheme() const;
 	quint32 getInitHealth() const;
 	quint32 getTurnTime() const;
+	QStringList getFullConfig() const;
 
 private slots:
 

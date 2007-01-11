@@ -54,18 +54,10 @@ void HWGame::SendTeamConfig(int index)
 
 void HWGame::commonConfig()
 {
-	SendIPC(QString("eseed %1").arg(seed).toAscii());
-	try {
-	  QString currentMap=gamecfg->getCurrentMap();
-	  SendIPC((QString("emap ")+currentMap).toAscii());
-	  SendIPC(QString("etheme %1").arg(gamecfg->getCurrentTheme()).toAscii());
-	}
-	catch(const MapFileErrorException& e) {
-	  SendIPC(QString("etheme %1").arg(config->GetRandomTheme()).toAscii());
-	}
-	SendIPC("TL");
-	SendIPC(QString("e$gmflags %1").arg(gamecfg->getGameFlags()).toAscii());
-	SendIPC(QString("e$turntime %1").arg(gamecfg->getTurnTime() * 1000).toAscii());
+	QByteArray buf;
+	HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
+	HWProto::addStringToBuffer(buf, "TL");
+	RawSendIPC(buf);
 }
 
 void HWGame::SendConfig()
