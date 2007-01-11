@@ -32,7 +32,7 @@ procedure GenPreview;
 
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects;
+uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects, uSHA, uIO;
 
 type TPixAr = record
               Count: Longword;
@@ -40,17 +40,19 @@ type TPixAr = record
               end;
 
 procedure LogLandDigest;
-//var ctx: TSHA1Context;
-//    dig: TSHA1Digest;
+var ctx: TSHA1Context;
+    dig: TSHA1Digest;
+    s: shortstring;
 begin
-//SHA1Init(ctx);
-//SHA1Update(ctx, @Land, sizeof(Land));
-//dig:= SHA1Final(ctx);
-{$IFDEF DEBUGFILE}
-//AddFileLog('SHA1 Land digest: {'+inttostr(dig.LongWords[0])+':'
-//           +inttostr(dig.LongWords[1])+':'+inttostr(dig.LongWords[2])+':'
-//           +inttostr(dig.LongWords[3])+':'+inttostr(dig.LongWords[4])+'}');
-{$ENDIF}
+SHA1Init(ctx);
+SHA1Update(ctx, @Land, sizeof(Land));
+dig:= SHA1Final(ctx);
+s:= '{'+inttostr(dig[0])+':'
+       +inttostr(dig[1])+':'
+       +inttostr(dig[2])+':'
+       +inttostr(dig[3])+':'
+       +inttostr(dig[4])+'}';
+SendIPC('M' + s)
 end;
 
 procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);

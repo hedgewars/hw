@@ -90,7 +90,7 @@ function Max(a, b: integer): integer;
 procedure OutError(Msg: String; const isFatalError: boolean=false);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
-function IntToStr(n: integer): shortstring;
+function IntToStr(n: LongInt): shortstring;
 function FloatToStr(n: Double): shortstring;
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
@@ -156,7 +156,7 @@ begin
 Color:= SDL_MapRGB(PixelFormat, (Color shr 16) and $FF, (Color shr 8) and $FF, Color and $FF)
 end;
 
-function IntToStr(n: integer): shortstring;
+function IntToStr(n: LongInt): shortstring;
 begin
 str(n, Result)
 end;

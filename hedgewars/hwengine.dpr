@@ -42,7 +42,8 @@ uses
   uLandObjects in 'uLandObjects.pas',
   uLandGraphics in 'uLandGraphics.pas',
   uLocale in 'uLocale.pas',
-  uAmmos in 'uAmmos.pas';
+  uAmmos in 'uAmmos.pas',
+  uSHA in 'uSHA.pas';
 
 {$INCLUDE options.inc}
 

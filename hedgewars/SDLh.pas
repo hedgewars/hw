@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -187,7 +187,9 @@ type PSDL_Rect = ^TSDL_Rect;
                        end;
 
      PByteArray = ^TByteArray;
-     TByteArray = array[0..32767] of Byte;
+     TByteArray = array[0..65535] of Byte;
+     PLongWordArray = ^TLongWordArray;
+     TLongWordArray = array[0..16383] of LongWord;
 
 function  SDL_Init(flags: Longword): integer; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
@@ -373,10 +375,10 @@ procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_Net
 function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
-procedure SDLNet_Write16(value: SmallInt; buf: pointer); cdecl; external SDL_NetLibName;
-procedure SDLNet_Write32(value: LongInt; buf: pointer); cdecl; external SDL_NetLibName;
-function SDLNet_Read16(buf: pointer): SmallInt; cdecl; external SDL_NetLibName;
-function SDLNet_Read32(buf: pointer): LongInt; cdecl; external SDL_NetLibName;
+procedure SDLNet_Write16(value: Word; buf: pointer); cdecl; external SDL_NetLibName;
+procedure SDLNet_Write32(value: LongWord; buf: pointer); cdecl; external SDL_NetLibName;
+function SDLNet_Read16(buf: pointer): Word; cdecl; external SDL_NetLibName;
+function SDLNet_Read32(buf: pointer): LongWord; cdecl; external SDL_NetLibName;
 
 implementation
 
