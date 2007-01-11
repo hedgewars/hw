@@ -78,7 +78,8 @@ class HWNetServer : public QObject
   void StartServer();
   void StopServer();
   bool isCheefClient(HWConnectedClient* cl) const;
-  void startAll(QString gameCfg);
+  void sendAll(QString gameCfg);
+  void sendOthers(HWConnectedClient* this_cl, QString gameCfg);
   bool haveNick(const QString& nick) const;
   QString getRunningHostName() const;
   quint16 getRunningPort() const;

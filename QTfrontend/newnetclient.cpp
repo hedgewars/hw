@@ -70,10 +70,11 @@ void HWNewNet::StartGame()
 
 void HWNewNet::SendNet(const QByteArray & buf)
 {
+  qDebug() << "to net:" << buf;
   QString msg = QString(buf.toBase64());
 
   //NetBuffer += buf;
-  //RawSendNet(QString("PRIVMSG %1 :"MAGIC_CHAR MAGIC_CHAR"%2").arg(channel, msg));
+  RawSendNet(QString(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -169,6 +170,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   QByteArray em = QByteArray::fromBase64(msg.toAscii());
+  qDebug() << "to engine:" << em;
   emit FromNet(em);
 }
 
@@ -177,6 +179,7 @@ void HWNewNet::ConfigAsked()
 {
   QByteArray cache;
   HWProto::addStringToBuffer(cache, "eseed " + seed);
+  HWProto::addStringToBuffer(cache, "TN");
   HWProto::addStringToBuffer(cache, "e$gmflags 0");
   HWProto::addStringToBuffer(cache, QString("etheme %1").arg(config->GetRandomTheme()));
   QString _msg = QString("CONFIGANSWER") + delimeter + QString(cache.toBase64());

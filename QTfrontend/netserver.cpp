@@ -131,9 +131,17 @@ QString HWNetServer::prepareConfig(QStringList lst)
   return msg;
 }
 
-void HWNetServer::startAll(QString gameCfg)
+void HWNetServer::sendAll(QString gameCfg)
 {
   for(QList<HWConnectedClient*>::iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+    (*it)->RawSendNet(gameCfg);
+  }
+}
+
+void HWNetServer::sendOthers(HWConnectedClient* this_cl, QString gameCfg)
+{
+  for(QList<HWConnectedClient*>::iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+    if(*it==this_cl) continue;
     (*it)->RawSendNet(gameCfg);
   }
 }
@@ -176,8 +184,9 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   qDebug() << "line " << msg << " received";
 
   QStringList lst = msg.split(delimeter);
-  if(lst.size()<2) return;
+  if(!lst.size()) return;
   if (lst[0] == "NICK") {
+    if(lst.size()<2) return;
     if(m_hwserver->haveNick(lst[1])) {
       RawSendNet(QString("ERRONEUSNICKNAME"));
       throw ShouldDisconnectException();
@@ -196,7 +205,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     readyToStart=true;
     if(m_hwserver->shouldStart(this)) {
       // start
-      m_hwserver->startAll(QString("CONFIGURED")+delimeter+m_hwserver->prepareConfig(gameCfg)+delimeter+"!"+delimeter);
+      m_hwserver->sendAll(QString("CONFIGURED")+delimeter+m_hwserver->prepareConfig(gameCfg)+delimeter+"!"+delimeter);
     }
     return;
   }
@@ -207,14 +216,16 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     return;
   }
 
-  if(lst.size()<10) return;
   if(lst[0]=="ADDTEAM:") {
+    if(lst.size()<10) return;
     lst.pop_front();
     if(pclent_team) delete pclent_team;
     pclent_team=new HWTeam(lst);
     m_hwserver->teamChanged();
     return;
   }
+  
+  m_hwserver->sendOthers(this, msg);
 }
 
 void HWConnectedClient::teamChangedNotify()
@@ -256,5 +267,5 @@ bool HWConnectedClient::isReady() const
 
 QString HWConnectedClient::getHedgehogsDescription() const
 {
-  return pclent_team->TeamGameConfig(65535, 4, 100).join((QString)delimeter);
+  return pclent_team->TeamGameConfig(65535, 4, 100, true).join((QString)delimeter);
 }
