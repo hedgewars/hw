@@ -17,7 +17,6 @@
  */
 
 #include <QMessageBox>
-#include <QTextStream>
 #include "gameuiconfig.h"
 #include "hwform.h"
 #include "pages.h"

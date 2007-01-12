@@ -20,7 +20,6 @@
 #define GAMECONFIG_H
 
 #include <QSettings>
-#include <QDir>
 #include <QStringList>
 
 class HWForm;

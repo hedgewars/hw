@@ -22,12 +22,14 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QTextStream>
 #include "hwform.h"
 #include "hwconsts.h"
 
 QDir * bindir;
 QDir * cfgdir;
 QDir * datadir;
+QStringList * Themes;
 
 bool checkForDir(const QString & dir)
 {
@@ -78,6 +80,20 @@ int main(int argc, char *argv[])
 					"Please check your installation").
 					arg(datadir->absolutePath()+"/hedgewars/Data"));
 		return 1;
+	}
+
+	Themes = new QStringList();
+	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
+	if (themesfile.open(QIODevice::ReadOnly)) {
+		QTextStream stream(&themesfile);
+		QString str;
+		while (!stream.atEnd())
+		{
+			Themes->append(stream.readLine());
+		}
+		themesfile.close();
+	} else {
+		QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
 	}
 
 	HWForm *Form = new HWForm();
