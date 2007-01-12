@@ -33,12 +33,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
   imageButt=new QPushButton(this);
-  imageButt->setMaximumSize(256, 128);
+  imageButt->setFixedSize(256, 128);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
-  connect(imageButt, SIGNAL(clicked()), this, SLOT(changeImage()));
-  changeImage();
+  connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
+  setRandomSeed();
 
   chooseMap=new QComboBox(this);
   QDir tmpdir;
@@ -82,20 +82,26 @@ void HWMapContainer::mapChanged(int index)
   }
 
   QPixmap mapImage;
-  if(!mapImage.load(datadir->absolutePath()+"/Maps/"+chooseMap->currentText()+"/map.png")) {
+  if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/map.png")) {
     changeImage();
     chooseMap->setCurrentIndex(0);
     return;
   }
-  imageButt->setIcon(mapImage.scaled(256,128));
+  imageButt->setIcon(mapImage.scaled(256, 128));
+  QFile mapCfgFile(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/map.cfg");
+  if (mapCfgFile.open(QFile::ReadOnly)) {
+    QTextStream input(&mapCfgFile);
+    input >> theme;
+    mapCfgFile.close();
+  }
 }
 
 void HWMapContainer::changeImage()
 {
-  pMap=new HWMap();
+  pMap = new HWMap();
   connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
-  m_seed = QUuid::createUuid().toString();
   pMap->getImage(m_seed.toStdString());
+  theme = (Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel";
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -105,27 +111,38 @@ QString HWMapContainer::getCurrentSeed() const
 
 QString HWMapContainer::getCurrentMap() const
 {
-  if(!chooseMap->currentIndex()) throw MapFileErrorException();
+  if(!chooseMap->currentIndex()) return QString();
   return chooseMap->currentText();
 }
 
 QString HWMapContainer::getCurrentTheme() const
 {
-  if(!chooseMap->currentIndex()) throw MapFileErrorException();
-  QFile mapCfgFile(datadir->absolutePath()+"/Maps/"+chooseMap->currentText()+"/map.cfg");
-  if (mapCfgFile.open(QFile::ReadOnly)) {
-    QTextStream input(&mapCfgFile);
-    QString theme;
-    input >> theme;
-    mapCfgFile.close();
-    if(theme.length()>256) throw MapFileErrorException(); // theme name too long
-    return theme;
-  } else {
-    throw MapFileErrorException();
-  }
+	return theme;
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
 {
   //imageButt->setIconSize(imageButt->size());
+}
+
+void HWMapContainer::setSeed(const QString & seed)
+{
+	m_seed = seed;
+	changeImage();
+}
+
+void HWMapContainer::setMap(const QString & map)
+{
+
+}
+
+void HWMapContainer::setTheme(const QString & theme)
+{
+	this->theme = theme;
+}
+
+void HWMapContainer::setRandomSeed()
+{
+  m_seed = QUuid::createUuid().toString();
+  changeImage();
 }

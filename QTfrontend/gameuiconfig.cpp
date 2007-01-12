@@ -38,19 +38,6 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageNet->editIP->setText(value("net/ip", "").toString());
 	Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
-
-	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
-	if (themesfile.open(QIODevice::ReadOnly)) {
-		QTextStream stream(&themesfile);
-		QString str;
-		while (!stream.atEnd())
-		{
-			Themes << stream.readLine();
-		}
-		themesfile.close();
-	} else {
-		QMessageBox::critical(FormWidgets, "Error", "Cannot access themes.cfg", "OK");
-	}
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -101,9 +88,4 @@ bool GameUIConfig::isShowFPSEnabled()
 quint8 GameUIConfig::timerInterval()
 {
 	return 35 - Form->ui.pageOptions->fpsedit->value();
-}
-
-QString GameUIConfig::GetRandomTheme()
-{
-	return (Themes.size() > 0) ? Themes[rand() % Themes.size()] : QString("steel");
 }

@@ -34,7 +34,7 @@ class MapFileErrorException
 class HWMapContainer : public QWidget
 {
   Q_OBJECT
-    
+
  public:
   HWMapContainer(QWidget * parent=0);
   QString getCurrentSeed() const;
@@ -43,10 +43,14 @@ class HWMapContainer : public QWidget
 
  public slots:
   void changeImage();
+  void setSeed(const QString & seed);
+  void setMap(const QString & map);
+  void setTheme(const QString & theme);
 
  private slots:
   void setImage(const QImage newImage);
   void mapChanged(int index);
+  void setRandomSeed();
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -57,6 +61,7 @@ class HWMapContainer : public QWidget
   QComboBox* chooseMap;
   HWMap* pMap;
   QString m_seed;
+  QString theme;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

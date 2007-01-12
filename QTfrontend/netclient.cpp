@@ -346,7 +346,7 @@ void HWNet::ConfigAsked()
 			QByteArray cache;
 			HWProto::addStringToBuffer(cache, "eseed " + seed);
 			HWProto::addStringToBuffer(cache, "e$gmflags 0");
-			HWProto::addStringToBuffer(cache, QString("etheme %1").arg(config->GetRandomTheme()));
+			HWProto::addStringToBuffer(cache, QString("etheme steel"));
 			QString _msg = MAGIC_CHAR MAGIC_CHAR + QString(cache.toBase64());
 			RawSendNet(QString("PRIVMSG %1 :%2").arg(channel, _msg));
 			hwp_chanmsg(mynick, _msg);

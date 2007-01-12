@@ -108,13 +108,39 @@ QStringList GameCFGWidget::getFullConfig() const
 	sl.append("eseed " + getCurrentSeed());
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
 	sl.append(QString("e$turntime %1").arg(getTurnTime() * 1000));
-	try {
-		QString currentMap = getCurrentMap();
+	QString currentMap = getCurrentMap();
+	if (currentMap.size() > 0)
 		sl.append("emap " + currentMap);
-		sl.append("etheme " + getCurrentTheme());
-	}
-	catch(const MapFileErrorException& e) {
-		sl.append(QString("etheme %1").arg("steel"));
-	}
+	sl.append("etheme " + getCurrentTheme());
 	return sl;
+}
+
+void GameCFGWidget::setSeed(const QString & seed)
+{
+	pMapContainer->setSeed(seed);
+}
+
+void GameCFGWidget::setMap(const QString & map)
+{
+	pMapContainer->setMap(map);
+}
+
+void GameCFGWidget::setTheme(const QString & theme)
+{
+	pMapContainer->setTheme(theme);
+}
+
+void GameCFGWidget::setInitHealth(const quint32 health)
+{
+	SB_InitHealth->setValue(health);
+}
+
+void GameCFGWidget::setTurnTime(const quint32 time)
+{
+	SB_TurnTime->setValue(time);
+}
+
+void GameCFGWidget::setFortsMode(const bool value)
+{
+	CB_mode_Forts->setChecked(value);
 }

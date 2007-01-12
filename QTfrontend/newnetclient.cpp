@@ -130,7 +130,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 void HWNewNet::ParseLine(const QByteArray & line)
 {
   QString msg = QString::fromUtf8 (line.data(), line.size());
-  
+
   qDebug() << "line " << msg << " received";
 
   QStringList lst = msg.split(delimeter);
@@ -155,14 +155,14 @@ void HWNewNet::ParseLine(const QByteArray & line)
     ConfigAsked();
     return;
   }
-  
+
   if (lst[0] == "CONFIGURED") {
     lst.pop_front();
     RunGame();
     qDebug() << lst[0];
     QByteArray ar=QByteArray::fromBase64(lst[0].toAscii());
     emit FromNet(ar);
-    
+
     lst.pop_front();
     QByteArray cache;
     emit FromNet(HWProto::addStringListToBuffer(cache, lst));
@@ -181,7 +181,7 @@ void HWNewNet::ConfigAsked()
   HWProto::addStringToBuffer(cache, "eseed " + seed);
   HWProto::addStringToBuffer(cache, "TN");
   HWProto::addStringToBuffer(cache, "e$gmflags 0");
-  HWProto::addStringToBuffer(cache, QString("etheme %1").arg(config->GetRandomTheme()));
+  HWProto::addStringToBuffer(cache, QString("etheme steel"));
   QString _msg = QString("CONFIGANSWER") + delimeter + QString(cache.toBase64());
   RawSendNet(_msg);
 }

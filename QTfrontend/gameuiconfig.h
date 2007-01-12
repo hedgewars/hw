@@ -38,7 +38,6 @@ public:
 	bool isSoundEnabled();
 	bool isShowFPSEnabled();
 	quint8 timerInterval();
-	QString GetRandomTheme();
 
 private slots:
 
@@ -47,7 +46,6 @@ public slots:
 
 private:
 	HWForm * Form;
-	QStringList Themes;
 };
 
 #endif

@@ -43,7 +43,13 @@ public:
 	quint32 getTurnTime() const;
 	QStringList getFullConfig() const;
 
-private slots:
+public slots:
+	void setSeed(const QString & seed);
+	void setMap(const QString & map);
+	void setTheme(const QString & theme);
+	void setInitHealth(const quint32 health);
+	void setTurnTime(const quint32 time);
+	void setFortsMode(const bool value);
 
 private:
 	QCheckBox * CB_mode_Forts;
