@@ -344,6 +344,7 @@ case Gear.Kind of
                    if Gear.Timer = 0 then
                       begin
                       SendIPC('N');
+                      SendIPC('q');
                       GameState:= gsExit
                       end
                    end;

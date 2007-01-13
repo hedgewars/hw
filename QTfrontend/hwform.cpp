@@ -159,7 +159,7 @@ void HWForm::OnPageShown(quint8 id)
 	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETCFG) {
 		QStringList tmNames=config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
-		id == ID_PAGE_MULTIPLAYER ? curTeamSelWidget=ui.pageMultiplayer->teamsSelect : 
+		id == ID_PAGE_MULTIPLAYER ? curTeamSelWidget=ui.pageMultiplayer->teamsSelect :
 		  curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
 		QList<HWTeam> teamsList;
 		for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
@@ -337,11 +337,18 @@ void HWForm::StartMPGame()
 
 void HWForm::GameStateChanged(GameState gameState)
 {
-	if (gameState == gsStarted)
-	{
-		GoToPage(ID_PAGE_GAMESTATS);
-		ui.pageGameStats->labelGameStats->setText("");
+	switch(gameState) {
+		case gsStarted: {
+			ui.pageGameStats->labelGameStats->setText("");
+			break;
+		}
+		case gsFinished: {
+			GoToPage(ID_PAGE_GAMESTATS);
+			break;
+		}
+		default: ;
 	}
+
 }
 
 void HWForm::AddStatText(const QString & msg)

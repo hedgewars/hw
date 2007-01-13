@@ -18,7 +18,7 @@
 
 function CheckNoTeamOrHH: boolean;
 begin
-Result:= (CurrentTeam=nil) or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = nil);
+Result:= (CurrentTeam = nil) or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = nil);
 {$IFDEF DEBUGFILE}
 if Result then
    if CurrentTeam = nil then AddFileLog('CONSOLE: CurTeam = nil')
@@ -28,6 +28,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure chQuit(var s: shortstring);
 begin
+SendIPC('Q');
 GameState:= gsExit
 end;
 

@@ -34,7 +34,9 @@ class GameCFGWidget;
 enum GameState {
 	gsNotStarted = 0,
 	gsStarted  = 1,
-	gsFinished = 2
+	gsInterrupted = 2,
+	gsFinished = 3,
+	gsStopped = 4
 };
 
 

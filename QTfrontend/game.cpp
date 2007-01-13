@@ -44,7 +44,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
 void HWGame::onClientDisconnect()
 {
 	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer);
-	emit GameStateChanged(gsFinished);
+	emit GameStateChanged(gsStopped);
 }
 
 void HWGame::SendTeamConfig(int index)
@@ -155,6 +155,14 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 'i': {
 			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
+			break;
+		}
+		case 'Q': {
+			emit GameStateChanged(gsInterrupted);
+			break;
+		}
+		case 'q': {
+			emit GameStateChanged(gsFinished);
 			break;
 		}
 		default: {
