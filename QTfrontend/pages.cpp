@@ -447,13 +447,9 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
-	//pageLayout->setColumnStretch(0, 1);
-	//pageLayout->setColumnStretch(1, 2);
-	//pageLayout->setColumnStretch(2, 1);
 
 	pGameCFG=new GameCFGWidget(this);
 	pageLayout->addWidget(pGameCFG, 0, 0);
-
 	
 	pNetTeamsWidget=new TeamSelWidget(this);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1);
@@ -463,18 +459,10 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
 
-	BtnAddTeam = new QPushButton(this);
-	BtnAddTeam->setFont(*font14);
-	BtnAddTeam->setText(QPushButton::tr("Add Team"));
-	//pageLayout->addWidget(BtnAddTeam, 1, 1);
-
 	BtnGo	= new QPushButton(this);
 	BtnGo->setFont(*font14);
 	BtnGo->setText(QPushButton::tr("Go!"));
 	pageLayout->addWidget(BtnGo, 1, 1);
-
-	listNetTeams = new QListWidget(this);
-	//pageLayout->addWidget(listNetTeams, 0, 1);
 }
 
 PageInfo::PageInfo(QWidget* parent) : QWidget(parent)

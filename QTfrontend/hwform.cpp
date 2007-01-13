@@ -313,6 +313,14 @@ void HWForm::ChangeInNetTeams(const QStringList & teams)
   for(QStringList::iterator it=addedTeams.begin(); it!=addedTeams.end(); ++it) {
     ui.pageNetGame->pNetTeamsWidget->addTeam(*it, true);
   }
+
+  /*
+  QStringList lstQSPlaying;
+  std::for_each(lstPlaying.begin(), lstPlaying.end(), lstQSPlaying.push_back);
+  QStringList removedTeams=teams;
+  for(QStringList::iterator it=teams.begin()
+  list<HWTeam>::iterator removedItem=std::find(addedTeams.begin(), addedTeams.end(), nm);
+  */
 }
 
 void HWForm::StartMPGame()

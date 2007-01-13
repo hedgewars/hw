@@ -187,9 +187,7 @@ public:
 	PageNetGame(QWidget* parent = 0);
 
 	QPushButton *BtnBack;
-	QPushButton *BtnAddTeam;
 	QPushButton *BtnGo;
-	QListWidget *listNetTeams;
 
 	TeamSelWidget* pNetTeamsWidget;
 
