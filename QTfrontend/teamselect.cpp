@@ -26,12 +26,17 @@
 #include "teamselhelper.h"
 #include "frameTeam.h"
 
-void TeamSelWidget::addTeam(HWTeam team)
+void TeamSelWidget::addTeam(HWTeam team, bool netTeam)
 {
-  frameDontPlaying->addTeam(team, false);
-  curDontPlayingTeams.push_back(team);
-  QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-		   this, SLOT(changeTeamStatus(HWTeam)));
+  if(netTeam) {
+    framePlaying->addTeam(team, true);
+    curPlayingTeams.push_back(team);
+  } else {
+    frameDontPlaying->addTeam(team, false);
+    curDontPlayingTeams.push_back(team);
+    QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+		     this, SLOT(changeTeamStatus(HWTeam)));
+  }
 }
 
 //void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
@@ -55,6 +60,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     if(framePlaying->isFullTeams()) return;
     // dont playing team => playing
     curPlayingTeams.push_back(*itDontPlay);
+    emit teamWillPlay(*itDontPlay);
     curDontPlayingTeams.erase(itDontPlay);
   }
 

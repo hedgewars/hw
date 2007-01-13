@@ -77,7 +77,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNetGame->BtnAddTeam,	SIGNAL(clicked()),	this, SLOT(NetAddTeam()));
+	connect(ui.pageNetGame->pNetTeamsWidget,	SIGNAL(teamWillPlay(HWTeam)),	this, SLOT(NetAddTeam(HWTeam)));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
 
 	connect(ui.pageNetChat->BtnDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
@@ -156,15 +156,18 @@ void HWForm::GoToNetChat()
 
 void HWForm::OnPageShown(quint8 id)
 {
-	if (id == ID_PAGE_MULTIPLAYER) {
+	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETCFG) {
 		QStringList tmNames=config->GetTeamsList();
+		TeamSelWidget* curTeamSelWidget;
+		id == ID_PAGE_MULTIPLAYER ? curTeamSelWidget=ui.pageMultiplayer->teamsSelect : 
+		  curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
 		QList<HWTeam> teamsList;
 		for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
 		  HWTeam team(*it);
 		  team.LoadFromFile();
 		  teamsList.push_back(team);
 		}
-		ui.pageMultiplayer->teamsSelect->resetPlayingTeams(teamsList);
+		curTeamSelWidget->resetPlayingTeams(teamsList);
 	}
 }
 
@@ -236,7 +239,6 @@ void HWForm::PlayDemo()
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
 	hwnet = new HWNewNet(config);
-	connect(hwnet, SIGNAL(Connected()), this, SLOT(GoToNetChat()));
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
@@ -289,11 +291,9 @@ void HWForm::NetCreate()
 	hwnet->JoinGame("#hw");
 }
 
-void HWForm::NetAddTeam()
+void HWForm::NetAddTeam(HWTeam team)
 {
-	HWTeam team("DefaultTeam");
-	team.LoadFromFile();
-	hwnet->AddTeam(team);
+  hwnet->AddTeam(team);
 }
 
 void HWForm::NetStartGame()
@@ -303,8 +303,16 @@ void HWForm::NetStartGame()
 
 void HWForm::ChangeInNetTeams(const QStringList & teams)
 {
-	ui.pageNetGame->listNetTeams->clear();
-	ui.pageNetGame->listNetTeams->addItems(teams);
+  QStringList addedTeams=teams;
+  list<HWTeam> lstPlaying=ui.pageNetGame->pNetTeamsWidget->getPlayingTeams();
+  for(list<HWTeam>::iterator it=lstPlaying.begin(); it!=lstPlaying.end(); ++it) {
+    QString nm=it->TeamName;
+    QStringList::iterator itt=std::find(addedTeams.begin(), addedTeams.end(), nm);
+    if(itt!=addedTeams.end()) addedTeams.erase(itt);
+  }
+  for(QStringList::iterator it=addedTeams.begin(); it!=addedTeams.end(); ++it) {
+    ui.pageNetGame->pNetTeamsWidget->addTeam(*it, true);
+  }
 }
 
 void HWForm::StartMPGame()

@@ -40,17 +40,20 @@ class TeamSelWidget : public QGroupBox
 
  public:
   TeamSelWidget(QWidget* parent=0);
-  void addTeam(HWTeam team);
   //void removeTeam(HWTeam team);
   void resetPlayingTeams(const QList<HWTeam>& teamslist);
   bool isPlaying(HWTeam team) const;
   HWTeamTempParams getTeamParams(HWTeam team) const;
   list<HWTeam> getPlayingTeams() const;
 
-  signals:
-    void NewTeam();
+ public slots:
+  void addTeam(HWTeam team, bool netTeam=false);
 
-private slots:
+ signals:
+  void NewTeam();
+  void teamWillPlay(HWTeam team);
+  
+ private slots:
   void changeTeamStatus(HWTeam team);
   void newTeamClicked();
 

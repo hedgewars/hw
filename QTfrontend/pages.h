@@ -22,6 +22,7 @@
 #include <QWidget>
 
 #include "binds.h"
+#include "mapContainer.h"
 
 class GameCFGWidget;
 class QPushButton;
@@ -189,6 +190,11 @@ public:
 	QPushButton *BtnAddTeam;
 	QPushButton *BtnGo;
 	QListWidget *listNetTeams;
+
+	TeamSelWidget* pNetTeamsWidget;
+
+ private:
+	GameCFGWidget* pGameCFG;
 };
 
 class PageInfo : public QWidget

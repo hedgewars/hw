@@ -64,7 +64,7 @@ private slots:
 	void NetJoin();
 	void NetCreate();
 	void AddGame(const QString & chan);
-	void NetAddTeam();
+	void NetAddTeam(HWTeam team);
 	void NetGameEnter();
 	void NetStartGame();
 	void ChangeInNetTeams(const QStringList & teams);

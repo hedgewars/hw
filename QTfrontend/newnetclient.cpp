@@ -70,8 +70,8 @@ void HWNewNet::StartGame()
 
 void HWNewNet::SendNet(const QByteArray & buf)
 {
-  qDebug() << "to net:" << buf;
   QString msg = QString(buf.toBase64());
+  qDebug() << "to net:" << buf << ":" << msg;
 
   //NetBuffer += buf;
   RawSendNet(QString(msg));
