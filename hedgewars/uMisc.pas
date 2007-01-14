@@ -208,6 +208,12 @@ begin
 if r >= 0 then r:= cLittle else r:= - cLittle 
 end;
 
+procedure SendStat(sit: TStatInfoType; s: shortstring);
+const stc: array [TStatInfoType] of char = 'rDK';
+begin
+SendIPC('i' + stc[sit] + s)
+end;
+
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 begin
@@ -220,15 +226,18 @@ begin
 Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
-procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDK';
-begin
-SendIPC('i' + stc[sit] + s)
-end;
+
+var i: integer;
 
 initialization
-AssignFile(f, 'debug.txt');
-rewrite(f);
+{$I-}
+for i:= 0 to 7 do
+    begin
+    AssignFile(f, 'debug' + inttostr(i) + '.txt');
+    rewrite(f);
+    if IOResult = 0 then break
+    end;
+{$I+}
 
 finalization
 writeln(f, '-= halt at ',GameTicks,' ticks =-');
