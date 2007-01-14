@@ -68,6 +68,8 @@ class HWMapContainer : public QWidget
   HWMap* pMap;
   QString m_seed;
   QString theme;
+
+  void loadMap(int index);
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

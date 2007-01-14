@@ -81,6 +81,13 @@ void HWMapContainer::mapChanged(int index)
     return;
   }
 
+  loadMap(index);
+
+  emit mapChanged(chooseMap->currentText());
+}
+
+void HWMapContainer::loadMap(int index)
+{
   QPixmap mapImage;
   if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/map.png")) {
     changeImage();
@@ -94,7 +101,6 @@ void HWMapContainer::mapChanged(int index)
     input >> theme;
     mapCfgFile.close();
   }
-  emit mapChanged(chooseMap->currentText());
 }
 
 void HWMapContainer::changeImage()
@@ -134,7 +140,11 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::setMap(const QString & map)
 {
-
+	int id = chooseMap->findText(map);
+	if(id >= 0) {
+		chooseMap->setCurrentIndex(id);
+		loadMap(id);
+	}
 }
 
 void HWMapContainer::setTheme(const QString & theme)
