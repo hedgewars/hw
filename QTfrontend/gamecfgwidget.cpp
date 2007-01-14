@@ -68,8 +68,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 
 	mainLayout.addWidget(new QWidget, 100);
 
-	connect(SB_InitHealth, SIGNAL(valueChanged(int i)), this, SLOT(onInitHealthChanged(int)));
-	connect(SB_TurnTime, SIGNAL(valueChanged(int i)), this, SLOT(onTurnTimeChanged(int time)));
+	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
+	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));

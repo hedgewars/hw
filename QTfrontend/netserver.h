@@ -49,7 +49,7 @@ class HWConnectedClient : public QObject
   bool readyToStart;
   QStringList gameCfg;
   class ShouldDisconnectException {};
-  
+
   QString client_nick;
   void ParseLine(const QByteArray & line);
 
@@ -77,7 +77,7 @@ class HWNetServer : public QObject
  public:
   void StartServer();
   void StopServer();
-  bool isCheefClient(HWConnectedClient* cl) const;
+  bool isChiefClient(HWConnectedClient* cl) const;
   void sendAll(QString gameCfg);
   void sendOthers(HWConnectedClient* this_cl, QString gameCfg);
   bool haveNick(const QString& nick) const;

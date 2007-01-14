@@ -38,7 +38,7 @@ void HWNetServer::StartServer()
 			  tr("Unable to start the server: %1.")
 			  .arg(IPCServer->errorString()));
   }
-  
+
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
 }
 
@@ -52,7 +52,7 @@ void HWNetServer::NewConnection()
   QTcpSocket* client = IPCServer->nextPendingConnection();
   if(!client) return;
   connclients.push_back(new HWConnectedClient(this, client));
-  connect(connclients.back(), SIGNAL(HWClientDisconnected(HWConnectedClient*)), 
+  connect(connclients.back(), SIGNAL(HWClientDisconnected(HWConnectedClient*)),
 	  this, SLOT(ClientDisconnect(HWConnectedClient*)));
 }
 
@@ -73,7 +73,7 @@ quint16 HWNetServer::getRunningPort() const
   return ds_port;
 }
 
-bool HWNetServer::isCheefClient(HWConnectedClient* cl) const
+bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
     if((*it)->getClientNick()!="" && *it==cl)  return true;
@@ -196,7 +196,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     qDebug() << "send connected";
     RawSendNet(QString("CONNECTED"));
     m_hwserver->teamChanged();
-    if(m_hwserver->isCheefClient(this)) RawSendNet(QString("CONFIGASKED"));
+    if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
     return;
   }
   if(client_nick=="") return;
@@ -224,7 +224,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     m_hwserver->teamChanged();
     return;
   }
-  
+
   m_hwserver->sendOthers(this, msg);
 }
 
