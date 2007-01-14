@@ -40,15 +40,15 @@ class HWConnectedClient : public QObject
   ~HWConnectedClient();
   QString getClientNick() const;
 
+  QList<QStringList> getTeamNames() const;
   class NoTeamNameException{};
-  QString getTeamName() const;
-  void teamChangedNotify();
   bool isReady() const;
 
   QString getHedgehogsDescription() const;
 
   bool readyToStart;
-  QMap<QString, QString> m_gameCfg;
+  QMap<QString, QString> m_gameCfg; // config_param - value
+  QList<QStringList> m_teamsCfg; // TeamName - hhs
   class ShouldDisconnectException {};
 
   QString client_nick;
@@ -56,7 +56,6 @@ class HWConnectedClient : public QObject
 
   HWNetServer* m_hwserver;
   QTcpSocket* m_client;
-  HWTeam* pclent_team;
 
   void RawSendNet(const QString & buf);
   void RawSendNet(const QByteArray & buf);
@@ -85,7 +84,7 @@ class HWNetServer : public QObject
   bool haveNick(const QString& nick) const;
   QString getRunningHostName() const;
   quint16 getRunningPort() const;
-  QStringList getTeams() const;
+  QList<QStringList> getTeamsConfig() const;
   void teamChanged();
   bool shouldStart(HWConnectedClient* client);
   QString prepareConfig(QStringList lst);

@@ -104,7 +104,7 @@ void HWNewNet::OnConnect()
 
 void HWNewNet::OnDisconnect()
 {
-  emit ChangeInTeams(QStringList());
+  //emit ChangeInTeams(QStringList());
   emit Disconnected();
 }
 
@@ -145,9 +145,9 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
-  if (lst[0] == "TEAMCHANGED") {
+  if (lst[0] == "ADDTEAM:") {
     lst.pop_front();
-    emit ChangeInTeams(lst);
+    emit AddNetTeam(lst[0]);
     return;
   }
 

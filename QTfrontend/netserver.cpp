@@ -60,7 +60,7 @@ void HWNetServer::ClientDisconnect(HWConnectedClient* client)
 {
   QList<HWConnectedClient*>::iterator it=std::find(connclients.begin(), connclients.end(), client);
   connclients.erase(it);
-  teamChanged();
+  //teamChanged();
 }
 
 QString HWNetServer::getRunningHostName() const
@@ -108,23 +108,16 @@ bool HWNetServer::haveNick(const QString& nick) const
   return false;
 }
 
-QStringList HWNetServer::getTeams() const
+QList<QStringList> HWNetServer::getTeamsConfig() const
 {
-  QStringList lst;
+  QList<QStringList> lst;
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
     try {
-      lst.push_back((*it)->getTeamName());
+      lst+=(*it)->getTeamNames();
     } catch(HWConnectedClient::NoTeamNameException& e) {
     }
   }
   return lst;
-}
-
-void HWNetServer::teamChanged()
-{
-  for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-    (*it)->teamChangedNotify();
-  }
 }
 
 bool HWNetServer::shouldStart(HWConnectedClient* client)
@@ -166,8 +159,7 @@ void HWNetServer::sendOthers(HWConnectedClient* this_cl, QString gameCfg)
 HWConnectedClient::HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client) :
   readyToStart(false),
   m_hwserver(hwserver),
-  m_client(client),
-  pclent_team(0)
+  m_client(client)
 {
   connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
   connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
@@ -175,7 +167,6 @@ HWConnectedClient::HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client) 
 
 HWConnectedClient::~HWConnectedClient()
 {
-  if(pclent_team) delete pclent_team;
 }
 
 void HWConnectedClient::ClientDisconnect()
@@ -212,12 +203,17 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     client_nick=lst[1];
     qDebug() << "send connected";
     RawSendNet(QString("CONNECTED"));
-    m_hwserver->teamChanged();
     if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
     else {
+      // send config
       QMap<QString, QString> conf=m_hwserver->getGameCfg();
       for(QMap<QString, QString>::iterator it=conf.begin(); it!=conf.end(); ++it) {
 	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value());
+      }
+      // send teams
+      QList<QStringList> team_conf=m_hwserver->getTeamsConfig();
+      for(QList<QStringList>::iterator tmit=team_conf.begin(); tmit!=team_conf.end(); ++tmit) {
+	RawSendNet(QString("ADDTEAM:")+delimeter+tmit->join(QString(delimeter)));
       }
     }
     return;
@@ -240,23 +236,17 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="ADDTEAM:") {
     if(lst.size()<10) return;
     lst.pop_front();
-    if(pclent_team) delete pclent_team;
-    pclent_team=new HWTeam(lst);
-    m_hwserver->teamChanged();
+    m_teamsCfg.push_back(lst);
+    m_hwserver->sendOthers(this, msg);
     return;
   }
 
   m_hwserver->sendOthers(this, msg);
 }
 
-void HWConnectedClient::teamChangedNotify()
+QList<QStringList> HWConnectedClient::getTeamNames() const
 {
-  QString teams;
-  QStringList lst=m_hwserver->getTeams();
-  for(int i=0; i<lst.size(); i++) {
-    teams+=delimeter+lst[i];
-  }
-  RawSendNet(QString("TEAMCHANGED")+teams);
+  return m_teamsCfg;
 }
 
 void HWConnectedClient::RawSendNet(const QString & str)
@@ -275,12 +265,6 @@ QString HWConnectedClient::getClientNick() const
   return client_nick;
 }
 
-QString HWConnectedClient::getTeamName() const
-{
-  if(!pclent_team) throw NoTeamNameException();
-  return pclent_team->TeamName;
-}
-
 bool HWConnectedClient::isReady() const
 {
   return readyToStart;
@@ -288,5 +272,5 @@ bool HWConnectedClient::isReady() const
 
 QString HWConnectedClient::getHedgehogsDescription() const
 {
-  return pclent_team->TeamGameConfig(65535, 4, 100, true).join((QString)delimeter);
+  return QString();//pclent_team->TeamGameConfig(65535, 4, 100, true).join((QString)delimeter);
 }

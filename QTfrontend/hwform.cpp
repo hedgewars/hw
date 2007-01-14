@@ -241,7 +241,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG);
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
-	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));
+	connect(hwnet, SIGNAL(AddNetTeam(const QString&)), this, SLOT(AddNetTeam(const QString&)));
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamWillPlay(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 
@@ -314,26 +314,9 @@ void HWForm::NetStartGame()
 	hwnet->StartGame();
 }
 
-void HWForm::ChangeInNetTeams(const QStringList & teams)
+void HWForm::AddNetTeam(const QString& team)
 {
-  QStringList addedTeams=teams;
-  list<HWTeam> lstPlaying=ui.pageNetGame->pNetTeamsWidget->getPlayingTeams();
-  for(list<HWTeam>::iterator it=lstPlaying.begin(); it!=lstPlaying.end(); ++it) {
-    QString nm=it->TeamName;
-    QStringList::iterator itt=std::find(addedTeams.begin(), addedTeams.end(), nm);
-    if(itt!=addedTeams.end()) addedTeams.erase(itt);
-  }
-  for(QStringList::iterator it=addedTeams.begin(); it!=addedTeams.end(); ++it) {
-    ui.pageNetGame->pNetTeamsWidget->addTeam(*it, true);
-  }
-
-  /*
-  QStringList lstQSPlaying;
-  std::for_each(lstPlaying.begin(), lstPlaying.end(), lstQSPlaying.push_back);
-  QStringList removedTeams=teams;
-  for(QStringList::iterator it=teams.begin()
-  list<HWTeam>::iterator removedItem=std::find(addedTeams.begin(), addedTeams.end(), nm);
-  */
+  ui.pageNetGame->pNetTeamsWidget->addTeam(team, true);
 }
 
 void HWForm::StartMPGame()

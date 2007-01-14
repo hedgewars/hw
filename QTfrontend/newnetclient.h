@@ -83,7 +83,7 @@ class HWNewNet : public QObject
   void EnteredGame();
   void FromNet(const QByteArray & buf);
   void LocalCFG(const QString & team);
-  void ChangeInTeams(const QStringList & teams);
+  void AddNetTeam(const QString&);
 
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
