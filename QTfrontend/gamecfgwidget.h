@@ -47,9 +47,17 @@ public slots:
 	void setSeed(const QString & seed);
 	void setMap(const QString & map);
 	void setTheme(const QString & theme);
-	void setInitHealth(const quint32 health);
-	void setTurnTime(const quint32 time);
-	void setFortsMode(const bool value);
+	void setInitHealth(quint32 health);
+	void setTurnTime(quint32 time);
+	void setFortsMode(bool value);
+
+signals:
+	void seedChanged(const QString & seed);
+	void mapChanged(const QString & map);
+	void themeChanged(const QString & theme);
+	void initHealthChanged(quint32 health);
+	void turnTimeChanged(quint32 time);
+	void fortsModeChanged(bool value);
 
 private:
 	QCheckBox * CB_mode_Forts;
@@ -59,6 +67,15 @@ private:
 	QSpinBox * SB_InitHealth;
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;
+
+private slots:
+	void onSeedChanged(const QString & seed);
+	void onMapChanged(const QString & map);
+	void onThemeChanged(const QString & theme);
+	void onInitHealthChanged(int health);
+	void onTurnTimeChanged(int time);
+	void onFortsModeChanged(bool value);
+
 };
 
 #endif // GAMECONFIGWIDGET_H

@@ -94,14 +94,17 @@ void HWMapContainer::mapChanged(int index)
     input >> theme;
     mapCfgFile.close();
   }
+  emit mapChanged(chooseMap->currentText());
 }
 
 void HWMapContainer::changeImage()
 {
   pMap = new HWMap();
   connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
+  emit seedChanged(m_seed);
   pMap->getImage(m_seed.toStdString());
   theme = (Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel";
+  emit themeChanged(theme);
 }
 
 QString HWMapContainer::getCurrentSeed() const

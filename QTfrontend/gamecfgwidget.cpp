@@ -67,6 +67,14 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
 
 	mainLayout.addWidget(new QWidget, 100);
+
+	connect(SB_InitHealth, SIGNAL(valueChanged(int i)), this, SLOT(onInitHealthChanged(int)));
+	connect(SB_TurnTime, SIGNAL(valueChanged(int i)), this, SLOT(onTurnTimeChanged(int time)));
+	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
+
+	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(onThemeChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(onMapChanged(const QString &)));
 }
 
 quint32 GameCFGWidget::getGameFlags() const
@@ -130,17 +138,47 @@ void GameCFGWidget::setTheme(const QString & theme)
 	pMapContainer->setTheme(theme);
 }
 
-void GameCFGWidget::setInitHealth(const quint32 health)
+void GameCFGWidget::setInitHealth(quint32 health)
 {
 	SB_InitHealth->setValue(health);
 }
 
-void GameCFGWidget::setTurnTime(const quint32 time)
+void GameCFGWidget::setTurnTime(quint32 time)
 {
 	SB_TurnTime->setValue(time);
 }
 
-void GameCFGWidget::setFortsMode(const bool value)
+void GameCFGWidget::setFortsMode(bool value)
 {
 	CB_mode_Forts->setChecked(value);
+}
+
+void GameCFGWidget::onInitHealthChanged(int health)
+{
+	emit initHealthChanged(health);
+}
+
+void GameCFGWidget::onTurnTimeChanged(int time)
+{
+	emit turnTimeChanged(time);
+}
+
+void GameCFGWidget::onFortsModeChanged(bool value)
+{
+	emit fortsModeChanged(value);
+}
+
+void GameCFGWidget::onSeedChanged(const QString & seed)
+{
+	emit seedChanged(seed);
+}
+
+void GameCFGWidget::onMapChanged(const QString & map)
+{
+	emit mapChanged(map);
+}
+
+void GameCFGWidget::onThemeChanged(const QString & theme)
+{
+	emit themeChanged(theme);
 }

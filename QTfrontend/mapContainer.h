@@ -47,6 +47,12 @@ class HWMapContainer : public QWidget
   void setMap(const QString & map);
   void setTheme(const QString & theme);
 
+ signals:
+  void seedChanged(const QString & seed);
+  void mapChanged(const QString & map);
+  void themeChanged(const QString & theme);
+
+
  private slots:
   void setImage(const QImage newImage);
   void mapChanged(int index);
