@@ -76,9 +76,11 @@ quint16 HWNetServer::getRunningPort() const
 bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-    if((*it)->getClientNick()!="" && *it==cl)  return true;
+    // watch for first fully connected client (with confirmed nick) and test it for chief
+    if((*it)->getClientNick()=="") continue;
+    if(*it==cl) return true;
+    else return false;
   }
-  return false;
 }
 
 bool HWNetServer::haveNick(const QString& nick) const

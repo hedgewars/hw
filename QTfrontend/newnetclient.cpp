@@ -168,27 +168,27 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if (lst[0] == "CONFIG_PARAM") {
   	if (lst[1] == "SEED") {
-      emit seedChanged(lst[2]);
+	  emit seedChanged(lst[2]);
 	  return;
   	}
   	if (lst[1] == "MAP") {
-      emit mapChanged(lst[2]);
+	  emit mapChanged(lst[2]);
 	  return;
   	}
   	if (lst[1] == "THEME") {
-      emit themeChanged(lst[2]);
+	  emit themeChanged(lst[2]);
 	  return;
   	}
   	if (lst[1] == "HEALTH") {
-      emit initHealthChanged(lst[2].toUInt());
+	  emit initHealthChanged(lst[2].toUInt());
 	  return;
   	}
   	if (lst[1] == "TURNTIME") {
-      emit turnTimeChanged(lst[2].toUInt());
+	  emit turnTimeChanged(lst[2].toUInt());
 	  return;
   	}
   	if (lst[1] == "FORTSMODE") {
-      emit fortsModeChanged(lst[2].toInt() != 0);
+	  emit fortsModeChanged(lst[2].toInt() != 0);
 	  return;
   	}
   	qDebug() << "unknow config param: " << lst[1];
