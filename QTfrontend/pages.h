@@ -82,6 +82,9 @@ public:
 	QGroupBox *GBoxGrave;
 	QComboBox *CBGrave;
 	QLabel *GravePreview;
+	QGroupBox *GBoxTeamLvl;
+	QComboBox *CBTeamLvl;
+	QLabel *LevelPict;
 	QGroupBox *GBoxBinds;
 	QToolBox *BindsBox;
 	QWidget *page_A;
@@ -91,13 +94,13 @@ public:
 	QPushButton *BtnTeamDiscard;
 	QPushButton *BtnTeamSave;
 	QLineEdit * TeamNameEdit;
-	QSpinBox* difficultyBox;
 	QLineEdit * HHNameEdit[8];
 	QComboBox * CBBind[BINDS_NUMBER];
 
 public slots:
 	void CBGrave_activated(const QString & gravename);
 	void CBFort_activated(const QString & gravename);
+	void CBTeamLvl_activated(int id);
 
 private:
 	QLabel * LBind[BINDS_NUMBER];

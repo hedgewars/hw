@@ -164,7 +164,8 @@ bool HWTeam::SaveToFile()
 void HWTeam::SetToPage(HWForm * hwform)
 {
 	hwform->ui.pageEditTeam->TeamNameEdit->setText(TeamName);
-	hwform->ui.pageEditTeam->difficultyBox->setValue(difficulty);
+	hwform->ui.pageEditTeam->CBTeamLvl->setCurrentIndex(difficulty);
+	hwform->ui.pageEditTeam->CBTeamLvl_activated(difficulty);
 	for(int i = 0; i < 8; i++)
 	{
 		hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
@@ -184,7 +185,7 @@ void HWTeam::SetToPage(HWForm * hwform)
 void HWTeam::GetFromPage(HWForm * hwform)
 {
 	TeamName  = hwform->ui.pageEditTeam->TeamNameEdit->text();
-	difficulty = hwform->ui.pageEditTeam->difficultyBox->value();
+	difficulty = hwform->ui.pageEditTeam->CBTeamLvl->currentIndex();
 	for(int i = 0; i < 8; i++)
 	{
 		HHName[i] = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
