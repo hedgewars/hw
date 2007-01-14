@@ -190,8 +190,6 @@ public:
 	QPushButton *BtnGo;
 
 	TeamSelWidget* pNetTeamsWidget;
-
- private:
 	GameCFGWidget* pGameCFG;
 };
 

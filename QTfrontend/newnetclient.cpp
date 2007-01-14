@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QUuid>
 #include <QMessageBox>
 #include <QDebug>
 
@@ -64,8 +63,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 
 void HWNewNet::StartGame()
 {
-  seed = QUuid::createUuid().toString();
-  RawSendNet(QString("START:") + delimeter + seed);
+  RawSendNet(QString("START:"));
 }
 
 void HWNewNet::SendNet(const QByteArray & buf)
@@ -74,7 +72,7 @@ void HWNewNet::SendNet(const QByteArray & buf)
   qDebug() << "to net:" << buf << ":" << msg;
 
   //NetBuffer += buf;
-  RawSendNet(QString(msg));
+  RawSendNet(QString("GAMEMSG:%1%2").arg(delimeter).arg(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -84,7 +82,6 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-  if (buf.size() > 510) return;
   NetSocket.write(buf);
   NetSocket.write("\n", 1);
 }
@@ -169,9 +166,47 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
-  QByteArray em = QByteArray::fromBase64(msg.toAscii());
-  qDebug() << "to engine:" << em;
-  emit FromNet(em);
+  if (lst[0] == "CONFIG_PARAM") {
+  	if (lst[1] == "SEED") {
+      emit seedChanged(lst[2]);
+	  return;
+  	}
+  	if (lst[1] == "MAP") {
+      emit mapChanged(lst[2]);
+	  return;
+  	}
+  	if (lst[1] == "THEME") {
+      emit themeChanged(lst[2]);
+	  return;
+  	}
+  	if (lst[1] == "HEALTH") {
+      emit initHealthChanged(lst[2].toUInt());
+	  return;
+  	}
+  	if (lst[1] == "TURNTIME") {
+      emit turnTimeChanged(lst[2].toUInt());
+	  return;
+  	}
+  	if (lst[1] == "FORTSMODE") {
+      emit fortsModeChanged(lst[2].toInt() != 0);
+	  return;
+  	}
+  	qDebug() << "unknow config param: " << lst[1];
+    return;
+  }
+
+
+  // should be kinda game states, which don't allow "GAMEMSG:" at configure step,
+  // "CONNECTED" at round phase, etc.
+  if (lst[0] == "GAMEMSG:") {
+    QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
+    qDebug() << "to engine:" << em;
+    emit FromNet(em);
+    return;
+  }
+
+  qDebug() << "unknown net command: " << msg;
+
 }
 
 
@@ -193,4 +228,34 @@ void HWNewNet::RunGame()
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
   game->StartNet();
+}
+
+void HWNewNet::onSeedChanged(const QString & seed)
+{
+  RawSendNet(QString("CONFIG_PARAM%1SEED%1%2").arg(delimeter).arg(seed));
+}
+
+void HWNewNet::onMapChanged(const QString & map)
+{
+  RawSendNet(QString("CONFIG_PARAM%1MAP%1%2").arg(delimeter).arg(map));
+}
+
+void HWNewNet::onThemeChanged(const QString & theme)
+{
+  RawSendNet(QString("CONFIG_PARAM%1THEME%1%2").arg(delimeter).arg(theme));
+}
+
+void HWNewNet::onInitHealthChanged(quint32 health)
+{
+  RawSendNet(QString("CONFIG_PARAM%1HEALTH%1%2").arg(delimeter).arg(health));
+}
+
+void HWNewNet::onTurnTimeChanged(quint32 time)
+{
+  RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
+}
+
+void HWNewNet::onFortsModeChanged(bool value)
+{
+  RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
 }

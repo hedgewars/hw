@@ -101,10 +101,8 @@ void HWMapContainer::changeImage()
 {
   pMap = new HWMap();
   connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
-  emit seedChanged(m_seed);
   pMap->getImage(m_seed.toStdString());
   theme = (Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel";
-  emit themeChanged(theme);
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -147,5 +145,7 @@ void HWMapContainer::setTheme(const QString & theme)
 void HWMapContainer::setRandomSeed()
 {
   m_seed = QUuid::createUuid().toString();
+  emit seedChanged(m_seed);
   changeImage();
+  emit themeChanged(theme);
 }

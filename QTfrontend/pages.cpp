@@ -448,10 +448,10 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	pGameCFG=new GameCFGWidget(this);
+	pGameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(pGameCFG, 0, 0);
-	
-	pNetTeamsWidget=new TeamSelWidget(this);
+
+	pNetTeamsWidget = new TeamSelWidget(this);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1);
 
 	BtnBack = new QPushButton(this);

@@ -82,9 +82,22 @@ class HWNewNet : public QObject
   void LocalCFG(const QString & team);
   void ChangeInTeams(const QStringList & teams);
 
+  void seedChanged(const QString & seed);
+  void mapChanged(const QString & map);
+  void themeChanged(const QString & theme);
+  void initHealthChanged(quint32 health);
+  void turnTimeChanged(quint32 time);
+  void fortsModeChanged(bool value);
+
  public slots:
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
+  void onSeedChanged(const QString & seed);
+  void onMapChanged(const QString & map);
+  void onThemeChanged(const QString & theme);
+  void onInitHealthChanged(quint32 health);
+  void onTurnTimeChanged(quint32 time);
+  void onFortsModeChanged(bool value);
 
  private slots:
   void ClientRead();
