@@ -216,13 +216,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
 void HWNewNet::ConfigAsked()
 {
-  QString _msg=QString("CONFIGANSWER")+delimeter;
-  _msg+=m_pGameCFGWidget->getCurrentSeed()+delimeter;
-  _msg+=m_pGameCFGWidget->getCurrentMap()+delimeter;
-  _msg+=m_pGameCFGWidget->getCurrentTheme()+delimeter;
-  _msg+=QString("%1").arg(m_pGameCFGWidget->getInitHealth())+delimeter;
-  _msg+=QString("%1").arg(m_pGameCFGWidget->getTurnTime());
-  RawSendNet(_msg);
+  onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
+  onMapChanged(m_pGameCFGWidget->getCurrentMap());
+  onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
+  onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
+  onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
 }
 
 void HWNewNet::RunGame()

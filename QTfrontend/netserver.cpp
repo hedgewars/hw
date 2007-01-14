@@ -87,13 +87,15 @@ bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
   return getChiefClient()==cl;
 }
 
-QStringList HWNetServer::getGameCfg() const
+QMap<QString, QString> HWNetServer::getGameCfg() const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-    if(isChiefClient(*it)) return (*it)->gameCfg;
+    if(isChiefClient(*it)) {
+      return (*it)->m_gameCfg;
+    }
   }
   // error happened if we are here
-  return QStringList();
+  return QMap<QString, QString>();
 }
 
 bool HWNetServer::haveNick(const QString& nick) const
@@ -212,7 +214,12 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     RawSendNet(QString("CONNECTED"));
     m_hwserver->teamChanged();
     if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
-    else RawSendNet(QString("CONFIGURED")+delimeter+m_hwserver->getGameCfg().join(QString(delimeter)));
+    else {
+      QMap<QString, QString> conf=m_hwserver->getGameCfg();
+      for(QMap<QString, QString>::iterator it=conf.begin(); it!=conf.end(); ++it) {
+	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value());
+      }
+    }
     return;
   }
   if(client_nick=="") return;
@@ -225,10 +232,9 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     return;
   }
 
-  if(lst[0]=="CONFIGANSWER") {
-    lst.pop_front();
-    gameCfg=lst;
-    return;
+  if(lst[0]=="CONFIG_PARAM") {
+    if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
+    else m_gameCfg[lst[1]]=lst[2];
   }
 
   if(lst[0]=="ADDTEAM:") {
