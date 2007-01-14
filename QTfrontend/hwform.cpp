@@ -77,7 +77,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNetGame->pNetTeamsWidget,	SIGNAL(teamWillPlay(HWTeam)),	this, SLOT(NetAddTeam(HWTeam)));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
 
 	connect(ui.pageNetChat->BtnDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
@@ -290,11 +289,6 @@ void HWForm::NetJoin()
 void HWForm::NetCreate()
 {
 	hwnet->JoinGame("#hw");
-}
-
-void HWForm::NetAddTeam(HWTeam team)
-{
-  hwnet->AddTeam(team);
 }
 
 void HWForm::NetStartGame()

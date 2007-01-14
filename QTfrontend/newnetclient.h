@@ -38,7 +38,6 @@ class HWNewNet : public QObject
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
   void JoinGame(const QString & game);
-  void AddTeam(const HWTeam & team);
   void StartGame();
 
  private:
@@ -54,7 +53,7 @@ class HWNewNet : public QObject
   template <typename T>
   void SendCfgStrNet(T a) {
     QByteArray strmsg;
-    strmsg.append(a); 
+    strmsg.append(a);
     quint8 sz = strmsg.size();
     QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg;
     QString _msg = delimeter + QString(enginemsg.toBase64());
@@ -85,6 +84,7 @@ class HWNewNet : public QObject
 
  public slots:
   void SendNet(const QByteArray & buf);
+  void AddTeam(const HWTeam & team);
 
  private slots:
   void ClientRead();
