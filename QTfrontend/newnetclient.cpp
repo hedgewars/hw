@@ -23,11 +23,14 @@
 #include "proto.h"
 #include "gameuiconfig.h"
 #include "game.h"
+#include "gamecfgwidget.h"
 
 char delimeter='\t';
 
-HWNewNet::HWNewNet(GameUIConfig * config) :
-  config(config)
+HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget) :
+  config(config),
+  m_pGameCFGWidget(pGameCFGWidget),
+  isChief(false)
 {
   connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -149,20 +152,21 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "CONFIGASKED") {
+    isChief=true;
     ConfigAsked();
     return;
   }
 
   if (lst[0] == "CONFIGURED") {
     lst.pop_front();
-    RunGame();
-    qDebug() << lst[0];
-    QByteArray ar=QByteArray::fromBase64(lst[0].toAscii());
-    emit FromNet(ar);
-
-    lst.pop_front();
-    QByteArray cache;
-    emit FromNet(HWProto::addStringListToBuffer(cache, lst));
+    if(lst.size()<5) return;
+    qDebug() << lst;
+    emit seedChanged(lst[0]);
+    emit mapChanged(lst[1]);
+    emit themeChanged(lst[2]);
+    emit initHealthChanged(lst[3].toUInt());
+    emit turnTimeChanged(lst[4].toUInt());
+    //emit fortsModeChanged(lst[5].toInt() != 0); // FIXME: add a getFortsMode in ConfigAsked
     return;
   }
 
@@ -212,12 +216,12 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
 void HWNewNet::ConfigAsked()
 {
-  QByteArray cache;
-  HWProto::addStringToBuffer(cache, "eseed " + seed);
-  HWProto::addStringToBuffer(cache, "TN");
-  HWProto::addStringToBuffer(cache, "e$gmflags 0");
-  HWProto::addStringToBuffer(cache, QString("etheme steel"));
-  QString _msg = QString("CONFIGANSWER") + delimeter + QString(cache.toBase64());
+  QString _msg=QString("CONFIGANSWER")+delimeter;
+  _msg+=m_pGameCFGWidget->getCurrentSeed()+delimeter;
+  _msg+=m_pGameCFGWidget->getCurrentMap()+delimeter;
+  _msg+=m_pGameCFGWidget->getCurrentTheme()+delimeter;
+  _msg+=QString("%1").arg(m_pGameCFGWidget->getInitHealth())+delimeter;
+  _msg+=QString("%1").arg(m_pGameCFGWidget->getTurnTime());
   RawSendNet(_msg);
 }
 

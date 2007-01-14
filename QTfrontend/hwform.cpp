@@ -238,7 +238,7 @@ void HWForm::PlayDemo()
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
-	hwnet = new HWNewNet(config);
+	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG);
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(ChangeInTeams(const QStringList &)), this, SLOT(ChangeInNetTeams(const QStringList &)));

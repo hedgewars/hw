@@ -73,14 +73,27 @@ quint16 HWNetServer::getRunningPort() const
   return ds_port;
 }
 
-bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
+HWConnectedClient* HWNetServer::getChiefClient() const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-    // watch for first fully connected client (with confirmed nick) and test it for chief
-    if((*it)->getClientNick()=="") continue;
-    if(*it==cl) return true;
-    else return false;
+    // watch for first fully connected client (with confirmed nick)
+    if((*it)->getClientNick()!="") return *it;
   }
+  return 0;
+}
+
+bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
+{
+  return getChiefClient()==cl;
+}
+
+QStringList HWNetServer::getGameCfg() const
+{
+  for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+    if(isChiefClient(*it)) return (*it)->gameCfg;
+  }
+  // error happened if we are here
+  return QStringList();
 }
 
 bool HWNetServer::haveNick(const QString& nick) const
@@ -199,6 +212,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     RawSendNet(QString("CONNECTED"));
     m_hwserver->teamChanged();
     if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
+    else RawSendNet(QString("CONFIGURED")+delimeter+m_hwserver->getGameCfg().join(QString(delimeter)));
     return;
   }
   if(client_nick=="") return;
@@ -207,7 +221,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     readyToStart=true;
     if(m_hwserver->shouldStart(this)) {
       // start
-      m_hwserver->sendAll(QString("CONFIGURED")+delimeter+m_hwserver->prepareConfig(gameCfg)+delimeter+"!"+delimeter);
     }
     return;
   }

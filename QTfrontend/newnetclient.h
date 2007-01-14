@@ -26,6 +26,7 @@
 #include "team.h"
 
 class GameUIConfig;
+class GameCFGWidget;
 
 extern char delimeter;
 
@@ -34,7 +35,7 @@ class HWNewNet : public QObject
   Q_OBJECT
 
  public:
-  HWNewNet(GameUIConfig * config);
+  HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget);
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
   void JoinGame(const QString & game);
@@ -42,7 +43,9 @@ class HWNewNet : public QObject
 
  private:
   GameUIConfig* config;
+  GameCFGWidget* m_pGameCFGWidget;
 
+  bool isChief;
   QString mynick;
   QTcpSocket NetSocket;
   QString seed;
