@@ -53,8 +53,7 @@ class TeamShowWidget : public QWidget
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
- HWTeamTempParams getTeamParams() const;
- 
+
  private:
  TeamShowWidget();
  QHBoxLayout mainLayout;

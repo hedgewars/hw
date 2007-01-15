@@ -54,6 +54,7 @@ class HWNewNet : public QObject
 
   void ConfigAsked();
   void RunGame();
+  void SendConfigToEngine();
 
   template <typename T>
   void SendCfgStrNet(T a) {

@@ -217,7 +217,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	CreateGame(ui.pageLocalGame->gameCFG);
+	CreateGame(ui.pageLocalGame->gameCFG, 0);
 	game->StartQuick();
 }
 
@@ -232,7 +232,7 @@ void HWForm::PlayDemo()
 				tr("OK"));
 		return ;
 	}
-	CreateGame(0);
+	CreateGame(0, 0);
 	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
 }
 
@@ -321,13 +321,8 @@ void HWForm::AddNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-	CreateGame(ui.pageMultiplayer->gameCFG);
+	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect);
 
-	list<HWTeam> teamslist=ui.pageMultiplayer->teamsSelect->getPlayingTeams();
-	for (list<HWTeam>::const_iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-	  HWTeamTempParams params=ui.pageMultiplayer->teamsSelect->getTeamParams(it->TeamName);
-	  game->AddTeam(it->TeamName, params);
-	}
 	game->StartLocal();
 }
 
@@ -375,9 +370,9 @@ void HWForm::GameStats(char type, const QString & info)
 	}
 }
 
-void HWForm::CreateGame(GameCFGWidget * gamecfg)
+void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
 {
-	game = new HWGame(config, gamecfg);
+	game = new HWGame(config, gamecfg, pTeamSelWidget);
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 }

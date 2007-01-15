@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QUuid>
+#include <QDebug>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -57,28 +58,40 @@ void HWGame::SendTeamConfig(int index)
 void HWGame::commonConfig()
 {
 	QByteArray buf;
+	QString gt;
+	switch (gameType) {
+		case gtDemo:
+			gt = "TD";
+			break;
+		case gtNet:
+			gt = "TN";
+			break;
+		default:
+			gt = "TL";
+	}
+	HWProto::addStringToBuffer(buf, gt);
+	qDebug() << "game type" << gt;
 	HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
-	HWProto::addStringToBuffer(buf, "TL");
+	qDebug() << "config" << gamecfg->getFullConfig();
+
+	if (m_pTeamSelWidget)
+	{
+		qDebug() << "adding teams from teamselwidget...";
+		QList<HWTeam> teams = QList<HWTeam>::fromStdList(m_pTeamSelWidget->getPlayingTeams());
+		for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
+		{
+			qDebug() << "a team...";
+			(*it).numHedgehogs = 4;
+			HWProto::addStringListToBuffer(buf,
+				(*it).TeamGameConfig(gamecfg->getInitHealth()));
+		}
+	}
 	RawSendIPC(buf);
 }
 
 void HWGame::SendConfig()
 {
 	commonConfig();
-
-	for (int i = 0; i < TeamCount; i++)
-	{
-		HWTeam team(teams[i]);
-		team.LoadFromFile();
-
-		QColor clr = m_teamsParams[teams[i]].teamColor;
-		QByteArray buf;
-		QStringList sl = team.TeamGameConfig(clr.rgb()&0xFFFFFF,
-				m_teamsParams[teams[i]].numHedgehogs,
-				gamecfg->getInitHealth());
-		HWProto::addStringListToBuffer(buf, sl);
-		RawSendIPC(buf);
-	}
 }
 
 void HWGame::SendQuickConfig()
@@ -88,13 +101,22 @@ void HWGame::SendQuickConfig()
 	QByteArray teamscfg;
 	HWTeam team1(0);
 	team1.difficulty = 0;
+	team1.teamColor = QColor(65535);
+	team1.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
-			team1.TeamGameConfig(65535, 4, gamecfg->getInitHealth()));
+			team1.TeamGameConfig(gamecfg->getInitHealth()));
 
 	HWTeam team2(2);
 	team2.difficulty = 4;
+	team2.teamColor = QColor(16776960);
+	team2.numHedgehogs = 4;
 	RawSendIPC(HWProto::addStringListToBuffer(teamscfg,
-			team2.TeamGameConfig(16776960, 4, gamecfg->getInitHealth())));
+			team2.TeamGameConfig(gamecfg->getInitHealth())));
+}
+
+void HWGame::SendNetConfig()
+{
+	commonConfig();
 }
 
 void HWGame::ParseMessage(const QByteArray & msg)
@@ -108,6 +130,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'C': {
+			qDebug("ASK Config");
 			switch (gameType) {
 				case gtLocal: {
 				 	SendConfig();
@@ -119,8 +142,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
 				}
 				case gtDemo: break;
 				case gtNet: {
-					SendIPC("TN");
 					emit SendNet(QByteArray("\x01""C"));
+					SendNetConfig();
 					break;
 				}
 			}
@@ -212,12 +235,11 @@ QStringList HWGame::setArguments()
 	return arguments;
 }
 
-void HWGame::AddTeam(const QString & teamname, HWTeamTempParams teamParams)
+void HWGame::AddTeam(const QString & teamname)
 {
 	if (TeamCount == 5) return;
 	teams[TeamCount] = teamname;
 	TeamCount++;
-	m_teamsParams[teamname]=teamParams;
 }
 
 void HWGame::SaveDemo(const QString & filename)
@@ -283,7 +305,6 @@ void HWGame::StartNet()
 void HWGame::StartLocal()
 {
 	gameType = gtLocal;
-	if (TeamCount < 2) return;
 	seed = gamecfg->getCurrentSeed();
 	demo = new QByteArray;
 	Start();
@@ -302,10 +323,12 @@ void HWGame::StartQuick()
 
 void HWGame::LocalCFG(const QString & teamname)
 {
-	QByteArray teamcfg;
+	qDebug("HWGame::LocalCFG is UNIMPLEMENTED");
+/*	QByteArray teamcfg;
 	HWTeam team(teamname);
 	team.LoadFromFile();
 	RawSendIPC(HWProto::addStringListToBuffer(teamcfg,
 			team.TeamGameConfig(16776960, 4, gamecfg->getInitHealth())));
+*/
 }
 

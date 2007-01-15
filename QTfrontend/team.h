@@ -43,25 +43,21 @@ class HWTeam
 		QString Fort;
 		unsigned int difficulty;
 		BindAction binds[BINDS_NUMBER];
+
 		bool netTeam;
+		unsigned char numHedgehogs;
+		QColor teamColor;
 
 		bool LoadFromFile();
 		bool SaveToFile();
 		void SetToPage(HWForm * hwform);
 		void GetFromPage(HWForm * hwform);
-		QStringList TeamGameConfig(quint32 color, int hedgehogs, quint32 InitHealth, bool netTeam=false) const;
+		QStringList TeamGameConfig(quint32 InitHealth) const;
 
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
 	private:
 		QString OldTeamName;
-};
-
-class HWTeamTempParams
-{
- public:
-  unsigned char numHedgehogs;
-  QColor teamColor;
 };
 
 #endif

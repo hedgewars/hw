@@ -70,11 +70,20 @@ void HWNewNet::StartGame()
   RawSendNet(QString("START:"));
 }
 
+void HWNewNet::SendConfigToEngine()
+{
+
+}
+
 void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
   qDebug() << "to net:" << buf << ":" << msg;
 
+  if(msg == "AUM=") {
+    SendConfigToEngine();
+    return ;
+  }
   //NetBuffer += buf;
   RawSendNet(QString("GAMEMSG:%1%2").arg(delimeter).arg(msg));
 }

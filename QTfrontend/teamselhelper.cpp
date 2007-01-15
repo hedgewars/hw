@@ -80,14 +80,14 @@ void TeamShowWidget::activateTeam()
   emit teamStatusChanged(m_team);
 }
 
-HWTeamTempParams TeamShowWidget::getTeamParams() const
+/*HWTeamTempParams TeamShowWidget::getTeamParams() const
 {
   if(!phhoger) throw;
   HWTeamTempParams params;
   params.numHedgehogs=phhoger->getHedgehogsNum();
   params.teamColor=colorButt->palette().color(QPalette::Button);
   return params;
-}
+}*/
 
 void TeamShowWidget::changeTeamColor()
 {
@@ -95,7 +95,7 @@ void TeamShowWidget::changeTeamColor()
   if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
     pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
   }
-  
+
   QPalette newPalette = palette();
   newPalette.setColor(QPalette::Button, QColor(*pOurFrameTeams->currentColor));
   //colorButt->setStyleSheet(QString("background-color : ")+pOurFrameTeams->currentColor->name());

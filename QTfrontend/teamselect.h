@@ -43,7 +43,6 @@ class TeamSelWidget : public QGroupBox
   //void removeTeam(HWTeam team);
   void resetPlayingTeams(const QList<HWTeam>& teamslist);
   bool isPlaying(HWTeam team) const;
-  HWTeamTempParams getTeamParams(HWTeam team) const;
   list<HWTeam> getPlayingTeams() const;
 
  public slots:
@@ -52,7 +51,7 @@ class TeamSelWidget : public QGroupBox
  signals:
   void NewTeam();
   void teamWillPlay(HWTeam team);
-  
+
  private slots:
   void changeTeamStatus(HWTeam team);
   void newTeamClicked();

@@ -45,8 +45,8 @@ class HWGame : public TCPBase
 {
 	Q_OBJECT
 public:
-	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget=0);
-	void AddTeam(const QString & team, HWTeamTempParams teamParams);
+	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget = 0);
+	void AddTeam(const QString & team);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
 	void StartQuick();
@@ -75,7 +75,6 @@ private:
     };
 	char msgbuf[MAXMSGCHARS];
 	QString teams[5];
-	std::map<QString, HWTeamTempParams> m_teamsParams;
 	QString seed;
 	int TeamCount;
 	GameUIConfig * config;
@@ -86,6 +85,7 @@ private:
 	void commonConfig();
 	void SendConfig();
 	void SendQuickConfig();
+	void SendNetConfig();
 	void SendTeamConfig(int index);
 	void ParseMessage(const QByteArray & msg);
 	void SaveDemo(const QString & filename);

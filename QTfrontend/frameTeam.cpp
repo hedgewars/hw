@@ -46,7 +46,7 @@ void FrameTeams::resetColors()
 
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
-  TeamShowWidget* pTeamShowWidget =new TeamShowWidget(team, willPlay, this);
+  TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
   teamToWidget.insert(make_pair(team, pTeamShowWidget));
   mainLayout.addWidget(pTeamShowWidget);

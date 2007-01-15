@@ -141,13 +141,6 @@ list<HWTeam> TeamSelWidget::getPlayingTeams() const
   return curPlayingTeams;
 }
 
-HWTeamTempParams TeamSelWidget::getTeamParams(HWTeam team) const
-{
-  const TeamShowWidget* tsw=dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team));
-  if(!tsw) throw;
-  return tsw->getTeamParams();
-}
-
 void TeamSelWidget::newTeamClicked()
 {
 	emit NewTeam();
