@@ -9,5 +9,6 @@
     <file>res/botlevels/4.png</file>
     <file>res/botlevels/5.png</file>
     <file>res/Hedgehog.svg</file>
+    <file>res/net.png</file>
 </qresource>
 </RCC>
