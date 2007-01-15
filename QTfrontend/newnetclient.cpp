@@ -27,9 +27,10 @@
 
 char delimeter='\t';
 
-HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget) :
+HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget) :
   config(config),
   m_pGameCFGWidget(pGameCFGWidget),
+  m_pTeamSelWidget(pTeamSelWidget),
   isChief(false)
 {
   connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
@@ -147,7 +148,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if (lst[0] == "ADDTEAM:") {
     lst.pop_front();
-    emit AddNetTeam(lst[0]);
+    emit AddNetTeam(lst);
     return;
   }
 
@@ -155,6 +156,14 @@ void HWNewNet::ParseLine(const QByteArray & line)
     isChief=true;
     ConfigAsked();
     return;
+  }
+
+  if (lst[0] == "RUNGAME") {
+    HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget); // FIXME: memory leak here (stackify it?)
+    connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
+    connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
+    connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
+    game->StartNet();
   }
 
   if (lst[0] == "CONFIGURED") {

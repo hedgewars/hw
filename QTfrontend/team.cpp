@@ -30,7 +30,8 @@
 #include <QDebug>
 
 HWTeam::HWTeam(const QString & teamname) :
-  difficulty(0)
+  difficulty(0),
+  netTeam(false)
 {
 	TeamName = teamname;
 	OldTeamName = TeamName;
@@ -44,15 +45,18 @@ HWTeam::HWTeam(const QString & teamname) :
 	}
 }
 
-HWTeam::HWTeam(const QStringList& strLst)
+HWTeam::HWTeam(const QStringList& strLst) :
+  netTeam(true)
 {
+  // net teams are configured from QStringList
   if(strLst.size()<9) throw HWTeamConstructException();
   TeamName=strLst[0];
   for(int i = 0; i < 8; i++) HHName[i]=strLst[i+1];
 }
 
 HWTeam::HWTeam(quint8 num) :
-  difficulty(0)
+  difficulty(0),
+  netTeam(false)
 {
 	num %= PREDEFTEAMS_COUNT;
 	TeamName = QApplication::translate("teams", pteams[num].TeamName);

@@ -30,6 +30,7 @@
 
 class GameUIConfig;
 class GameCFGWidget;
+class TeamSelWidget;
 
 enum GameState {
 	gsNotStarted = 0,
@@ -44,7 +45,7 @@ class HWGame : public TCPBase
 {
 	Q_OBJECT
 public:
-	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg);
+	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget=0);
 	void AddTeam(const QString & team, HWTeamTempParams teamParams);
 	void PlayDemo(const QString & demofilename);
 	void StartLocal();
@@ -79,6 +80,7 @@ private:
 	int TeamCount;
 	GameUIConfig * config;
 	GameCFGWidget * gamecfg;
+	TeamSelWidget* m_pTeamSelWidget;
 	GameType gameType;
 
 	void commonConfig();

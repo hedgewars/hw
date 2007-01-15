@@ -224,6 +224,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     readyToStart=true;
     if(m_hwserver->shouldStart(this)) {
       // start
+      m_hwserver->sendAll("RUNGAME");
     }
     return;
   }

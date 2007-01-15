@@ -27,6 +27,7 @@
 
 class GameUIConfig;
 class GameCFGWidget;
+class TeamSelWidget;
 
 extern char delimeter;
 
@@ -35,7 +36,7 @@ class HWNewNet : public QObject
   Q_OBJECT
 
  public:
-  HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget);
+  HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
   void JoinGame(const QString & game);
@@ -44,6 +45,7 @@ class HWNewNet : public QObject
  private:
   GameUIConfig* config;
   GameCFGWidget* m_pGameCFGWidget;
+  TeamSelWidget* m_pTeamSelWidget;
 
   bool isChief;
   QString mynick;
@@ -83,7 +85,7 @@ class HWNewNet : public QObject
   void EnteredGame();
   void FromNet(const QByteArray & buf);
   void LocalCFG(const QString & team);
-  void AddNetTeam(const QString&);
+  void AddNetTeam(const HWTeam&);
 
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);

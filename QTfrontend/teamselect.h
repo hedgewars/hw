@@ -47,7 +47,7 @@ class TeamSelWidget : public QGroupBox
   list<HWTeam> getPlayingTeams() const;
 
  public slots:
-  void addTeam(HWTeam team, bool netTeam=false);
+  void addTeam(HWTeam team);
 
  signals:
   void NewTeam();

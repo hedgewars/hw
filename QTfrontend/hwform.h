@@ -66,7 +66,7 @@ private slots:
 	void AddGame(const QString & chan);
 	void NetGameEnter();
 	void NetStartGame();
-	void AddNetTeam(const QString& team);
+	void AddNetTeam(const HWTeam& team);
 	void StartMPGame();
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);

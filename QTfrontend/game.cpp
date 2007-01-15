@@ -29,11 +29,13 @@
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
+#include "teamselect.h"
 #include "KB.h"
 #include "proto.h"
 
-HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg) :
-  TCPBase(true)
+HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget) :
+  TCPBase(true),
+  m_pTeamSelWidget(pTeamSelWidget)
 {
 	this->config = config;
 	this->gamecfg = gamecfg;

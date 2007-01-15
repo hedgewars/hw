@@ -26,9 +26,9 @@
 #include "teamselhelper.h"
 #include "frameTeam.h"
 
-void TeamSelWidget::addTeam(HWTeam team, bool netTeam)
+void TeamSelWidget::addTeam(HWTeam team)
 {
-  if(netTeam) {
+  if(team.netTeam) {
     framePlaying->addTeam(team, true);
     curPlayingTeams.push_back(team);
   } else {

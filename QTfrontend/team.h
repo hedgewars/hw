@@ -43,6 +43,7 @@ class HWTeam
 		QString Fort;
 		unsigned int difficulty;
 		BindAction binds[BINDS_NUMBER];
+		bool netTeam;
 
 		bool LoadFromFile();
 		bool SaveToFile();

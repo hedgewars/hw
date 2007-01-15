@@ -238,10 +238,10 @@ void HWForm::PlayDemo()
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
-	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG);
+	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
-	connect(hwnet, SIGNAL(AddNetTeam(const QString&)), this, SLOT(AddNetTeam(const QString&)));
+	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamWillPlay(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 
@@ -314,9 +314,9 @@ void HWForm::NetStartGame()
 	hwnet->StartGame();
 }
 
-void HWForm::AddNetTeam(const QString& team)
+void HWForm::AddNetTeam(const HWTeam& team)
 {
-  ui.pageNetGame->pNetTeamsWidget->addTeam(team, true);
+  ui.pageNetGame->pNetTeamsWidget->addTeam(team);
 }
 
 void HWForm::StartMPGame()
