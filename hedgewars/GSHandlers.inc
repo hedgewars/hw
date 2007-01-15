@@ -523,17 +523,27 @@ if ((HHGear.State and gstHHDriven) = 0)
    end;
 Gear.dX:= HHGear.X - Gear.X;
 Gear.dY:= HHGear.Y - Gear.Y;
+AddFileLog('Rope 1: (' + floattostr(HHGear.X) + ',' + floattostr(HHGear.Y) + ')');
+AddFileLog('Rope 2: (' + floattostr(Gear.dX) + ',' + floattostr(Gear.dY) + ')');
 
 if (Gear.Message and gm_Left  <> 0) then HHGear.dX:= HHGear.dX - 0.0002 else
 if (Gear.Message and gm_Right <> 0) then HHGear.dX:= HHGear.dX + 0.0002;
 
-if not TestCollisionYwithGear(HHGear, 1) then HHGear.dY:= HHGear.dY + cGravity;
+if not TestCollisionYwithGear(HHGear, 1) then
+   begin
+   HHGear.dY:= HHGear.dY + cGravity;
+   AddFileLog('Rope 4: free fall');
+   end;
+
+AddFileLog('Rope 3: ' + floattostr(HHGear.dY));
 
 cs:= Gear.dY + HHGear.dY;
 cc:= Gear.dX + HHGear.dX;
 len:= 1 / sqrt(sqr(cc)+sqr(cs));
 cc:= cc * len;
 cs:= cs * len;
+
+AddFileLog('Rope 5: (' + floattostr(cc) + ',' + floattostr(cs) + ')');
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
@@ -582,6 +592,8 @@ if flCheck then  // check whether rope needs dividing
 Gear.dX:= HHGear.X - Gear.X;
 Gear.dY:= HHGear.Y - Gear.Y;
 
+AddFileLog('Rope 6: (' + floattostr(Gear.dX) + ',' + floattostr(Gear.dY) + ')');
+
 cs:= Gear.dY + HHGear.dY;
 cc:= Gear.dX + HHGear.dX;
 len:= 1 / sqrt(sqr(cc)+sqr(cs));
@@ -605,10 +617,15 @@ HHGear.Y:= Gear.Y + cs*Gear.Elasticity;
 HHGear.dX:= HHGear.X - HHGear.dX;
 HHGear.dY:= HHGear.Y - HHGear.dY;
 
+AddFileLog('Rope 7: (' + floattostr(HHGear.dX) + ',' + floattostr(HHGear.dY) + ')');
+AddFileLog('Rope 8: (' + floattostr(HHGear.X) + ',' + floattostr(HHGear.Y) + ')');
+
 if TestCollisionXwithGear(HHGear, hwSign(HHGear.dX)) then
    HHGear.dX:= -0.6 * HHGear.dX;
 if TestCollisionYwithGear(HHGear, hwSign(HHGear.dY)) then
    HHGear.dY:= -0.6 * HHGear.dY;
+
+AddFileLog('Rope 9: (' + floattostr(HHGear.dX) + ',' + floattostr(HHGear.dY) + ')');
 
 if (Gear.Message and gm_Attack) <> 0 then
    if (Gear.State and gsttmpFlag) <> 0 then DeleteMe else
