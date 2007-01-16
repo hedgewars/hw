@@ -569,6 +569,12 @@ if flCheck then  // check whether rope needs dividing
       begin
       tx:= RopePoints.ar[Pred(RopePoints.Count)].X;
       ty:= RopePoints.ar[Pred(RopePoints.Count)].Y;
+      if GameTicks = 189245 then
+         begin
+         AddFileLog('tx = ' + floattostr(tx) + ' ty = ' + floattostr(ty));
+         AddFileLog('Gear.X = ' + floattostr(Gear.X) + ' Gear.Y = ' + floattostr(Gear.Y));
+         AddFileLog('HHGear.X = ' + floattostr(HHGear.X) + ' HHGear.Y = ' + floattostr(HHGear.Y));
+         end;
       if RopePoints.ar[Pred(RopePoints.Count)].b xor ((tx - Gear.X) * (ty - HHGear.Y) > (tx - HHGear.X) * (ty - Gear.Y)) then
          begin
          dec(RopePoints.Count);

@@ -163,7 +163,8 @@ end;
 
 function FloatToStr(n: Double): shortstring;
 begin
-str(n:5:5, Result)
+//str(n:5:5, Result)
+str(n, Result)
 end;
 
 {$IFNDEF FPC}
