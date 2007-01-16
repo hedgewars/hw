@@ -1,5 +1,6 @@
 unit uLandGraphics;
 interface
+{$INCLUDE options.inc}
 
 type PRangeArray = ^TRangeArray;
      TRangeArray = array[0..31] of record

@@ -18,8 +18,8 @@
 
 unit uKeys;
 interface
-{$INCLUDE options.inc}
 uses uConsts;
+{$INCLUDE options.inc}
 
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
 
