@@ -24,6 +24,7 @@
 #include "gameuiconfig.h"
 #include "game.h"
 #include "gamecfgwidget.h"
+#include "teamselect.h"
 
 char delimeter='\t';
 
@@ -63,6 +64,11 @@ void HWNewNet::AddTeam(const HWTeam & team)
 	     team.TeamName + delimeter + team.HHName[0] + delimeter + team.HHName[1] + delimeter +
 	     team.HHName[2] + delimeter + team.HHName[3] + delimeter + team.HHName[4] + delimeter +
 	     team.HHName[5] + delimeter + team.HHName[6] + delimeter + team.HHName[7]);
+}
+
+void HWNewNet::RemoveTeam(const HWTeam & team)
+{
+  RawSendNet(QString("REMOVETEAM:") + delimeter + team.TeamName);
 }
 
 void HWNewNet::StartGame()
@@ -161,6 +167,12 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
+  if (lst[0] == "REMOVETEAM:") {
+    if(lst.size()<2) return;
+    m_pTeamSelWidget->removeNetTeam(lst[1]);
+    return;
+  }
+
   if (lst[0] == "CONFIGASKED") {
     isChief=true;
     ConfigAsked();
@@ -222,7 +234,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
   // "CONNECTED" at round phase, etc.
   if (lst[0] == "GAMEMSG:") {
     QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
-    qDebug() << "to engine:" << em;
     emit FromNet(em);
     return;
   }

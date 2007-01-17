@@ -53,6 +53,7 @@ class HWConnectedClient : public QObject
 
   QString client_nick;
   void ParseLine(const QByteArray & line);
+  void removeTeam(const QString& tname);
 
   HWNetServer* m_hwserver;
   QTcpSocket* m_client;

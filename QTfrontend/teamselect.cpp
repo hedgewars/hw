@@ -31,12 +31,27 @@ void TeamSelWidget::addTeam(HWTeam team)
   if(team.netTeam) {
     framePlaying->addTeam(team, true);
     curPlayingTeams.push_back(team);
+    QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
     curDontPlayingTeams.push_back(team);
     QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		     this, SLOT(changeTeamStatus(HWTeam)));
   }
+}
+
+void TeamSelWidget::removeNetTeam(const HWTeam& team)
+{
+  list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  framePlaying->removeTeam(team);
+  curPlayingTeams.erase(itPlay);
+}
+
+void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
+{
+  list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  
 }
 
 //void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
@@ -54,6 +69,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   if(!willBePlaying) {
     // playing team => dont playing
     curDontPlayingTeams.push_back(*itPlay);
+    emit teamNotPlaying(*itPlay);
     curPlayingTeams.erase(itPlay);
   } else {
     // return if max playing teams reached

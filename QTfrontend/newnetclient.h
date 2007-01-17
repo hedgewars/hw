@@ -98,6 +98,7 @@ class HWNewNet : public QObject
  public slots:
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
+  void RemoveTeam(const HWTeam& team);
   void onSeedChanged(const QString & seed);
   void onMapChanged(const QString & map);
   void onThemeChanged(const QString & theme);

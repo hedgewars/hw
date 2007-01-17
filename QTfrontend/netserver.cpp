@@ -33,7 +33,7 @@ extern char delimeter;
 void HWNetServer::StartServer()
 {
   IPCServer = new QTcpServer(this);
-  if (!IPCServer->listen(QHostAddress::LocalHost, ds_port)) {
+  if (!IPCServer->listen(QHostAddress::Any, ds_port)) {
     QMessageBox::critical(0, tr("Error"),
 			  tr("Unable to start the server: %1.")
 			  .arg(IPCServer->errorString()));
@@ -242,7 +242,22 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     return;
   }
 
+  if(lst[0]=="REMOVETEAM:") {
+    if(lst.size()<2) return;
+    removeTeam(lst[1]);
+  }
+
   m_hwserver->sendOthers(this, msg);
+}
+
+void HWConnectedClient::removeTeam(const QString& tname)
+{
+  for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it) {
+    if((*it)[0]==tname) {
+      m_teamsCfg.erase(it);
+      break;
+    }
+  }
 }
 
 QList<QStringList> HWConnectedClient::getTeamNames() const
