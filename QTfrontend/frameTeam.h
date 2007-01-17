@@ -22,9 +22,9 @@
 #include <QWidget>
 #include <QList>
 #include <QColor>
+#include <QMultiMap>
 
 #include "teamselect.h"
-#include <map>
 
 class FrameTeams : public QWidget
 {
@@ -50,7 +50,7 @@ class FrameTeams : public QWidget
   QList<QColor>::Iterator currentColor;
 
   QVBoxLayout mainLayout;
-  typedef map<HWTeam, QWidget*> tmapTeamToWidget;
+  typedef QMultiMap<HWTeam, QWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;
 };
 

@@ -33,7 +33,7 @@ class HWTeamConstructException
 class HWTeam
 {
 	public:
-		HWTeam(const QString & teamname);
+		HWTeam(const QString & teamname, bool isNet=false);
 		HWTeam(const QStringList& strLst);
 		HWTeam(quint8 num);
 

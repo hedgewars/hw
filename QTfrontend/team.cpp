@@ -29,9 +29,9 @@
 #include <QStringList>
 #include <QDebug>
 
-HWTeam::HWTeam(const QString & teamname) :
+HWTeam::HWTeam(const QString & teamname, bool isNet) :
   difficulty(0),
-  netTeam(false)
+  netTeam(isNet)
 {
 	TeamName = teamname;
 	OldTeamName = TeamName;
@@ -230,9 +230,9 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 }
 
 bool HWTeam::operator==(const HWTeam& t1) const {
-  return TeamName==t1.TeamName;
+  return TeamName==t1.TeamName && netTeam==t1.netTeam;
 }
 
 bool HWTeam::operator<(const HWTeam& t1) const {
-  return TeamName<t1.TeamName;
+  return TeamName<t1.TeamName || (netTeam < t1.netTeam); // if names are equal - test if it is net team
 }

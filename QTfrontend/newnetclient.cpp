@@ -169,7 +169,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if (lst[0] == "REMOVETEAM:") {
     if(lst.size()<2) return;
-    m_pTeamSelWidget->removeNetTeam(lst[1]);
+    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1], true));
     return;
   }
 
