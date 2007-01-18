@@ -34,7 +34,7 @@ class GameCFGWidget : public QWidget
 	Q_OBJECT
 
 public:
-	GameCFGWidget(QWidget* parent);
+	GameCFGWidget(QWidget* parent, bool externalControl=false);
 	quint32 getGameFlags() const;
 	QString getCurrentSeed() const;
 	QString getCurrentMap() const;

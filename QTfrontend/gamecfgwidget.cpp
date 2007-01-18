@@ -24,7 +24,7 @@
 #include <QLabel>
 #include "gamecfgwidget.h"
 
-GameCFGWidget::GameCFGWidget(QWidget* parent) :
+GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QWidget(parent), mainLayout(this)
 {
 	mainLayout.setMargin(0);
@@ -71,7 +71,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
-
+	  
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(onThemeChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(onMapChanged(const QString &)));

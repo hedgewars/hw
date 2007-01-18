@@ -205,6 +205,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     RawSendNet(QString("CONNECTED"));
     if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
     else {
+      RawSendNet(QString("SLAVE"));
       // send config
       QMap<QString, QString> conf=m_hwserver->getGameCfg();
       for(QMap<QString, QString>::iterator it=conf.begin(); it!=conf.end(); ++it) {

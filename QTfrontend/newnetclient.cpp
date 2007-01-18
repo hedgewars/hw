@@ -173,6 +173,10 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
+  if(lst[0]=="SLAVE") {
+    m_pGameCFGWidget->setEnabled(false);
+  }
+
   if (lst[0] == "CONFIGASKED") {
     isChief=true;
     ConfigAsked();
