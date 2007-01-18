@@ -180,6 +180,9 @@ void HWForm::GoToPage(quint8 id)
 
 void HWForm::GoBack()
 {
+	if (!PagesStack.isEmpty() && PagesStack.top() == ID_PAGE_NET) {
+	  NetDisconnect();
+	}
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
 	OnPageShown(id);
 	ui.Pages->setCurrentIndex(id);
@@ -280,7 +283,6 @@ void HWForm::NetStartServer()
 void HWForm::NetDisconnect()
 {
   hwnet->Disconnect();
-  GoBack();
   delete hwnet;
   hwnet=0;
   if(pnetserver) {
