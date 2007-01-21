@@ -63,14 +63,14 @@ end;
 
 procedure SoundLoad;
 var i: TSound;
-    s: array[byte] of char;
+    s: shortstring;
 begin
 if not isSoundEnabled then exit;
 for i:= Low(TSound) to High(TSound) do
     begin
     s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-    WriteToConsole(msgLoading + string(s) + ' ');
-    Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(@s, 'rb'), 1);
+    WriteToConsole(msgLoading + s + ' ');
+    Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
     TryDo(Soundz[i].id <> nil, msgFailed, true);
     WriteLnToConsole(msgOK);
     end;

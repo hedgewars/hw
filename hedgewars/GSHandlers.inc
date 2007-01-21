@@ -442,8 +442,8 @@ b:= false;
 
 if (HHGear^.Angle <> BTPrevAngle) then
    begin
-   Gear^.dX:= hwSign(HHGear^.dX) * _0_5;//hwSign(HHGear^.dX) * Sin(HHGear^.Angle * pi / cMaxAngle) * _0_5;
-   Gear^.dY:= 0;//Cos(HHGear^.Angle * pi / cMaxAngle) * (-0.5);
+   Gear^.dX:= hwSign(HHGear^.dX) * AngleSin(HHGear^.Angle) * _0_5;
+   Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
    BTPrevAngle:= HHGear^.Angle;
    b:= true
    end;

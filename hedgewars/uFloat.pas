@@ -171,7 +171,7 @@ operator * (z1: hwFloat; z2: LongInt) z : hwFloat;
 begin
 z.isNegative:= z1.isNegative xor (z2 < 0);
 z2:= abs(z2);
-z.QWordValue:= z.QWordValue * z2
+z.QWordValue:= z1.QWordValue * z2
 end;
 
 operator / (z1, z2: hwFloat) z : hwFloat;
@@ -260,7 +260,7 @@ end;
 function AngleSin(angle: Longword): hwFloat;
 begin
 AngleSin.isNegative:= false;
-AngleSin:= Round(Sin(Angle * pi / cMaxAngle) * 4294967296)
+AngleSin.QWordValue:= Round(Sin(Angle * pi / cMaxAngle) * 4294967296)
 end;
 
 function AngleCos(angle: Longword): hwFloat;
@@ -268,7 +268,7 @@ var CosVal: Extended;
 begin
 CosVal:= Cos(Angle * pi / cMaxAngle);
 AngleCos.isNegative:= CosVal < 0;
-AngleCos:= Round(Cosval * 4294967296)
+AngleCos.QWordValue:= Round(Abs(Cosval) * 4294967296)
 end;
 
 {$ENDIF}

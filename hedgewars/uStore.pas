@@ -100,10 +100,8 @@ var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     Result: TSDL_Rect;
-    ps: array[byte] of char;
 begin
-ps:= s;
-TTF_SizeUTF8(Fontz[Font].Handle, @ps, w, h);
+TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
 Result.x:= X;
 Result.y:= Y;
 Result.w:= w + FontBorder * 2 + 4;
@@ -112,7 +110,7 @@ DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
-tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, @ps, clr.value);
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
 Result.x:= X + FontBorder + 2;
 Result.y:= Y + FontBorder;
 SDLTry(tmpsurf <> nil, true);
@@ -253,16 +251,13 @@ var i: TStuff;
     AdjustColor(cExplosionBorderColor);
     end;
 
-var ps: array[byte] of char;
-
 begin
 for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
          begin
          s:= Pathz[ptFonts] + '/' + Name;
          WriteToConsole(msgLoading + s + '... ');
-         ps:= s;
-         Handle:= TTF_OpenFont(@ps, Height);
+         Handle:= TTF_OpenFont(Str2PChar(s), Height);
          SDLTry(Handle <> nil, true);
          TTF_SetFontStyle(Handle, style);
          WriteLnToConsole(msgOK)
@@ -379,15 +374,13 @@ procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surfa
 var clr: TSDL_Color;
     tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
-    ps: array[byte] of Char;
 begin
 r.x:= X;
 r.y:= Y;
 clr.r:= $FF;
 clr.g:= $FF;
 clr.b:= $FF;
-ps:= s;
-tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, @ps, clr.value);
+tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, Str2PChar(s), clr.value);
 if tmpsurf = nil then
    begin
    SetKB(1);
@@ -446,11 +439,9 @@ end;
 
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 var w, h: Longint;
-    ps: array[byte] of Char;
     Result: PSDL_Surface;
 begin
-ps:= s;
-TTF_SizeUTF8(Fontz[font].Handle, @ps, w, h);
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
 Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
          cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
 TryDo(Result <> nil, 'RenderString: fail to create surface', true);
@@ -495,17 +486,17 @@ end;
 
 function  LoadImage(filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
-    ps: array[byte] of char;
     Result: PSDL_Surface;
+    s: shortstring;
 begin
 WriteToConsole(msgLoading + filename + '... ');
-ps:= filename + '.' + cBitsStr + '.png';
-tmpsurf:= IMG_Load(@ps);
+s:= filename + '.' + cBitsStr + '.png';
+tmpsurf:= IMG_Load(Str2PChar(s));
 
 if tmpsurf = nil then
    begin
-   ps:= filename + '.png';
-   tmpsurf:= IMG_Load(ps);
+   s:= filename + '.png';
+   tmpsurf:= IMG_Load(Str2PChar(s));
    end;
 
 if tmpsurf = nil then
