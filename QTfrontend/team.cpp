@@ -31,6 +31,7 @@
 
 HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
   difficulty(0),
+  numHedgehogs(4),
   m_netID(netID)
 {
 	TeamName = teamname;
@@ -45,7 +46,8 @@ HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
 	}
 }
 
-HWTeam::HWTeam(const QStringList& strLst)
+HWTeam::HWTeam(const QStringList& strLst) :
+  numHedgehogs(4)
 {
   // net teams are configured from QStringList
   if(strLst.size()<10) throw HWTeamConstructException();
@@ -56,6 +58,7 @@ HWTeam::HWTeam(const QStringList& strLst)
 
 HWTeam::HWTeam(quint8 num) :
   difficulty(0),
+  numHedgehogs(4),
   m_netID(0)
 {
 	num %= PREDEFTEAMS_COUNT;
@@ -80,6 +83,7 @@ HWTeam::HWTeam(quint8 num) :
 
 bool HWTeam::LoadFromFile()
 {
+	numHedgehogs=4;
 	QFile cfgfile(cfgdir->absolutePath() + "/" + TeamName + ".cfg");
 	if (!cfgfile.open(QIODevice::ReadOnly)) return false;
 	QTextStream stream(&cfgfile);
