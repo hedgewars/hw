@@ -18,17 +18,17 @@
 
 unit uConsole;
 interface
-uses SDLh;
+uses SDLh, uFloat;
 {$INCLUDE options.inc}
 const isDeveloperMode: boolean = true;
-type TVariableType = (vtCommand, vtInteger, vtDouble, vtBoolean);
+type TVariableType = (vtCommand, vtInteger, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
 procedure DrawConsole(Surface: PSDL_Surface);
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure KeyPressConsole(Key: Longword);
-procedure ParseCommand(CmdStr: shortstring; const TrustedSource: boolean = true);
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 function  GetLastConsoleLine: shortstring;
 
 implementation
@@ -37,7 +37,7 @@ uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
      uRandom, uAmmos;
 const cLineWidth: integer = 0;
       cLinesCount = 256;
-      
+
 type  PVariable = ^TVariable;
       TVariable = record
                      Next: PVariable;
@@ -53,20 +53,23 @@ var   ConsoleLines: array[byte] of ShortString;
       Variables: PVariable = nil;
 
 function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
+var Result: PVariable;
 begin
 New(Result);
 TryDo(Result <> nil, 'RegisterVariable: Result = nil', true);
 FillChar(Result^, sizeof(TVariable), 0);
-Result.Name:= Name;
-Result.VType:= VType;
-Result.Handler:= p;
-Result.Trusted:= Trusted;
+Result^.Name:= Name;
+Result^.VType:= VType;
+Result^.Handler:= p;
+Result^.Trusted:= Trusted;
 
 if Variables = nil then Variables:= Result
                    else begin
-                        Result.Next:= Variables;
+                        Result^.Next:= Variables;
                         Variables:= Result
-                        end
+                        end;
+
+RegisterVariable:= Result
 end;
 
 procedure FreeVariablesList;
@@ -74,10 +77,10 @@ var t, tt: PVariable;
 begin
 tt:= Variables;
 Variables:= nil;
-while tt<>nil do
+while tt <> nil do
       begin
       t:= tt;
-      tt:= tt.Next;
+      tt:= tt^.Next;
       Dispose(t)
       end;
 end;
@@ -151,8 +154,8 @@ if cLineWidth > 255 then cLineWidth:= 255;
 for i:= 0 to Pred(cLinesCount) do PLongWord(@ConsoleLines[i])^:= 0
 end;
 
-procedure ParseCommand(CmdStr: shortstring; const TrustedSource: boolean = true);
-type PDouble = ^Double;
+procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
+type PhwFloat = ^hwFloat;
 var i, ii: integer;
     s: shortstring;
     t: PVariable;
@@ -167,39 +170,39 @@ SplitBySpace(CmdStr, s);
 t:= Variables;
 while t <> nil do
       begin
-      if t.Name = CmdStr then
+      if t^.Name = CmdStr then
          begin
-         if TrustedSource or t.Trusted then
-            case t.VType of
+         if TrustedSource or t^.Trusted then
+            case t^.VType of
               vtCommand: if c='/' then
                          begin
-                         TCommandHandler(t.Handler)(s);
+                         TCommandHandler(t^.Handler)(s);
                          end;
               vtInteger: if c='$' then
                          if s[0]=#0 then
                             begin
-                            str(PInteger(t.Handler)^, s);
+                            str(PInteger(t^.Handler)^, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PInteger(t.Handler)^, i);
-                 vtDouble: if c='$' then
+                            end else val(s, PInteger(t^.Handler)^, i);
+                 vthwFloat: if c='$' then
                          if s[0]=#0 then
                             begin
-                            str(PDouble(t.Handler)^:4:6, s);
+                            //str(PhwFloat(t^.Handler)^:4:6, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PDouble(t.Handler)^   , i);
+                            end else; //val(s, PhwFloat(t^.Handler)^, i);
              vtBoolean: if c='$' then
                          if s[0]=#0 then
                             begin
-                            str(ord(boolean(t.Handler^)), s);
+                            str(ord(boolean(t^.Handler^)), s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
                             end else
                             begin
                             val(s, ii, i);
-                            boolean(t.Handler^):= not (ii = 0)
+                            boolean(t^.Handler^):= not (ii = 0)
                             end;
               end;
          exit
-         end else t:= t.Next
+         end else t:= t^.Next
       end;
 case c of
      '$': WriteLnToConsole(errmsgUnknownVariable + ': "$' + CmdStr + '"')
@@ -218,15 +221,15 @@ if InputStr[byte(InputStr[0])] = #32 then dec(InputStr[0]);
 t:= Variables;
 while t <> nil do
       begin
-      if (c=#0) or ((t.VType =  vtCommand) and (c='/'))or
-                   ((t.VType <> vtCommand) and (c='$'))then
-         if copy(t.Name, 1, Length(InputStr)) = InputStr then
+      if (c=#0) or ((t^.VType =  vtCommand) and (c='/'))or
+                   ((t^.VType <> vtCommand) and (c='$'))then
+         if copy(t^.Name, 1, Length(InputStr)) = InputStr then
             begin
-            if t.VType = vtCommand then InputStr:= '/' + t.Name + ' '
-                                   else InputStr:= '$' + t.Name + ' ';
+            if t^.VType = vtCommand then InputStr:= '/' + t^.Name + ' '
+                                    else InputStr:= '$' + t^.Name + ' ';
             exit
             end;
-      t:= t.Next
+      t:= t^.Next
       end
 end;
 
@@ -253,8 +256,8 @@ end;
 
 function GetLastConsoleLine: shortstring;
 begin
-if CurrLine = 0 then Result:= ConsoleLines[Pred(cLinesCount)]
-                else Result:= ConsoleLines[Pred(CurrLine)]
+if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)]
+                else GetLastConsoleLine:= ConsoleLines[Pred(CurrLine)]
 end;
 
 {$INCLUDE CCHandlers.inc}

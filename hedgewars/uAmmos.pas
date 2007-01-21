@@ -28,8 +28,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if cnts[a] > 0 then
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
-       Ammo[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-       Ammo[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
        inc(mi[Ammoz[a].Slot])
        end
 end;
@@ -59,7 +59,7 @@ end;
 function GetAmmoByNum(num: Longword): PHHAmmo;
 begin
 TryDo(num < StoreCnt, 'Invalid store number', true);
-Result:= StoresList[num]
+exit(StoresList[num])
 end;
 
 procedure AssignStores;
@@ -70,9 +70,9 @@ tteam:= TeamsList;
 while tteam <> nil do
       begin
       for i:= 0 to cMaxHHIndex do
-          if tteam.Hedgehogs[i].Gear <> nil then
-             tteam.Hedgehogs[i].Ammo:= GetAmmoByNum(tteam.Hedgehogs[i].AmmoStore);
-      tteam:= tteam.Next
+          if tteam^.Hedgehogs[i].Gear <> nil then
+             tteam^.Hedgehogs[i].Ammo:= GetAmmoByNum(tteam^.Hedgehogs[i].AmmoStore);
+      tteam:= tteam^.Next
       end
 end;
 
@@ -82,12 +82,12 @@ var ammos: TAmmoCounts;
     hhammo: PHHAmmo;
 begin
 FillChar(ammos, sizeof(ammos), 0);
-hhammo:= PHedgehog(Hedgehog).Ammo;
+hhammo:= PHedgehog(Hedgehog)^.Ammo;
 
 for slot:= 0 to cMaxSlotIndex do
     for ami:= 0 to cMaxSlotAmmoIndex do
-        if hhammo[slot, ami].Count > 0 then
-           ammos[hhammo[slot, ami].AmmoType]:= hhammo[slot, ami].Count;
+        if hhammo^[slot, ami].Count > 0 then
+           ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
 
 if ammos[ammo] <> AMMO_INFINITE then inc(ammos[ammo]);
 FillAmmoStore(hhammo, ammos)
@@ -101,13 +101,13 @@ begin
       b:= false;
       ami:= 0;
       while (not b) and (ami < cMaxSlotAmmoIndex) do
-          if (Ammo[Slot, ami].Count = 0)
-             and (Ammo[Slot, ami + 1].Count > 0) then b:= true
+          if (Ammo^[Slot, ami].Count = 0)
+             and (Ammo^[Slot, ami + 1].Count > 0) then b:= true
                                                  else inc(ami);
       if b then // there's a free item in ammo stack
          begin
-         Ammo[Slot, ami]:= Ammo[Slot, ami + 1];
-         Ammo[Slot, ami + 1].Count:= 0
+         Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
+         Ammo^[Slot, ami + 1].Count:= 0
          end;
     until not b;
 end;
@@ -115,11 +115,11 @@ end;
 procedure OnUsedAmmo(Ammo: PHHAmmo);
 var s, a: Longword;
 begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      begin
      if CurAmmoGear = nil then begin s:= CurSlot; a:= CurAmmo end
                           else begin s:= AltSlot; a:= AltAmmo end;
-     with Ammo[s, a] do
+     with Ammo^[s, a] do
           if Count <> AMMO_INFINITE then
              begin
              dec(Count);
@@ -133,13 +133,13 @@ var slot, ami: integer;
 begin
 Slot:= Ammoz[Ammo].Slot;
 ami:= 0;
-Result:= false;
-while (not Result) and (ami <= cMaxSlotAmmoIndex) do
+while (ami <= cMaxSlotAmmoIndex) do
       begin
-      with PHedgehog(Hedgehog).Ammo[Slot, ami] do
-            if (AmmoType = Ammo) and (Count > 0) then Result:= true;
+      with PHedgehog(Hedgehog)^.Ammo^[Slot, ami] do
+            if (AmmoType = Ammo) and (Count > 0) then exit(true);
       inc(ami)
-      end
+      end;
+HHHasAmmo:= false
 end;
 
 end.

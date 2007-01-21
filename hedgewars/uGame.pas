@@ -18,6 +18,7 @@
 
 unit uGame;
 interface
+uses uFloat;
 {$INCLUDE options.inc}
 
 procedure DoGameTick(Lag: integer);
@@ -32,7 +33,7 @@ const SendEmptyPacketTicks: LongWord = 0;
 var i: integer;
 begin
 if isPaused then exit;
-if not CurrentTeam.ExtDriven then
+if not CurrentTeam^.ExtDriven then
    begin
    NetGetNextCmd; // its for the case when receiving "/say" message
    isInLag:= false;
@@ -49,7 +50,7 @@ else if GameType = gmtSave then Lag:= 2500;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
-    if not CurrentTeam.ExtDriven then
+    if not CurrentTeam^.ExtDriven then
        begin
        with CurrentTeam^ do
            if Hedgehogs[CurrHedgehog].BotLevel <> 0 then ProcessBot(Frames);

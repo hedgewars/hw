@@ -18,9 +18,9 @@
 
 unit uAIActions;
 interface
-uses uGears;
+uses uGears, uFloat;
 {$INCLUDE options.inc}
-const MAXACTIONS = 96;
+(*const MAXACTIONS = 96;
       aia_none       = 0;
       aia_Left       = 1;
       aia_Right      = 2;
@@ -57,9 +57,9 @@ type TAction = record
 
 procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; const X: integer = 0; Y: integer = 0);
 procedure ProcessAction(var Actions: TActions; Me: PGear);
-
+*)
 implementation
-uses uMisc, uTeams, uConsts, uConsole, uAIMisc;
+(*uses uMisc, uTeams, uConsts, uConsole, uAIMisc;
 
 const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
@@ -191,5 +191,5 @@ if Actions.Pos <= Actions.Count then
    inc(Actions.actions[Actions.Pos].Time, GameTicks);
 until false
 end;
-
+*)
 end.

@@ -18,12 +18,13 @@
 
 unit uAI;
 interface
+uses uFloat;
 {$INCLUDE options.inc}
 procedure ProcessBot(FrameNo: Longword);
 procedure FreeActionsList;
 
 implementation
-uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
+{uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
      uAIThinkStack, uAmmos;
 
 var BestActions: TActions;
@@ -31,13 +32,13 @@ var BestActions: TActions;
     AIThinkStart: Longword;
     isThinking: boolean = false;
 
-procedure FreeActionsList;
+}procedure FreeActionsList;
 begin
-isThinking:= false;
+{isThinking:= false;
 BestActions.Count:= 0;
 BestActions.Pos:= 0
-end;
-
+}end;
+{
 procedure TestAmmos(var Actions: TActions; Me: PGear);
 var Time, BotLevel: Longword;
     Angle, Power, Score, ExplX, ExplY, ExplR: integer;
@@ -235,12 +236,12 @@ Push(0, BestActions, Me^, tmp xor 3);
 BestActions.Score:= Low(integer);
 
 Think(Me)
-end;
+end; }
 
 procedure ProcessBot(FrameNo: Longword);
-const LastFrameNo: Longword = 0;
+//const LastFrameNo: Longword = 0;
 begin
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+{with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear.State and gstHHDriven) <> 0)
         and (TurnTimeLeft < cHedgehogTurnTime - 50) then
@@ -252,6 +253,6 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
                 LastFrameNo:= FrameNo;
                 Think(Gear)
                 end;
-end;
+}end;
 
 end.

@@ -18,10 +18,11 @@
 
 unit uRandom;
 interface
+uses uFloat;
 {$INCLUDE options.inc}
 
 procedure SetRandomSeed(Seed: shortstring);
-function  GetRandom: Double; overload;
+function  GetRandom: hwFloat; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
 
 implementation
@@ -36,7 +37,7 @@ cirbuf[n]:=
             cirbuf[(n +  9) and $3F])            {n - 55 mod 64}
             and $7FFFFFFF;                       {mod 2^31}
 
-Result:= cirbuf[n]
+GetNext:= cirbuf[n]
 end;
 
 procedure SetRandomSeed(Seed: shortstring);
@@ -55,15 +56,19 @@ for i:= Length(Seed) to 54 do
 for i:= 0 to 1023 do GetNext
 end;
 
-function GetRandom: Double;
+function GetRandom: hwFloat;
+var r: hwFloat;
 begin
-Result:= frac( GetNext * 0.00073 + GetNext * 0.00301)
+GetNext;
+r.isNegative:= false;
+r.QWordValue:= GetNext;
+GetRandom:= r
 end;
 
 function GetRandom(m: LongWord): LongWord;
 begin
 GetNext;
-Result:= GetNext mod m
+GetRandom:= GetNext mod m
 end;
 
 end.

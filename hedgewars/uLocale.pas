@@ -40,7 +40,7 @@ var s: shortstring;
     a, b, c: integer;
 begin
 {$I-}
-AssignFile(f, FileName);
+Assign(f, FileName);
 reset(f);
 TryDo(IOResult = 0, 'Cannot load locale "' + FileName + '"', true);
 while not eof(f) do
@@ -61,7 +61,7 @@ while not eof(f) do
            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
            end;
       end;
-closefile(f)
+Close(f)
 {$I+}
 end;
 
@@ -69,8 +69,8 @@ function Format(fmt: shortstring; var arg: shortstring): shortstring;
 var i: integer;
 begin
 i:= Pos('%1', fmt);
-if i = 0 then Result:= fmt
-         else Result:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+if i = 0 then Format:= fmt
+         else Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 end.

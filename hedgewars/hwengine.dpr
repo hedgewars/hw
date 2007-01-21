@@ -43,7 +43,8 @@ uses
   uLandGraphics in 'uLandGraphics.pas',
   uLocale in 'uLocale.pas',
   uAmmos in 'uAmmos.pas',
-  uSHA in 'uSHA.pas';
+  uSHA in 'uSHA.pas',
+  uFloat in 'uFloat.pas';
 
 {$INCLUDE options.inc}
 
@@ -102,7 +103,7 @@ if flagMakeCapture then
    flagMakeCapture:= false;
    s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.bmp';
    WriteLnToConsole('Saving ' + s);
-   SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(PChar(s), 'wb'), 1)
+//   SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(PChar(s), 'wb'), 1)
    end;
 end;
 
@@ -154,7 +155,7 @@ end;
 procedure GetParams;
 var c: integer;
 {$IFDEF DEBUGFILE}
-    i: integer;    
+    i: integer;
 {$ENDIF}
     p: TPathType;
 begin
@@ -194,8 +195,8 @@ end;
 
 procedure ShowMainWindow;
 begin
-if cFullScreen then ParseCommand('fullscr 1')
-               else ParseCommand('fullscr 0');
+if cFullScreen then ParseCommand('fullscr 1', true)
+               else ParseCommand('fullscr 0', true);
 SDL_ShowCursor(0)
 end;
 
@@ -225,7 +226,7 @@ s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
 InitTeams;
-ParseCommand('ammstore 91911111111111108');
+ParseCommand('ammstore 91911111111111108', true);
 AssignStores;
 
 if isSoundEnabled then InitSound;

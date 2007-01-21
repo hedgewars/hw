@@ -24,7 +24,7 @@ uses SDLh, uConsts;
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
-procedure PlaySound(snd: TSound; const infinite: boolean = false);
+procedure PlaySound(snd: TSound; infinite: boolean);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: integer): integer;
@@ -63,26 +63,26 @@ end;
 
 procedure SoundLoad;
 var i: TSound;
-    s: string;
+    s: array[byte] of char;
 begin
 if not isSoundEnabled then exit;
 for i:= Low(TSound) to High(TSound) do
     begin
     s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-    WriteToConsole(msgLoading + s + ' ');
-    Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(PChar(s), 'rb'), 1);
+    WriteToConsole(msgLoading + string(s) + ' ');
+    Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(@s, 'rb'), 1);
     TryDo(Soundz[i].id <> nil, msgFailed, true);
     WriteLnToConsole(msgOK);
     end;
 
 s:= PathPrefix + '/Music/kahvi140a_alexander_chereshnev-illusion.ogg';
-WriteToConsole(msgLoading + s + ' ');
-Mus:= Mix_LoadMUS(PChar(s));
+WriteToConsole(msgLoading + string(s) + ' ');
+Mus:= Mix_LoadMUS(@s);
 TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK)
 end;
 
-procedure PlaySound(snd: TSound; const infinite: boolean = false);
+procedure PlaySound(snd: TSound; infinite: boolean);
 var loops: integer;
 begin
 if not isSoundEnabled then exit;
@@ -107,16 +107,14 @@ end;
 function ChangeVolume(voldelta: integer): integer;
 begin
 if not isSoundEnabled then
-   begin
-   Result:= 0;
-   exit
-   end;
+   exit(0);
+
 inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
 Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
 Mix_VolumeMusic(Volume * 3 div 8);
-Result:= Volume * 100 div MIX_MAX_VOLUME
+ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
 end.

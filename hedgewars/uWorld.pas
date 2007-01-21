@@ -18,7 +18,7 @@
 
 unit uWorld;
 interface
-uses SDLh, uGears, uConsts;
+uses SDLh, uGears, uConsts, uFloat;
 {$INCLUDE options.inc}
 const WorldDx: integer = -512;
       WorldDy: integer = -256;
@@ -39,7 +39,7 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
-const RealTicks: Longword = 0;
+const hwFloatTicks: Longword = 0;
       FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
@@ -93,7 +93,7 @@ if bShowAmmoMenu then
 if CurrentTeam = nil then exit;
 Slot:= 0;
 Pos:= -1;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      begin
      if Ammo = nil then exit;
      SlotsNum:= 0;
@@ -106,7 +106,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      dec(y, 33);
      DrawSprite(sprAMSlotName, x, y, 0, Surface);
      for i:= cMaxSlotIndex downto 0 do
-         if Ammo[i, 0].Count > 0 then
+         if Ammo^[i, 0].Count > 0 then
             begin
             if (CursorPoint.Y >= y - 33) and (CursorPoint.Y < y) then Slot:= i;
             dec(y, 33);
@@ -114,9 +114,9 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
             DrawSprite(sprAMSlot, x, y, 0, Surface);
             DrawSprite(sprAMSlotKeys, x + 2, y + 1, i, Surface);
             t:= 0;
-            while (t <= cMaxSlotAmmoIndex) and (Ammo[i, t].Count > 0) do
+            while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
                   begin
-                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, integer(Ammo[i, t].AmmoType), Surface);
+                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, integer(Ammo^[i, t].AmmoType), Surface);
                   if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
                      begin
                      DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0, Surface);
@@ -129,15 +129,15 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      DrawSprite(sprAMBorders, x, y, 0, Surface);
 
      if (Pos >= 0) then
-        if Ammo[Slot, Pos].Count > 0 then
+        if Ammo^[Slot, Pos].Count > 0 then
            begin
-           DXOutText(AMxCurr + 10, cScreenHeight - 68, fnt16, trAmmo[Ammoz[Ammo[Slot, Pos].AmmoType].NameId], Surface);
-           if Ammo[Slot, Pos].Count < 10 then
-              DXOutText(AMxCurr + 175, cScreenHeight - 68, fnt16, chr(Ammo[Slot, Pos].Count + 48) + 'x', Surface);
+           DXOutText(AMxCurr + 10, cScreenHeight - 68, fnt16, trAmmo[Ammoz[Ammo^[Slot, Pos].AmmoType].NameId], Surface);
+           if Ammo^[Slot, Pos].Count < 10 then
+              DXOutText(AMxCurr + 175, cScreenHeight - 68, fnt16, chr(Ammo^[Slot, Pos].Count + 48) + 'x', Surface);
            if bSelected then
               begin
               bShowAmmoMenu:= false;
-              SetWeapon(Ammo[Slot, Pos].AmmoType);
+              SetWeapon(Ammo^[Slot, Pos].AmmoType);
               bSelected:= false;
               exit
               end;
@@ -145,7 +145,7 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      end;
 
 bSelected:= false;
-if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface)
 end;
 
 procedure MoveCamera; forward;
@@ -174,7 +174,7 @@ begin
 if not isPaused then MoveCamera;
 
 // Sky
-inc(RealTicks, Lag);
+inc(hwFloatTicks, Lag);
 if WorldDy > 0 then
    begin
    if WorldDy > cScreenHeight then r.h:= cScreenHeight
@@ -190,8 +190,8 @@ DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (hwFloatTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy, Surface);
@@ -210,9 +210,9 @@ DrawGears(Surface);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (hwFloatTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
 {$WARNINGS ON}
 
 // Turn time
@@ -238,17 +238,17 @@ if CurrentTeam <> nil then
         1: begin
            r:= StuffPoz[sPowerBar];
            {$WARNINGS OFF}
-           r.w:= (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear.Power * 256) div cPowerDivisor;
+           r.w:= (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Power * 256) div cPowerDivisor;
            {$WARNINGS ON}
            DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
            end;
-        2: with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+        2: with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
                 begin
-                tdx:= hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle);
-                tdy:= - Cos(Gear.Angle*pi/cMaxAngle);
-                for i:= (Gear.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower, round(Gear.X + WorldDx + tdx * (24 + i * 2)) - 16,
-                                         round(Gear.Y + WorldDy + tdy * (24 + i * 2)) - 12,
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower, Gear^.X.Round + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
+                                         Gear^.Y.Round + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
                                          i, Surface)
                 end
         end;
@@ -263,8 +263,8 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
          if Surf <> nil then
             begin
             DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
-            inc(i, Surf.h + 2);
-            if EndTime <= RealTicks then
+            inc(i, Surf^.h + 2);
+            if EndTime <= hwFloatTicks then
                begin
                SDL_FreeSurface(Surf);
                Surf:= nil;
@@ -276,26 +276,26 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
 team:= TeamsList;
 while team <> nil do
       begin
-      r.x:= cScreenWidth div 2 - team.NameTag.w - 3;
-      r.y:= team.DrawHealthY;
-      r.w:= team.NameTag.w;
-      r.h:= team.NameTag.h;
-      SDL_UpperBlit(team.NameTag, nil, Surface, @r);
-      r:= team.HealthRect;
-      r.w:= 2 + team.TeamHealthBarWidth;
+      r.x:= cScreenWidth div 2 - team^.NameTag^.w - 3;
+      r.y:= team^.DrawHealthY;
+      r.w:= team^.NameTag^.w;
+      r.h:= team^.NameTag^.h;
+      SDL_UpperBlit(team^.NameTag, nil, Surface, @r);
+      r:= team^.HealthRect;
+      r.w:= 2 + team^.TeamHealthBarWidth;
       DrawFromStoreRect(cScreenWidth div 2,
-                        Team.DrawHealthY,
+                        Team^.DrawHealthY,
                         @r, Surface);
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-      DrawFromStoreRect(cScreenWidth div 2 + team.TeamHealthBarWidth + 2,
-                        Team.DrawHealthY,
+      DrawFromStoreRect(cScreenWidth div 2 + team^.TeamHealthBarWidth + 2,
+                        Team^.DrawHealthY,
                         @r, Surface);
-      team:= team.Next
+      team:= team^.Next
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 7, Surface);
+if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (hwFloatTicks shr 7) mod 7, Surface);
 
 // Wind bar
 DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
@@ -304,7 +304,7 @@ if WindBarWidth > 0 then
    with StuffPoz[sWindR] do
         begin
         {$WARNINGS OFF}
-        r.x:= x + 8 - (RealTicks shr 6) mod 8;
+        r.x:= x + 8 - (hwFloatTicks shr 6) mod 8;
         {$WARNINGS ON}
         r.y:= y;
         r.w:= WindBarWidth;
@@ -317,7 +317,7 @@ if WindBarWidth > 0 then
    with StuffPoz[sWindL] do
         begin
         {$WARNINGS OFF}
-        r.x:= x + (WindBarWidth + RealTicks shr 6) mod 8;
+        r.x:= x + (WindBarWidth + hwFloatTicks shr 6) mod 8;
         {$WARNINGS ON}
         r.y:= y;
         r.w:= - WindBarWidth;
@@ -330,7 +330,7 @@ if WindBarWidth > 0 then
 if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 
 // Cursor
-if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface);
+if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface);
 
 {$IFDEF COUNTTICKS}
 DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
@@ -349,7 +349,7 @@ if cShowFPS then
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
       if fpsSurface <> nil then SDL_FreeSurface(fpsSurface);
-      fpsSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, PChar(String(s)), $FFFFFF);
+      fpsSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
       end;
    r.x:= cScreenWidth - 50;
    r.y:= 10;
@@ -374,14 +374,14 @@ if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
 if Captions[Group].Surf <> nil then SDL_FreeSurface(Captions[Group].Surf);
 
 Captions[Group].Surf:= RenderString(s, Color, fntBig);
-Captions[Group].EndTime:= RealTicks + 1500
+Captions[Group].EndTime:= hwFloatTicks + 1500
 end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var EdgesDist: integer;
 begin
-if not (CurrentTeam.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+if not (CurrentTeam^.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 if (FollowGear <> nil) then
    if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
       begin
@@ -389,8 +389,8 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x * 7 + (round(FollowGear.X + hwSign(FollowGear.dX) * 100) + WorldDx)) div 8;
-      CursorPoint.y:= (CursorPoint.y * 7 + (round(FollowGear.Y) + WorldDy)) div 8
+      CursorPoint.x:= (CursorPoint.x * 7 + (hwRound(FollowGear^.X + hwSign(FollowGear^.dX) * 100) + WorldDx)) div 8;
+      CursorPoint.y:= (CursorPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
       end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
@@ -408,13 +408,13 @@ if AMxCurr < cScreenWidth then
 
 if isCursorVisible then
    begin
-   if (not CurrentTeam.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
+   if (not CurrentTeam^.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
       begin
       SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
       PrevSentPointTime:= GameTicks
       end;
    end;
-   
+
 if isCursorVisible or (FollowGear <> nil) then
    begin
    if isCursorVisible then EdgesDist:= cCursorEdgesDist
@@ -447,7 +447,7 @@ if isCursorVisible or (FollowGear <> nil) then
       CursorPoint.X:= (cScreenWidth  shr 1);
       CursorPoint.Y:= (cScreenHeight shr 1);
       end;
-      
+
 if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
 prevPoint:= CursorPoint;
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;

@@ -35,27 +35,27 @@ implementation
 
 function rol(x: LongWord; y: Byte): LongWord;
 begin
-  Result:= (X shl y) or (X shr (32 - y))
+  rol:= (X shl y) or (X shr (32 - y))
 end;
 
 function Ft(t, b, c, d: LongWord): LongWord;
 begin
 case t of
-      0..19: Result := (b and c) or ((not b) and d);
-     20..39: Result :=  b xor c xor d;
-     40..59: Result := (b and c) or (b and d) or (c and d);
-     else    Result :=  b xor c xor d;
+      0..19: Ft := (b and c) or ((not b) and d);
+     20..39: Ft :=  b xor c xor d;
+     40..59: Ft := (b and c) or (b and d) or (c and d);
+     else    Ft :=  b xor c xor d;
   end;
 end;
 
 function Kt(t: Byte): LongWord;
 begin
   case t of
-     0..19: Result := $5A827999;
-    20..39: Result := $6ED9EBA1;
-    40..59: Result := $8F1BBCDC;
+     0..19: Kt := $5A827999;
+    20..39: Kt := $6ED9EBA1;
+    40..59: Kt := $8F1BBCDC;
   else
-    Result := $CA62C1D6
+    Kt := $CA62C1D6
   end;
 end;
 
@@ -67,11 +67,11 @@ var S: array[0..4 ] of LongWord;
 begin
 move(Context.H, S, sizeof(S));
 for i:= 0 to 15 do
-    SDLNet_Write32(PLongWordArray(@Context.Buf)[i], @W[i]);
-    
+    SDLNet_Write32(PLongWordArray(@Context.Buf)^[i], @W[i]);
+
 for i := 16 to 79 do
     W[i] := rol(W[i - 3] xor W[i - 8] xor W[i - 14] xor W[i - 16], 1);
-    
+
 for i := 0 to 79 do
     begin
     t:= rol(S[0], 5) + Ft(i, S[1], S[2], S[3]) + S[4] + W[i] + Kt(i);
@@ -81,7 +81,7 @@ for i := 0 to 79 do
     S[1]:= S[0];
     S[0]:= t
     end;
-    
+
 for i := 0 to 4 do
     Context.H[i]:= Context.H[i] + S[i]
 end;
@@ -118,6 +118,7 @@ end;
 
 function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 var i: LongWord;
+    Result: TSHA1Digest;
 begin
 Context.Length:= Context.Length + Context.CurrLength shl 3;
 Context.Buf[Context.CurrLength]:= $80;
@@ -137,7 +138,8 @@ for i:= 56 to 63 do
     Context.Buf[i] := (Context.Length shr ((63 - i) * 8)) and $FF;
 SHA1Hash(Context);
 move(Context.H, Result, sizeof(TSHA1Digest));
-FillChar(Context, sizeof(Context), 0)
+FillChar(Context, sizeof(Context), 0);
+SHA1Final:= Result
 end;
 
 end.

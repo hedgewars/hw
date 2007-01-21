@@ -1,5 +1,6 @@
 unit uLandGraphics;
 interface
+uses uFloat;
 {$INCLUDE options.inc}
 
 type PRangeArray = ^TRangeArray;
@@ -9,7 +10,7 @@ type PRangeArray = ^TRangeArray;
 
 procedure DrawExplosion(X, Y, Radius: integer);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: integer; y, dY: integer; Count: Byte);
-procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
+procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: integer);
 procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
 
 implementation
@@ -51,32 +52,32 @@ end;
 procedure ClearLandPixel(y, x: integer);
 var p: PByteArray;
 begin
-p:= @PByteArray(LandSurface.pixels)^[LandSurface.pitch*y];
-case LandSurface.format.BytesPerPixel of
+p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
+case LandSurface^.format^.BytesPerPixel of
      1: ;// not supported
-     2: PWord(@p[x * 2])^:= 0;
+     2: PWord(@(p^[x * 2]))^:= 0;
      3: begin
-        p[x * 3 + 0]:= 0;
-        p[x * 3 + 1]:= 0;
-        p[x * 3 + 2]:= 0;
+        p^[x * 3 + 0]:= 0;
+        p^[x * 3 + 1]:= 0;
+        p^[x * 3 + 2]:= 0;
         end;
-     4: PLongword(@p[x * 4])^:= 0;
+     4: PLongword(@(p^[x * 4]))^:= 0;
      end
 end;
 
 procedure SetLandPixel(y, x: integer);
 var p: PByteArray;
 begin
-p:= @PByteArray(LandSurface.pixels)^[LandSurface.pitch*y];
-case LandSurface.format.BytesPerPixel of
+p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
+case LandSurface^.format^.BytesPerPixel of
      1: ;// not supported
-     2: PWord(@p[x * 2])^:= cExplosionBorderColor;
+     2: PWord(@(p^[x * 2]))^:= cExplosionBorderColor;
      3: begin
-        p[x * 3 + 0]:= cExplosionBorderColor and $FF;
-        p[x * 3 + 1]:= (cExplosionBorderColor shr 8) and $FF;
-        p[x * 3 + 2]:= cExplosionBorderColor shr 16;
+        p^[x * 3 + 0]:= cExplosionBorderColor and $FF;
+        p^[x * 3 + 1]:= (cExplosionBorderColor shr 8) and $FF;
+        p^[x * 3 + 2]:= cExplosionBorderColor shr 16;
         end;
-     4: PLongword(@p[x * 4])^:= cExplosionBorderColor;
+     4: PLongword(@(p^[x * 4]))^:= cExplosionBorderColor;
      end
 end;
 
@@ -148,8 +149,8 @@ if SDL_MustLock(LandSurface) then
           end;
      inc(dx)
      end;
-  if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);  
-  
+  if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
+
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 end;
@@ -163,18 +164,18 @@ if SDL_MustLock(LandSurface) then
 for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
-        for tx:= max(0, ar[i].Left - Radius) to min(2047, ar[i].Right + Radius) do
+        for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
             ClearLandPixel(ty, tx);
     inc(y, dY)
     end;
 
 inc(Radius, 4);
-dec(y, Count*dY);
+dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
-        for tx:= max(0, ar[i].Left - Radius) to min(2047, ar[i].Right + Radius) do
+        for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
             if Land[ty, tx] = $FFFFFF then
                   SetLandPixel(ty, tx);
     inc(y, dY)
@@ -187,8 +188,8 @@ end;
 //
 //  - (dX, dY) - direction, vector of length = 0.5
 //
-procedure DrawTunnel(X, Y, dX, dY: Double; ticks, HalfWidth: integer);
-var nx, ny: Double;
+procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: integer);
+var nx, ny: hwFloat;
     i, t, tx, ty: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 if SDL_MustLock(LandSurface) then
@@ -219,8 +220,8 @@ for i:= -HalfWidth to HalfWidth do
         begin
         X:= X + dX;
         Y:= Y + dY;
-        tx:= round(X);
-        ty:= round(Y);
+        tx:= hwRound(X);
+        ty:= hwRound(Y);
         if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0) then
            begin
            Land[ty, tx]:= 0;

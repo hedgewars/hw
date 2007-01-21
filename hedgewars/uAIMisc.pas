@@ -18,9 +18,9 @@
 
 unit uAIMisc;
 interface
-uses SDLh, uConsts, uGears;
+uses SDLh, uConsts, uGears, uFloat;
 {$INCLUDE options.inc}
-
+ {
 type TTarget = record
                Point: TPoint;
                Score: integer;
@@ -48,9 +48,9 @@ function rndSign(num: integer): integer;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
-
+                       }
 implementation
-uses uTeams, uMisc, uLand, uCollisions;
+{uses uTeams, uMisc, uLand, uCollisions;
 const KillScore = 200;
       MAXBONUS = 1024;
       
@@ -389,6 +389,6 @@ function rndSign(num: integer): integer;
 begin
 if random(2) = 0 then Result:=   num
                  else Result:= - num
-end;
+end;  }
 
 end.

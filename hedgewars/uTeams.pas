@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uAmmos;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uAmmos, uFloat;
 {$INCLUDE options.inc}
 type PHedgehog = ^THedgehog;
      PTeam     = ^TTeam;
@@ -83,22 +83,21 @@ var team, AliveTeam: PTeam;
     AliveCount: Longword;
     s: shortstring;
 begin
-Result:= false;
 AliveCount:= 0;
 AliveTeam:= nil;
 team:= TeamsList;
 while team <> nil do
       begin
-      if team.TeamHealth > 0 then
+      if team^.TeamHealth > 0 then
          begin
          inc(AliveCount);
          AliveTeam:= team
          end;
-      team:= team.Next
+      team:= team^.Next
       end;
 
-if AliveCount >= 2 then exit;
-Result:= true;
+if AliveCount >= 2 then exit(false);
+CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 if AliveCount = 0 then
@@ -108,7 +107,7 @@ if AliveCount = 0 then
    AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
    end else // win
    begin
-   s:= Format(trmsg[sidWinner], AliveTeam.TeamName);
+   s:= Format(trmsg[sidWinner], AliveTeam^.TeamName);
    AddCaption(s, $FFFFFF, capgrpGameState);
    SendStat(siGameResult, s);
    AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
@@ -119,30 +118,31 @@ end;
 procedure SwitchHedgehog;
 var tteam: PTeam;
     th: integer;
+    g: PGear;
 begin
 FreeActionsList;
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
 tteam:= CurrentTeam;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if Gear <> nil then
         begin
-        Gear.Message:= 0;
-        Gear.Z:= cHHZ
+        Gear^.Message:= 0;
+        Gear^.Z:= cHHZ
         end;
 
 repeat
-  CurrentTeam:= CurrentTeam.Next;
+  CurrentTeam:= CurrentTeam^.Next;
   if CurrentTeam = nil then CurrentTeam:= TeamsList;
-  th:= CurrentTeam.CurrHedgehog;
+  th:= CurrentTeam^.CurrHedgehog;
   repeat
-    CurrentTeam.CurrHedgehog:= Succ(CurrentTeam.CurrHedgehog) mod (cMaxHHIndex + 1);
-  until (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil) or (CurrentTeam.CurrHedgehog = th)
-until (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil) or (CurrentTeam = tteam);
+    CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (cMaxHHIndex + 1);
+  until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (CurrentTeam^.CurrHedgehog = th)
+until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (CurrentTeam = tteam);
 
 TryDo(CurrentTeam <> tteam, 'Switch hedgehog: only one team?!', true);
 
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      begin
      AttacksNum:= 0;
      with Gear^ do
@@ -156,29 +156,35 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
      FollowGear:= Gear
      end;
 ResetKbd;
-cWindSpeed:= (GetRandom * 2 - 1) * cMaxWindSpeed;
-AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1).Tag:= round(72 * cWindSpeed / cMaxWindSpeed);
+
+cWindSpeed:= rndSign(GetRandom * cMaxWindSpeed);
+addfilelog('SwitchHedgehog 06');
+g:= AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1);
+g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
+addfilelog('SwitchHedgehog 07');
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
-ApplyAmmoChanges(CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog]);
-if CurrentTeam.ExtDriven then SetDefaultBinds
-                         else SetBinds(CurrentTeam.Binds);
+ApplyAmmoChanges(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+if CurrentTeam^.ExtDriven then SetDefaultBinds
+                          else SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 
 function AddTeam: PTeam;
+var Result: PTeam;
 begin
 New(Result);
 TryDo(Result <> nil, 'AddTeam: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
-Result.AttackBar:= 2;
-Result.CurrHedgehog:= cMaxHHIndex;
+Result^.AttackBar:= 2;
+Result^.CurrHedgehog:= cMaxHHIndex;
 if TeamsList = nil then TeamsList:= Result
                    else begin
-                        Result.Next:= TeamsList;
+                        Result^.Next:= TeamsList;
                         TeamsList:= Result
                         end;
-CurrentTeam:= Result
+CurrentTeam:= Result;
+AddTeam:= Result
 end;
 
 procedure FreeTeamsList;
@@ -186,10 +192,10 @@ var t, tt: PTeam;
 begin
 tt:= TeamsList;
 TeamsList:= nil;
-while tt<>nil do
+while tt <> nil do
       begin
       t:= tt;
-      tt:= tt.Next;
+      tt:= tt^.Next;
       Dispose(t)
       end;
 end;
@@ -201,7 +207,7 @@ p:= TeamsList;
 while p <> nil do
       begin
       RecountTeamHealth(p);
-      p:= p.Next
+      p:= p^.Next
       end
 end;
 
@@ -215,10 +221,10 @@ while p <> nil do
       begin
       th:= 0;
       for i:= 0 to cMaxHHIndex do
-          if p.Hedgehogs[i].Gear <> nil then
-             inc(th, p.Hedgehogs[i].Gear.Health);
+          if p^.Hedgehogs[i].Gear <> nil then
+             inc(th, p^.Hedgehogs[i].Gear^.Health);
       if th > MaxTeamHealth then MaxTeamHealth:= th;
-      p:= p.Next
+      p:= p^.Next
       end;
 RecountAllTeamsHealth
 end;
@@ -230,14 +236,14 @@ TargetPoint.X:= NoPointX;
 
 with Hedgehog do
      begin
-     if Ammo[CurSlot, CurAmmo].Count = 0 then
+     if Ammo^[CurSlot, CurAmmo].Count = 0 then
         begin
         CurAmmo:= 0;
         CurSlot:= 0;
-        while (CurSlot <= cMaxSlotIndex) and (Ammo[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
+        while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
         end;
 
-with Ammo[CurSlot, CurAmmo] do
+with Ammo^[CurSlot, CurAmmo] do
      begin
      CurMinAngle:= Ammoz[AmmoType].minAngle;
      if Ammoz[AmmoType].maxAngle <> 0 then CurMaxAngle:= Ammoz[AmmoType].maxAngle
@@ -247,19 +253,19 @@ with Ammo[CurSlot, CurAmmo] do
         if Angle < CurMinAngle then Angle:= CurMinAngle;
         if Angle > CurMaxAngle then Angle:= CurMaxAngle;
         end;
-        
+
      s:= trammo[Ammoz[AmmoType].NameId];
      if Count <> AMMO_INFINITE then
         s:= s + ' (' + IntToStr(Count) + ')';
      if (Propz and ammoprop_Timerable) <> 0 then
         s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-     AddCaption(s, Team.Color, capgrpAmmoinfo);
+     AddCaption(s, Team^.Color, capgrpAmmoinfo);
      if (Propz and ammoprop_NeedTarget) <> 0
         then begin
-        Gear.State:= Gear.State or      gstHHChooseTarget;
+        Gear^.State:= Gear^.State or      gstHHChooseTarget;
         isCursorVisible:= true
         end else begin
-        Gear.State:= Gear.State and not gstHHChooseTarget;
+        Gear^.State:= Gear^.State and not gstHHChooseTarget;
         isCursorVisible:= false
         end;
      ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
@@ -268,11 +274,12 @@ with Ammo[CurSlot, CurAmmo] do
 end;
 
 function  TeamSize(p: PTeam): Longword;
-var i: Longword;
+var i, Result: Longword;
 begin
 Result:= 0;
 for i:= 0 to cMaxHHIndex do
-    if p.Hedgehogs[i].Gear <> nil then inc(Result)
+    if p^.Hedgehogs[i].Gear <> nil then inc(Result);
+TeamSize:= Result
 end;
 
 procedure RecountTeamHealth(team: PTeam);
@@ -283,7 +290,7 @@ with team^ do
      TeamHealthBarWidth:= 0;
      for i:= 0 to cMaxHHIndex do
          if Hedgehogs[i].Gear <> nil then
-            inc(TeamHealthBarWidth, Hedgehogs[i].Gear.Health);
+            inc(TeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
      TeamHealth:= TeamHealthBarWidth;
      if TeamHealthBarWidth > MaxTeamHealth then
         begin
@@ -292,7 +299,7 @@ with team^ do
         end else TeamHealthBarWidth:= (TeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
      end;
 // FIXME: at the game init, gtTeamHealthSorters are created for each team, and they work simultaneously
-AddGear(0, 0, gtTeamHealthSorter, 0)
+AddGear(0, 0, gtTeamHealthSorter, 0, 0, 0, 0)
 end;
 
 procedure RestoreTeamsFromSave;
@@ -301,8 +308,8 @@ begin
 p:= TeamsList;
 while p <> nil do
       begin
-      p.ExtDriven:= false;
-      p:= p.Next
+      p^.ExtDriven:= false;
+      p:= p^.Next
       end;
 end;
 
@@ -312,9 +319,9 @@ begin
 t:= cMaxSlotAmmoIndex;
 with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
-          while (Ammo[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
+          while (Ammo^[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
                 begin
-                ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot));
+                ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot), true);
                 dec(t)
                 end
 end;
@@ -329,15 +336,15 @@ p:= TeamsList;
 while p <> nil do
       begin
       for i:= 0 to cMaxHHIndex do
-          if p.Hedgehogs[i].MaxStepDamage > msd then
+          if p^.Hedgehogs[i].MaxStepDamage > msd then
              begin
-             msdhh:= @p.Hedgehogs[i];
-             msd:= p.Hedgehogs[i].MaxStepDamage
+             msdhh:= @(p^.Hedgehogs[i]);
+             msd:= p^.Hedgehogs[i].MaxStepDamage
              end;
-      p:= p.Next
+      p:= p^.Next
       end;
-if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msdhh.MaxStepDamage) + ' ' +
-                                               msdhh.Name + ' (' + msdhh.Team.TeamName + ')');
+if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msdhh^.MaxStepDamage) + ' ' +
+                                               msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
 if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 

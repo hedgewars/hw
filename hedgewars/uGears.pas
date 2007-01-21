@@ -18,7 +18,7 @@
 
 unit uGears;
 interface
-uses SDLh, uConsts;
+uses SDLh, uConsts, uFloat;
 {$INCLUDE options.inc}
 const AllInactive: boolean = false;
 
@@ -28,19 +28,19 @@ type PGear = ^TGear;
              NextGear, PrevGear: PGear;
              Active: Boolean;
              State : Longword;
-             X : Double;
-             Y : Double;
-             dX: Double;
-             dY: Double;
+             X : hwFloat;
+             Y : hwFloat;
+             dX: hwFloat;
+             dY: hwFloat;
              Kind: TGearType;
              Pos: Longword;
              doStep: TGearStepProcedure;
              Radius: integer;
              Angle, Power : Longword;
-             DirAngle: Double;
+             DirAngle: hwFloat;
              Timer : LongWord;
-             Elasticity: Double;
-             Friction  : Double;
+             Elasticity: hwFloat;
+             Friction  : hwFloat;
              Message : Longword;
              Hedgehog: pointer;
              Health, Damage: integer;
@@ -50,7 +50,7 @@ type PGear = ^TGear;
              Z: Longword;
              end;
 
-function  AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
+function  AddGear(X, Y: integer; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -73,8 +73,8 @@ var RopePoints: record
                 Count: Longword;
                 HookAngle: integer;
                 ar: array[0..300] of record
-                                  X, Y: Double;
-                                  dLen: Double;
+                                  X, Y: hwFloat;
+                                  dLen: hwFloat;
                                   b: boolean;
                                   end;
                  end;
@@ -95,35 +95,35 @@ procedure HedgehogChAngle(Gear: PGear); forward;
 {$INCLUDE HHHandlers.inc}
 
 const doStepHandlers: array[TGearType] of TGearStepProcedure = (
-                                                               doStepCloud,
-                                                               doStepBomb,
-                                                               doStepHedgehog,
-                                                               doStepGrenade,
-                                                               doStepHealthTag,
-                                                               doStepGrave,
-                                                               doStepUFO,
-                                                               doStepShotgunShot,
-                                                               doStepPickHammer,
-                                                               doStepRope,
-                                                               doStepSmokeTrace,
-                                                               doStepExplosion,
-                                                               doStepMine,
-                                                               doStepCase,
-                                                               doStepDEagleShot,
-                                                               doStepDynamite,
-                                                               doStepTeamHealthSorter,
-                                                               doStepBomb,
-                                                               doStepCluster,
-                                                               doStepShover,
-                                                               doStepFlame,
-                                                               doStepFirePunch,
-                                                               doStepActionTimer,
-                                                               doStepActionTimer,
-                                                               doStepActionTimer,
-                                                               doStepParachute,
-                                                               doStepAirAttack,
-                                                               doStepAirBomb,
-                                                               doStepBlowTorch
+                                                               @doStepCloud,
+                                                               @doStepBomb,
+                                                               @doStepHedgehog,
+                                                               @doStepGrenade,
+                                                               @doStepHealthTag,
+                                                               @doStepGrave,
+                                                               @doStepUFO,
+                                                               @doStepShotgunShot,
+                                                               @doStepPickHammer,
+                                                               @doStepRope,
+                                                               @doStepSmokeTrace,
+                                                               @doStepExplosion,
+                                                               @doStepMine,
+                                                               @doStepCase,
+                                                               @doStepDEagleShot,
+                                                               @doStepDynamite,
+                                                               @doStepTeamHealthSorter,
+                                                               @doStepBomb,
+                                                               @doStepCluster,
+                                                               @doStepShover,
+                                                               @doStepFlame,
+                                                               @doStepFirePunch,
+                                                               @doStepActionTimer,
+                                                               @doStepActionTimer,
+                                                               @doStepActionTimer,
+                                                               @doStepParachute,
+                                                               @doStepAirAttack,
+                                                               @doStepAirBomb,
+                                                               @doStepBlowTorch
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -134,172 +134,174 @@ if GearsList = nil then
    else begin
    // WARNING: this code assumes that the first gears added to the list are clouds (have maximal Z)
    tmp:= GearsList;
-   while (tmp <> nil) and (tmp.Z < Gear.Z) do
-          tmp:= tmp.NextGear;
+   while (tmp <> nil) and (tmp^.Z < Gear^.Z) do
+          tmp:= tmp^.NextGear;
 
-   if tmp.PrevGear <> nil then tmp.PrevGear.NextGear:= Gear;
-   Gear.PrevGear:= tmp.PrevGear;
-   tmp.PrevGear:= Gear;
-   Gear.NextGear:= tmp;
+   if tmp^.PrevGear <> nil then tmp^.PrevGear^.NextGear:= Gear;
+   Gear^.PrevGear:= tmp^.PrevGear;
+   tmp^.PrevGear:= Gear;
+   Gear^.NextGear:= tmp;
    if GearsList = tmp then GearsList:= Gear
    end
 end;
 
 procedure RemoveGearFromList(Gear: PGear);
 begin
-if Gear.NextGear <> nil then Gear.NextGear.PrevGear:= Gear.PrevGear;
-if Gear.PrevGear <> nil then Gear.PrevGear.NextGear:= Gear.NextGear
+if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
+if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
    else begin
-   GearsList:= Gear.NextGear;
-   if GearsList <> nil then GearsList.PrevGear:= nil
+   GearsList:= Gear^.NextGear;
+   if GearsList <> nil then GearsList^.PrevGear:= nil
    end;
 end;
 
-function AddGear(X, Y: integer; Kind: TGearType; State: Longword; const dX: Double=0.0; dY: Double=0.0; Timer: LongWord=0): PGear;
+function AddGear(X, Y: integer; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 const Counter: Longword = 0;
+var Result: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
 New(Result);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: type = '+inttostr(ord(Kind))+'; handle = '+inttostr(integer(Result)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
-Result.X:= X;
-Result.Y:= Y;
-Result.Kind := Kind;
-Result.State:= State;
-Result.Active:= true;
-Result.dX:= dX;
-Result.dY:= dY;
-Result.doStep:= doStepHandlers[Kind];
-Result.CollIndex:= High(Longword);
-Result.Timer:= Timer;
+Result^.X:= X;
+Result^.Y:= Y;
+Result^.Kind := Kind;
+Result^.State:= State;
+Result^.Active:= true;
+Result^.dX:= dX;
+Result^.dY:= dY;
+Result^.doStep:= doStepHandlers[Kind];
+Result^.CollIndex:= High(Longword);
+Result^.Timer:= Timer;
 if CurrentTeam <> nil then
-   Result.Hedgehog:= @CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog];
+   Result^.Hedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
 case Kind of
-       gtCloud: Result.Z:= High(Result.Z);  
+       gtCloud: Result^.Z:= High(Result^.Z);
    gtAmmo_Bomb: begin
-                Result.Radius:= 4;
-                Result.Elasticity:= 0.6;
-                Result.Friction:= 0.995;
+                Result^.Radius:= 4;
+                Result^.Elasticity:= _0_6;
+                Result^.Friction:= _0_995;
                 end;
     gtHedgehog: begin
-                Result.Radius:= cHHRadius;
-                Result.Elasticity:= 0.35;
-                Result.Friction:= 0.999;
-                Result.Angle:= cMaxAngle div 2;
-                Result.Z:= cHHZ;
+                Result^.Radius:= cHHRadius;
+                Result^.Elasticity:= _0_35;
+                Result^.Friction:= _0_999;
+                Result^.Angle:= cMaxAngle div 2;
+                Result^.Z:= cHHZ;
                 end;
 gtAmmo_Grenade: begin
-                Result.Radius:= 4;
+                Result^.Radius:= 4;
                 end;
    gtHealthTag: begin
-                Result.Timer:= 1500;
-                Result.Z:= 2000;
+                Result^.Timer:= 1500;
+                Result^.Z:= 2000;
                 end;
        gtGrave: begin
-                Result.Radius:= 10;
-                Result.Elasticity:= 0.6;
+                Result^.Radius:= 10;
+                Result^.Elasticity:= _0_6;
                 end;
          gtUFO: begin
-                Result.Radius:= 5;
-                Result.Timer:= 500;
-                Result.Elasticity:= 0.9
+                Result^.Radius:= 5;
+                Result^.Timer:= 500;
+                Result^.Elasticity:= _0_9
                 end;
  gtShotgunShot: begin
-                Result.Timer:= 900;
-                Result.Radius:= 2
+                Result^.Timer:= 900;
+                Result^.Radius:= 2
                 end;
   gtPickHammer: begin
-                Result.Radius:= 10;
-                Result.Timer:= 4000
+                Result^.Radius:= 10;
+                Result^.Timer:= 4000
                 end;
   gtSmokeTrace: begin
-                Result.X:= Result.X - 16;
-                Result.Y:= Result.Y - 16;
-                Result.State:= 8
+                Result^.X:= Result^.X - 16;
+                Result^.Y:= Result^.Y - 16;
+                Result^.State:= 8
                 end;
         gtRope: begin
-                Result.Radius:= 3;
-                Result.Friction:= 500;
+                Result^.Radius:= 3;
+                Result^.Friction:= 500;
                 RopePoints.Count:= 0;
                 end;
    gtExplosion: begin
-                Result.X:= Result.X - 25;
-                Result.Y:= Result.Y - 25;
+                Result^.X:= Result^.X - 25;
+                Result^.Y:= Result^.Y - 25;
                 end;
         gtMine: begin
-                Result.Radius:= 3;
-                Result.Elasticity:= 0.55;
-                Result.Friction:= 0.995;
-                Result.Timer:= 3000;
+                Result^.Radius:= 3;
+                Result^.Elasticity:= _0_55;
+                Result^.Friction:= _0_995;
+                Result^.Timer:= 3000;
                 end;
         gtCase: begin
-                Result.Radius:= 16;
-                Result.Elasticity:= 0.4
+                Result^.Radius:= 16;
+                Result^.Elasticity:= _0_4
                 end;
   gtDEagleShot: begin
-                Result.Radius:= 1;
-                Result.Radius:= 1;
-                Result.Health:= 50
+                Result^.Radius:= 1;
+                Result^.Radius:= 1;
+                Result^.Health:= 50
                 end;
     gtDynamite: begin
-                Result.Radius:= 3;
-                Result.Elasticity:= 0.55;
-                Result.Friction:= 0.03;
-                Result.Timer:= 5000;
+                Result^.Radius:= 3;
+                Result^.Elasticity:= _0_55;
+                Result^.Friction:= _0_03;
+                Result^.Timer:= 5000;
                 end;
  gtClusterBomb: begin
-                Result.Radius:= 4;
-                Result.Elasticity:= 0.6;
-                Result.Friction:= 0.995;
+                Result^.Radius:= 4;
+                Result^.Elasticity:= _0_6;
+                Result^.Friction:= _0_995;
                 end;
        gtFlame: begin
-                Result.Angle:= Counter mod 64;
-                Result.Radius:= 1;
-                Result.Health:= 2;
-                Result.dY:= (getrandom - 0.8) * 0.03;
-                Result.dX:= (getrandom - 0.5) * 0.4
+                Result^.Angle:= Counter mod 64;
+                Result^.Radius:= 1;
+                Result^.Health:= 2;
+                Result^.dY:= (getrandom - _0_8) * _0_03;
+                Result^.dX:= (getrandom - _0_5) * _0_4
                 end;
    gtFirePunch: begin
-                Result.Radius:= 15;
-                Result.Tag:= Y
+                Result^.Radius:= 15;
+                Result^.Tag:= Y
                 end;
      gtAirBomb: begin
-                Result.Radius:= 10;
+                Result^.Radius:= 10;
                 end;
    gtBlowTorch: begin
-                Result.Radius:= cHHRadius;
-                Result.Timer:= 7500;
+                Result^.Radius:= cHHRadius;
+                Result^.Timer:= 7500;
                 end;
      end;
-InsertGearToList(Result)
+InsertGearToList(Result);
+AddGear:= Result
 end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t: Longword;
 begin
-if Gear.CollIndex < High(Longword) then DeleteCI(Gear);
-if Gear.Surf <> nil then SDL_FreeSurface(Gear.Surf);
-if Gear.Kind = gtHedgehog then
+if Gear^.CollIndex < High(Longword) then DeleteCI(Gear);
+if Gear^.Surf <> nil then SDL_FreeSurface(Gear^.Surf);
+if Gear^.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
       {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: Sending gm_Destroy, hh handle = '+inttostr(integer(Gear)));{$ENDIF}
-      Gear.Message:= gm_Destroy;
-      CurAmmoGear.Message:= gm_Destroy;
+      Gear^.Message:= gm_Destroy;
+      CurAmmoGear^.Message:= gm_Destroy;
       exit
       end else
       begin
-      if Gear.Y >= cWaterLine then
+      if not (Gear^.Y < cWaterLine) then
          begin
-         t:= max(Gear.Damage, Gear.Health);
-         AddGear(Round(Gear.X), Round(Gear.Y), gtHealthTag, t).Hedgehog:= Gear.Hedgehog;
+         t:= max(Gear^.Damage, Gear^.Health);
+         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, 0, 0, 0)^.Hedgehog:= Gear^.Hedgehog;
          inc(StepDamage, t)
          end;
-      team:= PHedgehog(Gear.Hedgehog).Team;
-      if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = Gear then
+      team:= PHedgehog(Gear^.Hedgehog)^.Team;
+      if CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = Gear then
          FreeActionsList; // to avoid ThinkThread on drawned gear
-      PHedgehog(Gear.Hedgehog).Gear:= nil;
+      PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
       inc(KilledHHs);
       RecountTeamHealth(team);
       end;
@@ -313,25 +315,25 @@ end;
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
 begin
-Result:= true;
+CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
       begin
-      if Gear.Kind = gtHedgehog then
-         if Gear.Damage <> 0 then
+      if Gear^.Kind = gtHedgehog then
+         if Gear^.Damage <> 0 then
             begin
-            Result:= false;
-            inc(StepDamage, Gear.Damage);
-            if Gear.Health < Gear.Damage then Gear.Health:= 0
-                                         else dec(Gear.Health, Gear.Damage);
-            AddGear(Round(Gear.X), round(Gear.Y) - cHHRadius - 12 - PHedgehog(Gear.Hedgehog)^.HealthTag.h,
-                    gtHealthTag, Gear.Damage).Hedgehog:= Gear.Hedgehog;
-            RenderHealth(PHedgehog(Gear.Hedgehog)^);
-            RecountTeamHealth(PHedgehog(Gear.Hedgehog)^.Team);
-            
-            Gear.Damage:= 0
+            CheckNoDamage:= false;
+            inc(StepDamage, Gear^.Damage);
+            if Gear^.Health < Gear^.Damage then Gear^.Health:= 0
+                                         else dec(Gear^.Health, Gear^.Damage);
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12 - PHedgehog(Gear^.Hedgehog)^.HealthTag^.h,
+                    gtHealthTag, Gear^.Damage, 0, 0, 0)^.Hedgehog:= Gear^.Hedgehog;
+            RenderHealth(PHedgehog(Gear^.Hedgehog)^);
+            RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
+
+            Gear^.Damage:= 0
             end;
-      Gear:= Gear.NextGear
+      Gear:= Gear^.NextGear
       end;
 end;
 
@@ -360,8 +362,8 @@ t:= GearsList;
 while t<>nil do
       begin
       Gear:= t;
-      t:= Gear.NextGear;
-      if Gear.Active then Gear.doStep(Gear);
+      t:= Gear^.NextGear;
+      if Gear^.Active then Gear^.doStep(Gear);
       end;
 
 if AllInactive then
@@ -375,19 +377,19 @@ if AllInactive then
                     end
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
-        stChWin: if not CheckForWin then inc(step) else step:= stDelay; 
+        stChWin: if not CheckForWin then inc(step) else step:= stDelay;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)
                  end;
         stNTurn: begin
-                 AwareOfExplosion(0, 0, 0);
+                 //AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
-                    with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+                    with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
                          if MaxStepDamage < StepDamage then MaxStepDamage:= StepDamage;
                     StepDamage:= 0;
-                    ParseCommand('/nextturn');
+                    ParseCommand('/nextturn', true);
                     end;
                  step:= Low(step)
                  end;
@@ -395,10 +397,10 @@ if AllInactive then
 
 if TurnTimeLeft > 0 then
    if CurrentTeam <> nil then
-      if CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear <> nil then
-         if ((CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear.State and gstAttacking) = 0)
+      if CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil then
+         if ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
-            
+
 inc(GameTicks);
 {$IFDEF COUNTTICKS}
 asm
@@ -427,10 +429,10 @@ var t: PGear;
 begin
 AllInactive:= false;
 t:= GearsList;
-while t<>nil do
+while t <> nil do
       begin
-      t.Active:= true;
-      t:= t.NextGear
+      t^.Active:= true;
+      t:= t^.NextGear
       end
 end;
 
@@ -439,64 +441,64 @@ var t: PGear;
 begin
 AllInactive:= false;
 t:= GearsList;
-while t<>nil do
+while t <> nil do
       begin
-      if t.Kind = gtHedgehog then t.Active:= true;
-      t:= t.NextGear
+      if t^.Kind = gtHedgehog then t^.Active:= true;
+      t:= t^.NextGear
       end
 end;
 
 procedure DrawHH(Gear: PGear; Surface: PSDL_Surface);
 var t: integer;
 begin
-DrawHedgehog(Round(Gear.X) - 14 + WorldDx, Round(Gear.Y) - 18 + WorldDy,
-             hwSign(Gear.dX), 0,
-             PHedgehog(Gear.Hedgehog).visStepPos div 2,
+DrawHedgehog(hwRound(Gear^.X) - 14 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
+             hwSign(Gear^.dX), 0,
+             PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
              Surface);
 
-with PHedgehog(Gear.Hedgehog)^ do
-     if Gear.State = 0 then
+with PHedgehog(Gear^.Hedgehog)^ do
+     if Gear^.State = 0 then
         begin
-        t:= round(Gear.Y) - cHHRadius - 10 + WorldDy;
-        dec(t, HealthTag.h + 2);
-        DrawCentered(round(Gear.X) + WorldDx, t, HealthTag, Surface);
-        dec(t, NameTag.h + 2);
-        DrawCentered(round(Gear.X) + WorldDx, t, NameTag, Surface);
-        dec(t, Team.NameTag.h + 2);
-        DrawCentered(round(Gear.X) + WorldDx, t, Team.NameTag, Surface)
+        t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
+        dec(t, HealthTag^.h + 2);
+        DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTag, Surface);
+        dec(t, NameTag^.h + 2);
+        DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTag, Surface);
+        dec(t, Team^.NameTag^.h + 2);
+        DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTag, Surface)
         end else // Current hedgehog
         begin
-        if bShowFinger and ((Gear.State and gstHHDriven) <> 0) then
-           DrawSprite(sprFinger, round(Gear.X) - 16 + WorldDx, round(Gear.Y) - 64 + WorldDy,
+        if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
+           DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
                       GameTicks div 32 mod 16, Surface);
-        if (Gear.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
-           if (Gear.State and gstHHThinking) <> 0 then
-              DrawGear(sQuestion, Round(Gear.X) - 10 + WorldDx, Round(Gear.Y) - cHHRadius - 34 + WorldDy, Surface)
+        if (Gear^.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
+           if (Gear^.State and gstHHThinking) <> 0 then
+              DrawGear(sQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, Surface)
               else
-              if ShowCrosshair and ((Gear.State and gstAttacked) = 0) then
-                 DrawSurfSprite(Round(Gear.X + hwSign(Gear.dX) * Sin(Gear.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
-                           Round(Gear.Y - Cos(Gear.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
-                           24, (18 + hwSign(Gear.dX) * integer(((Gear.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
-                           Team.CrosshairSurf, Surface);
+              if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
+                 DrawSurfSprite(Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
+                           Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
+                           24, (18 + hwSign(Gear^.dX) * integer(((Gear^.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
+                           Team^.CrosshairSurf, Surface);
         end;
 end;
 
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
-    roplen: Double;
+    roplen: hwFloat;
 
     procedure DrawRopeLine(X1, Y1, X2, Y2: integer);
     const nodlen = 5;
     var i, x, y: integer;
-        t, k, ladd: Double;
+        t, k, ladd: hwFloat;
     begin
     if (X1 = X2) and (Y1 = Y2) then
        begin
-       OutError('WARNING: zero length rope line!');
+       OutError('WARNING: zero length rope line!', false);
        exit
        end;
-    if abs(X1 - X2) > abs(Y1 - Y2) then
+{    if abs(X1 - X2) > abs(Y1 - Y2) then
        begin
        if X1 > X2 then
           begin
@@ -555,21 +557,21 @@ var Gear: PGear;
            t:= t + k;
            end;
        end
-    end;
+}    end;
 
 begin
 Gear:= GearsList;
 while Gear<>nil do
       begin
-      case Gear.Kind of
-           gtCloud: DrawSprite(sprCloud   , Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
-       gtAmmo_Bomb: DrawSprite(sprBomb , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
+      case Gear^.Kind of
+           gtCloud: DrawSprite(sprCloud   , hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
+       gtAmmo_Bomb: DrawSprite(sprBomb , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
         gtHedgehog: DrawHH(Gear, Surface);
-    gtAmmo_Grenade: DrawSprite(sprGrenade , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
-       gtHealthTag: if Gear.Surf <> nil then DrawCentered(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.Surf, Surface);
-           gtGrave: DrawSpriteFromRect(PHedgehog(Gear.Hedgehog).Team.GraveRect, Round(Gear.X) + WorldDx - 16, Round(Gear.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
-             gtUFO: DrawSprite(sprUFO, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
-      gtSmokeTrace: if Gear.State < 8 then DrawSprite(sprSmokeTrace, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
+    gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
+       gtHealthTag: if Gear^.Surf <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Surf, Surface);
+           gtGrave: DrawSpriteFromRect(PHedgehog(Gear^.Hedgehog)^.Team^.GraveRect, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
+             gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
+      gtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
             gtRope: begin
                     roplen:= 0;
                     if RopePoints.Count > 0 then
@@ -577,38 +579,38 @@ while Gear<>nil do
                        i:= 0;
                        while i < Pred(RopePoints.Count) do
                              begin
-                             DrawRopeLine(Round(RopePoints.ar[i].X) + WorldDx, Round(RopePoints.ar[i].Y) + WorldDy,
-                                          Round(RopePoints.ar[Succ(i)].X) + WorldDx, Round(RopePoints.ar[Succ(i)].Y) + WorldDy);
+                             DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+                                          hwRound(RopePoints.ar[Succ(i)].X) + WorldDx, hwRound(RopePoints.ar[Succ(i)].Y) + WorldDy);
                              inc(i)
                              end;
-                       DrawRopeLine(Round(RopePoints.ar[i].X) + WorldDx, Round(RopePoints.ar[i].Y) + WorldDy,
-                                    Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy);
-                       DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
-                                    Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
-                       DrawSprite(sprRopeHook, Round(RopePoints.ar[0].X) + WorldDx - 16, Round(RopePoints.ar[0].Y) + WorldDy - 16, RopePoints.HookAngle, Surface);
+                       DrawRopeLine(hwRound(RopePoints.ar[i].X) + WorldDx, hwRound(RopePoints.ar[i].Y) + WorldDy,
+                                    hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy);
+                       DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+                                    hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
+                       DrawSprite(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx - 16, hwRound(RopePoints.ar[0].Y) + WorldDy - 16, RopePoints.HookAngle, Surface);
                        end else
                        begin
-                       DrawRopeLine(Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy,
-                                    Round(PHedgehog(Gear.Hedgehog).Gear.X) + WorldDx, Round(PHedgehog(Gear.Hedgehog).Gear.Y) + WorldDy);
-                       DrawSprite(sprRopeHook, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
+                       DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+                                    hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
+                       DrawSprite(sprRopeHook, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
                        end;
                     end;
-       gtExplosion: DrawSprite(sprExplosion50, Round(Gear.X) + WorldDx, Round(Gear.Y) + WorldDy, Gear.State, Surface);
-            gtMine: if ((Gear.State and gstAttacking) = 0)or((Gear.Timer and $3FF) < 420)
-                       then DrawSprite(sprMineOff , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface)
-                       else DrawSprite(sprMineOn  , Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-        gtDynamite: DrawSprite2(sprDynamite, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 25 + WorldDy, Gear.Tag and 1, Gear.Tag shr 1, Surface);
-            gtCase: case Gear.Pos of
-                         posCaseAmmo  : DrawSprite(sprCase, Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, 0, Surface);
-                         posCaseHealth: DrawSprite(sprFAid, Round(Gear.X) - 24 + WorldDx, Round(Gear.Y) - 24 + WorldDy, (GameTicks shr 6) mod 13, Surface);
+       gtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
+            gtMine: if ((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)
+                       then DrawSprite(sprMineOff , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface)
+                       else DrawSprite(sprMineOn  , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
+        gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1, Surface);
+            gtCase: case Gear^.Pos of
+                         posCaseAmmo  : DrawSprite(sprCase, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0, Surface);
+                         posCaseHealth: DrawSprite(sprFAid, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, (GameTicks shr 6) mod 13, Surface);
                          end;
-     gtClusterBomb: DrawSprite(sprClusterBomb, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, trunc(Gear.DirAngle), Surface);
-         gtCluster: DrawSprite(sprClusterParticle, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy, 0, Surface);
-           gtFlame: DrawSprite(sprFlame, Round(Gear.X) - 8 + WorldDx, Round(Gear.Y) - 8 + WorldDy,(GameTicks div 128 + Gear.Angle) mod 8, Surface);
-         gtAirBomb: DrawSprite(sprAirBomb , Round(Gear.X) - 16 + WorldDx, Round(Gear.Y) - 16 + WorldDy, DxDy2Angle32(Gear.dY, Gear.dX), Surface);
-       gtAirAttack: DrawSprite(sprAirplane, Round(Gear.X) - 60 + WorldDx, Round(Gear.Y) - 25 + WorldDy, 0, Surface);
+     gtClusterBomb: DrawSprite(sprClusterBomb, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
+         gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0, Surface);
+           gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Angle) mod 8, Surface);
+         gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
+       gtAirAttack: DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0, Surface);
               end;
-      Gear:= Gear.NextGear
+      Gear:= Gear^.NextGear
       end;
 end;
 
@@ -620,7 +622,7 @@ GearsList:= nil;
 while tt<>nil do
       begin
       t:= tt;
-      tt:= tt.NextGear;
+      tt:= tt^.NextGear;
       Dispose(t)
       end;
 end;
@@ -631,7 +633,7 @@ begin
 AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do
-       FindPlace(AddGear(0, 0, gtMine, 0), false, 0, 2048);
+       FindPlace(AddGear(0, 0, gtMine, 0, 0, 0, 0), false, 0, 2048);
 end;
 
 procedure AddClouds;
@@ -639,7 +641,8 @@ var i: integer;
 begin
 for i:= 0 to cCloudsNumber do
     AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
-             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random))
+//             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random), 0)
+             0, 0, 0)
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);
@@ -649,39 +652,39 @@ begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
-if Radius = 50 then AddGear(X, Y, gtExplosion, 0);
-if (Mask and EXPLAutoSound)<>0 then PlaySound(sndExplosion);
+if Radius = 50 then AddGear(X, Y, gtExplosion, 0, 0, 0, 0);
+if (Mask and EXPLAutoSound)<>0 then PlaySound(sndExplosion, false);
 if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;
 Gear:= GearsList;
 while Gear <> nil do
       begin
-      dmg:= Radius - Round(sqrt(sqr(Gear.X - X) + sqr(Gear.Y - Y)));
+      dmg:= Radius - hwRound(Distance(Gear^.X - X, Gear^.Y - Y));
       if dmg > 0 then
          begin
          dmg:= dmg shr 1;
-         case Gear.Kind of
+         case Gear^.Kind of
               gtHedgehog,
                   gtMine,
                   gtCase,
                  gtFlame: begin
-                          if (Mask and EXPLNoDamage) = 0 then inc(Gear.Damage, dmg);
-                          if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear.Kind <> gtHedgehog) then
+                          if (Mask and EXPLNoDamage) = 0 then inc(Gear^.Damage, dmg);
+                          if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
-                             Gear.dX:= Gear.dX + (dmg / 200 + cHHKick)* hwSign(Gear.X - X);
-                             Gear.dY:= Gear.dY + (dmg / 200 + cHHKick)* hwSign(Gear.Y - Y);
-                             Gear.Active:= true;
+                             Gear^.dX:= Gear^.dX + (_0_005 * dmg + cHHKick)* hwSign(Gear^.X - X);
+                             Gear^.dY:= Gear^.dY + (_0_005 * dmg + cHHKick)* hwSign(Gear^.Y - Y);
+                             Gear^.Active:= true;
                              FollowGear:= Gear
                              end;
                           end;
                  gtGrave: begin
-                          Gear.dY:= - dmg / 250;
-                          Gear.Active:= true;
+                          Gear^.dY:= - _0_004 * dmg;
+                          Gear^.Active:= true;
                           end;
               end;
          end;
-      Gear:= Gear.NextGear
+      Gear:= Gear^.NextGear
       end;
-uAIMisc.AwareOfExplosion(0, 0, 0)
+//uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: integer);
@@ -690,23 +693,23 @@ var t: PGearArray;
     hh: PHedgehog;
 begin
 t:= CheckGearsCollision(Ammo);
-i:= t.Count;
-hh:= Ammo.Hedgehog;
+i:= t^.Count;
+hh:= Ammo^.Hedgehog;
 while i > 0 do
     begin
     dec(i);
-    if (t.ar[i].State and gstNoDamage) = 0 then
-       case t.ar[i].Kind of
+    if (t^.ar[i]^.State and gstNoDamage) = 0 then
+       case t^.ar[i]^.Kind of
            gtHedgehog,
                gtMine,
                gtCase: begin
-                       inc(t.ar[i].Damage, Damage);
-                       inc(hh.DamageGiven, Damage);
-                       t.ar[i].dX:= Ammo.dX * Power * 0.01;
-                       t.ar[i].dY:= Ammo.dY * Power * 0.01;
-                       t.ar[i].Active:= true;
-                       DeleteCI(t.ar[i]);
-                       FollowGear:= t.ar[i]
+                       inc(t^.ar[i]^.Damage, Damage);
+                       inc(hh^.DamageGiven, Damage);
+                       t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
+                       t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
+                       t^.ar[i]^.Active:= true;
+                       DeleteCI(t^.ar[i]);
+                       FollowGear:= t^.ar[i]
                        end;
            end
     end;
@@ -722,12 +725,12 @@ t:= 0;
 while Team <> nil do
       begin
       for i:= 0 to cMaxHHIndex do
-          with Team.Hedgehogs[i] do
+          with Team^.Hedgehogs[i] do
                if Gear <> nil then
                   if (GameFlags and gfForts) = 0 then FindPlace(Gear, false, 0, 2048)
                                                  else FindPlace(Gear, false, t, t + 1024);
       inc(t, 1024);
-      Team:= Team.Next
+      Team:= Team^.Next
       end
 end;
 
@@ -739,15 +742,12 @@ rX:= sqr(rX);
 rY:= sqr(rY);
 while t <> nil do
       begin
-      if (t <> Gear) and (t.Kind = Kind) then
-         if sqr(Gear.X - t.X) / rX + sqr(Gear.Y - t.Y) / rY <= 1 then
-            begin
-            Result:= t;
-            exit
-            end;
-      t:= t.NextGear
+      if (t <> Gear) and (t^.Kind = Kind) then
+         if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > 1) then
+            exit(t);
+      t:= t^.NextGear
       end;
-Result:= nil
+CheckGearNear:= nil
 end;
 
 procedure AmmoFlameWork(Ammo: PGear);
@@ -756,17 +756,17 @@ begin
 t:= GearsList;
 while t <> nil do
       begin
-      if (t.Kind = gtHedgehog) and (t.Y < Ammo.Y) then
-         if sqr(Ammo.X - t.X) + sqr(Ammo.Y - t.Y - cHHRadius) * 2 <= sqr(4) then
+      if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
+         if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - cHHRadius) * 2 > 2) then
             begin
-            inc(t.Damage, 5);
-            t.dX:= t.dX + (t.X - Ammo.X) * 0.02;
-            t.dY:= - 0.25;
-            t.Active:= true;
+            inc(t^.Damage, 5);
+            t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
+            t^.dY:= - _0_25;
+            t^.Active:= true;
             DeleteCI(t);
             FollowGear:= t
             end;
-      t:= t.NextGear
+      t:= t^.NextGear
       end;
 end;
 
@@ -778,41 +778,40 @@ rX:= sqr(rX);
 rY:= sqr(rY);
 while t <> nil do
       begin
-      if t.Kind in Kind then
-         if sqr(mX - t.X) / rX + sqr(mY - t.Y) / rY <= 1 then
-            begin
-            Result:= t;
-            exit
-            end;
-      t:= t.NextGear
+      if t^.Kind in Kind then
+         if not (hwSqr(mX - t^.X) / rX + hwSqr(mY - t^.Y) / rY > 1) then
+            exit(t);
+      t:= t^.NextGear
       end;
-Result:= nil
+CheckGearsNear:= nil
 end;
 
 function CountGears(Kind: TGearType): Longword;
 var t: PGear;
+    Result: Longword;
 begin
 Result:= 0;
 t:= GearsList;
 while t <> nil do
       begin
-      if t.Kind = Kind then inc(Result);
-      t:= t.NextGear
+      if t^.Kind = Kind then inc(Result);
+      t:= t^.NextGear
       end;
+CountGears:= Result
 end;
 
 procedure SpawnBoxOfSmth;
 begin
 if (CountGears(gtCase) >= 5) or (getrandom(cCaseFactor) <> 0) then exit;
-FollowGear:= AddGear(0, 0, gtCase, 0);
+FollowGear:= AddGear(0, 0, gtCase, 0, 0, 0, 0);
 case getrandom(2) of
      0: begin
-        FollowGear.Health:= 25;
-        FollowGear.Pos:= posCaseHealth
+        FollowGear^.Health:= 25;
+        FollowGear^.Pos:= posCaseHealth
         end;
      1: begin
-        FollowGear.Pos:= posCaseAmmo;
-        FollowGear.State:= Longword(amMineStrike)
+        FollowGear^.Pos:= posCaseAmmo;
+        FollowGear^.State:= Longword(amMineStrike)
         end;
      end;
 FindPlace(FollowGear, true, 0, 2048)
@@ -822,11 +821,13 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer);
 
     function CountNonZeroz(x, y, r: integer): integer;
     var i: integer;
+        Result: integer;
     begin
     Result:= 0;
     if (y and $FFFFFC00) <> 0 then exit;
     for i:= max(x - r, 0) to min(x + r, 2043) do
-        if Land[y, i] <> 0 then inc(Result)
+        if Land[y, i] <> 0 then inc(Result);
+    CountNonZeroz:= Result
     end;
 
 var fx, x: integer;
@@ -839,26 +840,26 @@ x:= fx;
 delta:= 130;
 repeat
   repeat
-     inc(x, Gear.Radius);
+     inc(x, Gear^.Radius);
      if x > Right then x:= Left + (x mod (Right - left));
      cnt:= 0;
-     y:= -Gear.Radius * 2;
+     y:= -Gear^.Radius * 2;
      while y < 1023 do
         begin
         repeat
           inc(y, 2);
-        until (y > 1023) or (CountNonZeroz(x, y, Gear.Radius - 1) = 0);
+        until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
         sy:= y;
         repeat
           inc(y);
-        until (y > 1023) or (CountNonZeroz(x, y, Gear.Radius - 1) <> 0);
-        if (y - sy > Gear.Radius * 2)
+        until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
+        if (y - sy > Gear^.Radius * 2)
         and (y < 1023)
-        and (CheckGearsNear(x, y - Gear.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
+        and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
            begin
            ar[cnt].X:= x;
-           if withFall then ar[cnt].Y:= sy + Gear.Radius
-                       else ar[cnt].Y:= y - Gear.Radius;
+           if withFall then ar[cnt].Y:= sy + Gear^.Radius
+                       else ar[cnt].Y:= y - Gear^.Radius;
            inc(cnt)
            end;
         inc(y, 80)
@@ -866,8 +867,8 @@ repeat
      if cnt > 0 then
         with ar[GetRandom(cnt)] do
           begin
-          Gear.X:= x;
-          Gear.Y:= y;
+          Gear^.X:= x;
+          Gear^.Y:= y;
          {$IFDEF DEBUGFILE}
          AddFileLog('Assigned Gear ' + inttostr(integer(Gear)) +
                     ' coordinates (' + inttostr(x) +
@@ -875,7 +876,7 @@ repeat
          {$ENDIF}
           exit
           end
-  until (x - Gear.Radius < fx) and (x + Gear.Radius > fx);
+  until (x - Gear^.Radius < fx) and (x + Gear^.Radius > fx);
 dec(Delta, 20)
 until (Delta < 70);
 OutError('Couldn''t find place for Gear ' + inttostr(integer(Gear)), false);

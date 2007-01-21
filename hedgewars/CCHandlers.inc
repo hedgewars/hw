@@ -17,13 +17,15 @@
  *)
 
 function CheckNoTeamOrHH: boolean;
+var Result: boolean;
 begin
-Result:= (CurrentTeam = nil) or (CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear = nil);
+Result:= (CurrentTeam = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil);
 {$IFDEF DEBUGFILE}
 if Result then
    if CurrentTeam = nil then AddFileLog('CONSOLE: CurTeam = nil')
-                        else AddFileLog('CONSOLE: CurTeam <> nil, Gear = nil')
+                        else AddFileLog('CONSOLE: CurTeam <> nil, Gear = nil');
 {$ENDIF}
+CheckNoTeamOrHH:= Result
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure chQuit(var s: shortstring);
@@ -53,15 +55,15 @@ if isDeveloperMode then
    TryDo(TeamsCount <= 5, 'Too many teams', true);
    AddTeam
    end;
-   
-if GameType in [gmtDemo, gmtSave] then CurrentTeam.ExtDriven:= true
+
+if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
 end;
 
 procedure chTeamLocal(var s: shortstring);
 begin
 if not isDeveloperMode then exit;
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
-CurrentTeam.ExtDriven:= true
+CurrentTeam^.ExtDriven:= true
 end;
 
 procedure chName(var id: shortstring);
@@ -71,11 +73,11 @@ if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/name"', true);
 SplitBySpace(id, s);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-if id = 'team' then CurrentTeam.TeamName:= s
+if id = 'team' then CurrentTeam^.TeamName:= s
 else if (id[1] = 'h') and (id[2] = 'h')
      and (id[3] >= '0') and (id[3] <= chr(ord('0')+cMaxHHIndex)) then
-   CurrentTeam.Hedgehogs[byte(id[3])-48].Name:= s
-else OutError(errmsgUnknownVariable + ' "' + id + '"')
+   CurrentTeam^.Hedgehogs[byte(id[3])-48].Name:= s
+else OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 end;
 
 procedure chGrave(var s: shortstring);
@@ -83,7 +85,7 @@ begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-CurrentTeam.GraveName:= s
+CurrentTeam^.GraveName:= s
 end;
 
 procedure chFort(var s: shortstring);
@@ -91,16 +93,16 @@ begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-CurrentTeam.FortName:= s
+CurrentTeam^.FortName:= s
 end;
 
 procedure chColor(var id: shortstring);
 var c: integer;
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
-val(id, CurrentTeam.Color, c);
-CurrentTeam.AdjColor:= CurrentTeam.Color;
-AdjustColor(CurrentTeam.AdjColor)
+val(id, CurrentTeam^.Color, c);
+CurrentTeam^.AdjColor:= CurrentTeam^.Color;
+AdjustColor(CurrentTeam^.AdjColor)
 end;
 
 procedure chAddHH(var id: shortstring);
@@ -113,11 +115,11 @@ with CurrentTeam^ do
      begin
      SplitBySpace(id, s);
      val(id, Hedgehogs[HedgehogsNumber].BotLevel, c);
-     Gear:= AddGear(0, 0, gtHedgehog, 0);
-     Gear.Hedgehog:= @Hedgehogs[HedgehogsNumber];
-     val(s, Gear.Health, c);
-     TryDo(Gear.Health > 0, 'Invalid hedgehog health', true);
-     PHedgehog(Gear.Hedgehog).Team:= CurrentTeam;
+     Gear:= AddGear(0, 0, gtHedgehog, 0, 0, 0, 0);
+     Gear^.Hedgehog:= @Hedgehogs[HedgehogsNumber];
+     val(s, Gear^.Health, c);
+     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+     PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
      Hedgehogs[HedgehogsNumber].AmmoStore:= 0;
      Hedgehogs[HedgehogsNumber].Gear:= Gear;
      inc(HedgehogsNumber)
@@ -138,24 +140,24 @@ SplitBySpace(id, s);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 b:= KeyNameToCode(id);
-if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"')
-         else CurrentTeam.Binds[b]:= s
+if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+         else CurrentTeam^.Binds[b]:= s
 end;
 
 procedure chLeft_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('L');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('L');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_Left
 end;
 
 procedure chLeft_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-if not CurrentTeam.ExtDriven then SendIPC('l');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('l');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      Message:= Message and not gm_Left
 end;
 
@@ -163,16 +165,16 @@ procedure chRight_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('R');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('R');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_Right
 end;
 
 procedure chRight_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-if not CurrentTeam.ExtDriven then SendIPC('r');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('r');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      Message:= Message and not gm_Right
 end;
 
@@ -180,16 +182,16 @@ procedure chUp_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('U');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('U');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_Up
 end;
 
 procedure chUp_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-if not CurrentTeam.ExtDriven then SendIPC('u');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('u');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      Message:= Message and not gm_Up
 end;
 
@@ -197,16 +199,16 @@ procedure chDown_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('D');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('D');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_Down
 end;
 
 procedure chDown_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-if not CurrentTeam.ExtDriven then SendIPC('d');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('d');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      Message:= Message and not gm_Down
 end;
 
@@ -214,8 +216,8 @@ procedure chLJump(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('j');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('j');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_LJump
 end;
 
@@ -223,8 +225,8 @@ procedure chHJump(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-if not CurrentTeam.ExtDriven then SendIPC('J');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('J');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
     Message:= Message or gm_HJump
 end;
 
@@ -232,13 +234,13 @@ procedure chAttack_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      begin
-     {$IFDEF DEBUGFILE}AddFileLog('/+attack: Gear.State = '+inttostr(State));{$ENDIF}
+     {$IFDEF DEBUGFILE}AddFileLog('/+attack: Gear^.State = '+inttostr(State));{$ENDIF}
      if ((State and gstHHDriven)<>0)and((State and (gstAttacked or gstHHChooseTarget or gstMoving)) = 0) then
         begin
-        FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear;
-        if not CurrentTeam.ExtDriven then SendIPC('A');
+        FollowGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+        if not CurrentTeam^.ExtDriven then SendIPC('A');
         Message:= Message or gm_Attack
         end
      end
@@ -247,9 +249,9 @@ end;
 procedure chAttack_m(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      begin
-     if not CurrentTeam.ExtDriven and
+     if not CurrentTeam^.ExtDriven and
         ((Message and gm_Attack) <> 0) then SendIPC('a');
      Message:= Message and not gm_Attack
      end
@@ -258,8 +260,8 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
-if not CurrentTeam.ExtDriven then SendIPC('S');
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^ do
+if not CurrentTeam^.ExtDriven then SendIPC('S');
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^ do
      Message:= Message or gm_Switch
 end;
 
@@ -267,7 +269,7 @@ procedure chNextTurn(var s: shortstring);
 begin
 if AllInactive then
    begin
-   if not CurrentTeam.ExtDriven then SendIPC('N');
+   if not CurrentTeam^.ExtDriven then SendIPC('N');
    {$IFDEF DEBUGFILE}AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));{$ENDIF}
    SwitchHedgehog;
    end
@@ -283,13 +285,13 @@ procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or (CurrentTeam = nil) then exit;
 bShowFinger:= false;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-     if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0 then
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+     if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0 then
         begin
-        Ammo[CurSlot, CurAmmo].Timer:= 1000 * (byte(s[1]) - 48);
+        Ammo^[CurSlot, CurAmmo].Timer:= 1000 * (byte(s[1]) - 48);
         with CurrentTeam^ do
              ApplyAmmoChanges(Hedgehogs[CurrHedgehog]);
-        if not CurrentTeam.ExtDriven then SendIPC(s);
+        if not CurrentTeam^.ExtDriven then SendIPC(s);
         end
 end;
 
@@ -301,21 +303,21 @@ if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 bShowFinger:= false;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
-if not CurrentTeam.ExtDriven then SendIPC(char(byte(s[1]) + 79));
+if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
 with CurrentTeam^ do
      begin
      with Hedgehogs[CurrHedgehog] do
           begin
-          if ((Gear.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
-             or ((Gear.State and gstHHDriven) = 0) then exit; // во время стрельбы исключает смену оружия
+          if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
+             or ((Gear^.State and gstHHDriven) = 0) then exit; // во время стрельбы исключает смену оружия
           if CurAmmoGear = nil then begin caSlot:= @CurSlot; caAmmo:= @CurAmmo end
                                else begin caSlot:= @AltSlot; caAmmo:= @AltAmmo end;
           if caSlot^ = slot then
              begin
              inc(caAmmo^);
-             if (caAmmo^ > cMaxSlotAmmoIndex) or (Ammo[slot, caAmmo^].Count = 0) then caAmmo^:= 0
+             if (caAmmo^ > cMaxSlotAmmoIndex) or (Ammo^[slot, caAmmo^].Count = 0) then caAmmo^:= 0
              end else
-             if Ammo[slot, 0].Count > 0 then
+             if Ammo^[slot, 0].Count > 0 then
                 begin
                 caSlot^:= slot;
                 caAmmo^:= 0;
@@ -333,12 +335,12 @@ if bShowAmmoMenu then
    bSelected:= true;
    exit
    end;
-with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
-     CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
+     CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if (State and gstHHChooseTarget) <> 0 then
         begin
         isCursorVisible:= false;
-        if not CurrentTeam.ExtDriven then
+        if not CurrentTeam^.ExtDriven then
            begin
            SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
            dec(TargetPoint.X, WorldDx);
@@ -346,9 +348,9 @@ with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear^,
            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
            end;
         State:= State and not gstHHChooseTarget;
-        if (Ammo[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
+        if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
            Message:= Message or gm_Attack;
-        end else if CurrentTeam.ExtDriven then OutError('got /put while not being in choose target mode', false)
+        end else if CurrentTeam^.ExtDriven then OutError('got /put while not being in choose target mode', false)
 end;
 
 procedure chCapture(var s: shortstring);
@@ -358,7 +360,7 @@ end;
 
 procedure chSkip(var s: shortstring);
 begin
-if not CurrentTeam.ExtDriven then SendIPC(',');
+if not CurrentTeam^.ExtDriven then SendIPC(',');
 TurnTimeLeft:= 0
 end;
 
@@ -398,8 +400,8 @@ with CurrentTeam^ do
           begin
           bSelected:= false;
           if bShowAmmoMenu then bShowAmmoMenu:= false
-          else if ((Gear.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
-               or ((Gear.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+          else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
+               or ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
           end
 end;
 
@@ -412,7 +414,7 @@ begin
 if Length(s) = 0 then cFullScreen:= not cFullScreen
                  else cFullScreen:= s = '1';
 
-flags:= SDL_HWSURFACE or SDL_DOUBLEBUF or SDL_HWACCEL;
+flags:= SDL_HWSURFACE or SDL_hwFloatBUF or SDL_HWACCEL;
 if cFullScreen then flags:= flags or SDL_FULLSCREEN
                else SDL_WM_SetCaption('Hedgewars', nil);
 SDL_FreeSurface(SDLPrimSurface);
@@ -422,7 +424,7 @@ SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
 TryDo(SDLPrimSurface <> nil, errmsgCreateSurface, true);
-PixelFormat:= SDLPrimSurface.format
+PixelFormat:= SDLPrimSurface^.format
 end;
 
 procedure chVol_p(var s: shortstring);
@@ -439,7 +441,7 @@ procedure chFindhh(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
 bShowFinger:= true;
-FollowGear:= CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog].Gear
+FollowGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear
 end;
 
 procedure chPause(var s: shortstring);
@@ -447,4 +449,3 @@ begin
 isPaused:= not isPaused;
 SDL_ShowCursor(ord(isPaused))
 end;
-

@@ -18,7 +18,7 @@
 
 unit uLandTemplates;
 interface
-uses SDLh;
+uses SDLh, uFloat;
 {$INCLUDE options.inc}
 
 type PPointArray = ^TPointArray;
@@ -28,8 +28,8 @@ type PPointArray = ^TPointArray;
                      BasePointsCount: Longword;
                      BezPassCnt: Longword; 
                      PassMin, PassDelta: Longword;
-                     WaveAmplMin, WaveAmplDelta: Double;
-                     WaveFreqMin, WaveFreqDelta: Double;
+                     WaveAmplMin, WaveAmplDelta: Longword;
+                     WaveFreqMin, WaveFreqDelta: Longword;
                      FillPoints: PPointArray;
                      FillPointsCount: Longword;
                      canMirror, canFlip: boolean;
@@ -496,7 +496,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 4;
         PassMin: 10; PassDelta: 5;
         WaveAmplMin:    17; WaveAmplDelta: 20;
-        WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
+        WaveFreqMin: 0100; WaveFreqDelta: 0020;
         FillPoints: @Template0FPoints;
         FillPointsCount: Succ(High(Template0FPoints));
         canMirror: false; canFlip: false;
@@ -506,7 +506,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 3;
         PassMin: 10; PassDelta: 2;
         WaveAmplMin:    25; WaveAmplDelta: 15;
-        WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+        WaveFreqMin:  0080; WaveFreqDelta: 0020;
         FillPoints: @Template1FPoints;
         FillPointsCount: Succ(High(Template1FPoints));
         canMirror: false; canFlip: false;
@@ -516,7 +516,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 3;
         PassMin: 14; PassDelta: 3;
         WaveAmplMin:    10; WaveAmplDelta: 10;
-        WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
+        WaveFreqMin:  0100; WaveFreqDelta: 0020;
         FillPoints: @Template2FPoints;
         FillPointsCount: Succ(High(Template2FPoints));
         canMirror: true; canFlip: false;
@@ -526,7 +526,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 4;
         PassMin: 15; PassDelta: 2;
         WaveAmplMin:    8; WaveAmplDelta: 12;
-        WaveFreqMin: 0.015; WaveFreqDelta: 0.0015;
+        WaveFreqMin: 0150; WaveFreqDelta: 0015;
         FillPoints: @Template3FPoints;
         FillPointsCount: Succ(High(Template3FPoints));
         canMirror: true; canFlip: false;
@@ -536,7 +536,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 3;
         PassMin: 19; PassDelta: 5;
         WaveAmplMin:    12; WaveAmplDelta: 14;
-        WaveFreqMin: 0.008; WaveFreqDelta: 0.001;
+        WaveFreqMin:  0080; WaveFreqDelta: 0010;
         FillPoints: @Template4FPoints;
         FillPointsCount: Succ(High(Template4FPoints));
         canMirror: true; canFlip: false;
@@ -546,7 +546,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         BezPassCnt: 4;
         PassMin: 15; PassDelta: 1;
         WaveAmplMin:    15; WaveAmplDelta: 14;
-        WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+        WaveFreqMin:  0080; WaveFreqDelta: 0020;
         FillPoints: @Template5FPoints;
         FillPointsCount: Succ(High(Template5FPoints));
         canMirror: true; canFlip: false;
@@ -556,7 +556,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 3;
        PassMin: 15; PassDelta: 1;
        WaveAmplMin:    15; WaveAmplDelta: 10;
-       WaveFreqMin: 0.010; WaveFreqDelta: 0.0015;
+       WaveFreqMin:  0100; WaveFreqDelta: 0015;
        FillPoints: @Template6FPoints;
        FillPointsCount: Succ(High(Template6FPoints));
        canMirror: true; canFlip: false;
@@ -566,7 +566,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 3;
        PassMin: 12; PassDelta: 4;
        WaveAmplMin:     5; WaveAmplDelta: 15;
-       WaveFreqMin: 0.015; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0150; WaveFreqDelta: 0020;
        FillPoints: @Template7FPoints;
        FillPointsCount: Succ(High(Template7FPoints));
        canMirror: true; canFlip: false;
@@ -576,7 +576,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 4;
        PassMin:  9; PassDelta: 3;
        WaveAmplMin:    18; WaveAmplDelta: 18;
-       WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0100; WaveFreqDelta: 0020;
        FillPoints: @Template8FPoints;
        FillPointsCount: Succ(High(Template8FPoints));
        canMirror: true; canFlip: false;
@@ -586,7 +586,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 4;
        PassMin: 17; PassDelta: 3;
        WaveAmplMin:    10; WaveAmplDelta: 10;
-       WaveFreqMin: 0.010; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0100; WaveFreqDelta: 0020;
        FillPoints: @Template9FPoints;
        FillPointsCount: Succ(High(Template9FPoints));
        canMirror: true; canFlip: false;
@@ -596,7 +596,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 4;
        PassMin: 15; PassDelta: 2;
        WaveAmplMin:    15; WaveAmplDelta: 10;
-       WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0080; WaveFreqDelta: 0020;
        FillPoints: @Template10FPoints;
        FillPointsCount: Succ(High(Template10FPoints));
        canMirror: false; canFlip: false;
@@ -606,7 +606,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 4;
        PassMin: 15; PassDelta: 1;
        WaveAmplMin:    10; WaveAmplDelta: 10;
-       WaveFreqMin: 0.008; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0080; WaveFreqDelta: 0020;
        FillPoints: @Template11FPoints;
        FillPointsCount: Succ(High(Template11FPoints));
        canMirror: true; canFlip: false;
@@ -616,7 +616,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 3;
        PassMin: 10; PassDelta: 1;
        WaveAmplMin:    15; WaveAmplDelta: 15;
-       WaveFreqMin: 0.005; WaveFreqDelta: 0.003;
+       WaveFreqMin:  0050; WaveFreqDelta: 0030;
        FillPoints: @Template12FPoints;
        FillPointsCount: Succ(High(Template12FPoints));
        canMirror: true; canFlip: false;
@@ -626,7 +626,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 5;
        PassMin: 15; PassDelta: 3;
        WaveAmplMin:    18; WaveAmplDelta: 15;
-       WaveFreqMin: 0.0028; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0028; WaveFreqDelta: 0020;
        FillPoints: @Template13FPoints;
        FillPointsCount: Succ(High(Template13FPoints));
        canMirror: true; canFlip: false;
@@ -636,7 +636,7 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
        BezPassCnt: 4;
        PassMin: 14; PassDelta: 3;
        WaveAmplMin:    20; WaveAmplDelta: 15;
-       WaveFreqMin: 0.003; WaveFreqDelta: 0.002;
+       WaveFreqMin:  0030; WaveFreqDelta: 0020;
        FillPoints: @Template14FPoints;
        FillPointsCount: Succ(High(Template14FPoints));
        canMirror: true; canFlip: false;

@@ -71,30 +71,30 @@ WriteToConsole('Generating collision info... ');
 if SDL_MustLock(Image) then
    SDLTry(SDL_LockSurface(Image) >= 0, true);
 
-bpp:= Image.format.BytesPerPixel;
+bpp:= Image^.format^.BytesPerPixel;
 WriteToConsole('('+inttostr(bpp)+') ');
-p:= Image.pixels;
+p:= Image^.pixels;
 case bpp of
      1: OutError('We don''t work with 8 bit surfaces', true);
-     2: for y:= 0 to Pred(Image.h) do
+     2: for y:= 0 to Pred(Image^.h) do
             begin
-            for x:= 0 to Pred(Image.w) do
-                if PWord(@p[x * 2])^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @p[Image.pitch];
+            for x:= 0 to Pred(Image^.w) do
+                if PWord(@(p^[x * 2]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
             end;
-     3: for y:= 0 to Pred(Image.h) do
+     3: for y:= 0 to Pred(Image^.h) do
             begin
-            for x:= 0 to Pred(Image.w) do
-                if  (p[x * 3 + 0] <> 0)
-                 or (p[x * 3 + 1] <> 0)
-                 or (p[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @p[Image.pitch];
+            for x:= 0 to Pred(Image^.w) do
+                if  (p^[x * 3 + 0] <> 0)
+                 or (p^[x * 3 + 1] <> 0)
+                 or (p^[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
             end;
-     4: for y:= 0 to Pred(Image.h) do
+     4: for y:= 0 to Pred(Image^.h) do
             begin
-            for x:= 0 to Pred(Image.w) do
-                if PLongword(@p[x * 4])^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @p[Image.pitch];
+            for x:= 0 to Pred(Image^.w) do
+                if PLongword(@(p^[x * 4]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
             end;
      end;
 if SDL_MustLock(Image) then
@@ -104,7 +104,7 @@ end;
 
 procedure AddRect(x1, y1, w1, h1: integer);
 begin
-with Rects[RectCount] do
+with Rects^[RectCount] do
      begin
      x:= x1;
      y:= y1;
@@ -128,29 +128,34 @@ end;
 
 function CheckIntersect(x1, y1, w1, h1: integer): boolean;
 var i: Longword;
+    Result: boolean;
 begin
 Result:= false;
 i:= 0;
 if RectCount > 0 then
    repeat
-   with Rects[i] do
+   with Rects^[i] do
         Result:= (x < x1 + w1) and (x1 < x + w) and
                  (y < y1 + h1) and (y1 < y + h);
    inc(i)
-   until (i = RectCount) or (Result)
+   until (i = RectCount) or (Result);
+CheckIntersect:= Result
 end;
 
 function AddGirder(gX: integer; Surface: PSDL_Surface): boolean;
 var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: integer;
     r, rr: TSDL_Rect;
+    Result: boolean;
 
     function CountNonZeroz(x, y: integer): Longword;
     var i: integer;
+        Result: Longword;
     begin
     Result:= 0;
     for i:= y to y + 15 do
-        if Land[i, x] <> 0 then inc(Result)
+        if Land[i, x] <> 0 then inc(Result);
+    CountNonZeroz:= Result
     end;
 
 begin
@@ -182,7 +187,7 @@ until y > 900;
 if x1 > 0 then
    begin
    Result:= true;
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false);
+   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
    rr.x:= x1;
    rr.y:= y;
    while rr.x + 100 < x2 do
@@ -199,11 +204,13 @@ if x1 > 0 then
    AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
    for k:= y to y + 15 do
        for i:= x1 to x2 do Land[k, i]:= $FFFFFF
-   end else Result:= false
+   end else Result:= false;
+AddGirder:= Result
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
 var i: Longword;
+    Result: boolean;
 begin
 Result:= true;
 inc(rect.x, dX);
@@ -222,10 +229,12 @@ while (i <= rect.h) and Result do
       inc(i)
       end;
 {$WARNINGS ON}
+CheckLand:= Result
 end;
 
 function CheckCanPlace(x, y: Longword; var Obj: TThemeObject): boolean;
 var i: Longword;
+    Result: boolean;
 begin
 with Obj do
      if CheckLand(inland, x, y, $FFFFFF) then
@@ -240,7 +249,8 @@ with Obj do
         if Result then
            Result:= not CheckIntersect(x, y, Width, Height)
         end else
-        Result:= false
+        Result:= false;
+CheckCanPlace:= Result
 end;
 
 function TryPut(var Obj: TThemeObject; Surface: PSDL_Surface): boolean; overload;
@@ -248,15 +258,13 @@ const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
     cnt, i: Longword;
+    Result: boolean;
 begin
 cnt:= 0;
 with Obj do
      begin
      if Maxcnt = 0 then
-        begin
-        Result:= false;
-        exit
-        end;
+        exit(false);
      x:= 0;
      repeat
          y:= 0;
@@ -284,7 +292,8 @@ with Obj do
         AddRect(ar[i].x, ar[i].y, Width, Height);
         dec(Maxcnt)
         end else Maxcnt:= 0
-     end
+     end;
+TryPut:= Result
 end;
 
 function TryPut(var Obj: TSprayObject; Surface: PSDL_Surface): boolean; overload;
@@ -293,15 +302,13 @@ var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
     cnt, i: Longword;
     r: TSDL_Rect;
+    Result: boolean;
 begin
 cnt:= 0;
 with Obj do
      begin
      if Maxcnt = 0 then
-        begin
-        Result:= false;
-        exit
-        end;
+        exit(false);
      x:= 0;
      r.x:= 0;
      r.y:= 0;
@@ -338,7 +345,8 @@ with Obj do
         AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
         dec(Maxcnt)
         end else Maxcnt:= 0
-     end
+     end;
+TryPut:= Result
 end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
@@ -348,7 +356,7 @@ var s: string;
 begin
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
-AssignFile(f, s);
+Assign(f, s);
 {$I-}
 Reset(f);
 Readln(f, s); // skip color
@@ -358,9 +366,9 @@ for i:= 0 to Pred(ThemeObjects.Count) do
     Readln(f, s); // filename
     with ThemeObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false);
-         Width:= Surf.w;
-         Height:= Surf.h;
+         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
+         Width:= Surf^.w;
+         Height:= Surf^.h;
          with inland do Read(f, x, y, w, h);
          Read(f, rectcnt);
          for ii:= 1 to rectcnt do
@@ -376,13 +384,13 @@ for i:= 0 to Pred(SprayObjects.Count) do
     Readln(f, s); // filename
     with SprayObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false);
-         Width:= Surf.w;
-         Height:= Surf.h;
+         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
+         Width:= Surf^.w;
+         Height:= Surf^.h;
          ReadLn(f, Maxcnt)
          end;
     end;
-Closefile(f);
+Close(f);
 {$I+}
 TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
 end;

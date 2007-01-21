@@ -18,7 +18,7 @@
 
 unit uCollisions;
 interface
-uses uGears;
+uses uGears, uFloat;
 {$INCLUDE options.inc}
 const cMaxGearArrayInd = 255;
 
@@ -34,7 +34,7 @@ function CheckGearsCollision(Gear: PGear): PGearArray;
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
 function TestCollisionY(Gear: PGear; Dir: integer): boolean;
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: Double; Dir: integer): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: integer): boolean;
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 
 implementation
@@ -44,7 +44,7 @@ type TCollisionEntry = record
                        X, Y, Radius: integer;
                        cGear: PGear;
                        end;
-                       
+
 const MAXRECTSINDEX = 255;
 var Count: Longword = 0;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
@@ -52,28 +52,28 @@ var Count: Longword = 0;
 
 procedure AddGearCI(Gear: PGear);
 begin
-if Gear.CollIndex < High(Longword) then exit;
+if Gear^.CollIndex < High(Longword) then exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
      begin
-     X:= round(Gear.X);
-     Y:= round(Gear.Y);
-     Radius:= Gear.Radius;
+     X:= hwRound(Gear^.X);
+     Y:= hwRound(Gear^.Y);
+     Radius:= Gear^.Radius;
      FillRoundInLand(X, Y, Radius-1, $FF);
      cGear:= Gear
      end;
-Gear.CollIndex:= Count;
+Gear^.CollIndex:= Count;
 inc(Count)
 end;
 
 procedure DeleteCI(Gear: PGear);
 begin
-if Gear.CollIndex < Count then
+if Gear^.CollIndex < Count then
    begin
-   with cinfos[Gear.CollIndex] do FillRoundInLand(X, Y, Radius-1, 0);
-   cinfos[Gear.CollIndex]:= cinfos[Pred(Count)];
-   cinfos[Gear.CollIndex].cGear.CollIndex:= Gear.CollIndex;
-   Gear.CollIndex:= High(Longword);
+   with cinfos[Gear^.CollIndex] do FillRoundInLand(X, Y, Radius-1, 0);
+   cinfos[Gear^.CollIndex]:= cinfos[Pred(Count)];
+   cinfos[Gear^.CollIndex].cGear^.CollIndex:= Gear^.CollIndex;
+   Gear^.CollIndex:= High(Longword);
    dec(Count)
    end;
 end;
@@ -81,93 +81,98 @@ end;
 function CheckGearsCollision(Gear: PGear): PGearArray;
 var mx, my: integer;
     i: Longword;
+    Result: PGearArray;
 begin
 Result:= @ga;
 ga.Count:= 0;
 if Count = 0 then exit;
-mx:= round(Gear.X);
-my:= round(Gear.Y);
+mx:= hwRound(Gear^.X);
+my:= hwRound(Gear^.Y);
 
 for i:= 0 to Pred(Count) do
    with cinfos[i] do
       if (Gear <> cGear) and
-         (sqrt(sqr(mx - x) + sqr(my - y)) <= Radius + Gear.Radius) then
+         (sqrt(sqr(mx - x) + sqr(my - y)) <= Radius + Gear^.Radius) then
              begin
              ga.ar[ga.Count]:= cinfos[i].cGear;
              inc(ga.Count)
              end;
+CheckGearsCollision:= Result
 end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
 var x, y, i: integer;
 begin
-Result:= false;
-x:= round(Gear.X);
-if Dir < 0 then x:= x - Gear.Radius
-           else x:= x + Gear.Radius;
+x:= hwRound(Gear^.X);
+if Dir < 0 then x:= x - Gear^.Radius
+           else x:= x + Gear^.Radius;
 if (x and $FFFFF800) = 0 then
    begin
-   y:= round(Gear.Y) - Gear.Radius + 1;
-   i:= y + Gear.Radius * 2 - 2;
+   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+   i:= y + Gear^.Radius * 2 - 2;
    repeat
-     if (y and $FFFFFC00) = 0 then Result:= Land[y, x]<>0;
+     if (y and $FFFFFC00) = 0 then
+        if Land[y, x] <> 0 then exit(true);
      inc(y)
-   until (y > i) or Result;
-   end
+   until (y > i);
+   end;
+TestCollisionXwithGear:= false
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: Double; Dir: integer): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: integer): boolean;
 begin
-Gear.X:= Gear.X + ShiftX;
-Gear.Y:= Gear.Y + ShiftY;
-Result:= TestCollisionXwithGear(Gear, Dir);
-Gear.X:= Gear.X - ShiftX;
-Gear.Y:= Gear.Y - ShiftY
+Gear^.X:= Gear^.X + ShiftX;
+Gear^.Y:= Gear^.Y + ShiftY;
+TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
+Gear^.X:= Gear^.X - ShiftX;
+Gear^.Y:= Gear^.Y - ShiftY
 end;
 
 function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
 var x, y, i: integer;
 begin
-Result:= false;
-y:= round(Gear.Y);
-if Dir < 0 then y:= y - Gear.Radius
-           else y:= y + Gear.Radius;
+y:= hwRound(Gear^.Y);
+if Dir < 0 then y:= y - Gear^.Radius
+           else y:= y + Gear^.Radius;
 if (y and $FFFFFC00) = 0 then
    begin
-   x:= round(Gear.X) - Gear.Radius + 1;
-   i:= x + Gear.Radius * 2 - 2;
+   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+   i:= x + Gear^.Radius * 2 - 2;
    repeat
-     if (x and $FFFFF800) = 0 then Result:= Land[y, x]<>0;
+     if (x and $FFFFF800) = 0 then
+        if Land[y, x] <> 0 then exit(true);
      inc(x)
-   until (x > i) or Result;
-   end
+   until (x > i);
+   end;
+TestCollisionYwithGear:= false
 end;
 
 function TestCollisionY(Gear: PGear; Dir: integer): boolean;
 var x, y, i: integer;
 begin
-Result:= false;
-y:= round(Gear.Y);
-if Dir < 0 then y:= y - Gear.Radius
-           else y:= y + Gear.Radius;
+y:= hwRound(Gear^.Y);
+if Dir < 0 then y:= y - Gear^.Radius
+           else y:= y + Gear^.Radius;
 if (y and $FFFFFC00) = 0 then
    begin
-   x:= round(Gear.X) - Gear.Radius + 1;
-   i:= x + Gear.Radius * 2 - 2;
+   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+   i:= x + Gear^.Radius * 2 - 2;
    repeat
-     if (x and $FFFFF800) = 0 then Result:= Land[y, x] = COLOR_LAND;
+     if (x and $FFFFF800) = 0 then
+        if Land[y, x] = COLOR_LAND then exit(true);
      inc(x)
-   until (x > i) or Result;
-   end
+   until (x > i);
+   end;
+TestCollisionY:= false
 end;
 
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
 begin
-Gear.X:= Gear.X + ShiftX;
-Gear.Y:= Gear.Y + ShiftY;
-Result:= TestCollisionYwithGear(Gear, Dir);
-Gear.X:= Gear.X - ShiftX;
-Gear.Y:= Gear.Y - ShiftY
+Gear^.X:= Gear^.X + ShiftX;
+Gear^.Y:= Gear^.Y + ShiftY;
+TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir);
+Gear^.X:= Gear^.X - ShiftX;
+Gear^.Y:= Gear^.Y - ShiftY
 end;
 
 end.

@@ -18,9 +18,9 @@
 
 unit uAIAmmoTests;
 interface
-uses SDLh, uGears, uConsts;
+uses SDLh, uGears, uConsts, uFloat;
 
-function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+(*function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
@@ -50,22 +50,23 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                   );
 
 const BadTurn = Low(integer);
+*)
 
 implementation
 uses uMisc, uAIMisc, uLand;
-
+{
 function Metric(x1, y1, x2, y2: integer): integer;
 begin
 Result:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, r: Double;
-    rTime: Double;
+var Vx, Vy, r: hwFloat;
+    rTime: hwFloat;
     Score, EX, EY: integer;
 
     function CheckTrace: integer;
-    var x, y, dX, dY: Double;
+    var x, y, dX, dY: hwFloat;
         t: integer;
     begin
     x:= Me.X;
@@ -115,12 +116,12 @@ end;
 
 function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 const tDelta = 24;
-var Vx, Vy, r: Double;
+var Vx, Vy, r: hwFloat;
     Score, EX, EY: integer;
     TestTime: Longword;
 
     function CheckTrace: integer;
-    var x, y, dY: Double;
+    var x, y, dY: hwFloat;
         t: integer;
     begin
     x:= Me.X;
@@ -167,7 +168,7 @@ until (TestTime = 5000)
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, x, y: Double;
+var Vx, Vy, x, y: hwFloat;
 begin       
 ExplR:= 0;
 if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
@@ -197,7 +198,7 @@ Result:= BadTurn
 end;
 
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-var Vx, Vy, x, y, t: Double;
+var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
 begin
 ExplR:= 0;
@@ -257,5 +258,5 @@ for i:= 0 to 4 do
     Result:= Result + RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30);
 if Result <= 0 then Result:= BadTurn
 end;
-
+}
 end.

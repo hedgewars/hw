@@ -18,7 +18,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates;
+uses SDLh, uLandTemplates, uFloat;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
@@ -57,71 +57,72 @@ end;
 
 procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);
 var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: Double;
-    r1, r2, r3, r4: Double;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: Double;
+    tx, ty, vx, vy, vlen, t: hwFloat;
+    r1, r2, r3, r4: hwFloat;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
 begin
 vx:= 0;
 vy:= 0;
 with pa do
 for i:= 0 to Count-2 do
     begin
-    vlen:= sqrt(sqr(ar[i + 1].x - ar[i    ].X) + sqr(ar[i + 1].y - ar[i    ].y));
-    t:=    sqrt(sqr(ar[i + 1].x - ar[i + 2].X) + sqr(ar[i + 1].y - ar[i + 2].y));
+    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
+    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
     if t<vlen then vlen:= t;
-    vlen:= vlen/3;
+    vlen:= vlen * _1div3;
     tx:= ar[i+2].X - ar[i].X;
     ty:= ar[i+2].y - ar[i].y;
-    t:= sqrt(sqr(tx)+sqr(ty));
-    if t = 0 then
+    t:= Distance(tx, ty);
+    if t.QWordValue = 0 then
        begin
-       tx:= -tx * 100000;
-       ty:= -ty * 100000;
+       tx:= -tx * 10000;
+       ty:= -ty * 10000;
        end else
        begin
-       tx:= -tx/t;
-       ty:= -ty/t;
+       t:= 1/t;
+       tx:= -tx * t;
+       ty:= -ty * t;
        end;
-    t:= 1.0*vlen;
-    tx:= tx*t;
-    ty:= ty*t;
+    t:= vlen;
+    tx:= tx * t;
+    ty:= ty * t;
     x1:= ar[i].x;
     y1:= ar[i].y;
     x2:= ar[i + 1].x;
     y2:= ar[i + 1].y;
-    cx1:= ar[i].X   + trunc(vx);
-    cy1:= ar[i].y   + trunc(vy);
-    cx2:= ar[i+1].X + trunc(tx);
-    cy2:= ar[i+1].y + trunc(ty);
+    cx1:= ar[i].X   + hwRound(vx);
+    cy1:= ar[i].y   + hwRound(vy);
+    cx2:= ar[i+1].X + hwRound(tx);
+    cy2:= ar[i+1].y + hwRound(ty);
     vx:= -tx;
     vy:= -ty;
     t:= 0;
-    while t <= 1.0 do
+    while t.Round = 0 do
           begin
-          tsq:= sqr(t);
+          tsq:= t * t;
           tcb:= tsq * t;
           r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
           r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
           r3:= (          3*tsq - 3*tcb) * cx2;
           r4:= (                    tcb) * x2;
-          X:= round(r1 + r2 + r3 + r4);
+          X:= hwRound(r1 + r2 + r3 + r4);
           r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
           r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
           r3:= (          3*tsq - 3*tcb) * cy2;
           r4:= (                    tcb) * y2;
-          Y:= round(r1 + r2 + r3 + r4);
-          t:= t + 0.001;
+          Y:= hwRound(r1 + r2 + r3 + r4);
+          t:= t + _1div1024;
           if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
                 Land[y, x]:= Color;
           end;
     end;
 end;
 
-procedure BezierizeEdge(var pa: TPixAr; Delta: Double);
+procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
 var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: Double;
-    r1, r2, r3, r4: Double;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: Double;
+    tx, ty, vx, vy, vlen, t: hwFloat;
+    r1, r2, r3, r4: hwFloat;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
     opa: TPixAr;
 begin
 opa:= pa;
@@ -131,50 +132,53 @@ vy:= 0;
 with opa do
 for i:= 0 to Count-2 do
     begin
-    vlen:= sqrt(sqr(ar[i + 1].x - ar[i    ].X) + sqr(ar[i + 1].y - ar[i    ].y));
-    t:=    sqrt(sqr(ar[i + 1].x - ar[i + 2].X) + sqr(ar[i + 1].y - ar[i + 2].y));
+addfilelog('50');
+    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
+    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
+addfilelog('51');
     if t<vlen then vlen:= t;
-    vlen:= vlen/3;
+    vlen:= vlen * _1div3;
     tx:= ar[i+2].X - ar[i].X;
     ty:= ar[i+2].y - ar[i].y;
-    t:= sqrt(sqr(tx)+sqr(ty));
-    if t = 0 then
+    t:= Distance(tx, ty);
+    if t.QWordValue = 0 then
        begin
        tx:= -tx * 100000;
        ty:= -ty * 100000;
        end else
        begin
-       tx:= -tx/t;
-       ty:= -ty/t;
+       t:= 1/t;
+       tx:= -tx * t;
+       ty:= -ty * t;
        end;
-    t:= 1.0*vlen;
+    t:= vlen;
     tx:= tx*t;
     ty:= ty*t;
     x1:= ar[i].x;
     y1:= ar[i].y;
     x2:= ar[i + 1].x;
     y2:= ar[i + 1].y;
-    cx1:= ar[i].X   + trunc(vx);
-    cy1:= ar[i].y   + trunc(vy);
-    cx2:= ar[i+1].X + trunc(tx);
-    cy2:= ar[i+1].y + trunc(ty);
+    cx1:= ar[i].X   + hwRound(vx);
+    cy1:= ar[i].y   + hwRound(vy);
+    cx2:= ar[i+1].X + hwRound(tx);
+    cy2:= ar[i+1].y + hwRound(ty);
     vx:= -tx;
     vy:= -ty;
     t:= 0;
-    while t <= 1.0 do
+    while t.Round = 0 do
           begin
-          tsq:= sqr(t);
+          tsq:= t * t;
           tcb:= tsq * t;
           r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
           r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
           r3:= (          3*tsq - 3*tcb) * cx2;
           r4:= (                    tcb) * x2;
-          X:= round(r1 + r2 + r3 + r4);
+          X:= hwRound(r1 + r2 + r3 + r4);
           r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
           r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
           r3:= (          3*tsq - 3*tcb) * cy2;
           r4:= (                    tcb) * y2;
-          Y:= round(r1 + r2 + r3 + r4);
+          Y:= hwRound(r1 + r2 + r3 + r4);
           t:= t + Delta;
           pa.ar[pa.Count].x:= X;
           pa.ar[pa.Count].y:= Y;
@@ -207,7 +211,7 @@ var Stack: record
     inc(Stack.Count)
     end;
 
-    procedure Pop(out _xl, _xr, _y, _dir: integer);
+    procedure Pop(var _xl, _xr, _y, _dir: integer);
     begin
     dec(Stack.Count);
     with Stack.points[Stack.Count] do
@@ -220,7 +224,7 @@ var Stack: record
     end;
 
 var xl, xr, dir: integer;
-begin     
+begin
 Stack.Count:= 0;
 xl:= x - 1;
 xr:= x;
@@ -253,7 +257,7 @@ procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
 begin
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, true);
 r.y:= 0;
 while r.y < 1024 do
       begin
@@ -261,15 +265,15 @@ while r.y < 1024 do
       while r.x < 2048 do
             begin
             SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-            inc(r.x, tmpsurf.w)
+            inc(r.x, tmpsurf^.w)
             end;
-      inc(r.y, tmpsurf.h)
+      inc(r.y, tmpsurf^.h)
       end;
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, $FF0000, $FF00, $FF, 0);
 SDLTry(tmpsurf <> nil, true);
-SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf.format, $FF, $FF, $FF));
+SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
 SDL_UpperBlit(tmpsurf, nil, Surface, nil);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -279,7 +283,7 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: integer;
 begin
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false, true, true);
 for x:= 0 to 2047 do
     begin
     yd:= 1023;
@@ -295,7 +299,7 @@ for x:= 0 to 2047 do
          begin
          rr.x:= x;
          rr.y:= yd - 15;
-         r.x:= x mod tmpsurf.w;
+         r.x:= x mod tmpsurf^.w;
          r.y:= 16;
          r.w:= 1;
          r.h:= 16;
@@ -305,7 +309,7 @@ for x:= 0 to 2047 do
          begin
          rr.x:= x;
          rr.y:= yu;
-         r.x:= x mod tmpsurf.w;
+         r.x:= x mod tmpsurf^.w;
          r.y:= 0;
          r.w:= 1;
          r.h:= min(16, yd - yu + 1);
@@ -316,38 +320,35 @@ for x:= 0 to 2047 do
     end;
 end;
 
-function rndSign(num: Double): Double;
-begin
-if getrandom(2) = 0 then Result:=   num
-                    else Result:= - num
-end;
-
-
 procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
 const MAXPASSES = 32;
-var ar: array[0..MAXPASSES, 0..9] of Double;
+var ar: array[0..MAXPASSES, 0..9] of hwFloat;
     i, k: integer;
-    rx, ry, ox, oy: Double;
+    rx, ry, ox, oy: hwFloat;
     PassesNum: Longword;
 begin
 with Template do
      begin
      PassesNum:= PassMin + getrandom(PassDelta);
      TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
-     ar[0, 1]:= WaveFreqMin;
-     ar[0, 4]:= WaveFreqMin;
+     ar[0, 1]:= WaveFreqMin * _1div10000;
+     ar[0, 4]:= WaveFreqMin * _1div10000;
      for i:= 1 to PassesNum do  // initialize random parameters
          begin
          ar[i, 0]:= WaveAmplMin + getrandom * WaveAmplDelta;
-         ar[i, 1]:= ar[i - 1, 1] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
-         ar[i, 2]:= getrandom * pi * 2;
+//         ar[i, 1]:= ar[i - 1, 1] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
+         ar[i, 1]:= ar[i - 1, 1] + (getrandom) * WaveFreqDelta;
+         ar[i, 2]:= getrandom * hwPi * 2;
          ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
-         ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
-         ar[i, 5]:= getrandom * pi * 2;
+//         ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
+         ar[i, 4]:= ar[i - 1, 4] + (getrandom) * WaveFreqDelta;
+         ar[i, 5]:= getrandom * hwPi * 2;
          ar[i, 6]:= ar[i, 1] * (getrandom * 2 - 1);
-         ar[i, 7]:= ar[i, 1] * rndSign(sqrt(1 - sqr(ar[i, 6])));
+//         ar[i, 7]:= ar[i, 1] * rndSign(sqrt(1 - sqr(ar[i, 6])));
+         ar[i, 7]:= ar[i, 1] * rndSign((1 - (ar[i, 6])));
          ar[i, 8]:= ar[i, 4] * (getrandom * 2 - 1);
-         ar[i, 9]:= ar[i, 4] * rndSign(sqrt(1 - sqr(ar[i, 8])));
+//         ar[i, 9]:= ar[i, 4] * rndSign(sqrt(1 - sqr(ar[i, 8])));
+           ar[i, 9]:= ar[i, 4] * rndSign((1 - (ar[i, 8])));
          end;
      end;
 
@@ -359,17 +360,17 @@ for k:= 0 to Pred(pa.Count) do  // apply transformation
         begin
         ox:= rx;
         oy:= ry;
-        ry:= ry + ar[i, 0] * sin(ox * ar[i, 6] + oy * ar[i, 7] + ar[i, 2]);
-        rx:= rx + ar[i, 3] * sin(ox * ar[i, 8] + oy * ar[i, 9] + ar[i, 5]);
+//        ry:= ry; + ar[i, 0] * sin(ox * ar[i, 6] + oy * ar[i, 7] + ar[i, 2]);
+//        rx:= rx + ar[i, 3] * sin(ox * ar[i, 8] + oy * ar[i, 9] + ar[i, 5]);
         end;
-    pa.ar[k].x:= round(rx);
-    pa.ar[k].y:= round(ry);
+    pa.ar[k].x:= hwRound(rx);
+    pa.ar[k].y:= hwRound(ry);
     end;
 end;
 
 procedure NormalizePoints(var pa: TPixAr);
 const brd = 32;
-var isUP: boolean;  // HACK: transform for Y should be exact as one for X  
+var isUP: boolean;  // HACK: transform for Y should be exact as one for X
     Left, Right, Top, Bottom,
     OWidth, Width, OHeight, Height,
     OLeft: integer;
@@ -449,8 +450,8 @@ with Template do
      for i:= 0 to pred(pa.Count) do
          pa.ar[i]:= BasePoints^[i];
 
-     for i:= 1 to BezPassCnt do
-         BezierizeEdge(pa, 0.33333334);
+//     for i:= 1 to BezPassCnt do
+         BezierizeEdge(pa, _1div3);
 
      PointWave(Template, pa);
      NormalizePoints(pa);
@@ -466,7 +467,7 @@ end;
 
 function SelectTemplate: integer;
 begin
-Result:= getrandom(Succ(High(EdgeTemplates)))
+SelectTemplate:= getrandom(Succ(High(EdgeTemplates)))
 end;
 
 procedure GenLandSurface;
@@ -506,15 +507,15 @@ TryDo(p <> nil, 'No teams on map!', true);
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
 SDL_FillRect(LandSurface, nil, 0);
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'L', false);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p^.FortName + 'L', false, true, true);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-p:= p.Next;
+p:= p^.Next;
 TryDo(p <> nil, 'Only one team on map!', true);
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p.FortName + 'R', false);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p^.FortName + 'R', false, true, true);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-p:= p.Next;
+p:= p^.Next;
 TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
 end;
 
@@ -524,36 +525,37 @@ var x, y: Longword;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map', false);
-TryDo((LandSurface.w = 2048) and (LandSurface.h = 1024), 'Map dimensions should be 2048x1024!', true);
+LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map', false, true, true);
+TryDo((LandSurface^.w = 2048) and (LandSurface^.h = 1024), 'Map dimensions should be 2048x1024!', true);
 
 if SDL_MustLock(LandSurface) then
    SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-p:= LandSurface.pixels;
-case LandSurface.format.BytesPerPixel of
+p:= LandSurface^.pixels;
+case LandSurface^.format^.BytesPerPixel of
      1: OutError('We don''t work with 8 bit surfaces', true);
      2: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PWord(@p[x * 2])^ <> 0 then Land[y, x]:= COLOR_LAND;
-            p:= @p[LandSurface.pitch];
+                if PWord(@(p^[x * 2]))^ <> 0 then Land[y, x]:= COLOR_LAND;
+            p:= @(p^[LandSurface^.pitch]);
             end;
      3: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if  (p[x * 3 + 0] <> 0)
-                 or (p[x * 3 + 1] <> 0)
-                 or (p[x * 3 + 2] <> 0) then Land[y, x]:= COLOR_LAND;
-            p:= @p[LandSurface.pitch];
+                if  (p^[x * 3 + 0] <> 0)
+                 or (p^[x * 3 + 1] <> 0)
+                 or (p^[x * 3 + 2] <> 0) then Land[y, x]:= COLOR_LAND;
+            p:= @(p^[LandSurface^.pitch]);
             end;
      4: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PLongword(@p[x * 4])^ <> 0 then Land[y, x]:= COLOR_LAND;
-            p:= @p[LandSurface.pitch];
+                if PLongword(@(p^[x * 4]))^ <> 0 then Land[y, x]:= COLOR_LAND;
+            p:= @(p^[LandSurface^.pitch]);
             end;
      end;
+
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 end;
@@ -584,7 +586,7 @@ for y:= 0 to 127 do
             for yy:= y * 8 to y * 8 + 7 do
                 for xx:= x * 64 + bit * 8 to x * 64 + bit * 8 + 7 do
                     if Land[yy, xx] <> 0 then inc(t);
-            if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit) 
+            if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit)
             end
         end
 end;

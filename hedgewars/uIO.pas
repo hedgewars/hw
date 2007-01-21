@@ -77,7 +77,7 @@ begin
 case s[1] of
      '!': begin {$IFDEF DEBUGFILE}AddFileLog('Ping? Pong!');{$ENDIF}isPonged:= true; end;
      '?': SendIPC('!');
-     'e': ParseCommand(copy(s, 2, Length(s) - 1));
+     'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
      'T': case s[2] of
@@ -101,12 +101,12 @@ var i: integer;
     buf: array[0..255] of byte;
     s: shortstring absolute buf;
 begin
-fds.numsockets:= 0;
+fds^.numsockets:= 0;
 SDLNet_AddSocket(fds, IPCSock);
 
 while SDLNet_CheckSockets(fds, 0) > 0 do
       begin
-      i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255);
+      i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
       if i > 0 then
          begin
          buf[0]:= i;
@@ -175,7 +175,7 @@ while (cmdcurpos <= cmdendpos)and(extcmd[cmdcurpos].cmd = 's') do
       AddCaption('> ' + copy(extcmd[cmdcurpos].str, 2, Pred(extcmd[cmdcurpos].len)), $FFFFFF, capgrpNetSay);
       inc(cmdcurpos)
       end;
-         
+
 if cmdcurpos <= cmdendpos then
    TryDo(GameTicks <= extcmd[cmdcurpos].Time,
          'oops, queue error. in buffer: ' + extcmd[cmdcurpos].cmd +
@@ -187,20 +187,20 @@ tmpflag:= true;
 while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
    begin
    case extcmd[cmdcurpos].cmd of
-        'L': ParseCommand('+left');
-        'l': ParseCommand('-left');
-        'R': ParseCommand('+right');
-        'r': ParseCommand('-right');
-        'U': ParseCommand('+up');
-        'u': ParseCommand('-up');
-        'D': ParseCommand('+down');
-        'd': ParseCommand('-down');
-        'A': ParseCommand('+attack');
-        'a': ParseCommand('-attack');
-        'S': ParseCommand('switch');
-        'j': ParseCommand('ljump');
-        'J': ParseCommand('hjump');
-        ',': ParseCommand('skip');
+        'L': ParseCommand('+left', true);
+        'l': ParseCommand('-left', true);
+        'R': ParseCommand('+right', true);
+        'r': ParseCommand('-right', true);
+        'U': ParseCommand('+up', true);
+        'u': ParseCommand('-up', true);
+        'D': ParseCommand('+down', true);
+        'd': ParseCommand('-down', true);
+        'A': ParseCommand('+attack', true);
+        'a': ParseCommand('-attack', true);
+        'S': ParseCommand('switch', true);
+        'j': ParseCommand('ljump', true);
+        'J': ParseCommand('hjump', true);
+        ',': ParseCommand('skip', true);
         'N': begin
              tmpflag:= false;
              {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}
@@ -208,14 +208,14 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
         'p': begin
              TargetPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X);
              TargetPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y);
-             ParseCommand('put')
+             ParseCommand('put', true)
              end;
         'P': begin
              CursorPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X) + WorldDx;
              CursorPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y) + WorldDy;
              end;
-        '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd);
-        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79))
+        '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd, true);
+        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79), true)
         end;
    inc(cmdcurpos)
    end;

@@ -1,7 +1,7 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in 
 	${hedgewars_SOURCE_DIR}/hedgewars/proto.inc) 
 
-set(dcc32_tryexe dcc32.exe)
+set(dcc32_tryexe "delphi!doesnt!work.exe")
 set(fpc_tryexe fpc)
 set(hwengine_project "hwengine.dpr")
 
@@ -66,7 +66,7 @@ else (dcc32version)
 			message("Minimum required version of FreePascal is 1.9.4")
 		else (fpc_ver LESS "010904")
 			set(pascal_compiler ${fpc_executable})
-			set(pascal_compiler_flags "-k-z" "-knoexecstack" "-B" "-Sd" "-Xs" "-OG" "-O2" "-FE../bin" "-Cs2000000" ${hwengine_project})
+			set(pascal_compiler_flags "-FE../bin" "-Cs2000000" "-O2" ${hwengine_project})
 		endif (fpc_ver LESS "010904")
 	endif (fpc_version)
 endif (dcc32version)

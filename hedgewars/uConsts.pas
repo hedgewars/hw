@@ -121,8 +121,6 @@ const
       cHHStepTicks = 38;
       cHHZ = 1000;
       cCurrHHZ = Succ(cHHZ);
-      cHHKick = 0.03;
-      cLittle = 0.0000001;
 
       cKeyMaxIndex = 1023;
 
@@ -184,10 +182,12 @@ const
       cThemeCFGFilename = 'theme.cfg';
 
       Fontz: array[THWFont] of THHFont = (
-                                         (Height: 12;
+                                         (Handle: nil;
+                                          Height: 12;
                                           style: TTF_STYLE_NORMAL;
                                           Name: 'DejaVuSans.ttf'),
-                                         (Height: 24;
+                                         (Handle: nil;
+                                          Height: 24;
                                           style: TTF_STYLE_NORMAL;
                                           Name: 'DejaVuSans.ttf')
                                          );
@@ -241,40 +241,72 @@ const
                      Width, Height: integer;
                      hasAlpha: boolean;
                      end = (
-                     (FileName: 'BlueWater'; Path: ptGraphics; Width: 256; Height: 48; hasAlpha: false),// sprWater
-                     (FileName:    'Clouds'; Path: ptCurrTheme;
-                                          AltPath: ptGraphics; Width: 256; Height:128; hasAlpha: false),// sprCloud
-                     (FileName:      'Bomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprBomb
-                     (FileName: 'BigDigits'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
-                     (FileName:     'Frame'; Path: ptGraphics; Width:   4; Height: 32; hasAlpha:  true),// sprFrame
-                     (FileName:       'Lag'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprLag
-                     (FileName:     'Arrow'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprCursor
-                     (FileName:   'Grenade'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprGrenade
-                     (FileName:   'Targetp'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprTargetP
-                     (FileName:       'UFO'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprUFO
-                     (FileName:'SmokeTrace'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
-                     (FileName:  'RopeHook'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
-                     (FileName:    'Expl50'; Path: ptGraphics; Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
-                     (FileName:   'MineOff'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOff
-                     (FileName:    'MineOn'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprMineOn
-                     (FileName:      'Case'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprCase
-                     (FileName:  'FirstAid'; Path: ptGraphics; Width:  48; Height: 48; hasAlpha: false),// sprFAid
-                     (FileName:  'dynamite'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprDynamite
-                     (FileName:     'Power'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha:  true),// sprPower
-                     (FileName:    'ClBomb'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
-                     (FileName:'ClParticle'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
-                     (FileName:     'Flame'; Path: ptGraphics; Width:  16; Height: 16; hasAlpha: false),// sprFlame
-                     (FileName:  'horizont'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false),// sprHorizont
-                     (FileName:       'Sky'; Path: ptCurrTheme;Width:   0; Height:  0; hasAlpha: false),// sprSky
-                     (FileName: 'BrdrLines'; Path: ptAmmoMenu; Width: 202; Height:  1; hasAlpha: false),// sprAMBorders
-                     (FileName:      'Slot'; Path: ptAmmoMenu; Width: 202; Height: 33; hasAlpha: false),// sprAMSlot
-                     (FileName:  'AmmoName'; Path: ptAmmoMenu; Width: 202; Height: 33; hasAlpha: false),// sprAMSlotName
-                     (FileName:     'Ammos'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMAmmos
-                     (FileName:  'SlotKeys'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSlotKeys
-                     (FileName: 'Selection'; Path: ptAmmoMenu; Width:  32; Height: 32; hasAlpha: false),// sprAMSelection
-                     (FileName:    'Finger'; Path: ptGraphics; Width:  32; Height: 48; hasAlpha: false),// sprFinger
-                     (FileName:   'AirBomb'; Path: ptGraphics; Width:  32; Height: 32; hasAlpha: false),// sprAirBomb
-                     (FileName:  'Airplane'; Path: ptGraphics; Width: 125; Height: 42; hasAlpha: false) // sprAirplane
+                     (FileName: 'BlueWater'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width: 256; Height: 48; hasAlpha: false),// sprWater
+                     (FileName:    'Clouds'; Path: ptCurrTheme; AltPath: ptGraphics; Surface: nil;
+                     Width: 256; Height:128; hasAlpha: false),// sprCloud
+                     (FileName:      'Bomb'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprBomb
+                     (FileName: 'BigDigits'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
+                     (FileName:     'Frame'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:   4; Height: 32; hasAlpha:  true),// sprFrame
+                     (FileName:       'Lag'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  64; Height: 64; hasAlpha: false),// sprLag
+                     (FileName:     'Arrow'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprCursor
+                     (FileName:   'Grenade'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprGrenade
+                     (FileName:   'Targetp'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprTargetP
+                     (FileName:       'UFO'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprUFO
+                     (FileName:'SmokeTrace'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
+                     (FileName:  'RopeHook'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
+                     (FileName:    'Expl50'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
+                     (FileName:   'MineOff'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprMineOff
+                     (FileName:    'MineOn'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprMineOn
+                     (FileName:      'Case'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprCase
+                     (FileName:  'FirstAid'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  48; Height: 48; hasAlpha: false),// sprFAid
+                     (FileName:  'dynamite'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprDynamite
+                     (FileName:     'Power'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha:  true),// sprPower
+                     (FileName:    'ClBomb'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
+                     (FileName:'ClParticle'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
+                     (FileName:     'Flame'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  16; Height: 16; hasAlpha: false),// sprFlame
+                     (FileName:  'horizont'; Path: ptCurrTheme; AltPath: ptNone; Surface: nil;
+                     Width:   0; Height:  0; hasAlpha: false),// sprHorizont
+                     (FileName:       'Sky'; Path: ptCurrTheme; AltPath: ptNone; Surface: nil;
+                     Width:   0; Height:  0; hasAlpha: false),// sprSky
+                     (FileName: 'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width: 202; Height:  1; hasAlpha: false),// sprAMBorders
+                     (FileName:      'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width: 202; Height: 33; hasAlpha: false),// sprAMSlot
+                     (FileName:  'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width: 202; Height: 33; hasAlpha: false),// sprAMSlotName
+                     (FileName:     'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprAMAmmos
+                     (FileName:  'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprAMSlotKeys
+                     (FileName: 'Selection'; Path: ptAmmoMenu; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprAMSelection
+                     (FileName:    'Finger'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 48; hasAlpha: false),// sprFinger
+                     (FileName:   'AirBomb'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false),// sprAirBomb
+                     (FileName:  'Airplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width: 125; Height: 42; hasAlpha: false) // sprAirplane
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -309,7 +341,9 @@ const
                                           Timer: 3000;
                                           AmmoType: amGrenade);
                                    Slot: 1;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidClusterBomb;
                                    Ammo: (Propz: ammoprop_Timerable or
                                                  ammoprop_Power;
@@ -318,7 +352,9 @@ const
                                           Timer: 3000;
                                           AmmoType: amClusterBomb);
                                    Slot: 1;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidBazooka;
                                    Ammo: (Propz: ammoprop_Power;
                                           Count: AMMO_INFINITE;
@@ -326,7 +362,9 @@ const
                                           Timer: 0;
                                           AmmoType: amBazooka);
                                    Slot: 0;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidUFO;
                                    Ammo: (Propz: ammoprop_Power or
                                                  ammoprop_NeedTarget;
@@ -335,7 +373,9 @@ const
                                           Timer: 0;
                                           AmmoType: amUFO);
                                    Slot: 0;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidShotgun;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
                                           Count: AMMO_INFINITE;
@@ -343,7 +383,9 @@ const
                                           Timer: 0;
                                           AmmoType: amShotgun);
                                    Slot: 2;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidPickHammer;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInFall or
@@ -354,7 +396,9 @@ const
                                           Timer: 0;
                                           AmmoType: amPickHammer);
                                    Slot: 6;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidSkip;
                                    Ammo: (Propz: 0;
                                           Count: AMMO_INFINITE;
@@ -362,7 +406,9 @@ const
                                           Timer: 0;
                                           AmmoType: amSkip);
                                    Slot: 8;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidRope;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInFall or
@@ -373,6 +419,7 @@ const
                                           AmmoType: amRope);
                                    Slot: 7;
                                    TimeAfterTurn: 0;
+                                   minAngle: 0;
                                    maxAngle: cMaxAngle div 2),
                                   (NameId: sidMine;
                                    Ammo: (Propz: ammoprop_NoCrosshair;
@@ -381,7 +428,9 @@ const
                                           Timer: 0;
                                           AmmoType: amMine);
                                    Slot: 4;
-                                   TimeAfterTurn: 5000),
+                                   TimeAfterTurn: 5000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidDEagle;
                                    Ammo: (Propz: 0;
                                           Count: 3;
@@ -389,7 +438,9 @@ const
                                           Timer: 0;
                                           AmmoType: amDEagle);
                                    Slot: 2;
-                                   TimeAfterTurn: 3000),
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                    (NameId: sidDynamite;
                                     Ammo: (Propz: ammoprop_NoCrosshair or
                                                   ammoprop_AttackInJump or
@@ -399,7 +450,9 @@ const
                                            Timer: 0;
                                            AmmoType: amDynamite);
                                     Slot: 4;
-                                    TimeAfterTurn: 5000),
+                                    TimeAfterTurn: 5000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                    (NameId: sidFirePunch;
                                     Ammo: (Propz: ammoprop_NoCrosshair or
                                                   ammoprop_ForwMsgs or
@@ -410,7 +463,9 @@ const
                                            Timer: 0;
                                            AmmoType: amFirePunch);
                                     Slot: 3;
-                                    TimeAfterTurn: 3000),
+                                    TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                    (NameId: sidBaseballBat;
                                     Ammo: (Propz: 0;
                                            Count: 1;
@@ -418,7 +473,9 @@ const
                                            Timer: 0;
                                            AmmoType: amBaseballBat);
                                     Slot: 3;
-                                    TimeAfterTurn: 5000),
+                                    TimeAfterTurn: 5000;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidParachute;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInJump or
@@ -428,7 +485,9 @@ const
                                           Timer: 0;
                                           AmmoType: amParachute);
                                    Slot: 7;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidAirAttack;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
@@ -438,7 +497,9 @@ const
                                           Timer: 0;
                                           AmmoType: amAirAttack);
                                    Slot: 5;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidMineStrike;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
@@ -448,7 +509,9 @@ const
                                           Timer: 0;
                                           AmmoType: amMineStrike);
                                    Slot: 5;
-                                   TimeAfterTurn: 0),
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0),
                                   (NameId: sidBlowTorch;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
                                           Count: 1;

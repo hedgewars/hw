@@ -18,7 +18,7 @@
 
 unit uMisc;
 interface
-uses uConsts, SDLh;
+uses uConsts, SDLh, uFloat;
 {$INCLUDE options.inc}
 var isCursorVisible : boolean = false;
     isTerminated    : boolean = false;
@@ -37,7 +37,7 @@ var isCursorVisible : boolean = false;
 
     cCloudsNumber    : integer = 9;
     cConsoleHeight   : integer = 320;
-    cConsoleYAdd     : integer = 0; 
+    cConsoleYAdd     : integer = 0;
     cScreenWidth     : integer = 1024;
     cScreenHeight    : integer = 768;
     cBits            : integer = 16;
@@ -58,11 +58,6 @@ var isCursorVisible : boolean = false;
     cColorNearBlack       : Longword = 16;
     cExplosionBorderColor : LongWord = $808080;
 
-    cDrownSpeed   : Double = 0.06;
-    cMaxWindSpeed : Double = 0.0005;
-    cWindSpeed    : Double = 0.0001;
-    cGravity      : Double = 0.0005;
-
     cShowFPS      : boolean = true;
     cCaseFactor   : Longword = 3;  {1..10}
     cFullScreen   : boolean = true;
@@ -71,12 +66,16 @@ var isCursorVisible : boolean = false;
     cInitVolume   : integer = 128;
     cVolumeDelta  : integer = 0;
     cTimerInterval   : Longword = 5;
-    cHasFocus     : boolean = true;   
+    cHasFocus     : boolean = true;
 
 var
     cSendEmptyPacketTime : LongWord = 2000;
     cSendCursorPosTime   : LongWord = 50;
     ShowCrosshair  : boolean;
+    cDrownSpeed,
+    cMaxWindSpeed,
+    cWindSpeed,
+    cGravity: hwFloat;
 
     flagMakeCapture: boolean = false;
 
@@ -84,14 +83,15 @@ var
 
     AttackBar: integer = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-function hwSign(r: Double): integer;
+function hwSign(r: hwFloat): integer;
 function Min(a, b: integer): integer;
 function Max(a, b: integer): integer;
-procedure OutError(Msg: String; const isFatalError: boolean=false);
+function rndSign(num: hwFloat): hwFloat;
+procedure OutError(Msg: String; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: LongInt): shortstring;
-function FloatToStr(n: Double): shortstring;
+function FloatToStr(n: hwFloat): shortstring;
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 procedure AdjustColor(var Color: Longword);
@@ -101,35 +101,36 @@ function RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
 procedure SetKB(n: Longword);
 procedure SendKB;
-procedure SetLittle(var r: Double);
+procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
+function Str2PChar(var s: shortstring): PChar;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore, uIO{$IFDEF FPC}, Math{$ENDIF};
+uses uConsole, uStore, uIO, Math, uRandom;
 var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
 
-function hwSign(r: Double): integer;
+function hwSign(r: hwFloat): integer;
 begin
-if r < 0 then Result:= -1 else Result:= 1
+if r.isNegative then hwSign:= -1 else hwSign:= 1
 end;
 
 function Min(a, b: integer): integer;
 begin
-if a < b then Result:= a else Result:= b
+if a < b then Min:= a else Min:= b
 end;
 
 function Max(a, b: integer): integer;
 begin
-if a > b then Result:= a else Result:= b
+if a > b then Max:= a else Max:= b
 end;
 
-procedure OutError(Msg: String; const isFatalError: boolean=false);
+procedure OutError(Msg: String; isFatalError: boolean);
 begin
 {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
 WriteLnToConsole(Msg);
@@ -158,17 +159,16 @@ end;
 
 function IntToStr(n: LongInt): shortstring;
 begin
-str(n, Result)
+str(n, IntToStr)
 end;
 
-function FloatToStr(n: Double): shortstring;
+function FloatToStr(n: hwFloat): shortstring;
 begin
-//str(n:5:5, Result)
-str(n, Result)
+FloatToStr:= cstr(n)
 end;
 
 {$IFNDEF FPC}
-function arctan2(const Y, X: Double): Double;
+function arctan2(const Y, X: hwFloat): hwFloat;
 asm
         fld     Y
         fld     X
@@ -180,13 +180,13 @@ end;
 function DxDy2Angle32(const _dY, _dX: Extended): integer;
 const _16divPI: Extended = 16/pi;
 begin
-Result:= trunc(arctan2(_dY, _dX) * _16divPI) and $1f
+DxDy2Angle32:= trunc(arctan2(_dY, _dX) * _16divPI) and $1f
 end;
 
 function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
 begin
-Result:= trunc(arctan2(_dY, _dX) * MaxAngleDivPI) mod cMaxAngle
+DxDy2AttackAngle:= trunc(arctan2(_dY, _dX) * MaxAngleDivPI) mod cMaxAngle
 end;
 
 procedure SetKB(n: Longword);
@@ -204,15 +204,29 @@ if KBnum <> 0 then
    end
 end;
 
-procedure SetLittle(var r: Double);
+procedure SetLittle(var r: hwFloat);
 begin
-if r >= 0 then r:= cLittle else r:= - cLittle 
+if not r.isNegative then r:= cLittle else r:= - cLittle
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 const stc: array [TStatInfoType] of char = 'rDK';
 begin
 SendIPC('i' + stc[sit] + s)
+end;
+
+function rndSign(num: hwFloat): hwFloat;
+begin
+num.isNegative:= getrandom(2) = 0;
+rndSign:= num
+end;
+
+function Str2PChar(var s: shortstring): PChar;
+const CharArray: array[byte] of Char = '';
+begin
+CharArray:= s;
+CharArray[Length(s)]:= #0;
+Str2PChar:= @CharArray
 end;
 
 {$IFDEF DEBUGFILE}
@@ -224,17 +238,23 @@ end;
 
 function RectToStr(Rect: TSDL_Rect): shortstring;
 begin
-Result:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
+RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
 
 var i: integer;
 
 initialization
+cDrownSpeed.QWordValue:= 257698038;// 0.06
+cMaxWindSpeed.QWordValue:=   2147484;// 0.0005
+cWindSpeed.QWordValue:=    429496;// 0.0001
+cGravity:= cMaxWindSpeed;
+
+
 {$I-}
 for i:= 0 to 7 do
     begin
-    AssignFile(f, 'debug' + inttostr(i) + '.txt');
+    Assign(f, 'debug' + inttostr(i) + '.txt');
     rewrite(f);
     if IOResult = 0 then break
     end;
@@ -243,7 +263,7 @@ for i:= 0 to 7 do
 finalization
 writeln(f, '-= halt at ',GameTicks,' ticks =-');
 Flush(f);
-closefile(f)
+close(f)
 {$ENDIF}
 
 end.
