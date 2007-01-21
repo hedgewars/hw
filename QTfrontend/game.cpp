@@ -77,11 +77,11 @@ void HWGame::commonConfig()
 	if (m_pTeamSelWidget)
 	{
 		qDebug() << "adding teams from teamselwidget...";
-		QList<HWTeam> teams = QList<HWTeam>::fromStdList(m_pTeamSelWidget->getPlayingTeams());
+		QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
 		for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
 		{
 			qDebug() << "a team...";
-			(*it).numHedgehogs = 4;
+			//(*it).numHedgehogs = 4;
 			HWProto::addStringListToBuffer(buf,
 				(*it).TeamGameConfig(gamecfg->getInitHealth()));
 		}

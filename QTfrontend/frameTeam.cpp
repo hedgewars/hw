@@ -62,6 +62,13 @@ void FrameTeams::removeTeam(HWTeam team)
   teamToWidget.erase(it);
 }
 
+void FrameTeams::setHHNum(const HWTeam& team)
+{
+  TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+  if(!pTeamShowWidget) throw;
+  pTeamShowWidget->setHHNum(team.numHedgehogs);
+}
+
 QWidget* FrameTeams::getTeamWidget(HWTeam team)
 {
   tmapTeamToWidget::iterator it=teamToWidget.find(team);

@@ -36,7 +36,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
   this->setMaximumHeight(35);
-  QIcon difficultyIcon=team.netTeam ? QIcon(QString(":/res/net.png"))
+  QIcon difficultyIcon=team.isNetTeam() ? QIcon(QString(":/res/net.png"))
     : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
   QPalette newPalette = palette();
@@ -68,11 +68,23 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
     // hedgehogs num
     phhoger=new CHedgehogerWidget(this);
+    connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
     mainLayout.addWidget(phhoger);
   }
 
   QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
   QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
+}
+
+void TeamShowWidget::setHHNum(unsigned int num)
+{
+  phhoger->setHHNum(num);
+}
+
+void TeamShowWidget::hhNumChanged()
+{
+  m_team.numHedgehogs=phhoger->getHedgehogsNum();
+  emit hhNmChanged(m_team);
 }
 
 void TeamShowWidget::activateTeam()

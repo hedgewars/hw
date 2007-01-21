@@ -168,8 +168,8 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "REMOVETEAM:") {
-    if(lst.size()<2) return;
-    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1], true));
+    if(lst.size()<3) return;
+    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1], lst[2].toUInt()));
     return;
   }
 
@@ -229,6 +229,12 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit fortsModeChanged(lst[2].toInt() != 0);
 	  return;
   	}
+  	if (lst[1] == "HHNUM") {
+	  HWTeam tmptm(lst[2], lst[3].toUInt());
+	  tmptm.numHedgehogs=lst[4].toUInt();
+	  emit hhnumChanged(tmptm);
+	  return;
+  	}
   	qDebug() << "unknow config param: " << lst[1];
     return;
   }
@@ -263,6 +269,12 @@ void HWNewNet::RunGame()
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
   game->StartNet();
+}
+
+void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
+{
+  qDebug() << team.getNetID() << ":" << team.numHedgehogs;
+  RawSendNet(QString("CONFIG_PARAM%1HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName).arg(team.getNetID()).arg(team.numHedgehogs));
 }
 
 void HWNewNet::onSeedChanged(const QString & seed)

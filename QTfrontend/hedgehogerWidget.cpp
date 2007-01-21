@@ -47,17 +47,27 @@ void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
     if(numHedgehogs < 8 && pOurFrameTeams->overallHedgehogs<18) {
       numHedgehogs++;
       pOurFrameTeams->overallHedgehogs++;
+      emit hedgehogsNumChanged();
     }
   } else if (event->button()==Qt::RightButton) {
     event->accept();
     if(numHedgehogs > 3) {
       numHedgehogs--;
       pOurFrameTeams->overallHedgehogs--;
+      emit hedgehogsNumChanged();
     }
   } else {
     event->ignore();
     return;
   }
+  repaint();
+}
+
+void CHedgehogerWidget::setHHNum(unsigned int num)
+{
+  unsigned int diff=numHedgehogs-num;
+  numHedgehogs=num;
+  pOurFrameTeams->overallHedgehogs+=diff;
   repaint();
 }
 

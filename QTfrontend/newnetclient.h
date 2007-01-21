@@ -94,6 +94,7 @@ class HWNewNet : public QObject
   void initHealthChanged(quint32 health);
   void turnTimeChanged(quint32 time);
   void fortsModeChanged(bool value);
+  void hhnumChanged(const HWTeam&);
 
  public slots:
   void SendNet(const QByteArray & buf);
@@ -105,6 +106,7 @@ class HWNewNet : public QObject
   void onInitHealthChanged(quint32 health);
   void onTurnTimeChanged(quint32 time);
   void onFortsModeChanged(bool value);
+  void onHedgehogsNumChanged(const HWTeam& team);
 
  private slots:
   void ClientRead();

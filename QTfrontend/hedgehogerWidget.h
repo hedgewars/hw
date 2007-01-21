@@ -31,6 +31,10 @@ class CHedgehogerWidget : public QWidget
   CHedgehogerWidget(QWidget * parent);
   ~CHedgehogerWidget();
   unsigned char getHedgehogsNum() const;
+  void setHHNum (unsigned int num);
+
+ signals:
+  void hedgehogsNumChanged();
 
  protected:
   virtual void paintEvent(QPaintEvent* event);

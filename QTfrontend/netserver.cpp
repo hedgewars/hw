@@ -241,27 +241,36 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="ADDTEAM:") {
     if(lst.size()<10) return;
     lst.pop_front();
+    // add team ID
+    static unsigned int netTeamID=1;
+    lst.insert(1, QString::number(netTeamID++));
+
     m_teamsCfg.push_back(lst);
-    m_hwserver->sendOthers(this, msg);
+    m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
     return;
   }
 
   if(lst[0]=="REMOVETEAM:") {
     if(lst.size()<2) return;
-    removeTeam(lst[1]);
+    unsigned int netID=removeTeam(lst[1]);
+    m_hwserver->sendOthers(this, QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID));
+    return;
   }
 
   m_hwserver->sendOthers(this, msg);
 }
 
-void HWConnectedClient::removeTeam(const QString& tname)
+unsigned int HWConnectedClient::removeTeam(const QString& tname)
 {
+  unsigned int netID=0;
   for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it) {
     if((*it)[0]==tname) {
+      netID=(*it)[1].toUInt();
       m_teamsCfg.erase(it);
       break;
     }
   }
+  return netID;
 }
 
 QList<QStringList> HWConnectedClient::getTeamNames() const

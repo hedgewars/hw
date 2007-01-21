@@ -53,6 +53,7 @@ class TeamShowWidget : public QWidget
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
+ void setHHNum(unsigned int num);
 
  private:
  TeamShowWidget();
@@ -62,8 +63,12 @@ class TeamShowWidget : public QWidget
  CHedgehogerWidget* phhoger;
  QPushButton* colorButt;
 
+ private slots:
+  void hhNumChanged();
+
  signals:
  void teamStatusChanged(HWTeam team);
+ void hhNmChanged(const HWTeam&);
 };
 
 #endif // _TEAMSEL_HELPER_INCLUDED

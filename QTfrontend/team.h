@@ -33,9 +33,12 @@ class HWTeamConstructException
 class HWTeam
 {
 	public:
-		HWTeam(const QString & teamname, bool isNet=false);
+		HWTeam(const QString & teamname, unsigned int netID=0);
 		HWTeam(const QStringList& strLst);
 		HWTeam(quint8 num);
+
+		bool isNetTeam() const;
+		unsigned int getNetID() const;
 
 		QString TeamName;
 		QString HHName[8];
@@ -44,7 +47,6 @@ class HWTeam
 		unsigned int difficulty;
 		BindAction binds[BINDS_NUMBER];
 
-		bool netTeam;
 		unsigned char numHedgehogs;
 		QColor teamColor;
 
@@ -57,6 +59,7 @@ class HWTeam
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
 	private:
+		unsigned int m_netID;
 		QString OldTeamName;
 };
 

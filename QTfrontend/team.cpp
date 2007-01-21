@@ -29,9 +29,9 @@
 #include <QStringList>
 #include <QDebug>
 
-HWTeam::HWTeam(const QString & teamname, bool isNet) :
+HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
   difficulty(0),
-  netTeam(isNet)
+  m_netID(netID)
 {
 	TeamName = teamname;
 	OldTeamName = TeamName;
@@ -45,18 +45,18 @@ HWTeam::HWTeam(const QString & teamname, bool isNet) :
 	}
 }
 
-HWTeam::HWTeam(const QStringList& strLst) :
-  netTeam(true)
+HWTeam::HWTeam(const QStringList& strLst)
 {
   // net teams are configured from QStringList
-  if(strLst.size()<9) throw HWTeamConstructException();
+  if(strLst.size()<10) throw HWTeamConstructException();
   TeamName=strLst[0];
-  for(int i = 0; i < 8; i++) HHName[i]=strLst[i+1];
+  m_netID=strLst[1].toUInt();
+  for(int i = 0; i < 8; i++) HHName[i]=strLst[i+2];
 }
 
 HWTeam::HWTeam(quint8 num) :
   difficulty(0),
-  netTeam(false)
+  m_netID(0)
 {
 	num %= PREDEFTEAMS_COUNT;
 	TeamName = QApplication::translate("teams", pteams[num].TeamName);
@@ -207,7 +207,7 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 {
 	QStringList sl;
 	sl.push_back("eaddteam");
-	if (netTeam)
+	if (m_netID)
 		sl.push_back("erdriven");
 	sl.push_back(QString("ecolor %1").arg(teamColor.rgb() & 0xffffff));
 	sl.push_back("ename team " + TeamName);
@@ -218,7 +218,7 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
 
-	if (!netTeam)
+	if (!m_netID)
 		for(int i = 0; i < BINDS_NUMBER; i++)
 			sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 
@@ -229,10 +229,20 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 	return sl;
 }
 
+bool HWTeam::isNetTeam() const
+{
+  return m_netID!=0;
+}
+
+unsigned int HWTeam::getNetID() const
+{
+  return m_netID;
+}
+
 bool HWTeam::operator==(const HWTeam& t1) const {
-  return TeamName==t1.TeamName && netTeam==t1.netTeam;
+  return TeamName==t1.TeamName && m_netID==t1.m_netID;
 }
 
 bool HWTeam::operator<(const HWTeam& t1) const {
-  return TeamName<t1.TeamName || (netTeam < t1.netTeam); // if names are equal - test if it is net team
+  return m_netID<t1.m_netID || TeamName<t1.TeamName; // if names are equal - test if it is net team
 }

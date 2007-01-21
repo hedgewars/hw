@@ -28,10 +28,10 @@
 
 void TeamSelWidget::addTeam(HWTeam team)
 {
-  if(team.netTeam) {
+  if(team.isNetTeam()) {
     framePlaying->addTeam(team, true);
     curPlayingTeams.push_back(team);
-    QObject::connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+    connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
@@ -41,12 +41,27 @@ void TeamSelWidget::addTeam(HWTeam team)
   }
 }
 
+void TeamSelWidget::hhNumChanged(const HWTeam& team)
+{
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  itPlay->numHedgehogs=team.numHedgehogs;
+  emit hhogsNumChanged(team);
+}
+
+void TeamSelWidget::changeHHNum(const HWTeam& team)
+{
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  itPlay->numHedgehogs=team.numHedgehogs;
+
+  framePlaying->setHHNum(team);
+}
+
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
   for(;;) {
-    list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end()) break;
-    if(itPlay->netTeam) {
+    if(itPlay->isNetTeam()) {
       QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
       framePlaying->removeTeam(team);
       curPlayingTeams.erase(itPlay);
@@ -57,7 +72,7 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
 
 void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
 {
-  list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
   
 }
 
@@ -68,8 +83,8 @@ void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
 
 void TeamSelWidget::changeTeamStatus(HWTeam team)
 {
-  list<HWTeam>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
-  list<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  QList<HWTeam>::iterator itDontPlay=std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team);
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
   bool willBePlaying=itDontPlay!=curDontPlayingTeams.end();
 
@@ -101,6 +116,8 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   pRemoveTeams->removeTeam(team);
   QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));
+  if(willBePlaying) connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
+			    this, SLOT(hhNumChanged(const HWTeam&)));
 
   QSize szh=pAddTeams->sizeHint();
   QSize szh1=pRemoveTeams->sizeHint();
@@ -138,7 +155,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
 {
-  list<HWTeam>::iterator it;
+  QList<HWTeam>::iterator it;
   for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
     framePlaying->removeTeam(*it);
   }
@@ -159,7 +176,7 @@ bool TeamSelWidget::isPlaying(HWTeam team) const
   return std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team)!=curPlayingTeams.end();
 }
 
-list<HWTeam> TeamSelWidget::getPlayingTeams() const
+QList<HWTeam> TeamSelWidget::getPlayingTeams() const
 {
   return curPlayingTeams;
 }

@@ -38,6 +38,7 @@ class FrameTeams : public QWidget
   QWidget* getTeamWidget(HWTeam team);
   bool isFullTeams() const;
   void resetColors();
+  void setHHNum(const HWTeam& team);
 
  public slots:
   void addTeam(HWTeam team, bool willPlay);
