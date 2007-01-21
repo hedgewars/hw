@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QString>
 #include <QTcpSocket>
+#include <QMap>
 
 #include "team.h"
 
@@ -51,6 +52,8 @@ class HWNewNet : public QObject
   QString mynick;
   QTcpSocket NetSocket;
   QString seed;
+
+  QMap<unsigned int, QString> m_networkToLocalteams; // key is netID, value is local team name
 
   void ConfigAsked();
   void RunGame();

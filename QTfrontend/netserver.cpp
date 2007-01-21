@@ -90,7 +90,7 @@ bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
   return getChiefClient()==cl;
 }
 
-QMap<QString, QString> HWNetServer::getGameCfg() const
+QMap<QString, QStringList> HWNetServer::getGameCfg() const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
     if(isChiefClient(*it)) {
@@ -98,7 +98,7 @@ QMap<QString, QString> HWNetServer::getGameCfg() const
     }
   }
   // error happened if we are here
-  return QMap<QString, QString>();
+  return QMap<QString, QStringList>();
 }
 
 bool HWNetServer::haveNick(const QString& nick) const
@@ -209,15 +209,15 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
     else {
       RawSendNet(QString("SLAVE"));
-      // send config
-      QMap<QString, QString> conf=m_hwserver->getGameCfg();
-      for(QMap<QString, QString>::iterator it=conf.begin(); it!=conf.end(); ++it) {
-	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value());
-      }
       // send teams
       QList<QStringList> team_conf=m_hwserver->getTeamsConfig();
       for(QList<QStringList>::iterator tmit=team_conf.begin(); tmit!=team_conf.end(); ++tmit) {
 	RawSendNet(QString("ADDTEAM:")+delimeter+tmit->join(QString(delimeter)));
+      }
+      // send config
+      QMap<QString, QStringList> conf=m_hwserver->getGameCfg();
+      for(QMap<QString, QStringList>::iterator it=conf.begin(); it!=conf.end(); ++it) {
+	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter)));
       }
     }
     return;
@@ -235,7 +235,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(lst[0]=="CONFIG_PARAM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
-    else m_gameCfg[lst[1]]=lst[2];
+    else m_gameCfg[lst[1]]=lst.mid(2);
   }
 
   if(lst[0]=="ADDTEAM:") {
@@ -247,6 +247,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
     m_teamsCfg.push_back(lst);
     m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
+    RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(lst[0]).arg(lst[1]));
     return;
   }
 

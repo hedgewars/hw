@@ -175,6 +175,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if(lst[0]=="SLAVE") {
     m_pGameCFGWidget->setEnabled(false);
+    return;
   }
 
   if (lst[0] == "CONFIGASKED") {
@@ -201,6 +202,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
     emit initHealthChanged(lst[3].toUInt());
     emit turnTimeChanged(lst[4].toUInt());
     //emit fortsModeChanged(lst[5].toInt() != 0); // FIXME: add a getFortsMode in ConfigAsked
+    return;
+  }
+
+  if(lst[0]=="TEAM_ACCEPTED") {
+    m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
     return;
   }
 
@@ -274,7 +280,9 @@ void HWNewNet::RunGame()
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
   qDebug() << team.getNetID() << ":" << team.numHedgehogs;
-  RawSendNet(QString("CONFIG_PARAM%1HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName).arg(team.getNetID()).arg(team.numHedgehogs));
+  RawSendNet(QString("CONFIG_PARAM%1HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
+	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
+	     .arg(team.numHedgehogs));
 }
 
 void HWNewNet::onSeedChanged(const QString & seed)

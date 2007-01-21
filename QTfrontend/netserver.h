@@ -47,7 +47,7 @@ class HWConnectedClient : public QObject
   QString getHedgehogsDescription() const;
 
   bool readyToStart;
-  QMap<QString, QString> m_gameCfg; // config_param - value
+  QMap<QString, QStringList> m_gameCfg; // config_param - value
   QList<QStringList> m_teamsCfg; // TeamName - hhs
   class ShouldDisconnectException {};
 
@@ -79,7 +79,7 @@ class HWNetServer : public QObject
   void StartServer();
   void StopServer();
   bool isChiefClient(HWConnectedClient* cl) const;
-  QMap<QString, QString> getGameCfg() const;
+  QMap<QString, QStringList> getGameCfg() const;
   void sendAll(QString gameCfg);
   void sendOthers(HWConnectedClient* this_cl, QString gameCfg);
   bool haveNick(const QString& nick) const;
