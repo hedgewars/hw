@@ -33,6 +33,8 @@ void TeamSelWidget::addTeam(HWTeam team)
     curPlayingTeams.push_back(team);
     connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
+    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
+			    this, SLOT(hhNumChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
     curDontPlayingTeams.push_back(team);

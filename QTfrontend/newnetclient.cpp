@@ -237,6 +237,10 @@ void HWNewNet::ParseLine(const QByteArray & line)
   	}
   	if (lst[1] == "HHNUM") {
 	  HWTeam tmptm(lst[2], lst[3].toUInt());
+	  QMap<unsigned int, QString>::iterator it=m_networkToLocalteams.find(lst[3].toUInt());
+	  if(it!=m_networkToLocalteams.end()) {
+	    tmptm=HWTeam(lst[2]); // local team should be changed
+	  }
 	  tmptm.numHedgehogs=lst[4].toUInt();
 	  emit hhnumChanged(tmptm);
 	  return;
