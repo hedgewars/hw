@@ -370,8 +370,8 @@ if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and
    end;
 if (Gear^.Timer and $3F) = 0 then
    begin
-   i:= hwRound(Gear^.X) - Gear^.Radius  - GetRandom(2);
-   ei:= hwRound(Gear^.X) + Gear^.Radius + GetRandom(2);
+   i:= hwRound(Gear^.X) - Gear^.Radius - integer(GetRandom(2));
+   ei:= hwRound(Gear^.X) + Gear^.Radius + integer(GetRandom(2));
    while i <= ei do
          begin
          doMakeExplosion(i, hwRound(Gear^.Y) + 3, 3, 0);
@@ -413,8 +413,8 @@ i:= 0;
 y:= hwRound(Gear^.Y) - cHHRadius*2;
 while y < hwRound(Gear^.Y) do
    begin
-   ar[i].Left := hwRound(Gear^.X) - Gear^.Radius - GetRandom(2);
-   ar[i].Right:= hwRound(Gear^.X) + Gear^.Radius + GetRandom(2);
+   ar[i].Left := hwRound(Gear^.X) - Gear^.Radius - integer(GetRandom(2));
+   ar[i].Right:= hwRound(Gear^.X) + Gear^.Radius + integer(GetRandom(2));
    inc(y, 2);
    inc(i)
    end;
@@ -445,7 +445,7 @@ if (HHGear^.Angle <> BTPrevAngle) then
    Gear^.dX:= hwSign(HHGear^.dX) * AngleSin(HHGear^.Angle) * _0_5;
    Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
    BTPrevAngle:= HHGear^.Angle;
-   b:= true
+//   b:= true
    end;
 
 if Gear^.Timer mod cHHStepTicks = 0 then
@@ -453,7 +453,10 @@ if Gear^.Timer mod cHHStepTicks = 0 then
    b:= true;
    if Gear^.dX < 0 then HHGear^.Message:= (HHGear^.Message or gm_Left) and not gm_Right
                   else HHGear^.Message:= (HHGear^.Message or gm_Right) and not gm_Left;
+
+   HHGear^.State:= HHGear^.State and not gstAttacking;
    HedgehogStep(HHGear);
+   HHGear^.State:= HHGear^.State or gstAttacking;
 
    inc(BTSteps);
    if BTSteps = 11 then
@@ -488,7 +491,6 @@ begin
 BTPrevAngle:= High(Longword);
 BTSteps:= 0;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-HHGear^.State:= HHGear^.State and not gstAttacking;
 HHGear^.Message:= 0;
 Gear^.doStep:= @doStepBlowTorchWork
 end;
@@ -1017,13 +1019,16 @@ if Gear^.X > 3072 then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
+var t: integer;
 begin
 AllInactive:= false;
 Gear^.X:= -1024;
 Gear^.Y:= -128;
 Gear^.dX:= TargetPoint.X -
-          cBombsDistance * 5 / 2;{ -
-          cBombsSpeed * sqrt(2 * (TargetPoint.Y - Gear^.Y) / cGravity);}
+          cBombsDistance * 5 / 2;
+
+if TargetPoint.Y - Gear^.Y > 0 then
+   Gear^.dX:= Gear^.dX - cBombsSpeed * hwSqrt(2 * (TargetPoint.Y - Gear^.Y) / cGravity);
 Gear^.Health:= 6;
 Gear^.doStep:= @doStepAirAttackWork
 end;

@@ -17,6 +17,7 @@ set(engine_sources
 	uCollisions.pas
 	uConsole.pas
 	uConsts.pas
+	uFloat.pas
 	uGame.pas
 	uGears.pas
 	uIO.pas
@@ -35,6 +36,7 @@ set(engine_sources
 	CCHandlers.inc
 	GSHandlers.inc
 	HHHandlers.inc
+	SinTable.inc
 	options.inc
 	proto.inc
 	tunsetborder.inc

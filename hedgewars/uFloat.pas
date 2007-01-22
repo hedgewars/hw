@@ -53,9 +53,10 @@ function cstr(z: hwFloat): string;
 function hwRound(t: hwFloat): integer;
 function hwAbs(t: hwFloat): hwFloat;
 function hwSqr(t: hwFloat): hwFloat;
+function hwSqrt(t: hwFloat): hwFloat;
 function Distance(dx, dy: hwFloat): hwFloat;
-function AngleSin(angle: Longword): hwFloat;
-function AngleCos(angle: Longword): hwFloat;
+function AngleSin(Angle: Longword): hwFloat;
+function AngleCos(Angle: Longword): hwFloat;
 
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
@@ -246,6 +247,12 @@ begin
 hwSqr:= t * t
 end;
 
+function hwSqrt(t: hwFloat): hwFloat;
+begin
+hwSqrt.isNegative:= false;
+hwSqrt.QWordValue:= Round(sqrt(1.0 / $100000000 * (t.QWordValue)) * $100000000)
+end;
+
 function Distance(dx, dy: hwFloat): hwFloat;
 var x, y: hwFloat;
     Result: hwFloat;
@@ -253,22 +260,25 @@ begin
 x:= dx * dx;
 y:= dy * dy;
 Result:= x + y;
-Result.QWordValue:= Round(sqrt(1.0 / 4294967296 * (Result.QWordValue)) * 4294967296);
+Result.QWordValue:= Round(sqrt(1.0 / $100000000 * (Result.QWordValue)) * $100000000);
 Distance:= Result
 end;
 
-function AngleSin(angle: Longword): hwFloat;
+{$INCLUDE SinTable.inc}
+
+function AngleSin(Angle: Longword): hwFloat;
 begin
 AngleSin.isNegative:= false;
-AngleSin.QWordValue:= Round(Sin(Angle * pi / cMaxAngle) * 4294967296)
+if Angle < 1024 then AngleSin.QWordValue:= SinTable[Angle]
+                else AngleSin.QWordValue:= SinTable[2048 - Angle]
 end;
 
-function AngleCos(angle: Longword): hwFloat;
+function AngleCos(Angle: Longword): hwFloat;
 var CosVal: Extended;
 begin
-CosVal:= Cos(Angle * pi / cMaxAngle);
-AngleCos.isNegative:= CosVal < 0;
-AngleCos.QWordValue:= Round(Abs(Cosval) * 4294967296)
+AngleCos.isNegative:= Angle > 1024;
+if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]
+                else AngleCos.QWordValue:= SinTable[Angle - 1024]
 end;
 
 {$ENDIF}

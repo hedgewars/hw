@@ -162,7 +162,7 @@ begin
 inc(Counter);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
 New(Result);
-{$IFDEF DEBUGFILE}AddFileLog('AddGear: type = '+inttostr(ord(Kind))+'; handle = '+inttostr(integer(Result)));{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('AddGear: type = ' + inttostr(ord(Kind)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
 Result^.X:= X;
 Result^.Y:= Y;
@@ -286,7 +286,6 @@ if Gear^.Surf <> nil then SDL_FreeSurface(Gear^.Surf);
 if Gear^.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
-      {$IFDEF DEBUGFILE}AddFileLog('DeleteGear: Sending gm_Destroy, hh handle = '+inttostr(integer(Gear)));{$ENDIF}
       Gear^.Message:= gm_Destroy;
       CurAmmoGear^.Message:= gm_Destroy;
       exit
@@ -305,7 +304,7 @@ if Gear^.Kind = gtHedgehog then
       inc(KilledHHs);
       RecountTeamHealth(team);
       end;
-{$IFDEF DEBUGFILE}AddFileLog('DeleteGear: handle = '+inttostr(integer(Gear)));{$ENDIF}
+{$IFDEF DEBUGFILE}AddFileLog('DeleteGear');{$ENDIF}
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);
@@ -873,16 +872,14 @@ repeat
           Gear^.X:= x;
           Gear^.Y:= y;
          {$IFDEF DEBUGFILE}
-         AddFileLog('Assigned Gear ' + inttostr(integer(Gear)) +
-                    ' coordinates (' + inttostr(x) +
-                    ',' + inttostr(y) + ')');
+         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
          {$ENDIF}
           exit
           end
   until (x - Gear^.Radius < fx) and (x + Gear^.Radius > fx);
 dec(Delta, 20)
 until (Delta < 70);
-OutError('Couldn''t find place for Gear ' + inttostr(integer(Gear)), false);
+OutError('Couldn''t find place for Gear', false);
 DeleteGear(Gear)
 end;
 
