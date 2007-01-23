@@ -76,27 +76,35 @@ void MyWindow::Code()
 
 void MyWindow::Save()
 {
-	if (xy->rects.size())
-	{
-		QFile f("rects.txt");
-		if (!f.open(QIODevice::WriteOnly))
-		{
-			QMessageBox::information(this, tr("Error"),
-						tr("Cannot save"));
-			return ;
-		}
-
-		QTextStream stream(&f);
-		for(int i = 0; i < xy->rects.size(); i++)
-		{
-			QRect r = xy->rects[i].normalized();
-			stream << r.x() << " " << r.y() << " " << r.width() << " " << r.height() << endl;
-		}
-		f.close();
-	}
+	Code();
 }
 
 void MyWindow::Load()
 {
+	QFile f("template.pas");
+	if (!f.open(QIODevice::ReadOnly))
+	{
+		QMessageBox::information(this, tr("Error"),
+					tr("Cannot open file"));
+		return ;
+	}
 
+	QTextStream stream(&f);
+	QStringList sl;
+	while (!stream.atEnd())
+	{
+		sl << stream.readLine();
+	}
+	xy->rects.clear();
+	for (int i = 0; i < sl.size(); ++i)
+	{
+		QRegExp re("x:\\s+(\\d+);\\sy:\\s+(\\d+);\\sw:\\s+(\\d+);\\sh:\\s+(\\d+)");
+		re.indexIn(sl.at(i));
+		QStringList coords = re.capturedTexts();
+		qDebug() << sl.at(i) << coords;
+		if ((coords.size() == 5) && (coords[0].size()))
+			xy->rects.push_back(QRect(coords[1].toInt() / 2, coords[2].toInt() / 2, coords[3].toInt() / 2, coords[4].toInt() / 2));
+	}
+	f.close();
+	xy->repaint();
 }

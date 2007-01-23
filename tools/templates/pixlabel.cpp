@@ -15,11 +15,17 @@ void PixLabel::paintEvent(QPaintEvent * event)
 
 	p.fillRect(QRect(0, 0, 1024, 512), QBrush(Qt::black));
 
-	p.setPen(QPen(Qt::white));
-	p.drawRects(rects.toVector());
-
 	if (rects.size())
 	{
+		p.setPen(QPen(Qt::lightGray));
+		QVector<QPoint> centers;
+		for(QList<QRect>::const_iterator it = rects.begin(); it != rects.end(); ++it)
+			centers.push_back((*it).center());
+		p.drawPolyline(QPolygon(centers));
+
+		p.setPen(QPen(Qt::white));
+		p.drawRects(rects.toVector());
+
 		p.setPen(QPen(Qt::yellow));
 		p.drawRect(rects.last());
 	}
