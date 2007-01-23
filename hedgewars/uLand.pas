@@ -55,8 +55,61 @@ s:= '{'+inttostr(dig[0])+':'
 SendIPC('M' + s)
 end;
 
+procedure DrawLine(X1, Y1, X2, Y2: integer; Color: Longword);
+var
+  eX, eY, dX, dY: integer;
+  i, sX, sY, x, y, d: integer;
+begin
+eX:= 0;
+eY:= 0;
+dX:= X2 - X1;
+dY:= Y2 - Y1;
+
+if (dX > 0) then sX:= 1
+else
+  if (dX < 0) then
+     begin
+     sX:= -1;
+     dX:= -dX
+     end else sX:= dX;
+
+if (dY > 0) then sY:= 1
+  else
+  if (dY < 0) then
+     begin
+     sY:= -1;
+     dY:= -dY
+     end else sY:= dY;
+
+if (dX > dY) then d:= dX
+             else d:= dY;
+
+x:= X1;
+y:= Y1;
+ 
+for i:= 0 to d do
+    begin
+    inc(eX, dX);
+    inc(eY, dY);
+    if (eX > d) then
+       begin
+       dec(eX, d);
+       inc(x, sX);
+       end;
+    if (eY > d) then
+       begin
+       dec(eY, d);
+       inc(y, sY);
+       end;
+       
+    if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
+       Land[y, x]:= Color;
+    end
+end;
+
 procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);
-var x, y, i: integer;
+const dT: hwFloat = (isNegative: false; QWordValue: 85899346);
+var x, y, i, px, py: integer;
     tx, ty, vx, vy, vlen, t: hwFloat;
     r1, r2, r3, r4: hwFloat;
     x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
@@ -96,7 +149,9 @@ for i:= 0 to Count-2 do
     cy2:= ar[i+1].y + hwRound(ty);
     vx:= -tx;
     vy:= -ty;
-    t:= 0;
+    px:= hwRound(x1);
+    py:= hwRound(y1);
+    t:= dT;
     while t.Round = 0 do
           begin
           tsq:= t * t;
@@ -111,79 +166,10 @@ for i:= 0 to Count-2 do
           r3:= (          3*tsq - 3*tcb) * cy2;
           r4:= (                    tcb) * y2;
           Y:= hwRound(r1 + r2 + r3 + r4);
-          t:= t + _1div1024;
-          if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
-                Land[y, x]:= Color;
-          end;
-    end;
-end;
-
-procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
-var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: hwFloat;
-    r1, r2, r3, r4: hwFloat;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
-    opa: TPixAr;
-begin
-opa:= pa;
-pa.Count:= 0;
-vx:= 0;
-vy:= 0;
-with opa do
-for i:= 0 to Count-2 do
-    begin
-addfilelog('50');
-    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
-    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
-addfilelog('51');
-    if t<vlen then vlen:= t;
-    vlen:= vlen * _1div3;
-    tx:= ar[i+2].X - ar[i].X;
-    ty:= ar[i+2].y - ar[i].y;
-    t:= Distance(tx, ty);
-    if t.QWordValue = 0 then
-       begin
-       tx:= -tx * 100000;
-       ty:= -ty * 100000;
-       end else
-       begin
-       t:= 1/t;
-       tx:= -tx * t;
-       ty:= -ty * t;
-       end;
-    t:= vlen;
-    tx:= tx*t;
-    ty:= ty*t;
-    x1:= ar[i].x;
-    y1:= ar[i].y;
-    x2:= ar[i + 1].x;
-    y2:= ar[i + 1].y;
-    cx1:= ar[i].X   + hwRound(vx);
-    cy1:= ar[i].y   + hwRound(vy);
-    cx2:= ar[i+1].X + hwRound(tx);
-    cy2:= ar[i+1].y + hwRound(ty);
-    vx:= -tx;
-    vy:= -ty;
-    t:= 0;
-    while t.Round = 0 do
-          begin
-          tsq:= t * t;
-          tcb:= tsq * t;
-          r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
-          r3:= (          3*tsq - 3*tcb) * cx2;
-          r4:= (                    tcb) * x2;
-          X:= hwRound(r1 + r2 + r3 + r4);
-          r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
-          r3:= (          3*tsq - 3*tcb) * cy2;
-          r4:= (                    tcb) * y2;
-          Y:= hwRound(r1 + r2 + r3 + r4);
-          t:= t + Delta;
-          pa.ar[pa.Count].x:= X;
-          pa.ar[pa.Count].y:= Y;
-          inc(pa.Count);
-          TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+          t:= t + dT;
+          DrawLine(px, py, x, y, Color);
+          px:= x;
+          py:= y
           end;
     end;
 end;
@@ -320,52 +306,36 @@ for x:= 0 to 2047 do
     end;
 end;
 
-procedure PointWave(var Template: TEdgeTemplate; var pa: TPixAr);
-const MAXPASSES = 32;
-var ar: array[0..MAXPASSES, 0..9] of hwFloat;
-    i, k: integer;
-    rx, ry, ox, oy: hwFloat;
-    PassesNum: Longword;
+procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
+var i: integer;
 begin
 with Template do
      begin
-     PassesNum:= PassMin + getrandom(PassDelta);
-     TryDo(PassesNum < MAXPASSES, 'Passes number too big', true);
-     ar[0, 1]:= WaveFreqMin * _1div10000;
-     ar[0, 4]:= WaveFreqMin * _1div10000;
-     for i:= 1 to PassesNum do  // initialize random parameters
+     pa.Count:= BasePointsCount;
+     for i:= 0 to pred(pa.Count) do
          begin
-         ar[i, 0]:= WaveAmplMin + getrandom * WaveAmplDelta;
-//         ar[i, 1]:= ar[i - 1, 1] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
-         ar[i, 1]:= ar[i - 1, 1] + (getrandom) * WaveFreqDelta;
-         ar[i, 2]:= getrandom * hwPi * 2;
-         ar[i, 3]:= WaveAmplMin + getrandom * WaveAmplDelta;
-//         ar[i, 4]:= ar[i - 1, 4] + (getrandom * 0.7 + 0.3) * WaveFreqDelta;
-         ar[i, 4]:= ar[i - 1, 4] + (getrandom) * WaveFreqDelta;
-         ar[i, 5]:= getrandom * hwPi * 2;
-         ar[i, 6]:= ar[i, 1] * (getrandom * 2 - 1);
-//         ar[i, 7]:= ar[i, 1] * rndSign(sqrt(1 - sqr(ar[i, 6])));
-         ar[i, 7]:= ar[i, 1] * rndSign((1 - (ar[i, 6])));
-         ar[i, 8]:= ar[i, 4] * (getrandom * 2 - 1);
-//         ar[i, 9]:= ar[i, 4] * rndSign(sqrt(1 - sqr(ar[i, 8])));
-           ar[i, 9]:= ar[i, 4] * rndSign((1 - (ar[i, 8])));
+         pa.ar[i].x:= BasePoints^[i].x + integer(GetRandom(BasePoints^[i].w));
+         pa.ar[i].y:= BasePoints^[i].y + integer(GetRandom(BasePoints^[i].h))
          end;
-     end;
+         
+     if canMirror then
+        if getrandom(16) < 8 then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               BasePoints^[i].x:= 2047 - BasePoints^[i].x;
+           for i:= 0 to pred(FillPointsCount) do
+               FillPoints^[i].x:= 2047 - FillPoints^[i].x;
+           end;
 
-for k:= 0 to Pred(pa.Count) do  // apply transformation
-    begin
-    rx:= pa.ar[k].x;
-    ry:= pa.ar[k].y;
-    for i:= 1 to PassesNum do
-        begin
-        ox:= rx;
-        oy:= ry;
-//        ry:= ry; + ar[i, 0] * sin(ox * ar[i, 6] + oy * ar[i, 7] + ar[i, 2]);
-//        rx:= rx + ar[i, 3] * sin(ox * ar[i, 8] + oy * ar[i, 9] + ar[i, 5]);
-        end;
-    pa.ar[k].x:= hwRound(rx);
-    pa.ar[k].y:= hwRound(ry);
-    end;
+     if canFlip then
+        if getrandom(16) < 8 then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               BasePoints^[i].y:= 1023 - BasePoints^[i].y;
+           for i:= 0 to pred(FillPointsCount) do
+               FillPoints^[i].y:= 1023 - FillPoints^[i].y;
+           end;
+     end
 end;
 
 procedure NormalizePoints(var pa: TPixAr);
@@ -426,43 +396,17 @@ for y:= 0 to 1023 do
     for x:= 0 to 2047 do
         Land[y, x]:= COLOR_LAND;
 
+SetPoints(Template, pa);
+NormalizePoints(pa);
+
+DrawBezierEdge(pa, 0);
+
 with Template do
-     begin
-     if canMirror then
-        if getrandom(16) < 8 then
-           begin
-           for i:= 0 to pred(BasePointsCount) do
-               BasePoints^[i].x:= 2047 - BasePoints^[i].x;
-           for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].x:= 2047 - FillPoints^[i].x;
-           end;
-
-     if canFlip then
-        if getrandom(16) < 8 then
-           begin
-           for i:= 0 to pred(BasePointsCount) do
-               BasePoints^[i].y:= 1023 - BasePoints^[i].y;
-           for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].y:= 1023 - FillPoints^[i].y;
-           end;
-
-     pa.Count:= BasePointsCount;
-     for i:= 0 to pred(pa.Count) do
-         pa.ar[i]:= BasePoints^[i];
-
-//     for i:= 1 to BezPassCnt do
-         BezierizeEdge(pa, _1div3);
-
-     PointWave(Template, pa);
-     NormalizePoints(pa);
-     DrawBezierEdge(pa, 0);
-
      for i:= 0 to pred(FillPointsCount) do
          with FillPoints^[i] do
               FillLand(x, y);
 
-     DrawBezierEdge(pa, COLOR_LAND);
-     end;
+DrawBezierEdge(pa, COLOR_LAND)
 end;
 
 function SelectTemplate: integer;

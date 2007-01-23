@@ -426,7 +426,7 @@ Gear^.doStep:= @doStepPickHammerWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var BTPrevAngle, BTSteps: Longword;
+var BTPrevAngle, BTSteps: integer;
 
 procedure doStepBlowTorchWork(Gear: PGear);
 var HHGear: PGear;
@@ -440,12 +440,12 @@ HedgehogChAngle(HHGear);
 
 b:= false;
 
-if (HHGear^.Angle <> BTPrevAngle) then
+if abs(integer(HHGear^.Angle) - BTPrevAngle) > 7  then
    begin
    Gear^.dX:= hwSign(HHGear^.dX) * AngleSin(HHGear^.Angle) * _0_5;
    Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
    BTPrevAngle:= HHGear^.Angle;
-//   b:= true
+   b:= true
    end;
 
 if Gear^.Timer mod cHHStepTicks = 0 then
@@ -488,7 +488,7 @@ end;
 procedure doStepBlowTorch(Gear: PGear);
 var HHGear: PGear;
 begin
-BTPrevAngle:= High(Longword);
+BTPrevAngle:= High(integer);
 BTSteps:= 0;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= 0;

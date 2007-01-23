@@ -189,7 +189,7 @@ end;
 //  - (dX, dY) - direction, vector of length = 0.5
 //
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: integer);
-var nx, ny: hwFloat;
+var nx, ny, dX8, dY8: hwFloat;
     i, t, tx, ty: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 if SDL_MustLock(LandSurface) then
@@ -198,10 +198,12 @@ if SDL_MustLock(LandSurface) then
 nx:= X + dY * (HalfWidth + 8);
 ny:= Y - dX * (HalfWidth + 8);
 
+dX8:= dX * 8;
+dY8:= dY * 8;
 for i:= 0 to 7 do
     begin
-    X:= nx - 8 * dX;
-    Y:= ny - 8 * dY;
+    X:= nx - dX8;
+    Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
         {$include tunsetborder.inc}
     nx:= nx - dY;
@@ -210,8 +212,8 @@ for i:= 0 to 7 do
 
 for i:= -HalfWidth to HalfWidth do
     begin
-    X:= nx - dX * 8;
-    Y:= ny - dY * 8;
+    X:= nx - dX8;
+    Y:= ny - dY8;
     for t:= 0 to 7 do
         {$include tunsetborder.inc}
     X:= nx;
@@ -236,8 +238,8 @@ for i:= -HalfWidth to HalfWidth do
 
 for i:= 0 to 7 do
     begin
-    X:= nx - 8 * dX;
-    Y:= ny - 8 * dY;
+    X:= nx - dX8;
+    Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
         {$include tunsetborder.inc}
     nx:= nx - dY;

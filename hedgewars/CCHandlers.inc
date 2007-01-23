@@ -414,7 +414,7 @@ begin
 if Length(s) = 0 then cFullScreen:= not cFullScreen
                  else cFullScreen:= s = '1';
 
-flags:= SDL_HWSURFACE or SDL_hwFloatBUF or SDL_HWACCEL;
+flags:= SDL_HWSURFACE or SDL_DOUBLEBUF or SDL_HWACCEL;
 if cFullScreen then flags:= flags or SDL_FULLSCREEN
                else SDL_WM_SetCaption('Hedgewars', nil);
 SDL_FreeSurface(SDLPrimSurface);

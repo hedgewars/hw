@@ -35,7 +35,7 @@ begin
 if isPaused then exit;
 if not CurrentTeam^.ExtDriven then
    begin
-   NetGetNextCmd; // its for the case when receiving "/say" message
+   NetGetNextCmd; // its for the case of receiving "/say" message
    isInLag:= false;
    inc(SendEmptyPacketTicks, Lag);
    if SendEmptyPacketTicks >= cSendEmptyPacketTime then
