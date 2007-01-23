@@ -637,11 +637,17 @@ end;
 
 procedure AddClouds;
 var i: integer;
+    dx, dy: hwFloat;
 begin
 for i:= 0 to cCloudsNumber do
-    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, gtCloud, random(4),
-//             (0.5-random)*0.1, ((i mod 2) * 2 - 1) * (0.005 + 0.015*random), 0)
-             0, 0, 0)
+    begin
+    dx.isNegative:= random(2) = 1;
+    dx.QWordValue:= random(214748364);
+    dy.isNegative:= (i and 1) = 1;
+    dy.QWordValue:= 21474836 + random(64424509);
+    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140,
+             gtCloud, random(4), dx, dy, 0)
+    end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);

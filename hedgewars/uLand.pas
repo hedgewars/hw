@@ -320,19 +320,19 @@ with Template do
          end;
          
      if canMirror then
-        if getrandom(16) < 8 then
+        if getrandom(2) = 0 then
            begin
            for i:= 0 to pred(BasePointsCount) do
-               BasePoints^[i].x:= 2047 - BasePoints^[i].x;
+               pa.ar[i].x:= 2047 - pa.ar[i].x;
            for i:= 0 to pred(FillPointsCount) do
                FillPoints^[i].x:= 2047 - FillPoints^[i].x;
            end;
 
      if canFlip then
-        if getrandom(16) < 8 then
+        if getrandom(2) = 0 then
            begin
            for i:= 0 to pred(BasePointsCount) do
-               BasePoints^[i].y:= 1023 - BasePoints^[i].y;
+               pa.ar[i].y:= 1023 - pa.ar[i].y;
            for i:= 0 to pred(FillPointsCount) do
                FillPoints^[i].y:= 1023 - FillPoints^[i].y;
            end;
