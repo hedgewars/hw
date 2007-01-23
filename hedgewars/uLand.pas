@@ -171,6 +171,7 @@ for i:= 0 to Count-2 do
           px:= x;
           py:= y
           end;
+    DrawLine(px, py, hwRound(x2), hwRound(y2), Color)
     end;
 end;
 
