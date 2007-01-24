@@ -25,7 +25,7 @@
 using namespace std;
 
 FrameTeams::FrameTeams(QWidget* parent) :
-  QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this)
+  QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
   mainLayout.setSpacing(1);
 
@@ -39,6 +39,16 @@ FrameTeams::FrameTeams(QWidget* parent) :
   resetColors();
 }
 
+void FrameTeams::setNonInteractive()
+{
+  nonInteractive=true;
+  for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
+    TeamShowWidget* pts=dynamic_cast<TeamShowWidget*>(it.value());
+    if(!pts) throw;
+    pts->setNonInteractive();
+  }
+}
+
 void FrameTeams::resetColors()
 {
   currentColor=availableColors.begin();
@@ -47,6 +57,7 @@ void FrameTeams::resetColors()
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
   TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
+  if(nonInteractive) pTeamShowWidget->setNonInteractive();
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
   teamToWidget.insert(team, pTeamShowWidget);
   mainLayout.addWidget(pTeamShowWidget);

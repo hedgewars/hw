@@ -31,7 +31,8 @@ void TeamLabel::teamButtonClicked()
 }
 
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
-  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0), colorButt(0)
+  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0), 
+  colorButt(0)
 {
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
@@ -43,7 +44,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   newPalette.setColor(QPalette::Button, palette().color(backgroundRole()));
 
   // team fort
-  QPushButton* butt=new QPushButton(difficultyIcon, "", this);
+  butt=new QPushButton(difficultyIcon, "", this);
   butt->setFlat(true);
   butt->setGeometry(0, 0, 30, 30);
   butt->setMaximumWidth(30);
@@ -52,7 +53,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   butt->setIconSize(butt->size());
 
   // team name
-  QPushButton* bText=new QPushButton(team.TeamName, this);
+  bText=new QPushButton(team.TeamName, this);
   bText->setPalette(newPalette);
   bText->setFlat(true);
   mainLayout.addWidget(bText);
@@ -74,6 +75,15 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
   QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
   QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
+}
+
+void TeamShowWidget::setNonInteractive()
+{
+  if(m_team.isNetTeam()) {
+    disconnect(butt, SIGNAL(clicked()));
+    disconnect(bText, SIGNAL(clicked()));
+  }
+  phhoger->setNonInteractive();
 }
 
 void TeamShowWidget::setHHNum(unsigned int num)

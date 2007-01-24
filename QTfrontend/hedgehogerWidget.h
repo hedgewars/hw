@@ -32,6 +32,7 @@ class CHedgehogerWidget : public QWidget
   ~CHedgehogerWidget();
   unsigned char getHedgehogsNum() const;
   void setHHNum (unsigned int num);
+  void setNonInteractive();
 
  signals:
   void hedgehogsNumChanged();
@@ -44,6 +45,7 @@ class CHedgehogerWidget : public QWidget
   CHedgehogerWidget();
   unsigned char numHedgehogs;
   FrameTeams* pOurFrameTeams;
+  bool nonInteractive;
 };
 
 #endif // _HEDGEHOGER_WIDGET

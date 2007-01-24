@@ -43,6 +43,11 @@ void TeamSelWidget::addTeam(HWTeam team)
   }
 }
 
+void TeamSelWidget::setNonInteractive()
+{
+  framePlaying->setNonInteractive();
+}
+
 void TeamSelWidget::hhNumChanged(const HWTeam& team)
 {
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);

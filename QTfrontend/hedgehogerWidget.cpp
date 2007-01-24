@@ -24,7 +24,7 @@
 #include "frameTeam.h"
 
 CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
-  QWidget(parent)
+  QWidget(parent), nonInteractive(false)
 {
   if(parent) {
     pOurFrameTeams=dynamic_cast<FrameTeams*>(parent->parentWidget());
@@ -40,8 +40,14 @@ CHedgehogerWidget::~CHedgehogerWidget()
   pOurFrameTeams->overallHedgehogs-=numHedgehogs;
 }
 
+void CHedgehogerWidget::setNonInteractive()
+{
+  nonInteractive=true;
+}
+
 void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
 {
+  if(nonInteractive) return;
   if(event->button()==Qt::LeftButton) {
     event->accept();
     if(numHedgehogs < 8 && pOurFrameTeams->overallHedgehogs<18) {

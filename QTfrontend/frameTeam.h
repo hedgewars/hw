@@ -39,6 +39,7 @@ class FrameTeams : public QWidget
   bool isFullTeams() const;
   void resetColors();
   void setHHNum(const HWTeam& team);
+  void setNonInteractive();
 
  public slots:
   void addTeam(HWTeam team, bool willPlay);
@@ -53,6 +54,7 @@ class FrameTeams : public QWidget
   QVBoxLayout mainLayout;
   typedef QMultiMap<HWTeam, QWidget*> tmapTeamToWidget;
   tmapTeamToWidget teamToWidget;
+  bool nonInteractive;
 };
 
 #endif // _FRAME_TAM_INCLUDED
