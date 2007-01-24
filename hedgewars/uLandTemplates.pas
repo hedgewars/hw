@@ -28,6 +28,7 @@ type PPointArray = ^TPointArray;
                      BasePointsCount: Longword;
                      FillPoints: PPointArray;
                      FillPointsCount: Longword;
+                     RandPassesCount: Longword;
                      canMirror, canFlip: boolean;
                      end;
 
@@ -115,18 +116,21 @@ const EdgeTemplates: array[0..2] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template0Points));
         FillPoints: @Template0FPoints;
         FillPointsCount: Succ(High(Template0FPoints));
+        RandPassesCount: 4;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
         FillPoints: @Template1FPoints;
         FillPointsCount: Succ(High(Template1FPoints));
+        RandPassesCount: 3;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
         FillPoints: @Template2FPoints;
         FillPointsCount: Succ(High(Template2FPoints));
+        RandPassesCount: 3;
         canMirror: true; canFlip: false;
        )
       );

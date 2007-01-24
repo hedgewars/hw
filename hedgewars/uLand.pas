@@ -101,7 +101,7 @@ for i:= 0 to d do
        dec(eY, d);
        inc(y, sY);
        end;
-       
+
     if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
        Land[y, x]:= Color;
     end
@@ -173,6 +173,77 @@ for i:= 0 to Count-2 do
           end;
     DrawLine(px, py, hwRound(x2), hwRound(y2), Color)
     end;
+end;
+
+procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
+var x, y, i: integer;
+    tx, ty, vx, vy, vlen, t: hwFloat;
+    r1, r2, r3, r4: hwFloat;
+    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
+    opa: TPixAr;
+begin
+opa:= pa;
+pa.Count:= 0;
+vx:= 0;
+vy:= 0;
+with opa do
+for i:= 0 to Count-2 do
+    begin
+    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
+    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
+    if t<vlen then vlen:= t;
+    vlen:= vlen * _1div3;
+    tx:= ar[i+2].X - ar[i].X;
+    ty:= ar[i+2].y - ar[i].y;
+    t:= Distance(tx, ty);
+    if t.QWordValue = 0 then
+       begin
+       tx:= -tx * 100000;
+       ty:= -ty * 100000;
+       end else
+       begin
+       t:= 1/t;
+       tx:= -tx * t;
+       ty:= -ty * t;
+       end;
+    t:= vlen;
+    tx:= tx*t;
+    ty:= ty*t;
+    x1:= ar[i].x;
+    y1:= ar[i].y;
+    x2:= ar[i + 1].x;
+    y2:= ar[i + 1].y;
+    cx1:= ar[i].X   + hwRound(vx);
+    cy1:= ar[i].y   + hwRound(vy);
+    cx2:= ar[i+1].X + hwRound(tx);
+    cy2:= ar[i+1].y + hwRound(ty);
+    vx:= -tx;
+    vy:= -ty;
+    t:= 0;
+    while t.Round = 0 do
+          begin
+          tsq:= t * t;
+          tcb:= tsq * t;
+          r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
+          r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
+          r3:= (          3*tsq - 3*tcb) * cx2;
+          r4:= (                    tcb) * x2;
+          X:= hwRound(r1 + r2 + r3 + r4);
+          r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
+          r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
+          r3:= (          3*tsq - 3*tcb) * cy2;
+          r4:= (                    tcb) * y2;
+          Y:= hwRound(r1 + r2 + r3 + r4);
+          t:= t + Delta;
+          pa.ar[pa.Count].x:= X;
+          pa.ar[pa.Count].y:= Y;
+          inc(pa.Count);
+          TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+          end;
+    end;
+pa.ar[pa.Count].x:= opa.ar[Pred(opa.Count)].X;
+pa.ar[pa.Count].y:= opa.ar[Pred(opa.Count)].Y;
+inc(pa.Count)
 end;
 
 procedure FillLand(x, y: integer);
@@ -338,7 +409,7 @@ with Template do
            end;
      end
 end;
-
+(*
 procedure NormalizePoints(var pa: TPixAr);
 const brd = 32;
 var isUP: boolean;  // HACK: transform for Y should be exact as one for X
@@ -386,7 +457,42 @@ if isUp then // FIXME: remove hack
           with pa.ar[i] do
                y:= round((y - 1023) * Height div OHeight + 1023)
    end;
+end;*)
+
+procedure RandomizePoints(var pa: TPixAr);
+const cEdge = 55;
+      cMinDist = 14;
+var radz: array[0..Pred(cMaxEdgePoints)] of integer;
+    i, k, dist: integer;
+begin
+radz[0]:= 0;
+for i:= 0 to Pred(pa.Count) do
+  with pa.ar[i] do
+    begin
+    radz[i]:= Min(Max(x - cEdge, 0), Max(2048 - cEdge - x, 0));
+    radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(1024 - cEdge - y, 0)));
+    if radz[i] > 0 then
+      for k:= 0 to Pred(i) do
+        begin
+        dist:= Min(Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y)), 50);
+        if radz[k] >= dist then
+          begin
+          radz[k]:= Max(0, dist - cMinDist * 2);
+          radz[i]:= Min(dist - radz[k], radz[i])
+          end;
+        radz[i]:= Min(radz[i], dist)
+      end
+    end;
+
+for i:= 0 to Pred(pa.Count) do
+  with pa.ar[i] do
+    if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
+      begin
+      x:= x + integer(GetRandom(radz[i] * 2 + 1)) - radz[i];
+      y:= y + integer(GetRandom(radz[i] * 2 + 1)) - radz[i]
+      end
 end;
+
 
 procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
@@ -398,7 +504,9 @@ for y:= 0 to 1023 do
         Land[y, x]:= COLOR_LAND;
 
 SetPoints(Template, pa);
-NormalizePoints(pa);
+BezierizeEdge(pa, _1div3);
+for i:= 0 to Pred(Template.RandPassesCount) do RandomizePoints(pa);
+//NormalizePoints(pa);
 
 DrawBezierEdge(pa, 0);
 

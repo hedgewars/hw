@@ -677,8 +677,6 @@ while Gear <> nil do
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
                              Gear^.dX:= Gear^.dX + (_0_005 * dmg + cHHKick) * hwSign(Gear^.X - X);
-                             addfilelog(' >> _0_005 * dmg = '+floattostr(_0_005 * dmg));
-                             addfilelog(' >> dx = '+floattostr(Gear^.dX));
                              Gear^.dY:= Gear^.dY + (_0_005 * dmg + cHHKick) * hwSign(Gear^.Y - Y);
                              Gear^.Active:= true;
                              FollowGear:= Gear

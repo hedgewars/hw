@@ -158,10 +158,8 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * cMaxWindSpeed);
-addfilelog('SwitchHedgehog 06');
 g:= AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
-addfilelog('SwitchHedgehog 07');
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
 if CurrentTeam^.ExtDriven then SetDefaultBinds
