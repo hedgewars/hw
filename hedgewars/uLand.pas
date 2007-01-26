@@ -52,7 +52,7 @@ s:= '{'+inttostr(dig[0])+':'
        +inttostr(dig[2])+':'
        +inttostr(dig[3])+':'
        +inttostr(dig[4])+'}';
-SendIPC('M' + s)
+//SendIPC('M' + s)
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: integer; Color: Longword);
@@ -107,118 +107,75 @@ for i:= 0 to d do
     end
 end;
 
-procedure DrawBezierEdge(var pa: TPixAr; Color: Longword);
-const dT: hwFloat = (isNegative: false; QWordValue: 85899346);
-var x, y, i, px, py: integer;
-    tx, ty, vx, vy, vlen, t: hwFloat;
-    r1, r2, r3, r4: hwFloat;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
+procedure DrawEdge(var pa: TPixAr; Color: Longword);
+var i: integer;
 begin
-vx:= 0;
-vy:= 0;
+i:= 0;
 with pa do
-for i:= 0 to Count-2 do
-    begin
-    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
-    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
-    if t<vlen then vlen:= t;
-    vlen:= vlen * _1div3;
-    tx:= ar[i+2].X - ar[i].X;
-    ty:= ar[i+2].y - ar[i].y;
-    t:= Distance(tx, ty);
-    if t.QWordValue = 0 then
-       begin
-       tx:= -tx * 10000;
-       ty:= -ty * 10000;
-       end else
-       begin
-       t:= 1/t;
-       tx:= -tx * t;
-       ty:= -ty * t;
-       end;
-    t:= vlen;
-    tx:= tx * t;
-    ty:= ty * t;
-    x1:= ar[i].x;
-    y1:= ar[i].y;
-    x2:= ar[i + 1].x;
-    y2:= ar[i + 1].y;
-    cx1:= ar[i].X   + hwRound(vx);
-    cy1:= ar[i].y   + hwRound(vy);
-    cx2:= ar[i+1].X + hwRound(tx);
-    cy2:= ar[i+1].y + hwRound(ty);
-    vx:= -tx;
-    vy:= -ty;
-    px:= hwRound(x1);
-    py:= hwRound(y1);
-    t:= dT;
-    while t.Round = 0 do
-          begin
-          tsq:= t * t;
-          tcb:= tsq * t;
-          r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
-          r3:= (          3*tsq - 3*tcb) * cx2;
-          r4:= (                    tcb) * x2;
-          X:= hwRound(r1 + r2 + r3 + r4);
-          r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
-          r3:= (          3*tsq - 3*tcb) * cy2;
-          r4:= (                    tcb) * y2;
-          Y:= hwRound(r1 + r2 + r3 + r4);
-          t:= t + dT;
-          DrawLine(px, py, x, y, Color);
-          px:= x;
-          py:= y
-          end;
-    DrawLine(px, py, hwRound(x2), hwRound(y2), Color)
-    end;
+while i < integer(Count) - 1 do
+    if (ar[i + 1].X = NTPX) then inc(i, 2)
+       else begin
+       DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, Color);
+       inc(i)
+       end
 end;
 
-procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
-var x, y, i: integer;
-    tx, ty, vx, vy, vlen, t: hwFloat;
-    r1, r2, r3, r4: hwFloat;
-    x1, y1, x2, y2, cx1, cy1, cx2, cy2, tsq, tcb: hwFloat;
-    opa: TPixAr;
+procedure Vector(p1, p2, p3: TPoint; var Vx, Vy: hwFloat);
+var d1, d2, d: hwFloat;
 begin
-opa:= pa;
-pa.Count:= 0;
-vx:= 0;
-vy:= 0;
-with opa do
-for i:= 0 to Count-2 do
-    begin
-    vlen:= Distance(ar[i + 1].x - ar[i].X, ar[i + 1].y - ar[i].y);
-    t:=    Distance(ar[i + 1].x - ar[i + 2].X,ar[i + 1].y - ar[i + 2].y);
-    if t<vlen then vlen:= t;
-    vlen:= vlen * _1div3;
-    tx:= ar[i+2].X - ar[i].X;
-    ty:= ar[i+2].y - ar[i].y;
-    t:= Distance(tx, ty);
-    if t.QWordValue = 0 then
-       begin
-       tx:= -tx * 100000;
-       ty:= -ty * 100000;
-       end else
-       begin
-       t:= 1/t;
-       tx:= -tx * t;
-       ty:= -ty * t;
-       end;
-    t:= vlen;
-    tx:= tx*t;
-    ty:= ty*t;
-    x1:= ar[i].x;
-    y1:= ar[i].y;
-    x2:= ar[i + 1].x;
-    y2:= ar[i + 1].y;
-    cx1:= ar[i].X   + hwRound(vx);
-    cy1:= ar[i].y   + hwRound(vy);
-    cx2:= ar[i+1].X + hwRound(tx);
-    cy2:= ar[i+1].y + hwRound(ty);
-    vx:= -tx;
-    vy:= -ty;
+Vx:= p1.X - p3.X;
+Vy:= p1.Y - p3.Y;
+d:= Distance(p2.X - p1.X, p2.Y - p1.Y);
+d1:= Distance(p2.X - p3.X, p2.Y - p3.Y);
+d2:= Distance(Vx, Vy);
+if d1 < d then d:= d1;
+if d2 < d then d:= d2;
+d:= d * _1div3;
+if d2.QWordValue = 0 then
+   begin
+   Vx:= 0;
+   Vy:= 0
+   end else
+   begin
+   d2:= 1 / d2;
+   Vx:= Vx * d2;
+   Vy:= Vy * d2;
+
+   Vx:= Vx * d;
+   Vy:= Vy * d
+   end
+end;
+
+procedure AddLoopPoints(var pa, opa: TPixAr; StartI, EndI: integer; Delta: hwFloat);
+var i, pi, ni: integer;
+    NVx, NVy, PVx, PVy: hwFloat;
+    x1, x2, y1, y2, cx1, cx2, cy1, cy2: hwFloat;
+    tsq, tcb, t, r1, r2, r3, r4: hwFloat;
+    X, Y: integer;
+begin
+pi:= EndI;
+i:= StartI;
+ni:= Succ(StartI);
+Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+repeat
+    inc(pi);
+    if pi > EndI then pi:= StartI;
+    inc(i);
+    if i > EndI then i:= StartI;
+    inc(ni);
+    if ni > EndI then ni:= StartI;
+    PVx:= NVx;
+    PVy:= NVy;
+    Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+
+    x1:= opa.ar[pi].x;
+    y1:= opa.ar[pi].y;
+    x2:= opa.ar[i].x;
+    y2:= opa.ar[i].y;
+    cx1:= x1 - PVx;
+    cy1:= y1 - PVy;
+    cx2:= x2 + NVx;
+    cy2:= y2 + NVy;
     t:= 0;
     while t.Round = 0 do
           begin
@@ -240,10 +197,29 @@ for i:= 0 to Count-2 do
           inc(pa.Count);
           TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
           end;
-    end;
-pa.ar[pa.Count].x:= opa.ar[Pred(opa.Count)].X;
-pa.ar[pa.Count].y:= opa.ar[Pred(opa.Count)].Y;
+until i = StartI;
+pa.ar[pa.Count].x:= opa.ar[StartI].X;
+pa.ar[pa.Count].y:= opa.ar[StartI].Y;
 inc(pa.Count)
+end;
+
+procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
+var x, y, i, StartLoop: integer;
+    opa: TPixAr;
+begin
+opa:= pa;
+pa.Count:= 0;
+i:= 0;
+StartLoop:= 0;
+while i < integer(opa.Count) do
+    if (opa.ar[i + 1].X = NTPX) then
+       begin
+       AddLoopPoints(pa, opa, StartLoop, i, Delta);
+       inc(i, 2);
+       StartLoop:= i;
+       pa.ar[pa.Count].X:= NTPX;
+       inc(pa.Count);
+       end else inc(i)
 end;
 
 procedure FillLand(x, y: integer);
@@ -394,6 +370,7 @@ with Template do
         if getrandom(2) = 0 then
            begin
            for i:= 0 to pred(BasePointsCount) do
+             if pa.ar[i].x <> NTPX then
                pa.ar[i].x:= 2047 - pa.ar[i].x;
            for i:= 0 to pred(FillPointsCount) do
                FillPoints^[i].x:= 2047 - FillPoints^[i].x;
@@ -409,87 +386,35 @@ with Template do
            end;
      end
 end;
-(*
-procedure NormalizePoints(var pa: TPixAr);
-const brd = 32;
-var isUP: boolean;  // HACK: transform for Y should be exact as one for X
-    Left, Right, Top, Bottom,
-    OWidth, Width, OHeight, Height,
-    OLeft: integer;
-    i: integer;
-begin
-TryDo((pa.ar[0].y < 0) or (pa.ar[0].y > 1023), 'Bad land generated', true);
-TryDo((pa.ar[Pred(pa.Count)].y < 0) or (pa.ar[Pred(pa.Count)].y > 1023), 'Bad land generated', true);
-isUP:= pa.ar[0].y > 0;
-Left:= 1023;
-Right:= Left;
-Top:= pa.ar[0].y;
-Bottom:= Top;
 
-for i:= 1 to Pred(pa.Count) do
-    with pa.ar[i] do
-         begin
-         if (y and $FFFFFC00) = 0 then
-            if x < Left then Left:= x else
-            if x > Right then Right:= x;
-         if y < Top then Top:= y else
-         if y > Bottom then Bottom:= y
-         end;
-
-if (Left < brd) or (Right > 2047 - brd) then
-   begin
-   OLeft:= Left;
-   OWidth:= Right - OLeft;
-   if Left < brd then Left:= brd;
-   if Right > 2047 - brd then Right:= 2047 - brd;
-   Width:= Right - Left;
-   for i:= 0 to Pred(pa.Count) do
-       with pa.ar[i] do
-            x:= round((x - OLeft) * Width div OWidth + Left)
-   end;
-
-if isUp then // FIXME: remove hack
-   if Top < brd then
-      begin
-      OHeight:= 1023 - Top;
-      Height:= 1023 - brd;
-      for i:= 0 to Pred(pa.Count) do
-          with pa.ar[i] do
-               y:= round((y - 1023) * Height div OHeight + 1023)
-   end;
-end;*)
-
-procedure RandomizePoints(var pa: TPixAr);
+procedure RandomizePoints(var pa: TPixAr; MaxRad: integer);
 const cEdge = 55;
-      cMinDist = 14;
+      cMinDist = 0;
 var radz: array[0..Pred(cMaxEdgePoints)] of integer;
     i, k, dist: integer;
 begin
 radz[0]:= 0;
 for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
-    begin
-    radz[i]:= Min(Max(x - cEdge, 0), Max(2048 - cEdge - x, 0));
-    radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(1024 - cEdge - y, 0)));
-    if radz[i] > 0 then
-      for k:= 0 to Pred(i) do
-        begin
-        dist:= Min(Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y)), 50);
-        if radz[k] >= dist then
+    if x <> NTPX then
+      begin
+      radz[i]:= Min(Max(x - cEdge, 0), Max(2048 - cEdge - x, 0));
+      radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(1024 - cEdge - y, 0)));
+      if radz[i] > 0 then
+        for k:= 0 to Pred(i) do
           begin
-          radz[k]:= Max(0, dist - cMinDist * 2);
-          radz[i]:= Min(dist - radz[k], radz[i])
-          end;
-        radz[i]:= Min(radz[i], dist)
-      end
-    end;
+          dist:= Min(Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y)), MaxRad);
+          radz[k]:= Max(0, Min((dist - cMinDist) div 2, radz[k]));
+          radz[i]:= Max(0, Min(dist - radz[k] - cMinDist, radz[i]))
+        end
+      end;
 
 for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
     if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
       begin
-      x:= x + integer(GetRandom(radz[i] * 2 + 1)) - radz[i];
-      y:= y + integer(GetRandom(radz[i] * 2 + 1)) - radz[i]
+      x:= x + integer(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
+      y:= y + integer(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3
       end
 end;
 
@@ -505,17 +430,19 @@ for y:= 0 to 1023 do
 
 SetPoints(Template, pa);
 BezierizeEdge(pa, _1div3);
-for i:= 0 to Pred(Template.RandPassesCount) do RandomizePoints(pa);
-//NormalizePoints(pa);
+for i:= 0 to Pred(Template.RandPassesCount) do RandomizePoints(pa, 1000);
+BezierizeEdge(pa, _1div3);
+RandomizePoints(pa, 1000);
+BezierizeEdge(pa, _0_1);
 
-DrawBezierEdge(pa, 0);
+DrawEdge(pa, 0);
 
 with Template do
      for i:= 0 to pred(FillPointsCount) do
          with FillPoints^[i] do
               FillLand(x, y);
 
-DrawBezierEdge(pa, COLOR_LAND)
+DrawEdge(pa, COLOR_LAND)
 end;
 
 function SelectTemplate: integer;
