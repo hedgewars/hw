@@ -485,78 +485,69 @@ end;
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
-    roplen: hwFloat;
+    roplen: integer;
 
     procedure DrawRopeLine(X1, Y1, X2, Y2: integer);
-    const nodlen = 5;
-    var i, x, y: integer;
-        t, k, ladd: hwFloat;
+    var  eX, eY, dX, dY: integer;
+         i, sX, sY, x, y, d: integer;
+         b: boolean;
     begin
     if (X1 = X2) and (Y1 = Y2) then
        begin
        OutError('WARNING: zero length rope line!', false);
        exit
        end;
-{    if abs(X1 - X2) > abs(Y1 - Y2) then
+    eX:= 0;
+    eY:= 0;
+    dX:= X2 - X1;
+    dY:= Y2 - Y1;
+
+    if (dX > 0) then sX:= 1
+    else
+      if (dX < 0) then
+         begin
+         sX:= -1;
+         dX:= -dX
+         end else sX:= dX;
+
+    if (dY > 0) then sY:= 1
+       else
+    if (dY < 0) then
        begin
-       if X1 > X2 then
-          begin
-          i:= X1;
-          X1:= X2;
-          X2:= i;
-          i:= Y1;
-          Y1:= Y2;
-          Y2:= i
-          end;
-       k:= (Y2 - Y1) / (X2 - X1);
-       ladd:= sqrt(1 + sqr(k));
-       if X1 < 0 then
-          begin
-          t:= Y1 - 2 - k * X1;
-          X1:= 0
-          end else t:= Y1 - 2;
-       if X2 > cScreenWidth then X2:= cScreenWidth;
-       for x:= X1 to X2 do
+       sY:= -1;
+       dY:= -dY
+       end else sY:= dY;
+
+    if (dX > dY) then d:= dX
+                 else d:= dY;
+
+    x:= X1;
+    y:= Y1;
+
+    for i:= 0 to d do
+        begin
+        inc(eX, dX);
+        inc(eY, dY);
+        b:= false;
+        if (eX > d) then
            begin
-           roplen:= roplen + ladd;
-           if roplen > nodlen then
-              begin
-              DrawGear(sRopeNode, x - 2, round(t) - 2, Surface);
-              roplen:= roplen - nodlen;
-              end;
-           t:= t + k;
+           dec(eX, d);
+           inc(x, sX);
+           b:= true
            end;
-       end else
-       begin
-       if Y1 > Y2 then
-          begin
-          i:= X1;
-          X1:= X2;
-          X2:= i;
-          i:= Y1;
-          Y1:= Y2;
-          Y2:= i
-          end;
-       k:= (X2 - X1) / (Y2 - Y1);
-       ladd:= sqrt(1 + sqr(k));
-       if Y1 < 0 then
-          begin
-          t:= X1 - 2 - k * Y1;
-          Y1:= 0
-          end else t:= X1 - 2;
-       if Y2 > cScreenHeight then Y2:= cScreenHeight;
-       for y:= Y1 to Y2 do
+        if (eY > d) then
            begin
-           roplen:= roplen + ladd;
-           if roplen > nodlen then
-              begin
-              DrawGear(sRopeNode, round(t) - 2, y - 2, Surface);
-              roplen:= roplen - nodlen;
-              end;
-           t:= t + k;
+           dec(eY, d);
+           inc(y, sY);
+           b:= true
            end;
+        if b then
+           begin
+           inc(roplen);
+           if (roplen mod 4) = 0 then DrawGear(sRopeNode, x - 2, y - 2, Surface)
+           end
        end
-}    end;
+    end;
 
 begin
 Gear:= GearsList;
