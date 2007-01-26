@@ -29,7 +29,7 @@ var  Land: TLandArray;
 
 procedure GenMap;
 procedure GenPreview;
-
+procedure CheckLandDigest(s: shortstring);
 
 implementation
 uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -47,12 +47,22 @@ begin
 SHA1Init(ctx);
 SHA1Update(ctx, @Land, sizeof(Land));
 dig:= SHA1Final(ctx);
-s:= '{'+inttostr(dig[0])+':'
+s:='M{'+inttostr(dig[0])+':'
        +inttostr(dig[1])+':'
        +inttostr(dig[2])+':'
        +inttostr(dig[3])+':'
        +inttostr(dig[4])+'}';
-//SendIPC('M' + s)
+CheckLandDigest(s);
+SendIPCRaw(@s[0], Length(s) + 1)
+end;
+
+procedure CheckLandDigest(s: shortstring);
+const digest: shortstring = '';
+begin
+if digest = '' then
+   digest:= s
+else
+   TryDo(s = digest, 'Different maps generated, sorry', true)
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: integer; Color: Longword);
