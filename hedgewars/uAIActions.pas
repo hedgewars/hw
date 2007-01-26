@@ -20,7 +20,7 @@ unit uAIActions;
 interface
 uses uGears, uFloat;
 {$INCLUDE options.inc}
-(*const MAXACTIONS = 96;
+const MAXACTIONS = 96;
       aia_none       = 0;
       aia_Left       = 1;
       aia_Right      = 2;
@@ -55,11 +55,11 @@ type TAction = record
                 Score: integer;
                 end;
 
-procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; const X: integer = 0; Y: integer = 0);
+procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; X, Y: integer);
 procedure ProcessAction(var Actions: TActions; Me: PGear);
-*)
+
 implementation
-(*uses uMisc, uTeams, uConsts, uConsole, uAIMisc;
+uses uMisc, uTeams, uConsts, uConsole, uAIMisc;
 
 const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
@@ -97,7 +97,7 @@ else begin
 end;
 {$ENDIF}
 
-procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; const X: integer = 0; Y: integer = 0);
+procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; X, Y: integer);
 begin
 with Actions do
      begin
@@ -119,9 +119,9 @@ var s: shortstring;
     const PrevX: integer = 0;
           timedelta: Longword = 0;
     begin
-    if Round(Me.X) <> PrevX then
+    if hwRound(Me^.X) <> PrevX then
        begin
-       PrevX:= Round(Me.X);
+       PrevX:= hwRound(Me^.X);
        timedelta:= 0
        end else
        begin
@@ -146,34 +146,34 @@ with Actions.actions[Actions.Pos] do
      if (Action and ai_specmask) <> 0 then
         case Action of
            aia_Weapon: SetWeapon(TAmmoType(Param));
-           aia_WaitXL: if round(Me.X) = Param then Time:= GameTicks
-                          else if Round(Me.X) < Param then
+           aia_WaitXL: if hwRound(Me^.X) = Param then Time:= GameTicks
+                          else if hwRound(Me^.X) < Param then
                                begin
-                               OutError('AI: WaitXL assert');
+                               OutError('AI: WaitXL assert', false);
                                Actions.Count:= 0
                                end
                           else begin CheckHang; exit end;
-           aia_WaitXR: if round(Me.X) = Param then Time:= GameTicks
-                          else if Round(Me.X) > Param then
+           aia_WaitXR: if hwRound(Me^.X) = Param then Time:= GameTicks
+                          else if hwRound(Me^.X) > Param then
                                begin
-                               OutError('AI: WaitXR assert');
+                               OutError('AI: WaitXR assert', false);
                                Actions.Count:= 0
                                end
                           else begin CheckHang; exit end;
-         aia_LookLeft: if Me.dX >= 0 then
+         aia_LookLeft: if not Me^.dX.isNegative then
                           begin
-                          ParseCommand('+left');
+                          ParseCommand('+left', true);
                           exit
-                          end else ParseCommand('-left');
-        aia_LookRight: if Me.dX < 0 then
+                          end else ParseCommand('-left', true);
+        aia_LookRight: if Me^.dX.isNegative then
                           begin
-                          ParseCommand('+right');
+                          ParseCommand('+right', true);
                           exit
-                          end else ParseCommand('-right');
+                          end else ParseCommand('-right', true);
         aia_AwareExpl: AwareOfExplosion(X, Y, Param);
-            aia_HJump: ParseCommand('hjump');
-            aia_LJump: ParseCommand('ljump');
-             aia_Skip: ParseCommand('skip');
+            aia_HJump: ParseCommand('hjump', true);
+            aia_LJump: ParseCommand('ljump', true);
+             aia_Skip: ParseCommand('skip', true);
              end else
         begin
         s:= ActionIdToStr[Action];
@@ -183,7 +183,7 @@ with Actions.actions[Actions.Pos] do
           aim_release: s:= '-' + s;
              end
           else if Param <> 0 then s:= s + ' ' + inttostr(Param);
-        ParseCommand(s)
+        ParseCommand(s, true)
         end
      end;
 inc(Actions.Pos);
@@ -191,5 +191,5 @@ if Actions.Pos <= Actions.Count then
    inc(Actions.actions[Actions.Pos].Time, GameTicks);
 until false
 end;
-*)
+
 end.

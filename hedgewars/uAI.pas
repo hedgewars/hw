@@ -24,7 +24,7 @@ procedure ProcessBot(FrameNo: Longword);
 procedure FreeActionsList;
 
 implementation
-{uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
+uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
      uAIThinkStack, uAmmos;
 
 var BestActions: TActions;
@@ -32,26 +32,26 @@ var BestActions: TActions;
     AIThinkStart: Longword;
     isThinking: boolean = false;
 
-}procedure FreeActionsList;
+procedure FreeActionsList;
 begin
-{isThinking:= false;
+isThinking:= false;
 BestActions.Count:= 0;
 BestActions.Pos:= 0
-}end;
-{
+end;
+
 procedure TestAmmos(var Actions: TActions; Me: PGear);
 var Time, BotLevel: Longword;
     Angle, Power, Score, ExplX, ExplY, ExplR: integer;
     i: integer;
     a, aa: TAmmoType;
 begin
-BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
+BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) then
        begin
-       with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
-            a:= Ammo[CurSlot, CurAmmo].AmmoType;
+       with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+            a:= Ammo^[CurSlot, CurAmmo].AmmoType;
        aa:= a;
        repeat
         if CanUseAmmo[a] then
@@ -62,32 +62,32 @@ for i:= 0 to Pred(Targets.Count) do
               BestActions:= Actions;
               inc(BestActions.Score, Score);
 
-              AddAction(BestActions, aia_Weapon, Longword(a), 500);
-              if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400);
-              if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200)
-              else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200);
+              AddAction(BestActions, aia_Weapon, Longword(a), 500, 0, 0);
+              if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400, 0, 0);
+              if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
+              else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
               if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                  begin
-                 Angle:= integer(Me.Angle) - Abs(Angle);
+                 Angle:= integer(Me^.Angle) - Abs(Angle);
                  if Angle > 0 then
                     begin
-                    AddAction(BestActions, aia_Up, aim_push, 500);
-                    AddAction(BestActions, aia_Up, aim_release, Angle)
+                    AddAction(BestActions, aia_Up, aim_push, 500, 0, 0);
+                    AddAction(BestActions, aia_Up, aim_release, Angle, 0, 0)
                     end else if Angle < 0 then
                     begin
-                    AddAction(BestActions, aia_Down, aim_push, 500);
-                    AddAction(BestActions, aia_Down, aim_release, -Angle)
+                    AddAction(BestActions, aia_Down, aim_push, 500, 0, 0);
+                    AddAction(BestActions, aia_Down, aim_release, -Angle, 0, 0)
                     end
                  end;
-              AddAction(BestActions, aia_attack, aim_push, 800);
-              AddAction(BestActions, aia_attack, aim_release, Power);
+              AddAction(BestActions, aia_attack, aim_push, 800, 0, 0);
+              AddAction(BestActions, aia_attack, aim_release, Power, 0, 0);
               if ExplR > 0 then
                  AddAction(BestActions, aia_AwareExpl, ExplR, 10, ExplX, ExplY);
               end
            end;
         if a = High(TAmmoType) then a:= Low(TAmmoType)
                                else inc(a)
-       until (a = aa) or (PHedgehog(Me.Hedgehog).AttacksNum > 0)
+       until (a = aa) or (PHedgehog(Me^.Hedgehog)^.AttacksNum > 0)
        end
 end;
 
@@ -101,9 +101,9 @@ var Actions: TActions;
     CanGo: boolean;
     AltMe: TGear;
 begin
-BotLevel:= PHedgehog(Me.Hedgehog).BotLevel;
+BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
 
-if (Me.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
+if (Me^.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
                                   else maxticks:= TurnTimeLeft;
 
 BaseRate:= RatePlace(Me);
@@ -115,12 +115,12 @@ repeat
        exit
        end;
 
-    AddAction(Actions, Me.Message, aim_push, 10);
-    if (Me.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, round(Me.X), 0)
-                                     else AddAction(Actions, aia_WaitXR, round(Me.X), 0);
-    AddAction(Actions, Me.Message, aim_release, 0);
+    AddAction(Actions, Me^.Message, aim_push, 10, 0, 0);
+    if (Me^.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
+                                     else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
+    AddAction(Actions, Me^.Message, aim_release, 0, 0, 0);
     steps:= 0;
-    if ((Me.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
+    if ((Me^.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
 
     while not PosInThinkStack(Me) do
        begin
@@ -132,23 +132,23 @@ repeat
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with ThinkStack.States[Pred(ThinkStack.Count)] do
                   begin
-                  AddAction(MadeActions, aia_HJump, 0, 305);
-                  AddAction(MadeActions, aia_HJump, 0, 350);
-                  if (Me.dX < 0) then AddAction(MadeActions, aia_WaitXL, round(AltMe.X), 0)
-                                 else AddAction(MadeActions, aia_WaitXR, round(AltMe.X), 0);
+                  AddAction(MadeActions, aia_HJump, 0, 305, 0, 0);
+                  AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
+                  if (Me^.dX < 0) then AddAction(MadeActions, aia_WaitXL, hwRound(AltMe.X), 0, 0, 0)
+                                 else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
                   end;
        if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with ThinkStack.States[Pred(ThinkStack.Count)] do
                   begin
-                  AddAction(MadeActions, aia_LJump, 0, 305);
-                  if (Me.dX < 0) then AddAction(MadeActions, aia_WaitXL, round(AltMe.X), 0)
-                                 else AddAction(MadeActions, aia_WaitXR, round(AltMe.X), 0);
+                  AddAction(MadeActions, aia_LJump, 0, 305, 0, 0);
+                  if (Me^.dX < 0) then AddAction(MadeActions, aia_WaitXL, hwRound(AltMe.X), 0, 0, 0)
+                                 else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
                   end;
 
        if not CanGo then break;
        inc(steps);
-       Actions.actions[Actions.Count - 2].Param:= round(Me.X);
+       Actions.actions[Actions.Count - 2].Param:= hwRound(Me^.X);
        Rate:= RatePlace(Me);
        if Rate > BaseRate then
           begin
@@ -161,7 +161,7 @@ repeat
        if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
 
-       if ((Me.State and gstAttacked) = 0)
+       if ((Me^.State and gstAttacked) = 0)
            and ((steps mod 4) = 0) then
            begin
            if SDL_GetTicks - AIThinkStart > 3 then
@@ -182,7 +182,7 @@ begin
 AIThinkStart:= SDL_GetTicks;
 BackMe:= Me^;
 WalkMe:= BackMe;
-if (Me.State and gstAttacked) = 0 then
+if (Me^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
       Walk(@WalkMe);
@@ -191,15 +191,15 @@ if (Me.State and gstAttacked) = 0 then
          if BestActions.Score < -1023 then
             begin
             BestActions.Count:= 0;
-            AddAction(BestActions, aia_Skip, 0, 250);
+            AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
-         Me.State:= Me.State and not gstHHThinking
+         Me^.State:= Me^.State and not gstHHThinking
          end
       end else
 else begin
       FillBonuses(true);
       Walk(@WalkMe);
-      AddAction(BestActions, aia_Wait, GameTicks + 100, 100);
+      AddAction(BestActions, aia_Wait, GameTicks + 100, 100, 0, 0);
       end
 end;
 
@@ -207,25 +207,25 @@ procedure StartThink(Me: PGear);
 var a: TAmmoType;
     tmp: integer;
 begin
-if ((Me.State and gstAttacking) <> 0) or isInMultiShoot then exit;
+if ((Me^.State and gstAttacking) <> 0) or isInMultiShoot then exit;
 ThinkingHH:= Me;
 isThinking:= true;
 
 ClearThinkStack;
 
-Me.State:= Me.State or gstHHThinking;
-Me.Message:= 0;
+Me^.State:= Me^.State or gstHHThinking;
+Me^.Message:= 0;
 FillTargets;
 if Targets.Count = 0 then
    begin
-   OutError('AI: no targets!?');
+   OutError('AI: no targets!?', false);
    exit
    end;
 
-FillBonuses((Me.State and gstAttacked) <> 0);
+FillBonuses((Me^.State and gstAttacked) <> 0);
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me.Hedgehog), a);
+    CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me^.Hedgehog), a);
 
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
@@ -236,14 +236,14 @@ Push(0, BestActions, Me^, tmp xor 3);
 BestActions.Score:= Low(integer);
 
 Think(Me)
-end; }
+end; 
 
 procedure ProcessBot(FrameNo: Longword);
-//const LastFrameNo: Longword = 0;
+const LastFrameNo: Longword = 0;
 begin
-{with CurrentTeam.Hedgehogs[CurrentTeam.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if (Gear <> nil)
-        and ((Gear.State and gstHHDriven) <> 0)
+        and ((Gear^.State and gstHHDriven) <> 0)
         and (TurnTimeLeft < cHedgehogTurnTime - 50) then
         if not isThinking then
            if (BestActions.Pos >= BestActions.Count) then StartThink(Gear)
@@ -253,6 +253,6 @@ begin
                 LastFrameNo:= FrameNo;
                 Think(Gear)
                 end;
-}end;
+end;
 
 end.

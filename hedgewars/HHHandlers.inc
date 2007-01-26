@@ -280,7 +280,7 @@ if (Gear^.State and gstFalling) <> 0 then
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.dY:= Gear^.dY + cGravity;
-   if (Gear^.dY < 0)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= 0;
+   if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= 0;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
       begin

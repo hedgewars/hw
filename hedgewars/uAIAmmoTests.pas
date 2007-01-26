@@ -26,23 +26,23 @@ function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
-
-type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: Integer; out Time: Longword; out Angle, Power: integer; out ExplX, ExplY, ExplR: integer): integer;
+*)
+type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
-{amGrenade}       TestGrenade,
+{amGrenade}       nil,//TestGrenade,
 {amClusterBomb}   nil,
-{amBazooka}       TestBazooka,
+{amBazooka}       nil,//TestBazooka,
 {amUFO}           nil,
-{amShotgun}       TestShotgun,
+{amShotgun}       nil,//TestShotgun,
 {amPickHammer}    nil,
 {amSkip}          nil,
 {amRope}          nil,
 {amMine}          nil,
-{amDEagle}        TestDesertEagle,
+{amDEagle}        nil,//TestDesertEagle,
 {amDynamite}      nil,
-{amFirePunch}     TestFirePunch,
-{amBaseballBat}   TestBaseballBat,
+{amFirePunch}     nil,//TestFirePunch,
+{amBaseballBat}   nil,//TestBaseballBat,
 {amParachute}     nil,
 {amAirAttack}     nil,
 {amMineStrike}    nil,
@@ -50,7 +50,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                   );
 
 const BadTurn = Low(integer);
-*)
+
 
 implementation
 uses uMisc, uAIMisc, uLand;

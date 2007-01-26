@@ -18,7 +18,7 @@
 
 unit uAIThinkStack;
 interface
-uses uAIActions, uGears;
+uses uAIActions, uGears, uFloat;
 {$INCLUDE options.inc}
 const cBranchStackSize = 12;
 type TStackEntry = record
@@ -33,13 +33,14 @@ var ThinkStack: record
                 end;
 
 function  Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
-function  Pop(out Ticks: Longword; out Actions: TActions; out Me: TGear): boolean;
+function  Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear): boolean;
 function  PosInThinkStack(Me: PGear): boolean;
 procedure ClearThinkStack;
 
 implementation
 
 function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+var Result: boolean;
 begin
 Result:= (ThinkStack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
 if Result then
@@ -50,10 +51,12 @@ if Result then
         Hedgehog:= Me;
         Hedgehog.Message:= Dir;
         inc(ThinkStack.Count)
-        end
+        end;
+Push:= Result
 end;
 
-function Pop(out Ticks: Longword; out Actions: TActions; out Me: TGear): boolean;
+function  Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear): boolean;
+var Result: boolean;
 begin
 Result:= ThinkStack.Count > 0;
 if Result then
@@ -65,21 +68,22 @@ if Result then
         Actions:= MadeActions;
         Me:= Hedgehog
         end
-   end
+   end;
+Pop:= Result
 end;
 
 function PosInThinkStack(Me: PGear): boolean;
 var i: Longword;
 begin
 i:= 0;
-Result:= false;
-while (i < ThinkStack.Count) and not Result do
+while (i < ThinkStack.Count) do
       begin
-      Result:= (abs(ThinkStack.States[i].Hedgehog.X - Me.X) +
-                abs(ThinkStack.States[i].Hedgehog.Y - Me.Y) <= 2)
-                and (ThinkStack.States[i].Hedgehog.Message = Me.Message);
+      if (not (2 < hwAbs(ThinkStack.States[i].Hedgehog.X - Me^.X) +
+                   hwAbs(ThinkStack.States[i].Hedgehog.Y - Me^.Y)))
+          and (ThinkStack.States[i].Hedgehog.Message = Me^.Message) then exit(true);
       inc(i)
-      end
+      end;
+PosInThinkStack:= false
 end;
 
 procedure ClearThinkStack;
