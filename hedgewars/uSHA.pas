@@ -25,7 +25,7 @@ type TSHA1Context = packed record
                     Length, CurrLength: Int64;
                     Buf: array[0..63] of byte;
                     end;
-     TSHA1Digest =  array[0.. 4] of LongWord;
+     TSHA1Digest =  array[0..4] of LongWord;
 
 procedure SHA1Init(var Context: TSHA1Context);
 procedure SHA1Update(var Context: TSHA1Context; Buf: PByteArray; Length: LongWord);
@@ -101,11 +101,11 @@ begin
 end;
 
 procedure SHA1Update(var Context: TSHA1Context; Buf: PByteArray; Length: LongWord);
-var i: integer;
+var i: Longword;
 begin
 for i:= 0 to Pred(Length) do
     begin
-    Context.Buf[Context.CurrLength]:= PByteArray(Buf)^[i];
+    Context.Buf[Context.CurrLength]:= Buf^[i];
     inc(Context.CurrLength);
     if Context.CurrLength = 64 then
        begin
@@ -118,7 +118,6 @@ end;
 
 function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 var i: LongWord;
-    Result: TSHA1Digest;
 begin
 Context.Length:= Context.Length + Context.CurrLength shl 3;
 Context.Buf[Context.CurrLength]:= $80;
@@ -137,9 +136,8 @@ FillChar(Context.Buf[Context.CurrLength], 56 - Context.CurrLength, 0);
 for i:= 56 to 63 do
     Context.Buf[i] := (Context.Length shr ((63 - i) * 8)) and $FF;
 SHA1Hash(Context);
-move(Context.H, Result, sizeof(TSHA1Digest));
-FillChar(Context, sizeof(Context), 0);
-SHA1Final:= Result
+for i:= 0 to 4 do SHA1Final[i]:= Context.H[i];
+FillChar(Context, sizeof(Context), 0)
 end;
 
 end.

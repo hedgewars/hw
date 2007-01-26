@@ -59,6 +59,9 @@ end;
 procedure CheckLandDigest(s: shortstring);
 const digest: shortstring = '';
 begin
+{$IFDEF DEBUGFILE}
+AddFileLog('CheckLandDigest: ' + s);
+{$ENDIF}
 if digest = '' then
    digest:= s
 else

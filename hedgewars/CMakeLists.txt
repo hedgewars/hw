@@ -28,6 +28,7 @@ set(engine_sources
 	uLocale.pas
 	uMisc.pas
 	uRandom.pas
+	uSHA.pas
 	uSound.pas
 	uStore.pas
 	uTeams.pas
