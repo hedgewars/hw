@@ -92,8 +92,8 @@ procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: LongInt): shortstring;
 function FloatToStr(n: hwFloat): shortstring;
-function DxDy2Angle32(const _dY, _dX: Extended): integer;
-function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
+function DxDy2Angle32(const _dY, _dX: hwFloat): integer;
+function DxDy2AttackAngle(const _dY, _dX: hwFloat): integer;
 procedure AdjustColor(var Color: Longword);
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
@@ -177,16 +177,26 @@ asm
 end;
 {$ENDIF}
 
-function DxDy2Angle32(const _dY, _dX: Extended): integer;
+function DxDy2Angle32(const _dY, _dX: hwFloat): integer;
 const _16divPI: Extended = 16/pi;
+var dY, dX: Extended;
 begin
-DxDy2Angle32:= trunc(arctan2(_dY, _dX) * _16divPI) and $1f
+dY:= _dY.QWordValue / $100000000;
+if _dY.isNegative then dY:= - dY;
+dX:= _dX.QWordValue / $100000000;
+if _dX.isNegative then dX:= - dX;
+DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
 end;
 
-function DxDy2AttackAngle(const _dY, _dX: Extended): integer;
+function DxDy2AttackAngle(const _dY, _dX: hwFloat): integer;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
+var dY, dX: Extended;
 begin
-DxDy2AttackAngle:= trunc(arctan2(_dY, _dX) * MaxAngleDivPI) mod cMaxAngle
+dY:= _dY.QWordValue / $100000000;
+if _dY.isNegative then dY:= - dY;
+dX:= _dX.QWordValue / $100000000;
+if _dX.isNegative then dX:= - dX;
+DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI) mod cMaxAngle
 end;
 
 procedure SetKB(n: Longword);

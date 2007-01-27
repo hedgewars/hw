@@ -46,7 +46,6 @@ var Time, BotLevel: Longword;
     a, aa: TAmmoType;
 begin
 BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
-
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) then
        begin
@@ -117,7 +116,7 @@ repeat
 
     AddAction(Actions, Me^.Message, aim_push, 10, 0, 0);
     if (Me^.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
-                                     else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
+                                      else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
     AddAction(Actions, Me^.Message, aim_release, 0, 0, 0);
     steps:= 0;
     if ((Me^.State and gstAttacked) = 0) then TestAmmos(Actions, Me);
@@ -145,7 +144,6 @@ repeat
                   if (Me^.dX < 0) then AddAction(MadeActions, aia_WaitXL, hwRound(AltMe.X), 0, 0, 0)
                                  else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
                   end;
-
        if not CanGo then break;
        inc(steps);
        Actions.actions[Actions.Count - 2].Param:= hwRound(Me^.X);

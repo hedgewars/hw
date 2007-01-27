@@ -557,7 +557,7 @@ while Gear<>nil do
            gtCloud: DrawSprite(sprCloud   , hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
        gtAmmo_Bomb: DrawSprite(sprBomb , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
         gtHedgehog: DrawHH(Gear, Surface);
-    gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
+    gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
        gtHealthTag: if Gear^.Surf <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Surf, Surface);
            gtGrave: DrawSpriteFromRect(PHedgehog(Gear^.Hedgehog)^.Team^.GraveRect, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
@@ -582,7 +582,7 @@ while Gear<>nil do
                        begin
                        DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
                                     hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
-                       DrawSprite(sprRopeHook, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
+                       DrawSprite(sprRopeHook, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
                        end;
                     end;
        gtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
@@ -597,7 +597,7 @@ while Gear<>nil do
      gtClusterBomb: DrawSprite(sprClusterBomb, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0, Surface);
            gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Angle) mod 8, Surface);
-         gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY.QWordValue, Gear^.dX.QWordValue), Surface);
+         gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
        gtAirAttack: DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0, Surface);
               end;
       Gear:= Gear^.NextGear

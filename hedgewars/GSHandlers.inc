@@ -554,7 +554,7 @@ if flCheck then  // check whether rope needs dividing
                 begin
                 X:= Gear^.X;
                 Y:= Gear^.Y;
-                if RopePoints.Count = 0 then RopePoints.HookAngle:= 0;//DxDy2Angle32(Gear^.dY, Gear^.dX);
+                if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle32(Gear^.dY, Gear^.dX);
                 b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
                 dLen:= len
                 end;

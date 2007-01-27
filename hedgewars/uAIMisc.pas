@@ -44,7 +44,7 @@ function TestColl(x, y, r: integer): boolean;
 function RateExplosion(Me: PGear; x, y, r: integer): integer;
 function RateShove(Me: PGear; x, y, r, power: integer): integer;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-//function rndSign(num: integer): integer;
+function AIrndSign(num: integer): integer;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -346,7 +346,7 @@ if (Gear^.State and gstFalling) <> 0 then
 
    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
-      Gear^.X:= Gear^.X + Gear^.dX;
+      Gear^.X:= Gear^.X + hwSign(Gear^.dX);
       inc(GoInfo.Ticks, cHHStepTicks)
       end;
    if not TestCollisionYwithGear(Gear, 1) then
@@ -388,10 +388,10 @@ until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and 
 HHJump(AltGear, jmpHJump, GoInfo)
 end;
 
-{function rndSign(num: integer): integer;
+function AIrndSign(num: integer): integer;
 begin
-if random(2) = 0 then Result:=   num
-                 else Result:= - num
-end;  }
+if random(2) = 0 then AIrndSign:=   num
+                 else AIrndSign:= - num
+end;  
 
 end.
