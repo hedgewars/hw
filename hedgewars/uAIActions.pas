@@ -45,17 +45,17 @@ const MAXACTIONS = 96;
       ai_specmask    = $8000;
 
 type TAction = record
-               Action, Param: Longword;
-               X, Y: integer;
+               Action: Longword;
+               X, Y, Param: LongInt;
                Time: Longword;
                end;
      TActions = record
                 Count, Pos: Longword;
                 actions: array[0..Pred(MAXACTIONS)] of TAction;
-                Score: integer;
+                Score: LongInt;
                 end;
 
-procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; X, Y: integer);
+procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 
 implementation
@@ -97,7 +97,7 @@ else begin
 end;
 {$ENDIF}
 
-procedure AddAction(var Actions: TActions; Action, Param, TimeDelta: Longword; X, Y: integer);
+procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; TimeDelta: Longword; X, Y: LongInt);
 begin
 with Actions do
      begin
@@ -116,7 +116,7 @@ procedure ProcessAction(var Actions: TActions; Me: PGear);
 var s: shortstring;
 
     procedure CheckHang;
-    const PrevX: integer = 0;
+    const PrevX: LongInt = 0;
           timedelta: Longword = 0;
     begin
     if hwRound(Me^.X) <> PrevX then

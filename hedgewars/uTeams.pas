@@ -44,15 +44,15 @@ type PHedgehog = ^THedgehog;
              ExtDriven: boolean;
              Binds: TBinds;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-             CurrHedgehog: integer;
+             CurrHedgehog: LongInt;
              NameTag: PSDL_Surface;
              CrosshairSurf: PSDL_Surface;
              GraveRect, HealthRect: TSDL_Rect;
              GraveName: string;
              FortName: string;
-             TeamHealth: integer;
-             TeamHealthBarWidth: integer;
-             DrawHealthY: integer;
+             TeamHealth: LongInt;
+             TeamHealthBarWidth: LongInt;
+             DrawHealthY: LongInt;
              AttackBar: LongWord;
              HedgehogsNumber: byte;
              end;
@@ -74,7 +74,7 @@ procedure SendStats;
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole;
-const MaxTeamHealth: integer = 0;
+const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;
 
@@ -117,7 +117,7 @@ end;
 
 procedure SwitchHedgehog;
 var tteam: PTeam;
-    th: integer;
+    th: LongInt;
     g: PGear;
 begin
 FreeActionsList;
@@ -211,8 +211,8 @@ end;
 
 procedure InitTeams;
 var p: PTeam;
-    i: integer;
-    th: integer;
+    i: LongInt;
+    th: LongInt;
 begin
 p:= TeamsList;
 while p <> nil do
@@ -281,7 +281,7 @@ TeamSize:= Result
 end;
 
 procedure RecountTeamHealth(team: PTeam);
-var i: integer;
+var i: LongInt;
 begin
 with team^ do
      begin
@@ -312,7 +312,7 @@ while p <> nil do
 end;
 
 procedure SetWeapon(weap: TAmmoType);
-var t: integer;
+var t: LongInt;
 begin
 t:= cMaxSlotAmmoIndex;
 with CurrentTeam^ do
@@ -326,7 +326,7 @@ end;
 
 procedure SendStats;
 var p: PTeam;
-    i: integer;
+    i: LongInt;
     msd: Longword; msdhh: PHedgehog;
 begin
 msd:= 0; msdhh:= nil;

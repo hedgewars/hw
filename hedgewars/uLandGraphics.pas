@@ -5,19 +5,19 @@ uses uFloat;
 
 type PRangeArray = ^TRangeArray;
      TRangeArray = array[0..31] of record
-                                   Left, Right: integer;
+                                   Left, Right: LongInt;
                                    end;
 
-procedure DrawExplosion(X, Y, Radius: integer);
-procedure DrawHLinesExplosions(ar: PRangeArray; Radius: integer; y, dY: integer; Count: Byte);
-procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: integer);
-procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
+procedure DrawExplosion(X, Y, Radius: LongInt);
+procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
+procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
+procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 
 implementation
 uses SDLh, uMisc, uLand, uConsts;
 
-procedure FillCircleLines(x, y, dx, dy: integer; Value: Longword);
-var i: integer;
+procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
+var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do Land[y + dy, i]:= Value;
@@ -29,8 +29,8 @@ if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y - dx, i]:= Value;
 end;
 
-procedure FillRoundInLand(X, Y, Radius: integer; Value: Longword);
-var dx, dy, d: integer;
+procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
+var dx, dy, d: LongInt;
 begin
   dx:= 0;
   dy:= Radius;
@@ -49,7 +49,7 @@ begin
   if (dx = dy) then FillCircleLines(x, y, dx, dy, Value);
 end;
 
-procedure ClearLandPixel(y, x: integer);
+procedure ClearLandPixel(y, x: LongInt);
 var p: PByteArray;
 begin
 p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
@@ -65,7 +65,7 @@ case LandSurface^.format^.BytesPerPixel of
      end
 end;
 
-procedure SetLandPixel(y, x: integer);
+procedure SetLandPixel(y, x: LongInt);
 var p: PByteArray;
 begin
 p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
@@ -81,8 +81,8 @@ case LandSurface^.format^.BytesPerPixel of
      end
 end;
 
-procedure FillLandCircleLines0(x, y, dx, dy: integer);
-var i: integer;
+procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
+var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do ClearLandPixel(y + dy, i);
@@ -94,8 +94,8 @@ if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do ClearLandPixel(y - dx, i);
 end;
 
-procedure FillLandCircleLinesEBC(x, y, dx, dy: integer);
-var i: integer;
+procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
+var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
@@ -111,8 +111,8 @@ if ((y - dx) and $FFFFFC00) = 0 then
        if Land[y - dx, i] = COLOR_LAND then SetLandPixel(y - dx, i);
 end;
 
-procedure DrawExplosion(X, Y, Radius: integer);
-var dx, dy, d: integer;
+procedure DrawExplosion(X, Y, Radius: LongInt);
+var dx, dy, d: LongInt;
 begin
 FillRoundInLand(X, Y, Radius, 0);
 
@@ -155,7 +155,7 @@ if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 end;
 
-procedure DrawHLinesExplosions(ar: PRangeArray; Radius: integer; y, dY: integer; Count: Byte);
+procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 var tx, ty, i: LongInt;
 begin
 if SDL_MustLock(LandSurface) then
@@ -188,7 +188,7 @@ end;
 //
 //  - (dX, dY) - direction, vector of length = 0.5
 //
-procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: integer);
+procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
     i, t, tx, ty: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2

@@ -21,7 +21,7 @@ interface
 uses SDLh, uFloat;
 {$INCLUDE options.inc}
 const isDeveloperMode: boolean = true;
-type TVariableType = (vtCommand, vtInteger, vthwFloat, vtBoolean);
+type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
 procedure DrawConsole(Surface: PSDL_Surface);
@@ -35,7 +35,7 @@ implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
      uRandom, uAmmos;
-const cLineWidth: integer = 0;
+const cLineWidth: LongInt = 0;
       cLinesCount = 256;
 
 type  PVariable = ^TVariable;
@@ -48,7 +48,7 @@ type  PVariable = ^TVariable;
                   end;
 
 var   ConsoleLines: array[byte] of ShortString;
-      CurrLine: integer = 0;
+      CurrLine: LongInt = 0;
       InputStr: shortstring;
       Variables: PVariable = nil;
 
@@ -86,7 +86,7 @@ while tt <> nil do
 end;
 
 procedure SplitBySpace(var a, b: shortstring);
-var i, t: integer;
+var i, t: LongInt;
 begin
 i:= Pos(' ', a);
 if i>0 then
@@ -100,7 +100,7 @@ if i>0 then
 end;
 
 procedure DrawConsole(Surface: PSDL_Surface);
-var x, y: integer;
+var x, y: LongInt;
     r: TSDL_Rect;
 begin
 with r do
@@ -120,7 +120,7 @@ DXOutText(4, cConsoleHeight - Fontz[fnt16].Height - 2, fnt16, '> '+InputStr, Sur
 end;
 
 procedure WriteToConsole(s: shortstring);
-var Len: integer;
+var Len: LongInt;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
 Write(s);
@@ -147,7 +147,7 @@ PLongWord(@ConsoleLines[CurrLine])^:= 0
 end;
 
 procedure InitConsole;
-var i: integer;
+var i: LongInt;
 begin
 cLineWidth:= cScreenWidth div 10;
 if cLineWidth > 255 then cLineWidth:= 255;
@@ -156,7 +156,7 @@ end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 type PhwFloat = ^hwFloat;
-var i, ii: integer;
+var i, ii: LongInt;
     s: shortstring;
     t: PVariable;
     c: char;
@@ -178,12 +178,12 @@ while t <> nil do
                          begin
                          TCommandHandler(t^.Handler)(s);
                          end;
-              vtInteger: if c='$' then
+              vtLongInt: if c='$' then
                          if s[0]=#0 then
                             begin
-                            str(PInteger(t^.Handler)^, s);
+                            str(PLongInt(t^.Handler)^, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PInteger(t^.Handler)^, i);
+                            end else val(s, PLongInt(t^.Handler)^, i);
                  vthwFloat: if c='$' then
                          if s[0]=#0 then
                             begin
@@ -272,9 +272,9 @@ RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
 RegisterVariable('map'     , vtCommand, @chSetMap       , false);
 RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
 RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
-RegisterVariable('c_height', vtInteger, @cConsoleHeight , false);
-RegisterVariable('gmflags' , vtInteger, @GameFlags      , false);
-RegisterVariable('turntime', vtInteger, @cHedgehogTurnTime, false);
+RegisterVariable('c_height', vtLongInt, @cConsoleHeight , false);
+RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
+RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
 RegisterVariable('name'    , vtCommand, @chName         , false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);

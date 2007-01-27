@@ -50,7 +50,7 @@ operator < (z1, z2: hwFloat) b : boolean;
 operator > (z1, z2: hwFloat) b : boolean;
 
 function cstr(z: hwFloat): string;
-function hwRound(t: hwFloat): integer;
+function hwRound(t: hwFloat): LongInt;
 function hwAbs(t: hwFloat): hwFloat;
 function hwSqr(t: hwFloat): hwFloat;
 function hwSqrt(t: hwFloat): hwFloat;
@@ -231,7 +231,7 @@ if z.Frac <> 0 then
 if z.isNegative then cstr:= '-' + cstr
 end;
 
-function hwRound(t: hwFloat): integer;
+function hwRound(t: hwFloat): LongInt;
 begin
 if t.isNegative then hwRound:= -t.Round
                 else hwRound:= t.Round

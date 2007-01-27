@@ -68,10 +68,10 @@ else
    TryDo(s = digest, 'Different maps generated, sorry', true)
 end;
 
-procedure DrawLine(X1, Y1, X2, Y2: integer; Color: Longword);
+procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 var
-  eX, eY, dX, dY: integer;
-  i, sX, sY, x, y, d: integer;
+  eX, eY, dX, dY: LongInt;
+  i, sX, sY, x, y, d: LongInt;
 begin
 eX:= 0;
 eY:= 0;
@@ -121,11 +121,11 @@ for i:= 0 to d do
 end;
 
 procedure DrawEdge(var pa: TPixAr; Color: Longword);
-var i: integer;
+var i: LongInt;
 begin
 i:= 0;
 with pa do
-while i < integer(Count) - 1 do
+while i < LongInt(Count) - 1 do
     if (ar[i + 1].X = NTPX) then inc(i, 2)
        else begin
        DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, Color);
@@ -159,12 +159,12 @@ if d2.QWordValue = 0 then
    end
 end;
 
-procedure AddLoopPoints(var pa, opa: TPixAr; StartI, EndI: integer; Delta: hwFloat);
-var i, pi, ni: integer;
+procedure AddLoopPoints(var pa, opa: TPixAr; StartI, EndI: LongInt; Delta: hwFloat);
+var i, pi, ni: LongInt;
     NVx, NVy, PVx, PVy: hwFloat;
     x1, x2, y1, y2, cx1, cx2, cy1, cy2: hwFloat;
     tsq, tcb, t, r1, r2, r3, r4: hwFloat;
-    X, Y: integer;
+    X, Y: LongInt;
 begin
 pi:= EndI;
 i:= StartI;
@@ -217,14 +217,14 @@ inc(pa.Count)
 end;
 
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
-var x, y, i, StartLoop: integer;
+var x, y, i, StartLoop: LongInt;
     opa: TPixAr;
 begin
 opa:= pa;
 pa.Count:= 0;
 i:= 0;
 StartLoop:= 0;
-while i < integer(opa.Count) do
+while i < LongInt(opa.Count) do
     if (opa.ar[i + 1].X = NTPX) then
        begin
        AddLoopPoints(pa, opa, StartLoop, i, Delta);
@@ -235,15 +235,15 @@ while i < integer(opa.Count) do
        end else inc(i)
 end;
 
-procedure FillLand(x, y: integer);
+procedure FillLand(x, y: LongInt);
 var Stack: record
            Count: Longword;
            points: array[0..8192] of record
-                                     xl, xr, y, dir: integer;
+                                     xl, xr, y, dir: LongInt;
                                      end
            end;
 
-    procedure Push(_xl, _xr, _y, _dir: integer);
+    procedure Push(_xl, _xr, _y, _dir: LongInt);
     begin
     TryDo(Stack.Count <= 8192, 'FillLand: stack overflow', true);
     _y:= _y + _dir;
@@ -258,7 +258,7 @@ var Stack: record
     inc(Stack.Count)
     end;
 
-    procedure Pop(var _xl, _xr, _y, _dir: integer);
+    procedure Pop(var _xl, _xr, _y, _dir: LongInt);
     begin
     dec(Stack.Count);
     with Stack.points[Stack.Count] do
@@ -270,7 +270,7 @@ var Stack: record
          end
     end;
 
-var xl, xr, dir: integer;
+var xl, xr, dir: LongInt;
 begin
 Stack.Count:= 0;
 xl:= x - 1;
@@ -328,7 +328,7 @@ end;
 procedure AddBorder(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
-    x, yd, yu: integer;
+    x, yd, yu: LongInt;
 begin
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false, true, true);
 for x:= 0 to 2047 do
@@ -368,15 +368,15 @@ for x:= 0 to 2047 do
 end;
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
-var i: integer;
+var i: LongInt;
 begin
 with Template do
      begin
      pa.Count:= BasePointsCount;
      for i:= 0 to pred(pa.Count) do
          begin
-         pa.ar[i].x:= BasePoints^[i].x + integer(GetRandom(BasePoints^[i].w));
-         pa.ar[i].y:= BasePoints^[i].y + integer(GetRandom(BasePoints^[i].h))
+         pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
+         pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h))
          end;
          
      if canMirror then
@@ -400,11 +400,11 @@ with Template do
      end
 end;
 
-procedure RandomizePoints(var pa: TPixAr; MaxRad: integer);
+procedure RandomizePoints(var pa: TPixAr; MaxRad: LongInt);
 const cEdge = 55;
       cMinDist = 0;
-var radz: array[0..Pred(cMaxEdgePoints)] of integer;
-    i, k, dist: integer;
+var radz: array[0..Pred(cMaxEdgePoints)] of LongInt;
+    i, k, dist: LongInt;
 begin
 radz[0]:= 0;
 for i:= 0 to Pred(pa.Count) do
@@ -426,8 +426,8 @@ for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
     if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
       begin
-      x:= x + integer(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
-      y:= y + integer(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3
+      x:= x + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
+      y:= y + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3
       end
 end;
 
@@ -458,7 +458,7 @@ with Template do
 DrawEdge(pa, COLOR_LAND)
 end;
 
-function SelectTemplate: integer;
+function SelectTemplate: LongInt;
 begin
 SelectTemplate:= getrandom(Succ(High(EdgeTemplates)))
 end;
@@ -564,7 +564,7 @@ AddProgress;
 end;
 
 procedure GenPreview;
-var x, y, xx, yy, t, bit: integer;
+var x, y, xx, yy, t, bit: LongInt;
 begin
 WriteLnToConsole('Generating preview...');
 GenBlank(EdgeTemplates[SelectTemplate]);

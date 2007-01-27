@@ -66,8 +66,8 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      THHFont    = record
                   Handle: PTTF_Font;
-                  Height: integer;
-                  style: integer;
+                  Height: LongInt;
+                  style: LongInt;
                   Name: string[15];
                   end;
 
@@ -175,7 +175,7 @@ const
       posCaseAmmo    = $00000001;
       posCaseHealth  = $00000002;
 
-      NoPointX = Low(Integer);
+      NoPointX = Low(LongInt);
 
       cHHFileName   = 'Hedgehog';
       cCHFileName   = 'Crosshair';
@@ -238,7 +238,7 @@ const
                      FileName: String[31];
                      Path, AltPath: TPathType;
                      Surface : PSDL_Surface;
-                     Width, Height: integer;
+                     Width, Height: LongInt;
                      hasAlpha: boolean;
                      end = (
                      (FileName: 'BlueWater'; Path: ptGraphics; AltPath: ptNone; Surface: nil;

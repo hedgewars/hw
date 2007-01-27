@@ -24,17 +24,17 @@ uses uConsts, uTeams, SDLh, uFloat;
 procedure StoreInit;
 procedure StoreLoad;
 procedure StoreRelease;
-procedure DrawGear(Stuff : TStuff; X, Y: integer; Surface: PSDL_Surface);
-procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: integer; Surface: PSDL_Surface);
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
-procedure DrawSurfSprite(X, Y, Height, Frame: integer; Source, Surface: PSDL_Surface);
-procedure DrawLand (X, Y: integer; Surface: PSDL_Surface);
-procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
-procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
-procedure DrawCentered(X, Top: integer; Source, Surface: PSDL_Surface);
-procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
-procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
+procedure DrawGear(Stuff : TStuff; X, Y: LongInt; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
+procedure DrawLand (X, Y: LongInt; Surface: PSDL_Surface);
+procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
+procedure DrawCaption(X, Y: LongInt; Rect: TSDL_Rect; Surface: PSDL_Surface);
+procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
+procedure DrawFromStoreRect(X, Y: LongInt; Rect: PSDL_Rect; Surface: PSDL_Surface);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
@@ -59,7 +59,7 @@ SDL_FillRect(StoreSurface, nil, 0);
 TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 end;
 
-procedure LoadToSurface(Filename: String; Surface: PSDL_Surface; X, Y: integer);
+procedure LoadToSurface(Filename: String; Surface: PSDL_Surface; X, Y: LongInt);
 var tmpsurf: PSDL_Surface;
     rr: TSDL_Rect;
 begin
@@ -95,7 +95,7 @@ r.h:= rect^.h - 4;
 SDL_FillRect(Surface, @r, FillColor)
 end;
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: integer; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
@@ -132,9 +132,9 @@ var i: TStuff;
 
     procedure WriteNames(Font: THWFont);
     var Team: PTeam;
-        i: integer;
+        i: LongInt;
         r, rr: TSDL_Rect;
-        drY: integer;
+        drY: LongInt;
     begin
     r.x:= 0;
     r.y:= 272;
@@ -186,7 +186,7 @@ var i: TStuff;
 
     procedure InitHealth;
     var p: PTeam;
-        i: integer;
+        i: LongInt;
     begin
     p:= TeamsList;
     while p <> nil do
@@ -200,7 +200,7 @@ var i: TStuff;
 
     procedure LoadGraves;
     var p: PTeam;
-        l: integer;
+        l: LongInt;
     begin
     p:= TeamsList;
     l:= 512;
@@ -235,7 +235,7 @@ var i: TStuff;
 
     procedure GetExplosionBorderColor;
     var f: textfile;
-        c: integer;
+        c: LongInt;
     begin
     s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
     WriteToConsole(msgLoading + s + ' ');
@@ -319,7 +319,7 @@ SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
 end;
 
-procedure DrawFromRect(X, Y: integer; r: PSDL_Rect; SourceSurface, DestSurface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceSurface, DestSurface: PSDL_Surface);
 var rr: TSDL_Rect;
 begin
 rr.x:= X;
@@ -333,24 +333,24 @@ if SDL_UpperBlit(SourceSurface, r, DestSurface, @rr) < 0 then
    end;
 end;
 
-procedure DrawGear(Stuff: TStuff; X, Y: integer; Surface: PSDL_Surface);
+procedure DrawGear(Stuff: TStuff; X, Y: LongInt; Surface: PSDL_Surface);
 begin
 DrawFromRect(X, Y, @StuffPoz[Stuff], StoreSurface, Surface)
 end;
 
-procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: integer; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
 DrawFromRect(X, Y, @r, StoreSurface, Surface)
 end;
 
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: integer; Surface: PSDL_Surface);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
 begin
 DrawSurfSprite(X, Y, SpritesData[Sprite].Height, Frame, SpritesData[Sprite].Surface, Surface)
 end;
 
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: integer; Surface: PSDL_Surface);
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
 r.x:= FrameX * SpritesData[Sprite].Width;
@@ -360,7 +360,7 @@ r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
 end;
 
-procedure DrawSurfSprite(X, Y, Height, Frame: integer; Source, Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
 r.x:= 0;
@@ -370,7 +370,7 @@ r.h:= Height;
 DrawFromRect(X, Y, @r, Source, Surface)
 end;
 
-procedure DXOutText(X, Y: Integer; Font: THWFont; s: string; Surface: PSDL_Surface);
+procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 var clr: TSDL_Color;
     tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
@@ -390,23 +390,23 @@ SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;
 
-procedure DrawLand(X, Y: integer; Surface: PSDL_Surface);
+procedure DrawLand(X, Y: LongInt; Surface: PSDL_Surface);
 const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
 begin
 DrawFromRect(X, Y, @r, LandSurface, Surface)
 end;
 
-procedure DrawFromStoreRect(X, Y: integer; Rect: PSDL_Rect; Surface: PSDL_Surface);
+procedure DrawFromStoreRect(X, Y: LongInt; Rect: PSDL_Rect; Surface: PSDL_Surface);
 begin
 DrawFromRect(X, Y, Rect, StoreSurface, Surface)
 end;
 
-procedure DrawCaption(X, Y: integer; Rect: TSDL_Rect; Surface: PSDL_Surface);
+procedure DrawCaption(X, Y: LongInt; Rect: TSDL_Rect; Surface: PSDL_Surface);
 begin
 DrawFromRect(X - (Rect.w) div 2, Y, @Rect, StoreSurface, Surface)
 end;
 
-procedure DrawCentered(X, Top: integer; Source, Surface: PSDL_Surface);
+procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
 r.x:= X - Source^.w div 2;
@@ -416,7 +416,7 @@ r.h:= Source^.h;
 SDL_UpperBlit(Source, nil, Surface, @r)
 end;
 
-procedure DrawHedgehog(X, Y: integer; Dir: integer; Pos, Step: LongWord; Surface: PSDL_Surface);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
 r.x:= Step * 32;

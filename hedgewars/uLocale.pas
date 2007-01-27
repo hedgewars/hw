@@ -37,7 +37,7 @@ uses uMisc;
 procedure LoadLocale(FileName: string);
 var s: shortstring;
     f: textfile;
-    a, b, c: integer;
+    a, b, c: LongInt;
 begin
 {$I-}
 Assign(f, FileName);
@@ -66,7 +66,7 @@ Close(f)
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
-var i: integer;
+var i: LongInt;
 begin
 i:= Pos('%1', fmt);
 if i = 0 then Format:= fmt

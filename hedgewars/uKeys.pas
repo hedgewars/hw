@@ -51,7 +51,7 @@ KeyNameToCode:= Result
 end;
 
 procedure ProcessKbd;
-var  i: integer;
+var  i: LongInt;
      s: shortstring;
      pkbd: PByteArray;
      Trusted: boolean;
@@ -86,7 +86,7 @@ for i:= 1 to cKeyMaxIndex do
 end;
 
 procedure ResetKbd;
-var i, t: integer;
+var i, t: LongInt;
     pkbd: PByteArray;
 begin
 pkbd:= PByteArray(SDL_GetKeyState(@i));
@@ -96,7 +96,7 @@ for t:= 0 to Pred(i) do
 end;
 
 procedure InitKbdKeyTable;
-var i, t: integer;
+var i, t: LongInt;
     s: string[15];
 begin
 KeyNames[1]:= 'mousel';

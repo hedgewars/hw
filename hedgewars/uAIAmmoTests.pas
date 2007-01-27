@@ -20,14 +20,14 @@ unit uAIAmmoTests;
 interface
 uses SDLh, uGears, uConsts, uFloat;
 
-function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-(*function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+(*function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 *)
-type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
 {amGrenade}       nil,//TestGrenade,
@@ -49,27 +49,27 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amBlowTorch}     nil
                   );
 
-const BadTurn = Low(integer);
+const BadTurn = Low(LongInt);
 
 
 implementation
 uses uMisc, uAIMisc, uLand;
 
-function Metric(x1, y1, x2, y2: integer): integer;
+function Metric(x1, y1, x2, y2: LongInt): LongInt;
 begin
 Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
-function TestBazooka(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, r: hwFloat;
     rTime: hwFloat;
-    Score, EX, EY: integer;
-    Result: integer;
+    Score, EX, EY: LongInt;
+    Result: LongInt;
 
-    function CheckTrace: integer;
+    function CheckTrace: LongInt;
     var x, y, dX, dY: hwFloat;
-        t: integer;
-        Result: integer;
+        t: LongInt;
+        Result: LongInt;
     begin
     x:= Me^.X;
     y:= Me^.Y;
@@ -117,15 +117,15 @@ until (rTime > 4500);
 TestBazooka:= Result
 end;
 {
-function TestGrenade(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: hwFloat;
-    Score, EX, EY: integer;
+    Score, EX, EY: LongInt;
     TestTime: Longword;
 
-    function CheckTrace: integer;
+    function CheckTrace: LongInt;
     var x, y, dY: hwFloat;
-        t: integer;
+        t: LongInt;
     begin
     x:= Me.X;
     y:= Me.Y;
@@ -140,7 +140,7 @@ var Vx, Vy, r: hwFloat;
     EX:= round(x);
     EY:= round(y);
     if t < 50 then Result:= RateExplosion(Me, round(x), round(y), 101)
-              else Result:= Low(integer)
+              else Result:= Low(LongInt)
     end;
 
 begin
@@ -170,7 +170,7 @@ repeat
 until (TestTime = 5000)
 end;
 
-function TestShotgun(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y: hwFloat;
 begin       
 ExplR:= 0;
@@ -200,7 +200,7 @@ until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048
 Result:= BadTurn
 end;
 
-function TestDesertEagle(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
 begin
@@ -226,10 +226,10 @@ repeat
      and (Land[round(y), round(x)] <> 0) then inc(d);
 until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024) or (d > 200);
 if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
-                                         else Result:= Low(integer)
+                                         else Result:= Low(LongInt)
 end;
 
-function TestBaseballBat(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 begin
 ExplR:= 0;
 if (Level > 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
@@ -244,8 +244,8 @@ Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15
 if Result <= 0 then Result:= BadTurn
 end;
 
-function TestFirePunch(Me: PGear; Targ: TPoint; Level: Integer; var Time: Longword; var Angle, Power: integer; var ExplX, ExplY, ExplR: integer): integer;
-var i: integer;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+var i: LongInt;
 begin
 ExplR:= 0;
 if (abs(Me.X - Targ.X) > 25) or (abs(Me.Y - 50 - Targ.Y) > 50) then

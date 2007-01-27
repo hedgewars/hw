@@ -21,16 +21,16 @@ interface
 uses uFloat;
 {$INCLUDE options.inc}
 
-procedure DoGameTick(Lag: integer);
+procedure DoGameTick(Lag: LongInt);
 
 ////////////////////
    implementation
 ////////////////////
 uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears, uConsole;
 
-procedure DoGameTick(Lag: integer);
+procedure DoGameTick(Lag: LongInt);
 const SendEmptyPacketTicks: LongWord = 0;
-var i: integer;
+var i: LongInt;
 begin
 if isPaused then exit;
 if not CurrentTeam^.ExtDriven then

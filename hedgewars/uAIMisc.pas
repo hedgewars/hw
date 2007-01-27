@@ -23,7 +23,7 @@ uses SDLh, uConsts, uGears, uFloat;
 
 type TTarget = record
                Point: TPoint;
-               Score: integer;
+               Score: LongInt;
                end;
      TTargets = record
                 Count: Longword;
@@ -38,13 +38,13 @@ type TTarget = record
 
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
-procedure AwareOfExplosion(x, y, r: integer);
-function RatePlace(Gear: PGear): integer;
-function TestColl(x, y, r: integer): boolean;
-function RateExplosion(Me: PGear; x, y, r: integer): integer;
-function RateShove(Me: PGear; x, y, r, power: integer): integer;
+procedure AwareOfExplosion(x, y, r: LongInt);
+function RatePlace(Gear: PGear): LongInt;
+function TestColl(x, y, r: LongInt): boolean;
+function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function AIrndSign(num: integer): integer;
+function AIrndSign(num: LongInt): LongInt;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
@@ -55,16 +55,16 @@ const KillScore = 200;
       MAXBONUS = 1024;
 
 type TBonus = record
-              X, Y: integer;
-              Radius: integer;
-              Score: integer;
+              X, Y: LongInt;
+              Radius: LongInt;
+              Score: LongInt;
               end;
 var bonuses: record
              Count: Longword;
              ar: array[0..Pred(MAXBONUS)] of TBonus;
              end;
     KnownExplosion: record
-                    X, Y, Radius: integer
+                    X, Y, Radius: LongInt
                     end = (X: 0; Y: 0; Radius: 0);
 
 procedure FillTargets;
@@ -96,7 +96,7 @@ procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
     MyColor: Longword;
 
-    procedure AddBonus(x, y: integer; r: Longword; s: integer);
+    procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
     begin
     bonuses.ar[bonuses.Count].x:= x;
     bonuses.ar[bonuses.Count].y:= y;
@@ -131,16 +131,16 @@ if isAfterAttack and (KnownExplosion.Radius > 0) then
         AddBonus(X, Y, Radius + 10, -Radius);
 end;
 
-procedure AwareOfExplosion(x, y, r: integer);
+procedure AwareOfExplosion(x, y, r: LongInt);
 begin
 KnownExplosion.X:= x;
 KnownExplosion.Y:= y;
 KnownExplosion.Radius:= r
 end;
 
-function RatePlace(Gear: PGear): integer;
-var i, r: integer;
-    Result: integer;
+function RatePlace(Gear: PGear): LongInt;
+var i, r: LongInt;
+    Result: LongInt;
 begin
 Result:= 0;
 for i:= 0 to Pred(bonuses.Count) do
@@ -153,7 +153,7 @@ for i:= 0 to Pred(bonuses.Count) do
     RatePlace:= Result
 end;
 
-function TestColl(x, y, r: integer): boolean;
+function TestColl(x, y, r: LongInt): boolean;
 var b: boolean;
 begin
 b:= (((x-r) and $FFFFF800) = 0)and(((y-r) and $FFFFFC00) = 0) and (Land[y-r, x-r] <> 0);
@@ -165,8 +165,8 @@ if b then exit(true);
 TestColl:=(((x+r) and $FFFFF800) = 0)and(((y+r) and $FFFFFC00) = 0) and (Land[y+r, x+r] <> 0)
 end;
 
-function RateExplosion(Me: PGear; x, y, r: integer): integer;
-var i, dmg, Result: integer;
+function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+var i, dmg, Result: LongInt;
 begin
 Result:= 0;
 // add our virtual position
@@ -195,8 +195,8 @@ for i:= 0 to Targets.Count do
 RateExplosion:= Result * 1024
 end;
 
-function RateShove(Me: PGear; x, y, r, power: integer): integer;
-var i, dmg, Result: integer;
+function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
+var i, dmg, Result: LongInt;
 begin
 Result:= 0;
 for i:= 0 to Targets.Count do
@@ -217,7 +217,7 @@ RateShove:= Result * 1024
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
-var bX, bY: integer;
+var bX, bY: LongInt;
     Result: boolean;
 begin
 Result:= false;
@@ -290,7 +290,7 @@ until false
 end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-var pX, pY: integer;
+var pX, pY: LongInt;
     Result: boolean;
 begin
 Result:= false;
@@ -388,7 +388,7 @@ until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and 
 HHJump(AltGear, jmpHJump, GoInfo)
 end;
 
-function AIrndSign(num: integer): integer;
+function AIrndSign(num: LongInt): LongInt;
 begin
 if random(2) = 0 then AIrndSign:=   num
                  else AIrndSign:= - num

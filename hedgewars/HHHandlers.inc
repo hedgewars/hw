@@ -133,7 +133,7 @@ end;
 const StepTicks: LongWord = 0;
 
 procedure HedgehogStep(Gear: PGear);
-var PrevdX: integer;
+var PrevdX: LongInt;
 begin
 if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    begin

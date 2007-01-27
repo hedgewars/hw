@@ -62,7 +62,7 @@ uses
 procedure OnDestroy; forward;
 
 ////////////////////////////////
-procedure DoTimer(Lag: integer);
+procedure DoTimer(Lag: LongInt);
 var s: string;
 begin
 case GameState of
@@ -158,9 +158,9 @@ end;
 
 ////////////////////
 procedure GetParams;
-var c: integer;
+var c: LongInt;
 {$IFDEF DEBUGFILE}
-    i: integer;
+    i: LongInt;
 {$ENDIF}
     p: TPathType;
 begin

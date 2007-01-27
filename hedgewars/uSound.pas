@@ -27,13 +27,13 @@ procedure SoundLoad;
 procedure PlaySound(snd: TSound; infinite: boolean);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
-function  ChangeVolume(voldelta: integer): integer;
+function  ChangeVolume(voldelta: LongInt): LongInt;
 
 implementation
 uses uMisc, uConsole;
 const chanTPU = 12;
 var Mus: PMixMusic;
-    Volume: integer;
+    Volume: LongInt;
 
 procedure InitSound;
 begin
@@ -83,7 +83,7 @@ WriteLnToConsole(msgOK)
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean);
-var loops: integer;
+var loops: LongInt;
 begin
 if not isSoundEnabled then exit;
 if infinite then loops:= -1 else loops:= 0;
@@ -104,7 +104,7 @@ if Mix_PlayingMusic = 0 then
    Mix_PlayMusic(Mus, -1)
 end;
 
-function ChangeVolume(voldelta: integer): integer;
+function ChangeVolume(voldelta: LongInt): LongInt;
 begin
 if not isSoundEnabled then
    exit(0);

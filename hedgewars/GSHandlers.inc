@@ -112,7 +112,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBomb(Gear: PGear);
-var i: integer;
+var i: LongInt;
 begin
 AllInactive:= false;
 doStepFallingGear(Gear);
@@ -355,7 +355,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPickHammerWork(Gear: PGear);
-var i, ei: integer;
+var i, ei: LongInt;
     HHGear: PGear;
 begin
 AllInactive:= false;
@@ -370,8 +370,8 @@ if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and
    end;
 if (Gear^.Timer and $3F) = 0 then
    begin
-   i:= hwRound(Gear^.X) - Gear^.Radius - integer(GetRandom(2));
-   ei:= hwRound(Gear^.X) + Gear^.Radius + integer(GetRandom(2));
+   i:= hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
+   ei:= hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
    while i <= ei do
          begin
          doMakeExplosion(i, hwRound(Gear^.Y) + 3, 3, 0);
@@ -406,15 +406,15 @@ if ((Gear^.Message and gm_Left) <> 0) then Gear^.dX:= - _0_3 else
 end;
 
 procedure doStepPickHammer(Gear: PGear);
-var i, y: integer;
+var i, y: LongInt;
     ar: TRangeArray;
 begin
 i:= 0;
 y:= hwRound(Gear^.Y) - cHHRadius*2;
 while y < hwRound(Gear^.Y) do
    begin
-   ar[i].Left := hwRound(Gear^.X) - Gear^.Radius - integer(GetRandom(2));
-   ar[i].Right:= hwRound(Gear^.X) + Gear^.Radius + integer(GetRandom(2));
+   ar[i].Left := hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
+   ar[i].Right:= hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
    inc(y, 2);
    inc(i)
    end;
@@ -426,7 +426,7 @@ Gear^.doStep:= @doStepPickHammerWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var BTPrevAngle, BTSteps: integer;
+var BTPrevAngle, BTSteps: LongInt;
 
 procedure doStepBlowTorchWork(Gear: PGear);
 var HHGear: PGear;
@@ -440,7 +440,7 @@ HedgehogChAngle(HHGear);
 
 b:= false;
 
-if abs(integer(HHGear^.Angle) - BTPrevAngle) > 7  then
+if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
    begin
    Gear^.dX:= hwSign(HHGear^.dX) * AngleSin(HHGear^.Angle) * _0_5;
    Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
@@ -488,7 +488,7 @@ end;
 procedure doStepBlowTorch(Gear: PGear);
 var HHGear: PGear;
 begin
-BTPrevAngle:= High(integer);
+BTPrevAngle:= High(LongInt);
 BTSteps:= 0;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= 0;
@@ -767,7 +767,7 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure doStepCase(Gear: PGear);
-var i, x, y: integer;
+var i, x, y: LongInt;
 begin
 if (Gear^.Message and gm_Destroy) > 0 then
    begin
@@ -807,14 +807,14 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 var thexchar: array[0..5] of record
-                             oy, ny: integer;
+                             oy, ny: LongInt;
                              team: PTeam;
                              end;
     thexchcnt: Longword;
     currsorter: PGear;
 
 procedure doStepTeamHealthSorterWork(Gear: PGear);
-var i: integer;
+var i: LongInt;
 begin
 AllInactive:= false;
 dec(Gear^.Timer);
@@ -1019,7 +1019,7 @@ if Gear^.X > 3072 then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
-var t: integer;
+var t: LongInt;
 begin
 AllInactive:= false;
 Gear^.X:= -1024;

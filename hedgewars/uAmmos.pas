@@ -9,7 +9,7 @@ procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(Hedgehog: pointer; ammo: TAmmoType);
 function  HHHasAmmo(Hedgehog: pointer; Ammo: TAmmoType): boolean;
-procedure PackAmmo(Ammo: PHHAmmo; Slot: integer);
+procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(Ammo: PHHAmmo);
 
 implementation
@@ -78,7 +78,7 @@ end;
 
 procedure AddAmmo(Hedgehog: pointer; ammo: TAmmoType);
 var ammos: TAmmoCounts;
-    slot, ami: integer;
+    slot, ami: LongInt;
     hhammo: PHHAmmo;
 begin
 FillChar(ammos, sizeof(ammos), 0);
@@ -93,8 +93,8 @@ if ammos[ammo] <> AMMO_INFINITE then inc(ammos[ammo]);
 FillAmmoStore(hhammo, ammos)
 end;
 
-procedure PackAmmo(Ammo: PHHAmmo; Slot: integer);
-var ami: integer;
+procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
+var ami: LongInt;
     b: boolean;
 begin
     repeat
@@ -129,7 +129,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
 end;
 
 function  HHHasAmmo(Hedgehog: pointer; Ammo: TAmmoType): boolean;
-var slot, ami: integer;
+var slot, ami: LongInt;
 begin
 Slot:= Ammoz[Ammo].Slot;
 ami:= 0;

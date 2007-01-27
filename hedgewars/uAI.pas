@@ -41,8 +41,8 @@ end;
 
 procedure TestAmmos(var Actions: TActions; Me: PGear);
 var Time, BotLevel: Longword;
-    Angle, Power, Score, ExplX, ExplY, ExplR: integer;
-    i: integer;
+    Angle, Power, Score, ExplX, ExplY, ExplR: LongInt;
+    i: LongInt;
     a, aa: TAmmoType;
 begin
 BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
@@ -67,7 +67,7 @@ for i:= 0 to Pred(Targets.Count) do
               else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
               if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                  begin
-                 Angle:= integer(Me^.Angle) - Abs(Angle);
+                 Angle:= LongInt(Me^.Angle) - Abs(Angle);
                  if Angle > 0 then
                     begin
                     AddAction(BestActions, aia_Up, aim_push, 500, 0, 0);
@@ -95,7 +95,7 @@ const FallPixForBranching = cHHRadius * 2 + 8;
       
 var Actions: TActions;
     ticks, maxticks, steps, BotLevel: Longword;
-    BaseRate, Rate: integer;
+    BaseRate, Rate: LongInt;
     GoInfo: TGoInfo;
     CanGo: boolean;
     AltMe: TGear;
@@ -203,7 +203,7 @@ end;
 
 procedure StartThink(Me: PGear);
 var a: TAmmoType;
-    tmp: integer;
+    tmp: LongInt;
 begin
 if ((Me^.State and gstAttacking) <> 0) or isInMultiShoot then exit;
 ThinkingHH:= Me;
@@ -231,7 +231,7 @@ BestActions.Score:= 0;
 tmp:= random(2) + 1;
 Push(0, BestActions, Me^, tmp);
 Push(0, BestActions, Me^, tmp xor 3);
-BestActions.Score:= Low(integer);
+BestActions.Score:= Low(LongInt);
 
 Think(Me)
 end; 

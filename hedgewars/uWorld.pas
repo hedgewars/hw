@@ -20,18 +20,18 @@ unit uWorld;
 interface
 uses SDLh, uGears, uConsts, uFloat;
 {$INCLUDE options.inc}
-const WorldDx: integer = -512;
-      WorldDy: integer = -256;
+const WorldDx: LongInt = -512;
+      WorldDy: LongInt = -256;
 
 procedure InitWorld;
-procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
+procedure DrawWorld(Lag: LongInt; Surface: PSDL_Surface);
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 
 {$IFDEF COUNTTICKS}
 var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
-    WindBarWidth: integer = 0;
+    WindBarWidth: LongInt = 0;
     bShowAmmoMenu: boolean = false;
     bSelected: boolean = false;
     bShowFinger: boolean = false;
@@ -50,9 +50,9 @@ type TCaptionStr = record
                    EndTime: LongWord;
                    end;
 
-var cWaterSprCount: integer;
+var cWaterSprCount: LongInt;
     Captions: array[TCapGroup] of TCaptionStr;
-    AMxLeft, AMxCurr, SlotsNum: integer;
+    AMxLeft, AMxCurr, SlotsNum: LongInt;
     fpsSurface: PSDL_Surface;
 
 procedure InitWorld;
@@ -70,8 +70,8 @@ end;
 
 procedure ShowAmmoMenu(Surface: PSDL_Surface);
 const MENUSPEED = 15;
-var x, y, i, t: integer;
-    Slot, Pos: integer;
+var x, y, i, t: LongInt;
+    Slot, Pos: LongInt;
 begin
 if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
@@ -116,7 +116,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
             t:= 0;
             while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
                   begin
-                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, integer(Ammo^[i, t].AmmoType), Surface);
+                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType), Surface);
                   if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
                      begin
                      DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0, Surface);
@@ -150,16 +150,16 @@ end;
 
 procedure MoveCamera; forward;
 
-procedure DrawWorld(Lag: integer; Surface: PSDL_Surface);
-var i, t: integer;
+procedure DrawWorld(Lag: LongInt; Surface: PSDL_Surface);
+var i, t: LongInt;
     r: TSDL_Rect;
     team: PTeam;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
 
-    procedure DrawRepeated(spr: TSprite; Shift: integer);
-    var i, w: integer;
+    procedure DrawRepeated(spr: TSprite; Shift: LongInt);
+    var i, w: LongInt;
     begin
     w:= SpritesData[spr].Width;
     i:= Shift mod w;
@@ -379,7 +379,7 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
-var EdgesDist: integer;
+var EdgesDist: LongInt;
 begin
 if not (CurrentTeam^.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 if (FollowGear <> nil) then

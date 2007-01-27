@@ -35,7 +35,7 @@ type PGear = ^TGear;
              Kind: TGearType;
              Pos: Longword;
              doStep: TGearStepProcedure;
-             Radius: integer;
+             Radius: LongInt;
              Angle, Power : Longword;
              DirAngle: hwFloat;
              Timer : LongWord;
@@ -43,14 +43,14 @@ type PGear = ^TGear;
              Friction  : hwFloat;
              Message : Longword;
              Hedgehog: pointer;
-             Health, Damage: integer;
+             Health, Damage: LongInt;
              CollIndex: Longword;
-             Tag: integer;
+             Tag: LongInt;
              Surf: PSDL_Surface;
              Z: Longword;
              end;
 
-function  AddGear(X, Y: integer; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
@@ -71,7 +71,7 @@ uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
      uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos;
 var RopePoints: record
                 Count: Longword;
-                HookAngle: integer;
+                HookAngle: LongInt;
                 ar: array[0..300] of record
                                   X, Y: hwFloat;
                                   dLen: hwFloat;
@@ -81,13 +81,13 @@ var RopePoints: record
     StepDamage: Longword = 0;
 
 procedure DeleteGear(Gear: PGear); forward;
-procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord); forward;
-procedure AmmoShove(Ammo: PGear; Damage, Power: integer); forward;
+procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
+procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 procedure AmmoFlameWork(Ammo: PGear); forward;
-function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear; forward;
+function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
-procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer); forward;
+procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 
@@ -155,7 +155,7 @@ if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
    end;
 end;
 
-function AddGear(X, Y: integer; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
+function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 const Counter: Longword = 0;
 var Result: PGear;
 begin
@@ -337,7 +337,7 @@ while Gear <> nil do
 end;
 
 procedure ProcessGears;
-const delay: integer = cInactDelay;
+const delay: LongInt = cInactDelay;
       step: (stDelay, stChDmg, stChWin, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 {$IFDEF COUNTTICKS}
@@ -448,7 +448,7 @@ while t <> nil do
 end;
 
 procedure DrawHH(Gear: PGear; Surface: PSDL_Surface);
-var t: integer;
+var t: LongInt;
 begin
 DrawHedgehog(hwRound(Gear^.X) - 14 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
              hwSign(Gear^.dX), 0,
@@ -477,7 +477,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
               if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
                  DrawSurfSprite(Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
                            Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
-                           24, (18 + hwSign(Gear^.dX) * integer(((Gear^.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
+                           24, (18 + hwSign(Gear^.dX) * LongInt(((Gear^.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
                            Team^.CrosshairSurf, Surface);
         end;
 end;
@@ -485,11 +485,11 @@ end;
 procedure DrawGears(Surface: PSDL_Surface);
 var Gear: PGear;
     i: Longword;
-    roplen: integer;
+    roplen: LongInt;
 
-    procedure DrawRopeLine(X1, Y1, X2, Y2: integer);
-    var  eX, eY, dX, dY: integer;
-         i, sX, sY, x, y, d: integer;
+    procedure DrawRopeLine(X1, Y1, X2, Y2: LongInt);
+    var  eX, eY, dX, dY: LongInt;
+         i, sX, sY, x, y, d: LongInt;
          b: boolean;
     begin
     if (X1 = X2) and (Y1 = Y2) then
@@ -618,7 +618,7 @@ while tt<>nil do
 end;
 
 procedure AddMiscGears;
-var i: integer;
+var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
 if (GameFlags and gfForts) = 0 then
@@ -627,7 +627,7 @@ if (GameFlags and gfForts) = 0 then
 end;
 
 procedure AddClouds;
-var i: integer;
+var i: LongInt;
     dx, dy: hwFloat;
 begin
 for i:= 0 to cCloudsNumber do
@@ -641,9 +641,9 @@ for i:= 0 to cCloudsNumber do
     end
 end;
 
-procedure doMakeExplosion(X, Y, Radius: integer; Mask: LongWord);
+procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
 var Gear: PGear;
-    dmg: integer;
+    dmg: LongInt;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
@@ -684,9 +684,9 @@ while Gear <> nil do
 //uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 
-procedure AmmoShove(Ammo: PGear; Damage, Power: integer);
+procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
-    i: integer;
+    i: LongInt;
     hh: PHedgehog;
 begin
 t:= CheckGearsCollision(Ammo);
@@ -715,7 +715,7 @@ end;
 
 procedure AssignHHCoords;
 var Team: PTeam;
-    i, t: integer;
+    i, t: LongInt;
 begin
 Team:= TeamsList;
 t:= 0;
@@ -731,7 +731,7 @@ while Team <> nil do
       end
 end;
 
-function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: integer): PGear;
+function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
 var t: PGear;
 begin
 t:= GearsList;
@@ -767,7 +767,7 @@ while t <> nil do
       end;
 end;
 
-function CheckGearsNear(mX, mY: integer; Kind: TGearsType; rX, rY: integer): PGear;
+function CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
 var t: PGear;
 begin
 t:= GearsList;
@@ -814,11 +814,11 @@ case getrandom(2) of
 FindPlace(FollowGear, true, 0, 2048)
 end;
 
-procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer);
+procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
-    function CountNonZeroz(x, y, r: integer): integer;
-    var i: integer;
-        Result: integer;
+    function CountNonZeroz(x, y, r: LongInt): LongInt;
+    var i: LongInt;
+        Result: LongInt;
     begin
     Result:= 0;
     if (y and $FFFFFC00) <> 0 then exit;
@@ -827,12 +827,12 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: integer);
     CountNonZeroz:= Result
     end;
 
-var fx, x: integer;
-    y, sy: integer;
+var fx, x: LongInt;
+    y, sy: LongInt;
     ar: array[0..512] of TPoint;
     cnt, delta: Longword;
 begin
-fx:= Left + integer(GetRandom(Right - Left));
+fx:= Left + LongInt(GetRandom(Right - Left));
 x:= fx;
 delta:= 130;
 repeat

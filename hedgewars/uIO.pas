@@ -47,8 +47,8 @@ var  IPCSock: PTCPSocket = nil;
                                             X, Y: SmallInt);
                                         2: (str: shortstring);
                                    end;
-     cmdcurpos: integer = 0;
-     cmdendpos: integer = -1;
+     cmdcurpos: LongInt = 0;
+     cmdendpos: LongInt = -1;
 
 procedure InitIPC;
 var ipaddr: TIPAddress;
@@ -98,7 +98,7 @@ end;
 
 procedure IPCCheckSock;
 const ss: string = '';
-var i: integer;
+var i: LongInt;
     buf: array[0..255] of byte;
     s: shortstring absolute buf;
 begin

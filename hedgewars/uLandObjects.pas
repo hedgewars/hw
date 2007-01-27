@@ -41,7 +41,7 @@ type PRectArray = ^TRectsArray;
                     Maxcnt: Longword;
                     end;
      TThemeObjects = record
-                     Count: integer;
+                     Count: LongInt;
                      objs: array[0..Pred(MAXTHEMEOBJECTS)] of TThemeObject;
                      end;
      TSprayObject = record
@@ -50,7 +50,7 @@ type PRectArray = ^TRectsArray;
                     Maxcnt: Longword;
                     end;
      TSprayObjects = record
-                     Count: integer;
+                     Count: LongInt;
                      objs: array[0..Pred(MAXTHEMEOBJECTS)] of TSprayObject
                      end;
 
@@ -60,7 +60,7 @@ var Rects: PRectArray;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 var p: PByteArray;
     x, y: Longword;
-    bpp: integer;
+    bpp: LongInt;
     r: TSDL_Rect;
 begin
 r.x:= cpX;
@@ -102,7 +102,7 @@ if SDL_MustLock(Image) then
 WriteLnToConsole(msgOK)
 end;
 
-procedure AddRect(x1, y1, w1, h1: integer);
+procedure AddRect(x1, y1, w1, h1: LongInt);
 begin
 with Rects^[RectCount] do
      begin
@@ -126,7 +126,7 @@ begin
 Dispose(rects)
 end;
 
-function CheckIntersect(x1, y1, w1, h1: integer): boolean;
+function CheckIntersect(x1, y1, w1, h1: LongInt): boolean;
 var i: Longword;
     Result: boolean;
 begin
@@ -142,14 +142,14 @@ if RectCount > 0 then
 CheckIntersect:= Result
 end;
 
-function AddGirder(gX: integer; Surface: PSDL_Surface): boolean;
+function AddGirder(gX: LongInt; Surface: PSDL_Surface): boolean;
 var tmpsurf: PSDL_Surface;
-    x1, x2, y, k, i: integer;
+    x1, x2, y, k, i: LongInt;
     r, rr: TSDL_Rect;
     Result: boolean;
 
-    function CountNonZeroz(x, y: integer): Longword;
-    var i: integer;
+    function CountNonZeroz(x, y: LongInt): Longword;
+    var i: LongInt;
         Result: Longword;
     begin
     Result:= 0;
@@ -352,7 +352,7 @@ end;
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s: string;
     f: textfile;
-    i, ii: integer;
+    i, ii: LongInt;
 begin
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
@@ -395,8 +395,8 @@ Close(f);
 TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
 end;
 
-procedure AddThemeObjects(Surface: PSDL_Surface; var ThemeObjects: TThemeObjects; MaxCount: integer);
-var i, ii, t: integer;
+procedure AddThemeObjects(Surface: PSDL_Surface; var ThemeObjects: TThemeObjects; MaxCount: LongInt);
+var i, ii, t: LongInt;
     b: boolean;
 begin
 if ThemeObjects.Count = 0 then exit;
@@ -416,7 +416,7 @@ end;
 
 procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects; MaxCount: Longword);
 var i: Longword;
-    ii, t: integer;
+    ii, t: LongInt;
     b: boolean;
 begin
 if SprayObjects.Count = 0 then exit;

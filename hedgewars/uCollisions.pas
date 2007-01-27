@@ -31,17 +31,17 @@ type PGearArray = ^TGearArray;
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 function CheckGearsCollision(Gear: PGear): PGearArray;
-function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
-function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
-function TestCollisionY(Gear: PGear; Dir: integer): boolean;
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: integer): boolean;
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
+function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
+function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: LongInt): boolean;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
 implementation
 uses uMisc, uConsts, uLand, uLandGraphics;
 
 type TCollisionEntry = record
-                       X, Y, Radius: integer;
+                       X, Y, Radius: LongInt;
                        cGear: PGear;
                        end;
 
@@ -79,7 +79,7 @@ if Gear^.CollIndex < Count then
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
-var mx, my: integer;
+var mx, my: LongInt;
     i: Longword;
     Result: PGearArray;
 begin
@@ -100,8 +100,8 @@ for i:= 0 to Pred(Count) do
 CheckGearsCollision:= Result
 end;
 
-function TestCollisionXwithGear(Gear: PGear; Dir: integer): boolean;
-var x, y, i: integer;
+function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
+var x, y, i: LongInt;
 begin
 x:= hwRound(Gear^.X);
 if Dir < 0 then x:= x - Gear^.Radius
@@ -119,7 +119,7 @@ if (x and $FFFFF800) = 0 then
 TestCollisionXwithGear:= false
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: integer): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: LongInt): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + ShiftY;
@@ -128,8 +128,8 @@ Gear^.X:= Gear^.X - ShiftX;
 Gear^.Y:= Gear^.Y - ShiftY
 end;
 
-function TestCollisionYwithGear(Gear: PGear; Dir: integer): boolean;
-var x, y, i: integer;
+function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+var x, y, i: LongInt;
 begin
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
@@ -147,8 +147,8 @@ if (y and $FFFFFC00) = 0 then
 TestCollisionYwithGear:= false
 end;
 
-function TestCollisionY(Gear: PGear; Dir: integer): boolean;
-var x, y, i: integer;
+function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
+var x, y, i: LongInt;
 begin
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
@@ -166,7 +166,7 @@ if (y and $FFFFFC00) = 0 then
 TestCollisionY:= false
 end;
 
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: integer; Dir: integer): boolean;
+function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + ShiftY;

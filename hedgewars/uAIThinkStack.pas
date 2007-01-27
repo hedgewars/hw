@@ -32,14 +32,14 @@ var ThinkStack: record
                 States: array[0..Pred(cBranchStackSize)] of TStackEntry;
                 end;
 
-function  Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+function  Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: LongInt): boolean;
 function  Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear): boolean;
 function  PosInThinkStack(Me: PGear): boolean;
 procedure ClearThinkStack;
 
 implementation
 
-function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
+function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: LongInt): boolean;
 var Result: boolean;
 begin
 Result:= (ThinkStack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);

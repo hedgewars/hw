@@ -35,7 +35,7 @@ GameState:= gsExit
 end;
 
 procedure chCheckProto(var s: shortstring);
-var i, c: integer;
+var i, c: LongInt;
 begin
 if isDeveloperMode then
    begin
@@ -97,7 +97,7 @@ CurrentTeam^.FortName:= s
 end;
 
 procedure chColor(var id: shortstring);
-var c: integer;
+var c: LongInt;
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
 val(id, CurrentTeam^.Color, c);
@@ -107,7 +107,7 @@ end;
 
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
-    c: integer;
+    c: LongInt;
     Gear: PGear;
 begin
 if (not isDeveloperMode)or(CurrentTeam=nil) then exit;
@@ -133,7 +133,7 @@ end;
 
 procedure chBind(var id: shortstring);
 var s: shortstring;
-    b: integer;
+    b: LongInt;
 begin
 if CurrentTeam = nil then exit;
 SplitBySpace(id, s);

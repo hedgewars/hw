@@ -35,19 +35,19 @@ var isCursorVisible : boolean = false;
     cHedgehogTurnTime: Longword = 45000;
     cMaxAIThinkTime  : Longword = 5000;
 
-    cCloudsNumber    : integer = 9;
-    cConsoleHeight   : integer = 320;
-    cConsoleYAdd     : integer = 0;
-    cScreenWidth     : integer = 1024;
-    cScreenHeight    : integer = 768;
-    cBits            : integer = 16;
+    cCloudsNumber    : LongInt = 9;
+    cConsoleHeight   : LongInt = 320;
+    cConsoleYAdd     : LongInt = 0;
+    cScreenWidth     : LongInt = 1024;
+    cScreenHeight    : LongInt = 768;
+    cBits            : LongInt = 16;
     cBitsStr         : string[2] = '16';
 
-    cWaterLine       : integer = 1024;
-    cVisibleWater    : integer = 128;
-    cGearScrEdgesDist: integer = 240;
-    cCursorEdgesDist : integer = 40;
-    cTeamHealthWidth : integer = 128;
+    cWaterLine       : LongInt = 1024;
+    cVisibleWater    : LongInt = 128;
+    cGearScrEdgesDist: LongInt = 240;
+    cCursorEdgesDist : LongInt = 40;
+    cTeamHealthWidth : LongInt = 128;
 
     GameTicks     : LongWord = 0;
 
@@ -63,8 +63,8 @@ var isCursorVisible : boolean = false;
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
     cSeed         : shortstring = '';
-    cInitVolume   : integer = 128;
-    cVolumeDelta  : integer = 0;
+    cInitVolume   : LongInt = 128;
+    cVolumeDelta  : LongInt = 0;
     cTimerInterval   : Longword = 5;
     cHasFocus     : boolean = true;
 
@@ -81,19 +81,19 @@ var
 
     InitStepsFlags: Longword = 0;
 
-    AttackBar: integer = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+    AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-function hwSign(r: hwFloat): integer;
-function Min(a, b: integer): integer;
-function Max(a, b: integer): integer;
+function hwSign(r: hwFloat): LongInt;
+function Min(a, b: LongInt): LongInt;
+function Max(a, b: LongInt): LongInt;
 function rndSign(num: hwFloat): hwFloat;
 procedure OutError(Msg: String; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: LongInt): shortstring;
 function FloatToStr(n: hwFloat): shortstring;
-function DxDy2Angle32(const _dY, _dX: hwFloat): integer;
-function DxDy2AttackAngle(const _dY, _dX: hwFloat): integer;
+function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
+function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 procedure AdjustColor(var Color: Longword);
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
@@ -115,17 +115,17 @@ var KBnum: Longword = 0;
 var f: textfile;
 {$ENDIF}
 
-function hwSign(r: hwFloat): integer;
+function hwSign(r: hwFloat): LongInt;
 begin
 if r.isNegative then hwSign:= -1 else hwSign:= 1
 end;
 
-function Min(a, b: integer): integer;
+function Min(a, b: LongInt): LongInt;
 begin
 if a < b then Min:= a else Min:= b
 end;
 
-function Max(a, b: integer): integer;
+function Max(a, b: LongInt): LongInt;
 begin
 if a > b then Max:= a else Max:= b
 end;
@@ -177,7 +177,7 @@ asm
 end;
 {$ENDIF}
 
-function DxDy2Angle32(const _dY, _dX: hwFloat): integer;
+function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 const _16divPI: Extended = 16/pi;
 var dY, dX: Extended;
 begin
@@ -188,7 +188,7 @@ if _dX.isNegative then dX:= - dX;
 DxDy2Angle32:= trunc(arctan2(dY, dX) * _16divPI) and $1f
 end;
 
-function DxDy2AttackAngle(const _dY, _dX: hwFloat): integer;
+function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 const MaxAngleDivPI: Extended = cMaxAngle/pi;
 var dY, dX: Extended;
 begin
@@ -252,7 +252,7 @@ RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + i
 end;
 
 
-var i: integer;
+var i: LongInt;
 
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06
