@@ -111,17 +111,27 @@ void TeamShowWidget::activateTeam()
   return params;
 }*/
 
-void TeamShowWidget::changeTeamColor()
+void TeamShowWidget::changeTeamColor(QColor color)
 {
   FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
-  if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
-    pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+  if(!color.isValid()) {
+    if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
+      pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+    }
+    color=QColor(*pOurFrameTeams->currentColor);
   }
 
   QPalette newPalette = palette();
-  newPalette.setColor(QPalette::Button, QColor(*pOurFrameTeams->currentColor));
-  newPalette.setColor(QPalette::Highlight, QColor(*pOurFrameTeams->currentColor));
+  newPalette.setColor(QPalette::Button, color);
+  newPalette.setColor(QPalette::Highlight, color);
   //colorButt->setStyleSheet(QString("background-color : ")+pOurFrameTeams->currentColor->name());
   colorButt->setStyle(QStyleFactory::create("plastique"));
   colorButt->setPalette(newPalette);
+  m_team.teamColor=color;
+  emit teamColorChanged(m_team);
+}
+
+HWTeam TeamShowWidget::getTeam() const
+{
+  return m_team;
 }

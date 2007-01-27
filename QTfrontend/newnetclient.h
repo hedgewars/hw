@@ -98,6 +98,7 @@ class HWNewNet : public QObject
   void turnTimeChanged(quint32 time);
   void fortsModeChanged(bool value);
   void hhnumChanged(const HWTeam&);
+  void teamColorChanged(const HWTeam&);
 
  public slots:
   void SendNet(const QByteArray & buf);
@@ -110,6 +111,7 @@ class HWNewNet : public QObject
   void onTurnTimeChanged(quint32 time);
   void onFortsModeChanged(bool value);
   void onHedgehogsNumChanged(const HWTeam& team);
+  void onTeamColorChanged(const HWTeam& team);
 
  private slots:
   void ClientRead();

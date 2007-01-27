@@ -248,6 +248,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
 		hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));
+	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamColorChanged(const HWTeam&)),
+		hwnet, SLOT(onTeamColorChanged(const HWTeam&)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamWillPlay(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamNotPlaying(const HWTeam&)), hwnet, SLOT(RemoveTeam(const HWTeam&)));
 
@@ -266,7 +268,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(fortsModeChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setFortsMode(bool)));
 	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)), 
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
-
+	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)), 
+		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
 	hwnet->Connect(hostName, port, nick);
 	config->SaveOptions();

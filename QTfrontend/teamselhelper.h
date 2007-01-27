@@ -46,15 +46,19 @@ class TeamShowWidget : public QWidget
 {
  Q_OBJECT
 
+ public slots:
+ void changeTeamColor(QColor color=QColor());
+
  private slots:
  void activateTeam();
- void changeTeamColor();
+ void hhNumChanged();
 
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
  void setHHNum(unsigned int num);
  void setNonInteractive();
+ HWTeam getTeam() const;
 
  private:
  TeamShowWidget();
@@ -66,12 +70,10 @@ class TeamShowWidget : public QWidget
  QPushButton* butt;
  QPushButton* bText;
 
- private slots:
-  void hhNumChanged();
-
  signals:
  void teamStatusChanged(HWTeam team);
  void hhNmChanged(const HWTeam&);
+ void teamColorChanged(const HWTeam&);
 };
 
 #endif // _TEAMSEL_HELPER_INCLUDED

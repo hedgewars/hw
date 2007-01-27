@@ -245,6 +245,15 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit hhnumChanged(tmptm);
 	  return;
   	}
+  	if (lst[1] == "TEAM_COLOR") {
+	  HWTeam tmptm(lst[2], lst[3].toUInt());
+	  if(m_networkToLocalteams.find(lst[3].toUInt())!=m_networkToLocalteams.end()) {
+	    tmptm=HWTeam(lst[2]); // local team should be changed
+	  }
+	  tmptm.teamColor=QColor(lst[4]);
+	  emit teamColorChanged(tmptm);
+	  return;
+  	}
   	qDebug() << "unknow config param: " << lst[1];
     return;
   }
@@ -287,6 +296,14 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
   RawSendNet(QString("CONFIG_PARAM%1HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
 	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
 	     .arg(team.numHedgehogs));
+}
+
+void HWNewNet::onTeamColorChanged(const HWTeam& team)
+{
+  qDebug() << team.getNetID() << ":" << team.teamColor.name();
+  RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
+	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
+	     .arg(team.teamColor.name()));
 }
 
 void HWNewNet::onSeedChanged(const QString & seed)

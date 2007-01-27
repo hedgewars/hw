@@ -35,6 +35,8 @@ void TeamSelWidget::addTeam(HWTeam team)
 		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
     connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
 			    this, SLOT(hhNumChanged(const HWTeam&)));
+    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)), 
+			    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
     curDontPlayingTeams.push_back(team);
@@ -55,12 +57,29 @@ void TeamSelWidget::hhNumChanged(const HWTeam& team)
   emit hhogsNumChanged(team);
 }
 
+void TeamSelWidget::proxyTeamColorChanged(const HWTeam& team)
+{
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  itPlay->teamColor=team.teamColor;
+  emit teamColorChanged(team);
+}
+
 void TeamSelWidget::changeHHNum(const HWTeam& team)
 {
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  if(itPlay==curPlayingTeams.end()) return;
   itPlay->numHedgehogs=team.numHedgehogs;
 
   framePlaying->setHHNum(team);
+}
+
+void TeamSelWidget::changeTeamColor(const HWTeam& team)
+{
+  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+  if(itPlay==curPlayingTeams.end()) return;
+  itPlay->teamColor=team.teamColor;
+
+  framePlaying->setTeamColor(team);
 }
 
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
@@ -123,8 +142,13 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   pRemoveTeams->removeTeam(team);
   QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		   this, SLOT(changeTeamStatus(HWTeam)));
-  if(willBePlaying) connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
-			    this, SLOT(hhNumChanged(const HWTeam&)));
+  if(willBePlaying) {
+    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
+	    this, SLOT(hhNumChanged(const HWTeam&)));
+    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)), 
+	    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+    emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
+  }
 
   QSize szh=pAddTeams->sizeHint();
   QSize szh1=pRemoveTeams->sizeHint();

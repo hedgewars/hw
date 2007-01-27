@@ -39,7 +39,11 @@ class FrameTeams : public QWidget
   bool isFullTeams() const;
   void resetColors();
   void setHHNum(const HWTeam& team);
+  void setTeamColor(const HWTeam& team);
   void setNonInteractive();
+
+ signals:
+  void teamColorChanged(const HWTeam&);
 
  public slots:
   void addTeam(HWTeam team, bool willPlay);
@@ -50,6 +54,8 @@ class FrameTeams : public QWidget
   int overallHedgehogs;
   QList<QColor> availableColors;
   QList<QColor>::Iterator currentColor;
+
+  void emitTeamColorChanged(const HWTeam& team);
 
   QVBoxLayout mainLayout;
   typedef QMultiMap<HWTeam, QWidget*> tmapTeamToWidget;

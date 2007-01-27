@@ -50,17 +50,20 @@ class TeamSelWidget : public QGroupBox
   void addTeam(HWTeam team);
   void netTeamStatusChanged(const HWTeam& team);
   void changeHHNum(const HWTeam&);
+  void changeTeamColor(const HWTeam&);
   
  signals:
   void NewTeam();
   void teamWillPlay(HWTeam team);
   void teamNotPlaying(const HWTeam& team);
   void hhogsNumChanged(const HWTeam&);
+  void teamColorChanged(const HWTeam&);
   
  private slots:
   void changeTeamStatus(HWTeam team);
   void newTeamClicked();
   void hhNumChanged(const HWTeam& team);
+  void proxyTeamColorChanged(const HWTeam& team);
 
  private:
   void addScrArea(FrameTeams* pfteams, QColor color, int maxHeight);

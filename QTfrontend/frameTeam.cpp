@@ -76,8 +76,15 @@ void FrameTeams::removeTeam(HWTeam team)
 void FrameTeams::setHHNum(const HWTeam& team)
 {
   TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
-  if(!pTeamShowWidget) throw;
+  if(!pTeamShowWidget) return;
   pTeamShowWidget->setHHNum(team.numHedgehogs);
+}
+
+void FrameTeams::setTeamColor(const HWTeam& team)
+{
+  TeamShowWidget* pTeamShowWidget = dynamic_cast<TeamShowWidget*>(getTeamWidget(team));
+  if(!pTeamShowWidget) return;
+  pTeamShowWidget->changeTeamColor(team.teamColor);
 }
 
 QWidget* FrameTeams::getTeamWidget(HWTeam team)
@@ -90,4 +97,9 @@ QWidget* FrameTeams::getTeamWidget(HWTeam team)
 bool FrameTeams::isFullTeams() const
 {
   return overallHedgehogs==maxHedgehogsPerGame;
+}
+
+void FrameTeams::emitTeamColorChanged(const HWTeam& team)
+{
+  emit teamColorChanged(team);
 }
