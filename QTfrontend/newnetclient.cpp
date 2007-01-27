@@ -208,6 +208,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if(lst[0]=="TEAM_ACCEPTED") {
     m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
+    m_pTeamSelWidget->changeTeamStatus(lst[1]);
     return;
   }
 

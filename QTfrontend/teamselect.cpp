@@ -40,8 +40,13 @@ void TeamSelWidget::addTeam(HWTeam team)
   } else {
     frameDontPlaying->addTeam(team, false);
     curDontPlayingTeams.push_back(team);
-    QObject::connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-		     this, SLOT(changeTeamStatus(HWTeam)));
+    if(m_acceptOuter) {
+      connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+	      this, SLOT(pre_changeTeamStatus(HWTeam)));
+    } else {
+      connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+	      this, SLOT(changeTeamStatus(HWTeam)));
+    }
   }
 }
 
@@ -124,7 +129,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     if(framePlaying->isFullTeams()) return;
     // dont playing team => playing
     curPlayingTeams.push_back(*itDontPlay);
-    emit teamWillPlay(*itDontPlay);
+    if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
     curDontPlayingTeams.erase(itDontPlay);
   }
 
@@ -168,7 +173,7 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
-  QGroupBox(parent), mainLayout(this)
+  QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
 {
   setTitle(QGroupBox::tr("Playing teams"));
   framePlaying=new FrameTeams();
@@ -182,6 +187,11 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   newTeam->setText(QPushButton::tr("New team"));
   connect(newTeam, SIGNAL(clicked()), this, SLOT(newTeamClicked()));
   mainLayout.addWidget(newTeam);
+}
+
+void TeamSelWidget::setAcceptOuter(bool acceptOuter)
+{
+  m_acceptOuter=acceptOuter;
 }
 
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
@@ -210,6 +220,11 @@ bool TeamSelWidget::isPlaying(HWTeam team) const
 QList<HWTeam> TeamSelWidget::getPlayingTeams() const
 {
   return curPlayingTeams;
+}
+
+void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
+{
+  emit acceptRequested(team);
 }
 
 void TeamSelWidget::newTeamClicked()

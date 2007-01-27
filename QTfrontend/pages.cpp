@@ -470,6 +470,7 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(pGameCFG, 0, 0);
 
 	pNetTeamsWidget = new TeamSelWidget(this);
+	pNetTeamsWidget->setAcceptOuter(true);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1);
 
 	BtnBack = new QPushButton(this);
