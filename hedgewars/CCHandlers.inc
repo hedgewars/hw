@@ -100,7 +100,8 @@ procedure chColor(var id: shortstring);
 var c: LongInt;
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
-val(id, CurrentTeam^.Color, c);
+//val(id, CurrentTeam^.Color, c);
+CurrentTeam^.Color:= random($FFFFFF);
 CurrentTeam^.AdjColor:= CurrentTeam^.Color;
 AdjustColor(CurrentTeam^.AdjColor)
 end;

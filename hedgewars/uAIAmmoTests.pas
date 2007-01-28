@@ -22,8 +22,8 @@ uses SDLh, uGears, uConsts, uFloat;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-(*function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+(*function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 *)
@@ -34,7 +34,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amClusterBomb}   nil,
 {amBazooka}       @TestBazooka,
 {amUFO}           nil,
-{amShotgun}       nil,//TestShotgun,
+{amShotgun}       @TestShotgun,
 {amPickHammer}    nil,
 {amSkip}          nil,
 {amRope}          nil,
@@ -92,11 +92,11 @@ var Vx, Vy, r: hwFloat;
 
 begin
 Time:= 0;
-rTime:= 50;
+rTime:= 350;
 ExplR:= 0;
 Result:= BadTurn;
 repeat
-  rTime:= rTime + 300 + Level * 50 + random(200);
+  rTime:= rTime + 300 + Level * 50 + random(300);
   Vx:= - cWindSpeed * rTime * _0_5 + (Targ.X - hwRound(Me^.X)) / rTime;
   Vy:= cGravity * rTime * _0_5 - (Targ.Y - hwRound(Me^.Y)) / rTime;
   r:= Distance(Vx, Vy);
@@ -113,7 +113,7 @@ repeat
         Result:= Score
         end;
      end
-until (rTime > 4500);
+until (rTime > 4250);
 TestBazooka:= Result
 end;
 
@@ -169,37 +169,40 @@ repeat
 until (TestTime = 5000);
 TestGrenade:= Result
 end;
-{
+
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y: hwFloat;
-begin       
+    rx, ry, Result: LongInt;
+begin
 ExplR:= 0;
-if Metric(round(Me.X), round(Me.Y), Targ.X, Targ.Y) < 80 then
+if Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y) < 80 then
    begin
    Result:= BadTurn;
    exit
    end;
 Time:= 0;
 Power:= 1;
-Vx:= (Targ.X - Me.X)/1024;
-Vy:= (Targ.Y - Me.Y)/1024;
-x:= Me.X;
-y:= Me.Y;
+Vx:= (Targ.X - Me^.X) * _1div1024;
+Vy:= (Targ.Y - Me^.Y) * _1div1024;
+x:= Me^.X;
+y:= Me^.Y;
 Angle:= DxDy2AttackAngle(Vx, -Vy);
 repeat
   x:= x + vX;
   y:= y + vY;
-  if TestColl(round(x), round(y), 2) then
+  rx:= hwRound(x);
+  ry:= hwRound(y);
+  if TestColl(rx, ry, 2) then
      begin
-     Result:= RateShove(Me, round(x), round(y), 25, 25) * 2;
-     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, round(x), round(y)) div 64
+     Result:= RateShove(Me, rx, ry, 25, 25) * 2;
+     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
                    else dec(Result, Level * 4000);
-     exit
+     exit(Result)
      end
-until (abs(Targ.X - x) + abs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
-Result:= BadTurn
+until (hwAbs(Targ.X - x) + hwAbs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
+TestShotgun:= BadTurn
 end;
-
+{
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y, t: hwFloat;
     d: Longword;

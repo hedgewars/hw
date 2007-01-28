@@ -302,7 +302,7 @@ GoInfo.JumpType:= jmpNone;
 repeat
 pX:= hwRound(Gear^.X);
 pY:= hwRound(Gear^.Y);
-if pY + cHHRadius >= cWaterLine then exit;
+if pY + cHHRadius >= cWaterLine then exit(false);
 if (Gear^.State and gstFalling) <> 0 then
    begin
    inc(GoInfo.Ticks);
@@ -380,12 +380,10 @@ if (Gear^.State and gstFalling) <> 0 then
    end
    end;
 if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstFalling) = 0) then
-   begin
-   Result:= true;
-   exit(Result)
-   end
+   exit(true);
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstFalling) = 0);
-HHJump(AltGear, jmpHJump, GoInfo)
+HHJump(AltGear, jmpHJump, GoInfo);
+HHGo:= Result
 end;
 
 function AIrndSign(num: LongInt): LongInt;

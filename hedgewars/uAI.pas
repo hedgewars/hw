@@ -134,7 +134,7 @@ repeat
                   AddAction(MadeActions, aia_HJump, 0, 305, 0, 0);
                   AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
                   if (Me^.dX < 0) then AddAction(MadeActions, aia_WaitXL, hwRound(AltMe.X), 0, 0, 0)
-                                 else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
+                                  else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
                   end;
        if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
@@ -142,7 +142,7 @@ repeat
                   begin
                   AddAction(MadeActions, aia_LJump, 0, 305, 0, 0);
                   if (Me^.dX < 0) then AddAction(MadeActions, aia_WaitXL, hwRound(AltMe.X), 0, 0, 0)
-                                 else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
+                                  else AddAction(MadeActions, aia_WaitXR, hwRound(AltMe.X), 0, 0, 0);
                   end;
        if not CanGo then break;
        inc(steps);
@@ -162,13 +162,13 @@ repeat
        if ((Me^.State and gstAttacked) = 0)
            and ((steps mod 4) = 0) then
            begin
-           if SDL_GetTicks - AIThinkStart > 3 then
+           TestAmmos(Actions, Me);
+           if SDL_GetTicks - AIThinkStart >= cTimerInterval then
               begin
               dec(Actions.Count, 3);
               Push(ticks, Actions, Me^, Me^.Message);
               exit
-              end;
-           TestAmmos(Actions, Me)
+              end
            end
        end;
 until false
