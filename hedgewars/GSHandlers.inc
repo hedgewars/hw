@@ -220,6 +220,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepUFOWork(Gear: PGear);
 var t: hwFloat;
+    y: LongInt;
 begin
 AllInactive:= false;
 t:= Distance(Gear^.dX, Gear^.dY);
@@ -230,6 +231,14 @@ Gear^.dX:= Gear^.dX * t;
 Gear^.dY:= Gear^.dY * t;
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
+
+if (GameTicks and $3F) = 0 then
+   begin
+   y:= hwRound(Gear^.Y);
+   if y + Gear^.Radius < cWaterLine then
+      AddGear(hwRound(Gear^.X), y, gtSmokeTrace, 0, 0, 0, 0);
+   end;
+
 CheckCollision(Gear);
 dec(Gear^.Timer);
 if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then

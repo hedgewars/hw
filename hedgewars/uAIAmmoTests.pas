@@ -21,8 +21,8 @@ interface
 uses SDLh, uGears, uConsts, uFloat;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-(*function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+(*function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
@@ -30,7 +30,7 @@ function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longwo
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
-{amGrenade}       nil,//TestGrenade,
+{amGrenade}       @TestGrenade,
 {amClusterBomb}   nil,
 {amBazooka}       @TestBazooka,
 {amUFO}           nil,
@@ -116,19 +116,19 @@ repeat
 until (rTime > 4500);
 TestBazooka:= Result
 end;
-{
+
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: hwFloat;
-    Score, EX, EY: LongInt;
+    Score, EX, EY, Result: LongInt;
     TestTime: Longword;
 
     function CheckTrace: LongInt;
     var x, y, dY: hwFloat;
         t: LongInt;
     begin
-    x:= Me.X;
-    y:= Me.Y;
+    x:= Me^.X;
+    y:= Me^.Y;
     dY:= -Vy;
     t:= TestTime;
     repeat
@@ -136,11 +136,11 @@ var Vx, Vy, r: hwFloat;
       y:= y + dY;
       dY:= dY + cGravity;
       dec(t)
-    until TestColl(round(x), round(y), 5) or (t = 0);
-    EX:= round(x);
-    EY:= round(y);
-    if t < 50 then Result:= RateExplosion(Me, round(x), round(y), 101)
-              else Result:= Low(LongInt)
+    until TestColl(hwRound(x), hwRound(y), 5) or (t = 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 101)
+              else CheckTrace:= Low(LongInt)
     end;
 
 begin
@@ -149,17 +149,16 @@ TestTime:= 0;
 ExplR:= 0;
 repeat
   inc(TestTime, 1000);
-  Vx:= (Targ.X - Me.X) / (TestTime + tDelta);
-  Vy:= cGravity*((TestTime + tDelta) div 2) - (Targ.Y - Me.Y) / (TestTime + tDelta);
-  r:= sqr(Vx) + sqr(Vy);
-  if r <= 1 then
+  Vx:= (Targ.X - Me^.X) / (TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (Targ.Y - Me^.Y) / (TestTime + tDelta);
+  r:= Distance(Vx, Vy);
+  if not (r > 1) then
      begin
      Score:= CheckTrace;
      if Result < Score then
         begin
-        r:= sqrt(r);
-        Angle:= DxDy2AttackAngle(Vx, Vy) + rndSign(random(Level));
-        Power:= round(r * cMaxPower) + rndSign(random(Level) * 12);
+        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 12);
         Time:= TestTime;
         ExplR:= 100;
         ExplX:= EX;
@@ -167,9 +166,10 @@ repeat
         Result:= Score
         end;
      end
-until (TestTime = 5000)
+until (TestTime = 5000);
+TestGrenade:= Result
 end;
-
+{
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y: hwFloat;
 begin       
