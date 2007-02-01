@@ -234,8 +234,12 @@ while t <> nil do
 end;
 
 procedure KeyPressConsole(Key: Longword);
+const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
+var i, btw: integer;
+    utf8: shortstring;
 begin
-case Key of
+if Key <> 0 then
+  case Key of
       8: if Length(InputStr)>0 then dec(InputStr[0]);
       9: AutoComplete;
  13,271: begin
@@ -250,7 +254,19 @@ case Key of
          cConsoleYAdd:= 0;
          ResetKbd
          end;
-     else InputStr:= InputStr + char(Key)
+     else
+     if (Key < $80) then btw:= 1
+     else if (Key < $800) then btw:= 2
+     else if (Key < $10000) then btw:= 3
+     else btw:= 4;
+     utf8:= '';
+     for i:= btw downto 2 do
+         begin
+         utf8:= char((Key or $80) and $BF) + utf8;
+         Key:= Key shr 6
+         end;
+     utf8:= char(Key or firstByteMark[btw]) + utf8;
+     InputStr:= InputStr + utf8
      end
 end;
 

@@ -140,7 +140,7 @@ while SDL_PollEvent(@event) <> 0 do
                                         cConsoleYAdd:= cConsoleHeight;
                                         GameState:= gsConsole
                                         end;
-                          gsConsole: KeyPressConsole(event.key.keysym.sym);
+                          gsConsole: KeyPressConsole(event.key.keysym.unicode);
                              end;
            SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                                cHasFocus:= event.active.gain = 1;
@@ -212,6 +212,7 @@ begin
 WriteToConsole('Init SDL... ');
 SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
 WriteLnToConsole(msgOK);
+SDL_EnableUNICODE(1);
 
 WriteToConsole('Init SDL_ttf... ');
 SDLTry(TTF_Init <> -1, true);
