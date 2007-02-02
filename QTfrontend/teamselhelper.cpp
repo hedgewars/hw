@@ -118,7 +118,16 @@ void TeamShowWidget::changeTeamColor(QColor color)
     if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
       pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
     }
-    color=QColor(*pOurFrameTeams->currentColor);
+    color=*pOurFrameTeams->currentColor;
+  } else {
+    // set according color iterator
+    pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(), 
+					   pOurFrameTeams->availableColors.end(), color);
+    if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
+      // error condition
+      throw;
+      pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+    }
   }
 
   QPalette newPalette = palette();
