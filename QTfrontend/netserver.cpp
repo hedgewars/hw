@@ -239,13 +239,22 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="ADDTEAM:") {
-    if(lst.size()<10) return;
+    if(lst.size()<11) return;
     lst.pop_front();
+    
     // add team ID
     static unsigned int netTeamID=1;
     lst.insert(1, QString::number(netTeamID++));
 
+    // creating color config for new team
+    QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3%1%4").arg(delimeter).arg(lst[0])\
+      .arg(netTeamID)\
+      .arg(lst.takeAt(2));
+    qDebug() << "color config:" << colorCfg;
+
+    m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
     m_teamsCfg.push_back(lst);
+
     m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
     RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(lst[0]).arg(lst[1]));
     return;

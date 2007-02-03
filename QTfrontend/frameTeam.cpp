@@ -54,6 +54,14 @@ void FrameTeams::resetColors()
   currentColor=availableColors.begin();
 }
 
+QColor FrameTeams::getNextColor() const
+{
+  QList<QColor>::ConstIterator nextColor=currentColor;
+  ++nextColor;
+  if (nextColor==availableColors.end()) nextColor=availableColors.begin();
+  return *nextColor;
+}
+
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
   TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);

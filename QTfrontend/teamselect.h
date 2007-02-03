@@ -21,6 +21,7 @@
 
 #include <QGroupBox>
 #include <QVBoxLayout>
+#include <QColor>
 
 #include <list>
 #include <map>

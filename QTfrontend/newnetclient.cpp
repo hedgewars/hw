@@ -61,7 +61,9 @@ void HWNewNet::JoinGame(const QString & game)
 void HWNewNet::AddTeam(const HWTeam & team)
 {
   RawSendNet(QString("ADDTEAM:") + delimeter +
-	     team.TeamName + delimeter + team.HHName[0] + delimeter + team.HHName[1] + delimeter +
+	     team.TeamName + delimeter +
+	     team.teamColor.name() + delimeter +
+	     team.HHName[0] + delimeter + team.HHName[1] + delimeter +
 	     team.HHName[2] + delimeter + team.HHName[3] + delimeter + team.HHName[4] + delimeter +
 	     team.HHName[5] + delimeter + team.HHName[6] + delimeter + team.HHName[7]);
 }

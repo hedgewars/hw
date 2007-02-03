@@ -41,6 +41,7 @@ class FrameTeams : public QWidget
   void setHHNum(const HWTeam& team);
   void setTeamColor(const HWTeam& team);
   void setNonInteractive();
+  QColor getNextColor() const;
 
  signals:
   void teamColorChanged(const HWTeam&);

@@ -224,6 +224,7 @@ QList<HWTeam> TeamSelWidget::getPlayingTeams() const
 
 void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
 {
+  team.teamColor=framePlaying->getNextColor();
   emit acceptRequested(team);
 }
 
