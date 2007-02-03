@@ -73,8 +73,8 @@ void TCPBase::RealStart()
 void TCPBase::ClientDisconnect()
 {
   IPCSocket->close();
-  delete IPCSocket;
-  IPCSocket = 0;
+  IPCSocket->deleteLater();
+  // IPCSocket = 0; // FIXME: breaks image receiving
 
   onClientDisconnect();
 
