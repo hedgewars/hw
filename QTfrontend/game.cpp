@@ -260,6 +260,7 @@ void HWGame::SaveDemo(const QString & filename)
 	stream.writeRawData(demo->constData(), demo->size());
 	demofile.close();
 	delete demo;
+	demo=0;
 }
 
 void HWGame::PlayDemo(const QString & demofilename)

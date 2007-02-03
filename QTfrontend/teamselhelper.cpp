@@ -125,7 +125,6 @@ void TeamShowWidget::changeTeamColor(QColor color)
 					   pOurFrameTeams->availableColors.end(), color);
     if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
       // error condition
-      throw;
       pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
     }
   }
