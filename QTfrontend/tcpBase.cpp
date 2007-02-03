@@ -51,11 +51,10 @@ void TCPBase::NewConnection()
     // connection should be already finished
     return;
   }
-  QTcpSocket * client = IPCServer->nextPendingConnection();
-  if(!client) return;
-  IPCSocket = client;
-  connect(client, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-  connect(client, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+  IPCSocket = IPCServer->nextPendingConnection();
+  if(!IPCSocket) return;
+  connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
+  connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   SendToClientFirst();
 }
 
@@ -74,6 +73,8 @@ void TCPBase::RealStart()
 void TCPBase::ClientDisconnect()
 {
   IPCSocket->close();
+  delete IPCSocket;
+  IPCSocket = 0;
 
   onClientDisconnect();
 
