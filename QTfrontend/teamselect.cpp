@@ -145,8 +145,13 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
 
   pAddTeams->addTeam(team, willBePlaying);
   pRemoveTeams->removeTeam(team);
-  QObject::connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-		   this, SLOT(changeTeamStatus(HWTeam)));
+  if(!team.isNetTeam() && m_acceptOuter && !willBePlaying) {
+    connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+	    this, SLOT(pre_changeTeamStatus(HWTeam)));
+  } else {
+    connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+	    this, SLOT(changeTeamStatus(HWTeam)));
+  }
   if(willBePlaying) {
     connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
 	    this, SLOT(hhNumChanged(const HWTeam&)));
