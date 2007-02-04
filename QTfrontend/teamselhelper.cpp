@@ -83,6 +83,7 @@ void TeamShowWidget::setNonInteractive()
     disconnect(butt, SIGNAL(clicked()));
     disconnect(bText, SIGNAL(clicked()));
   }
+  disconnect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
   phhoger->setNonInteractive();
 }
 
