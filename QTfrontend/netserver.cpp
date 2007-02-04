@@ -205,8 +205,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 {
   QString msg = QString::fromUtf8 (line.data(), line.size());
 
-  qDebug() << "line " << msg << " received";
-
   QStringList lst = msg.split(delimeter);
   if(!lst.size()) return;
   if (lst[0] == "NICK") {

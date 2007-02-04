@@ -87,7 +87,6 @@ void HWNewNet::SendConfigToEngine()
 void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
-  qDebug() << "to net:" << buf << ":" << msg;
 
   if(msg == "AUM=") {
     SendConfigToEngine();
@@ -150,8 +149,6 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 void HWNewNet::ParseLine(const QByteArray & line)
 {
   QString msg = QString::fromUtf8 (line.data(), line.size());
-
-  qDebug() << "line " << msg << " received";
 
   QStringList lst = msg.split(delimeter);
   if (lst[0] == "ERRONEUSNICKNAME") {
