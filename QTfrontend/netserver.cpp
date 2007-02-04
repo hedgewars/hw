@@ -138,6 +138,14 @@ bool HWNetServer::shouldStart(HWConnectedClient* client)
   return true;
 }
 
+void HWNetServer::resetStart()
+{
+  QList<HWConnectedClient*>::iterator it;
+  for(it=connclients.begin(); it!=connclients.end(); ++it) {
+    (*it)->readyToStart=false;
+  }
+}
+
 QString HWNetServer::prepareConfig(QStringList lst)
 {
   QString msg=lst.join((QString)delimeter)+delimeter;
@@ -234,6 +242,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     if(m_hwserver->shouldStart(this)) {
       // start
       m_hwserver->sendAll("RUNGAME");
+      m_hwserver->resetStart();
     }
     return;
   }

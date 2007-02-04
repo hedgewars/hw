@@ -89,6 +89,7 @@ class HWNetServer : public QObject
   void teamChanged();
   bool shouldStart(HWConnectedClient* client);
   QString prepareConfig(QStringList lst);
+  void resetStart();
 
  private:
   HWConnectedClient* getChiefClient() const;
