@@ -829,16 +829,16 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 var fx, x: LongInt;
     y, sy: LongInt;
-    ar: array[0..512] of TPoint;
-    cnt, delta: Longword;
+    ar: array[0..511] of TPoint;
+    ar2: array[0..1023] of TPoint;
+    cnt, cnt2, delta: Longword;
 begin
-fx:= Left + LongInt(GetRandom(Right - Left));
-x:= fx;
-delta:= 130;
+delta:= 250;
+cnt2:= 0;
 repeat
+  x:= Left + GetRandom(Delta);
   repeat
-     inc(x, Gear^.Radius);
-     if x > Right then x:= Left + (x mod (Right - left));
+     inc(x, Delta);
      cnt:= 0;
      y:= -Gear^.Radius * 2;
      while y < 1023 do
@@ -859,23 +859,32 @@ repeat
                        else ar[cnt].Y:= y - Gear^.Radius;
            inc(cnt)
            end;
-        inc(y, 80)
+        inc(y, 45)
         end;
      if cnt > 0 then
         with ar[GetRandom(cnt)] do
           begin
-          Gear^.X:= x;
-          Gear^.Y:= y;
-         {$IFDEF DEBUGFILE}
-         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
-         {$ENDIF}
-          exit
+          ar2[cnt2].x:= x;
+          ar2[cnt2].y:= y;
+          inc(cnt2)
           end
-  until (x - Gear^.Radius < fx) and (x + Gear^.Radius > fx);
-dec(Delta, 20)
-until (Delta < 70);
-OutError('Couldn''t find place for Gear', false);
-DeleteGear(Gear)
+  until (x + Delta > Right);
+dec(Delta, 60)
+until (cnt2 > 0) or (Delta < 70);
+if cnt2 > 0 then
+   with ar2[GetRandom(cnt2)] do
+      begin
+      Gear^.X:= x;
+      Gear^.Y:= y;
+      {$IFDEF DEBUGFILE}
+      AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
+      {$ENDIF}
+      end
+   else
+   begin
+   OutError('Can''t find place for Gear', false);
+   DeleteGear(Gear)
+   end
 end;
 
 initialization
