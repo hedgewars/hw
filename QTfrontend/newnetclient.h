@@ -52,6 +52,7 @@ class HWNewNet : public QObject
   QString mynick;
   QTcpSocket NetSocket;
   QString seed;
+  bool m_game_connected;
 
   QMap<unsigned int, QString> m_networkToLocalteams; // key is netID, value is local team name
 

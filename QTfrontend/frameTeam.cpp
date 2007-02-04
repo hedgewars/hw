@@ -67,8 +67,8 @@ void FrameTeams::addTeam(HWTeam team, bool willPlay)
   TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
   if(nonInteractive) pTeamShowWidget->setNonInteractive();
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
-  teamToWidget.insert(team, pTeamShowWidget);
   mainLayout.addWidget(pTeamShowWidget);
+  teamToWidget.insert(team, pTeamShowWidget);
   QResizeEvent* pevent=new QResizeEvent(parentWidget()->size(), parentWidget()->size());
   QCoreApplication::postEvent(parentWidget(), pevent);
 }
@@ -76,9 +76,19 @@ void FrameTeams::addTeam(HWTeam team, bool willPlay)
 void FrameTeams::removeTeam(HWTeam team)
 {
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
+  if(it==teamToWidget.end()) return;
   mainLayout.removeWidget(it.value());
   delete it.value();
   teamToWidget.erase(it);
+}
+
+void FrameTeams::resetTeams()
+{
+  for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ) {
+    mainLayout.removeWidget(it.value());
+    delete it.value();
+    teamToWidget.erase(it++);
+  }
 }
 
 void FrameTeams::setHHNum(const HWTeam& team)

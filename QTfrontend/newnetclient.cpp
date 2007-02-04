@@ -32,7 +32,8 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
   config(config),
   m_pGameCFGWidget(pGameCFGWidget),
   m_pTeamSelWidget(pTeamSelWidget),
-  isChief(false)
+  isChief(false),
+  m_game_connected(false)
 {
   connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -50,7 +51,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 
 void HWNewNet::Disconnect()
 {
-  NetSocket.disconnect();
+  NetSocket.disconnectFromHost();
 }
 
 void HWNewNet::JoinGame(const QString & game)
@@ -123,7 +124,8 @@ void HWNewNet::OnConnect()
 void HWNewNet::OnDisconnect()
 {
   //emit ChangeInTeams(QStringList());
-  emit Disconnected();
+  if(m_game_connected) emit Disconnected();
+  m_game_connected=false;
 }
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
@@ -158,6 +160,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "CONNECTED") {
+    m_game_connected=true;
     emit Connected();
     emit EnteredGame();
     return;

@@ -197,14 +197,16 @@ void TeamSelWidget::setAcceptOuter(bool acceptOuter)
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
 {
   QList<HWTeam>::iterator it;
-  for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
-    framePlaying->removeTeam(*it);
-  }
+  //for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
+  //framePlaying->removeTeam(*it);
+  //}
+  framePlaying->resetTeams();
   framePlaying->resetColors();
   curPlayingTeams.clear();
-  for(it=curDontPlayingTeams.begin(); it!=curDontPlayingTeams.end(); it++) {
-    frameDontPlaying->removeTeam(*it);
-  }
+  //for(it=curDontPlayingTeams.begin(); it!=curDontPlayingTeams.end(); it++) {
+  //frameDontPlaying->removeTeam(*it);
+  //}
+  frameDontPlaying->resetTeams();
   curDontPlayingTeams.clear();
 
   for (QList<HWTeam>::ConstIterator it = teamslist.begin(); it != teamslist.end(); ++it ) {

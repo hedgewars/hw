@@ -70,6 +70,7 @@ private slots:
 	void StartMPGame();
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
+	void ForcedDisconnect();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

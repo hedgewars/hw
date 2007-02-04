@@ -181,7 +181,7 @@ void HWForm::GoToPage(quint8 id)
 void HWForm::GoBack()
 {
 	if (!PagesStack.isEmpty() && PagesStack.top() == ID_PAGE_NET) {
-	  NetDisconnect();
+	  if(hwnet || pnetserver) NetDisconnect();
 	}
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
 	OnPageShown(id);
@@ -261,6 +261,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(turnTimeChanged(quint32)), hwnet, SLOT(onTurnTimeChanged(quint32)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(fortsModeChanged(bool)), hwnet, SLOT(onFortsModeChanged(bool)));
 
+	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()));
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
 	connect(hwnet, SIGNAL(mapChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setMap(const QString &)));
 	connect(hwnet, SIGNAL(themeChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setTheme(const QString &)));
@@ -290,14 +291,26 @@ void HWForm::NetStartServer()
 
 void HWForm::NetDisconnect()
 {
-  hwnet->Disconnect();
-  delete hwnet;
-  hwnet=0;
+  if(hwnet) {
+    hwnet->Disconnect();
+    delete hwnet;
+    hwnet=0;
+  }
   if(pnetserver) {
     pnetserver->StopServer();
     delete pnetserver;
     pnetserver=0;
   }
+}
+
+void HWForm::ForcedDisconnect()
+{
+  if(pnetserver) return; // we have server - let it care of all things
+  if (hwnet) {
+    hwnet->deleteLater();
+    hwnet=0;
+  }
+  GoBack();
 }
 
 void HWForm::AddGame(const QString & chan)

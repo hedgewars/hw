@@ -44,6 +44,10 @@ void HWNetServer::StartServer()
 
 void HWNetServer::StopServer()
 {
+  QList<HWConnectedClient*>::iterator it;
+  for(it=connclients.begin(); it!=connclients.end(); ++it) {
+    ClientDisconnect(*it);
+  }
   IPCServer->close();
 }
 
@@ -59,8 +63,9 @@ void HWNetServer::NewConnection()
 void HWNetServer::ClientDisconnect(HWConnectedClient* client)
 {
   QList<HWConnectedClient*>::iterator it=std::find(connclients.begin(), connclients.end(), client);
+  if(it==connclients.end()) return;
   for(QList<QStringList>::iterator tmIt=(*it)->m_teamsCfg.begin(); tmIt!=(*it)->m_teamsCfg.end(); ++tmIt) {
-    sendOthers(*it, QString("REMOVETEAM:")+delimeter+*(tmIt->begin()));
+    sendOthers(*it, QString("REMOVETEAM:")+delimeter+*(tmIt->begin()) + delimeter + *(tmIt->begin()+1));
   }
   connclients.erase(it);
   //teamChanged();
