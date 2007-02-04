@@ -26,6 +26,7 @@
 #include <QString>
 #include <QDir>
 #include <QProcess>
+#include <QPointer>
 
 #include <QImage>
 
@@ -34,7 +35,7 @@
 class TCPBase : public QObject
 {
   Q_OBJECT
-    
+
  public:
   TCPBase(bool demoMode);
 
@@ -60,11 +61,11 @@ class TCPBase : public QObject
   virtual void SendToClientFirst();
 
  private:
-  static QTcpServer* IPCServer;
+  static QPointer<QTcpServer> IPCServer;
 
   bool m_isDemoMode;
   void RealStart();
-  QTcpSocket * IPCSocket;
+  QPointer<QTcpSocket> IPCSocket;
 
  private slots:
   void NewConnection();

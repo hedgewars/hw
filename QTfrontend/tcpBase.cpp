@@ -26,7 +26,7 @@
 #include "hwconsts.h"
 
 QList<TCPBase*> srvsList;
-QTcpServer* TCPBase::IPCServer(0);
+QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::TCPBase(bool demoMode) :
   m_isDemoMode(demoMode),
@@ -51,9 +51,11 @@ void TCPBase::NewConnection()
     // connection should be already finished
     return;
   }
+  disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
   IPCSocket = IPCServer->nextPendingConnection();
   if(!IPCSocket) return;
   connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
+  connect(IPCSocket, SIGNAL(disconnected()), IPCSocket, SLOT(deleteLater()));
   connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   SendToClientFirst();
 }
@@ -62,7 +64,7 @@ void TCPBase::RealStart()
 {
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
   IPCSocket = 0;
-  
+
   QProcess * process;
   process = new QProcess;
   connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
@@ -72,10 +74,6 @@ void TCPBase::RealStart()
 
 void TCPBase::ClientDisconnect()
 {
-  IPCSocket->close();
-  IPCSocket->deleteLater();
-  // IPCSocket = 0; // FIXME: breaks image receiving
-
   onClientDisconnect();
 
   readbuffer.clear();
@@ -99,7 +97,7 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 
 void TCPBase::tcpServerReady()
 {
-  disconnect(srvsList.front(), SIGNAL(isReadyNow()), *(++srvsList.begin()), SLOT(tcpServerReady()));
+  disconnect(srvsList.front(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
   srvsList.pop_front();
 
   RealStart();
@@ -114,7 +112,7 @@ void TCPBase::Start()
     srvsList.push_back(this);
     return;
   }
-  
+
   RealStart();
 }
 
