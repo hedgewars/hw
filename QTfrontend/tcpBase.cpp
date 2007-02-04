@@ -33,7 +33,7 @@ TCPBase::TCPBase(bool demoMode) :
   IPCSocket(0)
 {
   if(!IPCServer) {
-    IPCServer = new QTcpServer(this);
+    IPCServer = new QTcpServer(0);
     IPCServer->setMaxPendingConnections(1);
     if (!IPCServer->listen(QHostAddress::LocalHost)) {
       QMessageBox::critical(0, tr("Error"),
@@ -80,6 +80,7 @@ void TCPBase::ClientDisconnect()
 
   if(srvsList.size()==1) srvsList.pop_front();
   emit isReadyNow();
+  deleteLater();
 }
 
 void TCPBase::ClientRead()
@@ -97,8 +98,7 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 
 void TCPBase::tcpServerReady()
 {
-  disconnect(srvsList.front(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
-  srvsList.pop_front();
+  disconnect(srvsList.takeFirst(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
 
   RealStart();
 }
