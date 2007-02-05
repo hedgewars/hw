@@ -46,12 +46,14 @@ if isDeveloperMode then
    end
 end;
 
-procedure chAddTeam(var s: shortstring);
 const TeamsCount: Longword = 0;
+
+procedure chAddTeam(var s: shortstring);
 begin
 if isDeveloperMode then
    begin
    inc(TeamsCount);
+   ParseCommand('ammstore 93919294221912103', true);
    TryDo(TeamsCount <= 5, 'Too many teams', true);
    AddTeam
    end;
@@ -110,7 +112,7 @@ var s: shortstring;
     c: LongInt;
     Gear: PGear;
 begin
-if (not isDeveloperMode)or(CurrentTeam=nil) then exit;
+if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
      begin
      SplitBySpace(id, s);
@@ -120,7 +122,7 @@ with CurrentTeam^ do
      val(s, Gear^.Health, c);
      TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
      PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
-     Hedgehogs[HedgehogsNumber].AmmoStore:= 0;
+     Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1;
      Hedgehogs[HedgehogsNumber].Gear:= Gear;
      inc(HedgehogsNumber)
      end

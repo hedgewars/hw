@@ -232,7 +232,6 @@ s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
 InitTeams;
-ParseCommand('ammstore 91911111111111108', true);
 AssignStores;
 
 if isSoundEnabled then InitSound;

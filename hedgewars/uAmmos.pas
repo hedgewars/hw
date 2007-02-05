@@ -107,7 +107,7 @@ for slot:= 0 to cMaxSlotIndex do
         if hhammo^[slot, ami].Count > 0 then
            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
 
-if ammos[ammo] <> AMMO_INFINITE then inc(ammos[ammo]);
+if ammos[ammo] <> AMMO_INFINITE then inc(ammos[ammo], Ammoz[ammo].NumberInCase);
 FillAmmoStore(hhammo, ammos)
 end;
 

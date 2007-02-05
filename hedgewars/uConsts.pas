@@ -328,12 +328,15 @@ const
 
       Ammoz: array [TAmmoType] of record
                                   NameId: TAmmoStrId;
+                                  Probability, NumberInCase: Longword;
                                   Ammo: TAmmo;
                                   Slot: 0..cMaxSlotIndex;
                                   TimeAfterTurn: Longword;
                                   minAngle, maxAngle: Longword;
                                   end = (
                                   (NameId: sidGrenade;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Timerable or
                                                  ammoprop_Power;
                                           Count: AMMO_INFINITE;
@@ -345,6 +348,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidClusterBomb;
+                                   Probability: 100;
+                                   NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_Timerable or
                                                  ammoprop_Power;
                                           Count: 5;
@@ -356,6 +361,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidBazooka;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Power;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
@@ -366,6 +373,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidUFO;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Power or
                                                  ammoprop_NeedTarget;
                                           Count: 2;
@@ -377,6 +386,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidShotgun;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 1;
@@ -387,6 +398,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidPickHammer;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInFall or
                                                  ammoprop_AttackInJump or
@@ -400,6 +413,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidSkip;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: 0;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
@@ -410,6 +425,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidRope;
+                                   Probability: 100;
+                                   NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInFall or
                                                  ammoprop_AttackInJump;
@@ -422,6 +439,8 @@ const
                                    minAngle: 0;
                                    maxAngle: cMaxAngle div 2),
                                   (NameId: sidMine;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;
@@ -432,6 +451,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidDEagle;
+                                   Probability: 100;
+                                   NumberInCase: 2;
                                    Ammo: (Propz: 0;
                                           Count: 3;
                                           NumPerTurn: 3;
@@ -442,6 +463,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                    (NameId: sidDynamite;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                     Ammo: (Propz: ammoprop_NoCrosshair or
                                                   ammoprop_AttackInJump or
                                                   ammoprop_AttackInFall;
@@ -454,6 +477,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                    (NameId: sidFirePunch;
+                                   Probability: 0;
+                                   NumberInCase: 1;
                                     Ammo: (Propz: ammoprop_NoCrosshair or
                                                   ammoprop_ForwMsgs or
                                                   ammoprop_AttackInJump or
@@ -467,6 +492,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                    (NameId: sidBaseballBat;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                     Ammo: (Propz: 0;
                                            Count: 1;
                                            NumPerTurn: 0;
@@ -477,6 +504,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidParachute;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInJump or
                                                  ammoprop_AttackInFall;
@@ -489,6 +518,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidAirAttack;
+                                   Probability: 100;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
                                                  ammoprop_AttackingPut;
@@ -501,6 +532,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidMineStrike;
+                                   Probability: 400;
+                                   NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
                                                  ammoprop_AttackingPut;
@@ -513,6 +546,8 @@ const
                                    minAngle: 0;
                                    maxAngle: 0),
                                   (NameId: sidBlowTorch;
+                                   Probability: 100;
+                                   NumberInCase: 2;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
                                           Count: 1;
                                           NumPerTurn: 0;

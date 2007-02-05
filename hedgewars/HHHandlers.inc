@@ -116,7 +116,7 @@ case Gear^.Pos of
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog), a);
-                    s:= trammo[Ammoz[a].NameId];
+                    s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                     AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Color, capgrpAmmoinfo);
                     end;
      posCaseHealth: begin

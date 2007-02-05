@@ -221,7 +221,7 @@ gtAmmo_Grenade: begin
                 end;
         gtRope: begin
                 Result^.Radius:= 3;
-                Result^.Friction:= 500;
+                Result^.Friction:= 450;
                 RopePoints.Count:= 0;
                 end;
    gtExplosion: begin
@@ -798,6 +798,8 @@ CountGears:= Result
 end;
 
 procedure SpawnBoxOfSmth;
+var t: LongInt;
+    i: TAmmoType;
 begin
 if (CountGears(gtCase) >= 5) or (getrandom(cCaseFactor) <> 0) then exit;
 FollowGear:= AddGear(0, 0, gtCase, 0, 0, 0, 0);
@@ -807,8 +809,19 @@ case getrandom(2) of
         FollowGear^.Pos:= posCaseHealth
         end;
      1: begin
+        t:= 0;
+        for i:= Low(TAmmoType) to High(TAmmoType) do
+            inc(t, Ammoz[i].Probability);
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        dec(t, Ammoz[i].Probability);
+        while t >= 0 do
+          begin
+          inc(i);
+          dec(t, Ammoz[i].Probability)
+          end;
         FollowGear^.Pos:= posCaseAmmo;
-        FollowGear^.State:= Longword(amMineStrike)
+        FollowGear^.State:= Longword(i)
         end;
      end;
 FindPlace(FollowGear, true, 0, 2048)
