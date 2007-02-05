@@ -64,7 +64,6 @@ signals:
 
 public slots:
 	void FromNet(const QByteArray & msg);
-	void LocalCFG(const QString & teamname);
 
 private:
     enum GameType {
@@ -86,7 +85,6 @@ private:
 	void SendConfig();
 	void SendQuickConfig();
 	void SendNetConfig();
-	void SendTeamConfig(int index);
 	void ParseMessage(const QByteArray & msg);
 	void SaveDemo(const QString & filename);
 };

@@ -50,11 +50,6 @@ void HWGame::onClientDisconnect()
 	emit GameStateChanged(gsStopped);
 }
 
-void HWGame::SendTeamConfig(int index)
-{
-	LocalCFG(teams[index]);
-}
-
 void HWGame::commonConfig()
 {
 	QByteArray buf;
@@ -123,10 +118,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 {
 	switch(msg.at(1)) {
 		case '?': {
-			if (gameType == gtNet)
-				emit SendNet(QByteArray("\x01""?"));
-			else
-				SendIPC("!");
+			SendIPC("!");
 			break;
 		}
 		case 'C': {
@@ -320,16 +312,3 @@ void HWGame::StartQuick()
 	Start();
 	emit GameStateChanged(gsStarted);
 }
-
-
-void HWGame::LocalCFG(const QString & teamname)
-{
-	qDebug("HWGame::LocalCFG is UNIMPLEMENTED");
-/*	QByteArray teamcfg;
-	HWTeam team(teamname);
-	team.LoadFromFile();
-	RawSendIPC(HWProto::addStringListToBuffer(teamcfg,
-			team.TeamGameConfig(16776960, 4, gamecfg->getInitHealth())));
-*/
-}
-

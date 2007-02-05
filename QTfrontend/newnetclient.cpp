@@ -79,19 +79,10 @@ void HWNewNet::StartGame()
   RawSendNet(QString("START:"));
 }
 
-void HWNewNet::SendConfigToEngine()
-{
-
-}
-
 void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
 
-  if(msg == "AUM=") {
-    SendConfigToEngine();
-    return ;
-  }
   //NetBuffer += buf;
   RawSendNet(QString("GAMEMSG:%1%2").arg(delimeter).arg(msg));
 }
@@ -188,11 +179,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "RUNGAME") {
-    HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget); // FIXME: memory leak here (stackify it?)
-    connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
-    connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
-    connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
-    game->StartNet();
+  	RunGame();
   }
 
   if (lst[0] == "CONFIGURED") {
@@ -286,7 +273,7 @@ void HWNewNet::ConfigAsked()
 
 void HWNewNet::RunGame()
 {
-  HWGame * game = new HWGame(config, 0);
+  HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget); // FIXME: memory leak here (stackify it?)
   connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));

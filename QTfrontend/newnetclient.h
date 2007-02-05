@@ -58,7 +58,6 @@ class HWNewNet : public QObject
 
   void ConfigAsked();
   void RunGame();
-  void SendConfigToEngine();
 
   template <typename T>
   void SendCfgStrNet(T a) {
@@ -89,7 +88,6 @@ class HWNewNet : public QObject
   void AddGame(const QString & chan);
   void EnteredGame();
   void FromNet(const QByteArray & buf);
-  void LocalCFG(const QString & team);
   void AddNetTeam(const HWTeam&);
 
   void seedChanged(const QString & seed);
