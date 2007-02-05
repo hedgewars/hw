@@ -134,7 +134,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
 				}
 				case gtDemo: break;
 				case gtNet: {
-					emit SendNet(QByteArray("\x01""C"));
 					SendNetConfig();
 					break;
 				}
