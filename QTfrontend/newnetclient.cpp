@@ -179,7 +179,8 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "RUNGAME") {
-  	RunGame();
+    RunGame();
+    return;
   }
 
   if (lst[0] == "CONFIGURED") {
