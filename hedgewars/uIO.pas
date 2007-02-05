@@ -207,13 +207,13 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
              {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}
              end;
         'p': begin
-             TargetPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X);
-             TargetPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y);
+             TargetPoint.X:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].X));
+             TargetPoint.Y:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].Y));
              ParseCommand('put', true)
              end;
         'P': begin
-             CursorPoint.X:= SDLNet_Read16(@extcmd[cmdcurpos].X) + WorldDx;
-             CursorPoint.Y:= SDLNet_Read16(@extcmd[cmdcurpos].Y) + WorldDy;
+             CursorPoint.X:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].X) + WorldDx);
+             CursorPoint.Y:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].Y) + WorldDy);
              end;
         '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd, true);
         #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79), true)

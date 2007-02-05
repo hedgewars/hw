@@ -831,12 +831,13 @@ var fx, x: LongInt;
     y, sy: LongInt;
     ar: array[0..511] of TPoint;
     ar2: array[0..1023] of TPoint;
-    cnt, cnt2, delta: Longword;
+    cnt, cnt2: Longword;
+    delta: LongInt;
 begin
 delta:= 250;
 cnt2:= 0;
 repeat
-  x:= Left + GetRandom(Delta);
+  x:= Left + LongInt(GetRandom(Delta));
   repeat
      inc(x, Delta);
      cnt:= 0;
