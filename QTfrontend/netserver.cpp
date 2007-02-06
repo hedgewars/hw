@@ -32,6 +32,7 @@ extern char delimeter;
 
 void HWNetServer::StartServer()
 {
+  hhnum=0;
   IPCServer = new QTcpServer(this);
   if (!IPCServer->listen(QHostAddress::Any, ds_port)) {
     QMessageBox::critical(0, tr("Error"),
@@ -258,6 +259,16 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     static unsigned int netTeamID=1;
     lst.insert(1, QString::number(netTeamID++));
 
+    // hedgehogs num count
+    int maxAdd=18-m_hwserver->hhnum;
+    if (maxAdd<=0) return; // reject command
+    int toAdd=maxAdd<4 ? maxAdd : 4;
+    m_hwserver->hhnum+=toAdd;
+    // hedgehogs num config
+    QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
+      .arg(netTeamID)\
+      .arg(toAdd);
+    
     // creating color config for new team
     QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
@@ -265,15 +276,30 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     qDebug() << "color config:" << colorCfg;
 
     m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
+    m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
     m_teamsCfg.push_back(lst);
 
     m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
     RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(lst[0]).arg(lst[1]));
+    m_hwserver->sendAll(hhnumCfg);
     return;
   }
 
   if(lst[0]=="REMOVETEAM:") {
     if(lst.size()<2) return;
+    
+    for(QMap<QString, QStringList>::iterator it=m_gameCfg.begin(); it!=m_gameCfg.end(); ++it) {
+      QStringList hhTmpList=it.key().split('+');
+      if(hhTmpList[0] == "HHNUM") {
+	qDebug() << "hhnum config found";
+	if(hhTmpList[1]==lst[1]) {
+	  qDebug() << "hhnum config team found with: " << lst[1] << ":" << it.value()[0].toUInt();
+	  m_hwserver->hhnum-=it.value()[0].toUInt();
+	  break;
+	}
+      }
+    }
+
     unsigned int netID=removeTeam(lst[1]);
     m_hwserver->sendOthers(this, QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID));
     return;

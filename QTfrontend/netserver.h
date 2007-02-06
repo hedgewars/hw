@@ -91,6 +91,8 @@ class HWNetServer : public QObject
   QString prepareConfig(QStringList lst);
   void resetStart();
 
+  int hhnum;
+
  private:
   HWConnectedClient* getChiefClient() const;
   static const quint16 ds_port;

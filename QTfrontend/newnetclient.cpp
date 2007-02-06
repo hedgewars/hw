@@ -227,15 +227,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit fortsModeChanged(lst[2].toInt() != 0);
 	  return;
   	}
-  	if (lst[1] == "HHNUM") {
-	  HWTeam tmptm(lst[2], lst[3].toUInt());
-	  if(m_networkToLocalteams.find(lst[3].toUInt())!=m_networkToLocalteams.end()) {
-	    tmptm=HWTeam(lst[2]); // local team should be changed
-	  }
-	  tmptm.numHedgehogs=lst[4].toUInt();
-	  emit hhnumChanged(tmptm);
-	  return;
-  	}
   	if (lst[1] == "TEAM_COLOR") {
 	  HWTeam tmptm(lst[2], lst[3].toUInt());
 	  if(m_networkToLocalteams.find(lst[3].toUInt())!=m_networkToLocalteams.end()) {
@@ -243,6 +234,17 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  }
 	  tmptm.teamColor=QColor(lst[4]);
 	  emit teamColorChanged(tmptm);
+	  return;
+  	}
+	QStringList hhTmpList;
+  	if ((hhTmpList=lst[1].split('+'))[0] == "HHNUM") {
+	  qDebug() << "NEW HHNUM!";
+	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
+	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
+	    tmptm=HWTeam(hhTmpList[1]); // local team should be changed
+	  }
+	  tmptm.numHedgehogs=lst[2].toUInt();
+	  emit hhnumChanged(tmptm);
 	  return;
   	}
   	qDebug() << "unknow config param: " << lst[1];
@@ -284,7 +286,7 @@ void HWNewNet::RunGame()
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
   qDebug() << team.getNetID() << ":" << team.numHedgehogs;
-  RawSendNet(QString("CONFIG_PARAM%1HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
+  RawSendNet(QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(team.TeamName)\
 	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
 	     .arg(team.numHedgehogs));
 }
