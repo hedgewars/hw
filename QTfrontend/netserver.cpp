@@ -98,6 +98,8 @@ bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
 
 QMap<QString, QStringList> HWNetServer::getGameCfg() const
 {
+  return m_gameCfg;
+  /*
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
     if(isChiefClient(*it)) {
       return (*it)->m_gameCfg;
@@ -105,6 +107,7 @@ QMap<QString, QStringList> HWNetServer::getGameCfg() const
   }
   // error happened if we are here
   return QMap<QString, QStringList>();
+  */
 }
 
 bool HWNetServer::haveNick(const QString& nick) const
@@ -250,7 +253,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(lst[0]=="CONFIG_PARAM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
-    else m_gameCfg[lst[1]]=lst.mid(2);
+    else m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
     qDebug() << msg;
   }
 
@@ -278,12 +281,13 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       .arg(lst.takeAt(2));
     qDebug() << "color config:" << colorCfg;
 
-    m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
-    m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
+    m_hwserver->m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
+    m_hwserver->m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
     m_teamsCfg.push_back(lst);
 
     m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
     RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(lst[0]).arg(lst[1]));
+    m_hwserver->sendAll(colorCfg);
     m_hwserver->sendAll(hhnumCfg);
     return;
   }
@@ -291,7 +295,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="REMOVETEAM:") {
     if(lst.size()<2) return;
     
-    for(QMap<QString, QStringList>::iterator it=m_gameCfg.begin(); it!=m_gameCfg.end(); ++it) {
+    for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it) {
       QStringList hhTmpList=it.key().split('+');
       if(hhTmpList[0] == "HHNUM") {
 	qDebug() << "hhnum config found";
