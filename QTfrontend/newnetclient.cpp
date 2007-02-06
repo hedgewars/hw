@@ -72,6 +72,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
   RawSendNet(QString("REMOVETEAM:") + delimeter + team.TeamName);
+  m_networkToLocalteams.remove(m_networkToLocalteams.key(team.TeamName));
 }
 
 void HWNewNet::StartGame()
@@ -197,6 +198,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="TEAM_ACCEPTED") {
+    qDebug() << "accepted " << lst[2].toUInt() << " team";
     m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
     m_pTeamSelWidget->changeTeamStatus(lst[1]);
     return;
@@ -227,17 +229,17 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit fortsModeChanged(lst[2].toInt() != 0);
 	  return;
   	}
-  	if (lst[1] == "TEAM_COLOR") {
-	  HWTeam tmptm(lst[2], lst[3].toUInt());
-	  if(m_networkToLocalteams.find(lst[3].toUInt())!=m_networkToLocalteams.end()) {
-	    tmptm=HWTeam(lst[2]); // local team should be changed
+	QStringList hhTmpList=lst[1].split('+');
+  	if (hhTmpList[0] == "TEAM_COLOR") {
+	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
+	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
+	    tmptm=HWTeam(hhTmpList[1]); // local team should be changed
 	  }
-	  tmptm.teamColor=QColor(lst[4]);
+	  tmptm.teamColor=QColor(lst[2]);
 	  emit teamColorChanged(tmptm);
 	  return;
   	}
-	QStringList hhTmpList;
-  	if ((hhTmpList=lst[1].split('+'))[0] == "HHNUM") {
+  	if (hhTmpList[0] == "HHNUM") {
 	  qDebug() << "NEW HHNUM!";
 	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
 	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
@@ -294,7 +296,7 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
   qDebug() << team.getNetID() << ":" << team.teamColor.name();
-  RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
+  RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(team.TeamName)\
 	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
 	     .arg(team.teamColor.name()));
 }

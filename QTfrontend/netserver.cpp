@@ -228,8 +228,10 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       }
       // send config
       QMap<QString, QStringList> conf=m_hwserver->getGameCfg();
+      qDebug() << "Config:";
       for(QMap<QString, QStringList>::iterator it=conf.begin(); it!=conf.end(); ++it) {
 	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter)));
+	qDebug() << QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter));
       }
     }
     return;
@@ -249,6 +251,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="CONFIG_PARAM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
     else m_gameCfg[lst[1]]=lst.mid(2);
+    qDebug() << msg;
   }
 
   if(lst[0]=="ADDTEAM:") {
@@ -256,8 +259,8 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     lst.pop_front();
     
     // add team ID
-    static unsigned int netTeamID=1;
-    lst.insert(1, QString::number(netTeamID++));
+    static unsigned int netTeamID=0;
+    lst.insert(1, QString::number(++netTeamID));
 
     // hedgehogs num count
     int maxAdd=18-m_hwserver->hhnum;
@@ -270,7 +273,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       .arg(toAdd);
     
     // creating color config for new team
-    QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3%1%4").arg(delimeter).arg(lst[0])\
+    QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
       .arg(lst.takeAt(2));
     qDebug() << "color config:" << colorCfg;
@@ -302,6 +305,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
     unsigned int netID=removeTeam(lst[1]);
     m_hwserver->sendOthers(this, QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID));
+    qDebug() << QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID);
     return;
   }
 
