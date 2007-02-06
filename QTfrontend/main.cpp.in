@@ -56,10 +56,6 @@ int main(int argc, char *argv[])
 
 	Q_INIT_RESOURCE(hedgewars);
 
-	QTranslator Translator;
-	Translator.load(":/translations/hedgewars_" + QLocale::system().name());
-	app.installTranslator(&Translator);
-
 	QDir mydir("${HEDGEWARS_BINDIR}");
 	mydir.cd("bin");
 
@@ -81,6 +77,10 @@ int main(int argc, char *argv[])
 					arg(datadir->absolutePath()+"/hedgewars/Data"));
 		return 1;
 	}
+
+	QTranslator Translator;
+	Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + QLocale::system().name());
+	app.installTranslator(&Translator);
 
 	Themes = new QStringList();
 	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
