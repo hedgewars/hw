@@ -32,6 +32,7 @@ class HWGame;
 class HWTeam;
 class HWNewNet;
 class GameUIConfig;
+class HWNetUdpServer;
 
 class HWForm : public QMainWindow
 {
@@ -95,6 +96,7 @@ private:
 	GameUIConfig * config;
 	QStack<quint8> PagesStack;
 	HWNetServer* pnetserver;
+	HWNetUdpServer* pUdpServer;
 	void AddStatText(const QString & msg);
 	void OnPageShown(quint8 id);
 };

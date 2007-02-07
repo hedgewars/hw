@@ -35,7 +35,9 @@ HEADERS += binds.h \
            proto.h \
            fpsedit.h \
            netserver.h \
-           newnetclient.h
+           newnetclient.h \
+           netudpserver.h \
+           netudpwidget.h
            
            
 SOURCES += game.cpp \
@@ -60,7 +62,9 @@ SOURCES += game.cpp \
            proto.cpp \
            fpsedit.cpp \
            netserver.cpp \
-           newnetclient.cpp
+           newnetclient.cpp \
+           netudpserver.cpp \
+           netudpwidget.cpp
 
 TRANSLATIONS += translations/hedgewars_ru.ts
 

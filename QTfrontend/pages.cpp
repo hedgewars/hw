@@ -39,6 +39,7 @@
 #include "mapContainer.h"
 #include "about.h"
 #include "fpsedit.h"
+#include "netudpwidget.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -418,20 +419,23 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	editIP->setMaxLength(50);
 	GBNlayout->addWidget(editIP, 1, 1);
 
+	HWNetUdpWidget* pUdpClient=new HWNetUdpWidget(this);
+	pageLayout->addWidget(pUdpClient, 2, 1);
+	
 	BtnNetConnect = new	QPushButton(this);
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
-	pageLayout->addWidget(BtnNetConnect, 2, 2);
+	pageLayout->addWidget(BtnNetConnect, 3, 2);
 
 	BtnNetSvrStart = new	QPushButton(this);
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
-	pageLayout->addWidget(BtnNetSvrStart, 2, 1);
+	pageLayout->addWidget(BtnNetSvrStart, 3, 1);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 2, 0);
+	pageLayout->addWidget(BtnBack, 3, 0);
 }
 
 PageNetChat::PageNetChat(QWidget* parent) : QWidget(parent)

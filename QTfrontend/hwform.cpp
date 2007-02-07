@@ -37,9 +37,10 @@
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
+#include "netudpserver.h"
 
 HWForm::HWForm(QWidget *parent)
-  : QMainWindow(parent), pnetserver(0)
+  : QMainWindow(parent), pnetserver(0), pUdpServer(0)
 {
 	ui.setupUi(this);
 
@@ -288,6 +289,7 @@ void HWForm::NetStartServer()
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
   _NetConnect(pnetserver->getRunningHostName(), pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
+  pUdpServer = new HWNetUdpServer();
 }
 
 void HWForm::NetDisconnect()
@@ -298,6 +300,7 @@ void HWForm::NetDisconnect()
     hwnet=0;
   }
   if(pnetserver) {
+    pUdpServer->deleteLater();
     pnetserver->StopServer();
     delete pnetserver;
     pnetserver=0;
