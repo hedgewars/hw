@@ -25,6 +25,7 @@
 #include <QIcon>
 #include <QFile>
 #include <QTextStream>
+#include <QMessageBox>
 
 #include "hwform.h"
 #include "game.h"
@@ -309,6 +310,8 @@ void HWForm::ForcedDisconnect()
   if (hwnet) {
     hwnet->deleteLater();
     hwnet=0;
+    QMessageBox::warning(this, QMessageBox::tr("Network"), 
+			 QMessageBox::tr("Connection to server is lost"));
   }
   GoBack();
 }

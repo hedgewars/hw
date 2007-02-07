@@ -51,6 +51,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 
 void HWNewNet::Disconnect()
 {
+  m_game_connected=false;
   NetSocket.disconnectFromHost();
 }
 
