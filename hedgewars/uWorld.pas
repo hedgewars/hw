@@ -330,7 +330,21 @@ if WindBarWidth > 0 then
 if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 
 // Cursor
-if isCursorVisible then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface);
+if isCursorVisible then
+   begin
+   if not bShowAmmoMenu then
+     with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+       if (Gear^.State and gstHHChooseTarget) <> 0 then
+         begin
+         i:= Ammo^[CurSlot, CurAmmo].Pos;
+         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
+           if PosCount > 1 then
+             DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
+                                   CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+                                   i, Surface);
+         end;
+   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface)
+   end;
 
 {$IFDEF COUNTTICKS}
 DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);

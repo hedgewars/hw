@@ -39,7 +39,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
-                   sprAirplane);
+                   sprAirplane, sprAmAirplane);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -76,6 +76,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
              Count: LongWord;
              NumPerTurn: LongWord;
              Timer: LongWord;
+             Pos: LongWord;
              AmmoType: TAmmoType;
              end;
 
@@ -306,7 +307,9 @@ const
                      (FileName:   'AirBomb'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  32; Height: 32; hasAlpha: false),// sprAirBomb
                      (FileName:  'Airplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width: 125; Height: 42; hasAlpha: false) // sprAirplane
+                     Width: 125; Height: 42; hasAlpha: false),// sprAirplane
+                     (FileName:'amAirplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  64; Height: 32; hasAlpha:  true) // sprAmAirplane
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -333,6 +336,8 @@ const
                                   Slot: 0..cMaxSlotIndex;
                                   TimeAfterTurn: Longword;
                                   minAngle, maxAngle: Longword;
+                                  PosCount: Longword;
+                                  PosSprite: TSprite;
                                   end = (
                                   (NameId: sidGrenade;
                                    Probability: 0;
@@ -342,11 +347,13 @@ const
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 3000;
+                                          Pos: 0;
                                           AmmoType: amGrenade);
                                    Slot: 1;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidClusterBomb;
                                    Probability: 100;
                                    NumberInCase: 3;
@@ -355,11 +362,13 @@ const
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 3000;
+                                          Pos: 0;
                                           AmmoType: amClusterBomb);
                                    Slot: 1;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidBazooka;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -367,11 +376,13 @@ const
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amBazooka);
                                    Slot: 0;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidUFO;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -380,11 +391,13 @@ const
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amUFO);
                                    Slot: 0;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidShotgun;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -392,11 +405,13 @@ const
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 1;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amShotgun);
                                    Slot: 2;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidPickHammer;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -407,11 +422,13 @@ const
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amPickHammer);
                                    Slot: 6;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidSkip;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -419,11 +436,13 @@ const
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amSkip);
                                    Slot: 8;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidRope;
                                    Probability: 100;
                                    NumberInCase: 3;
@@ -433,11 +452,13 @@ const
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amRope);
                                    Slot: 7;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: cMaxAngle div 2),
+                                   maxAngle: cMaxAngle div 2;
+                                   PosCount: 1),
                                   (NameId: sidMine;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -445,11 +466,13 @@ const
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amMine);
                                    Slot: 4;
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidDEagle;
                                    Probability: 100;
                                    NumberInCase: 2;
@@ -457,52 +480,60 @@ const
                                           Count: 3;
                                           NumPerTurn: 3;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amDEagle);
                                    Slot: 2;
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
-                                   maxAngle: 0),
-                                   (NameId: sidDynamite;
+                                   maxAngle: 0;
+                                   PosCount: 1),
+                                  (NameId: sidDynamite;
                                    Probability: 100;
                                    NumberInCase: 1;
-                                    Ammo: (Propz: ammoprop_NoCrosshair or
-                                                  ammoprop_AttackInJump or
-                                                  ammoprop_AttackInFall;
-                                           Count: 1;
-                                           NumPerTurn: 0;
-                                           Timer: 0;
-                                           AmmoType: amDynamite);
-                                    Slot: 4;
-                                    TimeAfterTurn: 5000;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_AttackInJump or
+                                                 ammoprop_AttackInFall;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amDynamite);
+                                   Slot: 4;
+                                   TimeAfterTurn: 5000;
                                    minAngle: 0;
-                                   maxAngle: 0),
-                                   (NameId: sidFirePunch;
+                                   maxAngle: 0;
+                                   PosCount: 1),
+                                  (NameId: sidFirePunch;
                                    Probability: 0;
                                    NumberInCase: 1;
-                                    Ammo: (Propz: ammoprop_NoCrosshair or
-                                                  ammoprop_ForwMsgs or
-                                                  ammoprop_AttackInJump or
-                                                  ammoprop_AttackInFall;
-                                           Count: AMMO_INFINITE;
-                                           NumPerTurn: 0;
-                                           Timer: 0;
-                                           AmmoType: amFirePunch);
-                                    Slot: 3;
-                                    TimeAfterTurn: 3000;
-                                   minAngle: 0;
-                                   maxAngle: 0),
-                                   (NameId: sidBaseballBat;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_ForwMsgs or
+                                                 ammoprop_AttackInJump or
+                                                 ammoprop_AttackInFall;
+                                          Count: AMMO_INFINITE;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amFirePunch);
+                                   Slot: 3;
+                                   TimeAfterTurn: 3000;
+                                   MinAngle: 0;
+                                   maxAngle: 0;
+                                   PosCount: 1),
+                                  (NameId: sidBaseballBat;
                                    Probability: 100;
                                    NumberInCase: 1;
-                                    Ammo: (Propz: 0;
-                                           Count: 1;
-                                           NumPerTurn: 0;
-                                           Timer: 0;
-                                           AmmoType: amBaseballBat);
-                                    Slot: 3;
-                                    TimeAfterTurn: 5000;
+                                   Ammo: (Propz: 0;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amBaseballBat);
+                                   Slot: 3;
+                                   TimeAfterTurn: 5000;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: cMaxAngle div 2;
+                                   PosCount: 1),
                                   (NameId: sidParachute;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -512,11 +543,13 @@ const
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amParachute);
                                    Slot: 7;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 1),
                                   (NameId: sidAirAttack;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -526,11 +559,14 @@ const
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amAirAttack);
                                    Slot: 5;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 2;
+                                   PosSprite: sprAmAirplane),
                                   (NameId: sidMineStrike;
                                    Probability: 400;
                                    NumberInCase: 1;
@@ -540,11 +576,14 @@ const
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amMineStrike);
                                    Slot: 5;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: 0),
+                                   maxAngle: 0;
+                                   PosCount: 2;
+                                   PosSprite: sprAmAirplane),
                                   (NameId: sidBlowTorch;
                                    Probability: 100;
                                    NumberInCase: 2;
@@ -552,11 +591,13 @@ const
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
+                                          Pos: 0;
                                           AmmoType: amBlowTorch);
                                    Slot: 6;
                                    TimeAfterTurn: 3000;
                                    minAngle: 768;
-                                   maxAngle: 1280));
+                                   maxAngle: 1280;
+                                   PosCount: 1));
 
 implementation
 

@@ -1014,30 +1014,32 @@ const cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue: 6012954214); // 
 procedure doStepAirAttackWork(Gear: PGear);
 begin
 AllInactive:= false;
-Gear^.X:= Gear^.X + cAirPlaneSpeed;
+Gear^.X:= Gear^.X + Gear^.Tag * cAirPlaneSpeed;
 if (Gear^.Health > 0)and( not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
    begin
    dec(Gear^.Health);
    case Gear^.State of
-        0: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed, 0, 0);
-        1: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine, 0, cBombsSpeed, 0, 0);
+        0: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.Tag * cBombsSpeed, 0, 0);
+        1: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, Gear^.Tag * cBombsSpeed, 0, 0);
         end;
-   Gear^.dX:= Gear^.dX + cBombsDistance
+   Gear^.dX:= Gear^.dX + Gear^.Tag * cBombsDistance
    end;
-if Gear^.X > 3072 then DeleteGear(Gear)
+if (Gear^.X > 3072) or (Gear^.X < -1024) then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
 var t: LongInt;
 begin
 AllInactive:= false;
-Gear^.X:= -1024;
+if Gear^.X.QWordValue = 0 then Gear^.Tag:=  1
+                          else Gear^.Tag:= -1;
+Gear^.X:= 1024 - Gear^.Tag * 2048;
 Gear^.Y:= -128;
 Gear^.dX:= TargetPoint.X -
-          cBombsDistance * 5 / 2;
+           Gear^.Tag * cBombsDistance * 5 / 2;
 
 if TargetPoint.Y - Gear^.Y > 0 then
-   Gear^.dX:= Gear^.dX - cBombsSpeed * hwSqrt(2 * (TargetPoint.Y - Gear^.Y) / cGravity);
+   Gear^.dX:= Gear^.dX - Gear^.Tag * cBombsSpeed * hwSqrt(2 * (TargetPoint.Y - Gear^.Y) / cGravity);
 Gear^.Health:= 6;
 Gear^.doStep:= @doStepAirAttackWork
 end;

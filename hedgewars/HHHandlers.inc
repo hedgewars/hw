@@ -48,8 +48,6 @@ with Gear^,
            StopSound(sndThrowPowerUp);
            PlaySound(sndThrowRelease, false);
            end;
-//        xx:= hwSign(dX)*Sin(Angle*pi/cMaxAngle);
-//        yy:= -Cos(Angle*pi/cMaxAngle);
         xx:= AngleSin(Angle);
         xx.isNegative:= dX.isNegative;
         yy:= -AngleCos(Angle);
@@ -71,8 +69,8 @@ with Gear^,
                   amBaseballBat: AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0)^.Radius:= 20;
                     amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, 0, 0, 0);
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, 0, 0, 0);
-                    amAirAttack: AddGear(0, 0, gtAirAttack, 0, 0, 0, 0);
-                   amMineStrike: AddGear(0, 0, gtAirAttack, 1, 0, 0, 0);
+                    amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, 0, 0, 0);
+                   amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, 0, 0, 0);
                     amBlowTorch: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBlowTorch, 0, hwSign(Gear^.dX) * _0_5, 0, 0);
                   end;
         Power:= 0;
@@ -137,6 +135,19 @@ var PrevdX: LongInt;
 begin
 if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    begin
+   if isCursorVisible then
+      with PHedgehog(Gear^.Hedgehog)^ do
+        with Ammo^[CurSlot, CurAmmo] do
+          begin
+          if (Gear^.Message and gm_Left  )<>0 then
+             Pos:= (Pos + Ammoz[AmmoType].PosCount - 1) mod Ammoz[AmmoType].PosCount
+          else
+          if (Gear^.Message and gm_Right )<>0 then
+             Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
+          else exit;
+          StepTicks:= 350;
+          exit
+          end;
    if ((Gear^.Message and gm_LJump ) <> 0) then
       begin
       Gear^.Message:= 0;
