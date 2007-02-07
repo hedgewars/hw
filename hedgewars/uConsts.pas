@@ -603,7 +603,7 @@ const
                                    PosCount: 1),
                                   (NameId: sidGirder;
                                    Probability: 400;
-                                   NumberInCase: 1;
+                                   NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
                                                  ammoprop_AttackingPut;
