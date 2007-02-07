@@ -12,7 +12,7 @@ HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
   mainLayout.addWidget(serversList);
   pUdpSocket = new QUdpSocket(this);
 
-  pUdpSocket->bind();//46632);
+  pUdpSocket->bind(46632);
   connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
   pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
 }
