@@ -200,7 +200,7 @@ void HWGame::onClientRead()
 {
 	quint8 msglen;
 	quint32 bufsize;
-	while (((bufsize = readbuffer.size()) > 0) &&
+	while (!readbuffer.isEmpty() && ((bufsize = readbuffer.size()) > 0) &&
 			((msglen = readbuffer.data()[0]) < bufsize))
 	{
 		QByteArray msg = readbuffer.left(msglen + 1);
