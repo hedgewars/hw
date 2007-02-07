@@ -18,7 +18,7 @@
 
 unit uLandGraphics;
 interface
-uses uFloat;
+uses uFloat, uConsts;
 {$INCLUDE options.inc}
 
 type PRangeArray = ^TRangeArray;
@@ -31,8 +31,10 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
+
 implementation
-uses SDLh, uMisc, uLand, uConsts;
+uses SDLh, uMisc, uLand;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
@@ -72,7 +74,6 @@ var p: PByteArray;
 begin
 p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
 case LandSurface^.format^.BytesPerPixel of
-     1: ;// not supported
      2: PWord(@(p^[x * 2]))^:= 0;
      3: begin
         p^[x * 3 + 0]:= 0;
@@ -88,7 +89,6 @@ var p: PByteArray;
 begin
 p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
 case LandSurface^.format^.BytesPerPixel of
-     1: ;// not supported
      2: PWord(@(p^[x * 2]))^:= cExplosionBorderColor;
      3: begin
         p^[x * 3 + 0]:= cExplosionBorderColor and $FF;
@@ -266,6 +266,111 @@ for i:= 0 to 7 do
 
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface)
+end;
+
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
+var Result: boolean;
+    X, Y, sY, bpp, h, w: LongInt;
+    p: PByteArray;
+    r, rr: TSDL_Rect;
+    Image: PSDL_Surface;
+begin
+Result:= true;
+Image:= SpritesData[Obj].Surface;
+w:= SpritesData[Obj].Width;
+h:= SpritesData[Obj].Height; 
+
+if SDL_MustLock(Image) then
+   SDLTry(SDL_LockSurface(Image) >= 0, true);
+
+bpp:= Image^.format^.BytesPerPixel;
+TryDo(bpp <> 1, 'We don''t work with 8 bit surfaces', true);
+// Check that sprites fits free space
+p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
+case bpp of
+     2: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if PWord(@(p^[x * 2]))^ <> 0 then
+                   if (((cpY + y) and $FFFFFC00) <> 0) or
+                      (((cpX + x) and $FFFFF800) <> 0) or
+                      (Land[cpY + y, cpX + x] <> 0) then
+                      begin
+                      if SDL_MustLock(Image) then
+                         SDL_UnlockSurface(Image);
+                      exit(false)
+                      end;
+            p:= @(p^[Image^.pitch]);
+            end;
+     3: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if  (p^[x * 3 + 0] <> 0)
+                 or (p^[x * 3 + 1] <> 0)
+                 or (p^[x * 3 + 2] <> 0) then
+                   if (((cpY + y) and $FFFFFC00) <> 0) or
+                      (((cpX + x) and $FFFFF800) <> 0) or
+                      (Land[cpY + y, cpX + x] <> 0) then
+                      begin
+                      if SDL_MustLock(Image) then
+                         SDL_UnlockSurface(Image);
+                      exit(false)
+                      end;
+            p:= @(p^[Image^.pitch]);
+            end;
+     4: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if PLongword(@(p^[x * 4]))^ <> 0 then
+                   if (((cpY + y) and $FFFFFC00) <> 0) or
+                      (((cpX + x) and $FFFFF800) <> 0) or
+                      (Land[cpY + y, cpX + x] <> 0) then
+                      begin
+                      if SDL_MustLock(Image) then
+                         SDL_UnlockSurface(Image);
+                      exit(false)
+                      end;
+            p:= @(p^[Image^.pitch]);
+            end;
+     end;
+
+// Checked, now place
+p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
+case bpp of
+     2: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if PWord(@(p^[x * 2]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
+            end;
+     3: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if  (p^[x * 3 + 0] <> 0)
+                 or (p^[x * 3 + 1] <> 0)
+                 or (p^[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
+            end;
+     4: for y:= 0 to Pred(h) do
+            begin
+            for x:= 0 to Pred(w) do
+                if PLongword(@(p^[x * 4]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+            p:= @(p^[Image^.pitch]);
+            end;
+     end;
+if SDL_MustLock(Image) then
+   SDL_UnlockSurface(Image);
+
+// Draw sprite on Land surface
+r.x:= 0;
+r.y:= SpritesData[Obj].Height * Frame;
+r.w:= SpritesData[Obj].Width;
+r.h:= SpritesData[Obj].Height;
+rr.x:= cpX;
+rr.y:= cpY;
+SDL_UpperBlit(Image, @r, LandSurface, @rr);
+
+TryPlaceOnLand:= true
 end;
 
 

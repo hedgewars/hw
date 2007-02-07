@@ -39,14 +39,14 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
-                   sprAirplane, sprAmAirplane);
+                   sprAirplane, sprAmAirplane, sprAmGirder);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
-                   gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch);
+                   gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder);
 
      TGearsType = set of TGearType;
 
@@ -56,7 +56,8 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
-                   amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch);
+                   amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
+                   amGirder);
 
      THWFont    = (fnt16, fntBig);
 
@@ -155,7 +156,7 @@ const
       gm_Destroy= $00000100;
 
       cMaxSlotIndex       = 8;
-      cMaxSlotAmmoIndex   = 1;
+      cMaxSlotAmmoIndex   = 2;
 
       ammoprop_Timerable    = $00000001;
       ammoprop_Power        = $00000002;
@@ -309,7 +310,9 @@ const
                      (FileName:  'Airplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width: 125; Height: 42; hasAlpha: false),// sprAirplane
                      (FileName:'amAirplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width:  64; Height: 32; hasAlpha:  true) // sprAmAirplane
+                     Width:  64; Height: 32; hasAlpha:  true),// sprAirplane
+                     (FileName:  'amGirder'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width: 128; Height:128; hasAlpha: false) // sprAmGirder
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -597,7 +600,24 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 768;
                                    maxAngle: 1280;
-                                   PosCount: 1));
+                                   PosCount: 1),
+                                  (NameId: sidGirder;
+                                   Probability: 400;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_NeedTarget or
+                                                 ammoprop_AttackingPut;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amGirder);
+                                   Slot: 6;
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   PosCount: 4;
+                                   PosSprite: sprAmGirder));
 
 implementation
 

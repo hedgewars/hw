@@ -1059,3 +1059,25 @@ if (Gear^.State and gstCollision) <> 0 then
 if (GameTicks and $3F) = 0 then
    AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, 0, 0, 0)
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepGirder(Gear: PGear);
+begin
+AllInactive:= false;
+writelntoconsole(inttostr(TargetPoint.X));
+if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
+                      TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
+                      sprAmGirder, Gear^.State) then
+   with PHedgehog(Gear^.Hedgehog)^.Gear^ do
+        begin
+        State:= State and not gstAttacking;
+        Message:= Message and not gm_Attack;
+        isCursorVisible:= true;
+        with PHedgehog(Gear^.Hedgehog)^ do
+             State:= State or gstHHChooseTarget
+        end
+   else AfterAttack;
+TargetPoint.X:= NoPointX;
+DeleteGear(Gear)
+end;

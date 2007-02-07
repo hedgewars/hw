@@ -72,6 +72,7 @@ with Gear^,
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, 0, 0, 0);
                    amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, 0, 0, 0);
                     amBlowTorch: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBlowTorch, 0, hwSign(Gear^.dX) * _0_5, 0, 0);
+                       amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, 0, 0, 0);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then

@@ -123,7 +123,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepParachute,
                                                                @doStepAirAttack,
                                                                @doStepAirBomb,
-                                                               @doStepBlowTorch
+                                                               @doStepBlowTorch,
+                                                               @doStepGirder
                                                                );
 
 procedure InsertGearToList(Gear: PGear);

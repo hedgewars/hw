@@ -18,6 +18,7 @@
 00:15=Air Attack
 00:16=Mine Strike
 00:17=Blow Torch
+00:18=Construction
 
 01:00=Let's fight!
 01:01=Round draw
