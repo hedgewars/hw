@@ -79,6 +79,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
+	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()), ui.pageNet->pUdpClient, SLOT(updateList()));
 	connect(ui.pageNet->pUpdateUdpButt, SIGNAL(clicked()), ui.pageNet->pUdpClient, SLOT(updateList()));
 	connect(ui.pageNet->pUdpClient->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
 
