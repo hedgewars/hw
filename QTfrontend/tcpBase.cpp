@@ -28,6 +28,10 @@
 QList<TCPBase*> srvsList;
 QPointer<QTcpServer> TCPBase::IPCServer(0);
 
+TCPBase::~TCPBase()
+{
+}
+
 TCPBase::TCPBase(bool demoMode) :
   m_isDemoMode(demoMode),
   IPCSocket(0)
@@ -75,8 +79,6 @@ void TCPBase::RealStart()
 void TCPBase::ClientDisconnect()
 {
   onClientDisconnect();
-
-  readbuffer.clear();
 
   if(srvsList.size()==1) srvsList.pop_front();
   emit isReadyNow();

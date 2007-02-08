@@ -38,6 +38,7 @@ class TCPBase : public QObject
 
  public:
   TCPBase(bool demoMode);
+  virtual ~TCPBase();
 
  signals:
   void isReadyNow();

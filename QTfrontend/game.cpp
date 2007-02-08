@@ -44,6 +44,10 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pT
 	seed = "";
 }
 
+HWGame::~HWGame()
+{
+}
+
 void HWGame::onClientDisconnect()
 {
 	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer);
