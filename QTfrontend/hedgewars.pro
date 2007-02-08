@@ -15,7 +15,6 @@ HEADERS += binds.h \
            hwform.h \
            sdlkeys.h \
            team.h \
-           netclient.h \
            teamselect.h \
            teamselhelper.h \
            frameTeam.h \
@@ -35,6 +34,7 @@ HEADERS += binds.h \
            proto.h \
            fpsedit.h \
            netserver.h \
+           netconnectedclient.h \
            newnetclient.h \
            netudpserver.h \
            netudpwidget.h
@@ -44,7 +44,6 @@ SOURCES += game.cpp \
            main.cpp \
            hwform.cpp \
            team.cpp \
-           netclient.cpp \
            teamselect.cpp \
            teamselhelper.cpp \
            frameTeam.cpp \
@@ -62,6 +61,7 @@ SOURCES += game.cpp \
            proto.cpp \
            fpsedit.cpp \
            netserver.cpp \
+           netconnectedclient.cpp \
            newnetclient.cpp \
            netudpserver.cpp \
            netudpwidget.cpp

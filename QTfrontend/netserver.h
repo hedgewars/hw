@@ -28,47 +28,7 @@
 class HWNetServer;
 class QTcpSocket;
 class QTcpServer;
-
-class HWConnectedClient : public QObject
-{
-  Q_OBJECT
-
- friend class HWNetServer;
-
- private:
-  HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client);
-  ~HWConnectedClient();
-  QString getClientNick() const;
-
-  QList<QStringList> getTeamNames() const;
-  class NoTeamNameException{};
-  bool isReady() const;
-
-  QString getHedgehogsDescription() const;
-
-  bool readyToStart;
-  QList<QStringList> m_teamsCfg; // TeamName - hhs
-  class ShouldDisconnectException {};
-
-  QString client_nick;
-  void ParseLine(const QByteArray & line);
-  unsigned int removeTeam(const QString& tname); // returns netID
-
-  HWNetServer* m_hwserver;
-  QTcpSocket* m_client;
-
-  void RawSendNet(const QString & buf);
-  void RawSendNet(const QByteArray & buf);
-
-  //QByteArray readbuffer;
-
- signals:
-  void HWClientDisconnected(HWConnectedClient* client);
-
- private slots:
-  void ClientRead();
-  void ClientDisconnect();
-};
+class HWConnectedClient;
 
 class HWNetServer : public QObject
 {
