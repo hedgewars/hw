@@ -25,7 +25,7 @@ void HWNetUdpServer::onClientRead()
     if(QString("%1").arg(datagram.data())==QString("hedgewars client")) {
       // send answer to client
       qDebug() << "received UDP query from " << clientAddr << ":" << clientPort;
-      pUdpSocket->writeDatagram("hedgewars server", clientAddr, 46632);
+      pUdpSocket->writeDatagram("hedgewars server", clientAddr, clientPort);
     }
   }
 }

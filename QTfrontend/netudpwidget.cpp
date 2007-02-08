@@ -12,7 +12,7 @@ HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
   mainLayout.addWidget(serversList);
   pUdpSocket = new QUdpSocket(this);
 
-  pUdpSocket->bind(46632, QUdpSocket::ShareAddress);
+  pUdpSocket->bind();
   connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
   updateList();
 }
