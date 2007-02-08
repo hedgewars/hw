@@ -38,6 +38,7 @@
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
 #include "netudpserver.h"
+#include "netudpwidget.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pUdpServer(0)
@@ -78,6 +79,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
+	connect(ui.pageNet->pUpdateUdpButt, SIGNAL(clicked()), ui.pageNet->pUdpClient, SLOT(updateList()));
+	connect(ui.pageNet->pUdpClient->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
@@ -239,6 +242,19 @@ void HWForm::PlayDemo()
 	}
 	CreateGame(0, 0);
 	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
+}
+
+void HWForm::NetConnectServer()
+{
+  QListWidgetItem * curritem = ui.pageNet->pUdpClient->serversList->currentItem();
+  if (!curritem) {
+    QMessageBox::critical(this,
+			  tr("Error"),
+			  tr("Please, select server from the list above"),
+			  tr("OK"));
+    return ;
+  }
+  _NetConnect(curritem->text(), 46631, ui.pageNet->editNetNick->text());
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)

@@ -14,13 +14,17 @@ class HWNetUdpWidget : public QWidget
  public:
   HWNetUdpWidget(QWidget *parent = 0);
 
+  QListWidget* serversList;
+
+ public slots:
+  void updateList();
+
  private slots:
   void onClientRead();
 
  private:
   QVBoxLayout mainLayout;
   QUdpSocket* pUdpSocket;
-  QListWidget* serversList;
 };
 
 #endif // _NET_UDPWIDGET_INCLUDED

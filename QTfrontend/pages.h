@@ -39,6 +39,7 @@ class SquareLabel;
 class About;
 class QSpinBox;
 class FPSEdit;
+class HWNetUdpWidget;
 
 class PageMain : public QWidget
 {
@@ -159,6 +160,8 @@ class PageNet : public QWidget
 public:
 	PageNet(QWidget* parent = 0);
 
+	QPushButton* pUpdateUdpButt;
+	HWNetUdpWidget* pUdpClient;
 	QPushButton *BtnBack;
 	QPushButton *BtnNetConnect;
 	QPushButton* BtnNetSvrStart;

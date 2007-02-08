@@ -397,7 +397,7 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
-	pageLayout->addWidget(NNGroupBox, 0, 1);
+	pageLayout->addWidget(NNGroupBox, 0, 1, 1, 2);
 
 	pageLayout->addWidget(new QWidget(), 1, 1);
 
@@ -419,18 +419,23 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	editIP->setMaxLength(50);
 	GBNlayout->addWidget(editIP, 1, 1);
 
-	HWNetUdpWidget* pUdpClient=new HWNetUdpWidget(this);
-	pageLayout->addWidget(pUdpClient, 2, 1);
+	pUdpClient=new HWNetUdpWidget(this);
+	pageLayout->addWidget(pUdpClient, 2, 1, 1, 2);
 	
 	BtnNetConnect = new	QPushButton(this);
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
-	pageLayout->addWidget(BtnNetConnect, 3, 2);
+	pageLayout->addWidget(BtnNetConnect, 3, 3);
+
+	pUpdateUdpButt = new QPushButton(this);
+	pUpdateUdpButt->setFont(*font14);
+	pUpdateUdpButt->setText(QPushButton::tr("Update"));
+	pageLayout->addWidget(pUpdateUdpButt, 3, 1);
 
 	BtnNetSvrStart = new	QPushButton(this);
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
-	pageLayout->addWidget(BtnNetSvrStart, 3, 1);
+	pageLayout->addWidget(BtnNetSvrStart, 3, 2);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);

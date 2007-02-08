@@ -60,6 +60,7 @@ private slots:
 	void SimpleGame();
 	void PlayDemo();
 	void NetConnect();
+	void NetConnectServer();
 	void NetStartServer();
 	void NetDisconnect();
 	void NetJoin();
