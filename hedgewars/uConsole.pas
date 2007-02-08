@@ -248,12 +248,7 @@ if Key <> 0 then
          else
             ParseCommand('/say ' + InputStr, false);
          InputStr:= ''
-         end;
-     96: begin
-         GameState:= gsGame;
-         cConsoleYAdd:= 0;
-         ResetKbd
-         end;
+         end
      else
      if (Key < $80) then btw:= 1
      else if (Key < $800) then btw:= 2

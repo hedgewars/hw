@@ -140,7 +140,12 @@ while SDL_PollEvent(@event) <> 0 do
                                         cConsoleYAdd:= cConsoleHeight;
                                         GameState:= gsConsole
                                         end;
-                          gsConsole: KeyPressConsole(event.key.keysym.unicode);
+                          gsConsole: if event.key.keysym.sym = 96 then
+                                        begin
+                                        GameState:= gsGame;
+                                        cConsoleYAdd:= 0;
+                                        ResetKbd
+                                        end else KeyPressConsole(event.key.keysym.unicode);
                              end;
            SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                                cHasFocus:= event.active.gain = 1;

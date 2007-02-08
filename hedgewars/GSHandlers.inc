@@ -1063,21 +1063,24 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure doStepGirder(Gear: PGear);
+var HHGear: PGear;
 begin
 AllInactive:= false;
-writelntoconsole(inttostr(TargetPoint.X));
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
                       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
                       sprAmGirder, Gear^.State) then
-   with PHedgehog(Gear^.Hedgehog)^.Gear^ do
         begin
-        State:= State and not gstAttacking;
-        Message:= Message and not gm_Attack;
-        isCursorVisible:= true;
-        with PHedgehog(Gear^.Hedgehog)^ do
-             State:= State or gstHHChooseTarget
+        HHGear^.Message:= HHGear^.Message and not gm_Attack;
+        HHGear^.State:= HHGear^.State and not gstAttacking;
+        HHGear^.State:= HHGear^.State or gstHHChooseTarget;
+        DeleteGear(Gear);
+        isCursorVisible:= true
         end
-   else AfterAttack;
-TargetPoint.X:= NoPointX;
-DeleteGear(Gear)
+   else begin
+        DeleteGear(Gear);
+        AfterAttack
+        end;
+TargetPoint.X:= NoPointX
 end;

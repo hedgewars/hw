@@ -22,7 +22,7 @@
 #include <QString>
 #include <QtGlobal>
 
-#define BINDS_NUMBER 30
+#define BINDS_NUMBER 31
 
 struct BindAction
 {
@@ -52,7 +52,8 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"slot 5",	"f5",	QT_TRANSLATE_NOOP("binds", "slot 5"),	false},
 	{"slot 6",	"f6",	QT_TRANSLATE_NOOP("binds", "slot 6"),	false},
 	{"slot 7",	"f7",	QT_TRANSLATE_NOOP("binds", "slot 7"),	false},
-	{"slot 8",	"f8",	QT_TRANSLATE_NOOP("binds", "slot 8"),	true},
+	{"slot 8",	"f8",	QT_TRANSLATE_NOOP("binds", "slot 8"),	false},
+	{"slot 9",	"f9",	QT_TRANSLATE_NOOP("binds", "slot 9"),	true},
 	{"timer 1",	"1",	QT_TRANSLATE_NOOP("binds", "timer 1 sec"),	false},
 	{"timer 2",	"2",	QT_TRANSLATE_NOOP("binds", "timer 2 sec"),	false},
 	{"timer 3",	"3",	QT_TRANSLATE_NOOP("binds", "timer 3 sec"),	false},
