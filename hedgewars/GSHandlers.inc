@@ -377,13 +377,17 @@ if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and
    AfterAttack;
    exit
    end;
-if (Gear^.Timer and $3F) = 0 then
+   
+if (Gear^.Timer mod 33) = 0 then
+   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y) + 6, 6, EXPLDontDraw);
+
+if (Gear^.Timer mod 47) = 0 then
    begin
    i:= hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
    ei:= hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
    while i <= ei do
          begin
-         doMakeExplosion(i, hwRound(Gear^.Y) + 3, 3, 0);
+         DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
          inc(i, 1)
          end;
    Gear^.X:= Gear^.X + Gear^.dX;
