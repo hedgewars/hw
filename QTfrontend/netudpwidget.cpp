@@ -9,6 +9,7 @@ HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
   serversList = new QListWidget(this);
+  mainLayout.setMargin(0);
   mainLayout.addWidget(serversList);
   pUdpSocket = new QUdpSocket(this);
 
