@@ -145,24 +145,14 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'E': {
-			QMessageBox::critical(0,
-					"Hedgewars: error message",
-					QString().append(msg.mid(2)).left(msg.size() - 6),
-					QMessageBox::Ok,
-					QMessageBox::NoButton,
-					QMessageBox::NoButton);
+			emit ErrorMessage(QString().append(msg.mid(2)).left(msg.size() - 6));
 			return;
 		}
 		case 'K': {
 			ulong kb = msg.mid(2).toULong();
 			if (kb && kb <= KBmsgsCount)
 			{
-				QMessageBox::information(0,
-						"Hedgewars: information",
-						KBMessages[kb - 1],
-						QMessageBox::Ok,
-						QMessageBox::NoButton,
-						QMessageBox::NoButton);
+				emit ErrorMessage(KBMessages[kb - 1]);
 			}
 			return;
 		}
@@ -245,10 +235,7 @@ void HWGame::SaveDemo(const QString & filename)
 	QFile demofile(filename);
 	if (!demofile.open(QIODevice::WriteOnly))
 	{
-		QMessageBox::critical(0,
-				tr("Error"),
-				tr("Cannot save demo to file %1").arg(filename),
-				tr("Quit"));
+		emit ErrorMessage(tr("Cannot save demo to file %1").arg(filename));
 		return ;
 	}
 	QDataStream stream(&demofile);
@@ -264,10 +251,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	QFile demofile(demofilename);
 	if (!demofile.open(QIODevice::ReadOnly))
 	{
-		QMessageBox::critical(0,
-				tr("Error"),
-				tr("Cannot open demofile %1").arg(demofilename),
-				tr("Quit"));
+		emit ErrorMessage(tr("Cannot open demofile %1").arg(demofilename));
 		return ;
 	}
 

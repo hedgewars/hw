@@ -73,6 +73,7 @@ private slots:
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
 	void ForcedDisconnect();
+	void ShowErrorMessage(const QString &);
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

@@ -287,9 +287,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(initHealthChanged(quint32)), ui.pageNetGame->pGameCFG, SLOT(setInitHealth(quint32)));
 	connect(hwnet, SIGNAL(turnTimeChanged(quint32)), ui.pageNetGame->pGameCFG, SLOT(setTurnTime(quint32)));
 	connect(hwnet, SIGNAL(fortsModeChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setFortsMode(bool)));
-	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)), 
+	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
-	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)), 
+	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
 	hwnet->Connect(hostName, port, nick);
@@ -330,7 +330,7 @@ void HWForm::ForcedDisconnect()
   if (hwnet) {
     hwnet->deleteLater();
     hwnet=0;
-    QMessageBox::warning(this, QMessageBox::tr("Network"), 
+    QMessageBox::warning(this, QMessageBox::tr("Network"),
 			 QMessageBox::tr("Connection to server is lost"));
   }
   GoBack();
@@ -422,4 +422,12 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
 	game = new HWGame(config, gamecfg, pTeamSelWidget);
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
+	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
+}
+
+void HWForm::ShowErrorMessage(const QString & msg)
+{
+	QMessageBox::warning(this,
+			"Hedgewars",
+			msg);
 }

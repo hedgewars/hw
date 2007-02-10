@@ -163,7 +163,7 @@ repeat
            and ((steps mod 4) = 0) then
            begin
            TestAmmos(Actions, Me);
-           if SDL_GetTicks - AIThinkStart >= cTimerInterval then
+           if SDL_GetTicks - AIThinkStart >= Pred(cTimerInterval) then
               begin
               dec(Actions.Count, 3);
               Push(ticks, Actions, Me^, Me^.Message);

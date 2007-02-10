@@ -62,6 +62,7 @@ signals:
 	void SendNet(const QByteArray & msg);
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
+	void ErrorMessage(const QString &);
 
 public slots:
 	void FromNet(const QByteArray & msg);
