@@ -114,7 +114,7 @@ const
       cTransparentColor: Longword = $000000;
 
       cMaxHHIndex      = 7;
-      cMaxHHs          = 20;
+      cMaxHHs          = 30;
       cMaxSpawnPoints  = 1024;
 
       cMaxEdgePoints = 16384;
@@ -312,7 +312,7 @@ const
                      (FileName:'amAirplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  64; Height: 32; hasAlpha:  true),// sprAirplane
                      (FileName:  'amGirder'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width: 128; Height:128; hasAlpha: false) // sprAmGirder
+                     Width: 160; Height:160; hasAlpha: false) // sprAmGirder
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -616,7 +616,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 4;
+                                   PosCount: 8;
                                    PosSprite: sprAmGirder));
 
 implementation

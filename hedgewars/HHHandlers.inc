@@ -146,7 +146,7 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
           if (Gear^.Message and gm_Right )<>0 then
              Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
           else exit;
-          StepTicks:= 350;
+          StepTicks:= 200;
           exit
           end;
    if ((Gear^.Message and gm_LJump ) <> 0) then
