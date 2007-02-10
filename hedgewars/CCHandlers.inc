@@ -312,6 +312,7 @@ with CurrentTeam^ do
           begin
           if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
              or ((Gear^.State and gstHHDriven) = 0) then exit; // во время стрельбы исключает смену оружия
+          Gear^.Message:= 0;
           if CurAmmoGear = nil then begin caSlot:= @CurSlot; caAmmo:= @CurAmmo end
                                else begin caSlot:= @AltSlot; caAmmo:= @AltAmmo end;
           if caSlot^ = slot then
