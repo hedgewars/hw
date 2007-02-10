@@ -208,11 +208,11 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	QGridLayout * GBTLLayout = new QGridLayout(GBoxTeamLvl);
 	CBTeamLvl = new QComboBox(GBoxTeamLvl);
 	CBTeamLvl->addItem(QComboBox::tr("Human"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 1"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 2"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 3"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 4"));
 	CBTeamLvl->addItem(QComboBox::tr("Level 5"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 4"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 3"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 2"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 1"));
 	CBTeamLvl->setMaxCount(6);
 	GBTLLayout->addWidget(CBTeamLvl, 0, 0, 1, 3);
 	LevelPict = new QLabel(GBoxTeamLvl);
@@ -326,6 +326,14 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 100);
+	pageLayout->setColumnStretch(1, 100);
+	pageLayout->setColumnStretch(2, 100);
+	pageLayout->setRowStretch(0, 0);
+	pageLayout->setRowStretch(1, 0);
+	pageLayout->setRowStretch(2, 100);
+	pageLayout->setRowStretch(3, 0);
+
 	groupBox = new QGroupBox(this);
 	groupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	groupBox->setTitle(QGroupBox::tr("Teams"));
@@ -348,32 +356,42 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	AGGroupBox = new QGroupBox(this);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
-	pageLayout->addWidget(AGGroupBox, 1, 0, 1, 3);
+	pageLayout->addWidget(AGGroupBox, 1, 1);
 
-	QGridLayout * GBAlayout = new QGridLayout(AGGroupBox);
+	QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
+	QHBoxLayout * GBAreslayout = new QHBoxLayout(AGGroupBox);
+	QLabel * resolution = new QLabel(AGGroupBox);
+	resolution->setText(QLabel::tr("Resolution"));
+	GBAreslayout->addWidget(resolution);
+
 	CBResolution = new QComboBox(AGGroupBox);
 	CBResolution->addItem("640x480");
 	CBResolution->addItem("800x600");
 	CBResolution->addItem("1024x768");
 	CBResolution->addItem("1280x1024");
-	GBAlayout->addWidget(CBResolution, 0, 0);
+	GBAreslayout->addWidget(CBResolution);
+	GBAlayout->addLayout(GBAreslayout);
+
+	QHBoxLayout * GBAfpslayout = new QHBoxLayout(AGGroupBox);
+	QLabel * maxfps = new QLabel(AGGroupBox);
+	maxfps->setText(QLabel::tr("FPS limit"));
+	GBAfpslayout->addWidget(maxfps);
+	GBAlayout->addLayout(GBAfpslayout);
 
 	CBFullscreen = new QCheckBox(AGGroupBox);
 	CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-	GBAlayout->addWidget(CBFullscreen, 0, 1);
+	GBAlayout->addWidget(CBFullscreen);
 
 	CBEnableSound = new	QCheckBox(AGGroupBox);
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-	GBAlayout->addWidget(CBEnableSound, 0, 2);
+	GBAlayout->addWidget(CBEnableSound);
 
 	CBShowFPS = new QCheckBox(AGGroupBox);
 	CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-	GBAlayout->addWidget(CBShowFPS, 0, 3);
+	GBAlayout->addWidget(CBShowFPS);
 
 	fpsedit = new FPSEdit(AGGroupBox);
-	GBAlayout->addWidget(fpsedit, 0, 4);
-
-	pageLayout->addWidget(new QWidget(), 3, 0, 1, 3);
+	GBAfpslayout->addWidget(fpsedit);
 
 	BtnSaveOptions = new QPushButton(this);
 	BtnSaveOptions->setFont(*font14);
