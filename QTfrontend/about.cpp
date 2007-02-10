@@ -35,7 +35,7 @@ About::About(QWidget * parent) :
 	lbl1->setOpenExternalLinks(true);
 	lbl1->setText(
 			"<div align=\"center\"><h1>Hedgewars</h1>" +
-			QLabel::tr("<h3>Version 0.8.1</h3>") +
+			QLabel::tr("<h3>Version 0.9</h3>") +
 			"<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
 			QLabel::tr("This program is distributed under the GNU General Public License") +
 			"</div>"
@@ -61,6 +61,7 @@ About::About(QWidget * parent) :
 			"</p>" +
 			QLabel::tr("<h2>Special thanks:</h2><p>") +
 			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
+			"Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
 			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;"
 			"</p>" +
 			QLabel::tr("<h2></h2><p></p>")
