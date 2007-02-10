@@ -257,7 +257,7 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    TurnTimeLeft:= 0;
    Gear^.State:= Gear^.State and not gstHHDriven;
    if Gear^.Damage > 0 then
-      Gear^.State:= Gear^.State and not gstHHJumping;
+      Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
    exit
    end;
 if ((Gear^.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
@@ -280,11 +280,12 @@ if ((Gear^.Message and gm_Attack) <> 0) or
 
 if (Gear^.State and gstFalling) <> 0 then
    begin
-   // it could be the source to trick: hwFloat-backspace jump -> vertical wall
-   // collision - > (abs(Gear^.dX) < 0.0000002) -> backspace -> even more high jump
-   if ((Gear^.Message and gm_HJump) <> 0) and ((Gear^.State and gstHHJumping) <> 0) then
-      if (hwAbs(Gear^.dX) < cLittle + cLittle) and (Gear^.dY < -_0_02) then
+   if ((Gear^.Message and gm_HJump) <> 0) and
+      ((Gear^.State and gstHHJumping) <> 0) and
+      ((Gear^.State and gstHHHJump) = 0) then
+      if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
          begin
+         Gear^.State:= Gear^.State or gstHHHJump;
          Gear^.dY:= -_0_25;
          Gear^.dX:= hwSign(Gear^.dX) * _0_02
          end;
@@ -299,7 +300,7 @@ if (Gear^.State and gstFalling) <> 0 then
       CheckHHDamage(Gear);
       if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
          and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
-      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping);
+      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
       StepTicks:= 300;
       Gear^.dY:= 0
       end;

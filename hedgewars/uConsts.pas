@@ -144,6 +144,7 @@ const
       gsttmpFlag        = $00000200;
       gstHHThinking     = $00000800;
       gstNoDamage       = $00001000;
+      gstHHHJump        = $00002000;
 
       gm_Left   = $00000001;
       gm_Right  = $00000002;
