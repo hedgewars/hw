@@ -163,7 +163,7 @@ procedure AddLoopPoints(var pa, opa: TPixAr; StartI, EndI: LongInt; Delta: hwFlo
 var i, pi, ni: LongInt;
     NVx, NVy, PVx, PVy: hwFloat;
     x1, x2, y1, y2, cx1, cx2, cy1, cy2: hwFloat;
-    tsq, tcb, t, r1, r2, r3, r4: hwFloat;
+    tsq, tcb, t, r1, r2, r3: hwFloat;
     X, Y: LongInt;
 begin
 pi:= EndI;
@@ -194,16 +194,11 @@ repeat
           begin
           tsq:= t * t;
           tcb:= tsq * t;
-          r1:= (1 - 3*t + 3*tsq -   tcb) * x1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cx1;
-          r3:= (          3*tsq - 3*tcb) * cx2;
-          r4:= (                    tcb) * x2;
-          X:= hwRound(r1 + r2 + r3 + r4);
-          r1:= (1 - 3*t + 3*tsq -   tcb) * y1;
-          r2:= (    3*t - 6*tsq + 3*tcb) * cy1;
-          r3:= (          3*tsq - 3*tcb) * cy2;
-          r4:= (                    tcb) * y2;
-          Y:= hwRound(r1 + r2 + r3 + r4);
+          r1:= (1 - 3*t + 3*tsq -   tcb);
+          r2:= (    3*t - 6*tsq + 3*tcb);
+          r3:= (          3*tsq - 3*tcb);
+          X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
+          Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
           t:= t + Delta;
           pa.ar[pa.Count].x:= X;
           pa.ar[pa.Count].y:= Y;
