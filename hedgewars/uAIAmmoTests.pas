@@ -262,7 +262,7 @@ if (hwAbs(Me^.X - Targ.X) > 25) or (hwAbs(Me^.Y - 50 - Targ.Y) > 50) then
 Result:= 0;
 for i:= 0 to 4 do
     Result:= Result + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Targ.X - Me^.X), hwRound(Me^.Y) - 20 * i - 5, 10, 30);
-if Result <= 0 then Result:= BadTurn;
+if Result <= 0 then Result:= BadTurn else inc(Result);
 TestFirePunch:= Result
 end;
 

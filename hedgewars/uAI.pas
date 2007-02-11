@@ -42,6 +42,10 @@ if ThinkThread <> nil then
    SDL_WaitThread(ThinkThread, nil);
    ThinkThread:= nil
    end;
+
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+     if Gear <> nil then Gear^.Message:= 0;
+
 BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;

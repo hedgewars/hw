@@ -156,7 +156,7 @@ if PrevTime + cTimerInterval <= CurrTime then
    begin
    DoTimer(CurrTime - PrevTime);
    PrevTime:= CurrTime
-   end else {sleep(1)};
+   end else SDL_Delay(1);
 IPCCheckSock
 until isTerminated
 end;
