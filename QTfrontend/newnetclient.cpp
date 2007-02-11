@@ -283,7 +283,15 @@ void HWNewNet::RunGame()
   connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
+  connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
   game->StartNet();
+}
+
+void HWNewNet::ShowErrorMessage(const QString & msg)
+{
+	QMessageBox::warning(0,
+			"Hedgewars",
+			msg);
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)

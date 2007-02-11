@@ -118,6 +118,7 @@ class HWNewNet : public QObject
   void OnDisconnect();
   //void Perform();
   void displayError(QAbstractSocket::SocketError socketError);
+  void ShowErrorMessage(const QString &);
   //void FlushNetBuf();
 };
 

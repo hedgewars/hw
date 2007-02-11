@@ -311,8 +311,8 @@ with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
           begin
           if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
-             or ((Gear^.State and gstHHDriven) = 0) then exit; // во время стрельбы исключает смену оружия
-          Gear^.Message:= 0;
+             or ((Gear^.State and gstHHDriven) = 0) then exit;
+          Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
           if CurAmmoGear = nil then begin caSlot:= @CurSlot; caAmmo:= @CurAmmo end
                                else begin caSlot:= @AltSlot; caAmmo:= @AltAmmo end;
           if caSlot^ = slot then

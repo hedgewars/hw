@@ -48,7 +48,7 @@ n:= 54;
 if Length(Seed) > 54 then Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
 
 for i:= 1 to Length(Seed) do
-    cirbuf[i - 1]:= byte(Seed[i]) * i;
+    cirbuf[i - 1]:= byte(Seed[i]) * (i * 2 + 7);
 
 for i:= Length(Seed) to 54 do
     cirbuf[i]:= i * 7 + 1;

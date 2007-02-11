@@ -439,7 +439,7 @@ for y:= 0 to 1023 do
 SetPoints(Template, pa);
 for i:= 1 to Template.BezierizeCount do
     begin
-    BezierizeEdge(pa, _1div3);
+    BezierizeEdge(pa, _0_5);
     RandomizePoints(pa)
     end;
 for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
