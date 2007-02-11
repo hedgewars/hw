@@ -53,7 +53,7 @@ while (GameState <> gsExit) and (i <= Lag) do
     if not CurrentTeam^.ExtDriven then
        begin
        with CurrentTeam^ do
-           if Hedgehogs[CurrHedgehog].BotLevel <> 0 then ProcessBot(Frames);
+           if Hedgehogs[CurrHedgehog].BotLevel <> 0 then ProcessBot;
        ProcessGears
        end else
        begin

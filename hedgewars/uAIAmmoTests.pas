@@ -24,9 +24,10 @@ function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 (*function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+*)
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-*)
+
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 const AmmoTests: array[TAmmoType] of TAmmoTestProc =
                  (
@@ -34,15 +35,15 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amClusterBomb}   nil,
 {amBazooka}       @TestBazooka,
 {amUFO}           nil,
-{amShotgun}       @TestShotgun,
+{amShotgun}       nil,//@TestShotgun,
 {amPickHammer}    nil,
 {amSkip}          nil,
 {amRope}          nil,
 {amMine}          nil,
 {amDEagle}        nil,//TestDesertEagle,
 {amDynamite}      nil,
-{amFirePunch}     nil,//TestFirePunch,
-{amBaseballBat}   nil,//TestBaseballBat,
+{amFirePunch}     @TestFirePunch,
+{amBaseballBat}   @TestBaseballBat,
 {amParachute}     nil,
 {amAirAttack}     nil,
 {amMineStrike}    nil,
@@ -106,8 +107,8 @@ repeat
      Score:= CheckTrace;
      if Result <= Score then
         begin
-        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 8));
-        Power:= hwRound(r * cMaxPower) - random((Level - 1) * 15 + 1);
+        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 11));
+        Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
         ExplR:= 100;
         ExplX:= EX;
         ExplY:= EY;
@@ -159,7 +160,7 @@ repeat
      if Result < Score then
         begin
         Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-        Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 12);
+        Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
         Time:= TestTime;
         ExplR:= 100;
         ExplX:= EX;
@@ -232,38 +233,37 @@ until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048
 if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
                                          else Result:= Low(LongInt)
 end;
-
+}
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+var Result: LongInt;
 begin
 ExplR:= 0;
-if (Level > 2) and (abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) >= 25) then
-   begin
-   Result:= BadTurn;
-   exit
-   end;
+if (Level > 2) and not (hwAbs(Me^.X - Targ.X) + hwAbs(Me^.Y - Targ.Y) < 25) then
+   exit(BadTurn);
+
 Time:= 0;
 Power:= 1;
-Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
-Result:= RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y), 15, 30);
-if Result <= 0 then Result:= BadTurn
+Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me^.X), 1);
+Result:= RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Targ.X - Me^.X), hwRound(Me^.Y), 15, 30);
+if Result <= 0 then Result:= BadTurn else inc(Result);
+TestBaseballBat:= Result
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-var i: LongInt;
+var i, Result: LongInt;
 begin
 ExplR:= 0;
-if (abs(Me.X - Targ.X) > 25) or (abs(Me.Y - 50 - Targ.Y) > 50) then
-   begin
-   Result:= BadTurn;
-   exit
-   end;
 Time:= 0;
 Power:= 1;
-Angle:= DxDy2AttackAngle(hwSign(Targ.X - Me.X), 1);
+Angle:= 0;
+if (hwAbs(Me^.X - Targ.X) > 25) or (hwAbs(Me^.Y - 50 - Targ.Y) > 50) then
+   exit(BadTurn);
+
 Result:= 0;
 for i:= 0 to 4 do
-    Result:= Result + RateShove(Me, round(Me.X) + 10 * hwSign(Targ.X - Me.X), round(Me.Y) - 20 * i - 5, 10, 30);
-if Result <= 0 then Result:= BadTurn
+    Result:= Result + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Targ.X - Me^.X), hwRound(Me^.Y) - 20 * i - 5, 10, 30);
+if Result <= 0 then Result:= BadTurn;
+TestFirePunch:= Result
 end;
-}
+
 end.

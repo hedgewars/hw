@@ -11,7 +11,6 @@ set(engine_sources
 	uAIActions.pas
 	uAIAmmoTests.pas
 	uAIMisc.pas
-	uAIThinkStack.pas
 	uAmmos.pas
 	uCollisions.pas
 	uConsole.pas

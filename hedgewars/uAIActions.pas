@@ -59,7 +59,7 @@ procedure AddAction(var Actions: TActions; Action: Longword; Param: LongInt; Tim
 procedure ProcessAction(var Actions: TActions; Me: PGear);
 
 implementation
-uses uMisc, uTeams, uConsts, uConsole, uAIMisc;
+uses uMisc, uTeams, uConsts, uConsole, uAIMisc, uAI;
 
 const ActionIdToStr: array[0..6] of string[16] = (
 {aia_none}           '',
@@ -150,14 +150,16 @@ with Actions.actions[Actions.Pos] do
                           else if hwRound(Me^.X) < Param then
                                begin
                                OutError('AI: WaitXL assert', false);
-                               Actions.Count:= 0
+                               FreeActionsList;
+                               exit
                                end
                           else begin CheckHang; exit end;
            aia_WaitXR: if hwRound(Me^.X) = Param then Time:= GameTicks
                           else if hwRound(Me^.X) > Param then
                                begin
                                OutError('AI: WaitXR assert', false);
-                               Actions.Count:= 0
+                               FreeActionsList;
+                               exit
                                end
                           else begin CheckHang; exit end;
          aia_LookLeft: if not Me^.dX.isNegative then

@@ -33,7 +33,7 @@ var isCursorVisible : boolean = false;
     GameFlags     : Longword = 0;
     TurnTimeLeft  : Longword = 0;
     cHedgehogTurnTime: Longword = 45000;
-    cMaxAIThinkTime  : Longword = 5000;
+    cMaxAIThinkTime  : Longword = 9000;
 
     cCloudsNumber    : LongInt = 9;
     cConsoleHeight   : LongInt = 320;

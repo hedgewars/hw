@@ -188,6 +188,9 @@ type PSDL_Rect = ^TSDL_Rect;
      PLongWordArray = ^TLongWordArray;
      TLongWordArray = array[0..16383] of LongWord;
 
+     PSDL_Thread = Pointer;
+     PSDL_mutex = Pointer;
+     
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
@@ -232,6 +235,13 @@ function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
+
+function  SDL_CreateThread(fn: pointer; data: pointer): PSDL_Thread; cdecl; external SDLLibName;
+procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
+function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
+procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
+function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';
+function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexV';
 
 (*  TTF  *)
 

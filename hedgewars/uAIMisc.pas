@@ -199,7 +199,7 @@ function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
 var i, dmg, Result: LongInt;
 begin
 Result:= 0;
-for i:= 0 to Targets.Count do
+for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          begin
          dmg:= r - hwRound(Distance(Point.x - x, Point.y - y));
@@ -241,7 +241,7 @@ case JumpType of
               if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
                  or   TestCollisionYwithGear(Gear, -1)) then
                  begin
-                 Gear^.dY:= _0_15;
+                 Gear^.dY:= -_0_15;
                  Gear^.dX:= hwSign(Gear^.dX) * _0_15;
                  Gear^.State:= Gear^.State or gstFalling or gstHHJumping
                  end else exit(Result)
@@ -253,7 +253,7 @@ if not (Gear^.Y + cHHRadius < cWaterLine) then exit(Result);
 if (Gear^.State and gstFalling) <> 0 then
    begin
    if (GoInfo.Ticks = 350) then
-      if (hwAbs(Gear^.dX) < cLittle + cLittle) and (Gear^.dY < -_0_02) then
+      if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
          begin
          Gear^.dY:= -_0_25;
          Gear^.dX:= hwSign(Gear^.dX) * _0_02
