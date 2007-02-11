@@ -126,8 +126,7 @@ case Gear^.Pos of
                     RenderHealth(PHedgehog(HH^.Hedgehog)^);
                     RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team)
                     end;
-     end;
-FreeActionsList
+     end
 end;
 
 const StepTicks: LongWord = 0;

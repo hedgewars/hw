@@ -785,6 +785,7 @@ begin
 if (Gear^.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
+   FreeActionsList;
    exit
    end;
 
