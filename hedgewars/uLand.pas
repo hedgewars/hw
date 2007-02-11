@@ -400,7 +400,7 @@ with Template do
      end
 end;
 
-procedure RandomizePoints(var pa: TPixAr; MaxRad: LongInt);
+procedure RandomizePoints(var pa: TPixAr);
 const cEdge = 55;
       cMinDist = 0;
 var radz: array[0..Pred(cMaxEdgePoints)] of LongInt;
@@ -416,7 +416,7 @@ for i:= 0 to Pred(pa.Count) do
       if radz[i] > 0 then
         for k:= 0 to Pred(i) do
           begin
-          dist:= Min(Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y)), MaxRad);
+          dist:= Max(abs(x - pa.ar[k].x), abs(y - pa.ar[k].y));
           radz[k]:= Max(0, Min((dist - cMinDist) div 2, radz[k]));
           radz[i]:= Max(0, Min(dist - radz[k] - cMinDist, radz[i]))
         end
@@ -442,10 +442,12 @@ for y:= 0 to 1023 do
         Land[y, x]:= COLOR_LAND;
 
 SetPoints(Template, pa);
-BezierizeEdge(pa, _1div3);
-for i:= 0 to Pred(Template.RandPassesCount) do RandomizePoints(pa, 1000);
-BezierizeEdge(pa, _1div3);
-RandomizePoints(pa, 1000);
+for i:= 1 to Template.BezierizeCount do
+    begin
+    BezierizeEdge(pa, _1div3);
+    RandomizePoints(pa)
+    end;
+for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);
 BezierizeEdge(pa, _0_1);
 
 DrawEdge(pa, 0);

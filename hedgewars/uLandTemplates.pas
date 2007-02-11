@@ -30,6 +30,7 @@ type PPointArray = ^TPointArray;
                      BasePointsCount: Longword;
                      FillPoints: PPointArray;
                      FillPointsCount: Longword;
+                     BezierizeCount: Longword;
                      RandPassesCount: Longword;
                      canMirror, canFlip: boolean;
                      end;
@@ -213,60 +214,88 @@ const Template6Points: array[0..13] of TSDL_Rect =
        (x: 1646; y: 1020; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
        );
-
       Template6FPoints: array[0..0] of TPoint =
       (
        (x: 1023; y:    0)
       );
 
-const EdgeTemplates: array[0..6] of TEdgeTemplate =
+const Template7Points: array[0..5] of TSDL_Rect =
+      (
+       (x:  162; y: 1024; w:  400; h:    1),
+       (x:  226; y:  234; w:  142; h:  360),
+       (x:  936; y:  740; w:  400; h:  200),
+       (x: 1576; y:  176; w:  186; h:  550),
+       (x: 1430; y: 1024; w:  454; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template7FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+
+const EdgeTemplates: array[0..7] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
         FillPoints: @Template0FPoints;
         FillPointsCount: Succ(High(Template0FPoints));
-        RandPassesCount: 4;
+        BezierizeCount: 2;
+        RandPassesCount: 3;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
         FillPoints: @Template1FPoints;
         FillPointsCount: Succ(High(Template1FPoints));
-        RandPassesCount: 3;
-        canMirror: false; canFlip: false;
+        BezierizeCount: 2;
+        RandPassesCount: 2;
+        canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
         FillPoints: @Template2FPoints;
         FillPointsCount: Succ(High(Template2FPoints));
-        RandPassesCount: 3;
-        canMirror: false; canFlip: false;
+        BezierizeCount: 2;
+        RandPassesCount: 2;
+        canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template3Points;
         BasePointsCount: Succ(High(Template3Points));
         FillPoints: @Template3FPoints;
         FillPointsCount: Succ(High(Template3FPoints));
-        RandPassesCount: 3;
+        BezierizeCount: 2;
+        RandPassesCount: 2;
         canMirror: false; canFlip: false;
        ),
        (BasePoints: @Template4Points;
         BasePointsCount: Succ(High(Template4Points));
         FillPoints: @Template4FPoints;
         FillPointsCount: Succ(High(Template4FPoints));
-        RandPassesCount: 3;
-        canMirror: false; canFlip: false;
+        BezierizeCount: 2;
+        RandPassesCount: 2;
+        canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template5Points;
         BasePointsCount: Succ(High(Template5Points));
         FillPoints: @Template5FPoints;
         FillPointsCount: Succ(High(Template5FPoints));
-        RandPassesCount: 3;
+        BezierizeCount: 2;
+        RandPassesCount: 2;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template6Points;
         BasePointsCount: Succ(High(Template6Points));
         FillPoints: @Template6FPoints;
         FillPointsCount: Succ(High(Template6FPoints));
+        BezierizeCount: 2;
+        RandPassesCount: 2;
+        canMirror: true; canFlip: false;
+       ),
+       (BasePoints: @Template7Points;
+        BasePointsCount: Succ(High(Template7Points));
+        FillPoints: @Template7FPoints;
+        FillPointsCount: Succ(High(Template7FPoints));
+        BezierizeCount: 3;
         RandPassesCount: 3;
         canMirror: true; canFlip: false;
        )
