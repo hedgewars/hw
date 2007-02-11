@@ -359,7 +359,7 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(AGGroupBox, 1, 1);
 
 	QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
-	QHBoxLayout * GBAreslayout = new QHBoxLayout(AGGroupBox);
+	QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
 	QLabel * resolution = new QLabel(AGGroupBox);
 	resolution->setText(QLabel::tr("Resolution"));
 	GBAreslayout->addWidget(resolution);
@@ -372,7 +372,7 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	GBAreslayout->addWidget(CBResolution);
 	GBAlayout->addLayout(GBAreslayout);
 
-	QHBoxLayout * GBAfpslayout = new QHBoxLayout(AGGroupBox);
+	QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
 	QLabel * maxfps = new QLabel(AGGroupBox);
 	maxfps->setText(QLabel::tr("FPS limit"));
 	GBAfpslayout->addWidget(maxfps);
