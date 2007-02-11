@@ -438,7 +438,7 @@ SDL_FreeSurface(StoreSurface )
 end;
 
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
-var w, h: Longint;
+var w, h: LongInt;
     Result: PSDL_Surface;
 begin
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);

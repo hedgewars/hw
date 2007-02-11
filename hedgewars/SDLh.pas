@@ -30,10 +30,7 @@ interface
 {$linklib pthread}
 {$ENDIF}
 
-{$IFDEF FPC}
-  {$MODE Delphi}
-  { $PACKRECORDS 4}
-{$ENDIF}
+{$PACKRECORDS C}
 
 (*  SDL *)
 const {$IFDEF WIN32}
@@ -102,10 +99,10 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_Surface = record
                     flags : Longword;
                     format: PSDL_PixelFormat;
-                    w, h  : integer;
+                    w, h  : LongInt;
                     pitch : Word;
                     pixels: Pointer;
-                    offset: integer;
+                    offset: LongInt;
                     end;
 
      PSDL_Color = ^TSDL_Color;
@@ -191,30 +188,30 @@ type PSDL_Rect = ^TSDL_Rect;
      PLongWordArray = ^TLongWordArray;
      TLongWordArray = array[0..16383] of LongWord;
 
-function  SDL_Init(flags: Longword): integer; cdecl; external SDLLibName;
+function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
-function  SDL_VideoDriverName(var namebuf; maxlen: integer): PChar; cdecl; external SDLLibName;
-procedure SDL_EnableUNICODE(enable: integer); cdecl; external SDLLibName;
+function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
+procedure SDL_EnableUNICODE(enable: LongInt); cdecl; external SDLLibName;
 
 procedure SDL_Delay(msec: Longword); cdecl; external SDLLibName;
 function  SDL_GetTicks: Longword; cdecl; external SDLLibName;
 
 function  SDL_MustLock(Surface: PSDL_Surface): Boolean;
-function  SDL_LockSurface(Surface: PSDL_Surface): integer; cdecl; external SDLLibName;
+function  SDL_LockSurface(Surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 procedure SDL_UnlockSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 
 function  SDL_GetError: PChar; cdecl; external SDLLibName;
 
-function  SDL_SetVideoMode(width, height, bpp: integer; flags: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: integer; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
-function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: integer; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_SetVideoMode(width, height, bpp: LongInt; flags: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
+function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_UpdateRect(Screen: PSDL_Surface; x, y: LongInt; w, h: Longword); cdecl; external SDLLibName;
-function  SDL_Flip(Screen: PSDL_Surface): integer; cdecl; external SDLLibName;
+function  SDL_Flip(Screen: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_GetRGB(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
 function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): Longword; cdecl; external SDLLibName;
@@ -223,16 +220,16 @@ function  SDL_DisplayFormat(Surface: PSDL_Surface): PSDL_Surface; cdecl; externa
 function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDLLibName;
-function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: integer): integer; cdecl; external SDLLibName;
+function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 function  SDL_GetMouseState(x, y: PInteger): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
-function  SDL_PollEvent(event: PSDL_Event): integer; cdecl; external SDLLibName;
+function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 
-function  SDL_ShowCursor(toggle: integer): integer; cdecl; external SDLLibName;
+function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 
@@ -252,18 +249,18 @@ type PTTF_Font = ^TTTF_font;
      TTTF_Font = record
                  end;
 
-function TTF_Init: integer; cdecl; external SDL_TTFLibName;
+function TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
 
-function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: integer): integer; cdecl; external SDL_TTFLibName;
+function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 (* TSDL_Color -> Longword conversion is workaround over freepascal bug.
    See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
 function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
-function TTF_OpenFont(const filename: PChar; size: integer): PTTF_Font; cdecl; external SDL_TTFLibName;
-procedure TTF_SetFontStyle(font: PTTF_Font; style: integer); cdecl; external SDL_TTFLibName;
+function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer *)
 
@@ -385,7 +382,7 @@ implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
-Result:= ( surface^.offset <> 0 )
+SDL_MustLock:= ( surface^.offset <> 0 )
        or(( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
 end;
 
