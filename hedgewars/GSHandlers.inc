@@ -1024,8 +1024,8 @@ if (Gear^.Health > 0)and( not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAir
    begin
    dec(Gear^.Health);
    case Gear^.State of
-        0: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.Tag * cBombsSpeed, 0, 0);
-        1: AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, Gear^.Tag * cBombsSpeed, 0, 0);
+        0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.Tag * cBombsSpeed, 0, 0);
+        1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, Gear^.Tag * cBombsSpeed, 0, 0);
         end;
    Gear^.dX:= Gear^.dX + Gear^.Tag * cBombsDistance
    end;
