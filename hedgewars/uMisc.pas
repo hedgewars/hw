@@ -196,7 +196,7 @@ dY:= _dY.QWordValue / $100000000;
 if _dY.isNegative then dY:= - dY;
 dX:= _dX.QWordValue / $100000000;
 if _dX.isNegative then dX:= - dX;
-DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI) mod cMaxAngle
+DxDy2AttackAngle:= trunc(arctan2(dY, dX) * MaxAngleDivPI)
 end;
 
 procedure SetKB(n: Longword);

@@ -23,8 +23,7 @@ uses SDLh, uGears, uConsts, uFloat;
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-(*function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-*)
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 
@@ -35,12 +34,12 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amClusterBomb}   nil,
 {amBazooka}       @TestBazooka,
 {amUFO}           nil,
-{amShotgun}       nil,//@TestShotgun,
+{amShotgun}       @TestShotgun,
 {amPickHammer}    nil,
 {amSkip}          nil,
 {amRope}          nil,
 {amMine}          nil,
-{amDEagle}        nil,//TestDesertEagle,
+{amDEagle}        @TestDesertEagle,
 {amDynamite}      nil,
 {amFirePunch}     @TestFirePunch,
 {amBaseballBat}   @TestBaseballBat,
@@ -204,36 +203,38 @@ repeat
 until (hwAbs(Targ.X - x) + hwAbs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024);
 TestShotgun:= BadTurn
 end;
-{
+
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
+    Result: LongInt;
 begin
 ExplR:= 0;
-if abs(Me.X - Targ.X) + abs(Me.Y - Targ.Y) < 80 then
+if hwAbs(Me^.X - Targ.X) + hwAbs(Me^.Y - Targ.Y) < 80 then
    begin
    Result:= BadTurn;
    exit
    end;
 Time:= 0;
 Power:= 1;
-t:= sqrt(sqr(Targ.X - Me.X) + sqr(Targ.Y - Me.Y)) * 2;
-Vx:= (Targ.X - Me.X) / t;
-Vy:= (Targ.Y - Me.Y) / t;
-x:= Me.X;
-y:= Me.Y;
+t:= _0_5 / Distance(Targ.X - Me^.X, Targ.Y - Me^.Y);
+Vx:= (Targ.X - Me^.X) * t;
+Vy:= (Targ.Y - Me^.Y) * t;
+x:= Me^.X;
+y:= Me^.Y;
 Angle:= DxDy2AttackAngle(Vx, -Vy);
 d:= 0;
 repeat
   x:= x + vX;
   y:= y + vY;
-  if ((round(x) and $FFFFF800) = 0)and((round(y) and $FFFFFC00) = 0)
-     and (Land[round(y), round(x)] <> 0) then inc(d);
-until (abs(Targ.X - x) + abs(Targ.Y - y) < 2) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024) or (d > 200);
-if abs(Targ.X - x) + abs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
-                                         else Result:= Low(LongInt)
+  if ((hwRound(x) and $FFFFF800) = 0)and((hwRound(y) and $FFFFFC00) = 0)
+     and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
+until (hwAbs(Targ.X - x) + hwAbs(Targ.Y - y) < 4) or (x < 0) or (y < 0) or (x > 2048) or (y > 1024) or (d > 200);
+if hwAbs(Targ.X - x) + hwAbs(Targ.Y - y) < 2 then Result:= max(0, (4 - d div 50) * 7 * 1024)
+                                             else Result:= Low(LongInt);
+TestDesertEagle:= Result
 end;
-}
+
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
 var Result: LongInt;
 begin
