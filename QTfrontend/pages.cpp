@@ -96,17 +96,26 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 PageLocalGame::PageLocalGame(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	QGridLayout * pageLayout = new QGridLayout(this);
-	BtnBack =	new QPushButton(this);
+	QVBoxLayout * pageLayout = new QVBoxLayout(this);
+	QHBoxLayout * topLayout = new QHBoxLayout();
+	QHBoxLayout * bottomLayout = new QHBoxLayout();
+	pageLayout->addLayout(topLayout, 100);
+	pageLayout->addLayout(bottomLayout, 0);
+
+	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	bottomLayout->addWidget(BtnBack, 100);
+	bottomLayout->addStretch(100);
 	BtnSimpleGame = new	QPushButton(this);
 	BtnSimpleGame->setFont(*font14);
 	BtnSimpleGame->setText(QPushButton::tr("Simple Game"));
-	pageLayout->addWidget(BtnSimpleGame, 1, 3);
+	bottomLayout->addWidget(BtnSimpleGame, 100);
+
 	gameCFG = new GameCFGWidget(this);
-	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
+	topLayout->addStretch(100);
+	topLayout->addWidget(gameCFG);
+	topLayout->addStretch(100);
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
