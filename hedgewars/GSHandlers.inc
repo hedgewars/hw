@@ -786,6 +786,8 @@ if (Gear^.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
    FreeActionsList;
+   with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+     if Gear <> nil then Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
    exit
    end;
 
