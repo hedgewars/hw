@@ -50,7 +50,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amGirder}        nil
                   );
 
-const BadTurn = Low(LongInt);
+const BadTurn = Low(LongInt) div 4;
 
 
 implementation
@@ -106,7 +106,7 @@ repeat
      Score:= CheckTrace;
      if Result <= Score then
         begin
-        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 11));
+        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
         Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
         ExplR:= 100;
         ExplX:= EX;
@@ -167,7 +167,7 @@ repeat
         Result:= Score
         end;
      end
-until (TestTime = 5000);
+until (TestTime = 4000);
 TestGrenade:= Result
 end;
 
@@ -176,13 +176,10 @@ var Vx, Vy, x, y: hwFloat;
     rx, ry, Result: LongInt;
 begin
 ExplR:= 0;
-if Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y) < 80 then
-   begin
-   Result:= BadTurn;
-   exit
-   end;
 Time:= 0;
 Power:= 1;
+if Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y) < 80 then
+   exit(BadTurn);
 Vx:= (Targ.X - Me^.X) * _1div1024;
 Vy:= (Targ.Y - Me^.Y) * _1div1024;
 x:= Me^.X;
@@ -210,13 +207,10 @@ var Vx, Vy, x, y, t: hwFloat;
     Result: LongInt;
 begin
 ExplR:= 0;
-if hwAbs(Me^.X - Targ.X) + hwAbs(Me^.Y - Targ.Y) < 80 then
-   begin
-   Result:= BadTurn;
-   exit
-   end;
 Time:= 0;
 Power:= 1;
+if hwAbs(Me^.X - Targ.X) + hwAbs(Me^.Y - Targ.Y) < 80 then
+   exit(BadTurn);
 t:= _0_5 / Distance(Targ.X - Me^.X, Targ.Y - Me^.Y);
 Vx:= (Targ.X - Me^.X) * t;
 Vy:= (Targ.Y - Me^.Y) * t;

@@ -806,7 +806,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
    Gear^.dY:= Gear^.dY + cGravity;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= 0 else
-   if (Gear^.dY.QWordValue <> 0) and TestCollisionYwithGear(Gear, 1) then
+   if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
       begin
       Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
       if Gear^.dY > - _0_001 then Gear^.dY:= 0
