@@ -66,6 +66,6 @@ SOURCES += game.cpp \
            netudpserver.cpp \
            netudpwidget.cpp
 
-TRANSLATIONS += translations/hedgewars_ru.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 
 RESOURCES += hedgewars.qrc

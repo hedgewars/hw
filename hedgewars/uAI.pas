@@ -43,6 +43,9 @@ if ThinkThread <> nil then
    ThinkThread:= nil
    end;
 
+   with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+     if Gear <> nil then Gear^.Message:= 0;
+     
 BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;
