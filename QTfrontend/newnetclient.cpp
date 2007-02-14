@@ -197,7 +197,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
     emit themeChanged(lst[2]);
     emit initHealthChanged(lst[3].toUInt());
     emit turnTimeChanged(lst[4].toUInt());
-    //emit fortsModeChanged(lst[5].toInt() != 0); // FIXME: add a getFortsMode in ConfigAsked
+    emit fortsModeChanged(lst[5].toInt() != 0);
     return;
   }
 
@@ -278,6 +278,7 @@ void HWNewNet::ConfigAsked()
   onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
   onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
   onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
+  onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
 }
 
 void HWNewNet::RunGame()
