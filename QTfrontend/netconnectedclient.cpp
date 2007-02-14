@@ -109,7 +109,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="ADDTEAM:") {
-    if(lst.size()<11) return;
+    if(lst.size()<14) return;
     lst.pop_front();
     
     // add team ID

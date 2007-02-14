@@ -65,6 +65,9 @@ void HWNewNet::AddTeam(const HWTeam & team)
   RawSendNet(QString("ADDTEAM:") + delimeter +
 	     team.TeamName + delimeter +
 	     team.teamColor.name() + delimeter +
+	     team.Grave + delimeter +
+	     team.Fort + delimeter +
+	     QString::number(team.difficulty) + delimeter +
 	     team.HHName[0] + delimeter + team.HHName[1] + delimeter +
 	     team.HHName[2] + delimeter + team.HHName[3] + delimeter + team.HHName[4] + delimeter +
 	     team.HHName[5] + delimeter + team.HHName[6] + delimeter + team.HHName[7]);
@@ -279,7 +282,7 @@ void HWNewNet::ConfigAsked()
 
 void HWNewNet::RunGame()
 {
-  HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget); // FIXME: memory leak here (stackify it?)
+  HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget);
   connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));

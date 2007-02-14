@@ -42,7 +42,7 @@ QStringList HWMap::setArguments()
 
 void HWMap::onClientDisconnect()
 {
-  QImage im((uchar*)(const char*)readbuffer, 256, 128, QImage::Format_Mono);
+  QImage im((uchar*)(readbuffer.constData()), 256, 128, QImage::Format_Mono);
   im.setNumColors(2);
   emit ImageReceived(im);
 }

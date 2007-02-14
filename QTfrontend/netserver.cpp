@@ -100,15 +100,6 @@ bool HWNetServer::isChiefClient(HWConnectedClient* cl) const
 QMap<QString, QStringList> HWNetServer::getGameCfg() const
 {
   return m_gameCfg;
-  /*
-  for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-    if(isChiefClient(*it)) {
-      return (*it)->m_gameCfg;
-    }
-  }
-  // error happened if we are here
-  return QMap<QString, QStringList>();
-  */
 }
 
 bool HWNetServer::haveNick(const QString& nick) const

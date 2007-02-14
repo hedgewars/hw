@@ -59,7 +59,6 @@ void TCPBase::NewConnection()
   IPCSocket = IPCServer->nextPendingConnection();
   if(!IPCSocket) return;
   connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-  connect(IPCSocket, SIGNAL(disconnected()), IPCSocket, SLOT(deleteLater()));
   connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   SendToClientFirst();
 }
@@ -78,16 +77,20 @@ void TCPBase::RealStart()
 
 void TCPBase::ClientDisconnect()
 {
+  disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   onClientDisconnect();
 
   if(srvsList.size()==1) srvsList.pop_front();
   emit isReadyNow();
+  IPCSocket->deleteLater();
   deleteLater();
 }
 
 void TCPBase::ClientRead()
 {
-  readbuffer.append(IPCSocket->readAll());
+  QByteArray readed=IPCSocket->readAll();
+  if(readed.isEmpty()) return;
+  readbuffer.append(readed);
   onClientRead();
 }
 

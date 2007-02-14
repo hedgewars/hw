@@ -50,10 +50,13 @@ HWTeam::HWTeam(const QStringList& strLst) :
   numHedgehogs(4)
 {
   // net teams are configured from QStringList
-  if(strLst.size()<10) throw HWTeamConstructException();
+  if(strLst.size()<13) throw HWTeamConstructException();
   TeamName=strLst[0];
   m_netID=strLst[1].toUInt();
-  for(int i = 0; i < 8; i++) HHName[i]=strLst[i+2];
+  Grave=strLst[2];
+  Fort=strLst[3];
+  difficulty=strLst[4].toUInt();
+  for(int i = 0; i < 8; i++) HHName[i]=strLst[i+5];
 }
 
 HWTeam::HWTeam(quint8 num) :
