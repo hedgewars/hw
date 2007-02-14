@@ -25,7 +25,7 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos;
+     uAmmos, uConsole;
 
 var BestActions: TActions;
     ThinkThread: PSDL_Thread = nil;
@@ -44,7 +44,12 @@ if ThinkThread <> nil then
    end;
 
    with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
-     if Gear <> nil then Gear^.Message:= 0;
+     if Gear <> nil then
+        if BotLevel <> 0 then
+           begin
+           if (Gear^.Message and gm_Left) <> 0 then ParseCommand('-left', true);
+           if (Gear^.Message and gm_Right) <> 0 then ParseCommand('-right', true);
+           end;
      
 BestActions.Count:= 0;
 BestActions.Pos:= 0
