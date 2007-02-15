@@ -255,7 +255,7 @@ const
                      (FileName:     'Frame'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:   4; Height: 32; hasAlpha:  true),// sprFrame
                      (FileName:       'Lag'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width:  64; Height: 64; hasAlpha: false),// sprLag
+                     Width:  65; Height: 65; hasAlpha:  true),// sprLag
                      (FileName:     'Arrow'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  16; Height: 16; hasAlpha: false),// sprCursor
                      (FileName:   'Grenade'; Path: ptGraphics; AltPath: ptNone; Surface: nil;

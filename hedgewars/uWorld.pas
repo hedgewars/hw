@@ -295,7 +295,7 @@ while team <> nil do
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (hwFloatTicks shr 7) mod 7, Surface);
+if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (hwFloatTicks shr 7) mod 12, Surface);
 
 // Wind bar
 DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
