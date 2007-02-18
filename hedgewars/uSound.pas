@@ -76,8 +76,8 @@ for i:= Low(TSound) to High(TSound) do
     end;
 
 s:= PathPrefix + '/Music/kahvi140a_alexander_chereshnev-illusion.ogg';
-WriteToConsole(msgLoading + string(s) + ' ');
-Mus:= Mix_LoadMUS(@s);
+WriteToConsole(msgLoading + s + ' ');
+Mus:= Mix_LoadMUS(Str2PChar(s));
 TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK)
 end;

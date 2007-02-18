@@ -306,7 +306,7 @@ void HWForm::NetStartServer()
 {
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
-  _NetConnect(pnetserver->getRunningHostName(), pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
+  _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
   pUdpServer = new HWNetUdpServer();
 }
 
