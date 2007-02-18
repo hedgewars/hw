@@ -35,7 +35,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   imageButt=new QPushButton(this);
   imageButt->setFixedSize(256, 128);
   imageButt->setFlat(true);
-  imageButt->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+  imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
   setRandomSeed();
@@ -51,6 +51,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
 
   mainLayout.addWidget(chooseMap);
+  mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 }
 
 void HWMapContainer::setImage(const QImage newImage)

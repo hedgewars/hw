@@ -28,6 +28,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QWidget(parent), mainLayout(this)
 {
 	mainLayout.setMargin(0);
+	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
 	QGroupBox *GBoxMap = new QGroupBox(this);
 	GBoxMap->setTitle(QGroupBox::tr("Landscape"));
 	GBoxMap->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);

@@ -40,6 +40,7 @@ class About;
 class QSpinBox;
 class FPSEdit;
 class HWNetUdpWidget;
+class QTextEdit;
 
 class PageMain : public QWidget
 {
@@ -194,6 +195,8 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnGo;
+	QListWidget* chatText;
+	QLineEdit* chatEditLine;
 
 	TeamSelWidget* pNetTeamsWidget;
 	GameCFGWidget* pGameCFG;
