@@ -159,6 +159,13 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
+  if (lst[0] == "CHAT_STRING") {
+    lst.pop_front();
+    if(lst.size() < 2) return;
+    emit chatStringFromNet(lst);
+    return;
+  }
+
   if (lst[0] == "ADDTEAM:") {
     lst.pop_front();
     emit AddNetTeam(lst);
@@ -343,4 +350,12 @@ void HWNewNet::onTurnTimeChanged(quint32 time)
 void HWNewNet::onFortsModeChanged(bool value)
 {
   RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
+}
+
+void HWNewNet::chatLineToNet(const QString& str)
+{
+  if(str!="") {
+    RawSendNet(QString("CHAT_STRING")+delimeter+mynick+delimeter+str);
+    emit(chatStringFromNet(QStringList(mynick) << str));
+  }
 }

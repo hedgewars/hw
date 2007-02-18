@@ -100,8 +100,10 @@ class HWNewNet : public QObject
   void fortsModeChanged(bool value);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
+  void chatStringFromNet(const QStringList&);
 
  public slots:
+  void chatLineToNet(const QString& str);
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
   void RemoveTeam(const HWTeam& team);

@@ -75,6 +75,8 @@ private slots:
 	void GameStats(char type, const QString & info);
 	void ForcedDisconnect();
 	void ShowErrorMessage(const QString &);
+	void chatLineToNet();
+	void onChatStringFromNet(const QStringList&);
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

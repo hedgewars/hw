@@ -512,12 +512,12 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
 
-	chatText = new QListWidget(this);
-	//chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	pageLayout->addWidget(chatText, 1, 0);
-
 	chatEditLine = new QLineEdit(this);
 	pageLayout->addWidget(chatEditLine, 2, 0);
+
+	chatText = new QListWidget(this);
+	chatText->setMinimumHeight(10);
+	pageLayout->addWidget(chatText, 1, 0);
 
 	pGameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(pGameCFG, 0, 0);
