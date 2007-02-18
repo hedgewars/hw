@@ -261,6 +261,7 @@ void HWForm::NetConnectServer()
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+	connect(hwnet, SIGNAL(GameStateChanged(GameState)), this, SLOT(NetGameStateChanged(GameState)));
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
@@ -358,7 +359,9 @@ void HWForm::NetCreate()
 
 void HWForm::NetStartGame()
 {
-	hwnet->StartGame();
+  ui.pageNetGame->BtnGo->setText(QPushButton::tr("Waiting"));
+  ui.pageNetGame->BtnGo->setEnabled(false);
+  hwnet->StartGame();
 }
 
 void HWForm::AddNetTeam(const HWTeam& team)
@@ -371,6 +374,12 @@ void HWForm::StartMPGame()
 	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect);
 
 	game->StartLocal();
+}
+
+void HWForm::NetGameStateChanged(GameState __attribute__((unused)) gameState)
+{
+  ui.pageNetGame->BtnGo->setText(QPushButton::tr("Go!"));
+  ui.pageNetGame->BtnGo->setEnabled(true);
 }
 
 void HWForm::GameStateChanged(GameState gameState)

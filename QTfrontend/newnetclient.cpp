@@ -284,6 +284,7 @@ void HWNewNet::ConfigAsked()
 void HWNewNet::RunGame()
 {
   HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget);
+  connect(game, SIGNAL(GameStateChanged(GameState)), this, SIGNAL(GameStateChanged(GameState)));
   connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
   connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));

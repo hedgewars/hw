@@ -25,6 +25,7 @@
 #include <QMap>
 
 #include "team.h"
+#include "game.h" // for GameState
 
 class GameUIConfig;
 class GameCFGWidget;
@@ -89,6 +90,7 @@ class HWNewNet : public QObject
   void EnteredGame();
   void FromNet(const QByteArray & buf);
   void AddNetTeam(const HWTeam&);
+  void GameStateChanged(GameState gameState);
 
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
