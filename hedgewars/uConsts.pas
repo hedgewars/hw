@@ -543,7 +543,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInJump or
-                                                 ammoprop_AttackInFall;
+                                                 ammoprop_AttackInFall or
+                                                 ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
