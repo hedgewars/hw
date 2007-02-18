@@ -126,9 +126,9 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnMinimumWidth(0, 150);
 	pageLayout->setColumnStretch(1, 100);
 	pageLayout->setColumnMinimumWidth(1, 210);
-	pageLayout->setColumnStretch(2, 150);
+	pageLayout->setColumnStretch(2, 75);
 	pageLayout->setColumnMinimumWidth(2, 110);
-	pageLayout->setColumnStretch(3, 150);
+	pageLayout->setColumnStretch(3, 75);
 	pageLayout->setColumnMinimumWidth(3, 110);
 
 	GBoxTeam = new QGroupBox(this);
