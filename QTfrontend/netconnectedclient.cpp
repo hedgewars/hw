@@ -88,6 +88,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 	qDebug() << QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter));
       }
     }
+    m_hwserver->sendAll(QString("JOINED")+delimeter+client_nick);
     return;
   }
   if(client_nick=="") return;
@@ -100,6 +101,17 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       m_hwserver->resetStart();
     }
     return;
+  }
+
+  if(lst[0]=="HHNUM") {
+    if(!m_hwserver->isChiefClient(this) || lst.size()<4) return; // error or permission denied :)
+    const QString confstr=lst[0]+"+"+lst[1]+"+"+lst[2];
+    QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.find(confstr);
+    int oldTeamHHNum = it==m_hwserver->m_gameCfg.end() ? 0 : it.value()[0].toUInt();
+    int newTeamHHNum = lst[3].toUInt();
+    m_hwserver->hhnum+=newTeamHHNum-oldTeamHHNum;
+    // create CONFIG_PARAM to save HHNUM at server from lst
+    lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
   }
 
   if(lst[0]=="CONFIG_PARAM") {
@@ -121,6 +133,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     if (maxAdd<=0) return; // reject command
     int toAdd=maxAdd<4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
+    qDebug() << "added " << toAdd << " hedgehogs";
     // hedgehogs num config
     QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
@@ -149,9 +162,8 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it) {
       QStringList hhTmpList=it.key().split('+');
       if(hhTmpList[0] == "HHNUM") {
-	qDebug() << "hhnum config found";
 	if(hhTmpList[1]==lst[1]) {
-	  qDebug() << "hhnum config team found with: " << lst[1] << ":" << it.value()[0].toUInt();
+	  qDebug() << "removed " << it.value()[0].toUInt() << " hedgehogs";
 	  m_hwserver->hhnum-=it.value()[0].toUInt();
 	  break;
 	}

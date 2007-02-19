@@ -184,6 +184,12 @@ void HWNewNet::ParseLine(const QByteArray & line)
     return;
   }
 
+  if(lst[0]=="JOINED") {
+    if(lst.size()<2) return;
+    qDebug() << "JOINED" << lst[1];
+    return;
+  }
+
   if (lst[0] == "CONFIGASKED") {
     isChief=true;
     ConfigAsked();
@@ -251,7 +257,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  return;
   	}
   	if (hhTmpList[0] == "HHNUM") {
-	  qDebug() << "NEW HHNUM!";
 	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
 	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
 	    tmptm=HWTeam(hhTmpList[1]); // local team should be changed
@@ -308,8 +313,7 @@ void HWNewNet::ShowErrorMessage(const QString & msg)
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
-  qDebug() << team.getNetID() << ":" << team.numHedgehogs;
-  RawSendNet(QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(team.TeamName)\
+  RawSendNet(QString("HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
 	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
 	     .arg(team.numHedgehogs));
 }
