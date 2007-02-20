@@ -514,6 +514,8 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
 	//pageLayout->setSpacing(1);
 	//pageLayout->setMargin(1);
+	pageLayout->setColumnStretch(0, 50);
+	pageLayout->setColumnStretch(1, 50);
 
 	// chatwidget
 	pChatWidget = new HWChatWidget(this);
