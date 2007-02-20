@@ -37,7 +37,8 @@ HEADERS += binds.h \
            netconnectedclient.h \
            newnetclient.h \
            netudpserver.h \
-           netudpwidget.h
+           netudpwidget.h \
+           chatwidget.h
            
            
 SOURCES += game.cpp \
@@ -64,7 +65,8 @@ SOURCES += game.cpp \
            netconnectedclient.cpp \
            newnetclient.cpp \
            netudpserver.cpp \
-           netudpwidget.cpp
+           netudpwidget.cpp \
+           chatwidget.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 

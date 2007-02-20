@@ -69,6 +69,7 @@ void HWNetServer::ClientDisconnect(HWConnectedClient* client)
   for(QList<QStringList>::iterator tmIt=(*it)->m_teamsCfg.begin(); tmIt!=(*it)->m_teamsCfg.end(); ++tmIt) {
     sendOthers(*it, QString("REMOVETEAM:")+delimeter+*(tmIt->begin()) + delimeter + *(tmIt->begin()+1));
   }
+  sendOthers(*it, QString("LEFT")+delimeter+client->client_nick);
   connclients.erase(it);
   //teamChanged();
 }

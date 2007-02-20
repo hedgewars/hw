@@ -88,7 +88,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 	qDebug() << QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter));
       }
     }
-    m_hwserver->sendAll(QString("JOINED")+delimeter+client_nick);
+    m_hwserver->sendOthers(this, QString("JOINED")+delimeter+client_nick);
     return;
   }
   if(client_nick=="") return;

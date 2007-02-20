@@ -41,6 +41,7 @@
 #include "about.h"
 #include "fpsedit.h"
 #include "netudpwidget.h"
+#include "chatwidget.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -511,30 +512,29 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
+	//pageLayout->setSpacing(1);
+	//pageLayout->setMargin(1);
 
-	chatEditLine = new QLineEdit(this);
-	pageLayout->addWidget(chatEditLine, 2, 0);
-
-	chatText = new QListWidget(this);
-	chatText->setMinimumHeight(10);
-	pageLayout->addWidget(chatText, 1, 0);
+	// chatwidget
+	pChatWidget = new HWChatWidget(this);
+	pageLayout->addWidget(pChatWidget, 1, 0);
 
 	pGameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(pGameCFG, 0, 0);
 
 	pNetTeamsWidget = new TeamSelWidget(this);
 	pNetTeamsWidget->setAcceptOuter(true);
-	pageLayout->addWidget(pNetTeamsWidget, 0, 1, 3, 1);
+	pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 3, 0);
+	pageLayout->addWidget(BtnBack, 2, 0);
 
 	BtnGo	= new QPushButton(this);
 	BtnGo->setFont(*font14);
 	BtnGo->setText(QPushButton::tr("Go!"));
-	pageLayout->addWidget(BtnGo, 3, 1);
+	pageLayout->addWidget(BtnGo, 2, 1);
 }
 
 PageInfo::PageInfo(QWidget* parent) : QWidget(parent)

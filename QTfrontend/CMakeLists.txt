@@ -46,7 +46,8 @@ set(hwfr_src
 	netconnectedclient.cpp
 	newnetclient.cpp
 	netudpserver.cpp
-	netudpwidget.cpp)
+	netudpwidget.cpp
+	chatwidget.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -78,7 +79,8 @@ set(hwfr_moc_hdrs
 	netconnectedclient.h
 	newnetclient.h
 	netudpserver.h
-	netudpwidget.h)
+	netudpwidget.h
+	chatwidget.h)
 
 
 set(hwfr_rez

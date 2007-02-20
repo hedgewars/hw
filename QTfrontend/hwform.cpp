@@ -39,6 +39,7 @@
 #include "gamecfgwidget.h"
 #include "netudpserver.h"
 #include "netudpwidget.h"
+#include "chatwidget.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pUdpServer(0)
@@ -265,11 +266,12 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
-	connect(hwnet, SIGNAL(chatStringFromNet(const QStringList&)), 
-		this, SLOT(onChatStringFromNet(const QStringList&)));
 
-	connect(ui.pageNetGame->chatEditLine, SIGNAL(returnPressed()),
-		this, SLOT(chatLineToNet()));
+	connect(hwnet, SIGNAL(chatStringFromNet(const QStringList&)), 
+		ui.pageNetGame->pChatWidget, SLOT(onChatStringFromNet(const QStringList&)));
+	connect(ui.pageNetGame->pChatWidget, SIGNAL(chatLine(const QString&)),
+		hwnet, SLOT(chatLineToNet(const QString&)));
+
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
 		hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamColorChanged(const HWTeam&)),
@@ -443,18 +445,4 @@ void HWForm::ShowErrorMessage(const QString & msg)
 	QMessageBox::warning(this,
 			"Hedgewars",
 			msg);
-}
-
-void HWForm::chatLineToNet()
-{
-  hwnet->chatLineToNet(ui.pageNetGame->chatEditLine->text());
-  ui.pageNetGame->chatEditLine->clear();
-}
-
-void HWForm::onChatStringFromNet(const QStringList& str)
-{
-  QListWidget* w=ui.pageNetGame->chatText;
-  w->addItem(str[0]+": "+str[1]);
-  w->scrollToBottom();
-  w->setSelectionMode(QAbstractItemView::NoSelection);
 }
