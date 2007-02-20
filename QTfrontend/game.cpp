@@ -24,6 +24,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QUuid>
+#include <QTextStream>
 #include <QDebug>
 
 #include "game.h"
@@ -150,6 +151,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 'K': {
 			ulong kb = msg.mid(2).toULong();
+			if (kb==1) {
+			  qWarning("%s\n", KBMessages[kb - 1].toLocal8Bit().constData());
+			  return;
+			}
 			if (kb && kb <= KBmsgsCount)
 			{
 				emit ErrorMessage(KBMessages[kb - 1]);
