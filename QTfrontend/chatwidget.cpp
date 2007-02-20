@@ -10,6 +10,8 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
   mainLayout.setSpacing(1);
   mainLayout.setMargin(1);
   mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
+  mainLayout.setColumnStretch(0, 75);
+  mainLayout.setColumnStretch(1, 25);
 
   chatEditLine = new QLineEdit(this);
   connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));

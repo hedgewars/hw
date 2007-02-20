@@ -520,6 +520,7 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	// chatwidget
 	pChatWidget = new HWChatWidget(this);
 	pageLayout->addWidget(pChatWidget, 1, 0);
+	pageLayout->setRowStretch(1, 100);
 
 	pGameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(pGameCFG, 0, 0);
