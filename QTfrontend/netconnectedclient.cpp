@@ -23,8 +23,6 @@
 #include <QTcpSocket>
 #include <QStringList>
 
-#include <QDebug>
-
 extern char delimeter;
 
 HWConnectedClient::HWConnectedClient(HWNetServer* hwserver, QTcpSocket* client) :
@@ -70,7 +68,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     }
 
     client_nick=lst[1];
-    qDebug() << "send connected";
     RawSendNet(QString("CONNECTED"));
     if(m_hwserver->isChiefClient(this)) {
       RawSendNet(QString("CONFIGASKED"));
@@ -84,10 +81,8 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       }
       // send config
       QMap<QString, QStringList> conf=m_hwserver->getGameCfg();
-      qDebug() << "Config:";
       for(QMap<QString, QStringList>::iterator it=conf.begin(); it!=conf.end(); ++it) {
 	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter)));
-	qDebug() << QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter));
       }
     }
     m_hwserver->sendNicks(this);
@@ -120,7 +115,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="CONFIG_PARAM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
     else m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
-    qDebug() << msg;
   }
 
   if(lst[0]=="ADDTEAM:") {
@@ -136,7 +130,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     if (maxAdd<=0) return; // reject command
     int toAdd=maxAdd<4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
-    qDebug() << "added " << toAdd << " hedgehogs";
     // hedgehogs num config
     QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
@@ -146,7 +139,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
       .arg(lst.takeAt(2));
-    qDebug() << "color config:" << colorCfg;
 
     m_hwserver->m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
     m_hwserver->m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
@@ -166,7 +158,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       QStringList hhTmpList=it.key().split('+');
       if(hhTmpList[0] == "HHNUM") {
 	if(hhTmpList[1]==lst[1]) {
-	  qDebug() << "removed " << it.value()[0].toUInt() << " hedgehogs";
 	  m_hwserver->hhnum-=it.value()[0].toUInt();
 	  break;
 	}
@@ -175,7 +166,6 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
     unsigned int netID=removeTeam(lst[1]);
     m_hwserver->sendOthers(this, QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID));
-    qDebug() << QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID);
     return;
   }
 

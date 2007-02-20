@@ -27,7 +27,6 @@
 #include "hwconsts.h"
 
 #include <QStringList>
-#include <QDebug>
 
 HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
   difficulty(0),

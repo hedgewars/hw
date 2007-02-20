@@ -25,7 +25,6 @@
 #include <QTextStream>
 #include <QUuid>
 #include <QTextStream>
-#include <QDebug>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -70,18 +69,13 @@ void HWGame::commonConfig()
 			gt = "TL";
 	}
 	HWProto::addStringToBuffer(buf, gt);
-	qDebug() << "game type" << gt;
 	HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
-	qDebug() << "config" << gamecfg->getFullConfig();
 
 	if (m_pTeamSelWidget)
 	{
-		qDebug() << "adding teams from teamselwidget...";
 		QList<HWTeam> teams = m_pTeamSelWidget->getPlayingTeams();
 		for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it)
 		{
-			qDebug() << "a team...";
-			//(*it).numHedgehogs = 4;
 			HWProto::addStringListToBuffer(buf,
 				(*it).TeamGameConfig(gamecfg->getInitHealth()));
 		}
@@ -127,7 +121,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'C': {
-			qDebug("ASK Config");
 			switch (gameType) {
 				case gtLocal: {
 				 	SendConfig();
@@ -152,7 +145,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		case 'K': {
 			ulong kb = msg.mid(2).toULong();
 			if (kb==1) {
-			  qWarning("%s\n", KBMessages[kb - 1].toLocal8Bit().constData());
+			  qWarning("%s", KBMessages[kb - 1].toLocal8Bit().constData());
 			  return;
 			}
 			if (kb && kb <= KBmsgsCount)

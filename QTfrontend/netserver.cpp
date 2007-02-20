@@ -25,8 +25,6 @@
 
 #include <algorithm>
 
-#include <QDebug>
-
 const quint16 HWNetServer::ds_port=46631;
 
 extern char delimeter;
@@ -116,7 +114,6 @@ bool HWNetServer::haveNick(const QString& nick) const
 void HWNetServer::sendNicks(HWConnectedClient* cl) const
 {
   for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
-      qDebug() << "sendNicks: " << (*it)->client_nick;
       cl->RawSendNet(QString("JOINED")+delimeter+(*it)->client_nick);
   }
 }
@@ -158,7 +155,6 @@ QString HWNetServer::prepareConfig(QStringList lst)
     if(!(*it)->isReady()) continue;
     msg+=(*it)->getHedgehogsDescription()+delimeter;
   }
-  qDebug() << msg;
   return msg;
 }
 

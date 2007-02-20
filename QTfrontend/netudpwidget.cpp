@@ -3,8 +3,6 @@
 
 #include "netudpwidget.h"
 
-#include <QDebug>
-
 HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
@@ -33,7 +31,6 @@ void HWNetUdpWidget::onClientRead()
     quint16 clientPort;
     pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
     if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
-      qDebug() << "detected server at " << clientAddr << ":" << clientPort;
       serversList->addItem(clientAddr.toString());
     }
   }

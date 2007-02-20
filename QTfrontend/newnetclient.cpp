@@ -17,7 +17,6 @@
  */
 
 #include <QMessageBox>
-#include <QDebug>
 
 #include "newnetclient.h"
 #include "proto.h"
@@ -44,7 +43,6 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
-  qDebug() << hostName << ":" << port;
   NetSocket.connectToHost(hostName, port);
   mynick = nick;
 }
@@ -186,14 +184,12 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if(lst[0]=="JOINED") {
     if(lst.size()<2) return;
-    qDebug() << "JOINED" << lst[1];
     emit nickAdded(lst[1]);
     return;
   }
 
   if(lst[0]=="LEFT") {
     if(lst.size()<2) return;
-    qDebug() << "LEFT" << lst[1];
     emit nickRemoved(lst[1]);
     return;
   }
@@ -212,7 +208,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
   if (lst[0] == "CONFIGURED") {
     lst.pop_front();
     if(lst.size()<5) return;
-    qDebug() << lst;
     emit seedChanged(lst[0]);
     emit mapChanged(lst[1]);
     emit themeChanged(lst[2]);
@@ -223,7 +218,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="TEAM_ACCEPTED") {
-    qDebug() << "accepted " << lst[2].toUInt() << " team";
     m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
     m_pTeamSelWidget->changeTeamStatus(lst[1]);
     return;
@@ -273,7 +267,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit hhnumChanged(tmptm);
 	  return;
   	}
-  	qDebug() << "unknow config param: " << lst[1];
     return;
   }
 
@@ -285,9 +278,6 @@ void HWNewNet::ParseLine(const QByteArray & line)
     emit FromNet(em);
     return;
   }
-
-  qDebug() << "unknown net command: " << msg;
-
 }
 
 
@@ -307,7 +297,6 @@ void HWNewNet::RunGame()
   connect(game, SIGNAL(GameStateChanged(GameState)), this, SIGNAL(GameStateChanged(GameState)));
   connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
   connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
-  connect(this, SIGNAL(LocalCFG(const QString &)), game, SLOT(LocalCFG(const QString &)));
   connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
   game->StartNet();
 }
@@ -328,7 +317,6 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
-  qDebug() << team.getNetID() << ":" << team.teamColor.name();
   RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(team.TeamName)\
 	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
 	     .arg(team.teamColor.name()));
