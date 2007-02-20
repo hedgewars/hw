@@ -24,6 +24,7 @@ class HWChatWidget : public QWidget
  private:
   QGridLayout mainLayout;
   QListWidget* chatText;
+  QListWidget* chatNicks;
   QLineEdit* chatEditLine;
 
  private slots:
