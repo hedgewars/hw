@@ -398,54 +398,30 @@ end;
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 begin
-{$IFDEF LITTLE_ENDIAN}
-  PByteArray(buf)^[0]:= value;
-  PByteArray(buf)^[1]:= value shr 8
-{$ELSE}
   PByteArray(buf)^[1]:= value;
   PByteArray(buf)^[0]:= value shr 8
-{$ENDIF}
 end;
 
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 begin
-{$IFDEF LITTLE_ENDIAN}
-  PByteArray(buf)^[0]:= value;
-  PByteArray(buf)^[1]:= value shr  8;
-  PByteArray(buf)^[2]:= value shr 16;
-  PByteArray(buf)^[3]:= value shr 24
-{$ELSE}
   PByteArray(buf)^[3]:= value;
   PByteArray(buf)^[2]:= value shr  8;
   PByteArray(buf)^[1]:= value shr 16;
   PByteArray(buf)^[0]:= value shr 24
-{$ENDIF}
 end;
 
 function SDLNet_Read16(buf: pointer): Word;
 begin
-{$IFDEF LITTLE_ENDIAN}
-  SDLNet_Read16:= PByteArray(buf)^[0] or
-                 (PByteArray(buf)^[1] shl 8)
-{$ELSE}
   SDLNet_Read16:= PByteArray(buf)^[1] or
                  (PByteArray(buf)^[0] shl 8)
-{$ENDIF}
 end;
 
 function SDLNet_Read32(buf: pointer): LongWord;
 begin
-{$IFDEF LITTLE_ENDIAN}
-  SDLNet_Read32:=  PByteArray(buf)^[0] or
-                  (PByteArray(buf)^[1] shl  8) or
-                  (PByteArray(buf)^[2] shl 16) or
-                  (PByteArray(buf)^[3] shl 24)
-{$ELSE}
   SDLNet_Read32:=  PByteArray(buf)^[3] or
                   (PByteArray(buf)^[2] shl  8) or
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
-{$ENDIF}
 end;
 
 end.

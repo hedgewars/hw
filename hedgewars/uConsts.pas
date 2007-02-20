@@ -321,16 +321,16 @@ const
                                        id      : PMixChunk;
                                        lastChan: LongInt;
                                        end = (
-                                       (FileName: 'grenadeimpact.ogg'; Path: ptSounds  ),// sndGrenadeImpact
-                                       (FileName:     'explosion.ogg'; Path: ptSounds  ),// sndExplosion
-                                       (FileName:  'throwpowerup.ogg'; Path: ptSounds  ),// sndThrowPowerUp
-                                       (FileName:  'throwrelease.ogg'; Path: ptSounds  ),// sndThrowRelease
-                                       (FileName:        'splash.ogg'; Path: ptSounds  ),// sndSplash
-                                       (FileName: 'shotgunreload.ogg'; Path: ptSounds  ),// sndShotgunReload
-                                       (FileName:   'shotgunfire.ogg'; Path: ptSounds  ),// sndShotgunFire
-                                       (FileName:   'graveimpact.ogg'; Path: ptSounds  ),// sndGraveImpact
-                                       (FileName:      'minetick.ogg'; Path: ptSounds  ),// sndMineTicks
-                                       (FileName:    'pickhammer.ogg'; Path: ptSounds  ) // sndPickhammer
+                                       (FileName: 'grenadeimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGrenadeImpact
+                                       (FileName:     'explosion.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndExplosion
+                                       (FileName:  'throwpowerup.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowPowerUp
+                                       (FileName:  'throwrelease.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowRelease
+                                       (FileName:        'splash.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndSplash
+                                       (FileName: 'shotgunreload.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunReload
+                                       (FileName:   'shotgunfire.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunFire
+                                       (FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGraveImpact
+                                       (FileName:      'minetick.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMineTicks
+                                       (FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndPickhammer
                                        );
 
       Ammoz: array [TAmmoType] of record
