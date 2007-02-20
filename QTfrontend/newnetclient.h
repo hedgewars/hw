@@ -88,6 +88,8 @@ class HWNewNet : public QObject
   void Disconnected();
   void AddGame(const QString & chan);
   void EnteredGame();
+  void nickAdded(const QString& nick);
+  void nickRemoved(const QString& nick);
   void FromNet(const QByteArray & buf);
   void AddNetTeam(const HWTeam&);
   void GameStateChanged(GameState gameState);

@@ -44,3 +44,22 @@ void HWChatWidget::onChatStringFromNet(const QStringList& str)
   w->scrollToBottom();
   w->setSelectionMode(QAbstractItemView::NoSelection);
 }
+
+void HWChatWidget::nickAdded(const QString& nick)
+{
+  chatNicks->addItem(nick);
+}
+
+void HWChatWidget::nickRemoved(const QString& nick)
+{
+  QList<QListWidgetItem *> items=chatNicks->findItems(nick, Qt::MatchExactly);
+  for(QList<QListWidgetItem *>::iterator it=items.begin(); it!=items.end();) {
+    chatNicks->takeItem(chatNicks->row(*it));
+    ++it;
+  }
+}
+
+void HWChatWidget::clear()
+{
+  chatNicks->clear();
+}

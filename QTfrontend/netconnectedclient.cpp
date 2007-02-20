@@ -72,7 +72,9 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     client_nick=lst[1];
     qDebug() << "send connected";
     RawSendNet(QString("CONNECTED"));
-    if(m_hwserver->isChiefClient(this)) RawSendNet(QString("CONFIGASKED"));
+    if(m_hwserver->isChiefClient(this)) {
+      RawSendNet(QString("CONFIGASKED"));
+    }
     else {
       RawSendNet(QString("SLAVE"));
       // send teams
@@ -88,6 +90,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 	qDebug() << QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter));
       }
     }
+    m_hwserver->sendNicks(this);
     m_hwserver->sendOthers(this, QString("JOINED")+delimeter+client_nick);
     return;
   }

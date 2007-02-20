@@ -187,12 +187,14 @@ void HWNewNet::ParseLine(const QByteArray & line)
   if(lst[0]=="JOINED") {
     if(lst.size()<2) return;
     qDebug() << "JOINED" << lst[1];
+    emit nickAdded(lst[1]);
     return;
   }
 
   if(lst[0]=="LEFT") {
     if(lst.size()<2) return;
     qDebug() << "LEFT" << lst[1];
+    emit nickRemoved(lst[1]);
     return;
   }
 

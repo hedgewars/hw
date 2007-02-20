@@ -17,6 +17,9 @@ class HWChatWidget : public QWidget
 
  public slots:
   void onChatStringFromNet(const QStringList& str);
+  void nickAdded(const QString& nick);
+  void nickRemoved(const QString& nick);
+  void clear();
 
  signals:
   void chatLine(const QString& str);

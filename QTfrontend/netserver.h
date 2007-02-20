@@ -41,6 +41,7 @@ class HWNetServer : public QObject
   QMap<QString, QStringList> getGameCfg() const;
   void sendAll(QString gameCfg);
   void sendOthers(HWConnectedClient* this_cl, QString gameCfg);
+  void sendNicks(HWConnectedClient* cl) const;
   bool haveNick(const QString& nick) const;
   QString getRunningHostName() const;
   quint16 getRunningPort() const;

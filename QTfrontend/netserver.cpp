@@ -113,6 +113,14 @@ bool HWNetServer::haveNick(const QString& nick) const
   return false;
 }
 
+void HWNetServer::sendNicks(HWConnectedClient* cl) const
+{
+  for(QList<HWConnectedClient*>::const_iterator it=connclients.begin(); it!=connclients.end(); ++it) {
+      qDebug() << "sendNicks: " << (*it)->client_nick;
+      cl->RawSendNet(QString("JOINED")+delimeter+(*it)->client_nick);
+  }
+}
+
 QList<QStringList> HWNetServer::getTeamsConfig() const
 {
   QList<QStringList> lst;
