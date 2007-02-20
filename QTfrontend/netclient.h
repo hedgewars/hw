@@ -53,7 +53,6 @@ signals:
 	void AddGame(const QString & chan);
 	void EnteredGame();
 	void FromNet(const QByteArray & buf);
-	void LocalCFG(const QString & team);
 	void ChangeInTeams(const QStringList & teams);
 
 public slots:
