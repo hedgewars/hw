@@ -9,12 +9,12 @@ To compile and install you need:
  - CMake >= 2.4.0
  
 1. Configure:
-# cmake . 
+$ cmake . 
 or
-# cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir"
+$ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir"
 
 2. Compile:
-# make
+$ make
 
 3. Install:
 # make install
