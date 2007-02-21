@@ -56,15 +56,12 @@ endif (WIN32)
 set(hwfr_moc_hdrs
 	game.h
 	hwform.h
-	binds.h
 	teamselect.h
 	teamselhelper.h
 	frameTeam.h
 	vertScrollArea.h
 	gameuiconfig.h
-	ui_hwform.h
 	gamecfgwidget.h
-	predefteams.h
 	pages.h
 	SquareLabel.h
 	hedgehogerWidget.h
@@ -72,7 +69,6 @@ set(hwfr_moc_hdrs
 	mapContainer.h
 	tcpBase.h
 	about.h
-	KB.h
 	proto.h
 	fpsedit.h
 	netserver.h
@@ -82,6 +78,12 @@ set(hwfr_moc_hdrs
 	netudpwidget.h
 	chatwidget.h)
 
+set(hwfr_hdrs
+	binds.h
+	ui_hwform.h
+	predefteams.h
+	KB.h
+)
 
 set(hwfr_rez
 	hedgewars.qrc)
@@ -95,6 +97,7 @@ qt4_wrap_cpp(hwfr_moc_srcs
 add_executable(hedgewars WIN32
 	${hwfr_src}
 	${hwfr_moc_srcs}
+	${hwfr_hdrs}
 	${hwfr_rez_src})
 
 target_link_libraries(hedgewars 
