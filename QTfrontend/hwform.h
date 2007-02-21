@@ -47,7 +47,6 @@ private slots:
 	void GoToMultiplayer();
 	void GoToDemos();
 	void GoToNet();
-	void GoToNetChat();
 	void GoToInfo();
 	void GoToPage(quint8 id);
 	void GoBack();
@@ -82,11 +81,10 @@ private:
 		ID_PAGE_MULTIPLAYER	= 3,
 		ID_PAGE_DEMOS	= 4,
 		ID_PAGE_NET	= 5,
-		ID_PAGE_NETCHAT	= 6,
-		ID_PAGE_NETCFG	= 7,
-		ID_PAGE_INFO	= 8,
-		ID_PAGE_MAIN	= 9,
-		ID_PAGE_GAMESTATS = 10
+		ID_PAGE_NETCFG	= 6,
+		ID_PAGE_INFO	= 7,
+		ID_PAGE_MAIN	= 8,
+		ID_PAGE_GAMESTATS = 9
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

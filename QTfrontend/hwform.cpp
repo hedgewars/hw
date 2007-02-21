@@ -30,7 +30,6 @@
 #include "hwform.h"
 #include "game.h"
 #include "team.h"
-#include "netclient.h"
 #include "teamselect.h"
 #include "gameuiconfig.h"
 #include "pages.h"
@@ -150,11 +149,6 @@ void HWForm::GoToDemos()
 void HWForm::GoToNet()
 {
 	GoToPage(ID_PAGE_NET);
-}
-
-void HWForm::GoToNetChat()
-{
-	GoToPage(ID_PAGE_NETCHAT);
 }
 
 void HWForm::OnPageShown(quint8 id)
