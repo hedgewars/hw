@@ -16,25 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
- #ifndef UI_HWFORM_H
+#ifndef UI_HWFORM_H
 #define UI_HWFORM_H
-
-#include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QListWidget>
-#include <QtGui/QMainWindow>
-#include <QtGui/QPushButton>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QToolBox>
-#include <QtGui/QWidget>
-#include <QStackedLayout>
 
 class PageMain;
 class PageLocalGame;
@@ -47,6 +30,10 @@ class PageNetChat;
 class PageNetGame;
 class PageInfo;
 class PageGameStats;
+class QStackedLayout;
+class QFont;
+class QWidget;
+class QMainWindow;
 
 class Ui_HWForm
 {

@@ -19,9 +19,7 @@
 #ifndef HWFORM_H
 #define HWFORM_H
 
-#include <QLabel>
-#include <QLineEdit>
-#include <QDir>
+#include <QMainWindow>
 #include <QStack>
 
 #include "netserver.h"
@@ -63,9 +61,6 @@ private slots:
 	void NetConnectServer();
 	void NetStartServer();
 	void NetDisconnect();
-	void NetJoin();
-	void NetCreate();
-	void AddGame(const QString & chan);
 	void NetGameEnter();
 	void NetStartGame();
 	void AddNetTeam(const HWTeam& team);

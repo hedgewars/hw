@@ -17,7 +17,6 @@
  */
 
 #include <QGridLayout>
-#include <QDir>
 #include <QPushButton>
 #include <QGroupBox>
 #include <QComboBox>
@@ -295,9 +294,6 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
 
-	//HWMapContainer* pMapContainer=new HWMapContainer(this);
-	//pageLayout->addWidget(pMapContainer, 1, 1);
-
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 	teamsSelect = new TeamSelWidget(this);
@@ -478,33 +474,6 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 3, 0);
-}
-
-PageNetChat::PageNetChat(QWidget* parent) : QWidget(parent)
-{
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnStretch(1, 1);
-	pageLayout->setColumnStretch(2, 1);
-
-	BtnDisconnect = new QPushButton(this);
-	BtnDisconnect->setFont(*font14);
-	BtnDisconnect->setText(QPushButton::tr("Disconnect"));
-	pageLayout->addWidget(BtnDisconnect, 2, 0);
-
-	ChannelsList = new QListWidget(this);
-	pageLayout->addWidget(ChannelsList, 0, 1);
-
-	BtnJoin = new QPushButton(this);
-	BtnJoin->setFont(*font14);
-	BtnJoin->setText(QPushButton::tr("Join"));
-	pageLayout->addWidget(BtnJoin, 2, 2);
-
-	BtnCreate = new QPushButton(this);
-	BtnCreate->setFont(*font14);
-	BtnCreate->setText(QPushButton::tr("Create"));
-	pageLayout->addWidget(BtnCreate, 1, 2);
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)

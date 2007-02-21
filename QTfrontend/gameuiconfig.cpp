@@ -17,6 +17,9 @@
  */
 
 #include <QMessageBox>
+#include <QCheckBox>
+#include <QLineEdit>
+
 #include "gameuiconfig.h"
 #include "hwform.h"
 #include "pages.h"

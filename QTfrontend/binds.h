@@ -20,7 +20,6 @@
 #define BINDS_H
 
 #include <QString>
-#include <QtGlobal>
 
 #define BINDS_NUMBER 31
 

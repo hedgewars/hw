@@ -18,6 +18,9 @@
 
 #include <QVBoxLayout>
 #include <QGridLayout>
+#include <QMainWindow>
+#include <QStackedLayout>
+
 #include "ui_hwform.h"
 #include "pages.h"
 
@@ -67,9 +70,6 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageNet = new PageNet();
 	Pages->addWidget(pageNet);
-
-	pageNetChat	= new PageNetChat();
-	Pages->addWidget(pageNetChat);
 
 	pageNetGame	= new PageNetGame();
 	Pages->addWidget(pageNetGame);

@@ -19,14 +19,14 @@
 #include <QFile>
 #include <QTextStream>
 #include <QApplication>
-#include <QSpinBox>
+#include <QStringList>
+#include <QLineEdit>
 #include "team.h"
 #include "hwform.h"
 #include "predefteams.h"
 #include "pages.h"
 #include "hwconsts.h"
 
-#include <QStringList>
 
 HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
   difficulty(0),

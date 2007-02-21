@@ -22,7 +22,6 @@
 #include <QWidget>
 #include <QList>
 #include <QColor>
-#include <QMultiMap>
 
 #include "teamselect.h"
 

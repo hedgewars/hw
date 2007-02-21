@@ -87,10 +87,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
 
-	connect(ui.pageNetChat->BtnDisconnect, SIGNAL(clicked()), this, SLOT(NetDisconnect()));
-	connect(ui.pageNetChat->BtnJoin,	SIGNAL(clicked()),	this, SLOT(NetJoin()));
-	connect(ui.pageNetChat->BtnCreate,	SIGNAL(clicked()),	this, SLOT(NetCreate()));
-
 	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
@@ -268,13 +264,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 
-	connect(hwnet, SIGNAL(chatStringFromNet(const QStringList&)), 
+	connect(hwnet, SIGNAL(chatStringFromNet(const QStringList&)),
 		ui.pageNetGame->pChatWidget, SLOT(onChatStringFromNet(const QStringList&)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(chatLine(const QString&)),
 		hwnet, SLOT(chatLineToNet(const QString&)));
-	connect(hwnet, SIGNAL(nickAdded(const QString&)), 
+	connect(hwnet, SIGNAL(nickAdded(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
-	connect(hwnet, SIGNAL(nickRemoved(const QString&)), 
+	connect(hwnet, SIGNAL(nickRemoved(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickRemoved(const QString&)));
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
@@ -348,24 +344,9 @@ void HWForm::ForcedDisconnect()
   GoBack();
 }
 
-void HWForm::AddGame(const QString & chan)
-{
-	ui.pageNetChat->ChannelsList->addItem(chan);
-}
-
 void HWForm::NetGameEnter()
 {
 	GoToPage(ID_PAGE_NETCFG);
-}
-
-void HWForm::NetJoin()
-{
-	hwnet->JoinGame("#hw");
-}
-
-void HWForm::NetCreate()
-{
-	hwnet->JoinGame("#hw");
 }
 
 void HWForm::NetStartGame()

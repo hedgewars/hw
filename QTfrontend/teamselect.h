@@ -22,9 +22,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QColor>
-
-#include <list>
-#include <map>
+#include <QMultiMap>
 
 #include "team.h"
 
@@ -54,7 +52,7 @@ class TeamSelWidget : public QGroupBox
   void changeHHNum(const HWTeam&);
   void changeTeamColor(const HWTeam&);
   void changeTeamStatus(HWTeam team);
-  
+
  signals:
   void NewTeam();
   void teamWillPlay(HWTeam team);
@@ -62,7 +60,7 @@ class TeamSelWidget : public QGroupBox
   void hhogsNumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void acceptRequested(HWTeam team);
-  
+
  private slots:
   void pre_changeTeamStatus(HWTeam);
   void newTeamClicked();

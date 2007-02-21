@@ -174,19 +174,6 @@ public:
 	QLineEdit * editIP;
 };
 
-class PageNetChat : public QWidget
-{
-	Q_OBJECT
-
-public:
-	PageNetChat(QWidget* parent = 0);
-
-	QPushButton *BtnDisconnect;
-	QListWidget *ChannelsList;
-	QPushButton *BtnJoin;
-	QPushButton *BtnCreate;
-};
-
 class PageNetGame : public QWidget
 {
 	Q_OBJECT
