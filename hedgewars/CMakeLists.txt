@@ -47,6 +47,18 @@ if (fpc_executable)
 	 exec_program(${fpc_executable} ARGS "-h" OUTPUT_VARIABLE fpc_output)
 endif (fpc_executable)
 
+set (noexecstack_flags "-k-z" "-knoexecstack")
+FILE(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
+
+EXEC_PROGRAM(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
+		ARGS ${noexecstack_flags} checkstack.pas
+		OUTPUT_VARIABLE noout
+		RETURN_VALUE testnoexecstack)
+
+if (${testnoexecstack})
+set (noexecstack_flags "")
+endif (${testnoexecstack})
+
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 if (fpc_version)
 	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
@@ -57,7 +69,7 @@ if (fpc_version)
 		message("Minimum required version of FreePascal is 1.9.4")
 	else (fpc_ver LESS "010904")
 		set(pascal_compiler ${fpc_executable})
-		set(pascal_compiler_flags "-B" "-FE../bin" "-Cs2000000" "-O2" ${hwengine_project})
+		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Cs2000000" "-O2" ${hwengine_project})
 	endif (fpc_ver LESS "010904")
 endif (fpc_version)
 
