@@ -50,7 +50,7 @@ About::About(QWidget * parent) :
 			QLabel::tr("<h2>Developers:</h2>") +
 			"<p>"
 			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"Igor Ulyanov &lt;<a href=\"mailto:iulyanov@gmail.com\">iulyanov@gmail.com</a>&gt;"
+			"Igor Ulyanov (aka Displacer) &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;"
 			"</p>" +
 			QLabel::tr("<h2>Translations:</h2><p>") +
 			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
@@ -59,7 +59,8 @@ About::About(QWidget * parent) :
 			QLabel::tr("<h2>Special thanks:</h2><p>") +
 			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
 			"Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
-			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;"
+			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
+			"Adam Higerd (aka ahigerd at FreeNode)"
 			"</p>"
 			);
 	mainLayout->addWidget(lbl2, 1, 1);
