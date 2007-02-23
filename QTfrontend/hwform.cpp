@@ -254,7 +254,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	ui.pageNetGame->pChatWidget->clear();
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 	connect(hwnet, SIGNAL(GameStateChanged(GameState)), this, SLOT(NetGameStateChanged(GameState)));
-	connect(hwnet, SIGNAL(AddGame(const QString &)), this, SLOT(AddGame(const QString &)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 

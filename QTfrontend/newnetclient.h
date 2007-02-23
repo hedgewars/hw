@@ -86,7 +86,6 @@ class HWNewNet : public QObject
  signals:
   void Connected();
   void Disconnected();
-  void AddGame(const QString & chan);
   void EnteredGame();
   void nickAdded(const QString& nick);
   void nickRemoved(const QString& nick);
