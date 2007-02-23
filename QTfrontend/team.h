@@ -1,6 +1,7 @@
 /*
  * Hedgewars, a worms-like game
  * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

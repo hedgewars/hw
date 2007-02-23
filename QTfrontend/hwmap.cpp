@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2006, 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ HWMap::~HWMap()
 {
 }
 
-void HWMap::getImage(std::string seed) 
+void HWMap::getImage(std::string seed)
 {
   m_seed=seed;
   Start();

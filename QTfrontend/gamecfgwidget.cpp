@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006, 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
-	  
+
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(onThemeChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(onMapChanged(const QString &)));

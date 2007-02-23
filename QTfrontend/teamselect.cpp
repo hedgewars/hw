@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006 Ulyanov Igor <iulyanov@gmail.com>
+ * Copyright (c) 2006, 2007 Ulyanov Igor <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,9 +33,9 @@ void TeamSelWidget::addTeam(HWTeam team)
     curPlayingTeams.push_back(team);
     connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
 		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
-    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
+    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
 			    this, SLOT(hhNumChanged(const HWTeam&)));
-    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)), 
+    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
 			    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
@@ -104,7 +104,7 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
 void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
 {
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-  
+
 }
 
 //void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
@@ -155,9 +155,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
 	    this, SLOT(changeTeamStatus(HWTeam)));
   }
   if(willBePlaying) {
-    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)), 
+    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
 	    this, SLOT(hhNumChanged(const HWTeam&)));
-    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)), 
+    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
 	    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
     emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
   }

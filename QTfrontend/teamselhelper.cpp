@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006 Ulyanov Igor <iulyanov@gmail.com>
+ * Copyright (c) 2006, 2007 Ulyanov Igor <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,13 +31,13 @@ void TeamLabel::teamButtonClicked()
 }
 
 TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
-  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0), 
+  QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
   colorButt(0)
 {
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
   this->setMaximumHeight(35);
-  QIcon difficultyIcon=team.isNetTeam() ? 
+  QIcon difficultyIcon=team.isNetTeam() ?
     QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
     : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
@@ -123,7 +123,7 @@ void TeamShowWidget::changeTeamColor(QColor color)
     color=*pOurFrameTeams->currentColor;
   } else {
     // set according color iterator
-    pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(), 
+    pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(),
 					   pOurFrameTeams->availableColors.end(), color);
     if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
       // error condition
