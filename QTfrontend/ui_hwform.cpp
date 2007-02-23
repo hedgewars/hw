@@ -29,7 +29,7 @@ void Ui_HWForm::setupUi(QMainWindow *HWForm)
 	SetupFonts();
 
 	HWForm->setObjectName(QString::fromUtf8("HWForm"));
-	HWForm->resize(QSize(620, 430).expandedTo(HWForm->minimumSizeHint()));
+	HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
 	HWForm->setMinimumSize(QSize(620, 430));
 	HWForm->setWindowTitle(QMainWindow::tr("Hedgewars"));
 	centralWidget = new QWidget(HWForm);
