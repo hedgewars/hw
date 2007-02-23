@@ -253,14 +253,15 @@ end;
 
 
 var i: LongInt;
+{$ENDIF}
 
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06
-cMaxWindSpeed.QWordValue:=   2147484;// 0.0005
-cWindSpeed.QWordValue:=    429496;// 0.0001
+cMaxWindSpeed.QWordValue:= 2147484;// 0.0005
+cWindSpeed.QWordValue:=     429496;// 0.0001
 cGravity:= cMaxWindSpeed;
 
-
+{$IFDEF DEBUGFILE}
 {$I-}
 for i:= 0 to 7 do
     begin
