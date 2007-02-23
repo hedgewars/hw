@@ -128,6 +128,7 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     // return if max playing teams reached
     if(framePlaying->isFullTeams()) return;
     // dont playing team => playing
+    team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
     itDontPlay->teamColor=framePlaying->getNextColor();
     curPlayingTeams.push_back(*itDontPlay);
     if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
