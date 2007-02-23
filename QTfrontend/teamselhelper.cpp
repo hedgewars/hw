@@ -37,7 +37,8 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   mainLayout.setSpacing(1);
   mainLayout.setMargin(2);
   this->setMaximumHeight(35);
-  QIcon difficultyIcon=team.isNetTeam() ? QIcon(QString(":/res/net.png"))
+  QIcon difficultyIcon=team.isNetTeam() ? 
+    QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
     : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
   QPalette newPalette = palette();

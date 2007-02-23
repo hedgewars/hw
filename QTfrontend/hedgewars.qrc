@@ -7,6 +7,12 @@
     <file>res/botlevels/3.png</file>
     <file>res/botlevels/4.png</file>
     <file>res/botlevels/5.png</file>
+    <file>res/botlevels/net0.png</file>
+    <file>res/botlevels/net1.png</file>
+    <file>res/botlevels/net2.png</file>
+    <file>res/botlevels/net3.png</file>
+    <file>res/botlevels/net4.png</file>
+    <file>res/botlevels/net5.png</file>
     <file>res/Hedgehog.svg</file>
     <file>res/net.png</file>
 </qresource>
