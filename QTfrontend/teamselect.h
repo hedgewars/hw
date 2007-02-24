@@ -54,6 +54,7 @@ class TeamSelWidget : public QGroupBox
   void changeTeamStatus(HWTeam team);
 
  signals:
+  void setEnabledGameStart(bool);
   void NewTeam();
   void teamWillPlay(HWTeam team);
   void teamNotPlaying(const HWTeam& team);

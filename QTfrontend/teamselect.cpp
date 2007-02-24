@@ -48,6 +48,7 @@ void TeamSelWidget::addTeam(HWTeam team)
 	      this, SLOT(changeTeamStatus(HWTeam)));
     }
   }
+  emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::setNonInteractive()
@@ -99,6 +100,7 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
       break;
     }
   }
+  emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
@@ -168,6 +170,8 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     pAddTeams->resize(pAddTeams->size().width(), szh.height());
     pRemoveTeams->resize(pRemoveTeams->size().width(), szh1.height());
   }
+
+  emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
