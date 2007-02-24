@@ -65,7 +65,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
-	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)), 
+	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
 
 	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
@@ -87,8 +87,9 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
-	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)), 
+	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
+	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(NewTeam()), this, SLOT(NewTeam()));
 
 	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 

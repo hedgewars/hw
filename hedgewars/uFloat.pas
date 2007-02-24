@@ -275,7 +275,6 @@ if Angle < 1024 then AngleSin.QWordValue:= SinTable[Angle]
 end;
 
 function AngleCos(Angle: Longword): hwFloat;
-var CosVal: Extended;
 begin
 AngleCos.isNegative:= Angle > 1024;
 if Angle < 1024 then AngleCos.QWordValue:= SinTable[1024 - Angle]
