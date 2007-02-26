@@ -1,8 +1,13 @@
 set(QT_MIN_VERSION "4.2.0")
 
-find_package(Qt4 REQUIRED)
+set(QT_USE_QTNETWORK TRUE)
+set(QT_USE_QTSVG TRUE)
+set(QT_USE_QTMAIN TRUE)
 
-include_directories(${QT_INCLUDES} .)
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE}) 
+
+include_directories(.)
 
 if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
@@ -101,11 +106,7 @@ add_executable(hedgewars WIN32
 	${hwfr_rez_src})
 
 target_link_libraries(hedgewars 
-	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
-	${QT_QTNETWORK_LIBRARY}
-	${QT_QTSVG_LIBRARY}
-	${QT_QTMAIN_LIBRARY})
+	${QT_LIBRARIES})
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
 
