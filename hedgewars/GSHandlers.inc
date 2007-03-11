@@ -1035,7 +1035,6 @@ if (Gear^.X > 3072) or (Gear^.X < -1024) then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
-var t: LongInt;
 begin
 AllInactive:= false;
 if Gear^.X.QWordValue = 0 then Gear^.Tag:=  1

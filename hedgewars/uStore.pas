@@ -248,6 +248,7 @@ var i: TStuff;
     TryDo(IOResult = 0, msgFailed, true);
     WriteLnToConsole(msgOK);
     val(s, cExplosionBorderColor, c);
+    TryDo(c = 0, 'Theme data corrupted', true);
     AdjustColor(cExplosionBorderColor);
     end;
 

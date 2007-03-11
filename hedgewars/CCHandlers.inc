@@ -99,27 +99,25 @@ CurrentTeam^.FortName:= s
 end;
 
 procedure chColor(var id: shortstring);
-var c: LongInt;
 begin
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
-val(id, CurrentTeam^.Color, c);
+val(id, CurrentTeam^.Color);
 CurrentTeam^.AdjColor:= CurrentTeam^.Color;
 AdjustColor(CurrentTeam^.AdjColor)
 end;
 
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
-    c: LongInt;
     Gear: PGear;
 begin
 if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
      begin
      SplitBySpace(id, s);
-     val(id, Hedgehogs[HedgehogsNumber].BotLevel, c);
+     val(id, Hedgehogs[HedgehogsNumber].BotLevel);
      Gear:= AddGear(0, 0, gtHedgehog, 0, 0, 0, 0);
      Gear^.Hedgehog:= @Hedgehogs[HedgehogsNumber];
-     val(s, Gear^.Health, c);
+     val(s, Gear^.Health);
      TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
      PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
      Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1;

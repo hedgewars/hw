@@ -842,7 +842,7 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt);
     CountNonZeroz:= Result
     end;
 
-var fx, x: LongInt;
+var x: LongInt;
     y, sy: LongInt;
     ar: array[0..511] of TPoint;
     ar2: array[0..1023] of TPoint;

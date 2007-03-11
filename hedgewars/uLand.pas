@@ -212,7 +212,7 @@ inc(pa.Count)
 end;
 
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
-var x, y, i, StartLoop: LongInt;
+var i, StartLoop: LongInt;
     opa: TPixAr;
 begin
 opa:= pa;

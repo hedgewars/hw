@@ -167,16 +167,6 @@ begin
 FloatToStr:= cstr(n)
 end;
 
-{$IFNDEF FPC}
-function arctan2(const Y, X: hwFloat): hwFloat;
-asm
-        fld     Y
-        fld     X
-        fpatan
-        fwait
-end;
-{$ENDIF}
-
 function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 const _16divPI: Extended = 16/pi;
 var dY, dX: Extended;

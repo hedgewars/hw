@@ -156,7 +156,7 @@ end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 type PhwFloat = ^hwFloat;
-var i, ii: LongInt;
+var ii: LongInt;
     s: shortstring;
     t: PVariable;
     c: char;
@@ -183,8 +183,8 @@ while t <> nil do
                             begin
                             str(PLongInt(t^.Handler)^, s);
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
-                            end else val(s, PLongInt(t^.Handler)^, i);
-                 vthwFloat: if c='$' then
+                            end else val(s, PLongInt(t^.Handler)^);
+              vthwFloat: if c='$' then
                          if s[0]=#0 then
                             begin
                             //str(PhwFloat(t^.Handler)^:4:6, s);
@@ -197,7 +197,7 @@ while t <> nil do
                             WriteLnToConsole('$' + CmdStr + ' is "' + s + '"');
                             end else
                             begin
-                            val(s, ii, i);
+                            val(s, ii);
                             boolean(t^.Handler^):= not (ii = 0)
                             end;
               end;

@@ -2,6 +2,7 @@ set(QT_MIN_VERSION "4.2.0")
 
 set(QT_USE_QTNETWORK TRUE)
 set(QT_USE_QTSVG TRUE)
+set(QT_USE_QTXML TRUE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
@@ -104,22 +105,18 @@ add_executable(hedgewars WIN32
 	${hwfr_moc_srcs}
 	${hwfr_hdrs}
 	${hwfr_rez_src})
-
-target_link_libraries(hedgewars 
-	${QT_LIBRARIES})
-
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
-
+	
+set(HW_LINK_LIBS ${QT_LIBRARIES})
 
 if(WIN32 AND NOT UNIX)
-	string(REPLACE "\\" "/" QT_BIN_DIR $ENV{QTDIR}/bin)
-
-	install(FILES
-		"${QT_BIN_DIR}/QtNetwork4.dll"
-		"${QT_BIN_DIR}/QtGui4.dll"
-		"${QT_BIN_DIR}/QtCore4.dll"
-		"${QT_BIN_DIR}/QtSvg4.dll"
-		"${QT_BIN_DIR}/QtXml4.dll"
-		"${QT_BIN_DIR}/mingwm10.dll"
-		DESTINATION bin)
+	set(HW_LINK_LIBS 
+		${HW_LINK_LIBS}
+		ole32
+		winspool
+		uuid)
 endif(WIN32 AND NOT UNIX)
+
+target_link_libraries(hedgewars 
+	${HW_LINK_LIBS})
+
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)

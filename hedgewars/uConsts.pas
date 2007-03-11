@@ -357,7 +357,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidClusterBomb;
                                    Probability: 100;
                                    NumberInCase: 3;
@@ -372,7 +373,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidBazooka;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -386,7 +388,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidUFO;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -401,7 +404,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidShotgun;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -415,7 +419,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidPickHammer;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -432,7 +437,8 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidSkip;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -446,7 +452,8 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidRope;
                                    Probability: 100;
                                    NumberInCase: 3;
@@ -462,7 +469,8 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: cMaxAngle div 2;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidMine;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -476,7 +484,8 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidDEagle;
                                    Probability: 100;
                                    NumberInCase: 2;
@@ -490,7 +499,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidDynamite;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -506,7 +516,8 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidFirePunch;
                                    Probability: 0;
                                    NumberInCase: 1;
@@ -523,7 +534,8 @@ const
                                    TimeAfterTurn: 3000;
                                    MinAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidBaseballBat;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -537,7 +549,8 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: cMaxAngle div 2;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidParachute;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -554,7 +567,8 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidAirAttack;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -602,7 +616,8 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 768;
                                    maxAngle: 1280;
-                                   PosCount: 1),
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
                                   (NameId: sidGirder;
                                    Probability: 400;
                                    NumberInCase: 3;
