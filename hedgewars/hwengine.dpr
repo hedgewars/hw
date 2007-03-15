@@ -176,27 +176,27 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
-11: begin
-     val(ParamStr(1), cScreenWidth, c);
-     val(ParamStr(2), cScreenHeight, c);
-     cBitsStr:= ParamStr(3);
+12: begin
+     val(ParamStr(2), cScreenWidth, c);
+     val(ParamStr(3), cScreenHeight, c);
+     cBitsStr:= ParamStr(4);
      val(cBitsStr, cBits, c);
-     val(ParamStr(4), ipcPort, c);
-     cFullScreen:= ParamStr(5) = '1';
-     isSoundEnabled:= ParamStr(6) = '1';
-     cLocaleFName:= ParamStr(7);
-     val(ParamStr(8), cInitVolume, c);
-     val(ParamStr(9), cTimerInterval, c);
-     PathPrefix:= ParamStr(10);
-     cShowFPS:= ParamStr(11) = '1';
+     val(ParamStr(5), ipcPort, c);
+     cFullScreen:= ParamStr(6) = '1';
+     isSoundEnabled:= ParamStr(7) = '1';
+     cLocaleFName:= ParamStr(8);
+     val(ParamStr(9), cInitVolume, c);
+     val(ParamStr(10), cTimerInterval, c);
+     PathPrefix:= ParamStr(11);
+     cShowFPS:= ParamStr(12) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
      AddClouds
      end;
-  2: begin
-     val(ParamStr(1), ipcPort, c);
+  3: begin
+     val(ParamStr(2), ipcPort, c);
      GameType:= gmtLandPreview;
-     if ParamStr(2) <> 'landpreview' then OutError(errmsgShouldntRun, true);
+     if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
      end
    else
    OutError(errmsgShouldntRun, true)

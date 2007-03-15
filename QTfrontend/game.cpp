@@ -204,6 +204,7 @@ void HWGame::onClientRead()
 QStringList HWGame::setArguments()
 {
 	QStringList arguments;
+	arguments << cfgdir->absolutePath();
 	arguments << resolutions[0][config->vid_Resolution()];
 	arguments << resolutions[1][config->vid_Resolution()];
 	arguments << "16"; // bpp

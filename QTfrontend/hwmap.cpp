@@ -15,6 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA */
 
+#include "hwconsts.h"
 #include "hwmap.h"
 
 HWMap::HWMap() :
@@ -35,6 +36,7 @@ void HWMap::getImage(std::string seed)
 QStringList HWMap::setArguments()
 {
   QStringList arguments;
+  arguments << cfgdir->absolutePath();
   arguments << QString("%1").arg(ipc_port);
   arguments << "landpreview";
   return arguments;
