@@ -94,7 +94,7 @@ private:
 	HWNetServer* pnetserver;
 	HWNetUdpServer* pUdpServer;
 	void AddStatText(const QString & msg);
-	void OnPageShown(quint8 id);
+	void OnPageShown(quint8 id, quint8 lastid=0);
 };
 
 #endif

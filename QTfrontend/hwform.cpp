@@ -156,20 +156,27 @@ void HWForm::GoToNet()
 	GoToPage(ID_PAGE_NET);
 }
 
-void HWForm::OnPageShown(quint8 id)
+void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
 	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETCFG) {
 		QStringList tmNames=config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
-		id == ID_PAGE_MULTIPLAYER ? curTeamSelWidget=ui.pageMultiplayer->teamsSelect :
+		if(id == ID_PAGE_MULTIPLAYER) {
+		  curTeamSelWidget=ui.pageMultiplayer->teamsSelect;
+		} else {
 		  curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
+		}
 		QList<HWTeam> teamsList;
 		for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
 		  HWTeam team(*it);
 		  team.LoadFromFile();
 		  teamsList.push_back(team);
 		}
-		curTeamSelWidget->resetPlayingTeams(teamsList);
+		if(lastid==ID_PAGE_SETUP_TEAM) {
+		  if (editedTeam) curTeamSelWidget->addTeam(*editedTeam);
+		} else {
+		  curTeamSelWidget->resetPlayingTeams(teamsList);
+		}
 	}
 }
 
@@ -186,7 +193,7 @@ void HWForm::GoBack()
 	  if(hwnet || pnetserver) NetDisconnect();
 	}
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
-	OnPageShown(id);
+	OnPageShown(id, ui.Pages->currentIndex());
 	ui.Pages->setCurrentIndex(id);
 }
 
@@ -209,14 +216,16 @@ void HWForm::TeamSave()
 {
 	editedTeam->GetFromPage(this);
 	editedTeam->SaveToFile();
-	delete editedTeam;
 	UpdateTeamsLists();
 	GoBack();
+	delete editedTeam;
+	editedTeam=0;
 }
 
 void HWForm::TeamDiscard()
 {
 	delete editedTeam;
+	editedTeam=0;
 	GoBack();
 }
 
