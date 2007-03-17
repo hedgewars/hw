@@ -165,8 +165,8 @@ inc(Counter);
 New(Result);
 {$IFDEF DEBUGFILE}AddFileLog('AddGear: type = ' + inttostr(ord(Kind)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
-Result^.X:= X;
-Result^.Y:= Y;
+Result^.X:= int2hwFloat(X);
+Result^.Y:= int2hwFloat(Y);
 Result^.Kind := Kind;
 Result^.State:= State;
 Result^.Active:= true;
@@ -216,18 +216,18 @@ gtAmmo_Grenade: begin
                 Result^.Timer:= 4000
                 end;
   gtSmokeTrace: begin
-                Result^.X:= Result^.X - 16;
-                Result^.Y:= Result^.Y - 16;
+                Result^.X:= Result^.X - _16;
+                Result^.Y:= Result^.Y - _16;
                 Result^.State:= 8
                 end;
         gtRope: begin
                 Result^.Radius:= 3;
-                Result^.Friction:= 450;
+                Result^.Friction:= _450;
                 RopePoints.Count:= 0;
                 end;
    gtExplosion: begin
-                Result^.X:= Result^.X - 25;
-                Result^.Y:= Result^.Y - 25;
+                Result^.X:= Result^.X - _25;
+                Result^.Y:= Result^.Y - _25;
                 end;
         gtMine: begin
                 Result^.Radius:= 3;
@@ -240,7 +240,6 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_4
                 end;
   gtDEagleShot: begin
-                Result^.Radius:= 1;
                 Result^.Radius:= 1;
                 Result^.Health:= 50
                 end;
@@ -292,10 +291,10 @@ if Gear^.Kind = gtHedgehog then
       exit
       end else
       begin
-      if not (Gear^.Y < cWaterLine) then
+      if not (hwRound(Gear^.Y) < cWaterLine) then
          begin
          t:= max(Gear^.Damage, Gear^.Health);
-         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, 0, 0, 0)^.Hedgehog:= Gear^.Hedgehog;
+         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
          inc(StepDamage, t)
          end;
       team:= PHedgehog(Gear^.Hedgehog)^.Team;
@@ -327,7 +326,7 @@ while Gear <> nil do
             if Gear^.Health < Gear^.Damage then Gear^.Health:= 0
                                          else dec(Gear^.Health, Gear^.Damage);
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12 - PHedgehog(Gear^.Hedgehog)^.HealthTag^.h,
-                    gtHealthTag, Gear^.Damage, 0, 0, 0)^.Hedgehog:= Gear^.Hedgehog;
+                    gtHealthTag, Gear^.Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
             RenderHealth(PHedgehog(Gear^.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
 
@@ -622,10 +621,10 @@ end;
 procedure AddMiscGears;
 var i: LongInt;
 begin
-AddGear(0, 0, gtATStartGame, 0, 0, 0, 2000);
+AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to 3 do
-       FindPlace(AddGear(0, 0, gtMine, 0, 0, 0, 0), false, 0, 2048);
+       FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
 end;
 
 procedure AddClouds;
@@ -650,13 +649,13 @@ begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
-if Radius = 50 then AddGear(X, Y, gtExplosion, 0, 0, 0, 0);
+if Radius = 50 then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false);
 if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;
 Gear:= GearsList;
 while Gear <> nil do
       begin
-      dmg:= Radius - hwRound(Distance(Gear^.X - X, Gear^.Y - Y));
+      dmg:= Radius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
       if dmg > 0 then
          begin
          dmg:= dmg div 2;
@@ -669,8 +668,8 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear^.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
-                             Gear^.dX:= Gear^.dX + (_0_005 * dmg + cHHKick) * hwSign(Gear^.X - X);
-                             Gear^.dY:= Gear^.dY + (_0_005 * dmg + cHHKick) * hwSign(Gear^.Y - Y);
+                             Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
+                             Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
                              Gear^.Active:= true;
                              FollowGear:= Gear
                              end;
@@ -683,7 +682,7 @@ while Gear <> nil do
          end;
       Gear:= Gear^.NextGear
       end;
-//uAIMisc.AwareOfExplosion(0, 0, 0)
+uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
@@ -742,7 +741,7 @@ rY:= sqr(rY);
 while t <> nil do
       begin
       if (t <> Gear) and (t^.Kind = Kind) then
-         if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > 1) then
+         if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
             exit(t);
       t:= t^.NextGear
       end;
@@ -756,7 +755,7 @@ t:= GearsList;
 while t <> nil do
       begin
       if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
-         if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - cHHRadius) * 2 > 2) then
+         if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2) then
             begin
             inc(t^.Damage, 5);
             t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
@@ -778,7 +777,7 @@ rY:= sqr(rY);
 while t <> nil do
       begin
       if t^.Kind in Kind then
-         if not (hwSqr(mX - t^.X) / rX + hwSqr(mY - t^.Y) / rY > 1) then
+         if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
             exit(t);
       t:= t^.NextGear
       end;
@@ -804,7 +803,7 @@ var t: LongInt;
     i: TAmmoType;
 begin
 if (CountGears(gtCase) >= 5) or (getrandom(cCaseFactor) <> 0) then exit;
-FollowGear:= AddGear(0, 0, gtCase, 0, 0, 0, 0);
+FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
 case getrandom(2) of
      0: begin
         FollowGear^.Health:= 25;
@@ -890,8 +889,8 @@ until (cnt2 > 0) or (Delta < 70);
 if cnt2 > 0 then
    with ar2[GetRandom(cnt2)] do
       begin
-      Gear^.X:= x;
-      Gear^.Y:= y;
+      Gear^.X:= int2hwFloat(x);
+      Gear^.Y:= int2hwFloat(y);
       {$IFDEF DEBUGFILE}
       AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
       {$ENDIF}

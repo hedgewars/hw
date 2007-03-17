@@ -136,21 +136,21 @@ end;
 procedure Vector(p1, p2, p3: TPoint; var Vx, Vy: hwFloat);
 var d1, d2, d: hwFloat;
 begin
-Vx:= p1.X - p3.X;
-Vy:= p1.Y - p3.Y;
-d:= Distance(p2.X - p1.X, p2.Y - p1.Y);
-d1:= Distance(p2.X - p3.X, p2.Y - p3.Y);
+Vx:= int2hwFloat(p1.X - p3.X);
+Vy:= int2hwFloat(p1.Y - p3.Y);
+d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
+d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
 d2:= Distance(Vx, Vy);
 if d1 < d then d:= d1;
 if d2 < d then d:= d2;
 d:= d * _1div3;
 if d2.QWordValue = 0 then
    begin
-   Vx:= 0;
-   Vy:= 0
+   Vx:= _0;
+   Vy:= _0
    end else
    begin
-   d2:= 1 / d2;
+   d2:= _1 / d2;
    Vx:= Vx * d2;
    Vy:= Vy * d2;
 
@@ -162,8 +162,8 @@ end;
 procedure AddLoopPoints(var pa, opa: TPixAr; StartI, EndI: LongInt; Delta: hwFloat);
 var i, pi, ni: LongInt;
     NVx, NVy, PVx, PVy: hwFloat;
-    x1, x2, y1, y2, cx1, cx2, cy1, cy2: hwFloat;
-    tsq, tcb, t, r1, r2, r3: hwFloat;
+    x1, x2, y1, y2: LongInt;
+    tsq, tcb, t, r1, r2, r3, cx1, cx2, cy1, cy2: hwFloat;
     X, Y: LongInt;
 begin
 pi:= EndI;
@@ -185,18 +185,18 @@ repeat
     y1:= opa.ar[pi].y;
     x2:= opa.ar[i].x;
     y2:= opa.ar[i].y;
-    cx1:= x1 - PVx;
-    cy1:= y1 - PVy;
-    cx2:= x2 + NVx;
-    cy2:= y2 + NVy;
-    t:= 0;
+    cx1:= int2hwFloat(x1) - PVx;
+    cy1:= int2hwFloat(y1) - PVy;
+    cx2:= int2hwFloat(x2) + NVx;
+    cy2:= int2hwFloat(y2) + NVy;
+    t:= _0;
     while t.Round = 0 do
           begin
           tsq:= t * t;
           tcb:= tsq * t;
-          r1:= (1 - 3*t + 3*tsq -   tcb);
-          r2:= (    3*t - 6*tsq + 3*tcb);
-          r3:= (          3*tsq - 3*tcb);
+          r1:= (_1 - t*3 + tsq*3 - tcb);
+          r2:= (     t*3 - tsq*6 + tcb*3);
+          r3:= (           tsq*3 - tcb*3);
           X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
           Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
           t:= t + Delta;

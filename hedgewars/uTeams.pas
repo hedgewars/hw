@@ -104,13 +104,13 @@ if AliveCount = 0 then
    begin // draw
    AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
    SendStat(siGameResult, trmsg[sidDraw]);
-   AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
+   AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
    end else // win
    begin
    s:= Format(trmsg[sidWinner], AliveTeam^.TeamName);
    AddCaption(s, $FFFFFF, capgrpGameState);
    SendStat(siGameResult, s);
-   AddGear(0, 0, gtATFinishGame, 0, 0, 0, 2000)
+   AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
    end;
 SendStats
 end;
@@ -158,7 +158,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * cMaxWindSpeed);
-g:= AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1);
+g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
@@ -297,7 +297,7 @@ with team^ do
         end else TeamHealthBarWidth:= (TeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
      end;
 // FIXME: at the game init, gtTeamHealthSorters are created for each team, and they work simultaneously
-AddGear(0, 0, gtTeamHealthSorter, 0, 0, 0, 0)
+AddGear(0, 0, gtTeamHealthSorter, 0, _0, _0, 0)
 end;
 
 procedure RestoreTeamsFromSave;

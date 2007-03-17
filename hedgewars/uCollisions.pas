@@ -34,7 +34,7 @@ function CheckGearsCollision(Gear: PGear): PGearArray;
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
 function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: LongInt): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
 implementation
@@ -119,13 +119,13 @@ if (x and $FFFFF800) = 0 then
 TestCollisionXwithGear:= false
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX, ShiftY: hwFloat; Dir: LongInt): boolean;
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
 begin
 Gear^.X:= Gear^.X + ShiftX;
-Gear^.Y:= Gear^.Y + ShiftY;
+Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
 TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
-Gear^.Y:= Gear^.Y - ShiftY
+Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
@@ -168,11 +168,11 @@ end;
 
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 begin
-Gear^.X:= Gear^.X + ShiftX;
-Gear^.Y:= Gear^.Y + ShiftY;
+Gear^.X:= Gear^.X + int2hwFloat(ShiftX);
+Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
 TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir);
-Gear^.X:= Gear^.X - ShiftX;
-Gear^.Y:= Gear^.Y - ShiftY
+Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
+Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
 end.

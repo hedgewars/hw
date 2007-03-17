@@ -403,7 +403,7 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x * 7 + (hwRound(FollowGear^.X + hwSign(FollowGear^.dX) * 100) + WorldDx)) div 8;
+      CursorPoint.x:= (CursorPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
       CursorPoint.y:= (CursorPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
       end;
 

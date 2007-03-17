@@ -115,7 +115,7 @@ with CurrentTeam^ do
      begin
      SplitBySpace(id, s);
      val(id, Hedgehogs[HedgehogsNumber].BotLevel);
-     Gear:= AddGear(0, 0, gtHedgehog, 0, 0, 0, 0);
+     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
      Gear^.Hedgehog:= @Hedgehogs[HedgehogsNumber];
      val(s, Gear^.Health);
      TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);

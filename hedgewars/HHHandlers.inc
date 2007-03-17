@@ -60,19 +60,19 @@ with Gear^,
                                  PlaySound(sndShotgunReload, false);
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
-                   amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, 0, 0, 0);
+                   amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
                          amSkip: TurnTimeLeft:= 0;
                          amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
-                         amMine: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, 0, hwSign(dX) * _0_02, 0, 3000);
+                         amMine: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, 0, SignAs(_0_02, dX), _0, 3000);
                        amDEagle: AddGear(hwRound(X), hwRound(Y), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
-                     amDynamite: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, hwSign(dX) * _0_03, 0, 5000);
+                     amDynamite: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
                   amBaseballBat: AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0)^.Radius:= 20;
-                    amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, 0, 0, 0);
-                    amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, 0, 0, 0);
-                    amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, 0, 0, 0);
-                   amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, 0, 0, 0);
-                    amBlowTorch: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBlowTorch, 0, hwSign(Gear^.dX) * _0_5, 0, 0);
-                       amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, 0, 0, 0);
+                    amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, _0, _0, 0);
+                    amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
+                    amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);
+                   amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, _0, _0, 0);
+                    amBlowTorch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
+                       amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, _0, _0, 0);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
@@ -153,13 +153,13 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
       begin
       Gear^.Message:= 0;
       if not TestCollisionYwithGear(Gear, -1) then
-         if not TestCollisionXwithXYShift(Gear, 0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - 2 else
-         if not TestCollisionXwithXYShift(Gear, 0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - 1;
+         if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _2 else
+         if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _1;
       if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
          or   TestCollisionYwithGear(Gear, -1)) then
          begin
          Gear^.dY:= -_0_15;
-         Gear^.dX:= hwSign(Gear^.dX) * _0_15;
+         Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstFalling or gstHHJumping;
          exit
          end;
@@ -183,45 +183,45 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    PHedgehog(Gear^.Hedgehog)^.visStepPos:= (PHedgehog(Gear^.Hedgehog)^.visStepPos + 1) and 7;
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
-      if not (TestCollisionXwithXYShift(Gear, 0, -6, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -5, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -4, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -3, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -2, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
-      if not (TestCollisionXwithXYShift(Gear, 0, -1, hwSign(Gear^.dX))
-         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - 1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+      if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
+         or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
       end;
-   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + hwSign(Gear^.dX);
+   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
 
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
    begin
-   Gear^.Y:= Gear^.Y + 1;
+   Gear^.Y:= Gear^.Y + _1;
    if not TestCollisionYwithGear(Gear, 1) then
       begin
-      Gear^.Y:= Gear^.Y - 6;
-      Gear^.dY:= 0;
+      Gear^.Y:= Gear^.Y - _6;
+      Gear^.dY:= _0;
       Gear^.State:= Gear^.State or gstFalling
       end;
    end
@@ -287,13 +287,13 @@ if (Gear^.State and gstFalling) <> 0 then
          begin
          Gear^.State:= Gear^.State or gstHHHJump;
          Gear^.dY:= -_0_25;
-         Gear^.dX:= hwSign(Gear^.dX) * _0_02
+         Gear^.dX:= SignAs(_0_02, Gear^.dX)
          end;
    Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.dY:= Gear^.dY + cGravity;
-   if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= 0;
+   if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
       begin
@@ -302,7 +302,7 @@ if (Gear^.State and gstFalling) <> 0 then
          and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
       Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
       StepTicks:= 300;
-      Gear^.dY:= 0
+      Gear^.dY:= _0
       end;
    CheckGearDrowning(Gear);
    exit
@@ -319,7 +319,7 @@ begin
 //DeleteCI(Gear);
 if not TestCollisionYwithGear(Gear, 1) then
    begin
-   if (Gear^.dY < 0) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= 0;
+   if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstFalling or gstMoving;
    Gear^.dY:= Gear^.dY + cGravity
    end else begin
@@ -327,7 +327,7 @@ if not TestCollisionYwithGear(Gear, 1) then
    if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
    Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping);
-   if Gear^.dY > 0 then Gear^.dY:= 0;
+   if Gear^.dY > _0 then Gear^.dY:= _0;
    if ((Gear^.State and gstMoving) <> 0) then Gear^.dX:= Gear^.dX * Gear^.Friction
    end;
 
@@ -337,11 +337,11 @@ if (Gear^.State and gstMoving) <> 0 then
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       if ((Gear^.State and gstFalling) = 0) then
          if hwAbs(Gear^.dX) > _0_01 then
-            if not TestCollisionXwithXYShift(Gear, hwSign(Gear^.dX) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - 1 end else
-            if not TestCollisionXwithXYShift(Gear, hwSign(Gear^.dX) - Gear^.dX, -2, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_93; Gear^.Y:= Gear^.Y - 2 end else
-            if not TestCollisionXwithXYShift(Gear, hwSign(Gear^.dX) - Gear^.dX, -3, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_9; Gear^.Y:= Gear^.Y - 3 end else
-            if not TestCollisionXwithXYShift(Gear, hwSign(Gear^.dX) - Gear^.dX, -4, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_87; Gear^.Y:= Gear^.Y - 4 end else
-            if not TestCollisionXwithXYShift(Gear, hwSign(Gear^.dX) - Gear^.dX, -5, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_84; Gear^.Y:= Gear^.Y - 5 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - _1 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_93; Gear^.Y:= Gear^.Y - _2 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_9 ; Gear^.Y:= Gear^.Y - _3 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_87; Gear^.Y:= Gear^.Y - _4 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_84; Gear^.Y:= Gear^.Y - _5 end else
             if hwAbs(Gear^.dX) > _0_02 then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
                                    else begin
                                         Gear^.State:= Gear^.State and not gstMoving;
@@ -358,18 +358,18 @@ if ((Gear^.State and gstFalling) = 0)and
    begin
    Gear^.State:= Gear^.State and not gstMoving;
    SetLittle(Gear^.dX);
-   Gear^.dY:= 0
+   Gear^.dY:= _0
    end else Gear^.State:= Gear^.State or gstMoving;
 
 if (Gear^.State and gstMoving) <> 0 then
    begin
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (Gear^.dY > 0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
+   if (Gear^.dY > _0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
       begin
       CheckHHDamage(Gear);
-      Gear^.dY:= 0;
-      Gear^.Y:= Gear^.Y + 1
+      Gear^.dY:= _0;
+      Gear^.Y:= Gear^.Y + _1
       end;
    end else
    if Gear^.Health = 0 then
@@ -377,7 +377,7 @@ if (Gear^.State and gstMoving) <> 0 then
       if AllInactive then
          begin
          doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
-         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, 0, 0, 0)^.Hedgehog:= Gear^.Hedgehog;
+         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
          DeleteGear(Gear);
          SetAllToActive
          end;

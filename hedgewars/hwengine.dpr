@@ -1,4 +1,4 @@
-(*
+ (*
  * Hedgewars, a worms-like game
  * Copyright (c) 2004-2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
@@ -163,7 +163,7 @@ end;
 
 ////////////////////
 procedure GetParams;
-var c: LongInt;
+var 
 {$IFDEF DEBUGFILE}
     i: LongInt;
 {$ENDIF}
@@ -177,16 +177,16 @@ for i:= 0 to ParamCount do
 
 case ParamCount of
 12: begin
-     val(ParamStr(2), cScreenWidth, c);
-     val(ParamStr(3), cScreenHeight, c);
+     val(ParamStr(2), cScreenWidth);
+     val(ParamStr(3), cScreenHeight);
      cBitsStr:= ParamStr(4);
-     val(cBitsStr, cBits, c);
-     val(ParamStr(5), ipcPort, c);
+     val(cBitsStr, cBits);
+     val(ParamStr(5), ipcPort);
      cFullScreen:= ParamStr(6) = '1';
      isSoundEnabled:= ParamStr(7) = '1';
      cLocaleFName:= ParamStr(8);
-     val(ParamStr(9), cInitVolume, c);
-     val(ParamStr(10), cTimerInterval, c);
+     val(ParamStr(9), cInitVolume);
+     val(ParamStr(10), cTimerInterval);
      PathPrefix:= ParamStr(11);
      cShowFPS:= ParamStr(12) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
@@ -194,7 +194,7 @@ case ParamCount of
      AddClouds
      end;
   3: begin
-     val(ParamStr(2), ipcPort, c);
+     val(ParamStr(2), ipcPort);
      GameType:= gmtLandPreview;
      if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
      end

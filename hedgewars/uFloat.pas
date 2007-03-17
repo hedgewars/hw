@@ -36,7 +36,7 @@ type hwFloat = record
                end;
 {$endif FPC_LITTLE_ENDIAN}
 
-operator := (i: LongInt) z : hwFloat;
+function int2hwFloat (i: LongInt) : hwFloat;
 
 operator + (z1, z2: hwFloat) z : hwFloat;
 operator - (z1, z2: hwFloat) z : hwFloat;
@@ -45,6 +45,7 @@ operator - (z1: hwFloat) z : hwFloat;
 operator * (z1, z2: hwFloat) z : hwFloat;
 operator * (z1: hwFloat; z2: LongInt) z : hwFloat;
 operator / (z1, z2: hwFloat) z : hwFloat;
+operator / (z1: hwFloat; z2: LongInt) z : hwFloat;
 
 operator < (z1, z2: hwFloat) b : boolean;
 operator > (z1, z2: hwFloat) b : boolean;
@@ -55,8 +56,10 @@ function hwAbs(t: hwFloat): hwFloat;
 function hwSqr(t: hwFloat): hwFloat;
 function hwSqrt(t: hwFloat): hwFloat;
 function Distance(dx, dy: hwFloat): hwFloat;
+function DistanceI(dx, dy: LongInt): hwFloat;
 function AngleSin(Angle: Longword): hwFloat;
 function AngleCos(Angle: Longword): hwFloat;
+function SignAs(num, signum: hwFloat): hwFloat;
 
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
@@ -95,6 +98,24 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
           _0_995: hwFloat = (isNegative: false; QWordValue:  4273492459);
           _0_999: hwFloat = (isNegative: false; QWordValue:  4290672328);
             _1_9: hwFloat = (isNegative: false; QWordValue:  8160437862);
+              _0: hwFloat = (isNegative: false; QWordValue:           0);
+              _1: hwFloat = (isNegative: false; QWordValue:  4294967296);
+              _2: hwFloat = (isNegative: false; QWordValue:  4294967296 * 2);
+              _3: hwFloat = (isNegative: false; QWordValue:  4294967296 * 3);
+              _4: hwFloat = (isNegative: false; QWordValue:  4294967296 * 4);
+              _5: hwFloat = (isNegative: false; QWordValue:  4294967296 * 5);
+              _6: hwFloat = (isNegative: false; QWordValue:  4294967296 * 6);
+             _10: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10);
+             _16: hwFloat = (isNegative: false; QWordValue:  4294967296 * 16);
+             _19: hwFloat = (isNegative: false; QWordValue:  4294967296 * 19);
+             _20: hwFloat = (isNegative: false; QWordValue:  4294967296 * 20);
+             _25: hwFloat = (isNegative: false; QWordValue:  4294967296 * 25);
+             _30: hwFloat = (isNegative: false; QWordValue:  4294967296 * 30);
+            _128: hwFloat = (isNegative: false; QWordValue:  4294967296 * 128);
+            _450: hwFloat = (isNegative: false; QWordValue:  4294967296 * 450);
+           _1024: hwFloat = (isNegative: false; QWordValue:  4398046511104);
+           _2048: hwFloat = (isNegative: false; QWordValue:  8796093022208);
+          _10000: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10000);
 
          cLittle: hwFloat = (isNegative: false; QWordValue:           1);
          cHHKick: hwFloat = (isNegative: false; QWordValue:   128849018);
@@ -109,11 +130,11 @@ uses uConsts;
 
 {$IFDEF FPC}
 
-operator := (i: LongInt) z : hwFloat;
+function int2hwFloat (i: LongInt) : hwFloat;
 begin
-z.isNegative:= i < 0;
-z.Round:= abs(i);
-z.Frac:= 0
+int2hwFloat.isNegative:= i < 0;
+int2hwFloat.Round:= abs(i);
+int2hwFloat.Frac:= 0
 end;
 
 operator + (z1, z2: hwFloat) z : hwFloat;
@@ -196,6 +217,13 @@ else
    end
 end;
 
+operator / (z1: hwFloat; z2: LongInt) z : hwFloat;
+begin
+z.isNegative:= z1.isNegative xor (z2 < 0);
+z2:= abs(z2);
+z.QWordValue:= z1.QWordValue div z2
+end;
+
 operator < (z1, z2: hwFloat) b : boolean;
 begin
 if z1.isNegative <> z2.isNegative then
@@ -263,6 +291,17 @@ y:= dy * dy;
 Result:= x + y;
 Result.QWordValue:= Round(sqrt(1.0 / $100000000 * (Result.QWordValue)) * $100000000);
 Distance:= Result
+end;
+
+function DistanceI(dx, dy: LongInt): hwFloat;
+begin
+DistanceI:= Distance(int2hwFloat(dx), int2hwFloat(dy))
+end;
+
+function SignAs(num, signum: hwFloat): hwFloat;
+begin
+SignAs:= num;
+SignAs.isNegative:= signum.isNegative
 end;
 
 {$INCLUDE SinTable.inc}

@@ -156,7 +156,7 @@ var Stack: record
     while (i < Stack.Count) do
           begin
           if(not(hwAbs(Stack.States[i].Hedgehog.X - Me^.X) +
-                 hwAbs(Stack.States[i].Hedgehog.Y - Me^.Y) > 2)) and
+                 hwAbs(Stack.States[i].Hedgehog.Y - Me^.Y) > _2)) and
               (Stack.States[i].Hedgehog.Message = Me^.Message) then exit(true);
           inc(i)
           end;
