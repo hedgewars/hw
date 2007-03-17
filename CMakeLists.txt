@@ -1,6 +1,6 @@
 project(hedgewars)
 
-cmake_minimum_required(VERSION 2.4.0)
+cmake_minimum_required(VERSION 2.4.4 FATAL_ERROR)
 
 if(DEFINED DATA_INSTALL_DIR)
 	set(SHAREPATH ${DATA_INSTALL_DIR}/hedgewars/)
