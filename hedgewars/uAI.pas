@@ -25,25 +25,25 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole;
+     uAmmos, uConsole{$IFDEF UNIX}, cthreads{$ENDIF};
 
 var BestActions: TActions;
-    ThinkThread: PSDL_Thread = nil;
+    ThinkThread: THandle = 0;
     StopThinking: boolean;
     CanUseAmmo: array [TAmmoType] of boolean;
 
 procedure FreeActionsList;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('FreeActionsList called');{$ENDIF}
-if ThinkThread <> nil then
+if ThinkThread <> 0 then
    begin
    {$IFDEF DEBUGFILE}AddFileLog('Waiting AI thread to finish');{$ENDIF}
    StopThinking:= true;
-   SDL_WaitThread(ThinkThread, nil);
-   ThinkThread:= nil
+   WaitForThreadTerminate(ThinkThread, 5000);
+   ThinkThread:= 0
    end;
 
-   with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if Gear <> nil then
         if BotLevel <> 0 then
            begin
@@ -237,7 +237,7 @@ while (Stack.Count > 0) and not StopThinking do
     end
 end;
 
-procedure Think(Me: PGear); cdecl;
+function Think(Me: Pointer): LongInt;
 var BackMe, WalkMe: TGear;
     StartTicks: Longword;
 begin
@@ -245,9 +245,9 @@ StartTicks:= GameTicks;
 BestActions.Count:= 0;
 BestActions.Pos:= 0;
 BestActions.Score:= Low(integer);
-BackMe:= Me^;
+BackMe:= PGear(Me)^;
 WalkMe:= BackMe;
-if (Me^.State and gstAttacked) = 0 then
+if (PGear(Me)^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
       Walk(@WalkMe);
@@ -268,7 +268,8 @@ else begin
             Walk(@WalkMe)
             end
       end;
-Me^.State:= Me^.State and not gstHHThinking
+PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
+Think:= 0
 end;
 
 procedure StartThink(Me: PGear);
@@ -290,7 +291,7 @@ FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me^.Hedgehog), a);
 {$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
-ThinkThread:= SDL_CreateThread(@Think, Me)
+BeginThread(@Think, Me, ThinkThread)
 end;
 
 procedure ProcessBot;
