@@ -64,39 +64,42 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
-var b: boolean;
 begin
-if TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) then
+Gear^.State:= Gear^.State and not gstCollision;
+
+if Gear^.dY.isNegative then
    begin
-   Gear^.dX:=   Gear^.dX * Gear^.Friction;
-   Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
-   b:= false
-   end else b:= true;
+   Gear^.State:= Gear^.State or gstFalling;
+   if TestCollisionYwithGear(Gear, -1) then
+      begin
+      Gear^.dX:=   Gear^.dX * Gear^.Friction;
+      Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
+      Gear^.State:= Gear^.State or gstCollision
+      end
+   end else
+   if TestCollisionYwithGear(Gear, 1) then
+      begin
+      Gear^.State:= Gear^.State and not gstFalling;
+      Gear^.dX:=   Gear^.dX * Gear^.Friction;
+      Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
+      Gear^.State:= Gear^.State or gstCollision
+      end else Gear^.State:= Gear^.State or gstFalling;
+
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
    begin
    Gear^.dX:= - Gear^.dX * Gear^.Elasticity;
-//   Gear^.dY:=   Gear^.dY;
-   b:= false
-   end;
-if b then
-   begin
-   Gear^.dY:= Gear^.dY + cGravity;
-   Gear^.State:= Gear^.State and not gstCollision
-   end else
-   begin
-   if hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _1div100000 then
-      if (Gear^.Timer = 0) then Gear^.Active:= false
-                          else begin
-                          Gear^.dX:= _0;
-                          Gear^.dY:= _0
-                          end;
    Gear^.State:= Gear^.State or gstCollision
    end;
+
+if (Gear^.State and gstFalling) <> 0 then Gear^.dY:= Gear^.dY + cGravity;
+
+
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckGearDrowning(Gear);
-if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_003) then Gear^.State:= Gear^.State and not gstMoving
-                                         else Gear^.State:= Gear^.State or      gstMoving
+if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
+   ((Gear^.State and gstFalling) = 0) then Gear^.State:= Gear^.State and not gstMoving
+                                      else Gear^.State:= Gear^.State or      gstMoving
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -730,13 +733,13 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 begin
-if (Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0) then
+if (Gear^.State and (gstMoving or gstFalling)) <> 0 then
    begin
-   if Gear^.CollIndex < High(Longword) then DeleteCI(Gear);
+   DeleteCI(Gear);
    doStepFallingGear(Gear);
-   if Gear^.Active = false then
+   if (Gear^.State and (gstMoving or gstFalling)) = 0 then
       begin
-      if Gear^.CollIndex = High(Longword) then AddGearCI(Gear);
+      AddGearCI(Gear);
       Gear^.dX:= _0;
       Gear^.dY:= _0
       end;

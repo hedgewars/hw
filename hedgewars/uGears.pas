@@ -230,6 +230,7 @@ gtAmmo_Grenade: begin
                 Result^.Y:= Result^.Y - _25;
                 end;
         gtMine: begin
+                Result^.State:= Result^.State or gstMoving;
                 Result^.Radius:= 3;
                 Result^.Elasticity:= _0_55;
                 Result^.Friction:= _0_995;
@@ -281,7 +282,7 @@ procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t: Longword;
 begin
-if Gear^.CollIndex < High(Longword) then DeleteCI(Gear);
+DeleteCI(Gear);
 if Gear^.Surf <> nil then SDL_FreeSurface(Gear^.Surf);
 if Gear^.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
@@ -450,7 +451,7 @@ end;
 procedure DrawHH(Gear: PGear; Surface: PSDL_Surface);
 var t: LongInt;
 begin
-DrawHedgehog(hwRound(Gear^.X) - 14 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
+DrawHedgehog(hwRound(Gear^.X) - 15 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
              hwSign(Gear^.dX), 0,
              PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
              Surface);
@@ -670,6 +671,7 @@ while Gear <> nil do
                              begin
                              Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
                              Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+                             Gear^.State:= Gear^.State or gstMoving;
                              Gear^.Active:= true;
                              FollowGear:= Gear
                              end;
@@ -706,6 +708,7 @@ while i > 0 do
                        t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
                        t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
                        t^.ar[i]^.Active:= true;
+                       t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
                        DeleteCI(t^.ar[i]);
                        FollowGear:= t^.ar[i]
                        end;
