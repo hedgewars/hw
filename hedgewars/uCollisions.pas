@@ -59,7 +59,7 @@ with cinfos[Count] do
      X:= hwRound(Gear^.X);
      Y:= hwRound(Gear^.Y);
      Radius:= Gear^.Radius;
-     FillRoundInLand(X, Y, Radius-1, $FF);
+     ChangeRoundInLand(X, Y, Radius - 1, +1);
      cGear:= Gear
      end;
 Gear^.CollIndex:= Count;
@@ -70,7 +70,8 @@ procedure DeleteCI(Gear: PGear);
 begin
 if Gear^.CollIndex < Count then
    begin
-   with cinfos[Gear^.CollIndex] do FillRoundInLand(X, Y, Radius-1, 0);
+   with cinfos[Gear^.CollIndex] do
+        ChangeRoundInLand(X, Y, Radius - 1, -1);
    cinfos[Gear^.CollIndex]:= cinfos[Pred(Count)];
    cinfos[Gear^.CollIndex].cGear^.CollIndex:= Gear^.CollIndex;
    Gear^.CollIndex:= High(Longword);

@@ -30,6 +30,7 @@ procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; Delta: LongInt);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
 
@@ -47,6 +48,19 @@ if ((y + dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y + dx, i]:= Value;
 if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y - dx, i]:= Value;
+end;
+
+procedure ChangeCircleLines(x, y, dx, dy: LongInt; Delta: LongInt);
+var i: LongInt;
+begin
+if ((y + dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y + dy, i], Delta);
+if ((y - dy) and $FFFFFC00) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y - dy, i], Delta);
+if ((y + dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y + dx, i], Delta);
+if ((y - dx) and $FFFFFC00) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y - dx, i], Delta);
 end;
 
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
@@ -68,6 +82,27 @@ begin
      end;
   if (dx = dy) then FillCircleLines(x, y, dx, dy, Value);
 end;
+
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; Delta: LongInt);
+var dx, dy, d: LongInt;
+begin
+  dx:= 0;
+  dy:= Radius;
+  d:= 3 - 2 * Radius;
+  while (dx < dy) do
+     begin
+     ChangeCircleLines(x, y, dx, dy, Delta);
+     if (d < 0)
+     then d:= d + 4 * dx + 6
+     else begin
+          d:= d + 4 * (dx - dy) + 10;
+          dec(dy)
+          end;
+     inc(dx)
+     end;
+  if (dx = dy) then ChangeCircleLines(x, y, dx, dy, Delta);
+end;
+
 
 procedure ClearLandPixel(y, x: LongInt);
 var p: PByteArray;
