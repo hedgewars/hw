@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QtGui>
 #include <QStringList>
 #include <QProcess>
 #include <QDir>
@@ -26,6 +25,11 @@
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QListWidget>
+#include <QStackedLayout>
+#include <QLineEdit>
+#include <QLabel>
 
 #include "hwform.h"
 #include "game.h"
