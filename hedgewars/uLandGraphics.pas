@@ -103,7 +103,6 @@ begin
   if (dx = dy) then ChangeCircleLines(x, y, dx, dy, Delta);
 end;
 
-
 procedure ClearLandPixel(y, x: LongInt);
 var p: PByteArray;
 begin

@@ -103,7 +103,19 @@ end;
 
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
+    TestWord: LongWord;
 begin
+if Gear^.IntersectGear <> nil then
+   with Gear^ do
+        if (hwRound(IntersectGear^.X) + IntersectGear^.Radius < hwRound(X) - Radius) or
+           (hwRound(IntersectGear^.X) - IntersectGear^.Radius > hwRound(X) + Radius) then
+           begin
+           IntersectGear:= nil;
+           TestWord:= 0
+           end else    
+           TestWord:= COLOR_LAND - 1
+   else TestWord:= 0;
+   
 x:= hwRound(Gear^.X);
 if Dir < 0 then x:= x - Gear^.Radius
            else x:= x + Gear^.Radius;
@@ -113,25 +125,28 @@ if (x and $FFFFF800) = 0 then
    i:= y + Gear^.Radius * 2 - 2;
    repeat
      if (y and $FFFFFC00) = 0 then
-        if Land[y, x] <> 0 then exit(true);
+        if Land[y, x] > TestWord then exit(true);
      inc(y)
    until (y > i);
    end;
 TestCollisionXwithGear:= false
 end;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
-begin
-Gear^.X:= Gear^.X + ShiftX;
-Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
-Gear^.X:= Gear^.X - ShiftX;
-Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
-end;
-
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
 var x, y, i: LongInt;
+    TestWord: LongWord;
 begin
+if Gear^.IntersectGear <> nil then
+   with Gear^ do
+        if (hwRound(IntersectGear^.Y) + IntersectGear^.Radius < hwRound(Y) - Radius) or
+           (hwRound(IntersectGear^.Y) - IntersectGear^.Radius > hwRound(Y) + Radius) then
+           begin
+           IntersectGear:= nil;
+           TestWord:= 0
+           end else    
+           TestWord:= COLOR_LAND - 1
+   else TestWord:= 0;
+
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
            else y:= y + Gear^.Radius;
@@ -141,11 +156,20 @@ if (y and $FFFFFC00) = 0 then
    i:= x + Gear^.Radius * 2 - 2;
    repeat
      if (x and $FFFFF800) = 0 then
-        if Land[y, x] <> 0 then exit(true);
+        if Land[y, x] > TestWord then exit(true);
      inc(x)
    until (x > i);
    end;
 TestCollisionYwithGear:= false
+end;
+
+function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
+begin
+Gear^.X:= Gear^.X + ShiftX;
+Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
+TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir);
+Gear^.X:= Gear^.X - ShiftX;
+Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
 function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;

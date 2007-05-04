@@ -149,9 +149,11 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
           StepTicks:= 200;
           exit
           end;
+
    if ((Gear^.Message and gm_LJump ) <> 0) then
       begin
       Gear^.Message:= 0;
+      DeleteCI(Gear);
       if not TestCollisionYwithGear(Gear, -1) then
          if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _2 else
          if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _1;
@@ -164,8 +166,10 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
          exit
          end;
       end;
+
    if ((Gear^.Message and gm_HJump ) <> 0) then
       begin
+      DeleteCI(Gear);
       Gear^.Message:= 0;
       if not TestCollisionYwithGear(Gear, -1) then
          begin
@@ -175,9 +179,12 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
          exit
          end;
       end;
+
    PrevdX:= hwSign(Gear^.dX);
    if (Gear^.Message and gm_Left  )<>0 then Gear^.dX:= -cLittle else
    if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit;
+   DeleteCI(Gear);
+
    StepTicks:= cHHStepTicks;
    if PrevdX <> hwSign(Gear^.dX) then exit;
    PHedgehog(Gear^.Hedgehog)^.visStepPos:= (PHedgehog(Gear^.Hedgehog)^.visStepPos + 1) and 7;
@@ -222,14 +229,16 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
       begin
       Gear^.Y:= Gear^.Y - _6;
       Gear^.dY:= _0;
-      Gear^.State:= Gear^.State or gstFalling
+      Gear^.State:= Gear^.State or gstFalling;
+      exit
       end;
    end
    end
    end
    end
    end
-   end
+   end;
+   AddGearCI(Gear)
    end
 end;
 
@@ -251,7 +260,7 @@ if isInMultiShoot and (Gear^.Damage = 0) then
    exit
    end;
 AllInactive:= false;
-DeleteCI(Gear);
+
 if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    begin
    TurnTimeLeft:= 0;
@@ -301,6 +310,7 @@ if (Gear^.State and gstFalling) <> 0 then
       if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
          and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
       Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
+      AddGearCI(Gear);
       StepTicks:= 300;
       Gear^.dY:= _0
       end;

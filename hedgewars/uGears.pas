@@ -48,6 +48,7 @@ type PGear = ^TGear;
              Tag: LongInt;
              Surf: PSDL_Surface;
              Z: Longword;
+             IntersectGear: PGear;
              end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -175,8 +176,13 @@ Result^.dY:= dY;
 Result^.doStep:= doStepHandlers[Kind];
 Result^.CollIndex:= High(Longword);
 Result^.Timer:= Timer;
+
 if CurrentTeam <> nil then
+   begin
    Result^.Hedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+   Result^.IntersectGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear
+   end;
+   
 case Kind of
        gtCloud: Result^.Z:= High(Result^.Z);
    gtAmmo_Bomb: begin

@@ -758,6 +758,7 @@ if ((Gear^.State and gsttmpFlag) <> 0) then
       if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick, false);
       if Gear^.Timer = 0 then
          begin
+         DeleteCI(Gear);
          doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
          DeleteGear(Gear)
          end;
