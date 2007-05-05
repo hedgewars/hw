@@ -91,6 +91,7 @@ procedure AfterAttack; forward;
 procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
+procedure ShotgunShot(Gear: PGear); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -651,18 +652,18 @@ end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
 var Gear: PGear;
-    dmg: LongInt;
+    dmg, dmgRadius: LongInt;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
-if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
 if Radius = 50 then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false);
-if (Mask and EXPLAllDamageInRadius)=0 then Radius:= Radius shl 1;
+if (Mask and EXPLAllDamageInRadius)=0 then dmgRadius:= Radius shl 1
+                                      else dmgRadius:= Radius;
 Gear:= GearsList;
 while Gear <> nil do
       begin
-      dmg:= Radius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+      dmg:= dmgRadius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
       if dmg > 0 then
          begin
          dmg:= dmg div 2;
@@ -675,6 +676,7 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then inc(Gear^.Damage, dmg);
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
+                             DeleteCI(Gear);
                              Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
                              Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
                              Gear^.State:= Gear^.State or gstMoving;
@@ -690,7 +692,40 @@ while Gear <> nil do
          end;
       Gear:= Gear^.NextGear
       end;
+if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
 uAIMisc.AwareOfExplosion(0, 0, 0)
+end;
+
+procedure ShotgunShot(Gear: PGear);
+var t: PGear;
+    dmg: integer;
+begin
+Gear^.Radius:= 22;
+t:= GearsList;
+while t <> nil do
+    begin
+    dmg:= min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25);
+    if dmg >= 0 then
+       case t^.Kind of
+           gtHedgehog,
+               gtMine,
+               gtCase: begin
+                       inc(t^.Damage, dmg);
+                       DeleteCI(t);
+                       t^.dX:= t^.dX + SignAs(Gear^.dX * dmg * _0_01 + cHHKick, t^.X - Gear^.X);
+                       t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
+                       t^.State:= t^.State or gstMoving;
+                       t^.Active:= true;
+                       FollowGear:= t
+                       end;
+              gtGrave: begin
+                       t^.dY:= - _0_1;
+                       t^.Active:= true
+                       end;
+           end;
+    t:= t^.NextGear
+    end;
+DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 22)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);

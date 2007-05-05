@@ -25,7 +25,7 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole{$IFDEF UNIX}, cthreads{$ENDIF};
+     uAmmos, uConsole, uCollisions{$IFDEF UNIX}, cthreads{$ENDIF};
 
 var BestActions: TActions;
     ThinkThread: THandle = 0;
@@ -277,6 +277,8 @@ var a: TAmmoType;
 begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstFalling or gstMoving)) <> 0)
    or isInMultiShoot then exit;
+
+DeleteCI(Me); // don't let collision info in Land to confuse AI
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;
 StopThinking:= false;

@@ -290,8 +290,9 @@ Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckCollision(Gear);
 if (Gear^.State and gstCollision) <> 0 then
    begin
-   AmmoShove(Gear, 25, 25);
-   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLNoDamage or EXPLDoNotTouchHH);
+   Gear^.X:= Gear^.X + Gear^.dX * 8;
+   Gear^.Y:= Gear^.Y + Gear^.dY * 8;
+   ShotgunShot(Gear);
    DeleteGear(Gear);
    AfterAttack;
    exit
@@ -758,7 +759,6 @@ if ((Gear^.State and gsttmpFlag) <> 0) then
       if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick, false);
       if Gear^.Timer = 0 then
          begin
-         DeleteCI(Gear);
          doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
          DeleteGear(Gear)
          end;
@@ -917,7 +917,7 @@ if not TestCollisionYwithGear(Gear, 1) then
    end else begin
    if Gear^.Timer > 0 then dec(Gear^.Timer)
       else begin
-      doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 2, 0);
+//      doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 2, 0);
       dec(Gear^.Health);
       Gear^.Timer:= 1250 - Gear^.Angle * 12
       end
