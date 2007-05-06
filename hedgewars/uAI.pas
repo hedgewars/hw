@@ -237,7 +237,7 @@ while (Stack.Count > 0) and not StopThinking do
     end
 end;
 
-function Think(Me: Pointer): integer;
+function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
     StartTicks: Longword;
 begin
