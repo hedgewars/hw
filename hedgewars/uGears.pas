@@ -700,7 +700,7 @@ procedure ShotgunShot(Gear: PGear);
 var t: PGear;
     dmg: integer;
 begin
-Gear^.Radius:= 22;
+Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
     begin
@@ -725,7 +725,7 @@ while t <> nil do
            end;
     t:= t^.NextGear
     end;
-DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 22)
+DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);

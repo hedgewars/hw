@@ -43,6 +43,7 @@ function RatePlace(Gear: PGear): LongInt;
 function TestColl(x, y, r: LongInt): boolean;
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
+function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 function AIrndSign(num: LongInt): LongInt;
 
@@ -184,7 +185,7 @@ for i:= 0 to Targets.Count do
          if dmg > 0 then
             begin
             dmg:= dmg shr 1;
-            if dmg > abs(Score) then
+            if dmg >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
                             else dec(Result, KillScore * 3)
             else
@@ -205,7 +206,7 @@ for i:= 0 to Pred(Targets.Count) do
          dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
          if dmg > 0 then
             begin
-            if power > abs(Score) then
+            if power >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
                             else dec(Result, KillScore * 3)
             else
@@ -214,6 +215,35 @@ for i:= 0 to Pred(Targets.Count) do
             end;
          end;
 RateShove:= Result * 1024
+end;
+
+function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
+var i, dmg, Result: LongInt;
+begin
+Result:= 0;
+// add our virtual position
+with Targets.ar[Targets.Count] do
+     begin
+     Point.x:= hwRound(Me^.X);
+     Point.y:= hwRound(Me^.Y);
+     Score:= - ThinkingHH^.Health
+     end;
+// rate shot
+for i:= 0 to Targets.Count do
+    with Targets.ar[i] do
+         begin
+         dmg:= min(cHHRadius + cShotgunRadius - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
+         if dmg > 0 then
+            begin
+            if dmg >= abs(Score) then
+               if Score > 0 then inc(Result, KillScore)
+                            else dec(Result, KillScore * 3)
+            else
+               if Score > 0 then inc(Result, dmg)
+                            else dec(Result, dmg * 3)
+            end;
+         end;
+RateShotgun:= Result * 1024
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;

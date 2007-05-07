@@ -121,8 +121,11 @@ const
 
       cHHRadius = 9;
       cHHStepTicks = 38;
+
       cHHZ = 1000;
       cCurrHHZ = Succ(cHHZ);
+
+      cShotgunRadius = 22;
 
       cKeyMaxIndex = 1023;
 

@@ -192,7 +192,9 @@ repeat
   ry:= hwRound(y);
   if TestColl(rx, ry, 2) then
      begin
-     Result:= RateShove(Me, rx, ry, 25, 25) * 2;
+     x:= x + vX * 8;
+     y:= y + vY * 8;
+     Result:= RateShotgun(Me, rx, ry) * 2;
      if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
                    else dec(Result, Level * 4000);
      exit(Result)

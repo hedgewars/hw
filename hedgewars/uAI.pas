@@ -25,22 +25,24 @@ procedure FreeActionsList;
 
 implementation
 uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
-     uAmmos, uConsole, uCollisions{$IFDEF UNIX}, cthreads{$ENDIF};
+     uAmmos, uConsole, uCollisions, SysUtils{$IFDEF UNIX}, cthreads{$ENDIF};
 
 var BestActions: TActions;
-    ThinkThread: THandle = 0;
-    StopThinking: boolean;
     CanUseAmmo: array [TAmmoType] of boolean;
-
+    StopThinking: boolean;
+    ThinkThread: THandle;
+    hasThread: LongInt = 0;
+    
 procedure FreeActionsList;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('FreeActionsList called');{$ENDIF}
-if ThinkThread <> 0 then
+if hasThread <> 0 then
    begin
    {$IFDEF DEBUGFILE}AddFileLog('Waiting AI thread to finish');{$ENDIF}
    StopThinking:= true;
-   WaitForThreadTerminate(ThinkThread, 5000);
-   ThinkThread:= 0
+   repeat
+     SDL_Delay(10)
+   until hasThread = 0
    end;
 
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
@@ -64,7 +66,7 @@ begin
 BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
 
 for i:= 0 to Pred(Targets.Count) do
-    if (Targets.ar[i].Score >= 0) then
+    if (Targets.ar[i].Score >= 0) and (not StopThinking) then
        begin
        with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
             a:= Ammo^[CurSlot, CurAmmo].AmmoType;
@@ -103,7 +105,9 @@ for i:= 0 to Pred(Targets.Count) do
            end;
         if a = High(TAmmoType) then a:= Low(TAmmoType)
                                else inc(a)
-       until (a = aa) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].AttacksNum > 0)
+       until (a = aa) or
+             (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].AttacksNum > 0) or
+             StopThinking
        end
 end;
 
@@ -241,15 +245,14 @@ function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
     StartTicks: Longword;
 begin
+InterlockedIncrement(hasThread);
 StartTicks:= GameTicks;
-BestActions.Count:= 0;
-BestActions.Pos:= 0;
-BestActions.Score:= Low(integer);
 BackMe:= PGear(Me)^;
-WalkMe:= BackMe;
+
 if (PGear(Me)^.State and gstAttacked) = 0 then
    if Targets.Count > 0 then
       begin
+      WalkMe:= BackMe;
       Walk(@WalkMe);
       if (StartTicks > GameTicks - 1500) and not StopThinking then SDL_Delay(2000);
       if BestActions.Score < -1023 then
@@ -259,17 +262,17 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
          end;
       end else
 else begin
-      Walk(@WalkMe);
       while (not StopThinking) and (BestActions.Count = 0) do
             begin
-            SDL_Delay(100);
             FillBonuses(true);
             WalkMe:= BackMe;
-            Walk(@WalkMe)
+            Walk(@WalkMe);
+            if not StopThinking then SDL_Delay(100)
             end
       end;
 PGear(Me)^.State:= PGear(Me)^.State and not gstHHThinking;
-Think:= 0
+Think:= 0;
+InterlockedDecrement(hasThread)
 end;
 
 procedure StartThink(Me: PGear);
@@ -281,8 +284,14 @@ if ((Me^.State and (gstAttacking or gstHHJumping or gstFalling or gstMoving)) <>
 DeleteCI(Me); // don't let collision info in Land to confuse AI
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;
+
+BestActions.Count:= 0;
+BestActions.Pos:= 0;
+BestActions.Score:= Low(integer);
+
 StopThinking:= false;
 ThinkingHH:= Me;
+
 FillTargets;
 if Targets.Count = 0 then
    begin
@@ -298,19 +307,21 @@ end;
 
 procedure ProcessBot;
 const StartTicks: Longword = 0;
+      cStopThinkTime = 40;
 begin
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if (Gear <> nil)
         and ((Gear^.State and gstHHDriven) <> 0)
         and (TurnTimeLeft < cHedgehogTurnTime - 50) then
         if ((Gear^.State and gstHHThinking) = 0) then
-           if (BestActions.Pos >= BestActions.Count) then
+           if (BestActions.Pos >= BestActions.Count)
+              and (TurnTimeLeft > cStopThinkTime) then
               begin
               StartThink(Gear);
               StartTicks:= GameTicks
               end else ProcessAction(BestActions, Gear)
-        else if (GameTicks - StartTicks) > cMaxAIThinkTime then StopThinking:= true
+        else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
+                or (TurnTimeLeft <= cStopThinkTime) then StopThinking:= true
 end;
-
 
 end.
