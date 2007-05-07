@@ -86,6 +86,7 @@ case GameState of
                  isSEBackup:= isSoundEnabled;
                  isSoundEnabled:= false
                  end;
+              FinishProgress;
               GameState:= gsGame
               end;
      gsGame : begin

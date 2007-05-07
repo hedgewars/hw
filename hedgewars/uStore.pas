@@ -38,6 +38,7 @@ procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
+procedure FinishProgress;
 function  LoadImage(filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
 
 var PixelFormat: PSDL_PixelFormat;
@@ -459,32 +460,6 @@ if Hedgehog.HealthTag <> nil then SDL_FreeSurface(Hedgehog.HealthTag);
 Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Color, fnt16)
 end;
 
-procedure AddProgress;
-const Step: Longword = 0;
-      ProgrSurf: PSDL_Surface = nil;
-      MaxCalls = 11; // MaxCalls should be the count of calls to AddProgress to prevent memory leakage
-var r: TSDL_Rect;
-begin
-if Step = 0 then
-   begin
-   WriteToConsole(msgLoading + 'progress sprite: ');
-   ProgrSurf:= LoadImage(Pathz[ptGraphics] + '/BigDigits', false, true, true);
-   end;
-SDL_FillRect(SDLPrimSurface, nil, 0);
-r.x:= 0;
-r.w:= 32;
-r.h:= 32;
-r.y:= (Step mod 10) * 32;
-DrawFromRect(cScreenWidth div 2 - 16, cScreenHeight div 2 - 16, @r, ProgrSurf, SDLPrimSurface);
-SDL_Flip(SDLPrimSurface);
-inc(Step);
-if Step = MaxCalls then
-   begin
-   WriteLnToConsole('Freeing progress surface... ');
-   SDL_FreeSurface(ProgrSurf)
-   end;
-end;
-
 function  LoadImage(filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     Result: PSDL_Surface;
@@ -512,6 +487,35 @@ if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
             else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole(msgOK);
 LoadImage:= Result
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+var ProgrSurf: PSDL_Surface = nil;
+    Step: Longword = 0;
+
+procedure AddProgress;
+var r: TSDL_Rect;
+begin
+if Step = 0 then
+   begin
+   WriteToConsole(msgLoading + 'progress sprite: ');
+   ProgrSurf:= LoadImage(Pathz[ptGraphics] + '/Progress', false, true, true);
+   end;
+SDL_FillRect(SDLPrimSurface, nil, 0);
+r.x:= 0;
+r.w:= ProgrSurf^.w;
+r.h:= ProgrSurf^.w;
+r.y:= (Step mod (ProgrSurf^.h div ProgrSurf^.w)) * ProgrSurf^.w;
+DrawFromRect((cScreenWidth - ProgrSurf^.w) div 2,
+             (cScreenHeight - ProgrSurf^.w) div 2, @r, ProgrSurf, SDLPrimSurface);
+SDL_Flip(SDLPrimSurface);
+inc(Step);
+end;
+
+procedure FinishProgress;
+begin
+WriteLnToConsole('Freeing progress surface... ');
+SDL_FreeSurface(ProgrSurf)
 end;
 
 end.
