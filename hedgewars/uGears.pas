@@ -44,7 +44,7 @@ type PGear = ^TGear;
              Message : Longword;
              Hedgehog: pointer;
              Health, Damage: LongInt;
-             CollIndex: Longword;
+             CollisionIndex: LongInt;
              Tag: LongInt;
              Surf: PSDL_Surface;
              Z: Longword;
@@ -175,7 +175,7 @@ Result^.Active:= true;
 Result^.dX:= dX;
 Result^.dY:= dY;
 Result^.doStep:= doStepHandlers[Kind];
-Result^.CollIndex:= High(Longword);
+Result^.CollisionIndex:= -1;
 Result^.Timer:= Timer;
 
 if CurrentTeam <> nil then
@@ -277,7 +277,7 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 10;
                 end;
    gtBlowTorch: begin
-                Result^.Radius:= cHHRadius;
+                Result^.Radius:= cHHRadius + cBlowTorchC;
                 Result^.Timer:= 7500;
                 end;
      end;
@@ -464,7 +464,7 @@ DrawHedgehog(hwRound(Gear^.X) - 15 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
              Surface);
 
 with PHedgehog(Gear^.Hedgehog)^ do
-     if Gear^.State = 0 then
+     if (Gear^.State and not gstAnimation) = 0 then
         begin
         t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
         dec(t, HealthTag^.h + 2);

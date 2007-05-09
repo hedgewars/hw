@@ -30,7 +30,7 @@ procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; Delta: LongInt);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
 
@@ -50,17 +50,34 @@ if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y - dx, i]:= Value;
 end;
 
-procedure ChangeCircleLines(x, y, dx, dy: LongInt; Delta: LongInt);
+procedure ChangeCircleLines(x, y, dx, dy: LongInt; doSet: boolean);
 var i: LongInt;
 begin
-if ((y + dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y + dy, i], Delta);
-if ((y - dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y - dy, i], Delta);
-if ((y + dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y + dx, i], Delta);
-if ((y - dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y - dx, i], Delta);
+if not doSet then
+   begin
+   if ((y + dy) and $FFFFFC00) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 2047) do
+          if (Land[y + dy, i] > 0) then dec(Land[y + dy, i]);
+   if ((y - dy) and $FFFFFC00) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 2047) do
+          if (Land[y - dy, i] > 0) then dec(Land[y - dy, i]);
+   if ((y + dx) and $FFFFFC00) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 2047) do
+          if (Land[y + dx, i] > 0) then dec(Land[y + dx, i]);
+   if ((y - dx) and $FFFFFC00) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 2047) do
+          if (Land[y - dx, i] > 0) then dec(Land[y - dx, i]);
+   end else
+   begin
+   if ((y + dy) and $FFFFFC00) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y + dy, i]);
+   if ((y - dy) and $FFFFFC00) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y - dy, i]);
+   if ((y + dx) and $FFFFFC00) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y + dx, i]);
+   if ((y - dx) and $FFFFFC00) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y - dx, i]);
+   end
 end;
 
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
@@ -83,7 +100,7 @@ begin
   if (dx = dy) then FillCircleLines(x, y, dx, dy, Value);
 end;
 
-procedure ChangeRoundInLand(X, Y, Radius: LongInt; Delta: LongInt);
+procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 var dx, dy, d: LongInt;
 begin
   dx:= 0;
@@ -91,7 +108,7 @@ begin
   d:= 3 - 2 * Radius;
   while (dx < dy) do
      begin
-     ChangeCircleLines(x, y, dx, dy, Delta);
+     ChangeCircleLines(x, y, dx, dy, doSet);
      if (d < 0)
      then d:= d + 4 * dx + 6
      else begin
@@ -100,7 +117,7 @@ begin
           end;
      inc(dx)
      end;
-  if (dx = dy) then ChangeCircleLines(x, y, dx, dy, Delta);
+  if (dx = dy) then ChangeCircleLines(x, y, dx, dy, doSet)
 end;
 
 procedure ClearLandPixel(y, x: LongInt);
@@ -277,6 +294,7 @@ for i:= -HalfWidth to HalfWidth do
         tx:= hwRound(X);
         ty:= hwRound(Y);
         if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0) then
+         if Land[ty, tx] = COLOR_LAND then
            begin
            Land[ty, tx]:= 0;
            ClearLandPixel(ty, tx);

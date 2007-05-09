@@ -126,6 +126,7 @@ const
       cCurrHHZ = Succ(cHHZ);
 
       cShotgunRadius = 22;
+      cBlowTorchC    = 6;
 
       cKeyMaxIndex = 1023;
 
@@ -148,6 +149,7 @@ const
       gstHHThinking     = $00000800;
       gstNoDamage       = $00001000;
       gstHHHJump        = $00002000;
+      gstAnimation      = $00004000;
 
       gm_Left   = $00000001;
       gm_Right  = $00000002;

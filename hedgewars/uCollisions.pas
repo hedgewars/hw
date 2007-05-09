@@ -38,7 +38,7 @@ function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
 implementation
-uses uMisc, uConsts, uLand, uLandGraphics;
+uses uMisc, uConsts, uLand, uLandGraphics, uConsole;
 
 type TCollisionEntry = record
                        X, Y, Radius: LongInt;
@@ -52,29 +52,29 @@ var Count: Longword = 0;
 
 procedure AddGearCI(Gear: PGear);
 begin
-if Gear^.CollIndex < High(Longword) then exit;
+if Gear^.CollisionIndex >= 0 then exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
      begin
      X:= hwRound(Gear^.X);
      Y:= hwRound(Gear^.Y);
      Radius:= Gear^.Radius;
-     ChangeRoundInLand(X, Y, Radius - 1, +1);
+     ChangeRoundInLand(X, Y, Radius - 1, true);
      cGear:= Gear
      end;
-Gear^.CollIndex:= Count;
+Gear^.CollisionIndex:= Count;
 inc(Count)
 end;
 
 procedure DeleteCI(Gear: PGear);
 begin
-if Gear^.CollIndex < Count then
+if Gear^.CollisionIndex >= 0 then
    begin
-   with cinfos[Gear^.CollIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, -1);
-   cinfos[Gear^.CollIndex]:= cinfos[Pred(Count)];
-   cinfos[Gear^.CollIndex].cGear^.CollIndex:= Gear^.CollIndex;
-   Gear^.CollIndex:= High(Longword);
+   with cinfos[Gear^.CollisionIndex] do
+        ChangeRoundInLand(X, Y, Radius - 1, false);
+   cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
+   cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
+   Gear^.CollisionIndex:= -1;
    dec(Count)
    end;
 end;
@@ -93,7 +93,7 @@ my:= hwRound(Gear^.Y);
 for i:= 0 to Pred(Count) do
    with cinfos[i] do
       if (Gear <> cGear) and
-         (sqrt(sqr(mx - x) + sqr(my - y)) <= Radius + Gear^.Radius) then
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) then
              begin
              ga.ar[ga.Count]:= cinfos[i].cGear;
              inc(ga.Count)

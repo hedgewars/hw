@@ -476,13 +476,13 @@ if Gear^.Timer mod cHHStepTicks = 0 then
    HHGear^.State:= HHGear^.State or gstAttacking;
 
    inc(BTSteps);
-   if BTSteps = 11 then
+   if BTSteps = 7 then
       begin
       BTSteps:= 0;
-      Gear^.X:= HHGear^.X + Gear^.dX * cHHRadius * 2;
-      Gear^.Y:= HHGear^.Y + Gear^.dY * cHHRadius * 2;
+      Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
+      Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
       HHGear^.State:= HHGear^.State or gstNoDamage;
-      AmmoShove(Gear, 3, 14);
+      AmmoShove(Gear, 2, 14);
       HHGear^.State:= HHGear^.State and not gstNoDamage
       end;
 
@@ -821,8 +821,8 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
    CheckGearDrowning(Gear);
    end;
 
-if (Gear^.CollIndex = High(Longword)) and (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
-   else if (Gear^.CollIndex < High(Longword)) and (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear);
+if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
+   else if (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

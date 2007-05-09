@@ -325,8 +325,9 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
+var prevState: Longword;
 begin
-//DeleteCI(Gear);
+prevState:= Gear^.State;
 if not TestCollisionYwithGear(Gear, 1) then
    begin
    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
@@ -373,6 +374,7 @@ if ((Gear^.State and gstFalling) = 0)and
 
 if (Gear^.State and gstMoving) <> 0 then
    begin
+   Gear^.State:= Gear^.State and not gstAnimation;
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (Gear^.dY > _0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
@@ -399,11 +401,20 @@ AllInactive:= false;
 
 if (not CheckGearDrowning(Gear)) and
    ((Gear^.State and gstMoving) = 0) then
+   if ((Gear^.State and gstAnimation) = 0) and
+      (prevState <> Gear^.State) then
       begin
-      Gear^.State:= 0;
-      Gear^.Active:= false;
-      AddGearCI(Gear);
-      exit
+      Gear^.State:= gstAnimation;
+      Gear^.Timer:= 150
+      end else
+      begin
+      if Gear^.Timer = 0 then
+         begin
+         Gear^.State:= 0;
+         Gear^.Active:= false;
+         AddGearCI(Gear);
+         exit
+         end else dec(Gear^.Timer)
       end
 end;
 
@@ -416,5 +427,5 @@ if (Gear^.Message and gm_Destroy) <> 0 then
    exit
    end;
 if (Gear^.State and gstHHDriven) = 0 then doStepHedgehogFree(Gear)
-                                    else doStepHedgehogDriven(Gear)
+                                     else doStepHedgehogDriven(Gear)
 end;
