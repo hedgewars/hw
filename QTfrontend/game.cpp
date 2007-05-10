@@ -255,17 +255,7 @@ void HWGame::PlayDemo(const QString & demofilename)
 	}
 
 	// read demo
-	QDataStream stream(&demofile);
-	char buf[512];
-	int readbytes;
-	do
-	{
-		readbytes = stream.readRawData((char *)&buf, 512);
-		toSendBuf.append(QByteArray((char *)&buf, readbytes));
-		//SendIPC(QByteArray((char *)&buf, readbytes));
-
-	} while (readbytes > 0);
-	demofile.close();
+	toSendBuf = demofile.readAll();
 
 	// run engine
 	demo = new QByteArray;
