@@ -328,9 +328,9 @@ procedure doStepHedgehogFree(Gear: PGear);
 var prevState: Longword;
 begin
 prevState:= Gear^.State;
-if not TestCollisionYwithGear(Gear, 1) then
+if not TestCollisionYKick(Gear, 1) then
    begin
-   if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
+   if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
    Gear^.State:= Gear^.State or gstFalling or gstMoving;
    Gear^.dY:= Gear^.dY + cGravity
    end else begin
@@ -345,7 +345,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 if (Gear^.State <> 0) then DeleteCI(Gear);
 
 if (Gear^.State and gstMoving) <> 0 then
-   if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+   if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
       if ((Gear^.State and gstFalling) = 0) then
          if hwAbs(Gear^.dX) > _0_01 then
             if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - _1 end else
@@ -377,7 +377,9 @@ if (Gear^.State and gstMoving) <> 0 then
    Gear^.State:= Gear^.State and not gstAnimation;
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (Gear^.dY > _0) and not TestCollisionYwithGear(Gear, 1) and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
+   if (not Gear^.dY.isNegative) and
+      (not TestCollisionYKick(Gear, 1)) and
+       TestCollisionYwithXYShift(Gear, 0, 1, 1) then
       begin
       CheckHHDamage(Gear);
       Gear^.dY:= _0;

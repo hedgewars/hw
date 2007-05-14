@@ -30,10 +30,17 @@ type PGearArray = ^TGearArray;
 
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
+
 function CheckGearsCollision(Gear: PGear): PGearArray;
+
 function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
 function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+
+function TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
+function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
+
 function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
+
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
 function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
@@ -143,7 +150,7 @@ if Gear^.IntersectGear <> nil then
            begin
            IntersectGear:= nil;
            TestWord:= 0
-           end else    
+           end else
            TestWord:= COLOR_LAND - 1
    else TestWord:= 0;
 
@@ -161,6 +168,103 @@ if (y and $FFFFFC00) = 0 then
    until (x > i);
    end;
 TestCollisionYwithGear:= false
+end;
+
+function TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
+var x, y, mx, my, i: LongInt;
+    flag: boolean;
+begin
+flag:= false;
+x:= hwRound(Gear^.X);
+if Dir < 0 then x:= x - Gear^.Radius
+           else x:= x + Gear^.Radius;
+if (x and $FFFFF800) = 0 then
+   begin
+   y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
+   i:= y + Gear^.Radius * 2 - 2;
+   repeat
+     if (y and $FFFFFC00) = 0 then
+           if Land[y, x] = COLOR_LAND then exit(true)
+                                      else flag:= true;
+     inc(y)
+   until (y > i);
+   end;
+TestCollisionXKick:= false;
+
+if flag then
+   begin
+   if Count = 0 then exit;
+   mx:= hwRound(Gear^.X);
+   my:= hwRound(Gear^.Y);
+
+   for i:= 0 to Pred(Count) do
+    with cinfos[i] do
+      if (Gear <> cGear) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
+         ((mx > x) xor (Dir > 0)) then
+             begin
+             Gear^.dX:= Gear^.dX {* _0_6};
+             Gear^.dY:= Gear^.dY {* _0_6};
+             with cinfos[i].cGear^ do
+                  begin
+                  dX:= Gear^.dX {* _1_5};
+                  dY:= Gear^.dY {* _1_5};
+                  State:= State and gstMoving;
+                  Active:= true
+                  end;
+             DeleteCI(cinfos[i].cGear);
+             exit
+             end
+   end
+end;
+
+function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
+var x, y, mx, my, i: LongInt;
+    flag: boolean;
+begin
+flag:= false;
+y:= hwRound(Gear^.Y);
+if Dir < 0 then y:= y - Gear^.Radius
+           else y:= y + Gear^.Radius;
+if (y and $FFFFFC00) = 0 then
+   begin
+   x:= hwRound(Gear^.X) - Gear^.Radius + 1;
+   i:= x + Gear^.Radius * 2 - 2;
+   repeat
+     if (x and $FFFFF800) = 0 then
+        if Land[y, x] > 0 then
+           if Land[y, x] = COLOR_LAND then exit(true)
+                                      else flag:= true;
+     inc(x)
+   until (x > i);
+   end;
+TestCollisionYKick:= false;
+
+if flag then
+   begin
+   if Count = 0 then exit;
+   mx:= hwRound(Gear^.X);
+   my:= hwRound(Gear^.Y);
+
+   for i:= 0 to Pred(Count) do
+    with cinfos[i] do
+      if (Gear <> cGear) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
+         ((my > y) xor (Dir > 0)) then
+             begin
+             Gear^.dX:= Gear^.dX * _0_6;
+             Gear^.dY:= Gear^.dY * _0_6;
+             with cinfos[i].cGear^ do
+                  begin
+                  dX:= Gear^.dX {* _1_5};
+                  dY:= Gear^.dY {* _1_5};
+                  State:= State and gstMoving;
+                  Active:= true
+                  end;
+             DeleteCI(cinfos[i].cGear);
+             exit
+             end
+   end
 end;
 
 function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;

@@ -93,7 +93,6 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
 
 if (Gear^.State and gstFalling) <> 0 then Gear^.dY:= Gear^.dY + cGravity;
 
-
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckGearDrowning(Gear);
