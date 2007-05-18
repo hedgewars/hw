@@ -201,7 +201,7 @@ if flag then
     with cinfos[i] do
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
-         ((mx > x) xor (Dir > 0)) then
+         ((mx > x) xor (Dir > 0)) then  // FIXME: Check Gear.Kind
              begin
              Gear^.dX:= Gear^.dX {* _0_6};
              Gear^.dY:= Gear^.dY {* _0_6};
