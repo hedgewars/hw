@@ -348,22 +348,7 @@ procedure ProcessGears;
 const delay: LongInt = cInactDelay;
       step: (stDelay, stChDmg, stChWin, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
-{$IFDEF COUNTTICKS}
-    tickcntA, tickcntB: LongWord;
-const cntSecTicks: LongWord = 0;
-{$ENDIF}
 begin
-{$IFDEF COUNTTICKS}
-asm
-        push    eax
-        push    edx
-        rdtsc
-        mov     tickcntA, eax
-        mov     tickcntB, edx
-        pop     edx
-        pop     eax
-end;
-{$ENDIF}
 AllInactive:= true;
 t:= GearsList;
 while t<>nil do
@@ -408,27 +393,7 @@ if TurnTimeLeft > 0 then
          if ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
 
-inc(GameTicks);
-{$IFDEF COUNTTICKS}
-asm
-        push    eax
-        push    edx
-        rdtsc
-        sub     eax, [tickcntA]
-        sbb     edx, [tickcntB]
-        add     [cntSecTicks], eax
-        pop     edx
-        pop     eax
-end;
-if (GameTicks and 1023) = 0 then
-   begin
-   cntTicks:= cntSecTicks shr 10;
-   {$IFDEF DEBUGFILE}
-   AddFileLog('<' + inttostr(cntTicks) + '>x1024 ticks');
-   {$ENDIF}
-   cntSecTicks:= 0
-   end;
-{$ENDIF}
+inc(GameTicks)
 end;
 
 procedure SetAllToActive;
