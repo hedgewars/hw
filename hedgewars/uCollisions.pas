@@ -191,7 +191,7 @@ if (x and $FFFFF800) = 0 then
    end;
 TestCollisionXKick:= false;
 
-if flag then
+if flag and (Gear^.dX > cHHKick) then
    begin
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
@@ -201,7 +201,8 @@ if flag then
     with cinfos[i] do
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
-         ((mx > x) xor (Dir > 0)) then  // FIXME: Check Gear.Kind
+         ((mx > x) xor (Dir > 0)) then
+         if (cinfos[i].cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
              Gear^.dX:= Gear^.dX {* _0_6};
              Gear^.dY:= Gear^.dY {* _0_6};
@@ -214,7 +215,7 @@ if flag then
                   end;
              DeleteCI(cinfos[i].cGear);
              exit
-             end
+             end else exit(true)
    end
 end;
 
@@ -240,7 +241,7 @@ if (y and $FFFFFC00) = 0 then
    end;
 TestCollisionYKick:= false;
 
-if flag then
+if flag and (Gear^.dX > cHHKick) then
    begin
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
@@ -251,9 +252,10 @@ if flag then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
          ((my > y) xor (Dir > 0)) then
+         if (cinfos[i].cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
-             Gear^.dX:= Gear^.dX * _0_6;
-             Gear^.dY:= Gear^.dY * _0_6;
+             Gear^.dX:= Gear^.dX {* _0_6};
+             Gear^.dY:= Gear^.dY {* _0_6};
              with cinfos[i].cGear^ do
                   begin
                   dX:= Gear^.dX {* _1_5};
@@ -263,7 +265,7 @@ if flag then
                   end;
              DeleteCI(cinfos[i].cGear);
              exit
-             end
+             end else exit(true)
    end
 end;
 

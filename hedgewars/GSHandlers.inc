@@ -643,6 +643,7 @@ Gear^.X:= Gear^.X - Gear^.dX;
 Gear^.Y:= Gear^.Y - Gear^.dY;
 Gear^.Elasticity:= Gear^.Elasticity + _1;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+DeleteCI(HHGear);
 if (HHGear^.State and gstFalling) <> 0 then
    if TestCollisionYwithGear(HHGear, 1) then
       begin
@@ -662,8 +663,8 @@ if (HHGear^.State and gstFalling) <> 0 then
       ty:= _0;
       while tt > _20 do
             begin
-            if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), hwSign(Gear^.dX))
-             or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), hwSign(Gear^.dY)) then
+            if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
+             or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
                 begin
                 Gear^.X:= Gear^.X + tx;
                 Gear^.Y:= Gear^.Y + ty;
@@ -672,8 +673,8 @@ if (HHGear^.State and gstFalling) <> 0 then
                 with HHGear^ do State:= State and not gstAttacking;
                 tt:= _0
                 end;
-            tx:= tx + Gear^.dX - Gear^.dX;
-            ty:= ty + Gear^.dY - Gear^.dY;
+            tx:= tx + Gear^.dX + Gear^.dX;
+            ty:= ty + Gear^.dY + Gear^.dY;
             tt:= tt - _2;
             end;
       end;
@@ -987,6 +988,7 @@ var HHGear: PGear;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State and not gstAttacking;
+DeleteCI(HHGear);
 
 inc(Gear^.Timer);
 
