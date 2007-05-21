@@ -988,6 +988,8 @@ begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State and not gstAttacking;
 
+inc(Gear^.Timer);
+
 if TestCollisionYwithGear(HHGear, 1)
    or ((HHGear^.State and gstHHDriven) = 0)
    or CheckGearDrowning(HHGear) then
@@ -1001,8 +1003,11 @@ if TestCollisionYwithGear(HHGear, 1)
         State:= State or gstFalling;
         end;
    DeleteGear(Gear);
-   OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^.Ammo);
-   ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+   if Gear^.Timer > 10 then
+      begin
+      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^.Ammo);
+      ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+      end;
    exit
    end;
 
