@@ -39,7 +39,7 @@ function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
-function  LoadImage(filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
+function  LoadImage(const filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
@@ -460,7 +460,7 @@ if Hedgehog.HealthTag <> nil then SDL_FreeSurface(Hedgehog.HealthTag);
 Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Color, fnt16)
 end;
 
-function  LoadImage(filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
+function  LoadImage(const filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     Result: PSDL_Surface;
     s: shortstring;
