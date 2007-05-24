@@ -760,7 +760,8 @@ if ((Gear^.State and gsttmpFlag) <> 0) then
       if Gear^.Timer = 0 then
          begin
          doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-         DeleteGear(Gear)
+         DeleteGear(Gear);
+         exit
          end;
       dec(Gear^.Timer);
       end else // gsttmpFlag = 0

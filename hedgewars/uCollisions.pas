@@ -191,7 +191,7 @@ if (x and $FFFFF800) = 0 then
    end;
 TestCollisionXKick:= false;
 
-if flag and (Gear^.dX > cHHKick) then
+if flag and (hwAbs(Gear^.dX) > cHHKick) then
    begin
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
@@ -202,18 +202,18 @@ if flag and (Gear^.dX > cHHKick) then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
          ((mx > x) xor (Dir > 0)) then
-         if (cinfos[i].cGear^.Kind in [gtHedgehog, gtMine]) then
+         if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
              Gear^.dX:= Gear^.dX {* _0_6};
              Gear^.dY:= Gear^.dY {* _0_6};
-             with cinfos[i].cGear^ do
+             with cGear^ do
                   begin
                   dX:= Gear^.dX {* _1_5};
                   dY:= Gear^.dY {* _1_5};
-                  State:= State and gstMoving;
+                  State:= State or gstMoving;
                   Active:= true
                   end;
-             DeleteCI(cinfos[i].cGear);
+             DeleteCI(cGear);
              exit
              end else exit(true)
    end
@@ -241,7 +241,7 @@ if (y and $FFFFFC00) = 0 then
    end;
 TestCollisionYKick:= false;
 
-if flag and (Gear^.dX > cHHKick) then
+if flag and (hwAbs(Gear^.dX) > cHHKick) then
    begin
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
@@ -252,18 +252,18 @@ if flag and (Gear^.dX > cHHKick) then
       if (Gear <> cGear) and
          (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
          ((my > y) xor (Dir > 0)) then
-         if (cinfos[i].cGear^.Kind in [gtHedgehog, gtMine]) then
+         if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
              Gear^.dX:= Gear^.dX {* _0_6};
              Gear^.dY:= Gear^.dY {* _0_6};
-             with cinfos[i].cGear^ do
+             with cGear^ do
                   begin
                   dX:= Gear^.dX {* _1_5};
                   dY:= Gear^.dY {* _1_5};
-                  State:= State and gstMoving;
+                  State:= State or gstMoving;
                   Active:= true
                   end;
-             DeleteCI(cinfos[i].cGear);
+             DeleteCI(cGear);
              exit
              end else exit(true)
    end
