@@ -48,8 +48,7 @@ with Gear^,
            StopSound(sndThrowPowerUp);
            PlaySound(sndThrowRelease, false);
            end;
-        xx:= AngleSin(Angle);
-        xx.isNegative:= dX.isNegative;
+        xx:= SignAs(AngleSin(Angle), dX);
         yy:= -AngleCos(Angle);
              case Ammo^[CurSlot, CurAmmo].AmmoType of
                       amGrenade: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);

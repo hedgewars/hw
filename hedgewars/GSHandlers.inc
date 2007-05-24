@@ -321,7 +321,7 @@ repeat
   y:= hwRound(Gear^.Y);
   if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0)
      and (Land[y, x] <> 0) then inc(Gear^.Damage);
-  AmmoShove(Gear, 7, 20);
+  if Gear^.Damage > 5 then AmmoShove(Gear, 7, 20);
   dec(i)
 until (i = 0) or (Gear^.Damage > Gear^.Health);
 if Gear^.Damage > 0 then

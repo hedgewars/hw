@@ -67,6 +67,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         end;
                gmtSave: begin
                         RestoreTeamsFromSave;
+                        SetBinds(CurrentTeam^.Binds);
                         isSoundEnabled:= isSEBackup;
                         GameType:= gmtLocal
                         end;
