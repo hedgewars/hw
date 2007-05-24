@@ -39,14 +39,15 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
-                   sprAirplane, sprAmAirplane, sprAmGirder);
+                   sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
-                   gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder);
+                   gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
+                   gtTeleport);
 
      TGearsType = set of TGearType;
 
@@ -57,7 +58,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder);
+                   amGirder, amTeleport);
 
      THWFont    = (fnt16, fntBig);
 
@@ -318,7 +319,9 @@ const
                      (FileName:'amAirplane'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  64; Height: 32; hasAlpha:  true),// sprAirplane
                      (FileName:  'amGirder'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width: 160; Height:160; hasAlpha: false) // sprAmGirder
+                     Width: 160; Height:160; hasAlpha: false),// sprAmGirder
+                     (FileName:    'hhMask'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha: false) // sprHHTelepMask
                      );
       Soundz: array[TSound] of record
                                        FileName: String[31];
@@ -639,7 +642,24 @@ const
                                    minAngle: 0;
                                    maxAngle: 0;
                                    PosCount: 8;
-                                   PosSprite: sprAmGirder));
+                                   PosSprite: sprAmGirder),
+                                  (NameId: sidTeleport;
+                                   Probability: 400;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_NeedTarget or
+                                                 ammoprop_AttackingPut;
+                                          Count: 2;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amTeleport);
+                                   Slot: 7;
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   PosCount: 1;
+                                   PosSprite: sprWater));
 
 implementation
 

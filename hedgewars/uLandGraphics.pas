@@ -32,7 +32,7 @@ procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet: boolean);
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 
 implementation
 uses SDLh, uMisc, uLand;
@@ -320,7 +320,7 @@ if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface)
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 var X, Y, bpp, h, w: LongInt;
     p: PByteArray;
     r, rr: TSDL_Rect;
@@ -384,6 +384,9 @@ case bpp of
             end;
      end;
 
+TryPlaceOnLand:= true;
+if not doPlace then exit;
+
 // Checked, now place
 p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
 case bpp of
@@ -418,9 +421,7 @@ r.w:= SpritesData[Obj].Width;
 r.h:= SpritesData[Obj].Height;
 rr.x:= cpX;
 rr.y:= cpY;
-SDL_UpperBlit(Image, @r, LandSurface, @rr);
-
-TryPlaceOnLand:= true
+SDL_UpperBlit(Image, @r, LandSurface, @rr)
 end;
 
 

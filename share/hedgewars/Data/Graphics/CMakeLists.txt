@@ -24,11 +24,13 @@ install(FILES
 	Girder.png
 	Grenade.png
 	Hedgehog.png
+	hhMask.png
 	Lag.png
 	MineOff.png
 	MineOn.png
 	Power.png
 	PowerBar.png
+	Progress.png
 	RopeHook.png
 	RopeNode.png
 	SmokeTrace.png

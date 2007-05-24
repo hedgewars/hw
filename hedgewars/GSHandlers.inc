@@ -1087,7 +1087,7 @@ AllInactive:= false;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
                       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
-                      sprAmGirder, Gear^.State) then
+                      sprAmGirder, Gear^.State, true) then
         begin
         HHGear^.Message:= HHGear^.Message and not gm_Attack;
         HHGear^.State:= HHGear^.State and not gstAttacking;
@@ -1096,6 +1096,34 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
         isCursorVisible:= true
         end
    else begin
+        DeleteGear(Gear);
+        AfterAttack
+        end;
+TargetPoint.X:= NoPointX
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepTeleport(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
+                      TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
+                      sprHHTelepMask, 0, false) then
+        begin
+        HHGear^.Message:= HHGear^.Message and not gm_Attack;
+        HHGear^.State:= HHGear^.State and not gstAttacking;
+        HHGear^.State:= HHGear^.State or gstHHChooseTarget;
+        DeleteGear(Gear);
+        isCursorVisible:= true
+        end
+   else begin
+        DeleteCI(HHGear);
+        HHGear^.X:= int2hwFloat(TargetPoint.X);
+        HHGear^.Y:= int2hwFloat(TargetPoint.Y);
         DeleteGear(Gear);
         AfterAttack
         end;
