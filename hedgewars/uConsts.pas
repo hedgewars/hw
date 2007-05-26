@@ -650,7 +650,8 @@ const
                                   (NameId: sidTeleport;
                                    Probability: 400;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
                                                  ammoprop_AttackingPut;
                                           Count: 2;

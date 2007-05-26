@@ -270,6 +270,7 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
       Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
    exit
    end;
+   
 if ((Gear^.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
    or (CurAmmoGear <> nil) then // we're moving
    begin

@@ -1124,6 +1124,18 @@ TargetPoint.X:= NoPointX
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepTeleportAfter(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.Y:= HHGear^.Y + HHGear^.dY;
+HHGear^.dY:= HHGear^.dY + cGravity;
+if TestCollisionYwithGear(HHGear, 1) then
+   begin
+   DeleteGear(Gear);
+   AfterAttack
+   end
+end;
 
 procedure doStepTeleport(Gear: PGear);
 var HHGear: PGear;
@@ -1143,10 +1155,10 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         end
    else begin
         DeleteCI(HHGear);
+        Gear^.doStep:= @doStepTeleportAfter;
         HHGear^.X:= int2hwFloat(TargetPoint.X);
         HHGear^.Y:= int2hwFloat(TargetPoint.Y);
-        DeleteGear(Gear);
-        AfterAttack
+        HHGear^.State:= HHGear^.State or gstFalling
         end;
 TargetPoint.X:= NoPointX
 end;
