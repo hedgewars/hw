@@ -48,10 +48,10 @@ class TeamShowWidget : public QWidget
 
  public slots:
  void changeTeamColor(QColor color=QColor());
+ void hhNumChanged();
 
  private slots:
  void activateTeam();
- void hhNumChanged();
 
  public:
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
