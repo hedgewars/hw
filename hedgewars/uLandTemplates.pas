@@ -264,7 +264,7 @@ const Template8Points: array[0..19] of TSDL_Rect =
 
 const Template9Points: array[0..31] of TSDL_Rect =
       (
-       (x:  340; y: 1022; w:    2; h:    2),
+       (x:  340; y: 1024; w:    1; h:    1),
        (x:  276; y:  902; w:   44; h:   54),
        (x:  434; y:  836; w:   58; h:   90),
        (x:  266; y:  734; w:   80; h:   80),
@@ -294,7 +294,7 @@ const Template9Points: array[0..31] of TSDL_Rect =
        (x: 1692; y:  524; w:  144; h:   94),
        (x: 1632; y:  678; w:  248; h:   20),
        (x: 1632; y:  802; w:  238; h:   16),
-       (x: 1680; y: 1020; w:    2; h:    2),
+       (x: 1680; y: 1024; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
       Template9FPoints: array[0..0] of TPoint =
@@ -302,8 +302,29 @@ const Template9Points: array[0..31] of TSDL_Rect =
        (x: 1023; y:    0)
       );
 
+const Template10Points: array[0..13] of TSDL_Rect =
+      (
+       (x:  188; y: 1024; w:  190; h:    1),
+       (x:  240; y:  682; w:  140; h:  150),
+       (x:  314; y:  468; w:  352; h:   94),
+       (x:  726; y:  246; w:  106; h:  282),
+       (x:  902; y:  390; w:  368; h:  142),
+       (x:  958; y:  588; w:  116; h:  244),
+       (x:  876; y: 1024; w:   14; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x: 1064; y: 1024; w:   22; h:    1),
+       (x: 1288; y:  795; w:  120; h:  120),
+       (x: 1458; y:  274; w:  354; h:  448),
+       (x: 1688; y:  795; w:  120; h:  120),
+       (x: 1782; y: 1024; w:    2; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template10FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
 
-const EdgeTemplates: array[0..9] of TEdgeTemplate =
+const EdgeTemplates: array[0..10] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -383,6 +404,14 @@ const EdgeTemplates: array[0..9] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template9FPoints));
         BezierizeCount: 2;
         RandPassesCount: 3;
+        canMirror: true; canFlip: false;
+       ),
+       (BasePoints: @Template10Points;
+        BasePointsCount: Succ(High(Template10Points));
+        FillPoints: @Template10FPoints;
+        FillPointsCount: Succ(High(Template10FPoints));
+        BezierizeCount: 3;
+        RandPassesCount: 2;
         canMirror: true; canFlip: false;
        )
       );
