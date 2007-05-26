@@ -38,8 +38,14 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.X)) or TestCollisionYwithGear(Gear,
 end;
 
 procedure CheckHHDamage(Gear: PGear);
+var dmg: Longword;
 begin
-if _0_4 < Gear^.dY then Gear^.Damage:= Gear^.Damage + 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
+if _0_4 < Gear^.dY then
+   begin
+   dmg:= 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
+   inc(Gear^.Damage, dmg);
+   AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, Gear);
+   end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -169,12 +175,14 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHealthTagWork(Gear: PGear);
 begin
-AllInactive:= false;
+if Gear^.Kind = gtHealthTag then
+   AllInactive:= false;
 dec(Gear^.Timer);
-Gear^.Y:= Gear^.Y - _0_08;
+Gear^.Y:= Gear^.Y + Gear^.dY;
 if Gear^.Timer = 0 then
    begin
-   PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
+   if Gear^.Kind = gtHealthTag then
+      PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
    DeleteGear(Gear)
    end
 end;
@@ -189,12 +197,24 @@ end;
 
 procedure doStepHealthTag(Gear: PGear);
 var s: shortstring;
+    font: THWFont;
 begin
 AllInactive:= false;
+if Gear^.Kind = gtHealthTag then
+   begin
+   font:= fnt16;
+   Gear^.dY:= -_0_08
+   end else
+   begin
+   font:= fntSmall;
+   Gear^.dY:= -_0_02
+   end;
+
 str(Gear^.State, s);
-Gear^.Surf:= RenderString(s, PHedgehog(Gear^.Hedgehog)^.Team^.Color, fnt16);
+Gear^.Surf:= RenderString(s, PHedgehog(Gear^.Hedgehog)^.Team^.Color, font);
 if hwRound(Gear^.Y) < cWaterLine then Gear^.doStep:= @doStepHealthTagWork
-                                 else Gear^.doStep:= @doStepHealthTagWorkUnderWater
+                                 else Gear^.doStep:= @doStepHealthTagWorkUnderWater;
+Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Surf^.h)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

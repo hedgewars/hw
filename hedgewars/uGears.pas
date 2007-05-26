@@ -92,6 +92,7 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt); forwa
 procedure HedgehogStep(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
+procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -127,7 +128,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepAirBomb,
                                                                @doStepBlowTorch,
                                                                @doStepGirder,
-                                                               @doStepTeleport
+                                                               @doStepTeleport,
+                                                               @doStepHealthTag
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -204,7 +206,7 @@ gtAmmo_Grenade: begin
                 end;
    gtHealthTag: begin
                 Result^.Timer:= 1500;
-                Result^.Z:= 2000;
+                Result^.Z:= 2001;
                 end;
        gtGrave: begin
                 Result^.Radius:= 10;
@@ -281,6 +283,10 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= cHHRadius + cBlowTorchC;
                 Result^.Timer:= 7500;
                 end;
+ gtSmallDamage: begin
+                Result^.Timer:= 1100;
+                Result^.Z:= 2000;
+                end;
      end;
 InsertGearToList(Result);
 AddGear:= Result
@@ -291,7 +297,11 @@ var team: PTeam;
     t: Longword;
 begin
 DeleteCI(Gear);
-if Gear^.Surf <> nil then SDL_FreeSurface(Gear^.Surf);
+if Gear^.Surf <> nil then
+   begin
+   SDL_FreeSurface(Gear^.Surf);
+   Gear^.Surf:= nil
+   end;
 if Gear^.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
@@ -333,8 +343,8 @@ while Gear <> nil do
             CheckNoDamage:= false;
             inc(StepDamage, Gear^.Damage);
             if Gear^.Health < Gear^.Damage then Gear^.Health:= 0
-                                         else dec(Gear^.Health, Gear^.Damage);
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12 - PHedgehog(Gear^.Hedgehog)^.HealthTag^.h,
+                                           else dec(Gear^.Health, Gear^.Damage);
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
                     gtHealthTag, Gear^.Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
             RenderHealth(PHedgehog(Gear^.Hedgehog)^);
             RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
@@ -343,6 +353,11 @@ while Gear <> nil do
             end;
       Gear:= Gear^.NextGear
       end;
+end;
+
+procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
+begin
+AddGear(X, Y, gtSmallDamage, Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 end;
 
 procedure ProcessGears;
@@ -532,7 +547,8 @@ while Gear<>nil do
        gtAmmo_Bomb: DrawSprite(sprBomb , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
         gtHedgehog: DrawHH(Gear, Surface);
     gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
-       gtHealthTag: if Gear^.Surf <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Surf, Surface);
+       gtHealthTag,
+     gtSmallDamage: if Gear^.Surf <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Surf, Surface);
            gtGrave: DrawSpriteFromRect(PHedgehog(Gear^.Hedgehog)^.Team^.GraveRect, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, Surface);
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
       gtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
@@ -630,7 +646,8 @@ Gear:= GearsList;
 while Gear <> nil do
       begin
       dmg:= dmgRadius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-      if dmg > 0 then
+      if (dmg > 0) and
+         ((Gear^.State and gstNoDamage) = 0) then
          begin
          dmg:= dmg div 2;
          case Gear^.Kind of
@@ -639,7 +656,12 @@ while Gear <> nil do
                   gtCase,
                  gtFlame: begin
                           {$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
-                          if (Mask and EXPLNoDamage) = 0 then inc(Gear^.Damage, dmg);
+                          if (Mask and EXPLNoDamage) = 0 then
+                             begin
+                             inc(Gear^.Damage, dmg);
+                             if Gear^.Kind = gtHedgehog then
+                                AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
+                             end;
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
                              DeleteCI(Gear);
@@ -665,8 +687,10 @@ end;
 procedure ShotgunShot(Gear: PGear);
 var t: PGear;
     dmg: integer;
+    hh: PHedgehog;
 begin
 Gear^.Radius:= cShotgunRadius;
+hh:= Gear^.Hedgehog;
 t:= GearsList;
 while t <> nil do
     begin
@@ -677,6 +701,11 @@ while t <> nil do
                gtMine,
                gtCase: begin
                        inc(t^.Damage, dmg);
+                       if t^.Kind = gtHedgehog then
+                          begin
+                          AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear);
+                          inc(hh^.DamageGiven, dmg)
+                          end;
                        DeleteCI(t);
                        t^.dX:= t^.dX + SignAs(Gear^.dX * dmg * _0_01 + cHHKick, t^.X - Gear^.X);
                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
@@ -711,7 +740,11 @@ while i > 0 do
                gtMine,
                gtCase: begin
                        inc(t^.ar[i]^.Damage, Damage);
-                       inc(hh^.DamageGiven, Damage);
+                       if t^.ar[i]^.Kind = gtHedgehog then
+                          begin
+                          AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
+                          inc(hh^.DamageGiven, Damage)
+                          end;
                        t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
                        t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
                        t^.ar[i]^.Active:= true;

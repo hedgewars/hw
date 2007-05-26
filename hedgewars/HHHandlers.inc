@@ -391,6 +391,7 @@ if (Gear^.State and gstMoving) <> 0 then
       begin
       if AllInactive then
          begin
+         Gear^.State:= Gear^.State or gstNoDamage;
          doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
          AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
          DeleteGear(Gear);

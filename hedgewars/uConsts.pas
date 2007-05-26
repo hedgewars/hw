@@ -47,7 +47,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
-                   gtTeleport);
+                   gtTeleport, gtSmallDamage);
 
      TGearsType = set of TGearType;
 
@@ -60,7 +60,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
                    amGirder, amTeleport);
 
-     THWFont    = (fnt16, fntBig);
+     THWFont    = (fnt16, fntBig, fntSmall);
 
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
@@ -197,6 +197,10 @@ const
                                           Name: 'DejaVuSans.ttf'),
                                          (Handle: nil;
                                           Height: 24;
+                                          style: TTF_STYLE_NORMAL;
+                                          Name: 'DejaVuSans.ttf'),
+                                         (Handle: nil;
+                                          Height: 10;
                                           style: TTF_STYLE_NORMAL;
                                           Name: 'DejaVuSans.ttf')
                                          );

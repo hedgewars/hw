@@ -281,7 +281,7 @@ begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstFalling or gstMoving)) <> 0)
    or isInMultiShoot then exit;
 
-DeleteCI(Me); // don't let collision info in Land to confuse AI
+//DeleteCI(Me); // this might break demo 
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;
 
