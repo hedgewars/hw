@@ -36,10 +36,11 @@ procedure NetGetNextCmd;
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uLand;
 const isPonged: boolean = false;
+      MAXCMDS = 65535;
 var  IPCSock: PTCPSocket = nil;
      fds: PSDLNet_SocketSet;
 
-     extcmd: array[word] of packed record
+     extcmd: array[0..MAXCMDS] of packed record
                                    Time: LongWord;
                                    case byte of
                                         1: (len: byte;
@@ -89,6 +90,7 @@ case s[1] of
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
      inc(cmdendpos);
+     TryDo(cmdendpos <= MAXCMDS, 'Too many commands in queue', true);
      extcmd[cmdendpos].Time := SDLNet_Read32(@s[byte(s[0]) - 3]);
      extcmd[cmdendpos].str  := s;
      {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(extcmd[cmdendpos].Time)+' at '+inttostr(cmdendpos));{$ENDIF}

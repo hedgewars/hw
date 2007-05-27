@@ -247,8 +247,8 @@ if CurrentTeam <> nil then
                 tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower, Gear^.X.Round + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
-                                         Gear^.Y.Round + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
+                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
+                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
                                          i, Surface)
                 end
         end;
