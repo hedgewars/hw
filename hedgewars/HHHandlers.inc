@@ -271,7 +271,8 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    exit
    end;
    
-if ((Gear^.State and gstFalling) <> 0) or (StepTicks = cHHStepTicks)
+if ((Gear^.State and (gstFalling or gstMoving)) <> 0)
+   or (StepTicks = cHHStepTicks)
    or (CurAmmoGear <> nil) then // we're moving
    begin
    // check for case with ammo
@@ -289,7 +290,7 @@ if CurAmmoGear <> nil then
 if ((Gear^.Message and gm_Attack) <> 0) or
    ((Gear^.State and gstAttacking) <> 0)then Attack(Gear);
 
-if (Gear^.State and gstFalling) <> 0 then
+if (Gear^.State and (gstFalling or gstMoving)) <> 0 then
    begin
    if ((Gear^.Message and gm_HJump) <> 0) and
       ((Gear^.State and gstHHJumping) <> 0) and
