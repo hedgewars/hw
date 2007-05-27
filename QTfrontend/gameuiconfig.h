@@ -36,6 +36,7 @@ public:
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
 	bool isShowFPSEnabled();
+	bool isAltDamageEnabled();
 	quint8 timerInterval();
 
 private slots:

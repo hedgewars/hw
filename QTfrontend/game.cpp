@@ -216,6 +216,7 @@ QStringList HWGame::setArguments()
 	arguments << QString::number(config->timerInterval());
 	arguments << datadir->absolutePath();
 	arguments << (config->isShowFPSEnabled() ? "1" : "0");
+	arguments << (config->isAltDamageEnabled() ? "1" : "0");
 	return arguments;
 }
 

@@ -177,7 +177,7 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
-12: begin
+13: begin
      val(ParamStr(2), cScreenWidth);
      val(ParamStr(3), cScreenHeight);
      cBitsStr:= ParamStr(4);
@@ -190,6 +190,7 @@ case ParamCount of
      val(ParamStr(10), cTimerInterval);
      PathPrefix:= ParamStr(11);
      cShowFPS:= ParamStr(12) = '1';
+     cAltDamage:= ParamStr(13) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
      AddClouds

@@ -357,7 +357,8 @@ end;
 
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
 begin
-AddGear(X, Y, gtSmallDamage, Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+if cAltDamage then
+   AddGear(X, Y, gtSmallDamage, Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 end;
 
 procedure ProcessGears;

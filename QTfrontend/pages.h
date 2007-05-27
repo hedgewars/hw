@@ -151,6 +151,7 @@ public:
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBFullscreen;
 	QCheckBox *CBShowFPS;
+	QCheckBox *CBAltDamage;
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 };

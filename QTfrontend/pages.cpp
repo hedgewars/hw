@@ -397,6 +397,10 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	CBShowFPS->setText(QCheckBox::tr("Show FPS"));
 	GBAlayout->addWidget(CBShowFPS);
 
+	CBAltDamage = new QCheckBox(AGGroupBox);
+	CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
+	GBAlayout->addWidget(CBAltDamage);
+
 	fpsedit = new FPSEdit(AGGroupBox);
 	GBAfpslayout->addWidget(fpsedit);
 

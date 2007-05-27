@@ -48,6 +48,7 @@ var isCursorVisible : boolean = false;
     cGearScrEdgesDist: LongInt = 240;
     cCursorEdgesDist : LongInt = 40;
     cTeamHealthWidth : LongInt = 128;
+    cAltDamage       : boolean = true;
 
     GameTicks     : LongWord = 0;
 

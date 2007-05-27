@@ -38,8 +38,11 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageNet->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
 	Form->ui.pageNet->editIP->setText(value("net/ip", "").toString());
+
 	Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
+
+	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", true).toBool());
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -65,6 +68,8 @@ void GameUIConfig::SaveOptions()
 
 	setValue("fps/show", isShowFPSEnabled());
 	setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());
+
+	setValue("misc/altdamage", isAltDamageEnabled());
 }
 
 int GameUIConfig::vid_Resolution()
@@ -85,6 +90,11 @@ bool GameUIConfig::isSoundEnabled()
 bool GameUIConfig::isShowFPSEnabled()
 {
 	return Form->ui.pageOptions->CBShowFPS->isChecked();
+}
+
+bool GameUIConfig::isAltDamageEnabled()
+{
+	return Form->ui.pageOptions->CBAltDamage->isChecked();;
 }
 
 quint8 GameUIConfig::timerInterval()
