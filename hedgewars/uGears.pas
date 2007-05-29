@@ -704,7 +704,7 @@ while t <> nil do
                        inc(t^.Damage, dmg);
                        if t^.Kind = gtHedgehog then
                           begin
-                          AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear);
+                          AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
                           inc(hh^.DamageGiven, dmg)
                           end;
                        DeleteCI(t);
