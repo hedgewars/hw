@@ -21,6 +21,7 @@
 
 #include <QMainWindow>
 #include <QStack>
+#include <QTime>
 
 #include "netserver.h"
 #include "game.h"
@@ -50,6 +51,8 @@ private slots:
 	void GoToInfo();
 	void GoToPage(quint8 id);
 	void GoBack();
+	void btnExitPressed();
+	void btnExitClicked();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -93,6 +96,7 @@ private:
 	QStack<quint8> PagesStack;
 	HWNetServer* pnetserver;
 	HWNetUdpServer* pUdpServer;
+	QTime eggTimer;
 	void AddStatText(const QString & msg);
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };

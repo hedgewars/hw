@@ -59,7 +59,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
 	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
 	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
-	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(close()));
+	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
+	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
 	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageLocalGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
@@ -199,6 +200,25 @@ void HWForm::GoBack()
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
 	OnPageShown(id, ui.Pages->currentIndex());
 	ui.Pages->setCurrentIndex(id);
+}
+
+void HWForm::btnExitPressed()
+{
+	eggTimer.start();
+}
+
+void HWForm::btnExitClicked()
+{
+	if (eggTimer.elapsed() < 3000)
+		close();
+	else
+	{
+		QPushButton * btn = findChild<QPushButton *>("imageButt");
+		if (btn)
+		{
+			btn->setIcon(QIcon(":/res/bonus.png"));
+		}
+	}
 }
 
 void HWForm::NewTeam()

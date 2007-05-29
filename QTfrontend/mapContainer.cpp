@@ -33,6 +33,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
   imageButt=new QPushButton(this);
+  imageButt->setObjectName("imageButt");
   imageButt->setFixedSize(256, 128);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
