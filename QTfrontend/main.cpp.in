@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 	if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
 	{
 		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
+		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
 	}
 	cfgdir->cd(".hedgewars");
 

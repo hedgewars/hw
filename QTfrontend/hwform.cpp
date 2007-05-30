@@ -455,6 +455,7 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
+	connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
 }
 
 void HWForm::ShowErrorMessage(const QString & msg)
@@ -462,4 +463,31 @@ void HWForm::ShowErrorMessage(const QString & msg)
 	QMessageBox::warning(this,
 			"Hedgewars",
 			msg);
+}
+
+void HWForm::GetRecord(bool isDemo, const QByteArray & record)
+{
+	QString filename;
+	QByteArray demo = record;
+	if (isDemo)
+	{
+		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
+		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
+		filename = cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer;
+	} else
+	{
+		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
+		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
+		filename = cfgdir->absolutePath() + "/Saves/LastRound.hws_" + cProtoVer;
+	}
+
+
+	QFile demofile(filename);
+	if (!demofile.open(QIODevice::WriteOnly))
+	{
+		ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
+		return ;
+	}
+	demofile.write(demo.constData(), demo.size());
+	demofile.close();
 }

@@ -19,12 +19,8 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <QObject>
-#include <QByteArray>
 #include <QString>
 #include "team.h"
-
-#include <map>
 
 #include "tcpBase.h"
 
@@ -62,6 +58,7 @@ signals:
 	void SendNet(const QByteArray & msg);
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
+	void HaveRecord(bool isDemo, const QByteArray & record);
 	void ErrorMessage(const QString &);
 
 public slots:
@@ -82,13 +79,14 @@ private:
 	GameCFGWidget * gamecfg;
 	TeamSelWidget* m_pTeamSelWidget;
 	GameType gameType;
+	GameState gameState;
 
 	void commonConfig();
 	void SendConfig();
 	void SendQuickConfig();
 	void SendNetConfig();
 	void ParseMessage(const QByteArray & msg);
-	void SaveDemo(const QString & filename);
+	void SetGameState(GameState state);
 };
 
 #endif

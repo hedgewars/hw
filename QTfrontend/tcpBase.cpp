@@ -150,12 +150,12 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
 		if (toSendBuf.size() > 0)
 		{
 			IPCSocket->write(toSendBuf);
-			if(m_isDemoMode) demo->append(toSendBuf);
+			if(m_isDemoMode) demo.append(toSendBuf);
 			toSendBuf.clear();
 		}
 		if(!buf.isEmpty()) {
 		  IPCSocket->write(buf);
-		  if(m_isDemoMode && demo) demo->append(buf);
+		  if(m_isDemoMode) demo.append(buf);
 		}
 	}
 }

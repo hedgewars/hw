@@ -51,7 +51,7 @@ class TCPBase : public QObject
   QByteArray readbuffer;
 
   QByteArray toSendBuf;
-  QByteArray * demo;
+  QByteArray demo;
 
   void SendIPC(const QByteArray & buf);
   void RawSendIPC(const QByteArray & buf);

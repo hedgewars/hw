@@ -23,8 +23,6 @@
 #include <QByteArray>
 #include <QFile>
 #include <QTextStream>
-#include <QUuid>
-#include <QTextStream>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -50,8 +48,9 @@ HWGame::~HWGame()
 
 void HWGame::onClientDisconnect()
 {
-	SaveDemo(cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer);
-	emit GameStateChanged(gsStopped);
+	if (gameState == gsInterrupted) emit HaveRecord(false, demo);
+	else if (gameState == gsFinished) emit HaveRecord(true, demo);
+	SetGameState(gsStopped);
 }
 
 void HWGame::commonConfig()
@@ -166,11 +165,11 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'Q': {
-			emit GameStateChanged(gsInterrupted);
+			SetGameState(gsInterrupted);
 			break;
 		}
 		case 'q': {
-			emit GameStateChanged(gsFinished);
+			SetGameState(gsFinished);
 			break;
 		}
 		default: {
@@ -178,7 +177,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			{
 				emit SendNet(msg);
 			}
-			demo->append(msg);
+			demo.append(msg);
 		}
 	}
 }
@@ -227,24 +226,6 @@ void HWGame::AddTeam(const QString & teamname)
 	TeamCount++;
 }
 
-void HWGame::SaveDemo(const QString & filename)
-{
-	demo->replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
-	demo->replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
-
-	QFile demofile(filename);
-	if (!demofile.open(QIODevice::WriteOnly))
-	{
-		emit ErrorMessage(tr("Cannot save demo to file %1").arg(filename));
-		return ;
-	}
-	QDataStream stream(&demofile);
-	stream.writeRawData(demo->constData(), demo->size());
-	demofile.close();
-	delete demo;
-	demo=0;
-}
-
 void HWGame::PlayDemo(const QString & demofilename)
 {
 	gameType = gtDemo;
@@ -259,33 +240,39 @@ void HWGame::PlayDemo(const QString & demofilename)
 	toSendBuf = demofile.readAll();
 
 	// run engine
-	demo = new QByteArray;
+	demo.clear();
 	Start();
-	emit GameStateChanged(gsStarted);
+	SetGameState(gsStarted);
 }
 
 void HWGame::StartNet()
 {
 	gameType = gtNet;
-	demo = new QByteArray;
+	demo.clear();
 	Start();
-	emit GameStateChanged(gsStarted);
+	SetGameState(gsStarted);
 }
 
 void HWGame::StartLocal()
 {
 	gameType = gtLocal;
 	seed = gamecfg->getCurrentSeed();
-	demo = new QByteArray;
+	demo.clear();
 	Start();
-	emit GameStateChanged(gsStarted);
+	SetGameState(gsStarted);
 }
 
 void HWGame::StartQuick()
 {
 	gameType = gtQLocal;
 	seed = gamecfg->getCurrentSeed();
-	demo = new QByteArray;
+	demo.clear();
 	Start();
-	emit GameStateChanged(gsStarted);
+	SetGameState(gsStarted);
+}
+
+void HWGame::SetGameState(GameState state)
+{
+	gameState = state;
+	emit GameStateChanged(state);
 }
