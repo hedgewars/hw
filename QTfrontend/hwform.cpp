@@ -45,7 +45,7 @@
 #include "chatwidget.h"
 
 HWForm::HWForm(QWidget *parent)
-  : QMainWindow(parent), pnetserver(0), pUdpServer(0)
+  : QMainWindow(parent), pnetserver(0), pUdpServer(0), editedTeam(0)
 {
 	ui.setupUi(this);
 
@@ -94,20 +94,25 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
-	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(NewTeam()), this, SLOT(NewTeam()));
+	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 
 	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
-	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(NewTeam()), this, SLOT(NewTeam()));
+	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 
 	GoToPage(ID_PAGE_MAIN);
 }
 
-void HWForm::UpdateTeamsLists()
+void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 {
-	QStringList teamslist = config->GetTeamsList();
+	QStringList teamslist;
+	if(editable_teams) {
+	  teamslist=*editable_teams;
+	} else {
+	  teamslist = config->GetTeamsList();
+	}
 
 	if(teamslist.empty()) {
 		HWTeam defaultTeam("DefaultTeam");
@@ -177,8 +182,10 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		  team.LoadFromFile();
 		  teamsList.push_back(team);
 		}
-		if(lastid==ID_PAGE_SETUP_TEAM) {
-		  if (editedTeam) curTeamSelWidget->addTeam(*editedTeam);
+		if(lastid==ID_PAGE_SETUP) { // _TEAM
+		  if (editedTeam) {
+		    curTeamSelWidget->addTeam(*editedTeam);
+		  }
 		} else {
 		  curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
@@ -187,8 +194,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
 void HWForm::GoToPage(quint8 id)
 {
+	quint8 lastid=ui.Pages->currentIndex();
 	PagesStack.push(ui.Pages->currentIndex());
-	OnPageShown(id);
+	OnPageShown(id, lastid);
 	ui.Pages->setCurrentIndex(id);
 }
 
@@ -221,6 +229,26 @@ void HWForm::btnExitClicked()
 	}
 }
 
+void HWForm::IntermediateSetup()
+{
+  quint8 id=ui.Pages->currentIndex();
+  TeamSelWidget* curTeamSelWidget;
+  if(id == ID_PAGE_MULTIPLAYER) {
+    curTeamSelWidget=ui.pageMultiplayer->teamsSelect;
+  } else {
+    curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
+  }
+  QList<HWTeam> teams=curTeamSelWidget->getDontPlayingTeams();
+  QStringList tmnames;
+  for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
+    qDebug() << it->TeamName;
+    tmnames+=it->TeamName;
+  }
+  UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+
+  GoToPage(ID_PAGE_SETUP);
+}
+
 void HWForm::NewTeam()
 {
 	editedTeam = new HWTeam("unnamed");
@@ -240,10 +268,10 @@ void HWForm::TeamSave()
 {
 	editedTeam->GetFromPage(this);
 	editedTeam->SaveToFile();
-	UpdateTeamsLists();
-	GoBack();
 	delete editedTeam;
 	editedTeam=0;
+	UpdateTeamsLists();
+	GoBack();
 }
 
 void HWForm::TeamDiscard()

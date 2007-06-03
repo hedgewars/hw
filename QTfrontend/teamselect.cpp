@@ -196,10 +196,10 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QPalette p;
   addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
   addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
-  newTeam = new QPushButton(this);
-  newTeam->setText(QPushButton::tr("New team"));
-  connect(newTeam, SIGNAL(clicked()), this, SLOT(newTeamClicked()));
-  mainLayout.addWidget(newTeam);
+  QPushButton * btnSetup = new QPushButton(this);
+  btnSetup->setText(QPushButton::tr("Setup"));
+  connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+  mainLayout.addWidget(btnSetup);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)
@@ -237,13 +237,13 @@ QList<HWTeam> TeamSelWidget::getPlayingTeams() const
   return curPlayingTeams;
 }
 
+QList<HWTeam> TeamSelWidget::getDontPlayingTeams() const
+{
+  return curDontPlayingTeams;
+}
+
 void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
 {
   team.teamColor=framePlaying->getNextColor();
   emit acceptRequested(team);
-}
-
-void TeamSelWidget::newTeamClicked()
-{
-	emit NewTeam();
 }

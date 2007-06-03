@@ -53,6 +53,7 @@ private slots:
 	void GoBack();
 	void btnExitPressed();
 	void btnExitClicked();
+	void IntermediateSetup();
 	void NewTeam();
 	void EditTeam();
 	void TeamSave();
@@ -76,7 +77,7 @@ private slots:
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
-	void UpdateTeamsLists();
+	void UpdateTeamsLists(const QStringList* editable_teams=0);
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget);
 	enum PageIDs {
 		ID_PAGE_SINGLEPLAYER	= 0,

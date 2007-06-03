@@ -44,6 +44,7 @@ class TeamSelWidget : public QGroupBox
   void resetPlayingTeams(const QList<HWTeam>& teamslist);
   bool isPlaying(HWTeam team) const;
   QList<HWTeam> getPlayingTeams() const;
+  QList<HWTeam> getDontPlayingTeams() const;
   void setNonInteractive();
 
  public slots:
@@ -55,7 +56,7 @@ class TeamSelWidget : public QGroupBox
 
  signals:
   void setEnabledGameStart(bool);
-  void NewTeam();
+  void SetupClicked();
   void teamWillPlay(HWTeam team);
   void teamNotPlaying(const HWTeam& team);
   void hhogsNumChanged(const HWTeam&);
@@ -64,7 +65,6 @@ class TeamSelWidget : public QGroupBox
 
  private slots:
   void pre_changeTeamStatus(HWTeam);
-  void newTeamClicked();
   void hhNumChanged(const HWTeam& team);
   void proxyTeamColorChanged(const HWTeam& team);
 
@@ -75,7 +75,6 @@ class TeamSelWidget : public QGroupBox
 
   QVBoxLayout mainLayout;
   bool m_acceptOuter;
-  QPushButton * newTeam;
 
   QList<HWTeam> curPlayingTeams;
   QList<HWTeam> curDontPlayingTeams;
