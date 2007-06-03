@@ -491,7 +491,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 var ProgrSurf: PSDL_Surface = nil;
-    Step: Longword = 0;
+    Step: integer = 0;
 
 procedure AddProgress;
 var r: TSDL_Rect;

@@ -20,6 +20,7 @@
 00:17=Blow Torch
 00:18=Construction
 00:19=Teleportation
+00:20=SwitchHedgehog
 
 01:00=Let's fight!
 01:01=Round draw

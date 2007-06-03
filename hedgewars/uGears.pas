@@ -129,7 +129,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepBlowTorch,
                                                                @doStepGirder,
                                                                @doStepTeleport,
-                                                               @doStepHealthTag
+                                                               @doStepHealthTag,
+                                                               @doStepSwitcher
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -590,7 +591,8 @@ while Gear<>nil do
            gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Angle) mod 8, Surface);
          gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
        gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0, Surface)
-                                     else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1, Surface)
+                                     else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1, Surface);
+        gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, 0, Surface);
               end;
       Gear:= Gear^.NextGear
       end;

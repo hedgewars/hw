@@ -73,6 +73,7 @@ with Gear^,
                     amBlowTorch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: CurAmmoGear:= AddGear(0, 0, gtGirder, Ammo^[CurSlot, CurAmmo].Pos, _0, _0, 0);
                      amTeleport: CurAmmoGear:= AddGear(0, 0, gtTeleport, 0, _0, _0, 0);
+                       amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                   end;
         Power:= 0;
         if CurAmmoGear <> nil then
@@ -99,7 +100,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
            else begin
            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
            State:= State or gstAttacked;
-           OnUsedAmmo(Ammo)
+           OnUsedAmmo(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
            end;
      AttackBar:= 0;
      end

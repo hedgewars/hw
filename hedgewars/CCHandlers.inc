@@ -53,7 +53,7 @@ begin
 if isDeveloperMode then
    begin
    inc(TeamsCount);
-   ParseCommand('ammstore 9391929422191210332', true);
+   ParseCommand('ammstore 93919294221912103323', true);
    TryDo(TeamsCount <= 5, 'Too many teams', true);
    AddTeam
    end;

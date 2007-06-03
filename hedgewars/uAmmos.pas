@@ -18,20 +18,18 @@
 
 unit uAmmos;
 interface
-uses uConsts;
+uses uConsts, uTeams;
 {$INCLUDE options.inc}
-type PHHAmmo = ^THHAmmo;
-     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(Hedgehog: pointer; ammo: TAmmoType);
 function  HHHasAmmo(Hedgehog: pointer; Ammo: TAmmoType): boolean;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
-procedure OnUsedAmmo(Ammo: PHHAmmo);
+procedure OnUsedAmmo(var Hedgehog: THedgehog);
 
 implementation
-uses uMisc, uTeams, uGears;
+uses uMisc, uGears;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     StoreCnt: Longword = 0;
@@ -130,10 +128,12 @@ begin
     until not b;
 end;
 
-procedure OnUsedAmmo(Ammo: PHHAmmo);
+procedure OnUsedAmmo(var Hedgehog: THedgehog);
 var s, a: Longword;
+    Ammo: PHHAmmo;
 begin
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+Ammo:= Hedgehog.Ammo;
+with Hedgehog do
      begin
      if CurAmmoGear = nil then begin s:= CurSlot; a:= CurAmmo end
                           else begin s:= AltSlot; a:= AltAmmo end;

@@ -69,7 +69,7 @@ if (fpc_version)
 		message("Minimum required version of FreePascal is 1.9.4")
 	else (fpc_ver LESS "010904")
 		set(pascal_compiler ${fpc_executable})
-		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Cs2000000" "-O2" ${hwengine_project})
+		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
 	endif (fpc_ver LESS "010904")
 endif (fpc_version)
 

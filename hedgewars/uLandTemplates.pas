@@ -18,7 +18,7 @@
 
 unit uLandTemplates;
 interface
-uses SDLh, uFloat;
+uses SDLh;
 {$INCLUDE options.inc}
 
 const NTPX = Low(TSDL_Rect.x); 

@@ -18,8 +18,12 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uAmmos, uFloat;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat;
 {$INCLUDE options.inc}
+
+type PHHAmmo = ^THHAmmo;
+     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+
 type PHedgehog = ^THedgehog;
      PTeam     = ^TTeam;
      THedgehog = record
@@ -73,7 +77,7 @@ procedure SetWeapon(weap: TAmmoType);
 procedure SendStats;
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;
@@ -128,7 +132,9 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if Gear <> nil then
         begin
         Gear^.Message:= 0;
-        Gear^.Z:= cHHZ
+        Gear^.Z:= cHHZ;
+        RemoveGearFromList(Gear);
+        InsertGearToList(Gear)
         end;
 
 repeat

@@ -48,7 +48,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTestProc =
 {amMineStrike}    nil,
 {amBlowTorch}     nil,
 {amGirder}        nil,
-{amTeleport}      nil
+{amTeleport}      nil,
+{amSwitch}        nil
                   );
 
 const BadTurn = Low(LongInt) div 4;

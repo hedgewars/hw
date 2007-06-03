@@ -547,7 +547,7 @@ var HHGear: PGear;
            State:= State or gstFalling;
            end;
       DeleteGear(Gear);
-      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^.Ammo);
+      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
       ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
     end;
 
@@ -1028,7 +1028,7 @@ if TestCollisionYwithGear(HHGear, 1)
    DeleteGear(Gear);
    if Gear^.Timer > 10 then
       begin
-      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^.Ammo);
+      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
       ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
       end;
    exit
@@ -1161,4 +1161,67 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         HHGear^.State:= HHGear^.State or gstFalling
         end;
 TargetPoint.X:= NoPointX
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSwitcherWork(Gear: PGear);
+var HHGear: PGear;
+    Team: PTeam;
+    th: LongInt;
+    Msg, State: Longword;
+begin
+AllInactive:= false;
+
+if (Gear^.Message and not gm_Switch) <> 0 then
+   begin
+   HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+   Msg:= Gear^.Message and not gm_Switch;
+   DeleteGear(Gear);
+   OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+
+   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+   HHGear^.Message:= Msg;
+   exit
+   end;
+
+if (Gear^.Message and gm_Switch) <> 0 then
+   begin
+   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   HHGear^.Message:= HHGear^.Message and not gm_Switch;
+   State:= HHGear^.State;
+   HHGear^.State:= 0;
+   HHGear^.Active:= false;
+   HHGear^.Z:= cHHZ;
+   RemoveGearFromList(HHGear);
+   InsertGearToList(HHGear);
+
+   th:= CurrentTeam^.CurrHedgehog;
+   repeat
+     CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (cMaxHHIndex + 1);
+   until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (Gear^.Pos = th);
+
+   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   HHGear^.State:= State;
+   HHGear^.Active:= true;
+   FollowGear:= HHGear;
+   HHGear^.Z:= cCurrHHZ;
+   RemoveGearFromList(HHGear);
+   InsertGearToList(HHGear);
+   Gear^.X:= HHGear^.X;
+   Gear^.Y:= HHGear^.Y
+   end;
+end;
+
+procedure doStepSwitcher(Gear: PGear);
+var HHGear: PGear;
+begin
+Gear^.doStep:= @doStepSwitcherWork;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+with HHGear^ do
+     begin
+     State:= State and not gstAttacking;
+     Message:= Message and not gm_Attack
+     end
 end;

@@ -85,7 +85,7 @@ var
     AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 function hwSign(r: hwFloat): LongInt;
-function Min(a, b: LongInt): LongInt;
+function Min(a, b: LongInt): LongInt; 
 function Max(a, b: LongInt): LongInt;
 function rndSign(num: hwFloat): hwFloat;
 procedure OutError(Msg: String; isFatalError: boolean);
@@ -104,7 +104,7 @@ procedure SetKB(n: Longword);
 procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-function Str2PChar(var s: shortstring): PChar;
+function Str2PChar(const s: shortstring): PChar;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -222,7 +222,7 @@ num.isNegative:= getrandom(2) = 0;
 rndSign:= num
 end;
 
-function Str2PChar(var s: shortstring): PChar;
+function Str2PChar(const s: shortstring): PChar;
 const CharArray: array[byte] of Char = '';
 begin
 CharArray:= s;
