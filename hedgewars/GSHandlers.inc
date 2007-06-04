@@ -1199,7 +1199,7 @@ if (Gear^.Message and gm_Switch) <> 0 then
    th:= CurrentTeam^.CurrHedgehog;
    repeat
      CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (cMaxHHIndex + 1);
-   until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (Gear^.Pos = th);
+   until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (CurrentTeam^.CurrHedgehog = th);
 
    HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
    HHGear^.State:= State;
