@@ -185,14 +185,15 @@ if (x and $FFFFF800) = 0 then
    repeat
      if (y and $FFFFFC00) = 0 then
            if Land[y, x] = COLOR_LAND then exit(true)
-                                      else flag:= true;
+           else if Land[y, x] <> 0 then flag:= true;
      inc(y)
    until (y > i);
    end;
 TestCollisionXKick:= false;
 
-if flag and (hwAbs(Gear^.dX) > cHHKick) then
+if flag then
    begin
+   if hwAbs(Gear^.dX) < cHHKick then exit(true);
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
@@ -204,12 +205,10 @@ if flag and (hwAbs(Gear^.dX) > cHHKick) then
          ((mx > x) xor (Dir > 0)) then
          if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
-             Gear^.dX:= Gear^.dX {* _0_6};
-             Gear^.dY:= Gear^.dY {* _0_6};
              with cGear^ do
                   begin
-                  dX:= Gear^.dX {* _1_5};
-                  dY:= Gear^.dY {* _1_5};
+                  dX:= Gear^.dX;
+                  dY:= Gear^.dY;
                   State:= State or gstMoving;
                   Active:= true
                   end;
@@ -235,14 +234,15 @@ if (y and $FFFFFC00) = 0 then
      if (x and $FFFFF800) = 0 then
         if Land[y, x] > 0 then
            if Land[y, x] = COLOR_LAND then exit(true)
-                                      else flag:= true;
+           else if Land[y, x] <> 0 then flag:= true;
      inc(x)
    until (x > i);
    end;
 TestCollisionYKick:= false;
 
-if flag and (hwAbs(Gear^.dX) > cHHKick) then
+if flag then
    begin
+   if hwAbs(Gear^.dX) < cHHKick then exit(true);
    if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
@@ -254,12 +254,10 @@ if flag and (hwAbs(Gear^.dX) > cHHKick) then
          ((my > y) xor (Dir > 0)) then
          if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
-             Gear^.dX:= Gear^.dX {* _0_6};
-             Gear^.dY:= Gear^.dY {* _0_6};
              with cGear^ do
                   begin
-                  dX:= Gear^.dX {* _1_5};
-                  dY:= Gear^.dY {* _1_5};
+                  dX:= Gear^.dX;
+                  dY:= Gear^.dY;
                   State:= State or gstMoving;
                   Active:= true
                   end;

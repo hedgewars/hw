@@ -34,6 +34,7 @@ install(FILES
 	RopeHook.png
 	RopeNode.png
 	SmokeTrace.png
+	Switch.png
 	Targetp.png
 	thinking.png
 	UFO.png
