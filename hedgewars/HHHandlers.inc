@@ -254,6 +254,76 @@ end;
 
 procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepHedgehogMoving(Gear: PGear);
+var prevState: Longword;
+begin
+prevState:= Gear^.State;
+if not TestCollisionYKick(Gear, 1) then
+   begin
+   if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
+   Gear^.State:= Gear^.State or gstFalling or gstMoving;
+   Gear^.dY:= Gear^.dY + cGravity
+   end else
+   if (not Gear^.dY.isNegative) then
+   begin
+   CheckHHDamage(Gear);
+   if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
+      and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
+
+   Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
+
+   if Gear^.dY > _0 then Gear^.dY:= _0;
+   if ((Gear^.State and gstMoving) <> 0) then Gear^.dX:= Gear^.dX * Gear^.Friction
+   end;
+
+if (Gear^.State <> 0) then DeleteCI(Gear);
+                
+if (Gear^.State and gstMoving) <> 0 then
+   if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
+      if ((Gear^.State and gstFalling) = 0) then
+         if hwAbs(Gear^.dX) > _0_01 then
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - _1 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_93; Gear^.Y:= Gear^.Y - _2 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_9 ; Gear^.Y:= Gear^.Y - _3 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_87; Gear^.Y:= Gear^.Y - _4 end else
+            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_84; Gear^.Y:= Gear^.Y - _5 end else
+            if hwAbs(Gear^.dX) > _0_02 then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
+                                   else begin
+                                        Gear^.State:= Gear^.State and not gstMoving;
+                                        SetLittle(Gear^.dX)
+                                        end
+            else begin
+                 Gear^.State:= Gear^.State and not gstMoving;
+                 SetLittle(Gear^.dX)
+                 end
+         else if hwAbs(Gear^.dX) > cLittle then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
+                                           else SetLittle(Gear^.dX);
+
+if ((Gear^.State and gstFalling) = 0)and
+   (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
+   begin
+   Gear^.State:= Gear^.State and not gstMoving;
+   SetLittle(Gear^.dX);
+   Gear^.dY:= _0
+   end else Gear^.State:= Gear^.State or gstMoving;
+
+if (Gear^.State and gstMoving) <> 0 then
+   begin
+   Gear^.State:= Gear^.State and not gstAnimation;
+   Gear^.X:= Gear^.X + Gear^.dX;
+   Gear^.Y:= Gear^.Y + Gear^.dY;
+   if (not Gear^.dY.isNegative) and
+      (not TestCollisionYKick(Gear, 1)) and
+       TestCollisionYwithXYShift(Gear, 0, 1, 1) then
+      begin
+      CheckHHDamage(Gear);
+      Gear^.dY:= _0;
+      Gear^.Y:= Gear^.Y + _1
+      end;
+   CheckGearDrowning(Gear)
+   end
+end;
+
 procedure doStepHedgehogDriven(Gear: PGear);
 var t: PGear;
 begin
@@ -303,24 +373,20 @@ if (Gear^.State and (gstFalling or gstMoving)) <> 0 then
          Gear^.dX:= SignAs(_0_02, Gear^.dX)
          end;
    Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
-   if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
-   Gear^.X:= Gear^.X + Gear^.dX;
-   Gear^.dY:= Gear^.dY + cGravity;
-   if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
-   Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
+
+
+   if ((Gear^.State and gstHHJumping) <> 0) and
+      TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+
+   doStepHedgehogMoving(Gear);
+   
+   if (Gear^.State and (gstFalling or gstMoving)) = 0 then
       begin
-      CheckHHDamage(Gear);
-      if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
-         and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
-      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
       AddGearCI(Gear);
-      StepTicks:= 300;
-      Gear^.dY:= _0
+      StepTicks:= 300
       end;
-   CheckGearDrowning(Gear);
    exit
-   end ;//else if Gear^.CollIndex = High(Longword) then AddIntersectorsCR(Gear);
+   end;
 
    HedgehogChAngle(Gear);
    if StepTicks > 0 then dec(StepTicks);
@@ -332,64 +398,10 @@ procedure doStepHedgehogFree(Gear: PGear);
 var prevState: Longword;
 begin
 prevState:= Gear^.State;
-if not TestCollisionYKick(Gear, 1) then
-   begin
-   if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
-   Gear^.State:= Gear^.State or gstFalling or gstMoving;
-   Gear^.dY:= Gear^.dY + cGravity
-   end else begin
-   CheckHHDamage(Gear);
-   if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
-      and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
-   Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping);
-   if Gear^.dY > _0 then Gear^.dY:= _0;
-   if ((Gear^.State and gstMoving) <> 0) then Gear^.dX:= Gear^.dX * Gear^.Friction
-   end;
 
-if (Gear^.State <> 0) then DeleteCI(Gear);
+doStepHedgehogMoving(Gear);
 
-if (Gear^.State and gstMoving) <> 0 then
-   if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
-      if ((Gear^.State and gstFalling) = 0) then
-         if hwAbs(Gear^.dX) > _0_01 then
-            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - _1 end else
-            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_93; Gear^.Y:= Gear^.Y - _2 end else
-            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_9 ; Gear^.Y:= Gear^.Y - _3 end else
-            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_87; Gear^.Y:= Gear^.Y - _4 end else
-            if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_84; Gear^.Y:= Gear^.Y - _5 end else
-            if hwAbs(Gear^.dX) > _0_02 then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
-                                   else begin
-                                        Gear^.State:= Gear^.State and not gstMoving;
-                                        SetLittle(Gear^.dX)
-                                        end
-            else begin
-                 Gear^.State:= Gear^.State and not gstMoving;
-                 SetLittle(Gear^.dX)
-                 end
-         else Gear^.dX:= -Gear^.Elasticity * Gear^.dX;
-
-if ((Gear^.State and gstFalling) = 0)and
-   (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
-   begin
-   Gear^.State:= Gear^.State and not gstMoving;
-   SetLittle(Gear^.dX);
-   Gear^.dY:= _0
-   end else Gear^.State:= Gear^.State or gstMoving;
-
-if (Gear^.State and gstMoving) <> 0 then
-   begin
-   Gear^.State:= Gear^.State and not gstAnimation;
-   Gear^.X:= Gear^.X + Gear^.dX;
-   Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (not Gear^.dY.isNegative) and
-      (not TestCollisionYKick(Gear, 1)) and
-       TestCollisionYwithXYShift(Gear, 0, 1, 1) then
-      begin
-      CheckHHDamage(Gear);
-      Gear^.dY:= _0;
-      Gear^.Y:= Gear^.Y + _1
-      end;
-   end else
+if (Gear^.State and gstMoving) = 0 then
    if Gear^.Health = 0 then
       begin
       if AllInactive then
@@ -406,8 +418,7 @@ if (Gear^.State and gstMoving) <> 0 then
 
 AllInactive:= false;
 
-if (not CheckGearDrowning(Gear)) and
-   ((Gear^.State and gstMoving) = 0) then
+if ((Gear^.State and gstMoving) = 0) then
    if ((Gear^.State and gstAnimation) = 0) and
       (prevState <> Gear^.State) then
       begin

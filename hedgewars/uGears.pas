@@ -447,7 +447,7 @@ DrawHedgehog(hwRound(Gear^.X) - 15 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
              Surface);
 
 with PHedgehog(Gear^.Hedgehog)^ do
-     if (Gear^.State and not gstAnimation) = 0 then
+     if (Gear^.State{ and not gstAnimation}) = 0 then
         begin
         t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
         dec(t, HealthTag^.h + 2);
@@ -457,6 +457,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
         dec(t, Team^.NameTag^.h + 2);
         DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTag, Surface)
         end else // Current hedgehog
+      if (Gear^.State and gstHHDriven) <> 0 then
         begin
         if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
            DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
@@ -649,7 +650,7 @@ Gear:= GearsList;
 while Gear <> nil do
       begin
       dmg:= dmgRadius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-      if (dmg > 0) and
+      if (dmg > 1) and
          ((Gear^.State and gstNoDamage) = 0) then
          begin
          dmg:= dmg div 2;
@@ -698,7 +699,7 @@ t:= GearsList;
 while t <> nil do
     begin
     dmg:= min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25);
-    if dmg >= 0 then
+    if dmg > 0 then
        case t^.Kind of
            gtHedgehog,
                gtMine,
@@ -748,11 +749,11 @@ while i > 0 do
                           AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
                           inc(hh^.DamageGiven, Damage)
                           end;
+                       DeleteCI(t^.ar[i]);
                        t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
                        t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
                        t^.ar[i]^.Active:= true;
                        t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
-                       DeleteCI(t^.ar[i]);
                        FollowGear:= t^.ar[i]
                        end;
            end

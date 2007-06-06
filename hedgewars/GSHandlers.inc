@@ -1177,10 +1177,11 @@ if (Gear^.Message and not gm_Switch) <> 0 then
    HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
    Msg:= Gear^.Message and not gm_Switch;
    DeleteGear(Gear);
-   OnUsedAmmo(PHedgehog(Gear^.Hedgehog)^);
+   OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+   ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 
    HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
-   ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^);
+   ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
    HHGear^.Message:= Msg;
    exit
    end;

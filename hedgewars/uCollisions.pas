@@ -189,12 +189,11 @@ if (x and $FFFFF800) = 0 then
      inc(y)
    until (y > i);
    end;
-TestCollisionXKick:= false;
+TestCollisionXKick:= flag;
 
 if flag then
    begin
-   if hwAbs(Gear^.dX) < cHHKick then exit(true);
-   if Count = 0 then exit;
+   if hwAbs(Gear^.dX) < cHHKick then exit;
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
 
@@ -213,8 +212,8 @@ if flag then
                   Active:= true
                   end;
              DeleteCI(cGear);
-             exit
-             end else exit(true)
+             exit(false)
+             end
    end
 end;
 
@@ -238,12 +237,11 @@ if (y and $FFFFFC00) = 0 then
      inc(x)
    until (x > i);
    end;
-TestCollisionYKick:= false;
+TestCollisionYKick:= flag;
 
 if flag then
    begin
    if hwAbs(Gear^.dX) < cHHKick then exit(true);
-   if Count = 0 then exit;
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
 
@@ -257,13 +255,13 @@ if flag then
              with cGear^ do
                   begin
                   dX:= Gear^.dX;
-                  dY:= Gear^.dY;
+                  dY:= Gear^.dY * _0_5;
                   State:= State or gstMoving;
                   Active:= true
                   end;
              DeleteCI(cGear);
-             exit
-             end else exit(true)
+             exit(false)
+             end
    end
 end;
 

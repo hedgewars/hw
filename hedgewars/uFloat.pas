@@ -61,6 +61,7 @@ function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat;
 
+{$J-}
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
       _1div50000: hwFloat = (isNegative: false; QWordValue:       85899);
@@ -119,7 +120,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
           _10000: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10000);
 
          cLittle: hwFloat = (isNegative: false; QWordValue:           1);
-         cHHKick: hwFloat = (isNegative: false; QWordValue:   128849018);
+         cHHKick: hwFloat = (isNegative: false; QWordValue:   128849018);  // _0_03
 {$ENDIF}
 
 {$IFNDEF FPC}
