@@ -55,7 +55,8 @@ set(hwfr_src
 	newnetclient.cpp
 	netudpserver.cpp
 	netudpwidget.cpp
-	chatwidget.cpp)
+	chatwidget.cpp
+	binds.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)

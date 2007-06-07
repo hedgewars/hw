@@ -42,6 +42,7 @@ var isCursorVisible : boolean = false;
     cScreenHeight    : LongInt = 768;
     cBits            : LongInt = 16;
     cBitsStr         : string[2] = '16';
+    cTagsMask        : byte = 7;
 
     cWaterLine       : LongInt = 1024;
     cVisibleWater    : LongInt = 128;

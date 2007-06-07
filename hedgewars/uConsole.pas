@@ -278,6 +278,7 @@ InitConsole;
 RegisterVariable('quit'    , vtCommand, @chQuit         , true );
 RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
 RegisterVariable('capture' , vtCommand, @chCapture      , true );
+RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
 RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
 RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
 RegisterVariable('map'     , vtCommand, @chSetMap       , false);

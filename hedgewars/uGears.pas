@@ -450,12 +450,21 @@ with PHedgehog(Gear^.Hedgehog)^ do
      if (Gear^.State{ and not gstAnimation}) = 0 then
         begin
         t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
-        dec(t, HealthTag^.h + 2);
-        DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTag, Surface);
-        dec(t, NameTag^.h + 2);
-        DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTag, Surface);
-        dec(t, Team^.NameTag^.h + 2);
-        DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTag, Surface)
+        if (cTagsMask and 1) <> 0 then
+           begin
+           dec(t, HealthTag^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTag, Surface)
+           end;
+        if (cTagsMask and 2) <> 0 then
+           begin
+           dec(t, NameTag^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTag, Surface)
+           end;
+        if (cTagsMask and 4) <> 0 then
+           begin
+           dec(t, Team^.NameTag^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTag, Surface)
+           end
         end else // Current hedgehog
       if (Gear^.State and gstHHDriven) <> 0 then
         begin

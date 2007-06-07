@@ -41,7 +41,8 @@ HEADERS += binds.h \
            chatwidget.h
            
            
-SOURCES += game.cpp \
+SOURCES += binds.cpp
+           game.cpp \
            main.cpp \
            hwform.cpp \
            team.cpp \
