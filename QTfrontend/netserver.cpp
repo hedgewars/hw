@@ -23,8 +23,6 @@
 #include <QTcpSocket>
 #include <QMessageBox>
 
-#include <algorithm>
-
 const quint16 HWNetServer::ds_port=46631;
 
 extern char delimeter;

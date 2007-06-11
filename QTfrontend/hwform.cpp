@@ -241,7 +241,6 @@ void HWForm::IntermediateSetup()
   QList<HWTeam> teams=curTeamSelWidget->getDontPlayingTeams();
   QStringList tmnames;
   for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
-    qDebug() << it->TeamName;
     tmnames+=it->TeamName;
   }
   UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
