@@ -264,15 +264,17 @@ if not TestCollisionYKick(Gear, 1) then
    Gear^.State:= Gear^.State or gstFalling or gstMoving;
    Gear^.dY:= Gear^.dY + cGravity
    end else
-   if (not Gear^.dY.isNegative) then
    begin
-   CheckHHDamage(Gear);
    if ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_55)
       and ((Gear^.State and gstHHJumping) <> 0) then SetLittle(Gear^.dX);
 
-   Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
+   if not Gear^.dY.isNegative then
+      begin
+      CheckHHDamage(Gear);
+      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
+      Gear^.dY:= _0;
+      end else Gear^.dY:= Gear^.dY + cGravity;
 
-   if Gear^.dY > _0 then Gear^.dY:= _0;
    if ((Gear^.State and gstMoving) <> 0) then Gear^.dX:= Gear^.dX * Gear^.Friction
    end;
 
@@ -373,7 +375,6 @@ if (Gear^.State and (gstFalling or gstMoving)) <> 0 then
          Gear^.dX:= SignAs(_0_02, Gear^.dX)
          end;
    Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
-
 
    if ((Gear^.State and gstHHJumping) <> 0) and
       TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);

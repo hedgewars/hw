@@ -1172,7 +1172,7 @@ var HHGear: PGear;
 begin
 AllInactive:= false;
 
-if (Gear^.Message and not gm_Switch) <> 0 then
+if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
    begin
    HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
    Msg:= Gear^.Message and not gm_Switch;

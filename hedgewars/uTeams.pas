@@ -131,6 +131,7 @@ tteam:= CurrentTeam;
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if Gear <> nil then
         begin
+        AttacksNum:= 0;
         Gear^.Message:= 0;
         Gear^.Z:= cHHZ;
         RemoveGearFromList(Gear);
@@ -150,7 +151,6 @@ TryDo(CurrentTeam <> tteam, 'Switch hedgehog: only one team?!', true);
 
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      begin
-     AttacksNum:= 0;
      with Gear^ do
           begin
           Z:= cCurrHHZ;

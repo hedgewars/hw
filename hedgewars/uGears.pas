@@ -288,6 +288,9 @@ gtAmmo_Grenade: begin
                 Result^.Timer:= 1100;
                 Result^.Z:= 2000;
                 end;
+    gtSwitcher: begin
+                Result^.Z:= cCurrHHZ
+                end;
      end;
 InsertGearToList(Result);
 AddGear:= Result
