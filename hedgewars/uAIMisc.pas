@@ -262,7 +262,7 @@ case JumpType of
                  begin
                  Gear^.dY:= -_0_2;
                  SetLittle(Gear^.dX);
-                 Gear^.State:= Gear^.State or gstFalling or gstHHJumping;
+                 Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
                  end else exit(Result);
     jmpLJump: begin
               if not TestCollisionYwithGear(Gear, -1) then
@@ -273,14 +273,14 @@ case JumpType of
                  begin
                  Gear^.dY:= -_0_15;
                  Gear^.dX:= SignAs(_0_15, Gear^.dX);
-                 Gear^.State:= Gear^.State or gstFalling or gstHHJumping
+                 Gear^.State:= Gear^.State or gstMoving or gstHHJumping
                  end else exit(Result)
               end
     end;
     
 repeat
 if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then exit(Result);
-if (Gear^.State and gstFalling) <> 0 then
+if (Gear^.State and gstMoving) <> 0 then
    begin
    if (GoInfo.Ticks = 350) then
       if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
@@ -297,7 +297,7 @@ if (Gear^.State and gstFalling) <> 0 then
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
       begin
-      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping);
+      Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
       case JumpType of
            jmpHJump: if bY - hwRound(Gear^.Y) > 5 then
@@ -333,7 +333,7 @@ repeat
 pX:= hwRound(Gear^.X);
 pY:= hwRound(Gear^.Y);
 if pY + cHHRadius >= cWaterLine then exit(false);
-if (Gear^.State and gstFalling) <> 0 then
+if (Gear^.State and gstMoving) <> 0 then
    begin
    inc(GoInfo.Ticks);
    Gear^.dY:= Gear^.dY + cGravity;
@@ -348,7 +348,7 @@ if (Gear^.State and gstFalling) <> 0 then
    if TestCollisionYwithGear(Gear, 1) then
       begin
       inc(GoInfo.Ticks, 300);
-      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping);
+      Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
       Result:= true;
       HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
@@ -401,7 +401,7 @@ if (Gear^.State and gstFalling) <> 0 then
       begin
       Gear^.Y:= Gear^.Y - _6;
       Gear^.dY:= _0;
-      Gear^.State:= Gear^.State or gstFalling
+      Gear^.State:= Gear^.State or gstMoving
       end
    end
    end
@@ -409,9 +409,9 @@ if (Gear^.State and gstFalling) <> 0 then
    end
    end
    end;
-if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstFalling) = 0) then
+if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
    exit(true);
-until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstFalling) = 0);
+until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
 HHJump(AltGear, jmpHJump, GoInfo);
 HHGo:= Result
 end;

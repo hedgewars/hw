@@ -474,7 +474,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
         if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
            DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
                       GameTicks div 32 mod 16, Surface);
-        if (Gear^.State and (gstMoving or gstDrowning or gstFalling)) = 0 then
+        if (Gear^.State and (gstMoving or gstDrowning)) = 0 then
            if (Gear^.State and gstHHThinking) <> 0 then
               DrawGear(sQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, Surface)
               else

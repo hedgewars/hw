@@ -145,7 +145,6 @@ const
       gstAttacking      = $00000010;
       gstCollision      = $00000020;
       gstHHChooseTarget = $00000040;
-      gstFalling        = $00000080;
       gstHHJumping      = $00000100;
       gsttmpFlag        = $00000200;
       gstHHThinking     = $00000800;
@@ -170,8 +169,7 @@ const
       ammoprop_Power        = $00000002;
       ammoprop_NeedTarget   = $00000004;
       ammoprop_ForwMsgs     = $00000008;
-      ammoprop_AttackInFall = $00000010;
-      ammoprop_AttackInJump = $00000020;
+      ammoprop_AttackInMove = $00000010;
       ammoprop_NoCrosshair  = $00000040;
       ammoprop_AttackingPut = $00000080;
       AMMO_INFINITE = High(LongWord);
@@ -440,8 +438,7 @@ const
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
-                                                 ammoprop_AttackInFall or
-                                                 ammoprop_AttackInJump or
+                                                 ammoprop_AttackInMove or
                                                  ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;
@@ -473,8 +470,7 @@ const
                                    Probability: 100;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
-                                                 ammoprop_AttackInFall or
-                                                 ammoprop_AttackInJump;
+                                                 ammoprop_AttackInMove;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -520,8 +516,7 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
-                                                 ammoprop_AttackInJump or
-                                                 ammoprop_AttackInFall;
+                                                 ammoprop_AttackInMove;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -538,8 +533,7 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_ForwMsgs or
-                                                 ammoprop_AttackInJump or
-                                                 ammoprop_AttackInFall;
+                                                 ammoprop_AttackInMove;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -570,8 +564,7 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
-                                                 ammoprop_AttackInJump or
-                                                 ammoprop_AttackInFall or
+                                                 ammoprop_AttackInMove or
                                                  ammoprop_NoCrosshair;
                                           Count: 2;
                                           NumPerTurn: 0;

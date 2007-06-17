@@ -24,11 +24,9 @@ with Gear^,
      PHedgehog(Gear^.Hedgehog)^ do
      begin
      if ((State and gstHHDriven) <> 0)and
- //       (((State and gstAttacking) <> 0) or ((Message and gm_Attack) <> 0))and
-        ((State and (gstAttacked or gstMoving or gstHHChooseTarget)) = 0)and
-        (((State and gstFalling  ) = 0)or((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInFall) <> 0))and
-        (((State and gstHHJumping) = 0)or((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInJump) <> 0))and
-          ((TargetPoint.X <> NoPointX) or((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
+        ((State and (gstAttacked or gstHHChooseTarget)) = 0)and
+        (((State and gstMoving) = 0)or((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0))and
+          ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
         State:= State or gstAttacking;
         if Power = cMaxPower then Message:= Message and not gm_Attack
@@ -135,16 +133,16 @@ const StepTicks: LongWord = 0;
 procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
 begin
-if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
+if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    begin
    if isCursorVisible then
       with PHedgehog(Gear^.Hedgehog)^ do
         with Ammo^[CurSlot, CurAmmo] do
           begin
-          if (Gear^.Message and gm_Left  )<>0 then
+          if (Gear^.Message and gm_Left  ) <> 0 then
              Pos:= (Pos + Ammoz[AmmoType].PosCount - 1) mod Ammoz[AmmoType].PosCount
           else
-          if (Gear^.Message and gm_Right )<>0 then
+          if (Gear^.Message and gm_Right ) <> 0 then
              Pos:= (Pos + 1) mod Ammoz[AmmoType].PosCount
           else exit;
           StepTicks:= 200;
@@ -153,7 +151,7 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
 
    if ((Gear^.Message and gm_LJump ) <> 0) then
       begin
-      Gear^.Message:= 0;
+      Gear^.Message:= Gear^.Message and not gm_LJump;
       DeleteCI(Gear);
       if not TestCollisionYwithGear(Gear, -1) then
          if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _2 else
@@ -163,7 +161,7 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
          begin
          Gear^.dY:= -_0_15;
          Gear^.dX:= SignAs(_0_15, Gear^.dX);
-         Gear^.State:= Gear^.State or gstFalling or gstHHJumping;
+         Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
          exit
          end;
       end;
@@ -171,12 +169,12 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
    if ((Gear^.Message and gm_HJump ) <> 0) then
       begin
       DeleteCI(Gear);
-      Gear^.Message:= 0;
+      Gear^.Message:= Gear^.Message and not gm_HJump;
       if not TestCollisionYwithGear(Gear, -1) then
          begin
          Gear^.dY:= -_0_2;
          SetLittle(Gear^.dX);
-         Gear^.State:= Gear^.State or gstFalling or gstHHJumping;
+         Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
          exit
          end;
       end;
@@ -231,7 +229,7 @@ if ((Gear^.State and (gstAttacking or gstMoving or gstFalling)) = 0) then
       begin
       Gear^.Y:= Gear^.Y - _6;
       Gear^.dY:= _0;
-      Gear^.State:= Gear^.State or gstFalling;
+      Gear^.State:= Gear^.State or gstMoving;
       exit
       end;
    end
@@ -246,7 +244,7 @@ end;
 
 procedure HedgehogChAngle(Gear: PGear);
 begin
-if ((Gear^.State and (gstMoving or gstFalling)) = 0) then
+if ((Gear^.State and gstMoving) = 0) then
    if (Gear^.Message and gm_Up    )<>0 then if Gear^.Angle > CurMinAngle then dec(Gear^.Angle)
    else else
    if (Gear^.Message and gm_Down  )<>0 then if Gear^.Angle < CurMaxAngle then inc(Gear^.Angle);
@@ -256,12 +254,14 @@ procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
 var prevState: Longword;
+    isFalling: boolean;
 begin
 prevState:= Gear^.State;
-if not TestCollisionYKick(Gear, 1) then
+isFalling:= not TestCollisionYKick(Gear, 1);
+if isFalling then
    begin
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
-   Gear^.State:= Gear^.State or gstFalling or gstMoving;
+   Gear^.State:= Gear^.State or gstMoving;
    Gear^.dY:= Gear^.dY + cGravity
    end else
    begin
@@ -271,7 +271,7 @@ if not TestCollisionYKick(Gear, 1) then
    if not Gear^.dY.isNegative then
       begin
       CheckHHDamage(Gear);
-      Gear^.State:= Gear^.State and not (gstFalling or gstHHJumping or gstHHHJump);
+      Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
       Gear^.dY:= _0;
       end else Gear^.dY:= Gear^.dY + cGravity;
 
@@ -282,7 +282,7 @@ if (Gear^.State <> 0) then DeleteCI(Gear);
                 
 if (Gear^.State and gstMoving) <> 0 then
    if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
-      if ((Gear^.State and gstFalling) = 0) then
+      if not isFalling then
          if hwAbs(Gear^.dX) > _0_01 then
             if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_96; Gear^.Y:= Gear^.Y - _1 end else
             if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) then begin Gear^.X:= Gear^.X + Gear^.dX; Gear^.dX:= Gear^.dX * _0_93; Gear^.Y:= Gear^.Y - _2 end else
@@ -301,7 +301,7 @@ if (Gear^.State and gstMoving) <> 0 then
          else if hwAbs(Gear^.dX) > cLittle then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
                                            else SetLittle(Gear^.dX);
 
-if ((Gear^.State and gstFalling) = 0)and
+if (not isFalling) and
    (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
    begin
    Gear^.State:= Gear^.State and not gstMoving;
@@ -343,8 +343,8 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
       Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
    exit
    end;
-   
-if ((Gear^.State and (gstFalling or gstMoving)) <> 0)
+
+if ((Gear^.State and gstMoving) <> 0)
    or (StepTicks = cHHStepTicks)
    or (CurAmmoGear <> nil) then // we're moving
    begin
@@ -361,16 +361,16 @@ if CurAmmoGear <> nil then
    end;
 
 if ((Gear^.Message and gm_Attack) <> 0) or
-   ((Gear^.State and gstAttacking) <> 0)then Attack(Gear);
+   ((Gear^.State and gstAttacking) <> 0) then Attack(Gear);
 
-if (Gear^.State and (gstFalling or gstMoving)) <> 0 then
+if (Gear^.State and gstMoving) <> 0 then
    begin
    if ((Gear^.Message and gm_HJump) <> 0) and
       ((Gear^.State and gstHHJumping) <> 0) and
       ((Gear^.State and gstHHHJump) = 0) then
       if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
          begin
-         Gear^.State:= Gear^.State or gstHHHJump;
+         Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
          Gear^.dY:= -_0_25;
          Gear^.dX:= SignAs(_0_02, Gear^.dX)
          end;
@@ -380,11 +380,11 @@ if (Gear^.State and (gstFalling or gstMoving)) <> 0 then
       TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
 
    doStepHedgehogMoving(Gear);
-   
-   if (Gear^.State and (gstFalling or gstMoving)) = 0 then
+
+   if (Gear^.State and gstMoving) = 0 then
       begin
       AddGearCI(Gear);
-      StepTicks:= 300
+      StepTicks:= 350
       end;
    exit
    end;

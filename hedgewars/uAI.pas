@@ -278,7 +278,7 @@ end;
 procedure StartThink(Me: PGear);
 var a: TAmmoType;
 begin
-if ((Me^.State and (gstAttacking or gstHHJumping or gstFalling or gstMoving)) <> 0)
+if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
    or isInMultiShoot then exit;
 
 //DeleteCI(Me); // this might break demo 

@@ -207,7 +207,7 @@ if flag then
              with cGear^ do
                   begin
                   dX:= Gear^.dX;
-                  dY:= Gear^.dY;
+                  dY:= Gear^.dY * _0_5;
                   State:= State or gstMoving;
                   Active:= true
                   end;
@@ -254,8 +254,8 @@ if flag then
              begin
              with cGear^ do
                   begin
-                  dX:= Gear^.dX;
-                  dY:= Gear^.dY * _0_5;
+                  dX:= Gear^.dX * _0_5;
+                  dY:= Gear^.dY;
                   State:= State or gstMoving;
                   Active:= true
                   end;

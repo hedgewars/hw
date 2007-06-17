@@ -70,12 +70,13 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
+var isFalling: boolean;
 begin
 Gear^.State:= Gear^.State and not gstCollision;
 
 if Gear^.dY.isNegative then
    begin
-   Gear^.State:= Gear^.State or gstFalling;
+   isFalling:= true;
    if TestCollisionYwithGear(Gear, -1) then
       begin
       Gear^.dX:=   Gear^.dX * Gear^.Friction;
@@ -85,11 +86,11 @@ if Gear^.dY.isNegative then
    end else
    if TestCollisionYwithGear(Gear, 1) then
       begin
-      Gear^.State:= Gear^.State and not gstFalling;
+      isFalling:= false;
       Gear^.dX:=   Gear^.dX * Gear^.Friction;
       Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
       Gear^.State:= Gear^.State or gstCollision
-      end else Gear^.State:= Gear^.State or gstFalling;
+      end else isFalling:= true;
 
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
    begin
@@ -97,14 +98,14 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
    Gear^.State:= Gear^.State or gstCollision
    end;
 
-if (Gear^.State and gstFalling) <> 0 then Gear^.dY:= Gear^.dY + cGravity;
+if isFalling then Gear^.dY:= Gear^.dY + cGravity;
 
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckGearDrowning(Gear);
 if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
-   ((Gear^.State and gstFalling) = 0) then Gear^.State:= Gear^.State and not gstMoving
-                                      else Gear^.State:= Gear^.State or      gstMoving
+   (not isFalling) then Gear^.State:= Gear^.State and not gstMoving
+                   else Gear^.State:= Gear^.State or      gstMoving
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -505,7 +506,7 @@ if Gear^.Timer mod cHHStepTicks = 0 then
       HHGear^.State:= HHGear^.State and not gstNoDamage
       end;
 
-   if (HHGear^.State and gstFalling) <> 0 then Gear^.Timer:= 0
+   if (HHGear^.State and gstMoving) <> 0 then Gear^.Timer:= 0
    end;
 
 if b then
@@ -544,7 +545,7 @@ var HHGear: PGear;
       with HHGear^ do
            begin
            Message:= Message and not gm_Attack;
-           State:= State or gstFalling;
+           State:= State or gstMoving;
            end;
       DeleteGear(Gear);
       OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
@@ -664,12 +665,12 @@ Gear^.Y:= Gear^.Y - Gear^.dY;
 Gear^.Elasticity:= Gear^.Elasticity + _1;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 DeleteCI(HHGear);
-if (HHGear^.State and gstFalling) <> 0 then
+if (HHGear^.State and gstMoving) <> 0 then
    if TestCollisionYwithGear(HHGear, 1) then
       begin
       HHGear^.dY:= _0;
       CheckHHDamage(HHGear);
-      HHGear^.State:= HHGear^.State and not (gstFalling or gstHHJumping);
+      HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping);
       end else
       begin
       if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
@@ -754,11 +755,11 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 begin
-if (Gear^.State and (gstMoving or gstFalling)) <> 0 then
+if (Gear^.State and gstMoving) <> 0 then
    begin
    DeleteCI(Gear);
    doStepFallingGear(Gear);
-   if (Gear^.State and (gstMoving or gstFalling)) = 0 then
+   if (Gear^.State and gstMoving) = 0 then
       begin
       AddGearCI(Gear);
       Gear^.dX:= _0;
@@ -977,7 +978,7 @@ if hwRound(HHGear^.Y) <= Gear^.Tag - 2 then
 HHGear^.dY:= HHGear^.dY + cGravity;
 if not (HHGear^.dY.isNegative) then
    begin
-   HHGear^.State:= HHGear^.State or gstFalling;
+   HHGear^.State:= HHGear^.State or gstMoving;
    DeleteGear(Gear);
    AfterAttack;
    exit
@@ -1023,7 +1024,7 @@ if TestCollisionYwithGear(HHGear, 1)
         SetLittle(dx);
         dY:= _0;
         State:= State and not (gstAttacking or gstAttacked);
-        State:= State or gstFalling;
+        State:= State or gstMoving;
         end;
    DeleteGear(Gear);
    if Gear^.Timer > 10 then
@@ -1158,7 +1159,7 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         Gear^.doStep:= @doStepTeleportAfter;
         HHGear^.X:= int2hwFloat(TargetPoint.X);
         HHGear^.Y:= int2hwFloat(TargetPoint.Y);
-        HHGear^.State:= HHGear^.State or gstFalling
+        HHGear^.State:= HHGear^.State or gstMoving
         end;
 TargetPoint.X:= NoPointX
 end;
