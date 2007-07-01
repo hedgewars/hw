@@ -19,41 +19,54 @@
 unit uAIAmmoTests;
 interface
 uses SDLh, uGears, uConsts, uFloat;
+const amtest_OnTurn = $00000001;
 
-function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+type TAttackParams = record
+                     Time: Longword;
+                     Angle, Power: LongInt;
+                     ExplX, ExplY, ExplR: LongInt;
+                     AttackPutX, AttackPutY: LongInt;
+                     end;
 
-type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
-const AmmoTests: array[TAmmoType] of TAmmoTestProc =
+function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+
+type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+     TAmmoTest = record
+                 proc: TAmmoTestProc;
+                 flags: Longword;
+                 end;
+
+const AmmoTests: array[TAmmoType] of TAmmoTest =
                  (
-{amGrenade}       @TestGrenade,
-{amClusterBomb}   nil,
-{amBazooka}       @TestBazooka,
-{amUFO}           nil,
-{amShotgun}       @TestShotgun,
-{amPickHammer}    nil,
-{amSkip}          nil,
-{amRope}          nil,
-{amMine}          nil,
-{amDEagle}        @TestDesertEagle,
-{amDynamite}      nil,
-{amFirePunch}     @TestFirePunch,
-{amBaseballBat}   @TestBaseballBat,
-{amParachute}     nil,
-{amAirAttack}     nil,
-{amMineStrike}    nil,
-{amBlowTorch}     nil,
-{amGirder}        nil,
-{amTeleport}      nil,
-{amSwitch}        nil
+                  (proc: @TestGrenade;     flags: 0), // amGrenade
+                  (proc: nil;              flags: 0), // amClusterBomb
+                  (proc: @TestBazooka;     flags: 0), // amBazooka
+                  (proc: nil;              flags: 0), // amUFO
+                  (proc: @TestShotgun;     flags: 0), // amShotgun
+                  (proc: nil;              flags: 0), // amPickHammer
+                  (proc: nil;              flags: 0), // amSkip
+                  (proc: nil;              flags: 0), // amRope
+                  (proc: nil;              flags: 0), // amMine
+                  (proc: @TestDesertEagle; flags: 0), // amDEagle
+                  (proc: nil;              flags: 0), // amDynamite
+                  (proc: @TestFirePunch;   flags: 0), // amFirePunch
+                  (proc: @TestBaseballBat; flags: 0), // amBaseballBat
+                  (proc: nil;              flags: 0), // amParachute
+                  (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
+                  (proc: nil;              flags: 0), // amMineStrike
+                  (proc: nil;              flags: 0), // amBlowTorch
+                  (proc: nil;              flags: 0), // amGirder
+                  (proc: nil;              flags: amtest_OnTurn), // amTeleport
+                  (proc: nil;              flags: 0)  // amSwitch
                   );
 
 const BadTurn = Low(LongInt) div 4;
-
 
 implementation
 uses uMisc, uAIMisc, uLand;
@@ -63,7 +76,7 @@ begin
 Metric:= abs(x1 - x2) + abs(y1 - y2)
 end;
 
-function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r: hwFloat;
     rTime: LongInt;
     Score, EX, EY: LongInt;
@@ -94,9 +107,9 @@ var Vx, Vy, r: hwFloat;
     end;
 
 begin
-Time:= 0;
+ap.Time:= 0;
 rTime:= 350;
-ExplR:= 0;
+ap.ExplR:= 0;
 Result:= BadTurn;
 repeat
   rTime:= rTime + 300 + Level * 50 + random(300);
@@ -108,11 +121,11 @@ repeat
      Score:= CheckTrace;
      if Result <= Score then
         begin
-        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
-        Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
-        ExplR:= 100;
-        ExplX:= EX;
-        ExplY:= EY;
+        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+        ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
+        ap.ExplR:= 100;
+        ap.ExplX:= EX;
+        ap.ExplY:= EY;
         Result:= Score
         end;
      end
@@ -120,7 +133,7 @@ until (rTime > 4250);
 TestBazooka:= Result
 end;
 
-function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, Result: LongInt;
@@ -149,7 +162,7 @@ var Vx, Vy, r: hwFloat;
 begin
 Result:= BadTurn;
 TestTime:= 0;
-ExplR:= 0;
+ap.ExplR:= 0;
 repeat
   inc(TestTime, 1000);
   Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime + tDelta);
@@ -160,12 +173,12 @@ repeat
      Score:= CheckTrace;
      if Result < Score then
         begin
-        Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-        Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
-        Time:= TestTime;
-        ExplR:= 100;
-        ExplX:= EX;
-        ExplY:= EY;
+        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
+        ap.Time:= TestTime;
+        ap.ExplR:= 100;
+        ap.ExplX:= EX;
+        ap.ExplY:= EY;
         Result:= Score
         end;
      end
@@ -173,20 +186,20 @@ until (TestTime = 4000);
 TestGrenade:= Result
 end;
 
-function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y: hwFloat;
     rx, ry, Result: LongInt;
 begin
-ExplR:= 0;
-Time:= 0;
-Power:= 1;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
 if Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y) < 80 then
    exit(BadTurn);
 Vx:= (int2hwFloat(Targ.X) - Me^.X) * _1div1024;
 Vy:= (int2hwFloat(Targ.Y) - Me^.Y) * _1div1024;
 x:= Me^.X;
 y:= Me^.Y;
-Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
 repeat
   x:= x + vX;
   y:= y + vY;
@@ -205,14 +218,14 @@ until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x < _0) or (
 TestShotgun:= BadTurn
 end;
 
-function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
     Result: LongInt;
 begin
-ExplR:= 0;
-Time:= 0;
-Power:= 1;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
 if Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 80 then
    exit(BadTurn);
 t:= _0_5 / Distance(int2hwFloat(Targ.X) - Me^.X, int2hwFloat(Targ.Y) - Me^.Y);
@@ -220,7 +233,7 @@ Vx:= (int2hwFloat(Targ.X) - Me^.X) * t;
 Vy:= (int2hwFloat(Targ.Y) - Me^.Y) * t;
 x:= Me^.X;
 y:= Me^.Y;
-Angle:= DxDy2AttackAngle(Vx, -Vy);
+ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
 d:= 0;
 repeat
   x:= x + vX;
@@ -229,33 +242,33 @@ repeat
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x < _0) or (y < _0) or (x > _2048) or (y > _1024) or (d > 200);
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then Result:= max(0, (4 - d div 50) * 7 * 1024)
-                                                           else Result:= Low(LongInt);
+                                                           else Result:= BadTurn;
 TestDesertEagle:= Result
 end;
 
-function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Result: LongInt;
 begin
-ExplR:= 0;
-if (Level > 2) and not (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) < 25) then
+ap.ExplR:= 0;
+if (Level > 2) or (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) > 25) then
    exit(BadTurn);
 
-Time:= 0;
-Power:= 1;
-if (Targ.X) - hwRound(Me^.X) >= 0 then Angle:=   cMaxAngle div 4
-                                  else Angle:= - cMaxAngle div 4;
+ap.Time:= 0;
+ap.Power:= 1;
+if (Targ.X) - hwRound(Me^.X) >= 0 then ap.Angle:=   cMaxAngle div 4
+                                  else ap.Angle:= - cMaxAngle div 4;
 Result:= RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X), hwRound(Me^.Y), 15, 30);
 if Result <= 0 then Result:= BadTurn else inc(Result);
 TestBaseballBat:= Result
 end;
 
-function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var Time: Longword; var Angle, Power: LongInt; var ExplX, ExplY, ExplR: LongInt): LongInt;
+function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var i, Result: LongInt;
 begin
-ExplR:= 0;
-Time:= 0;
-Power:= 1;
-Angle:= 0;
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.Power:= 1;
+ap.Angle:= 0;
 if (Abs(hwRound(Me^.X) - Targ.X) > 25) or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
    exit(BadTurn);
 
@@ -265,6 +278,68 @@ for i:= 0 to 4 do
                                     hwRound(Me^.Y) - 20 * i - 5, 10, 30);
 if Result <= 0 then Result:= BadTurn else inc(Result);
 TestFirePunch:= Result
+end;
+
+function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var X, Y, dY: hwFloat;
+    b: array[0..9] of boolean;
+    dmg: array[0..9] of LongInt;
+    fexit: boolean;
+    i, t, Result: LongInt;
+begin
+ap.ExplR:= 0;
+ap.Time:= 0;
+ap.AttackPutX:= Targ.X;
+ap.AttackPutY:= Targ.Y;
+
+X:= int2hwFloat(Targ.X - 135);
+X:= X - cBombsSpeed * hwSqrt(int2hwFloat((Targ.Y + 128) * 2) / cGravity);
+Y:= -_128;
+dY:= _0;
+
+for i:= 0 to 9 do
+    begin
+    b[i]:= true;
+    dmg[i]:= 0
+    end;
+Result:= 0;
+
+repeat
+  X:= X + cBombsSpeed;
+  Y:= Y + dY;
+  dY:= dY + cGravity;
+  fexit:= true;
+
+  for i:= 0 to 9 do
+    if b[i] then
+       begin
+       fexit:= false;
+       if TestColl(hwRound(X) + i * 30, hwRound(Y), 4) then
+          begin
+          b[i]:= false;
+          dmg[i]:= RateExplosion(Me, hwRound(X) + i * 30, hwRound(Y), 58)
+          // 58 (instead of 60) for better prediction (hh moves after explosion of one of the rockets)
+          end
+       end;
+until fexit or (Y > _1024);
+
+for i:= 0 to 5 do inc(Result, dmg[i]);
+t:= Result;
+ap.AttackPutX:= Targ.X - 60;
+
+for i:= 0 to 3 do
+    begin
+    dec(t, dmg[i]);
+    inc(t, dmg[i + 6]);
+    if t > Result then
+       begin
+       Result:= t;
+       ap.AttackPutX:= Targ.X - 30 + i * 30
+       end
+    end;
+
+if Result <= 0 then Result:= BadTurn;
+TestAirAttack:= Result
 end;
 
 end.

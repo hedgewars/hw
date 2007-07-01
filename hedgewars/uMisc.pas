@@ -70,6 +70,9 @@ var isCursorVisible : boolean = false;
     cTimerInterval   : Longword = 5;
     cHasFocus     : boolean = true;
 
+    cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
+    cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
+
 var
     cSendEmptyPacketTime : LongWord = 2000;
     cSendCursorPosTime   : LongWord = 50;

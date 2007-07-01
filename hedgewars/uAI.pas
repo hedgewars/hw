@@ -57,10 +57,10 @@ BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;
 
-procedure TestAmmos(var Actions: TActions; Me: PGear);
+procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
 var Time, BotLevel: Longword;
-    Angle, Power, Score, ExplX, ExplY, ExplR: LongInt;
-    i: LongInt;
+    ap: TAttackParams;
+    Score, i: LongInt;
     a, aa: TAmmoType;
 begin
 BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
@@ -72,35 +72,44 @@ for i:= 0 to Pred(Targets.Count) do
             a:= Ammo^[CurSlot, CurAmmo].AmmoType;
        aa:= a;
        repeat
-        if CanUseAmmo[a] then
+        if (CanUseAmmo[a]) and
+           ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) then
            begin
-           Score:= AmmoTests[a](Me, Targets.ar[i].Point, BotLevel, Time, Angle, Power, ExplX, ExplY, ExplR);
+           Score:= AmmoTests[a].proc(Me, Targets.ar[i].Point, BotLevel, ap);
            if Actions.Score + Score > BestActions.Score then
+            if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + LongInt(BotLevel) * 2048) then
               begin
               BestActions:= Actions;
               inc(BestActions.Score, Score);
 
-              AddAction(BestActions, aia_Weapon, Longword(a), 500, 0, 0);
-              if Time <> 0 then AddAction(BestActions, aia_Timer, Time div 1000, 400, 0, 0);
-              if (Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
-              else if (Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
+              AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
+              if (ap.Time <> 0) then AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
+              if (ap.Angle > 0) then AddAction(BestActions, aia_LookRight, 0, 200, 0, 0)
+              else if (ap.Angle < 0) then AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
               if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
                  begin
-                 Angle:= LongInt(Me^.Angle) - Abs(Angle);
-                 if Angle > 0 then
+                 ap.Angle:= LongInt(Me^.Angle) - Abs(ap.Angle);
+                 if ap.Angle > 0 then
                     begin
-                    AddAction(BestActions, aia_Up, aim_push, 500, 0, 0);
-                    AddAction(BestActions, aia_Up, aim_release, Angle, 0, 0)
-                    end else if Angle < 0 then
+                    AddAction(BestActions, aia_Up, aim_push, 300 + random(250), 0, 0);
+                    AddAction(BestActions, aia_Up, aim_release, ap.Angle, 0, 0)
+                    end else if ap.Angle < 0 then
                     begin
-                    AddAction(BestActions, aia_Down, aim_push, 500, 0, 0);
-                    AddAction(BestActions, aia_Down, aim_release, -Angle, 0, 0)
+                    AddAction(BestActions, aia_Down, aim_push, 300 + random(250), 0, 0);
+                    AddAction(BestActions, aia_Down, aim_release, -ap.Angle, 0, 0)
                     end
                  end;
-              AddAction(BestActions, aia_attack, aim_push, 800, 0, 0);
-              AddAction(BestActions, aia_attack, aim_release, Power, 0, 0);
-              if ExplR > 0 then
-                 AddAction(BestActions, aia_AwareExpl, ExplR, 10, ExplX, ExplY);
+              if (Ammoz[a].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
+                 begin
+                 AddAction(BestActions, aia_Put, 0, 1, ap.AttackPutX, ap.AttackPutY)
+                 end;
+              if (Ammoz[a].Ammo.Propz and ammoprop_AttackingPut) = 0 then
+                 begin
+                 AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
+                 AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
+                 end;
+              if ap.ExplR > 0 then
+                 AddAction(BestActions, aia_AwareExpl, ap.ExplR, 10, ap.ExplX, ap.ExplY);
               end
            end;
         if a = High(TAmmoType) then a:= Low(TAmmoType)
@@ -188,7 +197,7 @@ Push(0, Actions, Me^, tmp xor 3);
 if (Me^.State and gstAttacked) = 0 then maxticks:= max(0, TurnTimeLeft - 5000 - 4000 * BotLevel)
                                    else maxticks:= TurnTimeLeft;
 
-if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me);
+if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
 BestRate:= RatePlace(Me);
 BaseRate:= max(BestRate, 0);
 
@@ -232,7 +241,7 @@ while (Stack.Count > 0) and not StopThinking do
           end
        else if Rate < BestRate then break;
        if ((Me^.State and gstAttacked) = 0)
-           and ((steps mod 4) = 0) then TestAmmos(Actions, Me);
+           and ((steps mod 4) = 0) then TestAmmos(Actions, Me, true);
        if GoInfo.FallPix >= FallPixForBranching then
           Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
        end;
@@ -300,7 +309,7 @@ if Targets.Count = 0 then
    end;
 FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a]) and HHHasAmmo(PHedgehog(Me^.Hedgehog), a);
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(PHedgehog(Me^.Hedgehog), a);
 {$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
 BeginThread(@Think, Me, ThinkThread)
 end;

@@ -278,7 +278,7 @@ gtAmmo_Grenade: begin
                 Result^.Tag:= Y
                 end;
      gtAirBomb: begin
-                Result^.Radius:= 10;
+                Result^.Radius:= 5;
                 end;
    gtBlowTorch: begin
                 Result^.Radius:= cHHRadius + cBlowTorchC;
@@ -776,19 +776,45 @@ end;
 procedure AssignHHCoords;
 var Team: PTeam;
     i, t: LongInt;
+    ar: array[0..Pred(cMaxHHs)] of PGear;
+    Count: Longword;
 begin
 Team:= TeamsList;
-t:= 0;
-while Team <> nil do
+
+if (GameFlags and gfForts) <> 0 then
+   begin
+   t:= 0;
+   while Team <> nil do
+      begin
+      for i:= 0 to cMaxHHIndex do
+          with Team^.Hedgehogs[i] do
+               if Gear <> nil then FindPlace(Gear, false, t, t + 1024);
+      inc(t, 1024);
+      Team:= Team^.Next
+      end
+   end else // mix hedgehogs
+   begin
+   Count:= 0;
+   while Team <> nil do
       begin
       for i:= 0 to cMaxHHIndex do
           with Team^.Hedgehogs[i] do
                if Gear <> nil then
-                  if (GameFlags and gfForts) = 0 then FindPlace(Gear, false, 0, 2048)
-                                                 else FindPlace(Gear, false, t, t + 1024);
-      inc(t, 1024);
+                  begin
+                  ar[Count]:= Gear;
+                  inc(Count)
+                  end;
       Team:= Team^.Next
+      end;
+
+   while (Count > 0) do
+      begin
+      i:= GetRandom(Count);
+      FindPlace(ar[i], false, 0, 2048);
+      ar[i]:= ar[Count - 1];
+      dec(Count)
       end
+   end
 end;
 
 function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;

@@ -31,6 +31,8 @@ procedure KeyPressConsole(Key: Longword);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 function  GetLastConsoleLine: shortstring;
 
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
+
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,

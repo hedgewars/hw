@@ -39,6 +39,7 @@ const MAXACTIONS = 96;
       aia_LJump      = $8007;
       aia_Skip       = $8008;
       aia_Wait       = $8009;
+      aia_Put        = $800A;
 
       aim_push       = $8000;
       aim_release    = $8001;
@@ -176,6 +177,7 @@ with Actions.actions[Actions.Pos] do
             aia_HJump: ParseCommand('hjump', true);
             aia_LJump: ParseCommand('ljump', true);
              aia_Skip: ParseCommand('skip', true);
+              aia_Put: doPut(X, Y, true);
              end else
         begin
         s:= ActionIdToStr[Action];

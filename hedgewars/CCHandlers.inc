@@ -329,7 +329,7 @@ with CurrentTeam^ do
      end
 end;
 
-procedure chPut(var s: shortstring);
+procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH then exit;
 if bShowAmmoMenu then
@@ -337,6 +337,7 @@ if bShowAmmoMenu then
    bSelected:= true;
    exit
    end;
+
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
      CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      if (State and gstHHChooseTarget) <> 0 then
@@ -344,15 +345,28 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
         isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
            begin
-           SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
-           dec(TargetPoint.X, WorldDx);
-           dec(TargetPoint.Y, WorldDy);
+           if fromAI then
+              begin
+              TargetPoint.X:= putX;
+              TargetPoint.Y:= putY
+              end else
+              begin
+              SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
+              dec(TargetPoint.X, WorldDx);
+              dec(TargetPoint.Y, WorldDy)
+              end;
            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
            end;
-        State:= State and not gstHHChooseTarget;
+        State:= State and not gstHHChooseTarget; 
         if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
            Message:= Message or gm_Attack;
         end else if CurrentTeam^.ExtDriven then OutError('got /put while not being in choose target mode', false)
+
+end;
+
+procedure chPut(var s: shortstring);
+begin
+doPut(0, 0, false)
 end;
 
 procedure chCapture(var s: shortstring);

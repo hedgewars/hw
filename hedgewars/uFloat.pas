@@ -214,7 +214,8 @@ else
          t.QWordValue:= t.QWordValue shl 1;
          z2.QWordValue:= z2.QWordValue shl 1
          end;
-   z.Frac:= (t.QWordValue) div (z2.Round)
+   if z2.Round > 0 then z.Frac:= (t.QWordValue) div (z2.Round)
+                   else z.Frac:= 0
    end
 end;
 
