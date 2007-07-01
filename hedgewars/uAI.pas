@@ -208,7 +208,6 @@ while (Stack.Count > 0) and not StopThinking do
     AddAction(Actions, Me^.Message, aim_push, 250, 0, 0);
     if (Me^.Message and gm_Left) <> 0 then AddAction(Actions, aia_WaitXL, hwRound(Me^.X), 0, 0, 0)
                                       else AddAction(Actions, aia_WaitXR, hwRound(Me^.X), 0, 0, 0);
-    AddAction(Actions, Me^.Message, aim_release, 0, 0, 0);
     steps:= 0;
 
     while (not StopThinking) and (not PosInThinkStack(Me)) do
@@ -231,7 +230,7 @@ while (Stack.Count > 0) and not StopThinking do
 
        if not CanGo then break;
        inc(steps);
-       Actions.actions[Actions.Count - 2].Param:= hwRound(Me^.X);
+       Actions.actions[Pred(Actions.Count)].Param:= hwRound(Me^.X);
        Rate:= RatePlace(Me);
        if Rate > BestRate then
           begin

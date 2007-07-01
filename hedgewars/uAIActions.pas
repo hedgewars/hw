@@ -93,7 +93,7 @@ if (Action.Action and ai_specmask) = 0 then
 else begin
    WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
    if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
-      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(round(Me.X)));
+      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(hwRound(Me^.X)));
    end
 end;
 {$ENDIF}
@@ -147,18 +147,28 @@ with Actions.actions[Actions.Pos] do
      if (Action and ai_specmask) <> 0 then
         case Action of
            aia_Weapon: SetWeapon(TAmmoType(Param));
-           aia_WaitXL: if hwRound(Me^.X) = Param then Time:= GameTicks
+           aia_WaitXL: if hwRound(Me^.X) = Param then
+                          begin
+                          Action:= aia_LookLeft;
+                          Time:= GameTicks;
+                          exit
+                          end
                           else if hwRound(Me^.X) < Param then
                                begin
-                               OutError('AI: WaitXL assert', false);
+                               OutError('AI: WaitXL assert (' + IntToStr(hwRound(Me^.X)) + ' < ' + IntToStr(Param) + ')', false);
                                FreeActionsList;
                                exit
                                end
                           else begin CheckHang; exit end;
-           aia_WaitXR: if hwRound(Me^.X) = Param then Time:= GameTicks
+           aia_WaitXR: if hwRound(Me^.X) = Param then
+                          begin
+                          Action:= aia_LookRight;
+                          Time:= GameTicks;
+                          exit
+                          end
                           else if hwRound(Me^.X) > Param then
                                begin
-                               OutError('AI: WaitXR assert', false);
+                               OutError('AI: WaitXR assert (' + IntToStr(hwRound(Me^.X)) + ' > ' + IntToStr(Param) + ')', false);
                                FreeActionsList;
                                exit
                                end
