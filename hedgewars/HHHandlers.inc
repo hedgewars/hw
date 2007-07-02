@@ -253,10 +253,8 @@ end;
 procedure doStepHedgehog(Gear: PGear); forward;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogMoving(Gear: PGear);
-var prevState: Longword;
-    isFalling: boolean;
+var isFalling: boolean;
 begin
-prevState:= Gear^.State;
 isFalling:= not TestCollisionYKick(Gear, 1);
 if isFalling then
    begin

@@ -58,7 +58,7 @@ BestActions.Pos:= 0
 end;
 
 procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
-var Time, BotLevel: Longword;
+var BotLevel: Longword;
     ap: TAttackParams;
     Score, i: LongInt;
     a, aa: TAmmoType;

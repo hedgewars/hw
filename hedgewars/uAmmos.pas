@@ -130,9 +130,7 @@ end;
 
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 var s, a: Longword;
-    Ammo: PHHAmmo;
 begin
-Ammo:= Hedgehog.Ammo;
 with Hedgehog do
      begin
      if CurAmmoGear = nil then begin s:= CurSlot; a:= CurAmmo end

@@ -1165,7 +1165,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSwitcherWork(Gear: PGear);
 var HHGear: PGear;
-    Team: PTeam;
     th: LongInt;
     Msg, State: Longword;
 begin
