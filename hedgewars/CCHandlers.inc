@@ -54,11 +54,16 @@ if isDeveloperMode then
    begin
    inc(TeamsCount);
    ParseCommand('ammstore 93919294221912103323', true);
-   TryDo(TeamsCount <= 5, 'Too many teams', true);
-   AddTeam
-   end;
+   TryDo(TeamsCount <= 6, 'Too many teams', true);
+   AddTeam;
 
-if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
+
+   if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
+   val(s, CurrentTeam^.Color);
+   TryDo(CurrentTeam^.Color <> 0, 'Error: black team color', true);
+   CurrentTeam^.AdjColor:= CurrentTeam^.Color;
+   AdjustColor(CurrentTeam^.AdjColor)
+   end
 end;
 
 procedure chTeamLocal(var s: shortstring);
@@ -96,14 +101,6 @@ if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s
-end;
-
-procedure chColor(var id: shortstring);
-begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/color"', true);
-val(id, CurrentTeam^.Color);
-CurrentTeam^.AdjColor:= CurrentTeam^.Color;
-AdjustColor(CurrentTeam^.AdjColor)
 end;
 
 procedure chAddHH(var id: shortstring);

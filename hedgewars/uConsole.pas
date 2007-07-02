@@ -308,7 +308,6 @@ RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
 RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
 RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
 RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
-RegisterVariable('color'   , vtCommand, @chColor        , false);
 RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
 RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
 RegisterVariable('timer'   , vtCommand, @chTimer        , false);

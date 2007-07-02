@@ -212,10 +212,9 @@ void HWTeam::GetFromPage(HWForm * hwform)
 QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 {
 	QStringList sl;
-	sl.push_back("eaddteam");
+	sl.push_back(QString("eaddteam %1").arg(teamColor.rgb() & 0xffffff));
 	if (m_netID)
 		sl.push_back("erdriven");
-	sl.push_back(QString("ecolor %1").arg(teamColor.rgb() & 0xffffff));
 	sl.push_back("ename team " + TeamName);
 
 	for (int i = 0; i < numHedgehogs; i++)
