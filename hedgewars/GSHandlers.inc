@@ -874,19 +874,18 @@ if (Gear^.Timer = 0) or (currsorter <> Gear) then
 end;
 
 procedure doStepTeamHealthSorter(Gear: PGear);
-var team: PTeam;
-    i, t: Longword;
+var i, t: Longword;
 begin
 AllInactive:= false;
-team:= TeamsList;
 i:= 0;
-while team <> nil do
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
       begin
-      thexchar[i].oy:= team^.DrawHealthY;
-      thexchar[i].team:= team;
+      thexchar[i].oy:= DrawHealthY;
+      thexchar[i].team:= TeamsArray[t];
       inc(i);
-      team:= team^.Next
       end;
+
 thexchcnt:= i;
 for i:= 1 to thexchcnt do
     for t:= 0 to thexchcnt - 2 do
@@ -896,6 +895,7 @@ for i:= 1 to thexchcnt do
            thexchar[t]:= thexchar[Succ(t)];
            thexchar[Succ(t)]:= thexchar[5]
            end;
+           
 t:= cScreenHeight - 4;
 for i:= 0 to Pred(thexchcnt) do
     with thexchar[i] do
@@ -903,6 +903,7 @@ for i:= 0 to Pred(thexchcnt) do
          dec(t, team^.HealthRect.h + 2);
          ny:= t
          end;
+         
 Gear^.Timer:= 640;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear

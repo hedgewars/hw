@@ -132,7 +132,7 @@ var i: TStuff;
     tmpsurf: PSDL_Surface;
 
     procedure WriteNames(Font: THWFont);
-    var Team: PTeam;
+    var t: LongInt;
         i: LongInt;
         r, rr: TSDL_Rect;
         drY: LongInt;
@@ -140,81 +140,77 @@ var i: TStuff;
     r.x:= 0;
     r.y:= 272;
     drY:= cScreenHeight - 4;
-    Team:= TeamsList;
-    while Team<>nil do
+    for t:= 0 to Pred(TeamsCount) do
+     with TeamsArray[t]^ do
       begin
       r.w:= 104;
-      Team^.NameTag:= RenderString(Team^.TeamName, Team^.Color, Font);
+      NameTag:= RenderString(TeamName, Color, Font);
       r.w:= cTeamHealthWidth + 5;
-      r.h:= Team^.NameTag^.h;
+      r.h:= NameTag^.h;
       DrawRoundRect(@r, cWhiteColor, cColorNearBlack, StoreSurface, true);
-      Team^.HealthRect:= r;
+      HealthRect:= r;
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Team^.AdjColor, Team^.AdjColor, StoreSurface, false);
+      DrawRoundRect(@rr, AdjColor, AdjColor, StoreSurface, false);
       inc(r.y, r.h);
       dec(drY, r.h + 2);
-      Team^.DrawHealthY:= drY;
+      DrawHealthY:= drY;
       for i:= 0 to 7 do
-          with Team^.Hedgehogs[i] do
+          with Hedgehogs[i] do
                if Gear <> nil then
-                  NameTag:= RenderString(Name, Team^.Color, fnt16);
-      Team:= Team^.Next
+                  NameTag:= RenderString(Name, Color, fnt16);
       end;
     end;
 
     procedure MakeCrossHairs;
-    var Team: PTeam;
+    var t: LongInt;
         tmpsurf: PSDL_Surface;
         s: string;
     begin
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
     tmpsurf:= LoadImage(s, true, true, false);
 
-    Team:= TeamsList;
-    while Team<>nil do
+    for t:= 0 to Pred(TeamsCount) do
+      with TeamsArray[t]^ do
       begin
-      Team^.CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, tmpsurf^.w, tmpsurf^.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
-      TryDo(Team^.CrosshairSurf <> nil, errmsgCreateSurface, true);
-      SDL_FillRect(Team^.CrosshairSurf, nil, Team^.AdjColor);
-      SDL_UpperBlit(tmpsurf, nil, Team^.CrosshairSurf, nil);
-      TryDo(SDL_SetColorKey(Team^.CrosshairSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-      Team:= Team^.Next
+      CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, tmpsurf^.w, tmpsurf^.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
+      TryDo(CrosshairSurf <> nil, errmsgCreateSurface, true);
+      SDL_FillRect(CrosshairSurf, nil, AdjColor);
+      SDL_UpperBlit(tmpsurf, nil, CrosshairSurf, nil);
+      TryDo(SDL_SetColorKey(CrosshairSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
       end;
 
     SDL_FreeSurface(tmpsurf)
     end;
 
     procedure InitHealth;
-    var p: PTeam;
-        i: LongInt;
+    var i, t: LongInt;
     begin
-    p:= TeamsList;
-    while p <> nil do
+    for t:= 0 to Pred(TeamsCount) do
+     if TeamsArray[t] <> nil then
+      with TeamsArray[t]^ do
           begin
           for i:= 0 to cMaxHHIndex do
-              if p^.Hedgehogs[i].Gear <> nil then
-                 RenderHealth(p^.Hedgehogs[i]);
-          p:= p^.Next
+              if Hedgehogs[i].Gear <> nil then
+                 RenderHealth(Hedgehogs[i]);
           end
     end;
 
     procedure LoadGraves;
-    var p: PTeam;
-        l: LongInt;
+    var t, l: LongInt;
     begin
-    p:= TeamsList;
     l:= 512;
-    while p <> nil do
+    for t:= 0 to Pred(TeamsCount) do
+     if TeamsArray[t] <> nil then
+      with TeamsArray[t]^ do
           begin
           dec(l, 32);
-          if p^.GraveName = '' then p^.GraveName:= 'Simple';
-          LoadToSurface(Pathz[ptGraves] + '/' + p^.GraveName, StoreSurface, l, 512);
-          p^.GraveRect.x:= l;
-          p^.GraveRect.y:= 512;
-          p^.GraveRect.w:= 32;
-          p^.GraveRect.h:= 256;
-          p:= p^.Next
+          if GraveName = '' then GraveName:= 'Simple';
+          LoadToSurface(Pathz[ptGraves] + '/' + GraveName, StoreSurface, l, 512);
+          GraveRect.x:= l;
+          GraveRect.y:= 512;
+          GraveRect.w:= 32;
+          GraveRect.h:= 256;
           end
     end;
 

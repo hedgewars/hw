@@ -153,7 +153,6 @@ procedure MoveCamera; forward;
 procedure DrawWorld(Lag: LongInt; Surface: PSDL_Surface);
 var i, t: LongInt;
     r: TSDL_Rect;
-    team: PTeam;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
@@ -273,25 +272,24 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
             end;
 
 // Teams Healths
-team:= TeamsList;
-while team <> nil do
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
       begin
-      r.x:= cScreenWidth div 2 - team^.NameTag^.w - 3;
-      r.y:= team^.DrawHealthY;
-      r.w:= team^.NameTag^.w;
-      r.h:= team^.NameTag^.h;
-      SDL_UpperBlit(team^.NameTag, nil, Surface, @r);
-      r:= team^.HealthRect;
-      r.w:= 2 + team^.TeamHealthBarWidth;
+      r.x:= cScreenWidth div 2 - NameTag^.w - 3;
+      r.y:= DrawHealthY;
+      r.w:= NameTag^.w;
+      r.h:= NameTag^.h;
+      SDL_UpperBlit(NameTag, nil, Surface, @r);
+      r:= HealthRect;
+      r.w:= 2 + TeamHealthBarWidth;
       DrawFromStoreRect(cScreenWidth div 2,
-                        Team^.DrawHealthY,
+                        DrawHealthY,
                         @r, Surface);
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-      DrawFromStoreRect(cScreenWidth div 2 + team^.TeamHealthBarWidth + 2,
-                        Team^.DrawHealthY,
+      DrawFromStoreRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
+                        DrawHealthY,
                         @r, Surface);
-      team:= team^.Next
       end;
 
 // Lag alert

@@ -69,27 +69,25 @@ var bonuses: record
                     end = (X: 0; Y: 0; Radius: 0);
 
 procedure FillTargets;
-var t: PTeam;
-    i: Longword;
+var i, t: Longword;
 begin
 Targets.Count:= 0;
-t:= TeamsList;
-while t <> nil do
+for t:= 0 to Pred(TeamsCount) do
+    with TeamsArray[t]^ do
       begin
       for i:= 0 to cMaxHHIndex do
-          if (t^.Hedgehogs[i].Gear <> nil)
-             and (t^.Hedgehogs[i].Gear <> ThinkingHH) then
+          if (Hedgehogs[i].Gear <> nil)
+             and (Hedgehogs[i].Gear <> ThinkingHH) then
              begin
-             with Targets.ar[Targets.Count], t^.Hedgehogs[i] do
+             with Targets.ar[Targets.Count], Hedgehogs[i] do
                   begin
                   Point.X:= hwRound(Gear^.X);
                   Point.Y:= hwRound(Gear^.Y);
-                  if t^.Color <> CurrentTeam^.Color then Score:=  Gear^.Health
-                                                    else Score:= -Gear^.Health
+                  if Color <> CurrentTeam^.Color then Score:=  Gear^.Health
+                                                 else Score:= -Gear^.Health
                   end;
              inc(Targets.Count)
              end;
-      t:= t^.Next
       end
 end;
 

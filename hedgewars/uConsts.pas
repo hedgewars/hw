@@ -115,6 +115,7 @@ const
 
       cTransparentColor: Longword = $000000;
 
+      cMaxTeams        = 6;  
       cMaxHHIndex      = 7;
       cMaxHHs          = 30;
       cMaxSpawnPoints  = 1024;

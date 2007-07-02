@@ -46,15 +46,11 @@ if isDeveloperMode then
    end
 end;
 
-const TeamsCount: Longword = 0;
-
 procedure chAddTeam(var s: shortstring);
 begin
 if isDeveloperMode then
    begin
-   inc(TeamsCount);
    ParseCommand('ammstore 93919294221912103323', true);
-   TryDo(TeamsCount <= 6, 'Too many teams', true);
    AddTeam;
 
 

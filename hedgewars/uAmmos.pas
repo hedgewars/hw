@@ -79,16 +79,15 @@ exit(StoresList[num])
 end;
 
 procedure AssignStores;
-var tteam: PTeam;
+var t: LongInt;
     i: Longword;
 begin
-tteam:= TeamsList;
-while tteam <> nil do
+for t:= 0 to Pred(TeamsCount) do
+   with TeamsArray[t]^ do
       begin
       for i:= 0 to cMaxHHIndex do
-          if tteam^.Hedgehogs[i].Gear <> nil then
-             tteam^.Hedgehogs[i].Ammo:= GetAmmoByNum(tteam^.Hedgehogs[i].AmmoStore);
-      tteam:= tteam^.Next
+          if Hedgehogs[i].Gear <> nil then
+             Hedgehogs[i].Ammo:= GetAmmoByNum(Hedgehogs[i].AmmoStore);
       end
 end;
 

@@ -488,25 +488,22 @@ AddProgress
 end;
 
 procedure MakeFortsMap;
-var p: PTeam;
-    tmpsurf: PSDL_Surface;
+var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Generating forts land...');
-p:= TeamsList;
-TryDo(p <> nil, 'No teams on map!', true);
+TryDo(TeamsCount = 2, 'More or less than 2 teams on map in forts mode!', true);
+
 with PixelFormat^ do
      LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
 SDL_FillRect(LandSurface, nil, 0);
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p^.FortName + 'L', false, true, true);
+
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[0]^.FortName + 'L', false, true, true);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-p:= p^.Next;
-TryDo(p <> nil, 'Only one team on map!', true);
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + p^.FortName + 'R', false, true, true);
+
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[1]^.FortName + 'R', false, true, true);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
-p:= p^.Next;
-TryDo(p = nil, 'More than 2 teams on map in forts mode!', true);
 end;
 
 procedure LoadMap;

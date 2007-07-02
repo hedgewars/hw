@@ -774,37 +774,34 @@ SetAllToActive
 end;
 
 procedure AssignHHCoords;
-var Team: PTeam;
-    i, t: LongInt;
+var i, t, p: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PGear;
     Count: Longword;
 begin
-Team:= TeamsList;
-
 if (GameFlags and gfForts) <> 0 then
    begin
    t:= 0;
-   while Team <> nil do
+   for p:= 0 to Pred(TeamsCount) do
+     with TeamsArray[p]^ do
       begin
       for i:= 0 to cMaxHHIndex do
-          with Team^.Hedgehogs[i] do
+          with Hedgehogs[i] do
                if Gear <> nil then FindPlace(Gear, false, t, t + 1024);
       inc(t, 1024);
-      Team:= Team^.Next
       end
    end else // mix hedgehogs
    begin
    Count:= 0;
-   while Team <> nil do
+   for p:= 0 to Pred(TeamsCount) do
+     with TeamsArray[p]^ do
       begin
       for i:= 0 to cMaxHHIndex do
-          with Team^.Hedgehogs[i] do
+          with Hedgehogs[i] do
                if Gear <> nil then
                   begin
                   ar[Count]:= Gear;
                   inc(Count)
                   end;
-      Team:= Team^.Next
       end;
 
    while (Count > 0) do
