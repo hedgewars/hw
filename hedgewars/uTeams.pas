@@ -48,7 +48,7 @@ type PHedgehog = ^THedgehog;
              ExtDriven: boolean;
              Binds: TBinds;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-             CurrHedgehog: LongInt;
+             CurrHedgehog: LongWord;
              NameTag: PSDL_Surface;
              CrosshairSurf: PSDL_Surface;
              GraveRect, HealthRect: TSDL_Rect;
@@ -64,7 +64,7 @@ type PHedgehog = ^THedgehog;
              Color, AdjColor: Longword;
              Teams: array[0..Pred(cMaxTeams)] of PTeam;
              TeamsNumber: Longword;
-             CurrTeam: LongInt;
+             CurrTeam: LongWord;
              ClanHealth: LongInt;
              ClanIndex: LongInt;
              end;
@@ -132,7 +132,7 @@ SendStats
 end;
 
 procedure SwitchHedgehog;
-var c: LongInt;
+var c: LongWord;
     t: LongWord;
     g: PGear;
 begin
