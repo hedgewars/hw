@@ -85,12 +85,21 @@ procedure FreeTeamsList; forward;
 function CheckForWin: boolean;
 var team, AliveTeam: PTeam;
     s: shortstring;
+    t, AliveCount: LongInt;
 begin
-if TeamsCount >= 2 then exit(false);
+AliveCount:= 0;
+for t:= 0 to Pred(TeamsCount) do
+    if TeamsArray[t]^.TeamHealth > 0 then
+       begin
+       inc(AliveCount);
+       AliveTeam:= TeamsArray[t]
+       end;
+
+if AliveCount >= 2 then exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
-if TeamsCount = 0 then
+if AliveCount = 0 then
    begin // draw
    AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
    SendStat(siGameResult, trmsg[sidDraw]);
