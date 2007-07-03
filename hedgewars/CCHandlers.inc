@@ -47,18 +47,17 @@ if isDeveloperMode then
 end;
 
 procedure chAddTeam(var s: shortstring);
+var Color: Longword;
 begin
 if isDeveloperMode then
    begin
    ParseCommand('ammstore 93919294221912103323', true);
-   AddTeam;
+   val(s, Color);
+   TryDo(Color <> 0, 'Error: black team color', true);
 
+   AddTeam(Color);
 
-   if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
-   val(s, CurrentTeam^.Color);
-   TryDo(CurrentTeam^.Color <> 0, 'Error: black team color', true);
-   CurrentTeam^.AdjColor:= CurrentTeam^.Color;
-   AdjustColor(CurrentTeam^.AdjColor)
+   if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
    end
 end;
 

@@ -26,6 +26,7 @@ type PHHAmmo = ^THHAmmo;
 
 type PHedgehog = ^THedgehog;
      PTeam     = ^TTeam;
+     PClan     = ^TClan;
      THedgehog = record
                  Name: string[MAXNAMELEN];
                  Gear: PGear;
@@ -42,7 +43,7 @@ type PHedgehog = ^THedgehog;
                  MaxStepDamage: Longword;
                  end;
      TTeam = record
-             Color, AdjColor: Longword;
+             Clan: PClan;
              TeamName: string[MAXNAMELEN];
              ExtDriven: boolean;
              Binds: TBinds;
@@ -59,13 +60,21 @@ type PHedgehog = ^THedgehog;
              AttackBar: LongWord;
              HedgehogsNumber: byte;
              end;
+     TClan = record
+             Color, AdjColor: Longword;
+             Teams: array[0..Pred(cMaxTeams)] of PTeam;
+             TeamsNumber: Longword;
+             ClanHealth: LongInt;
+             end;
 
 var CurrentTeam: PTeam = nil;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword = 0;
+    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+    ClansCount: Longword = 0;
     CurMinAngle, CurMaxAngle: Longword;
 
-function AddTeam: PTeam;
+function AddTeam(TeamColor: Longword): PTeam;
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
@@ -83,16 +92,17 @@ const MaxTeamHealth: LongInt = 0;
 procedure FreeTeamsList; forward;
 
 function CheckForWin: boolean;
-var team, AliveTeam: PTeam;
+var team: PTeam;
+    AliveClan: PClan;
     s: shortstring;
     t, AliveCount: LongInt;
 begin
 AliveCount:= 0;
-for t:= 0 to Pred(TeamsCount) do
-    if TeamsArray[t]^.TeamHealth > 0 then
+for t:= 0 to Pred(ClansCount) do
+    if ClansArray[t]^.ClanHealth > 0 then
        begin
        inc(AliveCount);
-       AliveTeam:= TeamsArray[t]
+       AliveClan:= ClansArray[t]
        end;
 
 if AliveCount >= 2 then exit(false);
@@ -105,12 +115,17 @@ if AliveCount = 0 then
    SendStat(siGameResult, trmsg[sidDraw]);
    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
    end else // win
-   begin
-   s:= Format(trmsg[sidWinner], TeamsArray[0]^.TeamName);
-   AddCaption(s, $FFFFFF, capgrpGameState);
-   SendStat(siGameResult, s);
-   AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
-   end;
+   with AliveClan^ do
+     begin
+     if TeamsNumber = 1 then
+        s:= Format(trmsg[sidWinner], Teams[0]^.TeamName)  // team wins
+     else
+        s:= Format(trmsg[sidWinner], Teams[0]^.TeamName); // clan wins
+
+     AddCaption(s, $FFFFFF, capgrpGameState);
+     SendStat(siGameResult, s);
+     AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
+     end;
 SendStats
 end;
 
@@ -167,8 +182,9 @@ bShowFinger:= true;
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 
-function AddTeam: PTeam;
+function AddTeam(TeamColor: Longword): PTeam;
 var Result: PTeam;
+    c: LongInt;
 begin
 TryDo(TeamsCount <= cMaxTeams, 'Too many teams', true);
 New(Result);
@@ -179,6 +195,31 @@ Result^.CurrHedgehog:= cMaxHHIndex;
 
 TeamsArray[TeamsCount]:= Result;
 inc(TeamsCount);
+
+c:= Pred(ClansCount);
+while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
+if c < 0 then
+   begin
+   new(Result^.Clan);
+   FillChar(Result^.Clan^, sizeof(TClan), 0);
+   ClansArray[ClansCount]:= Result^.Clan;
+   inc(ClansCount);
+   with Result^.Clan^ do
+        begin
+        Color:= TeamColor;
+        AdjColor:= Color;
+        AdjustColor(AdjColor);
+        end
+   end else
+   begin
+   Result^.Clan:= ClansArray[c];
+   end;
+
+with Result^.Clan^ do
+    begin
+    Teams[TeamsNumber]:= Result;
+    inc(TeamsNumber)
+    end;
 
 CurrentTeam:= Result;
 AddTeam:= Result
@@ -244,7 +285,7 @@ with Ammo^[CurSlot, CurAmmo] do
         s:= s + ' (' + IntToStr(Count) + ')';
      if (Propz and ammoprop_Timerable) <> 0 then
         s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-     AddCaption(s, Team^.Color, capgrpAmmoinfo);
+     AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
      if (Propz and ammoprop_NeedTarget) <> 0
         then begin
         Gear^.State:= Gear^.State or      gstHHChooseTarget;
@@ -267,6 +308,17 @@ for i:= 0 to cMaxHHIndex do
 TeamSize:= Result
 end;
 
+procedure RecountClanHealth(clan: PClan);
+var i: LongInt;
+begin
+with clan^ do
+    begin
+    ClanHealth:= 0;
+    for i:= 0 to Pred(TeamsNumber) do
+        inc(ClanHealth, Teams[i]^.TeamHealth)
+    end
+end;
+
 procedure RecountTeamHealth(team: PTeam);
 var i: LongInt;
 begin
@@ -283,6 +335,9 @@ with team^ do
         RecountAllTeamsHealth;
         end else TeamHealthBarWidth:= (TeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
      end;
+
+RecountClanHealth(team^.Clan);
+
 // FIXME: at the game init, gtTeamHealthSorters are created for each team, and they work simultaneously
 AddGear(0, 0, gtTeamHealthSorter, 0, _0, _0, 0)
 end;

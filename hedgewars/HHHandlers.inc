@@ -115,13 +115,13 @@ case Gear^.Pos of
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog), a);
                     s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Color, capgrpAmmoinfo);
+                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Color, capgrpAmmoinfo);
+                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(PHedgehog(HH^.Hedgehog)^);
                     RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team)
                     end;

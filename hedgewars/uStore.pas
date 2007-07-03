@@ -144,21 +144,21 @@ var i: TStuff;
      with TeamsArray[t]^ do
       begin
       r.w:= 104;
-      NameTag:= RenderString(TeamName, Color, Font);
+      NameTag:= RenderString(TeamName, Clan^.Color, Font);
       r.w:= cTeamHealthWidth + 5;
       r.h:= NameTag^.h;
       DrawRoundRect(@r, cWhiteColor, cColorNearBlack, StoreSurface, true);
       HealthRect:= r;
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, AdjColor, AdjColor, StoreSurface, false);
+      DrawRoundRect(@rr, Clan^.AdjColor, Clan^.AdjColor, StoreSurface, false);
       inc(r.y, r.h);
       dec(drY, r.h + 2);
       DrawHealthY:= drY;
       for i:= 0 to 7 do
           with Hedgehogs[i] do
                if Gear <> nil then
-                  NameTag:= RenderString(Name, Color, fnt16);
+                  NameTag:= RenderString(Name, Clan^.Color, fnt16);
       end;
     end;
 
@@ -175,7 +175,7 @@ var i: TStuff;
       begin
       CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, tmpsurf^.w, tmpsurf^.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
       TryDo(CrosshairSurf <> nil, errmsgCreateSurface, true);
-      SDL_FillRect(CrosshairSurf, nil, AdjColor);
+      SDL_FillRect(CrosshairSurf, nil, Clan^.AdjColor);
       SDL_UpperBlit(tmpsurf, nil, CrosshairSurf, nil);
       TryDo(SDL_SetColorKey(CrosshairSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
       end;
@@ -453,7 +453,7 @@ var s: shortstring;
 begin
 str(Hedgehog.Gear^.Health, s);
 if Hedgehog.HealthTag <> nil then SDL_FreeSurface(Hedgehog.HealthTag);
-Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Color, fnt16)
+Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function  LoadImage(const filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;

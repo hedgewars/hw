@@ -83,8 +83,8 @@ for t:= 0 to Pred(TeamsCount) do
                   begin
                   Point.X:= hwRound(Gear^.X);
                   Point.Y:= hwRound(Gear^.Y);
-                  if Color <> CurrentTeam^.Color then Score:=  Gear^.Health
-                                                 else Score:= -Gear^.Health
+                  if Clan <> CurrentTeam^.Clan then Score:=  Gear^.Health
+                                               else Score:= -Gear^.Health
                   end;
              inc(Targets.Count)
              end;
@@ -93,7 +93,7 @@ end;
 
 procedure FillBonuses(isAfterAttack: boolean);
 var Gear: PGear;
-    MyColor: Longword;
+    MyClan: PClan;
 
     procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
     begin
@@ -107,7 +107,7 @@ var Gear: PGear;
 
 begin
 bonuses.Count:= 0;
-MyColor:= PHedgehog(ThinkingHH^.Hedgehog)^.Team^.Color;
+MyClan:= PHedgehog(ThinkingHH^.Hedgehog)^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
       begin
@@ -119,8 +119,8 @@ while Gear <> nil do
            gtHedgehog: begin
                        if Gear^.Damage >= Gear^.Health then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25) else
                           if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-                             if (MyColor = PHedgehog(Gear^.Hedgehog)^.Team^.Color) then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
-                                                                                   else AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
+                             if (MyClan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan) then AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
+                                                                                 else AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
                        end;
            end;
       Gear:= Gear^.NextGear
