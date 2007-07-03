@@ -58,13 +58,15 @@ type PHedgehog = ^THedgehog;
              TeamHealthBarWidth: LongInt;
              DrawHealthY: LongInt;
              AttackBar: LongWord;
-             HedgehogsNumber: byte;
+             HedgehogsNumber: Longword;
              end;
      TClan = record
              Color, AdjColor: Longword;
              Teams: array[0..Pred(cMaxTeams)] of PTeam;
              TeamsNumber: Longword;
+             CurrTeam: LongInt;
              ClanHealth: LongInt;
+             ClanIndex: LongInt;
              end;
 
 var CurrentTeam: PTeam = nil;
@@ -130,7 +132,7 @@ SendStats
 end;
 
 procedure SwitchHedgehog;
-var th: LongInt;
+var c: LongInt;
     t: LongWord;
     g: PGear;
 begin
@@ -148,14 +150,19 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
         InsertGearToList(Gear)
         end;
 
-t:= 0;
-while CurrentTeam <> TeamsArray[t] do inc(t);
-CurrentTeam:= TeamsArray[(t + 1) mod TeamsCount];
-
-th:= CurrentTeam^.CurrHedgehog;
+c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-  CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (cMaxHHIndex + 1);
-until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (CurrentTeam^.CurrHedgehog = th);
+  c:= Succ(c) mod ClansCount;
+  with ClansArray[c]^ do
+    repeat
+    CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
+    CurrentTeam:= Teams[CurrTeam];
+    with CurrentTeam^ do
+      repeat
+      CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+      until Hedgehogs[CurrHedgehog].Gear <> nil;
+    until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
+until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      begin
@@ -206,6 +213,7 @@ if c < 0 then
    inc(ClansCount);
    with Result^.Clan^ do
         begin
+        ClanIndex:= Pred(ClansCount);
         Color:= TeamColor;
         AdjColor:= Color;
         AdjustColor(AdjColor);
