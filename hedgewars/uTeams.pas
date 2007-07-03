@@ -135,6 +135,7 @@ procedure SwitchHedgehog;
 var c: LongWord;
     t: LongWord;
     g: PGear;
+    PrevHH, PrevTeam: LongWord;
 begin
 FreeActionsList;
 TargetPoint.X:= NoPointX;
@@ -155,13 +156,17 @@ repeat
   c:= Succ(c) mod ClansCount;
   with ClansArray[c]^ do
     repeat
+    PrevTeam:= CurrTeam;
     CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
     CurrentTeam:= Teams[CurrTeam];
     with CurrentTeam^ do
+      begin
+      PrevHH:= CurrHedgehog;
       repeat
-      CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-      until Hedgehogs[CurrHedgehog].Gear <> nil;
-    until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
+        CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+      until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
+      end
+    until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
 until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
 with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
