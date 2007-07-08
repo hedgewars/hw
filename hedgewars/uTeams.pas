@@ -77,7 +77,6 @@ var CurrentTeam: PTeam = nil;
     CurMinAngle, CurMaxAngle: Longword;
 
 function AddTeam(TeamColor: Longword): PTeam;
-procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchHedgehog;
 procedure InitTeams;
 function  TeamSize(p: PTeam): Longword;
@@ -147,6 +146,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
         AttacksNum:= 0;
         Gear^.Message:= 0;
         Gear^.Z:= cHHZ;
+        SwitchNotHoldedAmmo(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         RemoveGearFromList(Gear);
         InsertGearToList(Gear)
         end;
@@ -266,50 +266,6 @@ for t:= 0 to Pred(TeamsCount) do
       if th > MaxTeamHealth then MaxTeamHealth:= th;
       end;
 RecountAllTeamsHealth
-end;
-
-procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
-var s: shortstring;
-begin
-TargetPoint.X:= NoPointX;
-
-with Hedgehog do
-     begin
-     if Ammo^[CurSlot, CurAmmo].Count = 0 then
-        begin
-        CurAmmo:= 0;
-        CurSlot:= 0;
-        while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
-        end;
-
-with Ammo^[CurSlot, CurAmmo] do
-     begin
-     CurMinAngle:= Ammoz[AmmoType].minAngle;
-     if Ammoz[AmmoType].maxAngle <> 0 then CurMaxAngle:= Ammoz[AmmoType].maxAngle
-                                      else CurMaxAngle:= cMaxAngle;
-     with Hedgehog.Gear^ do
-        begin
-        if Angle < CurMinAngle then Angle:= CurMinAngle;
-        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
-        end;
-
-     s:= trammo[Ammoz[AmmoType].NameId];
-     if Count <> AMMO_INFINITE then
-        s:= s + ' (' + IntToStr(Count) + ')';
-     if (Propz and ammoprop_Timerable) <> 0 then
-        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-     AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
-     if (Propz and ammoprop_NeedTarget) <> 0
-        then begin
-        Gear^.State:= Gear^.State or      gstHHChooseTarget;
-        isCursorVisible:= true
-        end else begin
-        Gear^.State:= Gear^.State and not gstHHChooseTarget;
-        isCursorVisible:= false
-        end;
-     ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
-     end
-     end
 end;
 
 function  TeamSize(p: PTeam): Longword;

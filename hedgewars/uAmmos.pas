@@ -23,13 +23,15 @@ uses uConsts, uTeams;
 
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
-procedure AddAmmo(Hedgehog: pointer; ammo: TAmmoType);
-function  HHHasAmmo(Hedgehog: pointer; Ammo: TAmmoType): boolean;
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
+function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
+procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
+procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
 
 implementation
-uses uMisc, uGears;
+uses uMisc, uGears, uWorld, uLocale;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     StoreCnt: Longword = 0;
@@ -91,13 +93,13 @@ for t:= 0 to Pred(TeamsCount) do
       end
 end;
 
-procedure AddAmmo(Hedgehog: pointer; ammo: TAmmoType);
+procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 var ammos: TAmmoCounts;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
 begin
 FillChar(ammos, sizeof(ammos), 0);
-hhammo:= PHedgehog(Hedgehog)^.Ammo;
+hhammo:= Hedgehog.Ammo;
 
 for slot:= 0 to cMaxSlotIndex do
     for ami:= 0 to cMaxSlotAmmoIndex do
@@ -118,7 +120,7 @@ begin
       while (not b) and (ami < cMaxSlotAmmoIndex) do
           if (Ammo^[Slot, ami].Count = 0)
              and (Ammo^[Slot, ami + 1].Count > 0) then b:= true
-                                                 else inc(ami);
+                                                  else inc(ami);
       if b then // there's a free item in ammo stack
          begin
          Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
@@ -143,18 +145,73 @@ with Hedgehog do
      end
 end;
 
-function  HHHasAmmo(Hedgehog: pointer; Ammo: TAmmoType): boolean;
+function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
 var slot, ami: LongInt;
 begin
 Slot:= Ammoz[Ammo].Slot;
 ami:= 0;
 while (ami <= cMaxSlotAmmoIndex) do
       begin
-      with PHedgehog(Hedgehog)^.Ammo^[Slot, ami] do
+      with Hedgehog.Ammo^[Slot, ami] do
             if (AmmoType = Ammo) and (Count > 0) then exit(true);
       inc(ami)
       end;
 HHHasAmmo:= false
+end;
+
+procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
+var s: shortstring;
+begin
+TargetPoint.X:= NoPointX;
+
+with Hedgehog do
+     begin
+     if (Ammo^[CurSlot, CurAmmo].Count = 0)then
+        begin
+        CurAmmo:= 0;
+        CurSlot:= 0;
+        while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
+        end;
+
+with Ammo^[CurSlot, CurAmmo] do
+     begin
+     CurMinAngle:= Ammoz[AmmoType].minAngle;
+     if Ammoz[AmmoType].maxAngle <> 0 then CurMaxAngle:= Ammoz[AmmoType].maxAngle
+                                      else CurMaxAngle:= cMaxAngle;
+     with Hedgehog.Gear^ do
+        begin
+        if Angle < CurMinAngle then Angle:= CurMinAngle;
+        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
+        end;
+
+     s:= trammo[Ammoz[AmmoType].NameId];
+     if Count <> AMMO_INFINITE then
+        s:= s + ' (' + IntToStr(Count) + ')';
+     if (Propz and ammoprop_Timerable) <> 0 then
+        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
+     AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
+     if (Propz and ammoprop_NeedTarget) <> 0
+        then begin
+        Gear^.State:= Gear^.State or      gstHHChooseTarget;
+        isCursorVisible:= true
+        end else begin
+        Gear^.State:= Gear^.State and not gstHHChooseTarget;
+        isCursorVisible:= false
+        end;
+     ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
+     end
+     end
+end;
+
+procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
+begin
+with Hedgehog do
+     if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0 then
+        begin
+        CurAmmo:= 0;
+        CurSlot:= 0;
+        while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
+        end
 end;
 
 end.

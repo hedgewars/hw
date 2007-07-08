@@ -173,6 +173,7 @@ const
       ammoprop_AttackInMove = $00000010;
       ammoprop_NoCrosshair  = $00000040;
       ammoprop_AttackingPut = $00000080;
+      ammoprop_DontHold     = $00000100;
       AMMO_INFINITE = High(LongWord);
 
       EXPLAllDamageInRadius = $00000001;
@@ -408,7 +409,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Power or
-                                                 ammoprop_NeedTarget;
+                                                 ammoprop_NeedTarget or
+                                                 ammoprop_DontHold;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -440,7 +442,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInMove or
-                                                 ammoprop_NoCrosshair;
+                                                 ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -455,7 +458,7 @@ const
                                   (NameId: sidSkip;
                                    Probability: 0;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: 0;
+                                   Ammo: (Propz: ammoprop_DontHold;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -471,7 +474,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
-                                                 ammoprop_AttackInMove;
+                                                 ammoprop_AttackInMove or
+                                                 ammoprop_DontHold;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -486,7 +490,8 @@ const
                                   (NameId: sidMine;
                                    Probability: 100;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: ammoprop_NoCrosshair;
+                                   Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -517,7 +522,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
-                                                 ammoprop_AttackInMove;
+                                                 ammoprop_AttackInMove or
+                                                 ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -549,7 +555,7 @@ const
                                   (NameId: sidBaseballBat;
                                    Probability: 100;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: 0;
+                                   Ammo: (Propz: ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -566,7 +572,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInMove or
-                                                 ammoprop_NoCrosshair;
+                                                 ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -583,7 +590,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
-                                                 ammoprop_AttackingPut;
+                                                 ammoprop_AttackingPut or
+                                                 ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -600,7 +608,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
-                                                 ammoprop_AttackingPut;
+                                                 ammoprop_AttackingPut or
+                                                 ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -632,7 +641,8 @@ const
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
-                                                 ammoprop_AttackingPut;
+                                                 ammoprop_AttackingPut or
+                                                 ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -650,7 +660,8 @@ const
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_NoCrosshair or
                                                  ammoprop_NeedTarget or
-                                                 ammoprop_AttackingPut;
+                                                 ammoprop_AttackingPut or
+                                                 ammoprop_DontHold;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -666,7 +677,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
-                                                 ammoprop_NoCrosshair;
+                                                 ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
                                           Count: 3;
                                           NumPerTurn: 0;
                                           Timer: 0;

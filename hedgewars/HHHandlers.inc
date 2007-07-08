@@ -113,7 +113,7 @@ Gear^.Message:= gm_Destroy;
 case Gear^.Pos of
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
-                    AddAmmo(PHedgehog(HH^.Hedgehog), a);
+                    AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
                     s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                     AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
                     end;

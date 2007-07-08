@@ -308,7 +308,7 @@ if Targets.Count = 0 then
    end;
 FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(PHedgehog(Me^.Hedgehog), a);
+    CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(PHedgehog(Me^.Hedgehog)^, a);
 {$IFDEF DEBUGFILE}AddFileLog('Enter Think Thread');{$ENDIF}
 BeginThread(@Think, Me, ThinkThread)
 end;

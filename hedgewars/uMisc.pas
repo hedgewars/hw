@@ -61,7 +61,7 @@ var isCursorVisible : boolean = false;
     cExplosionBorderColor : LongWord = $808080;
 
     cShowFPS      : boolean = true;
-    cCaseFactor   : Longword = 3;  {1..10}
+    cCaseFactor   : Longword = 7;  {1..10}
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
     cSeed         : shortstring = '';
@@ -211,7 +211,7 @@ end;
 
 procedure SetLittle(var r: hwFloat);
 begin
-if not r.isNegative then r:= cLittle else r:= - cLittle
+r:= SignAs(cLittle, r)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
