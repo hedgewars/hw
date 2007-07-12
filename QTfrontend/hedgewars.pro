@@ -38,7 +38,8 @@ HEADERS += binds.h \
            newnetclient.h \
            netudpserver.h \
            netudpwidget.h \
-           chatwidget.h
+           chatwidget.h \
+           SDLs.h
            
            
 SOURCES += binds.cpp \
@@ -67,8 +68,11 @@ SOURCES += binds.cpp \
            newnetclient.cpp \
            netudpserver.cpp \
            netudpwidget.cpp \
-           chatwidget.cpp
+           chatwidget.cpp \
+           SDLs.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 
 RESOURCES += hedgewars.qrc
+
+LIBS += libSDL

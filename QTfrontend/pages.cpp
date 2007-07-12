@@ -41,6 +41,7 @@
 #include "fpsedit.h"
 #include "netudpwidget.h"
 #include "chatwidget.h"
+#include "SDLs.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -372,10 +373,8 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	GBAreslayout->addWidget(resolution);
 
 	CBResolution = new QComboBox(AGGroupBox);
-	CBResolution->addItem("640x480");
-	CBResolution->addItem("800x600");
-	CBResolution->addItem("1024x768");
-	CBResolution->addItem("1280x1024");
+	SDLInteraction sdli;
+	CBResolution->addItems(sdli.getResolutions());
 	GBAreslayout->addWidget(CBResolution);
 	GBAlayout->addLayout(GBAreslayout);
 

@@ -21,6 +21,7 @@
 
 #include <QSettings>
 #include <QStringList>
+#include <QRect>
 
 class HWForm;
 class QSettings;
@@ -32,7 +33,7 @@ class GameUIConfig : public QSettings
 public:
 	GameUIConfig(HWForm * FormWidgets, const QString & fileName);
 	QStringList GetTeamsList();
-	int vid_Resolution();
+	QRect vid_Resolution();
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
 	bool isShowFPSEnabled();

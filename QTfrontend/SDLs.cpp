@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005-2007 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,37 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QDir>
-#include <QString>
+#include "SDLs.h"
 
-extern QDir * cfgdir;
-extern QDir * datadir;
-extern QDir * bindir;
-extern QStringList * Themes;
+#include "SDL.h"
 
-const QString cProtoVer("${HEDGEWARS_PROTO_VER}");
+SDLInteraction::SDLInteraction()
+{
+	SDL_Init(SDL_INIT_VIDEO);
+}
+
+SDLInteraction::~SDLInteraction()
+{
+	SDL_Quit();
+}
+
+QStringList SDLInteraction::getResolutions() const
+{
+	QStringList result;
+
+	SDL_Rect **modes;
+
+	modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+
+	if((modes == (SDL_Rect **)0) || (modes == (SDL_Rect **)-1))
+	{
+		result << "640x480";
+	} else
+	{
+		for(int i = 0; modes[i]; ++i)
+			if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
+				result << QString("%1x%2").arg(modes[i]->w).arg(modes[i]->h);
+	}
+
+	return result;
+}

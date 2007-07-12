@@ -31,7 +31,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 {
 	Form = FormWidgets;
 
-	Form->ui.pageOptions->CBResolution->setCurrentIndex(value("video/resolution").toUInt());
+	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
+	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
 	Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
 
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
@@ -58,7 +59,7 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::SaveOptions()
 {
-	setValue("video/resolution", vid_Resolution());
+	setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
 	setValue("video/fullscreen", vid_Fullscreen());
 
 	setValue("audio/sound", isSoundEnabled());
@@ -72,9 +73,16 @@ void GameUIConfig::SaveOptions()
 	setValue("misc/altdamage", isAltDamageEnabled());
 }
 
-int GameUIConfig::vid_Resolution()
+QRect GameUIConfig::vid_Resolution()
 {
-	return Form->ui.pageOptions->CBResolution->currentIndex();
+	QRect result(0, 0, 640, 480);
+	QStringList wh = Form->ui.pageOptions->CBResolution->currentText().split('x');
+	if (wh.size() == 2)
+	{
+		result.setWidth(wh[0].toInt());
+		result.setHeight(wh[1].toInt());
+	}
+	return result;
 }
 
 bool GameUIConfig::vid_Fullscreen()

@@ -211,9 +211,10 @@ void HWGame::onClientRead()
 QStringList HWGame::setArguments()
 {
 	QStringList arguments;
+	QRect resolution = config->vid_Resolution();
 	arguments << cfgdir->absolutePath();
-	arguments << resolutions[0][config->vid_Resolution()];
-	arguments << resolutions[1][config->vid_Resolution()];
+	arguments << QString::number(resolution.width());
+	arguments << QString::number(resolution.height());
 	arguments << "16"; // bpp
 	arguments << QString("%1").arg(ipc_port);
 	arguments << (config->vid_Fullscreen() ? "1" : "0");

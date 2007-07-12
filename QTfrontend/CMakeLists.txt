@@ -1,3 +1,4 @@
+# Configure for Qt4
 set(QT_MIN_VERSION "4.2.0")
 
 set(QT_USE_QTCORE TRUE)
@@ -10,6 +11,14 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE}) 
 
+# Configure for SDL
+find_package(SDL REQUIRED)
+
+if(SDL_INCLUDE_DIR)
+	include_directories(${SDL_INCLUDE_DIR})
+endif(SDL_INCLUDE_DIR)
+
+# Done
 include_directories(.)
 
 if(WIN32 AND NOT UNIX)
@@ -56,7 +65,8 @@ set(hwfr_src
 	netudpserver.cpp
 	netudpwidget.cpp
 	chatwidget.cpp
-	binds.cpp)
+	binds.cpp
+	SDLs.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -85,7 +95,8 @@ set(hwfr_moc_hdrs
 	newnetclient.h
 	netudpserver.h
 	netudpwidget.h
-	chatwidget.h)
+	chatwidget.h
+	SDLs.h)
 
 set(hwfr_hdrs
 	binds.h
@@ -109,14 +120,25 @@ add_executable(hedgewars WIN32
 	${hwfr_hdrs}
 	${hwfr_rez_src})
 	
-set(HW_LINK_LIBS ${QT_LIBRARIES})
+set(HW_LINK_LIBS 
+	${QT_LIBRARIES}
+	${SDL_LIBRARY}
+	)
 
 if(WIN32 AND NOT UNIX)
+	if(NOT SDL_LIBRARY)
+		set(HW_LINK_LIBS 
+			${HW_LINK_LIBS}
+			SDL
+			)
+	endif(NOT SDL_LIBRARY)
+
 	set(HW_LINK_LIBS 
 		${HW_LINK_LIBS}
 		ole32
 		winspool
-		uuid)
+		uuid
+		)
 endif(WIN32 AND NOT UNIX)
 
 target_link_libraries(hedgewars 

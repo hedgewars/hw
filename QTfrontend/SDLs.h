@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2005-2007 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,19 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QDir>
-#include <QString>
+#ifndef SDLS_H
+#define SDLS_H
 
-extern QDir * cfgdir;
-extern QDir * datadir;
-extern QDir * bindir;
-extern QStringList * Themes;
+#include <QStringList>
 
-const QString cProtoVer("${HEDGEWARS_PROTO_VER}");
+class SDLInteraction : public QObject
+{
+	Q_OBJECT
+
+	public:
+	SDLInteraction();
+	~SDLInteraction();
+	QStringList getResolutions() const;
+};
+
+#endif
