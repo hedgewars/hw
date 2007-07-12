@@ -289,6 +289,8 @@ var X, Y, dY: hwFloat;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
+if (Level > 3) then exit(BadTurn);
+
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
 
