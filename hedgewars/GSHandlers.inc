@@ -848,11 +848,13 @@ if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var thexchar: array[0..5] of record
-                             oy, ny: LongInt;
+const cSorterWorkTime = 640;
+var thexchar: array[0..cMaxTeams] of
+                             record
+                             dy, ny, dw: LongInt;
                              team: PTeam;
+                             SortFactor: QWord;
                              end;
-    thexchcnt: Longword;
     currsorter: PGear;
 
 procedure doStepTeamHealthSorterWork(Gear: PGear);
@@ -861,11 +863,14 @@ begin
 AllInactive:= false;
 dec(Gear^.Timer);
 if (Gear^.Timer and 15) = 0 then
-   for i:= 0 to Pred(thexchcnt) do
+   for i:= 0 to Pred(TeamsCount) do
        with thexchar[i] do
+            begin
             {$WARNINGS OFF}
-            team^.DrawHealthY:= ny + (oy - ny) * Gear^.Timer div 640;
+            team^.DrawHealthY:= ny + dy * Gear^.Timer div 640;
+            team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * Gear^.Timer div cSorterWorkTime;
             {$WARNINGS ON}
+            end;
 if (Gear^.Timer = 0) or (currsorter <> Gear) then
    begin
    if currsorter = Gear then currsorter:= nil;
@@ -875,36 +880,43 @@ end;
 
 procedure doStepTeamHealthSorter(Gear: PGear);
 var i, t: Longword;
+    b: boolean;
 begin
 AllInactive:= false;
-i:= 0;
+
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
+  with thexchar[t] do
       begin
-      thexchar[i].oy:= DrawHealthY;
-      thexchar[i].team:= TeamsArray[t];
-      inc(i);
+      dy:= TeamsArray[t]^.DrawHealthY;
+      dw:= TeamsArray[t]^.TeamHealthBarWidth - TeamsArray[t]^.NewTeamHealthBarWidth;
+      team:= TeamsArray[t];
+      SortFactor:= TeamsArray[t]^.Clan^.ClanHealth;
+      SortFactor:= (SortFactor shl  3) + TeamsArray[t]^.Clan^.ClanIndex;
+      SortFactor:= (SortFactor shl 30) + TeamsArray[t]^.TeamHealth;
       end;
 
-thexchcnt:= i;
-for i:= 1 to thexchcnt do
-    for t:= 0 to thexchcnt - 2 do
-        if thexchar[t].team^.TeamHealthBarWidth > thexchar[Succ(t)].team^.TeamHealthBarWidth then
+repeat
+    b:= true;
+    for t:= 0 to TeamsCount - 2 do
+        if (thexchar[t].SortFactor > thexchar[Succ(t)].SortFactor) then
            begin
-           thexchar[5]:= thexchar[t];
+           thexchar[cMaxTeams]:= thexchar[t];
            thexchar[t]:= thexchar[Succ(t)];
-           thexchar[Succ(t)]:= thexchar[5]
-           end;
-           
+           thexchar[Succ(t)]:= thexchar[cMaxTeams];
+           b:= false
+           end
+until b;
+
 t:= cScreenHeight - 4;
-for i:= 0 to Pred(thexchcnt) do
+for i:= 0 to Pred(TeamsCount) do
     with thexchar[i] do
          begin
          dec(t, team^.HealthRect.h + 2);
-         ny:= t
+         ny:= t;
+         dy:= dy - ny
          end;
          
-Gear^.Timer:= 640;
+Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear
 end;

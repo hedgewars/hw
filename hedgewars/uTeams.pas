@@ -55,7 +55,8 @@ type PHedgehog = ^THedgehog;
              GraveName: string;
              FortName: string;
              TeamHealth: LongInt;
-             TeamHealthBarWidth: LongInt;
+             TeamHealthBarWidth,
+             NewTeamHealthBarWidth: LongInt;
              DrawHealthY: LongInt;
              AttackBar: LongWord;
              HedgehogsNumber: Longword;
@@ -293,21 +294,20 @@ var i: LongInt;
 begin
 with team^ do
      begin
-     TeamHealthBarWidth:= 0;
+     NewTeamHealthBarWidth:= 0;
      for i:= 0 to cMaxHHIndex do
          if Hedgehogs[i].Gear <> nil then
-            inc(TeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
-     TeamHealth:= TeamHealthBarWidth;
-     if TeamHealthBarWidth > MaxTeamHealth then
+            inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
+     TeamHealth:= NewTeamHealthBarWidth;
+     if NewTeamHealthBarWidth > MaxTeamHealth then
         begin
-        MaxTeamHealth:= TeamHealthBarWidth;
+        MaxTeamHealth:= NewTeamHealthBarWidth;
         RecountAllTeamsHealth;
-        end else TeamHealthBarWidth:= (TeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
      end;
 
 RecountClanHealth(team^.Clan);
 
-// FIXME: at the game init, gtTeamHealthSorters are created for each team, and they work simultaneously
 AddGear(0, 0, gtTeamHealthSorter, 0, _0, _0, 0)
 end;
 
