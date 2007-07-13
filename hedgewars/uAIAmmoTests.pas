@@ -113,7 +113,7 @@ ap.ExplR:= 0;
 Result:= BadTurn;
 repeat
   rTime:= rTime + 300 + Level * 50 + random(300);
-  Vx:= - cWindSpeed * rTime * _0_5 + (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(rTime);
+  Vx:= - cWindSpeed * rTime * _0_5 + (int2hwFloat(Targ.X + AIrndSign(2)) - Me^.X) / int2hwFloat(rTime);
   Vy:= cGravity * rTime * _0_5 - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(rTime);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
@@ -281,6 +281,7 @@ TestFirePunch:= Result
 end;
 
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+const cShift = 4;
 var X, Y, dY: hwFloat;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
@@ -294,7 +295,7 @@ if (Level > 3) then exit(BadTurn);
 ap.AttackPutX:= Targ.X;
 ap.AttackPutY:= Targ.Y;
 
-X:= int2hwFloat(Targ.X - 135);
+X:= int2hwFloat(Targ.X - 135 - cShift); // hh center - cShift
 X:= X - cBombsSpeed * hwSqrt(int2hwFloat((Targ.Y + 128) * 2) / cGravity);
 Y:= -_128;
 dY:= _0;
@@ -336,7 +337,7 @@ for i:= 0 to 3 do
     if t > Result then
        begin
        Result:= t;
-       ap.AttackPutX:= Targ.X - 30 + i * 30
+       ap.AttackPutX:= Targ.X - 30 - cShift + i * 30
        end
     end;
 
