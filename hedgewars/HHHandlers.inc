@@ -327,11 +327,10 @@ end;
 procedure doStepHedgehogDriven(Gear: PGear);
 var t: PGear;
 begin
-if isInMultiShoot and (Gear^.Damage = 0) then
-   begin
-   exit
-   end;
-AllInactive:= false;
+if not isInMultiShoot then
+   AllInactive:= false
+else
+   Gear^.Message:= 0;
 
 if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    begin
@@ -387,9 +386,12 @@ if (Gear^.State and gstMoving) <> 0 then
    exit
    end;
 
-   HedgehogChAngle(Gear);
-   if StepTicks > 0 then dec(StepTicks);
-   if (StepTicks = 0) then HedgehogStep(Gear)
+   if not isInMultiShoot then
+      begin
+      HedgehogChAngle(Gear);
+      if StepTicks > 0 then dec(StepTicks);
+      if (StepTicks = 0) then HedgehogStep(Gear)
+      end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
