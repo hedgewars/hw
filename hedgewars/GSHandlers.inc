@@ -327,7 +327,7 @@ if (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) th
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDEagleShot(Gear: PGear);
+procedure doStepDEagleShotWork(Gear: PGear);
 var i, x, y: LongWord;
     oX, oY: hwFloat;
 begin
@@ -353,6 +353,12 @@ if Gear^.Damage > 0 then
    end;
 if (Gear^.Health <= 0) or (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) then
    DeleteGear(Gear)
+end;
+
+procedure doStepDEagleShot(Gear: PGear);
+begin
+PlaySound(sndGun, false);
+Gear^.doStep:= @doStepDEagleShotWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

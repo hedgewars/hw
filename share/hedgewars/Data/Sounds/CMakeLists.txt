@@ -2,6 +2,7 @@ install(FILES
 	explosion.ogg
 	graveimpact.ogg
 	grenadeimpact.ogg
+	gun.ogg
 	minetick.ogg
 	pickhammer.ogg
 	shotgunfire.ogg
