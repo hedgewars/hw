@@ -10,4 +10,5 @@ install(FILES
 	splash.ogg
 	throwpowerup.ogg
 	throwrelease.ogg
+	ufo.ogg
 	DESTINATION ${SHAREPATH}Data/Sounds)

@@ -54,7 +54,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
 
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
                    sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
-                   sndMineTick, sndPickhammer, sndGun);
+                   sndMineTick, sndPickhammer, sndGun, sndUFO);
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
@@ -346,7 +346,8 @@ const
                                        (FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGraveImpact
                                        (FileName:      'minetick.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMineTicks
                                        (FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndPickhammer
-                                       (FileName:           'gun.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndGun
+                                       (FileName:           'gun.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGun
+                                       (FileName:           'ufo.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndUFO
                                        );
 
       Ammoz: array [TAmmoType] of record

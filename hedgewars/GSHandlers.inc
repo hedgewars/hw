@@ -266,6 +266,7 @@ CheckCollision(Gear);
 dec(Gear^.Timer);
 if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
    begin
+   StopSound(sndUFO);
    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
    end;
@@ -287,6 +288,7 @@ if (Gear^.State and gstCollision) <> 0 then
 dec(Gear^.Timer);
 if Gear^.Timer = 0 then
    begin
+   PlaySound(sndUFO, true);
    Gear^.Timer:= 5000;
    Gear^.doStep:= @doStepUFOWork
    end;
