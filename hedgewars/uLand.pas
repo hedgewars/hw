@@ -395,11 +395,49 @@ with Template do
      end
 end;
 
+function CheckIntersect(V1, V2, V3, V4: TPoint): boolean;
+var c1, c2, dm: LongInt;
+begin
+dm:= (V4.y - V3.y) * (V2.x - V1.x) - (V4.x - V3.x) * (V2.y - V1.y);
+c1:= (V4.x - V3.x) * (V1.y - V3.y) - (V4.y - V3.y) * (V1.x - V3.x);
+if dm = 0 then exit(false);
+
+c2:= (V2.x - V3.x) * (V1.y - V3.y) - (V2.y - V3.y) * (V1.x - V3.x);
+if dm > 0 then
+   begin
+   if (c1 < 0) or (c1 > dm) then exit(false);
+   if (c2 < 0) or (c2 > dm) then exit(false)
+   end else
+   begin
+   if (c1 > 0) or (c1 < dm) then exit(false);
+   if (c2 > 0) or (c2 < dm) then exit(false)
+   end;
+
+//AddFileLog('1  (' + inttostr(V1.x) + ',' + inttostr(V1.y) + ')x(' + inttostr(V2.x) + ',' + inttostr(V2.y) + ')');
+//AddFileLog('2  (' + inttostr(V3.x) + ',' + inttostr(V3.y) + ')x(' + inttostr(V4.x) + ',' + inttostr(V4.y) + ')');
+CheckIntersect:= true
+end;
+
+function CheckSelfIntersect(var pa: TPixAr; ind: Longword): boolean;
+var i: Longword;
+begin
+if (ind <= 0) or (ind >= Pred(pa.Count)) then exit(false);
+for i:= 1 to pa.Count - 3 do
+    if (i <= ind - 1) or (i >= ind + 2) then
+      begin
+      if (i <> ind - 1) and
+         CheckIntersect(pa.ar[ind], pa.ar[ind - 1], pa.ar[i], pa.ar[i - 1]) then exit(true);
+      if (i <> ind + 2) and
+         CheckIntersect(pa.ar[ind], pa.ar[ind + 1], pa.ar[i], pa.ar[i - 1]) then exit(true);
+      end;
+CheckSelfIntersect:= false
+end;
+
 procedure RandomizePoints(var pa: TPixAr);
 const cEdge = 55;
-      cMinDist = 0;
+      cMinDist = 8;
 var radz: array[0..Pred(cMaxEdgePoints)] of LongInt;
-    i, k, dist: LongInt;
+    i, k, dist, px, py: LongInt;
 begin
 radz[0]:= 0;
 for i:= 0 to Pred(pa.Count) do
@@ -421,8 +459,15 @@ for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
     if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
       begin
+      px:= x;
+      py:= y;
       x:= x + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
-      y:= y + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3
+      y:= y + LongInt(GetRandom(7) - 3) * (radz[i] * 5 div 7) div 3;
+      if CheckSelfIntersect(pa, i) then
+         begin
+         x:= px;
+         y:= py
+         end;
       end
 end;
 
@@ -440,6 +485,7 @@ SetPoints(Template, pa);
 for i:= 1 to Template.BezierizeCount do
     begin
     BezierizeEdge(pa, _0_5);
+    RandomizePoints(pa);
     RandomizePoints(pa)
     end;
 for i:= 1 to Template.RandPassesCount do RandomizePoints(pa);

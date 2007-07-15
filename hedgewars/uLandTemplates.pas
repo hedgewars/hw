@@ -349,7 +349,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template0FPoints;
         FillPointsCount: Succ(High(Template0FPoints));
         BezierizeCount: 3;
-        RandPassesCount: 1;
+        RandPassesCount: 8;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template1Points;
@@ -357,7 +357,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template1FPoints;
         FillPointsCount: Succ(High(Template1FPoints));
         BezierizeCount: 3;
-        RandPassesCount: 2;
+        RandPassesCount: 7;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template2Points;
@@ -365,7 +365,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template2FPoints;
         FillPointsCount: Succ(High(Template2FPoints));
         BezierizeCount: 2;
-        RandPassesCount: 2;
+        RandPassesCount: 6;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template3Points;
@@ -373,7 +373,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template3FPoints;
         FillPointsCount: Succ(High(Template3FPoints));
         BezierizeCount: 3;
-        RandPassesCount: 2;
+        RandPassesCount: 4;
         canMirror: false; canFlip: false;
        ),
        (BasePoints: @Template4Points;
@@ -381,7 +381,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template4FPoints;
         FillPointsCount: Succ(High(Template4FPoints));
         BezierizeCount: 3;
-        RandPassesCount: 2;
+        RandPassesCount: 4;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template5Points;
@@ -389,15 +389,15 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template5FPoints;
         FillPointsCount: Succ(High(Template5FPoints));
         BezierizeCount: 2;
-        RandPassesCount: 3;
+        RandPassesCount: 8;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template6Points;
         BasePointsCount: Succ(High(Template6Points));
         FillPoints: @Template6FPoints;
         FillPointsCount: Succ(High(Template6FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 1;
+        BezierizeCount: 2;
+        RandPassesCount: 5;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template7Points;
@@ -405,7 +405,7 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template7FPoints;
         FillPointsCount: Succ(High(Template7FPoints));
         BezierizeCount: 4;
-        RandPassesCount: 1;
+        RandPassesCount: 4;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template8Points;
@@ -413,31 +413,31 @@ const EdgeTemplates: array[0..11] of TEdgeTemplate =
         FillPoints: @Template8FPoints;
         FillPointsCount: Succ(High(Template8FPoints));
         BezierizeCount: 2;
-        RandPassesCount: 2;
+        RandPassesCount: 7;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template9Points;
         BasePointsCount: Succ(High(Template9Points));
         FillPoints: @Template9FPoints;
         FillPointsCount: Succ(High(Template9FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 3;
+        BezierizeCount: 1;
+        RandPassesCount: 5;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template10Points;
         BasePointsCount: Succ(High(Template10Points));
         FillPoints: @Template10FPoints;
         FillPointsCount: Succ(High(Template10FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 2;
+        BezierizeCount: 2;
+        RandPassesCount: 6;
         canMirror: true; canFlip: false;
        ),
        (BasePoints: @Template11Points;
         BasePointsCount: Succ(High(Template11Points));
         FillPoints: @Template11FPoints;
         FillPointsCount: Succ(High(Template11FPoints));
-        BezierizeCount: 2;
-        RandPassesCount: 5;
+        BezierizeCount: 1;
+        RandPassesCount: 8;
         canMirror: true; canFlip: false;
        )
       );
