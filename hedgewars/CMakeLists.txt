@@ -37,6 +37,7 @@ set(engine_sources
 	HHHandlers.inc
 	SinTable.inc
 	options.inc
+	playlist.inc
 	proto.inc
 	tunsetborder.inc
 	)

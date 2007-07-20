@@ -63,8 +63,18 @@ procedure OnDestroy; forward;
 
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
+const MusicTimerTicks: Longword = 0;
 var s: string;
 begin
+inc(RealTicks, Lag);
+
+inc(MusicTimerTicks, Lag);
+if MusicTimerTicks > 3000 then
+   begin
+   PlayMusic;
+   MusicTimerTicks:= 0
+   end;
+
 case GameState of
    gsLandGen: begin
               GenMap;
@@ -80,7 +90,7 @@ case GameState of
               AdjustColor(cConsoleSplitterColor);
               ResetKbd;
               SoundLoad;
-              PlayMusic;
+              InitPlaylistChunk(GetRandom(High(LongWord)));
               if GameType = gmtSave then
                  begin
                  isSEBackup:= isSoundEnabled;
@@ -103,6 +113,7 @@ case GameState of
               OnDestroy;
               end;
      end;
+
 SDL_Flip(SDLPrimSurface);
 if flagMakeCapture then
    begin

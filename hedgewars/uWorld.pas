@@ -39,8 +39,7 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
-const hwFloatTicks: Longword = 0;
-      FPS: Longword = 0;
+const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
       prevPoint: TPoint = (X: 0; Y: 0);
@@ -145,7 +144,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
      end;
 
 bSelected:= false;
-if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface)
+if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
 end;
 
 procedure MoveCamera; forward;
@@ -173,7 +172,6 @@ begin
 if not isPaused then MoveCamera;
 
 // Sky
-inc(hwFloatTicks, Lag);
 if WorldDy > 0 then
    begin
    if WorldDy > cScreenHeight then r.h:= cScreenHeight
@@ -189,8 +187,8 @@ DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (hwFloatTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy, Surface);
@@ -209,9 +207,9 @@ DrawGears(Surface);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (hwFloatTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (hwFloatTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
 {$WARNINGS ON}
 
 // Turn time
@@ -263,7 +261,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
             begin
             DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
             inc(i, Surf^.h + 2);
-            if EndTime <= hwFloatTicks then
+            if EndTime <= RealTicks then
                begin
                SDL_FreeSurface(Surf);
                Surf:= nil;
@@ -293,7 +291,7 @@ for t:= 0 to Pred(TeamsCount) do
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (hwFloatTicks shr 7) mod 12, Surface);
+if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
 
 // Wind bar
 DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
@@ -302,7 +300,7 @@ if WindBarWidth > 0 then
    with StuffPoz[sWindR] do
         begin
         {$WARNINGS OFF}
-        r.x:= x + 8 - (hwFloatTicks shr 6) mod 8;
+        r.x:= x + 8 - (RealTicks shr 6) mod 8;
         {$WARNINGS ON}
         r.y:= y;
         r.w:= WindBarWidth;
@@ -315,7 +313,7 @@ if WindBarWidth > 0 then
    with StuffPoz[sWindL] do
         begin
         {$WARNINGS OFF}
-        r.x:= x + (WindBarWidth + hwFloatTicks shr 6) mod 8;
+        r.x:= x + (WindBarWidth + RealTicks shr 6) mod 8;
         {$WARNINGS ON}
         r.y:= y;
         r.w:= - WindBarWidth;
@@ -341,7 +339,7 @@ if isCursorVisible then
                                    CursorPoint.Y - SpritesData[PosSprite].Height div 2,
                                    i, Surface);
          end;
-   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (hwFloatTicks shr 6) mod 8, Surface)
+   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
    end;
 
 {$IFDEF COUNTTICKS}
@@ -386,7 +384,7 @@ if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
 if Captions[Group].Surf <> nil then SDL_FreeSurface(Captions[Group].Surf);
 
 Captions[Group].Surf:= RenderString(s, Color, fntBig);
-Captions[Group].EndTime:= hwFloatTicks + 1500
+Captions[Group].EndTime:= RealTicks + 1500
 end;
 
 procedure MoveCamera;

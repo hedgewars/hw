@@ -28,11 +28,16 @@ procedure PlaySound(snd: TSound; infinite: boolean);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
+procedure InitPlaylistChunk(seed: LongWord);
 
 implementation
 uses uMisc, uConsole;
+
+{$INCLUDE playlist.inc}
+
 const chanTPU = 12;
-var Mus: PMixMusic;
+var Mus: PMixMusic = nil;
+    CurrMusic: Longword = 0;
     Volume: LongInt;
 
 procedure InitSound;
@@ -74,12 +79,6 @@ for i:= Low(TSound) to High(TSound) do
     TryDo(Soundz[i].id <> nil, msgFailed, true);
     WriteLnToConsole(msgOK);
     end;
-
-s:= PathPrefix + '/Music/kahvi140a_alexander_chereshnev-illusion.ogg';
-WriteToConsole(msgLoading + s + ' ');
-Mus:= Mix_LoadMUS(Str2PChar(s));
-TryDo(Mus <> nil, msgFailed, false);
-WriteLnToConsole(msgOK)
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean);
@@ -98,10 +97,21 @@ if Mix_Playing(Soundz[snd].lastChan) <> 0 then
 end;
 
 procedure PlayMusic;
+var s: string;
 begin
+{$IFDEF HAVE_MUSIC}
 if not isSoundEnabled then exit;
-if Mix_PlayingMusic = 0 then
-   Mix_PlayMusic(Mus, -1)
+if Mix_PlayingMusic() <> 0 then exit;
+Mix_FreeMusic(Mus);
+s:= PathPrefix + '/Music/' + playlist[CurrMusic];
+CurrMusic:= playlistchain[CurrMusic];
+WriteToConsole(msgLoading + s + ' ');
+Mus:= Mix_LoadMUS(Str2PChar(s));
+TryDo(Mus <> nil, msgFailed, false);
+WriteLnToConsole(msgOK);
+
+Mix_PlayMusic(Mus, 0)
+{$ENDIF}
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
@@ -115,6 +125,23 @@ Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
 Mix_VolumeMusic(Volume * 3 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+end;
+
+procedure InitPlaylistChunk(seed: LongWord);
+var i, t, tmp: Longword;
+begin
+{$IFDEF HAVE_MUSIC}
+for i:= 0 to Pred(cPlayListLength) do
+    playlistchain[i]:= i;
+
+for i:= 0 to Pred(cPlayListLength) do
+    begin
+    t:= (i + 1) mod cPlayListLength;
+    tmp:= playlistchain[t];
+    playlistchain[t]:= playlistchain[i];
+    playlistchain[i]:= tmp;
+    end
+{$ENDIF}
 end;
 
 end.
