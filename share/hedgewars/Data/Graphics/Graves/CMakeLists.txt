@@ -1,6 +1,5 @@
+file(GLOB GraveSprites *.png) 
+
 install(FILES
-	Bone.png
-	coffin.png
-	Rip.png
-	Simple.png
+	${GraveSprites}
 	DESTINATION ${SHAREPATH}Data/Graphics/Graves)

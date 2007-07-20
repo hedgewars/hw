@@ -1,8 +1,5 @@
+file(GLOB AmmoMenuSprites *.png) 
+
 install(FILES
-	AmmoName.png
-	Ammos.png
-	BrdrLines.png
-	Selection.png
-	Slot.png
-	SlotKeys.png
+	${AmmoMenuSprites}
 	DESTINATION ${SHAREPATH}Data/Graphics/AmmoMenu)

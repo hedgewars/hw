@@ -1,44 +1,8 @@
 add_subdirectory(Graves)
 add_subdirectory(AmmoMenu)
+
+file(GLOB BaseSprites *.png) 
+
 install(FILES
-	AirBomb.png
-	Airplane.png
-	amAirplane.png
-	amGirder.png
-	Arrow.png
-	BigDigits.png
-	BlueWater.png
-	Bomb.png
-	Case.png
-	ClBomb.png
-	Clouds.png
-	ClParticle.png
-	Console.png
-	Crosshair.png
-	dynamite.png
-	Expl50.png
-	Finger.png
-	FirstAid.png
-	Flame.png
-	Frame.png
-	Girder.png
-	Grenade.png
-	Hedgehog.png
-	hhMask.png
-	Lag.png
-	MineOff.png
-	MineOn.png
-	Power.png
-	PowerBar.png
-	Progress.png
-	RopeHook.png
-	RopeNode.png
-	SmokeTrace.png
-	Switch.png
-	Targetp.png
-	thinking.png
-	UFO.png
-	WindBar.png
-	WindL.png
-	WindR.png
+	${BaseSprites}
 	DESTINATION ${SHAREPATH}Data/Graphics)

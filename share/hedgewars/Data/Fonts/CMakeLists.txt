@@ -1,1 +1,3 @@
-install(FILES DejaVuSans.ttf DESTINATION ${SHAREPATH}Data/Fonts)
+install(FILES
+	DejaVuSans.ttf
+	DESTINATION ${SHAREPATH}Data/Fonts)

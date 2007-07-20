@@ -1,6 +1,5 @@
+file(GLOB FortSprites *.png) 
+
 install(FILES
-	BarrelhouseL.png
-	BarrelhouseR.png
-	IslandL.png
-	IslandR.png
+	${FortSprites}
 	DESTINATION ${SHAREPATH}Data/Forts)
