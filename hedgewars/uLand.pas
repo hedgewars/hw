@@ -25,10 +25,9 @@ type TLandArray = packed array[0..1023, 0..2047] of LongWord;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
-     Preview: TPreview;
 
 procedure GenMap;
-procedure GenPreview;
+function GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
 
 implementation
@@ -603,8 +602,9 @@ AddProgress;
 {$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}
 end;
 
-procedure GenPreview;
+function GenPreview: TPreview;
 var x, y, xx, yy, t, bit: LongInt;
+    Preview: TPreview;
 begin
 WriteLnToConsole('Generating preview...');
 GenBlank(EdgeTemplates[SelectTemplate]);
@@ -621,7 +621,8 @@ for y:= 0 to 127 do
                     if Land[yy, xx] <> 0 then inc(t);
             if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit)
             end
-        end
+        end;
+GenPreview:= Preview
 end;
 
 initialization

@@ -268,6 +268,7 @@ end;
 
 /////////////////////////
 procedure GenLandPreview;
+var Preview: TPreview;
 begin
 InitIPC;
 IPCWaitPongEvent;
@@ -275,7 +276,7 @@ TryDo(InitStepsFlags = cifRandomize,
       'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
       true);
 
-GenPreview;
+Preview:= GenPreview;
 WriteLnToConsole('Sending preview...');
 SendIPCRaw(@Preview, sizeof(Preview));
 WriteLnToConsole('Preview sent, disconnect');
