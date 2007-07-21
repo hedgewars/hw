@@ -102,15 +102,19 @@ begin
 {$IFDEF HAVE_MUSIC}
 if not isSoundEnabled then exit;
 if Mix_PlayingMusic() <> 0 then exit;
+
 Mix_FreeMusic(Mus);
-s:= PathPrefix + '/Music/' + playlist[CurrMusic];
+
 CurrMusic:= playlistchain[CurrMusic];
+
+s:= PathPrefix + '/Music/' + playlist[CurrMusic];
 WriteToConsole(msgLoading + s + ' ');
+
 Mus:= Mix_LoadMUS(Str2PChar(s));
 TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-Mix_PlayMusic(Mus, 0)
+Mix_PlayMusic(Mus, 1)
 {$ENDIF}
 end;
 
@@ -128,18 +132,21 @@ ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
 procedure InitPlaylistChunk(seed: LongWord);
-var i, t, tmp: Longword;
+var i, t, nt: Longword;
 begin
 {$IFDEF HAVE_MUSIC}
 for i:= 0 to Pred(cPlayListLength) do
-    playlistchain[i]:= i;
+    playlistchain[i]:= 0;
 
-for i:= 0 to Pred(cPlayListLength) do
+t:= 0;
+for i:= 0 to cPlayListLength - 2 do
     begin
-    t:= (i + 1) mod cPlayListLength;
-    tmp:= playlistchain[t];
-    playlistchain[t]:= playlistchain[i];
-    playlistchain[i]:= tmp;
+    repeat
+      seed:= seed * 1664525 + 1013904223;
+      nt:= seed mod cPlayListLength;
+    until (t <> nt) and (playlistchain[nt] = 0);
+    playlistchain[t]:= nt;
+    t:= nt;
     end
 {$ENDIF}
 end;

@@ -69,7 +69,7 @@ begin
 inc(RealTicks, Lag);
 
 inc(MusicTimerTicks, Lag);
-if MusicTimerTicks > 3000 then
+if (MusicTimerTicks > 3000) and (GameState > gsStart) then
    begin
    PlayMusic;
    MusicTimerTicks:= 0
@@ -81,6 +81,7 @@ case GameState of
               GameState:= gsStart;
               end;
      gsStart: begin
+              InitPlaylistChunk(GetRandom(High(LongWord)));
               AssignHHCoords;
               AddMiscGears;
               AdjustColor(cColorNearBlack);
@@ -90,7 +91,6 @@ case GameState of
               AdjustColor(cConsoleSplitterColor);
               ResetKbd;
               SoundLoad;
-              InitPlaylistChunk(GetRandom(High(LongWord)));
               if GameType = gmtSave then
                  begin
                  isSEBackup:= isSoundEnabled;
