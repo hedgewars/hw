@@ -298,7 +298,7 @@ procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
 begin
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, true);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, false);
 r.y:= 0;
 while r.y < 1024 do
       begin

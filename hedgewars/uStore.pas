@@ -302,10 +302,8 @@ for ii:= Low(TSprite) to High(TSprite) do
 GetSkyColor;
 
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, false, true, true);
-TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-HHSurface:= SDL_DisplayFormat(tmpsurf);
-SDL_FreeSurface(tmpsurf);
+
+HHSurface:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, true, true, true);
 
 InitHealth;
 

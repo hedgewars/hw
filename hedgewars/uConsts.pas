@@ -330,6 +330,7 @@ const
                      (FileName:    'Switch'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  32; Height: 32; hasAlpha: false) // sprSwitch
                      );
+                     
       Soundz: array[TSound] of record
                                        FileName: String[31];
                                        Path    : TPathType;
