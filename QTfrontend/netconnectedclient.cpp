@@ -110,11 +110,14 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="HHNUM") {
-    if(!m_hwserver->isChiefClient(this) || lst.size()<4)
+    if (lst.size()<4) {
+      qWarning((QString("Net: Bad 'HHNUM' message: ")+msg+" size="+QString("%1").arg(lst.size())).toAscii().data());
+      return;
+    }
+    if(!m_hwserver->isChiefClient(this))
     {
-      qWarning((QString("Net: Bad 'HHNUM' message: ")+msg).toAscii().data());
-	  return; // error or permission denied :)
-	}
+      return; // permission denied
+    }
     const QString confstr=lst[0]+"+"+lst[1]+"+"+lst[2];
     QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.find(confstr);
     int oldTeamHHNum = it==m_hwserver->m_gameCfg.end() ? 0 : it.value()[0].toUInt();
@@ -122,15 +125,19 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     m_hwserver->hhnum+=newTeamHHNum-oldTeamHHNum;
     // create CONFIG_PARAM to save HHNUM at server from lst
     lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
+    m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
   }
 
   if(lst[0]=="CONFIG_PARAM") {
-    if(!m_hwserver->isChiefClient(this) || lst.size()<3)
-    {
+    if (lst.size()<3) {
       qWarning((QString("Net: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
-      //qWarning("Net: Bad 'CONFIG_PARAM' message");
-	  return; // error or permission denied :)
-	}
+      return;
+    }
+    
+    if(!m_hwserver->isChiefClient(this))
+    {
+      return; // permission denied
+    }
     else m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
   }
 
