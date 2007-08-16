@@ -1042,7 +1042,7 @@ if TestCollisionYwithGear(HHGear, 1)
    with HHGear^ do
         begin
         Message:= 0;
-        SetLittle(dx);
+        SetLittle(dX);
         dY:= _0;
         State:= State and not (gstAttacking or gstAttacked);
         State:= State or gstMoving;
@@ -1065,6 +1065,8 @@ if (Gear^.Message and gm_Up) <> 0 then HHGear^.Y:= HHGear^.Y - cGravity * 40
 else if (Gear^.Message and gm_Down) <> 0 then HHGear^.Y:= HHGear^.Y + cGravity * 40;
 
 HHGear^.Y:= HHGear^.Y + cGravity * 100;
+Gear^.X:= HHGear^.X;
+Gear^.Y:= HHGear^.Y
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

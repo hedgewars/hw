@@ -338,7 +338,7 @@ if (Gear^.State and gstMoving) <> 0 then
    if Gear^.dY > _0_4 then
       begin
       Goinfo.FallPix:= 0;
-      HHJump(AltGear, jmpLJump, GoInfo); // try ljump enstead of fall with damage
+      HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
       exit(Result)
       end;
    Gear^.Y:= Gear^.Y + Gear^.dY;

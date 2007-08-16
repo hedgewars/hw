@@ -40,7 +40,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
-                   sprSwitch);
+                   sprSwitch, sprParachute);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -328,7 +328,9 @@ const
                      (FileName:    'hhMask'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  32; Height: 32; hasAlpha: false),// sprHHTelepMask
                      (FileName:    'Switch'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width:  32; Height: 32; hasAlpha: false) // sprSwitch
+                     Width:  32; Height: 32; hasAlpha: false),// sprSwitch
+                     (FileName: 'Parachute'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  48; Height: 48; hasAlpha: true) // sprParachute
                      );
                      
       Soundz: array[TSound] of record
