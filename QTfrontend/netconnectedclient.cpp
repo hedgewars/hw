@@ -57,11 +57,18 @@ void HWConnectedClient::ClientRead()
 void HWConnectedClient::ParseLine(const QByteArray & line)
 {
   QString msg = QString::fromUtf8 (line.data(), line.size());
-
   QStringList lst = msg.split(delimeter);
-  if(!lst.size()) return;
+  if(!lst.size())
+  {
+    qWarning("Net: Bad message");
+    return;
+  }
   if (lst[0] == "NICK") {
-    if(lst.size()<2) return;
+    if(lst.size() < 2)
+    {
+      qWarning("Net: Bad 'NICK' message");
+	  return;
+    }
     if(m_hwserver->haveNick(lst[1])) {
       RawSendNet(QString("ERRONEUSNICKNAME"));
       throw ShouldDisconnectException();
@@ -77,18 +84,19 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       // send teams
       QList<QStringList> team_conf=m_hwserver->getTeamsConfig();
       for(QList<QStringList>::iterator tmit=team_conf.begin(); tmit!=team_conf.end(); ++tmit) {
-	RawSendNet(QString("ADDTEAM:")+delimeter+tmit->join(QString(delimeter)));
+	    RawSendNet(QString("ADDTEAM:")+delimeter+tmit->join(QString(delimeter)));
       }
       // send config
       QMap<QString, QStringList> conf=m_hwserver->getGameCfg();
       for(QMap<QString, QStringList>::iterator it=conf.begin(); it!=conf.end(); ++it) {
-	RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter)));
+	    RawSendNet(QString("CONFIG_PARAM")+delimeter+it.key()+delimeter+it.value().join(QString(delimeter)));
       }
     }
     m_hwserver->sendNicks(this);
     m_hwserver->sendOthers(this, QString("JOINED")+delimeter+client_nick);
     return;
   }
+
   if(client_nick=="") return;
 
   if (lst[0]=="START:") {
@@ -102,7 +110,11 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="HHNUM") {
-    if(!m_hwserver->isChiefClient(this) || lst.size()<4) return; // error or permission denied :)
+    if(!m_hwserver->isChiefClient(this) || lst.size()<4)
+    {
+      qWarning("Net: Bad 'HHNUM' message");
+	  return; // error or permission denied :)
+	}
     const QString confstr=lst[0]+"+"+lst[1]+"+"+lst[2];
     QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.find(confstr);
     int oldTeamHHNum = it==m_hwserver->m_gameCfg.end() ? 0 : it.value()[0].toUInt();
@@ -113,28 +125,40 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="CONFIG_PARAM") {
-    if(!m_hwserver->isChiefClient(this) || lst.size()<3) return; // error or permission denied :)
+    if(!m_hwserver->isChiefClient(this) || lst.size()<3)
+    {
+      qWarning("Net: Bad 'CONFIG_PARAM' message");
+	  return; // error or permission denied :)
+	}
     else m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
   }
 
   if(lst[0]=="ADDTEAM:") {
-    if(lst.size()<14) return;
+    if(lst.size() < 14)
+    {
+      qWarning("Net: Bad 'ADDTEAM' message");
+	  return;
+    }
     lst.pop_front();
-    
+
     // add team ID
     static unsigned int netTeamID=0;
     lst.insert(1, QString::number(++netTeamID));
 
     // hedgehogs num count
     int maxAdd=18-m_hwserver->hhnum;
-    if (maxAdd<=0) return; // reject command
+    if (maxAdd<=0)
+    {
+	  qWarning("Net: 'ADDTEAM' message: rejecting");
+	  return; // reject command
+    }
     int toAdd=maxAdd<4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
     // hedgehogs num config
     QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
       .arg(toAdd);
-    
+
     // creating color config for new team
     QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
@@ -152,15 +176,22 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="REMOVETEAM:") {
-    if(lst.size()<2) return;
-    
-    for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it) {
+    if(lst.size() < 2)
+    {
+      qWarning("Net: Bad 'REMOVETEAM' message");
+	  return;
+    }
+
+    for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it)
+    {
       QStringList hhTmpList=it.key().split('+');
-      if(hhTmpList[0] == "HHNUM") {
-	if(hhTmpList[1]==lst[1]) {
-	  m_hwserver->hhnum-=it.value()[0].toUInt();
-	  break;
-	}
+      if(hhTmpList[0] == "HHNUM")
+      {
+        if(hhTmpList[1]==lst[1])
+        {
+		  m_hwserver->hhnum-=it.value()[0].toUInt();
+		  break;
+        }
       }
     }
 

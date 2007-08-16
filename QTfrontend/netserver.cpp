@@ -61,7 +61,11 @@ void HWNetServer::NewConnection()
 void HWNetServer::ClientDisconnect(HWConnectedClient* client)
 {
   QList<HWConnectedClient*>::iterator it=std::find(connclients.begin(), connclients.end(), client);
-  if(it==connclients.end()) return;
+  if(it==connclients.end())
+  {
+    qWarning("Unknown client disconnected");
+    return;
+  }
   for(QList<QStringList>::iterator tmIt=(*it)->m_teamsCfg.begin(); tmIt!=(*it)->m_teamsCfg.end(); ++tmIt) {
     sendOthers(*it, QString("REMOVETEAM:")+delimeter+*(tmIt->begin()) + delimeter + *(tmIt->begin()+1));
   }
