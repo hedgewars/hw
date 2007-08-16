@@ -112,7 +112,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="HHNUM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<4)
     {
-      qWarning("Net: Bad 'HHNUM' message");
+      qWarning((QString("Net: Bad 'HHNUM' message: ")+msg).toAscii().data());
 	  return; // error or permission denied :)
 	}
     const QString confstr=lst[0]+"+"+lst[1]+"+"+lst[2];
@@ -127,7 +127,8 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="CONFIG_PARAM") {
     if(!m_hwserver->isChiefClient(this) || lst.size()<3)
     {
-      qWarning("Net: Bad 'CONFIG_PARAM' message");
+      qWarning((QString("Net: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
+      //qWarning("Net: Bad 'CONFIG_PARAM' message");
 	  return; // error or permission denied :)
 	}
     else m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
