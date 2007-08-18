@@ -110,7 +110,6 @@ void HWNewNet::ClientRead()
 
 void HWNewNet::OnConnect()
 {
-  RawSendNet(QString("USER") + delimeter + "hwgame 1 2 Hedgewars game");
   RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
 }
 
@@ -169,6 +168,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "ADDTEAM:") {
+    if(lst.size() < 14)
+    {
+	  qWarning("Net: Too short ADDTEAM message");
+	  return;
+    }
     lst.pop_front();
     emit AddNetTeam(lst);
     return;
@@ -321,8 +325,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
 void HWNewNet::ConfigAsked()
 {
+  QString map = m_pGameCFGWidget->getCurrentMap();
+  if (map.size())
+    onMapChanged(map);
+
   onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
-  onMapChanged(m_pGameCFGWidget->getCurrentMap());
   onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
   onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
   onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());

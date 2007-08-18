@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,13 +60,13 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   QStringList lst = msg.split(delimeter);
   if(!lst.size())
   {
-    qWarning("Net: Bad message");
+    qWarning("Net server: Bad message");
     return;
   }
   if (lst[0] == "NICK") {
     if(lst.size() < 2)
     {
-      qWarning("Net: Bad 'NICK' message");
+      qWarning("Net server: Bad 'NICK' message");
 	  return;
     }
     if(m_hwserver->haveNick(lst[1])) {
@@ -99,7 +99,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(client_nick=="")
   {
-  	qWarning(QString("Net: Message from unnamed client: '%1'").arg(msg).toAscii().data());
+  	qWarning(QString("Net server: Message from unnamed client: '%1'").arg(msg).toAscii().data());
   	return;
   }
 
@@ -115,7 +115,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(lst[0]=="HHNUM") {
     if (lst.size()<4) {
-      qWarning((QString("Net: Bad 'HHNUM' message: ")+msg+" size="+QString("%1").arg(lst.size())).toAscii().data());
+      qWarning((QString("Net server: Bad 'HHNUM' message: ")+msg+" size="+QString("%1").arg(lst.size())).toAscii().data());
       return;
     }
     if(!m_hwserver->isChiefClient(this))
@@ -135,7 +135,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(lst[0]=="CONFIG_PARAM") {
     if (lst.size()<3) {
-      qWarning((QString("Net: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
+      qWarning((QString("Net server: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
       return;
     }
 
@@ -149,7 +149,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="ADDTEAM:") {
     if(lst.size() < 14)
     {
-      qWarning("Net: Bad 'ADDTEAM' message");
+      qWarning("Net server: Bad 'ADDTEAM' message");
 	  return;
     }
     lst.pop_front();
@@ -162,7 +162,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     int maxAdd=18-m_hwserver->hhnum;
     if (maxAdd<=0)
     {
-	  qWarning("Net: 'ADDTEAM' message: rejecting");
+	  qWarning("Net server: 'ADDTEAM' message: rejecting");
 	  return; // reject command
     }
     int toAdd=maxAdd<4 ? maxAdd : 4;
@@ -191,7 +191,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
   if(lst[0]=="REMOVETEAM:") {
     if(lst.size() < 2)
     {
-      qWarning("Net: Bad 'REMOVETEAM' message");
+      qWarning("Net server: Bad 'REMOVETEAM' message");
 	  return;
     }
 
