@@ -159,7 +159,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if (lst[0] == "CHAT_STRING") {
     lst.pop_front();
-    if(lst.size() < 2) return;
+    if(lst.size() < 2)
+    {
+	  qWarning("Net: Empty CHAT_STRING message");
+	  return;
+    }
     emit chatStringFromNet(lst);
     return;
   }
@@ -171,7 +175,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if (lst[0] == "REMOVETEAM:") {
-    if(lst.size()<3) return;
+    if(lst.size() < 3)
+    {
+      qWarning("Net: Bad REMOVETEAM message");
+      return;
+    }
     m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1], lst[2].toUInt()));
     return;
   }
@@ -183,13 +191,21 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="JOINED") {
-    if(lst.size()<2) return;
+    if(lst.size() < 2)
+    {
+      qWarning("Net: Bad JOINED message");
+      return;
+    }
     emit nickAdded(lst[1]);
     return;
   }
 
   if(lst[0]=="LEFT") {
-    if(lst.size()<2) return;
+    if(lst.size() < 2)
+    {
+      qWarning("Net: Bad LEFT message");
+      return;
+    }
     emit nickRemoved(lst[1]);
     return;
   }
@@ -207,7 +223,11 @@ void HWNewNet::ParseLine(const QByteArray & line)
 
   if (lst[0] == "CONFIGURED") {
     lst.pop_front();
-    if(lst.size()<5) return;
+    if(lst.size() < 6)
+    {
+      qWarning("Net: Bad CONFIGURED message");
+      return;
+    }
     emit seedChanged(lst[0]);
     emit mapChanged(lst[1]);
     emit themeChanged(lst[2]);
@@ -218,12 +238,22 @@ void HWNewNet::ParseLine(const QByteArray & line)
   }
 
   if(lst[0]=="TEAM_ACCEPTED") {
+    if(lst.size() < 3)
+    {
+      qWarning("Net: Bad TEAM_ACCEPTED message");
+      return;
+    }
     m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
     m_pTeamSelWidget->changeTeamStatus(lst[1]);
     return;
   }
 
   if (lst[0] == "CONFIG_PARAM") {
+    if(lst.size() < 3)
+    {
+      qWarning("Net: Bad CONFIG_PARAM message");
+      return;
+    }
   	if (lst[1] == "SEED") {
 	  emit seedChanged(lst[2]);
 	  return;
@@ -267,6 +297,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit hhnumChanged(tmptm);
 	  return;
   	}
+    qWarning(QString("Net: Unknown 'CONFIG_PARAM' message: '%1'").arg(msg).toAscii().data());
     return;
   }
 
@@ -274,10 +305,17 @@ void HWNewNet::ParseLine(const QByteArray & line)
   // should be kinda game states, which don't allow "GAMEMSG:" at configure step,
   // "CONNECTED" at round phase, etc.
   if (lst[0] == "GAMEMSG:") {
+    if(lst.size() < 2)
+    {
+      qWarning("Net: Bad LEFT message");
+      return;
+    }
     QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
     emit FromNet(em);
     return;
   }
+
+  qWarning(QString("Net: Unknown message: '%1'").arg(msg).toAscii().data());
 }
 
 

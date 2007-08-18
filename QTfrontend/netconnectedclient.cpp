@@ -97,7 +97,11 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     return;
   }
 
-  if(client_nick=="") return;
+  if(client_nick=="")
+  {
+  	qWarning(QString("Net: Message from unnamed client: '%1'").arg(msg).toAscii().data());
+  	return;
+  }
 
   if (lst[0]=="START:") {
     readyToStart=true;
@@ -126,6 +130,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     // create CONFIG_PARAM to save HHNUM at server from lst
     lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
     m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
+    return;
   }
 
   if(lst[0]=="CONFIG_PARAM") {
@@ -133,7 +138,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
       qWarning((QString("Net: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
       return;
     }
-    
+
     if(!m_hwserver->isChiefClient(this))
     {
       return; // permission denied
