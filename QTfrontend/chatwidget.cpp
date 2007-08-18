@@ -57,6 +57,7 @@ void HWChatWidget::returnPressed()
 
 void HWChatWidget::onChatStringFromNet(const QStringList& str)
 {
+  if (str.size() < 2) return;
   QListWidget* w=chatText;
   w->addItem(str[0]+": "+str[1]);
   w->scrollToBottom();
