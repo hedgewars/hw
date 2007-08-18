@@ -1188,7 +1188,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSwitcherWork(Gear: PGear);
 var HHGear: PGear;
-    th: LongInt;
     Msg, State: Longword;
 begin
 AllInactive:= false;
@@ -1218,7 +1217,6 @@ if (Gear^.Message and gm_Switch) <> 0 then
    RemoveGearFromList(HHGear);
    InsertGearToList(HHGear);
 
-   th:= CurrentTeam^.CurrHedgehog;
    repeat
      CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
    until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);

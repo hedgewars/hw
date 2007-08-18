@@ -94,8 +94,7 @@ const MaxTeamHealth: LongInt = 0;
 procedure FreeTeamsList; forward;
 
 function CheckForWin: boolean;
-var team: PTeam;
-    AliveClan: PClan;
+var AliveClan: PClan;
     s: shortstring;
     t, AliveCount: LongInt;
 begin
@@ -133,7 +132,6 @@ end;
 
 procedure SwitchHedgehog;
 var c: LongWord;
-    t: LongWord;
     g: PGear;
     PrevHH, PrevTeam: LongWord;
 begin

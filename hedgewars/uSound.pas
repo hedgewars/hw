@@ -97,7 +97,9 @@ if Mix_Playing(Soundz[snd].lastChan) <> 0 then
 end;
 
 procedure PlayMusic;
+{$IFDEF HAVE_MUSIC}
 var s: string;
+{$ENDIF}
 begin
 {$IFDEF HAVE_MUSIC}
 if not isSoundEnabled then exit;
@@ -132,7 +134,9 @@ ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
 procedure InitPlaylistChunk(seed: LongWord);
+{$IFDEF HAVE_MUSIC}
 var i, t, nt: Longword;
+{$ENDIF}
 begin
 {$IFDEF HAVE_MUSIC}
 for i:= 0 to Pred(cPlayListLength) do
