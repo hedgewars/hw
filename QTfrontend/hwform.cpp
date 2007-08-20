@@ -43,6 +43,7 @@
 #include "netudpserver.h"
 #include "netudpwidget.h"
 #include "chatwidget.h"
+#include "playrecordpage.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pUdpServer(0), editedTeam(0)
@@ -56,6 +57,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
 	connect(ui.pageMain->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
+	connect(ui.pageMain->BtnLoad,	SIGNAL(clicked()),	this, SLOT(GoToSaves()));
 	connect(ui.pageMain->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
 	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
 	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
@@ -149,15 +151,23 @@ void HWForm::GoToMultiplayer()
 	GoToPage(ID_PAGE_MULTIPLAYER);
 }
 
+void HWForm::GoToSaves()
+{
+	QDir tmpdir;
+	tmpdir.cd(cfgdir->absolutePath());
+	tmpdir.cd("Saves");
+	ui.pagePlayDemo->FillFromDir(tmpdir);
+
+	GoToPage(ID_PAGE_DEMOS);
+}
+
 void HWForm::GoToDemos()
 {
 	QDir tmpdir;
 	tmpdir.cd(cfgdir->absolutePath());
 	tmpdir.cd("Demos");
-	tmpdir.setFilter(QDir::Files);
-	ui.pagePlayDemo->DemosList->clear();
-	ui.pagePlayDemo->DemosList->addItems(tmpdir.entryList(QStringList("*.hwd_" + cProtoVer))
-			.replaceInStrings(QRegExp("^(.*).hwd_" + cProtoVer), "\\1"));
+	ui.pagePlayDemo->FillFromDir(tmpdir);
+
 	GoToPage(ID_PAGE_DEMOS);
 }
 
@@ -298,7 +308,7 @@ void HWForm::PlayDemo()
 		return ;
 	}
 	CreateGame(0, 0);
-	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + cProtoVer);
+	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + *cProtoVer);
 }
 
 void HWForm::NetConnectServer()
@@ -500,12 +510,12 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 	{
 		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
 		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
-		filename = cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + cProtoVer;
+		filename = cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + *cProtoVer;
 	} else
 	{
 		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
 		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
-		filename = cfgdir->absolutePath() + "/Saves/LastRound.hws_" + cProtoVer;
+		filename = cfgdir->absolutePath() + "/Saves/LastRound.hws_" + *cProtoVer;
 	}
 
 

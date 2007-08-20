@@ -57,7 +57,7 @@ void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
     }
   } else if (event->button()==Qt::RightButton) {
     event->accept();
-    if(numHedgehogs > 3) {
+    if(numHedgehogs > 1) {
       numHedgehogs--;
       pOurFrameTeams->overallHedgehogs--;
       emit hedgehogsNumChanged();

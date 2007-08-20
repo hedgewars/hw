@@ -54,6 +54,7 @@ public:
 	QPushButton *BtnMultiplayer;
 	QPushButton *BtnNet;
 	QPushButton *BtnSetup;
+	QPushButton *BtnLoad;
 	QPushButton *BtnDemos;
 	QPushButton *BtnInfo;
 	QPushButton *BtnExit;
@@ -120,18 +121,6 @@ public:
 	GameCFGWidget *gameCFG;
 	TeamSelWidget *teamsSelect;
 	QPushButton *BtnStartMPGame;
-};
-
-class PagePlayDemo : public QWidget
-{
-	Q_OBJECT
-
-public:
-	PagePlayDemo(QWidget* parent = 0);
-
-	QPushButton *BtnBack;
-	QPushButton *BtnPlayDemo;
-	QListWidget *DemosList;
 };
 
 class PageOptions : public QWidget

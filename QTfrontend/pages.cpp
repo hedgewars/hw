@@ -42,6 +42,7 @@
 #include "netudpwidget.h"
 #include "chatwidget.h"
 #include "SDLs.h"
+#include "playrecordpage.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -70,23 +71,29 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	BtnNet->setText(QPushButton::tr("Net game"));
 	pageLayout->addWidget(BtnNet, 3, 1);
 
+	BtnLoad = new QPushButton(this);
+	BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	BtnLoad->setFont(*font14);
+	BtnLoad->setText(QPushButton::tr("Load"));
+	pageLayout->addWidget(BtnLoad, 4, 1);
+
 	BtnDemos = new QPushButton(this);
 	BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnDemos->setFont(*font14);
 	BtnDemos->setText(QPushButton::tr("Demos"));
-	pageLayout->addWidget(BtnDemos, 4, 1);
+	pageLayout->addWidget(BtnDemos, 5, 1);
 
 	BtnSetup = new QPushButton(this);
 	BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnSetup->setFont(*font14);
 	BtnSetup->setText(QPushButton::tr("Setup"));
-	pageLayout->addWidget(BtnSetup, 5, 1);
+	pageLayout->addWidget(BtnSetup, 6, 1);
 
 	BtnInfo = new QPushButton(this);
 	BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnInfo->setFont(*font14);
 	BtnInfo->setText(QPushButton::tr("About"));
-	pageLayout->addWidget(BtnInfo, 6, 1);
+	pageLayout->addWidget(BtnInfo, 7, 1);
 
 	BtnExit = new QPushButton(parent);
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -304,30 +311,6 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
 	BtnStartMPGame->setFont(*font14);
 	BtnStartMPGame->setText(QPushButton::tr("Start"));
 	pageLayout->addWidget(BtnStartMPGame, 1, 3);
-}
-
-PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
-{
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnStretch(1, 2);
-	pageLayout->setColumnStretch(2, 1);
-
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
-
-	BtnPlayDemo	= new QPushButton(this);
-	BtnPlayDemo->setGeometry(QRect(240,	330, 161, 41));
-	BtnPlayDemo->setFont(*font14);
-	BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-	pageLayout->addWidget(BtnPlayDemo, 1, 2);
-
-	DemosList =	new QListWidget(this);
-	DemosList->setGeometry(QRect(170, 10, 311, 311));
-	pageLayout->addWidget(DemosList, 0, 1);
 }
 
 PageOptions::PageOptions(QWidget* parent) : QWidget(parent)

@@ -39,7 +39,9 @@ HEADERS += binds.h \
            netudpserver.h \
            netudpwidget.h \
            chatwidget.h \
-           SDLs.h
+           SDLs.h \
+           playrecordpage.h \
+           hwconsts.h
            
            
 SOURCES += binds.cpp \
@@ -69,7 +71,9 @@ SOURCES += binds.cpp \
            netudpserver.cpp \
            netudpwidget.cpp \
            chatwidget.cpp \
-           SDLs.cpp
+           SDLs.cpp \
+           playrecordpage.cpp \
+           hwconsts.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 

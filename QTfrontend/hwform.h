@@ -46,6 +46,7 @@ private slots:
 	void GoToSinglePlayer();
 	void GoToSetup();
 	void GoToMultiplayer();
+	void GoToSaves();
 	void GoToDemos();
 	void GoToNet();
 	void GoToInfo();

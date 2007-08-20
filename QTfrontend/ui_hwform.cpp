@@ -23,6 +23,7 @@
 
 #include "ui_hwform.h"
 #include "pages.h"
+#include "playrecordpage.h"
 
 void Ui_HWForm::setupUi(QMainWindow *HWForm)
 {

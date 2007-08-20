@@ -33,10 +33,8 @@ else(WIN32 AND NOT UNIX)
 	endif(DEFINED DATA_INSTALL_DIR)
 endif(WIN32 AND NOT UNIX)
 
-configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp.in 
-	${hedgewars_SOURCE_DIR}/QTfrontend/main.cpp)
-configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.h.in 
-	${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.h)
+configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.cpp.in 
+	${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.cpp)
 
 set(hwfr_src 
 	game.cpp
@@ -66,7 +64,9 @@ set(hwfr_src
 	netudpwidget.cpp
 	chatwidget.cpp
 	binds.cpp
-	SDLs.cpp)
+	SDLs.cpp
+	playrecordpage.cpp
+	hwconsts.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -96,13 +96,15 @@ set(hwfr_moc_hdrs
 	netudpserver.h
 	netudpwidget.h
 	chatwidget.h
-	SDLs.h)
+	SDLs.h
+	playrecordpage.h)
 
 set(hwfr_hdrs
 	binds.h
 	ui_hwform.h
 	predefteams.h
 	KB.h
+	hwconsts.h
 )
 
 set(hwfr_rez
