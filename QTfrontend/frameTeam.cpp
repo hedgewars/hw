@@ -22,19 +22,17 @@
 #include <QResizeEvent>
 #include <QCoreApplication>
 
-using namespace std;
-
 FrameTeams::FrameTeams(QWidget* parent) :
   QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
   mainLayout.setSpacing(1);
 
-  availableColors.push_back(QColor(0, 0, 255));
-  availableColors.push_back(QColor(0, 255, 0));
-  availableColors.push_back(QColor(0, 255, 255));
-  availableColors.push_back(QColor(255, 0, 0));
-  availableColors.push_back(QColor(255, 0, 255));
-  availableColors.push_back(QColor(255, 255, 0));
+  availableColors.push_back(QColor(  0, 255, 255));
+  availableColors.push_back(QColor(255, 127, 127));
+  availableColors.push_back(QColor(103, 167, 231));
+  availableColors.push_back(QColor( 37, 181,  61));
+  availableColors.push_back(QColor(247, 237, 112));
+  availableColors.push_back(QColor(192,  85, 160));
 
   resetColors();
 }
