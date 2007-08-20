@@ -43,7 +43,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
 
-	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", true).toBool());
+	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
 }
 
 QStringList GameUIConfig::GetTeamsList()
