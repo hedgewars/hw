@@ -156,7 +156,7 @@ void HWForm::GoToSaves()
 	QDir tmpdir;
 	tmpdir.cd(cfgdir->absolutePath());
 	tmpdir.cd("Saves");
-	ui.pagePlayDemo->FillFromDir(tmpdir);
+	ui.pagePlayDemo->FillFromDir(tmpdir, "hws_" + *cProtoVer);
 
 	GoToPage(ID_PAGE_DEMOS);
 }
@@ -166,7 +166,7 @@ void HWForm::GoToDemos()
 	QDir tmpdir;
 	tmpdir.cd(cfgdir->absolutePath());
 	tmpdir.cd("Demos");
-	ui.pagePlayDemo->FillFromDir(tmpdir);
+	ui.pagePlayDemo->FillFromDir(tmpdir, "hwd_" + *cProtoVer);
 
 	GoToPage(ID_PAGE_DEMOS);
 }
@@ -308,7 +308,7 @@ void HWForm::PlayDemo()
 		return ;
 	}
 	CreateGame(0, 0);
-	game->PlayDemo(cfgdir->absolutePath() + "/Demos/" + curritem->text() + ".hwd_" + *cProtoVer);
+	game->PlayDemo(curritem->data(Qt::UserRole).toString());
 }
 
 void HWForm::NetConnectServer()

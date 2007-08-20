@@ -32,7 +32,7 @@ class PagePlayDemo : public QWidget
 public:
 	PagePlayDemo(QWidget* parent = 0);
 
-	void FillFromDir(QDir dir);
+	void FillFromDir(QDir dir, const QString & extension);
 
 	QPushButton *BtnBack;
 	QPushButton *BtnPlayDemo;

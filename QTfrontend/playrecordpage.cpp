@@ -48,12 +48,19 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(DemosList, 0, 1);
 }
 
-void PagePlayDemo::FillFromDir(QDir dir)
+void PagePlayDemo::FillFromDir(QDir dir, const QString & extension)
 {
 	dir.setFilter(QDir::Files);
-	DemosList->clear();
-	DemosList->addItems(dir.entryList(QStringList("*.hwd_" + *cProtoVer))
-			.replaceInStrings(QRegExp("^(.*).hwd_" + *cProtoVer + "$"), "\\1"));
 
+	QStringList sl = dir.entryList(QStringList(QString("*.%1").arg(extension)));
+	sl.replaceInStrings(QRegExp(QString("^(.*).%1$").arg(extension)), "\\1");
+
+	DemosList->clear();
+	DemosList->addItems(sl);
+
+	for (int i = 0; i < DemosList->count(); ++i)
+	{
+		DemosList->item(i)->setData(Qt::UserRole, dir.absoluteFilePath(QString("%1.%2").arg(sl[i], extension)));
+	}
 }
 
