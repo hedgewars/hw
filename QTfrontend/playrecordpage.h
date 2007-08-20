@@ -30,9 +30,14 @@ class PagePlayDemo : public QWidget
 	Q_OBJECT
 
 public:
+	enum RecordType {
+		RT_Demo,
+		RT_Save
+	};
+
 	PagePlayDemo(QWidget* parent = 0);
 
-	void FillFromDir(QDir dir, const QString & extension);
+	void FillFromDir(RecordType rectype);
 
 	QPushButton *BtnBack;
 	QPushButton *BtnPlayDemo;

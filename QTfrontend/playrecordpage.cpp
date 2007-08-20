@@ -48,8 +48,23 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(DemosList, 0, 1);
 }
 
-void PagePlayDemo::FillFromDir(QDir dir, const QString & extension)
+void PagePlayDemo::FillFromDir(RecordType rectype)
 {
+	QDir dir;
+	QString extension;
+
+	dir.cd(cfgdir->absolutePath());
+	if (rectype == RT_Demo)
+	{
+		dir.cd("Demos");
+		extension = "hwd_" + *cProtoVer;
+		BtnPlayDemo->setText(QPushButton::tr("Play demo"));
+	} else
+	{
+		dir.cd("Saves");
+		extension = "hws_" + *cProtoVer;
+		BtnPlayDemo->setText(QPushButton::tr("Load"));
+	}
 	dir.setFilter(QDir::Files);
 
 	QStringList sl = dir.entryList(QStringList(QString("*.%1").arg(extension)));

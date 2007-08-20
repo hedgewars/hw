@@ -153,20 +153,14 @@ void HWForm::GoToMultiplayer()
 
 void HWForm::GoToSaves()
 {
-	QDir tmpdir;
-	tmpdir.cd(cfgdir->absolutePath());
-	tmpdir.cd("Saves");
-	ui.pagePlayDemo->FillFromDir(tmpdir, "hws_" + *cProtoVer);
+	ui.pagePlayDemo->FillFromDir(PagePlayDemo::RT_Save);
 
 	GoToPage(ID_PAGE_DEMOS);
 }
 
 void HWForm::GoToDemos()
 {
-	QDir tmpdir;
-	tmpdir.cd(cfgdir->absolutePath());
-	tmpdir.cd("Demos");
-	ui.pagePlayDemo->FillFromDir(tmpdir, "hwd_" + *cProtoVer);
+	ui.pagePlayDemo->FillFromDir(PagePlayDemo::RT_Demo);
 
 	GoToPage(ID_PAGE_DEMOS);
 }
@@ -303,7 +297,7 @@ void HWForm::PlayDemo()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select demo from the list above"),
+				tr("Please, select record from the list above"),
 				tr("OK"));
 		return ;
 	}
