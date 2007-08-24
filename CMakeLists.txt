@@ -16,12 +16,15 @@ add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)
 
+# CPack vars
+
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a turn-based strategy")
 set(CPACK_PACKAGE_VENDOR "Hedgewars")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 set(CPACK_PACKAGE_FILE_NAME "hedgewars-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "hedgewars-src-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(CPACK_PACKAGE_EXECUTABLES "hedgewars" "hedgewars")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Hedgewars ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
@@ -36,5 +39,43 @@ else(WIN32 AND NOT UNIX)
 	set(CPACK_STRIP_FILES "bin/hedgewars;bin/hwengine")
 endif(WIN32 AND NOT UNIX)
 
-include(CPack)
+set(CPACK_SOURCE_IGNORE_FILES
+	"~"
+	"\\\\.svn"
+	"\\\\.exe$"
+	"\\\\.a$"
+	"\\\\.dll$"
+	"\\\\.xcf$"
+	"\\\\.cxx$"
+	"\\\\.db$"
+	"\\\\.cfg$"
+	"\\\\.dof$"
+	"\\\\.cmake$"
+	"\\\\.layout$"
+	"\\\\.zip$"
+	"\\\\.gz$"
+	"\\\\.bz2$"
+	"Makefile"
+	"CMakeFiles"
+	"debug"
+	"release"
+	"Debug$"
+	"Release$"
+	"proto.inc$"
+	"hwconsts.cpp$"
+	"playlist.inc$"
+	"^${PROJECT_SOURCE_DIR}/bin/."
+	"^${PROJECT_SOURCE_DIR}/tools"
+	"^${PROJECT_SOURCE_DIR}/docs"
+	"^${PROJECT_SOURCE_DIR}/Graphics"
+	"^${PROJECT_SOURCE_DIR}/realtest"
+	"^${PROJECT_SOURCE_DIR}/tmp"
+	"^${PROJECT_SOURCE_DIR}/utils"
+	"^${PROJECT_SOURCE_DIR}/share/hedgewars/Data/Maps/test"
+	"^${PROJECT_SOURCE_DIR}/share/hedgewars/Data/Themes/ethereal"
+	"^${PROJECT_SOURCE_DIR}/install_manifest.txt"
+	"^${PROJECT_SOURCE_DIR}/CMakeCache.txt"
+	"^${PROJECT_SOURCE_DIR}/install_manifest.txt"
+)
 
+include(CPack)
