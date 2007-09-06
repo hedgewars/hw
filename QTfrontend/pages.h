@@ -202,5 +202,18 @@ public:
 	QLabel *labelGameStats;
 };
 
+class PageSinglePlayer : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageSinglePlayer(QWidget* parent = 0);
+
+	QPushButton *BtnSimpleGamePage;
+	QPushButton *BtnTrainPage;
+	QPushButton *BtnBack;
+	GameCFGWidget *gameCFG;
+};
+
 
 #endif // PAGES_H

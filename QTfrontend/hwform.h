@@ -50,6 +50,7 @@ private slots:
 	void GoToDemos();
 	void GoToNet();
 	void GoToInfo();
+	void GoToSimpleGame();
 	void GoToPage(quint8 id);
 	void GoBack();
 	void btnExitPressed();
@@ -81,16 +82,17 @@ private:
 	void UpdateTeamsLists(const QStringList* editable_teams=0);
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget);
 	enum PageIDs {
-		ID_PAGE_SINGLEPLAYER	= 0,
-		ID_PAGE_SETUP_TEAM	= 1,
-		ID_PAGE_SETUP	= 2,
-		ID_PAGE_MULTIPLAYER	= 3,
-		ID_PAGE_DEMOS	= 4,
-		ID_PAGE_NET	= 5,
-		ID_PAGE_NETCFG	= 6,
-		ID_PAGE_INFO	= 7,
-		ID_PAGE_MAIN	= 8,
-		ID_PAGE_GAMESTATS = 9
+		ID_PAGE_SIMPLEGAME      =  0,
+		ID_PAGE_SETUP_TEAM      =  1,
+		ID_PAGE_SETUP           =  2,
+		ID_PAGE_MULTIPLAYER     =  3,
+		ID_PAGE_DEMOS           =  4,
+		ID_PAGE_NET             =  5,
+		ID_PAGE_NETCFG          =  6,
+		ID_PAGE_INFO            =  7,
+		ID_PAGE_MAIN            =  8,
+		ID_PAGE_GAMESTATS       =  9,
+		ID_PAGE_SINGLEPLAYER    = 10
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

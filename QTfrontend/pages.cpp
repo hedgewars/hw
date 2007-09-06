@@ -57,43 +57,43 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnSinglePlayer->setFont(*font14);
 	BtnSinglePlayer->setText(QPushButton::tr("Single Player"));
-	pageLayout->addWidget(BtnSinglePlayer, 1, 1);
+	pageLayout->addWidget(BtnSinglePlayer, 0, 1);
 
 	BtnMultiplayer = new QPushButton(this);
 	BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnMultiplayer->setFont(*font14);
 	BtnMultiplayer->setText(QPushButton::tr("Multiplayer"));
-	pageLayout->addWidget(BtnMultiplayer, 2, 1);
+	pageLayout->addWidget(BtnMultiplayer, 1, 1);
 
 	BtnNet = new QPushButton(this);
 	BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnNet->setFont(*font14);
 	BtnNet->setText(QPushButton::tr("Net game"));
-	pageLayout->addWidget(BtnNet, 3, 1);
+	pageLayout->addWidget(BtnNet, 2, 1);
 
 	BtnLoad = new QPushButton(this);
 	BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnLoad->setFont(*font14);
 	BtnLoad->setText(QPushButton::tr("Load"));
-	pageLayout->addWidget(BtnLoad, 4, 1);
+	pageLayout->addWidget(BtnLoad, 3, 1);
 
 	BtnDemos = new QPushButton(this);
 	BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnDemos->setFont(*font14);
 	BtnDemos->setText(QPushButton::tr("Demos"));
-	pageLayout->addWidget(BtnDemos, 5, 1);
+	pageLayout->addWidget(BtnDemos, 4, 1);
 
 	BtnSetup = new QPushButton(this);
 	BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnSetup->setFont(*font14);
 	BtnSetup->setText(QPushButton::tr("Setup"));
-	pageLayout->addWidget(BtnSetup, 6, 1);
+	pageLayout->addWidget(BtnSetup, 5, 1);
 
 	BtnInfo = new QPushButton(this);
 	BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnInfo->setFont(*font14);
 	BtnInfo->setText(QPushButton::tr("About"));
-	pageLayout->addWidget(BtnInfo, 7, 1);
+	pageLayout->addWidget(BtnInfo, 6, 1);
 
 	BtnExit = new QPushButton(parent);
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -116,7 +116,7 @@ PageSimpleGame::PageSimpleGame(QWidget* parent) : QWidget(parent)
 	BtnBack->setText(QPushButton::tr("Back"));
 	bottomLayout->addWidget(BtnBack, 100);
 	bottomLayout->addStretch(100);
-	BtnSimpleGame = new	QPushButton(this);
+	BtnSimpleGame = new QPushButton(this);
 	BtnSimpleGame->setFont(*font14);
 	BtnSimpleGame->setText(QPushButton::tr("Simple Game"));
 	bottomLayout->addWidget(BtnSimpleGame, 100);
@@ -530,3 +530,30 @@ PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
 	labelGameStats->setTextFormat(Qt::RichText);
 	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
 }
+
+PageSinglePlayer::PageSinglePlayer(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setMargin(25);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 2);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnSimpleGamePage = new QPushButton(this);
+	BtnSimpleGamePage->setFont(*font14);
+	BtnSimpleGamePage->setText(QPushButton::tr("Simple Game"));
+	pageLayout->addWidget(BtnSimpleGamePage, 0, 1);
+
+	BtnTrainPage = new QPushButton(this);
+	BtnTrainPage->setFont(*font14);
+	BtnTrainPage->setText(QPushButton::tr("Training"));
+	pageLayout->addWidget(BtnTrainPage, 1, 1);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 3, 1);
+
+}
+

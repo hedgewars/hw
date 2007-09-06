@@ -74,6 +74,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
+	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 
 	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
@@ -102,7 +103,9 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
-	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(GoToSimpleGame()));
+	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageSinglePlayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	GoToPage(ID_PAGE_MAIN);
 }
@@ -134,6 +137,11 @@ void HWForm::GoToMain()
 void HWForm::GoToSinglePlayer()
 {
 	GoToPage(ID_PAGE_SINGLEPLAYER);
+}
+
+void HWForm::GoToSimpleGame()
+{
+	GoToPage(ID_PAGE_SIMPLEGAME);
 }
 
 void HWForm::GoToSetup()

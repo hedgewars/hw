@@ -52,7 +52,7 @@ void Ui_HWForm::SetupFonts()
 
 void Ui_HWForm::SetupPages(QWidget *Parent)
 {
-	Pages =	new QStackedLayout(Parent);
+	Pages = new QStackedLayout(Parent);
 
 	pageSimpleGame = new PageSimpleGame();
 	Pages->addWidget(pageSimpleGame);
@@ -66,13 +66,13 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 	pageMultiplayer = new PageMultiplayer();
 	Pages->addWidget(pageMultiplayer);
 
-	pagePlayDemo =	new PagePlayDemo();
+	pagePlayDemo = new PagePlayDemo();
 	Pages->addWidget(pagePlayDemo);
 
 	pageNet = new PageNet();
 	Pages->addWidget(pageNet);
 
-	pageNetGame	= new PageNetGame();
+	pageNetGame = new PageNetGame();
 	Pages->addWidget(pageNetGame);
 
 	pageInfo = new PageInfo();
@@ -83,4 +83,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageGameStats = new PageGameStats();
 	Pages->addWidget(pageGameStats);
+
+	pageSinglePlayer = new PageSinglePlayer();
+	Pages->addWidget(pageSinglePlayer);
 }
