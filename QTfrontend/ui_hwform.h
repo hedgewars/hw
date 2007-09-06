@@ -20,7 +20,7 @@
 #define UI_HWFORM_H
 
 class PageMain;
-class PageLocalGame;
+class PageSimpleGame;
 class PageEditTeam;
 class PageMultiplayer;
 class PagePlayDemo;
@@ -41,7 +41,7 @@ public:
 	QWidget *centralWidget;
 
 	PageMain *pageMain;
-	PageLocalGame *pageLocalGame;
+	PageSimpleGame *pageSimpleGame;
 	PageEditTeam *pageEditTeam;
 	PageMultiplayer *pageMultiplayer;
 	PagePlayDemo *pagePlayDemo;

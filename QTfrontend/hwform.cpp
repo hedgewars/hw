@@ -64,8 +64,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-	connect(ui.pageLocalGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageLocalGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
+	connect(ui.pageSimpleGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageSimpleGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
 
 	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
 	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
@@ -286,7 +286,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	CreateGame(ui.pageLocalGame->gameCFG, 0);
+	CreateGame(ui.pageSimpleGame->gameCFG, 0);
 	game->StartQuick();
 }
 

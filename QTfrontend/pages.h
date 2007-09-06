@@ -60,12 +60,12 @@ public:
 	QPushButton *BtnExit;
 };
 
-class PageLocalGame : public QWidget
+class PageSimpleGame : public QWidget
 {
 	Q_OBJECT
 
 public:
-	PageLocalGame(QWidget* parent = 0);
+	PageSimpleGame(QWidget* parent = 0);
 
 	QPushButton *BtnSimpleGame;
 	QPushButton *BtnBack;

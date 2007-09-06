@@ -102,7 +102,7 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnExit, 7, 1);
 }
 
-PageLocalGame::PageLocalGame(QWidget* parent) : QWidget(parent)
+PageSimpleGame::PageSimpleGame(QWidget* parent) : QWidget(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QVBoxLayout * pageLayout = new QVBoxLayout(this);
