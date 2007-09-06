@@ -557,3 +557,24 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : QWidget(parent)
 
 }
 
+PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setMargin(25);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 2);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnStartTrain = new QPushButton(this);
+	BtnStartTrain->setFont(*font14);
+	BtnStartTrain->setText(QPushButton::tr("Go!"));
+	pageLayout->addWidget(BtnStartTrain, 1, 2);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 1, 0);
+
+}
+

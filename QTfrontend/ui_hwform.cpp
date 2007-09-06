@@ -86,4 +86,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageSinglePlayer = new PageSinglePlayer();
 	Pages->addWidget(pageSinglePlayer);
+
+	pageTraining = new PageTraining();
+	Pages->addWidget(pageTraining);
 }

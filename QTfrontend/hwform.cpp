@@ -104,8 +104,11 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(GoToSimpleGame()));
-	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoToTraining()));
 	connect(ui.pageSinglePlayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+
+	connect(ui.pageTraining->BtnStartTrain,	SIGNAL(clicked()),	this, SLOT(StartTraining()));
+	connect(ui.pageTraining->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	GoToPage(ID_PAGE_MAIN);
 }
@@ -142,6 +145,11 @@ void HWForm::GoToSinglePlayer()
 void HWForm::GoToSimpleGame()
 {
 	GoToPage(ID_PAGE_SIMPLEGAME);
+}
+
+void HWForm::GoToTraining()
+{
+	GoToPage(ID_PAGE_TRAINING);
 }
 
 void HWForm::GoToSetup()
@@ -529,4 +537,11 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 	}
 	demofile.write(demo.constData(), demo.size());
 	demofile.close();
+}
+
+void HWForm::StartTraining()
+{
+	CreateGame(0, 0);
+
+	game->StartTraining();
 }

@@ -280,6 +280,11 @@ void HWGame::StartQuick()
 	SetGameState(gsStarted);
 }
 
+void HWGame::StartTraining()
+{
+
+}
+
 void HWGame::SetGameState(GameState state)
 {
 	gameState = state;

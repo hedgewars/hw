@@ -48,6 +48,7 @@ public:
 	void StartLocal();
 	void StartQuick();
 	void StartNet();
+	void StartTraining();
 
  protected:
 	virtual QStringList setArguments();

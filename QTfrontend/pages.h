@@ -215,5 +215,16 @@ public:
 	GameCFGWidget *gameCFG;
 };
 
+class PageTraining : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageTraining(QWidget* parent = 0);
+
+	QPushButton *BtnStartTrain;
+	QPushButton *BtnBack;
+};
+
 
 #endif // PAGES_H

@@ -31,6 +31,7 @@ class PageNetGame;
 class PageInfo;
 class PageGameStats;
 class PageSinglePlayer;
+class PageTraining;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -53,6 +54,7 @@ public:
 	PageInfo *pageInfo;
 	PageGameStats *pageGameStats;
 	PageSinglePlayer *pageSinglePlayer;
+	PageTraining *pageTraining;
 
 	QStackedLayout *Pages;
 	QFont *font14;

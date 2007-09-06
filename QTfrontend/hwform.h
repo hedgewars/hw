@@ -51,6 +51,7 @@ private slots:
 	void GoToNet();
 	void GoToInfo();
 	void GoToSimpleGame();
+	void GoToTraining();
 	void GoToPage(quint8 id);
 	void GoBack();
 	void btnExitPressed();
@@ -62,6 +63,7 @@ private slots:
 	void TeamDiscard();
 	void SimpleGame();
 	void PlayDemo();
+	void StartTraining();
 	void NetConnect();
 	void NetConnectServer();
 	void NetStartServer();
@@ -92,7 +94,8 @@ private:
 		ID_PAGE_INFO            =  7,
 		ID_PAGE_MAIN            =  8,
 		ID_PAGE_GAMESTATS       =  9,
-		ID_PAGE_SINGLEPLAYER    = 10
+		ID_PAGE_SINGLEPLAYER    = 10,
+		ID_PAGE_TRAINING	= 11
 		};
 	HWGame * game;
 	HWTeam * editedTeam;
