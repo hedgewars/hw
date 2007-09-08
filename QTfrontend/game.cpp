@@ -115,6 +115,31 @@ void HWGame::SendQuickConfig()
 			team2.TeamGameConfig(gamecfg->getInitHealth())));
 }
 
+void HWGame::SendTrainingConfig()
+{
+	QByteArray teamscfg;
+	HWProto::addStringToBuffer(teamscfg, "TL");
+	HWProto::addStringToBuffer(teamscfg, "eseed none");
+	HWProto::addStringToBuffer(teamscfg, "e$gmflags 0");
+	HWProto::addStringToBuffer(teamscfg, "e$turntime 60000");
+	HWProto::addStringToBuffer(teamscfg, "emap mushrooms");
+	HWProto::addStringToBuffer(teamscfg, "etheme avematan");
+
+	HWTeam team1(0);
+	team1.difficulty = 0;
+	team1.teamColor = QColor(65535);
+	team1.numHedgehogs = 4;
+	HWProto::addStringListToBuffer(teamscfg,
+			team1.TeamGameConfig(100));
+
+	HWTeam team2(2);
+	team2.difficulty = 4;
+	team2.teamColor = QColor(16776960);
+	team2.numHedgehogs = 4;
+	RawSendIPC(HWProto::addStringListToBuffer(teamscfg,
+			team2.TeamGameConfig(100)));
+}
+
 void HWGame::SendNetConfig()
 {
 	commonConfig();
@@ -140,6 +165,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
 				case gtDemo: break;
 				case gtNet: {
 					SendNetConfig();
+					break;
+				}
+				case gtTraining: {
+				 	SendTrainingConfig();
 					break;
 				}
 			}
@@ -282,7 +311,11 @@ void HWGame::StartQuick()
 
 void HWGame::StartTraining()
 {
-
+	gameType = gtTraining;
+	seed = "training";
+	demo.clear();
+	Start();
+	SetGameState(gsStarted);
 }
 
 void HWGame::SetGameState(GameState state)

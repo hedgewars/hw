@@ -150,7 +150,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 
 	pageLayout->addWidget(GBoxTeam, 0, 0);
 
-	GBoxHedgehogs = new	QGroupBox(this);
+	GBoxHedgehogs = new QGroupBox(this);
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
 	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
@@ -168,7 +168,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	BtnTeamDiscard->setText(QPushButton::tr("Discard"));
 	pageLayout->addWidget(BtnTeamDiscard, 4, 0);
 
-	GBoxBinds =	new QGroupBox(this);
+	GBoxBinds = new QGroupBox(this);
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
 	QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
 	BindsBox = new QToolBox(GBoxBinds);
@@ -208,7 +208,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 		widind++;
 	}
 
-	GBoxGrave =	new QGroupBox(this);
+	GBoxGrave = new QGroupBox(this);
 	GBoxGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
 	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
@@ -245,13 +245,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	CBFort = new QComboBox(GBoxFort);
 	CBFort->setMaxCount(65535);
 	GBFLayout->addWidget(CBFort, 0, 0);
-	FortPreview	= new SquareLabel(GBoxFort);
+	FortPreview = new SquareLabel(GBoxFort);
 	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	FortPreview->setPixmap(QPixmap());
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	pageLayout->addWidget(GBoxFort, 2, 2, 1, 2);
 
-	BtnTeamSave	= new QPushButton(this);
+	BtnTeamSave = new QPushButton(this);
 	BtnTeamSave->setFont(*font14);
 	BtnTeamSave->setText(QPushButton::tr("Save"));
 	pageLayout->addWidget(BtnTeamSave, 4, 2, 1, 2);
@@ -539,21 +539,23 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
+	pageLayout->setRowStretch(0, 1);
+	pageLayout->setRowStretch(3, 1);
 
 	BtnSimpleGamePage = new QPushButton(this);
 	BtnSimpleGamePage->setFont(*font14);
 	BtnSimpleGamePage->setText(QPushButton::tr("Simple Game"));
-	pageLayout->addWidget(BtnSimpleGamePage, 0, 1);
+	pageLayout->addWidget(BtnSimpleGamePage, 1, 1);
 
 	BtnTrainPage = new QPushButton(this);
 	BtnTrainPage->setFont(*font14);
 	BtnTrainPage->setText(QPushButton::tr("Training"));
-	pageLayout->addWidget(BtnTrainPage, 1, 1);
+	pageLayout->addWidget(BtnTrainPage, 2, 1);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 3, 1);
+	pageLayout->addWidget(BtnBack, 4, 0);
 
 }
 
