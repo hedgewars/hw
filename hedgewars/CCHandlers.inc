@@ -464,3 +464,9 @@ begin
 cTagsMask:= map[cTagsMask]
 end;
 
+procedure chAddTrigger(var s: shortstring);
+var t: integer;
+begin
+val(s, t);
+AddTrigger(t)
+end;

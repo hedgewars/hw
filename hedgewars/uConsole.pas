@@ -36,7 +36,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos;
+     uRandom, uAmmos, uTriggers;
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
 
@@ -282,6 +282,7 @@ RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
 RegisterVariable('capture' , vtCommand, @chCapture      , true );
 RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
 RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
+RegisterVariable('addtrig' , vtCommand, @chAddTrigger   , false);
 RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
 RegisterVariable('map'     , vtCommand, @chSetMap       , false);
 RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
