@@ -130,7 +130,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepGirder,
                                                                @doStepTeleport,
                                                                @doStepHealthTag,
-                                                               @doStepSwitcher
+                                                               @doStepSwitcher,
+                                                               @doStepCase
                                                                );
 
 procedure InsertGearToList(Gear: PGear);

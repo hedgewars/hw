@@ -830,9 +830,12 @@ if Gear^.Damage > 0 then
    x:= hwRound(Gear^.X);
    y:= hwRound(Gear^.Y);
    DeleteGear(Gear);
-   doMakeExplosion(x, y, 25, EXPLAutoSound);
-   for i:= 0 to 63 do
-       AddGear(x, y, gtFlame, 0, _0, _0, 0);
+   if Gear^.Kind = gtCase then
+      begin
+      doMakeExplosion(x, y, 25, EXPLAutoSound);
+      for i:= 0 to 63 do
+          AddGear(x, y, gtFlame, 0, _0, _0, 0);
+      end;
    exit
    end;
 

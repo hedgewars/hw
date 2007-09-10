@@ -40,7 +40,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
-                   sprSwitch, sprParachute);
+                   sprSwitch, sprParachute, sprTarget);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -48,7 +48,7 @@ type TStuff     = (sConsoleBG, sPowerBar, sQuestion, sWindBar,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
-                   gtTeleport, gtSmallDamage, gtSwitcher);
+                   gtTeleport, gtSmallDamage, gtSwitcher, gtTarget);
 
      TGearsType = set of TGearType;
 
@@ -330,7 +330,9 @@ const
                      (FileName:    'Switch'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                      Width:  32; Height: 32; hasAlpha: false),// sprSwitch
                      (FileName: 'Parachute'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                     Width:  48; Height: 48; hasAlpha: true) // sprParachute
+                     Width:  48; Height: 48; hasAlpha: true),// sprParachute
+                     (FileName:    'Target'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                     Width:  32; Height: 32; hasAlpha:false) // sprTarget
                      );
                      
       Soundz: array[TSound] of record
