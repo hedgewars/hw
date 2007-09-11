@@ -147,11 +147,3 @@ target_link_libraries(hedgewars
 	${HW_LINK_LIBS})
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
-
-if(WIN32 AND NOT UNIX)
-	string(REPLACE "\\" "/" QT_BIN_DIR $ENV{QTDIR}/bin)
-
-	install(FILES
-		"${QT_BIN_DIR}/mingwm10.dll"
-		DESTINATION bin)
-endif(WIN32 AND NOT UNIX)
