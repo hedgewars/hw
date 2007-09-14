@@ -21,32 +21,61 @@ unit uTriggers;
 interface
 uses SDLh, uConsts;
 {$INCLUDE options.inc}
+const trigTurns = $80000001;
 
-procedure AddTrigger(id: Longword);
-procedure DoTrigger(id: Longword);
+procedure AddTrigger(id, Ticks: Longword);
+procedure TickTrigger(id: Longword);
 
 implementation
-uses uGears;
+uses uGears, uFloat, uMisc;
 type PTrigger = ^TTrigger;
      TTrigger = record
                 id: Longword;
+                Ticks: Longword;
                 Next: PTrigger;
                 end;
 var TriggerList: PTrigger = nil;
 
-procedure AddTrigger(id: Longword);
+procedure AddTrigger(id, Ticks: Longword);
 var tmp: PTrigger;
 begin
+if (Ticks = 0) then exit;
+{$IFDEF DEBUGFILE}AddFileLog('Add trigger: ' + inttostr(id));{$ENDIF}
 new(tmp);
 FillChar(tmp^, sizeof(TGear), 0);
 
 tmp^.id:= id;
+tmp^.Ticks:= Ticks;
 if TriggerList <> nil then tmp^.Next:= TriggerList;
 TriggerList:= tmp
 end;
 
-procedure DoTrigger(id: Longword);
+procedure TickTriggerT(Trigger: PTrigger);
 begin
+AddGear(1024, -140, gtTarget, 0, _0, _0, 0)
+end;
+
+procedure TickTrigger(id: Longword);
+var t, tt: PTrigger;
+begin
+t:= TriggerList;
+
+while (t <> nil) do
+  begin
+  if t^.id = id then
+    begin
+    tt:= t;
+    dec(t^.Ticks);
+    if (t^.Ticks = 0) then
+       begin
+       TickTriggerT(t);
+       if t = TriggerList then TriggerList:= t^.Next
+                          else tt^.Next:= t^.Next;
+       Dispose(t)
+       end
+       else t:= t^.Next
+    end else t:= t^.Next
+  end
 end;
 
 end.

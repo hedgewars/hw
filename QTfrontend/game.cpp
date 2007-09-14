@@ -136,8 +136,12 @@ void HWGame::SendTrainingConfig()
 	team2.difficulty = 4;
 	team2.teamColor = QColor(16776960);
 	team2.numHedgehogs = 4;
-	RawSendIPC(HWProto::addStringListToBuffer(teamscfg,
-			team2.TeamGameConfig(100)));
+	HWProto::addStringListToBuffer(teamscfg,
+			team2.TeamGameConfig(100));
+
+	HWProto::addStringToBuffer(teamscfg, "eaddtrig 2147483649");
+
+	RawSendIPC(teamscfg);
 }
 
 void HWGame::SendNetConfig()

@@ -69,7 +69,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: LongInt;
@@ -291,6 +291,9 @@ gtAmmo_Grenade: begin
                 end;
     gtSwitcher: begin
                 Result^.Z:= cCurrHHZ
+                end;
+      gtTarget: begin
+                Result^.Radius:= 16
                 end;
      end;
 InsertGearToList(Result);
@@ -608,6 +611,7 @@ while Gear<>nil do
                                      else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1, Surface);
          gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, 0, Surface);
+          gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0, Surface);
               end;
       Gear:= Gear^.NextGear
       end;
@@ -672,6 +676,7 @@ while Gear <> nil do
               gtHedgehog,
                   gtMine,
                   gtCase,
+                gtTarget,
                  gtFlame: begin
                           {$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
                           if (Mask and EXPLNoDamage) = 0 then
@@ -717,7 +722,8 @@ while t <> nil do
        case t^.Kind of
            gtHedgehog,
                gtMine,
-               gtCase: begin
+               gtCase,
+             gtTarget: begin
                        inc(t^.Damage, dmg);
                        if t^.Kind = gtHedgehog then
                           begin
@@ -756,6 +762,7 @@ while i > 0 do
        case t^.ar[i]^.Kind of
            gtHedgehog,
                gtMine,
+             gtTarget,
                gtCase: begin
                        inc(t^.ar[i]^.Damage, Damage);
                        if t^.ar[i]^.Kind = gtHedgehog then

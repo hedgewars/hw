@@ -31,6 +31,7 @@ set(engine_sources
 	uSound.pas
 	uStore.pas
 	uTeams.pas
+	uTriggers.pas
 	uWorld.pas
 	CCHandlers.inc
 	GSHandlers.inc

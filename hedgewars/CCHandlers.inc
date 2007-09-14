@@ -263,6 +263,7 @@ begin
 if AllInactive then
    begin
    if not CurrentTeam^.ExtDriven then SendIPC('N');
+   TickTrigger(trigTurns);
    {$IFDEF DEBUGFILE}AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));{$ENDIF}
    SwitchHedgehog;
    end
@@ -465,8 +466,8 @@ cTagsMask:= map[cTagsMask]
 end;
 
 procedure chAddTrigger(var s: shortstring);
-var t: integer;
+var t: LongWord;
 begin
 val(s, t);
-AddTrigger(t)
+AddTrigger(t, 1)
 end;
