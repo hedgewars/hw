@@ -49,6 +49,7 @@ type PGear = ^TGear;
              Surf: PSDL_Surface;
              Z: Longword;
              IntersectGear: PGear;
+             TriggerId: Longword;
              end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -332,6 +333,7 @@ if Gear^.Kind = gtHedgehog then
       RecountTeamHealth(team);
       end;
 {$IFDEF DEBUGFILE}AddFileLog('DeleteGear');{$ENDIF}
+if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);

@@ -139,7 +139,11 @@ void HWGame::SendTrainingConfig()
 	HWProto::addStringListToBuffer(teamscfg,
 			team2.TeamGameConfig(100));
 
-	HWProto::addStringToBuffer(teamscfg, "eaddtrig 2147483649");
+//	HWProto::addStringToBuffer(teamscfg, "eaddtrig 2147483649");
+	HWProto::addStringToBuffer(teamscfg, "eaddtrig s2147483649 1 1 33 1100 -100 1");
+	HWProto::addStringToBuffer(teamscfg, "eaddtrig s1 1 1 33 1200 -100 2");
+	HWProto::addStringToBuffer(teamscfg, "eaddtrig s2 1 1 33 1300 -100 3");
+	HWProto::addStringToBuffer(teamscfg, "eaddtrig s3 1 1 33 1400 -100 0");
 
 	RawSendIPC(teamscfg);
 }

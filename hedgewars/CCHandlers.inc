@@ -466,8 +466,30 @@ cTagsMask:= map[cTagsMask]
 end;
 
 procedure chAddTrigger(var s: shortstring);
-var t: LongWord;
+var ttype, gt, geartrig, Ticks, Lives: LongWord;
+    X, Y: LongInt;
+    c: char;
+    tmp: shortstring;
 begin
-val(s, t);
-AddTrigger(t, 1, 2)
+c:= s[1];
+Delete(s, 1, 1);
+case c of
+  's': begin // s12345 1 1 33 0 0 123456
+       SplitBySpace(s, tmp);
+       val(s, ttype);
+       SplitBySpace(tmp, s);
+       val(tmp, Ticks);
+       SplitBySpace(s, tmp);
+       val(s, Lives);
+       SplitBySpace(tmp, s);
+       val(tmp, gt);
+       SplitBySpace(s, tmp);
+       val(s, X);
+       SplitBySpace(tmp, s);
+       val(tmp, Y);
+       SplitBySpace(s, tmp);
+       val(s, geartrig);
+       AddTriggerSpawner(ttype, Ticks, Lives, X, Y, TGearType(gt), geartrig);
+       end;
+  end
 end;
