@@ -469,5 +469,5 @@ procedure chAddTrigger(var s: shortstring);
 var t: LongWord;
 begin
 val(s, t);
-AddTrigger(t, 1)
+AddTrigger(t, 1, 2)
 end;

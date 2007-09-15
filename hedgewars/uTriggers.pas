@@ -23,7 +23,7 @@ uses SDLh, uConsts;
 {$INCLUDE options.inc}
 const trigTurns = $80000001;
 
-procedure AddTrigger(id, Ticks: Longword);
+procedure AddTrigger(id, Ticks, Lives: Longword);
 procedure TickTrigger(id: Longword);
 
 implementation
@@ -32,20 +32,24 @@ type PTrigger = ^TTrigger;
      TTrigger = record
                 id: Longword;
                 Ticks: Longword;
+                Lives: Longword;
+                TicksPerLife: LongWord;
                 Next: PTrigger;
                 end;
 var TriggerList: PTrigger = nil;
 
-procedure AddTrigger(id, Ticks: Longword);
+procedure AddTrigger(id, Ticks, Lives: Longword);
 var tmp: PTrigger;
 begin
-if (Ticks = 0) then exit;
+if (Ticks = 0) or (Lives = 0) then exit;
 {$IFDEF DEBUGFILE}AddFileLog('Add trigger: ' + inttostr(id));{$ENDIF}
 new(tmp);
 FillChar(tmp^, sizeof(TGear), 0);
 
 tmp^.id:= id;
 tmp^.Ticks:= Ticks;
+tmp^.TicksPerLife:= Ticks;
+tmp^.Lives:= Lives;
 if TriggerList <> nil then tmp^.Next:= TriggerList;
 TriggerList:= tmp
 end;
@@ -56,25 +60,32 @@ AddGear(1024, -140, gtTarget, 0, _0, _0, 0)
 end;
 
 procedure TickTrigger(id: Longword);
-var t, tt: PTrigger;
+var t, pt, nt: PTrigger;
 begin
 t:= TriggerList;
+pt:= nil;
 
 while (t <> nil) do
   begin
-  if t^.id = id then
+  nt:= t^.Next;
+  if (t^.id = id) then
     begin
-    tt:= t;
     dec(t^.Ticks);
     if (t^.Ticks = 0) then
        begin
        TickTriggerT(t);
-       if t = TriggerList then TriggerList:= t^.Next
-                          else tt^.Next:= t^.Next;
-       Dispose(t)
+       dec(t^.Lives);
+       t^.Ticks:= t^.TicksPerLife;
+       if (t^.Lives = 0) then
+          begin
+          if t = TriggerList then TriggerList:= nt
+                             else pt^.Next:= nt;
+          Dispose(t)
+          end
        end
-       else t:= t^.Next
-    end else t:= t^.Next
+    end;
+  pt:= t;
+  t:= nt
   end
 end;
 
