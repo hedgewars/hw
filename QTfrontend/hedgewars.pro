@@ -41,7 +41,8 @@ HEADERS += binds.h \
            chatwidget.h \
            SDLs.h \
            playrecordpage.h \
-           hwconsts.h
+           hwconsts.h \
+           selectWeapon.h
            
            
 SOURCES += binds.cpp \
@@ -73,7 +74,8 @@ SOURCES += binds.cpp \
            chatwidget.cpp \
            SDLs.cpp \
            playrecordpage.cpp \
-           hwconsts.cpp
+           hwconsts.cpp \
+           selectWeapon.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 

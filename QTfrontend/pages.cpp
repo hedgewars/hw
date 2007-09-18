@@ -395,6 +395,12 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 4, 0);
+
+	WeaponsButt = new QPushButton(this);
+	WeaponsButt->setFont(*font14);
+	WeaponsButt->setText(QPushButton::tr("Weapons scheme"));
+	pageLayout->addWidget(WeaponsButt, 1, 0);
+
 }
 
 PageNet::PageNet(QWidget* parent) : QWidget(parent)

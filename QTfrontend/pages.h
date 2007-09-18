@@ -130,6 +130,7 @@ class PageOptions : public QWidget
 public:
 	PageOptions(QWidget* parent = 0);
 
+	QPushButton* WeaponsButt;
 	QPushButton *BtnBack;
 	QGroupBox *groupBox;
 	QPushButton *BtnNewTeam;
