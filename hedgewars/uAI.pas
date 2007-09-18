@@ -30,9 +30,9 @@ uses uTeams, uConsts, SDLh, uAIMisc, uGears, uAIAmmoTests, uAIActions, uMisc,
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
-    ThinkThread: THandle;
+    ThinkThread: TThreadID;
     hasThread: LongInt = 0;
-    
+
 procedure FreeActionsList;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('FreeActionsList called');{$ENDIF}
