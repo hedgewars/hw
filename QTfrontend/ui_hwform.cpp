@@ -89,4 +89,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageTraining = new PageTraining();
 	Pages->addWidget(pageTraining);
+
+	pageSelectWeapon = new PageSelectWeapon();
+	Pages->addWidget(pageSelectWeapon);
 }

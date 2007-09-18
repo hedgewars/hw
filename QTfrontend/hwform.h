@@ -52,6 +52,7 @@ private slots:
 	void GoToInfo();
 	void GoToSimpleGame();
 	void GoToTraining();
+	void GoToSelectWeapon();
 	void GoToPage(quint8 id);
 	void GoBack();
 	void btnExitPressed();
@@ -95,7 +96,8 @@ private:
 		ID_PAGE_MAIN            =  8,
 		ID_PAGE_GAMESTATS       =  9,
 		ID_PAGE_SINGLEPLAYER    = 10,
-		ID_PAGE_TRAINING	= 11
+		ID_PAGE_TRAINING        = 11,
+		ID_PAGE_SELECTWEAPON    = 12
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

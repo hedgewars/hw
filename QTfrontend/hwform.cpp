@@ -86,6 +86,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
 	// TODO
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
@@ -111,6 +112,8 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageTraining->BtnStartTrain,	SIGNAL(clicked()),	this, SLOT(StartTraining()));
 	connect(ui.pageTraining->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+
+	connect(ui.pageSelectWeapon->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	GoToPage(ID_PAGE_MAIN);
 }
@@ -157,6 +160,11 @@ void HWForm::GoToTraining()
 void HWForm::GoToSetup()
 {
 	GoToPage(ID_PAGE_SETUP);
+}
+
+void HWForm::GoToSelectWeapon()
+{
+	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
 void HWForm::GoToInfo()

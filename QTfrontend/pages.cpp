@@ -583,6 +583,20 @@ PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
+}
 
+PageSelectWeapon::PageSelectWeapon(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setMargin(25);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 2);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 1, 0);
 }
 

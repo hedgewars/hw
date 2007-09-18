@@ -227,5 +227,14 @@ public:
 	QPushButton *BtnBack;
 };
 
+class PageSelectWeapon : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageSelectWeapon(QWidget* parent = 0);
+
+	QPushButton *BtnBack;
+};
 
 #endif // PAGES_H
