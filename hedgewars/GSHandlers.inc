@@ -866,7 +866,7 @@ var thexchar: array[0..cMaxTeams] of
                              team: PTeam;
                              SortFactor: QWord;
                              end;
-    currsorter: PGear;
+    currsorter: PGear = nil;
 
 procedure doStepTeamHealthSorterWork(Gear: PGear);
 var i: LongInt;
@@ -906,7 +906,8 @@ for t:= 0 to Pred(TeamsCount) do
       SortFactor:= (SortFactor shl 30) + TeamsArray[t]^.TeamHealth;
       end;
 
-repeat
+if TeamsCount > 1 then
+  repeat
     b:= true;
     for t:= 0 to TeamsCount - 2 do
         if (thexchar[t].SortFactor > thexchar[Succ(t)].SortFactor) then
@@ -916,7 +917,7 @@ repeat
            thexchar[Succ(t)]:= thexchar[cMaxTeams];
            b:= false
            end
-until b;
+  until b;
 
 t:= cScreenHeight - 4;
 for i:= 0 to Pred(TeamsCount) do

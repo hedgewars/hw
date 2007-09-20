@@ -137,7 +137,8 @@ const
 
       cInactDelay = 1500;
 
-      gfForts = $00000001;
+      gfForts       = $00000001;
+      gfOneClanMode = $10000000;
 
       gstDrowning       = $00000001;
       gstHHDriven       = $00000002;

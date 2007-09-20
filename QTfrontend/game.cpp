@@ -120,7 +120,7 @@ void HWGame::SendTrainingConfig()
 	QByteArray teamscfg;
 	HWProto::addStringToBuffer(teamscfg, "TL");
 	HWProto::addStringToBuffer(teamscfg, "eseed none");
-	HWProto::addStringToBuffer(teamscfg, "e$gmflags 0");
+	HWProto::addStringToBuffer(teamscfg, QString("e$gmflags %1").arg(0x10000000));
 	HWProto::addStringToBuffer(teamscfg, "e$turntime 60000");
 	HWProto::addStringToBuffer(teamscfg, "emap mushrooms");
 	HWProto::addStringToBuffer(teamscfg, "etheme avematan");
@@ -131,13 +131,6 @@ void HWGame::SendTrainingConfig()
 	team1.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
 			team1.TeamGameConfig(100));
-
-	HWTeam team2(2);
-	team2.difficulty = 4;
-	team2.teamColor = QColor(16776960);
-	team2.numHedgehogs = 4;
-	HWProto::addStringListToBuffer(teamscfg,
-			team2.TeamGameConfig(100));
 
 	QFile file(datadir->absolutePath() + "/Trainings/001_Shotgun.txt");
 	if(!file.open(QFile::ReadOnly))

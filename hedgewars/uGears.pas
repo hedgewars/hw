@@ -251,7 +251,7 @@ gtAmmo_Grenade: begin
                 end;
         gtCase: begin
                 Result^.Radius:= 16;
-                Result^.Elasticity:= _0_4
+                Result^.Elasticity:= _0_3
                 end;
   gtDEagleShot: begin
                 Result^.Radius:= 1;
@@ -294,7 +294,8 @@ gtAmmo_Grenade: begin
                 Result^.Z:= cCurrHHZ
                 end;
       gtTarget: begin
-                Result^.Radius:= 16
+                Result^.Radius:= 16;
+                Result^.Elasticity:= _0_3
                 end;
      end;
 InsertGearToList(Result);

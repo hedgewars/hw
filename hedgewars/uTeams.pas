@@ -106,7 +106,8 @@ for t:= 0 to Pred(ClansCount) do
        AliveClan:= ClansArray[t]
        end;
 
-if AliveCount >= 2 then exit(false);
+if  (AliveCount > 1) or
+   ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;

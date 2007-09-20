@@ -6,22 +6,36 @@
     <version>1</version>
     <projectmanagement>KDevCustomProject</projectmanagement>
     <primarylanguage>C++</primarylanguage>
-    <ignoreparts/>
+    <ignoreparts>
+      <part>kdevfilegroups</part>
+      <part>kdevvalgrind</part>
+      <part>kdevdoxygen</part>
+      <part>kdevregexptest</part>
+      <part>kdevdistpart</part>
+      <part>kdevscripting</part>
+      <part>kdevfilter</part>
+    </ignoreparts>
     <projectname>hedgewars</projectname>
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description></description>
     <versioncontrol>kdevsubversion</versioncontrol>
+    <defaultencoding></defaultencoding>
   </general>
   <kdevcustomproject>
     <run>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>bin/hedgewars</mainprogram>
+      <mainprogram>/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GNA/bin/hedgewars</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
+      <globaldebugarguments></globaldebugarguments>
+      <globalcwd>/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GNA</globalcwd>
+      <useglobalprogram>false</useglobalprogram>
+      <autoinstall>false</autoinstall>
+      <autokdesu>false</autokdesu>
     </run>
     <filetypes>
       <filetype>*.java</filetype>
@@ -165,11 +179,21 @@
         <default/>
       </environments>
     </make>
+    <other>
+      <prio>0</prio>
+      <otherbin></otherbin>
+      <defaulttarget></defaulttarget>
+      <otheroptions></otheroptions>
+      <selectedenvironment>default</selectedenvironment>
+      <environments>
+        <default/>
+      </environments>
+    </other>
   </kdevcustomproject>
   <kdevdebugger>
     <general>
       <dbgshell></dbgshell>
-      <programargs></programargs>
+      <programargs/>
       <gdbpath></gdbpath>
       <configGdbScript></configGdbScript>
       <runShellScript></runShellScript>
@@ -245,8 +269,8 @@
       <includestyle>3</includestyle>
       <root>/usr/qt/3</root>
       <designerintegration>EmbeddedKDevDesigner</designerintegration>
-      <qmake>/usr/qt/3/bin/qmake</qmake>
-      <designer>/usr/qt/3/bin/designer</designer>
+      <qmake>/usr/local/bin/qmake-qt4</qmake>
+      <designer>/usr/local/bin/designer-qt4</designer>
       <designerpluginpaths/>
     </qt>
     <references/>
@@ -285,6 +309,11 @@
       <inlineGet>true</inlineGet>
       <inlineSet>true</inlineSet>
     </creategettersetter>
+    <splitheadersource>
+      <enabled>false</enabled>
+      <synchronize>true</synchronize>
+      <orientation>Vertical</orientation>
+    </splitheadersource>
   </kdevcppsupport>
   <kdevfileview>
     <groups>
@@ -311,7 +340,8 @@
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments/>
-    <customTagfilePath/>
+    <customArguments></customArguments>
+    <customTagfilePath>/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GNA/tags</customTagfilePath>
+    <activeTagsFiles/>
   </ctagspart>
 </kdevelop>
