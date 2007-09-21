@@ -68,7 +68,7 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
 	dir.setFilter(QDir::Files);
 
 	QStringList sl = dir.entryList(QStringList(QString("*.%1").arg(extension)));
-	sl.replaceInStrings(QRegExp(QString("^(.*).%1$").arg(extension)), "\\1");
+	sl.replaceInStrings(QRegExp(QString("^(.*)\\.%1$").arg(extension)), "\\1");
 
 	DemosList->clear();
 	DemosList->addItems(sl);

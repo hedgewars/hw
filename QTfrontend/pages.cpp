@@ -261,12 +261,12 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	tmpdir.cd("Forts");
 	tmpdir.setFilter(QDir::Files);
 
-	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L.png"), "\\1"));
+	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
 	tmpdir.cd("../Graphics/Graves");
 	QStringList list = tmpdir.entryList(QStringList("*.png"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
-		CBGrave->addItem((*it).replace(QRegExp("^(.*).png"), "\\1"));
+		CBGrave->addItem((*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
 	}
 
 	connect(CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));

@@ -39,14 +39,14 @@ public:
 	bool isShowFPSEnabled();
 	bool isAltDamageEnabled();
 	quint8 timerInterval();
-
-private slots:
+	quint8 bitDepth();
 
 public slots:
 	void SaveOptions();
 
 private:
 	HWForm * Form;
+	quint8 depth;
 };
 
 #endif

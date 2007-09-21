@@ -19,6 +19,7 @@
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QLineEdit>
+#include <QDesktopWidget>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -44,6 +45,11 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
 
 	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
+
+	QDesktopWidget desktop;
+	depth = desktop.depth();
+	if (depth < 16) depth = 16;
+	else if (depth > 16) depth = 32;
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -51,7 +57,7 @@ QStringList GameUIConfig::GetTeamsList()
 	QStringList teamslist = cfgdir->entryList(QStringList("*.cfg"));
 	QStringList cleanedList;
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*).cfg$"), "\\1");
+	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.cfg$"), "\\1");
 	  cleanedList.push_back(tmpTeamStr);
 	}
 	return cleanedList;
@@ -108,4 +114,9 @@ bool GameUIConfig::isAltDamageEnabled()
 quint8 GameUIConfig::timerInterval()
 {
 	return 35 - Form->ui.pageOptions->fpsedit->value();
+}
+
+quint8 GameUIConfig::bitDepth()
+{
+	return depth;
 }
