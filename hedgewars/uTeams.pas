@@ -71,6 +71,7 @@ type PHedgehog = ^THedgehog;
              end;
 
 var CurrentTeam: PTeam = nil;
+    CurrentHedgehog: PHedgehog = nil;
     TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
     TeamsCount: Longword = 0;
     ClansArray: array[0..Pred(cMaxTeams)] of PClan;
@@ -169,7 +170,8 @@ repeat
     until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
 until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+with CurrentHedgehog^ do
      begin
      with Gear^ do
           begin
@@ -187,7 +189,7 @@ cWindSpeed:= rndSign(GetRandom * cMaxWindSpeed);
 g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
-ApplyAmmoChanges(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+ApplyAmmoChanges(CurrentHedgehog^);
 if CurrentTeam^.ExtDriven then SetDefaultBinds
                           else SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;

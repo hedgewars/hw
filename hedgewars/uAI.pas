@@ -45,7 +45,7 @@ if hasThread <> 0 then
    until hasThread = 0
    end;
 
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentHedgehog^ do
      if Gear <> nil then
         if BotLevel <> 0 then
            begin
@@ -68,7 +68,7 @@ BotLevel:= PHedgehog(Me^.Hedgehog)^.BotLevel;
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
        begin
-       with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+       with CurrentHedgehog^ do
             a:= Ammo^[CurSlot, CurAmmo].AmmoType;
        aa:= a;
        repeat
@@ -115,7 +115,7 @@ for i:= 0 to Pred(Targets.Count) do
         if a = High(TAmmoType) then a:= Low(TAmmoType)
                                else inc(a)
        until (a = aa) or
-             (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].AttacksNum > 0) or
+             (CurrentHedgehog^.AttacksNum > 0) or
              StopThinking
        end
 end;
@@ -317,7 +317,7 @@ procedure ProcessBot;
 const StartTicks: Longword = 0;
       cStopThinkTime = 40;
 begin
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentHedgehog^ do
      if (Gear <> nil)
         and ((Gear^.State and gstHHDriven) <> 0)
         and (TurnTimeLeft < cHedgehogTurnTime - 50) then

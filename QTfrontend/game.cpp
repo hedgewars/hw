@@ -252,7 +252,7 @@ QStringList HWGame::setArguments()
 	arguments << cfgdir->absolutePath();
 	arguments << QString::number(resolution.width());
 	arguments << QString::number(resolution.height());
-	arguments << "16"; // bpp
+	arguments << "32"; // bpp
 	arguments << QString("%1").arg(ipc_port);
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");

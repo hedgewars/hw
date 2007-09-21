@@ -186,8 +186,8 @@ Result^.Timer:= Timer;
 
 if CurrentTeam <> nil then
    begin
-   Result^.Hedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
-   Result^.IntersectGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear
+   Result^.Hedgehog:= CurrentHedgehog;
+   Result^.IntersectGear:= CurrentHedgehog^.Gear
    end;
    
 case Kind of
@@ -327,7 +327,7 @@ if Gear^.Kind = gtHedgehog then
          inc(StepDamage, t)
          end;
       team:= PHedgehog(Gear^.Hedgehog)^.Team;
-      if CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = Gear then
+      if CurrentHedgehog^.Gear = Gear then
          FreeActionsList; // to avoid ThinkThread on drawned gear
       PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
       inc(KilledHHs);
@@ -406,7 +406,7 @@ if AllInactive then
                  //AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
-                    with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+                    with CurrentHedgehog^ do
                          if MaxStepDamage < StepDamage then MaxStepDamage:= StepDamage;
                     StepDamage:= 0;
                     ParseCommand('/nextturn', true);
@@ -417,8 +417,8 @@ if AllInactive then
 
 if TurnTimeLeft > 0 then
    if CurrentTeam <> nil then
-      if CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil then
-         if ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.State and gstAttacking) = 0)
+      if CurrentHedgehog^.Gear <> nil then
+         if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
 
 inc(GameTicks)

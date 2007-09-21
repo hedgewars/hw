@@ -820,7 +820,7 @@ if (Gear^.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
    FreeActionsList;
-   with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+   with CurrentHedgehog^ do
      if Gear <> nil then Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
    exit
    end;
@@ -1204,7 +1204,7 @@ if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
    OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 
-   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   HHGear:= CurrentHedgehog^.Gear;
    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
    HHGear^.Message:= Msg;
    exit
@@ -1212,7 +1212,7 @@ if ((Gear^.Message and not gm_Switch) <> 0) or (TurnTimeLeft = 0) then
 
 if (Gear^.Message and gm_Switch) <> 0 then
    begin
-   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   HHGear:= CurrentHedgehog^.Gear;
    HHGear^.Message:= HHGear^.Message and not gm_Switch;
    State:= HHGear^.State;
    HHGear^.State:= 0;
@@ -1223,9 +1223,9 @@ if (Gear^.Message and gm_Switch) <> 0 then
 
    repeat
      CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-   until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
+   until (CurrentHedgehog^.Gear <> nil);
 
-   HHGear:= CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear;
+   HHGear:= CurrentHedgehog^.Gear;
    HHGear^.State:= State;
    HHGear^.Active:= true;
    FollowGear:= HHGear;

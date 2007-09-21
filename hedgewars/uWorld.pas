@@ -92,7 +92,7 @@ if bShowAmmoMenu then
 if CurrentTeam = nil then exit;
 Slot:= 0;
 Pos:= -1;
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentHedgehog^ do
      begin
      if Ammo = nil then exit;
      SlotsNum:= 0;
@@ -235,11 +235,11 @@ if CurrentTeam <> nil then
         1: begin
            r:= StuffPoz[sPowerBar];
            {$WARNINGS OFF}
-           r.w:= (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Power * 256) div cPowerDivisor;
+           r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
            {$WARNINGS ON}
            DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
            end;
-        2: with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+        2: with CurrentHedgehog^ do
                 begin
                 tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
@@ -329,7 +329,7 @@ if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 if isCursorVisible then
    begin
    if not bShowAmmoMenu then
-     with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+     with CurrentHedgehog^ do
        if (Gear^.State and gstHHChooseTarget) <> 0 then
          begin
          i:= Ammo^[CurSlot, CurAmmo].Pos;

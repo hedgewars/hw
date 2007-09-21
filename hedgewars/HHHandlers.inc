@@ -89,8 +89,8 @@ end;
 
 procedure AfterAttack;
 begin
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
-     CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentHedgehog^.Gear^,
+     CurrentHedgehog^ do
      begin
         Inc(AttacksNum);
         State:= State and not gstAttacking;
@@ -98,7 +98,7 @@ with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^,
            else begin
            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
            State:= State or gstAttacked;
-           OnUsedAmmo(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
+           OnUsedAmmo(CurrentHedgehog^)
            end;
      AttackBar:= 0;
      end
