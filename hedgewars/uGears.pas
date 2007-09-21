@@ -798,7 +798,7 @@ if (GameFlags and gfForts) <> 0 then
       begin
       for i:= 0 to cMaxHHIndex do
           with Hedgehogs[i] do
-               if Gear <> nil then FindPlace(Gear, false, t, t + 1024);
+               if (Gear <> nil) and (Gear^.X.QWordValue = 0) then FindPlace(Gear, false, t, t + 1024);
       inc(t, 1024);
       end
    end else // mix hedgehogs
@@ -809,7 +809,7 @@ if (GameFlags and gfForts) <> 0 then
       begin
       for i:= 0 to cMaxHHIndex do
           with Hedgehogs[i] do
-               if Gear <> nil then
+               if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
                   begin
                   ar[Count]:= Gear;
                   inc(Count)

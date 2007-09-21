@@ -295,6 +295,7 @@ RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
+RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
 RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
 RegisterVariable('say'     , vtCommand, @chSay          , true );

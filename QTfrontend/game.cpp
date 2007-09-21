@@ -128,7 +128,7 @@ void HWGame::SendTrainingConfig()
 	HWTeam team1(0);
 	team1.difficulty = 0;
 	team1.teamColor = QColor(65535);
-	team1.numHedgehogs = 4;
+	team1.numHedgehogs = 1;
 	HWProto::addStringListToBuffer(teamscfg,
 			team1.TeamGameConfig(100));
 

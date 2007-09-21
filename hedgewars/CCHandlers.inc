@@ -118,6 +118,18 @@ with CurrentTeam^ do
      end
 end;
 
+procedure chSetHHCoords(var x: shortstring);
+var y: shortstring;
+    t: Longint;
+begin
+if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then exit;
+SplitBySpace(x, y);
+val(x, t);
+CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
+val(y, t);
+CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
+end;
+
 procedure chAddAmmoStore(var descr: shortstring);
 begin
 AddAmmoStore(descr)
