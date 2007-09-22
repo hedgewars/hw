@@ -52,7 +52,6 @@ var Color: Longword;
 begin
 if isDeveloperMode then
    begin
-   ParseCommand('ammstore 93919294221912103323', true);
    SplitBySpace(s, ts);
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
@@ -101,7 +100,7 @@ with CurrentTeam^ do
      val(s, Gear^.Health);
      TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
      PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
-     Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1;
+     Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1; // FIXME HACK to get ammostores work
      Hedgehogs[HedgehogsNumber].Gear:= Gear;
      Hedgehogs[HedgehogsNumber].Name:= id;
      inc(HedgehogsNumber)
