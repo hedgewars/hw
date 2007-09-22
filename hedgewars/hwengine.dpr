@@ -21,7 +21,6 @@ WriteLn('Only Freepascal supported');
 {$ENDIF}
 
 program hwengine;
-{$APPTYPE CONSOLE}
 uses
   SDLh,
   uConsts in 'uConsts.pas',

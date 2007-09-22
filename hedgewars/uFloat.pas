@@ -62,6 +62,7 @@ function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat;
 
 {$J-}
+{$WARNINGS OFF}
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
       _1div50000: hwFloat = (isNegative: false; QWordValue:       85899);
@@ -115,12 +116,13 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
              _30: hwFloat = (isNegative: false; QWordValue:  4294967296 * 30);
             _128: hwFloat = (isNegative: false; QWordValue:  4294967296 * 128);
             _450: hwFloat = (isNegative: false; QWordValue:  4294967296 * 450);
-           _1024: hwFloat = (isNegative: false; QWordValue:  4398046511104);
-           _2048: hwFloat = (isNegative: false; QWordValue:  8796093022208);
+           _1024: hwFloat = (isNegative: false; QWordValue:  4294967296 * 1024);
+           _2048: hwFloat = (isNegative: false; QWordValue:  4294967296 * 2048);
           _10000: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10000);
 
          cLittle: hwFloat = (isNegative: false; QWordValue:           1);
          cHHKick: hwFloat = (isNegative: false; QWordValue:   128849018);  // _0_03
+{$WARNINGS ON}
 {$ENDIF}
 
 {$IFNDEF FPC}

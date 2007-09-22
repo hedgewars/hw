@@ -37,8 +37,10 @@ uses uMisc, uConsole;
 
 const chanTPU = 12;
 var Mus: PMixMusic = nil;
-    CurrMusic: Longword = 0;
     Volume: LongInt;
+{$IFDEF HAVE_MUSIC}
+    CurrMusic: Longword = 0;
+{$ENDIF}
 
 procedure InitSound;
 begin
