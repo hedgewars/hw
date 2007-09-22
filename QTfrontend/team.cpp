@@ -212,13 +212,9 @@ void HWTeam::GetFromPage(HWForm * hwform)
 QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 {
 	QStringList sl;
-	sl.push_back(QString("eaddteam %1").arg(teamColor.rgb() & 0xffffff));
+	sl.push_back(QString("eaddteam %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName));
 	if (m_netID)
 		sl.push_back("erdriven");
-	sl.push_back("ename team " + TeamName);
-
-	for (int i = 0; i < numHedgehogs; i++)
-		sl.push_back(QString("ename hh%1 ").arg(i).append(HHName[i]));
 
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
@@ -228,9 +224,10 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 			sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 
 	for (int t = 0; t < numHedgehogs; t++)
-	  sl.push_back(QString("eaddhh %1 %2")
+	  sl.push_back(QString("eaddhh %1 %2 %3")
 		       .arg(QString::number(difficulty),
-			    QString::number(InitHealth)));
+			    QString::number(InitHealth),
+			    HHName[t]));
 	return sl;
 }
 

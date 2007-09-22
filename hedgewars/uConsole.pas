@@ -290,7 +290,6 @@ RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
 RegisterVariable('c_height', vtLongInt, @cConsoleHeight , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
-RegisterVariable('name'    , vtCommand, @chName         , false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );

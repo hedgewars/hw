@@ -48,15 +48,17 @@ end;
 
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
+    ts: shortstring;
 begin
 if isDeveloperMode then
    begin
    ParseCommand('ammstore 93919294221912103323', true);
+   SplitBySpace(s, ts);
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
    AddTeam(Color);
-
+   CurrentTeam^.TeamName:= ts;
    if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
    end
 end;
@@ -66,20 +68,6 @@ begin
 if not isDeveloperMode then exit;
 if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
-end;
-
-procedure chName(var id: shortstring);
-var s: shortstring;
-begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/name"', true);
-SplitBySpace(id, s);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
-if id = 'team' then CurrentTeam^.TeamName:= s
-else if (id[1] = 'h') and (id[2] = 'h')
-     and (id[3] >= '0') and (id[3] <= chr(ord('0')+cMaxHHIndex)) then
-   CurrentTeam^.Hedgehogs[byte(id[3])-48].Name:= s
-else OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 end;
 
 procedure chGrave(var s: shortstring);
@@ -109,11 +97,13 @@ with CurrentTeam^ do
      CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
      val(id, CurrentHedgehog^.BotLevel);
      Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
+     SplitBySpace(s, id);
      val(s, Gear^.Health);
      TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
      PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
      Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1;
      Hedgehogs[HedgehogsNumber].Gear:= Gear;
+     Hedgehogs[HedgehogsNumber].Name:= id;
      inc(HedgehogsNumber)
      end
 end;
