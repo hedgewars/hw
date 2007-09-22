@@ -27,4 +27,4 @@ QDir * datadir = new QDir();
 
 QStringList * Themes;
 
-QString * cDefaultAmmoStore = "eammstore 93919294221912103323";
+QString * cDefaultAmmoStore = new QString("eammstore 93919294221912103323");
