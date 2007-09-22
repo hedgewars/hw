@@ -142,7 +142,7 @@ void HWGame::SendTrainingConfig()
 	QTextStream stream(&file);
 	while(!stream.atEnd())
 	{
-		HWProto::addStringToBuffer(teamscfg, stream.readLine());
+		HWProto::addStringToBuffer(teamscfg, "e" + stream.readLine());
 	}
 
 	RawSendIPC(teamscfg);

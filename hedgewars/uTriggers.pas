@@ -29,7 +29,7 @@ procedure AddTriggerSpawner(id, Ticks, Lives: Longword; X, Y: LongInt; GearType:
 procedure TickTrigger(id: Longword);
 
 implementation
-uses uGears, uFloat, uMisc;
+uses uGears, uFloat, uMisc, uWorld;
 type PTrigger = ^TTrigger;
      TTrigger = record
                 id: Longword;
@@ -69,7 +69,10 @@ procedure TickTriggerT(Trigger: PTrigger);
 begin
 with Trigger^ do
   case Action of
-     taSpawnGear: AddGear(X, Y, SpawnGearType, 0, _0, _0, 0)^.TriggerId:= SpawnGearTriggerId;
+     taSpawnGear: begin
+                  FollowGear:= AddGear(X, Y, SpawnGearType, 0, _0, _0, 0);
+                  FollowGear^.TriggerId:= SpawnGearTriggerId
+                  end
   end
 end;
 

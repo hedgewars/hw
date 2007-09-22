@@ -184,8 +184,12 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit;
 
    StepTicks:= cHHStepTicks;
-   if PrevdX <> hwSign(Gear^.dX) then exit;
-   DeleteCI(Gear); // after exit!!    ^^^^
+   if PrevdX <> hwSign(Gear^.dX) then
+      begin
+      FollowGear:= Gear;
+      exit
+      end;
+   DeleteCI(Gear); // must be after exit!! (see previous line)
    
    PHedgehog(Gear^.Hedgehog)^.visStepPos:= (PHedgehog(Gear^.Hedgehog)^.visStepPos + 1) and 7;
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then

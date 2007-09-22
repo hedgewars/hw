@@ -1,14 +1,14 @@
-eseed none
-e$gmflags 268435456
-e$turntime 60000
-emap mushrooms
-etheme avematan
-eammstore 00009000000000000000
-ehhcoords 1310 250
-eaddtrig s2147483649 1 1 33 1100 -100 1
-eaddtrig s1 1 1 33 760 545 2
-eaddtrig s2 1 1 33 1750 460 3
-eaddtrig s3 1 1 33 635 215 4
-eaddtrig s4 1 1 33 1450 275 5
-eaddtrig s5 1 1 33 220 535 6
-eaddtrig s6 1 1 33 1410 505 0
+seed none
+$gmflags 268435456
+$turntime 60000
+map mushrooms
+theme avematan
+ammstore 00009000000000000000
+hhcoords 1310 250
+addtrig s2147483649 1 1 33 1150 310 1
+addtrig s1 1 1 33 760 545 2
+addtrig s2 1 1 33 1750 460 3
+addtrig s3 1 1 33 635 215 4
+addtrig s4 1 1 33 1450 275 5
+addtrig s5 1 1 33 220 535 6
+addtrig s6 1 1 33 1410 505 0
