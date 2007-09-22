@@ -213,7 +213,6 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 {
 	QStringList sl;
 	sl.push_back(QString("eaddteam %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName));
-	sl.push_back("eammstore 93919294221912103323");
 
 	if (m_netID)
 		sl.push_back("erdriven");

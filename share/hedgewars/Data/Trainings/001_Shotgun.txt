@@ -1,3 +1,9 @@
+eseed none
+e$gmflags 268435456
+e$turntime 60000
+emap mushrooms
+etheme avematan
+eammstore 00009000000000000000
 ehhcoords 1500 310
 eaddtrig s2147483649 1 1 33 1100 -100 1
 eaddtrig s1 1 1 33 1200 -100 2
