@@ -43,6 +43,7 @@
 #include "chatwidget.h"
 #include "SDLs.h"
 #include "playrecordpage.h"
+#include "selectWeapon.h"
 
 PageMain::PageMain(QWidget* parent) : QWidget(parent)
 {
@@ -590,9 +591,12 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) : QWidget(parent)
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnStretch(1, 2);
-	pageLayout->setColumnStretch(2, 1);
+	//pageLayout->setColumnStretch(0, 1);
+	//pageLayout->setColumnStretch(1, 2);
+	//pageLayout->setColumnStretch(2, 1);
+        
+        pWeapons=new SelWeaponWidget(this);
+	pageLayout->addWidget(pWeapons, 0, 0);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);

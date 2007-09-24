@@ -67,7 +67,8 @@ set(hwfr_src
 	SDLs.cpp
 	playrecordpage.cpp
 	hwconsts.cpp
-	selectWeapon.cpp)
+	selectWeapon.cpp
+        itemNum.cpp)
 
 if (WIN32)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
@@ -99,7 +100,8 @@ set(hwfr_moc_hdrs
 	chatwidget.h
 	SDLs.h
 	playrecordpage.h
-	selectWeapon.h)
+	selectWeapon.h
+        itemNum.h)
 
 set(hwfr_hdrs
 	binds.h

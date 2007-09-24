@@ -18,26 +18,41 @@
 
 #include "hedgehogerWidget.h"
 
-#include <QMouseEvent>
-#include <QPainter>
-
 #include "frameTeam.h"
 
-CHedgehogerWidget::CHedgehogerWidget(QWidget * parent) :
-  QWidget(parent), nonInteractive(false)
+CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
+    ItemNum(im, parent)
 {
   if(parent) {
     pOurFrameTeams=dynamic_cast<FrameTeams*>(parent->parentWidget());
   }
   if(pOurFrameTeams->overallHedgehogs+4>pOurFrameTeams->maxHedgehogsPerGame) {
-    numHedgehogs=pOurFrameTeams->maxHedgehogsPerGame-pOurFrameTeams->overallHedgehogs;
-  } else numHedgehogs=4;
-  pOurFrameTeams->overallHedgehogs+=numHedgehogs;
+    numItems=pOurFrameTeams->maxHedgehogsPerGame-pOurFrameTeams->overallHedgehogs;
+  } else numItems=4;
+  pOurFrameTeams->overallHedgehogs+=numItems;
+}
+
+void CHedgehogerWidget::incItems() 
+{
+    if(numItems < 8 && pOurFrameTeams->overallHedgehogs<18) {
+      numItems++;
+      pOurFrameTeams->overallHedgehogs++;
+      emit hedgehogsNumChanged();
+    }
+}
+
+void CHedgehogerWidget::decItems()
+{
+    if(numItems > 1) {
+      numItems--;
+      pOurFrameTeams->overallHedgehogs--;
+      emit hedgehogsNumChanged();
+    }
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()
 {
-  pOurFrameTeams->overallHedgehogs-=numHedgehogs;
+  pOurFrameTeams->overallHedgehogs-=numItems;
 }
 
 void CHedgehogerWidget::setNonInteractive()
@@ -45,51 +60,15 @@ void CHedgehogerWidget::setNonInteractive()
   nonInteractive=true;
 }
 
-void CHedgehogerWidget::mousePressEvent ( QMouseEvent * event )
-{
-  if(nonInteractive) return;
-  if(event->button()==Qt::LeftButton) {
-    event->accept();
-    if(numHedgehogs < 8 && pOurFrameTeams->overallHedgehogs<18) {
-      numHedgehogs++;
-      pOurFrameTeams->overallHedgehogs++;
-      emit hedgehogsNumChanged();
-    }
-  } else if (event->button()==Qt::RightButton) {
-    event->accept();
-    if(numHedgehogs > 1) {
-      numHedgehogs--;
-      pOurFrameTeams->overallHedgehogs--;
-      emit hedgehogsNumChanged();
-    }
-  } else {
-    event->ignore();
-    return;
-  }
-  repaint();
-}
-
 void CHedgehogerWidget::setHHNum(unsigned int num)
 {
-  unsigned int diff=numHedgehogs-num;
-  numHedgehogs=num;
+  unsigned int diff=numItems-num;
+  numItems=num;
   pOurFrameTeams->overallHedgehogs+=diff;
   repaint();
 }
 
-void CHedgehogerWidget::paintEvent(QPaintEvent* event)
-{
-  QImage image(":/res/hh25x25.png");
-
-  QPainter painter(this);
-
-  for(int i=0; i<numHedgehogs; i++) {
-    QRect target(11 * i, i % 2, 25, 25);
-    painter.drawImage(target, image);
-  }
-}
-
 unsigned char CHedgehogerWidget::getHedgehogsNum() const
 {
-  return numHedgehogs;
+  return numItems;
 }

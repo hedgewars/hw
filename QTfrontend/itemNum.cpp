@@ -15,35 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
-#ifndef _HEDGEHOGER_WIDGET
-#define _HEDGEHOGER_WIDGET
-
+ 
 #include "itemNum.h"
 
-class FrameTeams;
+#include <QMouseEvent>
+#include <QPainter>
 
-class CHedgehogerWidget : public ItemNum
+ItemNum::ItemNum(const QImage& im, QWidget * parent) :
+    m_im(im), QWidget(parent), nonInteractive(false)
 {
-  Q_OBJECT
+}
 
- public:
-  CHedgehogerWidget(const QImage& im, QWidget * parent);
-  virtual ~CHedgehogerWidget();
-  unsigned char getHedgehogsNum() const;
-  void setHHNum (unsigned int num);
-  void setNonInteractive();
+ItemNum::~ItemNum()
+{
+}
 
- signals:
-  void hedgehogsNumChanged();
+void ItemNum::mousePressEvent ( QMouseEvent * event )
+{
+  if(nonInteractive) return;
+  if(event->button()==Qt::LeftButton) {
+    event->accept();
+    incItems();
+  } else if (event->button()==Qt::RightButton) {
+    event->accept();
+    decItems();
+  } else {
+    event->ignore();
+    return;
+  }
+  repaint();
+}
 
- protected:
-  virtual void incItems();
-  virtual void decItems();
+void ItemNum::paintEvent(QPaintEvent* event)
+{
+  QPainter painter(this);
 
- private:
-  CHedgehogerWidget();
-  FrameTeams* pOurFrameTeams;
-};
-
-#endif // _HEDGEHOGER_WIDGET
+  for(int i=0; i<numItems; i++) {
+    QRect target(11 * i, i % 2, 25, 25);
+    painter.drawImage(target, m_im);
+  }
+}

@@ -15,35 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
+ 
+#include <QWidget>
+#include <QImage>
 
-#ifndef _HEDGEHOGER_WIDGET
-#define _HEDGEHOGER_WIDGET
+#ifndef _ITEM_NUM_INCLUDED
+#define _ITEM_NUM_INCLUDED
 
-#include "itemNum.h"
-
-class FrameTeams;
-
-class CHedgehogerWidget : public ItemNum
+class ItemNum : public QWidget
 {
   Q_OBJECT
 
- public:
-  CHedgehogerWidget(const QImage& im, QWidget * parent);
-  virtual ~CHedgehogerWidget();
-  unsigned char getHedgehogsNum() const;
-  void setHHNum (unsigned int num);
-  void setNonInteractive();
-
- signals:
-  void hedgehogsNumChanged();
-
- protected:
-  virtual void incItems();
-  virtual void decItems();
-
- private:
-  CHedgehogerWidget();
-  FrameTeams* pOurFrameTeams;
+  protected:
+    ItemNum(const QImage& im, QWidget * parent);
+    virtual ~ItemNum()=0;
+    
+    bool nonInteractive;
+    unsigned char numItems;
+    
+    // from QWidget
+    virtual void mousePressEvent ( QMouseEvent * event );
+    virtual void paintEvent(QPaintEvent* event);
+  
+    // to be implemented in child
+    virtual void incItems()=0;
+    virtual void decItems()=0;
+    
+  private:
+    QImage m_im;
 };
 
-#endif // _HEDGEHOGER_WIDGET
+#endif // _ITEM_NUM_INCLUDED

@@ -44,7 +44,6 @@
 #include "netudpwidget.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
-#include "selectWeapon.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pUdpServer(0), editedTeam(0)

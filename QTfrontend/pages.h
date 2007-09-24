@@ -42,6 +42,7 @@ class FPSEdit;
 class HWNetUdpWidget;
 class QTextEdit;
 class HWChatWidget;
+class SelWeaponWidget;
 
 class PageMain : public QWidget
 {
@@ -235,6 +236,7 @@ public:
 	PageSelectWeapon(QWidget* parent = 0);
 
 	QPushButton *BtnBack;
+        SelWeaponWidget* pWeapons;
 };
 
 #endif // PAGES_H
