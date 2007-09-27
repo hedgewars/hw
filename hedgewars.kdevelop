@@ -158,6 +158,14 @@
       <path>share/hedgewars/Data/Themes/xtheme/Makefile</path>
       <path>share/hedgewars/Makefile</path>
       <path>share/Makefile</path>
+      <path>Makefile</path>
+      <path>tools</path>
+      <path>tools/templates</path>
+      <path>tools/templates/main.cpp</path>
+      <path>tools/templates/mainform.cpp</path>
+      <path>tools/templates/mainform.h</path>
+      <path>tools/templates/pixlabel.cpp</path>
+      <path>tools/templates/pixlabel.h</path>
     </blacklist>
     <general>
       <activedir/>

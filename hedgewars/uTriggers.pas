@@ -23,9 +23,10 @@ uses SDLh, uConsts;
 {$INCLUDE options.inc}
 const trigTurns = $80000001;
 
-type TTrigAction = (taSpawnGear);
+type TTrigAction = (taSpawnGear, taSuccessFinish);
 
 procedure AddTriggerSpawner(id, Ticks, Lives: Longword; X, Y: LongInt; GearType: TGearType; GearTriggerId: Longword);
+procedure AddTriggerSuccess(tId: Longword);
 procedure TickTrigger(id: Longword);
 
 implementation
@@ -44,14 +45,23 @@ type PTrigger = ^TTrigger;
                 end;
 var TriggerList: PTrigger = nil;
 
+function AddTrigger: PTrigger;
+var tmp: PTrigger;
+begin
+new(tmp);
+FillChar(tmp^, sizeof(TTrigger), 0);
+if TriggerList <> nil then tmp^.Next:= TriggerList;
+TriggerList:= tmp;
+AddTrigger:= tmp
+end;
+
 procedure AddTriggerSpawner(id, Ticks, Lives: Longword; X, Y: LongInt; GearType: TGearType; GearTriggerId: Longword);
 var tmp: PTrigger;
 begin
 if (Ticks = 0) or (Lives = 0) then exit;
 {$IFDEF DEBUGFILE}AddFileLog('Add spawner trigger: ' + inttostr(id) + ', gear triggers  ' + inttostr(GearTriggerId));{$ENDIF}
-new(tmp);
-FillChar(tmp^, sizeof(TTrigger), 0);
 
+tmp:= AddTrigger;
 tmp^.id:= id;
 tmp^.Ticks:= Ticks;
 tmp^.TicksPerLife:= Ticks;
@@ -60,9 +70,18 @@ tmp^.Action:= taSpawnGear;
 tmp^.X:= X;
 tmp^.Y:= Y;
 tmp^.SpawnGearType:= GearType;
-tmp^.SpawnGearTriggerId:= GearTriggerId;
-if TriggerList <> nil then tmp^.Next:= TriggerList;
-TriggerList:= tmp
+tmp^.SpawnGearTriggerId:= GearTriggerId
+end;
+
+procedure AddTriggerSuccess(tId: Longword);
+begin
+with AddTrigger^ do
+     begin
+     id:= tId;
+     Ticks:= 1;
+     TicksPerLife:= 1;
+     Action:= taSuccessFinish
+     end
 end;
 
 procedure TickTriggerT(Trigger: PTrigger);
@@ -72,6 +91,9 @@ with Trigger^ do
      taSpawnGear: begin
                   FollowGear:= AddGear(X, Y, SpawnGearType, 0, _0, _0, 0);
                   FollowGear^.TriggerId:= SpawnGearTriggerId
+                  end;
+ taSuccessFinish: begin
+                  GameState:= gsExit
                   end
   end
 end;

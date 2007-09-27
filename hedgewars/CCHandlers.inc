@@ -475,7 +475,7 @@ begin
 c:= s[1];
 Delete(s, 1, 1);
 case c of
-  's': begin // s12345 1 1 33 0 0 123456
+  's': begin // sTYPE TICKS LIVES GEARTYPE X Y GEARTRIGGER
        SplitBySpace(s, tmp);
        val(s, ttype);
        SplitBySpace(tmp, s);
@@ -491,6 +491,10 @@ case c of
        SplitBySpace(s, tmp);
        val(s, geartrig);
        AddTriggerSpawner(ttype, Ticks, Lives, X, Y, TGearType(gt), geartrig);
+       end;
+  'C': begin
+       val(s, ttype);
+       AddTriggerSuccess(ttype);
        end;
   end
 end;

@@ -11,4 +11,5 @@ addtrig s2 1 1 33 1750 460 3
 addtrig s3 1 1 33 635 215 4
 addtrig s4 1 1 33 1450 275 5
 addtrig s5 1 1 33 220 535 6
-addtrig s6 1 1 33 1410 505 0
+addtrig s6 1 1 33 1410 505 7
+addtrig C7
