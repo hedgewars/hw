@@ -373,7 +373,7 @@ if cAltDamage then
 end;
 
 procedure ProcessGears;
-const delay: LongInt = cInactDelay;
+const delay: LongWord = 0;
       step: (stDelay, stChDmg, stChWin, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 begin
@@ -389,12 +389,13 @@ while t<>nil do
 if AllInactive then
    case step of
         stDelay: begin
-                 dec(delay);
                  if delay = 0 then
-                    begin
-                    inc(step);
                     delay:= cInactDelay
-                    end
+                 else
+                    dec(delay);
+
+                 if delay = 0 then
+                    inc(step)
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
@@ -896,7 +897,9 @@ procedure SpawnBoxOfSmth;
 var t: LongInt;
     i: TAmmoType;
 begin
-if (CountGears(gtCase) >= 5) or (getrandom(cCaseFactor) <> 0) then exit;
+if (cCaseFactor = 0) or
+   (CountGears(gtCase) >= 5) or
+   (getrandom(cCaseFactor) <> 0) then exit;
 FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
 case getrandom(2) of
      0: begin

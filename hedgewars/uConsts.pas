@@ -115,7 +115,7 @@ const
 
       cTransparentColor: Longword = $000000;
 
-      cMaxTeams        = 6;  
+      cMaxTeams        = 6;
       cMaxHHIndex      = 7;
       cMaxHHs          = 30;
       cMaxSpawnPoints  = 1024;
@@ -135,9 +135,8 @@ const
 
       cMaxCaptions = 4;
 
-      cInactDelay = 1500;
-
       gfForts       = $00000001;
+      gfMultiWeapon = $00000002;
       gfOneClanMode = $10000000;
 
       gstDrowning       = $00000001;

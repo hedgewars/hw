@@ -94,7 +94,8 @@ with CurrentHedgehog^.Gear^,
      begin
         Inc(AttacksNum);
         State:= State and not gstAttacking;
-        if Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum then isInMultiShoot:= true
+        if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
+           ((GameFlags and gfMultiWeapon) <> 0) then isInMultiShoot:= true
            else begin
            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
            State:= State or gstAttacked;

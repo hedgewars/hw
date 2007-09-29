@@ -61,7 +61,7 @@ var isCursorVisible : boolean = false;
     cExplosionBorderColor : LongWord = $808080;
 
     cShowFPS      : boolean = true;
-    cCaseFactor   : Longword = 7;  {1..10}
+    cCaseFactor   : Longword = 6;  {0..9}
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
     cSeed         : shortstring = '';
@@ -69,9 +69,12 @@ var isCursorVisible : boolean = false;
     cVolumeDelta  : LongInt = 0;
     cTimerInterval   : Longword = 5;
     cHasFocus     : boolean = true;
+    cInactDelay   : Longword = 1500;
 
+{$WARNINGS OFF}
     cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
     cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
+{$WARNINGS ON}
 
 var
     cSendEmptyPacketTime : LongWord = 2000;

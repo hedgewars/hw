@@ -1,6 +1,8 @@
 seed none
-$gmflags 268435456
+$gmflags 268435458
 $turntime 60000
+$casefreq 0
+$delay 0
 map mushrooms
 theme avematan
 ammstore 00009000000000000000
