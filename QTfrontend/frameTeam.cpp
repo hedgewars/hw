@@ -18,6 +18,7 @@
 
 #include "frameTeam.h"
 #include "teamselhelper.h"
+#include "hwconsts.h"
 
 #include <QResizeEvent>
 #include <QCoreApplication>
@@ -27,12 +28,12 @@ FrameTeams::FrameTeams(QWidget* parent) :
 {
   mainLayout.setSpacing(1);
 
-  availableColors.push_back(QColor(  0, 255, 255));
-  availableColors.push_back(QColor(255, 127, 127));
-  availableColors.push_back(QColor(103, 167, 231));
-  availableColors.push_back(QColor( 37, 181,  61));
-  availableColors.push_back(QColor(247, 237, 112));
-  availableColors.push_back(QColor(192,  85, 160));
+  availableColors.push_back(*color1);
+  availableColors.push_back(*color2);
+  availableColors.push_back(*color3);
+  availableColors.push_back(*color4);
+  availableColors.push_back(*color5);
+  availableColors.push_back(*color6);
 
   resetColors();
 }

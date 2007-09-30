@@ -103,14 +103,14 @@ void HWGame::SendQuickConfig()
 	QByteArray teamscfg;
 	HWTeam team1(0);
 	team1.difficulty = 0;
-	team1.teamColor = QColor(65535);
+	team1.teamColor = *color1;
 	team1.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
 			team1.TeamGameConfig(gamecfg->getInitHealth()));
 
 	HWTeam team2(2);
 	team2.difficulty = 4;
-	team2.teamColor = QColor(16776960);
+	team2.teamColor = *color2;
 	team2.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
 			team2.TeamGameConfig(gamecfg->getInitHealth()));
@@ -127,7 +127,7 @@ void HWGame::SendTrainingConfig()
 
 	HWTeam team1(0);
 	team1.difficulty = 0;
-	team1.teamColor = QColor(65535);
+	team1.teamColor = *color1;
 	team1.numHedgehogs = 1;
 	HWProto::addStringListToBuffer(teamscfg,
 			team1.TeamGameConfig(100));

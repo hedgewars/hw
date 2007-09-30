@@ -19,6 +19,7 @@
 #include <QString>
 #include <QDir>
 #include <QStringList>
+#include <QColor>
 
 extern QString * cProtoVer;
 extern QString * cDataDir;
@@ -30,3 +31,10 @@ extern QDir * datadir;
 extern QStringList * Themes;
 
 extern QString * cDefaultAmmoStore;
+
+extern QColor * color1;
+extern QColor * color2;
+extern QColor * color3;
+extern QColor * color4;
+extern QColor * color5;
+extern QColor * color6;
