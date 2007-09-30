@@ -1,4 +1,4 @@
-seed none
+seed 0
 $gmflags 268435458
 $turntime 60000
 $casefreq 0
@@ -14,4 +14,5 @@ addtrig s3 1 1 33 635 215 4
 addtrig s4 1 1 33 1450 275 5
 addtrig s5 1 1 33 220 535 6
 addtrig s6 1 1 33 1410 505 7
-addtrig C7
+addtrig C7 1 1
+addtrig F2147483649 2 1

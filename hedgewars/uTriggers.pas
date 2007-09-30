@@ -23,10 +23,11 @@ uses SDLh, uConsts;
 {$INCLUDE options.inc}
 const trigTurns = $80000001;
 
-type TTrigAction = (taSpawnGear, taSuccessFinish);
+type TTrigAction = (taSpawnGear, taSuccessFinish, taFailFinish);
 
-procedure AddTriggerSpawner(id, Ticks, Lives: Longword; X, Y: LongInt; GearType: TGearType; GearTriggerId: Longword);
-procedure AddTriggerSuccess(tId: Longword);
+procedure AddTriggerSpawner(id, Ticks, Lives: Longword; GearType: TGearType; X, Y: LongInt; GearTriggerId: Longword);
+procedure AddTriggerSuccess(id, Ticks, Lives: Longword);
+procedure AddTriggerFail(id, Ticks, Lives: Longword);
 procedure TickTrigger(id: Longword);
 
 implementation
@@ -45,27 +46,28 @@ type PTrigger = ^TTrigger;
                 end;
 var TriggerList: PTrigger = nil;
 
-function AddTrigger: PTrigger;
+function AddTrigger(id, Ticks, Lives: Longword): PTrigger;
 var tmp: PTrigger;
 begin
 new(tmp);
 FillChar(tmp^, sizeof(TTrigger), 0);
+
+tmp^.id:= id;
+tmp^.Ticks:= Ticks;
+tmp^.TicksPerLife:= Ticks;
+tmp^.Lives:= Lives;
+
 if TriggerList <> nil then tmp^.Next:= TriggerList;
 TriggerList:= tmp;
 AddTrigger:= tmp
 end;
 
-procedure AddTriggerSpawner(id, Ticks, Lives: Longword; X, Y: LongInt; GearType: TGearType; GearTriggerId: Longword);
+procedure AddTriggerSpawner(id, Ticks, Lives: Longword; GearType: TGearType; X, Y: LongInt; GearTriggerId: Longword);
 var tmp: PTrigger;
 begin
 if (Ticks = 0) or (Lives = 0) then exit;
-{$IFDEF DEBUGFILE}AddFileLog('Add spawner trigger: ' + inttostr(id) + ', gear triggers  ' + inttostr(GearTriggerId));{$ENDIF}
 
-tmp:= AddTrigger;
-tmp^.id:= id;
-tmp^.Ticks:= Ticks;
-tmp^.TicksPerLife:= Ticks;
-tmp^.Lives:= Lives;
+tmp:= AddTrigger(id, Ticks, Lives);
 tmp^.Action:= taSpawnGear;
 tmp^.X:= X;
 tmp^.Y:= Y;
@@ -73,19 +75,21 @@ tmp^.SpawnGearType:= GearType;
 tmp^.SpawnGearTriggerId:= GearTriggerId
 end;
 
-procedure AddTriggerSuccess(tId: Longword);
+procedure AddTriggerSuccess(id, Ticks, Lives: Longword);
 begin
-with AddTrigger^ do
-     begin
-     id:= tId;
-     Ticks:= 1;
-     TicksPerLife:= 1;
+with AddTrigger(id, Ticks, Lives)^ do
      Action:= taSuccessFinish
-     end
+end;
+
+procedure AddTriggerFail(id, Ticks, Lives: Longword);
+begin
+with AddTrigger(id, Ticks, Lives)^ do
+     Action:= taFailFinish
 end;
 
 procedure TickTriggerT(Trigger: PTrigger);
 begin
+{$IFDEF DEBUGFILE}AddFileLog('Tick trigger (type: ' + inttostr(LongWord(Trigger^.Action)) + ')');{$ENDIF}
 with Trigger^ do
   case Action of
      taSpawnGear: begin
@@ -93,6 +97,9 @@ with Trigger^ do
                   FollowGear^.TriggerId:= SpawnGearTriggerId
                   end;
  taSuccessFinish: begin
+                  GameState:= gsExit
+                  end;
+    taFailFinish: begin
                   GameState:= gsExit
                   end
   end
@@ -117,9 +124,17 @@ while (t <> nil) do
        t^.Ticks:= t^.TicksPerLife;
        if (t^.Lives = 0) then
           begin
-          if t = TriggerList then TriggerList:= nt
-                             else pt^.Next:= nt;
-          Dispose(t)
+          if t = TriggerList then
+             begin
+             TriggerList:= nt;
+             Dispose(t)
+             end
+          else
+             begin
+             pt^.Next:= nt;
+             Dispose(t);
+             t:= pt
+             end
           end
        end
     end;

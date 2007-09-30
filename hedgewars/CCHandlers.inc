@@ -467,34 +467,37 @@ cTagsMask:= map[cTagsMask]
 end;
 
 procedure chAddTrigger(var s: shortstring);
-var ttype, gt, geartrig, Ticks, Lives: LongWord;
-    X, Y: LongInt;
+const MAXPARAMS = 16;
+var params: array[0..Pred(MAXPARAMS)] of Longword;
+    i: LongInt;
     c: char;
     tmp: shortstring;
 begin
 c:= s[1];
 Delete(s, 1, 1);
+
+i:= 0;
+while (i < MAXPARAMS) and
+      (Length(s) > 0) do
+    begin
+    SplitBySpace(s, tmp);
+    val(s, params[i]);
+    s:= tmp;
+    inc(i)
+    end;
+
 case c of
   's': begin // sTYPE TICKS LIVES GEARTYPE X Y GEARTRIGGER
-       SplitBySpace(s, tmp);
-       val(s, ttype);
-       SplitBySpace(tmp, s);
-       val(tmp, Ticks);
-       SplitBySpace(s, tmp);
-       val(s, Lives);
-       SplitBySpace(tmp, s);
-       val(tmp, gt);
-       SplitBySpace(s, tmp);
-       val(s, X);
-       SplitBySpace(tmp, s);
-       val(tmp, Y);
-       SplitBySpace(s, tmp);
-       val(s, geartrig);
-       AddTriggerSpawner(ttype, Ticks, Lives, X, Y, TGearType(gt), geartrig);
+       TryDo(i = 7, errmsgWrongNumber, true);
+       AddTriggerSpawner(params[0], params[1], params[2], TGearType(params[3]), params[4], params[5], params[6]);
        end;
   'C': begin
-       val(s, ttype);
-       AddTriggerSuccess(ttype);
+       TryDo(i = 3, errmsgWrongNumber, true);
+       AddTriggerSuccess(params[0], params[1], params[2]);
+       end;
+  'F': begin
+       TryDo(i = 3, errmsgWrongNumber, true);
+       AddTriggerFail(params[0], params[1], params[2]);
        end;
   end
 end;
