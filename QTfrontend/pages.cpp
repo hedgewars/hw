@@ -410,11 +410,12 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
 
 	BtnNetSvrStart = new QPushButton(this);
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
-	pageLayout->addWidget(BtnNetSvrStart, 0, 1);
+	pageLayout->addWidget(BtnNetSvrStart, 3, 2);
 
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
