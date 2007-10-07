@@ -128,7 +128,8 @@ procedure OnDestroy;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('Freeing resources...');{$ENDIF}
 if isSoundEnabled then ReleaseSound;
-StoreRelease;SendKB;
+StoreRelease;
+SendKB;
 CloseIPC;
 TTF_Quit;
 SDL_Quit;
