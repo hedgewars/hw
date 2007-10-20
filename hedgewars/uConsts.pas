@@ -102,7 +102,7 @@ const
       cMaxPower     = 1500;
       cMaxAngle     = 2048;
       cPowerDivisor = 1500;
-      
+
       MAXNAMELEN = 32;
 
       COLOR_LAND = $00FFFFFF;
@@ -138,6 +138,7 @@ const
 
       gfForts       = $00000001;
       gfMultiWeapon = $00000002;
+      gfSolidLand   = $00000004;
       gfOneClanMode = $10000000;
 
       gstDrowning       = $00000001;

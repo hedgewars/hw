@@ -707,7 +707,8 @@ while Gear <> nil do
          end;
       Gear:= Gear^.NextGear
       end;
-if (Mask and EXPLDontDraw) = 0 then DrawExplosion(X, Y, Radius);
+if (Mask and EXPLDontDraw) = 0 then
+   if (GameFlags and gfSolidLand) = 0 then DrawExplosion(X, Y, Radius);
 uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 
@@ -748,7 +749,7 @@ while t <> nil do
            end;
     t:= t^.NextGear
     end;
-DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
+if (GameFlags and gfSolidLand) = 0 then DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
 end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
