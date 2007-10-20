@@ -479,6 +479,7 @@ if tmpsurf = nil then
 if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
             else Result:= SDL_DisplayFormat(tmpsurf);
+{$IFDEF DEBUGFILE}WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');{$ENDIF}
 WriteLnToConsole(msgOK);
 LoadImage:= Result
 end;
