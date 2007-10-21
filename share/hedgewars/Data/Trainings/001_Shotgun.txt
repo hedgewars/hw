@@ -2,6 +2,7 @@ seed 0
 $gmflags 268435458
 $turntime 60000
 $casefreq 0
+$landadds 0
 $delay 0
 map mushrooms
 theme avematan

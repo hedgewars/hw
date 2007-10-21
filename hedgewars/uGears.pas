@@ -639,7 +639,7 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 if (GameFlags and gfForts) = 0 then
-   for i:= 0 to 3 do
+   for i:= 0 to Pred(cLandAdditions) do
        FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
 end;
 

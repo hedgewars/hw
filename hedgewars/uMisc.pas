@@ -62,6 +62,7 @@ var isCursorVisible : boolean = false;
 
     cShowFPS      : boolean = true;
     cCaseFactor   : Longword = 6;  {0..9}
+    cLandAdditions: Longword = 4;
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
     cSeed         : shortstring = '';

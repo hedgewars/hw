@@ -289,6 +289,7 @@ RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
 RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
 RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
 RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
+RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
 RegisterVariable('c_height', vtLongInt, @cConsoleHeight , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
