@@ -46,17 +46,20 @@ About::About(QWidget * parent) :
 	QTextBrowser *lbl2 = new QTextBrowser(this);
 
 	lbl2->setOpenExternalLinks(true);
-	lbl2->setText(
-			QLabel::tr("<h2>Developers:</h2>") +
-			"<p>"
+	lbl2->setText(  QString("<h2>") +
+			QLabel::tr("Developers:") +
+			"</h2><p>"
 			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Igor Ulyanov (aka Displacer) &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;"
-			"</p>" +
-			QLabel::tr("<h2>Translations:</h2><p>") +
+			"</p><h2>" +
+			QLabel::tr("Art:") + "</h2><p>"
+			"Volcano map and theme: Damion Brookes &lt;<a href=\"mailto:nintendo_wii33@hotmail.co.uk\">nintendo_wii33@hotmail.co.uk</a>&gt;"
+			"</p><h2>" +
+			QLabel::tr("Translations:") + "</h2><p>"
 			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;"
-			"</p>" +
-			QLabel::tr("<h2>Special thanks:</h2><p>") +
+			"</p><h2>" +
+			QLabel::tr("Special thanks:") + "</h2><p>"
 			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
 			"Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"
 			"Natasha Stafeeva &lt;<a href=\"mailto:layout@pisem.net\">layout@pisem.net</a>&gt;<br>"
