@@ -34,20 +34,18 @@ CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
 
 void CHedgehogerWidget::incItems() 
 {
-    if(numItems < 8 && pOurFrameTeams->overallHedgehogs<18) {
-      numItems++;
-      pOurFrameTeams->overallHedgehogs++;
-      emit hedgehogsNumChanged();
-    }
+  if (pOurFrameTeams->overallHedgehogs<18) {
+    numItems++;
+    pOurFrameTeams->overallHedgehogs++;
+    emit hedgehogsNumChanged();
+  }
 }
 
 void CHedgehogerWidget::decItems()
 {
-    if(numItems > 1) {
-      numItems--;
-      pOurFrameTeams->overallHedgehogs--;
-      emit hedgehogsNumChanged();
-    }
+  numItems--;
+  pOurFrameTeams->overallHedgehogs--;
+  emit hedgehogsNumChanged();
 }
 
 CHedgehogerWidget::~CHedgehogerWidget()

@@ -27,11 +27,16 @@ class ItemNum : public QWidget
   Q_OBJECT
 
   protected:
-    ItemNum(const QImage& im, QWidget * parent);
+    ItemNum(const QImage& im, QWidget * parent, unsigned char min=2, unsigned char max=8);
     virtual ~ItemNum()=0;
     
     bool nonInteractive;
     unsigned char numItems;
+    unsigned char minItems;
+    unsigned char maxItems;
+
+    unsigned char getItemsNum() const;
+    void setItemsNum(const unsigned char num);
     
     // from QWidget
     virtual void mousePressEvent ( QMouseEvent * event );

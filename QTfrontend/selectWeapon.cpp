@@ -15,10 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
+ 
 #include "selectWeapon.h"
+
+#include <QPushButton>
+#include <QGridLayout>
+
+#include "weaponItem.h"
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
 QWidget(parent)
 {
+  pLayout=new QGridLayout(this);
+  
+  WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
+  pLayout->addWidget(item);
 }

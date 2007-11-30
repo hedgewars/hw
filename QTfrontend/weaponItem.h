@@ -16,21 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _SELECT_WEAPON_INCLUDED
-#define _SELECT_WEAPON_INCLUDED
+#ifndef _WEAPON_ITEM
+#define _WEAPON_ITEM
 
-#include <QWidget>
+#include "itemNum.h"
 
-class QGridLayout;
-
-class SelWeaponWidget : public QWidget
+class WeaponItem : public ItemNum
 {
   Q_OBJECT
-  public:
-    SelWeaponWidget(QWidget* parent=0);
+
+ public:
+  WeaponItem(const QImage& im, QWidget * parent);
+  virtual ~WeaponItem();
+
+ signals:
+  void hedgehogsNumChanged();
+
+ protected:
+  virtual void incItems();
+  virtual void decItems();
 
  private:
-  QGridLayout* pLayout;
+  WeaponItem();
 };
 
-#endif // _SELECT_WEAPON_INCLUDED
+#endif // _WEAPON_ITEM
