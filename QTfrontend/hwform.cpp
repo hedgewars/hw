@@ -42,6 +42,7 @@
 #include "gamecfgwidget.h"
 #include "netudpserver.h"
 #include "netudpwidget.h"
+#include "netwwwwidget.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
 
