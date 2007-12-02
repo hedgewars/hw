@@ -27,6 +27,7 @@ var isCursorVisible : boolean = false;
     isSoundEnabled  : boolean = true;
     isSEBackup      : boolean = true;
     isInMultiShoot  : boolean = false;
+    isSpeed         : boolean = false;
 
     GameState     : TGameState = Low(TGameState);
     GameType      : TGameType = gmtLocal;

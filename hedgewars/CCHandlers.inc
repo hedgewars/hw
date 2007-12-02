@@ -501,3 +501,13 @@ case c of
        end;
   end
 end;
+
+procedure chSpeedup_p(var s: shortstring);
+begin
+isSpeed:= true
+end;
+
+procedure chSpeedup_m(var s: shortstring);
+begin
+isSpeed:= false
+end;

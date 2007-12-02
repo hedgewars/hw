@@ -120,6 +120,7 @@ DefaultBinds[ 99]:= 'capture';
 DefaultBinds[102]:= 'fullscr';
 DefaultBinds[104]:= 'findhh';
 DefaultBinds[112]:= 'pause';
+DefaultBinds[115]:= '+speedup';
 DefaultBinds[127]:= 'rotmask';
 SetDefaultBinds
 end;

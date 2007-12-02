@@ -299,6 +299,8 @@ RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
 RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
 RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
+RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
 RegisterVariable('say'     , vtCommand, @chSay          , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
