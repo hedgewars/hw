@@ -20,6 +20,10 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QListWidget>
+#include <QListWidgetItem>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QInputDialog>
 
 #include "hwconsts.h"
 #include "playrecordpage.h"
@@ -35,23 +39,31 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	pageLayout->addWidget(BtnBack, 2, 0);
 
-	BtnPlayDemo	= new QPushButton(this);
-	BtnPlayDemo->setGeometry(QRect(240,	330, 161, 41));
+	BtnPlayDemo = new QPushButton(this);
 	BtnPlayDemo->setFont(*font14);
 	BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-	pageLayout->addWidget(BtnPlayDemo, 1, 2);
+	pageLayout->addWidget(BtnPlayDemo, 2, 2);
 
-	DemosList =	new QListWidget(this);
+	BtnRenameRecord = new QPushButton(this);
+//	BtnRenameRecord->setFont(*font14);
+	BtnRenameRecord->setText(QPushButton::tr("Rename"));
+	pageLayout->addWidget(BtnRenameRecord, 0, 2);
+
+	DemosList = new QListWidget(this);
 	DemosList->setGeometry(QRect(170, 10, 311, 311));
-	pageLayout->addWidget(DemosList, 0, 1);
+	pageLayout->addWidget(DemosList, 0, 1, 2, 1);
+
+	connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
 }
 
 void PagePlayDemo::FillFromDir(RecordType rectype)
 {
 	QDir dir;
 	QString extension;
+
+	recType = rectype;
 
 	dir.cd(cfgdir->absolutePath());
 	if (rectype == RT_Demo)
@@ -79,3 +91,36 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
 	}
 }
 
+void PagePlayDemo::renameRecord()
+{
+	QListWidgetItem * curritem = DemosList->currentItem();
+	if (!curritem)
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Please, select record from the list"),
+				tr("OK"));
+		return ;
+	}
+	QFile rfile(curritem->data(Qt::UserRole).toString());
+
+	QFileInfo finfo(rfile);
+
+	bool ok;
+
+	QString newname = QInputDialog::getText(this, tr("Rename dialog"), tr("Enter new file name:"), QLineEdit::Normal, finfo.completeBaseName(), &ok);
+
+	if(ok && newname.size())
+	{
+		QString newfullname = QString("%1/%2.%3")
+		                              .arg(finfo.absolutePath())
+		                              .arg(newname)
+		                              .arg(finfo.suffix());
+
+		ok = rfile.rename(newfullname);
+		if(!ok)
+			QMessageBox::critical(this, tr("Error"), /*tr("Cannot rename to") +*/ newname);
+		else
+			FillFromDir(recType);
+	}
+}

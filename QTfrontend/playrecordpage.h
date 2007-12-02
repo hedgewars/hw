@@ -41,7 +41,14 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnPlayDemo;
+	QPushButton *BtnRenameRecord;
 	QListWidget *DemosList;
+
+private:
+	RecordType recType;
+
+private slots:
+	void renameRecord();
 };
 
 
