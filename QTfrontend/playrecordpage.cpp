@@ -119,7 +119,7 @@ void PagePlayDemo::renameRecord()
 
 		ok = rfile.rename(newfullname);
 		if(!ok)
-			QMessageBox::critical(this, tr("Error"), /*tr("Cannot rename to") +*/ newname);
+			QMessageBox::critical(this, tr("Error"), tr("Cannot rename to") + newfullname);
 		else
 			FillFromDir(recType);
 	}
