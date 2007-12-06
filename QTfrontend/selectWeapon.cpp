@@ -17,17 +17,41 @@
  */
  
 #include "selectWeapon.h"
+#include "weaponItem.h"
 
 #include <QPushButton>
 #include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 
-#include "weaponItem.h"
+QImage getAmmoImage(int num)
+{
+  static QImage ammo(":Ammos.png");
+  return ammo.copy(0, num*32, 32, 32);
+}
+
+SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
+  QWidget(parent)
+{
+  QHBoxLayout* hbLayout = new QHBoxLayout(this);
+  
+  QLabel* lbl = new QLabel("1");
+  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
+  
+  hbLayout->addWidget(lbl);
+  WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
+  hbLayout->addWidget(item);
+}
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
 QWidget(parent)
 {
   pLayout=new QGridLayout(this);
-  
-  WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
-  pLayout->addWidget(item);
+
+  int j=-1;
+  for(int i=0; i<19; ++i) {
+    if (i%4==0) ++j;
+    SelWeaponItem* swi = new SelWeaponItem(i, this);
+    pLayout->addWidget(swi, j, i%4);
+  }
 }

@@ -1,5 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
+    <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
     <file>res/hh25x25.png</file>
     <file>res/M2Round2.jpg</file>
     <file>res/botlevels/0.png</file>

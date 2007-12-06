@@ -23,6 +23,14 @@
 
 class QGridLayout;
 
+class SelWeaponItem : public QWidget
+{
+  Q_OBJECT
+
+public:
+  SelWeaponItem(int num, QWidget* parent=0);
+};
+
 class SelWeaponWidget : public QWidget
 {
   Q_OBJECT
