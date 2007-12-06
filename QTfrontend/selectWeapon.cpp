@@ -23,6 +23,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QBitmap>
 
 QImage getAmmoImage(int num)
 {
@@ -35,8 +36,10 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
 {
   QHBoxLayout* hbLayout = new QHBoxLayout(this);
   
-  QLabel* lbl = new QLabel("1");
-  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
+  QLabel* lbl = new QLabel();
+  QPixmap px(QPixmap::fromImage(getAmmoImage(num)));
+  px.setMask(px.createMaskFromColor(QColor(0,0,0)));
+  lbl->setPixmap(px);
   
   hbLayout->addWidget(lbl);
   WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
