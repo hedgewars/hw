@@ -37,9 +37,7 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   QHBoxLayout* hbLayout = new QHBoxLayout(this);
   
   QLabel* lbl = new QLabel();
-  QPixmap px(QPixmap::fromImage(getAmmoImage(num)));
-  px.setMask(px.createMaskFromColor(QColor(0,0,0)));
-  lbl->setPixmap(px);
+  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
   
   hbLayout->addWidget(lbl);
   WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
