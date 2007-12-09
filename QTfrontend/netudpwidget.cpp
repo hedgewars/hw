@@ -28,7 +28,6 @@ HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
 
   pUdpSocket->bind();
   connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
-  updateList();
 }
 
 void HWNetUdpWidget::updateList()

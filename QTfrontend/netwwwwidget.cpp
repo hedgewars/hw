@@ -18,7 +18,7 @@
 
 #include <QHttp>
 #include <QListWidget>
-#include <QMessageBox>
+#include <QDebug>
 
 #include "netwwwwidget.h"
 #include "hwconsts.h"
@@ -33,8 +33,6 @@ HWNetWwwWidget::HWNetWwwWidget(QWidget* parent) :
 
 void HWNetWwwWidget::updateList()
 {
-	http->abort();
-
 	QString request = QString("protocol_version=%1")
 			.arg(*cProtoVer);
 	http->post("/games/list_games", request.toUtf8());
@@ -46,8 +44,9 @@ void HWNetWwwWidget::onClientRead(int id, bool error)
 {
 	if (error)
 	{
-		QMessageBox::critical(this, tr("Error"), http->errorString());
+		qDebug() << "Error" << http->errorString();
 		return;
 	}
+	serversList->clear();
 	serversList->addItem(http->readAll());
 }
