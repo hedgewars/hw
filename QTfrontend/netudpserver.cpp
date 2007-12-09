@@ -20,8 +20,8 @@
 
 #include "netudpserver.h"
 
-HWNetUdpServer::HWNetUdpServer(QObject* parent) :
-  QObject(parent)
+HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 port) :
+  HWNetRegisterServer(parent, descr, port)
 {
   pUdpSocket = new QUdpSocket(this);
   pUdpSocket->bind(46631);

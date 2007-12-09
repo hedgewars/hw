@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a worms-like game
- * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +16,15 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _NET_UDPSERVER_INCLUDED
-#define _NET_UDPSERVER_INCLUDED
+#include "netwwwserver.h"
 
-#include <QObject>
-#include "netregister.h"
-
-class QUdpSocket;
-
-class HWNetUdpServer : public HWNetRegisterServer
+HWNetWwwServer::HWNetWwwServer(QObject *parent, const QString & descr, quint16 port) :
+  HWNetRegisterServer(parent, descr, port)
 {
-  Q_OBJECT
+	qDebug("www server start");
+}
 
- public:
-  HWNetUdpServer(QObject *parent, const QString & descr, quint16 port);
+void HWNetWwwServer::onClientRead()
+{
 
- private slots:
-  void onClientRead();
-
- private:
-  QUdpSocket* pUdpSocket;
-};
-
-#endif // _NET_UDPSERVER_INCLUDED
+}
