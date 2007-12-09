@@ -413,6 +413,7 @@ void HWForm::NetDisconnect()
     hwnet=0;
   }
   if(pnetserver) {
+    pRegisterServer->unregister();
     pRegisterServer->deleteLater();
     pnetserver->StopServer();
     delete pnetserver;

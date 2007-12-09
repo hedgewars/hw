@@ -30,21 +30,11 @@ HWNetWwwWidget::HWNetWwwWidget(QWidget* parent) :
 	http->setHost("www.hedgewars.org", 80);
 	connect(http, SIGNAL(requestFinished(int, bool)), this, SLOT(onClientRead(int, bool)));
 }
-// http://hedgewars.org/games/create
-// http://www.hedgewars.org/games/update_game?id=1&key=pufidzuk
-// http://www.hedgewars.org/games/destroy_game?id=5&key=wrdeough
+
 void HWNetWwwWidget::updateList()
 {
 	http->abort();
-// example for adding game to server list
-/*	QString request = QString("game[title]=%1&game[port]=%2&game[password]=%3&game[protocol_version]=%4")
-			.arg("hedgewarsserver")
-			.arg(46631)
-			.arg(false ? "true" : "false")
-			.arg(*cProtoVer);
-	http->post("/games/create", request.toUtf8());
-*/
-// query game list
+
 	QString request = QString("protocol_version=%1")
 			.arg(*cProtoVer);
 	http->post("/games/list_games", request.toUtf8());

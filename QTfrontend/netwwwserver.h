@@ -22,6 +22,9 @@
 #include <QObject>
 #include "netregister.h"
 
+class QHttp;
+class QTimer;
+
 class HWNetWwwServer : public HWNetRegisterServer
 {
 	Q_OBJECT
@@ -29,10 +32,17 @@ class HWNetWwwServer : public HWNetRegisterServer
 public:
 	HWNetWwwServer(QObject *parent, const QString & descr, quint16 port);
 
+public slots:
+	void unregister();
+
 private slots:
-	void onClientRead();
+	void onClientRead(int id, bool error);
+	void updateInList();
 
 private:
+	QHttp * http;
+	QTimer * timer;
+	QString servid, servkey;
 };
 
 #endif // _NET_WWWSERVER_INCLUDED

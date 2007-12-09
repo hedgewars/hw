@@ -23,3 +23,8 @@ HWNetRegisterServer::HWNetRegisterServer(QObject *parent, const QString & descr,
 {
 
 }
+
+void HWNetRegisterServer::unregister()
+{
+
+}
