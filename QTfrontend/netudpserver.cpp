@@ -25,9 +25,7 @@ HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 p
 {
   pUdpSocket = new QUdpSocket(this);
   pUdpSocket->bind(46631);
-
   connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
-
 }
 
 void HWNetUdpServer::onClientRead()

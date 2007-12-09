@@ -42,15 +42,13 @@
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
 #include "netserverslist.h"
-#include "netudpwidget.h"
 #include "netudpserver.h"
-#include "netwwwwidget.h"
 #include "netwwwserver.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
 
 HWForm::HWForm(QWidget *parent)
-  : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0)
+  : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
 	ui.setupUi(this);
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
@@ -347,8 +345,14 @@ void HWForm::NetConnectServer()
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
 {
+	if(hwnet) {
+		hwnet->Disconnect();
+		delete hwnet;
+		hwnet=0;
+	}
 	ui.pageNetGame->pChatWidget->clear();
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+
 	connect(hwnet, SIGNAL(GameStateChanged(GameState)), this, SLOT(NetGameStateChanged(GameState)));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
