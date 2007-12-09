@@ -24,7 +24,7 @@
 #include "hwconsts.h"
 
 HWNetWwwWidget::HWNetWwwWidget(QWidget* parent) :
-  HWNetServersWidget(parent), mainLayout(this)
+  HWNetServersWidget(parent)
 {
 	http = new QHttp(this);
 	http->setHost("www.hedgewars.org", 80);

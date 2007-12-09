@@ -42,12 +42,14 @@
 #include "gamecfgwidget.h"
 #include "netserverslist.h"
 #include "netudpwidget.h"
+#include "netudpserver.h"
 #include "netwwwwidget.h"
+#include "netwwwserver.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
 
 HWForm::HWForm(QWidget *parent)
-  : QMainWindow(parent), pnetserver(0), pUdpServer(0), editedTeam(0)
+  : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0)
 {
 	ui.setupUi(this);
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
@@ -400,7 +402,7 @@ void HWForm::NetStartServer()
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
   _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
-//  pUdpServer = new HWNetUdpServer();
+  pRegisterServer = new HWNetWwwServer(0, "hedgewars server", 46631);
 }
 
 void HWForm::NetDisconnect()
@@ -411,7 +413,7 @@ void HWForm::NetDisconnect()
     hwnet=0;
   }
   if(pnetserver) {
-//    pUdpServer->deleteLater();
+    pRegisterServer->deleteLater();
     pnetserver->StopServer();
     delete pnetserver;
     pnetserver=0;

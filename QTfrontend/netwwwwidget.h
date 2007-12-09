@@ -38,7 +38,6 @@ private slots:
 	void onClientRead(int id, bool error);
 
 private:
-	QVBoxLayout mainLayout;
 	QHttp * http;
 	
 };

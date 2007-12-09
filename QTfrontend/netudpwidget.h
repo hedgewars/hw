@@ -22,17 +22,17 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
+#include "netserverslist.h"
+
 class QUdpSocket;
 class QListWidget;
 
-class HWNetUdpWidget : public QWidget
+class HWNetUdpWidget : public HWNetServersWidget
 {
   Q_OBJECT
 
  public:
   HWNetUdpWidget(QWidget *parent = 0);
-
-  QListWidget* serversList;
 
  public slots:
   void updateList();
@@ -41,7 +41,6 @@ class HWNetUdpWidget : public QWidget
   void onClientRead();
 
  private:
-  QVBoxLayout mainLayout;
   QUdpSocket* pUdpSocket;
 };
 

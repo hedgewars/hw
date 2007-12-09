@@ -22,11 +22,8 @@
 #include "netudpwidget.h"
 
 HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
-  QWidget(parent), mainLayout(this)
+  HWNetServersWidget(parent)
 {
-  serversList = new QListWidget(this);
-  mainLayout.setMargin(0);
-  mainLayout.addWidget(serversList);
   pUdpSocket = new QUdpSocket(this);
 
   pUdpSocket->bind();
