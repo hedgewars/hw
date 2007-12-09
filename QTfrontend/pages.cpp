@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QSpinBox>
 #include <QTextEdit>
+#include <QRadioButton>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -429,10 +430,24 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	labelNN->setText(QLabel::tr("Net nick"));
 	GBNlayout->addWidget(labelNN, 0, 0);
 
-	editNetNick	= new QLineEdit(NNGroupBox);
+	editNetNick = new QLineEdit(NNGroupBox);
 	editNetNick->setMaxLength(20);
 	editNetNick->setText(QLineEdit::tr("unnamed"));
 	GBNlayout->addWidget(editNetNick, 0, 1);
+
+	QGroupBox * NetTypeGroupBox = new QGroupBox(this);
+	NetTypeGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+	NetTypeGroupBox->setTitle(QGroupBox::tr("Connection type"));
+	pageLayout->addWidget(NetTypeGroupBox, 0, 1);
+
+	QVBoxLayout * GBTlayout = new QVBoxLayout(NetTypeGroupBox);
+	rbLocalGame = new QRadioButton(NetTypeGroupBox);
+	rbLocalGame->setText(tr("Local game"));
+	rbLocalGame->setChecked(true);
+	GBTlayout->addWidget(rbLocalGame);
+	rbInternetGame = new QRadioButton(NetTypeGroupBox);
+	rbInternetGame->setText(tr("Internet game"));
+	GBTlayout->addWidget(rbInternetGame);
 
 	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
@@ -469,13 +484,18 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 3, 0);
+
+	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(changeServersList()));
 }
 
 void PageNet::changeServersList()
 {
 	if (netServersWidget) delete netServersWidget;
 
-	netServersWidget = new HWNetWwwWidget(ConnGroupBox);
+	if (rbLocalGame->isChecked())
+		netServersWidget = new HWNetUdpWidget(ConnGroupBox);
+	else
+		netServersWidget = new HWNetWwwWidget(ConnGroupBox);
 	GBClayout->addWidget(netServersWidget, 1, 0, 2, 2);
 
 	connect(BtnUpdateSList, SIGNAL(clicked()), netServersWidget, SLOT(updateList()));

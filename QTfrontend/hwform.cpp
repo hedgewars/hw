@@ -30,6 +30,7 @@
 #include <QStackedLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <QRadioButton>
 
 #include "hwform.h"
 #include "game.h"
@@ -402,7 +403,11 @@ void HWForm::NetStartServer()
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
   _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
-  pRegisterServer = new HWNetWwwServer(0, "hedgewars server", 46631);
+
+  if (ui.pageNet->rbLocalGame->isChecked())
+    pRegisterServer = new HWNetUdpServer(0, "hedgewars server", 46631);
+  else
+    pRegisterServer = new HWNetWwwServer(0, "hedgewars server", 46631);
 }
 
 void HWForm::NetDisconnect()

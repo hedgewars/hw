@@ -44,6 +44,7 @@ class QTextEdit;
 class HWChatWidget;
 class SelWeaponWidget;
 class HWNetServersWidget;
+class QRadioButton;
 
 class PageMain : public QWidget
 {
@@ -165,6 +166,8 @@ public:
 	QLineEdit *editNetNick;
 	QLabel *labelIP;
 	QLineEdit * editIP;
+	QRadioButton * rbLocalGame;
+	QRadioButton * rbInternetGame;
 
 private:
 	QGroupBox * ConnGroupBox;
