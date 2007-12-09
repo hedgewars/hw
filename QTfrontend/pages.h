@@ -43,6 +43,7 @@ class HWNetUdpWidget;
 class QTextEdit;
 class HWChatWidget;
 class SelWeaponWidget;
+class HWNetServersWidget;
 
 class PageMain : public QWidget
 {
@@ -154,8 +155,8 @@ class PageNet : public QWidget
 public:
 	PageNet(QWidget* parent = 0);
 
-	QPushButton* pUpdateUdpButt;
-	HWNetUdpWidget* pUdpClient;
+	QPushButton* BtnUpdateSList;
+	HWNetServersWidget* netServersWidget;
 	QPushButton *BtnBack;
 	QPushButton *BtnNetConnect;
 	QPushButton* BtnNetSvrStart;
@@ -164,6 +165,13 @@ public:
 	QLineEdit *editNetNick;
 	QLabel *labelIP;
 	QLineEdit * editIP;
+
+private:
+	QGroupBox * ConnGroupBox;
+	QGridLayout * GBClayout;
+
+public slots:
+	void changeServersList();
 };
 
 class PageNetGame : public QWidget

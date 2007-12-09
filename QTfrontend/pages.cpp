@@ -39,7 +39,9 @@
 #include "mapContainer.h"
 #include "about.h"
 #include "fpsedit.h"
+#include "netserverslist.h"
 #include "netudpwidget.h"
+#include "netwwwwidget.h"
 #include "chatwidget.h"
 #include "SDLs.h"
 #include "playrecordpage.h"
@@ -432,10 +434,10 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	editNetNick->setText(QLineEdit::tr("unnamed"));
 	GBNlayout->addWidget(editNetNick, 0, 1);
 
-	QGroupBox * ConnGroupBox = new QGroupBox(this);
+	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
 	pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
-	QGridLayout * GBClayout = new QGridLayout(ConnGroupBox);
+	GBClayout = new QGridLayout(ConnGroupBox);
 	GBClayout->setColumnStretch(0, 0);
 	GBClayout->setColumnStretch(1, 1);
 	GBClayout->setColumnStretch(2, 1);
@@ -451,23 +453,33 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	editIP->setMaxLength(50);
 	GBClayout->addWidget(editIP, 0, 1);
 
-	BtnNetConnect = new	QPushButton(ConnGroupBox);
+	BtnNetConnect = new QPushButton(ConnGroupBox);
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
 	GBClayout->addWidget(BtnNetConnect, 0, 2);
 
-	pUdpClient=new HWNetUdpWidget(ConnGroupBox);
-	GBClayout->addWidget(pUdpClient, 1, 0, 2, 2);
+	netServersWidget = 0;
 
-	pUpdateUdpButt = new QPushButton(ConnGroupBox);
-	pUpdateUdpButt->setFont(*font14);
-	pUpdateUdpButt->setText(QPushButton::tr("Update"));
-	GBClayout->addWidget(pUpdateUdpButt, 1, 2);
+	BtnUpdateSList = new QPushButton(ConnGroupBox);
+	BtnUpdateSList->setFont(*font14);
+	BtnUpdateSList->setText(QPushButton::tr("Update"));
+	GBClayout->addWidget(BtnUpdateSList, 1, 2);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 3, 0);
+}
+
+void PageNet::changeServersList()
+{
+	if (netServersWidget) delete netServersWidget;
+
+	netServersWidget = new HWNetWwwWidget(ConnGroupBox);
+	GBClayout->addWidget(netServersWidget, 1, 0, 2, 2);
+
+	connect(BtnUpdateSList, SIGNAL(clicked()), netServersWidget, SLOT(updateList()));
+	netServersWidget->updateList();
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)

@@ -40,7 +40,7 @@
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"
-#include "netudpserver.h"
+#include "netserverslist.h"
 #include "netudpwidget.h"
 #include "netwwwwidget.h"
 #include "chatwidget.h"
@@ -50,7 +50,6 @@ HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pUdpServer(0), editedTeam(0)
 {
 	ui.setupUi(this);
-
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
 	UpdateTeamsLists();
@@ -91,9 +90,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
-	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()), ui.pageNet->pUdpClient, SLOT(updateList()));
-	connect(ui.pageNet->pUpdateUdpButt, SIGNAL(clicked()), ui.pageNet->pUdpClient, SLOT(updateList()));
-	connect(ui.pageNet->pUdpClient->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
@@ -192,6 +188,9 @@ void HWForm::GoToDemos()
 
 void HWForm::GoToNet()
 {
+	ui.pageNet->changeServersList();
+	connect(ui.pageNet->netServersWidget->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
+
 	GoToPage(ID_PAGE_NET);
 }
 
@@ -332,7 +331,7 @@ void HWForm::PlayDemo()
 
 void HWForm::NetConnectServer()
 {
-  QListWidgetItem * curritem = ui.pageNet->pUdpClient->serversList->currentItem();
+  QListWidgetItem * curritem = ui.pageNet->netServersWidget->serversList->currentItem();
   if (!curritem) {
     QMessageBox::critical(this,
 			  tr("Error"),
@@ -401,7 +400,7 @@ void HWForm::NetStartServer()
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
   _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
-  pUdpServer = new HWNetUdpServer();
+//  pUdpServer = new HWNetUdpServer();
 }
 
 void HWForm::NetDisconnect()
@@ -412,7 +411,7 @@ void HWForm::NetDisconnect()
     hwnet=0;
   }
   if(pnetserver) {
-    pUdpServer->deleteLater();
+//    pUdpServer->deleteLater();
     pnetserver->StopServer();
     delete pnetserver;
     pnetserver=0;

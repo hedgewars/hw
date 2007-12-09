@@ -16,31 +16,27 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _NET_WWWWIDGET_INCLUDED
-#define _NET_WWWWIDGET_INCLUDED
+#ifndef _NET_SERVERSLIST_INCLUDED
+#define _NET_SERVERSLIST_INCLUDED
 
-#include "netserverslist.h"
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QListWidget>
 
-class QListWidget;
-class QHttp;
-
-class HWNetWwwWidget : public HWNetServersWidget
+class HWNetServersWidget : public QWidget
 {
- 	Q_OBJECT
+	Q_OBJECT
 
 public:
-	HWNetWwwWidget(QWidget *parent = 0);
+	HWNetServersWidget (QWidget *parent = 0);
+
+	QListWidget* serversList;
 
 public slots:
 	void updateList();
 
-private slots:
-	void onClientRead(int id, bool error);
-
 private:
 	QVBoxLayout mainLayout;
-	QHttp * http;
-	
 };
 
-#endif // _NET_WWWWIDGET_INCLUDED
+#endif // _NET_SERVERSLIST_INCLUDED

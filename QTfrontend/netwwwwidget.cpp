@@ -24,16 +24,11 @@
 #include "hwconsts.h"
 
 HWNetWwwWidget::HWNetWwwWidget(QWidget* parent) :
-  QWidget(parent), mainLayout(this)
+  HWNetServersWidget(parent), mainLayout(this)
 {
-	serversList = new QListWidget(this);
-	mainLayout.setMargin(0);
-	mainLayout.addWidget(serversList);
-
 	http = new QHttp(this);
 	http->setHost("www.hedgewars.org", 80);
 	connect(http, SIGNAL(requestFinished(int, bool)), this, SLOT(onClientRead(int, bool)));
-	updateList();
 }
 // http://hedgewars.org/games/create
 // http://www.hedgewars.org/games/update_game?id=1&key=pufidzuk

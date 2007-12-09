@@ -16,31 +16,20 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef _NET_WWWWIDGET_INCLUDED
-#define _NET_WWWWIDGET_INCLUDED
+#include <QUdpSocket>
+#include <QListWidget>
 
 #include "netserverslist.h"
 
-class QListWidget;
-class QHttp;
-
-class HWNetWwwWidget : public HWNetServersWidget
+HWNetServersWidget::HWNetServersWidget(QWidget* parent) :
+  QWidget(parent), mainLayout(this)
 {
- 	Q_OBJECT
+	serversList = new QListWidget(this);
+	mainLayout.setMargin(0);
+	mainLayout.addWidget(serversList);
+}
 
-public:
-	HWNetWwwWidget(QWidget *parent = 0);
-
-public slots:
-	void updateList();
-
-private slots:
-	void onClientRead(int id, bool error);
-
-private:
-	QVBoxLayout mainLayout;
-	QHttp * http;
-	
-};
-
-#endif // _NET_WWWWIDGET_INCLUDED
+void HWNetServersWidget::updateList()
+{
+	serversList->clear();
+}

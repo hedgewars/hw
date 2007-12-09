@@ -63,6 +63,7 @@ set(hwfr_src
 	netudpserver.cpp
 	netudpwidget.cpp
 	netwwwwidget.cpp
+	netserverslist.cpp
 	chatwidget.cpp
 	binds.cpp
 	SDLs.cpp
@@ -100,6 +101,7 @@ set(hwfr_moc_hdrs
 	netudpserver.h
 	netudpwidget.h
 	netwwwwidget.h
+	netserverslist.h
 	chatwidget.h
 	SDLs.h
 	playrecordpage.h

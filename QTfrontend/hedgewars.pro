@@ -39,6 +39,7 @@ HEADERS += binds.h \
            netudpserver.h \
            netudpwidget.h \
 	   netwwwwidget.h \
+	   netserverslist.h \
            chatwidget.h \
            SDLs.h \
            playrecordpage.h \
@@ -73,7 +74,8 @@ SOURCES += binds.cpp \
            newnetclient.cpp \
            netudpserver.cpp \
            netudpwidget.cpp \
-	   netwwwwidget.h \
+	   netwwwwidget.cpp \
+	   netserverslist.cpp \
            chatwidget.cpp \
            SDLs.cpp \
            playrecordpage.cpp \
