@@ -31,6 +31,7 @@ class ItemNum : public QWidget
 
   protected:
     ItemNum(const QImage& im, QWidget * parent, unsigned char min=2, unsigned char max=8);
+    virtual QSize sizeHint () const;
     virtual ~ItemNum()=0;
     
     bool nonInteractive;

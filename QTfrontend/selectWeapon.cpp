@@ -49,7 +49,7 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   hbLayout->setStretchFactor(lbl, 1);
   hbLayout->setStretchFactor(item, 99);
   hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignTop);
-  //hbLayout->setAlignment(item, Qt::AlignTop);
+  hbLayout->setAlignment(item, Qt::AlignTop);
 }
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :

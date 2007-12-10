@@ -55,6 +55,11 @@ void ItemNum::mousePressEvent ( QMouseEvent * event )
   repaint();
 }
 
+QSize ItemNum::sizeHint () const
+{
+  return QSize((maxItems+1)*12, 32);
+}
+
 void ItemNum::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
