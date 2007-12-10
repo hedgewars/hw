@@ -43,6 +43,7 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   hbLayout->addWidget(lbl);
 
   WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
+  item->setInfinityState(true);
   hbLayout->addWidget(item);
 
   hbLayout->setStretchFactor(lbl, 1);

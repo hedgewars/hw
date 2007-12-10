@@ -26,6 +26,9 @@ class ItemNum : public QWidget
 {
   Q_OBJECT
 
+  public:
+    void setInfinityState(bool value);
+
   protected:
     ItemNum(const QImage& im, QWidget * parent, unsigned char min=2, unsigned char max=8);
     virtual ~ItemNum()=0;
@@ -47,6 +50,7 @@ class ItemNum : public QWidget
     virtual void decItems()=0;
     
   private:
+    bool infinityState;
     QImage m_im;
 };
 

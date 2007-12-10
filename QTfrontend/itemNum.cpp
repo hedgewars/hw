@@ -22,7 +22,8 @@
 #include <QPainter>
 
 ItemNum::ItemNum(const QImage& im, QWidget * parent, unsigned char min, unsigned char max) :
-  m_im(im), QWidget(parent), nonInteractive(false), minItems(min), maxItems(max), numItems(min)
+  m_im(im), QWidget(parent), nonInteractive(false), minItems(min), maxItems(max), numItems(min),
+  infinityState(false)
 {
 }
 
@@ -35,6 +36,9 @@ void ItemNum::mousePressEvent ( QMouseEvent * event )
   if(nonInteractive) return;
   if(event->button()==Qt::LeftButton) {
     event->accept();
+    if(infinityState && numItems==maxItems) {
+      incItems();
+    }
     if(numItems < maxItems) {
       incItems();
     }
@@ -54,9 +58,14 @@ void ItemNum::paintEvent(QPaintEvent* event)
 {
   QPainter painter(this);
 
-  for(int i=0; i<numItems; i++) {
-    QRect target(11 * i, i % 2, 25, 25);
-    painter.drawImage(target, m_im);
+  if (numItems==maxItems+1) {
+    QRect target(0, 0, 250, 32);
+    painter.drawImage(target, QImage(":/res/infinity.png"));
+  } else {
+    for(int i=0; i<numItems; i++) {
+      QRect target(11 * i, i % 2, 25, 25);
+      painter.drawImage(target, m_im);
+    }
   }
 }
 
@@ -68,4 +77,9 @@ unsigned char ItemNum::getItemsNum() const
 void ItemNum::setItemsNum(const unsigned char num)
 {
   numItems=num;
+}
+
+void ItemNum::setInfinityState(bool value)
+{
+  infinityState=value;
 }
