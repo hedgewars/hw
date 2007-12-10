@@ -36,12 +36,19 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
 {
   QHBoxLayout* hbLayout = new QHBoxLayout(this);
   
-  QLabel* lbl = new QLabel();
+  QLabel* lbl = new QLabel(this);
   lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
-  
+  lbl->setMaximumWidth(30);
+  lbl->setGeometry(0, 0, 30, 30);
   hbLayout->addWidget(lbl);
+
   WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
   hbLayout->addWidget(item);
+
+  hbLayout->setStretchFactor(lbl, 1);
+  hbLayout->setStretchFactor(item, 99);
+  hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignTop);
+  //hbLayout->setAlignment(item, Qt::AlignTop);
 }
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
