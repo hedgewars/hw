@@ -35,6 +35,8 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   QWidget(parent)
 {
   QHBoxLayout* hbLayout = new QHBoxLayout(this);
+  hbLayout->setSpacing(1);
+  hbLayout->setMargin(1);
   
   QLabel* lbl = new QLabel(this);
   lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
@@ -48,14 +50,16 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
 
   hbLayout->setStretchFactor(lbl, 1);
   hbLayout->setStretchFactor(item, 99);
-  hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignTop);
-  hbLayout->setAlignment(item, Qt::AlignTop);
+  hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignVCenter);
+  hbLayout->setAlignment(item, Qt::AlignLeft | Qt::AlignVCenter);
 }
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
 QWidget(parent)
 {
   pLayout=new QGridLayout(this);
+  pLayout->setSpacing(1);
+  pLayout->setMargin(1);
 
   int j=-1;
   for(int i=0; i<19; ++i) {
