@@ -19,6 +19,10 @@
 #include <QHttp>
 #include <QListWidget>
 #include <QDebug>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QDomText>
 
 #include "netwwwwidget.h"
 #include "hwconsts.h"
@@ -44,9 +48,26 @@ void HWNetWwwWidget::onClientRead(int id, bool error)
 {
 	if (error)
 	{
-		qDebug() << "Error" << http->errorString();
+		qWarning() << "Error" << http->errorString();
 		return;
 	}
 	serversList->clear();
-	serversList->addItem(http->readAll());
+
+	QDomDocument doc;
+	if (!doc.setContent(http->readAll())) return;
+
+	QDomElement docElem = doc.documentElement();
+
+	QDomNode n = docElem.firstChild();
+	while (!n.isNull())
+	{
+		QDomElement e = n.toElement(); // try to convert the node to an element.
+		if(!e.isNull() && (e.tagName() == "ip"))
+		{
+			QDomText t = e.firstChild().toText();
+			if(!t.isNull())
+				serversList->addItem(t.data());
+		}
+		n = n.nextSibling();
+	}
 }

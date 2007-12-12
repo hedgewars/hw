@@ -39,7 +39,6 @@ private slots:
 
 private:
 	QHttp * http;
-	
 };
 
 #endif // _NET_WWWWIDGET_INCLUDED
