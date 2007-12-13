@@ -422,7 +422,12 @@ if TurnTimeLeft > 0 then
             and not isInMultiShoot then dec(TurnTimeLeft);
 
 if (not CurrentTeam^.ExtDriven) and
-   ((GameTicks and $FFFF) = $FFFF) then SendIPCTimeInc;
+   ((GameTicks and $FFFF) = $FFFF) then
+   begin
+   SendIPCTimeInc;
+   inc(hiTicks) // we do not recieve a message for it
+   end;
+
 inc(GameTicks)
 end;
 

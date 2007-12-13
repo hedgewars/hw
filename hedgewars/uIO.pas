@@ -34,6 +34,8 @@ procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
 
+var hiTicks: Word = 0;
+
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uLand;
 const isPonged: boolean = false;
@@ -54,8 +56,6 @@ var  IPCSock: PTCPSocket = nil;
 
      headcmd: PCmd = nil;
      lastcmd: PCmd = nil;
-
-     hiTicks: Word = 0;
 
 function AddCmd(Time: Longword; str: shortstring): PCmd;
 var Result: PCmd;
