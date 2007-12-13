@@ -36,20 +36,53 @@ procedure NetGetNextCmd;
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uLand;
 const isPonged: boolean = false;
-      MAXCMDS = 65535;
+
+type PCmd = ^TCmd;
+     TCmd = packed record
+            Next: PCmd;
+            Time: LongWord;
+            case byte of
+            1: (len: byte;
+                cmd: Char;
+                X, Y: SmallInt);
+            2: (str: shortstring);
+            end;
+
 var  IPCSock: PTCPSocket = nil;
      fds: PSDLNet_SocketSet;
 
-     extcmd: array[0..MAXCMDS] of packed record
-                                   Time: LongWord;
-                                   case byte of
-                                        1: (len: byte;
-                                            cmd: Char;
-                                            X, Y: SmallInt);
-                                        2: (str: shortstring);
-                                   end;
-     cmdcurpos: LongInt = 0;
-     cmdendpos: LongInt = -1;
+     headcmd: PCmd = nil;
+     lastcmd: PCmd = nil;
+
+function AddCmd(Time: Longword; str: shortstring): PCmd;
+var Result: PCmd;
+begin
+new(Result);
+FillChar(Result^, sizeof(TCmd), 0);
+Result^.Time:= Time;
+Result^.str:= str;
+dec(Result^.len, 4);
+if headcmd = nil then
+   begin
+   headcmd:= Result;
+   lastcmd:= Result
+   end else
+   begin
+   lastcmd^.Next:= Result;
+   lastcmd:= Result
+   end;
+AddCmd:= Result
+end;
+
+procedure RemoveCmd;
+var tmp: PCmd;
+begin
+TryDo(headcmd <> nil, 'Engine bug: headcmd = nil', true);
+tmp:= headcmd;
+headcmd:= headcmd^.Next;
+if headcmd = nil then lastcmd:= nil;
+dispose(tmp)
+end;
 
 procedure InitIPC;
 var ipaddr: TIPAddress;
@@ -89,12 +122,8 @@ case s[1] of
                'S': GameType:= gmtSave;
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
-     inc(cmdendpos);
-     TryDo(cmdendpos <= MAXCMDS, 'Too many commands in queue', true);
-     extcmd[cmdendpos].Time := SDLNet_Read32(@s[byte(s[0]) - 3]);
-     extcmd[cmdendpos].str  := s;
-     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(extcmd[cmdendpos].Time)+' at '+inttostr(cmdendpos));{$ENDIF}
-     dec(extcmd[cmdendpos].len, 4)
+     AddCmd(SDLNet_Read32(@s[byte(s[0]) - 3]), s);
+     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.Time));{$ENDIF}
      end
 end;
 
@@ -172,24 +201,24 @@ end;
 procedure NetGetNextCmd;
 var tmpflag: boolean;
 begin
-while (cmdcurpos <= cmdendpos)and(extcmd[cmdcurpos].cmd = 's') do
+while (headcmd <> nil) and (headcmd^.cmd = 's') do
       begin
-      WriteLnToConsole('> ' + copy(extcmd[cmdcurpos].str, 2, Pred(extcmd[cmdcurpos].len)));
-      AddCaption('> ' + copy(extcmd[cmdcurpos].str, 2, Pred(extcmd[cmdcurpos].len)), $FFFFFF, capgrpNetSay);
-      inc(cmdcurpos)
+      WriteLnToConsole('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)));
+      AddCaption('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), $FFFFFF, capgrpNetSay);
+      RemoveCmd
       end;
 
-if cmdcurpos <= cmdendpos then
-   TryDo(GameTicks <= extcmd[cmdcurpos].Time,
-         'oops, queue error. in buffer: ' + extcmd[cmdcurpos].cmd +
+if (headcmd <> nil) then
+   TryDo(GameTicks <= headcmd^.Time,
+         'oops, queue error. in buffer: ' + headcmd^.cmd +
          ' (' + inttostr(GameTicks) + ' > ' +
-         inttostr(extcmd[cmdcurpos].Time) + ')',
+         inttostr(headcmd^.Time) + ')',
          true);
 
 tmpflag:= true;
-while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
+while (headcmd <> nil) and (GameTicks = headcmd^.Time) do
    begin
-   case extcmd[cmdcurpos].cmd of
+   case headcmd^.cmd of
         'L': ParseCommand('+left', true);
         'l': ParseCommand('-left', true);
         'R': ParseCommand('+right', true);
@@ -206,23 +235,23 @@ while (cmdcurpos <= cmdendpos)and(GameTicks = extcmd[cmdcurpos].Time) do
         ',': ParseCommand('skip', true);
         'N': begin
              tmpflag:= false;
-             {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(extcmd[cmdcurpos].Time)){$ENDIF}
+             {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(headcmd^.Time)){$ENDIF}
              end;
         'p': begin
-             TargetPoint.X:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].X));
-             TargetPoint.Y:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].Y));
+             TargetPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)));
+             TargetPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)));
              ParseCommand('put', true)
              end;
         'P': begin
-             CursorPoint.X:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].X) + WorldDx);
-             CursorPoint.Y:= SmallInt(SDLNet_Read16(@extcmd[cmdcurpos].Y) + WorldDy);
+             CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)) + WorldDx);
+             CursorPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)) + WorldDy);
              end;
-        '1'..'5': ParseCommand('timer ' + extcmd[cmdcurpos].cmd, true);
-        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(extcmd[cmdcurpos].cmd) - 79), true)
+        '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
+        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
         end;
-   inc(cmdcurpos)
+   RemoveCmd
    end;
-isInLag:= (cmdcurpos > cmdendpos) and tmpflag
+isInLag:= (headcmd = nil) and tmpflag
 end;
 
 end.
