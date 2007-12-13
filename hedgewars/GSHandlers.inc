@@ -591,9 +591,9 @@ if flCheck then  // check whether rope needs dividing
          begin
          tx:= cc*len;
          ty:= cs*len;
-         lx:= hwRound(Gear^.X + tx) + hwSign(HHGear^.dX);
-         ly:= hwRound(Gear^.Y + ty) + hwSign(HHGear^.dY);
-         if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0)and (Land[ly, lx] <> 0) then
+         lx:= hwRound(Gear^.X + tx) + hwSign(HHGear^.dX)*2;
+         ly:= hwRound(Gear^.Y + ty) + hwSign(HHGear^.dY)*2;
+         if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
            begin
            with RopePoints.ar[RopePoints.Count] do
                 begin
@@ -1223,7 +1223,9 @@ if (Gear^.Message and gm_Switch) <> 0 then
 
    repeat
      CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-   until (CurrentHedgehog^.Gear <> nil);
+   until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
+
+   CurrentHedgehog:= @CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog];
 
    HHGear:= CurrentHedgehog^.Gear;
    HHGear^.State:= State;
