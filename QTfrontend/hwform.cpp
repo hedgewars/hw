@@ -46,6 +46,7 @@
 #include "netwwwserver.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
+#include "input_ip.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
@@ -89,7 +90,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
+	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnectServer()));
+	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart,	SIGNAL(clicked()),	this, SLOT(GoToNetServer()));
 	connect(ui.pageNet,	SIGNAL(connectClicked()),	this, SLOT(NetConnectServer()));
 	
@@ -408,6 +410,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 void HWForm::NetConnect()
 {
+	HWHostPortDialog * hpd = new HWHostPortDialog(this);
+
+	hpd->exec();
 // FIXME:  _NetConnect(ui.pageNet->editIP->text(), 46631, ui.pageNet->editNetNick->text());
 }
 

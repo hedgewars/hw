@@ -468,6 +468,11 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnUpdateSList->setText(QPushButton::tr("Update"));
 	GBClayout->addWidget(BtnUpdateSList, 2, 0);
 
+	BtnSpecifyServer = new QPushButton(ConnGroupBox);
+	BtnSpecifyServer->setFont(*font14);
+	BtnSpecifyServer->setText(QPushButton::tr("Specify"));
+	GBClayout->addWidget(BtnSpecifyServer, 2, 1);
+
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));

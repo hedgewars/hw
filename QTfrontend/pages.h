@@ -161,9 +161,10 @@ public:
 
 	QPushButton* BtnUpdateSList;
 	HWNetServersWidget* netServersWidget;
-	QPushButton *BtnBack;
-	QPushButton *BtnNetConnect;
-	QPushButton* BtnNetSvrStart;
+	QPushButton * BtnBack;
+	QPushButton * BtnNetConnect;
+	QPushButton * BtnNetSvrStart;
+	QPushButton * BtnSpecifyServer;
 	QRadioButton * rbLocalGame;
 	QRadioButton * rbInternetGame;
 

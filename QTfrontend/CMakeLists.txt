@@ -73,6 +73,7 @@ set(hwfr_src
 	hwconsts.cpp
 	selectWeapon.cpp
         itemNum.cpp
+	input_ip.cpp
 	weaponItem.cpp)
 
 if (WIN32)
@@ -111,6 +112,7 @@ set(hwfr_moc_hdrs
 	playrecordpage.h
 	selectWeapon.h
         itemNum.h
+	input_ip.h
 	weaponItem.h)
 
 set(hwfr_hdrs
