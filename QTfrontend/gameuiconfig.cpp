@@ -44,6 +44,9 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	netHost = new QString(value("net/ip", "").toString());
 	netPort = value("net/port", 46631).toUInt();
 
+	Form->ui.pageNetServer->leServerDescr->setText(value("net/servername", "hedgewars server").toString());
+	Form->ui.pageNetServer->sbPort->setValue(value("net/serverport", 46631).toUInt());
+
 	Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
 
@@ -76,6 +79,8 @@ void GameUIConfig::SaveOptions()
 	setValue("net/nick", Form->ui.pageOptions->editNetNick->text());
 	setValue("net/ip", *netHost);
 	setValue("net/port", netPort);
+	setValue("net/servername", Form->ui.pageNetServer->leServerDescr->text());
+	setValue("net/serverport", Form->ui.pageNetServer->sbPort->value());
 
 	setValue("fps/show", isShowFPSEnabled());
 	setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());

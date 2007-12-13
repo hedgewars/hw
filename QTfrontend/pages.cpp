@@ -514,15 +514,47 @@ PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(1, 1);
 	pageLayout->setColumnStretch(2, 1);
 
+	pageLayout->setRowStretch(0, 0);
+	pageLayout->setRowStretch(1, 0);
+	pageLayout->setRowStretch(2, 1);
+	pageLayout->setRowStretch(3, 0);
+
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 2, 0);
+	pageLayout->addWidget(BtnBack, 3, 0);
 
 	BtnStart = new QPushButton(this);
 	BtnStart->setFont(*font14);
 	BtnStart->setText(QPushButton::tr("Start"));
-	pageLayout->addWidget(BtnStart, 2, 2);
+	pageLayout->addWidget(BtnStart, 3, 2);
+
+	labelSD = new QLabel(this);
+	labelSD->setText(QLabel::tr("Server name:"));
+	pageLayout->addWidget(labelSD, 0, 0);
+
+	leServerDescr = new QLineEdit(this);
+	pageLayout->addWidget(leServerDescr, 0, 1);
+
+	labelPort = new QLabel(this);
+	labelPort->setText(QLabel::tr("Server port:"));
+	pageLayout->addWidget(labelPort, 1, 0);
+
+	sbPort = new QSpinBox(this);
+	sbPort->setMinimum(0);
+	sbPort->setMaximum(65535);
+	pageLayout->addWidget(sbPort, 1, 1);
+
+	BtnDefault = new QPushButton(this);
+	BtnDefault->setText(QPushButton::tr("default"));
+	pageLayout->addWidget(BtnDefault, 1, 2);
+
+	connect(BtnDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
+}
+
+void PageNetServer::setDefaultPort()
+{
+	sbPort->setValue(46631);
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)

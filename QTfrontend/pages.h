@@ -191,6 +191,14 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnStart;
+	QPushButton *BtnDefault;
+	QLabel *labelSD;
+	QLineEdit *leServerDescr;
+	QLabel *labelPort;
+	QSpinBox *sbPort;
+
+private slots:
+	void setDefaultPort();
 };
 
 class PageNetGame : public QWidget

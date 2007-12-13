@@ -29,11 +29,11 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
 	QGridLayout * layout = new QGridLayout(this);
 
 	QLabel * lbHost = new QLabel(this);
-	lbHost->setText(tr("Host:"));
+	lbHost->setText(QLabel::tr("Host:"));
 	layout->addWidget(lbHost, 0, 0);
 
 	QLabel * lbPort = new QLabel(this);
-	lbPort->setText(tr("Port:"));
+	lbPort->setText(QLabel::tr("Port:"));
 	layout->addWidget(lbPort, 1, 0);
 
 	leHost = new QLineEdit(this);
@@ -45,16 +45,16 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
 	layout->addWidget(sbPort, 1, 1, 1, 2);
 
 	pbDefault = new QPushButton(this);
-	pbDefault->setText(tr("default"));
+	pbDefault->setText(QPushButton::tr("default"));
 	layout->addWidget(pbDefault, 1, 3);
 
 	pbOK = new QPushButton(this);
-	pbOK->setText(tr("OK"));
+	pbOK->setText(QPushButton::tr("OK"));
 	pbOK->setDefault(true);
 	layout->addWidget(pbOK, 3, 1);
 
 	pbCancel = new QPushButton(this);
-	pbCancel->setText(tr("Cancel"));
+	pbCancel->setText(QPushButton::tr("Cancel"));
 	layout->addWidget(pbCancel, 3, 2);
 
 	connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));

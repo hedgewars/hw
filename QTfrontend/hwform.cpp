@@ -426,6 +426,7 @@ void HWForm::NetConnect()
 
 void HWForm::NetStartServer()
 {
+  config->SaveOptions();
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
   _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
