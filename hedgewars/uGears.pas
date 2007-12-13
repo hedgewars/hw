@@ -417,12 +417,12 @@ if AllInactive then
         end;
 
 if TurnTimeLeft > 0 then
-   if CurrentTeam <> nil then
       if CurrentHedgehog^.Gear <> nil then
          if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
 
-if (GameTicks and $FFFF) = $FFFF then SendIPCTimeInc;
+if (not CurrentTeam^.ExtDriven) and
+   ((GameTicks and $FFFF) = $FFFF) then SendIPCTimeInc;
 inc(GameTicks)
 end;
 
