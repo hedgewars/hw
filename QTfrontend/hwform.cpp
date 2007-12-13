@@ -90,7 +90,11 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
-	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
+	connect(ui.pageNet->BtnNetSvrStart,	SIGNAL(clicked()),	this, SLOT(GoToNetServer()));
+	connect(ui.pageNet,	SIGNAL(connectClicked()),	this, SLOT(NetConnectServer()));
+	
+	connect(ui.pageNetServer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
@@ -189,10 +193,15 @@ void HWForm::GoToDemos()
 
 void HWForm::GoToNet()
 {
-	ui.pageNet->changeServersList();
+	ui.pageNet->updateServersList();
 	connect(ui.pageNet->netServersWidget->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
 
 	GoToPage(ID_PAGE_NET);
+}
+
+void HWForm::GoToNetServer()
+{
+	GoToPage(ID_PAGE_NETSERVER);
 }
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
@@ -399,7 +408,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 void HWForm::NetConnect()
 {
-  _NetConnect(ui.pageNet->editIP->text(), 46631, ui.pageNet->editNetNick->text());
+// FIXME:  _NetConnect(ui.pageNet->editIP->text(), 46631, ui.pageNet->editNetNick->text());
 }
 
 void HWForm::NetStartServer()

@@ -92,4 +92,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageSelectWeapon = new PageSelectWeapon();
 	Pages->addWidget(pageSelectWeapon);
+
+	pageNetServer = new PageNetServer();
+	Pages->addWidget(pageNetServer);
 }

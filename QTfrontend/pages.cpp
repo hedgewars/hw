@@ -453,42 +453,31 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
 	pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
 	GBClayout = new QGridLayout(ConnGroupBox);
-	GBClayout->setColumnStretch(0, 0);
+	GBClayout->setColumnStretch(0, 1);
 	GBClayout->setColumnStretch(1, 1);
 	GBClayout->setColumnStretch(2, 1);
-	GBClayout->setRowStretch(0, 0);
-	GBClayout->setRowStretch(1, 0);
-	GBClayout->setRowStretch(2, 1);
-
-	labelIP = new QLabel(ConnGroupBox);
-	labelIP->setText(QLabel::tr("Server address"));
-	GBClayout->addWidget(labelIP, 0, 0);
-
-	editIP = new QLineEdit(ConnGroupBox);
-	editIP->setMaxLength(50);
-	GBClayout->addWidget(editIP, 0, 1);
 
 	BtnNetConnect = new QPushButton(ConnGroupBox);
 	BtnNetConnect->setFont(*font14);
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
-	GBClayout->addWidget(BtnNetConnect, 0, 2);
+	GBClayout->addWidget(BtnNetConnect, 2, 2);
 
 	netServersWidget = 0;
 
 	BtnUpdateSList = new QPushButton(ConnGroupBox);
 	BtnUpdateSList->setFont(*font14);
 	BtnUpdateSList->setText(QPushButton::tr("Update"));
-	GBClayout->addWidget(BtnUpdateSList, 1, 2);
+	GBClayout->addWidget(BtnUpdateSList, 2, 0);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 3, 0);
 
-	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(changeServersList()));
+	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(updateServersList()));
 }
 
-void PageNet::changeServersList()
+void PageNet::updateServersList()
 {
 	if (netServersWidget) delete netServersWidget;
 
@@ -502,9 +491,34 @@ void PageNet::changeServersList()
 		netServersWidget = new HWNetWwwWidget(ConnGroupBox);
 		static_cast<HWNetWwwWidget *>(netServersWidget)->updateList();
 	}
-	GBClayout->addWidget(netServersWidget, 1, 0, 2, 2);
+	GBClayout->addWidget(netServersWidget, 1, 0, 1, 3);
 
 	connect(BtnUpdateSList, SIGNAL(clicked()), netServersWidget, SLOT(updateList()));
+	connect(netServersWidget->serversList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotConnect()));
+}
+
+void PageNet::slotConnect()
+{
+	emit connectClicked();
+}
+
+PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
+{
+	QFont * font14 = new QFont("MS Shell Dlg", 14);
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setColumnStretch(0, 1);
+	pageLayout->setColumnStretch(1, 1);
+	pageLayout->setColumnStretch(2, 1);
+
+	BtnBack = new QPushButton(this);
+	BtnBack->setFont(*font14);
+	BtnBack->setText(QPushButton::tr("Back"));
+	pageLayout->addWidget(BtnBack, 2, 0);
+
+	BtnStart = new QPushButton(this);
+	BtnStart->setFont(*font14);
+	BtnStart->setText(QPushButton::tr("Start"));
+	pageLayout->addWidget(BtnStart, 2, 2);
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
@@ -534,7 +548,7 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 2, 0);
 
-	BtnGo	= new QPushButton(this);
+	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
 	BtnGo->setText(QPushButton::tr("Go!"));
 	BtnGo->setEnabled(false);

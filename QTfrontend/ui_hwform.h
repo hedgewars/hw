@@ -26,6 +26,7 @@ class PageMultiplayer;
 class PagePlayDemo;
 class PageOptions;
 class PageNet;
+class PageNetServer;
 class PageNetChat;
 class PageNetGame;
 class PageInfo;
@@ -50,6 +51,7 @@ public:
 	PagePlayDemo *pagePlayDemo;
 	PageOptions *pageOptions;
 	PageNet *pageNet;
+	PageNetServer * pageNetServer;
 	PageNetChat *pageNetChat;
 	PageNetGame *pageNetGame;
 	PageInfo *pageInfo;

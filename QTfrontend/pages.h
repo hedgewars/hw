@@ -164,8 +164,6 @@ public:
 	QGroupBox *NNGroupBox;
 	QLabel *labelNN;
 	QLineEdit *editNetNick;
-	QLabel *labelIP;
-	QLineEdit * editIP;
 	QRadioButton * rbLocalGame;
 	QRadioButton * rbInternetGame;
 
@@ -173,8 +171,25 @@ private:
 	QGroupBox * ConnGroupBox;
 	QGridLayout * GBClayout;
 
+private slots:
+	void slotConnect();
+
 public slots:
-	void changeServersList();
+	void updateServersList();
+
+signals:
+	void connectClicked();
+};
+
+class PageNetServer : public QWidget
+{
+	Q_OBJECT
+
+public:
+	PageNetServer(QWidget* parent = 0);
+
+	QPushButton *BtnBack;
+	QPushButton *BtnStart;
 };
 
 class PageNetGame : public QWidget
