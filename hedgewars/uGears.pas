@@ -422,6 +422,7 @@ if TurnTimeLeft > 0 then
          if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
             and not isInMultiShoot then dec(TurnTimeLeft);
 
+if (GameTicks and $FFFF) = $FFFF then SendIPCTimeInc;
 inc(GameTicks)
 end;
 

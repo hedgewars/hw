@@ -27,6 +27,7 @@ procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
+procedure SendIPCTimeInc;
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure InitIPC;
@@ -54,6 +55,8 @@ var  IPCSock: PTCPSocket = nil;
      headcmd: PCmd = nil;
      lastcmd: PCmd = nil;
 
+     hiTicks: Word = 0;
+
 function AddCmd(Time: Longword; str: shortstring): PCmd;
 var Result: PCmd;
 begin
@@ -61,7 +64,7 @@ new(Result);
 FillChar(Result^, sizeof(TCmd), 0);
 Result^.Time:= Time;
 Result^.str:= str;
-dec(Result^.len, 4);
+dec(Result^.len, 2); // cut timestamp
 if headcmd = nil then
    begin
    headcmd:= Result;
@@ -107,10 +110,12 @@ SDLNet_Quit
 end;
 
 procedure ParseIPCCommand(s: shortstring);
+var loTicks: Word;
 begin
 case s[1] of
      '!': begin {$IFDEF DEBUGFILE}AddFileLog('Ping? Pong!');{$ENDIF}isPonged:= true; end;
      '?': SendIPC('!');
+     '#': inc(hiTicks);
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -122,7 +127,8 @@ case s[1] of
                'S': GameType:= gmtSave;
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
-     AddCmd(SDLNet_Read32(@s[byte(s[0]) - 3]), s);
+     loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
+     AddCmd(hiTicks shl 16 + loTicks, s);
      {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.Time));{$ENDIF}
      end
 end;
@@ -157,9 +163,9 @@ begin
 if IPCSock <> nil then
    begin
    if s[0]>#251 then s[0]:= #251;
-   SDLNet_Write32(GameTicks, @s[Succ(byte(s[0]))]);
+   SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
    {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s);{$ENDIF}
-   inc(s[0],4);
+   inc(s[0], 2);
    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
    end
 end;
@@ -180,6 +186,12 @@ s[1]:= cmd;
 SDLNet_Write16(X, @s[2]);
 SDLNet_Write16(Y, @s[4]);
 SendIPC(s)
+end;
+
+procedure SendIPCTimeInc;
+const timeinc: shortstring = '#';
+begin
+SendIPCRaw(@timeinc, 2)
 end;
 
 procedure IPCWaitPongEvent;
