@@ -35,3 +35,6 @@ QColor * color3 = new QColor(103, 167, 231);
 QColor * color4 = new QColor( 37, 181,  61);
 QColor * color5 = new QColor(247, 237, 112);
 QColor * color6 = new QColor(192,  85, 160);
+
+QString * netHost = new QString();
+quint16 netPort = 46631;

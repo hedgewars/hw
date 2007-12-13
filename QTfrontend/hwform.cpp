@@ -31,6 +31,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QRadioButton>
+#include <QSpinBox>
 
 #include "hwform.h"
 #include "game.h"
@@ -405,15 +406,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
 	hwnet->Connect(hostName, port, nick);
-	config->SaveOptions();
 }
 
 void HWForm::NetConnect()
 {
 	HWHostPortDialog * hpd = new HWHostPortDialog(this);
+	hpd->leHost->setText(*netHost);
+	hpd->sbPort->setValue(netPort);
 
-	hpd->exec();
-// FIXME:  _NetConnect(ui.pageNet->editIP->text(), 46631, ui.pageNet->editNetNick->text());
+	if (hpd->exec() == QDialog::Accepted)
+	{
+		config->SaveOptions();
+		delete netHost;
+		netHost = new QString(hpd->leHost->text());
+		netPort = hpd->sbPort->value();
+		_NetConnect(*netHost, netPort, ui.pageOptions->editNetNick->text());
+	}
 }
 
 void HWForm::NetStartServer()

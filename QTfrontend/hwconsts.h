@@ -38,3 +38,6 @@ extern QColor * color3;
 extern QColor * color4;
 extern QColor * color5;
 extern QColor * color6;
+
+extern QString * netHost;
+extern quint16 netPort;

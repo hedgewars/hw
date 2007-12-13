@@ -33,9 +33,10 @@ class HWHostPortDialog : public QDialog
 public:
 	HWHostPortDialog(QWidget* parent = 0);
 
-private:
 	QLineEdit* leHost;
 	QSpinBox* sbPort;
+
+private:
 	QPushButton* pbOK;
 	QPushButton* pbCancel;
 	QPushButton * pbDefault;
