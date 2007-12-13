@@ -25,7 +25,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 
-char delimeter='\t';
+char delimeter='*';
 
 HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget) :
   config(config),
@@ -43,8 +43,8 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
-  NetSocket.connectToHost(hostName, port);
   mynick = nick;
+  NetSocket.connectToHost(hostName, port);
 }
 
 void HWNewNet::Disconnect()
