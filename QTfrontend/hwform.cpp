@@ -349,7 +349,7 @@ void HWForm::NetConnectServer()
 			  tr("OK"));
     return ;
   }
-  _NetConnect(curritem->text(), 46631, ui.pageNet->editNetNick->text());
+  _NetConnect(curritem->text(), 46631, ui.pageOptions->editNetNick->text());
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
@@ -415,7 +415,7 @@ void HWForm::NetStartServer()
 {
   pnetserver = new HWNetServer;
   pnetserver->StartServer();
-  _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageNet->editNetNick->text());
+  _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
 
   if (ui.pageNet->rbLocalGame->isChecked())
     pRegisterServer = new HWNetUdpServer(0, "hedgewars server", 46631);

@@ -405,6 +405,20 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	WeaponsButt->setText(QPushButton::tr("Weapons scheme"));
 	pageLayout->addWidget(WeaponsButt, 1, 0);
 
+	NNGroupBox = new QGroupBox(this);
+	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
+	pageLayout->addWidget(NNGroupBox, 1, 2);
+
+	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
+	labelNN = new QLabel(NNGroupBox);
+	labelNN->setText(QLabel::tr("Net nick"));
+	GBNlayout->addWidget(labelNN, 0, 0);
+
+	editNetNick = new QLineEdit(NNGroupBox);
+	editNetNick->setMaxLength(20);
+	editNetNick->setText(QLineEdit::tr("unnamed"));
+	GBNlayout->addWidget(editNetNick, 0, 1);
 }
 
 PageNet::PageNet(QWidget* parent) : QWidget(parent)
@@ -419,21 +433,6 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
 	pageLayout->addWidget(BtnNetSvrStart, 3, 2);
-
-	NNGroupBox = new QGroupBox(this);
-	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
-	pageLayout->addWidget(NNGroupBox, 0, 0);
-
-	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
-	labelNN = new QLabel(NNGroupBox);
-	labelNN->setText(QLabel::tr("Net nick"));
-	GBNlayout->addWidget(labelNN, 0, 0);
-
-	editNetNick = new QLineEdit(NNGroupBox);
-	editNetNick->setMaxLength(20);
-	editNetNick->setText(QLineEdit::tr("unnamed"));
-	GBNlayout->addWidget(editNetNick, 0, 1);
 
 	QGroupBox * NetTypeGroupBox = new QGroupBox(this);
 	NetTypeGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);

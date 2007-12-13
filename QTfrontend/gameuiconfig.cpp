@@ -38,7 +38,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
 
-	Form->ui.pageNet->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
+	Form->ui.pageOptions->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
 //	Form->ui.pageNet->editIP->setText(value("net/ip", "").toString());
 
 	Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
@@ -70,7 +70,7 @@ void GameUIConfig::SaveOptions()
 
 	setValue("audio/sound", isSoundEnabled());
 
-	setValue("net/nick", Form->ui.pageNet->editNetNick->text());
+	setValue("net/nick", Form->ui.pageOptions->editNetNick->text());
 //	setValue("net/ip", Form->ui.pageNet->editIP->text());
 
 	setValue("fps/show", isShowFPSEnabled());

@@ -147,6 +147,9 @@ public:
 	QCheckBox *CBAltDamage;
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
+	QGroupBox *NNGroupBox;
+	QLabel *labelNN;
+	QLineEdit *editNetNick;
 };
 
 class PageNet : public QWidget
@@ -161,9 +164,6 @@ public:
 	QPushButton *BtnBack;
 	QPushButton *BtnNetConnect;
 	QPushButton* BtnNetSvrStart;
-	QGroupBox *NNGroupBox;
-	QLabel *labelNN;
-	QLineEdit *editNetNick;
 	QRadioButton * rbLocalGame;
 	QRadioButton * rbInternetGame;
 
