@@ -486,15 +486,11 @@ void PageNet::updateServersList()
 	if (netServersWidget) delete netServersWidget;
 
 	if (rbLocalGame->isChecked())
-	{
 		netServersWidget = new HWNetUdpWidget(ConnGroupBox);
-		static_cast<HWNetUdpWidget *>(netServersWidget)->updateList();
-	}
 	else
-	{
 		netServersWidget = new HWNetWwwWidget(ConnGroupBox);
-		static_cast<HWNetWwwWidget *>(netServersWidget)->updateList();
-	}
+
+	netServersWidget->updateList();
 	GBClayout->addWidget(netServersWidget, 1, 0, 1, 3);
 
 	connect(BtnUpdateSList, SIGNAL(clicked()), netServersWidget, SLOT(updateList()));

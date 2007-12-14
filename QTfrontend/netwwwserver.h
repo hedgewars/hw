@@ -43,6 +43,8 @@ private:
 	QHttp * http;
 	QTimer * timer;
 	QString servid, servkey;
+	bool destroyPosted;
+	int destroyPostId;
 };
 
 #endif // _NET_WWWSERVER_INCLUDED

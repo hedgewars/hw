@@ -33,7 +33,7 @@ public:
 	QListWidget* serversList;
 
 public slots:
-	void updateList();
+	virtual void updateList();
 
 private:
 	QVBoxLayout mainLayout;

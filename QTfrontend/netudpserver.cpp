@@ -42,3 +42,8 @@ void HWNetUdpServer::onClientRead()
     }
   }
 }
+
+void HWNetUdpServer::unregister()
+{
+  deleteLater();
+}

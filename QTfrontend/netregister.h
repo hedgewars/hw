@@ -29,7 +29,7 @@ public:
 	HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port);
 
 public slots:
-	void unregister();
+	virtual void unregister();
 };
 
 #endif // _NET_REGISTER_INCLUDED

@@ -432,9 +432,9 @@ void HWForm::NetStartServer()
   _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
 
   if (ui.pageNet->rbLocalGame->isChecked())
-    pRegisterServer = new HWNetUdpServer(0, "hedgewars server", ui.pageNetServer->sbPort->value());
+    pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
   else
-    pRegisterServer = new HWNetWwwServer(0, "hedgewars server", ui.pageNetServer->sbPort->value());
+    pRegisterServer = new HWNetWwwServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
 }
 
 void HWForm::NetDisconnect()
@@ -446,7 +446,8 @@ void HWForm::NetDisconnect()
   }
   if(pnetserver) {
     pRegisterServer->unregister();
-    pRegisterServer->deleteLater();
+    pRegisterServer = 0;
+
     pnetserver->StopServer();
     delete pnetserver;
     pnetserver=0;

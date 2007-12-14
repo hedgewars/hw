@@ -31,6 +31,9 @@ class HWNetUdpServer : public HWNetRegisterServer
  public:
   HWNetUdpServer(QObject *parent, const QString & descr, quint16 port);
 
+ public slots:
+  void unregister();
+
  private slots:
   void onClientRead();
 

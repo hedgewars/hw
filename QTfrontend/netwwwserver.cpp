@@ -26,6 +26,9 @@
 HWNetWwwServer::HWNetWwwServer(QObject *parent, const QString & descr, quint16 port) :
   HWNetRegisterServer(parent, descr, port), timer(0)
 {
+	destroyPosted = false;
+	destroyPostId = 0;
+
 	http = new QHttp(this);
 	http->setHost("www.hedgewars.org", 80);
 	connect(http, SIGNAL(requestFinished(int, bool)), this, SLOT(onClientRead(int, bool)));
@@ -40,6 +43,12 @@ HWNetWwwServer::HWNetWwwServer(QObject *parent, const QString & descr, quint16 p
 
 void HWNetWwwServer::onClientRead(int id, bool error)
 {
+	if (destroyPosted && (id == destroyPostId))
+	{
+		deleteLater();
+		return;
+	}
+
 	if (error)
 	{
 		QMessageBox::critical(0,
@@ -80,5 +89,6 @@ void HWNetWwwServer::unregister()
 	QString request = QString("id=%1&key=%2")
 			.arg(servid)
 			.arg(servkey);
-	http->post("/games/destroy_game", request.toUtf8());
+	destroyPostId = http->post("/games/destroy_game", request.toUtf8());
+	destroyPosted = true;
 }
