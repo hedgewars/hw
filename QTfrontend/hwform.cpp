@@ -498,6 +498,11 @@ void HWForm::GameStateChanged(GameState gameState)
 	switch(gameState) {
 		case gsStarted: {
 			ui.pageGameStats->labelGameStats->setText("");
+			if (pRegisterServer)
+			{
+				pRegisterServer->unregister();
+				pRegisterServer = 0;
+			}
 			break;
 		}
 		case gsFinished: {
