@@ -23,12 +23,11 @@
 #include <QTcpSocket>
 #include <QMessageBox>
 
-const quint16 HWNetServer::ds_port=46631;
-
 extern char delimeter;
 
-void HWNetServer::StartServer()
+void HWNetServer::StartServer(quint16 port)
 {
+  ds_port = port;
   hhnum=0;
   IPCServer = new QTcpServer(this);
   if (!IPCServer->listen(QHostAddress::Any, ds_port)) {
