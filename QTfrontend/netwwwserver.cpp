@@ -86,6 +86,7 @@ void HWNetWwwServer::updateInList()
 
 void HWNetWwwServer::unregister()
 {
+	qDebug("delete server");
 	QString request = QString("id=%1&key=%2")
 			.arg(servid)
 			.arg(servkey);

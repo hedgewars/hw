@@ -84,6 +84,7 @@ class HWNewNet : public QObject
   void ParseLine(const QByteArray & line);
 
  signals:
+  void AskForRunGame();
   void Connected();
   void Disconnected();
   void EnteredGame();
@@ -91,7 +92,6 @@ class HWNewNet : public QObject
   void nickRemoved(const QString& nick);
   void FromNet(const QByteArray & buf);
   void AddNetTeam(const HWTeam&);
-  void GameStateChanged(GameState gameState);
 
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
@@ -123,7 +123,6 @@ class HWNewNet : public QObject
   void OnDisconnect();
   //void Perform();
   void displayError(QAbstractSocket::SocketError socketError);
-  void ShowErrorMessage(const QString &);
   //void FlushNetBuf();
 };
 

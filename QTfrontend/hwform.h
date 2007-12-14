@@ -74,12 +74,14 @@ private slots:
 	void NetStartGame();
 	void AddNetTeam(const HWTeam& team);
 	void StartMPGame();
-	void NetGameStateChanged(GameState gameState);
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
 	void ForcedDisconnect();
 	void ShowErrorMessage(const QString &);
 	void GetRecord(bool isDemo, const QByteArray & record);
+
+public slots:
+	void CreateNetGame();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

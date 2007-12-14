@@ -365,7 +365,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	ui.pageNetGame->pChatWidget->clear();
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
-	connect(hwnet, SIGNAL(GameStateChanged(GameState)), this, SLOT(NetGameStateChanged(GameState)));
+	connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 
@@ -445,8 +445,11 @@ void HWForm::NetDisconnect()
     hwnet=0;
   }
   if(pnetserver) {
-    pRegisterServer->unregister();
-    pRegisterServer = 0;
+    if (pRegisterServer)
+    {
+      pRegisterServer->unregister();
+      pRegisterServer = 0;
+    }
 
     pnetserver->StopServer();
     delete pnetserver;
@@ -490,12 +493,6 @@ void HWForm::StartMPGame()
 	game->StartLocal();
 }
 
-void HWForm::NetGameStateChanged(GameState __attribute__((unused)) gameState)
-{
-  ui.pageNetGame->BtnGo->setText(QPushButton::tr("Go!"));
-  ui.pageNetGame->BtnGo->setEnabled(true);
-}
-
 void HWForm::GameStateChanged(GameState gameState)
 {
 	switch(gameState) {
@@ -510,6 +507,11 @@ void HWForm::GameStateChanged(GameState gameState)
 		default: ;
 	}
 
+	if (hwnet)
+	{
+		ui.pageNetGame->BtnGo->setText(QPushButton::tr("Go!"));
+		ui.pageNetGame->BtnGo->setEnabled(true);
+	}
 }
 
 void HWForm::AddStatText(const QString & msg)
@@ -588,4 +590,14 @@ void HWForm::StartTraining()
 	CreateGame(0, 0);
 
 	game->StartTraining();
+}
+
+void HWForm::CreateNetGame()
+{
+	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+
+	connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
+	connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
+
+	game->StartNet();
 }

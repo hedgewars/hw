@@ -183,7 +183,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'E': {
-			emit ErrorMessage(QString().append(msg.mid(2)).left(msg.size() - 6));
+			int size = msg.size();
+			emit ErrorMessage(QString().append(msg.mid(2)).left(size - 4));
 			return;
 		}
 		case 'K': {
@@ -206,7 +207,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			break;
 		}
 		case 'i': {
-			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
+			int size = msg.size();
+			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3).left(size - 5)));
 			break;
 		}
 		case 'Q': {

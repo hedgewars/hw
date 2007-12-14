@@ -338,19 +338,7 @@ void HWNewNet::ConfigAsked()
 
 void HWNewNet::RunGame()
 {
-  HWGame* game = new HWGame(config, m_pGameCFGWidget, m_pTeamSelWidget);
-  connect(game, SIGNAL(GameStateChanged(GameState)), this, SIGNAL(GameStateChanged(GameState)));
-  connect(game, SIGNAL(SendNet(const QByteArray &)), this, SLOT(SendNet(const QByteArray &)));
-  connect(this, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
-  connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
-  game->StartNet();
-}
-
-void HWNewNet::ShowErrorMessage(const QString & msg)
-{
-	QMessageBox::warning(0,
-			"Hedgewars",
-			msg);
+  emit AskForRunGame();
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
