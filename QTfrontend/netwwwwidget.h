@@ -37,12 +37,6 @@ public:
 
 public slots:
 	void updateList();
-
-private slots:
-	void onClientRead(int id, bool error);
-
-private:
-	QHttp * http;
 };
 
 class HWNetWwwModel : public QAbstractTableModel

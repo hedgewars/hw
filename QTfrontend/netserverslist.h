@@ -21,7 +21,7 @@
 
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QListWidget>
+#include <QTableView>
 
 class HWNetServersWidget : public QWidget
 {
@@ -30,7 +30,7 @@ class HWNetServersWidget : public QWidget
 public:
 	HWNetServersWidget (QWidget *parent = 0);
 
-	QListWidget* serversList;
+	QTableView* serversList;
 
 public slots:
 	virtual void updateList();

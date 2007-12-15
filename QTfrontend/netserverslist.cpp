@@ -24,12 +24,12 @@
 HWNetServersWidget::HWNetServersWidget(QWidget* parent) :
   QWidget(parent), mainLayout(this)
 {
-	serversList = new QListWidget(this);
+	serversList = new QTableView(this);
 	mainLayout.setMargin(0);
 	mainLayout.addWidget(serversList);
 }
 
 void HWNetServersWidget::updateList()
 {
-	serversList->clear();
+
 }

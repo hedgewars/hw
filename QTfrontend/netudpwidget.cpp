@@ -32,7 +32,7 @@ HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
 
 void HWNetUdpWidget::updateList()
 {
-  serversList->clear();
+//  serversList->clear();
   pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
 }
 
@@ -45,7 +45,7 @@ void HWNetUdpWidget::onClientRead()
     quint16 clientPort;
     pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
     if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
-      serversList->addItem(clientAddr.toString());
+//      serversList->addItem(clientAddr.toString());
     }
   }
 }

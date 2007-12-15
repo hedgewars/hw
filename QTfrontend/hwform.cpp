@@ -344,7 +344,7 @@ void HWForm::PlayDemo()
 
 void HWForm::NetConnectServer()
 {
-  QListWidgetItem * curritem = ui.pageNet->netServersWidget->serversList->currentItem();
+/*  QListWidgetItem * curritem = ui.pageNet->netServersWidget->serversList->currentItem();
   if (!curritem) {
     QMessageBox::critical(this,
 			  tr("Error"),
@@ -352,7 +352,7 @@ void HWForm::NetConnectServer()
 			  tr("OK"));
     return ;
   }
-  _NetConnect(curritem->text(), 46631, ui.pageOptions->editNetNick->text());
+  _NetConnect(curritem->text(), 46631, ui.pageOptions->editNetNick->text());*/
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)
