@@ -19,7 +19,6 @@
 #ifndef _NET_WWWWIDGET_INCLUDED
 #define _NET_WWWWIDGET_INCLUDED
 
-#include <QAbstractTableModel>
 #include <QStringList>
 #include "netserverslist.h"
 

@@ -1,6 +1,7 @@
 /*
  * Hedgewars, a worms-like game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,29 +20,32 @@
 #ifndef _NET_UDPWIDGET_INCLUDED
 #define _NET_UDPWIDGET_INCLUDED
 
-#include <QWidget>
-#include <QVBoxLayout>
-
+#include <QStringList>
 #include "netserverslist.h"
-/*
-class QUdpSocket;
-class QListWidget;
 
-class HWNetUdpWidget : public HWNetServersWidget
+class QUdpSocket;
+
+class HWNetUdpModel : public HWNetServersModel
 {
   Q_OBJECT
 
- public:
-  HWNetUdpWidget(QWidget *parent = 0);
+public:
+	HWNetUdpModel(QObject *parent = 0);
 
- public slots:
-  void updateList();
+	QVariant data(const QModelIndex &index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	int rowCount(const QModelIndex & parent) const;
+	int columnCount(const QModelIndex & parent) const;
 
- private slots:
-  void onClientRead();
+public slots:
+	void updateList();
 
- private:
-  QUdpSocket* pUdpSocket;
+private slots:
+	void onClientRead();
+
+private:
+	QUdpSocket* pUdpSocket;
+	QList<QStringList> games;
 };
-*/
+
 #endif // _NET_UDPWIDGET_INCLUDED

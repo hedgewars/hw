@@ -485,11 +485,9 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 
 void PageNet::updateServersList()
 {
-//	if (tvServersList->model()) delete tvServersList->model();
-
 	if (rbLocalGame->isChecked())
-//;		netServersWidget = new HWNetUdpWidget(ConnGroupBox);
-//	else
+		tvServersList->setModel(new HWNetUdpModel());
+	else
 		tvServersList->setModel(new HWNetWwwModel());
 
 	static_cast<HWNetServersModel *>(tvServersList->model())->updateList();

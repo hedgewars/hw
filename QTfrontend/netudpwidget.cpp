@@ -1,6 +1,7 @@
 /*
  * Hedgewars, a worms-like game
  * Copyright (c) 2007 Ulyanov Igor <iulyanov@gmail.com>
+ * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,36 +18,89 @@
  */
 
 #include <QUdpSocket>
-#include <QListWidget>
 
 #include "netudpwidget.h"
 
-/*HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
-  HWNetServersWidget(parent)
+HWNetUdpModel::HWNetUdpModel(QObject* parent) :
+  HWNetServersModel(parent)
 {
-  pUdpSocket = new QUdpSocket(this);
+	pUdpSocket = new QUdpSocket(this);
 
-  pUdpSocket->bind();
-  connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
+	pUdpSocket->bind();
+	connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
 }
 
-void HWNetUdpWidget::updateList()
+void HWNetUdpModel::updateList()
 {
-//  serversList->clear();
-  pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
+	games.clear();
+
+	reset();
+
+	pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
 }
 
-void HWNetUdpWidget::onClientRead()
+void HWNetUdpModel::onClientRead()
 {
-  while (pUdpSocket->hasPendingDatagrams()) {
-    QByteArray datagram;
-    datagram.resize(pUdpSocket->pendingDatagramSize());
-    QHostAddress clientAddr;
-    quint16 clientPort;
-    pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
-    if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
-//      serversList->addItem(clientAddr.toString());
-    }
-  }
+	while (pUdpSocket->hasPendingDatagrams()) {
+		QByteArray datagram;
+		datagram.resize(pUdpSocket->pendingDatagramSize());
+		QHostAddress clientAddr;
+		quint16 clientPort;
+
+		pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
+
+		if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
+			QStringList sl;
+			sl << "-" << clientAddr.toString() << "46631";
+			games.append(sl);
+		}
+	}
+
+	reset();
 }
-*/
+
+QVariant HWNetUdpModel::data(const QModelIndex &index,
+                             int role) const
+{
+	if (!index.isValid() || index.row() < 0
+		|| index.row() >= games.size()
+		|| role != Qt::DisplayRole)
+	return QVariant();
+
+	return games[index.row()][index.column()];
+}
+
+QVariant HWNetUdpModel::headerData(int section,
+            Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	if (orientation == Qt::Horizontal)
+	{
+		switch (section)
+		{
+			case 0: return tr("Title");
+			case 1: return tr("IP");
+			case 2: return tr("Port");
+			default: return QVariant();
+		}
+	} else
+		return QString("%1").arg(section + 1);
+}
+
+int HWNetUdpModel::rowCount(const QModelIndex &parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return games.size();
+}
+
+int HWNetUdpModel::columnCount(const QModelIndex & parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return 3;
+}
