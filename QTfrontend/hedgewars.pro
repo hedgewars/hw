@@ -8,7 +8,7 @@ win32 {
 	RC_FILE	= ./res/hedgewars.rc
 }
 
-QT += network svg
+QT += network svg xml
 
 HEADERS += binds.h \
            game.h \
@@ -45,7 +45,8 @@ HEADERS += binds.h \
            playrecordpage.h \
            hwconsts.h \
            selectWeapon.h \
-           itemNum.h
+           itemNum.h \
+	   input_ip.h
            
            
 SOURCES += binds.cpp \
@@ -81,7 +82,8 @@ SOURCES += binds.cpp \
            playrecordpage.cpp \
            hwconsts.cpp \
            selectWeapon.cpp \
-           itemNum.cpp
+           itemNum.cpp \
+	   input_ip.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 

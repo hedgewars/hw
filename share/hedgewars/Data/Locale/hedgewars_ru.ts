@@ -497,6 +497,16 @@
         <source>Server port:</source>
         <translation>Порт:</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Host:</source>
+        <translation>Сервер:</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Port:</source>
+        <translation>Порт:</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -720,6 +730,16 @@ Please check your installation</source>
         <location filename="" line="7471221"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>OK</source>
+        <translation>ОК</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
     </message>
 </context>
 <context>
