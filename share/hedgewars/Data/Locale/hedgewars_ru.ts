@@ -44,7 +44,7 @@
     <message>
         <location filename="" line="7471221"/>
         <source>Please, select server from the list above</source>
-        <translation>Выберите сервер из списка</translation>
+        <translation type="obsolete">Выберите сервер из списка</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -132,6 +132,24 @@
     </message>
 </context>
 <context>
+    <name>HWNetServersModel</name>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Title</source>
+        <translation>Название</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>IP</source>
+        <translation>IP</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Port</source>
+        <translation>Порт</translation>
+    </message>
+</context>
+<context>
     <name>HWNewNet</name>
     <message>
         <location filename="" line="7471221"/>
@@ -155,6 +173,52 @@
         <location filename="" line="7471221"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
+    </message>
+</context>
+<context>
+    <name>PageNet</name>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Local</source>
+        <translation>Локальный</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Internet</source>
+        <translation>Интернет</translation>
+    </message>
+</context>
+<context>
+    <name>PagePlayDemo</name>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Please, select record from the list</source>
+        <translation>Выберите запись из списка</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>OK</source>
+        <translation>ОК</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Rename dialog</source>
+        <translation>Переименование</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Enter new file name:</source>
+        <translation>Введите новое имя файла:</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Cannot rename to</source>
+        <translation>Не могу переименовать в</translation>
     </message>
 </context>
 <context>
@@ -295,6 +359,11 @@
         <source>Net game</source>
         <translation>Сетевая игра</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Servers list</source>
+        <translation>Список серверов</translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -306,7 +375,7 @@
     <message>
         <location filename="" line="7471221"/>
         <source>Server address</source>
-        <translation>Адрес сервера</translation>
+        <translation type="obsolete">Адрес сервера</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -417,6 +486,16 @@
         <location filename="" line="7471221"/>
         <source>Special thanks:</source>
         <translation>Особая благодарность:</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Server name:</source>
+        <translation>Название сервера:</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Server port:</source>
+        <translation>Порт:</translation>
     </message>
 </context>
 <context>
@@ -626,6 +705,21 @@ Please check your installation</source>
         <location filename="" line="7471221"/>
         <source>Training</source>
         <translation>Тренировка</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Specify</source>
+        <translation>Указать</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>default</source>
+        <translation>по умолчанию</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Rename</source>
+        <translation>Переименовать</translation>
     </message>
 </context>
 <context>
