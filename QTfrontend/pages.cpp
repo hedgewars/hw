@@ -30,6 +30,7 @@
 #include <QTextEdit>
 #include <QRadioButton>
 #include <QTableView>
+#include <QMessageBox>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -463,6 +464,7 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	GBClayout->addWidget(BtnNetConnect, 2, 2);
 
 	tvServersList = new QTableView(ConnGroupBox);
+	tvServersList->setSelectionBehavior(QAbstractItemView::SelectRows);
 	GBClayout->addWidget(tvServersList, 1, 0, 1, 3);
 
 	BtnUpdateSList = new QPushButton(ConnGroupBox);
@@ -487,19 +489,28 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 void PageNet::updateServersList()
 {
 	if (rbLocalGame->isChecked())
-		tvServersList->setModel(new HWNetUdpModel());
+		tvServersList->setModel(new HWNetUdpModel(tvServersList));
 	else
-		tvServersList->setModel(new HWNetWwwModel());
+		tvServersList->setModel(new HWNetWwwModel(tvServersList));
 
 	static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 
 	connect(BtnUpdateSList, SIGNAL(clicked()), static_cast<HWNetServersModel *>(tvServersList->model()), SLOT(updateList()));
-//	connect(netServersWidget->serversList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotConnect()));
+	connect(tvServersList, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(slotConnect()));
 }
 
 void PageNet::slotConnect()
 {
-	emit connectClicked("localhost", 46631);
+	HWNetServersModel * model = static_cast<HWNetServersModel *>(tvServersList->model());
+	QModelIndex mi = tvServersList->currentIndex();
+	if(!mi.isValid())
+	{
+		QMessageBox::information(this, tr("Error"), tr("Please, select server from the list above"));
+		return;
+	}
+	QString host = model->index(mi.row(), 1).data().toString();
+	quint16 port = model->index(mi.row(), 2).data().toUInt();
+	emit connectClicked(host, 46631);
 }
 
 PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
