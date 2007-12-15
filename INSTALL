@@ -1,5 +1,5 @@
 To compile and install you need:
- - QT >= 4.2
+ - Qt >= 4.2
  - FreePascal >= 1.9.4
  - SDL >= 1.2.5
  - SDL_net >= 1.2.5
