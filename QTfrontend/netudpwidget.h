@@ -20,7 +20,6 @@
 #ifndef _NET_UDPWIDGET_INCLUDED
 #define _NET_UDPWIDGET_INCLUDED
 
-#include <QStringList>
 #include "netserverslist.h"
 
 class QUdpSocket;
@@ -33,9 +32,6 @@ public:
 	HWNetUdpModel(QObject *parent = 0);
 
 	QVariant data(const QModelIndex &index, int role) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	int rowCount(const QModelIndex & parent) const;
-	int columnCount(const QModelIndex & parent) const;
 
 public slots:
 	void updateList();
@@ -45,7 +41,6 @@ private slots:
 
 private:
 	QUdpSocket* pUdpSocket;
-	QList<QStringList> games;
 };
 
 #endif // _NET_UDPWIDGET_INCLUDED

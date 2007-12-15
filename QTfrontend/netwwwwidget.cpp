@@ -45,41 +45,6 @@ QVariant HWNetWwwModel::data(const QModelIndex &index,
 	return games[index.row()][index.column()];
 }
 
-QVariant HWNetWwwModel::headerData(int section,
-            Qt::Orientation orientation, int role) const
-{
-	if (role != Qt::DisplayRole)
-		return QVariant();
-
-	if (orientation == Qt::Horizontal)
-	{
-		switch (section)
-		{
-			case 0: return tr("Title");
-			case 1: return tr("IP");
-			case 2: return tr("Port");
-			default: return QVariant();
-		}
-	} else
-		return QString("%1").arg(section + 1);
-}
-
-int HWNetWwwModel::rowCount(const QModelIndex &parent) const
-{
-	if (parent.isValid())
-		return 0;
-	else
-		return games.size();
-}
-
-int HWNetWwwModel::columnCount(const QModelIndex & parent) const
-{
-	if (parent.isValid())
-		return 0;
-	else
-		return 3;
-}
-
 void HWNetWwwModel::updateList()
 {
 	QString request = QString("protocol_version=%1")

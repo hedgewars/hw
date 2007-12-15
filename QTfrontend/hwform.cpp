@@ -91,7 +91,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnectServer()));
 	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart,	SIGNAL(clicked()),	this, SLOT(GoToNetServer()));
 	connect(ui.pageNet,	SIGNAL(connectClicked(const QString &, quint16)),	this, SLOT(NetConnectServer(const QString &, quint16)));

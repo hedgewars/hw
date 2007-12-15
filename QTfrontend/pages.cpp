@@ -437,16 +437,16 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 
 	QGroupBox * NetTypeGroupBox = new QGroupBox(this);
 	NetTypeGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-	NetTypeGroupBox->setTitle(QGroupBox::tr("Connection type"));
+	NetTypeGroupBox->setTitle(QGroupBox::tr("Servers list"));
 	pageLayout->addWidget(NetTypeGroupBox, 0, 1);
 
 	QVBoxLayout * GBTlayout = new QVBoxLayout(NetTypeGroupBox);
 	rbLocalGame = new QRadioButton(NetTypeGroupBox);
-	rbLocalGame->setText(tr("Local game"));
+	rbLocalGame->setText(tr("Local"));
 	rbLocalGame->setChecked(true);
 	GBTlayout->addWidget(rbLocalGame);
 	rbInternetGame = new QRadioButton(NetTypeGroupBox);
-	rbInternetGame->setText(tr("Internet game"));
+	rbInternetGame->setText(tr("Internet"));
 	GBTlayout->addWidget(rbInternetGame);
 
 	ConnGroupBox = new QGroupBox(this);
@@ -481,6 +481,7 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnBack, 3, 0);
 
 	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(updateServersList()));
+	connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
 }
 
 void PageNet::updateServersList()

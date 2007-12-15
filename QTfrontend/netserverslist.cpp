@@ -31,3 +31,38 @@ void HWNetServersModel::updateList()
 {
 
 }
+
+QVariant HWNetServersModel::headerData(int section,
+            Qt::Orientation orientation, int role) const
+{
+	if (role != Qt::DisplayRole)
+		return QVariant();
+
+	if (orientation == Qt::Horizontal)
+	{
+		switch (section)
+		{
+			case 0: return tr("Title");
+			case 1: return tr("IP");
+			case 2: return tr("Port");
+			default: return QVariant();
+		}
+	} else
+		return QString("%1").arg(section + 1);
+}
+
+int HWNetServersModel::rowCount(const QModelIndex &parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return games.size();
+}
+
+int HWNetServersModel::columnCount(const QModelIndex & parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return 3;
+}

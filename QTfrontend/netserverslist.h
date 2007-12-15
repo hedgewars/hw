@@ -20,6 +20,7 @@
 #define _NET_SERVERSLIST_INCLUDED
 
 #include <QAbstractTableModel>
+#include <QStringList>
 
 class HWNetServersModel : public QAbstractTableModel
 {
@@ -28,8 +29,15 @@ class HWNetServersModel : public QAbstractTableModel
 public:
 	HWNetServersModel(QObject *parent = 0);
 
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	int rowCount(const QModelIndex & parent) const;
+	int columnCount(const QModelIndex & parent) const;
+
 public slots:
 	virtual void updateList();
+
+protected:
+	QList<QStringList> games;
 };
 
 #endif // _NET_SERVERSLIST_INCLUDED
