@@ -17,29 +17,17 @@
  */
 
 #include <QHttp>
-#include <QListWidget>
-#include <QDebug>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QDomNode>
 #include <QDomText>
+#include <QDebug>
 
 #include "netwwwwidget.h"
 #include "hwconsts.h"
 
-HWNetWwwWidget::HWNetWwwWidget(QWidget* parent) :
-  HWNetServersWidget(parent)
-{
-	serversList->setModel(new HWNetWwwModel);
-}
 
-void HWNetWwwWidget::updateList()
-{
-	static_cast<HWNetWwwModel *>(serversList->model())->updateList();
-}
-
-
-HWNetWwwModel::HWNetWwwModel(QObject *parent) : QAbstractTableModel(parent)
+HWNetWwwModel::HWNetWwwModel(QObject *parent) : HWNetServersModel(parent)
 {
 	http = new QHttp(this);
 	http->setHost("www.hedgewars.org", 80);

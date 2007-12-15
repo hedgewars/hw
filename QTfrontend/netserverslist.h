@@ -19,24 +19,17 @@
 #ifndef _NET_SERVERSLIST_INCLUDED
 #define _NET_SERVERSLIST_INCLUDED
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QTableView>
+#include <QAbstractTableModel>
 
-class HWNetServersWidget : public QWidget
+class HWNetServersModel : public QAbstractTableModel
 {
 	Q_OBJECT
 
 public:
-	HWNetServersWidget (QWidget *parent = 0);
-
-	QTableView* serversList;
+	HWNetServersModel(QObject *parent = 0);
 
 public slots:
 	virtual void updateList();
-
-private:
-	QVBoxLayout mainLayout;
 };
 
 #endif // _NET_SERVERSLIST_INCLUDED

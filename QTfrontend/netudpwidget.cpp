@@ -21,7 +21,7 @@
 
 #include "netudpwidget.h"
 
-HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
+/*HWNetUdpWidget::HWNetUdpWidget(QWidget* parent) :
   HWNetServersWidget(parent)
 {
   pUdpSocket = new QUdpSocket(this);
@@ -49,3 +49,4 @@ void HWNetUdpWidget::onClientRead()
     }
   }
 }
+*/

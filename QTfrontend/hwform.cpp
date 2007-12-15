@@ -197,7 +197,6 @@ void HWForm::GoToDemos()
 void HWForm::GoToNet()
 {
 	ui.pageNet->updateServersList();
-	connect(ui.pageNet->netServersWidget->serversList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(NetConnectServer()));
 
 	GoToPage(ID_PAGE_NET);
 }

@@ -21,15 +21,13 @@
 
 #include "netserverslist.h"
 
-HWNetServersWidget::HWNetServersWidget(QWidget* parent) :
-  QWidget(parent), mainLayout(this)
+HWNetServersModel::HWNetServersModel(QObject* parent) :
+  QAbstractTableModel(parent)
 {
-	serversList = new QTableView(this);
-	mainLayout.setMargin(0);
-	mainLayout.addWidget(serversList);
+
 }
 
-void HWNetServersWidget::updateList()
+void HWNetServersModel::updateList()
 {
 
 }

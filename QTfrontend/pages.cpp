@@ -29,6 +29,7 @@
 #include <QSpinBox>
 #include <QTextEdit>
 #include <QRadioButton>
+#include <QTableView>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -461,7 +462,8 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnNetConnect->setText(QPushButton::tr("Connect"));
 	GBClayout->addWidget(BtnNetConnect, 2, 2);
 
-	netServersWidget = 0;
+	tvServersList = new QTableView(ConnGroupBox);
+	GBClayout->addWidget(tvServersList, 1, 0, 1, 3);
 
 	BtnUpdateSList = new QPushButton(ConnGroupBox);
 	BtnUpdateSList->setFont(*font14);
@@ -483,23 +485,22 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 
 void PageNet::updateServersList()
 {
-	if (netServersWidget) delete netServersWidget;
+//	if (tvServersList->model()) delete tvServersList->model();
 
 	if (rbLocalGame->isChecked())
-		netServersWidget = new HWNetUdpWidget(ConnGroupBox);
-	else
-		netServersWidget = new HWNetWwwWidget(ConnGroupBox);
+//;		netServersWidget = new HWNetUdpWidget(ConnGroupBox);
+//	else
+		tvServersList->setModel(new HWNetWwwModel());
 
-	netServersWidget->updateList();
-	GBClayout->addWidget(netServersWidget, 1, 0, 1, 3);
+	static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 
-	connect(BtnUpdateSList, SIGNAL(clicked()), netServersWidget, SLOT(updateList()));
-	connect(netServersWidget->serversList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotConnect()));
+	connect(BtnUpdateSList, SIGNAL(clicked()), static_cast<HWNetServersModel *>(tvServersList->model()), SLOT(updateList()));
+//	connect(netServersWidget->serversList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this, SLOT(slotConnect()));
 }
 
 void PageNet::slotConnect()
 {
-	emit connectClicked();
+	emit connectClicked("localhost", 46631);
 }
 
 PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)

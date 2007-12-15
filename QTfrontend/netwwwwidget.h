@@ -20,26 +20,12 @@
 #define _NET_WWWWIDGET_INCLUDED
 
 #include <QAbstractTableModel>
-#include <QFile>
-#include <QDateTime>
-#include <QVector>
+#include <QStringList>
 #include "netserverslist.h"
 
-class QListWidget;
 class QHttp;
 
-class HWNetWwwWidget : public HWNetServersWidget
-{
- 	Q_OBJECT
-
-public:
-	HWNetWwwWidget(QWidget *parent = 0);
-
-public slots:
-	void updateList();
-};
-
-class HWNetWwwModel : public QAbstractTableModel
+class HWNetWwwModel : public HWNetServersModel
 {
 	Q_OBJECT
 

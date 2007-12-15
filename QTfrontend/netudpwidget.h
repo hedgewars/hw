@@ -23,7 +23,7 @@
 #include <QVBoxLayout>
 
 #include "netserverslist.h"
-
+/*
 class QUdpSocket;
 class QListWidget;
 
@@ -43,5 +43,5 @@ class HWNetUdpWidget : public HWNetServersWidget
  private:
   QUdpSocket* pUdpSocket;
 };
-
+*/
 #endif // _NET_UDPWIDGET_INCLUDED

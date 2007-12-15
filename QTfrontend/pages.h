@@ -24,27 +24,27 @@
 #include "binds.h"
 #include "mapContainer.h"
 
-class GameCFGWidget;
 class QPushButton;
 class QGroupBox;
 class QComboBox;
 class QLabel;
 class QToolBox;
 class QLineEdit;
-class TeamSelWidget;
-class DemosList;
 class QListWidget;
 class QCheckBox;
+class QSpinBox;
+class QTextEdit;
+class QRadioButton;
+class QTableView;
+
+class GameCFGWidget;
+class TeamSelWidget;
+class DemosList;
 class SquareLabel;
 class About;
-class QSpinBox;
 class FPSEdit;
-class HWNetUdpWidget;
-class QTextEdit;
 class HWChatWidget;
 class SelWeaponWidget;
-class HWNetServersWidget;
-class QRadioButton;
 
 class PageMain : public QWidget
 {
@@ -160,7 +160,7 @@ public:
 	PageNet(QWidget* parent = 0);
 
 	QPushButton* BtnUpdateSList;
-	HWNetServersWidget* netServersWidget;
+	QTableView * tvServersList;
 	QPushButton * BtnBack;
 	QPushButton * BtnNetConnect;
 	QPushButton * BtnNetSvrStart;
@@ -179,7 +179,7 @@ public slots:
 	void updateServersList();
 
 signals:
-	void connectClicked();
+	void connectClicked(const QString & host, quint16 port);
 };
 
 class PageNetServer : public QWidget
