@@ -25,18 +25,15 @@
 
 extern char delimeter;
 
-void HWNetServer::StartServer(quint16 port)
+bool HWNetServer::StartServer(quint16 port)
 {
   ds_port = port;
   hhnum=0;
   IPCServer = new QTcpServer(this);
-  if (!IPCServer->listen(QHostAddress::Any, ds_port)) {
-    QMessageBox::critical(0, tr("Error"),
-			  tr("Unable to start the server: %1.")
-			  .arg(IPCServer->errorString()));
-  }
 
   connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+
+  return IPCServer->listen(QHostAddress::Any, ds_port);
 }
 
 void HWNetServer::StopServer()

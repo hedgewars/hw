@@ -416,15 +416,24 @@ void HWForm::NetConnect()
 
 void HWForm::NetStartServer()
 {
-  config->SaveOptions();
-  pnetserver = new HWNetServer;
-  pnetserver->StartServer(ui.pageNetServer->sbPort->value());
-  _NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
+	config->SaveOptions();
 
-  if (ui.pageNet->rbLocalGame->isChecked())
-    pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
-  else
-    pRegisterServer = new HWNetWwwServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
+	pnetserver = new HWNetServer;
+	if(!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
+	{
+		QMessageBox::critical(0, tr("Error"),
+					tr("Unable to start the server"));
+		delete pnetserver;
+		pnetserver = 0;
+		return;
+	}
+
+	_NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
+
+	if (ui.pageNet->rbLocalGame->isChecked())
+		pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
+	else
+		pRegisterServer = new HWNetWwwServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
 }
 
 void HWForm::NetDisconnect()

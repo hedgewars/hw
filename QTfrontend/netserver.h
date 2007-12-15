@@ -35,7 +35,7 @@ class HWNetServer : public QObject
   Q_OBJECT
 
  public:
-  void StartServer(quint16 port);
+  bool StartServer(quint16 port);
   void StopServer();
   bool isChiefClient(HWConnectedClient* cl) const;
   QMap<QString, QStringList> getGameCfg() const;
