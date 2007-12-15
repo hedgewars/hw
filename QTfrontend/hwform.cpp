@@ -94,7 +94,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnNetConnect,	SIGNAL(clicked()),	this, SLOT(NetConnectServer()));
 	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart,	SIGNAL(clicked()),	this, SLOT(GoToNetServer()));
-	connect(ui.pageNet,	SIGNAL(connectClicked()),	this, SLOT(NetConnectServer()));
+	connect(ui.pageNet,	SIGNAL(connectClicked(const QString &, quint16)),	this, SLOT(NetConnectServer(const QString &, quint16)));
 	
 	connect(ui.pageNetServer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
@@ -341,17 +341,9 @@ void HWForm::PlayDemo()
 	game->PlayDemo(curritem->data(Qt::UserRole).toString());
 }
 
-void HWForm::NetConnectServer()
+void HWForm::NetConnectServer(const QString & host, quint16 port)
 {
-/*  QListWidgetItem * curritem = ui.pageNet->netServersWidget->serversList->currentItem();
-  if (!curritem) {
-    QMessageBox::critical(this,
-			  tr("Error"),
-			  tr("Please, select server from the list above"),
-			  tr("OK"));
-    return ;
-  }
-  _NetConnect(curritem->text(), 46631, ui.pageOptions->editNetNick->text());*/
+  _NetConnect(host, port, ui.pageOptions->editNetNick->text());
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)

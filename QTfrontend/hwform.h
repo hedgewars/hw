@@ -67,7 +67,7 @@ private slots:
 	void PlayDemo();
 	void StartTraining();
 	void NetConnect();
-	void NetConnectServer();
+	void NetConnectServer(const QString & host, quint16 port);
 	void NetStartServer();
 	void NetDisconnect();
 	void NetGameEnter();
