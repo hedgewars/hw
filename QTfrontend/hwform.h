@@ -79,8 +79,6 @@ private slots:
 	void ForcedDisconnect();
 	void ShowErrorMessage(const QString &);
 	void GetRecord(bool isDemo, const QByteArray & record);
-
-public slots:
 	void CreateNetGame();
 
 private:

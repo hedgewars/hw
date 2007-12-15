@@ -19,6 +19,10 @@
 #ifndef _NET_WWWWIDGET_INCLUDED
 #define _NET_WWWWIDGET_INCLUDED
 
+#include <QAbstractTableModel>
+#include <QFile>
+#include <QDateTime>
+#include <QVector>
 #include "netserverslist.h"
 
 class QListWidget;
@@ -39,6 +43,29 @@ private slots:
 
 private:
 	QHttp * http;
+};
+
+class HWNetWwwModel : public QAbstractTableModel
+{
+	Q_OBJECT
+
+public:
+	HWNetWwwModel(QObject *parent = 0);
+
+	QVariant data(const QModelIndex &index, int role) const;
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	int rowCount(const QModelIndex & parent) const;
+	int columnCount(const QModelIndex & parent) const;
+
+private:
+	QHttp * http;
+	QList<QStringList> games;
+
+private slots:
+	void onClientRead(int id, bool error);
+
+public slots:
+	void updateList();
 };
 
 #endif // _NET_WWWWIDGET_INCLUDED
