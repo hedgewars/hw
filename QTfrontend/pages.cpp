@@ -525,40 +525,54 @@ PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(1, 1);
 	pageLayout->setColumnStretch(2, 1);
 
-	pageLayout->setRowStretch(0, 0);
+	pageLayout->setRowStretch(0, 1);
 	pageLayout->setRowStretch(1, 0);
-	pageLayout->setRowStretch(2, 1);
-	pageLayout->setRowStretch(3, 0);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 3, 0);
+	pageLayout->addWidget(BtnBack, 1, 0);
 
 	BtnStart = new QPushButton(this);
 	BtnStart->setFont(*font14);
 	BtnStart->setText(QPushButton::tr("Start"));
-	pageLayout->addWidget(BtnStart, 3, 2);
+	pageLayout->addWidget(BtnStart, 1, 2);
 
-	labelSD = new QLabel(this);
+	QWidget * wg = new QWidget(this);
+	pageLayout->addWidget(wg, 0, 0, 1, 3);
+
+	QGridLayout * wgLayout = new QGridLayout(wg);
+	wgLayout->setColumnStretch(0, 1);
+	wgLayout->setColumnStretch(1, 3);
+	wgLayout->setColumnStretch(2, 1);
+
+	wgLayout->setRowStretch(0, 0);
+	wgLayout->setRowStretch(1, 1);
+
+	QGroupBox * gb = new QGroupBox(wg);
+	wgLayout->addWidget(gb, 0, 1);
+
+	QGridLayout * gbLayout = new QGridLayout(gb);
+
+	labelSD = new QLabel(gb);
 	labelSD->setText(QLabel::tr("Server name:"));
-	pageLayout->addWidget(labelSD, 0, 0);
+	gbLayout->addWidget(labelSD, 0, 0);
 
-	leServerDescr = new QLineEdit(this);
-	pageLayout->addWidget(leServerDescr, 0, 1);
+	leServerDescr = new QLineEdit(gb);
+	gbLayout->addWidget(leServerDescr, 0, 1);
 
-	labelPort = new QLabel(this);
+	labelPort = new QLabel(gb);
 	labelPort->setText(QLabel::tr("Server port:"));
-	pageLayout->addWidget(labelPort, 1, 0);
+	gbLayout->addWidget(labelPort, 1, 0);
 
-	sbPort = new QSpinBox(this);
+	sbPort = new QSpinBox(gb);
 	sbPort->setMinimum(0);
 	sbPort->setMaximum(65535);
-	pageLayout->addWidget(sbPort, 1, 1);
+	gbLayout->addWidget(sbPort, 1, 1);
 
-	BtnDefault = new QPushButton(this);
+	BtnDefault = new QPushButton(gb);
 	BtnDefault->setText(QPushButton::tr("default"));
-	pageLayout->addWidget(BtnDefault, 1, 2);
+	gbLayout->addWidget(BtnDefault, 1, 2);
 
 	connect(BtnDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
 }
