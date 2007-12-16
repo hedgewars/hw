@@ -127,10 +127,10 @@ var s: shortstring;
        end else
        begin
        inc(timedelta);
-       if timedelta > 2500 then
+       if timedelta > 2000 then
           begin
           timedelta:= 0;
-          Actions.Count:= 0
+          FreeActionsList
           end
        end
     end;
