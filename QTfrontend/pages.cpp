@@ -31,6 +31,7 @@
 #include <QRadioButton>
 #include <QTableView>
 #include <QMessageBox>
+#include <QHeaderView>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -80,7 +81,7 @@ PageMain::PageMain(QWidget* parent) : QWidget(parent)
 	BtnLoad = new QPushButton(this);
 	BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	BtnLoad->setFont(*font14);
-	BtnLoad->setText(QPushButton::tr("Load"));
+	BtnLoad->setText(QPushButton::tr("Saved games"));
 	pageLayout->addWidget(BtnLoad, 3, 1);
 
 	BtnDemos = new QPushButton(this);
@@ -492,6 +493,8 @@ void PageNet::updateServersList()
 		tvServersList->setModel(new HWNetUdpModel(tvServersList));
 	else
 		tvServersList->setModel(new HWNetWwwModel(tvServersList));
+
+	tvServersList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 
 	static_cast<HWNetServersModel *>(tvServersList->model())->updateList();
 
