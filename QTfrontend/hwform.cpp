@@ -32,6 +32,7 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QSpinBox>
+#include <QCloseEvent>
 
 #include "hwform.h"
 #include "game.h"
@@ -604,4 +605,10 @@ void HWForm::CreateNetGame()
 	connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
 
 	game->StartNet();
+}
+
+void HWForm::closeEvent(QCloseEvent *event)
+{
+	config->SaveOptions();
+	event->accept();
 }

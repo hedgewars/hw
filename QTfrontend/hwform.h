@@ -32,6 +32,7 @@ class HWTeam;
 class HWNewNet;
 class GameUIConfig;
 class HWNetRegisterServer;
+class QCloseEvent;
 
 class HWForm : public QMainWindow
 {
@@ -85,6 +86,7 @@ private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
 	void UpdateTeamsLists(const QStringList* editable_teams=0);
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget);
+	void closeEvent(QCloseEvent *event);
 	enum PageIDs {
 		ID_PAGE_SIMPLEGAME      =  0,
 		ID_PAGE_SETUP_TEAM      =  1,

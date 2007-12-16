@@ -20,6 +20,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QDesktopWidget>
+#include <QApplication>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -31,6 +32,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	: QSettings(fileName, QSettings::IniFormat)
 {
 	Form = FormWidgets;
+
+	Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
 
 	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
 	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
@@ -52,8 +55,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
 
-	QDesktopWidget desktop;
-	depth = desktop.depth();
+	depth = QApplication::desktop()->depth();
 	if (depth < 16) depth = 16;
 	else if (depth > 16) depth = 32;
 }
@@ -86,6 +88,9 @@ void GameUIConfig::SaveOptions()
 	setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());
 
 	setValue("misc/altdamage", isAltDamageEnabled());
+
+	setValue("window/width", Form->width());
+	setValue("window/height", Form->height());
 }
 
 QRect GameUIConfig::vid_Resolution()
