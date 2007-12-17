@@ -37,9 +37,9 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	QHBoxLayout *GBoxMapLayout = new QHBoxLayout(GBoxMap);
 	GBoxMapLayout->setMargin(0);
 	pMapContainer = new HWMapContainer(GBoxMap);
-	GBoxMapLayout->addWidget(new QWidget);
+	GBoxMapLayout->addStretch();
 	GBoxMapLayout->addWidget(pMapContainer);
-	GBoxMapLayout->addWidget(new QWidget);
+	GBoxMapLayout->addStretch();
 
 	QGroupBox *GBoxOptions = new QGroupBox(this);
 	GBoxOptions->setTitle(QGroupBox::tr("Game scheme"));
