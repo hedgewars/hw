@@ -391,7 +391,9 @@ procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var EdgesDist: LongInt;
 begin
-if not (CurrentTeam^.ExtDriven and isCursorVisible) then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+if (not (CurrentTeam^.ExtDriven and isCursorVisible))
+   and cHasFocus then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+
 if (FollowGear <> nil) then
    if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
       begin
@@ -399,8 +401,8 @@ if (FollowGear <> nil) then
       exit
       end
       else begin
-      CursorPoint.x:= (CursorPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
-      CursorPoint.y:= (CursorPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
+      CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
+      CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
       end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
