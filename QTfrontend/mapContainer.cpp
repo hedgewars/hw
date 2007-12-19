@@ -33,7 +33,9 @@
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
 {
+#if QT_VERSION >= 0x040300
   mainLayout.setContentsMargins (0, 1, 0, QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+#endif
   imageButt=new QPushButton(this);
   imageButt->setObjectName("imageButt");
   imageButt->setFixedSize(256, 128);
