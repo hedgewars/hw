@@ -11,7 +11,7 @@ To compile and install you need:
 1. Configure:
 $ cmake . 
 or
-$ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir"
+$ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir" .
 
 2. Compile:
 $ make
