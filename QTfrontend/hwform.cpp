@@ -38,6 +38,7 @@
 #include "game.h"
 #include "team.h"
 #include "teamselect.h"
+#include "selectWeapon.h"
 #include "gameuiconfig.h"
 #include "pages.h"
 #include "hwconsts.h"
@@ -549,7 +550,7 @@ void HWForm::GameStats(char type, const QString & info)
 
 void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
 {
-	game = new HWGame(config, gamecfg, pTeamSelWidget);
+	game = new HWGame(config, gamecfg, ui.pageSelectWeapon->pWeapons->getWeaponsString(), pTeamSelWidget);
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);

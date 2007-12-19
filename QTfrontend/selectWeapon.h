@@ -20,24 +20,35 @@
 #define _SELECT_WEAPON_INCLUDED
 
 #include <QWidget>
+#include <map>
 
 class QGridLayout;
+class WeaponItem;
 
 class SelWeaponItem : public QWidget
 {
   Q_OBJECT
 
 public:
-  SelWeaponItem(int num, QWidget* parent=0);
+  SelWeaponItem(int iconNum, int wNum, QWidget* parent=0);
+
+  unsigned char getItemsNum() const;
+
+ private:
+  WeaponItem* item;
 };
 
 class SelWeaponWidget : public QWidget
 {
   Q_OBJECT
-  public:
-    SelWeaponWidget(QWidget* parent=0);
+  
+ public:
+  SelWeaponWidget(QWidget* parent=0);
+  int operator [] (unsigned int weaponIndex) const;
+  QString getWeaponsString() const;
 
  private:
+  std::map<int, SelWeaponItem*> weaponItems;
   QGridLayout* pLayout;
 };
 

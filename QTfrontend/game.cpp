@@ -23,6 +23,7 @@
 #include <QByteArray>
 #include <QFile>
 #include <QTextStream>
+#include <QApplication>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -32,9 +33,10 @@
 #include "KB.h"
 #include "proto.h"
 
-HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget) :
+HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
-  m_pTeamSelWidget(pTeamSelWidget)
+  m_pTeamSelWidget(pTeamSelWidget),
+  ammostr(ammo)
 {
 	this->config = config;
 	this->gamecfg = gamecfg;
@@ -83,7 +85,7 @@ void HWGame::commonConfig()
 		{
 			HWProto::addStringListToBuffer(buf,
 				(*it).TeamGameConfig(gamecfg->getInitHealth()));
-			HWProto::addStringToBuffer(buf, *cDefaultAmmoStore);
+			HWProto::addStringToBuffer(buf, ammostr);
 		}
 	}
 	RawSendIPC(buf);

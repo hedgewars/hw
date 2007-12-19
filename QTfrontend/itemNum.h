@@ -28,6 +28,8 @@ class ItemNum : public QWidget
 
   public:
     void setInfinityState(bool value);
+    unsigned char getItemsNum() const;
+    void setItemsNum(const unsigned char num);
 
   protected:
     ItemNum(const QImage& im, QWidget * parent, unsigned char min=2, unsigned char max=8);
@@ -39,9 +41,6 @@ class ItemNum : public QWidget
     unsigned char minItems;
     unsigned char maxItems;
 
-    unsigned char getItemsNum() const;
-    void setItemsNum(const unsigned char num);
-    
     // from QWidget
     virtual void mousePressEvent ( QMouseEvent * event );
     virtual void paintEvent(QPaintEvent* event);

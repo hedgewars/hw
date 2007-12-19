@@ -41,7 +41,7 @@ class HWGame : public TCPBase
 {
 	Q_OBJECT
 public:
-	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget = 0);
+	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget = 0);
 	virtual ~HWGame();
 	void AddTeam(const QString & team);
 	void PlayDemo(const QString & demofilename);
@@ -76,6 +76,7 @@ private:
 	char msgbuf[MAXMSGCHARS];
 	QString teams[5];
 	QString seed;
+	QString ammostr;
 	int TeamCount;
 	GameUIConfig * config;
 	GameCFGWidget * gamecfg;

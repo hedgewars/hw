@@ -18,6 +18,7 @@
  
 #include "selectWeapon.h"
 #include "weaponItem.h"
+#include "hwconsts.h"
 
 #include <QPushButton>
 #include <QGridLayout>
@@ -31,7 +32,7 @@ QImage getAmmoImage(int num)
   return ammo.copy(0, num*32, 32, 32);
 }
 
-SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
+SelWeaponItem::SelWeaponItem(int iconNum, int wNum, QWidget* parent) :
   QWidget(parent)
 {
   QHBoxLayout* hbLayout = new QHBoxLayout(this);
@@ -39,12 +40,13 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   hbLayout->setMargin(1);
   
   QLabel* lbl = new QLabel(this);
-  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(num)));
+  lbl->setPixmap(QPixmap::fromImage(getAmmoImage(iconNum)));
   lbl->setMaximumWidth(30);
   lbl->setGeometry(0, 0, 30, 30);
   hbLayout->addWidget(lbl);
 
-  WeaponItem* item=new WeaponItem(QImage(":/res/M2Round2.jpg"), this);
+  item=new WeaponItem(QImage(":/res/hh25x25.png"), this);
+  item->setItemsNum(wNum);
   item->setInfinityState(true);
   hbLayout->addWidget(item);
 
@@ -52,6 +54,11 @@ SelWeaponItem::SelWeaponItem(int num, QWidget* parent) :
   hbLayout->setStretchFactor(item, 99);
   hbLayout->setAlignment(lbl, Qt::AlignLeft | Qt::AlignVCenter);
   hbLayout->setAlignment(item, Qt::AlignLeft | Qt::AlignVCenter);
+}
+
+unsigned char SelWeaponItem::getItemsNum() const
+{
+  return item->getItemsNum();
 }
 
 SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
@@ -62,9 +69,26 @@ QWidget(parent)
   pLayout->setMargin(1);
 
   int j=-1;
-  for(int i=0; i<19; ++i) {
-    if (i%4==0) ++j;
-    SelWeaponItem* swi = new SelWeaponItem(i, this);
-    pLayout->addWidget(swi, j, i%4);
+  for(int i=0, k=0; i<20; ++i) {
+    if(i==6) continue;
+    if (k%4==0) ++j;
+    weaponItems[i]=new SelWeaponItem(i, cDefaultAmmoStore->at(10+i).digitValue(), this);
+    pLayout->addWidget(weaponItems[i], j, k%4);
+    ++k;
   }
+}
+
+int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
+{
+  std::map<int, SelWeaponItem*>::const_iterator it=weaponItems.find(weaponIndex);
+  return it==weaponItems.end() ? 9 : it->second->getItemsNum();
+}
+
+QString SelWeaponWidget::getWeaponsString() const
+{
+  QString ammo("eammstore ");
+  for(int i=0; i<20; ++i) {
+    ammo=QString("%1%2").arg(ammo).arg((*this)[i]);
+  }
+  return ammo;
 }
