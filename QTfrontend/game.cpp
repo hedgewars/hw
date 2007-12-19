@@ -85,7 +85,7 @@ void HWGame::commonConfig()
 		{
 			HWProto::addStringListToBuffer(buf,
 				(*it).TeamGameConfig(gamecfg->getInitHealth()));
-			HWProto::addStringToBuffer(buf, ammostr);
+			HWProto::addStringToBuffer(buf, QString("eammstore %1").arg(ammostr));
 		}
 	}
 	RawSendIPC(buf);

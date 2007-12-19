@@ -86,9 +86,9 @@ int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 
 QString SelWeaponWidget::getWeaponsString() const
 {
-  QString ammo("eammstore ");
+  QString ammo;
   for(int i=0; i<20; ++i) {
-    ammo=QString("%1%2").arg(ammo).arg((*this)[i]);
+    ammo += (*this)[i];
   }
   return ammo;
 }

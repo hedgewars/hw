@@ -409,6 +409,7 @@ with CurrentTeam^ do
      with Hedgehogs[CurrHedgehog] do
           begin
           bSelected:= false;
+
           if bShowAmmoMenu then bShowAmmoMenu:= false
           else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
                or ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
