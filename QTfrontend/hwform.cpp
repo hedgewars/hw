@@ -118,6 +118,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageTraining->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	connect(ui.pageSelectWeapon->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageSelectWeapon->BtnDefault,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(setDefault()));
+	connect(ui.pageSelectWeapon->BtnSave,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(save()));
 
 	GoToPage(ID_PAGE_MAIN);
 }

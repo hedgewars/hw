@@ -270,6 +270,8 @@ class PageSelectWeapon : public QWidget
 public:
 	PageSelectWeapon(QWidget* parent = 0);
 
+	QPushButton *BtnSave;
+	QPushButton *BtnDefault;
 	QPushButton *BtnBack;
         SelWeaponWidget* pWeapons;
 };

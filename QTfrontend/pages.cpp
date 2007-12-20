@@ -708,12 +708,22 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) : QWidget(parent)
 	//pageLayout->setColumnStretch(1, 2);
 	//pageLayout->setColumnStretch(2, 1);
         
-        pWeapons=new SelWeaponWidget(this);
-	pageLayout->addWidget(pWeapons, 0, 0);
+        pWeapons=new SelWeaponWidget(20, this);
+	pageLayout->addWidget(pWeapons, 0, 0, 1, 3);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
 	pageLayout->addWidget(BtnBack, 1, 0);
+
+	BtnDefault = new QPushButton(this);
+	BtnDefault->setFont(*font14);
+	BtnDefault->setText(QPushButton::tr("Default"));
+	pageLayout->addWidget(BtnDefault, 1, 1);
+
+	BtnSave = new QPushButton(this);
+	BtnSave->setFont(*font14);
+	BtnSave->setText(QPushButton::tr("Save"));
+	pageLayout->addWidget(BtnSave, 1, 2);
 }
 

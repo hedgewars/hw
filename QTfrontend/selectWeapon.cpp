@@ -56,39 +56,68 @@ SelWeaponItem::SelWeaponItem(int iconNum, int wNum, QWidget* parent) :
   hbLayout->setAlignment(item, Qt::AlignLeft | Qt::AlignVCenter);
 }
 
+void SelWeaponItem::setItemsNum(const unsigned char num)
+{
+  item->setItemsNum(num);
+}
+
 unsigned char SelWeaponItem::getItemsNum() const
 {
   return item->getItemsNum();
 }
 
-SelWeaponWidget::SelWeaponWidget(QWidget* parent) :
-QWidget(parent)
+SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
+  m_numItems(numItems),
+  QWidget(parent)
 {
+  currentState=cDefaultAmmoStore->mid(10);
+
   pLayout=new QGridLayout(this);
   pLayout->setSpacing(1);
   pLayout->setMargin(1);
 
   int j=-1;
-  for(int i=0, k=0; i<20; ++i) {
+  for(int i=0, k=0; i<m_numItems; ++i) {
     if(i==6) continue;
     if (k%4==0) ++j;
-    weaponItems[i]=new SelWeaponItem(i, cDefaultAmmoStore->at(10+i).digitValue(), this);
+    weaponItems[i]=new SelWeaponItem(i, currentState[i].digitValue(), this);
     pLayout->addWidget(weaponItems[i], j, k%4);
     ++k;
   }
 }
 
+void SelWeaponWidget::setWeapons(QString ammo)
+{
+  for(int i=0; i<m_numItems; ++i) {
+    twi::iterator it=weaponItems.find(i);
+    if (it==weaponItems.end()) continue;
+    it->second->setItemsNum(ammo[i].digitValue());
+  }
+  update();
+}
+
+void SelWeaponWidget::setDefault()
+{
+  setWeapons(cDefaultAmmoStore->mid(10));
+}
+
+void SelWeaponWidget::save()
+{
+  currentState="";
+  for(int i=0; i<m_numItems; ++i) {
+    twi::const_iterator it=weaponItems.find(i);
+    int num = it==weaponItems.end() ? 9 : (*this)[i];
+    currentState = QString("%1%2").arg(currentState).arg(num);
+  }
+}
+
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 {
-  std::map<int, SelWeaponItem*>::const_iterator it=weaponItems.find(weaponIndex);
+  twi::const_iterator it=weaponItems.find(weaponIndex);
   return it==weaponItems.end() ? 9 : it->second->getItemsNum();
 }
 
 QString SelWeaponWidget::getWeaponsString() const
 {
-  QString ammo;
-  for(int i=0; i<20; ++i) {
-    ammo += (*this)[i];
-  }
-  return ammo;
+  return currentState;
 }

@@ -33,6 +33,7 @@ public:
   SelWeaponItem(int iconNum, int wNum, QWidget* parent=0);
 
   unsigned char getItemsNum() const;
+  void setItemsNum(const unsigned char num);
 
  private:
   WeaponItem* item;
@@ -43,12 +44,21 @@ class SelWeaponWidget : public QWidget
   Q_OBJECT
   
  public:
-  SelWeaponWidget(QWidget* parent=0);
-  int operator [] (unsigned int weaponIndex) const;
+  SelWeaponWidget(int numItems, QWidget* parent=0);
   QString getWeaponsString() const;
+  void setWeapons(QString ammo);
+
+ public slots:
+  void setDefault();
+  void save();
 
  private:
-  std::map<int, SelWeaponItem*> weaponItems;
+  QString currentState;
+  const int m_numItems;
+  int operator [] (unsigned int weaponIndex) const;
+  
+  typedef std::map<int, SelWeaponItem*> twi;
+  twi weaponItems;
   QGridLayout* pLayout;
 };
 
