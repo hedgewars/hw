@@ -20,6 +20,9 @@
 #define PAGES_H
 
 #include <QWidget>
+#include <QPushButton>
+#include <QFont>
+#include <QGridLayout>
 
 #include "binds.h"
 #include "mapContainer.h"
@@ -46,7 +49,36 @@ class FPSEdit;
 class HWChatWidget;
 class SelWeaponWidget;
 
-class PageMain : public QWidget
+class AbstractPage : public QWidget
+{
+ public:
+
+ protected:
+  AbstractPage(QWidget* parent = 0) {
+    font14 = new QFont("MS Shell Dlg", 14);
+  }
+  virtual ~AbstractPage() {};
+
+  QPushButton* addButton(const char* btname, QGridLayout* grid, int wy, int wx) {
+    QPushButton* butt = new QPushButton(this);
+    butt->setFont(*font14);
+    butt->setText(QPushButton::tr(btname));
+    grid->addWidget(butt, wy, wx);
+    return butt;
+  };
+
+  QPushButton* addButton(const char* btname, QBoxLayout* box, int where) {
+    QPushButton* butt = new QPushButton(this);
+    butt->setFont(*font14);
+    butt->setText(QPushButton::tr(btname));
+    box->addWidget(butt, where);
+    return butt;
+  };
+
+  QFont * font14;
+};
+
+class PageMain : public AbstractPage
 {
 	Q_OBJECT
 
@@ -63,7 +95,7 @@ public:
 	QPushButton *BtnExit;
 };
 
-class PageSimpleGame : public QWidget
+class PageSimpleGame : public AbstractPage
 {
 	Q_OBJECT
 
@@ -263,7 +295,7 @@ public:
 	QPushButton *BtnBack;
 };
 
-class PageSelectWeapon : public QWidget
+class PageSelectWeapon : public AbstractPage
 {
 	Q_OBJECT
 

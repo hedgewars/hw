@@ -51,82 +51,53 @@
 #include "playrecordpage.h"
 #include "selectWeapon.h"
 
-PageMain::PageMain(QWidget* parent) : QWidget(parent)
+PageMain::PageMain(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
 
-	BtnSinglePlayer = new QPushButton(this);
+	BtnSinglePlayer = addButton("Single Player", pageLayout, 0, 1);
 	BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnSinglePlayer->setFont(*font14);
-	BtnSinglePlayer->setText(QPushButton::tr("Single Player"));
-	pageLayout->addWidget(BtnSinglePlayer, 0, 1);
 
-	BtnMultiplayer = new QPushButton(this);
+	BtnMultiplayer = addButton("Multiplayer", pageLayout, 1, 1);
 	BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnMultiplayer->setFont(*font14);
-	BtnMultiplayer->setText(QPushButton::tr("Multiplayer"));
-	pageLayout->addWidget(BtnMultiplayer, 1, 1);
 
-	BtnNet = new QPushButton(this);
+	BtnNet = addButton("Net game", pageLayout, 2, 1);
 	BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnNet->setFont(*font14);
-	BtnNet->setText(QPushButton::tr("Net game"));
-	pageLayout->addWidget(BtnNet, 2, 1);
 
-	BtnLoad = new QPushButton(this);
+	BtnLoad = addButton("Saved games", pageLayout, 3, 1);
 	BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnLoad->setFont(*font14);
-	BtnLoad->setText(QPushButton::tr("Saved games"));
-	pageLayout->addWidget(BtnLoad, 3, 1);
 
-	BtnDemos = new QPushButton(this);
+	BtnDemos = addButton("Demos", pageLayout, 4, 1);
 	BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnDemos->setFont(*font14);
-	BtnDemos->setText(QPushButton::tr("Demos"));
-	pageLayout->addWidget(BtnDemos, 4, 1);
 
-	BtnSetup = new QPushButton(this);
+	BtnSetup = addButton("Setup", pageLayout, 5, 1);
 	BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnSetup->setFont(*font14);
-	BtnSetup->setText(QPushButton::tr("Setup"));
-	pageLayout->addWidget(BtnSetup, 5, 1);
 
-	BtnInfo = new QPushButton(this);
+	BtnInfo = addButton("About", pageLayout, 6, 1);
 	BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnInfo->setFont(*font14);
-	BtnInfo->setText(QPushButton::tr("About"));
-	pageLayout->addWidget(BtnInfo, 6, 1);
 
-	BtnExit = new QPushButton(parent);
+	BtnExit = addButton("Exit", pageLayout, 7, 1);
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	BtnExit->setFont(*font14);
-	BtnExit->setText(QPushButton::tr("Exit"));
-	pageLayout->addWidget(BtnExit, 7, 1);
 }
 
-PageSimpleGame::PageSimpleGame(QWidget* parent) : QWidget(parent)
+PageSimpleGame::PageSimpleGame(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QVBoxLayout * pageLayout = new QVBoxLayout(this);
 	QHBoxLayout * topLayout = new QHBoxLayout();
 	QHBoxLayout * bottomLayout = new QHBoxLayout();
 	pageLayout->addLayout(topLayout, 100);
 	pageLayout->addLayout(bottomLayout, 0);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	bottomLayout->addWidget(BtnBack, 100);
+	BtnBack = addButton("Back", bottomLayout, 100);
 	bottomLayout->addStretch(100);
-	BtnSimpleGame = new QPushButton(this);
-	BtnSimpleGame->setFont(*font14);
-	BtnSimpleGame->setText(QPushButton::tr("Simple Game"));
-	bottomLayout->addWidget(BtnSimpleGame, 100);
+
+	BtnSimpleGame = addButton("Simple Game", bottomLayout, 100);
 
 	gameCFG = new GameCFGWidget(this);
 	topLayout->addStretch(100);
@@ -699,9 +670,9 @@ PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnBack, 1, 0);
 }
 
-PageSelectWeapon::PageSelectWeapon(QWidget* parent) : QWidget(parent)
+PageSelectWeapon::PageSelectWeapon(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
 	//pageLayout->setColumnStretch(0, 1);
@@ -711,19 +682,8 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) : QWidget(parent)
         pWeapons=new SelWeaponWidget(20, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 3);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
-
-	BtnDefault = new QPushButton(this);
-	BtnDefault->setFont(*font14);
-	BtnDefault->setText(QPushButton::tr("Default"));
-	pageLayout->addWidget(BtnDefault, 1, 1);
-
-	BtnSave = new QPushButton(this);
-	BtnSave->setFont(*font14);
-	BtnSave->setText(QPushButton::tr("Save"));
-	pageLayout->addWidget(BtnSave, 1, 2);
+	BtnBack = addButton("Back", pageLayout, 1, 0);
+	BtnDefault = addButton("Default", pageLayout, 1, 1);
+	BtnSave = addButton("Save", pageLayout, 1, 2);
 }
 
