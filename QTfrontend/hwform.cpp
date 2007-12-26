@@ -16,12 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QStringList>
-#include <QProcess>
-#include <QDir>
-#include <QPixmap>
-#include <QRegExp>
-#include <QIcon>
 #include <QFile>
 #include <QTextStream>
 #include <QMessageBox>
@@ -515,7 +509,6 @@ void HWForm::GameStateChanged(GameState gameState)
 		}
 		default: {
 			quint8 id = ui.Pages->currentIndex();
-qDebug() << id;
 			if (id == ID_PAGE_INGAME) GoBack();
 		};
 	}
