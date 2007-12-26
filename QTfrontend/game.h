@@ -33,7 +33,8 @@ enum GameState {
 	gsStarted  = 1,
 	gsInterrupted = 2,
 	gsFinished = 3,
-	gsStopped = 4
+	gsStopped = 4,
+	gsDestroyed = 5
 };
 
 

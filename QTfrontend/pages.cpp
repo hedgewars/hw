@@ -687,3 +687,9 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	BtnSave = addButton("Save", pageLayout, 1, 2);
 }
 
+PageInGame::PageInGame(QWidget* parent) : 
+  AbstractPage(parent)
+{
+	QLabel * label = new QLabel(this);
+	label->setText("In game...");
+}

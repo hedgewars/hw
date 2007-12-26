@@ -308,4 +308,12 @@ public:
         SelWeaponWidget* pWeapons;
 };
 
+class PageInGame : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageInGame(QWidget* parent = 0);
+};
+
 #endif // PAGES_H

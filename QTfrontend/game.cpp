@@ -16,14 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QMessageBox>
-#include <QProcess>
-#include <QTimer>
 #include <QString>
 #include <QByteArray>
-#include <QFile>
-#include <QTextStream>
-#include <QApplication>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -46,6 +40,7 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
 
 HWGame::~HWGame()
 {
+	SetGameState(gsDestroyed);
 }
 
 void HWGame::onClientDisconnect()

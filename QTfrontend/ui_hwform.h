@@ -34,6 +34,7 @@ class PageGameStats;
 class PageSinglePlayer;
 class PageTraining;
 class PageSelectWeapon;
+class PageInGame;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -59,6 +60,7 @@ public:
 	PageSinglePlayer *pageSinglePlayer;
 	PageTraining *pageTraining;
 	PageSelectWeapon *pageSelectWeapon;
+	PageInGame *pageInGame;
 
 	QStackedLayout *Pages;
 	QFont *font14;

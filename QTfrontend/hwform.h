@@ -101,7 +101,8 @@ private:
 		ID_PAGE_SINGLEPLAYER    = 10,
 		ID_PAGE_TRAINING        = 11,
 		ID_PAGE_SELECTWEAPON    = 12,
-		ID_PAGE_NETSERVER       = 13
+		ID_PAGE_NETSERVER       = 13,
+		ID_PAGE_INGAME          = 14
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

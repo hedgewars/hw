@@ -509,10 +509,15 @@ void HWForm::GameStateChanged(GameState gameState)
 			break;
 		}
 		case gsFinished: {
+			GoBack();
 			GoToPage(ID_PAGE_GAMESTATS);
 			break;
 		}
-		default: ;
+		default: {
+			quint8 id = ui.Pages->currentIndex();
+qDebug() << id;
+			if (id == ID_PAGE_INGAME) GoBack();
+		};
 	}
 
 	if (hwnet)
@@ -557,6 +562,8 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
 	connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
+
+	GoToPage(ID_PAGE_INGAME);
 }
 
 void HWForm::ShowErrorMessage(const QString & msg)

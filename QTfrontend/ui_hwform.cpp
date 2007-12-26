@@ -95,4 +95,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageNetServer = new PageNetServer();
 	Pages->addWidget(pageNetServer);
+
+	pageInGame = new PageInGame();
+	Pages->addWidget(pageInGame);
 }
