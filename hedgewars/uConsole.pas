@@ -115,7 +115,7 @@ with r do
 SDL_FillRect(Surface, @r, cConsoleSplitterColor);
 for y:= 0 to cConsoleHeight div 256 + 1 do
     for x:= 0 to cScreenWidth div 256 + 1 do
-        DrawGear(sConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, Surface);
+        DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0, Surface);
 for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
     DXOutText(4, cConsoleHeight - (y + 2) * (Fontz[fnt16].Height + 2), fnt16, ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], Surface);
 DXOutText(4, cConsoleHeight - Fontz[fnt16].Height - 2, fnt16, '> '+InputStr, Surface);

@@ -490,7 +490,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
                       GameTicks div 32 mod 16, Surface);
         if (Gear^.State and (gstMoving or gstDrowning)) = 0 then
            if (Gear^.State and gstHHThinking) <> 0 then
-              DrawGear(sQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, Surface)
+              DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0, Surface)
               else
               if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
                  DrawSurfSprite(Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
@@ -562,7 +562,7 @@ var Gear: PGear;
         if b then
            begin
            inc(roplen);
-           if (roplen mod 4) = 0 then DrawGear(sRopeNode, x - 2, y - 2, Surface)
+           if (roplen mod 4) = 0 then DrawSprite(sprRopeNode, x - 2, y - 2, 0, Surface)
            end
        end
     end;
