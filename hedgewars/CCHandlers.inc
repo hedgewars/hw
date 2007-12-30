@@ -462,7 +462,7 @@ SDL_ShowCursor(ord(isPaused))
 end;
 
 procedure chRotateMask(var s: shortstring);
-const map: array[0..7] of byte = (7,4,0,5,2,1,0,3);
+const map: array[0..7] of byte = (7,4,0,1,2,3,0,5);
 begin
 cTagsMask:= map[cTagsMask]
 end;
