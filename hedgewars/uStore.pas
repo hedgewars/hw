@@ -30,9 +30,8 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: P
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
 procedure DrawLand (X, Y: LongInt; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
-procedure DrawCaption(X, Y: LongInt; Rect: TSDL_Rect; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
-procedure DrawFromStoreRect(X, Y: LongInt; Rect: PSDL_Rect; Surface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceSurface, DestSurface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -47,16 +46,12 @@ var PixelFormat: PSDL_PixelFormat;
 implementation
 uses uMisc, uConsole, uLand, uLocale;
 
-var StoreSurface,
-       HHSurface: PSDL_Surface;
+var
+    HHSurface: PSDL_Surface;
 
 procedure StoreInit;
 begin
-StoreSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 576, 1024, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
-TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
-SDL_FillRect(StoreSurface, nil, 0);
 
-TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 end;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -125,21 +120,24 @@ var ii: TSprite;
         drY: LongInt;
     begin
     r.x:= 0;
-    r.y:= 272;
+    r.y:= 0;
     drY:= cScreenHeight - 4;
     for t:= 0 to Pred(TeamsCount) do
      with TeamsArray[t]^ do
       begin
-      r.w:= 104;
       NameTag:= RenderString(TeamName, Clan^.Color, Font);
+
       r.w:= cTeamHealthWidth + 5;
       r.h:= NameTag^.h;
-      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, StoreSurface, true);
-      HealthRect:= r;
+
+      HealthSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, r.w, r.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
+      TryDo(HealthSurf <> nil, errmsgCreateSurface, true);
+
+      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, HealthSurf, true);
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Clan^.AdjColor, Clan^.AdjColor, StoreSurface, false);
-      inc(r.y, r.h);
+      DrawRoundRect(@rr, Clan^.AdjColor, Clan^.AdjColor, HealthSurf, false);
+
       dec(drY, r.h + 2);
       DrawHealthY:= drY;
       for i:= 0 to 7 do
@@ -364,16 +362,6 @@ begin
 DrawFromRect(X, Y, @r, LandSurface, Surface)
 end;
 
-procedure DrawFromStoreRect(X, Y: LongInt; Rect: PSDL_Rect; Surface: PSDL_Surface);
-begin
-DrawFromRect(X, Y, Rect, StoreSurface, Surface)
-end;
-
-procedure DrawCaption(X, Y: LongInt; Rect: TSDL_Rect; Surface: PSDL_Surface);
-begin
-DrawFromRect(X - (Rect.w) div 2, Y, @Rect, StoreSurface, Surface)
-end;
-
 procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
 var r: TSDL_Rect;
 begin
@@ -401,8 +389,7 @@ begin
 for ii:= Low(TSprite) to High(TSprite) do
     SDL_FreeSurface(SpritesData[ii].Surface);
 SDL_FreeSurface(  HHSurface  );
-SDL_FreeSurface(LandSurface  );
-SDL_FreeSurface(StoreSurface )
+SDL_FreeSurface(LandSurface  )
 end;
 
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;

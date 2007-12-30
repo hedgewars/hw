@@ -278,16 +278,22 @@ for t:= 0 to Pred(TeamsCount) do
       r.w:= NameTag^.w;
       r.h:= NameTag^.h;
       SDL_UpperBlit(NameTag, nil, Surface, @r);
-      r:= HealthRect;
+
+      r.x:= 0;
+      r.y:= 0;
       r.w:= 2 + TeamHealthBarWidth;
-      DrawFromStoreRect(cScreenWidth div 2,
+      r.h:= HealthSurf^.h;
+
+      DrawFromRect(cScreenWidth div 2,
                         DrawHealthY,
-                        @r, Surface);
+                        @r, HealthSurf, Surface);
+
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-      DrawFromStoreRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
+
+      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
                         DrawHealthY,
-                        @r, Surface);
+                        @r, HealthSurf, Surface);
       end;
 
 // Lag alert

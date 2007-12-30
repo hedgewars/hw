@@ -51,8 +51,8 @@ type PHedgehog = ^THedgehog;
              CurrHedgehog: LongWord;
              NameTag: PSDL_Surface;
              CrosshairSurf,
-             GraveSurf: PSDL_Surface;
-             HealthRect: TSDL_Rect;
+             GraveSurf,
+             HealthSurf: PSDL_Surface;
              GraveName: string;
              FortName: string;
              TeamHealth: LongInt;
