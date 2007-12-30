@@ -232,14 +232,14 @@ if TurnTimeLeft <> 0 then
 // Attack bar
 if CurrentTeam <> nil then
    case AttackBar of
-        1: begin
+(*        1: begin
            r:= StuffPoz[sPowerBar];
            {$WARNINGS OFF}
            r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
            {$WARNINGS ON}
            DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
            end;
-        2: with CurrentHedgehog^ do
+*)        2: with CurrentHedgehog^ do
                 begin
                 tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
@@ -294,32 +294,26 @@ for t:= 0 to Pred(TeamsCount) do
 if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
 
 // Wind bar
-DrawGear(sWindBar, cScreenWidth - 180, cScreenHeight - 30, Surface);
+DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
 if WindBarWidth > 0 then
    begin
-   with StuffPoz[sWindR] do
-        begin
-        {$WARNINGS OFF}
-        r.x:= x + 8 - (RealTicks shr 6) mod 8;
-        {$WARNINGS ON}
-        r.y:= y;
-        r.w:= WindBarWidth;
-        r.h:= 13;
-        end;
-   DrawSpriteFromRect(r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
+   {$WARNINGS OFF}
+   r.x:= 8 - (RealTicks shr 6) mod 8;
+   {$WARNINGS ON}
+   r.y:= 0;
+   r.w:= WindBarWidth;
+   r.h:= 13;
+   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
    end else
  if WindBarWidth < 0 then
    begin
-   with StuffPoz[sWindL] do
-        begin
-        {$WARNINGS OFF}
-        r.x:= x + (WindBarWidth + RealTicks shr 6) mod 8;
-        {$WARNINGS ON}
-        r.y:= y;
-        r.w:= - WindBarWidth;
-        r.h:= 13;
-        end;
-   DrawSpriteFromRect(r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
+   {$WARNINGS OFF}
+   r.x:= (WindBarWidth + RealTicks shr 6) mod 8;
+   {$WARNINGS ON}
+   r.y:= 0;
+   r.w:= - WindBarWidth;
+   r.h:= 13;
+   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
    end;
 
 // AmmoMenu

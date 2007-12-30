@@ -24,8 +24,7 @@ uses uConsts, uTeams, SDLh, uFloat;
 procedure StoreInit;
 procedure StoreLoad;
 procedure StoreRelease;
-procedure DrawGear(Stuff : TStuff; X, Y: LongInt; Surface: PSDL_Surface);
-procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
@@ -58,17 +57,6 @@ TryDo( StoreSurface <> nil, errmsgCreateSurface + ': store' , true);
 SDL_FillRect(StoreSurface, nil, 0);
 
 TryDo(SDL_SetColorKey( StoreSurface, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-end;
-
-procedure LoadToSurface(Filename: String; Surface: PSDL_Surface; X, Y: LongInt);
-var tmpsurf: PSDL_Surface;
-    rr: TSDL_Rect;
-begin
-  tmpsurf:= LoadImage(Filename, false, true, false);
-  rr.x:= X;
-  rr.y:= Y;
-  SDL_UpperBlit(tmpsurf, nil, Surface, @rr);
-  SDL_FreeSurface(tmpsurf);
 end;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -125,8 +113,7 @@ WriteInRoundRect:= Result
 end;
 
 procedure StoreLoad;
-var i: TStuff;
-    ii: TSprite;
+var ii: TSprite;
     fi: THWFont;
     s: string;
     tmpsurf: PSDL_Surface;
@@ -197,20 +184,14 @@ var i: TStuff;
     end;
 
     procedure LoadGraves;
-    var t, l: LongInt;
+    var t: LongInt;
     begin
-    l:= 512;
     for t:= 0 to Pred(TeamsCount) do
      if TeamsArray[t] <> nil then
       with TeamsArray[t]^ do
           begin
-          dec(l, 32);
           if GraveName = '' then GraveName:= 'Simple';
-          LoadToSurface(Pathz[ptGraves] + '/' + GraveName, StoreSurface, l, 512);
-          GraveRect.x:= l;
-          GraveRect.y:= 512;
-          GraveRect.w:= 32;
-          GraveRect.h:= 256;
+          GraveSurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
           end
     end;
 
@@ -276,10 +257,6 @@ WriteLnToConsole(msgOK);
 GetExplosionBorderColor;
 
 AddProgress;
-for i:= Low(TStuff) to High(TStuff) do
-    LoadToSurface(Pathz[StuffLoadData[i].Path] + '/' + StuffLoadData[i].FileName, StoreSurface, StuffPoz[i].x, StuffPoz[i].y);
-
-AddProgress;
 WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;
@@ -329,16 +306,11 @@ if SDL_UpperBlit(SourceSurface, r, DestSurface, @rr) < 0 then
    end;
 end;
 
-procedure DrawGear(Stuff: TStuff; X, Y: LongInt; Surface: PSDL_Surface);
-begin
-DrawFromRect(X, Y, @StuffPoz[Stuff], StoreSurface, Surface)
-end;
-
-procedure DrawSpriteFromRect(r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
-DrawFromRect(X, Y, @r, StoreSurface, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
 end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);

@@ -21,8 +21,7 @@ interface
 uses SDLh, uLocale;
 {$INCLUDE options.inc}
 {$INCLUDE proto.inc}
-type TStuff     = (sPowerBar, sWindBar,
-                   sWindL, sWindR);
+type
 
      TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
 
@@ -41,7 +40,8 @@ type TStuff     = (sPowerBar, sWindBar,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
                    sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
-                   sprQuestion);
+                   sprQuestion, sprPowerBar, sprWindBar,
+                   sprWindL, sprWindR);
 
      TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -230,21 +230,6 @@ const
                                                'Graphics/AmmoMenu'              // ptAmmoMenu
                                                );
 
-      StuffLoadData: array[TStuff] of record
-                                     FileName: String[31];
-                                     Path    : TPathType;
-                                     end = (
-                                     (FileName: 'PowerBar'; Path: ptGraphics     ),    // sPowerBar
-                                     (FileName:  'WindBar'; Path: ptGraphics     ),    // sWindBar
-                                     (FileName:    'WindL'; Path: ptGraphics     ),    // sWindL
-                                     (FileName:    'WindR'; Path: ptGraphics     )     // sWindR
-                                     );
-      StuffPoz: array[TStuff] of TSDL_Rect = (
-                                      (x: 256; y: 768; w: 256; h:  32), // sPowerBar
-                                      (x: 256; y: 800; w: 151; h:  17), // sWindBar
-                                      (x: 256; y: 817; w:  80; h:  13), // sWindL
-                                      (x: 336; y: 817; w:  80; h:  13)  // sWindR
-                                      );
       SpritesData: array[TSprite] of record
                      FileName: String[31];
                      Path, AltPath: TPathType;
@@ -335,7 +320,15 @@ const
                      (FileName:    'Console'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                       Width: 256; Height:256; hasAlpha:false),// sprConsoleBG
                      (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  32; Height: 32; hasAlpha:false) // sprQuestion
+                      Width:  32; Height: 32; hasAlpha:false),// sprQuestion
+                     (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                      Width: 256; Height: 32; hasAlpha:false),// sprPowerBar
+                     (FileName:    'WindBar'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                      Width: 151; Height: 17; hasAlpha:false),// sprWindBar
+                     (FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                      Width:  80; Height: 13; hasAlpha:false),// sprWindL
+                     (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
+                      Width:  80; Height: 13; hasAlpha:false) // sprWindR
                      );
 
       Soundz: array[TSound] of record

@@ -50,8 +50,9 @@ type PHedgehog = ^THedgehog;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              CurrHedgehog: LongWord;
              NameTag: PSDL_Surface;
-             CrosshairSurf: PSDL_Surface;
-             GraveRect, HealthRect: TSDL_Rect;
+             CrosshairSurf,
+             GraveSurf: PSDL_Surface;
+             HealthRect: TSDL_Rect;
              GraveName: string;
              FortName: string;
              TeamHealth: LongInt;
