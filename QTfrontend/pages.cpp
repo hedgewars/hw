@@ -105,9 +105,9 @@ PageSimpleGame::PageSimpleGame(QWidget* parent) :
 	topLayout->addStretch(100);
 }
 
-PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
+PageEditTeam::PageEditTeam(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnMinimumWidth(0, 150);
@@ -141,10 +141,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	}
 	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
 
-	BtnTeamDiscard = new QPushButton(this);
-	BtnTeamDiscard->setFont(*font14);
-	BtnTeamDiscard->setText(QPushButton::tr("Discard"));
-	pageLayout->addWidget(BtnTeamDiscard, 4, 0);
+	BtnTeamDiscard = addButton("Discard", pageLayout, 4, 0);
 
 	GBoxBinds = new QGroupBox(this);
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
@@ -229,10 +226,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) : QWidget(parent)
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	pageLayout->addWidget(GBoxFort, 2, 2, 1, 2);
 
-	BtnTeamSave = new QPushButton(this);
-	BtnTeamSave->setFont(*font14);
-	BtnTeamSave->setText(QPushButton::tr("Save"));
-	pageLayout->addWidget(BtnTeamSave, 4, 2, 1, 2);
+	BtnTeamSave = addButton("Save", pageLayout, 4, 2, 1, 2);
 
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
@@ -270,30 +264,24 @@ void PageEditTeam::CBTeamLvl_activated(int id)
 	LevelPict->setPixmap(pix);
 }
 
-PageMultiplayer::PageMultiplayer(QWidget* parent) : QWidget(parent)
+PageMultiplayer::PageMultiplayer(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	BtnBack = addButton("Back", pageLayout, 1, 0);
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 	teamsSelect = new TeamSelWidget(this);
 	pageLayout->addWidget(teamsSelect, 0, 2, 1, 2);
 
-	BtnStartMPGame = new QPushButton(this);
-	BtnStartMPGame->setFont(*font14);
-	BtnStartMPGame->setText(QPushButton::tr("Start"));
-	pageLayout->addWidget(BtnStartMPGame, 1, 3);
+	BtnStartMPGame = addButton("Start", pageLayout, 1, 3);
 }
 
-PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
+PageOptions::PageOptions(QWidget* parent) : 
+  AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 100);
 	pageLayout->setColumnStretch(1, 100);
@@ -309,18 +297,13 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(groupBox, 0, 0, 1, 3);
 
 	QGridLayout * GBTlayout = new QGridLayout(groupBox);
-	BtnNewTeam = new QPushButton(groupBox);
-	BtnNewTeam->setFont(*font14);
-	BtnNewTeam->setText(QPushButton::tr("New team"));
-	GBTlayout->addWidget(BtnNewTeam, 0, 0);
+
+	BtnNewTeam = addButton("New team", GBTlayout, 0, 0);
 
 	CBTeamName = new QComboBox(groupBox);
 	GBTlayout->addWidget(CBTeamName, 0, 1);
 
-	BtnEditTeam	= new QPushButton(groupBox);
-	BtnEditTeam->setFont(*font14);
-	BtnEditTeam->setText(QPushButton::tr("Edit team"));
-	GBTlayout->addWidget(BtnEditTeam, 0, 2);
+	BtnEditTeam	= addButton("Edit team", GBTlayout, 0, 2);
 
 	AGGroupBox = new QGroupBox(this);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -364,20 +347,11 @@ PageOptions::PageOptions(QWidget* parent) : QWidget(parent)
 	fpsedit = new FPSEdit(AGGroupBox);
 	GBAfpslayout->addWidget(fpsedit);
 
-	BtnSaveOptions = new QPushButton(this);
-	BtnSaveOptions->setFont(*font14);
-	BtnSaveOptions->setText(QPushButton::tr("Save"));
-	pageLayout->addWidget(BtnSaveOptions, 4, 2);
+	BtnSaveOptions = addButton("Save", pageLayout, 4, 2);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 4, 0);
+	BtnBack = addButton("Back", pageLayout, 4, 0);
 
-	WeaponsButt = new QPushButton(this);
-	WeaponsButt->setFont(*font14);
-	WeaponsButt->setText(QPushButton::tr("Weapons scheme"));
-	pageLayout->addWidget(WeaponsButt, 1, 0);
+	WeaponsButt = addButton("Weapons scheme", pageLayout, 1, 0);
 
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
@@ -675,9 +649,6 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
-	//pageLayout->setColumnStretch(0, 1);
-	//pageLayout->setColumnStretch(1, 2);
-	//pageLayout->setColumnStretch(2, 1);
         
         pWeapons=new SelWeaponWidget(20, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 3);

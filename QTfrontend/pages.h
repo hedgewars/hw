@@ -67,6 +67,14 @@ class AbstractPage : public QWidget
     return butt;
   };
 
+  QPushButton* addButton(const char* btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan) {
+    QPushButton* butt = new QPushButton(this);
+    butt->setFont(*font14);
+    butt->setText(QPushButton::tr(btname));
+    grid->addWidget(butt, wy, wx, rowSpan, columnSpan);
+    return butt;
+  };
+
   QPushButton* addButton(const char* btname, QBoxLayout* box, int where) {
     QPushButton* butt = new QPushButton(this);
     butt->setFont(*font14);
@@ -107,7 +115,7 @@ public:
 	GameCFGWidget *gameCFG;
 };
 
-class PageEditTeam : public QWidget
+class PageEditTeam : public AbstractPage
 {
 	Q_OBJECT
 
@@ -145,7 +153,7 @@ private:
 	QLabel * LBind[BINDS_NUMBER];
 };
 
-class PageMultiplayer : public QWidget
+class PageMultiplayer : public AbstractPage
 {
 	Q_OBJECT
 
@@ -158,7 +166,7 @@ public:
 	QPushButton *BtnStartMPGame;
 };
 
-class PageOptions : public QWidget
+class PageOptions : public AbstractPage
 {
 	Q_OBJECT
 
