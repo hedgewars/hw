@@ -308,7 +308,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	AGGroupBox = new QGroupBox(this);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
-	pageLayout->addWidget(AGGroupBox, 1, 1);
+	pageLayout->addWidget(AGGroupBox, 2, 1);
 
 	QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
 	QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
@@ -351,12 +351,21 @@ PageOptions::PageOptions(QWidget* parent) :
 
 	BtnBack = addButton("Back", pageLayout, 4, 0);
 
-	WeaponsButt = addButton("Weapons scheme", pageLayout, 1, 0);
+	QGroupBox* groupWeapons = new QGroupBox(this);
+	groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	groupWeapons->setTitle(QGroupBox::tr("Weapons"));
+	pageLayout->addWidget(groupWeapons, 1, 0, 1, 3);
+	QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
+
+	WeaponsButt = addButton("Weapons scheme", WeaponsLayout, 0, 0);
+	WeaponsName = new QComboBox(this);
+	WeaponsLayout->addWidget(WeaponsName, 0, 1);
+	WeaponEdit = addButton("Edit", WeaponsLayout, 0, 2);
 
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
-	pageLayout->addWidget(NNGroupBox, 1, 2);
+	pageLayout->addWidget(NNGroupBox, 2, 2);
 
 	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
 	labelNN = new QLabel(NNGroupBox);

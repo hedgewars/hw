@@ -174,6 +174,9 @@ public:
 	PageOptions(QWidget* parent = 0);
 
 	QPushButton* WeaponsButt;
+	QPushButton* WeaponEdit;
+	QComboBox* WeaponsName;
+
 	QPushButton *BtnBack;
 	QGroupBox *groupBox;
 	QPushButton *BtnNewTeam;
