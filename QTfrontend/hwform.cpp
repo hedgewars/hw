@@ -84,7 +84,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
+	connect(ui.pageOptions->WeaponEdit,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
+	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectNewWeapon()));
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
@@ -135,6 +136,10 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 
 	ui.pageOptions->CBTeamName->clear();
 	ui.pageOptions->CBTeamName->addItems(teamslist);
+
+	// now updates weapons also
+	ui.pageOptions->WeaponsName->clear();
+	ui.pageOptions->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
 }
 
 void HWForm::GoToMain()
@@ -162,8 +167,15 @@ void HWForm::GoToSetup()
 	GoToPage(ID_PAGE_SETUP);
 }
 
+void HWForm::GoToSelectNewWeapon()
+{
+	ui.pageSelectWeapon->pWeapons->setWeaponsName("");
+	GoToPage(ID_PAGE_SELECTWEAPON);
+}
+
 void HWForm::GoToSelectWeapon()
 {
+	ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 

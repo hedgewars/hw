@@ -25,6 +25,8 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QBitmap>
+#include <QLineEdit>
+#include <QSettings>
 
 QImage getAmmoImage(int num)
 {
@@ -70,6 +72,11 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
   m_numItems(numItems),
   QWidget(parent)
 {
+  wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
+  if (wconf->allKeys().empty()) {
+    wconf->setValue("Default", cDefaultAmmoStore->mid(10));
+  }
+
   currentState=cDefaultAmmoStore->mid(10);
 
   pLayout=new QGridLayout(this);
@@ -77,16 +84,20 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
   pLayout->setMargin(1);
 
   int j=-1;
-  for(int i=0, k=0; i<m_numItems; ++i) {
+  int i=0, k=0;
+  for(; i<m_numItems; ++i) {
     if(i==6) continue;
     if (k%4==0) ++j;
     weaponItems[i]=new SelWeaponItem(i, currentState[i].digitValue(), this);
     pLayout->addWidget(weaponItems[i], j, k%4);
     ++k;
   }
+
+  m_name = new QLineEdit(this);
+  pLayout->addWidget(m_name, i, 0, 1, 4);
 }
 
-void SelWeaponWidget::setWeapons(QString ammo)
+void SelWeaponWidget::setWeapons(const QString& ammo)
 {
   for(int i=0; i<m_numItems; ++i) {
     twi::iterator it=weaponItems.find(i);
@@ -103,12 +114,14 @@ void SelWeaponWidget::setDefault()
 
 void SelWeaponWidget::save()
 {
+  if (m_name->text()=="") return;
   currentState="";
   for(int i=0; i<m_numItems; ++i) {
     twi::const_iterator it=weaponItems.find(i);
     int num = it==weaponItems.end() ? 9 : (*this)[i];
     currentState = QString("%1%2").arg(currentState).arg(num);
   }
+  wconf->setValue(m_name->text(), currentState);
 }
 
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
@@ -120,4 +133,19 @@ int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 QString SelWeaponWidget::getWeaponsString() const
 {
   return currentState;
+}
+
+void SelWeaponWidget::setWeaponsName(const QString& name)
+{
+  if(name!="" && wconf->contains(name)) {
+    setWeapons(wconf->value(name).toString());
+  }
+
+  curWeaponsName=name;
+  m_name->setText(name);
+}
+
+QStringList SelWeaponWidget::getWeaponNames() const
+{
+  return wconf->allKeys();
 }

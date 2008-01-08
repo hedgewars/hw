@@ -24,6 +24,8 @@
 
 class QGridLayout;
 class WeaponItem;
+class QLineEdit;
+class QSettings;
 
 class SelWeaponItem : public QWidget
 {
@@ -46,14 +48,22 @@ class SelWeaponWidget : public QWidget
  public:
   SelWeaponWidget(int numItems, QWidget* parent=0);
   QString getWeaponsString() const;
-  void setWeapons(QString ammo);
+  QStringList getWeaponNames() const;
 
  public slots:
   void setDefault();
+  void setWeapons(const QString& ammo);
+  void setWeaponsName(const QString& name);
   void save();
 
  private:
   QString currentState;
+  QString curWeaponsName;
+
+  QLineEdit* m_name;
+
+  QSettings* wconf;
+
   const int m_numItems;
   int operator [] (unsigned int weaponIndex) const;
   
