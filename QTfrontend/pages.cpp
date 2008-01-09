@@ -273,6 +273,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
+
 	teamsSelect = new TeamSelWidget(this);
 	pageLayout->addWidget(teamsSelect, 0, 2, 1, 2);
 

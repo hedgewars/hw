@@ -87,7 +87,7 @@ private slots:
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
 	void UpdateTeamsLists(const QStringList* editable_teams=0);
-	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget);
+	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
 	void closeEvent(QCloseEvent *event);
 	enum PageIDs {
 		ID_PAGE_SIMPLEGAME      =  0,

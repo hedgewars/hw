@@ -136,6 +136,11 @@ QString SelWeaponWidget::getWeaponsString() const
   return currentState;
 }
 
+QString SelWeaponWidget::getWeaponsString(const QString& name) const
+{
+  return wconf->value(name).toString();
+}
+
 void SelWeaponWidget::setWeaponsName(const QString& name)
 {
   if(name!="" && wconf->contains(name)) {

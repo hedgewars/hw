@@ -47,7 +47,8 @@ class SelWeaponWidget : public QWidget
   
  public:
   SelWeaponWidget(int numItems, QWidget* parent=0);
-  QString getWeaponsString() const;
+  QString getWeaponsString() const; // deprecated?
+  QString getWeaponsString(const QString& name) const;
   QStringList getWeaponNames() const;
 
  public slots:

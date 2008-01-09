@@ -43,6 +43,8 @@ public:
 	quint32 getTurnTime() const;
 	QStringList getFullConfig() const;
 
+	QComboBox* WeaponsName;
+
 public slots:
 	void setSeed(const QString & seed);
 	void setMap(const QString & map);

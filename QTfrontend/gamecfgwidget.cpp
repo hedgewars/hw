@@ -67,7 +67,14 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	GBoxOptionsLayout->addWidget(SB_TurnTime, 1, 1);
 	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
 
-	mainLayout.addWidget(new QWidget, 100);
+	QGroupBox *GBoxWeapons = new QGroupBox(this);
+	GBoxWeapons->setTitle(QGroupBox::tr("Weapons"));
+	QHBoxLayout* lt=new QHBoxLayout(GBoxWeapons);
+	WeaponsName = new QComboBox(GBoxWeapons);
+	lt->addWidget(WeaponsName);
+	mainLayout.addWidget(GBoxWeapons);
+
+	mainLayout.addWidget(new QWidget(this), 100);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));

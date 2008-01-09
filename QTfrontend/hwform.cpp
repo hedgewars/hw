@@ -126,6 +126,12 @@ void HWForm::UpdateWeapons()
 {
   ui.pageOptions->WeaponsName->clear();
   ui.pageOptions->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+
+  ui.pageMultiplayer->gameCFG->WeaponsName->clear();
+  ui.pageMultiplayer->gameCFG->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+
+  ui.pageNetGame->pGameCFG->WeaponsName->clear();
+  ui.pageNetGame->pGameCFG->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
@@ -336,7 +342,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	CreateGame(ui.pageSimpleGame->gameCFG, 0);
+	CreateGame(ui.pageSimpleGame->gameCFG, 0, cDefaultAmmoStore->mid(10));
 	game->StartQuick();
 }
 
@@ -351,7 +357,7 @@ void HWForm::PlayDemo()
 				tr("OK"));
 		return ;
 	}
-	CreateGame(0, 0);
+	CreateGame(0, 0, 0);
 	game->PlayDemo(curritem->data(Qt::UserRole).toString());
 }
 
@@ -502,7 +508,9 @@ void HWForm::AddNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect);
+	QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageMultiplayer->gameCFG->WeaponsName->currentText());
+
+	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect, ammo);
 
 	game->StartLocal();
 }
@@ -565,9 +573,9 @@ void HWForm::GameStats(char type, const QString & info)
 	}
 }
 
-void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget)
+void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
 {
-	game = new HWGame(config, gamecfg, ui.pageSelectWeapon->pWeapons->getWeaponsString(), pTeamSelWidget);
+	game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
@@ -612,14 +620,15 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 
 void HWForm::StartTraining()
 {
-	CreateGame(0, 0);
+	CreateGame(0, 0, 0);
 
 	game->StartTraining();
 }
 
 void HWForm::CreateNetGame()
 {
-	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
+	QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
+	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
 	connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
 	connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
