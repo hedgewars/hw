@@ -122,6 +122,7 @@ void SelWeaponWidget::save()
     currentState = QString("%1%2").arg(currentState).arg(num);
   }
   wconf->setValue(m_name->text(), currentState);
+  emit weaponsChanged();
 }
 
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const

@@ -56,6 +56,9 @@ class SelWeaponWidget : public QWidget
   void setWeaponsName(const QString& name);
   void save();
 
+ signals:
+  void weaponsChanged();
+
  private:
   QString currentState;
   QString curWeaponsName;

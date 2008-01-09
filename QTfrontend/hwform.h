@@ -82,6 +82,7 @@ private slots:
 	void ShowErrorMessage(const QString &);
 	void GetRecord(bool isDemo, const QByteArray & record);
 	void CreateNetGame();
+	void UpdateWeapons();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

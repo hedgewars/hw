@@ -52,6 +52,7 @@ HWForm::HWForm(QWidget *parent)
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
 	UpdateTeamsLists();
+	UpdateWeapons();
 
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
@@ -84,8 +85,10 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+
 	connect(ui.pageOptions->WeaponEdit,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
 	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectNewWeapon()));
+	connect(ui.pageSelectWeapon->pWeapons,       SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
@@ -119,6 +122,12 @@ HWForm::HWForm(QWidget *parent)
 	GoToPage(ID_PAGE_MAIN);
 }
 
+void HWForm::UpdateWeapons()
+{
+  ui.pageOptions->WeaponsName->clear();
+  ui.pageOptions->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+}
+
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 {
 	QStringList teamslist;
@@ -136,10 +145,6 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 
 	ui.pageOptions->CBTeamName->clear();
 	ui.pageOptions->CBTeamName->addItems(teamslist);
-
-	// now updates weapons also
-	ui.pageOptions->WeaponsName->clear();
-	ui.pageOptions->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
 }
 
 void HWForm::GoToMain()
