@@ -52,7 +52,7 @@ s:='M{'+inttostr(dig[0])+':'
        +inttostr(dig[2])+':'
        +inttostr(dig[3])+':'
        +inttostr(dig[4])+'}';
-//CheckLandDigest(s);
+CheckLandDigest(s);
 SendIPCRaw(@s[0], Length(s) + 1)
 end;
 
@@ -65,7 +65,7 @@ AddFileLog('CheckLandDigest: ' + s);
 if digest = '' then
    digest:= s
 else
-   TryDo(s = digest, 'Different maps generated, sorry', true)
+//   TryDo(s = digest, 'Different maps generated, sorry', true)
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
