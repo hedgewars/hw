@@ -965,6 +965,7 @@ repeat
         repeat
           inc(y, 2);
         until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
+AddFileLog('x, sy = ' + inttostr(x) + ', ' + inttostr(y));
         sy:= y;
         repeat
           inc(y);

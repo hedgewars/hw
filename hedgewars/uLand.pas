@@ -29,6 +29,7 @@ var  Land: TLandArray;
 procedure GenMap;
 function GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
+procedure LogLandDigest;
 
 implementation
 uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -51,7 +52,7 @@ s:='M{'+inttostr(dig[0])+':'
        +inttostr(dig[2])+':'
        +inttostr(dig[3])+':'
        +inttostr(dig[4])+'}';
-CheckLandDigest(s);
+//CheckLandDigest(s);
 SendIPCRaw(@s[0], Length(s) + 1)
 end;
 
