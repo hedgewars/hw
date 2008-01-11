@@ -102,6 +102,7 @@ class HWNewNet : public QObject
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringFromNet(const QStringList&);
+  void ammoChanged(const QString&);
 
  public slots:
   void chatLineToNet(const QString& str);
@@ -116,6 +117,7 @@ class HWNewNet : public QObject
   void onFortsModeChanged(bool value);
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
+  void onWeaponsNameChanged(const QString& ammo);
 
  private slots:
   void ClientRead();

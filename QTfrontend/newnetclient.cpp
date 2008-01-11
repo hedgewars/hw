@@ -18,6 +18,7 @@
 
 #include <QMessageBox>
 
+#include "hwconsts.h"
 #include "newnetclient.h"
 #include "proto.h"
 #include "gameuiconfig.h"
@@ -282,6 +283,10 @@ void HWNewNet::ParseLine(const QByteArray & line)
 	  emit fortsModeChanged(lst[2].toInt() != 0);
 	  return;
   	}
+	if (lst[1] == "AMMO") {
+	  emit ammoChanged(lst[2]);
+	  return;
+	}
 	QStringList hhTmpList=lst[1].split('+');
   	if (hhTmpList[0] == "TEAM_COLOR") {
 	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
@@ -334,6 +339,8 @@ void HWNewNet::ConfigAsked()
   onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
   onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
   onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
+  // always initialize with default ammo (also avoiding complicated cross-class dependencies)
+  onWeaponsNameChanged(cDefaultAmmoStore->mid(10)); 
 }
 
 void HWNewNet::RunGame()
@@ -383,6 +390,11 @@ void HWNewNet::onTurnTimeChanged(quint32 time)
 void HWNewNet::onFortsModeChanged(bool value)
 {
   RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
+}
+
+void HWNewNet::onWeaponsNameChanged(const QString& ammo)
+{
+  RawSendNet(QString("CONFIG_PARAM%1AMMO%1%2").arg(delimeter).arg(ammo));
 }
 
 void HWNewNet::chatLineToNet(const QString& str)

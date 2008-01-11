@@ -55,6 +55,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
 	GBoxOptionsLayout->addWidget(L_TurnTime, 1, 0);
 	GBoxOptionsLayout->addWidget(L_InitHealth, 2, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 3, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
 	SB_TurnTime->setRange(15, 90);
@@ -66,19 +67,15 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	SB_InitHealth->setSingleStep(25);
 	GBoxOptionsLayout->addWidget(SB_TurnTime, 1, 1);
 	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
-
-	QGroupBox *GBoxWeapons = new QGroupBox(this);
-	GBoxWeapons->setTitle(QGroupBox::tr("Weapons"));
-	QHBoxLayout* lt=new QHBoxLayout(GBoxWeapons);
-	WeaponsName = new QComboBox(GBoxWeapons);
-	lt->addWidget(WeaponsName);
-	mainLayout.addWidget(GBoxWeapons);
+	WeaponsName = new QComboBox(GBoxOptions);
+	GBoxOptionsLayout->addWidget(WeaponsName, 3, 1);
 
 	mainLayout.addWidget(new QWidget(this), 100);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
+	connect(WeaponsName, SIGNAL(activated(const QString&)), this, SIGNAL(newWeaponsName(const QString&)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(onThemeChanged(const QString &)));
@@ -116,6 +113,11 @@ quint32 GameCFGWidget::getInitHealth() const
 quint32 GameCFGWidget::getTurnTime() const
 {
 	return SB_TurnTime->value();
+}
+
+QString GameCFGWidget::getNetAmmo() const
+{
+  return curNetAmmo;
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -189,4 +191,9 @@ void GameCFGWidget::onMapChanged(const QString & map)
 void GameCFGWidget::onThemeChanged(const QString & theme)
 {
 	emit themeChanged(theme);
+}
+
+void GameCFGWidget::setNetAmmo(const QString& ammo)
+{
+  curNetAmmo=ammo;
 }

@@ -43,6 +43,8 @@ public:
 	quint32 getTurnTime() const;
 	QStringList getFullConfig() const;
 
+	QString getNetAmmo() const; // FIXME: hack - this class should contain all ammo states itself
+
 	QComboBox* WeaponsName;
 
 public slots:
@@ -52,6 +54,7 @@ public slots:
 	void setInitHealth(quint32 health);
 	void setTurnTime(quint32 time);
 	void setFortsMode(bool value);
+	void setNetAmmo(const QString&);
 
 signals:
 	void seedChanged(const QString & seed);
@@ -60,6 +63,7 @@ signals:
 	void initHealthChanged(quint32 health);
 	void turnTimeChanged(quint32 time);
 	void fortsModeChanged(bool value);
+	void newWeaponsName(const QString& weapon);
 
 private:
 	QCheckBox * CB_mode_Forts;
@@ -69,6 +73,8 @@ private:
 	QSpinBox * SB_InitHealth;
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;
+
+	QString curNetAmmo;
 
 private slots:
 	void onSeedChanged(const QString & seed);

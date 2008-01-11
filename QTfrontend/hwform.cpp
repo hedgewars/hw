@@ -89,6 +89,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->WeaponEdit,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
 	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectNewWeapon()));
 	connect(ui.pageSelectWeapon->pWeapons,       SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
+	connect(ui.pageNetGame->pGameCFG,       SIGNAL(newWeaponsName(const QString&)), this, SLOT(NetWeaponNameChanged(const QString&)));
 
 	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
@@ -132,6 +133,12 @@ void HWForm::UpdateWeapons()
 
   ui.pageNetGame->pGameCFG->WeaponsName->clear();
   ui.pageNetGame->pGameCFG->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+}
+
+void HWForm::NetWeaponNameChanged(const QString& name)
+{
+  QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
+  hwnet->onWeaponsNameChanged(ammo);
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
@@ -415,6 +422,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
+	connect(hwnet, SIGNAL(ammoChanged(const QString&)), ui.pageNetGame->pGameCFG, SLOT(setNetAmmo(const QString&)));
 
 	hwnet->Connect(hostName, port, nick);
 }
@@ -627,7 +635,12 @@ void HWForm::StartTraining()
 
 void HWForm::CreateNetGame()
 {
-	QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
+	QString ammo;
+	if (pnetserver) {
+	  ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
+	} else {
+	  ammo=ui.pageNetGame->pGameCFG->getNetAmmo();
+	}
 	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
 	connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
