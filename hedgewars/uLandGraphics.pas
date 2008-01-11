@@ -222,8 +222,6 @@ if SDL_MustLock(LandSurface) then
 
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
-
-LogLandDigest
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);

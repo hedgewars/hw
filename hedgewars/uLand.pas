@@ -29,7 +29,6 @@ var  Land: TLandArray;
 procedure GenMap;
 function GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
-procedure LogLandDigest;
 
 implementation
 uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -65,7 +64,7 @@ AddFileLog('CheckLandDigest: ' + s);
 if digest = '' then
    digest:= s
 else
-//   TryDo(s = digest, 'Different maps generated, sorry', true)
+   TryDo(s = digest, 'Different maps generated, sorry', true)
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);

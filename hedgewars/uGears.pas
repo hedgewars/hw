@@ -939,9 +939,11 @@ procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt);
         Result: LongInt;
     begin
     Result:= 0;
+AddFileLog('x, y, test = ' + inttostr(x) + ', ' + inttostr(y) + ' ,' + inttostr(y and $FFFFFC00));
     if (y and $FFFFFC00) <> 0 then exit;
     for i:= max(x - r, 0) to min(x + r, 2043) do
         if Land[y, i] <> 0 then inc(Result);
+AddFileLog('CountNonZeroz = ' + inttostr(Result));
     CountNonZeroz:= Result
     end;
 
@@ -965,7 +967,6 @@ repeat
         repeat
           inc(y, 2);
         until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
-AddFileLog('x, sy = ' + inttostr(x) + ', ' + inttostr(y));
         sy:= y;
         repeat
           inc(y);
