@@ -193,7 +193,12 @@ void GameCFGWidget::onThemeChanged(const QString & theme)
 	emit themeChanged(theme);
 }
 
-void GameCFGWidget::setNetAmmo(const QString& ammo)
+void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
+  curNetAmmoName=name;
   curNetAmmo=ammo;
+
+  WeaponsName->setEditable(false);
+  WeaponsName->clear();
+  WeaponsName->addItem(name);
 }

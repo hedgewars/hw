@@ -54,7 +54,7 @@ public slots:
 	void setInitHealth(quint32 health);
 	void setTurnTime(quint32 time);
 	void setFortsMode(bool value);
-	void setNetAmmo(const QString&);
+	void setNetAmmo(const QString& name, const QString& ammo);
 
 signals:
 	void seedChanged(const QString & seed);
@@ -74,6 +74,7 @@ private:
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;
 
+	QString curNetAmmoName;
 	QString curNetAmmo;
 
 private slots:

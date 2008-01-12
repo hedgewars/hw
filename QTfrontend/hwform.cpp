@@ -144,7 +144,7 @@ void HWForm::UpdateWeapons()
 void HWForm::NetWeaponNameChanged(const QString& name)
 {
   QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
-  hwnet->onWeaponsNameChanged(ammo);
+  hwnet->onWeaponsNameChanged(name, ammo);
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
@@ -428,7 +428,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
-	connect(hwnet, SIGNAL(ammoChanged(const QString&)), ui.pageNetGame->pGameCFG, SLOT(setNetAmmo(const QString&)));
+	connect(hwnet, SIGNAL(ammoChanged(const QString&, const QString&)), ui.pageNetGame->pGameCFG, SLOT(setNetAmmo(const QString&, const QString&)));
 
 	hwnet->Connect(hostName, port, nick);
 }
