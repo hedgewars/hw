@@ -125,14 +125,20 @@ HWForm::HWForm(QWidget *parent)
 
 void HWForm::UpdateWeapons()
 {
-  ui.pageOptions->WeaponsName->clear();
-  ui.pageOptions->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+  // FIXME: rewrite this with boost (or TR1/0x)
+  QVector<QComboBox*> combos;
+  combos.push_back(ui.pageOptions->WeaponsName);
+  combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+  combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
 
-  ui.pageMultiplayer->gameCFG->WeaponsName->clear();
-  ui.pageMultiplayer->gameCFG->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
-
-  ui.pageNetGame->pGameCFG->WeaponsName->clear();
-  ui.pageNetGame->pGameCFG->WeaponsName->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+  for(QVector<QComboBox*>::iterator it=combos.begin(); it!=combos.end(); ++it) {
+    (*it)->clear();
+    (*it)->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+    int pos=(*it)->findText("Default");
+    if (pos!=-1) {
+      (*it)->setCurrentIndex(pos);
+    }
+  }
 }
 
 void HWForm::NetWeaponNameChanged(const QString& name)
