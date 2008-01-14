@@ -132,6 +132,7 @@ var ii: TSprite;
 
       HealthSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, r.w, r.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
       TryDo(HealthSurf <> nil, errmsgCreateSurface, true);
+      TryDo(SDL_SetColorKey(HealthSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
 
       DrawRoundRect(@r, cWhiteColor, cColorNearBlack, HealthSurf, true);
       rr:= r;

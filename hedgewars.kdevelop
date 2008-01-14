@@ -32,7 +32,7 @@
       <autocompile>true</autocompile>
       <envvars/>
       <globaldebugarguments/>
-      <globalcwd></globalcwd>
+      <globalcwd/>
       <useglobalprogram>false</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
@@ -52,121 +52,11 @@
       <filetype>*.cxx</filetype>
       <filetype>Makefile</filetype>
       <filetype>CMakeLists.txt</filetype>
+      <filetype>*.pas</filetype>
+      <filetype>*.inc</filetype>
+      <filetype>*.dpr</filetype>
     </filetypes>
-    <blacklist>
-      <path>bin</path>
-      <path>bin/CMakeLists.txt</path>
-      <path>bin/Makefile</path>
-      <path>hedgewars/Makefile</path>
-      <path>hedgewars/test.c</path>
-      <path>QTfrontend/moc_about.cxx</path>
-      <path>QTfrontend/moc_chatwidget.cxx</path>
-      <path>QTfrontend/moc_fpsedit.cxx</path>
-      <path>QTfrontend/moc_frameTeam.cxx</path>
-      <path>QTfrontend/moc_gamecfgwidget.cxx</path>
-      <path>QTfrontend/moc_game.cxx</path>
-      <path>QTfrontend/moc_gameuiconfig.cxx</path>
-      <path>QTfrontend/moc_hedgehogerWidget.cxx</path>
-      <path>QTfrontend/moc_hwform.cxx</path>
-      <path>QTfrontend/moc_hwmap.cxx</path>
-      <path>QTfrontend/moc_mapContainer.cxx</path>
-      <path>QTfrontend/moc_netclient.cpp</path>
-      <path>QTfrontend/moc_netconnectedclient.cxx</path>
-      <path>QTfrontend/moc_netserver.cxx</path>
-      <path>QTfrontend/moc_netudpserver.cxx</path>
-      <path>QTfrontend/moc_netudpwidget.cxx</path>
-      <path>QTfrontend/moc_newnetclient.cxx</path>
-      <path>QTfrontend/moc_pages.cxx</path>
-      <path>QTfrontend/moc_playrecordpage.cxx</path>
-      <path>QTfrontend/moc_proto.cxx</path>
-      <path>QTfrontend/moc_SDLs.cxx</path>
-      <path>QTfrontend/moc_selectWeapon.cxx</path>
-      <path>QTfrontend/moc_SquareLabel.cxx</path>
-      <path>QTfrontend/moc_tcpBase.cxx</path>
-      <path>QTfrontend/moc_teamselect.cxx</path>
-      <path>QTfrontend/moc_teamselhelper.cxx</path>
-      <path>QTfrontend/moc_vertScrollArea.cxx</path>
-      <path>QTfrontend/qrc_hedgewars.cxx</path>
-      <path>share</path>
-      <path>share/CMakeLists.txt</path>
-      <path>share/hedgewars</path>
-      <path>share/hedgewars/CMakeLists.txt</path>
-      <path>share/hedgewars/Data</path>
-      <path>share/hedgewars/Data/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Fonts</path>
-      <path>share/hedgewars/Data/Fonts/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Fonts/Makefile</path>
-      <path>share/hedgewars/Data/Forts</path>
-      <path>share/hedgewars/Data/Forts/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Forts/Makefile</path>
-      <path>share/hedgewars/Data/Graphics</path>
-      <path>share/hedgewars/Data/Graphics/AmmoMenu</path>
-      <path>share/hedgewars/Data/Graphics/AmmoMenu/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Graphics/AmmoMenu/Makefile</path>
-      <path>share/hedgewars/Data/Graphics/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Graphics/Graves</path>
-      <path>share/hedgewars/Data/Graphics/Graves/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Graphics/Graves/Makefile</path>
-      <path>share/hedgewars/Data/Graphics/Makefile</path>
-      <path>share/hedgewars/Data/Locale</path>
-      <path>share/hedgewars/Data/Locale/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Locale/Makefile</path>
-      <path>share/hedgewars/Data/Makefile</path>
-      <path>share/hedgewars/Data/Maps</path>
-      <path>share/hedgewars/Data/Maps/cheese</path>
-      <path>share/hedgewars/Data/Maps/cheese/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Maps/cheese/Makefile</path>
-      <path>share/hedgewars/Data/Maps/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Maps/Makefile</path>
-      <path>share/hedgewars/Data/Maps/mushrooms</path>
-      <path>share/hedgewars/Data/Maps/mushrooms/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Maps/mushrooms/Makefile</path>
-      <path>share/hedgewars/Data/Music</path>
-      <path>share/hedgewars/Data/Music/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Music/Makefile</path>
-      <path>share/hedgewars/Data/Sounds</path>
-      <path>share/hedgewars/Data/Sounds/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Sounds/Makefile</path>
-      <path>share/hedgewars/Data/Themes</path>
-      <path>share/hedgewars/Data/Themes/avematan</path>
-      <path>share/hedgewars/Data/Themes/avematan/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/avematan/Makefile</path>
-      <path>share/hedgewars/Data/Themes/bubbles</path>
-      <path>share/hedgewars/Data/Themes/bubbles/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/bubbles/Makefile</path>
-      <path>share/hedgewars/Data/Themes/cheese</path>
-      <path>share/hedgewars/Data/Themes/cheese/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/cheese/Makefile</path>
-      <path>share/hedgewars/Data/Themes/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/ethereal</path>
-      <path>share/hedgewars/Data/Themes/ethereal/Makefile</path>
-      <path>share/hedgewars/Data/Themes/Makefile</path>
-      <path>share/hedgewars/Data/Themes/norsk</path>
-      <path>share/hedgewars/Data/Themes/norsk/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/norsk/Makefile</path>
-      <path>share/hedgewars/Data/Themes/steel</path>
-      <path>share/hedgewars/Data/Themes/steel/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/steel/Makefile</path>
-      <path>share/hedgewars/Data/Themes/tibet</path>
-      <path>share/hedgewars/Data/Themes/tibet/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/tibet/Makefile</path>
-      <path>share/hedgewars/Data/Themes/wood</path>
-      <path>share/hedgewars/Data/Themes/wood/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/wood/Makefile</path>
-      <path>share/hedgewars/Data/Themes/xtheme</path>
-      <path>share/hedgewars/Data/Themes/xtheme/CMakeLists.txt</path>
-      <path>share/hedgewars/Data/Themes/xtheme/Makefile</path>
-      <path>share/hedgewars/Makefile</path>
-      <path>share/Makefile</path>
-      <path>Makefile</path>
-      <path>tools</path>
-      <path>tools/templates</path>
-      <path>tools/templates/main.cpp</path>
-      <path>tools/templates/mainform.cpp</path>
-      <path>tools/templates/mainform.h</path>
-      <path>tools/templates/pixlabel.cpp</path>
-      <path>tools/templates/pixlabel.h</path>
-    </blacklist>
+    <blacklist/>
     <general>
       <activedir/>
     </general>
@@ -330,7 +220,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns/>
+      <hidepatterns></hidepatterns>
       <hidenonprojectfiles>true</hidenonprojectfiles>
       <showvcsfields>false</showvcsfields>
     </tree>
@@ -343,13 +233,13 @@
   </cppsupportpart>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem></docsystem>
-      <docurl></docurl>
-      <usermanualurl></usermanualurl>
+      <docsystem/>
+      <docurl/>
+      <usermanualurl/>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments></customArguments>
+    <customArguments/>
     <customTagfilePath>/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GNA/tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>
