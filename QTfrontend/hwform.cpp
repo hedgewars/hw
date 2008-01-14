@@ -128,6 +128,7 @@ void HWForm::UpdateWeapons()
   // FIXME: rewrite this with boost (or TR1/0x)
   QVector<QComboBox*> combos;
   combos.push_back(ui.pageOptions->WeaponsName);
+  combos.push_back(ui.pageSimpleGame->gameCFG->WeaponsName);
   combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
   combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
 
