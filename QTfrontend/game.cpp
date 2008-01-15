@@ -27,6 +27,8 @@
 #include "KB.h"
 #include "proto.h"
 
+#include <QTextStream>
+
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
   m_pTeamSelWidget(pTeamSelWidget),
