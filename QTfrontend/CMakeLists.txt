@@ -14,9 +14,7 @@ include(${QT_USE_FILE})
 # Configure for SDL
 find_package(SDL REQUIRED)
 
-if(SDL_INCLUDE_DIR)
-	include_directories(${SDL_INCLUDE_DIR})
-endif(SDL_INCLUDE_DIR)
+include_directories(${SDL_INCLUDE_DIR})
 
 # Done
 include_directories(.)
