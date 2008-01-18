@@ -310,25 +310,25 @@ const
                      (FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
                       Width:  32; Height: 32; hasAlpha: false),// sprHHTelepMask
                      (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprSwitch
+                      Width:  32; Height: 32; hasAlpha:  true),// sprSwitch
                      (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  48; Height: 48; hasAlpha: true),// sprParachute
+                      Width:  48; Height: 48; hasAlpha:  true),// sprParachute
                      (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  32; Height: 32; hasAlpha:false),// sprTarget
+                      Width:  32; Height: 32; hasAlpha: false),// sprTarget
                      (FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:   6; Height:  6; hasAlpha:false),// sprRopeNode
+                      Width:   6; Height:  6; hasAlpha: false),// sprRopeNode
                      (FileName:    'Console'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width: 256; Height:256; hasAlpha:false),// sprConsoleBG
+                      Width: 256; Height:256; hasAlpha: false),// sprConsoleBG
                      (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  32; Height: 32; hasAlpha:false),// sprQuestion
+                      Width:  32; Height: 32; hasAlpha: false),// sprQuestion
                      (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width: 256; Height: 32; hasAlpha:false),// sprPowerBar
+                      Width: 256; Height: 32; hasAlpha: false),// sprPowerBar
                      (FileName:    'WindBar'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width: 151; Height: 17; hasAlpha:false),// sprWindBar
+                      Width: 151; Height: 17; hasAlpha: false),// sprWindBar
                      (FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  80; Height: 13; hasAlpha:false),// sprWindL
+                      Width:  80; Height: 13; hasAlpha: false),// sprWindL
                      (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Surface: nil;
-                      Width:  80; Height: 13; hasAlpha:false) // sprWindR
+                      Width:  80; Height: 13; hasAlpha: false) // sprWindR
                      );
 
       Soundz: array[TSound] of record
