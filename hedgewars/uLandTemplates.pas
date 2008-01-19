@@ -478,8 +478,30 @@ const Template16Points: array[0..28] of TSDL_Rect =
        (x: 1023; y:    0)
       );
 
+const Template17Points: array[0..13] of TSDL_Rect =
+      (
+       (x:  230; y: 1024; w:    2; h:    2),
+       (x:  166; y:  856; w:  128; h:  118),
+       (x:  352; y:  856; w:   98; h:  114),
+       (x:  348; y:  674; w:  140; h:  138),
+       (x:  556; y:  672; w:  136; h:  142),
+       (x:  746; y:  670; w:  114; h:  252),
+       (x:  924; y:  378; w:  120; h:  390),
+       (x: 1122; y:  462; w:  114; h:  210),
+       (x: 1324; y:  306; w:  130; h:  252),
+       (x: 1536; y:  206; w:  278; h:  234),
+       (x: 1524; y:  644; w:  272; h:   52),
+       (x: 1572; y:  852; w:  180; h:   56),
+       (x: 1598; y: 1024; w:   42; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template17FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
 
-const EdgeTemplates: array[0..16] of TEdgeTemplate =
+
+const EdgeTemplates: array[0..17] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -615,6 +637,14 @@ const EdgeTemplates: array[0..16] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template16FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
+        canMirror: true; canFlip: false;
+       ),
+       (BasePoints: @Template17Points;
+        BasePointsCount: Succ(High(Template17Points));
+        FillPoints: @Template17FPoints;
+        FillPointsCount: Succ(High(Template17FPoints));
+        BezierizeCount: 3;
+        RandPassesCount: 7;
         canMirror: true; canFlip: false;
        )
       );
