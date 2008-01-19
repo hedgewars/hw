@@ -441,8 +441,45 @@ const Template15Points: array[0..23] of TSDL_Rect =
        (x: 1023; y:    0)
       );
 
+const Template16Points: array[0..28] of TSDL_Rect =
+      (
+       (x:  300; y: 1024; w:    2; h:    2),
+       (x:  394; y:  902; w:   58; h:   62),
+       (x:  380; y:  770; w:   94; h:   90),
+       (x:  186; y:  626; w:   80; h:  220),
+       (x:  376; y:  600; w:   82; h:  118),
+       (x:  182; y:  328; w:  134; h:  226),
+       (x:  368; y:  328; w:   52; h:   52),
+       (x:  472; y:  174; w:   56; h:  212),
+       (x:  588; y:  322; w:   60; h:   62),
+       (x:  718; y:  324; w:  108; h:  218),
+       (x:  612; y:  516; w:   36; h:  168),
+       (x:  728; y:  656; w:  140; h:  134),
+       (x:  588; y:  850; w:   74; h:   82),
+       (x:  750; y: 1024; w:  102; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x: 1304; y: 1024; w:   72; h:    2),
+       (x: 1226; y:  908; w:  266; h:   34),
+       (x: 1224; y:  748; w:  252; h:   80),
+       (x: 1212; y:  576; w:  256; h:   94),
+       (x: 1140; y:  434; w:  174; h:   86),
+       (x: 1396; y:  318; w:  156; h:   96),
+       (x: 1086; y:  214; w:  206; h:   66),
+       (x: 1446; y:  156; w:  152; h:   40),
+       (x: 1708; y:  272; w:   60; h:  162),
+       (x: 1542; y:  488; w:  146; h:   80),
+       (x: 1686; y:  634; w:  178; h:  122),
+       (x: 1572; y:  820; w:   34; h:  124),
+       (x: 1698; y: 1024; w:   52; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template16FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
 
-const EdgeTemplates: array[0..15] of TEdgeTemplate =
+
+const EdgeTemplates: array[0..16] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -568,6 +605,14 @@ const EdgeTemplates: array[0..15] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template15Points));
         FillPoints: @Template15FPoints;
         FillPointsCount: Succ(High(Template15FPoints));
+        BezierizeCount: 2;
+        RandPassesCount: 6;
+        canMirror: true; canFlip: false;
+       ),
+       (BasePoints: @Template16Points;
+        BasePointsCount: Succ(High(Template16Points));
+        FillPoints: @Template16FPoints;
+        FillPointsCount: Succ(High(Template16FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
         canMirror: true; canFlip: false;
