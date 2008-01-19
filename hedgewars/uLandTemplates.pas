@@ -409,8 +409,40 @@ const Template14Points: array[0..13] of TSDL_Rect =
        (x: 1023; y:    0)
       );
 
+const Template15Points: array[0..23] of TSDL_Rect =
+      (
+       (x:  302; y: 1024; w:    2; h:    2),
+       (x:  240; y:  890; w:   44; h:   94),
+       (x:  350; y:  862; w:   44; h:   94),
+       (x:  460; y:  906; w:   78; h:   70),
+       (x:  466; y: 1024; w:    2; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  804; y: 1024; w:    2; h:    2),
+       (x:  720; y:  782; w:  108; h:  174),
+       (x:  484; y:  624; w:  314; h:   98),
+       (x:  310; y:  482; w:   76; h:  230),
+       (x:  434; y:  286; w:  220; h:  154),
+       (x:  840; y:  274; w:   56; h:  266),
+       (x: 1024; y:  244; w:   78; h:  304),
+       (x: 1248; y:  246; w:  116; h:  162),
+       (x: 1580; y:  326; w:  190; h:  228),
+       (x: 1360; y:  604; w:  140; h:   84),
+       (x: 1196; y:  740; w:  242; h:  118),
+       (x: 1216; y: 1024; w:    2; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x: 1494; y: 1024; w:    2; h:    2),
+       (x: 1450; y:  928; w:   88; h:   34),
+       (x: 1598; y:  838; w:   96; h:  112),
+       (x: 1656; y: 1024; w:    2; h:    2),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template15FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
 
-const EdgeTemplates: array[0..14] of TEdgeTemplate =
+
+const EdgeTemplates: array[0..15] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -530,6 +562,14 @@ const EdgeTemplates: array[0..14] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template14FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
+        canMirror: true; canFlip: false;
+       ),
+       (BasePoints: @Template15Points;
+        BasePointsCount: Succ(High(Template15Points));
+        FillPoints: @Template15FPoints;
+        FillPointsCount: Succ(High(Template15FPoints));
+        BezierizeCount: 2;
+        RandPassesCount: 6;
         canMirror: true; canFlip: false;
        )
       );
