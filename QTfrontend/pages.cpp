@@ -60,28 +60,28 @@ PageMain::PageMain(QWidget* parent) :
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
 
-	BtnSinglePlayer = addButton(QPushButton::tr("Single Player"), pageLayout, 0, 1);
+	BtnSinglePlayer = addButton(tr("Single Player"), pageLayout, 0, 1);
 	BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnMultiplayer = addButton(tr("Multiplayer"), pageLayout, 1, 1);
 	BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnNet = addButton("Net game", pageLayout, 2, 1);
+	BtnNet = addButton(tr("Net game"), pageLayout, 2, 1);
 	BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnLoad = addButton("Saved games", pageLayout, 3, 1);
+	BtnLoad = addButton(tr("Saved games"), pageLayout, 3, 1);
 	BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnDemos = addButton("Demos", pageLayout, 4, 1);
+	BtnDemos = addButton(tr("Demos"), pageLayout, 4, 1);
 	BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnSetup = addButton("Setup", pageLayout, 5, 1);
+	BtnSetup = addButton(tr("Setup"), pageLayout, 5, 1);
 	BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnInfo = addButton("About", pageLayout, 6, 1);
+	BtnInfo = addButton(tr("About"), pageLayout, 6, 1);
 	BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnExit = addButton("Exit", pageLayout, 7, 1);
+	BtnExit = addButton(tr("Exit"), pageLayout, 7, 1);
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
@@ -94,10 +94,10 @@ PageSimpleGame::PageSimpleGame(QWidget* parent) :
 	pageLayout->addLayout(topLayout, 100);
 	pageLayout->addLayout(bottomLayout, 0);
 
-	BtnBack = addButton("Back", bottomLayout, 100);
+	BtnBack = addButton(tr("Back"), bottomLayout, 100);
 	bottomLayout->addStretch(100);
 
-	BtnSimpleGame = addButton("Simple Game", bottomLayout, 100);
+	BtnSimpleGame = addButton(tr("Simple Game"), bottomLayout, 100);
 
 	gameCFG = new GameCFGWidget(this);
 	topLayout->addStretch(100);
@@ -141,7 +141,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	}
 	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
 
-	BtnTeamDiscard = addButton("Discard", pageLayout, 4, 0);
+	BtnTeamDiscard = addButton(tr("Discard"), pageLayout, 4, 0);
 
 	GBoxBinds = new QGroupBox(this);
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
@@ -226,7 +226,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	pageLayout->addWidget(GBoxFort, 2, 2, 1, 2);
 
-	BtnTeamSave = addButton("Save", pageLayout, 4, 2, 1, 2);
+	BtnTeamSave = addButton(tr("Save"), pageLayout, 4, 2, 1, 2);
 
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
@@ -269,7 +269,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	BtnBack = addButton("Back", pageLayout, 1, 0);
+	BtnBack = addButton(tr("Back"), pageLayout, 1, 0);
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
@@ -277,7 +277,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 	teamsSelect = new TeamSelWidget(this);
 	pageLayout->addWidget(teamsSelect, 0, 2, 1, 2);
 
-	BtnStartMPGame = addButton("Start", pageLayout, 1, 3);
+	BtnStartMPGame = addButton(tr("Start"), pageLayout, 1, 3);
 }
 
 PageOptions::PageOptions(QWidget* parent) : 
@@ -300,12 +300,12 @@ PageOptions::PageOptions(QWidget* parent) :
 
 	QGridLayout * GBTlayout = new QGridLayout(groupBox);
 
-	BtnNewTeam = addButton("New team", GBTlayout, 0, 0);
+	BtnNewTeam = addButton(tr("New team"), GBTlayout, 0, 0);
 
 	CBTeamName = new QComboBox(groupBox);
 	GBTlayout->addWidget(CBTeamName, 0, 1);
 
-	BtnEditTeam = addButton("Edit team", GBTlayout, 0, 2);
+	BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 0, 2);
 
 	AGGroupBox = new QGroupBox(this);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -349,9 +349,9 @@ PageOptions::PageOptions(QWidget* parent) :
 	fpsedit = new FPSEdit(AGGroupBox);
 	GBAfpslayout->addWidget(fpsedit);
 
-	BtnSaveOptions = addButton("Save", pageLayout, 4, 2);
+	BtnSaveOptions = addButton(tr("Save"), pageLayout, 4, 2);
 
-	BtnBack = addButton("Back", pageLayout, 4, 0);
+	BtnBack = addButton(tr("Back"), pageLayout, 4, 0);
 
 	QGroupBox* groupWeapons = new QGroupBox(this);
 	groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -359,10 +359,10 @@ PageOptions::PageOptions(QWidget* parent) :
 	pageLayout->addWidget(groupWeapons, 1, 0, 1, 3);
 	QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
 
-	WeaponsButt = addButton("Weapons scheme", WeaponsLayout, 0, 0);
+	WeaponsButt = addButton(tr("Weapons set"), WeaponsLayout, 0, 0);
 	WeaponsName = new QComboBox(this);
 	WeaponsLayout->addWidget(WeaponsName, 0, 1);
-	WeaponEdit = addButton("Edit", WeaponsLayout, 0, 2);
+	WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 0, 2);
 
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
@@ -664,10 +664,10 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
         pWeapons=new SelWeaponWidget(20, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
-	BtnBack = addButton("Back", pageLayout, 1, 0);
-	BtnDefault = addButton("Default", pageLayout, 1, 1);
-	BtnDelete = addButton("Delete", pageLayout, 1, 2);
-	BtnSave = addButton("Save", pageLayout, 1, 3);
+	BtnBack = addButton(tr("Back"), pageLayout, 1, 0);
+	BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
+	BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
+	BtnSave = addButton(tr("Save"), pageLayout, 1, 3);
 }
 
 PageInGame::PageInGame(QWidget* parent) : 
