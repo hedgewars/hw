@@ -93,7 +93,8 @@ if (Action.Action and ai_specmask) = 0 then
 else begin
    WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
    if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
-      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(hwRound(Me^.X)));
+      WriteLnToConsole('AI action Wait X = '+inttostr(Action.Param)+', current X = '+inttostr(hwRound(Me^.X)))
+   else if (Action.Action = aia_AwareExpl) then WriteLnToConsole('Aware X = ' + inttostr(Action.X) + ', Y = ' + inttostr(Action.Y));
    end
 end;
 {$ENDIF}
