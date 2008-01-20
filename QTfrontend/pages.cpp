@@ -661,11 +661,12 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	pageLayout->setMargin(25);
         
         pWeapons=new SelWeaponWidget(20, this);
-	pageLayout->addWidget(pWeapons, 0, 0, 1, 3);
+	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
 	BtnBack = addButton("Back", pageLayout, 1, 0);
 	BtnDefault = addButton("Default", pageLayout, 1, 1);
-	BtnSave = addButton("Save", pageLayout, 1, 2);
+	BtnDelete = addButton("Delete", pageLayout, 1, 2);
+	BtnSave = addButton("Save", pageLayout, 1, 3);
 }
 
 PageInGame::PageInGame(QWidget* parent) : 

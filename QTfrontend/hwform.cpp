@@ -120,6 +120,13 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageSelectWeapon->BtnDefault,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(setDefault()));
 	connect(ui.pageSelectWeapon->BtnSave,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(save()));
 
+	connect(ui.pageSelectWeapon->BtnDelete,	SIGNAL(clicked()),	
+		ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
+	connect(ui.pageSelectWeapon->BtnDelete,	SIGNAL(clicked()),	
+		this, SLOT(UpdateWeapons())); // executed second
+	connect(ui.pageSelectWeapon->BtnDelete,	SIGNAL(clicked()),	
+		this, SLOT(GoBack())); // executed third
+
 	GoToPage(ID_PAGE_MAIN);
 }
 

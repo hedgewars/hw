@@ -315,6 +315,7 @@ public:
 
 	QPushButton *BtnSave;
 	QPushButton *BtnDefault;
+	QPushButton *BtnDelete;
 	QPushButton *BtnBack;
         SelWeaponWidget* pWeapons;
 };

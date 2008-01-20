@@ -55,6 +55,7 @@ class SelWeaponWidget : public QWidget
   void setDefault();
   void setWeapons(const QString& ammo);
   void setWeaponsName(const QString& name, bool editMode);
+  void deleteWeaponsName();
   void save();
 
  signals:

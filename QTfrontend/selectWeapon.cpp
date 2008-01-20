@@ -145,6 +145,12 @@ QString SelWeaponWidget::getWeaponsString(const QString& name) const
   return wconf->value(name).toString();
 }
 
+void SelWeaponWidget::deleteWeaponsName()
+{
+  if (curWeaponsName=="") return;
+  wconf->remove(curWeaponsName);
+}
+
 void SelWeaponWidget::setWeaponsName(const QString& name, bool editMode)
 {
   if(name!="" && wconf->contains(name)) {
