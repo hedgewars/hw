@@ -68,6 +68,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                gmtSave: begin
                         RestoreTeamsFromSave;
                         SetBinds(CurrentTeam^.Binds);
+                        CurrentHedgehog^.Gear^.Message:= 0;
                         isSoundEnabled:= isSEBackup;
                         GameType:= gmtLocal
                         end;
