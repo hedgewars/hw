@@ -60,10 +60,10 @@ PageMain::PageMain(QWidget* parent) :
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
 
-	BtnSinglePlayer = addButton("Single Player", pageLayout, 0, 1);
+	BtnSinglePlayer = addButton(QPushButton::tr("Single Player"), pageLayout, 0, 1);
 	BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-	BtnMultiplayer = addButton("Multiplayer", pageLayout, 1, 1);
+	BtnMultiplayer = addButton(tr("Multiplayer"), pageLayout, 1, 1);
 	BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnNet = addButton("Net game", pageLayout, 2, 1);

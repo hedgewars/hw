@@ -59,26 +59,26 @@ class AbstractPage : public QWidget
   }
   virtual ~AbstractPage() {};
 
-  QPushButton* addButton(const char* btname, QGridLayout* grid, int wy, int wx) {
+  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx) {
     QPushButton* butt = new QPushButton(this);
     butt->setFont(*font14);
-    butt->setText(QPushButton::tr(btname));
+    butt->setText(btname);
     grid->addWidget(butt, wy, wx);
     return butt;
   };
 
-  QPushButton* addButton(const char* btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan) {
+  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan) {
     QPushButton* butt = new QPushButton(this);
     butt->setFont(*font14);
-    butt->setText(QPushButton::tr(btname));
+    butt->setText(btname);
     grid->addWidget(butt, wy, wx, rowSpan, columnSpan);
     return butt;
   };
 
-  QPushButton* addButton(const char* btname, QBoxLayout* box, int where) {
+  QPushButton* addButton(QString btname, QBoxLayout* box, int where) {
     QPushButton* butt = new QPushButton(this);
     butt->setFont(*font14);
-    butt->setText(QPushButton::tr(btname));
+    butt->setText(btname);
     box->addWidget(butt, where);
     return butt;
   };
