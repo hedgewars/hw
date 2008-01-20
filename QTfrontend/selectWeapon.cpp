@@ -121,6 +121,10 @@ void SelWeaponWidget::save()
     int num = it==weaponItems.end() ? 9 : (*this)[i];
     currentState = QString("%1%2").arg(currentState).arg(num);
   }
+  if (curWeaponsName!="") {
+    // remove old entry
+    wconf->remove(curWeaponsName);
+  }
   wconf->setValue(m_name->text(), currentState);
   emit weaponsChanged();
 }
@@ -141,13 +145,15 @@ QString SelWeaponWidget::getWeaponsString(const QString& name) const
   return wconf->value(name).toString();
 }
 
-void SelWeaponWidget::setWeaponsName(const QString& name)
+void SelWeaponWidget::setWeaponsName(const QString& name, bool editMode)
 {
   if(name!="" && wconf->contains(name)) {
     setWeapons(wconf->value(name).toString());
   }
 
-  curWeaponsName=name;
+  if(editMode) curWeaponsName=name;
+  else curWeaponsName="";
+
   m_name->setText(name);
 }
 

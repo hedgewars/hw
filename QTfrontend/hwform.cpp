@@ -194,13 +194,13 @@ void HWForm::GoToSetup()
 
 void HWForm::GoToSelectNewWeapon()
 {
-	ui.pageSelectWeapon->pWeapons->setWeaponsName("");
+  ui.pageSelectWeapon->pWeapons->setWeaponsName("", false);
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
 void HWForm::GoToSelectWeapon()
 {
-	ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
+  ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText(), true);
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
