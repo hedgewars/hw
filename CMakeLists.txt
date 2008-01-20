@@ -55,7 +55,11 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"\\\\.zip$"
 	"\\\\.gz$"
 	"\\\\.bz2$"
+	"\\\\.tmp$"
+	"\\\\.core$"
+	"\\\\.sh$"
 	"Makefile"
+	"Doxyfile"
 	"CMakeFiles"
 	"debug"
 	"release"
@@ -64,9 +68,12 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"proto.inc$"
 	"hwconsts.cpp$"
 	"playlist.inc$"
+	"CPack"
 	"^${PROJECT_SOURCE_DIR}/bin/."
 	"^${PROJECT_SOURCE_DIR}/tools"
-	"^${PROJECT_SOURCE_DIR}/docs"
+	"^${PROJECT_SOURCE_DIR}/doc"
+	"^${PROJECT_SOURCE_DIR}/misc"
+	"^${PROJECT_SOURCE_DIR}/templates"
 	"^${PROJECT_SOURCE_DIR}/Graphics"
 	"^${PROJECT_SOURCE_DIR}/realtest"
 	"^${PROJECT_SOURCE_DIR}/tmp"
@@ -76,6 +83,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"^${PROJECT_SOURCE_DIR}/install_manifest.txt"
 	"^${PROJECT_SOURCE_DIR}/CMakeCache.txt"
 	"^${PROJECT_SOURCE_DIR}/install_manifest.txt"
+	"^${PROJECT_SOURCE_DIR}/hedgewars\\\\."
 )
 
 include(CPack)

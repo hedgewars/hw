@@ -129,7 +129,7 @@ void HWGame::SendTrainingConfig()
 	HWProto::addStringListToBuffer(teamscfg,
 			team1.TeamGameConfig(100));
 
-	QFile file(datadir->absolutePath() + "/Trainings/002_Bazooka.txt");
+	QFile file(datadir->absolutePath() + "/Trainings/001_Shotgun.txt");
 	if(!file.open(QFile::ReadOnly))
 	{
 		emit ErrorMessage(tr("Error reading training config file"));
