@@ -294,7 +294,7 @@ if t.Round = 0 then
    end else
    begin
    l:= $100000000;
-   r:= t.QWordValue
+   r:= t.QWordValue div 2 + $80000000 // r:= t / 2 + 0.5 
    end;
 
 repeat
