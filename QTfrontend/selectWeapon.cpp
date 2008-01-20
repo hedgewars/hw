@@ -47,7 +47,7 @@ SelWeaponItem::SelWeaponItem(int iconNum, int wNum, QWidget* parent) :
   lbl->setGeometry(0, 0, 30, 30);
   hbLayout->addWidget(lbl);
 
-  item=new WeaponItem(QImage(":/res/hh25x25.png"), this);
+  item=new WeaponItem(QImage(":/res/ammopic.png"), this);
   item->setItemsNum(wNum);
   item->setInfinityState(true);
   hbLayout->addWidget(item);
@@ -93,8 +93,9 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     ++k;
   }
 
+  pLayout->setRowStretch(5, 100);
   m_name = new QLineEdit(this);
-  pLayout->addWidget(m_name, i, 0, 1, 4);
+  pLayout->addWidget(m_name, i, 0, 1, 5);
 }
 
 void SelWeaponWidget::setWeapons(const QString& ammo)

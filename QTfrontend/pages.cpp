@@ -289,8 +289,9 @@ PageOptions::PageOptions(QWidget* parent) :
 	pageLayout->setColumnStretch(2, 100);
 	pageLayout->setRowStretch(0, 0);
 	pageLayout->setRowStretch(1, 0);
-	pageLayout->setRowStretch(2, 100);
-	pageLayout->setRowStretch(3, 0);
+	pageLayout->setRowStretch(2, 0);
+	pageLayout->setRowStretch(3, 100);
+	pageLayout->setRowStretch(4, 0);
 
 	groupBox = new QGroupBox(this);
 	groupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -304,7 +305,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	CBTeamName = new QComboBox(groupBox);
 	GBTlayout->addWidget(CBTeamName, 0, 1);
 
-	BtnEditTeam	= addButton("Edit team", GBTlayout, 0, 2);
+	BtnEditTeam = addButton("Edit team", GBTlayout, 0, 2);
 
 	AGGroupBox = new QGroupBox(this);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
