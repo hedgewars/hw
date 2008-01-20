@@ -127,7 +127,7 @@ var s: shortstring;
        end else
        begin
        inc(timedelta);
-       if timedelta > 2000 then
+       if timedelta > 1700 then
           begin
           timedelta:= 0;
           FreeActionsList

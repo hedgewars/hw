@@ -52,7 +52,7 @@ with CurrentHedgehog^ do
            if (Gear^.Message and gm_Left) <> 0 then ParseCommand('-left', true);
            if (Gear^.Message and gm_Right) <> 0 then ParseCommand('-right', true);
            end;
-     
+
 BestActions.Count:= 0;
 BestActions.Pos:= 0
 end;
@@ -325,7 +325,7 @@ with CurrentHedgehog^ do
            if (BestActions.Pos >= BestActions.Count)
               and (TurnTimeLeft > cStopThinkTime) then
               begin
-              TryDo(Gear^.Message = 0, 'Engine bug: AI may break demos playing', true);
+              TryDo((Gear^.Message = 0) and (gameType <> gmtSave), 'Engine bug: AI may break demos playing', true);
               StartThink(Gear);
               StartTicks:= GameTicks
               end else ProcessAction(BestActions, Gear)
