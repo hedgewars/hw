@@ -19,12 +19,12 @@
  + Get possible screen resolutions from SDL library
  + Add Desert Eagle and UFO sounds
  + Add parachute sprite
- + Add trainig mode
+ + Add training mode
  + New theme and map 'Volcano'
- + Make missiles collide with attacking hedgehog
  + Moving hedgehog could make another hedgehog moving kicking him
  + Save and restore window size on application restart
  * Fix using parachute while staying on the ground
  * Fix old rope regression (attaching didn't work properly, when hedgehog is jumping)
  * Fix AI jumping to wrong direction on the turn start
  * Fix uninitalised variable causing network game to randomly fail
+ * Make missiles collide with attacking hedgehog
