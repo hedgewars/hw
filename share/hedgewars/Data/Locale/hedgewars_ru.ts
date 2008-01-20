@@ -56,6 +56,11 @@
         <source>Cannot save record to file %1</source>
         <translation>Не могу сохранить запись в файл %1</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Unable to start the server</source>
+        <translation>Ошибка запуска сервера</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -123,12 +128,12 @@
     <message>
         <location filename="" line="7471221"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Unable to start the server: %1.</source>
-        <translation>Ошибка запуска сервера: %1.</translation>
+        <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
 </context>
 <context>
@@ -187,6 +192,16 @@
         <source>Internet</source>
         <translation>Интернет</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Please, select server from the list above</source>
+        <translation>Выберите сервер из списка</translation>
+    </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
@@ -219,6 +234,11 @@
         <location filename="" line="7471221"/>
         <source>Cannot rename to</source>
         <translation>Не могу переименовать в</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Cannot delete file</source>
+        <translation>Не могу удалить файл</translation>
     </message>
 </context>
 <context>
@@ -364,6 +384,11 @@
         <source>Servers list</source>
         <translation>Список серверов</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Weapons</source>
+        <translation>Оружие</translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -455,7 +480,7 @@
     <message>
         <location filename="" line="7471221"/>
         <source>&lt;h3&gt;Version 0.9&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Версия 0.9&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Версия 0.9&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -507,6 +532,16 @@
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Weapons</source>
+        <translation>Оружие</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
+        <translation>&lt;h3&gt;Версия 0.9.2&lt;/h3&gt;</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -555,6 +590,21 @@ Please check your installation</source>
         <source>Connection to server is lost</source>
         <translation>Соединение с сервером потеряно</translation>
     </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Weapons</source>
+        <translation>Оружие</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Can not delete default weapon set</source>
+        <translation>Невозможно удалить набор оружия по умолчанию</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Really delete this weapon set?</source>
+        <translation>Удалить выбранный набор оружия?</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -584,22 +634,22 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>Single Player</source>
-        <translation>Одиночная игра</translation>
+        <translation type="obsolete">Одиночная игра</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Multiplayer</source>
-        <translation>Схватка</translation>
+        <translation type="obsolete">Схватка</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Net game</source>
-        <translation>Сетевая игра</translation>
+        <translation type="obsolete">Сетевая игра</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Demos</source>
-        <translation>Демки</translation>
+        <translation type="obsolete">Демки</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -609,7 +659,7 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>Exit</source>
-        <translation>Выход</translation>
+        <translation type="obsolete">Выход</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -624,12 +674,12 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>Discard</source>
-        <translation>Отменить</translation>
+        <translation type="obsolete">Отменить</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation type="obsolete">Сохранить</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -639,12 +689,12 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>New team</source>
-        <translation>Новая команда</translation>
+        <translation type="obsolete">Новая команда</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
         <source>Edit team</source>
-        <translation>Изменить</translation>
+        <translation type="obsolete">Изменить</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -684,7 +734,7 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation type="obsolete">О программе</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -709,7 +759,7 @@ Please check your installation</source>
     <message>
         <location filename="" line="7471221"/>
         <source>Weapons scheme</source>
-        <translation>Схема оружия</translation>
+        <translation type="obsolete">Схема оружия</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
@@ -740,6 +790,11 @@ Please check your installation</source>
         <location filename="" line="7471221"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="" line="7471221"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
