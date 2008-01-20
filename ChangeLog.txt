@@ -1,7 +1,7 @@
 + features
 * bugfixes
 
-0.9 -> 0.9.1:
+0.9 -> 0.9.2:
 
  + Add registration of net game in web
  + Introduce weapons sets support
