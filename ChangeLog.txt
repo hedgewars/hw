@@ -1,0 +1,30 @@
++ features
+* bugfixes
+
+0.9 -> 0.9.1:
+
+ + Add registration of net game in web
+ + Introduce weapons sets support
+ + Add teleportation tool
+ + Add switching hedgehogs tool
+ + Add tags with current damage (alt damage option on options page)
+ + A couple of new land templates
+ + Decrease network bandwidth usage
+ + Add support of clans (teams with identical colors are allies)
+ + 's' key speeds up demo playing
+ + Easter egg
+ + Full saves support, 'Saved games' page
+ + Add ability to choose which info is shown above hedgehogs
+ + AI can use Air Attack weapon
+ + Get possible screen resolutions from SDL library
+ + Add Desert Eagle and UFO sounds
+ + Add parachute sprite
+ + Add trainig mode
+ + New theme and map 'Volcano'
+ + Make missiles collide with attacking hedgehog
+ + Moving hedgehog could make another hedgehog moving kicking him
+ + Save and restore window size on application restart
+ * Fix using parachute while staying on the ground
+ * Fix old rope regression (attaching didn't work properly, when hedgehog is jumping)
+ * Fix AI jumping to wrong direction on the turn start
+ * Fix uninitalised variable causing network game to randomly fail
