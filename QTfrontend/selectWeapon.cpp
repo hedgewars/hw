@@ -93,7 +93,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     ++k;
   }
 
-  pLayout->setRowStretch(5, 100);
+  //pLayout->setRowStretch(5, 100);
   m_name = new QLineEdit(this);
   pLayout->addWidget(m_name, i, 0, 1, 5);
 }
