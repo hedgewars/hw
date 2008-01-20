@@ -27,6 +27,7 @@
 #include <QBitmap>
 #include <QLineEdit>
 #include <QSettings>
+#include <QMessageBox>
 
 QImage getAmmoImage(int num)
 {
@@ -149,7 +150,20 @@ QString SelWeaponWidget::getWeaponsString(const QString& name) const
 void SelWeaponWidget::deleteWeaponsName()
 {
   if (curWeaponsName=="") return;
-  wconf->remove(curWeaponsName);
+
+  if (curWeaponsName=="Default") {
+    QMessageBox impossible(QMessageBox::Warning, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not delete default weapon set"));
+    impossible.exec();
+    return;
+  }
+
+  QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Weapons"), QMessageBox::tr("Really delete this weapon set?"),
+			   QMessageBox::Ok | QMessageBox::Cancel);
+  
+  if (reallyDelete.exec()==QMessageBox::Ok) {
+    wconf->remove(curWeaponsName);
+    emit weaponsDeleted();
+  }
 }
 
 void SelWeaponWidget::setWeaponsName(const QString& name, bool editMode)

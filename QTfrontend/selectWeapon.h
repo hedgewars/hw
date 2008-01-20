@@ -60,6 +60,7 @@ class SelWeaponWidget : public QWidget
 
  signals:
   void weaponsChanged();
+  void weaponsDeleted();
 
  private:
   QString currentState;
