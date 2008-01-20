@@ -181,11 +181,72 @@
     </message>
 </context>
 <context>
+    <name>PageEditTeam</name>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="144"/>
+        <source>Discard</source>
+        <translation>Отменить</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="229"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="66"/>
         <source>Multiplayer</source>
         <translation>Схватка</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="63"/>
+        <source>Single Player</source>
+        <translation>Одиночная игра</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="69"/>
+        <source>Net game</source>
+        <translation>Сетевая игра</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="72"/>
+        <source>Saved games</source>
+        <translation>Сохранённые игры</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="75"/>
+        <source>Demos</source>
+        <translation>Демки</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="78"/>
+        <source>Setup</source>
+        <translation>Настройка</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="81"/>
+        <source>About</source>
+        <translation>О программе</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="84"/>
+        <source>Exit</source>
+        <translation>Выход</translation>
+    </message>
+</context>
+<context>
+    <name>PageMultiplayer</name>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="272"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="280"/>
+        <source>Start</source>
+        <translation>Старт</translation>
     </message>
 </context>
 <context>
@@ -209,6 +270,39 @@
         <location filename="../../../../QTfrontend/pages.cpp" line="467"/>
         <source>Please, select server from the list above</source>
         <translation>Выберите сервер из списка</translation>
+    </message>
+</context>
+<context>
+    <name>PageOptions</name>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="303"/>
+        <source>New team</source>
+        <translation>Новая команда</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="308"/>
+        <source>Edit team</source>
+        <translation>Изменить</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="352"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="354"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
+        <source>Weapons set</source>
+        <translation>Набор оружия</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="365"/>
+        <source>Edit</source>
+        <translation>Изменить</translation>
     </message>
 </context>
 <context>
@@ -247,6 +341,42 @@
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="152"/>
         <source>Cannot delete file</source>
         <translation>Не могу удалить файл</translation>
+    </message>
+</context>
+<context>
+    <name>PageSelectWeapon</name>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="667"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="668"/>
+        <source>Default</source>
+        <translation>По умолчанию</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="669"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="670"/>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+</context>
+<context>
+    <name>PageSimpleGame</name>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="97"/>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="100"/>
+        <source>Simple Game</source>
+        <translation>Быстрый старт</translation>
     </message>
 </context>
 <context>
@@ -647,7 +777,7 @@ Please check your installation</source>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="63"/>
         <source>Single Player</source>
-        <translation>Одиночная игра</translation>
+        <translation type="obsolete">Одиночная игра</translation>
     </message>
     <message>
         <location filename="" line="7471221"/>
