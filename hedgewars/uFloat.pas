@@ -276,24 +276,28 @@ end;
 
 function hwSqr(const t: hwFloat): hwFloat;
 begin
-hwSqr:= t * t
+hwSqr.isNegative:=false;
+hwSqr.QWordValue:= QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);
+hwSqr.Round:= hwSqr.Round + QWord(t.Round) * t.Round
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;
+var l, r: QWord;
+    c: hwFloat;
 begin
 hwSqrt.isNegative:= false;
-hwSqrt.QWordValue:= Round(sqrt(1.0 / $100000000 * (t.QWordValue)) * $100000000)
+l:= 0;
+r:= t.QWordValue div 2 + 1;
+repeat
+  c.QWordValue:= (l + r) div 2;
+  if hwSqr(c).QWordValue > t.QWordValue then r:= c.QWordValue else l:= c.QWordValue
+until r - l <= 1;
+hwSqrt.QWordValue:= l
 end;
 
 function Distance(const dx, dy: hwFloat): hwFloat;
-var x, y: hwFloat;
-    Result: hwFloat;
 begin
-x:= dx * dx;
-y:= dy * dy;
-Result:= x + y;
-Result.QWordValue:= Round(sqrt(1.0 / $100000000 * (Result.QWordValue)) * $100000000);
-Distance:= Result
+Distance:= hwSqrt(hwSqr(dx) + hwSqr(dy))
 end;
 
 function DistanceI(const dx, dy: LongInt): hwFloat;
