@@ -42,6 +42,7 @@ public:
 	QPushButton *BtnBack;
 	QPushButton *BtnPlayDemo;
 	QPushButton *BtnRenameRecord;
+	QPushButton *BtnRemoveRecord;
 	QListWidget *DemosList;
 
 private:
@@ -49,6 +50,7 @@ private:
 
 private slots:
 	void renameRecord();
+	void removeRecord();
 };
 
 

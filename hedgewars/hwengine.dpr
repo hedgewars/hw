@@ -288,8 +288,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('-= HedgeWars 0.9 =-');
-WriteLnToConsole('  -= by unC0Rr =-  ');
+WriteLnToConsole('-= HedgeWars 0.9.2 =-');
+WriteLnToConsole('   -= by unC0Rr =-   ');
 GetParams;
 Randomize;
 

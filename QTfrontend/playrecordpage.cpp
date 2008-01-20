@@ -35,27 +35,32 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
+	pageLayout->setRowStretch(2, 100);
 
 	BtnBack = new QPushButton(this);
 	BtnBack->setFont(*font14);
 	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 2, 0);
+	pageLayout->addWidget(BtnBack, 3, 0);
 
 	BtnPlayDemo = new QPushButton(this);
 	BtnPlayDemo->setFont(*font14);
 	BtnPlayDemo->setText(QPushButton::tr("Play demo"));
-	pageLayout->addWidget(BtnPlayDemo, 2, 2);
+	pageLayout->addWidget(BtnPlayDemo, 3, 2);
 
 	BtnRenameRecord = new QPushButton(this);
-//	BtnRenameRecord->setFont(*font14);
 	BtnRenameRecord->setText(QPushButton::tr("Rename"));
 	pageLayout->addWidget(BtnRenameRecord, 0, 2);
 
+	BtnRemoveRecord = new QPushButton(this);
+	BtnRemoveRecord->setText(QPushButton::tr("Delete"));
+	pageLayout->addWidget(BtnRemoveRecord, 1, 2);
+
 	DemosList = new QListWidget(this);
 	DemosList->setGeometry(QRect(170, 10, 311, 311));
-	pageLayout->addWidget(DemosList, 0, 1, 2, 1);
+	pageLayout->addWidget(DemosList, 0, 1, 3, 1);
 
 	connect(BtnRenameRecord, SIGNAL(clicked()), this, SLOT(renameRecord()));
+	connect(BtnRemoveRecord, SIGNAL(clicked()), this, SLOT(removeRecord()));
 }
 
 void PagePlayDemo::FillFromDir(RecordType rectype)
@@ -123,4 +128,28 @@ void PagePlayDemo::renameRecord()
 		else
 			FillFromDir(recType);
 	}
+}
+
+void PagePlayDemo::removeRecord()
+{
+	QListWidgetItem * curritem = DemosList->currentItem();
+	if (!curritem)
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Please, select record from the list"),
+				tr("OK"));
+		return ;
+	}
+	QFile rfile(curritem->data(Qt::UserRole).toString());
+
+	QFileInfo finfo(rfile);
+
+	bool ok;
+
+	ok = rfile.remove();
+	if(!ok)
+		QMessageBox::critical(this, tr("Error"), tr("Cannot delete file"));
+	else
+		FillFromDir(recType);
 }
