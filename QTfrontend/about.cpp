@@ -50,7 +50,7 @@ About::About(QWidget * parent) :
 			QLabel::tr("Developers:") +
 			"</h2><p>"
 			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"Igor Ulyanov (aka Displacer) &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;"
+			"Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;"
 			"</p><h2>" +
 			QLabel::tr("Art:") + "</h2><p>"
 			"Volcano map and theme: Damion Brookes &lt;<a href=\"mailto:nintendo_wii33@hotmail.co.uk\">nintendo_wii33@hotmail.co.uk</a>&gt;"
