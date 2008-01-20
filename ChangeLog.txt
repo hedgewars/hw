@@ -26,5 +26,5 @@
  * Fix using parachute while staying on the ground
  * Fix old rope regression (attaching didn't work properly, when hedgehog is jumping)
  * Fix AI jumping to wrong direction on the turn start
- * Fix uninitalised variable causing network game to randomly fail
+ * Fix rare conditions causing network game to randomly fail
  * Make missiles collide with attacking hedgehog
