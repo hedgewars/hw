@@ -130,7 +130,7 @@ type hwFloat = Extended;
 {$ENDIF}
 
 implementation
-uses uConsts;
+uses uConsts, uMisc;
 
 {$IFDEF FPC}
 
@@ -286,12 +286,22 @@ var l, r: QWord;
     c: hwFloat;
 begin
 hwSqrt.isNegative:= false;
-l:= 0;
-r:= t.QWordValue div 2 + 1;
+
+if t.Round = 0 then
+   begin
+   l:= t.QWordValue;
+   r:= $100000000
+   end else
+   begin
+   l:= $100000000;
+   r:= t.QWordValue
+   end;
+
 repeat
   c.QWordValue:= (l + r) div 2;
   if hwSqr(c).QWordValue > t.QWordValue then r:= c.QWordValue else l:= c.QWordValue
 until r - l <= 1;
+
 hwSqrt.QWordValue:= l
 end;
 

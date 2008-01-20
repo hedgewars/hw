@@ -123,7 +123,6 @@ repeat
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
         ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
-AddFilelog('r = '+floattostr(r)+' power = '+ inttostr(hwRound(r * cMaxPower))+' ==> '+inttostr(ap.Power));
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
