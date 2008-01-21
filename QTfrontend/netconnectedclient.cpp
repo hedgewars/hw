@@ -130,7 +130,8 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     // create CONFIG_PARAM to save HHNUM at server from lst
     lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
     m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
-    // return is really, really unneded here!
+    m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
+    return;
   }
 
   if(lst[0]=="CONFIG_PARAM") {

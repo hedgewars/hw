@@ -26,7 +26,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 
-char delimeter='*';
+char delimeter=0x17;
 
 HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget) :
   config(config),
