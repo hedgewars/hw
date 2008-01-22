@@ -23,6 +23,8 @@
 #include <QPainter>
 #include <QStyleFactory>
 
+#include <algorithm>
+
 #include "frameTeam.h"
 
 void TeamLabel::teamButtonClicked()

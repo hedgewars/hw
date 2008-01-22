@@ -23,6 +23,8 @@
 #include <QTcpSocket>
 #include <QMessageBox>
 
+#include <algorithm>
+
 extern char delimeter;
 
 bool HWNetServer::StartServer(quint16 port)
