@@ -1,7 +1,8 @@
 Hedgewars - a Worms-like game.
-Distributed under the terms of the GPL licence.
+Distributed under the terms of the GNU GPL licence.
+Images and sounds are distributed under the terms of the GNU FDL licence.
 
-Source 
+Source:
 Copyright 2004-2007 Andrey Korotaev <unC0Rr@gmail.com>
 Copyright 2006, 2007 Igor Ulyanov aka Displacer <iulyanov@gmail.com>
 
@@ -10,12 +11,13 @@ sounds in Data/Sounds,
 themes "avematan", "bubbles", "tibet"
 Copyright 2004, 2005, 2006 Andrey Korotaev <unC0Rr@gmail.com>
 
-Fonts  
-See Fonts_LICENSE.txt
+Fonts: see Fonts_LICENSE.txt
 
 Images in Data/Front, Data/Graphics/Graves, 
 themes "ethereal", "norsk", "wood", "xtheme"
 Copyright 2005 Alexey Andreev <grayfox@inbox.ru>
 
-Map and theme "cheese" 
+Map and theme "cheese":
 based on Wormux map "cheese" by Anthony Carré <yeknan AT yahoo DOT fr>
+
+Map and theme "Volcano": by Damion Brookes <nintendo_wii33 AT hotmail.co.uk>
