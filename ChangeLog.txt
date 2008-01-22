@@ -6,11 +6,11 @@
  + Add registration of net game in web
  + Introduce weapons sets support
  + Add teleportation tool
- + Add switching hedgehogs tool
+ + Add hedgehogs switching tool
  + Add tags with current damage (alt damage option on options page)
  + A couple of new land templates
  + Decrease network bandwidth usage
- + Add support of clans (teams with identical colors are allies)
+ + Add clans support (teams with identical colors are allies)
  + 's' key speeds up demo playing
  + Easter egg
  + Full saves support, 'Saved games' page
