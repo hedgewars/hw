@@ -495,14 +495,11 @@ var aspect: real;
 begin
 aspect:= cScreenWidth / cScreenHeight;
 
+glLoadIdentity;
 glViewport(0, 0, cScreenWidth, cScreenHeight);
 glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
 glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
-//glMatrixMode(GL_PROJECTION);
-//glLoadIdentity();
-
-//gluPerspective(60.0, aspect, 0.1, 100.0);
-
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 glMatrixMode(GL_MODELVIEW)
 end;
 

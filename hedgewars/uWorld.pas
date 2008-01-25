@@ -38,7 +38,7 @@ var FollowGear: PGear = nil;
     Frames: Longword = 0;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL;
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
@@ -169,6 +169,9 @@ var i, t: LongInt;
     end;
 
 begin
+glClear(GL_COLOR_BUFFER_BIT);
+glEnable(GL_BLEND);
+
 if not isPaused then MoveCamera;
 
 // Sky
@@ -375,7 +378,9 @@ if SoundTimerTicks >= 50 then
       str(ChangeVolume(cVolumeDelta), s);
       AddCaption(Format(trmsg[sidVolume], s), $FFFFFF, capgrpVolume)
       end
-   end
+   end;
+
+glDisable(GL_BLEND)
 end;
 
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);

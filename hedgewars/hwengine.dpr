@@ -101,13 +101,11 @@ case GameState of
               end;
      gsGame : begin
               ProcessKbd;
-              glClear(GL_COLOR_BUFFER_BIT);
               DoGameTick(Lag);
               DrawWorld(Lag, SDLPrimSurface);
               end;
    gsConsole: begin
               DoGameTick(Lag);
-              glClear(GL_COLOR_BUFFER_BIT);
 //              DrawWorld(Lag, SDLPrimSurface);
 //              DrawConsole(SDLPrimSurface);
               end;
