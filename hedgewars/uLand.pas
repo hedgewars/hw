@@ -514,14 +514,16 @@ WriteLnToConsole('Generating land...');
 GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
-with PixelFormat^ do
-     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, $FF, $FF00, $FF0000, 0);
+
+tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
+
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
 AddProgress;
 AddBorder(tmpsurf);
-with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, $FF, $FF00, $FF0000, 0);
+
+LandSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
+
 TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
@@ -540,8 +542,8 @@ begin
 WriteLnToConsole('Generating forts land...');
 TryDo(TeamsCount = 2, 'More or less than 2 teams on map in forts mode!', true);
 
-with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
+LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
+
 SDL_FillRect(LandSurface, nil, 0);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[0]^.FortName + 'L', false, true, true);
@@ -551,6 +553,8 @@ SDL_FreeSurface(tmpsurf);
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[1]^.FortName + 'R', false, true, true);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
+
+LandTexture:= Surface2Tex(LandSurface)
 end;
 
 procedure LoadMap;
@@ -568,12 +572,7 @@ if SDL_MustLock(LandSurface) then
 p:= LandSurface^.pixels;
 case LandSurface^.format^.BytesPerPixel of
      1: OutError('We don''t work with 8 bit surfaces', true);
-     2: for y:= 0 to 1023 do
-            begin
-            for x:= 0 to 2047 do
-                if PWord(@(p^[x * 2]))^ <> 0 then Land[y, x]:= COLOR_LAND;
-            p:= @(p^[LandSurface^.pitch]);
-            end;
+     2: OutError('We don''t work with 16 bit surfaces', true);
      3: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
@@ -592,6 +591,8 @@ case LandSurface^.format^.BytesPerPixel of
 
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
+
+LandTexture:= Surface2Tex(LandSurface)
 end;
 
 procedure GenMap;

@@ -369,20 +369,20 @@ glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
 
         // top left
-        glTexCoord2f(0, 0);
-        glVertex2f(0, 0);
+        glTexCoord2i(0, 0);
+        glVertex2i(X, Y);
 
         // top right
-        glTexCoord2f(1, 0);
-        glVertex2f(1, 0);
+        glTexCoord2i(1, 0);
+        glVertex2i(2048 + X, Y);
 
         // bottom right
-        glTexCoord2f(1, 1);
-        glVertex2f(1, 1);
+        glTexCoord2i(1, 1);
+        glVertex2i(2048 + X, 1024 + Y);
 
         // bottom left
-        glTexCoord2f(0, 1);
-        glVertex2f(0, 1);
+        glTexCoord2i(0, 1);
+        glVertex2i(X, 1024 + Y);
 
         glEnd();
 //DrawFromRect(X, Y, @r, LandSurface, Surface)
@@ -475,7 +475,8 @@ begin
 aspect:= cScreenWidth / cScreenHeight;
 
 glViewport(0, 0, cScreenWidth, cScreenHeight);
-
+glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
 //glMatrixMode(GL_PROJECTION);
 //glLoadIdentity();
 

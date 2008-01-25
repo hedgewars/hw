@@ -258,6 +258,9 @@ function Surface2Tex(surf: PSDL_Surface): GLuint;
 var mode: LongInt;
     texId: GLuint;
 begin
+if SDL_MustLock(surf) then
+   SDLTry(SDL_LockSurface(surf) >= 0, true);
+
 if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
 if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
    begin
@@ -271,6 +274,9 @@ glGenTextures(1, @texId);
 glBindTexture(GL_TEXTURE_2D, texId);
 
 glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
+
+if SDL_MustLock(surf) then
+   SDL_UnlockSurface(surf);
 
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);

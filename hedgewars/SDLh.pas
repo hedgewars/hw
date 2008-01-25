@@ -65,7 +65,12 @@ const {$IFDEF WIN32}
 
       SDL_GL_DOUBLEBUFFER = 5;
       SDL_OPENGL          = 2;
-      
+
+      RMask = $FF;
+      GMask = $FF00;
+      BMask = $FF0000;
+      AMask = $FF000000;
+
 type PSDL_Rect = ^TSDL_Rect;
      TSDL_Rect = record
                  x, y: SmallInt;
