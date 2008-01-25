@@ -425,11 +425,15 @@ begin
 if Length(s) = 0 then cFullScreen:= not cFullScreen
                  else cFullScreen:= s = '1';
 
-flags:= SDL_HWSURFACE or SDL_DOUBLEBUF or SDL_HWACCEL;
+SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+flags:= SDL_OPENGL;
 if cFullScreen then flags:= flags or SDL_FULLSCREEN
                else SDL_WM_SetCaption('Hedgewars', nil);
 SDL_FreeSurface(SDLPrimSurface);
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+
+SetupOpenGL();
 
 {$IFDEF DEBUGFILE}
 AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));

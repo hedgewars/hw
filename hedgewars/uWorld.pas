@@ -179,16 +179,16 @@ if WorldDy > 0 then
    r.x:= 0;
    r.y:= 0;
    r.w:= cScreenWidth;
-   SDL_FillRect(Surface, @r, cSkyColor)
+//   SDL_FillRect(Surface, @r, cSkyColor)
    end;
 // background
-DrawRepeated(sprSky, WorldDx * 3 div 8);
-DrawRepeated(sprHorizont, WorldDx * 3 div 5);
+//DrawRepeated(sprSky, WorldDx * 3 div 8);
+//DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy, Surface);
@@ -200,16 +200,16 @@ if r.y < cScreenHeight then
    r.h:= cScreenHeight - r.y;
    r.x:= 0;
    r.w:= cScreenWidth;
-   SDL_FillRect(Surface, @r, cWaterColor)
+//   SDL_FillRect(Surface, @r, cWaterColor)
    end;
 
-DrawGears(Surface);
+//DrawGears(Surface);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
 {$WARNINGS ON}
 
 // Turn time
@@ -219,14 +219,14 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, t, cScreenHeight - 48, 1, Surface);
+//   DrawSprite(sprFrame, t, cScreenHeight - 48, 1, Surface);
    while i > 0 do
          begin
          dec(t, 32);
          DrawSprite(sprBigDigit, t, cScreenHeight - 48, i mod 10, Surface);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
+//   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
    end;
 
 // Attack bar
@@ -244,14 +244,14 @@ if CurrentTeam <> nil then
                 tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
-                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
-                                         i, Surface)
+//                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
+//                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
+//                                         i, Surface)
                 end
         end;
 
 // Target
-if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
+//if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
 
 // Captions
 i:= 8;
@@ -259,7 +259,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
          if Surf <> nil then
             begin
-            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
+//            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
             inc(i, Surf^.h + 2);
             if EndTime <= RealTicks then
                begin
@@ -277,30 +277,30 @@ for t:= 0 to Pred(TeamsCount) do
       r.y:= DrawHealthY;
       r.w:= NameTag^.w;
       r.h:= NameTag^.h;
-      SDL_UpperBlit(NameTag, nil, Surface, @r);
+//      SDL_UpperBlit(NameTag, nil, Surface, @r);
 
       r.x:= 0;
       r.y:= 0;
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthSurf^.h;
 
-      DrawFromRect(cScreenWidth div 2,
-                        DrawHealthY,
-                        @r, HealthSurf, Surface);
+//      DrawFromRect(cScreenWidth div 2,
+//                        DrawHealthY,
+//                        @r, HealthSurf, Surface);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
-      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
-                        DrawHealthY,
-                        @r, HealthSurf, Surface);
+//      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
+//                        DrawHealthY,
+//                        @r, HealthSurf, Surface);
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
+//if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
 
 // Wind bar
-DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
+//DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -309,7 +309,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
+//   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
    end else
  if WindBarWidth < 0 then
    begin
@@ -319,11 +319,11 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
+//   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
    end;
 
 // AmmoMenu
-if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
+//if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 
 // Cursor
 if isCursorVisible then
@@ -335,18 +335,18 @@ if isCursorVisible then
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
-             DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
-                                   CursorPoint.Y - SpritesData[PosSprite].Height div 2,
-                                   i, Surface);
+//             DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
+//                                   CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+//                                   i, Surface);
          end;
-   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+//   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
    end;
 
 {$IFDEF COUNTTICKS}
-DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
+//DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
 {$ENDIF}
 
-if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseSurface, Surface);
+//if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseSurface, Surface);
 
 inc(Frames);
 if cShowFPS then
@@ -363,7 +363,7 @@ if cShowFPS then
       end;
    r.x:= cScreenWidth - 50;
    r.y:= 10;
-   SDL_UpperBlit(fpsSurface, nil, Surface, @r)
+//   SDL_UpperBlit(fpsSurface, nil, Surface, @r)
    end;
 
 inc(SoundTimerTicks, Lag);

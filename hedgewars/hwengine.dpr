@@ -23,6 +23,7 @@ WriteLn('Only Freepascal supported');
 program hwengine;
 uses
   SDLh,
+  GL,
   uConsts in 'uConsts.pas',
   uGame in 'uGame.pas',
   uMisc in 'uMisc.pas',
@@ -100,20 +101,23 @@ case GameState of
               end;
      gsGame : begin
               ProcessKbd;
+              glClear(GL_COLOR_BUFFER_BIT);
               DoGameTick(Lag);
               DrawWorld(Lag, SDLPrimSurface);
               end;
    gsConsole: begin
               DoGameTick(Lag);
-              DrawWorld(Lag, SDLPrimSurface);
-              DrawConsole(SDLPrimSurface);
+              glClear(GL_COLOR_BUFFER_BIT);
+//              DrawWorld(Lag, SDLPrimSurface);
+//              DrawConsole(SDLPrimSurface);
               end;
      gsExit : begin
               OnDestroy;
               end;
      end;
 
-SDL_Flip(SDLPrimSurface);
+//SDL_Flip(SDLPrimSurface);
+SDL_GL_SwapBuffers();
 if flagMakeCapture then
    begin
    flagMakeCapture:= false;
@@ -230,6 +234,7 @@ begin
 WriteToConsole('Init SDL... ');
 SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
 WriteLnToConsole(msgOK);
+
 SDL_EnableUNICODE(1);
 
 WriteToConsole('Init SDL_ttf... ');

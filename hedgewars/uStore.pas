@@ -38,13 +38,14 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
+procedure SetupOpenGL;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
    PauseSurface: PSDL_Surface;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale;
+uses uMisc, uConsole, uLand, uLocale, GL, GLU;
 
 var
     HHSurface: PSDL_Surface;
@@ -206,6 +207,8 @@ var ii: TSprite;
          3: cSkyColor:= (p^[0]) or (p^[1] shl 8) or (p^[2] shl 16);
          4: cSkyColor:= PLongword(p)^;
          end;
+    glClearColor((cSkyColor shr 16) / 255, ((cSkyColor shr 8) and $FF) / 255, (cSkyColor and $FF) / 255, 0);
+
     if SDL_MustLock(SpritesData[sprSky].Surface) then
        SDL_UnlockSurface(SpritesData[sprSky].Surface)
     end;
@@ -360,7 +363,29 @@ end;
 procedure DrawLand(X, Y: LongInt; Surface: PSDL_Surface);
 const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
 begin
-DrawFromRect(X, Y, @r, LandSurface, Surface)
+glBindTexture(GL_TEXTURE_2D, LandTexture);
+glEnable(GL_TEXTURE_2D);
+
+        glBegin(GL_QUADS);
+
+        // top left
+        glTexCoord2f(0, 0);
+        glVertex2f(0, 0);
+
+        // top right
+        glTexCoord2f(1, 0);
+        glVertex2f(1, 0);
+
+        // bottom right
+        glTexCoord2f(1, 1);
+        glVertex2f(1, 1);
+
+        // bottom left
+        glTexCoord2f(0, 1);
+        glVertex2f(0, 1);
+
+        glEnd();
+//DrawFromRect(X, Y, @r, LandSurface, Surface)
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
@@ -416,7 +441,7 @@ end;
 
 function  LoadImage(const filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
-    Result: PSDL_Surface;
+    //Result: PSDL_Surface;
     s: shortstring;
 begin
 WriteToConsole(msgLoading + filename + '... ');
@@ -437,11 +462,26 @@ if tmpsurf = nil then
       end;
 
 if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
-            else Result:= SDL_DisplayFormat(tmpsurf);
+//if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
+//            else Result:= SDL_DisplayFormat(tmpsurf);
 {$IFDEF DEBUGFILE}WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');{$ENDIF}
 WriteLnToConsole(msgOK);
-LoadImage:= Result
+LoadImage:= tmpsurf//Result
+end;
+
+procedure SetupOpenGL;
+var aspect: real;
+begin
+aspect:= cScreenWidth / cScreenHeight;
+
+glViewport(0, 0, cScreenWidth, cScreenHeight);
+
+//glMatrixMode(GL_PROJECTION);
+//glLoadIdentity();
+
+//gluPerspective(60.0, aspect, 0.1, 100.0);
+
+glMatrixMode(GL_MODELVIEW)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

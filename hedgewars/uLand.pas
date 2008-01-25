@@ -18,13 +18,14 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat;
+uses SDLh, uLandTemplates, uFloat, GL;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
+     LandTexture: GLuint;
 
 procedure GenMap;
 function GenPreview: TPreview;
@@ -514,13 +515,13 @@ GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
 with PixelFormat^ do
-     tmpsurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
+     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, $FF, $FF00, $FF0000, 0);
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
 AddProgress;
 AddBorder(tmpsurf);
 with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
+     LandSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, $FF, $FF00, $FF0000, 0);
 TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
@@ -529,6 +530,7 @@ SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
 AddObjects(tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
+LandTexture:= Surface2Tex(LandSurface);
 AddProgress
 end;
 
@@ -539,7 +541,7 @@ WriteLnToConsole('Generating forts land...');
 TryDo(TeamsCount = 2, 'More or less than 2 teams on map in forts mode!', true);
 
 with PixelFormat^ do
-     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, BitsPerPixel, RMask, GMask, BMask, AMask);
+     LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
 SDL_FillRect(LandSurface, nil, 0);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[0]^.FortName + 'L', false, true, true);

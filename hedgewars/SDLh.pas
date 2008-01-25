@@ -18,6 +18,7 @@
 
 unit SDLh;
 interface
+
 {$IFDEF LINUX}
 {$DEFINE UNIX}
 {$ENDIF}
@@ -61,6 +62,9 @@ const {$IFDEF WIN32}
 
       SDL_INIT_VIDEO  = $00000020;
       SDL_INIT_AUDIO  = $00000010;
+
+      SDL_GL_DOUBLEBUFFER = 5;
+      SDL_OPENGL          = 2;
       
 type PSDL_Rect = ^TSDL_Rect;
      TSDL_Rect = record
@@ -240,6 +244,9 @@ function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';
 function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexV';
+
+function  SDL_GL_SetAttribute(attr: byte; value: LongInt): LongInt; cdecl; external SDLLibName;
+procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
 
 (*  TTF  *)
 
