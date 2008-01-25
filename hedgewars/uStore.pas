@@ -18,7 +18,7 @@
 
 unit uStore;
 interface
-uses uConsts, uTeams, SDLh, uFloat;
+uses uConsts, uTeams, SDLh, uFloat, GL;
 {$INCLUDE options.inc}
 
 procedure StoreInit;
@@ -27,11 +27,11 @@ procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: GLuint; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: LongInt; Surface: PSDL_Surface);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceSurface, DestSurface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -45,7 +45,7 @@ var PixelFormat: PSDL_PixelFormat;
    PauseSurface: PSDL_Surface;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale, GL, GLU;
+uses uMisc, uConsole, uLand, uLocale, GLU;
 
 var
     HHSurface: PSDL_Surface;
@@ -196,9 +196,9 @@ var ii: TSprite;
     end;
 
     procedure GetSkyColor;
-    var p: PByteArray;
+//    var p: PByteArray;
     begin
-    if SDL_MustLock(SpritesData[sprSky].Surface) then
+(*    if SDL_MustLock(SpritesData[sprSky].Surface) then
        SDLTry(SDL_LockSurface(SpritesData[sprSky].Surface) >= 0, true);
     p:= SpritesData[sprSky].Surface^.pixels;
     case SpritesData[sprSky].Surface^.format^.BytesPerPixel of
@@ -206,11 +206,12 @@ var ii: TSprite;
          2: cSkyColor:= PWord(p)^;
          3: cSkyColor:= (p^[0]) or (p^[1] shl 8) or (p^[2] shl 16);
          4: cSkyColor:= PLongword(p)^;
-         end;
+         end;*)
+    cSkyColor:= $3030A0;
     glClearColor((cSkyColor shr 16) / 255, ((cSkyColor shr 8) and $FF) / 255, (cSkyColor and $FF) / 255, 0);
 
-    if SDL_MustLock(SpritesData[sprSky].Surface) then
-       SDL_UnlockSurface(SpritesData[sprSky].Surface)
+//    if SDL_MustLock(SpritesData[sprSky].Surface) then
+//       SDL_UnlockSurface(SpritesData[sprSky].Surface)
     end;
 
     procedure GetExplosionBorderColor;
@@ -268,14 +269,15 @@ for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
          begin
          if AltPath = ptNone then
-            Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, true, true)
+            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, true, true)
          else begin
-            Surface:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, false, true);
-            if Surface = nil then
-               Surface:= LoadImage(Pathz[AltPath] + '/' + FileName, hasAlpha, true, true)
+            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, false, true);
+            if tmpsurf = nil then
+               tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, hasAlpha, true, true)
             end;
-         if Width = 0 then Width:= Surface^.w;
-         if Height = 0 then Height:= Surface^.h
+         if Width = 0 then Width:= tmpsurf^.w;
+         if Height = 0 then Height:= tmpsurf^.h;
+         Texture:= Surface2Tex(tmpsurf)
          end;
 
 GetSkyColor;
@@ -294,30 +296,53 @@ SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
 end;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceSurface, DestSurface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
 var rr: TSDL_Rect;
+    t, b: real;
 begin
 rr.x:= X;
 rr.y:= Y;
 rr.w:= r^.w;
 rr.h:= r^.h;
-if SDL_UpperBlit(SourceSurface, r, DestSurface, @rr) < 0 then
-   begin
-   OutError('Blit: ' + SDL_GetError, true);
-   exit
-   end;
+
+t:= r^.y / SourceTexture^.h;
+b:= (r^.y + r^.h) / SourceTexture^.h;
+
+glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
+glEnable(GL_TEXTURE_2D);
+
+glBegin(GL_QUADS);
+
+glTexCoord2f(0, t);
+glVertex2i(X, Y);
+
+glTexCoord2f(1, t);
+glVertex2i(rr.w + X, Y);
+
+glTexCoord2f(1, b);
+glVertex2i(rr.w + X, rr.h + Y);
+
+glTexCoord2f(0, b);
+glVertex2i(X, rr.h + Y);
+
+glEnd();
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
 end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
+var r: TSDL_Rect;
 begin
-DrawSurfSprite(X, Y, SpritesData[Sprite].Height, Frame, SpritesData[Sprite].Surface, Surface)
+r.x:= 0;
+r.w:= SpritesData[Sprite].Width;
+r.y:= Frame * SpritesData[Sprite].Height;
+r.h:= SpritesData[Sprite].Height;
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
 end;
 
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
@@ -327,17 +352,17 @@ r.x:= FrameX * SpritesData[Sprite].Width;
 r.w:= SpritesData[Sprite].Width;
 r.y:= FrameY * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Surface, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
 end;
 
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source, Surface: PSDL_Surface);
-var r: TSDL_Rect;
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: GLuint; Surface: PSDL_Surface);
+//var r: TSDL_Rect;
 begin
-r.x:= 0;
-r.w:= Source^.w;
-r.y:= Frame * Height;
-r.h:= Height;
-DrawFromRect(X, Y, @r, Source, Surface)
+//r.x:= 0;
+//r.w:= Source^.w;
+//r.y:= Frame * Height;
+//r.h:= Height;
+//DrawFromRect(X, Y, @r, Source, Surface)
 end;
 
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -361,30 +386,26 @@ SDL_FreeSurface(tmpsurf)
 end;
 
 procedure DrawLand(X, Y: LongInt; Surface: PSDL_Surface);
-const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
+//const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
 begin
-glBindTexture(GL_TEXTURE_2D, LandTexture);
+glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
 glEnable(GL_TEXTURE_2D);
 
-        glBegin(GL_QUADS);
+glBegin(GL_QUADS);
 
-        // top left
-        glTexCoord2i(0, 0);
-        glVertex2i(X, Y);
+glTexCoord2i(0, 0);
+glVertex2i(X, Y);
 
-        // top right
-        glTexCoord2i(1, 0);
-        glVertex2i(2048 + X, Y);
+glTexCoord2i(1, 0);
+glVertex2i(2048 + X, Y);
 
-        // bottom right
-        glTexCoord2i(1, 1);
-        glVertex2i(2048 + X, 1024 + Y);
+glTexCoord2i(1, 1);
+glVertex2i(2048 + X, 1024 + Y);
 
-        // bottom left
-        glTexCoord2i(0, 1);
-        glVertex2i(X, 1024 + Y);
+glTexCoord2i(0, 1);
+glVertex2i(X, 1024 + Y);
 
-        glEnd();
+glEnd();
 //DrawFromRect(X, Y, @r, LandSurface, Surface)
 end;
 
@@ -406,14 +427,14 @@ r.y:= Pos * 32;
 if Dir = -1 then r.x:= HHSurface^.w - 32 - r.x;
 r.w:= 32;
 r.h:= 32;
-DrawFromRect(X, Y, @r, HHSurface, Surface)
+//DrawFromRect(X, Y, @r, HHSurface, Surface)
 end;
 
 procedure StoreRelease;
 var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
-    SDL_FreeSurface(SpritesData[ii].Surface);
+    glDeleteTextures(1, @SpritesData[ii].Texture);
 SDL_FreeSurface(  HHSurface  );
 SDL_FreeSurface(LandSurface  )
 end;
@@ -502,8 +523,8 @@ r.x:= 0;
 r.w:= ProgrSurf^.w;
 r.h:= ProgrSurf^.w;
 r.y:= (Step mod (ProgrSurf^.h div ProgrSurf^.w)) * ProgrSurf^.w;
-DrawFromRect((cScreenWidth - ProgrSurf^.w) div 2,
-             (cScreenHeight - ProgrSurf^.w) div 2, @r, ProgrSurf, SDLPrimSurface);
+//DrawFromRect((cScreenWidth - ProgrSurf^.w) div 2,
+//             (cScreenHeight - ProgrSurf^.w) div 2, @r, ProgrSurf, SDLPrimSurface);
 SDL_Flip(SDLPrimSurface);
 inc(Step);
 end;

@@ -18,21 +18,21 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, GL;
+uses SDLh, uLandTemplates, uFloat, GL, uConsts;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
-     LandTexture: GLuint;
+     LandTexture: PTexture;
 
 procedure GenMap;
 function GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
 
 implementation
-uses uConsole, uStore, uMisc, uConsts, uRandom, uTeams, uLandObjects, uSHA, uIO;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO;
 
 type TPixAr = record
               Count: Longword;

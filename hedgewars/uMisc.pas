@@ -116,7 +116,7 @@ procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
-function  Surface2Tex(surf: PSDL_Surface): GLuint;
+function  Surface2Tex(surf: PSDL_Surface): PTexture;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -254,24 +254,28 @@ begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
-function Surface2Tex(surf: PSDL_Surface): GLuint;
+function Surface2Tex(surf: PSDL_Surface): PTexture;
 var mode: LongInt;
     texId: GLuint;
 begin
 if SDL_MustLock(surf) then
    SDLTry(SDL_LockSurface(surf) >= 0, true);
 
+new(Surface2Tex);
+Surface2Tex^.w:= surf^.w;
+Surface2Tex^.h:= surf^.h;
+
 if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
 if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
    begin
-   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4]', true);
-   Surface2Tex:= 0;
+   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4]', false);
+   Surface2Tex^.id:= 0;
    exit
    end;
 
-glGenTextures(1, @texId);
+glGenTextures(1, @Surface2Tex^.id);
 
-glBindTexture(GL_TEXTURE_2D, texId);
+glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
 glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
 
@@ -279,9 +283,7 @@ if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);
 
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-
-Surface2Tex:= texId
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR)
 end;
 
 

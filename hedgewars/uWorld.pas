@@ -182,8 +182,8 @@ if WorldDy > 0 then
 //   SDL_FillRect(Surface, @r, cSkyColor)
    end;
 // background
-//DrawRepeated(sprSky, WorldDx * 3 div 8);
-//DrawRepeated(sprHorizont, WorldDx * 3 div 5);
+DrawRepeated(sprSky, WorldDx * 3 div 8);
+DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
 // Waves
 {$WARNINGS OFF}
@@ -203,7 +203,7 @@ if r.y < cScreenHeight then
 //   SDL_FillRect(Surface, @r, cWaterColor)
    end;
 
-//DrawGears(Surface);
+DrawGears(Surface);
 
 // Waves
 {$WARNINGS OFF}

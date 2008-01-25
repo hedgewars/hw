@@ -321,12 +321,12 @@ if SDL_MustLock(LandSurface) then
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
-var X, Y, bpp, h, w: LongInt;
+(*var X, Y, bpp, h, w: LongInt;
     p: PByteArray;
     r, rr: TSDL_Rect;
-    Image: PSDL_Surface;
+    Image: PSDL_Surface;*)
 begin
-Image:= SpritesData[Obj].Surface;
+(*Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
 h:= SpritesData[Obj].Height; 
 
@@ -421,7 +421,7 @@ r.w:= SpritesData[Obj].Width;
 r.h:= SpritesData[Obj].Height;
 rr.x:= cpX;
 rr.y:= cpY;
-SDL_UpperBlit(Image, @r, LandSurface, @rr)
+SDL_UpperBlit(Image, @r, LandSurface, @rr)*)
 end;
 
 
