@@ -313,7 +313,7 @@ while r.y < 1024 do
       end;
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, $FF0000, $FF00, $FF, 0);
+tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, RMask, GMask, BMask, AMask);
 SDLTry(tmpsurf <> nil, true);
 SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
 SDL_UpperBlit(tmpsurf, nil, Surface, nil);
