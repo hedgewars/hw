@@ -300,6 +300,7 @@ procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Des
 var rr: TSDL_Rect;
     t, b: real;
 begin
+if SourceTexture^.h = 0 then exit;
 rr.x:= X;
 rr.y:= Y;
 rr.w:= r^.w;
@@ -434,7 +435,7 @@ procedure StoreRelease;
 var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
-    glDeleteTextures(1, @SpritesData[ii].Texture);
+    FreeTexture(SpritesData[ii].Texture);
 SDL_FreeSurface(  HHSurface  );
 SDL_FreeSurface(LandSurface  )
 end;

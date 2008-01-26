@@ -52,7 +52,8 @@ type TCaptionStr = record
 var cWaterSprCount: LongInt;
     Captions: array[TCapGroup] of TCaptionStr;
     AMxLeft, AMxCurr, SlotsNum: LongInt;
-    fpsSurface: PSDL_Surface;
+    tmpSurface: PSDL_Surface;
+    fpsTexture: PTexture = nil;
 
 procedure InitWorld;
 begin
@@ -361,12 +362,20 @@ if cShowFPS then
       Frames:= 0;
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
-      if fpsSurface <> nil then SDL_FreeSurface(fpsSurface);
-      fpsSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+      if fpsTexture <> nil then FreeTexture(fpsTexture);
+      tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+      fpsTexture:= Surface2Tex(tmpSurface);
+      SDL_FreeSurface(tmpSurface)
       end;
-   r.x:= cScreenWidth - 50;
-   r.y:= 10;
-//   SDL_UpperBlit(fpsSurface, nil, Surface, @r)
+   if fpsTexture <> nil then
+      begin
+      r.x:= 0;
+      r.y:= 0;
+      r.w:= fpsTexture^.w;
+      r.h:= fpsTexture^.h;
+      DrawFromRect(cScreenWidth - 50, 10, @r, fpsTexture, Surface);
+      end
+//  SDL_UpperBlit(fpsSurface, nil, Surface, @r)
    end;
 
 inc(SoundTimerTicks, Lag);

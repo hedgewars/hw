@@ -117,6 +117,7 @@ procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
 function  Surface2Tex(surf: PSDL_Surface): PTexture;
+procedure FreeTexture(tex: PTexture);
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -286,6 +287,11 @@ glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR)
 end;
 
+procedure FreeTexture(tex: PTexture);
+begin
+glDeleteTextures(1, @tex^.id);
+dispose(tex)
+end;
 
 var i: LongInt;
 {$ENDIF}
