@@ -313,9 +313,9 @@ while r.y < 1024 do
       end;
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, RMask, GMask, BMask, AMask);
+tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, RMask, GMask, BMask, 0);
 SDLTry(tmpsurf <> nil, true);
-SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
+//SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
 SDL_UpperBlit(tmpsurf, nil, Surface, nil);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -515,7 +515,7 @@ GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
 
-tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
+tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, 0);
 
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);

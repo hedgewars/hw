@@ -111,7 +111,7 @@ const
 
       MAXNAMELEN = 32;
 
-      COLOR_LAND = $FFFFFFF;
+      COLOR_LAND = $7FFFFFF;
 
       cifRandomize = $00000001;
       cifTheme     = $00000002;
