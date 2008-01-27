@@ -375,7 +375,6 @@ if cShowFPS then
       r.h:= fpsTexture^.h;
       DrawFromRect(cScreenWidth - 50, 10, @r, fpsTexture, Surface);
       end
-//  SDL_UpperBlit(fpsSurface, nil, Surface, @r)
    end;
 
 inc(SoundTimerTicks, Lag);

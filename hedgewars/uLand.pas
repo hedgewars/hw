@@ -313,9 +313,10 @@ while r.y < 1024 do
       end;
 SDL_FreeSurface(tmpsurf);
 
+
 tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, RMask, GMask, BMask, 0);
 SDLTry(tmpsurf <> nil, true);
-//SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
+SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
 SDL_UpperBlit(tmpsurf, nil, Surface, nil);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -527,7 +528,6 @@ LandSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, 
 TryDo(LandSurface <> nil, 'Error creating land surface', true);
 SDL_FillRect(LandSurface, nil, 0);
 AddProgress;
-
 SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
 AddObjects(tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
