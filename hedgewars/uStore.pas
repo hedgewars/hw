@@ -268,17 +268,6 @@ for fi:= Low(THWFont) to High(THWFont) do
          end;
 AddProgress;
 
-WriteToConsole('LandSurface tuning... ');
-tmpsurf:= LandSurface;
-TryDo(tmpsurf <> nil, msgFailed, true);
-if cFullScreen then
-   begin
-   LandSurface:= SDL_DisplayFormat(tmpsurf);
-   SDL_FreeSurface(tmpsurf);
-   end else LandSurface:= tmpsurf;
-TryDo(SDL_SetColorKey(LandSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-WriteLnToConsole(msgOK);
-
 GetExplosionBorderColor;
 
 AddProgress;
@@ -291,16 +280,16 @@ for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
          begin
          if AltPath = ptNone then
-            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, true, true)
+            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, true, true)
          else begin
-            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, hasAlpha, false, true);
+            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, false, true);
             if tmpsurf = nil then
-               tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, hasAlpha, true, true)
+               tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, true, true, true)
             end;
          if Width = 0 then Width:= tmpsurf^.w;
          if Height = 0 then Height:= tmpsurf^.h;
          Texture:= Surface2Tex(tmpsurf);
-         SDL_FreeSurface(tmpsurf)
+         if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
          end;
 
 GetSkyColor;
@@ -487,7 +476,10 @@ procedure StoreRelease;
 var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
+    begin
     FreeTexture(SpritesData[ii].Texture);
+    if SpritesData[ii].Surface <> nil then SDL_FreeSurface(SpritesData[ii].Surface)
+    end;
 
 FreeTexture(HHTexture);
 FreeTexture(LandTexture);

@@ -640,6 +640,7 @@ if LandTexture <> nil then
    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
    end else
    begin
+   TryDo(LandSurface <> nil, 'Assert (LandSurface <> nil) failed', true);
    LandTexture:= Surface2Tex(LandSurface);
 
    if SDL_MustLock(LandSurface) then
@@ -648,7 +649,10 @@ if LandTexture <> nil then
    Move(LandSurface^.pixels^, LandPixels, 2048 * 1024 * 4);
 
    if SDL_MustLock(LandSurface) then
-      SDL_UnlockSurface(LandSurface)
+      SDL_UnlockSurface(LandSurface);
+
+   SDL_FreeSurface(LandSurface);
+   LandSurface:= nil
    end;
 
 end;

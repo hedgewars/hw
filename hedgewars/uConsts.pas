@@ -239,101 +239,102 @@ const
                      FileName: String[31];
                      Path, AltPath: TPathType;
                      Texture: PTexture;
+                     Surface: PSDL_Surface;
                      Width, Height: LongInt;
-                     hasAlpha: boolean;
+                     saveSurf: boolean;
                      end = (
-                     (FileName:  'BlueWater'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 256; Height: 48; hasAlpha: false),// sprWater
-                     (FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil;
-                      Width: 256; Height:128; hasAlpha: false),// sprCloud
-                     (FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprBomb
-                     (FileName:  'BigDigits'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha:  true),// sprBigDigit
-                     (FileName:      'Frame'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:   4; Height: 32; hasAlpha:  true),// sprFrame
-                     (FileName:        'Lag'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  65; Height: 65; hasAlpha:  true),// sprLag
-                     (FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprCursor
-                     (FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprGrenade
-                     (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprTargetP
-                     (FileName:        'UFO'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprUFO
-                     (FileName: 'SmokeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha:  true),// sprSmokeTrace
-                     (FileName:   'RopeHook'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprRopeHook
-                     (FileName:     'Expl50'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  64; Height: 64; hasAlpha: false),// sprExplosion50
-                     (FileName:    'MineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprMineOff
-                     (FileName:     'MineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprMineOn
-                     (FileName:       'Case'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprCase
-                     (FileName:   'FirstAid'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  48; Height: 48; hasAlpha: false),// sprFAid
-                     (FileName:   'dynamite'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprDynamite
-                     (FileName:      'Power'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha:  true),// sprPower
-                     (FileName:     'ClBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprClusterBomb
-                     (FileName: 'ClParticle'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprClusterParticle
-                     (FileName:      'Flame'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  16; Height: 16; hasAlpha: false),// sprFlame
-                     (FileName:   'horizont'; Path: ptCurrTheme; AltPath: ptNone; Texture: nil;
-                      Width:   0; Height:  0; hasAlpha: false),// sprHorizont
-                     (FileName:        'Sky'; Path: ptCurrTheme; AltPath: ptNone; Texture: nil;
-                      Width:   0; Height:  0; hasAlpha: false),// sprSky
-                     (FileName:  'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width: 202; Height:  1; hasAlpha: false),// sprAMBorders
-                     (FileName:       'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width: 202; Height: 33; hasAlpha: false),// sprAMSlot
-                     (FileName:   'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width: 202; Height: 33; hasAlpha: false),// sprAMSlotName
-                     (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprAMAmmos
-                     (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprAMSlotKeys
-                     (FileName:  'Selection'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprAMSelection
-                     (FileName:     'Finger'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 48; hasAlpha: false),// sprFinger
-                     (FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprAirBomb
-                     (FileName:   'Airplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 125; Height: 42; hasAlpha: false),// sprAirplane
-                     (FileName: 'amAirplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  64; Height: 32; hasAlpha:  true),// sprAirplane
-                     (FileName:   'amGirder'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 160; Height:160; hasAlpha: false),// sprAmGirder
-                     (FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprHHTelepMask
-                     (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha:  true),// sprSwitch
-                     (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  48; Height: 48; hasAlpha:  true),// sprParachute
-                     (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprTarget
-                     (FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:   6; Height:  6; hasAlpha: false),// sprRopeNode
-                     (FileName:    'Console'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 256; Height:256; hasAlpha: false),// sprConsoleBG
-                     (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  32; Height: 32; hasAlpha: false),// sprQuestion
-                     (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 256; Height: 32; hasAlpha: false),// sprPowerBar
-                     (FileName:    'WindBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width: 151; Height: 17; hasAlpha: false),// sprWindBar
-                     (FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  80; Height: 13; hasAlpha: false),// sprWindL
-                     (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil;
-                      Width:  80; Height: 13; hasAlpha: false) // sprWindR
+                     (FileName:  'BlueWater'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 256; Height: 48; saveSurf: false),// sprWater
+                     (FileName: 'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
+                      Width: 256; Height:128; saveSurf: false),// sprCloud
+                     (FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprBomb
+                     (FileName:  'BigDigits'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprBigDigit
+                     (FileName:      'Frame'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:   4; Height: 32; saveSurf: false),// sprFrame
+                     (FileName:        'Lag'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  65; Height: 65; saveSurf: false),// sprLag
+                     (FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprCursor
+                     (FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprGrenade
+                     (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprTargetP
+                     (FileName:        'UFO'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprUFO
+                     (FileName: 'SmokeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprSmokeTrace
+                     (FileName:   'RopeHook'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprRopeHook
+                     (FileName:     'Expl50'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 64; saveSurf: false),// sprExplosion50
+                     (FileName:    'MineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprMineOff
+                     (FileName:     'MineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprMineOn
+                     (FileName:       'Case'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprCase
+                     (FileName:   'FirstAid'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  48; Height: 48; saveSurf: false),// sprFAid
+                     (FileName:   'dynamite'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprDynamite
+                     (FileName:      'Power'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprPower
+                     (FileName:     'ClBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprClusterBomb
+                     (FileName: 'ClParticle'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprClusterParticle
+                     (FileName:      'Flame'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false),// sprFlame
+                     (FileName:   'horizont'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:   0; Height:  0; saveSurf: false),// sprHorizont
+                     (FileName:        'Sky'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:   0; Height:  0; saveSurf: false),// sprSky
+                     (FileName:  'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 202; Height:  1; saveSurf: false),// sprAMBorders
+                     (FileName:       'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 202; Height: 33; saveSurf: false),// sprAMSlot
+                     (FileName:   'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 202; Height: 33; saveSurf: false),// sprAMSlotName
+                     (FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprAMAmmos
+                     (FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprAMSlotKeys
+                     (FileName:  'Selection'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprAMSelection
+                     (FileName:     'Finger'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 48; saveSurf: false),// sprFinger
+                     (FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprAirBomb
+                     (FileName:   'Airplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 125; Height: 42; saveSurf: false),// sprAirplane
+                     (FileName: 'amAirplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 32; saveSurf: false),// sprAirplane
+                     (FileName:   'amGirder'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 160; Height:160; saveSurf:  true),// sprAmGirder
+                     (FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf:  true),// sprHHTelepMask
+                     (FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprSwitch
+                     (FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  48; Height: 48; saveSurf: false),// sprParachute
+                     (FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprTarget
+                     (FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:   6; Height:  6; saveSurf: false),// sprRopeNode
+                     (FileName:    'Console'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 256; Height:256; saveSurf: false),// sprConsoleBG
+                     (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprQuestion
+                     (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 256; Height: 32; saveSurf: false),// sprPowerBar
+                     (FileName:    'WindBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 151; Height: 17; saveSurf: false),// sprWindBar
+                     (FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  80; Height: 13; saveSurf: false),// sprWindL
+                     (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  80; Height: 13; saveSurf: false) // sprWindR
                      );
 
       Soundz: array[TSound] of record

@@ -281,53 +281,24 @@ UpdateLandTexture(0, 1024)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
-(*var X, Y, bpp, h, w: LongInt;
+var X, Y, bpp, h, w: LongInt;
     p: PByteArray;
     r, rr: TSDL_Rect;
-    Image: PSDL_Surface;*)
+    Image: PSDL_Surface;
 begin
-(*Image:= SpritesData[Obj].Surface;
+TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
-h:= SpritesData[Obj].Height; 
+h:= SpritesData[Obj].Height;
 
 if SDL_MustLock(Image) then
    SDLTry(SDL_LockSurface(Image) >= 0, true);
 
 bpp:= Image^.format^.BytesPerPixel;
-TryDo(bpp <> 1, 'We don''t work with 8 bit surfaces', true);
-// Check that sprites fits free space
+TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+// Check that sprite fits free space
 p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
 case bpp of
-     2: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if PWord(@(p^[x * 2]))^ <> 0 then
-                   if (((cpY + y) and $FFFFFC00) <> 0) or
-                      (((cpX + x) and $FFFFF800) <> 0) or
-                      (Land[cpY + y, cpX + x] <> 0) then
-                      begin
-                      if SDL_MustLock(Image) then
-                         SDL_UnlockSurface(Image);
-                      exit(false)
-                      end;
-            p:= @(p^[Image^.pitch]);
-            end;
-     3: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if  (p^[x * 3 + 0] <> 0)
-                 or (p^[x * 3 + 1] <> 0)
-                 or (p^[x * 3 + 2] <> 0) then
-                   if (((cpY + y) and $FFFFFC00) <> 0) or
-                      (((cpX + x) and $FFFFF800) <> 0) or
-                      (Land[cpY + y, cpX + x] <> 0) then
-                      begin
-                      if SDL_MustLock(Image) then
-                         SDL_UnlockSurface(Image);
-                      exit(false)
-                      end;
-            p:= @(p^[Image^.pitch]);
-            end;
      4: for y:= 0 to Pred(h) do
             begin
             for x:= 0 to Pred(w) do
@@ -345,43 +316,34 @@ case bpp of
      end;
 
 TryPlaceOnLand:= true;
-if not doPlace then exit;
+if not doPlace then
+   begin
+   if SDL_MustLock(Image) then
+      SDL_UnlockSurface(Image);
+   exit
+   end;
 
 // Checked, now place
 p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
 case bpp of
-     2: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if PWord(@(p^[x * 2]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @(p^[Image^.pitch]);
-            end;
-     3: for y:= 0 to Pred(h) do
-            begin
-            for x:= 0 to Pred(w) do
-                if  (p^[x * 3 + 0] <> 0)
-                 or (p^[x * 3 + 1] <> 0)
-                 or (p^[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @(p^[Image^.pitch]);
-            end;
      4: for y:= 0 to Pred(h) do
             begin
             for x:= 0 to Pred(w) do
-                if PLongword(@(p^[x * 4]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+                if PLongword(@(p^[x * 4]))^ <> 0 then
+                   begin
+                   Land[cpY + y, cpX + x]:= COLOR_LAND;
+                   LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^
+                   end;
             p:= @(p^[Image^.pitch]);
             end;
      end;
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 
-// Draw sprite on Land surface
-r.x:= 0;
-r.y:= SpritesData[Obj].Height * Frame;
-r.w:= SpritesData[Obj].Width;
-r.h:= SpritesData[Obj].Height;
-rr.x:= cpX;
-rr.y:= cpY;
-SDL_UpperBlit(Image, @r, LandSurface, @rr)*)
+y:= max(cpY, 0);
+h:= min(cpY + Image^.h, 1023) - y;
+addfilelog(inttostr(y) + ' <<<<<<<<>>>>>>>> '+inttostr(h));
+UpdateLandTexture(y, h)
 end;
 
 
