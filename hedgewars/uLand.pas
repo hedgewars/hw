@@ -25,11 +25,12 @@ type TLandArray = packed array[0..1023, 0..2047] of LongWord;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
-     LandTexture: PTexture;
+     LandTexture: PTexture = nil;
 
 procedure GenMap;
-function GenPreview: TPreview;
+function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
+procedure UpdateLandTexture;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -532,7 +533,7 @@ SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
 AddObjects(tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
-LandTexture:= Surface2Tex(LandSurface);
+UpdateLandTexture;
 AddProgress
 end;
 
@@ -554,7 +555,7 @@ tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[1]^.FortName + 'R', false,
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
-LandTexture:= Surface2Tex(LandSurface)
+UpdateLandTexture
 end;
 
 procedure LoadMap;
@@ -592,7 +593,7 @@ case LandSurface^.format^.BytesPerPixel of
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 
-LandTexture:= Surface2Tex(LandSurface)
+UpdateLandTexture
 end;
 
 procedure GenMap;
@@ -626,6 +627,12 @@ for y:= 0 to 127 do
             end
         end;
 GenPreview:= Preview
+end;
+
+procedure UpdateLandTexture;
+begin
+if LandTexture <> nil then FreeTexture(LandTexture);
+LandTexture:= Surface2Tex(LandSurface)
 end;
 
 initialization

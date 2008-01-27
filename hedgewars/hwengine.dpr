@@ -111,7 +111,6 @@ case GameState of
               end;
      end;
 
-//SDL_Flip(SDLPrimSurface);
 SDL_GL_SwapBuffers();
 if flagMakeCapture then
    begin

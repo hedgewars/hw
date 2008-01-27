@@ -249,7 +249,10 @@ var ii: TSprite;
     WriteLnToConsole(msgOK);
     val(s, cExplosionBorderColor, c);
     TryDo(c = 0, 'Theme data corrupted', true);
-    AdjustColor(cExplosionBorderColor);
+    cExplosionBorderColor:= SDL_MapRGB(LandSurface^.format,
+                                       cExplosionBorderColor shr 16,
+                                       cExplosionBorderColor shr 8,
+                                       cExplosionBorderColor and $FF);
     end;
 
 begin
@@ -545,10 +548,7 @@ LoadImage:= tmpsurf//Result
 end;
 
 procedure SetupOpenGL;
-//var aspect: real;
 begin
-//aspect:= cScreenWidth / cScreenHeight;
-
 glLoadIdentity;
 glViewport(0, 0, cScreenWidth, cScreenHeight);
 glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
@@ -558,32 +558,35 @@ glMatrixMode(GL_MODELVIEW)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var ProgrSurf: PSDL_Surface = nil;
+var ProgrTex: PTexture = nil;
     Step: integer = 0;
 
 procedure AddProgress;
 var r: TSDL_Rect;
+    texsurf: PSDL_Surface;
 begin
 if Step = 0 then
    begin
    WriteToConsole(msgLoading + 'progress sprite: ');
-   ProgrSurf:= LoadImage(Pathz[ptGraphics] + '/Progress', false, true, true);
+   texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', false, true, true);
+   ProgrTex:= Surface2Tex(texsurf);
+   SDL_FreeSurface(texsurf)
    end;
-SDL_FillRect(SDLPrimSurface, nil, 0);
+glClear(GL_COLOR_BUFFER_BIT);
 r.x:= 0;
-r.w:= ProgrSurf^.w;
-r.h:= ProgrSurf^.w;
-r.y:= (Step mod (ProgrSurf^.h div ProgrSurf^.w)) * ProgrSurf^.w;
-//DrawFromRect((cScreenWidth - ProgrSurf^.w) div 2,
-//             (cScreenHeight - ProgrSurf^.w) div 2, @r, ProgrSurf, SDLPrimSurface);
-SDL_Flip(SDLPrimSurface);
+r.w:= ProgrTex^.w;
+r.h:= ProgrTex^.w;
+r.y:= (Step mod (ProgrTex^.h div ProgrTex^.w)) * ProgrTex^.w;
+DrawFromRect((cScreenWidth - ProgrTex^.w) div 2,
+             (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex, SDLPrimSurface);
+SDL_GL_SwapBuffers();
 inc(Step);
 end;
 
 procedure FinishProgress;
 begin
 WriteLnToConsole('Freeing progress surface... ');
-SDL_FreeSurface(ProgrSurf)
+FreeTexture(ProgrTex)
 end;
 
 end.
