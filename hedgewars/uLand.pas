@@ -25,6 +25,7 @@ type TLandArray = packed array[0..1023, 0..2047] of LongWord;
 
 var  Land: TLandArray;
      LandSurface: PSDL_Surface;
+     LandPixels: TLandArray;
      LandTexture: PTexture = nil;
 
 procedure GenMap;
@@ -630,22 +631,26 @@ GenPreview:= Preview
 end;
 
 procedure UpdateLandTexture(Y, Height: LongInt);
-var p: pointer;
+var i: integer;
 begin
 if LandTexture <> nil then
    begin
+   glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
+
+   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
+   end else
+   begin
+   LandTexture:= Surface2Tex(LandSurface);
+
    if SDL_MustLock(LandSurface) then
       SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-   glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-
-   p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * Y];
-   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, p);
+   Move(LandSurface^.pixels^, LandPixels, 2048 * 1024 * 4);
 
    if SDL_MustLock(LandSurface) then
-      SDL_UnlockSurface(LandSurface);
-   end else
-   LandTexture:= Surface2Tex(LandSurface)
+      SDL_UnlockSurface(LandSurface)
+   end;
+
 end;
 
 initialization

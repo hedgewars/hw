@@ -249,10 +249,10 @@ var ii: TSprite;
     WriteLnToConsole(msgOK);
     val(s, cExplosionBorderColor, c);
     TryDo(c = 0, 'Theme data corrupted', true);
-    cExplosionBorderColor:= SDL_MapRGB(LandSurface^.format,
-                                       cExplosionBorderColor shr 16,
-                                       cExplosionBorderColor shr 8,
-                                       cExplosionBorderColor and $FF);
+    cExplosionBorderColor:= (cExplosionBorderColor shr 16) or
+                            (cExplosionBorderColor and $FF) or
+                            (cExplosionBorderColor shl 16) or
+                            $FF000000
     end;
 
 begin

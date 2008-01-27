@@ -120,47 +120,17 @@ begin
   if (dx = dy) then ChangeCircleLines(x, y, dx, dy, doSet)
 end;
 
-procedure ClearLandPixel(y, x: LongInt);
-var p: PByteArray;
-begin
-p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
-case LandSurface^.format^.BytesPerPixel of
-     2: PWord(@(p^[x * 2]))^:= 0;
-     3: begin
-        p^[x * 3 + 0]:= 0;
-        p^[x * 3 + 1]:= 0;
-        p^[x * 3 + 2]:= 0;
-        end;
-     4: PLongword(@(p^[x * 4]))^:= 0;
-     end
-end;
-
-procedure SetLandPixel(y, x: LongInt);
-var p: PByteArray;
-begin
-p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * y];
-case LandSurface^.format^.BytesPerPixel of
-     2: PWord(@(p^[x * 2]))^:= cExplosionBorderColor;
-     3: begin
-        p^[x * 3 + 0]:= cExplosionBorderColor and $FF;
-        p^[x * 3 + 1]:= (cExplosionBorderColor shr 8) and $FF;
-        p^[x * 3 + 2]:= cExplosionBorderColor shr 16;
-        end;
-     4: PLongword(@(p^[x * 4]))^:= cExplosionBorderColor;
-     end
-end;
-
 procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
 var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do ClearLandPixel(y + dy, i);
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do LandPixels[y + dy, i]:= 0;
 if ((y - dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do ClearLandPixel(y - dy, i);
+   for i:= max(x - dx, 0) to min(x + dx, 2047) do LandPixels[y - dy, i]:= 0;
 if ((y + dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do ClearLandPixel(y + dx, i);
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do LandPixels[y + dx, i]:= 0;
 if ((y - dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do ClearLandPixel(y - dx, i);
+   for i:= max(x - dy, 0) to min(x + dy, 2047) do LandPixels[y - dx, i]:= 0;
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
@@ -168,25 +138,22 @@ var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y + dy, i] = COLOR_LAND then SetLandPixel(y + dy, i);
+       if Land[y + dy, i] = COLOR_LAND then LandPixels[y + dy, i]:= cExplosionBorderColor;
 if ((y - dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y - dy, i] = COLOR_LAND then SetLandPixel(y - dy, i);
+       if Land[y - dy, i] = COLOR_LAND then LandPixels[y - dy, i]:= cExplosionBorderColor;
 if ((y + dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y + dx, i] = COLOR_LAND then SetLandPixel(y + dx, i);
+       if Land[y + dx, i] = COLOR_LAND then LandPixels[y + dx, i]:= cExplosionBorderColor;
 if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y - dx, i] = COLOR_LAND then SetLandPixel(y - dx, i);
+       if Land[y - dx, i] = COLOR_LAND then LandPixels[y - dx, i]:= cExplosionBorderColor;
 end;
 
 procedure DrawExplosion(X, Y, Radius: LongInt);
 var dx, dy, d: LongInt;
 begin
 FillRoundInLand(X, Y, Radius, 0);
-
-if SDL_MustLock(LandSurface) then
-   SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
   dx:= 0;
   dy:= Radius;
@@ -220,23 +187,19 @@ if SDL_MustLock(LandSurface) then
      end;
   if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
 
-if SDL_MustLock(LandSurface) then
-   SDL_UnlockSurface(LandSurface);
-
-UpdateLandTexture(Y - Radius, 2 * Radius)
+d:= max(Y - Radius, 0);
+dy:= min(Y + Radius, 1023) - d;
+UpdateLandTexture(d, dy)
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 var tx, ty, i: LongInt;
 begin
-if SDL_MustLock(LandSurface) then
-   SDL_LockSurface(LandSurface);
-
 for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
         for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
-            ClearLandPixel(ty, tx);
+            LandPixels[ty, tx]:= 0;
     inc(y, dY)
     end;
 
@@ -248,14 +211,11 @@ for i:= 0 to Pred(Count) do
     for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
         for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
             if Land[ty, tx] = $FFFFFF then
-                  SetLandPixel(ty, tx);
+                  LandPixels[ty, tx]:= cExplosionBorderColor;
     inc(y, dY)
     end;
 
-if SDL_MustLock(LandSurface) then
-   SDL_UnlockSurface(LandSurface);
-
-//UpdateLandTexture
+UpdateLandTexture(0, 1024)
 end;
 
 //
@@ -265,9 +225,6 @@ procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
     i, t, tx, ty: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
-if SDL_MustLock(LandSurface) then
-   SDL_LockSurface(LandSurface);
-
 nx:= X + dY * (HalfWidth + 8);
 ny:= Y - dX * (HalfWidth + 8);
 
@@ -301,7 +258,7 @@ for i:= -HalfWidth to HalfWidth do
          if Land[ty, tx] = COLOR_LAND then
            begin
            Land[ty, tx]:= 0;
-           ClearLandPixel(ty, tx);
+           LandPixels[ty, tx]:= 0;
            end
         end;
     for t:= 0 to 7 do
@@ -320,10 +277,7 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-if SDL_MustLock(LandSurface) then
-   SDL_UnlockSurface(LandSurface);
-
-//UpdateLandTexture
+UpdateLandTexture(0, 1024)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;

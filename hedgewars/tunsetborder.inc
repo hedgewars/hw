@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006-2007 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006-2008 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,5 +23,5 @@
         ty:= hwRound(Y);
         if ((ty and $FFFFFC00) = 0) and
            ((tx and $FFFFF800) = 0) and
-           (Land[ty, tx] = $FFFFFF) then SetLandPixel(ty, tx)
+           (Land[ty, tx] = $FFFFFF) then LandPixels[ty, tx]:= cExplosionBorderColor
 	end;
