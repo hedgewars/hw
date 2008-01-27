@@ -30,7 +30,7 @@ var  Land: TLandArray;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
-procedure UpdateLandTexture;
+procedure UpdateLandTexture(Y, Height: LongInt);
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -533,7 +533,7 @@ SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
 AddObjects(tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture;
+UpdateLandTexture(0, 1024);
 AddProgress
 end;
 
@@ -555,7 +555,7 @@ tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[1]^.FortName + 'R', false,
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture
+UpdateLandTexture(0, 1024)
 end;
 
 procedure LoadMap;
@@ -593,7 +593,7 @@ case LandSurface^.format^.BytesPerPixel of
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 
-UpdateLandTexture
+UpdateLandTexture(0, 1024)
 end;
 
 procedure GenMap;
@@ -629,10 +629,23 @@ for y:= 0 to 127 do
 GenPreview:= Preview
 end;
 
-procedure UpdateLandTexture;
+procedure UpdateLandTexture(Y, Height: LongInt);
+var p: pointer;
 begin
-if LandTexture <> nil then FreeTexture(LandTexture);
-LandTexture:= Surface2Tex(LandSurface)
+if LandTexture <> nil then
+   begin
+   if SDL_MustLock(LandSurface) then
+      SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+
+   glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
+
+   p:= @PByteArray(LandSurface^.pixels)^[LandSurface^.pitch * Y];
+   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, p);
+
+   if SDL_MustLock(LandSurface) then
+      SDL_UnlockSurface(LandSurface);
+   end else
+   LandTexture:= Surface2Tex(LandSurface)
 end;
 
 initialization

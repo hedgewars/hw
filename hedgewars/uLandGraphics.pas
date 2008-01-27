@@ -223,7 +223,7 @@ if SDL_MustLock(LandSurface) then
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 
-UpdateLandTexture
+UpdateLandTexture(Y - Radius, 2 * Radius)
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
@@ -255,7 +255,7 @@ for i:= 0 to Pred(Count) do
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 
-UpdateLandTexture
+//UpdateLandTexture
 end;
 
 //
@@ -323,7 +323,7 @@ for i:= 0 to 7 do
 if SDL_MustLock(LandSurface) then
    SDL_UnlockSurface(LandSurface);
 
-UpdateLandTexture
+//UpdateLandTexture
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
