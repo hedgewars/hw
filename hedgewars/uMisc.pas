@@ -55,10 +55,10 @@ var isCursorVisible : boolean = false;
     GameTicks     : LongWord = 0;
 
     cSkyColor     : Longword = 0;
-    cWaterColor   : Longword = $005ACE;
-    cWhiteColor   : Longword = $FFFFFF;
-    cConsoleSplitterColor : Longword = $FF0000;
-    cColorNearBlack       : Longword = 16;
+    cWaterColor   : Longword = $FF005ACE;
+    cWhiteColor   : Longword = $FFFFFFFF;
+    cConsoleSplitterColor : Longword = $FFFF0000;
+    cColorNearBlack       : Longword = $FF000010;
     cExplosionBorderColor : LongWord = $808080;
 
     cShowFPS      : boolean = true;
@@ -283,8 +283,8 @@ glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE
 if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);
 
-glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR)
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
 procedure FreeTexture(tex: PTexture);

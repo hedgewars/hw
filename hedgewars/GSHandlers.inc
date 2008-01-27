@@ -212,10 +212,10 @@ if Gear^.Kind = gtHealthTag then
    end;
 
 str(Gear^.State, s);
-Gear^.Surf:= RenderString(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, font);
+Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, font);
 if hwRound(Gear^.Y) < cWaterLine then Gear^.doStep:= @doStepHealthTagWork
                                  else Gear^.doStep:= @doStepHealthTagWorkUnderWater;
-Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Surf^.h)
+Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

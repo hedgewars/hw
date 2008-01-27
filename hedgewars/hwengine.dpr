@@ -84,9 +84,6 @@ case GameState of
               InitPlaylistChunk(GetRandom(High(LongWord)));
               AssignHHCoords;
               AddMiscGears;
-              AdjustColor(cColorNearBlack);
-              AdjustColor(cWaterColor);
-              AdjustColor(cWhiteColor);
               StoreLoad;
               AdjustColor(cConsoleSplitterColor);
               ResetKbd;

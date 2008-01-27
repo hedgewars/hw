@@ -46,7 +46,7 @@ type PGear = ^TGear;
              Health, Damage: LongInt;
              CollisionIndex: LongInt;
              Tag: LongInt;
-             Surf: PSDL_Surface;
+             Tex: PTexture;
              Z: Longword;
              IntersectGear: PGear;
              TriggerId: Longword;
@@ -307,11 +307,13 @@ var team: PTeam;
     t: Longword;
 begin
 DeleteCI(Gear);
-if Gear^.Surf <> nil then
+
+if Gear^.Tex <> nil then
    begin
-   SDL_FreeSurface(Gear^.Surf);
-   Gear^.Surf:= nil
+   FreeTexture(Gear^.Tex);
+   Gear^.Tex:= nil
    end;
+
 if Gear^.Kind = gtHedgehog then
    if CurAmmoGear <> nil then
       begin
@@ -469,18 +471,18 @@ with PHedgehog(Gear^.Hedgehog)^ do
         t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
         if (cTagsMask and 1) <> 0 then
            begin
-           dec(t, HealthTag^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTag, Surface)
+           dec(t, HealthTagTex^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
            end;
         if (cTagsMask and 2) <> 0 then
            begin
-           dec(t, NameTag^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTag, Surface)
+           dec(t, NameTagTex^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
            end;
         if (cTagsMask and 4) <> 0 then
            begin
-           dec(t, Team^.NameTag^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTag, Surface)
+           dec(t, Team^.NameTagTex^.h + 2);
+           DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
            end
         end else // Current hedgehog
       if (Gear^.State and gstHHDriven) <> 0 then
@@ -577,7 +579,7 @@ while Gear<>nil do
         gtHedgehog: DrawHH(Gear, Surface);
     gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
        gtHealthTag,
-     gtSmallDamage: if Gear^.Surf <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Surf, Surface);
+     gtSmallDamage: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
            gtGrave: ;//DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveSurf, Surface);
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
             gtRope: begin

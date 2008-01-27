@@ -30,7 +30,8 @@ type PHedgehog = ^THedgehog;
      THedgehog = record
                  Name: string[MAXNAMELEN];
                  Gear: PGear;
-                 NameTag, HealthTag: PSDL_Surface;
+                 NameTagTex: PTexture;
+                 HealthTagTex: PTexture;
                  Ammo: PHHAmmo;
                  AmmoStore: Longword;
                  CurSlot, CurAmmo: LongWord;
@@ -49,7 +50,7 @@ type PHedgehog = ^THedgehog;
              Binds: TBinds;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              CurrHedgehog: LongWord;
-             NameTag: PSDL_Surface;
+             NameTagTex: PTexture;
              CrosshairSurf,
              GraveSurf,
              HealthSurf: PSDL_Surface;

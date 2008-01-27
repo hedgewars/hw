@@ -28,12 +28,13 @@ procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Positi
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: GLuint; Surface: PSDL_Surface);
-procedure DrawLand (X, Y: LongInt; Surface: PSDL_Surface);
+procedure DrawLand (X, Y: LongInt);
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
-procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
+procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
-function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
+function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -42,7 +43,7 @@ procedure SetupOpenGL;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
-   PauseSurface: PSDL_Surface;
+   PauseTexture: PTexture;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, GLU;
@@ -126,10 +127,10 @@ var ii: TSprite;
     for t:= 0 to Pred(TeamsCount) do
      with TeamsArray[t]^ do
       begin
-      NameTag:= RenderString(TeamName, Clan^.Color, Font);
+      NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
 
       r.w:= cTeamHealthWidth + 5;
-      r.h:= NameTag^.h;
+      r.h:= NameTagTex^.h;
 
       HealthSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, r.w, r.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
       TryDo(HealthSurf <> nil, errmsgCreateSurface, true);
@@ -145,7 +146,7 @@ var ii: TSprite;
       for i:= 0 to 7 do
           with Hedgehogs[i] do
                if Gear <> nil then
-                  NameTag:= RenderString(Name, Clan^.Color, fnt16);
+                  NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
       end;
     end;
 
@@ -291,7 +292,7 @@ SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
-PauseSurface:= RenderString(trmsg[sidPaused], $FFFF00, fntBig);
+PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
 
 {$IFDEF DUMP}
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
@@ -329,7 +330,29 @@ glVertex2i(rr.w + X, rr.h + Y);
 glTexCoord2f(0, b);
 glVertex2i(X, rr.h + Y);
 
-glEnd();
+glEnd()
+end;
+
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+begin
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
+glEnable(GL_TEXTURE_2D);
+
+glBegin(GL_QUADS);
+
+glTexCoord2f(0, 0);
+glVertex2i(X, Y);
+
+glTexCoord2f(1, 0);
+glVertex2i(Texture^.w + X, Y);
+
+glTexCoord2f(1, 1);
+glVertex2i(Texture^.w + X, Texture^.h + Y);
+
+glTexCoord2f(0, 1);
+glVertex2i(X, Texture^.h + Y);
+
+glEnd()
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
@@ -389,38 +412,14 @@ SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 SDL_FreeSurface(tmpsurf)
 end;
 
-procedure DrawLand(X, Y: LongInt; Surface: PSDL_Surface);
-//const r: TSDL_Rect = (x: 0; y: 0; w: 2048; h: 1024);
+procedure DrawLand(X, Y: LongInt);
 begin
-glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-glEnable(GL_TEXTURE_2D);
-
-glBegin(GL_QUADS);
-
-glTexCoord2i(0, 0);
-glVertex2i(X, Y);
-
-glTexCoord2i(1, 0);
-glVertex2i(2048 + X, Y);
-
-glTexCoord2i(1, 1);
-glVertex2i(2048 + X, 1024 + Y);
-
-glTexCoord2i(0, 1);
-glVertex2i(X, 1024 + Y);
-
-glEnd();
-//DrawFromRect(X, Y, @r, LandSurface, Surface)
+DrawTexture(X, Y, LandTexture)
 end;
 
-procedure DrawCentered(X, Top: LongInt; Source, Surface: PSDL_Surface);
-var r: TSDL_Rect;
+procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 begin
-r.x:= X - Source^.w div 2;
-r.y:= Top;
-r.w:= Source^.w;
-r.h:= Source^.h;
-SDL_UpperBlit(Source, nil, Surface, @r)
+DrawTexture(X - Source^.w div 2, Top, Source)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
@@ -473,25 +472,26 @@ FreeTexture(LandTexture);
 SDL_FreeSurface(LandSurface)
 end;
 
-function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
+function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 var w, h: LongInt;
     Result: PSDL_Surface;
 begin
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
-Result:= SDL_CreateRGBSurface(SDL_HWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
-         cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
+Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
+         32, RMask, GMask, BMask, AMask);
 TryDo(Result <> nil, 'RenderString: fail to create surface', true);
 WriteInRoundRect(Result, 0, 0, Color, font, s);
-TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
-RenderString:= Result
+TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+RenderStringTex:= Surface2Tex(Result);
+SDL_FreeSurface(Result)
 end;
 
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
 str(Hedgehog.Gear^.Health, s);
-if Hedgehog.HealthTag <> nil then SDL_FreeSurface(Hedgehog.HealthTag);
-Hedgehog.HealthTag:= RenderString(s, Hedgehog.Team^.Clan^.Color, fnt16)
+if Hedgehog.HealthTagTex <> nil then FreeTexture(Hedgehog.HealthTagTex);
+Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function  LoadImage(const filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
@@ -525,9 +525,9 @@ LoadImage:= tmpsurf//Result
 end;
 
 procedure SetupOpenGL;
-var aspect: real;
+//var aspect: real;
 begin
-aspect:= cScreenWidth / cScreenHeight;
+//aspect:= cScreenWidth / cScreenHeight;
 
 glLoadIdentity;
 glViewport(0, 0, cScreenWidth, cScreenHeight);

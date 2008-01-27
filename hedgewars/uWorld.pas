@@ -45,7 +45,7 @@ const FPS: Longword = 0;
       prevPoint: TPoint = (X: 0; Y: 0);
 
 type TCaptionStr = record
-                   Surf: PSDL_Surface;
+                   Tex: PTexture;
                    EndTime: LongWord;
                    end;
 
@@ -195,7 +195,7 @@ for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (Re
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
 {$WARNINGS ON}
 
-DrawLand(WorldDx, WorldDy, Surface);
+DrawLand(WorldDx, WorldDy);
 // Water
 r.y:= WorldDy + cWaterLine + 32;
 if r.y < cScreenHeight then
@@ -248,27 +248,27 @@ if CurrentTeam <> nil then
                 tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
                 tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-//                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
-//                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
-//                                         i, Surface)
+                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
+                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
+                                         i, Surface)
                 end
         end;
 
 // Target
-//if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
+if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
 
 // Captions
 i:= 8;
 for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
-         if Surf <> nil then
+         if Tex <> nil then
             begin
-//            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Surf, Surface);
-            inc(i, Surf^.h + 2);
+            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Tex);
+            inc(i, Tex^.h + 2);
             if EndTime <= RealTicks then
                begin
-               SDL_FreeSurface(Surf);
-               Surf:= nil;
+               FreeTexture(Tex);
+               Tex:= nil;
                EndTime:= 0
                end
             end;
@@ -277,11 +277,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
-      r.x:= cScreenWidth div 2 - NameTag^.w - 3;
-      r.y:= DrawHealthY;
-      r.w:= NameTag^.w;
-      r.h:= NameTag^.h;
-//      SDL_UpperBlit(NameTag, nil, Surface, @r);
+      DrawTexture(cScreenWidth div 2 - NameTagTex^.w - 3, DrawHealthY, NameTagTex);
 
       r.x:= 0;
       r.y:= 0;
@@ -301,10 +297,10 @@ for t:= 0 to Pred(TeamsCount) do
       end;
 
 // Lag alert
-//if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
+if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
 
 // Wind bar
-//DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
+DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -339,18 +335,18 @@ if isCursorVisible then
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
-//             DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
-//                                   CursorPoint.Y - SpritesData[PosSprite].Height div 2,
-//                                   i, Surface);
+              DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
+                                    CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+                                    i, Surface);
          end;
-//   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
    end;
 
 {$IFDEF COUNTTICKS}
 //DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
 {$ENDIF}
 
-//if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseSurface, Surface);
+if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
 
 inc(Frames);
 if cShowFPS then
@@ -394,9 +390,9 @@ end;
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 begin
 if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
-if Captions[Group].Surf <> nil then SDL_FreeSurface(Captions[Group].Surf);
+if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
 
-Captions[Group].Surf:= RenderString(s, Color, fntBig);
+Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
 Captions[Group].EndTime:= RealTicks + 1500
 end;
 
