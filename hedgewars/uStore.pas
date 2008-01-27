@@ -210,7 +210,7 @@ var ii: TSprite;
           if GraveName = '' then GraveName:= 'Simple';
           texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
           GraveTex:= Surface2Tex(texsurf);
-          SDL_FreeSurface(tmpsurf)
+          SDL_FreeSurface(texsurf)
           end
     end;
 
