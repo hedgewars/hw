@@ -170,21 +170,12 @@ var i, t: LongInt;
     end;
 
 begin
+// Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
 
 if not isPaused then MoveCamera;
 
-// Sky
-if WorldDy > 0 then
-   begin
-   if WorldDy > cScreenHeight then r.h:= cScreenHeight
-                              else r.h:= WorldDy;
-   r.x:= 0;
-   r.y:= 0;
-   r.w:= cScreenWidth;
-//   SDL_FillRect(Surface, @r, cSkyColor)
-   end;
 // background
 DrawRepeated(sprSky, WorldDx * 3 div 8);
 DrawRepeated(sprHorizont, WorldDx * 3 div 5);
@@ -223,14 +214,14 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-//   DrawSprite(sprFrame, t, cScreenHeight - 48, 1, Surface);
+   DrawSprite(sprFrame, t, cScreenHeight - 48, 1, Surface);
    while i > 0 do
          begin
          dec(t, 32);
          DrawSprite(sprBigDigit, t, cScreenHeight - 48, i mod 10, Surface);
          i:= i div 10
          end;
-//   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
+   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
    end;
 
 // Attack bar
@@ -323,7 +314,7 @@ if WindBarWidth > 0 then
    end;
 
 // AmmoMenu
-//if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
+if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
 
 // Cursor
 if isCursorVisible then
@@ -341,10 +332,6 @@ if isCursorVisible then
          end;
    DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
    end;
-
-{$IFDEF COUNTTICKS}
-//DXOutText(10, 10, fnt16, inttostr(cntTicks), Surface);
-{$ENDIF}
 
 if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
 
