@@ -48,7 +48,7 @@ implementation
 uses uMisc, uConsole, uLand, uLocale, GLU;
 
 var
-    HHSurface: PSDL_Surface;
+    HHTexture: PTexture;
 
 procedure StoreInit;
 begin
@@ -277,14 +277,17 @@ for ii:= Low(TSprite) to High(TSprite) do
             end;
          if Width = 0 then Width:= tmpsurf^.w;
          if Height = 0 then Height:= tmpsurf^.h;
-         Texture:= Surface2Tex(tmpsurf)
+         Texture:= Surface2Tex(tmpsurf);
+         SDL_FreeSurface(tmpsurf)
          end;
 
 GetSkyColor;
 
 AddProgress;
 
-HHSurface:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, true, true, true);
+tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, true, true, true);
+HHTexture:= Surface2Tex(tmpsurf);
+SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
@@ -421,14 +424,41 @@ SDL_UpperBlit(Source, nil, Surface, @r)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
-var r: TSDL_Rect;
+var l, r, t, b: real;
 begin
-r.x:= Step * 32;
-r.y:= Pos * 32;
-if Dir = -1 then r.x:= HHSurface^.w - 32 - r.x;
-r.w:= 32;
-r.h:= 32;
-//DrawFromRect(X, Y, @r, HHSurface, Surface)
+
+t:= Pos * 32 / HHTexture^.h;
+b:= (Pos + 1) * 32 / HHTexture^.h;
+
+if Dir = -1 then
+   begin
+   l:= (Step + 1) * 32 / HHTexture^.w;
+   r:= Step * 32 / HHTexture^.w
+   end else
+   begin
+   l:= Step * 32 / HHTexture^.w;
+   r:= (Step + 1) * 32 / HHTexture^.w
+   end;
+
+glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
+glEnable(GL_TEXTURE_2D);
+
+glBegin(GL_QUADS);
+
+glTexCoord2f(l, t);
+glVertex2i(X, Y);
+
+glTexCoord2f(r, t);
+glVertex2i(32 + X, Y);
+
+glTexCoord2f(r, b);
+glVertex2i(32 + X, 32 + Y);
+
+glTexCoord2f(l, b);
+glVertex2i(X, 32 + Y);
+
+glEnd();
+
 end;
 
 procedure StoreRelease;
@@ -436,8 +466,11 @@ var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
     FreeTexture(SpritesData[ii].Texture);
-SDL_FreeSurface(  HHSurface  );
-SDL_FreeSurface(LandSurface  )
+
+FreeTexture(HHTexture);
+FreeTexture(LandTexture);
+
+SDL_FreeSurface(LandSurface)
 end;
 
 function  RenderString(s: string; Color: Longword; font: THWFont): PSDL_Surface;
