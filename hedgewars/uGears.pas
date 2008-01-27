@@ -495,10 +495,10 @@ with PHedgehog(Gear^.Hedgehog)^ do
               DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0, Surface)
               else
               if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
-(*                 DrawSurfSprite(Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
+                 DrawSurfSprite(Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx - 11,
                            Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle)*60) + WorldDy - 12,
                            24, (18 + hwSign(Gear^.dX) * LongInt(((Gear^.Angle * 72 div cMaxAngle) + 1) div 2) mod 18) mod 18,
-                           Team^.CrosshairSurf, Surface);*)
+                           Team^.CrosshairTex, Surface);
         end;
 end;
 
@@ -580,7 +580,7 @@ while Gear<>nil do
     gtAmmo_Grenade: DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
        gtHealthTag,
      gtSmallDamage: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
-           gtGrave: ;//DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveSurf, Surface);
+           gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, Surface);
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4, Surface);
             gtRope: begin
                     roplen:= 0;

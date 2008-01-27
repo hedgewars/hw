@@ -923,11 +923,11 @@ t:= cScreenHeight - 4;
 for i:= 0 to Pred(TeamsCount) do
     with thexchar[i] do
          begin
-         dec(t, team^.HealthSurf^.h + 2);
+         dec(t, team^.HealthTex^.h + 2);
          ny:= t;
          dy:= dy - ny
          end;
-         
+
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
 currsorter:= Gear

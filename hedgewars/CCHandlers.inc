@@ -56,6 +56,8 @@ if isDeveloperMode then
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
+   Color:= Color or $FF000000;
+
    AddTeam(Color);
    CurrentTeam^.TeamName:= ts;
    if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
@@ -79,7 +81,7 @@ end;
 
 procedure chFort(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
+if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/fort"', true);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s

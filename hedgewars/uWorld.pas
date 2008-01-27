@@ -282,18 +282,18 @@ for t:= 0 to Pred(TeamsCount) do
       r.x:= 0;
       r.y:= 0;
       r.w:= 2 + TeamHealthBarWidth;
-      r.h:= HealthSurf^.h;
+      r.h:= HealthTex^.h;
 
-//      DrawFromRect(cScreenWidth div 2,
-//                        DrawHealthY,
-//                        @r, HealthSurf, Surface);
+      DrawFromRect(cScreenWidth div 2,
+                        DrawHealthY,
+                        @r, HealthTex, Surface);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
-//      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
-//                        DrawHealthY,
-//                        @r, HealthSurf, Surface);
+      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
+                        DrawHealthY,
+                        @r, HealthTex, Surface);
       end;
 
 // Lag alert
@@ -309,7 +309,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-//   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
+   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
    end else
  if WindBarWidth < 0 then
    begin
@@ -319,7 +319,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-//   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
+   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
    end;
 
 // AmmoMenu

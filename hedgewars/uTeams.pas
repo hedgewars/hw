@@ -51,9 +51,9 @@ type PHedgehog = ^THedgehog;
              Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
              CurrHedgehog: LongWord;
              NameTagTex: PTexture;
-             CrosshairSurf,
-             GraveSurf,
-             HealthSurf: PSDL_Surface;
+             CrosshairTex,
+             GraveTex,
+             HealthTex: PTexture;
              GraveName: string;
              FortName: string;
              TeamHealth: LongInt;
@@ -64,7 +64,7 @@ type PHedgehog = ^THedgehog;
              HedgehogsNumber: Longword;
              end;
      TClan = record
-             Color, AdjColor: Longword;
+             Color: Longword;
              Teams: array[0..Pred(cMaxTeams)] of PTeam;
              TeamsNumber: Longword;
              CurrTeam: LongWord;
@@ -223,9 +223,7 @@ if c < 0 then
    with Result^.Clan^ do
         begin
         ClanIndex:= Pred(ClansCount);
-        Color:= TeamColor;
-        AdjColor:= Color;
-        AdjustColor(AdjColor);
+        Color:= TeamColor
         end
    end else
    begin

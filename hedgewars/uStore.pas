@@ -27,7 +27,7 @@ procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: GLuint; Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -61,6 +61,10 @@ var r: TSDL_Rect;
 begin
 r:= rect^;
 if Clear then SDL_FillRect(Surface, @r, 0);
+
+BorderColor:= SDL_MapRGB(Surface^.format, BorderColor shr 16, BorderColor shr 8, BorderColor and $FF);
+FillColor:= SDL_MapRGB(Surface^.format, FillColor shr 16, FillColor shr 8, FillColor and $FF);
+
 r.y:= rect^.y + 1;
 r.h:= rect^.h - 2;
 SDL_FillRect(Surface, @r, BorderColor);
@@ -120,6 +124,7 @@ var ii: TSprite;
         i: LongInt;
         r, rr: TSDL_Rect;
         drY: LongInt;
+        texsurf: PSDL_Surface;
     begin
     r.x:= 0;
     r.y:= 0;
@@ -132,14 +137,16 @@ var ii: TSprite;
       r.w:= cTeamHealthWidth + 5;
       r.h:= NameTagTex^.h;
 
-      HealthSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, r.w, r.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
-      TryDo(HealthSurf <> nil, errmsgCreateSurface, true);
-      TryDo(SDL_SetColorKey(HealthSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
+      texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
+      TryDo(texsurf <> nil, errmsgCreateSurface, true);
+      TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, HealthSurf, true);
+      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, texsurf, true);
       rr:= r;
       inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Clan^.AdjColor, Clan^.AdjColor, HealthSurf, false);
+      DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
+      HealthTex:= Surface2Tex(texsurf);
+      SDL_FreeSurface(texsurf);
 
       dec(drY, r.h + 2);
       DrawHealthY:= drY;
@@ -152,8 +159,9 @@ var ii: TSprite;
 
     procedure MakeCrossHairs;
     var t: LongInt;
-        tmpsurf: PSDL_Surface;
+        tmpsurf, texsurf: PSDL_Surface;
         s: string;
+        Color: Longword;
     begin
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
     tmpsurf:= LoadImage(s, true, true, false);
@@ -161,11 +169,18 @@ var ii: TSprite;
     for t:= 0 to Pred(TeamsCount) do
       with TeamsArray[t]^ do
       begin
-      CrosshairSurf:= SDL_CreateRGBSurface(SDL_HWSURFACE, tmpsurf^.w, tmpsurf^.h, cBits, PixelFormat^.RMask, PixelFormat^.GMask, PixelFormat^.BMask, PixelFormat^.AMask);
-      TryDo(CrosshairSurf <> nil, errmsgCreateSurface, true);
-      SDL_FillRect(CrosshairSurf, nil, Clan^.AdjColor);
-      SDL_UpperBlit(tmpsurf, nil, CrosshairSurf, nil);
-      TryDo(SDL_SetColorKey(CrosshairSurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
+      texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
+      TryDo(texsurf <> nil, errmsgCreateSurface, true);
+
+      Color:= Clan^.Color;
+      Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
+      SDL_FillRect(texsurf, nil, Color);
+
+      SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
+      TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+      CrosshairTex:= Surface2Tex(texsurf);
+      SDL_FreeSurface(texsurf)
       end;
 
     SDL_FreeSurface(tmpsurf)
@@ -186,13 +201,16 @@ var ii: TSprite;
 
     procedure LoadGraves;
     var t: LongInt;
+        texsurf: PSDL_Surface;
     begin
     for t:= 0 to Pred(TeamsCount) do
      if TeamsArray[t] <> nil then
       with TeamsArray[t]^ do
           begin
           if GraveName = '' then GraveName:= 'Simple';
-          GraveSurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
+          texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
+          GraveTex:= Surface2Tex(texsurf);
+          SDL_FreeSurface(tmpsurf)
           end
     end;
 
@@ -302,7 +320,7 @@ end;
 
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
 var rr: TSDL_Rect;
-    t, b: real;
+    _l, _r, _t, _b: real;
 begin
 if SourceTexture^.h = 0 then exit;
 rr.x:= X;
@@ -310,24 +328,26 @@ rr.y:= Y;
 rr.w:= r^.w;
 rr.h:= r^.h;
 
-t:= r^.y / SourceTexture^.h;
-b:= (r^.y + r^.h) / SourceTexture^.h;
+_l:= r^.x / SourceTexture^.w;
+_r:= (r^.x + r^.w) / SourceTexture^.w;
+_t:= r^.y / SourceTexture^.h;
+_b:= (r^.y + r^.h) / SourceTexture^.h;
 
 glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
 glEnable(GL_TEXTURE_2D);
 
 glBegin(GL_QUADS);
 
-glTexCoord2f(0, t);
+glTexCoord2f(_l, _t);
 glVertex2i(X, Y);
 
-glTexCoord2f(1, t);
+glTexCoord2f(_r, _t);
 glVertex2i(rr.w + X, Y);
 
-glTexCoord2f(1, b);
+glTexCoord2f(_r, _b);
 glVertex2i(rr.w + X, rr.h + Y);
 
-glTexCoord2f(0, b);
+glTexCoord2f(_l, _b);
 glVertex2i(X, rr.h + Y);
 
 glEnd()
@@ -382,14 +402,14 @@ r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
 end;
 
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: GLuint; Surface: PSDL_Surface);
-//var r: TSDL_Rect;
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface: PSDL_Surface);
+var r: TSDL_Rect;
 begin
-//r.x:= 0;
-//r.w:= Source^.w;
-//r.y:= Frame * Height;
-//r.h:= Height;
-//DrawFromRect(X, Y, @r, Source, Surface)
+r.x:= 0;
+r.w:= Source^.w;
+r.y:= Frame * Height;
+r.h:= Height;
+DrawFromRect(X, Y, @r, Source, Surface)
 end;
 
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -516,7 +536,7 @@ if tmpsurf = nil then
       exit(nil)
       end;
 
-if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY or SDL_RLEACCEL, 0) = 0, errmsgTransparentSet, true);
+if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 //if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
 //            else Result:= SDL_DisplayFormat(tmpsurf);
 {$IFDEF DEBUGFILE}WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');{$ENDIF}
