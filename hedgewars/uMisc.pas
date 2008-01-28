@@ -123,7 +123,7 @@ var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore, uIO, Math, uRandom;
+uses uConsole, uStore, uIO, Math, uRandom, GLU;
 var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
@@ -255,13 +255,25 @@ begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
+function isPowerOf2(i: Longword): boolean;
+begin
+if i = 0 then exit(true);
+while (i and 1) = 0 do i:= i shr 1;
+isPowerOf2:= (i = 1)
+end;
+
+function toPowerOf2(i: Longword): Longword;
+begin
+toPowerOf2:= 1;
+while (toPowerOf2 < i) do toPowerOf2:= toPowerOf2 shl 1
+end;
+
 function Surface2Tex(surf: PSDL_Surface): PTexture;
 var mode: LongInt;
     texId: GLuint;
+    tw, th: Longword;
+    tmpp: pointer;
 begin
-if SDL_MustLock(surf) then
-   SDLTry(SDL_LockSurface(surf) >= 0, true);
-
 new(Surface2Tex);
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
@@ -269,7 +281,7 @@ Surface2Tex^.h:= surf^.h;
 if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
 if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
    begin
-   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4]', false);
+   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4', false);
    Surface2Tex^.id:= 0;
    exit
    end;
@@ -278,12 +290,30 @@ glGenTextures(1, @Surface2Tex^.id);
 
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
-glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
+if SDL_MustLock(surf) then
+   SDLTry(SDL_LockSurface(surf) >= 0, true);
+
+if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
+   begin
+   tw:= toPowerOf2(Surf^.w);
+   th:= toPowerOf2(Surf^.h);
+
+   GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
+
+   gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE,
+        Surf^.pixels, tw, th, GL_UNSIGNED_BYTE,
+        tmpp);
+
+   glTexImage2D(GL_TEXTURE_2D, 0, mode, tw, th, 0, mode, GL_UNSIGNED_BYTE, tmpp);
+
+   FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
+   end else
+   glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
 
 if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);
 
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 

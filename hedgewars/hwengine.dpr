@@ -103,8 +103,8 @@ case GameState of
               end;
    gsConsole: begin
               DoGameTick(Lag);
-//              DrawWorld(Lag, SDLPrimSurface);
-//              DrawConsole(SDLPrimSurface);
+              DrawWorld(Lag, SDLPrimSurface);
+              DrawConsole(SDLPrimSurface);
               end;
      gsExit : begin
               OnDestroy;
