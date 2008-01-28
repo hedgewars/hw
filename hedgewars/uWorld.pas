@@ -174,6 +174,8 @@ begin
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
 glEnable(GL_TEXTURE_2D);
+//glPushMatrix;
+//glScalef(1.0, 1.0, 1.0);
 
 if not isPaused then MoveCamera;
 
@@ -248,6 +250,8 @@ if CurrentTeam <> nil then
 
 // Target
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
+
+//glPopMatrix;
 
 // Captions
 i:= 8;

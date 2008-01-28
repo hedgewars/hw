@@ -31,6 +31,7 @@ procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
+procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y: LongInt; Angle: real);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
@@ -162,7 +163,7 @@ var ii: TSprite;
     var t: LongInt;
         tmpsurf, texsurf: PSDL_Surface;
         s: string;
-        Color: Longword;
+        Color, i: Longword;
     begin
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
     tmpsurf:= LoadImage(s, true, true, false);
@@ -178,7 +179,18 @@ var ii: TSprite;
       SDL_FillRect(texsurf, nil, Color);
 
       SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
-      TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+      TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
+
+      if SDL_MustLock(texsurf) then
+         SDLTry(SDL_LockSurface(texsurf) >= 0, true);
+
+      // make black pixel be alpha-transparent
+      for i:= 0 to texsurf^.w * texsurf^.h - 1 do
+          if PLongwordArray(texsurf^.pixels)^[i] = $FF000000 then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+
+      if SDL_MustLock(texsurf) then
+         SDL_UnlockSurface(texsurf);
 
       CrosshairTex:= Surface2Tex(texsurf);
       SDL_FreeSurface(texsurf)
@@ -369,14 +381,19 @@ end;
 procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
 var hw, hh: LongInt;
 begin
+DrawRotatedTex(SpritesData[Sprite].Texture,
+               SpritesData[Sprite].Width,
+               SpritesData[Sprite].Height,
+               X, Y, Angle)
+end;
+
+procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y: LongInt; Angle: real);
+begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
 glRotatef(Angle, 0, 0, 1);
 
-hw:= SpritesData[Sprite].Width;
-hh:= SpritesData[Sprite].Height;
-
-glBindTexture(GL_TEXTURE_2D, SpritesData[Sprite].Texture^.id);
+glBindTexture(GL_TEXTURE_2D, Tex^.id);
 
 glBegin(GL_QUADS);
 
