@@ -51,13 +51,13 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 procedure CalcRotationDirAngle(Gear: PGear);
-var dAngle: hwFloat;
+var dAngle: real;
 begin
-dAngle:= (hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) * _0_1;
+dAngle:= (hwAbs(Gear^.dX) + hwAbs(Gear^.dY)).QWordValue / $80000000;
 if not Gear^.dX.isNegative then Gear^.DirAngle:= Gear^.DirAngle + dAngle
                 else Gear^.DirAngle:= Gear^.DirAngle - dAngle;
-if Gear^.DirAngle.isNegative then Gear^.DirAngle:= Gear^.DirAngle + _16
-else if _16 < Gear^.DirAngle then Gear^.DirAngle:= Gear^.DirAngle - _16
+if Gear^.DirAngle < 0 then Gear^.DirAngle:= Gear^.DirAngle + 360
+else if 360 < Gear^.DirAngle then Gear^.DirAngle:= Gear^.DirAngle - 360
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -599,7 +599,7 @@ if flCheck then  // check whether rope needs dividing
                 begin
                 X:= Gear^.X;
                 Y:= Gear^.Y;
-                if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle32(Gear^.dY, Gear^.dX);
+                if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
                 b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
                 dLen:= len
                 end;

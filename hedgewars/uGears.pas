@@ -37,7 +37,7 @@ type PGear = ^TGear;
              doStep: TGearStepProcedure;
              Radius: LongInt;
              Angle, Power : Longword;
-             DirAngle: hwFloat;
+             DirAngle: real;
              Timer : LongWord;
              Elasticity: hwFloat;
              Friction  : hwFloat;
@@ -70,10 +70,10 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL;
 var RopePoints: record
                 Count: Longword;
-                HookAngle: LongInt;
+                HookAngle: GLfloat;
                 ar: array[0..300] of record
                                   X, Y: hwFloat;
                                   dLen: hwFloat;
@@ -575,9 +575,9 @@ while Gear<>nil do
       begin
       case Gear^.Kind of
            gtCloud: DrawSprite(sprCloud   , hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
-       gtAmmo_Bomb: DrawSprite(sprBomb , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
+       gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.DirAngle);
         gtHedgehog: DrawHH(Gear, Surface);
-    gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, DxDy2Angle(Gear^.dY, Gear^.dX));//DrawSprite(sprGrenade , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
+    gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, DxDy2Angle(Gear^.dY, Gear^.dX));
        gtHealthTag,
      gtSmallDamage: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, Surface);
@@ -597,31 +597,31 @@ while Gear<>nil do
                                     hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy);
                        DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
                                     hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
-                       DrawSprite(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx - 16, hwRound(RopePoints.ar[0].Y) + WorldDy - 16, RopePoints.HookAngle, Surface);
+                       DrawRotated(sprRopeHook, hwRound(RopePoints.ar[0].X) + WorldDx, hwRound(RopePoints.ar[0].Y) + WorldDy, RopePoints.HookAngle)
                        end else
                        begin
                        DrawRopeLine(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
                                     hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx, hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy);
-                       DrawSprite(sprRopeHook, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
+                       DrawRotated(sprRopeHook, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, DxDy2Angle(Gear^.dY, Gear^.dX));
                        end;
                     end;
       gtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
        gtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
             gtMine: if ((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)
-                       then DrawSprite(sprMineOff , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface)
-                       else DrawSprite(sprMineOn  , hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
+                       then DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.DirAngle)
+                       else DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.DirAngle);
             gtCase: case Gear^.Pos of
                          posCaseAmmo  : DrawSprite(sprCase, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0, Surface);
                          posCaseHealth: DrawSprite(sprFAid, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, (GameTicks shr 6) mod 13, Surface);
                          end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1, Surface);
-     gtClusterBomb: DrawSprite(sprClusterBomb, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, hwRound(Gear^.DirAngle), Surface);
+     gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0, Surface);
            gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Angle) mod 8, Surface);
        gtParachute: DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0, Surface);
        gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0, Surface)
                                      else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1, Surface);
-         gtAirBomb: DrawSprite(sprAirBomb , hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, DxDy2Angle32(Gear^.dY, Gear^.dX), Surface);
+         gtAirBomb: DrawRotated(sprAirBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12, Surface);
           gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0, Surface);
               end;
