@@ -187,8 +187,8 @@ FillRoundInLand(X, Y, Radius, 0);
      end;
   if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
 
-d:= max(Y - Radius, 0);
-dy:= min(Y + Radius, 1023) - d;
+d:= max(Y - Radius - 1, 0);
+dy:= min(Y + Radius + 1, 1023) - d;
 UpdateLandTexture(d, dy)
 end;
 
@@ -223,8 +223,10 @@ end;
 //
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
-    i, t, tx, ty: Longint;
+    i, t, tx, ty, stY: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
+stY:= hwRound(Y);
+
 nx:= X + dY * (HalfWidth + 8);
 ny:= Y - dX * (HalfWidth + 8);
 
@@ -277,7 +279,9 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-UpdateLandTexture(0, 1024)
+t:= max(stY - HalfWidth * 3 div 2 - 4, 0);
+ty:= min(stY + HalfWidth * 3 div 2 + 4, 1023) - t;
+UpdateLandTexture(t, ty)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
@@ -342,7 +346,6 @@ if SDL_MustLock(Image) then
 
 y:= max(cpY, 0);
 h:= min(cpY + Image^.h, 1023) - y;
-addfilelog(inttostr(y) + ' <<<<<<<<>>>>>>>> '+inttostr(h));
 UpdateLandTexture(y, h)
 end;
 
