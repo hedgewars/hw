@@ -173,6 +173,7 @@ begin
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
+glEnable(GL_TEXTURE_2D);
 
 if not isPaused then MoveCamera;
 
@@ -371,6 +372,7 @@ if SoundTimerTicks >= 50 then
       end
    end;
 
+glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
 end;
 

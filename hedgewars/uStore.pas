@@ -30,6 +30,7 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: P
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface: PSDL_Surface);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
@@ -326,7 +327,6 @@ _t:= r^.y / SourceTexture^.h;
 _b:= (r^.y + r^.h) / SourceTexture^.h;
 
 glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
-glEnable(GL_TEXTURE_2D);
 
 glBegin(GL_QUADS);
 
@@ -348,7 +348,6 @@ end;
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 begin
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
-glEnable(GL_TEXTURE_2D);
 
 glBegin(GL_QUADS);
 
@@ -365,6 +364,37 @@ glTexCoord2f(0, 1);
 glVertex2i(X, Texture^.h + Y);
 
 glEnd()
+end;
+
+procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
+var hw, hh: LongInt;
+begin
+glPushMatrix;
+glTranslatef(X, Y, 0);
+glRotatef(Angle, 0, 0, 1);
+
+hw:= SpritesData[Sprite].Width;
+hh:= SpritesData[Sprite].Height;
+
+glBindTexture(GL_TEXTURE_2D, SpritesData[Sprite].Texture^.id);
+
+glBegin(GL_QUADS);
+
+glTexCoord2f(0, 0);
+glVertex2i(-hw, -hh);
+
+glTexCoord2f(1, 0);
+glVertex2i(hw, -hh);
+
+glTexCoord2f(1, 1);
+glVertex2i(hw, hh);
+
+glTexCoord2f(0, 1);
+glVertex2i(-hw, hh);
+
+glEnd();
+
+glPopMatrix
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
@@ -452,7 +482,6 @@ if Dir = -1 then
    end;
 
 glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
-glEnable(GL_TEXTURE_2D);
 
 glBegin(GL_QUADS);
 
@@ -565,12 +594,14 @@ if Step = 0 then
    SDL_FreeSurface(texsurf)
    end;
 glClear(GL_COLOR_BUFFER_BIT);
+glEnable(GL_TEXTURE_2D);
 r.x:= 0;
 r.w:= ProgrTex^.w;
 r.h:= ProgrTex^.w;
 r.y:= (Step mod (ProgrTex^.h div ProgrTex^.w)) * ProgrTex^.w;
 DrawFromRect((cScreenWidth - ProgrTex^.w) div 2,
              (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex, SDLPrimSurface);
+glDisable(GL_TEXTURE_2D);
 SDL_GL_SwapBuffers();
 inc(Step);
 end;

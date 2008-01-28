@@ -258,7 +258,7 @@ const
                      (FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  16; Height: 16; saveSurf: false),// sprCursor
                      (FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false),// sprGrenade
+                      Width:  16; Height: 16; saveSurf: false),// sprGrenade
                      (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprTargetP
                      (FileName:        'UFO'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

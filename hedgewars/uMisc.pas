@@ -104,6 +104,7 @@ procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function IntToStr(n: LongInt): shortstring;
 function FloatToStr(n: hwFloat): shortstring;
+function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 procedure AdjustColor(var Color: Longword);
@@ -179,6 +180,16 @@ end;
 function FloatToStr(n: hwFloat): shortstring;
 begin
 FloatToStr:= cstr(n)
+end;
+
+function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+var dY, dX: Extended;
+begin
+dY:= _dY.QWordValue / $100000000;
+if _dY.isNegative then dY:= - dY;
+dX:= _dX.QWordValue / $100000000;
+if _dX.isNegative then dX:= - dX;
+DxDy2Angle:= arctan2(dY, dX) * 180 / pi
 end;
 
 function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
