@@ -1,0 +1,181 @@
+bin/hedgewars
+bin/hwengine
+share/hedgewars/Data/Fonts/DejaVuSans.ttf
+share/hedgewars/Data/Forts/BarrelhouseL.png
+share/hedgewars/Data/Forts/BarrelhouseR.png
+share/hedgewars/Data/Forts/IslandL.png
+share/hedgewars/Data/Forts/IslandR.png
+share/hedgewars/Data/Graphics/AirBomb.png
+share/hedgewars/Data/Graphics/Airplane.png
+share/hedgewars/Data/Graphics/AmmoMenu/AmmoName.png
+share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png
+share/hedgewars/Data/Graphics/AmmoMenu/BrdrLines.png
+share/hedgewars/Data/Graphics/AmmoMenu/Selection.png
+share/hedgewars/Data/Graphics/AmmoMenu/Slot.png
+share/hedgewars/Data/Graphics/AmmoMenu/SlotKeys.png
+share/hedgewars/Data/Graphics/Arrow.png
+share/hedgewars/Data/Graphics/BigDigits.png
+share/hedgewars/Data/Graphics/BlueWater.png
+share/hedgewars/Data/Graphics/Bomb.png
+share/hedgewars/Data/Graphics/Case.png
+share/hedgewars/Data/Graphics/ClBomb.png
+share/hedgewars/Data/Graphics/ClParticle.png
+share/hedgewars/Data/Graphics/Clouds.png
+share/hedgewars/Data/Graphics/Console.png
+share/hedgewars/Data/Graphics/Crosshair.png
+share/hedgewars/Data/Graphics/Expl50.png
+share/hedgewars/Data/Graphics/Finger.png
+share/hedgewars/Data/Graphics/FirstAid.png
+share/hedgewars/Data/Graphics/Flame.png
+share/hedgewars/Data/Graphics/Frame.png
+share/hedgewars/Data/Graphics/Girder.png
+share/hedgewars/Data/Graphics/Graves/Bone.png
+share/hedgewars/Data/Graphics/Graves/Rip.png
+share/hedgewars/Data/Graphics/Graves/Simple.png
+share/hedgewars/Data/Graphics/Graves/coffin.png
+share/hedgewars/Data/Graphics/Grenade.png
+share/hedgewars/Data/Graphics/Hedgehog.png
+share/hedgewars/Data/Graphics/Lag.png
+share/hedgewars/Data/Graphics/MineOff.png
+share/hedgewars/Data/Graphics/MineOn.png
+share/hedgewars/Data/Graphics/Parachute.png
+share/hedgewars/Data/Graphics/Power.png
+share/hedgewars/Data/Graphics/PowerBar.png
+share/hedgewars/Data/Graphics/Progress.png
+share/hedgewars/Data/Graphics/RopeHook.png
+share/hedgewars/Data/Graphics/RopeNode.png
+share/hedgewars/Data/Graphics/SmokeTrace.png
+share/hedgewars/Data/Graphics/Switch.png
+share/hedgewars/Data/Graphics/Target.png
+share/hedgewars/Data/Graphics/Targetp.png
+share/hedgewars/Data/Graphics/UFO.png
+share/hedgewars/Data/Graphics/WindBar.png
+share/hedgewars/Data/Graphics/WindL.png
+share/hedgewars/Data/Graphics/WindR.png
+share/hedgewars/Data/Graphics/amAirplane.png
+share/hedgewars/Data/Graphics/amGirder.png
+share/hedgewars/Data/Graphics/dynamite.png
+share/hedgewars/Data/Graphics/hhMask.png
+share/hedgewars/Data/Graphics/thinking.png
+share/hedgewars/Data/Locale/en.txt
+share/hedgewars/Data/Locale/hedgewars_ru.qm
+share/hedgewars/Data/Locale/ru.txt
+share/hedgewars/Data/Maps/Volcano/map.16.png
+share/hedgewars/Data/Maps/Volcano/map.cfg
+share/hedgewars/Data/Maps/Volcano/map.png
+share/hedgewars/Data/Maps/cheese/map.16.png
+share/hedgewars/Data/Maps/cheese/map.cfg
+share/hedgewars/Data/Maps/cheese/map.png
+share/hedgewars/Data/Maps/mushrooms/map.16.png
+share/hedgewars/Data/Maps/mushrooms/map.cfg
+share/hedgewars/Data/Maps/mushrooms/map.png
+share/hedgewars/Data/Sounds/explosion.ogg
+share/hedgewars/Data/Sounds/graveimpact.ogg
+share/hedgewars/Data/Sounds/grenadeimpact.ogg
+share/hedgewars/Data/Sounds/gun.ogg
+share/hedgewars/Data/Sounds/minetick.ogg
+share/hedgewars/Data/Sounds/pickhammer.ogg
+share/hedgewars/Data/Sounds/shotgunfire.ogg
+share/hedgewars/Data/Sounds/shotgunreload.ogg
+share/hedgewars/Data/Sounds/splash.ogg
+share/hedgewars/Data/Sounds/throwpowerup.ogg
+share/hedgewars/Data/Sounds/throwrelease.ogg
+share/hedgewars/Data/Sounds/ufo.ogg
+share/hedgewars/Data/Themes/Volcano/Border.png
+share/hedgewars/Data/Themes/Volcano/LandTex.png
+share/hedgewars/Data/Themes/Volcano/Sky.png
+share/hedgewars/Data/Themes/Volcano/gr1.png
+share/hedgewars/Data/Themes/Volcano/horizont.png
+share/hedgewars/Data/Themes/Volcano/leaf1.png
+share/hedgewars/Data/Themes/Volcano/leaf2.png
+share/hedgewars/Data/Themes/Volcano/theme.cfg
+share/hedgewars/Data/Themes/Volcano/tree.png
+share/hedgewars/Data/Themes/avematan/Border.png
+share/hedgewars/Data/Themes/avematan/LandTex.png
+share/hedgewars/Data/Themes/avematan/Sky.png
+share/hedgewars/Data/Themes/avematan/a.png
+share/hedgewars/Data/Themes/avematan/e.png
+share/hedgewars/Data/Themes/avematan/horizont.png
+share/hedgewars/Data/Themes/avematan/inf.png
+share/hedgewars/Data/Themes/avematan/sqrt.png
+share/hedgewars/Data/Themes/avematan/theme.cfg
+share/hedgewars/Data/Themes/bubbles/Border.png
+share/hedgewars/Data/Themes/bubbles/LandTex.png
+share/hedgewars/Data/Themes/bubbles/Sky.png
+share/hedgewars/Data/Themes/bubbles/horizont.png
+share/hedgewars/Data/Themes/bubbles/round.png
+share/hedgewars/Data/Themes/bubbles/theme.cfg
+share/hedgewars/Data/Themes/cheese/Sky.png
+share/hedgewars/Data/Themes/cheese/horizont.png
+share/hedgewars/Data/Themes/cheese/theme.cfg
+share/hedgewars/Data/Themes/norsk/Border.png
+share/hedgewars/Data/Themes/norsk/LandTex.png
+share/hedgewars/Data/Themes/norsk/Sky.png
+share/hedgewars/Data/Themes/norsk/horizont.png
+share/hedgewars/Data/Themes/norsk/theme.cfg
+share/hedgewars/Data/Themes/norsk/tree.png
+share/hedgewars/Data/Themes/steel/01.png
+share/hedgewars/Data/Themes/steel/02.png
+share/hedgewars/Data/Themes/steel/Border.png
+share/hedgewars/Data/Themes/steel/Clouds.16.png
+share/hedgewars/Data/Themes/steel/Clouds.32.png
+share/hedgewars/Data/Themes/steel/LandTex.png
+share/hedgewars/Data/Themes/steel/Sky.16.png
+share/hedgewars/Data/Themes/steel/Sky.32.png
+share/hedgewars/Data/Themes/steel/horizont.png
+share/hedgewars/Data/Themes/steel/theme.cfg
+share/hedgewars/Data/Themes/themes.cfg
+share/hedgewars/Data/Themes/tibet/Border.png
+share/hedgewars/Data/Themes/tibet/LandTex.png
+share/hedgewars/Data/Themes/tibet/Sky.png
+share/hedgewars/Data/Themes/tibet/chha.png
+share/hedgewars/Data/Themes/tibet/horizont.png
+share/hedgewars/Data/Themes/tibet/ma.png
+share/hedgewars/Data/Themes/tibet/nga.png
+share/hedgewars/Data/Themes/tibet/sa.png
+share/hedgewars/Data/Themes/tibet/ta1.png
+share/hedgewars/Data/Themes/tibet/theme.cfg
+share/hedgewars/Data/Themes/wood/Border.png
+share/hedgewars/Data/Themes/wood/LandTex.png
+share/hedgewars/Data/Themes/wood/Sky.png
+share/hedgewars/Data/Themes/wood/gr1.png
+share/hedgewars/Data/Themes/wood/horizont.png
+share/hedgewars/Data/Themes/wood/leaf1.png
+share/hedgewars/Data/Themes/wood/leaf2.png
+share/hedgewars/Data/Themes/wood/theme.cfg
+share/hedgewars/Data/Themes/wood/tree.png
+share/hedgewars/Data/Themes/xtheme/Border.png
+share/hedgewars/Data/Themes/xtheme/LandTex.png
+share/hedgewars/Data/Themes/xtheme/Sky.png
+share/hedgewars/Data/Themes/xtheme/horizont.png
+share/hedgewars/Data/Themes/xtheme/plant1.png
+share/hedgewars/Data/Themes/xtheme/plant2.png
+share/hedgewars/Data/Themes/xtheme/plant3.png
+share/hedgewars/Data/Themes/xtheme/plant4.png
+share/hedgewars/Data/Themes/xtheme/theme.cfg
+share/hedgewars/Data/Trainings/001_Shotgun.txt
+share/hedgewars/Data/Trainings/002_Bazooka.txt
+@dirrm share/hedgewars/Data/Trainings
+@dirrm share/hedgewars/Data/Themes/xtheme
+@dirrm share/hedgewars/Data/Themes/wood
+@dirrm share/hedgewars/Data/Themes/tibet
+@dirrm share/hedgewars/Data/Themes/steel
+@dirrm share/hedgewars/Data/Themes/norsk
+@dirrm share/hedgewars/Data/Themes/cheese
+@dirrm share/hedgewars/Data/Themes/bubbles
+@dirrm share/hedgewars/Data/Themes/avematan
+@dirrm share/hedgewars/Data/Themes/Volcano
+@dirrm share/hedgewars/Data/Themes
+@dirrm share/hedgewars/Data/Sounds
+@dirrm share/hedgewars/Data/Maps/mushrooms
+@dirrm share/hedgewars/Data/Maps/cheese
+@dirrm share/hedgewars/Data/Maps/Volcano
+@dirrm share/hedgewars/Data/Maps
+@dirrm share/hedgewars/Data/Locale
+@dirrm share/hedgewars/Data/Graphics/Graves
+@dirrm share/hedgewars/Data/Graphics/AmmoMenu
+@dirrm share/hedgewars/Data/Graphics
+@dirrm share/hedgewars/Data/Forts
+@dirrm share/hedgewars/Data/Fonts
+@dirrm share/hedgewars/Data
+@dirrm share/hedgewars

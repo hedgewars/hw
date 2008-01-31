@@ -1,3 +1,15 @@
- 
+Hedgewars is turn-based Worms-like strategy game.
+
+Each player controls a team of several hedgehogs. During the course of the game,
+players take turns with one of their hedgehogs. They then use whatever tools and
+weapons are available to attack and kill the opponents' hedgehogs, thereby
+winning the game. Hedgehogs may move around the terrain in a variety of ways,
+normally by walking and jumping but also by using particular tools such as the
+"Rope" or "Parachute", to move to otherwise inaccessible areas. Each turn is
+time-limited to ensure that players do not hold up the game with excessive
+thinking or moving. A large variety of tools and weapons are available for
+players during the game: Grenade, Cluster Bomb, Bazooka, UFO, Shotgun, Desert
+Eagle, Fire Punch, Baseball Bat, Dynamite, Mine, Rope, Pneumatic pick,
+Parachute.
 
 WWW: http://www.hedgewars.org/
