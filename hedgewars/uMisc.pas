@@ -55,7 +55,6 @@ var isCursorVisible : boolean = false;
     GameTicks     : LongWord = 0;
 
     cSkyColor     : Longword = 0;
-    cWaterColor   : Longword = $FF005ACE;
     cWhiteColor   : Longword = $FFFFFFFF;
     cConsoleSplitterColor : Longword = $FFFF0000;
     cColorNearBlack       : Longword = $FF000010;

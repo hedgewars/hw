@@ -359,7 +359,8 @@ WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
 Reset(f);
-Readln(f, s); // skip color
+Readln(f, s); // skip sky color
+Readln(f, s); // skip border color
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
     begin

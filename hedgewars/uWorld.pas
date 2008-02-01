@@ -195,10 +195,19 @@ r.y:= WorldDy + cWaterLine + 32;
 if r.y < cScreenHeight then
    begin
    if r.y < 0 then r.y:= 0;
-   r.h:= cScreenHeight - r.y;
-   r.x:= 0;
-   r.w:= cScreenWidth;
-//   SDL_FillRect(Surface, @r, cWaterColor)
+
+   glDisable(GL_TEXTURE_2D);
+   glBegin(GL_QUADS);
+    glColor3ub(0, $5A, $CE); // water color
+    glVertex2i(0, r.y);
+    glVertex2i(cScreenWidth, r.y);
+    glColor3ub(0, $40, $B3); // deep water color
+    glVertex2i(cScreenWidth, cScreenHeight);
+    glVertex2i(0, cScreenHeight);
+   glEnd();
+
+   glColor4f(1, 1, 1, 1); // disable coloring
+   glEnable(GL_TEXTURE_2D)
    end;
 
 DrawGears(Surface);

@@ -122,8 +122,6 @@ type PSDL_Rect = ^TSDL_Rect;
                            b: Byte;
                            unused: Byte;
                           );
-(* workaround over freepascal bug.
-   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
                        1: (value: Longword);
                   end;
 

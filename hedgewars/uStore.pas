@@ -227,44 +227,25 @@ var ii: TSprite;
           end
     end;
 
-    procedure GetSkyColor;
-//    var p: PByteArray;
-    begin
-(*    if SDL_MustLock(SpritesData[sprSky].Surface) then
-       SDLTry(SDL_LockSurface(SpritesData[sprSky].Surface) >= 0, true);
-    p:= SpritesData[sprSky].Surface^.pixels;
-    case SpritesData[sprSky].Surface^.format^.BytesPerPixel of
-         1: cSkyColor:= PByte(p)^;
-         2: cSkyColor:= PWord(p)^;
-         3: cSkyColor:= (p^[0]) or (p^[1] shl 8) or (p^[2] shl 16);
-         4: cSkyColor:= PLongword(p)^;
-         end;*)
-    cSkyColor:= $3030A0;
-    glClearColor((cSkyColor shr 16) / 255, ((cSkyColor shr 8) and $FF) / 255, (cSkyColor and $FF) / 255, 0);
-
-//    if SDL_MustLock(SpritesData[sprSky].Surface) then
-//       SDL_UnlockSurface(SpritesData[sprSky].Surface)
-    end;
-
     procedure GetExplosionBorderColor;
     var f: textfile;
-        c: LongInt;
+        s1, s2: shortstring;
+        c1, c2: TSDL_Color;
     begin
     s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
     WriteToConsole(msgLoading + s + ' ');
     Assign(f, s);
     {$I-}
     Reset(f);
-    Readln(f, s);
+    Readln(f, c1.r, c1.g, c1. b);
+    Readln(f, c2.r, c2.g, c2. b);
     Close(f);
     {$I+}
     TryDo(IOResult = 0, msgFailed, true);
     WriteLnToConsole(msgOK);
-    val(s, cExplosionBorderColor, c);
-    TryDo(c = 0, 'Theme data corrupted', true);
-    cExplosionBorderColor:= (cExplosionBorderColor shr 16) or
-                            (cExplosionBorderColor and $FF) or
-                            (cExplosionBorderColor shl 16) or
+
+    glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
+    cExplosionBorderColor:= c2.value or
                             $FF000000
     end;
 
@@ -304,8 +285,6 @@ for ii:= Low(TSprite) to High(TSprite) do
          Texture:= Surface2Tex(tmpsurf);
          if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
          end;
-
-GetSkyColor;
 
 AddProgress;
 
