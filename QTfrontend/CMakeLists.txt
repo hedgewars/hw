@@ -32,12 +32,12 @@ else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 
 configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.cpp.in 
-	${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.cpp)
+	${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
-set(hwfr_src 
+set(hwfr_src
 	game.cpp
 	main.cpp
-	hwform.cpp 
+	hwform.cpp
 	team.cpp
 	teamselect.cpp
 	teamselhelper.cpp
@@ -68,7 +68,7 @@ set(hwfr_src
 	binds.cpp
 	SDLs.cpp
 	playrecordpage.cpp
-	hwconsts.cpp
+	${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
 	selectWeapon.cpp
         itemNum.cpp
 	input_ip.cpp
@@ -157,7 +157,7 @@ if(WIN32 AND NOT UNIX)
 		)
 endif(WIN32 AND NOT UNIX)
 
-target_link_libraries(hedgewars 
+target_link_libraries(hedgewars
 	${HW_LINK_LIBS})
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)

@@ -1,5 +1,5 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in 
-	${hedgewars_SOURCE_DIR}/hedgewars/proto.inc) 
+	${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
 set(fpc_tryexe fpc)
 set(hwengine_project "hwengine.dpr")
@@ -39,7 +39,7 @@ set(engine_sources
 	SinTable.inc
 	options.inc
 	playlist.inc
-	proto.inc
+	${CMAKE_CURRENT_BINARY_DIR}/proto.inc
 	tunsetborder.inc
 	)
 
@@ -50,9 +50,9 @@ if (fpc_executable)
 endif (fpc_executable)
 
 set (noexecstack_flags "-k-z" "-knoexecstack")
-FILE(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
+file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
 
-EXEC_PROGRAM(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
+exec_program(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
 		ARGS ${noexecstack_flags} checkstack.pas
 		OUTPUT_VARIABLE noout
 		RETURN_VALUE testnoexecstack)
@@ -80,12 +80,12 @@ if (NOT pascal_compiler)
 endif (NOT pascal_compiler)
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
-                  COMMAND "${pascal_compiler}" 
-                  ARGS ${pascal_compiler_flags}
-                  MAIN_DEPENDENCY ${hwengine_project}
-                  DEPENDS ${engine_sources}
-                  )
-                   
+		COMMAND "${pascal_compiler}"
+		ARGS ${pascal_compiler_flags}
+		MAIN_DEPENDENCY ${hwengine_project}
+		DEPENDS ${engine_sources}
+		)
+
 add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
