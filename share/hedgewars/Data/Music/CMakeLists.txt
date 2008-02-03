@@ -2,7 +2,7 @@ file(GLOB BaseMusic *.ogg)
 
 list(LENGTH BaseMusic PlayListLength)
 
-set(PlayListINCFile ${hedgewars_SOURCE_DIR}/hedgewars/playlist.inc)
+set(PlayListINCFile ${CMAKE_BINARY_DIR}/hedgewars/playlist.inc)
 
 file(WRITE ${PlayListINCFile} "const cPlayListLength = " ${PlayListLength} ";")
 
