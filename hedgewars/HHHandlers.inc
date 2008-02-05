@@ -17,6 +17,55 @@
  *)
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure ChangeAmmo(Gear: PGear);
+var slot: Longword;
+    caSlot, caAmmo: PLongword;
+begin
+slot:= Gear^.MsgParam;
+
+with PHedgehog(Gear^.Hedgehog)^ do
+     begin
+     if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
+        or ((Gear^.State and gstHHDriven) = 0) then exit;
+
+     Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump or gm_Slot);
+
+     if CurAmmoGear = nil then begin caSlot:= @CurSlot; caAmmo:= @CurAmmo end
+                          else begin caSlot:= @AltSlot; caAmmo:= @AltAmmo end;
+
+     if caSlot^ = slot then
+        begin
+        inc(caAmmo^);
+        if (caAmmo^ > cMaxSlotAmmoIndex) or (Ammo^[slot, caAmmo^].Count = 0) then caAmmo^:= 0
+        end else
+     if Ammo^[slot, 0].Count > 0 then
+        begin
+        caSlot^:= slot;
+        caAmmo^:= 0;
+        end;
+     end;
+ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+end;
+
+procedure HHSetWeapon(Gear: PGear);
+var t: LongInt;
+    weap: TAmmoType;
+begin
+weap:= TAmmoType(Gear^.MsgParam);
+Gear^.MsgParam:= Ammoz[weap].Slot;
+
+t:= cMaxSlotAmmoIndex;
+
+Gear^.Message:= Gear^.Message and not gm_Weapon;
+
+with PHedgehog(Gear^.Hedgehog)^ do
+     while (Ammo^[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
+           begin
+           ChangeAmmo(Gear);
+           dec(t)
+           end
+end;
+
 procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
 begin
@@ -282,7 +331,7 @@ if isFalling then
    end;
 
 if (Gear^.State <> 0) then DeleteCI(Gear);
-                
+
 if (Gear^.State and gstMoving) <> 0 then
    if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
       if not isFalling then
@@ -361,6 +410,10 @@ if CurAmmoGear <> nil then
    CurAmmoGear^.Message:= Gear^.Message;
    exit
    end;
+
+if ((Gear^.Message and gm_Slot) <> 0) then ChangeAmmo(Gear);
+
+if ((Gear^.Message and gm_Weapon) <> 0) then HHSetWeapon(Gear);
 
 if ((Gear^.Message and gm_Attack) <> 0) or
    ((Gear^.State and gstAttacking) <> 0) then Attack(Gear);

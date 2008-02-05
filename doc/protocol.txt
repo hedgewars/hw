@@ -10,7 +10,8 @@ IPC:
                 's' + <текст>   /say
                 '+'             пустой пакет для постоянности лага
                 '1'..'5'        /timer 1..5
-                chr(128+№)      /slot №
+                chr(128+№)     /slot №
+                'w'             /setweap
                 'p'             /put
                 'j'             /ljump
                 'J'             /hjump

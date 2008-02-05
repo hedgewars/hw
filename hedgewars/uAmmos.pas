@@ -29,9 +29,10 @@ procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
+procedure SetWeapon(weap: TAmmoType);
 
 implementation
-uses uMisc, uGears, uWorld, uLocale;
+uses uMisc, uGears, uWorld, uLocale, uConsole;
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     StoreCnt: Longword = 0;
@@ -212,6 +213,11 @@ with Hedgehog do
         CurSlot:= 0;
         while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
         end
+end;
+
+procedure SetWeapon(weap: TAmmoType);
+begin
+ParseCommand('/setweap ' + chr(ord('a') + byte(weap)), true)
 end;
 
 end.

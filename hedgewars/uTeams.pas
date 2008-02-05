@@ -87,7 +87,6 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function CheckForWin: boolean;
-procedure SetWeapon(weap: TAmmoType);
 procedure SendStats;
 
 implementation
@@ -317,19 +316,6 @@ var t: LongInt;
 begin
 for t:= 0 to Pred(TeamsCount) do
    TeamsArray[t]^.ExtDriven:= false
-end;
-
-procedure SetWeapon(weap: TAmmoType);
-var t: LongInt;
-begin
-t:= cMaxSlotAmmoIndex;
-with CurrentTeam^ do
-     with Hedgehogs[CurrHedgehog] do
-          while (Ammo^[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
-                begin
-                ParseCommand('/slot ' + chr(49 + Ammoz[TAmmoType(weap)].Slot), true);
-                dec(t)
-                end
 end;
 
 procedure SendStats;

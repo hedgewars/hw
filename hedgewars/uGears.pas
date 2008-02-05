@@ -41,7 +41,7 @@ type PGear = ^TGear;
              Timer : LongWord;
              Elasticity: hwFloat;
              Friction  : hwFloat;
-             Message : Longword;
+             Message, MsgParam : Longword;
              Hedgehog: pointer;
              Health, Damage: LongInt;
              CollisionIndex: LongInt;

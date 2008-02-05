@@ -38,7 +38,7 @@ var FollowGear: PGear = nil;
     Frames: Longword = 0;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL, uAmmos;
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;

@@ -294,34 +294,27 @@ end;
 
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
-    caSlot, caAmmo: PLongword;
 begin
 if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 bShowFinger:= false;
 slot:= byte(s[1]) - 49;
 if slot > cMaxSlotIndex then exit;
 if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
-with CurrentTeam^ do
+with CurrentHedgehog^.Gear^ do
      begin
-     with Hedgehogs[CurrHedgehog] do
-          begin
-          if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
-             or ((Gear^.State and gstHHDriven) = 0) then exit;
-          Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
-          if CurAmmoGear = nil then begin caSlot:= @CurSlot; caAmmo:= @CurAmmo end
-                               else begin caSlot:= @AltSlot; caAmmo:= @AltAmmo end;
-          if caSlot^ = slot then
-             begin
-             inc(caAmmo^);
-             if (caAmmo^ > cMaxSlotAmmoIndex) or (Ammo^[slot, caAmmo^].Count = 0) then caAmmo^:= 0
-             end else
-             if Ammo^[slot, 0].Count > 0 then
-                begin
-                caSlot^:= slot;
-                caAmmo^:= 0;
-                end;
-          end;
-     ApplyAmmoChanges(Hedgehogs[CurrHedgehog])
+     Message:= Message or gm_Slot;
+     MsgParam:= slot
+     end
+end;
+
+procedure chSetWeapon(var s: shortstring);
+begin
+if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+if not CurrentTeam^.ExtDriven then SendIPC('w' + char(byte(s[1]) + 79));
+with CurrentHedgehog^.Gear^ do
+     begin
+     Message:= Message or gm_Weapon;
+     MsgParam:= byte(s[1]) - ord('a')
      end
 end;
 

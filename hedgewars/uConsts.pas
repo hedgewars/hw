@@ -170,6 +170,8 @@ const
       gm_LJump  = $00000040;
       gm_HJump  = $00000080;
       gm_Destroy= $00000100;
+      gm_Slot   = $00000200; // with param
+      gm_Weapon = $00000400; // with param
 
       cMaxSlotIndex       = 8;
       cMaxSlotAmmoIndex   = 2;
