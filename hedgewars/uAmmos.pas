@@ -217,7 +217,7 @@ end;
 
 procedure SetWeapon(weap: TAmmoType);
 begin
-ParseCommand('/setweap ' + chr(ord('a') + byte(weap)), true)
+ParseCommand('/setweap ' + char(weap), true)
 end;
 
 end.
