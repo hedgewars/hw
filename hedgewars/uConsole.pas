@@ -57,6 +57,7 @@ type  PVariable = ^TVariable;
 var   ConsoleLines: array[byte] of TTextLine;
       CurrLine: LongInt = 0;
       InputStr: TTextLine;
+      InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
       Variables: PVariable = nil;
 
 procedure SetLine(var tl: TTextLine; str: shortstring);
@@ -120,13 +121,18 @@ procedure DrawConsole(Surface: PSDL_Surface);
 var x, y: LongInt;
 
     procedure DrawLine(var tl: TTextLine; X, Y: LongInt);
+    var tmpSurface: PSDL_Surface;
     begin
     with tl do
        begin
        if updatetex then
           begin
-          if s[0] <> #0 then tex:= RenderStringTex(s, $FFFFFF, fnt16)
-                        else tex:= nil;
+          if s[0] <> #0 then
+             begin
+             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+             tex:= Surface2Tex(tmpSurface);
+             SDL_FreeSurface(tmpSurface)
+             end else tex:= nil;
           updatetex:= false
           end;
 
@@ -137,6 +143,7 @@ var x, y: LongInt;
 
 begin
 glEnable(GL_TEXTURE_2D);
+glEnable(GL_BLEND);
 
 for y:= 0 to cConsoleHeight div 256 + 1 do
     for x:= 0 to cScreenWidth div 256 + 1 do
@@ -147,6 +154,7 @@ for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
 
 DrawLine(InputStr, 4, cConsoleHeight - Fontz[fnt16].Height - 2);
 
+glDisable(GL_BLEND);
 glDisable(GL_TEXTURE_2D);
 end;
 
@@ -273,7 +281,7 @@ if Key <> 0 then
   case Key of
       8: if Length(InputStr.s) > 0 then
             begin
-            dec(InputStr.s[0]);
+            InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
             SetLine(InputStr, InputStr.s)
             end;
       9: AutoComplete;
@@ -296,6 +304,8 @@ if Key <> 0 then
          Key:= Key shr 6
          end;
      utf8:= char(Key or firstByteMark[btw]) + utf8;
+
+     InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
      SetLine(InputStr, InputStr.s + utf8)
      end
 end;
