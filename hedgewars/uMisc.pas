@@ -291,7 +291,7 @@ Surface2Tex^.h:= surf^.h;
 if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
 if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
    begin
-   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4', false);
+   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4]', true);
    Surface2Tex^.id:= 0;
    exit
    end;
@@ -323,8 +323,8 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);
 
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
 end;
 
 procedure FreeTexture(tex: PTexture);

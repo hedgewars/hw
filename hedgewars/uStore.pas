@@ -493,8 +493,7 @@ glVertex2i(32 + X, 32 + Y);
 glTexCoord2f(l, b);
 glVertex2i(X, 32 + Y);
 
-glEnd();
-
+glEnd()
 end;
 
 procedure StoreRelease;
@@ -517,12 +516,18 @@ var w, h: LongInt;
     Result: PSDL_Surface;
 begin
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
+
 Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
          32, RMask, GMask, BMask, AMask);
+
 TryDo(Result <> nil, 'RenderString: fail to create surface', true);
+
 WriteInRoundRect(Result, 0, 0, Color, font, s);
+
 TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
 RenderStringTex:= Surface2Tex(Result);
+
 SDL_FreeSurface(Result)
 end;
 

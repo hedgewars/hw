@@ -36,7 +36,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uTriggers;
+     uRandom, uAmmos, uTriggers, GL;
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
 
@@ -48,11 +48,26 @@ type  PVariable = ^TVariable;
                   Handler: pointer;
                   Trusted: boolean;
                   end;
+      TTextLine = record
+                  s: shortstring;
+                  tex: PTexture;
+                  updatetex: boolean;
+                  end;
 
-var   ConsoleLines: array[byte] of ShortString;
+var   ConsoleLines: array[byte] of TTextLine;
       CurrLine: LongInt = 0;
-      InputStr: shortstring;
+      InputStr: TTextLine;
       Variables: PVariable = nil;
+
+procedure SetLine(var tl: TTextLine; str: shortstring);
+begin
+with tl do
+     begin
+     s:= str;
+     if tex <> nil then FreeTexture(tex);
+     updatetex:= true
+     end
+end;
 
 function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
 var Result: PVariable;
@@ -103,22 +118,36 @@ end;
 
 procedure DrawConsole(Surface: PSDL_Surface);
 var x, y: LongInt;
-    r: TSDL_Rect;
+
+    procedure DrawLine(var tl: TTextLine; X, Y: LongInt);
+    begin
+    with tl do
+       begin
+       if updatetex then
+          begin
+          if s[0] <> #0 then tex:= RenderStringTex(s, $FFFFFF, fnt16)
+                        else tex:= nil;
+          updatetex:= false
+          end;
+
+       if tex <> nil then
+          DrawTexture(X, Y, tex);
+       end
+    end;
+
 begin
-with r do
-     begin
-     x:= 0;
-     y:= cConsoleHeight;
-     w:= cScreenWidth;
-     h:= 4;
-     end;
-//SDL_FillRect(Surface, @r, cConsoleSplitterColor);
+glEnable(GL_TEXTURE_2D);
+
 for y:= 0 to cConsoleHeight div 256 + 1 do
     for x:= 0 to cScreenWidth div 256 + 1 do
         DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0, Surface);
+
 for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
-    //DXOutText(4, cConsoleHeight - (y + 2) * (Fontz[fnt16].Height + 2), fnt16, ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], Surface);
-//DXOutText(4, cConsoleHeight - Fontz[fnt16].Height - 2, fnt16, '> '+InputStr, Surface);
+    DrawLine(ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], 4, cConsoleHeight - (y + 2) * (Fontz[fnt16].Height + 2));
+
+DrawLine(InputStr, 4, cConsoleHeight - Fontz[fnt16].Height - 2);
+
+glDisable(GL_TEXTURE_2D);
 end;
 
 procedure WriteToConsole(s: shortstring);
@@ -127,14 +156,14 @@ begin
 {$IFDEF DEBUGFILE}AddFileLog('Console write: ' + s);{$ENDIF}
 Write(s);
 repeat
-Len:= cLineWidth - Length(ConsoleLines[CurrLine]);
-ConsoleLines[CurrLine]:= ConsoleLines[CurrLine] + copy(s, 1, Len);
+Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
+SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
 Delete(s, 1, Len);
-if byte(ConsoleLines[CurrLine][0])=cLineWidth then
+if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
    begin
    inc(CurrLine);
    if CurrLine = cLinesCount then CurrLine:= 0;
-   PLongWord(@ConsoleLines[CurrLine])^:= 0
+   PByte(@ConsoleLines[CurrLine].s)^:= 0
    end;
 until Length(s) = 0
 end;
@@ -145,7 +174,7 @@ WriteToConsole(s);
 WriteLn;
 inc(CurrLine);
 if CurrLine = cLinesCount then CurrLine:= 0;
-PLongWord(@ConsoleLines[CurrLine])^:= 0
+PByte(@ConsoleLines[CurrLine].s)^:= 0
 end;
 
 procedure InitConsole;
@@ -153,7 +182,7 @@ var i: LongInt;
 begin
 cLineWidth:= cScreenWidth div 10;
 if cLineWidth > 255 then cLineWidth:= 255;
-for i:= 0 to Pred(cLinesCount) do PLongWord(@ConsoleLines[i])^:= 0
+for i:= 0 to Pred(cLinesCount) do PByte(@ConsoleLines[i])^:= 0
 end;
 
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
@@ -215,20 +244,20 @@ procedure AutoComplete;
 var t: PVariable;
     c: char;
 begin
-if InputStr[0] = #0 then exit;
-c:= InputStr[1];
-if c in ['/', '$'] then Delete(InputStr, 1, 1)
+if InputStr.s[0] = #0 then exit;
+c:= InputStr.s[1];
+if c in ['/', '$'] then Delete(InputStr.s, 1, 1)
                    else c:= #0;
-if InputStr[byte(InputStr[0])] = #32 then dec(InputStr[0]);
+if InputStr.s[byte(InputStr.s[0])] = #32 then dec(InputStr.s[0]);
 t:= Variables;
 while t <> nil do
       begin
       if (c=#0) or ((t^.VType =  vtCommand) and (c='/'))or
                    ((t^.VType <> vtCommand) and (c='$'))then
-         if copy(t^.Name, 1, Length(InputStr)) = InputStr then
+         if copy(t^.Name, 1, Length(InputStr.s)) = InputStr.s then
             begin
-            if t^.VType = vtCommand then InputStr:= '/' + t^.Name + ' '
-                                    else InputStr:= '$' + t^.Name + ' ';
+            if t^.VType = vtCommand then InputStr.s:= '/' + t^.Name + ' '
+                                    else InputStr.s:= '$' + t^.Name + ' ';
             exit
             end;
       t:= t^.Next
@@ -242,14 +271,14 @@ var i, btw: integer;
 begin
 if Key <> 0 then
   case Key of
-      8: if Length(InputStr)>0 then dec(InputStr[0]);
+      8: if Length(InputStr.s)>0 then dec(InputStr.s[0]);
       9: AutoComplete;
  13,271: begin
-         if InputStr[1] in ['/', '$'] then
-            ParseCommand(InputStr, false)
+         if InputStr.s[1] in ['/', '$'] then
+            ParseCommand(InputStr.s, false)
          else
-            ParseCommand('/say ' + InputStr, false);
-         InputStr:= ''
+            ParseCommand('/say ' + InputStr.s, false);
+         InputStr.s:= ''
          end
      else
      if (Key < $80) then btw:= 1
@@ -263,14 +292,14 @@ if Key <> 0 then
          Key:= Key shr 6
          end;
      utf8:= char(Key or firstByteMark[btw]) + utf8;
-     InputStr:= InputStr + utf8
+     SetLine(InputStr, InputStr.s + utf8)
      end
 end;
 
 function GetLastConsoleLine: shortstring;
 begin
-if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)]
-                else GetLastConsoleLine:= ConsoleLines[Pred(CurrLine)]
+if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)].s
+                else GetLastConsoleLine:= ConsoleLines[Pred(CurrLine)].s
 end;
 
 {$INCLUDE CCHandlers.inc}
