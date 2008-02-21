@@ -246,8 +246,8 @@ var t: PVariable;
 begin
 if InputStr.s[0] = #0 then exit;
 c:= InputStr.s[1];
-if c in ['/', '$'] then Delete(InputStr.s, 1, 1)
-                   else c:= #0;
+if c in ['/', '$'] then Delete(InputStr.s, 1, 1) else c:= #0;
+
 if InputStr.s[byte(InputStr.s[0])] = #32 then dec(InputStr.s[0]);
 t:= Variables;
 while t <> nil do
@@ -256,8 +256,8 @@ while t <> nil do
                    ((t^.VType <> vtCommand) and (c='$'))then
          if copy(t^.Name, 1, Length(InputStr.s)) = InputStr.s then
             begin
-            if t^.VType = vtCommand then InputStr.s:= '/' + t^.Name + ' '
-                                    else InputStr.s:= '$' + t^.Name + ' ';
+            if t^.VType = vtCommand then SetLine(InputStr, '/' + t^.Name + ' ')
+                                    else SetLine(InputStr, '$' + t^.Name + ' ');
             exit
             end;
       t:= t^.Next
@@ -271,14 +271,18 @@ var i, btw: integer;
 begin
 if Key <> 0 then
   case Key of
-      8: if Length(InputStr.s)>0 then dec(InputStr.s[0]);
+      8: if Length(InputStr.s) > 0 then
+            begin
+            dec(InputStr.s[0]);
+            SetLine(InputStr, InputStr.s)
+            end;
       9: AutoComplete;
  13,271: begin
          if InputStr.s[1] in ['/', '$'] then
             ParseCommand(InputStr.s, false)
          else
             ParseCommand('/say ' + InputStr.s, false);
-         InputStr.s:= ''
+         SetLine(InputStr, '')
          end
      else
      if (Key < $80) then btw:= 1
