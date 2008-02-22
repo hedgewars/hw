@@ -323,8 +323,8 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);
 
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
 procedure FreeTexture(tex: PTexture);

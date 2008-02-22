@@ -103,18 +103,6 @@ public:
 	QPushButton *BtnExit;
 };
 
-class PageSimpleGame : public AbstractPage
-{
-	Q_OBJECT
-
-public:
-	PageSimpleGame(QWidget* parent = 0);
-
-	QPushButton *BtnSimpleGame;
-	QPushButton *BtnBack;
-	GameCFGWidget *gameCFG;
-};
-
 class PageEditTeam : public AbstractPage
 {
 	Q_OBJECT

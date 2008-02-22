@@ -51,7 +51,6 @@ private slots:
 	void GoToDemos();
 	void GoToNet();
 	void GoToInfo();
-	void GoToSimpleGame();
 	void GoToTraining();
 	void GoToSelectWeapon();
 	void GoToSelectNewWeapon();
@@ -91,21 +90,20 @@ private:
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
 	void closeEvent(QCloseEvent *event);
 	enum PageIDs {
-		ID_PAGE_SIMPLEGAME      =  0,
-		ID_PAGE_SETUP_TEAM      =  1,
-		ID_PAGE_SETUP           =  2,
-		ID_PAGE_MULTIPLAYER     =  3,
-		ID_PAGE_DEMOS           =  4,
-		ID_PAGE_NET             =  5,
-		ID_PAGE_NETCFG          =  6,
-		ID_PAGE_INFO            =  7,
-		ID_PAGE_MAIN            =  8,
-		ID_PAGE_GAMESTATS       =  9,
-		ID_PAGE_SINGLEPLAYER    = 10,
-		ID_PAGE_TRAINING        = 11,
-		ID_PAGE_SELECTWEAPON    = 12,
-		ID_PAGE_NETSERVER       = 13,
-		ID_PAGE_INGAME          = 14
+		ID_PAGE_SETUP_TEAM      =  0,
+		ID_PAGE_SETUP           =  1,
+		ID_PAGE_MULTIPLAYER     =  2,
+		ID_PAGE_DEMOS           =  3,
+		ID_PAGE_NET             =  4,
+		ID_PAGE_NETCFG          =  5,
+		ID_PAGE_INFO            =  6,
+		ID_PAGE_MAIN            =  7,
+		ID_PAGE_GAMESTATS       =  8,
+		ID_PAGE_SINGLEPLAYER    =  9,
+		ID_PAGE_TRAINING        = 10,
+		ID_PAGE_SELECTWEAPON    = 11,
+		ID_PAGE_NETSERVER       = 12,
+		ID_PAGE_INGAME          = 13
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

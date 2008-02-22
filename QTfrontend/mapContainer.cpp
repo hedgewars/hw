@@ -16,8 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "mapContainer.h"
-
 #include <QPushButton>
 #include <QBuffer>
 #include <QUuid>
@@ -29,6 +27,7 @@
 #include <QApplication>
 
 #include "hwconsts.h"
+#include "mapContainer.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)

@@ -76,7 +76,6 @@ private:
     };
 	char msgbuf[MAXMSGCHARS];
 	QString teams[5];
-	QString seed;
 	QString ammostr;
 	int TeamCount;
 	GameUIConfig * config;

@@ -54,9 +54,6 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 {
 	Pages = new QStackedLayout(Parent);
 
-	pageSimpleGame = new PageSimpleGame();
-	Pages->addWidget(pageSimpleGame);
-
 	pageEditTeam = new PageEditTeam();
 	Pages->addWidget(pageEditTeam);
 

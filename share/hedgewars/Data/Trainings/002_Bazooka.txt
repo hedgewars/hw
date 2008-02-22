@@ -5,7 +5,7 @@ $casefreq 0
 $landadds 0
 $delay 0
 map Volcano
-theme avematan
+theme Volcano
 ammstore 00900000000000000000
 hhcoords 1710 765
 addtrig s2147483649 1 1 33 1150 650 1

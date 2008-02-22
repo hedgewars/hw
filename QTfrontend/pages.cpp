@@ -85,27 +85,7 @@ PageMain::PageMain(QWidget* parent) :
 	BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-PageSimpleGame::PageSimpleGame(QWidget* parent) : 
-  AbstractPage(parent)
-{
-	QVBoxLayout * pageLayout = new QVBoxLayout(this);
-	QHBoxLayout * topLayout = new QHBoxLayout();
-	QHBoxLayout * bottomLayout = new QHBoxLayout();
-	pageLayout->addLayout(topLayout, 100);
-	pageLayout->addLayout(bottomLayout, 0);
-
-	BtnBack = addButton(tr("Back"), bottomLayout, 100);
-	bottomLayout->addStretch(100);
-
-	BtnSimpleGame = addButton(tr("Simple Game"), bottomLayout, 100);
-
-	gameCFG = new GameCFGWidget(this);
-	topLayout->addStretch(100);
-	topLayout->addWidget(gameCFG);
-	topLayout->addStretch(100);
-}
-
-PageEditTeam::PageEditTeam(QWidget* parent) : 
+PageEditTeam::PageEditTeam(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);

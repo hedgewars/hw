@@ -64,9 +64,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-	connect(ui.pageSimpleGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageSimpleGame->BtnSimpleGame,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
-
 	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
 	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
 
@@ -109,7 +106,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
-	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(GoToSimpleGame()));
+	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
 	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoToTraining()));
 	connect(ui.pageSinglePlayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
@@ -135,7 +132,6 @@ void HWForm::UpdateWeapons()
   // FIXME: rewrite this with boost (or TR1/0x)
   QVector<QComboBox*> combos;
   combos.push_back(ui.pageOptions->WeaponsName);
-  combos.push_back(ui.pageSimpleGame->gameCFG->WeaponsName);
   combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
   combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
 
@@ -182,11 +178,6 @@ void HWForm::GoToMain()
 void HWForm::GoToSinglePlayer()
 {
 	GoToPage(ID_PAGE_SINGLEPLAYER);
-}
-
-void HWForm::GoToSimpleGame()
-{
-	GoToPage(ID_PAGE_SIMPLEGAME);
 }
 
 void HWForm::GoToTraining()
@@ -363,7 +354,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	CreateGame(ui.pageSimpleGame->gameCFG, 0, cDefaultAmmoStore->mid(10));
+	CreateGame(0, 0, cDefaultAmmoStore->mid(10));
 	game->StartQuick();
 }
 

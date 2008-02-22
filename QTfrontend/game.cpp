@@ -18,6 +18,7 @@
 
 #include <QString>
 #include <QByteArray>
+#include <QUuid>
 
 #include "game.h"
 #include "hwconsts.h"
@@ -37,7 +38,6 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
 	this->config = config;
 	this->gamecfg = gamecfg;
 	TeamCount = 0;
-	seed = "";
 }
 
 HWGame::~HWGame()
@@ -73,6 +73,7 @@ void HWGame::commonConfig()
 			gt = "TL";
 	}
 	HWProto::addStringToBuffer(buf, gt);
+
 	HWProto::addStringListToBuffer(buf, gamecfg->getFullConfig());
 
 	if (m_pTeamSelWidget)
@@ -95,22 +96,26 @@ void HWGame::SendConfig()
 
 void HWGame::SendQuickConfig()
 {
-	commonConfig();
-
 	QByteArray teamscfg;
+
+	HWProto::addStringToBuffer(teamscfg, "TL");
+	HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
+			.arg((Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel"));
+	HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
+
 	HWTeam team1(0);
 	team1.difficulty = 0;
 	team1.teamColor = *color1;
 	team1.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
-			team1.TeamGameConfig(gamecfg->getInitHealth()));
+			team1.TeamGameConfig(100));
 
 	HWTeam team2(2);
 	team2.difficulty = 4;
 	team2.teamColor = *color2;
 	team2.numHedgehogs = 4;
 	HWProto::addStringListToBuffer(teamscfg,
-			team2.TeamGameConfig(gamecfg->getInitHealth()));
+			team2.TeamGameConfig(100));
 
 	HWProto::addStringToBuffer(teamscfg, *cDefaultAmmoStore);
 	HWProto::addStringToBuffer(teamscfg, *cDefaultAmmoStore);
@@ -119,14 +124,14 @@ void HWGame::SendQuickConfig()
 
 void HWGame::SendTrainingConfig()
 {
-	QByteArray teamscfg;
-	HWProto::addStringToBuffer(teamscfg, "TL");
+	QByteArray traincfg;
+	HWProto::addStringToBuffer(traincfg, "TL");
 
 	HWTeam team1(0);
 	team1.difficulty = 0;
 	team1.teamColor = *color1;
 	team1.numHedgehogs = 1;
-	HWProto::addStringListToBuffer(teamscfg,
+	HWProto::addStringListToBuffer(traincfg,
 			team1.TeamGameConfig(100));
 
 	QFile file(datadir->absolutePath() + "/Trainings/001_Shotgun.txt");
@@ -139,10 +144,10 @@ void HWGame::SendTrainingConfig()
 	QTextStream stream(&file);
 	while(!stream.atEnd())
 	{
-		HWProto::addStringToBuffer(teamscfg, "e" + stream.readLine());
+		HWProto::addStringToBuffer(traincfg, "e" + stream.readLine());
 	}
 
-	RawSendIPC(teamscfg);
+	RawSendIPC(traincfg);
 }
 
 void HWGame::SendNetConfig()
@@ -301,7 +306,6 @@ void HWGame::StartNet()
 void HWGame::StartLocal()
 {
 	gameType = gtLocal;
-	seed = gamecfg->getCurrentSeed();
 	demo.clear();
 	Start();
 	SetGameState(gsStarted);
@@ -310,7 +314,6 @@ void HWGame::StartLocal()
 void HWGame::StartQuick()
 {
 	gameType = gtQLocal;
-	seed = gamecfg->getCurrentSeed();
 	demo.clear();
 	Start();
 	SetGameState(gsStarted);
@@ -319,7 +322,6 @@ void HWGame::StartQuick()
 void HWGame::StartTraining()
 {
 	gameType = gtTraining;
-	seed = "training";
 	demo.clear();
 	Start();
 	SetGameState(gsStarted);
