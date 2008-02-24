@@ -545,7 +545,7 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;
-    len, cs, cc, tx, ty: hwFloat;
+    len, cs, cc, tx, ty, nx, ny: hwFloat;
     lx, ly: LongInt;
 
     procedure DeleteMe;
@@ -580,8 +580,11 @@ if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY:= HHGear^.dY + cGravity
 cs:= Gear^.dY + HHGear^.dY;
 cc:= Gear^.dX + HHGear^.dX;
 len:= _1 / Distance(cc, cs);
-cc:= cc * len;
+cc:= cc * len; // rope vector plus hedgehog direction vector normalized
 cs:= cs * len;
+
+nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 3; // hedgehog direction normalized with length 3
+ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 3;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
@@ -591,8 +594,8 @@ if flCheck then  // check whether rope needs dividing
          begin
          tx:= cc*len;
          ty:= cs*len;
-         lx:= hwRound(Gear^.X + tx) + hwSign(HHGear^.dX)*2;
-         ly:= hwRound(Gear^.Y + ty) + hwSign(HHGear^.dY)*2;
+         lx:= hwRound(Gear^.X + tx + nx);
+         ly:= hwRound(Gear^.Y + ty + ny);
          if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
            begin
            with RopePoints.ar[RopePoints.Count] do
@@ -606,11 +609,12 @@ if flCheck then  // check whether rope needs dividing
            Gear^.X:= Gear^.X + tx;
            Gear^.Y:= Gear^.Y + ty;
            inc(RopePoints.Count);
+           TryDo(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true);
            Gear^.Elasticity:= Gear^.Elasticity - len;
            Gear^.Friction:= Gear^.Friction - len;
            break
            end;
-         len:= len - _3
+         len:= len - _2
          end;
    end else
    if RopePoints.Count > 0 then // check whether the last dividing point could be removed
@@ -657,6 +661,14 @@ if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
    HHGear^.dX:= -_0_6 * HHGear^.dX;
 if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
    HHGear^.dY:= -_0_6 * HHGear^.dY;
+
+len:= Distance(HHGear^.dX, HHGear^.dY);
+if len > _0_5 then
+   begin
+   len:= _0_5 / len;
+   HHGear^.dX:= HHGear^.dX * len;
+   HHGear^.dY:= HHGear^.dY * len;
+   end;
 
 if (Gear^.Message and gm_Attack) <> 0 then
    if (Gear^.State and gsttmpFlag) <> 0 then DeleteMe else

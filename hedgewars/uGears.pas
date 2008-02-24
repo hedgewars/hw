@@ -71,10 +71,12 @@ var CurAmmoGear: PGear = nil;
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
      uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL;
+
+const MAXROPEPOINTS = 300;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: GLfloat;
-                ar: array[0..300] of record
+                ar: array[0..MAXROPEPOINTS] of record
                                   X, Y: hwFloat;
                                   dLen: hwFloat;
                                   b: boolean;
