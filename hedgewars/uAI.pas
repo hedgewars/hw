@@ -220,13 +220,17 @@ while (Stack.Count > 0) and not StopThinking do
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
                   begin
-                  AddAction(MadeActions, aia_HJump, 0, 305, 0, 0);
+                  if Me^.dX.isNegative then AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0)
+                                       else AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0);
+                  AddAction(MadeActions, aia_HJump, 0, 305 + random(50), 0, 0);
                   AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
+                  if Me^.dX.isNegative then AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
+                                       else AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                   end;
        if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
           if Push(ticks, Actions, AltMe, Me^.Message) then
              with Stack.States[Pred(Stack.Count)] do
-                  AddAction(MadeActions, aia_LJump, 0, 305, 0, 0);
+                  AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
 
        if not CanGo then break;
        inc(steps);
