@@ -323,6 +323,10 @@ if isFalling then
    if not Gear^.dY.isNegative then
       begin
       CheckHHDamage(Gear);
+
+      if ((Gear^.State and gstHHHJump) <> 0) and
+         (Gear^.dX.QWordValue < _0_02.QWordValue) then Gear^.dX.isNegative:= not Gear^.dX.isNegative; // landing after high jump
+
       Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
       Gear^.dY:= _0;
       end else Gear^.dY:= Gear^.dY + cGravity;
@@ -427,7 +431,7 @@ if (Gear^.State and gstMoving) <> 0 then
          begin
          Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
          Gear^.dY:= -_0_25;
-         Gear^.dX:= SignAs(_0_02, Gear^.dX)
+         Gear^.dX:= -SignAs(_0_02, Gear^.dX)
          end;
    Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
