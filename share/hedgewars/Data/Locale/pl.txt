@@ -1,0 +1,29 @@
+; Polish locale
+
+00:00=Granat
+00:01=Bomba rozpryskowa
+00:02=Bazooka
+00:03=UFO
+00:04=Strzelba
+00:05=Młot pnaumatyczny
+00:06=Pomiń turę
+00:07=Lina
+00:08=Mina
+00:09=DEagle
+00:10=Dynamit
+00:11=Kij bejsbolowy
+00:12=Ognista pięść
+00:13=sek
+00:14=Spadochron
+00:15=Nalot
+00:16=Zrzut min
+00:17=Palnik
+00:18=Budowanie
+00:19=Teleportacja
+00:20=Zmień jeża
+
+01:00=Walczmy!
+01:01=Remis
+01:02=%1 wygrywają!
+01:03=Głośność %1%
+01:04=Gra wstrzymana
