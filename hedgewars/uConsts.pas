@@ -246,7 +246,7 @@ const
                      saveSurf: boolean;
                      end = (
                      (FileName:  'BlueWater'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width: 256; Height: 48; saveSurf: false),// sprWater
+                      Width: 256; Height: 32; saveSurf: false),// sprWater
                      (FileName: 'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
                       Width: 256; Height:128; saveSurf: false),// sprCloud
                      (FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

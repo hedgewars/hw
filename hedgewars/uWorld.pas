@@ -198,10 +198,10 @@ if r.y < cScreenHeight then
 
    glDisable(GL_TEXTURE_2D);
    glBegin(GL_QUADS);
-    glColor3ub(0, $5A, $CE); // water color
+    glColor3ub($54, $5C, $9D); // water color
     glVertex2i(0, r.y);
     glVertex2i(cScreenWidth, r.y);
-    glColor3ub(0, $40, $B3); // deep water color
+    glColor3ub($34, $3C, $7D); // deep water color
     glVertex2i(cScreenWidth, cScreenHeight);
     glVertex2i(0, cScreenHeight);
    glEnd();
