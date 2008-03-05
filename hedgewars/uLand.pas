@@ -635,6 +635,9 @@ var i: integer;
 begin
 if LandTexture <> nil then
    begin
+   if (Height <= 0) then exit;
+   TryDo((Y >= 0) and (Y < 1024), 'UpdateLandTexture: wrong Y parameter', true);
+   TryDo(Y + Height < 1024, 'UpdateLandTexture: wrong Height parameter', true);
    glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
 
    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
