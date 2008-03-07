@@ -56,7 +56,7 @@ type
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
                    sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
                    sndMineTick, sndPickhammer, sndGun, sndUFO, sndJump1, sndJump2,
-                   sndJump3, sndYesSir, sndLaugh);
+                   sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndIncoming);
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
@@ -363,7 +363,9 @@ const
                 (FileName:         'Jump2.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump2
                 (FileName:         'Jump3.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump3
                 (FileName:        'Yessir.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndYesSir
-                (FileName:         'Laugh.ogg'; Path: ptVoices; id: nil; lastChan: 0) // sndLaugh
+                (FileName:         'Laugh.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndLaugh
+                (FileName:     'Illgetyou.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndIllGetYou
+                (FileName:      'Incoming.ogg'; Path: ptVoices; id: nil; lastChan: 0) // sndIncoming
 );
 
       Ammoz: array [TAmmoType] of record

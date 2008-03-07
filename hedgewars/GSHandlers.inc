@@ -1114,10 +1114,10 @@ Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
 if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then
    Gear^.dX:= Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 / cGravity) * Gear^.Tag;
-addfilelog('attack: x = '+floattostr(gear^.dx));
 
 Gear^.Health:= 6;
-Gear^.doStep:= @doStepAirAttackWork
+Gear^.doStep:= @doStepAirAttackWork;
+PlaySound(sndIncoming, false)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
