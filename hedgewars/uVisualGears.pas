@@ -18,7 +18,7 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts, uFloat;
+uses SDLh, uConsts, uFloat, GL;
 {$INCLUDE options.inc}
 const AllInactive: boolean = false;
 
@@ -26,28 +26,50 @@ type PVisualGear = ^TVisualGear;
      TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
      TVisualGear = record
              NextGear, PrevGear: PVisualGear;
-             State : Longword;
+             Frame,
+             FrameTicks: Longword;
              X : hwFloat;
              Y : hwFloat;
              dX: hwFloat;
              dY: hwFloat;
+             Angle, dAngle: real;
              Kind: TVisualGearType;
              doStep: TVGearStepProcedure;
              end;
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; dX, dY: hwFloat): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure DrawVisualGears();
 procedure AddClouds;
 
 var VisualGearsList: PVisualGear = nil;
+    vobFrameTicks, vobFramesCount: Longword;
+    vobVelocity, vobFallSpeed: LongInt;
 
 implementation
-uses uWorld, uMisc, uStore, GL;
+uses uWorld, uMisc, uStore;
 
 // ==================================================================
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 begin
+with Gear^ do
+  begin
+  inc(FrameTicks, Steps);
+  if FrameTicks > vobFrameTicks then
+    begin
+    dec(FrameTicks, vobFrameTicks);
+    inc(Frame);
+    if Frame = vobFramesCount then Frame:= 0
+    end
+  end;
+
+Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
+Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobVelocity) * Steps;
+Gear^.Angle:= Gear^.Angle + Gear^.dAngle;
+
+if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
+if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
+if hwRound(Gear^.Y) > 1024 then Gear^.Y:= - _128
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
@@ -55,7 +77,9 @@ begin
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
 if hwRound(Gear^.Y) > -160 then Gear^.dY:= Gear^.dY - _1div50000
                            else Gear^.dY:= Gear^.dY + _1div50000;
+
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+
 if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
 end;
@@ -67,7 +91,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
                           @doStepCloud
                         );
 
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; dX, dY: hwFloat): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 var Result: PVisualGear;
 begin
 New(Result);
@@ -75,12 +99,28 @@ FillChar(Result^, sizeof(TVisualGearType), 0);
 Result^.X:= int2hwFloat(X);
 Result^.Y:= int2hwFloat(Y);
 Result^.Kind := Kind;
-Result^.dX:= dX;
-Result^.dY:= dY;
 Result^.doStep:= doStepHandlers[Kind];
 
 case Kind of
-   vgtCloud: Result^.State:= random(4);
+   vgtFlake: with Result^ do
+               begin
+               FrameTicks:= random(vobFrameTicks);
+               Frame:= random(vobFramesCount);
+               Angle:= random * 360;
+               dx.isNegative:= random(2) = 0;
+               dx.QWordValue:= random(100000000);
+               dy.isNegative:= false;
+               dy.QWordValue:= random(20);
+               dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
+               end;
+   vgtCloud: with Result^ do
+               begin
+               Frame:= random(4);
+               dx.isNegative:= random(2) = 0;
+               dx.QWordValue:= random(214748364);
+               dy.isNegative:= random(2) = 0;
+               dy.QWordValue:= 21474836 + random(64424509)
+               end;
      end;
 
 if VisualGearsList <> nil then
@@ -115,8 +155,12 @@ Gear:= VisualGearsList;
 while Gear <> nil do
       begin
       case Gear^.Kind of
-           vgtFlake: ;
-           vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, nil);
+           vgtFlake: if vobVelocity = 0 then
+                        DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, nil)
+                     else
+                        DrawRotated(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Angle);
+
+           vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, nil);
               end;
       Gear:= Gear^.NextGear
       end;
@@ -127,14 +171,7 @@ var i: LongInt;
     dx, dy: hwFloat;
 begin
 for i:= 0 to cCloudsNumber do
-    begin
-    dx.isNegative:= random(2) = 1;
-    dx.QWordValue:= random(214748364);
-    dy.isNegative:= (i and 1) = 1;
-    dy.QWordValue:= 21474836 + random(64424509);
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140,
-             vgtCloud, dx, dy)
-    end
+    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, vgtCloud)
 end;
 
 initialization

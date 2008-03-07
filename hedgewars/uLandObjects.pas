@@ -25,7 +25,7 @@ procedure AddObjects(InSurface, Surface: PSDL_Surface);
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom;
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat;
 const MaxRects = 256;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
@@ -353,6 +353,7 @@ procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSpra
 var s: string;
     f: textfile;
     i, ii: LongInt;
+    vobcount: Longword;
 begin
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
@@ -394,7 +395,13 @@ for i:= 0 to Pred(SprayObjects.Count) do
     end;
 
 // snowflakes
-//Readln(f, );
+Readln(f, vobCount);
+if vobCount > 0 then
+   Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
+
+for i:= 0 to Pred(vobCount) do
+    AddVisualGear( -cScreenWidth + random(cScreenWidth * 2 + 2048), random(1000), vgtFlake);
+
 Close(f);
 {$I+}
 TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)

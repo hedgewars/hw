@@ -41,7 +41,7 @@ type
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
                    sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
                    sprQuestion, sprPowerBar, sprWindBar,
-                   sprWindL, sprWindR);
+                   sprWindL, sprWindR, sprFlake);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -223,7 +223,7 @@ const
 
       PathPrefix: string = './';
       Pathz: array[TPathType] of string      = (
-                                               '',                              // ptNone      
+                                               '',                              // ptNone
                                                '',                              // ptData
                                                'Graphics',                      // ptGraphics
                                                'Themes',                        // ptThemes
@@ -340,7 +340,9 @@ const
                      (FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  80; Height: 13; saveSurf: false),// sprWindL
                      (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  80; Height: 13; saveSurf: false) // sprWindR
+                      Width:  80; Height: 13; saveSurf: false),// sprWindR
+                     (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 64; saveSurf: false) // sprFlake
                      );
 
       Soundz: array[TSound] of record

@@ -1,5 +1,6 @@
 install(FILES
 	Border.png
+	Flake.png
 	horizont.png
 	LandTex.png
 	plant1.png
