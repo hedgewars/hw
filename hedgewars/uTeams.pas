@@ -90,7 +90,7 @@ function CheckForWin: boolean;
 procedure SendStats;
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;
@@ -191,9 +191,13 @@ g:= AddGear(0, 0, gtATSmoothWindCh, 0, _0, _0, 1);
 g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentHedgehog^);
+
 if CurrentTeam^.ExtDriven then SetDefaultBinds
                           else SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;
+
+if not (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then PlaySound(sndYesSir, false);
+
 TurnTimeLeft:= cHedgehogTurnTime
 end;
 
