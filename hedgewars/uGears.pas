@@ -59,7 +59,6 @@ procedure SetAllHHToActive;
 procedure DrawGears(Surface: PSDL_Surface);
 procedure FreeGearsList;
 procedure AddMiscGears;
-procedure AddClouds;
 procedure AssignHHCoords;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
@@ -101,7 +100,6 @@ procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear); forward;
 {$INCLUDE HHHandlers.inc}
 
 const doStepHandlers: array[TGearType] of TGearStepProcedure = (
-                                                               @doStepCloud,
                                                                @doStepBomb,
                                                                @doStepHedgehog,
                                                                @doStepGrenade,
@@ -138,21 +136,27 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
-var tmp: PGear;
+var tmp, ptmp: PGear;
 begin
 if GearsList = nil then
    GearsList:= Gear
    else begin
-   // WARNING: this code assumes that the first gears added to the list are clouds (have maximal Z)
    tmp:= GearsList;
-   while (tmp <> nil) and (tmp^.Z < Gear^.Z) do
-          tmp:= tmp^.NextGear;
+   ptmp:= GearsList;
+   while (tmp <> nil) and (tmp^.Z <= Gear^.Z) do
+          begin
+          ptmp:= tmp;
+          tmp:= tmp^.NextGear
+          end;
 
-   if tmp^.PrevGear <> nil then tmp^.PrevGear^.NextGear:= Gear;
-   Gear^.PrevGear:= tmp^.PrevGear;
-   tmp^.PrevGear:= Gear;
-   Gear^.NextGear:= tmp;
-   if GearsList = tmp then GearsList:= Gear
+   if ptmp <> nil then
+      begin
+      Gear^.NextGear:= ptmp^.NextGear;
+      Gear^.PrevGear:= ptmp;
+      if ptmp^.NextGear <> nil then ptmp^.NextGear^.PrevGear:= Gear;
+      ptmp^.NextGear:= Gear
+      end
+   else GearsList:= Gear
    end
 end;
 
@@ -193,7 +197,6 @@ if CurrentTeam <> nil then
    end;
 
 case Kind of
-       gtCloud: Result^.Z:= High(Result^.Z);
    gtAmmo_Bomb: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
@@ -579,7 +582,6 @@ Gear:= GearsList;
 while Gear<>nil do
       begin
       case Gear^.Kind of
-           gtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State, Surface);
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.DirAngle);
         gtHedgehog: DrawHH(Gear, Surface);
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, DxDy2Angle(Gear^.dY, Gear^.dX));
@@ -654,21 +656,6 @@ AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 if (GameFlags and gfForts) = 0 then
    for i:= 0 to Pred(cLandAdditions) do
        FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
-end;
-
-procedure AddClouds;
-var i: LongInt;
-    dx, dy: hwFloat;
-begin
-for i:= 0 to cCloudsNumber do
-    begin
-    dx.isNegative:= random(2) = 1;
-    dx.QWordValue:= random(214748364);
-    dy.isNegative:= (i and 1) = 1;
-    dy.QWordValue:= 21474836 + random(64424509);
-    AddGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140,
-             gtCloud, random(4), dx, dy, 0)
-    end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);

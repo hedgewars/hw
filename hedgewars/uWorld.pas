@@ -38,7 +38,8 @@ var FollowGear: PGear = nil;
     Frames: Longword = 0;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL, uAmmos;
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
+     uAmmos, uVisualGears;
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
@@ -182,6 +183,8 @@ if not isPaused then MoveCamera;
 // background
 DrawRepeated(sprSky, WorldDx * 3 div 8);
 DrawRepeated(sprHorizont, WorldDx * 3 div 5);
+
+DrawVisualGears;
 
 // Waves
 {$WARNINGS OFF}

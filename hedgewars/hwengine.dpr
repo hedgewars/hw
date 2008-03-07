@@ -100,10 +100,12 @@ case GameState of
      gsGame : begin
               ProcessKbd;
               DoGameTick(Lag);
+              ProcessVisualGears(Lag);
               DrawWorld(Lag, SDLPrimSurface);
               end;
    gsConsole: begin
               DoGameTick(Lag);
+              ProcessVisualGears(Lag);
               DrawWorld(Lag, SDLPrimSurface);
               DrawConsole(SDLPrimSurface);
               end;

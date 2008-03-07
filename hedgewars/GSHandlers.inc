@@ -109,17 +109,6 @@ if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepCloud(Gear: PGear);
-begin
-Gear^.X:= Gear^.X + cWindSpeed * 200 + Gear^.dX;
-if hwRound(Gear^.Y) > -160 then Gear^.dY:= Gear^.dY - _1div50000
-                           else Gear^.dY:= Gear^.dY + _1div50000;
-Gear^.Y:= Gear^.Y + Gear^.dY;
-if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
-if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
-end;
-
-////////////////////////////////////////////////////////////////////////////////
 procedure doStepBomb(Gear: PGear);
 var i: LongInt;
 begin

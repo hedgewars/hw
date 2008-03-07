@@ -43,7 +43,7 @@ type
                    sprQuestion, sprPowerBar, sprWindBar,
                    sprWindL, sprWindR);
 
-     TGearType  = (gtCloud, gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
+     TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
                    gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
@@ -51,7 +51,7 @@ type
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget);
 
-     TVisualGearType = (vgtFlake);
+     TVisualGearType = (vgtFlake, vgtCloud);
 
      TGearsType = set of TGearType;
 
