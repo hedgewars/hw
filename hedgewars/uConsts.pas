@@ -29,7 +29,7 @@ type
 
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-                   ptLocale, ptAmmoMenu);
+                   ptLocale, ptAmmoMenu, ptVoices);
 
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
@@ -55,7 +55,8 @@ type
 
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
                    sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
-                   sndMineTick, sndPickhammer, sndGun, sndUFO);
+                   sndMineTick, sndPickhammer, sndGun, sndUFO, sndJump1, sndJump2,
+                   sndJump3);
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
@@ -234,7 +235,8 @@ const
                                                'Fonts',                         // ptFonts
                                                'Forts',                         // ptForts
                                                'Locale',                        // ptLocale
-                                               'Graphics/AmmoMenu'              // ptAmmoMenu
+                                               'Graphics/AmmoMenu',             // ptAmmoMenu
+                                               'Sounds/voices'                  // ptVoices
                                                );
 
       SpritesData: array[TSprite] of record
@@ -340,24 +342,27 @@ const
                      );
 
       Soundz: array[TSound] of record
-                                       FileName: String[31];
-                                       Path    : TPathType;
-                                       id      : PMixChunk;
-                                       lastChan: LongInt;
-                                       end = (
-                                       (FileName: 'grenadeimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGrenadeImpact
-                                       (FileName:     'explosion.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndExplosion
-                                       (FileName:  'throwpowerup.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowPowerUp
-                                       (FileName:  'throwrelease.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowRelease
-                                       (FileName:        'splash.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndSplash
-                                       (FileName: 'shotgunreload.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunReload
-                                       (FileName:   'shotgunfire.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunFire
-                                       (FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGraveImpact
-                                       (FileName:      'minetick.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMineTicks
-                                       (FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndPickhammer
-                                       (FileName:           'gun.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGun
-                                       (FileName:           'ufo.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndUFO
-                                       );
+                FileName: String[31];
+                Path    : TPathType;
+                id      : PMixChunk;
+                lastChan: LongInt;
+                end = (
+                (FileName: 'grenadeimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGrenadeImpact
+                (FileName:     'explosion.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndExplosion
+                (FileName:  'throwpowerup.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowPowerUp
+                (FileName:  'throwrelease.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowRelease
+                (FileName:        'splash.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndSplash
+                (FileName: 'shotgunreload.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunReload
+                (FileName:   'shotgunfire.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunFire
+                (FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGraveImpact
+                (FileName:      'minetick.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMineTicks
+                (FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndPickhammer
+                (FileName:           'gun.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGun
+                (FileName:           'ufo.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndUFO
+                (FileName:         'Jump1.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump1
+                (FileName:         'Jump2.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump2
+                (FileName:         'Jump3.ogg'; Path: ptVoices; id: nil; lastChan: 0) // sndJump3
+);
 
       Ammoz: array [TAmmoType] of record
                                   NameId: TAmmoStrId;

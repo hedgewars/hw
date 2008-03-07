@@ -212,6 +212,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          Gear^.dY:= -_0_15;
          Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
+         PlaySound(sndJump1, false);
          exit
          end;
       end;
@@ -225,6 +226,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          Gear^.dY:= -_0_2;
          SetLittle(Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
+         PlaySound(sndJump3, false);
          exit
          end;
       end;
@@ -431,7 +433,8 @@ if (Gear^.State and gstMoving) <> 0 then
          begin
          Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
          Gear^.dY:= -_0_25;
-         Gear^.dX:= -SignAs(_0_02, Gear^.dX)
+         Gear^.dX:= -SignAs(_0_02, Gear^.dX);
+         PlaySound(sndJump2, false)
          end;
    Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
