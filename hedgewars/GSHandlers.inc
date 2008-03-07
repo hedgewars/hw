@@ -1163,16 +1163,16 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepTeleportAfter(Gear: PGear);
-var HHGear: PGear;
+//var HHGear: PGear;
 begin
-HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-HHGear^.Y:= HHGear^.Y + HHGear^.dY;
-HHGear^.dY:= HHGear^.dY + cGravity;
-if TestCollisionYwithGear(HHGear, 1) then
-   begin
+//HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+//HHGear^.Y:= HHGear^.Y + HHGear^.dY;
+//HHGear^.dY:= HHGear^.dY + cGravity;
+//if TestCollisionYwithGear(HHGear, 1) then
+//   begin
    DeleteGear(Gear);
    AfterAttack
-   end
+//   end
 end;
 
 procedure doStepTeleport(Gear: PGear);
