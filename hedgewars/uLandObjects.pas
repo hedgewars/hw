@@ -400,7 +400,7 @@ if vobCount > 0 then
    Readln(f, vobFramesCount, vobFrameTicks, vobVelocity, vobFallSpeed);
 
 for i:= 0 to Pred(vobCount) do
-    AddVisualGear( -cScreenWidth + random(cScreenWidth * 2 + 2048), random(1000), vgtFlake);
+    AddVisualGear( -cScreenWidth + random(cScreenWidth * 2 + 2048), random(1200) - 100, vgtFlake);
 
 Close(f);
 {$I+}

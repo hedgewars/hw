@@ -31,6 +31,7 @@ procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
+procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y: LongInt; Angle: real);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
@@ -358,12 +359,22 @@ glEnd()
 end;
 
 procedure DrawRotated(Sprite: TSprite; X, Y: LongInt; Angle: real);
-var hw, hh: LongInt;
 begin
 DrawRotatedTex(SpritesData[Sprite].Texture,
                SpritesData[Sprite].Width,
                SpritesData[Sprite].Height,
                X, Y, Angle)
+end;
+
+procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
+begin
+glPushMatrix;
+glTranslatef(X - SpritesData[Sprite].Width div 2, Y - SpritesData[Sprite].Width div 2, 0);
+glRotatef(Angle, 0, 0, 1);
+
+DrawSprite(Sprite, 0, 0, Frame, nil);
+
+glPopMatrix
 end;
 
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y: LongInt; Angle: real);

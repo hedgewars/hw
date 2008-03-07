@@ -69,7 +69,7 @@ Gear^.Angle:= Gear^.Angle + Gear^.dAngle;
 
 if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-if hwRound(Gear^.Y) > 1024 then Gear^.Y:= - _128
+if hwRound(Gear^.Y) > 1100 then Gear^.Y:= - _128
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
@@ -110,7 +110,7 @@ case Kind of
                dx.isNegative:= random(2) = 0;
                dx.QWordValue:= random(100000000);
                dy.isNegative:= false;
-               dy.QWordValue:= random(20);
+               dy.QWordValue:= random(70000000);
                dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
                end;
    vgtCloud: with Result^ do
@@ -158,7 +158,7 @@ while Gear <> nil do
            vgtFlake: if vobVelocity = 0 then
                         DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, nil)
                      else
-                        DrawRotated(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Angle);
+                        DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, Gear^.Angle);
 
            vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, nil);
               end;
