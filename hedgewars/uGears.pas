@@ -191,7 +191,7 @@ if CurrentTeam <> nil then
    Result^.Hedgehog:= CurrentHedgehog;
    Result^.IntersectGear:= CurrentHedgehog^.Gear
    end;
-   
+
 case Kind of
        gtCloud: Result^.Z:= High(Result^.Z);
    gtAmmo_Bomb: begin

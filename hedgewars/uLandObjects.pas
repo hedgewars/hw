@@ -379,6 +379,7 @@ for i:= 0 to Pred(ThemeObjects.Count) do
          end;
     end;
 
+// sprays
 Readln(f, SprayObjects.Count);
 for i:= 0 to Pred(SprayObjects.Count) do
     begin
@@ -391,6 +392,9 @@ for i:= 0 to Pred(SprayObjects.Count) do
          ReadLn(f, Maxcnt)
          end;
     end;
+
+// snowflakes
+//Readln(f, );
 Close(f);
 {$I+}
 TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)

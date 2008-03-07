@@ -51,6 +51,8 @@ type
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget);
 
+     TVisualGearType = (vgtFlake);
+
      TGearsType = set of TGearType;
 
      TSound     = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,

@@ -31,6 +31,7 @@ uses
   uWorld in 'uWorld.pas',
   uIO in 'uIO.pas',
   uGears in 'uGears.pas',
+  uVisualGears in 'uVisualGears.pas',
   uConsole in 'uConsole.pas',
   uKeys in 'uKeys.pas',
   uTeams in 'uTeams.pas',

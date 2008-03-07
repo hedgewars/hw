@@ -95,7 +95,7 @@ var
     AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 function hwSign(r: hwFloat): LongInt;
-function Min(a, b: LongInt): LongInt; 
+function Min(a, b: LongInt): LongInt;
 function Max(a, b: LongInt): LongInt;
 function rndSign(num: hwFloat): hwFloat;
 procedure OutError(Msg: String; isFatalError: boolean);

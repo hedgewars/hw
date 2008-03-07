@@ -32,6 +32,7 @@ set(engine_sources
 	uStore.pas
 	uTeams.pas
 	uTriggers.pas
+	uVisualGears.pas
 	uWorld.pas
 	CCHandlers.inc
 	GSHandlers.inc
