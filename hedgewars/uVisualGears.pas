@@ -64,8 +64,8 @@ with Gear^ do
   end;
 
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
-Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobVelocity) * Steps;
-Gear^.Angle:= Gear^.Angle + Gear^.dAngle;
+Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobFallSpeed) * Steps;
+Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
 
 if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
