@@ -164,10 +164,7 @@ procedure RemoveGearFromList(Gear: PGear);
 begin
 if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
-   else begin
-   GearsList:= Gear^.NextGear;
-   if GearsList <> nil then GearsList^.PrevGear:= nil
-   end;
+   else GearsList:= Gear^.NextGear
 end;
 
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;

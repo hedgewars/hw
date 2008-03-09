@@ -369,10 +369,10 @@ end;
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
 begin
 glPushMatrix;
-glTranslatef(X - SpritesData[Sprite].Width div 2, Y - SpritesData[Sprite].Width div 2, 0);
+glTranslatef(X, Y, 0);
 glRotatef(Angle, 0, 0, 1);
 
-DrawSprite(Sprite, 0, 0, Frame, nil);
+DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Width div 2, Frame, nil);
 
 glPopMatrix
 end;

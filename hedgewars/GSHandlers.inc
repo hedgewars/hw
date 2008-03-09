@@ -1215,6 +1215,7 @@ if (Gear^.Message and gm_Switch) <> 0 then
    begin
    HHGear:= CurrentHedgehog^.Gear;
    HHGear^.Message:= HHGear^.Message and not gm_Switch;
+   Gear^.Message:= Gear^.Message and not gm_Switch;
    State:= HHGear^.State;
    HHGear^.State:= 0;
    HHGear^.Active:= false;
