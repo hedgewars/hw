@@ -1,4 +1,4 @@
-foreach(dir "avematan" "bubbles" "cheese" "nature" "norsk" "steel" "tibet" "Volcano" "wood" "xtheme")
+foreach(dir "nature" "Snow")
   add_subdirectory(${dir})
 endforeach(dir)
 
