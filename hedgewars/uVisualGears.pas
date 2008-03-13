@@ -75,8 +75,8 @@ end;
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
-if hwRound(Gear^.Y) > -160 then Gear^.dY:= Gear^.dY - _1div50000
-                           else Gear^.dY:= Gear^.dY + _1div50000;
+if hwRound(Gear^.Y) > -160 then Gear^.dY:= Gear^.dY - _1div50000 * Steps
+                           else Gear^.dY:= Gear^.dY + _1div50000 * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
 
@@ -95,7 +95,7 @@ function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 var Result: PVisualGear;
 begin
 New(Result);
-FillChar(Result^, sizeof(TVisualGearType), 0);
+FillChar(Result^, sizeof(TVisualGear), 0);
 Result^.X:= int2hwFloat(X);
 Result^.Y:= int2hwFloat(Y);
 Result^.Kind := Kind;
