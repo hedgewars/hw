@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats;
 {$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;
@@ -40,8 +40,7 @@ type PHedgehog = ^THedgehog;
                  AttacksNum: Longword;
                  visStepPos: LongWord;
                  BotLevel  : LongWord; // 0 - Human player
-                 DamageGiven: Longword;
-                 MaxStepDamage: Longword;
+                 stats: TStatistics;
                  end;
      TTeam = record
              Clan: PClan;
@@ -87,7 +86,6 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function CheckForWin: boolean;
-procedure SendStats;
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound;
@@ -323,26 +321,6 @@ var t: LongInt;
 begin
 for t:= 0 to Pred(TeamsCount) do
    TeamsArray[t]^.ExtDriven:= false
-end;
-
-procedure SendStats;
-var i, t: LongInt;
-    msd: Longword; msdhh: PHedgehog;
-begin
-msd:= 0; msdhh:= nil;
-for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].MaxStepDamage > msd then
-             begin
-             msdhh:= @Hedgehogs[i];
-             msd:= Hedgehogs[i].MaxStepDamage
-             end;
-      end;
-if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msdhh^.MaxStepDamage) + ' ' +
-                                               msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
-if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 
 initialization

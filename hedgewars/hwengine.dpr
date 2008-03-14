@@ -49,7 +49,8 @@ uses
   uLocale in 'uLocale.pas',
   uAmmos in 'uAmmos.pas',
   uSHA in 'uSHA.pas',
-  uFloat in 'uFloat.pas';
+  uFloat in 'uFloat.pas',
+  uStats in 'uStats.pas';
 
 {$INCLUDE options.inc}
 

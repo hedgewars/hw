@@ -69,7 +69,8 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL;
+     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
+     uStats;
 
 const MAXROPEPOINTS = 300;
 var RopePoints: record
@@ -81,7 +82,6 @@ var RopePoints: record
                                   b: boolean;
                                   end;
                  end;
-    StepDamage: Longword = 0;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -328,7 +328,7 @@ if Gear^.Kind = gtHedgehog then
          begin
          t:= max(Gear^.Damage, Gear^.Health);
          AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
-         inc(StepDamage, t)
+         uStats.HedgehogDamaged(Gear, t)
          end;
       team:= PHedgehog(Gear^.Hedgehog)^.Team;
       if CurrentHedgehog^.Gear = Gear then
@@ -356,7 +356,6 @@ while Gear <> nil do
          if Gear^.Damage <> 0 then
             begin
             CheckNoDamage:= false;
-            inc(StepDamage, Gear^.Damage);
             if Gear^.Health < Gear^.Damage then Gear^.Health:= 0
                                            else dec(Gear^.Health, Gear^.Damage);
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
@@ -378,7 +377,7 @@ end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
-      step: (stDelay, stChDmg, stChWin, stSpawn, stNTurn) = stDelay;
+      step: (stDelay, stChDmg, stChWin, stTurnReact, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 begin
 AllInactive:= true;
@@ -403,6 +402,10 @@ if AllInactive then
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
+    stTurnReact: begin
+                 TurnReaction;
+                 inc(step)
+                 end;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)
@@ -411,9 +414,6 @@ if AllInactive then
                  //AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
-                    with CurrentHedgehog^ do
-                         if MaxStepDamage < StepDamage then MaxStepDamage:= StepDamage;
-                    StepDamage:= 0;
                     ParseCommand('/nextturn', true);
                     end;
                  step:= Low(step)
@@ -683,6 +683,7 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then
                              begin
                              inc(Gear^.Damage, dmg);
+                             uStats.HedgehogDamaged(Gear, dmg);
                              if Gear^.Kind = gtHedgehog then
                                 AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
                              end;
@@ -712,10 +713,8 @@ end;
 procedure ShotgunShot(Gear: PGear);
 var t: PGear;
     dmg: integer;
-    hh: PHedgehog;
 begin
 Gear^.Radius:= cShotgunRadius;
-hh:= Gear^.Hedgehog;
 t:= GearsList;
 while t <> nil do
     begin
@@ -730,7 +729,7 @@ while t <> nil do
                        if t^.Kind = gtHedgehog then
                           begin
                           AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
-                          inc(hh^.DamageGiven, dmg)
+                          uStats.HedgehogDamaged(Gear, dmg)
                           end;
                        DeleteCI(t);
                        t^.dX:= t^.dX + SignAs(Gear^.dX * dmg * _0_01 + cHHKick, t^.X - Gear^.X);
@@ -770,7 +769,7 @@ while i > 0 do
                        if t^.ar[i]^.Kind = gtHedgehog then
                           begin
                           AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
-                          inc(hh^.DamageGiven, Damage)
+                          uStats.HedgehogDamaged(t^.ar[i], Damage)
                           end;
                        DeleteCI(t^.ar[i]);
                        t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;

@@ -29,6 +29,7 @@ set(engine_sources
 	uRandom.pas
 	uSHA.pas
 	uSound.pas
+	uStats.pas
 	uStore.pas
 	uTeams.pas
 	uTriggers.pas
