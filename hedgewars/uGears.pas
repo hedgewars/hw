@@ -377,7 +377,8 @@ end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
-      step: (stDelay, stChDmg, stChWin, stTurnReact, stSpawn, stNTurn) = stDelay;
+      step: (stDelay, stChDmg, stChWin, stTurnReact,
+             stAfterDelay, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 begin
 AllInactive:= true;
@@ -403,8 +404,17 @@ if AllInactive then
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
     stTurnReact: begin
-                 TurnReaction;
+                 if not isInMultiShoot then uStats.TurnReaction;
                  inc(step)
+                 end;
+   stAfterDelay: begin
+                 if delay = 0 then
+                    delay:= cInactDelay
+                 else
+                    dec(delay);
+
+                 if delay = 0 then
+                    inc(step)
                  end;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;

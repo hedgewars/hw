@@ -27,7 +27,7 @@ type TStatistics = record
                    StepDamageGiven: Longword;
                    MaxStepDamageRecv,
                    MaxStepDamageGiven: Longword;
-                   Turns: Longword;
+                   FinishedTurns: Longword;
                    end;
 
 procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
@@ -36,16 +36,49 @@ procedure SendStats;
 
 implementation
 uses uTeams, uSound, uConsts;
+var DamageGiven : Longword = 0;
+    DamageClan  : Longword = 0;
 
 procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
 begin
 if Gear <> CurrentHedgehog^.Gear then
    inc(CurrentHedgehog^.stats.StepDamageGiven, Damage);
-inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Damage)
+
+if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Damage);
+
+
+inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Damage);
+inc(DamageGiven, Damage)
 end;
 
 procedure TurnReaction;
+var Gear: PGear;
 begin
+inc(CurrentHedgehog^.stats.FinishedTurns);
+
+if CurrentHedgehog^.stats.StepDamageRecv > 0 then PlaySound(sndStupid, false)
+else if DamageClan <> 0 then
+else if DamageGiven <> 0 then
+else PlaySound(sndMissed, false);
+
+Gear:= GearsList;
+while Gear <> nil do
+  begin
+  if Gear^.Kind = gtHedgehog then
+    with PHedgehog(Gear^.Hedgehog)^.stats do
+      begin
+      inc(DamageRecv, StepDamageRecv);
+      inc(DamageGiven, StepDamageGiven);
+      if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
+      if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
+      StepDamageRecv:= 0;
+      StepDamageGiven:= 0
+      end;
+  Gear:= Gear^.NextGear
+  end;
+
+DamageGiven:= 0;
+DamageClan:= 0
 end;
 
 procedure SendStats;
