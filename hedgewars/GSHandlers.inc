@@ -189,9 +189,9 @@ procedure doStepHealthTag(Gear: PGear);
 var s: shortstring;
     font: THWFont;
 begin
-AllInactive:= false;
 if Gear^.Kind = gtHealthTag then
    begin
+   AllInactive:= false;
    font:= fnt16;
    Gear^.dY:= -_0_08
    end else
