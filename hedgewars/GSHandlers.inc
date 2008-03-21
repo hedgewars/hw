@@ -1033,6 +1033,7 @@ end;
 
 procedure doStepParachute(Gear: PGear);
 var HHGear: PGear;
+    Timer: Longword;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State and not gstAttacking;
@@ -1052,8 +1053,9 @@ if TestCollisionYwithGear(HHGear, 1)
         State:= State and not (gstAttacking or gstAttacked);
         State:= State or gstMoving;
         end;
+   Timer:= Gear^.Timer;
    DeleteGear(Gear);
-   if Gear^.Timer > 10 then
+   if Timer > 10 then
       begin
       OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
       ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
