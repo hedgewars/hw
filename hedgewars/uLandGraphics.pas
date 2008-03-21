@@ -215,7 +215,8 @@ for i:= 0 to Pred(Count) do
     inc(y, dY)
     end;
 
-UpdateLandTexture(0, 1024)
+
+UpdateLandTexture(0, 1023)
 end;
 
 //
@@ -279,8 +280,8 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-t:= max(stY - HalfWidth * 3 div 2 - 4, 0);
-ty:= min(stY + HalfWidth * 3 div 2 + 4, 1023) - t;
+t:= max(stY - HalfWidth * 2 - 4, 0);
+ty:= min(stY + HalfWidth * 2 + 4, 1023) - t;
 UpdateLandTexture(t, ty)
 end;
 
