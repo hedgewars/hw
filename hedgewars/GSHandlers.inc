@@ -677,8 +677,8 @@ DeleteCI(HHGear);
 if (HHGear^.State and gstMoving) <> 0 then
    if TestCollisionYwithGear(HHGear, 1) then
       begin
-      HHGear^.dY:= _0;
       CheckHHDamage(HHGear);
+      HHGear^.dY:= _0;
       HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping);
       end else
       begin
