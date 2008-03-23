@@ -1184,6 +1184,7 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
         end
    else begin
         DeleteCI(HHGear);
+        SetAllHHToActive;
         Gear^.doStep:= @doStepTeleportAfter;
         HHGear^.X:= int2hwFloat(TargetPoint.X);
         HHGear^.Y:= int2hwFloat(TargetPoint.Y);
