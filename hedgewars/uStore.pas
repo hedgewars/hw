@@ -36,7 +36,7 @@ procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y: LongInt; Angle: real);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
@@ -471,7 +471,7 @@ begin
 DrawTexture(X - Source^.w div 2, Top, Source)
 end;
 
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Surface: PSDL_Surface);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 var l, r, t, b: real;
 begin
 
@@ -488,23 +488,30 @@ if Dir = -1 then
    r:= (Step + 1) * 32 / HHTexture^.w
    end;
 
+
+glPushMatrix();
+glTranslatef(X, Y, 0);
+glRotatef(Angle, 0, 0, 1);
+
 glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
 
 glBegin(GL_QUADS);
 
 glTexCoord2f(l, t);
-glVertex2i(X, Y);
+glVertex2i(-16, -16);
 
 glTexCoord2f(r, t);
-glVertex2i(32 + X, Y);
+glVertex2i(16, -16);
 
 glTexCoord2f(r, b);
-glVertex2i(32 + X, 32 + Y);
+glVertex2i(16, 16);
 
 glTexCoord2f(l, b);
-glVertex2i(X, 32 + Y);
+glVertex2i(-16, 16);
 
-glEnd()
+glEnd();
+
+glPopMatrix
 end;
 
 procedure StoreRelease;

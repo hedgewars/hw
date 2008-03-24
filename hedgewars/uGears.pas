@@ -472,10 +472,28 @@ end;
 procedure DrawHH(Gear: PGear; Surface: PSDL_Surface);
 var t: LongInt;
 begin
-DrawHedgehog(hwRound(Gear^.X) - 15 + WorldDx, hwRound(Gear^.Y) - 18 + WorldDy,
-             hwSign(Gear^.dX), 0,
+if (Gear^.State and gstHHDriven) <> 0 then
+   begin
+   if CurAmmoGear <> nil then
+      begin
+      if (CurAmmoGear^.Kind = gtRope) then
+      DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+             1,
+             1,
+             0,
+             DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
+      end else
+      DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+             hwSign(Gear^.dX),
+             0,
              PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
-             Surface);
+             0);
+   end else
+   DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+             hwSign(Gear^.dX),
+             0,
+             8,
+             0);
 
 with PHedgehog(Gear^.Hedgehog)^ do
      if (Gear^.State{ and not gstAnimation}) = 0 then
@@ -502,6 +520,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
         if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
            DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
                       GameTicks div 32 mod 16, Surface);
+
         if (Gear^.State and (gstMoving or gstDrowning)) = 0 then
            if (Gear^.State and gstHHThinking) <> 0 then
               DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0, Surface)
