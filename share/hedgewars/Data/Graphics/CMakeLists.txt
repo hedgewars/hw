@@ -1,5 +1,6 @@
 add_subdirectory(Graves)
 add_subdirectory(AmmoMenu)
+add_subdirectory(Hedgehog)
 
 file(GLOB BaseSprites *.png) 
 

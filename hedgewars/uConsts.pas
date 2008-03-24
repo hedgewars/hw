@@ -29,7 +29,7 @@ type
 
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-                   ptLocale, ptAmmoMenu, ptVoices);
+                   ptLocale, ptAmmoMenu, ptHedgehog, ptVoices);
 
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
@@ -41,7 +41,7 @@ type
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
                    sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
                    sprQuestion, sprPowerBar, sprWindBar,
-                   sprWindL, sprWindR, sprFlake);
+                   sprWindL, sprWindR, sprFlake, sprHandRope);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -239,6 +239,7 @@ const
                                                'Forts',                         // ptForts
                                                'Locale',                        // ptLocale
                                                'Graphics/AmmoMenu',             // ptAmmoMenu
+                                               'Graphics/Hedgehog',             // ptHedgehog
                                                'Sounds/voices'                  // ptVoices
                                                );
 
@@ -343,7 +344,9 @@ const
                      (FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  80; Height: 13; saveSurf: false),// sprWindR
                      (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  64; Height: 64; saveSurf: false) // sprFlake
+                      Width:  64; Height: 64; saveSurf: false),// sprFlake
+                     (FileName:     'amRope'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprHandRope
                      );
 
       Soundz: array[TSound] of record
@@ -511,7 +514,7 @@ const
                                    Slot: 7;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: cMaxAngle div 2;
+                                   maxAngle: cMaxAngle;// div 2;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidMine;
