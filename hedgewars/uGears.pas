@@ -474,24 +474,42 @@ var t: LongInt;
 	amt: TAmmoType;
 	hx, hy: LongInt;
 	aangle: real;
+	defaultPos: boolean;
 begin
+defaultPos:= true;
 if (Gear^.State and gstHHDriven) <> 0 then
 begin
 	if CurAmmoGear <> nil then
 	begin
 		if (CurAmmoGear^.Kind = gtRope) then
-		DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-				1,
-				1,
-				0,
-				DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
+			begin
+			DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+					1,
+					1,
+					0,
+					DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
+			defaultPos:= false
+			end
 	end else
-	if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
+	if ((Gear^.State and gstHHJumping) <> 0) then
+		begin
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			1,
+			1,
+			0);
+			defaultPos:= false
+		end else
+	if (Gear^.Message and (gm_Left or gm_Right) <> 0)
+       or ((Gear^.State and gstAttacked) <> 0) then
+		begin
 		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 			hwSign(Gear^.dX),
 			0,
 			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
-			0)
+			0);
+			defaultPos:= false
+		end
     else
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
@@ -509,20 +527,26 @@ begin
 			amBazooka,
 			amRope,
 			amShotgun,
-			amDEagle: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-						hwSign(Gear^.dX),
-						0,
-						4,
-						0);
+			amDEagle: begin
+					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+							hwSign(Gear^.dX),
+							0,
+							4,
+							0);
+					defaultPos:= false
+				end
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
 				0,
 				3,
 				0);
+			defaultPos:= false
 		end
 	end
-end else
+end;
+
+if defaultPos then 
 	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 		hwSign(Gear^.dX),
 		0,
