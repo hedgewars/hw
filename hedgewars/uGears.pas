@@ -528,13 +528,18 @@ begin
 			amRope,
 			amShotgun,
 			amDEagle: begin
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							0,
-							4,
-							0);
-					defaultPos:= false
-				end
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						0,
+						4,
+						0);
+				defaultPos:= false
+				end;
+			amAirAttack,
+			amMineStrike: begin
+				DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
+				defaultPos:= false
+				end;
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
