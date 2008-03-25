@@ -40,8 +40,9 @@ type
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
                    sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
-                   sprQuestion, sprPowerBar, sprWindBar,
-                   sprWindL, sprWindR, sprFlake, sprHandRope);
+                   sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
+                   sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
+                   sprHandDEagle);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -346,7 +347,13 @@ const
                      (FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  64; Height: 64; saveSurf: false),// sprFlake
                      (FileName:     'amRope'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprHandRope
+                      Width:  32; Height: 32; saveSurf: false),// sprHandRope
+                     (FileName:  'amBazooka'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprHandBazooka
+                     (FileName:  'amShotgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false),// sprHandShotgun
+                     (FileName:   'amDEagle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprHandDEagle
                      );
 
       Soundz: array[TSound] of record
@@ -514,7 +521,7 @@ const
                                    Slot: 7;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
-                                   maxAngle: cMaxAngle;// div 2;
+                                   maxAngle: cMaxAngle div 2;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidMine;

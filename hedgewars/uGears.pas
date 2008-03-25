@@ -499,11 +499,17 @@ begin
 		hy:= hwRound(Gear^.Y) - 2 + WorldDy;
 		aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
 		case amt of
+			amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
+			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 		else
 		end;
 		case amt of
-			amRope: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			amBazooka,
+			amRope,
+			amShotgun,
+			amDEagle: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 						hwSign(Gear^.dX),
 						0,
 						4,
