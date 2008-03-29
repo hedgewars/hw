@@ -586,7 +586,7 @@ case LandSurface^.format^.BytesPerPixel of
      4: for y:= 0 to 1023 do
             begin
             for x:= 0 to 2047 do
-                if PLongword(@(p^[x * 4]))^ <> 0 then Land[y, x]:= COLOR_LAND;
+                if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[y, x]:= COLOR_LAND;
             p:= @(p^[LandSurface^.pitch]);
             end;
      end;
