@@ -280,8 +280,8 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-t:= max(stY - HalfWidth * 2 - 4, 0);
-ty:= min(stY + HalfWidth * 2 + 4, 1023) - t;
+t:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
+ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), 1023) - t;
 UpdateLandTexture(t, ty)
 end;
 
