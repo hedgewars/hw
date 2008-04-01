@@ -776,9 +776,11 @@ while Gear <> nil do
                           if (Mask and EXPLNoDamage) = 0 then
                              begin
                              inc(Gear^.Damage, dmg);
-                             uStats.HedgehogDamaged(Gear, dmg);
                              if Gear^.Kind = gtHedgehog then
+                                begin
+                                uStats.HedgehogDamaged(Gear, dmg);
                                 AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
+                                end
                              end;
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin

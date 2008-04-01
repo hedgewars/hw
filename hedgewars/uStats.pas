@@ -65,7 +65,7 @@ if (DamageGiven = DamageTotal) and (DamageTotal > 0) then PlaySound(sndFirstBloo
 else if CurrentHedgehog^.stats.StepDamageRecv > 0 then PlaySound(sndStupid, false)
 else if DamageClan <> 0 then
 else if DamageGiven <> 0 then
-else PlaySound(sndMissed, false);
+else if AmmoDamagingUsed then PlaySound(sndMissed, false);
 
 Gear:= GearsList;
 while Gear <> nil do
