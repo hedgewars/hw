@@ -125,6 +125,9 @@ with Gear^,
                      amTeleport: CurAmmoGear:= AddGear(0, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                   end;
+
+        uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
+
         Power:= 0;
         if CurAmmoGear <> nil then
            begin

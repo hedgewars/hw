@@ -18,7 +18,7 @@
 
 unit uStats;
 interface
-uses uGears;
+uses uGears, uConsts;
 
 type TStatistics = record
                    DamageRecv,
@@ -30,14 +30,16 @@ type TStatistics = record
                    FinishedTurns: Longword;
                    end;
 
+procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
 procedure TurnReaction;
 procedure SendStats;
 
 implementation
-uses uTeams, uSound, uConsts;
+uses uTeams, uSound;
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
+    DamageTotal : Longword = 0;
 
 procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
 begin
@@ -48,7 +50,8 @@ if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(
 
 
 inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Damage);
-inc(DamageGiven, Damage)
+inc(DamageGiven, Damage);
+inc(DamageTotal, Damage)
 end;
 
 procedure TurnReaction;
@@ -56,7 +59,8 @@ var Gear: PGear;
 begin
 inc(CurrentHedgehog^.stats.FinishedTurns);
 
-if CurrentHedgehog^.stats.StepDamageRecv > 0 then PlaySound(sndStupid, false)
+if (DamageGiven = DamageTotal) and (DamageTotal > 0) then PlaySound(sndFirstBlood, false)
+else if CurrentHedgehog^.stats.StepDamageRecv > 0 then PlaySound(sndStupid, false)
 else if DamageClan <> 0 then
 else if DamageGiven <> 0 then
 else PlaySound(sndMissed, false);
@@ -79,6 +83,10 @@ while Gear <> nil do
 
 DamageGiven:= 0;
 DamageClan:= 0
+end;
+
+procedure AmmoUsed(am: TAmmoType);
+begin
 end;
 
 procedure SendStats;
