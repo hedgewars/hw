@@ -395,6 +395,7 @@ const
                                   Slot: 0..cMaxSlotIndex;
                                   TimeAfterTurn: Longword;
                                   minAngle, maxAngle: Longword;
+                                  isDamaging: boolean;
                                   PosCount: Longword;
                                   PosSprite: TSprite;
                                   end = (
@@ -412,6 +413,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidClusterBomb;
@@ -428,6 +430,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidBazooka;
@@ -443,6 +446,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidUFO;
@@ -460,6 +464,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidShotgun;
@@ -475,6 +480,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidPickHammer;
@@ -493,6 +499,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidSkip;
@@ -508,6 +515,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidRope;
@@ -525,6 +533,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: cMaxAngle div 2;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidMine;
@@ -541,6 +550,7 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidDEagle;
@@ -556,6 +566,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidDynamite;
@@ -573,6 +584,7 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidFirePunch;
@@ -590,6 +602,7 @@ const
                                    TimeAfterTurn: 3000;
                                    MinAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidBaseballBat;
@@ -605,6 +618,7 @@ const
                                    TimeAfterTurn: 5000;
                                    minAngle: 0;
                                    maxAngle: cMaxAngle div 2;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidParachute;
@@ -623,6 +637,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidAirAttack;
@@ -641,6 +656,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 2;
                                    PosSprite: sprAmAirplane),
                                   (NameId: sidMineStrike;
@@ -659,6 +675,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 2;
                                    PosSprite: sprAmAirplane),
                                   (NameId: sidBlowTorch;
@@ -674,6 +691,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 768;
                                    maxAngle: 1280;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidGirder;
@@ -692,6 +710,7 @@ const
                                    TimeAfterTurn: 3000;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 8;
                                    PosSprite: sprAmGirder),
                                   (NameId: sidTeleport;
@@ -711,6 +730,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidSwitch;
@@ -728,6 +748,7 @@ const
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
+                                   isDamaging: false;
                                    PosCount: 1;
                                    PosSprite: sprWater));
 

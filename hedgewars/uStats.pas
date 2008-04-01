@@ -40,6 +40,8 @@ uses uTeams, uSound;
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
+    AmmoUsedCount : Longword = 0;
+    AmmoDamagingUsed : boolean = false;
 
 procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
 begin
@@ -82,11 +84,15 @@ while Gear <> nil do
   end;
 
 DamageGiven:= 0;
-DamageClan:= 0
+DamageClan:= 0;
+AmmoUsedCount:= 0;
+AmmoDamagingUsed:= false
 end;
 
 procedure AmmoUsed(am: TAmmoType);
 begin
+inc(AmmoUsedCount);
+AmmoDamagingUsed:= AmmoDamagingUsed or Ammoz[am].isDamaging
 end;
 
 procedure SendStats;
