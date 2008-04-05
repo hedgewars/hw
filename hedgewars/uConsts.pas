@@ -42,7 +42,7 @@ type
                    sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
                    sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
-                   sprHandDEagle, sprHandAirAttack);
+                   sprHandDEagle, sprHandAirAttack, sprHandBaseball);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -355,7 +355,9 @@ const
                      (FileName:   'amDEagle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHandDEagle
                      (FileName:'amAirAttack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprHandAirAttack
+                      Width:  32; Height: 32; saveSurf: false),// sprHandAirAttack
+                     (FileName: 'amBaseball'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprHandBaseball
                      );
 
       Soundz: array[TSound] of record

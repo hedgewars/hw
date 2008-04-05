@@ -528,18 +528,24 @@ begin
 			amBazooka,
 			amRope,
 			amShotgun,
-			amDEagle: begin
+			amDEagle,
+			amBaseballBat: begin
 				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 						hwSign(Gear^.dX),
 						0,
 						4,
 						0);
-				defaultPos:= false
 				end;
 			amAirAttack,
 			amMineStrike: begin
 				DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
-				defaultPos:= false
+				end;
+			amPickHammer: begin
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						2,
+						0);
 				end;
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
@@ -547,8 +553,15 @@ begin
 				0,
 				3,
 				0);
-			defaultPos:= false
-		end
+		end;
+
+		case amt of
+			amBaseballBat: DrawRotated(sprHandBaseball,
+					hwRound(Gear^.X) + 1 - 4 * hwSign(Gear^.dX) + WorldDx,
+					hwRound(Gear^.Y) + 6 + WorldDy, hwSign(Gear^.dX), aangle);
+		end;
+
+		defaultPos:= false
 	end
 end;
 
