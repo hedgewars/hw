@@ -837,10 +837,10 @@ while t <> nil do
                        if t^.Kind = gtHedgehog then
                           begin
                           AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
-                          uStats.HedgehogDamaged(Gear, dmg)
+                          uStats.HedgehogDamaged(t, dmg)
                           end;
                        DeleteCI(t);
-                       t^.dX:= t^.dX + SignAs(Gear^.dX * dmg * _0_01 + cHHKick, t^.X - Gear^.X);
+                       t^.dX:= t^.dX + hwAbs(Gear^.dX * dmg * _0_01) + SignAs(cHHKick, Gear^.dX);
                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
                        t^.State:= t^.State or gstMoving;
                        t^.Active:= true;
