@@ -252,7 +252,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       exit
       end;
    DeleteCI(Gear); // must be after exit!! (see previous line)
-   
+
    PHedgehog(Gear^.Hedgehog)^.visStepPos:= (PHedgehog(Gear^.Hedgehog)^.visStepPos + 1) and 7;
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin

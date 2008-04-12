@@ -119,10 +119,10 @@ if Gear^.IntersectGear <> nil then
            begin
            IntersectGear:= nil;
            TestWord:= 0
-           end else    
+           end else
            TestWord:= COLOR_LAND - 1
    else TestWord:= 0;
-   
+
 x:= hwRound(Gear^.X);
 if Dir < 0 then x:= x - Gear^.Radius
            else x:= x + Gear^.Radius;
