@@ -91,7 +91,7 @@ var
     InitStepsFlags: Longword = 0;
 
     RealTicks: Longword = 0;
-    
+
     AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 function hwSign(r: hwFloat): LongInt;

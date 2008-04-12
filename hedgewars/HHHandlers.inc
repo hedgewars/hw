@@ -74,8 +74,8 @@ with Gear^,
      begin
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0)and
-        (((State and gstMoving) = 0)or((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0))and
-          ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
+        (((State and gstMoving) = 0) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0))and
+        ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
         State:= State or gstAttacking;
         if Power = cMaxPower then Message:= Message and not gm_Attack
@@ -170,8 +170,12 @@ case Gear^.Pos of
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
-                    s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                    AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    if not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven
+                      or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)) then
+                       begin
+                       s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
+                       AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
+                       end
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);
@@ -407,21 +411,20 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    exit
    end;
 
-if ((Gear^.State and gstMoving) <> 0) then
-	begin
-	if (StepTicks = cHHStepTicks)
+if ((Gear^.State and gstMoving) <> 0)
+    or (StepTicks = cHHStepTicks)
 	or (CurAmmoGear <> nil) then // we're moving
-		begin
-		// check for case with ammo
-		t:= CheckGearNear(Gear, gtCase, 36, 36);
-		if t <> nil then
-			PickUp(Gear, t)
-		end else
+	begin
+	// check for case with ammo
+	t:= CheckGearNear(Gear, gtCase, 36, 36);
+	if t <> nil then
+		PickUp(Gear, t)
+	end else
+	if ((Gear^.State and gstMoving) <> 0) then
 		with PHedgehog(Gear^.Hedgehog)^ do
 			if (CurAmmoGear = nil)
 			and (Gear^.dY > _0_39)
-			and (Ammo^[CurSlot, CurAmmo].AmmoType = amParachute) then Gear^.Message:= Gear^.Message or gm_Attack
-	end;
+			and (Ammo^[CurSlot, CurAmmo].AmmoType = amParachute) then Gear^.Message:= Gear^.Message or gm_Attack;
 
 if CurAmmoGear <> nil then
    begin
