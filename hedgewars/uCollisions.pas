@@ -241,7 +241,7 @@ TestCollisionYKick:= flag;
 
 if flag then
    begin
-   if hwAbs(Gear^.dX) < cHHKick then exit(true);
+   if hwAbs(Gear^.dY) < cHHKick then exit(true);
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
 

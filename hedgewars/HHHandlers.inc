@@ -415,16 +415,15 @@ if ((Gear^.State and gstMoving) <> 0)
     or (StepTicks = cHHStepTicks)
 	or (CurAmmoGear <> nil) then // we're moving
 	begin
+	with PHedgehog(Gear^.Hedgehog)^ do
+		if (CurAmmoGear = nil)
+		and (Gear^.dY > _0_39)
+		and (Ammo^[CurSlot, CurAmmo].AmmoType = amParachute) then Gear^.Message:= Gear^.Message or gm_Attack;
 	// check for case with ammo
 	t:= CheckGearNear(Gear, gtCase, 36, 36);
 	if t <> nil then
 		PickUp(Gear, t)
-	end else
-	if ((Gear^.State and gstMoving) <> 0) then
-		with PHedgehog(Gear^.Hedgehog)^ do
-			if (CurAmmoGear = nil)
-			and (Gear^.dY > _0_39)
-			and (Ammo^[CurSlot, CurAmmo].AmmoType = amParachute) then Gear^.Message:= Gear^.Message or gm_Attack;
+	end; 
 
 if CurAmmoGear <> nil then
    begin
