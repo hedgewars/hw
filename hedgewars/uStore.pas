@@ -24,10 +24,10 @@ uses uConsts, uTeams, SDLh, uFloat, GL;
 procedure StoreInit;
 procedure StoreLoad;
 procedure StoreRelease;
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -35,7 +35,7 @@ procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -302,7 +302,7 @@ SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
 end;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture; DestSurface: PSDL_Surface);
+procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
 begin
@@ -371,7 +371,7 @@ glPushMatrix;
 glTranslatef(X, Y, 0);
 glRotatef(Angle, 0, 0, 1);
 
-DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Width div 2, Frame, nil);
+DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Width div 2, Frame);
 
 glPopMatrix
 end;
@@ -410,41 +410,41 @@ glEnd();
 glPopMatrix
 end;
 
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt; Surface: PSDL_Surface);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt; Surface: PSDL_Surface);
+procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 var r: TSDL_Rect;
 begin
 r.x:= 0;
 r.w:= SpritesData[Sprite].Width;
 r.y:= Frame * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt; Surface: PSDL_Surface);
+procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 var r: TSDL_Rect;
 begin
 r.x:= FrameX * SpritesData[Sprite].Width;
 r.w:= SpritesData[Sprite].Width;
 r.y:= FrameY * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture, Surface)
+DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture; Surface: PSDL_Surface);
+procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 var r: TSDL_Rect;
 begin
 r.x:= 0;
 r.w:= Source^.w;
 r.y:= Frame * Height;
 r.h:= Height;
-DrawFromRect(X, Y, @r, Source, Surface)
+DrawFromRect(X, Y, @r, Source)
 end;
 
 procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
@@ -625,7 +625,7 @@ r.w:= ProgrTex^.w;
 r.h:= ProgrTex^.w;
 r.y:= (Step mod (ProgrTex^.h div ProgrTex^.w)) * ProgrTex^.w;
 DrawFromRect((cScreenWidth - ProgrTex^.w) div 2,
-             (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex, SDLPrimSurface);
+             (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex);
 glDisable(GL_TEXTURE_2D);
 SDL_GL_SwapBuffers();
 inc(Step);

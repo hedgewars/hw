@@ -101,33 +101,33 @@ with CurrentHedgehog^ do
      x:= AMxCurr;
      y:= cScreenHeight - 40;
      dec(y);
-     DrawSprite(sprAMBorders, x, y, 0, Surface);
+     DrawSprite(sprAMBorders, x, y, 0);
      dec(y);
-     DrawSprite(sprAMBorders, x, y, 1, Surface);
+     DrawSprite(sprAMBorders, x, y, 1);
      dec(y, 33);
-     DrawSprite(sprAMSlotName, x, y, 0, Surface);
+     DrawSprite(sprAMSlotName, x, y, 0);
      for i:= cMaxSlotIndex downto 0 do
          if Ammo^[i, 0].Count > 0 then
             begin
             if (CursorPoint.Y >= y - 33) and (CursorPoint.Y < y) then Slot:= i;
             dec(y, 33);
             inc(SlotsNum);
-            DrawSprite(sprAMSlot, x, y, 0, Surface);
-            DrawSprite(sprAMSlotKeys, x + 2, y + 1, i, Surface);
+            DrawSprite(sprAMSlot, x, y, 0);
+            DrawSprite(sprAMSlotKeys, x + 2, y + 1, i);
             t:= 0;
             while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
                   begin
-                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType), Surface);
+                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
                   if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
                      begin
-                     DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0, Surface);
+                     DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0);
                      Pos:= t;
                      end;
                   inc(t)
                   end
             end;
      dec(y, 1);
-     DrawSprite(sprAMBorders, x, y, 0, Surface);
+     DrawSprite(sprAMBorders, x, y, 0);
 
      if (Pos >= 0) then
         if Ammo^[Slot, Pos].Count > 0 then
@@ -146,7 +146,7 @@ with CurrentHedgehog^ do
      end;
 
 bSelected:= false;
-if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
 end;
 
 procedure MoveCamera; forward;
@@ -165,7 +165,7 @@ var i, t: LongInt;
     i:= Shift mod w;
     if i > 0 then dec(i, w);
     repeat
-      DrawSprite(spr, i, WorldDy + 1024 - SpritesData[spr].Height, 0, Surface);
+      DrawSprite(spr, i, WorldDy + 1024 - SpritesData[spr].Height, 0);
       inc(i, w)
     until i > cScreenWidth
     end;
@@ -188,8 +188,8 @@ DrawVisualGears;
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy);
@@ -217,9 +217,9 @@ DrawGears(Surface);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0, Surface);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0, Surface);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0);
 {$WARNINGS ON}
 
 // Turn time
@@ -229,14 +229,14 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, t, cScreenHeight - 48, 1, Surface);
+   DrawSprite(sprFrame, t, cScreenHeight - 48, 1);
    while i > 0 do
          begin
          dec(t, 32);
-         DrawSprite(sprBigDigit, t, cScreenHeight - 48, i mod 10, Surface);
+         DrawSprite(sprBigDigit, t, cScreenHeight - 48, i mod 10);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0, Surface);
+   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0);
    end;
 
 // Attack bar
@@ -256,12 +256,12 @@ if CurrentTeam <> nil then
                 for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
                     DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
                                          hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
-                                         i, Surface)
+                                         i)
                 end
         end;
 
 // Target
-if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0, Surface);
+if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
 
 //glPopMatrix;
 
@@ -294,21 +294,21 @@ for t:= 0 to Pred(TeamsCount) do
 
       DrawFromRect(cScreenWidth div 2,
                         DrawHealthY,
-                        @r, HealthTex, Surface);
+                        @r, HealthTex);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
       DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
                         DrawHealthY,
-                        @r, HealthTex, Surface);
+                        @r, HealthTex);
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12, Surface);
+if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12);
 
 // Wind bar
-DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0, Surface);
+DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -317,7 +317,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0, Surface);
+   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0);
    end else
  if WindBarWidth < 0 then
    begin
@@ -327,7 +327,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0, Surface);
+   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0);
    end;
 
 // AmmoMenu
@@ -345,9 +345,9 @@ if isCursorVisible then
            if PosCount > 1 then
               DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
                                     CursorPoint.Y - SpritesData[PosSprite].Height div 2,
-                                    i, Surface);
+                                    i);
          end;
-   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8, Surface)
+   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
    end;
 
 if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
@@ -368,13 +368,7 @@ if cShowFPS then
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then
-      begin
-      r.x:= 0;
-      r.y:= 0;
-      r.w:= fpsTexture^.w;
-      r.h:= fpsTexture^.h;
-      DrawFromRect(cScreenWidth - 50, 10, @r, fpsTexture, Surface);
-      end
+      DrawTexture(cScreenWidth - 50, 10, fpsTexture);
    end;
 
 inc(SoundTimerTicks, Lag);

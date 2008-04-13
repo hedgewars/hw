@@ -147,7 +147,7 @@ glEnable(GL_BLEND);
 
 for y:= 0 to cConsoleHeight div 256 + 1 do
     for x:= 0 to cScreenWidth div 256 + 1 do
-        DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0, Surface);
+        DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0);
 
 for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
     DrawLine(ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], 4, cConsoleHeight - (y + 2) * (Fontz[fnt16].Height + 2));
