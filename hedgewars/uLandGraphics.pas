@@ -288,7 +288,6 @@ end;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
 var X, Y, bpp, h, w: LongInt;
     p: PByteArray;
-    r, rr: TSDL_Rect;
     Image: PSDL_Surface;
 begin
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);

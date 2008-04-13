@@ -280,7 +280,6 @@ end;
 
 function Surface2Tex(surf: PSDL_Surface): PTexture;
 var mode: LongInt;
-    texId: GLuint;
     tw, th: Longword;
     tmpp: pointer;
 begin

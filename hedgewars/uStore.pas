@@ -230,7 +230,6 @@ var ii: TSprite;
 
     procedure GetExplosionBorderColor;
     var f: textfile;
-        s1, s2: shortstring;
         c1, c2: TSDL_Color;
     begin
     s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;

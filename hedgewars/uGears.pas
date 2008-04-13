@@ -609,7 +609,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
                                 hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx,
                                 Round(hwRound(Gear^.Y) -
                                 Cos(Gear^.Angle*pi/cMaxAngle)*60) + WorldDy, 0,
-                                hwSign(Gear^.dX) * Gear^.Angle * 180 / cMaxAngle)
+                                hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle)
         end;
 end;
 
@@ -859,11 +859,9 @@ end;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
     i: LongInt;
-    hh: PHedgehog;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t^.Count;
-hh:= Ammo^.Hedgehog;
 while i > 0 do
     begin
     dec(i);

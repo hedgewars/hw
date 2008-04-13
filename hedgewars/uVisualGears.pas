@@ -168,7 +168,6 @@ end;
 
 procedure AddClouds;
 var i: LongInt;
-    dx, dy: hwFloat;
 begin
 for i:= 0 to cCloudsNumber do
     AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, vgtCloud)

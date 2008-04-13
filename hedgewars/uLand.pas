@@ -631,7 +631,6 @@ GenPreview:= Preview
 end;
 
 procedure UpdateLandTexture(Y, Height: LongInt);
-var i: integer;
 begin
 if LandTexture <> nil then
    begin
