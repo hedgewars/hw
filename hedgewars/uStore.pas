@@ -33,7 +33,6 @@ procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
@@ -445,26 +444,6 @@ r.w:= Source^.w;
 r.y:= Frame * Height;
 r.h:= Height;
 DrawFromRect(X, Y, @r, Source)
-end;
-
-procedure DXOutText(X, Y: LongInt; Font: THWFont; s: string; Surface: PSDL_Surface);
-var clr: TSDL_Color;
-    tmpsurf: PSDL_Surface;
-    r: TSDL_Rect;
-begin
-r.x:= X;
-r.y:= Y;
-clr.r:= $FF;
-clr.g:= $FF;
-clr.b:= $FF;
-tmpsurf:= TTF_RenderUTF8_Solid(Fontz[Font].Handle, Str2PChar(s), clr.value);
-if tmpsurf = nil then
-   begin
-   SetKB(1);
-   exit
-   end;
-SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-SDL_FreeSurface(tmpsurf)
 end;
 
 procedure DrawLand(X, Y: LongInt);
