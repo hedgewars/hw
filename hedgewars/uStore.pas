@@ -118,6 +118,7 @@ end;
 procedure StoreLoad;
 var ii: TSprite;
     fi: THWFont;
+    ai: TAmmoType;
     s: string;
     tmpsurf: PSDL_Surface;
 
@@ -294,6 +295,14 @@ SDL_FreeSurface(tmpsurf);
 InitHealth;
 
 PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
+
+for ai:= Low(TAmmoType) to High(TAmmoType) do
+	with Ammoz[ai] do
+		begin
+		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), $FFFFFF);
+		NameTex:= Surface2Tex(tmpsurf);
+		SDL_FreeSurface(tmpsurf)
+		end;
 
 {$IFDEF DUMP}
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);

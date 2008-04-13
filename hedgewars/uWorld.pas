@@ -132,7 +132,7 @@ with CurrentHedgehog^ do
      if (Pos >= 0) then
         if Ammo^[Slot, Pos].Count > 0 then
            begin
-           //DXOutText(AMxCurr + 10, cScreenHeight - 68, fnt16, trAmmo[Ammoz[Ammo^[Slot, Pos].AmmoType].NameId], Surface);
+           DrawTexture(AMxCurr + 10, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
            if Ammo^[Slot, Pos].Count < 10 then
               //DXOutText(AMxCurr + 175, cScreenHeight - 68, fnt16, chr(Ammo^[Slot, Pos].Count + 48) + 'x', Surface);
            if bSelected then

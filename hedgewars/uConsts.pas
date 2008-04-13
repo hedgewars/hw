@@ -392,6 +392,7 @@ const
 
       Ammoz: array [TAmmoType] of record
                                   NameId: TAmmoStrId;
+                                  NameTex: PTexture;
                                   Probability, NumberInCase: Longword;
                                   Ammo: TAmmo;
                                   Slot: 0..cMaxSlotIndex;
@@ -402,6 +403,7 @@ const
                                   PosSprite: TSprite;
                                   end = (
                                   (NameId: sidGrenade;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Timerable or
@@ -419,6 +421,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidClusterBomb;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_Timerable or
@@ -436,6 +439,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidBazooka;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Power;
@@ -452,6 +456,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidUFO;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Power or
@@ -470,6 +475,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidShotgun;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
@@ -486,6 +492,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidPickHammer;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
@@ -505,6 +512,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidSkip;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_DontHold;
@@ -521,6 +529,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidRope;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
@@ -539,6 +548,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidMine;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -556,6 +566,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidDEagle;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 2;
                                    Ammo: (Propz: 0;
@@ -572,6 +583,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidDynamite;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -590,6 +602,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidFirePunch;
+                                   NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -608,6 +621,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidBaseballBat;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_DontHold;
@@ -624,6 +638,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidParachute;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
@@ -643,6 +658,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidAirAttack;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -662,6 +678,7 @@ const
                                    PosCount: 2;
                                    PosSprite: sprAmAirplane),
                                   (NameId: sidMineStrike;
+                                   NameTex: nil;
                                    Probability: 400;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -681,6 +698,7 @@ const
                                    PosCount: 2;
                                    PosSprite: sprAmAirplane),
                                   (NameId: sidBlowTorch;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 2;
                                    Ammo: (Propz: ammoprop_ForwMsgs;
@@ -697,6 +715,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidGirder;
+                                   NameTex: nil;
                                    Probability: 400;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
@@ -716,6 +735,7 @@ const
                                    PosCount: 8;
                                    PosSprite: sprAmGirder),
                                   (NameId: sidTeleport;
+                                   NameTex: nil;
                                    Probability: 400;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
@@ -736,6 +756,7 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater),
                                   (NameId: sidSwitch;
+                                   NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
