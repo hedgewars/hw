@@ -398,7 +398,7 @@ if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and
    AfterAttack;
    exit
    end;
-   
+
 if (Gear^.Timer mod 33) = 0 then
    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y) + 6, 6, EXPLDontDraw);
 

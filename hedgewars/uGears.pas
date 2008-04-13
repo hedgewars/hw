@@ -490,6 +490,8 @@ begin
 					DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
 			defaultPos:= false
 			end
+		else if (CurAmmoGear^.Kind = gtPickHammer) then
+			defaultPos:= false
 	end else
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
@@ -565,7 +567,7 @@ begin
 	end
 end;
 
-if defaultPos then 
+if defaultPos then
 	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 		hwSign(Gear^.dX),
 		0,
@@ -692,6 +694,7 @@ while Gear<>nil do
      gtSmallDamage: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex);
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4);
+      gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 +  WorldDx, hwRound(Gear^.Y) - 50 + ((GameTicks shr 5) and 1) * 2 + WorldDy, 0);
             gtRope: begin
                     roplen:= 0;
                     if RopePoints.Count > 0 then
