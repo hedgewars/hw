@@ -775,6 +775,8 @@ const
                                    PosCount: 1;
                                    PosSprite: sprWater));
 
+var CountTexz: array[1..9] of PTexture;
+
 implementation
 
 end.

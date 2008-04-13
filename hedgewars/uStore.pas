@@ -116,11 +116,7 @@ WriteInRoundRect:= Result
 end;
 
 procedure StoreLoad;
-var ii: TSprite;
-    fi: THWFont;
-    ai: TAmmoType;
-    s: string;
-    tmpsurf: PSDL_Surface;
+var s: string;
 
     procedure WriteNames(Font: THWFont);
     var t: LongInt;
@@ -163,7 +159,6 @@ var ii: TSprite;
     procedure MakeCrossHairs;
     var t: LongInt;
         tmpsurf, texsurf: PSDL_Surface;
-        s: string;
         Color, i: Longword;
     begin
     s:= Pathz[ptGraphics] + '/' + cCHFileName;
@@ -249,6 +244,11 @@ var ii: TSprite;
                             $FF000000
     end;
 
+var ii: TSprite;
+    fi: THWFont;
+    ai: TAmmoType;
+    tmpsurf: PSDL_Surface;
+    i: LongInt;
 begin
 for fi:= Low(THWFont) to High(THWFont) do
     with Fontz[fi] do
@@ -303,6 +303,13 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
 		NameTex:= Surface2Tex(tmpsurf);
 		SDL_FreeSurface(tmpsurf)
 		end;
+
+for i:= Low(CountTexz) to High(CountTexz) do
+	begin
+	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), $FFFFFF);
+	CountTexz[i]:= Surface2Tex(tmpsurf);
+	SDL_FreeSurface(tmpsurf)
+	end;
 
 {$IFDEF DUMP}
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
