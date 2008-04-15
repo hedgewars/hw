@@ -59,7 +59,7 @@ begin
 KbdKeyPressed:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
-          and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].BotLevel = 0);
+          and (CurrentHedgehog^.BotLevel = 0);
 
 pkbd:= SDL_GetKeyState(nil);
 i:= SDL_GetMouseState(nil, nil);
@@ -77,7 +77,7 @@ for i:= 1 to cKeyMaxIndex do
              begin
              s:= CurrentBinds[i];
              s[1]:= '-';
-             ParseCommand(s, true)
+             ParseCommand(s, Trusted)
              end;
           end else
           if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted);
