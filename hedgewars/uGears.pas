@@ -477,21 +477,36 @@ var t: LongInt;
 	defaultPos: boolean;
 begin
 defaultPos:= true;
+
+hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
+hy:= hwRound(Gear^.Y) - 2 + WorldDy;
+aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
+
 if (Gear^.State and gstHHDriven) <> 0 then
 begin
 	if CurAmmoGear <> nil then
 	begin
-		if (CurAmmoGear^.Kind = gtRope) then
-			begin
-			DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-					1,
-					1,
-					0,
-					DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
-			defaultPos:= false
-			end
+		case CurAmmoGear^.Kind of
+			 gtRope: begin
+				DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+						1,
+						1,
+						0,
+						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
+				defaultPos:= false
+				end;
+			gtBlowTorch: begin
+				DrawRotated(sprBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						3,
+						0);
+				end;
+
 		else if (CurAmmoGear^.Kind = gtPickHammer) then
 			defaultPos:= false
+		end
 	end else
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
@@ -515,15 +530,12 @@ begin
     else
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
-		hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
-		hy:= hwRound(Gear^.Y) - 2 + WorldDy;
-		aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
-
 		case amt of
 			amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
 		end;
 
 		case amt of
@@ -531,29 +543,28 @@ begin
 			amRope,
 			amShotgun,
 			amDEagle,
-			amBaseballBat: begin
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			amBaseballBat: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 						hwSign(Gear^.dX),
 						0,
 						4,
 						0);
-				end;
 			amAirAttack,
-			amMineStrike: begin
-				DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
-				end;
-			amPickHammer: begin
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			amMineStrike: DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
+			amPickHammer: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 						hwSign(Gear^.dX),
 						1,
 						2,
 						0);
-				end;
+			amBlowTorch: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						3,
+						0);
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
 				0,
-				3,
+				4,
 				0);
 		end;
 
