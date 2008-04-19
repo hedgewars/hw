@@ -8,22 +8,6 @@ import Control.Concurrent.STM
 import Control.Exception (finally)
 import Miscutils
 
-data ClientInfo =
-	ClientInfo
-	{
-		handle :: Handle,
-		nick :: String,
-		game :: String,
-		isMaster :: Bool
-	}
-
-data RoomInfo =
-	RoomInfo
-	{
-		name :: String,
-		password :: String
-	}
-
 
 handleCmd :: Handle -> TVar[ClientInfo] -> TVar[RoomInfo] -> (String, [String]) -> IO()
 handleCmd clientHandle clientsList roomsList ("SAY", param) = do
@@ -32,9 +16,20 @@ handleCmd clientHandle clientsList roomsList ("SAY", param) = do
 		return ()
 
 handleCmd clientHandle clientsList roomsList ("CREATE", [roomname]) = do
-		manipState roomsList (\x -> (RoomInfo roomname ""):x)
-		manipState clientsList (\x -> map (\xc -> if (clientHandle == handle xc) then xc{isMaster = True, game = roomname} else xc) x)
+		manipState2 clientsList roomsList (hcCreate)
 		sendMsg clientHandle ("JOINED " ++ roomname)
+		where
+			hcCreate ci ri = if (null $ filter (\ xr -> roomname == name xr) ri) then
+				(map
+					(\ xc
+						-> if (clientHandle == handle xc) then
+								xc {isMaster = True, room = roomname}
+							else
+								xc)
+					ci,
+					(RoomInfo roomname "") : ri)
+				else
+					(ci, ri)
 
 handleCmd clientHandle clientsList roomsList ("LIST", []) = do
 		rl <- atomically $ readTVar roomsList
@@ -57,7 +52,7 @@ main = do
 	clientsList <- atomically $ newTVar[]
 	roomsList <- atomically $ newTVar[]
 	bracket
-		(listenOn $ PortNumber 46631)
+		(listenOn $ Service "hedgewars")
 		(sClose)
 		(loop clientsList roomsList)
 		where
