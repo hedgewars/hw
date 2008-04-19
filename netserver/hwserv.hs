@@ -16,8 +16,8 @@ handleCmd clientHandle clientsList roomsList ("SAY", param) = do
 		return ()
 
 handleCmd clientHandle clientsList roomsList ("CREATE", [roomname]) = do
-		manipState2 clientsList roomsList (hcCreate)
-		sendMsg clientHandle ("JOINED " ++ roomname)
+		res <- manipState2 clientsList roomsList (hcCreate)
+		if res then sendMsg clientHandle ("JOINED " ++ roomname) else sendMsg clientHandle "Already exists"
 		where
 			hcCreate ci ri = if (null $ filter (\ xr -> roomname == name xr) ri) then
 				(map
@@ -27,9 +27,9 @@ handleCmd clientHandle clientsList roomsList ("CREATE", [roomname]) = do
 							else
 								xc)
 					ci,
-					(RoomInfo roomname "") : ri)
+					(RoomInfo roomname "") : ri, True)
 				else
-					(ci, ri)
+					(ci, ri, False)
 
 handleCmd clientHandle clientsList roomsList ("LIST", []) = do
 		rl <- atomically $ readTVar roomsList
