@@ -43,7 +43,7 @@ type
                    sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
-                   sprHandBlowTorch, sprBlowTorch);
+                   sprHandBlowTorch, sprBlowTorch, sprTeleport);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -364,7 +364,9 @@ const
                      (FileName: 'amBTorch_i'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHandBlowToch
                      (FileName: 'amBTorch_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprBlowToch
+                      Width:  32; Height: 32; saveSurf: false),// sprBlowToch
+                     (FileName:   'Teleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 32;saveSurf: false) // sprTeleport
                      );
 
       Soundz: array[TSound] of record

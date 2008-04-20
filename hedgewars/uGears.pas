@@ -503,9 +503,8 @@ begin
 						3,
 						0);
 				end;
-
-		else if (CurAmmoGear^.Kind = gtPickHammer) then
-			defaultPos:= false
+			gtPickHammer,
+			gtTeleport: defaultPos:= false;
 		end
 	end else
 	if ((Gear^.State and gstHHJumping) <> 0) then
@@ -560,6 +559,7 @@ begin
 						1,
 						3,
 						0);
+			amTeleport: DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, 0, hwSign(Gear^.dX), 0);
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
@@ -627,7 +627,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 end;
 
 procedure DrawGears(Surface: PSDL_Surface);
-var Gear: PGear;
+var Gear, HHGear: PGear;
     i: Longword;
     roplen: LongInt;
 
@@ -746,6 +746,11 @@ while Gear<>nil do
        gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0)
                                      else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1);
          gtAirBomb: DrawRotated(sprAirBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+        gtTeleport: begin
+                    HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+                    DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, Gear^.Pos, hwSign(HHGear^.dX), 0);
+                    DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
+                    end;
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
           gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
               end;

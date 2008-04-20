@@ -31,7 +31,7 @@ procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
+procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
@@ -380,13 +380,15 @@ DrawRotatedTex(SpritesData[Sprite].Texture,
 		X, Y, Dir, Angle)
 end;
 
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame: LongInt; Angle: real);
+procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
 glRotatef(Angle, 0, 0, 1);
 
-DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Width div 2, Frame);
+if Dir < 0 then glScalef(-1.0, 1.0, 1.0);
+
+DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
 glPopMatrix
 end;

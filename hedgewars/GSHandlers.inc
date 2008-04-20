@@ -1154,16 +1154,18 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepTeleportAfter(Gear: PGear);
-//var HHGear: PGear;
 begin
-//HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-//HHGear^.Y:= HHGear^.Y + HHGear^.dY;
-//HHGear^.dY:= HHGear^.dY + cGravity;
-//if TestCollisionYwithGear(HHGear, 1) then
-//   begin
-   DeleteGear(Gear);
-   AfterAttack
-//   end
+inc(Gear^.Timer);
+if Gear^.Timer = 65 then
+	begin
+	Gear^.Timer:= 0;
+	inc(Gear^.Pos);
+	if Gear^.Pos = 11 then
+		begin
+		DeleteGear(Gear);
+		AfterAttack
+		end
+	end
 end;
 
 procedure doStepTeleport(Gear: PGear);
@@ -1175,21 +1177,23 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
                       TargetPoint.Y - SpritesData[sprHHTelepMask].Height div 2,
                       sprHHTelepMask, 0, false) then
-        begin
-        HHGear^.Message:= HHGear^.Message and not gm_Attack;
-        HHGear^.State:= HHGear^.State and not gstAttacking;
-        HHGear^.State:= HHGear^.State or gstHHChooseTarget;
-        DeleteGear(Gear);
-        isCursorVisible:= true
-        end
-   else begin
-        DeleteCI(HHGear);
-        SetAllHHToActive;
-        Gear^.doStep:= @doStepTeleportAfter;
-        HHGear^.X:= int2hwFloat(TargetPoint.X);
-        HHGear^.Y:= int2hwFloat(TargetPoint.Y);
-        HHGear^.State:= HHGear^.State or gstMoving
-        end;
+		begin
+		HHGear^.Message:= HHGear^.Message and not gm_Attack;
+		HHGear^.State:= HHGear^.State and not gstAttacking;
+		HHGear^.State:= HHGear^.State or gstHHChooseTarget;
+		DeleteGear(Gear);
+		isCursorVisible:= true
+		end
+	else begin
+		DeleteCI(HHGear);
+		SetAllHHToActive;
+		Gear^.doStep:= @doStepTeleportAfter;
+		Gear^.X:= HHGear^.X;
+		Gear^.Y:= HHGear^.Y;
+		HHGear^.X:= int2hwFloat(TargetPoint.X);
+		HHGear^.Y:= int2hwFloat(TargetPoint.Y);
+		HHGear^.State:= HHGear^.State or gstMoving
+		end;
 TargetPoint.X:= NoPointX
 end;
 
