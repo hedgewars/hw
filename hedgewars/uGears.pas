@@ -404,8 +404,12 @@ if AllInactive then
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
     stTurnReact: begin
-                 if not isInMultiShoot then uStats.TurnReaction;
-                 inc(step)
+                 if not isInMultiShoot then
+                    begin
+                    uStats.TurnReaction;
+                    inc(step)
+                    end else
+                    inc(step, 2);
                  end;
    stAfterDelay: begin
                  if delay = 0 then

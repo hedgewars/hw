@@ -231,14 +231,12 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       begin
       DeleteCI(Gear);
       Gear^.Message:= Gear^.Message and not gm_HJump;
-      if not TestCollisionYwithGear(Gear, -1) then
-         begin
-         Gear^.dY:= -_0_2;
-         SetLittle(Gear^.dX);
-         Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-         PlaySound(sndJump3, false);
-         exit
-         end;
+
+      Gear^.dY:= -_0_2;
+      SetLittle(Gear^.dX);
+      Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
+      PlaySound(sndJump3, false);
+      exit
       end;
 
    PrevdX:= hwSign(Gear^.dX);
@@ -321,7 +319,7 @@ procedure doStepHedgehog(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling: boolean;
 begin
-isFalling:= not TestCollisionYKick(Gear, 1);
+isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
 if isFalling then
    begin
    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then Gear^.dY:= _0;
@@ -423,7 +421,7 @@ if ((Gear^.State and gstMoving) <> 0)
 	t:= CheckGearNear(Gear, gtCase, 36, 36);
 	if t <> nil then
 		PickUp(Gear, t)
-	end; 
+	end;
 
 if CurAmmoGear <> nil then
    begin

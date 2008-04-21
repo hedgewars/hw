@@ -200,7 +200,7 @@ if flag then
    for i:= 0 to Pred(Count) do
     with cinfos[i] do
       if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
          ((mx > x) xor (Dir > 0)) then
          if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin
@@ -248,7 +248,7 @@ if flag then
    for i:= 0 to Pred(Count) do
     with cinfos[i] do
       if (Gear <> cGear) and
-         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius)) and
+         (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) and
          ((my > y) xor (Dir > 0)) then
          if (cGear^.Kind in [gtHedgehog, gtMine]) then
              begin

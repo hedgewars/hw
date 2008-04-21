@@ -57,7 +57,7 @@ if not doSet then
    begin
    if ((y + dy) and $FFFFFC00) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, 2047) do
-          if (Land[y + dy, i] > 0) then dec(Land[y + dy, i]);
+          if (Land[y + dy, i] > 0) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
    if ((y - dy) and $FFFFFC00) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, 2047) do
           if (Land[y - dy, i] > 0) then dec(Land[y - dy, i]);
