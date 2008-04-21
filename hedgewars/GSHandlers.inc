@@ -935,6 +935,17 @@ currsorter:= Gear
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepIdle(Gear: PGear);
+begin
+AllInactive:= false;
+dec(Gear^.Timer);addfilelog(inttostr(Gear^.Timer));
+if Gear^.Timer = 0 then
+	begin
+	DeleteGear(Gear);
+	AfterAttack
+	end
+end;
+
 procedure doStepShover(Gear: PGear);
 var HHGear: PGear;
 begin
@@ -942,7 +953,8 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 AmmoShove(Gear, 30, 115);
 HHGear^.State:= HHGear^.State and not gstNoDamage;
-DeleteGear(Gear)
+Gear^.Timer:= 250;
+Gear^.doStep:= @doStepIdle
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

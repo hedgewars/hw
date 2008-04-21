@@ -503,6 +503,7 @@ begin
 						3,
 						0);
 				end;
+			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
 			gtPickHammer,
 			gtTeleport: defaultPos:= false;
 		end
