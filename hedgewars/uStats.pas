@@ -36,7 +36,7 @@ procedure TurnReaction;
 procedure SendStats;
 
 implementation
-uses uTeams, uSound;
+uses uTeams, uSound, uMisc;
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
@@ -96,23 +96,23 @@ AmmoDamagingUsed:= AmmoDamagingUsed or Ammoz[am].isDamaging
 end;
 
 procedure SendStats;
-//var i, t: LongInt;
-//    msd: Longword; msdhh: PHedgehog;
+var i, t: LongInt;
+    msd: Longword; msdhh: PHedgehog;
 begin
-(*msd:= 0; msdhh:= nil;
+msd:= 0; msdhh:= nil;
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
       for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].MaxStepDamage > msd then
+          if Hedgehogs[i].stats.StepDamageGiven > msd then
              begin
              msdhh:= @Hedgehogs[i];
-             msd:= Hedgehogs[i].MaxStepDamage
+             msd:= Hedgehogs[i].stats.StepDamageGiven
              end;
       end;
-if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msdhh^.MaxStepDamage) + ' ' +
+if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msd) + ' ' +
                                                msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
-if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));*)
+if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 
 end.
