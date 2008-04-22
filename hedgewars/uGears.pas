@@ -491,7 +491,8 @@ begin
 	if CurAmmoGear <> nil then
 	begin
 		case CurAmmoGear^.Kind of
-			 gtRope: begin
+			gtShotgunShot: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtRope: begin
 				DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
 						1,
 						1,
