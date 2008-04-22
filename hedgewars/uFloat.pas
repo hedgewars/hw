@@ -313,12 +313,12 @@ end;
 
 function DistanceI(const dx, dy: LongInt): hwFloat;
 begin
-DistanceI:= Distance(int2hwFloat(dx), int2hwFloat(dy))
+DistanceI:= hwSqrt(int2hwFloat(sqr(dx) + sqr(dy)))
 end;
 
 function SignAs(const num, signum: hwFloat): hwFloat;
 begin
-SignAs:= num;
+SignAs.QWordValue:= num.QWordValue;
 SignAs.isNegative:= signum.isNegative
 end;
 
