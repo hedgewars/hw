@@ -476,8 +476,8 @@ end;
 procedure DrawHH(Gear: PGear);
 var t: LongInt;
 	amt: TAmmoType;
-	hx, hy: LongInt;
-	aangle: real;
+	hx, hy, m: LongInt;
+	aAngle, dAngle: real;
 	defaultPos: boolean;
 begin
 defaultPos:= true;
@@ -493,11 +493,20 @@ begin
 		case CurAmmoGear^.Kind of
 			gtShotgunShot: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			gtRope: begin
+				if Gear^.X < CurAmmoGear^.X then
+					begin
+					dAngle:= 0;
+					m:= 1
+					end else
+					begin
+					dAngle:= 180;
+					m:= -1
+					end;
 				DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-						1,
+						m,
 						1,
 						0,
-						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) - 110);
+						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
 				defaultPos:= false
 				end;
 			gtBlowTorch: begin
