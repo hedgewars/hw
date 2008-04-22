@@ -866,7 +866,6 @@ while t <> nil do
                        DeleteCI(t);
                        t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
-writelntoconsole('after ('+floattostr(t^.dx)+','+floattostr(t^.dy)+')');
                        t^.State:= t^.State or gstMoving;
                        t^.Active:= true;
                        FollowGear:= t
