@@ -1,0 +1,48 @@
+Amazing - an excellent shot/direct hit (the projectile directly hits the enemy hedgehog, not the terrain around it, the projectile hits an enemy hedgehog after traveling a certain distance)
+boring - when a player skips his go
+brilliant - when you do damage after a projectile traveling a certain distance
+Bugger - when you lose your go because you fall a certain distance, or shoot yourself
+Bungee - when using the as yet non existant bungee rope
+bye bye - before your hedgehog blows up because its health reaches 0
+Come on then -  when you havent done anything for a certain amount of time, telling you to take your go
+Hello - when you havent done anything for a certain amount of time, telling you to take your go
+Coward - when you end your go without attacking
+cut it out   -  when your hedgehog takes a very low amount of damage
+Enemy down - when you reduce enemys health to 0
+Excellent - when you do a high amount of damage
+Fire - when you shoot
+First blood - when a hedgehog first takes damage
+Flawless - when you win a match without losing a hedgehog
+gonna get you - when you take a medium amount of damage
+Grenade - when a grenade lands nearby your hedgehog
+hmm - plays sometimes when it's your go, your hedgehog is  thinking about what it should do
+Hurry - timer is getting low
+ill get you - said after taking a medium amount of damage
+Incoming - on airstrike
+Just you wait - said after your team takes a certain amount of damage
+Kamikaze - when your hedgehog uses the as yet nonexistant kamikaze weapon
+laugh - used when your hedgehog blows himself up Near an enemy hedgehog
+leave me alone - when a hedgehog is being picked on / hit a certain amount of times in a row
+Missed - when enemy misses
+Nooooo - when a hh is blasted off of the screen
+Nutter - when you hit your own hh
+Oh dear - another thing to say before dying
+oops - when a hedgehog hurts itself with a small amount of damage
+Perfect - when hitting 3 or more hhs at once
+reinforcements - when a weapon crate drops
+Revenge - when a hedgehog is hit by the same hog twice
+runaway - when dynamite is dropped near your hog
+same team - when you hit a hog on the same team
+so long - said before you die
+stupid - when you hit yourself
+Take cover - when a grenade lands nearby
+this ones mine - said sometimes when its your go
+traitor - when you hit your own team
+uh oh - when an enemy hog stands near you with a baseball bat
+Victory - when you win the match
+watch it - when you hit your own team
+watch this - when you throw a cluster bomb/grenade/bazooka
+what the - when a grenade lands nearby
+whoopsee - when you take fall damage
+yessir - when its your go
+you'll regret that - when you get hit
