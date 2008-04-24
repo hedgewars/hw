@@ -327,8 +327,9 @@ if Gear^.Kind = gtHedgehog then
       if not (hwRound(Gear^.Y) < cWaterLine) then
          begin
          t:= max(Gear^.Damage, Gear^.Health);
+         Gear^.Damage:= t;
          AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
-         uStats.HedgehogDamaged(Gear, t)
+         uStats.HedgehogDamaged(Gear)
          end;
       team:= PHedgehog(Gear^.Hedgehog)^.Team;
       if CurrentHedgehog^.Gear = Gear then
@@ -351,22 +352,27 @@ begin
 CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
-      begin
-      if Gear^.Kind = gtHedgehog then
-         if Gear^.Damage <> 0 then
-            begin
-            CheckNoDamage:= false;
-            if Gear^.Health < Gear^.Damage then Gear^.Health:= 0
-                                           else dec(Gear^.Health, Gear^.Damage);
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
-                    gtHealthTag, Gear^.Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
-            RenderHealth(PHedgehog(Gear^.Hedgehog)^);
-            RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
+	begin
+	if Gear^.Kind = gtHedgehog then
+		if Gear^.Damage <> 0 then
+		begin
+		CheckNoDamage:= false;
+		uStats.HedgehogDamaged(Gear);
 
-            Gear^.Damage:= 0
-            end;
-      Gear:= Gear^.NextGear
-      end;
+		if Gear^.Health < Gear^.Damage then
+			Gear^.Health:= 0
+		else
+			dec(Gear^.Health, Gear^.Damage);
+
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
+				gtHealthTag, Gear^.Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+		RenderHealth(PHedgehog(Gear^.Hedgehog)^);
+		RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
+
+		Gear^.Damage:= 0
+		end;
+	Gear:= Gear^.NextGear
+	end;
 end;
 
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
@@ -824,10 +830,7 @@ while Gear <> nil do
                              begin
                              inc(Gear^.Damage, dmg);
                              if Gear^.Kind = gtHedgehog then
-                                begin
-                                uStats.HedgehogDamaged(Gear, dmg);
                                 AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
-                                end
                              end;
                           if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
                              begin
@@ -868,11 +871,10 @@ while t <> nil do
                gtCase,
              gtTarget: begin
                        inc(t^.Damage, dmg);
+
                        if t^.Kind = gtHedgehog then
-                          begin
                           AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
-                          uStats.HedgehogDamaged(t, dmg)
-                          end;
+
                        DeleteCI(t);
                        t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
@@ -906,11 +908,10 @@ while i > 0 do
              gtTarget,
                gtCase: begin
                        inc(t^.ar[i]^.Damage, Damage);
+
                        if t^.ar[i]^.Kind = gtHedgehog then
-                          begin
                           AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
-                          uStats.HedgehogDamaged(t^.ar[i], Damage)
-                          end;
+
                        DeleteCI(t^.ar[i]);
                        t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
                        t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;

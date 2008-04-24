@@ -31,7 +31,7 @@ type TStatistics = record
                    end;
 
 procedure AmmoUsed(am: TAmmoType);
-procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
+procedure HedgehogDamaged(Gear: PGear);
 procedure TurnReaction;
 procedure SendStats;
 
@@ -40,20 +40,29 @@ uses uTeams, uSound, uMisc;
 var DamageGiven : Longword = 0;
     DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
+    KillsClan   : LongWord = 0;
+    Kills       : LongWord = 0;
+    KillsTotal  : LongWord = 0;
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
 
-procedure HedgehogDamaged(Gear: PGear; Damage: Longword);
+procedure HedgehogDamaged(Gear: PGear);
 begin
 if Gear <> CurrentHedgehog^.Gear then
-   inc(CurrentHedgehog^.stats.StepDamageGiven, Damage);
+	inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
 
-if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Damage);
+if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Gear^.Damage);
 
+if Gear^.Health <= Gear^.Damage then
+	begin
+	inc(Kills);
+	inc(KillsTotal);
+	if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
+	end;
 
-inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Damage);
-inc(DamageGiven, Damage);
-inc(DamageTotal, Damage)
+inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Gear^.Damage);
+inc(DamageGiven, Gear^.Damage);
+inc(DamageTotal, Gear^.Damage)
 end;
 
 procedure TurnReaction;
@@ -76,9 +85,14 @@ else if DamageClan <> 0 then
 		else
 			PlaySound(sndTraitor, false)
 
-else if DamageGiven <> 0 then PlaySound(sndRegret, false)
+else if DamageGiven <> 0 then
+	if Kills > 0 then
+		PlaySound(sndEnemyDown, false)
+	else
+		PlaySound(sndRegret, false)
 
-else if AmmoDamagingUsed then PlaySound(sndMissed, false);
+else if AmmoDamagingUsed then
+	PlaySound(sndMissed, false);
 
 Gear:= GearsList;
 while Gear <> nil do
@@ -96,6 +110,8 @@ while Gear <> nil do
   Gear:= Gear^.NextGear
   end;
 
+Kills:= 0;
+KillsClan:= 0;
 DamageGiven:= 0;
 DamageClan:= 0;
 AmmoUsedCount:= 0;
