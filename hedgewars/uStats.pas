@@ -24,9 +24,11 @@ type TStatistics = record
                    DamageRecv,
                    DamageGiven: Longword;
                    StepDamageRecv,
-                   StepDamageGiven: Longword;
+                   StepDamageGiven,
+                   StepKills: Longword;
                    MaxStepDamageRecv,
-                   MaxStepDamageGiven: Longword;
+                   MaxStepDamageGiven,
+                   MaxStepKills: Longword;
                    FinishedTurns: Longword;
                    end;
 
@@ -55,6 +57,7 @@ if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(
 
 if Gear^.Health <= Gear^.Damage then
 	begin
+	inc(CurrentHedgehog^.stats.StepKills);
 	inc(Kills);
 	inc(KillsTotal);
 	if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
@@ -67,6 +70,7 @@ end;
 
 procedure TurnReaction;
 var Gear: PGear;
+    i, t: LongInt;
 begin
 inc(CurrentHedgehog^.stats.FinishedTurns);
 
@@ -94,21 +98,19 @@ else if DamageGiven <> 0 then
 else if AmmoDamagingUsed then
 	PlaySound(sndMissed, false);
 
-Gear:= GearsList;
-while Gear <> nil do
-  begin
-  if Gear^.Kind = gtHedgehog then
-    with PHedgehog(Gear^.Hedgehog)^.stats do
-      begin
-      inc(DamageRecv, StepDamageRecv);
-      inc(DamageGiven, StepDamageGiven);
-      if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
-      if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
-      StepDamageRecv:= 0;
-      StepDamageGiven:= 0
-      end;
-  Gear:= Gear^.NextGear
-  end;
+for t:= 0 to Pred(TeamsCount) do
+	with TeamsArray[t]^ do
+		for i:= 0 to cMaxHHIndex do
+			with Hedgehogs[i].stats do
+				begin
+				inc(DamageRecv, StepDamageRecv);
+				inc(DamageGiven, StepDamageGiven);
+				if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
+				if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
+				if StepKills > MaxStepKills then MaxStepKills:= StepKills;
+				StepDamageRecv:= 0;
+				StepDamageGiven:= 0
+				end;
 
 Kills:= 0;
 KillsClan:= 0;
@@ -126,21 +128,39 @@ end;
 
 procedure SendStats;
 var i, t: LongInt;
-    msd: Longword; msdhh: PHedgehog;
+    msd, msk: Longword; msdhh, mskhh: PHedgehog;
+    mskcnt: Longword;
 begin
 msd:= 0; msdhh:= nil;
+msk:= 0; mskhh:= nil;
+mskcnt:= 0;
+
 for t:= 0 to Pred(TeamsCount) do
-   with TeamsArray[t]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].stats.StepDamageGiven > msd then
-             begin
-             msdhh:= @Hedgehogs[i];
-             msd:= Hedgehogs[i].stats.StepDamageGiven
-             end;
-      end;
-if msdhh <> nil then SendStat(siMaxStepDamage, inttostr(msd) + ' ' +
-                                               msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+	with TeamsArray[t]^ do
+		begin
+		for i:= 0 to cMaxHHIndex do
+			begin
+			if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
+				begin
+				msdhh:= @Hedgehogs[i];
+				msd:= Hedgehogs[i].stats.MaxStepDamageGiven
+				end;
+			if Hedgehogs[i].stats.MaxStepKills >= msk then
+				if Hedgehogs[i].stats.MaxStepKills = msk then
+					inc(mskcnt)
+				else
+					begin
+					mskcnt:= 1;
+					mskhh:= @Hedgehogs[i];
+					msk:= Hedgehogs[i].stats.MaxStepKills
+					end;
+			end
+		end;
+if msdhh <> nil then
+	SendStat(siMaxStepDamage, inttostr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+if mskcnt = 1 then
+	SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+
 if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 

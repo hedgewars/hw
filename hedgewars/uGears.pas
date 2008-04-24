@@ -384,8 +384,8 @@ end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
-      step: (stDelay, stChDmg, stChWin, stTurnReact,
-             stAfterDelay, stSpawn, stNTurn) = stDelay;
+      step: (stDelay, stChDmg, stTurnReact,
+             stAfterDelay, stChWin, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 begin
 PrvInactive:= AllInactive;
@@ -410,7 +410,6 @@ if AllInactive then
                     inc(step)
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
-        stChWin: if not CheckForWin then inc(step) else step:= stDelay;
     stTurnReact: begin
                  if not isInMultiShoot then
                     begin
@@ -428,12 +427,12 @@ if AllInactive then
                  if delay = 0 then
                     inc(step)
                  end;
+        stChWin: if not CheckForWin then inc(step) else step:= stDelay;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)
                  end;
         stNTurn: begin
-                 //AwareOfExplosion(0, 0, 0);
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
                     ParseCommand('/nextturn', true);
@@ -451,7 +450,7 @@ if (not CurrentTeam^.ExtDriven) and
    ((GameTicks and $FFFF) = $FFFF) then
    begin
    SendIPCTimeInc;
-   inc(hiTicks) // we do not recieve a message for it
+   inc(hiTicks) // we do not recieve a message for this
    end;
 
 inc(GameTicks)

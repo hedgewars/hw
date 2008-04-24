@@ -234,7 +234,7 @@ r:= SignAs(cLittle, r)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDK';
+const stc: array [TStatInfoType] of char = 'rDkK';
 begin
 SendIPC('i' + stc[sit] + s)
 end;
@@ -290,7 +290,7 @@ Surface2Tex^.h:= surf^.h;
 if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
 if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
    begin
-   TryDo(false, 'Surface2Tex: BytePerPixel not in [3, 4]', true);
+   TryDo(false, 'Surface2Tex: BytesPerPixel not in [3, 4]', true);
    Surface2Tex^.id:= 0;
    exit
    end;

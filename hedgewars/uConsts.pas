@@ -74,7 +74,7 @@ type
 
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
-     TStatInfoType = (siGameResult, siMaxStepDamage, siKilledHHs);
+     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs);
 
      THHFont    = record
                   Handle: PTTF_Font;
