@@ -29,7 +29,7 @@ Nooooo - when a hh is blasted off of the screen
 Oh dear - another thing to say before dying
 oops - when a hedgehog hurts itself with a small amount of damage
 Perfect - when hitting 3 or more hhs at once
-reinforcements - when a weapon crate drops
+ + reinforcements - when a weapon crate drops
 Revenge - when a hedgehog is hit by the same hog twice
 runaway - when dynamite is dropped near your hog
  + same team - when you hit a hog on the same team

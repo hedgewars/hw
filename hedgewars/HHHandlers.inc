@@ -505,7 +505,11 @@ prevState:= Gear^.State;
 
 doStepHedgehogMoving(Gear);
 
-if (Gear^.State and gstMoving) <> 0 then exit;
+if (Gear^.State and gstMoving) <> 0 then
+	begin
+	AllInactive:= false;
+	exit
+	end;
 
 if (Gear^.Health = 0) then
 	begin

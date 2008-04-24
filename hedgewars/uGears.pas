@@ -1055,6 +1055,7 @@ case getrandom(2) of
           inc(i);
           dec(t, Ammoz[i].Probability)
           end;
+        PlaySound(sndReinforce, false);
         FollowGear^.Pos:= posCaseAmmo;
         FollowGear^.State:= Longword(i)
         end;

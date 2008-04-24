@@ -61,7 +61,7 @@ var isCursorVisible : boolean = false;
     cExplosionBorderColor : LongWord = $808080;
 
     cShowFPS      : boolean = true;
-    cCaseFactor   : Longword = 6;  {0..9}
+    cCaseFactor   : Longword = 5;  {0..9}
     cLandAdditions: Longword = 4;
     cFullScreen   : boolean = true;
     cLocaleFName  : shortstring = 'en.txt';
