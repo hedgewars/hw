@@ -182,7 +182,7 @@ if Gear^.Timer = 1 then
 	begin
 	AllInactive:= false;
 	PlaySound(sndByeBye, false);
-	Gear^.Timer:= 1250
+	Gear^.Timer:= 1100
 	end
 end;
 
@@ -510,7 +510,10 @@ if (Gear^.State and gstMoving) <> 0 then exit;
 if (Gear^.Health = 0) then
 	begin
 	if AllInactive then
-		Gear^.doStep:= @doStepHedgehogDead;
+		begin
+		Gear^.Timer:= 0;
+		Gear^.doStep:= @doStepHedgehogDead
+		end;
 	AllInactive:= false;
 	exit
 	end;

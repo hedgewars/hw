@@ -61,10 +61,20 @@ var Gear: PGear;
 begin
 inc(CurrentHedgehog^.stats.FinishedTurns);
 
-if (DamageGiven = DamageTotal) and (DamageTotal > 0) then PlaySound(sndFirstBlood, false)
-else if CurrentHedgehog^.stats.StepDamageRecv > 0 then PlaySound(sndStupid, false)
+if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
+	PlaySound(sndFirstBlood, false)
+
+else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
+	PlaySound(sndStupid, false)
+
 else if DamageClan <> 0 then
+	if DamageTotal > DamageClan then
+		PlaySound(sndNutter, false)
+	else
+		PlaySound(sndSameTeam, false)
+
 else if DamageGiven <> 0 then
+
 else if AmmoDamagingUsed then PlaySound(sndMissed, false);
 
 Gear:= GearsList;
