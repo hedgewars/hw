@@ -107,10 +107,7 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
-                         amSkip: begin
-                                 TurnTimeLeft:= 0;
-                                 PlaySound(sndBoring, false)
-                                 end;
+                         amSkip: ParseCommand('/skip', true);
                          amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
                          amMine: begin
                                  AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, 0, SignAs(_0_02, dX), _0, 3000);

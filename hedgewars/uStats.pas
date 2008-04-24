@@ -71,9 +71,12 @@ else if DamageClan <> 0 then
 	if DamageTotal > DamageClan then
 		PlaySound(sndNutter, false)
 	else
-		PlaySound(sndSameTeam, false)
+		if random(2) = 0 then
+			PlaySound(sndSameTeam, false)
+		else
+			PlaySound(sndTraitor, false)
 
-else if DamageGiven <> 0 then
+else if DamageGiven <> 0 then PlaySound(sndRegret, false)
 
 else if AmmoDamagingUsed then PlaySound(sndMissed, false);
 

@@ -370,6 +370,7 @@ end;
 procedure chSkip(var s: shortstring);
 begin
 if not CurrentTeam^.ExtDriven then SendIPC(',');
+PlaySound(sndBoring, false);
 TurnTimeLeft:= 0
 end;
 

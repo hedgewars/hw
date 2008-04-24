@@ -36,7 +36,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uTriggers, GL;
+     uRandom, uAmmos, uTriggers, GL, uSound;
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
 
