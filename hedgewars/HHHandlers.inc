@@ -107,7 +107,10 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
-                         amSkip: TurnTimeLeft:= 0;
+                         amSkip: begin
+                                 TurnTimeLeft:= 0;
+                                 PlaySound(sndBoring, false)
+                                 end;
                          amRope: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtRope, 0, xx, yy, 0);
                          amMine: begin
                                  AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtMine, 0, SignAs(_0_02, dX), _0, 3000);
@@ -158,6 +161,29 @@ with CurrentHedgehog^.Gear^,
            end;
      AttackBar:= 0;
      end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepHedgehogDead(Gear: PGear);
+begin
+if Gear^.Timer > 1 then
+	begin
+	AllInactive:= false;
+	dec(Gear^.Timer)
+	end else
+if Gear^.Timer = 1 then
+	begin
+	Gear^.State:= Gear^.State or gstNoDamage;
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+	DeleteGear(Gear);
+	SetAllToActive
+	end else // Gear^.Timer = 0
+	begin
+	AllInactive:= false;
+	PlaySound(sndByeBye, false);
+	Gear^.Timer:= 1250
+	end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -479,39 +505,33 @@ prevState:= Gear^.State;
 
 doStepHedgehogMoving(Gear);
 
-if (Gear^.State and gstMoving) = 0 then
-   if Gear^.Health = 0 then
-      begin
-      if AllInactive then
-         begin
-         Gear^.State:= Gear^.State or gstNoDamage;
-         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
-         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
-         DeleteGear(Gear);
-         SetAllToActive
-         end;
-      AllInactive:= false;
-      exit
-      end;
+if (Gear^.State and gstMoving) <> 0 then exit;
 
-AllInactive:= false;
+if (Gear^.Health = 0) then
+	begin
+	if AllInactive then
+		Gear^.doStep:= @doStepHedgehogDead;
+	AllInactive:= false;
+	exit
+	end;
 
-if ((Gear^.State and gstMoving) = 0) then
-   if ((Gear^.State and gstAnimation) = 0) and
-      (prevState <> Gear^.State) then
-      begin
-      Gear^.State:= gstAnimation;
-      Gear^.Timer:= 150
-      end else
-      begin
-      if Gear^.Timer = 0 then
-         begin
-         Gear^.State:= 0;
-         Gear^.Active:= false;
-         AddGearCI(Gear);
-         exit
-         end else dec(Gear^.Timer)
-      end
+if ((Gear^.State and gstAnimation) = 0) and
+	(prevState <> Gear^.State) then
+	begin
+	Gear^.State:= gstAnimation;
+	Gear^.Timer:= 150
+	end else
+	begin
+	if Gear^.Timer = 0 then
+		begin
+		Gear^.State:= 0;
+		Gear^.Active:= false;
+		AddGearCI(Gear);
+		exit
+		end else dec(Gear^.Timer)
+	end;
+
+AllInactive:= false
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
