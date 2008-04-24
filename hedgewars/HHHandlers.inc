@@ -162,11 +162,14 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogDead(Gear: PGear);
+const frametime = 200;
+      timertime = frametime * 6;
 begin
 if Gear^.Timer > 1 then
 	begin
 	AllInactive:= false;
-	dec(Gear^.Timer)
+	dec(Gear^.Timer);
+	if (Gear^.Timer mod frametime) = 0 then inc(Gear^.Pos)
 	end else
 if Gear^.Timer = 1 then
 	begin
@@ -178,8 +181,12 @@ if Gear^.Timer = 1 then
 	end else // Gear^.Timer = 0
 	begin
 	AllInactive:= false;
+	Gear^.Z:= cCurrHHZ;
+	RemoveGearFromList(Gear);
+	InsertGearToList(Gear);
 	PlaySound(sndByeBye, false);
-	Gear^.Timer:= 1100
+	Gear^.Pos:= 0;
+	Gear^.Timer:= timertime
 	end
 end;
 
@@ -510,12 +517,14 @@ if (Gear^.State and gstMoving) <> 0 then
 
 if (Gear^.Health = 0) then
 	begin
-	if AllInactive then
+	if PrvInactive then
 		begin
 		Gear^.Timer:= 0;
-		Gear^.doStep:= @doStepHedgehogDead
+		Gear^.State:= Gear^.State or gstHHDeath;
+		Gear^.doStep:= @doStepHedgehogDead;
+		PrvInactive:= false;
+		AllInactive:= false
 		end;
-	AllInactive:= false;
 	exit
 	end;
 

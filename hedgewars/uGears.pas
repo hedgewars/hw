@@ -21,6 +21,7 @@ interface
 uses SDLh, uConsts, uFloat;
 {$INCLUDE options.inc}
 const AllInactive: boolean = false;
+      PrvInactive: boolean = false;
 
 type PGear = ^TGear;
      TGearStepProcedure = procedure (Gear: PGear);
@@ -387,6 +388,7 @@ const delay: LongWord = 0;
              stAfterDelay, stSpawn, stNTurn) = stDelay;
 var Gear, t: PGear;
 begin
+PrvInactive:= AllInactive;
 AllInactive:= true;
 t:= GearsList;
 while t<>nil do
@@ -486,6 +488,11 @@ var t: LongInt;
 	aAngle, dAngle: real;
 	defaultPos: boolean;
 begin
+if (Gear^.State and gstHHDeath) <> 0 then
+	begin
+	DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
+	exit
+	end;
 defaultPos:= true;
 
 hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
