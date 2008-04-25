@@ -47,6 +47,7 @@ var DamageGiven : Longword = 0;
     KillsTotal  : LongWord = 0;
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
+    FinishedTurnsTotal: LongInt = -1;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
@@ -72,6 +73,9 @@ procedure TurnReaction;
 var Gear: PGear;
     i, t: LongInt;
 begin
+inc(FinishedTurnsTotal);
+if FinishedTurnsTotal = 0 then exit;
+
 inc(CurrentHedgehog^.stats.FinishedTurns);
 
 if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
@@ -96,7 +100,12 @@ else if DamageGiven <> 0 then
 		PlaySound(sndRegret, false)
 
 else if AmmoDamagingUsed then
-	PlaySound(sndMissed, false);
+	PlaySound(sndMissed, false)
+else if AmmoUsedCount > 0 then
+	// nothing ?
+else
+	PlaySound(sndCoward, false);
+
 
 for t:= 0 to Pred(TeamsCount) do
 	with TeamsArray[t]^ do

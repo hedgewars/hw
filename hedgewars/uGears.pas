@@ -442,9 +442,15 @@ if AllInactive then
         end;
 
 if TurnTimeLeft > 0 then
-      if CurrentHedgehog^.Gear <> nil then
-         if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-            and not isInMultiShoot then dec(TurnTimeLeft);
+		if CurrentHedgehog^.Gear <> nil then
+			if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
+				and not isInMultiShoot then
+				begin
+				if (TurnTimeLeft = 5000)
+					and (CurrentHedgehog^.Gear <> nil)
+					and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then PlaySound(sndHurry, false);
+				dec(TurnTimeLeft)
+				end;
 
 if (not CurrentTeam^.ExtDriven) and
    ((GameTicks and $FFFF) = $FFFF) then

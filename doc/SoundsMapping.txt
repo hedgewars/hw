@@ -16,7 +16,7 @@ Flawless - when you win a match without losing a hedgehog
 gonna get you - when you take a medium amount of damage
 Grenade - when a grenade lands nearby your hedgehog
 hmm - plays sometimes when it's your go, your hedgehog is  thinking about what it should do
-Hurry - timer is getting low
+ + Hurry - timer is getting low
  + ill get you - said after taking a medium amount of damage
  + Incoming - on airstrike
 Just you wait - said after your team takes a certain amount of damage
