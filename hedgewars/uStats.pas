@@ -95,7 +95,10 @@ else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
 
 else if DamageClan <> 0 then
 	if DamageTotal > DamageClan then
-		PlaySound(sndNutter, false)
+		if random(2) = 0 then
+			PlaySound(sndNutter, false)
+		else
+			PlaySound(sndWatchIt, false)
 	else
 		if random(2) = 0 then
 			PlaySound(sndSameTeam, false)

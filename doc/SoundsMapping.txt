@@ -40,7 +40,7 @@ this ones mine - said sometimes when its your go
  + traitor - when you hit your own team
 uh oh - when an enemy hog stands near you with a baseball bat
 Victory - when you win the match
-watch it - when you hit your own team
+ + watch it - when you hit your own team
 watch this - when you throw a cluster bomb/grenade/bazooka
 what the - when a grenade lands nearby
 whoopsee - when you take fall damage
