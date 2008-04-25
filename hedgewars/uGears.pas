@@ -500,12 +500,12 @@ if (Gear^.State and gstHHDeath) <> 0 then
 	end;
 defaultPos:= true;
 
-hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
-hy:= hwRound(Gear^.Y) - 2 + WorldDy;
-aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
-
 if (Gear^.State and gstHHDriven) <> 0 then
 begin
+	hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
+	hy:= hwRound(Gear^.Y) - 2 + WorldDy;
+	aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
+
 	if CurAmmoGear <> nil then
 	begin
 		case CurAmmoGear^.Kind of
@@ -540,15 +540,24 @@ begin
 			gtTeleport: defaultPos:= false;
 		end
 	end else
+
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-			hwSign(Gear^.dX),
-			1,
-			1,
-			0);
+		if ((Gear^.State and gstHHHJump) <> 0) then
+			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				- hwSign(Gear^.dX),
+				1,
+				1,
+				0)
+			else
+			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				hwSign(Gear^.dX),
+				1,
+				1,
+				0);
 			defaultPos:= false
 		end else
+
 	if (Gear^.Message and (gm_Left or gm_Right) <> 0)
        or ((Gear^.State and gstAttacked) <> 0) then
 		begin
@@ -560,6 +569,7 @@ begin
 			defaultPos:= false
 		end
     else
+
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
 		case amt of

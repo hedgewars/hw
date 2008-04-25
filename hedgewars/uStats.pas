@@ -79,8 +79,7 @@ isTurnSkipped:= true
 end;
 
 procedure TurnReaction;
-var Gear: PGear;
-    i, t: LongInt;
+var i, t: LongInt;
 begin
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal = 0 then exit;
