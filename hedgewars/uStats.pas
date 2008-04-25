@@ -34,6 +34,7 @@ type TStatistics = record
 
 procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogDamaged(Gear: PGear);
+procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
 
@@ -48,6 +49,8 @@ var DamageGiven : Longword = 0;
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
     FinishedTurnsTotal: LongInt = -1;
+    SkippedTurns: LongWord = 0;
+    isTurnSkipped: boolean = false;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
@@ -67,6 +70,12 @@ if Gear^.Health <= Gear^.Damage then
 inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Gear^.Damage);
 inc(DamageGiven, Gear^.Damage);
 inc(DamageTotal, Gear^.Damage)
+end;
+
+procedure Skipped;
+begin
+inc(SkippedTurns);
+isTurnSkipped:= true
 end;
 
 procedure TurnReaction;
@@ -103,6 +112,8 @@ else if AmmoDamagingUsed then
 	PlaySound(sndMissed, false)
 else if AmmoUsedCount > 0 then
 	// nothing ?
+else if isTurnSkipped then
+	PlaySound(sndBoring, false)
 else
 	PlaySound(sndCoward, false);
 
@@ -117,6 +128,7 @@ for t:= 0 to Pred(TeamsCount) do
 				if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
 				if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
 				if StepKills > MaxStepKills then MaxStepKills:= StepKills;
+				StepKills:= 0;
 				StepDamageRecv:= 0;
 				StepDamageGiven:= 0
 				end;
@@ -126,7 +138,8 @@ KillsClan:= 0;
 DamageGiven:= 0;
 DamageClan:= 0;
 AmmoUsedCount:= 0;
-AmmoDamagingUsed:= false
+AmmoDamagingUsed:= false;
+isTurnSkipped:= false
 end;
 
 procedure AmmoUsed(am: TAmmoType);

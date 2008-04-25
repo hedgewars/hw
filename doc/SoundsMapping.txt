@@ -6,7 +6,7 @@ Bungee - when using the as yet non existant bungee rope
  + bye bye - before your hedgehog blows up because its health reaches 0
 Come on then -  when you havent done anything for a certain amount of time, telling you to take your go
 Hello - when you havent done anything for a certain amount of time, telling you to take your go
-Coward - when you end your go without attacking
+ + Coward - when you end your go without attacking
 cut it out   -  when your hedgehog takes a very low amount of damage
  + Enemy down - when you reduce enemys health to 0
 Excellent - when you do a high amount of damage
