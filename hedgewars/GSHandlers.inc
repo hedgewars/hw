@@ -284,37 +284,51 @@ if Gear^.Timer = 0 then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+procedure doStepShotIdle(Gear: PGear);
+begin
+AllInactive:= false;
+inc(Gear^.Timer);
+if Gear^.Timer > 75 then
+	begin
+	DeleteGear(Gear);
+	AfterAttack
+	end
+end;
+
 procedure doStepShotgunShot(Gear: PGear);
 var i: LongWord;
 begin
 AllInactive:= false;
-if Gear^.Timer > 0 then
-   begin
-   dec(Gear^.Timer);
-   if Gear^.Timer = 0 then PlaySound(sndShotgunFire, false);
-   exit
-   end;
+
+if ((Gear^.State and gstAnimation) = 0) then
+	begin
+	dec(Gear^.Timer);
+	if Gear^.Timer = 0 then
+		begin
+		PlaySound(sndShotgunFire, false);
+		Gear^.State:= Gear^.State or gstAnimation
+		end;
+	exit
+	end
+	else inc(Gear^.Timer);
+
 i:= 200;
 repeat
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckCollision(Gear);
 if (Gear^.State and gstCollision) <> 0 then
-   begin
-   Gear^.X:= Gear^.X + Gear^.dX * 8;
-   Gear^.Y:= Gear^.Y + Gear^.dY * 8;
-   ShotgunShot(Gear);
-   DeleteGear(Gear);
-   AfterAttack;
-   exit
-   end;
+	begin
+	Gear^.X:= Gear^.X + Gear^.dX * 8;
+	Gear^.Y:= Gear^.Y + Gear^.dY * 8;
+	ShotgunShot(Gear);
+	Gear^.doStep:= @doStepShotIdle;
+	exit
+	end;
 dec(i)
 until i = 0;
 if (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) then
-   begin
-   DeleteGear(Gear);
-   AfterAttack
-   end
+	Gear^.doStep:= @doStepShotIdle
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -323,6 +337,7 @@ var i, x, y: LongWord;
     oX, oY: hwFloat;
 begin
 AllInactive:= false;
+inc(Gear^.Timer);
 i:= 80;
 oX:= Gear^.X;
 oY:= Gear^.Y;
@@ -343,7 +358,7 @@ if Gear^.Damage > 0 then
    Gear^.Damage:= 0
    end;
 if (Gear^.Health <= 0) or (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) then
-   DeleteGear(Gear)
+	Gear^.doStep:= @doStepShotIdle
 end;
 
 procedure doStepDEagleShot(Gear: PGear);

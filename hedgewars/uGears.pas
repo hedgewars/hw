@@ -509,7 +509,11 @@ begin
 	if CurAmmoGear <> nil then
 	begin
 		case CurAmmoGear^.Kind of
-			gtShotgunShot: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtShotgunShot: if (CurAmmoGear^.State and gstAnimation <> 0) then
+					DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
+				else
+					DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 			gtRope: begin
 				if Gear^.X < CurAmmoGear^.X then
 					begin
@@ -538,6 +542,19 @@ begin
 			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
 			gtPickHammer,
 			gtTeleport: defaultPos:= false;
+		end;
+
+		case CurAmmoGear^.Kind of
+			gtShotgunShot,
+			gtDEagleShot,
+			gtShover: begin
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						0,
+						4,
+						0);
+				defaultPos:= false
+			end
 		end
 	end else
 
@@ -581,15 +598,6 @@ begin
 		end;
 
 		case amt of
-			amBazooka,
-			amRope,
-			amShotgun,
-			amDEagle,
-			amBaseballBat: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-						hwSign(Gear^.dX),
-						0,
-						4,
-						0);
 			amAirAttack,
 			amMineStrike: DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
 			amPickHammer: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,

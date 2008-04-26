@@ -43,7 +43,8 @@ type
                    sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
-                   sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath);
+                   sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
+                   sprShotgun, sprDEagle);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -355,9 +356,9 @@ const
                      (FileName:  'amBazooka'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHandBazooka
                      (FileName:  'amShotgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false),// sprHandShotgun
+                      Width:  64; Height: 64; saveSurf: false),// sprHandShotgun
                      (FileName:   'amDEagle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false),// sprHandDEagle
+                      Width:  64; Height: 64; saveSurf: false),// sprHandDEagle
                      (FileName:'amAirAttack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHandAirAttack
                      (FileName: 'amBaseball'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -371,7 +372,11 @@ const
                      (FileName:   'Teleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  64; Height: 32; saveSurf: false),// sprTeleport
                      (FileName:    'HHDeath'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 64; saveSurf: false) // sprHHDeath
+                      Width:  32; Height: 64; saveSurf: false),// sprHHDeath
+                     (FileName:'amShotgun_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 64; saveSurf: false),// sprShotgun
+                     (FileName: 'amDEagle_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 64; saveSurf: false) // sprDEagle
                      );
 
       Soundz: array[TSound] of record
