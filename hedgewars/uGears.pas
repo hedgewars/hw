@@ -271,6 +271,7 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_6;
                 Result^.Friction:= _0_995;
                 end;
+      gtShover: Result^.Radius:= 20;
        gtFlame: begin
                 Result^.Angle:= Counter mod 64;
                 Result^.Radius:= 1;

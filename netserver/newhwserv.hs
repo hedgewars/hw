@@ -39,7 +39,7 @@ mainLoop servSock acceptChan clients = do
 		Left (ch, h) -> do
 			mainLoop servSock acceptChan $ (ch, h):clients
 		Right (line, handle) -> do
-			clients' <- forM clients $ 
+			clients' <- forM clients $
 					\(ch, h) -> do
 						hPutStrLn h line
 						hFlush h
@@ -55,6 +55,6 @@ startServer serverSocket = do
 	forkIO $ acceptLoop serverSocket acceptChan
 	mainLoop serverSocket acceptChan []
 
-main = withSocketsDo $ do 
+main = withSocketsDo $ do
 	serverSocket <- listenOn $ Service "hedgewars"
 	startServer serverSocket `finally` sClose serverSocket
