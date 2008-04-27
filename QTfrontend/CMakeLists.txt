@@ -70,13 +70,20 @@ set(hwfr_src
 	playrecordpage.cpp
 	${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
 	selectWeapon.cpp
-        itemNum.cpp
+	itemNum.cpp
 	input_ip.cpp
 	weaponItem.cpp)
 
-if (WIN32)
+if(MINGW)
+	# resource compilation for mingw
+	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o
+	COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
+	-i ${CMAKE_CURRENT_SOURCE_DIR}/res/hedgewars.rc
+	-o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+	set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+else(MINGW)
 	set(hwfr_src ${hwfr_src} res/hedgewars.rc)
-endif (WIN32)
+endif(MINGW)
 
 set(hwfr_moc_hdrs
 	game.h
@@ -109,7 +116,7 @@ set(hwfr_moc_hdrs
 	SDLs.h
 	playrecordpage.h
 	selectWeapon.h
-        itemNum.h
+	itemNum.h
 	input_ip.h
 	weaponItem.h)
 
