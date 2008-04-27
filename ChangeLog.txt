@@ -1,6 +1,22 @@
 + features
 * bugfixes
 
+0.9.2 -> 0.9.3:
+ + Switch to OpenGL rendering
+ + Massive graphics update
+ + New animations, weapon sprites
+ + New themes 'Snow' and 'Nature'
+ + Many new sounds
+ + Hedgehog somersaults like in worms
+ + Automated parachute
+ + Hedgehog can jump even when someone is on its head
+ * Improve and bugfix statistics
+ * Fix bug allowing to make stack of hedgehogs using teleport
+ * Fix fall without damage trick, which could be performed with not attached rope
+ * Don't show enemy's picked weapon name
+ * Fix hedgehog moving direction after been shot by shotgun
+ * Fix bug with handling keys while it is enemy's turn
+
 0.9 -> 0.9.2:
 
  + Add registration of net game in web
