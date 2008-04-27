@@ -1,4 +1,4 @@
-foreach(dir "nature" "Snow")
+foreach(dir "nature" "Snow" "Volcano" "cheese")
   add_subdirectory(${dir})
 endforeach(dir)
 
