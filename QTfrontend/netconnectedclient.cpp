@@ -16,12 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "netconnectedclient.h"
-#include "netserver.h"
-
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <QStringList>
+#include <QDebug>
+
+#include "netconnectedclient.h"
+#include "netserver.h"
 
 extern char delimeter;
 
