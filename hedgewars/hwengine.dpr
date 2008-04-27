@@ -118,11 +118,11 @@ case GameState of
 SDL_GL_SwapBuffers();
 if flagMakeCapture then
    begin
-   flagMakeCapture:= false;
+{   flagMakeCapture:= false;
    s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.bmp';
    WriteLnToConsole('Saving ' + s);
    SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
-   end;
+}   end;
 end;
 
 ////////////////////
