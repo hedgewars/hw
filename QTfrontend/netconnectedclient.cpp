@@ -58,6 +58,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 {
   QString msg = QString::fromUtf8 (line.data(), line.size());
   QStringList lst = msg.split(delimeter);
+//qDebug() << "Parsing: " << lst;
   if(!lst.size())
   {
     qWarning("Net server: Bad message");
@@ -219,15 +220,18 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
 unsigned int HWConnectedClient::removeTeam(const QString& tname)
 {
-  unsigned int netID=0;
-  for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it) {
-    if((*it)[0]==tname) {
-      netID=(*it)[1].toUInt();
-      m_teamsCfg.erase(it);
-      break;
-    }
-  }
-  return netID;
+	unsigned int netID=0;
+	for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it) {
+		if((*it)[0]==tname) {
+			netID=(*it)[1].toUInt();
+			m_teamsCfg.erase(it);
+			break;
+		}
+	}
+	if (netID == 0)
+		qDebug() << QString("removeTeam: team '%1' not found").arg(tname);
+
+	return netID;
 }
 
 QList<QStringList> HWConnectedClient::getTeamNames() const

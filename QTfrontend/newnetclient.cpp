@@ -145,6 +145,7 @@ void HWNewNet::ParseLine(const QByteArray & line)
   QString msg = QString::fromUtf8 (line.data(), line.size());
 
   QStringList lst = msg.split(delimeter);
+//qDebug() << "Parsing: " << lst;
   if (lst[0] == "ERRONEUSNICKNAME") {
     QMessageBox::information(0, 0, "Your net nickname is in use or cannot be used");
     return;
