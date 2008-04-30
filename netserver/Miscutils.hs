@@ -9,6 +9,7 @@ import Control.Exception (finally)
 data ClientInfo =
 	ClientInfo
 	{
+		chan :: TChan String,
 		handle :: Handle,
 		nick :: String,
 		room :: String,
@@ -51,4 +52,7 @@ manipState2 state1 state2 op =
 			writeTVar state1 ol1
 			writeTVar state2 ol2
 			return res
-	
+
+tselect :: [ClientInfo] -> STM (String, Handle)
+tselect = foldl orElse retry . map (\ci -> (flip (,) (handle ci)) `fmap` readTChan (chan ci))
+

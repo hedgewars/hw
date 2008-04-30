@@ -177,7 +177,7 @@ end;
 
 ////////////////////
 procedure GetParams;
-var 
+var
 {$IFDEF DEBUGFILE}
     i: LongInt;
 {$ENDIF}
