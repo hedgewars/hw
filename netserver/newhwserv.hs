@@ -39,20 +39,21 @@ mainLoop servSock acceptChan clients rooms = do
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
 		Right (line, client) -> do
-			let (doQuit, toMe, strs) = handleCmd client sameRoom rooms line
+			let (doQuit, recipients, strs) = handleCmd client sameRoom rooms $ words line
 
-			clients' <- forM sameRoom $
+			clients' <- forM recipients $
 					\ci -> do
-						if (handle ci /= handle client) || toMe then do
 							forM_ strs (\str -> hPutStrLn (handle ci) str)
 							hFlush (handle ci)
 							return []
-							else if doQuit then return [ci] else return []
 					`catch` const (hClose (handle ci) >> return [ci])
 
-			mainLoop servSock acceptChan (deleteFirstsBy (\ a b -> handle a == handle b) clients (concat clients')) rooms
+			client' <- if doQuit then hClose (handle client) >> return [client] else return []
+
+			mainLoop servSock acceptChan (remove (remove clients (concat clients')) client') rooms
 			where
 				sameRoom = filter (\cl -> room cl == room client) clients
+				remove list rmClients = deleteFirstsBy (\ a b -> handle a == handle b) list rmClients
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
