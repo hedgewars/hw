@@ -39,7 +39,7 @@ mainLoop servSock acceptChan clients rooms = do
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
 		Right (line, client) -> do
-			let (doQuit, recipients, strs) = handleCmd client sameRoom rooms $ words line
+			let (recipients, strs) = handleCmd client sameRoom rooms $ words line
 
 			clients' <- forM recipients $
 					\ci -> do
@@ -48,7 +48,7 @@ mainLoop servSock acceptChan clients rooms = do
 							return []
 					`catch` const (hClose (handle ci) >> return [ci])
 
-			client' <- if doQuit then hClose (handle client) >> return [client] else return []
+			client' <- if head strs == "QUIT" then hClose (handle client) >> return [client] else return []
 
 			mainLoop servSock acceptChan (remove (remove clients (concat clients')) client') rooms
 			where
