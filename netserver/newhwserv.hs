@@ -6,8 +6,10 @@ import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (finally)
-import Control.Monad (forM, filterM, liftM)
+import Control.Monad (forM, forM_, filterM, liftM)
+import Data.List
 import Miscutils
+import HWProto
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = do
@@ -36,15 +38,21 @@ mainLoop servSock acceptChan clients rooms = do
 	case r of
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
-		Right (line, clhandle) -> do
-			--handleCmd handle line
-			clients' <- forM clients $
+		Right (line, client) -> do
+			let (doQuit, toMe, strs) = handleCmd client sameRoom rooms line
+
+			clients' <- forM sameRoom $
 					\ci -> do
-						hPutStrLn (handle ci) line
-						hFlush (handle ci)
-						return [ci]
-					`catch` const (hClose (handle ci) >> return [])
-			mainLoop servSock acceptChan (concat clients') rooms
+						if (handle ci /= handle client) || toMe then do
+							forM_ strs (\str -> hPutStrLn (handle ci) str)
+							hFlush (handle ci)
+							return []
+							else if doQuit then return [ci] else return []
+					`catch` const (hClose (handle ci) >> return [ci])
+
+			mainLoop servSock acceptChan (deleteFirstsBy (\ a b -> handle a == handle b) clients (concat clients')) rooms
+			where
+				sameRoom = filter (\cl -> room cl == room client) clients
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan

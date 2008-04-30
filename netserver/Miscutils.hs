@@ -53,6 +53,6 @@ manipState2 state1 state2 op =
 			writeTVar state2 ol2
 			return res
 
-tselect :: [ClientInfo] -> STM (String, Handle)
-tselect = foldl orElse retry . map (\ci -> (flip (,) (handle ci)) `fmap` readTChan (chan ci))
+tselect :: [ClientInfo] -> STM (String, ClientInfo)
+tselect = foldl orElse retry . map (\ci -> (flip (,) ci) `fmap` readTChan (chan ci))
 
