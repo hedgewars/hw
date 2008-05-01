@@ -43,7 +43,7 @@ handleCmd_noRoom client clients rooms ("CREATE":newRoom:roomPassword:[]) =
 	if haveSameRoom then
 		(client, rooms, [client], ["WARNING", "There's already a room with that name"])
 	else
-		(client{room = newRoom, isMaster = True}, (RoomInfo newRoom roomPassword):rooms, [client], ["JOIN", newRoom, nick client])
+		(client{room = newRoom, isMaster = True}, (RoomInfo newRoom roomPassword):rooms, [client], ["JOINS", nick client])
 	where
 		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
 
@@ -56,13 +56,13 @@ handleCmd_noRoom client clients rooms ("JOIN":roomName:roomPassword:[]) =
 	else if roomPassword /= password (getRoom roomName) then
 		(client, rooms, [client], ["WARNING", "Wrong password"])
 	else
-		(client{room = roomName}, rooms, client : fromRoom roomName clients, ["JOIN", roomName, nick client])
+		(client{room = roomName}, rooms, client : fromRoom roomName clients, ["JOINS", nick client])
 	where
 		noRoom = null $ filter (\room -> roomName == name room) rooms
 		getRoom roomName = fromJust $ find (\room -> roomName == name room) rooms
 
 handleCmd_noRoom client clients rooms ("JOIN":roomName:[]) =
-	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
+	handleCmd_noRoom client clients rooms ["JOIN", ""]
 
 handleCmd_noRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
 
@@ -78,7 +78,7 @@ handleCmd client clients rooms ("QUIT":xs) =
 	if null (room client) then
 		(client, rooms, [client], ["QUIT"])
 	else if isMaster client then
-		(client, filter (\rm -> room client /= name rm) rooms, fromRoom (room client) clients, ["ROOMABANDONED"])
+		(client, filter (\rm -> room client /= name rm) rooms, fromRoom (room client) clients, ["ROOMABANDONED"]) -- core disconnect clients on ROOMABANDONED command
 	else
 		(client, rooms, fromRoom (room client) clients, ["QUIT", nick client])
 
