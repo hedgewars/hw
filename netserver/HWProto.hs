@@ -1,9 +1,10 @@
 module HWProto where
 
 import IO
+import Data.List
 import Data.Word
 import Miscutils
-import Maybe (fromMaybe)
+import Maybe (fromMaybe, fromJust)
 
 fromRoom :: String -> [ClientInfo] -> [ClientInfo]
 fromRoom roomName clients = filter (\cl -> roomName == room cl) clients
@@ -52,10 +53,13 @@ handleCmd_noRoom client clients rooms ("CREATE":newRoom:[]) =
 handleCmd_noRoom client clients rooms ("JOIN":roomName:roomPassword:[]) =
 	if noRoom then
 		(client, rooms, [client], ["WARNING", "There's no room with that name"])
+	else if roomPassword /= password (getRoom roomName) then
+		(client, rooms, [client], ["WARNING", "Wrong password"])
 	else
 		(client{room = roomName}, rooms, client : fromRoom roomName clients, ["JOIN", roomName, nick client])
 	where
 		noRoom = null $ filter (\room -> roomName == name room) rooms
+		getRoom roomName = fromJust $ find (\room -> roomName == name room) rooms
 
 handleCmd_noRoom client clients rooms ("JOIN":roomName:[]) =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
