@@ -16,7 +16,7 @@ acceptLoop servSock acceptChan = do
 	(cHandle, host, port) <- accept servSock
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" "" False)
+	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
 	acceptLoop servSock acceptChan
 
 listenLoop :: Handle -> TChan String -> IO ()
@@ -29,7 +29,6 @@ clientLoop :: Handle -> TChan String -> IO ()
 clientLoop handle chan =
 	listenLoop handle chan
 		`catch` (const $ clientOff >> return ())
-		`finally` hClose handle
 	where clientOff = atomically $ writeTChan chan "QUIT"
 
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
@@ -48,7 +47,7 @@ mainLoop servSock acceptChan clients rooms = do
 							return []
 					`catch` const (hClose (handle ci) >> return [ci])
 
-			client' <- if head strs == "QUIT" then hClose (handle client) >> return [client] else return []
+			client' <- if (not $ null strs) && (head strs == "QUIT") then hClose (handle client) >> return [client] else return []
 
 			mainLoop servSock acceptChan (remove (remove (mclient : filter (\cl -> handle cl /= handle client) clients) (concat clients')) client') mrooms
 			where
