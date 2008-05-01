@@ -44,7 +44,7 @@ mainLoop servSock acceptChan clients rooms = do
 					\ci -> do
 							forM_ strs (\str -> hPutStrLn (handle ci) str)
 							hFlush (handle ci)
-							return []
+							if (not $ null strs) && (head strs == "ROOMABANDONED") then hClose (handle ci) >> return [ci] else return []
 					`catch` const (hClose (handle ci) >> return [ci])
 
 			client' <- if (not $ null strs) && (head strs == "QUIT") then hClose (handle client) >> return [client] else return []

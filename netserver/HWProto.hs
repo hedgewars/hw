@@ -71,12 +71,14 @@ handleCmd_inRoom :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (Cli
 
 handleCmd_inRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
 
--- state-independent comman handlers	
+-- state-independent command handlers
 handleCmd :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
 
 handleCmd client clients rooms ("QUIT":xs) =
 	if null (room client) then
 		(client, rooms, [client], ["QUIT"])
+	else if isMaster client then
+		(client, filter (\rm -> room client /= name rm) rooms, fromRoom (room client) clients, ["ROOMABANDONED"])
 	else
 		(client, rooms, fromRoom (room client) clients, ["QUIT", nick client])
 
