@@ -66,6 +66,11 @@ handleCmd_noRoom client clients rooms ("JOIN":roomName:[]) =
 
 handleCmd_noRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
 
+-- 'inRoom' clients state command handlers
+handleCmd_inRoom :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
+
+handleCmd_inRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
+
 -- state-independent comman handlers	
 handleCmd :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
 
@@ -79,5 +84,7 @@ handleCmd client clients rooms ("QUIT":xs) =
 handleCmd client clients rooms cmd =
 	if null (nick client) || protocol client == 0 then
 		handleCmd_noInfo client clients rooms cmd
-	else
+	else if null (room client) then
 		handleCmd_noRoom client clients rooms cmd
+	else
+		handleCmd_inRoom client clients rooms cmd
