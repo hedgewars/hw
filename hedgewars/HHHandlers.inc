@@ -96,7 +96,9 @@ with Gear^,
            PlaySound(sndThrowRelease, false);
            end;
         xx:= SignAs(AngleSin(Angle), dX);
-        yy:= -AngleCos(Angle); 
+        yy:= -AngleCos(Angle);
+
+        if ((Gear^.State and gstHHHJump) <> 0) then xx:= - xx;
              case Ammo^[CurSlot, CurAmmo].AmmoType of
                       amGrenade: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
                   amClusterBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
