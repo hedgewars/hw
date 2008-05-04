@@ -29,6 +29,9 @@ data RoomInfo =
 clientByHandle :: Handle -> [ClientInfo] -> ClientInfo
 clientByHandle clhandle clients = fromJust $ find (\ci -> handle ci == clhandle) clients
 
+roomByName :: String -> [RoomInfo] -> RoomInfo
+roomByName roomName rooms = fromJust $ find (\room -> roomName == name room) rooms
+
 fromRoomHandles :: String -> [ClientInfo] -> [Handle]
 fromRoomHandles roomName clients = map (\ci -> handle ci) $ filter (\ci -> room ci == roomName) clients
 

@@ -37,30 +37,31 @@ handleCmd_noInfo clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
-{--handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:roomPassword:[]) =
+handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:roomPassword:[]) =
 	if haveSameRoom then
-		(client, rooms, [clhandle], ["WARNING", "There's already a room with that name"])
+		(clients, rooms, [clhandle], ["WARNING", "There's already a room with that name"])
 	else
-		(client{room = newRoom, isMaster = True}, (RoomInfo newRoom roomPassword):rooms, [client], ["JOINS", nick client])
+		(modifyClient clhandle clients (\cl -> cl{room = newRoom, isMaster = True}), (RoomInfo newRoom roomPassword):rooms, [clhandle], ["JOINS", nick client])
 	where
 		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
+		client = clientByHandle clhandle clients
 
 handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:[]) =
-	handleCmd_noRoom client clients rooms ["CREATE", newRoom, ""]
+	handleCmd_noRoom clhandle clients rooms ["CREATE", newRoom, ""]
 
 handleCmd_noRoom clhandle clients rooms ("JOIN":roomName:roomPassword:[]) =
-	if noRoom then
-		(client, rooms, [clhandle], ["WARNING", "There's no room with that name"])
-	else if roomPassword /= password (getRoom roomName) then
-		(client, rooms, [clhandle], ["WARNING", "Wrong password"])
+	if noSuchRoom then
+		(clients, rooms, [clhandle], ["WARNING", "There's no room with that name"])
+	else if roomPassword /= password (roomByName roomName rooms) then
+		(clients, rooms, [clhandle], ["WARNING", "Wrong password"])
 	else
-		(client{room = roomName}, rooms, client : fromRoom roomName clients, ["JOINS", nick client])
+		(modifyClient clhandle clients (\cl -> cl{room = roomName}), rooms, clhandle : (fromRoomHandles roomName clients), ["JOINS", nick client])
 	where
-		noRoom = null $ filter (\room -> roomName == name room) rooms
-		getRoom roomName = fromJust $ find (\room -> roomName == name room) rooms
+		noSuchRoom = null $ filter (\room -> roomName == name room) rooms
+		client = clientByHandle clhandle clients
 
 handleCmd_noRoom clhandle clients rooms ("JOIN":roomName:[]) =
-	handleCmd_noRoom client clients rooms ["JOIN", ""]--}
+	handleCmd_noRoom clhandle clients rooms ["JOIN", roomName, ""]
 
 handleCmd_noRoom clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR", "Bad command or incorrect parameter"])
 
