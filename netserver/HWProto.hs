@@ -37,6 +37,9 @@ handleCmd_noInfo clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
+handleCmd_noRoom clhandle clients rooms ("LIST":[]) =
+		(clients, rooms, [clhandle], ["ROOMS"] ++ map (\r -> name r) rooms)
+
 handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:roomPassword:[]) =
 	if haveSameRoom then
 		(clients, rooms, [clhandle], ["WARNING", "There's already a room with that name"])
