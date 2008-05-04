@@ -6,87 +6,90 @@ import Data.Word
 import Miscutils
 import Maybe (fromMaybe, fromJust)
 
-fromRoom :: String -> [ClientInfo] -> [ClientInfo]
-fromRoom roomName clients = filter (\cl -> roomName == room cl) clients
-
 -- 'noInfo' clients state command handlers
-handleCmd_noInfo :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
+handleCmd_noInfo :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
-handleCmd_noInfo client clients rooms ("NICK":newNick:[]) =
+handleCmd_noInfo clhandle clients rooms ("NICK":newNick:[]) =
 	if not . null $ nick client then
-		(client, rooms, [client], ["ERROR", "The nick already chosen"])
+		(clients, rooms, [clhandle], ["ERROR", "The nick already chosen"])
 	else if haveSameNick then
-		(client, rooms, [client], ["WARNING", "Choose another nick"])
+		(clients, rooms, [clhandle], ["WARNING", "Choose another nick"])
 	else
-		(client{nick = newNick}, rooms, [client], ["NICK", newNick])
+		(modifyClient clhandle clients (\cl -> cl{nick = newNick}), rooms, [clhandle], ["NICK", newNick])
 	where
 		haveSameNick = not . null $ filter (\cl -> newNick == nick cl) clients
+		client = clientByHandle clhandle clients
 
-handleCmd_noInfo client clients rooms ("PROTO":protoNum:[]) =
+handleCmd_noInfo clhandle clients rooms ("PROTO":protoNum:[]) =
 	if protocol client > 0 then
-		(client, rooms, [client], ["ERROR", "Protocol number already known"])
+		(clients, rooms, [clhandle], ["ERROR", "Protocol number already known"])
 	else if parsedProto == 0 then
-		(client, rooms, [client], ["ERROR", "Bad input"])
+		(clients, rooms, [clhandle], ["ERROR", "Bad input"])
 	else
-		(client{protocol = parsedProto}, rooms, [], [])
+		(modifyClient clhandle clients (\cl -> cl{protocol = parsedProto}), rooms, [], [])
 	where
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
+		client = clientByHandle clhandle clients
 
-
-handleCmd_noInfo client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
+handleCmd_noInfo clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR", "Bad command or incorrect parameter"])
 
 
 -- 'noRoom' clients state command handlers
-handleCmd_noRoom :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
+handleCmd_noRoom :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
-handleCmd_noRoom client clients rooms ("CREATE":newRoom:roomPassword:[]) =
+{--handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:roomPassword:[]) =
 	if haveSameRoom then
-		(client, rooms, [client], ["WARNING", "There's already a room with that name"])
+		(client, rooms, [clhandle], ["WARNING", "There's already a room with that name"])
 	else
 		(client{room = newRoom, isMaster = True}, (RoomInfo newRoom roomPassword):rooms, [client], ["JOINS", nick client])
 	where
 		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
 
-handleCmd_noRoom client clients rooms ("CREATE":newRoom:[]) =
+handleCmd_noRoom clhandle clients rooms ("CREATE":newRoom:[]) =
 	handleCmd_noRoom client clients rooms ["CREATE", newRoom, ""]
 
-handleCmd_noRoom client clients rooms ("JOIN":roomName:roomPassword:[]) =
+handleCmd_noRoom clhandle clients rooms ("JOIN":roomName:roomPassword:[]) =
 	if noRoom then
-		(client, rooms, [client], ["WARNING", "There's no room with that name"])
+		(client, rooms, [clhandle], ["WARNING", "There's no room with that name"])
 	else if roomPassword /= password (getRoom roomName) then
-		(client, rooms, [client], ["WARNING", "Wrong password"])
+		(client, rooms, [clhandle], ["WARNING", "Wrong password"])
 	else
 		(client{room = roomName}, rooms, client : fromRoom roomName clients, ["JOINS", nick client])
 	where
 		noRoom = null $ filter (\room -> roomName == name room) rooms
 		getRoom roomName = fromJust $ find (\room -> roomName == name room) rooms
 
-handleCmd_noRoom client clients rooms ("JOIN":roomName:[]) =
-	handleCmd_noRoom client clients rooms ["JOIN", ""]
+handleCmd_noRoom clhandle clients rooms ("JOIN":roomName:[]) =
+	handleCmd_noRoom client clients rooms ["JOIN", ""]--}
 
-handleCmd_noRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
+handleCmd_noRoom clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR", "Bad command or incorrect parameter"])
 
 -- 'inRoom' clients state command handlers
-handleCmd_inRoom :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
+handleCmd_inRoom :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
-handleCmd_inRoom client _ rooms _ = (client, rooms, [client], ["ERROR", "Bad command or incorrect parameter"])
+handleCmd_inRoom clhandle clients rooms _ = (clients, rooms, [clhandle], ["ERROR", "Bad command or incorrect parameter"])
 
 -- state-independent command handlers
-handleCmd :: ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientInfo, [RoomInfo], [ClientInfo], [String])
+handleCmd :: Handle -> [ClientInfo] -> [RoomInfo] -> [String] -> ([ClientInfo], [RoomInfo], [Handle], [String])
 
-handleCmd client clients rooms ("QUIT":xs) =
+handleCmd clhandle clients rooms ("QUIT":xs) =
 	if null (room client) then
-		(client, rooms, [client], ["QUIT"])
+		(clients, rooms, [clhandle], ["QUIT"])
 	else if isMaster client then
-		(client, filter (\rm -> room client /= name rm) rooms, fromRoom (room client) clients, ["ROOMABANDONED"]) -- core disconnect clients on ROOMABANDONED command
+		(clients, filter (\rm -> room client /= name rm) rooms, roomMates, ["ROOMABANDONED"]) -- core disconnects clients on ROOMABANDONED command
 	else
-		(client, rooms, fromRoom (room client) clients, ["QUIT", nick client])
+		(clients, rooms, roomMates, ["QUIT", nick client])
+	where
+		client = clientByHandle clhandle clients
+		roomMates = fromRoomHandles (room client) clients
 
 -- check state and call state-dependent commmand handlers
-handleCmd client clients rooms cmd =
+handleCmd clhandle clients rooms cmd =
 	if null (nick client) || protocol client == 0 then
-		handleCmd_noInfo client clients rooms cmd
+		handleCmd_noInfo clhandle clients rooms cmd
 	else if null (room client) then
-		handleCmd_noRoom client clients rooms cmd
+		handleCmd_noRoom clhandle clients rooms cmd
 	else
-		handleCmd_inRoom client clients rooms cmd
+		handleCmd_inRoom clhandle clients rooms cmd
+	where
+		client = clientByHandle clhandle clients

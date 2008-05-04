@@ -37,21 +37,21 @@ mainLoop servSock acceptChan clients rooms = do
 	case r of
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
-		Right (line, client) -> do
-			let (mclient, mrooms, recipients, strs) = handleCmd client clients rooms $ words line
+		Right (line, clhandle) -> do
+			let (mclients, mrooms, recipients, strs) = handleCmd clhandle clients rooms $ words line
 
-			clients' <- forM recipients $
-					\ci -> do
-							forM_ strs (\str -> hPutStrLn (handle ci) str)
-							hFlush (handle ci)
-							if (not $ null strs) && (head strs == "ROOMABANDONED") then hClose (handle ci) >> return [ci] else return []
-					`catch` const (hClose (handle ci) >> return [ci])
+			clHandles' <- forM recipients $
+					\ch -> do
+							forM_ strs (\str -> hPutStrLn ch str)
+							hFlush ch
+							if (not $ null strs) && (head strs == "ROOMABANDONED") then hClose ch >> return [ch] else return []
+					`catch` const (hClose ch >> return [ch])
 
-			client' <- if (not $ null strs) && (head strs == "QUIT") then hClose (handle client) >> return [client] else return []
+			clHandle' <- if (not $ null strs) && (head strs == "QUIT") then hClose clhandle >> return [clhandle] else return []
 
-			mainLoop servSock acceptChan (remove (remove (mclient : filter (\cl -> handle cl /= handle client) clients) (concat clients')) client') mrooms
+			mainLoop servSock acceptChan (remove (remove mclients (concat clHandles')) clHandle') mrooms
 			where
-				remove list rmClients = deleteFirstsBy (\ a b -> handle a == handle b) list rmClients
+				remove list rmClHandles = deleteFirstsBy2t (\ a b -> (handle a) == b) list rmClHandles
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
