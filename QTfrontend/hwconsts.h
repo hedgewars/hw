@@ -22,6 +22,7 @@
 #include <QColor>
 
 extern QString * cProtoVer;
+extern QString * cVersionString;
 extern QString * cDataDir;
 
 extern QDir * bindir;

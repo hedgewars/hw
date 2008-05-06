@@ -291,7 +291,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('-= HedgeWars 0.9.3 =-');
+WriteLnToConsole('-= Hedgewars ' + cVersionString + ' =-');
 WriteLnToConsole('   -= by unC0Rr =-   ');
 GetParams;
 Randomize;
