@@ -52,7 +52,7 @@ type TCollisionEntry = record
                        cGear: PGear;
                        end;
 
-const MAXRECTSINDEX = 255;
+const MAXRECTSINDEX = 511;
 var Count: Longword = 0;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
