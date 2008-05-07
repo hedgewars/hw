@@ -230,6 +230,7 @@ if (headcmd <> nil) then
 tmpflag:= true;
 while (headcmd <> nil) and (GameTicks = headcmd^.Time) do
    begin
+   tmpflag:= true;
    case headcmd^.cmd of
         'L': ParseCommand('+left', true);
         'l': ParseCommand('-left', true);
