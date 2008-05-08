@@ -842,7 +842,7 @@ if (Gear^.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
    FreeActionsList;
-   SetAllHHToActive; // someone could be on top of the case
+   SetAllToActive; // something (hh, mine, etc...) could be on top of the case
    with CurrentHedgehog^ do
      if Gear <> nil then Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
    exit
