@@ -80,7 +80,6 @@ end;
 function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
-AddFileLog(inttostr(n)  +' rnd ' + inttostr(cirbuf[n]));
 rndSign:= num
 end;
 
