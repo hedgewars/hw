@@ -111,6 +111,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBomb(Gear: PGear);
 var i: LongInt;
+    dX, dY: hwFloat;
 begin
 AllInactive:= false;
 doStepFallingGear(Gear);
@@ -122,7 +123,11 @@ if Gear^.Timer = 0 then
       gtClusterBomb: begin
                      doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
                      for i:= 0 to 4 do
-                         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, rndSign(GetRandom * _0_1), (GetRandom - _3) * _0_08, 0);
+                         begin
+                         dX:= rndSign(GetRandom * _0_1);
+                         dY:= (GetRandom - _3) * _0_08;
+                         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 0);
+                         end
                      end
         end;
    DeleteGear(Gear);
