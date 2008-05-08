@@ -346,7 +346,7 @@ if ParamCount > 0 then
 {$I+}
 
 finalization
-uRandom.DumpBuffer;
+//uRandom.DumpBuffer;
 writeln(f, '-= halt at ',GameTicks,' ticks =-');
 Flush(f);
 close(f)

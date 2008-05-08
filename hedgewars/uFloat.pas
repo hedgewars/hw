@@ -230,7 +230,7 @@ end;
 
 operator < (const z1, z2: hwFloat) b : boolean;
 begin
-if z1.isNegative <> z2.isNegative then
+if z1.isNegative xor z2.isNegative then
    b:= z1.isNegative
 else
    if z1.QWordValue = z2.QWordValue then
@@ -241,7 +241,7 @@ end;
 
 operator > (const z1, z2: hwFloat) b : boolean;
 begin
-if z1.isNegative <> z2.isNegative then
+if z1.isNegative xor z2.isNegative then
    b:= z2.isNegative
 else
    if z1.QWordValue = z2.QWordValue then

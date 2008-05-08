@@ -82,6 +82,7 @@ end;
 function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
+if num.isNegative then AddFileLog('isNegative TRUE') else AddFileLog('isNegative FALSE');
 rndSign:= num
 end;
 
