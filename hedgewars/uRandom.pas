@@ -25,8 +25,15 @@ uses uFloat;
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
+function  rndSign(num: hwFloat): hwFloat;
+{$IFDEF DEBUGFILE}
+procedure DumpBuffer;
+{$ENDIF}
 
 implementation
+{$IFDEF DEBUGFILE}
+uses uMisc;
+{$ENDIF}
 var cirbuf: array[0..63] of Longword;
     n: byte = 54;
 
@@ -71,5 +78,20 @@ begin
 GetNext;
 GetRandom:= GetNext mod m
 end;
+
+function rndSign(num: hwFloat): hwFloat;
+begin
+num.isNegative:= odd(GetNext);
+rndSign:= num
+end;
+
+{$IFDEF DEBUGFILE}
+procedure DumpBuffer;
+var i: LongInt;
+begin
+for i:= 0 to 63 do
+	AddFileLog('[' + inttostr(i) + '] = ' + inttostr(cirbuf[i]))
+end;
+{$ENDIF}
 
 end.

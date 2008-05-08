@@ -120,9 +120,9 @@ if Gear^.Timer = 0 then
    case Gear^.Kind of
         gtAmmo_Bomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
       gtClusterBomb: begin
-                     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+                     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
                      for i:= 0 to 4 do
-                         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, (getrandom - _0_5) * _0_2, (getrandom - _3) * _0_08, 0);
+                         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, rndSign(GetRandom * _0_1), (GetRandom - _3) * _0_08, 0);
                      end
         end;
    DeleteGear(Gear);
@@ -138,7 +138,7 @@ AllInactive:= false;
 doStepFallingGear(Gear);
 if (Gear^.State and gstCollision) <> 0 then
    begin
-   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
    DeleteGear(Gear);
    exit
    end;

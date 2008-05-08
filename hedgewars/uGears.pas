@@ -195,7 +195,8 @@ if CurrentTeam <> nil then
    end;
 
 case Kind of
-   gtAmmo_Bomb: begin
+   gtAmmo_Bomb,
+ gtClusterBomb: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
                 Result^.Friction:= _0_995;
@@ -247,7 +248,7 @@ gtAmmo_Grenade: begin
                 end;
         gtMine: begin
                 Result^.State:= Result^.State or gstMoving;
-                Result^.Radius:= 3;
+                Result^.Radius:= 2;
                 Result^.Elasticity:= _0_55;
                 Result^.Friction:= _0_995;
                 Result^.Timer:= 3000;
@@ -265,11 +266,6 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_55;
                 Result^.Friction:= _0_03;
                 Result^.Timer:= 5000;
-                end;
- gtClusterBomb: begin
-                Result^.Radius:= 4;
-                Result^.Elasticity:= _0_6;
-                Result^.Friction:= _0_995;
                 end;
      gtCluster: Result^.Radius:= 2;
       gtShover: Result^.Radius:= 20;

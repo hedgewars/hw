@@ -97,7 +97,6 @@ var
 function hwSign(r: hwFloat): LongInt;
 function Min(a, b: LongInt): LongInt;
 function Max(a, b: LongInt): LongInt;
-function rndSign(num: hwFloat): hwFloat;
 procedure OutError(Msg: String; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
@@ -239,12 +238,6 @@ begin
 SendIPC('i' + stc[sit] + s)
 end;
 
-function rndSign(num: hwFloat): hwFloat;
-begin
-num.isNegative:= getrandom(2) = 0;
-rndSign:= num
-end;
-
 function Str2PChar(const s: shortstring): PChar;
 const CharArray: array[byte] of Char = '';
 begin
@@ -353,6 +346,7 @@ if ParamCount > 0 then
 {$I+}
 
 finalization
+uRandom.DumpBuffer;
 writeln(f, '-= halt at ',GameTicks,' ticks =-');
 Flush(f);
 close(f)
