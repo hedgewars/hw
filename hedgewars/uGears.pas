@@ -451,11 +451,11 @@ if TurnTimeLeft > 0 then
 				end;
 
 if (not CurrentTeam^.ExtDriven) and
-   ((GameTicks and $FFFF) = $FFFF) then
-   begin
-   SendIPCTimeInc;
-   inc(hiTicks) // we do not recieve a message for this
-   end;
+	((GameTicks and $FFFF) = $FFFF) then
+	begin
+	SendIPCTimeInc;
+	inc(hiTicks) // we do not recieve a message for this
+	end;
 
 inc(GameTicks)
 end;

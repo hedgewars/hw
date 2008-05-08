@@ -371,7 +371,7 @@ procedure chSkip(var s: shortstring);
 begin
 if not CurrentTeam^.ExtDriven then SendIPC(',');
 uStats.Skipped;
-TurnTimeLeft:= 0
+skipFlag:= true
 end;
 
 procedure chSetMap(var s: shortstring);
