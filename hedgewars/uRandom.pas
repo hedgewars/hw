@@ -65,12 +65,10 @@ for i:= 0 to 1023 do GetNext
 end;
 
 function GetRandom: hwFloat;
-var r: hwFloat;
 begin
 GetNext;
-r.isNegative:= false;
-r.QWordValue:= GetNext;
-GetRandom:= r
+GetRandom.isNegative:= false;
+GetRandom.QWordValue:= GetNext
 end;
 
 function GetRandom(m: LongWord): LongWord;
@@ -82,7 +80,7 @@ end;
 function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
-if num.isNegative then AddFileLog('isNegative TRUE') else AddFileLog('isNegative FALSE');
+AddFileLog(inttostr(n)  +' rnd ' + inttostr(cirbuf[n]));
 rndSign:= num
 end;
 
