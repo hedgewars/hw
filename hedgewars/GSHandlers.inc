@@ -786,23 +786,25 @@ end;
 procedure doStepMine(Gear: PGear);
 begin
 if (Gear^.State and gstMoving) <> 0 then
-   begin
-   DeleteCI(Gear);
-   doStepFallingGear(Gear);
-   if (Gear^.State and gstMoving) = 0 then
-      begin
-      AddGearCI(Gear);
-      Gear^.dX:= _0;
-      Gear^.dY:= _0
-      end;
-   CalcRotationDirAngle(Gear);
-   AllInactive:= false
-   end;
+	begin
+	DeleteCI(Gear);
+	doStepFallingGear(Gear);
+	if (Gear^.State and gstMoving) = 0 then
+		begin
+		AddGearCI(Gear);
+		Gear^.dX:= _0;
+		Gear^.dY:= _0
+		end;
+	CalcRotationDirAngle(Gear);
+	AllInactive:= false
+	end else
+	if ((GameTicks and $3F) = 25) then
+		doStepFallingGear(Gear);
 
 if ((Gear^.State and gsttmpFlag) <> 0) then
    if ((Gear^.State and gstAttacking) = 0) then
       begin
-      if ((GameTicks and $F) = 0) then
+      if ((GameTicks and $1F) = 0) then
          if CheckGearNear(Gear, gtHedgehog, 46, 32) <> nil then Gear^.State:= Gear^.State or gstAttacking
       end else // gstAttacking <> 0
       begin
