@@ -1188,6 +1188,19 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepTeleportAfter(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.Y:= HHGear^.Y + HHGear^.dY; // hedgehog falling to collect cases
+HHGear^.dY:= HHGear^.dY + cGravity;
+if TestCollisionYwithGear(HHGear, 1) then
+   begin
+   DeleteGear(Gear);
+   AfterAttack
+   end
+end;
+
+procedure doStepTeleportAnim(Gear: PGear);
 begin
 inc(Gear^.Timer);
 if Gear^.Timer = 65 then
@@ -1195,10 +1208,7 @@ if Gear^.Timer = 65 then
 	Gear^.Timer:= 0;
 	inc(Gear^.Pos);
 	if Gear^.Pos = 11 then
-		begin
-		DeleteGear(Gear);
-		AfterAttack
-		end
+		Gear^.doStep:= @doStepTeleportAfter
 	end
 end;
 
@@ -1221,7 +1231,7 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 	else begin
 		DeleteCI(HHGear);
 		SetAllHHToActive;
-		Gear^.doStep:= @doStepTeleportAfter;
+		Gear^.doStep:= @doStepTeleportAnim;
 		Gear^.X:= HHGear^.X;
 		Gear^.Y:= HHGear^.Y;
 		HHGear^.X:= int2hwFloat(TargetPoint.X);
