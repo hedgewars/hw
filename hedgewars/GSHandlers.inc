@@ -457,8 +457,11 @@ end;
 procedure doStepPickHammer(Gear: PGear);
 var i, y: LongInt;
     ar: TRangeArray;
+    HHGear: PGear;
 begin
 i:= 0;
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+
 y:= hwRound(Gear^.Y) - cHHRadius * 2;
 while y < hwRound(Gear^.Y) do
    begin
@@ -467,8 +470,11 @@ while y < hwRound(Gear^.Y) do
    inc(y, 2);
    inc(i)
    end;
+
 DrawHLinesExplosions(@ar, 3, hwRound(Gear^.Y) - cHHRadius * 2, 2, Pred(i));
-Gear^.dY:= PHedgehog(Gear^.Hedgehog)^.Gear^.dY;
+Gear^.dY:= HHGear^.dY;
+DeleteCI(HHGear);
+
 PlaySound(sndPickhammer, true);
 doStepPickHammerWork(Gear);
 Gear^.doStep:= @doStepPickHammerWork
@@ -836,6 +842,7 @@ if (Gear^.Message and gm_Destroy) > 0 then
    begin
    DeleteGear(Gear);
    FreeActionsList;
+   SetAllHHToActive; // someone could be on top of the case
    with CurrentHedgehog^ do
      if Gear <> nil then Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
    exit
