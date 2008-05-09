@@ -49,11 +49,12 @@ function AIrndSign(num: LongInt): LongInt;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
-                       
+
 implementation
-uses uTeams, uMisc, uLand, uCollisions;
+uses uTeams, uMisc, uLand, uCollisions, uconsole;
 const KillScore = 200;
       MAXBONUS = 1024;
+      friendlyfactor: Longword = 300;
 
 type TBonus = record
               X, Y: LongInt;
@@ -70,25 +71,39 @@ var bonuses: record
 
 procedure FillTargets;
 var i, t: Longword;
+    f, e: Longword;
 begin
 Targets.Count:= 0;
+f:= 0;
+e:= 0;
 for t:= 0 to Pred(TeamsCount) do
-    with TeamsArray[t]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          if (Hedgehogs[i].Gear <> nil)
-             and (Hedgehogs[i].Gear <> ThinkingHH) then
-             begin
-             with Targets.ar[Targets.Count], Hedgehogs[i] do
-                  begin
-                  Point.X:= hwRound(Gear^.X);
-                  Point.Y:= hwRound(Gear^.Y);
-                  if Clan <> CurrentTeam^.Clan then Score:=  Gear^.Health
-                                               else Score:= -Gear^.Health
-                  end;
-             inc(Targets.Count)
-             end;
-      end
+	with TeamsArray[t]^ do
+	begin
+	for i:= 0 to cMaxHHIndex do
+		if (Hedgehogs[i].Gear <> nil)
+			and (Hedgehogs[i].Gear <> ThinkingHH) then
+			begin
+			with Targets.ar[Targets.Count], Hedgehogs[i] do
+				begin
+				Point.X:= hwRound(Gear^.X);
+				Point.Y:= hwRound(Gear^.Y);
+				if Clan <> CurrentTeam^.Clan then
+					begin
+					Score:=  Gear^.Health;
+					inc(e)
+					end else
+					begin
+					Score:= -Gear^.Health;
+					inc(f)
+					end
+				end;
+			inc(Targets.Count)
+			end;
+	end;
+
+if e > f then friendlyfactor:= 300 + (e - f) * 30
+else friendlyfactor:= max(30, 300 - f * 80 div e);
+writelntoconsole('e:' +inttostr(e) + ' f:' + inttostr(f) + ' ff:'+ inttostr(friendlyfactor))
 end;
 
 procedure FillBonuses(isAfterAttack: boolean);
@@ -185,10 +200,10 @@ for i:= 0 to Targets.Count do
             dmg:= dmg shr 1;
             if dmg >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * 3)
+                            else dec(Result, KillScore * friendlyfactor div 100)
             else
                if Score > 0 then inc(Result, dmg)
-                            else dec(Result, dmg * 3)
+                            else dec(Result, dmg * friendlyfactor div 100)
             end;
          end;
 RateExplosion:= Result * 1024
@@ -206,10 +221,10 @@ for i:= 0 to Pred(Targets.Count) do
             begin
             if power >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * 3)
+                            else dec(Result, KillScore * friendlyfactor div 100)
             else
                if Score > 0 then inc(Result, power)
-                            else dec(Result, power * 3)
+                            else dec(Result, power * friendlyfactor div 100)
             end;
          end;
 RateShove:= Result * 1024
@@ -235,10 +250,10 @@ for i:= 0 to Targets.Count do
             begin
             if dmg >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * 3)
+                            else dec(Result, KillScore * friendlyfactor div 100)
             else
                if Score > 0 then inc(Result, dmg)
-                            else dec(Result, dmg * 3)
+                            else dec(Result, dmg * friendlyfactor div 100)
             end;
          end;
 RateShotgun:= Result * 1024
