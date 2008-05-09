@@ -51,7 +51,7 @@ var ThinkingHH: PGear;
     Targets: TTargets;
 
 implementation
-uses uTeams, uMisc, uLand, uCollisions, uconsole;
+uses uTeams, uMisc, uLand, uCollisions;
 const KillScore = 200;
       MAXBONUS = 1024;
       friendlyfactor: Longword = 300;
@@ -102,8 +102,7 @@ for t:= 0 to Pred(TeamsCount) do
 	end;
 
 if e > f then friendlyfactor:= 300 + (e - f) * 30
-else friendlyfactor:= max(30, 300 - f * 80 div e);
-writelntoconsole('e:' +inttostr(e) + ' f:' + inttostr(f) + ' ff:'+ inttostr(friendlyfactor))
+else friendlyfactor:= max(30, 300 - f * 80 div e)
 end;
 
 procedure FillBonuses(isAfterAttack: boolean);
