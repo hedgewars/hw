@@ -52,7 +52,7 @@ type
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
-                   gtTeleport, gtSmallDamage, gtSwitcher, gtTarget);
+                   gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar);
 
      TVisualGearType = (vgtFlake, vgtCloud);
 
@@ -69,7 +69,7 @@ type
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder, amTeleport, amSwitch);
+                   amGirder, amTeleport, amSwitch, amMortar);
 
      THWFont    = (fnt16, fntBig, fntSmall);
 
@@ -802,6 +802,23 @@ const
                                    minAngle: 0;
                                    maxAngle: 0;
                                    isDamaging: false;
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
+                                  (NameId: sidMortar;
+                                   NameTex: nil;
+                                   Probability: 100;
+                                   NumberInCase: 5;
+                                   Ammo: (Propz: 0;
+                                          Count: 5;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amMortar);
+                                   Slot: 1;
+                                   TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   isDamaging: true;
                                    PosCount: 1;
                                    PosSprite: sprWater));
 

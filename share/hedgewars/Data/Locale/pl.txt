@@ -21,6 +21,7 @@
 00:18=Budowanie
 00:19=Teleportacja
 00:20=Zmień jeża
+00:21=Mortar
 
 01:00=Walczmy!
 01:01=Remis

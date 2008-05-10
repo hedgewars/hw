@@ -95,6 +95,7 @@ if Gear^.dY.isNegative then
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
    begin
    Gear^.dX:= - Gear^.dX * Gear^.Elasticity;
+   Gear^.dY:=   Gear^.dY * Gear^.Elasticity;
    Gear^.State:= Gear^.State or gstCollision
    end;
 
@@ -1310,4 +1311,29 @@ with HHGear^ do
      State:= State and not gstAttacking;
      Message:= Message and not gm_Attack
      end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepMortar(Gear: PGear);
+var dX, dY: hwFloat;
+    i: LongInt;
+begin
+AllInactive:= false;
+doStepFallingGear(Gear);
+if (Gear^.State and gstCollision) <> 0 then
+	begin
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+	
+	for i:= 0 to 4 do
+		begin
+		dX:= - Gear^.dX + (GetRandom - _0_5) * _0_03;
+		dY:= - Gear^.dY + (GetRandom - _0_5) * _0_03;
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 0);
+		end;
+	
+	DeleteGear(Gear);
+	exit
+	end;
+if (GameTicks and $3F) = 0 then
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
 end;
