@@ -635,13 +635,13 @@ PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnBack, 1, 0);
 }
 
-PageSelectWeapon::PageSelectWeapon(QWidget* parent) : 
+PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
-        
-        pWeapons=new SelWeaponWidget(20, this);
+	
+	pWeapons=new SelWeaponWidget(cDefaultAmmoStore->size() - 10, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
 	BtnBack = addButton(tr("Back"), pageLayout, 1, 0);
