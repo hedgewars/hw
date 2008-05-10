@@ -52,7 +52,8 @@ type
                    gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
-                   gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar);
+                   gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
+                   gtWhip);
 
      TVisualGearType = (vgtFlake, vgtCloud);
 
@@ -67,7 +68,7 @@ type
                    sndEnemyDown, sndCoward, sndHurry, sndWatchIt);
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
-                   amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch,
+                   amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
                    amGirder, amTeleport, amSwitch, amMortar);
 
@@ -643,6 +644,23 @@ const
                                           Timer: 0;
                                           Pos: 0;
                                           AmmoType: amFirePunch);
+                                   Slot: 3;
+                                   TimeAfterTurn: 3000;
+                                   MinAngle: 0;
+                                   maxAngle: 0;
+                                   isDamaging: true;
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
+                                  (NameId: sidWhip;
+                                   NameTex: nil;
+                                   Probability: 0;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: ammoprop_NoCrosshair;
+                                          Count: AMMO_INFINITE;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amWhip);
                                    Slot: 3;
                                    TimeAfterTurn: 3000;
                                    MinAngle: 0;

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a worms-like game
- * Copyright (c) 2006, 2007 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2006-2008 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
                    sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
                    sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
-                   sidGirder, sidTeleport, sidSwitch, sidMortar);
+                   sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip);
 
      TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused);
 

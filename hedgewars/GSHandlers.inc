@@ -968,7 +968,7 @@ end;
 procedure doStepIdle(Gear: PGear);
 begin
 AllInactive:= false;
-dec(Gear^.Timer);addfilelog(inttostr(Gear^.Timer));
+dec(Gear^.Timer);
 if Gear^.Timer = 0 then
 	begin
 	DeleteGear(Gear);
@@ -982,6 +982,25 @@ begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 AmmoShove(Gear, 30, 115);
+HHGear^.State:= HHGear^.State and not gstNoDamage;
+Gear^.Timer:= 250;
+Gear^.doStep:= @doStepIdle
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepWhip(Gear: PGear);
+var HHGear: PGear;
+    i: LongInt;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.State:= HHGear^.State or gstNoDamage;
+
+for i:= 0 to 3 do
+	begin
+	AmmoShove(Gear, 30, 25);
+	Gear^.X:= Gear^.X + Gear^.dX * 5
+	end;
+
 HHGear^.State:= HHGear^.State and not gstNoDamage;
 Gear^.Timer:= 250;
 Gear^.doStep:= @doStepIdle

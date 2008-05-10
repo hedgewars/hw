@@ -22,6 +22,7 @@
 00:19=Teleportation
 00:20=Switch Hedgehog
 00:21=Mortar
+00:22=Whip
 
 01:00=Let's fight!
 01:01=Round draw

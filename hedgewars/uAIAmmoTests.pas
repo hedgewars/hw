@@ -56,6 +56,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
                   (proc: @TestDesertEagle; flags: 0), // amDEagle
                   (proc: nil;              flags: 0), // amDynamite
                   (proc: @TestFirePunch;   flags: 0), // amFirePunch
+                  (proc: nil;              flags: 0), // amWhip
                   (proc: @TestBaseballBat; flags: 0), // amBaseballBat
                   (proc: nil;              flags: 0), // amParachute
                   (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack

@@ -134,7 +134,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepHealthTag,
                                                                @doStepSwitcher,
                                                                @doStepCase,
-                                                               @doStepMortar
+                                                               @doStepMortar,
+                                                               @doStepWhip
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -303,6 +304,7 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_2;
                 Result^.Friction:= _0_08
                 end;
+        gtWhip: Result^.Radius:= 20;
      end;
 InsertGearToList(Result);
 AddGear:= Result
