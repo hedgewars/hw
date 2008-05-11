@@ -35,7 +35,6 @@ type PHedgehog = ^THedgehog;
                  Ammo: PHHAmmo;
                  AmmoStore: Longword;
                  CurSlot, CurAmmo: LongWord;
-                 AltSlot, AltAmmo: LongWord;
                  Team: PTeam;
                  AttacksNum: Longword;
                  visStepPos: LongWord;

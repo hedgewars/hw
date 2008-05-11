@@ -348,11 +348,10 @@ with CurrentHedgehog^.Gear^,
               end;
            SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
            end;
-        State:= State and not gstHHChooseTarget; 
+        State:= State and not gstHHChooseTarget;
         if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
            Message:= Message or gm_Attack;
         end else if CurrentTeam^.ExtDriven then OutError('got /put while not being in choose target mode', false)
-
 end;
 
 procedure chPut(var s: shortstring);

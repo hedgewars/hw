@@ -131,13 +131,10 @@ begin
 end;
 
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
-var s, a: Longword;
 begin
 with Hedgehog do
      begin
-     if CurAmmoGear = nil then begin s:= CurSlot; a:= CurAmmo end
-                          else begin s:= AltSlot; a:= AltAmmo end;
-     with Ammo^[s, a] do
+     with Ammo^[CurSlot, CurAmmo] do
           if Count <> AMMO_INFINITE then
              begin
              dec(Count);
