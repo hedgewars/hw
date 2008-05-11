@@ -282,14 +282,12 @@ procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or (CurrentTeam = nil) then exit;
 bShowFinger:= false;
-with CurrentHedgehog^ do
-     if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0 then
-        begin
-        Ammo^[CurSlot, CurAmmo].Timer:= 1000 * (byte(s[1]) - 48);
-        with CurrentTeam^ do
-             ApplyAmmoChanges(Hedgehogs[CurrHedgehog]);
-        if not CurrentTeam^.ExtDriven then SendIPC(s);
-        end
+if not CurrentTeam^.ExtDriven then SendIPC(s);
+with CurrentHedgehog^.Gear^ do
+     begin
+     Message:= Message or gm_Timer;
+     MsgParam:= byte(s[1]) - ord('0')
+     end
 end;
 
 procedure chSlot(var s: shortstring);

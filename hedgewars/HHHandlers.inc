@@ -59,12 +59,25 @@ t:= cMaxSlotAmmoIndex;
 Gear^.Message:= Gear^.Message and not gm_Weapon;
 
 with PHedgehog(Gear^.Hedgehog)^ do
-     while (Ammo^[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
-           begin
-           ChangeAmmo(Gear);
-           dec(t)
-           end
+	while (Ammo^[CurSlot, CurAmmo].AmmoType <> weap) and (t >= 0) do
+		begin
+		ChangeAmmo(Gear);
+		dec(t)
+		end
 end;
+
+procedure HHSetTimer(Gear: PGear);
+begin
+Gear^.Message:= Gear^.Message and not gm_Timer;
+with PHedgehog(Gear^.Hedgehog)^ do
+	if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Timerable) <> 0 then
+		begin
+		Ammo^[CurSlot, CurAmmo].Timer:= 1000 * Gear^.MsgParam;
+		with CurrentTeam^ do
+			ApplyAmmoChanges(Hedgehogs[CurrHedgehog]);
+		end;
+end;
+
 
 procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
@@ -466,6 +479,8 @@ if CurAmmoGear <> nil then
 if ((Gear^.Message and gm_Slot) <> 0) then ChangeAmmo(Gear);
 
 if ((Gear^.Message and gm_Weapon) <> 0) then HHSetWeapon(Gear);
+
+if ((Gear^.Message and gm_Timer) <> 0) then HHSetTimer(Gear);
 
 if ((Gear^.Message and gm_Attack) <> 0) or
    ((Gear^.State and gstAttacking) <> 0) then Attack(Gear);
