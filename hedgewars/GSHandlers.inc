@@ -571,9 +571,7 @@ var HHGear: PGear;
            Message:= Message and not gm_Attack;
            State:= State or gstMoving;
            end;
-      DeleteGear(Gear);
-      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-      ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+      DeleteGear(Gear)
     end;
 
 begin
@@ -736,14 +734,20 @@ if (HHGear^.State and gstMoving) <> 0 then
             tt:= tt - _2;
             end;
       end;
+
 CheckCollision(Gear);
+
 if (Gear^.State and gstCollision) <> 0 then
-   begin
-   Gear^.doStep:= @doStepRopeWork;
-   with HHGear^ do State:= State and not gstAttacking;
-   if Gear^.Elasticity < _10 then
-      Gear^.Elasticity:= _10000;
-   end;
+	begin
+	Gear^.doStep:= @doStepRopeWork;
+	with HHGear^ do State:= State and not gstAttacking;
+
+	OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+	ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+	
+	if Gear^.Elasticity < _10 then
+		Gear^.Elasticity:= _10000;
+	end;
 
 if (Gear^.Elasticity > Gear^.Friction) or ((Gear^.Message and gm_Attack) = 0) then
    begin
@@ -1093,35 +1097,26 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-procedure doStepParachute(Gear: PGear);
+procedure doStepParachuteWork(Gear: PGear);
 var HHGear: PGear;
-    Timer: Longword;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-HHGear^.State:= HHGear^.State and not gstAttacking;
-DeleteCI(HHGear);
 
 inc(Gear^.Timer);
 
 if TestCollisionYwithGear(HHGear, 1)
    or ((HHGear^.State and gstHHDriven) = 0)
-   or CheckGearDrowning(HHGear) then
+   or CheckGearDrowning(HHGear)
+   or ((Gear^.Message and gm_Attack) <> 0) then
    begin
    with HHGear^ do
         begin
         Message:= 0;
         SetLittle(dX);
         dY:= _0;
-        State:= State and not (gstAttacking or gstAttacked);
         State:= State or gstMoving;
         end;
-   Timer:= Gear^.Timer;
    DeleteGear(Gear);
-   if Timer > 10 then
-      begin
-      OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-      ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
-      end;
    exit
    end;
 
@@ -1136,6 +1131,26 @@ else if (Gear^.Message and gm_Down) <> 0 then HHGear^.Y:= HHGear^.Y + cGravity *
 HHGear^.Y:= HHGear^.Y + cGravity * 100;
 Gear^.X:= HHGear^.X;
 Gear^.Y:= HHGear^.Y
+end;
+
+procedure doStepParachute(Gear: PGear);
+var HHGear: PGear;
+    Timer: Longword;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+
+DeleteCI(HHGear);
+
+OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+
+HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked);
+HHGear^.Message:= HHGear^.Message and not gm_Attack;
+
+Gear^.doStep:= @doStepParachuteWork;
+
+Gear^.Message:= HHGear^.Message;
+doStepParachuteWork(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

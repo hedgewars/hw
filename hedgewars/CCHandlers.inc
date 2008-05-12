@@ -232,8 +232,7 @@ bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
      begin
      {$IFDEF DEBUGFILE}AddFileLog('/+attack: Gear^.State = '+inttostr(State));{$ENDIF}
-     if ((State and gstHHDriven) <> 0) and
-        ((State and (gstAttacked or gstHHChooseTarget)) = 0) then
+     if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;
         if not CurrentTeam^.ExtDriven then SendIPC('A');
