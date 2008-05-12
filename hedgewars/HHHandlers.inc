@@ -24,7 +24,8 @@ slot:= Gear^.MsgParam;
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin
-	if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (AttacksNum > 0)
+	if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+		or (AttacksNum > 0)
 		or ((Gear^.State and gstHHDriven) = 0) then exit;
 
 	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump or gm_Slot);

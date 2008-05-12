@@ -585,6 +585,7 @@ if ((HHGear^.State and gstHHDriven) = 0)
    DeleteMe;
    exit
    end;
+
 Gear^.dX:= HHGear^.X - Gear^.X;
 Gear^.dY:= HHGear^.Y - Gear^.Y;
 

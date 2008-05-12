@@ -196,6 +196,7 @@ const
       ammoprop_NoCrosshair  = $00000040;
       ammoprop_AttackingPut = $00000080;
       ammoprop_DontHold     = $00000100;
+      ammoprop_AltAttack    = $00000200;
       AMMO_INFINITE = High(LongWord);
 
       EXPLAllDamageInRadius = $00000001;
@@ -566,7 +567,8 @@ const
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInMove or
-                                                 ammoprop_DontHold;
+                                                 ammoprop_DontHold or
+                                                 ammoprop_AltAttack;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -693,7 +695,8 @@ const
                                    Ammo: (Propz: ammoprop_ForwMsgs or
                                                  ammoprop_AttackInMove or
                                                  ammoprop_NoCrosshair or
-                                                 ammoprop_DontHold;
+                                                 ammoprop_DontHold or
+                                                 ammoprop_AltAttack;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -839,7 +842,8 @@ const
                                    maxAngle: 0;
                                    isDamaging: true;
                                    PosCount: 1;
-                                   PosSprite: sprWater));
+                                   PosSprite: sprWater)
+                                  );
 
 var CountTexz: array[1..9] of PTexture;
 

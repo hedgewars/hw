@@ -8,12 +8,13 @@
     <primarylanguage>C++</primarylanguage>
     <ignoreparts>
       <part>kdevfilegroups</part>
-      <part>kdevvalgrind</part>
       <part>kdevdoxygen</part>
       <part>kdevregexptest</part>
+      <part>kdevabbrev</part>
       <part>kdevdistpart</part>
       <part>kdevscripting</part>
       <part>kdevfilter</part>
+      <part>kdevastyle</part>
     </ignoreparts>
     <projectname>hedgewars</projectname>
     <projectdirectory>.</projectdirectory>
