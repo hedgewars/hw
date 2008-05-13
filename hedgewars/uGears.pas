@@ -28,6 +28,7 @@ type PGear = ^TGear;
      TGear = record
              NextGear, PrevGear: PGear;
              Active: Boolean;
+             Ammo : PAmmo;
              State : Longword;
              X : hwFloat;
              Y : hwFloat;

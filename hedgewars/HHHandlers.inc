@@ -144,8 +144,10 @@ with Gear^,
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
 
         Power:= 0;
-        if CurAmmoGear <> nil then
+        if (CurAmmoGear <> nil)
+           and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
            begin
+           CurAmmoGear^.Ammo:= @(Ammo^[CurSlot, CurAmmo]);
            Message:= Message or gm_Attack;
            CurAmmoGear^.Message:= Message
            end else begin
@@ -468,20 +470,32 @@ if ((Gear^.State and gstMoving) <> 0)
 		PickUp(Gear, t)
 	end;
 
+if (CurAmmoGear = nil) then
+	if (((Gear^.Message and gm_Attack) <> 0)
+		or ((Gear^.State and gstAttacking) <> 0)) then
+		Attack(Gear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
+	else
+else with PHedgehog(Gear^.Hedgehog)^ do
+	 if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)
+		and ((Gear^.Message and gm_LJump) <> 0)
+		and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) <> 0) then Attack(Gear);
+
+if (CurAmmoGear = nil)
+	or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
+	begin
+	if ((Gear^.Message and gm_Slot) <> 0) then ChangeAmmo(Gear);
+
+	if ((Gear^.Message and gm_Weapon) <> 0) then HHSetWeapon(Gear);
+
+	if ((Gear^.Message and gm_Timer) <> 0) then HHSetTimer(Gear);
+	end;
+
 if CurAmmoGear <> nil then
    begin
    CurAmmoGear^.Message:= Gear^.Message;
    exit
    end;
 
-if ((Gear^.Message and gm_Attack) <> 0) or
-   ((Gear^.State and gstAttacking) <> 0) then Attack(Gear); // should be before others to avoid desync with '/put' msg and changing weapon msgs
-
-if ((Gear^.Message and gm_Slot) <> 0) then ChangeAmmo(Gear);
-
-if ((Gear^.Message and gm_Weapon) <> 0) then HHSetWeapon(Gear);
-
-if ((Gear^.Message and gm_Timer) <> 0) then HHSetTimer(Gear);
 
 if (Gear^.State and gstMoving) <> 0 then
    begin

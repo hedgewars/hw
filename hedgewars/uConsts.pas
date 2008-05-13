@@ -85,6 +85,7 @@ type
                   Name: string[15];
                   end;
 
+     PAmmo = ^TAmmo;
      TAmmo = record
              Propz: LongWord;
              Count: LongWord;
@@ -197,6 +198,8 @@ const
       ammoprop_AttackingPut = $00000080;
       ammoprop_DontHold     = $00000100;
       ammoprop_AltAttack    = $00000200;
+      ammoprop_AltUse       = $00000400;
+
       AMMO_INFINITE = High(LongWord);
 
       EXPLAllDamageInRadius = $00000001;
@@ -440,7 +443,8 @@ const
                                    Probability: 0;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_Timerable or
-                                                 ammoprop_Power;
+                                                 ammoprop_Power or
+                                                 ammoprop_AltUse;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 3000;
@@ -458,7 +462,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 3;
                                    Ammo: (Propz: ammoprop_Timerable or
-                                                 ammoprop_Power;
+                                                 ammoprop_Power or
+                                                 ammoprop_AltUse;
                                           Count: 5;
                                           NumPerTurn: 0;
                                           Timer: 3000;
@@ -475,7 +480,8 @@ const
                                    NameTex: nil;
                                    Probability: 0;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: ammoprop_Power;
+                                   Ammo: (Propz: ammoprop_Power or
+                                                 ammoprop_AltUse;
                                           Count: AMMO_INFINITE;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -586,7 +592,8 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
-                                                 ammoprop_DontHold;
+                                                 ammoprop_DontHold or
+                                                 ammoprop_AltUse;
                                           Count: 2;
                                           NumPerTurn: 0;
                                           Timer: 0;
@@ -622,7 +629,8 @@ const
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
                                                  ammoprop_AttackInMove or
-                                                 ammoprop_DontHold;
+                                                 ammoprop_DontHold or
+                                                 ammoprop_AltUse;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;
