@@ -1,0 +1,32 @@
+; Italian locale
+
+00:00=Granata
+00:01=Granata a grappolo
+00:02=Bazooka
+00:03=UFO
+00:04=Fucile a Pompa
+00:05=Martello Pneumatico
+00:06=Salta il turno
+00:07=Corda
+00:08=Mina
+00:09=DEagle
+00:10=Dinamite
+00:11=Mazza da Baseball
+00:12=Pugno di Fuoco
+00:13=sec
+00:14=Paracadute
+00:15=Attacco Aereo Missilistico
+00:16=Attacco Aereo Minato
+00:17=Torcia Infuocata
+00:18=Trave
+00:19=Teletrasporto
+00:20=Cambia Hedgehog
+00:21=Granata a grappolo
+00:22=Spintarella
+
+01:00=Combattiamo!
+01:01=Round in parità
+01:02=%1 vince!
+01:03=Volume %1%
+01:04=In pausa
+
