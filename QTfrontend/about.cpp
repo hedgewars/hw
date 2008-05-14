@@ -60,6 +60,7 @@ About::About(QWidget * parent) :
 			"</p><h2>" +
 			QLabel::tr("Translations:") + "</h2><p>"
 			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
+			"italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
 			"russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>" +
 			QString::fromUtf8("polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;<br>") +
 			"</p><h2>" +
