@@ -1135,7 +1135,6 @@ end;
 
 procedure doStepParachute(Gear: PGear);
 var HHGear: PGear;
-    Timer: Longword;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 
@@ -1144,7 +1143,7 @@ DeleteCI(HHGear);
 OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
 ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 
-HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked);
+HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked or gstMoving);
 HHGear^.Message:= HHGear^.Message and not gm_Attack;
 
 Gear^.doStep:= @doStepParachuteWork;

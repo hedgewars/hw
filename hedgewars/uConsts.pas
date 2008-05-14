@@ -592,6 +592,7 @@ const
                                    Probability: 100;
                                    NumberInCase: 1;
                                    Ammo: (Propz: ammoprop_NoCrosshair or
+                                                 ammoprop_AttackInMove or
                                                  ammoprop_DontHold or
                                                  ammoprop_AltUse;
                                           Count: 2;

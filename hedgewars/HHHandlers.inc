@@ -476,9 +476,13 @@ if (CurAmmoGear = nil) then
 		Attack(Gear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
 	else
 else with PHedgehog(Gear^.Hedgehog)^ do
-	 if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)
+	 if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) 
 		and ((Gear^.Message and gm_LJump) <> 0)
-		and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) <> 0) then Attack(Gear);
+		and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) <> 0) then
+		begin
+		Gear^.Message:= Gear^.Message and not gm_LJump;
+		Attack(Gear)
+		end;
 
 if (CurAmmoGear = nil)
 	or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then

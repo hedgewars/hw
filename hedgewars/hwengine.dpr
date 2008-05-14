@@ -66,7 +66,7 @@ procedure OnDestroy; forward;
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
 const MusicTimerTicks: Longword = 0;
-var s: string;
+//var s: string;
 begin
 inc(RealTicks, Lag);
 
