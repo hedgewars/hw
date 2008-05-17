@@ -29,6 +29,7 @@ procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure KeyPressConsole(Key: Longword);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
+procedure StopMessages(Message: Longword);
 function  GetLastConsoleLine: shortstring;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
@@ -314,6 +315,15 @@ function GetLastConsoleLine: shortstring;
 begin
 if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)].s
                 else GetLastConsoleLine:= ConsoleLines[Pred(CurrLine)].s
+end;
+
+procedure StopMessages(Message: Longword);
+begin
+if (Message and gm_Left) <> 0 then ParseCommand('/-left', true) else
+if (Message and gm_Right) <> 0 then ParseCommand('/-right', true) else
+if (Message and gm_Up) <> 0 then ParseCommand('/-up', true) else
+if (Message and gm_Down) <> 0 then ParseCommand('/-down', true) else
+if (Message and gm_Attack) <> 0 then ParseCommand('/-attack', true)
 end;
 
 {$INCLUDE CCHandlers.inc}

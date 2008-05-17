@@ -329,7 +329,12 @@ with CurrentHedgehog^ do
            if (BestActions.Pos >= BestActions.Count)
               and (TurnTimeLeft > cStopThinkTime) then
               begin
-              TryDo(Gear^.Message = 0, 'Engine bug: AI may break demos playing', true);
+              if Gear^.Message <> 0 then
+                 begin
+                 StopMessages(Gear^.Message);
+                 TryDo((Gear^.Message and gmAllStoppable) = 0, 'Engine bug: AI may break demos playing', true);
+                 end;
+              if Gear^.Message <> 0 then exit;
               StartThink(Gear);
               StartTicks:= GameTicks
               end else ProcessAction(BestActions, Gear)
