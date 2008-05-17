@@ -69,7 +69,7 @@ Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
 
 if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-if hwRound(Gear^.Y) > 1100 then Gear^.Y:= - _128
+if hwRound(Gear^.Y) > 1100 then Gear^.Y:= Gear^.Y - int2hwFloat(1228)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
