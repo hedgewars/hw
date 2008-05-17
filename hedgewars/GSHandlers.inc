@@ -598,8 +598,8 @@ len:= _1 / Distance(cc, cs);
 cc:= cc * len; // rope vector plus hedgehog direction vector normalized
 cs:= cs * len;
 
-nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 3; // hedgehog direction normalized with length 3
-ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 3;
+nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 5; // hedgehog direction normalized with length 3
+ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 5;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
@@ -678,9 +678,9 @@ if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
    HHGear^.dY:= -_0_6 * HHGear^.dY;
 
 len:= Distance(HHGear^.dX, HHGear^.dY);
-if len > _0_5 then
+if len > _0_8 then
    begin
-   len:= _0_5 / len;
+   len:= _0_8 / len;
    HHGear^.dX:= HHGear^.dX * len;
    HHGear^.dY:= HHGear^.dY * len;
    end;
