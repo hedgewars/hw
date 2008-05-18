@@ -68,6 +68,7 @@ type PHedgehog = ^THedgehog;
              CurrTeam: LongWord;
              ClanHealth: LongInt;
              ClanIndex: LongInt;
+             TurnNumber: LongWord;
              end;
 
 var CurrentTeam: PTeam = nil;
@@ -181,6 +182,9 @@ with CurrentHedgehog^ do
      InsertGearToList(Gear);
      FollowGear:= Gear
      end;
+
+inc(CurrentTeam^.Clan^.TurnNumber);
+
 ResetKbd;
 
 cWindSpeed:= rndSign(GetRandom * cMaxWindSpeed);

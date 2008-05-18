@@ -129,7 +129,7 @@ type TStackEntry = record
                    MadeActions: TActions;
                    Hedgehog: TGear;
                    end;
-                   
+
 var Stack: record
            Count: Longword;
            States: array[0..Pred(cBranchStackSize)] of TStackEntry;
@@ -310,6 +310,7 @@ if Targets.Count = 0 then
    OutError('AI: no targets!?', false);
    exit
    end;
+
 FillBonuses((Me^.State and gstAttacked) <> 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and HHHasAmmo(PHedgehog(Me^.Hedgehog)^, a);

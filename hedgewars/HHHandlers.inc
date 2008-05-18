@@ -18,7 +18,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure ChangeAmmo(Gear: PGear);
-var slot: Longword;
+var slot, i: Longword;
 begin
 slot:= Gear^.MsgParam;
 
@@ -32,14 +32,30 @@ with PHedgehog(Gear^.Hedgehog)^ do
 
 	if CurSlot = slot then
 		begin
+		i:= 0;
+		repeat
 		inc(CurAmmo);
-		if (CurAmmo > cMaxSlotAmmoIndex) or (Ammo^[slot, CurAmmo].Count = 0) then CurAmmo:= 0
+		if (CurAmmo > cMaxSlotAmmoIndex) then
+			begin
+			CurAmmo:= 0;
+			inc(i);
+			TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
+			end;
+		until (Ammo^[slot, CurAmmo].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, CurAmmo].AmmoType].SkipTurns)
 		end else
-	if Ammo^[slot, 0].Count > 0 then
 		begin
-		CurSlot:= slot;
-		CurAmmo:= 0
-		end;
+		i:= 0;
+		// check whether there's ammo in slot
+		while (i <= cMaxSlotAmmoIndex)
+		  and ((Ammo^[slot, i].Count = 0)
+		       or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
+		
+		if i <= cMaxSlotAmmoIndex then
+			begin
+			CurSlot:= slot;
+			CurAmmo:= i
+			end
+		end
 	end;
 
 ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
@@ -50,6 +66,9 @@ var t: LongInt;
     weap: TAmmoType;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
+
+if PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon isn't activated yet
+
 Gear^.MsgParam:= Ammoz[weap].Slot;
 
 t:= cMaxSlotAmmoIndex;

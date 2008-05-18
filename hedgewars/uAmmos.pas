@@ -107,7 +107,12 @@ for slot:= 0 to cMaxSlotIndex do
         if hhammo^[slot, ami].Count > 0 then
            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
 
-if ammos[ammo] <> AMMO_INFINITE then inc(ammos[ammo], Ammoz[ammo].NumberInCase);
+if ammos[ammo] <> AMMO_INFINITE then
+   begin
+   inc(ammos[ammo], Ammoz[ammo].NumberInCase);
+   if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE
+   end;
+
 FillAmmoStore(hhammo, ammos)
 end;
 
@@ -151,7 +156,8 @@ ami:= 0;
 while (ami <= cMaxSlotAmmoIndex) do
       begin
       with Hedgehog.Ammo^[Slot, ami] do
-            if (AmmoType = Ammo) and (Count > 0) then exit(true);
+            if (AmmoType = Ammo) then
+               exit((Count > 0) and (Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns));
       inc(ami)
       end;
 HHHasAmmo:= false
@@ -164,7 +170,7 @@ TargetPoint.X:= NoPointX;
 
 with Hedgehog do
      begin
-     if (Ammo^[CurSlot, CurAmmo].Count = 0)then
+     if (Ammo^[CurSlot, CurAmmo].Count = 0) then
         begin
         CurAmmo:= 0;
         CurSlot:= 0;
