@@ -39,7 +39,7 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
-     uAmmos, uVisualGears;
+     uAmmos, uVisualGears, uChat;
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
@@ -332,6 +332,8 @@ if WindBarWidth > 0 then
 
 // AmmoMenu
 if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
+
+DrawChat;
 
 // Cursor
 if isCursorVisible then

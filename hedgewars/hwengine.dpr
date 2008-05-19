@@ -50,7 +50,8 @@ uses
   uAmmos in 'uAmmos.pas',
   uSHA in 'uSHA.pas',
   uFloat in 'uFloat.pas',
-  uStats in 'uStats.pas';
+  uStats in 'uStats.pas',
+  uChat in 'uChat.pas';
 
 {$INCLUDE options.inc}
 
