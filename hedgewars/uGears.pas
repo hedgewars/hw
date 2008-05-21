@@ -544,8 +544,17 @@ begin
 						1,
 						3,
 						0);
+				defaultPos:= false
 				end;
 			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
+			gtFirePunch: begin
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						4,
+						0);
+				defaultPos:= false
+				end;
 			gtPickHammer,
 			gtTeleport: defaultPos:= false;
 		end;
