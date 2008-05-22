@@ -140,13 +140,13 @@ FreeActionsList;
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
 
-with CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog] do
+with CurrentHedgehog^ do
      if Gear <> nil then
         begin
         AttacksNum:= 0;
         Gear^.Message:= 0;
         Gear^.Z:= cHHZ;
-        SwitchNotHoldedAmmo(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+        SwitchNotHoldedAmmo(CurrentHedgehog^);
         RemoveGearFromList(Gear);
         InsertGearToList(Gear)
         end;
@@ -170,6 +170,7 @@ repeat
 until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+SwitchNotHoldedAmmo(CurrentHedgehog^);
 with CurrentHedgehog^ do
      begin
      with Gear^ do
