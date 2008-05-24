@@ -25,7 +25,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 implementation
-uses uMisc, uStore, uConsts, SDLh;
+uses uMisc, uStore, uConsts, SDLh, uConsole;
 
 const MaxStrIndex = 7;
 
@@ -69,7 +69,7 @@ SDL_UpperBlit(strSurface, nil, resSurface, nil);
 
 SDL_FreeSurface(strSurface);
 
-
+cl.s:= str;
 cl.Time:= RealTicks + 7500;
 cl.Tex:= Surface2Tex(resSurface);
 SDL_FreeSurface(resSurface)
@@ -100,7 +100,11 @@ while (t <= MaxStrIndex)
 	inc(t)
 	end;
 
-visibleCount:= cnt
+visibleCount:= cnt;
+
+if (GameState = gsChat)
+	and (InputStr.Tex <> nil) then
+	DrawTexture(11, visibleCount * 16 + 10 + cConsoleYAdd, InputStr.Tex);
 end;
 
 procedure KeyPressChat(Key: Longword);
@@ -116,8 +120,12 @@ if Key <> 0 then
 				SetLine(InputStr, InputStr.s)
 				end;
 		13,271: begin
-			AddChatString(InputStr.s);
-			SetLine(InputStr, '');
+			if Length(InputStr.s) > 0 then
+				begin
+				AddChatString(InputStr.s);
+				ParseCommand('/say ' + InputStr.s, true);
+				SetLine(InputStr, '');
+				end;
 			GameState:= gsGame
 			end
 	else

@@ -67,22 +67,19 @@ pkbd^[1]:= (i and 1);
 pkbd^[2]:= ((i shr 1) and 1);
 pkbd^[3]:= ((i shr 2) and 1);
 for i:= 1 to cKeyMaxIndex do
-    if CurrentBinds[i][0] <> #0 then
-      begin
-      if (i > 3) and (pkbd^[i] <> 0) then KbdKeyPressed:= true;
-      if CurrentBinds[i][1] = '+' then
-          begin
-          if (pkbd^[i] <> 0)and(tkbd[i]  = 0) then ParseCommand(CurrentBinds[i], Trusted) else
-          if (pkbd^[i] =  0)and(tkbd[i] <> 0) then
-             begin
-             s:= CurrentBinds[i];
-             s[1]:= '-';
-             ParseCommand(s, Trusted)
-             end;
-          end else
-          if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted);
-       tkbd[i]:= pkbd^[i]
-       end
+if CurrentBinds[i][0] <> #0 then
+	begin
+	if (i > 3) and (pkbd^[i] <> 0) then KbdKeyPressed:= true;
+	if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted)
+	else if (CurrentBinds[i][1] = '+')
+			and (pkbd^[i] = 0)and(tkbd[i] <> 0) then
+			begin
+			s:= CurrentBinds[i];
+			s[1]:= '-';
+			ParseCommand(s, Trusted)
+			end;
+	tkbd[i]:= pkbd^[i]
+	end
 end;
 
 procedure ResetKbd;

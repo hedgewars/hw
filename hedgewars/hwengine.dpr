@@ -99,7 +99,7 @@ case GameState of
               FinishProgress;
               GameState:= gsGame
               end;
-     gsGame : begin
+      gsGame: begin
               ProcessKbd;
               DoGameTick(Lag);
               ProcessVisualGears(Lag);
@@ -111,7 +111,12 @@ case GameState of
               DrawWorld(Lag, SDLPrimSurface);
               DrawConsole(SDLPrimSurface);
               end;
-     gsExit : begin
+      gsChat: begin
+              DoGameTick(Lag);
+              ProcessVisualGears(Lag);
+              DrawWorld(Lag, SDLPrimSurface);
+              end;
+      gsExit: begin
               OnDestroy;
               end;
      end;
