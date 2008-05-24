@@ -149,19 +149,7 @@ PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
       case event.type_ of
-           SDL_KEYDOWN: case GameState of
-                             gsGame: if event.key.keysym.sym = 96 then
-                                        begin
-                                        cConsoleYAdd:= cConsoleHeight;
-                                        GameState:= gsConsole
-                                        end;
-                          gsConsole: if event.key.keysym.sym = 96 then
-                                        begin
-                                        GameState:= gsGame;
-                                        cConsoleYAdd:= 0;
-                                        ResetKbd
-                                        end else KeyPressConsole(event.key.keysym.unicode);
-                             end;
+           SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
            SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                                cHasFocus:= event.active.gain = 1;
            SDL_QUITEV: isTerminated:= true

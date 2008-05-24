@@ -27,7 +27,6 @@ type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
 procedure DrawConsole(Surface: PSDL_Surface);
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
-procedure KeyPressConsole(Key: Longword);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 function  GetLastConsoleLine: shortstring;
@@ -57,8 +56,6 @@ type  PVariable = ^TVariable;
 
 var   ConsoleLines: array[byte] of TTextLine;
       CurrLine: LongInt = 0;
-      InputStr: TTextLine;
-      InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
       Variables: PVariable = nil;
 
 procedure SetLine(var tl: TTextLine; str: shortstring);
@@ -151,9 +148,7 @@ for y:= 0 to cConsoleHeight div 256 + 1 do
         DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0);
 
 for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
-    DrawLine(ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], 4, cConsoleHeight - (y + 2) * (Fontz[fnt16].Height + 2));
-
-DrawLine(InputStr, 4, cConsoleHeight - Fontz[fnt16].Height - 2);
+    DrawLine(ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], 4, cConsoleHeight - (y + 1) * (Fontz[fnt16].Height + 2));
 
 glDisable(GL_BLEND);
 glDisable(GL_TEXTURE_2D);
@@ -249,68 +244,6 @@ case c of
      else WriteLnToConsole(errmsgUnknownCommand  + ': "/' + CmdStr + '"') end
 end;
 
-procedure AutoComplete;
-var t: PVariable;
-    c: char;
-begin
-if InputStr.s[0] = #0 then exit;
-c:= InputStr.s[1];
-if c in ['/', '$'] then Delete(InputStr.s, 1, 1) else c:= #0;
-
-if InputStr.s[byte(InputStr.s[0])] = #32 then dec(InputStr.s[0]);
-t:= Variables;
-while t <> nil do
-      begin
-      if (c=#0) or ((t^.VType =  vtCommand) and (c='/'))or
-                   ((t^.VType <> vtCommand) and (c='$'))then
-         if copy(t^.Name, 1, Length(InputStr.s)) = InputStr.s then
-            begin
-            if t^.VType = vtCommand then SetLine(InputStr, '/' + t^.Name + ' ')
-                                    else SetLine(InputStr, '$' + t^.Name + ' ');
-            exit
-            end;
-      t:= t^.Next
-      end
-end;
-
-procedure KeyPressConsole(Key: Longword);
-const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
-var i, btw: integer;
-    utf8: shortstring;
-begin
-if Key <> 0 then
-  case Key of
-      8: if Length(InputStr.s) > 0 then
-            begin
-            InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-            SetLine(InputStr, InputStr.s)
-            end;
-      9: AutoComplete;
- 13,271: begin
-         if InputStr.s[1] in ['/', '$'] then
-            ParseCommand(InputStr.s, false)
-         else
-            ParseCommand('/say ' + InputStr.s, false);
-         SetLine(InputStr, '')
-         end
-     else
-     if (Key < $80) then btw:= 1
-     else if (Key < $800) then btw:= 2
-     else if (Key < $10000) then btw:= 3
-     else btw:= 4;
-     utf8:= '';
-     for i:= btw downto 2 do
-         begin
-         utf8:= char((Key or $80) and $BF) + utf8;
-         Key:= Key shr 6
-         end;
-     utf8:= char(Key or firstByteMark[btw]) + utf8;
-
-     InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-     SetLine(InputStr, InputStr.s + utf8)
-     end
-end;
-
 function GetLastConsoleLine: shortstring;
 begin
 if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)].s
@@ -355,6 +288,7 @@ RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
 RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
+RegisterVariable('chat'    , vtCommand, @chChat         , true );
 RegisterVariable('say'     , vtCommand, @chSay          , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
 RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);

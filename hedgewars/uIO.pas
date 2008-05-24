@@ -216,10 +216,9 @@ var tmpflag: boolean;
 begin
 while (headcmd <> nil) and (headcmd^.cmd = 's') do
       begin
-      s:= '> ' + copy(headcmd^.str, 2, Pred(headcmd^.len));
+      s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
       AddChatString(s);
       WriteLnToConsole(s);
-      //AddCaption('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), $FFFFFF, capgrpNetSay);
       RemoveCmd
       end;
 

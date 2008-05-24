@@ -522,3 +522,8 @@ procedure chSpeedup_m(var s: shortstring);
 begin
 isSpeed:= false
 end;
+
+procedure chChat(var s: shortstring);
+begin
+GameState:= gsChat
+end;

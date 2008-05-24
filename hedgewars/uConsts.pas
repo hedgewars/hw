@@ -23,7 +23,7 @@ uses SDLh, GL, uLocale;
 {$INCLUDE proto.inc}
 type
 
-     TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsExit);
+     TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsChat, gsExit);
 
      TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
 
