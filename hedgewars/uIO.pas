@@ -37,7 +37,7 @@ procedure NetGetNextCmd;
 var hiTicks: Word = 0;
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc, uLand;
+uses uConsole, uConsts, uWorld, uMisc, uLand, uChat;
 const isPonged: boolean = false;
 
 type PCmd = ^TCmd;
@@ -212,11 +212,14 @@ end;
 
 procedure NetGetNextCmd;
 var tmpflag: boolean;
+    s: shortstring;
 begin
 while (headcmd <> nil) and (headcmd^.cmd = 's') do
       begin
-      WriteLnToConsole('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)));
-      AddCaption('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), $FFFFFF, capgrpNetSay);
+      s:= '> ' + copy(headcmd^.str, 2, Pred(headcmd^.len));
+      AddChatString(s);
+      WriteLnToConsole(s);
+      //AddCaption('> ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), $FFFFFF, capgrpNetSay);
       RemoveCmd
       end;
 

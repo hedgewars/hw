@@ -1235,7 +1235,8 @@ begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Y:= HHGear^.Y + HHGear^.dY; // hedgehog falling to collect cases
 HHGear^.dY:= HHGear^.dY + cGravity;
-if TestCollisionYwithGear(HHGear, 1) then
+if TestCollisionYwithGear(HHGear, 1)
+   or CheckGearDrowning(HHGear) then
    begin
    DeleteGear(Gear);
    AfterAttack

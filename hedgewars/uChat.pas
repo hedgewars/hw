@@ -24,7 +24,7 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 
 implementation
-uses uMisc, uStore, uConsts;
+uses uMisc, uStore, uConsts, SDLh;
 
 const MaxStrIndex = 7;
 
@@ -35,18 +35,58 @@ type TStr = record
 
 var Strs: array[0 .. MaxStrIndex] of TStr;
 	lastStr: Longword = 0;
+	visibleCount: Longword = 0;
 
 procedure AddChatString(s: shortstring);
+var strSurface, resSurface: PSDL_Surface;
+    r: TSDL_Rect;
+    w, h: LongInt;
 begin
 lastStr:= (lastStr + 1) mod (MaxStrIndex + 1);
 
+TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(s), w, h);
+
+resSurface:= SDL_CreateRGBSurface(0,
+		toPowerOf2(w + 2),
+		toPowerOf2(h + 2),
+		32,
+		RMask, GMask, BMask, AMask);
+
+strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(s), $202020);
+r.x:= 1;
+r.y:= 1;
+SDL_UpperBlit(strSurface, nil, resSurface, @r);
+
+strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+SDL_UpperBlit(strSurface, nil, resSurface, nil);
+
+SDL_FreeSurface(strSurface);
+
+
 Strs[lastStr].Time:= RealTicks + 7500;
-Strs[lastStr].Tex:= RenderStringTex(s, $FFFFFF, fnt16)
+Strs[lastStr].Tex:= Surface2Tex(resSurface);
+SDL_FreeSurface(resSurface);
+
+inc(visibleCount)
 end;
 
 procedure DrawChat;
+var i, t, cnt: Longword;
 begin
-if Strs[lastStr].Tex <> nil then DrawTexture(10, 10, Strs[lastStr].Tex)
+cnt:= 0;
+t:= 0;
+i:= lastStr;
+while (t <= MaxStrIndex)
+	and (Strs[i].Tex <> nil)
+	and (Strs[i].Time > RealTicks) do
+	begin
+	DrawTexture(8, (visibleCount - t) * 16 - 8, Strs[i].Tex);
+	if i = 0 then i:= MaxStrIndex else dec(i);
+	inc(cnt);
+	inc(t)
+	end;
+
+visibleCount:= cnt
 end;
 
 end.

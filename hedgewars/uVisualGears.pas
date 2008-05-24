@@ -32,6 +32,7 @@ type PVisualGear = ^TVisualGear;
              Y : hwFloat;
              dX: hwFloat;
              dY: hwFloat;
+             mdY: QWord;
              Angle, dAngle: real;
              Kind: TVisualGearType;
              doStep: TVGearStepProcedure;
@@ -119,7 +120,8 @@ case Kind of
                dx.isNegative:= random(2) = 0;
                dx.QWordValue:= random(214748364);
                dy.isNegative:= random(2) = 0;
-               dy.QWordValue:= 21474836 + random(64424509)
+               dy.QWordValue:= 21474836 + random(64424509);
+               mdY:= dy.QWordValue
                end;
      end;
 

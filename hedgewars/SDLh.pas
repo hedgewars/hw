@@ -51,7 +51,7 @@ const {$IFDEF WIN32}
       SDL_HWACCEL     = $00000100;
       SDL_SRCCOLORKEY = $00001000;
       SDL_RLEACCEL    = $00004000;
-      
+
       SDL_NOEVENT     = 0;
       SDL_ACTIVEEVENT = 1;
       SDL_KEYDOWN     = 2;
@@ -197,7 +197,7 @@ type PSDL_Rect = ^TSDL_Rect;
 
      PSDL_Thread = Pointer;
      PSDL_mutex = Pointer;
-     
+
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
@@ -276,6 +276,7 @@ function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): Lo
    See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
 function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
 function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;

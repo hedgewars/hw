@@ -117,6 +117,7 @@ procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
 function  Surface2Tex(surf: PSDL_Surface): PTexture;
 procedure FreeTexture(tex: PTexture);
+function  toPowerOf2(i: Longword): Longword;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
