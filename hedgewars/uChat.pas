@@ -25,7 +25,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 implementation
-uses uMisc, uStore, uConsts, SDLh, uConsole;
+uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
 
 const MaxStrIndex = 7;
 
@@ -119,13 +119,14 @@ if Key <> 0 then
 				InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
 				SetLine(InputStr, InputStr.s)
 				end;
-		13,271: begin
+		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
 				AddChatString(InputStr.s);
 				ParseCommand('/say ' + InputStr.s, true);
-				SetLine(InputStr, '');
+				SetLine(InputStr, '')
 				end;
+			FreezeEnterKey;
 			GameState:= gsGame
 			end
 	else

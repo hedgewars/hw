@@ -26,6 +26,7 @@ type TBinds = array[0..cKeyMaxIndex] of shortstring;
 function KeyNameToCode(name: string): word;
 procedure ProcessKbd;
 procedure ResetKbd;
+procedure FreezeEnterKey;
 procedure InitKbdKeyTable;
 
 procedure SetBinds(var binds: TBinds);
@@ -72,7 +73,8 @@ if CurrentBinds[i][0] <> #0 then
 	if (i > 3) and (pkbd^[i] <> 0) then KbdKeyPressed:= true;
 	if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted)
 	else if (CurrentBinds[i][1] = '+')
-			and (pkbd^[i] = 0)and(tkbd[i] <> 0) then
+			and (pkbd^[i] = 0)
+			and (tkbd[i] <> 0) then
 			begin
 			s:= CurrentBinds[i];
 			s[1]:= '-';
@@ -118,6 +120,7 @@ DefaultBinds[102]:= 'fullscr';
 DefaultBinds[104]:= 'findhh';
 DefaultBinds[112]:= 'pause';
 DefaultBinds[115]:= '+speedup';
+DefaultBinds[116]:= 'chat';
 DefaultBinds[127]:= 'rotmask';
 SetDefaultBinds
 end;
@@ -132,6 +135,11 @@ begin
 CurrentBinds:= DefaultBinds
 end;
 
+procedure FreezeEnterKey;
+begin
+tkbd[13]:= 1;
+tkbd[271]:= 1
+end;
 
 initialization
 
