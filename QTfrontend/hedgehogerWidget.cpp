@@ -21,7 +21,7 @@
 #include "frameTeam.h"
 
 CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
-    ItemNum(im, parent)
+    ItemNum(im, parent, 1)
 {
   if(parent) {
     pOurFrameTeams=dynamic_cast<FrameTeams*>(parent->parentWidget());
