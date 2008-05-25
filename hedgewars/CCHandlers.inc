@@ -273,8 +273,9 @@ end;
 
 procedure chSay(var s: shortstring);
 begin
-WriteLnToConsole('> ' + s);
-SendIPC('s'+s)
+s:= UserNick + ': ' + s;
+AddChatString(s);
+SendIPC('s' + s)
 end;
 
 procedure chTimer(var s: shortstring);

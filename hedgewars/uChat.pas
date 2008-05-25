@@ -123,9 +123,7 @@ if Key <> 0 then
 		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
-				s:= UserNick + ': ' + InputStr.s;
-				AddChatString(s);
-				ParseCommand('/say ' + s, true);
+				ParseCommand('/say ' + InputStr.s, true);
 				SetLine(InputStr, '')
 				end;
 			FreezeEnterKey;
