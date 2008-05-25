@@ -266,6 +266,7 @@ QStringList HWGame::setArguments()
 	arguments << datadir->absolutePath();
 	arguments << (config->isShowFPSEnabled() ? "1" : "0");
 	arguments << (config->isAltDamageEnabled() ? "1" : "0");
+	arguments << config->netNick().toUtf8().toBase64();
 	return arguments;
 }
 

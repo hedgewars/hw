@@ -118,6 +118,7 @@ function  Str2PChar(const s: shortstring): PChar;
 function  Surface2Tex(surf: PSDL_Surface): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
+function DecodeBase64(s: shortstring): shortstring;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -247,18 +248,6 @@ CharArray[Length(s)]:= #0;
 Str2PChar:= @CharArray
 end;
 
-{$IFDEF DEBUGFILE}
-procedure AddFileLog(s: shortstring);
-begin
-writeln(f, GameTicks: 6, ': ', s);
-flush(f)
-end;
-
-function RectToStr(Rect: TSDL_Rect): shortstring;
-begin
-RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
-end;
-
 function isPowerOf2(i: Longword): boolean;
 begin
 if i = 0 then exit(true);
@@ -324,6 +313,46 @@ procedure FreeTexture(tex: PTexture);
 begin
 glDeleteTextures(1, @tex^.id);
 dispose(tex)
+end;
+
+function DecodeBase64(s: shortstring): shortstring;
+const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+var i, t, c: Longword;
+begin
+c:= 0;
+for i:= 1 to Length(s) do
+	begin
+	t:= Pos(s[i], table);
+	if s[i] = '=' then inc(c);
+	if t > 0 then byte(s[i]):= t - 1 else byte(s[i]):= 0
+	end;
+
+i:= 1;
+t:= 1;
+while i <= length(s) do
+	begin
+	DecodeBase64[t    ]:= char((byte(s[i    ]) shl 2) or (byte(s[i + 1]) shr 4));
+	DecodeBase64[t + 1]:= char((byte(s[i + 1]) shl 4) or (byte(s[i + 2]) shr 2));
+	DecodeBase64[t + 2]:= char((byte(s[i + 2]) shl 6) or (byte(s[i + 3])      ));
+	inc(t, 3);
+	inc(i, 4)
+	end;
+
+if c < 3 then t:= t - c;
+
+byte(DecodeBase64[0]):= t - 1
+end;
+
+{$IFDEF DEBUGFILE}
+procedure AddFileLog(s: shortstring);
+begin
+writeln(f, GameTicks: 6, ': ', s);
+flush(f)
+end;
+
+function RectToStr(Rect: TSDL_Rect): shortstring;
+begin
+RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
 var i: LongInt;

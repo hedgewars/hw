@@ -85,6 +85,7 @@ case GameState of
               end;
      gsStart: begin
               InitPlaylistChunk(GetRandom(High(LongWord)));
+              AddClouds;
               AssignHHCoords;
               AddMiscGears;
               StoreLoad;
@@ -184,7 +185,7 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
-13: begin
+14: begin
      val(ParamStr(2), cScreenWidth);
      val(ParamStr(3), cScreenHeight);
      cBitsStr:= ParamStr(4);
@@ -198,9 +199,9 @@ case ParamCount of
      PathPrefix:= ParamStr(11);
      cShowFPS:= ParamStr(12) = '1';
      cAltDamage:= ParamStr(13) = '1';
+     UserNick:= DecodeBase64(ParamStr(14));
      for p:= Succ(Low(TPathType)) to High(TPathType) do
-         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
-     AddClouds
+         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;
   3: begin
      val(ParamStr(2), ipcPort);

@@ -40,6 +40,7 @@ public:
 	bool isAltDamageEnabled();
 	quint8 timerInterval();
 	quint8 bitDepth();
+	QString netNick();
 
 public slots:
 	void SaveOptions();

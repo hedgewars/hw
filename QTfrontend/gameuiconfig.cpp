@@ -78,7 +78,7 @@ void GameUIConfig::SaveOptions()
 
 	setValue("audio/sound", isSoundEnabled());
 
-	setValue("net/nick", Form->ui.pageOptions->editNetNick->text());
+	setValue("net/nick", netNick());
 	setValue("net/ip", *netHost);
 	setValue("net/port", netPort);
 	setValue("net/servername", Form->ui.pageNetServer->leServerDescr->text());
@@ -133,4 +133,9 @@ quint8 GameUIConfig::timerInterval()
 quint8 GameUIConfig::bitDepth()
 {
 	return depth;
+}
+
+QString GameUIConfig::netNick()
+{
+	return Form->ui.pageOptions->editNetNick->text();
 }

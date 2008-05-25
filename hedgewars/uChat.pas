@@ -24,6 +24,8 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
+var UserNick: shortstring = '';
+
 implementation
 uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
 
@@ -34,7 +36,6 @@ type TChatLine = record
 		Time: Longword;
 		Tex: PTexture;
 		end;
-
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	lastStr: Longword = 0;
@@ -110,7 +111,7 @@ end;
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
-    utf8: shortstring;
+    utf8, s: shortstring;
 begin
 if Key <> 0 then
 	case Key of
@@ -122,8 +123,9 @@ if Key <> 0 then
 		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
-				AddChatString(InputStr.s);
-				ParseCommand('/say ' + InputStr.s, true);
+				s:= UserNick + ': ' + InputStr.s;
+				AddChatString(s);
+				ParseCommand('/say ' + s, true);
 				SetLine(InputStr, '')
 				end;
 			FreezeEnterKey;
