@@ -209,6 +209,7 @@ case Kind of
                 Result^.Elasticity:= _0_35;
                 Result^.Friction:= _0_999;
                 Result^.Angle:= cMaxAngle div 2;
+                Result^.Pos:= GetRandom(19);
                 Result^.Z:= cHHZ;
                 end;
 gtAmmo_Grenade: begin
@@ -590,8 +591,7 @@ begin
 			defaultPos:= false
 		end else
 
-	if (Gear^.Message and (gm_Left or gm_Right) <> 0)
-       or ((Gear^.State and gstAttacked) <> 0) then
+	if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
 		begin
 		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 			hwSign(Gear^.dX),
@@ -602,6 +602,7 @@ begin
 		end
     else
 
+	if ((Gear^.State and gstAttacked) = 0) then
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
 		case amt of
@@ -645,10 +646,11 @@ begin
 end;
 
 if defaultPos then
-	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+	DrawRotatedF(sprHHIdle,
+		hwRound(Gear^.X) + 1 + WorldDx,
+		hwRound(Gear^.Y) - 3 + WorldDy,
+		(RealTicks div 256 + Gear^.Pos) mod 19,
 		hwSign(Gear^.dX),
-		0,
-		3,
 		0);
 
 with PHedgehog(Gear^.Hedgehog)^ do
