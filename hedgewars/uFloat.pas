@@ -279,7 +279,7 @@ function hwSqr(const t: hwFloat): hwFloat;
 begin
 hwSqr.isNegative:=false;
 hwSqr.QWordValue:= QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);
-hwSqr.Round:= hwSqr.Round + QWord(t.Round) * t.Round
+hwSqr.Round:= hwSqr.Round + t.Round * t.Round
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;
@@ -295,7 +295,8 @@ if t.Round = 0 then
    end else
    begin
    l:= $100000000;
-   r:= t.QWordValue div 2 + $80000000 // r:= t / 2 + 0.5 
+   r:= t.QWordValue div 2 + $80000000; // r:= t / 2 + 0.5
+   if r > $FFFFFFFFFFFF then r:= $FFFFFFFFFFFF
    end;
 
 repeat
