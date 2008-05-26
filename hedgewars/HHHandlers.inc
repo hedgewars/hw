@@ -374,10 +374,9 @@ end;
 
 procedure HedgehogChAngle(Gear: PGear);
 begin
-if ((Gear^.State and gstMoving) = 0) then
-   if (Gear^.Message and gm_Up    )<>0 then if Gear^.Angle > CurMinAngle then dec(Gear^.Angle)
-   else else
-   if (Gear^.Message and gm_Down  )<>0 then if Gear^.Angle < CurMaxAngle then inc(Gear^.Angle);
+if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle > CurMinAngle) then dec(Gear^.Angle)
+else
+if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle < CurMaxAngle) then inc(Gear^.Angle);
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;
@@ -519,6 +518,8 @@ if CurAmmoGear <> nil then
    exit
    end;
 
+if not isInMultiShoot then
+   HedgehogChAngle(Gear);
 
 if (Gear^.State and gstMoving) <> 0 then
    begin
@@ -549,7 +550,6 @@ if (Gear^.State and gstMoving) <> 0 then
 
    if not isInMultiShoot then
       begin
-      HedgehogChAngle(Gear);
       if StepTicks > 0 then dec(StepTicks);
       if (StepTicks = 0) then HedgehogStep(Gear)
       end
