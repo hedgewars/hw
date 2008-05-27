@@ -104,18 +104,18 @@ case GameState of
               ProcessKbd;
               DoGameTick(Lag);
               ProcessVisualGears(Lag);
-              DrawWorld(Lag, SDLPrimSurface);
+              DrawWorld(Lag);
               end;
    gsConsole: begin
               DoGameTick(Lag);
               ProcessVisualGears(Lag);
-              DrawWorld(Lag, SDLPrimSurface);
+              DrawWorld(Lag);
               DrawConsole(SDLPrimSurface);
               end;
       gsChat: begin
               DoGameTick(Lag);
               ProcessVisualGears(Lag);
-              DrawWorld(Lag, SDLPrimSurface);
+              DrawWorld(Lag);
               end;
       gsExit: begin
               OnDestroy;

@@ -24,7 +24,7 @@ const WorldDx: LongInt = -512;
       WorldDy: LongInt = -256;
 
 procedure InitWorld;
-procedure DrawWorld(Lag: LongInt; Surface: PSDL_Surface);
+procedure DrawWorld(Lag: LongInt);
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 
 {$IFDEF COUNTTICKS}
@@ -69,7 +69,7 @@ AMxLeft:= cScreenWidth - 210;
 AMxCurr:= cScreenWidth
 end;
 
-procedure ShowAmmoMenu(Surface: PSDL_Surface);
+procedure ShowAmmoMenu;
 const MENUSPEED = 15;
 var x, y, i, t: LongInt;
     Slot, Pos: LongInt;
@@ -151,7 +151,7 @@ end;
 
 procedure MoveCamera; forward;
 
-procedure DrawWorld(Lag: LongInt; Surface: PSDL_Surface);
+procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
@@ -213,7 +213,7 @@ if r.y < cScreenHeight then
    glEnable(GL_TEXTURE_2D)
    end;
 
-DrawGears(Surface);
+DrawGears;
 
 // Waves
 {$WARNINGS OFF}
@@ -331,7 +331,7 @@ if WindBarWidth > 0 then
    end;
 
 // AmmoMenu
-if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu(Surface);
+if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu;
 
 DrawChat;
 

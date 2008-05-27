@@ -58,7 +58,7 @@ function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFlo
 procedure ProcessGears;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
-procedure DrawGears(Surface: PSDL_Surface);
+procedure DrawGears;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
@@ -694,7 +694,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
         end;
 end;
 
-procedure DrawGears(Surface: PSDL_Surface);
+procedure DrawGears;
 var Gear, HHGear: PGear;
     i: Longword;
     roplen: LongInt;
