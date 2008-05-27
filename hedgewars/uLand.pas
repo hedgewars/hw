@@ -542,17 +542,17 @@ procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Generating forts land...');
-TryDo(TeamsCount = 2, 'More or less than 2 teams on map in forts mode!', true);
+TryDo(ClansCount = 2, 'More or less than 2 clans on map in forts mode!', true);
 
 LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
 
 SDL_FillRect(LandSurface, nil, 0);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[0]^.FortName + 'L', false, true, true);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', false, true, true);
 BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + TeamsArray[1]^.FortName + 'R', false, true, true);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'R', false, true, true);
 BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
 SDL_FreeSurface(tmpsurf);
 

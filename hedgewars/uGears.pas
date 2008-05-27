@@ -904,7 +904,7 @@ end;
 
 procedure ShotgunShot(Gear: PGear);
 var t: PGear;
-    dmg: integer;
+    dmg: LongInt;
 begin
 Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
@@ -972,44 +972,46 @@ SetAllToActive
 end;
 
 procedure AssignHHCoords;
-var i, t, p: LongInt;
+var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PGear;
     Count: Longword;
 begin
 if (GameFlags and gfForts) <> 0 then
-   begin
-   t:= 0;
-   for p:= 0 to Pred(TeamsCount) do
-     with TeamsArray[p]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          with Hedgehogs[i] do
-               if (Gear <> nil) and (Gear^.X.QWordValue = 0) then FindPlace(Gear, false, t, t + 1024);
-      inc(t, 1024);
-      end
-   end else // mix hedgehogs
-   begin
-   Count:= 0;
-   for p:= 0 to Pred(TeamsCount) do
-     with TeamsArray[p]^ do
-      begin
-      for i:= 0 to cMaxHHIndex do
-          with Hedgehogs[i] do
-               if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
-                  begin
-                  ar[Count]:= Gear;
-                  inc(Count)
-                  end;
-      end;
+	begin
+	t:= 0;
+	for p:= 0 to 1 do
+		begin
+		with ClansArray[p]^ do
+			for j:= 0 to Pred(TeamsNumber) do
+				with Teams[j]^ do
+					for i:= 0 to cMaxHHIndex do
+						with Hedgehogs[i] do
+							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then FindPlace(Gear, false, t, t + 1024);
+		inc(t, 1024)
+		end
+	end else // mix hedgehogs
+	begin
+	Count:= 0;
+	for p:= 0 to Pred(TeamsCount) do
+		with TeamsArray[p]^ do
+		begin
+		for i:= 0 to cMaxHHIndex do
+			with Hedgehogs[i] do
+				if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
+					begin
+					ar[Count]:= Gear;
+					inc(Count)
+					end;
+		end;
 
-   while (Count > 0) do
-      begin
-      i:= GetRandom(Count);
-      FindPlace(ar[i], false, 0, 2048);
-      ar[i]:= ar[Count - 1];
-      dec(Count)
-      end
-   end
+	while (Count > 0) do
+		begin
+		i:= GetRandom(Count);
+		FindPlace(ar[i], false, 0, 2048);
+		ar[i]:= ar[Count - 1];
+		dec(Count)
+		end
+	end
 end;
 
 function CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
