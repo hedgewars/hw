@@ -649,7 +649,7 @@ if defaultPos then
 	DrawRotatedF(sprHHIdle,
 		hwRound(Gear^.X) + 1 + WorldDx,
 		hwRound(Gear^.Y) - 3 + WorldDy,
-		(RealTicks div 256 + Gear^.Pos) mod 19,
+		(RealTicks div 128 + Gear^.Pos) mod 19,
 		hwSign(Gear^.dX),
 		0);
 
@@ -679,7 +679,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
            DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
                       GameTicks div 32 mod 16);
 
-        if (Gear^.State and (gstMoving or gstDrowning)) = 0 then
+        if (Gear^.State and (gstHHJumping or gstDrowning)) = 0 then
            if (Gear^.State and gstHHThinking) <> 0 then
               DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
               else
