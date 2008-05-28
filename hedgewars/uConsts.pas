@@ -44,7 +44,7 @@ type
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
-                   sprShotgun, sprDEagle, sprHHIdle, sprMortar);
+                   sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -387,7 +387,9 @@ const
                      (FileName:       'Idle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHHIdle
                      (FileName:     'Mortar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  16; Height: 16; saveSurf: false) // sprMortar
+                      Width:  16; Height: 16; saveSurf: false),// sprMortar
+                     (FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  16; Height: 16; saveSurf: false) // sprTurnsLeft
                      );
 
       Soundz: array[TSound] of record

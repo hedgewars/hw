@@ -71,7 +71,7 @@ end;
 
 procedure ShowAmmoMenu;
 const MENUSPEED = 15;
-var x, y, i, t: LongInt;
+var x, y, i, t, l: LongInt;
     Slot, Pos: LongInt;
 begin
 if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
@@ -118,6 +118,11 @@ with CurrentHedgehog^ do
             while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
                   begin
                   DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
+                  l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
+
+                  if l >= 0 then
+                     DrawSprite(sprTurnsLeft, x + t * 33 + 51, y + 17, l);
+
                   if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
                      begin
                      DrawSprite(sprAMSelection, x + t * 33 + 35, y + 1, 0);
