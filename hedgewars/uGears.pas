@@ -209,7 +209,6 @@ case Kind of
                 Result^.Elasticity:= _0_35;
                 Result^.Friction:= _0_999;
                 Result^.Angle:= cMaxAngle div 2;
-                Result^.Pos:= GetRandom(19);
                 Result^.Z:= cHHZ;
                 end;
 gtAmmo_Grenade: begin
@@ -654,44 +653,45 @@ if defaultPos then
 		0);
 
 with PHedgehog(Gear^.Hedgehog)^ do
-     if (Gear^.State{ and not gstAnimation}) = 0 then
-        begin
-        t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
-        if (cTagsMask and 1) <> 0 then
-           begin
-           dec(t, HealthTagTex^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
-           end;
-        if (cTagsMask and 2) <> 0 then
-           begin
-           dec(t, NameTagTex^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
-           end;
-        if (cTagsMask and 4) <> 0 then
-           begin
-           dec(t, Team^.NameTagTex^.h + 2);
-           DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
-           end
-        end else // Current hedgehog
-      if (Gear^.State and gstHHDriven) <> 0 then
-        begin
-        if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
-           DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
-                      GameTicks div 32 mod 16);
+	if (Gear^.State{ and not gstAnimation}) = 0 then
+	begin
+	t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
+	if (cTagsMask and 1) <> 0 then
+		begin
+		dec(t, HealthTagTex^.h + 2);
+		DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
+		end;
+	if (cTagsMask and 2) <> 0 then
+		begin
+		dec(t, NameTagTex^.h + 2);
+		DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
+		end;
+	if (cTagsMask and 4) <> 0 then
+		begin
+		dec(t, Team^.NameTagTex^.h + 2);
+		DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
+		end
+	end else // Current hedgehog
+	if (Gear^.State and gstHHDriven) <> 0 then
+		begin
+		if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
+			DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
+						GameTicks div 32 mod 16);
 
-        if (Gear^.State and (gstHHJumping or gstDrowning)) = 0 then
-           if (Gear^.State and gstHHThinking) <> 0 then
-              DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
-              else
-              if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
-                 DrawRotatedTex(Team^.CrosshairTex,
-                                12, 12,
-                                Round(hwRound(Gear^.X) +
-                                hwSign(Gear^.dX) * Sin(Gear^.Angle*pi/cMaxAngle)*60) + WorldDx,
-                                Round(hwRound(Gear^.Y) -
-                                Cos(Gear^.Angle*pi/cMaxAngle)*60) + WorldDy, 0,
-                                hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle)
-        end;
+		if (Gear^.State and gstDrowning) = 0 then
+			if (Gear^.State and gstHHThinking) <> 0 then
+				DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
+				else
+				if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
+					begin
+					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
+					DrawRotatedTex(Team^.CrosshairTex,
+							12, 12,
+							Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * m * Sin(Gear^.Angle*pi/cMaxAngle) * 60) + WorldDx,
+							Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle) * 60) + WorldDy, 0,
+							hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle)
+					end
+			end;
 end;
 
 procedure DrawGears;
@@ -986,7 +986,11 @@ if (GameFlags and gfForts) <> 0 then
 				with Teams[j]^ do
 					for i:= 0 to cMaxHHIndex do
 						with Hedgehogs[i] do
-							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then FindPlace(Gear, false, t, t + 1024);
+							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
+								begin
+								FindPlace(Gear, false, t, t + 1024);
+								Gear^.Pos:= GetRandom(19);
+								end;
 		inc(t, 1024)
 		end
 	end else // mix hedgehogs

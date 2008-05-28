@@ -373,10 +373,15 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 end;
 
 procedure HedgehogChAngle(Gear: PGear);
+var da: LongWord;
 begin
-if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle > CurMinAngle) then dec(Gear^.Angle)
+with PHedgehog(Gear^.Hedgehog)^ do
+	if (Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
+	and ((Gear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
+
+if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle - da >= CurMinAngle) then dec(Gear^.Angle, da)
 else
-if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle < CurMaxAngle) then inc(Gear^.Angle);
+if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da);
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;
