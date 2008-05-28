@@ -605,7 +605,8 @@ begin
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
 		case amt of
-			amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+			amBazooka,
+			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
@@ -821,6 +822,7 @@ while Gear<>nil do
                     end;
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
           gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+          gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
               end;
       Gear:= Gear^.NextGear
       end;
@@ -989,7 +991,7 @@ if (GameFlags and gfForts) <> 0 then
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
 								FindPlace(Gear, false, t, t + 1024);
-								Gear^.Pos:= GetRandom(19);
+								Gear^.Pos:= GetRandom(19)
 								end;
 		inc(t, 1024)
 		end
@@ -1012,6 +1014,7 @@ if (GameFlags and gfForts) <> 0 then
 		begin
 		i:= GetRandom(Count);
 		FindPlace(ar[i], false, 0, 2048);
+		ar[i]^.Pos:= GetRandom(19);
 		ar[i]:= ar[Count - 1];
 		dec(Count)
 		end
