@@ -22,7 +22,7 @@
 00:19=Teletrasporto
 00:20=Cambia Hedgehog
 00:21=Granata a grappolo
-00:22=Spintarella
+00:22=Frusta
 
 01:00=Combattiamo!
 01:01=Round in parità
