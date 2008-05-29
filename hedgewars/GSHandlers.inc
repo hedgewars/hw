@@ -1352,23 +1352,30 @@ end;
 procedure doStepMortar(Gear: PGear);
 var dX, dY: hwFloat;
     i: LongInt;
+    dxn, dyn: boolean;
 begin
 AllInactive:= false;
+dxn:= Gear^.dX.isNegative;
+dyn:= Gear^.dY.isNegative;
+
 doStepFallingGear(Gear);
 if (Gear^.State and gstCollision) <> 0 then
 	begin
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
-	
+
+	Gear^.dX.isNegative:= not dxn;
+	Gear^.dY.isNegative:= not dyn;
 	for i:= 0 to 4 do
 		begin
-		dX:= - Gear^.dX + (GetRandom - _0_5) * _0_03;
-		dY:= - Gear^.dY + (GetRandom - _0_5) * _0_03;
+		dX:= Gear^.dX + (GetRandom - _0_5) * _0_03;
+		dY:= Gear^.dY + (GetRandom - _0_5) * _0_03;
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 0);
 		end;
 	
 	DeleteGear(Gear);
 	exit
 	end;
+
 if (GameTicks and $3F) = 0 then
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
 end;
