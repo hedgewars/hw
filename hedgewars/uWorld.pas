@@ -138,7 +138,7 @@ with CurrentHedgehog^ do
         if Ammo^[Slot, Pos].Count > 0 then
            begin
            DrawTexture(AMxCurr + 10, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
-           if Ammo^[Slot, Pos].Count < 10 then
+           if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
               DrawTexture(AMxCurr + 175, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
            if bSelected then
               begin

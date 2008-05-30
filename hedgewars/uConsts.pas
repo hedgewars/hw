@@ -201,7 +201,7 @@ const
       ammoprop_AltAttack    = $00000200;
       ammoprop_AltUse       = $00000400;
 
-      AMMO_INFINITE = High(LongWord);
+      AMMO_INFINITE = 9;
 
       EXPLAllDamageInRadius = $00000001;
       EXPLAutoSound         = $00000002;
