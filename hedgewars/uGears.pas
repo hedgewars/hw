@@ -663,12 +663,20 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
 
 if defaultPos then
+	begin
 	DrawRotatedF(sprHHIdle,
 		hwRound(Gear^.X) + 1 + WorldDx,
 		hwRound(Gear^.Y) - 3 + WorldDy,
 		(RealTicks div 128 + Gear^.Pos) mod 19,
 		hwSign(Gear^.dX),
 		0);
+	DrawRotatedF(sprHat,
+		hwRound(Gear^.X) + 1 + WorldDx,
+		hwRound(Gear^.Y) - 8 + WorldDy,
+		(RealTicks div 128 + Gear^.Pos) mod 19,
+		hwSign(Gear^.dX),
+		0);
+	end;
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	if (Gear^.State{ and not gstAnimation}) = 0 then

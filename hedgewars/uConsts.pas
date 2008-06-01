@@ -29,7 +29,7 @@ type
 
      TPathType  = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
                    ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-                   ptLocale, ptAmmoMenu, ptHedgehog, ptVoices);
+                   ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats);
 
      TSprite    = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
                    sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
@@ -44,7 +44,8 @@ type
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
-                   sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft);
+                   sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
+                   sprHat);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -253,7 +254,8 @@ const
                                                'Locale',                        // ptLocale
                                                'Graphics/AmmoMenu',             // ptAmmoMenu
                                                'Graphics/Hedgehog',             // ptHedgehog
-                                               'Sounds/voices'                  // ptVoices
+                                               'Sounds/voices',                 // ptVoices
+                                               'Graphics/Hats'                  // ptHats
                                                );
 
       SpritesData: array[TSprite] of record
@@ -389,7 +391,9 @@ const
                      (FileName:     'Mortar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  16; Height: 16; saveSurf: false),// sprMortar
                      (FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  16; Height: 16; saveSurf: false) // sprTurnsLeft
+                      Width:  16; Height: 16; saveSurf: false),// sprTurnsLeft
+                     (FileName:    'Samurai'; Path: ptHats    ; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprHat
                      );
 
       Soundz: array[TSound] of record

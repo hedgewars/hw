@@ -310,7 +310,7 @@ RegisterVariable('slot'    , vtCommand, @chSlot         , false);
 RegisterVariable('put'     , vtCommand, @chPut          , false);
 RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
 RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
-//RegisterVariable('fullscr' , vtCommand, @chFullScr      , true );
+RegisterVariable('fullscr' , vtCommand, @chFullScr      , true );
 RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
 RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
 RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
