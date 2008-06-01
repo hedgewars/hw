@@ -122,7 +122,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
           _10000: hwFloat = (isNegative: false; QWordValue:  4294967296 * 10000);
 
          cLittle: hwFloat = (isNegative: false; QWordValue:           1);
-         cHHKick: hwFloat = (isNegative: false; QWordValue:   128849018);  // _0_03
+         cHHKick: hwFloat = (isNegative: false; QWordValue:    42949673);  // _0_01
 {$WARNINGS ON}
 {$ENDIF}
 

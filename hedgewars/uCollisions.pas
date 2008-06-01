@@ -194,6 +194,9 @@ TestCollisionXKick:= flag;
 if flag then
    begin
    if hwAbs(Gear^.dX) < cHHKick then exit;
+   if (Gear^.State and gstHHJumping <> 0)
+   and (hwAbs(Gear^.dX) < _0_4) then exit;
+
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
 
@@ -242,6 +245,10 @@ TestCollisionYKick:= flag;
 if flag then
    begin
    if hwAbs(Gear^.dY) < cHHKick then exit(true);
+   if (Gear^.State and gstHHJumping <> 0)
+   and (not Gear^.dY.isNegative)
+   and (Gear^.dY < _0_4) then exit;
+
    mx:= hwRound(Gear^.X);
    my:= hwRound(Gear^.Y);
 
