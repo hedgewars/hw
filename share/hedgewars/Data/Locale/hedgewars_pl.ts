@@ -348,7 +348,7 @@
     <name>QLabel</name>
     <message>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
@@ -417,6 +417,18 @@
     <message>
         <source>Server port:</source>
         <translation>Port serwera:</translation>
+    </message>
+    <message>
+        <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
+        <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Odznaczenie za najlepszy strzał otrzymuje &lt;b&gt;%1&lt;/b&gt;, zabijając nim &lt;b&gt;%2&lt;/b&gt; przeciwników.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Wersja</translation>
     </message>
 </context>
 <context>
@@ -723,6 +735,10 @@ jeży</translation>
     <message>
         <source>quit</source>
         <translation>wyjście</translation>
+    </message>
+    <message>
+        <source>chat</source>
+        <translation>czat</translation>
     </message>
 </context>
 <context>
