@@ -146,7 +146,6 @@ with CurrentHedgehog^ do
         AttacksNum:= 0;
         Gear^.Message:= 0;
         Gear^.Z:= cHHZ;
-        SwitchNotHoldedAmmo(CurrentHedgehog^);
         RemoveGearFromList(Gear);
         InsertGearToList(Gear)
         end;

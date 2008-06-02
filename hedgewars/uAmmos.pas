@@ -138,14 +138,18 @@ end;
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-     begin
-     with Ammo^[CurSlot, CurAmmo] do
-          if Count <> AMMO_INFINITE then
-             begin
-             dec(Count);
-             if Count = 0 then PackAmmo(Ammo, CurSlot)
-             end
-     end
+	begin
+	with Ammo^[CurSlot, CurAmmo] do
+		if Count <> AMMO_INFINITE then
+			begin
+			dec(Count);
+			if Count = 0 then
+				begin
+				PackAmmo(Ammo, CurSlot);
+				SwitchNotHoldedAmmo(Hedgehog)
+				end
+			end
+	end
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
