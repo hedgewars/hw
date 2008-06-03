@@ -93,6 +93,11 @@
       <path>QTfrontend/moc_weaponItem.cxx</path>
       <path>bin/Makefile</path>
       <path>bin/checkstack.pas</path>
+      <path>CMakeFiles</path>
+      <path>CMakeFiles/CompilerIdC</path>
+      <path>CMakeFiles/CompilerIdC/CMakeCCompilerId.c</path>
+      <path>CMakeFiles/CompilerIdCXX</path>
+      <path>CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp</path>
     </blacklist>
     <general>
       <activedir/>
