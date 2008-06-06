@@ -681,7 +681,7 @@ if defaultPos then
 with PHedgehog(Gear^.Hedgehog)^ do
 	if (Gear^.State{ and not gstAnimation}) = 0 then
 	begin
-	t:= hwRound(Gear^.Y) - cHHRadius - 10 + WorldDy;
+	t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
 	if (cTagsMask and 1) <> 0 then
 		begin
 		dec(t, HealthTagTex^.h + 2);
