@@ -740,7 +740,7 @@ CheckCollision(Gear);
 if (Gear^.State and gstCollision) <> 0 then
 	begin
 	Gear^.doStep:= @doStepRopeWork;
-	with HHGear^ do State:= State and not gstAttacking;
+	with HHGear^ do State:= State and not (gstAttacking or gstHHHJump);
 
 	OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
 	ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
