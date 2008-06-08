@@ -212,61 +212,60 @@ end;
 
 procedure NetGetNextCmd;
 var tmpflag: boolean;
-    s: shortstring;
+	s: shortstring;
 begin
-while (headcmd <> nil) and (headcmd^.cmd = 's') do
-      begin
-      s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-      AddChatString(s);
-      WriteLnToConsole(s);
-      RemoveCmd
-      end;
+tmpflag:= true;
+
+while (headcmd <> nil) and ((GameTicks = headcmd^.Time) or (headcmd^.cmd = 's')) do
+	begin
+	tmpflag:= true;
+	case headcmd^.cmd of
+		'L': ParseCommand('+left', true);
+		'l': ParseCommand('-left', true);
+		'R': ParseCommand('+right', true);
+		'r': ParseCommand('-right', true);
+		'U': ParseCommand('+up', true);
+		'u': ParseCommand('-up', true);
+		'D': ParseCommand('+down', true);
+		'd': ParseCommand('-down', true);
+		'A': ParseCommand('+attack', true);
+		'a': ParseCommand('-attack', true);
+		'S': ParseCommand('switch', true);
+		'j': ParseCommand('ljump', true);
+		'J': ParseCommand('hjump', true);
+		',': ParseCommand('skip', true);
+		's': begin
+			s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+			AddChatString(s);
+			WriteLnToConsole(s)
+			end;
+		'N': begin
+			tmpflag:= false;
+			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(headcmd^.Time)){$ENDIF}
+			end;
+		'p': begin
+			TargetPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)));
+			TargetPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)));
+			ParseCommand('put', true)
+			end;
+		'P': begin
+			CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)) + WorldDx);
+			CursorPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)) + WorldDy);
+			end;
+		'w': ParseCommand('setweap ' + headcmd^.str[2], true);
+		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
+		#128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
+		end;
+	RemoveCmd
+	end;
 
 if (headcmd <> nil) then
-   TryDo(GameTicks <= headcmd^.Time,
-         'oops, queue error. in buffer: ' + headcmd^.cmd +
-         ' (' + inttostr(GameTicks) + ' > ' +
-         inttostr(headcmd^.Time) + ')',
-         true);
+	TryDo(GameTicks < headcmd^.Time,
+			'oops, queue error. in buffer: ' + headcmd^.cmd +
+			' (' + inttostr(GameTicks) + ' > ' +
+			inttostr(headcmd^.Time) + ')',
+			true);
 
-tmpflag:= true;
-while (headcmd <> nil) and (GameTicks = headcmd^.Time) do
-   begin
-   tmpflag:= true;
-   case headcmd^.cmd of
-        'L': ParseCommand('+left', true);
-        'l': ParseCommand('-left', true);
-        'R': ParseCommand('+right', true);
-        'r': ParseCommand('-right', true);
-        'U': ParseCommand('+up', true);
-        'u': ParseCommand('-up', true);
-        'D': ParseCommand('+down', true);
-        'd': ParseCommand('-down', true);
-        'A': ParseCommand('+attack', true);
-        'a': ParseCommand('-attack', true);
-        'S': ParseCommand('switch', true);
-        'j': ParseCommand('ljump', true);
-        'J': ParseCommand('hjump', true);
-        ',': ParseCommand('skip', true);
-        'N': begin
-             tmpflag:= false;
-             {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(headcmd^.Time)){$ENDIF}
-             end;
-        'p': begin
-             TargetPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)));
-             TargetPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)));
-             ParseCommand('put', true)
-             end;
-        'P': begin
-             CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X)) + WorldDx);
-             CursorPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)) + WorldDy);
-             end;
-        'w': ParseCommand('setweap ' + headcmd^.str[2], true);
-        '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
-        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
-        end;
-   RemoveCmd
-   end;
 isInLag:= (headcmd = nil) and tmpflag
 end;
 
