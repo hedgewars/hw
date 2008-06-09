@@ -992,7 +992,7 @@ while i > 0 do
 					t^.ar[i]^.Active:= true;
 					t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
 
-(*					if TestCollisionXwithGear(t^.ar[i], hwSign(t^.ar[i]^.dX)) then
+					if TestCollisionXwithGear(t^.ar[i], hwSign(t^.ar[i]^.dX)) then
 						begin
 						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -3, hwSign(t^.ar[i]^.dX))
 							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
@@ -1001,7 +1001,7 @@ while i > 0 do
 						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -1, hwSign(t^.ar[i]^.dX))
 							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
 						end;
-*)					
+					
 					FollowGear:= t^.ar[i]
 					end;
 		end
