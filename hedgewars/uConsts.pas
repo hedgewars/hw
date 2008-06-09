@@ -71,7 +71,7 @@ type
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder, amTeleport, amSwitch, amMortar);
+                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze);
 
      THWFont    = (fnt16, fntBig, fntSmall);
 
@@ -189,7 +189,7 @@ const
       gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack;
 
       cMaxSlotIndex       = 8;
-      cMaxSlotAmmoIndex   = 2;
+      cMaxSlotAmmoIndex   = 3;
 
       ammoprop_Timerable    = $00000001;
       ammoprop_Power        = $00000002;
@@ -873,13 +873,31 @@ const
                                    Probability: 100;
                                    NumberInCase: 5;
                                    Ammo: (Propz: 0;
-                                          Count: 5;
+                                          Count: 4;
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           Pos: 0;
                                           AmmoType: amMortar);
                                    Slot: 1;
                                    TimeAfterTurn: 3000;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   isDamaging: true;
+                                   SkipTurns: 0;
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
+                                  (NameId: sidKamikaze;
+                                   NameTex: nil;
+                                   Probability: 100;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: 0;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amKamikaze);
+                                   Slot: 3;
+                                   TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;
                                    isDamaging: true;
