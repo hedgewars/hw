@@ -986,7 +986,10 @@ var HHGear: PGear;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
+DeleteCI(HHGear);
+
 AmmoShove(Gear, 30, 115);
+
 HHGear^.State:= HHGear^.State and not gstNoDamage;
 Gear^.Timer:= 250;
 Gear^.doStep:= @doStepIdle
@@ -999,6 +1002,7 @@ var HHGear: PGear;
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
+DeleteCI(HHGear);
 
 for i:= 0 to 3 do
 	begin
