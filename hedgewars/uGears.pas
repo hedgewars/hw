@@ -973,28 +973,39 @@ begin
 t:= CheckGearsCollision(Ammo);
 i:= t^.Count;
 while i > 0 do
-    begin
-    dec(i);
-    if (t^.ar[i]^.State and gstNoDamage) = 0 then
-       case t^.ar[i]^.Kind of
-           gtHedgehog,
-               gtMine,
-             gtTarget,
-               gtCase: begin
-                       inc(t^.ar[i]^.Damage, Damage);
+	begin
+	dec(i);
+	if (t^.ar[i]^.State and gstNoDamage) = 0 then
+		case t^.ar[i]^.Kind of
+			gtHedgehog,
+			gtMine,
+			gtTarget,
+			gtCase: begin
+					inc(t^.ar[i]^.Damage, Damage);
 
-                       if t^.ar[i]^.Kind = gtHedgehog then
-                          AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
+					if t^.ar[i]^.Kind = gtHedgehog then
+						AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, t^.ar[i]);
 
-                       DeleteCI(t^.ar[i]);
-                       t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
-                       t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
-                       t^.ar[i]^.Active:= true;
-                       t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
-                       FollowGear:= t^.ar[i]
-                       end;
-           end
-    end;
+					DeleteCI(t^.ar[i]);
+					t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
+					t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
+					t^.ar[i]^.Active:= true;
+					t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
+
+(*					if TestCollisionXwithGear(t^.ar[i], hwSign(t^.ar[i]^.dX)) then
+						begin
+						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -3, hwSign(t^.ar[i]^.dX))
+							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
+						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -2, hwSign(t^.ar[i]^.dX))
+							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
+						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -1, hwSign(t^.ar[i]^.dX))
+							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
+						end;
+*)					
+					FollowGear:= t^.ar[i]
+					end;
+		end
+	end;
 SetAllToActive
 end;
 
