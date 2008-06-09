@@ -54,7 +54,7 @@ type
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-                   gtWhip);
+                   gtWhip, gtKamikaze);
 
      TVisualGearType = (vgtFlake, vgtCloud);
 
@@ -890,7 +890,8 @@ const
                                    NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
-                                   Ammo: (Propz: 0;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_DontHold;
                                           Count: 1;
                                           NumPerTurn: 0;
                                           Timer: 0;

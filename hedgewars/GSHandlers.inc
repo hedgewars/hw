@@ -1383,3 +1383,79 @@ if (Gear^.State and gstCollision) <> 0 then
 if (GameTicks and $3F) = 0 then
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepKamikazeWork(Gear: PGear);
+const upd: Longword = 0;
+var i, x, y: LongWord;
+    oX, oY: hwFloat;
+    HHGear: PGear;
+begin
+AllInactive:= false;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.State:= HHGear^.State or gstNoDamage;
+DeleteCI(HHGear);
+
+i:= 2;
+oX:= Gear^.X;
+oY:= Gear^.Y;
+repeat
+	Gear^.X:= Gear^.X + HHGear^.dX;
+	Gear^.Y:= Gear^.Y + HHGear^.dY;
+	HHGear^.X:= Gear^.X;
+	HHGear^.Y:= Gear^.Y;
+
+	inc(Gear^.Damage, 2);
+
+	if TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
+		or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY)) then inc(Gear^.Damage, 3);
+
+	dec(i)
+until (i = 0) or (Gear^.Damage > Gear^.Health);
+addfilelog(inttostr(Gear^.Damage));
+
+inc(upd);
+if upd > 3 then
+	begin
+	AmmoShove(Gear, 30, 40);
+	
+	DrawTunnel(HHGear^.X - HHGear^.dX * 10,
+			HHGear^.Y - _3 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 5,
+			HHGear^.dX,
+			HHGear^.dY,
+			20 + cHHRadius * 2,
+			cHHRadius * 2 + 4);
+	
+	upd:= 0
+	end;
+
+if Gear^.Health < Gear^.Damage then
+	begin
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, EXPLAutoSound);
+	AfterAttack;
+	DeleteGear(Gear);
+	DeleteGear(HHGear);
+	end else
+	begin
+	dec(Gear^.Health, Gear^.Damage);
+	Gear^.Damage:= 0
+	end
+end;
+
+procedure doStepKamikaze(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+
+HHGear^.dX:= Gear^.dX;
+HHGear^.dY:= Gear^.dY;
+
+Gear^.dX:= SignAs(_0_45, Gear^.dX);
+Gear^.dY:= - _0_9;
+
+Gear^.doStep:= @doStepKamikazeWork
+end;
+
