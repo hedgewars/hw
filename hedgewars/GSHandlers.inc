@@ -1089,7 +1089,7 @@ SetLittle(HHGear^.dX);
 HHGear^.dY:= - _0_3;
 
 Gear^.X:= HHGear^.X;
-Gear^.dX:= SignAs(_0_45, HHGear^.dX);
+Gear^.dX:= SignAs(_0_45, Gear^.dX);
 Gear^.dY:= - _0_9;
 Gear^.doStep:= @doStepFirePunchWork;
 DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
