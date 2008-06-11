@@ -1449,6 +1449,7 @@ dec(Gear^.Timer);
 if Gear^.Timer = 0 then
 	begin
 	Gear^.Pos:= 1;
+	PlaySound(sndKamikaze, false);
 	Gear^.doStep:= @doStepKamikazeWork
 	end
 end;
