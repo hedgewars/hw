@@ -526,5 +526,6 @@ end;
 
 procedure chChat(var s: shortstring);
 begin
-GameState:= gsChat
+GameState:= gsChat;
+KeyPressChat(27)
 end;

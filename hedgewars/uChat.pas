@@ -25,12 +25,12 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 var UserNick: shortstring = '';
-	ChatVisibleCount: Longword = 7;
+	showAll: boolean = true;
 
 implementation
 uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
 
-const MaxStrIndex = 30;
+const MaxStrIndex = 27;
 
 type TChatLine = record
 		s: shortstring;
@@ -45,13 +45,17 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	InputStr: TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
-procedure SetLine(var cl: TChatLine; str: shortstring);
+procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
     r: TSDL_Rect;
     w, h: LongInt;
 begin
 if cl.Tex <> nil then
 	FreeTexture(cl.Tex);
+
+cl.s:= str;
+
+if isInput then str:= UserNick + '> ' + str + '_';
 
 TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
 
@@ -71,7 +75,6 @@ SDL_UpperBlit(strSurface, nil, resSurface, nil);
 
 SDL_FreeSurface(strSurface);
 
-cl.s:= str;
 cl.Time:= RealTicks + 12500;
 cl.Tex:= Surface2Tex(resSurface);
 SDL_FreeSurface(resSurface)
@@ -81,7 +84,7 @@ procedure AddChatString(s: shortstring);
 begin
 lastStr:= (lastStr + 1) mod (MaxStrIndex + 1);
 
-SetLine(Strs[lastStr], s);
+SetLine(Strs[lastStr], s, false);
 
 inc(visibleCount)
 end;
@@ -92,9 +95,14 @@ begin
 cnt:= 0;
 t:= 0;
 i:= lastStr;
-while (t < ChatVisibleCount)
-	and (Strs[i].Tex <> nil)
-	and (Strs[i].Time > RealTicks) do
+while
+	(
+			((t < 7) and (Strs[i].Time > RealTicks))
+		or
+			((t < MaxStrIndex) and showAll)
+	)
+	and
+		(Strs[i].Tex <> nil) do
 	begin
 	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Tex);
 	if i = 0 then i:= MaxStrIndex else dec(i);
@@ -119,13 +127,14 @@ if Key <> 0 then
 		8: if Length(InputStr.s) > 0 then
 				begin
 				InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-				SetLine(InputStr, InputStr.s)
+				SetLine(InputStr, InputStr.s, true)
 				end;
+		27: SetLine(InputStr, '', true);
 		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
 				ParseCommand('/say ' + InputStr.s, true);
-				SetLine(InputStr, '')
+				SetLine(InputStr, '', false)
 				end;
 			FreezeEnterKey;
 			GameState:= gsGame
@@ -147,7 +156,7 @@ if Key <> 0 then
 	utf8:= char(Key or firstByteMark[btw]) + utf8;
 
 	InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-	SetLine(InputStr, InputStr.s + utf8)
+	SetLine(InputStr, InputStr.s + utf8, true)
 	end
 end;
 
