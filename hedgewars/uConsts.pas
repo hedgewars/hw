@@ -23,7 +23,7 @@ uses SDLh, GL, uLocale;
 {$INCLUDE proto.inc}
 type
 
-     TGameState = (gsLandGen, gsStart, gsGame, gsConsole, gsChat, gsExit);
+     TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsExit);
 
      TGameType  = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
 
@@ -39,7 +39,7 @@ type
                    sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
                    sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
                    sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
-                   sprSwitch, sprParachute, sprTarget, sprRopeNode, sprConsoleBG,
+                   sprSwitch, sprParachute, sprTarget, sprRopeNode,
                    sprQuestion, sprPowerBar, sprWindBar, sprWindL, sprWindR,
                    sprFlake, sprHandRope, sprHandBazooka, sprHandShotgun,
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
@@ -346,8 +346,6 @@ const
                       Width:  32; Height: 32; saveSurf: false),// sprTarget
                      (FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:   6; Height:  6; saveSurf: false),// sprRopeNode
-                     (FileName:    'Console'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width: 256; Height:256; saveSurf: false),// sprConsoleBG
                      (FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprQuestion
                      (FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

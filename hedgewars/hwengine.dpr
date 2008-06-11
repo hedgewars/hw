@@ -89,7 +89,6 @@ case GameState of
               AssignHHCoords;
               AddMiscGears;
               StoreLoad;
-              AdjustColor(cConsoleSplitterColor);
               ResetKbd;
               SoundLoad;
               if GameType = gmtSave then
@@ -105,12 +104,6 @@ case GameState of
               DoGameTick(Lag);
               ProcessVisualGears(Lag);
               DrawWorld(Lag);
-              end;
-   gsConsole: begin
-              DoGameTick(Lag);
-              ProcessVisualGears(Lag);
-              DrawWorld(Lag);
-              DrawConsole(SDLPrimSurface);
               end;
       gsChat: begin
               DoGameTick(Lag);

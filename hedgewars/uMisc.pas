@@ -37,8 +37,6 @@ var isCursorVisible : boolean = false;
     cMaxAIThinkTime  : Longword = 9000;
 
     cCloudsNumber    : LongInt = 9;
-    cConsoleHeight   : LongInt = 320;
-    cConsoleYAdd     : LongInt = 0;
     cScreenWidth     : LongInt = 1024;
     cScreenHeight    : LongInt = 768;
     cBits            : LongInt = 16;
@@ -56,7 +54,6 @@ var isCursorVisible : boolean = false;
 
     cSkyColor     : Longword = 0;
     cWhiteColor   : Longword = $FFFFFFFF;
-    cConsoleSplitterColor : Longword = $FFFF0000;
     cColorNearBlack       : Longword = $FF000010;
     cExplosionBorderColor : LongWord = $808080;
 

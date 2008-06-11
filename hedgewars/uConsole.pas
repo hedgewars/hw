@@ -18,13 +18,12 @@
 
 unit uConsole;
 interface
-uses SDLh, uFloat;
+uses uFloat;
 {$INCLUDE options.inc}
 const isDeveloperMode: boolean = true;
 type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
-procedure DrawConsole(Surface: PSDL_Surface);
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
@@ -36,7 +35,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uTriggers, GL, uStats, uGame, uChat;
+     uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh;
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
@@ -51,8 +50,6 @@ type  PVariable = ^TVariable;
                   end;
       TTextLine = record
                   s: shortstring;
-                  tex: PTexture;
-                  updatetex: boolean;
                   end;
 
 var   ConsoleLines: array[byte] of TTextLine;
@@ -62,11 +59,7 @@ var   ConsoleLines: array[byte] of TTextLine;
 procedure SetLine(var tl: TTextLine; str: shortstring);
 begin
 with tl do
-     begin
      s:= str;
-     if tex <> nil then FreeTexture(tex);
-     updatetex:= true
-     end
 end;
 
 function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
@@ -114,45 +107,6 @@ if i>0 then
    while (b[0]<>#0) and (b[1]=#32) do Delete(b, 1, 1);
    byte(a[0]):= Pred(i)
    end else b:= '';
-end;
-
-procedure DrawConsole(Surface: PSDL_Surface);
-var x, y: LongInt;
-
-    procedure DrawLine(var tl: TTextLine; X, Y: LongInt);
-    var tmpSurface: PSDL_Surface;
-    begin
-    with tl do
-       begin
-       if updatetex then
-          begin
-          if s[0] <> #0 then
-             begin
-             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
-             tex:= Surface2Tex(tmpSurface);
-             SDL_FreeSurface(tmpSurface)
-             end else tex:= nil;
-          updatetex:= false
-          end;
-
-       if tex <> nil then
-          DrawTexture(X, Y, tex);
-       end
-    end;
-
-begin
-glEnable(GL_TEXTURE_2D);
-glEnable(GL_BLEND);
-
-for y:= 0 to cConsoleHeight div 256 + 1 do
-    for x:= 0 to cScreenWidth div 256 + 1 do
-        DrawSprite(sprConsoleBG, x * 256, cConsoleHeight - 256 - y * 256, 0);
-
-for y:= 0 to cConsoleHeight div Fontz[fnt16].Height do
-    DrawLine(ConsoleLines[(CurrLine - 1 - y + cLinesCount) mod cLinesCount], 4, cConsoleHeight - (y + 1) * (Fontz[fnt16].Height + 2));
-
-glDisable(GL_BLEND);
-glDisable(GL_TEXTURE_2D);
 end;
 
 procedure WriteToConsole(s: shortstring);
@@ -277,7 +231,6 @@ RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
 RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
 RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
 RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
-RegisterVariable('c_height', vtLongInt, @cConsoleHeight , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);

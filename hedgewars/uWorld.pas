@@ -276,7 +276,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
          if Tex <> nil then
             begin
-            DrawCentered(cScreenWidth div 2, i + cConsoleYAdd, Tex);
+            DrawCentered(cScreenWidth div 2, i, Tex);
             inc(i, Tex^.h + 2);
             if EndTime <= RealTicks then
                begin
@@ -310,7 +310,7 @@ for t:= 0 to Pred(TeamsCount) do
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32  + cConsoleYAdd, (RealTicks shr 7) mod 12);
+if isInLag then DrawSprite(sprLag, 32, 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
 DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0);

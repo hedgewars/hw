@@ -25,11 +25,12 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 var UserNick: shortstring = '';
+	ChatVisibleCount: Longword = 7;
 
 implementation
 uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
 
-const MaxStrIndex = 7;
+const MaxStrIndex = 30;
 
 type TChatLine = record
 		s: shortstring;
@@ -91,11 +92,11 @@ begin
 cnt:= 0;
 t:= 0;
 i:= lastStr;
-while (t <= MaxStrIndex)
+while (t < ChatVisibleCount)
 	and (Strs[i].Tex <> nil)
 	and (Strs[i].Time > RealTicks) do
 	begin
-	DrawTexture(8, (visibleCount - t) * 16 - 6 + cConsoleYAdd, Strs[i].Tex);
+	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Tex);
 	if i = 0 then i:= MaxStrIndex else dec(i);
 	inc(cnt);
 	inc(t)
@@ -105,7 +106,7 @@ visibleCount:= cnt;
 
 if (GameState = gsChat)
 	and (InputStr.Tex <> nil) then
-	DrawTexture(11, visibleCount * 16 + 10 + cConsoleYAdd, InputStr.Tex);
+	DrawTexture(11, visibleCount * 16 + 10, InputStr.Tex);
 end;
 
 procedure KeyPressChat(Key: Longword);
