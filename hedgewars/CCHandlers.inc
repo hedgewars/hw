@@ -529,3 +529,8 @@ begin
 GameState:= gsChat;
 KeyPressChat(27)
 end;
+
+procedure chHistory(var s: shortstring);
+begin
+uChat.showAll:= not uChat.showAll
+end;

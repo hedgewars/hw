@@ -114,7 +114,7 @@ visibleCount:= cnt;
 
 if (GameState = gsChat)
 	and (InputStr.Tex <> nil) then
-	DrawTexture(11, visibleCount * 16 + 10, InputStr.Tex);
+	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
 end;
 
 procedure KeyPressChat(Key: Longword);

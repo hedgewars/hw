@@ -242,6 +242,7 @@ RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
 RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
+RegisterVariable('history' , vtCommand, @chHistory      , true );
 RegisterVariable('chat'    , vtCommand, @chChat         , true );
 RegisterVariable('say'     , vtCommand, @chSay          , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
