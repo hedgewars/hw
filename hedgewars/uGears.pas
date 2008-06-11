@@ -562,6 +562,23 @@ if (Gear^.State and gstHHDriven) <> 0 then
 					end;
 				gtPickHammer,
 				gtTeleport: defaultPos:= false;
+				gtKamikaze: begin
+							if CurAmmoGear^.Pos = 0 then
+								DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+										hwSign(Gear^.dX),
+										1,
+										6,
+										0)
+							else
+								DrawRotatedF(sprKamikaze,
+										hwRound(Gear^.X) + WorldDx,
+										hwRound(Gear^.Y) + WorldDy,
+										CurAmmoGear^.Pos - 1,
+										1,
+										DxDy2Angle(Gear^.dY, Gear^.dX));
+										
+							defaultPos:= false
+							end;
 			end;
 
 			case CurAmmoGear^.Kind of
@@ -632,6 +649,11 @@ if (Gear^.State and gstHHDriven) <> 0 then
 							3,
 							0);
 				amTeleport: DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, 0, hwSign(Gear^.dX), 0);
+				amKamikaze: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+							hwSign(Gear^.dX),
+							1,
+							5,
+							0);
 			else
 				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 					hwSign(Gear^.dX),

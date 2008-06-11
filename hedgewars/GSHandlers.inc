@@ -1387,8 +1387,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKamikazeWork(Gear: PGear);
 const upd: Longword = 0;
-var i, x, y: LongWord;
-    oX, oY: hwFloat;
+var i: LongWord;
     HHGear: PGear;
 begin
 AllInactive:= false;
@@ -1398,8 +1397,6 @@ HHGear^.State:= HHGear^.State or gstNoDamage;
 DeleteCI(HHGear);
 
 i:= 2;
-oX:= Gear^.X;
-oY:= Gear^.Y;
 repeat
 	Gear^.X:= Gear^.X + HHGear^.dX;
 	Gear^.Y:= Gear^.Y + HHGear^.dY;
@@ -1418,6 +1415,8 @@ addfilelog(inttostr(Gear^.Damage));
 inc(upd);
 if upd > 3 then
 	begin
+	if Gear^.Health < 1500 then Gear^.Pos:= 2;
+	
 	AmmoShove(Gear, 30, 40);
 	
 	DrawTunnel(HHGear^.X - HHGear^.dX * 10,
@@ -1443,6 +1442,17 @@ if Gear^.Health < Gear^.Damage then
 	end
 end;
 
+procedure doStepKamikazeIdle(Gear: PGear);
+begin
+AllInactive:= false;
+dec(Gear^.Timer);
+if Gear^.Timer = 0 then
+	begin
+	Gear^.Pos:= 1;
+	Gear^.doStep:= @doStepKamikazeWork
+	end
+end;
+
 procedure doStepKamikaze(Gear: PGear);
 var HHGear: PGear;
 begin
@@ -1456,6 +1466,8 @@ HHGear^.dY:= Gear^.dY;
 Gear^.dX:= SignAs(_0_45, Gear^.dX);
 Gear^.dY:= - _0_9;
 
-Gear^.doStep:= @doStepKamikazeWork
+Gear^.Timer:= 550;
+
+Gear^.doStep:= @doStepKamikazeIdle
 end;
 
