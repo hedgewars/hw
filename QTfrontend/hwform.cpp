@@ -619,6 +619,7 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 	{
 		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
 		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
+		demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
 		filename = cfgdir->absolutePath() + "/Demos/LastRound.hwd_" + *cProtoVer;
 	} else
 	{
