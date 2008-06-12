@@ -25,7 +25,7 @@ procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 var UserNick: shortstring = '';
-	showAll: boolean = true;
+	showAll: boolean = false;
 
 implementation
 uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
