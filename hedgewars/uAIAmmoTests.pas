@@ -30,6 +30,7 @@ type TAttackParams = record
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -65,7 +66,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
                   (proc: nil;              flags: 0), // amGirder
                   (proc: nil;              flags: amtest_OnTurn), // amTeleport
                   (proc: nil;              flags: 0), // amSwitch
-                  (proc: nil;              flags: 0), // amMortar
+                  (proc: @TestMortar;      flags: 0), // amMortar
                   (proc: nil;              flags: 0)  // amKamikaze
                   );
 
@@ -159,7 +160,7 @@ var Vx, Vy, r: hwFloat;
     EX:= hwRound(x);
     EY:= hwRound(y);
     if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 101)
-              else CheckTrace:= Low(LongInt)
+              else CheckTrace:= BadTurn
     end;
 
 begin
@@ -187,6 +188,80 @@ repeat
      end
 until (TestTime = 4000);
 TestGrenade:= Result
+end;
+
+function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+const tDelta = 24;
+var Vx, Vy, r: hwFloat;
+    Score, EX, EY, Result: LongInt;
+    TestTime: Longword;
+
+	function CheckTrace: LongInt;
+	var x, y, dY: hwFloat;
+	begin
+	x:= Me^.X;
+	y:= Me^.Y;
+	dY:= -Vy;
+	repeat
+		x:= x + Vx;
+		y:= y + dY;
+		dY:= dY + cGravity;
+		EX:= hwRound(x);
+		EY:= hwRound(y);
+	until TestColl(EX, EY, 5) or (EY > 1000);
+	if EY < 1000 then
+		begin
+		CheckTrace:= RateExplosion(Me, EX, EY, 91);
+		if (CheckTrace = 0)
+			and (not dY.isNegative) then CheckTrace:= - abs(Targ.Y - EY) div 32;
+		end
+	else
+		CheckTrace:= BadTurn
+	end;
+
+	function Solve: LongWord;
+	var A, B, D, T: hwFloat;
+		C: LongInt;
+	begin
+	A:= hwSqr(cGravity) * _0_25;
+	B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
+	C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
+	D:= hwSqr(B) - (A * C * 4);
+	if D.isNegative = false then
+		begin
+		D:= ( - B + hwSqrt(D)) * _0_5 / A;
+		if D.isNegative = false then
+			T:= hwSqrt(D)
+		else
+			T:= _0;
+		Solve:= hwRound(T)
+		end else Solve:= 0
+	end;
+
+begin
+Result:= BadTurn;
+ap.ExplR:= 0;
+
+
+TestTime:= Solve;
+
+if TestTime = 0 then exit;
+
+	Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
+	Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
+
+	Score:= CheckTrace;
+	if Result < Score then
+		begin
+		ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+		ap.Power:= 1;
+		ap.ExplR:= 100;
+		ap.ExplX:= EX;
+		ap.ExplY:= EY;
+		Result:= Score
+		end;
+
+TestMortar:= Result
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;

@@ -303,6 +303,7 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_3
                 end;
       gtMortar: begin
+                Result^.Radius:= 4;
                 Result^.Elasticity:= _0_2;
                 Result^.Friction:= _0_08
                 end;
@@ -706,7 +707,9 @@ if defaultPos then
 	end;
 
 with PHedgehog(Gear^.Hedgehog)^ do
-	if (Gear^.State{ and not gstAnimation}) = 0 then
+	begin
+	if ((Gear^.State{ and not gstAnimation}) = 0)
+		or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
 	begin
 	t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
 	if (cTagsMask and 1) <> 0 then
@@ -724,8 +727,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		dec(t, Team^.NameTagTex^.h + 2);
 		DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
 		end
-	end else // Current hedgehog
-	if (Gear^.State and gstHHDriven) <> 0 then
+	end;
+	if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
 		begin
 		if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
 			DrawSprite(sprFinger, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 64 + WorldDy,
@@ -744,7 +747,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 							Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle) * 60) + WorldDy, 0,
 							hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle)
 					end
-			end;
+			end
+	end
 end;
 
 procedure DrawGears;

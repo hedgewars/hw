@@ -98,6 +98,23 @@
       <path>CMakeFiles/CompilerIdC/CMakeCCompilerId.c</path>
       <path>CMakeFiles/CompilerIdCXX</path>
       <path>CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp</path>
+      <path>Makefile</path>
+      <path>QTfrontend/qrc_hedgewars.cxx</path>
+      <path>misc</path>
+      <path>misc/fbsd-port</path>
+      <path>misc/fbsd-port/Makefile</path>
+      <path>share/Makefile</path>
+      <path>share/hedgewars/Data/Fonts/Makefile</path>
+      <path>share/hedgewars/Data/Forts/Makefile</path>
+      <path>share/hedgewars/Data/Graphics/Makefile</path>
+      <path>share/hedgewars/Data/Locale/Makefile</path>
+      <path>share/hedgewars/Data/Makefile</path>
+      <path>share/hedgewars/Data/Maps/Makefile</path>
+      <path>share/hedgewars/Data/Music/Makefile</path>
+      <path>share/hedgewars/Data/Sounds/Makefile</path>
+      <path>share/hedgewars/Data/Themes/Makefile</path>
+      <path>share/hedgewars/Data/Trainings/Makefile</path>
+      <path>share/hedgewars/Makefile</path>
     </blacklist>
     <general>
       <activedir/>
