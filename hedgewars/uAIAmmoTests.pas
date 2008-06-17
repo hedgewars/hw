@@ -198,54 +198,67 @@ var Vx, Vy, r: hwFloat;
 
 	function CheckTrace: LongInt;
 	var x, y, dY: hwFloat;
+		Result: LongInt;
 	begin
-	x:= Me^.X;
-	y:= Me^.Y;
-	dY:= -Vy;
-	repeat
-		x:= x + Vx;
-		y:= y + dY;
-		dY:= dY + cGravity;
-		EX:= hwRound(x);
-		EY:= hwRound(y);
-	until TestColl(EX, EY, 5) or (EY > 1000);
-	if EY < 1000 then
-		begin
-		CheckTrace:= RateExplosion(Me, EX, EY, 91);
-		if (CheckTrace = 0)
-			and (not dY.isNegative) then CheckTrace:= - abs(Targ.Y - EY) div 32;
-		end
-	else
-		CheckTrace:= BadTurn
+		x:= Me^.X;
+		y:= Me^.Y;
+		dY:= -Vy;
+		
+		repeat
+			x:= x + Vx;
+			y:= y + dY;
+			dY:= dY + cGravity;
+			EX:= hwRound(x);
+			EY:= hwRound(y);
+		until TestColl(EX, EY, 5) or (EY > 1000);
+		
+		if EY < 1000 then
+			begin
+			Result:= RateExplosion(Me, EX, EY, 91);
+			if (Result = 0) then
+				if (dY > _0_15) then
+					begin
+					Result:= - abs(Targ.Y - EY) div 32;
+					AddFileLog('dY > _0_15');
+					end
+				else
+					Result:= BadTurn
+			else if (Result < 0) then Result:= BadTurn
+			end
+		else
+			Result:= BadTurn;
+
+		CheckTrace:= Result
 	end;
 
 	function Solve: LongWord;
 	var A, B, D, T: hwFloat;
 		C: LongInt;
 	begin
-	A:= hwSqr(cGravity) * _0_25;
-	B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
-	C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
-	D:= hwSqr(B) - (A * C * 4);
-	if D.isNegative = false then
-		begin
-		D:= ( - B + hwSqrt(D)) * _0_5 / A;
+		A:= hwSqr(cGravity) * _0_25;
+		B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
+		C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
+		D:= hwSqr(B) - (A * C * 4);
 		if D.isNegative = false then
-			T:= hwSqrt(D)
-		else
-			T:= _0;
-		Solve:= hwRound(T)
-		end else Solve:= 0
+			begin
+			D:= ( - B + hwSqrt(D)) * _0_5 / A;
+			if D.isNegative = false then
+				T:= hwSqrt(D)
+			else
+				T:= _0;
+			Solve:= hwRound(T)
+			end else Solve:= 0
 	end;
 
 begin
 Result:= BadTurn;
 ap.ExplR:= 0;
 
+if (Level > 2) then exit(BadTurn);
 
 TestTime:= Solve;
 
-if TestTime = 0 then exit;
+if TestTime = 0 then exit(BadTurn);
 
 	Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
 	Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
