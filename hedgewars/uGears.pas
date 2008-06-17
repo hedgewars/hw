@@ -203,7 +203,7 @@ case Kind of
  gtClusterBomb: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
-                Result^.Friction:= _0_995;
+                Result^.Friction:= _0_96;
                 end;
     gtHedgehog: begin
                 Result^.Radius:= cHHRadius;
