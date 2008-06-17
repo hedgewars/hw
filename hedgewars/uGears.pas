@@ -1082,6 +1082,7 @@ if (GameFlags and gfForts) <> 0 then
 		begin
 		i:= GetRandom(Count);
 		FindPlace(ar[i], false, 0, 2048);
+		ar[i]^.dX.isNegative:= ar[i]^.X > _1024;
 		ar[i]^.Pos:= GetRandom(19);
 		ar[i]:= ar[Count - 1];
 		dec(Count)
