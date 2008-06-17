@@ -192,7 +192,7 @@ end;
 
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 const tDelta = 24;
-var Vx, Vy, r: hwFloat;
+var Vx, Vy: hwFloat;
     Score, EX, EY, Result: LongInt;
     TestTime: Longword;
 

@@ -54,7 +54,7 @@ implementation
 uses uTeams, uMisc, uLand, uCollisions;
 const KillScore = 200;
       MAXBONUS = 1024;
-      friendlyfactor: Longword = 300;
+      friendlyfactor: LongInt = 300;
 
 type TBonus = record
               X, Y: LongInt;

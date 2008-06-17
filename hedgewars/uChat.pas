@@ -120,7 +120,7 @@ end;
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
-    utf8, s: shortstring;
+    utf8: shortstring;
 begin
 if Key <> 0 then
 	case Key of
