@@ -546,7 +546,7 @@ if (Gear^.State and gstMoving) <> 0 then
 
    doStepHedgehogMoving(Gear);
 
-   if (Gear^.State and gstMoving) = 0 then
+   if ((Gear^.State and (gstMoving or gstDrowning)) = 0) then
       begin
       AddGearCI(Gear);
       StepTicks:= 350
@@ -569,7 +569,7 @@ prevState:= Gear^.State;
 
 doStepHedgehogMoving(Gear);
 
-if (Gear^.State and gstMoving) <> 0 then
+if (Gear^.State and (gstMoving or gstDrowning)) <> 0 then
 	begin
 	AllInactive:= false;
 	exit

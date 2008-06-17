@@ -510,184 +510,195 @@ if (Gear^.State and gstHHDeath) <> 0 then
 	DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
 	exit
 	end;
+
 defaultPos:= true;
+
+if (Gear^.State and gstDrowning) <> 0 then
+	begin
+	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			1,
+			7,
+			0);
+	defaultPos:= false
+	end else
 
 if (Gear^.State and gstHHDriven) <> 0 then
 	begin
-		hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
-		hy:= hwRound(Gear^.Y) - 2 + WorldDy;
-		aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
+	hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
+	hy:= hwRound(Gear^.Y) - 2 + WorldDy;
+	aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
 
-		if CurAmmoGear <> nil then
-		begin
-			case CurAmmoGear^.Kind of
-				gtShotgunShot: if (CurAmmoGear^.State and gstAnimation <> 0) then
-						DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
-					else
-						DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-				gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
-				gtRope: begin
-					if Gear^.X < CurAmmoGear^.X then
-						begin
-						dAngle:= 0;
-						m:= 1
-						end else
-						begin
-						dAngle:= 180;
-						m:= -1
+	if CurAmmoGear <> nil then
+	begin
+		case CurAmmoGear^.Kind of
+			gtShotgunShot: if (CurAmmoGear^.State and gstAnimation <> 0) then
+					DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
+				else
+					DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			gtRope: begin
+				if Gear^.X < CurAmmoGear^.X then
+					begin
+					dAngle:= 0;
+					m:= 1
+					end else
+					begin
+					dAngle:= 180;
+					m:= -1
+					end;
+				DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+						m,
+						1,
+						0,
+						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
+				defaultPos:= false
+				end;
+			gtBlowTorch: begin
+				DrawRotated(sprBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						3,
+						0);
+				defaultPos:= false
+				end;
+			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
+			gtFirePunch: begin
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						4,
+						0);
+				defaultPos:= false
+				end;
+			gtPickHammer,
+			gtTeleport: defaultPos:= false;
+			gtKamikaze: begin
+						if CurAmmoGear^.Pos = 0 then
+							DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+									hwSign(Gear^.dX),
+									1,
+									6,
+									0)
+						else
+							DrawRotatedF(sprKamikaze,
+									hwRound(Gear^.X) + WorldDx,
+									hwRound(Gear^.Y) + WorldDy,
+									CurAmmoGear^.Pos - 1,
+									1,
+									DxDy2Angle(Gear^.dY, Gear^.dX));
+
+						defaultPos:= false
 						end;
-					DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
-							m,
-							1,
-							0,
-							DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
-					defaultPos:= false
-					end;
-				gtBlowTorch: begin
-					DrawRotated(sprBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							1,
-							3,
-							0);
-					defaultPos:= false
-					end;
-				gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
-				gtFirePunch: begin
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							1,
-							4,
-							0);
-					defaultPos:= false
-					end;
-				gtPickHammer,
-				gtTeleport: defaultPos:= false;
-				gtKamikaze: begin
-							if CurAmmoGear^.Pos = 0 then
-								DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-										hwSign(Gear^.dX),
-										1,
-										6,
-										0)
-							else
-								DrawRotatedF(sprKamikaze,
-										hwRound(Gear^.X) + WorldDx,
-										hwRound(Gear^.Y) + WorldDy,
-										CurAmmoGear^.Pos - 1,
-										1,
-										DxDy2Angle(Gear^.dY, Gear^.dX));
-										
-							defaultPos:= false
-							end;
-			end;
+		end;
 
-			case CurAmmoGear^.Kind of
-				gtShotgunShot,
-				gtDEagleShot,
-				gtShover: begin
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							0,
-							4,
-							0);
-					defaultPos:= false
-				end
+		case CurAmmoGear^.Kind of
+			gtShotgunShot,
+			gtDEagleShot,
+			gtShover: begin
+				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						0,
+						4,
+						0);
+				defaultPos:= false
 			end
-		end else
+		end
+	end else
 
-		if ((Gear^.State and gstHHJumping) <> 0) then
+	if ((Gear^.State and gstHHJumping) <> 0) then
+	begin
+	if ((Gear^.State and gstHHHJump) <> 0) then
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			- hwSign(Gear^.dX),
+			1,
+			1,
+			0)
+		else
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			1,
+			1,
+			0);
+	defaultPos:= false
+	end else
+
+	if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
 		begin
-		if ((Gear^.State and gstHHHJump) <> 0) then
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-				- hwSign(Gear^.dX),
-				1,
-				1,
-				0)
-			else
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-				hwSign(Gear^.dX),
-				1,
-				1,
-				0);
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			0,
+			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
+			0);
 			defaultPos:= false
-		end else
-		
-		if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
-			begin
+		end
+	else
+
+	if ((Gear^.State and gstAttacked) = 0) then
+	begin
+		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+		case amt of
+			amBazooka,
+			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
+			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
+		end;
+
+		case amt of
+			amAirAttack,
+			amMineStrike: DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
+			amPickHammer: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						2,
+						0);
+			amBlowTorch: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						3,
+						0);
+			amTeleport: DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, 0, hwSign(Gear^.dX), 0);
+			amKamikaze: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						1,
+						5,
+						0);
+		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
 				0,
-				PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
+				4,
 				0);
-				defaultPos:= false
-			end
-		else
-
-		if ((Gear^.State and gstAttacked) = 0) then
-		begin
-			amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
-			case amt of
-				amBazooka,
-				amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
-				amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
-				amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-				amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
-				amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
-			end;
-
-			case amt of
-				amAirAttack,
-				amMineStrike: DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
-				amPickHammer: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							1,
-							2,
-							0);
-				amBlowTorch: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							1,
-							3,
-							0);
-				amTeleport: DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, 0, hwSign(Gear^.dX), 0);
-				amKamikaze: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-							hwSign(Gear^.dX),
-							1,
-							5,
-							0);
-			else
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-					hwSign(Gear^.dX),
-					0,
-					4,
-					0);
-			end;
-
-			case amt of
-				amBaseballBat: DrawRotated(sprHandBaseball,
-						hwRound(Gear^.X) + 1 - 4 * hwSign(Gear^.dX) + WorldDx,
-						hwRound(Gear^.Y) + 6 + WorldDy, hwSign(Gear^.dX), aangle);
-			end;
-
-			defaultPos:= false
-		end
-	end else // not gstHHDriven
-		if ((Gear^.State and gstHHJumping) <> 0) then
-		begin
-		if ((Gear^.State and gstHHHJump) <> 0) then
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-				- hwSign(Gear^.dX),
-				1,
-				1,
-				0)
-			else
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-				hwSign(Gear^.dX),
-				1,
-				1,
-				0);
-			defaultPos:= false
 		end;
+
+		case amt of
+			amBaseballBat: DrawRotated(sprHandBaseball,
+					hwRound(Gear^.X) + 1 - 4 * hwSign(Gear^.dX) + WorldDx,
+					hwRound(Gear^.Y) + 6 + WorldDy, hwSign(Gear^.dX), aangle);
+		end;
+
+		defaultPos:= false
+	end
+end else // not gstHHDriven
+if ((Gear^.State and gstHHJumping) <> 0) then
+begin
+if ((Gear^.State and gstHHHJump) <> 0) then
+	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		- hwSign(Gear^.dX),
+		1,
+		1,
+		0)
+	else
+	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		hwSign(Gear^.dX),
+		1,
+		1,
+		0);
+	defaultPos:= false
+end;
 
 
 if defaultPos then
