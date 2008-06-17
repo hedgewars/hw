@@ -1058,7 +1058,8 @@ if (GameFlags and gfForts) <> 0 then
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
 								FindPlace(Gear, false, t, t + 1024);
-								Gear^.Pos:= GetRandom(19)
+								Gear^.Pos:= GetRandom(19);
+								Gear^.dX.isNegative:= p = 1;
 								end;
 		inc(t, 1024)
 		end
