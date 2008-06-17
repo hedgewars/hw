@@ -740,6 +740,10 @@ jeży</translation>
         <source>chat</source>
         <translation>czat</translation>
     </message>
+    <message>
+        <source>chat history</source>
+        <translation>historia czatu</translation>
+    </message>
 </context>
 <context>
     <name>teams</name>
