@@ -1089,7 +1089,8 @@ AllInactive:= false;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 DeleteCI(HHGear);
 HHGear^.X:= int2hwFloat(hwRound(HHGear^.X)) - _0_5;
-SetLittle(HHGear^.dX);
+HHGear^.dX:= SignAs(cLittle, Gear^.dX);
+
 HHGear^.dY:= - _0_3;
 
 Gear^.X:= HHGear^.X;

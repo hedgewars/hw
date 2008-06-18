@@ -711,31 +711,34 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		defaultPos:= false
 	end
 end else // not gstHHDriven
-if (Gear^.Damage > 0)
-and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
 	begin
-	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-		hwSign(Gear^.dX),
-		2,
-		1,
-		Gear^.DirAngle);
-	defaultPos:= false
-	end;
-if ((Gear^.State and gstHHJumping) <> 0) then
-	begin
-	if ((Gear^.State and gstHHHJump) <> 0) then
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-			- hwSign(Gear^.dX),
-			1,
-			1,
-			0)
-		else
+	if (Gear^.Damage > 0)
+	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
+		begin
 		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 			hwSign(Gear^.dX),
+			2,
 			1,
-			1,
-			0);
+			Gear^.DirAngle);
 		defaultPos:= false
+		end;
+
+	if ((Gear^.State and gstHHJumping) <> 0) then
+		begin
+		if ((Gear^.State and gstHHHJump) <> 0) then
+			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				- hwSign(Gear^.dX),
+				1,
+				1,
+				0)
+			else
+			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				hwSign(Gear^.dX),
+				1,
+				1,
+				0);
+			defaultPos:= false
+		end;
 	end;
 
 
