@@ -571,6 +571,7 @@ doStepHedgehogMoving(Gear);
 
 if (Gear^.State and (gstMoving or gstDrowning)) <> 0 then
 	begin
+	if Gear^.Damage > 0 then CalcRotationDirAngle(Gear);
 	AllInactive:= false;
 	exit
 	end;

@@ -247,8 +247,8 @@ gtAmmo_Grenade: begin
                 RopePoints.Count:= 0;
                 end;
    gtExplosion: begin
-                Result^.X:= Result^.X - _25;
-                Result^.Y:= Result^.Y - _25;
+                Result^.X:= Result^.X;
+                Result^.Y:= Result^.Y;
                 end;
         gtMine: begin
                 Result^.State:= Result^.State or gstMoving;
@@ -711,22 +711,32 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		defaultPos:= false
 	end
 end else // not gstHHDriven
-if ((Gear^.State and gstHHJumping) <> 0) then
-begin
-if ((Gear^.State and gstHHHJump) <> 0) then
-	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-		- hwSign(Gear^.dX),
-		1,
-		1,
-		0)
-	else
+if (Gear^.Damage > 0)
+and ((Gear^.State or gstMoving) <> 0) then
+	begin
 	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 		hwSign(Gear^.dX),
+		2,
 		1,
-		1,
-		0);
+		Gear^.DirAngle);
 	defaultPos:= false
-end;
+	end;
+if ((Gear^.State and gstHHJumping) <> 0) then
+	begin
+	if ((Gear^.State and gstHHHJump) <> 0) then
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			- hwSign(Gear^.dX),
+			1,
+			1,
+			0)
+		else
+		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			1,
+			1,
+			0);
+		defaultPos:= false
+	end;
 
 
 if defaultPos then
@@ -894,7 +904,7 @@ while Gear<>nil do
                        end;
                     end;
       gtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
-       gtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+       gtExplosion: DrawSprite(sprExplosion50, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 32 + WorldDy, Gear^.State);
             gtMine: if ((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)
                        then DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
