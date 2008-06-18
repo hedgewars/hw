@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ru">
+<defaultcodec></defaultcodec>
 <context>
     <name>GameUIConfig</name>
     <message>
@@ -682,7 +683,7 @@
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="39"/>
         <source>Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="584"/>
@@ -1152,12 +1153,12 @@ info</source>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="48"/>
         <source>chat</source>
-        <translation type="unfinished"></translation>
+        <translation>чат</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>история чата</translation>
     </message>
 </context>
 <context>
