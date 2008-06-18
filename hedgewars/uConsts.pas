@@ -45,7 +45,7 @@ type
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-                   sprHat, sprKamikaze);
+                   sprHat, sprKamikaze, sprWhip);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -393,7 +393,9 @@ const
                      (FileName:    'Samurai'; Path: ptHats    ; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHat
                      (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width: 256; Height: 32; saveSurf: false) // sprKamikaze
+                      Width: 256; Height: 32; saveSurf: false),// sprKamikaze
+                     (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width: 128; Height: 32; saveSurf: false) // sprWhip
                      );
 
       Soundz: array[TSound] of record

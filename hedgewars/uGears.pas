@@ -574,6 +574,15 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				end;
 			gtPickHammer,
 			gtTeleport: defaultPos:= false;
+			gtWhip: begin
+				DrawRotatedF(sprWhip,
+						hwRound(Gear^.X) + 1 + WorldDx,
+						hwRound(Gear^.Y) - 3 + WorldDy,
+						1,
+						hwSign(Gear^.dX),
+						0);
+				defaultPos:= false
+				end;
 			gtKamikaze: begin
 						if CurAmmoGear^.Pos = 0 then
 							DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
@@ -666,6 +675,15 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						1,
 						5,
 						0);
+			amWhip: begin
+				DrawRotatedF(sprWhip,
+						hwRound(Gear^.X) + 1 + WorldDx,
+						hwRound(Gear^.Y) - 3 + WorldDy,
+						0,
+						hwSign(Gear^.dX),
+						0);
+				defaultPos:= false
+				end;
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),
