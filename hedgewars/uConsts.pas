@@ -173,6 +173,7 @@ const
       gstHHHJump        = $00002000;
       gstAnimation      = $00004000;
       gstHHDeath        = $00008000;
+      gstWinner         = $00010000;
 
       gm_Left   = $00000001;
       gm_Right  = $00000002;

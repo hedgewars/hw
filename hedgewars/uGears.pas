@@ -523,6 +523,16 @@ if (Gear^.State and gstDrowning) <> 0 then
 	defaultPos:= false
 	end else
 
+if (Gear^.State and gstWinner) <> 0 then
+	begin
+	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			hwSign(Gear^.dX),
+			2,
+			0,
+			0);
+	defaultPos:= false
+	end else
+
 if (Gear^.State and gstHHDriven) <> 0 then
 	begin
 	hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
@@ -737,7 +747,7 @@ if defaultPos then
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin
-	if ((Gear^.State{ and not gstAnimation}) = 0)
+	if ((Gear^.State and not gstWinner) = 0)
 		or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
 	begin
 	t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;

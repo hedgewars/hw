@@ -96,7 +96,7 @@ procedure FreeTeamsList; forward;
 function CheckForWin: boolean;
 var AliveClan: PClan;
     s: shortstring;
-    t, AliveCount: LongInt;
+    t, AliveCount, i, j: LongInt;
 begin
 AliveCount:= 0;
 for t:= 0 to Pred(ClansCount) do
@@ -112,22 +112,29 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 if AliveCount = 0 then
-   begin // draw
-   AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
-   SendStat(siGameResult, trmsg[sidDraw]);
-   AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
-   end else // win
-   with AliveClan^ do
-     begin
-     if TeamsNumber = 1 then
-        s:= Format(trmsg[sidWinner], Teams[0]^.TeamName)  // team wins
-     else
-        s:= Format(trmsg[sidWinner], Teams[0]^.TeamName); // clan wins
+	begin // draw
+	AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
+	SendStat(siGameResult, trmsg[sidDraw]);
+	AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+	end else // win
+	with AliveClan^ do
+		begin
+		if TeamsNumber = 1 then
+			s:= Format(trmsg[sidWinner], Teams[0]^.TeamName)  // team wins
+		else
+			s:= Format(trmsg[sidWinner], Teams[0]^.TeamName); // clan wins
 
-     AddCaption(s, $FFFFFF, capgrpGameState);
-     SendStat(siGameResult, s);
-     AddGear(0, 0, gtATFinishGame, 0, _0, _0, 2000)
-     end;
+		for j:= 0 to Pred(TeamsNumber) do
+			with Teams[j]^ do
+				for i:= 0 to cMaxHHIndex do
+					with Hedgehogs[i] do
+						if (Gear <> nil) then
+							Gear^.State:= gstWinner;
+		
+		AddCaption(s, $FFFFFF, capgrpGameState);
+		SendStat(siGameResult, s);
+		AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+		end;
 SendStats
 end;
 
