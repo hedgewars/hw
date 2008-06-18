@@ -1,6 +1,20 @@
 + features
 * bugfixes
 
+0.9.3 -> 0.9.4:
+ + In game chat is now implemented, chat (and taunt!) your buddies during network play
+ + Mortar, whip and Kamikaze weapon additions
+ + Two new themes, desert island and city
+ + New maps
+ + New animations, including an idle animation!
+ + Rope reworked, much greater momentum, ability to aim the rope between swings
+ + AI updates
+ + Teams now work in fort mode, i.e. 2v2
+ + Ability to attack whilst jumping/rope swinging
+ + Some weapons can only be used after a certain number of turns 
+ + Lots of new graphics
+ * Many network/gameplay bug fixes
+
 0.9.2 -> 0.9.3:
  + Switch to OpenGL rendering
  + Massive graphics update
