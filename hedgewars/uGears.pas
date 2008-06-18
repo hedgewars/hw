@@ -712,7 +712,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	end
 end else // not gstHHDriven
 if (Gear^.Damage > 0)
-and ((Gear^.State or gstMoving) <> 0) then
+and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
 	begin
 	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 		hwSign(Gear^.dX),
