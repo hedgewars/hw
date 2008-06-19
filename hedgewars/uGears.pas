@@ -721,7 +721,7 @@ end else // not gstHHDriven
 			1,
 			Gear^.DirAngle);
 		defaultPos:= false
-		end;
+		end else
 
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
