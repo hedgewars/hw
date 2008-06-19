@@ -1,3 +1,3 @@
-foreach(dir "cheese" "Hedgewars" "Hedgelove" "mushrooms" "Plane" "Volcano")
+foreach(dir "cheese" "Hedgewars" "Hedgelove" "Hydrant" "mushrooms" "Plane" "Volcano")
   add_subdirectory(${dir})
 endforeach(dir)
