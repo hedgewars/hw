@@ -30,3 +30,4 @@
 01:02=%1 wygrywają!
 01:03=Głośność %1%
 01:04=Gra wstrzymana
+01:05=Really quit (Y/Esc)?

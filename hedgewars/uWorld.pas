@@ -389,6 +389,8 @@ if SoundTimerTicks >= 50 then
       end
    end;
 
+if GameState = gsConfirm then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, ConfirmTexture);
+
 glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
 end;

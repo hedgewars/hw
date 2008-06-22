@@ -30,3 +30,4 @@
 01:02=%1 wins!
 01:03=Volume %1%
 01:04=Paused
+01:05=Really quit (Y/Esc)?

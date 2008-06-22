@@ -25,7 +25,8 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
                    sidKamikaze);
 
-     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused);
+     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+                  sidConfirm);
 
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;

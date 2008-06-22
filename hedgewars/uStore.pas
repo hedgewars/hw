@@ -45,7 +45,8 @@ procedure SetupOpenGL;
 
 var PixelFormat: PSDL_PixelFormat;
  SDLPrimSurface: PSDL_Surface;
-   PauseTexture: PTexture;
+   PauseTexture,
+   ConfirmTexture: PTexture;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, GLU;
@@ -295,6 +296,7 @@ SDL_FreeSurface(tmpsurf);
 InitHealth;
 
 PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
+ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], $FFFF00, fntBig);
 
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
