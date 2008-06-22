@@ -218,7 +218,6 @@ end;
 
 initialization
 InitConsole;
-RegisterVariable('quit'    , vtCommand, @chQuit         , true );
 RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
 RegisterVariable('capture' , vtCommand, @chCapture      , true );
 RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
@@ -239,6 +238,8 @@ RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
 RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
 RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
+RegisterVariable('quit'    , vtCommand, @chQuit         , true );
+RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
 RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
 RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);

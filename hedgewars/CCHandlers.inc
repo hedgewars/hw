@@ -29,9 +29,23 @@ CheckNoTeamOrHH:= Result
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure chQuit(var s: shortstring);
+const prevGState: TGameState = gsConfirm;
 begin
-SendIPC('Q');
-GameState:= gsExit
+if GameState <> gsConfirm then
+        begin
+        prevGState:= GameState;
+        GameState:= gsConfirm
+        end else
+        GameState:= prevGState
+end;
+
+procedure chConfirm(var s: shortstring);
+begin
+if GameState = gsConfirm then
+	begin
+	SendIPC('Q');
+	GameState:= gsExit
+	end
 end;
 
 procedure chCheckProto(var s: shortstring);

@@ -99,6 +99,7 @@ case GameState of
               FinishProgress;
               GameState:= gsGame
               end;
+   gsConfirm,
       gsGame: begin
               ProcessKbd;
               DoGameTick(Lag);

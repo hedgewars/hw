@@ -122,6 +122,7 @@ DefaultBinds[104]:= 'findhh';
 DefaultBinds[112]:= 'pause';
 DefaultBinds[115]:= '+speedup';
 DefaultBinds[116]:= 'chat';
+DefaultBinds[121]:= 'confirm';
 DefaultBinds[127]:= 'rotmask';
 SetDefaultBinds
 end;

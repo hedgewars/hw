@@ -48,6 +48,7 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"chat",	"t",	QT_TRANSLATE_NOOP("binds", "chat"),	false},
 	{"history",	"`",	QT_TRANSLATE_NOOP("binds", "chat history"),	false},
 	{"pause",	"p",	QT_TRANSLATE_NOOP("binds", "pause"),	false},
+	{"confirm",	"y",	QT_TRANSLATE_NOOP("binds", "confirmation"),	false},
 	{"+voldown",	"9",	QT_TRANSLATE_NOOP("binds", "volume down"),	false},
 	{"+volup",	"0",	QT_TRANSLATE_NOOP("binds", "volume up"),	false},
 	{"fullscr",	"f",	QT_TRANSLATE_NOOP("binds", "change mode"),	false},
