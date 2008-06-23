@@ -1411,7 +1411,6 @@ repeat
 
 	dec(i)
 until (i = 0) or (Gear^.Damage > Gear^.Health);
-addfilelog(inttostr(Gear^.Damage));
 
 inc(upd);
 if upd > 3 then

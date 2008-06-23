@@ -217,10 +217,7 @@ var Vx, Vy: hwFloat;
 			Result:= RateExplosion(Me, EX, EY, 91);
 			if (Result = 0) then
 				if (dY > _0_15) then
-					begin
-					Result:= - abs(Targ.Y - EY) div 32;
-					AddFileLog('dY > _0_15');
-					end
+					Result:= - abs(Targ.Y - EY) div 32
 				else
 					Result:= BadTurn
 			else if (Result < 0) then Result:= BadTurn
