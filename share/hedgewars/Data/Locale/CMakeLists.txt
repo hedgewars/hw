@@ -1,9 +1,7 @@
+file(GLOB txttrans ??.txt)
+file(GLOB qmtrans hedgewars_*.qm)
+
 install(FILES
-	en.txt
-	it.txt
-	ru.txt
-	pl.txt
-	hedgewars_it.qm
-	hedgewars_ru.qm
-	hedgewars_pl.qm
+	${txttrans}
+	${qmtrans}
 	DESTINATION ${SHAREPATH}Data/Locale)

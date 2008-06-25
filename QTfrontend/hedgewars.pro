@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = hedgewars
 DEPENDPATH += .
 INCLUDEPATH += .
-DESTDIR	= ../bin
+DESTDIR = ../bin
 
 win32 {
 	RC_FILE	= ./res/hedgewars.rc
@@ -46,9 +46,8 @@ HEADERS += binds.h \
            hwconsts.h \
            selectWeapon.h \
            itemNum.h \
-	   input_ip.h
-           
-           
+           input_ip.h
+
 SOURCES += binds.cpp \
            game.cpp \
            main.cpp \
@@ -85,6 +84,9 @@ SOURCES += binds.cpp \
            itemNum.cpp \
 	   input_ip.cpp
 
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_it.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_pl.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
 
 RESOURCES += hedgewars.qrc
