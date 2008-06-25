@@ -61,12 +61,13 @@ About::About(QWidget * parent) :
 			"</p><h2>" +
 			
 			QLabel::tr("Translations:") + "</h2><p>"
-			"bulgarian: Svetoslav Stefanov"
-			"english: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
-			 + QString::fromUtf8("polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;<br>") +
-			"russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"slovak: Jose Riha"
+			"Bulgarian: Svetoslav Stefanov<br>"
+			"English: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
+			 + QString::fromUtf8("German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;<br>") +
+			"Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
+			 + QString::fromUtf8("Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;<br>") +
+			"Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
+			"Slovak: Jose Riha"
 			"</p><h2>" +
 			
 			QLabel::tr("Special thanks:") + "</h2><p>"
