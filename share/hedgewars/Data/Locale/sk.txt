@@ -1,0 +1,33 @@
+; Slovak locale
+
+00:00=Granát
+00:01=Skupinová bomba
+00:02=Bazuka
+00:03=UFO
+00:04=Brokovnica
+00:05=Zbíjačka
+00:06=Preskočiť
+00:07=Lano
+00:08=Mína
+00:09=DEagle
+00:10=Dynamit
+00:11=Bejzbolka
+00:12=Úder ohňa
+00:13=sek
+00:14=Padák
+00:15=Vzdušné posily
+00:16=Mínový útok
+00:17=Lampa
+00:18=Stavba
+00:19=Teleport
+00:20=Prepnúť ježka
+00:21=Mínomet
+00:22=Bič
+00:23=Kamikadze
+
+01:00=Do boja!
+01:01=Remíza
+01:02=%1 vyhral!
+01:03=Hlasitosť %1%
+01:04=Pauza
+01:05=Really quit (Y/Esc)?
