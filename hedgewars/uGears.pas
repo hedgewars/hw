@@ -654,6 +654,17 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		end
 	else
 
+	if ((Gear^.State and gstAnimation) <> 0) then
+		begin
+		DrawRotatedF(TSprite(Gear^.Tag),
+				hwRound(Gear^.X) + 1 + WorldDx,
+				hwRound(Gear^.Y) - 3 + WorldDy,
+				Gear^.Pos,
+				hwSign(Gear^.dX),
+				0.0);
+		defaultPos:= false
+		end
+	else
 	if ((Gear^.State and gstAttacked) = 0) then
 	begin
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
@@ -790,7 +801,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			if (Gear^.State and gstHHThinking) <> 0 then
 				DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
 				else
-				if ShowCrosshair and ((Gear^.State and gstAttacked) = 0) then
+				if ShowCrosshair and ((Gear^.State and (gstAttacked or gstAnimation)) = 0) then
 					begin
 					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
 					DrawRotatedTex(Team^.CrosshairTex,

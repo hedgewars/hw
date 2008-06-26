@@ -276,6 +276,15 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
           exit
           end;
 
+	if ((Gear^.Message and gm_Animate) <> 0) then
+		begin
+		Gear^.Message:= 0;
+		Gear^.State:= Gear^.State or gstAnimation;
+		Gear^.Tag:= Gear^.MsgParam;
+		Gear^.Timer:= 0;
+		Gear^.Pos:= 0
+		end;
+
    if ((Gear^.Message and gm_LJump ) <> 0) then
       begin
       Gear^.Message:= Gear^.Message and not gm_LJump;
@@ -471,6 +480,21 @@ if not isInMultiShoot then
 else
    Gear^.Message:= 0;
 
+if (Gear^.State and gstAnimation) <> 0 then
+	begin
+	Gear^.Message:= 0;
+	inc(Gear^.Timer);
+	if Gear^.Timer = 125 then
+		begin
+		Gear^.Timer:= 0;
+		inc(Gear^.Pos);
+		if Gear^.Pos = 12 then
+			Gear^.State:= Gear^.State and not gstAnimation
+		end;
+	exit
+	end;
+
+
 if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
    begin
    TurnTimeLeft:= 0;
@@ -554,11 +578,11 @@ if (Gear^.State and gstMoving) <> 0 then
    exit
    end;
 
-   if not isInMultiShoot then
-      begin
-      if StepTicks > 0 then dec(StepTicks);
-      if (StepTicks = 0) then HedgehogStep(Gear)
-      end
+	if not isInMultiShoot then
+		begin
+		if StepTicks > 0 then dec(StepTicks);
+		if (StepTicks = 0) then HedgehogStep(Gear)
+		end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -589,10 +613,10 @@ if (Gear^.Health = 0) then
 	exit
 	end;
 
-if ((Gear^.State and gstAnimation) = 0) and
+if ((Gear^.State and gstWait) = 0) and
 	(prevState <> Gear^.State) then
 	begin
-	Gear^.State:= gstAnimation;
+	Gear^.State:= gstWait;
 	Gear^.Timer:= 150
 	end else
 	begin

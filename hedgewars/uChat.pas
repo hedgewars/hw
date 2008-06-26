@@ -28,7 +28,7 @@ var UserNick: shortstring = '';
 	showAll: boolean = false;
 
 implementation
-uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys;
+uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uGears, uTeams;
 
 const MaxStrIndex = 27;
 
@@ -117,6 +117,18 @@ if (GameState = gsChat)
 	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
 end;
 
+procedure AcceptChatString(s: shortstring);
+begin
+if (s = '/rollup') and not CurrentTeam^.ExtDriven then
+	with CurrentHedgehog^.Gear^ do
+		begin
+		Message:= Message or gm_Animate;
+		MsgParam:= Longword(sprKowtow)
+		end
+else
+	ParseCommand('/say ' + s, true);
+end;
+
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
@@ -133,7 +145,7 @@ if Key <> 0 then
 		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
-				ParseCommand('/say ' + InputStr.s, true);
+				AcceptChatString(InputStr.s);
 				SetLine(InputStr, '', false)
 				end;
 			FreezeEnterKey;

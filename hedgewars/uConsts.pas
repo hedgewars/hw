@@ -45,7 +45,7 @@ type
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-                   sprHat, sprKamikaze, sprWhip);
+                   sprHat, sprKamikaze, sprWhip, sprKowtow);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -117,150 +117,152 @@ const
       msgGettingConfig     = 'Getting game config...';
 
 const
-      cMaxPower     = 1500;
-      cMaxAngle     = 2048;
-      cPowerDivisor = 1500;
+	cMaxPower     = 1500;
+	cMaxAngle     = 2048;
+	cPowerDivisor = 1500;
 
-      MAXNAMELEN = 32;
+	MAXNAMELEN = 32;
 
-      COLOR_LAND = $00FFFFFF;
+	COLOR_LAND = $00FFFFFF;
 
-      cifRandomize = $00000001;
-      cifTheme     = $00000002;
-      cifMap       = $00000002; // either theme or map (or map+theme)
-      cifAllInited = cifRandomize or
-                     cifTheme or
-                     cifMap;
+	cifRandomize = $00000001;
+	cifTheme     = $00000002;
+	cifMap       = $00000002; // either theme or map (or map+theme)
+	cifAllInited = cifRandomize or
+					cifTheme or
+					cifMap;
 
-      cTransparentColor: Longword = $000000;
+	cTransparentColor: Longword = $000000;
 
-      cMaxTeams        = 6;
-      cMaxHHIndex      = 7;
-      cMaxHHs          = 30;
-      cMaxSpawnPoints  = 1024;
+	cMaxTeams        = 6;
+	cMaxHHIndex      = 7;
+	cMaxHHs          = 30;
+	cMaxSpawnPoints  = 1024;
 
-      cMaxEdgePoints = 16384;
+	cMaxEdgePoints = 16384;
 
-      cHHRadius = 9;
-      cHHStepTicks = 38;
+	cHHRadius = 9;
+	cHHStepTicks = 38;
 
-      cHHZ = 1000;
-      cCurrHHZ = Succ(cHHZ);
+	cHHZ = 1000;
+	cCurrHHZ = Succ(cHHZ);
 
-      cShotgunRadius = 22;
-      cBlowTorchC    = 6;
+	cShotgunRadius = 22;
+	cBlowTorchC    = 6;
 
-      cKeyMaxIndex = 1023;
+	cKeyMaxIndex = 1023;
 
-      cMaxCaptions = 4;
+	cMaxCaptions = 4;
 
-      gfForts       = $00000001;
-      gfMultiWeapon = $00000002;
-      gfSolidLand   = $00000004;
-      gfOneClanMode = $10000000;
+	gfForts       = $00000001;
+	gfMultiWeapon = $00000002;
+	gfSolidLand   = $00000004;
+	gfOneClanMode = $10000000;
 
-      gstDrowning       = $00000001;
-      gstHHDriven       = $00000002;
-      gstMoving         = $00000004;
-      gstAttacked       = $00000008;
-      gstAttacking      = $00000010;
-      gstCollision      = $00000020;
-      gstHHChooseTarget = $00000040;
-      gstHHJumping      = $00000100;
-      gsttmpFlag        = $00000200;
-      gstHHThinking     = $00000800;
-      gstNoDamage       = $00001000;
-      gstHHHJump        = $00002000;
-      gstAnimation      = $00004000;
-      gstHHDeath        = $00008000;
-      gstWinner         = $00010000;
+	gstDrowning       = $00000001;
+	gstHHDriven       = $00000002;
+	gstMoving         = $00000004;
+	gstAttacked       = $00000008;
+	gstAttacking      = $00000010;
+	gstCollision      = $00000020;
+	gstHHChooseTarget = $00000040;
+	gstHHJumping      = $00000100;
+	gsttmpFlag        = $00000200;
+	gstHHThinking     = $00000800;
+	gstNoDamage       = $00001000;
+	gstHHHJump        = $00002000;
+	gstAnimation      = $00004000;
+	gstHHDeath        = $00008000;
+	gstWinner         = $00010000;
+	gstWait           = $00020000;
 
-      gm_Left   = $00000001;
-      gm_Right  = $00000002;
-      gm_Up     = $00000004;
-      gm_Down   = $00000008;
-      gm_Switch = $00000010;
-      gm_Attack = $00000020;
-      gm_LJump  = $00000040;
-      gm_HJump  = $00000080;
-      gm_Destroy= $00000100;
-      gm_Slot   = $00000200; // with param
-      gm_Weapon = $00000400; // with param
-      gm_Timer  = $00000800; // with param
-      gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack;
+	gm_Left   = $00000001;
+	gm_Right  = $00000002;
+	gm_Up     = $00000004;
+	gm_Down   = $00000008;
+	gm_Switch = $00000010;
+	gm_Attack = $00000020;
+	gm_LJump  = $00000040;
+	gm_HJump  = $00000080;
+	gm_Destroy= $00000100;
+	gm_Slot   = $00000200; // with param
+	gm_Weapon = $00000400; // with param
+	gm_Timer  = $00000800; // with param
+	gm_Animate= $00001000; // with param
+	gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack;
 
-      cMaxSlotIndex       = 8;
-      cMaxSlotAmmoIndex   = 3;
+	cMaxSlotIndex       = 8;
+	cMaxSlotAmmoIndex   = 3;
 
-      ammoprop_Timerable    = $00000001;
-      ammoprop_Power        = $00000002;
-      ammoprop_NeedTarget   = $00000004;
-      ammoprop_ForwMsgs     = $00000008;
-      ammoprop_AttackInMove = $00000010;
-      ammoprop_NoCrosshair  = $00000040;
-      ammoprop_AttackingPut = $00000080;
-      ammoprop_DontHold     = $00000100;
-      ammoprop_AltAttack    = $00000200;
-      ammoprop_AltUse       = $00000400;
+	ammoprop_Timerable    = $00000001;
+	ammoprop_Power        = $00000002;
+	ammoprop_NeedTarget   = $00000004;
+	ammoprop_ForwMsgs     = $00000008;
+	ammoprop_AttackInMove = $00000010;
+	ammoprop_NoCrosshair  = $00000040;
+	ammoprop_AttackingPut = $00000080;
+	ammoprop_DontHold     = $00000100;
+	ammoprop_AltAttack    = $00000200;
+	ammoprop_AltUse       = $00000400;
 
-      AMMO_INFINITE = 9;
+	AMMO_INFINITE = 9;
 
-      EXPLAllDamageInRadius = $00000001;
-      EXPLAutoSound         = $00000002;
-      EXPLNoDamage          = $00000004;
-      EXPLDoNotTouchHH      = $00000008;
-      EXPLDontDraw          = $00000010;
+	EXPLAllDamageInRadius = $00000001;
+	EXPLAutoSound         = $00000002;
+	EXPLNoDamage          = $00000004;
+	EXPLDoNotTouchHH      = $00000008;
+	EXPLDontDraw          = $00000010;
 
-      posCaseAmmo    = $00000001;
-      posCaseHealth  = $00000002;
+	posCaseAmmo    = $00000001;
+	posCaseHealth  = $00000002;
 
-      NoPointX = Low(LongInt);
+	NoPointX = Low(LongInt);
 
-      cHHFileName   = 'Hedgehog';
-      cCHFileName   = 'Crosshair';
-      cThemeCFGFilename = 'theme.cfg';
+	cHHFileName   = 'Hedgehog';
+	cCHFileName   = 'Crosshair';
+	cThemeCFGFilename = 'theme.cfg';
 
-      Fontz: array[THWFont] of THHFont = (
-                                         (Handle: nil;
-                                          Height: 12;
-                                          style: TTF_STYLE_NORMAL;
-                                          Name: 'DejaVuSans.ttf'),
-                                         (Handle: nil;
-                                          Height: 24;
-                                          style: TTF_STYLE_NORMAL;
-                                          Name: 'DejaVuSans.ttf'),
-                                         (Handle: nil;
-                                          Height: 10;
-                                          style: TTF_STYLE_NORMAL;
-                                          Name: 'DejaVuSans.ttf')
-                                         );
+	Fontz: array[THWFont] of THHFont = (
+			(Handle: nil;
+			Height: 12;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans.ttf'),
+			(Handle: nil;
+			Height: 24;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans.ttf'),
+			(Handle: nil;
+			Height: 10;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans.ttf')
+			);
 
-      FontBorder = 2;
+	FontBorder = 2;
 
-      PathPrefix: string = './';
-      Pathz: array[TPathType] of string      = (
-                                               '',                              // ptNone
-                                               '',                              // ptData
-                                               'Graphics',                      // ptGraphics
-                                               'Themes',                        // ptThemes
-                                               'Themes/avematan',               // ptCurrTheme
-                                               'Teams',                         // ptTeams
-                                               'Maps',                          // ptMaps
-                                               '',                              // ptMapCurrent
-                                               'Demos',                         // ptDemos
-                                               'Sounds',                        // ptSounds
-                                               'Graphics/Graves',               // ptGraves
-                                               'Fonts',                         // ptFonts
-                                               'Forts',                         // ptForts
-                                               'Locale',                        // ptLocale
-                                               'Graphics/AmmoMenu',             // ptAmmoMenu
-                                               'Graphics/Hedgehog',             // ptHedgehog
-                                               'Sounds/voices',                 // ptVoices
-                                               'Graphics/Hats'                  // ptHats
-                                               );
+	PathPrefix: string = './';
+	Pathz: array[TPathType] of String = (
+			'',                              // ptNone
+			'',                              // ptData
+			'Graphics',                      // ptGraphics
+			'Themes',                        // ptThemes
+			'Themes/avematan',               // ptCurrTheme
+			'Teams',                         // ptTeams
+			'Maps',                          // ptMaps
+			'',                              // ptMapCurrent
+			'Demos',                         // ptDemos
+			'Sounds',                        // ptSounds
+			'Graphics/Graves',               // ptGraves
+			'Fonts',                         // ptFonts
+			'Forts',                         // ptForts
+			'Locale',                        // ptLocale
+			'Graphics/AmmoMenu',             // ptAmmoMenu
+			'Graphics/Hedgehog',             // ptHedgehog
+			'Sounds/voices',                 // ptVoices
+			'Graphics/Hats'                  // ptHats
+			);
 
       SpritesData: array[TSprite] of record
-                     FileName: String[31];
+                     FileName: String[12];
                      Path, AltPath: TPathType;
                      Texture: PTexture;
                      Surface: PSDL_Surface;
@@ -269,7 +271,7 @@ const
                      end = (
                      (FileName:  'BlueWater'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width: 256; Height: 32; saveSurf: false),// sprWater
-                     (FileName: 'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
+                     (FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
                       Width: 256; Height:128; saveSurf: false),// sprCloud
                      (FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:   8; Height:  8; saveSurf: false),// sprBomb
@@ -396,11 +398,13 @@ const
                      (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width: 256; Height: 32; saveSurf: false),// sprKamikaze
                      (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width: 128; Height: 32; saveSurf: false) // sprWhip
+                      Width: 128; Height: 32; saveSurf: false),// sprWhip
+                     (FileName:     'Kowtow'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprWhip
                      );
 
       Soundz: array[TSound] of record
-                FileName: String[31];
+                FileName: String[19];
                 Path    : TPathType;
                 id      : PMixChunk;
                 lastChan: LongInt;
