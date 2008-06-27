@@ -119,7 +119,6 @@ end;
 
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
-	b: boolean;
 begin
 if s[1] = '/' then
 	begin

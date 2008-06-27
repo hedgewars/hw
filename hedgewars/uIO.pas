@@ -219,6 +219,7 @@ tmpflag:= true;
 while (headcmd <> nil) and ((GameTicks = headcmd^.Time) or (headcmd^.cmd = 's')) do
 	begin
 	case headcmd^.cmd of
+		'+': ; // do nothing - it's just empty packet
 		'L': ParseCommand('+left', true);
 		'l': ParseCommand('-left', true);
 		'R': ParseCommand('+right', true);
