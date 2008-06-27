@@ -45,7 +45,8 @@ type
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-                   sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad);
+                   sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
+                   sprHurrah);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -79,7 +80,7 @@ type
 
      TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs);
 
-     TWave = (waveRollup, waveSad);
+     TWave = (waveRollup, waveSad,waveWave, waveHurrah);
 
      THHFont    = record
                   Handle: PTTF_Font;
@@ -404,7 +405,11 @@ const
                      (FileName:     'Kowtow'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprKowtow
                      (FileName:        'Sad'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprSad
+                      Width:  32; Height: 32; saveSurf: false),// sprSad
+                     (FileName:       'Wave'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  64; Height: 32; saveSurf: false),// sprWave
+                     (FileName:     'Hurrah'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprHurrah
                      );
 
 	Wavez: array [TWave] of record
@@ -413,7 +418,9 @@ const
 			cmd: String[10];
 			end = (
 			(Sprite: sprKowtow; FramesCount: 12; cmd: '/rollup'),
-			(Sprite:    sprSad; FramesCount: 14; cmd: '/sad')
+			(Sprite:    sprSad; FramesCount: 14; cmd: '/sad'),
+			(Sprite:   sprWave; FramesCount: 14; cmd: '/wave'),
+			(Sprite: sprHurrah; FramesCount: 14; cmd: '/hurrah')
 			);
 
       Soundz: array[TSound] of record
