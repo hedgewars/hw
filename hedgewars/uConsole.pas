@@ -260,6 +260,7 @@ RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
 RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
 RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
 RegisterVariable('timer'   , vtCommand, @chTimer        , false);
+RegisterVariable('taunt'   , vtCommand, @chTaunt        , false);
 RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
 RegisterVariable('slot'    , vtCommand, @chSlot         , false);
 RegisterVariable('put'     , vtCommand, @chPut          , false);

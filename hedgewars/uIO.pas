@@ -252,8 +252,11 @@ while (headcmd <> nil) and ((GameTicks = headcmd^.Time) or (headcmd^.cmd = 's'))
 			CursorPoint.Y:= SmallInt(SDLNet_Read16(@(headcmd^.Y)) + WorldDy);
 			end;
 		'w': ParseCommand('setweap ' + headcmd^.str[2], true);
+		't': ParseCommand('taunt ' + headcmd^.str[2], true);
 		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
 		#128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
+		else
+			OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
 		end;
 	RemoveCmd
 	end;

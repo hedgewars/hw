@@ -334,6 +334,21 @@ with CurrentHedgehog^.Gear^ do
      end
 end;
 
+procedure chTaunt(var s: shortstring);
+begin
+if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+
+if TWave(s[1]) > High(TWave) then exit;
+
+if not CurrentTeam^.ExtDriven then SendIPC('t' + s);
+
+with CurrentHedgehog^.Gear^ do
+     begin
+     Message:= Message or gm_Animate;
+     MsgParam:= byte(s[1])
+     end
+end;
+
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH then exit;

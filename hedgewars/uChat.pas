@@ -28,7 +28,7 @@ var UserNick: shortstring = '';
 	showAll: boolean = false;
 
 implementation
-uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uGears, uTeams;
+uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uTeams;
 
 const MaxStrIndex = 27;
 
@@ -118,15 +118,22 @@ if (GameState = gsChat)
 end;
 
 procedure AcceptChatString(s: shortstring);
+var i: TWave;
+	b: boolean;
 begin
-if (s = '/sad') and not CurrentTeam^.ExtDriven then
-	with CurrentHedgehog^.Gear^ do
-		begin
-		Message:= Message or gm_Animate;
-		MsgParam:= Longword(waveSad)
-		end
-else
-	ParseCommand('/say ' + s, true);
+if s[1] = '/' then
+	begin
+	if CurrentTeam^.ExtDriven then exit;
+	
+	for i:= Low(TWave) to High(TWave) do
+		if (s = Wavez[i].cmd) then
+			begin
+			ParseCommand('/taunt ' + char(i), true);
+			exit
+			end;
+	end
+	else
+		ParseCommand('/say ' + s, true);
 end;
 
 procedure KeyPressChat(Key: Longword);
