@@ -488,7 +488,7 @@ if (Gear^.State and gstAnimation) <> 0 then
 		begin
 		Gear^.Timer:= 0;
 		inc(Gear^.Pos);
-		if Gear^.Pos = 12 then
+		if Gear^.Pos = Wavez[TWave(Gear^.Tag)].FramesCount then
 			Gear^.State:= Gear^.State and not gstAnimation
 		end;
 	exit

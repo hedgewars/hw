@@ -45,7 +45,7 @@ type
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-                   sprHat, sprKamikaze, sprWhip, sprKowtow);
+                   sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -78,6 +78,8 @@ type
      TCapGroup  = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
      TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs);
+
+     TWave = (waveRollup, waveSad);
 
      THHFont    = record
                   Handle: PTTF_Font;
@@ -400,8 +402,19 @@ const
                      (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width: 128; Height: 32; saveSurf: false),// sprWhip
                      (FileName:     'Kowtow'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprWhip
+                      Width:  32; Height: 32; saveSurf: false),// sprKowtow
+                     (FileName:        'Sad'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprSad
                      );
+
+	Wavez: array [TWave] of record
+			Sprite: TSprite;
+			FramesCount: Longword;
+			cmd: String[10];
+			end = (
+			(Sprite: sprKowtow; FramesCount: 12; cmd: '/rollup'),
+			(Sprite:    sprSad; FramesCount: 14; cmd: '/sad')
+			);
 
       Soundz: array[TSound] of record
                 FileName: String[19];

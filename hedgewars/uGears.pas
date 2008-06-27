@@ -656,7 +656,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
 	if ((Gear^.State and gstAnimation) <> 0) then
 		begin
-		DrawRotatedF(TSprite(Gear^.Tag),
+		DrawRotatedF(Wavez[TWave(Gear^.Tag)].Sprite,
 				hwRound(Gear^.X) + 1 + WorldDx,
 				hwRound(Gear^.Y) - 3 + WorldDy,
 				Gear^.Pos,

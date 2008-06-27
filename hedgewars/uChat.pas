@@ -119,11 +119,11 @@ end;
 
 procedure AcceptChatString(s: shortstring);
 begin
-if (s = '/rollup') and not CurrentTeam^.ExtDriven then
+if (s = '/sad') and not CurrentTeam^.ExtDriven then
 	with CurrentHedgehog^.Gear^ do
 		begin
 		Message:= Message or gm_Animate;
-		MsgParam:= Longword(sprKowtow)
+		MsgParam:= Longword(waveSad)
 		end
 else
 	ParseCommand('/say ' + s, true);
