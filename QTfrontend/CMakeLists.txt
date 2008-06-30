@@ -78,7 +78,7 @@ if(MINGW)
 	# resource compilation for mingw
 	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o
 	COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
-	-i ${CMAKE_CURRENT_SOURCE_DIR}/res/hedgewars.rc
+	-i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
 	-o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 	set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
