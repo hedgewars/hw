@@ -41,6 +41,7 @@ type PVisualGear = ^TVisualGear;
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure DrawVisualGears();
+procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
 
 var VisualGearsList: PVisualGear = nil;
@@ -85,11 +86,23 @@ if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidt
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
 end;
 
+procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX;
+
+Gear^.Y:= Gear^.Y + Gear^.dY;
+Gear^.dY:= Gear^.dY + cGravity;
+
+dec(Gear^.FrameTicks);
+if Gear^.FrameTicks = 0 then DeleteVisualGear(Gear)
+end;
+
 // ==================================================================
 const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
                         (
                           @doStepFlake,
-                          @doStepCloud
+                          @doStepCloud,
+                          @doStepExpl
                         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -123,6 +136,14 @@ case Kind of
                dy.QWordValue:= 21474836 + random(64424509);
                mdY:= dy.QWordValue
                end;
+  vgtExplPart: with Result^ do
+               begin
+               dx.isNegative:= random(2) = 0;
+               dx.QWordValue:= random(300000) + 1000000;
+               dy.isNegative:= random(2) = 0;
+               dy.QWordValue:= random(300000) + 1000000;
+               FrameTicks:= 700
+               end;
      end;
 
 if VisualGearsList <> nil then
@@ -135,6 +156,14 @@ VisualGearsList:= Result;
 AddVisualGear:= Result
 end;
 
+procedure DeleteVisualGear(Gear: PVisualGear);
+begin
+if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
+if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
+   else VisualGearsList:= Gear^.NextGear;
+
+Dispose(Gear)
+end;
 
 procedure ProcessVisualGears(Steps: Longword);
 var Gear, t: PVisualGear;

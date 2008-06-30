@@ -57,7 +57,7 @@ type
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
                    gtWhip, gtKamikaze);
 
-     TVisualGearType = (vgtFlake, vgtCloud);
+     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart);
 
      TGearsType = set of TGearType;
 
