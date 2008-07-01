@@ -1,11 +1,7 @@
 if(WIN32 AND NOT UNIX)
+	file(GLOB DLLs *.dll)
+	
 	install(FILES
-		libpng13.dll
-		SDL.dll
-		SDL_image.dll
-		SDL_mixer.dll
-		SDL_net.dll
-		SDL_ttf.dll
-		zlib1.dll
+		${DLLs}
 		DESTINATION bin)
 endif(WIN32 AND NOT UNIX)
