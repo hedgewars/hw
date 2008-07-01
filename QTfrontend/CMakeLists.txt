@@ -159,6 +159,7 @@ if(WIN32 AND NOT UNIX)
 	set(HW_LINK_LIBS 
 		${HW_LINK_LIBS}
 		ole32
+		oleaut32
 		winspool
 		uuid
 		)
