@@ -82,7 +82,7 @@ if(MINGW)
 	-o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 	set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
-	set(hwfr_src ${hwfr_src} /hedgewars.rc)
+	set(hwfr_src ${hwfr_src} hedgewars.rc)
 endif(MINGW)
 
 set(hwfr_moc_hdrs
