@@ -50,7 +50,7 @@ var VisualGearsList: PVisualGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore;
-const cExplFrameTicks = 80;
+const cExplFrameTicks = 110;
 
 // ==================================================================
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
@@ -123,6 +123,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
                           @doStepFlake,
                           @doStepCloud,
                           @doStepExpl,
+                          @doStepExpl,
                           @doStepFire
                         );
 
@@ -159,10 +160,11 @@ case Kind of
                dy.QWordValue:= 21474836 + random(64424509);
                mdY:= dy.QWordValue
                end;
-  vgtExplPart: with Result^ do
+  vgtExplPart,
+ vgtExplPart2: with Result^ do
                begin
                t:= random(1024);
-               sp:= _0_001 * (random(80) + 85);
+               sp:= _0_001 * (random(95) + 70);
                dx:= AngleSin(t) * sp;
                dx.isNegative:= random(2) = 0;
                dy:= AngleCos(t) * sp;
@@ -178,7 +180,7 @@ case Kind of
                dx.isNegative:= random(2) = 0;
                dy:= AngleCos(t) * sp;
                dy.isNegative:= random(2) = 0;
-               FrameTicks:= 400 + random(200);
+               FrameTicks:= 650 + random(250);
                Frame:= random(8)
                end;
      end;
@@ -236,6 +238,7 @@ case Layer of
 		begin
 		case Gear^.Kind of
 			vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+			vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
 			vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
 			end;
 		Gear:= Gear^.NextGear

@@ -796,8 +796,9 @@ end;
 procedure doStepExplosion(Gear: PGear);
 var i: LongWord;
 begin
-for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
-for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
+for i:= 0 to 31 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
+for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
+for i:= 0 to 8 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
 Gear^.doStep:= @doStepExplosionWork
 end;
 

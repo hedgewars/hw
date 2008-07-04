@@ -46,7 +46,7 @@ type
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
                    sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
-                   sprHurrah, sprLemonade, sprExplPart);
+                   sprHurrah, sprLemonade, sprExplPart, sprExplPart2);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -57,7 +57,7 @@ type
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
                    gtWhip, gtKamikaze);
 
-     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtFire);
+     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
      TGearsType = set of TGearType;
 
@@ -413,7 +413,9 @@ const
                      (FileName:'ILoveLemonade';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width: 128; Height: 32; saveSurf: false),// sprLemonade
                      (FileName:   'ExplPart'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false) // sprExplPart
+                      Width:  32; Height: 32; saveSurf: false),// sprExplPart
+                     (FileName:  'ExplPart2'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprExplPart2
                      );
 
 	Wavez: array [TWave] of record
