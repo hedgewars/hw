@@ -89,10 +89,10 @@ end;
 
 procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
 begin
-Gear^.X:= Gear^.X + Gear^.dX;
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
-Gear^.Y:= Gear^.Y + Gear^.dY;
-Gear^.dY:= Gear^.dY + cGravity;
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+//Gear^.dY:= Gear^.dY + cGravity;
 
 if Gear^.FrameTicks <= Steps then
 	if Gear^.Frame = 0 then DeleteVisualGear(Gear)
@@ -104,12 +104,26 @@ if Gear^.FrameTicks <= Steps then
 	else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepFire(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravity * (Steps * Steps);
+Gear^.dY:= Gear^.dY + cGravity * Steps;
+
+if Gear^.FrameTicks <= Steps then
+	DeleteVisualGear(Gear)
+else
+	dec(Gear^.FrameTicks, Steps)
+end;
+
 // ==================================================================
 const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
                         (
                           @doStepFlake,
                           @doStepCloud,
-                          @doStepExpl
+                          @doStepExpl,
+                          @doStepFire
                         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -148,13 +162,24 @@ case Kind of
   vgtExplPart: with Result^ do
                begin
                t:= random(1024);
-               sp:= _0_001 * (random(700) + 150);
+               sp:= _0_001 * (random(80) + 85);
                dx:= AngleSin(t) * sp;
                dx.isNegative:= random(2) = 0;
                dy:= AngleCos(t) * sp;
                dy.isNegative:= random(2) = 0;
                Frame:= 7 - random(3);
                FrameTicks:= cExplFrameTicks
+               end;
+      vgtFire: with Result^ do
+               begin
+               t:= random(1024);
+               sp:= _0_001 * (random(85) + 95);
+               dx:= AngleSin(t) * sp;
+               dx.isNegative:= random(2) = 0;
+               dy:= AngleCos(t) * sp;
+               dy.isNegative:= random(2) = 0;
+               FrameTicks:= 400 + random(200);
+               Frame:= random(8)
                end;
      end;
 
@@ -211,6 +236,7 @@ case Layer of
 		begin
 		case Gear^.Kind of
 			vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+			vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
 			end;
 		Gear:= Gear^.NextGear
 		end
