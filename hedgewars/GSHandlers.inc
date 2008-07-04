@@ -782,7 +782,7 @@ if Gear^.State = 0 then DeleteGear(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepExplosion(Gear: PGear);
+procedure doStepExplosionWork(Gear: PGear);
 begin
 inc(Gear^.Timer);
 if Gear^.Timer > 75 then
@@ -791,6 +791,13 @@ if Gear^.Timer > 75 then
    Gear^.Timer:= 0;
    if Gear^.State > 5 then DeleteGear(Gear)
    end;
+end;
+
+procedure doStepExplosion(Gear: PGear);
+var i: LongWord;
+begin
+for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
+Gear^.doStep:= @doStepExplosionWork
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

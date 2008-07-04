@@ -617,6 +617,7 @@ if Step = 0 then
    ProgrTex:= Surface2Tex(texsurf);
    SDL_FreeSurface(texsurf)
    end;
+
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_TEXTURE_2D);
 r.x:= 0;

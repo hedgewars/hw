@@ -40,7 +40,7 @@ type PVisualGear = ^TVisualGear;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
-procedure DrawVisualGears();
+procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
 
@@ -50,6 +50,7 @@ var VisualGearsList: PVisualGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore;
+const cExplFrameTicks = 80;
 
 // ==================================================================
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
@@ -93,8 +94,14 @@ Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 Gear^.dY:= Gear^.dY + cGravity;
 
-dec(Gear^.FrameTicks);
-if Gear^.FrameTicks = 0 then DeleteVisualGear(Gear)
+if Gear^.FrameTicks <= Steps then
+	if Gear^.Frame = 0 then DeleteVisualGear(Gear)
+	else
+		begin
+		dec(Gear^.Frame);
+		Gear^.FrameTicks:= cExplFrameTicks
+		end
+	else dec(Gear^.FrameTicks, Steps)
 end;
 
 // ==================================================================
@@ -107,6 +114,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 var Result: PVisualGear;
+	t: Longword;
+	sp: hwFloat;
 begin
 New(Result);
 FillChar(Result^, sizeof(TVisualGear), 0);
@@ -138,11 +147,14 @@ case Kind of
                end;
   vgtExplPart: with Result^ do
                begin
+               t:= random(1024);
+               sp:= _0_001 * (random(700) + 150);
+               dx:= AngleSin(t) * sp;
                dx.isNegative:= random(2) = 0;
-               dx.QWordValue:= random(300000) + 1000000;
+               dy:= AngleCos(t) * sp;
                dy.isNegative:= random(2) = 0;
-               dy.QWordValue:= random(300000) + 1000000;
-               FrameTicks:= 700
+               Frame:= 7 - random(3);
+               FrameTicks:= cExplFrameTicks
                end;
      end;
 
@@ -179,22 +191,30 @@ while t <> nil do
       end
 end;
 
-procedure DrawVisualGears();
+procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
 begin
 Gear:= VisualGearsList;
-while Gear <> nil do
-      begin
-      case Gear^.Kind of
-           vgtFlake: if vobVelocity = 0 then
-                        DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame)
-                     else
-                        DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-
-           vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame);
-              end;
-      Gear:= Gear^.NextGear
-      end;
+case Layer of
+	0: while Gear <> nil do
+		begin
+		case Gear^.Kind of
+			vgtFlake: if vobVelocity = 0 then
+						DrawSprite(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame)
+					else
+						DrawRotatedF(sprFlake, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+			vgtCloud: DrawSprite(sprCloud, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame);
+			end;
+		Gear:= Gear^.NextGear
+		end;
+	1: while Gear <> nil do
+		begin
+		case Gear^.Kind of
+			vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+			end;
+		Gear:= Gear^.NextGear
+		end
+	end
 end;
 
 procedure AddClouds;

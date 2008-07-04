@@ -189,7 +189,7 @@ if not isPaused then MoveCamera;
 DrawRepeated(sprSky, WorldDx * 3 div 8);
 DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
-DrawVisualGears;
+DrawVisualGears(0);
 
 // Waves
 {$WARNINGS OFF}
@@ -219,6 +219,8 @@ if r.y < cScreenHeight then
    end;
 
 DrawGears;
+
+DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}

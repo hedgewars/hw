@@ -72,7 +72,7 @@ var CurAmmoGear: PGear = nil;
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
      uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
-     uStats;
+     uStats, uVisualGears;
 
 const MAXROPEPOINTS = 300;
 var RopePoints: record

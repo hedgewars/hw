@@ -39,83 +39,17 @@
       <autokdesu>false</autokdesu>
     </run>
     <filetypes>
-      <filetype>*.java</filetype>
       <filetype>*.h</filetype>
-      <filetype>*.H</filetype>
-      <filetype>*.hh</filetype>
-      <filetype>*.hxx</filetype>
-      <filetype>*.hpp</filetype>
       <filetype>*.c</filetype>
-      <filetype>*.C</filetype>
       <filetype>*.cc</filetype>
       <filetype>*.cpp</filetype>
       <filetype>*.c++</filetype>
-      <filetype>*.cxx</filetype>
-      <filetype>Makefile</filetype>
       <filetype>CMakeLists.txt</filetype>
       <filetype>*.pas</filetype>
       <filetype>*.inc</filetype>
       <filetype>*.dpr</filetype>
     </filetypes>
-    <blacklist>
-      <path>QTfrontend/moc_SDLs.cxx</path>
-      <path>QTfrontend/moc_SquareLabel.cxx</path>
-      <path>QTfrontend/moc_about.cxx</path>
-      <path>QTfrontend/moc_chatwidget.cxx</path>
-      <path>QTfrontend/moc_fpsedit.cxx</path>
-      <path>QTfrontend/moc_frameTeam.cxx</path>
-      <path>QTfrontend/moc_game.cxx</path>
-      <path>QTfrontend/moc_gamecfgwidget.cxx</path>
-      <path>QTfrontend/moc_gameuiconfig.cxx</path>
-      <path>QTfrontend/moc_hedgehogerWidget.cxx</path>
-      <path>QTfrontend/moc_hwform.cxx</path>
-      <path>QTfrontend/moc_hwmap.cxx</path>
-      <path>QTfrontend/moc_input_ip.cxx</path>
-      <path>QTfrontend/moc_itemNum.cxx</path>
-      <path>QTfrontend/moc_mapContainer.cxx</path>
-      <path>QTfrontend/moc_netconnectedclient.cxx</path>
-      <path>QTfrontend/moc_netregister.cxx</path>
-      <path>QTfrontend/moc_netserver.cxx</path>
-      <path>QTfrontend/moc_netserverslist.cxx</path>
-      <path>QTfrontend/moc_netudpserver.cxx</path>
-      <path>QTfrontend/moc_netudpwidget.cxx</path>
-      <path>QTfrontend/moc_netwwwserver.cxx</path>
-      <path>QTfrontend/moc_netwwwwidget.cxx</path>
-      <path>QTfrontend/moc_newnetclient.cxx</path>
-      <path>QTfrontend/moc_pages.cxx</path>
-      <path>QTfrontend/moc_playrecordpage.cxx</path>
-      <path>QTfrontend/moc_proto.cxx</path>
-      <path>QTfrontend/moc_selectWeapon.cxx</path>
-      <path>QTfrontend/moc_tcpBase.cxx</path>
-      <path>QTfrontend/moc_teamselect.cxx</path>
-      <path>QTfrontend/moc_teamselhelper.cxx</path>
-      <path>QTfrontend/moc_vertScrollArea.cxx</path>
-      <path>QTfrontend/moc_weaponItem.cxx</path>
-      <path>bin/Makefile</path>
-      <path>bin/checkstack.pas</path>
-      <path>CMakeFiles</path>
-      <path>CMakeFiles/CompilerIdC</path>
-      <path>CMakeFiles/CompilerIdC/CMakeCCompilerId.c</path>
-      <path>CMakeFiles/CompilerIdCXX</path>
-      <path>CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp</path>
-      <path>Makefile</path>
-      <path>QTfrontend/qrc_hedgewars.cxx</path>
-      <path>misc</path>
-      <path>misc/fbsd-port</path>
-      <path>misc/fbsd-port/Makefile</path>
-      <path>share/Makefile</path>
-      <path>share/hedgewars/Data/Fonts/Makefile</path>
-      <path>share/hedgewars/Data/Forts/Makefile</path>
-      <path>share/hedgewars/Data/Graphics/Makefile</path>
-      <path>share/hedgewars/Data/Locale/Makefile</path>
-      <path>share/hedgewars/Data/Makefile</path>
-      <path>share/hedgewars/Data/Maps/Makefile</path>
-      <path>share/hedgewars/Data/Music/Makefile</path>
-      <path>share/hedgewars/Data/Sounds/Makefile</path>
-      <path>share/hedgewars/Data/Themes/Makefile</path>
-      <path>share/hedgewars/Data/Trainings/Makefile</path>
-      <path>share/hedgewars/Makefile</path>
-    </blacklist>
+    <blacklist/>
     <general>
       <activedir/>
     </general>

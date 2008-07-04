@@ -46,7 +46,7 @@ type
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
                    sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
-                   sprHurrah, sprLemonade);
+                   sprHurrah, sprLemonade, sprExplPart);
 
      TGearType  = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
                    gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -411,7 +411,9 @@ const
                      (FileName:     'Hurrah'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  32; Height: 32; saveSurf: false),// sprHurrah
                      (FileName:'ILoveLemonade';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width: 128; Height: 32; saveSurf: false) // sprLemonade
+                      Width: 128; Height: 32; saveSurf: false),// sprLemonade
+                     (FileName:   'ExplPart'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+                      Width:  32; Height: 32; saveSurf: false) // sprExplPart
                      );
 
 	Wavez: array [TWave] of record
