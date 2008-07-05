@@ -448,7 +448,7 @@ var flags: Longword;
     buf: array[byte] of char;
 {$ENDIF}
 begin
-if Length(s) = 0 then exit //cFullScreen:= not cFullScreen
+if Length(s) = 0 then cFullScreen:= not cFullScreen
                  else cFullScreen:= s = '1';
 
 {$IFDEF DEBUGFILE}

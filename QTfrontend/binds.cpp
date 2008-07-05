@@ -51,7 +51,7 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"confirm",	"y",	QT_TRANSLATE_NOOP("binds", "confirmation"),	false},
 	{"+voldown",	"9",	QT_TRANSLATE_NOOP("binds", "volume down"),	false},
 	{"+volup",	"0",	QT_TRANSLATE_NOOP("binds", "volume up"),	false},
-	{"fullscr",	"f",	QT_TRANSLATE_NOOP("binds", "change mode"),	false},
+	{"fullscr",	"f12",	QT_TRANSLATE_NOOP("binds", "change mode"),	false},
 	{"capture",	"c",	QT_TRANSLATE_NOOP("binds", "capture"),	false},
 	{"rotmask",	"delete",	QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"),	false},
 	{"quit",	"escape",	QT_TRANSLATE_NOOP("binds", "quit"),	true}

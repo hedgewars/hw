@@ -117,13 +117,15 @@ DefaultBinds[ 48]:= '+volup';
 DefaultBinds[ 57]:= '+voldown';
 DefaultBinds[ 96]:= 'history';
 DefaultBinds[ 99]:= 'capture';
-DefaultBinds[102]:= 'fullscr';
 DefaultBinds[104]:= 'findhh';
 DefaultBinds[112]:= 'pause';
 DefaultBinds[115]:= '+speedup';
 DefaultBinds[116]:= 'chat';
 DefaultBinds[121]:= 'confirm';
 DefaultBinds[127]:= 'rotmask';
+
+DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
+
 SetDefaultBinds
 end;
 
