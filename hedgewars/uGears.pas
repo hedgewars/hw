@@ -979,7 +979,7 @@ var Gear: PGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
-if (Radius = 50) or (Radius = 30) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
+if (Radius > 10) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false);
 if (Mask and EXPLAllDamageInRadius)=0 then dmgRadius:= Radius shl 1
                                       else dmgRadius:= Radius;
