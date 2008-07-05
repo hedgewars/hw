@@ -1,0 +1,33 @@
+; French locale
+
+00:00=Grenade
+00:01=Grenade à fragments
+00:02=Bazooka
+00:03=OVNI
+00:04=Fusil
+00:05=Marteau Piqueur
+00:06=Passer
+00:07=Corde ninja
+00:08=Mine
+00:09=Desert Eagle
+00:10=Dynamite
+00:11=Batte de baseball
+00:12=Punch en feu
+00:13=sec
+00:14=Parachute
+00:15=Attaque aérienne
+00:16=Lancer de mines
+00:17=Chalumeau
+00:18=Poutre
+00:19=Téléportation
+00:20=Changer de Hérisson
+00:21=Mortier
+00:22=Fouet
+00:23=Kamikaze
+
+01:00=C'est parti!
+01:01=Round ex aequo
+01:02=%1 gagne!
+01:03=Volume %1%
+01:04=Pause
+01:05=Really quit (Y/Esc)?
