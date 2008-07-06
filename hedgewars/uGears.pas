@@ -483,8 +483,8 @@ if AllInactive then
                     begin
                     if not bBetweenTurns then
                        begin
-                       SwitchHedgehog;
                        ParseCommand('/nextturn', true);
+                       SwitchHedgehog;
                        end;
                     inc(step)
                     end else step:= stDelay;
