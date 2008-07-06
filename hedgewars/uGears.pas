@@ -483,14 +483,18 @@ if AllInactive then
         stWater: begin
                  if GameTicks > 25 * 60 * 1000 then bWaterRising:= true;
 
-                 if not bWaterRising then inc(step);
-                 if delay = 0 then
-                    delay:= 17
+                 if not bWaterRising then
+                    inc(step)
                  else
-                    dec(delay);
+                    begin
+                    if delay = 0 then
+                       delay:= 17
+                    else
+                       dec(delay);
 
-                 if delay = 0 then
-                    if not WaterMachine then inc(step)
+                    if delay = 0 then
+                       if not WaterMachine then inc(step)
+                    end
                  end;
        stHealth: begin
                  if GameTicks > 20 * 60 * 1000 then cHealthDecrease:= 5;
