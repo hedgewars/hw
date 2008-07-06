@@ -402,6 +402,30 @@ while Gear <> nil do
 	end;
 end;
 
+function WaterMachine: boolean;
+const
+	decStep: Longword = 0;
+	LastTurn: LongWord = 0;
+var i: LongWord;
+begin
+if (decStep = 0) and (LastTurn < FinishedTurnsTotal) then
+	begin
+	LastTurn:= FinishedTurnsTotal;
+	decStep:= 40
+	end;
+
+if decStep <> 0 then
+	begin
+	dec(decStep);
+	dec(cWaterLine);
+	for i:= 0 to 2047 do
+		Land[cWaterLine, i]:= 0;
+	SetAllToActive
+	end;
+
+WaterMachine:= decStep <> 0;
+end;
+
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
 begin
 if cAltDamage then
@@ -411,7 +435,8 @@ end;
 procedure ProcessGears;
 const delay: LongWord = 0;
       step: (stDelay, stChDmg, stTurnReact,
-             stAfterDelay, stChWin, stHealth, stSpawn, stNTurn) = stDelay;
+             stAfterDelay, stChWin, stWater, stHealth,
+             stSpawn, stNTurn) = stDelay;
 
 var Gear, t: PGear;
 begin
@@ -455,7 +480,22 @@ if AllInactive then
                     inc(step)
                  end;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
-       stHealth: if (cHealthDecrease = 0)
+        stWater: begin
+                 if GameTicks > 25 * 60 * 1000 then bWaterRising:= true;
+
+                 if not bWaterRising then inc(step);
+                 if delay = 0 then
+                    delay:= 17
+                 else
+                    dec(delay);
+
+                 if delay = 0 then
+                    if not WaterMachine then inc(step)
+                 end;
+       stHealth: begin
+                 if GameTicks > 20 * 60 * 1000 then cHealthDecrease:= 5;
+
+                 if (cHealthDecrease = 0)
                    or bBetweenTurns
                    or isInMultiShoot
                    or (FinishedTurnsTotal = 0) then inc(step)
@@ -463,7 +503,8 @@ if AllInactive then
                     bBetweenTurns:= true;
                     HealthMachine;
                     step:= stChDmg
-                    end;
+                    end
+                 end;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)

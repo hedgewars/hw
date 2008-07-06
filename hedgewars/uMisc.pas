@@ -71,7 +71,8 @@ var
 	cInactDelay   : Longword = 1500;
 
 	bBetweenTurns: boolean = false;
-	cHealthDecrease: LongWord = 1;
+	cHealthDecrease: LongWord = 0;
+	bWaterRising   : Boolean = false;
 
 {$WARNINGS OFF}
 	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
