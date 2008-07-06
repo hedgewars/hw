@@ -85,6 +85,7 @@ SOURCES += binds.cpp \
 	   input_ip.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_fr.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_it.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_pl.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ru.ts
