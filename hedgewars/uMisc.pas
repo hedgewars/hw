@@ -68,7 +68,7 @@ var
 	cVolumeDelta  : LongInt = 0;
 	cTimerInterval   : Longword = 5;
 	cHasFocus     : boolean = true;
-	cInactDelay   : Longword = 1500;
+	cInactDelay   : Longword = 1250;
 
 	bBetweenTurns: boolean = false;
 	cHealthDecrease: LongWord = 0;
