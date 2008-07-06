@@ -505,7 +505,11 @@ if AllInactive then
                     end
                  end;
        stHealth: begin
-                 if TotalRounds = 15 then cHealthDecrease:= 5;
+                 if (TotalRounds = 15) and (cHealthDecrease = 0) then
+                    begin
+                    cHealthDecrease:= 5;
+                    AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState)
+                    end;
 
                  if (cHealthDecrease = 0)
                    or bBetweenTurns
