@@ -38,6 +38,8 @@ procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
 
+var FinishedTurnsTotal: LongInt = -1;
+
 implementation
 uses uTeams, uSound, uMisc;
 var DamageGiven : Longword = 0;
@@ -48,12 +50,13 @@ var DamageGiven : Longword = 0;
     KillsTotal  : LongWord = 0;
     AmmoUsedCount : Longword = 0;
     AmmoDamagingUsed : boolean = false;
-    FinishedTurnsTotal: LongInt = -1;
     SkippedTurns: LongWord = 0;
     isTurnSkipped: boolean = false;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
+if bBetweenTurns then exit;
+
 if Gear <> CurrentHedgehog^.Gear then
 	inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
 
@@ -81,6 +84,8 @@ end;
 procedure TurnReaction;
 var i, t: LongInt;
 begin
+TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
+
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal = 0 then exit;
 
@@ -112,7 +117,7 @@ else if DamageGiven <> 0 then
 
 else if AmmoDamagingUsed then
 	PlaySound(sndMissed, false)
-else if AmmoUsedCount > 0 then
+else if (AmmoUsedCount > 0) and not isTurnSkipped then
 	// nothing ?
 else if isTurnSkipped then
 	PlaySound(sndBoring, false)

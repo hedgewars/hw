@@ -20,76 +20,80 @@ unit uMisc;
 interface
 uses uConsts, SDLh, uFloat, GL;
 {$INCLUDE options.inc}
-var isCursorVisible : boolean = false;
-    isTerminated    : boolean = false;
-    isInLag         : boolean = false;
-    isPaused        : boolean = false;
-    isSoundEnabled  : boolean = true;
-    isSEBackup      : boolean = true;
-    isInMultiShoot  : boolean = false;
-    isSpeed         : boolean = false;
+var
+	isCursorVisible : boolean = false;
+	isTerminated    : boolean = false;
+	isInLag         : boolean = false;
+	isPaused        : boolean = false;
+	isSoundEnabled  : boolean = true;
+	isSEBackup      : boolean = true;
+	isInMultiShoot  : boolean = false;
+	isSpeed         : boolean = false;
 
-    GameState     : TGameState = Low(TGameState);
-    GameType      : TGameType = gmtLocal;
-    GameFlags     : Longword = 0;
-    TurnTimeLeft  : Longword = 0;
-    cHedgehogTurnTime: Longword = 45000;
-    cMaxAIThinkTime  : Longword = 9000;
+	GameState     : TGameState = Low(TGameState);
+	GameType      : TGameType = gmtLocal;
+	GameFlags     : Longword = 0;
+	TurnTimeLeft  : Longword = 0;
+	cHedgehogTurnTime: Longword = 45000;
+	cMaxAIThinkTime  : Longword = 9000;
 
-    cCloudsNumber    : LongInt = 9;
-    cScreenWidth     : LongInt = 1024;
-    cScreenHeight    : LongInt = 768;
-    cBits            : LongInt = 16;
-    cBitsStr         : string[2] = '16';
-    cTagsMask        : byte = 7;
+	cCloudsNumber    : LongInt = 9;
+	cScreenWidth     : LongInt = 1024;
+	cScreenHeight    : LongInt = 768;
+	cBits            : LongInt = 16;
+	cBitsStr         : string[2] = '16';
+	cTagsMask        : byte = 7;
 
-    cWaterLine       : LongInt = 1024;
-    cVisibleWater    : LongInt = 128;
-    cGearScrEdgesDist: LongInt = 240;
-    cCursorEdgesDist : LongInt = 40;
-    cTeamHealthWidth : LongInt = 128;
-    cAltDamage       : boolean = true;
+	cWaterLine       : LongInt = 1024;
+	cVisibleWater    : LongInt = 128;
+	cGearScrEdgesDist: LongInt = 240;
+	cCursorEdgesDist : LongInt = 40;
+	cTeamHealthWidth : LongInt = 128;
+	cAltDamage       : boolean = true;
 
-    GameTicks     : LongWord = 0;
+	GameTicks     : LongWord = 0;
 
-    cSkyColor     : Longword = 0;
-    cWhiteColor   : Longword = $FFFFFFFF;
-    cColorNearBlack       : Longword = $FF000010;
-    cExplosionBorderColor : LongWord = $808080;
+	cSkyColor     : Longword = 0;
+	cWhiteColor   : Longword = $FFFFFFFF;
+	cColorNearBlack       : Longword = $FF000010;
+	cExplosionBorderColor : LongWord = $808080;
 
-    cShowFPS      : boolean = true;
-    cCaseFactor   : Longword = 5;  {0..9}
-    cLandAdditions: Longword = 4;
-    cFullScreen   : boolean = true;
-    cLocaleFName  : shortstring = 'en.txt';
-    cSeed         : shortstring = '';
-    cInitVolume   : LongInt = 128;
-    cVolumeDelta  : LongInt = 0;
-    cTimerInterval   : Longword = 5;
-    cHasFocus     : boolean = true;
-    cInactDelay   : Longword = 1500;
+	cShowFPS      : boolean = true;
+	cCaseFactor   : Longword = 5;  {0..9}
+	cLandAdditions: Longword = 4;
+	cFullScreen   : boolean = true;
+	cLocaleFName  : shortstring = 'en.txt';
+	cSeed         : shortstring = '';
+	cInitVolume   : LongInt = 128;
+	cVolumeDelta  : LongInt = 0;
+	cTimerInterval   : Longword = 5;
+	cHasFocus     : boolean = true;
+	cInactDelay   : Longword = 1500;
+
+	bBetweenTurns: boolean = false;
+	cHealthDecrease: LongWord = 1;
 
 {$WARNINGS OFF}
-    cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
-    cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
+	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
+	cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
 {$WARNINGS ON}
 
 var
-    cSendEmptyPacketTime : LongWord = 2000;
-    cSendCursorPosTime   : LongWord = 50;
-    ShowCrosshair  : boolean;
-    cDrownSpeed,
-    cMaxWindSpeed,
-    cWindSpeed,
-    cGravity: hwFloat;
+	cSendEmptyPacketTime : LongWord = 2000;
+	cSendCursorPosTime   : LongWord = 50;
+	ShowCrosshair  : boolean;
+	cDrownSpeed,
+	cMaxWindSpeed,
+	cWindSpeed,
+	cGravity: hwFloat;
 
-    flagMakeCapture: boolean = false;
+	flagMakeCapture: boolean = false;
 
-    InitStepsFlags: Longword = 0;
+	InitStepsFlags: Longword = 0;
 
-    RealTicks: Longword = 0;
+	RealTicks: Longword = 0;
 
-    AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 function hwSign(r: hwFloat): LongInt;
 function Min(a, b: LongInt): LongInt;

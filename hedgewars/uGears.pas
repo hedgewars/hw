@@ -388,6 +388,20 @@ while Gear <> nil do
 	end;
 end;
 
+procedure HealthMachine;
+var Gear: PGear;
+begin
+Gear:= GearsList;
+
+while Gear <> nil do
+	begin
+	if Gear^.Kind = gtHedgehog then
+		Gear^.Damage:= min(cHealthDecrease, Gear^.Health - 1);
+
+	Gear:= Gear^.NextGear
+	end;
+end;
+
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
 begin
 if cAltDamage then
@@ -397,13 +411,14 @@ end;
 procedure ProcessGears;
 const delay: LongWord = 0;
       step: (stDelay, stChDmg, stTurnReact,
-             stAfterDelay, stChWin, stSpawn, stNTurn) = stDelay;
+             stAfterDelay, stChWin, stHealth, stSpawn, stNTurn) = stDelay;
+
 var Gear, t: PGear;
 begin
 PrvInactive:= AllInactive;
 AllInactive:= true;
 t:= GearsList;
-while t<>nil do
+while t <> nil do
       begin
       Gear:= t;
       t:= Gear^.NextGear;
@@ -423,7 +438,7 @@ if AllInactive then
                  end;
         stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
     stTurnReact: begin
-                 if not isInMultiShoot then
+                 if (not bBetweenTurns) and (not isInMultiShoot) then
                     begin
                     uStats.TurnReaction;
                     inc(step)
@@ -440,6 +455,15 @@ if AllInactive then
                     inc(step)
                  end;
         stChWin: if not CheckForWin then inc(step) else step:= stDelay;
+       stHealth: if (cHealthDecrease = 0)
+                   or bBetweenTurns
+                   or isInMultiShoot
+                   or (FinishedTurnsTotal = 0) then inc(step)
+                    else begin
+                    bBetweenTurns:= true;
+                    HealthMachine;
+                    step:= stChDmg
+                    end;
         stSpawn: begin
                  if not isInMultiShoot then SpawnBoxOfSmth;
                  inc(step)
@@ -448,6 +472,7 @@ if AllInactive then
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
                     ParseCommand('/nextturn', true);
+                    bBetweenTurns:= false
                     end;
                  step:= Low(step)
                  end;
