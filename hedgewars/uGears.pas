@@ -481,7 +481,11 @@ if AllInactive then
                  end;
         stChWin: if not CheckForWin then
                     begin
-                    if not bBetweenTurns then SwitchHedgehog;
+                    if not bBetweenTurns then
+                       begin
+                       SwitchHedgehog;
+                       ParseCommand('/nextturn', true);
+                       end;
                     inc(step)
                     end else step:= stDelay;
         stWater: begin
@@ -520,7 +524,6 @@ if AllInactive then
         stNTurn: begin
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
-                    ParseCommand('/nextturn', true);
                     AfterSwitchHedgehog;
                     bBetweenTurns:= false
                     end;
