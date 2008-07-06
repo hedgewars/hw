@@ -38,7 +38,9 @@ procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
 
-var FinishedTurnsTotal: LongInt = -1;
+var
+	TotalRounds: Longword = -1;
+	FinishedTurnsTotal: LongInt = -1;
 
 implementation
 uses uTeams, uSound, uMisc;

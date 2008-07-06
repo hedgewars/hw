@@ -79,13 +79,14 @@ var CurrentTeam: PTeam = nil;
     ClansCount: Longword = 0;
     CurMinAngle, CurMaxAngle: Longword;
 
-function AddTeam(TeamColor: Longword): PTeam;
+function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
+procedure AfterSwitchHedgehog;
 procedure InitTeams;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
-function CheckForWin: boolean;
+function  CheckForWin: boolean;
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound;
@@ -140,7 +141,6 @@ end;
 
 procedure SwitchHedgehog;
 var c: LongWord;
-    g: PGear;
     PrevHH, PrevTeam: LongWord;
 begin
 FreeActionsList;
@@ -159,23 +159,34 @@ with CurrentHedgehog^ do
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-  c:= Succ(c) mod ClansCount;
-  with ClansArray[c]^ do
-    repeat
-    PrevTeam:= CurrTeam;
-    CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
-    CurrentTeam:= Teams[CurrTeam];
-    with CurrentTeam^ do
-      begin
-      PrevHH:= CurrHedgehog;
-      repeat
-        CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-      until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
-      end
-    until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
+	inc(c);
+	if c = ClansCount then
+		begin
+		inc(TotalRounds);
+		c:= 0
+		end;
+
+	with ClansArray[c]^ do
+		repeat
+			PrevTeam:= CurrTeam;
+			CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
+			CurrentTeam:= Teams[CurrTeam];
+			with CurrentTeam^ do
+				begin
+				PrevHH:= CurrHedgehog;
+				repeat
+					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
+			end
+		until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
 until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
-CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
+CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
+end;
+
+procedure AfterSwitchHedgehog;
+var g: PGear;
+begin
 SwitchNotHoldedAmmo(CurrentHedgehog^);
 with CurrentHedgehog^ do
      begin

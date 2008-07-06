@@ -479,9 +479,13 @@ if AllInactive then
                  if delay = 0 then
                     inc(step)
                  end;
-        stChWin: if not CheckForWin then inc(step) else step:= stDelay;
+        stChWin: if not CheckForWin then
+                    begin
+                    if not bBetweenTurns then SwitchHedgehog;
+                    inc(step)
+                    end else step:= stDelay;
         stWater: begin
-                 if GameTicks > 25 * 60 * 1000 then bWaterRising:= true;
+                 if TotalRounds = 17 then bWaterRising:= true;
 
                  if not bWaterRising then
                     inc(step)
@@ -497,12 +501,12 @@ if AllInactive then
                     end
                  end;
        stHealth: begin
-                 if GameTicks > 20 * 60 * 1000 then cHealthDecrease:= 5;
+                 if TotalRounds = 15 then cHealthDecrease:= 5;
 
                  if (cHealthDecrease = 0)
                    or bBetweenTurns
                    or isInMultiShoot
-                   or (FinishedTurnsTotal = 0) then inc(step)
+                   or (TotalRounds = 0) then inc(step)
                     else begin
                     bBetweenTurns:= true;
                     HealthMachine;
@@ -517,6 +521,7 @@ if AllInactive then
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
                     ParseCommand('/nextturn', true);
+                    AfterSwitchHedgehog;
                     bBetweenTurns:= false
                     end;
                  step:= Low(step)
