@@ -481,7 +481,7 @@ if AllInactive then
                  end;
         stChWin: if not CheckForWin then
                     begin
-                    if not bBetweenTurns then
+                    if not (bBetweenTurns or isInMultiShoot) then
                        begin
                        ParseCommand('/nextturn', true);
                        SwitchHedgehog;
