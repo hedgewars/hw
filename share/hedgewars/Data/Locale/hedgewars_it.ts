@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="it_IT">
-<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -424,6 +423,7 @@
 <context>
     <name>QLabel</name>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -438,17 +438,17 @@
         <translation>Sviluppatori:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="56"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="57"/>
         <source>Art:</source>
         <translation>Grafica:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="63"/>
         <source>Translations:</source>
         <translation>Traduzioni:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="67"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="75"/>
         <source>Special thanks:</source>
         <translation>Ringraziamenti speciali:</translation>
     </message>
@@ -566,22 +566,22 @@ Please check your installation</source>
 Controllare la propria installazione</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="168"/>
         <source>Weapons</source>
         <translation>Armi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="120"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="123"/>
         <source>Can not edit default weapon set</source>
         <translation>Non è possibile modificare il set di armi predefinito</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="160"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="163"/>
         <source>Can not delete default weapon set</source>
         <translation>Non è possibile eliminare il set di armi predefinito</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="168"/>
         <source>Really delete this weapon set?</source>
         <translation>Vuoi davvero eliminare questo set di armi?</translation>
     </message>
@@ -866,34 +866,34 @@ Controllare la propria installazione</translation>
         <translation>pausa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
         <source>volume down</source>
         <translation>abbassare volume</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
         <source>volume up</source>
         <translation>alzare volume</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
         <source>change mode</source>
         <translation>cambiare modalità</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
         <source>capture</source>
         <translation>cattura</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
         <source>hedgehogs
 info</source>
         <translation>informazioni
 hedgehogs</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
         <source>quit</source>
         <translation>esci</translation>
     </message>
@@ -906,6 +906,11 @@ hedgehogs</translation>
         <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat history</source>
         <translation>cronologia chat</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
+        <source>confirmation</source>
+        <translation>conferma</translation>
     </message>
 </context>
 <context>
