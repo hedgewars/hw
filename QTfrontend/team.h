@@ -1,5 +1,5 @@
 /*
- * Hedgewars, a worms-like game
+ * Hedgewars, a free turn based strategy game
  * Copyright (c) 2005 Andrey Korotaev <unC0Rr@gmail.com>
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
