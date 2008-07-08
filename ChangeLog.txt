@@ -1,6 +1,16 @@
 + features
 * bugfixes
 
+0.9.4 -> 0.9.5:
+ + Taunts
+ + Exit confirmation dialog
+ + Sudden death
+ + Maps added: Hydrant, Lonely Island
+ + Updated mushroom map
+ + Translations added: German, Slovak, Bulgarian, French
+ + More impressive exposions
+ * Fix bad sprite when you jump and get hit
+
 0.9.3 -> 0.9.4:
  + In game chat is now implemented, chat (and taunt!) your buddies during network play
  + Mortar, whip and Kamikaze weapon additions
