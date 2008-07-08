@@ -39,7 +39,7 @@ procedure TurnReaction;
 procedure SendStats;
 
 var
-	TotalRounds: Longword = -1;
+	TotalRounds: LongInt = -1;
 	FinishedTurnsTotal: LongInt = -1;
 
 implementation

@@ -405,7 +405,7 @@ end;
 function WaterMachine: boolean;
 const
 	decStep: Longword = 0;
-	LastTurn: LongWord = 0;
+	LastTurn: LongInt = 0;
 var i: LongWord;
 begin
 if (decStep = 0) and (LastTurn < FinishedTurnsTotal) then
