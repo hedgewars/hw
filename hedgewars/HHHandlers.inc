@@ -237,8 +237,9 @@ case Gear^.Pos of
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
-                    if not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven
-                      or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)) then
+                    if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven
+                      or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
+                    or (GameType = gmtDemo)  then
                        begin
                        s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
                        AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
