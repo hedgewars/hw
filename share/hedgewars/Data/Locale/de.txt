@@ -1,18 +1,18 @@
 ; German locale
 
 00:00=Granate
-00:01=ClusterBomb
+00:01=Splittergranate
 00:02=Bazooka
 00:03=UFO
 00:04=Schrotflinte
 00:05=Presslufthammer
-00:06=Skip
+00:06=Überspringen
 00:07=Seil
 00:08=Mine
 00:09=DEagle
 00:10=Dynamit
-00:11=Baseball Schläger
-00:12=Fire Punch
+00:11=Baseballschläger
+00:12=Feuerfaust
 00:13=sek
 00:14=Fallschirm
 00:15=Luftangriff
@@ -25,10 +25,10 @@
 00:22=Stoßen
 00:23=Kamikaze
 
-01:00=Auf in die Schlach!
+01:00=Auf in die Schlacht!
 01:01=Unentschieden
 01:02=%1 gewinnt!
 01:03=Lautstärke %1%
 01:04=Pausiert
-01:05=Really quit (Y/Esc)?
+01:05=Wirklich beenden (Y/Esc)?
 01:06=Sudden death!
