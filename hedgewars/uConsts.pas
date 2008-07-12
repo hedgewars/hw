@@ -228,15 +228,15 @@ const
 	Fontz: array[THWFont] of THHFont = (
 			(Handle: nil;
 			Height: 12;
-			style: TTF_STYLE_NORMAL;
+			style: TTF_STYLE_BOLD;
 			Name: 'DejaVuSans.ttf'),
 			(Handle: nil;
 			Height: 24;
-			style: TTF_STYLE_NORMAL;
+			style: TTF_STYLE_BOLD;
 			Name: 'DejaVuSans.ttf'),
 			(Handle: nil;
 			Height: 10;
-			style: TTF_STYLE_NORMAL;
+			style: TTF_STYLE_BOLD;
 			Name: 'DejaVuSans.ttf')
 			);
 
