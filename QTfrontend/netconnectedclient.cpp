@@ -129,6 +129,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     int oldTeamHHNum = it==m_hwserver->m_gameCfg.end() ? 0 : it.value()[0].toUInt();
     int newTeamHHNum = lst[3].toUInt();
     m_hwserver->hhnum+=newTeamHHNum-oldTeamHHNum;
+qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
     // create CONFIG_PARAM to save HHNUM at server from lst
     lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
     m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
@@ -170,6 +171,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     }
     int toAdd=maxAdd<4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
+qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
     // hedgehogs num config
     QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
       .arg(netTeamID)\
@@ -195,7 +197,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     if(lst.size() < 2)
     {
       qWarning("Net server: Bad 'REMOVETEAM' message");
-	  return;
+      return;
     }
 
     for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it)
@@ -206,6 +208,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
         if(hhTmpList[1]==lst[1])
         {
 		  m_hwserver->hhnum-=it.value()[0].toUInt();
+qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
 		  break;
         }
       }

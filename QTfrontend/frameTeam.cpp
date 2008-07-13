@@ -16,12 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QResizeEvent>
+#include <QCoreApplication>
+#include <QDebug>
+
 #include "frameTeam.h"
 #include "teamselhelper.h"
 #include "hwconsts.h"
-
-#include <QResizeEvent>
-#include <QCoreApplication>
 
 FrameTeams::FrameTeams(QWidget* parent) :
   QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
@@ -106,6 +107,7 @@ void FrameTeams::setTeamColor(const HWTeam& team)
 
 QWidget* FrameTeams::getTeamWidget(HWTeam team)
 {
+//qDebug() << "FrameTeams::getTeamWidget getNetID() = " << team.getNetID();
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   QWidget* ret = it!=teamToWidget.end() ? it.value() : 0;
   return ret;
