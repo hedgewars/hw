@@ -76,12 +76,19 @@ if hwRound(Gear^.Y) > 1100 then Gear^.Y:= Gear^.Y - int2hwFloat(1228)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
+var i: Longword;
 begin
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
-if hwRound(Gear^.Y) > -160 then Gear^.dY:= Gear^.dY - _1div50000 * Steps
-                           else Gear^.dY:= Gear^.dY + _1div50000 * Steps;
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+for i:= 0 to Steps - 1 do
+	begin
+	if hwRound(Gear^.Y) > -160 then
+		Gear^.dY:= Gear^.dY - _1div50000
+	else
+		Gear^.dY:= Gear^.dY + _1div50000;
+
+	Gear^.Y:= Gear^.Y + Gear^.dY
+	end;
 
 if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
 if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
@@ -250,7 +257,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -140, vgtCloud)
+    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -160, vgtCloud)
 end;
 
 initialization
