@@ -121,6 +121,7 @@ function  Surface2Tex(surf: PSDL_Surface): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
+procedure MakeScreenshot(s: shortstring);
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -343,6 +344,36 @@ while i <= length(s) do
 if c < 3 then t:= t - c;
 
 byte(DecodeBase64[0]):= t - 1
+end;
+
+const GL_BGR = $80E0; // some opengl headers don't have that const (?)
+procedure MakeScreenshot(s: shortstring);
+const head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
+var p: Pointer;
+	size: Longword;
+	f: file;
+begin
+head[6]:= cScreenWidth;
+head[7]:= cScreenHeight;
+
+size:= cScreenWidth * cScreenHeight * 3;
+p:= GetMem(size);
+
+glReadBuffer(GL_FRONT);
+glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
+
+{$I-}
+Assign(f, s);
+Rewrite(f, 1);
+if IOResult = 0 then
+	begin
+	BlockWrite(f, head, sizeof(head));
+	BlockWrite(f, p^, size);
+	Close(f);
+	end;
+{$I+}
+
+FreeMem(p)
 end;
 
 {$IFDEF DEBUGFILE}

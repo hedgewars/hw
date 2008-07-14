@@ -67,7 +67,7 @@ procedure OnDestroy; forward;
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
 const MusicTimerTicks: Longword = 0;
-//var s: string;
+var s: string;
 begin
 inc(RealTicks, Lag);
 
@@ -119,11 +119,12 @@ case GameState of
 SDL_GL_SwapBuffers();
 if flagMakeCapture then
    begin
-{   flagMakeCapture:= false;
-   s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.bmp';
+   flagMakeCapture:= false;
+   s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
    WriteLnToConsole('Saving ' + s);
-   SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
-}   end;
+   MakeScreenshot(s);
+//   SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
+   end;
 end;
 
 ////////////////////
