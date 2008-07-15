@@ -56,7 +56,7 @@ void HWNewNet::Disconnect()
 
 void HWNewNet::JoinGame(const QString & game)
 {
-  RawSendNet(QString("JOIN %1").arg(game));
+  RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(game));
 }
 
 void HWNewNet::AddTeam(const HWTeam & team)
@@ -98,6 +98,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
+qDebug() << "Client: " << buf;
   NetSocket.write(buf);
   NetSocket.write("\n", 1);
 }
@@ -142,6 +143,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseLine(const QByteArray & line)
 {
+qDebug() << "Server: " << line;
   QString msg = QString::fromUtf8 (line.data(), line.size());
 
   QStringList lst = msg.split(delimeter);

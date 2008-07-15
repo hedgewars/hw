@@ -17,6 +17,7 @@ acceptLoop servSock acceptChan = do
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
+	hPutStrLn cHandle "CONNECTED"
 	acceptLoop servSock acceptChan
 
 listenLoop :: Handle -> TChan String -> IO ()
