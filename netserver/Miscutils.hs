@@ -22,11 +22,18 @@ data ClientInfo =
 instance Eq ClientInfo where
 	a1 == a2 = handle a1 == handle a2
 
+data TeamInfo =
+	TeamInfo
+	{
+		teamname :: String
+	}
+
 data RoomInfo =
 	RoomInfo
 	{
 		name :: String,
-		password :: String
+		password :: String,
+		teams :: [TeamInfo]
 	}
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]

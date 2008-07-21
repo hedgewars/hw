@@ -58,7 +58,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
 		(noChangeClients, noChangeRooms, clientOnly, ["WARNING", "There's already a room with that name"])
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword), clientOnly, ["JOINED", nick client])
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword []), clientOnly, ["JOINED", nick client])
 	where
 		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
 
@@ -85,6 +85,13 @@ handleCmd_inRoom :: CmdHandler
 
 handleCmd_inRoom client _ _ ["CHAT_STRING", _, msg] = (noChangeClients, noChangeRooms, othersInRoom, ["CHAT_STRING", nick client, msg])
 
-handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value] = (noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value])
+handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value] =
+	(noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value])
+
+handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value1, value2] =
+	(noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value1, value2])
+
+handleCmd_inRoom client clients rooms ["ADDTEAM:", teamName, teamColor, graveName, fortName, teamLevel, hh0, hh1, hh2, hh3, hh4, hh5, hh6, hh7] =
+	(noChangeClients, noChangeRooms, othersInRoom, ["TEAM_ACCEPTED", "1", teamName])
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, clientOnly, badCmd)

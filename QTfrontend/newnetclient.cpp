@@ -125,6 +125,7 @@ void HWNewNet::OnConnect()
   RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
   RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
   RawSendNet(QString("CREATE%1%2").arg(delimeter).arg("myroom"));
+  RawSendNet(QString("JOIN%1%2").arg(delimeter).arg("myroom"));
 }
 
 void HWNewNet::OnDisconnect()
