@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QList>
 #include <QMap>
+#include <QStringList>
 
 class HWNetServer;
 class QTcpSocket;
@@ -49,7 +50,7 @@ class HWConnectedClient : public QObject
   class ShouldDisconnectException {};
 
   QString client_nick;
-  void ParseLine(const QByteArray & line);
+  void ParseCmd(const QStringList & lst);
   unsigned int removeTeam(const QString& tname); // returns netID
 
   HWNetServer* m_hwserver;
@@ -58,7 +59,7 @@ class HWConnectedClient : public QObject
   void RawSendNet(const QString & buf);
   void RawSendNet(const QByteArray & buf);
 
-  //QByteArray readbuffer;
+  QStringList cmdbuf;
 
  signals:
   void HWClientDisconnected(HWConnectedClient* client);

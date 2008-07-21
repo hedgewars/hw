@@ -9,15 +9,18 @@ import Maybe (fromJust)
 
 
 data ClientInfo =
-	ClientInfo
+ ClientInfo
 	{
-		chan :: TChan String,
+		chan :: TChan [String],
 		handle :: Handle,
 		nick :: String,
 		protocol :: Word16,
 		room :: String,
 		isMaster :: Bool
 	}
+
+instance Eq ClientInfo where
+	a1 == a2 = handle a1 == handle a2
 
 data RoomInfo =
 	RoomInfo
@@ -26,24 +29,17 @@ data RoomInfo =
 		password :: String
 	}
 
-clientByHandle :: Handle -> [ClientInfo] -> ClientInfo
-clientByHandle clhandle clients = fromJust $ find (\ci -> handle ci == clhandle) clients
+type ClientsTransform = [ClientInfo] -> [ClientInfo]
+type RoomsTransform = [RoomInfo] -> [RoomInfo]
+type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]
+type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, HandlesSelector, [String])
+
 
 roomByName :: String -> [RoomInfo] -> RoomInfo
 roomByName roomName rooms = fromJust $ find (\room -> roomName == name room) rooms
 
-fromRoomHandles :: String -> [ClientInfo] -> [Handle]
-fromRoomHandles roomName clients = map (\ci -> handle ci) $ filter (\ci -> room ci == roomName) clients
-
-modifyClient :: Handle -> [ClientInfo] -> (ClientInfo -> ClientInfo) -> [ClientInfo]
-modifyClient clhandle (cl:cls) func =
-	if handle cl == clhandle then
-		(func cl) : cls
-	else
-		cl : (modifyClient clhandle cls func)
-
-tselect :: [ClientInfo] -> STM (String, Handle)
-tselect = foldl orElse retry . map (\ci -> (flip (,) $ handle ci) `fmap` readTChan (chan ci))
+tselect :: [ClientInfo] -> STM ([String], ClientInfo)
+tselect = foldl orElse retry . map (\ci -> (flip (,) ci) `fmap` readTChan (chan ci))
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of
@@ -56,3 +52,37 @@ deleteBy2t eq x (y:ys) = if y `eq` x then ys else y : deleteBy2t eq x ys
 
 deleteFirstsBy2t :: (a -> b -> Bool) -> [a] -> [b] -> [a]
 deleteFirstsBy2t eq =  foldl (flip (deleteBy2t eq))
+
+sameRoom :: HandlesSelector
+sameRoom client clients rooms = map handle $ filter (\ci -> room ci == room client) clients
+
+othersInRoom :: HandlesSelector
+othersInRoom client clients rooms = map handle $ filter (client /=) $ filter (\ci -> room ci == room client) clients
+
+fromRoom :: String -> HandlesSelector
+fromRoom roomName _ clients _ = map handle $ filter (\ci -> room ci == roomName) clients
+
+clientOnly :: HandlesSelector
+clientOnly client _ _ = [handle client]
+
+noChangeClients :: ClientsTransform
+noChangeClients a = a
+
+modifyClient :: ClientInfo -> ClientsTransform
+modifyClient client (cl:cls) =
+	if cl == client then
+		client : cls
+	else
+		cl : (modifyClient client cls)
+
+noChangeRooms :: RoomsTransform
+noChangeRooms a = a
+
+addRoom :: RoomInfo -> RoomsTransform
+addRoom room rooms = room:rooms
+
+removeRoom :: String -> RoomsTransform
+removeRoom roomname rooms = filter (\rm -> roomname /= name rm) rooms
+
+badCmd :: [String]
+badCmd = ["ERROR", "Bad command, state or incorrect parameter"]

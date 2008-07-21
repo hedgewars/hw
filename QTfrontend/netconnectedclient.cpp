@@ -47,19 +47,22 @@ void HWConnectedClient::ClientDisconnect()
 void HWConnectedClient::ClientRead()
 {
   try {
-    while (m_client->canReadLine()) {
-      ParseLine(m_client->readLine().trimmed());
-    }
+	while (m_client->canReadLine()) {
+		QString s = QString::fromUtf8(m_client->readLine().trimmed());
+		if (s.size() == 0) {
+			ParseCmd(cmdbuf);
+			cmdbuf.clear();
+		} else
+			cmdbuf << s;
+	}
   } catch(ShouldDisconnectException& e) {
     m_client->close();
   }
 }
 
-void HWConnectedClient::ParseLine(const QByteArray & line)
+void HWConnectedClient::ParseCmd(const QStringList & lst)
 {
-  QString msg = QString::fromUtf8 (line.data(), line.size());
-  QStringList lst = msg.split(delimeter);
-//qDebug() << "Parsing: " << lst;
+qDebug() << "Server: Parsing:" << lst;
   if(!lst.size())
   {
     qWarning("Net server: Bad message");
@@ -101,7 +104,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(client_nick=="")
   {
-  	qWarning(QString("Net server: Message from unnamed client: '%1'").arg(msg).toAscii().data());
+  	qWarning() << "Net server: Message from unnamed client:" << lst;
   	return;
   }
 
@@ -117,7 +120,7 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
 
   if(lst[0]=="HHNUM") {
     if (lst.size()<4) {
-      qWarning((QString("Net server: Bad 'HHNUM' message: ")+msg+" size="+QString("%1").arg(lst.size())).toAscii().data());
+      qWarning() << "Net server: Bad 'HHNUM' message:" << lst;
       return;
     }
     if(!m_hwserver->isChiefClient(this))
@@ -131,15 +134,16 @@ void HWConnectedClient::ParseLine(const QByteArray & line)
     m_hwserver->hhnum+=newTeamHHNum-oldTeamHHNum;
 qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
     // create CONFIG_PARAM to save HHNUM at server from lst
-    lst=QStringList("CONFIG_PARAM") << confstr << lst[3];
-    m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
-    m_hwserver->m_gameCfg[lst[1]]=lst.mid(2);
+    QStringList tmp = lst;
+    tmp=QStringList("CONFIG_PARAM") << confstr << lst[3];
+    m_hwserver->sendOthers(this, tmp.join(QString(delimeter)));
+    m_hwserver->m_gameCfg[tmp[1]]=tmp.mid(2);
     return;
   }
 
   if(lst[0]=="CONFIG_PARAM") {
     if (lst.size()<3) {
-      qWarning((QString("Net server: Bad 'CONFIG_PARAM' message: ")+msg).toAscii().data());
+      qWarning() << "Net server: Bad 'CONFIG_PARAM' message:" << lst;
       return;
     }
 
@@ -156,11 +160,12 @@ qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
       qWarning("Net server: Bad 'ADDTEAM' message");
 	  return;
     }
-    lst.pop_front();
+    QStringList tmp = lst;
+    tmp.pop_front();
 
     // add team ID
     static unsigned int netTeamID=0;
-    lst.insert(1, QString::number(++netTeamID));
+    tmp.insert(1, QString::number(++netTeamID));
 
     // hedgehogs num count
     int maxAdd=18-m_hwserver->hhnum;
@@ -173,21 +178,21 @@ qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
     m_hwserver->hhnum+=toAdd;
 qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
     // hedgehogs num config
-    QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(lst[0])\
+    QString hhnumCfg=QString("CONFIG_PARAM%1HHNUM+%2+%3%1%4").arg(delimeter).arg(tmp[0])\
       .arg(netTeamID)\
       .arg(toAdd);
 
     // creating color config for new team
-    QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(lst[0])\
+    QString colorCfg=QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(tmp[0])\
       .arg(netTeamID)\
-      .arg(lst.takeAt(2));
+      .arg(tmp.takeAt(2));
 
     m_hwserver->m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
     m_hwserver->m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
-    m_teamsCfg.push_back(lst);
+    m_teamsCfg.push_back(tmp);
 
-    m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+lst.join(QString(delimeter)));
-    RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(lst[0]).arg(lst[1]));
+    m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+tmp.join(QString(delimeter)));
+    RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(tmp[0]).arg(tmp[1]));
     m_hwserver->sendAll(colorCfg);
     m_hwserver->sendAll(hhnumCfg);
     return;
@@ -219,7 +224,7 @@ qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
     return;
   }
 
-  m_hwserver->sendOthers(this, msg);
+  m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
 }
 
 unsigned int HWConnectedClient::removeTeam(const QString& tname)
@@ -251,7 +256,7 @@ void HWConnectedClient::RawSendNet(const QString & str)
 void HWConnectedClient::RawSendNet(const QByteArray & buf)
 {
   m_client->write(buf);
-  m_client->write("\n", 1);
+  m_client->write("\n\n", 2);
 }
 
 QString HWConnectedClient::getClientNick() const

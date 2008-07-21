@@ -17,20 +17,23 @@ acceptLoop servSock acceptChan = do
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
-	hPutStrLn cHandle "CONNECTED"
+	hPutStrLn cHandle "CONNECTED\n"
 	acceptLoop servSock acceptChan
 
-listenLoop :: Handle -> TChan String -> IO ()
-listenLoop handle chan = do
+listenLoop :: Handle -> [String] -> TChan [String] -> IO ()
+listenLoop handle buf chan = do
 	str <- hGetLine handle
-	atomically $ writeTChan chan str
-	listenLoop handle chan
+	if str == "" then do
+		atomically $ writeTChan chan buf
+		listenLoop handle [] chan
+		else
+		listenLoop handle (buf ++ [str]) chan
 
-clientLoop :: Handle -> TChan String -> IO ()
+clientLoop :: Handle -> TChan [String] -> IO ()
 clientLoop handle chan =
-	listenLoop handle chan
+	listenLoop handle [] chan
 		`catch` (const $ clientOff >> return ())
-	where clientOff = atomically $ writeTChan chan "QUIT"
+	where clientOff = atomically $ writeTChan chan ["QUIT"]
 
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
 mainLoop servSock acceptChan clients rooms = do
@@ -38,17 +41,24 @@ mainLoop servSock acceptChan clients rooms = do
 	case r of
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
-		Right (line, clhandle) -> do
-			let (mclients, mrooms, recipients, strs) = handleCmd clhandle clients rooms $ words line
+		Right (cmd, client) -> do
+			print ("> " ++ show cmd)
+			let (clientsFunc, roomsFunc, handlesFunc, answer) = handleCmd client clients rooms $ cmd
+			print ("< " ++ show answer)
 
+			let mclients = clientsFunc clients
+			let mrooms = roomsFunc rooms
+			let recipients = handlesFunc client clients rooms
+			
 			clHandles' <- forM recipients $
 					\ch -> do
-							forM_ strs (\str -> hPutStrLn ch str)
+							forM_ answer (\str -> hPutStrLn ch str)
+							hPutStrLn ch ""
 							hFlush ch
-							if (not $ null strs) && (head strs == "ROOMABANDONED") then hClose ch >> return [ch] else return []
+							if (not $ null answer) && (head answer == "ROOMABANDONED") then hClose ch >> return [ch] else return []
 					`catch` const (hClose ch >> return [ch])
 
-			clHandle' <- if (not $ null strs) && (head strs == "QUIT") then hClose clhandle >> return [clhandle] else return []
+			clHandle' <- if (not $ null answer) && (head answer == "QUIT") then hClose (handle client) >> return [handle client] else return []
 
 			mainLoop servSock acceptChan (remove (remove mclients (concat clHandles')) clHandle') mrooms
 			where

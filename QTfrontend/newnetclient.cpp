@@ -26,7 +26,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 
-char delimeter=0x17;
+char delimeter='\n';
 
 HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget) :
   config(config),
@@ -54,9 +54,14 @@ void HWNewNet::Disconnect()
   NetSocket.disconnectFromHost();
 }
 
-void HWNewNet::JoinGame(const QString & game)
+void HWNewNet::CreateRoom(const QString & room)
 {
-  RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(game));
+	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg(room));
+}
+
+void HWNewNet::JoinRoom(const QString & room)
+{
+	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(room));
 }
 
 void HWNewNet::AddTeam(const HWTeam & team)
@@ -87,7 +92,6 @@ void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
 
-  //NetBuffer += buf;
   RawSendNet(QString("GAMEMSG:%1%2").arg(delimeter).arg(msg));
 }
 
@@ -100,19 +104,27 @@ void HWNewNet::RawSendNet(const QByteArray & buf)
 {
 qDebug() << "Client: " << buf;
   NetSocket.write(buf);
-  NetSocket.write("\n", 1);
+  NetSocket.write("\n\n", 2);
 }
 
 void HWNewNet::ClientRead()
 {
-  while (NetSocket.canReadLine()) {
-    ParseLine(NetSocket.readLine().trimmed());
-  }
+	while (NetSocket.canReadLine()) {
+		QString s = QString::fromUtf8(NetSocket.readLine().trimmed());
+
+		if (s.size() == 0) {
+			ParseCmd(cmdbuf);
+			cmdbuf.clear();
+		} else
+			cmdbuf << s;
+	}
 }
 
 void HWNewNet::OnConnect()
 {
   RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
+  RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
+  RawSendNet(QString("CREATE%1%2").arg(delimeter).arg("myroom"));
 }
 
 void HWNewNet::OnDisconnect()
@@ -141,13 +153,16 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
   }
 }
 
-void HWNewNet::ParseLine(const QByteArray & line)
+void HWNewNet::ParseCmd(const QStringList & lst)
 {
-qDebug() << "Server: " << line;
-  QString msg = QString::fromUtf8 (line.data(), line.size());
+qDebug() << "Server: " << lst;
 
-  QStringList lst = msg.split(delimeter);
-//qDebug() << "Parsing: " << lst;
+  if(!lst.size())
+  {
+    qWarning("Net client: Bad message");
+    return;
+  }
+
   if (lst[0] == "ERRONEUSNICKNAME") {
     QMessageBox::information(0, 0, "Your net nickname is in use or cannot be used");
     return;
@@ -161,13 +176,14 @@ qDebug() << "Server: " << line;
   }
 
   if (lst[0] == "CHAT_STRING") {
-    lst.pop_front();
-    if(lst.size() < 2)
+    if(lst.size() < 3)
     {
 	  qWarning("Net: Empty CHAT_STRING message");
 	  return;
     }
-    emit chatStringFromNet(lst);
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    emit chatStringFromNet(tmp);
     return;
   }
 
@@ -177,8 +193,9 @@ qDebug() << "Server: " << line;
 	  qWarning("Net: Too short ADDTEAM message");
 	  return;
     }
-    lst.pop_front();
-    emit AddNetTeam(lst);
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    emit AddNetTeam(tmp);
     return;
   }
 
@@ -230,18 +247,19 @@ qDebug() << "Server: " << line;
   }
 
   if (lst[0] == "CONFIGURED") {
-    lst.pop_front();
-    if(lst.size() < 6)
+    QStringList tmp = lst;
+    tmp.removeFirst();
+    if(tmp.size() < 6)
     {
       qWarning("Net: Bad CONFIGURED message");
       return;
     }
-    emit seedChanged(lst[0]);
-    emit mapChanged(lst[1]);
-    emit themeChanged(lst[2]);
-    emit initHealthChanged(lst[3].toUInt());
-    emit turnTimeChanged(lst[4].toUInt());
-    emit fortsModeChanged(lst[5].toInt() != 0);
+    emit seedChanged(tmp[0]);
+    emit mapChanged(tmp[1]);
+    emit themeChanged(tmp[2]);
+    emit initHealthChanged(tmp[3].toUInt());
+    emit turnTimeChanged(tmp[4].toUInt());
+    emit fortsModeChanged(tmp[5].toInt() != 0);
     return;
   }
 
@@ -310,7 +328,7 @@ qDebug() << "Server: " << line;
 	  emit hhnumChanged(tmptm);
 	  return;
   	}
-    qWarning(QString("Net: Unknown 'CONFIG_PARAM' message: '%1'").arg(msg).toAscii().data());
+    qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
     return;
   }
 
@@ -328,7 +346,7 @@ qDebug() << "Server: " << line;
     return;
   }
 
-  qWarning(QString("Net: Unknown message: '%1'").arg(msg).toAscii().data());
+  qWarning() << "Net: Unknown message:" << lst;
 }
 
 

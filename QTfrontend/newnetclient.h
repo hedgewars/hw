@@ -41,7 +41,8 @@ class HWNewNet : public QObject
   HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
-  void JoinGame(const QString & game);
+  void JoinRoom(const QString & room);
+  void CreateRoom(const QString & room);
   void StartGame();
 
  private:
@@ -79,9 +80,11 @@ class HWNewNet : public QObject
     emit FromNet(enginemsg);
   }
 
+  QStringList cmdbuf;
+
   void RawSendNet(const QString & buf);
   void RawSendNet(const QByteArray & buf);
-  void ParseLine(const QByteArray & line);
+  void ParseCmd(const QStringList & lst);
 
  signals:
   void AskForRunGame();
