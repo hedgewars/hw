@@ -224,27 +224,6 @@ var s: string;
           end
     end;
 
-    procedure GetExplosionBorderColor;
-    var f: textfile;
-        c1, c2: TSDL_Color;
-    begin
-    s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
-    WriteToConsole(msgLoading + s + ' ');
-    Assign(f, s);
-    {$I-}
-    Reset(f);
-    Readln(f, c1.r, c1.g, c1. b);
-    Readln(f, c2.r, c2.g, c2. b);
-    Close(f);
-    {$I+}
-    TryDo(IOResult = 0, msgFailed, true);
-    WriteLnToConsole(msgOK);
-
-    glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
-    cExplosionBorderColor:= c2.value or
-                            $FF000000
-    end;
-
 var ii: TSprite;
     fi: THWFont;
     ai: TAmmoType;
@@ -262,8 +241,6 @@ for fi:= Low(THWFont) to High(THWFont) do
          WriteLnToConsole(msgOK)
          end;
 AddProgress;
-
-GetExplosionBorderColor;
 
 AddProgress;
 WriteNames(fnt16);

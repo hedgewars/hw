@@ -599,6 +599,8 @@ end;
 
 procedure GenMap;
 begin
+LoadThemeConfig;
+
 if (GameFlags and gfForts) = 0 then
    if Pathz[ptMapCurrent] <> '' then LoadMap
                                 else GenLandSurface

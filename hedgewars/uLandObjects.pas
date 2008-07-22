@@ -22,10 +22,11 @@ uses SDLh;
 {$include options.inc}
 
 procedure AddObjects(InSurface, Surface: PSDL_Surface);
+procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat;
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL;
 const MaxRects = 256;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
@@ -56,6 +57,9 @@ type PRectArray = ^TRectsArray;
 
 var Rects: PRectArray;
     RectCount: Longword;
+    ThemeObjects: TThemeObjects;
+    SprayObjects: TSprayObjects;
+
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 var p: PByteArray;
@@ -354,14 +358,21 @@ var s: string;
     f: textfile;
     i, ii: LongInt;
     vobcount: Longword;
+    c1, c2: TSDL_Color;
 begin
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
 Reset(f);
-Readln(f, s); // skip sky color
-Readln(f, s); // skip border color
+
+// read sky and explosion border colors
+Readln(f, c1.r, c1.g, c1. b);
+Readln(f, c2.r, c2.g, c2. b);
+
+glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
+cExplosionBorderColor:= c2.value or $FF000000;
+
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
     begin
@@ -447,8 +458,6 @@ until (i > MaxCount) or not b;
 end;
 
 procedure AddObjects(InSurface, Surface: PSDL_Surface);
-var ThemeObjects: TThemeObjects;
-    SprayObjects: TSprayObjects;
 begin
 InitRects;
 AddGirder(256, Surface);
@@ -458,12 +467,16 @@ AddGirder(1024, Surface);
 AddGirder(1280, Surface);
 AddGirder(1536, Surface);
 AddGirder(1792, Surface);
-ReadThemeInfo(ThemeObjects, SprayObjects);
 AddThemeObjects(Surface, ThemeObjects, 8);
 AddProgress;
 SDL_UpperBlit(InSurface, nil, Surface, nil);
 AddSprayObjects(Surface, SprayObjects, 10);
 FreeRects
+end;
+
+procedure LoadThemeConfig;
+begin
+ReadThemeInfo(ThemeObjects, SprayObjects)
 end;
 
 end.
