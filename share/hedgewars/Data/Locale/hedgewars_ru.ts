@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="ru">
-<defaultcodec></defaultcodec>
 <context>
     <name>GameUIConfig</name>
     <message>
@@ -157,17 +156,17 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="138"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="152"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="131"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="145"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Ошибка подключения. Проверьте имя сервера и номер порта.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="135"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="149"/>
         <source>Connection refused</source>
         <translation>Отказано в соединении</translation>
     </message>
@@ -636,17 +635,17 @@
         <translation>Разработчики:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="56"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="57"/>
         <source>Art:</source>
         <translation>Графика:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="73"/>
         <source>Translations:</source>
         <translation>Переводы:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="67"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="85"/>
         <source>Special thanks:</source>
         <translation>Особая благодарность:</translation>
     </message>
@@ -688,6 +687,11 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="584"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/about.cpp" line="65"/>
+        <source>Sounds:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -739,22 +743,22 @@ Please check your installation</source>
         <translation>Соединение с сервером потеряно</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="168"/>
         <source>Weapons</source>
         <translation>Оружие</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="160"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="163"/>
         <source>Can not delete default weapon set</source>
         <translation>Невозможно удалить набор оружия по умолчанию</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="168"/>
         <source>Really delete this weapon set?</source>
         <translation>Удалить выбранный набор оружия?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="120"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="123"/>
         <source>Can not edit default weapon set</source>
         <translation>Невозможно редактировать набор оружия по умолчанию</translation>
     </message>
@@ -1099,12 +1103,12 @@ Please check your installation</source>
         <translation>таймер на 5 сек</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
         <source>capture</source>
         <translation>снимок</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
         <source>quit</source>
         <translation>выход</translation>
     </message>
@@ -1119,17 +1123,17 @@ Please check your installation</source>
         <translation>меню оружия</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
         <source>volume down</source>
         <translation>тише</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
         <source>volume up</source>
         <translation>громче</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
         <source>change mode</source>
         <translation>сменить режим</translation>
     </message>
@@ -1144,7 +1148,7 @@ Please check your installation</source>
         <translation>слот 9</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
         <source>hedgehogs
 info</source>
         <translation>информация
@@ -1159,6 +1163,11 @@ info</source>
         <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat history</source>
         <translation>история чата</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
+        <source>confirmation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

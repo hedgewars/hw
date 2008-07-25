@@ -67,17 +67,17 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="138"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="152"/>
         <source>Error</source>
         <translation>Błąd</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="131"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="145"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Stacja nie została znaleziona. Sprawdź nazwę stacji i ustawienia portu.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="135"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="149"/>
         <source>Connection refused</source>
         <translation>Połączenie odrzucone</translation>
     </message>
@@ -443,12 +443,12 @@
         <translation>Grafika:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="63"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="73"/>
         <source>Translations:</source>
         <translation>Tłumaczenia:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="75"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="85"/>
         <source>Special thanks:</source>
         <translation>Szczególne podziękowania:</translation>
     </message>
@@ -526,6 +526,11 @@
         <location filename="../../../../QTfrontend/about.cpp" line="39"/>
         <source>Version</source>
         <translation>Wersja</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/about.cpp" line="65"/>
+        <source>Sounds:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

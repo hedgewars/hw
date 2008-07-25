@@ -67,17 +67,17 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="138"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="152"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="131"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="145"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Host non trovato. Controllare impostazioni di nome host e porta.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="135"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="149"/>
         <source>Connection refused</source>
         <translation>Connessione rifiutata</translation>
     </message>
@@ -443,12 +443,12 @@
         <translation>Grafica:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="63"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="73"/>
         <source>Translations:</source>
         <translation>Traduzioni:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="75"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="85"/>
         <source>Special thanks:</source>
         <translation>Ringraziamenti speciali:</translation>
     </message>
@@ -521,6 +521,11 @@
         <location filename="../../../../QTfrontend/hwform.cpp" line="584"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; hedgehog uccisi.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/about.cpp" line="65"/>
+        <source>Sounds:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

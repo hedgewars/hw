@@ -24,12 +24,12 @@
 00:21=Mortier
 00:22=Fouet
 00:23=Kamikaze
-00:24=Cake
+00:24=Gateau
 
 01:00=C'est parti!
 01:01=Round ex aequo
 01:02=%1 gagne!
 01:03=Volume %1%
 01:04=Pause
-01:05=Really quit (Y/Esc)?
-01:06=Sudden death!
+01:05=Quitter (Y/Esc)?
+01:06=Match à mort!
