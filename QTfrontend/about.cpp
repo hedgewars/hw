@@ -62,6 +62,14 @@ About::About(QWidget * parent) :
 			"\"Volcano\" map and theme: Damion Brookes &lt;<a href=\"mailto:nintendo_wii33@hotmail.co.uk\">nintendo_wii33@hotmail.co.uk</a>&gt;"
 			"</p><h2>" +
 			
+			QLabel::tr("Sounds:") + "</h2>"
+			"Hedgehogs voice: Stephen Alexander"
+			"<br>"
+			"'Nature' and 'Snow' music themes: Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
+			"<br>"
+			"'Pirate' and 'City' music themes: J4t"
+			"</p><h2>" +
+			
 			QLabel::tr("Translations:") + "</h2><p>"
 			+ QString::fromUtf8(
 			"Bulgarian: Svetoslav Stefanov<br>"
