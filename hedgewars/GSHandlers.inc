@@ -1527,7 +1527,7 @@ if (yy = 0) then
 		end;
 
 dec(Gear^.Health);
-if Gear^.Health = 0 then
+if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
 	AfterAttack;
