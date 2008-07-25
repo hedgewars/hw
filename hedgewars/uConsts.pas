@@ -55,7 +55,7 @@ type
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-                   gtWhip, gtKamikaze, gtSpider);
+                   gtWhip, gtKamikaze, gtCake);
 
      TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
@@ -72,7 +72,7 @@ type
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amSpider);
+                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake);
 
      THWFont    = (fnt16, fntBig, fntSmall);
 
@@ -940,7 +940,7 @@ const
                                    SkipTurns: 0;
                                    PosCount: 1;
                                    PosSprite: sprWater),
-                                  (NameId: sidSpider;
+                                  (NameId: sidCake;
                                    NameTex: nil;
                                    Probability: 100;
                                    NumberInCase: 1;
@@ -951,7 +951,7 @@ const
                                           NumPerTurn: 0;
                                           Timer: 0;
                                           Pos: 0;
-                                          AmmoType: amSpider);
+                                          AmmoType: amCake);
                                    Slot: 4;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;

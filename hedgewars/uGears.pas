@@ -138,7 +138,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepMortar,
                                                                @doStepWhip,
                                                                @doStepKamikaze,
-                                                               @doStepSpider
+                                                               @doStepCake
                                                                );
 
 procedure InsertGearToList(Gear: PGear);
@@ -312,6 +312,11 @@ gtAmmo_Grenade: begin
     gtKamikaze: begin
                 Result^.Health:= 2048;
                 Result^.Radius:= 20
+                end;
+        gtCake: begin
+                Result^.Health:= 3072;
+                Result^.Radius:= 5;
+                if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
                 end;
      end;
 InsertGearToList(Result);
@@ -1029,6 +1034,7 @@ while Gear<>nil do
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
           gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
           gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+          gtCake: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
               end;
       Gear:= Gear^.NextGear
       end;

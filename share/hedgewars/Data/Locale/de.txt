@@ -24,7 +24,7 @@
 00:21=Mörser
 00:22=Stoßen
 00:23=Kamikaze
-00:24=Spider
+00:24=Cake
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden

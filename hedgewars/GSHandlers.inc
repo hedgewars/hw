@@ -1481,8 +1481,82 @@ Gear^.Timer:= 550;
 Gear^.doStep:= @doStepKamikazeIdle
 end;
 
-procedure doStepSpider(Gear: PGear);
+procedure doStepCakeWork(Gear: PGear);
+const dirs: array[0..3] of TPoint = ((x: 0; y: -1), (x: 1; y: 0),(x: 0; y: 1),(x: -1; y: 0));
+var xx, yy, xxn, yyn: LongInt;
+	da: LongInt;
+
+	procedure PrevAngle;
+	begin
+	Gear^.Angle:= (Gear^.Angle + 4 - dA) mod 4
+	end;
+	
+	procedure NextAngle;
+	begin
+	Gear^.Angle:= (Gear^.Angle + 4 + dA) mod 4
+	end;
+	
 begin
-AfterAttack;
-DeleteGear(Gear);
+inc(Gear^.Tag);
+if Gear^.Tag < 5 then exit;
+
+
+dA:= hwSign(Gear^.dX);
+xx:= dirs[Gear^.Angle].x;
+yy:= dirs[Gear^.Angle].y;
+xxn:= dirs[(Gear^.Angle + 4 + dA) mod 4].x;
+yyn:= dirs[(Gear^.Angle + 4 + dA) mod 4].y;
+
+
+if (xx = 0) then
+	if TestCollisionYwithGear(Gear, yy) then
+		PrevAngle
+	else begin
+		Gear^.Tag:= 0;
+		Gear^.Y:= Gear^.Y + int2hwFloat(yy);
+		if not TestCollisionXwithGear(Gear, xxn) then NextAngle
+		end;
+
+if (yy = 0) then
+	if TestCollisionXwithGear(Gear, xx) then
+		PrevAngle
+	else begin
+		Gear^.Tag:= 0;
+		Gear^.X:= Gear^.X + int2hwFloat(xx);
+		if not TestCollisionYwithGear(Gear, yyn) then NextAngle
+		end;
+
+dec(Gear^.Health);
+if Gear^.Health = 0 then
+	begin
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
+	AfterAttack;
+	DeleteGear(Gear)
+	end
 end;
+
+procedure doStepCakeFall(Gear: PGear);
+begin
+AllInactive:= false;
+
+Gear^.dY:= Gear^.dY + cGravity;
+if TestCollisionYwithGear(Gear, 1) then
+	Gear^.doStep:= @doStepCakeWork
+else
+	begin
+	Gear^.Y:= Gear^.Y + Gear^.dY;
+	if CheckGearDrowning(Gear) then AfterAttack
+	end
+end;
+
+procedure doStepCake(Gear: PGear);
+var HHGear: PGear;
+begin
+AllInactive:= false;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+DeleteCI(HHGear);
+
+Gear^.doStep:= @doStepCakeFall
+end;
+
