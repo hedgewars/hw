@@ -26,7 +26,7 @@ procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL;
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound;
 const MaxRects = 256;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
@@ -372,6 +372,9 @@ Readln(f, c2.r, c2.g, c2. b);
 
 glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
 cExplosionBorderColor:= c2.value or $FF000000;
+
+ReadLn(f, s);
+if MusicFN = '' then MusicFN:= s;
 
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do

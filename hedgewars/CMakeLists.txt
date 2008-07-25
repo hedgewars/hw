@@ -41,7 +41,6 @@ set(engine_sources
 	HHHandlers.inc
 	SinTable.inc
 	options.inc
-	${CMAKE_CURRENT_BINARY_DIR}/playlist.inc
 	${CMAKE_CURRENT_BINARY_DIR}/proto.inc
 	tunsetborder.inc
 	)

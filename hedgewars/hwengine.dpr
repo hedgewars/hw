@@ -66,17 +66,9 @@ procedure OnDestroy; forward;
 
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
-const MusicTimerTicks: Longword = 0;
 var s: string;
 begin
 inc(RealTicks, Lag);
-
-inc(MusicTimerTicks, Lag);
-if (MusicTimerTicks > 3000) and (GameState > gsStart) then
-   begin
-   PlayMusic;
-   MusicTimerTicks:= 0
-   end;
 
 case GameState of
    gsLandGen: begin
@@ -84,7 +76,6 @@ case GameState of
               GameState:= gsStart;
               end;
      gsStart: begin
-              InitPlaylistChunk(GetRandom(High(LongWord)));
               AddClouds;
               AssignHHCoords;
               AddMiscGears;
@@ -97,6 +88,7 @@ case GameState of
                  isSoundEnabled:= false
                  end;
               FinishProgress;
+              PlayMusic;
               GameState:= gsGame
               end;
    gsConfirm,

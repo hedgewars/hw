@@ -30,17 +30,14 @@ procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 procedure InitPlaylistChunk(seed: LongWord);
 
+var MusicFN: shortstring = '';
+
 implementation
 uses uMisc, uConsole;
-
-{$INCLUDE playlist.inc}
 
 const chanTPU = 12;
 var Mus: PMixMusic = nil;
     Volume: LongInt;
-{$IFDEF HAVE_MUSIC}
-    CurrMusic: Longword = 0;
-{$ENDIF}
 
 procedure InitSound;
 begin
@@ -52,7 +49,7 @@ if isSoundEnabled then
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 Mix_AllocateChannels(Succ(chanTPU));
-Mix_VolumeMusic(48);
+Mix_VolumeMusic(64);
 
 Volume:= cInitVolume;
 if Volume < 0 then Volume:= 0;
@@ -99,27 +96,19 @@ if Mix_Playing(Soundz[snd].lastChan) <> 0 then
 end;
 
 procedure PlayMusic;
-{$IFDEF HAVE_MUSIC}
 var s: string;
-{$ENDIF}
 begin
-{$IFDEF HAVE_MUSIC}
-if not isSoundEnabled then exit;
-if Mix_PlayingMusic() <> 0 then exit;
+if (not isSoundEnabled)
+	or (MusicFN = '') then exit;
 
-Mix_FreeMusic(Mus);
-
-CurrMusic:= playlistchain[CurrMusic];
-
-s:= PathPrefix + '/Music/' + playlist[CurrMusic];
+s:= PathPrefix + '/Music/' + MusicFN;
 WriteToConsole(msgLoading + s + ' ');
 
 Mus:= Mix_LoadMUS(Str2PChar(s));
 TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-Mix_PlayMusic(Mus, 1)
-{$ENDIF}
+Mix_PlayMusic(Mus, -1)
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
