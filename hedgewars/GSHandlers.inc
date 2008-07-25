@@ -1481,10 +1481,16 @@ Gear^.Timer:= 550;
 Gear^.doStep:= @doStepKamikazeIdle
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+const cakeh = 27;
+var CakePoints: array[0..Pred(cakeh)] of record x, y: hwFloat; end;
+	CakeI: Longword;
+
 procedure doStepCakeWork(Gear: PGear);
 const dirs: array[0..3] of TPoint = ((x: 0; y: -1), (x: 1; y: 0),(x: 0; y: 1),(x: -1; y: 0));
 var xx, yy, xxn, yyn: LongInt;
 	da: LongInt;
+	tdx, tdy: hwFloat;
 
 	procedure PrevAngle;
 	begin
@@ -1499,7 +1505,6 @@ var xx, yy, xxn, yyn: LongInt;
 begin
 inc(Gear^.Tag);
 if Gear^.Tag < 5 then exit;
-
 
 dA:= hwSign(Gear^.dX);
 xx:= dirs[Gear^.Angle].x;
@@ -1526,6 +1531,16 @@ if (yy = 0) then
 		if not TestCollisionYwithGear(Gear, yyn) then NextAngle
 		end;
 
+if Gear^.Tag = 0 then
+	begin
+	CakeI:= (CakeI + 1) mod cakeh;
+	tdx:= CakePoints[CakeI].x - Gear^.X;
+	tdy:= - CakePoints[CakeI].y + Gear^.Y;
+	CakePoints[CakeI].x:= Gear^.X;
+	CakePoints[CakeI].y:= Gear^.Y;
+	Gear^.DirAngle:= DxDy2Angle(tdx, tdy);
+	end;
+
 dec(Gear^.Health);
 if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
@@ -1535,13 +1550,29 @@ if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	end
 end;
 
+procedure doStepCakeUp(Gear: PGear);
+var i: Longword;
+begin
+AllInactive:= false;
+
+	begin
+	for i:= 0 to Pred(cakeh) do
+		begin
+		CakePoints[i].x:= Gear^.X;
+		CakePoints[i].y:= Gear^.Y
+		end;
+	CakeI:= 0;
+	Gear^.doStep:= @doStepCakeWork
+	end
+end;
+
 procedure doStepCakeFall(Gear: PGear);
 begin
 AllInactive:= false;
 
 Gear^.dY:= Gear^.dY + cGravity;
 if TestCollisionYwithGear(Gear, 1) then
-	Gear^.doStep:= @doStepCakeWork
+	Gear^.doStep:= @doStepCakeUp
 else
 	begin
 	Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -1555,6 +1586,7 @@ begin
 AllInactive:= false;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.Message:= HHGear^.Message and (not gm_Attack);
 DeleteCI(HHGear);
 
 Gear^.doStep:= @doStepCakeFall
