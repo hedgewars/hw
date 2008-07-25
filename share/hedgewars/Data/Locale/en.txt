@@ -24,6 +24,7 @@
 00:21=Mortar
 00:22=Whip
 00:23=Kamikaze
+00:24=Spider
 
 01:00=Let's fight!
 01:01=Round draw

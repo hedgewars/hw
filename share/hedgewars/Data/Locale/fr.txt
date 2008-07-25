@@ -24,6 +24,7 @@
 00:21=Mortier
 00:22=Fouet
 00:23=Kamikaze
+00:24=Spider
 
 01:00=C'est parti!
 01:01=Round ex aequo

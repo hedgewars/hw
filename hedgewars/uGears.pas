@@ -137,7 +137,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
                                                                @doStepCase,
                                                                @doStepMortar,
                                                                @doStepWhip,
-                                                               @doStepKamikaze
+                                                               @doStepKamikaze,
+                                                               @doStepSpider
                                                                );
 
 procedure InsertGearToList(Gear: PGear);

@@ -23,7 +23,7 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
                    sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
                    sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
                    sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
-                   sidKamikaze);
+                   sidKamikaze, sidSpider);
 
      TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
                   sidConfirm, sidSuddenDeath);

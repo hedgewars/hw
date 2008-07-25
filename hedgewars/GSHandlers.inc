@@ -1481,3 +1481,8 @@ Gear^.Timer:= 550;
 Gear^.doStep:= @doStepKamikazeIdle
 end;
 
+procedure doStepSpider(Gear: PGear);
+begin
+AfterAttack;
+DeleteGear(Gear);
+end;

@@ -55,7 +55,7 @@ type
                    gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
                    gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
                    gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-                   gtWhip, gtKamikaze);
+                   gtWhip, gtKamikaze, gtSpider);
 
      TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
@@ -72,7 +72,7 @@ type
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze);
+                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amSpider);
 
      THWFont    = (fnt16, fntBig, fntSmall);
 
@@ -933,6 +933,26 @@ const
                                           Pos: 0;
                                           AmmoType: amKamikaze);
                                    Slot: 3;
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   isDamaging: true;
+                                   SkipTurns: 0;
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
+                                  (NameId: sidSpider;
+                                   NameTex: nil;
+                                   Probability: 100;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amSpider);
+                                   Slot: 4;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;

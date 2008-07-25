@@ -24,6 +24,7 @@
 00:21=Moździerz
 00:22=Bicz
 00:23=Kamikaze
+00:24=Spider
 
 01:00=Walczmy!
 01:01=Remis

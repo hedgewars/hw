@@ -24,6 +24,7 @@
 00:21=Mínomet
 00:22=Bič
 00:23=Kamikadze
+00:24=Spider
 
 01:00=Do boja!
 01:01=Remíza

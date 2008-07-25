@@ -24,6 +24,7 @@
 00:21=Granata a grappolo
 00:22=Frusta
 00:23=Attacco Kamikaze
+00:24=Spider
 
 01:00=Combattiamo!
 01:01=Round in parità

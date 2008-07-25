@@ -159,6 +159,7 @@ with Gear^,
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                        amMortar: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
                        amKamikaze: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
+                         amSpider: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSpider, 0, xx, _0, 0);
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
