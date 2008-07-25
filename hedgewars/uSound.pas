@@ -28,7 +28,6 @@ procedure PlaySound(snd: TSound; infinite: boolean);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
-procedure InitPlaylistChunk(seed: LongWord);
 
 var MusicFN: shortstring = '';
 
@@ -60,7 +59,8 @@ procedure ReleaseSound;
 var i: TSound;
 begin
 for i:= Low(TSound) to High(TSound) do
-    Mix_FreeChunk(Soundz[i].id);
+	Mix_FreeChunk(Soundz[i].id);
+
 Mix_FreeMusic(Mus);
 Mix_CloseAudio
 end;
@@ -122,28 +122,6 @@ Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
 Mix_VolumeMusic(Volume * 3 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
-end;
-
-procedure InitPlaylistChunk(seed: LongWord);
-{$IFDEF HAVE_MUSIC}
-var i, t, nt: Longword;
-{$ENDIF}
-begin
-{$IFDEF HAVE_MUSIC}
-for i:= 0 to Pred(cPlayListLength) do
-    playlistchain[i]:= 0;
-
-t:= 0;
-for i:= 0 to cPlayListLength - 2 do
-    begin
-    repeat
-      seed:= seed * 1664525 + 1013904223;
-      nt:= seed mod cPlayListLength;
-    until (t <> nt) and (playlistchain[nt] = 0);
-    playlistchain[t]:= nt;
-    t:= nt;
-    end
-{$ENDIF}
 end;
 
 end.
