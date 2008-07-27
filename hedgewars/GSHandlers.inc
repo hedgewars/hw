@@ -1176,15 +1176,20 @@ procedure doStepAirAttackWork(Gear: PGear);
 begin
 AllInactive:= false;
 Gear^.X:= Gear^.X + cAirPlaneSpeed * Gear^.Tag;
+
 if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirPlaneSpeed) then
-   begin
-   dec(Gear^.Health);
-   case Gear^.State of
-        0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
-        1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
-        end;
-   Gear^.dX:= Gear^.dX + int2hwFloat(30 * Gear^.Tag)
-   end;
+	begin
+	dec(Gear^.Health);
+	case Gear^.State of
+			0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
+			1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
+			end;
+	Gear^.dX:= Gear^.dX + int2hwFloat(30 * Gear^.Tag)
+	end;
+
+if (GameTicks and $3F) = 0 then
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+
 if (hwRound(Gear^.X) > 3072) or (hwRound(Gear^.X) < -1024) then DeleteGear(Gear)
 end;
 
@@ -1195,7 +1200,7 @@ AllInactive:= false;
 if Gear^.X.QWordValue = 0 then Gear^.Tag:=  1
                           else Gear^.Tag:= -1;
 Gear^.X:= _1024 - _2048 * Gear^.Tag;
-Gear^.Y:= -_128;
+Gear^.Y:= -_300;
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
 if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then

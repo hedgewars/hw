@@ -77,7 +77,7 @@ var
 	bWaterRising   : Boolean = false;
 
 {$WARNINGS OFF}
-	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   6012954214); // 1.4
+	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
 	cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
 {$WARNINGS ON}
 
