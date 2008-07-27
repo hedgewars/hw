@@ -376,6 +376,8 @@ cExplosionBorderColor:= c2.value or $FF000000;
 ReadLn(f, s);
 if MusicFN = '' then MusicFN:= s;
 
+ReadLn(f, cCloudsNumber);
+
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
     begin
