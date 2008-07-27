@@ -267,7 +267,7 @@ QStringList HWGame::setArguments()
 	arguments << (config->isShowFPSEnabled() ? "1" : "0");
 	arguments << (config->isAltDamageEnabled() ? "1" : "0");
 	arguments << config->netNick().toUtf8().toBase64();
-	arguments << "1";
+	arguments << (config->isMusicEnabled() ? "1" : "0");
 	return arguments;
 }
 

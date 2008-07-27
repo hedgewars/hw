@@ -318,6 +318,10 @@ PageOptions::PageOptions(QWidget* parent) :
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 	GBAlayout->addWidget(CBEnableSound);
 
+	CBEnableMusic = new	QCheckBox(AGGroupBox);
+	CBEnableMusic->setText(QCheckBox::tr("Enable music"));
+	GBAlayout->addWidget(CBEnableMusic);
+
 	CBShowFPS = new QCheckBox(AGGroupBox);
 	CBShowFPS->setText(QCheckBox::tr("Show FPS"));
 	GBAlayout->addWidget(CBShowFPS);

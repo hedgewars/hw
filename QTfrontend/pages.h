@@ -173,6 +173,7 @@ public:
 	QGroupBox *AGGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
+	QCheckBox *CBEnableMusic;
 	QCheckBox *CBFullscreen;
 	QCheckBox *CBShowFPS;
 	QCheckBox *CBAltDamage;

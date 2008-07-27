@@ -40,6 +40,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
 
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
+	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 
 	Form->ui.pageOptions->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
 
@@ -77,6 +78,7 @@ void GameUIConfig::SaveOptions()
 	setValue("video/fullscreen", vid_Fullscreen());
 
 	setValue("audio/sound", isSoundEnabled());
+	setValue("audio/music", isMusicEnabled());
 
 	setValue("net/nick", netNick());
 	setValue("net/ip", *netHost);
@@ -113,6 +115,11 @@ bool GameUIConfig::vid_Fullscreen()
 bool GameUIConfig::isSoundEnabled()
 {
 	return Form->ui.pageOptions->CBEnableSound->isChecked();
+}
+
+bool GameUIConfig::isMusicEnabled()
+{
+	return Form->ui.pageOptions->CBEnableMusic->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()
