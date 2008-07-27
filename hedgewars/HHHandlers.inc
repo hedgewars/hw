@@ -146,7 +146,10 @@ with Gear^,
                                  PlaySound(sndLaugh, false)
                                  end;
                        amDEagle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
-                     amDynamite: AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
+                     amDynamite: begin
+                                 AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
+                                 PlaySound(sndLaugh, false)
+                                 end;
                     amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, xx, _0, 0);
                          amWhip: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
                   amBaseballBat: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0);
@@ -159,7 +162,10 @@ with Gear^,
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                        amMortar: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
                        amKamikaze: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
-                         amCake: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
+                         amCake: begin
+                                 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
+                                 PlaySound(sndLaugh, false)
+                                 end;
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
