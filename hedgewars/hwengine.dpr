@@ -156,7 +156,7 @@ while SDL_PollEvent(@event) <> 0 do
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
 		SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
-		SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
+		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
 		SDL_QUITEV: isTerminated:= true
 		end;
 CurrTime:= SDL_GetTicks;

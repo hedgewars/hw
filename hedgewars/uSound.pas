@@ -120,7 +120,7 @@ inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
 Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
-Mix_VolumeMusic(Volume * 3 div 8);
+Mix_VolumeMusic(Volume * 5 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
