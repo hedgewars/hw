@@ -48,7 +48,7 @@ if isSoundEnabled then
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 Mix_AllocateChannels(Succ(chanTPU));
-Mix_VolumeMusic(64);
+if isMusicEnabled then Mix_VolumeMusic(64);
 
 Volume:= cInitVolume;
 if Volume < 0 then Volume:= 0;
@@ -99,7 +99,8 @@ procedure PlayMusic;
 var s: string;
 begin
 if (not isSoundEnabled)
-	or (MusicFN = '') then exit;
+	or (MusicFN = '')
+	or (not isMusicEnabled)then exit;
 
 s:= PathPrefix + '/Music/' + MusicFN;
 WriteToConsole(msgLoading + s + ' ');
@@ -120,7 +121,7 @@ inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
 Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
-Mix_VolumeMusic(Volume * 5 div 8);
+if isMusicEnabled then Mix_VolumeMusic(Volume * 5 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
