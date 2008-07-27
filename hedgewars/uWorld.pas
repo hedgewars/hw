@@ -116,11 +116,14 @@ with CurrentHedgehog^ do
             t:= 0;
             while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
                   begin
-                  DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
                   l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
                   if l >= 0 then
+                     begin
+                     DrawSprite(sprAMAmmosBW, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
                      DrawSprite(sprTurnsLeft, x + t * 33 + 51, y + 17, l);
+                     end else
+                     DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
 
                   if (Slot = i) and (CursorPoint.X >= x + t * 33 + 35) and (CursorPoint.X < x + t * 33 + 68) then
                      begin
