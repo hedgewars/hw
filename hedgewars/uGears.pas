@@ -314,8 +314,9 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 20
                 end;
         gtCake: begin
-                Result^.Health:= 3072;
+                Result^.Health:= 4096;
                 Result^.Radius:= 7;
+                Result^.Pos:= 5;
                 if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
                 end;
      end;
@@ -1034,7 +1035,10 @@ while Gear<>nil do
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
           gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
           gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-          gtCake: DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 32) mod 6, hwSign(Gear^.dX), Gear^.DirAngle + hwSign(Gear^.dX) * 90);
+          gtCake: if Gear^.Pos = 6 then
+                     DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle + hwSign(Gear^.dX) * 90)
+                  else
+                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Pos, hwSign(Gear^.dX), 0)
               end;
       Gear:= Gear^.NextGear
       end;

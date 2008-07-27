@@ -1504,7 +1504,7 @@ var xx, yy, xxn, yyn: LongInt;
 	
 begin
 inc(Gear^.Tag);
-if Gear^.Tag < 5 then exit;
+if Gear^.Tag < 7 then exit;
 
 dA:= hwSign(Gear^.dX);
 xx:= dirs[Gear^.Angle].x;
@@ -1555,6 +1555,11 @@ var i: Longword;
 begin
 AllInactive:= false;
 
+inc(Gear^.Tag);
+if Gear^.Tag < 85 then exit;
+Gear^.Tag:= 0;
+
+if Gear^.Pos = 0 then
 	begin
 	for i:= 0 to Pred(cakeh) do
 		begin
@@ -1562,8 +1567,9 @@ AllInactive:= false;
 		CakePoints[i].y:= Gear^.Y
 		end;
 	CakeI:= 0;
+	Gear^.Pos:= 6;
 	Gear^.doStep:= @doStepCakeWork
-	end
+	end else dec(Gear^.Pos)
 end;
 
 procedure doStepCakeFall(Gear: PGear);
