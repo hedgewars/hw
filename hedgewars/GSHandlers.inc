@@ -1589,6 +1589,8 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= HHGear^.Message and (not gm_Attack);
 DeleteCI(HHGear);
 
+FollowGear:= Gear;
+
 Gear^.doStep:= @doStepCakeFall
 end;
 
