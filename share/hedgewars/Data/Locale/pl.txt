@@ -1,4 +1,4 @@
-; Polish locale
+﻿; Polish locale
 
 00:00=Granat
 00:01=Bomba rozpryskowa
@@ -24,7 +24,7 @@
 00:21=Moździerz
 00:22=Bicz
 00:23=Kamikaze
-00:24=Cake
+00:24=Ciasto
 
 01:00=Walczmy!
 01:01=Remis

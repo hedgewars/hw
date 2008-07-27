@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="pl">
+<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -423,7 +424,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="7471221"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -513,7 +513,6 @@
         <translation>Port serwera:</translation>
     </message>
     <message>
-        <location filename="" line="7471221"/>
         <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
     </message>
@@ -530,7 +529,7 @@
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="65"/>
         <source>Sounds:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dźwięki</translation>
     </message>
 </context>
 <context>
