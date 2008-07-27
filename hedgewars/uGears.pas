@@ -316,7 +316,7 @@ gtAmmo_Grenade: begin
         gtCake: begin
                 Result^.Health:= 4096;
                 Result^.Radius:= 7;
-                Result^.Pos:= 5;
+                Result^.Z:= cOnHHZ;
                 if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
                 end;
      end;
@@ -1038,7 +1038,7 @@ while Gear<>nil do
           gtCake: if Gear^.Pos = 6 then
                      DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle + hwSign(Gear^.dX) * 90)
                   else
-                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Pos, hwSign(Gear^.dX), 0)
+                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), 0)
               end;
       Gear:= Gear^.NextGear
       end;

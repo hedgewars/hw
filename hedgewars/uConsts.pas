@@ -150,6 +150,7 @@ const
 
 	cHHZ = 1000;
 	cCurrHHZ = Succ(cHHZ);
+	cOnHHZ = 2000;
 
 	cShotgunRadius = 22;
 	cBlowTorchC    = 6;

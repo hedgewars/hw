@@ -1486,6 +1486,24 @@ const cakeh = 27;
 var CakePoints: array[0..Pred(cakeh)] of record x, y: hwFloat; end;
 	CakeI: Longword;
 
+procedure doStepCakeDown(Gear: PGear);
+var i: Longword;
+begin
+AllInactive:= false;
+
+inc(Gear^.Tag);
+if Gear^.Tag < 100 then exit;
+Gear^.Tag:= 0;
+
+if Gear^.Pos = 0 then
+	begin
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
+	AfterAttack;
+	DeleteGear(Gear)
+	end else dec(Gear^.Pos)
+end;
+
+
 procedure doStepCakeWork(Gear: PGear);
 const dirs: array[0..3] of TPoint = ((x: 0; y: -1), (x: 1; y: 0),(x: 0; y: 1),(x: -1; y: 0));
 var xx, yy, xxn, yyn: LongInt;
@@ -1544,9 +1562,8 @@ if Gear^.Tag = 0 then
 dec(Gear^.Health);
 if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
-	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
-	AfterAttack;
-	DeleteGear(Gear)
+	FollowGear:= Gear;
+	Gear^.doStep:= @doStepCakeDown
 	end
 end;
 
@@ -1556,10 +1573,10 @@ begin
 AllInactive:= false;
 
 inc(Gear^.Tag);
-if Gear^.Tag < 85 then exit;
+if Gear^.Tag < 100 then exit;
 Gear^.Tag:= 0;
 
-if Gear^.Pos = 0 then
+if Gear^.Pos = 6 then
 	begin
 	for i:= 0 to Pred(cakeh) do
 		begin
@@ -1567,9 +1584,8 @@ if Gear^.Pos = 0 then
 		CakePoints[i].y:= Gear^.Y
 		end;
 	CakeI:= 0;
-	Gear^.Pos:= 6;
 	Gear^.doStep:= @doStepCakeWork
-	end else dec(Gear^.Pos)
+	end else inc(Gear^.Pos)
 end;
 
 procedure doStepCakeFall(Gear: PGear);
