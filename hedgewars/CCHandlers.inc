@@ -456,8 +456,13 @@ AddFileLog('Prepare to change video parameters...');
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
 flags:= SDL_OPENGL or SDL_RESIZABLE;
-if cFullScreen then flags:= flags or SDL_FULLSCREEN
-               else SDL_WM_SetCaption('Hedgewars', nil);
+if cFullScreen then
+	begin
+	flags:= flags or SDL_FULLSCREEN;
+	cScreenWidth:= cInitWidth;
+	cScreenHeight:= cInitHeight
+	end
+	else SDL_WM_SetCaption('Hedgewars', nil);
 {$IFDEF DEBUGFILE}
 AddFileLog('Freeing old primary surface...');
 {$ENDIF}

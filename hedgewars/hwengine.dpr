@@ -156,7 +156,7 @@ while SDL_PollEvent(@event) <> 0 do
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
 		SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
-		SDL_VIDEORESIZE: Resize(max(event.resize.w, 320), max(event.resize.h, 240));
+		SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
 		SDL_QUITEV: isTerminated:= true
 		end;
 CurrTime:= SDL_GetTicks;
@@ -187,6 +187,8 @@ case ParamCount of
 14: begin
      val(ParamStr(2), cScreenWidth);
      val(ParamStr(3), cScreenHeight);
+     cInitWidth:= cScreenWidth;
+     cInitHeight:= cScreenHeight;
      cBitsStr:= ParamStr(4);
      val(cBitsStr, cBits);
      val(ParamStr(5), ipcPort);

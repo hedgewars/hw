@@ -40,6 +40,8 @@ var
 	cCloudsNumber    : LongInt = 9;
 	cScreenWidth     : LongInt = 1024;
 	cScreenHeight    : LongInt = 768;
+	cInitWidth       : LongInt = 1024;
+	cInitHeight      : LongInt = 768;
 	cBits            : LongInt = 16;
 	cBitsStr         : string[2] = '16';
 	cTagsMask        : byte = 7;
