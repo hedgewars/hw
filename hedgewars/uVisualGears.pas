@@ -256,8 +256,8 @@ end;
 procedure AddClouds;
 var i: LongInt;
 begin
-for i:= 0 to cCloudsNumber do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div cCloudsNumber), -160, vgtCloud)
+for i:= 0 to cCloudsNumber - 1 do
+    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div (cCloudsNumber + 1)), -160, vgtCloud)
 end;
 
 initialization

@@ -43,9 +43,9 @@ begin
 if _0_4 < Gear^.dY then
 	begin
 	if _0_6 < Gear^.dY then
-		PlaySound(sndOw1, false)
+		PlaySound(sndOw4, false)
 	else
-		PlaySound(sndOw4, false);
+		PlaySound(sndOw1, false);
 
 	dmg:= 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
 	inc(Gear^.Damage, dmg);
