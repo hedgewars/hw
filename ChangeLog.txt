@@ -1,6 +1,16 @@
 + features
 * bugfixes
 
+0.9.5 -> 0.9.6:
+ + New Cake weapon
+ + New maps: EarthRise, Bamboo, Bath, BambooPlinko
+ + Add soundtracks for each theme
+ + Show picked up ammo name when playing demo
+ + Make engine fonts bold
+ + Small sound improvements
+ * Fix clouds shaking up
+ * Repair screenshots capturing
+
 0.9.4 -> 0.9.5:
  + Taunts
  + Exit confirmation dialog
