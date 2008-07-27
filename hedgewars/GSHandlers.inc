@@ -1519,6 +1519,7 @@ if Gear^.Pos = 0 then
 		gi:= gi^.NextGear
 		end;
 	Gear^.doStep:= @doStepCakeExpl;
+	PlaySound(sndCake, false)
 	end else dec(Gear^.Pos)
 end;
 
