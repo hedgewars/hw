@@ -41,11 +41,16 @@ procedure CheckHHDamage(Gear: PGear);
 var dmg: Longword;
 begin
 if _0_4 < Gear^.dY then
-   begin
-   dmg:= 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
-   inc(Gear^.Damage, dmg);
-   AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, Gear);
-   end
+	begin
+	if _0_6 < Gear^.dY then
+		PlaySound(sndOw1, false)
+	else
+		PlaySound(sndOw4, false);
+
+	dmg:= 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
+	inc(Gear^.Damage, dmg);
+	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, Gear);
+	end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

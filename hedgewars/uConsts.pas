@@ -69,7 +69,7 @@ type
                    sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
                    sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
                    sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
-                   sndCake);
+                   sndCake, sndOw1, sndOw4);
 
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -477,7 +477,9 @@ const
                 (FileName:         'Hurry.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndHurry
                 (FileName:       'Watchit.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndWatchIt
                 (FileName:      'Kamikaze.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndKamikaze
-                (FileName:         'cake2.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndCake
+                (FileName:         'cake2.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndCake
+                (FileName:           'Ow1.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndOw1
+                (FileName:           'Ow4.ogg'; Path: ptVoices; id: nil; lastChan: 0) // sndOw4
                 );
 
       Ammoz: array [TAmmoType] of record
