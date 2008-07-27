@@ -1102,7 +1102,7 @@ while Gear <> nil do
                              DeleteCI(Gear);
                              Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
                              Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-                             Gear^.State:= Gear^.State or gstMoving;
+                             Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                              Gear^.Active:= true;
                              FollowGear:= Gear
                              end;

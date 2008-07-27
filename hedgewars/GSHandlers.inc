@@ -1483,11 +1483,24 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 const cakeh = 27;
+      cakeDmg = 75;
 var CakePoints: array[0..Pred(cakeh)] of record x, y: hwFloat; end;
 	CakeI: Longword;
 
+procedure doStepCakeExpl(Gear: PGear);
+begin
+inc(Gear^.Tag);
+if Gear^.Tag < 2250 then exit;
+
+doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg, EXPLAutoSound);
+AfterAttack;
+DeleteGear(Gear)
+end;
+
 procedure doStepCakeDown(Gear: PGear);
 var i: Longword;
+    gi: PGear;
+    dmg: LongInt;
 begin
 AllInactive:= false;
 
@@ -1497,9 +1510,15 @@ Gear^.Tag:= 0;
 
 if Gear^.Pos = 0 then
 	begin
-	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
-	AfterAttack;
-	DeleteGear(Gear)
+	gi:= GearsList;
+	while gi <> nil do
+		begin
+		dmg:= cakeDmg * 2 - hwRound(Distance(gi^.X - Gear^.X, gi^.Y - Gear^.Y));
+		if (dmg > 1) and (gi^.Kind = gtHedgehog) then
+			gi^.State:= gi^.State or gstWinner;
+		gi:= gi^.NextGear
+		end;
+	Gear^.doStep:= @doStepCakeExpl;
 	end else dec(Gear^.Pos)
 end;
 
