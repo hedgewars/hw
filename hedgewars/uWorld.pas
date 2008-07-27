@@ -52,7 +52,7 @@ type TCaptionStr = record
 
 var cWaterSprCount: LongInt;
     Captions: array[TCapGroup] of TCaptionStr;
-    AMxLeft, AMxCurr, SlotsNum: LongInt;
+    AMxShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture = nil;
 
@@ -65,8 +65,7 @@ prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - 1024 + cScreenWidth div 2;
 WorldDy:=  - 512 + cScreenHeight div 2;
-AMxLeft:= cScreenWidth - 210;
-AMxCurr:= cScreenWidth
+AMxShift:= 210
 end;
 
 procedure ShowAmmoMenu;
@@ -77,18 +76,18 @@ begin
 if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
-   if AMxCurr = cScreenWidth then prevPoint.X:= 0;
-   if AMxCurr > AMxLeft then dec(AMxCurr, MENUSPEED);
+   if AMxShift = 210 then prevPoint.X:= 0;
+   if AMxShift > 0 then dec(AMxShift, MENUSPEED);
    end else
    begin
-   if AMxCurr = AMxLeft then
+   if AMxShift = 0 then
       begin
       CursorPoint.X:= cScreenWidth div 2;
       CursorPoint.Y:= cScreenHeight div 2;
       prevPoint:= CursorPoint;
       SDL_WarpMouse(CursorPoint.X, CursorPoint.Y)
       end;
-   if AMxCurr < cScreenWidth then inc(AMxCurr, MENUSPEED);
+   if AMxShift < 210 then inc(AMxShift, MENUSPEED);
    end;
 
 if CurrentTeam = nil then exit;
@@ -98,7 +97,7 @@ with CurrentHedgehog^ do
      begin
      if Ammo = nil then exit;
      SlotsNum:= 0;
-     x:= AMxCurr;
+     x:= cScreenWidth - 210 + AMxShift;
      y:= cScreenHeight - 40;
      dec(y);
      DrawSprite(sprAMBorders, x, y, 0);
@@ -137,9 +136,9 @@ with CurrentHedgehog^ do
      if (Pos >= 0) then
         if Ammo^[Slot, Pos].Count > 0 then
            begin
-           DrawTexture(AMxCurr + 10, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+           DrawTexture(cScreenWidth - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
            if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-              DrawTexture(AMxCurr + 175, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
+              DrawTexture(cScreenWidth + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
            if bSelected then
               begin
               bShowAmmoMenu:= false;
@@ -151,7 +150,7 @@ with CurrentHedgehog^ do
      end;
 
 bSelected:= false;
-if AMxLeft = AMxCurr then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
+if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
 end;
 
 procedure MoveCamera; forward;
@@ -292,7 +291,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
-      DrawTexture(cScreenWidth div 2 - NameTagTex^.w - 3, DrawHealthY, NameTagTex);
+      DrawTexture(cScreenWidth div 2 - NameTagTex^.w - 3, cScreenHeight + DrawHealthY, NameTagTex);
 
       r.x:= 0;
       r.y:= 0;
@@ -300,14 +299,14 @@ for t:= 0 to Pred(TeamsCount) do
       r.h:= HealthTex^.h;
 
       DrawFromRect(cScreenWidth div 2,
-                        DrawHealthY,
+                        cScreenHeight + DrawHealthY,
                         @r, HealthTex);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
       DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
-                        DrawHealthY,
+                        cScreenHeight + DrawHealthY,
                         @r, HealthTex);
       end;
 
@@ -338,7 +337,7 @@ if WindBarWidth > 0 then
    end;
 
 // AmmoMenu
-if (AMxCurr < cScreenWidth) or bShowAmmoMenu then ShowAmmoMenu;
+if (AMxShift < 210) or bShowAmmoMenu then ShowAmmoMenu;
 
 DrawChat;
 
@@ -426,10 +425,10 @@ if (FollowGear <> nil) then
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
 
-if AMxCurr < cScreenWidth then
+if AMxShift < 210 then
    begin
-   if CursorPoint.X < AMxCurr + 35 then CursorPoint.X:= AMxCurr + 35;
-   if CursorPoint.X > AMxCurr + 200 then CursorPoint.X:= AMxCurr + 200;
+   if CursorPoint.X < cScreenWidth + AMxShift - 175 then CursorPoint.X:= cScreenWidth + AMxShift - 175;
+   if CursorPoint.X > cScreenWidth + AMxShift - 10 then CursorPoint.X:= cScreenWidth + AMxShift - 10;
    if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
    if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
    prevPoint:= CursorPoint;

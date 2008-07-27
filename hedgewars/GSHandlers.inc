@@ -964,7 +964,7 @@ if TeamsCount > 1 then
            end
   until b;
 
-t:= cScreenHeight - 4;
+t:= - 4;
 for i:= 0 to Pred(TeamsCount) do
     with thexchar[i] do
          begin

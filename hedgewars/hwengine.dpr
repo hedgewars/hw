@@ -132,6 +132,17 @@ SDL_Quit;
 halt
 end;
 
+////////////////////////////////
+procedure Resize(w, h: LongInt);
+begin
+cScreenWidth:= w;
+cScreenHeight:= h;
+if cFullScreen then
+	ParseCommand('/fullscr 1', true)
+else
+	ParseCommand('/fullscr 0', true);
+end;
+
 ///////////////////
 procedure MainLoop;
 var PrevTime,
@@ -141,12 +152,13 @@ begin
 PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
-      case event.type_ of
-           SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
-           SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
-                               cHasFocus:= event.active.gain = 1;
-           SDL_QUITEV: isTerminated:= true
-           end;
+	case event.type_ of
+		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
+		SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+				cHasFocus:= event.active.gain = 1;
+		SDL_VIDEORESIZE: Resize(max(event.resize.w, 320), max(event.resize.h, 240));
+		SDL_QUITEV: isTerminated:= true
+		end;
 CurrTime:= SDL_GetTicks;
 if PrevTime + cTimerInterval <= CurrTime then
    begin

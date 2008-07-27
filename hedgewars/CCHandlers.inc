@@ -455,7 +455,7 @@ AddFileLog('Prepare to change video parameters...');
 {$ENDIF}
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-flags:= SDL_OPENGL;
+flags:= SDL_OPENGL or SDL_RESIZABLE;
 if cFullScreen then flags:= flags or SDL_FULLSCREEN
                else SDL_WM_SetCaption('Hedgewars', nil);
 {$IFDEF DEBUGFILE}

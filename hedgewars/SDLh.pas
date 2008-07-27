@@ -57,6 +57,7 @@ const {$IFDEF WIN32}
       SDL_KEYDOWN     = 2;
       SDL_KEYUP       = 3;
       SDL_QUITEV      = 12;
+      SDL_VIDEORESIZE = 16;
 
       SDL_APPINPUTFOCUS = 2;
 
@@ -65,6 +66,7 @@ const {$IFDEF WIN32}
 
       SDL_GL_DOUBLEBUFFER = 5;
       SDL_OPENGL          = 2;
+      SDL_RESIZABLE       = $00000010;
 
       RMask = $FF;
       GMask = $FF00;
@@ -167,9 +169,9 @@ type PSDL_Rect = ^TSDL_Rect;
 
      TSDL_ActiveEvent = record
 	                type_: byte;
-                        gain: byte;
-                        state: byte;
-                        end;
+                    gain: byte;
+                    state: byte;
+                    end;
 
      TSDL_KeyboardEvent = record
                           type_: Byte;
@@ -181,6 +183,11 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_QuitEvent = record
                       type_: Byte;
                       end;
+	TSDL_ResizeEvent = record
+			type_: Byte;
+			w, h: LongInt;
+			end;
+
      PSDL_Event = ^TSDL_Event;
      TSDL_Event = record
                   case Byte of
@@ -188,6 +195,7 @@ type PSDL_Rect = ^TSDL_Rect;
                        SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
                        SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
+                       SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
                        end;
 
      PByteArray = ^TByteArray;

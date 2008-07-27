@@ -128,7 +128,7 @@ var s: string;
     begin
     r.x:= 0;
     r.y:= 0;
-    drY:= cScreenHeight - 4;
+    drY:= - 4;
     for t:= 0 to Pred(TeamsCount) do
      with TeamsArray[t]^ do
       begin
