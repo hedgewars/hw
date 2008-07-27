@@ -63,7 +63,7 @@ About::About(QWidget * parent) :
 			"</p><h2>" +
 			
 			QLabel::tr("Sounds:") + "</h2>"
-			"Hedgehogs voice: Stephen Alexander"
+			"Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
 			"<br>"
 			"'Nature' and 'Snow' music themes: Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
 			"<br>"
