@@ -657,8 +657,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				DrawRotated(sprBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
 				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 						hwSign(Gear^.dX),
-						1,
 						3,
+						PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 						0);
 				defaultPos:= false
 				end;
