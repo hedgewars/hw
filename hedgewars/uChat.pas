@@ -35,7 +35,7 @@ const MaxStrIndex = 27;
 type TChatLine = record
 		s: shortstring;
 		Time: Longword;
-		Texb, Texf: PTexture;
+		Tex: PTexture;
 		end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
@@ -46,33 +46,38 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
-var surf: PSDL_Surface;
+var strSurface, resSurface: PSDL_Surface;
+    r: TSDL_Rect;
+    w, h: LongInt;
 begin
-if cl.Texb <> nil then
-	begin
-	FreeTexture(cl.Texb);
-	FreeTexture(cl.Texf)
-	end;
+if cl.Tex <> nil then
+	FreeTexture(cl.Tex);
 
 cl.s:= str;
 
 if isInput then str:= UserNick + '> ' + str + '_';
 
+TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
+
+resSurface:= SDL_CreateRGBSurface(0,
+		toPowerOf2(w + 2),
+		toPowerOf2(h + 2),
+		32,
+		RMask, GMask, BMask, AMask);
+
+strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $202020);
+r.x:= 1;
+r.y:= 1;
+SDL_UpperBlit(strSurface, nil, resSurface, @r);
+
+strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $FFFFFF);
+SDL_UpperBlit(strSurface, nil, resSurface, nil);
+
+SDL_FreeSurface(strSurface);
+
 cl.Time:= RealTicks + 12500;
-
-TryDo(str <> '', 'Error: null chat string', true);
-
-surf:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $202020);
-surf:= SDL_DisplayFormatAlpha(surf);
-TryDo(surf <> nil, 'Chat: fail to render string', true);
-cl.Texb:= Surface2Tex(surf);
-SDL_FreeSurface(surf);
-
-surf:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $FFFFFF);
-surf:= SDL_DisplayFormatAlpha(surf);
-TryDo(surf <> nil, 'Chat: fail to render string', true);
-cl.Texf:= Surface2Tex(surf);
-SDL_FreeSurface(surf)
+cl.Tex:= Surface2Tex(resSurface);
+SDL_FreeSurface(resSurface)
 end;
 
 procedure AddChatString(s: shortstring);
@@ -85,7 +90,6 @@ inc(visibleCount)
 end;
 
 procedure DrawChat;
-const shift = 2;
 var i, t, cnt: Longword;
 begin
 cnt:= 0;
@@ -98,10 +102,9 @@ while
 			((t < MaxStrIndex) and showAll)
 	)
 	and
-		(Strs[i].Texb <> nil) do
+		(Strs[i].Tex <> nil) do
 	begin
-	DrawTexture(8 + shift, (visibleCount - t) * 16 - 6 + shift, Strs[i].Texb);
-	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Texf);
+	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Tex);
 	if i = 0 then i:= MaxStrIndex else dec(i);
 	inc(cnt);
 	inc(t)
@@ -110,11 +113,8 @@ while
 visibleCount:= cnt;
 
 if (GameState = gsChat)
-	and (InputStr.Texb <> nil) then
-	begin
-	DrawTexture(8 + shift, visibleCount * 16 + 10 + shift, InputStr.Texb);
-	DrawTexture(8, visibleCount * 16 + 10, InputStr.Texf)
-	end
+	and (InputStr.Tex <> nil) then
+	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
 end;
 
 procedure AcceptChatString(s: shortstring);
@@ -152,7 +152,7 @@ if Key <> 0 then
 			if Length(InputStr.s) > 0 then
 				begin
 				AcceptChatString(InputStr.s);
-				SetLine(InputStr, '', true)
+				SetLine(InputStr, '', false)
 				end;
 			FreezeEnterKey;
 			GameState:= gsGame

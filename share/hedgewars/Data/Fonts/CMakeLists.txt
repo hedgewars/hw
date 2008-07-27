@@ -1,3 +1,3 @@
 install(FILES
-	DejaVuSans.ttf
+	DejaVuSans-Bold.ttf
 	DESTINATION ${SHAREPATH}Data/Fonts)

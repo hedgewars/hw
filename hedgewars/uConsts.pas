@@ -88,7 +88,7 @@ type
                   Handle: PTTF_Font;
                   Height: LongInt;
                   style: LongInt;
-                  Name: string[15];
+                  Name: string[19];
                   end;
 
      PAmmo = ^TAmmo;
@@ -231,16 +231,16 @@ const
 	Fontz: array[THWFont] of THHFont = (
 			(Handle: nil;
 			Height: 12;
-			style: TTF_STYLE_BOLD;
-			Name: 'DejaVuSans.ttf'),
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans-Bold.ttf'),
 			(Handle: nil;
 			Height: 24;
-			style: TTF_STYLE_BOLD;
-			Name: 'DejaVuSans.ttf'),
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans-Bold.ttf'),
 			(Handle: nil;
 			Height: 10;
-			style: TTF_STYLE_BOLD;
-			Name: 'DejaVuSans.ttf')
+			style: TTF_STYLE_NORMAL;
+			Name: 'DejaVuSans-Bold.ttf')
 			);
 
 	FontBorder = 2;
