@@ -48,7 +48,7 @@ if isSoundEnabled then
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 Mix_AllocateChannels(Succ(chanTPU));
-if isMusicEnabled then Mix_VolumeMusic(64);
+if isMusicEnabled then Mix_VolumeMusic(50);
 
 Volume:= cInitVolume;
 if Volume < 0 then Volume:= 0;
@@ -121,7 +121,7 @@ inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
 Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
-if isMusicEnabled then Mix_VolumeMusic(Volume * 5 div 8);
+if isMusicEnabled then Mix_VolumeMusic(Volume * 4 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
