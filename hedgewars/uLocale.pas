@@ -53,10 +53,10 @@ while not eof(f) do
       if s[1] = ';' then continue;
       TryDo(Length(s) > 6, 'Load locale: empty string', true);
       val(s[1]+s[2], a, c);
-      TryDo(c = 0, 'Load locale: numbers should be two-digit', true);
+      TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
       TryDo(s[3] = ':', 'Load locale: ":" expected', true);
       val(s[4]+s[5], b, c);
-      TryDo(c = 0, 'Load locale: numbers should be two-digit', true);
+      TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
       TryDo(s[6] = '=', 'Load locale: "=" expected', true);
       Delete(s, 1, 6);
       case a of

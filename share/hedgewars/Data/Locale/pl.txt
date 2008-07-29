@@ -1,4 +1,4 @@
-﻿; Polish locale
+; Polish locale
 
 00:00=Granat
 00:01=Bomba rozpryskowa
