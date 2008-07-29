@@ -58,8 +58,6 @@ About::About(QWidget * parent) :
 			"<p>All sprites, all themes except for \"Cheese\" and \"Volcano\": Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
 			"<br>"
 			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
-			"<br>"
-			"\"Volcano\" map and theme: Damion Brookes &lt;<a href=\"mailto:nintendo_wii33@hotmail.co.uk\">nintendo_wii33@hotmail.co.uk</a>&gt;"
 			"</p><h2>" +
 			
 			QLabel::tr("Sounds:") + "</h2>"
