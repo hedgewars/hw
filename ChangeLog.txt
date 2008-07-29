@@ -4,6 +4,7 @@
 0.9.5 -> 0.9.6:
  + New Cake weapon
  + New maps: EarthRise, Bamboo, Bath, BambooPlinko
+ + New theme EarthRise
  + Add soundtracks for each theme
  + Show picked up ammo name when playing demo
  + Make engine fonts bold
