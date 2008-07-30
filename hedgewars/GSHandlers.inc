@@ -608,8 +608,8 @@ len:= _1 / Distance(cc, cs);
 cc:= cc * len; // rope vector plus hedgehog direction vector normalized
 cs:= cs * len;
 
-nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 5; // hedgehog direction normalized with length 3
-ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 5;
+nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 7; // hedgehog direction normalized with length 7
+ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 7;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
