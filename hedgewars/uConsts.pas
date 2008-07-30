@@ -147,7 +147,7 @@ const
 	cMaxEdgePoints = 16384;
 
 	cHHRadius = 9;
-	cHHStepTicks = 38;
+	cHHStepTicks = 29;
 
 	cHHZ = 1000;
 	cCurrHHZ = Succ(cHHZ);

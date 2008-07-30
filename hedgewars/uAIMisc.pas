@@ -193,10 +193,10 @@ with Targets.ar[Targets.Count] do
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
-         dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
+         dmg:= r + cHHRadius div 2 - hwRound(DistanceI(Point.x - x, Point.y - y));
          if dmg > 0 then
             begin
-            dmg:= dmg shr 1;
+            dmg:= min(dmg div 2, r);
             if dmg >= abs(Score) then
                if Score > 0 then inc(Result, KillScore)
                             else dec(Result, KillScore * friendlyfactor div 100)

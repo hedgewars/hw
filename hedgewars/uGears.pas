@@ -1079,11 +1079,11 @@ if (Mask and EXPLAllDamageInRadius)=0 then dmgRadius:= Radius shl 1
 Gear:= GearsList;
 while Gear <> nil do
       begin
-      dmg:= dmgRadius - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+      dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
       if (dmg > 1) and
          ((Gear^.State and gstNoDamage) = 0) then
          begin
-         dmg:= dmg div 2;
+         dmg:= min(dmg div 2, Radius);
          case Gear^.Kind of
               gtHedgehog,
                   gtMine,

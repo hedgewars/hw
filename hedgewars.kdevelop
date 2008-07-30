@@ -27,13 +27,13 @@
     <run>
       <directoryradio>executable</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram></mainprogram>
+      <mainprogram>bin/hedgewars</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
       <envvars/>
       <globaldebugarguments></globaldebugarguments>
-      <globalcwd></globalcwd>
+      <globalcwd>/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-FF/trunk</globalcwd>
       <useglobalprogram>false</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
