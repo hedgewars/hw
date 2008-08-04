@@ -23,6 +23,8 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QTextStream>
+#include <QDesktopWidget>
+
 #include "hwform.h"
 #include "hwconsts.h"
 
@@ -51,6 +53,27 @@ int main(int argc, char *argv[])
 
 	Q_INIT_RESOURCE(hedgewars);
 
+	QString imgAddr=":/res/Background.png";
+	QImage bgrndIm(imgAddr);
+	QRect deskSz=qApp->desktop()->screenGeometry();
+	bgrndIm=bgrndIm.scaled(deskSz.width()-deskSz.left(), deskSz.height()-deskSz.top(), 
+			       Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+	if (bgrndIm.save(QDir::tempPath()+"/hedgewarsScaledBgrnd.png")) {
+	  imgAddr=QDir::tempPath()+"/hedgewarsScaledBgrnd.png";
+	}
+	
+	qApp->setStyleSheet
+	  (QString(
+		   ".HWForm{"
+		   "background-image: url(\"%1\");"
+		   "background-position: bottom center;"
+		   //" background-origin: content;"
+		   //"background-repeat: no-repeat;"
+		   //"background-color: black;"
+		   "}"
+		   ).arg(imgAddr)
+	   );
+	
 	bindir->cd("bin"); // workaround over NSIS installer
 
 	cfgdir->setPath(cfgdir->homePath());
