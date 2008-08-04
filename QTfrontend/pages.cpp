@@ -68,30 +68,21 @@ PageMain::PageMain(QWidget* parent) :
 
 	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 1, 0, 1, 2, QSize(314, 289));
 	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignCenter);
-	//BtnSinglePlayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnMultiplayer = new QPushButton(tr("Multiplayer"));// addButton(tr("Multiplayer"), pageLayout, 1, 1);
-	//pageLayout->setAlignment(BtnMultiplayer, Qt::AlignCenter);
-	//BtnMultiplayer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnNet = addButton(":/res/Network play.png", pageLayout, 1, 2, 1, 2, QSize(314, 289));
-	//BtnNet->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnLoad = new QPushButton(tr("Saved games"));//addButton(tr("Saved games"), pageLayout, 3, 1);
-	//BtnLoad->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnDemos = new QPushButton(tr("Demos")); // addButton(tr("Demos"), pageLayout, 4, 1);
-	//BtnDemos->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnSetup = addButton(":/res/Settings.png", pageLayout, 2, 3, QSize(54, 50));
-	//BtnSetup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnInfo = addButton(":/res/About.png", pageLayout, 2, 1, 1, 2, QSize(116, 37));
 	pageLayout->setAlignment(BtnInfo, Qt::AlignCenter);
-	//BtnInfo->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	BtnExit = addButton(":/res/Exit.png", pageLayout, 2, 0, 1, 1, QSize(58, 52));
-	//BtnExit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :

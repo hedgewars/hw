@@ -70,6 +70,7 @@ class AbstractPage : public QWidget
       butt->setFixedSize(sz+QSize(2, 2));
       butt->setIconSize(sz);
       butt->setFlat(true);
+      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     }
     grid->addWidget(butt, wy, wx);
     return butt;
@@ -86,6 +87,7 @@ class AbstractPage : public QWidget
       butt->setFixedSize(sz+QSize(2, 2));
       butt->setIconSize(sz);
       butt->setFlat(true);
+      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     }
     grid->addWidget(butt, wy, wx, rowSpan, columnSpan);
     return butt;

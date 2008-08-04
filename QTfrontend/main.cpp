@@ -71,6 +71,9 @@ int main(int argc, char *argv[])
 		   "background-repeat: no-repeat;"
 		   "background-color: #3f095f;"
 		   "}"
+		   "PageMain > QPushButton{"
+		   "border: solid transparent;"
+		   "}"
 		   ).arg(imgAddr)
 	   );
 	
