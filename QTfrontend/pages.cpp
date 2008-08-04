@@ -55,34 +55,30 @@ PageMain::PageMain(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setMargin(25);
+	//pageLayout->setMargin(25);
 	//pageLayout->setColumnStretch(0, 1);
 	//pageLayout->setColumnStretch(1, 2);
 	//pageLayout->setColumnStretch(2, 1);
 
-	QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, QSize(780, 176));
-	pageLayout->setAlignment(btnLogo, Qt::AlignCenter);
+	QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, QSize(720, 140));
+	pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
 	pageLayout->setRowStretch(0, 1);
-	pageLayout->setRowStretch(1, 100);
-	pageLayout->setRowStretch(2, 1);
+	pageLayout->setRowStretch(1, 1);
+	pageLayout->setRowStretch(2, 0);
+	pageLayout->setRowStretch(3, 1);
 
-	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 1, 0, 1, 2, QSize(314, 289));
-	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignCenter);
+	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, QSize(314, 260));
+	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
-	BtnMultiplayer = new QPushButton(tr("Multiplayer"));// addButton(tr("Multiplayer"), pageLayout, 1, 1);
+	BtnNet = addButton(":/res/Network play.png", pageLayout, 2, 2, 1, 2, QSize(314, 260));
+	pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
-	BtnNet = addButton(":/res/Network play.png", pageLayout, 1, 2, 1, 2, QSize(314, 289));
+	BtnSetup = addButton(":/res/Settings.png", pageLayout, 3, 3, QSize(54, 50));
 
-	BtnLoad = new QPushButton(tr("Saved games"));//addButton(tr("Saved games"), pageLayout, 3, 1);
+	BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, QSize(116, 37));
+	pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-	BtnDemos = new QPushButton(tr("Demos")); // addButton(tr("Demos"), pageLayout, 4, 1);
-
-	BtnSetup = addButton(":/res/Settings.png", pageLayout, 2, 3, QSize(54, 50));
-
-	BtnInfo = addButton(":/res/About.png", pageLayout, 2, 1, 1, 2, QSize(116, 37));
-	pageLayout->setAlignment(BtnInfo, Qt::AlignCenter);
-
-	BtnExit = addButton(":/res/Exit.png", pageLayout, 2, 0, 1, 1, QSize(58, 52));
+	BtnExit = addButton(":/res/Exit.png", pageLayout, 3, 0, 1, 1, QSize(58, 52));
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
@@ -591,7 +587,7 @@ PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
 }
 
-PageSinglePlayer::PageSinglePlayer(QWidget* parent) : QWidget(parent)
+PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -600,23 +596,15 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
 	pageLayout->setRowStretch(0, 1);
-	pageLayout->setRowStretch(3, 1);
+	pageLayout->setRowStretch(6, 1);
 
-	BtnSimpleGamePage = new QPushButton(this);
-	BtnSimpleGamePage->setFont(*font14);
-	BtnSimpleGamePage->setText(QPushButton::tr("Simple Game"));
-	pageLayout->addWidget(BtnSimpleGamePage, 1, 1);
+	BtnSimpleGamePage = addButton(tr("Simple Game"), pageLayout, 1, 1);
+	BtnTrainPage = addButton(tr("Training"), pageLayout, 2, 1);
+	BtnMultiplayer = addButton(tr("Multiplayer"), pageLayout, 3, 1);
+	BtnLoad = addButton(tr("Saved games"), pageLayout, 4, 1);
+	BtnDemos = addButton(tr("Demos"), pageLayout, 5, 1);
 
-	BtnTrainPage = new QPushButton(this);
-	BtnTrainPage->setFont(*font14);
-	BtnTrainPage->setText(QPushButton::tr("Training"));
-	pageLayout->addWidget(BtnTrainPage, 2, 1);
-
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 4, 0);
-
+	BtnBack = addButton(tr("Back"), pageLayout, 7, 0);
 }
 
 PageTraining::PageTraining(QWidget* parent) : QWidget(parent)

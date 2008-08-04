@@ -112,11 +112,8 @@ public:
 	PageMain(QWidget* parent = 0);
 
 	QPushButton *BtnSinglePlayer;
-	QPushButton *BtnMultiplayer;
 	QPushButton *BtnNet;
 	QPushButton *BtnSetup;
-	QPushButton *BtnLoad;
-	QPushButton *BtnDemos;
 	QPushButton *BtnInfo;
 	QPushButton *BtnExit;
 };
@@ -289,7 +286,7 @@ public:
 	QLabel *labelGameStats;
 };
 
-class PageSinglePlayer : public QWidget
+class PageSinglePlayer : public AbstractPage
 {
 	Q_OBJECT
 
@@ -298,6 +295,9 @@ public:
 
 	QPushButton *BtnSimpleGamePage;
 	QPushButton *BtnTrainPage;
+	QPushButton *BtnMultiplayer;
+	QPushButton *BtnLoad;
+	QPushButton *BtnDemos;
 	QPushButton *BtnBack;
 	GameCFGWidget *gameCFG;
 };

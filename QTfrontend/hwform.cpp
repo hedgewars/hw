@@ -56,9 +56,6 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
-	connect(ui.pageMain->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
-	connect(ui.pageMain->BtnLoad,	SIGNAL(clicked()),	this, SLOT(GoToSaves()));
-	connect(ui.pageMain->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
 	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
 	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
 	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
@@ -108,6 +105,9 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
 	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoToTraining()));
+	connect(ui.pageSinglePlayer->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
+	connect(ui.pageSinglePlayer->BtnLoad,	SIGNAL(clicked()),	this, SLOT(GoToSaves()));
+	connect(ui.pageSinglePlayer->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
 	connect(ui.pageSinglePlayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
 	connect(ui.pageTraining->BtnStartTrain,	SIGNAL(clicked()),	this, SLOT(StartTraining()));

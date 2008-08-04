@@ -53,30 +53,21 @@ int main(int argc, char *argv[])
 
 	Q_INIT_RESOURCE(hedgewars);
 
-	QString imgAddr=":/res/Background.png";
-	QImage bgrndIm(imgAddr);
-	QRect deskSz=qApp->desktop()->screenGeometry();
-	bgrndIm=bgrndIm.scaled(deskSz.width()-deskSz.left(), deskSz.height()-deskSz.top(), 
-			       Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-	if (bgrndIm.save(QDir::tempPath()+"/hedgewarsScaledBgrnd.png")) {
-	  imgAddr=QDir::tempPath()+"/hedgewarsScaledBgrnd.png";
-	}
-	
 	qApp->setStyleSheet
 	  (QString(
 		   ".HWForm{"
-		   "background-image: url(\"%1\");"
+		   "background-image: url(\":/res/Background.png\");"
 		   "background-position: bottom center;"
 		   //" background-origin: content;"
-		   "background-repeat: no-repeat;"
-		   "background-color: #3f095f;"
+		   "background-repeat: repeat-x;"
+		   "background-color: #870c8f;"
 		   "}"
 		   "PageMain > QPushButton{"
 		   "border: solid transparent;"
 		   "}"
-		   ).arg(imgAddr)
+		   )
 	   );
-	
+
 	bindir->cd("bin"); // workaround over NSIS installer
 
 	cfgdir->setPath(cfgdir->homePath());
