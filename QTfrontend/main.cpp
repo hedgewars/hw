@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
 		   "background-image: url(\"%1\");"
 		   "background-position: bottom center;"
 		   //" background-origin: content;"
-		   //"background-repeat: no-repeat;"
-		   //"background-color: black;"
+		   "background-repeat: no-repeat;"
+		   "background-color: #3f095f;"
 		   "}"
 		   ).arg(imgAddr)
 	   );
