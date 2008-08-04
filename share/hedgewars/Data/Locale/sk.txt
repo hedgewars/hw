@@ -24,12 +24,11 @@
 00:21=Mínomet
 00:22=Bič
 00:23=Kamikadze
-00:24=Cake
 
 01:00=Do boja!
 01:01=Remíza
 01:02=%1 vyhral!
 01:03=Hlasitosť %1%
 01:04=Pauza
-01:05=Really quit (Y/Esc)?
-01:06=Sudden death!
+01:05=Naozaj skončiť (Y/Esc)?
+01:06=Rýchla smrť!
