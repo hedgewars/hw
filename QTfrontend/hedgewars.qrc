@@ -27,5 +27,7 @@
     <file>res/NetworkPlay.png</file>
     <file>res/Settings.png</file>
     <file>res/dropdown.png</file>
+    <file>res/checked.png</file>
+    <file>res/unchecked.png</file>
 </qresource>
 </RCC>
