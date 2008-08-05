@@ -201,7 +201,7 @@ public:
 	QLineEdit *editNetNick;
 };
 
-class PageNet : public QWidget
+class PageNet : public AbstractPage
 {
 	Q_OBJECT
 
@@ -231,7 +231,7 @@ signals:
 	void connectClicked(const QString & host, quint16 port);
 };
 
-class PageNetServer : public QWidget
+class PageNetServer : public AbstractPage
 {
 	Q_OBJECT
 
@@ -250,7 +250,7 @@ private slots:
 	void setDefaultPort();
 };
 
-class PageNetGame : public QWidget
+class PageNetGame : public AbstractPage
 {
 	Q_OBJECT
 
@@ -266,7 +266,7 @@ public:
 	GameCFGWidget* pGameCFG;
 };
 
-class PageInfo : public QWidget
+class PageInfo : public AbstractPage
 {
 	Q_OBJECT
 
@@ -277,7 +277,7 @@ public:
 	About *about;
 };
 
-class PageGameStats : public QWidget
+class PageGameStats : public AbstractPage
 {
 	Q_OBJECT
 
@@ -304,7 +304,7 @@ public:
 	GameCFGWidget *gameCFG;
 };
 
-class PageTraining : public QWidget
+class PageTraining : public AbstractPage
 {
 	Q_OBJECT
 

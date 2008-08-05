@@ -117,7 +117,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	}
 	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
 
-	BtnTeamDiscard = addButton(tr("Discard"), pageLayout, 4, 0);
+	BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 
 	GBoxBinds = new QGroupBox(this);
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
@@ -245,7 +245,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	BtnBack = addButton(tr("Back"), pageLayout, 1, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
@@ -331,7 +331,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
 	BtnSaveOptions = addButton(tr("Save"), pageLayout, 4, 2);
 
-	BtnBack = addButton(tr("Back"), pageLayout, 4, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 
 	QGroupBox* groupWeapons = new QGroupBox(this);
 	groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -360,7 +360,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	GBNlayout->addWidget(editNetNick, 0, 1);
 }
 
-PageNet::PageNet(QWidget* parent) : QWidget(parent)
+PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -414,10 +414,7 @@ PageNet::PageNet(QWidget* parent) : QWidget(parent)
 	BtnSpecifyServer->setText(QPushButton::tr("Specify"));
 	GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 3, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 
 	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(updateServersList()));
 	connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
@@ -453,7 +450,7 @@ void PageNet::slotConnect()
 	emit connectClicked(host, port);
 }
 
-PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
+PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -464,10 +461,7 @@ PageNetServer::PageNetServer(QWidget* parent) : QWidget(parent)
 	pageLayout->setRowStretch(0, 1);
 	pageLayout->setRowStretch(1, 0);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	BtnBack =addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
 	BtnStart = new QPushButton(this);
 	BtnStart->setFont(*font14);
@@ -518,7 +512,7 @@ void PageNetServer::setDefaultPort()
 	sbPort->setValue(46631);
 }
 
-PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
+PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -540,10 +534,7 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	pNetTeamsWidget->setAcceptOuter(true);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 2, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
@@ -552,7 +543,7 @@ PageNetGame::PageNetGame(QWidget* parent) : QWidget(parent)
 	pageLayout->addWidget(BtnGo, 2, 1);
 }
 
-PageInfo::PageInfo(QWidget* parent) : QWidget(parent)
+PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -560,16 +551,13 @@ PageInfo::PageInfo(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(1, 1);
 	pageLayout->setColumnStretch(2, 1);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
 	about = new About(this);
 	pageLayout->addWidget(about, 0, 0, 1, 3);
 }
 
-PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
+PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -577,10 +565,7 @@ PageGameStats::PageGameStats(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(1, 1);
 	pageLayout->setColumnStretch(2, 1);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 
 	labelGameStats = new QLabel(this);
 	labelGameStats->setTextFormat(Qt::RichText);
@@ -604,10 +589,10 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	BtnLoad = addButton(tr("Saved games"), pageLayout, 4, 1);
 	BtnDemos = addButton(tr("Demos"), pageLayout, 5, 1);
 
-	BtnBack = addButton(tr("Back"), pageLayout, 7, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 7, 0, true);
 }
 
-PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
+PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -621,10 +606,7 @@ PageTraining::PageTraining(QWidget* parent) : QWidget(parent)
 	BtnStartTrain->setText(QPushButton::tr("Go!"));
 	pageLayout->addWidget(BtnStartTrain, 1, 2);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 1, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 }
 
 PageSelectWeapon::PageSelectWeapon(QWidget* parent) :

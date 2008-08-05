@@ -19,13 +19,14 @@
 #ifndef PLAYRECORDPAGE_H
 #define PLAYRECORDPAGE_H
 
-#include <QWidget>
 #include <QDir>
+
+#include "pages.h"
 
 class QPushButton;
 class QListWidget;
 
-class PagePlayDemo : public QWidget
+class PagePlayDemo : public AbstractPage
 {
 	Q_OBJECT
 

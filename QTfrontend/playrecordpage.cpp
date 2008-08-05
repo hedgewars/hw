@@ -28,7 +28,7 @@
 #include "hwconsts.h"
 #include "playrecordpage.h"
 
-PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
+PagePlayDemo::PagePlayDemo(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -37,10 +37,7 @@ PagePlayDemo::PagePlayDemo(QWidget* parent) : QWidget(parent)
 	pageLayout->setColumnStretch(2, 1);
 	pageLayout->setRowStretch(2, 100);
 
-	BtnBack = new QPushButton(this);
-	BtnBack->setFont(*font14);
-	BtnBack->setText(QPushButton::tr("Back"));
-	pageLayout->addWidget(BtnBack, 3, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 
 	BtnPlayDemo = new QPushButton(this);
 	BtnPlayDemo->setFont(*font14);
