@@ -59,15 +59,16 @@ class AbstractPage : public QWidget
   }
   virtual ~AbstractPage() {};
 
-  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, const QSize sz=QSize(0, 0)) {
+  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, bool iconed = false) {
     QPushButton* butt = new QPushButton(this);
-    if (sz==QSize(0, 0)) {
+    if (!iconed) {
       butt->setFont(*font14);
       butt->setText(btname);
     } else {
       const QIcon& lp=QIcon(btname);
+      QSize sz = lp.actualSize(QSize(65535, 65535));
       butt->setIcon(lp);
-      butt->setFixedSize(sz+QSize(2, 2));
+      butt->setFixedSize(sz);
       butt->setIconSize(sz);
       butt->setFlat(true);
       butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -76,15 +77,16 @@ class AbstractPage : public QWidget
     return butt;
   };
 
-  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, const QSize sz=QSize(0, 0)) {
+  QPushButton* addButton(QString btname, QGridLayout* grid, int wy, int wx, int rowSpan, int columnSpan, bool iconed = false) {
     QPushButton* butt = new QPushButton(this);
-    if (sz==QSize(0, 0)) {
+    if (!iconed) {
       butt->setFont(*font14);
       butt->setText(btname);
     } else {
       const QIcon& lp=QIcon(btname);
+      QSize sz = lp.actualSize(QSize(65535, 65535));
       butt->setIcon(lp);
-      butt->setFixedSize(sz+QSize(2, 2));
+      butt->setFixedSize(sz);
       butt->setIconSize(sz);
       butt->setFlat(true);
       butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);

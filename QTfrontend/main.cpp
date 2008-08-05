@@ -54,19 +54,28 @@ int main(int argc, char *argv[])
 	Q_INIT_RESOURCE(hedgewars);
 
 	qApp->setStyleSheet
-	  (QString(
-		   ".HWForm{"
-		   "background-image: url(\":/res/Background.png\");"
-		   "background-position: bottom center;"
-		   //" background-origin: content;"
-		   "background-repeat: repeat-x;"
-		   "background-color: #870c8f;"
-		   "}"
-		   "PageMain > QPushButton{"
-		   "border: solid transparent;"
-		   "}"
-		   )
-	   );
+		(QString(
+				".HWForm{"
+				"background-image: url(\":/res/Background.png\");"
+				"background-position: bottom center;"
+				"background-repeat: repeat-x;"
+				"background-color: #870c8f;"
+				"}"
+				"PageMain > QPushButton{"
+				"border: solid;"
+				"border-width: 4px;"
+				"border-radius: 8px;"
+				"border-color: orange;"
+				"background-origin: content;"
+				"}"
+				"PageMain > QPushButton:hover{"
+				"border-color: yellow;"
+				"}"
+				"PageMain > QPushButton:pressed{"
+				"border-color: white;"
+				"}"
+			)
+		);
 
 	bindir->cd("bin"); // workaround over NSIS installer
 

@@ -60,25 +60,25 @@ PageMain::PageMain(QWidget* parent) :
 	//pageLayout->setColumnStretch(1, 2);
 	//pageLayout->setColumnStretch(2, 1);
 
-	QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, QSize(720, 140));
+	QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
 	pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
 	pageLayout->setRowStretch(0, 1);
 	pageLayout->setRowStretch(1, 1);
 	pageLayout->setRowStretch(2, 0);
 	pageLayout->setRowStretch(3, 1);
 
-	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, QSize(314, 260));
+	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
 	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
-	BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, QSize(314, 260));
+	BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
 	pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
-	BtnSetup = addButton(":/res/Settings.png", pageLayout, 3, 3, QSize(54, 50));
+	BtnSetup = addButton(":/res/Settings.png", pageLayout, 3, 3, true);
 
-	BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, QSize(116, 37));
+	BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
 	pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-	BtnExit = addButton(":/res/Exit.png", pageLayout, 3, 0, 1, 1, QSize(58, 52));
+	BtnExit = addButton(":/res/Exit.png", pageLayout, 3, 0, 1, 1, true);
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
