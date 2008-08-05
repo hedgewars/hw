@@ -24,7 +24,7 @@
     <file>res/Exit.png</file>
     <file>res/HedgewarsTitle.png</file>
     <file>res/LocalPlay.png</file>
-    <file>res/Network play.png</file>
+    <file>res/NetworkPlay.png</file>
     <file>res/Settings.png</file>
 </qresource>
 </RCC>

@@ -70,7 +70,7 @@ PageMain::PageMain(QWidget* parent) :
 	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, QSize(314, 260));
 	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
-	BtnNet = addButton(":/res/Network play.png", pageLayout, 2, 2, 1, 2, QSize(314, 260));
+	BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, QSize(314, 260));
 	pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
 	BtnSetup = addButton(":/res/Settings.png", pageLayout, 3, 3, QSize(54, 50));
