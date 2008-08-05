@@ -26,5 +26,6 @@
     <file>res/LocalPlay.png</file>
     <file>res/NetworkPlay.png</file>
     <file>res/Settings.png</file>
+    <file>res/dropdown.png</file>
 </qresource>
 </RCC>
