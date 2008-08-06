@@ -284,6 +284,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 0, 2);
 
 	AGGroupBox = new QGroupBox(this);
+	AGGroupBox->setCheckable(true);
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 	pageLayout->addWidget(AGGroupBox, 2, 1);
@@ -310,11 +311,11 @@ PageOptions::PageOptions(QWidget* parent) :
 	CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
 	GBAlayout->addWidget(CBFullscreen);
 
-	CBEnableSound = new	QCheckBox(AGGroupBox);
+	CBEnableSound = new QCheckBox(AGGroupBox);
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 	GBAlayout->addWidget(CBEnableSound);
 
-	CBEnableMusic = new	QCheckBox(AGGroupBox);
+	CBEnableMusic = new QCheckBox(AGGroupBox);
 	CBEnableMusic->setText(QCheckBox::tr("Enable music"));
 	GBAlayout->addWidget(CBEnableMusic);
 
@@ -329,7 +330,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	fpsedit = new FPSEdit(AGGroupBox);
 	GBAfpslayout->addWidget(fpsedit);
 
-	BtnSaveOptions = addButton(tr("Save"), pageLayout, 4, 2);
+	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 4, 2, true);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 

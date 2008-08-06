@@ -29,5 +29,7 @@
     <file>res/dropdown.png</file>
     <file>res/checked.png</file>
     <file>res/unchecked.png</file>
+    <file>res/graphicsicon.png</file>
+    <file>res/Save.png</file>
 </qresource>
 </RCC>
