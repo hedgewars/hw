@@ -171,8 +171,8 @@ repeat
   while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
   i:= x1 - 12;
   repeat
-    k:= CountNonZeroz(x1, y);
-    dec(x1, 2)
+    dec(x1, 2);
+    k:= CountNonZeroz(x1, y)
   until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
   inc(x1, 2);
   if k = 16 then
@@ -180,8 +180,8 @@ repeat
      while (x2 < 1900) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
      i:= x2 + 12;
      repeat
-       k:= CountNonZeroz(x2, y);
-       inc(x2, 2)
+       inc(x2, 2);
+       k:= CountNonZeroz(x2, y)
      until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
      if (x2 < 1900) and (k = 16) and (x2 - x1 > 250)
         and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
