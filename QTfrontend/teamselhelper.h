@@ -68,7 +68,7 @@ class TeamShowWidget : public QWidget
  CHedgehogerWidget* phhoger;
  QPushButton* colorButt;
  QPushButton* butt;
- QPushButton* bText;
+// QPushButton* bText;
 
  signals:
  void teamStatusChanged(HWTeam team);
