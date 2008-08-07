@@ -145,7 +145,10 @@ if Gear^.Timer = 0 then
 	exit
 	end;
 CalcRotationDirAngle(Gear);
-if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then PlaySound(sndGrenadeImpact, false)
+if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then
+	if (hwAbs(Gear^.dX) > _0_1) or
+	   (hwAbs(Gear^.dY) > _0_1) then
+		PlaySound(sndGrenadeImpact, false)
 end;
 
 procedure doStepCluster(Gear: PGear);
