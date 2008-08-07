@@ -40,7 +40,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 #endif
   imageButt=new QPushButton(this);
   imageButt->setObjectName("imageButt");
-  imageButt->setFixedSize(256, 128);
+  imageButt->setFixedSize(256 + 8, 128 + 8);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt);
