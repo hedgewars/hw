@@ -38,6 +38,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
 	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
 	Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
+	bool ffscr=value("video/frontendfullscreen", false).toBool();
+	Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
@@ -76,6 +78,9 @@ void GameUIConfig::SaveOptions()
 {
 	setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
 	setValue("video/fullscreen", vid_Fullscreen());
+	bool ffscr=isFrontendFullscreen();
+	setValue("video/frontendfullscreen", ffscr);
+	emit frontendFullscreen(ffscr);
 
 	setValue("audio/sound", isSoundEnabled());
 	setValue("audio/music", isMusicEnabled());
@@ -110,6 +115,11 @@ QRect GameUIConfig::vid_Resolution()
 bool GameUIConfig::vid_Fullscreen()
 {
 	return Form->ui.pageOptions->CBFullscreen->isChecked();
+}
+
+bool GameUIConfig::isFrontendFullscreen() const
+{
+  return Form->ui.pageOptions->CBFrontendFullscreen->isChecked();
 }
 
 bool GameUIConfig::isSoundEnabled()

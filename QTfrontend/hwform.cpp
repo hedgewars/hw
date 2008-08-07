@@ -54,6 +54,9 @@ HWForm::HWForm(QWidget *parent)
 	UpdateTeamsLists();
 	UpdateWeapons();
 
+	connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
+	onFrontendFullscreen(config->isFrontendFullscreen());
+
 	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
 	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
@@ -125,6 +128,12 @@ HWForm::HWForm(QWidget *parent)
 		this, SLOT(GoBack())); // executed third
 
 	GoToPage(ID_PAGE_MAIN);
+}
+
+void HWForm::onFrontendFullscreen(bool value)
+{
+  qDebug() << "fullscreen = " << value;
+  setWindowState(windowState() | (value ? Qt::WindowFullScreen : Qt::WindowNoState));
 }
 
 void HWForm::UpdateWeapons()

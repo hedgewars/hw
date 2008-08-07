@@ -311,6 +311,10 @@ PageOptions::PageOptions(QWidget* parent) :
 	CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
 	GBAlayout->addWidget(CBFullscreen);
 
+	CBFrontendFullscreen = new QCheckBox(AGGroupBox);
+	CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
+	GBAlayout->addWidget(CBFrontendFullscreen);
+
 	CBEnableSound = new QCheckBox(AGGroupBox);
 	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 	GBAlayout->addWidget(CBEnableSound);

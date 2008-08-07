@@ -42,6 +42,10 @@ public:
 	quint8 timerInterval();
 	quint8 bitDepth();
 	QString netNick();
+	bool isFrontendFullscreen() const;
+
+ signals:
+	void frontendFullscreen(bool value);
 
 public slots:
 	void SaveOptions();

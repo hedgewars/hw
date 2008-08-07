@@ -192,6 +192,7 @@ public:
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBEnableMusic;
 	QCheckBox *CBFullscreen;
+	QCheckBox *CBFrontendFullscreen;
 	QCheckBox *CBShowFPS;
 	QCheckBox *CBAltDamage;
 	FPSEdit *fpsedit;
