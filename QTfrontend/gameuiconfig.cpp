@@ -33,7 +33,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 {
 	Form = FormWidgets;
 
-	Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
+	//Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
+	resizeToConfigValues();
 
 	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
 	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
@@ -74,6 +75,11 @@ QStringList GameUIConfig::GetTeamsList()
 	return cleanedList;
 }
 
+void GameUIConfig::resizeToConfigValues()
+{
+  Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
+}
+
 void GameUIConfig::SaveOptions()
 {
 	setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
@@ -81,6 +87,12 @@ void GameUIConfig::SaveOptions()
 	bool ffscr=isFrontendFullscreen();
 	setValue("video/frontendfullscreen", ffscr);
 	emit frontendFullscreen(ffscr);
+	if (!ffscr) {
+	  setValue("window/width", Form->width());
+	  setValue("window/height", Form->height());
+	} else {
+	  resizeToConfigValues();
+	}
 
 	setValue("audio/sound", isSoundEnabled());
 	setValue("audio/music", isMusicEnabled());
@@ -95,9 +107,6 @@ void GameUIConfig::SaveOptions()
 	setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());
 
 	setValue("misc/altdamage", isAltDamageEnabled());
-
-	setValue("window/width", Form->width());
-	setValue("window/height", Form->height());
 }
 
 QRect GameUIConfig::vid_Resolution()

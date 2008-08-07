@@ -132,7 +132,6 @@ HWForm::HWForm(QWidget *parent)
 
 void HWForm::onFrontendFullscreen(bool value)
 {
-  qDebug() << "fullscreen = " << value;
   if (value)
     setWindowState(windowState() | Qt::WindowFullScreen);
   else {

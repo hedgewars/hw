@@ -43,6 +43,7 @@ public:
 	quint8 bitDepth();
 	QString netNick();
 	bool isFrontendFullscreen() const;
+	void resizeToConfigValues();
 
  signals:
 	void frontendFullscreen(bool value);
