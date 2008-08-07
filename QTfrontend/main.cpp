@@ -68,6 +68,7 @@ int main(int argc, char *argv[])
 				"border-radius: 10px;"
 				"border-color: orange;"
 				"background-origin: content;"
+				"background-color: #00351d;"
 				"}"
 				"QPushButton:hover{"
 				"border-color: yellow;"
