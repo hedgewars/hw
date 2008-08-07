@@ -92,6 +92,11 @@ int main(int argc, char *argv[])
 				"border-color: yellow;"
 				"}"
 
+			"QLabel{"
+				"color: orange;"
+				"font: bold 14px;"
+				"}"
+
 			"QListWidget{"
 				"border: solid;"
 				"border-width: 4px;"
@@ -115,6 +120,21 @@ int main(int argc, char *argv[])
 				"font: bold 14px;"
 				"}"
 			"QSpinBox:hover{"
+				"border-color: yellow;"
+				"}"
+
+			"QToolBox{"
+				"border: solid;"
+				"border-width: 4px;"
+				"border-radius: 12px;"
+				"border-color: orange;"
+				"background-color: #0d0544;"
+			"}"
+			"QToolBox::tab{"
+				"color: orange;"
+				"font: bold 14px;"
+				"}"
+			"QToolBox:hover{"
 				"border-color: yellow;"
 				"}"
 
@@ -183,6 +203,11 @@ int main(int argc, char *argv[])
 				"}"
 			"QCheckBox::indicator:unchecked{"
 				"image: url(\":/res/unchecked.png\");"
+				"}"
+			
+			"QRadioButton{"
+				"color: orange;"
+				"font: bold 14px;"
 				"}"
 			)
 		);
