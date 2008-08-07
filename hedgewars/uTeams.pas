@@ -227,7 +227,7 @@ function AddTeam(TeamColor: Longword): PTeam;
 var Result: PTeam;
     c: LongInt;
 begin
-TryDo(TeamsCount <= cMaxTeams, 'Too many teams', true);
+TryDo(TeamsCount < cMaxTeams, 'Too many teams', true);
 New(Result);
 TryDo(Result <> nil, 'AddTeam: Result = nil', true);
 FillChar(Result^, sizeof(TTeam), 0);
