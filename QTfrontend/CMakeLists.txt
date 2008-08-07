@@ -9,12 +9,15 @@ set(QT_USE_QTXML TRUE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE}) 
+include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
+if(UNIX)
+	include_directories("/usr/local/include") # HACK: in freebsd cannot find iconv.h included via SDL.h
+endif(UNIX)
 
 # Done
 include_directories(.)
