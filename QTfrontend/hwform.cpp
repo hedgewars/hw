@@ -133,7 +133,11 @@ HWForm::HWForm(QWidget *parent)
 void HWForm::onFrontendFullscreen(bool value)
 {
   qDebug() << "fullscreen = " << value;
-  setWindowState(windowState() | (value ? Qt::WindowFullScreen : Qt::WindowNoState));
+  if (value)
+    setWindowState(windowState() | Qt::WindowFullScreen);
+  else {
+    setWindowState(windowState() & !Qt::WindowFullScreen);
+  }
 }
 
 void HWForm::UpdateWeapons()
