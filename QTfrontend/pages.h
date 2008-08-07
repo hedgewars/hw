@@ -67,6 +67,10 @@ class AbstractPage : public QWidget
     } else {
       const QIcon& lp=QIcon(btname);
       QSize sz = lp.actualSize(QSize(65535, 65535));
+      if (btname == ":/res/Save.png")
+      {
+      	butt->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+      }
       butt->setIcon(lp);
       butt->setFixedSize(sz);
       butt->setIconSize(sz);

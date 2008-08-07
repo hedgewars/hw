@@ -202,7 +202,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	pageLayout->addWidget(GBoxFort, 2, 2, 1, 2);
 
-	BtnTeamSave = addButton(tr("Save"), pageLayout, 4, 2, 1, 2);
+	BtnTeamSave = addButton(":/res/Save.png", pageLayout, 4, 3, true);;
 
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
@@ -620,13 +620,13 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setMargin(25);
 	
-	pWeapons=new SelWeaponWidget(cDefaultAmmoStore->size() - 10, this);
+	pWeapons = new SelWeaponWidget(cDefaultAmmoStore->size() - 10, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
-	BtnBack = addButton(tr("Back"), pageLayout, 1, 0);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 	BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
 	BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
-	BtnSave = addButton(tr("Save"), pageLayout, 1, 3);
+	BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
 }
 
 PageInGame::PageInGame(QWidget* parent) : 
