@@ -21,9 +21,9 @@ interface
 uses SDLh;
 {$include options.inc}
 
-procedure AddObjects(InSurface, Surface: PSDL_Surface);
+procedure AddObjects();
 procedure LoadThemeConfig;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound;
@@ -61,7 +61,7 @@ var Rects: PRectArray;
     SprayObjects: TSprayObjects;
 
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image, Surface: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
 var p: PByteArray;
     x, y: Longword;
     bpp: LongInt;
@@ -69,38 +69,26 @@ var p: PByteArray;
 begin
 r.x:= cpX;
 r.y:= cpY;
-SDL_UpperBlit(Image, nil, Surface, @r);
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
    SDLTry(SDL_LockSurface(Image) >= 0, true);
 
 bpp:= Image^.format^.BytesPerPixel;
-WriteToConsole('('+inttostr(bpp)+') ');
+TryDo(bpp = 4, 'Land object should be 32bit', true);
 p:= Image^.pixels;
-case bpp of
-     1: OutError('We don''t work with 8 bit surfaces', true);
-     2: for y:= 0 to Pred(Image^.h) do
-            begin
-            for x:= 0 to Pred(Image^.w) do
-                if PWord(@(p^[x * 2]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @(p^[Image^.pitch]);
-            end;
-     3: for y:= 0 to Pred(Image^.h) do
-            begin
-            for x:= 0 to Pred(Image^.w) do
-                if  (p^[x * 3 + 0] <> 0)
-                 or (p^[x * 3 + 1] <> 0)
-                 or (p^[x * 3 + 2] <> 0) then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @(p^[Image^.pitch]);
-            end;
-     4: for y:= 0 to Pred(Image^.h) do
-            begin
-            for x:= 0 to Pred(Image^.w) do
-                if PLongword(@(p^[x * 4]))^ <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
-            p:= @(p^[Image^.pitch]);
-            end;
-     end;
+
+for y:= 0 to Pred(Image^.h) do
+	begin
+	for x:= 0 to Pred(Image^.w) do
+		//if LandPixels[cpY + y, cpX + x] = 0 then
+			begin
+			LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^;
+			if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+			end;
+	p:= @(p^[Image^.pitch]);
+	end;
+
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 WriteLnToConsole(msgOK)
@@ -257,7 +245,7 @@ with Obj do
 CheckCanPlace:= Result
 end;
 
-function TryPut(var Obj: TThemeObject; Surface: PSDL_Surface): boolean; overload;
+function TryPut(var Obj: TThemeObject): boolean; overload;
 const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
@@ -292,7 +280,7 @@ with Obj do
      if Result then
         begin
         i:= getrandom(cnt);
-        BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, Obj.Surf, Surface);
+        BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, Obj.Surf);
         AddRect(ar[i].x, ar[i].y, Width, Height);
         dec(Maxcnt)
         end else Maxcnt:= 0
@@ -436,7 +424,7 @@ repeat
     repeat
       inc(ii);
       if ii = ThemeObjects.Count then ii:= 0;
-      b:= TryPut(ThemeObjects.objs[ii], Surface)
+      b:= TryPut(ThemeObjects.objs[ii])
     until b or (ii = t);
     inc(i)
 until (i > MaxCount) or not b;
@@ -462,9 +450,9 @@ repeat
 until (i > MaxCount) or not b;
 end;
 
-procedure AddObjects(InSurface, Surface: PSDL_Surface);
+procedure AddObjects();
 begin
-InitRects;
+{InitRects;
 AddGirder(256, Surface);
 AddGirder(512, Surface);
 AddGirder(768, Surface);
@@ -476,7 +464,7 @@ AddThemeObjects(Surface, ThemeObjects, 8);
 AddProgress;
 SDL_UpperBlit(InSurface, nil, Surface, nil);
 AddSprayObjects(Surface, SprayObjects, 10);
-FreeRects
+FreeRects}
 end;
 
 procedure LoadThemeConfig;

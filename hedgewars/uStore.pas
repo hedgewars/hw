@@ -506,9 +506,7 @@ for ii:= Low(TSprite) to High(TSprite) do
     end;
 
 FreeTexture(HHTexture);
-FreeTexture(LandTexture);
-
-SDL_FreeSurface(LandSurface)
+FreeTexture(LandTexture)
 end;
 
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;

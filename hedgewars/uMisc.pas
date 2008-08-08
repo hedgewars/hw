@@ -120,6 +120,7 @@ procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
+function NewTexture(width, height: Longword; buf: Pointer): PTexture;
 function  Surface2Tex(surf: PSDL_Surface): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
@@ -265,6 +266,22 @@ function toPowerOf2(i: Longword): Longword;
 begin
 toPowerOf2:= 1;
 while (toPowerOf2 < i) do toPowerOf2:= toPowerOf2 shl 1
+end;
+
+function NewTexture(width, height: Longword; buf: Pointer): PTexture;
+begin
+new(NewTexture);
+NewTexture^.w:= width;
+NewTexture^.h:= height;
+
+glGenTextures(1, @NewTexture^.id);
+
+glBindTexture(GL_TEXTURE_2D, NewTexture^.id);
+
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
 function Surface2Tex(surf: PSDL_Surface): PTexture;

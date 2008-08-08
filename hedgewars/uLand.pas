@@ -24,7 +24,6 @@ type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
 
 var  Land: TLandArray;
-     LandSurface: PSDL_Surface;
      LandPixels: TLandArray;
      LandTexture: PTexture = nil;
 
@@ -509,6 +508,20 @@ begin
 SelectTemplate:= getrandom(Succ(High(EdgeTemplates)))
 end;
 
+procedure LandSurface2Land(LandSurface: PSDL_Surface);
+begin
+TryDo(LandSurface <> nil, 'Assert (LandSurface <> nil) failed', true);
+LandTexture:= Surface2Tex(LandSurface);
+
+if SDL_MustLock(LandSurface) then
+	SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+
+Move(LandSurface^.pixels^, LandPixels, 2048 * 1024 * 4);
+
+if SDL_MustLock(LandSurface) then
+	SDL_UnlockSurface(LandSurface)
+end;
+
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
 begin
@@ -522,19 +535,16 @@ tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMas
 
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
-AddProgress;
 AddBorder(tmpsurf);
 
-LandSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
-
-TryDo(LandSurface <> nil, 'Error creating land surface', true);
-SDL_FillRect(LandSurface, nil, 0);
-AddProgress;
-SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0);
-AddObjects(tmpsurf, LandSurface);
+LandSurface2Land(tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture(0, 1024);
+AddProgress;
+
+AddObjects;
+
+UpdateLandTexture(0, 1023);
 AddProgress
 end;
 
@@ -544,57 +554,43 @@ begin
 WriteLnToConsole('Generating forts land...');
 TryDo(ClansCount = 2, 'More or less than 2 clans on map in forts mode!', true);
 
-LandSurface:= SDL_CreateRGBSurface(SDL_HWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, AMask);
-
-SDL_FillRect(LandSurface, nil, 0);
-
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', false, true, true);
-BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf, LandSurface);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
+BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'R', false, true, true);
-BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf, LandSurface);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'R', true, true, true);
+BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture(0, 1024)
+UpdateLandTexture(0, 1023)
 end;
 
 procedure LoadMap;
 var x, y: Longword;
     p: PByteArray;
+    LandSurface: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map', false, true, true);
+LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
 TryDo((LandSurface^.w = 2048) and (LandSurface^.h = 1024), 'Map dimensions should be 2048x1024!', true);
 
 if SDL_MustLock(LandSurface) then
-   SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+	SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
 
-p:= LandSurface^.pixels;
-case LandSurface^.format^.BytesPerPixel of
-     1: OutError('We don''t work with 8 bit surfaces', true);
-     2: OutError('We don''t work with 16 bit surfaces', true);
-     3: for y:= 0 to 1023 do
-            begin
-            for x:= 0 to 2047 do
-                if  (p^[x * 3 + 0] <> 0)
-                 or (p^[x * 3 + 1] <> 0)
-                 or (p^[x * 3 + 2] <> 0) then Land[y, x]:= COLOR_LAND;
-            p:= @(p^[LandSurface^.pitch]);
-            end;
-     4: for y:= 0 to 1023 do
-            begin
-            for x:= 0 to 2047 do
-                if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[y, x]:= COLOR_LAND;
-            p:= @(p^[LandSurface^.pitch]);
-            end;
-     end;
+TryDo(LandSurface^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
+
+for y:= 0 to 1023 do
+	begin
+	for x:= 0 to 2047 do
+		if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[y, x]:= COLOR_LAND;
+	p:= @(p^[LandSurface^.pitch]);
+	end;
 
 if SDL_MustLock(LandSurface) then
-   SDL_UnlockSurface(LandSurface);
+	SDL_UnlockSurface(LandSurface);
 
-UpdateLandTexture(0, 1024)
+UpdateLandTexture(0, 1023)
 end;
 
 procedure GenMap;
@@ -634,31 +630,17 @@ end;
 
 procedure UpdateLandTexture(Y, Height: LongInt);
 begin
-if LandTexture <> nil then
-   begin
-   if (Height <= 0) then exit;
-   TryDo((Y >= 0) and (Y < 1024), 'UpdateLandTexture: wrong Y parameter', true);
-   TryDo(Y + Height < 1024, 'UpdateLandTexture: wrong Height parameter', true);
-   glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
+if (Height <= 0) then exit;
+TryDo((Y >= 0) and (Y < 1024), 'UpdateLandTexture: wrong Y parameter', true);
+TryDo(Y + Height < 1024, 'UpdateLandTexture: wrong Height parameter', true);
 
-   glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
-   end else
-   begin
-   TryDo(LandSurface <> nil, 'Assert (LandSurface <> nil) failed', true);
-   LandTexture:= Surface2Tex(LandSurface);
-
-   if SDL_MustLock(LandSurface) then
-      SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
-
-   Move(LandSurface^.pixels^, LandPixels, 2048 * 1024 * 4);
-
-   if SDL_MustLock(LandSurface) then
-      SDL_UnlockSurface(LandSurface);
-
-   SDL_FreeSurface(LandSurface);
-   LandSurface:= nil
-   end;
-
+if LandTexture = nil then
+	LandTexture:= NewTexture(2048, 1024, @LandPixels)
+else
+	begin
+	glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
+	end
 end;
 
 initialization
