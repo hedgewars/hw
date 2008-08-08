@@ -119,110 +119,110 @@ end;
 procedure StoreLoad;
 var s: string;
 
-    procedure WriteNames(Font: THWFont);
-    var t: LongInt;
-        i: LongInt;
-        r, rr: TSDL_Rect;
-        drY: LongInt;
-        texsurf: PSDL_Surface;
-    begin
-    r.x:= 0;
-    r.y:= 0;
-    drY:= - 4;
-    for t:= 0 to Pred(TeamsCount) do
-     with TeamsArray[t]^ do
-      begin
-      NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
+	procedure WriteNames(Font: THWFont);
+	var t: LongInt;
+		i: LongInt;
+		r, rr: TSDL_Rect;
+		drY: LongInt;
+		texsurf: PSDL_Surface;
+	begin
+	r.x:= 0;
+	r.y:= 0;
+	drY:= - 4;
+	for t:= 0 to Pred(TeamsCount) do
+		with TeamsArray[t]^ do
+		begin
+		NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
 
-      r.w:= cTeamHealthWidth + 5;
-      r.h:= NameTagTex^.h;
+		r.w:= cTeamHealthWidth + 5;
+		r.h:= NameTagTex^.h;
 
-      texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-      TryDo(texsurf <> nil, errmsgCreateSurface, true);
-      TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
+		TryDo(texsurf <> nil, errmsgCreateSurface, true);
+		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-      DrawRoundRect(@r, cWhiteColor, cColorNearBlack, texsurf, true);
-      rr:= r;
-      inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-      DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-      HealthTex:= Surface2Tex(texsurf);
-      SDL_FreeSurface(texsurf);
+		DrawRoundRect(@r, cWhiteColor, cColorNearBlack, texsurf, true);
+		rr:= r;
+		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
+		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
+		HealthTex:= Surface2Tex(texsurf);
+		SDL_FreeSurface(texsurf);
 
-      dec(drY, r.h + 2);
-      DrawHealthY:= drY;
-      for i:= 0 to 7 do
-          with Hedgehogs[i] do
-               if Gear <> nil then
-                  NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
-      end;
-    end;
+		dec(drY, r.h + 2);
+		DrawHealthY:= drY;
+		for i:= 0 to 7 do
+			with Hedgehogs[i] do
+				if Gear <> nil then
+					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
+		end;
+	end;
 
-    procedure MakeCrossHairs;
-    var t: LongInt;
-        tmpsurf, texsurf: PSDL_Surface;
-        Color, i: Longword;
-    begin
-    s:= Pathz[ptGraphics] + '/' + cCHFileName;
-    tmpsurf:= LoadImage(s, true, true, false);
+	procedure MakeCrossHairs;
+	var t: LongInt;
+		tmpsurf, texsurf: PSDL_Surface;
+		Color, i: Longword;
+	begin
+	s:= Pathz[ptGraphics] + '/' + cCHFileName;
+	tmpsurf:= LoadImage(s, true, true, false);
 
-    for t:= 0 to Pred(TeamsCount) do
-      with TeamsArray[t]^ do
-      begin
-      texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
-      TryDo(texsurf <> nil, errmsgCreateSurface, true);
+	for t:= 0 to Pred(TeamsCount) do
+		with TeamsArray[t]^ do
+		begin
+		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
+		TryDo(texsurf <> nil, errmsgCreateSurface, true);
 
-      Color:= Clan^.Color;
-      Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
-      SDL_FillRect(texsurf, nil, Color);
+		Color:= Clan^.Color;
+		Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
+		SDL_FillRect(texsurf, nil, Color);
 
-      SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
+		SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
 
-      TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
+		TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
 
-      if SDL_MustLock(texsurf) then
-         SDLTry(SDL_LockSurface(texsurf) >= 0, true);
+		if SDL_MustLock(texsurf) then
+			SDLTry(SDL_LockSurface(texsurf) >= 0, true);
 
-      // make black pixel be alpha-transparent
-      for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-          if PLongwordArray(texsurf^.pixels)^[i] = $FF000000 then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+		// make black pixel be alpha-transparent
+		for i:= 0 to texsurf^.w * texsurf^.h - 1 do
+			if PLongwordArray(texsurf^.pixels)^[i] = $FF000000 then PLongwordArray(texsurf^.pixels)^[i]:= 0;
 
-      if SDL_MustLock(texsurf) then
-         SDL_UnlockSurface(texsurf);
+		if SDL_MustLock(texsurf) then
+			SDL_UnlockSurface(texsurf);
 
-      CrosshairTex:= Surface2Tex(texsurf);
-      SDL_FreeSurface(texsurf)
-      end;
+		CrosshairTex:= Surface2Tex(texsurf);
+		SDL_FreeSurface(texsurf)
+		end;
 
-    SDL_FreeSurface(tmpsurf)
-    end;
+	SDL_FreeSurface(tmpsurf)
+	end;
 
-    procedure InitHealth;
-    var i, t: LongInt;
-    begin
-    for t:= 0 to Pred(TeamsCount) do
-     if TeamsArray[t] <> nil then
-      with TeamsArray[t]^ do
-          begin
-          for i:= 0 to cMaxHHIndex do
-              if Hedgehogs[i].Gear <> nil then
-                 RenderHealth(Hedgehogs[i]);
-          end
-    end;
+	procedure InitHealth;
+	var i, t: LongInt;
+	begin
+	for t:= 0 to Pred(TeamsCount) do
+		if TeamsArray[t] <> nil then
+			with TeamsArray[t]^ do
+				begin
+				for i:= 0 to cMaxHHIndex do
+					if Hedgehogs[i].Gear <> nil then
+						RenderHealth(Hedgehogs[i]);
+				end
+	end;
 
-    procedure LoadGraves;
-    var t: LongInt;
-        texsurf: PSDL_Surface;
-    begin
-    for t:= 0 to Pred(TeamsCount) do
-     if TeamsArray[t] <> nil then
-      with TeamsArray[t]^ do
-          begin
-          if GraveName = '' then GraveName:= 'Simple';
-          texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
-          GraveTex:= Surface2Tex(texsurf);
-          SDL_FreeSurface(texsurf)
-          end
-    end;
+	procedure LoadGraves;
+	var t: LongInt;
+		texsurf: PSDL_Surface;
+	begin
+	for t:= 0 to Pred(TeamsCount) do
+	if TeamsArray[t] <> nil then
+		with TeamsArray[t]^ do
+			begin
+			if GraveName = '' then GraveName:= 'Simple';
+			texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
+			GraveTex:= Surface2Tex(texsurf);
+			SDL_FreeSurface(texsurf)
+			end
+	end;
 
 var ii: TSprite;
     fi: THWFont;
@@ -231,15 +231,15 @@ var ii: TSprite;
     i: LongInt;
 begin
 for fi:= Low(THWFont) to High(THWFont) do
-    with Fontz[fi] do
-         begin
-         s:= Pathz[ptFonts] + '/' + Name;
-         WriteToConsole(msgLoading + s + '... ');
-         Handle:= TTF_OpenFont(Str2PChar(s), Height);
-         SDLTry(Handle <> nil, true);
-         TTF_SetFontStyle(Handle, style);
-         WriteLnToConsole(msgOK)
-         end;
+	with Fontz[fi] do
+		begin
+		s:= Pathz[ptFonts] + '/' + Name;
+		WriteToConsole(msgLoading + s + '... ');
+		Handle:= TTF_OpenFont(Str2PChar(s), Height);
+		SDLTry(Handle <> nil, true);
+		TTF_SetFontStyle(Handle, style);
+		WriteLnToConsole(msgOK)
+		end;
 AddProgress;
 
 AddProgress;
@@ -249,20 +249,20 @@ LoadGraves;
 
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
-    with SpritesData[ii] do
-         begin
-         if AltPath = ptNone then
-            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, true, true)
-         else begin
-            tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, false, true);
-            if tmpsurf = nil then
-               tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, true, true, true)
-            end;
-         if Width = 0 then Width:= tmpsurf^.w;
-         if Height = 0 then Height:= tmpsurf^.h;
-         Texture:= Surface2Tex(tmpsurf);
-         if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
-         end;
+	with SpritesData[ii] do
+			begin
+			if AltPath = ptNone then
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, true, true)
+			else begin
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, false, true);
+				if tmpsurf = nil then
+					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, true, true, true)
+				end;
+			if Width = 0 then Width:= tmpsurf^.w;
+			if Height = 0 then Height:= tmpsurf^.h;
+			Texture:= Surface2Tex(tmpsurf);
+			if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+			end;
 
 AddProgress;
 

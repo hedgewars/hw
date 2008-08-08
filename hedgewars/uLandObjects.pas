@@ -183,7 +183,7 @@ if x1 > 0 then
 	begin
 	Result:= true;
 	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', false, false, true);
-	if tmpsurf = nil then LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
+	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
 	
 	rr.x:= x1;
 	while rr.x < x2 do
