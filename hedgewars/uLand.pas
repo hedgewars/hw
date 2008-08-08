@@ -367,7 +367,7 @@ with Template do
          pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
          pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h))
          end;
-         
+
      if canMirror then
         if getrandom(2) = 0 then
            begin
@@ -553,11 +553,11 @@ WriteLnToConsole('Generating forts land...');
 TryDo(ClansCount = 2, 'More or less than 2 clans on map in forts mode!', true);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
-BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf);
+BlitImageAndGenerateCollisionInfo(0, 0, 1024, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'R', true, true, true);
-BlitImageAndGenerateCollisionInfo(1024, 0, tmpsurf);
+BlitImageAndGenerateCollisionInfo(1024, 0, 1024, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 UpdateLandTexture(0, 1023)
@@ -575,7 +575,7 @@ TryDo((tmpsurf^.w = 2048) and (tmpsurf^.h = 1024), 'Map dimensions should be 204
 
 TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
 
-BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf);
+BlitImageAndGenerateCollisionInfo(0, 0, 2048, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 UpdateLandTexture(0, 1023)

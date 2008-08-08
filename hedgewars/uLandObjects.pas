@@ -23,7 +23,7 @@ uses SDLh;
 
 procedure AddObjects();
 procedure LoadThemeConfig;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound;
@@ -61,14 +61,11 @@ var Rects: PRectArray;
     SprayObjects: TSprayObjects;
 
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
 var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;
-    r: TSDL_Rect;
 begin
-r.x:= cpX;
-r.y:= cpY;
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
@@ -77,10 +74,12 @@ if SDL_MustLock(Image) then
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'Land object should be 32bit', true);
 
+if Width = 0 then Width:= Image^.w;
+
 p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
 	begin
-	for x:= 0 to Pred(Image^.w) do
+	for x:= 0 to Pred(Width) do
 		if LandPixels[cpY + y, cpX + x] = 0 then
 			begin
 			LandPixels[cpY + y, cpX + x]:= p^[x];
@@ -134,69 +133,67 @@ if RectCount > 0 then
 CheckIntersect:= Result
 end;
 
-function AddGirder(gX: LongInt; Surface: PSDL_Surface): boolean;
+function AddGirder(gX: LongInt): boolean;
 var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: LongInt;
-    r, rr: TSDL_Rect;
+    rr: TSDL_Rect;
     Result: boolean;
 
-    function CountNonZeroz(x, y: LongInt): Longword;
-    var i: LongInt;
-        Result: Longword;
-    begin
-    Result:= 0;
-    for i:= y to y + 15 do
-        if Land[i, x] <> 0 then inc(Result);
-    CountNonZeroz:= Result
-    end;
+	function CountNonZeroz(x, y: LongInt): Longword;
+	var i: LongInt;
+		Result: Longword;
+	begin
+	Result:= 0;
+	for i:= y to y + 15 do
+		if Land[i, x] <> 0 then inc(Result);
+	CountNonZeroz:= Result
+	end;
 
 begin
 y:= 150;
 repeat
-  inc(y, 24);
-  x1:= gX;
-  x2:= gX;
-  while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
-  i:= x1 - 12;
-  repeat
-    dec(x1, 2);
-    k:= CountNonZeroz(x1, y)
-  until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
-  inc(x1, 2);
-  if k = 16 then
-     begin
-     while (x2 < 1900) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
-     i:= x2 + 12;
-     repeat
-       inc(x2, 2);
-       k:= CountNonZeroz(x2, y)
-     until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
-     if (x2 < 1900) and (k = 16) and (x2 - x1 > 250)
-        and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
-     end;
+	inc(y, 24);
+	x1:= gX;
+	x2:= gX;
+	
+	while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
+
+	i:= x1 - 12;
+	repeat
+		dec(x1, 2);
+		k:= CountNonZeroz(x1, y)
+	until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
+	
+	inc(x1, 2);
+	if k = 16 then
+		begin
+		while (x2 < 1900) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
+		i:= x2 + 12;
+		repeat
+		inc(x2, 2);
+		k:= CountNonZeroz(x2, y)
+		until (x2 > 1900) or (k = 0) or (k = 16) or (x2 > i);
+		if (x2 < 1900) and (k = 16) and (x2 - x1 > 250)
+			and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
+		end;
 x1:= 0;
 until y > 900;
+
 if x1 > 0 then
-   begin
-   Result:= true;
-   tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
-   rr.x:= x1;
-   rr.y:= y;
-   while rr.x + 100 < x2 do
-         begin
-         SDL_UpperBlit(tmpsurf, nil, Surface, @rr);
-         inc(rr.x, 100);
-         end;
-   r.x:= 0;
-   r.y:= 0;
-   r.w:= x2 - rr.x;
-   r.h:= 16;
-   SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-   SDL_FreeSurface(tmpsurf);
-   AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
-   for k:= y to y + 15 do
-       for i:= x1 to x2 do Land[k, i]:= $FFFFFF
-   end else Result:= false;
+	begin
+	Result:= true;
+	tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
+	rr.x:= x1;
+	while rr.x < x2 do
+		begin
+		BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
+		inc(rr.x, tmpsurf^.w);
+		end;
+	SDL_FreeSurface(tmpsurf);
+	
+	AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
+	end else Result:= false;
+
 AddGirder:= Result
 end;
 
@@ -280,7 +277,7 @@ with Obj do
      if Result then
         begin
         i:= getrandom(cnt);
-        BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, Obj.Surf);
+        BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
         AddRect(ar[i].x, ar[i].y, Width, Height);
         dec(Maxcnt)
         end else Maxcnt:= 0
@@ -452,15 +449,15 @@ end;
 
 procedure AddObjects();
 begin
-{InitRects;
-AddGirder(256, Surface);
-AddGirder(512, Surface);
-AddGirder(768, Surface);
-AddGirder(1024, Surface);
-AddGirder(1280, Surface);
-AddGirder(1536, Surface);
-AddGirder(1792, Surface);
-AddThemeObjects(Surface, ThemeObjects, 8);
+InitRects;
+AddGirder(256);
+AddGirder(512);
+AddGirder(768);
+AddGirder(1024);
+AddGirder(1280);
+AddGirder(1536);
+AddGirder(1792);
+{AddThemeObjects(Surface, ThemeObjects, 8);
 AddProgress;
 SDL_UpperBlit(InSurface, nil, Surface, nil);
 AddSprayObjects(Surface, SprayObjects, 10);
