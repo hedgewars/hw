@@ -78,7 +78,7 @@ void FrameTeams::removeTeam(HWTeam team)
   tmapTeamToWidget::iterator it=teamToWidget.find(team);
   if(it==teamToWidget.end()) return;
   mainLayout.removeWidget(it.value());
-  delete it.value();
+  it.value()->deleteLater();
   teamToWidget.erase(it);
 }
 
