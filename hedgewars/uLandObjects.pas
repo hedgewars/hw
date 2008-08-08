@@ -62,7 +62,7 @@ var Rects: PRectArray;
 
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY: Longword; Image: PSDL_Surface);
-var p: PByteArray;
+var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;
     r: TSDL_Rect;
@@ -76,17 +76,17 @@ if SDL_MustLock(Image) then
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'Land object should be 32bit', true);
-p:= Image^.pixels;
 
+p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
 	begin
 	for x:= 0 to Pred(Image^.w) do
 		if LandPixels[cpY + y, cpX + x] = 0 then
 			begin
-			LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^;
-			if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+			LandPixels[cpY + y, cpX + x]:= p^[x];
+			if (p^[x] and $FF000000) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
 			end;
-	p:= @(p^[Image^.pitch]);
+	p:= @(p^[Image^.pitch div 4]);
 	end;
 
 if SDL_MustLock(Image) then

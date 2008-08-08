@@ -298,70 +298,62 @@ end;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
-    r: TSDL_Rect;
+    r, rr: TSDL_Rect;
+    x, yd, yu: LongInt;
 begin
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, false);
 r.y:= 0;
 while r.y < 1024 do
-      begin
-      r.x:= 0;
-      while r.x < 2048 do
-            begin
-            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-            inc(r.x, tmpsurf^.w)
-            end;
-      inc(r.y, tmpsurf^.h)
-      end;
+	begin
+	r.x:= 0;
+	while r.x < 2048 do
+		begin
+		SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+		inc(r.x, tmpsurf^.w)
+		end;
+	inc(r.y, tmpsurf^.h)
+	end;
 SDL_FreeSurface(tmpsurf);
 
-
-tmpsurf:= SDL_CreateRGBSurfaceFrom(@Land, 2048, 1024, 32, 2048*4, RMask, GMask, BMask, 0);
-SDLTry(tmpsurf <> nil, true);
-SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, SDL_MapRGB(tmpsurf^.format, $FF, $FF, $FF));
-SDL_UpperBlit(tmpsurf, nil, Surface, nil);
-SDL_FreeSurface(tmpsurf)
-end;
-
-procedure AddBorder(Surface: PSDL_Surface);
-var tmpsurf: PSDL_Surface;
-    r, rr: TSDL_Rect;
-    x, yd, yu: LongInt;
-begin
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false, true, true);
 for x:= 0 to 2047 do
-    begin
-    yd:= 1023;
-    repeat
-      while (yd > 0   ) and (Land[yd, x] =  0) do dec(yd);
-      if (yd < 0) then yd:= 0;
-      while (yd < 1024) and (Land[yd, x] <> 0) do inc(yd);
-      dec(yd);
-      yu:= yd;
-      while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
-      while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
-      if (yd < 1023) and ((yd - yu) >= 16) then
-         begin
-         rr.x:= x;
-         rr.y:= yd - 15;
-         r.x:= x mod tmpsurf^.w;
-         r.y:= 16;
-         r.w:= 1;
-         r.h:= 16;
-         SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-         end;
-      if (yu > 0) then
-         begin
-         rr.x:= x;
-         rr.y:= yu;
-         r.x:= x mod tmpsurf^.w;
-         r.y:= 0;
-         r.w:= 1;
-         r.h:= min(16, yd - yu + 1);
-         SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-         end;
-      yd:= yu - 1;
-    until yd < 0;
-    end;
+	begin
+	yd:= 1023;
+	repeat
+		while (yd > 0   ) and (Land[yd, x] =  0) do dec(yd);
+		
+		if (yd < 0) then yd:= 0;
+
+		while (yd < 1024) and (Land[yd, x] <> 0) do inc(yd);
+		dec(yd);
+		yu:= yd;
+		
+		while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
+		while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
+		
+		if (yd < 1023) and ((yd - yu) >= 16) then
+			begin
+			rr.x:= x;
+			rr.y:= yd - 15;
+			r.x:= x mod tmpsurf^.w;
+			r.y:= 16;
+			r.w:= 1;
+			r.h:= 16;
+			SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+			end;
+		if (yu > 0) then
+			begin
+			rr.x:= x;
+			rr.y:= yu;
+			r.x:= x mod tmpsurf^.w;
+			r.y:= 0;
+			r.w:= 1;
+			r.h:= min(16, yd - yu + 1);
+			SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+			end;
+		yd:= yu - 1;
+	until yd < 0;
+	end;
 end;
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
@@ -508,18 +500,25 @@ begin
 SelectTemplate:= getrandom(Succ(High(EdgeTemplates)))
 end;
 
-procedure LandSurface2Land(LandSurface: PSDL_Surface);
+procedure LandSurface2LandPixels(Surface: PSDL_Surface);
+var x, y: LongInt;
+	p: PLongwordArray;
 begin
-TryDo(LandSurface <> nil, 'Assert (LandSurface <> nil) failed', true);
-LandTexture:= Surface2Tex(LandSurface);
+TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
 
-if SDL_MustLock(LandSurface) then
-	SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+if SDL_MustLock(Surface) then
+	SDLTry(SDL_LockSurface(Surface) >= 0, true);
 
-Move(LandSurface^.pixels^, LandPixels, 2048 * 1024 * 4);
+p:= Surface^.pixels;
+for y:= 0 to 1023 do
+	begin
+	for x:= 0 to 2047 do
+		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or $FF000000;
+	p:= @(p^[Surface^.pitch div 4]);
+	end;
 
-if SDL_MustLock(LandSurface) then
-	SDL_UnlockSurface(LandSurface)
+if SDL_MustLock(Surface) then
+	SDL_UnlockSurface(Surface)
 end;
 
 procedure GenLandSurface;
@@ -535,9 +534,8 @@ tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMas
 
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
-AddBorder(tmpsurf);
 
-LandSurface2Land(tmpsurf);
+LandSurface2LandPixels(tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 AddProgress;
