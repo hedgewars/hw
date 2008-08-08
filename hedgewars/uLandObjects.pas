@@ -410,7 +410,7 @@ Close(f);
 TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
 end;
 
-procedure AddThemeObjects(Surface: PSDL_Surface; var ThemeObjects: TThemeObjects; MaxCount: LongInt);
+procedure AddThemeObjects(var ThemeObjects: TThemeObjects; MaxCount: LongInt);
 var i, ii, t: LongInt;
     b: boolean;
 begin
@@ -459,11 +459,11 @@ AddGirder(1024);
 AddGirder(1280);
 AddGirder(1536);
 AddGirder(1792);
-{AddThemeObjects(Surface, ThemeObjects, 8);
+AddThemeObjects(ThemeObjects, 8);
 AddProgress;
-SDL_UpperBlit(InSurface, nil, Surface, nil);
-AddSprayObjects(Surface, SprayObjects, 10);
-FreeRects}
+{SDL_UpperBlit(InSurface, nil, Surface, nil);
+AddSprayObjects(Surface, SprayObjects, 10);}
+FreeRects
 end;
 
 procedure LoadThemeConfig;
