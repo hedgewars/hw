@@ -213,7 +213,7 @@ var Vx, Vy: hwFloat;
 			EY:= hwRound(y);
 		until TestColl(EX, EY, 5) or (EY > 1000);
 		
-		if EY < 1000 then
+		if (EY < 1000) and not dY.isNegative then
 			begin
 			Result:= RateExplosion(Me, EX, EY, 91);
 			if (Result = 0) then
