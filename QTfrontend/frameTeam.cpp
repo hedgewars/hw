@@ -86,7 +86,7 @@ void FrameTeams::resetTeams()
 {
   for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ) {
     mainLayout.removeWidget(it.value());
-    delete it.value();
+    it.value()->deleteLater();
     teamToWidget.erase(it++);
   }
 }
