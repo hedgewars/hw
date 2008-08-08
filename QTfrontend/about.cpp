@@ -55,10 +55,13 @@ About::About(QWidget * parent) :
 			"</p><h2>" +
 			
 			QLabel::tr("Art:") + "</h2>"
+			+ QString::fromUtf8(
 			"<p>All sprites, all themes except for \"Cheese\" and \"Volcano\": Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
 			"<br>"
 			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
-			"</p><h2>" +
+			"<br>"
+			"\"Castle\" map: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
+			"</p><h2>") +
 			
 			QLabel::tr("Sounds:") + "</h2>"
 			"Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
