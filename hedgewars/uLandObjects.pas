@@ -81,7 +81,7 @@ p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
 	begin
 	for x:= 0 to Pred(Image^.w) do
-		//if LandPixels[cpY + y, cpX + x] = 0 then
+		if LandPixels[cpY + y, cpX + x] = 0 then
 			begin
 			LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^;
 			if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;

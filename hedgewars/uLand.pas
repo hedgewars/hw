@@ -568,27 +568,17 @@ end;
 procedure LoadMap;
 var x, y: Longword;
     p: PByteArray;
-    LandSurface: PSDL_Surface;
+    tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-LandSurface:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
-TryDo((LandSurface^.w = 2048) and (LandSurface^.h = 1024), 'Map dimensions should be 2048x1024!', true);
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
+TryDo((tmpsurf^.w = 2048) and (tmpsurf^.h = 1024), 'Map dimensions should be 2048x1024!', true);
 
-if SDL_MustLock(LandSurface) then
-	SDLTry(SDL_LockSurface(LandSurface) >= 0, true);
+TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
 
-TryDo(LandSurface^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
-
-for y:= 0 to 1023 do
-	begin
-	for x:= 0 to 2047 do
-		if (PLongword(@(p^[x * 4]))^ and $FF000000) <> 0 then Land[y, x]:= COLOR_LAND;
-	p:= @(p^[LandSurface^.pitch]);
-	end;
-
-if SDL_MustLock(LandSurface) then
-	SDL_UnlockSurface(LandSurface);
+BlitImageAndGenerateCollisionInfo(0, 0, tmpsurf);
+SDL_FreeSurface(tmpsurf);
 
 UpdateLandTexture(0, 1023)
 end;
