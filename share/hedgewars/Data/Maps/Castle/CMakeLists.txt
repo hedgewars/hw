@@ -1,4 +1,4 @@
 install(FILES
 	map.png
 	map.cfg
-	DESTINATION ${SHAREPATH}Data/Castle)
+	DESTINATION ${SHAREPATH}Data/Maps/Castle)
