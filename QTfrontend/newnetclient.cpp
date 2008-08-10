@@ -17,6 +17,7 @@
  */
 
 #include <QMessageBox>
+#include <QDebug>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
