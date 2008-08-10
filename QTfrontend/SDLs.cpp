@@ -36,7 +36,7 @@ QStringList SDLInteraction::getResolutions() const
 
 	SDL_Rect **modes;
 
-	modes = SDL_ListModes(NULL, SDL_FULLSCREEN | SDL_HWSURFACE);
+	modes = SDL_ListModes(NULL, SDL_FULLSCREEN);
 
 	if((modes == (SDL_Rect **)0) || (modes == (SDL_Rect **)-1))
 	{
