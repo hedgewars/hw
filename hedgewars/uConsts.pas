@@ -126,7 +126,7 @@ const
 	cMaxAngle     = 2048;
 	cPowerDivisor = 1500;
 
-	MAXNAMELEN = 32;
+	MAXNAMELEN = 192;
 
 	COLOR_LAND = $00FFFFFF;
 

@@ -24,10 +24,11 @@ uses SDLh;
 procedure AddObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
+procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound;
-const MaxRects = 256;
+const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
 
@@ -297,46 +298,46 @@ var x, y: Longword;
 begin
 cnt:= 0;
 with Obj do
-     begin
-     if Maxcnt = 0 then
-        exit(false);
-     x:= 0;
-     r.x:= 0;
-     r.y:= 0;
-     r.w:= Width;
-     r.h:= Height + 16;
-     repeat
-         y:= 8;
-         repeat
-             if CheckLand(r, x, y - 8, $FFFFFF)
-                and not CheckIntersect(x, y, Width, Height) then
-                begin
-                ar[cnt].x:= x;
-                ar[cnt].y:= y;
-                inc(cnt);
-                if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
-                   begin
-                   y:= 5000;
-                   x:= 5000;
-                   end
-                end;
-             inc(y, 12);
-         until y > 1023 - Height - 8;
-         inc(x, getrandom(12) + 12)
-     until x > 2047 - Width;
-     Result:= cnt <> 0;
-     if Result then
-        begin
-        i:= getrandom(cnt);
-        r.x:= ar[i].X;
-        r.y:= ar[i].Y;
-        r.w:= Width;
-        r.h:= Height;
-        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
-        AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
-        dec(Maxcnt)
-        end else Maxcnt:= 0
-     end;
+	begin
+	if Maxcnt = 0 then
+		exit(false);
+	x:= 0;
+	r.x:= 0;
+	r.y:= 0;
+	r.w:= Width;
+	r.h:= Height + 16;
+	repeat
+		y:= 8;
+		repeat
+			if CheckLand(r, x, y - 8, $FFFFFF)
+			and not CheckIntersect(x, y, Width, Height) then
+			begin
+			ar[cnt].x:= x;
+			ar[cnt].y:= y;
+			inc(cnt);
+			if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+				begin
+				y:= 5000;
+				x:= 5000;
+				end
+			end;
+			inc(y, 12);
+		until y > 1023 - Height - 8;
+		inc(x, getrandom(12) + 12)
+	until x > 2047 - Width;
+	Result:= cnt <> 0;
+	if Result then
+		begin
+		i:= getrandom(cnt);
+		r.x:= ar[i].X;
+		r.y:= ar[i].Y;
+		r.w:= Width;
+		r.h:= Height;
+		SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+		AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
+		dec(Maxcnt)
+		end else Maxcnt:= 0
+	end;
 TryPut:= Result
 end;
 
@@ -461,8 +462,13 @@ AddGirder(1536);
 AddGirder(1792);
 AddThemeObjects(ThemeObjects, 8);
 AddProgress;
-{SDL_UpperBlit(InSurface, nil, Surface, nil);
-AddSprayObjects(Surface, SprayObjects, 10);}
+FreeRects
+end;
+
+procedure AddOnLandObjects(Surface: PSDL_Surface);
+begin
+InitRects;
+AddSprayObjects(Surface, SprayObjects, 12);
 FreeRects
 end;
 

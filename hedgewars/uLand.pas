@@ -534,6 +534,7 @@ tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMas
 
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
+AddOnLandObjects(tmpsurf);
 
 LandSurface2LandPixels(tmpsurf);
 SDL_FreeSurface(tmpsurf);
