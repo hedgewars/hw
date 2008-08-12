@@ -31,5 +31,7 @@
     <file>res/unchecked.png</file>
     <file>res/graphicsicon.png</file>
     <file>res/Save.png</file>
+    <file>res/weaponsicon.png</file>
+    <file>res/teamicon.png</file>
 </qresource>
 </RCC>

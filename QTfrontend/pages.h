@@ -188,7 +188,7 @@ public:
 	QComboBox* WeaponsName;
 
 	QPushButton *BtnBack;
-	QGroupBox *groupBox;
+	IconedGroupBox *teamsBox;
 	QPushButton *BtnNewTeam;
 	QPushButton *BtnEditTeam;
 	QComboBox *CBTeamName;
