@@ -202,6 +202,7 @@ int main(int argc, char *argv[])
 				"border-radius: 16px;"
 				"border-color: orange;"
 				"background-color: #040200;"
+				"padding: 6px;"
 				"color: orange;"
 				"font: bold 14px;"
 				"}"

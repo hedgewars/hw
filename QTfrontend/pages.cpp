@@ -61,12 +61,13 @@ PageMain::PageMain(QWidget* parent) :
 	//pageLayout->setColumnStretch(1, 2);
 	//pageLayout->setColumnStretch(2, 1);
 
-	QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
-	pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
+	//QPushButton* btnLogo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+	//pageLayout->setAlignment(btnLogo, Qt::AlignHCenter);
 	pageLayout->setRowStretch(0, 1);
 	pageLayout->setRowStretch(1, 1);
 	pageLayout->setRowStretch(2, 0);
 	pageLayout->setRowStretch(3, 1);
+	pageLayout->setRowStretch(4, 1);
 
 	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
 	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
@@ -74,12 +75,14 @@ PageMain::PageMain(QWidget* parent) :
 	BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
 	pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
-	BtnSetup = addButton(":/res/Settings.png", pageLayout, 3, 3, true);
+	BtnSetup = addButton(":/res/Settings.png", pageLayout, 4, 3, true);
 
-	BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
+	//BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
+	BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
 	pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
+	//pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-	BtnExit = addButton(":/res/Exit.png", pageLayout, 3, 0, 1, 1, true);
+	BtnExit = addButton(":/res/Exit.png", pageLayout, 4, 0, 1, 1, true);
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
@@ -288,14 +291,24 @@ PageOptions::PageOptions(QWidget* parent) :
 		GBTlayout->addWidget(CBTeamName, 0, 0, 1, 2);
 
 		BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 1, 1);
-		pageLayout->addWidget(teamsBox, 0, 0, 1, 3);
+		
+		labelNN = new QLabel(teamsBox);
+		labelNN->setText(QLabel::tr("Net nick"));
+		GBTlayout->addWidget(labelNN, 2, 0, 1, 2);
+
+		editNetNick = new QLineEdit(teamsBox);
+		editNetNick->setMaxLength(20);
+		editNetNick->setText(QLineEdit::tr("unnamed"));
+		GBTlayout->addWidget(editNetNick, 3, 0, 1, 2);
+		
 		gbTBLayout->addWidget(teamsBox);
 	}
 
 	{
 		IconedGroupBox* groupWeapons = new IconedGroupBox(this);
+		groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
-		groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		//groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 		groupWeapons->setTitle(QGroupBox::tr("Weapons"));
 		QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
 
@@ -360,21 +373,6 @@ PageOptions::PageOptions(QWidget* parent) :
 	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 4, 2, true);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-
-	NNGroupBox = new QGroupBox(this);
-	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-	NNGroupBox->setTitle(QGroupBox::tr("Net options"));
-	pageLayout->addWidget(NNGroupBox, 2, 2);
-
-	QGridLayout * GBNlayout = new QGridLayout(NNGroupBox);
-	labelNN = new QLabel(NNGroupBox);
-	labelNN->setText(QLabel::tr("Net nick"));
-	GBNlayout->addWidget(labelNN, 0, 0);
-
-	editNetNick = new QLineEdit(NNGroupBox);
-	editNetNick->setMaxLength(20);
-	editNetNick->setText(QLineEdit::tr("unnamed"));
-	GBNlayout->addWidget(editNetNick, 0, 1);
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)

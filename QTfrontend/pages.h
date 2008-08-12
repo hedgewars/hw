@@ -203,7 +203,6 @@ public:
 	QCheckBox *CBAltDamage;
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
-	QGroupBox *NNGroupBox;
 	QLabel *labelNN;
 	QLineEdit *editNetNick;
 };
