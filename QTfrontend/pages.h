@@ -192,7 +192,7 @@ public:
 	QPushButton *BtnNewTeam;
 	QPushButton *BtnEditTeam;
 	QComboBox *CBTeamName;
-	QGroupBox *AGGroupBox;
+	IconedGroupBox *AGGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
 	QCheckBox *CBEnableMusic;

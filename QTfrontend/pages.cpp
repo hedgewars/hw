@@ -284,8 +284,8 @@ PageOptions::PageOptions(QWidget* parent) :
 
 	BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 0, 2);
 
-	AGGroupBox = new QGroupBox(this);
-	//AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
+	AGGroupBox = new IconedGroupBox(this);
+	AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
 	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 	pageLayout->addWidget(AGGroupBox, 2, 1);

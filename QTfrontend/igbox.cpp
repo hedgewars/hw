@@ -18,6 +18,9 @@
 
 #include <QPainter>
 #include <QPoint>
+#include <QStylePainter>
+#include <QStyleOptionGroupBox>
+
 #include "igbox.h"
 
 IconedGroupBox::IconedGroupBox(QWidget * parent)
@@ -32,7 +35,11 @@ void IconedGroupBox::setIcon(const QIcon & icon)
 
 void IconedGroupBox::paintEvent(QPaintEvent * event)
 {
-	QPainter painter(this);
+	QStylePainter painter(this);
 
-	icon.paint(&painter, QRect(QPoint(0, 0), size()));
+	QStyleOptionGroupBox option;
+	initStyleOption(&option);
+	painter.drawComplexControl(QStyle::CC_GroupBox, option);
+
+	icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
 }
