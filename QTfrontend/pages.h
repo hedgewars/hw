@@ -65,6 +65,7 @@ class AbstractPage : public QWidget
     if (!iconed) {
       butt->setFont(*font14);
       butt->setText(btname);
+      butt->setStyleSheet("background-color: #0d0544");
     } else {
       const QIcon& lp=QIcon(btname);
       QSize sz = lp.actualSize(QSize(65535, 65535));

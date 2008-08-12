@@ -270,20 +270,41 @@ PageOptions::PageOptions(QWidget* parent) :
 	pageLayout->setRowStretch(3, 100);
 	pageLayout->setRowStretch(4, 0);
 
-	teamsBox = new IconedGroupBox(this);
-	teamsBox->setIcon(QIcon(":/res/teamicon.png"));
-	teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	teamsBox->setTitle(QGroupBox::tr("Teams"));
-	pageLayout->addWidget(teamsBox, 0, 0, 1, 3);
 
-	QGridLayout * GBTlayout = new QGridLayout(teamsBox);
+	QGroupBox * gbTwoBoxes = new QGroupBox(this);
+	pageLayout->addWidget(gbTwoBoxes, 0, 0, 1, 3);
+	QHBoxLayout * gbTBLayout = new QHBoxLayout(gbTwoBoxes);
+	{
+		teamsBox = new IconedGroupBox(this);
+		teamsBox->setIcon(QIcon(":/res/teamicon.png"));
+		teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		teamsBox->setTitle(QGroupBox::tr("Teams"));
 
-	BtnNewTeam = addButton(tr("New team"), GBTlayout, 0, 0);
+		QGridLayout * GBTlayout = new QGridLayout(teamsBox);
 
-	CBTeamName = new QComboBox(teamsBox);
-	GBTlayout->addWidget(CBTeamName, 0, 1);
+		BtnNewTeam = addButton(tr("New team"), GBTlayout, 1, 0);
 
-	BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 0, 2);
+		CBTeamName = new QComboBox(teamsBox);
+		GBTlayout->addWidget(CBTeamName, 0, 0, 1, 2);
+
+		BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 1, 1);
+		pageLayout->addWidget(teamsBox, 0, 0, 1, 3);
+		gbTBLayout->addWidget(teamsBox);
+	}
+
+	{
+		IconedGroupBox* groupWeapons = new IconedGroupBox(this);
+		groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
+		groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		groupWeapons->setTitle(QGroupBox::tr("Weapons"));
+		QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
+
+		WeaponsButt = addButton(tr("Weapons set"), WeaponsLayout, 1, 0);
+		WeaponsName = new QComboBox(this);
+		WeaponsLayout->addWidget(WeaponsName, 0, 0, 1, 2);
+		WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 1, 1);
+		gbTBLayout->addWidget(groupWeapons);
+	}
 
 	AGGroupBox = new IconedGroupBox(this);
 	AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
@@ -339,18 +360,6 @@ PageOptions::PageOptions(QWidget* parent) :
 	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 4, 2, true);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-
-	IconedGroupBox* groupWeapons = new IconedGroupBox(this);
-	groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
-	groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	groupWeapons->setTitle(QGroupBox::tr("Weapons"));
-	pageLayout->addWidget(groupWeapons, 1, 0, 1, 3);
-	QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
-
-	WeaponsButt = addButton(tr("Weapons set"), WeaponsLayout, 0, 0);
-	WeaponsName = new QComboBox(this);
-	WeaponsLayout->addWidget(WeaponsName, 0, 1);
-	WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 0, 2);
 
 	NNGroupBox = new QGroupBox(this);
 	NNGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
