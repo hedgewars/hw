@@ -48,6 +48,7 @@ class About;
 class FPSEdit;
 class HWChatWidget;
 class SelWeaponWidget;
+class IconedGroupBox;
 
 class AbstractPage : public QWidget
 {

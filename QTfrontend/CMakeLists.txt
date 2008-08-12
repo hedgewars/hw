@@ -75,6 +75,7 @@ set(hwfr_src
 	selectWeapon.cpp
 	itemNum.cpp
 	input_ip.cpp
+	igbox.cpp
 	weaponItem.cpp)
 
 if(MINGW)
@@ -121,6 +122,7 @@ set(hwfr_moc_hdrs
 	selectWeapon.h
 	itemNum.h
 	input_ip.h
+	igbox.h
 	weaponItem.h)
 
 set(hwfr_hdrs
