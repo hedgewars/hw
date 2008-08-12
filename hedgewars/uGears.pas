@@ -1078,45 +1078,47 @@ if (Mask and EXPLAllDamageInRadius)=0 then dmgRadius:= Radius shl 1
                                       else dmgRadius:= Radius;
 Gear:= GearsList;
 while Gear <> nil do
-      begin
-      dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-      if (dmg > 1) and
-         ((Gear^.State and gstNoDamage) = 0) then
-         begin
-         dmg:= min(dmg div 2, Radius);
-         case Gear^.Kind of
-              gtHedgehog,
-                  gtMine,
-                  gtCase,
-                gtTarget,
-                 gtFlame: begin
-                          {$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
-                          if (Mask and EXPLNoDamage) = 0 then
-                             begin
-                             inc(Gear^.Damage, dmg);
-                             if Gear^.Kind = gtHedgehog then
-                                AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
-                             end;
-                          if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
-                             begin
-                             DeleteCI(Gear);
-                             Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
-                             Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-                             Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
-                             Gear^.Active:= true;
-                             FollowGear:= Gear
-                             end;
-                          end;
-                 gtGrave: begin
-                          Gear^.dY:= - _0_004 * dmg;
-                          Gear^.Active:= true;
-                          end;
-              end;
-         end;
-      Gear:= Gear^.NextGear
-      end;
+	begin
+	dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+	if (dmg > 1) and
+		((Gear^.State and gstNoDamage) = 0) then
+		begin
+		dmg:= min(dmg div 2, Radius);
+		case Gear^.Kind of
+			gtHedgehog,
+				gtMine,
+				gtCase,
+				gtTarget,
+				gtFlame: begin
+						{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
+						if (Mask and EXPLNoDamage) = 0 then
+							begin
+							inc(Gear^.Damage, dmg);
+							if Gear^.Kind = gtHedgehog then
+								AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, Gear)
+							end;
+						if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
+							begin
+							DeleteCI(Gear);
+							Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
+							Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+							Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
+							Gear^.Active:= true;
+							FollowGear:= Gear
+							end;
+						end;
+				gtGrave: begin
+						Gear^.dY:= - _0_004 * dmg;
+						Gear^.Active:= true;
+						end;
+			end;
+		end;
+	Gear:= Gear^.NextGear
+	end;
+
 if (Mask and EXPLDontDraw) = 0 then
-   if (GameFlags and gfSolidLand) = 0 then DrawExplosion(X, Y, Radius);
+	if (GameFlags and gfSolidLand) = 0 then DrawExplosion(X, Y, Radius);
+
 uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
 

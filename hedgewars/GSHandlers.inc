@@ -426,40 +426,44 @@ AllInactive:= false;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 dec(Gear^.Timer);
 if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and gstHHDriven) = 0) then
-   begin
-   StopSound(sndPickhammer);
-   DeleteGear(Gear);
-   AfterAttack;
-   exit
-   end;
+	begin
+	StopSound(sndPickhammer);
+	DeleteGear(Gear);
+	AfterAttack;
+	exit
+	end;
 
 if (Gear^.Timer mod 33) = 0 then
-   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y) + 6, 6, EXPLDontDraw);
+	begin
+	HHGear^.State:= HHGear^.State or gstNoDamage;
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y) + 7, 6, EXPLDontDraw);
+	HHGear^.State:= HHGear^.State and not gstNoDamage
+	end;
 
 if (Gear^.Timer mod 47) = 0 then
-   begin
-   i:= hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
-   ei:= hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
-   while i <= ei do
-         begin
-         DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
-         inc(i, 1)
-         end;
-   Gear^.X:= Gear^.X + Gear^.dX;
-   Gear^.Y:= Gear^.Y + _1_9;
-   SetAllHHToActive;
-   end;
+	begin
+	i:= hwRound(Gear^.X) - Gear^.Radius - LongInt(GetRandom(2));
+	ei:= hwRound(Gear^.X) + Gear^.Radius + LongInt(GetRandom(2));
+	while i <= ei do
+		begin
+		DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
+		inc(i, 1)
+		end;
+	Gear^.X:= Gear^.X + Gear^.dX;
+	Gear^.Y:= Gear^.Y + _1_9;
+	SetAllHHToActive;
+	end;
 if TestCollisionYwithGear(Gear, 1) then
-   begin
-   Gear^.dY:= _0;
-   SetLittle(HHGear^.dX);
-   HHGear^.dY:= _0;
-   end else
-   begin
-   Gear^.dY:= Gear^.dY + cGravity;
-   Gear^.Y:= Gear^.Y + Gear^.dY;
-   if Gear^.Y > _1024 then Gear^.Timer:= 1
-   end;
+	begin
+	Gear^.dY:= _0;
+	SetLittle(HHGear^.dX);
+	HHGear^.dY:= _0;
+	end else
+	begin
+	Gear^.dY:= Gear^.dY + cGravity;
+	Gear^.Y:= Gear^.Y + Gear^.dY;
+	if Gear^.Y > _1024 then Gear^.Timer:= 1
+	end;
 
 Gear^.X:= Gear^.X + HHGear^.dX;
 HHGear^.X:= Gear^.X;
@@ -1435,8 +1439,8 @@ repeat
 
 	inc(Gear^.Damage, 2);
 
-	if TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
-		or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY)) then inc(Gear^.Damage, 3);
+//	if TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
+//		or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY)) then inc(Gear^.Damage, 3);
 
 	dec(i)
 until (i = 0) or (Gear^.Damage > Gear^.Health);
@@ -1449,11 +1453,11 @@ if upd > 3 then
 	AmmoShove(Gear, 30, 40);
 	
 	DrawTunnel(HHGear^.X - HHGear^.dX * 10,
-			HHGear^.Y - _3 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 5,
+			HHGear^.Y - _2 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 2,
 			HHGear^.dX,
 			HHGear^.dY,
 			20 + cHHRadius * 2,
-			cHHRadius * 2 + 4);
+			cHHRadius * 2 + 6);
 	
 	upd:= 0
 	end;
