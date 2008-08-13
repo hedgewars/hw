@@ -646,7 +646,7 @@ if flCheck then  // check whether rope needs dividing
            Gear^.Friction:= Gear^.Friction - len;
            break
            end;
-         len:= len - _2
+         len:= len - _1
          end;
    end else
    if RopePoints.Count > 0 then // check whether the last dividing point could be removed
