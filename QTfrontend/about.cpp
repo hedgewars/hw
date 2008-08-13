@@ -80,7 +80,8 @@ About::About(QWidget * parent) :
 			"Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
 			"Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;<br>"
 			"Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"Slovak: Jose Riha"
+			"Slovak: Jose Riha<br>"
+			"Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;"
 			"</p><h2>") +
 			
 			QLabel::tr("Special thanks:") + "</h2><p>"
