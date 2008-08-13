@@ -60,7 +60,7 @@ About::About(QWidget * parent) :
 			"<br>"
 			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
 			"<br>"
-			"\"Castle\" map: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
+			"\"Castle\" map, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
 			"</p><h2>") +
 			
 			QLabel::tr("Sounds:") + "</h2>"
