@@ -1,0 +1,35 @@
+; Swedish locale
+
+00:00=Granat
+00:01=Splitterbomb
+00:02=Raketgevär
+00:03=UFO
+00:04=Hagelgevär
+00:05=Murarhammare
+00:06=Hoppa över
+00:07=Rep
+00:08=Mina
+00:09=DEagle (pistol)
+00:10=Dynamit
+00:11=Basebollträ
+00:12=Flammande knytnäve
+00:13=sekunder
+00:14=Fallskärm
+00:15=Luftangrepp
+00:16=Minangrepp
+00:17=Blåslampa
+00:18=Konstruktion
+00:19=Teleportering
+00:20=Byt igelkott
+00:21=Granatkastare
+00:22=Piska
+00:23=Kamikaze (självmord)
+00:24=Tårta
+
+01:00=Nu kör vi!
+01:01=Oavgjort
+01:02=%1 vinner!
+01:03=Volym %1%
+01:04=Pausat
+01:05=Vill du verkligen avsluta (Y/Esc)?
+01:06=Sudden death!
