@@ -74,7 +74,7 @@ uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
      uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
      uStats, uVisualGears;
 
-const MAXROPEPOINTS = 300;
+const MAXROPEPOINTS = 384;
 var RopePoints: record
                 Count: Longword;
                 HookAngle: GLfloat;
