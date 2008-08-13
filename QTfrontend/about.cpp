@@ -56,11 +56,13 @@ About::About(QWidget * parent) :
 			
 			QLabel::tr("Art:") + "</h2>"
 			+ QString::fromUtf8(
-			"<p>All sprites, all themes except for \"Cheese\" and \"Volcano\": Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
+			"<p>All sprites, all themes except for mentioned below: Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
 			"<br>"
 			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
 			"<br>"
 			"\"Castle\" map, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
+			"<br>"
+			"\"Sheep\" map: Julien Koesten &lt;<a href=\"mailto:julienkoesten@aol.com\">julienkoesten@aol.com</a>&gt;"
 			"</p><h2>") +
 			
 			QLabel::tr("Sounds:") + "</h2>"
