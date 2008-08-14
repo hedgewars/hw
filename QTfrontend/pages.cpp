@@ -79,6 +79,7 @@ PageMain::PageMain(QWidget* parent) :
 
 	//BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);
 	BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
+	BtnInfo->setStyleSheet("border: transparent;background: transparent;");
 	pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 	//pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
