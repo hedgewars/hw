@@ -103,12 +103,16 @@ int main(int argc, char *argv[])
 				"border-radius: 12px;"
 				"border-color: orange;"
 				"background-color: #0d0544;"
+//				"alternate-background-color: #2f213a;" //what's it?
 				"color: orange;"
 				"font: bold 14px;"
 				"}"
 			"QListWidget:hover{"
 				"border-color: yellow;"
 				"}"
+//			"QListWidget::item:alternate{"
+//				"background: #2f213a;"
+//				"}"
 
 			"QSpinBox{"
 				"border: solid;"

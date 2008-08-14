@@ -70,8 +70,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	lwThemes = new QListWidget(this);
 	lwThemes->setMinimumHeight(30);
 	lwThemes->setFixedWidth(100);
-	for (int i = 0; i < Themes->size(); ++i)
-		lwThemes->addItem(Themes->at(i));
+	for (int i = 0; i < Themes->size(); ++i) {
+		QListWidgetItem * lwi = new QListWidgetItem();
+		lwi->setText(Themes->at(i));
+		lwi->setTextAlignment(Qt::AlignHCenter);
+		lwThemes->addItem(lwi);
+	}
 	
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
