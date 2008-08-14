@@ -19,11 +19,11 @@
 #ifndef _HWMAP_CONTAINER_INCLUDED
 #define _HWMAP_CONTAINER_INCLUDED
 
-#include "hwmap.h"
-
 #include <QWidget>
 #include <QGridLayout>
 #include <QComboBox>
+
+#include "hwmap.h"
 
 class QPushButton;
 class IconedGroupBox;

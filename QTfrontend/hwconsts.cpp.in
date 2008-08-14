@@ -27,6 +27,7 @@ QDir * cfgdir = new QDir();
 QDir * datadir = new QDir();
 
 QStringList * Themes;
+QStringList * mapList;
 
 QString * cDefaultAmmoStore = new QString("eammstore 939192942219912103223511");
 

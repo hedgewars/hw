@@ -261,6 +261,12 @@ int main(int argc, char *argv[])
 		QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
 	}
 
+	QDir tmpdir;
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Maps");
+	tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+	mapList = new QStringList(tmpdir.entryList(QStringList("*")));
+
 	HWForm *Form = new HWForm();
 	Form->show();
 	return app.exec();

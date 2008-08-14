@@ -30,6 +30,7 @@ extern QDir * cfgdir;
 extern QDir * datadir;
 
 extern QStringList * Themes;
+extern QStringList * mapList;
 
 extern QString * cDefaultAmmoStore;
 

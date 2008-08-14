@@ -53,13 +53,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
   chooseMap = new QComboBox(this);
   chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  QDir tmpdir;
-  tmpdir.cd(datadir->absolutePath());
-  tmpdir.cd("Maps");
-  tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-  QStringList mapList=tmpdir.entryList(QStringList("*"));
-  mapList.push_front(QComboBox::tr("generated map..."));
-  chooseMap->addItems(mapList);
+  chooseMap->addItem(QComboBox::tr("generated map..."));
+  chooseMap->addItems(*mapList);
   connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
   mainLayout.addWidget(chooseMap, 1, 1);
 
@@ -70,9 +65,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	gbThemes->setTitle(tr("Themes"));
 	gbThemes->setStyleSheet("padding: 0px;");
 	mainLayout.addWidget(gbThemes, 0, 2, 2, 1);
+	
 	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
 	lwThemes = new QListWidget(this);
+	lwThemes->setMinimumHeight(30);
 	lwThemes->setFixedWidth(100);
+	for (int i = 0; i < Themes->size(); ++i)
+		lwThemes->addItem(Themes->at(i));
+	
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 	
