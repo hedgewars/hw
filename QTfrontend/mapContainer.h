@@ -22,10 +22,12 @@
 #include "hwmap.h"
 
 #include <QWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
 #include <QComboBox>
 
 class QPushButton;
+class IconedGroupBox;
+class QListWidget;
 
 class MapFileErrorException
 {
@@ -62,9 +64,11 @@ class HWMapContainer : public QWidget
   virtual void resizeEvent ( QResizeEvent * event );
 
  private:
-  QVBoxLayout mainLayout;
+  QGridLayout mainLayout;
   QPushButton* imageButt;
   QComboBox* chooseMap;
+  IconedGroupBox* gbThemes;
+  QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
   QString theme;

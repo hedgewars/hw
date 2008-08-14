@@ -25,9 +25,13 @@
 #include <QColor>
 #include <QTextStream>
 #include <QApplication>
+#include <QLabel>
+#include <QListWidget>
+#include <QVBoxLayout>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
+#include "igbox.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
   QWidget(parent), mainLayout(this)
@@ -38,16 +42,17 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
                 QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
                 QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 #endif
-  imageButt=new QPushButton(this);
+  imageButt = new QPushButton(this);
   imageButt->setObjectName("imageButt");
   imageButt->setFixedSize(256 + 8, 128 + 8);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
-  mainLayout.addWidget(imageButt);
+  mainLayout.addWidget(imageButt, 0, 0, 1, 2);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
   setRandomSeed();
 
-  chooseMap=new QComboBox(this);
+  chooseMap = new QComboBox(this);
+  chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   QDir tmpdir;
   tmpdir.cd(datadir->absolutePath());
   tmpdir.cd("Maps");
@@ -56,8 +61,22 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   mapList.push_front(QComboBox::tr("generated map..."));
   chooseMap->addItems(mapList);
   connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
+  mainLayout.addWidget(chooseMap, 1, 1);
 
-  mainLayout.addWidget(chooseMap);
+  QLabel * lblMap = new QLabel(tr("Map"), this);
+  mainLayout.addWidget(lblMap, 1, 0);
+
+	gbThemes = new IconedGroupBox(this);
+	gbThemes->setTitle(tr("Themes"));
+	gbThemes->setStyleSheet("padding: 0px;");
+	mainLayout.addWidget(gbThemes, 0, 2, 2, 1);
+	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
+	lwThemes = new QListWidget(this);
+	lwThemes->setFixedWidth(100);
+	gbTLayout->addWidget(lwThemes);
+	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+	
+
   mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 }
 

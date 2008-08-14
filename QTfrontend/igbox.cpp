@@ -31,6 +31,20 @@ IconedGroupBox::IconedGroupBox(QWidget * parent)
 void IconedGroupBox::setIcon(const QIcon & icon)
 {
 	this->icon = icon;
+	setStyleSheet(
+		"IconedGroupBox{"
+			"margin-top: 46px;"
+			"margin-left: 12px;"
+			"padding-top: 22px;"
+			"}"
+		"IconedGroupBox::title{"
+			"subcontrol-origin: margin;"
+			"subcontrol-position: top left;"
+			"padding-left: 82px;"
+			"padding-top: 26px;"
+			"text-align: left;"
+			"}"
+	);
 }
 
 void IconedGroupBox::paintEvent(QPaintEvent * event)
