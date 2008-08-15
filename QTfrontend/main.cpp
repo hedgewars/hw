@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 
 	qApp->setStyleSheet
 		(QString(
-			".HWForm{"
+			"HWForm,QDialog{"
 				"background-image: url(\":/res/Background.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
