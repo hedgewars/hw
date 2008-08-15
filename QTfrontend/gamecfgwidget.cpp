@@ -63,8 +63,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	WeaponsName = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(WeaponsName, 3, 1);
 
-	mainLayout.addWidget(new QWidget(this), 5, 0);
-
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));

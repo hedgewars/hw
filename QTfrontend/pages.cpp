@@ -250,15 +250,17 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
 	gameCFG = new GameCFGWidget(this);
 	pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 
-	teamsSelect = new TeamSelWidget(this);
-	pageLayout->addWidget(teamsSelect, 0, 2, 1, 2);
+	pageLayout->setRowStretch(1, 1);
 
-	BtnStartMPGame = addButton(tr("Start"), pageLayout, 1, 3);
+	teamsSelect = new TeamSelWidget(this);
+	pageLayout->addWidget(teamsSelect, 0, 2, 2, 2);
+
+	BtnStartMPGame = addButton(tr("Start"), pageLayout, 2, 3);
 }
 
 PageOptions::PageOptions(QWidget* parent) : 
