@@ -44,7 +44,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 #endif
   imageButt = new QPushButton(this);
   imageButt->setObjectName("imageButt");
-  imageButt->setFixedSize(256 + 8, 128 + 8);
+  imageButt->setFixedSize(256 + 6, 128 + 6);
   imageButt->setFlat(true);
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt, 0, 0, 1, 2);
@@ -80,7 +80,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 	
-
   mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 }
 
@@ -136,10 +135,14 @@ void HWMapContainer::loadMap(int index)
 
 void HWMapContainer::changeImage()
 {
-  pMap = new HWMap();
-  connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
-  pMap->getImage(m_seed.toStdString());
-  theme = (Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel";
+	pMap = new HWMap();
+	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
+	pMap->getImage(m_seed.toStdString());
+
+	if(!Themes->size()) return;
+	quint32 themeNum = rand() % Themes->size();
+	theme = Themes->at(themeNum);
+	lwThemes->setCurrentRow(themeNum);
 }
 
 QString HWMapContainer::getCurrentSeed() const
