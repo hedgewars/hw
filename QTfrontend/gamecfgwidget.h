@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <QGroupBox>
 
 #include "mapContainer.h"
 
@@ -29,7 +30,7 @@ class QVBoxLayout;
 class QSpinBox;
 class QLabel;
 
-class GameCFGWidget : public QWidget
+class GameCFGWidget : public QGroupBox
 {
 	Q_OBJECT
 
@@ -67,7 +68,7 @@ signals:
 
 private:
 	QCheckBox * CB_mode_Forts;
-	QVBoxLayout mainLayout;
+	QGridLayout mainLayout;
 	HWMapContainer* pMapContainer;
 	QSpinBox * SB_TurnTime;
 	QSpinBox * SB_InitHealth;

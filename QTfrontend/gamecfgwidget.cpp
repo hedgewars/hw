@@ -22,27 +22,20 @@
 #include <QGridLayout>
 #include <QSpinBox>
 #include <QLabel>
+
 #include "gamecfgwidget.h"
+#include "igbox.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
-  QWidget(parent), mainLayout(this)
+  QGroupBox(parent), mainLayout(this)
 {
 	mainLayout.setMargin(0);
-	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
-	QGroupBox *GBoxMap = new QGroupBox(this);
-	//GBoxMap->setTitle(QGroupBox::tr("Landscape"));
-	GBoxMap->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	mainLayout.addWidget(GBoxMap);
+//	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
 
-	QHBoxLayout *GBoxMapLayout = new QHBoxLayout(GBoxMap);
-	GBoxMapLayout->setMargin(0);
-	pMapContainer = new HWMapContainer(GBoxMap);
-	GBoxMapLayout->addStretch();
-	GBoxMapLayout->addWidget(pMapContainer);
-	GBoxMapLayout->addStretch();
+	pMapContainer = new HWMapContainer(this);
+	mainLayout.addWidget(pMapContainer, 0, 0);
 
-	QGroupBox *GBoxOptions = new QGroupBox(this);
-	GBoxOptions->setTitle(QGroupBox::tr("Game scheme"));
+	IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
 	GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 	mainLayout.addWidget(GBoxOptions);
 
@@ -70,7 +63,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	WeaponsName = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(WeaponsName, 3, 1);
 
-	mainLayout.addWidget(new QWidget(this), 100);
+	mainLayout.addWidget(new QWidget(this), 5, 0);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
