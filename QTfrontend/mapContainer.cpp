@@ -49,7 +49,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt, 0, 0, 1, 2);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
-  setRandomSeed();
 
   chooseMap = new QComboBox(this);
   chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -76,11 +75,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 		lwi->setTextAlignment(Qt::AlignHCenter);
 		lwThemes->addItem(lwi);
 	}
+	connect(lwThemes, SIGNAL(currentRowChanged(int)), this, SLOT(themeSelected(int)));
 	
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 	
   mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
+
+  setRandomSeed();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -141,8 +143,13 @@ void HWMapContainer::changeImage()
 
 	if(!Themes->size()) return;
 	quint32 themeNum = rand() % Themes->size();
-	theme = Themes->at(themeNum);
 	lwThemes->setCurrentRow(themeNum);
+}
+
+void HWMapContainer::themeSelected(int currentRow)
+{
+	theme = Themes->at(currentRow);
+	emit themeChanged(theme);
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -183,7 +190,10 @@ void HWMapContainer::setMap(const QString & map)
 
 void HWMapContainer::setTheme(const QString & theme)
 {
-	this->theme = theme;
+	QList<QListWidgetItem *> items = lwThemes->findItems(theme, Qt::MatchExactly);
+	if(items.size())
+		lwThemes->setCurrentItem(items.at(0));
+	//this->theme = theme;
 }
 
 void HWMapContainer::setRandomSeed()
@@ -191,5 +201,4 @@ void HWMapContainer::setRandomSeed()
   m_seed = QUuid::createUuid().toString();
   emit seedChanged(m_seed);
   changeImage();
-  emit themeChanged(theme);
 }

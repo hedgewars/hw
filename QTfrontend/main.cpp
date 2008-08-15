@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
 	QDateTime now = QDateTime::currentDateTime();
 	QDateTime zero;
 	srand(now.secsTo(zero));
+	rand();
 
 	Q_INIT_RESOURCE(hedgewars);
 
