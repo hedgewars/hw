@@ -104,7 +104,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QGridLayout * GBTLayout = new QGridLayout(GBoxTeam);
 	TeamNameEdit = new QLineEdit(GBoxTeam);
-	TeamNameEdit->setMaxLength(15);
+	TeamNameEdit->setMaxLength(64);
 	GBTLayout->addWidget(TeamNameEdit, 0, 0, 1, 0);
 
 	pageLayout->addWidget(GBoxTeam, 0, 0);
@@ -117,7 +117,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	{
 		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
 		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
-		HHNameEdit[i]->setMaxLength(15);
+		HHNameEdit[i]->setMaxLength(64);
 		GBHLayout->addWidget(HHNameEdit[i]);
 	}
 	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
