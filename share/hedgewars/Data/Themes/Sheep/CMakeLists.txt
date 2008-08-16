@@ -1,4 +1,5 @@
 install(FILES
+	icon.png
 	mouton2.png
 	Border.png
 	mouton3.png

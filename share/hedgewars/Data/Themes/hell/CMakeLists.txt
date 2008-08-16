@@ -3,6 +3,7 @@ install(FILES
 	Clouds.png
 	Flake.png
 	horizont.png
+	icon.png
 	LandTex.png
 	plant1.png
 	plant2.png

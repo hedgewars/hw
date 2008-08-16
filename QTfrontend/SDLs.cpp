@@ -34,7 +34,7 @@ SDLInteraction::SDLInteraction()
 
 SDLInteraction::~SDLInteraction()
 {
-//	SDL_Quit();
+	SDL_Quit();
 }
 
 QStringList SDLInteraction::getResolutions() const

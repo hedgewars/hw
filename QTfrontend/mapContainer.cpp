@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QVBoxLayout>
+#include <QIcon>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
@@ -149,6 +150,7 @@ void HWMapContainer::changeImage()
 void HWMapContainer::themeSelected(int currentRow)
 {
 	theme = Themes->at(currentRow);
+	gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
 	emit themeChanged(theme);
 }
 
