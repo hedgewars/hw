@@ -13,6 +13,7 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
+find_package(SDL_mixer REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
 if(UNIX)
@@ -151,6 +152,7 @@ add_executable(hedgewars WIN32
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
+	${SDLMIXER_LIBRARY}
 	)
 
 if(WIN32 AND NOT UNIX)

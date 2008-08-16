@@ -54,6 +54,8 @@ HWForm::HWForm(QWidget *parent)
 	UpdateTeamsLists();
 	UpdateWeapons();
 
+	StartMusic();
+
 	connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
 	onFrontendFullscreen(config->isFrontendFullscreen());
 
@@ -544,6 +546,8 @@ void HWForm::GameStateChanged(GameState gameState)
 {
 	switch(gameState) {
 		case gsStarted: {
+			StopMusic();
+			GoToPage(ID_PAGE_INGAME);
 			ui.pageGameStats->labelGameStats->setText("");
 			if (pRegisterServer)
 			{
@@ -554,6 +558,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		}
 		case gsFinished: {
 			GoBack();
+			StartMusic();
 			GoToPage(ID_PAGE_GAMESTATS);
 			break;
 		}
@@ -612,8 +617,6 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
 	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
 	connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
-
-	GoToPage(ID_PAGE_INGAME);
 }
 
 void HWForm::ShowErrorMessage(const QString & msg)
@@ -678,4 +681,14 @@ void HWForm::closeEvent(QCloseEvent *event)
 {
 	config->SaveOptions();
 	event->accept();
+}
+
+void HWForm::StartMusic()
+{
+
+}
+
+void HWForm::StopMusic()
+{
+
 }

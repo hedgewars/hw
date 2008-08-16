@@ -21,14 +21,22 @@
 
 #include <QStringList>
 
+#include "SDL_mixer.h"
+
+
 class SDLInteraction : public QObject
 {
 	Q_OBJECT
 
-	public:
+private:
+	Mix_Music * music;
+
+public:
 	SDLInteraction();
 	~SDLInteraction();
 	QStringList getResolutions() const;
+	void StartMusic();
+	void StopMusic();
 };
 
 #endif

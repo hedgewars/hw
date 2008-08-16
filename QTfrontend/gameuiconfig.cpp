@@ -77,7 +77,7 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::resizeToConfigValues()
 {
-  Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
+  Form->resize(value("window/width", 720).toUInt(), value("window/height", 450).toUInt());
 }
 
 void GameUIConfig::SaveOptions()

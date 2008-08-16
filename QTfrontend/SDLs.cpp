@@ -19,15 +19,22 @@
 #include "SDLs.h"
 
 #include "SDL.h"
+#include "hwconsts.h"
 
 SDLInteraction::SDLInteraction()
 {
 	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_AUDIO);
+	Mix_OpenAudio(22050, 0x8010, 2, 512);
+	
+	Mix_Volume(-1, 50);
+	music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toAscii().constData());
+	StartMusic();
 }
 
 SDLInteraction::~SDLInteraction()
 {
-	SDL_Quit();
+//	SDL_Quit();
 }
 
 QStringList SDLInteraction::getResolutions() const
@@ -49,4 +56,13 @@ QStringList SDLInteraction::getResolutions() const
 	}
 
 	return result;
+}
+void SDLInteraction::StartMusic()
+{
+	Mix_PlayMusic(music, -1);
+}
+
+void SDLInteraction::StopMusic()
+{
+
 }
