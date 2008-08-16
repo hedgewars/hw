@@ -25,6 +25,7 @@
 00:22=Whip
 00:23=Kamikaze
 00:24=Cake
+00:25=Seduction
 
 01:00=Let's fight!
 01:01=Round draw

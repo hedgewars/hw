@@ -785,15 +785,17 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						1,
 						5,
 						0);
-			amWhip: begin
-				DrawRotatedF(sprWhip,
+			amWhip: DrawRotatedF(sprWhip,
 						hwRound(Gear^.X) + 1 + WorldDx,
 						hwRound(Gear^.Y) - 3 + WorldDy,
 						0,
 						hwSign(Gear^.dX),
 						0);
-				defaultPos:= false
-				end;
+			amSeduction: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						hwSign(Gear^.dX),
+						2,
+						2,
+						0);
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
 				hwSign(Gear^.dX),

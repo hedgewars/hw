@@ -25,6 +25,7 @@
 00:22=Bicz
 00:23=Kamikaze
 00:24=Ciasto
+00:25=Seduction
 
 01:00=Walczmy!
 01:01=Remis

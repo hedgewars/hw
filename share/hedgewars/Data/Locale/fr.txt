@@ -25,6 +25,7 @@
 00:22=Fouet
 00:23=Kamikaze
 00:24=Gateau
+00:25=Seduction
 
 01:00=C'est parti!
 01:01=Round ex aequo

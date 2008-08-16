@@ -74,7 +74,8 @@ type
      TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
                    amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
                    amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
-                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake);
+                   amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
+                   amSeduction);
 
      THWFont    = (fnt16, fntBig, fntSmall);
 
@@ -965,6 +966,26 @@ const
                                           Pos: 0;
                                           AmmoType: amCake);
                                    Slot: 4;
+                                   TimeAfterTurn: 0;
+                                   minAngle: 0;
+                                   maxAngle: 0;
+                                   isDamaging: true;
+                                   SkipTurns: 0;
+                                   PosCount: 1;
+                                   PosSprite: sprWater),
+                                  (NameId: sidSeduction;
+                                   NameTex: nil;
+                                   Probability: 100;
+                                   NumberInCase: 1;
+                                   Ammo: (Propz: ammoprop_ForwMsgs or
+                                                 ammoprop_NoCrosshair or
+                                                 ammoprop_DontHold;
+                                          Count: 1;
+                                          NumPerTurn: 0;
+                                          Timer: 0;
+                                          Pos: 0;
+                                          AmmoType: amSeduction);
+                                   Slot: 2;
                                    TimeAfterTurn: 0;
                                    minAngle: 0;
                                    maxAngle: 0;

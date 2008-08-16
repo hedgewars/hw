@@ -25,6 +25,7 @@
 00:22=Stoßen
 00:23=Kamikaze
 00:24=Cake
+00:25=Seduction
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden

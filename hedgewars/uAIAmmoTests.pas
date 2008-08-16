@@ -68,7 +68,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
                   (proc: nil;              flags: 0), // amSwitch
                   (proc: @TestMortar;      flags: 0), // amMortar
                   (proc: nil;              flags: 0), // amKamikaze
-                  (proc: nil;              flags: 0)  // amCake
+                  (proc: nil;              flags: 0), // amCake
+                  (proc: nil;              flags: 0)  // amSeduction
                   );
 
 const BadTurn = Low(LongInt) div 4;
