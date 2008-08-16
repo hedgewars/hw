@@ -16,6 +16,7 @@ find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
+include_directories(${SDLMIXER_INCLUDE_DIR})
 if(UNIX)
 	include_directories("/usr/local/include") # HACK: in freebsd cannot find iconv.h included via SDL.h
 endif(UNIX)
