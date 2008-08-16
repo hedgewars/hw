@@ -109,7 +109,7 @@ Mus:= Mix_LoadMUS(Str2PChar(s));
 TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-Mix_PlayMusic(Mus, -1)
+SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;

@@ -26,6 +26,7 @@
 #include "netserver.h"
 #include "game.h"
 #include "ui_hwform.h"
+#include "SDLs.h"
 
 class HWGame;
 class HWTeam;
@@ -84,8 +85,6 @@ private slots:
 	void UpdateWeapons();
 	void NetWeaponNameChanged(const QString& name);
 	void onFrontendFullscreen(bool value);
-	void StartMusic();
-	void StopMusic();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);
@@ -116,6 +115,7 @@ private:
 	HWNetServer* pnetserver;
 	HWNetRegisterServer* pRegisterServer;
 	QTime eggTimer;
+	SDLInteraction sdli;
 	void AddStatText(const QString & msg);
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };

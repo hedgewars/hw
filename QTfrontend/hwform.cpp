@@ -49,12 +49,13 @@ HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
 	ui.setupUi(this);
+
+	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
+
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
 	UpdateTeamsLists();
 	UpdateWeapons();
-
-	StartMusic();
 
 	connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
 	onFrontendFullscreen(config->isFrontendFullscreen());
@@ -130,6 +131,8 @@ HWForm::HWForm(QWidget *parent)
 		this, SLOT(GoBack())); // executed third
 
 	GoToPage(ID_PAGE_MAIN);
+
+	sdli.StartMusic();
 }
 
 void HWForm::onFrontendFullscreen(bool value)
@@ -546,7 +549,7 @@ void HWForm::GameStateChanged(GameState gameState)
 {
 	switch(gameState) {
 		case gsStarted: {
-			StopMusic();
+			sdli.StopMusic();
 			GoToPage(ID_PAGE_INGAME);
 			ui.pageGameStats->labelGameStats->setText("");
 			if (pRegisterServer)
@@ -558,13 +561,16 @@ void HWForm::GameStateChanged(GameState gameState)
 		}
 		case gsFinished: {
 			GoBack();
-			StartMusic();
+			sdli.StartMusic();
 			GoToPage(ID_PAGE_GAMESTATS);
 			break;
 		}
 		default: {
 			quint8 id = ui.Pages->currentIndex();
-			if (id == ID_PAGE_INGAME) GoBack();
+			if (id == ID_PAGE_INGAME) {
+				GoBack();
+				sdli.StartMusic();
+			}
 		};
 	}
 
@@ -681,14 +687,4 @@ void HWForm::closeEvent(QCloseEvent *event)
 {
 	config->SaveOptions();
 	event->accept();
-}
-
-void HWForm::StartMusic()
-{
-
-}
-
-void HWForm::StopMusic()
-{
-
 }

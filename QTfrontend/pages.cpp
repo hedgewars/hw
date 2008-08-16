@@ -47,7 +47,6 @@
 #include "netudpwidget.h"
 #include "netwwwwidget.h"
 #include "chatwidget.h"
-#include "SDLs.h"
 #include "playrecordpage.h"
 #include "selectWeapon.h"
 #include "igbox.h"
@@ -335,8 +334,6 @@ PageOptions::PageOptions(QWidget* parent) :
 	GBAreslayout->addWidget(resolution);
 
 	CBResolution = new QComboBox(AGGroupBox);
-	SDLInteraction sdli;
-	CBResolution->addItems(sdli.getResolutions());
 	GBAreslayout->addWidget(CBResolution);
 	GBAlayout->addLayout(GBAreslayout);
 

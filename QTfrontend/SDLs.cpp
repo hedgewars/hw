@@ -29,7 +29,6 @@ SDLInteraction::SDLInteraction()
 	
 	Mix_Volume(-1, 50);
 	music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toAscii().constData());
-	StartMusic();
 }
 
 SDLInteraction::~SDLInteraction()
@@ -59,10 +58,10 @@ QStringList SDLInteraction::getResolutions() const
 }
 void SDLInteraction::StartMusic()
 {
-	Mix_PlayMusic(music, -1);
+	Mix_FadeInMusic(music, -1, 3000);
 }
 
 void SDLInteraction::StopMusic()
 {
-
+	Mix_FadeOutMusic(2000);
 }

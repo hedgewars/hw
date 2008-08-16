@@ -341,6 +341,7 @@ function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_Mix
 
 function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_FadeInMusic(music: PMixMusic; loops: LongInt; ms: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 function  Mix_PlayChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_PlayMusic(music: PMixMusic; loops: LongInt): LongInt; cdecl; external SDL_MixerLibName;
