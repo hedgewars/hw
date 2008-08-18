@@ -58,7 +58,7 @@ About::About(QWidget * parent) :
 			+ QString::fromUtf8(
 			"<p>All sprites, all themes except for mentioned below: Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
 			"<br>"
-			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
+			"\"Bamboo\", \"EarthRise\", \"Freeway\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
 			"<br>"
 			"\"Castle\", \"PirateFlag\" maps, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
 			"<br>"

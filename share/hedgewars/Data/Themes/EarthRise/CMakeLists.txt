@@ -5,8 +5,8 @@ install(FILES
 	horizont.png
 	icon.png
 	LandTex.png
-	rock1.png
-	rock2.png
+	Rock.png
+	RockShort.png
 	Sky.png
 	theme.cfg
 	DESTINATION ${SHAREPATH}Data/Themes/EarthRise)

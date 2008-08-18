@@ -1,4 +1,5 @@
 install(FILES
+	BlueWater.png
 	Border.png
 	Clouds.png
 	Flake.png
