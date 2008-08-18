@@ -16,7 +16,7 @@ Copyright 2008 Finn Brice <tiyuri@gmail.com>
 Copyright 2008 Jonatan Nilsson <jonatanfan@gmail.com>
 
 Images in Data/Graphics,
-themes "nature", "Snow", "City"
+themes "nature", "Snow", "City",
 maps "Bath", "Hedgelove", "Hedgewars", "Hydrant", "mushrooms", "Plane"
 Copyright 2008 Finn Brice <tiyuri@gmail.com>
 
@@ -28,7 +28,8 @@ based on Wormux map "cheese" by Anthony Carré <yeknan AT yahoo DOT fr>
 Maps and themes "Bamboo", "EarthRise", map "BambooPlinko":
 Copyright 2008 Joshua Frese <joshfrese@gmail.com>
 
-Map "Castle", theme "hell":
+Maps "Castle", "PirateFlag"
+theme "hell":
 Copyright 2008 Stanko Tadić <stanko@mfhinc.net>
 
 Theme "Sheep"

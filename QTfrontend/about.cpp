@@ -60,7 +60,7 @@ About::About(QWidget * parent) :
 			"<br>"
 			"\"Bamboo\", \"EarthRise\" maps and themes: Joshua Frese &lt;<a href=\"mailto:joshfrese@gmail.com\">joshfrese@gmail.com</a>&gt;"
 			"<br>"
-			"\"Castle\" map, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
+			"\"Castle\", \"PirateFlag\" maps, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
 			"<br>"
 			"\"Sheep\" theme: Julien Koesten &lt;<a href=\"mailto:julienkoesten@aol.com\">julienkoesten@aol.com</a>&gt;"
 			"</p><h2>") +

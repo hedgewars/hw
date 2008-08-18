@@ -63,10 +63,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
 	gbThemes = new IconedGroupBox(this);
 	gbThemes->setTitle(tr("Themes"));
-	gbThemes->setStyleSheet("padding: 0px;");
+	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - why?
 	mainLayout.addWidget(gbThemes, 0, 2, 2, 1);
 	
 	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
+	gbTLayout->setContentsMargins(0, 0, 0 ,0);
+	gbTLayout->setSpacing(0);
 	lwThemes = new QListWidget(this);
 	lwThemes->setMinimumHeight(30);
 	lwThemes->setFixedWidth(100);

@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 				"background-color: #130f2c;"
 				"color: #ffcc00;"
 				"font: bold 14px;"
-				"padding: 12px;"
+				"padding: 2px;"
 				"}"
 			".QGroupBox,GameCFGWidget,TeamSelWidget{"
 				"background-image: url(\":/res/panelbg.png\");"
