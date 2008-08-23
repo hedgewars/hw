@@ -6,6 +6,7 @@ install(FILES
 	Clouds.png
 	Flake.png
 	Flower.png
+	Girder.png
 	horizont.png
 	Sky.png
 	theme.cfg
