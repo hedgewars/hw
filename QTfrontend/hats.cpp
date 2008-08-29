@@ -16,8 +16,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include "hats.h"
+
 HatsModel::HatsModel(QObject* parent) :
   QAbstractTableModel(parent)
 {
 
+}
+
+QVariant HatsModel::headerData(int section,
+            Qt::Orientation orientation, int role) const
+{
+	return QVariant();
+}
+
+int HatsModel::rowCount(const QModelIndex &parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return 60;
+}
+
+int HatsModel::columnCount(const QModelIndex & parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return 2;
 }
