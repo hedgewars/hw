@@ -153,6 +153,7 @@ public:
 	QPushButton *BtnTeamSave;
 	QLineEdit * TeamNameEdit;
 	QLineEdit * HHNameEdit[8];
+	QComboBox * HHHats[8];
 	QComboBox * CBBind[BINDS_NUMBER];
 
 public slots:

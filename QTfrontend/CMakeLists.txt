@@ -53,6 +53,7 @@ set(hwfr_src
 	gamecfgwidget.cpp
 	pages.cpp
 	SquareLabel.cpp
+	hats.cpp
 	hedgehogerWidget.cpp
 	hwmap.cpp
 	mapContainer.cpp
@@ -93,6 +94,7 @@ endif(MINGW)
 
 set(hwfr_moc_hdrs
 	game.h
+	hats.h
 	hwform.h
 	teamselect.h
 	teamselhelper.h
