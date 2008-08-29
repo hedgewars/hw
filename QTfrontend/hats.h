@@ -19,10 +19,13 @@
 #ifndef _HATS_INCLUDED
 #define _HATS_INCLUDED
 
-#include <QAbstractTableModel>
+#include <QAbstractListModel>
 #include <QStringList>
+#include <QVector>
+#include <QPair>
+#include <QIcon>
 
-class HatsModel : public QAbstractTableModel
+class HatsModel : public QAbstractListModel
 {
 	Q_OBJECT
 
@@ -31,11 +34,11 @@ public:
 
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 	int rowCount(const QModelIndex & parent) const;
-	int columnCount(const QModelIndex & parent) const;
+	//int columnCount(const QModelIndex & parent) const;
 
 	QVariant data(const QModelIndex &index, int role) const;
-//protected:
-//	QList<QStringList> games;
+protected:
+	QVector<QPair<QString, QIcon> > hats;
 };
 
 #endif // _HATS_INCLUDED
