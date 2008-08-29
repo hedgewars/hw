@@ -85,6 +85,7 @@ private slots:
 	void UpdateWeapons();
 	void NetWeaponNameChanged(const QString& name);
 	void onFrontendFullscreen(bool value);
+	void Music(bool checked);
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

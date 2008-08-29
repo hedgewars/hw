@@ -33,6 +33,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 {
 	Form = FormWidgets;
 
+	connect(Form->ui.pageOptions->CBEnableMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
+
 	//Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
 	resizeToConfigValues();
 

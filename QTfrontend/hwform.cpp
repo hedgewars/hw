@@ -27,6 +27,7 @@
 #include <QRadioButton>
 #include <QSpinBox>
 #include <QCloseEvent>
+#include <QCheckBox>
 
 #include "hwform.h"
 #include "game.h"
@@ -131,8 +132,6 @@ HWForm::HWForm(QWidget *parent)
 		this, SLOT(GoBack())); // executed third
 
 	GoToPage(ID_PAGE_MAIN);
-
-	sdli.StartMusic();
 }
 
 void HWForm::onFrontendFullscreen(bool value)
@@ -687,4 +686,12 @@ void HWForm::closeEvent(QCloseEvent *event)
 {
 	config->SaveOptions();
 	event->accept();
+}
+
+void HWForm::Music(bool checked)
+{
+	if (checked)
+		sdli.StartMusic();
+	else
+		sdli.StopMusic();
 }
