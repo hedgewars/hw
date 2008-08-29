@@ -45,3 +45,14 @@ int HatsModel::columnCount(const QModelIndex & parent) const
 	else
 		return 2;
 }
+
+QVariant HatsModel::data(const QModelIndex &index,
+                         int role) const
+{
+	if (!index.isValid() || index.row() < 0
+		|| index.row() >= 60
+		|| role != Qt::DisplayRole)
+		return QVariant();
+
+	return QVariant();//games[index.row()][index.column()];
+}

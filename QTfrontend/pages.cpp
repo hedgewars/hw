@@ -50,6 +50,7 @@
 #include "playrecordpage.h"
 #include "selectWeapon.h"
 #include "igbox.h"
+#include "hats.h"
 
 PageMain::PageMain(QWidget* parent) : 
   AbstractPage(parent)
@@ -90,7 +91,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnMinimumWidth(0, 150);
+	pageLayout->setColumnMinimumWidth(0, 180);
 	pageLayout->setColumnStretch(1, 100);
 	pageLayout->setColumnMinimumWidth(1, 210);
 	pageLayout->setColumnStretch(2, 75);
@@ -112,12 +113,18 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
 	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
+	
+	HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
 	for(int i = 0; i < 8; i++)
 	{
 		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
-		HHNameEdit[i]->setGeometry(QRect(10, 20 + i * 30, 141, 20));
 		HHNameEdit[i]->setMaxLength(64);
-		GBHLayout->addWidget(HHNameEdit[i]);
+		HHNameEdit[i]->setMinimumWidth(120);
+		GBHLayout->addWidget(HHNameEdit[i], i, 0);
+		
+		HHHats[i] = new QComboBox(GBoxHedgehogs);
+		HHHats[i]->setModel(hatsModel);
+		GBHLayout->addWidget(HHHats[i], i, 1);
 	}
 	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
 
