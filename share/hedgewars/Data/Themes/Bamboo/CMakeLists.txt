@@ -8,6 +8,7 @@ install(FILES
 	Flower.png
 	Girder.png
 	horizont.png
+	LandTex.png
 	Sky.png
 	theme.cfg
 	DESTINATION ${SHAREPATH}Data/Themes/Bamboo)
