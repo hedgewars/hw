@@ -200,9 +200,18 @@ case c of
 end;
 
 function GetLastConsoleLine: shortstring;
+var Result: shortstring;
+	i: LongWord;
 begin
-if CurrLine = 0 then GetLastConsoleLine:= ConsoleLines[Pred(cLinesCount)].s
-                else GetLastConsoleLine:= ConsoleLines[Pred(CurrLine)].s
+i:= (CurrLine + cLinesCount - 2) mod cLinesCount;
+Result:= ConsoleLines[i].s;
+
+//Result:= Result + #10;
+
+i:= (CurrLine + cLinesCount - 1) mod cLinesCount;
+Result:= Result + ConsoleLines[i].s;
+
+GetLastConsoleLine:= Result
 end;
 
 procedure StopMessages(Message: Longword);
@@ -236,6 +245,7 @@ RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);
+RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
 RegisterVariable('hhcoords', vtCommand, @chSetHHCoords  , false);
 RegisterVariable('ammstore', vtCommand, @chAddAmmoStore , false);
 RegisterVariable('quit'    , vtCommand, @chQuit         , true );

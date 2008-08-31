@@ -107,20 +107,30 @@ var s: shortstring;
 begin
 if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
-     begin
-     SplitBySpace(id, s);
-     CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
-     val(id, CurrentHedgehog^.BotLevel);
-     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
-     SplitBySpace(s, id);
-     val(s, Gear^.Health);
-     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-     PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
-     Hedgehogs[HedgehogsNumber].AmmoStore:= TeamsCount - 1; // FIXME HACK to get ammostores work
-     Hedgehogs[HedgehogsNumber].Gear:= Gear;
-     Hedgehogs[HedgehogsNumber].Name:= id;
-     inc(HedgehogsNumber)
-     end
+	begin
+	SplitBySpace(id, s);
+	CurrentHedgehog:= @Hedgehogs[HedgehogsNumber];
+	val(id, CurrentHedgehog^.BotLevel);
+	Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
+	SplitBySpace(s, id);
+	val(s, Gear^.Health);
+	TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
+	PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
+	CurrentHedgehog^.AmmoStore:= TeamsCount - 1; // FIXME HACK to get ammostores work
+	CurrentHedgehog^.Gear:= Gear;
+	CurrentHedgehog^.Name:= id;
+	inc(HedgehogsNumber)
+	end
+end;
+
+procedure chSetHat(var s: shortstring);
+begin
+if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
+with CurrentTeam^ do
+	if s = '' then
+		CurrentHedgehog^.Hat:= 'NoHat'
+	else
+		CurrentHedgehog^.Hat:= s
 end;
 
 procedure chSetHHCoords(var x: shortstring);

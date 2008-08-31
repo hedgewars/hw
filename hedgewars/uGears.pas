@@ -852,12 +852,12 @@ if defaultPos then
 		(RealTicks div 128 + Gear^.Pos) mod 19,
 		hwSign(Gear^.dX),
 		0);
-	DrawRotatedF(sprHat,
+	DrawTextureF(PHedgehog(Gear^.Hedgehog)^.HatTex,
 		hwRound(Gear^.X) + 1 + WorldDx,
 		hwRound(Gear^.Y) - 8 + WorldDy,
 		(RealTicks div 128 + Gear^.Pos) mod 19,
 		hwSign(Gear^.dX),
-		0);
+		32);
 	end;
 
 with PHedgehog(Gear^.Hedgehog)^ do

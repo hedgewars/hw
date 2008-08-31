@@ -45,7 +45,7 @@ type
                    sprHandDEagle, sprHandAirAttack, sprHandBaseball, sprPHammer,
                    sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
                    sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
-                   sprHat, sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
+                   sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
                    sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
                    sprCakeWalk, sprCakeDown, sprAMAmmosBW);
 
@@ -400,8 +400,6 @@ const
                       Width:  16; Height: 16; saveSurf: false),// sprMortar
                      (FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width:  16; Height: 16; saveSurf: false),// sprTurnsLeft
-                     (FileName:    'Samurai'; Path: ptHats    ; AltPath: ptNone; Texture: nil; Surface: nil;
-                      Width:  32; Height: 32; saveSurf: false),// sprHat
                      (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
                       Width: 256; Height: 32; saveSurf: false),// sprKamikaze
                      (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;

@@ -30,6 +30,7 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+procedure DrawTextureF(Texture: PTexture; X, Y, Frame, Dir, Frames: LongInt);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -153,7 +154,12 @@ var s: string;
 		for i:= 0 to 7 do
 			with Hedgehogs[i] do
 				if Gear <> nil then
+					begin
 					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
+					texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, true, false);
+					HatTex:= Surface2Tex(texsurf);
+					SDL_FreeSurface(texsurf)
+					end;
 		end;
 	end;
 
@@ -349,6 +355,42 @@ glTexCoord2f(0, 1);
 glVertex2i(X, Texture^.h + Y);
 
 glEnd()
+end;
+
+procedure DrawTextureF(Texture: PTexture; X, Y, Frame, Dir, Frames: LongInt);
+var ft, fb: GLfloat;
+	hw: LongInt;
+begin
+glPushMatrix;
+glTranslatef(X, Y, 0);
+
+if Dir < 0 then
+	hw:= - 16
+else
+	hw:= 16;
+
+ft:= Frame / Frames;
+fb:= (Frame + 1) / Frames;
+
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
+
+glBegin(GL_QUADS);
+
+glTexCoord2f(0, ft);
+glVertex2i(-hw, -16);
+
+glTexCoord2f(1, ft);
+glVertex2i(hw, -16);
+
+glTexCoord2f(1, fb);
+glVertex2i(hw, 16);
+
+glTexCoord2f(0, fb);
+glVertex2i(-hw, 16);
+
+glEnd();
+
+glPopMatrix
 end;
 
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);

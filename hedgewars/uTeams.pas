@@ -30,8 +30,9 @@ type PHedgehog = ^THedgehog;
      THedgehog = record
                  Name: string[MAXNAMELEN];
                  Gear: PGear;
-                 NameTagTex: PTexture;
-                 HealthTagTex: PTexture;
+                 NameTagTex,
+                 HealthTagTex,
+                 HatTex: PTexture;
                  Ammo: PHHAmmo;
                  AmmoStore: Longword;
                  CurSlot, CurAmmo: LongWord;
@@ -40,6 +41,7 @@ type PHedgehog = ^THedgehog;
                  visStepPos: LongWord;
                  BotLevel  : LongWord; // 0 - Human player
                  stats: TStatistics;
+                 Hat: String;
                  end;
      TTeam = record
              Clan: PClan;

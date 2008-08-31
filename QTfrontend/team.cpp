@@ -242,10 +242,14 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 			sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 
 	for (int t = 0; t < numHedgehogs; t++)
+	{
 	  sl.push_back(QString("eaddhh %1 %2 %3")
 		       .arg(QString::number(difficulty),
 			    QString::number(InitHealth),
 			    HHName[t]));
+	  sl.push_back(QString("ehat %1")
+		       .arg(HHHat[t]));
+	}
 	return sl;
 }
 
