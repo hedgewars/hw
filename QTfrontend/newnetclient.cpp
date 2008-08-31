@@ -67,15 +67,21 @@ void HWNewNet::JoinRoom(const QString & room)
 
 void HWNewNet::AddTeam(const HWTeam & team)
 {
-  RawSendNet(QString("ADDTEAM:") + delimeter +
+	QString cmd = QString("ADDTEAM:") + delimeter +
 	     team.TeamName + delimeter +
 	     team.teamColor.name() + delimeter +
 	     team.Grave + delimeter +
 	     team.Fort + delimeter +
-	     QString::number(team.difficulty) + delimeter +
-	     team.HHName[0] + delimeter + team.HHName[1] + delimeter +
-	     team.HHName[2] + delimeter + team.HHName[3] + delimeter + team.HHName[4] + delimeter +
-	     team.HHName[5] + delimeter + team.HHName[6] + delimeter + team.HHName[7]);
+	     QString::number(team.difficulty);
+
+	for(int i = 0; i < 8; ++i)
+	{
+		cmd.append(delimeter);
+		cmd.append(team.HHName[i]);
+		cmd.append(delimeter);
+		cmd.append(team.HHHat[i]);
+	}
+	RawSendNet(cmd);
 }
 
 void HWNewNet::RemoveTeam(const HWTeam & team)
@@ -190,7 +196,7 @@ qDebug() << "Server: " << lst;
   }
 
   if (lst[0] == "ADDTEAM:") {
-    if(lst.size() < 14)
+    if(lst.size() < 22)
     {
 	  qWarning("Net: Too short ADDTEAM message");
 	  return;
