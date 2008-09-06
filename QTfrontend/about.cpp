@@ -83,6 +83,7 @@ About::About(QWidget * parent) :
 			"Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;<br>"
 			"Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Slovak: Jose Riha<br>"
+			"Spanish: Carlos Vives &lt;<a href=\"mailto:mail@carlosvives.es\">mail@carlosvives.es</a>&gt;<br>"
 			"Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;"
 			"</p><h2>") +
 			

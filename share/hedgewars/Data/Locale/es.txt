@@ -1,0 +1,36 @@
+; Spanish locale
+
+00:00=Granada
+00:01=Granada de frag.
+00:02=Bazuca
+00:03=OVNI
+00:04=Escopeta
+00:05=Taladro
+00:06=Pasar
+00:07=Cuerda
+00:08=Mina
+00:09=DEagle
+00:10=Dinamita
+00:11=Bate de béisbol
+00:12=Puño de fuego
+00:13=seg
+00:14=Paracaídas
+00:15=Bombardeo aéreo
+00:16=Minado aéreo
+00:17=Soplete
+00:18=Construcción
+00:19=Teletransporte
+00:20=Cambiar erizo
+00:21=Mortero
+00:22=Látigo
+00:23=Kamikaze
+00:24=Tarta
+00:25=Seducción
+
+01:00=Luchad!
+01:01=Empate
+01:02=%1 venció!
+01:03=Volumen %1%
+01:04=Pausa
+01:05=Desea salir (Y/Esc)?
+01:06=Muerte súbita!
