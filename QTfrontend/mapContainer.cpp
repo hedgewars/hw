@@ -62,8 +62,10 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   mainLayout.addWidget(lblMap, 1, 0);
 
 	gbThemes = new IconedGroupBox(this);
+	gbThemes->setTitleTextPadding(60);
 	gbThemes->setTitle(tr("Themes"));
-	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - why?
+
+	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
 	mainLayout.addWidget(gbThemes, 0, 2, 2, 1);
 	
 	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
@@ -71,7 +73,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	gbTLayout->setSpacing(0);
 	lwThemes = new QListWidget(this);
 	lwThemes->setMinimumHeight(30);
-	lwThemes->setFixedWidth(100);
+	lwThemes->setFixedWidth(120);
 	for (int i = 0; i < Themes->size(); ++i) {
 		QListWidgetItem * lwi = new QListWidgetItem();
 		lwi->setText(Themes->at(i));

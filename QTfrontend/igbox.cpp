@@ -25,25 +25,26 @@
 
 IconedGroupBox::IconedGroupBox(QWidget * parent)
 {
-
+	padding = 82;
 }
 
 void IconedGroupBox::setIcon(const QIcon & icon)
 {
 	this->icon = icon;
-	setStyleSheet(
+	setStyleSheet(QString(
 		"IconedGroupBox{"
 			"margin-top: 46px;"
 			"margin-left: 12px;"
-			"padding-top: 22px;"
+			"padding: 22px 0px 0px 0px;"
 			"}"
 		"IconedGroupBox::title{"
 			"subcontrol-origin: margin;"
 			"subcontrol-position: top left;"
-			"padding-left: 82px;"
+			"padding-left: %1px;"
 			"padding-top: 26px;"
 			"text-align: left;"
 			"}"
+			).arg(padding)
 	);
 }
 
@@ -56,4 +57,9 @@ void IconedGroupBox::paintEvent(QPaintEvent * event)
 	painter.drawComplexControl(QStyle::CC_GroupBox, option);
 
 	icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
+}
+
+void IconedGroupBox::setTitleTextPadding(int px)
+{
+	padding = px;
 }

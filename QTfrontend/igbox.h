@@ -30,11 +30,13 @@ public:
 	IconedGroupBox(QWidget * parent = 0);
 
 	void setIcon(const QIcon & icon);
+	void setTitleTextPadding(int px);
 protected:
 	virtual void paintEvent(QPaintEvent * event);
 
 private:
 	QIcon icon;
+	int padding;
 };
 
 #endif // _IGBOX_H
