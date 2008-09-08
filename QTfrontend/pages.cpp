@@ -56,7 +56,6 @@ PageMain::PageMain(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	//pageLayout->setMargin(25);
 	//pageLayout->setColumnStretch(0, 1);
 	//pageLayout->setColumnStretch(1, 2);
 	//pageLayout->setColumnStretch(2, 1);
@@ -271,7 +270,7 @@ PageMultiplayer::PageMultiplayer(QWidget* parent) :
 	BtnStartMPGame = addButton(tr("Start"), pageLayout, 2, 3);
 }
 
-PageOptions::PageOptions(QWidget* parent) : 
+PageOptions::PageOptions(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -542,7 +541,6 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
 	//pageLayout->setSpacing(1);
-	//pageLayout->setMargin(1);
 	pageLayout->setColumnStretch(0, 50);
 	pageLayout->setColumnStretch(1, 50);
 
@@ -600,7 +598,6 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setMargin(25);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
@@ -620,7 +617,6 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setMargin(25);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
@@ -637,7 +633,6 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setMargin(25);
 	
 	pWeapons = new SelWeaponWidget(cDefaultAmmoStore->size() - 10, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
@@ -648,7 +643,7 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
 }
 
-PageInGame::PageInGame(QWidget* parent) : 
+PageInGame::PageInGame(QWidget* parent) :
   AbstractPage(parent)
 {
 	QLabel * label = new QLabel(this);
