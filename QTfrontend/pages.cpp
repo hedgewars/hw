@@ -32,6 +32,7 @@
 #include <QTableView>
 #include <QMessageBox>
 #include <QHeaderView>
+#include <QTabWidget>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -89,15 +90,27 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnMinimumWidth(0, 180);
-	pageLayout->setColumnStretch(1, 100);
-	pageLayout->setColumnMinimumWidth(1, 210);
-	pageLayout->setColumnStretch(2, 75);
-	pageLayout->setColumnMinimumWidth(2, 110);
-	pageLayout->setColumnStretch(3, 75);
-	pageLayout->setColumnMinimumWidth(3, 110);
+	QTabWidget * tbw = new QTabWidget(this);
+	QWidget * page1 = new QWidget();
+	QWidget * page2 = new QWidget();
+	tbw->addTab(page1, tr("General"));
+	tbw->addTab(page2, tr("Advanced"));
+	pageLayout->addWidget(tbw, 0, 0, 1, 3);
+	BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+	BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
 
+	QHBoxLayout * page1Layout = new QHBoxLayout(page1);
+	page1Layout->setAlignment(Qt::AlignTop);
+	QGridLayout * page2Layout = new QGridLayout(page2);
+
+// ====== Page 1 ======
+	QVBoxLayout * vbox1 = new QVBoxLayout();
+	QVBoxLayout * vbox2 = new QVBoxLayout();
+	QVBoxLayout * vbox3 = new QVBoxLayout();
+	page1Layout->addLayout(vbox1);
+	page1Layout->addLayout(vbox2);
+	page1Layout->addLayout(vbox3);
+	
 	GBoxTeam = new QGroupBox(this);
 	GBoxTeam->setTitle(QGroupBox::tr("Team"));
 	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -105,8 +118,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	TeamNameEdit = new QLineEdit(GBoxTeam);
 	TeamNameEdit->setMaxLength(64);
 	GBTLayout->addWidget(TeamNameEdit, 0, 0, 1, 0);
-
-	pageLayout->addWidget(GBoxTeam, 0, 0);
+	vbox1->addWidget(GBoxTeam);
 
 	GBoxHedgehogs = new QGroupBox(this);
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
@@ -127,10 +139,76 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		//HHHats[i]->setMinimumWidth(132);
 		GBHLayout->addWidget(HHHats[i], i, 1);
 	}
-	pageLayout->addWidget(GBoxHedgehogs, 1, 0, 2, 1);
+	vbox1->addWidget(GBoxHedgehogs);
 
-	BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 
+	GBoxGrave = new QGroupBox(this);
+	GBoxGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
+	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
+	CBGrave = new QComboBox(GBoxGrave);
+	CBGrave->setMaxCount(65535);
+	GBGLayout->addWidget(CBGrave, 0, 0, 1, 3);
+	GravePreview = new QLabel(GBoxGrave);
+	GravePreview->setScaledContents(false);
+	GBGLayout->addWidget(GravePreview, 1, 1);
+	vbox2->addWidget(GBoxGrave);
+	
+	//page1Layout->addWidget(new QWidget(), 3, 1, 1, 1);
+
+	GBoxTeamLvl = new QGroupBox(this);
+	GBoxTeamLvl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	GBoxTeamLvl->setTitle(QGroupBox::tr("Team level"));
+	QGridLayout * GBTLLayout = new QGridLayout(GBoxTeamLvl);
+	CBTeamLvl = new QComboBox(GBoxTeamLvl);
+	CBTeamLvl->addItem(QComboBox::tr("Human"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 5"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 4"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 3"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 2"));
+	CBTeamLvl->addItem(QComboBox::tr("Level 1"));
+	CBTeamLvl->setMaxCount(6);
+	GBTLLayout->addWidget(CBTeamLvl, 0, 0, 1, 3);
+	LevelPict = new QLabel(GBoxTeamLvl);
+	LevelPict->setScaledContents(false);
+	LevelPict->setFixedSize(32, 32);
+	GBTLLayout->addWidget(LevelPict, 1, 1);
+	vbox2->addWidget(GBoxTeamLvl);
+
+	GBoxFort = new QGroupBox(this);
+	GBoxFort->setTitle(QGroupBox::tr("Fort"));
+	QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
+	CBFort = new QComboBox(GBoxFort);
+	CBFort->setMaxCount(65535);
+	GBFLayout->addWidget(CBFort, 0, 0);
+	FortPreview = new SquareLabel(GBoxFort);
+	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	FortPreview->setPixmap(QPixmap());
+	GBFLayout->addWidget(FortPreview, 1, 0);
+	vbox3->addWidget(GBoxFort);
+
+	QDir tmpdir;
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Forts");
+	tmpdir.setFilter(QDir::Files);
+
+	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
+	tmpdir.cd("../Graphics/Graves");
+	QStringList list = tmpdir.entryList(QStringList("*.png"));
+	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+	{
+		CBGrave->addItem((*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+	}
+
+	connect(CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));
+	connect(CBTeamLvl, SIGNAL(activated(int)), this, SLOT(CBTeamLvl_activated(int)));
+	connect(CBFort, SIGNAL(activated(const QString &)), this, SLOT(CBFort_activated(const QString &)));
+
+	vbox1->addStretch();
+	vbox2->addStretch();
+//	vbox3->addStretch();
+
+// ====== Page 2 ======
 	GBoxBinds = new QGroupBox(this);
 	GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
 	QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
@@ -145,7 +223,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	BindsBox->addItem(page_WP, QToolBox::tr("Weapon properties"));
 	page_O = new QWidget();
 	BindsBox->addItem(page_O, QToolBox::tr("Other"));
-	pageLayout->addWidget(GBoxBinds, 0, 1, 5, 1);
+	page2Layout->addWidget(GBoxBinds, 0, 0);
 
 	QStringList binds;
 	for(int i = 0; strlen(sdlkeys[i][1]) > 0; i++)
@@ -170,68 +248,6 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		pagelayout->addWidget(new QWidget(BindsBox->widget(widind)), num, 0, 1, 2);
 		widind++;
 	}
-
-	GBoxGrave = new QGroupBox(this);
-	GBoxGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
-	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
-	CBGrave = new QComboBox(GBoxGrave);
-	CBGrave->setMaxCount(65535);
-	GBGLayout->addWidget(CBGrave, 0, 0, 1, 3);
-	GravePreview = new QLabel(GBoxGrave);
-	GravePreview->setScaledContents(false);
-	pageLayout->addWidget(GBoxGrave, 0, 3, 2, 1);
-	GBGLayout->addWidget(GravePreview, 1, 1);
-
-	GBoxTeamLvl = new QGroupBox(this);
-	GBoxTeamLvl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	GBoxTeamLvl->setTitle(QGroupBox::tr("Team level"));
-	QGridLayout * GBTLLayout = new QGridLayout(GBoxTeamLvl);
-	CBTeamLvl = new QComboBox(GBoxTeamLvl);
-	CBTeamLvl->addItem(QComboBox::tr("Human"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 5"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 4"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 3"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 2"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 1"));
-	CBTeamLvl->setMaxCount(6);
-	GBTLLayout->addWidget(CBTeamLvl, 0, 0, 1, 3);
-	LevelPict = new QLabel(GBoxTeamLvl);
-	LevelPict->setScaledContents(false);
-	LevelPict->setFixedSize(32, 32);
-	pageLayout->addWidget(GBoxTeamLvl, 0, 2, 2, 1);
-	GBTLLayout->addWidget(LevelPict, 1, 1);
-
-	GBoxFort = new QGroupBox(this);
-	GBoxFort->setTitle(QGroupBox::tr("Fort"));
-	QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
-	CBFort = new QComboBox(GBoxFort);
-	CBFort->setMaxCount(65535);
-	GBFLayout->addWidget(CBFort, 0, 0);
-	FortPreview = new SquareLabel(GBoxFort);
-	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	FortPreview->setPixmap(QPixmap());
-	GBFLayout->addWidget(FortPreview, 1, 0);
-	pageLayout->addWidget(GBoxFort, 2, 2, 1, 2);
-
-	BtnTeamSave = addButton(":/res/Save.png", pageLayout, 4, 3, true);;
-
-	QDir tmpdir;
-	tmpdir.cd(datadir->absolutePath());
-	tmpdir.cd("Forts");
-	tmpdir.setFilter(QDir::Files);
-
-	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
-	tmpdir.cd("../Graphics/Graves");
-	QStringList list = tmpdir.entryList(QStringList("*.png"));
-	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
-	{
-		CBGrave->addItem((*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
-	}
-
-	connect(CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));
-	connect(CBTeamLvl, SIGNAL(activated(int)), this, SLOT(CBTeamLvl_activated(int)));
-	connect(CBFort, SIGNAL(activated(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 }
 
 void PageEditTeam::CBGrave_activated(const QString & gravename)
@@ -598,9 +614,9 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnStretch(1, 2);
-	pageLayout->setColumnStretch(2, 1);
+//	pageLayout->setColumnStretch(0, 1);
+//	pageLayout->setColumnStretch(1, 2);
+//	pageLayout->setColumnStretch(2, 1);
 	pageLayout->setRowStretch(0, 1);
 	pageLayout->setRowStretch(6, 1);
 

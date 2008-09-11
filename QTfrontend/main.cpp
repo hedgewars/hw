@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 				"border-width: 3px;"
 				"border-radius: 12px;"
 				"border-color: #ffcc00;"
-				"background-color: #0d0544;"
+				//"background-color: #0d0544;"
 			"}"
 			"QToolBox::tab{"
 				"color: #ffcc00;"
@@ -224,6 +224,14 @@ int main(int argc, char *argv[])
 			"QRadioButton{"
 				"color: #ffcc00;"
 				"font: bold 14px;"
+				"}"
+			
+			".QWidget{"
+				"background: transparent;"
+				"}"
+			".QTabWidget{"
+				//"background: transparent;"
+				"background-color: #130f2c;"
 				"}"
 			)
 		);
