@@ -870,11 +870,11 @@ with PHedgehog(Gear^.Hedgehog)^ do
 
 	if HatVisible then
 		if HatVisibility < 1.0 then
-			HatVisibility:= HatVisibility + 0.1
+			HatVisibility:= HatVisibility + 0.2
 		else
 	else
 		if HatVisibility > 0.0 then
-			HatVisibility:= HatVisibility - 0.1;
+			HatVisibility:= HatVisibility - 0.2;
 	
 	if HatVisibility > 0 then
 		DrawTextureF(HatTex,
