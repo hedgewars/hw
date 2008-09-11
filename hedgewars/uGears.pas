@@ -592,7 +592,7 @@ var t: LongInt;
 	amt: TAmmoType;
 	hx, hy, m: LongInt;
 	aAngle, dAngle: real;
-	defaultPos: boolean;
+	defaultPos, HatVisible: boolean;
 begin
 if (Gear^.State and gstHHDeath) <> 0 then
 	begin
@@ -601,6 +601,7 @@ if (Gear^.State and gstHHDeath) <> 0 then
 	end;
 
 defaultPos:= true;
+HatVisible:= false;
 
 if (Gear^.State and gstDrowning) <> 0 then
 	begin
@@ -802,6 +803,17 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				0,
 				4,
 				0);
+			
+			HatVisible:= true;
+			with PHedgehog(Gear^.Hedgehog)^ do
+				if HatVisibility > 0 then
+					DrawTextureF(HatTex,
+						HatVisibility,
+						hwRound(Gear^.X) + 1 + WorldDx,
+						hwRound(Gear^.Y) - 8 + WorldDy,
+						0,
+						hwSign(Gear^.dX),
+						32);
 		end;
 
 		case amt of
@@ -853,13 +865,17 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			(RealTicks div 128 + Gear^.Pos) mod 19,
 			hwSign(Gear^.dX),
 			0);
+		HatVisible:= true;
+		end;
+
+	if HatVisible then
 		if HatVisibility < 1.0 then
-			HatVisibility:= HatVisibility + 0.05;
-		end
+			HatVisibility:= HatVisibility + 0.1
+		else
 	else
 		if HatVisibility > 0.0 then
-			HatVisibility:= HatVisibility - 0.05;
-
+			HatVisibility:= HatVisibility - 0.1;
+	
 	if HatVisibility > 0 then
 		DrawTextureF(HatTex,
 			HatVisibility,
