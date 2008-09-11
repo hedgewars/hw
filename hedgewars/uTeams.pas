@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, GL;
 {$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;
@@ -40,6 +40,7 @@ type PHedgehog = ^THedgehog;
                  AttacksNum: Longword;
                  visStepPos: LongWord;
                  BotLevel  : LongWord; // 0 - Human player
+                 HatVisibility: GLfloat;
                  stats: TStatistics;
                  Hat: String;
                  end;

@@ -30,7 +30,7 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawLand (X, Y: LongInt);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
-procedure DrawTextureF(Texture: PTexture; X, Y, Frame, Dir, Frames: LongInt);
+procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -357,12 +357,13 @@ glVertex2i(X, Texture^.h + Y);
 glEnd()
 end;
 
-procedure DrawTextureF(Texture: PTexture; X, Y, Frame, Dir, Frames: LongInt);
+procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
 var ft, fb: GLfloat;
 	hw: LongInt;
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
+glScalef(Scale, Scale, 1.0);
 
 if Dir < 0 then
 	hw:= - 16

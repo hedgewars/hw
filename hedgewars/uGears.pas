@@ -843,22 +843,33 @@ end else // not gstHHDriven
 		end;
 	end;
 
-
-if defaultPos then
+with PHedgehog(Gear^.Hedgehog)^ do
 	begin
-	DrawRotatedF(sprHHIdle,
-		hwRound(Gear^.X) + 1 + WorldDx,
-		hwRound(Gear^.Y) - 3 + WorldDy,
-		(RealTicks div 128 + Gear^.Pos) mod 19,
-		hwSign(Gear^.dX),
-		0);
-	DrawTextureF(PHedgehog(Gear^.Hedgehog)^.HatTex,
-		hwRound(Gear^.X) + 1 + WorldDx,
-		hwRound(Gear^.Y) - 8 + WorldDy,
-		(RealTicks div 128 + Gear^.Pos) mod 19,
-		hwSign(Gear^.dX),
-		32);
+	if defaultPos then
+		begin
+		DrawRotatedF(sprHHIdle,
+			hwRound(Gear^.X) + 1 + WorldDx,
+			hwRound(Gear^.Y) - 3 + WorldDy,
+			(RealTicks div 128 + Gear^.Pos) mod 19,
+			hwSign(Gear^.dX),
+			0);
+		if HatVisibility < 1.0 then
+			HatVisibility:= HatVisibility + 0.05;
+		end
+	else
+		if HatVisibility > 0.0 then
+			HatVisibility:= HatVisibility - 0.05;
+
+	if HatVisibility > 0 then
+		DrawTextureF(HatTex,
+			HatVisibility,
+			hwRound(Gear^.X) + 1 + WorldDx,
+			hwRound(Gear^.Y) - 8 + WorldDy,
+			(RealTicks div 128 + Gear^.Pos) mod 19,
+			hwSign(Gear^.dX),
+			32);
 	end;
+
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin
