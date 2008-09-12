@@ -31,11 +31,12 @@ procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
-    WindBarWidth: LongInt = 0;
-    bShowAmmoMenu: boolean = false;
-    bSelected: boolean = false;
-    bShowFinger: boolean = false;
-    Frames: Longword = 0;
+	WindBarWidth: LongInt = 0;
+	bShowAmmoMenu: boolean = false;
+	bSelected: boolean = false;
+	bShowFinger: boolean = false;
+	Frames: Longword = 0;
+	WaterColor, DeepWaterColor: TSDL_Color;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
@@ -51,10 +52,10 @@ type TCaptionStr = record
                    end;
 
 var cWaterSprCount: LongInt;
-    Captions: array[TCapGroup] of TCaptionStr;
-    AMxShift, SlotsNum: LongInt;
-    tmpSurface: PSDL_Surface;
-    fpsTexture: PTexture = nil;
+	Captions: array[TCapGroup] of TCaptionStr;
+	AMxShift, SlotsNum: LongInt;
+	tmpSurface: PSDL_Surface;
+	fpsTexture: PTexture = nil;
 
 procedure InitWorld;
 begin
@@ -208,14 +209,13 @@ if r.y < cScreenHeight then
 
    glDisable(GL_TEXTURE_2D);
    glBegin(GL_QUADS);
-    glColor3ub($54, $5C, $9D); // water color
+    glColor3ub(WaterColor.r, WaterColor.g, WaterColor. b); // water color
     glVertex2i(0, r.y);
     glVertex2i(cScreenWidth, r.y);
-    glColor3ub($34, $3C, $7D); // deep water color
+    glColor3ub(DeepWaterColor.r, DeepWaterColor.g, DeepWaterColor. b); // deep water color
     glVertex2i(cScreenWidth, cScreenHeight);
     glVertex2i(0, cScreenHeight);
    glEnd();
-
    glColor4f(1, 1, 1, 1); // disable coloring
    glEnable(GL_TEXTURE_2D)
    end;

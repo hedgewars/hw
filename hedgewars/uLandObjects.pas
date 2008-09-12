@@ -27,7 +27,7 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound;
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, GL, uSound, uWorld;
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
@@ -357,6 +357,9 @@ Reset(f);
 // read sky and explosion border colors
 Readln(f, c1.r, c1.g, c1. b);
 Readln(f, c2.r, c2.g, c2. b);
+// read water gradient colors
+Readln(f, WaterColor.r, WaterColor.g, WaterColor. b);
+Readln(f, DeepWaterColor.r, DeepWaterColor.g, DeepWaterColor. b);
 
 glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
 cExplosionBorderColor:= c2.value or $FF000000;
