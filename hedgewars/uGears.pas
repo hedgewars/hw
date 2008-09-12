@@ -877,13 +877,22 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			HatVisibility:= HatVisibility - 0.2;
 	
 	if HatVisibility > 0 then
-		DrawTextureF(HatTex,
-			HatVisibility,
-			hwRound(Gear^.X) + 1 + WorldDx,
-			hwRound(Gear^.Y) - 8 + WorldDy,
-			(RealTicks div 128 + Gear^.Pos) mod 19,
-			hwSign(Gear^.dX),
-			32);
+		if DefaultPos then
+			DrawTextureF(HatTex,
+				HatVisibility,
+				hwRound(Gear^.X) + 1 + WorldDx,
+				hwRound(Gear^.Y) - 8 + WorldDy,
+				(RealTicks div 128 + Gear^.Pos) mod 19,
+				hwSign(Gear^.dX),
+				32)
+		else
+			DrawTextureF(HatTex,
+				HatVisibility,
+				hwRound(Gear^.X) + 1 + WorldDx,
+				hwRound(Gear^.Y) - 8 + WorldDy,
+				0,
+				hwSign(Gear^.dX),
+				32);
 	end;
 
 
