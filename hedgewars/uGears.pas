@@ -740,7 +740,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			0,
 			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 			0);
-			defaultPos:= false
+		defaultPos:= false;
+		HatVisible:= true
 		end
 	else
 
