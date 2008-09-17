@@ -1659,3 +1659,10 @@ FollowGear:= Gear;
 Gear^.doStep:= @doStepCakeFall
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepSeduction(Gear: PGear);
+begin
+AllInactive:= false;
+DeleteGear(Gear);
+
+end;

@@ -166,6 +166,7 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
                                  PlaySound(sndLaugh, false)
                                  end;
+                    amSeduction: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtSeduction, 0, xx, yy);
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);

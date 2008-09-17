@@ -24,35 +24,35 @@ const AllInactive: boolean = false;
       PrvInactive: boolean = false;
 
 type PGear = ^TGear;
-     TGearStepProcedure = procedure (Gear: PGear);
-     TGear = record
-             NextGear, PrevGear: PGear;
-             Active: Boolean;
-             Ammo : PAmmo;
-             State : Longword;
-             X : hwFloat;
-             Y : hwFloat;
-             dX: hwFloat;
-             dY: hwFloat;
-             Kind: TGearType;
-             Pos: Longword;
-             doStep: TGearStepProcedure;
-             Radius: LongInt;
-             Angle, Power : Longword;
-             DirAngle: real;
-             Timer : LongWord;
-             Elasticity: hwFloat;
-             Friction  : hwFloat;
-             Message, MsgParam : Longword;
-             Hedgehog: pointer;
-             Health, Damage: LongInt;
-             CollisionIndex: LongInt;
-             Tag: LongInt;
-             Tex: PTexture;
-             Z: Longword;
-             IntersectGear: PGear;
-             TriggerId: Longword;
-             end;
+	TGearStepProcedure = procedure (Gear: PGear);
+	TGear = record
+			NextGear, PrevGear: PGear;
+			Active: Boolean;
+			Ammo : PAmmo;
+			State : Longword;
+			X : hwFloat;
+			Y : hwFloat;
+			dX: hwFloat;
+			dY: hwFloat;
+			Kind: TGearType;
+			Pos: Longword;
+			doStep: TGearStepProcedure;
+			Radius: LongInt;
+			Angle, Power : Longword;
+			DirAngle: real;
+			Timer : LongWord;
+			Elasticity: hwFloat;
+			Friction  : hwFloat;
+			Message, MsgParam : Longword;
+			Hedgehog: pointer;
+			Health, Damage: LongInt;
+			CollisionIndex: LongInt;
+			Tag: LongInt;
+			Tex: PTexture;
+			Z: Longword;
+			IntersectGear: PGear;
+			TriggerId: Longword;
+			end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
@@ -71,8 +71,8 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-     uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
-     uStats, uVisualGears;
+	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
+	uStats, uVisualGears;
 
 const MAXROPEPOINTS = 384;
 var RopePoints: record
@@ -102,44 +102,45 @@ procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear); forward;
 {$INCLUDE HHHandlers.inc}
 
 const doStepHandlers: array[TGearType] of TGearStepProcedure = (
-                                                               @doStepBomb,
-                                                               @doStepHedgehog,
-                                                               @doStepGrenade,
-                                                               @doStepHealthTag,
-                                                               @doStepGrave,
-                                                               @doStepUFO,
-                                                               @doStepShotgunShot,
-                                                               @doStepPickHammer,
-                                                               @doStepRope,
-                                                               @doStepSmokeTrace,
-                                                               @doStepExplosion,
-                                                               @doStepMine,
-                                                               @doStepCase,
-                                                               @doStepDEagleShot,
-                                                               @doStepDynamite,
-                                                               @doStepTeamHealthSorter,
-                                                               @doStepBomb,
-                                                               @doStepCluster,
-                                                               @doStepShover,
-                                                               @doStepFlame,
-                                                               @doStepFirePunch,
-                                                               @doStepActionTimer,
-                                                               @doStepActionTimer,
-                                                               @doStepActionTimer,
-                                                               @doStepParachute,
-                                                               @doStepAirAttack,
-                                                               @doStepAirBomb,
-                                                               @doStepBlowTorch,
-                                                               @doStepGirder,
-                                                               @doStepTeleport,
-                                                               @doStepHealthTag,
-                                                               @doStepSwitcher,
-                                                               @doStepCase,
-                                                               @doStepMortar,
-                                                               @doStepWhip,
-                                                               @doStepKamikaze,
-                                                               @doStepCake
-                                                               );
+			@doStepBomb,
+			@doStepHedgehog,
+			@doStepGrenade,
+			@doStepHealthTag,
+			@doStepGrave,
+			@doStepUFO,
+			@doStepShotgunShot,
+			@doStepPickHammer,
+			@doStepRope,
+			@doStepSmokeTrace,
+			@doStepExplosion,
+			@doStepMine,
+			@doStepCase,
+			@doStepDEagleShot,
+			@doStepDynamite,
+			@doStepTeamHealthSorter,
+			@doStepBomb,
+			@doStepCluster,
+			@doStepShover,
+			@doStepFlame,
+			@doStepFirePunch,
+			@doStepActionTimer,
+			@doStepActionTimer,
+			@doStepActionTimer,
+			@doStepParachute,
+			@doStepAirAttack,
+			@doStepAirBomb,
+			@doStepBlowTorch,
+			@doStepGirder,
+			@doStepTeleport,
+			@doStepHealthTag,
+			@doStepSwitcher,
+			@doStepCase,
+			@doStepMortar,
+			@doStepWhip,
+			@doStepKamikaze,
+			@doStepCake,
+			@doStepSeduction
+			);
 
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
