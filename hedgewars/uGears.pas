@@ -140,7 +140,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepKamikaze,
 			@doStepCake,
 			@doStepSeduction,
-			@doStepBomb
+			@doStepBomb,
+			@doStepCluster
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -1084,7 +1085,9 @@ while Gear<>nil do
           gtCake: if Gear^.Pos = 6 then
                      DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle + hwSign(Gear^.dX) * 90)
                   else
-                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), 0)
+                     DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), 0);
+      gtWatermelon: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 0, Gear^.DirAngle);
+      gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
               end;
       Gear:= Gear^.NextGear
       end;

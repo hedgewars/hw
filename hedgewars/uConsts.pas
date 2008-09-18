@@ -47,7 +47,7 @@ type
 			sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
 			sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
-			sprCakeWalk, sprCakeDown, sprAMAmmosBW);
+			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -56,7 +56,7 @@ type
 			gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
 			gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon);
+			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
@@ -423,7 +423,9 @@ const
 			(FileName:  'Cake_down'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 64; saveSurf: false),// sprCakeDown
 			(FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false) // sprAMAmmosBW
+			Width:  32; Height: 32; saveSurf: false),// sprAMAmmosBW
+			(FileName: 'Watermelon'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  32; Height: 32; saveSurf: false) // sprWatermelon
 			);
 
 	Wavez: array [TWave] of record

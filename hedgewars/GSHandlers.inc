@@ -145,8 +145,8 @@ if Gear^.Timer = 0 then
 				for i:= 0 to 5 do
 					begin
 					dX:= rndSign(GetRandom * _0_1);
-					dY:= (GetRandom - _3) * _0_08;
-					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 75);
+					dY:= (GetRandom - _2) * _0_2;
+					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
 					end
 				end
 		end;
@@ -170,8 +170,12 @@ if (Gear^.State and gstCollision) <> 0 then
 	DeleteGear(Gear);
 	exit
 	end;
-if (GameTicks and $1F) = 0 then
-	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
+
+if Gear^.Kind = gtMelonPiece then
+	CalcRotationDirAngle(Gear)
+else
+	if (GameTicks and $1F) = 0 then
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
