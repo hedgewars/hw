@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="it_IT">
+<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -118,12 +119,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="96"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Generale</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="97"/>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
+        <translation>Avanzato</translation>
     </message>
 </context>
 <context>
@@ -484,7 +485,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
