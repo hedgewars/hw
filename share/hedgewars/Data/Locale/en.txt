@@ -11,7 +11,7 @@
 00:08=Mine
 00:09=DEagle
 00:10=Dynamite
-00:11=BaseballBat
+00:11=Baseball Bat
 00:12=Fire Punch
 00:13=sec
 00:14=Parachute
@@ -26,8 +26,8 @@
 00:23=Kamikaze
 00:24=Cake
 00:25=Seduction
-00:26=Watermelon bomb
-00:27=Hellish Bomb
+00:26=Watermelon Bomb
+00:27=Hellish hand-grenade
 
 01:00=Let's fight!
 01:01=Round draw

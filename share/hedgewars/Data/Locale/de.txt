@@ -27,7 +27,7 @@
 00:24=Cake
 00:25=Seduction
 00:26=Watermelon bomb
-00:27=Hellish Bomb
+00:27=Hellish hand-grenade
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden

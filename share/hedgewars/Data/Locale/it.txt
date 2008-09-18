@@ -27,7 +27,7 @@
 00:24=Torta
 00:25=Seduzione
 00:26=Bomba anguria
-00:27=Hellish Bomb
+00:27=Hellish hand-grenade
 
 01:00=Combattiamo!
 01:01=Round in parità
