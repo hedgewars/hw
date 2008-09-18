@@ -19,14 +19,15 @@
 unit uLocale;
 interface
 type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
-                   sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-                   sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
-                   sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
-                   sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
-                   sidKamikaze, sidCake, sidSeduction, sidWatermelon);
+			sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
+			sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
+			sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
+			sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
+			sidKamikaze, sidCake, sidSeduction, sidWatermelon,
+			sidHellishBomb);
 
-     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-                  sidConfirm, sidSuddenDeath);
+	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+			sidConfirm, sidSuddenDeath);
 
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
@@ -47,23 +48,23 @@ Assign(f, FileName);
 reset(f);
 TryDo(IOResult = 0, 'Cannot load locale "' + FileName + '"', true);
 while not eof(f) do
-      begin
-      readln(f, s);
-      if Length(s) = 0 then continue;
-      if s[1] = ';' then continue;
-      TryDo(Length(s) > 6, 'Load locale: empty string', true);
-      val(s[1]+s[2], a, c);
-      TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
-      TryDo(s[3] = ':', 'Load locale: ":" expected', true);
-      val(s[4]+s[5], b, c);
-      TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
-      TryDo(s[6] = '=', 'Load locale: "=" expected', true);
-      Delete(s, 1, 6);
-      case a of
-           0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
-           1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
-           end;
-      end;
+	begin
+	readln(f, s);
+	if Length(s) = 0 then continue;
+	if s[1] = ';' then continue;
+	TryDo(Length(s) > 6, 'Load locale: empty string', true);
+	val(s[1]+s[2], a, c);
+	TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
+	TryDo(s[3] = ':', 'Load locale: ":" expected', true);
+	val(s[4]+s[5], b, c);
+	TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
+	TryDo(s[6] = '=', 'Load locale: "=" expected', true);
+	Delete(s, 1, 6);
+	case a of
+		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
+		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
+		end;
+	end;
 Close(f)
 {$I+}
 end;

@@ -29,7 +29,7 @@ QDir * datadir = new QDir();
 QStringList * Themes;
 QStringList * mapList;
 
-QString * cDefaultAmmoStore = new QString("eammstore 93919294221991210322351111");
+QString * cDefaultAmmoStore = new QString("eammstore 939192942219912103223511111");
 
 QColor * color1 = new QColor(  0, 255, 255);
 QColor * color2 = new QColor(255, 127, 127);

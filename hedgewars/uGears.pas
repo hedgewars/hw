@@ -141,7 +141,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepCake,
 			@doStepSeduction,
 			@doStepBomb,
-			@doStepCluster
+			@doStepCluster,
+			@doStepBomb,
+			@doStepSmokeTrace
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -245,7 +247,8 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 10;
                 Result^.Timer:= 4000
                 end;
-  gtSmokeTrace: begin
+  gtSmokeTrace,
+   gtEvilTrace: begin
                 Result^.X:= Result^.X - _16;
                 Result^.Y:= Result^.Y - _16;
                 Result^.State:= 8
@@ -326,6 +329,11 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 7;
                 Result^.Z:= cOnHHZ;
                 if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
+                end;
+ gtHellishBomb: begin
+                Result^.Radius:= 4;
+                Result^.Elasticity:= _0_5;
+                Result^.Friction:= _0_96;
                 end;
      end;
 InsertGearToList(Result);
@@ -1088,7 +1096,9 @@ while Gear<>nil do
                      DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), 0);
       gtWatermelon: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 0, Gear^.DirAngle);
       gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
-              end;
+     gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+      gtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+         end;
       Gear:= Gear^.NextGear
       end;
 end;

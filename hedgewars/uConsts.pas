@@ -47,7 +47,8 @@ type
 			sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
 			sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
-			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon);
+			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
+			sprEvilTrace, sprHellishBomb);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -56,7 +57,8 @@ type
 			gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
 			gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece);
+			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece,
+			gtHellishBomb, gtEvilTrace);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
@@ -75,7 +77,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon);
+			amSeduction, amWatermelon, amHellishBomb);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -425,7 +427,11 @@ const
 			(FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprAMAmmosBW
 			(FileName: 'Watermelon'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false) // sprWatermelon
+			Width:  32; Height: 32; saveSurf: false),// sprWatermelon
+			(FileName:  'EvilTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  32; Height: 32; saveSurf: false),// sprEvilTrace
+			(FileName:'HellishBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  16; Height: 16; saveSurf: false) // sprHellishBomb
 			);
 
 	Wavez: array [TWave] of record
@@ -1006,6 +1012,25 @@ const
 					Pos: 0;
 					AmmoType: amWatermelon);
 			Slot: 1;
+			TimeAfterTurn: 3000;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidHellishBomb;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz:  ammoprop_Power or
+							ammoprop_AltUse;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 5000;
+					Pos: 0;
+					AmmoType: amHellishBomb);
+			Slot: 4;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
 			maxAngle: 0;

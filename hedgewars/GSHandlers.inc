@@ -125,7 +125,9 @@ var i: LongInt;
     dX, dY: hwFloat;
 begin
 AllInactive:= false;
+
 doStepFallingGear(Gear);
+
 dec(Gear^.Timer);
 if Gear^.Timer = 0 then
 	begin
@@ -148,12 +150,20 @@ if Gear^.Timer = 0 then
 					dY:= (GetRandom - _2) * _0_2;
 					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
 					end
-				end
+				end;
+		gtHellishBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 90, EXPLAutoSound);
 		end;
 	DeleteGear(Gear);
 	exit
 	end;
+
 CalcRotationDirAngle(Gear);
+
+if Gear^.Kind = gtHellishBomb then
+	if (GameTicks and $3F) = 0 then
+		if (Gear^.State and gstCollision) = 0 then
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0);
+
 if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then
 	if (hwAbs(Gear^.dX) > _0_1) or
 	   (hwAbs(Gear^.dY) > _0_1) then

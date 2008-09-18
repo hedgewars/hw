@@ -168,6 +168,7 @@ with Gear^,
                                  end;
                     amSeduction: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtSeduction, 0, xx, yy, 0);
                    amWatermelon: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
+                  amHellishBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 5000);
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
