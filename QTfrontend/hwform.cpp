@@ -548,7 +548,7 @@ void HWForm::GameStateChanged(GameState gameState)
 {
 	switch(gameState) {
 		case gsStarted: {
-			sdli.StopMusic();
+			Music(false);
 			GoToPage(ID_PAGE_INGAME);
 			ui.pageGameStats->labelGameStats->setText("");
 			if (pRegisterServer)
@@ -560,7 +560,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		}
 		case gsFinished: {
 			GoBack();
-			sdli.StartMusic();
+			Music(ui.pageOptions->CBEnableMusic->isChecked());
 			GoToPage(ID_PAGE_GAMESTATS);
 			break;
 		}
@@ -568,7 +568,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			quint8 id = ui.Pages->currentIndex();
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
-				sdli.StartMusic();
+				Music(ui.pageOptions->CBEnableMusic->isChecked());
 			}
 		};
 	}
