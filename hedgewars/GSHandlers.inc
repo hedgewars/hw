@@ -137,7 +137,16 @@ if Gear^.Timer = 0 then
 					begin
 					dX:= rndSign(GetRandom * _0_1);
 					dY:= (GetRandom - _3) * _0_08;
-					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 0);
+					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
+					end
+				end;
+		gtWatermelon: begin
+				doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
+				for i:= 0 to 5 do
+					begin
+					dX:= rndSign(GetRandom * _0_1);
+					dY:= (GetRandom - _3) * _0_08;
+					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 75);
 					end
 				end
 		end;
@@ -157,7 +166,7 @@ AllInactive:= false;
 doStepFallingGear(Gear);
 if (Gear^.State and gstCollision) <> 0 then
 	begin
-	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Timer, EXPLAutoSound);
 	DeleteGear(Gear);
 	exit
 	end;

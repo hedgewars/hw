@@ -26,6 +26,7 @@
 00:23=Kamikaze (självmord)
 00:24=Tårta
 00:25=Seduction
+00:26=Watermelon bomb
 
 01:00=Nu kör vi!
 01:01=Oavgjort

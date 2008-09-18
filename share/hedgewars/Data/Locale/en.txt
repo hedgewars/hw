@@ -26,6 +26,7 @@
 00:23=Kamikaze
 00:24=Cake
 00:25=Seduction
+00:26=Watermelon bomb
 
 01:00=Let's fight!
 01:01=Round draw

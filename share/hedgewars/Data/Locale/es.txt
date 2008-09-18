@@ -26,6 +26,7 @@
 00:23=Kamikaze
 00:24=Tarta
 00:25=Seducción
+00:26=Watermelon bomb
 
 01:00=Luchad!
 01:01=Empate

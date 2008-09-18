@@ -26,6 +26,7 @@
 00:23=Attacco Kamikaze
 00:24=Torta
 00:25=Seduzione
+00:26=Watermelon bomb
 
 01:00=Combattiamo!
 01:01=Round in parità

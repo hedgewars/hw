@@ -139,7 +139,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepWhip,
 			@doStepKamikaze,
 			@doStepCake,
-			@doStepSeduction
+			@doStepSeduction,
+			@doStepBomb
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -206,6 +207,11 @@ case Kind of
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
                 Result^.Friction:= _0_96;
+                end;
+  gtWatermelon: begin
+                Result^.Radius:= 4;
+                Result^.Elasticity:= _0_8;
+                Result^.Friction:= _0_995;
                 end;
     gtHedgehog: begin
                 Result^.Radius:= cHHRadius;
@@ -315,7 +321,7 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 20
                 end;
         gtCake: begin
-                Result^.Health:= 4096;
+                Result^.Health:= 2048;
                 Result^.Radius:= 7;
                 Result^.Z:= cOnHHZ;
                 if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3

@@ -56,7 +56,7 @@ type
 			gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
 			gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-			gtWhip, gtKamikaze, gtCake, gtSeduction);
+			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 
@@ -75,7 +75,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction);
+			amSeduction, amWatermelon);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -814,7 +814,7 @@ const
 			PosSprite: sprAmAirplane),
 			(NameId: sidMineStrike;
 			NameTex: nil;
-			Probability: 400;
+			Probability: 300;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
@@ -853,7 +853,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidGirder;
 			NameTex: nil;
-			Probability: 400;
+			Probability: 300;
 			NumberInCase: 3;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
@@ -874,7 +874,7 @@ const
 			PosSprite: sprAmGirder),
 			(NameId: sidTeleport;
 			NameTex: nil;
-			Probability: 400;
+			Probability: 300;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or
 							ammoprop_NoCrosshair or
@@ -985,6 +985,26 @@ const
 					AmmoType: amSeduction);
 			Slot: 2;
 			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidWatermelon;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_Timerable or
+							ammoprop_Power or
+							ammoprop_AltUse;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 3000;
+					Pos: 0;
+					AmmoType: amWatermelon);
+			Slot: 1;
+			TimeAfterTurn: 3000;
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: true;
