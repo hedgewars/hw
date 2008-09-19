@@ -371,21 +371,29 @@ ReadLn(f, cCloudsNumber);
 
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
-    begin
-    Readln(f, s); // filename
-    with ThemeObjects.objs[i] do
-         begin
-         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
-         Width:= Surf^.w;
-         Height:= Surf^.h;
-         with inland do Read(f, x, y, w, h);
-         Read(f, rectcnt);
-         for ii:= 1 to rectcnt do
-             with outland[ii] do Read(f, x, y, w, h);
-         Maxcnt:= 3;
-         ReadLn(f)
-         end;
-    end;
+	begin
+	Readln(f, s); // filename
+	with ThemeObjects.objs[i] do
+			begin
+			Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
+			Width:= Surf^.w;
+			Height:= Surf^.h;
+			with inland do
+				begin
+				Read(f, x, y, w, h);
+				TryDo((x + w <= Width) and (y + h <=Height), 'Object''s rectangle exceeds image', true)
+				end;
+			Read(f, rectcnt);
+			for ii:= 1 to rectcnt do
+				with outland[ii] do
+					begin
+					Read(f, x, y, w, h);
+					TryDo((x + w <= Width) and (y + h <=Height), 'Object''s rectangle exceeds image', true);
+					end;
+			Maxcnt:= 3;
+			ReadLn(f)
+			end;
+	end;
 
 // sprays
 Readln(f, SprayObjects.Count);
