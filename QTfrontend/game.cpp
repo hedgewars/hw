@@ -186,7 +186,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 'E': {
 			int size = msg.size();
-			emit ErrorMessage(QString().append(msg.mid(2)).left(size - 4));
+			emit ErrorMessage(QString("Last two engine messages:\n") + QString().append(msg.mid(2)).left(size - 4));
 			return;
 		}
 		case 'K': {

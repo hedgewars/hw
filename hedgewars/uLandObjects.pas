@@ -347,6 +347,13 @@ var s: string;
     i, ii: LongInt;
     vobcount: Longword;
     c1, c2: TSDL_Color;
+
+	procedure CheckRect(Width, Height, x, y, w, h: LongWord);
+	begin
+	if (x + w > Width) then OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
+	if (y + h > Height) then OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+	end;
+
 begin
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
@@ -381,14 +388,14 @@ for i:= 0 to Pred(ThemeObjects.Count) do
 			with inland do
 				begin
 				Read(f, x, y, w, h);
-				TryDo((x + w <= Width) and (y + h <=Height), 'Object''s rectangle exceeds image', true)
+				CheckRect(Width, Height, x, y, w, h)
 				end;
 			Read(f, rectcnt);
 			for ii:= 1 to rectcnt do
 				with outland[ii] do
 					begin
 					Read(f, x, y, w, h);
-					TryDo((x + w <= Width) and (y + h <=Height), 'Object''s rectangle exceeds image', true);
+					CheckRect(Width, Height, x, y, w, h)
 					end;
 			Maxcnt:= 3;
 			ReadLn(f)

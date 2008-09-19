@@ -206,7 +206,7 @@ begin
 i:= (CurrLine + cLinesCount - 2) mod cLinesCount;
 Result:= ConsoleLines[i].s;
 
-//Result:= Result + #10;
+Result:= Result + #10;
 
 i:= (CurrLine + cLinesCount - 1) mod cLinesCount;
 Result:= Result + ConsoleLines[i].s;
