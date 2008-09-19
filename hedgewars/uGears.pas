@@ -197,6 +197,7 @@ Result^.dY:= dY;
 Result^.doStep:= doStepHandlers[Kind];
 Result^.CollisionIndex:= -1;
 Result^.Timer:= Timer;
+Result^.Z:= cUsualZ;
 
 if CurrentTeam <> nil then
    begin
@@ -251,7 +252,8 @@ gtAmmo_Grenade: begin
    gtEvilTrace: begin
                 Result^.X:= Result^.X - _16;
                 Result^.Y:= Result^.Y - _16;
-                Result^.State:= 8
+                Result^.State:= 8;
+                Result^.Z:= cSmokeZ
                 end;
         gtRope: begin
                 Result^.Radius:= 3;

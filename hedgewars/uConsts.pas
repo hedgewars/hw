@@ -152,6 +152,8 @@ const
 	cHHRadius = 9;
 	cHHStepTicks = 29;
 
+	cUsualZ = 500;
+	cSmokeZ = 499;
 	cHHZ = 1000;
 	cCurrHHZ = Succ(cHHZ);
 	cOnHHZ = 2000;
