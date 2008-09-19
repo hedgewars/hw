@@ -160,14 +160,25 @@ if Gear^.Timer = 0 then
 CalcRotationDirAngle(Gear);
 
 if Gear^.Kind = gtHellishBomb then
+	begin
+	if Gear^.Timer = 3000 then PlaySound(sndHellish, false);
+
 	if (GameTicks and $3F) = 0 then
 		if (Gear^.State and gstCollision) = 0 then
 			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0);
+	end;
 
 if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then
 	if (hwAbs(Gear^.dX) > _0_1) or
 	   (hwAbs(Gear^.dY) > _0_1) then
 		PlaySound(sndGrenadeImpact, false)
+end;
+
+procedure doStepWatermelon(Gear: PGear);
+begin
+AllInactive:= false;
+PlaySound(sndMelon, false);
+Gear^.doStep:= @doStepBomb
 end;
 
 procedure doStepCluster(Gear: PGear);
@@ -1149,6 +1160,8 @@ Gear^.dX:= SignAs(_0_45, Gear^.dX);
 Gear^.dY:= - _0_9;
 Gear^.doStep:= @doStepFirePunchWork;
 DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
+
+PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), false)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

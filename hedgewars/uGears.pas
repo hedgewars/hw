@@ -140,7 +140,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepKamikaze,
 			@doStepCake,
 			@doStepSeduction,
-			@doStepBomb,
+			@doStepWatermelon,
 			@doStepCluster,
 			@doStepBomb,
 			@doStepSmokeTrace

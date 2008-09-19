@@ -71,7 +71,9 @@ type
 			sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
 			sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
 			sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
-			sndCake, sndOw1, sndOw4);
+			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
+			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
+			sndMelon, sndHellish);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -490,7 +492,15 @@ const
 			(FileName:      'Kamikaze.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndKamikaze
 			(FileName:         'cake2.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndCake
 			(FileName:           'Ow1.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndOw1
-			(FileName:           'Ow4.ogg'; Path: ptVoices; id: nil; lastChan: 0) // sndOw4
+			(FileName:           'Ow4.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndOw4
+			(FileName:    'Firepunch1.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch1
+			(FileName:    'Firepunch2.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch2
+			(FileName:    'Firepunch3.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch3
+			(FileName:    'Firepunch4.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch4
+			(FileName:    'Firepunch5.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch5
+			(FileName:    'Firepunch6.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch6
+			(FileName:         'Melon.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMelon
+			(FileName:       'Hellish.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndHellish
 			);
 
 	Ammoz: array [TAmmoType] of record
