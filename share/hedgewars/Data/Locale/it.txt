@@ -1,7 +1,7 @@
 ; Italian locale
 
 00:00=Granata
-00:01=Granata a grappolo
+00:01=Bomba a grappolo
 00:02=Bazooka
 00:03=UFO
 00:04=Fucile a Pompa
@@ -21,13 +21,13 @@
 00:18=Trave
 00:19=Teletrasporto
 00:20=Cambia Hedgehog
-00:21=Granata a grappolo
+00:21=Mortaio
 00:22=Frusta
 00:23=Attacco Kamikaze
 00:24=Torta
 00:25=Seduzione
 00:26=Bomba anguria
-00:27=Hellish hand-grenade
+00:27=Granata a mano infernale
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -36,6 +36,7 @@
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
 01:06=Sudden death!
+
 
 
 
