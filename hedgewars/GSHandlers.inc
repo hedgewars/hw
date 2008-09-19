@@ -1430,7 +1430,7 @@ if (Gear^.State and gstCollision) <> 0 then
 		begin
 		dX:= Gear^.dX + (GetRandom - _0_5) * _0_03;
 		dY:= Gear^.dY + (GetRandom - _0_5) * _0_03;
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 0);
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
 		end;
 	
 	DeleteGear(Gear);
