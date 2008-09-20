@@ -952,8 +952,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
 					DrawRotatedTex(Team^.CrosshairTex,
 							12, 12,
-							Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * m * Sin(Gear^.Angle*pi/cMaxAngle) * 60) + WorldDx,
-							Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle) * 60) + WorldDy, 0,
+							Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * m * Sin(Gear^.Angle*pi/cMaxAngle) * 80) + WorldDx,
+							Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle) * 80) + WorldDy, 0,
 							hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle)
 					end
 			end
