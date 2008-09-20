@@ -135,6 +135,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		
 		HHHats[i] = new QComboBox(GBoxHedgehogs);
 		HHHats[i]->setModel(hatsModel);
+		HHHats[i]->setIconSize(QSize(32, 37));
+		//HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		//HHHats[i]->setModelColumn(1);
 		//HHHats[i]->setMinimumWidth(132);
 		GBHLayout->addWidget(HHHats[i], i, 1);
