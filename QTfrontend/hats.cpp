@@ -18,12 +18,15 @@
 
 #include <QDir>
 #include <QPixmap>
+#include <QPainter>
 #include "hwconsts.h"
 #include "hats.h"
 
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
+	QPixmap hhpix = QPixmap(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
+
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Graphics");
@@ -31,14 +34,23 @@ HatsModel::HatsModel(QObject* parent) :
 
 	tmpdir.setFilter(QDir::Files);
 
+
 	QStringList hatsList = tmpdir.entryList(QStringList("*.png"));
 	for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
 	{
 		QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
 		QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/" + str + ".png");
-		hats.append(qMakePair(str, QIcon(pix.copy(0, 0, 32, 32))));
-	}
 
+		QPixmap tmppix(32, 37);
+		tmppix.fill(QColor(Qt::transparent));
+		
+		QPainter painter(&tmppix);
+		painter.drawPixmap(QPoint(0, 5), hhpix);
+		painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+		painter.end();
+
+		hats.append(qMakePair(str, QIcon(tmppix)));
+	}
 }
 
 QVariant HatsModel::headerData(int section,
