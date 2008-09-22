@@ -1696,9 +1696,34 @@ Gear^.doStep:= @doStepCakeFall
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepSeduction(Gear: PGear);
+procedure doStepSeductionWork(Gear: PGear);
+var x, y: LongInt;
 begin
 AllInactive:= false;
-DeleteGear(Gear);
 
+Gear^.X:= Gear^.X + Gear^.dX;
+Gear^.Y:= Gear^.Y + Gear^.dY;
+x:= hwRound(Gear^.X);
+y:= hwRound(Gear^.Y);
+
+if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0) then
+	if (Land[y, x] <> 0) then
+		begin
+		Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+		Gear^.dY.isNegative:= not Gear^.dY.isNegative;
+		Gear^.dY:= Gear^.dY - _0_2;
+		AmmoShove(Gear, 0, 40);
+		DeleteGear(Gear)
+		end
+	else
+else
+	DeleteGear(Gear)
+end;
+
+procedure doStepSeduction(Gear: PGear);
+var x, y: LongInt;
+begin
+AllInactive:= false;
+DeleteCI(PHedgehog(Gear^.Hedgehog)^.Gear);
+Gear^.doStep:= @doStepSeductionWork
 end;

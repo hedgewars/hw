@@ -48,7 +48,7 @@ type
 			sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
-			sprEvilTrace, sprHellishBomb);
+			sprEvilTrace, sprHellishBomb, sprSeduction);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -435,7 +435,9 @@ const
 			(FileName:  'EvilTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprEvilTrace
 			(FileName:'HellishBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false) // sprHellishBomb
+			Width:  16; Height: 16; saveSurf: false),// sprHellishBomb
+			(FileName:  'Seduction'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  16; Height: 16; saveSurf: false) // sprSeduction
 			);
 
 	Wavez: array [TWave] of record
@@ -995,9 +997,7 @@ const
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_NoCrosshair or
-							ammoprop_DontHold;
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;
