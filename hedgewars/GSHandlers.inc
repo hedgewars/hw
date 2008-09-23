@@ -1711,19 +1711,37 @@ if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0) then
 		begin
 		Gear^.dX.isNegative:= not Gear^.dX.isNegative;
 		Gear^.dY.isNegative:= not Gear^.dY.isNegative;
-		Gear^.dY:= Gear^.dY - _0_2;
+		Gear^.dX:= Gear^.dX * _1_5;
+		Gear^.dY:= Gear^.dY * _1_5 - _0_3;
 		AmmoShove(Gear, 0, 40);
+		AfterAttack;
 		DeleteGear(Gear)
 		end
 	else
 else
+	begin
+	AfterAttack;
 	DeleteGear(Gear)
+	end
+end;
+
+procedure doStepSeductionWear(Gear: PGear);
+begin
+AllInactive:= false;
+inc(Gear^.Timer);
+if Gear^.Timer > 250 then
+	begin
+	Gear^.Timer:= 0;
+	inc(Gear^.Pos)
+	end;
+	
+if Gear^.Pos = 8 then
+	Gear^.doStep:= @doStepSeductionWork
 end;
 
 procedure doStepSeduction(Gear: PGear);
-var x, y: LongInt;
 begin
 AllInactive:= false;
 DeleteCI(PHedgehog(Gear^.Hedgehog)^.Gear);
-Gear^.doStep:= @doStepSeductionWork
+Gear^.doStep:= @doStepSeductionWear
 end;

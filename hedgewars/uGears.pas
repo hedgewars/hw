@@ -702,22 +702,41 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				defaultPos:= false
 				end;
 			gtKamikaze: begin
-						if CurAmmoGear^.Pos = 0 then
-							DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-									hwSign(Gear^.dX),
-									1,
-									6,
-									0)
-						else
-							DrawRotatedF(sprKamikaze,
-									hwRound(Gear^.X) + WorldDx,
-									hwRound(Gear^.Y) + WorldDy,
-									CurAmmoGear^.Pos - 1,
-									1,
-									DxDy2Angle(Gear^.dY, Gear^.dX));
+				if CurAmmoGear^.Pos = 0 then
+					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+							hwSign(Gear^.dX),
+							1,
+							6,
+							0)
+				else
+					DrawRotatedF(sprKamikaze,
+							hwRound(Gear^.X) + WorldDx,
+							hwRound(Gear^.Y) + WorldDy,
+							CurAmmoGear^.Pos - 1,
+							1,
+							DxDy2Angle(Gear^.dY, Gear^.dX));
 
-						defaultPos:= false
-						end;
+				defaultPos:= false
+				end;
+			gtSeduction: begin
+				if CurAmmoGear^.Pos >= 6 then
+					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+							hwSign(Gear^.dX),
+							2,
+							2,
+							0)
+				else
+					begin
+					DrawRotatedF(sprDress,
+							hwRound(Gear^.X) + WorldDx,
+							hwRound(Gear^.Y) + WorldDy,
+							CurAmmoGear^.Pos,
+							hwSign(Gear^.dX),
+							0);
+					DrawSprite(sprCensored, hwRound(Gear^.X) - 32 + WorldDx, hwRound(Gear^.Y) - 20 + WorldDy, 0)
+					end;
+				defaultPos:= false
+				end;
 		end;
 
 		case CurAmmoGear^.Kind of
@@ -810,11 +829,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						hwRound(Gear^.Y) - 3 + WorldDy,
 						0,
 						hwSign(Gear^.dX),
-						0);
-			amSeduction: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
-						hwSign(Gear^.dX),
-						2,
-						2,
 						0);
 		else
 			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
@@ -1096,7 +1110,7 @@ while Gear<>nil do
                      DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle + hwSign(Gear^.dX) * 90)
                   else
                      DrawRotatedf(sprCakeDown, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 5 - Gear^.Pos, hwSign(Gear^.dX), 0);
-       gtSeduction: DrawSprite(sprSeduction, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+       gtSeduction: if Gear^.Pos >= 6 then DrawSprite(sprSeduction, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
       gtWatermelon: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 0, Gear^.DirAngle);
       gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
      gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
@@ -1191,33 +1205,33 @@ begin
 Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
-    begin
-    dmg:= min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25);
-    if dmg > 0 then
-       case t^.Kind of
-           gtHedgehog,
-               gtMine,
-               gtCase,
-             gtTarget: begin
-                       inc(t^.Damage, dmg);
+	begin
+	dmg:= min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25);
+	if dmg > 0 then
+	case t^.Kind of
+		gtHedgehog,
+			gtMine,
+			gtCase,
+			gtTarget: begin
+					inc(t^.Damage, dmg);
 
-                       if t^.Kind = gtHedgehog then
-                          AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
+					if t^.Kind = gtHedgehog then
+							AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, t);
 
-                       DeleteCI(t);
-                       t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
-                       t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
-                       t^.State:= t^.State or gstMoving;
-                       t^.Active:= true;
-                       FollowGear:= t
-                       end;
-              gtGrave: begin
-                       t^.dY:= - _0_1;
-                       t^.Active:= true
-                       end;
-           end;
-    t:= t^.NextGear
-    end;
+					DeleteCI(t);
+					t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
+					t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
+					t^.State:= t^.State or gstMoving;
+					t^.Active:= true;
+					FollowGear:= t
+					end;
+			gtGrave: begin
+					t^.dY:= - _0_1;
+					t^.Active:= true
+					end;
+		end;
+	t:= t^.NextGear
+	end;
 if (GameFlags and gfSolidLand) = 0 then DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
 end;
 

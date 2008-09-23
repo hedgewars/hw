@@ -48,7 +48,8 @@ type
 			sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
-			sprEvilTrace, sprHellishBomb, sprSeduction);
+			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
+			sprCensored);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
@@ -437,7 +438,11 @@ const
 			(FileName:'HellishBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; saveSurf: false),// sprHellishBomb
 			(FileName:  'Seduction'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false) // sprSeduction
+			Width:  32; Height: 32; saveSurf: false),// sprSeduction
+			(FileName:    'HHDress'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  64; Height: 64; saveSurf: false),// sprDress
+			(FileName:   'Censored'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  64; Height: 16; saveSurf: false) // sprCensored
 			);
 
 	Wavez: array [TWave] of record

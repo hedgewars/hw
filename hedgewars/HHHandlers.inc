@@ -166,7 +166,7 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
                                  PlaySound(sndLaugh, false)
                                  end;
-                    amSeduction: FollowGear:= AddGear(hwRound(X + xx * cHHRadius * 2), hwRound(Y + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
+                    amSeduction: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius * 2), hwRound(Y + yy * cHHRadius * 2), gtSeduction, 0, xx * _0_4, yy * _0_4, 0);
                    amWatermelon: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtWatermelon,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
                   amHellishBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 5000);
                   end;
@@ -192,19 +192,19 @@ end;
 procedure AfterAttack;
 begin
 with CurrentHedgehog^.Gear^,
-     CurrentHedgehog^ do
-     begin
-        Inc(AttacksNum);
-        State:= State and not gstAttacking;
-        if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
-           ((GameFlags and gfMultiWeapon) <> 0) then isInMultiShoot:= true
-           else begin
-           TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
-           State:= State or gstAttacked;
-           OnUsedAmmo(CurrentHedgehog^)
-           end;
-     AttackBar:= 0;
-     end
+		CurrentHedgehog^ do
+	begin
+		Inc(AttacksNum);
+		State:= State and not gstAttacking;
+		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
+		((GameFlags and gfMultiWeapon) <> 0) then isInMultiShoot:= true
+		else begin
+		TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
+		State:= State or gstAttacked;
+		OnUsedAmmo(CurrentHedgehog^)
+		end;
+	AttackBar:= 0;
+	end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
