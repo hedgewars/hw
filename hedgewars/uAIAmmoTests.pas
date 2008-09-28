@@ -365,7 +365,7 @@ if (Abs(hwRound(Me^.X) - Targ.X) > 25)
 or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
 	begin
 	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6) then
-		Result:= 1
+		Result:= Succ(BadTurn)
 	else
 		Result:= BadTurn;
 	exit(Result)

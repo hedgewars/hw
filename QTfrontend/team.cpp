@@ -81,6 +81,15 @@ HWTeam::HWTeam(quint8 num) :
 	HHName[5] = QApplication::translate("teams", pteams[num].hh5name);
 	HHName[6] = QApplication::translate("teams", pteams[num].hh6name);
 	HHName[7] = QApplication::translate("teams", pteams[num].hh7name);
+	HHHat[0] = pteams[num].hh0hat;
+	HHHat[1] = pteams[num].hh1hat;
+	HHHat[2] = pteams[num].hh2hat;
+	HHHat[3] = pteams[num].hh3hat;
+	HHHat[4] = pteams[num].hh4hat;
+	HHHat[5] = pteams[num].hh5hat;
+	HHHat[6] = pteams[num].hh6hat;
+	HHHat[7] = pteams[num].hh7hat;
+	
 	Grave = pteams[num].Grave;
 	Fort = pteams[num].Fort;
 	for(int i = 0; i < BINDS_NUMBER; i++)

@@ -34,6 +34,14 @@ struct PredefinedTeam
 	const char * hh5name;
 	const char * hh6name;
 	const char * hh7name;
+	const char * hh0hat;
+	const char * hh1hat;
+	const char * hh2hat;
+	const char * hh3hat;
+	const char * hh4hat;
+	const char * hh5hat;
+	const char * hh6hat;
+	const char * hh7hat;
 	QString Grave;
 	QString Fort;
 };
@@ -51,6 +59,14 @@ const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 		QT_TRANSLATE_NOOP("teams", "hedgehog 6"),
 		QT_TRANSLATE_NOOP("teams", "hedgehog 7"),
 		QT_TRANSLATE_NOOP("teams", "hedgehog 8"),
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
 		"Simple", "Island"
 	},
 	{
@@ -63,6 +79,14 @@ const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 		QT_TRANSLATE_NOOP("teams", "Demeter"),
 		QT_TRANSLATE_NOOP("teams", "Kali"),
 		QT_TRANSLATE_NOOP("teams", "Inanna"),
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
 		"Bone", "Island"
 	},
 	{
@@ -75,6 +99,14 @@ const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 		QT_TRANSLATE_NOOP("teams", "Mango"),
 		QT_TRANSLATE_NOOP("teams", "Peach"),
 		QT_TRANSLATE_NOOP("teams", "Plum"),
+		"banana",
+		"apple",
+		"orange",
+		"lemon",
+		"NoHat",
+		"NoHat",
+		"NoHat",
+		"NoHat",
 		"coffin", "Barrelhouse"
 	}
 };
