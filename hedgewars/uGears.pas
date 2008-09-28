@@ -650,10 +650,13 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	if CurAmmoGear <> nil then
 	begin
 		case CurAmmoGear^.Kind of
-			gtShotgunShot: if (CurAmmoGear^.State and gstAnimation <> 0) then
-					DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
-				else
-					DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtShotgunShot: begin
+					if (CurAmmoGear^.State and gstAnimation <> 0) then
+						DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
+					else
+						DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
+					HatVisible:= true
+				end;
 			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 			gtRope: begin
 				if Gear^.X < CurAmmoGear^.X then
@@ -839,7 +842,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			
 			HatVisible:= true;
 			with PHedgehog(Gear^.Hedgehog)^ do
-				if HatVisibility > 0 then
+				if (HatTex <> nil)
+				and (HatVisibility > 0) then
 					DrawTextureF(HatTex,
 						HatVisibility,
 						hwRound(Gear^.X) + 1 + WorldDx,
@@ -909,7 +913,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		if HatVisibility > 0.0 then
 			HatVisibility:= HatVisibility - 0.2;
 	
-	if HatVisibility > 0 then
+	if (HatTex <> nil)
+	and (HatVisibility > 0) then
 		if DefaultPos then
 			DrawTextureF(HatTex,
 				HatVisibility,

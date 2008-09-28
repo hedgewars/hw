@@ -156,9 +156,12 @@ var s: string;
 				if Gear <> nil then
 					begin
 					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
-					texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, true, false);
-					HatTex:= Surface2Tex(texsurf);
-					SDL_FreeSurface(texsurf)
+					if Hat <> 'NoHat' then
+						begin
+						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, true, false);
+						HatTex:= Surface2Tex(texsurf);
+						SDL_FreeSurface(texsurf)
+						end
 					end;
 		end;
 	end;
