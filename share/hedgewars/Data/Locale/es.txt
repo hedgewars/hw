@@ -26,8 +26,8 @@
 00:23=Kamikaze
 00:24=Tarta
 00:25=Seducción
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
+00:26=Sandía bomba
+00:27=Granada infernal
 
 01:00=Luchad!
 01:01=Empate

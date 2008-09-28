@@ -691,7 +691,7 @@ Verifique su instalación</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="389"/>
         <source>Start server</source>
-        <translation>Inciar servidor</translation>
+        <translation>Iniciar servidor</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="416"/>
@@ -1105,7 +1105,7 @@ los erizos</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="77"/>
         <source>Plum</source>
-        <translation type="unfinished">Ciruela</translation>
+        <translation>Ciruela</translation>
     </message>
 </context>
 </TS>

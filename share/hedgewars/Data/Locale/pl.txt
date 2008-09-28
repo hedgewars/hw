@@ -26,8 +26,8 @@
 00:23=Kamikaze
 00:24=Ciasto
 00:25=Uwodzenie
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
+00:26=Bomba arbuzowa
+00:27=Piekielna bomba
 
 01:00=Walczmy!
 01:01=Remis
