@@ -364,7 +364,8 @@ ap.Angle:= 0;
 if (Abs(hwRound(Me^.X) - Targ.X) > 25)
 or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
 	begin
-	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6) then
+	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6)
+	and (RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Me^.dX), hwRound(Me^.Y) - 40, 30, 30) = 0) then
 		Result:= Succ(BadTurn)
 	else
 		Result:= BadTurn;
