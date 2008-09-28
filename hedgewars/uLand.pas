@@ -565,9 +565,7 @@ UpdateLandTexture(0, 1023)
 end;
 
 procedure LoadMap;
-var x, y: Longword;
-    p: PByteArray;
-    tmpsurf: PSDL_Surface;
+var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;

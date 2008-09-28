@@ -361,14 +361,25 @@ ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= 0;
-if (Abs(hwRound(Me^.X) - Targ.X) > 25) or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
-   exit(BadTurn);
+if (Abs(hwRound(Me^.X) - Targ.X) > 25)
+or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
+	begin
+	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6) then
+		Result:= 1
+	else
+		Result:= BadTurn;
+	exit(Result)
+	end;
 
 Result:= 0;
 for i:= 0 to 4 do
-    Result:= Result + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
+	Result:= Result + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
                                     hwRound(Me^.Y) - 20 * i - 5, 10, 30);
-if Result <= 0 then Result:= BadTurn else inc(Result);
+if Result <= 0 then
+	Result:= BadTurn
+else
+	inc(Result);
+
 TestFirePunch:= Result
 end;
 
