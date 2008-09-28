@@ -288,7 +288,7 @@ gtAmmo_Grenade: begin
      gtCluster: Result^.Radius:= 2;
       gtShover: Result^.Radius:= 20;
        gtFlame: begin
-                Result^.Angle:= Counter mod 64;
+                Result^.Tag:= Counter mod 64;
                 Result^.Radius:= 1;
                 Result^.Health:= 2;
                 Result^.dY:= (getrandom - _0_8) * _0_03;
@@ -1354,19 +1354,19 @@ var t: PGear;
 begin
 t:= GearsList;
 while t <> nil do
-      begin
-      if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
-         if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2) then
-            begin
-            inc(t^.Damage, 5);
-            t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
-            t^.dY:= - _0_25;
-            t^.Active:= true;
-            DeleteCI(t);
-            FollowGear:= t
-            end;
-      t:= t^.NextGear
-      end;
+	begin
+	if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
+		if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2) then
+			begin
+			inc(t^.Damage, 5);
+			t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
+			t^.dY:= - _0_25;
+			t^.Active:= true;
+			DeleteCI(t);
+			FollowGear:= t
+			end;
+	t:= t^.NextGear
+	end;
 end;
 
 function CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
@@ -1406,6 +1406,7 @@ begin
 if (cCaseFactor = 0) or
    (CountGears(gtCase) >= 5) or
    (getrandom(cCaseFactor) <> 0) then exit;
+
 FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
 case getrandom(2) of
      0: begin

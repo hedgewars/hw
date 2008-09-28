@@ -1097,14 +1097,15 @@ if not TestCollisionYwithGear(Gear, 1) then
 	end else begin
 	if Gear^.Timer > 0 then dec(Gear^.Timer)
 		else begin
-//		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 2, 0);
+		AmmoShove(Gear, 5, 5);
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 3, 0);
 		dec(Gear^.Health);
 		Gear^.Timer:= 1250 - Gear^.Angle * 12
 		end
 	end;
 
-if (((GameTicks div 8) mod 64) = Gear^.Angle) then
-	AmmoFlameWork(Gear);
+//if (((GameTicks div 8) mod 64) = Gear^.Tag) then
+//	AmmoFlameWork(Gear);
 
 if Gear^.Health = 0 then
 	DeleteGear(Gear)
