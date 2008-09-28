@@ -137,9 +137,7 @@ public:
 	QGroupBox *GBoxFort;
 	QComboBox *CBFort;
 	SquareLabel *FortPreview;
-	QGroupBox *GBoxGrave;
 	QComboBox *CBGrave;
-	QGroupBox *GBoxTeamLvl;
 	QComboBox *CBTeamLvl;
 	QGroupBox *GBoxBinds;
 	QToolBox *BindsBox;

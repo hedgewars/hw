@@ -144,7 +144,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBTLayout->addWidget(TeamNameEdit);
 	vbox2->addWidget(GBoxTeam);
 	
-	CBTeamLvl = new QComboBox(GBoxTeamLvl);
+	CBTeamLvl = new QComboBox(GBoxTeam);
 	CBTeamLvl->setIconSize(QSize(32, 32));
 	CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
 	for(int i = 5; i > 0; i--)
@@ -154,7 +154,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 				);
 	GBTLayout->addWidget(CBTeamLvl);
 	
-	CBGrave = new QComboBox(GBoxGrave);
+	CBGrave = new QComboBox(GBoxTeam);
 	CBGrave->setMaxCount(65535);
 	CBGrave->setIconSize(QSize(32, 32));
 	GBTLayout->addWidget(CBGrave);
