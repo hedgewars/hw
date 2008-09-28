@@ -111,15 +111,6 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	page1Layout->addLayout(vbox2);
 	page1Layout->addLayout(vbox3);
 	
-	GBoxTeam = new QGroupBox(this);
-	GBoxTeam->setTitle(QGroupBox::tr("Team"));
-	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	QGridLayout * GBTLayout = new QGridLayout(GBoxTeam);
-	TeamNameEdit = new QLineEdit(GBoxTeam);
-	TeamNameEdit->setMaxLength(64);
-	GBTLayout->addWidget(TeamNameEdit, 0, 0, 1, 0);
-	vbox1->addWidget(GBoxTeam);
-
 	GBoxHedgehogs = new QGroupBox(this);
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
 	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -144,22 +135,15 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	vbox1->addWidget(GBoxHedgehogs);
 
 
-	GBoxGrave = new QGroupBox(this);
-	GBoxGrave->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	GBoxGrave->setTitle(QGroupBox::tr("Grave"));
-	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
-	CBGrave = new QComboBox(GBoxGrave);
-	CBGrave->setMaxCount(65535);
-	CBGrave->setIconSize(QSize(32, 32));
-	GBGLayout->addWidget(CBGrave, 0, 0, 1, 3);
-	vbox2->addWidget(GBoxGrave);
+	GBoxTeam = new QGroupBox(this);
+	GBoxTeam->setTitle(QGroupBox::tr("Team"));
+	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+	QVBoxLayout * GBTLayout = new QVBoxLayout(GBoxTeam);
+	TeamNameEdit = new QLineEdit(GBoxTeam);
+	TeamNameEdit->setMaxLength(64);
+	GBTLayout->addWidget(TeamNameEdit);
+	vbox2->addWidget(GBoxTeam);
 	
-	//page1Layout->addWidget(new QWidget(), 3, 1, 1, 1);
-
-	GBoxTeamLvl = new QGroupBox(this);
-	GBoxTeamLvl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	GBoxTeamLvl->setTitle(QGroupBox::tr("Team level"));
-	QGridLayout * GBTLLayout = new QGridLayout(GBoxTeamLvl);
 	CBTeamLvl = new QComboBox(GBoxTeamLvl);
 	CBTeamLvl->setIconSize(QSize(32, 32));
 	CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
@@ -168,10 +152,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 				QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
 				QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
 				);
+	GBTLayout->addWidget(CBTeamLvl);
 	
-	GBTLLayout->addWidget(CBTeamLvl, 0, 0, 1, 3);
-	vbox2->addWidget(GBoxTeamLvl);
-
+	CBGrave = new QComboBox(GBoxGrave);
+	CBGrave->setMaxCount(65535);
+	CBGrave->setIconSize(QSize(32, 32));
+	GBTLayout->addWidget(CBGrave);
+	
 	GBoxFort = new QGroupBox(this);
 	GBoxFort->setTitle(QGroupBox::tr("Fort"));
 	QGridLayout * GBFLayout = new QGridLayout(GBoxFort);
