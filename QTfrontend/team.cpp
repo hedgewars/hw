@@ -194,17 +194,15 @@ void HWTeam::SetToPage(HWForm * hwform)
 {
 	hwform->ui.pageEditTeam->TeamNameEdit->setText(TeamName);
 	hwform->ui.pageEditTeam->CBTeamLvl->setCurrentIndex(difficulty);
-	hwform->ui.pageEditTeam->CBTeamLvl_activated(difficulty);
 	for(int i = 0; i < 8; i++)
 	{
 		hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
 		hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(HHHat[i], Qt::DisplayRole));
 	}
 	hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
-	hwform->ui.pageEditTeam->CBGrave_activated(Grave);
 
 	hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(Fort));
-	hwform->ui.pageEditTeam->CBFort_activated(Fort);
+	//hwform->ui.pageEditTeam->CBFort_activated(Fort);
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{

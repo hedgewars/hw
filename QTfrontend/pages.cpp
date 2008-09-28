@@ -150,10 +150,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	QGridLayout * GBGLayout = new QGridLayout(GBoxGrave);
 	CBGrave = new QComboBox(GBoxGrave);
 	CBGrave->setMaxCount(65535);
+	CBGrave->setIconSize(QSize(32, 32));
 	GBGLayout->addWidget(CBGrave, 0, 0, 1, 3);
-	GravePreview = new QLabel(GBoxGrave);
-	GravePreview->setScaledContents(false);
-	GBGLayout->addWidget(GravePreview, 1, 1);
 	vbox2->addWidget(GBoxGrave);
 	
 	//page1Layout->addWidget(new QWidget(), 3, 1, 1, 1);
@@ -163,18 +161,15 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBoxTeamLvl->setTitle(QGroupBox::tr("Team level"));
 	QGridLayout * GBTLLayout = new QGridLayout(GBoxTeamLvl);
 	CBTeamLvl = new QComboBox(GBoxTeamLvl);
-	CBTeamLvl->addItem(QComboBox::tr("Human"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 5"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 4"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 3"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 2"));
-	CBTeamLvl->addItem(QComboBox::tr("Level 1"));
-	CBTeamLvl->setMaxCount(6);
+	CBTeamLvl->setIconSize(QSize(32, 32));
+	CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
+	for(int i = 5; i > 0; i--)
+		CBTeamLvl->addItem(
+				QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
+				QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
+				);
+	
 	GBTLLayout->addWidget(CBTeamLvl, 0, 0, 1, 3);
-	LevelPict = new QLabel(GBoxTeamLvl);
-	LevelPict->setScaledContents(false);
-	LevelPict->setFixedSize(32, 32);
-	GBTLLayout->addWidget(LevelPict, 1, 1);
 	vbox2->addWidget(GBoxTeamLvl);
 
 	GBoxFort = new QGroupBox(this);
@@ -194,17 +189,17 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	tmpdir.cd("Forts");
 	tmpdir.setFilter(QDir::Files);
 
+	connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
+	
 	tmpdir.cd("../Graphics/Graves");
 	QStringList list = tmpdir.entryList(QStringList("*.png"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
 	{
-		CBGrave->addItem((*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+		QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + *it);
+		QIcon icon(pix.copy(0, 0, 32, 32));
+		CBGrave->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
 	}
-
-	connect(CBGrave, SIGNAL(activated(const QString &)), this, SLOT(CBGrave_activated(const QString &)));
-	connect(CBTeamLvl, SIGNAL(activated(int)), this, SLOT(CBTeamLvl_activated(int)));
-	connect(CBFort, SIGNAL(activated(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 
 	vbox1->addStretch();
 	vbox2->addStretch();
@@ -252,25 +247,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	}
 }
 
-void PageEditTeam::CBGrave_activated(const QString & gravename)
-{
-	QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + gravename + ".png");
-	GravePreview->setPixmap(pix.copy(0, 0, 32, 32));
-}
-
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
 	QPixmap pix(datadir->absolutePath() + "/Forts/" + fortname + "L.png");
 	FortPreview->setPixmap(pix);
 }
 
-void PageEditTeam::CBTeamLvl_activated(int id)
-{
-	QPixmap pix(QString(":/res/botlevels/%1.png").arg(id));
-	LevelPict->setPixmap(pix);
-}
-
-PageMultiplayer::PageMultiplayer(QWidget* parent) : 
+PageMultiplayer::PageMultiplayer(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);

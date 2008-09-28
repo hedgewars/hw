@@ -139,10 +139,8 @@ public:
 	SquareLabel *FortPreview;
 	QGroupBox *GBoxGrave;
 	QComboBox *CBGrave;
-	QLabel *GravePreview;
 	QGroupBox *GBoxTeamLvl;
 	QComboBox *CBTeamLvl;
-	QLabel *LevelPict;
 	QGroupBox *GBoxBinds;
 	QToolBox *BindsBox;
 	QWidget *page_A;
@@ -157,9 +155,7 @@ public:
 	QComboBox * CBBind[BINDS_NUMBER];
 
 public slots:
-	void CBGrave_activated(const QString & gravename);
 	void CBFort_activated(const QString & gravename);
-	void CBTeamLvl_activated(int id);
 
 private:
 	QLabel * LBind[BINDS_NUMBER];
