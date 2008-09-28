@@ -34,5 +34,7 @@
     <file>res/weaponsicon.png</file>
     <file>res/teamicon.png</file>
     <file>res/panelbg.png</file>
+    <file>res/spin_up.png</file>
+    <file>res/spin_down.png</file>
 </qresource>
 </RCC>
