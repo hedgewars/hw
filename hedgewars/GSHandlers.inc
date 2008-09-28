@@ -1083,12 +1083,15 @@ begin
 AllInactive:= false;
 if not TestCollisionYwithGear(Gear, 1) then
 	begin
-	Gear^.dX:= Gear^.dX + cWindSpeed;
+	if hwAbs(Gear^.dX - cWindSpeed) > _0_1 then
+		Gear^.dX:= (Gear^.dX - cWindSpeed) * _0_5 + cWindSpeed;
+
 	Gear^.dY:= Gear^.dY + cGravity;
-	if hwAbs(Gear^.dX) > _0_1 then Gear^.dX:= Gear^.dX * _0_5;
 	if Gear^.dY > _0_1 then Gear^.dY:= Gear^.dY * _0_995;
+	
 	Gear^.X:= Gear^.X + Gear^.dX;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
+	
 	if not (Gear^.Y < _1024) then
 		begin
 		DeleteGear(Gear);
@@ -1097,10 +1100,12 @@ if not TestCollisionYwithGear(Gear, 1) then
 	end else begin
 	if Gear^.Timer > 0 then dec(Gear^.Timer)
 		else begin
-		AmmoShove(Gear, 5, 5);
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 3, 0);
+		Gear^.Radius:= 5;
+		AmmoShove(Gear, 3, 100);
+		Gear^.Radius:= 1;
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
 		dec(Gear^.Health);
-		Gear^.Timer:= 1250 - Gear^.Angle * 12
+		Gear^.Timer:= 1250 - Gear^.Tag * 12
 		end
 	end;
 
