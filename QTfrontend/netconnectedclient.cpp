@@ -62,7 +62,7 @@ void HWConnectedClient::ClientRead()
 
 void HWConnectedClient::ParseCmd(const QStringList & lst)
 {
-qDebug() << "Server: Parsing:" << lst;
+//qDebug() << "Server: Parsing:" << lst;
   if(!lst.size())
   {
     qWarning("Net server: Bad message");
@@ -138,6 +138,7 @@ qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
     tmp=QStringList("CONFIG_PARAM") << confstr << lst[3];
     m_hwserver->sendOthers(this, tmp.join(QString(delimeter)));
     m_hwserver->m_gameCfg[tmp[1]]=tmp.mid(2);
+qDebug() << QString("[%1] = %2").arg(tmp[1]).arg(tmp.mid(2)[0]);
     return;
   }
 
@@ -168,13 +169,13 @@ qDebug() << "HHNUM hhnum = " << m_hwserver->hhnum;
     tmp.insert(1, QString::number(++netTeamID));
 
     // hedgehogs num count
-    int maxAdd=18-m_hwserver->hhnum;
-    if (maxAdd<=0)
+    int maxAdd = 18 - m_hwserver->hhnum;
+    if (maxAdd <= 0)
     {
 	  qWarning("Net server: 'ADDTEAM' message: rejecting");
 	  return; // reject command
     }
-    int toAdd=maxAdd<4 ? maxAdd : 4;
+    int toAdd=maxAdd < 4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
 qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
     // hedgehogs num config
@@ -190,7 +191,7 @@ qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
     m_hwserver->m_gameCfg[colorCfg.split(delimeter)[1]]=colorCfg.split(delimeter).mid(2);
     m_hwserver->m_gameCfg[hhnumCfg.split(delimeter)[1]]=hhnumCfg.split(delimeter).mid(2);
     m_teamsCfg.push_back(tmp);
-
+qDebug() << QString("[%1] = %2").arg(hhnumCfg.split(delimeter)[1]).arg(hhnumCfg.split(delimeter).mid(2)[0]);
     m_hwserver->sendOthers(this, QString("ADDTEAM:")+delimeter+tmp.join(QString(delimeter)));
     RawSendNet(QString("TEAM_ACCEPTED%1%2%1%3").arg(delimeter).arg(tmp[0]).arg(tmp[1]));
     m_hwserver->sendAll(colorCfg);
@@ -213,6 +214,7 @@ qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
         if(hhTmpList[1]==lst[1])
         {
 		  m_hwserver->hhnum-=it.value()[0].toUInt();
+		  m_hwserver->m_gameCfg.remove(it.key());
 qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
 		  break;
         }
