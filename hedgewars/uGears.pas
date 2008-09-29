@@ -143,7 +143,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepWatermelon,
 			@doStepCluster,
 			@doStepBomb,
-			@doStepSmokeTrace
+			@doStepSmokeTrace,
+			@doStepWaterUp
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -427,30 +428,6 @@ while Gear <> nil do
 	end;
 end;
 
-function WaterMachine: boolean;
-const
-	decStep: Longword = 0;
-	LastTurn: LongInt = 0;
-var i: LongWord;
-begin
-if (decStep = 0) and (LastTurn < FinishedTurnsTotal) then
-	begin
-	LastTurn:= FinishedTurnsTotal;
-	decStep:= 40
-	end;
-
-if decStep <> 0 then
-	begin
-	dec(decStep);
-	dec(cWaterLine);
-	for i:= 0 to 2047 do
-		Land[cWaterLine, i]:= 0;
-	SetAllToActive
-	end;
-
-WaterMachine:= decStep <> 0;
-end;
-
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
 begin
 if cAltDamage then
@@ -460,7 +437,7 @@ end;
 procedure ProcessGears;
 const delay: LongWord = 0;
       step: (stDelay, stChDmg, stTurnReact,
-             stAfterDelay, stChWin, stWater, stHealth,
+             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
              stSpawn, stNTurn) = stDelay;
 
 var Gear, t: PGear;
@@ -504,30 +481,21 @@ if AllInactive then
                  if delay = 0 then
                     inc(step)
                  end;
-        stChWin: if not CheckForWin then
-                    begin
-                    if not (bBetweenTurns or isInMultiShoot) then
-                       begin
-                       ParseCommand('/nextturn', true);
-                       SwitchHedgehog;
-                       end;
-                    inc(step)
-                    end else step:= stDelay;
+        stChWin: begin
+                 CheckForWin;
+                 inc(step)
+                 end;
         stWater: begin
                  if TotalRounds = 17 then bWaterRising:= true;
 
-                 if not bWaterRising then
-                    inc(step)
-                 else
-                    begin
-                    if delay = 0 then
-                       delay:= 17
-                    else
-                       dec(delay);
+                 if bWaterRising then
+                    AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
 
-                    if delay = 0 then
-                       if not WaterMachine then inc(step)
-                    end
+                 inc(step)
+                 end;
+       stChWin2: begin
+                 CheckForWin;
+                 inc(step)
                  end;
        stHealth: begin
                  if (TotalRounds = 15) and (cHealthDecrease = 0) then
@@ -553,6 +521,11 @@ if AllInactive then
         stNTurn: begin
                  if isInMultiShoot then isInMultiShoot:= false
                     else begin
+                    ParseCommand('/nextturn', true);
+                    SwitchHedgehog;
+
+                    inc(step);
+
                     AfterSwitchHedgehog;
                     bBetweenTurns:= false
                     end;

@@ -59,7 +59,7 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
 			gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece,
-			gtHellishBomb, gtEvilTrace);
+			gtHellishBomb, gtEvilTrace, gtWaterUp);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
 

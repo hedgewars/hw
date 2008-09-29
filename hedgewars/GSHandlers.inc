@@ -1751,3 +1751,28 @@ AllInactive:= false;
 DeleteCI(PHedgehog(Gear^.Hedgehog)^.Gear);
 Gear^.doStep:= @doStepSeductionWear
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepWaterUp(Gear: PGear);
+var i: LongWord;
+begin
+AllInactive:= false;
+
+inc(Gear^.Timer);
+if Gear^.Timer = 17 then
+	Gear^.Timer:= 0
+else
+	exit;
+
+if cWaterLine > 0 then
+	begin
+	dec(cWaterLine);
+	for i:= 0 to 2047 do
+		Land[cWaterLine, i]:= 0;
+	SetAllToActive
+	end;
+
+inc(Gear^.Tag);
+if (Gear^.Tag = 51) or (cWaterLine = 0) then
+	DeleteGear(Gear)
+end;

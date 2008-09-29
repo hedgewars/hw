@@ -62,7 +62,7 @@ var
 	cExplosionBorderColor : LongWord = $808080;
 
 	cShowFPS      : boolean = true;
-	cCaseFactor   : Longword = 1;//5;  {0..9}
+	cCaseFactor   : Longword = 5;  {0..9}
 	cLandAdditions: Longword = 4;
 	cFullScreen   : boolean = true;
 	cLocaleFName  : shortstring = 'en.txt';
