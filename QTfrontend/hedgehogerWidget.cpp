@@ -24,17 +24,17 @@ CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
     ItemNum(im, parent, 1)
 {
   if(parent) {
-    pOurFrameTeams=dynamic_cast<FrameTeams*>(parent->parentWidget());
+    pOurFrameTeams = dynamic_cast<FrameTeams*>(parent->parentWidget());
   }
-  if(pOurFrameTeams->overallHedgehogs+4>pOurFrameTeams->maxHedgehogsPerGame) {
-    numItems=pOurFrameTeams->maxHedgehogsPerGame-pOurFrameTeams->overallHedgehogs;
-  } else numItems=4;
-  pOurFrameTeams->overallHedgehogs+=numItems;
+  if(pOurFrameTeams->overallHedgehogs + 4 > pOurFrameTeams->maxHedgehogsPerGame) {
+    numItems = pOurFrameTeams->maxHedgehogsPerGame - pOurFrameTeams->overallHedgehogs;
+  } else numItems = 4;
+  pOurFrameTeams->overallHedgehogs += numItems;
 }
 
-void CHedgehogerWidget::incItems() 
+void CHedgehogerWidget::incItems()
 {
-  if (pOurFrameTeams->overallHedgehogs<18) {
+  if (pOurFrameTeams->overallHedgehogs < 18) {
     numItems++;
     pOurFrameTeams->overallHedgehogs++;
     emit hedgehogsNumChanged();
@@ -60,9 +60,9 @@ void CHedgehogerWidget::setNonInteractive()
 
 void CHedgehogerWidget::setHHNum(unsigned int num)
 {
-  unsigned int diff=numItems-num;
-  numItems=num;
-  pOurFrameTeams->overallHedgehogs+=diff;
+  unsigned int diff = num - numItems;
+  numItems += diff;
+  pOurFrameTeams->overallHedgehogs += diff;
   repaint();
 }
 
