@@ -22,65 +22,69 @@ uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, GL;
 {$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;
-     THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+	THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
-type PHedgehog = ^THedgehog;
-     PTeam     = ^TTeam;
-     PClan     = ^TClan;
-     THedgehog = record
-                 Name: string[MAXNAMELEN];
-                 Gear: PGear;
-                 NameTagTex,
-                 HealthTagTex,
-                 HatTex: PTexture;
-                 Ammo: PHHAmmo;
-                 AmmoStore: Longword;
-                 CurSlot, CurAmmo: LongWord;
-                 Team: PTeam;
-                 AttacksNum: Longword;
-                 visStepPos: LongWord;
-                 BotLevel  : LongWord; // 0 - Human player
-                 HatVisibility: GLfloat;
-                 stats: TStatistics;
-                 Hat: String;
-                 end;
-     TTeam = record
-             Clan: PClan;
-             TeamName: string[MAXNAMELEN];
-             ExtDriven: boolean;
-             Binds: TBinds;
-             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-             CurrHedgehog: LongWord;
-             NameTagTex: PTexture;
-             CrosshairTex,
-             GraveTex,
-             HealthTex: PTexture;
-             GraveName: string;
-             FortName: string;
-             TeamHealth: LongInt;
-             TeamHealthBarWidth,
-             NewTeamHealthBarWidth: LongInt;
-             DrawHealthY: LongInt;
-             AttackBar: LongWord;
-             HedgehogsNumber: Longword;
-             end;
-     TClan = record
-             Color: Longword;
-             Teams: array[0..Pred(cMaxTeams)] of PTeam;
-             TeamsNumber: Longword;
-             CurrTeam: LongWord;
-             ClanHealth: LongInt;
-             ClanIndex: LongInt;
-             TurnNumber: LongWord;
-             end;
+	PHedgehog = ^THedgehog;
+	PTeam     = ^TTeam;
+	PClan     = ^TClan;
+	
+	THedgehog = record
+			Name: string[MAXNAMELEN];
+			Gear: PGear;
+			NameTagTex,
+			HealthTagTex,
+			HatTex: PTexture;
+			Ammo: PHHAmmo;
+			AmmoStore: Longword;
+			CurSlot, CurAmmo: LongWord;
+			Team: PTeam;
+			AttacksNum: Longword;
+			visStepPos: LongWord;
+			BotLevel  : LongWord; // 0 - Human player
+			HatVisibility: GLfloat;
+			stats: TStatistics;
+			Hat: String;
+			end;
+			
+	TTeam = record
+			Clan: PClan;
+			TeamName: string[MAXNAMELEN];
+			ExtDriven: boolean;
+			Binds: TBinds;
+			Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
+			CurrHedgehog: LongWord;
+			NameTagTex: PTexture;
+			CrosshairTex,
+			GraveTex,
+			HealthTex: PTexture;
+			GraveName: string;
+			FortName: string;
+			TeamHealth: LongInt;
+			TeamHealthBarWidth,
+			NewTeamHealthBarWidth: LongInt;
+			DrawHealthY: LongInt;
+			AttackBar: LongWord;
+			HedgehogsNumber: Longword;
+			hasSurrendered: boolean;
+			end;
+			
+	TClan = record
+			Color: Longword;
+			Teams: array[0..Pred(cMaxTeams)] of PTeam;
+			TeamsNumber: Longword;
+			CurrTeam: LongWord;
+			ClanHealth: LongInt;
+			ClanIndex: LongInt;
+			TurnNumber: LongWord;
+			end;
 
 var CurrentTeam: PTeam = nil;
-    CurrentHedgehog: PHedgehog = nil;
-    TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-    TeamsCount: Longword = 0;
-    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
-    ClansCount: Longword = 0;
-    CurMinAngle, CurMaxAngle: Longword;
+	CurrentHedgehog: PHedgehog = nil;
+	TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
+	TeamsCount: Longword = 0;
+	ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+	ClansCount: Longword = 0;
+	CurMinAngle, CurMaxAngle: Longword;
 
 function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
@@ -104,14 +108,14 @@ var AliveClan: PClan;
 begin
 AliveCount:= 0;
 for t:= 0 to Pred(ClansCount) do
-    if ClansArray[t]^.ClanHealth > 0 then
-       begin
-       inc(AliveCount);
-       AliveClan:= ClansArray[t]
-       end;
+	if ClansArray[t]^.ClanHealth > 0 then
+		begin
+		inc(AliveCount);
+		AliveClan:= ClansArray[t]
+		end;
 
-if  (AliveCount > 1) or
-   ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
+if (AliveCount > 1)
+or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
 CheckForWin:= true;
 
 TurnTimeLeft:= 0;
@@ -151,14 +155,14 @@ TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
 
 with CurrentHedgehog^ do
-     if Gear <> nil then
-        begin
-        AttacksNum:= 0;
-        Gear^.Message:= 0;
-        Gear^.Z:= cHHZ;
-        RemoveGearFromList(Gear);
-        InsertGearToList(Gear)
-        end;
+	if Gear <> nil then
+		begin
+		AttacksNum:= 0;
+		Gear^.Message:= 0;
+		Gear^.Z:= cHHZ;
+		RemoveGearFromList(Gear);
+		InsertGearToList(Gear)
+		end;
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
@@ -180,8 +184,8 @@ repeat
 				repeat
 					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
 				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
-			end
-		until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
+				end
+		until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasSurrendered)) or (PrevTeam = CurrTeam);
 until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
@@ -192,17 +196,17 @@ var g: PGear;
 begin
 SwitchNotHoldedAmmo(CurrentHedgehog^);
 with CurrentHedgehog^ do
-     begin
-     with Gear^ do
-          begin
-          Z:= cCurrHHZ;
-          State:= gstHHDriven;
-          Active:= true
-          end;
-     RemoveGearFromList(Gear);
-     InsertGearToList(Gear);
-     FollowGear:= Gear
-     end;
+	begin
+	with Gear^ do
+		begin
+		Z:= cCurrHHZ;
+		State:= gstHHDriven;
+		Active:= true
+		end;
+	RemoveGearFromList(Gear);
+	InsertGearToList(Gear);
+	FollowGear:= Gear
+	end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
 
@@ -219,9 +223,9 @@ if CurrentTeam^.ExtDriven then SetDefaultBinds
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-   PlaySound(sndIllGetYou, false)
+	PlaySound(sndIllGetYou, false)
 else
-   PlaySound(sndYesSir, false);
+	PlaySound(sndYesSir, false);
 
 TurnTimeLeft:= cHedgehogTurnTime
 end;
