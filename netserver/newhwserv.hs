@@ -33,7 +33,7 @@ clientLoop :: Handle -> TChan [String] -> IO ()
 clientLoop handle chan =
 	listenLoop handle [] chan
 		`catch` (const $ clientOff >> return ())
-	where clientOff = atomically $ writeTChan chan ["QUIT"]
+	where clientOff = atomically $ writeTChan chan ["QUIT"] -- если клиент отключается, то делаем вид, что от него пришла команда QUIT
 
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
 mainLoop servSock acceptChan clients rooms = do
@@ -48,7 +48,7 @@ mainLoop servSock acceptChan clients rooms = do
 
 			let mclients = clientsFunc clients
 			let mrooms = roomsFunc rooms
-			let recipients = handlesFunc client clients rooms
+			let recipients = handlesFunc client mclients mrooms
 			
 			clHandles' <- forM recipients $
 					\ch -> do

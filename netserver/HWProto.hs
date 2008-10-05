@@ -6,15 +6,32 @@ import Data.Word
 import Miscutils
 import Maybe (fromMaybe, fromJust)
 
+answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
+answerQuit = [(clientOnly, ["QUIT"])]
+answerAbandoned = [(sameRoom, ["ROOMABANDONED"])]
+answerQuitInform nick = [(sameRoom, ["QUIT", nick])]
+answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
+answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
+answerNick nick = [(clientOnly, ["NICK", nick])]
+answerProtocolKnown = [(clientOnly, ["ERROR", "Protocol number already known"])]
+answerBadInput = [(clientOnly, ["ERROR", "Bad input"])]
+answerProto protoNum = [(clientOnly, ["PROTO", show protoNum])]
+answerRoomsList list = [(clientOnly, ["ROOMS"] ++ list)]
+answerRoomExists = [(clientOnly, ["WARNING", "There's already a room with that name"])]
+answerJoined nick = [(sameRoom, ["JOINED", nick])]
+answerNoRoom = [(clientOnly, ["WARNING", "There's no room with that name"])]
+answerWrongPassword = [(clientOnly, ["WARNING", "Wrong password"])]
+answerChatString nick msg = [(othersInRoom, ["CHAT_STRING", nick, msg])]
+
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
 handleCmd client _ rooms ("QUIT":xs) =
 	if null (room client) then
-		(noChangeClients, noChangeRooms, clientOnly, ["QUIT"])
+		(noChangeClients, noChangeRooms, answerQuit)
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), sameRoom, ["ROOMABANDONED"]) -- core disconnects clients on ROOMABANDONED command
+		(noChangeClients, removeRoom (room client), (answerQuitInform $ nick client) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, noChangeRooms, sameRoom, ["QUIT", nick client])
+		(noChangeClients, noChangeRooms, answerQuitInform $ nick client)
 
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =
@@ -29,36 +46,36 @@ handleCmd client clients rooms cmd =
 handleCmd_noInfo :: CmdHandler
 handleCmd_noInfo client clients _ ["NICK", newNick] =
 	if not . null $ nick client then
-		(noChangeClients, noChangeRooms, clientOnly, ["ERROR", "The nick already chosen"])
+		(noChangeClients, noChangeRooms, answerNickChosen)
 	else if haveSameNick then
-		(noChangeClients, noChangeRooms, clientOnly, ["WARNING", "Choose another nick"])
+		(noChangeClients, noChangeRooms, answerNickChooseAnother)
 	else
-		(modifyClient client{nick = newNick}, noChangeRooms, clientOnly, ["NICK", newNick])
+		(modifyClient client{nick = newNick}, noChangeRooms, answerNick newNick)
 	where
 		haveSameNick = not . null $ filter (\cl -> newNick == nick cl) clients
 
 handleCmd_noInfo client _ _ ["PROTO", protoNum] =
 	if protocol client > 0 then
-		(noChangeClients, noChangeRooms, clientOnly, ["ERROR", "Protocol number already known"])
+		(noChangeClients, noChangeRooms, answerProtocolKnown)
 	else if parsedProto == 0 then
-		(noChangeClients, noChangeRooms, clientOnly, ["ERROR", "Bad input"])
+		(noChangeClients, noChangeRooms, answerBadInput)
 	else
-		(modifyClient client{protocol = parsedProto}, noChangeRooms, clientOnly, ["PROTO", show parsedProto])
+		(modifyClient client{protocol = parsedProto}, noChangeRooms, answerProto parsedProto)
 	where
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
 
-handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, clientOnly, badCmd)
+handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client _ rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, clientOnly, ["ROOMS"] ++ map name rooms)
+		(noChangeClients, noChangeRooms, answerRoomsList $ map name rooms)
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
-		(noChangeClients, noChangeRooms, clientOnly, ["WARNING", "There's already a room with that name"])
+		(noChangeClients, noChangeRooms, answerRoomExists)
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword []), clientOnly, ["JOINED", nick client])
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword []), answerJoined $ nick client)
 	where
 		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
 
@@ -67,31 +84,22 @@ handleCmd_noRoom client clients rooms ["CREATE", newRoom] =
 	
 handleCmd_noRoom client _ rooms ["JOIN", roomName, roomPassword] =
 	if noSuchRoom then
-		(noChangeClients, noChangeRooms, clientOnly, ["WARNING", "There's no room with that name"])
+		(noChangeClients, noChangeRooms, answerNoRoom)
 	else if roomPassword /= password (roomByName roomName rooms) then
-		(noChangeClients, noChangeRooms, clientOnly, ["WARNING", "Wrong password"])
+		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, fromRoom roomName, ["JOINED", nick client])
+		(modifyClient client{room = roomName}, noChangeRooms, answerJoined $ nick client)
 	where
 		noSuchRoom = null $ filter (\room -> roomName == name room) rooms
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
 
-handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, clientOnly, badCmd)
+handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 -- 'inRoom' clients state command handlers
 handleCmd_inRoom :: CmdHandler
 
-handleCmd_inRoom client _ _ ["CHAT_STRING", _, msg] = (noChangeClients, noChangeRooms, othersInRoom, ["CHAT_STRING", nick client, msg])
+handleCmd_inRoom client _ _ ["CHAT_STRING", _, msg] = (noChangeClients, noChangeRooms, answerChatString (nick client) msg)
 
-handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value] =
-	(noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value])
-
-handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value1, value2] =
-	(noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value1, value2])
-
-handleCmd_inRoom client clients rooms ("ADDTEAM:" : teamName : teamColor : graveName : fortName : teamLevel : hhs) =
-	(noChangeClients, noChangeRooms, clientOnly, ["TEAM_ACCEPTED", teamName, "1"])
-
-handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, clientOnly, badCmd)
+handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)

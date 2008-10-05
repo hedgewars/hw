@@ -39,7 +39,7 @@ data RoomInfo =
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
 type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]
-type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, HandlesSelector, [String])
+type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, [(HandlesSelector, [String])])
 
 
 roomByName :: String -> [RoomInfo] -> RoomInfo
@@ -90,6 +90,3 @@ addRoom room rooms = room:rooms
 
 removeRoom :: String -> RoomsTransform
 removeRoom roomname rooms = filter (\rm -> roomname /= name rm) rooms
-
-badCmd :: [String]
-badCmd = ["ERROR", "Bad command, state or incorrect parameter"]
