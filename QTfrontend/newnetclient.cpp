@@ -163,18 +163,21 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-  qDebug() << "Server: " << lst;
+	qDebug() << "Server: " << lst;
 
-  if(!lst.size())
-  {
-    qWarning("Net client: Bad message");
-    return;
-  }
+	if(!lst.size())
+	{
+		qWarning("Net client: Bad message");
+		return;
+	}
 
-  if (lst[0] == "ERRONEUSNICKNAME") {
-    QMessageBox::information(0, 0, "Your net nickname is in use or cannot be used");
-    return;
-  }
+	if (lst[0] == "ERROR") {
+		if (lst.size() == 2)
+			QMessageBox::information(0, 0, lst[1]);
+		else
+			QMessageBox::information(0, 0, "Unknown error");
+		return;
+	}
 
   if (lst[0] == "CONNECTED") {
     m_game_connected=true;

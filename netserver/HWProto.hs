@@ -7,8 +7,8 @@ import Miscutils
 import Maybe (fromMaybe, fromJust)
 
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
-answerQuit = [(clientOnly, ["QUIT"])]
-answerAbandoned = [(sameRoom, ["ROOMABANDONED"])]
+answerQuit = [(clientOnly, ["BYE"])]
+answerAbandoned = [(sameRoom, ["BYE"])]
 answerQuitInform nick = [(sameRoom, ["QUIT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
 answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]

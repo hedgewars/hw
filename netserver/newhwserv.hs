@@ -43,24 +43,24 @@ mainLoop servSock acceptChan clients rooms = do
 			mainLoop servSock acceptChan (ci:clients) rooms
 		Right (cmd, client) -> do
 			putStrLn ("> " ++ show cmd)
-			let (clientsFunc, roomsFunc, handlesFunc, answer) = handleCmd client clients rooms $ cmd
-			putStrLn ("< " ++ show answer)
+			let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
 
 			let mclients = clientsFunc clients
 			let mrooms = roomsFunc rooms
-			let recipients = handlesFunc client mclients mrooms
-			
-			clHandles' <- forM recipients $
-					\ch -> do
+
+			clHandles' <- forM answers $
+				\(handlesFunc, answer) -> do
+					putStrLn ("< " ++ show answer)
+					let recipients = handlesFunc client mclients mrooms
+					forM recipients $
+						\ch -> do
 							forM_ answer (\str -> hPutStrLn ch str)
 							hPutStrLn ch ""
 							hFlush ch
-							if (not $ null answer) && (head answer == "ROOMABANDONED") then hClose ch >> return [ch] else return []
-					`catch` const (hClose ch >> return [ch])
+							if (not $ null answer) && (head answer == "BYE") then hClose ch >> return [ch] else return []
+						`catch` const (hClose ch >> return [ch])
 
-			clHandle' <- if (not $ null answer) && (head answer == "QUIT") then hClose (handle client) >> return [handle client] else return []
-
-			mainLoop servSock acceptChan (remove (remove mclients (concat clHandles')) clHandle') mrooms
+			mainLoop servSock acceptChan (remove mclients (concat $ concat clHandles')) mrooms
 			where
 				remove list rmClHandles = deleteFirstsBy2t (\ a b -> (handle a) == b) list rmClHandles
 
