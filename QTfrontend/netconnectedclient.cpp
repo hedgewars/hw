@@ -212,20 +212,25 @@ qDebug() << QString("[%1] = %2").arg(hhnumCfg.split(delimeter)[1]).arg(hhnumCfg.
       return;
     }
 
-    for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it)
-    {
-      QStringList hhTmpList=it.key().split('+');
-      if(hhTmpList[0] == "HHNUM")
-      {
-        if(hhTmpList[1]==lst[1])
-        {
-		  m_hwserver->hhnum-=it.value()[0].toUInt();
-		  m_hwserver->m_gameCfg.remove(it.key());
-qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
-		  break;
-        }
-      }
-    }
+	for(QMap<QString, QStringList>::iterator it=m_hwserver->m_gameCfg.begin(); it!=m_hwserver->m_gameCfg.end(); ++it)
+	{
+		QStringList hhTmpList=it.key().split('+');
+		if(hhTmpList[0] == "HHNUM")
+		{
+			if(hhTmpList[1]==lst[1])
+			{
+				m_hwserver->hhnum-=it.value()[0].toUInt();
+				m_hwserver->m_gameCfg.remove(it.key());
+				
+				for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it)
+					if((*it)[0] == lst[1])
+						m_teamsCfg.erase(it);
+
+				qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
+				break;
+			}
+		}
+	}
 
     unsigned int netID=removeTeam(lst[1]);
     m_hwserver->sendOthers(this, QString("REMOVETEAM:")+delimeter+lst[1]+delimeter+QString::number(netID));
@@ -237,8 +242,6 @@ qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
 
 unsigned int HWConnectedClient::netIDbyTeamName(const QString& tname)
 {
-    qDebug() << "Check exist" << tname;
-
 	for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it)
 		if((*it)[0]==tname)
 			return (*it)[1].toUInt();
