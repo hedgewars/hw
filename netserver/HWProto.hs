@@ -91,7 +91,7 @@ handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value] =
 handleCmd_inRoom client clients rooms ["CONFIG_PARAM", paramName, value1, value2] =
 	(noChangeClients, noChangeRooms, othersInRoom, ["CONFIG_PARAM", paramName, value1, value2])
 
-handleCmd_inRoom client clients rooms ["ADDTEAM:", teamName, teamColor, graveName, fortName, teamLevel, hh0, hh1, hh2, hh3, hh4, hh5, hh6, hh7] =
-	(noChangeClients, noChangeRooms, othersInRoom, ["TEAM_ACCEPTED", "1", teamName])
+handleCmd_inRoom client clients rooms ("ADDTEAM:" : teamName : teamColor : graveName : fortName : teamLevel : hhs) =
+	(noChangeClients, noChangeRooms, clientOnly, ["TEAM_ACCEPTED", teamName, "1"])
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, clientOnly, badCmd)

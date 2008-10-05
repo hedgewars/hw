@@ -42,9 +42,9 @@ mainLoop servSock acceptChan clients rooms = do
 		Left ci -> do
 			mainLoop servSock acceptChan (ci:clients) rooms
 		Right (cmd, client) -> do
-			print ("> " ++ show cmd)
+			putStrLn ("> " ++ show cmd)
 			let (clientsFunc, roomsFunc, handlesFunc, answer) = handleCmd client clients rooms $ cmd
-			print ("< " ++ show answer)
+			putStrLn ("< " ++ show answer)
 
 			let mclients = clientsFunc clients
 			let mrooms = roomsFunc rooms

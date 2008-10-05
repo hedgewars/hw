@@ -175,6 +175,12 @@ qDebug() << QString("[%1] = %2").arg(tmp[1]).arg(tmp.mid(2)[0]);
 	  qWarning("Net server: 'ADDTEAM' message: rejecting");
 	  return; // reject command
     }
+    if (netIDbyTeamName(tmp[0]) > 0)
+    {
+	  qWarning("Net server: 'ADDTEAM' message: rejecting (have team with same name)");
+	  return; // reject command
+
+    }
     int toAdd=maxAdd < 4 ? maxAdd : 4;
     m_hwserver->hhnum+=toAdd;
 qDebug() << "to add = " << toAdd << "m_hwserver->hhnum = " << m_hwserver->hhnum;
@@ -229,16 +235,21 @@ qDebug() << "REMOVETEAM hhnum = " << m_hwserver->hhnum;
   m_hwserver->sendOthers(this, lst.join(QString(delimeter)));
 }
 
+unsigned int HWConnectedClient::netIDbyTeamName(const QString& tname)
+{
+    qDebug() << "Check exist" << tname;
+
+	for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it)
+		if((*it)[0]==tname)
+			return (*it)[1].toUInt();
+
+	return 0;
+}
+
 unsigned int HWConnectedClient::removeTeam(const QString& tname)
 {
-	unsigned int netID=0;
-	for(QList<QStringList>::iterator it=m_teamsCfg.begin(); it!=m_teamsCfg.end(); ++it) {
-		if((*it)[0]==tname) {
-			netID=(*it)[1].toUInt();
-			m_teamsCfg.erase(it);
-			break;
-		}
-	}
+	unsigned int netID = netIDbyTeamName(tname);
+	
 	if (netID == 0)
 		qDebug() << QString("removeTeam: team '%1' not found").arg(tname);
 

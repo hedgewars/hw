@@ -109,7 +109,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-qDebug() << "Client: " << buf;
+  qDebug() << "Client: " << buf;
   NetSocket.write(buf);
   NetSocket.write("\n\n", 2);
 }
@@ -144,26 +144,26 @@ void HWNewNet::OnDisconnect()
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
-  switch (socketError) {
-  case QAbstractSocket::RemoteHostClosedError:
-    break;
-  case QAbstractSocket::HostNotFoundError:
-    QMessageBox::information(0, tr("Error"),
-			     tr("The host was not found. Please check the host name and port settings."));
-    break;
-  case QAbstractSocket::ConnectionRefusedError:
-    QMessageBox::information(0, tr("Error"),
-			     tr("Connection refused"));
-    break;
-  default:
-    QMessageBox::information(0, tr("Error"),
-			     NetSocket.errorString());
-  }
+	switch (socketError) {
+		case QAbstractSocket::RemoteHostClosedError:
+			break;
+		case QAbstractSocket::HostNotFoundError:
+			QMessageBox::information(0, tr("Error"),
+					tr("The host was not found. Please check the host name and port settings."));
+			break;
+		case QAbstractSocket::ConnectionRefusedError:
+			QMessageBox::information(0, tr("Error"),
+					tr("Connection refused"));
+			break;
+		default:
+			QMessageBox::information(0, tr("Error"),
+					NetSocket.errorString());
+		}
 }
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-qDebug() << "Server: " << lst;
+  qDebug() << "Server: " << lst;
 
   if(!lst.size())
   {

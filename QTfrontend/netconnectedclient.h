@@ -61,6 +61,8 @@ class HWConnectedClient : public QObject
 
   QStringList cmdbuf;
 
+  unsigned int netIDbyTeamName(const QString& tname);
+
  signals:
   void HWClientDisconnected(HWConnectedClient* client);
 
