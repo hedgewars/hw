@@ -35,6 +35,27 @@ clientLoop handle chan =
 		`catch` (const $ clientOff >> return ())
 	where clientOff = atomically $ writeTChan chan ["QUIT"] -- если клиент отключается, то делаем вид, что от него пришла команда QUIT
 
+sendAnswers [] _ clients _ = return clients
+sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
+	putStrLn ("< " ++ show answer)
+	
+	let recipients = handlesFunc client clients rooms
+
+	clHandles' <- forM recipients $
+		\ch -> do
+			forM_ answer (\str -> hPutStrLn ch str)
+			hPutStrLn ch ""
+			hFlush ch
+			if (not $ null answer) && (head answer == "BYE") then hClose ch >> return [ch] else return []
+		`catch` const (hClose ch >> return [ch])
+
+	let mclients = remove clients $ concat clHandles'
+
+	sendAnswers answers client mclients rooms
+	where
+		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (handle a) == b) list rmClHandles
+
+
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
 mainLoop servSock acceptChan clients rooms = do
 	r <- atomically $ (Left `fmap` readTChan acceptChan) `orElse` (Right `fmap` tselect clients)
@@ -48,21 +69,9 @@ mainLoop servSock acceptChan clients rooms = do
 			let mclients = clientsFunc clients
 			let mrooms = roomsFunc rooms
 
-			clHandles' <- forM answers $
-				\(handlesFunc, answer) -> do
-					putStrLn ("< " ++ show answer)
-					let recipients = handlesFunc client mclients mrooms
-					forM recipients $
-						\ch -> do
-							forM_ answer (\str -> hPutStrLn ch str)
-							hPutStrLn ch ""
-							hFlush ch
-							if (not $ null answer) && (head answer == "BYE") then hClose ch >> return [ch] else return []
-						`catch` const (hClose ch >> return [ch])
-
-			mainLoop servSock acceptChan (remove mclients (concat $ concat clHandles')) mrooms
-			where
-				remove list rmClHandles = deleteFirstsBy2t (\ a b -> (handle a) == b) list rmClHandles
+			mclients <- sendAnswers answers client clients rooms
+			
+			mainLoop servSock acceptChan mclients mrooms
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
