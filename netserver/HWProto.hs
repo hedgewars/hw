@@ -9,7 +9,7 @@ import Maybe (fromMaybe, fromJust)
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerQuit = [(clientOnly, ["BYE"])]
 answerAbandoned = [(sameRoom, ["BYE"])]
-answerQuitInform nick = [(sameRoom, ["QUIT", nick])]
+answerQuitInform nick = [(othersInRoom, ["QUIT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
 answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
 answerNick nick = [(clientOnly, ["NICK", nick])]
@@ -30,7 +30,7 @@ handleCmd client _ rooms ("QUIT":xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit)
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), answerAbandoned ++ (answerQuitInform $ nick client)) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, noChangeRooms, answerQuitInform $ nick client)
 
@@ -86,15 +86,16 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 handleCmd_noRoom client clients rooms ["CREATE", newRoom] =
 	handleCmd_noRoom client clients rooms ["CREATE", newRoom, ""]
 	
-handleCmd_noRoom client _ rooms ["JOIN", roomName, roomPassword] =
+handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	if noSuchRoom then
 		(noChangeClients, noChangeRooms, answerNoRoom)
 	else if roomPassword /= password (roomByName roomName rooms) then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, answerJoined $ nick client)
+		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks)
 	where
 		noSuchRoom = null $ filter (\room -> roomName == name room) rooms
+		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]

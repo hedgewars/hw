@@ -7,6 +7,7 @@ import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (setUncaughtExceptionHandler, handle, finally)
 import Control.Monad (forM, forM_, filterM, liftM)
+import Maybe (fromMaybe)
 import Data.List
 import Miscutils
 import HWProto
@@ -69,8 +70,10 @@ mainLoop servSock acceptChan clients rooms = do
 
 			let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
 			let mrooms = roomsFunc rooms
+			let mclients = (clientsFunc clients)
+			let mclient = fromMaybe client $ find (== client) mclients
 
-			clientsIn <- sendAnswers answers client (clientsFunc clients) mrooms
+			clientsIn <- sendAnswers answers mclient mclients mrooms
 			
 			mainLoop servSock acceptChan clientsIn mrooms
 

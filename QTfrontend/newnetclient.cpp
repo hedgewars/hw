@@ -109,7 +109,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-  qDebug() << "Client: " << buf;
+  qDebug() << "Client: " << QString(buf).split("\n");
   NetSocket.write(buf);
   NetSocket.write("\n\n", 2);
 }
@@ -171,6 +171,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if ((lst[0] == "NICK") || (lst[0] == "PROTO"))
+		return ;
+
 	if (lst[0] == "ERROR") {
 		if (lst.size() == 2)
 			QMessageBox::information(0, 0, "Error: " + lst[1]);
@@ -187,24 +190,24 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "CONNECTED") {
-    m_game_connected=true;
-    emit Connected();
-    emit EnteredGame();
-    return;
-  }
+	if (lst[0] == "CONNECTED") {
+		m_game_connected=true;
+		emit Connected();
+		emit EnteredGame();
+		return;
+	}
 
-  if (lst[0] == "CHAT_STRING") {
-    if(lst.size() < 3)
-    {
-	  qWarning("Net: Empty CHAT_STRING message");
-	  return;
-    }
-    QStringList tmp = lst;
-    tmp.removeFirst();
-    emit chatStringFromNet(tmp);
-    return;
-  }
+	if (lst[0] == "CHAT_STRING") {
+		if(lst.size() < 3)
+		{
+		qWarning("Net: Empty CHAT_STRING message");
+		return;
+		}
+		QStringList tmp = lst;
+		tmp.removeFirst();
+		emit chatStringFromNet(tmp);
+		return;
+	}
 
   if (lst[0] == "ADDTEAM:") {
     if(lst.size() < 22)
@@ -228,21 +231,22 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     return;
   }
 
-  if(lst[0]=="SLAVE") {
-    m_pGameCFGWidget->setEnabled(false);
-    m_pTeamSelWidget->setNonInteractive();
-    return;
-  }
+/*	if(lst[0] == "SLAVE") { // клиент знает CREATE он делал или JOIN
+		m_pGameCFGWidget->setEnabled(false);
+		m_pTeamSelWidget->setNonInteractive();
+		return;
+	}*/
 
-  if(lst[0]=="JOINED") {
-    if(lst.size() < 2)
-    {
-      qWarning("Net: Bad JOINED message");
-      return;
-    }
-    emit nickAdded(lst[1]);
-    return;
-  }
+	if(lst[0]=="JOINED") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad JOINED message");
+			return;
+		}
+		for(int i = 1; i < lst.size(); ++i)
+			emit nickAdded(lst[i]);
+		return;
+	}
 
   if(lst[0]=="LEFT") {
     if(lst.size() < 2)
