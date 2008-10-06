@@ -46,7 +46,6 @@
 #include "fpsedit.h"
 #include "netserverslist.h"
 #include "netudpwidget.h"
-#include "netwwwwidget.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
 #include "selectWeapon.h"
@@ -384,20 +383,6 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
 	pageLayout->addWidget(BtnNetSvrStart, 3, 2);
 
-	QGroupBox * NetTypeGroupBox = new QGroupBox(this);
-	NetTypeGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-	NetTypeGroupBox->setTitle(QGroupBox::tr("Servers list"));
-	pageLayout->addWidget(NetTypeGroupBox, 0, 1);
-
-	QVBoxLayout * GBTlayout = new QVBoxLayout(NetTypeGroupBox);
-	rbLocalGame = new QRadioButton(NetTypeGroupBox);
-	rbLocalGame->setText(tr("Local"));
-	rbLocalGame->setChecked(true);
-	GBTlayout->addWidget(rbLocalGame);
-	rbInternetGame = new QRadioButton(NetTypeGroupBox);
-	rbInternetGame->setText(tr("Internet"));
-	GBTlayout->addWidget(rbInternetGame);
-
 	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
 	pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
@@ -427,16 +412,12 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 
-	connect(rbLocalGame, SIGNAL(toggled(bool)), this, SLOT(updateServersList()));
 	connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
 }
 
 void PageNet::updateServersList()
 {
-	if (rbLocalGame->isChecked())
-		tvServersList->setModel(new HWNetUdpModel(tvServersList));
-	else
-		tvServersList->setModel(new HWNetWwwModel(tvServersList));
+	tvServersList->setModel(new HWNetUdpModel(tvServersList));
 
 	tvServersList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 

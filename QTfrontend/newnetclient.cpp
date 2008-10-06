@@ -129,10 +129,10 @@ void HWNewNet::ClientRead()
 
 void HWNewNet::OnConnect()
 {
-  RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
-  RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
-  RawSendNet(QString("CREATE%1%2").arg(delimeter).arg("myroom"));
-  RawSendNet(QString("JOIN%1%2").arg(delimeter).arg("myroom"));
+	RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
+	RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
+	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg("myroom"));
+	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg("myroom"));
 }
 
 void HWNewNet::OnDisconnect()
@@ -248,21 +248,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if(lst[0]=="LEFT") {
-    if(lst.size() < 2)
-    {
-      qWarning("Net: Bad LEFT message");
-      return;
-    }
-    emit nickRemoved(lst[1]);
-    return;
-  }
+	if(lst[0]=="LEFT") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad LEFT message");
+			return;
+		}
+		emit nickRemoved(lst[1]);
+		return;
+	}
 
-  if (lst[0] == "CONFIGASKED") {
-    isChief=true;
-    ConfigAsked();
-    return;
-  }
+	if (lst[0] == "CONFIGASKED") { // клиент знает CREATE он делал или JOIN
+		isChief=true;
+		ConfigAsked();
+		return;
+	}
 
   if (lst[0] == "RUNGAME") {
     RunGame();
@@ -358,10 +358,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
   // should be kinda game states, which don't allow "GAMEMSG:" at configure step,
   // "CONNECTED" at round phase, etc.
-  if (lst[0] == "GAMEMSG:") {
+  if (lst[0] == "GAMEMSG") {
     if(lst.size() < 2)
     {
-      qWarning("Net: Bad LEFT message");
+      qWarning("Net: Bad GAMEMSG message");
       return;
     }
     QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
@@ -375,22 +375,22 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 void HWNewNet::ConfigAsked()
 {
-  QString map = m_pGameCFGWidget->getCurrentMap();
-  if (map.size())
-    onMapChanged(map);
+	QString map = m_pGameCFGWidget->getCurrentMap();
+	if (map.size())
+		onMapChanged(map);
 
-  onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
-  onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
-  onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
-  onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
-  onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
-  // always initialize with default ammo (also avoiding complicated cross-class dependencies)
-  onWeaponsNameChanged("Default", cDefaultAmmoStore->mid(10)); 
+	onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
+	onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
+	onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
+	onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
+	onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
+	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
+	onWeaponsNameChanged("Default", cDefaultAmmoStore->mid(10));
 }
 
 void HWNewNet::RunGame()
 {
-  emit AskForRunGame();
+	emit AskForRunGame();
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)

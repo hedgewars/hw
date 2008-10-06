@@ -41,7 +41,6 @@
 #include "gamecfgwidget.h"
 #include "netserverslist.h"
 #include "netudpserver.h"
-#include "netwwwserver.h"
 #include "chatwidget.h"
 #include "playrecordpage.h"
 #include "input_ip.h"
@@ -480,10 +479,7 @@ void HWForm::NetStartServer()
 
 	_NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
 
-	if (ui.pageNet->rbLocalGame->isChecked())
-		pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
-	else
-		pRegisterServer = new HWNetWwwServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
+	pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
 }
 
 void HWForm::NetDisconnect()

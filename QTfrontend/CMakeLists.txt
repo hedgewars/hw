@@ -66,8 +66,6 @@ set(hwfr_src
 	newnetclient.cpp
 	netudpserver.cpp
 	netudpwidget.cpp
-	netwwwserver.cpp
-	netwwwwidget.cpp
 	netregister.cpp
 	netserverslist.cpp
 	chatwidget.cpp
@@ -116,8 +114,6 @@ set(hwfr_moc_hdrs
 	newnetclient.h
 	netudpserver.h
 	netudpwidget.h
-	netwwwserver.h
-	netwwwwidget.h
 	netregister.h
 	netserverslist.h
 	chatwidget.h

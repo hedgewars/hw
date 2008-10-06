@@ -215,8 +215,6 @@ public:
 	QPushButton * BtnNetConnect;
 	QPushButton * BtnNetSvrStart;
 	QPushButton * BtnSpecifyServer;
-	QRadioButton * rbLocalGame;
-	QRadioButton * rbInternetGame;
 
 private:
 	QGroupBox * ConnGroupBox;
