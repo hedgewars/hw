@@ -7,9 +7,9 @@ import Miscutils
 import Maybe (fromMaybe, fromJust)
 
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
-answerQuit = [(clientOnly, ["BYE"])]
+answerQuit = [(clientOnly, ["off"])]
 answerAbandoned = [(sameRoom, ["BYE"])]
-answerQuitInform nick = [(othersInRoom, ["QUIT", nick])]
+answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
 answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
 answerNick nick = [(clientOnly, ["NICK", nick])]
@@ -32,7 +32,7 @@ handleCmd client _ rooms ("QUIT":xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, noChangeRooms, answerQuitInform $ nick client)
+		(noChangeClients, noChangeRooms, answerQuit ++ (answerQuitInform $ nick client))
 
 
 -- check state and call state-dependent commmand handlers

@@ -36,7 +36,7 @@ clientLoop :: Handle -> TChan [String] -> IO ()
 clientLoop handle chan =
 	listenLoop handle [] chan
 		`catch` (const $ clientOff >> return ())
-	where clientOff = atomically $ writeTChan chan ["QUIT"] -- если клиент отключается, то делаем вид, что от него пришла команда QUIT
+	where clientOff = atomically $ writeTChan chan ["QUIT"] -- if the client disconnects, we perform as if it sent QUIT message
 
 
 sendAnswers [] _ clients _ = return clients
@@ -46,6 +46,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle (\e -> putStrLn (show e) >> hClose ch >> return [ch]) $
+			if (not $ null answer) && (head answer == "off") then hClose ch >> return [ch] else -- probably client with exception, don't send him anything
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
