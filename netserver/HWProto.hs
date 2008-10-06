@@ -23,15 +23,17 @@ answerNoRoom = [(clientOnly, ["WARNING", "There's no room with that name"])]
 answerWrongPassword = [(clientOnly, ["WARNING", "Wrong password"])]
 answerChatString nick msg = [(othersInRoom, ["CHAT_STRING", nick, msg])]
 
+
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
 handleCmd client _ rooms ("QUIT":xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit)
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), (answerQuitInform $ nick client) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), answerAbandoned ++ (answerQuitInform $ nick client)) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, noChangeRooms, answerQuitInform $ nick client)
+
 
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =
@@ -41,6 +43,7 @@ handleCmd client clients rooms cmd =
 		handleCmd_noRoom client clients rooms cmd
 	else
 		handleCmd_inRoom client clients rooms cmd
+
 
 -- 'no info' state - need to get protocol number and nickname
 handleCmd_noInfo :: CmdHandler
@@ -65,6 +68,7 @@ handleCmd_noInfo client _ _ ["PROTO", protoNum] =
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
 
 handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
+
 
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
@@ -96,6 +100,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
 
 handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
+
 
 -- 'inRoom' clients state command handlers
 handleCmd_inRoom :: CmdHandler

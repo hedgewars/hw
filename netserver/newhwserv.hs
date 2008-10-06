@@ -5,7 +5,7 @@ import IO
 import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
-import Control.Exception (finally)
+import Control.Exception (setUncaughtExceptionHandler, handle, finally)
 import Control.Monad (forM, forM_, filterM, liftM)
 import Data.List
 import Miscutils
@@ -20,6 +20,7 @@ acceptLoop servSock acceptChan = do
 	hPutStrLn cHandle "CONNECTED\n"
 	acceptLoop servSock acceptChan
 
+
 listenLoop :: Handle -> [String] -> TChan [String] -> IO ()
 listenLoop handle buf chan = do
 	str <- hGetLine handle
@@ -29,31 +30,32 @@ listenLoop handle buf chan = do
 		else
 		listenLoop handle (buf ++ [str]) chan
 
+
 clientLoop :: Handle -> TChan [String] -> IO ()
 clientLoop handle chan =
 	listenLoop handle [] chan
 		`catch` (const $ clientOff >> return ())
 	where clientOff = atomically $ writeTChan chan ["QUIT"] -- если клиент отключается, то делаем вид, что от него пришла команда QUIT
 
+
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
-	putStrLn ("< " ++ show answer)
-	
 	let recipients = handlesFunc client clients rooms
+	putStrLn ("< " ++ (show answer) ++ " (" ++ (show $ length recipients) ++ " recipients)")
 
 	clHandles' <- forM recipients $
-		\ch -> do
+		\ch -> Control.Exception.handle (\e -> putStrLn (show e) >> hClose ch >> return [ch]) $
+			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
 			hFlush ch
 			if (not $ null answer) && (head answer == "BYE") then hClose ch >> return [ch] else return []
-		`catch` const (hClose ch >> return [ch])
 
 	let mclients = remove clients $ concat clHandles'
 
 	sendAnswers answers client mclients rooms
 	where
-		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (handle a) == b) list rmClHandles
+		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (Miscutils.handle a) == b) list rmClHandles
 
 
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
@@ -64,19 +66,20 @@ mainLoop servSock acceptChan clients rooms = do
 			mainLoop servSock acceptChan (ci:clients) rooms
 		Right (cmd, client) -> do
 			putStrLn ("> " ++ show cmd)
-			let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
 
-			let mclients = clientsFunc clients
+			let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
 			let mrooms = roomsFunc rooms
 
-			mclients <- sendAnswers answers client clients rooms
+			clientsIn <- sendAnswers answers client (clientsFunc clients) mrooms
 			
-			mainLoop servSock acceptChan mclients mrooms
+			mainLoop servSock acceptChan clientsIn mrooms
+
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
 	forkIO $ acceptLoop serverSocket acceptChan
 	mainLoop serverSocket acceptChan [] []
+
 
 main = withSocketsDo $ do
 	serverSocket <- listenOn $ Service "hedgewars"

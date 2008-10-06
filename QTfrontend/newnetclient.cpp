@@ -173,9 +173,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 	if (lst[0] == "ERROR") {
 		if (lst.size() == 2)
-			QMessageBox::information(0, 0, lst[1]);
+			QMessageBox::information(0, 0, "Error: " + lst[1]);
 		else
 			QMessageBox::information(0, 0, "Unknown error");
+		return;
+	}
+
+	if (lst[0] == "WARNING") {
+		if (lst.size() == 2)
+			QMessageBox::information(0, 0, "Warning: " + lst[1]);
+		else
+			QMessageBox::information(0, 0, "Unknown warning");
 		return;
 	}
 
