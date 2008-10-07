@@ -43,7 +43,7 @@ class HWNewNet : public QObject
   void Disconnect();
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
-  void StartGame();
+  void Ready();
 
  private:
   GameUIConfig* config;
@@ -126,9 +126,7 @@ class HWNewNet : public QObject
   void ClientRead();
   void OnConnect();
   void OnDisconnect();
-  //void Perform();
   void displayError(QAbstractSocket::SocketError socketError);
-  //void FlushNetBuf();
 };
 
 #endif // _NEW_NETCLIENT_INCLUDED

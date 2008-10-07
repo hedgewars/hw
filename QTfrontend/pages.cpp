@@ -618,3 +618,9 @@ PageInGame::PageInGame(QWidget* parent) :
 	QLabel * label = new QLabel(this);
 	label->setText("In game...");
 }
+
+PageRoomsList::PageRoomsList(QWidget* parent) :
+  AbstractPage(parent)
+{
+
+}

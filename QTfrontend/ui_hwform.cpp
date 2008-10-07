@@ -95,4 +95,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageInGame = new PageInGame();
 	Pages->addWidget(pageInGame);
+
+	pageRoomsList = new PageRoomsList();
+	Pages->addWidget(pageRoomsList);
 }

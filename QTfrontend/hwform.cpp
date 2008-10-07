@@ -400,10 +400,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		delete hwnet;
 		hwnet=0;
 	}
+	
 	ui.pageNetGame->pChatWidget->clear();
+	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
 	connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
+	connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 
@@ -514,6 +517,11 @@ void HWForm::ForcedDisconnect()
   GoBack();
 }
 
+void HWForm::NetConnected()
+{
+	GoToPage(ID_PAGE_ROOMSLIST);
+}
+
 void HWForm::NetGameEnter()
 {
 	GoToPage(ID_PAGE_NETCFG);
@@ -521,9 +529,9 @@ void HWForm::NetGameEnter()
 
 void HWForm::NetStartGame()
 {
-  ui.pageNetGame->BtnGo->setText(QPushButton::tr("Waiting"));
-  ui.pageNetGame->BtnGo->setEnabled(false);
-  hwnet->StartGame();
+	ui.pageNetGame->BtnGo->setText(QPushButton::tr("Waiting"));
+	ui.pageNetGame->BtnGo->setEnabled(false);
+	hwnet->Ready();
 }
 
 void HWForm::AddNetTeam(const HWTeam& team)

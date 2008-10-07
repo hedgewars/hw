@@ -336,4 +336,12 @@ public:
 	PageInGame(QWidget* parent = 0);
 };
 
+class PageRoomsList : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageRoomsList(QWidget* parent = 0);
+};
+
 #endif // PAGES_H

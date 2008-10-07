@@ -80,5 +80,6 @@ void HWChatWidget::nickRemoved(const QString& nick)
 
 void HWChatWidget::clear()
 {
-  chatNicks->clear();
+	chatText->clear();
+	chatNicks->clear();
 }

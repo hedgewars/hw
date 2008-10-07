@@ -51,7 +51,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 
 void HWNewNet::Disconnect()
 {
-  m_game_connected=false;
+  m_game_connected = false;
   NetSocket.disconnectFromHost();
 }
 
@@ -67,7 +67,7 @@ void HWNewNet::JoinRoom(const QString & room)
 
 void HWNewNet::AddTeam(const HWTeam & team)
 {
-	QString cmd = QString("ADDTEAM:") + delimeter +
+	QString cmd = QString("ADDTEAM") + delimeter +
 	     team.TeamName + delimeter +
 	     team.teamColor.name() + delimeter +
 	     team.Grave + delimeter +
@@ -86,20 +86,20 @@ void HWNewNet::AddTeam(const HWTeam & team)
 
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
-  RawSendNet(QString("REMOVETEAM:") + delimeter + team.TeamName);
+  RawSendNet(QString("REMOVETEAM") + delimeter + team.TeamName);
   m_networkToLocalteams.remove(m_networkToLocalteams.key(team.TeamName));
 }
 
-void HWNewNet::StartGame()
+void HWNewNet::Ready()
 {
-  RawSendNet(QString("START:"));
+  RawSendNet(QString("READY"));
 }
 
 void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
 
-  RawSendNet(QString("GAMEMSG:%1%2").arg(delimeter).arg(msg));
+  RawSendNet(QString("GAMEMSG%1%2").arg(delimeter).arg(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -193,7 +193,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	if (lst[0] == "CONNECTED") {
 		m_game_connected=true;
 		emit Connected();
-		emit EnteredGame();
 		return;
 	}
 
@@ -243,8 +242,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Bad JOINED message");
 			return;
 		}
+		
 		for(int i = 1; i < lst.size(); ++i)
+		{
+			if (lst[i] == mynick) emit EnteredGame();
 			emit nickAdded(lst[i]);
+		}
 		return;
 	}
 

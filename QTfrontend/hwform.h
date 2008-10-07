@@ -72,6 +72,7 @@ private slots:
 	void NetConnectServer(const QString & host, quint16 port);
 	void NetStartServer();
 	void NetDisconnect();
+	void NetConnected();
 	void NetGameEnter();
 	void NetStartGame();
 	void AddNetTeam(const HWTeam& team);
@@ -106,7 +107,8 @@ private:
 		ID_PAGE_TRAINING        = 10,
 		ID_PAGE_SELECTWEAPON    = 11,
 		ID_PAGE_NETSERVER       = 12,
-		ID_PAGE_INGAME          = 13
+		ID_PAGE_INGAME          = 13,
+		ID_PAGE_ROOMSLIST       = 14
 		};
 	HWGame * game;
 	HWTeam * editedTeam;
