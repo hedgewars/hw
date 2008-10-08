@@ -4,7 +4,7 @@ import IO
 import Data.List
 import Data.Word
 import Miscutils
-import Maybe (fromMaybe, fromJust)
+import Maybe
 import qualified Data.Map as Map
 
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
@@ -61,7 +61,7 @@ handleCmd_noInfo client clients _ ["NICK", newNick] =
 	else
 		(modifyClient client{nick = newNick}, noChangeRooms, answerNick newNick)
 	where
-		haveSameNick = not . null $ filter (\cl -> newNick == nick cl) clients
+		haveSameNick = isJust $ find (\cl -> newNick == nick cl) clients
 
 handleCmd_noInfo client _ _ ["PROTO", protoNum] =
 	if protocol client > 0 then
@@ -87,7 +87,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	else
 		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword (protocol client) [] Map.empty), answerJoined $ nick client)
 	where
-		haveSameRoom = not . null $ filter (\room -> newRoom == name room) rooms
+		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 
 handleCmd_noRoom client clients rooms ["CREATE", newRoom] =
 	handleCmd_noRoom client clients rooms ["CREATE", newRoom, ""]
@@ -100,7 +100,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else
 		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig joinRoom)
 	where
-		noSuchRoom = null $ filter (\room -> roomName == name room) rooms
+		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
 		joinRoom = roomByName roomName rooms
 

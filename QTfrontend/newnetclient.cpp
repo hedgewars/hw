@@ -300,22 +300,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     return;
   }
 
-  if (lst[0] == "CONFIGURED") {
-    QStringList tmp = lst;
-    tmp.removeFirst();
-    if(tmp.size() < 6)
-    {
-      qWarning("Net: Bad CONFIGURED message");
-      return;
-    }
-    emit seedChanged(tmp[0]);
-    emit mapChanged(tmp[1]);
-    emit themeChanged(tmp[2]);
-    emit initHealthChanged(tmp[3].toUInt());
-    emit turnTimeChanged(tmp[4].toUInt());
-    emit fortsModeChanged(tmp[5].toInt() != 0);
-    return;
-  }
 
   if(lst[0]=="TEAM_ACCEPTED") {
     if(lst.size() < 3)
