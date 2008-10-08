@@ -419,6 +419,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(CreateRoom(const QString&)));
 	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
 		hwnet, SLOT(JoinRoom(const QString&)));
+	connect(ui.pageRoomsList, SIGNAL(askForRoomList()),
+		hwnet, SLOT(askRoomsList()));
 
 	connect(hwnet, SIGNAL(chatStringFromNet(const QStringList&)),
 		ui.pageNetGame->pChatWidget, SLOT(onChatStringFromNet(const QStringList&)));

@@ -479,3 +479,13 @@ void HWNewNet::chatLineToNet(const QString& str)
     emit(chatStringFromNet(QStringList(mynick) << str));
   }
 }
+
+void HWNewNet::askRoomsList()
+{
+	if(netClientState != 2)
+	{
+		qDebug("Illegal try to get rooms list!");
+		return;
+	}
+	RawSendNet(QString("LIST"));
+}

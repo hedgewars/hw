@@ -125,6 +125,7 @@ class HWNewNet : public QObject
   void onWeaponsNameChanged(const QString& name, const QString& ammo);
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
+  void askRoomsList();
 
  private slots:
   void ClientRead();

@@ -356,10 +356,12 @@ public slots:
 private slots:
 	void onCreateClick();
 	void onJoinClick();
+	void onRefreshClick();
 	
 signals:
 	void askForCreateRoom(const QString &);
 	void askForJoinRoom(const QString &);
+	void askForRoomList();
 };
 
 #endif // PAGES_H

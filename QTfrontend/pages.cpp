@@ -636,6 +636,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 
 	connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
 	connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
+	connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
 	connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
 }
 
@@ -653,7 +654,7 @@ void PageRoomsList::onCreateClick()
 	else
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select record from the list"),
+				tr("Please, enter room name"),
 				tr("OK"));
 }
 
@@ -669,5 +670,10 @@ void PageRoomsList::onJoinClick()
 		return ;
 	}
 	emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+}
+
+void PageRoomsList::onRefreshClick()
+{
+	emit askForRoomList();
 }
 
