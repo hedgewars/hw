@@ -41,8 +41,6 @@ class HWNewNet : public QObject
   HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
-  void JoinRoom(const QString & room);
-  void CreateRoom(const QString & room);
   void Ready();
 
  private:
@@ -86,6 +84,9 @@ class HWNewNet : public QObject
   void RawSendNet(const QByteArray & buf);
   void ParseCmd(const QStringList & lst);
 
+  int loginStep;
+  int netClientState;
+
  signals:
   void AskForRunGame();
   void Connected();
@@ -106,6 +107,7 @@ class HWNewNet : public QObject
   void teamColorChanged(const HWTeam&);
   void chatStringFromNet(const QStringList&);
   void ammoChanged(const QString& name, const QString& ammo);
+  void roomsList(const QStringList&);
 
  public slots:
   void chatLineToNet(const QString& str);
@@ -121,6 +123,8 @@ class HWNewNet : public QObject
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
   void onWeaponsNameChanged(const QString& name, const QString& ammo);
+  void JoinRoom(const QString & room);
+  void CreateRoom(const QString & room);
 
  private slots:
   void ClientRead();

@@ -348,6 +348,13 @@ public:
 	QPushButton * BtnCreate;
 	QPushButton * BtnJoin;
 	QPushButton * BtnRefresh;
+	
+public slots:
+	void setRoomsList(const QStringList & list);
+	
+signals:
+	void askForCreateRoom(const QString &);
+	void askForJoinRoom(const QString &);
 };
 
 #endif // PAGES_H

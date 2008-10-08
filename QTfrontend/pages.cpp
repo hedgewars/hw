@@ -632,3 +632,10 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 2, 1);
 }
+
+void PageRoomsList::setRoomsList(const QStringList & list)
+{
+	roomsList->clear();
+	roomsList->addItems(list);
+	roomsList->sortItems();
+}

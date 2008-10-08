@@ -34,7 +34,9 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
   m_pGameCFGWidget(pGameCFGWidget),
   m_pTeamSelWidget(pTeamSelWidget),
   isChief(false),
-  m_game_connected(false)
+  m_game_connected(false),
+  loginStep(0),
+  netClientState(0)
 {
   connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
   connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
@@ -57,12 +59,30 @@ void HWNewNet::Disconnect()
 
 void HWNewNet::CreateRoom(const QString & room)
 {
+	if(netClientState != 2)
+	{
+		qDebug("Illegal try to create room!");
+		return;
+	}
+	
 	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg(room));
+	isChief = true;
 }
 
 void HWNewNet::JoinRoom(const QString & room)
 {
+	if(netClientState != 2)
+	{
+		qDebug("Illegal try to join room!");
+		return;
+	}
+	
+	loginStep++;
+
 	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(room));
+	m_pGameCFGWidget->setEnabled(false);
+	m_pTeamSelWidget->setNonInteractive();
+	isChief = false;
 }
 
 void HWNewNet::AddTeam(const HWTeam & team)
@@ -131,8 +151,6 @@ void HWNewNet::OnConnect()
 {
 	RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
 	RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
-	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg("myroom"));
-	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg("myroom"));
 }
 
 void HWNewNet::OnDisconnect()
@@ -172,7 +190,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if ((lst[0] == "NICK") || (lst[0] == "PROTO"))
+	{
+		loginStep++;
+		if (loginStep == 2)
+		{
+			netClientState = 2;
+			RawSendNet(QString("LIST"));
+		}
 		return ;
+	}
 
 	if (lst[0] == "ERROR") {
 		if (lst.size() == 2)
@@ -191,8 +217,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "CONNECTED") {
-		m_game_connected=true;
+		netClientState = 1;
+		m_game_connected = true;
 		emit Connected();
+		return;
+	}
+
+	if (lst[0] == "ROOMS") {
+		QStringList tmp = lst;
+		tmp.removeFirst();
+		emit roomsList(tmp);
 		return;
 	}
 
@@ -230,12 +264,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     return;
   }
 
-/*	if(lst[0] == "SLAVE") { // клиент знает CREATE он делал или JOIN
-		m_pGameCFGWidget->setEnabled(false);
-		m_pTeamSelWidget->setNonInteractive();
-		return;
-	}*/
-
 	if(lst[0]=="JOINED") {
 		if(lst.size() < 2)
 		{
@@ -245,7 +273,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		
 		for(int i = 1; i < lst.size(); ++i)
 		{
-			if (lst[i] == mynick) emit EnteredGame();
+			if (lst[i] == mynick)
+			{
+				netClientState = 3;
+				emit EnteredGame();
+				ConfigAsked();
+			}
 			emit nickAdded(lst[i]);
 		}
 		return;
@@ -258,12 +291,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit nickRemoved(lst[1]);
-		return;
-	}
-
-	if (lst[0] == "CONFIGASKED") { // клиент знает CREATE он делал или JOIN
-		isChief=true;
-		ConfigAsked();
 		return;
 	}
 
