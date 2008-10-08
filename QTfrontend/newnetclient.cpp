@@ -107,7 +107,6 @@ void HWNewNet::AddTeam(const HWTeam & team)
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
   RawSendNet(QString("REMOVETEAM") + delimeter + team.TeamName);
-  m_networkToLocalteams.remove(m_networkToLocalteams.key(team.TeamName));
 }
 
 void HWNewNet::Ready()
@@ -307,7 +306,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
       qWarning("Net: Bad TEAM_ACCEPTED message");
       return;
     }
-    m_networkToLocalteams.insert(lst[2].toUInt(), lst[1]);
     m_pTeamSelWidget->changeTeamStatus(lst[1]);
     return;
   }
@@ -347,22 +345,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit ammoChanged(lst[3], lst[2]);
 			return;
 		}
-		QStringList hhTmpList=lst[1].split('+');
+		QStringList hhTmpList = lst[1].split('+');
 		if (hhTmpList[0] == "TEAM_COLOR") {
-			HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
-			if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
-				tmptm=HWTeam(hhTmpList[1]); // local team should be changed
-			}
-			tmptm.teamColor=QColor(lst[2]);
+			HWTeam tmptm(hhTmpList[1]);
+			tmptm.teamColor = QColor(lst[2]);
 			emit teamColorChanged(tmptm);
 			return;
 		}
 		if (hhTmpList[0] == "HHNUM") {
-			HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
-			if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
-				tmptm=HWTeam(hhTmpList[1]); // local team should be changed
-			}
-			tmptm.numHedgehogs=lst[2].toUInt();
+			HWTeam tmptm(hhTmpList[1]);
+			tmptm.numHedgehogs = lst[2].toUInt();
 			emit hhnumChanged(tmptm);
 			return;
 		}
@@ -410,15 +402,17 @@ void HWNewNet::RunGame()
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
-	RawSendNet(QString("HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)
-			.arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))
+	RawSendNet(QString("HHNUM%1%2%1%3")
+			.arg(delimeter)
+			.arg(team.TeamName)
 			.arg(team.numHedgehogs));
 }
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
-	RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(team.TeamName)
-			.arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))
+	RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3")
+			.arg(delimeter)
+			.arg(team.TeamName)
 			.arg(team.teamColor.name()));
 }
 
