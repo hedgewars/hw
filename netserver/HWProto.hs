@@ -30,6 +30,10 @@ answerFullConfig room = map toAnswer (Map.toList $ params room)
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
 answerCantAdd = [(clientOnly, ["WARNING", "Too many teams"])]
+answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
+answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo)]
+	where
+		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -129,11 +133,12 @@ handleCmd_inRoom client _ rooms ("ADDTEAM" : name : color : grave : fort : difSt
 	if length (teams clRoom) == 6 then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
-		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, [])
+		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, answerTeamAccepted newTeam ++ answerAddTeam newTeam)
 	where
 		clRoom = roomByName (room client) rooms
 		newTeam = (TeamInfo name color grave fort difficulty (hhsList hhsInfo))
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
+		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
 
 

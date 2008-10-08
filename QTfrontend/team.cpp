@@ -28,10 +28,10 @@
 #include "hwconsts.h"
 #include "hats.h"
 
-HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
-  difficulty(0),
-  numHedgehogs(4),
-  m_netID(netID)
+HWTeam::HWTeam(const QString & teamname) :
+	difficulty(0),
+	numHedgehogs(4),
+	m_isNetTeam(false)
 {
 	TeamName = teamname;
 	OldTeamName = TeamName;
@@ -50,26 +50,26 @@ HWTeam::HWTeam(const QString & teamname, unsigned int netID) :
 }
 
 HWTeam::HWTeam(const QStringList& strLst) :
-  numHedgehogs(4)
+  numHedgehogs(4),
+  m_isNetTeam(true)
 {
 	// net teams are configured from QStringList
-	if(strLst.size() < 21) throw HWTeamConstructException();
-	TeamName=strLst[0];
-	m_netID=strLst[1].toUInt();
-	Grave=strLst[2];
-	Fort=strLst[3];
-	difficulty=strLst[4].toUInt();
+	if(strLst.size() < 20) throw HWTeamConstructException();
+	TeamName = strLst[0];
+	Grave = strLst[1];
+	Fort = strLst[2];
+	difficulty = strLst[3].toUInt();
 	for(int i = 0; i < 8; i++)
 	{
-		HHName[i]=strLst[i * 2 + 5];
-		HHHat[i]=strLst[i * 2 + 6];
+		HHName[i]=strLst[i * 2 + 4];
+		HHHat[i]=strLst[i * 2 + 5];
 	}
 }
 
 HWTeam::HWTeam(quint8 num) :
   difficulty(0),
   numHedgehogs(4),
-  m_netID(0)
+  m_isNetTeam(false)
 {
 	num %= PREDEFTEAMS_COUNT;
 	TeamName = QApplication::translate("teams", pteams[num].TeamName);
@@ -242,13 +242,13 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 	QStringList sl;
 	sl.push_back(QString("eaddteam %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName));
 
-	if (m_netID)
+	if (m_isNetTeam)
 		sl.push_back("erdriven");
 
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
 
-	if (!m_netID)
+	if (!m_isNetTeam)
 		for(int i = 0; i < BINDS_NUMBER; i++)
 			sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 
@@ -266,18 +266,14 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 
 bool HWTeam::isNetTeam() const
 {
-  return m_netID!=0;
+  return m_isNetTeam;
 }
 
-unsigned int HWTeam::getNetID() const
-{
-  return m_netID;
-}
 
 bool HWTeam::operator==(const HWTeam& t1) const {
-  return TeamName==t1.TeamName && m_netID==t1.m_netID;
+  return TeamName==t1.TeamName;
 }
 
 bool HWTeam::operator<(const HWTeam& t1) const {
-  return m_netID<t1.m_netID || TeamName<t1.TeamName; // if names are equal - test if it is net team
+  return TeamName<t1.TeamName; // if names are equal - test if it is net team
 }

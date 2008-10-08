@@ -34,12 +34,11 @@ class HWTeamConstructException
 class HWTeam
 {
 	public:
-		HWTeam(const QString & teamname, unsigned int netID=0);
+		HWTeam(const QString & teamname);
 		HWTeam(const QStringList& strLst);
 		HWTeam(quint8 num);
 
 		bool isNetTeam() const;
-		unsigned int getNetID() const;
 
 		QString TeamName;
 		QString HHName[8];
@@ -61,7 +60,7 @@ class HWTeam
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
 	private:
-		unsigned int m_netID;
+		bool m_isNetTeam;
 		QString OldTeamName;
 };
 

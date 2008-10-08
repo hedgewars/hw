@@ -241,10 +241,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if (lst[0] == "ADDTEAM") {
-		if(lst.size() < 22)
+	if (lst[0] == "ADD_TEAM") {
+		if(lst.size() != 21)
 		{
-			qWarning("Net: Too short ADDTEAM message");
+			qWarning("Net: Bad ADDTEAM message");
 			return;
 		}
 		QStringList tmp = lst;
@@ -259,7 +259,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
       qWarning("Net: Bad REMOVETEAM message");
       return;
     }
-    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1], lst[2].toUInt()));
+    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
     return;
   }
 
@@ -284,7 +284,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if(lst[0]=="LEFT") {
+	if(lst[0] == "LEFT") {
 		if(lst.size() < 2)
 		{
 			qWarning("Net: Bad LEFT message");
@@ -294,21 +294,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "RUNGAME") {
-    RunGame();
-    return;
-  }
+	if (lst[0] == "RUNGAME") {
+		RunGame();
+		return;
+	}
 
 
-  if(lst[0]=="TEAM_ACCEPTED") {
-    if(lst.size() < 3)
-    {
-      qWarning("Net: Bad TEAM_ACCEPTED message");
-      return;
-    }
-    m_pTeamSelWidget->changeTeamStatus(lst[1]);
-    return;
-  }
+	if (lst[0] == "TEAM_ACCEPTED") {
+		if (lst.size() != 2)
+		{
+			qWarning("Net: Bad TEAM_ACCEPTED message");
+			return;
+		}
+		m_pTeamSelWidget->changeTeamStatus(lst[1]);
+		return;
+	}
 
 	if (lst[0] == "CONFIG_PARAM") {
 		if(lst.size() < 3)
@@ -345,7 +345,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit ammoChanged(lst[3], lst[2]);
 			return;
 		}
-		QStringList hhTmpList = lst[1].split('+');
+		QStringList hhTmpList = lst[1].split('+');// deprecated stuff
 		if (hhTmpList[0] == "TEAM_COLOR") {
 			HWTeam tmptm(hhTmpList[1]);
 			tmptm.teamColor = QColor(lst[2]);
@@ -363,8 +363,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 
-  // should be kinda game states, which don't allow "GAMEMSG:" at configure step,
-  // "CONNECTED" at round phase, etc.
   if (lst[0] == "GAMEMSG") {
     if(lst.size() < 2)
     {
