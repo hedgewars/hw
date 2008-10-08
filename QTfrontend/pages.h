@@ -325,7 +325,7 @@ public:
 	QPushButton *BtnDefault;
 	QPushButton *BtnDelete;
 	QPushButton *BtnBack;
-        SelWeaponWidget* pWeapons;
+	SelWeaponWidget* pWeapons;
 };
 
 class PageInGame : public AbstractPage
@@ -342,6 +342,12 @@ class PageRoomsList : public AbstractPage
 
 public:
 	PageRoomsList(QWidget* parent = 0);
+
+	QListWidget * roomsList;
+	QPushButton * BtnBack;
+	QPushButton * BtnCreate;
+	QPushButton * BtnJoin;
+	QPushButton * BtnRefresh;
 };
 
 #endif // PAGES_H

@@ -622,5 +622,13 @@ PageInGame::PageInGame(QWidget* parent) :
 PageRoomsList::PageRoomsList(QWidget* parent) :
   AbstractPage(parent)
 {
-
+	QGridLayout * pageLayout = new QGridLayout(this);
+	
+	roomsList = new QListWidget(this);
+	pageLayout->addWidget(roomsList, 0, 0, 4, 1);
+	
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
+	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
+	BtnRefresh = addButton(tr("Refresh"), pageLayout, 2, 1);
 }

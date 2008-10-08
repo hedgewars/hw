@@ -100,14 +100,16 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNetGame->BtnGo,	SIGNAL(clicked()),	this, SLOT(NetStartGame()));
+	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), this, SLOT(NetStartGame()));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 
-	connect(ui.pageInfo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-	connect(ui.pageGameStats->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
+	connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
 	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoToTraining()));
