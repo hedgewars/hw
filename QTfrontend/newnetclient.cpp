@@ -61,7 +61,7 @@ void HWNewNet::CreateRoom(const QString & room)
 {
 	if(netClientState != 2)
 	{
-		qDebug("Illegal try to create room!");
+		qWarning("Illegal try to create room!");
 		return;
 	}
 	
@@ -73,7 +73,7 @@ void HWNewNet::JoinRoom(const QString & room)
 {
 	if(netClientState != 2)
 	{
-		qDebug("Illegal try to join room!");
+		qWarning("Illegal try to join room!");
 		return;
 	}
 	
@@ -242,19 +242,19 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "ADDTEAM:") {
-    if(lst.size() < 22)
-    {
-	  qWarning("Net: Too short ADDTEAM message");
-	  return;
-    }
-    QStringList tmp = lst;
-    tmp.removeFirst();
-    emit AddNetTeam(tmp);
-    return;
-  }
+	if (lst[0] == "ADDTEAM") {
+		if(lst.size() < 22)
+		{
+			qWarning("Net: Too short ADDTEAM message");
+			return;
+		}
+		QStringList tmp = lst;
+		tmp.removeFirst();
+		emit AddNetTeam(tmp);
+		return;
+	}
 
-  if (lst[0] == "REMOVETEAM:") {
+  if (lst[0] == "REMOVETEAM") {
     if(lst.size() < 3)
     {
       qWarning("Net: Bad REMOVETEAM message");
@@ -410,16 +410,16 @@ void HWNewNet::RunGame()
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
-  RawSendNet(QString("HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)\
-	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
-	     .arg(team.numHedgehogs));
+	RawSendNet(QString("HHNUM%1%2%1%3%1%4").arg(delimeter).arg(team.TeamName)
+			.arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))
+			.arg(team.numHedgehogs));
 }
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
-  RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(team.TeamName)\
-	     .arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))\
-	     .arg(team.teamColor.name()));
+	RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR+%2+%3%1%4").arg(delimeter).arg(team.TeamName)
+			.arg(team.getNetID() ? team.getNetID() : m_networkToLocalteams.key(team.TeamName))
+			.arg(team.teamColor.name()));
 }
 
 void HWNewNet::onSeedChanged(const QString & seed)
@@ -469,7 +469,7 @@ void HWNewNet::askRoomsList()
 {
 	if(netClientState != 2)
 	{
-		qDebug("Illegal try to get rooms list!");
+		qWarning("Illegal try to get rooms list!");
 		return;
 	}
 	RawSendNet(QString("LIST"));

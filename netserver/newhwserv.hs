@@ -42,7 +42,7 @@ clientLoop handle chan =
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
-	putStrLn ("< " ++ (show answer) ++ " (" ++ (show $ length recipients) ++ " recipients)")
+	putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle (\e -> putStrLn (show e) >> hClose ch >> return [ch]) $

@@ -29,6 +29,10 @@ data TeamInfo =
 	TeamInfo
 	{
 		teamname :: String,
+		teamcolor :: String,
+		teamgrave :: String,
+		teamfort :: String,
+		difficulty :: Int,
 		hedgehogs :: [HedgehogInfo]
 	}
 
@@ -82,6 +86,7 @@ noChangeClients :: ClientsTransform
 noChangeClients a = a
 
 modifyClient :: ClientInfo -> ClientsTransform
+modifyClient _ [] = error "modifyClient: no such client"
 modifyClient client (cl:cls) =
 	if cl == client then
 		client : cls
@@ -97,10 +102,10 @@ addRoom room rooms = room:rooms
 removeRoom :: String -> RoomsTransform
 removeRoom roomname rooms = filter (\rm -> roomname /= name rm) rooms
 
-changeRoomConfig :: String -> String -> [String] -> RoomsTransform
-changeRoomConfig _ _ _ [] = error "changeRoomConfig: no such room"
-changeRoomConfig roomName paramName paramStrs (room:rooms) =
-	if roomName == name room then
-		room{params = Map.insert paramName paramStrs (params room)} : rooms
+modifyRoom :: RoomInfo -> RoomsTransform
+modifyRoom _ [] = error "changeRoomConfig: no such room"
+modifyRoom room (rm:rms) =
+	if name room == name rm then
+		room : rms
 	else
-		room : changeRoomConfig roomName paramName paramStrs rooms
+		room : modifyRoom room rms

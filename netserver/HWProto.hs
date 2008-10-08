@@ -27,7 +27,7 @@ answerChatString nick msg = [(othersInRoom, ["CHAT_STRING", nick, msg])]
 answerConfigParam paramName paramStrs = [(othersInRoom, "CONFIG_PARAM" : paramName : paramStrs)]
 answerFullConfig room = map toAnswer (Map.toList $ params room)
 	where
-		toAnswer (paramName, paramStrs)=
+		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
 
 -- Main state-independent cmd handler
@@ -95,14 +95,14 @@ handleCmd_noRoom client clients rooms ["CREATE", newRoom] =
 handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	if noSuchRoom then
 		(noChangeClients, noChangeRooms, answerNoRoom)
-	else if roomPassword /= password joinRoom then
+	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig joinRoom)
+		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
-		joinRoom = roomByName roomName rooms
+		clRoom = roomByName roomName rooms
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
@@ -115,10 +115,16 @@ handleCmd_inRoom :: CmdHandler
 handleCmd_inRoom client _ _ ["CHAT_STRING", _, msg] =
 	(noChangeClients, noChangeRooms, answerChatString (nick client) msg)
 
-handleCmd_inRoom client _ _ ("CONFIG_PARAM":paramName:paramStrs) =
+handleCmd_inRoom client _ rooms ("CONFIG_PARAM":paramName:paramStrs) =
 	if isMaster client then
-		(noChangeClients, changeRoomConfig (room client) paramName paramStrs, answerConfigParam paramName paramStrs)
+		(noChangeClients, modifyRoom clRoom{params = Map.insert paramName paramStrs (params room)}, answerConfigParam paramName paramStrs)
 	else
 		(noChangeClients, noChangeRooms, answerNotMaster)
+	where
+		clRoom = roomByName (room client) rooms
+
+
+handleCmd_inRoom client _ _ ("ADDTEAM" : name : color : grave : fort : difStr : hhsInfo)
+	| length hhsInfo == 16 = (noChangeClients, noChangeRooms, answerBadCmd)
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
