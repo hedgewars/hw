@@ -6,7 +6,7 @@ import Data.Word
 import Data.Char
 import Data.List
 import Maybe (fromJust)
-
+import qualified Data.Map as Map
 
 data ClientInfo =
  ClientInfo
@@ -22,10 +22,14 @@ data ClientInfo =
 instance Eq ClientInfo where
 	a1 == a2 = handle a1 == handle a2
 
+data HedgehogInfo =
+	HedgehogInfo String String
+
 data TeamInfo =
 	TeamInfo
 	{
-		teamname :: String
+		teamname :: String,
+		hedgehogs :: [HedgehogInfo]
 	}
 
 data RoomInfo =
@@ -33,7 +37,9 @@ data RoomInfo =
 	{
 		name :: String,
 		password :: String,
-		teams :: [TeamInfo]
+		roomProto :: Word16,
+		teams :: [TeamInfo],
+		params :: Map.Map String [String]
 	}
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
@@ -90,3 +96,11 @@ addRoom room rooms = room:rooms
 
 removeRoom :: String -> RoomsTransform
 removeRoom roomname rooms = filter (\rm -> roomname /= name rm) rooms
+
+changeRoomConfig :: String -> String -> [String] -> RoomsTransform
+changeRoomConfig _ _ _ [] = error "changeRoomConfig: no such room"
+changeRoomConfig roomName paramName paramStrs (room:rooms) =
+	if roomName == name room then
+		room{params = Map.insert paramName paramStrs (params room)} : rooms
+	else
+		room : changeRoomConfig roomName paramName paramStrs rooms
