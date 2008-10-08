@@ -343,6 +343,7 @@ class PageRoomsList : public AbstractPage
 public:
 	PageRoomsList(QWidget* parent = 0);
 
+	QLineEdit * roomName;
 	QListWidget * roomsList;
 	QPushButton * BtnBack;
 	QPushButton * BtnCreate;
@@ -351,6 +352,10 @@ public:
 	
 public slots:
 	void setRoomsList(const QStringList & list);
+
+private slots:
+	void onCreateClick();
+	void onJoinClick();
 	
 signals:
 	void askForCreateRoom(const QString &);

@@ -623,14 +623,20 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	
+
+	roomName = new QLineEdit(this);
+	pageLayout->addWidget(roomName, 0, 0);
 	roomsList = new QListWidget(this);
-	pageLayout->addWidget(roomsList, 0, 0, 4, 1);
+	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 2, 1);
+
+	connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
+	connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
+	connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
 }
 
 void PageRoomsList::setRoomsList(const QStringList & list)
@@ -639,3 +645,29 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 	roomsList->addItems(list);
 	roomsList->sortItems();
 }
+
+void PageRoomsList::onCreateClick()
+{
+	if (roomName->text().size())
+		emit askForCreateRoom(roomName->text());
+	else
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Please, select record from the list"),
+				tr("OK"));
+}
+
+void PageRoomsList::onJoinClick()
+{
+	QListWidgetItem * curritem = roomsList->currentItem();
+	if (!curritem)
+	{
+		QMessageBox::critical(this,
+				tr("Error"),
+				tr("Please, select room from the list"),
+				tr("OK"));
+		return ;
+	}
+	emit askForJoinRoom(curritem->data(Qt::DisplayRole).toString());
+}
+
