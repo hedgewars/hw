@@ -277,7 +277,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			{
 				netClientState = 3;
 				emit EnteredGame();
-				ConfigAsked();
+				if (isChief)
+					ConfigAsked();
 			}
 			emit nickAdded(lst[i]);
 		}
