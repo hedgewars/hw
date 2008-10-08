@@ -112,17 +112,16 @@ handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 -- 'inRoom' clients state command handlers
 handleCmd_inRoom :: CmdHandler
-handleCmd_inRoom client _ _ ["CHAT_STRING", _, msg] =
+handleCmd_inRoom client _ _ ["CHAT_STRING", msg] =
 	(noChangeClients, noChangeRooms, answerChatString (nick client) msg)
 
 handleCmd_inRoom client _ rooms ("CONFIG_PARAM":paramName:paramStrs) =
 	if isMaster client then
-		(noChangeClients, modifyRoom clRoom{params = Map.insert paramName paramStrs (params room)}, answerConfigParam paramName paramStrs)
+		(noChangeClients, modifyRoom clRoom{params = Map.insert paramName paramStrs (params clRoom)}, answerConfigParam paramName paramStrs)
 	else
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	where
 		clRoom = roomByName (room client) rooms
-
 
 handleCmd_inRoom client _ _ ("ADDTEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 = (noChangeClients, noChangeRooms, answerBadCmd)

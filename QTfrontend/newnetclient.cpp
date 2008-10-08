@@ -460,7 +460,7 @@ void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
 void HWNewNet::chatLineToNet(const QString& str)
 {
   if(str!="") {
-    RawSendNet(QString("CHAT_STRING")+delimeter+mynick+delimeter+str);
+    RawSendNet(QString("CHAT_STRING")+delimeter+str);
     emit(chatStringFromNet(QStringList(mynick) << str));
   }
 }
