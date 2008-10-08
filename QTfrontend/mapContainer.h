@@ -59,6 +59,7 @@ class HWMapContainer : public QWidget
   void setImage(const QImage newImage);
   void mapChanged(int index);
   void setRandomSeed();
+  void setRandomTheme();
   void themeSelected(int currentRow);
 
  protected:

@@ -50,6 +50,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   imageButt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);//QSizePolicy::Minimum, QSizePolicy::Minimum);
   mainLayout.addWidget(imageButt, 0, 0, 1, 2);
   connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomSeed()));
+  connect(imageButt, SIGNAL(clicked()), this, SLOT(setRandomTheme()));
 
   chooseMap = new QComboBox(this);
   chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -88,6 +89,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 
   setRandomSeed();
+  setRandomTheme();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -145,10 +147,6 @@ void HWMapContainer::changeImage()
 	pMap = new HWMap();
 	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
 	pMap->getImage(m_seed.toStdString());
-
-	if(!Themes->size()) return;
-	quint32 themeNum = rand() % Themes->size();
-	lwThemes->setCurrentRow(themeNum);
 }
 
 void HWMapContainer::themeSelected(int currentRow)
@@ -199,7 +197,6 @@ void HWMapContainer::setTheme(const QString & theme)
 	QList<QListWidgetItem *> items = lwThemes->findItems(theme, Qt::MatchExactly);
 	if(items.size())
 		lwThemes->setCurrentItem(items.at(0));
-	//this->theme = theme;
 }
 
 void HWMapContainer::setRandomSeed()
@@ -207,4 +204,11 @@ void HWMapContainer::setRandomSeed()
   m_seed = QUuid::createUuid().toString();
   emit seedChanged(m_seed);
   changeImage();
+}
+
+void HWMapContainer::setRandomTheme()
+{
+	if(!Themes->size()) return;
+	quint32 themeNum = rand() % Themes->size();
+	lwThemes->setCurrentRow(themeNum);
 }
