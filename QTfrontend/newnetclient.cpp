@@ -328,63 +328,63 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     return;
   }
 
-  if (lst[0] == "CONFIG_PARAM") {
-    if(lst.size() < 3)
-    {
-      qWarning("Net: Bad CONFIG_PARAM message");
-      return;
-    }
-  	if (lst[1] == "SEED") {
-	  emit seedChanged(lst[2]);
-	  return;
-  	}
-  	if (lst[1] == "MAP") {
-	  emit mapChanged(lst[2]);
-	  return;
-  	}
-  	if (lst[1] == "THEME") {
-	  emit themeChanged(lst[2]);
-	  return;
-  	}
-  	if (lst[1] == "HEALTH") {
-	  emit initHealthChanged(lst[2].toUInt());
-	  return;
-  	}
-  	if (lst[1] == "TURNTIME") {
-	  emit turnTimeChanged(lst[2].toUInt());
-	  return;
-  	}
-  	if (lst[1] == "FORTSMODE") {
-	  emit fortsModeChanged(lst[2].toInt() != 0);
-	  return;
-  	}
-	if (lst[1] == "AMMO") {
-	  if(lst.size() < 4) return;
-	  emit ammoChanged(lst[3], lst[2]);
-	  return;
+	if (lst[0] == "CONFIG_PARAM") {
+		if(lst.size() < 3)
+		{
+			qWarning("Net: Bad CONFIG_PARAM message");
+			return;
+		}
+		if (lst[1] == "SEED") {
+			emit seedChanged(lst[2]);
+			return;
+		}
+		if (lst[1] == "MAP") {
+			emit mapChanged(lst[2]);
+			return;
+		}
+		if (lst[1] == "THEME") {
+			emit themeChanged(lst[2]);
+			return;
+		}
+		if (lst[1] == "HEALTH") {
+			emit initHealthChanged(lst[2].toUInt());
+			return;
+		}
+		if (lst[1] == "TURNTIME") {
+			emit turnTimeChanged(lst[2].toUInt());
+			return;
+		}
+		if (lst[1] == "FORTSMODE") {
+			emit fortsModeChanged(lst[2].toInt() != 0);
+			return;
+		}
+		if (lst[1] == "AMMO") {
+			if(lst.size() < 4) return;
+			emit ammoChanged(lst[3], lst[2]);
+			return;
+		}
+		QStringList hhTmpList=lst[1].split('+');
+		if (hhTmpList[0] == "TEAM_COLOR") {
+			HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
+			if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
+				tmptm=HWTeam(hhTmpList[1]); // local team should be changed
+			}
+			tmptm.teamColor=QColor(lst[2]);
+			emit teamColorChanged(tmptm);
+			return;
+		}
+		if (hhTmpList[0] == "HHNUM") {
+			HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
+			if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
+				tmptm=HWTeam(hhTmpList[1]); // local team should be changed
+			}
+			tmptm.numHedgehogs=lst[2].toUInt();
+			emit hhnumChanged(tmptm);
+			return;
+		}
+		qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
+		return;
 	}
-	QStringList hhTmpList=lst[1].split('+');
-  	if (hhTmpList[0] == "TEAM_COLOR") {
-	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
-	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
-	    tmptm=HWTeam(hhTmpList[1]); // local team should be changed
-	  }
-	  tmptm.teamColor=QColor(lst[2]);
-	  emit teamColorChanged(tmptm);
-	  return;
-  	}
-  	if (hhTmpList[0] == "HHNUM") {
-	  HWTeam tmptm(hhTmpList[1], hhTmpList[2].toUInt());
-	  if(m_networkToLocalteams.find(hhTmpList[2].toUInt())!=m_networkToLocalteams.end()) {
-	    tmptm=HWTeam(hhTmpList[1]); // local team should be changed
-	  }
-	  tmptm.numHedgehogs=lst[2].toUInt();
-	  emit hhnumChanged(tmptm);
-	  return;
-  	}
-    qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
-    return;
-  }
 
 
   // should be kinda game states, which don't allow "GAMEMSG:" at configure step,
