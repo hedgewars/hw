@@ -29,6 +29,7 @@ answerFullConfig room = map toAnswer (Map.toList $ params room)
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
+answerCantAdd = [(clientOnly, ["WARNING", "Too many teams"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -123,7 +124,17 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM":paramName:paramStrs) =
 	where
 		clRoom = roomByName (room client) rooms
 
-handleCmd_inRoom client _ _ ("ADDTEAM" : name : color : grave : fort : difStr : hhsInfo)
-	| length hhsInfo == 16 = (noChangeClients, noChangeRooms, answerBadCmd)
+handleCmd_inRoom client _ rooms ("ADDTEAM" : name : color : grave : fort : difStr : hhsInfo)
+	| length hhsInfo == 16 =
+	if length (teams clRoom) == 6 then
+		(noChangeClients, noChangeRooms, answerCantAdd)
+	else
+		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, [])
+	where
+		clRoom = roomByName (room client) rooms
+		newTeam = (TeamInfo name color grave fort difficulty (hhsList hhsInfo))
+		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
+		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
+
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
