@@ -30,12 +30,13 @@ answerFullConfig room = map toAnswer (Map.toList $ params room)
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
-answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs"])]
+answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs, or same name team"])]
 answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
 answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo)]
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
+answerRemoveTeam teamName = [(othersInRoom, ["REMOVE_TEAM", teamName])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -132,13 +133,14 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 
 handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 =
-	if length (teams clRoom) == 6 || canAddNumber <= 0 then
+	if length (teams clRoom) == 6 || canAddNumber <= 0 || isJust findTeam then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
 		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, answerTeamAccepted newTeam ++ answerAddTeam newTeam)
 	where
 		clRoom = roomByName (room client) rooms
 		newTeam = (TeamInfo name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))
+		findTeam = find (\t -> name == teamname t) $ teams clRoom
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
@@ -161,5 +163,18 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 		clRoom = roomByName (room client) rooms
 		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
 
+handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
+	if not $ isMaster client then
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	else
+		if noSuchTeam then
+			(noChangeClients, noChangeRooms, answerBadParam)
+		else
+			(noChangeClients, modifyRoom clRoom{teams = filter (\t -> teamName /= teamname t) $ teams clRoom}, answerRemoveTeam teamName)
+	where
+		noSuchTeam = isNothing findTeam
+		team = fromJust findTeam
+		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
+		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
