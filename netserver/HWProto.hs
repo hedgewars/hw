@@ -38,6 +38,7 @@ answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team,
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
 answerRemoveTeam teamName = [(othersInRoom, ["REMOVE_TEAM", teamName])]
 answerNotOwner = [(clientOnly, ["ERROR", "You do not own this team"])]
+answerTeamColor teamName newColor = [(othersInRoom, ["TEAM_COLOR", teamName, newColor])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -163,6 +164,17 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
 		clRoom = roomByName (room client) rooms
 		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
+
+handleCmd_inRoom client _ rooms ["TEAM_COLOR", teamName, newColor] =
+	if not $ isMaster client then
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	else
+		(noChangeClients, modifyRoom $ modifyTeam clRoom team{teamcolor = newColor}, answerTeamColor teamName newColor)
+	where
+		noSuchTeam = isNothing findTeam
+		team = fromJust findTeam
+		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
+		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 	if noSuchTeam then

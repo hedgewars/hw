@@ -254,7 +254,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
   if (lst[0] == "REMOVE_TEAM") {
-    if(lst.size() < 3)
+    if(lst.size() != 2)
     {
       qWarning("Net: Bad REMOVETEAM message");
       return;
@@ -345,13 +345,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit ammoChanged(lst[3], lst[2]);
 			return;
 		}
-/*		QStringList hhTmpList = lst[1].split('+');// deprecated stuff
-		if (hhTmpList[0] == "TEAM_COLOR") {
-			HWTeam tmptm(hhTmpList[1]);
-			tmptm.teamColor = QColor(lst[2]);
-			emit teamColorChanged(tmptm);
-			return;
-		}*/
 		qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
 		return;
 	}
@@ -365,6 +358,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		HWTeam tmptm(lst[1]);
 		tmptm.numHedgehogs = lst[2].toUInt();
 		emit hhnumChanged(tmptm);
+		return;
+	}
+
+	if (lst[0] == "TEAM_COLOR") {
+		if (lst.size() != 3)
+		{
+			qWarning("Net: Bad TEAM_COLOR message");
+			return;
+		}
+		HWTeam tmptm(lst[1]);
+		tmptm.teamColor = QColor(lst[2]);
+		emit teamColorChanged(tmptm);
 		return;
 	}
 
@@ -405,6 +410,7 @@ void HWNewNet::RunGame()
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
+	if (isChief)
 	RawSendNet(QString("HH_NUM%1%2%1%3")
 			.arg(delimeter)
 			.arg(team.TeamName)
@@ -413,7 +419,8 @@ void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 
 void HWNewNet::onTeamColorChanged(const HWTeam& team)
 {
-	RawSendNet(QString("CONFIG_PARAM%1TEAM_COLOR%1%2%1%3")
+	if (isChief)
+	RawSendNet(QString("TEAM_COLOR%1%2%1%3")
 			.arg(delimeter)
 			.arg(team.TeamName)
 			.arg(team.teamColor.name()));
