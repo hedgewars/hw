@@ -159,7 +159,7 @@ handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difS
 	if length (teams clRoom) == 6 || canAddNumber <= 0 || isJust findTeam then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
-		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam)
+		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam ++ answerTeamColor name color)
 	where
 		clRoom = roomByName (room client) rooms
 		newTeam = (TeamInfo (nick client) name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))

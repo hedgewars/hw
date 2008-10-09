@@ -66,6 +66,8 @@ void HWNewNet::CreateRoom(const QString & room)
 	}
 	
 	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg(room));
+	m_pGameCFGWidget->setEnabled(true);
+	//m_pTeamSelWidget->setNonInteractive();
 	isChief = true;
 }
 
