@@ -685,11 +685,12 @@ void HWForm::StartTraining()
 void HWForm::CreateNetGame()
 {
 	QString ammo;
-	if (pnetserver) {
-	  ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
+	if (hwnet->isRoomChief()) {
+		ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
 	} else {
-	  ammo=ui.pageNetGame->pGameCFG->getNetAmmo();
+		ammo = ui.pageNetGame->pGameCFG->getNetAmmo();
 	}
+	
 	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
 	connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));

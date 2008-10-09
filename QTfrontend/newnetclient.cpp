@@ -486,3 +486,8 @@ void HWNewNet::askRoomsList()
 	}
 	RawSendNet(QString("LIST"));
 }
+
+bool HWNewNet::isRoomChief()
+{
+	return isChief;
+}
