@@ -19,6 +19,7 @@ acceptLoop servSock acceptChan = do
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
 	hPutStrLn cHandle "CONNECTED\n"
+	hFlush cHandle
 	acceptLoop servSock acceptChan
 
 
