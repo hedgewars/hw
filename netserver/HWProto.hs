@@ -7,6 +7,10 @@ import Miscutils
 import Maybe
 import qualified Data.Map as Map
 
+teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
+	where
+		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
+
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
@@ -32,13 +36,17 @@ answerFullConfig room = map toAnswer (Map.toList $ params room)
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
 answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs, or same name team"])]
 answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
-answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo)]
-	where
-		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
+answerAddTeam team = [(othersInRoom, teamToNet team)]
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
 answerRemoveTeam teamName = [(othersInRoom, ["REMOVE_TEAM", teamName])]
 answerNotOwner = [(clientOnly, ["ERROR", "You do not own this team"])]
 answerTeamColor teamName newColor = [(othersInRoom, ["TEAM_COLOR", teamName, newColor])]
+answerAllTeams room = concatMap toAnswer (teams room)
+	where
+		toAnswer team =
+			[(clientOnly, teamToNet team),
+			(clientOnly, ["TEAM_COLOR", teamname team, teamcolor team]),
+			(clientOnly, ["HH_NUM", teamname team, show $ hhnum team])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -108,7 +116,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig clRoom)
+		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
