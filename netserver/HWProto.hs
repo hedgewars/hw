@@ -48,6 +48,7 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(clientOnly, ["TEAM_COLOR", teamname team, teamcolor team]),
 			(clientOnly, ["HH_NUM", teamname team, show $ hhnum team])]
 answerMap mapName = [(othersInRoom, ["MAP", mapName])]
+answerRunGame = [(sameRoom, ["RUN_GAME"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -210,5 +211,14 @@ handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 		team = fromJust findTeam
 		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
 		clRoom = roomByName (room client) rooms
+
+handleCmd_inRoom client _ _ ["READY"] =
+	if not $ isMaster client then
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	else
+		(noChangeClients, noChangeRooms, answerRunGame)
+
+handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
+	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)

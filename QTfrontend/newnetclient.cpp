@@ -255,15 +255,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "REMOVE_TEAM") {
-    if(lst.size() != 2)
-    {
-      qWarning("Net: Bad REMOVETEAM message");
-      return;
-    }
-    m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
-    return;
-  }
+	if (lst[0] == "REMOVE_TEAM") {
+		if(lst.size() != 2)
+		{
+			qWarning("Net: Bad REMOVETEAM message");
+			return;
+		}
+		m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
+		return;
+	}
 
 	if(lst[0]=="JOINED") {
 		if(lst.size() < 2)
@@ -296,7 +296,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if (lst[0] == "RUNGAME") {
+	if (lst[0] == "RUN_GAME") {
 		RunGame();
 		return;
 	}
