@@ -28,6 +28,7 @@ data HedgehogInfo =
 data TeamInfo =
 	TeamInfo
 	{
+		teamowner :: String,
 		teamname :: String,
 		teamcolor :: String,
 		teamgrave :: String,

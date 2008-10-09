@@ -106,7 +106,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 
 void HWNewNet::RemoveTeam(const HWTeam & team)
 {
-  RawSendNet(QString("REMOVETEAM") + delimeter + team.TeamName);
+	RawSendNet(QString("REMOVE_TEAM") + delimeter + team.TeamName);
 }
 
 void HWNewNet::Ready()
@@ -253,7 +253,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "REMOVETEAM") {
+  if (lst[0] == "REMOVE_TEAM") {
     if(lst.size() < 3)
     {
       qWarning("Net: Bad REMOVETEAM message");

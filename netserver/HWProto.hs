@@ -37,6 +37,7 @@ answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team,
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
 answerRemoveTeam teamName = [(othersInRoom, ["REMOVE_TEAM", teamName])]
+answerNotOwner = [(clientOnly, ["ERROR", "You do not own this team"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -139,7 +140,7 @@ handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difS
 		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, answerTeamAccepted newTeam ++ answerAddTeam newTeam)
 	where
 		clRoom = roomByName (room client) rooms
-		newTeam = (TeamInfo name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))
+		newTeam = (TeamInfo (nick client) name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))
 		findTeam = find (\t -> name == teamname t) $ teams clRoom
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
@@ -151,7 +152,7 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 	if not $ isMaster client then
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	else
-		if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber|| noSuchTeam then
+		if hhNumber < 1 || hhNumber > 8 || noSuchTeam || hhNumber > (canAddNumber + (hhnum team)) then
 			(noChangeClients, noChangeRooms, answerBadParam)
 		else
 			(noChangeClients, modifyRoom $ modifyTeam clRoom team{hhnum = hhNumber}, answerHHNum teamName hhNumber)
@@ -164,11 +165,11 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
 
 handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
-	if not $ isMaster client then
-		(noChangeClients, noChangeRooms, answerNotMaster)
+	if noSuchTeam then
+		(noChangeClients, noChangeRooms, answerBadParam)
 	else
-		if noSuchTeam then
-			(noChangeClients, noChangeRooms, answerBadParam)
+		if not $ nick client == teamowner team then
+			(noChangeClients, noChangeRooms, answerNotOwner)
 		else
 			(noChangeClients, modifyRoom clRoom{teams = filter (\t -> teamName /= teamname t) $ teams clRoom}, answerRemoveTeam teamName)
 	where
