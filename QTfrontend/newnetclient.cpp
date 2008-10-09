@@ -87,7 +87,7 @@ void HWNewNet::JoinRoom(const QString & room)
 
 void HWNewNet::AddTeam(const HWTeam & team)
 {
-	QString cmd = QString("ADDTEAM") + delimeter +
+	QString cmd = QString("ADD_TEAM") + delimeter +
 	     team.TeamName + delimeter +
 	     team.teamColor.name() + delimeter +
 	     team.Grave + delimeter +
@@ -345,23 +345,28 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit ammoChanged(lst[3], lst[2]);
 			return;
 		}
-		QStringList hhTmpList = lst[1].split('+');// deprecated stuff
+/*		QStringList hhTmpList = lst[1].split('+');// deprecated stuff
 		if (hhTmpList[0] == "TEAM_COLOR") {
 			HWTeam tmptm(hhTmpList[1]);
 			tmptm.teamColor = QColor(lst[2]);
 			emit teamColorChanged(tmptm);
 			return;
-		}
-		if (hhTmpList[0] == "HHNUM") {
-			HWTeam tmptm(hhTmpList[1]);
-			tmptm.numHedgehogs = lst[2].toUInt();
-			emit hhnumChanged(tmptm);
-			return;
-		}
+		}*/
 		qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
 		return;
 	}
 
+	if (lst[0] == "HH_NUM") {
+		if (lst.size() != 3)
+		{
+			qWarning("Net: Bad TEAM_ACCEPTED message");
+			return;
+		}
+		HWTeam tmptm(lst[1]);
+		tmptm.numHedgehogs = lst[2].toUInt();
+		emit hhnumChanged(tmptm);
+		return;
+	}
 
   if (lst[0] == "GAMEMSG") {
     if(lst.size() < 2)
@@ -400,7 +405,7 @@ void HWNewNet::RunGame()
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
 {
-	RawSendNet(QString("HHNUM%1%2%1%3")
+	RawSendNet(QString("HH_NUM%1%2%1%3")
 			.arg(delimeter)
 			.arg(team.TeamName)
 			.arg(team.numHedgehogs));

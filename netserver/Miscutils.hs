@@ -33,6 +33,7 @@ data TeamInfo =
 		teamgrave :: String,
 		teamfort :: String,
 		difficulty :: Int,
+		hhnum :: Int,
 		hedgehogs :: [HedgehogInfo]
 	}
 
@@ -109,3 +110,13 @@ modifyRoom room (rm:rms) =
 		room : rms
 	else
 		room : modifyRoom room rms
+
+modifyTeam :: RoomInfo -> TeamInfo -> RoomInfo
+modifyTeam room team = room{teams = replaceTeam team $ teams room}
+	where
+	replaceTeam _ [] = error "modifyTeam: no such team"
+	replaceTeam team (t:teams) =
+		if teamname team == teamname t then
+			team : teams
+		else
+			t : replaceTeam team teams

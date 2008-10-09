@@ -9,8 +9,9 @@ import qualified Data.Map as Map
 
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
+answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
 answerQuit = [(clientOnly, ["off"])]
-answerAbandoned = [(sameRoom, ["BYE"])]
+answerAbandoned = [(othersInRoom, ["BYE"])]
 answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
 answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
@@ -29,11 +30,12 @@ answerFullConfig room = map toAnswer (Map.toList $ params room)
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
-answerCantAdd = [(clientOnly, ["WARNING", "Too many teams"])]
+answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs"])]
 answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
 answerAddTeam team = [(othersInRoom, ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo)]
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
+answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -41,7 +43,7 @@ handleCmd client _ rooms ("QUIT":xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit)
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, noChangeRooms, answerQuit ++ (answerQuitInform $ nick client))
 
@@ -120,7 +122,7 @@ handleCmd_inRoom :: CmdHandler
 handleCmd_inRoom client _ _ ["CHAT_STRING", msg] =
 	(noChangeClients, noChangeRooms, answerChatString (nick client) msg)
 
-handleCmd_inRoom client _ rooms ("CONFIG_PARAM":paramName:paramStrs) =
+handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 	if isMaster client then
 		(noChangeClients, modifyRoom clRoom{params = Map.insert paramName paramStrs (params clRoom)}, answerConfigParam paramName paramStrs)
 	else
@@ -128,18 +130,36 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM":paramName:paramStrs) =
 	where
 		clRoom = roomByName (room client) rooms
 
-handleCmd_inRoom client _ rooms ("ADDTEAM" : name : color : grave : fort : difStr : hhsInfo)
+handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 =
-	if length (teams clRoom) == 6 then
+	if length (teams clRoom) == 6 || canAddNumber <= 0 then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
 		(noChangeClients, modifyRoom clRoom{teams = newTeam : teams clRoom}, answerTeamAccepted newTeam ++ answerAddTeam newTeam)
 	where
 		clRoom = roomByName (room client) rooms
-		newTeam = (TeamInfo name color grave fort difficulty (hhsList hhsInfo))
+		newTeam = (TeamInfo name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
+		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
+		newTeamHHNum = min 4 canAddNumber
+
+handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
+	if not $ isMaster client then
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	else
+		if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber|| noSuchTeam then
+			(noChangeClients, noChangeRooms, answerBadParam)
+		else
+			(noChangeClients, modifyRoom $ modifyTeam clRoom team{hhnum = hhNumber}, answerHHNum teamName hhNumber)
+	where
+		hhNumber = fromMaybe 0 (maybeRead numberStr :: Maybe Int)
+		noSuchTeam = isNothing findTeam
+		team = fromJust findTeam
+		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
+		clRoom = roomByName (room client) rooms
+		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
 
 
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
