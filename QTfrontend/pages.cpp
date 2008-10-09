@@ -625,6 +625,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	QGridLayout * pageLayout = new QGridLayout(this);
 
 	roomName = new QLineEdit(this);
+	roomName->setMaxLength(60);
 	pageLayout->addWidget(roomName, 0, 0);
 	roomsList = new QListWidget(this);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);

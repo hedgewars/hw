@@ -57,7 +57,10 @@ handleCmd client _ rooms ("QUIT":xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, noChangeRooms, answerQuit ++ (answerQuitInform $ nick client))
+		(noChangeClients, modifyRoom clRoom{teams = filter (\t -> teamowner t /= nick client) $ teams clRoom}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+	where
+		clRoom = roomByName (room client) rooms
+		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) $ filter (\t -> teamowner t == nick client) $ teams clRoom
 
 
 -- check state and call state-dependent commmand handlers
