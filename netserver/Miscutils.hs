@@ -45,6 +45,7 @@ data RoomInfo =
 		password :: String,
 		roomProto :: Word16,
 		teams :: [TeamInfo],
+		gamemap :: String,
 		params :: Map.Map String [String]
 	}
 

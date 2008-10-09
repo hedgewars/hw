@@ -30,7 +30,7 @@ answerNoRoom = [(clientOnly, ["WARNING", "There's no room with that name"])]
 answerWrongPassword = [(clientOnly, ["WARNING", "Wrong password"])]
 answerChatString nick msg = [(othersInRoom, ["CHAT_STRING", nick, msg])]
 answerConfigParam paramName paramStrs = [(othersInRoom, "CONFIG_PARAM" : paramName : paramStrs)]
-answerFullConfig room = map toAnswer (Map.toList $ params room)
+answerFullConfig room = map toAnswer (Map.toList $ params room) ++ [(clientOnly, ["MAP", gamemap room])]
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
@@ -47,6 +47,7 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			[(clientOnly, teamToNet team),
 			(clientOnly, ["TEAM_COLOR", teamname team, teamcolor team]),
 			(clientOnly, ["HH_NUM", teamname team, show $ hhnum team])]
+answerMap mapName = [(othersInRoom, ["MAP", mapName])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -103,7 +104,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
 		(noChangeClients, noChangeRooms, answerRoomExists)
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword (protocol client) [] Map.empty), answerJoined $ nick client)
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword (protocol client) [] "+rnd+" Map.empty), answerJoined $ nick client)
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 
@@ -136,6 +137,14 @@ handleCmd_inRoom client _ _ ["CHAT_STRING", msg] =
 handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 	if isMaster client then
 		(noChangeClients, modifyRoom clRoom{params = Map.insert paramName paramStrs (params clRoom)}, answerConfigParam paramName paramStrs)
+	else
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	where
+		clRoom = roomByName (room client) rooms
+
+handleCmd_inRoom client _ rooms ["MAP", mapName] =
+	if isMaster client then
+		(noChangeClients, modifyRoom clRoom{gamemap = mapName}, answerMap mapName)
 	else
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	where

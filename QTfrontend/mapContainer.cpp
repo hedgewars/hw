@@ -35,7 +35,9 @@
 #include "igbox.h"
 
 HWMapContainer::HWMapContainer(QWidget * parent) :
-  QWidget(parent), mainLayout(this)
+	QWidget(parent),
+	mainLayout(this),
+	pMap(0)
 {
 #if QT_VERSION >= 0x040300
   mainLayout.setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
@@ -111,12 +113,14 @@ void HWMapContainer::setImage(const QImage newImage)
   imageButt->setIcon(pxres);
   imageButt->setIconSize(QSize(256, 128));
   chooseMap->setCurrentIndex(0);
+  pMap = 0;
 }
 
 void HWMapContainer::mapChanged(int index)
 {
   if(!index) {
     changeImage();
+    emit mapChanged("+rnd+");
     return;
   }
 
@@ -185,10 +189,18 @@ void HWMapContainer::setSeed(const QString & seed)
 
 void HWMapContainer::setMap(const QString & map)
 {
+	if(map == "+rnd+")
+	{
+		changeImage();
+		return;
+	}
+	
 	int id = chooseMap->findText(map);
-	if(id >= 0) {
+	if(id > 0) {
 		chooseMap->setCurrentIndex(id);
 		loadMap(id);
+		if (pMap)
+			disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
 	}
 }
 

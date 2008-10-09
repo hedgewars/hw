@@ -299,7 +299,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-
 	if (lst[0] == "TEAM_ACCEPTED") {
 		if (lst.size() != 2)
 		{
@@ -310,6 +309,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "MAP") {
+		if (lst.size() != 2)
+		{
+			qWarning("Net: Bad MAP message");
+			return;
+		}
+		emit mapChanged(lst[1]);
+		return;
+	}
+
+
 	if (lst[0] == "CONFIG_PARAM") {
 		if(lst.size() < 3)
 		{
@@ -318,10 +328,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		if (lst[1] == "SEED") {
 			emit seedChanged(lst[2]);
-			return;
-		}
-		if (lst[1] == "MAP") {
-			emit mapChanged(lst[2]);
 			return;
 		}
 		if (lst[1] == "THEME") {
@@ -433,7 +439,7 @@ void HWNewNet::onSeedChanged(const QString & seed)
 
 void HWNewNet::onMapChanged(const QString & map)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1MAP%1%2").arg(delimeter).arg(map));
+  if (isChief) RawSendNet(QString("MAP%1%2").arg(delimeter).arg(map));
 }
 
 void HWNewNet::onThemeChanged(const QString & theme)
