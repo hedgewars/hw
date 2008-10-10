@@ -11,11 +11,11 @@ data Flag = ListenPort PortNumber
 
 options :: [OptDescr Flag]
 options = [
-	Option ['p'] ["port"] (OptArg defaultPort "PORT") "listen on PORT"
+	Option ['p'] ["port"] (OptArg readPort "PORT") "listen on PORT"
 	]
 
-defaultPort :: Maybe String -> Flag
-defaultPort str = ListenPort $ fromInteger (fromMaybe 46631 (maybeRead (fromMaybe "46631" str) :: Maybe Integer))
+readPort :: Maybe String -> Flag
+readPort str = ListenPort $ fromInteger (fromMaybe 46631 (maybeRead (fromMaybe "46631" str) :: Maybe Integer))
 
 opts :: IO [Flag]
 opts = do
