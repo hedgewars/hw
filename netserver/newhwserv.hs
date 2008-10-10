@@ -11,6 +11,7 @@ import Maybe (fromMaybe)
 import Data.List
 import Miscutils
 import HWProto
+import Opts
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = do
@@ -87,5 +88,7 @@ startServer serverSocket = do
 
 
 main = withSocketsDo $ do
-	serverSocket <- listenOn $ Service "hedgewars"
+	flags <- opts
+	putStrLn $ "Listening on port " ++ show (getPort flags)
+	serverSocket <- listenOn $ PortNumber (getPort flags)
 	startServer serverSocket `finally` sClose serverSocket
