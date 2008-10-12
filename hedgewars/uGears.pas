@@ -453,85 +453,86 @@ while t <> nil do
       end;
 
 if AllInactive then
-   case step of
-        stDelay: begin
-                 if delay = 0 then
-                    delay:= cInactDelay
-                 else
-                    dec(delay);
+case step of
+	stDelay: begin
+		if delay = 0 then
+			delay:= cInactDelay
+		else
+			dec(delay);
 
-                 if delay = 0 then
-                    inc(step)
-                 end;
-        stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
-    stTurnReact: begin
-                 if (not bBetweenTurns) and (not isInMultiShoot) then
-                    begin
-                    uStats.TurnReaction;
-                    inc(step)
-                    end else
-                    inc(step, 2);
-                 end;
-   stAfterDelay: begin
-                 if delay = 0 then
-                    delay:= cInactDelay
-                 else
-                    dec(delay);
+		if delay = 0 then
+			inc(step)
+		end;
+	stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
+	stTurnReact: begin
+		if (not bBetweenTurns) and (not isInMultiShoot) then
+			begin
+			uStats.TurnReaction;
+			inc(step)
+		end else
+			inc(step, 2);
+		end;
+	stAfterDelay: begin
+		if delay = 0 then
+			delay:= cInactDelay
+		else
+			dec(delay);
 
-                 if delay = 0 then
-                    inc(step)
-                 end;
-        stChWin: begin
-                 CheckForWin;
-                 inc(step)
-                 end;
-        stWater: begin
-                 if TotalRounds = 17 then bWaterRising:= true;
+		if delay = 0 then
+		inc(step)
+		end;
+	stChWin: begin
+			CheckForWin;
+			inc(step)
+			end;
+	stWater: if (not bBetweenTurns) and (not isInMultiShoot) then
+				begin
+				if TotalRounds = 17 then bWaterRising:= true;
 
-                 if bWaterRising then
-                    AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
+				if bWaterRising then
+				AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
 
-                 inc(step)
-                 end;
-       stChWin2: begin
-                 CheckForWin;
-                 inc(step)
-                 end;
-       stHealth: begin
-                 if (TotalRounds = 15) and (cHealthDecrease = 0) then
-                    begin
-                    cHealthDecrease:= 5;
-                    AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState)
-                    end;
+				inc(step)
+				end else inc(step);
+	stChWin2: begin
+			CheckForWin;
+			inc(step)
+			end;
+	stHealth: begin
+			if (TotalRounds = 15) and (cHealthDecrease = 0) then
+				begin
+				cHealthDecrease:= 5;
+				AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState)
+				end;
 
-                 if (cHealthDecrease = 0)
-                   or bBetweenTurns
-                   or isInMultiShoot
-                   or (TotalRounds = 0) then inc(step)
-                    else begin
-                    bBetweenTurns:= true;
-                    HealthMachine;
-                    step:= stChDmg
-                    end
-                 end;
-        stSpawn: begin
-                 if not isInMultiShoot then SpawnBoxOfSmth;
-                 inc(step)
-                 end;
-        stNTurn: begin
-                 if isInMultiShoot then isInMultiShoot:= false
-                    else begin
-                    ParseCommand('/nextturn', true);
-                    SwitchHedgehog;
+			if (cHealthDecrease = 0)
+				or bBetweenTurns
+				or isInMultiShoot
+				or (TotalRounds = 0) then inc(step)
+			else begin
+				bBetweenTurns:= true;
+				HealthMachine;
+				step:= stChDmg
+				end
+			end;
+	stSpawn: begin
+			if not isInMultiShoot then SpawnBoxOfSmth;
+			inc(step)
+			end;
+	stNTurn: begin
+			if isInMultiShoot then isInMultiShoot:= false
+			else begin
+			ParseCommand('/nextturn', true);
+			SwitchHedgehog;
 
-                    inc(step);
+			inc(step);
 
-                    AfterSwitchHedgehog;
-                    bBetweenTurns:= false
-                    end;
-                 step:= Low(step)
-                 end;
-        end;
+			AfterSwitchHedgehog;
+			bBetweenTurns:= false
+			end;
+			step:= Low(step)
+			end;
+	end;
 
 if TurnTimeLeft > 0 then
 		if CurrentHedgehog^.Gear <> nil then

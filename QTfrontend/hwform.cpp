@@ -258,20 +258,23 @@ void HWForm::GoToNetServer()
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
 	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETCFG) {
-		QStringList tmNames=config->GetTeamsList();
+		QStringList tmNames = config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
+		
 		if(id == ID_PAGE_MULTIPLAYER) {
-		  curTeamSelWidget=ui.pageMultiplayer->teamsSelect;
+		  curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
 		} else {
-		  curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
+		  curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
 		}
+		
 		QList<HWTeam> teamsList;
-		for(QStringList::iterator it=tmNames.begin(); it!=tmNames.end(); it++) {
+		for(QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
 		  HWTeam team(*it);
 		  team.LoadFromFile();
 		  teamsList.push_back(team);
 		}
-		if(lastid==ID_PAGE_SETUP) { // _TEAM
+		
+		if(lastid == ID_PAGE_SETUP) { // _TEAM
 		  if (editedTeam) {
 		    curTeamSelWidget->addTeam(*editedTeam);
 		  }
@@ -553,7 +556,7 @@ void HWForm::AddNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-	QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageMultiplayer->gameCFG->WeaponsName->currentText());
+	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageMultiplayer->gameCFG->WeaponsName->currentText());
 
 	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect, ammo);
 

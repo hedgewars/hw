@@ -1773,6 +1773,6 @@ if cWaterLine > 0 then
 	end;
 
 inc(Gear^.Tag);
-if (Gear^.Tag = 51) or (cWaterLine = 0) then
+if (Gear^.Tag = 47) or (cWaterLine = 0) then
 	DeleteGear(Gear)
 end;
