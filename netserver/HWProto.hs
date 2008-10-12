@@ -218,6 +218,9 @@ handleCmd_inRoom client _ _ ["READY"] =
 	else
 		(noChangeClients, noChangeRooms, answerRunGame)
 
+handleCmd_inRoom client _ _ ["ROUNDFINISHED"] =
+		(noChangeClients, noChangeRooms, [])
+
 handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
 	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])
 

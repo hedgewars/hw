@@ -125,6 +125,7 @@ class HWNewNet : public QObject
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
   void askRoomsList();
+  void gameFinished();
 
  private slots:
   void ClientRead();

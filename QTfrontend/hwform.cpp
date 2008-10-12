@@ -581,6 +581,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
 			GoToPage(ID_PAGE_GAMESTATS);
+			if (hwnet) hwnet->gameFinished();
 			break;
 		}
 		default: {
@@ -588,6 +589,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
 				Music(ui.pageOptions->CBEnableMusic->isChecked());
+				if (hwnet) hwnet->gameFinished();
 			}
 		};
 	}

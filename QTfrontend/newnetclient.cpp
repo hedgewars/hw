@@ -491,3 +491,8 @@ bool HWNewNet::isRoomChief()
 {
 	return isChief;
 }
+
+void HWNewNet::gameFinished()
+{
+	RawSendNet(QString("ROUNDFINISHED"));
+}
