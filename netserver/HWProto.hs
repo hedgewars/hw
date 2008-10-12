@@ -218,8 +218,13 @@ handleCmd_inRoom client _ _ ["READY"] =
 	else
 		(noChangeClients, noChangeRooms, answerRunGame)
 
-handleCmd_inRoom client _ _ ["ROUNDFINISHED"] =
+handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
+	if isMaster client then
+		(noChangeClients, modifyRoom clRoom{teams = []}, [])
+	else
 		(noChangeClients, noChangeRooms, [])
+	where
+		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
 	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])
