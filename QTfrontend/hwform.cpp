@@ -282,11 +282,14 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		  curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
 	}
+
+	if (id == ID_PAGE_ROOMSLIST && lastid == ID_PAGE_NETCFG)
+		GoBack();
 }
 
 void HWForm::GoToPage(quint8 id)
 {
-	quint8 lastid=ui.Pages->currentIndex();
+	quint8 lastid = ui.Pages->currentIndex();
 	PagesStack.push(ui.Pages->currentIndex());
 	OnPageShown(id, lastid);
 	ui.Pages->setCurrentIndex(id);
@@ -295,11 +298,12 @@ void HWForm::GoToPage(quint8 id)
 void HWForm::GoBack()
 {
 	if (!PagesStack.isEmpty() && PagesStack.top() == ID_PAGE_NET) {
-	  if(hwnet || pnetserver) NetDisconnect();
+		if(hwnet || pnetserver) NetDisconnect();
 	}
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
-	OnPageShown(id, ui.Pages->currentIndex());
+	quint8 curid = ui.Pages->currentIndex();
 	ui.Pages->setCurrentIndex(id);
+	OnPageShown(id, curid);
 }
 
 void HWForm::btnExitPressed()

@@ -617,6 +617,7 @@ if (Gear^.Health = 0) then
 		Gear^.Timer:= 0;
 		Gear^.State:= Gear^.State or gstHHDeath;
 		Gear^.doStep:= @doStepHedgehogDead;
+		FollowGear:= Gear;
 		PrvInactive:= false;
 		AllInactive:= false
 		end;
