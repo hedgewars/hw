@@ -37,7 +37,7 @@ procedure NetGetNextCmd;
 var hiTicks: Word = 0;
 
 implementation
-uses uConsole, uConsts, uWorld, uMisc, uLand, uChat;
+uses uConsole, uConsts, uWorld, uMisc, uLand, uChat, uTeams;
 const isPonged: boolean = false;
 
 type PCmd = ^TCmd;
@@ -64,7 +64,7 @@ new(Result);
 FillChar(Result^, sizeof(TCmd), 0);
 Result^.Time:= Time;
 Result^.str:= str;
-dec(Result^.len, 2); // cut timestamp
+if Result^.cmd <> 'F' then dec(Result^.len, 2); // cut timestamp
 if headcmd = nil then
    begin
    headcmd:= Result;
@@ -216,7 +216,10 @@ var tmpflag: boolean;
 begin
 tmpflag:= true;
 
-while (headcmd <> nil) and ((GameTicks = headcmd^.Time) or (headcmd^.cmd = 's')) do
+while (headcmd <> nil)
+	and ((GameTicks = headcmd^.Time)
+		or (headcmd^.cmd = 's')
+		or (headcmd^.cmd = 'F')) do
 	begin
 	case headcmd^.cmd of
 		'+': ; // do nothing - it's just empty packet
@@ -239,6 +242,7 @@ while (headcmd <> nil) and ((GameTicks = headcmd^.Time) or (headcmd^.cmd = 's'))
 			AddChatString(s);
 			WriteLnToConsole(s)
 			end;
+		'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
 		'N': begin
 			tmpflag:= false;
 			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(headcmd^.Time)){$ENDIF}

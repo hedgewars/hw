@@ -65,7 +65,7 @@ type PHHAmmo = ^THHAmmo;
 			DrawHealthY: LongInt;
 			AttackBar: LongWord;
 			HedgehogsNumber: Longword;
-			hasSurrendered: boolean;
+			hasGone: boolean;
 			end;
 			
 	TClan = record
@@ -94,9 +94,10 @@ function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
+procedure TeamGone(s: shortstring);
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound, uChat;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;
@@ -174,8 +175,9 @@ repeat
 		end;
 
 	with ClansArray[c]^ do
+		begin
+		PrevTeam:= CurrTeam;
 		repeat
-			PrevTeam:= CurrTeam;
 			CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
 			CurrentTeam:= Teams[CurrTeam];
 			with CurrentTeam^ do
@@ -185,8 +187,9 @@ repeat
 					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
 				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
 				end
-		until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasSurrendered)) or (PrevTeam = CurrTeam);
-until CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil;
+		until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasGone)) or (PrevTeam = CurrTeam);
+		end
+until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasGone);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
 end;
@@ -349,6 +352,24 @@ var t: LongInt;
 begin
 for t:= 0 to Pred(TeamsCount) do
    TeamsArray[t]^.ExtDriven:= false
+end;
+
+procedure TeamGone(s: shortstring);
+var i: integer;
+begin
+i:= 0;
+
+while (i < cMaxTeams)
+	and (TeamsArray[i] <> nil)
+	and (TeamsArray[i]^.TeamName <> s) do inc(i);
+if (i = cMaxTeams) or (TeamsArray[i] = nil) then exit;
+
+with TeamsArray[i]^ do
+	begin
+	AddChatString('* '+ TeamName + ' is gone');
+	//for i:= 0 to cMaxHHIndex do Hedgehogs[i].Gear:= nil;
+	hasGone:= true
+	end
 end;
 
 initialization

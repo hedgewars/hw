@@ -262,6 +262,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
+		if (netClientState == 5) // we're in game, need to tell the engine about this
+		{
+			QByteArray em;
+			HWProto::addStringToBuffer(em, "F" + lst[1]);
+			emit FromNet(em);
+		}
 		return;
 	}
 
@@ -297,6 +303,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "RUN_GAME") {
+		netClientState = 5;
 		RunGame();
 		return;
 	}
@@ -381,18 +388,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-  if (lst[0] == "GAMEMSG") {
-    if(lst.size() < 2)
-    {
-      qWarning("Net: Bad GAMEMSG message");
-      return;
-    }
-    QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
-    emit FromNet(em);
-    return;
-  }
+	if (lst[0] == "GAMEMSG") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad GAMEMSG message");
+			return;
+		}
+		QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
+		emit FromNet(em);
+		return;
+	}
 
-  qWarning() << "Net: Unknown message:" << lst;
+	qWarning() << "Net: Unknown message:" << lst;
 }
 
 
@@ -494,5 +501,6 @@ bool HWNewNet::isRoomChief()
 
 void HWNewNet::gameFinished()
 {
+	netClientState = 3;
 	RawSendNet(QString("ROUNDFINISHED"));
 }
