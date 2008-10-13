@@ -46,8 +46,10 @@ data RoomInfo =
 		roomProto :: Word16,
 		teams :: [TeamInfo],
 		gamemap :: String,
+		gameinprogress :: Bool,
 		params :: Map.Map String [String]
 	}
+createRoom = (RoomInfo "" "" 0 [] "+rnd+" False Map.empty)
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]

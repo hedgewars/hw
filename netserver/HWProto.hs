@@ -58,11 +58,14 @@ handleCmd client _ rooms ("QUIT":xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams ++ answerLostTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
+		answerLostTeams = if gameinprogress clRoom then answerInGameLostTeams clientTeams else []
+		answerInGameLostTeams teams = []
+
 
 
 -- check state and call state-dependent commmand handlers
@@ -109,7 +112,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
 		(noChangeClients, noChangeRooms, answerRoomExists)
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom (RoomInfo newRoom roomPassword (protocol client) [] "+rnd+" Map.empty), answerJoined $ nick client)
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, answerJoined $ nick client)
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 
@@ -212,15 +215,17 @@ handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
 		clRoom = roomByName (room client) rooms
 
-handleCmd_inRoom client _ _ ["READY"] =
+handleCmd_inRoom client _ rooms ["READY"] =
 	if not $ isMaster client then
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	else
-		(noChangeClients, noChangeRooms, answerRunGame)
+		(noChangeClients, modifyRoom clRoom{gameinprogress = True}, answerRunGame)
+	where
+		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(noChangeClients, modifyRoom clRoom{teams = []}, [])
+		(noChangeClients, modifyRoom clRoom{teams = [], gameinprogress = False}, [])
 	else
 		(noChangeClients, noChangeRooms, [])
 	where

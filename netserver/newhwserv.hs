@@ -67,7 +67,7 @@ mainLoop servSock acceptChan clients rooms = do
 	r <- atomically $ (Left `fmap` readTChan acceptChan) `orElse` (Right `fmap` tselect clients)
 	case r of
 		Left ci -> do
-			mainLoop servSock acceptChan (ci:clients) rooms
+			mainLoop servSock acceptChan (clients ++ [ci]) rooms
 		Right (cmd, client) -> do
 			putStrLn ("> " ++ show cmd)
 
