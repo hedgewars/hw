@@ -145,11 +145,6 @@ int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
   return it==weaponItems.end() ? 9 : it->second->getItemsNum();
 }
 
-QString SelWeaponWidget::getWeaponsString() const
-{
-  return currentState;
-}
-
 QString SelWeaponWidget::getWeaponsString(const QString& name) const
 {
   return wconf->value(name).toString();

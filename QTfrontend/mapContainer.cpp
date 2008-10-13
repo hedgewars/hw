@@ -132,12 +132,12 @@ void HWMapContainer::mapChanged(int index)
 void HWMapContainer::loadMap(int index)
 {
   QPixmap mapImage;
-  if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/map.png")) {
+  if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/preview.png")) {
     changeImage();
     chooseMap->setCurrentIndex(0);
     return;
   }
-  imageButt->setIcon(mapImage.scaled(256, 128));
+  imageButt->setIcon(mapImage);
   QFile mapCfgFile(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/map.cfg");
   if (mapCfgFile.open(QFile::ReadOnly)) {
     QTextStream input(&mapCfgFile);
