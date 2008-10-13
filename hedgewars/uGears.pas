@@ -1145,7 +1145,7 @@ while Gear <> nil do
 				gtCase,
 				gtTarget,
 				gtFlame: begin
-						{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
+						//{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
 						if (Mask and EXPLNoDamage) = 0 then
 							begin
 							inc(Gear^.Damage, dmg);

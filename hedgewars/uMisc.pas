@@ -186,7 +186,7 @@ end;
 
 function FloatToStr(n: hwFloat): shortstring;
 begin
-FloatToStr:= cstr(n)
+FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
 function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
