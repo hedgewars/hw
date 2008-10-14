@@ -329,18 +329,21 @@ procedure RecountTeamHealth(team: PTeam);
 var i: LongInt;
 begin
 with team^ do
-     begin
-     NewTeamHealthBarWidth:= 0;
-     for i:= 0 to cMaxHHIndex do
-         if Hedgehogs[i].Gear <> nil then
-            inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
-     TeamHealth:= NewTeamHealthBarWidth;
-     if NewTeamHealthBarWidth > MaxTeamHealth then
-        begin
-        MaxTeamHealth:= NewTeamHealthBarWidth;
-        RecountAllTeamsHealth;
-        end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
-     end;
+	begin
+	NewTeamHealthBarWidth:= 0;
+	
+	if not hasGone then
+		for i:= 0 to cMaxHHIndex do
+			if Hedgehogs[i].Gear <> nil then
+				inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
+
+	TeamHealth:= NewTeamHealthBarWidth;
+	if NewTeamHealthBarWidth > MaxTeamHealth then
+		begin
+		MaxTeamHealth:= NewTeamHealthBarWidth;
+		RecountAllTeamsHealth;
+		end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+	end;
 
 RecountClanHealth(team^.Clan);
 

@@ -446,11 +446,11 @@ PrvInactive:= AllInactive;
 AllInactive:= true;
 t:= GearsList;
 while t <> nil do
-      begin
-      Gear:= t;
-      t:= Gear^.NextGear;
-      if Gear^.Active then Gear^.doStep(Gear);
-      end;
+	begin
+	Gear:= t;
+	t:= Gear^.NextGear;
+	if Gear^.Active then Gear^.doStep(Gear);
+	end;
 
 if AllInactive then
 case step of

@@ -273,7 +273,7 @@ if (headcmd <> nil) then
 			inttostr(headcmd^.Time) + ')',
 			true);
 
-isInLag:= (headcmd = nil) and tmpflag
+isInLag:= (headcmd = nil) and tmpflag and not CurrentTeam^.hasGone
 end;
 
 end.
