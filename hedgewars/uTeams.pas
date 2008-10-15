@@ -382,7 +382,7 @@ with TeamsArray[t]^ do
 	hasGone:= true
 	end;
 	
-RecountTeamHealth(TeamsArray[i])
+RecountTeamHealth(TeamsArray[t])
 end;
 
 initialization
