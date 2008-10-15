@@ -649,8 +649,8 @@ len:= _1 / Distance(cc, cs);
 cc:= cc * len; // rope vector plus hedgehog direction vector normalized
 cs:= cs * len;
 
-nx:= hwAbs(cs) * hwSign(HHGear^.dX) * 7; // hedgehog direction normalized with length 7
-ny:= hwAbs(cc) * hwSign(HHGear^.dY) * 7;
+nx:= SignAs(cs, HHGear^.dX) * 7; // hedgehog direction normalized with length 7
+ny:= SignAs(cc, HHGear^.dY) * 7;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
@@ -680,7 +680,7 @@ if flCheck then  // check whether rope needs dividing
            Gear^.Friction:= Gear^.Friction - len;
            break
            end;
-         len:= len - _0_2
+         len:= len - _0_5
          end;
    end else
    if RopePoints.Count > 0 then // check whether the last dividing point could be removed
