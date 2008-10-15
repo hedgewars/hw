@@ -26,6 +26,7 @@ HWProto::HWProto()
 QByteArray & HWProto::addStringToBuffer(QByteArray & buf, const QString & string)
 {
 	QByteArray strmsg = string.toUtf8();
+	strmsg.left(250);
 	quint8 sz = strmsg.size();
 	buf.append(QByteArray((char *)&sz, 1));
 	buf.append(strmsg);

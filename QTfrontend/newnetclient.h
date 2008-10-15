@@ -105,6 +105,7 @@ class HWNewNet : public QObject
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringFromNet(const QString&);
+  void chatStringFromMe(const QString&);
   void ammoChanged(const QString& name, const QString& ammo);
   void roomsList(const QStringList&);
 

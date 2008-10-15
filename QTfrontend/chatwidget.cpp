@@ -55,7 +55,7 @@ void HWChatWidget::returnPressed()
   chatEditLine->clear();
 }
 
-void HWChatWidget::onChatStringFromNet(const QString& str)
+void HWChatWidget::onChatString(const QString& str)
 {
   QListWidget* w = chatText;
   w->addItem(str);

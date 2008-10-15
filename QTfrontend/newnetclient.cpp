@@ -482,7 +482,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 {
   if(str!="") {
     RawSendNet(QString("CHAT_STRING")+delimeter+str);
-    emit(chatStringFromNet(QString("%1: %2").arg(mynick).arg(str)));
+    emit(chatStringFromMe(QString("%1: %2").arg(mynick).arg(str)));
   }
 }
 

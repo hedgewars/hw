@@ -34,7 +34,7 @@ class HWChatWidget : public QWidget
   HWChatWidget(QWidget* parent=0);
 
  public slots:
-  void onChatStringFromNet(const QString& str);
+  void onChatString(const QString& str);
   void nickAdded(const QString& nick);
   void nickRemoved(const QString& nick);
   void clear();
