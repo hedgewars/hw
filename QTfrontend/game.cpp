@@ -157,6 +157,7 @@ void HWGame::SendNetConfig()
 
 void HWGame::ParseMessage(const QByteArray & msg)
 {
+qDebug() << msg;
 	switch(msg.at(1)) {
 		case '?': {
 			SendIPC("!");
@@ -165,11 +166,11 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		case 'C': {
 			switch (gameType) {
 				case gtLocal: {
-				 	SendConfig();
+					SendConfig();
 					break;
 				}
 				case gtQLocal: {
-				 	SendQuickConfig();
+					SendQuickConfig();
 					break;
 				}
 				case gtDemo: break;
@@ -178,7 +179,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 					break;
 				}
 				case gtTraining: {
-				 	SendTrainingConfig();
+					SendTrainingConfig();
 					break;
 				}
 			}
@@ -216,13 +217,19 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 's': {
 			int size = msg.size();
-			emit SendChat(QString::fromUtf8(msg.mid(2).left(size - 4)));
+			QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
+			emit SendChat(msgbody);
+			QByteArray buf;
+			HWProto::addStringToBuffer(buf, QString("s%1: %2\x20\x20").arg(config->netNick()).arg(msgbody));
+			demo.append(buf);
+			break;
 		}
 		default: {
 			if (gameType == gtNet)
 			{
 				emit SendNet(msg);
 			}
+		if (msg.at(1) != 's')
 			demo.append(msg);
 		}
 	}
