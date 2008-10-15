@@ -300,8 +300,10 @@ void HWForm::GoBack()
 	OnPageShown(id, curid);
 	
 	if (id == ID_PAGE_ROOMSLIST) {
-		if(hwnet || pnetserver) NetDisconnect();
 		GoBack();
+	}
+	if (id == ID_PAGE_NET) {
+		if(hwnet || pnetserver) NetDisconnect();
 	}
 }
 
