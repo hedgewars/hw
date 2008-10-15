@@ -99,7 +99,7 @@ private:
 		ID_PAGE_MULTIPLAYER     =  2,
 		ID_PAGE_DEMOS           =  3,
 		ID_PAGE_NET             =  4,
-		ID_PAGE_NETCFG          =  5,
+		ID_PAGE_NETGAME         =  5,
 		ID_PAGE_INFO            =  6,
 		ID_PAGE_MAIN            =  7,
 		ID_PAGE_GAMESTATS       =  8,

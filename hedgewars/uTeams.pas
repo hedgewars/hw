@@ -370,7 +370,9 @@ if (i = cMaxTeams) or (TeamsArray[i] = nil) then exit;
 with TeamsArray[i]^ do
 	begin
 	AddChatString('* '+ TeamName + ' is gone');
-	//for i:= 0 to cMaxHHIndex do Hedgehogs[i].Gear:= nil;
+	for i:= 0 to cMaxHHIndex do
+		with Hedgehogs[i] do
+			Gear^.State:= Gear^.State and not gstHHDriven;
 	hasGone:= true
 	end
 end;

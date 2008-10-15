@@ -122,7 +122,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, (answerJoined $ nick client) ++ answerNicks ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
+		(modifyClient client{room = roomName}, noChangeRooms, answerNicks ++ (answerJoined $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]

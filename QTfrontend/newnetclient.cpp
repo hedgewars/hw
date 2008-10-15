@@ -53,8 +53,10 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 
 void HWNewNet::Disconnect()
 {
-  m_game_connected = false;
-  NetSocket.disconnectFromHost();
+	if (m_game_connected)
+		RawSendNet(QString("QUIT"));
+	m_game_connected = false;
+	NetSocket.disconnectFromHost();
 }
 
 void HWNewNet::CreateRoom(const QString & room)
@@ -158,7 +160,7 @@ void HWNewNet::OnDisconnect()
 {
   //emit ChangeInTeams(QStringList());
   if(m_game_connected) emit Disconnected();
-  m_game_connected=false;
+  m_game_connected = false;
 }
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)

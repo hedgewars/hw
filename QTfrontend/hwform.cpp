@@ -257,7 +257,7 @@ void HWForm::GoToNetServer()
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
-	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETCFG) {
+	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
 		QStringList tmNames = config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
 		
@@ -282,9 +282,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		  curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
 	}
-
-	if (id == ID_PAGE_ROOMSLIST && lastid == ID_PAGE_NETCFG)
-		GoBack();
 }
 
 void HWForm::GoToPage(quint8 id)
@@ -297,13 +294,15 @@ void HWForm::GoToPage(quint8 id)
 
 void HWForm::GoBack()
 {
-	if (!PagesStack.isEmpty() && PagesStack.top() == ID_PAGE_NET) {
-		if(hwnet || pnetserver) NetDisconnect();
-	}
 	quint8 id = PagesStack.isEmpty() ? ID_PAGE_MAIN : PagesStack.pop();
 	quint8 curid = ui.Pages->currentIndex();
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
+	
+	if (id == ID_PAGE_ROOMSLIST) {
+		if(hwnet || pnetserver) NetDisconnect();
+		GoBack();
+	}
 }
 
 void HWForm::btnExitPressed()
@@ -509,7 +508,7 @@ void HWForm::NetDisconnect()
   if(hwnet) {
     hwnet->Disconnect();
     delete hwnet;
-    hwnet=0;
+    hwnet = 0;
   }
   if(pnetserver) {
     if (pRegisterServer)
@@ -543,7 +542,7 @@ void HWForm::NetConnected()
 
 void HWForm::NetGameEnter()
 {
-	GoToPage(ID_PAGE_NETCFG);
+	GoToPage(ID_PAGE_NETGAME);
 }
 
 void HWForm::NetStartGame()
