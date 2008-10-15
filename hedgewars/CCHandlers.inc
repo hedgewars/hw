@@ -296,9 +296,9 @@ end;
 
 procedure chSay(var s: shortstring);
 begin
+SendIPC('s' + s);
 s:= UserNick + ': ' + s;
-AddChatString(s);
-SendIPC('s' + s)
+AddChatString(s)
 end;
 
 procedure chTimer(var s: shortstring);

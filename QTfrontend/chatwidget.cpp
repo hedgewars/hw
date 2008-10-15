@@ -55,11 +55,10 @@ void HWChatWidget::returnPressed()
   chatEditLine->clear();
 }
 
-void HWChatWidget::onChatStringFromNet(const QStringList& str)
+void HWChatWidget::onChatStringFromNet(const QString& str)
 {
   if (str.size() < 2) return;
   QListWidget* w = chatText;
-  w->addItem(str[0]+": "+str[1]);
   w->scrollToBottom();
   w->setSelectionMode(QAbstractItemView::NoSelection);
 }
@@ -67,8 +66,6 @@ void HWChatWidget::onChatStringFromNet(const QStringList& str)
 void HWChatWidget::nickAdded(const QString& nick)
 {
   chatNicks->addItem(nick);
-  chatText->addItem(QString(tr("* %1 joined")).arg(nick));
-  chatText->scrollToBottom();
 }
 
 void HWChatWidget::nickRemoved(const QString& nick)
@@ -78,8 +75,6 @@ void HWChatWidget::nickRemoved(const QString& nick)
     chatNicks->takeItem(chatNicks->row(*it));
     ++it;
   }
-  chatText->addItem(QString(tr("* %1 left")).arg(nick));
-  chatText->scrollToBottom();
 }
 
 void HWChatWidget::clear()

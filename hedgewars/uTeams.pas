@@ -358,16 +358,16 @@ for t:= 0 to Pred(TeamsCount) do
 end;
 
 procedure TeamGone(s: shortstring);
-var i: integer;
+var i, t: LongInt;
 begin
 i:= 0;
 
-while (i < cMaxTeams)
-	and (TeamsArray[i] <> nil)
-	and (TeamsArray[i]^.TeamName <> s) do inc(i);
-if (i = cMaxTeams) or (TeamsArray[i] = nil) then exit;
+while (t < cMaxTeams)
+	and (TeamsArray[t] <> nil)
+	and (TeamsArray[t]^.TeamName <> s) do inc(t);
+if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 
-with TeamsArray[i]^ do
+with TeamsArray[t]^ do
 	begin
 	AddChatString('* '+ TeamName + ' is gone');
 	for i:= 0 to cMaxHHIndex do

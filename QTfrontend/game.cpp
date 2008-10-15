@@ -201,13 +201,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			}
 			return;
 		}
-		case '+': {
-			if (gameType == gtNet)
-			{
-				emit SendNet(msg);
-			}
-			break;
-		}
 		case 'i': {
 			int size = msg.size();
 			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3).left(size - 5)));
@@ -220,6 +213,10 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		case 'q': {
 			SetGameState(gsFinished);
 			break;
+		}
+		case 's': {
+			int size = msg.size();
+			emit SendChat(QString::fromUtf8(msg.mid(2).left(size - 4)));
 		}
 		default: {
 			if (gameType == gtNet)
@@ -234,6 +231,13 @@ void HWGame::ParseMessage(const QByteArray & msg)
 void HWGame::FromNet(const QByteArray & msg)
 {
 	RawSendIPC(msg);
+}
+
+void HWGame::FromNetChat(const QString & msg)
+{
+	QByteArray buf;
+	HWProto::addStringToBuffer(buf, 's' + msg + "\x20\x20");
+	RawSendIPC(buf);
 }
 
 void HWGame::onClientRead()
