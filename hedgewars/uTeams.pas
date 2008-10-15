@@ -360,8 +360,7 @@ end;
 procedure TeamGone(s: shortstring);
 var i, t: LongInt;
 begin
-i:= 0;
-
+t:= 0;
 while (t < cMaxTeams)
 	and (TeamsArray[t] <> nil)
 	and (TeamsArray[t]^.TeamName <> s) do inc(t);
