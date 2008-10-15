@@ -372,9 +372,18 @@ with TeamsArray[i]^ do
 	AddChatString('* '+ TeamName + ' is gone');
 	for i:= 0 to cMaxHHIndex do
 		with Hedgehogs[i] do
-			Gear^.State:= Gear^.State and not gstHHDriven;
+			if Gear <> nil then
+				begin
+				if Gear^.State and gstAttacking <> 0 then
+					AttackBar:= 0;
+					
+				Gear^.State:= Gear^.State and not gstHHDriven
+				end;
+
 	hasGone:= true
-	end
+	end;
+	
+RecountTeamHealth(TeamsArray[i])
 end;
 
 initialization
