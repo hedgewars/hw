@@ -58,7 +58,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
   chooseMap->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   chooseMap->addItem(QComboBox::tr("generated map..."));
   chooseMap->addItems(*mapList);
-  connect(chooseMap, SIGNAL(activated(int)), this, SLOT(mapChanged(int)));
+  connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
   mainLayout.addWidget(chooseMap, 1, 1);
 
   QLabel * lblMap = new QLabel(tr("Map"), this);
@@ -200,7 +200,10 @@ void HWMapContainer::setMap(const QString & map)
 		chooseMap->setCurrentIndex(id);
 		loadMap(id);
 		if (pMap)
+		{
 			disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+			pMap = 0;
+		}
 	}
 }
 

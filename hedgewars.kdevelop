@@ -48,6 +48,7 @@
       <filetype>*.pas</filetype>
       <filetype>*.inc</filetype>
       <filetype>*.dpr</filetype>
+      <filetype>*.hs</filetype>
     </filetypes>
     <blacklist/>
     <general>
@@ -213,7 +214,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns/>
+      <hidepatterns></hidepatterns>
       <hidenonprojectfiles>true</hidenonprojectfiles>
       <showvcsfields>false</showvcsfields>
     </tree>
