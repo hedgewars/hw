@@ -34,7 +34,7 @@ answerFullConfig room = map toAnswer (Map.toList $ params room) ++ [(clientOnly,
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
-answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs, or same name team"])]
+answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs, or same name team, or round in progress"])]
 answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
 answerAddTeam team = [(othersInRoom, teamToNet team)]
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
@@ -157,7 +157,7 @@ handleCmd_inRoom client _ rooms ["MAP", mapName] =
 
 handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 =
-	if length (teams clRoom) == 6 || canAddNumber <= 0 || isJust findTeam then
+	if length (teams clRoom) == 6 || canAddNumber <= 0 || isJust findTeam || gameinprogress clRoom then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
 		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam ++ answerTeamColor name color)
@@ -222,7 +222,7 @@ handleCmd_inRoom client _ rooms ["READY"] =
 
 handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(noChangeClients, modifyRoom clRoom{teams = [], gameinprogress = False}, [])
+		(noChangeClients, modifyRoom clRoom{gameinprogress = False}, [])
 	else
 		(noChangeClients, noChangeRooms, [])
 	where
