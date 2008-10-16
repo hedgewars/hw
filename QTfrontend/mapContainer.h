@@ -73,7 +73,6 @@ class HWMapContainer : public QWidget
   QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
-  QString theme;
 
   void loadMap(int index);
 };
