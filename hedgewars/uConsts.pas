@@ -74,7 +74,7 @@ type
 			sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
-			sndMelon, sndHellish);
+			sndMelon, sndHellish, sndYoohoo);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -507,7 +507,8 @@ const
 			(FileName:    'Firepunch5.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch5
 			(FileName:    'Firepunch6.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch6
 			(FileName:         'Melon.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMelon
-			(FileName:       'Hellish.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndHellish
+			(FileName:       'Hellish.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndHellish
+			(FileName:        'Yoohoo.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndYoohoo
 			);
 
 	Ammoz: array [TAmmoType] of record
