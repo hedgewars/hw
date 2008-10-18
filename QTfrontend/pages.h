@@ -39,6 +39,7 @@ class QSpinBox;
 class QTextEdit;
 class QRadioButton;
 class QTableView;
+class QTextBrowser;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -349,6 +350,7 @@ public:
 	QPushButton * BtnCreate;
 	QPushButton * BtnJoin;
 	QPushButton * BtnRefresh;
+	QTextBrowser * serverMessage;
 	
 public slots:
 	void setRoomsList(const QStringList & list);

@@ -33,6 +33,7 @@
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QTabWidget>
+#include <QTextBrowser>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -629,8 +630,11 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	pageLayout->addWidget(roomName, 0, 0);
 	roomsList = new QListWidget(this);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
+	serverMessage = new QTextBrowser(this);
+	serverMessage->setOpenExternalLinks(true);
+	pageLayout->addWidget(serverMessage, 4, 0, 1, 2);
 	
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
 	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 2, 1);
@@ -640,6 +644,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	connect(BtnRefresh, SIGNAL(clicked()), this, SLOT(onRefreshClick()));
 	connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
 }
+
 
 void PageRoomsList::setRoomsList(const QStringList & list)
 {

@@ -11,6 +11,7 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
+answerServerMessage = [(clientOnly, ["SERVER_MESSAGE", "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"])]
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
@@ -103,7 +104,7 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client _ rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerRoomsList $ map name rooms)
+		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ map name rooms))
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then

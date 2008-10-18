@@ -115,6 +115,16 @@ int main(int argc, char *argv[])
 //				"background: #2f213a;"
 //				"}"
 
+			"QTextBrowser{"
+				"border: solid;"
+				"border-width: 3px;"
+				"border-radius: 12px;"
+				"border-color: #ffcc00;"
+				"background-color: #0d0544;"
+				"color: #ffcc00;"
+				"font: bold 14px;"
+				"}"
+
 			"QSpinBox{"
 				"border: solid;"
 				"border-width: 3px;"
@@ -194,7 +204,6 @@ int main(int argc, char *argv[])
 				"color: #ffcc00;"
 				"font: bold 14px;"
 				"}"
-
 
 			"IconedGroupBox{"
 				"border: solid;"

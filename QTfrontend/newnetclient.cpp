@@ -233,11 +233,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "SERVER_MESSAGE") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Empty SERVERMESSAGE message");
+			return;
+		}
+		emit serverMessage(lst[1]);
+		return;
+	}
+
 	if (lst[0] == "CHAT_STRING") {
 		if(lst.size() < 3)
 		{
-		qWarning("Net: Empty CHAT_STRING message");
-		return;
+			qWarning("Net: Empty CHAT_STRING message");
+			return;
 		}
 		emit chatStringFromNet(QString("%1: %2").arg(lst[1]).arg(lst[2]));
 		return;

@@ -107,7 +107,9 @@ class HWNewNet : public QObject
   void chatStringFromNet(const QString&);
   void chatStringFromMe(const QString&);
   void ammoChanged(const QString& name, const QString& ammo);
+
   void roomsList(const QStringList&);
+  void serverMessage(const QString &);
 
  public slots:
   void chatLineToNet(const QString& str);

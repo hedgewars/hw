@@ -28,6 +28,7 @@
 #include <QSpinBox>
 #include <QCloseEvent>
 #include <QCheckBox>
+#include <QTextBrowser>
 
 #include "hwform.h"
 #include "game.h"
@@ -422,6 +423,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 	connect(hwnet, SIGNAL(roomsList(const QStringList&)),
 		ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)));
+	connect(hwnet, SIGNAL(serverMessage(const QString&)),
+		ui.pageRoomsList->serverMessage, SLOT(setText(const QString&)));
 	
 	connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
 		hwnet, SLOT(CreateRoom(const QString&)));
