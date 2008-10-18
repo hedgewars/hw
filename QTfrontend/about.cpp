@@ -75,6 +75,7 @@ About::About(QWidget * parent) :
 			
 			QLabel::tr("Translations:") + "</h2><p>"
 			+ QString::fromUtf8(
+			"Brazilian Portuguese: Romulo Fernandes Machado &lt;<a href=\"mailto:abra185@gmail.com\">abra185@gmail.com</a>&gt;<br>"
 			"Bulgarian: Svetoslav Stefanov<br>"
 			"English: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
