@@ -22,6 +22,7 @@ set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MI
 set(HEDGEWARS_PROTO_VER 17)
 
 add_subdirectory(bin)
+add_subdirectory(netserver)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)
