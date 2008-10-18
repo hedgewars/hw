@@ -15,7 +15,7 @@ answerServerMessage = [(clientOnly, ["SERVER_MESSAGE", "<h2><p align=center><a h
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
-answerQuit = [(clientOnly, ["off"])]
+answerQuit = [(clientOnly, ["BYE"])]
 answerAbandoned = [(othersInRoom, ["BYE"])]
 answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]

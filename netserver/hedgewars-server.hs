@@ -6,7 +6,7 @@ import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (setUncaughtExceptionHandler, handle, finally)
-import Control.Monad (forM, forM_, filterM, liftM)
+import Control.Monad (forM, forM_, filterM, liftM, unless)
 import Maybe (fromMaybe)
 import Data.List
 import Miscutils
@@ -44,11 +44,10 @@ clientLoop handle chan =
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
-	putStrLn ("< " ++ (show answer))
+	unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle (\e -> putStrLn (show e) >> hClose ch >> return [ch]) $
-			if (not $ null answer) && (head answer == "off") then hClose ch >> return [ch] else -- probably client with exception, don't send him anything
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
