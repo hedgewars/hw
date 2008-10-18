@@ -1,0 +1,38 @@
+; Brazilian Portuguese locale
+
+00:00=Granada
+00:01=Bomba de estilhaço
+00:02=Bazooka
+00:03=Disco Voador
+00:04=Escopeta
+00:05=Cavadeira
+00:06=Pula a Vez
+00:07=Corda
+00:08=Mina
+00:09=Desert Eagle (Pistola)
+00:10=Dinamite
+00:11=Taco de Baseball
+00:12=Soco de Fogo
+00:13=seg
+00:14=Para-quedas
+00:15=Ataque Aéreo
+00:16=Mine Strike
+00:17=Maçarico
+00:18=Construção
+00:19=Teleporte
+00:20=Trocar de Jogador
+00:21=Morteiro
+00:22=Empurrão
+00:23=Suicídio
+00:24=Bolo de aniversário
+00:25=Sedução
+00:26=Bomba de Melância
+00:27=Granada infernal
+
+01:00=Hora de lutar!
+01:01=Partida empatou
+01:02=%1 ganhou!
+01:03=Volume %1%
+01:04=Pausado
+01:05=Realmente sair (Y/Esc)?
+01:06=Morte Súbita!

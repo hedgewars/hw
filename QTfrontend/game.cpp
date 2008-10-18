@@ -157,7 +157,6 @@ void HWGame::SendNetConfig()
 
 void HWGame::ParseMessage(const QByteArray & msg)
 {
-qDebug() << msg;
 	switch(msg.at(1)) {
 		case '?': {
 			SendIPC("!");
