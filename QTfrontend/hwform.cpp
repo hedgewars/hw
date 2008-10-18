@@ -299,7 +299,7 @@ void HWForm::GoBack()
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
 	
-	if (id == ID_PAGE_ROOMSLIST) {
+	if (id == ID_PAGE_ROOMSLIST || id == ID_PAGE_NETSERVER) {
 		GoBack();
 	}
 	if (id == ID_PAGE_NET) {
