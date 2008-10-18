@@ -20,12 +20,14 @@
 #define _NETSERVER_INCLUDED
 
 #include <QObject>
+#include <QProcess>
 
 class HWNetServer : public QObject
 {
 	Q_OBJECT
 
 public:
+	~HWNetServer();
 	bool StartServer(quint16 port);
 	void StopServer();
 	QString getRunningHostName() const;
@@ -33,6 +35,7 @@ public:
 
 private:
 	quint16 ds_port;
+	QProcess process;
 };
 
 #endif // _NETSERVER_INCLUDED

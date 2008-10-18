@@ -69,12 +69,12 @@ public slots:
 	void FromNetChat(const QString & msg);
 
 private:
-    enum GameType {
-        gtLocal    = 1,
-        gtQLocal   = 2,
-        gtDemo     = 3,
-        gtNet      = 4,
-	gtTraining = 5
+	enum GameType {
+		gtLocal    = 1,
+		gtQLocal   = 2,
+		gtDemo     = 3,
+		gtNet      = 4,
+		gtTraining = 5
     };
 	char msgbuf[MAXMSGCHARS];
 	QString teams[5];

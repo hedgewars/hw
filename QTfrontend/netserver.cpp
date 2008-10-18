@@ -18,17 +18,30 @@
  */
 
 #include <QMessageBox>
+
+#include "hwconsts.h"
 #include "netserver.h"
+
+HWNetServer::~HWNetServer()
+{
+	StopServer();
+}
 
 bool HWNetServer::StartServer(quint16 port)
 {
 	ds_port = port;
 
-	return true;
+	QStringList params;
+	params << QString("--port=%1").arg(port);
+	
+	process.start(bindir->absolutePath() + "/hedgewars-server", params);
+
+	return process.waitForStarted(5000);
 }
 
 void HWNetServer::StopServer()
 {
+	process.close();
 }
 
 
