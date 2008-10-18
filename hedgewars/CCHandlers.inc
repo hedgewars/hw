@@ -297,7 +297,12 @@ end;
 procedure chSay(var s: shortstring);
 begin
 SendIPC('s' + s);
-s:= UserNick + ': ' + s;
+
+if copy(s, 1, 4) = '/me ' then
+	s:= '* ' + UserNick + ' ' + s
+else
+	s:= UserNick + ': ' + s;
+
 AddChatString(s)
 end;
 

@@ -249,7 +249,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Empty CHAT_STRING message");
 			return;
 		}
-		emit chatStringFromNet(QString("%1: %2").arg(lst[1]).arg(lst[2]));
+		emit chatStringFromNet(formatChatMsg(lst[1], lst[2]));
 		return;
 	}
 
@@ -298,7 +298,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 					ConfigAsked();
 			}
 			emit nickAdded(lst[i]);
-			emit chatStringFromNet(QString(tr("* %1 joined")).arg(lst[i]));
+			emit chatStringFromNet(QString(tr("*** %1 joined")).arg(lst[i]));
 		}
 		return;
 	}
@@ -310,7 +310,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit nickRemoved(lst[1]);
-		emit chatStringFromNet(QString(tr("* %1 left")).arg(lst[1]));
+		emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
 		return;
 	}
 
@@ -492,7 +492,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 {
   if(str!="") {
     RawSendNet(QString("CHAT_STRING")+delimeter+str);
-    emit(chatStringFromMe(QString("%1: %2").arg(mynick).arg(str)));
+    emit(chatStringFromMe(formatChatMsg(mynick, str)));
   }
 }
 
@@ -515,4 +515,12 @@ void HWNewNet::gameFinished()
 {
 	netClientState = 3;
 	RawSendNet(QString("ROUNDFINISHED"));
+}
+
+QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
+{
+	if(msg.left(4) == "/me ")
+		return QString("* %1 %2").arg(nick).arg(msg.mid(4));
+	else
+		return QString("%1: %2").arg(nick).arg(msg);
 }

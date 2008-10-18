@@ -120,7 +120,7 @@ end;
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
 begin
-if s[1] = '/' then
+if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 	begin
 	if CurrentTeam^.ExtDriven then exit;
 	
