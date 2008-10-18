@@ -16,7 +16,9 @@ set(hwserv_main ${hedgewars_SOURCE_DIR}/netserver/hedgewars-server.hs)
 set(ghc_flags
 	--make ${hwserv_main}
 	-i${hedgewars_SOURCE_DIR}/netserver
-	-o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX})
+	-o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}
+	-odir ${CMAKE_CURRENT_BINARY_DIR}
+	-hidir ${CMAKE_CURRENT_BINARY_DIR})
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${ghc_executable}"
