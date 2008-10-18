@@ -62,7 +62,6 @@ set(hwfr_src
 	proto.cpp
 	fpsedit.cpp
 	netserver.cpp
-	netconnectedclient.cpp
 	newnetclient.cpp
 	netudpserver.cpp
 	netudpwidget.cpp
@@ -110,7 +109,6 @@ set(hwfr_moc_hdrs
 	proto.h
 	fpsedit.h
 	netserver.h
-	netconnectedclient.h
 	newnetclient.h
 	netudpserver.h
 	netudpwidget.h

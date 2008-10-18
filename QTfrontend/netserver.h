@@ -20,49 +20,19 @@
 #define _NETSERVER_INCLUDED
 
 #include <QObject>
-#include <QList>
-#include <QMap>
-
-#include "team.h"
-
-class HWNetServer;
-class QTcpSocket;
-class QTcpServer;
-class HWConnectedClient;
 
 class HWNetServer : public QObject
 {
-  Q_OBJECT
+	Q_OBJECT
 
- public:
-  bool StartServer(quint16 port);
-  void StopServer();
-  bool isChiefClient(HWConnectedClient* cl) const;
-  QMap<QString, QStringList> getGameCfg() const;
-  void sendAll(QString gameCfg);
-  void sendOthers(HWConnectedClient* this_cl, QString gameCfg);
-  void sendNicks(HWConnectedClient* cl) const;
-  bool haveNick(const QString& nick) const;
-  QString getRunningHostName() const;
-  quint16 getRunningPort() const;
-  QList<QStringList> getTeamsConfig() const;
-  void teamChanged();
-  bool shouldStart(HWConnectedClient* client);
-  QString prepareConfig(QStringList lst);
-  void resetStart();
+public:
+	bool StartServer(quint16 port);
+	void StopServer();
+	QString getRunningHostName() const;
+	quint16 getRunningPort() const;
 
-  QMap<QString, QStringList> m_gameCfg; // config_param - value
-  int hhnum;
-
- private:
-  HWConnectedClient* getChiefClient() const;
-  quint16 ds_port;
-  QTcpServer* IPCServer;
-  QList<HWConnectedClient*> connclients;
-
- private slots:
-  void NewConnection();
-  void ClientDisconnect(HWConnectedClient* client);
+private:
+	quint16 ds_port;
 };
 
 #endif // _NETSERVER_INCLUDED

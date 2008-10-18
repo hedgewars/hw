@@ -34,11 +34,10 @@ HEADERS += binds.h \
            proto.h \
            fpsedit.h \
            netserver.h \
-           netconnectedclient.h \
            newnetclient.h \
            netudpserver.h \
            netudpwidget.h \
-	   netserverslist.h \
+           netserverslist.h \
            chatwidget.h \
            SDLs.h \
            playrecordpage.h \
@@ -69,11 +68,10 @@ SOURCES += binds.cpp \
            proto.cpp \
            fpsedit.cpp \
            netserver.cpp \
-           netconnectedclient.cpp \
            newnetclient.cpp \
            netudpserver.cpp \
            netudpwidget.cpp \
-	   netserverslist.cpp \
+           netserverslist.cpp \
            chatwidget.cpp \
            SDLs.cpp \
            playrecordpage.cpp \
