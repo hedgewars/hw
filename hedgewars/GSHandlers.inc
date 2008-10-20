@@ -1738,11 +1738,11 @@ inc(Gear^.Timer);
 if Gear^.Timer > 250 then
 	begin
 	Gear^.Timer:= 0;
-	inc(Gear^.Pos)
+	inc(Gear^.Pos);
+	if Gear^.Pos = 5 then
+		PlaySound(sndYoohoo, false)
 	end;
 
-if Gear^.Pos = 5 then
-	PlaySound(sndYoohoo, false);
 if Gear^.Pos = 14 then
 	Gear^.doStep:= @doStepSeductionWork
 end;
