@@ -29,7 +29,7 @@ SDLInteraction::SDLInteraction()
 	SDL_Init(SDL_INIT_AUDIO);
 	Mix_OpenAudio(22050, 0x8010, 2, 512);
 	
-	Mix_VolumeMusic(50);
+	Mix_VolumeMusic(33);
 }
 
 SDLInteraction::~SDLInteraction()
