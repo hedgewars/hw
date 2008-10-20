@@ -51,6 +51,13 @@ data RoomInfo =
 	}
 createRoom = (RoomInfo "" "" 0 [] "+rnd+" False Map.empty)
 
+data GlobalInfo =
+	GlobalInfo
+	{
+		isDedicated :: Bool,
+		serverMessage :: String
+	}
+
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
 type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]

@@ -49,6 +49,7 @@
       <filetype>*.inc</filetype>
       <filetype>*.dpr</filetype>
       <filetype>*.hs</filetype>
+      <filetype>*.pro</filetype>
     </filetypes>
     <blacklist/>
     <general>
