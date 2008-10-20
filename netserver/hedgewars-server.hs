@@ -6,7 +6,7 @@ import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (setUncaughtExceptionHandler, handle, finally)
-import Control.Monad (forM, forM_, filterM, liftM, unless)
+import Control.Monad (forM, forM_, filterM, liftM, when, unless)
 import Maybe (fromMaybe)
 import Data.List
 import Miscutils
@@ -16,11 +16,11 @@ import Opts
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = do
 	(cHandle, host, port) <- accept servSock
+	hPutStrLn cHandle "CONNECTED\n"
+	hFlush cHandle
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
-	hPutStrLn cHandle "CONNECTED\n"
-	hFlush cHandle
 	acceptLoop servSock acceptChan
 
 
@@ -77,7 +77,7 @@ mainLoop servSock acceptChan clients rooms = do
 
 			clientsIn <- sendAnswers answers mclient mclients mrooms
 			
-			mainLoop servSock acceptChan clientsIn mrooms
+			when ((isDedicated globalOptions) || (not $ null clientsIn)) $ mainLoop servSock acceptChan clientsIn mrooms
 
 
 startServer serverSocket = do

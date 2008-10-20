@@ -6,12 +6,15 @@ import Data.Word
 import Miscutils
 import Maybe
 import qualified Data.Map as Map
+import Opts
 
 teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
-answerServerMessage = [(clientOnly, ["SERVER_MESSAGE", ""])]
+answerServerMessage = [(clientOnly, "SERVER_MESSAGE" : [body])]
+	where
+		body = serverMessage globalOptions ++ if isDedicated globalOptions then "" else "<p align=center>Private server</p>"
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
@@ -50,7 +53,7 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(clientOnly, ["HH_NUM", teamname team, show $ hhnum team])]
 answerMap mapName = [(othersInRoom, ["MAP", mapName])]
 answerRunGame = [(sameRoom, ["RUN_GAME"])]
-
+answerCannotCreateRoom = [(clientOnly, ["WARNING", "Cannot create more rooms"])]
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
 handleCmd client _ rooms ("QUIT":xs) =
@@ -107,10 +110,13 @@ handleCmd_noRoom client _ rooms ["LIST"] =
 		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ map name rooms))
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
-	if haveSameRoom then
-		(noChangeClients, noChangeRooms, answerRoomExists)
+	if (not $ isDedicated globalOptions) && (not $ null rooms) then
+		(noChangeClients, noChangeRooms, answerCannotCreateRoom)
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, answerJoined $ nick client)
+		if haveSameRoom then
+			(noChangeClients, noChangeRooms, answerRoomExists)
+		else
+			(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, answerJoined $ nick client)
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 
