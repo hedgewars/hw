@@ -87,7 +87,6 @@ startServer serverSocket = do
 
 
 main = withSocketsDo $ do
-	flags <- opts
-	putStrLn $ "Listening on port " ++ show (getPort flags)
-	serverSocket <- listenOn $ PortNumber (getPort flags)
+	putStrLn $ "Listening on port " ++ show (listenPort globalOptions)
+	serverSocket <- listenOn $ PortNumber (listenPort globalOptions)
 	startServer serverSocket `finally` sClose serverSocket

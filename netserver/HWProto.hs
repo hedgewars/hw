@@ -11,7 +11,7 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
-answerServerMessage = [(clientOnly, ["SERVER_MESSAGE", "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"])]
+answerServerMessage = [(clientOnly, ["SERVER_MESSAGE", ""])]
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
