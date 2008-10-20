@@ -14,7 +14,7 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 
 answerServerMessage = [(clientOnly, "SERVER_MESSAGE" : [body])]
 	where
-		body = serverMessage globalOptions ++ if isDedicated globalOptions then "" else "<p align=center>Private server</p>"
+		body = serverMessage globalOptions ++ if isDedicated globalOptions then "<p align=center>Dedicated server</p>" else "<p align=center>Private server</p>"
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]

@@ -77,7 +77,9 @@ mainLoop servSock acceptChan clients rooms = do
 
 			clientsIn <- sendAnswers answers mclient mclients mrooms
 			
-			when ((isDedicated globalOptions) || (not $ null clientsIn)) $ mainLoop servSock acceptChan clientsIn mrooms
+			let hadRooms = (not $ null rooms) && (null mrooms)
+				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
+					mainLoop servSock acceptChan clientsIn mrooms
 
 
 startServer serverSocket = do
