@@ -15,7 +15,7 @@ data GlobalOptions =
 		listenPort :: PortNumber
 	}
 defaultMessage = "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-defaultOptions = (GlobalOptions False defaultMessage 46631)
+defaultOptions = (GlobalOptions True defaultMessage 46631)
 
 options :: [OptDescr (GlobalOptions -> GlobalOptions)]
 options = [
