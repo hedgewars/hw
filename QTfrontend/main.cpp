@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 				"font: bold 14px;"
 				"}"
 
-			"QListWidget{"
+			"QListWidget,QTableView{"
 				"border: solid;"
 				"border-width: 3px;"
 				"border-radius: 12px;"
@@ -111,9 +111,6 @@ int main(int argc, char *argv[])
 			"QListWidget:hover{"
 				"border-color: yellow;"
 				"}"
-//			"QListWidget::item:alternate{"
-//				"background: #2f213a;"
-//				"}"
 
 			"QTextBrowser{"
 				"border: solid;"
