@@ -91,8 +91,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	QTabWidget * tbw = new QTabWidget(this);
-	QWidget * page1 = new QWidget();
-	QWidget * page2 = new QWidget();
+	QWidget * page1 = new QWidget(this);
+	QWidget * page2 = new QWidget(this);
 	tbw->addTab(page1, tr("General"));
 	tbw->addTab(page2, tr("Advanced"));
 	pageLayout->addWidget(tbw, 0, 0, 1, 3);
@@ -199,13 +199,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	BindsBox = new QToolBox(GBoxBinds);
 	BindsBox->setLineWidth(0);
 	GBBLayout->addWidget(BindsBox);
-	page_A = new QWidget();
+	page_A = new QWidget(this);
 	BindsBox->addItem(page_A, QToolBox::tr("Actions"));
-	page_W = new QWidget();
+	page_W = new QWidget(this);
 	BindsBox->addItem(page_W, QToolBox::tr("Weapons"));
-	page_WP = new QWidget();
+	page_WP = new QWidget(this);
 	BindsBox->addItem(page_WP, QToolBox::tr("Weapon properties"));
-	page_O = new QWidget();
+	page_O = new QWidget(this);
 	BindsBox->addItem(page_O, QToolBox::tr("Other"));
 	page2Layout->addWidget(GBoxBinds, 0, 0);
 
@@ -218,18 +218,19 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	quint16 widind = 0, i = 0;
 	while (i < BINDS_NUMBER) {
 		quint16 num = 0;
-		QGridLayout * pagelayout = new QGridLayout(BindsBox->widget(widind));
+		QWidget * curW = BindsBox->widget(widind);
+		QGridLayout * pagelayout = new QGridLayout(curW);
 		do {
-			LBind[i] = new QLabel(BindsBox->widget(widind));
+			LBind[i] = new QLabel(curW);
 			LBind[i]->setText(QApplication::translate("binds", cbinds[i].name));
 			LBind[i]->setAlignment(Qt::AlignRight);
 			pagelayout->addWidget(LBind[i], num, 0);
-			CBBind[i] = new QComboBox(BindsBox->widget(widind));
+			CBBind[i] = new QComboBox(curW);
 			CBBind[i]->addItems(binds);
 			pagelayout->addWidget(CBBind[i], num, 1);
 			num++;
 		} while (!cbinds[i++].chwidget);
-		pagelayout->addWidget(new QWidget(BindsBox->widget(widind)), num, 0, 1, 2);
+		pagelayout->addWidget(new QWidget(curW), num, 0, 1, 2);
 		widind++;
 	}
 }

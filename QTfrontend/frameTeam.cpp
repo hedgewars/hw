@@ -18,7 +18,7 @@
 
 #include <QResizeEvent>
 #include <QCoreApplication>
-#include <QDebug>
+#include <QPalette>
 
 #include "frameTeam.h"
 #include "teamselhelper.h"
@@ -27,16 +27,21 @@
 FrameTeams::FrameTeams(QWidget* parent) :
   QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
-  mainLayout.setSpacing(1);
+	QPalette newPalette = palette();
+	newPalette.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
+	setPalette(newPalette);
+	setAutoFillBackground(true);
+	
+	mainLayout.setSpacing(1);
 
-  availableColors.push_back(*color1);
-  availableColors.push_back(*color2);
-  availableColors.push_back(*color3);
-  availableColors.push_back(*color4);
-  availableColors.push_back(*color5);
-  availableColors.push_back(*color6);
+	availableColors.push_back(*color1);
+	availableColors.push_back(*color2);
+	availableColors.push_back(*color3);
+	availableColors.push_back(*color4);
+	availableColors.push_back(*color5);
+	availableColors.push_back(*color6);
 
-  resetColors();
+	resetColors();
 }
 
 void FrameTeams::setNonInteractive()

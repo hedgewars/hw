@@ -35,19 +35,20 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
   colorButt(0)
 {
-  mainLayout.setSpacing(1);
-  mainLayout.setMargin(2);
-  this->setMaximumHeight(35);
-  QIcon difficultyIcon=team.isNetTeam() ?
-    QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
-    : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
+	QPalette newPalette = palette();
+	newPalette.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
+	setPalette(newPalette);
+	setAutoFillBackground(true);
 
-  QPalette newPalette = palette();
-  newPalette.setColor(QPalette::Button, palette().color(backgroundRole()));
+	mainLayout.setSpacing(0);
+	mainLayout.setMargin(0);
+	this->setMaximumHeight(30);
+	QIcon difficultyIcon=team.isNetTeam() ?
+		QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
+		: QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
 	butt = new QPushButton(difficultyIcon, team.TeamName, this);
 	butt->setFlat(true);
-	butt->setPalette(newPalette);
 	mainLayout.addWidget(butt);
 	butt->setStyleSheet("QPushButton{"
 			"icon-size: 36px;"
@@ -55,14 +56,15 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 			"background-color: #0d0544;"
 			"color: orange;"
 			"font: bold;"
+			"border-width: 2px;"
 		"}");
 
 	if(m_isPlaying) {
 		// team color
-		colorButt=new QPushButton(this);
-		colorButt->setMaximumWidth(30);
-		colorButt->setMinimumHeight(30);
-		colorButt->setGeometry(0, 0, 30, 30);
+		colorButt = new QPushButton(this);
+		colorButt->setMaximumWidth(26);
+		colorButt->setMinimumHeight(26);
+		colorButt->setGeometry(0, 0, 26, 26);
 		
 		changeTeamColor();
 		connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));

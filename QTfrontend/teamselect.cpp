@@ -215,11 +215,10 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
 {
   setTitle(QGroupBox::tr("Playing teams"));
-  framePlaying=new FrameTeams();
-  frameDontPlaying=new FrameTeams();
-//  addScrArea(framePlaying, QColor("DarkTurquoise"));
-//  addScrArea(frameDontPlaying, QColor("LightGoldenrodYellow"));
+  framePlaying = new FrameTeams();
+  frameDontPlaying = new FrameTeams();
   QPalette p;
+  p.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
   addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
   addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
   QPushButton * btnSetup = new QPushButton(this);
