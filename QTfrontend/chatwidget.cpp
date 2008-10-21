@@ -18,6 +18,7 @@
 
 #include <QListWidget>
 #include <QLineEdit>
+#include <QAction>
 
 #include "chatwidget.h"
 
@@ -46,7 +47,12 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
   chatNicks->setMinimumHeight(10);
   chatNicks->setMinimumWidth(10);
   chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
   mainLayout.addWidget(chatNicks, 0, 1);
+
+  QAction * acBan = new QAction(QAction::tr("Kick"), chatNicks);
+  connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onKick()));
+  chatNicks->insertAction(0, acBan);
 }
 
 void HWChatWidget::returnPressed()
@@ -65,12 +71,13 @@ void HWChatWidget::onChatString(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick)
 {
-  chatNicks->addItem(nick);
+	QListWidgetItem * item = new QListWidgetItem(nick);
+	chatNicks->addItem(item);
 }
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
-  QList<QListWidgetItem *> items=chatNicks->findItems(nick, Qt::MatchExactly);
+  QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
   for(QList<QListWidgetItem *>::iterator it=items.begin(); it!=items.end();) {
     chatNicks->takeItem(chatNicks->row(*it));
     ++it;
@@ -81,4 +88,11 @@ void HWChatWidget::clear()
 {
 	chatText->clear();
 	chatNicks->clear();
+}
+
+void HWChatWidget::onKick()
+{
+	QListWidgetItem * curritem = chatNicks->currentItem();
+	if (curritem)
+		emit kick(curritem->text());
 }

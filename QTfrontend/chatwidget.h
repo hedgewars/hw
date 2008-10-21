@@ -41,6 +41,7 @@ class HWChatWidget : public QWidget
 
  signals:
   void chatLine(const QString& str);
+  void kick(const QString & str);
 
  private:
   QGridLayout mainLayout;
@@ -50,6 +51,7 @@ class HWChatWidget : public QWidget
 
  private slots:
   void returnPressed();
+  void onKick();
 };
 
 #endif // _CHAT_WIDGET_INCLUDED

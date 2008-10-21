@@ -16,7 +16,8 @@ data ClientInfo =
 		nick :: String,
 		protocol :: Word16,
 		room :: String,
-		isMaster :: Bool
+		isMaster :: Bool,
+		forceQuit :: Bool
 	}
 
 instance Eq ClientInfo where

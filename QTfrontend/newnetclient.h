@@ -130,6 +130,7 @@ class HWNewNet : public QObject
   void CreateRoom(const QString & room);
   void askRoomsList();
   void gameFinished();
+  void kickPlayer(const QString &);
 
  private slots:
   void ClientRead();

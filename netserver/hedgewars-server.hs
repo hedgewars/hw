@@ -7,7 +7,7 @@ import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (setUncaughtExceptionHandler, handle, finally)
 import Control.Monad (forM, forM_, filterM, liftM, when, unless)
-import Maybe (fromMaybe)
+import Maybe (fromMaybe, isJust, fromJust)
 import Data.List
 import Miscutils
 import HWProto
@@ -20,7 +20,7 @@ acceptLoop servSock acceptChan = do
 	hFlush cHandle
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False)
+	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False)
 	acceptLoop servSock acceptChan
 
 
@@ -61,6 +61,20 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (Miscutils.handle a) == b) list rmClHandles
 
 
+reactCmd :: [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
+reactCmd cmd client clients rooms = do
+	putStrLn ("> " ++ show cmd)
+
+	let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
+	let mrooms = roomsFunc rooms
+	let mclients = (clientsFunc clients)
+	let mclient = fromMaybe client $ find (== client) mclients
+
+	clientsIn <- sendAnswers answers mclient mclients mrooms
+	let quitClient = find forceQuit $ clientsIn
+	if isJust quitClient then reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms else return (clientsIn, mrooms)
+
+
 mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
 mainLoop servSock acceptChan clients rooms = do
 	r <- atomically $ (Left `fmap` readTChan acceptChan) `orElse` (Right `fmap` tselect clients)
@@ -68,14 +82,7 @@ mainLoop servSock acceptChan clients rooms = do
 		Left ci -> do
 			mainLoop servSock acceptChan (clients ++ [ci]) rooms
 		Right (cmd, client) -> do
-			putStrLn ("> " ++ show cmd)
-
-			let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
-			let mrooms = roomsFunc rooms
-			let mclients = (clientsFunc clients)
-			let mclient = fromMaybe client $ find (== client) mclients
-
-			clientsIn <- sendAnswers answers mclient mclients mrooms
+			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $

@@ -238,4 +238,18 @@ handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
 handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
 	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])
 
+handleCmd_inRoom client clients rooms ["KICK", kickNick] =
+	if isMaster client then
+		if noSuchClient || (kickClient == client) then
+			(noChangeClients, noChangeRooms, [])
+		else
+			(modifyClient kickClient{forceQuit = True}, noChangeRooms, [])
+	else
+		(noChangeClients, noChangeRooms, [])
+	where
+		clRoom = roomByName (room client) rooms
+		noSuchClient = isNothing findClient
+		kickClient = fromJust findClient
+		findClient = find (\t -> ((room t) == (room client)) && ((nick t) == kickNick)) $ clients
+
 handleCmd_inRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)

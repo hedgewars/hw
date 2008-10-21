@@ -524,3 +524,8 @@ QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
 	else
 		return QString("%1: %2").arg(nick).arg(msg);
 }
+
+void HWNewNet::kickPlayer(const QString & nick)
+{
+	RawSendNet(QString("KICK%1%2").arg(delimeter).arg(nick));
+}
