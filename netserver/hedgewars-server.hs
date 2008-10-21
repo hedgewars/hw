@@ -47,7 +47,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
-		\ch -> Control.Exception.handle (\e -> putStrLn ("handle exception: " ++ show e) >> hClose ch >> return []) $ -- cannot just remove
+		\ch -> Control.Exception.handle (\e -> putStrLn ("handle exception: " ++ show e) >> return []) $ -- cannot just remove
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
