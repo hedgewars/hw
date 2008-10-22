@@ -383,7 +383,9 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	BtnNetSvrStart = new QPushButton(this);
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
-	pageLayout->addWidget(BtnNetSvrStart, 3, 2);
+	pageLayout->addWidget(BtnNetSvrStart, 4, 2);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 
 	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
@@ -412,7 +414,10 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	BtnSpecifyServer->setText(QPushButton::tr("Specify"));
 	GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+	BtnOfficialServer = new QPushButton(ConnGroupBox);
+	BtnOfficialServer->setFont(*font14);
+	BtnOfficialServer->setText(QPushButton::tr("Join official server"));
+	GBClayout->addWidget(BtnOfficialServer, 3, 0, 1, 3);
 
 	connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
 }

@@ -40,7 +40,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 	setPalette(newPalette);
 	setAutoFillBackground(true);
 
-	mainLayout.setSpacing(0);
+	mainLayout.setSpacing(3);
 	mainLayout.setMargin(0);
 	this->setMaximumHeight(30);
 	QIcon difficultyIcon=team.isNetTeam() ?

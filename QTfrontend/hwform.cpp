@@ -92,10 +92,11 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageSelectWeapon->pWeapons,       SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
 	connect(ui.pageNetGame->pGameCFG,       SIGNAL(newWeaponsName(const QString&)), this, SLOT(NetWeaponNameChanged(const QString&)));
 
-	connect(ui.pageNet->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNet->BtnSpecifyServer,	SIGNAL(clicked()),	this, SLOT(NetConnect()));
-	connect(ui.pageNet->BtnNetSvrStart,	SIGNAL(clicked()),	this, SLOT(GoToNetServer()));
-	connect(ui.pageNet,	SIGNAL(connectClicked(const QString &, quint16)),	this, SLOT(NetConnectServer(const QString &, quint16)));
+	connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
+	connect(ui.pageNet->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
+	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(GoToNetServer()));
+	connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 	
 	connect(ui.pageNetServer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
@@ -401,7 +402,12 @@ void HWForm::PlayDemo()
 
 void HWForm::NetConnectServer(const QString & host, quint16 port)
 {
-  _NetConnect(host, port, ui.pageOptions->editNetNick->text());
+	_NetConnect(host, port, ui.pageOptions->editNetNick->text());
+}
+
+void HWForm::NetConnectOfficialServer()
+{
+	NetConnectServer("netserver.hedgewars.org", 46631);
 }
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString & nick)

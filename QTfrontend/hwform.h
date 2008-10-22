@@ -70,6 +70,7 @@ private slots:
 	void StartTraining();
 	void NetConnect();
 	void NetConnectServer(const QString & host, quint16 port);
+	void NetConnectOfficialServer();
 	void NetStartServer();
 	void NetDisconnect();
 	void NetConnected();
