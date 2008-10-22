@@ -14,6 +14,7 @@ set(hwserver_sources
 set(hwserv_main ${hedgewars_SOURCE_DIR}/netserver/hedgewars-server.hs)
 
 set(ghc_flags
+	-cpp
 	--make ${hwserv_main}
 	-i${hedgewars_SOURCE_DIR}/netserver
 	-o ${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}
