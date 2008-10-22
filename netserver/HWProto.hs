@@ -62,7 +62,7 @@ handleCmd client _ rooms ("QUIT":xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) clientTeams
@@ -107,7 +107,9 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client _ rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ map name rooms))
+		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ concat $ map roomInfo rooms))
+		where
+			roomInfo room = [name room, show $ playersIn room, show $ gameinprogress room]
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if (not $ isDedicated globalOptions) && (not $ null rooms) then
@@ -129,7 +131,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, noChangeRooms, answerNicks ++ (answerJoined $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ (answerJoined $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]

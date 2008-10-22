@@ -12,6 +12,7 @@ import Data.List
 import Miscutils
 import HWProto
 import Opts
+import System.Posix
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = do
@@ -96,6 +97,7 @@ startServer serverSocket = do
 
 
 main = withSocketsDo $ do
+	installHandler sigPIPE Ignore Nothing;
 	putStrLn $ "Listening on port " ++ show (listenPort globalOptions)
 	serverSocket <- listenOn $ PortNumber (listenPort globalOptions)
 	startServer serverSocket `finally` sClose serverSocket
