@@ -34,6 +34,7 @@
 #include <QHeaderView>
 #include <QTabWidget>
 #include <QTextBrowser>
+#include <QTableWidget>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -634,7 +635,14 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomName = new QLineEdit(this);
 	roomName->setMaxLength(60);
 	pageLayout->addWidget(roomName, 0, 0);
-	roomsList = new QListWidget(this);
+	
+	roomsList = new QTableWidget(this);
+	roomsList->setColumnCount(3);
+	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
+	roomsList->verticalHeader()->setVisible(false);
+	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+	roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+	
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	serverMessage = new QTextBrowser(this);
 	serverMessage->setOpenExternalLinks(true);
@@ -655,8 +663,25 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
 	roomsList->clear();
-	roomsList->addItems(list);
-	roomsList->sortItems();
+	roomsList->setHorizontalHeaderLabels(
+			QStringList() <<
+			QTableWidget::tr("Room name") <<
+			QTableWidget::tr("Players number") <<
+			QTableWidget::tr("Round in progress")
+			);
+	
+	if (list.size() % 3)
+		return;
+
+	roomsList->setRowCount(list.size() / 3);
+	for(int i = 0; i < list.size(); i += 3)
+		for(int t = 0; t < 3; t++)
+		{
+			QTableWidgetItem * item = new QTableWidgetItem(list[i + t]);
+			item->setFlags(Qt::ItemIsSelectable);
+			roomsList->setItem(i, t, item);
+		}
+	//roomsList->resizeColumnsToContents();
 }
 
 void PageRoomsList::onCreateClick()
@@ -672,7 +697,7 @@ void PageRoomsList::onCreateClick()
 
 void PageRoomsList::onJoinClick()
 {
-	QListWidgetItem * curritem = roomsList->currentItem();
+	QTableWidgetItem * curritem = roomsList->item(roomsList->currentRow(), 0);
 	if (!curritem)
 	{
 		QMessageBox::critical(this,

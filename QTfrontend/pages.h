@@ -40,6 +40,7 @@ class QTextEdit;
 class QRadioButton;
 class QTableView;
 class QTextBrowser;
+class QTableWidget;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -346,7 +347,7 @@ public:
 	PageRoomsList(QWidget* parent = 0);
 
 	QLineEdit * roomName;
-	QListWidget * roomsList;
+	QTableWidget * roomsList;
 	QPushButton * BtnBack;
 	QPushButton * BtnCreate;
 	QPushButton * BtnJoin;
