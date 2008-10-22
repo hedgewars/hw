@@ -13,7 +13,7 @@ import Miscutils
 import HWProto
 import Opts
 
-#ifndef WIN32
+#if !defined(mingw32_HOST_OS)
 import System.Posix
 #endif
 
@@ -101,7 +101,7 @@ startServer serverSocket = do
 
 
 main = withSocketsDo $ do
-#ifndef WIN32
+#if !defined(mingw32_HOST_OS)
 	installHandler sigPIPE Ignore Nothing;
 #endif
 	putStrLn $ "Listening on port " ++ show (listenPort globalOptions)
