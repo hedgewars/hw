@@ -109,7 +109,11 @@ handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client _ rooms ["LIST"] =
 		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
 		where
-			roomInfo room = [name room, show $ playersIn room, show $ gameinprogress room]
+			roomInfo room = [
+					name room,
+					(show $ playersIn room) ++ "(" ++ (show $ length $ teams room) ++ ")",
+					show $ gameinprogress room
+					]
 			sameProtoRooms = filter (\r -> roomProto r == protocol client) rooms
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =

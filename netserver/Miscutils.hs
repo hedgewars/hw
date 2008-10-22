@@ -115,7 +115,7 @@ modifyRoom room (rm:rms) =
 	if name room == name rm then
 		room : rms
 	else
-		room : modifyRoom room rms
+		rm : modifyRoom room rms
 
 modifyTeam :: RoomInfo -> TeamInfo -> RoomInfo
 modifyTeam room team = room{teams = replaceTeam team $ teams room}
