@@ -107,9 +107,10 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client _ rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ concat $ map roomInfo rooms))
+		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
 		where
 			roomInfo room = [name room, show $ playersIn room, show $ gameinprogress room]
+			sameProtoRooms = filter (\r -> roomProto r == protocol client) rooms
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if (not $ isDedicated globalOptions) && (not $ null rooms) then
@@ -133,7 +134,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else
 		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ (answerJoined $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
-		noSuchRoom = isNothing $ find (\room -> roomName == name room) rooms
+		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
 		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
 		clRoom = roomByName roomName rooms
 
