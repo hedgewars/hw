@@ -25,7 +25,7 @@ acceptLoop servSock acceptChan = do
 	hFlush cHandle
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False)
+	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False False)
 	acceptLoop servSock acceptChan
 
 

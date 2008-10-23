@@ -17,6 +17,7 @@ data ClientInfo =
 		protocol :: Word16,
 		room :: String,
 		isMaster :: Bool,
+		isReady :: Bool,
 		forceQuit :: Bool
 	}
 
@@ -49,9 +50,10 @@ data RoomInfo =
 		gamemap :: String,
 		gameinprogress :: Bool,
 		playersIn :: Int,
+		readyPlayers :: Int,
 		params :: Map.Map String [String]
 	}
-createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 Map.empty)
+createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 0 Map.empty)
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]

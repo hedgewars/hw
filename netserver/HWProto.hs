@@ -54,6 +54,10 @@ answerAllTeams room = concatMap toAnswer (teams room)
 answerMap mapName = [(othersInRoom, ["MAP", mapName])]
 answerRunGame = [(sameRoom, ["RUN_GAME"])]
 answerCannotCreateRoom = [(clientOnly, ["WARNING", "Cannot create more rooms"])]
+answerReady nick = [(sameRoom, ["READY", nick])]
+answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
+
+
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
 handleCmd client _ rooms ("QUIT":xs) =
@@ -62,11 +66,12 @@ handleCmd client _ rooms ("QUIT":xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
+		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
 
 
 -- check state and call state-dependent commmand handlers
@@ -226,13 +231,17 @@ handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
 		clRoom = roomByName (room client) rooms
 
-handleCmd_inRoom client _ rooms ["READY"] =
-	if not $ isMaster client then
-		(noChangeClients, noChangeRooms, answerNotMaster)
+handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
+	if isReady client then
+		(modifyClient client{isReady = False}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, (answerNotReady $ nick client))
 	else
-		(noChangeClients, modifyRoom clRoom{gameinprogress = True}, answerRunGame)
+		if (playersIn clRoom) == newReadyPlayers then
+			(modifyClient client{isReady = True}, modifyRoom clRoom{gameinprogress = True, readyPlayers = newReadyPlayers}, (answerReady $ nick client) ++ answerRunGame)
+		else
+			(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerReady $ nick client)
 	where
 		clRoom = roomByName (room client) rooms
+		newReadyPlayers = (readyPlayers clRoom) + if isReady client then 1 else -1
 
 handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
 	if isMaster client then
