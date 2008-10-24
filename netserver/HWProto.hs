@@ -128,7 +128,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 		if haveSameRoom then
 			(noChangeClients, noChangeRooms, answerRoomExists)
 		else
-			(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, answerJoined $ nick client)
+			(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, (answerJoined $ nick client) ++ (answerNotReady $ nick client))
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 
