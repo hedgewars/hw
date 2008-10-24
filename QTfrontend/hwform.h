@@ -87,6 +87,8 @@ private slots:
 	void NetWeaponNameChanged(const QString& name);
 	void onFrontendFullscreen(bool value);
 	void Music(bool checked);
+	void NetGameMaster();
+	void NetGameSlave();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

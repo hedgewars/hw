@@ -29,6 +29,7 @@
 #include <QCloseEvent>
 #include <QCheckBox>
 #include <QTextBrowser>
+#include <QAction>
 
 #include "hwform.h"
 #include "game.h"
@@ -435,6 +436,10 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(CreateRoom(const QString&)));
 	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
 		hwnet, SLOT(JoinRoom(const QString&)));
+	connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
+		this, SLOT(NetGameMaster()));
+	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
+		this, SLOT(NetGameSlave()));
 	connect(ui.pageRoomsList, SIGNAL(askForRoomList()),
 		hwnet, SLOT(askRoomsList()));
 
@@ -725,4 +730,16 @@ void HWForm::Music(bool checked)
 		sdli.StartMusic();
 	else
 		sdli.StopMusic();
+}
+
+void HWForm::NetGameMaster()
+{
+	ui.pageNetGame->BtnMaster->setVisible(true);
+	ui.pageNetGame->restrictJoins->setChecked(false);
+	ui.pageNetGame->restrictTeamAdds->setChecked(false);
+}
+
+void HWForm::NetGameSlave()
+{
+	ui.pageNetGame->BtnMaster->setVisible(false);
 }

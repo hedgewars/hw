@@ -41,6 +41,7 @@ class QRadioButton;
 class QTableView;
 class QTextBrowser;
 class QTableWidget;
+class QAction;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -67,7 +68,7 @@ class AbstractPage : public QWidget
     if (!iconed) {
       butt->setFont(*font14);
       butt->setText(btname);
-      butt->setStyleSheet("background-color: #0d0544");
+      //butt->setStyleSheet("background-color: #0d0544");
     } else {
       const QIcon& lp=QIcon(btname);
       QSize sz = lp.actualSize(QSize(65535, 65535));
@@ -261,6 +262,11 @@ public:
 
 	QPushButton *BtnBack;
 	QPushButton *BtnGo;
+	QPushButton *BtnMaster;
+	
+	QAction * startGame;
+	QAction * restrictJoins;
+	QAction * restrictTeamAdds;
 
 	HWChatWidget* pChatWidget;
 

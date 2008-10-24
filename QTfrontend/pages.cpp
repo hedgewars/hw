@@ -35,6 +35,8 @@
 #include <QTabWidget>
 #include <QTextBrowser>
 #include <QTableWidget>
+#include <QAction>
+#include <QMenu>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -523,7 +525,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 
 	// chatwidget
 	pChatWidget = new HWChatWidget(this);
-	pageLayout->addWidget(pChatWidget, 1, 0);
+	pageLayout->addWidget(pChatWidget, 1, 0, 2, 1);
 	pageLayout->setRowStretch(1, 100);
 
 	pGameCFG = new GameCFGWidget(this);
@@ -533,12 +535,25 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	pNetTeamsWidget->setAcceptOuter(true);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
-
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
 	BtnGo->setText(QPushButton::tr("Ready"));
-	pageLayout->addWidget(BtnGo, 2, 1);
+	pageLayout->addWidget(BtnGo, 3, 1);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+
+	BtnMaster = addButton(tr("Control"), pageLayout, 2, 1);
+	QMenu * menu = new QMenu(BtnMaster);
+	startGame = new QAction(QAction::tr("Start"), menu);
+	restrictJoins = new QAction(QAction::tr("Restrict Joins"), menu);
+	restrictJoins->setCheckable(true);
+	restrictTeamAdds = new QAction(QAction::tr("Restrict Team Additions"), menu);
+	restrictTeamAdds->setCheckable(true);
+	menu->addAction(startGame);
+	menu->addAction(restrictJoins);
+	menu->addAction(restrictTeamAdds);
+	
+	BtnMaster->setMenu(menu);
 }
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
