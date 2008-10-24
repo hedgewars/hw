@@ -54,7 +54,7 @@ answerAllTeams room = concatMap toAnswer (teams room)
 answerMap mapName = [(othersInRoom, ["MAP", mapName])]
 answerRunGame = [(sameRoom, ["RUN_GAME"])]
 answerCannotCreateRoom = [(clientOnly, ["WARNING", "Cannot create more rooms"])]
-answerReady nick = [(sameRoom, ["READY", nick])]
+answerIsReady nick = [(sameRoom, ["READY", nick])]
 answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
 
 
@@ -141,10 +141,12 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
 	else
-		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ (answerJoined $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
-		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ filter (\ci -> room ci == roomName) clients))]
+		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ sameRoomClients))]
+		answerReady = map (\c -> (clientOnly, [if isReady c then "READY" else "NOT_READY", nick c])) sameRoomClients
+		sameRoomClients = filter (\ci -> room ci == roomName) clients
 		clRoom = roomByName roomName rooms
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
@@ -236,9 +238,9 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 		(modifyClient client{isReady = False}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, (answerNotReady $ nick client))
 	else
 		if (playersIn clRoom) == newReadyPlayers then
-			(modifyClient client{isReady = True}, modifyRoom clRoom{gameinprogress = True, readyPlayers = newReadyPlayers}, (answerReady $ nick client) ++ answerRunGame)
+			(modifyClient client{isReady = True}, modifyRoom clRoom{gameinprogress = True, readyPlayers = newReadyPlayers}, (answerIsReady $ nick client) ++ answerRunGame)
 		else
-			(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerReady $ nick client)
+			(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerIsReady $ nick client)
 	where
 		clRoom = roomByName (room client) rooms
 		newReadyPlayers = (readyPlayers clRoom) + if isReady client then -1 else 1
