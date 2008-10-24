@@ -541,7 +541,7 @@ void HWForm::NetDisconnect()
 
     pnetserver->StopServer();
     delete pnetserver;
-    pnetserver=0;
+    pnetserver = 0;
   }
 }
 

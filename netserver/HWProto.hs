@@ -56,7 +56,8 @@ answerRunGame = [(sameRoom, ["RUN_GAME"])]
 answerCannotCreateRoom = [(clientOnly, ["WARNING", "Cannot create more rooms"])]
 answerIsReady nick = [(sameRoom, ["READY", nick])]
 answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
-
+answerTooFewClans = [(clientOnly, ["ERROR", "Too few clans in game"])]
+answerRestricted = [(clientOnly, ["WARNING", "Room joining restricted"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -140,6 +141,8 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 		(noChangeClients, noChangeRooms, answerNoRoom)
 	else if roomPassword /= password clRoom then
 		(noChangeClients, noChangeRooms, answerWrongPassword)
+	else if isRestrictedJoins clRoom then
+		(noChangeClients, noChangeRooms, answerRestricted)
 	else
 		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
@@ -178,7 +181,11 @@ handleCmd_inRoom client _ rooms ["MAP", mapName] =
 
 handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 =
-	if length (teams clRoom) == 6 || canAddNumber <= 0 || isJust findTeam || gameinprogress clRoom then
+	if length (teams clRoom) == 6
+		|| canAddNumber <= 0
+		|| isJust findTeam
+		|| gameinprogress clRoom
+		|| isRestrictedTeams clRoom then
 		(noChangeClients, noChangeRooms, answerCantAdd)
 	else
 		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam ++ answerTeamColor name color)
@@ -235,15 +242,42 @@ handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 
 handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 	if isReady client then
-		(modifyClient client{isReady = False}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, (answerNotReady $ nick client))
+		(modifyClient client{isReady = False}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerNotReady $ nick client)
 	else
-		if (playersIn clRoom) == newReadyPlayers then
-			(modifyClient client{isReady = True}, modifyRoom clRoom{gameinprogress = True, readyPlayers = newReadyPlayers}, (answerIsReady $ nick client) ++ answerRunGame)
-		else
-			(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerIsReady $ nick client)
+		(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerIsReady $ nick client)
 	where
 		clRoom = roomByName (room client) rooms
 		newReadyPlayers = (readyPlayers clRoom) + if isReady client then -1 else 1
+
+handleCmd_inRoom client _ rooms ["START_GAME"] =
+	if isMaster client && (playersIn clRoom == readyPlayers clRoom) && (not $ gameinprogress clRoom) then
+		if enoughClans then
+			(noChangeClients, modifyRoom clRoom{gameinprogress = True}, answerRunGame)
+		else
+			(noChangeClients, noChangeRooms, answerTooFewClans)
+	else
+		(noChangeClients, noChangeRooms, [])
+	where
+		clRoom = roomByName (room client) rooms
+		enoughClans = not $ null $ drop 1 $ group $ map teamcolor $ teams clRoom
+
+handleCmd_inRoom client _ rooms ["TOGGLE_RESTRICT_JOINS"] =
+	if isMaster client then
+		(noChangeClients, modifyRoom clRoom{isRestrictedJoins = newStatus}, [])
+	else
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	where
+		clRoom = roomByName (room client) rooms
+		newStatus = not $ isRestrictedJoins clRoom
+
+handleCmd_inRoom client _ rooms ["TOGGLE_RESTRICT_TEAMS"] =
+	if isMaster client then
+		(noChangeClients, modifyRoom clRoom{isRestrictedTeams = newStatus}, [])
+	else
+		(noChangeClients, noChangeRooms, answerNotMaster)
+	where
+		clRoom = roomByName (room client) rooms
+		newStatus = not $ isRestrictedTeams clRoom
 
 handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then

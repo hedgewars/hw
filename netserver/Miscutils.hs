@@ -51,9 +51,11 @@ data RoomInfo =
 		gameinprogress :: Bool,
 		playersIn :: Int,
 		readyPlayers :: Int,
+		isRestrictedJoins :: Bool,
+		isRestrictedTeams :: Bool,
 		params :: Map.Map String [String]
 	}
-createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 0 Map.empty)
+createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 0 False False Map.empty)
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
