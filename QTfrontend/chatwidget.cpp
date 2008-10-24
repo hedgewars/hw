@@ -96,3 +96,18 @@ void HWChatWidget::onKick()
 	if (curritem)
 		emit kick(curritem->text());
 }
+
+void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
+{
+	QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+	if (items.size() != 1)
+	{
+		qWarning("Bug: cannot find user in chat");
+		return;
+	}
+
+	if(isReady)
+		items[0]->setIcon(QIcon(":/res/checked.png"));
+	else
+		items[0]->setIcon(QIcon(":/res/unchecked.png"));
+}

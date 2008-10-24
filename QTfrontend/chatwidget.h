@@ -38,6 +38,7 @@ class HWChatWidget : public QWidget
   void nickAdded(const QString& nick);
   void nickRemoved(const QString& nick);
   void clear();
+  void setReadyStatus(const QString & nick, bool isReady);
 
  signals:
   void chatLine(const QString& str);

@@ -253,6 +253,25 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "READY") {
+		if(lst.size() != 2)
+		{
+			qWarning("Net: Malformed READY message");
+			return;
+		}
+		emit setReadyStatus(lst[1], true);
+		return;
+	}
+	if (lst[0] == "NOT_READY") {
+		if(lst.size() != 2)
+		{
+			qWarning("Net: Malformed NOT_READY message");
+			return;
+		}
+		emit setReadyStatus(lst[1], false);
+		return;
+	}
+
 	if (lst[0] == "ADD_TEAM") {
 		if(lst.size() != 21)
 		{

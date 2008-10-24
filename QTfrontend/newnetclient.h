@@ -111,6 +111,8 @@ class HWNewNet : public QObject
   void roomsList(const QStringList&);
   void serverMessage(const QString &);
 
+  void setReadyStatus(const QString & nick, bool isReady);
+
  public slots:
   void ToggleReady();
   void chatLineToNet(const QString& str);
