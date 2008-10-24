@@ -737,6 +737,13 @@ void HWForm::NetGameMaster()
 	ui.pageNetGame->BtnMaster->setVisible(true);
 	ui.pageNetGame->restrictJoins->setChecked(false);
 	ui.pageNetGame->restrictTeamAdds->setChecked(false);
+	
+	if (hwnet)
+	{
+		connect(ui.pageNetGame->startGame, SIGNAL(triggered(bool)), hwnet, SLOT(startGame()));
+		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered(bool)), hwnet, SLOT(toggleRestrictJoins()));
+		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered(bool)), hwnet, SLOT(toggleRestrictTeamAdds()));
+	}
 }
 
 void HWForm::NetGameSlave()

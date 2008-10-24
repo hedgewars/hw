@@ -133,6 +133,9 @@ class HWNewNet : public QObject
   void askRoomsList();
   void gameFinished();
   void kickPlayer(const QString &);
+  void startGame();
+  void toggleRestrictJoins();
+  void toggleRestrictTeamAdds();
 
  private slots:
   void ClientRead();

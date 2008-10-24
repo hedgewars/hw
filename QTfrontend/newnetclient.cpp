@@ -548,3 +548,18 @@ void HWNewNet::kickPlayer(const QString & nick)
 {
 	RawSendNet(QString("KICK%1%2").arg(delimeter).arg(nick));
 }
+
+void HWNewNet::startGame()
+{
+	RawSendNet(QString("START_GAME"));
+}
+
+void HWNewNet::toggleRestrictJoins()
+{
+	RawSendNet(QString("TOGGLE_RESTRICT_JOINS"));
+}
+
+void HWNewNet::toggleRestrictTeamAdds()
+{
+	RawSendNet(QString("TOGGLE_RESTRICT_TEAMS"));
+}
