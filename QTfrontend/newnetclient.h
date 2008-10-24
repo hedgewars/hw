@@ -41,7 +41,6 @@ class HWNewNet : public QObject
   HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
-  void Ready();
   bool isRoomChief();
 
  private:
@@ -113,6 +112,7 @@ class HWNewNet : public QObject
   void serverMessage(const QString &);
 
  public slots:
+  void ToggleReady();
   void chatLineToNet(const QString& str);
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);

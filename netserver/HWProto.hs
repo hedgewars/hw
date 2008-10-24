@@ -241,7 +241,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 			(modifyClient client{isReady = True}, modifyRoom clRoom{readyPlayers = newReadyPlayers}, answerReady $ nick client)
 	where
 		clRoom = roomByName (room client) rooms
-		newReadyPlayers = (readyPlayers clRoom) + if isReady client then 1 else -1
+		newReadyPlayers = (readyPlayers clRoom) + if isReady client then -1 else 1
 
 handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
 	if isMaster client then

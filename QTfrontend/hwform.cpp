@@ -102,7 +102,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
 
 	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), this, SLOT(NetStartGame()));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
@@ -451,6 +450,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
 	connect(hwnet, SIGNAL(nickRemoved(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickRemoved(const QString&)));
+	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
 		hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));
@@ -560,13 +560,6 @@ void HWForm::NetGameEnter()
 	GoToPage(ID_PAGE_NETGAME);
 }
 
-void HWForm::NetStartGame()
-{
-	ui.pageNetGame->BtnGo->setText(QPushButton::tr("Waiting"));
-	ui.pageNetGame->BtnGo->setEnabled(false);
-	hwnet->Ready();
-}
-
 void HWForm::AddNetTeam(const HWTeam& team)
 {
   ui.pageNetGame->pNetTeamsWidget->addTeam(team);
@@ -610,12 +603,6 @@ void HWForm::GameStateChanged(GameState gameState)
 				if (hwnet) hwnet->gameFinished();
 			}
 		};
-	}
-
-	if (hwnet)
-	{
-		ui.pageNetGame->BtnGo->setText(QPushButton::tr("Go!"));
-		ui.pageNetGame->BtnGo->setEnabled(true);
 	}
 }
 

@@ -75,7 +75,6 @@ private slots:
 	void NetDisconnect();
 	void NetConnected();
 	void NetGameEnter();
-	void NetStartGame();
 	void AddNetTeam(const HWTeam& team);
 	void StartMPGame();
 	void GameStateChanged(GameState gameState);

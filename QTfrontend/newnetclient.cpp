@@ -113,9 +113,9 @@ void HWNewNet::RemoveTeam(const HWTeam & team)
 	RawSendNet(QString("REMOVE_TEAM") + delimeter + team.TeamName);
 }
 
-void HWNewNet::Ready()
+void HWNewNet::ToggleReady()
 {
-  RawSendNet(QString("READY"));
+  RawSendNet(QString("TOGGLE_READY"));
 }
 
 void HWNewNet::SendNet(const QByteArray & buf)

@@ -537,8 +537,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
-	BtnGo->setText(QPushButton::tr("Go!"));
-	BtnGo->setEnabled(false);
+	BtnGo->setText(QPushButton::tr("Ready"));
 	pageLayout->addWidget(BtnGo, 2, 1);
 }
 
