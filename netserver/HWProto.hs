@@ -245,13 +245,15 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 		clRoom = roomByName (room client) rooms
 		newReadyPlayers = (readyPlayers clRoom) + if isReady client then -1 else 1
 
-handleCmd_inRoom client _ rooms ["ROUNDFINISHED"] =
+handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(noChangeClients, modifyRoom clRoom{gameinprogress = False}, [])
+		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0}, answerAllNotReady)
 	else
 		(noChangeClients, noChangeRooms, [])
 	where
 		clRoom = roomByName (room client) rooms
+		sameRoomClients = filter (\ci -> room ci == name clRoom) clients
+		answerAllNotReady = map (\cl -> (sameRoom, ["NOT_READY", nick cl])) sameRoomClients
 
 handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
 	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])

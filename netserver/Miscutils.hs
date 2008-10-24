@@ -102,6 +102,9 @@ modifyClient client (cl:cls) =
 	else
 		cl : (modifyClient client cls)
 
+modifyRoomClients :: RoomInfo -> (ClientInfo -> ClientInfo) -> ClientsTransform
+modifyRoomClients clientsroom clientMod clients = map (\c -> if name clientsroom == room c then clientMod c else c) clients
+
 noChangeRooms :: RoomsTransform
 noChangeRooms a = a
 
