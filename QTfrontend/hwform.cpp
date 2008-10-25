@@ -740,9 +740,9 @@ void HWForm::NetGameMaster()
 	
 	if (hwnet)
 	{
-		connect(ui.pageNetGame->startGame, SIGNAL(triggered(bool)), hwnet, SLOT(startGame()));
-		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered(bool)), hwnet, SLOT(toggleRestrictJoins()));
-		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered(bool)), hwnet, SLOT(toggleRestrictTeamAdds()));
+		connect(ui.pageNetGame->startGame, SIGNAL(triggered()), hwnet, SLOT(startGame()));
+		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
+		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
 	}
 }
 
