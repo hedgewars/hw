@@ -120,7 +120,7 @@ handleCmd_noRoom client _ rooms ["LIST"] =
 					(show $ playersIn room) ++ "(" ++ (show $ length $ teams room) ++ ")",
 					show $ gameinprogress room
 					]
-			sameProtoRooms = filter (\r -> roomProto r == protocol client) rooms
+			sameProtoRooms = filter (\r -> (roomProto r == protocol client) && (not $ isRestrictedJoins r)) rooms
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if (not $ isDedicated globalOptions) && (not $ null rooms) then
