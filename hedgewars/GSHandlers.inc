@@ -496,7 +496,7 @@ if TestCollisionYwithGear(Gear, 1) then
 	begin
 	Gear^.dY:= Gear^.dY + cGravity;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
-	if Gear^.Y > _1024 then Gear^.Timer:= 1
+	if hwRound(Gear^.Y) > cWaterLine then Gear^.Timer:= 1
 	end;
 
 Gear^.X:= Gear^.X + HHGear^.dX;
@@ -1092,7 +1092,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 	Gear^.X:= Gear^.X + Gear^.dX;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	
-	if not (Gear^.Y < _1024) then
+	if not (hwRound(Gear^.Y) < cWaterLine) then
 		begin
 		DeleteGear(Gear);
 		exit
