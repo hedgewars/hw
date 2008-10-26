@@ -36,7 +36,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   colorButt(0)
 {
 	QPalette newPalette = palette();
-	newPalette.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
+	newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
 	setPalette(newPalette);
 	setAutoFillBackground(true);
 

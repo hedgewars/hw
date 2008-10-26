@@ -19,13 +19,13 @@
 #ifndef _FRAME_TEAM_INCLUDED
 #define _FRAME_TEAM_INCLUDED
 
-#include <QWidget>
+#include <QFrame>
 #include <QList>
 #include <QColor>
 
 #include "teamselect.h"
 
-class FrameTeams : public QWidget
+class FrameTeams : public QFrame
 {
   Q_OBJECT
 

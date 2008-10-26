@@ -25,10 +25,10 @@
 #include "hwconsts.h"
 
 FrameTeams::FrameTeams(QWidget* parent) :
-  QWidget(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
+  QFrame(parent), maxHedgehogsPerGame(18), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
 	QPalette newPalette = palette();
-	newPalette.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
+	newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
 	setPalette(newPalette);
 	setAutoFillBackground(true);
 	

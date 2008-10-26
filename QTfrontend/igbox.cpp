@@ -30,22 +30,25 @@ IconedGroupBox::IconedGroupBox(QWidget * parent)
 
 void IconedGroupBox::setIcon(const QIcon & icon)
 {
+	if (this->icon.isNull())
+		setStyleSheet(QString(
+			"IconedGroupBox{"
+				"margin-top: 46px;"
+				"margin-left: 12px;"
+				"padding: 22px 0px 0px 0px;"
+				"}"
+			"IconedGroupBox::title{"
+				"subcontrol-origin: margin;"
+				"subcontrol-position: top left;"
+				"padding-left: %1px;"
+				"padding-top: 26px;"
+				"text-align: left;"
+				"}"
+				).arg(padding)
+		);
+
 	this->icon = icon;
-	setStyleSheet(QString(
-		"IconedGroupBox{"
-			"margin-top: 46px;"
-			"margin-left: 12px;"
-			"padding: 22px 0px 0px 0px;"
-			"}"
-		"IconedGroupBox::title{"
-			"subcontrol-origin: margin;"
-			"subcontrol-position: top left;"
-			"padding-left: %1px;"
-			"padding-top: 26px;"
-			"text-align: left;"
-			"}"
-			).arg(padding)
-	);
+	repaint();
 }
 
 void IconedGroupBox::paintEvent(QPaintEvent * event)

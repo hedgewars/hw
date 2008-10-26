@@ -214,17 +214,31 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
 {
-  setTitle(QGroupBox::tr("Playing teams"));
-  framePlaying = new FrameTeams();
-  frameDontPlaying = new FrameTeams();
-  QPalette p;
-  p.setColor(QPalette::Window, QColor(0x13, 0x0f, 0x2c));
-  addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
-  addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
-  QPushButton * btnSetup = new QPushButton(this);
-  btnSetup->setText(QPushButton::tr("Setup"));
-  connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
-  mainLayout.addWidget(btnSetup);
+	setTitle(QGroupBox::tr("Playing teams"));
+	framePlaying = new FrameTeams();
+	framePlaying->setStyleSheet(
+			"FrameTeams{"
+				"border: solid;"
+				"border-width: 1px;"
+				"border-radius: 16px;"
+				"border-color: #ffcc00;"
+				"}"
+	);
+	frameDontPlaying = new FrameTeams();
+	frameDontPlaying->setStyleSheet(
+			"FrameTeams{"
+				"background-image: url(\":/res/panelbg.png\");"
+				"}"
+	);
+	
+	QPalette p;
+	p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+	addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
+	addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+	QPushButton * btnSetup = new QPushButton(this);
+	btnSetup->setText(QPushButton::tr("Setup"));
+	connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+	mainLayout.addWidget(btnSetup);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)
