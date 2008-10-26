@@ -204,11 +204,21 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
 {
-  VertScrArea* area=new VertScrArea(color);
-  area->setWidget(pfteams);
-  mainLayout.addWidget(area, 30);
-  if (maxHeight > 0)
-  	area->setMaximumHeight(maxHeight);
+	VertScrArea* area = new VertScrArea(color);
+	area->setWidget(pfteams);
+	mainLayout.addWidget(area, 30);
+	if (maxHeight > 0)
+	{
+		area->setMaximumHeight(maxHeight);
+		area->setStyleSheet(
+				"FrameTeams{"
+					"border: solid;"
+					"border-width: 1px;"
+					"border-radius: 16px;"
+					"border-color: #ffcc00;"
+					"}"
+		);
+	}
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
@@ -216,20 +226,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 {
 	setTitle(QGroupBox::tr("Playing teams"));
 	framePlaying = new FrameTeams();
-	framePlaying->setStyleSheet(
-			"FrameTeams{"
-				"border: solid;"
-				"border-width: 1px;"
-				"border-radius: 16px;"
-				"border-color: #ffcc00;"
-				"}"
-	);
 	frameDontPlaying = new FrameTeams();
-	frameDontPlaying->setStyleSheet(
-			"FrameTeams{"
-				"background-image: url(\":/res/panelbg.png\");"
-				"}"
-	);
 	
 	QPalette p;
 	p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));

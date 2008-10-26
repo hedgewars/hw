@@ -200,7 +200,13 @@ int main(int argc, char *argv[])
 				"color: #ffcc00;"
 				"font: bold 14px;"
 				"}"
-
+			
+			"VertScrArea{"
+				"background-image: url(\":/res/panelbg.png\");"
+				"background-position: bottom center;"
+				"background-repeat: repeat-x;"
+				"}"
+			
 			"IconedGroupBox{"
 				"border: solid;"
 				"border-width: 3px;"
