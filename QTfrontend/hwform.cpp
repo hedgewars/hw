@@ -31,6 +31,7 @@
 #include <QTextBrowser>
 #include <QAction>
 #include <QTimer>
+#include <QScrollBar>
 
 #include "hwform.h"
 #include "game.h"
@@ -52,6 +53,8 @@ HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
 	ui.setupUi(this);
+
+	CustomizePalettes();
 
 	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
@@ -147,28 +150,44 @@ void HWForm::onFrontendFullscreen(bool value)
   }
 }
 
+void HWForm::CustomizePalettes()
+{
+	QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
+	QPalette pal = palette();
+	pal.setColor(QPalette::WindowText, QColor(0xff, 0xcc, 0x00));
+	pal.setColor(QPalette::Button, QColor(0x00, 0x35, 0x1d));
+	pal.setColor(QPalette::Base, QColor(0x00, 0x35, 0x1d));
+	pal.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+
+	for (int i = 0; i < allSBars.size(); ++i)
+		allSBars.at(i)->setPalette(pal);
+}
+
 void HWForm::UpdateWeapons()
 {
-  // FIXME: rewrite this with boost (or TR1/0x)
-  QVector<QComboBox*> combos;
-  combos.push_back(ui.pageOptions->WeaponsName);
-  combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
-  combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
+	// FIXME: rewrite this with boost (or TR1/0x)
+	QVector<QComboBox*> combos;
+	combos.push_back(ui.pageOptions->WeaponsName);
+	combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
+	combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
 
-  for(QVector<QComboBox*>::iterator it=combos.begin(); it!=combos.end(); ++it) {
-    (*it)->clear();
-    (*it)->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
-    int pos=(*it)->findText("Default");
-    if (pos!=-1) {
-      (*it)->setCurrentIndex(pos);
-    }
-  }
+	for(QVector<QComboBox*>::iterator it=combos.begin(); it!=combos.end(); ++it) {
+		(*it)->clear();
+		(*it)->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+		int pos=(*it)->findText("Default");
+		if (pos!=-1) {
+			(*it)->setCurrentIndex(pos);
+		}
+	}
 }
 
 void HWForm::NetWeaponNameChanged(const QString& name)
 {
-  QString ammo=ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
-  hwnet->onWeaponsNameChanged(name, ammo);
+	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(
+			ui.pageNetGame->pGameCFG->WeaponsName->currentText()
+			);
+
+	hwnet->onWeaponsNameChanged(name, ammo);
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)

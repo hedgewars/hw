@@ -70,7 +70,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 		connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
 		mainLayout.addWidget(colorButt);
 
-		phhoger=new CHedgehogerWidget(QImage(":/res/hh25x25.png"), this);
+		phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), this);
 		connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
 		mainLayout.addWidget(phhoger);
 	}

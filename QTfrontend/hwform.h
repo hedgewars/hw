@@ -96,6 +96,8 @@ private:
 	void UpdateTeamsLists(const QStringList* editable_teams=0);
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
 	void closeEvent(QCloseEvent *event);
+	void CustomizePalettes();
+	
 	enum PageIDs {
 		ID_PAGE_SETUP_TEAM      =  0,
 		ID_PAGE_SETUP           =  1,
