@@ -1,7 +1,7 @@
 ; Czech locale
 
 00:00=Granát
-00:01=ClusterBomb
+00:01=Tříštivý Granát
 00:02=Bazuka
 00:03=UFO
 00:04=Brokovnice
