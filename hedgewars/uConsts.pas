@@ -171,6 +171,7 @@ const
 	gfForts       = $00000001;
 	gfMultiWeapon = $00000002;
 	gfSolidLand   = $00000004;
+	gfDivideTeams = $00000010;
 	gfOneClanMode = $10000000;
 
 	gstDrowning       = $00000001;

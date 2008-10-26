@@ -1262,9 +1262,10 @@ var i, t, p, j: LongInt;
     ar: array[0..Pred(cMaxHHs)] of PGear;
     Count: Longword;
 begin
-if (GameFlags and gfForts) <> 0 then
+if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	begin
 	t:= 0;
+	TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
 	for p:= 0 to 1 do
 		begin
 		with ClansArray[p]^ do

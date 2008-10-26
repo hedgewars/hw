@@ -86,9 +86,9 @@ quint32 GameCFGWidget::getGameFlags() const
 	quint32 result = 0;
 
 	if (CB_mode_Forts->isChecked())
-		result |= 1;
+		result |= 0x01;
 	if (CB_teamsDivide->isChecked())
-		result |= 1;
+		result |= 0x10;
 
 	return result;
 }

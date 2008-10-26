@@ -551,7 +551,6 @@ procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Generating forts land...');
-TryDo(ClansCount = 2, 'More or less than 2 clans on map in forts mode!', true);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
 BlitImageAndGenerateCollisionInfo(0, 0, 1024, tmpsurf);
