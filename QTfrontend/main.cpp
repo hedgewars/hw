@@ -20,10 +20,7 @@
 #include <QTranslator>
 #include <QLocale>
 #include <QMessageBox>
-#include <QFileInfo>
-#include <QDateTime>
-#include <QTextStream>
-#include <QDesktopWidget>
+#include <QPlastiqueStyle>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -47,6 +44,8 @@ int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
 
+	app.setStyle(new QPlastiqueStyle);
+	
 	QDateTime now = QDateTime::currentDateTime();
 	QDateTime zero;
 	srand(now.secsTo(zero));
