@@ -89,6 +89,7 @@ private slots:
 	void Music(bool checked);
 	void NetGameMaster();
 	void NetGameSlave();
+	void AsyncNetServerStart();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

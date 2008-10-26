@@ -38,17 +38,17 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
   loginStep(0),
   netClientState(0)
 {
-  connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-  connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
-  connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
-  connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
-	  SLOT(displayError(QAbstractSocket::SocketError)));
+	connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+	connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
+	connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
+	connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+			SLOT(displayError(QAbstractSocket::SocketError)));
 }
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
-  mynick = nick;
-  NetSocket.connectToHost(hostName, port);
+	mynick = nick;
+	NetSocket.connectToHost(hostName, port);
 }
 
 void HWNewNet::Disconnect()

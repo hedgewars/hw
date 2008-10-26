@@ -30,6 +30,7 @@
 #include <QCheckBox>
 #include <QTextBrowser>
 #include <QAction>
+#include <QTimer>
 
 #include "hwform.h"
 #include "game.h"
@@ -502,7 +503,7 @@ void HWForm::NetConnect()
 		delete netHost;
 		netHost = new QString(hpd->leHost->text());
 		netPort = hpd->sbPort->value();
-		_NetConnect(*netHost, netPort, ui.pageOptions->editNetNick->text());
+		NetConnectServer(*netHost, netPort);
 	}
 }
 
@@ -520,9 +521,16 @@ void HWForm::NetStartServer()
 		return;
 	}
 
-	_NetConnect("localhost", pnetserver->getRunningPort(), ui.pageOptions->editNetNick->text());
+	QTimer::singleShot(250, this, SLOT(AsyncNetServerStart()));
 
-	pRegisterServer = new HWNetUdpServer(0, ui.pageNetServer->leServerDescr->text(), ui.pageNetServer->sbPort->value());
+	pRegisterServer = new HWNetUdpServer(0,
+			ui.pageNetServer->leServerDescr->text(),
+			ui.pageNetServer->sbPort->value());
+}
+
+void HWForm::AsyncNetServerStart()
+{
+	NetConnectServer("localhost", pnetserver->getRunningPort());
 }
 
 void HWForm::NetDisconnect()
@@ -547,14 +555,14 @@ void HWForm::NetDisconnect()
 
 void HWForm::ForcedDisconnect()
 {
-  if(pnetserver) return; // we have server - let it care of all things
-  if (hwnet) {
-    hwnet->deleteLater();
-    hwnet=0;
-    QMessageBox::warning(this, QMessageBox::tr("Network"),
-			 QMessageBox::tr("Connection to server is lost"));
-  }
-  GoBack();
+	if(pnetserver) return; // we have server - let it care of all things
+	if (hwnet) {
+		hwnet->deleteLater();
+		hwnet = 0;
+		QMessageBox::warning(this, QMessageBox::tr("Network"),
+				QMessageBox::tr("Connection to server is lost"));
+	}
+	GoBack();
 }
 
 void HWForm::NetConnected()
@@ -569,7 +577,7 @@ void HWForm::NetGameEnter()
 
 void HWForm::AddNetTeam(const HWTeam& team)
 {
-  ui.pageNetGame->pNetTeamsWidget->addTeam(team);
+	ui.pageNetGame->pNetTeamsWidget->addTeam(team);
 }
 
 void HWForm::StartMPGame()
