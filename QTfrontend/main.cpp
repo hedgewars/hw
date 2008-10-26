@@ -283,6 +283,26 @@ int main(int argc, char *argv[])
 			"QMenu::indicator:non-exclusive:unchecked{"
 				"image: url(\":/res/unchecked.png\");"
 				"}"
+
+			"QScrollBar:vertical{"
+				"background-color: #000000;"
+				"border: 2px #ffcc00;"
+				"width: 16px;"
+				"margin: 22px 0 22px 0;"
+				"}"
+			"QScrollBar::handle:vertical{"
+				"border: 1px #ffcc00;"
+				"background-color: #0d0544;"
+				"min-height: 16px;"
+				"}"
+			"QScrollBar::up-arrow:vertical{"
+				"image: url(\":/res/spin_up.png\");"
+				"width: 16px;"
+				"height: 16px;"
+				"}"
+			"QScrollBar::down-arrow:vertical{"
+				"image: url(\":/res/spin_down.png\");"
+				"}"
 			)
 		);
 

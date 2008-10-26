@@ -386,6 +386,7 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	BtnNetSvrStart = new QPushButton(this);
 	BtnNetSvrStart->setFont(*font14);
 	BtnNetSvrStart->setText(QPushButton::tr("Start server"));
+	BtnNetSvrStart->setVisible(haveServer);
 	pageLayout->addWidget(BtnNetSvrStart, 4, 2);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);

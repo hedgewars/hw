@@ -43,3 +43,5 @@ extern QColor * color6;
 
 extern QString * netHost;
 extern quint16 netPort;
+
+extern bool haveServer;

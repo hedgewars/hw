@@ -1,6 +1,6 @@
 To compile and install you need:
- - Qt >= 4.2
- - FreePascal >= 1.9.4
+ - Qt >= 4.4
+ - FreePascal >= 2.2.0
  - SDL >= 1.2.5
  - SDL_net >= 1.2.5
  - SDL_mixer >= 1.2
@@ -12,6 +12,8 @@ To compile and install you need:
 $ cmake .
 or
 $ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir" .
+
+add -DWITH_SERVER=1 to compile net server (requires Glasgow Haskell Compiler)
 
 2. Compile:
 $ make
