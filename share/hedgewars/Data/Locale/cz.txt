@@ -1,0 +1,38 @@
+; Czech locale
+
+00:00=Granát
+00:01=ClusterBomb
+00:02=Bazuka
+00:03=UFO
+00:04=Brokovnice
+00:05=Sbíječka
+00:06=Přeskočit
+00:07=Lano
+00:08=Mina
+00:09=DEagle
+00:10=Dynamit
+00:11=Basebalová pálka
+00:12=Ohnivý úder
+00:13=sec
+00:14=Padák
+00:15=Nálet
+00:16=Minový nálet
+00:17=Blow Torch
+00:18=Výstavba
+00:19=Teleportace
+00:20=Vyměnit Ježka
+00:21=Mortar
+00:22=Švihnutí bičem
+00:23=Kamikaze
+00:24=Dort
+00:25=Omámení
+00:26=Bomba z vodního melounu
+00:27=Ďábelský ruční granát
+
+01:00=Do boje!
+01:01=Kolo nerozhodně
+01:02=%1 vyhráli!
+01:03=Hlasitost %1%
+01:04=Pauza
+01:05=Opravdu ukončit (Y/Esc)?
+01:06=Náhlá smrt!
