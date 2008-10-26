@@ -385,6 +385,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit fortsModeChanged(lst[2].toInt() != 0);
 			return;
 		}
+		if (lst[1] == "DIVIDETEAMS") {
+			emit teamsDivideChanged(lst[2].toInt() != 0);
+			return;
+		}
 		if (lst[1] == "AMMO") {
 			if(lst.size() < 4) return;
 			emit ammoChanged(lst[3], lst[2]);
@@ -486,12 +490,12 @@ void HWNewNet::onThemeChanged(const QString & theme)
   if (isChief) RawSendNet(QString("CONFIG_PARAM%1THEME%1%2").arg(delimeter).arg(theme));
 }
 
-void HWNewNet::onInitHealthChanged(quint32 health)
+void HWNewNet::onInitHealthChanged(int health)
 {
   if (isChief) RawSendNet(QString("CONFIG_PARAM%1HEALTH%1%2").arg(delimeter).arg(health));
 }
 
-void HWNewNet::onTurnTimeChanged(quint32 time)
+void HWNewNet::onTurnTimeChanged(int time)
 {
   if (isChief) RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
 }
@@ -499,6 +503,11 @@ void HWNewNet::onTurnTimeChanged(quint32 time)
 void HWNewNet::onFortsModeChanged(bool value)
 {
   if (isChief) RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
+}
+
+void HWNewNet::onTeamsDivideChanged(bool value)
+{
+  if (isChief) RawSendNet(QString("CONFIG_PARAM%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)

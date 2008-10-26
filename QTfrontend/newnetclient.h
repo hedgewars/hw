@@ -99,9 +99,10 @@ class HWNewNet : public QObject
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
   void themeChanged(const QString & theme);
-  void initHealthChanged(quint32 health);
-  void turnTimeChanged(quint32 time);
+  void initHealthChanged(int health);
+  void turnTimeChanged(int time);
   void fortsModeChanged(bool value);
+  void teamsDivideChanged(bool value);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringFromNet(const QString&);
@@ -122,9 +123,10 @@ class HWNewNet : public QObject
   void onSeedChanged(const QString & seed);
   void onMapChanged(const QString & map);
   void onThemeChanged(const QString & theme);
-  void onInitHealthChanged(quint32 health);
-  void onTurnTimeChanged(quint32 time);
+  void onInitHealthChanged(int health);
+  void onTurnTimeChanged(int time);
   void onFortsModeChanged(bool value);
+  void onTeamsDivideChanged(bool value);
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
   void onWeaponsNameChanged(const QString& name, const QString& ammo);

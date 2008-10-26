@@ -40,44 +40,56 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	mainLayout.addWidget(GBoxOptions);
 
 	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
+	
 	CB_mode_Forts = new QCheckBox(GBoxOptions);
 	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
 	GBoxOptionsLayout->addWidget(CB_mode_Forts, 0, 0, 1, 2);
 
+	CB_teamsDivide = new QCheckBox(GBoxOptions);
+	CB_teamsDivide->setText(QCheckBox::tr("Divide teams"));
+	GBoxOptionsLayout->addWidget(CB_teamsDivide, 1, 0, 1, 2);
+
 	L_TurnTime = new QLabel(QLabel::tr("Turn time"), GBoxOptions);
 	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
-	GBoxOptionsLayout->addWidget(L_TurnTime, 1, 0);
-	GBoxOptionsLayout->addWidget(L_InitHealth, 2, 0);
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 3, 0);
+	GBoxOptionsLayout->addWidget(L_TurnTime, 2, 0);
+	GBoxOptionsLayout->addWidget(L_InitHealth, 3, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 4, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
-	SB_TurnTime->setRange(15, 90);
+	SB_TurnTime->setRange(5, 90);
 	SB_TurnTime->setValue(45);
 	SB_TurnTime->setSingleStep(15);
+	
 	SB_InitHealth = new QSpinBox(GBoxOptions);
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
-	GBoxOptionsLayout->addWidget(SB_TurnTime, 1, 1);
-	GBoxOptionsLayout->addWidget(SB_InitHealth, 2, 1);
+	GBoxOptionsLayout->addWidget(SB_TurnTime, 2, 1);
+	GBoxOptionsLayout->addWidget(SB_InitHealth, 3, 1);
+	
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 3, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 4, 1);
 
-	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(onInitHealthChanged(int)));
-	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(onTurnTimeChanged(int)));
-	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(onFortsModeChanged(bool)));
+	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
+	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
+	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
+	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
 	connect(WeaponsName, SIGNAL(activated(const QString&)), this, SIGNAL(newWeaponsName(const QString&)));
 
-	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(onSeedChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(onThemeChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(onMapChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SIGNAL(mapChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SIGNAL(themeChanged(const QString &)));
 }
 
 quint32 GameCFGWidget::getGameFlags() const
 {
 	quint32 result = 0;
+
 	if (CB_mode_Forts->isChecked())
 		result |= 1;
+	if (CB_teamsDivide->isChecked())
+		result |= 1;
+
 	return result;
 }
 
@@ -139,12 +151,12 @@ void GameCFGWidget::setTheme(const QString & theme)
 	pMapContainer->setTheme(theme);
 }
 
-void GameCFGWidget::setInitHealth(quint32 health)
+void GameCFGWidget::setInitHealth(int health)
 {
 	SB_InitHealth->setValue(health);
 }
 
-void GameCFGWidget::setTurnTime(quint32 time)
+void GameCFGWidget::setTurnTime(int time)
 {
 	SB_TurnTime->setValue(time);
 }
@@ -154,34 +166,9 @@ void GameCFGWidget::setFortsMode(bool value)
 	CB_mode_Forts->setChecked(value);
 }
 
-void GameCFGWidget::onInitHealthChanged(int health)
+void GameCFGWidget::setTeamsDivide(bool value)
 {
-	emit initHealthChanged(health);
-}
-
-void GameCFGWidget::onTurnTimeChanged(int time)
-{
-	emit turnTimeChanged(time);
-}
-
-void GameCFGWidget::onFortsModeChanged(bool value)
-{
-	emit fortsModeChanged(value);
-}
-
-void GameCFGWidget::onSeedChanged(const QString & seed)
-{
-	emit seedChanged(seed);
-}
-
-void GameCFGWidget::onMapChanged(const QString & map)
-{
-	emit mapChanged(map);
-}
-
-void GameCFGWidget::onThemeChanged(const QString & theme)
-{
-	emit themeChanged(theme);
+	CB_teamsDivide->setChecked(value);
 }
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)

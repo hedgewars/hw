@@ -52,22 +52,25 @@ public slots:
 	void setSeed(const QString & seed);
 	void setMap(const QString & map);
 	void setTheme(const QString & theme);
-	void setInitHealth(quint32 health);
-	void setTurnTime(quint32 time);
+	void setInitHealth(int health);
+	void setTurnTime(int time);
 	void setFortsMode(bool value);
+	void setTeamsDivide(bool value);
 	void setNetAmmo(const QString& name, const QString& ammo);
 
 signals:
 	void seedChanged(const QString & seed);
 	void mapChanged(const QString & map);
 	void themeChanged(const QString & theme);
-	void initHealthChanged(quint32 health);
-	void turnTimeChanged(quint32 time);
+	void initHealthChanged(int health);
+	void turnTimeChanged(int time);
 	void fortsModeChanged(bool value);
+	void teamsDivideChanged(bool value);
 	void newWeaponsName(const QString& weapon);
 
 private:
 	QCheckBox * CB_mode_Forts;
+	QCheckBox * CB_teamsDivide;
 	QGridLayout mainLayout;
 	HWMapContainer* pMapContainer;
 	QSpinBox * SB_TurnTime;
@@ -77,15 +80,6 @@ private:
 
 	QString curNetAmmoName;
 	QString curNetAmmo;
-
-private slots:
-	void onSeedChanged(const QString & seed);
-	void onMapChanged(const QString & map);
-	void onThemeChanged(const QString & theme);
-	void onInitHealthChanged(int health);
-	void onTurnTimeChanged(int time);
-	void onFortsModeChanged(bool value);
-
 };
 
 #endif // GAMECONFIGWIDGET_H

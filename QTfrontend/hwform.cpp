@@ -490,17 +490,19 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(seedChanged(const QString &)), hwnet, SLOT(onSeedChanged(const QString &)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(mapChanged(const QString &)), hwnet, SLOT(onMapChanged(const QString &)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(themeChanged(const QString &)), hwnet, SLOT(onThemeChanged(const QString &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(initHealthChanged(quint32)), hwnet, SLOT(onInitHealthChanged(quint32)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(turnTimeChanged(quint32)), hwnet, SLOT(onTurnTimeChanged(quint32)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(initHealthChanged(int)), hwnet, SLOT(onInitHealthChanged(int)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(turnTimeChanged(int)), hwnet, SLOT(onTurnTimeChanged(int)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(fortsModeChanged(bool)), hwnet, SLOT(onFortsModeChanged(bool)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(teamsDivideChanged(bool)), hwnet, SLOT(onTeamsDivideChanged(bool)));
 
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()));
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
 	connect(hwnet, SIGNAL(mapChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setMap(const QString &)));
 	connect(hwnet, SIGNAL(themeChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setTheme(const QString &)));
-	connect(hwnet, SIGNAL(initHealthChanged(quint32)), ui.pageNetGame->pGameCFG, SLOT(setInitHealth(quint32)));
-	connect(hwnet, SIGNAL(turnTimeChanged(quint32)), ui.pageNetGame->pGameCFG, SLOT(setTurnTime(quint32)));
+	connect(hwnet, SIGNAL(initHealthChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setInitHealth(int)));
+	connect(hwnet, SIGNAL(turnTimeChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setTurnTime(int)));
 	connect(hwnet, SIGNAL(fortsModeChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setFortsMode(bool)));
+	connect(hwnet, SIGNAL(teamsDivideChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setTeamsDivide(bool)));
 	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),

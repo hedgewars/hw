@@ -26,7 +26,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="536"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="538"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -51,12 +51,12 @@
         <translation>S&apos;il vous plait, choisissez une partie dans la liste ci-dessus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="715"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="717"/>
         <source>Cannot save record to file %1</source>
         <translation>Impossible de sauver la partie dans le fichier %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="537"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="539"/>
         <source>Unable to start the server</source>
         <translation>Impossible de démarrer le serveur</translation>
     </message>
@@ -521,7 +521,7 @@
         <translation>Plein écran</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="45"/>
         <source>Forts mode</source>
         <translation>Mode forts</translation>
     </message>
@@ -543,6 +543,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="351"/>
         <source>Frontend fullscreen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="49"/>
+        <source>Divide teams</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -647,7 +652,7 @@
         <translation type="obsolete">Paramètres de jeu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/teamselect.cpp" line="217"/>
+        <location filename="../../../../QTfrontend/teamselect.cpp" line="227"/>
         <source>Playing teams</source>
         <translation>Équipes participantes</translation>
     </message>
@@ -740,22 +745,22 @@
         <translation type="obsolete">&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="47"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="52"/>
         <source>Turn time</source>
         <translation>Temps du tour</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="48"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="53"/>
         <source>Initial health</source>
         <translation>Vie initiale</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="659"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="661"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Le prix du meilleur tir revient à &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; points.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="671"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="673"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; Hérisson(s) ont été tués pendant ce round.&lt;/p&gt;</translation>
     </message>
@@ -790,7 +795,7 @@
         <translation>Traductions:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="92"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="93"/>
         <source>Special thanks:</source>
         <translation>Remerciements spéciaux:</translation>
     </message>
@@ -815,7 +820,7 @@
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="51"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="56"/>
         <source>Weapons</source>
         <translation>Armes</translation>
     </message>
@@ -830,7 +835,7 @@
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="668"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Le prix du meilleur tir revient à &lt;br&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; morts.&lt;/p&gt;</translation>
     </message>
@@ -864,12 +869,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="301"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="307"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="304"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -878,12 +883,12 @@ Please check your installation</source>
 Vérifier votre installation</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="581"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="583"/>
         <source>Network</source>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="582"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="584"/>
         <source>Connection to server is lost</source>
         <translation>La connexion au serveur à été perdue</translation>
     </message>
@@ -954,7 +959,7 @@ Vérifier votre installation</translation>
         <translation type="obsolete">Демки</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/teamselect.cpp" line="225"/>
+        <location filename="../../../../QTfrontend/teamselect.cpp" line="236"/>
         <source>Setup</source>
         <translation>Configuration</translation>
     </message>
