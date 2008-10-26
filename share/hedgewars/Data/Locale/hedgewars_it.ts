@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="it_IT">
-<context>
-    <name>HWChatWidget</name>
-</context>
+<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -100,12 +98,12 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="320"/>
         <source>*** %1 joined</source>
-        <translation type="unfinished"></translation>
+        <translation>*** %1 è entrato</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="332"/>
         <source>*** %1 left</source>
-        <translation type="unfinished"></translation>
+        <translation>*** %1 è uscito</translation>
     </message>
 </context>
 <context>
@@ -223,7 +221,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="545"/>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Controllo</translation>
     </message>
 </context>
 <context>
@@ -302,37 +300,37 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="666"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Crea</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="667"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Entra</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="668"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiorna</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
         <source>Error</source>
-        <translation type="unfinished">Errore</translation>
+        <translation>Errore</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="708"/>
         <source>Please, enter room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci il nome della room</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="720"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="719"/>
         <source>Please, select room from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la room dalla lista</translation>
     </message>
 </context>
 <context>
@@ -391,22 +389,22 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="53"/>
         <source>Kick</source>
-        <translation type="unfinished"></translation>
+        <translation>Kick</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="547"/>
         <source>Start</source>
-        <translation type="unfinished">Gioca</translation>
+        <translation>Gioca</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="548"/>
         <source>Restrict Joins</source>
-        <translation type="unfinished"></translation>
+        <translation>Limita le entrate</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="550"/>
         <source>Restrict Team Additions</source>
-        <translation type="unfinished"></translation>
+        <translation>Limita l&apos;aggiunta di nuove squadre</translation>
     </message>
 </context>
 <context>
@@ -487,7 +485,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="156"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Livello</translation>
     </message>
 </context>
 <context>
@@ -571,7 +569,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -852,12 +849,12 @@ Controllare la propria installazione</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="422"/>
         <source>Join official server</source>
-        <translation type="unfinished"></translation>
+        <translation>Entra nel server ufficiale</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="540"/>
         <source>Ready</source>
-        <translation type="unfinished"></translation>
+        <translation>Pronto</translation>
     </message>
 </context>
 <context>
@@ -865,17 +862,17 @@ Controllare la propria installazione</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="682"/>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome della room</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="683"/>
         <source>Players number</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di giocatori</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="685"/>
         <source>Round in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Round in corso</translation>
     </message>
 </context>
 <context>
