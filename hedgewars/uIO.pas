@@ -164,7 +164,7 @@ if IPCSock <> nil then
    begin
    if s[0]>#251 then s[0]:= #251;
    SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-   {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s);{$ENDIF}
+   {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s[1]);{$ENDIF}
    inc(s[0], 2);
    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
    end
