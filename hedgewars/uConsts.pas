@@ -705,7 +705,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidDEagle;
 			NameTex: nil;
-			Probability: 100;
+			Probability: 20;
 			NumberInCase: 2;
 			Ammo: (Propz: 0;
 					Count: 3;
@@ -843,7 +843,7 @@ const
 			PosSprite: sprAmAirplane),
 			(NameId: sidMineStrike;
 			NameTex: nil;
-			Probability: 300;
+			Probability: 200;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
@@ -882,7 +882,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidGirder;
 			NameTex: nil;
-			Probability: 300;
+			Probability: 150;
 			NumberInCase: 3;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
@@ -903,7 +903,7 @@ const
 			PosSprite: sprAmGirder),
 			(NameId: sidTeleport;
 			NameTex: nil;
-			Probability: 300;
+			Probability: 200;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or
 							ammoprop_NoCrosshair or
@@ -946,7 +946,7 @@ const
 			(NameId: sidMortar;
 			NameTex: nil;
 			Probability: 100;
-			NumberInCase: 5;
+			NumberInCase: 4;
 			Ammo: (Propz: 0;
 					Count: 4;
 					NumPerTurn: 0;
@@ -1020,12 +1020,12 @@ const
 			PosSprite: sprWater),
 			(NameId: sidWatermelon;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 400;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Timerable or
 							ammoprop_Power or
 							ammoprop_AltUse;
-					Count: 1;
+					Count: 0;
 					NumPerTurn: 0;
 					Timer: 3000;
 					Pos: 0;
@@ -1040,11 +1040,11 @@ const
 			PosSprite: sprWater),
 			(NameId: sidHellishBomb;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 400;
 			NumberInCase: 1;
 			Ammo: (Propz:  ammoprop_Power or
 							ammoprop_AltUse;
-					Count: 1;
+					Count: 0;
 					NumPerTurn: 0;
 					Timer: 5000;
 					Pos: 0;
