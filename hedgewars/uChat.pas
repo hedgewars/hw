@@ -33,9 +33,10 @@ uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uTeams;
 const MaxStrIndex = 27;
 
 type TChatLine = record
-		s: shortstring;
-		Time: Longword;
 		Tex: PTexture;
+		Time: Longword;
+		Width: LongInt;
+		s: shortstring;
 		end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
@@ -47,8 +48,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
-    r: TSDL_Rect;
-    w, h: LongInt;
+	w, h: LongInt;
 begin
 if cl.Tex <> nil then
 	FreeTexture(cl.Tex);
@@ -60,23 +60,19 @@ if isInput then str:= UserNick + '> ' + str + '_';
 TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
 
 resSurface:= SDL_CreateRGBSurface(0,
-		toPowerOf2(w + 2),
-		toPowerOf2(h + 2),
+		toPowerOf2(w),
+		toPowerOf2(h),
 		32,
 		RMask, GMask, BMask, AMask);
 
-strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $202020);
-r.x:= 1;
-r.y:= 1;
-SDL_UpperBlit(strSurface, nil, resSurface, @r);
-
 strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $FFFFFF);
+cl.Width:= w + 4;
 SDL_UpperBlit(strSurface, nil, resSurface, nil);
-
 SDL_FreeSurface(strSurface);
 
 cl.Time:= RealTicks + 12500;
 cl.Tex:= Surface2Tex(resSurface);
+
 SDL_FreeSurface(resSurface)
 end;
 
@@ -91,10 +87,26 @@ end;
 
 procedure DrawChat;
 var i, t, cnt: Longword;
+	r: TSDL_Rect;
 begin
 cnt:= 0;
 t:= 0;
 i:= lastStr;
+
+r.x:= 6;
+r.y:= (visibleCount - t) * 16 + 10;
+r.h:= 16;
+
+if (GameState = gsChat)
+	and (InputStr.Tex <> nil) then
+	begin
+	r.w:= InputStr.Width;
+	DrawFillRect(r);
+	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
+	end;
+
+dec(r.y, 16);
+
 while
 	(
 			((t < 7) and (Strs[i].Time > RealTicks))
@@ -104,17 +116,17 @@ while
 	and
 		(Strs[i].Tex <> nil) do
 	begin
+	r.w:= Strs[i].Width;
+	DrawFillRect(r);
 	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Tex);
+	dec(r.y, 16);
+	
 	if i = 0 then i:= MaxStrIndex else dec(i);
 	inc(cnt);
 	inc(t)
 	end;
 
 visibleCount:= cnt;
-
-if (GameState = gsChat)
-	and (InputStr.Tex <> nil) then
-	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
 end;
 
 procedure AcceptChatString(s: shortstring);

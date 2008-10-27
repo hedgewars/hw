@@ -37,6 +37,7 @@ procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real)
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawFillRect(r: TSDL_Rect);
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
@@ -540,6 +541,25 @@ glVertex2i(-16, 16);
 glEnd();
 
 glPopMatrix
+end;
+
+procedure DrawFillRect(r: TSDL_Rect);
+begin
+glDisable(GL_TEXTURE_2D);
+
+glColor4ub(0, 0, 0, 127);
+
+glBegin(GL_QUADS);
+
+glVertex2i(r.x       , r.y      );
+glVertex2i(r.x + r.w , r.y      );
+glVertex2i(r.x + r.w , r.y + r.h);
+glVertex2i(r.x       , r.y + r.h);
+
+glEnd();
+
+glColor4f(1, 1, 1, 1);
+glEnable(GL_TEXTURE_2D)
 end;
 
 procedure StoreRelease;
