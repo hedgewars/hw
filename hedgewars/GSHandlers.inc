@@ -752,39 +752,39 @@ Gear^.Elasticity:= Gear^.Elasticity + _1;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 DeleteCI(HHGear);
 if (HHGear^.State and gstMoving) <> 0 then
-   if TestCollisionYwithGear(HHGear, 1) then
-      begin
-      CheckHHDamage(HHGear);
-      HHGear^.dY:= _0;
-      HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping);
-      end else
-      begin
-      if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
-      HHGear^.X:= HHGear^.X + HHGear^.dX;
-      HHGear^.Y:= HHGear^.Y + HHGear^.dY;
-      Gear^.X:= Gear^.X + HHGear^.dX;
-      Gear^.Y:= Gear^.Y + HHGear^.dY;
-      HHGear^.dY:= HHGear^.dY + cGravity;
-      tt:= Gear^.Elasticity;
-      tx:= _0;
-      ty:= _0;
-      while tt > _20 do
-            begin
-            if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
-             or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
-                begin
-                Gear^.X:= Gear^.X + tx;
-                Gear^.Y:= Gear^.Y + ty;
-                Gear^.Elasticity:= tt;
-                Gear^.doStep:= @doStepRopeWork;
-                with HHGear^ do State:= State and not gstAttacking;
-                tt:= _0
-                end;
-            tx:= tx + Gear^.dX + Gear^.dX;
-            ty:= ty + Gear^.dY + Gear^.dY;
-            tt:= tt - _2;
-            end;
-      end;
+if TestCollisionYwithGear(HHGear, 1) then
+	begin
+	CheckHHDamage(HHGear);
+	HHGear^.dY:= _0;
+	HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping);
+	end else
+	begin
+	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
+	HHGear^.X:= HHGear^.X + HHGear^.dX;
+	HHGear^.Y:= HHGear^.Y + HHGear^.dY;
+	Gear^.X:= Gear^.X + HHGear^.dX;
+	Gear^.Y:= Gear^.Y + HHGear^.dY;
+	HHGear^.dY:= HHGear^.dY + cGravity;
+	tt:= Gear^.Elasticity;
+	tx:= _0;
+	ty:= _0;
+	while tt > _20 do
+		begin
+		if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
+		or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
+			begin
+			Gear^.X:= Gear^.X + tx;
+			Gear^.Y:= Gear^.Y + ty;
+			Gear^.Elasticity:= tt;
+			Gear^.doStep:= @doStepRopeWork;
+			with HHGear^ do State:= State and not gstAttacking;
+			tt:= _0
+			end;
+		tx:= tx + Gear^.dX + Gear^.dX;
+		ty:= ty + Gear^.dY + Gear^.dY;
+		tt:= tt - _2;
+		end;
+	end;
 
 CheckCollision(Gear);
 
@@ -801,14 +801,14 @@ if (Gear^.State and gstCollision) <> 0 then
 	end;
 
 if (Gear^.Elasticity > Gear^.Friction) or ((Gear^.Message and gm_Attack) = 0) then
-   begin
-   with PHedgehog(Gear^.Hedgehog)^.Gear^ do
-        begin
-        State:= State and not gstAttacking;
-        Message:= Message and not gm_Attack
-        end;
-   DeleteGear(Gear)
-   end
+	begin
+	with PHedgehog(Gear^.Hedgehog)^.Gear^ do
+		begin
+		State:= State and not gstAttacking;
+		Message:= Message and not gm_Attack
+		end;
+	DeleteGear(Gear)
+	end
 end;
 
 procedure doStepRope(Gear: PGear);
@@ -1079,12 +1079,16 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlame(Gear: PGear);
+var cWindFactor: hwFloat;
 begin
 AllInactive:= false;
+
 if not TestCollisionYwithGear(Gear, 1) then
 	begin
-	if hwAbs(Gear^.dX - cWindSpeed) > _0_1 then
-		Gear^.dX:= (Gear^.dX - cWindSpeed) * _0_5 + cWindSpeed;
+	cWindFactor:= cWindSpeed * 270;
+	
+	if hwAbs(Gear^.dX - cWindFactor) > _0_01 then
+		Gear^.dX:= (Gear^.dX - cWindFactor) * _0_998 + cWindFactor;
 
 	Gear^.dY:= Gear^.dY + cGravity;
 	if Gear^.dY > _0_1 then Gear^.dY:= Gear^.dY * _0_995;

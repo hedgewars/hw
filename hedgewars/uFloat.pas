@@ -99,6 +99,7 @@ const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
            _0_93: hwFloat = (isNegative: false; QWordValue:  3994319585);
            _0_96: hwFloat = (isNegative: false; QWordValue:  4123168604);
           _0_995: hwFloat = (isNegative: false; QWordValue:  4273492459);
+          _0_998: hwFloat = (isNegative: false; QWordValue:  4294967296);
           _0_999: hwFloat = (isNegative: false; QWordValue:  4290672328);
             _1_9: hwFloat = (isNegative: false; QWordValue:  8160437862);
               _0: hwFloat = (isNegative: false; QWordValue:           0);
@@ -278,9 +279,11 @@ end;
 
 function hwSqr(const t: hwFloat): hwFloat;
 begin
-hwSqr.isNegative:=false;
-hwSqr.QWordValue:= QWord(t.Round) * t.Frac * 2 + ((QWord(t.Frac) * t.Frac) shr 32);
-hwSqr.Round:= hwSqr.Round + t.Round * t.Round
+hwSqr.isNegative:= false;
+hwSqr.QWordValue:=
+	  ((QWord(t.Round) * t.Round) shl 32)
+	+ QWord(t.Round) * t.Frac * 2
+	+ ((QWord(t.Frac) * t.Frac) shr 32);
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;

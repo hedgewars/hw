@@ -88,7 +88,7 @@ var RopePoints: record
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
-procedure AmmoFlameWork(Ammo: PGear); forward;
+//procedure AmmoFlameWork(Ammo: PGear); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
@@ -1129,8 +1129,12 @@ TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 3 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 if (Radius > 10) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false);
-if (Mask and EXPLAllDamageInRadius)=0 then dmgRadius:= Radius shl 1
-                                      else dmgRadius:= Radius;
+
+if (Mask and EXPLAllDamageInRadius) = 0 then
+	dmgRadius:= Radius shl 1
+else
+	dmgRadius:= Radius;
+
 Gear:= GearsList;
 while Gear <> nil do
 	begin
@@ -1314,17 +1318,19 @@ begin
 t:= GearsList;
 rX:= sqr(rX);
 rY:= sqr(rY);
+
 while t <> nil do
-      begin
-      if (t <> Gear) and (t^.Kind = Kind) then
-         if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
-            exit(t);
-      t:= t^.NextGear
-      end;
+	begin
+	if (t <> Gear) and (t^.Kind = Kind) then
+		if not((hwSqr(Gear^.X - t^.X) / rX + hwSqr(Gear^.Y - t^.Y) / rY) > _1) then
+		exit(t);
+	t:= t^.NextGear
+	end;
+
 CheckGearNear:= nil
 end;
 
-procedure AmmoFlameWork(Ammo: PGear);
+{procedure AmmoFlameWork(Ammo: PGear);
 var t: PGear;
 begin
 t:= GearsList;
@@ -1342,7 +1348,7 @@ while t <> nil do
 			end;
 	t:= t^.NextGear
 	end;
-end;
+end;}
 
 function CheckGearsNear(mX, mY: LongInt; Kind: TGearsType; rX, rY: LongInt): PGear;
 var t: PGear;
