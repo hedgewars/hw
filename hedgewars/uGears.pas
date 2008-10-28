@@ -85,7 +85,7 @@ var RopePoints: record
                                   end;
                  end;
 
-procedure DeleteGear(Gear: PGear); forward;
+procedure DeleteGear(var Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
@@ -343,7 +343,7 @@ InsertGearToList(Result);
 AddGear:= Result
 end;
 
-procedure DeleteGear(Gear: PGear);
+procedure DeleteGear(var Gear: PGear);
 var team: PTeam;
     t: Longword;
 begin
@@ -382,7 +382,10 @@ if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);
-Dispose(Gear)
+
+Dispose(Gear);
+
+Gear:= nil
 end;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
@@ -1116,9 +1119,10 @@ procedure AddMiscGears;
 var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
+
 if (GameFlags and gfForts) = 0 then
-   for i:= 0 to Pred(cLandAdditions) do
-       FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
+	for i:= 0 to Pred(cLandAdditions) do
+		FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
