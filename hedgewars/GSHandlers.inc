@@ -1091,7 +1091,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 	cWindFactor:= cWindSpeed * 270;
 	
 	if hwAbs(Gear^.dX - cWindFactor) > _0_01 then
-		Gear^.dX:= (Gear^.dX - cWindFactor) * _0_998 + cWindFactor;
+		Gear^.dX:= (Gear^.dX - cWindFactor) * _0_995 + cWindFactor;
 
 	Gear^.dY:= Gear^.dY + cGravity;
 	if Gear^.dY > _0_1 then Gear^.dY:= Gear^.dY * _0_995;
