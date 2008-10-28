@@ -910,6 +910,7 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 procedure doStepCase(Gear: PGear);
 var i, x, y: LongInt;
+	k: TGearType;
 begin
 if (Gear^.Message and gm_Destroy) > 0 then
 	begin
@@ -925,13 +926,15 @@ if Gear^.Damage > 0 then
 	begin
 	x:= hwRound(Gear^.X);
 	y:= hwRound(Gear^.Y);
-	if Gear^.Kind = gtCase then
+	k:= Gear^.Kind;
+	DeleteGear(Gear); // <-- delete gear!
+	
+	if k = gtCase then
 		begin
 		doMakeExplosion(x, y, 25, EXPLAutoSound);
 		for i:= 0 to 63 do
 			AddGear(x, y, gtFlame, 0, _0, _0, 0);
 		end;
-	DeleteGear(Gear);
 	exit
 	end;
 
