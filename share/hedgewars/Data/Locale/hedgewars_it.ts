@@ -382,11 +382,6 @@
         <source>Demos</source>
         <translation type="obsolete">Demo</translation>
     </message>
-    <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="612"/>
-        <source>:/res/Record.png</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QAction</name>

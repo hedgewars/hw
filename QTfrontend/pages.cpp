@@ -609,7 +609,7 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
 	bottomLine->addStretch();
 
-	BtnDemos = addButton(tr(":/res/Record.png"), bottomLine, 1, true);
+	BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);
 	BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
 	BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 }
