@@ -599,16 +599,20 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	QHBoxLayout * bottomLine = new QHBoxLayout();
 	vLayout->addStretch();
 	vLayout->addLayout(topLine);
+	vLayout->addSpacing(30);
 	vLayout->addLayout(middleLine);
 	vLayout->addStretch();
 	vLayout->addLayout(bottomLine);
 
+	topLine->addStretch();
 	BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
 	BtnSimpleGamePage->setToolTip(tr("Simple Game (a quick game against the computer, settings are chosen for you)"));
-	
+	topLine->addSpacing(60);
 	BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
 	BtnMultiplayer->setToolTip(tr("Multiplayer (play a hotseat game against your friends, or AI teams)"));
-//	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
+	topLine->addStretch();
+	
+
 	BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
 	BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 	

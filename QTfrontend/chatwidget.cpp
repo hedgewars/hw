@@ -107,7 +107,7 @@ void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
 	}
 
 	if(isReady)
-		items[0]->setIcon(QIcon(":/res/checked.png"));
+		items[0]->setIcon(QIcon(":/res/lightbulb_on.png"));
 	else
-		items[0]->setIcon(QIcon(":/res/unchecked.png"));
+		items[0]->setIcon(QIcon(":/res/lightbulb_off.png"));
 }
