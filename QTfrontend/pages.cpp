@@ -73,9 +73,11 @@ PageMain::PageMain(QWidget* parent) :
 	pageLayout->setRowStretch(4, 1);
 
 	BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
+	BtnSinglePlayer->setToolTip(tr("Local Game (Play a game on a single computer)"));
 	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
 	BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
+	BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
 	pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
 	BtnSetup = addButton(":/res/Settings.png", pageLayout, 4, 3, true);
@@ -602,16 +604,22 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	vLayout->addLayout(bottomLine);
 
 	BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
+	BtnSimpleGamePage->setToolTip(tr("Simple Game (a quick game against the computer, settings are chosen for you)"));
+	
 	BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
+	BtnMultiplayer->setToolTip(tr("Multiplayer (play a hotseat game against your friends, or AI teams)"));
 //	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 	BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
+	BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
 	
 	BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
 	bottomLine->addStretch();
 
 	BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);
+	BtnDemos->setToolTip(tr("Demos (Watch recorded demos)"));
 	BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
 	BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+	BtnLoad->setToolTip(tr("Load (Load a previously saved game)"));
 }
 
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
