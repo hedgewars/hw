@@ -196,8 +196,8 @@ DrawVisualGears(0);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy - 64, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 192) and $FF), cWaterLine + WorldDy - 48, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6)      ) mod 125), cWaterLine + WorldDy - 64, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) + 100) mod 125), cWaterLine + WorldDy - 48, 0);
 {$WARNINGS ON}
 
 DrawLand(WorldDx, WorldDy);
@@ -226,9 +226,9 @@ DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6) +  64) and $FF), cWaterLine + WorldDy - 32, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx - (RealTicks shr 6) + 128) and $FF), cWaterLine + WorldDy - 16, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 256  + ((WorldDx + (RealTicks shr 6)      ) and $FF), cWaterLine + WorldDy     , 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6) +  25) mod 125), cWaterLine + WorldDy - 32, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) +  50) mod 125), cWaterLine + WorldDy - 16, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6) +  75) mod 125), cWaterLine + WorldDy     , 0);
 {$WARNINGS ON}
 
 // Turn time
