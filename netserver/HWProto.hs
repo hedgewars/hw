@@ -219,7 +219,10 @@ handleCmd_inRoom client _ rooms ["TEAM_COLOR", teamName, newColor] =
 	if not $ isMaster client then
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	else
-		(noChangeClients, modifyRoom $ modifyTeam clRoom team{teamcolor = newColor}, answerTeamColor teamName newColor)
+		if noSuchTeam then
+			(noChangeClients, noChangeRooms, answerBadParam)
+		else
+			(noChangeClients, modifyRoom $ modifyTeam clRoom team{teamcolor = newColor}, answerTeamColor teamName newColor)
 	where
 		noSuchTeam = isNothing findTeam
 		team = fromJust findTeam
