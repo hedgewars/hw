@@ -12,9 +12,13 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
-answerServerMessage = [(clientOnly, "SERVER_MESSAGE" : [body])]
+answerServerMessage clients = [(clientOnly, "SERVER_MESSAGE" : [mainbody ++ clientsIn])]
 	where
-		body = serverMessage globalOptions ++ if isDedicated globalOptions then "<p align=center>Dedicated server</p>" else "<p align=center>Private server</p>"
+		mainbody = serverMessage globalOptions ++ if isDedicated globalOptions then "<p align=center>Dedicated server</p>" else "<p align=center>Private server</p>"
+		clientsIn = "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>"
+		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
+		nicks = filter (not . null) $ map nick clients
+		
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
@@ -112,8 +116,8 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
-handleCmd_noRoom client _ rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerServerMessage ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
+handleCmd_noRoom client clients rooms ["LIST"] =
+		(noChangeClients, noChangeRooms, answerServerMessage clients ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
 		where
 			roomInfo room = [
 					name room,
