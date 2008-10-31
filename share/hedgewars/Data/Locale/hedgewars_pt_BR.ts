@@ -126,12 +126,12 @@
         <translation type="obsolete">Guardar</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="99"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="101"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="102"/>
         <source>Advanced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,6 +178,16 @@
         <source>Exit</source>
         <translation type="obsolete">Salir</translation>
     </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="76"/>
+        <source>Local Game (Play a game on a single computer)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="80"/>
+        <source>Network Game (Play a game across a network)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -187,7 +197,7 @@
         <translation type="obsolete">Volver</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="263"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="265"/>
         <source>Start</source>
         <translation>Começar</translation>
     </message>
@@ -205,12 +215,12 @@
         <translation type="obsolete">Internet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="449"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="451"/>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="449"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="451"/>
         <source>Please, select server from the list above</source>
         <translation type="unfinished">Por favor, selecione o servidor na lista acima</translation>
     </message>
@@ -218,7 +228,7 @@
 <context>
     <name>PageNetGame</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="548"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="550"/>
         <source>Control</source>
         <translation type="unfinished"></translation>
     </message>
@@ -226,12 +236,12 @@
 <context>
     <name>PageOptions</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="291"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="293"/>
         <source>New team</source>
         <translation>Nova equipe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="296"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="298"/>
         <source>Edit team</source>
         <translation>Editar equipe</translation>
     </message>
@@ -246,12 +256,12 @@
         <translation type="obsolete">Volver</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="318"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="320"/>
         <source>Weapons set</source>
         <translation>Set de armas</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="321"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="323"/>
         <source>Edit</source>
         <translation>Editar</translation>
     </message>
@@ -297,37 +307,37 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="677"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="685"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="678"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="686"/>
         <source>Join</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="679"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="687"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="729"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="737"/>
         <source>Error</source>
         <translation type="unfinished">Erro</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="719"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="727"/>
         <source>Please, enter room name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="731"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="739"/>
         <source>OK</source>
         <translation type="unfinished">OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="730"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="738"/>
         <source>Please, select room from the list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -340,12 +350,12 @@
         <translation type="obsolete">Volver</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="642"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="650"/>
         <source>Default</source>
         <translation>Padrão</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="643"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="651"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
@@ -382,6 +392,31 @@
         <source>Demos</source>
         <translation type="obsolete">Demonstrações</translation>
     </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="607"/>
+        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="610"/>
+        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="613"/>
+        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="619"/>
+        <source>Demos (Watch recorded demos)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="622"/>
+        <source>Load (Load a previously saved game)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QAction</name>
@@ -391,17 +426,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="550"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="552"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="551"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="553"/>
         <source>Restrict Joins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="553"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="555"/>
         <source>Restrict Team Additions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -414,32 +449,32 @@
         <translation>Modo de Fortes</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="348"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="350"/>
         <source>Fullscreen</source>
         <translation>Tela cheia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="356"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="358"/>
         <source>Enable sound</source>
         <translation>Habilitar sons</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="364"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="366"/>
         <source>Show FPS</source>
         <translation>Mostrar FPS (Performance)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="368"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="370"/>
         <source>Alternative damage show</source>
         <translation>Mostrar dano de maneira alternativa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="360"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
         <source>Enable music</source>
         <translation>Habilitar música</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="352"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="354"/>
         <source>Frontend fullscreen</source>
         <translation>Interface em tela cheia</translation>
     </message>
@@ -457,7 +492,7 @@
         <translation type="unfinished">gerando mapa...</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="153"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="155"/>
         <source>Human</source>
         <translation>Humano</translation>
     </message>
@@ -487,7 +522,7 @@
         <translation type="obsolete">Nivel 1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="157"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="159"/>
         <source>Level</source>
         <translation type="unfinished"></translation>
     </message>
@@ -505,17 +540,17 @@
         <translation type="obsolete">Esquema de jogo</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="143"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="145"/>
         <source>Team</source>
         <translation>Equipe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="119"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="121"/>
         <source>Team Members</source>
         <translation>Membros da equipe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="201"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="203"/>
         <source>Key binds</source>
         <translation>Associação de teclas</translation>
     </message>
@@ -530,22 +565,22 @@
         <translation type="obsolete">Nivel da equipe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="167"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="169"/>
         <source>Fort</source>
         <translation>Forte</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="287"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="289"/>
         <source>Teams</source>
         <translation>Equipes</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="328"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="330"/>
         <source>Audio/Graphic options</source>
         <translation>Opções de audi e gráficos</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="315"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="317"/>
         <source>Weapons</source>
         <translation>Armas</translation>
     </message>
@@ -560,7 +595,7 @@
         <translation type="obsolete">Lista de servidores</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="397"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="399"/>
         <source>Net game</source>
         <translation>Jogo em ree</translation>
     </message>
@@ -638,27 +673,27 @@
         <translation type="unfinished">Porta:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="334"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="336"/>
         <source>Resolution</source>
         <translation>Resolução</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="343"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="345"/>
         <source>FPS limit</source>
         <translation>Limite de FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="299"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="301"/>
         <source>Net nick</source>
         <translation type="unfinished">Apelido de rede</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="493"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="495"/>
         <source>Server name:</source>
         <translation type="unfinished">Nome do servidor:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="500"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="502"/>
         <source>Server port:</source>
         <translation type="unfinished">Porta do servidor:</translation>
     </message>
@@ -681,7 +716,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="304"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="306"/>
         <source>unnamed</source>
         <translation>sem nome</translation>
     </message>
@@ -707,12 +742,12 @@
         <translation type="unfinished">A conexão com o servidor foi perdida</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="311"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="315"/>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="314"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="318"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -767,12 +802,12 @@ Por favor verifique sua instalação</translation>
         <translation type="obsolete">Aguardando</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="627"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="635"/>
         <source>Go!</source>
         <translation type="unfinished">Avançar!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="509"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="511"/>
         <source>default</source>
         <translation>pre-determinado</translation>
     </message>
@@ -787,22 +822,22 @@ Por favor verifique sua instalação</translation>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="390"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="392"/>
         <source>Start server</source>
         <translation>Iniciar servidor</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="406"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="408"/>
         <source>Connect</source>
         <translation>Conectar</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="415"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="417"/>
         <source>Update</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="420"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="422"/>
         <source>Specify</source>
         <translation>Especificar</translation>
     </message>
@@ -812,7 +847,7 @@ Por favor verifique sua instalação</translation>
         <translation type="obsolete">Volver</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="473"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="475"/>
         <source>Start</source>
         <translation>Iniciar</translation>
     </message>
@@ -852,12 +887,12 @@ Por favor verifique sua instalação</translation>
         <translation>Configuração</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="425"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="427"/>
         <source>Join official server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="543"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="545"/>
         <source>Ready</source>
         <translation type="unfinished"></translation>
     </message>
@@ -865,17 +900,17 @@ Por favor verifique sua instalação</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="693"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="701"/>
         <source>Room name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="694"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="702"/>
         <source>Players number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="696"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="704"/>
         <source>Round in progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -883,22 +918,22 @@ Por favor verifique sua instalação</translation>
 <context>
     <name>QToolBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="207"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="209"/>
         <source>Actions</source>
         <translation>Ações</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="209"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="211"/>
         <source>Weapons</source>
         <translation>Armas</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="211"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="213"/>
         <source>Weapon properties</source>
         <translation>Propriedades da arma</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="213"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="215"/>
         <source>Other</source>
         <translation>Outros</translation>
     </message>
