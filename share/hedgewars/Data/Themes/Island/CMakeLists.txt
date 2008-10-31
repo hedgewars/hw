@@ -1,4 +1,5 @@
 install(FILES
+	anchor.png
 	Border.png
 	Flake.png
 	horizont.png
