@@ -148,7 +148,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	vbox2->addWidget(GBoxTeam);
 	
 	CBTeamLvl = new QComboBox(GBoxTeam);
-	CBTeamLvl->setIconSize(QSize(32, 32));
+	CBTeamLvl->setIconSize(QSize(48, 48));
 	CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
 	for(int i = 5; i > 0; i--)
 		CBTeamLvl->addItem(

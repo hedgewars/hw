@@ -42,8 +42,8 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
 	mainLayout.setSpacing(3);
 	mainLayout.setMargin(0);
-	this->setMaximumHeight(30);
-	this->setMinimumHeight(30);
+	this->setMaximumHeight(38);
+	this->setMinimumHeight(38);
 	QIcon difficultyIcon=team.isNetTeam() ?
 		QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
 		: QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
@@ -52,13 +52,14 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 	butt->setFlat(true);
 	mainLayout.addWidget(butt);
 	butt->setStyleSheet("QPushButton{"
-			"icon-size: 36px;"
+			"icon-size: 48px;"
 			"text-align: left;"
 			"background-color: #0d0544;"
 			"color: orange;"
 			"font: bold;"
 			"border-width: 2px;"
-		"}");
+			"margin: 6px 0px 6px 0px;"
+			"}");
 
 	if(m_isPlaying) {
 		// team color
