@@ -595,8 +595,10 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	QHBoxLayout * topLine = new QHBoxLayout();
 	QHBoxLayout * middleLine = new QHBoxLayout();
 	QHBoxLayout * bottomLine = new QHBoxLayout();
+	vLayout->addStretch();
 	vLayout->addLayout(topLine);
 	vLayout->addLayout(middleLine);
+	vLayout->addStretch();
 	vLayout->addLayout(bottomLine);
 
 	BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
@@ -605,8 +607,9 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
 	
 	BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
+	bottomLine->addStretch();
+
 	BtnDemos = addButton(tr(":/res/Record.png"), bottomLine, 1, true);
-	
 	BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
 	BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 }
