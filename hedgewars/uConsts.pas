@@ -997,7 +997,7 @@ const
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: true;
-			SkipTurns: 0;
+			SkipTurns: 4;
 			PosCount: 1;
 			PosSprite: sprWater),
 			(NameId: sidSeduction;
