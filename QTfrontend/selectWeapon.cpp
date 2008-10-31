@@ -75,11 +75,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 {
   wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 
-  if(wconf->value("Default", "").toString().size() != cDefaultAmmoStore->size() - 10)
-  {
-    wconf->clear();
-    wconf->setValue("Default", cDefaultAmmoStore->mid(10));
-  }
+  wconf->setValue("Default", cDefaultAmmoStore->mid(10));
 
   currentState=cDefaultAmmoStore->mid(10);
 
