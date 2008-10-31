@@ -72,10 +72,6 @@ class AbstractPage : public QWidget
     } else {
       const QIcon& lp=QIcon(btname);
       QSize sz = lp.actualSize(QSize(65535, 65535));
-      if (btname == ":/res/Save.png")
-      {
-      	butt->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
-      }
       butt->setIcon(lp);
       butt->setFixedSize(sz);
       butt->setIconSize(sz);
@@ -104,10 +100,20 @@ class AbstractPage : public QWidget
     return butt;
   };
 
-  QPushButton* addButton(QString btname, QBoxLayout* box, int where) {
+  QPushButton* addButton(QString btname, QBoxLayout* box, int where, bool iconed = false) {
     QPushButton* butt = new QPushButton(this);
-    butt->setFont(*font14);
-    butt->setText(btname);
+    if (!iconed) {
+      butt->setFont(*font14);
+      butt->setText(btname);
+    } else {
+      const QIcon& lp=QIcon(btname);
+      QSize sz = lp.actualSize(QSize(65535, 65535));
+      butt->setIcon(lp);
+      butt->setFixedSize(sz);
+      butt->setIconSize(sz);
+      butt->setFlat(true);
+      butt->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    }
     box->addWidget(butt, where);
     return butt;
   };

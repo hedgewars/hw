@@ -20,6 +20,9 @@
     <file>res/Hedgehog.svg</file>
     <file>res/net.png</file>
     <file>res/About.png</file>
+    <file>res/SimpleGame.png</file>
+    <file>res/Multiplayer.png</file>
+    <file>res/Trainings.png</file>
     <file>res/Background.png</file>
     <file>res/Exit.png</file>
     <file>res/HedgewarsTitle.png</file>
@@ -31,6 +34,7 @@
     <file>res/unchecked.png</file>
     <file>res/graphicsicon.png</file>
     <file>res/Save.png</file>
+    <file>res/Record.png</file>
     <file>res/weaponsicon.png</file>
     <file>res/teamicon.png</file>
     <file>res/panelbg.png</file>

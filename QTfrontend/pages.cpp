@@ -101,7 +101,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	pageLayout->addWidget(tbw, 0, 0, 1, 3);
 	BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 	BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
-
+	BtnTeamSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+	
 	QHBoxLayout * page1Layout = new QHBoxLayout(page1);
 	page1Layout->setAlignment(Qt::AlignTop);
 	QGridLayout * page2Layout = new QGridLayout(page2);
@@ -371,6 +372,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	GBAfpslayout->addWidget(fpsedit);
 
 	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 4, 2, true);
+	BtnSaveOptions->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }
@@ -589,20 +591,24 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	QGridLayout * pageLayout = new QGridLayout(this);
-//	pageLayout->setColumnStretch(0, 1);
-//	pageLayout->setColumnStretch(1, 2);
-//	pageLayout->setColumnStretch(2, 1);
-	pageLayout->setRowStretch(0, 1);
-	pageLayout->setRowStretch(6, 1);
+	QVBoxLayout * vLayout = new QVBoxLayout(this);
+	QHBoxLayout * topLine = new QHBoxLayout();
+	QHBoxLayout * middleLine = new QHBoxLayout();
+	QHBoxLayout * bottomLine = new QHBoxLayout();
+	vLayout->addLayout(topLine);
+	vLayout->addLayout(middleLine);
+	vLayout->addLayout(bottomLine);
 
-	BtnSimpleGamePage = addButton(tr("Simple Game"), pageLayout, 1, 1);
-	BtnTrainPage = addButton(tr("Training"), pageLayout, 2, 1);
-	BtnMultiplayer = addButton(tr("Multiplayer"), pageLayout, 3, 1);
-	BtnLoad = addButton(tr("Saved games"), pageLayout, 4, 1);
-	BtnDemos = addButton(tr("Demos"), pageLayout, 5, 1);
-
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 7, 0, true);
+	BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
+	BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
+//	pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
+	BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
+	
+	BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
+	BtnDemos = addButton(tr(":/res/Record.png"), bottomLine, 1, true);
+	
+	BtnLoad = addButton(":/res/Save.png", bottomLine, 2, true);
+	BtnLoad->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 }
 
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
@@ -633,6 +639,7 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
 	BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
 	BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
+	BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");	
 }
 
 PageInGame::PageInGame(QWidget* parent) :
