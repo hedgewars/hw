@@ -6,6 +6,7 @@ install(FILES
 	Clouds.png
 	FishDirt.png
 	Flake.png
+	icon.png
 	LandTex.png
 	Sky.png
 	Tire.png
