@@ -288,6 +288,10 @@ int main(int argc, char *argv[])
 			"QMenu::indicator:non-exclusive:unchecked{"
 				"image: url(\":/res/unchecked.png\");"
 				"}"
+			
+			":disabled{"
+				"color: #a0a0a0;"
+				"}"
 			)
 		);
 
