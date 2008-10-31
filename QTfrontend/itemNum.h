@@ -16,13 +16,13 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
  
-#include <QWidget>
+#include <QFrame>
 #include <QImage>
 
 #ifndef _ITEM_NUM_INCLUDED
 #define _ITEM_NUM_INCLUDED
 
-class ItemNum : public QWidget
+class ItemNum : public QFrame
 {
   Q_OBJECT
 

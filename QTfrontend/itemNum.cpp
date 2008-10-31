@@ -22,7 +22,7 @@
 #include <QPainter>
 
 ItemNum::ItemNum(const QImage& im, QWidget * parent, unsigned char min, unsigned char max) :
-  m_im(im), QWidget(parent), nonInteractive(false), minItems(min), maxItems(max), 
+  m_im(im), QFrame(parent), nonInteractive(false), minItems(min), maxItems(max),
   numItems(min+2 >= max ? min : min+2),
   infinityState(false)
 {
@@ -69,7 +69,7 @@ void ItemNum::paintEvent(QPaintEvent* event)
     painter.drawImage(target, QImage(":/res/infinity.png"));
   } else {
     for(int i=0; i<numItems; i++) {
-      QRect target(11 * i, i % 2, 25, 25);
+      QRect target(11 * i, i % 2, 25, 35);
       painter.drawImage(target, m_im);
     }
   }

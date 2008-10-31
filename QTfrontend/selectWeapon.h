@@ -19,7 +19,7 @@
 #ifndef _SELECT_WEAPON_INCLUDED
 #define _SELECT_WEAPON_INCLUDED
 
-#include <QWidget>
+#include <QFrame>
 #include <map>
 
 class QGridLayout;
@@ -41,7 +41,7 @@ public:
   WeaponItem* item;
 };
 
-class SelWeaponWidget : public QWidget
+class SelWeaponWidget : public QFrame
 {
   Q_OBJECT
   
