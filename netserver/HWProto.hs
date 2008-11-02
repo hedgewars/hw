@@ -82,6 +82,9 @@ handleCmd client _ rooms ("QUIT":xs) =
 handleCmd _ _ _ ["PING"] = -- core requsted
 	(noChangeClients, noChangeRooms, answerPing)
 
+handleCmd _ _ _ ["PONG"] =
+	(noChangeClients, noChangeRooms, [])
+
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =
 	if null (nick client) || protocol client == 0 then

@@ -225,6 +225,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "PING") {
+		RawSendNet(QString("PONG"));
+		return;
+	}
+
 	if (lst[0] == "ROOMS") {
 		QStringList tmp = lst;
 		tmp.removeFirst();
