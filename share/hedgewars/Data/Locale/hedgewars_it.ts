@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="it_IT">
+<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -181,12 +182,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="76"/>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioco locale (Gioca una partita su un singolo computer)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="80"/>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioco in rete (Gioca una partita attraverso la rete)</translation>
     </message>
 </context>
 <context>
@@ -395,27 +396,27 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="607"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished"></translation>
+        <translation>Partita singola ( Una partita veloce contro il computer, con le impostazioni scelte da te)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="610"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished"></translation>
+        <translation>Multigiocatore (Gioca contro i tuoi amici, o squadre di AI)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="613"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità Allenamento (Allena le tue abilità in una gamma di missioni). IN SVILUPPO</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="619"/>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished"></translation>
+        <translation>Demo (Guarda le partite registrate)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="622"/>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished"></translation>
+        <translation>Carica (Carica una partita precedentemente salvata)</translation>
     </message>
 </context>
 <context>
@@ -481,7 +482,7 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="49"/>
         <source>Divide teams</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi le squadre</translation>
     </message>
 </context>
 <context>
@@ -608,7 +609,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
