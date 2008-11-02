@@ -62,6 +62,7 @@ answerIsReady nick = [(sameRoom, ["READY", nick])]
 answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
 answerTooFewClans = [(clientOnly, ["ERROR", "Too few clans in game"])]
 answerRestricted = [(clientOnly, ["WARNING", "Room joining restricted"])]
+answerPing = [(allClients, ["PING"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -78,6 +79,8 @@ handleCmd client _ rooms ("QUIT":xs) =
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
 		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
 
+handleCmd _ _ _ ["PING"] = -- core requsted
+	(noChangeClients, noChangeRooms, answerPing)
 
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =

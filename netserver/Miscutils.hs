@@ -90,6 +90,9 @@ othersInRoom client clients rooms = map handle $ filter (client /=) $ filter (\c
 fromRoom :: String -> HandlesSelector
 fromRoom roomName _ clients _ = map handle $ filter (\ci -> room ci == roomName) clients
 
+allClients :: HandlesSelector
+allClients _ clients _ = map handle $ clients
+
 clientOnly :: HandlesSelector
 clientOnly client _ _ = [handle client]
 

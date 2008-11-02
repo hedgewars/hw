@@ -6,7 +6,7 @@ import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
 import Control.Exception (setUncaughtExceptionHandler, handle, finally)
-import Control.Monad (forM, forM_, filterM, liftM, when, unless)
+import Control.Monad
 import Maybe (fromMaybe, isJust, fromJust)
 import Data.List
 import Miscutils
@@ -17,6 +17,15 @@ import Opts
 import System.Posix
 #endif
 
+data Messages =
+	Accept ClientInfo
+	| ClientMessage ([String], ClientInfo)
+	| CoreMessage [String]
+
+messagesLoop :: TChan [String] -> IO()
+messagesLoop messagesChan = forever $ do
+	threadDelay (30 * 10^6) -- 30 seconds
+	atomically $ writeTChan messagesChan ["PING"]
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = do
@@ -80,24 +89,35 @@ reactCmd cmd client clients rooms = do
 	if isJust quitClient then reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms else return (clientsIn, mrooms)
 
 
-mainLoop :: Socket -> TChan ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ()
-mainLoop servSock acceptChan clients rooms = do
-	r <- atomically $ (Left `fmap` readTChan acceptChan) `orElse` (Right `fmap` tselect clients)
+mainLoop :: Socket -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
+mainLoop servSock acceptChan messagesChan clients rooms = do
+	r <- atomically $ (Accept `fmap` readTChan acceptChan) `orElse` (ClientMessage `fmap` tselect clients) `orElse` (CoreMessage `fmap` readTChan messagesChan)
 	case r of
-		Left ci -> do
-			mainLoop servSock acceptChan (clients ++ [ci]) rooms
-		Right (cmd, client) -> do
+		Accept ci ->
+			mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
+		ClientMessage (cmd, client) -> do
 			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
-					mainLoop servSock acceptChan clientsIn mrooms
+					mainLoop servSock acceptChan messagesChan clientsIn mrooms
+		CoreMessage msg -> if not $ null $ clients then
+			do
+				let client = head clients -- don't care
+				(clientsIn, mrooms) <- reactCmd msg client clients rooms
+				mainLoop servSock acceptChan messagesChan clientsIn mrooms
+			else
+				mainLoop servSock acceptChan messagesChan clients rooms
 
 
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
 	forkIO $ acceptLoop serverSocket acceptChan
-	mainLoop serverSocket acceptChan [] []
+	
+	messagesChan <- atomically newTChan
+	forkIO $ messagesLoop messagesChan
+	
+	mainLoop serverSocket acceptChan messagesChan [] []
 
 
 main = withSocketsDo $ do
