@@ -61,7 +61,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
-		\ch -> Control.Exception.handle (\e -> putStrLn ("handle exception: " ++ show e) >> hClose ch >> if head answer == "BYE" then return [ch] else return []) $ -- cannot just remove
+		\ch -> Control.Exception.handle (handleException ch) $ -- cannot just remove
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
@@ -73,6 +73,15 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	sendAnswers answers client mclients rooms
 	where
 		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (Miscutils.handle a) == b) list rmClHandles
+		handleException ch e = do
+			putStrLn ("handle exception: " ++ show e)
+			handleInfo <- hShow ch
+			putStrLn ("handle info: " ++ handleInfo)
+			
+			cl <- hIsClosed ch
+			unless cl (hClose ch)
+			
+			if head answer == "BYE" then return [ch] else return []
 
 
 reactCmd :: [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
