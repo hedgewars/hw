@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="pl">
+<defaultcodec></defaultcodec>
 <context>
     <name>HWForm</name>
     <message>
@@ -97,12 +98,12 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="319"/>
         <source>*** %1 joined</source>
-        <translation type="unfinished"></translation>
+        <translation>*** %1 dołączył</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="331"/>
         <source>*** %1 left</source>
-        <translation type="unfinished"></translation>
+        <translation>*** %1 wyszedł</translation>
     </message>
 </context>
 <context>
@@ -116,12 +117,10 @@
 <context>
     <name>PageEditTeam</name>
     <message>
-        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Zaniechaj</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
@@ -139,60 +138,51 @@
 <context>
     <name>PageMain</name>
     <message>
-        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Gra jednoosobowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Gra wieloosobowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Gra sieciowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Zapisane gry</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Dema</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Setup</source>
         <translation type="obsolete">Ustawienia</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">O programie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Wyjście</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="76"/>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra Lokalna (Graj na jednym komputerze)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="80"/>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra sieciowa (Graj w grę przez internet lub LAN)</translation>
     </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -205,12 +195,10 @@
 <context>
     <name>PageNet</name>
     <message>
-        <location filename="" line="0"/>
         <source>Local</source>
         <translation type="obsolete">Sieć lokalna</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Internet</source>
         <translation type="obsolete">Internet</translation>
     </message>
@@ -230,7 +218,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="550"/>
         <source>Control</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kontrola</translation>
     </message>
 </context>
 <context>
@@ -246,12 +234,10 @@
         <translation>Edycja drużyny</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -309,43 +295,42 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="685"/>
         <source>Create</source>
-        <translation type="unfinished"></translation>
+        <translation>Stwórz</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="686"/>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Dołącz</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="687"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Odśwież</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="737"/>
         <source>Error</source>
-        <translation type="unfinished">Błąd</translation>
+        <translation>Błąd</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="727"/>
         <source>Please, enter room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Wprowadź nazwę pokoju</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="739"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="738"/>
         <source>Please, select room from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz pokój z listy</translation>
     </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -360,7 +345,6 @@
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
@@ -395,27 +379,27 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="607"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosta Gra (Szybka gra przeciwko komputerowi, ustawienia są już wybrane za ciebie)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="610"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gra Wieloosobowa (Graj z kumplami lub z komputerem zmieniając miejsca)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="613"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trening (Ćwicz swoje umiejętności na kilku misjach treningowych). W PRODUKCJI</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="619"/>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dema (Zobacz nagrane dema)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="622"/>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wczytaj grę (Wczytaj poprzednio zapisaną grę)</translation>
     </message>
 </context>
 <context>
@@ -423,22 +407,22 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="53"/>
         <source>Kick</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyrzuć</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="552"/>
         <source>Start</source>
-        <translation type="unfinished">Rozpoczęcie</translation>
+        <translation>Rozpoczęcie</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="553"/>
         <source>Restrict Joins</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zabroń dołączenia</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="555"/>
         <source>Restrict Team Additions</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zabroń dodawania drużyn</translation>
     </message>
 </context>
 <context>
@@ -481,7 +465,7 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="49"/>
         <source>Divide teams</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podziel drużyny</translation>
     </message>
 </context>
 <context>
@@ -497,45 +481,38 @@
         <translation>Człowiek</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 5</source>
         <translation type="obsolete">Poziom 5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 4</source>
         <translation type="obsolete">Poziom 4</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 3</source>
         <translation type="obsolete">Poziom 3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 2</source>
         <translation type="obsolete">Poziom 2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 1</source>
         <translation type="obsolete">Poziom 1</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="159"/>
         <source>Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poziom</translation>
     </message>
 </context>
 <context>
     <name>QGroupBox</name>
     <message>
-        <location filename="" line="0"/>
         <source>Landscape</source>
         <translation type="obsolete">Pejzaż</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game scheme</source>
         <translation type="obsolete">Ustawienia gry</translation>
     </message>
@@ -555,12 +532,10 @@
         <translation>Ustawienia klawiszy</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Grave</source>
         <translation type="obsolete">Nagrobek</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Team level</source>
         <translation type="obsolete">Poziom drużyny</translation>
     </message>
@@ -585,12 +560,10 @@
         <translation>Bronie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net options</source>
         <translation type="obsolete">Ustawienia sieciowe</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Servers list</source>
         <translation type="obsolete">Lista serwerów</translation>
     </message>
@@ -608,7 +581,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -698,7 +670,6 @@
         <translation>Port serwera:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
     </message>
@@ -847,7 +818,6 @@ Sprawdź poprawność instalacji</translation>
         <translation>Ustawienia własne</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -857,12 +827,10 @@ Sprawdź poprawność instalacji</translation>
         <translation>Rozpoczęcie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Szybka gra</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Trening</translation>
     </message>
@@ -894,12 +862,12 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="427"/>
         <source>Join official server</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dołącz do oficjalnego serwera</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="545"/>
         <source>Ready</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gotowy</translation>
     </message>
 </context>
 <context>
@@ -907,17 +875,17 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="701"/>
         <source>Room name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa pokoju</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="702"/>
         <source>Players number</source>
-        <translation type="unfinished"></translation>
+        <translation>Liczba graczy</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="704"/>
         <source>Round in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Gra w toku</translation>
     </message>
 </context>
 <context>
