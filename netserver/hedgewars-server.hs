@@ -61,12 +61,12 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
-		\ch -> Control.Exception.handle (\e -> putStrLn ("handle exception: " ++ show e) >> if head answer == "BYE" then return [ch] else return []) $ -- cannot just remove
+		\ch -> Control.Exception.handle (\e -> putStrLn ("handle exception: " ++ show e) >> if head answer == "BYE" then return [ch] else atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients)  ["QUIT"] >> return []) $ -- cannot just remove
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
 			hFlush ch
-			if head answer == "BYE" then hClose ch >> return [ch] else return []
+			if head answer == "BYE" then return [ch] else return []
 
 	let mclients = remove clients $ concat clHandles'
 

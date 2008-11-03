@@ -81,6 +81,9 @@ deleteBy2t eq x (y:ys) = if y `eq` x then ys else y : deleteBy2t eq x ys
 deleteFirstsBy2t :: (a -> b -> Bool) -> [a] -> [b] -> [a]
 deleteFirstsBy2t eq =  foldl (flip (deleteBy2t eq))
 
+clientByHandle :: Handle -> [ClientInfo] -> Maybe ClientInfo
+clientByHandle chandle clients = find (\c -> handle c == chandle) clients
+
 sameRoom :: HandlesSelector
 sameRoom client clients rooms = map handle $ filter (\ci -> room ci == room client) clients
 
