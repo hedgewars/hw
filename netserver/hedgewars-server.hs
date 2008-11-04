@@ -28,13 +28,12 @@ messagesLoop messagesChan = forever $ do
 	atomically $ writeTChan messagesChan ["PING"]
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
-acceptLoop servSock acceptChan = do
+acceptLoop servSock acceptChan = Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $ do
 	(cHandle, host, port) <- accept servSock
-	hPutStrLn cHandle "CONNECTED\n"
-	hFlush cHandle
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False False)
+	atomically $ writeTChan cChan ["ASKME"]
 	acceptLoop servSock acceptChan
 
 

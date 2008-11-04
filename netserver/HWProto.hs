@@ -63,6 +63,7 @@ answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
 answerTooFewClans = [(clientOnly, ["ERROR", "Too few clans in game"])]
 answerRestricted = [(clientOnly, ["WARNING", "Room joining restricted"])]
 answerPing = [(allClients, ["PING"])]
+answerConnected = [(clientOnly, ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"])]
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -81,6 +82,9 @@ handleCmd client _ rooms ("QUIT":xs) =
 
 handleCmd _ _ _ ["PING"] = -- core requsted
 	(noChangeClients, noChangeRooms, answerPing)
+
+handleCmd _ _ _ ["ASKME"] = -- core requsted
+	(noChangeClients, noChangeRooms, answerConnected)
 
 handleCmd _ _ _ ["PONG"] =
 	(noChangeClients, noChangeRooms, [])
