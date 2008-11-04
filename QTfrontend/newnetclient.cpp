@@ -151,8 +151,6 @@ void HWNewNet::ClientRead()
 
 void HWNewNet::OnConnect()
 {
-	RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
-	RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
 }
 
 void HWNewNet::OnDisconnect()
@@ -219,6 +217,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "CONNECTED") {
+		RawSendNet(QString("NICK%1%2").arg(delimeter).arg(mynick));
+		RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
 		netClientState = 1;
 		m_game_connected = true;
 		emit Connected();
