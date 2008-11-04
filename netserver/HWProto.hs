@@ -1,4 +1,7 @@
-module HWProto where
+module HWProto
+(
+	handleCmd
+) where
 
 import IO
 import Data.List

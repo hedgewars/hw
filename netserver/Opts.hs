@@ -1,4 +1,8 @@
-module Opts where
+module Opts
+(
+	GlobalOptions(..),
+	globalOptions
+) where
 
 import System
 import System.Console.GetOpt

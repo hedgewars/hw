@@ -57,7 +57,7 @@ clientLoop handle chan =
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
-	unless (null recipients) $ putStrLn ("< " ++ (show answer))
+	--unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle
@@ -82,7 +82,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 
 reactCmd :: [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
 reactCmd cmd client clients rooms = do
-	putStrLn ("> " ++ show cmd)
+	--putStrLn ("> " ++ show cmd)
 
 	let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
 	let mrooms = roomsFunc rooms
@@ -91,12 +91,18 @@ reactCmd cmd client clients rooms = do
 
 	clientsIn <- sendAnswers answers mclient mclients mrooms
 	let quitClient = find forceQuit $ clientsIn
-	if isJust quitClient then reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms else return (clientsIn, mrooms)
+	if isJust quitClient then
+		reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms
+	else
+		return (clientsIn, mrooms)
 
 
 mainLoop :: Socket -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
 mainLoop servSock acceptChan messagesChan clients rooms = do
-	r <- atomically $ (Accept `fmap` readTChan acceptChan) `orElse` (ClientMessage `fmap` tselect clients) `orElse` (CoreMessage `fmap` readTChan messagesChan)
+	r <- atomically $
+		(Accept `fmap` readTChan acceptChan) `orElse`
+		(ClientMessage `fmap` tselect clients) `orElse`
+		(CoreMessage `fmap` readTChan messagesChan)
 	case r of
 		Accept ci ->
 			mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
@@ -106,8 +112,9 @@ mainLoop servSock acceptChan messagesChan clients rooms = do
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
 					mainLoop servSock acceptChan messagesChan clientsIn mrooms
-		CoreMessage msg -> if not $ null $ clients then
-			do
+		CoreMessage msg ->
+			if not $ null $ clients then
+				do
 				let client = head clients -- don't care
 				(clientsIn, mrooms) <- reactCmd msg client clients rooms
 				mainLoop servSock acceptChan messagesChan clientsIn mrooms
