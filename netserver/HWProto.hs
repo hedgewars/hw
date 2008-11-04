@@ -42,7 +42,7 @@ answerFullConfig room = map toAnswer (Map.toList $ params room) ++ [(clientOnly,
 	where
 		toAnswer (paramName, paramStrs) =
 			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
-answerCantAdd = [(clientOnly, ["WARNING", "Too many teams or hedgehogs, or same name team, or round in progress"])]
+answerCantAdd reason = [(clientOnly, ["WARNING", "Cannot add team: " ++ reason])]
 answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
 answerAddTeam team = [(othersInRoom, teamToNet team)]
 answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
@@ -195,12 +195,16 @@ handleCmd_inRoom client _ rooms ["MAP", mapName] =
 
 handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
 	| length hhsInfo == 16 =
-	if length (teams clRoom) == 6
-		|| canAddNumber <= 0
-		|| isJust findTeam
-		|| gameinprogress clRoom
-		|| isRestrictedTeams clRoom then
-		(noChangeClients, noChangeRooms, answerCantAdd)
+	if length (teams clRoom) == 6 then
+		(noChangeClients, noChangeRooms, answerCantAdd "too many teams")
+	else if canAddNumber <= 0 then
+		(noChangeClients, noChangeRooms, answerCantAdd "too many hedgehogs")
+	else if isJust findTeam then
+		(noChangeClients, noChangeRooms, answerCantAdd "already has a team with same name")
+	else if gameinprogress clRoom then
+		(noChangeClients, noChangeRooms, answerCantAdd "round in progress")
+	else if isRestrictedTeams clRoom then
+		(noChangeClients, noChangeRooms, answerCantAdd "restricted")
 	else
 		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam ++ answerTeamColor name color)
 	where
