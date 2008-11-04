@@ -45,7 +45,7 @@ class TeamSelWidget : public QGroupBox
   bool isPlaying(HWTeam team) const;
   QList<HWTeam> getPlayingTeams() const;
   QList<HWTeam> getDontPlayingTeams() const;
-  void setNonInteractive();
+  void setInteractivity(bool interactive);
 
  public slots:
   void addTeam(HWTeam team);

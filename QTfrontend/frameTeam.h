@@ -40,7 +40,7 @@ class FrameTeams : public QFrame
   void resetTeams();
   void setHHNum(const HWTeam& team);
   void setTeamColor(const HWTeam& team);
-  void setNonInteractive();
+  void setInteractivity(bool interactive);
   QColor getNextColor() const;
 
  signals:

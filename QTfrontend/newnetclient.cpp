@@ -69,6 +69,7 @@ void HWNewNet::CreateRoom(const QString & room)
 	
 	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg(room));
 	m_pGameCFGWidget->setEnabled(true);
+	m_pTeamSelWidget->setInteractivity(true);
 	isChief = true;
 }
 
@@ -84,7 +85,7 @@ void HWNewNet::JoinRoom(const QString & room)
 
 	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(room));
 	m_pGameCFGWidget->setEnabled(false);
-	m_pTeamSelWidget->setNonInteractive();
+	m_pTeamSelWidget->setInteractivity(false);
 	isChief = false;
 }
 
@@ -453,6 +454,7 @@ void HWNewNet::ConfigAsked()
 	onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
 	onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
 	onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
+	onTeamsDivideChanged(m_pGameCFGWidget->getGameFlags() & 0x10);
 	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
 	onWeaponsNameChanged("Default", cDefaultAmmoStore->mid(10));
 }

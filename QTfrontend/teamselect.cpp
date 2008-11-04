@@ -55,9 +55,9 @@ void TeamSelWidget::addTeam(HWTeam team)
   emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
-void TeamSelWidget::setNonInteractive()
+void TeamSelWidget::setInteractivity(bool interactive)
 {
-  framePlaying->setNonInteractive();
+	framePlaying->setInteractivity(interactive);
 }
 
 void TeamSelWidget::hhNumChanged(const HWTeam& team)

@@ -82,14 +82,15 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 	//QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 
-void TeamShowWidget::setNonInteractive()
+void TeamShowWidget::setInteractivity(bool interactive)
 {
-  if(m_team.isNetTeam()) {
-    disconnect(butt, SIGNAL(clicked()));
-   // disconnect(bText, SIGNAL(clicked()));
-  }
-  disconnect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
-  phhoger->setNonInteractive();
+	if(m_team.isNetTeam()) {
+		butt->setEnabled(interactive);
+	}
+	
+	colorButt->setEnabled(interactive);
+	//phhoger->setNonInteractive();
+	phhoger->setEnabled(interactive);
 }
 
 void TeamShowWidget::setHHNum(unsigned int num)

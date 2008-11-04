@@ -57,7 +57,7 @@ class TeamShowWidget : public QWidget
  TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
  void setPlaying(bool isPlaying);
  void setHHNum(unsigned int num);
- void setNonInteractive();
+ void setInteractivity(bool interactive);
  HWTeam getTeam() const;
 
  private:

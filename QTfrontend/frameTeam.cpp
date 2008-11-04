@@ -44,14 +44,14 @@ FrameTeams::FrameTeams(QWidget* parent) :
 	resetColors();
 }
 
-void FrameTeams::setNonInteractive()
+void FrameTeams::setInteractivity(bool interactive)
 {
-  nonInteractive=true;
-  for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
-    TeamShowWidget* pts=dynamic_cast<TeamShowWidget*>(it.value());
-    if(!pts) throw;
-    pts->setNonInteractive();
-  }
+	nonInteractive = !interactive;
+	for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
+		TeamShowWidget* pts = dynamic_cast<TeamShowWidget*>(it.value());
+		if(!pts) throw;
+		pts->setInteractivity(interactive);
+	}
 }
 
 void FrameTeams::resetColors()
@@ -70,7 +70,7 @@ QColor FrameTeams::getNextColor() const
 void FrameTeams::addTeam(HWTeam team, bool willPlay)
 {
   TeamShowWidget* pTeamShowWidget = new TeamShowWidget(team, willPlay, this);
-  if(nonInteractive) pTeamShowWidget->setNonInteractive();
+  if(nonInteractive) pTeamShowWidget->setInteractivity(false);
 //  int hght=teamToWidget.empty() ? 0 : teamToWidget.begin()->second->size().height();
   mainLayout.addWidget(pTeamShowWidget);
   teamToWidget.insert(team, pTeamShowWidget);
