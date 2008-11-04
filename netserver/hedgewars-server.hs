@@ -57,7 +57,7 @@ clientLoop handle chan =
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
-	unless (null recipients) $ putStrLn ("< " ++ (show answer))
+	--unless (null recipients) $ putStrLn ("< " ++ (show answer))
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle
@@ -73,7 +73,9 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 			hFlush ch
 			if head answer == "BYE" then return [ch] else return []
 
-	let mclients = remove clients $ concat clHandles'
+	let outHandles = concat clHandles'
+	mapM_ (\ch -> Control.Exception.handle (const $ putStrLn "error on hClose") (hClose ch)) outHandles
+	let mclients = remove clients outHandles
 
 	sendAnswers answers client mclients rooms
 	where
