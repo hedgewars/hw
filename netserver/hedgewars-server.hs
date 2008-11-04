@@ -91,9 +91,10 @@ reactCmd cmd client clients rooms = do
 
 	clientsIn <- sendAnswers answers mclient mclients mrooms
 	let quitClient = find forceQuit $ clientsIn
+	
 	if isJust quitClient then
 		reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms
-	else
+		else
 		return (clientsIn, mrooms)
 
 
