@@ -89,7 +89,6 @@ void TeamShowWidget::setInteractivity(bool interactive)
 	}
 	
 	colorButt->setEnabled(interactive);
-	//phhoger->setNonInteractive();
 	phhoger->setEnabled(interactive);
 }
 

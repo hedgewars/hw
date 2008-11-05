@@ -30,6 +30,7 @@ messagesLoop messagesChan = forever $ do
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $ do
 	(cHandle, host, port) <- accept servSock
+	putStrLn "new client"
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False False)
@@ -74,6 +75,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 			if head answer == "BYE" then return [ch] else return []
 
 	let outHandles = concat clHandles'
+	unless (null outHandles) $ putStrLn ("bye: " ++ (show $ length outHandles) ++ "/" ++ (show $ length clients) ++ " clients")
 	mapM_ (\ch -> Control.Exception.handle (const $ putStrLn "error on hClose") (hClose ch)) outHandles
 	let mclients = remove clients outHandles
 
