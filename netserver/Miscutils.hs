@@ -7,12 +7,15 @@ import Data.Char
 import Data.List
 import Maybe (fromJust)
 import qualified Data.Map as Map
+import Data.Time
 
 data ClientInfo =
  ClientInfo
 	{
 		chan :: TChan [String],
 		handle :: Handle,
+		host :: String,
+		connectTime :: UTCTime,
 		nick :: String,
 		protocol :: Word16,
 		room :: String,

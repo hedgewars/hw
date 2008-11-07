@@ -25,8 +25,8 @@ answerServerMessage clients = [(clientOnly, "SERVER_MESSAGE" : [mainbody ++ clie
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
-answerQuit = [(clientOnly, ["BYE"])]
-answerAbandoned = [(othersInRoom, ["BYE"])]
+answerQuit msg = [(clientOnly, ["BYE", msg])]
+answerAbandoned = [(othersInRoom, ["BYE", "Room abandoned"])]
 answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
 answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
 answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
@@ -70,18 +70,19 @@ answerConnected = [(clientOnly, ["CONNECTED", "Hedgewars server http://www.hedge
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
-handleCmd client _ rooms ("QUIT":xs) =
+handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
-		(noChangeClients, noChangeRooms, answerQuit)
+		(noChangeClients, noChangeRooms, answerQuit msg)
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), answerQuit ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, answerQuit ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
 		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
+		msg = if not $ null xs then head xs else ""
 
 handleCmd _ _ _ ["PING"] = -- core requsted
 	(noChangeClients, noChangeRooms, answerPing)

@@ -12,6 +12,7 @@ import Data.List
 import Miscutils
 import HWProto
 import Opts
+import Data.Time
 
 #if !defined(mingw32_HOST_OS)
 import System.Posix
@@ -29,11 +30,12 @@ messagesLoop messagesChan = forever $ do
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $ do
-	(cHandle, host, port) <- accept servSock
-	putStrLn "new client"
+	(cHandle, host, _) <- accept servSock
+	putStrLn $ "new client: " ++ host
+	currentTime <- getCurrentTime
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle "" 0 "" False False False)
+	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle host currentTime"" 0 "" False False False)
 	atomically $ writeTChan cChan ["ASKME"]
 	acceptLoop servSock acceptChan
 
@@ -51,22 +53,22 @@ listenLoop handle buf chan = do
 clientLoop :: Handle -> TChan [String] -> IO ()
 clientLoop handle chan =
 	listenLoop handle [] chan
-		`catch` (const $ clientOff >> return ())
-	where clientOff = atomically $ writeTChan chan ["QUIT"] -- if the client disconnects, we perform as if it sent QUIT message
+		`catch` (\e -> (clientOff $ show e) >> return ())
+	where clientOff msg = atomically $ writeTChan chan ["QUIT", msg] -- if the client disconnects, we perform as if it sent QUIT message
 
 
 sendAnswers [] _ clients _ = return clients
 sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
 	--unless (null recipients) $ putStrLn ("< " ++ (show answer))
+	when (head answer == "NICK") $ putStrLn (show answer)
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle
-			(\e -> putStrLn ("handle exception: " ++ show e) >>
-				if head answer == "BYE" then
+			(\e -> if head answer == "BYE" then
 					return [ch]
 				else
-					atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients) ["QUIT"] >> return []  -- cannot just remove
+					atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients) ["QUIT", show e] >> return []  -- cannot just remove
 			) $
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
@@ -75,7 +77,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 			if head answer == "BYE" then return [ch] else return []
 
 	let outHandles = concat clHandles'
-	unless (null outHandles) $ putStrLn ("bye: " ++ (show $ length outHandles) ++ "/" ++ (show $ length clients) ++ " clients")
+	unless (null outHandles) $ putStrLn ((show $ length outHandles) ++ " / " ++ (show $ length clients) ++ " : " ++ (show answer))
 	mapM_ (\ch -> Control.Exception.handle (const $ putStrLn "error on hClose") (hClose ch)) outHandles
 	let mclients = remove clients outHandles
 
@@ -97,7 +99,7 @@ reactCmd cmd client clients rooms = do
 	let quitClient = find forceQuit $ clientsIn
 	
 	if isJust quitClient then
-		reactCmd ["QUIT"] (fromJust quitClient) clientsIn mrooms
+		reactCmd ["QUIT", "Kicked"] (fromJust quitClient) clientsIn mrooms
 		else
 		return (clientsIn, mrooms)
 
@@ -109,7 +111,14 @@ mainLoop servSock acceptChan messagesChan clients rooms = do
 		(ClientMessage `fmap` tselect clients) `orElse`
 		(CoreMessage `fmap` readTChan messagesChan)
 	case r of
-		Accept ci ->
+		Accept ci -> do
+			let sameHostClients = filter (\cl -> host ci == host cl) clients
+			let haveJustConnected = not $ null $ filter (\cl -> diffUTCTime (connectTime ci) (connectTime cl) <= 5) sameHostClients
+			
+			when haveJustConnected $ do
+				atomically $ writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
+				mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
+				
 			mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
 		ClientMessage (cmd, client) -> do
 			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
