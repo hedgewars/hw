@@ -113,7 +113,7 @@ mainLoop acceptChan messagesChan clients rooms = do
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
-			let haveJustConnected = not $ null $ filter (\cl -> diffUTCTime (connectTime ci) (connectTime cl) <= 5) sameHostClients
+			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 5) sameHostClients
 			
 			when haveJustConnected $ do
 				atomically $ writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
