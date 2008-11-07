@@ -31,8 +31,8 @@ messagesLoop messagesChan = forever $ do
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan = Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $ do
 	(cHandle, host, _) <- accept servSock
-	putStrLn $ "new client: " ++ host
 	currentTime <- getCurrentTime
+	putStrLn $ (show currentTime) ++ " new client: " ++ host
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
 	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle host currentTime"" 0 "" False False False)
