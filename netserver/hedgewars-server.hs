@@ -104,8 +104,8 @@ reactCmd cmd client clients rooms = do
 		return (clientsIn, mrooms)
 
 
-mainLoop :: Socket -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
-mainLoop servSock acceptChan messagesChan clients rooms = do
+mainLoop :: TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
+mainLoop acceptChan messagesChan clients rooms = do
 	r <- atomically $
 		(Accept `fmap` readTChan acceptChan) `orElse`
 		(ClientMessage `fmap` tselect clients) `orElse`
@@ -117,25 +117,25 @@ mainLoop servSock acceptChan messagesChan clients rooms = do
 			
 			when haveJustConnected $ do
 				atomically $ writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
-				mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
+				mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
 				
-			mainLoop servSock acceptChan messagesChan (clients ++ [ci]) rooms
+			mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
 		ClientMessage (cmd, client) -> do
 			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
-					mainLoop servSock acceptChan messagesChan clientsIn mrooms
+					mainLoop acceptChan messagesChan clientsIn mrooms
 		CoreMessage msg ->
 			if not $ null $ clients then
 				do
 				let client = head clients -- don't care
 				(clientsIn, mrooms) <- reactCmd msg client clients rooms
-				mainLoop servSock acceptChan messagesChan clientsIn mrooms
+				mainLoop acceptChan messagesChan clientsIn mrooms
 			else
-				mainLoop servSock acceptChan messagesChan clients rooms
+				mainLoop acceptChan messagesChan clients rooms
 
-
+startServer :: Socket -> IO()
 startServer serverSocket = do
 	acceptChan <- atomically newTChan
 	forkIO $ acceptLoop serverSocket acceptChan
@@ -143,7 +143,7 @@ startServer serverSocket = do
 	messagesChan <- atomically newTChan
 	forkIO $ messagesLoop messagesChan
 	
-	mainLoop serverSocket acceptChan messagesChan [] []
+	mainLoop acceptChan messagesChan [] []
 
 
 main = withSocketsDo $ do
