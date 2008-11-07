@@ -56,7 +56,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 4, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
-	SB_TurnTime->setRange(5, 90);
+	SB_TurnTime->setRange(1, 99);
 	SB_TurnTime->setValue(45);
 	SB_TurnTime->setSingleStep(15);
 	
