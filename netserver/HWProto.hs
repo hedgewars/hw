@@ -25,6 +25,7 @@ answerServerMessage clients = [(clientOnly, "SERVER_MESSAGE" : [mainbody ++ clie
 answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
 answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
 answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
+answerErrorMsg msg = [(clientOnly, ["ERROR", msg])]
 answerQuit msg = [(clientOnly, ["BYE", msg])]
 answerAbandoned = [(othersInRoom, ["BYE", "Room abandoned"])]
 answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
@@ -92,6 +93,9 @@ handleCmd _ _ _ ["ASKME"] = -- core requsted
 
 handleCmd _ _ _ ["PONG"] =
 	(noChangeClients, noChangeRooms, [])
+
+handleCmd _ _ _ ["ERROR", msg] =
+	(noChangeClients, noChangeRooms, answerErrorMsg msg)
 
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =

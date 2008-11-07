@@ -29,13 +29,18 @@ messagesLoop messagesChan = forever $ do
 	atomically $ writeTChan messagesChan ["PING"]
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
-acceptLoop servSock acceptChan = Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $ do
+acceptLoop servSock acceptChan =
+	Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
+	do
 	(cHandle, host, _) <- accept servSock
+	
 	currentTime <- getCurrentTime
 	putStrLn $ (show currentTime) ++ " new client: " ++ host
+	
 	cChan <- atomically newTChan
 	forkIO $ clientLoop cHandle cChan
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle host currentTime"" 0 "" False False False)
+	
+	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle host currentTime "" 0 "" False False False)
 	atomically $ writeTChan cChan ["ASKME"]
 	acceptLoop servSock acceptChan
 
@@ -96,12 +101,9 @@ reactCmd cmd client clients rooms = do
 	let mclient = fromMaybe client $ find (== client) mclients
 
 	clientsIn <- sendAnswers answers mclient mclients mrooms
-	let quitClient = find forceQuit $ clientsIn
+	mapM_ (\cl -> atomically $ writeTChan (chan cl) ["QUIT", "Kicked"]) $ filter forceQuit $ clientsIn
 	
-	if isJust quitClient then
-		reactCmd ["QUIT", "Kicked"] (fromJust quitClient) clientsIn mrooms
-		else
-		return (clientsIn, mrooms)
+	return (clientsIn, mrooms)
 
 
 mainLoop :: TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
@@ -113,11 +115,12 @@ mainLoop acceptChan messagesChan clients rooms = do
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
-			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 5) sameHostClients
+			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
 			
 			when haveJustConnected $ do
-				atomically $ writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
-				mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
+				atomically $ do
+					--writeTChan (chan ci) ["ERROR", "Reconnected too fast"]
+					writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
 				
 			mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
 		ClientMessage (cmd, client) -> do
