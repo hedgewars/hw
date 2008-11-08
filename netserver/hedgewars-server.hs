@@ -112,6 +112,7 @@ mainLoop acceptChan messagesChan clients rooms = do
 		(Accept `fmap` readTChan acceptChan) `orElse`
 		(ClientMessage `fmap` tselect clients) `orElse`
 		(CoreMessage `fmap` readTChan messagesChan)
+	
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
@@ -123,12 +124,14 @@ mainLoop acceptChan messagesChan clients rooms = do
 					writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
 				
 			mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
+			
 		ClientMessage (cmd, client) -> do
 			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
 					mainLoop acceptChan messagesChan clientsIn mrooms
+		
 		CoreMessage msg ->
 			if not $ null $ clients then
 				do

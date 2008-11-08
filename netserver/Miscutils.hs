@@ -90,6 +90,9 @@ clientByHandle chandle clients = find (\c -> handle c == chandle) clients
 sameRoom :: HandlesSelector
 sameRoom client clients rooms = map handle $ filter (\ci -> room ci == room client) clients
 
+noRoomSameProto :: HandlesSelector
+noRoomSameProto client clients _ = map handle $ filter (null . room) $ filter (\ci -> protocol client == protocol ci) clients
+
 othersInRoom :: HandlesSelector
 othersInRoom client clients rooms = map handle $ filter (client /=) $ filter (\ci -> room ci == room client) clients
 
