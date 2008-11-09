@@ -185,6 +185,8 @@ if Key <> 0 then
 	
 	utf8:= char(Key or firstByteMark[btw]) + utf8;
 
+	if byte(InputStr.s[0]) + btw > 240 then exit;
+
 	InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
 	SetLine(InputStr, InputStr.s + utf8, true)
 	end
