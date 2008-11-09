@@ -48,6 +48,7 @@ HWGame::~HWGame()
 void HWGame::onClientDisconnect()
 {
 	switch (gameType) {
+		case gtDemo: break;
 		case gtNet:
 			emit HaveRecord(true, demo);
 			break;
