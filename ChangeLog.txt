@@ -1,6 +1,30 @@
 + features
 * bugfixes
 
+0.9.6 -> 0.9.7:
+ + Completely redesign the frontend, no longer looks like an ugly program launcher
+ + New art
+ + Add fullscreen mode to frontend
+ + New Castle map
+ + All map rendering now 32bit / theme objects have alpha channels
+ + Bath, Freeway, Hell, Sheep, Underwater themes
+ + PirateFlag, Sheep maps
+ + Seduction weapon
+ + Dedicated server
+ + Increase possible length of team and Hedgehog names
+ + New music
+ + Ability to customize your hedgehogs with a variety of hats
+ + Ability to customize water colour in themes
+ + Watermelon Bomb Weapon
+ + Hellish Hand Grenade Weapon
+ + /me now works in chat
+ + Ability to divide teams on any map
+ * Fix rope getting stuck bug
+ * Make soundtrack loop better
+ * Fixed small glitch with placing girders
+ * Fixed grenade sound
+ * AI uses the mortar better
+
 0.9.5 -> 0.9.6:
  + New Cake weapon
  + New maps: EarthRise, Bamboo, Bath, BambooPlinko
