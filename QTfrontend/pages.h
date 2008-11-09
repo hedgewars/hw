@@ -205,6 +205,7 @@ public:
 	QCheckBox *CBFrontendFullscreen;
 	QCheckBox *CBShowFPS;
 	QCheckBox *CBAltDamage;
+	QCheckBox *CBNameWithDate;
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 	QLabel *labelNN;

@@ -60,6 +60,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
 
 	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
+	Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
 
 	depth = QApplication::desktop()->depth();
 	if (depth < 16) depth = 16;
@@ -109,6 +110,7 @@ void GameUIConfig::SaveOptions()
 	setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());
 
 	setValue("misc/altdamage", isAltDamageEnabled());
+	setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
 }
 
 QRect GameUIConfig::vid_Resolution()
@@ -150,7 +152,12 @@ bool GameUIConfig::isShowFPSEnabled()
 
 bool GameUIConfig::isAltDamageEnabled()
 {
-	return Form->ui.pageOptions->CBAltDamage->isChecked();;
+	return Form->ui.pageOptions->CBAltDamage->isChecked();
+}
+
+bool GameUIConfig::appendDateTimeToRecordName()
+{
+	return Form->ui.pageOptions->CBNameWithDate->isChecked();
 }
 
 quint8 GameUIConfig::timerInterval()

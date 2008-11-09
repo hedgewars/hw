@@ -370,6 +370,10 @@ PageOptions::PageOptions(QWidget* parent) :
 	CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
 	GBAlayout->addWidget(CBAltDamage);
 
+	CBNameWithDate = new QCheckBox(AGGroupBox);
+	CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+	GBAlayout->addWidget(CBNameWithDate);
+
 	fpsedit = new FPSEdit(AGGroupBox);
 	GBAfpslayout->addWidget(fpsedit);
 

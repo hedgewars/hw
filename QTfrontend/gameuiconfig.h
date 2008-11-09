@@ -39,6 +39,7 @@ public:
 	bool isMusicEnabled();
 	bool isShowFPSEnabled();
 	bool isAltDamageEnabled();
+	bool appendDateTimeToRecordName();
 	quint8 timerInterval();
 	quint8 bitDepth();
 	QString netNick();
