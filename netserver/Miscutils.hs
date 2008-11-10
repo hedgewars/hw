@@ -79,13 +79,17 @@ data ServerInfo =
 	{
 		isDedicated :: Bool,
 		serverMessage :: String,
-		listenPort :: PortNumber
+		listenPort :: PortNumber,
+		loginsNumber :: Int,
+		lastHourUsers :: [UTCTime]
 	}
 newServerInfo = (
 	ServerInfo
 		True
 		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
 		46631
+		0
+		[]
 	)
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]

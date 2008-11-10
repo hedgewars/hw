@@ -72,7 +72,8 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(answerClientOnly ["TEAM_COLOR", teamname team, teamcolor team]) ++
 			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
 
-answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" : [(mainbody serverInfo) ++ clientsIn])]
+answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
+		[(mainbody serverInfo) ++ clientsIn ++ (lastHour serverInfo)])]
 	where
 		mainbody serverInfo = serverMessage serverInfo ++
 			if isDedicated serverInfo then
@@ -82,6 +83,11 @@ answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" : [(
 		
 		clientsIn = "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>"
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
+		lastHour serverInfo =
+			if isDedicated serverInfo then
+				"<p align=left>" ++ (show $ length $ lastHourUsers serverInfo) ++ " user logins in last hour</p>"
+				else
+				""
 		nicks = filter (not . null) $ map nick clients
 
 answerPing = makeAnswer allClients ["PING"]

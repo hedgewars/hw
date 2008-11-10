@@ -22,11 +22,17 @@ data Messages =
 	Accept ClientInfo
 	| ClientMessage ([String], ClientInfo)
 	| CoreMessage [String]
+	| TimerTick
 
 messagesLoop :: TChan [String] -> IO()
 messagesLoop messagesChan = forever $ do
-	threadDelay (30 * 10^6) -- 30 seconds
+	threadDelay (25 * 10^6) -- 25 seconds
 	atomically $ writeTChan messagesChan ["PING"]
+
+timerLoop :: TChan [String] -> IO()
+timerLoop messagesChan = forever $ do
+	threadDelay (60 * 10^6) -- 60 seconds
+	atomically $ writeTChan messagesChan ["MINUTELY"]
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
@@ -123,8 +129,13 @@ mainLoop serverInfo acceptChan messagesChan clients rooms = do
 				atomically $ do
 					--writeTChan (chan ci) ["ERROR", "Reconnected too fast"]
 					writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
-				
-			mainLoop serverInfo acceptChan messagesChan (clients ++ [ci]) rooms
+
+			currentTime <- getCurrentTime
+			let newServerInfo = serverInfo{
+					loginsNumber = loginsNumber serverInfo + 1,
+					lastHourUsers = currentTime : lastHourUsers serverInfo
+					}
+			mainLoop newServerInfo acceptChan messagesChan (clients ++ [ci]) rooms
 			
 		ClientMessage (cmd, client) -> do
 			(clientsIn, mrooms) <- reactCmd serverInfo cmd client clients rooms
@@ -133,14 +144,21 @@ mainLoop serverInfo acceptChan messagesChan clients rooms = do
 				in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $
 					mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
 		
-		CoreMessage msg ->
-			if not $ null $ clients then
-				do
-				let client = head clients -- don't care
-				(clientsIn, mrooms) <- reactCmd serverInfo msg client clients rooms
-				mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
-			else
-				mainLoop serverInfo acceptChan messagesChan clients rooms
+		CoreMessage msg -> case msg of
+			["PING"] ->
+				if not $ null $ clients then
+					do
+					let client = head clients -- don't care
+					(clientsIn, mrooms) <- reactCmd serverInfo msg client clients rooms
+					mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
+				else
+					mainLoop serverInfo acceptChan messagesChan clients rooms
+			["MINUTELY"] -> do
+				currentTime <- getCurrentTime
+				let newServerInfo = serverInfo{
+						lastHourUsers = filter (\t -> currentTime `diffUTCTime` t > 3600) $ lastHourUsers serverInfo
+						}
+				mainLoop newServerInfo acceptChan messagesChan clients rooms
 
 startServer :: ServerInfo -> Socket -> IO()
 startServer serverInfo serverSocket = do
@@ -149,6 +167,7 @@ startServer serverInfo serverSocket = do
 	
 	messagesChan <- atomically newTChan
 	forkIO $ messagesLoop messagesChan
+	forkIO $ timerLoop messagesChan
 
 	mainLoop serverInfo acceptChan messagesChan [] []
 
@@ -157,9 +176,9 @@ main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
 	installHandler sigPIPE Ignore Nothing;
 #endif
-	serverInfo <- getOpts newServerInfo
+	serverInfo <- getOpts $ newServerInfo
 	
 	putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
-	
 	serverSocket <- listenOn $ PortNumber (listenPort serverInfo)
+	
 	startServer serverInfo serverSocket `finally` sClose serverSocket
