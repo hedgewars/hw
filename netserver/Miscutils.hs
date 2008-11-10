@@ -8,6 +8,7 @@ import Data.List
 import Maybe (fromJust)
 import qualified Data.Map as Map
 import Data.Time
+import Network
 
 data ClientInfo =
  ClientInfo
@@ -58,18 +59,39 @@ data RoomInfo =
 		isRestrictedTeams :: Bool,
 		params :: Map.Map String [String]
 	}
-createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 0 False False Map.empty)
+createRoom = (
+	RoomInfo
+		""
+		""
+		0
+		[]
+		"+rnd+"
+		False
+		1
+		0
+		False
+		False
+		Map.empty
+	)
 
 data ServerInfo =
 	ServerInfo
 	{
-		message :: String
+		isDedicated :: Bool,
+		serverMessage :: String,
+		listenPort :: PortNumber
 	}
+newServerInfo = (
+	ServerInfo
+		True
+		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
+		46631
+	)
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
 type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]
-type Answer = (HandlesSelector, [String])
+type Answer = ServerInfo -> (HandlesSelector, [String])
 type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, [Answer])
 
 

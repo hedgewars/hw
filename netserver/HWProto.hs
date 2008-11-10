@@ -16,7 +16,7 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
 makeAnswer :: HandlesSelector -> [String] -> [Answer]
-makeAnswer func msg = [(func, msg)]-- [\_ -> (func, msg)]
+makeAnswer func msg = [\_ -> (func, msg)]
 answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
 answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
@@ -72,12 +72,18 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(answerClientOnly ["TEAM_COLOR", teamname team, teamcolor team]) ++
 			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
 
-answerServerMessage clients = answerClientOnly $ "SERVER_MESSAGE" : [mainbody ++ clientsIn]
+answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" : [(mainbody serverInfo) ++ clientsIn])]
 	where
-		mainbody = serverMessage globalOptions ++ if isDedicated globalOptions then "<p align=center>Dedicated server</p>" else "<p align=center>Private server</p>"
+		mainbody serverInfo = serverMessage serverInfo ++
+			if isDedicated serverInfo then
+				"<p align=center>Dedicated server</p>"
+				else
+				"<p align=center>Private server</p>"
+		
 		clientsIn = "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>"
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
 		nicks = filter (not . null) $ map nick clients
+
 answerPing = makeAnswer allClients ["PING"]
 
 
@@ -157,13 +163,10 @@ handleCmd_noRoom client clients rooms ["LIST"] =
 			sameProtoRooms = filter (\r -> (roomProto r == protocol client) && (not $ isRestrictedJoins r)) rooms
 
 handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
-	if (not $ isDedicated globalOptions) && (not $ null rooms) then
-		(noChangeClients, noChangeRooms, answerCannotCreateRoom)
+	if haveSameRoom then
+		(noChangeClients, noChangeRooms, answerRoomExists)
 	else
-		if haveSameRoom then
-			(noChangeClients, noChangeRooms, answerRoomExists)
-		else
-			(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, (answerJoined $ nick client) ++ (answerNotReady $ nick client))
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, (answerJoined $ nick client) ++ (answerNotReady $ nick client))
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 

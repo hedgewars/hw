@@ -91,14 +91,15 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (Miscutils.handle a) == b) list rmClHandles
 
 
-reactCmd :: [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
-reactCmd cmd client clients rooms = do
+reactCmd :: ServerInfo -> [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
+reactCmd serverInfo cmd client clients rooms = do
 	--putStrLn ("> " ++ show cmd)
 
-	let (clientsFunc, roomsFunc, answers) = handleCmd client clients rooms $ cmd
+	let (clientsFunc, roomsFunc, answerFuncs) = handleCmd client clients rooms $ cmd
 	let mrooms = roomsFunc rooms
 	let mclients = (clientsFunc clients)
 	let mclient = fromMaybe client $ find (== client) mclients
+	let answers = map (\x -> x serverInfo) answerFuncs
 
 	clientsIn <- sendAnswers answers mclient mclients mrooms
 	mapM_ (\cl -> atomically $ writeTChan (chan cl) ["QUIT", "Kicked"]) $ filter forceQuit $ clientsIn
@@ -106,8 +107,8 @@ reactCmd cmd client clients rooms = do
 	return (clientsIn, mrooms)
 
 
-mainLoop :: TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
-mainLoop acceptChan messagesChan clients rooms = do
+mainLoop :: ServerInfo -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
+mainLoop serverInfo acceptChan messagesChan clients rooms = do
 	r <- atomically $
 		(Accept `fmap` readTChan acceptChan) `orElse`
 		(ClientMessage `fmap` tselect clients) `orElse`
@@ -123,39 +124,42 @@ mainLoop acceptChan messagesChan clients rooms = do
 					--writeTChan (chan ci) ["ERROR", "Reconnected too fast"]
 					writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
 				
-			mainLoop acceptChan messagesChan (clients ++ [ci]) rooms
+			mainLoop serverInfo acceptChan messagesChan (clients ++ [ci]) rooms
 			
 		ClientMessage (cmd, client) -> do
-			(clientsIn, mrooms) <- reactCmd cmd client clients rooms
+			(clientsIn, mrooms) <- reactCmd serverInfo cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
-				in unless ((not $ isDedicated globalOptions) && ((null clientsIn) || hadRooms)) $
-					mainLoop acceptChan messagesChan clientsIn mrooms
+				in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $
+					mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
 		
 		CoreMessage msg ->
 			if not $ null $ clients then
 				do
 				let client = head clients -- don't care
-				(clientsIn, mrooms) <- reactCmd msg client clients rooms
-				mainLoop acceptChan messagesChan clientsIn mrooms
+				(clientsIn, mrooms) <- reactCmd serverInfo msg client clients rooms
+				mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
 			else
-				mainLoop acceptChan messagesChan clients rooms
+				mainLoop serverInfo acceptChan messagesChan clients rooms
 
-startServer :: Socket -> IO()
-startServer serverSocket = do
+startServer :: ServerInfo -> Socket -> IO()
+startServer serverInfo serverSocket = do
 	acceptChan <- atomically newTChan
 	forkIO $ acceptLoop serverSocket acceptChan
 	
 	messagesChan <- atomically newTChan
 	forkIO $ messagesLoop messagesChan
-	
-	mainLoop acceptChan messagesChan [] []
+
+	mainLoop serverInfo acceptChan messagesChan [] []
 
 
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
 	installHandler sigPIPE Ignore Nothing;
 #endif
-	putStrLn $ "Listening on port " ++ show (listenPort globalOptions)
-	serverSocket <- listenOn $ PortNumber (listenPort globalOptions)
-	startServer serverSocket `finally` sClose serverSocket
+	serverInfo <- getOpts newServerInfo
+	
+	putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
+	
+	serverSocket <- listenOn $ PortNumber (listenPort serverInfo)
+	startServer serverInfo serverSocket `finally` sClose serverSocket
