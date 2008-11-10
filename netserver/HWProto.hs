@@ -15,59 +15,71 @@ teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
-answerServerMessage clients = [(clientOnly, "SERVER_MESSAGE" : [mainbody ++ clientsIn])]
+makeAnswer :: HandlesSelector -> [String] -> [Answer]
+makeAnswer func msg = [(func, msg)]-- [\_ -> (func, msg)]
+answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
+answerClientOnly  = makeAnswer clientOnly
+answerOthersRoom  = makeAnswer othersInRoom
+answerSameRoom    = makeAnswer sameRoom
+
+answerBadCmd            = answerClientOnly ["ERROR", "Bad command, state or incorrect parameter"]
+answerNotMaster         = answerClientOnly ["ERROR", "You cannot configure room parameters"]
+answerBadParam          = answerClientOnly ["ERROR", "Bad parameter"]
+answerErrorMsg msg      = answerClientOnly ["ERROR", msg]
+answerQuit msg          = answerClientOnly ["BYE", msg]
+answerNickChosen        = answerClientOnly ["ERROR", "The nick already chosen"]
+answerNickChooseAnother = answerClientOnly ["WARNING", "Choose another nick"]
+answerNick nick         = answerClientOnly ["NICK", nick]
+answerProtocolKnown     = answerClientOnly ["ERROR", "Protocol number already known"]
+answerBadInput          = answerClientOnly ["ERROR", "Bad input"]
+answerProto protoNum    = answerClientOnly ["PROTO", show protoNum]
+answerRoomsList list    = answerClientOnly $ "ROOMS" : list
+answerRoomExists        = answerClientOnly ["WARNING", "There's already a room with that name"]
+answerNoRoom            = answerClientOnly ["WARNING", "There's no room with that name"]
+answerWrongPassword     = answerClientOnly ["WARNING", "Wrong password"]
+answerCantAdd reason    = answerClientOnly ["WARNING", "Cannot add team: " ++ reason]
+answerTeamAccepted team = answerClientOnly ["TEAM_ACCEPTED", teamname team]
+answerTooFewClans       = answerClientOnly ["ERROR", "Too few clans in game"]
+answerRestricted        = answerClientOnly ["WARNING", "Room joining restricted"]
+answerConnected         = answerClientOnly ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
+answerNotOwner          = answerClientOnly ["ERROR", "You do not own this team"]
+answerCannotCreateRoom  = answerClientOnly ["WARNING", "Cannot create more rooms"]
+
+answerAbandoned           = answerOthersRoom ["BYE", "Room abandoned"]
+answerQuitInform nick     = answerOthersRoom ["LEFT", nick]
+answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
+answerAddTeam team        = answerOthersRoom $ teamToNet team
+answerRemoveTeam teamName = answerOthersRoom ["REMOVE_TEAM", teamName]
+answerMap mapName         = answerOthersRoom ["MAP", mapName]
+answerHHNum teamName hhNumber = answerOthersRoom ["HH_NUM", teamName, show hhNumber]
+answerTeamColor teamName newColor = answerOthersRoom ["TEAM_COLOR", teamName, newColor]
+answerConfigParam paramName paramStrs = answerOthersRoom $ "CONFIG_PARAM" : paramName : paramStrs
+
+answerJoined nick   = answerSameRoom ["JOINED", nick]
+answerRunGame       = answerSameRoom ["RUN_GAME"]
+answerIsReady nick  = answerSameRoom ["READY", nick]
+answerNotReady nick = answerSameRoom ["NOT_READY", nick]
+
+answerFullConfig room = concatMap toAnswer (Map.toList $ params room) ++ (answerClientOnly ["MAP", gamemap room])
+	where
+		toAnswer (paramName, paramStrs) =
+			answerClientOnly $ "CONFIG_PARAM" : paramName : paramStrs
+
+answerAllTeams room = concatMap toAnswer (teams room)
+	where
+		toAnswer team =
+			(answerClientOnly $ teamToNet team) ++
+			(answerClientOnly ["TEAM_COLOR", teamname team, teamcolor team]) ++
+			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
+
+answerServerMessage clients = answerClientOnly $ "SERVER_MESSAGE" : [mainbody ++ clientsIn]
 	where
 		mainbody = serverMessage globalOptions ++ if isDedicated globalOptions then "<p align=center>Dedicated server</p>" else "<p align=center>Private server</p>"
 		clientsIn = "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>"
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
 		nicks = filter (not . null) $ map nick clients
-		
-answerBadCmd = [(clientOnly, ["ERROR", "Bad command, state or incorrect parameter"])]
-answerNotMaster = [(clientOnly, ["ERROR", "You cannot configure room parameters"])]
-answerBadParam = [(clientOnly, ["ERROR", "Bad parameter"])]
-answerErrorMsg msg = [(clientOnly, ["ERROR", msg])]
-answerQuit msg = [(clientOnly, ["BYE", msg])]
-answerAbandoned = [(othersInRoom, ["BYE", "Room abandoned"])]
-answerQuitInform nick = [(othersInRoom, ["LEFT", nick])]
-answerNickChosen = [(clientOnly, ["ERROR", "The nick already chosen"])]
-answerNickChooseAnother = [(clientOnly, ["WARNING", "Choose another nick"])]
-answerNick nick = [(clientOnly, ["NICK", nick])]
-answerProtocolKnown = [(clientOnly, ["ERROR", "Protocol number already known"])]
-answerBadInput = [(clientOnly, ["ERROR", "Bad input"])]
-answerProto protoNum = [(clientOnly, ["PROTO", show protoNum])]
-answerRoomsList list = [(clientOnly, ["ROOMS"] ++ list)]
-answerRoomExists = [(clientOnly, ["WARNING", "There's already a room with that name"])]
-answerJoined nick = [(sameRoom, ["JOINED", nick])]
-answerNoRoom = [(clientOnly, ["WARNING", "There's no room with that name"])]
-answerWrongPassword = [(clientOnly, ["WARNING", "Wrong password"])]
-answerChatString nick msg = [(othersInRoom, ["CHAT_STRING", nick, msg])]
-answerConfigParam paramName paramStrs = [(othersInRoom, "CONFIG_PARAM" : paramName : paramStrs)]
-answerFullConfig room = map toAnswer (Map.toList $ params room) ++ [(clientOnly, ["MAP", gamemap room])]
-	where
-		toAnswer (paramName, paramStrs) =
-			(clientOnly, "CONFIG_PARAM" : paramName : paramStrs)
-answerCantAdd reason = [(clientOnly, ["WARNING", "Cannot add team: " ++ reason])]
-answerTeamAccepted team = [(clientOnly, ["TEAM_ACCEPTED", teamname team])]
-answerAddTeam team = [(othersInRoom, teamToNet team)]
-answerHHNum teamName hhNumber = [(othersInRoom, ["HH_NUM", teamName, show hhNumber])]
-answerRemoveTeam teamName = [(othersInRoom, ["REMOVE_TEAM", teamName])]
-answerNotOwner = [(clientOnly, ["ERROR", "You do not own this team"])]
-answerTeamColor teamName newColor = [(othersInRoom, ["TEAM_COLOR", teamName, newColor])]
-answerAllTeams room = concatMap toAnswer (teams room)
-	where
-		toAnswer team =
-			[(clientOnly, teamToNet team),
-			(clientOnly, ["TEAM_COLOR", teamname team, teamcolor team]),
-			(clientOnly, ["HH_NUM", teamname team, show $ hhnum team])]
-answerMap mapName = [(othersInRoom, ["MAP", mapName])]
-answerRunGame = [(sameRoom, ["RUN_GAME"])]
-answerCannotCreateRoom = [(clientOnly, ["WARNING", "Cannot create more rooms"])]
-answerIsReady nick = [(sameRoom, ["READY", nick])]
-answerNotReady nick = [(sameRoom, ["NOT_READY", nick])]
-answerTooFewClans = [(clientOnly, ["ERROR", "Too few clans in game"])]
-answerRestricted = [(clientOnly, ["WARNING", "Room joining restricted"])]
-answerPing = [(allClients, ["PING"])]
-answerConnected = [(clientOnly, ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"])]
+answerPing = makeAnswer allClients ["PING"]
+
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
@@ -80,7 +92,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
-		answerRemoveClientTeams = map (\tn -> (othersInRoom, ["REMOVE_TEAM", teamname tn])) clientTeams
+		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
 		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
 		msg = if not $ null xs then head xs else ""
@@ -169,8 +181,8 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
-		answerNicks = [(clientOnly, ["JOINED"] ++ (map nick $ sameRoomClients))]
-		answerReady = map (\c -> (clientOnly, [if isReady c then "READY" else "NOT_READY", nick c])) sameRoomClients
+		answerNicks = answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
+		answerReady = concatMap (\c -> answerClientOnly [if isReady c then "READY" else "NOT_READY", nick c]) sameRoomClients
 		sameRoomClients = filter (\ci -> room ci == roomName) clients
 		clRoom = roomByName roomName rooms
 
@@ -316,10 +328,10 @@ handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	where
 		clRoom = roomByName (room client) rooms
 		sameRoomClients = filter (\ci -> room ci == name clRoom) clients
-		answerAllNotReady = map (\cl -> (sameRoom, ["NOT_READY", nick cl])) sameRoomClients
+		answerAllNotReady = concatMap (\cl -> answerSameRoom ["NOT_READY", nick cl]) sameRoomClients
 
 handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
-	(noChangeClients, noChangeRooms, [(othersInRoom, ["GAMEMSG", msg])])
+	(noChangeClients, noChangeRooms, answerOthersRoom ["GAMEMSG", msg])
 
 handleCmd_inRoom client clients rooms ["KICK", kickNick] =
 	if isMaster client then

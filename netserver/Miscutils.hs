@@ -60,10 +60,17 @@ data RoomInfo =
 	}
 createRoom = (RoomInfo "" "" 0 [] "+rnd+" False 1 0 False False Map.empty)
 
+data ServerInfo =
+	ServerInfo
+	{
+		message :: String
+	}
+
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
 type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]
-type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, [(HandlesSelector, [String])])
+type Answer = (HandlesSelector, [String])
+type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, [Answer])
 
 
 roomByName :: String -> [RoomInfo] -> RoomInfo
