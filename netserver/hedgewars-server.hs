@@ -156,7 +156,7 @@ mainLoop serverInfo acceptChan messagesChan clients rooms = do
 			["MINUTELY"] -> do
 				currentTime <- getCurrentTime
 				let newServerInfo = serverInfo{
-						lastHourUsers = filter (\t -> currentTime `diffUTCTime` t > 3600) $ lastHourUsers serverInfo
+						lastHourUsers = filter (\t -> currentTime `diffUTCTime` t < 3600) $ lastHourUsers serverInfo
 						}
 				mainLoop newServerInfo acceptChan messagesChan clients rooms
 
