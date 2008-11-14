@@ -368,7 +368,7 @@ if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 
 with TeamsArray[t]^ do
 	begin
-	AddChatString('* '+ TeamName + ' is gone');
+	AddChatString('** '+ TeamName + ' is gone');
 	for i:= 0 to cMaxHHIndex do
 		with Hedgehogs[i] do
 			if Gear <> nil then

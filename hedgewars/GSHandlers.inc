@@ -232,8 +232,11 @@ end;
 
 procedure doStepHealthTagWorkUnderWater(Gear: PGear);
 begin
-AllInactive:= false;
+if Gear^.Kind = gtHealthTag then
+	AllInactive:= false;
+
 Gear^.Y:= Gear^.Y - _0_08;
+
 if hwRound(Gear^.Y) < cWaterLine + 10 then
    DeleteGear(Gear)
 end;

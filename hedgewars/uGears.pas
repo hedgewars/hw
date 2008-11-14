@@ -184,9 +184,11 @@ const Counter: Longword = 0;
 var Result: PGear;
 begin
 inc(Counter);
-{$IFDEF DEBUGFILE}AddFileLog('AddGear: ('+inttostr(x)+','+inttostr(y)+'), d('+floattostr(dX)+','+floattostr(dY)+')');{$ENDIF}
+{$IFDEF DEBUGFILE}
+AddFileLog('AddGear: (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+{$ENDIF}
+
 New(Result);
-{$IFDEF DEBUGFILE}AddFileLog('AddGear: type = ' + inttostr(ord(Kind)));{$ENDIF}
 FillChar(Result^, sizeof(TGear), 0);
 Result^.X:= int2hwFloat(X);
 Result^.Y:= int2hwFloat(Y);
@@ -350,34 +352,39 @@ begin
 DeleteCI(Gear);
 
 if Gear^.Tex <> nil then
-   begin
-   FreeTexture(Gear^.Tex);
-   Gear^.Tex:= nil
-   end;
+	begin
+	FreeTexture(Gear^.Tex);
+	Gear^.Tex:= nil
+	end;
 
 if Gear^.Kind = gtHedgehog then
-   if CurAmmoGear <> nil then
-      begin
-      Gear^.Message:= gm_Destroy;
-      CurAmmoGear^.Message:= gm_Destroy;
-      exit
-      end else
-      begin
-      if not (hwRound(Gear^.Y) < cWaterLine) then
-         begin
-         t:= max(Gear^.Damage, Gear^.Health);
-         Gear^.Damage:= t;
-         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
-         uStats.HedgehogDamaged(Gear)
-         end;
-      team:= PHedgehog(Gear^.Hedgehog)^.Team;
-      if CurrentHedgehog^.Gear = Gear then
-         FreeActionsList; // to avoid ThinkThread on drawned gear
-      PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
-      inc(KilledHHs);
-      RecountTeamHealth(team);
-      end;
-{$IFDEF DEBUGFILE}AddFileLog('DeleteGear');{$ENDIF}
+	if CurAmmoGear <> nil then
+		begin
+		Gear^.Message:= gm_Destroy;
+		CurAmmoGear^.Message:= gm_Destroy;
+		exit
+		end
+	else
+		begin
+		if not (hwRound(Gear^.Y) < cWaterLine) then
+			begin
+			t:= max(Gear^.Damage, Gear^.Health);
+			Gear^.Damage:= t;
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+			uStats.HedgehogDamaged(Gear)
+			end;
+		team:= PHedgehog(Gear^.Hedgehog)^.Team;
+		if CurrentHedgehog^.Gear = Gear then
+			FreeActionsList; // to avoid ThinkThread on drawned gear
+		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
+		inc(KilledHHs);
+		RecountTeamHealth(team);
+		end;
+
+{$IFDEF DEBUGFILE}
+with Gear^ do AddFileLog('Delete: (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+{$ENDIF}
+
 if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
@@ -434,19 +441,20 @@ end;
 procedure AddDamageTag(X, Y, Damage: LongWord; Gear: PGear);
 begin
 if cAltDamage then
-   AddGear(X, Y, gtSmallDamage, Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+	AddGear(X, Y, gtSmallDamage, Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
-      step: (stDelay, stChDmg, stTurnReact,
-             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
-             stSpawn, stNTurn) = stDelay;
+	step: (stDelay, stChDmg, stTurnReact,
+			stAfterDelay, stChWin, stWater, stChWin2, stHealth,
+			stSpawn, stNTurn) = stDelay;
 
 var Gear, t: PGear;
 begin
 PrvInactive:= AllInactive;
 AllInactive:= true;
+
 t:= GearsList;
 while t <> nil do
 	begin
