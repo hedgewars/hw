@@ -147,7 +147,7 @@ if Gear^.Timer = 0 then
 				for i:= 0 to 5 do
 					begin
 					dX:= rndSign(GetRandom * _0_1);
-					dY:= (GetRandom - _2) * _0_2;
+					dY:= (GetRandom - _1_5) * _0_3;
 					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
 					end
 				end;
