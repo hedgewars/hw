@@ -580,7 +580,7 @@ if Gear^.Timer mod cHHStepTicks = 0 then
       Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
       Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
       HHGear^.State:= HHGear^.State or gstNoDamage;
-      AmmoShove(Gear, 2, 14);
+      AmmoShove(Gear, 2, 10);
       HHGear^.State:= HHGear^.State and not gstNoDamage
       end;
 
@@ -590,7 +590,7 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 if b then
    DrawTunnel(HHGear^.X - Gear^.dX * cHHRadius, HHGear^.Y - _4 - Gear^.dY * cHHRadius + hwAbs(Gear^.dY) * 7,
               Gear^.dX, Gear^.dY,
-              cHHRadius * 5, cHHRadius * 2 + 6);
+              cHHRadius * 5, cHHRadius * 2 + 7);
 
 if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) then
    begin
