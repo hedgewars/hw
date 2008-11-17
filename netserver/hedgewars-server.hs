@@ -85,7 +85,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
-			--hFlush ch
+			hFlush ch
 			if head answer == "BYE" then return [ch] else return []
 
 	let outHandles = concat clHandles'
