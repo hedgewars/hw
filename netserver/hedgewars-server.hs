@@ -85,12 +85,14 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 			do
 			forM_ answer (\str -> hPutStrLn ch str)
 			hPutStrLn ch ""
-			hFlush ch
+			--hFlush ch
 			if head answer == "BYE" then return [ch] else return []
 
 	let outHandles = concat clHandles'
 	unless (null outHandles) $ putStrLn ((show $ length outHandles) ++ " / " ++ (show $ length clients) ++ " : " ++ (show answer))
-	mapM_ (\ch -> Control.Exception.handle (const $ putStrLn "error on hClose") (hClose ch)) outHandles
+
+	-- strange, but this seems to be a bad idea to manually close these handles as it causes hangs
+	--mapM_ (\ch -> Control.Exception.handle (const $ putStrLn "error on hClose") (hClose ch)) outHandles
 	let mclients = remove clients outHandles
 
 	sendAnswers answers client mclients rooms
