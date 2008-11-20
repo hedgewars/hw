@@ -52,6 +52,7 @@ type PGear = ^TGear;
 			Z: Longword;
 			IntersectGear: PGear;
 			TriggerId: Longword;
+			uid: Longword;
 			end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -185,7 +186,7 @@ var Result: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}
-AddFileLog('AddGear: (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
 {$ENDIF}
 
 New(Result);
@@ -201,6 +202,7 @@ Result^.doStep:= doStepHandlers[Kind];
 Result^.CollisionIndex:= -1;
 Result^.Timer:= Timer;
 Result^.Z:= cUsualZ;
+Result^.uid:= Counter;
 
 if CurrentTeam <> nil then
    begin
@@ -382,7 +384,7 @@ if Gear^.Kind = gtHedgehog then
 		end;
 
 {$IFDEF DEBUGFILE}
-with Gear^ do AddFileLog('Delete: (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
+with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
 {$ENDIF}
 
 if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
