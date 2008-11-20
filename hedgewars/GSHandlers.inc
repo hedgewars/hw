@@ -615,28 +615,28 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;
-    len, cs, cc, tx, ty, nx, ny: hwFloat;
-    lx, ly: LongInt;
+	len, cs, cc, tx, ty, nx, ny: hwFloat;
+	lx, ly: LongInt;
 
-    procedure DeleteMe;
-    begin
-      with HHGear^ do
-           begin
-           Message:= Message and not gm_Attack;
-           State:= State or gstMoving;
-           end;
-      DeleteGear(Gear)
-    end;
+	procedure DeleteMe;
+	begin
+	with HHGear^ do
+		begin
+		Message:= Message and not gm_Attack;
+		State:= State or gstMoving;
+		end;
+	DeleteGear(Gear)
+	end;
 
 begin
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 
 if ((HHGear^.State and gstHHDriven) = 0)
-   or (CheckGearDrowning(HHGear)) then
-   begin
-   DeleteMe;
-   exit
-   end;
+	or (CheckGearDrowning(HHGear)) then
+	begin
+	DeleteMe;
+	exit
+	end;
 
 Gear^.dX:= HHGear^.X - Gear^.X;
 Gear^.dY:= HHGear^.Y - Gear^.Y;
@@ -657,48 +657,48 @@ ny:= SignAs(cc, HHGear^.dY) * 7;
 
 flCheck:= not flCheck;
 if flCheck then  // check whether rope needs dividing
-   begin
-   len:= Gear^.Elasticity - _20;
-   while len > _5 do
-         begin
-         tx:= cc*len;
-         ty:= cs*len;
-         lx:= hwRound(Gear^.X + tx + nx);
-         ly:= hwRound(Gear^.Y + ty + ny);
-         if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
-           begin
-           with RopePoints.ar[RopePoints.Count] do
-                begin
-                X:= Gear^.X;
-                Y:= Gear^.Y;
-                if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
-                b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
-                dLen:= len
-                end;
-           Gear^.X:= Gear^.X + tx;
-           Gear^.Y:= Gear^.Y + ty;
-           inc(RopePoints.Count);
-           TryDo(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true);
-           Gear^.Elasticity:= Gear^.Elasticity - len;
-           Gear^.Friction:= Gear^.Friction - len;
-           break
-           end;
-         len:= len - _0_5
-         end;
-   end else
-   if RopePoints.Count > 0 then // check whether the last dividing point could be removed
-      begin
-      tx:= RopePoints.ar[Pred(RopePoints.Count)].X;
-      ty:= RopePoints.ar[Pred(RopePoints.Count)].Y;
-      if RopePoints.ar[Pred(RopePoints.Count)].b xor ((tx - Gear^.X) * (ty - HHGear^.Y) > (tx - HHGear^.X) * (ty - Gear^.Y)) then
-         begin
-         dec(RopePoints.Count);
-         Gear^.X:=RopePoints.ar[RopePoints.Count].X;
-         Gear^.Y:=RopePoints.ar[RopePoints.Count].Y;
-         Gear^.Elasticity:= Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
-         Gear^.Friction:= Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen
-         end
-      end;
+	begin
+	len:= Gear^.Elasticity - _20;
+	while len > _5 do
+			begin
+			tx:= cc*len;
+			ty:= cs*len;
+			lx:= hwRound(Gear^.X + tx + nx);
+			ly:= hwRound(Gear^.Y + ty + ny);
+			if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
+				begin
+				with RopePoints.ar[RopePoints.Count] do
+					begin
+					X:= Gear^.X;
+					Y:= Gear^.Y;
+					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
+					b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
+					dLen:= len
+					end;
+				Gear^.X:= Gear^.X + tx;
+				Gear^.Y:= Gear^.Y + ty;
+				inc(RopePoints.Count);
+				TryDo(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true);
+				Gear^.Elasticity:= Gear^.Elasticity - len;
+				Gear^.Friction:= Gear^.Friction - len;
+				break
+				end;
+			len:= len - _0_5
+			end;
+	end else
+	if RopePoints.Count > 0 then // check whether the last dividing point could be removed
+		begin
+		tx:= RopePoints.ar[Pred(RopePoints.Count)].X;
+		ty:= RopePoints.ar[Pred(RopePoints.Count)].Y;
+		if RopePoints.ar[Pred(RopePoints.Count)].b xor ((tx - Gear^.X) * (ty - HHGear^.Y) > (tx - HHGear^.X) * (ty - Gear^.Y)) then
+			begin
+			dec(RopePoints.Count);
+			Gear^.X:=RopePoints.ar[RopePoints.Count].X;
+			Gear^.Y:=RopePoints.ar[RopePoints.Count].Y;
+			Gear^.Elasticity:= Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
+			Gear^.Friction:= Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen
+			end
+		end;
 
 Gear^.dX:= HHGear^.X - Gear^.X;
 Gear^.dY:= HHGear^.Y - Gear^.Y;
@@ -713,12 +713,12 @@ HHGear^.dX:= HHGear^.X;
 HHGear^.dY:= HHGear^.Y;
 
 if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-   if not (TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
-        or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity + _0_3;
+	if not (TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
+			or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity + _0_3;
 
 if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
-   if not (TestCollisionXwithGear(HHGear, -hwSign(Gear^.dX))
-        or TestCollisionYwithGear(HHGear, -hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity - _0_3;
+	if not (TestCollisionXwithGear(HHGear, -hwSign(Gear^.dX))
+			or TestCollisionYwithGear(HHGear, -hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity - _0_3;
 
 HHGear^.X:= Gear^.X + cc*Gear^.Elasticity;
 HHGear^.Y:= Gear^.Y + cs*Gear^.Elasticity;
@@ -727,21 +727,25 @@ HHGear^.dX:= HHGear^.X - HHGear^.dX;
 HHGear^.dY:= HHGear^.Y - HHGear^.dY;
 
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
-   HHGear^.dX:= -_0_6 * HHGear^.dX;
+	HHGear^.dX:= -_0_6 * HHGear^.dX;
 if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
-   HHGear^.dY:= -_0_6 * HHGear^.dY;
+	HHGear^.dY:= -_0_6 * HHGear^.dY;
 
 len:= Distance(HHGear^.dX, HHGear^.dY);
 if len > _0_8 then
-   begin
-   len:= _0_8 / len;
-   HHGear^.dX:= HHGear^.dX * len;
-   HHGear^.dY:= HHGear^.dY * len;
-   end;
+	begin
+	len:= _0_8 / len;
+	HHGear^.dX:= HHGear^.dX * len;
+	HHGear^.dY:= HHGear^.dY * len;
+	end;
 
 if (Gear^.Message and gm_Attack) <> 0 then
-   if (Gear^.State and gsttmpFlag) <> 0 then DeleteMe else
-else if (Gear^.State and gsttmpFlag) = 0 then Gear^.State:= Gear^.State or gsttmpFlag;
+	if (Gear^.State and gsttmpFlag) <> 0 then
+		DeleteMe
+	else
+else
+	if (Gear^.State and gsttmpFlag) = 0 then
+		Gear^.State:= Gear^.State or gsttmpFlag;
 end;
 
 
