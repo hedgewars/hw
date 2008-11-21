@@ -49,7 +49,7 @@ if _0_4 < Gear^.dY then
 
 	dmg:= 1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70);
 	inc(Gear^.Damage, dmg);
-	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, Gear);
+	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
 	end
 end;
 
@@ -219,9 +219,11 @@ end;
 procedure doStepHealthTagWork(Gear: PGear);
 begin
 if Gear^.Kind = gtHealthTag then
-   AllInactive:= false;
+	AllInactive:= false;
+
 dec(Gear^.Timer);
 Gear^.Y:= Gear^.Y + Gear^.dY;
+
 if Gear^.Timer = 0 then
 	begin
 	if Gear^.Kind = gtHealthTag then
@@ -232,34 +234,28 @@ end;
 
 procedure doStepHealthTagWorkUnderWater(Gear: PGear);
 begin
-if Gear^.Kind = gtHealthTag then
-	AllInactive:= false;
+AllInactive:= false;
 
 Gear^.Y:= Gear^.Y - _0_08;
 
 if hwRound(Gear^.Y) < cWaterLine + 10 then
-   DeleteGear(Gear)
+	DeleteGear(Gear)
 end;
 
 procedure doStepHealthTag(Gear: PGear);
 var s: shortstring;
-    font: THWFont;
 begin
-if Gear^.Kind = gtHealthTag then
-   begin
-   AllInactive:= false;
-   font:= fnt16;
-   Gear^.dY:= -_0_08
-   end else
-   begin
-   font:= fntSmall;
-   Gear^.dY:= -_0_02
-   end;
+AllInactive:= false;
+Gear^.dY:= -_0_08;
 
 str(Gear^.State, s);
-Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, font);
-if hwRound(Gear^.Y) < cWaterLine then Gear^.doStep:= @doStepHealthTagWork
-                                 else Gear^.doStep:= @doStepHealthTagWorkUnderWater;
+Gear^.Tex:= RenderStringTex(s, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color, fnt16);
+
+if hwRound(Gear^.Y) < cWaterLine then
+	Gear^.doStep:= @doStepHealthTagWork
+else
+	Gear^.doStep:= @doStepHealthTagWorkUnderWater;
+
 Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
 end;
 
@@ -280,6 +276,7 @@ if not Gear^.dY.isNegative then
          exit
          end else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact, false)
       end;
+
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckGearDrowning(Gear);
 Gear^.dY:= Gear^.dY + cGravity

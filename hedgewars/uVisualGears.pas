@@ -23,48 +23,62 @@ uses SDLh, uConsts, uFloat, GL;
 const AllInactive: boolean = false;
 
 type PVisualGear = ^TVisualGear;
-     TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
-     TVisualGear = record
-             NextGear, PrevGear: PVisualGear;
-             Frame,
-             FrameTicks: Longword;
-             X : hwFloat;
-             Y : hwFloat;
-             dX: hwFloat;
-             dY: hwFloat;
-             mdY: QWord;
-             Angle, dAngle: real;
-             Kind: TVisualGearType;
-             doStep: TVGearStepProcedure;
-             end;
+	TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
+	TVisualGear = record
+		NextGear, PrevGear: PVisualGear;
+		Frame,
+		FrameTicks: Longword;
+		X : hwFloat;
+		Y : hwFloat;
+		dX: hwFloat;
+		dY: hwFloat;
+		mdY: QWord;
+		Angle, dAngle: real;
+		Kind: TVisualGearType;
+		doStep: TVGearStepProcedure;
+		Tex: PTexture;
+		end;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
+procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
 var VisualGearsList: PVisualGear = nil;
-    vobFrameTicks, vobFramesCount: Longword;
-    vobVelocity, vobFallSpeed: LongInt;
+	vobFrameTicks, vobFramesCount: Longword;
+	vobVelocity, vobFallSpeed: LongInt;
 
 implementation
 uses uWorld, uMisc, uStore;
 const cExplFrameTicks = 110;
 
+procedure AddDamageTag(X, Y, Damage, Color: LongWord);
+var s: shortstring;
+begin
+if cAltDamage then
+	with AddVisualGear(X, Y, vgtSmallDamageTag)^ do
+		begin
+		str(Damage, s);
+		Tex:= RenderStringTex(s, Color, fntSmall);
+		end;
+end;
+
+
 // ==================================================================
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 begin
 with Gear^ do
-  begin
-  inc(FrameTicks, Steps);
-  if FrameTicks > vobFrameTicks then
-    begin
-    dec(FrameTicks, vobFrameTicks);
-    inc(Frame);
-    if Frame = vobFramesCount then Frame:= 0
-    end
-  end;
+	begin
+	inc(FrameTicks, Steps);
+	if FrameTicks > vobFrameTicks then
+		begin
+		dec(FrameTicks, vobFrameTicks);
+		inc(Frame);
+		if Frame = vobFramesCount then Frame:= 0
+		end
+	end;
 
 Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobFallSpeed) * Steps;
@@ -124,15 +138,26 @@ else
 	dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.Y:= Gear^.Y - _0_02 * Steps;
+
+if Gear^.FrameTicks <= Steps then
+	DeleteVisualGear(Gear)
+else
+	dec(Gear^.FrameTicks, Steps)
+end;
+
 // ==================================================================
 const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
-                        (
-                          @doStepFlake,
-                          @doStepCloud,
-                          @doStepExpl,
-                          @doStepExpl,
-                          @doStepFire
-                        );
+		(
+			@doStepFlake,
+			@doStepCloud,
+			@doStepExpl,
+			@doStepExpl,
+			@doStepFire,
+			@doStepSmallDamage
+		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 var Result: PVisualGear;
@@ -146,57 +171,57 @@ Result^.Y:= int2hwFloat(Y);
 Result^.Kind := Kind;
 Result^.doStep:= doStepHandlers[Kind];
 
-case Kind of
-   vgtFlake: with Result^ do
-               begin
-               FrameTicks:= random(vobFrameTicks);
-               Frame:= random(vobFramesCount);
-               Angle:= random * 360;
-               dx.isNegative:= random(2) = 0;
-               dx.QWordValue:= random(100000000);
-               dy.isNegative:= false;
-               dy.QWordValue:= random(70000000);
-               dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
-               end;
-   vgtCloud: with Result^ do
-               begin
-               Frame:= random(4);
-               dx.isNegative:= random(2) = 0;
-               dx.QWordValue:= random(214748364);
-               dy.isNegative:= random(2) = 0;
-               dy.QWordValue:= 21474836 + random(64424509);
-               mdY:= dy.QWordValue
-               end;
-  vgtExplPart,
- vgtExplPart2: with Result^ do
-               begin
-               t:= random(1024);
-               sp:= _0_001 * (random(95) + 70);
-               dx:= AngleSin(t) * sp;
-               dx.isNegative:= random(2) = 0;
-               dy:= AngleCos(t) * sp;
-               dy.isNegative:= random(2) = 0;
-               Frame:= 7 - random(3);
-               FrameTicks:= cExplFrameTicks
-               end;
-      vgtFire: with Result^ do
-               begin
-               t:= random(1024);
-               sp:= _0_001 * (random(85) + 95);
-               dx:= AngleSin(t) * sp;
-               dx.isNegative:= random(2) = 0;
-               dy:= AngleCos(t) * sp;
-               dy.isNegative:= random(2) = 0;
-               FrameTicks:= 650 + random(250);
-               Frame:= random(8)
-               end;
-     end;
+with Result^ do
+	case Kind of
+	vgtFlake: begin
+				FrameTicks:= random(vobFrameTicks);
+				Frame:= random(vobFramesCount);
+				Angle:= random * 360;
+				dx.isNegative:= random(2) = 0;
+				dx.QWordValue:= random(100000000);
+				dy.isNegative:= false;
+				dy.QWordValue:= random(70000000);
+				dAngle:= (random(2) * 2 - 1) * (1 + random) * vobVelocity / 1000
+				end;
+	vgtCloud: begin
+				Frame:= random(4);
+				dx.isNegative:= random(2) = 0;
+				dx.QWordValue:= random(214748364);
+				dy.isNegative:= random(2) = 0;
+				dy.QWordValue:= 21474836 + random(64424509);
+				mdY:= dy.QWordValue
+				end;
+	vgtExplPart,
+	vgtExplPart2: begin
+				t:= random(1024);
+				sp:= _0_001 * (random(95) + 70);
+				dx:= AngleSin(t) * sp;
+				dx.isNegative:= random(2) = 0;
+				dy:= AngleCos(t) * sp;
+				dy.isNegative:= random(2) = 0;
+				Frame:= 7 - random(3);
+				FrameTicks:= cExplFrameTicks
+				end;
+		vgtFire: begin
+				t:= random(1024);
+				sp:= _0_001 * (random(85) + 95);
+				dx:= AngleSin(t) * sp;
+				dx.isNegative:= random(2) = 0;
+				dy:= AngleCos(t) * sp;
+				dy.isNegative:= random(2) = 0;
+				FrameTicks:= 650 + random(250);
+				Frame:= random(8)
+				end;
+	vgtSmallDamageTag: begin
+				Result^.FrameTicks:= 1100
+				end;
+		end;
 
 if VisualGearsList <> nil then
-   begin
-   VisualGearsList^.PrevGear:= Result;
-   Result^.NextGear:= VisualGearsList
-   end;
+	begin
+	VisualGearsList^.PrevGear:= Result;
+	Result^.NextGear:= VisualGearsList
+	end;
 VisualGearsList:= Result;
 
 AddVisualGear:= Result
@@ -204,6 +229,9 @@ end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);
 begin
+if Gear^.Tex <> nil then
+	FreeTexture(Gear^.Tex);
+
 if Gear^.NextGear <> nil then Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then Gear^.PrevGear^.NextGear:= Gear^.NextGear
    else VisualGearsList:= Gear^.NextGear;
@@ -247,6 +275,7 @@ case Layer of
 			vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
 			vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
 			vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+			vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
 			end;
 		Gear:= Gear^.NextGear
 		end

@@ -51,17 +51,18 @@ type
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored);
 
-	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag,
-			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope,
-			gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite,
-			gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame,
-			gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame,
-			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder,
-			gtTeleport, gtSmallDamage, gtSwitcher, gtTarget, gtMortar,
-			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece,
+	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
+			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
+			gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite, // 14
+			gtTeamHealthSorter, gtClusterBomb, gtCluster, gtShover, gtFlame, // 19
+			gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame, // 23
+			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 28
+			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 32
+			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 38
 			gtHellishBomb, gtEvilTrace, gtWaterUp);
 
-	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire);
+	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
+			vgtSmallDamageTag);
 
 	TGearsType = set of TGearType;
 

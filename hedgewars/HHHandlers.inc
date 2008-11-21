@@ -647,10 +647,14 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 begin
 if (Gear^.Message and gm_Destroy) <> 0 then
-   begin
-   DeleteGear(Gear);
-   exit
-   end;
+	begin
+	DeleteGear(Gear);
+	exit
+	end;
+
+//if Gear^.uid = 7 then
+//with Gear^ do AddFileLog('State: (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ')');
+
 if (Gear^.State and gstHHDriven) = 0 then doStepHedgehogFree(Gear)
                                      else doStepHedgehogDriven(Gear)
 end;
