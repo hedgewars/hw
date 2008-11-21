@@ -1228,6 +1228,7 @@ var t: PGearArray;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t^.Count;
+
 while i > 0 do
 	begin
 	dec(i);
