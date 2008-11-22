@@ -1240,6 +1240,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepAirAttackWork(Gear: PGear);
+var i: Longint;
 begin
 AllInactive:= false;
 Gear^.X:= Gear^.X + cAirPlaneSpeed * Gear^.Tag;
@@ -1250,6 +1251,8 @@ if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirP
 	case Gear^.State of
 			0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
 			1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
+			2: for i:= -17 to 17 do
+				FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, _0_01 * i, _0, 0);
 			end;
 	Gear^.dX:= Gear^.dX + int2hwFloat(30 * Gear^.Tag)
 	end;
@@ -1264,8 +1267,11 @@ procedure doStepAirAttack(Gear: PGear);
 begin
 AllInactive:= false;
 
-if Gear^.X.QWordValue = 0 then Gear^.Tag:=  1
-                          else Gear^.Tag:= -1;
+if Gear^.X.QWordValue = 0 then
+	Gear^.Tag:=  1
+else
+	Gear^.Tag:= -1;
+
 Gear^.X:= _1024 - _2048 * Gear^.Tag;
 Gear^.Y:= -_300;
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);

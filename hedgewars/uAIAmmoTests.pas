@@ -22,11 +22,11 @@ uses SDLh, uGears, uConsts, uFloat;
 const amtest_OnTurn = $00000001;
 
 type TAttackParams = record
-                     Time: Longword;
-                     Angle, Power: LongInt;
-                     ExplX, ExplY, ExplR: LongInt;
-                     AttackPutX, AttackPutY: LongInt;
-                     end;
+			Time: Longword;
+			Angle, Power: LongInt;
+			ExplX, ExplY, ExplR: LongInt;
+			AttackPutX, AttackPutY: LongInt;
+			end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -38,41 +38,42 @@ function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackP
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-     TAmmoTest = record
-                 proc: TAmmoTestProc;
-                 flags: Longword;
-                 end;
+	TAmmoTest = record
+			proc: TAmmoTestProc;
+			flags: Longword;
+			end;
 
 const AmmoTests: array[TAmmoType] of TAmmoTest =
-                 (
-                  (proc: @TestGrenade;     flags: 0), // amGrenade
-                  (proc: nil;              flags: 0), // amClusterBomb
-                  (proc: @TestBazooka;     flags: 0), // amBazooka
-                  (proc: nil;              flags: 0), // amUFO
-                  (proc: @TestShotgun;     flags: 0), // amShotgun
-                  (proc: nil;              flags: 0), // amPickHammer
-                  (proc: nil;              flags: 0), // amSkip
-                  (proc: nil;              flags: 0), // amRope
-                  (proc: nil;              flags: 0), // amMine
-                  (proc: @TestDesertEagle; flags: 0), // amDEagle
-                  (proc: nil;              flags: 0), // amDynamite
-                  (proc: @TestFirePunch;   flags: 0), // amFirePunch
-                  (proc: nil;              flags: 0), // amWhip
-                  (proc: @TestBaseballBat; flags: 0), // amBaseballBat
-                  (proc: nil;              flags: 0), // amParachute
-                  (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
-                  (proc: nil;              flags: 0), // amMineStrike
-                  (proc: nil;              flags: 0), // amBlowTorch
-                  (proc: nil;              flags: 0), // amGirder
-                  (proc: nil;              flags: amtest_OnTurn), // amTeleport
-                  (proc: nil;              flags: 0), // amSwitch
-                  (proc: @TestMortar;      flags: 0), // amMortar
-                  (proc: nil;              flags: 0), // amKamikaze
-                  (proc: nil;              flags: 0), // amCake
-                  (proc: nil;              flags: 0), // amSeduction
-                  (proc: nil;              flags: 0), // amBanana
-                  (proc: nil;              flags: 0)  // amHellishBomb
-                  );
+			(
+			(proc: @TestGrenade;     flags: 0), // amGrenade
+			(proc: nil;              flags: 0), // amClusterBomb
+			(proc: @TestBazooka;     flags: 0), // amBazooka
+			(proc: nil;              flags: 0), // amUFO
+			(proc: @TestShotgun;     flags: 0), // amShotgun
+			(proc: nil;              flags: 0), // amPickHammer
+			(proc: nil;              flags: 0), // amSkip
+			(proc: nil;              flags: 0), // amRope
+			(proc: nil;              flags: 0), // amMine
+			(proc: @TestDesertEagle; flags: 0), // amDEagle
+			(proc: nil;              flags: 0), // amDynamite
+			(proc: @TestFirePunch;   flags: 0), // amFirePunch
+			(proc: nil;              flags: 0), // amWhip
+			(proc: @TestBaseballBat; flags: 0), // amBaseballBat
+			(proc: nil;              flags: 0), // amParachute
+			(proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
+			(proc: nil;              flags: 0), // amMineStrike
+			(proc: nil;              flags: 0), // amBlowTorch
+			(proc: nil;              flags: 0), // amGirder
+			(proc: nil;              flags: amtest_OnTurn), // amTeleport
+			(proc: nil;              flags: 0), // amSwitch
+			(proc: @TestMortar;      flags: 0), // amMortar
+			(proc: nil;              flags: 0), // amKamikaze
+			(proc: nil;              flags: 0), // amCake
+			(proc: nil;              flags: 0), // amSeduction
+			(proc: nil;              flags: 0), // amBanana
+			(proc: nil;              flags: 0), // amHellishBomb
+			(proc: nil;              flags: 0)  // amNapalm
+			);
 
 const BadTurn = Low(LongInt) div 4;
 

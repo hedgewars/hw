@@ -81,7 +81,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb);
+			amSeduction, amWatermelon, amHellishBomb, amNapalm);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -1057,7 +1057,28 @@ const
 			isDamaging: true;
 			SkipTurns: 0;
 			PosCount: 1;
-			PosSprite: sprWater)
+			PosSprite: sprWater),
+			(NameId: sidAirAttack;
+			NameTex: nil;
+			Probability: 100;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+							ammoprop_NeedTarget or
+							ammoprop_AttackingPut or
+							ammoprop_DontHold;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amNapalm);
+			Slot: 5;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 2;
+			PosSprite: sprAmAirplane)
 			);
 
 var CountTexz: array[1..9] of PTexture;
