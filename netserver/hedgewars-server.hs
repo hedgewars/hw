@@ -6,7 +6,7 @@ import IO
 import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
-import Control.Exception (setUncaughtExceptionHandler, handle, finally)
+import Control.Exception (handle, finally)
 import Control.Monad
 import Maybe (fromMaybe, isJust, fromJust)
 import Data.List
