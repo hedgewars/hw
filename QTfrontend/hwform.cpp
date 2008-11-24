@@ -92,10 +92,10 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
 	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 
-	connect(ui.pageOptions->WeaponEdit,	SIGNAL(clicked()),	this, SLOT(GoToSelectWeapon()));
-	connect(ui.pageOptions->WeaponsButt,	SIGNAL(clicked()),	this, SLOT(GoToSelectNewWeapon()));
-	connect(ui.pageSelectWeapon->pWeapons,       SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
-	connect(ui.pageNetGame->pGameCFG,       SIGNAL(newWeaponsName(const QString&)), this, SLOT(NetWeaponNameChanged(const QString&)));
+	connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
+	connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
+	connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(newWeaponsName(const QString&)), this, SLOT(NetWeaponNameChanged(const QString&)));
 
 	connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
@@ -174,8 +174,8 @@ void HWForm::UpdateWeapons()
 	for(QVector<QComboBox*>::iterator it=combos.begin(); it!=combos.end(); ++it) {
 		(*it)->clear();
 		(*it)->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
-		int pos=(*it)->findText("Default");
-		if (pos!=-1) {
+		int pos = (*it)->findText("Default");
+		if (pos != -1) {
 			(*it)->setCurrentIndex(pos);
 		}
 	}
@@ -183,18 +183,17 @@ void HWForm::UpdateWeapons()
 
 void HWForm::NetWeaponNameChanged(const QString& name)
 {
-	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(
-			ui.pageNetGame->pGameCFG->WeaponsName->currentText()
-			);
+	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(name);
 
-	hwnet->onWeaponsNameChanged(name, ammo);
+	if (hwnet)
+		hwnet->onWeaponsNameChanged(name, ammo);
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 {
 	QStringList teamslist;
 	if(editable_teams) {
-	  teamslist=*editable_teams;
+	  teamslist =* editable_teams;
 	} else {
 	  teamslist = config->GetTeamsList();
 	}
@@ -231,13 +230,13 @@ void HWForm::GoToSetup()
 
 void HWForm::GoToSelectNewWeapon()
 {
-  ui.pageSelectWeapon->pWeapons->setWeaponsName("", false);
+	ui.pageSelectWeapon->pWeapons->setWeaponsName(tr("new"));
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
 void HWForm::GoToSelectWeapon()
 {
-  ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText(), true);
+	ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
@@ -350,21 +349,23 @@ void HWForm::btnExitClicked()
 
 void HWForm::IntermediateSetup()
 {
-  quint8 id=ui.Pages->currentIndex();
-  TeamSelWidget* curTeamSelWidget;
-  if(id == ID_PAGE_MULTIPLAYER) {
-    curTeamSelWidget=ui.pageMultiplayer->teamsSelect;
-  } else {
-    curTeamSelWidget=ui.pageNetGame->pNetTeamsWidget;
-  }
-  QList<HWTeam> teams=curTeamSelWidget->getDontPlayingTeams();
-  QStringList tmnames;
-  for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
-    tmnames+=it->TeamName;
-  }
-  UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
+	quint8 id=ui.Pages->currentIndex();
+	TeamSelWidget* curTeamSelWidget;
+	
+	if(id == ID_PAGE_MULTIPLAYER) {
+		curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
+	} else {
+		curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
+	}
+	
+	QList<HWTeam> teams = curTeamSelWidget->getDontPlayingTeams();
+	QStringList tmnames;
+	for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
+		tmnames += it->TeamName;
+	}
+	UpdateTeamsLists(&tmnames); // FIXME: still need more work if teamname is updated while configuring
 
-  GoToPage(ID_PAGE_SETUP);
+	GoToPage(ID_PAGE_SETUP);
 }
 
 void HWForm::NewTeam()
@@ -536,7 +537,7 @@ void HWForm::NetStartServer()
 	if(!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
 	{
 		QMessageBox::critical(0, tr("Error"),
-					tr("Unable to start the server"));
+				tr("Unable to start the server"));
 		delete pnetserver;
 		pnetserver = 0;
 		return;
@@ -556,22 +557,22 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-  if(hwnet) {
-    hwnet->Disconnect();
-    delete hwnet;
-    hwnet = 0;
-  }
-  if(pnetserver) {
-    if (pRegisterServer)
-    {
-      pRegisterServer->unregister();
-      pRegisterServer = 0;
-    }
+	if(hwnet) {
+		hwnet->Disconnect();
+		delete hwnet;
+		hwnet = 0;
+	}
+	if(pnetserver) {
+		if (pRegisterServer)
+		{
+			pRegisterServer->unregister();
+			pRegisterServer = 0;
+		}
 
-    pnetserver->StopServer();
-    delete pnetserver;
-    pnetserver = 0;
-  }
+		pnetserver->StopServer();
+		delete pnetserver;
+		pnetserver = 0;
+	}
 }
 
 void HWForm::ForcedDisconnect()

@@ -53,7 +53,7 @@ class SelWeaponWidget : public QFrame
  public slots:
   void setDefault();
   void setWeapons(const QString& ammo);
-  void setWeaponsName(const QString& name, bool editMode);
+  void setWeaponsName(const QString& name);
   void deleteWeaponsName();
   void save();
 
@@ -62,7 +62,6 @@ class SelWeaponWidget : public QFrame
   void weaponsDeleted();
 
  private:
-  QString currentState;
   QString curWeaponsName;
 
   QLineEdit* m_name;
