@@ -1,4 +1,5 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP, PatternSignatures #-}
+
 module Main where
 
 import Network
@@ -6,7 +7,7 @@ import IO
 import System.IO
 import Control.Concurrent
 import Control.Concurrent.STM
-import Control.Exception (handle, finally)
+import Control.Exception (handle, finally, Exception, IOException)
 import Control.Monad
 import Maybe (fromMaybe, isJust, fromJust)
 import Data.List
@@ -38,11 +39,11 @@ timerLoop messagesChan = forever $ do
 socketCloseLoop :: TChan Handle -> IO()
 socketCloseLoop closingChan = forever $ do
 	h <- atomically $ readTChan closingChan
-	Control.Exception.handle (const $ putStrLn "error on hClose") $ hClose h
+	Control.Exception.handle (\(_ :: Exception) -> putStrLn "error on hClose") $ hClose h
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
-	Control.Exception.handle (const $ putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
+	Control.Exception.handle (\(_ :: Exception) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
 	do
 	(cHandle, host, _) <- accept servSock
 	
@@ -82,7 +83,7 @@ sendAnswers closingChan ((handlesFunc, answer):answers) client clients rooms = d
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle
-			(\e -> if head answer == "BYE" then
+			(\(e :: Exception) -> if head answer == "BYE" then
 					return [ch]
 				else
 					atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients) ["QUIT", show e] >> return []  -- cannot just remove
@@ -131,11 +132,10 @@ mainLoop serverInfo acceptChan messagesChan closingChan clients rooms = do
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
-			let haveJustConnected = False--not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
+			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
 			
 			when haveJustConnected $ do
 				atomically $ do
-					--writeTChan (chan ci) ["ERROR", "Reconnected too fast"]
 					writeTChan (chan ci) ["QUIT", "Reconnected too fast"]
 
 			currentTime <- getCurrentTime
