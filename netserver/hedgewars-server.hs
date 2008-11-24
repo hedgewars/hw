@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, PatternSignatures #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 
 module Main where
 
@@ -39,11 +39,11 @@ timerLoop messagesChan = forever $ do
 socketCloseLoop :: TChan Handle -> IO()
 socketCloseLoop closingChan = forever $ do
 	h <- atomically $ readTChan closingChan
-	Control.Exception.handle (\(_ :: Exception) -> putStrLn "error on hClose") $ hClose h
+	Control.Exception.handle (\(_ :: IOException) -> putStrLn "error on hClose") $ hClose h
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
-	Control.Exception.handle (\(_ :: Exception) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
+	Control.Exception.handle (\(_ :: IOException) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
 	do
 	(cHandle, host, _) <- accept servSock
 	
@@ -83,7 +83,7 @@ sendAnswers closingChan ((handlesFunc, answer):answers) client clients rooms = d
 
 	clHandles' <- forM recipients $
 		\ch -> Control.Exception.handle
-			(\(e :: Exception) -> if head answer == "BYE" then
+			(\(e :: IOException) -> if head answer == "BYE" then
 					return [ch]
 				else
 					atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients) ["QUIT", show e] >> return []  -- cannot just remove
