@@ -443,6 +443,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
+	connect(hwnet, SIGNAL(showMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
+
 	connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));

@@ -46,7 +46,6 @@ answerNotOwner          = answerClientOnly ["ERROR", "You do not own this team"]
 answerCannotCreateRoom  = answerClientOnly ["WARNING", "Cannot create more rooms"]
 
 answerAbandoned           = answerOthersRoom ["BYE", "Room abandoned"]
-answerQuitInform nick     = answerOthersRoom ["LEFT", nick]
 answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
 answerAddTeam team        = answerOthersRoom $ teamToNet team
 answerRemoveTeam teamName = answerOthersRoom ["REMOVE_TEAM", teamName]
@@ -54,6 +53,11 @@ answerMap mapName         = answerOthersRoom ["MAP", mapName]
 answerHHNum teamName hhNumber = answerOthersRoom ["HH_NUM", teamName, show hhNumber]
 answerTeamColor teamName newColor = answerOthersRoom ["TEAM_COLOR", teamName, newColor]
 answerConfigParam paramName paramStrs = answerOthersRoom $ "CONFIG_PARAM" : paramName : paramStrs
+answerQuitInform nick msg =
+	if not $ null msg then
+		answerOthersRoom ["LEFT", nick, msg]
+		else
+		answerOthersRoom ["LEFT", nick]
 
 answerJoined nick   = answerSameRoom ["JOINED", nick]
 answerRunGame       = answerSameRoom ["RUN_GAME"]
@@ -101,7 +105,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	else if isMaster client then
 		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform $ nick client) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
@@ -251,7 +255,7 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	else
 		if hhNumber < 1 || hhNumber > 8 || noSuchTeam || hhNumber > (canAddNumber + (hhnum team)) then
-			(noChangeClients, noChangeRooms, answerBadParam)
+			(noChangeClients, noChangeRooms, [])
 		else
 			(noChangeClients, modifyRoom $ modifyTeam clRoom team{hhnum = hhNumber}, answerHHNum teamName hhNumber)
 	where
@@ -267,7 +271,7 @@ handleCmd_inRoom client _ rooms ["TEAM_COLOR", teamName, newColor] =
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	else
 		if noSuchTeam then
-			(noChangeClients, noChangeRooms, answerBadParam)
+			(noChangeClients, noChangeRooms, [])
 		else
 			(noChangeClients, modifyRoom $ modifyTeam clRoom team{teamcolor = newColor}, answerTeamColor teamName newColor)
 	where
@@ -278,7 +282,7 @@ handleCmd_inRoom client _ rooms ["TEAM_COLOR", teamName, newColor] =
 
 handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 	if noSuchTeam then
-		(noChangeClients, noChangeRooms, answerBadParam)
+		(noChangeClients, noChangeRooms, [])
 	else
 		if not $ nick client == teamowner team then
 			(noChangeClients, noChangeRooms, answerNotOwner)

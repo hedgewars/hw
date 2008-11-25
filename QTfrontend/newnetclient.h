@@ -113,6 +113,7 @@ class HWNewNet : public QObject
   void serverMessage(const QString &);
 
   void setReadyStatus(const QString & nick, bool isReady);
+  void showMessage(const QString &);
 
  public slots:
   void ToggleReady();

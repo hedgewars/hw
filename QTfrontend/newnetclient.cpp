@@ -334,7 +334,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit nickRemoved(lst[1]);
-		emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
+		if (lst.size() < 3)
+			emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
+		else
+			emit chatStringFromNet(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));
 		return;
 	}
 
@@ -436,6 +439,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
 		emit FromNet(em);
+		return;
+	}
+
+	if (lst[0] == "BYE") {
+		if (lst.size() < 2)
+		{
+			qWarning("Net: Bad BYE message");
+			return;
+		}
+		emit showMessage(HWNewNet::tr("Quit reason: ") + lst[1]);
 		return;
 	}
 
