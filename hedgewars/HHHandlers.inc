@@ -456,8 +456,10 @@ if (Gear^.State and gstMoving) <> 0 then
                  Gear^.State:= Gear^.State and not gstMoving;
                  SetLittle(Gear^.dX)
                  end
-         else if hwAbs(Gear^.dX) > cLittle then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
-                                           else SetLittle(Gear^.dX);
+         else if (hwAbs(Gear^.dX) > cLittle)
+                and ((Gear^.State and gstHHJumping) = 0)
+                then Gear^.dX:= -Gear^.Elasticity * Gear^.dX
+                else SetLittle(Gear^.dX);
 
 if (not isFalling) and
    (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
