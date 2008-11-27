@@ -63,10 +63,14 @@ void HWChatWidget::returnPressed()
 
 void HWChatWidget::onChatString(const QString& str)
 {
-  QListWidget* w = chatText;
-  w->addItem(str);
-  w->scrollToBottom();
-  w->setSelectionMode(QAbstractItemView::NoSelection);
+	QListWidget* w = chatText;
+	
+	if (w->count() > 250)
+		delete w->item(0);
+
+	w->addItem(str);
+	w->scrollToBottom();
+	w->setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 void HWChatWidget::nickAdded(const QString& nick)
