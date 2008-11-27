@@ -20,7 +20,7 @@ import Data.Time
 import System.Posix
 #endif
 
-#define IOException Exception
+-- #define IOException Exception
 
 data Messages =
 	Accept ClientInfo
@@ -107,7 +107,6 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let outHandles = concat clHandles'
 	unless (null outHandles) $ putStrLn ((show $ length outHandles) ++ " / " ++ (show $ length clients) ++ " : " ++ (show answer))
 
-	-- strange, but this seems to be a bad idea to manually close these handles as it causes hangs
 	let mclients = deleteFirstsBy (==) clients outHandles
 
 	sendAnswers answers client mclients rooms
@@ -139,7 +138,7 @@ mainLoop serverInfo acceptChan messagesChan clients rooms = do
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
-			let haveJustConnected = False--not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
+			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
 			
 			when haveJustConnected $ do
 				atomically $ do

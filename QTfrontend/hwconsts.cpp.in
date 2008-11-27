@@ -31,12 +31,12 @@ QStringList * mapList;
 
 QString * cDefaultAmmoStore = new QString("eammstore 9391929422199121032235111001");
 
-QColor * color1 = new QColor(  0, 255, 255);
-QColor * color2 = new QColor(255, 127, 127);
-QColor * color3 = new QColor(103, 167, 231);
-QColor * color4 = new QColor( 37, 181,  61);
-QColor * color5 = new QColor(247, 237, 112);
-QColor * color6 = new QColor(192,  85, 160);
+QColor * color1 = new QColor(221,   0,   0);
+QColor * color2 = new QColor( 67, 118, 233);
+QColor * color3 = new QColor( 62, 147,  33);
+QColor * color4 = new QColor(162,  61, 187);
+QColor * color5 = new QColor(255, 147,  41);
+QColor * color6 = new QColor(115, 115, 115);
 
 QString * netHost = new QString();
 quint16 netPort = 46631;
