@@ -14,6 +14,7 @@ data ClientInfo =
  ClientInfo
 	{
 		chan :: TChan [String],
+		sendChan :: TChan [String],
 		handle :: Handle,
 		host :: String,
 		connectTime :: UTCTime,
@@ -94,7 +95,7 @@ newServerInfo = (
 
 type ClientsTransform = [ClientInfo] -> [ClientInfo]
 type RoomsTransform = [RoomInfo] -> [RoomInfo]
-type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [Handle]
+type HandlesSelector = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [ClientInfo]
 type Answer = ServerInfo -> (HandlesSelector, [String])
 type CmdHandler = ClientInfo -> [ClientInfo] -> [RoomInfo] -> [String] -> (ClientsTransform, RoomsTransform, [Answer])
 
@@ -117,26 +118,26 @@ deleteBy2t eq x (y:ys) = if y `eq` x then ys else y : deleteBy2t eq x ys
 deleteFirstsBy2t :: (a -> b -> Bool) -> [a] -> [b] -> [a]
 deleteFirstsBy2t eq =  foldl (flip (deleteBy2t eq))
 
-clientByHandle :: Handle -> [ClientInfo] -> Maybe ClientInfo
-clientByHandle chandle clients = find (\c -> handle c == chandle) clients
+--clientByHandle :: Handle -> [ClientInfo] -> Maybe ClientInfo
+--clientByHandle chandle clients = find (\c -> handle c == chandle) clients
 
 sameRoom :: HandlesSelector
-sameRoom client clients rooms = map handle $ filter (\ci -> room ci == room client) clients
+sameRoom client clients rooms = filter (\ci -> room ci == room client) clients
 
 noRoomSameProto :: HandlesSelector
-noRoomSameProto client clients _ = map handle $ filter (null . room) $ filter (\ci -> protocol client == protocol ci) clients
+noRoomSameProto client clients _ = filter (null . room) $ filter (\ci -> protocol client == protocol ci) clients
 
 othersInRoom :: HandlesSelector
-othersInRoom client clients rooms = map handle $ filter (client /=) $ filter (\ci -> room ci == room client) clients
+othersInRoom client clients rooms = filter (client /=) $ filter (\ci -> room ci == room client) clients
 
 fromRoom :: String -> HandlesSelector
-fromRoom roomName _ clients _ = map handle $ filter (\ci -> room ci == roomName) clients
+fromRoom roomName _ clients _ = filter (\ci -> room ci == roomName) clients
 
 allClients :: HandlesSelector
-allClients _ clients _ = map handle $ clients
+allClients _ clients _ = clients
 
 clientOnly :: HandlesSelector
-clientOnly client _ _ = [handle client]
+clientOnly client _ _ = [client]
 
 noChangeClients :: ClientsTransform
 noChangeClients a = a

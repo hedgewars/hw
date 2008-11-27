@@ -20,6 +20,8 @@ import Data.Time
 import System.Posix
 #endif
 
+#define IOException Exception
+
 data Messages =
 	Accept ClientInfo
 	| ClientMessage ([String], ClientInfo)
@@ -36,11 +38,6 @@ timerLoop messagesChan = forever $ do
 	threadDelay (60 * 10^6) -- 60 seconds
 	atomically $ writeTChan messagesChan ["MINUTELY"]
 
-socketCloseLoop :: TChan Handle -> IO()
-socketCloseLoop closingChan = forever $ do
-	h <- atomically $ readTChan closingChan
-	Control.Exception.handle (\(_ :: IOException) -> putStrLn "error on hClose") $ hClose h
-
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
 	Control.Exception.handle (\(_ :: IOException) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
@@ -51,9 +48,11 @@ acceptLoop servSock acceptChan =
 	putStrLn $ (show currentTime) ++ " new client: " ++ host
 	
 	cChan <- atomically newTChan
-	forkIO $ clientLoop cHandle cChan
+	sendChan <- atomically newTChan
+	forkIO $ clientRecvLoop cHandle cChan
+	forkIO $ clientSendLoop cHandle cChan sendChan
 	
-	atomically $ writeTChan acceptChan (ClientInfo cChan cHandle host currentTime "" 0 "" False False False)
+	atomically $ writeTChan acceptChan (ClientInfo cChan sendChan cHandle host currentTime "" 0 "" False False False)
 	atomically $ writeTChan cChan ["ASKME"]
 	acceptLoop servSock acceptChan
 
@@ -68,46 +67,54 @@ listenLoop handle buf chan = do
 		listenLoop handle (buf ++ [str]) chan
 
 
-clientLoop :: Handle -> TChan [String] -> IO ()
-clientLoop handle chan =
+clientRecvLoop :: Handle -> TChan [String] -> IO ()
+clientRecvLoop handle chan =
 	listenLoop handle [] chan
 		`catch` (\e -> (clientOff $ show e) >> return ())
 	where clientOff msg = atomically $ writeTChan chan ["QUIT", msg] -- if the client disconnects, we perform as if it sent QUIT message
 
+clientSendLoop :: Handle -> TChan[String] -> TChan[String] -> IO()
+clientSendLoop handle clChan chan = do
+	answer <- atomically $ readTChan chan
+	doClose <- Control.Exception.handle
+		(\(e :: IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
+		forM_ answer (\str -> hPutStrLn handle str)
+		hPutStrLn handle ""
+		hFlush handle
+		return $ isQuit answer
 
-sendAnswers _ [] _ clients _ = return clients
-sendAnswers closingChan ((handlesFunc, answer):answers) client clients rooms = do
+	if doClose then
+		Control.Exception.handle (\(_ :: IOException) -> putStrLn "error on hClose") $ hClose handle
+		else
+		clientSendLoop handle clChan chan
+
+	where
+		sendQuit e = atomically $ writeTChan clChan ["QUIT", show e]
+		isQuit answer = head answer == "BYE"
+
+sendAnswers  [] _ clients _ = return clients
+sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let recipients = handlesFunc client clients rooms
 	--unless (null recipients) $ putStrLn ("< " ++ (show answer))
 	when (head answer == "NICK") $ putStrLn (show answer)
 
 	clHandles' <- forM recipients $
-		\ch -> Control.Exception.handle
-			(\(e :: IOException) -> if head answer == "BYE" then
-					return [ch]
-				else
-					atomically $ writeTChan (chan $ fromJust $ clientByHandle ch clients) ["QUIT", show e] >> return []  -- cannot just remove
-			) $
+		\ch ->
 			do
-			forM_ answer (\str -> hPutStrLn ch str)
-			hPutStrLn ch ""
-			hFlush ch
+			atomically $ writeTChan (sendChan ch) answer
 			if head answer == "BYE" then return [ch] else return []
 
 	let outHandles = concat clHandles'
 	unless (null outHandles) $ putStrLn ((show $ length outHandles) ++ " / " ++ (show $ length clients) ++ " : " ++ (show answer))
 
 	-- strange, but this seems to be a bad idea to manually close these handles as it causes hangs
-	mapM_ (\ch -> atomically $ writeTChan closingChan ch) outHandles
-	let mclients = remove clients outHandles
+	let mclients = deleteFirstsBy (==) clients outHandles
 
-	sendAnswers closingChan answers client mclients rooms
-	where
-		remove list rmClHandles = deleteFirstsBy2t (\ a b -> (Miscutils.handle a) == b) list rmClHandles
+	sendAnswers answers client mclients rooms
 
 
-reactCmd :: ServerInfo -> TChan Handle -> [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
-reactCmd serverInfo closingChan cmd client clients rooms = do
+reactCmd :: ServerInfo -> [String] -> ClientInfo -> [ClientInfo] -> [RoomInfo] -> IO ([ClientInfo], [RoomInfo])
+reactCmd serverInfo cmd client clients rooms = do
 	--putStrLn ("> " ++ show cmd)
 
 	let (clientsFunc, roomsFunc, answerFuncs) = handleCmd client clients rooms $ cmd
@@ -116,14 +123,14 @@ reactCmd serverInfo closingChan cmd client clients rooms = do
 	let mclient = fromMaybe client $ find (== client) mclients
 	let answers = map (\x -> x serverInfo) answerFuncs
 
-	clientsIn <- sendAnswers closingChan answers mclient mclients mrooms
+	clientsIn <- sendAnswers answers mclient mclients mrooms
 	mapM_ (\cl -> atomically $ writeTChan (chan cl) ["QUIT", "Kicked"]) $ filter forceQuit $ clientsIn
 	
 	return (clientsIn, mrooms)
 
 
-mainLoop :: ServerInfo -> TChan ClientInfo -> TChan [String] -> TChan Handle -> [ClientInfo] -> [RoomInfo] -> IO ()
-mainLoop serverInfo acceptChan messagesChan closingChan clients rooms = do
+mainLoop :: ServerInfo -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()
+mainLoop serverInfo acceptChan messagesChan clients rooms = do
 	r <- atomically $
 		(Accept `fmap` readTChan acceptChan) `orElse`
 		(ClientMessage `fmap` tselect clients) `orElse`
@@ -132,7 +139,7 @@ mainLoop serverInfo acceptChan messagesChan closingChan clients rooms = do
 	case r of
 		Accept ci -> do
 			let sameHostClients = filter (\cl -> host ci == host cl) clients
-			let haveJustConnected = not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
+			let haveJustConnected = False--not $ null $ filter (\cl -> connectTime ci `diffUTCTime` connectTime cl <= 25) sameHostClients
 			
 			when haveJustConnected $ do
 				atomically $ do
@@ -143,30 +150,30 @@ mainLoop serverInfo acceptChan messagesChan closingChan clients rooms = do
 					loginsNumber = loginsNumber serverInfo + 1,
 					lastHourUsers = currentTime : lastHourUsers serverInfo
 					}
-			mainLoop newServerInfo acceptChan messagesChan closingChan (clients ++ [ci]) rooms
+			mainLoop newServerInfo acceptChan messagesChan (clients ++ [ci]) rooms
 			
 		ClientMessage (cmd, client) -> do
-			(clientsIn, mrooms) <- reactCmd serverInfo closingChan cmd client clients rooms
+			(clientsIn, mrooms) <- reactCmd serverInfo cmd client clients rooms
 			
 			let hadRooms = (not $ null rooms) && (null mrooms)
 				in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $
-					mainLoop serverInfo acceptChan messagesChan closingChan clientsIn mrooms
+					mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
 		
 		CoreMessage msg -> case msg of
 			["PING"] ->
 				if not $ null $ clients then
 					do
 					let client = head clients -- don't care
-					(clientsIn, mrooms) <- reactCmd serverInfo closingChan msg client clients rooms
-					mainLoop serverInfo acceptChan messagesChan closingChan clientsIn mrooms
+					(clientsIn, mrooms) <- reactCmd serverInfo msg client clients rooms
+					mainLoop serverInfo acceptChan messagesChan clientsIn mrooms
 				else
-					mainLoop serverInfo acceptChan messagesChan closingChan clients rooms
+					mainLoop serverInfo acceptChan messagesChan clients rooms
 			["MINUTELY"] -> do
 				currentTime <- getCurrentTime
 				let newServerInfo = serverInfo{
 						lastHourUsers = filter (\t -> currentTime `diffUTCTime` t < 3600) $ lastHourUsers serverInfo
 						}
-				mainLoop newServerInfo acceptChan messagesChan closingChan clients rooms
+				mainLoop newServerInfo acceptChan messagesChan clients rooms
 
 startServer :: ServerInfo -> Socket -> IO()
 startServer serverInfo serverSocket = do
@@ -177,10 +184,7 @@ startServer serverInfo serverSocket = do
 	forkIO $ messagesLoop messagesChan
 	forkIO $ timerLoop messagesChan
 
-	closingChan <- atomically newTChan
-	forkIO $ socketCloseLoop closingChan
-
-	mainLoop serverInfo acceptChan messagesChan closingChan [] []
+	mainLoop serverInfo acceptChan messagesChan [] []
 
 
 main = withSocketsDo $ do
