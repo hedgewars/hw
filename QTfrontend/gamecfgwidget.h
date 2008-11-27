@@ -44,8 +44,6 @@ public:
 	quint32 getTurnTime() const;
 	QStringList getFullConfig() const;
 
-	QString getNetAmmo() const; // FIXME: hack - this class should contain all ammo states itself
-
 	QComboBox* WeaponsName;
 
 public slots:

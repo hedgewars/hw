@@ -165,15 +165,19 @@ void HWForm::CustomizePalettes()
 
 void HWForm::UpdateWeapons()
 {
-	// FIXME: rewrite this with boost (or TR1/0x)
 	QVector<QComboBox*> combos;
 	combos.push_back(ui.pageOptions->WeaponsName);
 	combos.push_back(ui.pageMultiplayer->gameCFG->WeaponsName);
 	combos.push_back(ui.pageNetGame->pGameCFG->WeaponsName);
 
-	for(QVector<QComboBox*>::iterator it=combos.begin(); it!=combos.end(); ++it) {
+	QStringList names = ui.pageSelectWeapon->pWeapons->getWeaponNames();
+
+	for(QVector<QComboBox*>::iterator it = combos.begin(); it != combos.end(); ++it) {
 		(*it)->clear();
-		(*it)->addItems(ui.pageSelectWeapon->pWeapons->getWeaponNames());
+
+		for(int i = 0; i < names.size(); ++i)
+			(*it)->addItem(names[i], ui.pageSelectWeapon->pWeapons->getWeaponsString(names[i]));
+		
 		int pos = (*it)->findText("Default");
 		if (pos != -1) {
 			(*it)->setCurrentIndex(pos);
@@ -739,12 +743,10 @@ void HWForm::StartTraining()
 void HWForm::CreateNetGame()
 {
 	QString ammo;
-	if (hwnet->isRoomChief()) {
-		ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageNetGame->pGameCFG->WeaponsName->currentText());
-	} else {
-		ammo = ui.pageNetGame->pGameCFG->getNetAmmo();
-	}
-	
+	ammo = ui.pageNetGame->pGameCFG->WeaponsName->itemData(
+			ui.pageNetGame->pGameCFG->WeaponsName->currentIndex()
+			).toString();
+
 	CreateGame(ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget, ammo);
 
 	connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));

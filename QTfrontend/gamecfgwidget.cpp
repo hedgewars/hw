@@ -22,9 +22,11 @@
 #include <QGridLayout>
 #include <QSpinBox>
 #include <QLabel>
+#include <QMessageBox>
 
 #include "gamecfgwidget.h"
 #include "igbox.h"
+#include "hwconsts.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QGroupBox(parent), mainLayout(this)
@@ -118,11 +120,6 @@ quint32 GameCFGWidget::getTurnTime() const
 	return SB_TurnTime->value();
 }
 
-QString GameCFGWidget::getNetAmmo() const
-{
-  return curNetAmmo;
-}
-
 QStringList GameCFGWidget::getFullConfig() const
 {
 	QStringList sl;
@@ -173,10 +170,15 @@ void GameCFGWidget::setTeamsDivide(bool value)
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
-  curNetAmmoName=name;
-  curNetAmmo=ammo;
+	if (ammo.size() != cDefaultAmmoStore->size() - 10)
+		QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
 
-  WeaponsName->setEditable(false);
-  WeaponsName->clear();
-  WeaponsName->addItem(name);
-}
+	int pos = WeaponsName->findText(name);
+	if (pos == -1) {
+		WeaponsName->addItem(name, ammo);
+		WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
+	} else {
+		WeaponsName->setItemData(pos, ammo);
+		WeaponsName->setCurrentIndex(pos);
+	}
+	}
