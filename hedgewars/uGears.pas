@@ -86,14 +86,14 @@ var RopePoints: record
                                   end;
                  end;
 
-procedure DeleteGear(var Gear: PGear); forward;
+procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 //procedure AmmoFlameWork(Ammo: PGear); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
-procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
@@ -343,9 +343,9 @@ InsertGearToList(Result);
 AddGear:= Result
 end;
 
-procedure DeleteGear(var Gear: PGear);
+procedure DeleteGear(Gear: PGear);
 var team: PTeam;
-    t: Longword;
+	t: Longword;
 begin
 DeleteCI(Gear);
 
@@ -371,14 +371,15 @@ if Gear^.Kind = gtHedgehog then
 			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 			uStats.HedgehogDamaged(Gear)
 			end;
+	
 		team:= PHedgehog(Gear^.Hedgehog)^.Team;
 		if CurrentHedgehog^.Gear = Gear then
 			FreeActionsList; // to avoid ThinkThread on drawned gear
+		
 		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
 		inc(KilledHHs);
-		RecountTeamHealth(team);
+		RecountTeamHealth(team)
 		end;
-
 {$IFDEF DEBUGFILE}
 with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
 {$ENDIF}
@@ -388,9 +389,7 @@ if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);
 
-Dispose(Gear);
-
-Gear:= nil
+Dispose(Gear)
 end;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
@@ -1117,12 +1116,16 @@ end;
 
 procedure AddMiscGears;
 var i: LongInt;
+	Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
 if (GameFlags and gfForts) = 0 then
 	for i:= 0 to Pred(cLandAdditions) do
-		FindPlace(AddGear(0, 0, gtMine, 0, _0, _0, 0), false, 0, 2048);
+		begin
+		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+		FindPlace(Gear, false, 0, 2048)
+		end
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
@@ -1268,7 +1271,7 @@ end;
 
 procedure AssignHHCoords;
 var i, t, p, j: LongInt;
-    ar: array[0..Pred(cMaxHHs)] of PGear;
+    ar: array[0..Pred(cMaxHHs)] of PHedgehog;
     Count: Longword;
 begin
 if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
@@ -1284,9 +1287,12 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 						with Hedgehogs[i] do
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
-								FindPlace(Gear, false, t, t + 1024);
-								Gear^.Pos:= GetRandom(19);
-								Gear^.dX.isNegative:= p = 1;
+								FindPlace(Gear, false, t, t + 1024);// could make Gear == nil
+								if Gear <> nil then
+									begin
+									Gear^.Pos:= GetRandom(19);
+									Gear^.dX.isNegative:= p = 1;
+									end
 								end;
 		inc(t, 1024)
 		end
@@ -1300,7 +1306,7 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 			with Hedgehogs[i] do
 				if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 					begin
-					ar[Count]:= Gear;
+					ar[Count]:= @Hedgehogs[i];
 					inc(Count)
 					end;
 		end;
@@ -1308,10 +1314,13 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	while (Count > 0) do
 		begin
 		i:= GetRandom(Count);
-		FindPlace(ar[i], false, 0, 2048);
-		ar[i]^.dX.isNegative:= ar[i]^.X > _1024;
-		ar[i]^.Pos:= GetRandom(19);
-		ar[i]:= ar[Count - 1];
+		FindPlace(ar[i]^.Gear, false, 0, 2048);
+		if ar[i]^.Gear <> nil then
+			begin
+			ar[i]^.Gear^.dX.isNegative:= ar[i]^.Gear^.X > _1024;
+			ar[i]^.Gear^.Pos:= GetRandom(19);
+			ar[i]:= ar[Count - 1]
+			end;
 		dec(Count)
 		end
 	end
@@ -1362,12 +1371,12 @@ t:= GearsList;
 rX:= sqr(rX);
 rY:= sqr(rY);
 while t <> nil do
-      begin
-      if t^.Kind in Kind then
-         if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
-            exit(t);
-      t:= t^.NextGear
-      end;
+	begin
+	if t^.Kind in Kind then
+		if not (hwSqr(int2hwFloat(mX) - t^.X) / rX + hwSqr(int2hwFloat(mY) - t^.Y) / rY > _1) then
+			exit(t);
+	t:= t^.NextGear
+	end;
 CheckGearsNear:= nil
 end;
 
@@ -1378,10 +1387,10 @@ begin
 Result:= 0;
 t:= GearsList;
 while t <> nil do
-      begin
-      if t^.Kind = Kind then inc(Result);
-      t:= t^.NextGear
-      end;
+	begin
+	if t^.Kind = Kind then inc(Result);
+	t:= t^.NextGear
+	end;
 CountGears:= Result
 end;
 
@@ -1419,78 +1428,85 @@ case getrandom(2) of
 FindPlace(FollowGear, true, 0, 2048)
 end;
 
-procedure FindPlace(Gear: PGear; withFall: boolean; Left, Right: LongInt);
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
-    function CountNonZeroz(x, y, r: LongInt): LongInt;
-    var i: LongInt;
-        Result: LongInt;
-    begin
-    Result:= 0;
-    if (y and $FFFFFC00) = 0 then
-      for i:= max(x - r, 0) to min(x + r, 2043) do
-        if Land[y, i] <> 0 then inc(Result);
-    CountNonZeroz:= Result
-    end;
+	function CountNonZeroz(x, y, r: LongInt): LongInt;
+	var i: LongInt;
+		Result: LongInt;
+	begin
+	Result:= 0;
+	if (y and $FFFFFC00) = 0 then
+		for i:= max(x - r, 0) to min(x + r, 2043) do
+			if Land[y, i] <> 0 then inc(Result);
+	CountNonZeroz:= Result
+	end;
 
 var x: LongInt;
-    y, sy: LongInt;
-    ar: array[0..511] of TPoint;
-    ar2: array[0..1023] of TPoint;
-    cnt, cnt2: Longword;
-    delta: LongInt;
+	y, sy: LongInt;
+	ar: array[0..511] of TPoint;
+	ar2: array[0..1023] of TPoint;
+	cnt, cnt2: Longword;
+	delta: LongInt;
 begin
 delta:= 250;
 cnt2:= 0;
 repeat
-  x:= Left + LongInt(GetRandom(Delta));
-  repeat
-     inc(x, Delta);
-     cnt:= 0;
-     y:= -Gear^.Radius * 2;
-     while y < 1023 do
-        begin
-        repeat
-         inc(y, 2);
-        until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
-        sy:= y;
-        repeat
-          inc(y);
-        until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
-        if (y - sy > Gear^.Radius * 2)
-        and (y < 1023)
-        and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
-           begin
-           ar[cnt].X:= x;
-           if withFall then ar[cnt].Y:= sy + Gear^.Radius
-                       else ar[cnt].Y:= y - Gear^.Radius;
-           inc(cnt)
-           end;
-        inc(y, 45)
-        end;
-     if cnt > 0 then
-        with ar[GetRandom(cnt)] do
-          begin
-          ar2[cnt2].x:= x;
-          ar2[cnt2].y:= y;
-          inc(cnt2)
-          end
-  until (x + Delta > Right);
-dec(Delta, 60)
+	x:= Left + LongInt(GetRandom(Delta));
+	repeat
+		inc(x, Delta);
+		cnt:= 0;
+		y:= -Gear^.Radius * 2;
+		while y < 1023 do
+			begin
+			repeat
+				inc(y, 2);
+			until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
+			
+			sy:= y;
+
+			repeat
+				inc(y);
+			until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
+			
+			if (y - sy > Gear^.Radius * 2)
+				and (y < 1023)
+				and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
+				begin
+				ar[cnt].X:= x;
+				if withFall then ar[cnt].Y:= sy + Gear^.Radius
+							else ar[cnt].Y:= y - Gear^.Radius;
+				inc(cnt)
+				end;
+			
+			inc(y, 45)
+			end;
+		
+		if cnt > 0 then
+			with ar[GetRandom(cnt)] do
+				begin
+				ar2[cnt2].x:= x;
+				ar2[cnt2].y:= y;
+				inc(cnt2)
+				end
+	until (x + Delta > Right);
+	dec(Delta, 60)
 until (cnt2 > 0) or (Delta < 70);
+
 if cnt2 > 0 then
-   with ar2[GetRandom(cnt2)] do
-      begin
-      Gear^.X:= int2hwFloat(x);
-      Gear^.Y:= int2hwFloat(y);
-      {$IFDEF DEBUGFILE}
-      AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
-      {$ENDIF}
-      end
-   else
-   begin
-   OutError('Can''t find place for Gear', false);
-   DeleteGear(Gear)
-   end
+	with ar2[GetRandom(cnt2)] do
+		begin
+		Gear^.X:= int2hwFloat(x);
+		Gear^.Y:= int2hwFloat(y);
+		{$IFDEF DEBUGFILE}
+		AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
+		{$ENDIF}
+		end
+	else
+	begin
+	OutError('Can''t find place for Gear', false);
+	DeleteGear(Gear);
+	Gear:= nil
+	end
 end;
 
 initialization
