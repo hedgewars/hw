@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QTextBrowser>
 #include <QListWidget>
 #include <QLineEdit>
 #include <QAction>
@@ -37,8 +38,8 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 
   mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
 
-  chatText = new QListWidget(this);
-  chatText->setMinimumHeight(10);
+  chatText = new QTextBrowser(this);
+  chatText->setMinimumHeight(20);
   chatText->setMinimumWidth(10);
   chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   mainLayout.addWidget(chatText, 0, 0);
@@ -63,14 +64,14 @@ void HWChatWidget::returnPressed()
 
 void HWChatWidget::onChatString(const QString& str)
 {
-	QListWidget* w = chatText;
+	if (chatStrings.size() > 250)
+		chatStrings.removeFirst();
 	
-	if (w->count() > 250)
-		delete w->item(0);
+	chatStrings.append(str);
+	
+	chatText->setPlainText(chatStrings.join("\n"));
 
-	w->addItem(str);
-	w->scrollToBottom();
-	w->setSelectionMode(QAbstractItemView::NoSelection);
+	chatText->moveCursor(QTextCursor::End);
 }
 
 void HWChatWidget::nickAdded(const QString& nick)
@@ -81,16 +82,17 @@ void HWChatWidget::nickAdded(const QString& nick)
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
-  QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-  for(QList<QListWidgetItem *>::iterator it=items.begin(); it!=items.end();) {
-    chatNicks->takeItem(chatNicks->row(*it));
-    ++it;
-  }
+	QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+	for(QList<QListWidgetItem *>::iterator it=items.begin(); it!=items.end();) {
+		chatNicks->takeItem(chatNicks->row(*it));
+		++it;
+	}
 }
 
 void HWChatWidget::clear()
 {
 	chatText->clear();
+	chatStrings.clear();
 	chatNicks->clear();
 }
 

@@ -23,8 +23,9 @@
 #include <QString>
 #include <QGridLayout>
 
-class QListWidget;
+class QTextBrowser;
 class QLineEdit;
+class QListWidget;
 
 class HWChatWidget : public QWidget
 {
@@ -46,7 +47,8 @@ class HWChatWidget : public QWidget
 
  private:
   QGridLayout mainLayout;
-  QListWidget* chatText;
+  QTextBrowser* chatText;
+  QStringList chatStrings;
   QListWidget* chatNicks;
   QLineEdit* chatEditLine;
 
