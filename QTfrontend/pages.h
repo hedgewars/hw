@@ -366,6 +366,7 @@ public:
 	QPushButton * BtnJoin;
 	QPushButton * BtnRefresh;
 	QTextBrowser * serverMessage;
+	HWChatWidget * chatWidget;
 	
 public slots:
 	void setRoomsList(const QStringList & list);
