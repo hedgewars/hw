@@ -34,6 +34,7 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
   mainLayout.setColumnStretch(1, 25);
 
   chatEditLine = new QLineEdit(this);
+  chatEditLine->setMaxLength(300);
   connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
   mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
