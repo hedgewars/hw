@@ -488,6 +488,7 @@ end;
 
 procedure doStepHedgehogDriven(Gear: PGear);
 var t: PGear;
+	wasJumping: boolean;
 begin
 if not isInMultiShoot then
    AllInactive:= false
@@ -537,7 +538,7 @@ if (CurAmmoGear = nil) then
 		Attack(Gear) // should be before others to avoid desync with '/put' msg and changing weapon msgs
 	else
 else with PHedgehog(Gear^.Hedgehog)^ do
-	 if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) 
+	 if ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)
 		and ((Gear^.Message and gm_LJump) <> 0)
 		and (((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_AltUse) <> 0) then
 		begin
@@ -565,31 +566,37 @@ if not isInMultiShoot then
    HedgehogChAngle(Gear);
 
 if (Gear^.State and gstMoving) <> 0 then
-   begin
-   if ((Gear^.Message and gm_HJump) <> 0) and
-      ((Gear^.State and gstHHJumping) <> 0) and
-      ((Gear^.State and gstHHHJump) = 0) then
-      if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
-         begin
-         Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
-         Gear^.dY:= -_0_25;
-         Gear^.dX:= -SignAs(_0_02, Gear^.dX);
-         PlaySound(sndJump2, false)
-         end;
-   Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
+	begin
+	wasJumping:= ((Gear^.State and gstHHJumping) <> 0);
+	
+	if ((Gear^.Message and gm_HJump) <> 0) and
+		wasJumping and
+		((Gear^.State and gstHHHJump) = 0) then
+		if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
+			begin
+			Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
+			Gear^.dY:= -_0_25;
+			Gear^.dX:= -SignAs(_0_02, Gear^.dX);
+			PlaySound(sndJump2, false)
+			end;
+	
+	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
-   if ((Gear^.State and gstHHJumping) <> 0) and
-      TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+	if wasJumping and
+		TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
 
-   doStepHedgehogMoving(Gear);
+	doStepHedgehogMoving(Gear);
 
-   if ((Gear^.State and (gstMoving or gstDrowning)) = 0) then
-      begin
-      AddGearCI(Gear);
-      StepTicks:= 350
-      end;
-   exit
-   end;
+	if ((Gear^.State and (gstMoving or gstDrowning)) = 0) then
+		begin
+		AddGearCI(Gear);
+		if wasJumping then
+			StepTicks:= 410
+		else
+			StepTicks:= 95
+		end;
+	exit
+	end;
 
 	if not isInMultiShoot then
 		begin

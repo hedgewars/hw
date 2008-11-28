@@ -366,7 +366,7 @@ if (Gear^.State and gstMoving) <> 0 then
    if hwRound(Gear^.Y) > pY then inc(GoInfo.FallPix);
    if TestCollisionYwithGear(Gear, 1) then
       begin
-      inc(GoInfo.Ticks, 300);
+      inc(GoInfo.Ticks, 410);
       Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
       Result:= true;
