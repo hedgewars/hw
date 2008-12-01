@@ -22,36 +22,36 @@ WriteLn('Only Freepascal supported');
 
 program hwengine;
 uses
-  SDLh,
-  GL,
-  uConsts in 'uConsts.pas',
-  uGame in 'uGame.pas',
-  uMisc in 'uMisc.pas',
-  uStore in 'uStore.pas',
-  uWorld in 'uWorld.pas',
-  uIO in 'uIO.pas',
-  uGears in 'uGears.pas',
-  uVisualGears in 'uVisualGears.pas',
-  uConsole in 'uConsole.pas',
-  uKeys in 'uKeys.pas',
-  uTeams in 'uTeams.pas',
-  uSound in 'uSound.pas',
-  uRandom in 'uRandom.pas',
-  uAI in 'uAI.pas',
-  uAIMisc in 'uAIMisc.pas',
-  uAIAmmoTests in 'uAIAmmoTests.pas',
-  uAIActions in 'uAIActions.pas',
-  uCollisions in 'uCollisions.pas',
-  uLand in 'uLand.pas',
-  uLandTemplates in 'uLandTemplates.pas',
-  uLandObjects in 'uLandObjects.pas',
-  uLandGraphics in 'uLandGraphics.pas',
-  uLocale in 'uLocale.pas',
-  uAmmos in 'uAmmos.pas',
-  uSHA in 'uSHA.pas',
-  uFloat in 'uFloat.pas',
-  uStats in 'uStats.pas',
-  uChat in 'uChat.pas';
+	SDLh,
+	GL,
+	uConsts in 'uConsts.pas',
+	uGame in 'uGame.pas',
+	uMisc in 'uMisc.pas',
+	uStore in 'uStore.pas',
+	uWorld in 'uWorld.pas',
+	uIO in 'uIO.pas',
+	uGears in 'uGears.pas',
+	uVisualGears in 'uVisualGears.pas',
+	uConsole in 'uConsole.pas',
+	uKeys in 'uKeys.pas',
+	uTeams in 'uTeams.pas',
+	uSound in 'uSound.pas',
+	uRandom in 'uRandom.pas',
+	uAI in 'uAI.pas',
+	uAIMisc in 'uAIMisc.pas',
+	uAIAmmoTests in 'uAIAmmoTests.pas',
+	uAIActions in 'uAIActions.pas',
+	uCollisions in 'uCollisions.pas',
+	uLand in 'uLand.pas',
+	uLandTemplates in 'uLandTemplates.pas',
+	uLandObjects in 'uLandObjects.pas',
+	uLandGraphics in 'uLandGraphics.pas',
+	uLocale in 'uLocale.pas',
+	uAmmos in 'uAmmos.pas',
+	uSHA in 'uSHA.pas',
+	uFloat in 'uFloat.pas',
+	uStats in 'uStats.pas',
+	uChat in 'uChat.pas';
 
 {$INCLUDE options.inc}
 
@@ -71,52 +71,52 @@ begin
 inc(RealTicks, Lag);
 
 case GameState of
-   gsLandGen: begin
-              GenMap;
-              GameState:= gsStart;
-              end;
-     gsStart: begin
-              AddClouds;
-              AssignHHCoords;
-              AddMiscGears;
-              StoreLoad;
-              ResetKbd;
-              SoundLoad;
-              if GameType = gmtSave then
-                 begin
-                 isSEBackup:= isSoundEnabled;
-                 isSoundEnabled:= false
-                 end;
-              FinishProgress;
-              PlayMusic;
-              GameState:= gsGame
-              end;
-   gsConfirm,
-      gsGame: begin
-              ProcessKbd;
-              DoGameTick(Lag);
-              ProcessVisualGears(Lag);
-              DrawWorld(Lag);
-              end;
-      gsChat: begin
-              DoGameTick(Lag);
-              ProcessVisualGears(Lag);
-              DrawWorld(Lag);
-              end;
-      gsExit: begin
-              OnDestroy;
-              end;
-     end;
+	gsLandGen: begin
+			GenMap;
+			GameState:= gsStart;
+			end;
+	gsStart: begin
+			AddClouds;
+			AssignHHCoords;
+			AddMiscGears;
+			StoreLoad;
+			ResetKbd;
+			SoundLoad;
+			if GameType = gmtSave then
+				begin
+				isSEBackup:= isSoundEnabled;
+				isSoundEnabled:= false
+				end;
+			FinishProgress;
+			PlayMusic;
+			GameState:= gsGame
+			end;
+	gsConfirm,
+	gsGame: begin
+			ProcessKbd;
+			DrawWorld(Lag);
+			DoGameTick(Lag);
+			ProcessVisualGears(Lag);
+			end;
+	gsChat: begin
+			DrawWorld(Lag);
+			DoGameTick(Lag);
+			ProcessVisualGears(Lag);
+			end;
+	gsExit: begin
+			OnDestroy;
+			end;
+	end;
 
 SDL_GL_SwapBuffers();
 if flagMakeCapture then
-   begin
-   flagMakeCapture:= false;
-   s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
-   WriteLnToConsole('Saving ' + s);
-   MakeScreenshot(s);
-//   SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
-   end;
+	begin
+	flagMakeCapture:= false;
+	s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
+	WriteLnToConsole('Saving ' + s);
+	MakeScreenshot(s);
+//	SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
+	end;
 end;
 
 ////////////////////
