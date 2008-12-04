@@ -60,7 +60,7 @@ QStringList SDLInteraction::getResolutions() const
 void SDLInteraction::StartMusic()
 {
 	if (!music)
-		music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toAscii().constData());
+		music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 
 	Mix_FadeInMusic(music, -1, 3000);
 }
