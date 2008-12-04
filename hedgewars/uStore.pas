@@ -45,8 +45,8 @@ procedure FinishProgress;
 function  LoadImage(const filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
 procedure SetupOpenGL;
 
-var PixelFormat: PSDL_PixelFormat;
- SDLPrimSurface: PSDL_Surface;
+var PixelFormat: PSDL_PixelFormat = nil;
+ SDLPrimSurface: PSDL_Surface = nil;
    PauseTexture,
    ConfirmTexture: PTexture;
 

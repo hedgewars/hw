@@ -481,7 +481,7 @@ if cFullScreen then
 {$IFDEF DEBUGFILE}
 AddFileLog('Freeing old primary surface...');
 {$ENDIF}
-SDL_FreeSurface(SDLPrimSurface);
+if SDLPrimSurface <> nil then SDL_FreeSurface(SDLPrimSurface);
 
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 SDLTry(SDLPrimSurface <> nil, true);
