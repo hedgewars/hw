@@ -191,6 +191,7 @@ const
 	gstHHDeath        = $00008000;
 	gstWinner         = $00010000;
 	gstWait           = $00020000;
+	gstNotKickable    = $00040000;
 
 	gm_Left   = $00000001;
 	gm_Right  = $00000002;

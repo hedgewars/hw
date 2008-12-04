@@ -542,7 +542,8 @@ var BTPrevAngle, BTSteps: LongInt;
 
 procedure doStepBlowTorchWork(Gear: PGear);
 var HHGear: PGear;
-    b: boolean;
+	b: boolean;
+	prevX: LongInt;
 begin
 AllInactive:= false;
 dec(Gear^.Timer);
@@ -553,36 +554,49 @@ HedgehogChAngle(HHGear);
 b:= false;
 
 if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
-   begin
-   Gear^.dX:= SignAs(AngleSin(HHGear^.Angle) * _0_5, HHGear^.dX);
-   Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
-   BTPrevAngle:= HHGear^.Angle;
-   b:= true
-   end;
+	begin
+	Gear^.dX:= SignAs(AngleSin(HHGear^.Angle) * _0_5, HHGear^.dX);
+	Gear^.dY:= AngleCos(HHGear^.Angle) * ( - _0_5);
+	BTPrevAngle:= HHGear^.Angle;
+	b:= true
+	end;
+
+if ((HHGear^.State and gstMoving) <> 0) then
+	begin
+	doStepHedgehogMoving(HHGear);
+	if (HHGear^.Damage > 0) then Gear^.Timer:= 0
+	end;
 
 if Gear^.Timer mod cHHStepTicks = 0 then
-   begin
-   b:= true;
-   if Gear^.dX.isNegative then HHGear^.Message:= (HHGear^.Message or gm_Left) and not gm_Right
-                          else HHGear^.Message:= (HHGear^.Message or gm_Right) and not gm_Left;
+	begin
+	b:= true;
+	if Gear^.dX.isNegative then
+		HHGear^.Message:= (HHGear^.Message or gm_Left) and not gm_Right
+	else
+		HHGear^.Message:= (HHGear^.Message or gm_Right) and not gm_Left;
 
-   HHGear^.State:= HHGear^.State and not gstAttacking;
-   HedgehogStep(HHGear);
-   HHGear^.State:= HHGear^.State or gstAttacking;
+	if ((HHGear^.State and gstMoving) = 0) then
+		begin
+		HHGear^.State:= HHGear^.State and not gstAttacking;
+		prevX:= hwRound(HHGear^.X);
+		
+		HedgehogStep(HHGear);
+		
+		if (prevX = hwRound(HHGear^.X)) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
+		HHGear^.State:= HHGear^.State or gstAttacking
+		end;
 
-   inc(BTSteps);
-   if BTSteps = 7 then
-      begin
-      BTSteps:= 0;
-      Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
-      Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
-      HHGear^.State:= HHGear^.State or gstNoDamage;
-      AmmoShove(Gear, 2, 10);
-      HHGear^.State:= HHGear^.State and not gstNoDamage
-      end;
-
-   if (HHGear^.State and gstMoving) <> 0 then Gear^.Timer:= 0
-   end;
+	inc(BTSteps);
+	if BTSteps = 7 then
+		begin
+		BTSteps:= 0;
+		Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
+		Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
+		HHGear^.State:= HHGear^.State or gstNoDamage;
+		AmmoShove(Gear, 2, 10);
+		HHGear^.State:= HHGear^.State and not gstNoDamage
+		end;
+	end;
 
 if b then
    DrawTunnel(HHGear^.X - Gear^.dX * cHHRadius, HHGear^.Y - _4 - Gear^.dY * cHHRadius + hwAbs(Gear^.dY) * 7,
@@ -590,11 +604,12 @@ if b then
               cHHRadius * 5, cHHRadius * 2 + 7);
 
 if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) then
-   begin
-   HHGear^.Message:= 0;
-   DeleteGear(Gear);
-   AfterAttack
-   end
+	begin
+	HHGear^.Message:= 0;
+	HHGear^.State:= HHGear^.State and (not gstNotKickable);
+	DeleteGear(Gear);
+	AfterAttack
+	end
 end;
 
 procedure doStepBlowTorch(Gear: PGear);
@@ -604,6 +619,7 @@ BTPrevAngle:= High(LongInt);
 BTSteps:= 0;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= 0;
+HHGear^.State:= HHGear^.State or gstNotKickable;
 Gear^.doStep:= @doStepBlowTorchWork
 end;
 
@@ -1111,7 +1127,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 	end else begin
 	if Gear^.Timer > 0 then dec(Gear^.Timer)
 		else begin
-		Gear^.Radius:= 5;
+		Gear^.Radius:= 7;
 		AmmoShove(Gear, 3, 100);
 		Gear^.Radius:= 1;
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);

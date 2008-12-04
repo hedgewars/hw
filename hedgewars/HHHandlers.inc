@@ -355,8 +355,8 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
          or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
       end;
-   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
 
+   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then

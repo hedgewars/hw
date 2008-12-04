@@ -95,6 +95,7 @@ procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
 procedure HedgehogStep(Gear: PGear); forward;
+procedure doStepHedgehogMoving(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 
