@@ -45,6 +45,13 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
 			SLOT(displayError(QAbstractSocket::SocketError)));
 }
 
+HWNewNet::~HWNewNet()
+{
+	if (m_game_connected)
+		RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
+	NetSocket.flush();
+}
+
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
 	mynick = nick;
@@ -54,7 +61,7 @@ void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & n
 void HWNewNet::Disconnect()
 {
 	if (m_game_connected)
-		RawSendNet(QString("QUIT"));
+		RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
 	m_game_connected = false;
 	NetSocket.disconnectFromHost();
 }

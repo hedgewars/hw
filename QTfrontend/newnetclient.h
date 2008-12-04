@@ -39,6 +39,7 @@ class HWNewNet : public QObject
 
  public:
   HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSelWidget* pTeamSelWidget);
+  ~HWNewNet();
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
   bool isRoomChief();
