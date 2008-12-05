@@ -1,17 +1,20 @@
 foreach(dir
-	"Bamboo"
-	"Bath"
-	"City"
-	"EarthRise"
-	"Freeway"
-	"hell"
-	"Island"
-	"nature"
-	"Planes"
-	"Sheep"
-	"Snow"
-	"cheese"
-	"Underwater")
+	Bamboo
+	Bath
+	Blox
+	Cake
+	City
+	EarthRise
+	Freeway
+	hell
+	Island
+	nature
+	Planes
+	Sheep
+	Snow
+	cheese
+	Underwater
+	)
 	add_subdirectory(${dir})
 endforeach(dir)
 
