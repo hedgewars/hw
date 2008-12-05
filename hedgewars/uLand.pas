@@ -556,7 +556,7 @@ tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + '
 BlitImageAndGenerateCollisionInfo(0, 0, 1024, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'R', true, true, true);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
 BlitImageAndGenerateCollisionInfo(1024, 0, 1024, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
