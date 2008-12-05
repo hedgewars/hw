@@ -50,7 +50,7 @@ var
 	cWaterLine       : LongInt = 1024;
 	cVisibleWater    : LongInt = 128;
 	cGearScrEdgesDist: LongInt = 240;
-	cCursorEdgesDist : LongInt = 40;
+	cCursorEdgesDist : LongInt = 100;
 	cTeamHealthWidth : LongInt = 128;
 	cAltDamage       : boolean = true;
 

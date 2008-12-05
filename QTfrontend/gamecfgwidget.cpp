@@ -51,11 +51,15 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	CB_teamsDivide->setText(QCheckBox::tr("Divide teams"));
 	GBoxOptionsLayout->addWidget(CB_teamsDivide, 1, 0, 1, 2);
 
+	CB_solid = new QCheckBox(GBoxOptions);
+	CB_solid->setText(QCheckBox::tr("Solid land"));
+	GBoxOptionsLayout->addWidget(CB_solid, 2, 0, 1, 2);
+
 	L_TurnTime = new QLabel(QLabel::tr("Turn time"), GBoxOptions);
 	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
-	GBoxOptionsLayout->addWidget(L_TurnTime, 2, 0);
-	GBoxOptionsLayout->addWidget(L_InitHealth, 3, 0);
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 4, 0);
+	GBoxOptionsLayout->addWidget(L_TurnTime, 3, 0);
+	GBoxOptionsLayout->addWidget(L_InitHealth, 4, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 5, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
 	SB_TurnTime->setRange(1, 99);
@@ -66,16 +70,17 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
-	GBoxOptionsLayout->addWidget(SB_TurnTime, 2, 1);
-	GBoxOptionsLayout->addWidget(SB_InitHealth, 3, 1);
+	GBoxOptionsLayout->addWidget(SB_TurnTime, 3, 1);
+	GBoxOptionsLayout->addWidget(SB_InitHealth, 4, 1);
 	
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 4, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 5, 1);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
 	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
+	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
 	connect(WeaponsName, SIGNAL(activated(const QString&)), this, SIGNAL(newWeaponsName(const QString&)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
@@ -91,6 +96,8 @@ quint32 GameCFGWidget::getGameFlags() const
 		result |= 0x01;
 	if (CB_teamsDivide->isChecked())
 		result |= 0x10;
+	if (CB_solid->isChecked())
+		result |= 0x04;
 
 	return result;
 }
@@ -168,6 +175,11 @@ void GameCFGWidget::setTeamsDivide(bool value)
 	CB_teamsDivide->setChecked(value);
 }
 
+void GameCFGWidget::setSolid(bool value)
+{
+	CB_solid->setChecked(value);
+}
+
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
 	if (ammo.size() != cDefaultAmmoStore->size() - 10)
@@ -181,4 +193,4 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 		WeaponsName->setItemData(pos, ammo);
 		WeaponsName->setCurrentIndex(pos);
 	}
-	}
+}

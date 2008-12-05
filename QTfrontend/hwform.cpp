@@ -501,6 +501,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(turnTimeChanged(int)), hwnet, SLOT(onTurnTimeChanged(int)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(fortsModeChanged(bool)), hwnet, SLOT(onFortsModeChanged(bool)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(teamsDivideChanged(bool)), hwnet, SLOT(onTeamsDivideChanged(bool)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(solidChanged(bool)), hwnet, SLOT(onSolidChanged(bool)));
 
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()));
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
@@ -510,6 +511,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(turnTimeChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setTurnTime(int)));
 	connect(hwnet, SIGNAL(fortsModeChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setFortsMode(bool)));
 	connect(hwnet, SIGNAL(teamsDivideChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setTeamsDivide(bool)));
+	connect(hwnet, SIGNAL(solidChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setSolid(bool)));
 	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),

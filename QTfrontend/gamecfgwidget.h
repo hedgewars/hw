@@ -54,6 +54,7 @@ public slots:
 	void setTurnTime(int time);
 	void setFortsMode(bool value);
 	void setTeamsDivide(bool value);
+	void setSolid(bool value);
 	void setNetAmmo(const QString& name, const QString& ammo);
 
 signals:
@@ -64,11 +65,13 @@ signals:
 	void turnTimeChanged(int time);
 	void fortsModeChanged(bool value);
 	void teamsDivideChanged(bool value);
+	void solidChanged(bool value);
 	void newWeaponsName(const QString& weapon);
 
 private:
 	QCheckBox * CB_mode_Forts;
 	QCheckBox * CB_teamsDivide;
+	QCheckBox * CB_solid;
 	QGridLayout mainLayout;
 	HWMapContainer* pMapContainer;
 	QSpinBox * SB_TurnTime;

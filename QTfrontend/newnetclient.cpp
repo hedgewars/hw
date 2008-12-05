@@ -405,6 +405,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit teamsDivideChanged(lst[2].toInt() != 0);
 			return;
 		}
+		if (lst[1] == "SOLIDLAND") {
+			emit solidChanged(lst[2].toInt() != 0);
+			return;
+		}
 		if (lst[1] == "AMMO") {
 			if(lst.size() < 4) return;
 			emit ammoChanged(lst[3], lst[2]);
@@ -475,6 +479,7 @@ void HWNewNet::ConfigAsked()
 	onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
 	onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
 	onTeamsDivideChanged(m_pGameCFGWidget->getGameFlags() & 0x10);
+	onSolidChanged(m_pGameCFGWidget->getGameFlags() & 0x04);
 	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
 	onWeaponsNameChanged("Default", cDefaultAmmoStore->mid(10));
 }
@@ -504,42 +509,47 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 
 void HWNewNet::onSeedChanged(const QString & seed)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1SEED%1%2").arg(delimeter).arg(seed));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SEED%1%2").arg(delimeter).arg(seed));
 }
 
 void HWNewNet::onMapChanged(const QString & map)
 {
-  if (isChief) RawSendNet(QString("MAP%1%2").arg(delimeter).arg(map));
+	if (isChief) RawSendNet(QString("MAP%1%2").arg(delimeter).arg(map));
 }
 
 void HWNewNet::onThemeChanged(const QString & theme)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1THEME%1%2").arg(delimeter).arg(theme));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1THEME%1%2").arg(delimeter).arg(theme));
 }
 
 void HWNewNet::onInitHealthChanged(int health)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1HEALTH%1%2").arg(delimeter).arg(health));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1HEALTH%1%2").arg(delimeter).arg(health));
 }
 
 void HWNewNet::onTurnTimeChanged(int time)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
 }
 
 void HWNewNet::onFortsModeChanged(bool value)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onTeamsDivideChanged(bool value)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
+}
+
+void HWNewNet::onSolidChanged(bool value)
+{
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SOLIDLAND%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
 {
-  if (isChief) RawSendNet(QString("CONFIG_PARAM%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
 }
 
 void HWNewNet::chatLineToNet(const QString& str)
