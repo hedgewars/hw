@@ -81,7 +81,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
 	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
 	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
-	connect(WeaponsName, SIGNAL(activated(const QString&)), this, SIGNAL(newWeaponsName(const QString&)));
+	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SIGNAL(mapChanged(const QString &)));
@@ -193,4 +193,9 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 		WeaponsName->setItemData(pos, ammo);
 		WeaponsName->setCurrentIndex(pos);
 	}
+}
+
+void GameCFGWidget::ammoChanged(int index)
+{
+	emit newWeaponScheme(WeaponsName->itemText(index), WeaponsName->itemData(index).toString());
 }

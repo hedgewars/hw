@@ -66,7 +66,10 @@ signals:
 	void fortsModeChanged(bool value);
 	void teamsDivideChanged(bool value);
 	void solidChanged(bool value);
-	void newWeaponsName(const QString& weapon);
+	void newWeaponScheme(const QString & name, const QString & ammo);
+
+private slots:
+	void ammoChanged(int index);
 
 private:
 	QCheckBox * CB_mode_Forts;

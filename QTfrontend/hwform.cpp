@@ -95,7 +95,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
 	connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
 	connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsChanged()), this, SLOT(UpdateWeapons()));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(newWeaponsName(const QString&)), this, SLOT(NetWeaponNameChanged(const QString&)));
 
 	connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
@@ -183,14 +182,6 @@ void HWForm::UpdateWeapons()
 			(*it)->setCurrentIndex(pos);
 		}
 	}
-}
-
-void HWForm::NetWeaponNameChanged(const QString& name)
-{
-	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(name);
-
-	if (hwnet)
-		hwnet->onWeaponsNameChanged(name, ammo);
 }
 
 void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
@@ -502,6 +493,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(fortsModeChanged(bool)), hwnet, SLOT(onFortsModeChanged(bool)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(teamsDivideChanged(bool)), hwnet, SLOT(onTeamsDivideChanged(bool)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(solidChanged(bool)), hwnet, SLOT(onSolidChanged(bool)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(newWeaponScheme(const QString &, const QString &)),
+			hwnet, SLOT(onWeaponsNameChanged(const QString &, const QString &)));
 
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()));
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
@@ -612,7 +605,10 @@ void HWForm::AddNetTeam(const HWTeam& team)
 
 void HWForm::StartMPGame()
 {
-	QString ammo = ui.pageSelectWeapon->pWeapons->getWeaponsString(ui.pageMultiplayer->gameCFG->WeaponsName->currentText());
+	QString ammo;
+	ammo = ui.pageMultiplayer->gameCFG->WeaponsName->itemData(
+		ui.pageMultiplayer->gameCFG->WeaponsName->currentIndex()
+		).toString();
 
 	CreateGame(ui.pageMultiplayer->gameCFG, ui.pageMultiplayer->teamsSelect, ammo);
 

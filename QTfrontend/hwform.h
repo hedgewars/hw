@@ -84,7 +84,6 @@ private slots:
 	void GetRecord(bool isDemo, const QByteArray & record);
 	void CreateNetGame();
 	void UpdateWeapons();
-	void NetWeaponNameChanged(const QString& name);
 	void onFrontendFullscreen(bool value);
 	void Music(bool checked);
 	void NetGameMaster();
