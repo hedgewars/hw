@@ -40,8 +40,8 @@ HWTeam::HWTeam(const QString & teamname) :
 		HHName[i].sprintf("hedgehog %d", i);
 		HHHat[i] = "NoHat";
 	}
-	Grave = "Simple";
-	Fort = "Barrelhouse";
+	Grave = "Statue";
+	Fort = "Plane";
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].action = cbinds[i].action;
