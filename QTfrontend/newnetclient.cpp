@@ -481,7 +481,11 @@ void HWNewNet::ConfigAsked()
 	onTeamsDivideChanged(m_pGameCFGWidget->getGameFlags() & 0x10);
 	onSolidChanged(m_pGameCFGWidget->getGameFlags() & 0x04);
 	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
-	onWeaponsNameChanged("Default", cDefaultAmmoStore->mid(10));
+	QString name = m_pGameCFGWidget->WeaponsName->currentText();
+	QString ammo = m_pGameCFGWidget->WeaponsName->itemData(
+			m_pGameCFGWidget->WeaponsName->currentIndex()
+			).toString();
+	onWeaponsNameChanged(name, ammo);
 }
 
 void HWNewNet::RunGame()
