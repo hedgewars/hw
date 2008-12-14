@@ -571,9 +571,9 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 	begin
 	b:= true;
 	if Gear^.dX.isNegative then
-		HHGear^.Message:= (HHGear^.Message or gm_Left) and not gm_Right
+		HHGear^.Message:= (HHGear^.Message and gm_Attack) or gm_Left
 	else
-		HHGear^.Message:= (HHGear^.Message or gm_Right) and not gm_Left;
+		HHGear^.Message:= (HHGear^.Message and gm_Attack) or gm_Right;
 
 	if ((HHGear^.State and gstMoving) = 0) then
 		begin
