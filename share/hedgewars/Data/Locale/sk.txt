@@ -1,7 +1,7 @@
 ; Slovak locale
 
 00:00=Granát
-00:01=Skupinová bomba
+00:01=Trieštivý granát
 00:02=Bazuka
 00:03=UFO
 00:04=Brokovnica
@@ -24,10 +24,10 @@
 00:21=Mínomet
 00:22=Bič
 00:23=Kamikadze
-00:24=Cake
-00:25=Seduction
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
+00:24=Torta
+00:25=Zvádzanie
+00:26=Melónová bomba
+00:27=Pekelný granát
 
 01:00=Do boja!
 01:01=Remíza
