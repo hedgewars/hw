@@ -571,9 +571,9 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 	begin
 	b:= true;
 	if Gear^.dX.isNegative then
-		HHGear^.Message:= (HHGear^.Message and gm_Attack) or gm_Left
+		HHGear^.Message:= (HHGear^.Message and (gm_Attack or gm_Up or gm_Down)) or gm_Left
 	else
-		HHGear^.Message:= (HHGear^.Message and gm_Attack) or gm_Right;
+		HHGear^.Message:= (HHGear^.Message and (gm_Attack or gm_Up or gm_Down)) or gm_Right;
 
 	if ((HHGear^.State and gstMoving) = 0) then
 		begin
@@ -628,7 +628,7 @@ end;
 procedure doStepRopeWork(Gear: PGear);
 const flCheck: boolean = false;
 var HHGear: PGear;
-	len, cs, cc, tx, ty, nx, ny: hwFloat;
+	len, cs, cc, tx, ty, nx, ny, ropeDx, ropeDy: hwFloat;
 	lx, ly: LongInt;
 
 	procedure DeleteMe;
@@ -651,16 +651,16 @@ if ((HHGear^.State and gstHHDriven) = 0)
 	exit
 	end;
 
-Gear^.dX:= HHGear^.X - Gear^.X;
-Gear^.dY:= HHGear^.Y - Gear^.Y;
+ropeDx:= HHGear^.X - Gear^.X; // vector between hedgehog and rope attaching point
+ropeDy:= HHGear^.Y - Gear^.Y;
 
 if (Gear^.Message and gm_Left  <> 0) then HHGear^.dX:= HHGear^.dX - _0_0002 else
 if (Gear^.Message and gm_Right <> 0) then HHGear^.dX:= HHGear^.dX + _0_0002;
 
 if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY:= HHGear^.dY + cGravity;
 
-cs:= Gear^.dY + HHGear^.dY;
-cc:= Gear^.dX + HHGear^.dX;
+cc:= ropeDx + HHGear^.dX;
+cs:= ropeDy + HHGear^.dY;
 len:= _1 / Distance(cc, cs);
 cc:= cc * len; // rope vector plus hedgehog direction vector normalized
 cs:= cs * len;
@@ -696,7 +696,7 @@ if flCheck then  // check whether rope needs dividing
 				Gear^.Friction:= Gear^.Friction - len;
 				break
 				end;
-			len:= len - _0_5
+			len:= len - _3
 			end;
 	end else
 	if RopePoints.Count > 0 then // check whether the last dividing point could be removed

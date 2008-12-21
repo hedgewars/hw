@@ -20,7 +20,7 @@ hmm - plays sometimes when it's your go, your hedgehog is  thinking about what i
  + ill get you - said after taking a medium amount of damage
  + Incoming - on airstrike
 Just you wait - said after your team takes a certain amount of damage
-Kamikaze - when your hedgehog uses the as yet nonexistant kamikaze weapon
+ + Kamikaze - when your hedgehog uses the as yet nonexistant kamikaze weapon
  + laugh - used when your hedgehog blows himself up Near an enemy hedgehog
 leave me alone - when a hedgehog is being picked on / hit a certain amount of times in a row
  + Missed - when enemy misses
