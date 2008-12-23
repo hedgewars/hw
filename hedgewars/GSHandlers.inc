@@ -684,7 +684,7 @@ if flCheck then  // check whether rope needs dividing
 					begin
 					X:= Gear^.X;
 					Y:= Gear^.Y;
-					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
+					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(ropeDx, ropeDy);
 					b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
 					dLen:= len
 					end;
@@ -713,31 +713,28 @@ if flCheck then  // check whether rope needs dividing
 			end
 		end;
 
-Gear^.dX:= HHGear^.X - Gear^.X;
-Gear^.dY:= HHGear^.Y - Gear^.Y;
+ropeDx:= HHGear^.X - Gear^.X;
+ropeDy:= HHGear^.Y - Gear^.Y;
 
-cs:= Gear^.dY + HHGear^.dY;
-cc:= Gear^.dX + HHGear^.dX;
+cs:= ropeDy + HHGear^.dY;
+cc:= ropeDx + HHGear^.dX;
 len:= _1 / Distance(cc, cs);
 cc:= cc * len;
 cs:= cs * len;
 
-HHGear^.dX:= HHGear^.X;
-HHGear^.dY:= HHGear^.Y;
+HHGear^.dX:= Gear^.X + cc*Gear^.Elasticity - HHGear^.X;
+HHGear^.dY:= Gear^.Y + cs*Gear^.Elasticity - HHGear^.Y;
 
 if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-	if not (TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
-			or TestCollisionYwithGear(HHGear, hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity + _0_3;
+	if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
+			or TestCollisionYwithGear(HHGear, hwSign(ropeDy))) then Gear^.Elasticity:= Gear^.Elasticity + _0_3;
 
 if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
-	if not (TestCollisionXwithGear(HHGear, -hwSign(Gear^.dX))
-			or TestCollisionYwithGear(HHGear, -hwSign(Gear^.dY))) then Gear^.Elasticity:= Gear^.Elasticity - _0_3;
+	if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
+			or TestCollisionYwithGear(HHGear, -hwSign(ropeDy))) then Gear^.Elasticity:= Gear^.Elasticity - _0_3;
 
 HHGear^.X:= Gear^.X + cc*Gear^.Elasticity;
 HHGear^.Y:= Gear^.Y + cs*Gear^.Elasticity;
-
-HHGear^.dX:= HHGear^.X - HHGear^.dX;
-HHGear^.dY:= HHGear^.Y - HHGear^.dY;
 
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
 	HHGear^.dX:= -_0_6 * HHGear^.dX;
