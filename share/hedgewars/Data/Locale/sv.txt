@@ -25,9 +25,9 @@
 00:22=Piska
 00:23=Kamikaze (självmord)
 00:24=Tårta
-00:25=Seduction
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
+00:25=Förförelse
+00:26=Vattenmelonsbomb
+00:27=Helvetisk handgranat
 
 01:00=Nu kör vi!
 01:01=Oavgjort
