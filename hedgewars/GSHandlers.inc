@@ -630,6 +630,7 @@ const flCheck: boolean = false;
 var HHGear: PGear;
 	len, cs, cc, tx, ty, nx, ny, ropeDx, ropeDy: hwFloat;
 	lx, ly: LongInt;
+	haveCollision: boolean;
 
 	procedure DeleteMe;
 	begin
@@ -736,10 +737,23 @@ if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
 HHGear^.X:= Gear^.X + cc*Gear^.Elasticity;
 HHGear^.Y:= Gear^.Y + cs*Gear^.Elasticity;
 
+haveCollision:= false;
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+	begin
 	HHGear^.dX:= -_0_6 * HHGear^.dX;
+	haveCollision:= true
+	end;
 if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
+	begin
 	HHGear^.dY:= -_0_6 * HHGear^.dY;
+	haveCollision:= true
+	end;
+
+if haveCollision and (Gear^.Message and (gm_Left or gm_Right) <> 0) then
+	begin
+	HHGear^.dX:= SignAs(hwAbs(HHGear^.dX) + _0_15, HHGear^.dX);
+	HHGear^.dY:= SignAs(hwAbs(HHGear^.dY) + _0_15, HHGear^.dY)
+	end;
 
 len:= Distance(HHGear^.dX, HHGear^.dY);
 if len > _0_8 then
