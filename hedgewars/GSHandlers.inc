@@ -151,7 +151,16 @@ if Gear^.Timer = 0 then
 					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMelonPiece, 0, dX, dY, 75)^.DirAngle:= i * 60;
 					end
 				end;
-		gtHellishBomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 90, EXPLAutoSound);
+		gtHellishBomb: begin
+				doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 90, EXPLAutoSound);
+				for i:= 0 to 127 do
+					begin
+					dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
+					dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+					end
+				end;
 		end;
 	DeleteGear(Gear);
 	exit
@@ -1131,7 +1140,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 		Gear^.dX:= (Gear^.dX - cWindFactor) * _0_995 + cWindFactor;
 
 	Gear^.dY:= Gear^.dY + cGravity;
-	if Gear^.dY > _0_1 then Gear^.dY:= Gear^.dY * _0_995;
+	if hwAbs(Gear^.dY) > _0_1 then Gear^.dY:= Gear^.dY * _0_995;
 	
 	Gear^.X:= Gear^.X + Gear^.dX;
 	Gear^.Y:= Gear^.Y + Gear^.dY;

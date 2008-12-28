@@ -297,8 +297,11 @@ gtAmmo_Grenade: begin
                 Result^.Tag:= Counter mod 64;
                 Result^.Radius:= 1;
                 Result^.Health:= 2;
-                Result^.dY:= (getrandom - _0_8) * _0_03;
-                Result^.dX:= (getrandom - _0_5) * _0_4
+                if (Result^.dY.QWordValue = 0) and (Result^.dX.QWordValue = 0) then
+                	begin
+                	Result^.dY:= (getrandom - _0_8) * _0_03;
+                	Result^.dX:= (getrandom - _0_5) * _0_4
+                	end
                 end;
    gtFirePunch: begin
                 Result^.Radius:= 15;
@@ -1075,7 +1078,7 @@ while Gear<>nil do
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0);
-           gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Angle) mod 8);
+           gtFlame: DrawSprite(sprFlame, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy,(GameTicks div 128 + Gear^.Tag) mod 8);
        gtParachute: DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0);
        gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 0)
                                      else DrawSprite(sprAirplane, hwRound(Gear^.X) - 60 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, 1);
