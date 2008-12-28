@@ -626,11 +626,11 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 procedure doStepRopeWork(Gear: PGear);
-const flCheck: boolean = false;
 var HHGear: PGear;
 	len, cs, cc, tx, ty, nx, ny, ropeDx, ropeDy: hwFloat;
 	lx, ly: LongInt;
-	haveCollision: boolean;
+	haveCollision,
+	haveDivided: boolean;
 
 	procedure DeleteMe;
 	begin
@@ -660,46 +660,46 @@ if (Gear^.Message and gm_Right <> 0) then HHGear^.dX:= HHGear^.dX + _0_0002;
 
 if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY:= HHGear^.dY + cGravity;
 
-cc:= ropeDx + HHGear^.dX;
-cs:= ropeDy + HHGear^.dY;
-len:= _1 / Distance(cc, cs);
-cc:= cc * len; // rope vector plus hedgehog direction vector normalized
-cs:= cs * len;
+tx:= ropeDx + HHGear^.dX;
+ty:= ropeDy + HHGear^.dY;
+len:= _1 / Distance(tx, ty);
+tx:= tx * len; // rope vector plus hedgehog direction vector normalized
+ty:= ty * len;
 
-nx:= SignAs(cs, HHGear^.dX) * 7; // hedgehog direction normalized with length 7
-ny:= SignAs(cc, HHGear^.dY) * 7;
-
-flCheck:= not flCheck;
-if flCheck then  // check whether rope needs dividing
-	begin
+haveDivided:= false;
+	// check whether rope needs dividing
+	len:= _1 / Distance(ropeDx, ropeDy); // old rope pos
+	nx:= ropeDx * len;
+	ny:= ropeDy * len;
+	
 	len:= Gear^.Elasticity - _20;
 	while len > _5 do
 			begin
-			tx:= cc*len;
-			ty:= cs*len;
-			lx:= hwRound(Gear^.X + tx + nx);
-			ly:= hwRound(Gear^.Y + ty + ny);
+			lx:= hwRound(Gear^.X + tx * len);
+			ly:= hwRound(Gear^.Y + ty * len);
 			if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
 				begin
 				with RopePoints.ar[RopePoints.Count] do
 					begin
 					X:= Gear^.X;
 					Y:= Gear^.Y;
-					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(ropeDx, ropeDy);
-					b:= (cc * HHGear^.dY) > (cs * HHGear^.dX);
+					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
+					b:= (tx * HHGear^.dY) > (ty * HHGear^.dX);
 					dLen:= len
 					end;
-				Gear^.X:= Gear^.X + tx;
-				Gear^.Y:= Gear^.Y + ty;
+				Gear^.X:= Gear^.X + nx * len;
+				Gear^.Y:= Gear^.Y + ny * len;
 				inc(RopePoints.Count);
 				TryDo(RopePoints.Count <= MAXROPEPOINTS, 'Rope points overflow', true);
 				Gear^.Elasticity:= Gear^.Elasticity - len;
 				Gear^.Friction:= Gear^.Friction - len;
+				haveDivided:= true;
 				break
 				end;
-			len:= len - _3
+			len:= len - _0_3 // should be the same as increase step
 			end;
-	end else
+
+if not haveDivided then
 	if RopePoints.Count > 0 then // check whether the last dividing point could be removed
 		begin
 		tx:= RopePoints.ar[Pred(RopePoints.Count)].X;
