@@ -666,6 +666,9 @@ len:= _1 / Distance(tx, ty);
 tx:= tx * len; // rope vector plus hedgehog direction vector normalized
 ty:= ty * len;
 
+Gear^.dX:= tx; // for visual purposes only
+Gear^.dY:= ty;
+
 haveDivided:= false;
 	// check whether rope needs dividing
 	len:= _1 / Distance(ropeDx, ropeDy); // old rope pos
