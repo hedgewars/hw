@@ -723,8 +723,8 @@ len:= _1 / Distance(cc, cs);
 cc:= cc * len;
 cs:= cs * len;
 
-HHGear^.dX:= Gear^.X + cc*Gear^.Elasticity - HHGear^.X;
-HHGear^.dY:= Gear^.Y + cs*Gear^.Elasticity - HHGear^.Y;
+tx:= HHGear^.X;
+ty:= HHGear^.Y;
 
 if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
 	if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
@@ -736,6 +736,9 @@ if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
 
 HHGear^.X:= Gear^.X + cc*Gear^.Elasticity;
 HHGear^.Y:= Gear^.Y + cs*Gear^.Elasticity;
+
+HHGear^.dX:= HHGear^.X - tx;
+HHGear^.dY:= HHGear^.Y - ty;
 
 haveCollision:= false;
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
