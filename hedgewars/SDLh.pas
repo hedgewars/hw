@@ -27,8 +27,12 @@ interface
 {$ENDIF}
 
 {$IFDEF UNIX}
-{$linklib c}
-{$linklib pthread}
+  {$IFDEF DARWIN}
+    {$linklib gcc}
+  {$ELSE}
+    {$linklib c}
+  {$ENDIF}
+  {$linklib pthread}
 {$ENDIF}
 
 {$PACKRECORDS C}
@@ -38,7 +42,15 @@ const {$IFDEF WIN32}
       SDLLibName = 'SDL.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-      SDLLibName = 'libSDL.so';
+	{$IFDEF DARWIN}
+	  SDLLibName = 'libSDL.dylib';
+	  {$linklib libSDL}
+	  {$linklib SDLmain}
+	  {$linkframework Cocoa}
+	  {$PASCALMAINNAME SDL_main}
+	{$ELSE}
+          SDLLibName = 'libSDL.so';
+        {$ENDIF}
       {$ENDIF}
       SDL_SWSURFACE   = $00000000;
       SDL_HWSURFACE   = $00000001;
@@ -265,7 +277,12 @@ const {$IFDEF WIN32}
       SDL_TTFLibName = 'SDL_ttf.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-      SDL_TTFLibName = 'libSDL_ttf.so';
+	{$IFDEF DARWIN}
+	  SDL_TTFLibName = 'libSDL_ttf.dylib';
+	  {$linklib libSDL_ttf}
+	{$ELSE}
+          SDL_TTFLibName = 'libSDL_ttf.so';
+        {$ENDIF}
       {$ENDIF}
       TTF_STYLE_NORMAL = 0;
       TTF_STYLE_BOLD   = 1;
@@ -295,7 +312,12 @@ const {$IFDEF WIN32}
       SDL_MixerLibName = 'SDL_mixer.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-      SDL_MixerLibName = 'libSDL_mixer.so';
+	{$IFDEF DARWIN}
+	  SDL_MixerLibName = 'libSDL_mixer.dylib';
+	  {$linklib libSDL_mixer}
+	{$ELSE}
+          SDL_MixerLibName = 'libSDL_mixer.so';
+	{$ENDIF}
       {$ENDIF}
 
 const MIX_MAX_VOLUME = 128;
@@ -353,7 +375,12 @@ const {$IFDEF WIN32}
       SDL_ImageLibName = 'SDL_image.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-      SDL_ImageLibName = 'libSDL_image.so';
+	{$IFDEF DARWIN}
+	  SDL_ImageLibName = 'libSDL_image.dylib';
+	  {$linklib libSDL_image}
+	{$ELSE}
+           SDL_ImageLibName = 'libSDL_image.so';
+	{$ENDIF}
       {$ENDIF}
 
 function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
@@ -364,7 +391,12 @@ const {$IFDEF WIN32}
       SDL_NetLibName = 'SDL_net.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-      SDL_NetLibName = 'libSDL_net.so';
+	{$IFDEF DARWIN}
+	  SDL_NetLibName = 'libSDL_net.dylib';
+	  {$linklib libSDL_net}
+	{$ELSE}
+          SDL_NetLibName = 'libSDL_net.so';
+	{$ENDIF}
       {$ENDIF}
 
 type TIPAddress = record
