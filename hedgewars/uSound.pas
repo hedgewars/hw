@@ -83,7 +83,7 @@ end;
 procedure PlaySound(snd: TSound; infinite: boolean);
 var loops: LongInt;
 begin
-if not isSoundEnabled then exit;
+if (not isSoundEnabled) or fastUntilLag then exit;
 if infinite then loops:= -1 else loops:= 0;
 Soundz[snd].lastChan:= Mix_PlayChannelTimed(-1, Soundz[snd].id, loops, -1)
 end;
