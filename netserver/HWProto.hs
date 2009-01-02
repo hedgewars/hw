@@ -21,6 +21,7 @@ answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
 answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
 answerSameRoom    = makeAnswer sameRoom
+answerAll         = makeAnswer allClients
 
 answerBadCmd            = answerClientOnly ["ERROR", "Bad command, state or incorrect parameter"]
 answerNotMaster         = answerClientOnly ["ERROR", "You cannot configure room parameters"]
@@ -60,9 +61,9 @@ answerQuitInform nick msg =
 		answerOthersRoom ["LEFT", nick]
 answerQuitLobby nick msg =
 	if not $ null msg then
-		answerOthersRoom ["LOBBY:LEFT", nick, msg]
+		answerAll ["LOBBY:LEFT", nick, msg]
 		else
-		answerOthersRoom ["LOBBY:LEFT", nick]
+		answerAll ["LOBBY:LEFT", nick]
 
 answerJoined nick   = answerSameRoom ["JOINED", nick]
 answerRunGame       = answerSameRoom ["RUN_GAME"]
@@ -100,7 +101,6 @@ answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
 		nicks = filter (not . null) $ map nick clients
 
 answerPing = makeAnswer allClients ["PING"]
-
 
 -- Main state-independent cmd handler
 handleCmd :: CmdHandler
