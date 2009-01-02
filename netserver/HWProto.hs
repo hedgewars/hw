@@ -201,7 +201,8 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 		watchRound = if (roomProto clRoom < 20) || (not $ gameinprogress clRoom) then
 					[]
 				else
-					(answerClientOnly  ["RUN_GAME"]) ++ answerClientOnly ("GAMEMSG" : roundMsgs clRoom)
+					(answerClientOnly  ["RUN_GAME"]) ++
+					answerClientOnly ("GAMEMSG" : "DGUkc3BlY3RhdGUgMQ==" : roundMsgs clRoom)
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]

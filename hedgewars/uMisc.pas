@@ -31,6 +31,8 @@ var
 	isInMultiShoot  : boolean = false;
 	isSpeed         : boolean = false;
 
+	fastUntilLag    : boolean = false;
+
 	GameState     : TGameState = Low(TGameState);
 	GameType      : TGameType = gmtLocal;
 	GameFlags     : Longword = 0;

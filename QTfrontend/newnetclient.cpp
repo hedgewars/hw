@@ -189,7 +189,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-	qDebug() << "Server: " << lst;
+//	qDebug() << "Server: " << lst;
 
 	if(!lst.size())
 	{

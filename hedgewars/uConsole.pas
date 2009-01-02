@@ -228,6 +228,7 @@ end;
 initialization
 InitConsole;
 RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
+RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
 RegisterVariable('capture' , vtCommand, @chCapture      , true );
 RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
 RegisterVariable('addteam' , vtCommand, @chAddTeam      , false);
