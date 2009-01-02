@@ -219,6 +219,9 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
 
+handleCmd_noRoom client _ _ ["CHAT_STRING", msg] =
+	(noChangeClients, noChangeRooms, answerChatString (nick client) msg)
+
 handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 

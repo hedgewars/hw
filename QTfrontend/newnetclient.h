@@ -109,8 +109,10 @@ class HWNewNet : public QObject
   void solidChanged(bool value);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
+  void chatStringLobby(const QString&);
   void chatStringFromNet(const QString&);
   void chatStringFromMe(const QString&);
+  void chatStringFromMeLobby(const QString&);
   void ammoChanged(const QString& name, const QString& ammo);
 
   void roomsList(const QStringList&);
@@ -122,6 +124,7 @@ class HWNewNet : public QObject
  public slots:
   void ToggleReady();
   void chatLineToNet(const QString& str);
+  void chatLineToLobby(const QString& str);
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
   void RemoveTeam(const HWTeam& team);

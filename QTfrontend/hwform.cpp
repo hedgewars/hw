@@ -474,6 +474,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(kickPlayer(const QString&)));
 	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
 
+	connect(ui.pageRoomsList->chatWidget, SIGNAL(chatLine(const QString&)),
+		hwnet, SLOT(chatLineToLobby(const QString&)));
+	connect(hwnet, SIGNAL(chatStringLobby(const QString&)),
+		ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
+	connect(hwnet, SIGNAL(chatStringFromMeLobby(const QString&)),
+		ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
+
 	connect(hwnet, SIGNAL(nickAdded(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
 	connect(hwnet, SIGNAL(nickRemoved(const QString&)),

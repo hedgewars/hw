@@ -261,7 +261,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Empty CHAT_STRING message");
 			return;
 		}
-		emit chatStringFromNet(formatChatMsg(lst[1], lst[2]));
+		if (netClientState == 2)
+			emit chatStringLobby(formatChatMsg(lst[1], lst[2]));
+		else
+			emit chatStringFromNet(formatChatMsg(lst[1], lst[2]));
 		return;
 	}
 
@@ -344,7 +347,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		for(int i = 1; i < lst.size(); ++i)
 		{
 			emit nickAddedLobby(lst[i]);
-			//emit chatStringFromNet(QString(tr("*** %1 joined")).arg(lst[i]));
+			emit chatStringLobby(QString(tr("*** %1 joined")).arg(lst[i]));
 		}
 		return;
 	}
@@ -370,10 +373,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit nickRemovedLobby(lst[1]);
-		/*if (lst.size() < 3)
-			emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
+		if (lst.size() < 3)
+			emit chatStringLobby(QString(tr("*** %1 left")).arg(lst[1]));
 		else
-			emit chatStringFromNet(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));*/
+			emit chatStringLobby(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));
 		return;
 	}
 
@@ -590,10 +593,18 @@ void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
 
 void HWNewNet::chatLineToNet(const QString& str)
 {
-  if(str!="") {
-    RawSendNet(QString("CHAT_STRING")+delimeter+str);
-    emit(chatStringFromMe(formatChatMsg(mynick, str)));
-  }
+	if(str != "") {
+		RawSendNet(QString("CHAT_STRING") + delimeter + str);
+		emit(chatStringFromMe(formatChatMsg(mynick, str)));
+	}
+}
+
+void HWNewNet::chatLineToLobby(const QString& str)
+{
+	if(str != "") {
+		RawSendNet(QString("CHAT_STRING") + delimeter + str);
+		emit(chatStringFromMeLobby(formatChatMsg(mynick, str)));
+	}
 }
 
 void HWNewNet::askRoomsList()
