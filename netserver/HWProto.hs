@@ -58,6 +58,11 @@ answerQuitInform nick msg =
 		answerOthersRoom ["LEFT", nick, msg]
 		else
 		answerOthersRoom ["LEFT", nick]
+answerQuitLobby nick msg =
+	if not $ null msg then
+		answerOthersRoom ["LOBBY:LEFT", nick, msg]
+		else
+		answerOthersRoom ["LOBBY:LEFT", nick]
 
 answerJoined nick   = answerSameRoom ["JOINED", nick]
 answerRunGame       = answerSameRoom ["RUN_GAME"]
@@ -101,11 +106,11 @@ answerPing = makeAnswer allClients ["PING"]
 handleCmd :: CmdHandler
 handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
-		(noChangeClients, noChangeRooms, answerQuit msg)
+		(noChangeClients, noChangeRooms, answerQuit msg ++ (answerQuitLobby (nick client) msg) )
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ answerRemoveClientTeams)
+		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
@@ -136,6 +141,13 @@ handleCmd client clients rooms cmd =
 
 
 -- 'no info' state - need to get protocol number and nickname
+onLoginFinished client clients =
+	if (protocol client < 20) || (null $ nick client) || (protocol client == 0) then
+		[]
+	else
+		(answerClientOnly $ ["LOBBY:JOINED"] ++ (map nick $ clients)) ++
+		(answerOthersRoom ["LOBBY:JOINED", nick client])
+
 handleCmd_noInfo :: CmdHandler
 handleCmd_noInfo client clients _ ["NICK", newNick] =
 	if not . null $ nick client then
@@ -143,17 +155,17 @@ handleCmd_noInfo client clients _ ["NICK", newNick] =
 	else if haveSameNick then
 		(noChangeClients, noChangeRooms, answerNickChooseAnother)
 	else
-		(modifyClient client{nick = newNick}, noChangeRooms, answerNick newNick)
+		(modifyClient client{nick = newNick}, noChangeRooms, answerNick newNick ++ (onLoginFinished client{nick = newNick} clients))
 	where
 		haveSameNick = isJust $ find (\cl -> newNick == nick cl) clients
 
-handleCmd_noInfo client _ _ ["PROTO", protoNum] =
+handleCmd_noInfo client clients _ ["PROTO", protoNum] =
 	if protocol client > 0 then
 		(noChangeClients, noChangeRooms, answerProtocolKnown)
 	else if parsedProto == 0 then
 		(noChangeClients, noChangeRooms, answerBadInput)
 	else
-		(modifyClient client{protocol = parsedProto}, noChangeRooms, answerProto parsedProto)
+		(modifyClient client{protocol = parsedProto}, noChangeRooms, answerProto parsedProto ++ (onLoginFinished client{protocol = parsedProto} clients))
 	where
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
 

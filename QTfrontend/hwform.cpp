@@ -435,6 +435,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	}
 	
 	ui.pageNetGame->pChatWidget->clear();
+	ui.pageRoomsList->chatWidget->clear();
 	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
@@ -471,11 +472,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(chatLineToNet(const QString&)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(kick(const QString&)),
 		hwnet, SLOT(kickPlayer(const QString&)));
+	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
+
 	connect(hwnet, SIGNAL(nickAdded(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
 	connect(hwnet, SIGNAL(nickRemoved(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickRemoved(const QString&)));
-	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
+	connect(hwnet, SIGNAL(nickAddedLobby(const QString&)),
+		ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&)));
+	connect(hwnet, SIGNAL(nickRemovedLobby(const QString&)),
+		ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
 
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
 		hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));

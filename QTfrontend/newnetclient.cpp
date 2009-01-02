@@ -189,7 +189,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-//	qDebug() << "Server: " << lst;
+	qDebug() << "Server: " << lst;
 
 	if(!lst.size())
 	{
@@ -334,6 +334,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if(lst[0]=="LOBBY:JOINED") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad JOINED message");
+			return;
+		}
+		
+		for(int i = 1; i < lst.size(); ++i)
+		{
+			emit nickAddedLobby(lst[i]);
+			//emit chatStringFromNet(QString(tr("*** %1 joined")).arg(lst[i]));
+		}
+		return;
+	}
+
 	if(lst[0] == "LEFT") {
 		if(lst.size() < 2)
 		{
@@ -345,6 +360,20 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
 		else
 			emit chatStringFromNet(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));
+		return;
+	}
+
+	if(lst[0] == "LOBBY:LEFT") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad LEFT message");
+			return;
+		}
+		emit nickRemovedLobby(lst[1]);
+		/*if (lst.size() < 3)
+			emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
+		else
+			emit chatStringFromNet(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));*/
 		return;
 	}
 

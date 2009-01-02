@@ -274,7 +274,7 @@ const
 			'Locale',                        // ptLocale
 			'Graphics/AmmoMenu',             // ptAmmoMenu
 			'Graphics/Hedgehog',             // ptHedgehog
-			'Sounds/voices',                 // ptVoices
+			'Sounds/voices/Default',         // ptVoices
 			'Graphics/Hats'                  // ptHats
 			);
 
