@@ -144,7 +144,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepCluster,
 			@doStepBomb,
 			@doStepSmokeTrace,
-			@doStepWaterUp
+			@doStepWaterUp,
+			@doStepDrill
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -341,6 +342,10 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_5;
                 Result^.Friction:= _0_96;
+                end;
+       gtDrill: begin
+                Result^.Timer:= 5000;
+                Result^.Radius:= 4;
                 end;
      end;
 InsertGearToList(Result);
@@ -783,6 +788,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		case amt of
 			amBazooka,
 			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+                        amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
@@ -1033,6 +1039,7 @@ while Gear<>nil do
       begin
       case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtHedgehog: DrawHH(Gear);
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
        gtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
@@ -1245,6 +1252,7 @@ while i > 0 do
 			gtMine,
 			gtTarget,
 			gtCase: begin
+					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
 					inc(t^.ar[i]^.Damage, Damage);
 
 					if (t^.ar[i]^.Kind = gtHedgehog) and (Damage > 0) then

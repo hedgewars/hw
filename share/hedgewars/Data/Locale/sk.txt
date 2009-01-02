@@ -28,6 +28,7 @@
 00:25=Zvádzanie
 00:26=Melónová bomba
 00:27=Pekelný granát
+00:28=Drill Rocket
 
 01:00=Do boja!
 01:01=Remíza

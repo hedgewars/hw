@@ -28,6 +28,7 @@
 00:25=Omámení
 00:26=Bomba z vodního melounu
 00:27=Ďábelský ruční granát
+00:28=Drill Rocket
 
 01:00=Do boje!
 01:01=Kolo nerozhodně

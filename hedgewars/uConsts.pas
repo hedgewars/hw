@@ -49,7 +49,7 @@ type
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
-			sprCensored);
+			sprCensored, sprDrill, sprHandDrill);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -59,7 +59,7 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 28
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 32
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 38
-			gtHellishBomb, gtEvilTrace, gtWaterUp);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag);
@@ -81,7 +81,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb, amNapalm);
+			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -445,7 +445,11 @@ const
 			(FileName:    'HHDress'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 64; saveSurf: false),// sprDress
 			(FileName:   'Censored'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 16; saveSurf: false) // sprCensored
+			Width:  64; Height: 16; saveSurf: false),// sprCensored
+			(FileName:      'Drill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  16; Height: 16; saveSurf: false),// sprDrill
+			(FileName:    'amDrill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  32; Height: 32; saveSurf: false)// sprHandDrill
 			);
 
 	Wavez: array [TWave] of record
@@ -1079,7 +1083,26 @@ const
 			isDamaging: true;
 			SkipTurns: 0;
 			PosCount: 2;
-			PosSprite: sprAmAirplane)
+			PosSprite: sprAmAirplane),
+			(NameId: sidDrill;
+			NameTex: nil;
+			Probability: 0;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_Power or
+							ammoprop_AltUse;
+					Count: AMMO_INFINITE;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amDrill);
+			Slot: 0;
+			TimeAfterTurn: 3000;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprDrill)
 			);
 
 var CountTexz: array[1..9] of PTexture;

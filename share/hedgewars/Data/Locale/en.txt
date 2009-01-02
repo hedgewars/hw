@@ -28,6 +28,7 @@
 00:25=Seduction
 00:26=Watermelon Bomb
 00:27=Hellish hand-grenade
+00:28=Drill Rocket
 
 01:00=Let's fight!
 01:01=Round draw

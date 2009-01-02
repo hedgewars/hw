@@ -28,6 +28,7 @@
 00:25=Uwodzenie
 00:26=Bomba arbuzowa
 00:27=Piekielna bomba
+00:28=Drill Rocket
 
 01:00=Walczmy!
 01:01=Remis

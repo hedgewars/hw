@@ -28,6 +28,7 @@
 00:25=Seduzione
 00:26=Bomba anguria
 00:27=Granata infernale
+00:28=Drill Rocket
 
 01:00=Combattiamo!
 01:01=Round in parità
