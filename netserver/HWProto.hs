@@ -82,7 +82,7 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(answerClientOnly ["TEAM_COLOR", teamname team, teamcolor team]) ++
 			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
 
-answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
+answerServerMessage client clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
 		[(mainbody serverInfo) ++ clientsIn ++ (lastHour serverInfo)])]
 	where
 		mainbody serverInfo = serverMessage serverInfo ++
@@ -91,7 +91,7 @@ answerServerMessage clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
 				else
 				"<p align=center>Private server</p>"
 		
-		clientsIn = "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>"
+		clientsIn = if protocol client < 20 then "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>" else []
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
 		lastHour serverInfo =
 			if isDedicated serverInfo then
@@ -175,7 +175,7 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client clients rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerServerMessage clients ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
+		(noChangeClients, noChangeRooms, answerServerMessage client clients ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
 		where
 			roomInfo room = [
 					name room,
