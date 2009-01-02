@@ -81,7 +81,7 @@ set(hwfr_src
 if(MINGW)
 	# resource compilation for mingw
 	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o
-	COMMAND ${WINDRES} -I ${CMAKE_CURRENT_SOURCE_DIR}
+	COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
 	-i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
 	-o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 	set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
