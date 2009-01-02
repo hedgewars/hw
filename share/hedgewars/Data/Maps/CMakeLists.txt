@@ -7,9 +7,12 @@ foreach(dir
 	Castle
 	cheese
 	Cogs
+	CrazyMission
 	EarthRise
-	Hedgewars
+	Eyes
+	HedgeFortress
 	Hedgelove
+	Hedgewars
 	Hydrant
 	Lonely_Island
 	mushrooms
