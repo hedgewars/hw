@@ -450,7 +450,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		for(int i = 1; i < lst.size(); ++i)
 		{
-			QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
+			QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
 			emit FromNet(em);
 		}
 		return;
