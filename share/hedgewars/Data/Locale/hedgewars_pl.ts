@@ -5,12 +5,12 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Error</source>
-        <translation type="unfinished">Błąd</translation>
+        <translation>Błąd</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niepoprawny schemat broni</translation>
     </message>
 </context>
 <context>
@@ -43,7 +43,7 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="228"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">nowy</translation>
     </message>
 </context>
 <context>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="347"/>
         <source>*** %1 left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">*** %1 wyszedł (%2)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="462"/>
         <source>Quit reason: </source>
-        <translation type="unfinished"></translation>
+        <translation>Powód zamknięcia:</translation>
     </message>
 </context>
 <context>
@@ -428,12 +428,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="616"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished">Gra Wieloosobowa (Graj z kumplami lub z komputerem zmieniając miejsca)</translation>
+        <translation>Gra Wieloosobowa (Graj z kumplami lub z komputerem zmieniając miejsca)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="621"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished">Trening (Ćwicz swoje umiejętności na kilku misjach treningowych). W PRODUKCJI</translation>
+        <translation>Trening (Ćwicz swoje umiejętności na kilku misjach treningowych). W PRODUKCJI</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="627"/>
@@ -514,12 +514,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="374"/>
         <source>Append date and time to record file name</source>
-        <translation type="unfinished"></translation>
+        <translation>Dodaj czas i datę do nazwy pliku</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="55"/>
         <source>Solid land</source>
-        <translation type="unfinished"></translation>
+        <translation>Niezniszczalny teren</translation>
     </message>
 </context>
 <context>
@@ -774,7 +774,7 @@
     <message>
         <location filename="../../../../QTfrontend/ui_hwform.cpp" line="36"/>
         <source>Hedgewars %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hedgewars %1</translation>
     </message>
 </context>
 <context>
@@ -942,7 +942,7 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
         <source>Ready</source>
-        <translation type="unfinished">Gotowy</translation>
+        <translation>Gotowe</translation>
     </message>
 </context>
 <context>
