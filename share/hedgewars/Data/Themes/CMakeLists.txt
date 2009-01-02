@@ -4,7 +4,9 @@ foreach(dir
 	Blox
 	Cake
 	City
+	CrazyMission
 	EarthRise
+	Eyes
 	Freeway
 	hell
 	Island
