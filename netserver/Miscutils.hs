@@ -58,6 +58,7 @@ data RoomInfo =
 		readyPlayers :: Int,
 		isRestrictedJoins :: Bool,
 		isRestrictedTeams :: Bool,
+		roundMsgs :: [String],
 		params :: Map.Map String [String]
 	}
 createRoom = (
@@ -72,6 +73,7 @@ createRoom = (
 		0
 		False
 		False
+		[]
 		Map.empty
 	)
 

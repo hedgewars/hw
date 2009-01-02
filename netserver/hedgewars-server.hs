@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables #-}
+{-# LANGUAGE CPP, ScopedTypeVariables, PatternSignatures #-}
 
 module Main where
 
@@ -20,7 +20,6 @@ import Data.Time
 import System.Posix
 #endif
 
--- #define IOException Exception
 
 data Messages =
 	Accept ClientInfo
@@ -40,7 +39,7 @@ timerLoop messagesChan = forever $ do
 
 acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
-	Control.Exception.handle (\(_ :: IOException) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
+	Control.Exception.handle (\(_ :: Exception) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
 	do
 	(cHandle, host, _) <- accept servSock
 	
@@ -77,14 +76,14 @@ clientSendLoop :: Handle -> TChan[String] -> TChan[String] -> IO()
 clientSendLoop handle clChan chan = do
 	answer <- atomically $ readTChan chan
 	doClose <- Control.Exception.handle
-		(\(e :: IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
+		(\(e :: Exception) -> if isQuit answer then return True else sendQuit e >> return False) $ do
 		forM_ answer (\str -> hPutStrLn handle str)
 		hPutStrLn handle ""
 		hFlush handle
 		return $ isQuit answer
 
 	if doClose then
-		Control.Exception.handle (\(_ :: IOException) -> putStrLn "error on hClose") $ hClose handle
+		Control.Exception.handle (\(_ :: Exception) -> putStrLn "error on hClose") $ hClose handle
 		else
 		clientSendLoop handle clChan chan
 

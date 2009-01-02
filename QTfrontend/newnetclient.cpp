@@ -189,7 +189,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-	//qDebug() << "Server: " << lst;
+	qDebug() << "Server: " << lst;
 
 	if(!lst.size())
 	{
@@ -448,8 +448,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Bad GAMEMSG message");
 			return;
 		}
-		QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
-		emit FromNet(em);
+		for(int i = 1; i < lst.size(); ++i)
+		{
+			QByteArray em = QByteArray::fromBase64(lst[1].toAscii());
+			emit FromNet(em);
+		}
 		return;
 	}
 

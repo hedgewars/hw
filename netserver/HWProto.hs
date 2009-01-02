@@ -191,13 +191,17 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if isRestrictedJoins clRoom then
 		(noChangeClients, noChangeRooms, answerRestricted)
 	else
-		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom ++ watchRound)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
 		answerNicks = answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
 		answerReady = concatMap (\c -> answerClientOnly [if isReady c then "READY" else "NOT_READY", nick c]) sameRoomClients
 		sameRoomClients = filter (\ci -> room ci == roomName) clients
 		clRoom = roomByName roomName rooms
+		watchRound = if (roomProto clRoom < 20) || (not $ gameinprogress clRoom) then
+					[]
+				else
+					answerRunGame ++ answerClientOnly ("GAMEMSG" : roundMsgs clRoom)
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
@@ -343,8 +347,14 @@ handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 		sameRoomClients = filter (\ci -> room ci == name clRoom) clients
 		answerAllNotReady = concatMap (\cl -> answerSameRoom ["NOT_READY", nick cl]) sameRoomClients
 
-handleCmd_inRoom client _ _ ["GAMEMSG", msg] =
-	(noChangeClients, noChangeRooms, answerOthersRoom ["GAMEMSG", msg])
+handleCmd_inRoom client _ rooms ["GAMEMSG", msg] =
+	(noChangeClients, addMsg, answerOthersRoom ["GAMEMSG", msg])
+	where
+		addMsg = if roomProto clRoom < 20 then
+					noChangeRooms
+				else
+					modifyRoom clRoom{roundMsgs = roundMsgs clRoom ++ [msg]}
+		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom client clients rooms ["KICK", kickNick] =
 	if isMaster client then
