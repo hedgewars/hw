@@ -142,7 +142,7 @@ handleCmd client clients rooms cmd =
 
 -- 'no info' state - need to get protocol number and nickname
 onLoginFinished client clients =
-	if (protocol client < 20) || (null $ nick client) || (protocol client == 0) then
+	if (null $ nick client) || (protocol client == 0) then
 		[]
 	else
 		(answerClientOnly $ ["LOBBY:JOINED"] ++ (map nick $ clients)) ++
