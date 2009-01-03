@@ -1,6 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +21,7 @@
 #include <QListWidget>
 #include <QLineEdit>
 #include <QAction>
+#include <QApplication>
 
 #include "chatwidget.h"
 
@@ -27,40 +29,44 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
   QWidget(parent),
   mainLayout(this)
 {
-  mainLayout.setSpacing(1);
-  mainLayout.setMargin(1);
-  mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
-  mainLayout.setColumnStretch(0, 75);
-  mainLayout.setColumnStretch(1, 25);
+	mainLayout.setSpacing(1);
+	mainLayout.setMargin(1);
+	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
+	mainLayout.setColumnStretch(0, 75);
+	mainLayout.setColumnStretch(1, 25);
 
-  chatEditLine = new QLineEdit(this);
-  chatEditLine->setMaxLength(300);
-  connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+	chatEditLine = new QLineEdit(this);
+	chatEditLine->setMaxLength(300);
+	connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
 
-  mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
+	mainLayout.addWidget(chatEditLine, 1, 0, 1, 2);
 
-  chatText = new QTextBrowser(this);
-  chatText->setMinimumHeight(20);
-  chatText->setMinimumWidth(10);
-  chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  mainLayout.addWidget(chatText, 0, 0);
+	chatText = new QTextBrowser(this);
+	chatText->setMinimumHeight(20);
+	chatText->setMinimumWidth(10);
+	chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	mainLayout.addWidget(chatText, 0, 0);
 
-  chatNicks = new QListWidget(this);
-  chatNicks->setMinimumHeight(10);
-  chatNicks->setMinimumWidth(10);
-  chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-  chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
-  mainLayout.addWidget(chatNicks, 0, 1);
+	chatNicks = new QListWidget(this);
+	chatNicks->setMinimumHeight(10);
+	chatNicks->setMinimumWidth(10);
+	chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
+	mainLayout.addWidget(chatNicks, 0, 1);
 
-  QAction * acBan = new QAction(QAction::tr("Kick"), chatNicks);
-  connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onKick()));
-  chatNicks->insertAction(0, acBan);
+	QAction * acBan = new QAction(QAction::tr("Kick"), chatNicks);
+	connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onKick()));
+	chatNicks->insertAction(0, acBan);
+
+	QAction * acInfo = new QAction(QAction::tr("Info"), chatNicks);
+	connect(acInfo, SIGNAL(triggered(bool)), this, SLOT(onInfo()));
+	chatNicks->insertAction(0, acInfo);
 }
 
 void HWChatWidget::returnPressed()
 {
-  emit chatLine(chatEditLine->text());
-  chatEditLine->clear();
+	emit chatLine(chatEditLine->text());
+	chatEditLine->clear();
 }
 
 void HWChatWidget::onChatString(const QString& str)
@@ -102,6 +108,13 @@ void HWChatWidget::onKick()
 	QListWidgetItem * curritem = chatNicks->currentItem();
 	if (curritem)
 		emit kick(curritem->text());
+}
+
+void HWChatWidget::onInfo()
+{
+	QListWidgetItem * curritem = chatNicks->currentItem();
+	if (curritem)
+		emit info(curritem->text());
 }
 
 void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)

@@ -144,6 +144,7 @@ class HWNewNet : public QObject
   void askRoomsList();
   void gameFinished();
   void kickPlayer(const QString &);
+  void infoPlayer(const QString &);
   void startGame();
   void toggleRestrictJoins();
   void toggleRestrictTeamAdds();

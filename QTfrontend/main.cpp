@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 				"border-color: #ffcc00;"
 				"background-color: #0d0544;"
 				"color: #ffcc00;"
-				"font: bold 14px;"
+//				"font: bold 14px;"
 				"}"
 
 			"QSpinBox{"

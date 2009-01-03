@@ -269,6 +269,21 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "INFO") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Empty INFO message");
+			return;
+		}
+		QStringList tmp = lst;
+		tmp.removeFirst();
+		if (netClientState == 2)
+			emit chatStringLobby(tmp.join("\n"));
+		else
+			emit chatStringFromNet(tmp.join("\n"));
+		return;
+	}
+
 	if (lst[0] == "READY") {
 		if(lst.size() != 2)
 		{
@@ -640,6 +655,11 @@ QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
 void HWNewNet::kickPlayer(const QString & nick)
 {
 	RawSendNet(QString("KICK%1%2").arg(delimeter).arg(nick));
+}
+
+void HWNewNet::infoPlayer(const QString & nick)
+{
+	RawSendNet(QString("INFO%1%2").arg(delimeter).arg(nick));
 }
 
 void HWNewNet::startGame()

@@ -181,3 +181,9 @@ modifyTeam room team = room{teams = replaceTeam team $ teams room}
 			team : teams
 		else
 			t : replaceTeam team teams
+
+proto2ver :: Word16 -> String
+proto2ver 17 = "0.9.7-dev"
+proto2ver 19 = "0.9.7"
+proto2ver 20 = "0.9.8-dev"
+proto2ver _ = "Unknown"

@@ -45,6 +45,7 @@ answerRestricted        = answerClientOnly ["WARNING", "Room joining restricted"
 answerConnected         = answerClientOnly ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 answerNotOwner          = answerClientOnly ["ERROR", "You do not own this team"]
 answerCannotCreateRoom  = answerClientOnly ["WARNING", "Cannot create more rooms"]
+answerInfo client       = answerClientOnly ["INFO", nick client, proto2ver $ protocol client]
 
 answerAbandoned           = answerOthersRoom ["BYE", "Room abandoned"]
 answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
@@ -129,6 +130,17 @@ handleCmd _ _ _ ["PONG"] =
 
 handleCmd _ _ _ ["ERROR", msg] =
 	(noChangeClients, noChangeRooms, answerErrorMsg msg)
+
+handleCmd _ clients _ ["INFO", asknick] =
+	if noSuchClient then
+		(noChangeClients, noChangeRooms, [])
+	else
+		(noChangeClients, noChangeRooms, answerInfo client)
+	where
+		maybeClient = find (\cl -> asknick == nick cl) clients
+		noSuchClient = isNothing maybeClient
+		client = fromJust maybeClient
+
 
 -- check state and call state-dependent commmand handlers
 handleCmd client clients rooms cmd =
