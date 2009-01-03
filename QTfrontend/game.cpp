@@ -118,8 +118,8 @@ void HWGame::SendQuickConfig()
 	HWProto::addStringListToBuffer(teamscfg,
 			team2.TeamGameConfig(100));
 
-	HWProto::addStringToBuffer(teamscfg, *cDefaultAmmoStore);
-	HWProto::addStringToBuffer(teamscfg, *cDefaultAmmoStore);
+	HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);
+	HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);
 	RawSendIPC(teamscfg);
 }
 

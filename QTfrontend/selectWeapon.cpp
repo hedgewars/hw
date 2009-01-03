@@ -75,9 +75,16 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 {
 	wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 
-	wconf->setValue("Default", cDefaultAmmoStore->mid(10));
+	wconf->setValue("Default", *cDefaultAmmoStore);
 
-	QString currentState = cDefaultAmmoStore->mid(10);
+	QStringList keys = wconf->allKeys();
+	for(int i = 0; i < keys.size(); i++)
+	{
+		if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
+			wconf->remove(keys[i]);
+	}
+
+	QString currentState = *cDefaultAmmoStore;
 
 	pLayout = new QGridLayout(this);
 	pLayout->setSpacing(1);
@@ -110,7 +117,7 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 
 void SelWeaponWidget::setDefault()
 {
-	setWeapons(cDefaultAmmoStore->mid(10));
+	setWeapons(*cDefaultAmmoStore);
 }
 
 void SelWeaponWidget::save()

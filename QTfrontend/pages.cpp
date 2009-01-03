@@ -651,7 +651,7 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	
-	pWeapons = new SelWeaponWidget(cDefaultAmmoStore->size() - 10, this);
+	pWeapons = new SelWeaponWidget(cDefaultAmmoStore->size(), this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);

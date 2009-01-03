@@ -397,7 +397,7 @@ void HWForm::TeamDiscard()
 
 void HWForm::SimpleGame()
 {
-	CreateGame(0, 0, cDefaultAmmoStore->mid(10));
+	CreateGame(0, 0, *cDefaultAmmoStore);
 	game->StartQuick();
 }
 

@@ -182,7 +182,7 @@ void GameCFGWidget::setSolid(bool value)
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
-	if (ammo.size() != cDefaultAmmoStore->size() - 10)
+	if (ammo.size() != cDefaultAmmoStore->size())
 		QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
 
 	int pos = WeaponsName->findText(name);
