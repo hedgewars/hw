@@ -28,7 +28,7 @@
 00:25=Seduzione
 00:26=Bomba anguria
 00:27=Granata infernale
-00:28=Drill Rocket
+00:28=Razzo trivella
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -37,6 +37,7 @@
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
 01:06=Sudden death!
+
 
 
 
