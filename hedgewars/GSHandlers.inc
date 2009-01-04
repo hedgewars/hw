@@ -764,10 +764,12 @@ if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) then
 	haveCollision:= true
 	end;
 
-if haveCollision and (Gear^.Message and (gm_Left or gm_Right) <> 0) then
+if haveCollision
+	and (Gear^.Message and (gm_Left or gm_Right) <> 0)
+	and (Gear^.Message and (gm_Up or gm_Down) <> 0) then
 	begin
-	HHGear^.dX:= SignAs(hwAbs(HHGear^.dX) + _0_15, HHGear^.dX);
-	HHGear^.dY:= SignAs(hwAbs(HHGear^.dY) + _0_15, HHGear^.dY)
+	HHGear^.dX:= SignAs(hwAbs(HHGear^.dX) + _0_2, HHGear^.dX);
+	HHGear^.dY:= SignAs(hwAbs(HHGear^.dY) + _0_2, HHGear^.dY)
 	end;
 
 len:= Distance(HHGear^.dX, HHGear^.dY);
