@@ -45,7 +45,7 @@ answerRestricted        = answerClientOnly ["WARNING", "Room joining restricted"
 answerConnected         = answerClientOnly ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 answerNotOwner          = answerClientOnly ["ERROR", "You do not own this team"]
 answerCannotCreateRoom  = answerClientOnly ["WARNING", "Cannot create more rooms"]
-answerInfo client       = answerClientOnly ["INFO", nick client, proto2ver $ protocol client]
+answerInfo client       = answerClientOnly ["INFO", nick client, host client, proto2ver $ protocol client]
 
 answerAbandoned           = answerOthersRoom ["BYE", "Room abandoned"]
 answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
