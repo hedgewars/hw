@@ -446,7 +446,7 @@ const
 			Width:  64; Height: 64; saveSurf: false),// sprDress
 			(FileName:   'Censored'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 16; saveSurf: false),// sprCensored
-			(FileName:      'Drill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:      'Drill'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; saveSurf: false),// sprDrill
 			(FileName:    'amDrill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false)// sprHandDrill
