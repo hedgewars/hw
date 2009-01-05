@@ -61,10 +61,13 @@ answerQuitInform nick msg =
 		else
 		answerOthersRoom ["LEFT", nick]
 answerQuitLobby nick msg =
-	if not $ null msg then
-		answerAll ["LOBBY:LEFT", nick, msg]
+	if not $ null nick then
+		if not $ null msg then
+			answerAll ["LOBBY:LEFT", nick, msg]
 		else
-		answerAll ["LOBBY:LEFT", nick]
+			answerAll ["LOBBY:LEFT", nick]
+	else
+		[]
 
 answerJoined nick   = answerSameRoom ["JOINED", nick]
 answerRunGame       = answerSameRoom ["RUN_GAME"]

@@ -385,7 +385,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	if(lst[0] == "LOBBY:LEFT") {
 		if(lst.size() < 2)
 		{
-			qWarning("Net: Bad LEFT message");
+			qWarning("Net: Bad LOBBY:LEFT message");
 			return;
 		}
 		emit nickRemovedLobby(lst[1]);
