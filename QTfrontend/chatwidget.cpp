@@ -87,7 +87,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 	if (chatStrings.size() > 250)
 		chatStrings.removeFirst();
 	
-	chatStrings.append(str);
+	chatStrings.append("<hr>" + str + "<hr>");
 	
 	chatText->setHtml(chatStrings.join("<br>"));
 
