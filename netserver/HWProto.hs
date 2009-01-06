@@ -21,6 +21,7 @@ answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
 answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
 answerSameRoom    = makeAnswer sameRoom
+answerSameProtoLobby = makeAnswer sameProtoLobbyClients
 answerAll         = makeAnswer allClients
 
 answerBadCmd            = answerClientOnly ["ERROR", "Bad command, state or incorrect parameter"]
@@ -76,6 +77,9 @@ answerRunGame       = answerSameRoom ["RUN_GAME"]
 answerIsReady nick  = answerSameRoom ["READY", nick]
 answerNotReady nick = answerSameRoom ["NOT_READY", nick]
 
+answerRoomAdded name    = answerSameProtoLobby ["ROOM", "ADD", name]
+answerRoomDeleted name  = answerSameProtoLobby ["ROOM", "DEL", name]
+
 answerFullConfig room = concatMap toAnswer (Map.toList $ params room) ++ (answerClientOnly ["MAP", gamemap room])
 	where
 		toAnswer (paramName, paramStrs) =
@@ -114,7 +118,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit msg ++ (answerQuitLobby (nick client) msg) )
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ answerAbandoned) -- core disconnects clients on ROOMABANDONED answer
+		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ answerAbandoned ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
 	where
@@ -206,7 +210,7 @@ handleCmd_noRoom client _ rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
 		(noChangeClients, noChangeRooms, answerRoomExists)
 	else
-		(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, (answerJoined $ nick client) ++ (answerNotReady $ nick client))
+		(modifyClient client{room = newRoom, isMaster = True}, addRoom createRoom{name = newRoom, password = roomPassword, roomProto = (protocol client)}, (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ (answerRoomAdded newRoom))
 	where
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) rooms
 

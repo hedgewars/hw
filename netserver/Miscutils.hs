@@ -126,6 +126,9 @@ deleteFirstsBy2t eq =  foldl (flip (deleteBy2t eq))
 sameRoom :: HandlesSelector
 sameRoom client clients rooms = filter (\ci -> room ci == room client) clients
 
+sameProtoLobbyClients :: HandlesSelector
+sameProtoLobbyClients client clients rooms = filter (\ci -> room ci == [] && protocol ci == protocol client) clients
+
 noRoomSameProto :: HandlesSelector
 noRoomSameProto client clients _ = filter (null . room) $ filter (\ci -> protocol client == protocol ci) clients
 

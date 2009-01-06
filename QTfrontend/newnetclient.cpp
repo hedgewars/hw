@@ -190,7 +190,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-//	qDebug() << "Server: " << lst;
+	qDebug() << "Server: " << lst;
 
 	if(!lst.size())
 	{
@@ -293,6 +293,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		emit setReadyStatus(lst[1], true);
 		return;
 	}
+	
 	if (lst[0] == "NOT_READY") {
 		if(lst.size() != 2)
 		{
@@ -379,6 +380,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit chatStringFromNet(QString(tr("*** %1 left")).arg(lst[1]));
 		else
 			emit chatStringFromNet(QString(tr("*** %1 left (%2)")).arg(lst[1], lst[2]));
+		return;
+	}
+
+	if(lst[0] == "ROOM") {
+		if(lst.size() < 2)
+		{
+			qWarning("Net: Bad ROOM message");
+			return;
+		}
+		RawSendNet(QString("LIST"));
 		return;
 	}
 
