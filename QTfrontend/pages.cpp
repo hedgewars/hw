@@ -684,18 +684,13 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
 	roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
-	pageLayout->setRowStretch(2, 125);
+	pageLayout->setRowStretch(2, 100);
 	
-	serverMessage = new QTextBrowser(this);
-	serverMessage->setOpenExternalLinks(true);
-	pageLayout->addWidget(serverMessage, 4, 0, 1, 2);
-	pageLayout->setRowStretch(4, 100);
-
 	chatWidget = new HWChatWidget(this);
-	pageLayout->addWidget(chatWidget, 5, 0, 1, 2);
-	pageLayout->setRowStretch(5, 200);
+	pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
+	pageLayout->setRowStretch(4, 350);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 6, 0, true);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
 	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);

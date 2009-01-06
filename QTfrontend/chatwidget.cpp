@@ -76,7 +76,7 @@ void HWChatWidget::onChatString(const QString& str)
 	
 	chatStrings.append(str);
 	
-	chatText->setPlainText(chatStrings.join("\n"));
+	chatText->setHtml(chatStrings.join("<br>"));
 
 	chatText->moveCursor(QTextCursor::End);
 }

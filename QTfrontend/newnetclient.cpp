@@ -270,9 +270,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "INFO") {
-		if(lst.size() < 2)
+		if(lst.size() < 5)
 		{
-			qWarning("Net: Empty INFO message");
+			qWarning("Net: Malformed INFO message");
 			return;
 		}
 		QStringList tmp = lst;

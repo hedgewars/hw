@@ -365,7 +365,6 @@ public:
 	QPushButton * BtnCreate;
 	QPushButton * BtnJoin;
 	QPushButton * BtnRefresh;
-	QTextBrowser * serverMessage;
 	HWChatWidget * chatWidget;
 	
 public slots:

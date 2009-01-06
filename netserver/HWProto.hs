@@ -163,7 +163,8 @@ onLoginFinished client clients =
 		[]
 	else
 		(answerClientOnly $ ["LOBBY:JOINED"] ++ (map nick $ clients)) ++
-		(answerOthersRoom ["LOBBY:JOINED", nick client])
+		(answerOthersRoom ["LOBBY:JOINED", nick client]) ++
+		(answerServerMessage client clients)
 
 handleCmd_noInfo :: CmdHandler
 handleCmd_noInfo client clients _ ["NICK", newNick] =
@@ -192,7 +193,7 @@ handleCmd_noInfo _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 -- 'noRoom' clients state command handlers
 handleCmd_noRoom :: CmdHandler
 handleCmd_noRoom client clients rooms ["LIST"] =
-		(noChangeClients, noChangeRooms, answerServerMessage client clients ++ (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
+		(noChangeClients, noChangeRooms, (answerRoomsList $ concatMap roomInfo $ sameProtoRooms))
 		where
 			roomInfo room = [
 					name room,
