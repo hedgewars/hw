@@ -1838,61 +1838,64 @@ if (Gear^.Tag = 47) or (cWaterLine = 0) then
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDiggingGear(Gear: PGear);
+procedure doStepDrillDrilling(Gear: PGear);
 var ox,oy: hwFloat;
 begin
+AllInactive:= false;
+
+if (Gear^.Timer > 0) and ((Gear^.Timer mod 20) = 0) then
+	begin
 	ox:= Gear^.X;
 	oy:= Gear^.Y;
 	Gear^.X:= Gear^.X + Gear^.dX;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
 	CheckGearDrowning(Gear);
+	end;
+
+if (Gear^.Timer = 0)
+or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
+and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
+	begin //out of time or exited ground
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+	DeleteGear(Gear);
+	exit
+	end;
+
+dec(Gear^.Timer);
 end;
 
 procedure doStepDrill(Gear: PGear);
-var newX, newY, oldDx, oldDy: hwFloat;
-	t: PGearArray;
+var t: PGearArray;
+    newX, newY, oldDx, oldDy: hwFloat;
 begin
-	AllInactive:= false;
+AllInactive:= false;
 
-	if (Gear^.Timer = 5000) then begin //flying
-		Gear^.dX:= Gear^.dX + cWindSpeed;
-		oldDx:= Gear^.dX;
-		oldDy:= Gear^.dY;
-		doStepFallingGear(Gear);
-		if (GameTicks and $3F) = 0 then
-			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
-	end;
+Gear^.dX:= Gear^.dX + cWindSpeed;
+oldDx:= Gear^.dX;
+oldDy:= Gear^.dY;
 
-	if ((Gear^.State and gstCollision) <> 0) and (Gear^.Timer = 5000) then
-		begin //hit
-		Gear^.dX:= oldDx;
-		Gear^.dY:= oldDy;
-		t:= CheckGearsCollision(Gear);
-		if (t^.Count = 0) then
-			begin //hit the ground not the hedgehog
-			newy:= hwSqrt((_0_5 * Gear^.dY * Gear^.dY) / Distance(Gear^.dX, Gear^.dY));
-			if (Gear^.dY < _0) then newY := -newY;
-			newx:= newy * Gear^.dX / Gear^.dY;
-			Gear^.dX := newx;
-			Gear^.dY := newy;
-			dec(Gear^.Timer);
-			end
-		else
-			Gear^.Timer:= 0
-		end;
+doStepFallingGear(Gear);
 
-	if (Gear^.Timer > 0) and (Gear^.Timer < 5000) and ((Gear^.Timer mod 20) = 0) then doStepDiggingGear(Gear);
+if (GameTicks and $3F) = 0 then
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
 
-	if (Gear^.Timer = 0)
-	or ((Gear^.Timer < 5000)
-		and not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
-	and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
-		begin //out of time or exited ground
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-		DeleteGear(Gear);
-		exit
-		end;
-
-	if (Gear^.Timer < 5000) then dec(Gear^.Timer);
+if ((Gear^.State and gstCollision) <> 0) then
+	begin //hit
+	Gear^.dX:= oldDx;
+	Gear^.dY:= oldDy;
+	t:= CheckGearsCollision(Gear);
+	Gear^.doStep:= @doStepDrillDrilling;
+	if (t^.Count = 0) then
+		begin //hit the ground not the hedgehog
+		newy:= hwSqrt((_0_5 * Gear^.dY * Gear^.dY) / Distance(Gear^.dX, Gear^.dY));
+		if (Gear^.dY < _0) then newY := -newY;
+		newx:= newy * Gear^.dX / Gear^.dY;
+		Gear^.dX := newx;
+		Gear^.dY := newy;
+		dec(Gear^.Timer)
+		end
+	else
+		Gear^.Timer:= 0
+	end
 end;
