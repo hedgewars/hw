@@ -92,6 +92,7 @@ class HWNewNet : public QObject
   void Connected();
   void Disconnected();
   void EnteredGame();
+  void LeftRoom();
   void nickAdded(const QString& nick);
   void nickRemoved(const QString& nick);
   void nickAddedLobby(const QString& nick);
@@ -148,6 +149,7 @@ class HWNewNet : public QObject
   void startGame();
   void toggleRestrictJoins();
   void toggleRestrictTeamAdds();
+  void partRoom();
 
  private slots:
   void ClientRead();

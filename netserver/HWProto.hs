@@ -50,7 +50,12 @@ answerInfo client       = answerClientOnly ["INFO", nick client, host client, pr
 	where
 	roomInfo = if not $ null $ room client then "room " ++ (room client) else "lobby"
 
-answerAbandoned           = answerOthersRoom ["BYE", "Room abandoned"]
+answerAbandoned protocol  =
+	if protocol < 20 then
+		answerOthersRoom ["BYE", "Room abandoned"]
+	else
+		answerOthersRoom ["ROOMABANDONED"]
+
 answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
 answerAddTeam team        = answerOthersRoom $ teamToNet team
 answerRemoveTeam teamName = answerOthersRoom ["REMOVE_TEAM", teamName]
@@ -63,6 +68,8 @@ answerQuitInform nick msg =
 		answerOthersRoom ["LEFT", nick, msg]
 		else
 		answerOthersRoom ["LEFT", nick]
+
+answerPartInform nick = answerOthersRoom ["LEFT", nick, "bye room"]
 answerQuitLobby nick msg =
 	if not $ null nick then
 		if not $ null msg then
@@ -118,7 +125,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit msg ++ (answerQuitLobby (nick client) msg) )
 	else if isMaster client then
-		(noChangeClients, removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ answerAbandoned ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
+		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
 	where
@@ -259,6 +266,17 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 		(noChangeClients, noChangeRooms, answerNotMaster)
 	where
 		clRoom = roomByName (room client) rooms
+
+handleCmd_inRoom client _ rooms ["PART"] =
+	if isMaster client then
+		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
+	else
+		(modifyClient client{room = [], isReady = False}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (nick client)) ++ answerRemoveClientTeams)
+	where
+		clRoom = roomByName (room client) rooms
+		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
+		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
+		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
 
 handleCmd_inRoom client _ rooms ["MAP", mapName] =
 	if isMaster client then

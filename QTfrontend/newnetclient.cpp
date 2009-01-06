@@ -140,7 +140,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-	//qDebug() << "Client: " << QString(buf).split("\n");
+	qDebug() << "Client: " << QString(buf).split("\n");
 	NetSocket.write(buf);
 	NetSocket.write("\n\n", 2);
 }
@@ -329,6 +329,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			HWProto::addStringToBuffer(em, "F" + lst[1]);
 			emit FromNet(em);
 		}
+		return;
+	}
+
+	if(lst[0]=="ROOMABANDONED") {
+		netClientState = 2;
+		emit LeftRoom();
 		return;
 	}
 
@@ -686,4 +692,10 @@ void HWNewNet::toggleRestrictJoins()
 void HWNewNet::toggleRestrictTeamAdds()
 {
 	RawSendNet(QString("TOGGLE_RESTRICT_TEAMS"));
+}
+
+void HWNewNet::partRoom()
+{
+	netClientState = 2;
+	RawSendNet(QString("PART"));
 }

@@ -315,7 +315,7 @@ void HWForm::GoBack()
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
 	
-	if (id == ID_PAGE_ROOMSLIST || id == ID_PAGE_NETSERVER) {
+	if (id == ID_PAGE_NETSERVER) {
 		GoBack();
 	}
 	if (id == ID_PAGE_NET) {
@@ -445,6 +445,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
+	connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
 	connect(hwnet, SIGNAL(roomsList(const QStringList&)),
 		ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)));
