@@ -19,7 +19,6 @@
 
 #include <QMessageBox>
 #include <QDebug>
-#include <QTextDocument>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -279,9 +278,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		QStringList tmp = lst;
 		tmp.removeFirst();
 		if (netClientState == 2)
-			emit chatStringLobby(Qt::escape(tmp.join("\n")));
+			emit chatStringLobby(tmp.join("\n"));
 		else
-			emit chatStringFromNet(Qt::escape(tmp.join("\n")));
+			emit chatStringFromNet(tmp.join("\n"));
 		return;
 	}
 
@@ -648,9 +647,9 @@ void HWNewNet::gameFinished()
 QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
 {
 	if(msg.left(4) == "/me ")
-		return QString("* %1 %2").arg(Qt::escape(nick)).arg(Qt::escape(msg.mid(4)));
+		return QString("* %1 %2").arg(nick).arg(msg.mid(4));
 	else
-		return QString("%1: %2").arg(Qt::escape(nick)).arg(Qt::escape(msg));
+		return QString("%1: %2").arg(nick).arg(msg);
 }
 
 void HWNewNet::kickPlayer(const QString & nick)

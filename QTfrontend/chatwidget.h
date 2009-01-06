@@ -36,6 +36,7 @@ class HWChatWidget : public QWidget
 
  public slots:
   void onChatString(const QString& str);
+  void onServerMessage(const QString& str);
   void nickAdded(const QString& nick);
   void nickRemoved(const QString& nick);
   void clear();

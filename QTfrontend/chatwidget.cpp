@@ -22,6 +22,7 @@
 #include <QLineEdit>
 #include <QAction>
 #include <QApplication>
+#include <QTextDocument>
 
 #include "chatwidget.h"
 
@@ -70,6 +71,18 @@ void HWChatWidget::returnPressed()
 }
 
 void HWChatWidget::onChatString(const QString& str)
+{
+	if (chatStrings.size() > 250)
+		chatStrings.removeFirst();
+	
+	chatStrings.append(Qt::escape(str));
+	
+	chatText->setHtml(chatStrings.join("<br>"));
+
+	chatText->moveCursor(QTextCursor::End);
+}
+
+void HWChatWidget::onServerMessage(const QString& str)
 {
 	if (chatStrings.size() > 250)
 		chatStrings.removeFirst();
