@@ -295,9 +295,9 @@ gtAmmo_Grenade: begin
      gtCluster: Result^.Radius:= 2;
       gtShover: Result^.Radius:= 20;
        gtFlame: begin
-                Result^.Tag:= Counter mod 64;
+                Result^.Tag:= Counter mod 32;
                 Result^.Radius:= 1;
-                Result^.Health:= 2;
+                Result^.Health:= 5;
                 if (Result^.dY.QWordValue = 0) and (Result^.dX.QWordValue = 0) then
                 	begin
                 	Result^.dY:= (getrandom - _0_8) * _0_03;

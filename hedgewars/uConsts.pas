@@ -1086,7 +1086,7 @@ const
 			PosSprite: sprAmAirplane),
 			(NameId: sidDrill;
 			NameTex: nil;
-			Probability: 0;
+			Probability: 300;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Power or
 							ammoprop_AltUse;

@@ -1130,21 +1130,18 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlame(Gear: PGear);
-var cWindFactor: hwFloat;
 begin
 AllInactive:= false;
 
 if not TestCollisionYwithGear(Gear, 1) then
 	begin
-	cWindFactor:= cWindSpeed * 270;
-	
-	if hwAbs(Gear^.dX - cWindFactor) > _0_01 then
-		Gear^.dX:= (Gear^.dX - cWindFactor) * _0_995 + cWindFactor;
+	if hwAbs(Gear^.dX) > _0_01 then
+		Gear^.dX:= Gear^.dX * _0_995;
 
 	Gear^.dY:= Gear^.dY + cGravity;
-	if hwAbs(Gear^.dY) > _0_1 then Gear^.dY:= Gear^.dY * _0_995;
+	if hwAbs(Gear^.dY) > _0_08 then Gear^.dY:= Gear^.dY * _0_995;
 	
-	Gear^.X:= Gear^.X + Gear^.dX;
+	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 270;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	
 	if not (hwRound(Gear^.Y) < cWaterLine) then
@@ -1155,12 +1152,12 @@ if not TestCollisionYwithGear(Gear, 1) then
 	end else begin
 	if Gear^.Timer > 0 then dec(Gear^.Timer)
 		else begin
-		Gear^.Radius:= 7;
-		AmmoShove(Gear, 3, 100);
+		Gear^.Radius:= 9;
+		AmmoShove(Gear, 4, 100);
 		Gear^.Radius:= 1;
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
 		dec(Gear^.Health);
-		Gear^.Timer:= 1250 - Gear^.Tag * 12
+		Gear^.Timer:= 450 - Gear^.Tag * 8
 		end
 	end;
 
@@ -1295,8 +1292,8 @@ if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirP
 	case Gear^.State of
 			0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
 			1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
-			2: for i:= -17 to 17 do
-				FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, _0_01 * i, _0, 0);
+			2: for i:= -19 to 19 do
+				FollowGear:= AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0, _0_001 * i, _0, 0);
 			end;
 	Gear^.dX:= Gear^.dX + int2hwFloat(30 * Gear^.Tag)
 	end;
