@@ -16,7 +16,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="540"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="558"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
@@ -31,12 +31,12 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
         <source>Unable to start the server</source>
         <translation>Server konnte nicht gestartet werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="727"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="745"/>
         <source>Cannot save record to file %1</source>
         <translation>Datei %1 konnte nicht gespeichert werden</translation>
     </message>
@@ -98,37 +98,37 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="185"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="186"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="178"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="179"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Der Host wurde nicht gefunden. Bitte überprüfen Sie ihre Einstellungen.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="182"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="183"/>
         <source>Connection refused</source>
         <translation>Verbindungsaufbau abgelehnt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="332"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="366"/>
         <source>*** %1 joined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="345"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="393"/>
         <source>*** %1 left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="347"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="395"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="462"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="513"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -449,7 +449,7 @@
 <context>
     <name>QAction</name>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="57"/>
         <source>Kick</source>
         <translation type="unfinished"></translation>
     </message>
@@ -466,6 +466,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="559"/>
         <source>Restrict Team Additions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="61"/>
+        <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -691,12 +696,12 @@
         <translation>Waffen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="684"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Punkten.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="678"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="696"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Insgesamt wurden &lt;b&gt;%1&lt;/b&gt; Igel während dieser Runde getötet.&lt;/p&gt;</translation>
     </message>
@@ -741,7 +746,7 @@
         <translation type="obsolete">&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="673"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="691"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Kills.&lt;/p&gt;</translation>
     </message>
@@ -780,12 +785,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="585"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="603"/>
         <source>Network</source>
         <translation>Netzwerk</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="586"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
         <source>Connection to server is lost</source>
         <translation>Verbindung zum Server wurde unterbrochen</translation>
     </message>
@@ -804,22 +809,22 @@ Please check your installation</source>
 konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Weapons</source>
         <translation>Waffen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="119"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
         <source>Can not edit default weapon set</source>
         <translation>Das Standard-Waffen-Set kann nicht editiert werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="157"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
         <source>Can not delete default weapon set</source>
         <translation>Das Standard-Waffen-Set kann nicht gelöscht werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Really delete this weapon set?</source>
         <translation>Soll dieses Waffen-Set wirklich gelöscht werden?</translation>
     </message>

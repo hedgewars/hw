@@ -39,7 +39,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="540"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="558"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
@@ -64,12 +64,12 @@
         <translation>Виберіть запис зі списку</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="727"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="745"/>
         <source>Cannot save record to file %1</source>
         <translation>Не можу зберегти запис до файлу %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
         <source>Unable to start the server</source>
         <translation>Помилка при запущенні сервера</translation>
     </message>
@@ -187,37 +187,37 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="185"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="186"/>
         <source>Error</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="178"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="179"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Помилка підключення. Перевірте ім&apos;я серверу та номер порту.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="182"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="183"/>
         <source>Connection refused</source>
         <translation>Відмовленно в з&apos;єднанні</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="332"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="366"/>
         <source>*** %1 joined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="345"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="393"/>
         <source>*** %1 left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="347"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="395"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="462"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="513"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -551,7 +551,7 @@
 <context>
     <name>QAction</name>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="57"/>
         <source>Kick</source>
         <translation type="unfinished"></translation>
     </message>
@@ -568,6 +568,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="559"/>
         <source>Restrict Team Additions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="61"/>
+        <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -828,12 +833,12 @@
         <translation>Початковий рівень здоров&apos;я</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="684"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами урону.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="678"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="696"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;За цей раунд було вбито &lt;b&gt;%1&lt;/b&gt; їжаків.&lt;/p&gt;</translation>
     </message>
@@ -908,7 +913,7 @@
         <translation>Версія</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="673"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="691"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; вбитими ворогами.&lt;/p&gt;</translation>
     </message>
@@ -961,32 +966,32 @@ Please check your installation</source>
 Перевірте правильність установки</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="585"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="603"/>
         <source>Network</source>
         <translation>Мережа</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="586"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
         <source>Connection to server is lost</source>
         <translation>З&apos;єднання з сервером загублено</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Weapons</source>
         <translation>Зброя</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="157"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
         <source>Can not delete default weapon set</source>
         <translation>Неможливо видалити набір зброї за замовчуванням</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Really delete this weapon set?</source>
         <translation>Видалити вибраний набір зброї?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="119"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
         <source>Can not edit default weapon set</source>
         <translation>Неможливо редагувати набір зброї за замовчуванням</translation>
     </message>

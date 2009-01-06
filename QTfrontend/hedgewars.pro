@@ -93,6 +93,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_sk.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_sv.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_uk.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += hedgewars.qrc
 

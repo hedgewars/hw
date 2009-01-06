@@ -39,7 +39,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="540"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="558"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -64,12 +64,12 @@
         <translation>请选择一个记录</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="727"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="745"/>
         <source>Cannot save record to file %1</source>
         <translation>无法录入文件 %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
         <source>Unable to start the server</source>
         <translation>开启服务端出现错误</translation>
     </message>
@@ -187,37 +187,37 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="185"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="186"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="178"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="179"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>错误没找到这个主机。请检查主机名和端口设置。</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="182"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="183"/>
         <source>Connection refused</source>
         <translation>连接被拒绝</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="332"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="366"/>
         <source>*** %1 joined</source>
         <translation>*** %1 加入</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="345"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="393"/>
         <source>*** %1 left</source>
         <translation>*** %1 离开</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="347"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="395"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="462"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="513"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -552,7 +552,7 @@
 <context>
     <name>QAction</name>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="57"/>
         <source>Kick</source>
         <translation>踢</translation>
     </message>
@@ -570,6 +570,11 @@
         <location filename="../../../../QTfrontend/pages.cpp" line="559"/>
         <source>Restrict Team Additions</source>
         <translation type="unfinished">限制团队附加</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="61"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -824,12 +829,12 @@
         <translation>初始生命值</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="684"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;射击冠军&lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; .&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="678"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="696"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;阵亡&lt;b&gt;%1&lt;/b&gt; &lt;/p&gt;</translation>
     </message>
@@ -904,7 +909,7 @@
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="673"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="691"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;最佳射手&lt;b&gt;%1&lt;/b&gt;取得的战果 &lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
@@ -957,32 +962,32 @@ Please check your installation</source>
 请检查</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="585"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="603"/>
         <source>Network</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="586"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
         <source>Connection to server is lost</source>
         <translation>连接丢失</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Weapons</source>
         <translation>武器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="157"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
         <source>Can not delete default weapon set</source>
         <translation>不能删除默认武器设置</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="162"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Really delete this weapon set?</source>
         <translation>真的删除这个武器设置吗?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="119"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
         <source>Can not edit default weapon set</source>
         <translation>不能更改默认的武器设置</translation>
     </message>
