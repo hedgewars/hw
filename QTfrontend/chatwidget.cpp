@@ -46,6 +46,7 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	chatText->setMinimumHeight(20);
 	chatText->setMinimumWidth(10);
 	chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	chatText->setOpenExternalLinks(true);
 	mainLayout.addWidget(chatText, 0, 0);
 
 	chatNicks = new QListWidget(this);
