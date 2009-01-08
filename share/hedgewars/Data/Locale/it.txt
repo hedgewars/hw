@@ -29,7 +29,7 @@
 00:26=Bomba anguria
 00:27=Granata infernale
 00:28=Razzo trivella
-00:29=Ballgun
+00:29=Sparapalle
 00:30=Napalm
 
 01:00=Combattiamo!
