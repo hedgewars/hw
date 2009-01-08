@@ -39,7 +39,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="558"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -64,12 +64,12 @@
         <translation>请选择一个记录</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="745"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="747"/>
         <source>Cannot save record to file %1</source>
         <translation>无法录入文件 %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
         <source>Unable to start the server</source>
         <translation>开启服务端出现错误</translation>
     </message>
@@ -202,22 +202,22 @@
         <translation>连接被拒绝</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="366"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="373"/>
         <source>*** %1 joined</source>
         <translation>*** %1 加入</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="393"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="410"/>
         <source>*** %1 left</source>
         <translation>*** %1 离开</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="395"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="412"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="513"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="530"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -425,37 +425,37 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="699"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="694"/>
         <source>Create</source>
         <translation>建立</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="700"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="695"/>
         <source>Join</source>
         <translation>加入</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="701"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="696"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="751"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="746"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="741"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="736"/>
         <source>Please, enter room name</source>
         <translation>请键入房间名</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="753"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="748"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="752"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="747"/>
         <source>Please, select room from the list</source>
         <translation>请从列表选中房间</translation>
     </message>
@@ -552,7 +552,7 @@
 <context>
     <name>QAction</name>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="57"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="59"/>
         <source>Kick</source>
         <translation>踢</translation>
     </message>
@@ -572,7 +572,7 @@
         <translation type="unfinished">限制团队附加</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="63"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -829,12 +829,12 @@
         <translation>初始生命值</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="684"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="686"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;射击冠军&lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; .&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="696"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="698"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;阵亡&lt;b&gt;%1&lt;/b&gt; &lt;/p&gt;</translation>
     </message>
@@ -909,7 +909,7 @@
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="691"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="693"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;最佳射手&lt;b&gt;%1&lt;/b&gt;取得的战果 &lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
@@ -962,12 +962,12 @@ Please check your installation</source>
 请检查</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="603"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
         <source>Network</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
         <source>Connection to server is lost</source>
         <translation>连接丢失</translation>
     </message>
@@ -1196,17 +1196,17 @@ Please check your installation</source>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="715"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="710"/>
         <source>Room name</source>
         <translation>房间名称</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="716"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="711"/>
         <source>Players number</source>
         <translation>玩家数量</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="713"/>
         <source>Round in progress</source>
         <translation>回合数</translation>
     </message>

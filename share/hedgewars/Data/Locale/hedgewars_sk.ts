@@ -16,7 +16,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="558"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
@@ -31,12 +31,12 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
         <source>Unable to start the server</source>
         <translation>Nie je možné spustiť server</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="745"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="747"/>
         <source>Cannot save record to file %1</source>
         <translation>Nie je možné zapísať záznam do súboru %1</translation>
     </message>
@@ -113,22 +113,22 @@
         <translation>Spojenie odmietnuté</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="366"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="373"/>
         <source>*** %1 joined</source>
         <translation>*** %1 sa pripojil(a)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="393"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="410"/>
         <source>*** %1 left</source>
         <translation>*** %1 odišiel(la)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="395"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="412"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="513"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="530"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,37 +335,37 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="699"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="694"/>
         <source>Create</source>
         <translation>Vytvoriť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="700"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="695"/>
         <source>Join</source>
         <translation>Pripojiť sa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="701"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="696"/>
         <source>Refresh</source>
         <translation>Obnoviť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="751"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="746"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="741"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="736"/>
         <source>Please, enter room name</source>
         <translation>Prosím, zadajte názov miestnosti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="753"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="748"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="752"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="747"/>
         <source>Please, select room from the list</source>
         <translation>Prosím, vyberte miestnosť zo zoznamu</translation>
     </message>
@@ -449,7 +449,7 @@
 <context>
     <name>QAction</name>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="57"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="59"/>
         <source>Kick</source>
         <translation>Vykopnúť</translation>
     </message>
@@ -469,7 +469,7 @@
         <translation>Obmedziť pripojenie k teamu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/chatwidget.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/chatwidget.cpp" line="63"/>
         <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -696,12 +696,12 @@
         <translation>Výzbroj</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="684"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="686"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Ocenenie za najlepší zásah vyhral(a) &lt;b&gt;%1&lt;/b&gt; (&lt;b&gt;%2&lt;/b&gt; bodov).&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="696"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="698"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Celkovo bolo zabitých &lt;b&gt;%1&lt;/b&gt; ježkov počas tohto kola.&lt;/p&gt;</translation>
     </message>
@@ -746,7 +746,7 @@
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="691"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="693"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Ocenenie za najlepší zásah získal(a) &lt;b&gt;%1&lt;/b&gt;, zabil ním &lt;b&gt;%2&lt;/b&gt; nepriateľov.&lt;/p&gt;</translation>
     </message>
@@ -785,12 +785,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="603"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
         <source>Network</source>
         <translation>Sieť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
         <source>Connection to server is lost</source>
         <translation>Spojenie so serverom bolo prerušené</translation>
     </message>
@@ -953,17 +953,17 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="715"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="710"/>
         <source>Room name</source>
         <translation>Názov miestnosti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="716"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="711"/>
         <source>Players number</source>
         <translation>Počet hráčov</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="713"/>
         <source>Round in progress</source>
         <translation>Hra prebieha</translation>
     </message>
