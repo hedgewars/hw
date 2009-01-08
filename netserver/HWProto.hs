@@ -127,7 +127,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit msg ++ (answerQuitLobby (nick client) msg) )
 	else if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
+		(modifyRoomClients clRoom (\cl -> if isMaster cl then cl else cl{room = [], isReady = False}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
 	where
