@@ -8,12 +8,12 @@ map mushrooms
 theme nature
 ammstore 000090000000000000000000000000
 hhcoords 1310 230
-addtrig s2147483649 1 1 32 1150 300 1
-addtrig s1 1 1 32 1310 890 2
-addtrig s2 1 1 32 1750 460 3
-addtrig s3 1 1 32 635 0 4
-addtrig s4 1 1 32 1450 245 5
-addtrig s5 1 1 32 220 235 6
-addtrig s6 1 1 32 1510 605 7
+addtrig s2147483649 1 1 31 1150 300 1
+addtrig s1 1 1 31 1310 890 2
+addtrig s2 1 1 31 1750 460 3
+addtrig s3 1 1 31 635 0 4
+addtrig s4 1 1 31 1450 245 5
+addtrig s5 1 1 31 220 235 6
+addtrig s6 1 1 31 1510 605 7
 addtrig C7 1 1
 addtrig F2147483649 2 1
