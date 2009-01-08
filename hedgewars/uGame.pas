@@ -35,7 +35,8 @@ const SendEmptyPacketTicks: LongWord = 0;
 var i: LongInt;
 begin
 if isPaused then exit;
-if not CurrentTeam^.ExtDriven then
+if (not CurrentTeam^.ExtDriven)
+	and not ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) then
    begin
    NetGetNextCmd; // its for the case of receiving "/say" message
    isInLag:= false;
