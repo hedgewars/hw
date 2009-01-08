@@ -100,14 +100,15 @@ answerAllTeams room = concatMap toAnswer (teams room)
 			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
 
 answerServerMessage client clients = [\serverInfo -> (clientOnly, "SERVER_MESSAGE" :
-		[(mainbody serverInfo) ++ clientsIn ++ (lastHour serverInfo)])]
+		[(mainbody serverInfo) ++ updateInfo ++ clientsIn ++ (lastHour serverInfo)])]
 	where
 		mainbody serverInfo = serverMessage serverInfo ++
 			if isDedicated serverInfo then
 				"<p align=center>Dedicated server</p>"
 				else
 				"<p align=center>Private server</p>"
-		
+				
+		updateInfo = if protocol client < 21 then "<p align=left>Hedgewars 0.9.8 is out!!! Please, update. Support for 0.9.7 will be dropped in a month.</p>" else ""
 		clientsIn = if protocol client < 20 then "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>" else []
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
 		lastHour serverInfo =
