@@ -51,7 +51,21 @@ acceptLoop servSock acceptChan =
 	forkIO $ clientRecvLoop cHandle cChan
 	forkIO $ clientSendLoop cHandle cChan sendChan
 	
-	atomically $ writeTChan acceptChan (ClientInfo cChan sendChan cHandle host currentTime "" 0 "" False False False)
+	atomically $ writeTChan acceptChan
+			(ClientInfo
+				cChan
+				sendChan
+				cHandle
+				host
+				currentTime
+				""
+				0
+				""
+				False
+				False
+				False
+				False)
+
 	atomically $ writeTChan cChan ["ASKME"]
 	acceptLoop servSock acceptChan
 
@@ -123,8 +137,9 @@ reactCmd serverInfo cmd client clients rooms = do
 
 	clientsIn <- sendAnswers answers mclient mclients mrooms
 	mapM_ (\cl -> atomically $ writeTChan (chan cl) ["QUIT", "Kicked"]) $ filter forceQuit $ clientsIn
-	
-	return (clientsIn, mrooms)
+
+	let clientsFinal = map (\cl -> if partRoom cl then cl{room = [], partRoom = False} else cl) clientsIn
+	return (clientsFinal, mrooms)
 
 
 mainLoop :: ServerInfo -> TChan ClientInfo -> TChan [String] -> [ClientInfo] -> [RoomInfo] -> IO ()

@@ -21,7 +21,6 @@ answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
 answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
 answerSameRoom    = makeAnswer sameRoom
-answerFromRoom roomName = makeAnswer (fromRoom roomName)
 answerSameProtoLobby = makeAnswer sameProtoLobbyClients
 answerAll         = makeAnswer allClients
 
@@ -70,7 +69,7 @@ answerQuitInform nick msg =
 		else
 		answerOthersRoom ["LEFT", nick]
 
-answerPartInform nick roomName = answerFromRoom roomName ["LEFT", nick, "bye room"]
+answerPartInform nick = answerOthersRoom ["LEFT", nick, "bye room"]
 answerQuitLobby nick msg =
 	if not $ null nick then
 		if not $ null msg then
@@ -270,9 +269,9 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 
 handleCmd_inRoom client _ rooms ["PART"] =
 	if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
+		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False, isMaster = False}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
 	else
-		(modifyClient client{room = [], isReady = False}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (room client) (nick client)) ++ answerRemoveClientTeams)
+		(modifyClient client{isReady = False, partRoom = True}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (nick client)) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams

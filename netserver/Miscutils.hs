@@ -23,7 +23,8 @@ data ClientInfo =
 		room :: String,
 		isMaster :: Bool,
 		isReady :: Bool,
-		forceQuit :: Bool
+		forceQuit :: Bool,
+		partRoom :: Bool
 	}
 
 instance Eq ClientInfo where

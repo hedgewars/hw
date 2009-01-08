@@ -2,9 +2,10 @@
 2. Update translations (check fireforge for patches)
 3. Check copyright headers
 4. Changelog
-5. Make a branch
-6. Make packages
-7. Test packages
-8. Upload (hedgewars.org, fireforge.net, gna.org)
-9. Post news (hedgewars.org, fireforge.net, gna.org, etc.)
-10. Make tag (svn copy svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/branches/0.9.7 svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/tags/0.9.7 -m "Tag for 0.9.7 release")
+5. Turn debug stuff off (frontend console output)
+6. Make a branch
+7. Make packages
+8. Test packages
+9. Upload (hedgewars.org, fireforge.net, gna.org)
+10. Post news (hedgewars.org, fireforge.net, gna.org, etc.)
+11. Make tag (svn copy svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/branches/0.9.7 svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/tags/0.9.7 -m "Tag for 0.9.7 release")
