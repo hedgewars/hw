@@ -1,8 +1,10 @@
-1. Check copyright headers
-2. Changelog
-3. Make a branch
-4. Make packages
-5. Test packages
-6. Upload (hedgewars.org, fireforge.net, gna.org)
-7. Post news (hedgewars.org, fireforge.net, gna.org, etc.)
-8. Make tag (svn copy svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/branches/0.9.7 svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/tags/0.9.7 -m "Tag for 0.9.7 release")
+1. Fix broken trainings/missions
+2. Update translations (check fireforge for patches)
+3. Check copyright headers
+4. Changelog
+5. Make a branch
+6. Make packages
+7. Test packages
+8. Upload (hedgewars.org, fireforge.net, gna.org)
+9. Post news (hedgewars.org, fireforge.net, gna.org, etc.)
+10. Make tag (svn copy svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/branches/0.9.7 svn+ssh://unc0rr@svn.fireforge.net/svnroot/hedgewars/tags/0.9.7 -m "Tag for 0.9.7 release")

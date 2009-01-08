@@ -21,6 +21,7 @@ answerClientOnly, answerOthersRoom, answerSameRoom :: [String] -> [Answer]
 answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
 answerSameRoom    = makeAnswer sameRoom
+answerFromRoom roomName = makeAnswer (fromRoom roomName)
 answerSameProtoLobby = makeAnswer sameProtoLobbyClients
 answerAll         = makeAnswer allClients
 
@@ -69,7 +70,7 @@ answerQuitInform nick msg =
 		else
 		answerOthersRoom ["LEFT", nick]
 
-answerPartInform nick = answerOthersRoom ["LEFT", nick, "bye room"]
+answerPartInform nick roomName = answerFromRoom roomName ["LEFT", nick, "bye room"]
 answerQuitLobby nick msg =
 	if not $ null nick then
 		if not $ null msg then
@@ -232,7 +233,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if isRestrictedJoins clRoom then
 		(noChangeClients, noChangeRooms, answerRestricted)
 	else
-		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, answerNicks ++ answerReady ++ (answerJoined $ nick client) ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom ++ watchRound)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom ++ watchRound)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
 		answerNicks = answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
@@ -271,7 +272,7 @@ handleCmd_inRoom client _ rooms ["PART"] =
 	if isMaster client then
 		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
 	else
-		(modifyClient client{room = [], isReady = False}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (nick client)) ++ answerRemoveClientTeams)
+		(modifyClient client{room = [], isReady = False}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (room client) (nick client)) ++ answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
