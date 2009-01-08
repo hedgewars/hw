@@ -22,6 +22,7 @@ answerClientOnly  = makeAnswer clientOnly
 answerOthersRoom  = makeAnswer othersInRoom
 answerSameRoom    = makeAnswer sameRoom
 answerSameProtoLobby = makeAnswer sameProtoLobbyClients
+answerOtherLobby  = makeAnswer otherLobbyClients
 answerAll         = makeAnswer allClients
 
 answerBadCmd            = answerClientOnly ["ERROR", "Bad command, state or incorrect parameter"]
@@ -126,7 +127,7 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	if null (room client) then
 		(noChangeClients, noChangeRooms, answerQuit msg ++ (answerQuitLobby (nick client) msg) )
 	else if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
+		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
 	else
 		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
 	where
@@ -174,8 +175,8 @@ onLoginFinished client clients =
 	if (null $ nick client) || (protocol client == 0) then
 		[]
 	else
-		(answerClientOnly $ ["LOBBY:JOINED"] ++ (filter (not . null) $ map nick $ clients)) ++
-		(answerOthersRoom ["LOBBY:JOINED", nick client]) ++
+		(answerClientOnly $ ["LOBBY:JOINED"] ++ (filter (\n -> (not (null n)) && n /= nick client) $ map nick $ clients)) ++
+		(answerAll ["LOBBY:JOINED", nick client]) ++
 		(answerServerMessage client clients)
 
 handleCmd_noInfo :: CmdHandler
@@ -270,7 +271,7 @@ handleCmd_inRoom client _ rooms ("CONFIG_PARAM" : paramName : paramStrs) =
 
 handleCmd_inRoom client _ rooms ["PART"] =
 	if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{room = [], isReady = False, isMaster = False}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
+		(modifyRoomClients clRoom (\cl -> cl{isReady = False, isMaster = False, partRoom = True}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
 	else
 		(modifyClient client{isReady = False, partRoom = True}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (nick client)) ++ answerRemoveClientTeams)
 	where

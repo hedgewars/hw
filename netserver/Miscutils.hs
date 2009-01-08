@@ -130,6 +130,9 @@ sameRoom client clients rooms = filter (\ci -> room ci == room client) clients
 sameProtoLobbyClients :: HandlesSelector
 sameProtoLobbyClients client clients rooms = filter (\ci -> room ci == [] && protocol ci == protocol client) clients
 
+otherLobbyClients :: HandlesSelector
+otherLobbyClients client clients rooms = filter (\ci -> room ci == []) clients
+
 noRoomSameProto :: HandlesSelector
 noRoomSameProto client clients _ = filter (null . room) $ filter (\ci -> protocol client == protocol ci) clients
 
