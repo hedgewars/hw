@@ -145,7 +145,9 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBomb,
 			@doStepSmokeTrace,
 			@doStepWaterUp,
-			@doStepDrill
+			@doStepDrill,
+			@doStepBallgun,
+			@doStepBomb
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -346,6 +348,16 @@ gtAmmo_Grenade: begin
        gtDrill: begin
                 Result^.Timer:= 5000;
                 Result^.Radius:= 4;
+                end;
+        gtBall: begin
+                Result^.Radius:= 5;
+                Result^.Tag:= random(8);
+                Result^.Timer:= 5000;
+                Result^.Elasticity:= _0_7;
+                Result^.Friction:= _0_995;
+                end;
+     gtBallgun: begin
+                Result^.Timer:= 5001;
                 end;
      end;
 InsertGearToList(Result);
@@ -644,6 +656,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 					HatVisible:= true
 				end;
 			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			gtBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
 			gtRope: begin
 				if Gear^.X < CurAmmoGear^.X then
 					begin
@@ -788,6 +801,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		case amt of
 			amBazooka,
 			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+                        amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
                         amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
@@ -1039,6 +1053,7 @@ while Gear<>nil do
       begin
       case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+       gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, DxDy2Angle(Gear^.dY, Gear^.dX));
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtHedgehog: DrawHH(Gear);
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
