@@ -1067,7 +1067,7 @@ const
 			SkipTurns: 0;
 			PosCount: 1;
 			PosSprite: sprWater),
-			(NameId: sidAirAttack;
+			(NameId: sidNapalm;
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
@@ -1085,7 +1085,7 @@ const
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: true;
-			SkipTurns: 0;
+			SkipTurns: 7;
 			PosCount: 2;
 			PosSprite: sprAmAirplane),
 			(NameId: sidDrill;

@@ -30,6 +30,7 @@
 00:27=Hellish hand-grenade
 00:28=Drill Rocket
 00:29=Ballgun
+00:30=Napalm
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
