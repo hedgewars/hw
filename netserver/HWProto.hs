@@ -173,7 +173,7 @@ onLoginFinished client clients =
 	if (null $ nick client) || (protocol client == 0) then
 		[]
 	else
-		(answerClientOnly $ ["LOBBY:JOINED"] ++ (map nick $ clients)) ++
+		(answerClientOnly $ ["LOBBY:JOINED"] ++ (filter (not . null) $ map nick $ clients)) ++
 		(answerOthersRoom ["LOBBY:JOINED", nick client]) ++
 		(answerServerMessage client clients)
 
