@@ -29,6 +29,7 @@
 00:26=Vattenmelonsbomb
 00:27=Helvetisk handgranat
 00:28=Drill Rocket
+00:29=Ballgun
 
 01:00=Nu kör vi!
 01:01=Oavgjort

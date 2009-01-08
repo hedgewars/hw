@@ -29,6 +29,7 @@
 00:26=Bomba de Melância
 00:27=Granada infernal
 00:28=Drill Rocket
+00:29=Ballgun
 
 01:00=Hora de lutar!
 01:01=Partida empatou

@@ -29,6 +29,7 @@
 00:26=Sandía bomba
 00:27=Granada infernal
 00:28=Drill Rocket
+00:29=Ballgun
 
 01:00=Luchad!
 01:01=Empate
