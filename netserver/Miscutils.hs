@@ -190,4 +190,6 @@ proto2ver :: Word16 -> String
 proto2ver 17 = "0.9.7-dev"
 proto2ver 19 = "0.9.7"
 proto2ver 20 = "0.9.8-dev"
+proto2ver 21 = "0.9.8"
+proto2ver 22 = "0.9.9-dev"
 proto2ver _ = "Unknown"
