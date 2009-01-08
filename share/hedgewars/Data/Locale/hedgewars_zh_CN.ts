@@ -39,7 +39,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
@@ -64,12 +64,12 @@
         <translation>请选择一个记录</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="747"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="748"/>
         <source>Cannot save record to file %1</source>
         <translation>无法录入文件 %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="561"/>
         <source>Unable to start the server</source>
         <translation>开启服务端出现错误</translation>
     </message>
@@ -202,23 +202,28 @@
         <translation>连接被拒绝</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="373"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="374"/>
         <source>*** %1 joined</source>
         <translation>*** %1 加入</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="410"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="411"/>
         <source>*** %1 left</source>
         <translation>*** %1 离开</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="412"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="413"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="530"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="531"/>
         <source>Quit reason: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="337"/>
+        <source>Room destroyed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -829,12 +834,12 @@
         <translation>初始生命值</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="686"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="687"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;射击冠军&lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; .&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="698"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="699"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;阵亡&lt;b&gt;%1&lt;/b&gt; &lt;/p&gt;</translation>
     </message>
@@ -909,7 +914,7 @@
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="693"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="694"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;最佳射手&lt;b&gt;%1&lt;/b&gt;取得的战果 &lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</translation>
     </message>
@@ -962,12 +967,12 @@ Please check your installation</source>
 请检查</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
         <source>Network</source>
         <translation>网络</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="606"/>
         <source>Connection to server is lost</source>
         <translation>连接丢失</translation>
     </message>

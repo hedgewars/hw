@@ -39,7 +39,7 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="559"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -64,12 +64,12 @@
         <translation>S&apos;il vous plait, choisissez une partie dans la liste ci-dessus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="747"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="748"/>
         <source>Cannot save record to file %1</source>
         <translation>Impossible de sauver la partie dans le fichier %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="560"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="561"/>
         <source>Unable to start the server</source>
         <translation>Impossible de démarrer le serveur</translation>
     </message>
@@ -202,23 +202,28 @@
         <translation>Connexion refusée</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="373"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="374"/>
         <source>*** %1 joined</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="410"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="411"/>
         <source>*** %1 left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="412"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="413"/>
         <source>*** %1 left (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="530"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="531"/>
         <source>Quit reason: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="337"/>
+        <source>Room destroyed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -818,12 +823,12 @@
         <translation>Vie initiale</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="686"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="687"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Le prix du meilleur tir revient à &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; points.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="698"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="699"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; Hérisson(s) ont été tués pendant ce round.&lt;/p&gt;</translation>
     </message>
@@ -898,7 +903,7 @@
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="693"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="694"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Le prix du meilleur tir revient à &lt;br&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; morts.&lt;/p&gt;</translation>
     </message>
@@ -951,12 +956,12 @@ Please check your installation</source>
 Vérifier votre installation</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="604"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
         <source>Network</source>
         <translation>Réseau</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="605"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="606"/>
         <source>Connection to server is lost</source>
         <translation>La connexion au serveur à été perdue</translation>
     </message>
