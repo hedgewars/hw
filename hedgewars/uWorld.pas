@@ -419,7 +419,7 @@ begin
 if (not (CurrentTeam^.ExtDriven and isCursorVisible))
    and cHasFocus then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 
-if (FollowGear <> nil) then
+if (FollowGear <> nil) and (not isCursorVisible) then
    if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
       begin
       FollowGear:= nil;
