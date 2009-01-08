@@ -40,7 +40,7 @@ if (not CurrentTeam^.ExtDriven) then
    NetGetNextCmd; // its for the case of receiving "/say" message
    isInLag:= false;
    inc(SendEmptyPacketTicks, Lag);
-   if (SendEmptyPacketTicks >= cSendEmptyPacketTime) and not ((GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet))) then
+   if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
       begin
       SendIPC('+');
       SendEmptyPacketTicks:= 0
