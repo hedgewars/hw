@@ -50,8 +50,9 @@ About::About(QWidget * parent) :
 	lbl2->setText(  QString("<h2>") +
 			QLabel::tr("Developers:") +
 			"</h2><p>"
-			"Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
-			"Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;"
+			"Engine, frontend, net server: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
+			"Many frontend improvements: Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;<br>"
+			"Drill rocket and Ballgun weapons: Martin Boze &lt;<a href=\"mailto:afffect@gmail.com\">afffect@gmail.com</a>&gt;"
 			"</p><h2>" +
 			
 			QLabel::tr("Art:") + "</h2>"
