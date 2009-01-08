@@ -434,7 +434,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet=0;
 	}
 	
-	ui.pageNetGame->pChatWidget->clear();
 	ui.pageRoomsList->chatWidget->clear();
 	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
@@ -615,6 +614,7 @@ void HWForm::NetConnected()
 
 void HWForm::NetGameEnter()
 {
+	ui.pageNetGame->pChatWidget->clear();
 	GoToPage(ID_PAGE_NETGAME);
 }
 
