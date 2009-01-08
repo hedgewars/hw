@@ -133,7 +133,7 @@ if Gear^.Timer = 0 then
 	begin
 	case Gear^.Kind of
 		gtAmmo_Bomb: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-		     gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 15, EXPLAutoSound);
+		     gtBall: doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 40, EXPLAutoSound);
 		gtClusterBomb: begin
 				doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
 				for i:= 0 to 4 do

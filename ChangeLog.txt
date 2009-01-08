@@ -1,6 +1,22 @@
 + features
 * bugfixes
 
+0.9.7 -> 0.9.8:
+ - Many net server fixes
+ - Lobby on net server
+ - Napalm weapon
+ - Drill rocket and Ballgun weapons
+ - Show quit reason message
+ - Solid Land option
+ - New maps
+ - Many new forts
+ - Improve Hellish hand grenade
+ - Spectating for those who joined after game start
+ * Fix silent crash when cannot place all hedgehogs
+ * Fix small damage tag issues
+ * Fix a bug leading to engine silent crash when using whip, bat or firepunch (and probably flame)
+ * Limit chat history to 250 entries to avoid DoS attack with its use
+
 0.9.6 -> 0.9.7:
  + Completely redesign the frontend, no longer looks like an ugly program launcher
  + New art
