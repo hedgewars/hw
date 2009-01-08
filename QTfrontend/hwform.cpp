@@ -443,6 +443,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
 	connect(hwnet, SIGNAL(Connected()), this, SLOT(NetConnected()));
 	connect(hwnet, SIGNAL(EnteredGame()), this, SLOT(NetGameEnter()));
+	connect(hwnet, SIGNAL(LeftRoom()), this, SLOT(NetLeftRoom()));
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 	connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
@@ -806,4 +807,12 @@ void HWForm::NetGameMaster()
 void HWForm::NetGameSlave()
 {
 	ui.pageNetGame->BtnMaster->setVisible(false);
+}
+
+void HWForm::NetLeftRoom()
+{
+	if (ui.Pages->currentIndex() == ID_PAGE_NETGAME)
+		GoBack();
+	else
+		qWarning("Left room while not in room");
 }

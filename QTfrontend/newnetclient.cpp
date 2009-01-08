@@ -211,17 +211,17 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 	if (lst[0] == "ERROR") {
 		if (lst.size() == 2)
-			QMessageBox::information(0, 0, "Error: " + lst[1]);
+			emit showMessage("Error: " + lst[1]);
 		else
-			QMessageBox::information(0, 0, "Unknown error");
+			emit showMessage("Unknown error");
 		return;
 	}
 
 	if (lst[0] == "WARNING") {
 		if (lst.size() == 2)
-			QMessageBox::information(0, 0, "Warning: " + lst[1]);
+			emit showMessage("Warning: " + lst[1]);
 		else
-			QMessageBox::information(0, 0, "Unknown warning");
+			emit showMessage("Unknown warning");
 		return;
 	}
 
@@ -334,6 +334,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 	if(lst[0]=="ROOMABANDONED") {
 		netClientState = 2;
+		emit showMessage(HWNewNet::tr("Room destroyed"));
 		emit LeftRoom();
 		return;
 	}
