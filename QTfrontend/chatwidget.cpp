@@ -75,8 +75,12 @@ void HWChatWidget::onChatString(const QString& str)
 {
 	if (chatStrings.size() > 250)
 		chatStrings.removeFirst();
+
+	QString formattedStr = Qt::escape(str);
+	if (formattedStr.startsWith("***"))
+		formattedStr = QString("<font color=grey>%1</font>").arg(formattedStr);
 	
-	chatStrings.append(Qt::escape(str));
+	chatStrings.append(formattedStr);
 	
 	chatText->setHtml(chatStrings.join("<br>"));
 
