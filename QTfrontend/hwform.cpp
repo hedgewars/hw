@@ -643,7 +643,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		case gsStarted: {
 			Music(false);
 			GoToPage(ID_PAGE_INGAME);
-			ui.pageGameStats->labelGameStats->setText("");
+			ui.pageGameStats->clear();
 			if (pRegisterServer)
 			{
 				pRegisterServer->unregister();
@@ -669,46 +669,11 @@ void HWForm::GameStateChanged(GameState gameState)
 	}
 }
 
-void HWForm::AddStatText(const QString & msg)
-{
-	ui.pageGameStats->labelGameStats->setText(
-		ui.pageGameStats->labelGameStats->text() + msg);
-}
-
-void HWForm::GameStats(char type, const QString & info)
-{
-	switch(type) {
-		case 'r' : {
-			AddStatText(QString("<h1 align=\"center\">%1</h1>").arg(info));
-			break;
-		}
-		case 'D' : {
-			int i = info.indexOf(' ');
-			QString message = QLabel::tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
-					.arg(info.mid(i + 1), info.left(i));
-			AddStatText(message);
-			break;
-		}
-		case 'k' : {
-			int i = info.indexOf(' ');
-			QString message = QLabel::tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> kills.</p>")
-					.arg(info.mid(i + 1), info.left(i));
-			AddStatText(message);
-			break;
-		}
-		case 'K' : {
-			QString message = QLabel::tr("<p>A total of <b>%1</b> Hedgehog(s) were killed during this round.</p>").arg(info);
-			AddStatText(message);
-			break;
-		}
-	}
-}
-
 void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo)
 {
 	game = new HWGame(config, gamecfg, ammo, pTeamSelWidget);
 	connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
-	connect(game, SIGNAL(GameStats(char, const QString &)), this, SLOT(GameStats(char, const QString &)));
+	connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
 	connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
 	connect(game, SIGNAL(HaveRecord(bool, const QByteArray &)), this, SLOT(GetRecord(bool, const QByteArray &)));
 }

@@ -35,3 +35,42 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 	labelGameStats->setTextFormat(Qt::RichText);
 	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
 }
+
+void PageGameStats::AddStatText(const QString & msg)
+{
+	labelGameStats->setText(labelGameStats->text() + msg);
+}
+
+void PageGameStats::clear()
+{
+	labelGameStats->setText("");
+}
+
+void PageGameStats::GameStats(char type, const QString & info)
+{
+	switch(type) {
+		case 'r' : {
+			AddStatText(QString("<h1 align=\"center\">%1</h1>").arg(info));
+			break;
+		}
+		case 'D' : {
+			int i = info.indexOf(' ');
+			QString message = tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
+					.arg(info.mid(i + 1), info.left(i));
+			AddStatText(message);
+			break;
+		}
+		case 'k' : {
+			int i = info.indexOf(' ');
+			QString message = tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> kills.</p>")
+					.arg(info.mid(i + 1), info.left(i));
+			AddStatText(message);
+			break;
+		}
+		case 'K' : {
+			QString message = tr("<p>A total of <b>%1</b> Hedgehog(s) were killed during this round.</p>").arg(info);
+			AddStatText(message);
+			break;
+		}
+	}
+}

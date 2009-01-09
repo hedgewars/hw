@@ -30,6 +30,13 @@ public:
 
 	QPushButton *BtnBack;
 	QLabel *labelGameStats;
+
+public slots:
+	void GameStats(char type, const QString & info);
+	void clear();
+	
+private:
+	void AddStatText(const QString & msg);
 };
 
 #endif // STATSPAGE_H

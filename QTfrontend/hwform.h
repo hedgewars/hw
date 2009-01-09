@@ -78,7 +78,6 @@ private slots:
 	void AddNetTeam(const HWTeam& team);
 	void StartMPGame();
 	void GameStateChanged(GameState gameState);
-	void GameStats(char type, const QString & info);
 	void ForcedDisconnect();
 	void ShowErrorMessage(const QString &);
 	void GetRecord(bool isDemo, const QByteArray & record);
@@ -124,7 +123,6 @@ private:
 	HWNetRegisterServer* pRegisterServer;
 	QTime eggTimer;
 	SDLInteraction sdli;
-	void AddStatText(const QString & msg);
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };
 
