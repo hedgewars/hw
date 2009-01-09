@@ -89,45 +89,46 @@ begin
 TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
 inc(FinishedTurnsTotal);
-if FinishedTurnsTotal = 0 then exit;
+if FinishedTurnsTotal <> 0 then
+	begin
+	inc(CurrentHedgehog^.stats.FinishedTurns);
 
-inc(CurrentHedgehog^.stats.FinishedTurns);
+	if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
+		PlaySound(sndFirstBlood, false)
 
-if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
-	PlaySound(sndFirstBlood, false)
+	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
+		PlaySound(sndStupid, false)
 
-else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
-	PlaySound(sndStupid, false)
-
-else if DamageClan <> 0 then
-	if DamageTotal > DamageClan then
-		if random(2) = 0 then
-			PlaySound(sndNutter, false)
+	else if DamageClan <> 0 then
+		if DamageTotal > DamageClan then
+			if random(2) = 0 then
+				PlaySound(sndNutter, false)
+			else
+				PlaySound(sndWatchIt, false)
 		else
-			PlaySound(sndWatchIt, false)
-	else
-		if random(2) = 0 then
-			PlaySound(sndSameTeam, false)
+			if random(2) = 0 then
+				PlaySound(sndSameTeam, false)
+			else
+				PlaySound(sndTraitor, false)
+
+	else if DamageGiven <> 0 then
+		if Kills > 0 then
+			PlaySound(sndEnemyDown, false)
 		else
-			PlaySound(sndTraitor, false)
+			PlaySound(sndRegret, false)
 
-else if DamageGiven <> 0 then
-	if Kills > 0 then
-		PlaySound(sndEnemyDown, false)
+	else if AmmoDamagingUsed then
+		PlaySound(sndMissed, false)
+	else if (AmmoUsedCount > 0) and not isTurnSkipped then
+		// nothing ?
+	else if isTurnSkipped then
+		PlaySound(sndBoring, false)
 	else
-		PlaySound(sndRegret, false)
-
-else if AmmoDamagingUsed then
-	PlaySound(sndMissed, false)
-else if (AmmoUsedCount > 0) and not isTurnSkipped then
-	// nothing ?
-else if isTurnSkipped then
-	PlaySound(sndBoring, false)
-else
-	PlaySound(sndCoward, false);
+		PlaySound(sndCoward, false);
+	end;
 
 
-for t:= 0 to Pred(TeamsCount) do
+for t:= 0 to Pred(TeamsCount) do // send even on zero turn
 	with TeamsArray[t]^ do
 		for i:= 0 to cMaxHHIndex do
 			with Hedgehogs[i].stats do
@@ -141,6 +142,12 @@ for t:= 0 to Pred(TeamsCount) do
 				StepDamageRecv:= 0;
 				StepDamageGiven:= 0
 				end;
+
+for t:= 0 to Pred(ClansCount) do
+	with ClansArray[t]^ do
+		begin
+		SendStat(siClanHealth, inttostr(Color) + ' ' + inttostr(ClanHealth));
+		end;
 
 Kills:= 0;
 KillsClan:= 0;

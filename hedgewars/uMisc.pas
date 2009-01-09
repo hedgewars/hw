@@ -244,7 +244,7 @@ r:= SignAs(cLittle, r)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkK';
+const stc: array [TStatInfoType] of char = 'rDkKH';
 begin
 SendIPC('i' + stc[sit] + s)
 end;

@@ -298,6 +298,10 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		} else if(lastid != ID_PAGE_GAMESTATS && lastid != ID_PAGE_INGAME) {
 		  curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
+	} else
+	if (id == ID_PAGE_GAMESTATS)
+	{
+		ui.pageGameStats->renderStats();
 	}
 }
 

@@ -19,7 +19,11 @@
 #ifndef STATSPAGE_H
 #define STATSPAGE_H
 
+#include <QVector>
+#include <QMap>
 #include "pages.h"
+
+class QGraphicsView;
 
 class PageGameStats : public AbstractPage
 {
@@ -30,13 +34,17 @@ public:
 
 	QPushButton *BtnBack;
 	QLabel *labelGameStats;
+	QGraphicsView * graphic;
 
 public slots:
 	void GameStats(char type, const QString & info);
 	void clear();
+	void renderStats();
 	
 private:
 	void AddStatText(const QString & msg);
+
+	QMap<quint32, QVector<quint32> > healthPoints;
 };
 
 #endif // STATSPAGE_H

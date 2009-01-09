@@ -87,7 +87,8 @@ type
 
 	TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
 
-	TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs);
+	TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
+			siClanHealth);
 
 	TWave = (waveRollup, waveSad,waveWave, waveHurrah, waveLemonade);
 
