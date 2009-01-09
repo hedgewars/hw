@@ -296,13 +296,16 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		    curTeamSelWidget->addTeam(*editedTeam);
 		  }
 		} else if(lastid != ID_PAGE_GAMESTATS && lastid != ID_PAGE_INGAME) {
-		  curTeamSelWidget->resetPlayingTeams(teamsList);
+			curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
 	} else
 	if (id == ID_PAGE_GAMESTATS)
 	{
 		ui.pageGameStats->renderStats();
 	}
+
+	if ((lastid == ID_PAGE_GAMESTATS) && !hwnet)
+		GoBack();
 }
 
 void HWForm::GoToPage(quint8 id)
