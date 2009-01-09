@@ -62,7 +62,7 @@ void PageGameStats::GameStats(char type, const QString & info)
 		}
 		case 'k' : {
 			int i = info.indexOf(' ');
-			QString message = tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> kills.</p>")
+			QString message = tr("<p>The best killer is <b>%1</b> with <b>%2</b> kills in a turn.</p>")
 					.arg(info.mid(i + 1), info.left(i));
 			AddStatText(message);
 			break;
