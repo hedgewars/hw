@@ -23,6 +23,7 @@
 
 #include "ui_hwform.h"
 #include "pages.h"
+#include "statsPage.h"
 #include "playrecordpage.h"
 #include "hwconsts.h"
 

@@ -292,17 +292,6 @@ public:
 	About *about;
 };
 
-class PageGameStats : public AbstractPage
-{
-	Q_OBJECT
-
-public:
-	PageGameStats(QWidget* parent = 0);
-
-	QPushButton *BtnBack;
-	QLabel *labelGameStats;
-};
-
 class PageSinglePlayer : public AbstractPage
 {
 	Q_OBJECT

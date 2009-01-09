@@ -397,7 +397,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_RESTRICT_TEAMS"] =
 
 handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs =[]}, answerAllNotReady)
+		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs = []}, answerAllNotReady)
 	else
 		(noChangeClients, noChangeRooms, [])
 	where

@@ -78,7 +78,7 @@ SOURCES += binds.cpp \
            hwconsts.cpp \
            selectWeapon.cpp \
            itemNum.cpp \
-	   input_ip.cpp
+           input_ip.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts

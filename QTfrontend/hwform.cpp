@@ -40,6 +40,7 @@
 #include "selectWeapon.h"
 #include "gameuiconfig.h"
 #include "pages.h"
+#include "statsPage.h"
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "gamecfgwidget.h"

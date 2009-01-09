@@ -76,7 +76,9 @@ set(hwfr_src
 	itemNum.cpp
 	input_ip.cpp
 	igbox.cpp
-	weaponItem.cpp)
+	weaponItem.cpp
+	statsPage.cpp
+	)
 
 if(MINGW)
 	# resource compilation for mingw
@@ -121,7 +123,9 @@ set(hwfr_moc_hdrs
 	itemNum.h
 	input_ip.h
 	igbox.h
-	weaponItem.h)
+	weaponItem.h
+	statsPage.h
+	)
 
 set(hwfr_hdrs
 	binds.h

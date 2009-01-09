@@ -579,21 +579,6 @@ PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
 	pageLayout->addWidget(about, 0, 0, 1, 3);
 }
 
-PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
-{
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
-	QGridLayout * pageLayout = new QGridLayout(this);
-	pageLayout->setColumnStretch(0, 1);
-	pageLayout->setColumnStretch(1, 1);
-	pageLayout->setColumnStretch(2, 1);
-
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
-
-	labelGameStats = new QLabel(this);
-	labelGameStats->setTextFormat(Qt::RichText);
-	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
-}
-
 PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
 	QFont * font14 = new QFont("MS Shell Dlg", 14);
