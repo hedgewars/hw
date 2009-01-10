@@ -1913,7 +1913,7 @@ begin
 		begin
 		rx:= rndSign(getRandom * _0_1);
 		ry:= rndSign(getRandom * _0_1);
-		addfilelog('rx, ry = '+floattostr(rx)+', '+floattostr(ry));
+		
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBall, 0,
 				SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
 				AngleCos(HHGear^.Angle) * ( - _0_8) + ry,
