@@ -1903,6 +1903,7 @@ end;
 
 procedure doStepBallgunWork(Gear: PGear);
 var HHGear: PGear;
+	rx, ry: hwFloat;
 begin
 	AllInactive:= false;
 	dec(Gear^.Timer);
@@ -1910,7 +1911,13 @@ begin
 	HedgehogChAngle(HHGear);
 	if (Gear^.Timer mod 100) = 0 then
 		begin
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX)+ rndSign(getRandom * _0_1), AngleCos(HHGear^.Angle) * ( - _0_8) + rndSign(getRandom * _0_1), 0);
+		rx:= rndSign(getRandom * _0_1);
+		ry:= rndSign(getRandom * _0_1);
+		addfilelog('rx, ry = '+floattostr(rx)+', '+floattostr(ry));
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBall, 0,
+				SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
+				AngleCos(HHGear^.Angle) * ( - _0_8) + ry,
+				0);
 		
 		PlaySound(sndGun, false);
 		end;
