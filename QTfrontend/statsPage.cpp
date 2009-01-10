@@ -19,9 +19,18 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QGraphicsScene>
-#include <QGraphicsView>
 
 #include "statsPage.h"
+
+FitGraphicsView::FitGraphicsView(QWidget* parent) : QGraphicsView(parent)
+{
+
+}
+
+void FitGraphicsView::resizeEvent(QResizeEvent * event)
+{
+	fitInView(sceneRect());
+}
 
 PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 {
@@ -37,7 +46,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 	labelGameStats->setTextFormat(Qt::RichText);
 	pageLayout->addWidget(labelGameStats, 0, 0, 1, 3);
 
-	graphic = new QGraphicsView(this);
+	graphic = new FitGraphicsView(this);
 	graphic->scale(1.0, -1.0);
 	pageLayout->addWidget(graphic, 1, 0, 1, 3);
 }
@@ -76,7 +85,6 @@ void PageGameStats::renderStats()
 	}
 
 	graphic->setScene(scene);
-	graphic->fitInView(graphic->sceneRect());
 }
 
 void PageGameStats::GameStats(char type, const QString & info)

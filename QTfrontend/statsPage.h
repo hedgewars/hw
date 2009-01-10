@@ -21,9 +21,19 @@
 
 #include <QVector>
 #include <QMap>
+#include <QGraphicsView>
 #include "pages.h"
 
-class QGraphicsView;
+class FitGraphicsView : public QGraphicsView
+{
+	Q_OBJECT
+
+public:
+	FitGraphicsView(QWidget* parent = 0);
+
+protected:
+	void resizeEvent(QResizeEvent * event);
+};
 
 class PageGameStats : public AbstractPage
 {
@@ -34,7 +44,7 @@ public:
 
 	QPushButton *BtnBack;
 	QLabel *labelGameStats;
-	QGraphicsView * graphic;
+	FitGraphicsView * graphic;
 
 public slots:
 	void GameStats(char type, const QString & info);
