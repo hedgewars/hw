@@ -48,6 +48,7 @@ PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 
 	graphic = new FitGraphicsView(this);
 	graphic->scale(1.0, -1.0);
+	graphic->setBackgroundBrush(QBrush(Qt::black));
 	pageLayout->addWidget(graphic, 1, 0, 1, 3);
 }
 
