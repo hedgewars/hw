@@ -197,5 +197,6 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 
 void GameCFGWidget::ammoChanged(int index)
 {
-	emit newWeaponScheme(WeaponsName->itemText(index), WeaponsName->itemData(index).toString());
+	if (index >= 0)
+		emit newWeaponScheme(WeaponsName->itemText(index), WeaponsName->itemData(index).toString());
 }
