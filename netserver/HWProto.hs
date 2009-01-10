@@ -368,7 +368,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 handleCmd_inRoom client _ rooms ["START_GAME"] =
 	if isMaster client && (playersIn clRoom == readyPlayers clRoom) && (not $ gameinprogress clRoom) then
 		if enoughClans then
-			(noChangeClients, modifyRoom clRoom{gameinprogress = True}, answerRunGame)
+			(noChangeClients, modifyRoom clRoom{gameinprogress = True, roundMsgs = []}, answerRunGame)
 		else
 			(noChangeClients, noChangeRooms, answerTooFewClans)
 	else
