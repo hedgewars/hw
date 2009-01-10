@@ -1676,14 +1676,17 @@ yy:= dirs[Gear^.Angle].y;
 xxn:= dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].x;
 yyn:= dirs[(LongInt(Gear^.Angle) + 4 + dA) mod 4].y;
 
-
 if (xx = 0) then
 	if TestCollisionYwithGear(Gear, yy) then
 		PrevAngle
 	else begin
 		Gear^.Tag:= 0;
 		Gear^.Y:= Gear^.Y + int2hwFloat(yy);
-		if not TestCollisionXwithGear(Gear, xxn) then NextAngle
+		if not TestCollisionXwithGear(Gear, xxn) then
+			begin
+			Gear^.X:= Gear^.X + int2hwFloat(xxn);
+			NextAngle
+			end;
 		end;
 
 if (yy = 0) then
@@ -1692,7 +1695,11 @@ if (yy = 0) then
 	else begin
 		Gear^.Tag:= 0;
 		Gear^.X:= Gear^.X + int2hwFloat(xx);
-		if not TestCollisionYwithGear(Gear, yyn) then NextAngle
+		if not TestCollisionYwithGear(Gear, yyn) then
+			begin
+			Gear^.Y:= Gear^.Y + int2hwFloat(yyn);
+			NextAngle
+			end;
 		end;
 
 if Gear^.Tag = 0 then
