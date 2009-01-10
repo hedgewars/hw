@@ -27,6 +27,7 @@ const BindAction cbinds[BINDS_NUMBER] =
 	{"ljump",	"return",	QT_TRANSLATE_NOOP("binds", "jump"),	false},
 	{"hjump",	"backspace",	QT_TRANSLATE_NOOP("binds", "jump"),	false},
 	{"+attack",	"space",	QT_TRANSLATE_NOOP("binds", "attack"),	false},
+	{"+precise",	"left_shift",	QT_TRANSLATE_NOOP("binds", "precise aim"),	false},
 	{"put",	"mousel",	QT_TRANSLATE_NOOP("binds", "put"),	false},
 	{"switch",	"tab",	QT_TRANSLATE_NOOP("binds", "switch"),	false},
 	{"findhh",	"h",	QT_TRANSLATE_NOOP("binds", "find hedgehog"),	true},

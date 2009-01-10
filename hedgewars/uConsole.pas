@@ -258,6 +258,8 @@ RegisterVariable('history' , vtCommand, @chHistory      , true );
 RegisterVariable('chat'    , vtCommand, @chChat         , true );
 RegisterVariable('say'     , vtCommand, @chSay          , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
+RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
+RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
 RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
 RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
 RegisterVariable('+right'  , vtCommand, @chRight_p      , false);

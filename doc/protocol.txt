@@ -4,6 +4,7 @@
 	'r','R'                                 -right, +right
 	'u','U'                                 -up, +up
 	'd','D'                                 -down, +down
+	'z', 'Z'                                -precise, +precise
 	'N'             срабатывание команды /nextturn
 	'S'                                  /switch
 	's' + <текст>   /say

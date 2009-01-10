@@ -231,6 +231,23 @@ with CurrentHedgehog^.Gear^ do
      Message:= Message and not gm_Down
 end;
 
+procedure chPrecise_p(var s: shortstring);
+begin
+if CheckNoTeamOrHH then exit;
+bShowFinger:= false;
+if not CurrentTeam^.ExtDriven then SendIPC('Z');
+with CurrentHedgehog^.Gear^ do
+    Message:= Message or gm_Precise
+end;
+
+procedure chPrecise_m(var s: shortstring);
+begin
+if CheckNoTeamOrHH then exit;
+if not CurrentTeam^.ExtDriven then SendIPC('z');
+with CurrentHedgehog^.Gear^ do
+     Message:= Message and not gm_Precise
+end;
+
 procedure chLJump(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;

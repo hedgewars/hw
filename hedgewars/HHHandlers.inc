@@ -403,9 +403,10 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	if (Ammo^[CurSlot, CurAmmo].AmmoType = amRope)
 	and ((Gear^.State and (gstMoving or gstHHJumping)) = gstMoving) then da:= 2 else da:= 1;
 
-if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle - da >= CurMinAngle) then dec(Gear^.Angle, da)
-else
-if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da);
+if (((Gear^.Message and gm_Precise) = 0) or ((GameTicks mod 5) = 1)) then
+	if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle - da >= CurMinAngle) then dec(Gear^.Angle, da)
+	else
+	if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da);
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;

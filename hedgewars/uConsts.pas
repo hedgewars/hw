@@ -207,7 +207,8 @@ const
 	gm_Weapon = $00000400; // with param
 	gm_Timer  = $00000800; // with param
 	gm_Animate= $00001000; // with param
-	gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack;
+	gm_Precise= $00002000;
+	gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
 
 	cMaxSlotIndex       = 8;
 	cMaxSlotAmmoIndex   = 3;

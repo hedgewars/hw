@@ -231,6 +231,8 @@ while (headcmd <> nil)
 		'u': ParseCommand('-up', true);
 		'D': ParseCommand('+down', true);
 		'd': ParseCommand('-down', true);
+		'Z': ParseCommand('+precise', true);
+		'z': ParseCommand('-precise', true);
 		'A': ParseCommand('+attack', true);
 		'a': ParseCommand('-attack', true);
 		'S': ParseCommand('switch', true);
