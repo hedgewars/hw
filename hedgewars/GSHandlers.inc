@@ -1840,11 +1840,12 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrillDrilling(Gear: PGear);
-var ox,oy: hwFloat;
+var t: PGearArray;
+	ox, oy: hwFloat;
 begin
 AllInactive:= false;
 
-if (Gear^.Timer > 0) and ((Gear^.Timer mod 20) = 0) then
+if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
 	begin
 	ox:= Gear^.X;
 	oy:= Gear^.Y;
@@ -1854,7 +1855,9 @@ if (Gear^.Timer > 0) and ((Gear^.Timer mod 20) = 0) then
 	CheckGearDrowning(Gear);
 	end;
 
+t:= CheckGearsCollision(Gear); //fixes drill not exploding when touching HH bug
 if (Gear^.Timer = 0)
+or (t^.Count <> 0)
 or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
 and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
 	begin //out of time or exited ground
@@ -1868,7 +1871,8 @@ end;
 
 procedure doStepDrill(Gear: PGear);
 var t: PGearArray;
-    newX, newY, oldDx, oldDy: hwFloat;
+	oldDx, oldDy: hwFloat;
+	t2: hwFloat;
 begin
 AllInactive:= false;
 
@@ -1881,26 +1885,27 @@ doStepFallingGear(Gear);
 if (GameTicks and $3F) = 0 then
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
 
-if ((Gear^.State and gstCollision) <> 0) then
-	begin //hit
+if ((Gear^.State and gstCollision) <> 0) then begin //hit
 	Gear^.dX:= oldDx;
 	Gear^.dY:= oldDy;
+
 	t:= CheckGearsCollision(Gear);
+	if (t^.Count = 0) then begin //hit the ground not the HH
+		t2 := _0_5 / Distance(Gear^.dX, Gear^.dY);
+		Gear^.dX:= Gear^.dX * t2;
+		Gear^.dY:= Gear^.dY * t2;
+	end else begin //explode right on contact with HH
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+		DeleteGear(Gear);
+		exit;
+		end;
+	
 	Gear^.doStep:= @doStepDrillDrilling;
-	if (t^.Count = 0) then
-		begin //hit the ground not the hedgehog
-		newy:= hwSqrt((_0_5 * Gear^.dY * Gear^.dY) / Distance(Gear^.dX, Gear^.dY));
-		if (Gear^.dY < _0) then newY := -newY;
-		newx:= newy * Gear^.dX / Gear^.dY;
-		Gear^.dX := newx;
-		Gear^.dY := newy;
-		dec(Gear^.Timer)
-		end
-	else
-		Gear^.Timer:= 0
+	dec(Gear^.Timer)
 	end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepBallgunWork(Gear: PGear);
 var HHGear: PGear;
 	rx, ry: hwFloat;
