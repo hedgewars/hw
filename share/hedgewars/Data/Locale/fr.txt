@@ -26,9 +26,9 @@
 00:23=Kamikaze
 00:24=Gateau
 00:25=Seduction
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
-00:28=Drill Rocket
+00:26=Bombe pastèque
+00:27=Grenade infernale
+00:28=Roquette perforante
 00:29=Ballgun
 00:30=Napalm
 

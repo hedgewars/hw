@@ -1047,145 +1047,150 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
         <translation>angreifen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="31"/>
         <source>put</source>
         <translation>platzieren</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="31"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="32"/>
         <source>switch</source>
         <translation>wechseln</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="32"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="33"/>
         <source>find hedgehog</source>
         <translation>Igel finden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="33"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="34"/>
         <source>ammo menu</source>
         <translation>Monitions Menü</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="34"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="35"/>
         <source>slot 1</source>
         <translation>Slot 1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="35"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="36"/>
         <source>slot 2</source>
         <translation>Slot 2</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="36"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="37"/>
         <source>slot 3</source>
         <translation>Slot 3</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="37"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="38"/>
         <source>slot 4</source>
         <translation>Slot 4</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="38"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="39"/>
         <source>slot 5</source>
         <translation>Slot 5</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="39"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="40"/>
         <source>slot 6</source>
         <translation>Slot 6</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="40"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="41"/>
         <source>slot 7</source>
         <translation>Slot 7</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="41"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="42"/>
         <source>slot 8</source>
         <translation>Slot 8</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="42"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="43"/>
         <source>slot 9</source>
         <translation>Slot 9</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="43"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="44"/>
         <source>timer 1 sec</source>
         <translation>Timer 1 Sek.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="45"/>
         <source>timer 2 sec</source>
         <translation>Timer 2 Sek.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="46"/>
         <source>timer 3 sec</source>
         <translation>Timer 3 Sek.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="46"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="47"/>
         <source>timer 4 sec</source>
         <translation>Timer 4 Sek.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="47"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="48"/>
         <source>timer 5 sec</source>
         <translation>Timer 5 Sek.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="50"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
         <source>pause</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
         <source>volume down</source>
         <translation>Lautstärke verringern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
         <source>volume up</source>
         <translation>Lautstärke erhöhen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
         <source>change mode</source>
         <translation>Modus ändern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
         <source>capture</source>
         <translation>erobern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
         <source>hedgehogs
 info</source>
         <translation>Igel 
 Statistik</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="58"/>
         <source>quit</source>
         <translation>Beenden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="48"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat</source>
         <translation>chatten</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="50"/>
         <source>chat history</source>
         <translation>Chat Historie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
+        <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
         <source>confirmation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
+        <source>precise aim</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
