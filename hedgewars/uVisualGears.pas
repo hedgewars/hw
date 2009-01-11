@@ -164,6 +164,13 @@ var Result: PVisualGear;
 	t: Longword;
 	sp: hwFloat;
 begin
+if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're scrolling now
+	if Kind <> vgtCloud then
+		begin
+		AddVisualGear:= nil;
+		exit
+		end;
+
 New(Result);
 FillChar(Result^, sizeof(TVisualGear), 0);
 Result^.X:= int2hwFloat(X);
