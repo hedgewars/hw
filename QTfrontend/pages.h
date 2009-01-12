@@ -282,6 +282,7 @@ public:
 
 public slots:
 	void setReadyStatus(bool isReady);
+	void setMasterMode(bool isMaster);
 };
 
 class PageInfo : public AbstractPage

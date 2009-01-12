@@ -767,7 +767,7 @@ void HWForm::Music(bool checked)
 
 void HWForm::NetGameMaster()
 {
-	ui.pageNetGame->BtnMaster->setVisible(true);
+	ui.pageNetGame->setMasterMode(true);
 	ui.pageNetGame->restrictJoins->setChecked(false);
 	ui.pageNetGame->restrictTeamAdds->setChecked(false);
 	
@@ -781,7 +781,7 @@ void HWForm::NetGameMaster()
 
 void HWForm::NetGameSlave()
 {
-	ui.pageNetGame->BtnMaster->setVisible(false);
+	ui.pageNetGame->setMasterMode(false);
 }
 
 void HWForm::NetLeftRoom()

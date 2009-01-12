@@ -554,16 +554,23 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	pNetTeamsWidget->setAcceptOuter(true);
 	pageLayout->addWidget(pNetTeamsWidget, 0, 1);
 
+
+	QHBoxLayout * bottomLayout = new QHBoxLayout;
+	pageLayout->addLayout(bottomLayout, 3, 0, 1, 2);
+
+	BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
+	
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
 	//BtnGo->setText(QPushButton::tr("Ready"));
 	BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 	BtnGo->setIconSize(QSize(25, 34));
-	pageLayout->addWidget(BtnGo, 3, 1);
+	BtnGo->setMinimumWidth(50);
+	BtnGo->setMinimumHeight(50);
+	bottomLayout->addWidget(BtnGo, 2);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 
-	BtnMaster = addButton(tr("Control"), pageLayout, 2, 1);
+	BtnMaster = addButton(tr("Control"), bottomLayout, 3);
 	QMenu * menu = new QMenu(BtnMaster);
 	startGame = new QAction(QAction::tr("Start"), menu);
 	restrictJoins = new QAction(QAction::tr("Restrict Joins"), menu);
@@ -575,6 +582,8 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	menu->addAction(restrictTeamAdds);
 	
 	BtnMaster->setMenu(menu);
+
+	bottomLayout->insertStretch(1, 100);
 }
 
 void PageNetGame::setReadyStatus(bool isReady)
@@ -583,6 +592,11 @@ void PageNetGame::setReadyStatus(bool isReady)
 		BtnGo->setIcon(QIcon(":/res/lightbulb_on.png"));
 	else
 		BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
+}
+
+void PageNetGame::setMasterMode(bool isMaster)
+{
+	BtnMaster->setVisible(isMaster);
 }
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
