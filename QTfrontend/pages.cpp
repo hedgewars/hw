@@ -556,7 +556,9 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
-	BtnGo->setText(QPushButton::tr("Ready"));
+	//BtnGo->setText(QPushButton::tr("Ready"));
+	BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
+	BtnGo->setIconSize(QSize(25, 34));
 	pageLayout->addWidget(BtnGo, 3, 1);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
@@ -573,6 +575,14 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	menu->addAction(restrictTeamAdds);
 	
 	BtnMaster->setMenu(menu);
+}
+
+void PageNetGame::setReadyStatus(bool isReady)
+{
+	if(isReady)
+		BtnGo->setIcon(QIcon(":/res/lightbulb_on.png"));
+	else
+		BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 }
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)

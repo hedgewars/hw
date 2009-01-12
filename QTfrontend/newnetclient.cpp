@@ -291,6 +291,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit setReadyStatus(lst[1], true);
+		if (lst[1] == mynick)
+			emit setMyReadyStatus(true);
 		return;
 	}
 	
@@ -301,6 +303,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit setReadyStatus(lst[1], false);
+		if (lst[1] == mynick)
+			emit setMyReadyStatus(false);
 		return;
 	}
 

@@ -279,6 +279,9 @@ public:
 
 	TeamSelWidget* pNetTeamsWidget;
 	GameCFGWidget* pGameCFG;
+
+public slots:
+	void setReadyStatus(bool isReady);
 };
 
 class PageInfo : public AbstractPage
