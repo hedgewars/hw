@@ -499,13 +499,14 @@ else
    Gear^.Message:= 0;
 
 if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
-   begin
-   TurnTimeLeft:= 0;
-   Gear^.State:= Gear^.State and not (gstHHDriven or gstAnimation);
-   if Gear^.Damage > 0 then
-      Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
-   exit
-   end;
+	begin
+	TurnTimeLeft:= 0;
+	isCursorVisible:= false;
+	Gear^.State:= Gear^.State and not (gstHHDriven or gstAnimation);
+	if Gear^.Damage > 0 then
+		Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
+	exit
+	end;
 
 if (Gear^.State and gstAnimation) <> 0 then
 	begin
