@@ -89,7 +89,6 @@ case GameState of
 				end;
 			FinishProgress;
 			PlayMusic;
-			SetDefaultBinds;
 			GameState:= gsGame
 			end;
 	gsConfirm,
