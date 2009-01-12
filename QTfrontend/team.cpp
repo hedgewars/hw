@@ -247,6 +247,7 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
+	sl.push_back(QString("evoicepack Default"));
 
 	if (!m_isNetTeam)
 		for(int i = 0; i < BINDS_NUMBER; i++)
