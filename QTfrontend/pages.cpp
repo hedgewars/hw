@@ -544,7 +544,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 
 	// chatwidget
 	pChatWidget = new HWChatWidget(this);
-	pageLayout->addWidget(pChatWidget, 1, 0, 2, 1);
+	pageLayout->addWidget(pChatWidget, 1, 0, 1, 2);
 	pageLayout->setRowStretch(1, 100);
 
 	pGameCFG = new GameCFGWidget(this);
@@ -552,7 +552,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 
 	pNetTeamsWidget = new TeamSelWidget(this);
 	pNetTeamsWidget->setAcceptOuter(true);
-	pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
+	pageLayout->addWidget(pNetTeamsWidget, 0, 1);
 
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);

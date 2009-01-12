@@ -202,14 +202,15 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
-void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int maxHeight)
+void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeight)
 {
 	VertScrArea* area = new VertScrArea(color);
 	area->setWidget(pfteams);
 	mainLayout.addWidget(area, 30);
-	if (maxHeight > 0)
+	if (fixedHeight > 0)
 	{
-		area->setMaximumHeight(maxHeight);
+		area->setMinimumHeight(fixedHeight);
+		area->setMaximumHeight(fixedHeight);
 		area->setStyleSheet(
 				"FrameTeams{"
 					"border: solid;"
@@ -230,7 +231,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 	
 	QPalette p;
 	p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-	addScrArea(framePlaying, p.color(QPalette::Window).light(105), 200);
+	addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);
 	addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
 	QPushButton * btnSetup = new QPushButton(this);
 	btnSetup->setText(QPushButton::tr("Setup"));

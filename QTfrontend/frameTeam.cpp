@@ -33,7 +33,8 @@ FrameTeams::FrameTeams(QWidget* parent) :
 	setAutoFillBackground(true);
 	
 	mainLayout.setSpacing(1);
-
+	mainLayout.setContentsMargins(4, 4, 4, 4);
+	
 	availableColors.push_back(*color1);
 	availableColors.push_back(*color2);
 	availableColors.push_back(*color3);
