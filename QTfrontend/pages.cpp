@@ -273,40 +273,48 @@ PageOptions::PageOptions(QWidget* parent) :
 	pageLayout->setColumnStretch(1, 100);
 	pageLayout->setColumnStretch(2, 100);
 	pageLayout->setRowStretch(0, 0);
-	pageLayout->setRowStretch(1, 0);
+	pageLayout->setRowStretch(1, 100);
 	pageLayout->setRowStretch(2, 0);
-	pageLayout->setRowStretch(3, 100);
-	pageLayout->setRowStretch(4, 0);
+	pageLayout->setContentsMargins(7, 7, 7, 0);
+	pageLayout->setSpacing(0);
 
 
 	QGroupBox * gbTwoBoxes = new QGroupBox(this);
 	pageLayout->addWidget(gbTwoBoxes, 0, 0, 1, 3);
-	QHBoxLayout * gbTBLayout = new QHBoxLayout(gbTwoBoxes);
+	QGridLayout * gbTBLayout = new QGridLayout(gbTwoBoxes);
+	gbTBLayout->setMargin(0);
+	gbTBLayout->setSpacing(0);
 	{
 		teamsBox = new IconedGroupBox(this);
 		teamsBox->setIcon(QIcon(":/res/teamicon.png"));
 		teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 		teamsBox->setTitle(QGroupBox::tr("Teams"));
 
-		QGridLayout * GBTlayout = new QGridLayout(teamsBox);
-
-		BtnNewTeam = addButton(tr("New team"), GBTlayout, 1, 0);
+		QVBoxLayout * GBTlayout = new QVBoxLayout(teamsBox);
 
 		CBTeamName = new QComboBox(teamsBox);
-		GBTlayout->addWidget(CBTeamName, 0, 0, 1, 2);
+		GBTlayout->addWidget(CBTeamName);
 
-		BtnEditTeam = addButton(tr("Edit team"), GBTlayout, 1, 1);
+		QHBoxLayout * layout1 = new QHBoxLayout;
+		GBTlayout->addLayout(layout1);
+		BtnNewTeam = addButton(tr("New team"), layout1, 0);
+		BtnEditTeam = addButton(tr("Edit team"), layout1, 1);
+		layout1->setStretchFactor(BtnNewTeam, 100);
+		layout1->setStretchFactor(BtnEditTeam, 100);
+		
+		QHBoxLayout * layout2 = new QHBoxLayout;
+		GBTlayout->addLayout(layout2);
 		
 		labelNN = new QLabel(teamsBox);
 		labelNN->setText(QLabel::tr("Net nick"));
-		GBTlayout->addWidget(labelNN, 2, 0, 1, 2);
+		layout2->addWidget(labelNN);
 
 		editNetNick = new QLineEdit(teamsBox);
 		editNetNick->setMaxLength(20);
 		editNetNick->setText(QLineEdit::tr("unnamed"));
-		GBTlayout->addWidget(editNetNick, 3, 0, 1, 2);
+		layout2->addWidget(editNetNick);
 		
-		gbTBLayout->addWidget(teamsBox);
+		gbTBLayout->addWidget(teamsBox, 0, 0);
 	}
 
 	{
@@ -321,66 +329,68 @@ PageOptions::PageOptions(QWidget* parent) :
 		WeaponsName = new QComboBox(this);
 		WeaponsLayout->addWidget(WeaponsName, 0, 0, 1, 2);
 		WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 1, 1);
-		gbTBLayout->addWidget(groupWeapons);
+		gbTBLayout->addWidget(groupWeapons, 1, 0);
 	}
 
-	AGGroupBox = new IconedGroupBox(this);
-	AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
-	AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
-	pageLayout->addWidget(AGGroupBox, 2, 1);
+	{
+		AGGroupBox = new IconedGroupBox(this);
+		AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
+		AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 
-	QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
-	QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
-	QLabel * resolution = new QLabel(AGGroupBox);
-	resolution->setText(QLabel::tr("Resolution"));
-	GBAreslayout->addWidget(resolution);
+		QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
+		QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+		QLabel * resolution = new QLabel(AGGroupBox);
+		resolution->setText(QLabel::tr("Resolution"));
+		GBAreslayout->addWidget(resolution);
 
-	CBResolution = new QComboBox(AGGroupBox);
-	GBAreslayout->addWidget(CBResolution);
-	GBAlayout->addLayout(GBAreslayout);
+		CBResolution = new QComboBox(AGGroupBox);
+		GBAreslayout->addWidget(CBResolution);
+		GBAlayout->addLayout(GBAreslayout);
 
-	QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
-	QLabel * maxfps = new QLabel(AGGroupBox);
-	maxfps->setText(QLabel::tr("FPS limit"));
-	GBAfpslayout->addWidget(maxfps);
-	GBAlayout->addLayout(GBAfpslayout);
+		QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
+		QLabel * maxfps = new QLabel(AGGroupBox);
+		maxfps->setText(QLabel::tr("FPS limit"));
+		GBAfpslayout->addWidget(maxfps);
+		GBAlayout->addLayout(GBAfpslayout);
 
-	CBFullscreen = new QCheckBox(AGGroupBox);
-	CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-	GBAlayout->addWidget(CBFullscreen);
+		CBFullscreen = new QCheckBox(AGGroupBox);
+		CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
+		GBAlayout->addWidget(CBFullscreen);
 
-	CBFrontendFullscreen = new QCheckBox(AGGroupBox);
-	CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
-	GBAlayout->addWidget(CBFrontendFullscreen);
+		CBFrontendFullscreen = new QCheckBox(AGGroupBox);
+		CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
+		GBAlayout->addWidget(CBFrontendFullscreen);
 
-	CBEnableSound = new QCheckBox(AGGroupBox);
-	CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-	GBAlayout->addWidget(CBEnableSound);
+		CBEnableSound = new QCheckBox(AGGroupBox);
+		CBEnableSound->setText(QCheckBox::tr("Enable sound"));
+		GBAlayout->addWidget(CBEnableSound);
 
-	CBEnableMusic = new QCheckBox(AGGroupBox);
-	CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-	GBAlayout->addWidget(CBEnableMusic);
+		CBEnableMusic = new QCheckBox(AGGroupBox);
+		CBEnableMusic->setText(QCheckBox::tr("Enable music"));
+		GBAlayout->addWidget(CBEnableMusic);
 
-	CBShowFPS = new QCheckBox(AGGroupBox);
-	CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-	GBAlayout->addWidget(CBShowFPS);
+		CBShowFPS = new QCheckBox(AGGroupBox);
+		CBShowFPS->setText(QCheckBox::tr("Show FPS"));
+		GBAlayout->addWidget(CBShowFPS);
 
-	CBAltDamage = new QCheckBox(AGGroupBox);
-	CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-	GBAlayout->addWidget(CBAltDamage);
+		CBAltDamage = new QCheckBox(AGGroupBox);
+		CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
+		GBAlayout->addWidget(CBAltDamage);
 
-	CBNameWithDate = new QCheckBox(AGGroupBox);
-	CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-	GBAlayout->addWidget(CBNameWithDate);
+		CBNameWithDate = new QCheckBox(AGGroupBox);
+		CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+		GBAlayout->addWidget(CBNameWithDate);
 
-	fpsedit = new FPSEdit(AGGroupBox);
-	GBAfpslayout->addWidget(fpsedit);
+		fpsedit = new FPSEdit(AGGroupBox);
+		GBAfpslayout->addWidget(fpsedit);
+		gbTBLayout->addWidget(AGGroupBox, 0, 1, 2, 1);
+	}
 
-	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 4, 2, true);
+	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 2, 2, true);
 	BtnSaveOptions->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 }
 
 PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
