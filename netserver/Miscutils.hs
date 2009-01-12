@@ -4,10 +4,11 @@ import IO
 import Control.Concurrent.STM
 import Data.Word
 import Data.Char
-import Data.List
+import Data.List(find)
 import Maybe (fromJust)
 import qualified Data.Map as Map
 import Data.Time
+import Data.Sequence(Seq, empty)
 import Network
 
 data ClientInfo =
@@ -59,7 +60,7 @@ data RoomInfo =
 		readyPlayers :: Int,
 		isRestrictedJoins :: Bool,
 		isRestrictedTeams :: Bool,
-		roundMsgs :: [String],
+		roundMsgs :: Seq String,
 		params :: Map.Map String [String]
 	}
 createRoom = (
@@ -74,7 +75,7 @@ createRoom = (
 		0
 		False
 		False
-		[]
+		Data.Sequence.empty
 		Map.empty
 	)
 

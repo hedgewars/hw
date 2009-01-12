@@ -6,6 +6,8 @@ module HWProto
 import IO
 import Data.List
 import Data.Word
+import Data.Sequence(Seq, (|>), empty)
+import Data.Foldable(toList)
 import Miscutils
 import Maybe
 import qualified Data.Map as Map
@@ -245,7 +247,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 					[]
 				else
 					(answerClientOnly  ["RUN_GAME"]) ++
-					answerClientOnly ("GAMEMSG" : "DGUkc3BlY3RhdGUgMQ==" : roundMsgs clRoom)
+					answerClientOnly ("GAMEMSG" : "DGUkc3BlY3RhdGUgMQ==" : (toList $ roundMsgs clRoom))
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
@@ -368,7 +370,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 handleCmd_inRoom client _ rooms ["START_GAME"] =
 	if isMaster client && (playersIn clRoom == readyPlayers clRoom) && (not $ gameinprogress clRoom) then
 		if enoughClans then
-			(noChangeClients, modifyRoom clRoom{gameinprogress = True, roundMsgs = []}, answerRunGame)
+			(noChangeClients, modifyRoom clRoom{gameinprogress = True, roundMsgs = empty}, answerRunGame)
 		else
 			(noChangeClients, noChangeRooms, answerTooFewClans)
 	else
@@ -397,7 +399,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_RESTRICT_TEAMS"] =
 
 handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs = []}, answerAllNotReady)
+		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs = empty}, answerAllNotReady)
 	else
 		(noChangeClients, noChangeRooms, [])
 	where
@@ -411,7 +413,7 @@ handleCmd_inRoom client _ rooms ["GAMEMSG", msg] =
 		addMsg = if roomProto clRoom < 20 then
 					noChangeRooms
 				else
-					modifyRoom clRoom{roundMsgs = roundMsgs clRoom ++ [msg]}
+					modifyRoom clRoom{roundMsgs = roundMsgs clRoom |> msg}
 		clRoom = roomByName (room client) rooms
 
 handleCmd_inRoom client clients rooms ["KICK", kickNick] =
