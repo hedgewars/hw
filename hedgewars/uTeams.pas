@@ -224,6 +224,8 @@ ApplyAmmoChanges(CurrentHedgehog^);
 
 if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 
+SetVoicePack(CurrentTeam^.voicepack);
+
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then

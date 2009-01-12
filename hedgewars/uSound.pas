@@ -114,7 +114,7 @@ SetVoicePack(defVoicepack);
 for i:= Low(TSound) to High(TSound) do
 	if Soundz[i].Path <> ptVoices then
 		begin
-		s:= Pathz[Soundz[i].Path] + '/Default/' + Soundz[i].FileName;
+		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
 		defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
 		TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
