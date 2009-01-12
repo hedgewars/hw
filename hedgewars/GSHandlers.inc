@@ -603,7 +603,7 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 		Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
 		Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
 		HHGear^.State:= HHGear^.State or gstNoDamage;
-		AmmoShove(Gear, 2, 10);
+		AmmoShove(Gear, 2, 15);
 		HHGear^.State:= HHGear^.State and not gstNoDamage
 		end;
 	end;
@@ -1936,11 +1936,11 @@ begin
 		PlaySound(sndGun, false);
 		end;
 
-	if (Gear^.Timer = 0) then
+	if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
 		begin
 		DeleteGear(Gear);
-		AfterAttack;
-	end
+		AfterAttack
+		end
 end;
 
 procedure doStepBallgun(Gear: PGear);

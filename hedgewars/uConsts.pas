@@ -1113,7 +1113,8 @@ const
 			NameTex: nil;
 			Probability: 400;
 			NumberInCase: 1;
-			Ammo: (Propz:  ammoprop_ForwMsgs;
+			Ammo: (Propz:  ammoprop_ForwMsgs or
+							 ammoprop_DontHold;
 					Count: AMMO_INFINITE;
 					NumPerTurn: 0;
 					Timer: 5001;
