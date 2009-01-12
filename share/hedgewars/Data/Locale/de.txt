@@ -6,7 +6,7 @@
 00:03=UFO
 00:04=Schrotflinte
 00:05=Presslufthammer
-00:06=Überspringen
+00:06=Aussetzen
 00:07=Seil
 00:08=Mine
 00:09=DEagle
@@ -22,15 +22,15 @@
 00:19=Teleporter
 00:20=Igel wechseln
 00:21=Mörser
-00:22=Stoßen
+00:22=Peitsche
 00:23=Kamikaze
-00:24=Cake
-00:25=Seduction
-00:26=Watermelon bomb
-00:27=Hellish hand-grenade
-00:28=Drill Rocket
-00:29=Ballgun
-00:30=Napalm
+00:24=Torte
+00:25=Anmachen
+00:26=Wassermelonen-Bombe
+00:27=Höllische Granate
+00:28=Bohrrakete
+00:29=Ballkanone
+00:30=Napalm-Teppich
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
@@ -39,3 +39,4 @@
 01:04=Pausiert
 01:05=Wirklich beenden (Y/Esc)?
 01:06=Sudden death!
+
