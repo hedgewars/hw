@@ -637,7 +637,7 @@ end;
 
 procedure doStepRopeWork(Gear: PGear);
 var HHGear: PGear;
-	len, cs, cc, tx, ty, nx, ny, ropeDx, ropeDy: hwFloat;
+	len, cs, cc, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
 	lx, ly: LongInt;
 	haveCollision,
 	haveDivided: boolean;
@@ -662,22 +662,44 @@ if ((HHGear^.State and gstHHDriven) = 0)
 	exit
 	end;
 
-ropeDx:= HHGear^.X - Gear^.X; // vector between hedgehog and rope attaching point
-ropeDy:= HHGear^.Y - Gear^.Y;
-
 if (Gear^.Message and gm_Left  <> 0) then HHGear^.dX:= HHGear^.dX - _0_0002 else
 if (Gear^.Message and gm_Right <> 0) then HHGear^.dX:= HHGear^.dX + _0_0002;
 
 if not TestCollisionYwithGear(HHGear, 1) then HHGear^.dY:= HHGear^.dY + cGravity;
 
-tx:= ropeDx + HHGear^.dX;
-ty:= ropeDy + HHGear^.dY;
-len:= _1 / Distance(tx, ty);
-tx:= tx * len; // rope vector plus hedgehog direction vector normalized
-ty:= ty * len;
+ropeDx:= HHGear^.X - Gear^.X; // vector between hedgehog and rope attaching point
+ropeDy:= HHGear^.Y - Gear^.Y;
 
-Gear^.dX:= tx; // for visual purposes only
-Gear^.dY:= ty;
+mdX:= ropeDx + HHGear^.dX;
+mdY:= ropeDy + HHGear^.dY;
+len:= _1 / Distance(mdX, mdY);
+mdX:= mdX * len; // rope vector plus hedgehog direction vector normalized
+mdY:= mdY * len;
+
+Gear^.dX:= mdX; // for visual purposes only
+Gear^.dY:= mdY;
+
+/////
+	tx:= HHGear^.X;
+	ty:= HHGear^.Y;
+
+	if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
+		if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
+				or TestCollisionYwithGear(HHGear, hwSign(ropeDy))) then
+					Gear^.Elasticity:= Gear^.Elasticity + _0_3;
+
+	if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
+		if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
+				or TestCollisionYwithGear(HHGear, -hwSign(ropeDy))) then
+					Gear^.Elasticity:= Gear^.Elasticity - _0_3;
+
+	HHGear^.X:= Gear^.X + mdX * Gear^.Elasticity;
+	HHGear^.Y:= Gear^.Y + mdY * Gear^.Elasticity;
+
+	HHGear^.dX:= HHGear^.X - tx;
+	HHGear^.dY:= HHGear^.Y - ty;
+////
+
 
 haveDivided:= false;
 	// check whether rope needs dividing
@@ -685,11 +707,11 @@ haveDivided:= false;
 	nx:= ropeDx * len;
 	ny:= ropeDy * len;
 	
-	len:= Gear^.Elasticity - _20;
-	while len > _5 do
+	len:= Gear^.Elasticity - _0_3x70;
+	while len > _0_3 do
 			begin
-			lx:= hwRound(Gear^.X + tx * len);
-			ly:= hwRound(Gear^.Y + ty * len);
+			lx:= hwRound(Gear^.X + mdX * len);
+			ly:= hwRound(Gear^.Y + mdY * len);
 			if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
 				begin
 				with RopePoints.ar[RopePoints.Count] do
@@ -697,7 +719,7 @@ haveDivided:= false;
 					X:= Gear^.X;
 					Y:= Gear^.Y;
 					if RopePoints.Count = 0 then RopePoints.HookAngle:= DxDy2Angle(Gear^.dY, Gear^.dX);
-					b:= (tx * HHGear^.dY) > (ty * HHGear^.dX);
+					b:= (nx * HHGear^.dY) > (ny * HHGear^.dX);
 					dLen:= len
 					end;
 				Gear^.X:= Gear^.X + nx * len;
@@ -720,38 +742,12 @@ if not haveDivided then
 		if RopePoints.ar[Pred(RopePoints.Count)].b xor ((tx - Gear^.X) * (ty - HHGear^.Y) > (tx - HHGear^.X) * (ty - Gear^.Y)) then
 			begin
 			dec(RopePoints.Count);
-			Gear^.X:=RopePoints.ar[RopePoints.Count].X;
-			Gear^.Y:=RopePoints.ar[RopePoints.Count].Y;
+			Gear^.X:= RopePoints.ar[RopePoints.Count].X;
+			Gear^.Y:= RopePoints.ar[RopePoints.Count].Y;
 			Gear^.Elasticity:= Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
 			Gear^.Friction:= Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen
 			end
 		end;
-
-ropeDx:= HHGear^.X - Gear^.X;
-ropeDy:= HHGear^.Y - Gear^.Y;
-
-cs:= ropeDy + HHGear^.dY;
-cc:= ropeDx + HHGear^.dX;
-len:= _1 / Distance(cc, cs);
-cc:= cc * len;
-cs:= cs * len;
-
-tx:= HHGear^.X;
-ty:= HHGear^.Y;
-
-if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-	if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-			or TestCollisionYwithGear(HHGear, hwSign(ropeDy))) then Gear^.Elasticity:= Gear^.Elasticity + _0_3;
-
-if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Elasticity > _30) then
-	if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-			or TestCollisionYwithGear(HHGear, -hwSign(ropeDy))) then Gear^.Elasticity:= Gear^.Elasticity - _0_3;
-
-HHGear^.X:= Gear^.X + cc*Gear^.Elasticity;
-HHGear^.Y:= Gear^.Y + cs*Gear^.Elasticity;
-
-HHGear^.dX:= HHGear^.X - tx;
-HHGear^.dY:= HHGear^.Y - ty;
 
 haveCollision:= false;
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
