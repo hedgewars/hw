@@ -74,7 +74,9 @@ if isDeveloperMode then
 
    AddTeam(Color);
    CurrentTeam^.TeamName:= ts;
-   if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true
+   if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
+
+   CurrentTeam^.voicepack:= AskForVoicepack('Default')
    end
 end;
 
@@ -99,6 +101,14 @@ if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/fort"', true);
 if s[1]='"' then Delete(s, 1, 1);
 if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s
+end;
+
+procedure chVoicepack(var s: shortstring);
+begin
+if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/voicepack"', true);
+if s[1]='"' then Delete(s, 1, 1);
+if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+CurrentTeam^.voicepack:= AskForVoicepack(s)
 end;
 
 procedure chAddHH(var id: shortstring);

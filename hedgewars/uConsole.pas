@@ -35,7 +35,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 {$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh;
+     uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh, uSound;
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
@@ -243,6 +243,7 @@ RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);
+RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
 RegisterVariable('bind'    , vtCommand, @chBind         , true );
 RegisterVariable('addhh'   , vtCommand, @chAddHH        , false);

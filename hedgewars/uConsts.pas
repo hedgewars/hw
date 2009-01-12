@@ -474,54 +474,53 @@ const
 			FileName: String[19];
 			Path    : TPathType;
 			id      : PMixChunk;
-			lastChan: LongInt;
 			end = (
-			(FileName: 'grenadeimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGrenadeImpact
-			(FileName:     'explosion.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndExplosion
-			(FileName:  'throwpowerup.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowPowerUp
-			(FileName:  'throwrelease.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndThrowRelease
-			(FileName:        'splash.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndSplash
-			(FileName: 'shotgunreload.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunReload
-			(FileName:   'shotgunfire.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndShotgunFire
-			(FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGraveImpact
-			(FileName:      'minetick.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMineTicks
-			(FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndPickhammer
-			(FileName:           'gun.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndGun
-			(FileName:           'ufo.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndUFO
-			(FileName:         'Jump1.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump1
-			(FileName:         'Jump2.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump2
-			(FileName:         'Jump3.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndJump3
-			(FileName:        'Yessir.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndYesSir
-			(FileName:         'Laugh.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndLaugh
-			(FileName:     'Illgetyou.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndIllGetYou
-			(FileName:      'Incoming.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndIncoming
-			(FileName:        'Missed.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndMissed
-			(FileName:        'Stupid.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndStupid
-			(FileName:    'Firstblood.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndFirstBlood
-			(FileName:        'Boring.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndBoring
-			(FileName:        'Byebye.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndByeBye
-			(FileName:      'Sameteam.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndSameTeam
-			(FileName:        'Nutter.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndNutter
-			(FileName:'Reinforcements.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndReinforce
-			(FileName:       'Traitor.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndTraitor
-			(FileName:'Youllregretthat.ogg';Path: ptVoices; id: nil; lastChan: 0),// sndRegret
-			(FileName:     'Enemydown.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndEnemyDown
-			(FileName:        'Coward.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndCoward
-			(FileName:         'Hurry.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndHurry
-			(FileName:       'Watchit.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndWatchIt
-			(FileName:      'Kamikaze.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndKamikaze
-			(FileName:         'cake2.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndCake
-			(FileName:           'Ow1.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndOw1
-			(FileName:           'Ow4.ogg'; Path: ptVoices; id: nil; lastChan: 0),// sndOw4
-			(FileName:    'Firepunch1.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch1
-			(FileName:    'Firepunch2.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch2
-			(FileName:    'Firepunch3.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch3
-			(FileName:    'Firepunch4.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch4
-			(FileName:    'Firepunch5.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch5
-			(FileName:    'Firepunch6.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndFirepunch6
-			(FileName:         'Melon.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndMelon
-			(FileName:       'Hellish.ogg'; Path: ptSounds; id: nil; lastChan: 0),// sndHellish
-			(FileName:        'Yoohoo.ogg'; Path: ptSounds; id: nil; lastChan: 0) // sndYoohoo
+			(FileName: 'grenadeimpact.ogg'; Path: ptSounds; id: nil),// sndGrenadeImpact
+			(FileName:     'explosion.ogg'; Path: ptSounds; id: nil),// sndExplosion
+			(FileName:  'throwpowerup.ogg'; Path: ptSounds; id: nil),// sndThrowPowerUp
+			(FileName:  'throwrelease.ogg'; Path: ptSounds; id: nil),// sndThrowRelease
+			(FileName:        'splash.ogg'; Path: ptSounds; id: nil),// sndSplash
+			(FileName: 'shotgunreload.ogg'; Path: ptSounds; id: nil),// sndShotgunReload
+			(FileName:   'shotgunfire.ogg'; Path: ptSounds; id: nil),// sndShotgunFire
+			(FileName:   'graveimpact.ogg'; Path: ptSounds; id: nil),// sndGraveImpact
+			(FileName:      'minetick.ogg'; Path: ptSounds; id: nil),// sndMineTicks
+			(FileName:    'pickhammer.ogg'; Path: ptSounds; id: nil),// sndPickhammer
+			(FileName:           'gun.ogg'; Path: ptSounds; id: nil),// sndGun
+			(FileName:           'ufo.ogg'; Path: ptSounds; id: nil),// sndUFO
+			(FileName:         'Jump1.ogg'; Path: ptVoices; id: nil),// sndJump1
+			(FileName:         'Jump2.ogg'; Path: ptVoices; id: nil),// sndJump2
+			(FileName:         'Jump3.ogg'; Path: ptVoices; id: nil),// sndJump3
+			(FileName:        'Yessir.ogg'; Path: ptVoices; id: nil),// sndYesSir
+			(FileName:         'Laugh.ogg'; Path: ptVoices; id: nil),// sndLaugh
+			(FileName:     'Illgetyou.ogg'; Path: ptVoices; id: nil),// sndIllGetYou
+			(FileName:      'Incoming.ogg'; Path: ptVoices; id: nil),// sndIncoming
+			(FileName:        'Missed.ogg'; Path: ptVoices; id: nil),// sndMissed
+			(FileName:        'Stupid.ogg'; Path: ptVoices; id: nil),// sndStupid
+			(FileName:    'Firstblood.ogg'; Path: ptVoices; id: nil),// sndFirstBlood
+			(FileName:        'Boring.ogg'; Path: ptVoices; id: nil),// sndBoring
+			(FileName:        'Byebye.ogg'; Path: ptVoices; id: nil),// sndByeBye
+			(FileName:      'Sameteam.ogg'; Path: ptVoices; id: nil),// sndSameTeam
+			(FileName:        'Nutter.ogg'; Path: ptVoices; id: nil),// sndNutter
+			(FileName:'Reinforcements.ogg'; Path: ptVoices; id: nil),// sndReinforce
+			(FileName:       'Traitor.ogg'; Path: ptVoices; id: nil),// sndTraitor
+			(FileName:'Youllregretthat.ogg';Path: ptVoices; id: nil),// sndRegret
+			(FileName:     'Enemydown.ogg'; Path: ptVoices; id: nil),// sndEnemyDown
+			(FileName:        'Coward.ogg'; Path: ptVoices; id: nil),// sndCoward
+			(FileName:         'Hurry.ogg'; Path: ptVoices; id: nil),// sndHurry
+			(FileName:       'Watchit.ogg'; Path: ptVoices; id: nil),// sndWatchIt
+			(FileName:      'Kamikaze.ogg'; Path: ptVoices; id: nil),// sndKamikaze
+			(FileName:         'cake2.ogg'; Path: ptSounds; id: nil),// sndCake
+			(FileName:           'Ow1.ogg'; Path: ptVoices; id: nil),// sndOw1
+			(FileName:           'Ow4.ogg'; Path: ptVoices; id: nil),// sndOw4
+			(FileName:    'Firepunch1.ogg'; Path: ptSounds; id: nil),// sndFirepunch1
+			(FileName:    'Firepunch2.ogg'; Path: ptSounds; id: nil),// sndFirepunch2
+			(FileName:    'Firepunch3.ogg'; Path: ptSounds; id: nil),// sndFirepunch3
+			(FileName:    'Firepunch4.ogg'; Path: ptSounds; id: nil),// sndFirepunch4
+			(FileName:    'Firepunch5.ogg'; Path: ptSounds; id: nil),// sndFirepunch5
+			(FileName:    'Firepunch6.ogg'; Path: ptSounds; id: nil),// sndFirepunch6
+			(FileName:         'Melon.ogg'; Path: ptSounds; id: nil),// sndMelon
+			(FileName:       'Hellish.ogg'; Path: ptSounds; id: nil),// sndHellish
+			(FileName:        'Yoohoo.ogg'; Path: ptSounds; id: nil) // sndYoohoo
 			);
 
 	Ammoz: array [TAmmoType] of record

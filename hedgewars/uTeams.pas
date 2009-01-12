@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, GL;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, GL, uSound;
 {$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;
@@ -66,6 +66,7 @@ type PHHAmmo = ^THHAmmo;
 			AttackBar: LongWord;
 			HedgehogsNumber: Longword;
 			hasGone: boolean;
+			voicepack: PVoicepack;
 			end;
 			
 	TClan = record
@@ -97,7 +98,7 @@ function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uSound, uChat;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;

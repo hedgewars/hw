@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005, 2007 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2005, 2007, 2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,12 @@ interface
 uses SDLh, uConsts;
 {$INCLUDE options.inc}
 
+type PVoicepack = ^TVoicepack;
+	TVoicepack = record
+		name: shortstring;
+		chunks: array [TSound] of PMixChunk;
+		end;
+
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
@@ -28,6 +34,7 @@ procedure PlaySound(snd: TSound; infinite: boolean);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
+function  AskForVoicepack(name: shortstring): Pointer;
 
 var MusicFN: shortstring = '';
 
@@ -36,7 +43,23 @@ uses uMisc, uConsole;
 
 const chanTPU = 12;
 var Mus: PMixMusic = nil;
-    Volume: LongInt;
+	Volume: LongInt;
+	lastChan: array [TSound] of LongInt;
+	voicepacks: array[0..cMaxTeams] of TVoicepack;
+
+function  AskForVoicepack(name: shortstring): Pointer;
+var i: Longword;
+begin
+i:= 0;
+while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
+	begin
+	inc(i);
+	TryDo(i <= cMaxTeams, 'Engine bug: AskForVoicepack i > cMaxTeams', true)
+	end;
+
+voicepacks[i].name:= name;
+AskForVoicepack:= @voicepacks[i]
+end;
 
 procedure InitSound;
 begin
@@ -70,14 +93,16 @@ var i: TSound;
     s: shortstring;
 begin
 if not isSoundEnabled then exit;
+AskForVoicepack('Default');
+
 for i:= Low(TSound) to High(TSound) do
-    begin
-    s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-    WriteToConsole(msgLoading + s + ' ');
-    Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-    TryDo(Soundz[i].id <> nil, msgFailed, true);
-    WriteLnToConsole(msgOK);
-    end;
+	begin
+	s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
+	WriteToConsole(msgLoading + s + ' ');
+	Soundz[i].id:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+	TryDo(Soundz[i].id <> nil, msgFailed, true);
+	WriteLnToConsole(msgOK);
+	end;
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean);
@@ -85,14 +110,14 @@ var loops: LongInt;
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
 if infinite then loops:= -1 else loops:= 0;
-Soundz[snd].lastChan:= Mix_PlayChannelTimed(-1, Soundz[snd].id, loops, -1)
+lastChan[snd]:= Mix_PlayChannelTimed(-1, Soundz[snd].id, loops, -1)
 end;
 
 procedure StopSound(snd: TSound);
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(Soundz[snd].lastChan) <> 0 then
-   Mix_HaltChannel(Soundz[snd].lastChan)
+if Mix_Playing(lastChan[snd]) <> 0 then
+	Mix_HaltChannel(lastChan[snd])
 end;
 
 procedure PlayMusic;
@@ -115,7 +140,7 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
 if not isSoundEnabled then
-   exit(0);
+	exit(0);
 
 inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
