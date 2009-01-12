@@ -221,8 +221,8 @@ g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentHedgehog^);
 
-if CurrentTeam^.ExtDriven then SetDefaultBinds
-                          else SetBinds(CurrentTeam^.Binds);
+if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
+
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
