@@ -52,6 +52,7 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	chatNicks = new QListWidget(this);
 	chatNicks->setMinimumHeight(10);
 	chatNicks->setMinimumWidth(10);
+	chatNicks->setSortingEnabled(true);
 	chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
 	mainLayout.addWidget(chatNicks, 0, 1);
