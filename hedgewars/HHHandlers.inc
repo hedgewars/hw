@@ -485,7 +485,8 @@ if (Gear^.State and gstMoving) <> 0 then
       Gear^.dY:= _0;
       Gear^.Y:= Gear^.Y + _1
       end;
-   CheckGearDrowning(Gear)
+   CheckGearDrowning(Gear);
+   if (Gear^.State and gstDrowning) <> 0 then isCursorVisible:= false
    end
 end;
 
