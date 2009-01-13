@@ -1,5 +1,5 @@
 file(GLOB SurferSounds *.ogg)
 
 install(FILES
-	${BaseSounds}
+	${SurferSounds}
 	DESTINATION ${SHAREPATH}Data/Sounds/voices/Surfer)
