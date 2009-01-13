@@ -55,15 +55,16 @@ HWTeam::HWTeam(const QStringList& strLst) :
   m_isNetTeam(true)
 {
 	// net teams are configured from QStringList
-	if(strLst.size() < 20) throw HWTeamConstructException();
+	if(strLst.size() < 21) throw HWTeamConstructException();
 	TeamName = strLst[0];
 	Grave = strLst[1];
 	Fort = strLst[2];
-	difficulty = strLst[3].toUInt();
+	Voicepack = strLst[3];
+	difficulty = strLst[4].toUInt();
 	for(int i = 0; i < 8; i++)
 	{
-		HHName[i]=strLst[i * 2 + 4];
-		HHHat[i]=strLst[i * 2 + 5];
+		HHName[i]=strLst[i * 2 + 5];
+		HHHat[i]=strLst[i * 2 + 6];
 	}
 }
 

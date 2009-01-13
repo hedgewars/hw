@@ -13,7 +13,11 @@ import Maybe
 import qualified Data.Map as Map
 import Opts
 
-teamToNet team = ["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
+teamToNet protocol team =
+	if protocol == 21 then
+		["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
+	else
+		["ADD_TEAM", teamname team, teamgrave team, teamfort team, teamvoicepack team, show $ difficulty team] ++ hhsInfo
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
@@ -60,7 +64,7 @@ answerAbandoned protocol  =
 		answerOthersRoom ["ROOMABANDONED"]
 
 answerChatString nick msg = answerOthersRoom ["CHAT_STRING", nick, msg]
-answerAddTeam team        = answerOthersRoom $ teamToNet team
+answerAddTeam protocol team = answerOthersRoom $ teamToNet protocol team
 answerRemoveTeam teamName = answerOthersRoom ["REMOVE_TEAM", teamName]
 answerMap mapName         = answerOthersRoom ["MAP", mapName]
 answerHHNum teamName hhNumber = answerOthersRoom ["HH_NUM", teamName, show hhNumber]
@@ -95,10 +99,10 @@ answerFullConfig room = concatMap toAnswer (Map.toList $ params room) ++ (answer
 		toAnswer (paramName, paramStrs) =
 			answerClientOnly $ "CONFIG_PARAM" : paramName : paramStrs
 
-answerAllTeams room = concatMap toAnswer (teams room)
+answerAllTeams protocol room = concatMap toAnswer (teams room)
 	where
 		toAnswer team =
-			(answerClientOnly $ teamToNet team) ++
+			(answerClientOnly $ teamToNet protocol team) ++
 			(answerClientOnly ["TEAM_COLOR", teamname team, teamcolor team]) ++
 			(answerClientOnly ["HH_NUM", teamname team, show $ hhnum team])
 
@@ -236,7 +240,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if isRestrictedJoins clRoom then
 		(noChangeClients, noChangeRooms, answerRestricted)
 	else
-		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams clRoom ++ watchRound)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams (protocol client) clRoom ++ watchRound)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
 		answerNicks = answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
@@ -290,7 +294,7 @@ handleCmd_inRoom client _ rooms ["MAP", mapName] =
 	where
 		clRoom = roomByName (room client) rooms
 
-handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo)
+handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : difStr : hhsInfo)
 	| length hhsInfo == 16 =
 	if length (teams clRoom) == 6 then
 		(noChangeClients, noChangeRooms, answerCantAdd "too many teams")
@@ -303,16 +307,20 @@ handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : difS
 	else if isRestrictedTeams clRoom then
 		(noChangeClients, noChangeRooms, answerCantAdd "restricted")
 	else
-		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam newTeam ++ answerTeamColor name color)
+		(noChangeClients, modifyRoom clRoom{teams = teams clRoom ++ [newTeam]}, answerTeamAccepted newTeam ++ answerAddTeam (protocol client) newTeam ++ answerTeamColor name color)
 	where
 		clRoom = roomByName (room client) rooms
-		newTeam = (TeamInfo (nick client) name color grave fort difficulty newTeamHHNum (hhsList hhsInfo))
+		newTeam = (TeamInfo (nick client) name color grave fort voicepack difficulty newTeamHHNum (hhsList hhsInfo))
 		findTeam = find (\t -> name == teamname t) $ teams clRoom
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
 		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
 		newTeamHHNum = min 4 canAddNumber
+
+handleCmd_inRoom client clients rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo) =
+	handleCmd_inRoom client clients rooms ("ADD_TEAM" : name : color : grave : fort : "Default" : difStr : hhsInfo)
+
 
 handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 	if not $ isMaster client then
