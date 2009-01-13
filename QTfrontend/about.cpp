@@ -64,8 +64,9 @@ About::About(QWidget * parent) :
 			"\"Castle\", \"PirateFlag\" maps, \"hell\" theme: Stanko Tadić &lt;<a href=\"mailto:stanko@mfhinc.net\">stanko@mfhinc.net</a>&gt;"
 			"<br>"
 			"\"Sheep\" theme: Julien Koesten &lt;<a href=\"mailto:julienkoesten@aol.com\">julienkoesten@aol.com</a>&gt;"
+			"<br>"
+			"\"Blox\", \"Cake\", \"Cogs\" maps: Joshua O'Sullivan &lt;<a href=\"mailto:battysausage@hotmail.co.uk\">battysausage@hotmail.co.uk</a>&gt;"
 			"</p><h2>") +
-			
 			QLabel::tr("Sounds:") + "</h2>"
 			"Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
 			"<br>"

@@ -104,6 +104,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 	     team.teamColor.name() + delimeter +
 	     team.Grave + delimeter +
 	     team.Fort + delimeter +
+	     team.Voicepack + delimeter +
 	     QString::number(team.difficulty);
 
 	for(int i = 0; i < 8; ++i)
