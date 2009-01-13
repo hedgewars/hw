@@ -165,6 +165,16 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	CBGrave->setIconSize(QSize(32, 32));
 	GBTLayout->addWidget(CBGrave);
 	
+	CBVoicepack = new QComboBox(GBoxTeam);
+	{
+		QDir tmpdir;
+		tmpdir.cd(datadir->absolutePath());
+		tmpdir.cd("Sounds/voices");
+		QStringList list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+		CBVoicepack->addItems(list);
+	}
+	GBTLayout->addWidget(CBVoicepack);
+
 	GBoxFort = new QGroupBox(this);
 	GBoxFort->setTitle(QGroupBox::tr("Fort"));
 	QGridLayout * GBFLayout = new QGridLayout(GBoxFort);

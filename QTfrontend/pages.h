@@ -148,6 +148,7 @@ public:
 	SquareLabel *FortPreview;
 	QComboBox *CBGrave;
 	QComboBox *CBTeamLvl;
+	QComboBox *CBVoicepack;
 	QGroupBox *GBoxBinds;
 	QToolBox *BindsBox;
 	QWidget *page_A;

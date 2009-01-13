@@ -42,6 +42,7 @@ HWTeam::HWTeam(const QString & teamname) :
 	}
 	Grave = "Statue";
 	Fort = "Plane";
+	Voicepack = "Default";
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].action = cbinds[i].action;
@@ -145,6 +146,11 @@ bool HWTeam::LoadFromFile()
 			str.remove(0, 5);
 			Fort = str;
 		} else
+		if (str.startsWith("voicepack "))
+		{
+			str.remove(0, 10);
+			Voicepack = str;
+		} else
 		if (str.startsWith("bind "))
 		{
 			str.remove(0, 5);
@@ -190,6 +196,7 @@ bool HWTeam::SaveToFile()
 	}
 	stream << "grave " << Grave << endl;
 	stream << "fort " << Fort << endl;
+	stream << "voicepack " << Voicepack << endl;
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		stream << "bind " << binds[i].strbind << " " << binds[i].action << endl;
@@ -211,6 +218,7 @@ void HWTeam::SetToPage(HWForm * hwform)
 	hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
 
 	hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(Fort));
+	hwform->ui.pageEditTeam->CBVoicepack->setCurrentIndex(hwform->ui.pageEditTeam->CBVoicepack->findText(Voicepack));
 	//hwform->ui.pageEditTeam->CBFort_activated(Fort);
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
@@ -231,6 +239,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
 
 	Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
 	Fort = hwform->ui.pageEditTeam->CBFort->currentText();
+	Voicepack = hwform->ui.pageEditTeam->CBVoicepack->currentText();
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->currentText();
@@ -247,7 +256,7 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
-	sl.push_back(QString("evoicepack Default"));
+	sl.push_back(QString("evoicepack " + Voicepack));
 
 	if (!m_isNetTeam)
 		for(int i = 0; i < BINDS_NUMBER; i++)
