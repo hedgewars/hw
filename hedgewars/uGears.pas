@@ -939,24 +939,24 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	begin
 	if ((Gear^.State and not gstWinner) = 0)
 		or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
-	begin
-	t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
-	if (cTagsMask and 1) <> 0 then
 		begin
-		dec(t, HealthTagTex^.h + 2);
-		DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
+		t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
+		if (cTagsMask and 1) <> 0 then
+			begin
+			dec(t, HealthTagTex^.h + 2);
+			DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
+			end;
+		if (cTagsMask and 2) <> 0 then
+			begin
+			dec(t, NameTagTex^.h + 2);
+			DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
+			end;
+		if (cTagsMask and 4) <> 0 then
+			begin
+			dec(t, Team^.NameTagTex^.h + 2);
+			DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
+			end
 		end;
-	if (cTagsMask and 2) <> 0 then
-		begin
-		dec(t, NameTagTex^.h + 2);
-		DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
-		end;
-	if (cTagsMask and 4) <> 0 then
-		begin
-		dec(t, Team^.NameTagTex^.h + 2);
-		DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
-		end
-	end;
 	if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
 		begin
 		if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then

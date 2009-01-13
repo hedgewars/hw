@@ -224,6 +224,28 @@ if r.y < cScreenHeight then
    glEnable(GL_TEXTURE_2D)
    end;
 
+// Attack bar
+if CurrentTeam <> nil then
+	case AttackBar of
+(*        1: begin
+		r:= StuffPoz[sPowerBar];
+		{$WARNINGS OFF}
+		r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
+		{$WARNINGS ON}
+		DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
+		end;*)
+		2: with CurrentHedgehog^ do
+				begin
+				tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+				tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+				for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+					DrawSprite(sprPower,
+							hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
+							hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
+							i)
+				end
+		end;
+
 DrawGears;
 
 DrawVisualGears(1);
@@ -251,27 +273,6 @@ if TurnTimeLeft <> 0 then
          end;
    DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0);
    end;
-
-// Attack bar
-if CurrentTeam <> nil then
-   case AttackBar of
-(*        1: begin
-           r:= StuffPoz[sPowerBar];
-           {$WARNINGS OFF}
-           r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-           {$WARNINGS ON}
-           DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-           end;
-*)        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower, hwRound(Gear^.X) + system.round(WorldDx + tdx * (24 + i * 2)) - 16,
-                                         hwRound(Gear^.Y) + system.round(WorldDy + tdy * (24 + i * 2)) - 12,
-                                         i)
-                end
-        end;
 
 // Target
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
