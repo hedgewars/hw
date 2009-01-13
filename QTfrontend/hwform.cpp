@@ -700,7 +700,7 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 	QByteArray demo = record;
 	QString recordFileName =
 			config->appendDateTimeToRecordName() ?
-				QDateTime::currentDateTime().toString(Qt::ISODate) :
+				QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
 				"LastRound";
 
 	if (isDemo)
