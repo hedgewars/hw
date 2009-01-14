@@ -320,9 +320,15 @@ void HWForm::GoBack()
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
 	
-	if (id == ID_PAGE_NETSERVER || (id == ID_PAGE_ROOMSLIST && !hwnet)) {
+	if (id == ID_PAGE_NETSERVER)
 		GoBack();
-	}
+	if ((!hwnet) && (id == ID_PAGE_ROOMSLIST))
+		GoBack();
+	
+	if ((!hwnet) || (!hwnet->isInRoom()))
+		if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
+			GoBack();
+
 	if (id == ID_PAGE_NET) {
 		if(hwnet || pnetserver) NetDisconnect();
 	}
