@@ -80,6 +80,7 @@ type PHHAmmo = ^THHAmmo;
 			end;
 
 var CurrentTeam: PTeam = nil;
+	PreviousTeam: PTeam = nil;
 	CurrentHedgehog: PHedgehog = nil;
 	TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
 	TeamsCount: Longword = 0;
@@ -155,6 +156,7 @@ begin
 FreeActionsList;
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
+PreviousTeam:= CurrentTeam;
 
 with CurrentHedgehog^ do
 	if Gear <> nil then

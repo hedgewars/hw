@@ -45,19 +45,28 @@ var
 implementation
 uses uTeams, uSound, uMisc;
 var DamageGiven : Longword = 0;
-    DamageClan  : Longword = 0;
-    DamageTotal : Longword = 0;
-    KillsClan   : LongWord = 0;
-    Kills       : LongWord = 0;
-    KillsTotal  : LongWord = 0;
-    AmmoUsedCount : Longword = 0;
-    AmmoDamagingUsed : boolean = false;
-    SkippedTurns: LongWord = 0;
-    isTurnSkipped: boolean = false;
+	DamageClan  : Longword = 0;
+	DamageTotal : Longword = 0;
+	KillsClan   : LongWord = 0;
+	Kills       : LongWord = 0;
+	KillsTotal  : LongWord = 0;
+	AmmoUsedCount : Longword = 0;
+	AmmoDamagingUsed : boolean = false;
+	SkippedTurns: LongWord = 0;
+	isTurnSkipped: boolean = false;
+	vpHurtSameClan: PVoicepack = nil;
+	vpHurtEnemy: PVoicepack = nil;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
+if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then
+	vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
+else
+	vpHurtEnemy:= CurrentHedgehog^.Team^.voicepack;
+
 if bBetweenTurns then exit;
+
+//////////////////////////
 
 if Gear <> CurrentHedgehog^.Gear then
 	inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
@@ -97,34 +106,34 @@ if FinishedTurnsTotal <> 0 then
 		PlaySound(sndFirstBlood, false, CurrentTeam^.voicepack)
 
 	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
-		PlaySound(sndStupid, false, CurrentTeam^.voicepack)
+		PlaySound(sndStupid, false, PreviousTeam^.voicepack)
 
 	else if DamageClan <> 0 then
 		if DamageTotal > DamageClan then
 			if random(2) = 0 then
 				PlaySound(sndNutter, false, CurrentTeam^.voicepack)
 			else
-				PlaySound(sndWatchIt, false, CurrentTeam^.voicepack)
+				PlaySound(sndWatchIt, false, vpHurtSameClan)
 		else
 			if random(2) = 0 then
-				PlaySound(sndSameTeam, false, CurrentTeam^.voicepack)
+				PlaySound(sndSameTeam, false, vpHurtSameClan)
 			else
-				PlaySound(sndTraitor, false, CurrentTeam^.voicepack)
+				PlaySound(sndTraitor, false, vpHurtSameClan)
 
 	else if DamageGiven <> 0 then
 		if Kills > 0 then
 			PlaySound(sndEnemyDown, false, CurrentTeam^.voicepack)
 		else
-			PlaySound(sndRegret, false, CurrentTeam^.voicepack)
+			PlaySound(sndRegret, false, vpHurtEnemy)
 
 	else if AmmoDamagingUsed then
-		PlaySound(sndMissed, false, CurrentTeam^.voicepack)
+		PlaySound(sndMissed, false, PreviousTeam^.voicepack)
 	else if (AmmoUsedCount > 0) and not isTurnSkipped then
 		// nothing ?
 	else if isTurnSkipped then
-		PlaySound(sndBoring, false, CurrentTeam^.voicepack)
+		PlaySound(sndBoring, false, PreviousTeam^.voicepack)
 	else
-		PlaySound(sndCoward, false, CurrentTeam^.voicepack);
+		PlaySound(sndCoward, false, PreviousTeam^.voicepack);
 	end;
 
 
