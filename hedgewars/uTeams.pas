@@ -224,14 +224,12 @@ ApplyAmmoChanges(CurrentHedgehog^);
 
 if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 
-SetVoicePack(CurrentTeam^.voicepack);
-
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-	PlaySound(sndIllGetYou, false)
+	PlaySound(sndIllGetYou, false, CurrentTeam^.voicepack)
 else
-	PlaySound(sndYesSir, false);
+	PlaySound(sndYesSir, false, CurrentTeam^.voicepack);
 
 TurnTimeLeft:= cHedgehogTurnTime
 end;

@@ -565,7 +565,8 @@ if TurnTimeLeft > 0 then
 				begin
 				if (TurnTimeLeft = 5000)
 					and (CurrentHedgehog^.Gear <> nil)
-					and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then PlaySound(sndHurry, false);
+					and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
+						PlaySound(sndHurry, false, CurrentTeam^.voicepack);
 				dec(TurnTimeLeft)
 				end;
 
@@ -1161,7 +1162,7 @@ begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 if (Radius > 10) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
-if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false);
+if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false, nil);
 
 if (Mask and EXPLAllDamageInRadius) = 0 then
 	dmgRadius:= Radius shl 1
@@ -1447,7 +1448,7 @@ case getrandom(2) of
           inc(i);
           dec(t, Ammoz[i].Probability)
           end;
-        PlaySound(sndReinforce, false);
+        PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
         FollowGear^.Pos:= posCaseAmmo;
         FollowGear^.State:= Longword(i)
         end;

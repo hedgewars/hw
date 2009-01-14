@@ -30,13 +30,12 @@ type PVoicepack = ^TVoicepack;
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
-procedure PlaySound(snd: TSound; infinite: boolean);
+procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
 procedure PlayMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 
 function  AskForVoicepack(name: shortstring): Pointer;
-procedure SetVoicePack(vp: PVoicePack);
 
 var MusicFN: shortstring = '';
 
@@ -49,7 +48,6 @@ var Mus: PMixMusic = nil;
 	lastChan: array [TSound] of LongInt;
 	voicepacks: array[0..cMaxTeams] of TVoicepack;
 	defVoicepack: PVoicepack;
-	currentVP: PVoicepack;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
@@ -63,11 +61,6 @@ while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
 
 voicepacks[i].name:= name;
 AskForVoicepack:= @voicepacks[i]
-end;
-
-procedure SetVoicePack(vp: PVoicePack);
-begin
-currentVP:= vp
 end;
 
 procedure InitSound;
@@ -109,7 +102,6 @@ begin
 if not isSoundEnabled then exit;
 
 defVoicepack:= AskForVoicepack('Default');
-SetVoicePack(defVoicepack);
 
 for i:= Low(TSound) to High(TSound) do
 	if Soundz[i].Path <> ptVoices then
@@ -136,14 +128,14 @@ for t:= 0 to cMaxTeams do
 				end;
 end;
 
-procedure PlaySound(snd: TSound; infinite: boolean);
+procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
 var loops: LongInt;
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
 if infinite then loops:= -1 else loops:= 0;
 
-if currentVP^.chunks[snd] <> nil then
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, currentVP^.chunks[snd], loops, -1)
+if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], loops, -1)
 else
 	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], loops, -1)
 end;
