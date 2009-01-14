@@ -243,7 +243,10 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams (protocol client) clRoom ++ watchRound)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
-		answerNicks = answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
+		answerNicks = if not $ null sameRoomClients then
+					answerClientOnly $ ["JOINED"] ++ (map nick $ sameRoomClients)
+				else
+					[]
 		answerReady = concatMap (\c -> answerClientOnly [if isReady c then "READY" else "NOT_READY", nick c]) sameRoomClients
 		sameRoomClients = filter (\ci -> room ci == roomName) clients
 		clRoom = roomByName roomName rooms
