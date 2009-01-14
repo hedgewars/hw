@@ -181,9 +181,15 @@ onLoginFinished client clients =
 	if (null $ nick client) || (protocol client == 0) then
 		[]
 	else
-		(answerClientOnly $ ["LOBBY:JOINED"] ++ (filter (\n -> (not (null n)) && n /= nick client) $ map nick $ clients)) ++
+		answerLobbyNicks ++
 		(answerAll ["LOBBY:JOINED", nick client]) ++
 		(answerServerMessage client clients)
+	where
+		lobbyNicks = filter (\n -> (not (null n)) && n /= nick client) $ map nick $ clients
+		answerLobbyNicks = if not $ null lobbyNicks then
+					answerClientOnly $ ["LOBBY:JOINED"] ++ lobbyNicks
+				else
+					[]
 
 handleCmd_noInfo :: CmdHandler
 handleCmd_noInfo client clients _ ["NICK", newNick] =
