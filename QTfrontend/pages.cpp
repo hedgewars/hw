@@ -572,7 +572,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	
 	BtnGo = new QPushButton(this);
 	BtnGo->setFont(*font14);
-	//BtnGo->setText(QPushButton::tr("Ready"));
+	BtnGo->setToolTip(QPushButton::tr("Ready"));
 	BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 	BtnGo->setIconSize(QSize(25, 34));
 	BtnGo->setMinimumWidth(50);
