@@ -303,9 +303,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 	{
 		ui.pageGameStats->renderStats();
 	}
-
-	if ((lastid == ID_PAGE_GAMESTATS) && (id == ID_PAGE_NETGAME) && !hwnet)
-		GoBack();
 }
 
 void HWForm::GoToPage(quint8 id)

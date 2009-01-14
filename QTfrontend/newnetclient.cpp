@@ -705,3 +705,8 @@ void HWNewNet::partRoom()
 	netClientState = 2;
 	RawSendNet(QString("PART"));
 }
+
+bool HWNewNet::isInRoom()
+{
+	return netClientState > 2;
+}

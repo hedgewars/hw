@@ -43,6 +43,7 @@ class HWNewNet : public QObject
   void Connect(const QString & hostName, quint16 port, const QString & nick);
   void Disconnect();
   bool isRoomChief();
+  bool isInRoom();
 
  private:
   GameUIConfig* config;
