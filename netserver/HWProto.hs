@@ -14,7 +14,7 @@ import qualified Data.Map as Map
 import Opts
 
 teamToNet protocol team =
-	if protocol == 21 then
+	if protocol <= 21 then
 		["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
 	else
 		["ADD_TEAM", teamname team, teamgrave team, teamfort team, teamvoicepack team, show $ difficulty team] ++ hhsInfo

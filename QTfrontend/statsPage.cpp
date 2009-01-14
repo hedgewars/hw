@@ -86,6 +86,7 @@ void PageGameStats::renderStats()
 	}
 
 	graphic->setScene(scene);
+	graphic->fitInView(graphic->sceneRect());
 }
 
 void PageGameStats::GameStats(char type, const QString & info)
@@ -97,20 +98,22 @@ void PageGameStats::GameStats(char type, const QString & info)
 		}
 		case 'D' : {
 			int i = info.indexOf(' ');
-			QString message = tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
+			QString message = PageGameStats::tr("<p>The best shot award was won by <b>%1</b> with <b>%2</b> pts.</p>")
 					.arg(info.mid(i + 1), info.left(i));
 			AddStatText(message);
 			break;
 		}
 		case 'k' : {
 			int i = info.indexOf(' ');
-			QString message = tr("<p>The best killer is <b>%1</b> with <b>%2</b> kills in a turn.</p>")
+			int num = info.left(i).toInt();
+			QString message = PageGameStats::tr("<p>The best killer is <b>%1</b> with <b>%2</b> kills in a turn.</p>", "", num)
 					.arg(info.mid(i + 1), info.left(i));
 			AddStatText(message);
 			break;
 		}
 		case 'K' : {
-			QString message = tr("<p>A total of <b>%1</b> Hedgehog(s) were killed during this round.</p>").arg(info);
+			int num = info.toInt();
+			QString message = PageGameStats::tr("<p>A total of <b>%1</b> hedgehog(s) were killed during this round.</p>", "", num).arg(num);
 			AddStatText(message);
 			break;
 		}
