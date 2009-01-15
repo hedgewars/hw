@@ -776,9 +776,9 @@ Prosím zkontrolujte Vaši instalaci</translation>
         <translation>Start</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Připraven</translation>
+        <translation type="unfinished">Připraven</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="672"/>

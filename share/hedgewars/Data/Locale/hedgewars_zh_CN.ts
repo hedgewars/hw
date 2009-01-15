@@ -1215,9 +1215,9 @@ Please check your installation</source>
         <translation>加入官方服务器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">准备好了</translation>
+        <translation type="unfinished">准备好了</translation>
     </message>
 </context>
 <context>

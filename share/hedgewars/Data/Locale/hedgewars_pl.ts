@@ -976,9 +976,9 @@ Sprawdź poprawność instalacji</translation>
         <translation type="unfinished">Dołącz do oficjalnego serwera</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Gotowe</translation>
+        <translation type="unfinished">Gotowe</translation>
     </message>
 </context>
 <context>

@@ -973,6 +973,11 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
         <source>Join official server</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
+        <source>Ready</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>

@@ -972,9 +972,9 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Pripojiť sa k oficiálnemu serveru</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Pripravený</translation>
+        <translation type="unfinished">Pripravený</translation>
     </message>
 </context>
 <context>

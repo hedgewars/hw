@@ -969,9 +969,9 @@ Verifique su instalación</translation>
         <translation>Unirse al servidor oficial</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Preparado</translation>
+        <translation type="unfinished">Preparado</translation>
     </message>
 </context>
 <context>

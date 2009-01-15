@@ -942,9 +942,9 @@ Var god kontrollera din installation</translation>
         <translation>Anslut till officiell server</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Klar</translation>
+        <translation type="unfinished">Klar</translation>
     </message>
 </context>
 <context>

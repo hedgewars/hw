@@ -1206,9 +1206,9 @@ Vérifier votre installation</translation>
         <translation>Joindre le serveur officiel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="obsolete">Prêt</translation>
+        <translation type="unfinished">Prêt</translation>
     </message>
 </context>
 <context>
