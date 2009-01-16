@@ -164,16 +164,23 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	CBGrave->setMaxCount(65535);
 	CBGrave->setIconSize(QSize(32, 32));
 	GBTLayout->addWidget(CBGrave);
-	
-	CBVoicepack = new QComboBox(GBoxTeam);
+
 	{
-		QDir tmpdir;
-		tmpdir.cd(datadir->absolutePath());
-		tmpdir.cd("Sounds/voices");
-		QStringList list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
-		CBVoicepack->addItems(list);
+		QHBoxLayout * hbox = new QHBoxLayout();
+		CBVoicepack = new QComboBox(GBoxTeam);
+		{
+			QDir tmpdir;
+			tmpdir.cd(datadir->absolutePath());
+			tmpdir.cd("Sounds/voices");
+			QStringList list = tmpdir.entryList(QDir::AllDirs | QDir::NoDotAndDotDot, QDir::Name);
+			CBVoicepack->addItems(list);
+		}
+		hbox->addWidget(CBVoicepack, 100);
+		BtnTestSound = addButton(":/res/lightbulb_on.png", hbox, 1, true);
+		hbox->setStretchFactor(BtnTestSound, 1);
+		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
+		GBTLayout->addLayout(hbox);
 	}
-	GBTLayout->addWidget(CBVoicepack);
 
 	GBoxFort = new QGroupBox(this);
 	GBoxFort->setTitle(QGroupBox::tr("Fort"));
@@ -255,6 +262,17 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 {
 	QPixmap pix(datadir->absolutePath() + "/Forts/" + fortname + "L.png");
 	FortPreview->setPixmap(pix);
+}
+
+void PageEditTeam::testSound()
+{
+	QDir tmpdir;
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Sounds/voices");
+	tmpdir.cd(CBVoicepack->currentText());
+	QStringList list = tmpdir.entryList(QStringList() << "*.ogg", QDir::Files);
+	if (list.size())
+		;//QSound::play(tmpdir.absolutePath() + list[rand() % list.size()]);
 }
 
 PageMultiplayer::PageMultiplayer(QWidget* parent) :

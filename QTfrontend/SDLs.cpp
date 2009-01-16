@@ -69,3 +69,8 @@ void SDLInteraction::StopMusic()
 {
 	Mix_FadeOutMusic(2000);
 }
+
+void SDLInteraction::PlaySound(const QString & filename)
+{
+
+}

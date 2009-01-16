@@ -157,6 +157,7 @@ public:
 	QWidget *page_O;
 	QPushButton *BtnTeamDiscard;
 	QPushButton *BtnTeamSave;
+	QPushButton * BtnTestSound;
 	QLineEdit * TeamNameEdit;
 	QLineEdit * HHNameEdit[8];
 	QComboBox * HHHats[8];
@@ -167,6 +168,9 @@ public slots:
 
 private:
 	QLabel * LBind[BINDS_NUMBER];
+
+private slots:
+	void testSound();
 };
 
 class PageMultiplayer : public AbstractPage

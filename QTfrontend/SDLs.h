@@ -37,6 +37,7 @@ public:
 	QStringList getResolutions() const;
 	void StartMusic();
 	void StopMusic();
+	void PlaySound(const QString & filename);
 };
 
 #endif
