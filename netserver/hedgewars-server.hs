@@ -120,7 +120,7 @@ sendAnswers ((handlesFunc, answer):answers) client clients rooms = do
 	let outHandles = concat clHandles'
 	unless (null outHandles) $ putStrLn ((show $ length outHandles) ++ " / " ++ (show $ length clients) ++ " : " ++ (show answer))
 
-	let mclients = deleteFirstsBy (==) clients outHandles
+	let mclients = clients \\ outHandles
 
 	sendAnswers answers client mclients rooms
 
