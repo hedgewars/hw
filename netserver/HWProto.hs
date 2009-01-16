@@ -17,7 +17,7 @@ teamToNet protocol team =
 	if protocol <= 21 then
 		["ADD_TEAM", teamname team, teamgrave team, teamfort team, show $ difficulty team] ++ hhsInfo
 	else
-		["ADD_TEAM", teamname team, teamgrave team, teamfort team, teamvoicepack team, show $ difficulty team] ++ hhsInfo
+		["ADD_TEAM", teamname team, teamgrave team, teamfort team, teamvoicepack team, teamowner team, show $ difficulty team] ++ hhsInfo
 	where
 		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 

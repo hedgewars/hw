@@ -1,6 +1,7 @@
 foreach(dir
 	Default
 	Pirate
+	Robot
 	Singer
 	Surfer
 	)
