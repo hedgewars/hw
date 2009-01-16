@@ -185,7 +185,7 @@ repeat
 			CurrentTeam:= Teams[CurrTeam];
 			with CurrentTeam^ do
 				begin
-				PrevHH:= CurrHedgehog;
+				PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn
 				repeat
 					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
 				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
