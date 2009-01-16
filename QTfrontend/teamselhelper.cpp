@@ -50,6 +50,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 
 	butt = new QPushButton(difficultyIcon, team.TeamName, this);
 	butt->setFlat(true);
+	butt->setToolTip(team.Owner);
 	mainLayout.addWidget(butt);
 	butt->setStyleSheet("QPushButton{"
 			"icon-size: 48px;"

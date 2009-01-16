@@ -46,6 +46,7 @@ class HWTeam
 		QString Grave;
 		QString Fort;
 		QString Voicepack;
+		QString Owner;
 		unsigned int difficulty;
 		BindAction binds[BINDS_NUMBER];
 

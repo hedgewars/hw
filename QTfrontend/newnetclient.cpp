@@ -310,7 +310,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "ADD_TEAM") {
-		if(lst.size() != 22)
+		if(lst.size() != 23)
 		{
 			qWarning("Net: Bad ADDTEAM message");
 			return;
