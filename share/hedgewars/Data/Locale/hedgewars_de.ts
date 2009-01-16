@@ -5,12 +5,12 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Error</source>
-        <translation type="unfinished">Fehler</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Waffenzusammenstellung</translation>
     </message>
 </context>
 <context>
@@ -43,7 +43,7 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="229"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu</translation>
     </message>
 </context>
 <context>
@@ -69,12 +69,12 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="76"/>
         <source>Map</source>
-        <translation type="unfinished">Karte</translation>
+        <translation>Karte</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="81"/>
         <source>Themes</source>
-        <translation type="unfinished"></translation>
+        <translation>Motiv</translation>
     </message>
 </context>
 <context>
@@ -82,7 +82,7 @@
     <message>
         <location filename="../../../../QTfrontend/netserverslist.cpp" line="45"/>
         <source>Title</source>
-        <translation>Name</translation>
+        <translation>Spielname</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/netserverslist.cpp" line="46"/>
@@ -115,27 +115,27 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="379"/>
         <source>*** %1 joined</source>
-        <translation type="unfinished">*** %1 ist jetzt dabei</translation>
+        <translation>*** %1 ist jetzt dabei</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="416"/>
         <source>*** %1 left</source>
-        <translation type="unfinished">*** %1 ist gegangen</translation>
+        <translation>*** %1 ist gegangen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="418"/>
         <source>*** %1 left (%2)</source>
-        <translation type="unfinished">*** %1 ist gegangen (%2)</translation>
+        <translation>*** %1 ist gegangen (%2)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="536"/>
         <source>Quit reason: </source>
-        <translation type="unfinished">Gegangen wegen: </translation>
+        <translation>Gegangen wegen: </translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="342"/>
         <source>Room destroyed</source>
-        <translation type="unfinished">Raum geschlossen</translation>
+        <translation>Raum geschlossen</translation>
     </message>
 </context>
 <context>
@@ -143,7 +143,7 @@
     <message>
         <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf kehrte vom Rendern des Textes mit einem Fehler zurück, dies liegt vermutlich an einem Bug in freetype2. Wir empfehlen, die freetype Bibliothek auf den neuesten Stand zu bringen.</translation>
+        <translation>SDL_ttf meldete einen Fehler beim Rendern des Textes, dies liegt vermutlich an einem Fehler in freetype2. Es wird empfohlen die freetype Bibliothek auf den neuesten Stand zu bringen.</translation>
     </message>
 </context>
 <context>
@@ -161,12 +161,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="101"/>
         <source>General</source>
-        <translation type="unfinished">Allgemein</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="102"/>
         <source>Advanced</source>
-        <translation type="unfinished">Erweitert</translation>
+        <translation>Erweitert</translation>
     </message>
 </context>
 <context>
@@ -174,22 +174,22 @@
     <message>
         <location filename="../../../../QTfrontend/statsPage.cpp" line="102"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Punkten.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Punkten.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Der beste Schütze ist &lt;b&gt;%1&lt;/b&gt; mit genau einem Abschuss während einer Runde.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Der beste Schütze ist &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Abschüssen während einer Runde.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Insgesamt kam in dieser Runde ein Igel ums Leben.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Insgesamt kamen in dieser Runde &lt;b&gt;%1&lt;/b&gt; Igel ums Leben.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -238,12 +238,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="76"/>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokales Spiel</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="80"/>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkspiel</translation>
     </message>
 </context>
 <context>
@@ -287,7 +287,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="583"/>
         <source>Control</source>
-        <translation type="unfinished">Steuern</translation>
+        <translation>Steuerung</translation>
     </message>
 </context>
 <context>
@@ -366,37 +366,37 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="723"/>
         <source>Create</source>
-        <translation type="unfinished">Erstellen</translation>
+        <translation>Erstellen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="724"/>
         <source>Join</source>
-        <translation type="unfinished">Betreten</translation>
+        <translation>Betreten</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="725"/>
         <source>Refresh</source>
-        <translation type="unfinished">Aktualisieren</translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="775"/>
         <source>Error</source>
-        <translation type="unfinished">Fehler</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="765"/>
         <source>Please, enter room name</source>
-        <translation type="unfinished">Bitte einen Raumnamen eingeben</translation>
+        <translation>Bitte einen Raumnamen eingeben</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="777"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="776"/>
         <source>Please, select room from the list</source>
-        <translation type="unfinished">Bitte einen Raum aus der Liste auswählen</translation>
+        <translation>Bitte einen Raum aus der Liste auswählen</translation>
     </message>
 </context>
 <context>
@@ -452,27 +452,27 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="642"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished">Einfaches Spiel (schnelle Runde gegen den PC, Einstellungen werden automatisch gewählt)</translation>
+        <translation>Einfaches Spiel (Eine schnelle Runde gegen den PC, Einstellungen werden automatisch gewählt)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="645"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished">Mehrspieler (mehrere Spieler abwechselnd)</translation>
+        <translation>Mehrspieler (Spiele gegen deine Freunde oder Computergegner)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="650"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished"></translation>
+        <translation>Trainingsmodus (Verbessere dein Können in verschiedenen Trainingsmissionen). IN ENTWICKLUNG</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="656"/>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished">Demos anschauen</translation>
+        <translation>Demos (Wiedergabe einer gespeicherten Demo)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="659"/>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished">Laden (vorher gespeichertes Spiel)</translation>
+        <translation>Laden (eines vorher gespeicherten Spiels)</translation>
     </message>
 </context>
 <context>
@@ -480,27 +480,27 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="60"/>
         <source>Kick</source>
-        <translation type="unfinished">Rauswerfen</translation>
+        <translation>Rauswerfen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="585"/>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="586"/>
         <source>Restrict Joins</source>
-        <translation type="unfinished">Zugang beschränken</translation>
+        <translation>Zugang beschränken</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="588"/>
         <source>Restrict Team Additions</source>
-        <translation type="unfinished">Teamzugang beschränken</translation>
+        <translation>Teamzugang beschränken</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Info</source>
-        <translation type="unfinished">Info</translation>
+        <translation>Info</translation>
     </message>
 </context>
 <context>
@@ -533,27 +533,27 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="380"/>
         <source>Enable music</source>
-        <translation type="unfinished">Musik an</translation>
+        <translation>Musik an</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="372"/>
         <source>Frontend fullscreen</source>
-        <translation type="unfinished">Frontend im Vollbild</translation>
+        <translation>Frontend im Vollbild</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="51"/>
         <source>Divide teams</source>
-        <translation type="unfinished">Teams getrennt aufstellen</translation>
+        <translation>Teams getrennt aufstellen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="392"/>
         <source>Append date and time to record file name</source>
-        <translation type="unfinished">Datum und Uhrzeit an Aufnahmedatei anhängen</translation>
+        <translation>Datum und Uhrzeit an Aufnahmedatei anhängen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="55"/>
         <source>Solid land</source>
-        <translation type="unfinished">Unzerstörbares Terrain</translation>
+        <translation>Unzerstörbares Terrain</translation>
     </message>
 </context>
 <context>
@@ -596,7 +596,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="159"/>
         <source>Level</source>
-        <translation type="unfinished">Stufe</translation>
+        <translation>Stufe</translation>
     </message>
 </context>
 <context>
@@ -787,7 +787,7 @@
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="70"/>
         <source>Sounds:</source>
-        <translation type="unfinished">Sounds:</translation>
+        <translation>Sounds:</translation>
     </message>
 </context>
 <context>
@@ -808,7 +808,7 @@
     <message>
         <location filename="../../../../QTfrontend/ui_hwform.cpp" line="37"/>
         <source>Hedgewars %1</source>
-        <translation type="unfinished">Hedgewars %1</translation>
+        <translation>Hedgewars %1</translation>
     </message>
 </context>
 <context>
@@ -971,12 +971,12 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="451"/>
         <source>Join official server</source>
-        <translation type="unfinished"></translation>
+        <translation>Offiziellem Server beitreten</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="unfinished"></translation>
+        <translation>Bereit</translation>
     </message>
 </context>
 <context>
@@ -984,17 +984,17 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="739"/>
         <source>Room name</source>
-        <translation type="unfinished">Raumname</translation>
+        <translation>Raumname</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="740"/>
         <source>Players number</source>
-        <translation type="unfinished">Anzahl Spieler</translation>
+        <translation>Anzahl Spieler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="742"/>
         <source>Round in progress</source>
-        <translation type="unfinished">Runde läuft noch</translation>
+        <translation>Runde läuft</translation>
     </message>
 </context>
 <context>
@@ -1210,12 +1210,12 @@ Statistik</translation>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
         <source>confirmation</source>
-        <translation type="unfinished">Bestätigung</translation>
+        <translation>Bestätigung</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
         <source>precise aim</source>
-        <translation type="unfinished">Genaues Zielen</translation>
+        <translation>Genaues Zielen</translation>
     </message>
 </context>
 <context>
@@ -1353,7 +1353,7 @@ Statistik</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="101"/>
         <source>Plum</source>
-        <translation>Plaume</translation>
+        <translation>Pflaume</translation>
     </message>
 </context>
 </TS>

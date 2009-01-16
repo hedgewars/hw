@@ -180,16 +180,16 @@
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
+            <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisione in un turno.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisioni in un turno.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;I migliori killer sono &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisioni in un turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehog(s) sono stati uccisi durante questo round.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehog(s) sono stati uccisi durante questo round.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehog è stato ucciso durante questo round.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehogs sono stati uccisi durante questo round.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -971,7 +971,7 @@ Controllare la propria installazione</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="unfinished">Pronto</translation>
+        <translation>Pronto</translation>
     </message>
 </context>
 <context>

@@ -28,8 +28,8 @@
 00:25=Förförelse
 00:26=Vattenmelonsbomb
 00:27=Helvetisk handgranat
-00:28=Drill Rocket
-00:29=Ballgun
+00:28=Borraket
+00:29=Luftgevär
 00:30=Napalm
 
 01:00=Nu kör vi!

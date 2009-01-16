@@ -135,7 +135,7 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="342"/>
         <source>Room destroyed</source>
-        <translation type="unfinished"></translation>
+        <translation>Rum tillintetgjort</translation>
     </message>
 </context>
 <context>
@@ -174,20 +174,22 @@
     <message>
         <location filename="../../../../QTfrontend/statsPage.cpp" line="102"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; , med &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som fick &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Den bästa mördaren är &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkottar på en omgång.&lt;/p&gt;
+        </numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Totalt dog &lt;b&gt;%1&lt;/b&gt; igelkott(ar) under denna omgång.&lt;/p&gt;
+        </numerusform>
         </translation>
     </message>
 </context>
@@ -216,7 +218,7 @@
     <message>
         <location filename="" line="0"/>
         <source>Demos</source>
-        <translation type="obsolete">Demos</translation>
+        <translation type="obsolete">Demor</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -226,7 +228,7 @@
     <message>
         <location filename="" line="0"/>
         <source>About</source>
-        <translation type="obsolete">Upphovsmän</translation>
+        <translation type="obsolete">Tack till</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -440,7 +442,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="656"/>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Demon (se inspelade demon)</translation>
+        <translation>Demor (se inspelade demor)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="659"/>
@@ -473,7 +475,7 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Information</translation>
     </message>
 </context>
 <context>
@@ -496,7 +498,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="384"/>
         <source>Show FPS</source>
-        <translation>Visa FPS</translation>
+        <translation>Visa FPS (rutor per sekund)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="388"/>
@@ -698,14 +700,14 @@
         <translation>Vapen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="687"/>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; , med &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som fick &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="699"/>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;En summa av &lt;b&gt;%1&lt;/b&gt; igelkott(ar) dödades under denna runda.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Totalt dog &lt;b&gt;%1&lt;/b&gt; igelkott(ar) under denna omgång.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/input_ip.cpp" line="32"/>
@@ -748,9 +750,9 @@
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="694"/>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; med &lt;b&gt;%2&lt;/b&gt; dödade igelkottar.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkottar.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="70"/>
@@ -934,7 +936,7 @@ Var god kontrollera din installation</translation>
     <message>
         <location filename="../../../../QTfrontend/teamselect.cpp" line="237"/>
         <source>Setup</source>
-        <translation>Upplägg</translation>
+        <translation>Inställningar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="451"/>
@@ -944,7 +946,7 @@ Var god kontrollera din installation</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Ready</source>
-        <translation type="unfinished">Klar</translation>
+        <translation>Klar</translation>
     </message>
 </context>
 <context>
@@ -957,7 +959,7 @@ Var god kontrollera din installation</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="740"/>
         <source>Players number</source>
-        <translation>Spelares nummer</translation>
+        <translation>Spelarnas nummer</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="742"/>
@@ -1182,7 +1184,7 @@ info</source>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
         <source>precise aim</source>
-        <translation type="unfinished"></translation>
+        <translation>exakt sikte</translation>
     </message>
 </context>
 <context>
