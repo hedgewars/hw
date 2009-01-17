@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="it_IT">
+<defaultcodec></defaultcodec>
 <context>
     <name>GameCFGWidget</name>
     <message>
@@ -188,7 +189,7 @@
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehog è stato ucciso durante questo round.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Durante questo round è stato ucciso &lt;b&gt;%1&lt;/b&gt; hedgehog in totale.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehogs sono stati uccisi durante questo round.&lt;/p&gt;</numerusform>
         </translation>
     </message>
@@ -680,7 +681,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
