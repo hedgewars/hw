@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -418,40 +418,42 @@ const PrevSentPointTime: LongWord = 0;
 var EdgesDist: LongInt;
 begin
 if (not (CurrentTeam^.ExtDriven and isCursorVisible))
-   and cHasFocus then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+	and cHasFocus then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 
 if (FollowGear <> nil) and (not isCursorVisible) then
-   if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
-      begin
-      FollowGear:= nil;
-      exit
-      end
-      else begin
-      CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
-      CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
-      end;
+	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
+		begin
+		FollowGear:= nil;
+		prevPoint.X:= CursorPoint.X;
+		prevPoint.Y:= CursorPoint.Y;
+		exit
+		end
+		else begin
+		CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
+		CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
+		end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < 210 then
-   begin
-   if CursorPoint.X < cScreenWidth + AMxShift - 175 then CursorPoint.X:= cScreenWidth + AMxShift - 175;
-   if CursorPoint.X > cScreenWidth + AMxShift - 10 then CursorPoint.X:= cScreenWidth + AMxShift - 10;
-   if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
-   if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
-   prevPoint:= CursorPoint;
-   if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
-   exit
-   end;
+	begin
+	if CursorPoint.X < cScreenWidth + AMxShift - 175 then CursorPoint.X:= cScreenWidth + AMxShift - 175;
+	if CursorPoint.X > cScreenWidth + AMxShift - 10 then CursorPoint.X:= cScreenWidth + AMxShift - 10;
+	if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
+	if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
+	prevPoint:= CursorPoint;
+	if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+	exit
+	end;
 
 if isCursorVisible then
-   begin
-   if (not CurrentTeam^.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
-      begin
-      SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
-      PrevSentPointTime:= GameTicks
-      end;
-   end;
+	begin
+	if (not CurrentTeam^.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
+		begin
+		SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
+		PrevSentPointTime:= GameTicks
+		end;
+	end;
 
 if isCursorVisible or (FollowGear <> nil) then
    begin

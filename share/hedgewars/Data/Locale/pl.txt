@@ -31,6 +31,7 @@
 00:28=Wiertnicza rakieta
 00:29=Pistolet na kulki
 00:30=Napalm
+00:31=RCPlane
 
 01:00=Walczmy!
 01:01=Remis

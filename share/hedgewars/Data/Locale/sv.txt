@@ -31,6 +31,7 @@
 00:28=Borraket
 00:29=Luftgevär
 00:30=Napalm
+00:31=RCPlane
 
 01:00=Nu kör vi!
 01:01=Oavgjort

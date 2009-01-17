@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1946,4 +1946,97 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Down);
 HHGear^.State:= HHGear^.State or gstNotKickable;
 Gear^.doStep:= @doStepBallgunWork
+end;
+
+procedure doStepRCPlaneWork(Gear: PGear);
+const cAngleSpeed = 3;
+var HHGear: PGear;
+	i: LongInt;
+	dX, dY: hwFloat;
+	fChanged: boolean;
+	trueAngle: Longword;
+	t: PGear;
+begin
+AllInactive:= false;
+
+dec(Gear^.Timer);
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+FollowGear:= Gear;
+
+fChanged:= false;
+if ((Gear^.Message and gm_Left) <> 0) then
+	begin
+	fChanged:= true;
+	Gear^.Angle:= (Gear^.Angle + (4096 - cAngleSpeed)) mod 4096
+	end;
+
+if ((Gear^.Message and gm_Right) <> 0) then
+	begin
+	fChanged:= true;
+	Gear^.Angle:= (Gear^.Angle + cAngleSpeed) mod 4096
+	end;
+
+if fChanged then
+	begin
+	Gear^.dX.isNegative:= (Gear^.Angle > 2048);
+	if Gear^.dX.isNegative then
+		trueAngle:= 4096 - Gear^.Angle
+	else
+		trueAngle:= Gear^.Angle;
+
+	Gear^.dX:= SignAs(AngleSin(trueAngle), Gear^.dX) * _0_25;
+	Gear^.dY:= AngleCos(trueAngle) * -_0_25;
+	end;
+
+
+Gear^.X:= Gear^.X + Gear^.dX;
+Gear^.Y:= Gear^.Y + Gear^.dY;
+
+if (GameTicks and $FF) = 0 then
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+
+if ((HHGear^.Message and gm_Attack) <> 0)and(Gear^.Health <> 0) then
+	begin
+	HHGear^.Message := HHGear^.Message and not gm_Attack;
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
+	dec(Gear^.Health)
+	end;
+
+// pickup bonuses
+t:= CheckGearNear(Gear, gtCase, 36, 36);
+if t <> nil then
+	PickUp(HHGear, t);
+
+CheckCollision(Gear);
+
+if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
+	begin
+	HHGear^.Message:= 0;
+	//HHGear^.State:= HHGear^.State and (not gstNotKickable);
+	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+	for i:= 0 to 25 do
+		begin
+		dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
+		dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+		end;
+	DeleteGear(Gear);
+	AfterAttack;
+	end;
+
+if CheckGearDrowning(Gear) then
+	AfterAttack
+end;
+
+procedure doStepRCPlane(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.Message:= 0;
+HHGear^.State:= HHGear^.State or gstNotKickable;
+Gear^.Angle:= HHGear^.Angle;
+if HHGear^.dX.isNegative then Gear^.Angle:= 4096 - Gear^.Angle;
+Gear^.doStep:= @doStepRCPlaneWork
 end;

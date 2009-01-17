@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,6 +98,7 @@ procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
+procedure PickUp(HH, Gear: PGear); forward;
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}
@@ -147,7 +148,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepWaterUp,
 			@doStepDrill,
 			@doStepBallgun,
-			@doStepBomb
+			@doStepBomb,
+			@doStepRCPlane
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -358,6 +360,11 @@ gtAmmo_Grenade: begin
                 end;
      gtBallgun: begin
                 Result^.Timer:= 5001;
+                end;
+     gtRCPlane: begin
+                Result^.Timer:= 15000;
+                Result^.Health:= 3;
+                Result^.Radius:= 8;
                 end;
      end;
 InsertGearToList(Result);
@@ -801,7 +808,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
 		case amt of
 			amBazooka,
-			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+			amMortar,amRCPlane: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
                         amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
                         amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
@@ -1051,16 +1058,29 @@ var Gear, HHGear: PGear;
 begin
 Gear:= GearsList;
 while Gear<>nil do
-      begin
-      case Gear^.Kind of
+	begin
+	case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+
+       gtRCPlane: if (PHedgehog(Gear^.Hedgehog)^.Gear^.dX.isNegative) then
+                     DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
+                  else
+                     DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,0,DxDy2Angle(Gear^.dY, Gear^.dX));
+       
        gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, DxDy2Angle(Gear^.dY, Gear^.dX));
+       
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+        
         gtHedgehog: DrawHH(Gear);
+    
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
+       
        gtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
+           
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex);
+             
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4);
+      
       gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 50 + LongInt(((GameTicks shr 5) and 1) * 2) + WorldDy, 0);
             gtRope: begin
                     roplen:= 0;

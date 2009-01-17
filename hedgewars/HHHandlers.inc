@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2009 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -161,6 +161,7 @@ with Gear^,
                      amTeleport: CurAmmoGear:= AddGear(0, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                        amMortar: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
+                       amRCPlane: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtRCPlane,  0, xx * cMaxPower / cPowerDivisor / 4, yy * cMaxPower / cPowerDivisor / 4, 0);
                        amKamikaze: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
                          amCake: begin
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
@@ -406,7 +407,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 if (((Gear^.Message and gm_Precise) = 0) or ((GameTicks mod 5) = 1)) then
 	if ((Gear^.Message and gm_Up) <> 0) and (Gear^.Angle - da >= CurMinAngle) then dec(Gear^.Angle, da)
 	else
-	if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da);
+	if ((Gear^.Message and gm_Down) <> 0) and (Gear^.Angle + da <= CurMaxAngle) then inc(Gear^.Angle, da)
 end;
 
 procedure doStepHedgehog(Gear: PGear); forward;

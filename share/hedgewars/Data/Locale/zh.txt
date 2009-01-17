@@ -29,6 +29,7 @@
 00:28=Drill Rocket
 00:29=Ballgun
 00:30=Napalm
+00:31=RCPlane
 
 01:00=戰鬥開始!
 01:01=平手

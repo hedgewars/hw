@@ -31,6 +31,7 @@
 00:28=Misil perforador
 00:29=Lanzapelotas
 00:30=Napalm
+00:31=RCPlane
 
 01:00=Luchad!
 01:01=Empate

@@ -49,7 +49,7 @@ type
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
-			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls);
+			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls, sprPlane);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -59,7 +59,7 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 28
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 32
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 38
-			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag);
@@ -81,7 +81,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun);
+			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, amRCPlane);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -455,7 +455,9 @@ const
 			(FileName:    'amBallgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 64; saveSurf: false),// sprHandBallgun
 			(FileName:      'Balls'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 20; saveSurf: false)// sprBalls
+			Width:  32; Height: 20; saveSurf: false),// sprBalls
+			(FileName:      'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  32; Height: 32; saveSurf: false)// sprPlane
 			);
 
 	Wavez: array [TWave] of record
@@ -1119,6 +1121,26 @@ const
 					Pos: 0;
 					AmmoType: amBallgun);
 			Slot: 2;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidRCPlane;
+			NameTex: nil;
+			Probability: 100;
+			NumberInCase: 2;
+			Ammo: (Propz: ammoprop_ForwMsgs{ or
+							ammoprop_DontHold or
+							ammoprop_AltAttack};
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amRCPlane);
+			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
 			maxAngle: 0;

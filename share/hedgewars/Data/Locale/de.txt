@@ -31,6 +31,7 @@
 00:28=Bohrkopfrakete
 00:29=Ballpistole
 00:30=Napalm
+00:31=RCPlane
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
