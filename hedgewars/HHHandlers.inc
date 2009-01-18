@@ -56,9 +56,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			CurAmmo:= i
 			end
 		end
-	end;
-
-ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+	end
 end;
 
 procedure HHSetWeapon(Gear: PGear);
@@ -80,7 +78,9 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		begin
 		ChangeAmmo(Gear);
 		dec(t)
-		end
+		end;
+
+ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
 end;
 
 procedure HHSetTimer(Gear: PGear);
@@ -555,7 +555,11 @@ else with PHedgehog(Gear^.Hedgehog)^ do
 if (CurAmmoGear = nil)
 	or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0) then
 	begin
-	if ((Gear^.Message and gm_Slot) <> 0) then ChangeAmmo(Gear);
+	if ((Gear^.Message and gm_Slot) <> 0) then
+		begin
+		ChangeAmmo(Gear);
+		ApplyAmmoChanges(PHedgehog(Gear^.Hedgehog)^)
+		end;
 
 	if ((Gear^.Message and gm_Weapon) <> 0) then HHSetWeapon(Gear);
 
