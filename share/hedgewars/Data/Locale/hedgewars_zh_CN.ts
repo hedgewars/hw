@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="zh">
 <context>
     <name>GameCFGWidget</name>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="186"/>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>不合理的弹夹框架</translation>
     </message>
 </context>
 <context>
@@ -76,7 +76,7 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="229"/>
         <source>new</source>
-        <translation type="unfinished"></translation>
+        <translation>新</translation>
     </message>
 </context>
 <context>
@@ -214,17 +214,17 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="418"/>
         <source>*** %1 left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>*** %1 离开 (%2)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="536"/>
         <source>Quit reason: </source>
-        <translation type="unfinished"></translation>
+        <translation>退出原因：</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="342"/>
         <source>Room destroyed</source>
-        <translation type="unfinished"></translation>
+        <translation>房间被破坏了</translation>
     </message>
 </context>
 <context>
@@ -264,20 +264,20 @@
     <message>
         <location filename="../../../../QTfrontend/statsPage.cpp" line="102"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;射击冠军&lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; .&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;最佳射手是&lt;b&gt;%1&lt;/b&gt;。伤害 &lt;b&gt;%2&lt;/b&gt;点。&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;最佳杀手&lt;b&gt;%1&lt;/b&gt;：却敌&lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;有 &lt;b&gt;%1&lt;/b&gt;个刺猬在此局失去生命。&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -342,7 +342,7 @@
         <translation type="obsolete">返回</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="275"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="293"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
@@ -360,12 +360,12 @@
         <translation type="obsolete">Internet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="475"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="493"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="475"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="493"/>
         <source>Please, select server from the list above</source>
         <translation>请选择一个服务器</translation>
     </message>
@@ -373,7 +373,7 @@
 <context>
     <name>PageNetGame</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="583"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="601"/>
         <source>Control</source>
         <translation>Ctrl</translation>
     </message>
@@ -381,12 +381,12 @@
 <context>
     <name>PageOptions</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="310"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="328"/>
         <source>New team</source>
         <translation>新队伍</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="311"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="329"/>
         <source>Edit team</source>
         <translation>修改队伍</translation>
     </message>
@@ -401,12 +401,12 @@
         <translation type="obsolete">返回</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="338"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="356"/>
         <source>Weapons set</source>
         <translation>武器设置</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="341"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="359"/>
         <source>Edit</source>
         <translation>修改</translation>
     </message>
@@ -452,37 +452,37 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="723"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="741"/>
         <source>Create</source>
         <translation>建立</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="724"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="742"/>
         <source>Join</source>
         <translation>加入</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="725"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="743"/>
         <source>Refresh</source>
         <translation>刷新</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="775"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="793"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="765"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="783"/>
         <source>Please, enter room name</source>
         <translation>请键入房间名</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="777"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="795"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="776"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="794"/>
         <source>Please, select room from the list</source>
         <translation>请从列表选中房间</translation>
     </message>
@@ -495,12 +495,12 @@
         <translation type="obsolete">选择武器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="687"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="705"/>
         <source>Default</source>
         <translation>默认</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="688"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="706"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
@@ -551,27 +551,27 @@
         <translation type="obsolete">Demo</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="642"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="660"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
         <translation>快速游戏 (对抗电脑，固定设置)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="645"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="663"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
         <translation>多人游戏 (热坐对抗朋友或AI)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="650"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="668"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
         <translation>训练模式 (一系列训练任务)。开发中</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="656"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="674"/>
         <source>Demos (Watch recorded demos)</source>
         <translation>Demo (观看记录的Demo)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="659"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="677"/>
         <source>Load (Load a previously saved game)</source>
         <translation>读取 (读取之前保存的游戏)</translation>
     </message>
@@ -584,35 +584,35 @@
         <translation>踢</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="585"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="603"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="586"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="604"/>
         <source>Restrict Joins</source>
         <translation>限制参与</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="588"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="606"/>
         <source>Restrict Team Additions</source>
-        <translation type="unfinished">限制团队附加</translation>
+        <translation>限制团队插件</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>信息</translation>
     </message>
 </context>
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="376"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="394"/>
         <source>Enable sound</source>
         <translation>开启音效</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="368"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="386"/>
         <source>Fullscreen</source>
         <translation>全屏幕</translation>
     </message>
@@ -622,39 +622,39 @@
         <translation>城堡模式</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="384"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="402"/>
         <source>Show FPS</source>
         <translation>显示 FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="388"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="406"/>
         <source>Alternative damage show</source>
         <translation>伤害显示（可选）</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="380"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="398"/>
         <source>Enable music</source>
         <translation>音乐开启</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="372"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="390"/>
         <source>Frontend fullscreen</source>
         <translation>界面全屏</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="51"/>
         <source>Divide teams</source>
-        <translation type="unfinished">分组</translation>
+        <translation>分组</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="392"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="410"/>
         <source>Append date and time to record file name</source>
         <translation>记录名称中包含确切时间</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="55"/>
         <source>Solid land</source>
-        <translation type="unfinished"></translation>
+        <translation>固实地面</translation>
     </message>
 </context>
 <context>
@@ -713,22 +713,22 @@
         <translation>队伍</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="179"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="186"/>
         <source>Fort</source>
         <translation>城堡模式</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="213"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="220"/>
         <source>Key binds</source>
         <translation>键位绑定</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="301"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="319"/>
         <source>Teams</source>
         <translation>队伍</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="349"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="367"/>
         <source>Audio/Graphic options</source>
         <translation>音频/视频 选项</translation>
     </message>
@@ -763,7 +763,7 @@
         <translation type="obsolete">队伍等级</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="423"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="441"/>
         <source>Net game</source>
         <translation>网络游戏</translation>
     </message>
@@ -773,7 +773,7 @@
         <translation type="obsolete">服务器列表</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="335"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="353"/>
         <source>Weapons</source>
         <translation>武器</translation>
     </message>
@@ -781,34 +781,34 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="319"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="337"/>
         <source>Net nick</source>
         <translation>网络游戏</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Server address</source>
-        <translation type="obsolete">Адрес сервера</translation>
+        <translation type="obsolete">服务器地址</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;div align=&quot;center&quot;&gt;&lt;h1&gt;Hedgewars&lt;/h1&gt;&lt;h3&gt;Version 0.8&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://www.hedgewars.org/&quot;&gt;http://www.hedgewars.org/&lt;/a&gt;&lt;/p&gt;&lt;br&gt;This program is distributed under the GNU General Public License&lt;/div&gt;</source>
-        <translation type="obsolete">&lt;div align=&quot;center&quot;&gt;&lt;h1&gt;Hedgewars&lt;/h1&gt;&lt;h3&gt;Версия 0.8&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://www.hedgewars.org/&quot;&gt;http://www.hedgewars.org/&lt;/a&gt;&lt;/p&gt;&lt;br&gt;Эта программа распространяется под лицензией GNU (the GNU General Public License)&lt;/div&gt;</translation>
+        <translation type="obsolete">&lt;div align=&quot;center&quot;&gt;&lt;h1&gt;刺猬战争&lt;/h1&gt;&lt;h3&gt;0.8&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://www.hedgewars.org/&quot;&gt;http://www.hedgewars.org/&lt;/a&gt;&lt;/p&gt;&lt;br&gt;This program is distributed under the GNU General Public License&lt;/div&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;&lt;p&gt;Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Igor Ulyanov &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Translations:&lt;/h2&gt;english: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;russian: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</source>
-        <translation type="obsolete">&lt;h2&gt;Разработчики:&lt;/h2&gt;&lt;p&gt;Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Игорь Ульянов &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Перевод:&lt;/h2&gt;английский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;русский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;Developers:&lt;/h2&gt;&lt;p&gt;Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Igor Ulyanov &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Translations:&lt;/h2&gt;english: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;russian: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>difficulty:</source>
-        <translation type="obsolete">Уровень игры:</translation>
+        <translation type="obsolete">难度:</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.8&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Версия 0.8&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;版本 0.8&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="42"/>
@@ -818,27 +818,27 @@
     <message>
         <location filename="" line="0"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;</source>
-        <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;翻译:&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;</source>
-        <translation type="obsolete">&lt;h2&gt;Разработчики:&lt;/h2&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;开发者:&lt;/h2&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;&lt;p&gt;</source>
-        <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;&lt;p&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;翻译:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h2&gt;Special thanks:&lt;/h2&gt;&lt;p&gt;</source>
-        <translation type="obsolete">&lt;h2&gt;Особая благодарность:&lt;/h2&gt;&lt;p&gt;</translation>
+        <translation type="obsolete">&lt;h2&gt;特别感谢:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.8.1&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Версия 0.8.1&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;版本 0.8.1&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -868,15 +868,15 @@
     <message>
         <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Версия 0.9&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;版本0.9&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="354"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="372"/>
         <source>Resolution</source>
         <translation>分辨率</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="363"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="381"/>
         <source>FPS limit</source>
         <translation>FPS 上限</translation>
     </message>
@@ -901,12 +901,12 @@
         <translation>特别感谢:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="519"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="537"/>
         <source>Server name:</source>
         <translation>服务器名:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="526"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="544"/>
         <source>Server port:</source>
         <translation>服务器端口:</translation>
     </message>
@@ -928,7 +928,7 @@
     <message>
         <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Версия 0.9.2&lt;/h3&gt;</translation>
+        <translation type="obsolete">&lt;h3&gt;版本0.9.2&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="39"/>
@@ -949,7 +949,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="324"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="342"/>
         <source>unnamed</source>
         <translation>未命名</translation>
     </message>
@@ -964,12 +964,12 @@
     <message>
         <location filename="" line="0"/>
         <source>Hedgewars</source>
-        <translation type="obsolete">Hedgewars</translation>
+        <translation type="obsolete">刺猬战争</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui_hwform.cpp" line="37"/>
         <source>Hedgewars %1</source>
-        <translation type="unfinished"></translation>
+        <translation>刺猬战争 %1</translation>
     </message>
 </context>
 <context>
@@ -1110,7 +1110,7 @@ Please check your installation</source>
         <translation type="obsolete">编辑队伍</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="432"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="450"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
@@ -1135,12 +1135,12 @@ Please check your installation</source>
         <translation type="obsolete">添加队伍</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="672"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="690"/>
         <source>Go!</source>
         <translation>上场!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="499"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="517"/>
         <source>Start</source>
         <translation>开始</translation>
     </message>
@@ -1150,19 +1150,19 @@ Please check your installation</source>
         <translation type="obsolete">关于</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="416"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="434"/>
         <source>Start server</source>
         <translation>开始服务端</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="441"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="459"/>
         <source>Update</source>
         <translation>升级</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Waiting</source>
-        <translation type="obsolete">Очікування</translation>
+        <translation type="obsolete">等待中</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="80"/>
@@ -1172,20 +1172,20 @@ Please check your installation</source>
     <message>
         <location filename="" line="0"/>
         <source>Weapons scheme</source>
-        <translation type="obsolete">Схема оружия</translation>
+        <translation type="obsolete">武器框架</translation>
     </message>
     <message>
         <location filename="" line="0"/>
         <source>Training</source>
-        <translation type="obsolete">Тренировка</translation>
+        <translation type="obsolete">训练</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="446"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="464"/>
         <source>Specify</source>
         <translation>指定</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="535"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="553"/>
         <source>default</source>
         <translation>默认</translation>
     </message>
@@ -1210,30 +1210,30 @@ Please check your installation</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="451"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="469"/>
         <source>Join official server</source>
         <translation>加入官方服务器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="593"/>
         <source>Ready</source>
-        <translation type="unfinished">准备好了</translation>
+        <translation>准备好了</translation>
     </message>
 </context>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="739"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="757"/>
         <source>Room name</source>
         <translation>房间名称</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="740"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="758"/>
         <source>Players number</source>
         <translation>玩家数量</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="742"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="760"/>
         <source>Round in progress</source>
         <translation>回合数</translation>
     </message>
@@ -1241,22 +1241,22 @@ Please check your installation</source>
 <context>
     <name>QToolBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="219"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="226"/>
         <source>Actions</source>
         <translation>行动</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="221"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="228"/>
         <source>Weapons</source>
         <translation>武器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="223"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="230"/>
         <source>Weapon properties</source>
         <translation>武器选项</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="225"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="232"/>
         <source>Other</source>
         <translation>其他</translation>
     </message>
@@ -1399,7 +1399,7 @@ Please check your installation</source>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="33"/>
         <source>find hedgehog</source>
-        <translation>找到  hedgehog</translation>
+        <translation>找到  刺猬</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="34"/>
@@ -1435,7 +1435,7 @@ Please check your installation</source>
         <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
         <source>hedgehogs
 info</source>
-        <translation>hedgehogs
+        <translation>刺猬战争
 信息</translation>
     </message>
     <message>
@@ -1456,7 +1456,7 @@ info</source>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
         <source>precise aim</source>
-        <translation type="unfinished"></translation>
+        <translation>练习瞄准</translation>
     </message>
 </context>
 <context>
@@ -1464,132 +1464,132 @@ info</source>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="53"/>
         <source>Hedgehogs</source>
-        <translation>Hedgehog</translation>
+        <translation>刺猬 </translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="54"/>
         <source>hedgehog 1</source>
-        <translation>hedgehog 1</translation>
+        <translation>刺猬 1号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="55"/>
         <source>hedgehog 2</source>
-        <translation>hedgehog 2</translation>
+        <translation>刺猬 2号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="56"/>
         <source>hedgehog 3</source>
-        <translation>hedgehog 3</translation>
+        <translation>刺猬 3号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="57"/>
         <source>hedgehog 4</source>
-        <translation>hedgehog 4</translation>
+        <translation>刺猬 4号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="58"/>
         <source>hedgehog 5</source>
-        <translation>hedgehog 5</translation>
+        <translation>刺猬 5号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="59"/>
         <source>hedgehog 6</source>
-        <translation>hedgehog 6</translation>
+        <translation>刺猬 6号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="60"/>
         <source>hedgehog 7</source>
-        <translation>hedgehog 7</translation>
+        <translation>刺猬 7号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="61"/>
         <source>hedgehog 8</source>
-        <translation>hedgehog 8</translation>
+        <translation>刺猬 8号</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="73"/>
         <source>Goddess</source>
-        <translation>Goddess</translation>
+        <translation>女神</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="74"/>
         <source>Isis</source>
-        <translation>Isis</translation>
+        <translation>艾希丝</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="75"/>
         <source>Astarte</source>
-        <translation>Astarte</translation>
+        <translation>阿斯德尔特</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="76"/>
         <source>Diana</source>
-        <translation>Diana</translation>
+        <translation>黛安娜</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="77"/>
         <source>Aphrodite</source>
-        <translation>Aphrodite</translation>
+        <translation>阿弗罗狄特</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="78"/>
         <source>Hecate</source>
-        <translation>Hecate</translation>
+        <translation>赫卡特</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="79"/>
         <source>Demeter</source>
-        <translation>Demeter</translation>
+        <translation>得墨忒耳</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="80"/>
         <source>Kali</source>
-        <translation>Kali</translation>
+        <translation>迦梨</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="81"/>
         <source>Inanna</source>
-        <translation>Inanna</translation>
+        <translation>維納斯</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="93"/>
         <source>Fruits</source>
-        <translation>Fruits</translation>
+        <translation>水果</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="94"/>
         <source>Banana</source>
-        <translation>Banana</translation>
+        <translation>香蕉</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="95"/>
         <source>Apple</source>
-        <translation>Apple</translation>
+        <translation>苹果</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="96"/>
         <source>Orange</source>
-        <translation>Orange</translation>
+        <translation>橙子</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="97"/>
         <source>Lemon</source>
-        <translation>Lemon</translation>
+        <translation>柠檬</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="98"/>
         <source>Pineapple</source>
-        <translation>Pineapple</translation>
+        <translation>菠萝</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="99"/>
         <source>Mango</source>
-        <translation>Манго</translation>
+        <translation>芒果</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="100"/>
         <source>Peach</source>
-        <translation>Peach</translation>
+        <translation>桃子</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="101"/>

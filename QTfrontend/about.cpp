@@ -80,6 +80,7 @@ About::About(QWidget * parent) :
 			"Brazilian Portuguese: Romulo Fernandes Machado &lt;<a href=\"mailto:abra185@gmail.com\">abra185@gmail.com</a>&gt;<br>"
 			"Bulgarian: Svetoslav Stefanov<br>"
 			"Czech: Petr Řezáček &lt;<a href=\"mailto:rezacek@gmail.com\">rezacek@gmail.com</a>&gt;<br>"
+			"Chinese: Jie Luo &lt;<a href=\"mailto:lililjlj@gmail.com\">lililjlj@gmail.com</a>&gt;<br>"
 			"English: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
 			"German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;<br>"
