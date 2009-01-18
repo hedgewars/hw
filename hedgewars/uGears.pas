@@ -1062,7 +1062,7 @@ while Gear<>nil do
 	case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
-       gtRCPlane: if (PHedgehog(Gear^.Hedgehog)^.Gear^.dX.isNegative) then
+       gtRCPlane: if (Gear^.Tag = -1) then
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
                   else
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,0,DxDy2Angle(Gear^.dY, Gear^.dX));

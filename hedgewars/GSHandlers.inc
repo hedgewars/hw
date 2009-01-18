@@ -1948,6 +1948,7 @@ HHGear^.State:= HHGear^.State or gstNotKickable;
 Gear^.doStep:= @doStepBallgunWork
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepRCPlaneWork(Gear: PGear);
 const cAngleSpeed = 3;
 var HHGear: PGear;
@@ -1959,22 +1960,31 @@ var HHGear: PGear;
 begin
 AllInactive:= false;
 
-dec(Gear^.Timer);
+if Gear^.Timer > 0 then dec(Gear^.Timer);
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= Gear;
 
 fChanged:= false;
-if ((Gear^.Message and gm_Left) <> 0) then
+if ((HHGear^.State and gstHHDriven) = 0) or (Gear^.Timer = 0) then
 	begin
 	fChanged:= true;
-	Gear^.Angle:= (Gear^.Angle + (4096 - cAngleSpeed)) mod 4096
-	end;
+	if Gear^.Angle > 2048 then dec(Gear^.Angle) else
+		if Gear^.Angle < 2048 then inc(Gear^.Angle) else fChanged:= false
+	end
+else
+	begin
+	if ((Gear^.Message and gm_Left) <> 0) then
+		begin
+		fChanged:= true;
+		Gear^.Angle:= (Gear^.Angle + (4096 - cAngleSpeed)) mod 4096
+		end;
 
-if ((Gear^.Message and gm_Right) <> 0) then
-	begin
-	fChanged:= true;
-	Gear^.Angle:= (Gear^.Angle + cAngleSpeed) mod 4096
+	if ((Gear^.Message and gm_Right) <> 0) then
+		begin
+		fChanged:= true;
+		Gear^.Angle:= (Gear^.Angle + cAngleSpeed) mod 4096
+		end
 	end;
 
 if fChanged then
@@ -1989,14 +1999,16 @@ if fChanged then
 	Gear^.dY:= AngleCos(trueAngle) * -_0_25;
 	end;
 
-
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 
 if (GameTicks and $FF) = 0 then
-	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+	if Gear^.Timer < 2500 then
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0)
+	else
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
 
-if ((HHGear^.Message and gm_Attack) <> 0)and(Gear^.Health <> 0) then
+if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
 	begin
 	HHGear^.Message := HHGear^.Message and not gm_Attack;
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
@@ -2010,7 +2022,7 @@ if t <> nil then
 
 CheckCollision(Gear);
 
-if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
+if ((Gear^.State and gstCollision) <> 0) then
 	begin
 	HHGear^.Message:= 0;
 	//HHGear^.State:= HHGear^.State and (not gstNotKickable);
@@ -2037,6 +2049,7 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Message:= 0;
 HHGear^.State:= HHGear^.State or gstNotKickable;
 Gear^.Angle:= HHGear^.Angle;
+Gear^.Tag:= hwSign(HHGear^.dX);
 if HHGear^.dX.isNegative then Gear^.Angle:= 4096 - Gear^.Angle;
 Gear^.doStep:= @doStepRCPlaneWork
 end;
