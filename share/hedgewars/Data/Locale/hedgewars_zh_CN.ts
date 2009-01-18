@@ -896,7 +896,7 @@
         <translation>翻译:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="95"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="97"/>
         <source>Special thanks:</source>
         <translation>特别感谢:</translation>
     </message>
