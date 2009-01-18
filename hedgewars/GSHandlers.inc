@@ -2036,10 +2036,16 @@ if ((Gear^.State and gstCollision) <> 0) then
 		end;
 	DeleteGear(Gear);
 	AfterAttack;
+	TurnTimeLeft:= 14 * 125;
+	ParseCommand('/taunt '#1, true)
 	end;
 
 if CheckGearDrowning(Gear) then
-	AfterAttack
+	begin
+	AfterAttack;
+	TurnTimeLeft:= 14 * 125;
+	ParseCommand('/taunt '#1, true)
+	end
 end;
 
 procedure doStepRCPlane(Gear: PGear);
