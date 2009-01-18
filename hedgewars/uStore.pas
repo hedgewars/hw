@@ -159,9 +159,12 @@ var s: string;
 					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
 					if Hat <> 'NoHat' then
 						begin
-						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, true, false);
-						HatTex:= Surface2Tex(texsurf);
-						SDL_FreeSurface(texsurf)
+						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, false, false);
+						if texsurf <> nil then
+							begin
+							HatTex:= Surface2Tex(texsurf);
+							SDL_FreeSurface(texsurf)
+							end
 						end
 					end;
 		end;
@@ -252,7 +255,6 @@ for fi:= Low(THWFont) to High(THWFont) do
 		end;
 AddProgress;
 
-AddProgress;
 WriteNames(fnt16);
 MakeCrossHairs;
 LoadGraves;

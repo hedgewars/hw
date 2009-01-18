@@ -2003,7 +2003,7 @@ Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 
 if (GameTicks and $FF) = 0 then
-	if Gear^.Timer < 2500 then
+	if Gear^.Timer < 3500 then
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0)
 	else
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
