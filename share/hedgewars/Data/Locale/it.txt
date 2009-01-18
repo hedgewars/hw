@@ -31,7 +31,7 @@
 00:28=Razzo trivella
 00:29=Sparapalle
 00:30=Napalm
-00:31=RCPlane
+00:31=Aereo Radiocomandato
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -40,6 +40,7 @@
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
 01:06=Sudden death!
+
 
 
 
