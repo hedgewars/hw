@@ -2011,7 +2011,7 @@ if (GameTicks and $FF) = 0 then
 if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
 	begin
 	HHGear^.Message := HHGear^.Message and not gm_Attack;
-	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
+	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY * _0_5, 0);
 	dec(Gear^.Health)
 	end;
 

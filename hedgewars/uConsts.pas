@@ -513,12 +513,12 @@ const
 			(FileName:         'cake2.ogg'; Path: ptSounds),// sndCake
 			(FileName:           'Ow1.ogg'; Path: ptVoices),// sndOw1
 			(FileName:           'Ow4.ogg'; Path: ptVoices),// sndOw4
-			(FileName:    'Firepunch1.ogg'; Path: ptSounds),// sndFirepunch1
-			(FileName:    'Firepunch2.ogg'; Path: ptSounds),// sndFirepunch2
-			(FileName:    'Firepunch3.ogg'; Path: ptSounds),// sndFirepunch3
-			(FileName:    'Firepunch4.ogg'; Path: ptSounds),// sndFirepunch4
-			(FileName:    'Firepunch5.ogg'; Path: ptSounds),// sndFirepunch5
-			(FileName:    'Firepunch6.ogg'; Path: ptSounds),// sndFirepunch6
+			(FileName:    'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
+			(FileName:    'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
+			(FileName:    'Firepunch3.ogg'; Path: ptVoices),// sndFirepunch3
+			(FileName:    'Firepunch4.ogg'; Path: ptVoices),// sndFirepunch4
+			(FileName:    'Firepunch5.ogg'; Path: ptVoices),// sndFirepunch5
+			(FileName:    'Firepunch6.ogg'; Path: ptVoices),// sndFirepunch6
 			(FileName:         'Melon.ogg'; Path: ptSounds),// sndMelon
 			(FileName:       'Hellish.ogg'; Path: ptSounds),// sndHellish
 			(FileName:        'Yoohoo.ogg'; Path: ptSounds) // sndYoohoo
