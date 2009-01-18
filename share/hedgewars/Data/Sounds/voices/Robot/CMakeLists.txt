@@ -1,4 +1,4 @@
-file(GLOB RobotSounds *.ogg)
+file(GLOB RobotSounds *.ogg *.wav)
 
 install(FILES
 	${RobotSounds}

@@ -1,4 +1,4 @@
-file(GLOB SurferSounds *.ogg)
+file(GLOB SurferSounds *.ogg *.wav)
 
 install(FILES
 	${SurferSounds}

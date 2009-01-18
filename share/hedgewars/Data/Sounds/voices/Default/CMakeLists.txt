@@ -1,4 +1,4 @@
-file(GLOB BaseSounds *.ogg) 
+file(GLOB BaseSounds *.ogg *.wav)
 
 install(FILES
 	${BaseSounds}

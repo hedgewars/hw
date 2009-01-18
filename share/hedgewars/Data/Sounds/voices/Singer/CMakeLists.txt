@@ -1,4 +1,4 @@
-file(GLOB SingerSounds *.ogg)
+file(GLOB SingerSounds *.ogg *.wav)
 
 install(FILES
 	${SingerSounds}

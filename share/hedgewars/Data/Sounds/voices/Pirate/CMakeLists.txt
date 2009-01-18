@@ -1,4 +1,4 @@
-file(GLOB PirateSounds *.ogg)
+file(GLOB PirateSounds *.ogg *.wav)
 
 install(FILES
 	${PirateSounds}
