@@ -37,6 +37,7 @@
 #include <QTableWidget>
 #include <QAction>
 #include <QMenu>
+#include <QSound>
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -270,9 +271,9 @@ void PageEditTeam::testSound()
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Sounds/voices");
 	tmpdir.cd(CBVoicepack->currentText());
-	QStringList list = tmpdir.entryList(QStringList() << "*.ogg", QDir::Files);
+	QStringList list = tmpdir.entryList(QStringList() << "*.wav", QDir::Files);
 	if (list.size())
-		;//QSound::play(tmpdir.absolutePath() + list[rand() % list.size()]);
+		QSound::play(tmpdir.absolutePath() + "/" + list[rand() % list.size()]);
 }
 
 PageMultiplayer::PageMultiplayer(QWidget* parent) :
