@@ -2015,10 +2015,6 @@ if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
 	dec(Gear^.Health)
     end;
 
-// Ride of the Valkyries
-// This does actually work, interestingly, if music is turned off
-// However, I'm not actually sure how this works with game state, and some
-// sort of flag specific to the purpose of avoiding duplicate playSounds might be better.  Can't use lastChan reasonably, unfortunately
 if ((HHGear^.Message and gm_LJump) <> 0)
 	and ((Gear^.State and gsttmpFlag) = 0) then
     begin
