@@ -62,7 +62,7 @@ begin
 if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then
 	vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
-	vpHurtEnemy:= CurrentHedgehog^.Team^.voicepack;
+	vpHurtEnemy:= PHedgehog(Gear^.Hedgehog)^.Team^.voicepack;
 
 if bBetweenTurns then exit;
 
