@@ -115,7 +115,7 @@ answerServerMessage client clients = [\serverInfo -> (clientOnly, "SERVER_MESSAG
 				else
 				"<p align=center>Private server</p>"
 				
-		updateInfo = if protocol client < 21 then "<font color=yellow><p align=center>Hedgewars 0.9.8 is out!!! Please, update. Support for 0.9.7 will be dropped in a month.</p><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><hr></font>" else ""
+		updateInfo = if protocol client < 23 then "<font color=yellow><h3>Hedgewars 0.9.9 is out!!! Please, update. Support for previous versions will be dropped soon</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><h4>New features are:</h4><ul><li>Voice packs</li><li>Precise aim</li><li>RC Plane weapon</li><li>...</li></ul></font>" else ""
 		clientsIn = if protocol client < 20 then "<p align=left>" ++ (show $ length nicks) ++ " clients in: " ++ clientslist ++ "</p>" else []
 		clientslist = if not $ null nicks then foldr1 (\a b -> a  ++ ", " ++ b) nicks else ""
 		lastHour serverInfo =
