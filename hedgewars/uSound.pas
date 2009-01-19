@@ -32,6 +32,8 @@ procedure ReleaseSound;
 procedure SoundLoad;
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
 procedure PlayMusic;
+procedure PauseMusic;
+procedure ResumeMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 
@@ -43,11 +45,11 @@ implementation
 uses uMisc, uConsole;
 
 const chanTPU = 12;
-var Mus: PMixMusic = nil;
-	Volume: LongInt;
+var Volume: LongInt;
 	lastChan: array [TSound] of LongInt;
 	voicepacks: array[0..cMaxTeams] of TVoicepack;
 	defVoicepack: PVoicepack;
+	Mus: PMixMusic = nil;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
@@ -152,7 +154,7 @@ var s: string;
 begin
 if (not isSoundEnabled)
 	or (MusicFN = '')
-	or (not isMusicEnabled)then exit;
+	or (not isMusicEnabled) then exit;
 
 s:= PathPrefix + '/Music/' + MusicFN;
 WriteToConsole(msgLoading + s + ' ');
@@ -175,6 +177,20 @@ Mix_Volume(-1, Volume);
 Volume:= Mix_Volume(-1, -1);
 if isMusicEnabled then Mix_VolumeMusic(Volume * 4 div 8);
 ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+end;
+
+procedure PauseMusic;
+begin
+if (MusicFN = '') or (not isMusicEnabled) then exit;
+
+Mix_PauseMusic(Mus);
+end;
+
+procedure ResumeMusic;
+begin
+if (MusicFN = '') or (not isMusicEnabled) then exit;
+
+Mix_ResumeMusic(Mus);
 end;
 
 end.

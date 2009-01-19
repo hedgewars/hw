@@ -75,7 +75,8 @@ type
 			sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
-			sndMelon, sndHellish, sndYoohoo);
+			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
+			sndRideOfTheValkyries);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -473,55 +474,58 @@ const
 			);
 
 	Soundz: array[TSound] of record
-			FileName: String[19];
+			FileName: String[25];
 			Path    : TPathType;
 			end = (
-			(FileName: 'grenadeimpact.ogg'; Path: ptSounds),// sndGrenadeImpact
-			(FileName:     'explosion.ogg'; Path: ptSounds),// sndExplosion
-			(FileName:  'throwpowerup.ogg'; Path: ptSounds),// sndThrowPowerUp
-			(FileName:  'throwrelease.ogg'; Path: ptSounds),// sndThrowRelease
-			(FileName:        'splash.ogg'; Path: ptSounds),// sndSplash
-			(FileName: 'shotgunreload.ogg'; Path: ptSounds),// sndShotgunReload
-			(FileName:   'shotgunfire.ogg'; Path: ptSounds),// sndShotgunFire
-			(FileName:   'graveimpact.ogg'; Path: ptSounds),// sndGraveImpact
-			(FileName:      'minetick.ogg'; Path: ptSounds),// sndMineTicks
-			(FileName:    'pickhammer.ogg'; Path: ptSounds),// sndPickhammer
-			(FileName:           'gun.ogg'; Path: ptSounds),// sndGun
-			(FileName:           'ufo.ogg'; Path: ptSounds),// sndUFO
-			(FileName:         'Jump1.ogg'; Path: ptVoices),// sndJump1
-			(FileName:         'Jump2.ogg'; Path: ptVoices),// sndJump2
-			(FileName:         'Jump3.ogg'; Path: ptVoices),// sndJump3
-			(FileName:        'Yessir.ogg'; Path: ptVoices),// sndYesSir
-			(FileName:         'Laugh.ogg'; Path: ptVoices),// sndLaugh
-			(FileName:     'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
-			(FileName:      'Incoming.ogg'; Path: ptVoices),// sndIncoming
-			(FileName:        'Missed.ogg'; Path: ptVoices),// sndMissed
-			(FileName:        'Stupid.ogg'; Path: ptVoices),// sndStupid
-			(FileName:    'Firstblood.ogg'; Path: ptVoices),// sndFirstBlood
-			(FileName:        'Boring.ogg'; Path: ptVoices),// sndBoring
-			(FileName:        'Byebye.ogg'; Path: ptVoices),// sndByeBye
-			(FileName:      'Sameteam.ogg'; Path: ptVoices),// sndSameTeam
-			(FileName:        'Nutter.ogg'; Path: ptVoices),// sndNutter
-			(FileName:'Reinforcements.ogg'; Path: ptVoices),// sndReinforce
-			(FileName:       'Traitor.ogg'; Path: ptVoices),// sndTraitor
-			(FileName:'Youllregretthat.ogg';Path: ptVoices),// sndRegret
-			(FileName:     'Enemydown.ogg'; Path: ptVoices),// sndEnemyDown
-			(FileName:        'Coward.ogg'; Path: ptVoices),// sndCoward
-			(FileName:         'Hurry.ogg'; Path: ptVoices),// sndHurry
-			(FileName:       'Watchit.ogg'; Path: ptVoices),// sndWatchIt
-			(FileName:      'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
-			(FileName:         'cake2.ogg'; Path: ptSounds),// sndCake
-			(FileName:           'Ow1.ogg'; Path: ptVoices),// sndOw1
-			(FileName:           'Ow4.ogg'; Path: ptVoices),// sndOw4
-			(FileName:    'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
-			(FileName:    'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
-			(FileName:    'Firepunch3.ogg'; Path: ptVoices),// sndFirepunch3
-			(FileName:    'Firepunch4.ogg'; Path: ptVoices),// sndFirepunch4
-			(FileName:    'Firepunch5.ogg'; Path: ptVoices),// sndFirepunch5
-			(FileName:    'Firepunch6.ogg'; Path: ptVoices),// sndFirepunch6
-			(FileName:         'Melon.ogg'; Path: ptSounds),// sndMelon
-			(FileName:       'Hellish.ogg'; Path: ptSounds),// sndHellish
-			(FileName:        'Yoohoo.ogg'; Path: ptSounds) // sndYoohoo
+			(FileName:        'grenadeimpact.ogg'; Path: ptSounds),// sndGrenadeImpact
+			(FileName:            'explosion.ogg'; Path: ptSounds),// sndExplosion
+			(FileName:         'throwpowerup.ogg'; Path: ptSounds),// sndThrowPowerUp
+			(FileName:         'throwrelease.ogg'; Path: ptSounds),// sndThrowRelease
+			(FileName:               'splash.ogg'; Path: ptSounds),// sndSplash
+			(FileName:        'shotgunreload.ogg'; Path: ptSounds),// sndShotgunReload
+			(FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndShotgunFire
+			(FileName:          'graveimpact.ogg'; Path: ptSounds),// sndGraveImpact
+			(FileName:             'minetick.ogg'; Path: ptSounds),// sndMineTicks
+			(FileName:           'pickhammer.ogg'; Path: ptSounds),// sndPickhammer
+			(FileName:                  'gun.ogg'; Path: ptSounds),// sndGun
+			(FileName:                  'ufo.ogg'; Path: ptSounds),// sndUFO
+			(FileName:                'Jump1.ogg'; Path: ptVoices),// sndJump1
+			(FileName:                'Jump2.ogg'; Path: ptVoices),// sndJump2
+			(FileName:                'Jump3.ogg'; Path: ptVoices),// sndJump3
+			(FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
+			(FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
+			(FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
+			(FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
+			(FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
+			(FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
+			(FileName:           'Firstblood.ogg'; Path: ptVoices),// sndFirstBlood
+			(FileName:               'Boring.ogg'; Path: ptVoices),// sndBoring
+			(FileName:               'Byebye.ogg'; Path: ptVoices),// sndByeBye
+			(FileName:             'Sameteam.ogg'; Path: ptVoices),// sndSameTeam
+			(FileName:               'Nutter.ogg'; Path: ptVoices),// sndNutter
+			(FileName:       'Reinforcements.ogg'; Path: ptVoices),// sndReinforce
+			(FileName:              'Traitor.ogg'; Path: ptVoices),// sndTraitor
+			(FileName:       'Youllregretthat.ogg';Path: ptVoices),// sndRegret
+			(FileName:            'Enemydown.ogg'; Path: ptVoices),// sndEnemyDown
+			(FileName:               'Coward.ogg'; Path: ptVoices),// sndCoward
+			(FileName:                'Hurry.ogg'; Path: ptVoices),// sndHurry
+			(FileName:              'Watchit.ogg'; Path: ptVoices),// sndWatchIt
+			(FileName:             'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
+			(FileName:                'cake2.ogg'; Path: ptSounds),// sndCake
+			(FileName:                  'Ow1.ogg'; Path: ptVoices),// sndOw1
+			(FileName:                  'Ow4.ogg'; Path: ptVoices),// sndOw4
+			(FileName:           'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
+			(FileName:           'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
+			(FileName:           'Firepunch3.ogg'; Path: ptVoices),// sndFirepunch3
+			(FileName:           'Firepunch4.ogg'; Path: ptVoices),// sndFirepunch4
+			(FileName:           'Firepunch5.ogg'; Path: ptVoices),// sndFirepunch5
+			(FileName:           'Firepunch6.ogg'; Path: ptVoices),// sndFirepunch6
+			(FileName:                'Melon.ogg'; Path: ptSounds),// sndMelon
+			(FileName:              'Hellish.ogg'; Path: ptSounds),// sndHellish
+			(FileName:               'Yoohoo.ogg'; Path: ptSounds),// sndYoohoo
+			(FileName:              'rcplane.ogg'; Path: ptSounds),// sndRCPlane
+			(FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhipCrack
+			(FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds) // sndRideOfTheValkyries
 			);
 
 	Ammoz: array [TAmmoType] of record

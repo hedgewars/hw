@@ -2013,7 +2013,19 @@ if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
 	HHGear^.Message := HHGear^.Message and not gm_Attack;
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY * _0_5, 0);
 	dec(Gear^.Health)
-	end;
+    end;
+
+// Ride of the Valkyries
+// This does actually work, interestingly, if music is turned off
+// However, I'm not actually sure how this works with game state, and some
+// sort of flag specific to the purpose of avoiding duplicate playSounds might be better.  Can't use lastChan reasonably, unfortunately
+if ((HHGear^.Message and gm_LJump) <> 0)
+	and ((Gear^.State and gsttmpFlag) = 0) then
+    begin
+    Gear^.State:= Gear^.State or gsttmpFlag;
+    PauseMusic;
+    playSound(sndRideOfTheValkyries, false, nil);
+    end;
 
 // pickup bonuses
 t:= CheckGearNear(Gear, gtCase, 36, 36);
@@ -2022,28 +2034,29 @@ if t <> nil then
 
 CheckCollision(Gear);
 
-if ((Gear^.State and gstCollision) <> 0) then
+if ((Gear^.State and gstCollision) <> 0)
+	or CheckGearDrowning(Gear) then
 	begin
-	HHGear^.Message:= 0;
-	//HHGear^.State:= HHGear^.State and (not gstNotKickable);
-	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
-	for i:= 0 to 25 do
+	StopSound(sndRCPlane);
+	StopSound(sndRideOfTheValkyries);
+	ResumeMusic;
+	
+	if ((Gear^.State and gstCollision) <> 0) then
 		begin
-		dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
-		dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+		for i:= 0 to 25 do
+			begin
+			dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
+			dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+			end;
+		DeleteGear(Gear)
 		end;
-	DeleteGear(Gear);
+	
 	AfterAttack;
 	TurnTimeLeft:= 14 * 125;
-	ParseCommand('/taunt '#1, true)
-	end;
-
-if CheckGearDrowning(Gear) then
-	begin
-	AfterAttack;
-	TurnTimeLeft:= 14 * 125;
+	HHGear^.Message:= 0;
 	ParseCommand('/taunt '#1, true)
 	end
 end;
