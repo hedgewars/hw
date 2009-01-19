@@ -177,7 +177,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 			CBVoicepack->addItems(list);
 		}
 		hbox->addWidget(CBVoicepack, 100);
-		BtnTestSound = addButton(":/res/lightbulb_on.png", hbox, 1, true);
+		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
 		hbox->setStretchFactor(BtnTestSound, 1);
 		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 		GBTLayout->addLayout(hbox);
