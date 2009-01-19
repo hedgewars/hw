@@ -56,13 +56,18 @@ const cExplFrameTicks = 110;
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 var s: shortstring;
+	Gear: PVisualGear;
 begin
 if cAltDamage then
-	with AddVisualGear(X, Y, vgtSmallDamageTag)^ do
-		begin
-		str(Damage, s);
-		Tex:= RenderStringTex(s, Color, fntSmall);
-		end;
+	begin
+	Gear:= AddVisualGear(X, Y, vgtSmallDamageTag);
+	if Gear <> nil then
+		with Gear^ do
+			begin
+			str(Damage, s);
+			Tex:= RenderStringTex(s, Color, fntSmall);
+			end
+	end
 end;
 
 
