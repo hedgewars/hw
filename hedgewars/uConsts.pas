@@ -49,7 +49,8 @@ type
 			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
-			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls, sprPlane);
+			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
+			sprPlane, sprHandPlane);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -458,7 +459,9 @@ const
 			(FileName:      'Balls'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 20; saveSurf: false),// sprBalls
 			(FileName:      'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false)// sprPlane
+			Width:  32; Height: 32; saveSurf: false),// sprPlane
+			(FileName:    'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  32; Height: 32; saveSurf: false) // sprHandPlane
 			);
 
 	Wavez: array [TWave] of record

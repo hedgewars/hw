@@ -665,6 +665,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				end;
 			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 			gtBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
+			gtRCPlane: begin
+				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
+				defaultPos:= false
+				end;
 			gtRope: begin
 				if Gear^.X < CurAmmoGear^.X then
 					begin
@@ -808,13 +812,17 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
 		case amt of
 			amBazooka,
-			amMortar,amRCPlane: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
-                        amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
-                        amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
+			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+			amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
+			amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 			amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
+			amRCPlane: begin
+				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
+				defaultPos:= false
+				end;
 		end;
 
 		case amt of
