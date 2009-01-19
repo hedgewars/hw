@@ -2044,10 +2044,10 @@ if ((Gear^.State and gstCollision) <> 0)
 	if ((Gear^.State and gstCollision) <> 0) then
 		begin
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
-		for i:= 0 to 25 do
+		for i:= 0 to 32 do
 			begin
-			dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
-			dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+			dX:= AngleCos(i * 64) * _0_5 * (GetRandom + _1);
+			dY:= AngleSin(i * 64) * _0_5 * (GetRandom + _1);
 			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
 			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
 			end;
