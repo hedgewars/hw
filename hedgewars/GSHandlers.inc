@@ -2053,8 +2053,9 @@ if ((Gear^.State and gstCollision) <> 0)
 			end;
 		DeleteGear(Gear)
 		end;
-	
+
 	AfterAttack;
+	CurAmmoGear:= nil;
 	TurnTimeLeft:= 14 * 125;
 	HHGear^.Message:= 0;
 	ParseCommand('/taunt '#1, true)
