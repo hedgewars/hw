@@ -1137,7 +1137,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidRCPlane;
 			NameTex: nil;
-			Probability: 100;
+			Probability: 200;
 			NumberInCase: 2;
 			Ammo: (Propz: ammoprop_ForwMsgs{ or
 							ammoprop_DontHold or
@@ -1152,7 +1152,7 @@ const
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: true;
-			SkipTurns: 0;
+			SkipTurns: 4;
 			PosCount: 1;
 			PosSprite: sprWater)
 			);
