@@ -574,7 +574,7 @@ if abs(LongInt(HHGear^.Angle) - BTPrevAngle) > 7  then
 if ((HHGear^.State and gstMoving) <> 0) then
 	begin
 	doStepHedgehogMoving(HHGear);
-	if (HHGear^.Damage > 0) then Gear^.Timer:= 0
+	if (HHGear^.State and gstHHDriven) = 0 then Gear^.Timer:= 0
 	end;
 
 if Gear^.Timer mod cHHStepTicks = 0 then
