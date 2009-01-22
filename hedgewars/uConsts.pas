@@ -1138,7 +1138,7 @@ const
 			(NameId: sidRCPlane;
 			NameTex: nil;
 			Probability: 200;
-			NumberInCase: 2;
+			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs{ or
 							ammoprop_DontHold or
 							ammoprop_AltAttack};
