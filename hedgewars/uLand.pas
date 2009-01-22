@@ -22,10 +22,12 @@ uses SDLh, uLandTemplates, uFloat, GL, uConsts;
 {$include options.inc}
 type TLandArray = packed array[0..1023, 0..2047] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
+     TDirtyTag = packed array[0..31, 0..63] of byte;
 
 var  Land: TLandArray;
      LandPixels: TLandArray;
      LandTexture: PTexture = nil;
+     LandDirty: TDirtyTag;
 
 procedure GenMap;
 function  GenPreview: TPreview;

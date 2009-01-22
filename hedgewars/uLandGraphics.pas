@@ -26,6 +26,8 @@ type PRangeArray = ^TRangeArray;
                                    Left, Right: LongInt;
                                    end;
 
+procedure SweepDirty;
+function Despeckle(X, Y: LongInt): boolean;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
@@ -138,16 +140,36 @@ var i: LongInt;
 begin
 if ((y + dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y + dy, i] = COLOR_LAND then LandPixels[y + dy, i]:= cExplosionBorderColor;
+       if Land[y + dy, i] = COLOR_LAND then 
+          begin
+          LandPixels[y + dy, i]:= cExplosionBorderColor;
+//          Despeckle(y + dy, i);
+          LandDirty[(y + dy) div 32, i div 32]:= 1;
+          end;
 if ((y - dy) and $FFFFFC00) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, 2047) do
-       if Land[y - dy, i] = COLOR_LAND then LandPixels[y - dy, i]:= cExplosionBorderColor;
+       if Land[y - dy, i] = COLOR_LAND then
+          begin
+          LandPixels[y - dy, i]:= cExplosionBorderColor;
+//          Despeckle(y - dy, i);
+          LandDirty[(y - dy) div 32, i div 32]:= 1;
+          end;
 if ((y + dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y + dx, i] = COLOR_LAND then LandPixels[y + dx, i]:= cExplosionBorderColor;
+       if Land[y + dx, i] = COLOR_LAND then
+           begin
+           LandPixels[y + dx, i]:= cExplosionBorderColor;
+//           Despeckle(y + dx, i);
+           LandDirty[(y + dx) div 32, i div 32]:= 1;
+           end;
 if ((y - dx) and $FFFFFC00) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, 2047) do
-       if Land[y - dx, i] = COLOR_LAND then LandPixels[y - dx, i]:= cExplosionBorderColor;
+       if Land[y - dx, i] = COLOR_LAND then
+          begin
+          LandPixels[y - dx, i]:= cExplosionBorderColor;
+//          Despeckle(y - dx, i);
+          LandDirty[(y - dx) div 32, i div 32]:= 1;
+          end;
 end;
 
 procedure DrawExplosion(X, Y, Radius: LongInt);
@@ -211,7 +233,10 @@ for i:= 0 to Pred(Count) do
     for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
         for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
             if Land[ty, tx] = $FFFFFF then
-                  LandPixels[ty, tx]:= cExplosionBorderColor;
+                begin
+                LandPixels[ty, tx]:= cExplosionBorderColor;
+                LandDirty[trunc((y + dy)/32), trunc(i/32)]:= 1;
+                end;
     inc(y, dY)
     end;
 
@@ -349,5 +374,65 @@ h:= min(cpY + Image^.h, 1023) - y;
 UpdateLandTexture(y, h)
 end;
 
+// was experimenting with applying as damage occurred.
+function Despeckle(X, Y: LongInt): boolean;
+var nx, ny, i, j, c: LongInt;
+begin
+if Land[Y, X] <> 0 then // check neighbours
+	begin
+	c:= 0;
+	for i:= -1 to 1 do
+		for j:= -1 to 1 do
+			if (i <> 0) or (j <> 0) then
+				begin
+				ny:= Y + i;
+				nx:= X + j;
+				if ((ny and $FFFFFC00) = 0) and ((nx and $FFFFF800) = 0) then
+					if Land[ny, nx] <> 0 then
+						inc(c);
+				end;
+
+	if c < 4 then // 0-3 neighbours
+		begin
+		LandPixels[Y, X]:= 0;
+		Land[Y, X]:= 0;
+		exit(true);
+		end;
+	end;
+Despeckle:= false
+end;
+
+procedure SweepDirty;
+var x, y, xx, yy: LongInt;
+    updatedRow, updatedCell: boolean;
+begin
+for y:= 0 to 31 do
+	begin
+	updatedRow:= false;
+	
+	for x:= 0 to 63 do
+		begin
+			repeat
+			updatedCell:= false;
+			if LandDirty[y, x] <> 0 then
+				begin
+				updatedRow:= true;
+				// testing. should make black squares
+				for yy:= y * 32 to y * 32 + 31 do
+					for xx:= x * 32 to x * 32 + 31 do
+						if Despeckle(xx, yy) then updatedCell:= true;
+				end;
+			if updatedCell then updatedRow:= true
+			until not updatedCell;
+		LandDirty[y, x]:= 0;
+		end;
+	
+	if updatedRow then
+		if y = 31 then
+			UpdateLandTexture(992, 31)
+		else
+			UpdateLandTexture(y*32, 32);
+	end;
+end;
 
 end.

@@ -423,6 +423,7 @@ end;
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
 begin
+SweepDirty; // convenient place to clean up pixels after damage is run 
 CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
