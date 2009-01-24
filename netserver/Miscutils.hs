@@ -10,6 +10,8 @@ import qualified Data.Map as Map
 import Data.Time
 import Data.Sequence(Seq, empty)
 import Network
+import qualified Codec.Binary.Base64 as Base64
+import qualified Codec.Binary.UTF8.String as UTF8
 
 data ClientInfo =
  ClientInfo
@@ -62,6 +64,7 @@ data RoomInfo =
 		isRestrictedJoins :: Bool,
 		isRestrictedTeams :: Bool,
 		roundMsgs :: Seq String,
+		leftTeams :: [String],
 		params :: Map.Map String [String]
 	}
 createRoom = (
@@ -77,6 +80,7 @@ createRoom = (
 		False
 		False
 		Data.Sequence.empty
+		[]
 		Map.empty
 	)
 
@@ -200,3 +204,6 @@ proto2ver 22 = "0.9.9-dev"
 proto2ver 23 = "0.9.9"
 proto2ver 24 = "0.9.10-dev"
 proto2ver _ = "Unknown"
+
+toEngineMsg :: String -> String
+toEngineMsg msg = Base64.encode (fromIntegral (length msg) : (UTF8.encode msg))

@@ -141,7 +141,7 @@ void HWNewNet::RawSendNet(const QString & str)
 
 void HWNewNet::RawSendNet(const QByteArray & buf)
 {
-	//qDebug() << "Client: " << QString(buf).split("\n");
+	qDebug() << "Client: " << QString(buf).split("\n");
 	NetSocket.write(buf);
 	NetSocket.write("\n\n", 2);
 }
@@ -191,7 +191,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::ParseCmd(const QStringList & lst)
 {
-	//qDebug() << "Server: " << lst;
+	qDebug() << "Server: " << lst;
 
 	if(!lst.size())
 	{
