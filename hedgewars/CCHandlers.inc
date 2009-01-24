@@ -543,7 +543,8 @@ end;
 
 procedure chPause(var s: shortstring);
 begin
-isPaused:= not isPaused;
+if gameType <> gmtNet then
+	isPaused:= not isPaused;
 SDL_ShowCursor(ord(isPaused))
 end;
 
