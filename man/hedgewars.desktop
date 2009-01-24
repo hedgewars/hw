@@ -1,11 +1,10 @@
 [Desktop Entry]
 Type=Application
 Name=Hedgewars
-GenericName=Platform Game
-GenericName[ru]=Платформенная игра
-Comment=Worms style game
-Comment[ru]=Игра в стиле Worms
+GenericName=Strategy Game
+GenericName[ru]=Стратегия
+Comment=Free Worms-like turn based strategy game
+Comment[ru]=Пошаговая стратегия в стиле Worms
 Exec=hedgewars
 Icon=hedgewars
-Categories=Game;ArcadeGame;
-
+Categories=Game;StrategyGame;
