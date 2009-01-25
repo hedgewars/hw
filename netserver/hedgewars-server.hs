@@ -2,7 +2,8 @@
 
 module Main where
 
-import Network
+import qualified Network
+import Network.Socket
 import IO
 import System.IO
 import Control.Concurrent
@@ -41,7 +42,7 @@ acceptLoop :: Socket -> TChan ClientInfo -> IO ()
 acceptLoop servSock acceptChan =
 	Control.Exception.handle (\(_ :: Exception) -> putStrLn "exception on connect" >> acceptLoop servSock acceptChan) $
 	do
-	(cHandle, host, _) <- accept servSock
+	(cHandle, host, _) <- Network.accept servSock
 	
 	currentTime <- getCurrentTime
 	putStrLn $ (show currentTime) ++ " new client: " ++ host
@@ -186,6 +187,12 @@ mainLoop serverInfo acceptChan messagesChan clients rooms = do
 				let newServerInfo = serverInfo{
 						lastHourUsers = filter (\t -> currentTime `diffUTCTime` t < 3600) $ lastHourUsers serverInfo
 						}
+				atomically $ swapTMVar
+					(stats serverInfo)
+					(StatisticsInfo
+						(length clients)
+						(length rooms)
+					)
 				mainLoop newServerInfo acceptChan messagesChan clients rooms
 
 startServer :: ServerInfo -> Socket -> IO()
@@ -199,14 +206,31 @@ startServer serverInfo serverSocket = do
 
 	mainLoop serverInfo acceptChan messagesChan [] []
 
+socketEcho :: Socket -> TMVar StatisticsInfo -> IO ()
+socketEcho sock stats = do
+	(msg, recv_count, client) <- recvFrom sock 128
+	currStats <- atomically $ readTMVar stats
+	send_count <- sendTo sock (statsMsg1 currStats) client
+	socketEcho sock stats
+	where
+		statsMsg1 currStats = (show $ playersNumber currStats) ++ "," ++ (show $ roomsNumber currStats)
+
+startUDPserver :: TMVar StatisticsInfo -> IO ThreadId
+startUDPserver stats = do
+	sock <- socket AF_INET Datagram 0
+	bindSocket sock (SockAddrInet 46632 iNADDR_ANY)
+	forkIO $ socketEcho sock stats
 
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
 	installHandler sigPIPE Ignore Nothing;
 #endif
-	serverInfo <- getOpts $ newServerInfo
+
+	stats <- atomically $ newTMVar (StatisticsInfo 0 0)
+	serverInfo <- getOpts $ newServerInfo stats
 	
 	putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
-	serverSocket <- listenOn $ PortNumber (listenPort serverInfo)
-	
+	serverSocket <- Network.listenOn $ Network.PortNumber (listenPort serverInfo)
+
+	startUDPserver stats
 	startServer serverInfo serverSocket `finally` sClose serverSocket

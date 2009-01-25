@@ -87,6 +87,13 @@ createRoom = (
 		Map.empty
 	)
 
+data StatisticsInfo =
+	StatisticsInfo
+	{
+		playersNumber :: Int,
+		roomsNumber :: Int
+	}
+
 data ServerInfo =
 	ServerInfo
 	{
@@ -94,7 +101,8 @@ data ServerInfo =
 		serverMessage :: String,
 		listenPort :: PortNumber,
 		loginsNumber :: Int,
-		lastHourUsers :: [UTCTime]
+		lastHourUsers :: [UTCTime],
+		stats :: TMVar StatisticsInfo
 	}
 
 newServerInfo = (
