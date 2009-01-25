@@ -89,7 +89,6 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"^${PROJECT_SOURCE_DIR}/bin/[a-z]"
 	"^${PROJECT_SOURCE_DIR}/tools"
 	"^${PROJECT_SOURCE_DIR}/doc"
-	"^${PROJECT_SOURCE_DIR}/misc"
 	"^${PROJECT_SOURCE_DIR}/templates"
 	"^${PROJECT_SOURCE_DIR}/Graphics"
 	"^${PROJECT_SOURCE_DIR}/realtest"
