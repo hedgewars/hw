@@ -504,7 +504,6 @@ end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
 var x, y: LongInt;
-    c: LongWord;
 	p: PLongwordArray;
 begin
 TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
@@ -522,6 +521,75 @@ for y:= 0 to LAND_HEIGHT do
 
 if SDL_MustLock(Surface) then
 	SDL_UnlockSurface(Surface);
+end;
+
+procedure GenLandSurface;
+var tmpsurf: PSDL_Surface;
+begin
+WriteLnToConsole('Generating land...');
+
+GenBlank(EdgeTemplates[SelectTemplate]);
+
+AddProgress;
+
+tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH+1, LAND_HEIGHT+1, 32, RMask, GMask, BMask, 0);
+
+TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
+ColorizeLand(tmpsurf);
+AddOnLandObjects(tmpsurf);
+
+LandSurface2LandPixels(tmpsurf);
+SDL_FreeSurface(tmpsurf);
+
+AddProgress;
+
+AddObjects;
+
+AddProgress
+end;
+
+procedure MakeFortsMap;
+var tmpsurf: PSDL_Surface;
+begin
+WriteLnToConsole('Generating forts land...');
+
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
+BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
+SDL_FreeSurface(tmpsurf);
+
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
+BlitImageAndGenerateCollisionInfo(2048, 0, LAND_WIDTH+1, tmpsurf);
+SDL_FreeSurface(tmpsurf);
+
+end;
+
+procedure LoadMap;
+var tmpsurf: PSDL_Surface;
+begin
+WriteLnToConsole('Loading land from file...');
+AddProgress;
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
+TryDo((tmpsurf^.w = LAND_WIDTH+1) and (tmpsurf^.h = LAND_HEIGHT+1), 'Map dimensions should be 4096x2048!', true);
+
+TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
+
+BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
+SDL_FreeSurface(tmpsurf);
+
+end;
+
+procedure GenMap;
+var x, y: LongInt;
+    c: LongWord;
+begin
+LoadThemeConfig;
+
+if (GameFlags and gfForts) = 0 then
+   if Pathz[ptMapCurrent] <> '' then LoadMap
+                                else GenLandSurface
+                               else MakeFortsMap;
+AddProgress;
+{$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
 
 for y:= 0 to 63 do
 	for x:= 0 to 127 do
@@ -557,76 +625,8 @@ for x:= 0 to LAND_WIDTH do
     LandPixels[1, x]:= c;           
     LandPixels[2, x]:= c;           
     end;
-end;
 
-procedure GenLandSurface;
-var tmpsurf: PSDL_Surface;
-begin
-WriteLnToConsole('Generating land...');
-
-GenBlank(EdgeTemplates[SelectTemplate]);
-
-AddProgress;
-
-tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH+1, LAND_HEIGHT+1, 32, RMask, GMask, BMask, 0);
-
-TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
-ColorizeLand(tmpsurf);
-AddOnLandObjects(tmpsurf);
-
-LandSurface2LandPixels(tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-AddProgress;
-
-AddObjects;
-
-UpdateLandTexture(0, LAND_WIDTH);
-AddProgress
-end;
-
-procedure MakeFortsMap;
-var tmpsurf: PSDL_Surface;
-begin
-WriteLnToConsole('Generating forts land...');
-
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
-BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
-BlitImageAndGenerateCollisionInfo(2048, 0, LAND_WIDTH+1, tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-UpdateLandTexture(0, LAND_HEIGHT)
-end;
-
-procedure LoadMap;
-var tmpsurf: PSDL_Surface;
-begin
-WriteLnToConsole('Loading land from file...');
-AddProgress;
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
-TryDo((tmpsurf^.w = LAND_WIDTH+1) and (tmpsurf^.h = LAND_HEIGHT+1), 'Map dimensions should be 4096x2048!', true);
-
-TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
-
-BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-UpdateLandTexture(0, LAND_HEIGHT)
-end;
-
-procedure GenMap;
-begin
-LoadThemeConfig;
-
-if (GameFlags and gfForts) = 0 then
-   if Pathz[ptMapCurrent] <> '' then LoadMap
-                                else GenLandSurface
-                               else MakeFortsMap;
-AddProgress;
-{$IFDEF DEBUGFILE}LogLandDigest{$ENDIF}
+UpdateLandTexture(0, LAND_HEIGHT);
 end;
 
 function GenPreview: TPreview;
