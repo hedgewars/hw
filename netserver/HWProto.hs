@@ -99,7 +99,7 @@ answerFullConfig room = concatMap toAnswer (Map.toList $ params room) ++ (answer
 		toAnswer (paramName, paramStrs) =
 			answerClientOnly $ "CONFIG_PARAM" : paramName : paramStrs
 
-answerAllTeams protocol room = concatMap toAnswer (teams room)
+answerAllTeams protocol teams = concatMap toAnswer teams
 	where
 		toAnswer team =
 			(answerClientOnly $ teamToNet protocol team) ++
@@ -246,7 +246,7 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 	else if isRestrictedJoins clRoom then
 		(noChangeClients, noChangeRooms, answerRestricted)
 	else
-		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerAllTeams (protocol client) clRoom ++ watchRound)
+		(modifyClient client{room = roomName}, modifyRoom clRoom{playersIn = 1 + playersIn clRoom}, (answerJoined $ nick client) ++ answerNicks ++ answerReady ++ (answerNotReady $ nick client) ++ answerFullConfig clRoom ++ answerTeams ++ watchRound)
 	where
 		noSuchRoom = isNothing $ find (\room -> roomName == name room && roomProto room == protocol client) rooms
 		answerNicks = if not $ null sameRoomClients then
@@ -261,6 +261,10 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName, roomPassword] =
 				else
 					(answerClientOnly  ["RUN_GAME"]) ++
 					answerClientOnly ("GAMEMSG" : toEngineMsg "e$spectate 1" : (toList $ roundMsgs clRoom))
+		answerTeams = if gameinprogress clRoom then
+				answerAllTeams (protocol client) (teamsAtStart clRoom)
+			else
+				answerAllTeams (protocol client) (teams clRoom)
 
 handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 	handleCmd_noRoom client clients rooms ["JOIN", roomName, ""]
@@ -371,7 +375,13 @@ handleCmd_inRoom client _ rooms ["REMOVE_TEAM", teamName] =
 			if not $ gameinprogress clRoom then
 				(noChangeClients, modifyRoom clRoom{teams = filter (\t -> teamName /= teamname t) $ teams clRoom}, answerRemoveTeam teamName)
 			else
-				(noChangeClients, modifyRoom clRoom{leftTeams = teamName : leftTeams clRoom, roundMsgs = roundMsgs clRoom |> rmTeamMsg}, answerOthersRoom ["GAMEMSG", rmTeamMsg])
+				(noChangeClients,
+				modifyRoom clRoom{
+					teams = filter (\t -> teamName /= teamname t) $ teams clRoom,
+					leftTeams = teamName : leftTeams clRoom,
+					roundMsgs = roundMsgs clRoom |> rmTeamMsg
+					},
+				answerOthersRoom ["GAMEMSG", rmTeamMsg])
 	where
 		noSuchTeam = isNothing findTeam
 		team = fromJust findTeam
@@ -391,7 +401,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_READY"] =
 handleCmd_inRoom client _ rooms ["START_GAME"] =
 	if isMaster client && (playersIn clRoom == readyPlayers clRoom) && (not $ gameinprogress clRoom) then
 		if enoughClans then
-			(noChangeClients, modifyRoom clRoom{gameinprogress = True, roundMsgs = empty, leftTeams = []}, answerRunGame)
+			(noChangeClients, modifyRoom clRoom{gameinprogress = True, roundMsgs = empty, leftTeams = [], teamsAtStart = teams clRoom}, answerRunGame)
 		else
 			(noChangeClients, noChangeRooms, answerTooFewClans)
 	else
@@ -420,7 +430,7 @@ handleCmd_inRoom client _ rooms ["TOGGLE_RESTRICT_TEAMS"] =
 
 handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
-		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs = empty, leftTeams = []}, answerAllNotReady ++ answerRemovedTeams)
+		(modifyRoomClients clRoom (\cl -> cl{isReady = False}), modifyRoom clRoom{gameinprogress = False, readyPlayers = 0, roundMsgs = empty, leftTeams = [], teamsAtStart = []}, answerAllNotReady ++ answerRemovedTeams)
 	else
 		(noChangeClients, noChangeRooms, [])
 	where

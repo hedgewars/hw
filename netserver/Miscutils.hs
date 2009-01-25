@@ -65,8 +65,10 @@ data RoomInfo =
 		isRestrictedTeams :: Bool,
 		roundMsgs :: Seq String,
 		leftTeams :: [String],
+		teamsAtStart :: [TeamInfo],
 		params :: Map.Map String [String]
 	}
+
 createRoom = (
 	RoomInfo
 		""
@@ -81,6 +83,7 @@ createRoom = (
 		False
 		Data.Sequence.empty
 		[]
+		[]
 		Map.empty
 	)
 
@@ -93,6 +96,7 @@ data ServerInfo =
 		loginsNumber :: Int,
 		lastHourUsers :: [UTCTime]
 	}
+
 newServerInfo = (
 	ServerInfo
 		True
