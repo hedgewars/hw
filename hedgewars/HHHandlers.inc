@@ -510,7 +510,8 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
 	begin
 	TurnTimeLeft:= 0;
 	isCursorVisible:= false;
-	Gear^.State:= Gear^.State and not (gstHHDriven or gstAnimation);
+	Gear^.State:= Gear^.State and not (gstHHDriven or gstAnimation or gstAttacking);
+	AttackBar:= 0;
 	if Gear^.Damage > 0 then
 		Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
 	exit
