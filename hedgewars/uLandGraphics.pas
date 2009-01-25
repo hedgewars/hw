@@ -42,14 +42,22 @@ uses SDLh, uMisc, uLand;
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
 begin
-if ((y + dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do Land[y + dy, i]:= Value;
-if ((y - dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do Land[y - dy, i]:= Value;
-if ((y + dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y + dx, i]:= Value;
-if ((y - dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do Land[y - dx, i]:= Value;
+if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dx, 0) to min(x + dx, 4095) do 
+        if Land[y + dy, i] <> COLOR_INDESTRUCTIBLE then
+            Land[y + dy, i]:= Value;
+if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 4095) do 
+        if Land[y - dy, i] <> COLOR_INDESTRUCTIBLE then
+            Land[y - dy, i]:= Value;
+if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dy, 0) to min(x + dy, 4095) do 
+        if Land[y + dx, i] <> COLOR_INDESTRUCTIBLE then
+            Land[y + dx, i]:= Value;
+if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dy, 0) to min(x + dy, 4095) do 
+        if Land[y - dx, i] <> COLOR_INDESTRUCTIBLE then
+            Land[y - dx, i]:= Value;
 end;
 
 procedure ChangeCircleLines(x, y, dx, dy: LongInt; doSet: boolean);
@@ -57,28 +65,28 @@ var i: LongInt;
 begin
 if not doSet then
    begin
-   if ((y + dy) and $FFFFFC00) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, 2047) do
+   if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 4095) do
           if (Land[y + dy, i] > 0) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
-   if ((y - dy) and $FFFFFC00) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, 2047) do
+   if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 4095) do
           if (Land[y - dy, i] > 0) then dec(Land[y - dy, i]);
-   if ((y + dx) and $FFFFFC00) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, 2047) do
+   if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 4095) do
           if (Land[y + dx, i] > 0) then dec(Land[y + dx, i]);
-   if ((y - dx) and $FFFFFC00) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, 2047) do
+   if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 4095) do
           if (Land[y - dx, i] > 0) then dec(Land[y - dx, i]);
    end else
    begin
-   if ((y + dy) and $FFFFFC00) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y + dy, i]);
-   if ((y - dy) and $FFFFFC00) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, 2047) do inc(Land[y - dy, i]);
-   if ((y + dx) and $FFFFFC00) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y + dx, i]);
-   if ((y - dx) and $FFFFFC00) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, 2047) do inc(Land[y - dx, i]);
+   if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 4095) do inc(Land[y + dy, i]);
+   if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dx, 0) to min(x + dx, 4095) do inc(Land[y - dy, i]);
+   if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 4095) do inc(Land[y + dx, i]);
+   if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+      for i:= max(x - dy, 0) to min(x + dy, 4095) do inc(Land[y - dx, i]);
    end
 end;
 
@@ -125,45 +133,53 @@ end;
 procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
 var i: LongInt;
 begin
-if ((y + dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do LandPixels[y + dy, i]:= 0;
-if ((y - dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do LandPixels[y - dy, i]:= 0;
-if ((y + dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do LandPixels[y + dx, i]:= 0;
-if ((y - dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do LandPixels[y - dx, i]:= 0;
+if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dx, 0) to min(x + dx, 4095) do 
+        if Land[y + dy, i] <> COLOR_INDESTRUCTIBLE then
+            LandPixels[y + dy, i]:= 0;
+if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dx, 0) to min(x + dx, 4095) do 
+        if Land[y - dy, i] <> COLOR_INDESTRUCTIBLE then
+             LandPixels[y - dy, i]:= 0;
+if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dy, 0) to min(x + dy, 4095) do 
+        if Land[y + dx, i] <> COLOR_INDESTRUCTIBLE then
+            LandPixels[y + dx, i]:= 0;
+if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+    for i:= max(x - dy, 0) to min(x + dy, 4095) do 
+        if Land[y - dx, i] <> COLOR_INDESTRUCTIBLE then
+             LandPixels[y - dx, i]:= 0;
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
 var i: LongInt;
 begin
-if ((y + dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do
+if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 4095) do
        if Land[y + dy, i] = COLOR_LAND then 
           begin
           LandPixels[y + dy, i]:= cExplosionBorderColor;
 //          Despeckle(y + dy, i);
           LandDirty[(y + dy) div 32, i div 32]:= 1;
           end;
-if ((y - dy) and $FFFFFC00) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, 2047) do
+if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, 4095) do
        if Land[y - dy, i] = COLOR_LAND then
           begin
           LandPixels[y - dy, i]:= cExplosionBorderColor;
 //          Despeckle(y - dy, i);
           LandDirty[(y - dy) div 32, i div 32]:= 1;
           end;
-if ((y + dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do
+if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 4095) do
        if Land[y + dx, i] = COLOR_LAND then
            begin
            LandPixels[y + dx, i]:= cExplosionBorderColor;
 //           Despeckle(y + dx, i);
            LandDirty[(y + dx) div 32, i div 32]:= 1;
            end;
-if ((y - dx) and $FFFFFC00) = 0 then
-   for i:= max(x - dy, 0) to min(x + dy, 2047) do
+if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, 4095) do
        if Land[y - dx, i] = COLOR_LAND then
           begin
           LandPixels[y - dx, i]:= cExplosionBorderColor;
@@ -210,7 +226,7 @@ FillRoundInLand(X, Y, Radius, 0);
   if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
 
 d:= max(Y - Radius - 1, 0);
-dy:= min(Y + Radius + 1, 1023) - d;
+dy:= min(Y + Radius + 1, 2047) - d;
 UpdateLandTexture(d, dy)
 end;
 
@@ -219,9 +235,10 @@ var tx, ty, i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
-        for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
-            LandPixels[ty, tx]:= 0;
+    for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
+        for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
+            if Land[ty, tx] <> COLOR_INDESTRUCTIBLE then
+                LandPixels[ty, tx]:= 0;
     inc(y, dY)
     end;
 
@@ -230,9 +247,9 @@ dec(y, Count * dY);
 
 for i:= 0 to Pred(Count) do
     begin
-    for ty:= max(y - Radius, 0) to min(y + Radius, 1023) do
-        for tx:= max(0, ar^[i].Left - Radius) to min(2047, ar^[i].Right + Radius) do
-            if Land[ty, tx] = $FFFFFF then
+    for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
+        for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
+            if Land[ty, tx] = COLOR_LAND then
                 begin
                 LandPixels[ty, tx]:= cExplosionBorderColor;
                 LandDirty[trunc((y + dy)/32), trunc(i/32)]:= 1;
@@ -241,7 +258,7 @@ for i:= 0 to Pred(Count) do
     end;
 
 
-UpdateLandTexture(0, 1023)
+UpdateLandTexture(0, LAND_HEIGHT)
 end;
 
 //
@@ -282,7 +299,7 @@ for i:= -HalfWidth to HalfWidth do
         Y:= Y + dY;
         tx:= hwRound(X);
         ty:= hwRound(Y);
-        if ((ty and $FFFFFC00) = 0) and ((tx and $FFFFF800) = 0) then
+        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) then
          if Land[ty, tx] = COLOR_LAND then
            begin
            Land[ty, tx]:= 0;
@@ -306,7 +323,7 @@ for i:= 0 to 7 do
     end;
 
 t:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), 1023) - t;
+ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), 2047) - t;
 UpdateLandTexture(t, ty)
 end;
 
@@ -332,8 +349,8 @@ case bpp of
             begin
             for x:= 0 to Pred(w) do
                 if PLongword(@(p^[x * 4]))^ <> 0 then
-                   if (((cpY + y) and $FFFFFC00) <> 0) or
-                      (((cpX + x) and $FFFFF800) <> 0) or
+                   if (((cpY + y) and LAND_HEIGHT_MASK) <> 0) or
+                      (((cpX + x) and LAND_WIDTH_MASK) <> 0) or
                       (Land[cpY + y, cpX + x] <> 0) then
                       begin
                       if SDL_MustLock(Image) then
@@ -370,7 +387,7 @@ if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 
 y:= max(cpY, 0);
-h:= min(cpY + Image^.h, 1023) - y;
+h:= min(cpY + Image^.h, LAND_HEIGHT) - y;
 UpdateLandTexture(y, h)
 end;
 
@@ -378,7 +395,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c: LongInt;
 begin
-if Land[Y, X] <> 0 then // check neighbours
+if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) then // check neighbours
 	begin
 	c:= 0;
 	for i:= -1 to 1 do
@@ -387,7 +404,7 @@ if Land[Y, X] <> 0 then // check neighbours
 				begin
 				ny:= Y + i;
 				nx:= X + j;
-				if ((ny and $FFFFFC00) = 0) and ((nx and $FFFFF800) = 0) then
+				if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
 					if Land[ny, nx] <> 0 then
 						inc(c);
 				end;
@@ -406,11 +423,11 @@ procedure SweepDirty;
 var x, y, xx, yy: LongInt;
     updatedRow, updatedCell: boolean;
 begin
-for y:= 0 to 31 do
+for y:= 0 to 63 do
 	begin
 	updatedRow:= false;
 	
-	for x:= 0 to 63 do
+	for x:= 0 to 127 do
 		begin
 			repeat
 			updatedCell:= false;
@@ -428,8 +445,8 @@ for y:= 0 to 31 do
 		end;
 	
 	if updatedRow then
-		if y = 31 then
-			UpdateLandTexture(992, 31)
+		if y = 63 then
+			UpdateLandTexture(LAND_HEIGHT-31, 31)
 		else
 			UpdateLandTexture(y*32, 32);
 	end;

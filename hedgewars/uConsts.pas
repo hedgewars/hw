@@ -138,7 +138,12 @@ const
 
 	MAXNAMELEN = 192;
 
+    LAND_HEIGHT = 2047;  // could these be variable instead of const?
+    LAND_HEIGHT_MASK = $FFFFF800; // derive from LAND_HEIGHT?
+    LAND_WIDTH = 4095;
+    LAND_WIDTH_MASK = $FFFFF000;
 	COLOR_LAND = $00FFFFFF;
+	COLOR_INDESTRUCTIBLE = $0000F00D;
 
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;

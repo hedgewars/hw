@@ -49,7 +49,7 @@ var
 	cBitsStr         : string[2] = '16';
 	cTagsMask        : byte = 7;
 
-	cWaterLine       : LongInt = 1024;
+	cWaterLine       : LongInt = LAND_HEIGHT+1;
 	cVisibleWater    : LongInt = 128;
 	cGearScrEdgesDist: LongInt = 240;
 	cCursorEdgesDist : LongInt = 100;

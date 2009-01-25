@@ -1180,7 +1180,7 @@ if (GameFlags and gfForts) = 0 then
 	for i:= 0 to Pred(cLandAdditions) do
 		begin
 		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-		FindPlace(Gear, false, 0, 2048)
+		FindPlace(Gear, false, 0, LAND_WIDTH+1)
 		end
 end;
 
@@ -1371,10 +1371,10 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	while (Count > 0) do
 		begin
 		i:= GetRandom(Count);
-		FindPlace(ar[i]^.Gear, false, 0, 2048);
+		FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH+1);
 		if ar[i]^.Gear <> nil then
 			begin
-			ar[i]^.Gear^.dX.isNegative:= ar[i]^.Gear^.X > _1024;
+			ar[i]^.Gear^.dX.isNegative:= ar[i]^.Gear^.X > _4096; // LAND_WIDTH
 			ar[i]^.Gear^.Pos:= GetRandom(19);
 			ar[i]:= ar[Count - 1]
 			end;
@@ -1482,7 +1482,7 @@ case getrandom(2) of
         FollowGear^.State:= Longword(i)
         end;
      end;
-FindPlace(FollowGear, true, 0, 2048)
+FindPlace(FollowGear, true, 0, 4096)
 end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
@@ -1492,8 +1492,8 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 		Result: LongInt;
 	begin
 	Result:= 0;
-	if (y and $FFFFFC00) = 0 then
-		for i:= max(x - r, 0) to min(x + r, 2043) do
+	if (y and LAND_HEIGHT_MASK) = 0 then
+		for i:= max(x - r, 0) to min(x + r, LAND_WIDTH-4) do
 			if Land[y, i] <> 0 then inc(Result);
 	CountNonZeroz:= Result
 	end;
@@ -1513,20 +1513,20 @@ repeat
 		inc(x, Delta);
 		cnt:= 0;
 		y:= -Gear^.Radius * 2;
-		while y < 1023 do
+		while y < LAND_HEIGHT do
 			begin
 			repeat
 				inc(y, 2);
-			until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
+			until (y > LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
 			
 			sy:= y;
 
 			repeat
 				inc(y);
-			until (y > 1023) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
+			until (y > LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
 			
 			if (y - sy > Gear^.Radius * 2)
-				and (y < 1023)
+				and (y < LAND_HEIGHT)
 				and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
 				begin
 				ar[cnt].X:= x;

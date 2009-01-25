@@ -20,9 +20,9 @@ unit uLand;
 interface
 uses SDLh, uLandTemplates, uFloat, GL, uConsts;
 {$include options.inc}
-type TLandArray = packed array[0..1023, 0..2047] of LongWord;
+type TLandArray = packed array[0..LAND_HEIGHT, 0..LAND_WIDTH] of LongWord;
      TPreview = packed array[0..127, 0..31] of byte;
-     TDirtyTag = packed array[0..31, 0..63] of byte;
+     TDirtyTag = packed array[0..63, 0..127] of byte;
 
 var  Land: TLandArray;
      LandPixels: TLandArray;
@@ -118,7 +118,7 @@ for i:= 0 to d do
        inc(y, sY);
        end;
 
-    if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
+    if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
        Land[y, x]:= Color;
     end
 end;
@@ -245,7 +245,7 @@ var Stack: record
     begin
     TryDo(Stack.Count <= 8192, 'FillLand: stack overflow', true);
     _y:= _y + _dir;
-    if (_y < 0) or (_y > 1023) then exit;
+    if (_y < 0) or (_y > LAND_HEIGHT) then exit;
     with Stack.points[Stack.Count] do
          begin
          xl:= _xl;
@@ -279,7 +279,7 @@ while Stack.Count > 0 do
       begin
       Pop(xl, xr, y, dir);
       while (xl > 0) and (Land[y, xl] <> 0) do dec(xl);
-      while (xr < 2047) and (Land[y, xr] <> 0) do inc(xr);
+      while (xr < LAND_WIDTH) and (Land[y, xr] <> 0) do inc(xr);
       while (xl < xr) do
             begin
             while (xl <= xr) and (Land[y, xl] = 0) do inc(xl);
@@ -305,10 +305,10 @@ var tmpsurf: PSDL_Surface;
 begin
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, false);
 r.y:= 0;
-while r.y < 1024 do
+while r.y < 2048 do
 	begin
 	r.x:= 0;
-	while r.x < 2048 do
+	while r.x <= LAND_WIDTH do
 		begin
 		SDL_UpperBlit(tmpsurf, nil, Surface, @r);
 		inc(r.x, tmpsurf^.w)
@@ -318,22 +318,22 @@ while r.y < 1024 do
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false, true, true);
-for x:= 0 to 2047 do
+for x:= 0 to 4095 do
 	begin
-	yd:= 1023;
+	yd:= LAND_HEIGHT;
 	repeat
 		while (yd > 0   ) and (Land[yd, x] =  0) do dec(yd);
 		
 		if (yd < 0) then yd:= 0;
 
-		while (yd < 1024) and (Land[yd, x] <> 0) do inc(yd);
+		while (yd <= LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
 		dec(yd);
 		yu:= yd;
 		
 		while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
 		while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
 		
-		if (yd < 1023) and ((yd - yu) >= 16) then
+		if (yd < LAND_HEIGHT) and ((yd - yu) >= 16) then
 			begin
 			rr.x:= x;
 			rr.y:= yd - 15;
@@ -375,18 +375,18 @@ with Template do
            begin
            for i:= 0 to pred(BasePointsCount) do
              if pa.ar[i].x <> NTPX then
-               pa.ar[i].x:= 2047 - pa.ar[i].x;
+               pa.ar[i].x:= LAND_WIDTH - pa.ar[i].x;
            for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].x:= 2047 - FillPoints^[i].x;
+               FillPoints^[i].x:= LAND_WIDTH - FillPoints^[i].x;
            end;
 
      if canFlip then
         if getrandom(2) = 0 then
            begin
            for i:= 0 to pred(BasePointsCount) do
-               pa.ar[i].y:= 1023 - pa.ar[i].y;
+               pa.ar[i].y:= LAND_HEIGHT - pa.ar[i].y;
            for i:= 0 to pred(FillPointsCount) do
-               FillPoints^[i].y:= 1023 - FillPoints^[i].y;
+               FillPoints^[i].y:= LAND_HEIGHT - FillPoints^[i].y;
            end;
      end
 end;
@@ -440,8 +440,8 @@ for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
     if x <> NTPX then
       begin
-      radz[i]:= Min(Max(x - cEdge, 0), Max(2048 - cEdge - x, 0));
-      radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(1024 - cEdge - y, 0)));
+      radz[i]:= Min(Max(x - cEdge, 0), Max(LAND_WIDTH + 1 - cEdge - x, 0));
+      radz[i]:= Min(radz[i], Min(Max(y - cEdge, 0), Max(LAND_HEIGHT + 1 - cEdge - y, 0)));
       if radz[i] > 0 then
         for k:= 0 to Pred(i) do
           begin
@@ -453,7 +453,7 @@ for i:= 0 to Pred(pa.Count) do
 
 for i:= 0 to Pred(pa.Count) do
   with pa.ar[i] do
-    if ((x and $FFFFF800) = 0) and ((y and $FFFFFC00) = 0) then
+    if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
       begin
       px:= x;
       py:= y;
@@ -473,8 +473,8 @@ var pa: TPixAr;
     i: Longword;
     y, x: Longword;
 begin
-for y:= 0 to 1023 do
-    for x:= 0 to 2047 do
+for y:= 0 to LAND_HEIGHT do
+    for x:= 0 to LAND_WIDTH do
         Land[y, x]:= COLOR_LAND;
 
 SetPoints(Template, pa);
@@ -504,6 +504,7 @@ end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
 var x, y: LongInt;
+    c: LongWord;
 	p: PLongwordArray;
 begin
 TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
@@ -512,15 +513,50 @@ if SDL_MustLock(Surface) then
 	SDLTry(SDL_LockSurface(Surface) >= 0, true);
 
 p:= Surface^.pixels;
-for y:= 0 to 1023 do
+for y:= 0 to LAND_HEIGHT do
 	begin
-	for x:= 0 to 2047 do
+	for x:= 0 to LAND_WIDTH do
 		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or $FF000000;
 	p:= @(p^[Surface^.pitch div 4]);
 	end;
 
 if SDL_MustLock(Surface) then
-	SDL_UnlockSurface(Surface)
+	SDL_UnlockSurface(Surface);
+
+for y:= 0 to 63 do
+	for x:= 0 to 127 do
+	    LandDirty[y, x]:= 0;  // TODO - ask unC0Rr why he took this out of merge - doesn't it need initialising? seems random values could result in some unintended smoothing of initial map edges. also be slower.
+
+// experiment hardcoding cave
+for y:= 0 to LAND_HEIGHT do
+    begin
+    Land[y, 0]:= COLOR_INDESTRUCTIBLE;
+    Land[y, 1]:= COLOR_INDESTRUCTIBLE;
+    Land[y, 2]:= COLOR_INDESTRUCTIBLE;
+    Land[y, LAND_WIDTH-2]:= COLOR_INDESTRUCTIBLE;
+    Land[y, LAND_WIDTH-1]:= COLOR_INDESTRUCTIBLE;
+    Land[y, LAND_WIDTH]:= COLOR_INDESTRUCTIBLE;
+    if y mod 32 < 16 then c:= $FF000000
+    else c:= $FF00FFFF;   
+    LandPixels[y, 0]:= c;           
+    LandPixels[y, 1]:= c;           
+    LandPixels[y, 2]:= c;           
+    LandPixels[y, LAND_WIDTH-2]:= c;           
+    LandPixels[y, LAND_WIDTH-1]:= c;           
+    LandPixels[y, LAND_WIDTH]:= c;           
+    end;
+
+for x:= 0 to LAND_WIDTH do
+    begin
+    Land[0, x]:= COLOR_INDESTRUCTIBLE;
+    Land[1, x]:= COLOR_INDESTRUCTIBLE;
+    Land[2, x]:= COLOR_INDESTRUCTIBLE;
+    if x mod 32 < 16 then c:= $FF000000
+    else c:= $FF00FFFF;   
+    LandPixels[0, x]:= c;           
+    LandPixels[1, x]:= c;           
+    LandPixels[2, x]:= c;           
+    end;
 end;
 
 procedure GenLandSurface;
@@ -532,7 +568,7 @@ GenBlank(EdgeTemplates[SelectTemplate]);
 
 AddProgress;
 
-tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2048, 1024, 32, RMask, GMask, BMask, 0);
+tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH+1, LAND_HEIGHT+1, 32, RMask, GMask, BMask, 0);
 
 TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
 ColorizeLand(tmpsurf);
@@ -545,7 +581,7 @@ AddProgress;
 
 AddObjects;
 
-UpdateLandTexture(0, 1023);
+UpdateLandTexture(0, LAND_WIDTH);
 AddProgress
 end;
 
@@ -555,14 +591,14 @@ begin
 WriteLnToConsole('Generating forts land...');
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
-BlitImageAndGenerateCollisionInfo(0, 0, 1024, tmpsurf);
+BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
-BlitImageAndGenerateCollisionInfo(1024, 0, 1024, tmpsurf);
+BlitImageAndGenerateCollisionInfo(2048, 0, LAND_WIDTH+1, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture(0, 1023)
+UpdateLandTexture(0, LAND_HEIGHT)
 end;
 
 procedure LoadMap;
@@ -571,14 +607,14 @@ begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
-TryDo((tmpsurf^.w = 2048) and (tmpsurf^.h = 1024), 'Map dimensions should be 2048x1024!', true);
+TryDo((tmpsurf^.w = LAND_WIDTH+1) and (tmpsurf^.h = LAND_HEIGHT+1), 'Map dimensions should be 4096x2048!', true);
 
 TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
 
-BlitImageAndGenerateCollisionInfo(0, 0, 2048, tmpsurf);
+BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH+1, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-UpdateLandTexture(0, 1023)
+UpdateLandTexture(0, LAND_HEIGHT)
 end;
 
 procedure GenMap;
@@ -607,8 +643,8 @@ for y:= 0 to 127 do
         for bit:= 0 to 7 do
             begin
             t:= 0;
-            for yy:= y * 8 to y * 8 + 7 do
-                for xx:= x * 64 + bit * 8 to x * 64 + bit * 8 + 7 do
+            for yy:= y * 16 to y * 16 + 7 do
+                for xx:= x * 128 + bit * 8 to x * 128 + bit * 8 + 7 do
                     if Land[yy, xx] <> 0 then inc(t);
             if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit)
             end
@@ -619,15 +655,15 @@ end;
 procedure UpdateLandTexture(Y, Height: LongInt);
 begin
 if (Height <= 0) then exit;
-TryDo((Y >= 0) and (Y < 1024), 'UpdateLandTexture: wrong Y parameter', true);
-TryDo(Y + Height < 1024, 'UpdateLandTexture: wrong Height parameter', true);
+TryDo((Y >= 0) and (Y <= LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
+TryDo(Y + Height <= LAND_WIDTH, 'UpdateLandTexture: wrong Height parameter', true);
 
 if LandTexture = nil then
-	LandTexture:= NewTexture(2048, 1024, @LandPixels)
+	LandTexture:= NewTexture(LAND_WIDTH+1, LAND_HEIGHT+1, @LandPixels)
 else
 	begin
 	glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, 2048, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, LAND_WIDTH+1, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
 	end
 end;
 

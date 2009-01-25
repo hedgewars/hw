@@ -390,7 +390,7 @@ if (Gear^.State and gstCollision) <> 0 then
 	end;
 dec(i)
 until i = 0;
-if (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) then
+if (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _4096) or (Gear^.Y > _2048) then // LAND_WIDTH / LAND_HEIGHT 
 	Gear^.doStep:= @doStepShotIdle
 end;
 
@@ -409,7 +409,7 @@ repeat
   Gear^.Y:= Gear^.Y + Gear^.dY;
   x:= hwRound(Gear^.X);
   y:= hwRound(Gear^.Y);
-  if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0)
+  if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
      and (Land[y, x] <> 0) then inc(Gear^.Damage);
   if Gear^.Damage > 5 then AmmoShove(Gear, 7, 20);
   dec(i)
@@ -420,7 +420,7 @@ if Gear^.Damage > 0 then
    dec(Gear^.Health, Gear^.Damage);
    Gear^.Damage:= 0
    end;
-if (Gear^.Health <= 0) or (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _2048) or (Gear^.Y > _1024) then
+if (Gear^.Health <= 0) or (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _4096) or (Gear^.Y > _2048) then // LAND_WIDTH / LAND_HEIGHT
 	Gear^.doStep:= @doStepShotIdle
 end;
 
@@ -712,7 +712,7 @@ haveDivided:= false;
 			begin
 			lx:= hwRound(Gear^.X + mdX * len);
 			ly:= hwRound(Gear^.Y + mdY * len);
-			if ((ly and $FFFFFC00) = 0) and ((lx and $FFFFF800) = 0) and (Land[ly, lx] <> 0) then
+			if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] <> 0) then
 				begin
 				with RopePoints.ar[RopePoints.Count] do
 					begin
@@ -1301,7 +1301,7 @@ if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirP
 if (GameTicks and $3F) = 0 then
 	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
 
-if (hwRound(Gear^.X) > 3072) or (hwRound(Gear^.X) < -1024) then DeleteGear(Gear)
+if (hwRound(Gear^.X) > (LAND_WIDTH+1024)) or (hwRound(Gear^.X) < -1024) then DeleteGear(Gear)
 end;
 
 procedure doStepAirAttack(Gear: PGear);
@@ -1777,7 +1777,7 @@ Gear^.Y:= Gear^.Y + Gear^.dY;
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
 
-if ((y and $FFFFFC00) = 0) and ((x and $FFFFF800) = 0) then
+if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) then
 	if (Land[y, x] <> 0) then
 		begin
 		Gear^.dX.isNegative:= not Gear^.dX.isNegative;

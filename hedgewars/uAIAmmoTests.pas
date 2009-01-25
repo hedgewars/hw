@@ -334,7 +334,7 @@ d:= 0;
 repeat
   x:= x + vX;
   y:= y + vY;
-  if ((hwRound(x) and $FFFFF800) = 0)and((hwRound(y) and $FFFFFC00) = 0)
+  if ((hwRound(x) and LAND_WIDTH_MASK) = 0)and((hwRound(y) and LAND_HEIGHT_MASK) = 0)
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x < _0) or (y < _0) or (x > _2048) or (y > _1024) or (d > 200);
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then Result:= max(0, (4 - d div 50) * 7 * 1024)

@@ -124,12 +124,12 @@ if Gear^.IntersectGear <> nil then
 x:= hwRound(Gear^.X);
 if Dir < 0 then x:= x - Gear^.Radius
            else x:= x + Gear^.Radius;
-if (x and $FFFFF800) = 0 then
+if (x and LAND_WIDTH_MASK) = 0 then
    begin
    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
    i:= y + Gear^.Radius * 2 - 2;
    repeat
-     if (y and $FFFFFC00) = 0 then
+     if (y and LAND_HEIGHT_MASK) = 0 then
         if Land[y, x] > TestWord then exit(true);
      inc(y)
    until (y > i);
@@ -155,12 +155,12 @@ if Gear^.IntersectGear <> nil then
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
            else y:= y + Gear^.Radius;
-if (y and $FFFFFC00) = 0 then
+if (y and LAND_HEIGHT_MASK) = 0 then
    begin
    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
    i:= x + Gear^.Radius * 2 - 2;
    repeat
-     if (x and $FFFFF800) = 0 then
+     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > TestWord then exit(true);
      inc(x)
    until (x > i);
@@ -176,12 +176,12 @@ flag:= false;
 x:= hwRound(Gear^.X);
 if Dir < 0 then x:= x - Gear^.Radius
            else x:= x + Gear^.Radius;
-if (x and $FFFFF800) = 0 then
+if (x and LAND_WIDTH_MASK) = 0 then
    begin
    y:= hwRound(Gear^.Y) - Gear^.Radius + 1;
    i:= y + Gear^.Radius * 2 - 2;
    repeat
-     if (y and $FFFFFC00) = 0 then
+     if (y and LAND_HEIGHT_MASK) = 0 then
            if Land[y, x] = COLOR_LAND then exit(true)
            else if Land[y, x] <> 0 then flag:= true;
      inc(y)
@@ -226,12 +226,12 @@ flag:= false;
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
            else y:= y + Gear^.Radius;
-if (y and $FFFFFC00) = 0 then
+if (y and LAND_HEIGHT_MASK) = 0 then
    begin
    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
    i:= x + Gear^.Radius * 2 - 2;
    repeat
-     if (x and $FFFFF800) = 0 then
+     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
            if Land[y, x] = COLOR_LAND then exit(true)
            else if Land[y, x] <> 0 then flag:= true;
@@ -285,12 +285,12 @@ begin
 y:= hwRound(Gear^.Y);
 if Dir < 0 then y:= y - Gear^.Radius
            else y:= y + Gear^.Radius;
-if (y and $FFFFFC00) = 0 then
+if (y and LAND_HEIGHT_MASK) = 0 then
    begin
    x:= hwRound(Gear^.X) - Gear^.Radius + 1;
    i:= x + Gear^.Radius * 2 - 2;
    repeat
-     if (x and $FFFFF800) = 0 then
+     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] = COLOR_LAND then exit(true);
      inc(x)
    until (x > i);

@@ -64,8 +64,8 @@ cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
-WorldDx:=  - 1024 + cScreenWidth div 2;
-WorldDy:=  - 512 + cScreenHeight div 2;
+WorldDx:=  - (LAND_WIDTH shr 1) + cScreenWidth div 2;
+WorldDy:=  - (LAND_HEIGHT shr 1) + cScreenHeight div 2;
 AMxShift:= 210
 end;
 
@@ -177,7 +177,7 @@ var i, t: LongInt;
     i:= Shift mod w;
     if i > 0 then dec(i, w);
     repeat
-      DrawSprite(spr, i, WorldDy + 1024 - SpritesData[spr].Height, 0);
+      DrawSprite(spr, i, WorldDy + LAND_HEIGHT + 1 - SpritesData[spr].Height, 0);
       inc(i, w)
     until i > cScreenWidth
     end;
@@ -491,8 +491,8 @@ if isCursorVisible or (FollowGear <> nil) then
 if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
 prevPoint:= CursorPoint;
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
-if WorldDy >  2048 then WorldDy:=  2048;
-if WorldDx < -2048 then WorldDx:= -2048;
+if WorldDy >  LAND_HEIGHT then WorldDy:=  LAND_HEIGHT;
+if WorldDx < -LAND_WIDTH then WorldDx:= -LAND_WIDTH;
 if WorldDx > cScreenWidth then WorldDx:=  cScreenWidth;
 end;
 
