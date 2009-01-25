@@ -6,7 +6,7 @@ module HWProto
 import IO
 import Data.List
 import Data.Word
-import Data.Sequence(Seq, (|>), empty)
+import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.Foldable(toList)
 import Miscutils
 import Maybe
@@ -135,13 +135,43 @@ handleCmd client _ rooms ("QUIT" : xs) =
 	else if isMaster client then
 		(modifyRoomClients clRoom (\cl -> cl{isReady = False, partRoom = True}), removeRoom (room client), (answerQuit msg) ++ (answerQuitLobby (nick client) msg) ++ (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client)) -- core disconnects clients on ROOMABANDONED answer
 	else
-		(noChangeClients, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerQuit msg) ++ (answerQuitInform (nick client) msg) ++ (answerQuitLobby (nick client) msg) ++ answerRemoveClientTeams)
+		if not $ gameinprogress clRoom then
+			(noChangeClients,
+			modifyRoom clRoom{
+				teams = othersTeams,
+				playersIn = (playersIn clRoom) - 1,
+				readyPlayers = newReadyPlayers
+				},
+			(answerQuit msg) ++
+			(answerQuitInform (nick client) msg) ++
+			(answerQuitLobby (nick client) msg) ++
+			answerRemoveClientTeams)
+		else
+			(noChangeClients,
+			modifyRoom clRoom{
+				teams = othersTeams,
+				leftTeams = (map teamname clientTeams) ++ (leftTeams clRoom),
+				roundMsgs = (roundMsgs clRoom) >< (fromList rmTeamsMsgs),
+				playersIn = (playersIn clRoom) - 1,
+				readyPlayers = newReadyPlayers
+				},
+			(answerQuit msg) ++
+			(answerQuitInform (nick client) msg) ++
+			(answerQuitLobby (nick client) msg) ++
+			answerRemoveClientTeams ++
+			answerEngineTeamsRemoveMsg)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
 		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
 		msg = if not $ null xs then head xs else ""
+		rmTeamsMsgs = map (\team -> toEngineMsg $ 'F' : teamname team) clientTeams
+		answerEngineTeamsRemoveMsg =
+			if not $ null rmTeamsMsgs then
+				answerOthersRoom $ "GAMEMSG" : rmTeamsMsgs
+			else
+				[]
 
 handleCmd _ _ _ ["PING"] = -- core requsted
 	(noChangeClients, noChangeRooms, answerPing)
@@ -292,12 +322,44 @@ handleCmd_inRoom client _ rooms ["PART"] =
 	if isMaster client then
 		(modifyRoomClients clRoom (\cl -> cl{isReady = False, isMaster = False, partRoom = True}), removeRoom (room client), (answerAbandoned $ protocol client) ++ (answerRoomDeleted $ room client))
 	else
-		(modifyClient client{isReady = False, partRoom = True}, modifyRoom clRoom{teams = othersTeams, playersIn = (playersIn clRoom) - 1, readyPlayers = newReadyPlayers}, (answerPartInform (nick client)) ++ answerRemoveClientTeams)
+			if not $ gameinprogress clRoom then
+				(modifyClient client{
+					isReady = False,
+					partRoom = True
+					},
+				 modifyRoom clRoom{
+				 	teams = othersTeams,
+				 	playersIn = (playersIn clRoom) - 1,
+				 	readyPlayers = newReadyPlayers
+				 	},
+				 (answerPartInform (nick client)) ++ answerRemoveClientTeams)
+			else
+				(modifyClient client{
+					isReady = False,
+					partRoom = True
+					},
+				modifyRoom clRoom{
+					teams = othersTeams,
+					leftTeams = (map teamname clientTeams) ++ (leftTeams clRoom),
+					roundMsgs = (roundMsgs clRoom) >< (fromList rmTeamsMsgs),
+				 	playersIn = (playersIn clRoom) - 1,
+				 	readyPlayers = newReadyPlayers
+					},
+				answerEngineTeamsRemoveMsg ++
+				(answerPartInform (nick client)) ++
+				answerRemoveClientTeams)
 	where
 		clRoom = roomByName (room client) rooms
 		answerRemoveClientTeams = concatMap (\tn -> answerOthersRoom ["REMOVE_TEAM", teamname tn]) clientTeams
 		(clientTeams, othersTeams) = partition (\t -> teamowner t == nick client) $ teams clRoom
 		newReadyPlayers = if isReady client then (readyPlayers clRoom) - 1 else readyPlayers clRoom
+		rmTeamsMsgs = map (\team -> toEngineMsg $ 'F' : teamname team) clientTeams
+		answerEngineTeamsRemoveMsg =
+			if not $ null rmTeamsMsgs then
+				answerOthersRoom $ "GAMEMSG" : rmTeamsMsgs
+			else
+				[]
+
 
 handleCmd_inRoom client _ rooms ["MAP", mapName] =
 	if isMaster client then
@@ -437,7 +499,7 @@ handleCmd_inRoom client clients rooms ["ROUNDFINISHED"] =
 		clRoom = roomByName (room client) rooms
 		sameRoomClients = filter (\ci -> room ci == name clRoom) clients
 		answerAllNotReady = concatMap (\cl -> answerSameRoom ["NOT_READY", nick cl]) sameRoomClients
-		answerRemovedTeams = concatMap answerRemoveTeam $ leftTeams clRoom
+		answerRemovedTeams = concatMap (\t -> answerSameRoom ["REMOVE_TEAM", t]) $ leftTeams clRoom
 
 handleCmd_inRoom client _ rooms ["GAMEMSG", msg] =
 	(noChangeClients, addMsg, answerOthersRoom ["GAMEMSG", msg])
