@@ -302,6 +302,15 @@ handleCmd_noRoom client clients rooms ["JOIN", roomName] =
 handleCmd_noRoom client _ _ ["CHAT_STRING", msg] =
 	(noChangeClients, noChangeRooms, answerChatString (nick client) msg)
 
+handleCmd_noRoom client _ _ ["GLOBALMSG", password, msg] =
+	(noChangeClients, noChangeRooms, [answer])
+	where
+		answer = \serverInfo ->
+			if (not $ null password) && (adminPassword serverInfo == password) then
+				(allClients, ["CHAT_STRING", nick client, msg])
+			else
+				(clientOnly, ["ERROR", "Wrong password"])
+
 handleCmd_noRoom _ _ _ _ = (noChangeClients, noChangeRooms, answerBadCmd)
 
 
