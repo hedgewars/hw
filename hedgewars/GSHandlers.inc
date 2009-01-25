@@ -822,8 +822,9 @@ if TestCollisionYwithGear(HHGear, 1) then
 			Gear^.Y:= Gear^.Y + ty;
 			Gear^.Elasticity:= tt;
 			Gear^.doStep:= @doStepRopeWork;
-			with HHGear^ do State:= State and not (gstAttacking or gstMoving);
-			tt:= _0
+			with HHGear^ do State:= State and not (gstAttacking or gstMoving or gstHHHJump);
+			tt:= _0;
+			exit
 			end;
 		tx:= tx + Gear^.dX + Gear^.dX;
 		ty:= ty + Gear^.dY + Gear^.dY;
