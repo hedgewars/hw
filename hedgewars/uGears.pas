@@ -1180,7 +1180,7 @@ if (GameFlags and gfForts) = 0 then
 	for i:= 0 to Pred(cLandAdditions) do
 		begin
 		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-		FindPlace(Gear, false, 0, LAND_WIDTH+1)
+		FindPlace(Gear, false, 0, LAND_WIDTH)
 		end
 end;
 
@@ -1328,8 +1328,8 @@ end;
 
 procedure AssignHHCoords;
 var i, t, p, j: LongInt;
-    ar: array[0..Pred(cMaxHHs)] of PHedgehog;
-    Count: Longword;
+	ar: array[0..Pred(cMaxHHs)] of PHedgehog;
+	Count: Longword;
 begin
 if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	begin
@@ -1344,14 +1344,14 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 						with Hedgehogs[i] do
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
-								FindPlace(Gear, false, t, t + 1024);// could make Gear == nil
+								FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil
 								if Gear <> nil then
 									begin
 									Gear^.Pos:= GetRandom(19);
 									Gear^.dX.isNegative:= p = 1;
 									end
 								end;
-		inc(t, 1024)
+		t:= LAND_WIDTH div 2
 		end
 	end else // mix hedgehogs
 	begin
@@ -1371,10 +1371,10 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	while (Count > 0) do
 		begin
 		i:= GetRandom(Count);
-		FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH+1);
+		FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH);
 		if ar[i]^.Gear <> nil then
 			begin
-			ar[i]^.Gear^.dX.isNegative:= ar[i]^.Gear^.X > _4096; // LAND_WIDTH
+			ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
 			ar[i]^.Gear^.Pos:= GetRandom(19);
 			ar[i]:= ar[Count - 1]
 			end;
@@ -1482,7 +1482,8 @@ case getrandom(2) of
         FollowGear^.State:= Longword(i)
         end;
      end;
-FindPlace(FollowGear, true, 0, 4096)
+ 
+FindPlace(FollowGear, true, 0, LAND_WIDTH)
 end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
@@ -1493,7 +1494,7 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 	begin
 	Result:= 0;
 	if (y and LAND_HEIGHT_MASK) = 0 then
-		for i:= max(x - r, 0) to min(x + r, LAND_WIDTH-4) do
+		for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
 			if Land[y, i] <> 0 then inc(Result);
 	CountNonZeroz:= Result
 	end;
@@ -1517,13 +1518,13 @@ repeat
 			begin
 			repeat
 				inc(y, 2);
-			until (y > LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
+			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
 			
 			sy:= y;
 
 			repeat
 				inc(y);
-			until (y > LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
+			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
 			
 			if (y - sy > Gear^.Radius * 2)
 				and (y < LAND_HEIGHT)
@@ -1546,6 +1547,7 @@ repeat
 				inc(cnt2)
 				end
 	until (x + Delta > Right);
+	
 	dec(Delta, 60)
 until (cnt2 > 0) or (Delta < 70);
 

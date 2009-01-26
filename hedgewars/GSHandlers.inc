@@ -390,7 +390,7 @@ if (Gear^.State and gstCollision) <> 0 then
 	end;
 dec(i)
 until i = 0;
-if (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _4096) or (Gear^.Y > _2048) then // LAND_WIDTH / LAND_HEIGHT 
+if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
 	Gear^.doStep:= @doStepShotIdle
 end;
 
@@ -420,7 +420,10 @@ if Gear^.Damage > 0 then
    dec(Gear^.Health, Gear^.Damage);
    Gear^.Damage:= 0
    end;
-if (Gear^.Health <= 0) or (Gear^.X < _0) or (Gear^.Y < _0) or (Gear^.X > _4096) or (Gear^.Y > _2048) then // LAND_WIDTH / LAND_HEIGHT
+
+if (Gear^.Health <= 0)
+	or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
+	or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
 	Gear^.doStep:= @doStepShotIdle
 end;
 
@@ -1834,7 +1837,7 @@ else
 if cWaterLine > 0 then
 	begin
 	dec(cWaterLine);
-	for i:= 0 to 2047 do
+	for i:= 0 to LAND_WIDTH - 1 do
 		Land[cWaterLine, i]:= 0;
 	SetAllToActive
 	end;

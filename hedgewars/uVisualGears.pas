@@ -89,9 +89,9 @@ Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobFallSpeed) * Steps;
 Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
 
-if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH + 1) else
-if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH + 1 then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-if hwRound(Gear^.Y) > (LAND_HEIGHT+75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT+200)
+if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
+if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
+if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT + 200)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
