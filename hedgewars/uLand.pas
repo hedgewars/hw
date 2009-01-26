@@ -555,11 +555,11 @@ begin
 WriteLnToConsole('Generating forts land...');
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
-BlitImageAndGenerateCollisionInfo(0, 0, LAND_HEIGHT, tmpsurf);
+BlitImageAndGenerateCollisionInfo(0, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
-BlitImageAndGenerateCollisionInfo(LAND_WIDTH - 1024, 0, LAND_HEIGHT, tmpsurf);
+BlitImageAndGenerateCollisionInfo(LAND_WIDTH - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
 
@@ -573,9 +573,12 @@ TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimension
 
 TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
 
-BlitImageAndGenerateCollisionInfo(0, 0, LAND_WIDTH, tmpsurf);
+BlitImageAndGenerateCollisionInfo(
+	(LAND_WIDTH - tmpsurf^.w) div 2,
+	LAND_HEIGHT - tmpsurf^.h,
+	tmpsurf^.w,
+	tmpsurf);
 SDL_FreeSurface(tmpsurf);
-
 end;
 
 procedure GenMap;
