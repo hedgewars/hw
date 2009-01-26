@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="pl">
+<defaultcodec></defaultcodec>
 <context>
     <name>GameCFGWidget</name>
     <message>
@@ -135,7 +136,7 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="342"/>
         <source>Room destroyed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pokój zniszczony</translation>
     </message>
 </context>
 <context>
@@ -149,12 +150,10 @@
 <context>
     <name>PageEditTeam</name>
     <message>
-        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Zaniechaj</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
@@ -180,60 +179,52 @@
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą był &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą był &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą był &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej rundzie.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeże zostały zabite w tej rundzie.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zostało zabitych w tej rundzie.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
 <context>
     <name>PageMain</name>
     <message>
-        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Gra jednoosobowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Gra wieloosobowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Gra sieciowa</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Zapisane gry</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Dema</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Setup</source>
         <translation type="obsolete">Ustawienia</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">O programie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Wyjście</translation>
     </message>
@@ -251,7 +242,6 @@
 <context>
     <name>PageMultiplayer</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -264,12 +254,10 @@
 <context>
     <name>PageNet</name>
     <message>
-        <location filename="" line="0"/>
         <source>Local</source>
         <translation type="obsolete">Sieć lokalna</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Internet</source>
         <translation type="obsolete">Internet</translation>
     </message>
@@ -305,12 +293,10 @@
         <translation>Edycja drużyny</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -404,7 +390,6 @@
 <context>
     <name>PageSelectWeapon</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -419,7 +404,6 @@
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Zapisz</translation>
     </message>
@@ -571,27 +555,22 @@
         <translation>Człowiek</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 5</source>
         <translation type="obsolete">Poziom 5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 4</source>
         <translation type="obsolete">Poziom 4</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 3</source>
         <translation type="obsolete">Poziom 3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 2</source>
         <translation type="obsolete">Poziom 2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 1</source>
         <translation type="obsolete">Poziom 1</translation>
     </message>
@@ -604,12 +583,10 @@
 <context>
     <name>QGroupBox</name>
     <message>
-        <location filename="" line="0"/>
         <source>Landscape</source>
         <translation type="obsolete">Pejzaż</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game scheme</source>
         <translation type="obsolete">Ustawienia gry</translation>
     </message>
@@ -629,12 +606,10 @@
         <translation>Ustawienia klawiszy</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Grave</source>
         <translation type="obsolete">Nagrobek</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Team level</source>
         <translation type="obsolete">Poziom drużyny</translation>
     </message>
@@ -659,12 +634,10 @@
         <translation>Bronie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net options</source>
         <translation type="obsolete">Ustawienia sieciowe</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Servers list</source>
         <translation type="obsolete">Lista serwerów</translation>
     </message>
@@ -682,7 +655,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -772,7 +744,6 @@
         <translation>Port serwera:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
     </message>
@@ -926,7 +897,6 @@ Sprawdź poprawność instalacji</translation>
         <translation>Ustawienia własne</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Powrót</translation>
     </message>
@@ -936,12 +906,10 @@ Sprawdź poprawność instalacji</translation>
         <translation>Rozpoczęcie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Szybka gra</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Trening</translation>
     </message>
@@ -1217,7 +1185,7 @@ jeży</translation>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
         <source>precise aim</source>
-        <translation type="unfinished"></translation>
+        <translation>precyzyjne celowanie</translation>
     </message>
 </context>
 <context>
