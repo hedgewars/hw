@@ -1312,11 +1312,16 @@ begin
 AllInactive:= false;
 
 if Gear^.X.QWordValue = 0 then
-	Gear^.Tag:=  1
+	begin
+	Gear^.Tag:=  1;
+	Gear^.X:= -_1024;
+	end
 else
+	begin
 	Gear^.Tag:= -1;
+	Gear^.X:= int2hwFloat(LAND_WIDTH + 1024);
+	end;
 
-Gear^.X:= _1024 - _2048 * Gear^.Tag;
 Gear^.Y:= -_300;
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
