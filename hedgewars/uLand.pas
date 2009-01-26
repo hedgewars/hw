@@ -579,6 +579,9 @@ SDL_FreeSurface(tmpsurf);
 end;
 
 procedure GenMap;
+var x, y: LongInt;
+	c: Longword;
+	isCave: boolean;
 begin
 LoadThemeConfig;
 
@@ -590,14 +593,56 @@ AddProgress;
 
 {$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
 
+isCave:= false;
+// check for land near top
+for x:= 0 to LAND_WIDTH-1 do
+	for y:= 0 to 4 do
+		if Land[y, x] <> 0 then
+			begin
+			isCave:= true;
+			break;
+			end;
+
+if isCave then
+	begin
+	// experiment hardcoding cave
+	for y:= 0 to LAND_HEIGHT-1 do
+		begin
+		Land[y, 0]:= COLOR_INDESTRUCTIBLE;
+		Land[y, 1]:= COLOR_INDESTRUCTIBLE;
+		Land[y, 2]:= COLOR_INDESTRUCTIBLE;
+		Land[y, LAND_WIDTH-3]:= COLOR_INDESTRUCTIBLE;
+		Land[y, LAND_WIDTH-2]:= COLOR_INDESTRUCTIBLE;
+		Land[y, LAND_WIDTH-1]:= COLOR_INDESTRUCTIBLE;
+		if y mod 32 < 16 then c:= $FF000000
+		else c:= $FF00FFFF;
+		LandPixels[y, 0]:= c;
+		LandPixels[y, 1]:= c;
+		LandPixels[y, 2]:= c;
+		LandPixels[y, LAND_WIDTH-3]:= c;
+		LandPixels[y, LAND_WIDTH-2]:= c;
+		LandPixels[y, LAND_WIDTH-1]:= c;
+		end;
+
+	for x:= 0 to LAND_WIDTH-1 do
+		begin
+		Land[0, x]:= COLOR_INDESTRUCTIBLE;
+		Land[1, x]:= COLOR_INDESTRUCTIBLE;
+		Land[2, x]:= COLOR_INDESTRUCTIBLE;
+		if x mod 32 < 16 then c:= $FF000000
+		else c:= $FF00FFFF;
+		LandPixels[0, x]:= c;
+		LandPixels[1, x]:= c;
+		LandPixels[2, x]:= c;
+		end;
+	end;
+
 UpdateLandTexture(0, LAND_HEIGHT);
 end;
 
 function GenPreview: TPreview;
 var x, y, xx, yy, t, bit: LongInt;
     Preview: TPreview;
-    isCave: boolean;
-    c: LongWord;
 begin
 WriteLnToConsole('Generating preview...');
 GenBlank(EdgeTemplates[SelectTemplate]);
@@ -615,51 +660,7 @@ for y:= 0 to 127 do
             if t > 8 then Preview[y, x]:= Preview[y, x] or ($80 shr bit)
             end
         end;
-GenPreview:= Preview;
-
-isCave:= false;
-// check for land near top
-for x:= 0 to LAND_WIDTH-1 do
-   for y:= 0 to 4 do
-       if Land[y, x] <> 0 then
-           begin
-           isCave:= true;
-           break;
-           end;
-
-if isCave then
-    begin
-    // experiment hardcoding cave
-    for y:= 0 to LAND_HEIGHT-1 do
-        begin
-        Land[y, 0]:= COLOR_INDESTRUCTIBLE;
-        Land[y, 1]:= COLOR_INDESTRUCTIBLE;
-        Land[y, 2]:= COLOR_INDESTRUCTIBLE;
-        Land[y, LAND_WIDTH-3]:= COLOR_INDESTRUCTIBLE;
-        Land[y, LAND_WIDTH-2]:= COLOR_INDESTRUCTIBLE;
-        Land[y, LAND_WIDTH-1]:= COLOR_INDESTRUCTIBLE;
-        if y mod 32 < 16 then c:= $FF000000
-        else c:= $FF00FFFF;   
-        LandPixels[y, 0]:= c;           
-        LandPixels[y, 1]:= c;           
-        LandPixels[y, 2]:= c;           
-        LandPixels[y, LAND_WIDTH-3]:= c;           
-        LandPixels[y, LAND_WIDTH-2]:= c;           
-        LandPixels[y, LAND_WIDTH-1]:= c;           
-        end;
-  
-    for x:= 0 to LAND_WIDTH-1 do
-        begin
-        Land[0, x]:= COLOR_INDESTRUCTIBLE;
-        Land[1, x]:= COLOR_INDESTRUCTIBLE;
-        Land[2, x]:= COLOR_INDESTRUCTIBLE;
-        if x mod 32 < 16 then c:= $FF000000
-        else c:= $FF00FFFF;   
-        LandPixels[0, x]:= c;           
-        LandPixels[1, x]:= c;        
-        LandPixels[2, x]:= c;      
-        end;
-     end;
+GenPreview:= Preview
 end;
 
 procedure UpdateLandTexture(Y, Height: LongInt);
