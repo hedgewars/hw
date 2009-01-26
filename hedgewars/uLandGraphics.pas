@@ -323,7 +323,7 @@ for i:= 0 to 7 do
     end;
 
 t:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), 2047) - t;
+ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - t;
 UpdateLandTexture(t, ty)
 end;
 
@@ -423,11 +423,11 @@ procedure SweepDirty;
 var x, y, xx, yy: LongInt;
     updatedRow, updatedCell: boolean;
 begin
-for y:= 0 to 63 do
+for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	begin
 	updatedRow:= false;
 	
-	for x:= 0 to 127 do
+	for x:= 0 to LAND_WIDTH div 32 - 1 do
 		begin
 			repeat
 			updatedCell:= false;
