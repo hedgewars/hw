@@ -110,7 +110,7 @@ for i:= 0 to Steps - 1 do
 	end;
 
 if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
-if hwRound(Gear^.X) > cScreenWidth + 2048 then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
+if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
 end;
 
 procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
