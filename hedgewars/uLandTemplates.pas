@@ -42,60 +42,29 @@ type PPointArray = ^TPointArray;
 // Hi unC0Rr.  Yeah, I know this is kind of lame.  Real templates should probably
 // be made from scratch for taller/wider area.  But hey, for testing.
 // The first 18 are in all 4 quadrants, the last 18 are in only the bottom 2
-const Template0Points: array[0..37] of TSDL_Rect =
+const Template0Points: array[0..18] of TSDL_Rect =
       (
-       (x:  410; y: 1024; w:    1; h:    1),
-       (x:  160; y:  760; w:  130; h:  170),
-       (x:  342; y:  706; w:  316; h:  150),
-       (x:  238; y:  386; w:  270; h:  180),
-       (x:  246; y:  176; w:  242; h:  156),
-       (x:  552; y:  128; w:  610; h:  300),
-       (x:  750; y:  468; w:  352; h:  324),
-       (x:  650; y: 1024; w:  500; h:    1),
-       (x: 1250; y: 1100; w:    1; h:    1),
-       (x: 1490; y: 1024; w:    1; h:    1),
-       (x: 1452; y:  904; w:   74; h:   12),
-       (x: 1248; y:  575; w:   68; h:  425),
-       (x: 1426; y:  592; w:  140; h:  142),
-       (x: 1310; y:  192; w:  150; h:  350),
-       (x: 1588; y:  194; w:  148; h:  242),
-       (x: 1618; y:  472; w:  276; h:  314),
-       (x: 1710; y:  850; w:  130; h:   86),
-       (x: 1734; y: 1024; w:    1; h:    1),
-       (x: NTPX; y:    0; w:    1; h:    1),
-       (x: 2458; y: 1024; w:    1; h:    1), // X + 2048
-       (x: 2208; y:  760; w:  130; h:  170),
-       (x: 2390; y:  706; w:  316; h:  150),
-       (x: 2286; y:  386; w:  270; h:  180),
-       (x: 2294; y:  176; w:  242; h:  156),
-       (x: 2600; y:  128; w:  610; h:  300),
-       (x: 2798; y:  468; w:  352; h:  324),
-       (x: 2698; y: 1024; w:  500; h:    1),
-       (x: 3298; y: 1100; w:    1; h:    1),
-       (x: 3538; y: 1024; w:    1; h:    1),
-       (x: 3500; y:  904; w:   74; h:   12),
-       (x: 3296; y:  575; w:   68; h:  425),
-       (x: 3474; y:  592; w:  140; h:  142),
-       (x: 3358; y:  192; w:  150; h:  350),
-       (x: 3636; y:  194; w:  148; h:  242),
-       (x: 3666; y:  472; w:  276; h:  314),
-       (x: 3758; y:  850; w:  130; h:   86),
-       (x: 3782; y: 1024; w:    1; h:    1),
+       (x:  324; y: 1656; w:  196; h:  204),
+       (x:  224; y: 1496; w:  404; h:   60),
+       (x:  240; y: 1168; w:  464; h:  152),
+       (x:  876; y: 1136; w:  168; h:  348),
+       (x: 1204; y:  956; w:  148; h:  700),
+       (x: 1516; y:  952; w:  192; h:  664),
+       (x: 1808; y:  960; w:  328; h:  496),
+       (x: 2292; y:  992; w:  184; h:  492),
+       (x: 2664; y: 1116; w:  196; h:  340),
+       (x: 3004; y: 1008; w:  176; h:  480),
+       (x: 3260; y: 1268; w:  120; h:  348),
+       (x: 3476; y: 1360; w:  208; h:  448),
+       (x: 3268; y: 1856; w:  192; h:   96),
+       (x: 2876; y: 1564; w:  204; h:  380),
+       (x: 2240; y: 1648; w:  344; h:  324),
+       (x: 1584; y: 1696; w:  440; h:  300),
+       (x:  892; y: 1752; w:  324; h:  184),
+       (x:  576; y: 1876; w:   16; h:   28),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
       Template0FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template1Points: array[0..4] of TSDL_Rect =
-      (
-       (x:  100; y:  100; w:    1; h:    1),
-       (x:  100; y:  100; w: 3000; h: 1500),
-       (x:  500; y:  500; w: 2000; h: 1000),
-       (x: 4000; y: 2000; w:    1; h:    1),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template1FPoints: array[0..0] of TPoint =
       (
        (x: 2047; y:    0)
       );
@@ -104,27 +73,16 @@ const Template1Points: array[0..4] of TSDL_Rect =
 /////////////////// END MIRRORED TWO TIMES ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-const EdgeTemplates: array[0..1] of TEdgeTemplate =
+const EdgeTemplates: array[0..0] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
         FillPoints: @Template0FPoints;
         FillPointsCount: Succ(High(Template0FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 8;
+        BezierizeCount: 2;
+        RandPassesCount: 10;
         TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: false; canInvert: true;
-// Yes. I know this isn't a good map to invert, just testing
-       ),
-       (BasePoints: @Template1Points;
-        BasePointsCount: Succ(High(Template1Points));
-        FillPoints: @Template0FPoints;
-        FillPointsCount: Succ(High(Template1FPoints));
-        BezierizeCount: 6;
-        RandPassesCount: 8;
-        TemplateHeight: 2048; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-// make a decent cave about one time in, oh, 5 or 6 :-/
        )
       );
 

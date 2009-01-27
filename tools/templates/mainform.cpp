@@ -67,7 +67,7 @@ void MyWindow::Code()
 		{
 			QRect r = xy->rects[i].normalized();
 			stream << QString("       (x: %1; y: %2; w: %3; h: %4),").
-					arg(r.x() * 2, 4).arg(r.y() * 2, 4).arg(r.width() * 2, 4).arg(r.height() * 2, 4) << endl;
+					arg(r.x() * 4, 4).arg(r.y() * 4, 4).arg(r.width() * 4, 4).arg(r.height() * 4, 4) << endl;
 		}
 		stream << "      );" << endl;
 		f.close();
@@ -103,7 +103,7 @@ void MyWindow::Load()
 		QStringList coords = re.capturedTexts();
 		qDebug() << sl.at(i) << coords;
 		if ((coords.size() == 5) && (coords[0].size()))
-			xy->rects.push_back(QRect(coords[1].toInt() / 2, coords[2].toInt() / 2, coords[3].toInt() / 2, coords[4].toInt() / 2));
+			xy->rects.push_back(QRect(coords[1].toInt() / 4, coords[2].toInt() / 4, coords[3].toInt() / 4, coords[4].toInt() / 4));
 	}
 	f.close();
 	xy->repaint();
