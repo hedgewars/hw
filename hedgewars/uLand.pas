@@ -494,7 +494,16 @@ with Template do
          with FillPoints^[i] do
               FillLand(x, y);
 
-DrawEdge(pa, COLOR_LAND)
+DrawEdge(pa, COLOR_LAND);
+
+if (Template.canInvert and (getrandom(2) = 0)) or
+    (not Template.canInvert and Template.isNegative) then 
+    for y:= 0 to LAND_HEIGHT - 1 do
+        for x:= 0 to LAND_WIDTH - 1 do
+            if Land[y, x] = 0 then
+                Land[y, x]:= COLOR_LAND
+            else if Land[y, x] = COLOR_LAND then
+                Land[y, x]:= 0;
 end;
 
 function SelectTemplate: LongInt;

@@ -273,9 +273,9 @@ with Obj do
                    end
                 end;
              inc(y, 3);
-         until y > LAND_HEIGHT - Height;
+         until y > LAND_HEIGHT - 1 - Height;
          inc(x, getrandom(6) + 3)
-     until x > LAND_WIDTH - Width;
+     until x > LAND_WIDTH - 1 - Width;
      Result:= cnt <> 0;
      if Result then
         begin

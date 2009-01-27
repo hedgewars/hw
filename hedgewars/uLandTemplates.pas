@@ -32,7 +32,8 @@ type PPointArray = ^TPointArray;
                      FillPointsCount: Longword;
                      BezierizeCount: Longword;
                      RandPassesCount: Longword;
-                     canMirror, canFlip: boolean;
+                     TemplateHeight, TemplateWidth: LongInt;
+                     canMirror, canFlip, isNegative, canInvert: boolean;
                      end;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -86,12 +87,24 @@ const Template0Points: array[0..37] of TSDL_Rect =
       (
        (x: 2047; y:    0)
       );
+const Template1Points: array[0..4] of TSDL_Rect =
+      (
+       (x:  100; y:  100; w:    1; h:    1),
+       (x:  100; y:  100; w: 3000; h: 1500),
+       (x:  500; y:  500; w: 2000; h: 1000),
+       (x: 4000; y: 2000; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1)
+      );
+      Template1FPoints: array[0..0] of TPoint =
+      (
+       (x: 2047; y:    0)
+      );
 
 //////////////////////////////////////////////////////////////////////////////
 /////////////////// END MIRRORED TWO TIMES ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-const EdgeTemplates: array[0..0] of TEdgeTemplate =
+const EdgeTemplates: array[0..1] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -99,7 +112,19 @@ const EdgeTemplates: array[0..0] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template0FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
-        canMirror: true; canFlip: false;
+        TemplateHeight: 1024; TemplateWidth: 4096;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: true;
+// Yes. I know this isn't a good map to invert, just testing
+       ),
+       (BasePoints: @Template1Points;
+        BasePointsCount: Succ(High(Template1Points));
+        FillPoints: @Template0FPoints;
+        FillPointsCount: Succ(High(Template1FPoints));
+        BezierizeCount: 6;
+        RandPassesCount: 8;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
+// make a decent cave about one time in, oh, 5 or 6 :-/
        )
       );
 
