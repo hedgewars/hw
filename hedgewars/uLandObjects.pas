@@ -229,7 +229,7 @@ var i: Longword;
     Result: boolean;
 begin
 with Obj do
-     if CheckLand(inland, x, y, $FFFFFF) then
+     if CheckLand(inland, x, y, COLOR_LAND) then
         begin
         Result:= true;
         i:= 1;
@@ -309,7 +309,7 @@ with Obj do
 	repeat
 		y:= 8;
 		repeat
-			if CheckLand(r, x, y - 8, $FFFFFF)
+			if CheckLand(r, x, y - 8, COLOR_LAND)
 			and not CheckIntersect(x, y, Width, Height) then
 			begin
 			ar[cnt].x:= x;
@@ -471,13 +471,16 @@ end;
 procedure AddObjects();
 begin
 InitRects;
-AddGirder(256);
-AddGirder(512);
-AddGirder(768);
-AddGirder(1024);
-AddGirder(1280);
-AddGirder(1536);
-AddGirder(1792);
+if hasGirders then
+    begin
+    AddGirder(256);
+    AddGirder(512);
+    AddGirder(768);
+    AddGirder(1024);
+    AddGirder(1280);
+    AddGirder(1536);
+    AddGirder(1792);
+    end;
 AddThemeObjects(ThemeObjects, 8);
 AddProgress;
 FreeRects

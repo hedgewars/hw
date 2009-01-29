@@ -91,7 +91,7 @@ Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
 
 if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
 if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT + 200)
+if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT-1024) // TODO - configure in theme (jellies for example could use limited range)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
@@ -101,7 +101,7 @@ Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
 
 for i:= 0 to Steps - 1 do
 	begin
-	if hwRound(Gear^.Y) > -160 then
+	if hwRound(Gear^.Y) > LAND_HEIGHT-1184 then // TODO - configure in theme
 		Gear^.dY:= Gear^.dY - _1div50000
 	else
 		Gear^.dY:= Gear^.dY + _1div50000;
@@ -298,7 +298,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div (cCloudsNumber + 1)), -160, vgtCloud)
+    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 initialization

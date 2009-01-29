@@ -416,7 +416,6 @@ if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);
-
 Dispose(Gear)
 end;
 
@@ -1375,9 +1374,9 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 		if ar[i]^.Gear <> nil then
 			begin
 			ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
-			ar[i]^.Gear^.Pos:= GetRandom(19);
-			ar[i]:= ar[Count - 1]
+			ar[i]^.Gear^.Pos:= GetRandom(19)
 			end;
+		ar[i]:= ar[Count - 1];
 		dec(Count)
 		end
 	end
@@ -1475,6 +1474,9 @@ case getrandom(2) of
         while t >= 0 do
           begin
           inc(i);
+          while hasBorder and ((i = amAirAttack) or (i = amMineStrike) or (i = amNapalm)) do
+              inc(i);
+
           dec(t, Ammoz[i].Probability)
           end;
         PlaySound(sndReinforce, false, CurrentTeam^.voicepack);

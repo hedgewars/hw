@@ -1322,7 +1322,7 @@ else
 	Gear^.X:= int2hwFloat(LAND_WIDTH + 1024);
 	end;
 
-Gear^.Y:= -_300;
+Gear^.Y:= -_300;  // TODO - consider making this proportional to topY to reduce spread on low maps
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
 if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then

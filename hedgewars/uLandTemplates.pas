@@ -21,7 +21,7 @@ interface
 uses SDLh;
 {$INCLUDE options.inc}
 
-const NTPX = Low(TSDL_Rect.x); 
+const NTPX = Low(TSDL_Rect.x);
 
 type PPointArray = ^TPointArray;
      TPointArray = array[0..64] of TSDL_Rect;
@@ -32,8 +32,9 @@ type PPointArray = ^TPointArray;
                      FillPointsCount: Longword;
                      BezierizeCount: Longword;
                      RandPassesCount: Longword;
-                     TemplateHeight, TemplateWidth: LongInt;
+                     TemplateHeight, TemplateWidth: Longword;
                      canMirror, canFlip, isNegative, canInvert: boolean;
+                     hasGirders: boolean;
                      end;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -83,6 +84,7 @@ const EdgeTemplates: array[0..0] of TEdgeTemplate =
         RandPassesCount: 12;
         TemplateHeight: 1024; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: true; canInvert: false;
+        hasGirders: false;  // this map, and some other caves, are cramped enough and have plenty of ceiling. Maybe not all caves though
        )
       );
 

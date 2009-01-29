@@ -51,7 +51,9 @@
       <filetype>*.hs</filetype>
       <filetype>*.pro</filetype>
     </filetypes>
-    <blacklist/>
+    <blacklist>
+      <path>template.pas</path>
+    </blacklist>
     <general>
       <activedir/>
     </general>
