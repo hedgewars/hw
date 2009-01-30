@@ -46,6 +46,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
+	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
 	Form->ui.pageOptions->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
 
@@ -99,6 +100,7 @@ void GameUIConfig::SaveOptions()
 
 	setValue("audio/sound", isSoundEnabled());
 	setValue("audio/music", isMusicEnabled());
+	setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
 	setValue("net/nick", netNick());
 	setValue("net/ip", *netHost);
@@ -173,4 +175,9 @@ quint8 GameUIConfig::bitDepth()
 QString GameUIConfig::netNick()
 {
 	return Form->ui.pageOptions->editNetNick->text();
+}
+
+quint8 GameUIConfig::volume()
+{
+	return Form->ui.pageOptions->volumeBox->value() * 128 / 100;
 }

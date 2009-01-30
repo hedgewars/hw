@@ -77,9 +77,8 @@ if isSoundEnabled then WriteLnToConsole(msgOK)
 Mix_AllocateChannels(Succ(chanTPU));
 if isMusicEnabled then Mix_VolumeMusic(50);
 
-Volume:= cInitVolume;
-if Volume < 0 then Volume:= 0;
-Volume:= Mix_Volume(-1, Volume)
+Volume:= 0;
+ChangeVolume(cInitVolume)
 end;
 
 procedure ReleaseSound;

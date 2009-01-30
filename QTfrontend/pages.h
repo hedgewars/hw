@@ -214,6 +214,7 @@ public:
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 	QLabel *labelNN;
+	QSpinBox * volumeBox;
 	QLineEdit *editNetNick;
 };
 

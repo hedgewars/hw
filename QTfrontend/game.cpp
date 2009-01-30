@@ -272,7 +272,7 @@ QStringList HWGame::setArguments()
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
 	arguments << tr("en.txt");
-	arguments << "128"; // sound volume
+	arguments << QString::number(config->volume()); // sound volume
 	arguments << QString::number(config->timerInterval());
 	arguments << datadir->absolutePath();
 	arguments << (config->isShowFPSEnabled() ? "1" : "0");

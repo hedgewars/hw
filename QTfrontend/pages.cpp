@@ -399,6 +399,17 @@ PageOptions::PageOptions(QWidget* parent) :
 		CBEnableMusic->setText(QCheckBox::tr("Enable music"));
 		GBAlayout->addWidget(CBEnableMusic);
 
+		QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
+		QLabel * vol = new QLabel(AGGroupBox);
+		vol->setText(QLabel::tr("Initial sound volume"));
+		GBAvollayout->addWidget(vol);
+		GBAlayout->addLayout(GBAvollayout);
+		volumeBox = new QSpinBox(AGGroupBox);
+		volumeBox->setRange(0, 100);
+		volumeBox->setSingleStep(5);
+		GBAvollayout->addWidget(volumeBox);
+		
+
 		CBShowFPS = new QCheckBox(AGGroupBox);
 		CBShowFPS->setText(QCheckBox::tr("Show FPS"));
 		GBAlayout->addWidget(CBShowFPS);

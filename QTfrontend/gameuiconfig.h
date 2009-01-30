@@ -40,6 +40,7 @@ public:
 	bool isShowFPSEnabled();
 	bool isAltDamageEnabled();
 	bool appendDateTimeToRecordName();
+	quint8 volume();
 	quint8 timerInterval();
 	quint8 bitDepth();
 	QString netNick();
