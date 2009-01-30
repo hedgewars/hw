@@ -1474,9 +1474,6 @@ case getrandom(2) of
         while t >= 0 do
           begin
           inc(i);
-          while hasBorder and ((i = amAirAttack) or (i = amMineStrike) or (i = amNapalm)) do
-              inc(i);
-
           dec(t, Ammoz[i].Probability)
           end;
         PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
