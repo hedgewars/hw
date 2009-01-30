@@ -40,7 +40,8 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
-     uAmmos, uVisualGears, uChat;
+     uAmmos, uVisualGears, uChat, uLand;
+     
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
       SoundTimerTicks: Longword = 0;
@@ -189,6 +190,8 @@ glEnable(GL_BLEND);
 glEnable(GL_TEXTURE_2D);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
+
+RealLandTexUpdate;
 
 if not isPaused then MoveCamera;
 

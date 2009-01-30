@@ -38,6 +38,7 @@ procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
 procedure UpdateLandTexture(Y, Height: LongInt);
+procedure RealLandTexUpdate;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO;
@@ -46,6 +47,9 @@ type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
+
+var updTopY: LongInt = LAND_HEIGHT;
+    updBottomY: LongInt = 0;
 
 procedure LogLandDigest;
 var ctx: TSHA1Context;
@@ -730,14 +734,26 @@ if (Height <= 0) then exit;
 TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
 TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
 
+if Y < updTopY then updTopY:= Y;
+if Y + Height > updBottomY then updBottomY:= Y + Height
+end;
+
+procedure RealLandTexUpdate;
+begin
+if updBottomY = 0 then exit;
+
 if LandTexture = nil then
 	LandTexture:= NewTexture(LAND_WIDTH, LAND_HEIGHT, @LandPixels)
 else
 	begin
 	glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, Y, LAND_WIDTH, Height, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[Y, 0]);
-	end
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, updTopY, LAND_WIDTH, updBottomY - updTopY, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[updTopY, 0]);
+	end;
+
+updTopY:= LAND_HEIGHT + 1;
+updBottomY:= 0
 end;
+
 
 initialization
 
