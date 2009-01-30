@@ -21,7 +21,7 @@
         Y:= Y + dY;
         tx:= hwRound(X);
         ty:= hwRound(Y);
-        if ((ty and $FFFFFC00) = 0) and
-           ((tx and $FFFFF800) = 0) and
+        if ((ty and LAND_HEIGHT_MASK) = 0) and
+           ((tx and LAND_WIDTH_MASK) = 0) and
            (Land[ty, tx] = $FFFFFF) then LandPixels[ty, tx]:= cExplosionBorderColor
 	end;
