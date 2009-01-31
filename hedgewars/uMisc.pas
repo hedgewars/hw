@@ -37,6 +37,7 @@ var
 	GameType      : TGameType = gmtLocal;
 	GameFlags     : Longword = 0;
 	TurnTimeLeft  : Longword = 0;
+	cSuddenDTurns : Longword = 15;
 	cHedgehogTurnTime: Longword = 45000;
 	cMaxAIThinkTime  : Longword = 9000;
 

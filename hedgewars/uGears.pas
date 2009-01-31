@@ -518,7 +518,7 @@ case step of
 			end;
 	stWater: if (not bBetweenTurns) and (not isInMultiShoot) then
 				begin
-				if TotalRounds = 17 then bWaterRising:= true;
+				if TotalRounds = cSuddenDTurns + 2 then bWaterRising:= true;
 
 				if bWaterRising then
 				AddGear(0, 0, gtWaterUp, 0, _0, _0, 0);
@@ -530,7 +530,7 @@ case step of
 			inc(step)
 			end;
 	stHealth: begin
-			if (TotalRounds = 15) and (cHealthDecrease = 0) then
+			if (TotalRounds = cSuddenDTurns) and (cHealthDecrease = 0) then
 				begin
 				cHealthDecrease:= 5;
 				AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState)

@@ -106,6 +106,8 @@ class HWNewNet : public QObject
   void themeChanged(const QString & theme);
   void initHealthChanged(int health);
   void turnTimeChanged(int time);
+  void suddenDeathTurnsChanged(int turns);
+  void caseProbabilityChanged(int prob);
   void fortsModeChanged(bool value);
   void teamsDivideChanged(bool value);
   void solidChanged(bool value);
@@ -136,6 +138,8 @@ class HWNewNet : public QObject
   void onThemeChanged(const QString & theme);
   void onInitHealthChanged(int health);
   void onTurnTimeChanged(int time);
+  void onSuddenDeathTurnsChanged(int turns);
+  void onCaseProbabilityChanged(int prob);
   void onFortsModeChanged(bool value);
   void onTeamsDivideChanged(bool value);
   void onSolidChanged(bool value);

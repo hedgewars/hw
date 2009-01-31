@@ -42,6 +42,8 @@ public:
 	QString getCurrentTheme() const;
 	quint32 getInitHealth() const;
 	quint32 getTurnTime() const;
+	quint32 getSuddenDeathTurns() const;
+	quint32 getCaseProbability() const;
 	QStringList getFullConfig() const;
 
 	QComboBox* WeaponsName;
@@ -52,6 +54,8 @@ public slots:
 	void setTheme(const QString & theme);
 	void setInitHealth(int health);
 	void setTurnTime(int time);
+	void setSuddenDeathTurns(int turns);
+	void setCaseProbability(int prob);
 	void setFortsMode(bool value);
 	void setTeamsDivide(bool value);
 	void setSolid(bool value);
@@ -63,6 +67,8 @@ signals:
 	void themeChanged(const QString & theme);
 	void initHealthChanged(int health);
 	void turnTimeChanged(int time);
+	void suddenDeathTurnsChanged(int turns);
+	void caseProbabilityChanged(int prob);
 	void fortsModeChanged(bool value);
 	void teamsDivideChanged(bool value);
 	void solidChanged(bool value);
@@ -79,8 +85,12 @@ private:
 	HWMapContainer* pMapContainer;
 	QSpinBox * SB_TurnTime;
 	QSpinBox * SB_InitHealth;
+	QSpinBox * SB_SuddenDeath;
+	QSpinBox * SB_CaseProb;
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;
+	QLabel * L_SuddenDeath;
+	QLabel * L_CaseProb;
 
 	QString curNetAmmoName;
 	QString curNetAmmo;

@@ -57,9 +57,13 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	L_TurnTime = new QLabel(QLabel::tr("Turn time"), GBoxOptions);
 	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
+	L_SuddenDeath = new QLabel(QLabel::tr("Turns before SD"), GBoxOptions);
+	L_CaseProb = new QLabel(QLabel::tr("Bonus factor"), GBoxOptions);
 	GBoxOptionsLayout->addWidget(L_TurnTime, 3, 0);
 	GBoxOptionsLayout->addWidget(L_InitHealth, 4, 0);
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 5, 0);
+	GBoxOptionsLayout->addWidget(L_SuddenDeath, 5, 0);
+	GBoxOptionsLayout->addWidget(L_CaseProb, 6, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 7, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
 	SB_TurnTime->setRange(1, 99);
@@ -70,14 +74,28 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
+	
+	SB_SuddenDeath = new QSpinBox(GBoxOptions);
+	SB_SuddenDeath->setRange(0, 50);
+	SB_SuddenDeath->setValue(15);
+	SB_SuddenDeath->setSingleStep(3);
+	
+	SB_CaseProb = new QSpinBox(GBoxOptions);
+	SB_CaseProb->setRange(0, 9);
+	SB_CaseProb->setValue(5);
+
 	GBoxOptionsLayout->addWidget(SB_TurnTime, 3, 1);
 	GBoxOptionsLayout->addWidget(SB_InitHealth, 4, 1);
+	GBoxOptionsLayout->addWidget(SB_SuddenDeath, 5, 1);
+	GBoxOptionsLayout->addWidget(SB_CaseProb, 6, 1);
 	
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 5, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 7, 1);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
+	connect(SB_SuddenDeath, SIGNAL(valueChanged(int)), this, SIGNAL(suddenDeathTurnsChanged(int)));
+	connect(SB_CaseProb, SIGNAL(valueChanged(int)), this, SIGNAL(caseProbabilityChanged(int)));
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
 	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
 	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
@@ -127,12 +145,25 @@ quint32 GameCFGWidget::getTurnTime() const
 	return SB_TurnTime->value();
 }
 
+quint32 GameCFGWidget::getSuddenDeathTurns() const
+{
+	return SB_SuddenDeath->value();
+}
+
+quint32 GameCFGWidget::getCaseProbability() const
+{
+	return SB_CaseProb->value();
+}
+
 QStringList GameCFGWidget::getFullConfig() const
 {
 	QStringList sl;
 	sl.append("eseed " + getCurrentSeed());
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
 	sl.append(QString("e$turntime %1").arg(getTurnTime() * 1000));
+	sl.append(QString("e$sd_turns %1").arg(getSuddenDeathTurns()));
+	sl.append(QString("e$casefreq %1").arg(getCaseProbability()));
+
 	QString currentMap = getCurrentMap();
 	if (currentMap.size() > 0)
 		sl.append("emap " + currentMap);
@@ -163,6 +194,16 @@ void GameCFGWidget::setInitHealth(int health)
 void GameCFGWidget::setTurnTime(int time)
 {
 	SB_TurnTime->setValue(time);
+}
+
+void GameCFGWidget::setSuddenDeathTurns(int turns)
+{
+	SB_SuddenDeath->setValue(turns);
+}
+
+void GameCFGWidget::setCaseProbability(int prob)
+{
+	SB_CaseProb->setValue(prob);
 }
 
 void GameCFGWidget::setFortsMode(bool value)

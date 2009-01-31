@@ -468,6 +468,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit turnTimeChanged(lst[2].toUInt());
 			return;
 		}
+		if (lst[1] == "SD_TURNS") {
+			emit suddenDeathTurnsChanged(lst[2].toUInt());
+			return;
+		}
+		if (lst[1] == "CASEFACTOR") {
+			emit caseProbabilityChanged(lst[2].toUInt());
+			return;
+		}
 		if (lst[1] == "FORTSMODE") {
 			emit fortsModeChanged(lst[2].toInt() != 0);
 			return;
@@ -608,6 +616,16 @@ void HWNewNet::onInitHealthChanged(int health)
 void HWNewNet::onTurnTimeChanged(int time)
 {
 	if (isChief) RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
+}
+
+void HWNewNet::onSuddenDeathTurnsChanged(int turns)
+{
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SD_TURNS%1%2").arg(delimeter).arg(turns));
+}
+
+void HWNewNet::onCaseProbabilityChanged(int prob)
+{
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1CASEFACTOR%1%2").arg(delimeter).arg(prob));
 }
 
 void HWNewNet::onFortsModeChanged(bool value)
