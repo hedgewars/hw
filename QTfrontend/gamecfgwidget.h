@@ -22,13 +22,35 @@
 #include <QWidget>
 #include <QStringList>
 #include <QGroupBox>
+#include <QSpinBox>
 
 #include "mapContainer.h"
 
 class QCheckBox;
 class QVBoxLayout;
-class QSpinBox;
 class QLabel;
+class FreqSpinBox;
+
+class FreqSpinBox : public QSpinBox
+{
+	Q_OBJECT
+
+public:
+	FreqSpinBox(QWidget* parent) : QSpinBox(parent)
+	{
+
+	}
+
+	QString textFromValue ( int value ) const
+	{
+		switch (value)
+		{
+			case 0 : return tr("Never");
+			case 1 : return tr("Every turn");
+			default : return tr("Each %1 turn").arg(value);
+		}
+	}
+};
 
 class GameCFGWidget : public QGroupBox
 {
@@ -86,7 +108,7 @@ private:
 	QSpinBox * SB_TurnTime;
 	QSpinBox * SB_InitHealth;
 	QSpinBox * SB_SuddenDeath;
-	QSpinBox * SB_CaseProb;
+	FreqSpinBox * SB_CaseProb;
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;
 	QLabel * L_SuddenDeath;

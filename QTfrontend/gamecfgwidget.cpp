@@ -80,7 +80,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	SB_SuddenDeath->setValue(15);
 	SB_SuddenDeath->setSingleStep(3);
 	
-	SB_CaseProb = new QSpinBox(GBoxOptions);
+	SB_CaseProb = new FreqSpinBox(GBoxOptions);
 	SB_CaseProb->setRange(0, 9);
 	SB_CaseProb->setValue(5);
 
