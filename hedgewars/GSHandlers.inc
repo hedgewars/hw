@@ -638,6 +638,39 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+procedure doStepRope(Gear: PGear); forward;
+
+procedure doStepRopeAfterAttack(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+if ((HHGear^.State and gstHHDriven) = 0)
+	or (CheckGearDrowning(HHGear))
+	or TestCollisionYwithGear(HHGear, 1) then
+	begin
+	DeleteGear(Gear);
+	exit
+	end;
+
+if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
+if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY:= _0;
+HHGear^.X:= HHGear^.X + HHGear^.dX;
+HHGear^.Y:= HHGear^.Y + HHGear^.dY;
+HHGear^.dY:= HHGear^.dY + cGravity;
+
+if (Gear^.Message and gm_Attack) <> 0 then
+	begin
+	Gear^.X:= HHGear^.X;
+	Gear^.Y:= HHGear^.Y;
+	Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
+	Gear^.dY:= -AngleCos(HHGear^.Angle);
+	Gear^.Friction:= _450;
+	Gear^.Elasticity:= _0;
+	Gear^.State:= Gear^.State and not gsttmpflag;
+	Gear^.doStep:= @doStepRope
+	end
+end;
+
 procedure doStepRopeWork(Gear: PGear);
 var HHGear: PGear;
 	len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
@@ -653,6 +686,18 @@ var HHGear: PGear;
 		State:= State or gstMoving;
 		end;
 	DeleteGear(Gear)
+	end;
+
+	procedure WaitCollision;
+	begin
+	with HHGear^ do
+		begin
+		Message:= Message and not gm_Attack;
+		State:= State or gstMoving;
+		end;
+	RopePoints.Count:= 0;
+	Gear^.Elasticity:= _0;
+	Gear^.doStep:= @doStepRopeAfterAttack
 	end;
 
 begin
@@ -782,17 +827,27 @@ if len > _0_8 then
 
 if (Gear^.Message and gm_Attack) <> 0 then
 	if (Gear^.State and gsttmpFlag) <> 0 then
-		DeleteMe
+		WaitCollision
 	else
 else
 	if (Gear^.State and gsttmpFlag) = 0 then
 		Gear^.State:= Gear^.State or gsttmpFlag;
 end;
 
-
 procedure doStepRopeAttach(Gear: PGear);
 var HHGear: PGear;
-    tx, ty, tt: hwFloat;
+	tx, ty, tt: hwFloat;
+
+	procedure RemoveFromAmmo;
+	begin
+	if (Gear^.State and gstAttacked) = 0 then
+		begin
+		OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+		ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+		Gear^.State:= Gear^.State or gstAttacked
+		end
+	end;
+	
 begin
 Gear^.X:= Gear^.X - Gear^.dX;
 Gear^.Y:= Gear^.Y - Gear^.dY;
@@ -826,6 +881,9 @@ if TestCollisionYwithGear(HHGear, 1) then
 			Gear^.Elasticity:= tt;
 			Gear^.doStep:= @doStepRopeWork;
 			with HHGear^ do State:= State and not (gstAttacking or gstMoving or gstHHHJump);
+			
+			RemoveFromAmmo;
+			
 			tt:= _0;
 			exit
 			end;
@@ -842,8 +900,7 @@ if (Gear^.State and gstCollision) <> 0 then
 	Gear^.doStep:= @doStepRopeWork;
 	with HHGear^ do State:= State and not (gstAttacking or gstHHHJump);
 
-	OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-	ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+	RemoveFromAmmo;
 	
 	if Gear^.Elasticity < _10 then
 		Gear^.Elasticity:= _10000;
