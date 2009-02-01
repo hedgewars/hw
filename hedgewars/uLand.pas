@@ -41,7 +41,7 @@ procedure UpdateLandTexture(Y, Height: LongInt);
 procedure RealLandTexUpdate;
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos;
 
 type TPixAr = record
               Count: Longword;
@@ -584,9 +584,9 @@ end;
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
-// For now, defining a fort's playable area as 4096x1536 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it'll give a bit more maneuvering room.
-playHeight:= 1536;
-playWidth:= 4096;
+// For now, defining a fort's playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it'll give a bit more maneuvering room.
+playHeight:= 1200;
+playWidth:= 3072;
 leftX:= (LAND_WIDTH - playWidth) div 2;
 rightX:= ((playWidth + (LAND_WIDTH - playWidth) div 2) - 1);
 topY:= LAND_HEIGHT - playHeight;
@@ -594,11 +594,11 @@ topY:= LAND_HEIGHT - playHeight;
 WriteLnToConsole('Generating forts land...');
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
-BlitImageAndGenerateCollisionInfo(0, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
-BlitImageAndGenerateCollisionInfo(LAND_WIDTH - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
 
@@ -628,8 +628,7 @@ SDL_FreeSurface(tmpsurf);
 end;
 
 procedure GenMap;
-var i, j, t: LongInt;
-	x, y, w, c: Longword;
+var x, y, w, c: Longword;
 begin
 hasBorder:= false;
 hasGirders:= true;
@@ -644,59 +643,54 @@ AddProgress;
 {$IFDEF DEBUGFILE}LogLandDigest;{$ENDIF}
 
 // check for land near top
-for y:= topY to topY + 5 do
-    for x:= leftX to rightX do
-		if Land[y, x] <> 0 then
-			begin
-			hasBorder:= true;
-			break;
-			end;
+c:= 0;
+if (GameFlags and gfBorder) <> 0 then
+    hasBorder:= true
+else
+    for y:= topY to topY + 5 do
+        for x:= leftX to rightX do
+            if Land[y, x] <> 0 then
+                begin
+                inc(c);
+                if c > 200 then // avoid accidental triggering
+                    begin
+                    hasBorder:= true;
+                    break;
+                    end;
+                end;
 
 if hasBorder then
 	begin
-    for y:= 0 to LAND_HEIGHT - 1 do
-        for x:= 0 to LAND_WIDTH - 1 do
-            if (y < topY) or (x < leftX) or (x > rightX) then
-                Land[y, x]:= COLOR_INDESTRUCTIBLE;
+	for y:= 0 to LAND_HEIGHT - 1 do
+		for x:= 0 to LAND_WIDTH - 1 do
+			if (y < topY) or (x < leftX) or (x > rightX) then
+				Land[y, x]:= COLOR_INDESTRUCTIBLE;
 	// experiment hardcoding cave
-    // also try basing cave dimensions on map/template dimensions, if they exist
-    for w:= 0 to 5 do // width of 3 allowed worms to be knocked through with grenade
-        begin
-        for y:= topY to LAND_HEIGHT - 1 do
-            begin
-            Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
-            Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
-            if y mod 32 < 16 then c:= $FF000000
-            else c:= $FF00FFFF;
-            LandPixels[y, leftX + w]:= c;
-            LandPixels[y, rightX - w]:= c;
-            end;
+	// also try basing cave dimensions on map/template dimensions, if they exist
+	for w:= 0 to 5 do // width of 3 allowed worms to be knocked through with grenade
+		begin
+		for y:= topY to LAND_HEIGHT - 1 do
+			begin
+			Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
+			Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
+			if (y + w) mod 32 < 16 then
+				c:= $FF000000
+			else
+				c:= $FF00FFFF;
+			LandPixels[y, leftX + w]:= c;
+			LandPixels[y, rightX - w]:= c;
+			end;
 
-        for x:= leftX to rightX do
-            begin
-            Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
-            if x mod 32 < 16 then c:= $FF000000
-            else c:= $FF00FFFF;
-            LandPixels[topY + w, x]:= c;
-            end;
-        end;
-     // This is almost certainly not the right place to do this
-     // I just want it to be disabled after a border is added, which could by by map constraints as well as player desire
-     t:= 0;
-     while (t < cMaxTeams) and (TeamsArray[t] <> nil) do
-         begin
-         for i:= 0 to cMaxHHIndex do
-             if TeamsArray[t]^.Hedgehogs[i].Gear <> nil then
-                 begin
-                 for j:= 0 to cMaxSlotAmmoIndex do
-                     begin
-                     TeamsArray[t]^.Hedgehogs[i].Ammo^[Ammoz[amAirAttack].Slot, j].Count:= 0;
-                     TeamsArray[t]^.Hedgehogs[i].Ammo^[Ammoz[amMineStrike].Slot, j].Count:= 0;
-                     TeamsArray[t]^.Hedgehogs[i].Ammo^[Ammoz[amNapalm].Slot, j].Count:= 0;
-                     end;
-                 end;
-         inc(t);
-         end;
+		for x:= leftX to rightX do
+			begin
+			Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
+			if (x + w) mod 32 < 16 then
+				c:= $FF000000
+			else
+				c:= $FF00FFFF;
+			LandPixels[topY + w, x]:= c;
+			end;
+		end;
 	end;
 
 if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then AddObjects;

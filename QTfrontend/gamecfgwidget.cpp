@@ -55,15 +55,19 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	CB_solid->setText(QCheckBox::tr("Solid land"));
 	GBoxOptionsLayout->addWidget(CB_solid, 2, 0, 1, 2);
 
+	CB_border = new QCheckBox(GBoxOptions);
+	CB_border->setText(QCheckBox::tr("Add Border"));
+	GBoxOptionsLayout->addWidget(CB_border, 3, 0, 1, 2);
+
 	L_TurnTime = new QLabel(QLabel::tr("Turn time"), GBoxOptions);
 	L_InitHealth = new QLabel(QLabel::tr("Initial health"), GBoxOptions);
 	L_SuddenDeath = new QLabel(QLabel::tr("Turns before SD"), GBoxOptions);
 	L_CaseProb = new QLabel(QLabel::tr("Bonus factor"), GBoxOptions);
-	GBoxOptionsLayout->addWidget(L_TurnTime, 3, 0);
-	GBoxOptionsLayout->addWidget(L_InitHealth, 4, 0);
-	GBoxOptionsLayout->addWidget(L_SuddenDeath, 5, 0);
-	GBoxOptionsLayout->addWidget(L_CaseProb, 6, 0);
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 7, 0);
+	GBoxOptionsLayout->addWidget(L_TurnTime, 4, 0);
+	GBoxOptionsLayout->addWidget(L_InitHealth, 5, 0);
+	GBoxOptionsLayout->addWidget(L_SuddenDeath, 6, 0);
+	GBoxOptionsLayout->addWidget(L_CaseProb, 7, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 8, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
 	SB_TurnTime->setRange(1, 99);
@@ -84,13 +88,13 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	SB_CaseProb->setRange(0, 9);
 	SB_CaseProb->setValue(5);
 
-	GBoxOptionsLayout->addWidget(SB_TurnTime, 3, 1);
-	GBoxOptionsLayout->addWidget(SB_InitHealth, 4, 1);
-	GBoxOptionsLayout->addWidget(SB_SuddenDeath, 5, 1);
-	GBoxOptionsLayout->addWidget(SB_CaseProb, 6, 1);
+	GBoxOptionsLayout->addWidget(SB_TurnTime, 4, 1);
+	GBoxOptionsLayout->addWidget(SB_InitHealth, 5, 1);
+	GBoxOptionsLayout->addWidget(SB_SuddenDeath, 6, 1);
+	GBoxOptionsLayout->addWidget(SB_CaseProb, 7, 1);
 	
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 7, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 8, 1);
 
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
@@ -99,6 +103,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
 	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
 	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
+	connect(CB_border, SIGNAL(toggled(bool)), this, SIGNAL(borderChanged(bool)));
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
@@ -116,6 +121,8 @@ quint32 GameCFGWidget::getGameFlags() const
 		result |= 0x10;
 	if (CB_solid->isChecked())
 		result |= 0x04;
+	if (CB_border->isChecked())
+		result |= 0x08;
 
 	return result;
 }
@@ -219,6 +226,11 @@ void GameCFGWidget::setTeamsDivide(bool value)
 void GameCFGWidget::setSolid(bool value)
 {
 	CB_solid->setChecked(value);
+}
+
+void GameCFGWidget::setBorder(bool value)
+{
+	CB_border->setChecked(value);
 }
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)

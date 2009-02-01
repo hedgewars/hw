@@ -35,6 +35,7 @@ type PPointArray = ^TPointArray;
                      TemplateHeight, TemplateWidth: Longword;
                      canMirror, canFlip, isNegative, canInvert: boolean;
                      hasGirders: boolean;
+                     MaxHedgeHogs: Longword;
                      end;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -85,6 +86,7 @@ const EdgeTemplates: array[0..0] of TEdgeTemplate =
         TemplateHeight: 1024; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;  // this map, and some other caves, are cramped enough and have plenty of ceiling. Maybe not all caves though
+        MaxHedgehogs: 24;
        )
       );
 

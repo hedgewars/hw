@@ -34,7 +34,7 @@ CHedgehogerWidget::CHedgehogerWidget(const QImage& im, QWidget * parent) :
 
 void CHedgehogerWidget::incItems()
 {
-  if (pOurFrameTeams->overallHedgehogs < 18) {
+  if (pOurFrameTeams->overallHedgehogs < pOurFrameTeams->maxHedgehogsPerGame) {
     numItems++;
     pOurFrameTeams->overallHedgehogs++;
     emit hedgehogsNumChanged();

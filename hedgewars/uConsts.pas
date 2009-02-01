@@ -157,7 +157,7 @@ const
 
 	cMaxTeams        = 6;
 	cMaxHHIndex      = 7;
-	cMaxHHs          = 30;
+	cMaxHHs          = 48;
 	cMaxSpawnPoints  = 1024;
 
 	cMaxEdgePoints = 16384;
@@ -181,6 +181,7 @@ const
 	gfForts       = $00000001;
 	gfMultiWeapon = $00000002;
 	gfSolidLand   = $00000004;
+	gfBorder      = $00000008;
 	gfDivideTeams = $00000010;
 	gfOneClanMode = $10000000;
 
@@ -231,6 +232,7 @@ const
 	ammoprop_DontHold     = $00000100;
 	ammoprop_AltAttack    = $00000200;
 	ammoprop_AltUse       = $00000400;
+	ammoprop_NotBorder    = $00000800;
 
 	AMMO_INFINITE = 9;
 
@@ -852,7 +854,8 @@ const
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
 							ammoprop_AttackingPut or
-							ammoprop_DontHold;
+							ammoprop_DontHold or
+							ammoprop_NotBorder;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;
@@ -873,7 +876,8 @@ const
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
 							ammoprop_AttackingPut or
-							ammoprop_DontHold;
+							ammoprop_DontHold or
+							ammoprop_NotBorder;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;
@@ -1089,7 +1093,8 @@ const
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
 							ammoprop_AttackingPut or
-							ammoprop_DontHold;
+							ammoprop_DontHold or
+							ammoprop_NotBorder;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;

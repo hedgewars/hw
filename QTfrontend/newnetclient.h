@@ -111,6 +111,7 @@ class HWNewNet : public QObject
   void fortsModeChanged(bool value);
   void teamsDivideChanged(bool value);
   void solidChanged(bool value);
+  void borderChanged(bool value);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringLobby(const QString&);
@@ -143,6 +144,7 @@ class HWNewNet : public QObject
   void onFortsModeChanged(bool value);
   void onTeamsDivideChanged(bool value);
   void onSolidChanged(bool value);
+  void onBorderChanged(bool value);
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
   void onWeaponsNameChanged(const QString& name, const QString& ammo);

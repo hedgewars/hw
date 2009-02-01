@@ -76,6 +76,7 @@ case GameState of
 			GameState:= gsStart;
 			end;
 	gsStart: begin
+			if HasBorder then DisableSomeWeapons;
 			AddClouds;
 			AssignHHCoords;
 			AddMiscGears;

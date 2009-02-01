@@ -30,6 +30,7 @@ procedure OnUsedAmmo(var Hedgehog: THedgehog);
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
+procedure DisableSomeWeapons;
 
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole;
@@ -225,6 +226,24 @@ end;
 procedure SetWeapon(weap: TAmmoType);
 begin
 ParseCommand('/setweap ' + char(weap), true)
+end;
+
+procedure DisableSomeWeapons;
+var i, slot, a: Longword;
+	t: TAmmoType;
+begin
+for i:= 0 to Pred(StoreCnt) do
+	for slot:= 0 to cMaxSlotIndex do
+		begin
+		for a:= 0 to cMaxSlotAmmoIndex do
+			with StoresList[i]^[slot, a] do
+				if (Propz and ammoprop_NotBorder) <> 0 then Count:= 0;
+
+		PackAmmo(StoresList[i], slot)
+		end;
+
+for t:= Low(TAmmoType) to High(TAmmoType) do
+	if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
 end;
 
 end.

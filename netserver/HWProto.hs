@@ -399,7 +399,7 @@ handleCmd_inRoom client _ rooms ("ADD_TEAM" : name : color : grave : fort : voic
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
-		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
+		canAddNumber = 48 - (sum . map hhnum $ teams clRoom)
 		newTeamHHNum = min 4 canAddNumber
 
 handleCmd_inRoom client clients rooms ("ADD_TEAM" : name : color : grave : fort : difStr : hhsInfo) =
@@ -420,7 +420,7 @@ handleCmd_inRoom client _ rooms ["HH_NUM", teamName, numberStr] =
 		team = fromJust findTeam
 		findTeam = find (\t -> teamName == teamname t) $ teams clRoom
 		clRoom = roomByName (room client) rooms
-		canAddNumber = 18 - (sum . map hhnum $ teams clRoom)
+		canAddNumber = 48 - (sum . map hhnum $ teams clRoom)
 
 handleCmd_inRoom client _ rooms ["TEAM_COLOR", teamName, newColor] =
 	if not $ isMaster client then

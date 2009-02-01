@@ -616,7 +616,7 @@ if b then
               Gear^.dX, Gear^.dY,
               cHHRadius * 5, cHHRadius * 2 + 7);
 
-if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) then
+if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) or (Land[hwRound(HHGear^.Y), hwRound(HHGear^.X + Gear^.dX * 32)] = COLOR_INDESTRUCTIBLE) then
 	begin
 	HHGear^.Message:= 0;
 	HHGear^.State:= HHGear^.State and (not gstNotKickable);
@@ -1379,7 +1379,7 @@ else
 	Gear^.X:= int2hwFloat(LAND_WIDTH + 1024);
 	end;
 
-Gear^.Y:= -_300;  // TODO - consider making this proportional to topY to reduce spread on low maps
+Gear^.Y:= int2hwFloat(topY-300);
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
 if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then
@@ -1930,7 +1930,8 @@ t:= CheckGearsCollision(Gear); //fixes drill not exploding when touching HH bug
 if (Gear^.Timer = 0)
 or (t^.Count <> 0)
 or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
-and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
+and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
+or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] = COLOR_INDESTRUCTIBLE) then
 	begin //out of time or exited ground
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
 	DeleteGear(Gear);

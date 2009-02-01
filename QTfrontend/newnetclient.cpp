@@ -488,6 +488,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit solidChanged(lst[2].toInt() != 0);
 			return;
 		}
+		if (lst[1] == "BORDER") {
+			emit borderChanged(lst[2].toInt() != 0);
+			return;
+		}
 		if (lst[1] == "AMMO") {
 			if(lst.size() < 4) return;
 			emit ammoChanged(lst[3], lst[2]);
@@ -562,6 +566,7 @@ void HWNewNet::ConfigAsked()
 	onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
 	onTeamsDivideChanged(m_pGameCFGWidget->getGameFlags() & 0x10);
 	onSolidChanged(m_pGameCFGWidget->getGameFlags() & 0x04);
+	onBorderChanged(m_pGameCFGWidget->getGameFlags() & 0x08);
 	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
 	QString name = m_pGameCFGWidget->WeaponsName->currentText();
 	QString ammo = m_pGameCFGWidget->WeaponsName->itemData(
@@ -641,6 +646,11 @@ void HWNewNet::onTeamsDivideChanged(bool value)
 void HWNewNet::onSolidChanged(bool value)
 {
 	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SOLIDLAND%1%2").arg(delimeter).arg(value));
+}
+
+void HWNewNet::onBorderChanged(bool value)
+{
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1BORDER%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)

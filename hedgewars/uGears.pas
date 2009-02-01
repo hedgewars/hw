@@ -1347,7 +1347,7 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 								FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil
 								if Gear <> nil then
 									begin
-									Gear^.Pos:= GetRandom(19);
+									Gear^.Pos:= GetRandom(49);
 									Gear^.dX.isNegative:= p = 1;
 									end
 								end;

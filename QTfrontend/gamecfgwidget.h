@@ -81,6 +81,7 @@ public slots:
 	void setFortsMode(bool value);
 	void setTeamsDivide(bool value);
 	void setSolid(bool value);
+	void setBorder(bool value);
 	void setNetAmmo(const QString& name, const QString& ammo);
 
 signals:
@@ -94,6 +95,7 @@ signals:
 	void fortsModeChanged(bool value);
 	void teamsDivideChanged(bool value);
 	void solidChanged(bool value);
+	void borderChanged(bool value);
 	void newWeaponScheme(const QString & name, const QString & ammo);
 
 private slots:
@@ -103,6 +105,7 @@ private:
 	QCheckBox * CB_mode_Forts;
 	QCheckBox * CB_teamsDivide;
 	QCheckBox * CB_solid;
+	QCheckBox * CB_border;
 	QGridLayout mainLayout;
 	HWMapContainer* pMapContainer;
 	QSpinBox * SB_TurnTime;
