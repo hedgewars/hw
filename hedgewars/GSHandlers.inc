@@ -652,6 +652,8 @@ if ((HHGear^.State and gstHHDriven) = 0)
 	exit
 	end;
 
+HedgehogChAngle(HHGear);
+
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY:= _0;
 HHGear^.X:= HHGear^.X + HHGear^.dX;
