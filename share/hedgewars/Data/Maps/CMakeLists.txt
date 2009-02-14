@@ -19,6 +19,7 @@ foreach(dir
 	PirateFlag
 	Plane
 	Sheep
+	Trash
 	)
 
 add_subdirectory(${dir})
