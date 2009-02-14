@@ -151,30 +151,30 @@ var tmpsurf: PSDL_Surface;
 	end;
 
 begin
-y:= 150;
+y:= topY+150;
 repeat
 	inc(y, 24);
 	x1:= gX;
 	x2:= gX;
 	
-	while (x1 > 100) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
+	while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
 
 	i:= x1 - 12;
 	repeat
 		dec(x1, 2);
 		k:= CountNonZeroz(x1, y)
-	until (x1 < 100) or (k = 0) or (k = 16) or (x1 < i);
+	until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
 	
 	inc(x1, 2);
 	if k = 16 then
 		begin
-		while (x2 < (LAND_WIDTH-150)) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
+		while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
 		i:= x2 + 12;
 		repeat
 		inc(x2, 2);
 		k:= CountNonZeroz(x2, y)
-		until (x2 > (LAND_WIDTH-150)) or (k = 0) or (k = 16) or (x2 > i);
-		if (x2 < (LAND_WIDTH-150)) and (k = 16) and (x2 - x1 > 250)
+		until (x2 > (rightX-150)) or (k = 0) or (k = 16) or (x2 > i);
+		if (x2 < (rightX-150)) and (k = 16) and (x2 - x1 > 250)
 			and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
 		end;
 x1:= 0;
@@ -259,7 +259,7 @@ with Obj do
         exit(false);
      x:= 0;
      repeat
-         y:= 0;
+         y:= topY+32; // leave room for a hedgie to teleport in
          repeat
              if CheckCanPlace(x, y, Obj) then
                 begin
@@ -469,19 +469,19 @@ until (i > MaxCount) or not b;
 end;
 
 procedure AddObjects();
+var i, int: Longword;
 begin
 InitRects;
 if hasGirders then
     begin
-    AddGirder(256);
-    AddGirder(512);
-    AddGirder(768);
-    AddGirder(1024);
-    AddGirder(1280);
-    AddGirder(1536);
-    AddGirder(1792);
+    int:= max(playWidth div 8, 256);
+    i:=leftX+int;
+    repeat
+        AddGirder(i);
+        i:=i+int;
+    until (i>rightX-int);
     end;
-AddThemeObjects(ThemeObjects, 8);
+AddThemeObjects(ThemeObjects, MaxHedgehogs div 2); // MaxHedgehogs should roughly correspond to available surface area.  Was also thinking maybe using playHeight * playWidth div constant   :)
 AddProgress;
 FreeRects
 end;

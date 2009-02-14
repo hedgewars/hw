@@ -30,7 +30,7 @@ var  Land: TLandArray;
      LandDirty: TDirtyTag;
      hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
      hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands don't need? It might be better to tweak the girder code based upon space above.  dunno.
-     playHeight, playWidth, leftX, rightX, topY: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.  Maybe not a good idea, but, for now?  Could also be used to prevent placing a girder outside play area on maps with hasBorder = true
+     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.  Maybe not a good idea, but, for now?  Could also be used to prevent placing a girder outside play area on maps with hasBorder = true
 
 // in your coding style, it appears to be "isXXXX" for a verb, and "FooBar" for everything else - should be PlayHeight ?
 
@@ -376,6 +376,8 @@ with Template do
      for i:= 0 to pred(pa.Count) do
          begin
          pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
+         if pa.ar[i].x <> NTPX then
+            pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
          pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - Template.TemplateHeight
          end;
 
@@ -505,10 +507,10 @@ with Template do
 
 DrawEdge(pa, COLOR_LAND);
 
+MaxHedgehogs:= Template.MaxHedgehogs;
 hasGirders:= Template.hasGirders;
 playHeight:= Template.TemplateHeight;
 playWidth:= Template.TemplateWidth;
-//TryDo(playWidth<>0, 'freakin magic man!  Why the HELL does having a TryDo here make the following calculations work?', true);
 leftX:= ((LAND_WIDTH - playWidth) div 2);
 rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
@@ -533,7 +535,8 @@ end;
 
 function SelectTemplate: LongInt;
 begin
-SelectTemplate:= getrandom(Succ(High(EdgeTemplates)))
+SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
+WriteLnToConsole('Selected template #'+inttostr(SelectTemplate));
 end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
@@ -602,17 +605,64 @@ BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsu
 SDL_FreeSurface(tmpsurf);
 end;
 
+// Hi unC0Rr.
+// This is a function that Tiy assures me would not be good for gameplay.
+// It allows the setting of arbitrary portions of landscape as indestructible, or regular, or even blank.
+// He said I could add it here only when I swore it wouldn't impact gameplay.  Which, as far as I can tell, is true.
+// I'd just like to play with it with my friends if you don't mind.
+// Can allow for amusing maps.
+procedure LoadMask;
+var tmpsurf: PSDL_Surface;
+    p: PLongwordArray;
+    x, y, cpX, cpY: Longword;
+begin
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', true, false, true);
+if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
+    begin
+	cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
+	cpY:= LAND_HEIGHT - tmpsurf^.h;
+    if SDL_MustLock(tmpsurf) then
+       SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+  
+    p:= tmpsurf^.pixels;
+    for y:= 0 to Pred(tmpsurf^.h) do
+        begin
+        for x:= 0 to Pred(tmpsurf^.w) do
+            Land[cpY + y, cpX + x]:= p^[x];
+        p:= @(p^[tmpsurf^.pitch div 4]);
+        end;
+  
+    if SDL_MustLock(tmpsurf) then
+       SDL_UnlockSurface(tmpsurf);
+    SDL_FreeSurface(tmpsurf);
+    end;
+end;
+
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
+    s: string;
+    a,b: shortstring;
+    f: textfile;
+    tn: Longint;
+
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
+// unC0Rr - should this be passed from the GUI? I'm not sure which layer does what
+s:= Pathz[ptMapCurrent] + '/map.cfg';
+WriteLnToConsole('Fetching map HH limit');
+Assign(f, s);
+Reset(f);
+Readln(f, a);
+SplitBySpace(a,b);
+Val(b,MaxHedgehogs,tn);
+if(MaxHedgehogs = 0) then MaxHedgehogs:= 18;
+
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;
-TryDo(playWidth<>0, 'freakin magic man!  Why the HELL does having a TryDo here make the following calculations work?', true);
 leftX:= (LAND_WIDTH - playWidth) div 2;
 rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
@@ -625,6 +675,8 @@ BlitImageAndGenerateCollisionInfo(
 	tmpsurf^.w,
 	tmpsurf);
 SDL_FreeSurface(tmpsurf);
+
+LoadMask;
 end;
 
 procedure GenMap;

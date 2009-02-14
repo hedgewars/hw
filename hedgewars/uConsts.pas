@@ -143,8 +143,8 @@ const
     LAND_WIDTH_MASK  = $FFFFF000;
     LAND_HEIGHT_MASK = $FFFFF800;
 	
-	COLOR_LAND           = $00FFFFFF;
-	COLOR_INDESTRUCTIBLE = $0000F00D;
+	COLOR_LAND           = $FFFFFFFF;  // white
+	COLOR_INDESTRUCTIBLE = $FF0000FF;  // red
 
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;

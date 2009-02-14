@@ -91,7 +91,7 @@ Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
 
 if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
 if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT-1024) // TODO - configure in theme (jellies for example could use limited range)
+if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(LAND_HEIGHT-1024+150) // TODO - configure in theme (jellies for example could use limited range)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);

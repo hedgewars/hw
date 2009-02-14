@@ -29,6 +29,7 @@ procedure WriteLnToConsole(s: shortstring);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 function  GetLastConsoleLine: shortstring;
+procedure SplitBySpace(var a, b: shortstring);
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 

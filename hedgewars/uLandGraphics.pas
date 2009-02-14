@@ -26,7 +26,7 @@ type PRangeArray = ^TRangeArray;
                                    Left, Right: LongInt;
                                    end;
 
-procedure SweepDirty;
+function SweepDirty: boolean;
 function Despeckle(X, Y: LongInt): boolean;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
@@ -349,8 +349,10 @@ case bpp of
             begin
             for x:= 0 to Pred(w) do
                 if PLongword(@(p^[x * 4]))^ <> 0 then
-                   if (((cpY + y) and LAND_HEIGHT_MASK) <> 0) or
-                      (((cpX + x) and LAND_WIDTH_MASK) <> 0) or
+                   if ((cpY + y) < Longint(topY)) or
+                      ((cpY + y) > LAND_HEIGHT) or
+                      ((cpX + x) < Longint(leftX)) or
+                      ((cpX + x) > Longint(rightX)) or
                       (Land[cpY + y, cpX + x] <> 0) then
                       begin
                       if SDL_MustLock(Image) then
@@ -386,7 +388,7 @@ case bpp of
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 
-y:= max(cpY, 0);
+y:= max(cpY, topY);
 h:= min(cpY + Image^.h, LAND_HEIGHT) - y;
 UpdateLandTexture(y, h)
 end;
@@ -395,7 +397,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c: LongInt;
 begin
-if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) then // check neighbours
+if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y, X] = cExplosionBorderColor)then // check neighbours
 	begin
 	c:= 0;
 	for i:= -1 to 1 do
@@ -419,10 +421,12 @@ if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) then // check neig
 Despeckle:= false
 end;
 
-procedure SweepDirty;
+function SweepDirty: boolean;
 var x, y, xx, yy: LongInt;
-    updatedRow, updatedCell: boolean;
+    updatedRow, updatedCell, Result: boolean;
 begin
+Result:= false;
+
 for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	begin
 	updatedRow:= false;
@@ -445,8 +449,13 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
 		end;
 	
 	if updatedRow then
+		begin
 		UpdateLandTexture(y * 32, 32);
+		Result:= true
+		end
 	end;
+
+SweepDirty:= Result
 end;
 
 end.
