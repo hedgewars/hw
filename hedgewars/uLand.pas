@@ -640,11 +640,8 @@ end;
 
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
-    s: string;
-    a,b: shortstring;
-    f: textfile;
-    tn: Longint;
-
+	s: string;
+	f: textfile;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
@@ -656,9 +653,9 @@ s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
 Assign(f, s);
 Reset(f);
-Readln(f, a);
-SplitBySpace(a,b);
-Val(b,MaxHedgehogs,tn);
+Readln(f);
+if not eof(f) then Readln(f, MaxHedgehogs);
+
 if(MaxHedgehogs = 0) then MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;

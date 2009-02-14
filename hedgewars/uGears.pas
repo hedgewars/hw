@@ -1380,7 +1380,7 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
     // unC0Rr, while it is true user can watch value on map screen, IMO this (and check above) should be enforced in UI
     // - is there a good place to put values for the different widgets to check?  Right now they are kind of disconnected.
     //it'd be nice if divide teams, forts mode and hh per map could all be checked by the team widget, or maybe disable start button
-	TryDo(Count <= MaxHedgehogs, 'Too many hedgehogs for this map!', true);
+	TryDo(Count <= MaxHedgehogs, 'Too many hedgehogs for this map! (max # is ' + inttostr(MaxHedgehogs) + ')', true);
 	while (Count > 0) do
 		begin
 		i:= GetRandom(Count);
