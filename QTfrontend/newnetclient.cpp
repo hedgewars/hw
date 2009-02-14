@@ -559,6 +559,8 @@ void HWNewNet::ConfigAsked()
 	if (map.size())
 		onMapChanged(map);
 
+	onSuddenDeathTurnsChanged(m_pGameCFGWidget->getSuddenDeathTurns());
+	onCaseProbabilityChanged(m_pGameCFGWidget->getCaseProbability());
 	onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
 	onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
 	onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
