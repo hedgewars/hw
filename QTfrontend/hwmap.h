@@ -43,6 +43,7 @@ class HWMap : public TCPBase
 
  signals:
   void ImageReceived(const QImage newImage);
+  void HHLimitReceived(int hhLimit);
 
  private:
   std::string m_seed;

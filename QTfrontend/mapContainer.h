@@ -42,6 +42,7 @@ class HWMapContainer : public QWidget
   QString getCurrentSeed() const;
   QString getCurrentMap() const;
   QString getCurrentTheme() const;
+  int     getCurrentHHLimit() const;
 
  public slots:
   void changeImage();
@@ -57,10 +58,12 @@ class HWMapContainer : public QWidget
 
  private slots:
   void setImage(const QImage newImage);
+  void setHHLimit(int hhLimit);
   void mapChanged(int index);
   void setRandomSeed();
   void setRandomTheme();
   void themeSelected(int currentRow);
+  void addInfoToPreview(QPixmap image);
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -73,6 +76,8 @@ class HWMapContainer : public QWidget
   QListWidget* lwThemes;
   HWMap* pMap;
   QString m_seed;
+  int hhLimit;
+  QPixmap hhSmall;
 
   void loadMap(int index);
 };

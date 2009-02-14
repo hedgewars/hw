@@ -17,7 +17,7 @@
 
 #include "hwconsts.h"
 #include "hwmap.h"
-
+										#include <QDebug>
 HWMap::HWMap() :
   TCPBase(false)
 {
@@ -44,9 +44,14 @@ QStringList HWMap::setArguments()
 
 void HWMap::onClientDisconnect()
 {
-  QImage im((uchar*)(readbuffer.constData()), 256, 128, QImage::Format_Mono);
-  im.setNumColors(2);
-  emit ImageReceived(im);
+	if (readbuffer.size() == 128 * 32 + 1)
+	{
+		quint8 *buf = (quint8*) readbuffer.constData();
+		QImage im(buf, 256, 128, QImage::Format_Mono);
+		im.setNumColors(2);
+		emit HHLimitReceived(buf[128 * 32 + 1]);
+		emit ImageReceived(im);
+	}
 }
 
 void HWMap::SendToClientFirst()

@@ -39,10 +39,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	mainLayout(this),
 	pMap(0)
 {
+	hhSmall.load(":/res/hh_small.png");
+	hhLimit = 18;
+	
 	mainLayout.setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
 		1,
 		QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
 		QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
+	
 	imageButt = new QPushButton(this);
 	imageButt->setObjectName("imageButt");
 	imageButt->setFixedSize(256 + 6, 128 + 6);
@@ -61,11 +65,20 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 				QString("%1/Maps/%2/map.cfg")
 				.arg(datadir->absolutePath())
 				.arg(map));
+
 		if (mapCfgFile.open(QFile::ReadOnly)) {
 			QString theme;
+			quint32 limit = 0;
+			QList<QVariant> mapInfo;
 			QTextStream input(&mapCfgFile);
 			input >> theme;
-			chooseMap->addItem(map, theme);
+			input >> limit;
+			mapInfo.push_back(theme);
+			if (limit)
+				mapInfo.push_back(limit);
+			else
+				mapInfo.push_back(18);
+			chooseMap->addItem(map, mapInfo);
 			mapCfgFile.close();
 		}
 	}
@@ -122,10 +135,14 @@ void HWMapContainer::setImage(const QImage newImage)
 	p.fillRect(QRect(0, 0, 256, 128), linearGrad);
 	p.drawPixmap(QPoint(0, 0), px);
 
-	imageButt->setIcon(pxres);
-	imageButt->setIconSize(QSize(256, 128));
+    addInfoToPreview(pxres);
 	chooseMap->setCurrentIndex(0);
 	pMap = 0;
+}
+
+void HWMapContainer::setHHLimit(int newHHLimit)
+{
+    hhLimit = newHHLimit;
 }
 
 void HWMapContainer::mapChanged(int index)
@@ -151,20 +168,46 @@ void HWMapContainer::loadMap(int index)
 		chooseMap->setCurrentIndex(0);
 		return;
 	}
-	imageButt->setIcon(mapImage);
+
+    hhLimit = chooseMap->itemData(index).toList()[1].toInt();
+    addInfoToPreview(mapImage);
+}
+
+// Should this add text to identify map size?
+void HWMapContainer::addInfoToPreview(QPixmap image)
+{
+	QPixmap finalImage = QPixmap(image.size());
+	finalImage.fill(QColor(0, 0, 0, 0));
+	
+	QPainter p(&finalImage);
+	p.drawPixmap(image.rect(), image);
+	//p.setPen(QColor(0xf4,0x9e,0xe9));
+	p.setPen(QColor(0xff,0xcc,0x00));
+	p.setBrush(QColor(0, 0, 0));
+	p.drawRect(image.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
+	p.setFont(QFont("MS Shell Dlg", 10));
+	p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, QString::number(hhLimit));
+	p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
+
+	imageButt->setIcon(finalImage);
+	imageButt->setIconSize(image.size());
 }
 
 void HWMapContainer::changeImage()
 {
 	pMap = new HWMap();
 	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
+	connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
 	pMap->getImage(m_seed.toStdString());
 }
 
 void HWMapContainer::themeSelected(int currentRow)
 {
 	QString theme = Themes->at(currentRow);
-	chooseMap->setItemData(0, theme);
+    QList<QVariant> mapInfo;
+    mapInfo.push_back(theme);
+    mapInfo.push_back(18);
+	chooseMap->setItemData(0, mapInfo);
 	gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
 	emit themeChanged(theme);
 }
@@ -182,7 +225,12 @@ QString HWMapContainer::getCurrentMap() const
 
 QString HWMapContainer::getCurrentTheme() const
 {
-	return chooseMap->itemData(chooseMap->currentIndex()).toString();
+	return chooseMap->itemData(chooseMap->currentIndex()).toList()[0].toString();
+}
+
+int HWMapContainer::getCurrentHHLimit() const
+{
+	return hhLimit;
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
