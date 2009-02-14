@@ -1,0 +1,42 @@
+; English locale
+
+00:00=Kranaatti
+00:01=Sirpalekranaatti
+00:02=Sinko
+00:03=UFO
+00:04=Haulikko
+00:05=Pora
+00:06=Hyppää yli
+00:07=Köysi
+00:08=Miina
+00:09=DEagle
+00:10=Dynamiitti
+00:11=Pesäpallomaila
+00:12=Fire Punch
+00:13=sek
+00:14=Laskuvarjo
+00:15=Ilmaisku
+00:16=Miinaisku
+00:17=Puhalluslamppu
+00:18=Rakennus
+00:19=Teleportaatio
+00:20=Vaihda siiliä
+00:21=Sirpalekranaatinheitin
+00:22=Piiska
+00:23=Kamikaze
+00:24=Kakku
+00:25=Viehätys
+00:26=Vesimelonipommi
+00:27=Helvetillinen käsikranaatti
+00:28=Poraraketti
+00:29=Palloase
+00:30=Napalmi
+00:31=Kauko-ohjattava lentokone
+
+01:00=Taistelu alkakoon!
+01:01=Tasapeli
+01:02=%1 voitti!
+01:03=Äänenvoimakkuus %1%
+01:04=Tauko
+01:05=Poistutaanko (Y/Esc)?
+01:06=Äkkikuolema!

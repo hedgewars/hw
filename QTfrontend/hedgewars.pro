@@ -91,6 +91,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_cs.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_en.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_es.ts
+TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_fi.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_fr.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_it.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ja.ts
