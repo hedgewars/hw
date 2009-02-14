@@ -270,6 +270,7 @@ end;
 /////////////////////////
 procedure GenLandPreview;
 var Preview: TPreview;
+	h: byte;
 begin
 InitIPC;
 IPCWaitPongEvent;
@@ -280,6 +281,8 @@ TryDo(InitStepsFlags = cifRandomize,
 Preview:= GenPreview;
 WriteLnToConsole('Sending preview...');
 SendIPCRaw(@Preview, sizeof(Preview));
+h:= MaxHedgehogs;
+SendIPCRaw(@h, sizeof(h));
 WriteLnToConsole('Preview sent, disconnect');
 CloseIPC
 end;

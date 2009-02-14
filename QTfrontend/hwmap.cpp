@@ -49,7 +49,7 @@ void HWMap::onClientDisconnect()
 		quint8 *buf = (quint8*) readbuffer.constData();
 		QImage im(buf, 256, 128, QImage::Format_Mono);
 		im.setNumColors(2);
-		emit HHLimitReceived(buf[128 * 32 + 1]);
+		emit HHLimitReceived(buf[128 * 32]);
 		emit ImageReceived(im);
 	}
 }
