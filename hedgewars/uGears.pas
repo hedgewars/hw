@@ -1126,7 +1126,11 @@ while Gear<>nil do
                        then DrawRotated(sprMineOff, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle)
                        else DrawRotated(sprMineOn, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
             gtCase: case Gear^.Pos of
-                         posCaseAmmo  : DrawSprite(sprCase, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+                         posCaseAmmo  : begin
+                                        i:= (GameTicks shr 6) mod 64;
+                                        if i > 18 then i:= 0;
+                                        DrawSprite(sprCase, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                                        end;
                          posCaseHealth: begin
                                         i:= (GameTicks shr 6) mod 64;
                                         if i > 12 then i:= 0;

@@ -329,7 +329,7 @@ const
 			(FileName:     'MineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:   8; Height:  8; saveSurf: false),// sprMineOn
 			(FileName:       'Case'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprCase
+			Width:  48; Height: 48; saveSurf: false),// sprCase
 			(FileName:   'FirstAid'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false),// sprFAid
 			(FileName:   'dynamite'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
