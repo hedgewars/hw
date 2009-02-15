@@ -380,4 +380,12 @@ signals:
 	void askForRoomList();
 };
 
+class PageConnecting : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageConnecting(QWidget* parent = 0);
+};
+
 #endif // PAGES_H

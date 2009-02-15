@@ -329,7 +329,7 @@ void HWForm::GoBack()
 		if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
 			GoBack();
 
-	if (id == ID_PAGE_NET) {
+	if ((id == ID_PAGE_NET) && (curid != ID_PAGE_CONNECTING)) {
 		if(hwnet || pnetserver) NetDisconnect();
 	}
 }
@@ -449,6 +449,12 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
+	{
+		GoToPage(ID_PAGE_CONNECTING);
+		connect(hwnet, SIGNAL(Connected()), this, SLOT(GoBack()));
+		connect(hwnet, SIGNAL(Disconnected()), this, SLOT(GoBack()));
+	}
+
 	connect(hwnet, SIGNAL(showMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
 
 	connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
@@ -533,7 +539,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 			hwnet, SLOT(onWeaponsNameChanged(const QString &, const QString &)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
 
-	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()));
+	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
 	connect(hwnet, SIGNAL(mapChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setMap(const QString &)));
 	connect(hwnet, SIGNAL(themeChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setTheme(const QString &)));
@@ -599,6 +605,7 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
+	qDebug("NetDisconnect");
 	if(hwnet) {
 		hwnet->Disconnect();
 		delete hwnet;
@@ -625,8 +632,9 @@ void HWForm::ForcedDisconnect()
 		hwnet = 0;
 		QMessageBox::warning(this, QMessageBox::tr("Network"),
 				QMessageBox::tr("Connection to server is lost"));
+	
 	}
-	GoBack();
+	if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
 }
 
 void HWForm::NetConnected()

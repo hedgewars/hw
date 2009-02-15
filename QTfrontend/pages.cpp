@@ -815,3 +815,9 @@ void PageRoomsList::onRefreshClick()
 	emit askForRoomList();
 }
 
+
+PageConnecting::PageConnecting(QWidget* parent) :
+	AbstractPage(parent)
+{
+	QGridLayout * pageLayout = new QGridLayout(this);
+}

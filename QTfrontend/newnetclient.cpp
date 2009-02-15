@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QMessageBox>
 #include <QDebug>
 
 #include "hwconsts.h"
@@ -49,7 +48,10 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
 HWNewNet::~HWNewNet()
 {
 	if (m_game_connected)
+	{
 		RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
+		emit Disconnected();
+	}
 	NetSocket.flush();
 }
 
@@ -64,6 +66,7 @@ void HWNewNet::Disconnect()
 	if (m_game_connected)
 		RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
 	m_game_connected = false;
+	
 	NetSocket.disconnectFromHost();
 }
 
@@ -172,20 +175,19 @@ void HWNewNet::OnDisconnect()
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
+	emit Disconnected();
+	
 	switch (socketError) {
 		case QAbstractSocket::RemoteHostClosedError:
 			break;
 		case QAbstractSocket::HostNotFoundError:
-			QMessageBox::information(0, tr("Error"),
-					tr("The host was not found. Please check the host name and port settings."));
+			emit showMessage(tr("The host was not found. Please check the host name and port settings."));
 			break;
 		case QAbstractSocket::ConnectionRefusedError:
-			QMessageBox::information(0, tr("Error"),
-					tr("Connection refused"));
+			emit showMessage(tr("Connection refused"));
 			break;
 		default:
-			QMessageBox::information(0, tr("Error"),
-					NetSocket.errorString());
+			emit showMessage(NetSocket.errorString());
 		}
 }
 
