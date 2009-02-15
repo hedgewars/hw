@@ -27,7 +27,7 @@ type TTarget = record
                end;
      TTargets = record
                 Count: Longword;
-                ar: array[0..cMaxHHIndex*5] of TTarget;
+                ar: array[0..Pred(cMaxHHs)] of TTarget;
                 end;
      TJumpType = (jmpNone, jmpHJump, jmpLJump);
      TGoInfo = record
