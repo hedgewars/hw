@@ -119,6 +119,7 @@ class HWNewNet : public QObject
   void chatStringFromMe(const QString&);
   void chatStringFromMeLobby(const QString&);
   void ammoChanged(const QString& name, const QString& ammo);
+  void templateFilterChanged(int filter);
 
   void roomsList(const QStringList&);
   void serverMessage(const QString &);
@@ -148,6 +149,7 @@ class HWNewNet : public QObject
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
   void onWeaponsNameChanged(const QString& name, const QString& ammo);
+  void onTemplateFilterChanged(int filter);
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
   void askRoomsList();

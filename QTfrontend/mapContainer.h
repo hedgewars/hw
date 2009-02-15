@@ -49,6 +49,7 @@ class HWMapContainer : public QWidget
   void setSeed(const QString & seed);
   void setMap(const QString & map);
   void setTheme(const QString & theme);
+  void setTemplateFilter(int);
 
  signals:
   void seedChanged(const QString & seed);
@@ -77,6 +78,7 @@ class HWMapContainer : public QWidget
   HWMap* pMap;
   QString m_seed;
   int hhLimit;
+  int templateFilter;
   QPixmap hhSmall;
 
   void loadMap(int index);

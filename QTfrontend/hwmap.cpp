@@ -17,7 +17,7 @@
 
 #include "hwconsts.h"
 #include "hwmap.h"
-										#include <QDebug>
+
 HWMap::HWMap() :
   TCPBase(false)
 {
@@ -27,19 +27,20 @@ HWMap::~HWMap()
 {
 }
 
-void HWMap::getImage(std::string seed)
+void HWMap::getImage(std::string seed, int filter)
 {
-  m_seed=seed;
-  Start();
+	m_seed = seed;
+	templateFilter = filter;
+	Start();
 }
 
 QStringList HWMap::setArguments()
 {
-  QStringList arguments;
-  arguments << cfgdir->absolutePath();
-  arguments << QString("%1").arg(ipc_port);
-  arguments << "landpreview";
-  return arguments;
+	QStringList arguments;
+	arguments << cfgdir->absolutePath();
+	arguments << QString("%1").arg(ipc_port);
+	arguments << "landpreview";
+	return arguments;
 }
 
 void HWMap::onClientDisconnect()
@@ -56,7 +57,7 @@ void HWMap::onClientDisconnect()
 
 void HWMap::SendToClientFirst()
 {
-  std::string toSend=std::string("eseed ")+m_seed;
-  SendIPC(toSend.c_str());
-  SendIPC("!");
+	SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
+	SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
+	SendIPC("!");
 }

@@ -34,7 +34,7 @@ class HWMap : public TCPBase
  public:
   HWMap();
   virtual ~HWMap();
-  void getImage(std::string seed);
+  void getImage(std::string seed, int templateFilter);
 
  protected:
   virtual QStringList setArguments();
@@ -47,6 +47,7 @@ class HWMap : public TCPBase
 
  private:
   std::string m_seed;
+  int templateFilter;
 
  private slots:
 };

@@ -515,6 +515,7 @@ leftX:= ((LAND_WIDTH - playWidth) div 2);
 rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
 
+// force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
 if (Template.canInvert and (getrandom(2) = 0)) or
     (not Template.canInvert and Template.isNegative) then 
     begin
@@ -535,8 +536,27 @@ end;
 
 function SelectTemplate: LongInt;
 begin
-SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
-WriteLnToConsole('Selected template #'+inttostr(SelectTemplate));
+case cTemplateFilter of
+     0: begin
+     SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
+     end;
+     1: begin
+     SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))];
+     end;
+     2: begin
+     SelectTemplate:= MediumTemplates[getrandom(Succ(High(MediumTemplates)))];
+     end;
+     3: begin
+     SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
+     end;
+     4: begin
+     SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
+     end;
+     5: begin
+     SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
+     end;
+end;
+WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
 end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);

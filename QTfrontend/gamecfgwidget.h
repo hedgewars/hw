@@ -66,6 +66,7 @@ public:
 	quint32 getTurnTime() const;
 	quint32 getSuddenDeathTurns() const;
 	quint32 getCaseProbability() const;
+	quint32 getTemplateFilter() const;
 	QStringList getFullConfig() const;
 
 	QComboBox* WeaponsName;
@@ -83,6 +84,7 @@ public slots:
 	void setSolid(bool value);
 	void setBorder(bool value);
 	void setNetAmmo(const QString& name, const QString& ammo);
+    void setTemplateFilter(int filter);
 
 signals:
 	void seedChanged(const QString & seed);
@@ -97,9 +99,11 @@ signals:
 	void solidChanged(bool value);
 	void borderChanged(bool value);
 	void newWeaponScheme(const QString & name, const QString & ammo);
+	void newTemplateFilter(int filter);
 
 private slots:
 	void ammoChanged(int index);
+	void templateFilterChanged(int filter);
 
 private:
 	QCheckBox * CB_mode_Forts;
@@ -111,6 +115,7 @@ private:
 	QSpinBox * SB_TurnTime;
 	QSpinBox * SB_InitHealth;
 	QSpinBox * SB_SuddenDeath;
+	QComboBox* CB_TemplateFilter;
 	FreqSpinBox * SB_CaseProb;
 	QLabel * L_TurnTime;
 	QLabel * L_InitHealth;

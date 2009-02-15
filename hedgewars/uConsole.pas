@@ -238,6 +238,7 @@ RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
 RegisterVariable('map'     , vtCommand, @chSetMap       , false);
 RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
 RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
+RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
 RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
 RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
 RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);

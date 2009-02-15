@@ -497,6 +497,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit ammoChanged(lst[3], lst[2]);
 			return;
 		}
+		if (lst[1] == "TEMPLATE_FILTER") {
+			emit templateFilterChanged(lst[2].toUInt());
+			return;
+		}
 		qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
 		return;
 	}
@@ -575,6 +579,7 @@ void HWNewNet::ConfigAsked()
 			m_pGameCFGWidget->WeaponsName->currentIndex()
 			).toString();
 	onWeaponsNameChanged(name, ammo);
+	onTemplateFilterChanged(m_pGameCFGWidget->getTemplateFilter());
 }
 
 void HWNewNet::RunGame()
@@ -658,6 +663,11 @@ void HWNewNet::onBorderChanged(bool value)
 void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
 {
 	if (isChief) RawSendNet(QString("CONFIG_PARAM%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
+}
+
+void HWNewNet::onTemplateFilterChanged(int filter)
+{
+	if (isChief) RawSendNet(QString("CONFIG_PARAM%1TEMPLATE_FILTER%1%2").arg(delimeter).arg(filter));
 }
 
 void HWNewNet::chatLineToNet(const QString& str)

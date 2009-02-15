@@ -38,6 +38,8 @@ var
 	GameFlags     : Longword = 0;
 	TurnTimeLeft  : Longword = 0;
 	cSuddenDTurns : LongInt = 15;
+	cTemplateFilter : LongInt = 0;
+    
 	cHedgehogTurnTime: Longword = 45000;
 	cMaxAIThinkTime  : Longword = 9000;
 

@@ -1297,9 +1297,6 @@ const Template35Points: array[0..48] of TSDL_Rect =
       );
 
 ///////////////////////// CAVERNS ///////////////////////////////////
-//// DUE TO LACK OF OTHER CAVERNS, AND A FILTER OPTION IN GUI
-//// BELOW IS SAME CAVERN CLONED 18 TIMES TO KEEP UP RATIO 
-////////////////////////////////////////////////////////////////////
 const Template36Points: array[0..18] of TSDL_Rect =
       (
        (x:  324; y:  756; w:  196; h:  204),
@@ -1326,481 +1323,13 @@ const Template36Points: array[0..18] of TSDL_Rect =
       (
        (x: 2047; y:    0)
       );
-const Template37Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template37FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template38Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template38FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template39Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template39FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template40Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template40FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template41Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template41FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template42Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template42FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template43Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template43FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template44Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template44FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template45Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template45FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template46Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template46FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template47Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template47FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template48Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template48FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template49Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template49FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template50Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template50FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template51Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template51FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template52Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template52FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template53Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template53FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
-const Template54Points: array[0..18] of TSDL_Rect =
-      (
-       (x:  324; y:  756; w:  196; h:  204),
-       (x:  224; y:  596; w:  404; h:   60),
-       (x:  240; y:  268; w:  464; h:  152),
-       (x:  876; y:  236; w:  168; h:  348),
-       (x: 1204; y:   56; w:  148; h:  700),
-       (x: 1516; y:   52; w:  192; h:  664),
-       (x: 1808; y:   60; w:  328; h:  496),
-       (x: 2292; y:   92; w:  184; h:  492),
-       (x: 2664; y:  216; w:  196; h:  340),
-       (x: 3004; y:  108; w:  176; h:  480),
-       (x: 3260; y:  368; w:  120; h:  348),
-       (x: 3476; y:  460; w:  208; h:  448),
-       (x: 3268; y:  906; w:  192; h:   96),
-       (x: 2876; y:  664; w:  204; h:  310),
-       (x: 2240; y:  748; w:  344; h:  224),
-       (x: 1584; y:  796; w:  440; h:  250),
-       (x:  892; y:  852; w:  324; h:  184),
-       (x:  576; y:  976; w:   16; h:   28),
-       (x: NTPX; y:    0; w:    1; h:    1)
-      );
-      Template54FPoints: array[0..0] of TPoint =
-      (
-       (x: 2047; y:    0)
-      );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
 /// Ok. Tiy doesn't care for these.  Perhaps they could be saved.
 /// For now, just rare.
 //////////////////////////////////////////////////////////////////////////////
 
 // maybe Tiy would be ok with this if it was smoother/more climable and a bit shorter?
-const Template55Points: array[0..27] of TSDL_Rect =
+const Template37Points: array[0..27] of TSDL_Rect =
       (
        (x:  700; y: 2100; w: 20; h: 75),
        (x:  800; y: 1200; w: 20; h: 75),
@@ -1831,12 +1360,12 @@ const Template55Points: array[0..27] of TSDL_Rect =
        (x: 2250; y: 1200; w: 25; h: 25),
        (x: NTPX; y:    0; w:  1; h:  1)
       );
-      Template55FPoints: array[0..0] of TPoint =
+      Template37FPoints: array[0..0] of TPoint =
       (
        (x: 2047; y:    0)
       );
 // attempt to make a series of moderate hills/valleys - was before I really figured out the whole probabilities thing
-const Template56Points: array[0..16] of TSDL_Rect =
+const Template38Points: array[0..16] of TSDL_Rect =
       (
        (x:  100; y: 2100; w:   1; h:    1),
        (x:  100; y: 1600; w: 300; h:  500),
@@ -1856,13 +1385,13 @@ const Template56Points: array[0..16] of TSDL_Rect =
        (x: 3700; y: 2100; w:   1; h:    1),
        (x: NTPX; y:    0; w:   1; h:    1)
       );
-      Template56FPoints: array[0..0] of TPoint =
+      Template38FPoints: array[0..0] of TPoint =
       (
        (x: 2047; y:    0)
       );
 
 // 8 tiny islands
-const Template57Points: array[0..39] of TSDL_Rect =
+const Template39Points: array[0..39] of TSDL_Rect =
       (
        (x:   90; y: 520; w:   1; h:   1),
        (x:   90; y: 350; w:  10; h: 150),
@@ -1905,13 +1434,28 @@ const Template57Points: array[0..39] of TSDL_Rect =
        (x: 1430; y: 520; w:   1; h:   1),
        (x: NTPX; y:   0; w:   1; h:   1)
       );
-      Template57FPoints: array[0..0] of TPoint =
+      Template39FPoints: array[0..0] of TPoint =
+      (
+       (x: 512; y:    0)
+      );
+const Template40Points: array[0..7] of TSDL_Rect =
+      (
+       (x:   90; y: 1050; w:    1; h:   1),
+       (x:  100; y:  800; w:  100; h: 200),
+       (x:  300; y:  600; w:  100; h: 200),
+       (x:  500; y:  200; w:  100; h: 200),
+       (x:  700; y:  600; w:  100; h: 100),
+       (x:  900; y:  800; w:  100; h: 200),
+       (x:  900; y: 1050; w:    1; h:   1),
+       (x: NTPX; y:    0; w:    1; h:   1)
+      );
+      Template40FPoints: array[0..0] of TPoint =
       (
        (x: 512; y:    0)
       );
 
 ////////////////////////////////////////////////////////////////////////
-const EdgeTemplates: array[0..57] of TEdgeTemplate =
+const EdgeTemplates: array[0..40] of TEdgeTemplate =
       (
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
@@ -2316,7 +1860,7 @@ const EdgeTemplates: array[0..57] of TEdgeTemplate =
         BezierizeCount: 4;
         RandPassesCount: 12;
         TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: true;
+        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
         MaxHedgehogs: 32;
        ),
@@ -2324,236 +1868,57 @@ const EdgeTemplates: array[0..57] of TEdgeTemplate =
         BasePointsCount: Succ(High(Template37Points));
         FillPoints: @Template37FPoints;
         FillPointsCount: Succ(High(Template37FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: true;
-        hasGirders: false;
-        MaxHedgehogs: 32;
+        BezierizeCount: 3;
+        RandPassesCount: 3;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: true;
+        MaxHedgehogs: 48;
        ),
        (BasePoints: @Template38Points;
         BasePointsCount: Succ(High(Template38Points));
         FillPoints: @Template38FPoints;
         FillPointsCount: Succ(High(Template38FPoints));
         BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: true;
-        hasGirders: false;
-        MaxHedgehogs: 32;
+        RandPassesCount: 4;
+        TemplateHeight: 2048; TemplateWidth: 4096;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: true;
+        MaxHedgehogs: 48;
        ),
        (BasePoints: @Template39Points;
         BasePointsCount: Succ(High(Template39Points));
         FillPoints: @Template39FPoints;
         FillPointsCount: Succ(High(Template39FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: true;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template40Points;
-        BasePointsCount: Succ(High(Template40Points));
-        FillPoints: @Template40FPoints;
-        FillPointsCount: Succ(High(Template40FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: true;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template41Points;
-        BasePointsCount: Succ(High(Template41Points));
-        FillPoints: @Template41FPoints;
-        FillPointsCount: Succ(High(Template41FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template42Points;
-        BasePointsCount: Succ(High(Template42Points));
-        FillPoints: @Template42FPoints;
-        FillPointsCount: Succ(High(Template42FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template43Points;
-        BasePointsCount: Succ(High(Template43Points));
-        FillPoints: @Template43FPoints;
-        FillPointsCount: Succ(High(Template43FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template44Points;
-        BasePointsCount: Succ(High(Template44Points));
-        FillPoints: @Template44FPoints;
-        FillPointsCount: Succ(High(Template44FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template45Points;
-        BasePointsCount: Succ(High(Template45Points));
-        FillPoints: @Template45FPoints;
-        FillPointsCount: Succ(High(Template45FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template46Points;
-        BasePointsCount: Succ(High(Template46Points));
-        FillPoints: @Template46FPoints;
-        FillPointsCount: Succ(High(Template46FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template47Points;
-        BasePointsCount: Succ(High(Template47Points));
-        FillPoints: @Template47FPoints;
-        FillPointsCount: Succ(High(Template47FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template48Points;
-        BasePointsCount: Succ(High(Template48Points));
-        FillPoints: @Template48FPoints;
-        FillPointsCount: Succ(High(Template48FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template49Points;
-        BasePointsCount: Succ(High(Template49Points));
-        FillPoints: @Template49FPoints;
-        FillPointsCount: Succ(High(Template49FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template50Points;
-        BasePointsCount: Succ(High(Template50Points));
-        FillPoints: @Template50FPoints;
-        FillPointsCount: Succ(High(Template50FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template51Points;
-        BasePointsCount: Succ(High(Template51Points));
-        FillPoints: @Template51FPoints;
-        FillPointsCount: Succ(High(Template51FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-       ),
-       (BasePoints: @Template52Points;
-        BasePointsCount: Succ(High(Template52Points));
-        FillPoints: @Template52FPoints;
-        FillPointsCount: Succ(High(Template52FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-        ),
-       (BasePoints: @Template53Points;
-        BasePointsCount: Succ(High(Template53Points));
-        FillPoints: @Template53FPoints;
-        FillPointsCount: Succ(High(Template53FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-        ),
-       (BasePoints: @Template54Points;
-        BasePointsCount: Succ(High(Template54Points));
-        FillPoints: @Template54FPoints;
-        FillPointsCount: Succ(High(Template54FPoints));
-        BezierizeCount: 4;
-        RandPassesCount: 12;
-        TemplateHeight: 1024; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: true; canInvert: false;
-        hasGirders: false;
-        MaxHedgehogs: 32;
-        ),
-       (BasePoints: @Template55Points;
-        BasePointsCount: Succ(High(Template55Points));
-        FillPoints: @Template55FPoints;
-        FillPointsCount: Succ(High(Template55FPoints));
-        BezierizeCount: 3;
-        RandPassesCount: 3;
-        TemplateHeight: 2048; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
-        hasGirders: true;
-        MaxHedgehogs: 48;
-       ),
-       (BasePoints: @Template56Points;
-        BasePointsCount: Succ(High(Template56Points));
-        FillPoints: @Template56FPoints;
-        FillPointsCount: Succ(High(Template56FPoints));
-        BezierizeCount: 6;
-        RandPassesCount: 6;
-        TemplateHeight: 2048; TemplateWidth: 4096;
-        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
-        hasGirders: true;
-        MaxHedgehogs: 48;
-       ),
-       (BasePoints: @Template57Points;
-        BasePointsCount: Succ(High(Template57Points));
-        FillPoints: @Template57FPoints;
-        FillPointsCount: Succ(High(Template57FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
         TemplateHeight: 512; TemplateWidth: 1536;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: false;
         MaxHedgehogs: 8;
+       ),
+       (BasePoints: @Template40Points;
+        BasePointsCount: Succ(High(Template40Points));
+        FillPoints: @Template40FPoints;
+        FillPointsCount: Succ(High(Template40FPoints));
+        BezierizeCount: 3;
+        RandPassesCount: 3;
+        TemplateHeight: 1024; TemplateWidth: 1024;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: false;
+        MaxHedgehogs: 8;
        )
       );
-
-
+const SmallTemplates: array[0..1] of Longword = ( 39, 40 );
+const MediumTemplates: array[0..17] of Longword =
+      ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 );
+const LargeTemplates: array[0..19] of Longword =
+      ( 
+        18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
+        28, 29, 30, 31, 32, 33, 34, 35, 37, 38
+      );
+const CavernTemplates: array[0..0] of Longword = (36);
+const WackyTemplates: array[0..3] of Longword = (37, 38, 39, 40);
 
 implementation
 

@@ -465,7 +465,7 @@ end;
 
 procedure ProcessGears;
 const delay: LongWord = 0;
-	step: (stDelay, stChDmg, stTurnReact,
+	step: (stDelay, stChDmg, stSweep, stTurnReact,
 			stAfterDelay, stChWin, stWater, stChWin2, stHealth,
 			stSpawn, stNTurn) = stDelay;
 
@@ -493,14 +493,12 @@ case step of
 		if delay = 0 then
 			inc(step)
 		end;
-	stChDmg: begin
-			if CheckNoDamage then inc(step) else step:= stDelay;
-			if SweepDirty then
+	stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
+	stSweep: if SweepDirty then
 				begin
 				SetAllToActive;
 				step:= stChDmg
-				end;
-			end;
+				end else inc(step);
 	stTurnReact: begin
 		if (not bBetweenTurns) and (not isInMultiShoot) then
 			begin

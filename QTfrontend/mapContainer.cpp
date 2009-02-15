@@ -41,6 +41,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 {
 	hhSmall.load(":/res/hh_small.png");
 	hhLimit = 18;
+    templateFilter = 0;
 	
 	mainLayout.setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
 		1,
@@ -198,7 +199,7 @@ void HWMapContainer::changeImage()
 	pMap = new HWMap();
 	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
 	connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-	pMap->getImage(m_seed.toStdString());
+	pMap->getImage(m_seed.toStdString(), templateFilter);
 }
 
 void HWMapContainer::themeSelected(int currentRow)
@@ -283,4 +284,9 @@ void HWMapContainer::setRandomTheme()
 	if(!Themes->size()) return;
 	quint32 themeNum = rand() % Themes->size();
 	lwThemes->setCurrentRow(themeNum);
+}
+
+void HWMapContainer::setTemplateFilter(int filter)
+{
+   templateFilter = filter;   
 }
