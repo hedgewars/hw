@@ -13,6 +13,7 @@ foreach(dir
 	HedgeFortress
 	Hedgelove
 	Hedgewars
+	Hogville
 	Hydrant
 	Lonely_Island
 	mushrooms
