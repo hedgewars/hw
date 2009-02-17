@@ -109,7 +109,7 @@ for i:= 0 to Steps - 1 do
 	Gear^.Y:= Gear^.Y + Gear^.dY
 	end;
 
-if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + 2048) else
+if hwRound(Gear^.X) < -cScreenWidth - 256 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
 if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 256)
 end;
 
@@ -298,7 +298,7 @@ procedure AddClouds;
 var i: LongInt;
 begin
 for i:= 0 to cCloudsNumber - 1 do
-    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + 2304) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
+    AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
 initialization

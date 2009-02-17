@@ -376,6 +376,9 @@ if MusicFN = '' then MusicFN:= s;
 
 ReadLn(f, cCloudsNumber);
 
+// TODO - adjust all the theme cloud numbers. This should not be a permanent fix
+cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
+
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
 	begin
