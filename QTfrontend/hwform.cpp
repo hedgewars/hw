@@ -537,7 +537,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(borderChanged(bool)), hwnet, SLOT(onBorderChanged(bool)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(newWeaponScheme(const QString &, const QString &)),
 			hwnet, SLOT(onWeaponsNameChanged(const QString &, const QString &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
+	connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
 
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
 	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
@@ -556,7 +556,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 	connect(hwnet, SIGNAL(ammoChanged(const QString&, const QString&)), ui.pageNetGame->pGameCFG, SLOT(setNetAmmo(const QString&, const QString&)));
-	connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setTemplateFilter(int)));
+	connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG->pMapContainer, SLOT(setTemplateFilter(int)));
 
 	hwnet->Connect(hostName, port, nick);
 }

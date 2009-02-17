@@ -581,7 +581,7 @@ void HWNewNet::ConfigAsked()
 			m_pGameCFGWidget->WeaponsName->currentIndex()
 			).toString();
 	onWeaponsNameChanged(name, ammo);
-	onTemplateFilterChanged(m_pGameCFGWidget->getTemplateFilter());
+	onTemplateFilterChanged(m_pGameCFGWidget->pMapContainer->getTemplateFilter());
 }
 
 void HWNewNet::RunGame()

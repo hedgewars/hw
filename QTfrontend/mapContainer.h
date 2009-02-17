@@ -22,6 +22,7 @@
 #include <QWidget>
 #include <QGridLayout>
 #include <QComboBox>
+#include <QLabel>
 
 #include "hwmap.h"
 
@@ -43,6 +44,7 @@ class HWMapContainer : public QWidget
   QString getCurrentMap() const;
   QString getCurrentTheme() const;
   int     getCurrentHHLimit() const;
+  quint32 getTemplateFilter() const;
 
  public slots:
   void changeImage();
@@ -55,6 +57,7 @@ class HWMapContainer : public QWidget
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
   void themeChanged(const QString & theme);
+  void newTemplateFilter(int filter);
 
 
  private slots:
@@ -65,6 +68,7 @@ class HWMapContainer : public QWidget
   void setRandomTheme();
   void themeSelected(int currentRow);
   void addInfoToPreview(QPixmap image);
+  void templateFilterChanged(int filter);
 
  protected:
   virtual void resizeEvent ( QResizeEvent * event );
@@ -80,6 +84,8 @@ class HWMapContainer : public QWidget
   int hhLimit;
   int templateFilter;
   QPixmap hhSmall;
+  QLabel* lblFilter;
+  QComboBox* CB_TemplateFilter;
 
   void loadMap(int index);
 };

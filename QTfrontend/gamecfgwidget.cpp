@@ -68,7 +68,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	GBoxOptionsLayout->addWidget(L_SuddenDeath, 6, 0);
 	GBoxOptionsLayout->addWidget(L_CaseProb, 7, 0);
 	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 8, 0);
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Generated Map Filter"), GBoxOptions), 9, 0);
 
 	SB_TurnTime = new QSpinBox(GBoxOptions);
 	SB_TurnTime->setRange(1, 99);
@@ -97,15 +96,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	WeaponsName = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(WeaponsName, 8, 1);
 
-	CB_TemplateFilter = new QComboBox(GBoxOptions);
-    CB_TemplateFilter->addItem(tr("All"), 0);
-    CB_TemplateFilter->addItem(tr("Small"), 1);
-    CB_TemplateFilter->addItem(tr("Medium"), 2);
-    CB_TemplateFilter->addItem(tr("Large"), 3);
-    CB_TemplateFilter->addItem(tr("Cavern"), 4);
-    CB_TemplateFilter->addItem(tr("Wacky"), 5);
-	GBoxOptionsLayout->addWidget(CB_TemplateFilter, 9, 1);
-
 	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
 	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
 	connect(SB_SuddenDeath, SIGNAL(valueChanged(int)), this, SIGNAL(suddenDeathTurnsChanged(int)));
@@ -115,8 +105,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
 	connect(CB_border, SIGNAL(toggled(bool)), this, SIGNAL(borderChanged(bool)));
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
-	connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
-	connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SIGNAL(mapChanged(const QString &)));
@@ -174,11 +162,6 @@ quint32 GameCFGWidget::getCaseProbability() const
 	return SB_CaseProb->value();
 }
 
-quint32 GameCFGWidget::getTemplateFilter() const
-{
-	return CB_TemplateFilter->itemData(CB_TemplateFilter->currentIndex()).toInt();
-}
-
 QStringList GameCFGWidget::getFullConfig() const
 {
 	QStringList sl;
@@ -187,7 +170,7 @@ QStringList GameCFGWidget::getFullConfig() const
 	sl.append(QString("e$turntime %1").arg(getTurnTime() * 1000));
 	sl.append(QString("e$sd_turns %1").arg(getSuddenDeathTurns()));
 	sl.append(QString("e$casefreq %1").arg(getCaseProbability()));
-	sl.append(QString("e$template_filter %1").arg(getTemplateFilter()));
+	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
 	QString currentMap = getCurrentMap();
 	if (currentMap.size() > 0)
@@ -264,17 +247,6 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 		WeaponsName->setItemData(pos, ammo);
 		WeaponsName->setCurrentIndex(pos);
 	}
-}
-
-void GameCFGWidget::setTemplateFilter(int filter)
-{
-	CB_TemplateFilter->setCurrentIndex(filter);
-}
-
-void GameCFGWidget::templateFilterChanged(int filter)
-{
-	pMapContainer->setTemplateFilter(filter);
-	emit newTemplateFilter(filter);
 }
 
 void GameCFGWidget::ammoChanged(int index)

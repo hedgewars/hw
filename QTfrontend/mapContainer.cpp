@@ -90,12 +90,26 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	QLabel * lblMap = new QLabel(tr("Map"), this);
 	mainLayout.addWidget(lblMap, 1, 0);
 
+	lblFilter = new QLabel(tr("Filter"), this);
+	mainLayout.addWidget(lblFilter, 2, 0);
+
+	CB_TemplateFilter = new QComboBox(this);
+    CB_TemplateFilter->addItem(tr("All"), 0);
+    CB_TemplateFilter->addItem(tr("Small"), 1);
+    CB_TemplateFilter->addItem(tr("Medium"), 2);
+    CB_TemplateFilter->addItem(tr("Large"), 3);
+    CB_TemplateFilter->addItem(tr("Cavern"), 4);
+    CB_TemplateFilter->addItem(tr("Wacky"), 5);
+	mainLayout.addWidget(CB_TemplateFilter, 2, 1);
+
+	connect(CB_TemplateFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(templateFilterChanged(int)));
+
 	gbThemes = new IconedGroupBox(this);
 	gbThemes->setTitleTextPadding(60);
 	gbThemes->setTitle(tr("Themes"));
 
 	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
-	mainLayout.addWidget(gbThemes, 0, 2, 2, 1);
+	mainLayout.addWidget(gbThemes, 0, 2, 3, 1);
 	
 	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
 	gbTLayout->setContentsMargins(0, 0, 0 ,0);
@@ -110,7 +124,21 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 		lwThemes->addItem(lwi);
 	}
 	connect(lwThemes, SIGNAL(currentRowChanged(int)), this, SLOT(themeSelected(int)));
-	
+
+    // override default style to tighten up theme scroller
+	lwThemes->setStyleSheet(QString(
+		"QListWidget{"
+			"border: solid;"
+			"border-width: 0px;"
+			"border-radius: 0px;"
+			"border-color: transparent;"
+			"background-color: #0d0544;"
+			"color: #ffcc00;"
+			"font: bold 14px;"
+			"}"
+		)
+	);
+ 
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
 	
@@ -151,12 +179,16 @@ void HWMapContainer::mapChanged(int index)
 	if(!index) {
 		changeImage();
 		gbThemes->show();
+        lblFilter->show();
+        CB_TemplateFilter->show();
 		emit mapChanged("+rnd+");
 		emit themeChanged(chooseMap->itemData(0).toString());
 	} else
 	{
 		loadMap(index);
 		gbThemes->hide();
+        lblFilter->hide();
+        CB_TemplateFilter->hide();
 		emit mapChanged(chooseMap->currentText());
 	}
 }
@@ -199,7 +231,7 @@ void HWMapContainer::changeImage()
 	pMap = new HWMap();
 	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
 	connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
-	pMap->getImage(m_seed.toStdString(), templateFilter);
+	pMap->getImage(m_seed.toStdString(), getTemplateFilter());
 }
 
 void HWMapContainer::themeSelected(int currentRow)
@@ -232,6 +264,11 @@ QString HWMapContainer::getCurrentTheme() const
 int HWMapContainer::getCurrentHHLimit() const
 {
 	return hhLimit;
+}
+
+quint32 HWMapContainer::getTemplateFilter() const
+{
+	return CB_TemplateFilter->itemData(CB_TemplateFilter->currentIndex()).toInt();
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
@@ -288,5 +325,12 @@ void HWMapContainer::setRandomTheme()
 
 void HWMapContainer::setTemplateFilter(int filter)
 {
-   templateFilter = filter;   
+	CB_TemplateFilter->setCurrentIndex(filter);
 }
+
+void HWMapContainer::templateFilterChanged(int filter)
+{
+    changeImage();
+	emit newTemplateFilter(filter);
+}
+
