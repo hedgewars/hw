@@ -76,6 +76,7 @@ else
 			with LandTextures[x, y] do
 				if shouldUpdate then
 					begin
+					shouldUpdate:= false;
 					glBindTexture(GL_TEXTURE_2D, tex^.id);
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, TEXSIZE, TEXSIZE, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x, y));
 					end
