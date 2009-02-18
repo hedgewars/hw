@@ -189,7 +189,7 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
 end;
 
 procedure DrawExplosion(X, Y, Radius: LongInt);
-var dx, dy, d: LongInt;
+var dx, dy, ty, tx, d: LongInt;
 begin
 FillRoundInLand(X, Y, Radius, 0);
 
@@ -225,9 +225,11 @@ FillRoundInLand(X, Y, Radius, 0);
      end;
   if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
 
-d:= max(Y - Radius - 1, 0);
-dy:= min(Y + Radius + 1, LAND_HEIGHT) - d;
-UpdateLandTexture(d, dy)
+tx:= max(X - Radius - 1, 0);
+dx:= min(X + Radius + 1, LAND_WIDTH) - tx;
+ty:= max(Y - Radius - 1, 0);
+dy:= min(Y + Radius + 1, LAND_HEIGHT) - ty;
+UpdateLandTexture(tx, dx, ty, dy)
 end;
 
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
@@ -258,7 +260,7 @@ for i:= 0 to Pred(Count) do
     end;
 
 
-UpdateLandTexture(0, LAND_HEIGHT)
+UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT)
 end;
 
 //
@@ -266,7 +268,7 @@ end;
 //
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
-    i, t, tx, ty, stY: Longint;
+    i, t, tx, ty, stY, ddy: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 stY:= hwRound(Y);
 
@@ -322,9 +324,9 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-t:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ty:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - t;
-UpdateLandTexture(t, ty)
+ty:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
+ddy:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - t;
+UpdateLandTexture(0, LAND_WIDTH, ty, ddy)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
@@ -388,9 +390,11 @@ case bpp of
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
 
+x:= max(cpX, leftX);
+w:= min(cpX + Image^.w, LAND_WIDTH) - x;
 y:= max(cpY, topY);
 h:= min(cpY + Image^.h, LAND_HEIGHT) - y;
-UpdateLandTexture(y, h)
+UpdateLandTexture(x, w, y, h)
 end;
 
 // was experimenting with applying as damage occurred.
@@ -450,7 +454,7 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	
 	if updatedRow then
 		begin
-		UpdateLandTexture(y * 32, 32);
+		UpdateLandTexture(x * 32, 32, y * 32, 32);
 		Result:= true
 		end
 	end;

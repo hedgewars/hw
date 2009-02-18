@@ -51,7 +51,8 @@ uses
 	uSHA in 'uSHA.pas',
 	uFloat in 'uFloat.pas',
 	uStats in 'uStats.pas',
-	uChat in 'uChat.pas';
+	uChat in 'uChat.pas',
+	uLandTexture;
 
 {$INCLUDE options.inc}
 
@@ -126,6 +127,7 @@ begin
 {$IFDEF DEBUGFILE}AddFileLog('Freeing resources...');{$ENDIF}
 if isSoundEnabled then ReleaseSound;
 StoreRelease;
+FreeLand;
 SendKB;
 CloseIPC;
 TTF_Quit;

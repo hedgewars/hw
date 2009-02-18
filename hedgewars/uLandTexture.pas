@@ -18,50 +18,87 @@
 
 unit uLandTexture;
 interface
-uses SDLh, uLandTemplates, uFloat, GL, uConsts;
+uses SDLh;
 
-procedure UpdateLandTexture(Y, Height: LongInt);
-procedure DrawLand (X, Y: LongInt);
+procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
+procedure DrawLand(dX, dY: LongInt);
+procedure FreeLand;
 
 implementation
-uses uMisc, uLand, uStore;
+uses uMisc, uLand, uStore, GL, uConsts;
 
-var LandTexture: PTexture = nil;
-    updTopY: LongInt = LAND_HEIGHT;
-    updBottomY: LongInt = 0;
+const TEXSIZE = 256;
+	LANDTEXARW = LAND_WIDTH div TEXSIZE;
+	LANDTEXARH = LAND_HEIGHT div TEXSIZE;
 
+var
+	LandTextures: array[0..LANDTEXARW - 1, 0..LANDTEXARH - 1] of
+			record
+			shouldUpdate: boolean;
+			tex: PTexture;
+			end;
 
-procedure UpdateLandTexture(Y, Height: LongInt);
+	tmpPixels: array [0..TEXSIZE - 1, 0..TEXSIZE - 1] of LongWord;
+
+function Pixels(x, y: Longword): Pointer;
+var ty: Longword;
 begin
-if (Height <= 0) then exit;
+for ty:= 0 to TEXSIZE - 1 do
+	Move(LandPixels[y * TEXSIZE + ty, x * TEXSIZE], tmpPixels[ty, 0], sizeof(Longword) * TEXSIZE);
+	
+Pixels:= @tmpPixels
+end;
 
+procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
+var tx, ty: Longword;
+begin
+TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
+TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
 TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
 TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
 
-if Y < updTopY then updTopY:= Y;
-if Y + Height > updBottomY then updBottomY:= Y + Height
+for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
+	for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
+		LandTextures[tx, ty].shouldUpdate:= true
 end;
 
 procedure RealLandTexUpdate;
+var x, y: LongWord;
 begin
-if updBottomY = 0 then exit;
-
-if LandTexture = nil then
-	LandTexture:= NewTexture(LAND_WIDTH, LAND_HEIGHT, @LandPixels)
+if LandTextures[0, 0].tex = nil then
+	for x:= 0 to LANDTEXARW -1 do
+		for y:= 0 to LANDTEXARH - 1 do
+			with LandTextures[x, y] do
+				tex:= NewTexture(TEXSIZE, TEXSIZE, Pixels(x, y))
 else
-	begin
-	glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, updTopY, LAND_WIDTH, updBottomY - updTopY, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[updTopY, 0]);
-	end;
-
-updTopY:= LAND_HEIGHT + 1;
-updBottomY:= 0
+	for x:= 0 to LANDTEXARW -1 do
+		for y:= 0 to LANDTEXARH - 1 do
+			with LandTextures[x, y] do
+				if shouldUpdate then
+					begin
+					glBindTexture(GL_TEXTURE_2D, tex^.id);
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, TEXSIZE, TEXSIZE, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x, y));
+					end
 end;
 
-procedure DrawLand(X, Y: LongInt);
+procedure DrawLand(dX, dY: LongInt);
+var x, y: LongInt;
 begin
 RealLandTexUpdate;
-DrawTexture(X, Y, LandTexture)
+
+for x:= 0 to LANDTEXARW -1 do
+	for y:= 0 to LANDTEXARH - 1 do
+		with LandTextures[x, y] do
+			DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
+end;
+
+procedure FreeLand;
+var x, y: LongInt;
+begin
+for x:= 0 to LANDTEXARW -1 do
+	for y:= 0 to LANDTEXARH - 1 do
+		with LandTextures[x, y] do
+			FreeTexture(tex)
 end;
 
 end.
