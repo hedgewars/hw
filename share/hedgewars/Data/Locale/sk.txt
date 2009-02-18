@@ -31,11 +31,11 @@
 00:28=Raketová vŕtačka
 00:29=Loptičkový guľomet
 00:30=Napalm
-00:31=RCPlane
+00:31=Bezpilotný bombardér
 
 01:00=Do boja!
 01:01=Remíza
-01:02=%1 vyhral!
+01:02=%1 vyhrali!
 01:03=Hlasitosť %1%
 01:04=Pauza
 01:05=Naozaj skončiť (Y/Esc)?

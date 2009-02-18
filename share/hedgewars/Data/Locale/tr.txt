@@ -1,0 +1,42 @@
+; Turkish locale
+
+00:00=El Bombası
+00:01=Parça Tesirli Bomba
+00:02=Bazuka
+00:03=UFO
+00:04=Pompalı Tüfek
+00:05=Kompresör
+00:06=Geç
+00:07=Halat
+00:08=Mayın
+00:09=Çöl Kartalı
+00:10=Dinamit
+00:11=Beyzbol Sopası
+00:12=Alev Yumruğu
+00:13=san
+00:14=Paraşüt
+00:15=Hava Saldırısı
+00:16=Mayın Saldırısı
+00:17=Kaynak Makinesi
+00:18=İnşaat
+00:19=Işınlama
+00:20=Kirpi Değiştir
+00:21=Havan Topu
+00:22=Kamçı
+00:23=İntihar Saldırısı
+00:24=Pasta
+00:25=Baştan Çıkartma
+00:26=Karpuz Bombası
+00:27=Şeytani El Bombası
+00:28=Matkaplı Roket
+00:29=Top Silahı
+00:30=Napalm
+00:31=Uzaktan Kumandalı Uçak
+
+01:00=Savaş başlasın!
+01:01=Beraberlik
+01:02=%1 kazandı!
+01:03=Bölüm %1%
+01:04=Duraklatıldı
+01:05=Çıkılsın mı (Y/Esc)?
+01:06=Ani ölüm!

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="fi">
+<!DOCTYPE TS><TS version="1.1" language="tr_TR">
 <context>
     <name>FreqSpinBox</name>
     <message>
@@ -23,12 +23,12 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="240"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="240"/>
         <source>Illegal ammo scheme</source>
-        <translation>Virheellinen ammussuunnitelma</translation>
+        <translation>Uygunsuz cephane düzeni</translation>
     </message>
 </context>
 <context>
@@ -36,32 +36,32 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="229"/>
         <source>new</source>
-        <translation>uusi</translation>
+        <translation>yeni</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="587"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="422"/>
         <source>Please, select record from the list above</source>
-        <translation>Ole hyvä ja valitse nauhoite ylläolevasta listasta</translation>
+        <translation>Lütfen üstteki listeden kaydı seçin</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="423"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Tamam</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="588"/>
         <source>Unable to start the server</source>
-        <translation>Palvelimen käynnistys ei onnistunut</translation>
+        <translation>Sunucu başlatılamadı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="742"/>
         <source>Cannot save record to file %1</source>
-        <translation>Nauhoitetta ei voitu tallentaa tiedostoon %1</translation>
+        <translation>Kayıt %1 dosyasına yazılamadı</translation>
     </message>
 </context>
 <context>
@@ -69,17 +69,17 @@
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="141"/>
         <source>Error reading training config file</source>
-        <translation>Virhe luettaessa harjoituksen asetustiedostoa</translation>
+        <translation>Eğitim ayar dosyasını okuma hatası</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="274"/>
         <source>en.txt</source>
-        <translation>fi.txt</translation>
+        <translation>tr.txt</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="298"/>
         <source>Cannot open demofile %1</source>
-        <translation>Demotiedostoa %1 ei pystytty avaamaan</translation>
+        <translation>Gösteri dosyası açılamadı %1</translation>
     </message>
 </context>
 <context>
@@ -87,12 +87,12 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="90"/>
         <source>Map</source>
-        <translation>Kartta</translation>
+        <translation>Harita</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/mapContainer.cpp" line="81"/>
-        <source>Teemat</source>
-        <translation type="obsolete">Themes</translation>
+        <location filename="../../../../QTfrontend/mapContainer.cpp" line="109"/>
+        <source>Themes</source>
+        <translation>Temalar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="93"/>
@@ -129,18 +129,13 @@
         <source>Wacky</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../../../../QTfrontend/mapContainer.cpp" line="109"/>
-        <source>Themes</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
     <message>
         <location filename="../../../../QTfrontend/netserverslist.cpp" line="45"/>
         <source>Title</source>
-        <translation>Otsikko</translation>
+        <translation>Başlık</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/netserverslist.cpp" line="46"/>
@@ -150,7 +145,7 @@
     <message>
         <location filename="../../../../QTfrontend/netserverslist.cpp" line="47"/>
         <source>Port</source>
-        <translation>Portti</translation>
+        <translation>Port</translation>
     </message>
 </context>
 <context>
@@ -158,42 +153,42 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="187"/>
         <source>Error</source>
-        <translation type="obsolete">Virhe</translation>
+        <translation type="obsolete">Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="184"/>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>Palvelinta ei löydetty. Ole hyvä ja tarkista palvelimen nimi ja porttiasetukset.</translation>
+        <translation>Kurucu bilgisayar bulunamadı. Lütfen bilgisayar adı ve portu ayarlarınızı kontrol edin.</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="187"/>
         <source>Connection refused</source>
-        <translation>Yhteys hylätty</translation>
+        <translation>Bağlantı reddedildi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="344"/>
         <source>Room destroyed</source>
-        <translation>Huone tuhottiin</translation>
+        <translation>Oda kapatıldı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="381"/>
         <source>*** %1 joined</source>
-        <translation>*** %1 liittyi</translation>
+        <translation>*** %1 katıldı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="418"/>
         <source>*** %1 left</source>
-        <translation>*** %1 poistui</translation>
+        <translation>*** %1 gitti</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="420"/>
         <source>*** %1 left (%2)</source>
-        <translation>*** %1 poistui (%2)</translation>
+        <translation>*** %1 gitti (%2)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="554"/>
         <source>Quit reason: </source>
-        <translation>Poistumisssyy: </translation>
+        <translation>Çıkma sebebi:</translation>
     </message>
 </context>
 <context>
@@ -201,7 +196,7 @@
     <message>
         <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf palautti virheen mallintaessaan tekstiä, todennäköisesti syy on freetype2:n ohjelmavirheessä. Freetype-kirjaston päivitys on suosiltetavaa.</translation>
+        <translation>SDL_ttf yazıyı yorumlarken hata verdi. Bu büyük ihtimalle freetype2&apos;deki bir hatadan kaynaklanıyor. Freetype kurulumunuzu güncellemenizi öneririz.</translation>
     </message>
 </context>
 <context>
@@ -209,12 +204,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="102"/>
         <source>General</source>
-        <translation>Yleiset</translation>
+        <translation>Genel</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="103"/>
         <source>Advanced</source>
-        <translation>Lisäasetukset</translation>
+        <translation>Gelişmiş</translation>
     </message>
 </context>
 <context>
@@ -222,22 +217,22 @@
     <message>
         <location filename="../../../../QTfrontend/statsPage.cpp" line="102"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Paras laukaus -mitalin voitti &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; pisteellä&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;En iyi atış ödülünü &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt; kazandı.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="109"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Paras tappaja oli &lt;b&gt;%1&lt;/b&gt; yhdellä (&lt;b&gt;%2&lt;/b&gt;) tapolla vuorossa.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Paras tappaja oli &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; tapolla vuorossa.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="116"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Yhteensä &lt;b&gt;%1&lt;/b&gt; siili tapettiin tässä erässä.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Yhteensä &lt;b&gt;%1&lt;/b&gt; siiliä tapettiin tässä erässä.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -246,12 +241,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="77"/>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Paikallinen peli (Pelaa yhdellä tietokoneella)</translation>
+        <translation>Yerel Oyun (Tek bilgisayarda oyna)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="81"/>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Verkkopeli (Pelaa verkon yli)</translation>
+        <translation>Ağ Oyunu (Bir bilgisayar ağı üzerinde oyna)</translation>
     </message>
 </context>
 <context>
@@ -259,7 +254,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="294"/>
         <source>Start</source>
-        <translation>Aloita</translation>
+        <translation>Başla</translation>
     </message>
 </context>
 <context>
@@ -267,12 +262,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="505"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="505"/>
         <source>Please, select server from the list above</source>
-        <translation>Ole hyvä, ja valitse palvelin ylläolevasta listasta</translation>
+        <translation>Lütfen üstteki listeden bir sunucu seçin</translation>
     </message>
 </context>
 <context>
@@ -280,7 +275,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="613"/>
         <source>Control</source>
-        <translation>Ohjaus</translation>
+        <translation>Kontrol</translation>
     </message>
 </context>
 <context>
@@ -288,22 +283,22 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="329"/>
         <source>New team</source>
-        <translation>Uusi joukkue</translation>
+        <translation>Yeni takım</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="330"/>
         <source>Edit team</source>
-        <translation>Muokkaa joukkuetta</translation>
+        <translation>Takımı düzenle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="357"/>
         <source>Weapons set</source>
-        <translation>Uusi asesetti</translation>
+        <translation>Silah Seti</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="360"/>
         <source>Edit</source>
-        <translation>Muokkaa</translation>
+        <translation>Düzenle</translation>
     </message>
 </context>
 <context>
@@ -311,37 +306,37 @@
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
-        <translation>Ole hyvä ja valitse nauhoite listasta</translation>
+        <translation>Lütfen listeden kaydı seçin</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Tamam</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="113"/>
         <source>Rename dialog</source>
-        <translation>Uudelleennimeämis-dialogi</translation>
+        <translation>Yeniden adlandırma</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="113"/>
         <source>Enter new file name:</source>
-        <translation>Syötä uusi tiedostonimi:</translation>
+        <translation>Yeni dosya adını girin:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
         <source>Cannot rename to</source>
-        <translation>Ei voida uudelleennimetä</translation>
+        <translation>Adlandırılamıyor</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Cannot delete file</source>
-        <translation>Ei voida poistaa tiedostoa</translation>
+        <translation>Dosya silinemiyor</translation>
     </message>
 </context>
 <context>
@@ -349,37 +344,37 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="753"/>
         <source>Create</source>
-        <translation>Luo</translation>
+        <translation>Oluştur</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="754"/>
         <source>Join</source>
-        <translation>Liity</translation>
+        <translation>Katıl</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="755"/>
         <source>Refresh</source>
-        <translation>Päivitä</translation>
+        <translation>Tazele</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="805"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="795"/>
         <source>Please, enter room name</source>
-        <translation>Ole hyvä ja syötä huoneen nimi</translation>
+        <translation>Lütfen oda ismini girin</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="807"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Tamam</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="806"/>
         <source>Please, select room from the list</source>
-        <translation>Ole hyvä, ja valitse huone listalta</translation>
+        <translation>Lütfen listeden bir oda seçin</translation>
     </message>
 </context>
 <context>
@@ -387,12 +382,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="717"/>
         <source>Default</source>
-        <translation>Oletus</translation>
+        <translation>Öntanımlı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
         <source>Delete</source>
-        <translation>Poista</translation>
+        <translation>Sil</translation>
     </message>
 </context>
 <context>
@@ -400,27 +395,27 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="672"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Yksinkertainen peli (pikapeli tietokonetta vastaan, asetukset valitaan puolestasi)</translation>
+        <translation>Basit Oyun (bilgisayara karşı oynayın, ayarlar sizin yerinize seçilir)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="675"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation>Moninpeli (pelaa samalla koneella kavereitasi tai tekoälyä vastaan)</translation>
+        <translation>Çok oyunculu (arkadaşlarınızın veya bilgisayarın takımlarına karşı oynayın)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="680"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation>Harjoittelu (Harjoita taitojasi harjoitustasoissa). KEHITYKSEN ALLA</translation>
+        <translation> Talim Modu (Bir takım talimlere katılarak kirpilerinizi eğitin). YAPIM AŞAMASINDA</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="686"/>
         <source>Demos (Watch recorded demos)</source>
-        <translation>Demot (Katso nauhoitettuja demoja)</translation>
+        <translation>Kayıtlı Oyunlar (Kaydedilmiş oyunları izleyin)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="689"/>
         <source>Load (Load a previously saved game)</source>
-        <translation>Lataa (Lataa aikaisemmin tallennettu peli)</translation>
+        <translation>Yükle (Kaydedilmiş bir oyunu yükleyin)</translation>
     </message>
 </context>
 <context>
@@ -428,27 +423,27 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="60"/>
         <source>Kick</source>
-        <translation>Potki</translation>
+        <translation>Kov</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Info</source>
-        <translation>Tietoja</translation>
+        <translation>Bilgi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="615"/>
         <source>Start</source>
-        <translation>Aloita</translation>
+        <translation>Başla</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="616"/>
         <source>Restrict Joins</source>
-        <translation>Rajoita liittymisiä</translation>
+        <translation>Katılmaları Kısıtla</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="618"/>
         <source>Restrict Team Additions</source>
-        <translation>Rajoita joukkuelisäyksiä</translation>
+        <translation>Takım Eklemeleri Kısıtla</translation>
     </message>
 </context>
 <context>
@@ -456,52 +451,52 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="47"/>
         <source>Forts mode</source>
-        <translation>Linnakemoodi</translation>
+        <translation>Kaleler modu</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="51"/>
         <source>Divide teams</source>
-        <translation>Jaa joukkueet</translation>
+        <translation>Takımları böl</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="55"/>
         <source>Solid land</source>
-        <translation>Tuhoutumaton maa</translation>
+        <translation>Parçalanmaz yüzey</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="387"/>
         <source>Fullscreen</source>
-        <translation>Koko ruutu</translation>
+        <translation>Tam ekran</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="391"/>
         <source>Frontend fullscreen</source>
-        <translation>Koko ruutu käyttöliittymälle</translation>
+        <translation>Oyun girişi tam ekran</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="395"/>
         <source>Enable sound</source>
-        <translation>Äänet päälle</translation>
+        <translation>Sesleri etkinleştir</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="399"/>
         <source>Enable music</source>
-        <translation>Musiikki päälle</translation>
+        <translation>Müziği etkinleştir</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="414"/>
         <source>Show FPS</source>
-        <translation>Näytä FPS</translation>
+        <translation>FPS&apos;yi göster</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="418"/>
         <source>Alternative damage show</source>
-        <translation>Vaihtoehtoinen vahingon näyttäminen</translation>
+        <translation>Alternatif hasar göstergesi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="422"/>
         <source>Append date and time to record file name</source>
-        <translation>Lisää päivämäärä ja aika nauhoitusten tiedostonimeen</translation>
+        <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="59"/>
@@ -514,17 +509,17 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="62"/>
         <source>generated map...</source>
-        <translation>generoitu kartta...</translation>
+        <translation>rastgele harita...</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="156"/>
         <source>Human</source>
-        <translation>Ihminen</translation>
+        <translation>İnsan</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="160"/>
         <source>Level</source>
-        <translation>Taso</translation>
+        <translation>Bilgisayar</translation>
     </message>
 </context>
 <context>
@@ -532,52 +527,47 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="122"/>
         <source>Team Members</source>
-        <translation>Joukkueen jäsenet</translation>
+        <translation>Takım Üyeleri</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="146"/>
         <source>Team</source>
-        <translation>Joukkue</translation>
+        <translation>Takım</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="187"/>
         <source>Fort</source>
-        <translation>Linnake</translation>
+        <translation>Kale</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="221"/>
         <source>Key binds</source>
-        <translation>Näppäinasettelut</translation>
+        <translation>Tuşlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="320"/>
         <source>Teams</source>
-        <translation>Joukkueet</translation>
+        <translation>Takımlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="354"/>
         <source>Weapons</source>
-        <translation>Aseet</translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="367"/>
-        <source>&#xc4;&#xe4;ni/Grafiikka-asetukset</source>
-        <translation type="obsolete">Audio/Graphic options</translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="453"/>
-        <source>Net game</source>
-        <translation>Verkkopeli</translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/teamselect.cpp" line="228"/>
-        <source>Playing teams</source>
-        <translation>Pelaavat joukkueet</translation>
+        <translation>Silahlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="368"/>
         <source>Audio/Graphic options</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses/Görüntü seçenekleri</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="453"/>
+        <source>Net game</source>
+        <translation>Ağ oyunu</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/teamselect.cpp" line="228"/>
+        <source>Playing teams</source>
+        <translation>Oynayan takımlar</translation>
     </message>
 </context>
 <context>
@@ -585,87 +575,87 @@
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="39"/>
         <source>Version</source>
-        <translation>Versio</translation>
+        <translation>Sürüm</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="42"/>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Tätä ohjelmaa levitetään GNU General Public Licence-lisensisn alla</translation>
+        <translation>Bu program GNU Genel Kamu Lisansı&apos;yla dağıtılmaktadır</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="52"/>
         <source>Developers:</source>
-        <translation>Kehittäjät:</translation>
+        <translation>Geliştiriciler:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="58"/>
         <source>Art:</source>
-        <translation>Taide:</translation>
+        <translation>Sanat:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="70"/>
         <source>Sounds:</source>
-        <translation>Äänet:</translation>
+        <translation>Sesler:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="78"/>
         <source>Translations:</source>
-        <translation>Käännökset:</translation>
+        <translation>Çeviriler:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/about.cpp" line="98"/>
         <source>Special thanks:</source>
-        <translation>Erikoiskiitokset:</translation>
+        <translation>Özel teşekkür:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="62"/>
         <source>Turn time</source>
-        <translation>Vuoron aikaraja</translation>
+        <translation>Tur süresi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="63"/>
         <source>Initial health</source>
-        <translation>Aloitusterveys</translation>
+        <translation>Başlangıç sağlığı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="70"/>
         <source>Weapons</source>
-        <translation>Aseet</translation>
+        <translation>Silahlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/input_ip.cpp" line="32"/>
         <source>Host:</source>
-        <translation>Palvelin:</translation>
+        <translation>Bilgisayar adı:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/input_ip.cpp" line="36"/>
         <source>Port:</source>
-        <translation>Portti:</translation>
+        <translation>Port:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="338"/>
         <source>Net nick</source>
-        <translation>Verkkopeli-nimimerkki</translation>
+        <translation>Takma ad</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="373"/>
         <source>Resolution</source>
-        <translation>Resoluutio</translation>
+        <translation>Çözünürlük</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="382"/>
         <source>FPS limit</source>
-        <translation>FPS-raja</translation>
+        <translation>FPS sınırı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="549"/>
         <source>Server name:</source>
-        <translation>Palvelimen nimi:</translation>
+        <translation>Sunucu adı:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="556"/>
         <source>Server port:</source>
-        <translation>Palvelimen portti:</translation>
+        <translation>Sunucu portu:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="64"/>
@@ -688,7 +678,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="343"/>
         <source>unnamed</source>
-        <translation>nimetön</translation>
+        <translation>isimsiz</translation>
     </message>
 </context>
 <context>
@@ -704,46 +694,46 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="633"/>
         <source>Network</source>
-        <translation>Verkko</translation>
+        <translation>Ağ</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="634"/>
         <source>Connection to server is lost</source>
-        <translation>Yhteys palvelimeen katosi</translation>
+        <translation>Sunucuyla olan bağlantı kesildi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="315"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="318"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
-        <translation>Data-hakemiston avaus epäonnistui:
+        <translation>Veri dizini açılamadı:
  %1
-Ole hyvä ja tarkista asennuksesi</translation>
+Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Weapons</source>
-        <translation>Aseet</translation>
+        <translation>Silahlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
         <source>Can not edit default weapon set</source>
-        <translation>Oletus-asesettiä ei voi muokata</translation>
+        <translation>Öntanımlı silah seti düzenlenemez</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
         <source>Can not delete default weapon set</source>
-        <translation>Oletus-asesettiä ei voi poistaa</translation>
+        <translation>Öntanımlı silah seti silinemez</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
         <source>Really delete this weapon set?</source>
-        <translation>Haluatko todella poistaa tämän asesetin?</translation>
+        <translation>Bu silah seti silinsin mi?</translation>
     </message>
 </context>
 <context>
@@ -751,17 +741,17 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="35"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="36"/>
         <source>Cannot create directory %1</source>
-        <translation>Hakemiston %1 luonti epäonnistui</translation>
+        <translation>%1 dizini oluşturulamadı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="37"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Tamam</translation>
     </message>
 </context>
 <context>
@@ -769,82 +759,82 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="565"/>
         <source>default</source>
-        <translation>oletus</translation>
+        <translation>öntanımlı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/input_ip.cpp" line="52"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>Tamam</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/input_ip.cpp" line="57"/>
         <source>Cancel</source>
-        <translation>Peruuta</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="446"/>
         <source>Start server</source>
-        <translation>Käynnistä palvelin</translation>
+        <translation>Sunucu başlat</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="462"/>
         <source>Connect</source>
-        <translation>Yhdistä</translation>
+        <translation>Bağlan</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="471"/>
         <source>Update</source>
-        <translation>Päivitä</translation>
+        <translation>Güncelle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="476"/>
         <source>Specify</source>
-        <translation>Määritä</translation>
+        <translation>Elle Belirt</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="481"/>
         <source>Join official server</source>
-        <translation>Liity viralliselle palvelimelle</translation>
+        <translation>Resmi sunucuya bağlan</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="529"/>
         <source>Start</source>
-        <translation>Käynnistä</translation>
+        <translation>Başla</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="702"/>
         <source>Go!</source>
-        <translation>Aloita!</translation>
+        <translation>Hadi!</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
-        <translation>Toista nauhoite</translation>
+        <translation>Kayıtlı oyunu oynat</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="48"/>
         <source>Rename</source>
-        <translation>Nimeä uudelleen</translation>
+        <translation>Yeniden adlandır</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="52"/>
         <source>Delete</source>
-        <translation>Poista</translation>
+        <translation>Sil</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="80"/>
         <source>Load</source>
-        <translation>Lataa</translation>
+        <translation>Yükle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/teamselect.cpp" line="237"/>
         <source>Setup</source>
-        <translation>Asetukset</translation>
+        <translation>Ayarla</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="605"/>
         <source>Ready</source>
-        <translation>Valmis</translation>
+        <translation>Hazır</translation>
     </message>
 </context>
 <context>
@@ -852,17 +842,17 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
         <source>Room name</source>
-        <translation>Huoneen nimi</translation>
+        <translation>Oda ismi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="770"/>
         <source>Players number</source>
-        <translation>Pelaajien määrä</translation>
+        <translation>Oyuncu sayısı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="772"/>
         <source>Round in progress</source>
-        <translation>Erä kesken</translation>
+        <translation>Oyun başlamış</translation>
     </message>
 </context>
 <context>
@@ -870,22 +860,22 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="227"/>
         <source>Actions</source>
-        <translation>Toiminnat</translation>
+        <translation>Eylemler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="229"/>
         <source>Weapons</source>
-        <translation>Aseet</translation>
+        <translation>Silahlar</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="231"/>
         <source>Weapon properties</source>
-        <translation>Ase-ominaisuudet</translation>
+        <translation>Silah özellikleri</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="233"/>
         <source>Other</source>
-        <translation>Muu</translation>
+        <translation>Diğer</translation>
     </message>
 </context>
 <context>
@@ -893,17 +883,17 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
-        <translation>Virhe</translation>
+        <translation>Hata</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
         <source>Unable to start the server: %1.</source>
-        <translation>Palvelinta ei pystytty käynnistämään: %1.</translation>
+        <translation>Sunucu başlatılamadı: %1.</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
         <source>Unable to run engine: %1 (</source>
-        <translation>Pelimoottorin ajo epäonnistui: %1 (</translation>
+        <translation>Oyun motoru çalıştırılamadı: %1 (</translation>
     </message>
 </context>
 <context>
@@ -911,179 +901,179 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="23"/>
         <source>up</source>
-        <translation>ylös</translation>
+        <translation>yukarı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="24"/>
         <source>left</source>
-        <translation>vasen</translation>
+        <translation>sol</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="25"/>
         <source>right</source>
-        <translation>oikea</translation>
+        <translation>sağ</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="26"/>
         <source>down</source>
-        <translation>alas</translation>
+        <translation>aşağı</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
-        <translation>hyppy</translation>
+        <translation>zıpla</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="29"/>
         <source>attack</source>
-        <translation>hyökkäys</translation>
+        <translation>saldır</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="30"/>
         <source>precise aim</source>
-        <translation>tarkka tähtäys</translation>
+        <translation>hassas nişan alma</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="31"/>
         <source>put</source>
-        <translation>laita</translation>
+        <translation>koy</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="32"/>
         <source>switch</source>
-        <translation>vaihto</translation>
+        <translation>değiştir</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="33"/>
         <source>find hedgehog</source>
-        <translation>etsi siili</translation>
+        <translation>kirpi bul</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="34"/>
         <source>ammo menu</source>
-        <translation>asevalikko</translation>
+        <translation>cephane menüsü</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="35"/>
         <source>slot 1</source>
-        <translation>Paikka 1</translation>
+        <translation>slot 1</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="36"/>
         <source>slot 2</source>
-        <translation>Paikka 2</translation>
+        <translation>slot 2</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="37"/>
         <source>slot 3</source>
-        <translation>Paikka 3</translation>
+        <translation>slot 3</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="38"/>
         <source>slot 4</source>
-        <translation>Paikka 4</translation>
+        <translation>slot 4</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="39"/>
         <source>slot 5</source>
-        <translation>Paikka 5</translation>
+        <translation>slot 5</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="40"/>
         <source>slot 6</source>
-        <translation>Paikka 6</translation>
+        <translation>slot 6</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="41"/>
         <source>slot 7</source>
-        <translation>Paikka 7</translation>
+        <translation>slot 7</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="42"/>
         <source>slot 8</source>
-        <translation>Paikka 8</translation>
+        <translation>slot 8</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="43"/>
         <source>slot 9</source>
-        <translation>Paikka 9</translation>
+        <translation>slot 9</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="44"/>
         <source>timer 1 sec</source>
-        <translation>ajasta 1 sek</translation>
+        <translation>zamanlayıcı 1 san</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="45"/>
         <source>timer 2 sec</source>
-        <translation>ajasta 2 sek</translation>
+        <translation>zamanlayıcı 2 san</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="46"/>
         <source>timer 3 sec</source>
-        <translation>ajasta 3 sek</translation>
+        <translation>zamanlayıcı 3 san</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="47"/>
         <source>timer 4 sec</source>
-        <translation>ajasta 4 sek</translation>
+        <translation>zamanlayıcı 4 san</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="48"/>
         <source>timer 5 sec</source>
-        <translation>ajasta 5 sek</translation>
+        <translation>zamanlayıcı 5 san</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat</source>
-        <translation>keskustelu</translation>
+        <translation>sohbet</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="50"/>
         <source>chat history</source>
-        <translation>keskusteluhistoria</translation>
+        <translation>sohbet geçmişi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="51"/>
         <source>pause</source>
-        <translation>tauko</translation>
+        <translation>duraklat</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
         <source>confirmation</source>
-        <translation>varmistus</translation>
+        <translation>doğrulama</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="53"/>
         <source>volume down</source>
-        <translation>vähennä äänenvoimakkutta</translation>
+        <translation>sesi kıs</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="54"/>
         <source>volume up</source>
-        <translation>lisää äänenvoimakkutta</translation>
+        <translation>sesi aç</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="55"/>
         <source>change mode</source>
-        <translation>vaihda tilaa</translation>
+        <translation>modu değiştir</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
         <source>capture</source>
-        <translation>kaappaa</translation>
+        <translation>yakala</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
         <source>hedgehogs
 info</source>
-        <translation>siilien
-tiedot</translation>
+        <translation>kirpi
+bilgileri</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="58"/>
         <source>quit</source>
-        <translation>poistu</translation>
+        <translation>çıkış</translation>
     </message>
 </context>
 <context>
@@ -1091,62 +1081,62 @@ tiedot</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="53"/>
         <source>Hedgehogs</source>
-        <translation>Siilet</translation>
+        <translation>Kirpiler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="54"/>
         <source>hedgehog 1</source>
-        <translation>Siili 1</translation>
+        <translation>kirpi 1</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="55"/>
         <source>hedgehog 2</source>
-        <translation>Siili 2</translation>
+        <translation>kirpi 2</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="56"/>
         <source>hedgehog 3</source>
-        <translation>Siili 3</translation>
+        <translation>kirpi 3</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="57"/>
         <source>hedgehog 4</source>
-        <translation>Siili 4</translation>
+        <translation>kirpi 4</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="58"/>
         <source>hedgehog 5</source>
-        <translation>Siili 5</translation>
+        <translation>kirpi 5</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="59"/>
         <source>hedgehog 6</source>
-        <translation>Siili 6</translation>
+        <translation>kirpi 6</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="60"/>
         <source>hedgehog 7</source>
-        <translation>Siili 7</translation>
+        <translation>kirpi 7</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="61"/>
         <source>hedgehog 8</source>
-        <translation>Siili 8</translation>
+        <translation>kirpi 8</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="73"/>
         <source>Goddess</source>
-        <translation>Jumalatar</translation>
+        <translation>Tanrıça</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="74"/>
         <source>Isis</source>
-        <translation>Isis</translation>
+        <translation>İsis</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="75"/>
         <source>Astarte</source>
-        <translation>Astarte</translation>
+        <translation>Kibele</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="76"/>
@@ -1156,12 +1146,12 @@ tiedot</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="77"/>
         <source>Aphrodite</source>
-        <translation>Afrodite</translation>
+        <translation>Afrodit</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="78"/>
         <source>Hecate</source>
-        <translation>Hecate</translation>
+        <translation>Hekat</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="79"/>
@@ -1176,32 +1166,32 @@ tiedot</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="81"/>
         <source>Inanna</source>
-        <translation>Inanna</translation>
+        <translation>İnanna</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="93"/>
         <source>Fruits</source>
-        <translation>Hedelmät</translation>
+        <translation>Meyveler</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="94"/>
         <source>Banana</source>
-        <translation>Banaani</translation>
+        <translation>Muz</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="95"/>
         <source>Apple</source>
-        <translation>Omena</translation>
+        <translation>Elma</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="96"/>
         <source>Orange</source>
-        <translation>Appelsiini</translation>
+        <translation>Portakal</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="97"/>
         <source>Lemon</source>
-        <translation>Sitruuna</translation>
+        <translation>Limon</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="98"/>
@@ -1216,12 +1206,12 @@ tiedot</translation>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="100"/>
         <source>Peach</source>
-        <translation>Persikka</translation>
+        <translation>Şeftali</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/predefteams.h" line="101"/>
         <source>Plum</source>
-        <translation>Luumu</translation>
+        <translation>Erik</translation>
     </message>
 </context>
 </TS>

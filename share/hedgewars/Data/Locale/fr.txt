@@ -3,7 +3,7 @@
 00:00=Grenade
 00:01=Grenade à fragments
 00:02=Bazooka
-00:03=OVNI
+00:03=O.V.N.I.
 00:04=Fusil
 00:05=Marteau Piqueur
 00:06=Passer
@@ -31,7 +31,7 @@
 00:28=Roquette perforante
 00:29=Ballgun
 00:30=Napalm
-00:31=RCPlane
+00:31=Avion télécommandé
 
 01:00=C'est parti!
 01:01=Round ex aequo
