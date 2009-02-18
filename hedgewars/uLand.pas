@@ -26,7 +26,6 @@ type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Lon
 
 var  Land: TLandArray;
      LandPixels: TLandArray;
-     LandTexture: PTexture = nil;
      LandDirty: TDirtyTag;
      hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
      hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands don't need? It might be better to tweak the girder code based upon space above.  dunno.
@@ -37,19 +36,14 @@ var  Land: TLandArray;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
-procedure UpdateLandTexture(Y, Height: LongInt);
-procedure DrawLand (X, Y: LongInt);
 
 implementation
-uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos;
+uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;
 
 type TPixAr = record
               Count: Longword;
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
-
-var updTopY: LongInt = LAND_HEIGHT;
-    updBottomY: LongInt = 0;
 
 procedure LogLandDigest;
 var ctx: TSHA1Context;
@@ -788,39 +782,6 @@ for y:= 0 to 127 do
             end
         end;
 GenPreview:= Preview
-end;
-
-procedure UpdateLandTexture(Y, Height: LongInt);
-begin
-if (Height <= 0) then exit;
-
-TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
-TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
-
-if Y < updTopY then updTopY:= Y;
-if Y + Height > updBottomY then updBottomY:= Y + Height
-end;
-
-procedure RealLandTexUpdate;
-begin
-if updBottomY = 0 then exit;
-
-if LandTexture = nil then
-	LandTexture:= NewTexture(LAND_WIDTH, LAND_HEIGHT, @LandPixels)
-else
-	begin
-	glBindTexture(GL_TEXTURE_2D, LandTexture^.id);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, updTopY, LAND_WIDTH, updBottomY - updTopY, GL_RGBA, GL_UNSIGNED_BYTE, @LandPixels[updTopY, 0]);
-	end;
-
-updTopY:= LAND_HEIGHT + 1;
-updBottomY:= 0
-end;
-
-procedure DrawLand(X, Y: LongInt);
-begin
-RealLandTexUpdate;
-DrawTexture(X, Y, LandTexture)
 end;
 
 initialization

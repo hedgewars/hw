@@ -25,6 +25,7 @@ set(engine_sources
 	uLandGraphics.pas
 	uLandObjects.pas
 	uLandTemplates.pas
+	uLandTexture.pas
 	uLocale.pas
 	uMisc.pas
 	uRandom.pas

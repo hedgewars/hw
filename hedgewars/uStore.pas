@@ -567,8 +567,7 @@ for ii:= Low(TSprite) to High(TSprite) do
     if SpritesData[ii].Surface <> nil then SDL_FreeSurface(SpritesData[ii].Surface)
     end;
 
-FreeTexture(HHTexture);
-FreeTexture(LandTexture)
+FreeTexture(HHTexture)
 end;
 
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;

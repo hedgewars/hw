@@ -40,7 +40,7 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
-     uAmmos, uVisualGears, uChat, uLand;
+     uAmmos, uVisualGears, uChat, uLandTexture;
      
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
