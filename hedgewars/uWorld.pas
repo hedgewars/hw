@@ -191,8 +191,6 @@ glEnable(GL_TEXTURE_2D);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
 
-RealLandTexUpdate;
-
 if not isPaused then MoveCamera;
 
 // background

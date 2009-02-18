@@ -38,7 +38,7 @@ procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
 procedure UpdateLandTexture(Y, Height: LongInt);
-procedure RealLandTexUpdate;
+procedure DrawLand (X, Y: LongInt);
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos;
@@ -817,6 +817,11 @@ updTopY:= LAND_HEIGHT + 1;
 updBottomY:= 0
 end;
 
+procedure DrawLand(X, Y: LongInt);
+begin
+RealLandTexUpdate;
+DrawTexture(X, Y, LandTexture)
+end;
 
 initialization
 
