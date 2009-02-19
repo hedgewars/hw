@@ -268,9 +268,10 @@ end;
 //
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 var nx, ny, dX8, dY8: hwFloat;
-    i, t, tx, ty, stY, ddy: Longint;
+    i, t, tx, ty, stX, stY, ddy, ddx: Longint;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
 stY:= hwRound(Y);
+stX:= hwRound(X);
 
 nx:= X + dY * (HalfWidth + 8);
 ny:= Y - dX * (HalfWidth + 8);
@@ -324,9 +325,12 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
+tx:= max(stX - HalfWidth * 2 - 4 - abs(hwRound(dX * ticks)), 0);
 ty:= max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ddy:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - t;
-UpdateLandTexture(0, LAND_WIDTH, ty, ddy)
+ddx:= min(stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks)), LAND_WIDTH) - tx;
+ddy:= min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
+
+UpdateLandTexture(tx, ddx, ty, ddy)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
@@ -427,36 +431,29 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy: LongInt;
-    updatedRow, updatedCell, Result: boolean;
+    Result, updateBlock: boolean;
 begin
 Result:= false;
 
 for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	begin
-	updatedRow:= false;
 	
 	for x:= 0 to LAND_WIDTH div 32 - 1 do
 		begin
-			repeat
-			updatedCell:= false;
-			if LandDirty[y, x] <> 0 then
-				begin
-				updatedRow:= true;
-				// testing. should make black squares
-				for yy:= y * 32 to y * 32 + 31 do
-					for xx:= x * 32 to x * 32 + 31 do
-						if Despeckle(xx, yy) then updatedCell:= true;
-				end;
-			if updatedCell then updatedRow:= true
-			until not updatedCell;
-		LandDirty[y, x]:= 0;
+		if LandDirty[y, x] <> 0 then
+			begin
+			updateBlock:= false;
+			for yy:= y * 32 to y * 32 + 31 do
+				for xx:= x * 32 to x * 32 + 31 do
+					if Despeckle(xx, yy) then
+						begin
+						Result:= true;
+						updateBlock:= true;
+						end;
+			if updateBlock then UpdateLandTexture(x * 32, 32, y * 32, 32);
+			LandDirty[y, x]:= 0;
+			end;
 		end;
-	
-	if updatedRow then
-		begin
-		UpdateLandTexture(x * 32, 32, y * 32, 32);
-		Result:= true
-		end
 	end;
 
 SweepDirty:= Result
