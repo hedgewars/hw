@@ -348,6 +348,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
 	{
 		IconedGroupBox* groupWeapons = new IconedGroupBox(this);
+        groupWeapons->setContentTopPadding(0);
 		groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
 		//groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);

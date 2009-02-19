@@ -25,7 +25,8 @@
 
 IconedGroupBox::IconedGroupBox(QWidget * parent)
 {
-	padding = 82;
+	titleLeftPadding = 82;
+    contentTopPadding = 22;
 }
 
 void IconedGroupBox::setIcon(const QIcon & icon)
@@ -35,16 +36,16 @@ void IconedGroupBox::setIcon(const QIcon & icon)
 			"IconedGroupBox{"
 				"margin-top: 46px;"
 				"margin-left: 12px;"
-				"padding: 22px 0px 0px 0px;"
+                "padding: %1px 2px 5px 2px;"
 				"}"
 			"IconedGroupBox::title{"
 				"subcontrol-origin: margin;"
 				"subcontrol-position: top left;"
-				"padding-left: %1px;"
-				"padding-top: 26px;"
+				"padding-left: %2px;"
+				"padding-top: 25px;"
 				"text-align: left;"
 				"}"
-				).arg(padding)
+				).arg(contentTopPadding).arg(titleLeftPadding)
 		);
 
 	this->icon = icon;
@@ -64,5 +65,10 @@ void IconedGroupBox::paintEvent(QPaintEvent * event)
 
 void IconedGroupBox::setTitleTextPadding(int px)
 {
-	padding = px;
+	titleLeftPadding = px;
+}
+
+void IconedGroupBox::setContentTopPadding(int px)
+{
+	contentTopPadding = px;
 }

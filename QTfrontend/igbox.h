@@ -31,12 +31,14 @@ public:
 
 	void setIcon(const QIcon & icon);
 	void setTitleTextPadding(int px);
+	void setContentTopPadding(int px);
 protected:
 	virtual void paintEvent(QPaintEvent * event);
 
 private:
 	QIcon icon;
-	int padding;
+	int titleLeftPadding;
+	int contentTopPadding;
 };
 
 #endif // _IGBOX_H

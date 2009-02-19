@@ -106,6 +106,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
 	gbThemes = new IconedGroupBox(this);
 	gbThemes->setTitleTextPadding(60);
+	gbThemes->setContentTopPadding(6);
 	gbThemes->setTitle(tr("Themes"));
 
 	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
