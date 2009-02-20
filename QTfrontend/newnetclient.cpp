@@ -435,7 +435,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	if (lst[0] == "CFG") {
 		if(lst.size() < 3)
 		{
-			qWarning("Net: Bad CONFIG_PARAM message");
+			qWarning("Net: Bad CFG message");
 			return;
 		}
 		if (lst[1] == "MAP") {
@@ -491,7 +491,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			emit templateFilterChanged(lst[2].toUInt());
 			return;
 		}
-		qWarning() << "Net: Unknown 'CONFIG_PARAM' message:" << lst;
+		qWarning() << "Net: Unknown 'CFG' message:" << lst;
 		return;
 	}
 
@@ -597,67 +597,67 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 
 void HWNewNet::onSeedChanged(const QString & seed)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SEED%1%2").arg(delimeter).arg(seed));
+	if (isChief) RawSendNet(QString("CFG%1SEED%1%2").arg(delimeter).arg(seed));
 }
 
 void HWNewNet::onMapChanged(const QString & map)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1MAP%1%2").arg(delimeter).arg(map));
+	if (isChief) RawSendNet(QString("CFG%1MAP%1%2").arg(delimeter).arg(map));
 }
 
 void HWNewNet::onThemeChanged(const QString & theme)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1THEME%1%2").arg(delimeter).arg(theme));
+	if (isChief) RawSendNet(QString("CFG%1THEME%1%2").arg(delimeter).arg(theme));
 }
 
 void HWNewNet::onInitHealthChanged(int health)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1HEALTH%1%2").arg(delimeter).arg(health));
+	if (isChief) RawSendNet(QString("CFG%1HEALTH%1%2").arg(delimeter).arg(health));
 }
 
 void HWNewNet::onTurnTimeChanged(int time)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1TURNTIME%1%2").arg(delimeter).arg(time));
+	if (isChief) RawSendNet(QString("CFG%1TURNTIME%1%2").arg(delimeter).arg(time));
 }
 
 void HWNewNet::onSuddenDeathTurnsChanged(int turns)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SD_TURNS%1%2").arg(delimeter).arg(turns));
+	if (isChief) RawSendNet(QString("CFG%1SD_TURNS%1%2").arg(delimeter).arg(turns));
 }
 
 void HWNewNet::onCaseProbabilityChanged(int prob)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1CASEFACTOR%1%2").arg(delimeter).arg(prob));
+	if (isChief) RawSendNet(QString("CFG%1CASEFACTOR%1%2").arg(delimeter).arg(prob));
 }
 
 void HWNewNet::onFortsModeChanged(bool value)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1FORTSMODE%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CFG%1FORTSMODE%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onTeamsDivideChanged(bool value)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CFG%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onSolidChanged(bool value)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1SOLIDLAND%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CFG%1SOLIDLAND%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onBorderChanged(bool value)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1BORDER%1%2").arg(delimeter).arg(value));
+	if (isChief) RawSendNet(QString("CFG%1BORDER%1%2").arg(delimeter).arg(value));
 }
 
 void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
+	if (isChief) RawSendNet(QString("CFG%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
 }
 
 void HWNewNet::onTemplateFilterChanged(int filter)
 {
-	if (isChief) RawSendNet(QString("CONFIG_PARAM%1TEMPLATE_FILTER%1%2").arg(delimeter).arg(filter));
+	if (isChief) RawSendNet(QString("CFG%1TEMPLATE_FILTER%1%2").arg(delimeter).arg(filter));
 }
 
 void HWNewNet::chatLineToNet(const QString& str)
