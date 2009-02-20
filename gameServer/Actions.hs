@@ -4,9 +4,11 @@ import Control.Concurrent.STM
 import Control.Concurrent.Chan
 import Data.IntMap
 import qualified Data.IntSet as IntSet
+import qualified Data.Sequence as Seq
 import Monad
 -----------------------------
 import CoreTypes
+import Utils
 
 data Action =
 	AnswerThisClient [String]
@@ -17,6 +19,7 @@ data Action =
 	| AnswerLobby [String]
 	| RoomAddThisClient Int -- roomID
 	| RoomRemoveThisClient
+	| RemoveTeam String
 	| RemoveRoom
 	| UnreadyRoomClients
 	| ProtocolError String
@@ -192,6 +195,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
 		rID = roomID client
 		client = clients ! clID
 
+
 processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
 	processAction (clID, serverInfo, clients, rooms) $ AnswerThisRoom ("NOT_READY" : roomPlayers)
 	return (clID,
@@ -204,6 +208,29 @@ processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
 		client = clients ! clID
 		roomPlayers = Prelude.map (nick . (clients !)) roomPlayersIDs
 		roomPlayersIDs = IntSet.elems $ playersIDs room
+
+
+processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
+	newRooms <-	if not $ gameinprogress room then
+			do
+			processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["REMOVE_TEAM", teamName]
+			return $
+				adjust (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r}) rID rooms
+		else
+			do
+			processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["GAMEMSG", rmTeamMsg]
+			return $
+				adjust (\r -> r{
+				teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
+				leftTeams = teamName : leftTeams r,
+				roundMsgs = roundMsgs r Seq.|> rmTeamMsg
+				}) rID rooms
+	return (clID, serverInfo, clients, newRooms)
+	where
+		room = rooms ! rID
+		rID = roomID client
+		client = clients ! clID
+		rmTeamMsg = toEngineMsg $ 'F' : teamName
 
 
 processAction (clID, serverInfo, clients, rooms) (Dump) = do

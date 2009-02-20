@@ -3,6 +3,7 @@ module HWProtoLobbyState where
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
+import qualified Data.Foldable as Foldable
 import Maybe
 import Data.List
 --------------------------------------
@@ -68,7 +69,7 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 		++ [AnswerThisRoom ["NOT_READY", nick client]]
 		++ answerFullConfig jRoom
 		++ answerTeams
---		++ watchRound)
+		++ watchRound
 	where
 		noSuchRoom = isNothing mbRoom
 		mbRoom = find (\r -> roomName == name r && roomProto r == clientProto client) $ IntMap.elems rooms 
@@ -86,12 +87,13 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 
 		toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
 		answerFullConfig room = map toAnswer (Map.toList $ params room)
-{-
-		watchRound = if (roomProto clRoom < 20) || (not $ gameinprogress clRoom) then
+
+		watchRound = if not $ gameinprogress jRoom then
 					[]
 				else
-					(answerClientOnly  ["RUN_GAME"]) ++
-					answerClientOnly ("GAMEMSG" : toEngineMsg "e$spectate 1" : (toList $ roundMsgs clRoom)) -}
+					[AnswerThisClient  ["RUN_GAME"],
+					AnswerThisClient $ "GAMEMSG" : toEngineMsg "e$spectate 1" : (Foldable.toList $ roundMsgs jRoom)]
+
 		answerTeams = if gameinprogress jRoom then
 				answerAllTeams (teamsAtStart jRoom)
 			else

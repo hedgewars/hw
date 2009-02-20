@@ -75,26 +75,13 @@ handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName] =
 		if not $ nick client == teamowner team then
 			[ProtocolError "Not team owner!"]
 		else
-			if not $ gameinprogress room then
-				[ModifyRoom (\r -> r{teams = filter (\t -> teamName /= teamname t) $ teams r}),
-				AnswerOthersInRoom ["REMOVE_TEAM", teamName]]
-			else
-				[]
-{-			else
-				(noChangeClients,
-				modifyRoom clRoom{
-					teams = filter (\t -> teamName /= teamname t) $ teams clRoom,
-					leftTeams = teamName : leftTeams clRoom,
-					roundMsgs = roundMsgs clRoom |> rmTeamMsg
-					},
-				answerOthersRoom ["GAMEMSG", rmTeamMsg]) -}
+			[RemoveTeam teamName]
 	where
 		client = clients IntMap.! clID
 		room = rooms IntMap.! (roomID client)
 		noSuchTeam = isNothing findTeam
 		team = fromJust findTeam
 		findTeam = find (\t -> teamName == teamname t) $ teams room
-		rmTeamMsg = toEngineMsg $ 'F' : teamName
 
 
 handleCmd_inRoom clID clients rooms ["HH_NUM", teamName, numberStr] =
