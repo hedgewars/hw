@@ -216,6 +216,7 @@ public:
 	QLabel *labelNN;
 	QSpinBox * volumeBox;
 	QLineEdit *editNetNick;
+	QCheckBox *CBReduceQuality;
 };
 
 class PageNet : public AbstractPage

@@ -44,6 +44,7 @@ public:
 	quint8 timerInterval();
 	quint8 bitDepth();
 	QString netNick();
+	bool isReducedQuality() const;
 	bool isFrontendFullscreen() const;
 	void resizeToConfigValues();
 

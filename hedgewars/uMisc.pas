@@ -70,6 +70,7 @@ var
 	cCaseFactor   : Longword = 5;  {0..9}
 	cLandAdditions: Longword = 4;
 	cFullScreen   : boolean = true;
+	cReducedQuality : boolean = false;
 	cLocaleFName  : shortstring = 'en.txt';
 	cSeed         : shortstring = '';
 	cInitVolume   : LongInt = 128;

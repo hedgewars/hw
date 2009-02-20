@@ -79,7 +79,10 @@ if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    if AMxShift = 210 then prevPoint.X:= 0;
-   if AMxShift > 0 then dec(AMxShift, MENUSPEED);
+   if cReducedQuality then
+       AMxShift:= 0
+   else
+       if AMxShift > 0 then dec(AMxShift, MENUSPEED);
    end else
    begin
    if AMxShift = 0 then
@@ -89,7 +92,10 @@ if bShowAmmoMenu then
       prevPoint:= CursorPoint;
       SDL_WarpMouse(CursorPoint.X, CursorPoint.Y)
       end;
-   if AMxShift < 210 then inc(AMxShift, MENUSPEED);
+   if cReducedQuality then
+       AMxShift:= 210
+   else
+       if AMxShift < 210 then inc(AMxShift, MENUSPEED);
    end;
 
 if CurrentTeam = nil then exit;
@@ -193,17 +199,21 @@ glEnable(GL_TEXTURE_2D);
 
 if not isPaused then MoveCamera;
 
-// background
-DrawRepeated(sprSky, WorldDx * 3 div 8);
-DrawRepeated(sprHorizont, WorldDx * 3 div 5);
+if not cReducedQuality then
+    begin
+    // background
+    DrawRepeated(sprSky, WorldDx * 3 div 8);
+    DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
-DrawVisualGears(0);
+    DrawVisualGears(0);
 
-// Waves
-{$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6)      ) mod 125), cWaterLine + WorldDy - 64, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) + 100) mod 125), cWaterLine + WorldDy - 48, 0);
-{$WARNINGS ON}
+    // Waves
+    {$WARNINGS OFF}
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6)      ) mod 125), cWaterLine + WorldDy - 64, 0);
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) + 100) mod 125), cWaterLine + WorldDy - 48, 0);
+    {$WARNINGS ON}
+    end;
+
 
 DrawLand(WorldDx, WorldDy);
 // Water
@@ -249,7 +259,7 @@ if CurrentTeam <> nil then
 
 DrawGears;
 
-DrawVisualGears(1);
+if not cReducedQuality then DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}
@@ -257,7 +267,6 @@ for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (Re
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) +  50) mod 125), cWaterLine + WorldDy - 16, 0);
 for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6) +  75) mod 125), cWaterLine + WorldDy     , 0);
 {$WARNINGS ON}
-
 // Turn time
 if TurnTimeLeft <> 0 then
    begin

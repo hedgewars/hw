@@ -384,6 +384,10 @@ PageOptions::PageOptions(QWidget* parent) :
 		GBAfpslayout->addWidget(maxfps);
 		GBAlayout->addLayout(GBAfpslayout);
 
+		CBReduceQuality = new QCheckBox(AGGroupBox);
+		CBReduceQuality->setText(QCheckBox::tr("Reduce Quality"));
+		GBAlayout->addWidget(CBReduceQuality);
+
 		CBFullscreen = new QCheckBox(AGGroupBox);
 		CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
 		GBAlayout->addWidget(CBFullscreen);
