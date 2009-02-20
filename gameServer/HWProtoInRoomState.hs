@@ -19,13 +19,17 @@ handleCmd_inRoom clID clients _ ["CHAT_STRING", msg] =
 		clientNick = nick $ clients IntMap.! clID
 
 
-handleCmd_inRoom clID clients _ ["PART"] =
+handleCmd_inRoom clID clients rooms ["PART"] =
 	if isMaster client then
 		[RemoveRoom]
 	else
-		[RoomRemoveThisClient]
+		RoomRemoveThisClient
+		: removeClientTeams
 	where
 		client = clients IntMap.! clID
+		room = rooms IntMap.! (roomID client)
+		clientTeams = filter (\t -> teamowner t == nick client) $ teams room
+		removeClientTeams = map (RemoveTeam . teamname) clientTeams
 
 
 handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs) =
@@ -36,7 +40,6 @@ handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs) =
 		[ProtocolError "Not room master"]
 	where
 		client = clients IntMap.! clID
-
 
 handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : difStr : hhsInfo)
 	| length hhsInfo == 16 =
