@@ -13,8 +13,8 @@ import Utils
 
 handleCmd_inRoom :: CmdHandler
 
-handleCmd_inRoom clID clients _ ["CHAT_STRING", msg] =
-	[AnswerOthersInRoom ["CHAT_STRING", clientNick, msg]]
+handleCmd_inRoom clID clients _ ["CHAT", msg] =
+	[AnswerOthersInRoom ["CHAT", clientNick, msg]]
 	where
 		clientNick = nick $ clients IntMap.! clID
 

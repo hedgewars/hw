@@ -14,9 +14,9 @@ import System.Random
 import System.Posix
 #endif
 
-session1 nick room = ["NICK", nick, "", "PROTO", "24", "", "CHAT_STRING", "lobby 1", "", "CREATE", room, "", "CHAT_STRING", "room 1", "", "QUIT", "bye-bye", ""]
-session2 nick room = ["NICK", nick, "", "PROTO", "24", "", "LIST", "", "JOIN", room, "", "CHAT_STRING", "room 2", "", "PART", "", "CHAT_STRING", "lobby after part", "", "QUIT", "bye-bye", ""]
-session3 nick room = ["NICK", nick, "", "PROTO", "24", "", "LIST", "", "JOIN", room, "", "CHAT_STRING", "room 2", "", "QUIT", "bye-bye", ""]
+session1 nick room = ["NICK", nick, "", "PROTO", "24", "", "CHAT", "lobby 1", "", "CREATE", room, "", "CHAT", "room 1", "", "QUIT", "bye-bye", ""]
+session2 nick room = ["NICK", nick, "", "PROTO", "24", "", "LIST", "", "JOIN", room, "", "CHAT", "room 2", "", "PART", "", "CHAT", "lobby after part", "", "QUIT", "bye-bye", ""]
+session3 nick room = ["NICK", nick, "", "PROTO", "24", "", "LIST", "", "JOIN", room, "", "CHAT", "room 2", "", "QUIT", "bye-bye", ""]
 
 emulateSession sock s = do
 	mapM_ (\x -> hPutStrLn sock x >> hFlush sock >> randomRIO (50000::Int, 90000) >>= threadDelay) s

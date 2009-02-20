@@ -259,10 +259,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if (lst[0] == "CHAT_STRING") {
+	if (lst[0] == "CHAT") {
 		if(lst.size() < 3)
 		{
-			qWarning("Net: Empty CHAT_STRING message");
+			qWarning("Net: Empty CHAT message");
 			return;
 		}
 		if (netClientState == 2)
@@ -669,7 +669,7 @@ void HWNewNet::onTemplateFilterChanged(int filter)
 void HWNewNet::chatLineToNet(const QString& str)
 {
 	if(str != "") {
-		RawSendNet(QString("CHAT_STRING") + delimeter + str);
+		RawSendNet(QString("CHAT") + delimeter + str);
 		emit(chatStringFromMe(formatChatMsg(mynick, str)));
 	}
 }
@@ -677,7 +677,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 void HWNewNet::chatLineToLobby(const QString& str)
 {
 	if(str != "") {
-		RawSendNet(QString("CHAT_STRING") + delimeter + str);
+		RawSendNet(QString("CHAT") + delimeter + str);
 		emit(chatStringFromMeLobby(formatChatMsg(mynick, str)));
 	}
 }

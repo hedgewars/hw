@@ -34,8 +34,8 @@ handleCmd_lobby clID clients rooms ["LIST"] =
 				show $ gameinprogress room
 				]
 
-handleCmd_lobby clID clients _ ["CHAT_STRING", msg] =
-	[AnswerOthersInRoom ["CHAT_STRING", clientNick, msg]]
+handleCmd_lobby clID clients _ ["CHAT", msg] =
+	[AnswerOthersInRoom ["CHAT", clientNick, msg]]
 	where
 		clientNick = nick $ clients IntMap.! clID
 
