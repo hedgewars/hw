@@ -18,6 +18,7 @@ data Action =
 	| RoomAddThisClient Int -- roomID
 	| RoomRemoveThisClient
 	| RemoveRoom
+	| UnreadyRoomClients
 	| ProtocolError String
 	| Warning String
 	| ByeClient String
@@ -179,17 +180,31 @@ processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword)
 
 
 processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
-	processAction (clID, serverInfo, clients, rooms) $ AnswerLobby ["ROOM", "DEL", name clRoom]
-	processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["ROOMABANDONED", name clRoom]
+	processAction (clID, serverInfo, clients, rooms) $ AnswerLobby ["ROOM", "DEL", name room]
+	processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["ROOMABANDONED", name room]
 	return (clID,
 		serverInfo,
 		Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False} else cl) clients,
-		delete rID $ adjust (\r -> r{playersIDs = IntSet.union (playersIDs clRoom) (playersIDs r)}) 0 rooms
+		delete rID $ adjust (\r -> r{playersIDs = IntSet.union (playersIDs room) (playersIDs r)}) 0 rooms
 		)
 	where
-		clRoom = rooms ! rID
+		room = rooms ! rID
 		rID = roomID client
 		client = clients ! clID
+
+processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
+	processAction (clID, serverInfo, clients, rooms) $ AnswerThisRoom ("NOT_READY" : roomPlayers)
+	return (clID,
+		serverInfo,
+		Data.IntMap.map (\cl -> if roomID cl == rID then cl{isReady = False} else cl) clients,
+		rooms)
+	where
+		room = rooms ! rID
+		rID = roomID client
+		client = clients ! clID
+		roomPlayers = Prelude.map (nick . (clients !)) roomPlayersIDs
+		roomPlayersIDs = IntSet.elems $ playersIDs room
+
 
 processAction (clID, serverInfo, clients, rooms) (Dump) = do
 	writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]

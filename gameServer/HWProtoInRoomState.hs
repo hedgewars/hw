@@ -18,6 +18,7 @@ handleCmd_inRoom clID clients _ ["CHAT_STRING", msg] =
 	where
 		clientNick = nick $ clients IntMap.! clID
 
+
 handleCmd_inRoom clID clients _ ["PART"] =
 	if isMaster client then
 		[RemoveRoom]
@@ -25,6 +26,7 @@ handleCmd_inRoom clID clients _ ["PART"] =
 		[RoomRemoveThisClient]
 	where
 		client = clients IntMap.! clID
+
 
 handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs) =
 	if isMaster client then
@@ -142,7 +144,13 @@ handleCmd_inRoom clID clients rooms ["TOGGLE_READY"] =
 handleCmd_inRoom clID clients rooms ["START_GAME"] =
 	if isMaster client && (playersIn room == readyPlayers room) && (not $ gameinprogress room) then
 		if enoughClans then
-			[ModifyRoom (\r -> r{gameinprogress = True, roundMsgs = empty, leftTeams = [], teamsAtStart = teams r}),
+			[ModifyRoom
+					(\r -> r{
+						gameinprogress = True,
+						roundMsgs = empty,
+						leftTeams = [],
+						teamsAtStart = teams r}
+					),
 			AnswerThisRoom ["RUN_GAME"]]
 		else
 			[Warning "Less than two clans!"]
@@ -154,9 +162,29 @@ handleCmd_inRoom clID clients rooms ["START_GAME"] =
 		enoughClans = not $ null $ drop 1 $ group $ map teamcolor $ teams room
 
 
-handleCmd_inRoom client _ rooms ["GAMEMSG", msg] =
+handleCmd_inRoom _ _ rooms ["GAMEMSG", msg] =
 	[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
 	AnswerOthersInRoom ["GAMEMSG", msg]]
+
+
+handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
+	if isMaster client then
+		[ModifyRoom
+				(\r -> r{
+					gameinprogress = False,
+					readyPlayers = 0,
+					roundMsgs = empty,
+					leftTeams = [],
+					teamsAtStart = []}
+				),
+		UnreadyRoomClients
+		] ++ answerRemovedTeams
+	else
+		[]
+	where
+		client = clients IntMap.! clID
+		room = rooms IntMap.! (roomID client)
+		answerRemovedTeams = map (\t -> AnswerThisRoom ["REMOVE_TEAM", t]) $ leftTeams room
 
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]

@@ -5,7 +5,6 @@ import qualified Data.IntMap as IntMap
 import CoreTypes
 import Actions
 import Utils
-import Answers
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState

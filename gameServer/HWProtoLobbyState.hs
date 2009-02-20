@@ -8,7 +8,6 @@ import Data.List
 --------------------------------------
 import CoreTypes
 import Actions
-import Answers
 import Utils
 
 answerAllTeams teams = concatMap toAnswer teams
