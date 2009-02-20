@@ -330,12 +330,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		m_pTeamSelWidget->removeNetTeam(HWTeam(lst[1]));
-		if (netClientState == 5) // we're in game, need to tell the engine about this
-		{
-			QByteArray em;
-			HWProto::addStringToBuffer(em, "F" + lst[1]);
-			emit FromNet(em);
-		}
 		return;
 	}
 
