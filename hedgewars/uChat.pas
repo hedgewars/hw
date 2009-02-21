@@ -152,14 +152,18 @@ const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
     utf8: shortstring;
 begin
+
 if Key <> 0 then
 	case Key of
-		8: if Length(InputStr.s) > 0 then
+		{Backspace}
+		8, 127: if Length(InputStr.s) > 0 then
 				begin
 				InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
 				SetLine(InputStr, InputStr.s, true)
 				end;
+		{Esc}
 		27: SetLine(InputStr, '', true);
+		{Return}
 		13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
@@ -168,7 +172,16 @@ if Key <> 0 then
 				end;
 			FreezeEnterKey;
 			GameState:= gsGame
-			end
+			end;
+		{missing Mac keys}
+		{*
+			63272 is canc
+			63232 is UP
+			63234 is LEFT
+			63235 is RIGHT
+			63233 is DOWN
+		*}
+		63272, 63232, 36233, 36234, 36235: Key:=28;
 	else
 	if (Key < $80) then btw:= 1
 	else if (Key < $800) then btw:= 2

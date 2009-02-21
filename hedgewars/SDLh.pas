@@ -37,13 +37,33 @@ interface
 
 {$PACKRECORDS C}
 
+{$IFDEF DARWIN}
+{$linklib libpng}
+{$linklib libz}
+{$linklib libjpeg}
+{$linklib libtiff}
+{$linklib libfreetype}
+{$linklib libsmpeg}
+{$linklib libvorbis}
+{$linklib libvorbisfile}
+{$linklib libogg}
+
+{$linkframework Carbon}
+{$linkframework OpenGL}
+{$linkframework AudioUnit}
+{$linkframework Quicktime}
+{$linkframework IOKit}
+{$linkframework ForceFeedback}
+{$linkframework CoreAudio}
+{$ENDIF}
+
 (*  SDL *)
 const {$IFDEF WIN32}
       SDLLibName = 'SDL.dll';
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDLLibName = 'libSDL.dylib';
+	  SDLLibName = 'libSDL.a';
 	  {$linklib libSDL}
 	  {$linklib SDLmain}
 	  {$linkframework Cocoa}
@@ -278,7 +298,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_TTFLibName = 'libSDL_ttf.dylib';
+	  SDL_TTFLibName = 'libSDL_ttf.a';
 	  {$linklib libSDL_ttf}
 	{$ELSE}
           SDL_TTFLibName = 'libSDL_ttf.so';
@@ -313,7 +333,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_MixerLibName = 'libSDL_mixer.dylib';
+	  SDL_MixerLibName = 'libSDL_mixer.a';
 	  {$linklib libSDL_mixer}
 	{$ELSE}
           SDL_MixerLibName = 'libSDL_mixer.so';
@@ -379,7 +399,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_ImageLibName = 'libSDL_image.dylib';
+	  SDL_ImageLibName = 'libSDL_image.a';
 	  {$linklib libSDL_image}
 	{$ELSE}
            SDL_ImageLibName = 'libSDL_image.so';
@@ -395,7 +415,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_NetLibName = 'libSDL_net.dylib';
+	  SDL_NetLibName = 'libSDL_net.a';
 	  {$linklib libSDL_net}
 	{$ELSE}
           SDL_NetLibName = 'libSDL_net.so';
