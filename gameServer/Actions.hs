@@ -96,7 +96,11 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 			0,
 			serverInfo,
 			delete clID clients,
-			adjust (\r -> r{playersIDs = IntSet.delete clID (playersIDs r), playersIn = (playersIn r) - 1}) rID rooms
+			adjust (\r -> r{
+					playersIDs = IntSet.delete clID (playersIDs r),
+					playersIn = (playersIn r) - 1,
+					readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+					}) rID rooms
 			)
 	where
 		client = clients ! clID
@@ -152,7 +156,11 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient) = do
 		clID,
 		serverInfo,
 		adjust (\cl -> cl{roomID = 0}) clID clients,
-		adjust (\r -> r{playersIDs = IntSet.delete clID (playersIDs r), playersIn = (playersIn r) - 1}) rID $
+		adjust (\r -> r{
+				playersIDs = IntSet.delete clID (playersIDs r),
+				playersIn = (playersIn r) - 1,
+				readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+				}) rID $
 			adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r)}) 0 rooms
 		)
 	where
