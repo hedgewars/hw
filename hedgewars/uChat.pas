@@ -142,6 +142,8 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 			ParseCommand('/taunt ' + char(i), true);
 			exit
 			end;
+	if (s = '/newgrave') then
+	    ParseCommand('/newgrave', true);
 	end
 	else
 		ParseCommand('/say ' + s, true);
@@ -181,7 +183,7 @@ if Key <> 0 then
 			63235 is RIGHT
 			63233 is DOWN
 		*}
-		63272, 63232, 36233, 36234, 36235: Key:=28;
+		63272, 63232, 36233, 36234, 36235: Key:= 28;
 	else
 	if (Key < $80) then btw:= 1
 	else if (Key < $800) then btw:= 2

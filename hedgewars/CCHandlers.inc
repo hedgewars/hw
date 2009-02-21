@@ -390,6 +390,15 @@ with CurrentHedgehog^.Gear^ do
      end
 end;
 
+procedure chNewGrave;
+begin
+if CheckNoTeamOrHH then exit;
+
+if not CurrentTeam^.ExtDriven then SendIPC('g');
+
+AddGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), gtGrave, 0, _0, _0, 0)
+end;
+
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH then exit;
