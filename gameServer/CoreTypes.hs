@@ -73,6 +73,7 @@ instance Show RoomInfo where
 	show ri = (show $ roomUID ri)
 			++ ", players ids: " ++ (show $ IntSet.size $ playersIDs ri)
 			++ ", players: " ++ (show $ playersIn ri)
+			++ ", ready: " ++ (show $ readyPlayers ri)
 
 instance Eq RoomInfo where
 	a1 == a2 = roomUID a1 == roomUID a2
