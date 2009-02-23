@@ -178,7 +178,6 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
-    cWaveWidth, cWaveHeight: LongWord;
 
     procedure DrawRepeated(spr: TSprite; Shift: LongInt);
     var i, w: LongInt;
