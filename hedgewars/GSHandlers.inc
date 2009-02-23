@@ -1201,9 +1201,9 @@ if not TestCollisionYwithGear(Gear, 1) then
 		Gear^.dX:= Gear^.dX * _0_995;
 
 	Gear^.dY:= Gear^.dY + cGravity;
-	if hwAbs(Gear^.dY) > _0_08 then Gear^.dY:= Gear^.dY * _0_995;
+	if hwAbs(Gear^.dY) > _0_2 then Gear^.dY:= Gear^.dY * _0_995;
 	
-	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 270;
+	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 640;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	
 	if not (hwRound(Gear^.Y) < cWaterLine) then
