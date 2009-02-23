@@ -48,9 +48,9 @@ main = withSocketsDo $ do
 	setupLoggers
 
 	stats <- atomically $ newTMVar (StatisticsInfo 0 0)
-	--dbQueriesChan <- atomically newTChan
+	dbQueriesChan <- newChan
 	coreChan <- newChan
-	serverInfo <- getOpts $ newServerInfo stats -- dbQueriesChan
+	serverInfo <- getOpts $ newServerInfo stats dbQueriesChan
 	
 	bracket
 		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)

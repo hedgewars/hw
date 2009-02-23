@@ -13,6 +13,7 @@ import NetRoutines
 import Utils
 import HWProtoCore
 import Actions
+import OfficialServer.DBInteraction
 
 reactCmd :: ServerInfo -> Int -> [String] -> Clients -> Rooms -> IO (ServerInfo, Clients, Rooms)
 reactCmd serverInfo clID cmd clients rooms = do
@@ -64,7 +65,7 @@ startServer serverInfo coreChan serverSocket = do
 {-	forkIO $ messagesLoop messagesChan
 	forkIO $ timerLoop messagesChan-}
 
---	startDBConnection $ dbQueries serverInfo
+	startDBConnection $ serverInfo
 
 	mainLoop coreChan serverInfo IntMap.empty (IntMap.singleton 0 newRoom)
 

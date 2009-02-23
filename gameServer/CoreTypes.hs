@@ -10,6 +10,7 @@ import qualified Data.IntSet as IntSet
 import Data.Sequence(Seq, empty)
 import Network
 
+
 data ClientInfo =
  ClientInfo
 	{
@@ -104,10 +105,6 @@ data StatisticsInfo =
 		roomsNumber :: Int
 	}
 
-data DBQuery =
-	HasRegistered String
-	| CheckPassword String
-
 data ServerInfo =
 	ServerInfo
 	{
@@ -119,8 +116,8 @@ data ServerInfo =
 		dbHost :: String,
 		dbLogin :: String,
 		dbPassword :: String,
-		stats :: TMVar StatisticsInfo
-		--dbQueries :: TChan DBQuery
+		stats :: TMVar StatisticsInfo,
+		dbQueries :: Chan DBQuery
 	}
 
 instance Show ServerInfo where
@@ -143,6 +140,10 @@ data CoreMessage =
 	| ClientMessage (Int, [String])
 	-- | CoreMessage String
 	-- | TimerTick
+
+data DBQuery =
+	HasRegistered String
+	| CheckPassword String
 
 
 type Clients = IntMap.IntMap ClientInfo

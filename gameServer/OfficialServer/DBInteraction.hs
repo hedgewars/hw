@@ -6,32 +6,30 @@ module OfficialServer.DBInteraction
 
 import Database.HDBC
 import Database.HDBC.MySQL
-
 import System.IO
 import Control.Concurrent
-import Control.Concurrent.STM
 import Control.Exception
-
-data DBQuery =
-	HasRegistered String
-	| CheckPassword String
+import Monad
+------------------------
+import CoreTypes
 
 dbInteractionLoop queries dbConn = do
-	q <- atomically $ readTChan queries
+	q <- readChan queries
 	case q of
 		HasRegistered queryStr -> putStrLn queryStr
 		CheckPassword queryStr -> putStrLn queryStr
 
 	dbInteractionLoop queries dbConn
 
-dbConnectionLoop queries = do
+dbConnectionLoop serverInfo = do
 	Control.Exception.handle (\e -> print e) $ handleSqlError $
 		bracket
-			(connectMySQL defaultMySQLConnectInfo { mysqlHost = "192.168.50.5", mysqlDatabase = "glpi" })
+			(connectMySQL defaultMySQLConnectInfo {mysqlHost = dbHost serverInfo, mysqlDatabase = "hedge_main", mysqlUser = dbLogin serverInfo, mysqlPassword = dbPassword serverInfo })
 			(disconnect)
-			(dbInteractionLoop queries)
+			(dbInteractionLoop $ dbQueries serverInfo)
 
 	threadDelay (15 * 10^6)
-	dbConnectionLoop queries
+	dbConnectionLoop serverInfo
 
-startDBConnection queries = forkIO $ dbConnectionLoop queries
+startDBConnection serverInfo =
+	when (not . null $ dbHost serverInfo) ((forkIO $ dbConnectionLoop serverInfo) >> return ())
