@@ -159,7 +159,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient) = do
 		adjust (\r -> r{
 				playersIDs = IntSet.delete clID (playersIDs r),
 				playersIn = (playersIn r) - 1,
-				readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
+				readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
 				}) rID $
 			adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r)}) 0 rooms
 		)
@@ -195,7 +195,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
 	processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["ROOMABANDONED", name room]
 	return (clID,
 		serverInfo,
-		Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False} else cl) clients,
+		Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False, isReady = False} else cl) clients,
 		delete rID $ adjust (\r -> r{playersIDs = IntSet.union (playersIDs room) (playersIDs r)}) 0 rooms
 		)
 	where
@@ -209,7 +209,7 @@ processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
 	return (clID,
 		serverInfo,
 		Data.IntMap.map (\cl -> if roomID cl == rID then cl{isReady = False} else cl) clients,
-		rooms)
+		adjust (\r -> r{readyPlayers = 0}) rID rooms)
 	where
 		room = rooms ! rID
 		rID = roomID client
