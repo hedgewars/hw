@@ -10,13 +10,19 @@ import System.IO
 import Control.Concurrent
 import Control.Exception
 import Monad
+import Maybe
 ------------------------
 import CoreTypes
 
 dbInteractionLoop queries dbConn = do
 	q <- readChan queries
 	case q of
-		HasRegistered queryStr -> putStrLn queryStr
+		HasRegistered name -> do
+			statement <- prepare dbConn "SELECT uid FROM users WHERE name=?"
+			execute statement [SqlString name]
+			uid <- fetchRow statement
+			finish statement
+			putStrLn (show $ isJust uid)
 		CheckPassword queryStr -> putStrLn queryStr
 
 	dbInteractionLoop queries dbConn

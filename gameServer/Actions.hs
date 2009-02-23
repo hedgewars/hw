@@ -28,6 +28,7 @@ data Action =
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| AddRoom String String
+	| CheckRegistered
 	| Dump
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
@@ -240,6 +241,12 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
 		client = clients ! clID
 		rmTeamMsg = toEngineMsg $ 'F' : teamName
 
+
+processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
+	writeChan (dbQueries serverInfo) $ HasRegistered $ nick client
+	return (clID, serverInfo, clients, rooms)
+	where
+		client = clients ! clID
 
 processAction (clID, serverInfo, clients, rooms) (Dump) = do
 	writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]

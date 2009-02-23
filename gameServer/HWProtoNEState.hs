@@ -17,6 +17,7 @@ onLoginFinished clID clientNick clProto clients =
 		[]
 	else
 		(RoomAddThisClient 0)
+		: CheckRegistered
 		: answerLobbyNicks
 		-- ++ (answerServerMessage client clients)
 	where
