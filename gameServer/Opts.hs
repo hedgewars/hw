@@ -14,10 +14,17 @@ options :: [OptDescr (ServerInfo -> ServerInfo)]
 options = [
 	Option ['p'] ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
 	Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)",
-	Option []    ["password"] (ReqArg readPassword "STRING") "admin password"
+	Option []    ["db-login"] (ReqArg readDbLogin "STRING") "database access login",
+	Option []    ["db-password"] (ReqArg readDbPassword "STRING") "database access password",
+	Option []    ["db-host"] (ReqArg readDbHost "STRING") "database host"
 	]
 
-readListenPort, readDedicated, readPassword :: String -> ServerInfo -> ServerInfo
+readListenPort,
+	readDedicated,
+	readDbLogin,
+	readDbPassword,
+	readDbHost :: String -> ServerInfo -> ServerInfo
+
 readListenPort str opts = opts{listenPort = readPort}
 	where
 		readPort = fromInteger $ fromMaybe 46631 (maybeRead str :: Maybe Integer)
@@ -26,7 +33,9 @@ readDedicated str opts = opts{isDedicated = readDedicated}
 	where
 		readDedicated = fromMaybe True (maybeRead str :: Maybe Bool)
 
-readPassword str opts = opts{adminPassword = str}
+readDbLogin str opts = opts{dbLogin = str}
+readDbPassword str opts = opts{dbPassword = str}
+readDbHost str opts = opts{dbHost = str}
 
 getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do

@@ -113,10 +113,12 @@ data ServerInfo =
 	{
 		isDedicated :: Bool,
 		serverMessage :: String,
-		adminPassword :: String,
 		listenPort :: PortNumber,
 		loginsNumber :: Int,
 		nextRoomID :: Int,
+		dbHost :: String,
+		dbLogin :: String,
+		dbPassword :: String,
 		stats :: TMVar StatisticsInfo
 		--dbQueries :: TChan DBQuery
 	}
@@ -128,10 +130,12 @@ newServerInfo = (
 	ServerInfo
 		True
 		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-		""
 		46631
 		0
 		0
+		""
+		""
+		""
 	)
 
 data CoreMessage =
