@@ -177,4 +177,22 @@ handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
 		answerRemovedTeams = map (\t -> AnswerThisRoom ["REMOVE_TEAM", t]) $ leftTeams room
 
 
+handleCmd_inRoom clID clients _ ["TOGGLE_RESTRICT_JOINS"] =
+	if isMaster client then
+		[ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
+	else
+		[ProtocolError "Not room master"]
+	where
+		client = clients IntMap.! clID
+
+
+handleCmd_inRoom clID clients _ ["TOGGLE_RESTRICT_TEAMS"] =
+	if isMaster client then
+		[ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
+	else
+		[ProtocolError "Not room master"]
+	where
+		client = clients IntMap.! clID
+
+
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]
