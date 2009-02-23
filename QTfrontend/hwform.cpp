@@ -792,6 +792,10 @@ void HWForm::NetGameMaster()
 	
 	if (hwnet)
 	{
+		// disconnect connections first to ensure their inexistance and not to connect twice
+		ui.pageNetGame->startGame->disconnect(hwnet);
+		ui.pageNetGame->restrictJoins->disconnect(hwnet);
+		ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
 		connect(ui.pageNetGame->startGame, SIGNAL(triggered()), hwnet, SLOT(startGame()));
 		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
 		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
