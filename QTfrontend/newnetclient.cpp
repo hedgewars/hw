@@ -288,26 +288,32 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "READY") {
-		if(lst.size() != 2)
+		if(lst.size() < 2)
 		{
 			qWarning("Net: Malformed READY message");
 			return;
 		}
-		emit setReadyStatus(lst[1], true);
-		if (lst[1] == mynick)
-			emit setMyReadyStatus(true);
+		for(int i = 1; i < lst.size(); ++i)
+		{
+			if (lst[i] == mynick)
+				emit setMyReadyStatus(true);
+			emit setReadyStatus(lst[i], true);
+		}
 		return;
 	}
 	
 	if (lst[0] == "NOT_READY") {
-		if(lst.size() != 2)
+		if(lst.size() < 2)
 		{
 			qWarning("Net: Malformed NOT_READY message");
 			return;
 		}
-		emit setReadyStatus(lst[1], false);
-		if (lst[1] == mynick)
-			emit setMyReadyStatus(false);
+		for(int i = 1; i < lst.size(); ++i)
+		{
+			if (lst[i] == mynick)
+				emit setMyReadyStatus(false);
+			emit setReadyStatus(lst[i], false);
+		}
 		return;
 	}
 
