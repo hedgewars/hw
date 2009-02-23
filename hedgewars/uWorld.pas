@@ -52,7 +52,7 @@ type TCaptionStr = record
                    EndTime: LongWord;
                    end;
 
-var cWaterSprCount: LongInt;
+var cWaterSprCount, cWaveWidth, cWaveHeight: LongInt;
 	Captions: array[TCapGroup] of TCaptionStr;
 	AMxShift, SlotsNum: LongInt;
 	tmpSurface: PSDL_Surface;
@@ -60,7 +60,9 @@ var cWaterSprCount: LongInt;
 
 procedure InitWorld;
 begin
-cWaterSprCount:= 1 + cScreenWidth div (SpritesData[sprWater].Width);
+cWaveWidth:= SpritesData[sprWater].Width;
+cWaveHeight:= SpritesData[sprWater].Height;
+cWaterSprCount:= 1 + cScreenWidth div cWaveWidth;
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
@@ -176,6 +178,7 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
+    cWaveWidth, cWaveHeight: LongWord;
 
     procedure DrawRepeated(spr: TSprite; Shift: LongInt);
     var i, w: LongInt;
@@ -209,8 +212,8 @@ if not cReducedQuality then
 
     // Waves
     {$WARNINGS OFF}
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6)      ) mod 125), cWaterLine + WorldDy - 64, 0);
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) + 100) mod 125), cWaterLine + WorldDy - 48, 0);
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight*2), 0);
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
     {$WARNINGS ON}
     end;
 
@@ -263,9 +266,9 @@ if not cReducedQuality then DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6) +  25) mod 125), cWaterLine + WorldDy - 32, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx - (RealTicks shr 6) +  50) mod 125), cWaterLine + WorldDy - 16, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * 125  + ((WorldDx + (RealTicks shr 6) +  75) mod 125), cWaterLine + WorldDy     , 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth), cWaterLine + WorldDy - cWaveHeight, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth), cWaterLine + WorldDy     , 0);
 {$WARNINGS ON}
 // Turn time
 if TurnTimeLeft <> 0 then

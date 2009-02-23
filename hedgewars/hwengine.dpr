@@ -82,6 +82,7 @@ case GameState of
 			AssignHHCoords;
 			AddMiscGears;
 			StoreLoad;
+            InitWorld;
 			ResetKbd;
 			SoundLoad;
 			if GameType = gmtSave then
@@ -257,7 +258,6 @@ InitTeams;
 AssignStores;
 
 if isSoundEnabled then InitSound;
-InitWorld;
 
 StoreInit;
 
