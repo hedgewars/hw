@@ -519,6 +519,10 @@ AddFileLog('Freeing old primary surface...');
 {$ENDIF}
 if SDLPrimSurface <> nil then SDL_FreeSurface(SDLPrimSurface);
 
+{$IFDEF DARWIN}
+{Fix for the Mac titlebar bug}
+flags:= flags or SDL_NOFRAME;
+{$ENDIF}
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 SDLTry(SDLPrimSurface <> nil, true);
 
