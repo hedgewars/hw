@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="de">
+<defaultcodec></defaultcodec>
 <context>
     <name>FreqSpinBox</name>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.h" line="48"/>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.h" line="49"/>
         <source>Every turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Jede Runde</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.h" line="50"/>
         <source>Each %1 turn</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle %1 Runden</translation>
     </message>
 </context>
 <context>
@@ -97,37 +98,37 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="93"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="97"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="98"/>
         <source>Small</source>
-        <translation type="unfinished"></translation>
+        <translation>Klein</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="99"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittel</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="100"/>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Groß</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="101"/>
         <source>Cavern</source>
-        <translation type="unfinished"></translation>
+        <translation>Höhle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="102"/>
         <source>Wacky</source>
-        <translation type="unfinished"></translation>
+        <translation>Verrückt</translation>
     </message>
 </context>
 <context>
@@ -611,12 +612,12 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="59"/>
         <source>Add Border</source>
-        <translation type="unfinished"></translation>
+        <translation>Randbegrenzung einfügen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="388"/>
         <source>Reduce Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualität herabsetzen</translation>
     </message>
 </context>
 <context>
@@ -743,7 +744,6 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -833,7 +833,6 @@
         <translation>Serverport:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</translation>
     </message>
@@ -855,17 +854,17 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="64"/>
         <source>Turns before SD</source>
-        <translation type="unfinished"></translation>
+        <translation>Rundenzahl vor Suddendeath</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="65"/>
         <source>Crate drops</source>
-        <translation type="unfinished"></translation>
+        <translation>Kistenabwurf</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="409"/>
         <source>Initial sound volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgangslautstärke</translation>
     </message>
 </context>
 <context>
