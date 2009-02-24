@@ -201,14 +201,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if ((lst[0] == "NICK") || (lst[0] == "PROTO"))
+	if (lst[0] == "NICK")
 	{
-		loginStep++;
-		if (loginStep == 2)
-		{
-			netClientState = 2;
-			RawSendNet(QString("LIST"));
-		}
+		mynick = lst[1];
 		return ;
 	}
 
@@ -339,14 +334,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if(lst[0]=="ROOMABANDONED") {
+	if(lst[0] == "ROOMABANDONED") {
 		netClientState = 2;
 		emit showMessage(HWNewNet::tr("Room destroyed"));
 		emit LeftRoom();
 		return;
 	}
 
-	if(lst[0]=="JOINED") {
+	if(lst[0] == "JOINED") {
 		if(lst.size() < 2)
 		{
 			qWarning("Net: Bad JOINED message");
@@ -368,7 +363,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if(lst[0]=="LOBBY:JOINED") {
+	if(lst[0] == "LOBBY:JOINED") {
 		if(lst.size() < 2)
 		{
 			qWarning("Net: Bad JOINED message");
@@ -377,6 +372,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		
 		for(int i = 1; i < lst.size(); ++i)
 		{
+			if (lst[i] == mynick)
+			{
+				netClientState = 2;
+				RawSendNet(QString("LIST"));
+			}
+
 			emit nickAddedLobby(lst[i]);
 			emit chatStringLobby(QString(tr("*** %1 joined")).arg(lst[i]));
 		}
