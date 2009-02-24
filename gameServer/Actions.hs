@@ -5,6 +5,7 @@ import Control.Concurrent.Chan
 import Data.IntMap
 import qualified Data.IntSet as IntSet
 import qualified Data.Sequence as Seq
+import System.Log.Logger
 import Monad
 -----------------------------
 import CoreTypes
@@ -29,6 +30,7 @@ data Action =
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| AddRoom String String
 	| CheckRegistered
+	| ProcessAccountInfo AccountInfo
 	| Dump
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
@@ -243,7 +245,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
-	writeChan (dbQueries serverInfo) $ HasRegistered $ nick client
+	writeChan (dbQueries serverInfo) $ CheckAccount clID (nick client)
 	return (clID, serverInfo, clients, rooms)
 	where
 		client = clients ! clID
@@ -252,3 +254,13 @@ processAction (clID, serverInfo, clients, rooms) (Dump) = do
 	writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]
 	return (clID, serverInfo, clients, rooms)
 
+processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
+	case info of
+		HasAccount -> do
+			infoM "Clients" $ show clID ++ " has account"
+			writeChan (sendChan $ clients ! clID) ["ASKPASSWORD"]
+		LogonPassed -> do
+			infoM "Clients" $ show clID ++ " authenticated"
+		Guest -> do
+			infoM "Clients" $ show clID ++ " is guest"
+	return (clID, serverInfo, clients, rooms)

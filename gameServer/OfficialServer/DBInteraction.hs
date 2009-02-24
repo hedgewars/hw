@@ -1,9 +1,9 @@
 module OfficialServer.DBInteraction
 (
-	startDBConnection,
-	DBQuery(HasRegistered, CheckPassword)
+	startDBConnection
 ) where
 
+import Prelude hiding (catch);
 import Database.HDBC
 import Database.HDBC.MySQL
 import System.IO
@@ -11,30 +11,47 @@ import Control.Concurrent
 import Control.Exception
 import Monad
 import Maybe
+import System.Log.Logger
 ------------------------
 import CoreTypes
 
-dbInteractionLoop queries dbConn = do
+
+-------------------------------------------------------------------
+-- borrowed from base 4.0.0 ---------------------------------------
+onException :: IO a -> IO b -> IO a                              --
+onException io what = io `catch` \e -> do what                   --
+                                          throw (e :: Exception) --
+-- to be deleted --------------------------------------------------
+-------------------------------------------------------------------
+
+
+dbInteractionLoop queries coreChan dbConn = do
 	q <- readChan queries
 	case q of
-		HasRegistered name -> do
-			statement <- prepare dbConn "SELECT uid FROM users WHERE name=?"
-			execute statement [SqlString name]
-			uid <- fetchRow statement
-			finish statement
-			putStrLn (show $ isJust uid)
+		CheckAccount clID name -> do
+				statement <- prepare dbConn "SELECT uid FROM users WHERE name=?"
+				execute statement [SqlString name]
+				uid <- fetchRow statement
+				finish statement
+				if isJust uid then
+					writeChan coreChan $ ClientAccountInfo clID HasAccount
+					else
+					writeChan coreChan $ ClientAccountInfo clID Guest
+			`onException`
+				(unGetChan queries $ CheckAccount clID name)
+		
 		CheckPassword queryStr -> putStrLn queryStr
 
-	dbInteractionLoop queries dbConn
+	dbInteractionLoop queries coreChan dbConn
 
 dbConnectionLoop serverInfo = do
-	Control.Exception.handle (\e -> print e) $ handleSqlError $
+	Control.Exception.handle (\e -> infoM "Database" $ show e) $ handleSqlError $
 		bracket
 			(connectMySQL defaultMySQLConnectInfo {mysqlHost = dbHost serverInfo, mysqlDatabase = "hedge_main", mysqlUser = dbLogin serverInfo, mysqlPassword = dbPassword serverInfo })
 			(disconnect)
-			(dbInteractionLoop $ dbQueries serverInfo)
+			(dbInteractionLoop (dbQueries serverInfo) (coreChan serverInfo))
 
-	threadDelay (15 * 10^6)
+	threadDelay (5 * 10^6)
 	dbConnectionLoop serverInfo
 
 startDBConnection serverInfo =

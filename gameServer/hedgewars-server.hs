@@ -50,7 +50,7 @@ main = withSocketsDo $ do
 	stats <- atomically $ newTMVar (StatisticsInfo 0 0)
 	dbQueriesChan <- newChan
 	coreChan <- newChan
-	serverInfo <- getOpts $ newServerInfo stats dbQueriesChan
+	serverInfo <- getOpts $ newServerInfo stats coreChan dbQueriesChan
 	
 	bracket
 		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)

@@ -117,6 +117,7 @@ data ServerInfo =
 		dbLogin :: String,
 		dbPassword :: String,
 		stats :: TMVar StatisticsInfo,
+		coreChan :: Chan CoreMessage,
 		dbQueries :: Chan DBQuery
 	}
 
@@ -135,14 +136,20 @@ newServerInfo = (
 		""
 	)
 
+data AccountInfo =
+	HasAccount
+	| LogonPassed
+	| Guest
+
 data CoreMessage =
 	Accept ClientInfo
 	| ClientMessage (Int, [String])
+	| ClientAccountInfo Int AccountInfo
 	-- | CoreMessage String
 	-- | TimerTick
 
 data DBQuery =
-	HasRegistered String
+	CheckAccount Int String
 	| CheckPassword String
 
 
