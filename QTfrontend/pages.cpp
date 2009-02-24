@@ -122,23 +122,34 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
 	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
+
+	signalMapper = new QSignalMapper(this);
 	
 	HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
 	for(int i = 0; i < 8; i++)
 	{
-		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
-		HHNameEdit[i]->setMaxLength(64);
-		HHNameEdit[i]->setMinimumWidth(120);
-		GBHLayout->addWidget(HHNameEdit[i], i, 0);
-		
 		HHHats[i] = new QComboBox(GBoxHedgehogs);
 		HHHats[i]->setModel(hatsModel);
 		HHHats[i]->setIconSize(QSize(32, 37));
 		//HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		//HHHats[i]->setModelColumn(1);
 		//HHHats[i]->setMinimumWidth(132);
-		GBHLayout->addWidget(HHHats[i], i, 1);
+		GBHLayout->addWidget(HHHats[i], i, 0);
+
+		HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
+		HHNameEdit[i]->setMaxLength(64);
+		HHNameEdit[i]->setMinimumWidth(120);
+		GBHLayout->addWidget(HHNameEdit[i], i, 1);
+		
+		randButton[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
+
+		connect(randButton[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
+         	signalMapper->setMapping(randButton[i], i);
+
 	}
+
+	randTeamButton = addButton("Random Team", GBHLayout, 9, false);
+
 	vbox1->addWidget(GBoxHedgehogs);
 
 

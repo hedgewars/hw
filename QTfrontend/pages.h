@@ -23,6 +23,7 @@
 #include <QPushButton>
 #include <QFont>
 #include <QGridLayout>
+#include <QSignalMapper>
 
 #include "binds.h"
 #include "mapContainer.h"
@@ -141,6 +142,7 @@ class PageEditTeam : public AbstractPage
 
 public:
 	PageEditTeam(QWidget* parent = 0);
+	QSignalMapper* signalMapper;
 	QGroupBox *GBoxHedgehogs;
 	QGroupBox *GBoxTeam;
 	QGroupBox *GBoxFort;
@@ -161,7 +163,9 @@ public:
 	QLineEdit * TeamNameEdit;
 	QLineEdit * HHNameEdit[8];
 	QComboBox * HHHats[8];
+	QPushButton * randButton[8];
 	QComboBox * CBBind[BINDS_NUMBER];
+	QPushButton * randTeamButton;
 
 public slots:
 	void CBFort_activated(const QString & gravename);

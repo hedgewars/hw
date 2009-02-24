@@ -77,6 +77,9 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
 	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
 
+	connect(ui.pageEditTeam->signalMapper, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
+	connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
+
 	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
@@ -387,6 +390,20 @@ void HWForm::EditTeam()
 	editedTeam->LoadFromFile();
 	editedTeam->SetToPage(this);
 	GoToPage(ID_PAGE_SETUP_TEAM);
+}
+
+void HWForm::RandomNames()
+{
+	editedTeam->GetFromPage(this);
+	editedTeam->TeamRandomNames(FALSE);
+	editedTeam->SetToPage(this);
+}
+
+void HWForm::RandomName(const int &i)
+{
+	editedTeam->GetFromPage(this);
+	editedTeam->TeamRandomName(i);
+	editedTeam->SetToPage(this);
 }
 
 void HWForm::TeamSave()

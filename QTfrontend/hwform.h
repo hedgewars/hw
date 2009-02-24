@@ -63,6 +63,8 @@ private slots:
 	void IntermediateSetup();
 	void NewTeam();
 	void EditTeam();
+	void RandomNames();
+	void RandomName(const int &i);
 	void TeamSave();
 	void TeamDiscard();
 	void SimpleGame();
