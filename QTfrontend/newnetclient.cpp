@@ -228,7 +228,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
 		netClientState = 1;
 		m_game_connected = true;
-		emit Connected();
 		return;
 	}
 
@@ -376,6 +375,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			{
 				netClientState = 2;
 				RawSendNet(QString("LIST"));
+				emit Connected();
 			}
 
 			emit nickAddedLobby(lst[i]);
