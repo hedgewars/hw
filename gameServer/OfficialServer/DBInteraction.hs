@@ -29,12 +29,12 @@ dbInteractionLoop queries coreChan dbConn = do
 	q <- readChan queries
 	case q of
 		CheckAccount clID name -> do
-				statement <- prepare dbConn "SELECT uid FROM users WHERE name=?"
+				statement <- prepare dbConn "SELECT pass FROM users WHERE name=?"
 				execute statement [SqlString name]
-				uid <- fetchRow statement
+				pass <- fetchRow statement
 				finish statement
-				if isJust uid then
-					writeChan coreChan $ ClientAccountInfo clID HasAccount
+				if isJust pass then
+					writeChan coreChan $ ClientAccountInfo clID (HasAccount $ fromSql $ head $ fromJust $ pass)
 					else
 					writeChan coreChan $ ClientAccountInfo clID Guest
 			`onException`

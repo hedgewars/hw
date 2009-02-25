@@ -19,10 +19,8 @@ import OfficialServer.DBInteraction
 firstAway (_, a, b, c) = (a, b, c)
 
 reactCmd :: ServerInfo -> Int -> [String] -> Clients -> Rooms -> IO (ServerInfo, Clients, Rooms)
-reactCmd serverInfo clID cmd clients rooms = do
-	(_ , serverInfo, clients, rooms) <-
-		foldM processAction (clID, serverInfo, clients, rooms) $ handleCmd clID clients rooms cmd
-	return (serverInfo, clients, rooms)
+reactCmd serverInfo clID cmd clients rooms =
+	liftM firstAway $ foldM processAction (clID, serverInfo, clients, rooms) $ handleCmd clID clients rooms cmd
 
 mainLoop :: ServerInfo -> Clients -> Rooms -> IO ()
 mainLoop serverInfo clients rooms = do
@@ -33,10 +31,9 @@ mainLoop serverInfo clients rooms = do
 			Accept ci -> do
 				let updatedClients = IntMap.insert (clientUID ci) ci clients
 				infoM "Clients" ("New client: id " ++ (show $ clientUID ci))
-				processAction
+				liftM firstAway $ processAction
 					(clientUID ci, serverInfo, updatedClients, rooms)
 					(AnswerThisClient ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"])
-				return (serverInfo, updatedClients, rooms)
 
 			ClientMessage (clID, cmd) -> do
 				debugM "Clients" $ (show clID) ++ ": " ++ (show cmd)

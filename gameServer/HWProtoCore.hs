@@ -25,7 +25,7 @@ handleCmd clID clients rooms ("QUIT" : xs) =
 		removeClientTeams = map (RemoveTeam . teamname) clientTeams
 
 handleCmd clID clients rooms cmd =
-	if null (nick client) || clientProto client == 0 then
+	if not $ logonPassed client then
 		handleCmd_NotEntered clID clients rooms cmd
 	else if roomID client == 0 then
 		handleCmd_lobby clID clients rooms cmd

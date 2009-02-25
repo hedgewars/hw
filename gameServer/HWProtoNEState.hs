@@ -11,23 +11,6 @@ import Utils
 
 handleCmd_NotEntered :: CmdHandler
 
-onLoginFinished :: Int -> String -> Word16 -> Clients -> [Action]
-onLoginFinished clID clientNick clProto clients =
-	if (null $ clientNick) || (clProto == 0) then
-		[]
-	else
-		(RoomAddThisClient 0)
-		: CheckRegistered
-		: answerLobbyNicks
-		-- ++ (answerServerMessage client clients)
-	where
-		lobbyNicks = filter (\n -> (not (null n))) $ map nick $ IntMap.elems clients
-		answerLobbyNicks = if not $ null lobbyNicks then
-					[AnswerThisClient (["LOBBY:JOINED"] ++ lobbyNicks)]
-				else
-					[]
-
-
 handleCmd_NotEntered clID clients _ ["NICK", newNick] =
 	if not . null $ nick client then
 		[ProtocolError "Nick already chosen"]
@@ -37,10 +20,11 @@ handleCmd_NotEntered clID clients _ ["NICK", newNick] =
 	else
 		[ModifyClient (\c -> c{nick = newNick}),
 		AnswerThisClient ["NICK", newNick]]
-		++ (onLoginFinished clID newNick (clientProto client) clients)
+		++ checkPassword
 	where
 		client = clients IntMap.! clID
 		haveSameNick = isJust $ find (\cl -> newNick == nick cl) $ IntMap.elems clients
+		checkPassword = if clientProto client /= 0 then [CheckRegistered] else []
 
 
 handleCmd_NotEntered clID clients _ ["PROTO", protoNum] =
@@ -51,10 +35,15 @@ handleCmd_NotEntered clID clients _ ["PROTO", protoNum] =
 	else
 		[ModifyClient (\c -> c{clientProto = parsedProto}),
 		AnswerThisClient ["PROTO", show parsedProto]]
-		++ (onLoginFinished clID (nick client) parsedProto clients)
+		++ checkPassword
 	where
 		client = clients IntMap.! clID
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
+		checkPassword = if (not . null) (nick client) then [CheckRegistered] else []
+
+handleCmd_NotEntered clID clients _ ["PASSWORD"] =
+	[ModifyClient (\cl -> cl{logonPassed = True}),
+	MoveToLobby]
 
 
 handleCmd_NotEntered _ _ _ ["DUMP"] =

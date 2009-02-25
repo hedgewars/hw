@@ -428,6 +428,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "ASKPASSWORD") {
+		RawSendNet(QString("PASSWORD"));
+		return;
+	}
+
 	if (lst[0] == "TEAM_ACCEPTED") {
 		if (lst.size() != 2)
 		{

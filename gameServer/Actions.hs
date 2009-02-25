@@ -23,6 +23,7 @@ data Action =
 	| RemoveTeam String
 	| RemoveRoom
 	| UnreadyRoomClients
+	| MoveToLobby
 	| ProtocolError String
 	| Warning String
 	| ByeClient String
@@ -250,17 +251,33 @@ processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
 	where
 		client = clients ! clID
 
+
 processAction (clID, serverInfo, clients, rooms) (Dump) = do
 	writeChan (sendChan $ clients ! clID) ["DUMP", show serverInfo, showTree clients, showTree rooms]
 	return (clID, serverInfo, clients, rooms)
 
+
 processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
 	case info of
-		HasAccount -> do
+		HasAccount passwd -> do
 			infoM "Clients" $ show clID ++ " has account"
 			writeChan (sendChan $ clients ! clID) ["ASKPASSWORD"]
-		LogonPassed -> do
-			infoM "Clients" $ show clID ++ " authenticated"
+			return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd}) clID clients, rooms)
 		Guest -> do
 			infoM "Clients" $ show clID ++ " is guest"
-	return (clID, serverInfo, clients, rooms)
+			processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID clients, rooms) MoveToLobby
+
+
+processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
+	foldM processAction (clID, serverInfo, clients, rooms) $
+		(RoomAddThisClient 0)
+		: answerLobbyNicks
+		-- ++ (answerServerMessage client clients)
+	where
+		lobbyNicks = Prelude.filter (\n -> (not (Prelude.null n))) $ Prelude.map nick $ elems clients
+		answerLobbyNicks = if not $ Prelude.null lobbyNicks then
+					[AnswerThisClient (["LOBBY:JOINED"] ++ lobbyNicks)]
+				else
+					[]
+
+

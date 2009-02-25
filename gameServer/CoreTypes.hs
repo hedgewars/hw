@@ -19,6 +19,8 @@ data ClientInfo =
 		clientHandle :: Handle,
 		host :: String,
 		nick :: String,
+		webPassword :: String,
+		logonPassed :: Bool,
 		clientProto :: Word16,
 		roomID :: Int,
 		isMaster :: Bool,
@@ -137,8 +139,7 @@ newServerInfo = (
 	)
 
 data AccountInfo =
-	HasAccount
-	| LogonPassed
+	HasAccount String
 	| Guest
 
 data CoreMessage =
