@@ -119,7 +119,7 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 			else
 				[]
 		answerOthersQuit =
-			if not $ Prelude.null clientNick then
+			if logonPassed client then
 				if not $ Prelude.null msg then
 					[AnswerAll ["LOBBY:LEFT", clientNick, msg]]
 				else
@@ -274,7 +274,7 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 		: answerLobbyNicks
 		-- ++ (answerServerMessage client clients)
 	where
-		lobbyNicks = Prelude.filter (\n -> (not (Prelude.null n))) $ Prelude.map nick $ elems clients
+		lobbyNicks = Prelude.map nick $ Prelude.filter logonPassed $ elems clients
 		answerLobbyNicks = if not $ Prelude.null lobbyNicks then
 					[AnswerThisClient (["LOBBY:JOINED"] ++ lobbyNicks)]
 				else

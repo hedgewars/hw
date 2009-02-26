@@ -650,7 +650,6 @@ void HWForm::ForcedDisconnect()
 				QMessageBox::tr("Connection to server is lost"));
 	
 	}
-qDebug() << "ForcedDisconnect" << ui.Pages->currentIndex();
 	if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
 }
 
