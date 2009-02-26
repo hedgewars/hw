@@ -141,7 +141,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageSelectWeapon->pWeapons,	SIGNAL(weaponsDeleted()),
 		this, SLOT(GoBack())); // executed third
 
-	GoToPage(ID_PAGE_MAIN);
+	PagesStack.push(ID_PAGE_MAIN);
+	GoBack();
 }
 
 void HWForm::onFrontendFullscreen(bool value)
@@ -323,6 +324,8 @@ void HWForm::GoBack()
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
 	
+	if (id == ID_PAGE_CONNECTING)
+		GoBack();
 	if (id == ID_PAGE_NETSERVER)
 		GoBack();
 	if ((!hwnet) && (id == ID_PAGE_ROOMSLIST))
@@ -466,11 +469,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
-	{
-		GoToPage(ID_PAGE_CONNECTING);
-		connect(hwnet, SIGNAL(Connected()), this, SLOT(GoBack()));
-		connect(hwnet, SIGNAL(Disconnected()), this, SLOT(GoBack()));
-	}
+	GoToPage(ID_PAGE_CONNECTING);
 
 	connect(hwnet, SIGNAL(showMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
 
@@ -651,6 +650,7 @@ void HWForm::ForcedDisconnect()
 				QMessageBox::tr("Connection to server is lost"));
 	
 	}
+qDebug() << "ForcedDisconnect" << ui.Pages->currentIndex();
 	if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
 }
 
