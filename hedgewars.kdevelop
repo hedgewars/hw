@@ -50,6 +50,7 @@
       <filetype>*.dpr</filetype>
       <filetype>*.hs</filetype>
       <filetype>*.pro</filetype>
+      <filetype>Find*.cmake</filetype>
     </filetypes>
     <blacklist/>
     <general>
@@ -215,7 +216,7 @@
       <hidenonlocation>false</hidenonlocation>
     </groups>
     <tree>
-      <hidepatterns/>
+      <hidepatterns></hidepatterns>
       <hidenonprojectfiles>true</hidenonprojectfiles>
       <showvcsfields>false</showvcsfields>
     </tree>

@@ -18,6 +18,9 @@
  */
 
 #include <QDebug>
+#include <QInputDialog>
+
+#include <QtCrypto>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -429,7 +432,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "ASKPASSWORD") {
-		RawSendNet(QString("PASSWORD"));
+		QString password = QInputDialog::getText(0, tr("Password"), tr("Enter your password:"), QLineEdit::Password);
+
+		QCA::Initializer qcaInit;
+		QCA::Hash shaHash("md5");
+		shaHash.update(password.toLatin1());
+		QByteArray hashResult = shaHash.final().toByteArray();
+		
+		RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(QCA::arrayToHex(hashResult)));
 		return;
 	}
 
