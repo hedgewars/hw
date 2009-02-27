@@ -25,6 +25,7 @@ data ClientInfo =
 		roomID :: Int,
 		isMaster :: Bool,
 		isReady :: Bool,
+		isAdministrator :: Bool,
 		forceQuit :: Bool,
 		partRoom :: Bool
 	}
@@ -139,7 +140,7 @@ newServerInfo = (
 	)
 
 data AccountInfo =
-	HasAccount String
+	HasAccount String Bool
 	| Guest
 
 data CoreMessage =
@@ -151,7 +152,6 @@ data CoreMessage =
 
 data DBQuery =
 	CheckAccount Int String
-	| CheckPassword String
 
 
 type Clients = IntMap.IntMap ClientInfo

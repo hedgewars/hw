@@ -44,11 +44,12 @@ handleCmd_NotEntered clID clients _ ["PROTO", protoNum] =
 handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
 	if passwd == webPassword client then
 		[ModifyClient (\cl -> cl{logonPassed = True}),
-		MoveToLobby]
+		MoveToLobby] ++ adminNotice
 	else
 		[ByeClient "Authentication failed"]
 	where
 		client = clients IntMap.! clID
+		adminNotice = if isAdministrator client then [AnswerThisClient ["ADMIN_ACCESS"]] else []
 
 
 handleCmd_NotEntered _ _ _ ["DUMP"] =

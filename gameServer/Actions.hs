@@ -259,10 +259,10 @@ processAction (clID, serverInfo, clients, rooms) (Dump) = do
 
 processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
 	case info of
-		HasAccount passwd -> do
+		HasAccount passwd isAdmin -> do
 			infoM "Clients" $ show clID ++ " has account"
 			writeChan (sendChan $ clients ! clID) ["ASKPASSWORD"]
-			return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd}) clID clients, rooms)
+			return (clID, serverInfo, adjust (\cl -> cl{webPassword = passwd, isAdministrator = isAdmin}) clID clients, rooms)
 		Guest -> do
 			infoM "Clients" $ show clID ++ " is guest"
 			processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID clients, rooms) MoveToLobby

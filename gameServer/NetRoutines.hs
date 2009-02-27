@@ -48,7 +48,9 @@ acceptLoop servSock coreChan clientCounter = do
 					False
 					False
 					False
-					False)
+					False
+					False
+					)
 
 		writeChan coreChan $ Accept newClient
 

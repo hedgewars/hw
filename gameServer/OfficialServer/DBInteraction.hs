@@ -24,23 +24,28 @@ onException io what = io `catch` \e -> do what                   --
 -- to be deleted --------------------------------------------------
 -------------------------------------------------------------------
 
+dbQueryString =
+	"SELECT users.pass, users_roles.rid FROM `users`, users_roles "
+	++ "WHERE users.name = ? AND users_roles.uid = users.uid"
 
 dbInteractionLoop queries coreChan dbConn = do
 	q <- readChan queries
 	case q of
 		CheckAccount clID name -> do
-				statement <- prepare dbConn "SELECT pass FROM users WHERE name=?"
+				statement <- prepare dbConn dbQueryString
 				execute statement [SqlString name]
-				pass <- fetchRow statement
+				passAndRole <- fetchRow statement
 				finish statement
-				if isJust pass then
-					writeChan coreChan $ ClientAccountInfo clID (HasAccount $ fromSql $ head $ fromJust $ pass)
+				if isJust passAndRole then
+					writeChan coreChan $
+							ClientAccountInfo clID $
+								HasAccount
+									(fromSql $ head $ fromJust $ passAndRole)
+									((fromSql $ last $ fromJust $ passAndRole) == (3 :: Int))
 					else
 					writeChan coreChan $ ClientAccountInfo clID Guest
 			`onException`
 				(unGetChan queries $ CheckAccount clID name)
-		
-		CheckPassword queryStr -> putStrLn queryStr
 
 	dbInteractionLoop queries coreChan dbConn
 
