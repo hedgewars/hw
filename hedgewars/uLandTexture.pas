@@ -52,6 +52,7 @@ end;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 var tx, ty: Longword;
 begin
+if (Width <= 0) or (Height <= 0) then exit;
 TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
 TryDo(X + Width <= LAND_WIDTH, 'UpdateLandTexture: wrong Width parameter', true);
 TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
