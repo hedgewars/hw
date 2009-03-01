@@ -105,9 +105,6 @@ if i > 0 then
 	for t:= 1 to Pred(i) do
 		if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
 	b:= copy(a, i + 1, Length(a) - i);
-	while (b[0] <> #0) do
-		Delete(b, 1, 1);
-	
 	byte(a[0]):= Pred(i)
 	end else b:= '';
 end;
