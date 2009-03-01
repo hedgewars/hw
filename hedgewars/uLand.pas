@@ -642,7 +642,12 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
     for y:= 0 to Pred(tmpsurf^.h) do
         begin
         for x:= 0 to Pred(tmpsurf^.w) do
-            Land[cpY + y, cpX + x]:= p^[x];
+            begin
+            if (($FF000000 and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
+                Land[cpY + y, cpX + x]:= 0
+            else    
+                Land[cpY + y, cpX + x]:= p^[x];
+            end;
         p:= @(p^[tmpsurf^.pitch div 4]);
         end;
   

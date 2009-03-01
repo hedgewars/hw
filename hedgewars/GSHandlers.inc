@@ -40,6 +40,7 @@ end;
 procedure CheckHHDamage(Gear: PGear);
 var dmg: Longword;
 begin
+if(Gear^.Invulnerable) then exit;
 if _0_4 < Gear^.dY then
 	begin
 	if _0_6 < Gear^.dY then
@@ -1704,7 +1705,7 @@ if Gear^.Pos = 0 then
 	while gi <> nil do
 		begin
 		dmg:= cakeDmg * 2 - hwRound(Distance(gi^.X - Gear^.X, gi^.Y - Gear^.Y));
-		if (dmg > 1) and (gi^.Kind = gtHedgehog) then
+		if (dmg > 1) and (gi^.Kind = gtHedgehog) and (not gi^.Invulnerable) then
 			gi^.State:= gi^.State or gstWinner;
 		gi:= gi^.NextGear
 		end;

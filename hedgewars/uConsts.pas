@@ -83,7 +83,7 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, amRCPlane);
+			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -220,7 +220,7 @@ const
 	gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
 
 	cMaxSlotIndex       = 8;
-	cMaxSlotAmmoIndex   = 3;
+	cMaxSlotAmmoIndex   = 4;
 
 	ammoprop_Timerable    = $00000001;
 	ammoprop_Power        = $00000002;
@@ -233,6 +233,7 @@ const
 	ammoprop_AltAttack    = $00000200;
 	ammoprop_AltUse       = $00000400;
 	ammoprop_NotBorder    = $00000800;
+	ammoprop_Utility      = $00001000;
 
 	AMMO_INFINITE = 9;
 
@@ -1164,6 +1165,86 @@ const
 			maxAngle: 0;
 			isDamaging: true;
 			SkipTurns: 4;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidLowGravity;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amLowGravity);
+			Slot: 8;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidExtraDamage;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amExtraDamage);
+			Slot: 8;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidInvulnerable;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amInvulnerable);
+			Slot: 8;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidExtraTime;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amExtraTime);
+			Slot: 7;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
 			PosCount: 1;
 			PosSprite: sprWater)
 			);

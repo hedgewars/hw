@@ -179,6 +179,12 @@ with Gear^,
                        amNapalm: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 2, _0, _0, 0);
                         amDrill: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                         amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
+                      amLowGravity: cGravity:= cMaxWindSpeed / 2;
+                      amExtraDamage: cDamageModifier:= _1_5;
+                      //this flag unfortunately gets cleared too often for true invulnerability, although it seemed like the natural choice
+                      //amInvulnerable: State:= State or gstNoDamage;
+                      amInvulnerable: Invulnerable:= true;
+                      amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
@@ -193,9 +199,9 @@ with Gear^,
            end else begin
            if not CurrentTeam^.ExtDriven and
              ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0) then SendIPC('a');
-           AfterAttack
+           AfterAttack;
            end
-        end else Message:= Message and not gm_Attack
+        end else Message:= Message and not gm_Attack;
      end
 end;
 
@@ -204,15 +210,25 @@ begin
 with CurrentHedgehog^.Gear^,
 		CurrentHedgehog^ do
 	begin
-		Inc(AttacksNum);
-		State:= State and not gstAttacking;
-		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
-		((GameFlags and gfMultiWeapon) <> 0) then isInMultiShoot:= true
-		else begin
-		TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
-		State:= State or gstAttacked;
-		OnUsedAmmo(CurrentHedgehog^)
-		end;
+	State:= State and not gstAttacking;
+    if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Utility) = 0 then
+        begin
+        Inc(AttacksNum);
+        if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
+        ((GameFlags and gfMultiWeapon) <> 0) then 
+            isInMultiShoot:= true
+        else 
+            begin
+            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
+            State:= State or gstAttacked;
+            OnUsedAmmo(CurrentHedgehog^);
+            end;
+        end
+    else
+       begin
+       OnUsedAmmo(CurrentHedgehog^);
+       ApplyAmmoChanges(CurrentHedgehog^);
+       end;
 	AttackBar:= 0;
 	end
 end;

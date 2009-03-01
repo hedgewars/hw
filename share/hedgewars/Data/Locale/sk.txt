@@ -32,6 +32,10 @@
 00:29=Loptičkový guľomet
 00:30=Napalm
 00:31=Bezpilotný bombardér
+00:32=Low Gravity
+00:33=Extra Damage
+00:34=Invulnerable
+00:35=Extra Time
 
 01:00=Do boja!
 01:01=Remíza

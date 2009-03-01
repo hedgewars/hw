@@ -28,6 +28,7 @@ type PGear = ^TGear;
 	TGear = record
 			NextGear, PrevGear: PGear;
 			Active: Boolean;
+			Invulnerable: Boolean;
 			Ammo : PAmmo;
 			State : Longword;
 			X : hwFloat;
@@ -57,6 +58,7 @@ type PGear = ^TGear;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
+procedure ResetUtilities;
 procedure SetAllToActive;
 procedure SetAllHHToActive;
 procedure DrawGears;
@@ -421,30 +423,34 @@ end;
 
 function CheckNoDamage: boolean; // returns TRUE in case of no damaged hhs
 var Gear: PGear;
+    dmg: LongInt;
 begin
 CheckNoDamage:= true;
 Gear:= GearsList;
 while Gear <> nil do
 	begin
 	if Gear^.Kind = gtHedgehog then
-		if Gear^.Damage <> 0 then
-		begin
-		CheckNoDamage:= false;
-		uStats.HedgehogDamaged(Gear);
+        begin
+		if (Gear^.Damage <> 0) and
+		(not Gear^.Invulnerable) then
+		    begin
+            CheckNoDamage:= false;
+            uStats.HedgehogDamaged(Gear);
+            dmg:= HwRound(int2HwFloat(Gear^.Damage) * cDamageModifier);
+            if Gear^.Health < dmg then
+                Gear^.Health:= 0
+            else
+                dec(Gear^.Health, dmg);
 
-		if Gear^.Health < Gear^.Damage then
-			Gear^.Health:= 0
-		else
-			dec(Gear^.Health, Gear^.Damage);
+            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
+                    gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
-				gtHealthTag, Gear^.Damage, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+            RenderHealth(PHedgehog(Gear^.Hedgehog)^);
+            RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
 
-		RenderHealth(PHedgehog(Gear^.Hedgehog)^);
-		RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
-
-		Gear^.Damage:= 0
-		end;
+		    end;
+	    Gear^.Damage:= 0;
+        end;
 	Gear:= Gear^.NextGear
 	end;
 end;
@@ -557,6 +563,7 @@ case step of
 	stNTurn: begin
 			if isInMultiShoot then isInMultiShoot:= false
 			else begin
+            ResetUtilities;
 			ParseCommand('/nextturn', true);
 			SwitchHedgehog;
 
@@ -589,6 +596,17 @@ if (not CurrentTeam^.ExtDriven) and
 	end;
 
 inc(GameTicks)
+end;
+
+(* Purpose, to reset all transient attributes toggled by a utility.  Right now that is just Low Gravity and Extra Damage and Invulnerability.
+Other possibilities include: Laser Sight... more?
+*)
+procedure ResetUtilities;
+begin
+    cGravity:= cMaxWindSpeed;
+    cDamageModifier:= _1;
+    if (CurrentHedgehog^.Gear <> nil) then
+        CurrentHedgehog^.Gear^.Invulnerable:= false;
 end;
 
 procedure SetAllToActive;
@@ -1223,7 +1241,8 @@ while Gear <> nil do
 						//{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
 						if (Mask and EXPLNoDamage) = 0 then
 							begin
-							inc(Gear^.Damage, dmg);
+                            if not Gear^.Invulnerable then
+							   inc(Gear^.Damage, dmg);
 							if Gear^.Kind = gtHedgehog then
 								AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color)
 							end;
@@ -1267,7 +1286,8 @@ while t <> nil do
 			gtMine,
 			gtCase,
 			gtTarget: begin
-					inc(t^.Damage, dmg);
+                    if (not Gear^.Invulnerable) then
+					    inc(t^.Damage, dmg);
 
 					if t^.Kind = gtHedgehog then
 						AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(t^.Hedgehog)^.Team^.Clan^.Color);

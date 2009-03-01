@@ -32,6 +32,10 @@
 00:29=Palloase
 00:30=Napalmi
 00:31=Kauko-ohjattava lentokone
+00:32=Low Gravity
+00:33=Extra Damage
+00:34=Invulnerable
+00:35=Extra Time
 
 01:00=Taistelu alkakoon!
 01:01=Tasapeli

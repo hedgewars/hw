@@ -135,19 +135,19 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
-        if Land[y + dy, i] <> COLOR_INDESTRUCTIBLE then
+        if Land[y + dy, i] = COLOR_LAND then
             LandPixels[y + dy, i]:= 0;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
-        if Land[y - dy, i] <> COLOR_INDESTRUCTIBLE then
+        if Land[y - dy, i] = COLOR_LAND then
              LandPixels[y - dy, i]:= 0;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
-        if Land[y + dx, i] <> COLOR_INDESTRUCTIBLE then
+        if Land[y + dx, i] = COLOR_LAND then
             LandPixels[y + dx, i]:= 0;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
-        if Land[y - dx, i] <> COLOR_INDESTRUCTIBLE then
+        if Land[y - dx, i] = COLOR_LAND then
              LandPixels[y - dx, i]:= 0;
 end;
 
@@ -191,8 +191,6 @@ end;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 var dx, dy, ty, tx, d: LongInt;
 begin
-FillRoundInLand(X, Y, Radius, 0);
-
   dx:= 0;
   dy:= Radius;
   d:= 3 - 2 * Radius;
@@ -208,6 +206,8 @@ FillRoundInLand(X, Y, Radius, 0);
      inc(dx)
      end;
   if (dx = dy) then FillLandCircleLines0(x, y, dx, dy);
+  // FillRoundInLand after erasing land pixels to allow Land 0 check for mask.png to function
+  FillRoundInLand(X, Y, Radius, 0);
   inc(Radius, 4);
   dx:= 0;
   dy:= Radius;
@@ -239,7 +239,7 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if Land[ty, tx] <> COLOR_INDESTRUCTIBLE then
+            if Land[ty, tx] = COLOR_LAND then
                 LandPixels[ty, tx]:= 0;
     inc(y, dY)
     end;

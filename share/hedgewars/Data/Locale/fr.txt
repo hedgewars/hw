@@ -32,6 +32,10 @@
 00:29=Ballgun
 00:30=Napalm
 00:31=Avion télécommandé
+00:32=La Faible Gravité
+00:33=Plus de Dégâts
+00:34=Invulnérable
+00:35=Extra Time
 
 01:00=C'est parti!
 01:01=Round ex aequo
