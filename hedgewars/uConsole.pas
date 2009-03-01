@@ -100,14 +100,16 @@ procedure SplitBySpace(var a, b: shortstring);
 var i, t: LongInt;
 begin
 i:= Pos(' ', a);
-if i>0 then
-   begin
-   for t:= 1 to Pred(i) do
-       if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
-   b:= copy(a, i + 1, Length(a) - i);
-   while (b[0]<>#0) and (b[1]=#32) do Delete(b, 1, 1);
-   byte(a[0]):= Pred(i)
-   end else b:= '';
+if i > 0 then
+	begin
+	for t:= 1 to Pred(i) do
+		if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
+	b:= copy(a, i + 1, Length(a) - i);
+	while (b[0] <> #0) do
+		Delete(b, 1, 1);
+	
+	byte(a[0]):= Pred(i)
+	end else b:= '';
 end;
 
 procedure WriteToConsole(s: shortstring);

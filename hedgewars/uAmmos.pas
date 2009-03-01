@@ -225,7 +225,7 @@ end;
 
 procedure SetWeapon(weap: TAmmoType);
 begin
-ParseCommand('/setweap ' + char(LongInt(weap)+33), true)
+ParseCommand('/setweap ' + char(weap), true)
 end;
 
 procedure DisableSomeWeapons;

@@ -364,14 +364,14 @@ procedure chSetWeapon(var s: shortstring);
 begin
 if (s[0] <> #1) or CheckNoTeamOrHH then exit;
 
-if TAmmoType(LongInt(s[1])-33) > High(TAmmoType) then exit;
+if TAmmoType(s[1]) > High(TAmmoType) then exit;
 
 if not CurrentTeam^.ExtDriven then SendIPC('w' + s);
 
 with CurrentHedgehog^.Gear^ do
      begin
      Message:= Message or gm_Weapon;
-     MsgParam:= byte(LongInt(s[1])-33)
+     MsgParam:= byte(s[1])
      end
 end;
 
