@@ -35,7 +35,7 @@ procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real; Invulnerable: boolean);
 procedure DrawFillRect(r: TSDL_Rect);
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 procedure RenderHealth(var Hedgehog: THedgehog);
@@ -496,7 +496,7 @@ begin
 DrawTexture(X - Source^.w div 2, Top, Source)
 end;
 
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real; Invulnerable: boolean);
 var l, r, t, b: real;
 begin
 
@@ -522,6 +522,9 @@ glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
 
 glBegin(GL_QUADS);
 
+if Invulnerable then // twiddling the channels a bit. perhaps a pixmap or something would be better.
+    glColor4ub($CC, $FF, $0, $C0);
+
 glTexCoord2f(l, t);
 glVertex2i(-16, -16);
 
@@ -534,7 +537,9 @@ glVertex2i(16, 16);
 glTexCoord2f(l, b);
 glVertex2i(-16, 16);
 
+
 glEnd();
+glColor4f(1,1,1,1);
 
 glPopMatrix
 end;

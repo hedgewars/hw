@@ -185,6 +185,7 @@ with Gear^,
                       //amInvulnerable: State:= State or gstNoDamage;
                       amInvulnerable: Invulnerable:= true;
                       amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
+                      amLaserSight: cLaserSighting:= true;
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);

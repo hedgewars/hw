@@ -97,6 +97,7 @@ var
 	cWindSpeed,
 	cGravity: hwFloat;
 	cDamageModifier: hwFloat;
+	cLaserSighting: boolean;
 
 	flagMakeCapture: boolean = false;
 
@@ -424,6 +425,7 @@ cMaxWindSpeed.QWordValue:= 2147484;// 0.0005
 cWindSpeed.QWordValue:=     429496;// 0.0001
 cGravity:= cMaxWindSpeed;
 cDamageModifier:= _1;
+cLaserSighting:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}

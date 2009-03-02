@@ -79,7 +79,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 			(proc: nil;              flags: 0), // amLowGravity
 			(proc: nil;              flags: 0), // amExtraDamage
 			(proc: nil;              flags: 0), // amInvulnerable
-			(proc: nil;              flags: 0) // amExtraTime
+			(proc: nil;              flags: 0), // amExtraTime
+			(proc: nil;              flags: 0) // amLaserSight
 			);
 
 const BadTurn = Low(LongInt) div 4;

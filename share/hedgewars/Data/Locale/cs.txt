@@ -36,6 +36,7 @@
 00:33=Extra Damage
 00:34=Invulnerable
 00:35=Extra Time
+00:36=Laser Sight
 
 01:00=Do boje!
 01:01=Kolo nerozhodně

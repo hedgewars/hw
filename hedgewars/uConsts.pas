@@ -83,7 +83,8 @@ type
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime);
+			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
+            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, amLaserSight);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -1239,6 +1240,26 @@ const
 					Timer: 0;
 					Pos: 0;
 					AmmoType: amExtraTime);
+			Slot: 7;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidLaserSight;
+			NameTex: nil;
+			Probability: 200;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amLaserSight);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
