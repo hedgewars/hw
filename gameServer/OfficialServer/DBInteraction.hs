@@ -16,6 +16,15 @@ import System.Log.Logger
 import CoreTypes
 
 
+fakeDbConnection serverInfo = do
+	q <- readChan $ dbQueries serverInfo
+	case q of
+		CheckAccount clID name -> do
+			writeChan (coreChan serverInfo) $ ClientAccountInfo clID Guest
+
+	fakeDbConnection serverInfo
+
+
 -------------------------------------------------------------------
 -- borrowed from base 4.0.0 ---------------------------------------
 onException :: IO a -> IO b -> IO a                              --
@@ -60,4 +69,7 @@ dbConnectionLoop serverInfo = do
 	dbConnectionLoop serverInfo
 
 startDBConnection serverInfo =
-	when (not . null $ dbHost serverInfo) ((forkIO $ dbConnectionLoop serverInfo) >> return ())
+	if (not . null $ dbHost serverInfo) then
+		forkIO $ dbConnectionLoop serverInfo
+		else
+		forkIO $ fakeDbConnection serverInfo
