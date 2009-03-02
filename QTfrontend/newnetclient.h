@@ -99,8 +99,9 @@ class HWNewNet : public QObject
   void nickAddedLobby(const QString& nick);
   void nickRemovedLobby(const QString& nick);
   void FromNet(const QByteArray & buf);
-  void AddNetTeam(const HWTeam&);
+  void adminAccess(bool);
 
+  void AddNetTeam(const HWTeam&);
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
   void themeChanged(const QString & theme);

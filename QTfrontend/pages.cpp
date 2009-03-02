@@ -765,10 +765,12 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
 	pageLayout->setRowStretch(4, 350);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
 	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
+	
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
+	BtnAdmin = addButton(tr("Admin features"), pageLayout, 5, 1);
 
 	connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
 	connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
@@ -776,6 +778,10 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	connect(roomsList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(onJoinClick()));
 }
 
+void PageRoomsList::setAdmin(bool flag)
+{
+	BtnAdmin->setVisible(flag);
+}
 
 void PageRoomsList::setRoomsList(const QStringList & list)
 {

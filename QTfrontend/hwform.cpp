@@ -482,6 +482,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 	connect(hwnet, SIGNAL(roomsList(const QStringList&)),
 		ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)));
+	connect(hwnet, SIGNAL(adminAccess(bool)),
+		ui.pageRoomsList, SLOT(setAdmin(bool)));
 	
 	connect(hwnet, SIGNAL(serverMessage(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(onServerMessage(const QString&)));

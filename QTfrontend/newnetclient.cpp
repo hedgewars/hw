@@ -231,6 +231,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		RawSendNet(QString("PROTO%1%2").arg(delimeter).arg(*cProtoVer));
 		netClientState = 1;
 		m_game_connected = true;
+		emit adminAccess(false);
 		return;
 	}
 
@@ -562,6 +563,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		emit showMessage(HWNewNet::tr("Quit reason: ") + lst[1]);
+		return;
+	}
+
+
+	if (lst[0] == "ADMIN_ACCESS") {
+		emit adminAccess(true);
 		return;
 	}
 

@@ -369,10 +369,12 @@ public:
 	QPushButton * BtnCreate;
 	QPushButton * BtnJoin;
 	QPushButton * BtnRefresh;
+	QPushButton * BtnAdmin;
 	HWChatWidget * chatWidget;
 	
 public slots:
 	void setRoomsList(const QStringList & list);
+	void setAdmin(bool);
 
 private slots:
 	void onCreateClick();
