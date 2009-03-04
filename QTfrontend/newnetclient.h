@@ -100,6 +100,7 @@ class HWNewNet : public QObject
   void nickRemovedLobby(const QString& nick);
   void FromNet(const QByteArray & buf);
   void adminAccess(bool);
+  void roomMaster(bool);
 
   void AddNetTeam(const HWTeam&);
   void seedChanged(const QString & seed);
@@ -155,6 +156,7 @@ class HWNewNet : public QObject
   void CreateRoom(const QString & room);
   void askRoomsList();
   void gameFinished();
+  void banPlayer(const QString &);
   void kickPlayer(const QString &);
   void infoPlayer(const QString &);
   void startGame();

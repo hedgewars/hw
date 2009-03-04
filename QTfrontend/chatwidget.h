@@ -41,10 +41,12 @@ class HWChatWidget : public QWidget
   void nickRemoved(const QString& nick);
   void clear();
   void setReadyStatus(const QString & nick, bool isReady);
+  void adminAccess(bool);
 
  signals:
   void chatLine(const QString& str);
   void kick(const QString & str);
+  void ban(const QString & str);
   void info(const QString & str);
 
  private:
@@ -53,9 +55,13 @@ class HWChatWidget : public QWidget
   QStringList chatStrings;
   QListWidget* chatNicks;
   QLineEdit* chatEditLine;
+  QAction * acInfo;
+  QAction * acKick;
+  QAction * acBan;
 
  private slots:
   void returnPressed();
+  void onBan();
   void onKick();
   void onInfo();
 };

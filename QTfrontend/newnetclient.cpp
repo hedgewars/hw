@@ -357,6 +357,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			{
 				netClientState = 3;
 				emit EnteredGame();
+				emit roomMaster(isChief);
 				if (isChief)
 					ConfigAsked();
 			}
@@ -732,6 +733,11 @@ QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
 		return QString("* %1 %2").arg(nick).arg(msg.mid(4));
 	else
 		return QString("%1: %2").arg(nick).arg(msg);
+}
+
+void HWNewNet::banPlayer(const QString & nick)
+{
+	RawSendNet(QString("BAN%1%2").arg(delimeter).arg(nick));
 }
 
 void HWNewNet::kickPlayer(const QString & nick)

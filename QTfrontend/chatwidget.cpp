@@ -57,12 +57,13 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
 	mainLayout.addWidget(chatNicks, 0, 1);
 
-	QAction * acBan = new QAction(QAction::tr("Kick"), chatNicks);
-	connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onKick()));
-	chatNicks->insertAction(0, acBan);
-
-	QAction * acInfo = new QAction(QAction::tr("Info"), chatNicks);
+	acInfo = new QAction(QAction::tr("Info"), chatNicks);
 	connect(acInfo, SIGNAL(triggered(bool)), this, SLOT(onInfo()));
+	acKick = new QAction(QAction::tr("Kick"), chatNicks);
+	connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
+	acBan = new QAction(QAction::tr("Ban"), chatNicks);
+	connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
+	
 	chatNicks->insertAction(0, acInfo);
 }
 
@@ -129,6 +130,13 @@ void HWChatWidget::onKick()
 		emit kick(curritem->text());
 }
 
+void HWChatWidget::onBan()
+{
+	QListWidgetItem * curritem = chatNicks->currentItem();
+	if (curritem)
+		emit ban(curritem->text());
+}
+
 void HWChatWidget::onInfo()
 {
 	QListWidgetItem * curritem = chatNicks->currentItem();
@@ -149,4 +157,16 @@ void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
 		items[0]->setIcon(QIcon(":/res/lightbulb_on.png"));
 	else
 		items[0]->setIcon(QIcon(":/res/lightbulb_off.png"));
+}
+
+void HWChatWidget::adminAccess(bool b)
+{
+	chatNicks->removeAction(acKick);
+	chatNicks->removeAction(acBan);
+	
+	if(b)
+	{
+		chatNicks->insertAction(0, acKick);
+		chatNicks->insertAction(0, acBan);
+	}
 }

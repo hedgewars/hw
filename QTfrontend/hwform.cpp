@@ -484,6 +484,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)));
 	connect(hwnet, SIGNAL(adminAccess(bool)),
 		ui.pageRoomsList, SLOT(setAdmin(bool)));
+	connect(hwnet, SIGNAL(adminAccess(bool)),
+		ui.pageRoomsList->chatWidget, SLOT(adminAccess(bool)));
 	
 	connect(hwnet, SIGNAL(serverMessage(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(onServerMessage(const QString&)));
@@ -505,6 +507,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pChatWidget, SLOT(setReadyStatus(const QString &, bool)));
 	connect(hwnet, SIGNAL(chatStringFromMe(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)));
+	connect(hwnet, SIGNAL(roomMaster(bool)),
+		ui.pageNetGame->pChatWidget, SLOT(adminAccess(bool)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(chatLine(const QString&)),
 		hwnet, SLOT(chatLineToNet(const QString&)));
 	connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
@@ -513,8 +517,14 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(kick(const QString&)),
 		hwnet, SLOT(kickPlayer(const QString&)));
+	connect(ui.pageNetGame->pChatWidget, SIGNAL(ban(const QString&)),
+		hwnet, SLOT(banPlayer(const QString&)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(info(const QString&)),
 		hwnet, SLOT(infoPlayer(const QString&)));
+	connect(ui.pageRoomsList->chatWidget, SIGNAL(kick(const QString&)),
+		hwnet, SLOT(kickPlayer(const QString&)));
+	connect(ui.pageRoomsList->chatWidget, SIGNAL(ban(const QString&)),
+		hwnet, SLOT(banPlayer(const QString&)));
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(info(const QString&)),
 		hwnet, SLOT(infoPlayer(const QString&)));
 
