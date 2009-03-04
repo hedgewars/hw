@@ -49,6 +49,16 @@ for ty:= 0 to TEXSIZE - 1 do
 Pixels:= @tmpPixels
 end;
 
+function Pixels2(x, y: Longword): Pointer;
+var tx, ty: Longword;
+begin
+for ty:= 0 to TEXSIZE - 1 do
+	for tx:= 0 to TEXSIZE - 1 do
+		tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or $FF000000;
+	
+Pixels2:= @tmpPixels
+end;
+
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt);
 var tx, ty: Longword;
 begin
