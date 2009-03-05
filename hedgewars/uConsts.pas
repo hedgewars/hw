@@ -465,16 +465,16 @@ const
 			Width:  16; Height: 16; saveSurf: false),// sprDrill
 			(FileName:    'amDrill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprHandDrill
-			(FileName:    'amBallgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:  'amBallgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 64; saveSurf: false),// sprHandBallgun
 			(FileName:      'Balls'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 20; saveSurf: false),// sprBalls
-			(FileName:      'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:    'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprPlane
-			(FileName:    'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:  'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false), // sprHandPlane
-			(FileName:       'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  40; Height: 32; saveSurf: false) // sprUtility
+			(FileName:    'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  48; Height: 48; saveSurf: false) // sprUtility
 			);
 
 	Wavez: array [TWave] of record

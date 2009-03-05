@@ -1204,12 +1204,14 @@ while Gear<>nil do
                                         DrawSprite(sprCase, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
                          posCaseHealth: begin
-                                        i:= (GameTicks shr 6) mod 64;
-                                        if i > 12 then i:= 0;
+                                        i:= ((GameTicks shr 6) + 38) mod 64;
+                                        if i > 13 then i:= 0;
                                         DrawSprite(sprFAid, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
                          posCaseUtility: begin
-                                        DrawSprite(sprUtility, hwRound(Gear^.X) - 20 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+                                        i:= (GameTicks shr 6) mod 70;
+                                        if i > 23 then i:= 0;
+                                        DrawSprite(sprUtility, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
                          end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
