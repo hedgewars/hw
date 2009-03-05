@@ -34,10 +34,12 @@ handleCmd_lobby clID clients rooms ["LIST"] =
 				show $ gameinprogress room
 				]
 
+
 handleCmd_lobby clID clients _ ["CHAT", msg] =
 	[AnswerOthersInRoom ["CHAT", clientNick, msg]]
 	where
 		clientNick = nick $ clients IntMap.! clID
+
 
 handleCmd_lobby clID clients rooms ["CREATE", newRoom, roomPassword] =
 	if haveSameRoom then
@@ -51,8 +53,10 @@ handleCmd_lobby clID clients rooms ["CREATE", newRoom, roomPassword] =
 		clientNick = nick $ clients IntMap.! clID
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) $ IntMap.elems rooms
 
+
 handleCmd_lobby clID clients rooms ["CREATE", newRoom] =
 	handleCmd_lobby clID clients rooms ["CREATE", newRoom, ""]
+
 
 handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 	if noSuchRoom then
@@ -100,7 +104,28 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 				answerAllTeams (teams jRoom)
 
 
-handleCmd_lobby client clients rooms ["JOIN", roomName] =
-	handleCmd_lobby client clients rooms ["JOIN", roomName, ""]
+handleCmd_lobby clID clients rooms ["JOIN", roomName] =
+	handleCmd_lobby clID clients rooms ["JOIN", roomName, ""]
+
+
+handleCmd_lobby clID clients rooms ["KICK", kickNick] =
+	if not $ isAdministrator client then
+		[]
+	else
+		if noSuchClient then
+			[]
+		else
+			if kickID == clID then
+				[]
+			else
+				[KickClient kickID]
+	where
+		client = clients IntMap.! clID
+		maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
+		noSuchClient = isNothing maybeClient
+		kickID = clientUID $ fromJust maybeClient
+	--	room = rooms IntMap.! roomID client
+	--	roomInfo = if roomID client /= 0 then "room " ++ (name room) else "lobby"
+
 
 handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]

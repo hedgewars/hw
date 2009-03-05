@@ -27,6 +27,7 @@ data Action =
 	| ProtocolError String
 	| Warning String
 	| ByeClient String
+	| KickClient Int -- clID
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| AddRoom String String
@@ -36,6 +37,7 @@ data Action =
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
 
+replaceID a (b, c, d, e) = (a, c, d, e)
 
 processAction :: (Int, ServerInfo, Clients, Rooms) -> Action -> IO (Int, ServerInfo, Clients, Rooms)
 
@@ -281,3 +283,5 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 					[]
 
 
+processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
+	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
