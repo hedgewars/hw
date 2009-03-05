@@ -50,7 +50,7 @@ type
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-			sprPlane, sprHandPlane);
+			sprPlane, sprHandPlane, sprUtility);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -246,6 +246,7 @@ const
 
 	posCaseAmmo    = $00000001;
 	posCaseHealth  = $00000002;
+	posCaseUtility = $00000004;
 
 	NoPointX = Low(LongInt);
 
@@ -471,7 +472,9 @@ const
 			(FileName:      'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprPlane
 			(FileName:    'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false) // sprHandPlane
+			Width:  32; Height: 32; saveSurf: false), // sprHandPlane
+			(FileName:       'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  40; Height: 32; saveSurf: false) // sprUtility
 			);
 
 	Wavez: array [TWave] of record
@@ -1170,7 +1173,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidLowGravity;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 20;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
@@ -1190,7 +1193,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidExtraDamage;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 15;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
@@ -1210,7 +1213,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidInvulnerable;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 20;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
@@ -1230,7 +1233,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidExtraTime;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 30;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
@@ -1250,7 +1253,7 @@ const
 			PosSprite: sprWater),
 			(NameId: sidLaserSight;
 			NameTex: nil;
-			Probability: 200;
+			Probability: 15;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or

@@ -134,6 +134,7 @@ procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
 procedure MakeScreenshot(s: shortstring);
+function modifyDamage(dmg: Longword): Longword;
 
 var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
@@ -402,6 +403,11 @@ if IOResult = 0 then
 {$I+}
 
 FreeMem(p)
+end;
+
+function modifyDamage(dmg: Longword): Longword;
+begin
+ModifyDamage:= hwRound(int2HwFloat(dmg) * cDamageModifier)
 end;
 
 {$IFDEF DEBUGFILE}

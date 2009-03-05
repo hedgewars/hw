@@ -430,27 +430,27 @@ Gear:= GearsList;
 while Gear <> nil do
 	begin
 	if Gear^.Kind = gtHedgehog then
-        begin
+		begin
 		if (Gear^.Damage <> 0) and
 		(not Gear^.Invulnerable) then
-		    begin
-            CheckNoDamage:= false;
-            uStats.HedgehogDamaged(Gear);
-            dmg:= HwRound(int2HwFloat(Gear^.Damage) * cDamageModifier);
-            if Gear^.Health < dmg then
-                Gear^.Health:= 0
-            else
-                dec(Gear^.Health, dmg);
+			begin
+			CheckNoDamage:= false;
+			uStats.HedgehogDamaged(Gear);
+			dmg:= Gear^.Damage;
+			if Gear^.Health < dmg then
+				Gear^.Health:= 0
+			else
+				dec(Gear^.Health, dmg);
 
-            AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
-                    gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
+					gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 
-            RenderHealth(PHedgehog(Gear^.Hedgehog)^);
-            RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
+			RenderHealth(PHedgehog(Gear^.Hedgehog)^);
+			RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
 
-		    end;
-	    Gear^.Damage:= 0;
-        end;
+			end;
+		Gear^.Damage:= 0;
+		end;
 	Gear:= Gear^.NextGear
 	end;
 end;
@@ -1044,8 +1044,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 						// reached edge of land. assume infinite beam. Extend it way out past camera
 						if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
 							begin
-							lx:= lx + dx * (LAND_WIDTH div 4);
-							ly:= ly + dy * (LAND_WIDTH div 4)
+							tx:= round(lx + dx * (LAND_WIDTH div 4));
+							ty:= round(ly + dy * (LAND_WIDTH div 4));
 							end;
 						
 						//if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
@@ -1208,6 +1208,9 @@ while Gear<>nil do
                                         if i > 12 then i:= 0;
                                         DrawSprite(sprFAid, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
+                         posCaseUtility: begin
+                                        DrawSprite(sprUtility, hwRound(Gear^.X) - 20 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+                                        end;
                          end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
@@ -1287,7 +1290,7 @@ while Gear <> nil do
 	if (dmg > 1) and
 		((Gear^.State and gstNoDamage) = 0) then
 		begin
-		dmg:= min(dmg div 2, Radius);
+		dmg:= modifyDamage(min(dmg div 2, Radius));
 		case Gear^.Kind of
 			gtHedgehog,
 				gtMine,
@@ -1337,7 +1340,7 @@ Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
 	begin
-	dmg:= min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25);
+	dmg:= modifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25));
 	if dmg > 0 then
 	case t^.Kind of
 		gtHedgehog,
@@ -1374,6 +1377,8 @@ var t: PGearArray;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t^.Count;
+
+Damage:= modifyDamage(Damage);
 
 while i > 0 do
 	begin
@@ -1553,25 +1558,47 @@ if (cCaseFactor = 0) or
    (getrandom(cCaseFactor) <> 0) then exit;
 
 FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
-case getrandom(2) of
-     0: begin
+case getrandom(20) of
+     0..6: begin
         FollowGear^.Health:= 25;
         FollowGear^.Pos:= posCaseHealth
         end;
-     1: begin
+     7..13: begin
         t:= 0;
         for i:= Low(TAmmoType) to High(TAmmoType) do
-            inc(t, Ammoz[i].Probability);
+            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+                inc(t, Ammoz[i].Probability);
         t:= GetRandom(t);
         i:= Low(TAmmoType);
-        dec(t, Ammoz[i].Probability);
+        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+            dec(t, Ammoz[i].Probability);
         while t >= 0 do
           begin
           inc(i);
-          dec(t, Ammoz[i].Probability)
+          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+              dec(t, Ammoz[i].Probability)
           end;
         PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
         FollowGear^.Pos:= posCaseAmmo;
+        FollowGear^.State:= Longword(i)
+        end;
+     14..19: begin 
+        t:= 0;
+        for i:= Low(TAmmoType) to High(TAmmoType) do
+            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+                inc(t, Ammoz[i].Probability);
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+            dec(t, Ammoz[i].Probability);
+        while t >= 0 do
+          begin
+          inc(i);
+          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+              dec(t, Ammoz[i].Probability)
+          end;
+        PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
+        FollowGear^.Pos:= posCaseUtility;
         FollowGear^.State:= Longword(i)
         end;
      end;

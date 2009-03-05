@@ -271,6 +271,7 @@ var s: shortstring;
 begin
 Gear^.Message:= gm_Destroy;
 case Gear^.Pos of
+       posCaseUtility, 
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);

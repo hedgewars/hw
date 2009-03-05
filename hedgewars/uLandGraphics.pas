@@ -67,26 +67,34 @@ if not doSet then
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y + dy, i] > 0) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
+          if (Land[y + dy, i] > 0) and (Land[y + dy, i] < 256) then dec(Land[y + dy, i]); // check > 0 because explosion can erase collision data
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-          if (Land[y - dy, i] > 0) then dec(Land[y - dy, i]);
+          if (Land[y - dy, i] > 0) and (Land[y - dy, i] < 256) then dec(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y + dx, i] > 0) then dec(Land[y + dx, i]);
+          if (Land[y + dx, i] > 0) and (Land[y + dx, i] < 256) then dec(Land[y + dx, i]);
    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
       for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-          if (Land[y - dx, i] > 0) then dec(Land[y - dx, i]);
+          if (Land[y - dx, i] > 0) and (Land[y - dx, i] < 256) then dec(Land[y - dx, i]);
    end else
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do inc(Land[y + dy, i]);
+      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+          if (Land[y + dy, i] < 256) then
+              inc(Land[y + dy, i]);
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do inc(Land[y - dy, i]);
+      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+          if (Land[y - dy, i] < 256) then
+              inc(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do inc(Land[y + dx, i]);
+      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+          if (Land[y + dx, i] < 256) then
+              inc(Land[y + dx, i]);
    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do inc(Land[y - dx, i]);
+      for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+          if (Land[y - dx, i] < 256) then
+              inc(Land[y - dx, i]);
    end
 end;
 
