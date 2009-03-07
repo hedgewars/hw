@@ -69,7 +69,11 @@ new(StoresList[Pred(StoreCnt)]);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     cnt:= byte(s[ord(a) + 1]) - byte('0');
-    if cnt = 9 then cnt:= AMMO_INFINITE;
+    if cnt = 9 then
+        begin
+        cnt:= AMMO_INFINITE;
+        Ammoz[a].Probability:= 0 
+        end;
     ammos[a]:= cnt
     end;
 

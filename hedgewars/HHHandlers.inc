@@ -492,6 +492,7 @@ if (Gear^.State and gstMoving) <> 0 then
 if (not isFalling) and
    (hwAbs(Gear^.dX) + hwAbs(Gear^.dY) < _0_03) then
    begin
+   Gear^.State:= Gear^.State and not gstWinner;
    Gear^.State:= Gear^.State and not gstMoving;
    SetLittle(Gear^.dX);
    Gear^.dY:= _0

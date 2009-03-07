@@ -50,7 +50,7 @@ type
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-			sprPlane, sprHandPlane, sprUtility);
+			sprPlane, sprHandPlane, sprUtility, sprInvulnerable);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -200,9 +200,10 @@ const
 	gstHHHJump        = $00002000;
 	gstAnimation      = $00004000;
 	gstHHDeath        = $00008000;
-	gstWinner         = $00010000;
+	gstWinner         = $00010000;  // this, along with gstLoser, is good for indicating hedgies know they screwed up
 	gstWait           = $00020000;
 	gstNotKickable    = $00040000;
+	gstLoser          = $00080000;
 
 	gm_Left   = $00000001;
 	gm_Right  = $00000002;
@@ -474,7 +475,9 @@ const
 			(FileName:  'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false), // sprHandPlane
 			(FileName:    'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false) // sprUtility
+			Width:  48; Height: 48; saveSurf: false), // sprUtility
+			(FileName:  'Invulnerable'; Path: ptHedgehog;AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 48; Height: 48; saveSurf: false) // sprInvulnerable
 			);
 
 	Wavez: array [TWave] of record

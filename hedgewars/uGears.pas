@@ -601,12 +601,19 @@ end;
 //Purpose, to reset all transient attributes toggled by a utility.
 //If any of these are set as permanent toggles in the frontend, that needs to be checked and skipped here.
 procedure ResetUtilities;
+var  i: LongInt;
 begin
     cGravity:= cMaxWindSpeed;
     cDamageModifier:= _1;
     cLaserSighting:= false;
-    if (CurrentHedgehog^.Gear <> nil) then
-        CurrentHedgehog^.Gear^.Invulnerable:= false;
+    // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
+
+    if (CurrentTeam <> nil) then
+       with CurrentTeam^ do
+          for i:= 0 to cMaxHHIndex do
+              with Hedgehogs[i] do
+                  if (Gear <> nil) then
+                      Gear^.Invulnerable:= false;
 end;
 
 procedure SetAllToActive;
@@ -636,8 +643,8 @@ end;
 procedure DrawHH(Gear: PGear);
 var t: LongInt;
 	amt: TAmmoType;
-	hx, hy, cx, cy, tx, ty, m: LongInt;
-	lx, ly, dx, dy, aAngle, dAngle: real;
+	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite`
+	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
 begin
 if (Gear^.State and gstHHDeath) <> 0 then
@@ -649,23 +656,34 @@ if (Gear^.State and gstHHDeath) <> 0 then
 defaultPos:= true;
 HatVisible:= false;
 
+sx:= hwRound(Gear^.X) + 1 + WorldDx;
+sy:= hwRound(Gear^.Y) - 3 + WorldDy;
 if (Gear^.State and gstDrowning) <> 0 then
 	begin
-	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+	DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
 			1,
 			7,
-			0, Gear^.Invulnerable);
+			0);
 	defaultPos:= false
 	end else
 
 if (Gear^.State and gstWinner) <> 0 then
 	begin
-	DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+	DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
 			2,
 			0,
-			0, Gear^.Invulnerable);
+			0);
+	defaultPos:= false
+	end else
+if (Gear^.State and gstLoser) <> 0 then // for now using the jackhammer for its kind of bemused "oops" look
+	begin
+	DrawHedgehog(sx, sy,
+			hwSign(Gear^.dX),
+			1,
+			2,
+			0);
 	defaultPos:= false
 	end else
 
@@ -701,37 +719,39 @@ if (Gear^.State and gstHHDriven) <> 0 then
 					dAngle:= 180;
 					m:= -1
 					end;
-				DrawHedgehog(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,
+                sx:= hwRound(Gear^.X) + WorldDx;
+                sy:= hwRound(Gear^.Y) + WorldDy;
+				DrawHedgehog(sx, sy,
 						m,
 						1,
 						0,
-						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle, Gear^.Invulnerable);
+						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
 				defaultPos:= false
 				end;
 			gtBlowTorch: begin
 				DrawRotated(sprBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						3,
 						PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
-						0, Gear^.Invulnerable);
+						0);
 				defaultPos:= false
 				end;
 			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
 			gtFirePunch: begin
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						1,
 						4,
-						0, Gear^.Invulnerable);
+						0);
 				defaultPos:= false
 				end;
 			gtPickHammer,
 			gtTeleport: defaultPos:= false;
 			gtWhip: begin
 				DrawRotatedF(sprWhip,
-						hwRound(Gear^.X) + 1 + WorldDx,
-						hwRound(Gear^.Y) - 3 + WorldDy,
+						sx,
+						sy,
 						1,
 						hwSign(Gear^.dX),
 						0);
@@ -739,11 +759,11 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				end;
 			gtKamikaze: begin
 				if CurAmmoGear^.Pos = 0 then
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+					DrawHedgehog(sx, sy,
 							hwSign(Gear^.dX),
 							1,
 							6,
-							0, Gear^.Invulnerable)
+							0)
 				else
 					DrawRotatedF(sprKamikaze,
 							hwRound(Gear^.X) + WorldDx,
@@ -751,16 +771,15 @@ if (Gear^.State and gstHHDriven) <> 0 then
 							CurAmmoGear^.Pos - 1,
 							1,
 							DxDy2Angle(Gear^.dY, Gear^.dX));
-
 				defaultPos:= false
 				end;
 			gtSeduction: begin
 				if CurAmmoGear^.Pos >= 6 then
-					DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+					DrawHedgehog(sx, sy,
 							hwSign(Gear^.dX),
 							2,
 							2,
-							0, Gear^.Invulnerable)
+							0)
 				else
 					begin
 					DrawRotatedF(sprDress,
@@ -779,11 +798,11 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			gtShotgunShot,
 			gtDEagleShot,
 			gtShover: begin
-				DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+				DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						0,
 						4,
-						0, Gear^.Invulnerable);
+						0);
 				defaultPos:= false
 			end
 		end
@@ -792,27 +811,27 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	if ((Gear^.State and gstHHJumping) <> 0) then
 	begin
 	if ((Gear^.State and gstHHHJump) <> 0) then
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		DrawHedgehog(sx, sy,
 			- hwSign(Gear^.dX),
 			1,
 			1,
-			0, Gear^.Invulnerable)
+			0)
 		else
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
 			1,
 			1,
-			0, Gear^.Invulnerable);
+			0);
 	defaultPos:= false
 	end else
 
 	if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
 		begin
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
 			0,
 			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
-			0, Gear^.Invulnerable);
+			0);
 		defaultPos:= false;
 		HatVisible:= true
 		end
@@ -821,8 +840,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	if ((Gear^.State and gstAnimation) <> 0) then
 		begin
 		DrawRotatedF(Wavez[TWave(Gear^.Tag)].Sprite,
-				hwRound(Gear^.X) + 1 + WorldDx,
-				hwRound(Gear^.Y) - 3 + WorldDy,
+				sx,
+				sy,
 				Gear^.Pos,
 				hwSign(Gear^.dX),
 				0.0);
@@ -849,44 +868,43 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
 		case amt of
 			amAirAttack,
-			amMineStrike: DrawRotated(sprHandAirAttack, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
-			amPickHammer: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			amMineStrike: DrawRotated(sprHandAirAttack, sx, hwRound(Gear^.Y) + WorldDy, hwSign(Gear^.dX), 0);
+			amPickHammer: DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						1,
 						2,
-						0, Gear^.Invulnerable);
-			amBlowTorch: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						0);
+			amBlowTorch: DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						1,
 						3,
-						0, Gear^.Invulnerable);
-			amTeleport: DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, 0, hwSign(Gear^.dX), 0);
-			amKamikaze: DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+						0);
+			amTeleport: DrawRotatedF(sprTeleport, sx, sy, 0, hwSign(Gear^.dX), 0);
+			amKamikaze: DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
 						1,
 						5,
-						0, Gear^.Invulnerable);
+						0);
 			amWhip: DrawRotatedF(sprWhip,
-						hwRound(Gear^.X) + 1 + WorldDx,
-						hwRound(Gear^.Y) - 3 + WorldDy,
+						sx,
+						sy,
 						0,
 						hwSign(Gear^.dX),
 						0);
 		else
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			DrawHedgehog(sx, sy,
 				hwSign(Gear^.dX),
 				0,
 				4,
-				0, Gear^.Invulnerable);
+				0);
 			
 			HatVisible:= true;
 			with PHedgehog(Gear^.Hedgehog)^ do
 				if (HatTex <> nil)
-				and (HatVisibility > 0)
-                and (not Gear^.Invulnerable) then
+				and (HatVisibility > 0) then
 					DrawTextureF(HatTex,
 						HatVisibility,
-						hwRound(Gear^.X) + 1 + WorldDx,
+						sx,
 						hwRound(Gear^.Y) - 8 + WorldDy,
 						0,
 						hwSign(Gear^.dX),
@@ -906,28 +924,28 @@ end else // not gstHHDriven
 	if (Gear^.Damage > 0)
 	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
 		begin
-		DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
 			2,
 			1,
-			Gear^.DirAngle, Gear^.Invulnerable);
+			Gear^.DirAngle);
 		defaultPos:= false
 		end else
 
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
 		if ((Gear^.State and gstHHHJump) <> 0) then
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			DrawHedgehog(sx, sy,
 				- hwSign(Gear^.dX),
 				1,
 				1,
-				0, Gear^.Invulnerable)
+				0)
 			else
-			DrawHedgehog(hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy,
+			DrawHedgehog(sx, sy,
 				hwSign(Gear^.dX),
 				1,
 				1,
-				0, Gear^.Invulnerable);
+				0);
 			defaultPos:= false
 		end;
 	end;
@@ -937,8 +955,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	if defaultPos then
 		begin
 		DrawRotatedF(sprHHIdle,
-			hwRound(Gear^.X) + 1 + WorldDx,
-			hwRound(Gear^.Y) - 3 + WorldDy,
+			sx,
+			sy,
 			(RealTicks div 128 + Gear^.Pos) mod 19,
 			hwSign(Gear^.dX),
 			0);
@@ -953,12 +971,12 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		if HatVisibility > 0.0 then
 			HatVisibility:= HatVisibility - 0.2;
 	
-	if (HatTex <> nil) and (not Gear^.Invulnerable)
+	if (HatTex <> nil)
 	and (HatVisibility > 0) then
 		if DefaultPos then
 			DrawTextureF(HatTex,
 				HatVisibility,
-				hwRound(Gear^.X) + 1 + WorldDx,
+				sx,
 				hwRound(Gear^.Y) - 8 + WorldDy,
 				(RealTicks div 128 + Gear^.Pos) mod 19,
 				hwSign(Gear^.dX),
@@ -966,7 +984,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		else
 			DrawTextureF(HatTex,
 				HatVisibility,
-				hwRound(Gear^.X) + 1 + WorldDx,
+				sx,
 				hwRound(Gear^.Y) - 8 + WorldDy,
 				0,
 				hwSign(Gear^.dX),
@@ -1011,22 +1029,21 @@ with PHedgehog(Gear^.Hedgehog)^ do
 (* These calculations are a little complex for a few reasons:
    1: I need to draw the laser from weapon origin to nearest land
    2: I need to start the beam outside the hedgie for attractiveness. 
-      I can't do the calc from there, or it accumulates more error visible in a deagle shot.
    3: I need to extend the beam beyond land. 
    This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
-   Additionally, using crosshairs, amusingly, makes the laser imprecise to about   0.05% of a deagle shot.  This means that if you are firing across an entire 4096px map your laser will be a few pixels off of the the deagle shot.  This is still a lot more accurate than real laser sights - feel free to change if it bothers you.
 *)
+					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
+					dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
+					dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
 					if cLaserSighting then
 						begin
 						lx:= hwRound(Gear^.X);
 						ly:= hwRound(Gear^.Y);
-						dx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * pi / cMaxAngle);
-						dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
 						lx:= lx + dx * 16;
 						ly:= ly + dy * 16;
 
-						dx:= dx * 4;
-						dy:= dy * 4;
+						ax:= dx * 4;
+						ay:= dy * 4;
 
 						tx:= round(lx);
 						ty:= round(ly);
@@ -1036,16 +1053,16 @@ with PHedgehog(Gear^.Hedgehog)^ do
 							((tx and LAND_WIDTH_MASK) = 0) and
 							(Land[ty, tx] = 0) do
 							begin
-							lx:= lx + dx;
-							ly:= ly + dy;
+							lx:= lx + ax;
+							ly:= ly + ay;
 							tx:= round(lx);
 							ty:= round(ly)
 							end;
 						// reached edge of land. assume infinite beam. Extend it way out past camera
 						if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
 							begin
-							tx:= round(lx + dx * (LAND_WIDTH div 4));
-							ty:= round(ly + dy * (LAND_WIDTH div 4));
+							tx:= round(lx + ax * (LAND_WIDTH div 4));
+							ty:= round(ly + ay * (LAND_WIDTH div 4));
 							end;
 						
 						//if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
@@ -1062,16 +1079,20 @@ with PHedgehog(Gear^.Hedgehog)^ do
 							glDisable(GL_LINE_SMOOTH);
 							end;
 						end;
-					// draw crossahair
-					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
-					cx:= Round(hwRound(Gear^.X) + hwSign(Gear^.dX) * m * Sin(Gear^.Angle*pi/cMaxAngle) * 80);
-					cy:= Round(hwRound(Gear^.Y) - Cos(Gear^.Angle*pi/cMaxAngle) * 80);
+					// draw crosshair
+					cx:= Round(hwRound(Gear^.X) + dx * 80);
+					cy:= Round(hwRound(Gear^.Y) + dy * 80);
 					DrawRotatedTex(Team^.CrosshairTex,
-							12, 12, cx+WorldDx, cy+WorldDy, 0,
+							12, 12, cx + WorldDx, cy + WorldDy, 0,
 							hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
 					end
 			end
-	end
+	end;
+
+if Gear^.Invulnerable then
+     begin
+     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
+     end;
 end;
 
 procedure DrawGears;
@@ -1302,19 +1323,23 @@ while Gear <> nil do
 						//{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
 						if (Mask and EXPLNoDamage) = 0 then
 							begin
-                            if not Gear^.Invulnerable then
-                                begin
+							if not Gear^.Invulnerable then
+								begin
 							    inc(Gear^.Damage, dmg);
 							    if Gear^.Kind = gtHedgehog then
 								    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
-                                end;
+                                end
+                            else
+                                Gear^.State:= Gear^.State or gstWinner;
 							end;
 						if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
 							begin
 							DeleteCI(Gear);
 							Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
 							Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-							Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
+							Gear^.State:= Gear^.State or gstMoving;
+							if not Gear^.Invulnerable then
+								Gear^.State:= Gear^.State and (not gstWinner);
 							Gear^.Active:= true;
 							FollowGear:= Gear
 							end;
@@ -1354,7 +1379,9 @@ while t <> nil do
 					    inc(t^.Damage, dmg);
 					    if t^.Kind = gtHedgehog then
 						    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(t^.Hedgehog)^.Team^.Clan^.Color);
-                        end;
+                        end
+                    else
+                        Gear^.State:= Gear^.State or gstWinner;
 
 					DeleteCI(t);
 					t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
@@ -1398,7 +1425,9 @@ while i > 0 do
 
                         if (t^.ar[i]^.Kind = gtHedgehog) and (Damage > 0) then
                             AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, PHedgehog(t^.ar[i]^.Hedgehog)^.Team^.Clan^.Color);
-                        end;
+                        end
+                    else
+                        t^.ar[i]^.State:= t^.ar[i]^.State or gstWinner;
 
 					DeleteCI(t^.ar[i]);
 					t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
@@ -1559,9 +1588,9 @@ if (cCaseFactor = 0) or
    (CountGears(gtCase) >= 5) or
    (getrandom(cCaseFactor) <> 0) then exit;
 
-FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
 case getrandom(20) of
      0..6: begin
+        FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         FollowGear^.Health:= 25;
         FollowGear^.Pos:= posCaseHealth
         end;
@@ -1570,42 +1599,54 @@ case getrandom(20) of
         for i:= Low(TAmmoType) to High(TAmmoType) do
             if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
                 inc(t, Ammoz[i].Probability);
-        t:= GetRandom(t);
-        i:= Low(TAmmoType);
-        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-            dec(t, Ammoz[i].Probability);
-        while t >= 0 do
-          begin
-          inc(i);
-          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
-              dec(t, Ammoz[i].Probability)
-          end;
-        PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
-        FollowGear^.Pos:= posCaseAmmo;
-        FollowGear^.State:= Longword(i)
+        if (t > 0) then
+            begin
+            FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+            t:= GetRandom(t);
+            i:= Low(TAmmoType);
+            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+                dec(t, Ammoz[i].Probability);
+            while t >= 0 do
+              begin
+              inc(i);
+              if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+                  dec(t, Ammoz[i].Probability)
+              end;
+            FollowGear^.Pos:= posCaseAmmo;
+            FollowGear^.State:= Longword(i)
+            end
         end;
-     14..19: begin 
+     14..19: begin
         t:= 0;
         for i:= Low(TAmmoType) to High(TAmmoType) do
             if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
                 inc(t, Ammoz[i].Probability);
-        t:= GetRandom(t);
-        i:= Low(TAmmoType);
-        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-            dec(t, Ammoz[i].Probability);
-        while t >= 0 do
-          begin
-          inc(i);
-          if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
-              dec(t, Ammoz[i].Probability)
-          end;
-        PlaySound(sndReinforce, false, CurrentTeam^.voicepack);
-        FollowGear^.Pos:= posCaseUtility;
-        FollowGear^.State:= Longword(i)
+        if (t > 0) then
+            begin
+            FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+            t:= GetRandom(t);
+            i:= Low(TAmmoType);
+            if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+                dec(t, Ammoz[i].Probability);
+            while t >= 0 do
+              begin
+              inc(i);
+              if (Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0 then
+                  dec(t, Ammoz[i].Probability)
+              end;
+            FollowGear^.Pos:= posCaseUtility;
+            FollowGear^.State:= Longword(i)
+            end
         end;
      end;
- 
-FindPlace(FollowGear, true, 0, LAND_WIDTH)
+// handles case of no ammo or utility crates - considered also placing booleans in uAmmos and altering probabilities
+if (FollowGear <> nil) then
+	begin
+	FindPlace(FollowGear, true, 0, LAND_WIDTH);
+	
+	if (FollowGear <> nil) then
+		PlaySound(sndReinforce, false, CurrentTeam^.voicepack)
+	end
 end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);

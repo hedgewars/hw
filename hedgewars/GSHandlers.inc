@@ -48,6 +48,8 @@ if _0_4 < Gear^.dY then
 	else
 		PlaySound(sndOw1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
+//    if (CurrentHedgehog^.Gear = Gear) and (not Gear^.Invulnerable) then
+//	    Gear^.State:= Gear^.State or gstLoser;
 	dmg:= modifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70));
 	inc(Gear^.Damage, dmg);
 	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
@@ -1705,8 +1707,11 @@ if Gear^.Pos = 0 then
 	while gi <> nil do
 		begin
 		dmg:= cakeDmg * 2 - hwRound(Distance(gi^.X - Gear^.X, gi^.Y - Gear^.Y));
-		if (dmg > 1) and (gi^.Kind = gtHedgehog) and (not gi^.Invulnerable) then
-			gi^.State:= gi^.State or gstWinner;
+		if (dmg > 1) and (gi^.Kind = gtHedgehog) then
+            if (CurrentHedgehog^.Gear = gi) and (not gi^.Invulnerable) then
+//			    gi^.State:= gi^.State or gstLoser
+            else
+			    gi^.State:= gi^.State or gstWinner;
 		gi:= gi^.NextGear
 		end;
 	Gear^.doStep:= @doStepCakeExpl;
