@@ -434,6 +434,8 @@ while Gear <> nil do
 		if (Gear^.Damage <> 0) and
 		(not Gear^.Invulnerable) then
 			begin
+            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) then
+                Gear^.State:= Gear^.State or gstLoser;
 			CheckNoDamage:= false;
 			uStats.HedgehogDamaged(Gear);
 			dmg:= Gear^.Damage;
@@ -1337,9 +1339,9 @@ while Gear <> nil do
 							DeleteCI(Gear);
 							Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
 							Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-							Gear^.State:= Gear^.State or gstMoving;
+							Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
 							if not Gear^.Invulnerable then
-								Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
+								Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
 							Gear^.Active:= true;
 							FollowGear:= Gear
 							end;
