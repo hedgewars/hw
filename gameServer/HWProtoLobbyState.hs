@@ -96,7 +96,7 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 					[]
 				else
 					[AnswerThisClient  ["RUN_GAME"],
-					AnswerThisClient $ "GAMEMSG" : toEngineMsg "e$spectate 1" : (Foldable.toList $ roundMsgs jRoom)]
+					AnswerThisClient $ "EM" : toEngineMsg "e$spectate 1" : (Foldable.toList $ roundMsgs jRoom)]
 
 		answerTeams = if gameinprogress jRoom then
 				answerAllTeams (teamsAtStart jRoom)
@@ -124,8 +124,15 @@ handleCmd_lobby clID clients rooms ["KICK", kickNick] =
 		maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
 		noSuchClient = isNothing maybeClient
 		kickID = clientUID $ fromJust maybeClient
-	--	room = rooms IntMap.! roomID client
-	--	roomInfo = if roomID client /= 0 then "room " ++ (name room) else "lobby"
+
+
+handleCmd_lobby clID clients rooms ["BAN", banNick] =
+	if not $ isAdministrator client then
+		[]
+	else
+		BanClient banNick : handleCmd_lobby clID clients rooms ["KICK", banNick]
+	where
+		client = clients IntMap.! clID
 
 
 handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]

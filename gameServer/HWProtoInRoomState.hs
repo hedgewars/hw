@@ -152,9 +152,9 @@ handleCmd_inRoom clID clients rooms ["START_GAME"] =
 		enoughClans = not $ null $ drop 1 $ group $ map teamcolor $ teams room
 
 
-handleCmd_inRoom _ _ rooms ["GAMEMSG", msg] =
+handleCmd_inRoom _ _ rooms ["EM", msg] =
 	[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
-	AnswerOthersInRoom ["GAMEMSG", msg]]
+	AnswerOthersInRoom ["EM", msg]]
 
 
 handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =

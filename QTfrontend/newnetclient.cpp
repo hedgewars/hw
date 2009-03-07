@@ -137,7 +137,7 @@ void HWNewNet::SendNet(const QByteArray & buf)
 {
   QString msg = QString(buf.toBase64());
 
-  RawSendNet(QString("GAMEMSG%1%2").arg(delimeter).arg(msg));
+  RawSendNet(QString("EM%1%2").arg(delimeter).arg(msg));
 }
 
 void HWNewNet::RawSendNet(const QString & str)
@@ -543,10 +543,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
-	if (lst[0] == "GAMEMSG") {
+	if (lst[0] == "EM") {
 		if(lst.size() < 2)
 		{
-			qWarning("Net: Bad GAMEMSG message");
+			qWarning("Net: Bad EM message");
 			return;
 		}
 		for(int i = 1; i < lst.size(); ++i)

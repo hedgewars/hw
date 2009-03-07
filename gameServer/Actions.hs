@@ -28,6 +28,7 @@ data Action =
 	| Warning String
 	| ByeClient String
 	| KickClient Int -- clID
+	| BanClient String -- nick
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| AddRoom String String
@@ -232,7 +233,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
 				adjust (\r -> r{teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r}) rID rooms
 		else
 			do
-			processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["GAMEMSG", rmTeamMsg]
+			processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["EM", rmTeamMsg]
 			return $
 				adjust (\r -> r{
 				teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r,
