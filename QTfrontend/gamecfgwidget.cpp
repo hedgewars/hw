@@ -95,20 +95,20 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	
 	WeaponsName = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(WeaponsName, 8, 1);
-
-	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SIGNAL(initHealthChanged(int)));
-	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SIGNAL(turnTimeChanged(int)));
-	connect(SB_SuddenDeath, SIGNAL(valueChanged(int)), this, SIGNAL(suddenDeathTurnsChanged(int)));
-	connect(SB_CaseProb, SIGNAL(valueChanged(int)), this, SIGNAL(caseProbabilityChanged(int)));
-	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SIGNAL(fortsModeChanged(bool)));
-	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SIGNAL(teamsDivideChanged(bool)));
-	connect(CB_solid, SIGNAL(toggled(bool)), this, SIGNAL(solidChanged(bool)));
-	connect(CB_border, SIGNAL(toggled(bool)), this, SIGNAL(borderChanged(bool)));
+	
+	connect(SB_InitHealth, SIGNAL(valueChanged(int)), this, SLOT(initHealthChanged(int)));
+	connect(SB_TurnTime, SIGNAL(valueChanged(int)), this, SLOT(turnTimeChanged(int)));
+	connect(SB_SuddenDeath, SIGNAL(valueChanged(int)), this, SLOT(suddenDeathTurnsChanged(int)));
+	connect(SB_CaseProb, SIGNAL(valueChanged(int)), this, SLOT(caseProbabilityChanged(int)));
+	connect(CB_mode_Forts, SIGNAL(toggled(bool)), this, SLOT(fortsModeChanged(bool)));
+	connect(CB_teamsDivide, SIGNAL(toggled(bool)), this, SLOT(teamsDivideChanged(bool)));
+	connect(CB_solid, SIGNAL(toggled(bool)), this, SLOT(solidChanged(bool)));
+	connect(CB_border, SIGNAL(toggled(bool)), this, SLOT(borderChanged(bool)));
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
-	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SIGNAL(seedChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SIGNAL(mapChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SIGNAL(themeChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
 }
 
 quint32 GameCFGWidget::getGameFlags() const
@@ -194,12 +194,6 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 	}
 }
 
-void GameCFGWidget::ammoChanged(int index)
-{
-	if (index >= 0)
-		emit newWeaponScheme(WeaponsName->itemText(index), WeaponsName->itemData(index).toString());
-}
-
 void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 {
 	if (slValue.size() == 1)
@@ -264,3 +258,67 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 	}
 }
 
+
+void GameCFGWidget::ammoChanged(int index)
+{
+	if (index >= 0)
+		emit paramChanged(
+			"AMMO",
+			QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
+		);
+}
+
+void GameCFGWidget::borderChanged(bool value)
+{
+	emit paramChanged("BORDER", QStringList(value ? "1" : "0"));
+}
+
+void GameCFGWidget::caseProbabilityChanged(int value)
+{
+	emit paramChanged("CASEFACTOR", QStringList(QString::number(value)));
+}
+
+void GameCFGWidget::fortsModeChanged(bool value)
+{
+	emit paramChanged("FORTSMODE", QStringList(value ? "1" : "0"));
+}
+
+void GameCFGWidget::initHealthChanged(int value)
+{
+	emit paramChanged("HEALTH", QStringList(QString::number(value)));
+}
+
+void GameCFGWidget::mapChanged(const QString & value)
+{
+	emit paramChanged("MAP", QStringList(value));
+}
+
+void GameCFGWidget::seedChanged(const QString & value)
+{
+	emit paramChanged("SEED", QStringList(value));
+}
+
+void GameCFGWidget::solidChanged(bool value)
+{
+	emit paramChanged("SOLIDLAND", QStringList(value ? "1" : "0"));
+}
+
+void GameCFGWidget::suddenDeathTurnsChanged(int value)
+{
+	emit paramChanged("SD_TURNS", QStringList(QString::number(value)));
+}
+
+void GameCFGWidget::teamsDivideChanged(bool value)
+{
+	emit paramChanged("DIVIDETEAMS", QStringList(value ? "1" : "0"));
+}
+
+void GameCFGWidget::themeChanged(const QString & value)
+{
+	emit paramChanged("THEME", QStringList(value));
+}
+
+void GameCFGWidget::turnTimeChanged(int value)
+{
+	emit paramChanged("TURNTIME", QStringList(QString::number(value)));
+}

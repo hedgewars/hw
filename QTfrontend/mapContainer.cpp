@@ -183,7 +183,7 @@ void HWMapContainer::mapChanged(int index)
         lblFilter->show();
         CB_TemplateFilter->show();
 		emit mapChanged("+rnd+");
-		emit themeChanged(chooseMap->itemData(0).toString());
+		emit themeChanged(chooseMap->itemData(0).toList()[0].toString());
 	} else
 	{
 		loadMap(index);
@@ -238,9 +238,9 @@ void HWMapContainer::changeImage()
 void HWMapContainer::themeSelected(int currentRow)
 {
 	QString theme = Themes->at(currentRow);
-    QList<QVariant> mapInfo;
-    mapInfo.push_back(theme);
-    mapInfo.push_back(18);
+	QList<QVariant> mapInfo;
+	mapInfo.push_back(theme);
+	mapInfo.push_back(18);
 	chooseMap->setItemData(0, mapInfo);
 	gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
 	emit themeChanged(theme);
@@ -248,13 +248,13 @@ void HWMapContainer::themeSelected(int currentRow)
 
 QString HWMapContainer::getCurrentSeed() const
 {
-  return m_seed;
+	return m_seed;
 }
 
 QString HWMapContainer::getCurrentMap() const
 {
-  if(!chooseMap->currentIndex()) return QString();
-  return chooseMap->currentText();
+	if(!chooseMap->currentIndex()) return QString();
+	return chooseMap->currentText();
 }
 
 QString HWMapContainer::getCurrentTheme() const
@@ -312,9 +312,9 @@ void HWMapContainer::setTheme(const QString & theme)
 
 void HWMapContainer::setRandomSeed()
 {
-  m_seed = QUuid::createUuid().toString();
-  emit seedChanged(m_seed);
-  changeImage();
+	m_seed = QUuid::createUuid().toString();
+	emit seedChanged(m_seed);
+	changeImage();
 }
 
 void HWMapContainer::setRandomTheme()
@@ -331,7 +331,7 @@ void HWMapContainer::setTemplateFilter(int filter)
 
 void HWMapContainer::templateFilterChanged(int filter)
 {
-    changeImage();
+	changeImage();
 	emit newTemplateFilter(filter);
 }
 

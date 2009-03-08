@@ -480,6 +480,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)));
 	connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
+// rooms list page stuff
 	connect(hwnet, SIGNAL(roomsList(const QStringList&)),
 		ui.pageRoomsList, SLOT(setRoomsList(const QStringList&)));
 	connect(hwnet, SIGNAL(adminAccess(bool)),
@@ -501,6 +502,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageRoomsList, SIGNAL(askForRoomList()),
 		hwnet, SLOT(askRoomsList()));
 
+// net page stuff
 	connect(hwnet, SIGNAL(chatStringFromNet(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)));
 	connect(hwnet, SIGNAL(setReadyStatus(const QString &, bool)),
@@ -515,6 +517,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(setMyReadyStatus(bool)),
 		ui.pageNetGame, SLOT(setReadyStatus(bool)));
 
+// chat widget actions
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(kick(const QString&)),
 		hwnet, SLOT(kickPlayer(const QString&)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(ban(const QString&)),
@@ -528,6 +531,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(info(const QString&)),
 		hwnet, SLOT(infoPlayer(const QString&)));
 
+// chatting
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(chatLine(const QString&)),
 		hwnet, SLOT(chatLineToLobby(const QString&)));
 	connect(hwnet, SIGNAL(chatStringLobby(const QString&)),
@@ -535,6 +539,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(chatStringFromMeLobby(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
 
+// nick list stuff
 	connect(hwnet, SIGNAL(nickAdded(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
 	connect(hwnet, SIGNAL(nickRemoved(const QString&)),
@@ -544,6 +549,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(nickRemovedLobby(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
 
+// teams selecting stuff
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),
 		hwnet, SLOT(onHedgehogsNumChanged(const HWTeam&)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamColorChanged(const HWTeam&)),
@@ -551,18 +557,23 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamWillPlay(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(acceptRequested(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamNotPlaying(const HWTeam&)), hwnet, SLOT(RemoveTeam(const HWTeam&)));
-
-	//connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
-
 	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
+
+	//connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
+
 	//connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG->pMapContainer, SLOT(setTemplateFilter(int)));
 
-	
+// config stuff
+	connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
+
+
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
-hwnet->Connect(hostName, port, nick);
+	
+	hwnet->Connect(hostName, port, nick);
 }
 
 void HWForm::NetConnect()

@@ -75,22 +75,20 @@ public slots:
 
 signals:
 	void paramChanged(const QString & param, const QStringList & value);
-	
-	void seedChanged(const QString & seed);
-	void mapChanged(const QString & map);
-	void themeChanged(const QString & theme);
-	void initHealthChanged(int health);
-	void turnTimeChanged(int time);
-	void suddenDeathTurnsChanged(int turns);
-	void caseProbabilityChanged(int prob);
-	void fortsModeChanged(bool value);
-	void teamsDivideChanged(bool value);
-	void solidChanged(bool value);
-	void borderChanged(bool value);
-	void newWeaponScheme(const QString & name, const QString & ammo);
 
 private slots:
 	void ammoChanged(int index);
+	void borderChanged(bool);
+	void caseProbabilityChanged(int);
+	void fortsModeChanged(bool);
+	void initHealthChanged(int);
+	void mapChanged(const QString &);
+	void seedChanged(const QString &);
+	void solidChanged(bool);
+	void suddenDeathTurnsChanged(int);
+	void teamsDivideChanged(bool);
+	void themeChanged(const QString &);
+	void turnTimeChanged(int);
 
 private:
 	QCheckBox * CB_mode_Forts;

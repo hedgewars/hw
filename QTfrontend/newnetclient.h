@@ -105,25 +105,12 @@ class HWNewNet : public QObject
   void paramChanged(const QString & param, const QStringList & value);
   
   void AddNetTeam(const HWTeam&);
-  void seedChanged(const QString & seed);
-  void mapChanged(const QString & map);
-  void themeChanged(const QString & theme);
-  void initHealthChanged(int health);
-  void turnTimeChanged(int time);
-  void suddenDeathTurnsChanged(int turns);
-  void caseProbabilityChanged(int prob);
-  void fortsModeChanged(bool value);
-  void teamsDivideChanged(bool value);
-  void solidChanged(bool value);
-  void borderChanged(bool value);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);
   void chatStringLobby(const QString&);
   void chatStringFromNet(const QString&);
   void chatStringFromMe(const QString&);
   void chatStringFromMeLobby(const QString&);
-  void ammoChanged(const QString& name, const QString& ammo);
-  void templateFilterChanged(int filter);
 
   void roomsList(const QStringList&);
   void serverMessage(const QString &);
