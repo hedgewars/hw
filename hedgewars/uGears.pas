@@ -434,7 +434,8 @@ while Gear <> nil do
 		if (Gear^.Damage <> 0) and
 		(not Gear^.Invulnerable) then
 			begin
-            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) then
+            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
+               (Gear^.Damage <> int(cHealthDecrease)) then
                 Gear^.State:= Gear^.State or gstLoser;
 			CheckNoDamage:= false;
 			uStats.HedgehogDamaged(Gear);
