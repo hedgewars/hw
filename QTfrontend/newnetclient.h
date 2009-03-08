@@ -102,6 +102,8 @@ class HWNewNet : public QObject
   void adminAccess(bool);
   void roomMaster(bool);
 
+  void paramChanged(const QString & param, const QStringList & value);
+  
   void AddNetTeam(const HWTeam&);
   void seedChanged(const QString & seed);
   void mapChanged(const QString & map);
@@ -137,21 +139,11 @@ class HWNewNet : public QObject
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
   void RemoveTeam(const HWTeam& team);
-  void onSeedChanged(const QString & seed);
-  void onMapChanged(const QString & map);
-  void onThemeChanged(const QString & theme);
-  void onInitHealthChanged(int health);
-  void onTurnTimeChanged(int time);
-  void onSuddenDeathTurnsChanged(int turns);
-  void onCaseProbabilityChanged(int prob);
-  void onFortsModeChanged(bool value);
-  void onTeamsDivideChanged(bool value);
-  void onSolidChanged(bool value);
-  void onBorderChanged(bool value);
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
-  void onWeaponsNameChanged(const QString& name, const QString& ammo);
-  void onTemplateFilterChanged(int filter);
+  void onParamChanged(const QString & param, const QStringList & value);
+
+
   void JoinRoom(const QString & room);
   void CreateRoom(const QString & room);
   void askRoomsList();

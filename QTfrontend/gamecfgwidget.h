@@ -71,20 +71,11 @@ public:
 	HWMapContainer* pMapContainer;
 
 public slots:
-	void setSeed(const QString & seed);
-	void setMap(const QString & map);
-	void setTheme(const QString & theme);
-	void setInitHealth(int health);
-	void setTurnTime(int time);
-	void setSuddenDeathTurns(int turns);
-	void setCaseProbability(int prob);
-	void setFortsMode(bool value);
-	void setTeamsDivide(bool value);
-	void setSolid(bool value);
-	void setBorder(bool value);
-	void setNetAmmo(const QString& name, const QString& ammo);
+	void setParam(const QString & param, const QStringList & value);
 
 signals:
+	void paramChanged(const QString & param, const QStringList & value);
+	
 	void seedChanged(const QString & seed);
 	void mapChanged(const QString & map);
 	void themeChanged(const QString & theme);
@@ -118,6 +109,8 @@ private:
 
 	QString curNetAmmoName;
 	QString curNetAmmo;
+
+	void setNetAmmo(const QString& name, const QString& ammo);
 };
 
 #endif // GAMECONFIGWIDGET_H

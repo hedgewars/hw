@@ -179,61 +179,6 @@ QStringList GameCFGWidget::getFullConfig() const
 	return sl;
 }
 
-void GameCFGWidget::setSeed(const QString & seed)
-{
-	pMapContainer->setSeed(seed);
-}
-
-void GameCFGWidget::setMap(const QString & map)
-{
-	pMapContainer->setMap(map);
-}
-
-void GameCFGWidget::setTheme(const QString & theme)
-{
-	pMapContainer->setTheme(theme);
-}
-
-void GameCFGWidget::setInitHealth(int health)
-{
-	SB_InitHealth->setValue(health);
-}
-
-void GameCFGWidget::setTurnTime(int time)
-{
-	SB_TurnTime->setValue(time);
-}
-
-void GameCFGWidget::setSuddenDeathTurns(int turns)
-{
-	SB_SuddenDeath->setValue(turns);
-}
-
-void GameCFGWidget::setCaseProbability(int prob)
-{
-	SB_CaseProb->setValue(prob);
-}
-
-void GameCFGWidget::setFortsMode(bool value)
-{
-	CB_mode_Forts->setChecked(value);
-}
-
-void GameCFGWidget::setTeamsDivide(bool value)
-{
-	CB_teamsDivide->setChecked(value);
-}
-
-void GameCFGWidget::setSolid(bool value)
-{
-	CB_solid->setChecked(value);
-}
-
-void GameCFGWidget::setBorder(bool value)
-{
-	CB_border->setChecked(value);
-}
-
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
 	if (ammo.size() != cDefaultAmmoStore->size())
@@ -254,3 +199,68 @@ void GameCFGWidget::ammoChanged(int index)
 	if (index >= 0)
 		emit newWeaponScheme(WeaponsName->itemText(index), WeaponsName->itemData(index).toString());
 }
+
+void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
+{
+	if (slValue.size() == 1)
+	{
+		QString value = slValue[0];
+		if (param == "MAP") {
+			pMapContainer->setMap(value);
+			return;
+		}
+		if (param == "SEED") {
+			pMapContainer->setSeed(value);
+			return;
+		}
+		if (param == "THEME") {
+			pMapContainer->setTheme(value);
+			return;
+		}
+		if (param == "HEALTH") {
+			SB_InitHealth->setValue(value.toUInt());
+			return;
+		}
+		if (param == "TURNTIME") {
+			SB_TurnTime->setValue(value.toUInt());
+			return;
+		}
+		if (param == "SD_TURNS") {
+			SB_SuddenDeath->setValue(value.toUInt());
+			return;
+		}
+		if (param == "CASEFACTOR") {
+			SB_CaseProb->setValue(value.toUInt());
+			return;
+		}
+		if (param == "FORTSMODE") {
+			CB_mode_Forts->setChecked(value.toUInt() != 0);
+			return;
+		}
+		if (param == "DIVIDETEAMS") {
+			CB_teamsDivide->setChecked(value.toUInt() != 0);
+			return;
+		}
+		if (param == "SOLIDLAND") {
+			CB_solid->setChecked(value.toUInt() != 0);
+			return;
+		}
+		if (param == "BORDER") {
+			CB_border->setChecked(value.toUInt() != 0);
+			return;
+		}
+/*		if (param == "TEMPLATE_FILTER") {
+			emit templateFilterChanged(lst[2].toUInt());
+			return;
+		}
+*/	}
+
+	if (slValue.size() == 2)
+	{
+		if (param == "AMMO") {
+			setNetAmmo(slValue[0], slValue[1]);
+			return;
+		}
+	}
+}
+

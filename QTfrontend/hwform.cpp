@@ -552,41 +552,17 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(acceptRequested(HWTeam)), hwnet, SLOT(AddTeam(HWTeam)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(teamNotPlaying(const HWTeam&)), hwnet, SLOT(RemoveTeam(const HWTeam&)));
 
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(seedChanged(const QString &)), hwnet, SLOT(onSeedChanged(const QString &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(mapChanged(const QString &)), hwnet, SLOT(onMapChanged(const QString &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(themeChanged(const QString &)), hwnet, SLOT(onThemeChanged(const QString &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(initHealthChanged(int)), hwnet, SLOT(onInitHealthChanged(int)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(turnTimeChanged(int)), hwnet, SLOT(onTurnTimeChanged(int)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(suddenDeathTurnsChanged(int)), hwnet, SLOT(onSuddenDeathTurnsChanged(int)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(caseProbabilityChanged(int)), hwnet, SLOT(onCaseProbabilityChanged(int)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(fortsModeChanged(bool)), hwnet, SLOT(onFortsModeChanged(bool)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(teamsDivideChanged(bool)), hwnet, SLOT(onTeamsDivideChanged(bool)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(solidChanged(bool)), hwnet, SLOT(onSolidChanged(bool)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(borderChanged(bool)), hwnet, SLOT(onBorderChanged(bool)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(newWeaponScheme(const QString &, const QString &)),
-			hwnet, SLOT(onWeaponsNameChanged(const QString &, const QString &)));
-	connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
+	//connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
 
-	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
-	connect(hwnet, SIGNAL(seedChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setSeed(const QString &)));
-	connect(hwnet, SIGNAL(mapChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setMap(const QString &)));
-	connect(hwnet, SIGNAL(themeChanged(const QString &)), ui.pageNetGame->pGameCFG, SLOT(setTheme(const QString &)));
-	connect(hwnet, SIGNAL(initHealthChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setInitHealth(int)));
-	connect(hwnet, SIGNAL(turnTimeChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setTurnTime(int)));
-	connect(hwnet, SIGNAL(suddenDeathTurnsChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setSuddenDeathTurns(int)));
-	connect(hwnet, SIGNAL(caseProbabilityChanged(int)), ui.pageNetGame->pGameCFG, SLOT(setCaseProbability(int)));
-	connect(hwnet, SIGNAL(fortsModeChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setFortsMode(bool)));
-	connect(hwnet, SIGNAL(teamsDivideChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setTeamsDivide(bool)));
-	connect(hwnet, SIGNAL(solidChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setSolid(bool)));
-	connect(hwnet, SIGNAL(borderChanged(bool)), ui.pageNetGame->pGameCFG, SLOT(setBorder(bool)));
 	connect(hwnet, SIGNAL(hhnumChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
-	connect(hwnet, SIGNAL(ammoChanged(const QString&, const QString&)), ui.pageNetGame->pGameCFG, SLOT(setNetAmmo(const QString&, const QString&)));
-	connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG->pMapContainer, SLOT(setTemplateFilter(int)));
+	//connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG->pMapContainer, SLOT(setTemplateFilter(int)));
 
-	hwnet->Connect(hostName, port, nick);
+	
+	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
+hwnet->Connect(hostName, port, nick);
 }
 
 void HWForm::NetConnect()

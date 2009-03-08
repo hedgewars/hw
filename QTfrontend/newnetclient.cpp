@@ -462,60 +462,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Bad CFG message");
 			return;
 		}
-		if (lst[1] == "MAP") {
-			emit mapChanged(lst[2]);
-			return;
-		}
-		if (lst[1] == "SEED") {
-			emit seedChanged(lst[2]);
-			return;
-		}
-		if (lst[1] == "THEME") {
-			emit themeChanged(lst[2]);
-			return;
-		}
-		if (lst[1] == "HEALTH") {
-			emit initHealthChanged(lst[2].toUInt());
-			return;
-		}
-		if (lst[1] == "TURNTIME") {
-			emit turnTimeChanged(lst[2].toUInt());
-			return;
-		}
-		if (lst[1] == "SD_TURNS") {
-			emit suddenDeathTurnsChanged(lst[2].toUInt());
-			return;
-		}
-		if (lst[1] == "CASEFACTOR") {
-			emit caseProbabilityChanged(lst[2].toUInt());
-			return;
-		}
-		if (lst[1] == "FORTSMODE") {
-			emit fortsModeChanged(lst[2].toInt() != 0);
-			return;
-		}
-		if (lst[1] == "DIVIDETEAMS") {
-			emit teamsDivideChanged(lst[2].toInt() != 0);
-			return;
-		}
-		if (lst[1] == "SOLIDLAND") {
-			emit solidChanged(lst[2].toInt() != 0);
-			return;
-		}
-		if (lst[1] == "BORDER") {
-			emit borderChanged(lst[2].toInt() != 0);
-			return;
-		}
-		if (lst[1] == "AMMO") {
-			if(lst.size() < 4) return;
-			emit ammoChanged(lst[3], lst[2]);
-			return;
-		}
-		if (lst[1] == "TEMPLATE_FILTER") {
-			emit templateFilterChanged(lst[2].toUInt());
-			return;
-		}
-		qWarning() << "Net: Unknown 'CFG' message:" << lst;
+		QStringList tmp = lst;
+		tmp.removeFirst();
+		tmp.removeFirst();
+		emit paramChanged(lst[1], tmp);
 		return;
 	}
 
@@ -579,7 +529,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 void HWNewNet::ConfigAsked()
 {
-	QString map = m_pGameCFGWidget->getCurrentMap();
+/*	QString map = m_pGameCFGWidget->getCurrentMap();
 	if (map.size())
 		onMapChanged(map);
 
@@ -599,7 +549,7 @@ void HWNewNet::ConfigAsked()
 			m_pGameCFGWidget->WeaponsName->currentIndex()
 			).toString();
 	onWeaponsNameChanged(name, ammo);
-	onTemplateFilterChanged(m_pGameCFGWidget->pMapContainer->getTemplateFilter());
+	onTemplateFilterChanged(m_pGameCFGWidget->pMapContainer->getTemplateFilter());*/
 }
 
 void HWNewNet::RunGame()
@@ -625,69 +575,15 @@ void HWNewNet::onTeamColorChanged(const HWTeam& team)
 			.arg(team.teamColor.name()));
 }
 
-void HWNewNet::onSeedChanged(const QString & seed)
+void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
 {
-	if (isChief) RawSendNet(QString("CFG%1SEED%1%2").arg(delimeter).arg(seed));
-}
-
-void HWNewNet::onMapChanged(const QString & map)
-{
-	if (isChief) RawSendNet(QString("CFG%1MAP%1%2").arg(delimeter).arg(map));
-}
-
-void HWNewNet::onThemeChanged(const QString & theme)
-{
-	if (isChief) RawSendNet(QString("CFG%1THEME%1%2").arg(delimeter).arg(theme));
-}
-
-void HWNewNet::onInitHealthChanged(int health)
-{
-	if (isChief) RawSendNet(QString("CFG%1HEALTH%1%2").arg(delimeter).arg(health));
-}
-
-void HWNewNet::onTurnTimeChanged(int time)
-{
-	if (isChief) RawSendNet(QString("CFG%1TURNTIME%1%2").arg(delimeter).arg(time));
-}
-
-void HWNewNet::onSuddenDeathTurnsChanged(int turns)
-{
-	if (isChief) RawSendNet(QString("CFG%1SD_TURNS%1%2").arg(delimeter).arg(turns));
-}
-
-void HWNewNet::onCaseProbabilityChanged(int prob)
-{
-	if (isChief) RawSendNet(QString("CFG%1CASEFACTOR%1%2").arg(delimeter).arg(prob));
-}
-
-void HWNewNet::onFortsModeChanged(bool value)
-{
-	if (isChief) RawSendNet(QString("CFG%1FORTSMODE%1%2").arg(delimeter).arg(value));
-}
-
-void HWNewNet::onTeamsDivideChanged(bool value)
-{
-	if (isChief) RawSendNet(QString("CFG%1DIVIDETEAMS%1%2").arg(delimeter).arg(value));
-}
-
-void HWNewNet::onSolidChanged(bool value)
-{
-	if (isChief) RawSendNet(QString("CFG%1SOLIDLAND%1%2").arg(delimeter).arg(value));
-}
-
-void HWNewNet::onBorderChanged(bool value)
-{
-	if (isChief) RawSendNet(QString("CFG%1BORDER%1%2").arg(delimeter).arg(value));
-}
-
-void HWNewNet::onWeaponsNameChanged(const QString& name, const QString& ammo)
-{
-	if (isChief) RawSendNet(QString("CFG%1AMMO%1%2%1%3").arg(delimeter).arg(ammo).arg(name));
-}
-
-void HWNewNet::onTemplateFilterChanged(int filter)
-{
-	if (isChief) RawSendNet(QString("CFG%1TEMPLATE_FILTER%1%2").arg(delimeter).arg(filter));
+	if (isChief)
+		RawSendNet(
+				QString("CFG%1%2%1%3")
+					.arg(delimeter)
+					.arg(param)
+					.arg(value.join(QString(delimeter)))
+				);
 }
 
 void HWNewNet::chatLineToNet(const QString& str)
