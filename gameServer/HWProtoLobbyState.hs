@@ -71,7 +71,7 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 		++ answerNicks
 		++ answerReady
 		++ [AnswerThisRoom ["NOT_READY", nick client]]
-		++ answerFullConfig jRoom
+		++ answerFullConfig
 		++ answerTeams
 		++ watchRound
 	where
@@ -90,7 +90,9 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 			map (\clID -> clients IntMap.! clID) roomClientsIDs
 
 		toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
-		answerFullConfig room = map toAnswer (Map.toList $ params room)
+		
+		answerFullConfig = map toAnswer (leftConfigPart ++ rightConfigPart)
+		(leftConfigPart, rightConfigPart) = partition (\(p, _) -> p /= "MAP") (Map.toList $ params jRoom)
 
 		watchRound = if not $ gameinprogress jRoom then
 					[]
