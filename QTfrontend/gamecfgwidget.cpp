@@ -172,7 +172,7 @@ void GameCFGWidget::fullNetConfig()
 	borderChanged(CB_border->isChecked());
 	caseProbabilityChanged(SB_CaseProb->value());
 	fortsModeChanged(CB_mode_Forts->isChecked());
-	initHealthChanged(SB_CaseProb->value());
+	initHealthChanged(SB_InitHealth->value());
 	seedChanged(pMapContainer->getCurrentSeed());
 	solidChanged(CB_solid->isChecked());
 	suddenDeathTurnsChanged(SB_SuddenDeath->value());
