@@ -56,7 +56,6 @@ class HWNewNet : public QObject
   QString seed;
   bool m_game_connected;
 
-  void ConfigAsked();
   void RunGame();
 
   template <typename T>
@@ -103,7 +102,8 @@ class HWNewNet : public QObject
   void roomMaster(bool);
 
   void paramChanged(const QString & param, const QStringList & value);
-  
+  void configAsked();
+
   void AddNetTeam(const HWTeam&);
   void hhnumChanged(const HWTeam&);
   void teamColorChanged(const HWTeam&);

@@ -569,6 +569,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 // config stuff
 	connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
+	connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
 
 
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);

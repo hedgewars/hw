@@ -171,9 +171,8 @@ void HWNewNet::OnConnect()
 
 void HWNewNet::OnDisconnect()
 {
-  //emit ChangeInTeams(QStringList());
-  if(m_game_connected) emit Disconnected();
-  m_game_connected = false;
+	if(m_game_connected) emit Disconnected();
+	m_game_connected = false;
 }
 
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
@@ -359,7 +358,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 				emit EnteredGame();
 				emit roomMaster(isChief);
 				if (isChief)
-					ConfigAsked();
+					emit configAsked();
 			}
 			emit nickAdded(lst[i]);
 			emit chatStringFromNet(QString(tr("*** %1 joined")).arg(lst[i]));
@@ -524,32 +523,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	qWarning() << "Net: Unknown message:" << lst;
-}
-
-
-void HWNewNet::ConfigAsked()
-{
-/*	QString map = m_pGameCFGWidget->getCurrentMap();
-	if (map.size())
-		onMapChanged(map);
-
-	onSuddenDeathTurnsChanged(m_pGameCFGWidget->getSuddenDeathTurns());
-	onCaseProbabilityChanged(m_pGameCFGWidget->getCaseProbability());
-	onSeedChanged(m_pGameCFGWidget->getCurrentSeed());
-	onThemeChanged(m_pGameCFGWidget->getCurrentTheme());
-	onInitHealthChanged(m_pGameCFGWidget->getInitHealth());
-	onTurnTimeChanged(m_pGameCFGWidget->getTurnTime());
-	onFortsModeChanged(m_pGameCFGWidget->getGameFlags() & 0x1);
-	onTeamsDivideChanged(m_pGameCFGWidget->getGameFlags() & 0x10);
-	onSolidChanged(m_pGameCFGWidget->getGameFlags() & 0x04);
-	onBorderChanged(m_pGameCFGWidget->getGameFlags() & 0x08);
-	// always initialize with default ammo (also avoiding complicated cross-class dependencies)
-	QString name = m_pGameCFGWidget->WeaponsName->currentText();
-	QString ammo = m_pGameCFGWidget->WeaponsName->itemData(
-			m_pGameCFGWidget->WeaponsName->currentIndex()
-			).toString();
-	onWeaponsNameChanged(name, ammo);
-	onTemplateFilterChanged(m_pGameCFGWidget->pMapContainer->getTemplateFilter());*/
 }
 
 void HWNewNet::RunGame()

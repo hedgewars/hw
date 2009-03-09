@@ -127,55 +127,25 @@ quint32 GameCFGWidget::getGameFlags() const
 	return result;
 }
 
-QString GameCFGWidget::getCurrentSeed() const
-{
-  return pMapContainer->getCurrentSeed();
-}
-
-QString GameCFGWidget::getCurrentMap() const
-{
-  return pMapContainer->getCurrentMap();
-}
-
-QString GameCFGWidget::getCurrentTheme() const
-{
-  return pMapContainer->getCurrentTheme();
-}
-
 quint32 GameCFGWidget::getInitHealth() const
 {
 	return SB_InitHealth->value();
 }
 
-quint32 GameCFGWidget::getTurnTime() const
-{
-	return SB_TurnTime->value();
-}
-
-quint32 GameCFGWidget::getSuddenDeathTurns() const
-{
-	return SB_SuddenDeath->value();
-}
-
-quint32 GameCFGWidget::getCaseProbability() const
-{
-	return SB_CaseProb->value();
-}
-
 QStringList GameCFGWidget::getFullConfig() const
 {
 	QStringList sl;
-	sl.append("eseed " + getCurrentSeed());
+	sl.append("eseed " + pMapContainer->getCurrentSeed());
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-	sl.append(QString("e$turntime %1").arg(getTurnTime() * 1000));
-	sl.append(QString("e$sd_turns %1").arg(getSuddenDeathTurns()));
-	sl.append(QString("e$casefreq %1").arg(getCaseProbability()));
+	sl.append(QString("e$turntime %1").arg(SB_TurnTime->value() * 1000));
+	sl.append(QString("e$sd_turns %1").arg(SB_SuddenDeath->value()));
+	sl.append(QString("e$casefreq %1").arg(SB_CaseProb->value()));
 	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
-	QString currentMap = getCurrentMap();
+	QString currentMap = pMapContainer->getCurrentMap();
 	if (currentMap.size() > 0)
 		sl.append("emap " + currentMap);
-	sl.append("etheme " + getCurrentTheme());
+	sl.append("etheme " + pMapContainer->getCurrentTheme());
 	return sl;
 }
 
@@ -192,6 +162,27 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 		WeaponsName->setItemData(pos, ammo);
 		WeaponsName->setCurrentIndex(pos);
 	}
+}
+
+void GameCFGWidget::fullNetConfig()
+{
+	ammoChanged(WeaponsName->currentIndex());
+	
+	borderChanged(CB_border->isChecked());
+	caseProbabilityChanged(SB_CaseProb->value());
+	fortsModeChanged(CB_mode_Forts->isChecked());
+	initHealthChanged(SB_CaseProb->value());
+	seedChanged(pMapContainer->getCurrentSeed());
+	solidChanged(CB_solid->isChecked());
+	suddenDeathTurnsChanged(SB_SuddenDeath->value());
+	teamsDivideChanged(CB_teamsDivide->isChecked());
+	themeChanged(pMapContainer->getCurrentTheme());
+	turnTimeChanged(SB_TurnTime->value());
+
+	// map must be the last
+	QString map = pMapContainer->getCurrentMap();
+	if (map.size())
+		mapChanged(map);
 }
 
 void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
@@ -257,7 +248,6 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 		}
 	}
 }
-
 
 void GameCFGWidget::ammoChanged(int index)
 {

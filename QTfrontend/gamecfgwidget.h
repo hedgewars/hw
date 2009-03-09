@@ -59,19 +59,14 @@ class GameCFGWidget : public QGroupBox
 public:
 	GameCFGWidget(QWidget* parent, bool externalControl=false);
 	quint32 getGameFlags() const;
-	QString getCurrentSeed() const;
-	QString getCurrentMap() const;
-	QString getCurrentTheme() const;
 	quint32 getInitHealth() const;
-	quint32 getTurnTime() const;
-	quint32 getSuddenDeathTurns() const;
-	quint32 getCaseProbability() const;
 	QStringList getFullConfig() const;
-	QComboBox* WeaponsName;
+	QComboBox * WeaponsName;
 	HWMapContainer* pMapContainer;
 
 public slots:
 	void setParam(const QString & param, const QStringList & value);
+	void fullNetConfig();
 
 signals:
 	void paramChanged(const QString & param, const QStringList & value);
