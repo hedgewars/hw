@@ -11,8 +11,8 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
-find_package(QCA2 REQUIRED)
-include_directories(${QCA2_INCLUDE_DIR})
+#find_package(QCA2 REQUIRED)
+#include_directories(${QCA2_INCLUDE_DIR})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
@@ -81,6 +81,7 @@ set(hwfr_src
 	igbox.cpp
 	weaponItem.cpp
 	statsPage.cpp
+	misc.cpp
 	)
 
 if(MINGW)
@@ -128,6 +129,7 @@ set(hwfr_moc_hdrs
 	igbox.h
 	weaponItem.h
 	statsPage.h
+	misc.h
 	)
 
 set(hwfr_hdrs
@@ -155,7 +157,7 @@ add_executable(hedgewars WIN32
 	
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
-	${QCA2_LIBRARIES}
+#	${QCA2_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLMIXER_LIBRARY}
 	)

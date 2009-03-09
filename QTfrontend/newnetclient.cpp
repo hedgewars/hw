@@ -20,8 +20,6 @@
 #include <QDebug>
 #include <QInputDialog>
 
-#include <QtCrypto>
-
 #include "hwconsts.h"
 #include "newnetclient.h"
 #include "proto.h"
@@ -29,6 +27,7 @@
 #include "game.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
+#include "misc.h"
 
 char delimeter='\n';
 
@@ -435,12 +434,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	if (lst[0] == "ASKPASSWORD") {
 		QString password = QInputDialog::getText(0, tr("Password"), tr("Enter your password:"), QLineEdit::Password);
 
-		QCA::Initializer qcaInit;
-		QCA::Hash shaHash("md5");
-		shaHash.update(password.toLatin1());
-		QByteArray hashResult = shaHash.final().toByteArray();
-		
-		RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(QCA::arrayToHex(hashResult)));
+		QString hash = Hash::md5(password.toLatin1());
+
+		RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
 		return;
 	}
 
