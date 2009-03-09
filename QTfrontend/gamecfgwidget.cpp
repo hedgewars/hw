@@ -109,6 +109,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
+	connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
 }
 
 quint32 GameCFGWidget::getGameFlags() const
@@ -176,6 +177,7 @@ void GameCFGWidget::fullNetConfig()
 	solidChanged(CB_solid->isChecked());
 	suddenDeathTurnsChanged(SB_SuddenDeath->value());
 	teamsDivideChanged(CB_teamsDivide->isChecked());
+	templateFilterChanged(pMapContainer->getTemplateFilter());
 	themeChanged(pMapContainer->getCurrentTheme());
 	turnTimeChanged(SB_TurnTime->value());
 
@@ -234,11 +236,11 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 			CB_border->setChecked(value.toUInt() != 0);
 			return;
 		}
-/*		if (param == "TEMPLATE_FILTER") {
-			emit templateFilterChanged(lst[2].toUInt());
+		if (param == "TEMPLATE") {
+			pMapContainer->setTemplateFilter(value.toUInt());
 			return;
 		}
-*/	}
+	}
 
 	if (slValue.size() == 2)
 	{
@@ -281,6 +283,11 @@ void GameCFGWidget::initHealthChanged(int value)
 void GameCFGWidget::mapChanged(const QString & value)
 {
 	emit paramChanged("MAP", QStringList(value));
+}
+
+void GameCFGWidget::templateFilterChanged(int value)
+{
+	emit paramChanged("TEMPLATE", QStringList(QString::number(value)));
 }
 
 void GameCFGWidget::seedChanged(const QString & value)

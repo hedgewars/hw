@@ -78,6 +78,7 @@ private slots:
 	void fortsModeChanged(bool);
 	void initHealthChanged(int);
 	void mapChanged(const QString &);
+	void templateFilterChanged(int);
 	void seedChanged(const QString &);
 	void solidChanged(bool);
 	void suddenDeathTurnsChanged(int);
