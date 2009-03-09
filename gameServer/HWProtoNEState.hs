@@ -41,6 +41,7 @@ handleCmd_NotEntered clID clients _ ["PROTO", protoNum] =
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
 		checkPassword = if (not . null) (nick client) then [CheckRegistered] else []
 
+
 handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
 	if passwd == webPassword client then
 		[ModifyClient (\cl -> cl{logonPassed = True}),

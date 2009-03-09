@@ -28,6 +28,8 @@ data Action =
 	| Warning String
 	| ByeClient String
 	| KickClient Int -- clID
+	| KickRoomClient Int -- clID
+	| RemoveClientTeams Int -- clID
 	| BanClient String -- nick
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
@@ -54,7 +56,8 @@ processAction (clID, serverInfo, clients, rooms) (AnswerAll msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerAllOthers msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) $ Prelude.filter (/= clID) (keys clients)
+	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) $
+		Prelude.filter (\id' -> (id' /= clID) && (logonPassed $ clients ! id')) (keys clients)
 	return (clID, serverInfo, clients, rooms)
 
 
@@ -286,3 +289,18 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 
 processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
 	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
+
+
+processAction (clID, serverInfo, clients, rooms) (KickRoomClient kickID) = do
+	writeChan (sendChan $ clients ! kickID) ["KICKED"]
+	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ RoomRemoveThisClient)
+
+
+processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) = do
+	liftM2 replaceID (return clID) $
+		foldM processAction (teamsClID, serverInfo, clients, rooms) $ removeTeamsActions
+	where
+		client = clients ! teamsClID
+		room = rooms ! (roomID client)
+		teamsToRemove = Prelude.filter (\t -> teamowner t == nick client) $ teams room
+		removeTeamsActions = Prelude.map (RemoveTeam . teamname) teamsToRemove

@@ -1,5 +1,6 @@
 module HWProtoInRoomState where
 
+import qualified Data.Foldable as Foldable
 import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
@@ -193,6 +194,25 @@ handleCmd_inRoom clID clients _ ["TOGGLE_RESTRICT_TEAMS"] =
 		[ProtocolError "Not room master"]
 	where
 		client = clients IntMap.! clID
+
+handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
+	if not $ isMaster client then
+		[]
+	else
+		if noSuchClient then
+			[]
+		else
+			if (kickID == clID) || (roomID client /= roomID kickClient) then
+				[]
+			else
+				[RemoveClientTeams kickID,
+				KickRoomClient kickID]
+	where
+		client = clients IntMap.! clID
+		maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
+		noSuchClient = isNothing maybeClient
+		kickClient = fromJust maybeClient
+		kickID = clientUID kickClient
 
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]

@@ -342,6 +342,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if(lst[0] == "KICKED") {
+		netClientState = 2;
+		emit showMessage(HWNewNet::tr("You got kicked"));
+		emit LeftRoom();
+		return;
+	}
+
 	if(lst[0] == "JOINED") {
 		if(lst.size() < 2)
 		{
