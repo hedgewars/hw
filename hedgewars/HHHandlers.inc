@@ -24,11 +24,13 @@ slot:= Gear^.MsgParam;
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin
+	Gear^.Message:= Gear^.Message and not gm_Slot;
+	
 	if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
 		or (AttacksNum > 0)
 		or ((Gear^.State and gstHHDriven) = 0) then exit;
 
-	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump or gm_Slot);
+	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
 	if CurSlot = slot then
 		begin
@@ -212,24 +214,24 @@ with CurrentHedgehog^.Gear^,
 		CurrentHedgehog^ do
 	begin
 	State:= State and not gstAttacking;
-    if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Utility) = 0 then
-        begin
-        Inc(AttacksNum);
-        if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
-        ((GameFlags and gfMultiWeapon) <> 0) then 
-            isInMultiShoot:= true
-        else 
-            begin
-            TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
-            State:= State or gstAttacked;
-            OnUsedAmmo(CurrentHedgehog^);
-            end;
-        end
-    else
-       begin
-       OnUsedAmmo(CurrentHedgehog^);
-       ApplyAmmoChanges(CurrentHedgehog^);
-       end;
+	if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Utility) = 0 then
+		begin
+		Inc(AttacksNum);
+		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
+		((GameFlags and gfMultiWeapon) <> 0) then
+			isInMultiShoot:= true
+		else
+			begin
+			TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;
+			State:= State or gstAttacked;
+			OnUsedAmmo(CurrentHedgehog^);
+			end;
+		end
+	else
+	begin
+	OnUsedAmmo(CurrentHedgehog^);
+	ApplyAmmoChanges(CurrentHedgehog^);
+	end;
 	AttackBar:= 0;
 	end
 end;
