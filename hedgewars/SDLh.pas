@@ -53,8 +53,8 @@ interface
 {$linkframework AudioUnit}
 {$linkframework Quicktime}
 {$linkframework IOKit}
-{$linkframework ForceFeedback}
-{$linkframework CoreAudio}
+{for SDL1.3 {$linkframework ForceFeedback}}
+{for SDL1.3 {$linkframework CoreAudio}}
 {$ENDIF}
 
 (*  SDL *)
