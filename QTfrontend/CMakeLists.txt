@@ -82,6 +82,7 @@ set(hwfr_src
 	weaponItem.cpp
 	statsPage.cpp
 	misc.cpp
+	ammoSchemeModel.cpp
 	)
 
 if(MINGW)
@@ -130,6 +131,7 @@ set(hwfr_moc_hdrs
 	weaponItem.h
 	statsPage.h
 	misc.h
+	ammoSchemeModel.h
 	)
 
 set(hwfr_hdrs
