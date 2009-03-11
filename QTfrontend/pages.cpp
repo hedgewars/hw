@@ -843,3 +843,9 @@ PageConnecting::PageConnecting(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 }
+
+PageScheme::PageScheme(QWidget* parent) :
+	AbstractPage(parent)
+{
+	QGridLayout * pageLayout = new QGridLayout(this);
+}

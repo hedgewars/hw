@@ -22,7 +22,16 @@
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
   QAbstractTableModel(parent)
 {
+	defaultScheme
+		<< "Default"
+		<< "45"
+		<< "0"
+		<< "0"
+		<< "0"
+		<< "0"
+		;
 
+	schemes.append(defaultScheme);
 }
 
 QVariant AmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -43,7 +52,7 @@ int AmmoSchemeModel::columnCount(const QModelIndex & parent) const
 	if (parent.isValid())
 		return 0;
 	else
-		return 3;
+		return defaultScheme.size();
 }
 
 Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
@@ -56,5 +65,42 @@ Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 
 bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
+	if (!index.isValid() || index.row() < 0
+		|| index.row() >= schemes.size()
+		|| index.column() >= defaultScheme.size()
+		|| role != Qt::DisplayRole)
+		return false;
+
+	schemes[index.row()][index.column()] = value.toString();
 	emit dataChanged(index, index);
+	return true;
+}
+
+bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
+{
+	beginInsertRows(parent, row, row);
+
+	schemes.insert(row, defaultScheme);
+
+	endInsertRows();
+}
+
+bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
+{
+	beginRemoveRows(parent, row, row);
+
+	schemes.removeAt(row);
+
+	endRemoveRows();
+}
+
+QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
+{
+	if (!index.isValid() || index.row() < 0
+		|| index.row() >= schemes.size()
+		|| index.column() >= defaultScheme.size()
+		|| role != Qt::DisplayRole)
+		return QVariant();
+
+	return schemes[index.row()][index.column()];
 }

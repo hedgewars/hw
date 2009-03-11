@@ -395,4 +395,12 @@ public:
 	PageConnecting(QWidget* parent = 0);
 };
 
+class PageScheme : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageScheme(QWidget* parent = 0);
+};
+
 #endif // PAGES_H

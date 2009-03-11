@@ -103,4 +103,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageConnecting = new PageConnecting();
 	Pages->addWidget(pageConnecting);
+
+	pageScheme = new PageScheme();
+	Pages->addWidget(pageScheme);
 }

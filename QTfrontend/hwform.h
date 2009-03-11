@@ -115,7 +115,8 @@ private:
 		ID_PAGE_NETSERVER       = 12,
 		ID_PAGE_INGAME          = 13,
 		ID_PAGE_ROOMSLIST       = 14,
-		ID_PAGE_CONNECTING      = 15
+		ID_PAGE_CONNECTING      = 15,
+		ID_PAGE_SCHEME          = 16
 		};
 	HWGame * game;
 	HWTeam * editedTeam;

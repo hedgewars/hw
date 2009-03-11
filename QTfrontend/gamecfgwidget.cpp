@@ -23,10 +23,12 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QMessageBox>
+#include <QTableView>
 
 #include "gamecfgwidget.h"
 #include "igbox.h"
 #include "hwconsts.h"
+#include "ammoSchemeModel.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QGroupBox(parent), mainLayout(this)
@@ -42,10 +44,14 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	mainLayout.addWidget(GBoxOptions);
 
 	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
+
+	QTableView * tv = new QTableView(this);
+	tv->setModel(new AmmoSchemeModel);
+	GBoxOptionsLayout->addWidget(tv, 0, 0, 1, 2);
 	
 	CB_mode_Forts = new QCheckBox(GBoxOptions);
 	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
-	GBoxOptionsLayout->addWidget(CB_mode_Forts, 0, 0, 1, 2);
+	GBoxOptionsLayout->addWidget(CB_mode_Forts, 9, 0, 1, 2);
 
 	CB_teamsDivide = new QCheckBox(GBoxOptions);
 	CB_teamsDivide->setText(QCheckBox::tr("Divide teams"));
