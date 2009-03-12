@@ -37,16 +37,20 @@ void ItemNum::mousePressEvent ( QMouseEvent * event )
   if(nonInteractive) return;
   if(event->button()==Qt::LeftButton) {
     event->accept();
-    if(infinityState && numItems==maxItems) {
+    if((infinityState && numItems <= maxItems) || (!infinityState && numItems < maxItems)) {
       incItems();
-    }
-    if(numItems < maxItems) {
-      incItems();
+    } else {
+      numItems = minItems+1;
+      // appears there's an emit in there
+      decItems();
     }
   } else if (event->button()==Qt::RightButton) {
     event->accept();
     if(numItems > minItems) {
       decItems();
+    } else {
+      numItems = maxItems+(infinityState?0:-1);
+      incItems();
     }
   } else {
     event->ignore();
