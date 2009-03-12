@@ -46,8 +46,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
-	QTableView * tv = new QTableView(this);
-	tv->setModel(new AmmoSchemeModel);
+	tv = new QTableView(this);
 	GBoxOptionsLayout->addWidget(tv, 0, 0, 1, 2);
 
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);

@@ -33,6 +33,7 @@
 #include <QTimer>
 #include <QScrollBar>
 #include <QDataWidgetMapper>
+#include <QTableView>
 
 #include "hwform.h"
 #include "game.h"
@@ -124,30 +125,34 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageGameStats->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-	connect(ui.pageSinglePlayer->BtnSimpleGamePage,	SIGNAL(clicked()),	this, SLOT(SimpleGame()));
-	connect(ui.pageSinglePlayer->BtnTrainPage,	SIGNAL(clicked()),	this, SLOT(GoToTraining()));
-	connect(ui.pageSinglePlayer->BtnMultiplayer,	SIGNAL(clicked()),	this, SLOT(GoToMultiplayer()));
-	connect(ui.pageSinglePlayer->BtnLoad,	SIGNAL(clicked()),	this, SLOT(GoToSaves()));
-	connect(ui.pageSinglePlayer->BtnDemos,	SIGNAL(clicked()),	this, SLOT(GoToDemos()));
-	connect(ui.pageSinglePlayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
+	connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), this, SLOT(GoToTraining()));
+	connect(ui.pageSinglePlayer->BtnMultiplayer, SIGNAL(clicked()), this, SLOT(GoToMultiplayer()));
+	connect(ui.pageSinglePlayer->BtnLoad, SIGNAL(clicked()), this, SLOT(GoToSaves()));
+	connect(ui.pageSinglePlayer->BtnDemos, SIGNAL(clicked()), this, SLOT(GoToDemos()));
+	connect(ui.pageSinglePlayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-	connect(ui.pageTraining->BtnStartTrain,	SIGNAL(clicked()),	this, SLOT(StartTraining()));
-	connect(ui.pageTraining->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageTraining->BtnStartTrain, SIGNAL(clicked()), this, SLOT(StartTraining()));
+	connect(ui.pageTraining->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
-	connect(ui.pageSelectWeapon->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageSelectWeapon->BtnDefault,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(setDefault()));
-	connect(ui.pageSelectWeapon->BtnSave,	SIGNAL(clicked()),	ui.pageSelectWeapon->pWeapons, SLOT(save()));
+	connect(ui.pageSelectWeapon->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageSelectWeapon->BtnDefault, SIGNAL(clicked()), ui.pageSelectWeapon->pWeapons, SLOT(setDefault()));
+	connect(ui.pageSelectWeapon->BtnSave, SIGNAL(clicked()), ui.pageSelectWeapon->pWeapons, SLOT(save()));
 
-	connect(ui.pageSelectWeapon->BtnDelete,	SIGNAL(clicked()),	
+	connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
 		ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
-	connect(ui.pageSelectWeapon->pWeapons,	SIGNAL(weaponsDeleted()),
+	connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
 		this, SLOT(UpdateWeapons())); // executed second
-	connect(ui.pageSelectWeapon->pWeapons,	SIGNAL(weaponsDeleted()),
+	connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
 		this, SLOT(GoBack())); // executed third
+
+	connect(ui.pageScheme->BtnSave, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 
 	AmmoSchemeModel * ammoSchemeModel = new AmmoSchemeModel(this);
-	ui.pageScheme->mapper->setModel(ammoSchemeModel);
+	ui.pageScheme->setModel(ammoSchemeModel);
+	ui.pageMultiplayer->gameCFG->tv->setModel(ammoSchemeModel);
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();

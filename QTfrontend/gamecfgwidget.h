@@ -29,6 +29,7 @@
 class QCheckBox;
 class QVBoxLayout;
 class QLabel;
+class QTableView;
 
 class GameCFGWidget : public QGroupBox
 {
@@ -41,6 +42,7 @@ public:
 	QStringList getFullConfig() const;
 	QComboBox * WeaponsName;
 	HWMapContainer* pMapContainer;
+	QTableView * tv;
 
 public slots:
 	void setParam(const QString & param, const QStringList & value);

@@ -44,6 +44,7 @@ class QTextBrowser;
 class QTableWidget;
 class QAction;
 class QDataWidgetMapper;
+class QAbstractItemModel;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -406,9 +407,13 @@ class PageScheme : public AbstractPage
 public:
 	PageScheme(QWidget* parent = 0);
 
-	QDataWidgetMapper * mapper;
+	QPushButton * BtnBack;
+	QPushButton * BtnSave;
+
+	void setModel(QAbstractItemModel * model);
 
 private:
+	QDataWidgetMapper * mapper;
 	QCheckBox * CB_mode_Forts;
 	QCheckBox * CB_teamsDivide;
 	QCheckBox * CB_solid;

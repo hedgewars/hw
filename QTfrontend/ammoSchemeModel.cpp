@@ -30,7 +30,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
 		<< "0" // solid land
 		<< "0" // border
 		<< "45" // turn time
-		<< "100" // init health
+		<< "101" // init health
 		<< "15" // sudden death
 		<< "5" // case probability
 		;
@@ -107,5 +107,5 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 		|| role != Qt::DisplayRole)
 		return QVariant();
 
-	return schemes[index.row()][index.column()];
+	return QVariant::fromValue(schemes[index.row()][index.column()]);
 }

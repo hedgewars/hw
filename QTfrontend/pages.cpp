@@ -896,6 +896,17 @@ PageScheme::PageScheme(QWidget* parent) :
 	pageLayout->addWidget(LE_name, 8, 1);
 
 	mapper = new QDataWidgetMapper(this);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 10, 0, true);
+	BtnSave = addButton(":/res/Save.png", pageLayout, 10, 2, true);
+
+	connect(BtnSave, SIGNAL(clicked()), mapper, SLOT(toFirst()));
+}
+
+void PageScheme::setModel(QAbstractItemModel * model)
+{
+	mapper->setModel(model);
+	
 	mapper->addMapping(LE_name, 0);
 	mapper->addMapping(CB_mode_Forts, 1);
 	mapper->addMapping(CB_teamsDivide, 2);
@@ -905,4 +916,6 @@ PageScheme::PageScheme(QWidget* parent) :
 	mapper->addMapping(SB_InitHealth, 6);
 	mapper->addMapping(SB_SuddenDeath, 7);
 	mapper->addMapping(SB_CaseProb, 8);
+
+	mapper->toFirst();
 }
