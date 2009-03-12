@@ -62,6 +62,7 @@ uses
 //       SinTable.inc
 //       proto.inc
 
+var recordFileName : shortstring = '';
 
 procedure OnDestroy; forward;
 
@@ -214,7 +215,13 @@ case ParamCount of
      val(ParamStr(2), ipcPort);
      GameType:= gmtLandPreview;
      if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
-     end
+     end;
+  2: begin
+     PathPrefix:= ParamStr(1);
+     recordFileName:= ParamStr(2);
+     for p:= Succ(Low(TPathType)) to High(TPathType) do
+         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+     end;
    else
    OutError(errmsgShouldntRun, true)
    end
@@ -244,12 +251,16 @@ WriteLnToConsole(msgOK);
 ShowMainWindow;
 
 InitKbdKeyTable;
-InitIPC;
+
+if recordFileName = '' then InitIPC;
 WriteLnToConsole(msgGettingConfig);
 
 LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 
-SendIPCAndWaitReply('C');        // ask for game config
+if recordFileName = '' then
+	SendIPCAndWaitReply('C')        // ask for game config
+else
+	LoadRecordFromFile(recordFileName);
 
 s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version

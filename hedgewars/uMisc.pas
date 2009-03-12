@@ -39,7 +39,7 @@ var
 	TurnTimeLeft  : Longword = 0;
 	cSuddenDTurns : LongInt = 15;
 	cTemplateFilter : LongInt = 0;
-    
+
 	cHedgehogTurnTime: Longword = 45000;
 	cMaxAIThinkTime  : Longword = 9000;
 
@@ -69,7 +69,7 @@ var
 	cShowFPS      : boolean = true;
 	cCaseFactor   : Longword = 5;  {0..9}
 	cLandAdditions: Longword = 4;
-	cFullScreen   : boolean = true;
+	cFullScreen   : boolean = false;
 	cReducedQuality : boolean = false;
 	cLocaleFName  : shortstring = 'en.txt';
 	cSeed         : shortstring = '';

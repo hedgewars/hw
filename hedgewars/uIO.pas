@@ -28,6 +28,7 @@ procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
 procedure SendIPCTimeInc;
+procedure LoadRecordFromFile(fileName: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure InitIPC;
@@ -136,26 +137,57 @@ end;
 procedure IPCCheckSock;
 const ss: string = '';
 var i: LongInt;
-    buf: array[0..255] of byte;
-    s: shortstring absolute buf;
+	buf: array[0..255] of byte;
+	s: shortstring absolute buf;
 begin
+if IPCSock = nil then
+   exit;
+
 fds^.numsockets:= 0;
 SDLNet_AddSocket(fds, IPCSock);
 
 while SDLNet_CheckSockets(fds, 0) > 0 do
-      begin
-      i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
-      if i > 0 then
-         begin
-         buf[0]:= i;
-         ss:= ss + s;
-         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
-               begin
-               ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-               Delete(ss, 1, Succ(byte(ss[1])))
-               end
-         end else OutError('IPC connection lost', true)
-      end;
+	begin
+	i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
+	if i > 0 then
+		begin
+		buf[0]:= i;
+		ss:= ss + s;
+		while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+			begin
+			ParseIPCCommand(copy(ss, 2, byte(ss[1])));
+			Delete(ss, 1, Succ(byte(ss[1])))
+			end
+		end else OutError('IPC connection lost', true)
+	end;
+end;
+
+procedure LoadRecordFromFile(fileName: shortstring);
+var f: file;
+	ss: string = '';
+	i: LongInt;
+	buf: array[0..255] of byte;
+	s: shortstring absolute buf;
+begin
+assign(f, fileName);
+
+reset(f, 1);
+
+repeat
+	BlockRead(f, buf[1], 255 - Length(ss), i);
+	if i > 0 then
+		begin
+		buf[0]:= i;
+		ss:= ss + s;
+		while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+			begin
+			ParseIPCCommand(copy(ss, 2, byte(ss[1])));
+			Delete(ss, 1, Succ(byte(ss[1])))
+			end
+		end
+until i = 0;
+
+close(f)
 end;
 
 procedure SendIPC(s: shortstring);
