@@ -29,28 +29,6 @@
 class QCheckBox;
 class QVBoxLayout;
 class QLabel;
-class FreqSpinBox;
-
-class FreqSpinBox : public QSpinBox
-{
-	Q_OBJECT
-
-public:
-	FreqSpinBox(QWidget* parent) : QSpinBox(parent)
-	{
-
-	}
-
-	QString textFromValue ( int value ) const
-	{
-		switch (value)
-		{
-			case 0 : return tr("Never");
-			case 1 : return tr("Every turn");
-			default : return tr("Each %1 turn").arg(value);
-		}
-	}
-};
 
 class GameCFGWidget : public QGroupBox
 {
@@ -70,36 +48,17 @@ public slots:
 
 signals:
 	void paramChanged(const QString & param, const QStringList & value);
+	void goToSchemes();
 
 private slots:
 	void ammoChanged(int index);
-	void borderChanged(bool);
-	void caseProbabilityChanged(int);
-	void fortsModeChanged(bool);
-	void initHealthChanged(int);
 	void mapChanged(const QString &);
 	void templateFilterChanged(int);
 	void seedChanged(const QString &);
-	void solidChanged(bool);
-	void suddenDeathTurnsChanged(int);
-	void teamsDivideChanged(bool);
 	void themeChanged(const QString &);
-	void turnTimeChanged(int);
 
 private:
-	QCheckBox * CB_mode_Forts;
-	QCheckBox * CB_teamsDivide;
-	QCheckBox * CB_solid;
-	QCheckBox * CB_border;
 	QGridLayout mainLayout;
-	QSpinBox * SB_TurnTime;
-	QSpinBox * SB_InitHealth;
-	QSpinBox * SB_SuddenDeath;
-	FreqSpinBox * SB_CaseProb;
-	QLabel * L_TurnTime;
-	QLabel * L_InitHealth;
-	QLabel * L_SuddenDeath;
-	QLabel * L_CaseProb;
 
 	QString curNetAmmoName;
 	QString curNetAmmo;

@@ -16,6 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <QDebug>
 #include <QModelIndex>
 #include "ammoSchemeModel.h"
 
@@ -23,12 +24,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
   QAbstractTableModel(parent)
 {
 	defaultScheme
-		<< "Default"
-		<< "45"
-		<< "0"
-		<< "0"
-		<< "0"
-		<< "0"
+		<< "Default" // name
+		<< "0" // fortsmode
+		<< "0" // team divide
+		<< "0" // solid land
+		<< "0" // border
+		<< "45" // turn time
+		<< "100" // init health
+		<< "15" // sudden death
+		<< "5" // case probability
 		;
 
 	schemes.append(defaultScheme);
@@ -68,10 +72,11 @@ bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value,
 	if (!index.isValid() || index.row() < 0
 		|| index.row() >= schemes.size()
 		|| index.column() >= defaultScheme.size()
-		|| role != Qt::DisplayRole)
+		|| role != Qt::EditRole)
 		return false;
 
 	schemes[index.row()][index.column()] = value.toString();
+
 	emit dataChanged(index, index);
 	return true;
 }

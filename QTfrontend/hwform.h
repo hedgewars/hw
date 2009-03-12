@@ -56,6 +56,7 @@ private slots:
 	void GoToSelectWeapon();
 	void GoToSelectNewWeapon();
 	void GoToNetServer();
+	void GoToSchemes();
 	void GoToPage(quint8 id);
 	void GoBack();
 	void btnExitPressed();

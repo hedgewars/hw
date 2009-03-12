@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QByteArray>
 #include <QString>
+#include <QSpinBox>
 
 class Hash : public QObject
 {
@@ -31,5 +32,27 @@ public:
 	Hash();
 	static QString md5(QByteArray buf);
 };
+
+class FreqSpinBox : public QSpinBox
+{
+	Q_OBJECT
+
+public:
+	FreqSpinBox(QWidget* parent) : QSpinBox(parent)
+	{
+
+	}
+
+	QString textFromValue ( int value ) const
+	{
+		switch (value)
+		{
+			case 0 : return tr("Never");
+			case 1 : return tr("Every turn");
+			default : return tr("Each %1 turn").arg(value);
+		}
+	}
+};
+
 
 #endif // _MISC_H

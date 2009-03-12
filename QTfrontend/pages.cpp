@@ -38,6 +38,8 @@
 #include <QAction>
 #include <QMenu>
 #include <QSound>
+#include <QDataWidgetMapper>
+
 
 #include "pages.h"
 #include "sdlkeys.h"
@@ -56,6 +58,7 @@
 #include "selectWeapon.h"
 #include "igbox.h"
 #include "hats.h"
+#include "misc.h"
 
 PageMain::PageMain(QWidget* parent) : 
   AbstractPage(parent)
@@ -848,4 +851,58 @@ PageScheme::PageScheme(QWidget* parent) :
 	AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
+
+	CB_mode_Forts = new QCheckBox(this);
+	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
+	pageLayout->addWidget(CB_mode_Forts, 0, 0, 1, 2);
+
+	CB_teamsDivide = new QCheckBox(this);
+	CB_teamsDivide->setText(QCheckBox::tr("Divide teams"));
+	pageLayout->addWidget(CB_teamsDivide, 1, 0, 1, 2);
+
+	CB_solid = new QCheckBox(this);
+	CB_solid->setText(QCheckBox::tr("Solid land"));
+	pageLayout->addWidget(CB_solid, 2, 0, 1, 2);
+
+	CB_border = new QCheckBox(this);
+	CB_border->setText(QCheckBox::tr("Add Border"));
+	pageLayout->addWidget(CB_border, 3, 0, 1, 2);
+
+	SB_TurnTime = new QSpinBox(this);
+	SB_TurnTime->setRange(1, 99);
+	SB_TurnTime->setValue(45);
+	SB_TurnTime->setSingleStep(15);
+	
+	SB_InitHealth = new QSpinBox(this);
+	SB_InitHealth->setRange(50, 200);
+	SB_InitHealth->setValue(100);
+	SB_InitHealth->setSingleStep(25);
+	
+	SB_SuddenDeath = new QSpinBox(this);
+	SB_SuddenDeath->setRange(0, 50);
+	SB_SuddenDeath->setValue(15);
+	SB_SuddenDeath->setSingleStep(3);
+	
+	SB_CaseProb = new FreqSpinBox(this);
+	SB_CaseProb->setRange(0, 9);
+	SB_CaseProb->setValue(5);
+
+	LE_name = new QLineEdit(this);
+
+	pageLayout->addWidget(SB_TurnTime, 4, 1);
+	pageLayout->addWidget(SB_InitHealth, 5, 1);
+	pageLayout->addWidget(SB_SuddenDeath, 6, 1);
+	pageLayout->addWidget(SB_CaseProb, 7, 1);
+	pageLayout->addWidget(LE_name, 8, 1);
+
+	mapper = new QDataWidgetMapper(this);
+	mapper->addMapping(LE_name, 0);
+	mapper->addMapping(CB_mode_Forts, 1);
+	mapper->addMapping(CB_teamsDivide, 2);
+	mapper->addMapping(CB_solid, 3);
+	mapper->addMapping(CB_border, 4);
+	mapper->addMapping(SB_TurnTime, 5);
+	mapper->addMapping(SB_InitHealth, 6);
+	mapper->addMapping(SB_SuddenDeath, 7);
+	mapper->addMapping(SB_CaseProb, 8);
 }

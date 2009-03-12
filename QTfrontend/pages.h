@@ -43,6 +43,7 @@ class QTableView;
 class QTextBrowser;
 class QTableWidget;
 class QAction;
+class QDataWidgetMapper;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -53,9 +54,12 @@ class FPSEdit;
 class HWChatWidget;
 class SelWeaponWidget;
 class IconedGroupBox;
+class FreqSpinBox;
 
 class AbstractPage : public QWidget
 {
+	Q_OBJECT
+
  public:
 
  protected:
@@ -401,6 +405,19 @@ class PageScheme : public AbstractPage
 
 public:
 	PageScheme(QWidget* parent = 0);
+
+	QDataWidgetMapper * mapper;
+
+private:
+	QCheckBox * CB_mode_Forts;
+	QCheckBox * CB_teamsDivide;
+	QCheckBox * CB_solid;
+	QCheckBox * CB_border;
+	QSpinBox * SB_TurnTime;
+	QSpinBox * SB_InitHealth;
+	QSpinBox * SB_SuddenDeath;
+	FreqSpinBox * SB_CaseProb;
+	QLineEdit * LE_name;
 };
 
 #endif // PAGES_H

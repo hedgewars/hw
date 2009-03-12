@@ -32,6 +32,7 @@
 #include <QAction>
 #include <QTimer>
 #include <QScrollBar>
+#include <QDataWidgetMapper>
 
 #include "hwform.h"
 #include "game.h"
@@ -49,6 +50,7 @@
 #include "chatwidget.h"
 #include "playrecordpage.h"
 #include "input_ip.h"
+#include "ammoSchemeModel.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
@@ -67,24 +69,25 @@ HWForm::HWForm(QWidget *parent)
 	connect(config, SIGNAL(frontendFullscreen(bool)), this, SLOT(onFrontendFullscreen(bool)));
 	onFrontendFullscreen(config->isFrontendFullscreen());
 
-	connect(ui.pageMain->BtnSinglePlayer,	SIGNAL(clicked()),	this, SLOT(GoToSinglePlayer()));
-	connect(ui.pageMain->BtnSetup,	SIGNAL(clicked()),	this, SLOT(GoToSetup()));
-	connect(ui.pageMain->BtnNet,	SIGNAL(clicked()),	this, SLOT(GoToNet()));
-	connect(ui.pageMain->BtnInfo,	SIGNAL(clicked()),	this, SLOT(GoToInfo()));
+	connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
+	connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
+	connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNet()));
+	connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), this, SLOT(GoToInfo()));
 	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
 
-	connect(ui.pageEditTeam->BtnTeamSave,	SIGNAL(clicked()),	this, SLOT(TeamSave()));
-	connect(ui.pageEditTeam->BtnTeamDiscard,	SIGNAL(clicked()),	this, SLOT(TeamDiscard()));
+	connect(ui.pageEditTeam->BtnTeamSave, SIGNAL(clicked()), this, SLOT(TeamSave()));
+	connect(ui.pageEditTeam->BtnTeamDiscard, SIGNAL(clicked()), this, SLOT(TeamDiscard()));
 
 	connect(ui.pageEditTeam->signalMapper, SIGNAL(mapped(const int &)), this, SLOT(RandomName(const int &)));
 	connect(ui.pageEditTeam->randTeamButton, SIGNAL(clicked()), this, SLOT(RandomNames()));
 
-	connect(ui.pageMultiplayer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageMultiplayer->BtnStartMPGame,	SIGNAL(clicked()),	this, SLOT(StartMPGame()));
+	connect(ui.pageMultiplayer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageMultiplayer->BtnStartMPGame, SIGNAL(clicked()), this, SLOT(StartMPGame()));
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+	connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
 
 	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
 	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
@@ -113,6 +116,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
 
 	connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -140,6 +144,10 @@ HWForm::HWForm(QWidget *parent)
 		this, SLOT(UpdateWeapons())); // executed second
 	connect(ui.pageSelectWeapon->pWeapons,	SIGNAL(weaponsDeleted()),
 		this, SLOT(GoBack())); // executed third
+
+
+	AmmoSchemeModel * ammoSchemeModel = new AmmoSchemeModel(this);
+	ui.pageScheme->mapper->setModel(ammoSchemeModel);
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
@@ -274,6 +282,11 @@ void HWForm::GoToNet()
 void HWForm::GoToNetServer()
 {
 	GoToPage(ID_PAGE_NETSERVER);
+}
+
+void HWForm::GoToSchemes()
+{
+	GoToPage(ID_PAGE_SCHEME);
 }
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
