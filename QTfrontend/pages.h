@@ -408,6 +408,9 @@ public:
 	PageScheme(QWidget* parent = 0);
 
 	QPushButton * BtnBack;
+	QPushButton * BtnNew;
+	QPushButton * BtnPrev;
+	QPushButton * BtnNext;
 	QPushButton * BtnSave;
 
 	void setModel(QAbstractItemModel * model);
@@ -423,6 +426,9 @@ private:
 	QSpinBox * SB_SuddenDeath;
 	FreqSpinBox * SB_CaseProb;
 	QLineEdit * LE_name;
+
+private slots:
+	void newRow();
 };
 
 #endif // PAGES_H

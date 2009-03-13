@@ -25,10 +25,10 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
 {
 	defaultScheme
 		<< "Default" // name
-		<< "0" // fortsmode
-		<< "0" // team divide
-		<< "0" // solid land
-		<< "0" // border
+		<< "false" // fortsmode
+		<< "false" // team divide
+		<< "false" // solid land
+		<< "false" // border
 		<< "45" // turn time
 		<< "101" // init health
 		<< "15" // sudden death
@@ -85,7 +85,10 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
 	beginInsertRows(parent, row, row);
 
-	schemes.insert(row, defaultScheme);
+	QStringList newScheme = defaultScheme;
+	newScheme[0] = tr("new");
+	
+	schemes.insert(row, newScheme);
 
 	endInsertRows();
 }
@@ -104,7 +107,8 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 	if (!index.isValid() || index.row() < 0
 		|| index.row() >= schemes.size()
 		|| index.column() >= defaultScheme.size()
-		|| role != Qt::DisplayRole)
+		|| (role != Qt::EditRole && role != Qt::DisplayRole)
+		)
 		return QVariant();
 
 	return QVariant::fromValue(schemes[index.row()][index.column()]);

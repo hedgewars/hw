@@ -898,9 +898,15 @@ PageScheme::PageScheme(QWidget* parent) :
 	mapper = new QDataWidgetMapper(this);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 10, 0, true);
-	BtnSave = addButton(":/res/Save.png", pageLayout, 10, 2, true);
+	BtnNew = addButton(tr("New"), pageLayout, 10, 1);
+	BtnPrev = addButton(tr("Prev"), pageLayout, 10, 2);
+	BtnNext = addButton(tr("Next"), pageLayout, 10, 3);
+	BtnSave = addButton(":/res/Save.png", pageLayout, 10, 4, true);
 
 	connect(BtnSave, SIGNAL(clicked()), mapper, SLOT(toFirst()));
+	connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
+	connect(BtnPrev, SIGNAL(clicked()), mapper, SLOT(toPrevious()));
+	connect(BtnNext, SIGNAL(clicked()), mapper, SLOT(toNext()));
 }
 
 void PageScheme::setModel(QAbstractItemModel * model)
@@ -918,4 +924,11 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(SB_CaseProb, 8);
 
 	mapper->toFirst();
+}
+
+void PageScheme::newRow()
+{
+	QAbstractItemModel * model = mapper->model();
+	model->insertRow(model->rowCount());
+	mapper->toLast();
 }
