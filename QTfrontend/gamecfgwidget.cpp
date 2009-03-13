@@ -46,8 +46,8 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
-	tv = new QTableView(this);
-	GBoxOptionsLayout->addWidget(tv, 0, 0, 1, 2);
+	GameSchemes = new QComboBox(GBoxOptions);
+	GBoxOptionsLayout->addWidget(GameSchemes, 0, 1);
 
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
 	goToSchemePage->setText(tr("Edit schemes"));
@@ -67,25 +67,30 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
 }
 
+QVariant GameCFGWidget::schemeData(int column) const
+{
+	return GameSchemes->model()->data(GameSchemes->model()->index(GameSchemes->currentIndex(), column));
+}
+
 quint32 GameCFGWidget::getGameFlags() const
 {
 	quint32 result = 0;
 
-/*	if (CB_mode_Forts->isChecked())
+	if (schemeData(1).toBool())
 		result |= 0x01;
-	if (CB_teamsDivide->isChecked())
+	if (schemeData(2).toBool())
 		result |= 0x10;
-	if (CB_solid->isChecked())
+	if (schemeData(3).toBool())
 		result |= 0x04;
-	if (CB_border->isChecked())
-		result |= 0x08;*/
+	if (schemeData(4).toBool())
+		result |= 0x08;
 
 	return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-//	return SB_InitHealth->value();
+	return schemeData(6).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -93,9 +98,9 @@ QStringList GameCFGWidget::getFullConfig() const
 	QStringList sl;
 	sl.append("eseed " + pMapContainer->getCurrentSeed());
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-//	sl.append(QString("e$turntime %1").arg(SB_TurnTime->value() * 1000));
-//	sl.append(QString("e$sd_turns %1").arg(SB_SuddenDeath->value()));
-//	sl.append(QString("e$casefreq %1").arg(SB_CaseProb->value()));
+	sl.append(QString("e$turntime %1").arg(schemeData(5).toInt() * 1000));
+	sl.append(QString("e$sd_turns %1").arg(schemeData(7).toInt()));
+	sl.append(QString("e$casefreq %1").arg(schemeData(8).toInt()));
 	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
 	QString currentMap = pMapContainer->getCurrentMap();

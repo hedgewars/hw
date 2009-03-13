@@ -152,7 +152,7 @@ HWForm::HWForm(QWidget *parent)
 
 	AmmoSchemeModel * ammoSchemeModel = new AmmoSchemeModel(this);
 	ui.pageScheme->setModel(ammoSchemeModel);
-	ui.pageMultiplayer->gameCFG->tv->setModel(ammoSchemeModel);
+	ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
@@ -579,10 +579,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeHHNum(const HWTeam&)));
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
-
-	//connect(ui.pageNetGame->pGameCFG->pMapContainer, SIGNAL(newTemplateFilter(int)), hwnet, SLOT(onTemplateFilterChanged(int)));
-
-	//connect(hwnet, SIGNAL(templateFilterChanged(int)), ui.pageNetGame->pGameCFG->pMapContainer, SLOT(setTemplateFilter(int)));
 
 // config stuff
 	connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));

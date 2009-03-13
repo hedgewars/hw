@@ -24,15 +24,15 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
   QAbstractTableModel(parent)
 {
 	defaultScheme
-		<< "Default" // name
-		<< "false" // fortsmode
-		<< "false" // team divide
-		<< "false" // solid land
-		<< "false" // border
-		<< "45" // turn time
-		<< "101" // init health
-		<< "15" // sudden death
-		<< "5" // case probability
+		<< QVariant(tr("Default")) // name         0
+		<< QVariant(false)         // fortsmode    1
+		<< QVariant(false)         // team divide  2
+		<< QVariant(false)         // solid land   3
+		<< QVariant(false)         // border       4
+		<< QVariant(45)            // turn time    5
+		<< QVariant(100)           // init health  6
+		<< QVariant(15)            // sudden death 7
+		<< QVariant(5)             // case prob    8
 		;
 
 	schemes.append(defaultScheme);
@@ -75,7 +75,7 @@ bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value,
 		|| role != Qt::EditRole)
 		return false;
 
-	schemes[index.row()][index.column()] = value.toString();
+	schemes[index.row()][index.column()] = value;
 
 	emit dataChanged(index, index);
 	return true;
@@ -85,8 +85,8 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 {
 	beginInsertRows(parent, row, row);
 
-	QStringList newScheme = defaultScheme;
-	newScheme[0] = tr("new");
+	QList<QVariant> newScheme = defaultScheme;
+	newScheme[0] = QVariant(tr("new"));
 	
 	schemes.insert(row, newScheme);
 
@@ -111,5 +111,5 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 		)
 		return QVariant();
 
-	return QVariant::fromValue(schemes[index.row()][index.column()]);
+	return schemes[index.row()][index.column()];
 }

@@ -40,6 +40,7 @@ public:
 	quint32 getGameFlags() const;
 	quint32 getInitHealth() const;
 	QStringList getFullConfig() const;
+	QComboBox * GameSchemes;
 	QComboBox * WeaponsName;
 	HWMapContainer* pMapContainer;
 	QTableView * tv;
@@ -66,6 +67,8 @@ private:
 	QString curNetAmmo;
 
 	void setNetAmmo(const QString& name, const QString& ammo);
+
+	QVariant schemeData(int column) const;
 };
 
 #endif // GAMECONFIGWIDGET_H

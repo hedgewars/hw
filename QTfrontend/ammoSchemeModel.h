@@ -20,7 +20,7 @@
 #define _AMMO_SCHEME_MODEL_INCLUDED
 
 #include <QAbstractTableModel>
-#include <QStringList>
+#include <QList>
 
 class AmmoSchemeModel : public QAbstractTableModel
 {
@@ -42,10 +42,10 @@ signals:
 	void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 
 protected:
-	QList<QStringList> schemes;
+	QList< QList<QVariant> > schemes;
 
 private:
-	QStringList defaultScheme;
+	QList<QVariant> defaultScheme;
 };
 
 #endif // _AMMO_SCHEME_MODEL_INCLUDED
