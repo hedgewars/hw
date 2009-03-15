@@ -804,7 +804,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		for(int t = 0; t < 3; t++)
 		{
 			QTableWidgetItem * item = new QTableWidgetItem(list[i + t]);
-			item->setFlags(Qt::ItemIsSelectable);
+			item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 			roomsList->setItem(i / 3, t, item);
 		}
 	//roomsList->resizeColumnsToContents();
