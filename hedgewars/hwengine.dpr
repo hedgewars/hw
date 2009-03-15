@@ -189,7 +189,7 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
-16: begin
+ 16: begin
      val(ParamStr(2), cScreenWidth);
      val(ParamStr(3), cScreenHeight);
      cInitWidth:= cScreenWidth;
@@ -216,9 +216,24 @@ case ParamCount of
      GameType:= gmtLandPreview;
      if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
      end;
-  2: begin
+ 14: begin
      PathPrefix:= ParamStr(1);
      recordFileName:= ParamStr(2);
+     val(ParamStr(3), cScreenWidth);
+     val(ParamStr(4), cScreenHeight);
+     cInitWidth:= cScreenWidth;
+     cInitHeight:= cScreenHeight;
+     cBitsStr:= ParamStr(5);
+     val(cBitsStr, cBits);
+     cFullScreen:= ParamStr(6) = '1';
+     isSoundEnabled:= ParamStr(7) = '1';
+     cLocaleFName:= ParamStr(8);
+     val(ParamStr(9), cInitVolume);
+     val(ParamStr(10), cTimerInterval);
+     cShowFPS:= ParamStr(11) = '1';
+     cAltDamage:= ParamStr(12) = '1';
+     isMusicEnabled:= ParamStr(13) = '1';
+     cReducedQuality:= ParamStr(14) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;

@@ -687,6 +687,7 @@ var HHGear: PGear;
 		begin
 		Message:= Message and not gm_Attack;
 		State:= State or gstMoving;
+		State:= State and not gstWinner;
 		end;
 	DeleteGear(Gear)
 	end;

@@ -423,7 +423,7 @@ if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y,
 				ny:= Y + i;
 				nx:= X + j;
 				if ((ny and LAND_HEIGHT_MASK) = 0) and ((nx and LAND_WIDTH_MASK) = 0) then
-					if Land[ny, nx] <> 0 then
+					if Land[ny, nx] > 255 then
 						inc(c);
 				end;
 

@@ -1180,6 +1180,7 @@ const
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
+						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
 					NumPerTurn: 0;
@@ -1200,6 +1201,7 @@ const
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
+						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
 					NumPerTurn: 0;
@@ -1220,6 +1222,7 @@ const
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
+						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
 					NumPerTurn: 0;
@@ -1240,6 +1243,7 @@ const
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
+						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
 					NumPerTurn: 0;
@@ -1260,6 +1264,7 @@ const
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 						  ammoprop_DontHold or
+						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
 					NumPerTurn: 0;

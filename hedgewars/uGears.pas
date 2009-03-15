@@ -505,7 +505,6 @@ case step of
 	stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
 	stSweep: if SweepDirty then
 				begin
-				SetAllToActive;
 				step:= stChDmg
 				end else inc(step);
 	stTurnReact: begin
@@ -671,7 +670,8 @@ if (Gear^.State and gstDrowning) <> 0 then
 	defaultPos:= false
 	end else
 
-if (Gear^.State and gstWinner) <> 0 then
+if ((Gear^.State and gstWinner) <> 0) and 
+   ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
 	begin
 	DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
@@ -749,7 +749,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						0);
 				defaultPos:= false
 				end;
-			gtPickHammer,
+			gtPickHammer: begin
+                defaultPos:= false;
+                dec(sy,20);
+                end;
 			gtTeleport: defaultPos:= false;
 			gtWhip: begin
 				DrawRotatedF(sprWhip,
