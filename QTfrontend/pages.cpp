@@ -760,6 +760,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
 	roomsList->verticalHeader()->setVisible(false);
 	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
+	roomsList->setAlternatingRowColors(true);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	pageLayout->setRowStretch(2, 100);
 	

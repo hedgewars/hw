@@ -133,6 +133,9 @@ int main(int argc, char *argv[])
 				"border-bottom-width: 3px;"
 				"background-color: #00351d;"
 			"}"
+			"QTableView {"
+				"alternate-background-color: #2f213a;"
+			"}"
 
             "QTabBar::tab {"
                  "border-top: solid;"
