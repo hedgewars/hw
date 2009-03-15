@@ -760,7 +760,6 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
 	roomsList->verticalHeader()->setVisible(false);
 	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-	roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	pageLayout->setRowStretch(2, 100);
 	
@@ -795,6 +794,11 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 			QTableWidget::tr("Players number") <<
 			QTableWidget::tr("Round in progress")
 			);
+
+   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+
 	
 	if (list.size() % 3)
 		return;
