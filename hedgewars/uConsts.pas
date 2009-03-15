@@ -179,12 +179,16 @@ const
 
 	cMaxCaptions = 4;
 
-	gfForts       = $00000001;
-	gfMultiWeapon = $00000002;
-	gfSolidLand   = $00000004;
-	gfBorder      = $00000008;
-	gfDivideTeams = $00000010;
-	gfOneClanMode = $10000000;
+	gfForts        = $00000001;
+	gfMultiWeapon  = $00000002;
+	gfSolidLand    = $00000004;
+	gfBorder       = $00000008;
+	gfDivideTeams  = $00000010;
+	gfLowGravity   = $00000020;
+	gfLaserSight   = $00000040;
+	gfInvulnerable = $00000080;
+	gfMines        = $00000100;
+	gfOneClanMode  = $10000000;
 
 	gstDrowning       = $00000001;
 	gstHHDriven       = $00000002;

@@ -241,6 +241,7 @@ RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
 RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
 RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
 RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
+RegisterVariable('damagepct', vtLongInt, @cDamagePercent, false);
 RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);

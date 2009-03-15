@@ -84,13 +84,21 @@ quint32 GameCFGWidget::getGameFlags() const
 		result |= 0x04;
 	if (schemeData(4).toBool())
 		result |= 0x08;
+	if (schemeData(5).toBool())
+		result |= 0x20;
+	if (schemeData(6).toBool())
+		result |= 0x40;
+	if (schemeData(7).toBool())
+		result |= 0x80;
+	if (schemeData(8).toBool())
+		result |= 0x100;
 
 	return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-	return schemeData(6).toInt();
+	return schemeData(11).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
@@ -98,9 +106,10 @@ QStringList GameCFGWidget::getFullConfig() const
 	QStringList sl;
 	sl.append("eseed " + pMapContainer->getCurrentSeed());
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-	sl.append(QString("e$turntime %1").arg(schemeData(5).toInt() * 1000));
-	sl.append(QString("e$sd_turns %1").arg(schemeData(7).toInt()));
-	sl.append(QString("e$casefreq %1").arg(schemeData(8).toInt()));
+	sl.append(QString("e$damagepct %1").arg(schemeData(9).toInt()));
+	sl.append(QString("e$turntime %1").arg(schemeData(10).toInt() * 1000));
+	sl.append(QString("e$sd_turns %1").arg(schemeData(12).toInt()));
+	sl.append(QString("e$casefreq %1").arg(schemeData(13).toInt()));
 	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
 	QString currentMap = pMapContainer->getCurrentMap();

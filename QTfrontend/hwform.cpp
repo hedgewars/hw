@@ -317,7 +317,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 		  if (editedTeam) {
 		    curTeamSelWidget->addTeam(*editedTeam);
 		  }
-		} else if(lastid != ID_PAGE_GAMESTATS && lastid != ID_PAGE_INGAME) {
+		} else if(lastid != ID_PAGE_GAMESTATS && lastid != ID_PAGE_INGAME && lastid != ID_PAGE_SCHEME) {
 			curTeamSelWidget->resetPlayingTeams(teamsList);
 		}
 	} else

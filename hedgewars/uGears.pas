@@ -605,17 +605,22 @@ end;
 procedure ResetUtilities;
 var  i: LongInt;
 begin
-    cGravity:= cMaxWindSpeed;
+    if (GameFlags and gfLowGravity) = 0 then
+        cGravity:= cMaxWindSpeed;
+
     cDamageModifier:= _1;
-    cLaserSighting:= false;
+
+    if (GameFlags and gfLaserSight) = 0 then
+        cLaserSighting:= false;
     // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
 
-    if (CurrentTeam <> nil) then
-       with CurrentTeam^ do
-          for i:= 0 to cMaxHHIndex do
-              with Hedgehogs[i] do
-                  if (Gear <> nil) then
-                      Gear^.Invulnerable:= false;
+   if (GameFlags and gfInvulnerable) = 0 then
+       if (CurrentTeam <> nil) then
+          with CurrentTeam^ do
+             for i:= 0 to cMaxHHIndex do
+                 with Hedgehogs[i] do
+                     if (Gear <> nil) then
+                         Gear^.Invulnerable:= false;
 end;
 
 procedure SetAllToActive;
@@ -1290,12 +1295,26 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
-if (GameFlags and gfForts) = 0 then
+if ((GameFlags and gfForts) = 0) and ((GameFlags and gfMines) <> 0) then
 	for i:= 0 to Pred(cLandAdditions) do
 		begin
 		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
 		FindPlace(Gear, false, 0, LAND_WIDTH)
-		end
+		end;
+
+if (GameFlags and gfLowGravity) <> 0 then
+    cGravity:= cMaxWindSpeed / 2;
+
+Gear:= GearsList;
+if (GameFlags and gfInvulnerable) <> 0 then
+   while Gear <> nil do
+       begin
+       Gear^.Invulnerable:= true;  // this is only checked on hogs right now, so no need for gear type check
+       Gear:= Gear^.NextGear
+       end;
+
+if (GameFlags and gfLaserSight) <> 0 then
+    cLaserSighting:= true
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);

@@ -421,6 +421,12 @@ private:
 	QCheckBox * CB_teamsDivide;
 	QCheckBox * CB_solid;
 	QCheckBox * CB_border;
+	QCheckBox * CB_lowGravity;
+	QCheckBox * CB_laserSight;
+	QCheckBox * CB_invulnerable;
+	QCheckBox * CB_mines;
+
+	QSpinBox * SB_DamageModifier;
 	QSpinBox * SB_TurnTime;
 	QSpinBox * SB_InitHealth;
 	QSpinBox * SB_SuddenDeath;

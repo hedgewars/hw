@@ -873,6 +873,27 @@ PageScheme::PageScheme(QWidget* parent) :
 	CB_border->setText(QCheckBox::tr("Add Border"));
 	pageLayout->addWidget(CB_border, 3, 0, 1, 2);
 
+	CB_lowGravity = new QCheckBox(this);
+	CB_lowGravity->setText(QCheckBox::tr("Low Gravity"));
+	pageLayout->addWidget(CB_lowGravity, 4, 0, 1, 2);
+
+	CB_laserSight = new QCheckBox(this);
+	CB_laserSight->setText(QCheckBox::tr("Laser Sight"));
+	pageLayout->addWidget(CB_laserSight, 5, 0, 1, 2);
+
+	CB_invulnerable = new QCheckBox(this);
+	CB_invulnerable->setText(QCheckBox::tr("Invulnerable"));
+	pageLayout->addWidget(CB_invulnerable, 6, 0, 1, 2);
+
+	CB_mines = new QCheckBox(this);
+	CB_mines->setText(QCheckBox::tr("Add Mines"));
+	pageLayout->addWidget(CB_mines, 7, 0, 1, 2);
+
+	SB_DamageModifier = new QSpinBox(this);
+	SB_DamageModifier->setRange(10, 300);
+	SB_DamageModifier->setValue(100);
+	SB_DamageModifier->setSingleStep(25);
+	
 	SB_TurnTime = new QSpinBox(this);
 	SB_TurnTime->setRange(1, 99);
 	SB_TurnTime->setValue(45);
@@ -894,19 +915,20 @@ PageScheme::PageScheme(QWidget* parent) :
 
 	LE_name = new QLineEdit(this);
 
-	pageLayout->addWidget(SB_TurnTime, 4, 1);
-	pageLayout->addWidget(SB_InitHealth, 5, 1);
-	pageLayout->addWidget(SB_SuddenDeath, 6, 1);
-	pageLayout->addWidget(SB_CaseProb, 7, 1);
-	pageLayout->addWidget(LE_name, 8, 1);
+	pageLayout->addWidget(SB_DamageModifier, 8, 1);
+	pageLayout->addWidget(SB_TurnTime, 9, 1);
+	pageLayout->addWidget(SB_InitHealth, 10, 1);
+	pageLayout->addWidget(SB_SuddenDeath, 11, 1);
+	pageLayout->addWidget(SB_CaseProb, 12, 1);
+	pageLayout->addWidget(LE_name, 13, 1);
 
 	mapper = new QDataWidgetMapper(this);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 10, 0, true);
-	BtnNew = addButton(tr("New"), pageLayout, 10, 1);
-	BtnPrev = addButton(tr("Prev"), pageLayout, 10, 2);
-	BtnNext = addButton(tr("Next"), pageLayout, 10, 3);
-	BtnSave = addButton(":/res/Save.png", pageLayout, 10, 4, true);
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 15, 0, true);
+	BtnNew = addButton(tr("New"), pageLayout, 15, 1);
+	BtnPrev = addButton(tr("Prev"), pageLayout, 15, 2);
+	BtnNext = addButton(tr("Next"), pageLayout, 15, 3);
+	BtnSave = addButton(":/res/Save.png", pageLayout, 15, 4, true);
 
 	connect(BtnSave, SIGNAL(clicked()), mapper, SLOT(toFirst()));
 	connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
@@ -923,10 +945,15 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(CB_teamsDivide, 2);
 	mapper->addMapping(CB_solid, 3);
 	mapper->addMapping(CB_border, 4);
-	mapper->addMapping(SB_TurnTime, 5);
-	mapper->addMapping(SB_InitHealth, 6);
-	mapper->addMapping(SB_SuddenDeath, 7);
-	mapper->addMapping(SB_CaseProb, 8);
+	mapper->addMapping(CB_lowGravity, 5);
+	mapper->addMapping(CB_laserSight, 6);
+	mapper->addMapping(CB_invulnerable, 7);
+	mapper->addMapping(CB_mines, 8);
+	mapper->addMapping(SB_DamageModifier, 9);
+	mapper->addMapping(SB_TurnTime, 10);
+	mapper->addMapping(SB_InitHealth, 11);
+	mapper->addMapping(SB_SuddenDeath, 12);
+	mapper->addMapping(SB_CaseProb, 13);
 
 	mapper->toFirst();
 }

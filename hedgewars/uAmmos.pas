@@ -74,6 +74,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         cnt:= AMMO_INFINITE;
         Ammoz[a].Probability:= 0 
         end;
+    if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
+       ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
+       ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) then
+        begin
+        cnt:= 0;
+        Ammoz[a].Probability:= 0 
+        end;
     ammos[a]:= cnt
     end;
 

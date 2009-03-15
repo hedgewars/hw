@@ -24,15 +24,20 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent) :
   QAbstractTableModel(parent)
 {
 	defaultScheme
-		<< QVariant(tr("Default")) // name         0
-		<< QVariant(false)         // fortsmode    1
-		<< QVariant(false)         // team divide  2
-		<< QVariant(false)         // solid land   3
-		<< QVariant(false)         // border       4
-		<< QVariant(45)            // turn time    5
-		<< QVariant(100)           // init health  6
-		<< QVariant(15)            // sudden death 7
-		<< QVariant(5)             // case prob    8
+		<< QVariant(tr("Default")) // name           0
+		<< QVariant(false)         // fortsmode      1
+		<< QVariant(false)         // team divide    2
+		<< QVariant(false)         // solid land     3
+		<< QVariant(false)         // border         4
+		<< QVariant(false)         // low gravity    5
+		<< QVariant(false)         // laser sight    6
+		<< QVariant(false)         // invulnerable   7
+		<< QVariant(true)          // add mines      8
+		<< QVariant(100)           // damage modfier 9
+		<< QVariant(45)            // turn time      10
+		<< QVariant(100)           // init health    11
+		<< QVariant(15)            // sudden death   12
+		<< QVariant(5)             // case prob      13
 		;
 
 	schemes.append(defaultScheme);

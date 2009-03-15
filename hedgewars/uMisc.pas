@@ -38,6 +38,7 @@ var
 	GameFlags     : Longword = 0;
 	TurnTimeLeft  : Longword = 0;
 	cSuddenDTurns : LongInt = 15;
+	cDamagePercent : LongInt = 100;
 	cTemplateFilter : LongInt = 0;
 
 	cHedgehogTurnTime: Longword = 45000;
@@ -407,7 +408,7 @@ end;
 
 function modifyDamage(dmg: Longword): Longword;
 begin
-ModifyDamage:= hwRound(int2HwFloat(dmg) * cDamageModifier)
+ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent)
 end;
 
 {$IFDEF DEBUGFILE}
