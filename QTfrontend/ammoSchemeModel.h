@@ -19,7 +19,9 @@
 #ifndef _AMMO_SCHEME_MODEL_INCLUDED
 #define _AMMO_SCHEME_MODEL_INCLUDED
 
+#include <QSettings>
 #include <QAbstractTableModel>
+#include <QStringList>
 #include <QList>
 
 class AmmoSchemeModel : public QAbstractTableModel
@@ -27,7 +29,7 @@ class AmmoSchemeModel : public QAbstractTableModel
 	Q_OBJECT
 
 public:
-	AmmoSchemeModel(QObject *parent = 0);
+	AmmoSchemeModel(QObject * parent, const QString & fileName);
 
 	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 	int rowCount(const QModelIndex & parent) const;
@@ -38,6 +40,9 @@ public:
 	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 	QVariant data(const QModelIndex &index, int role) const;
 
+public slots:
+	void Save();
+
 signals:
 	void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 
@@ -46,6 +51,10 @@ protected:
 
 private:
 	QList<QVariant> defaultScheme;
+
+	QSettings fileConfig;
+
+	QStringList spNames;
 };
 
 #endif // _AMMO_SCHEME_MODEL_INCLUDED

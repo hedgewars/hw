@@ -150,7 +150,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 
-	AmmoSchemeModel * ammoSchemeModel = new AmmoSchemeModel(this);
+	ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
 	ui.pageScheme->setModel(ammoSchemeModel);
 	ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
 
@@ -365,6 +365,8 @@ void HWForm::btnExitPressed()
 
 void HWForm::btnExitClicked()
 {
+	ammoSchemeModel->Save();
+	
 	if (eggTimer.elapsed() < 3000)
 		close();
 	else

@@ -34,6 +34,7 @@ class HWNewNet;
 class GameUIConfig;
 class HWNetRegisterServer;
 class QCloseEvent;
+class AmmoSchemeModel;
 
 class HWForm : public QMainWindow
 {
@@ -123,6 +124,7 @@ private:
 	HWTeam * editedTeam;
 	HWNewNet * hwnet;
 	GameUIConfig * config;
+	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
 	HWNetServer* pnetserver;
 	HWNetRegisterServer* pRegisterServer;

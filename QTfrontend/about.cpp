@@ -35,6 +35,10 @@ About::About(QWidget * parent) :
 
 	lbl1->setOpenExternalLinks(true);
 	lbl1->setText(
+            "<style type=\"text/css\">"
+            "a { color: #ffcc00; }"
+//            "a:hover { color: yellow; }"
+            "</style>" 
 			"<div align=\"center\"><h1>Hedgewars</h1>"
 			"<h3>" + QLabel::tr("Version") + " " + *cVersionString + "</h3>"
 			"<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
@@ -47,7 +51,12 @@ About::About(QWidget * parent) :
 	QTextBrowser *lbl2 = new QTextBrowser(this);
 
 	lbl2->setOpenExternalLinks(true);
-	lbl2->setText(  QString("<h2>") +
+	lbl2->setText(
+            "<style type=\"text/css\">"
+            "a { color: #ffcc00; }"
+//            "a:hover { color: yellow; }"
+            "</style>" +
+            QString("<h2>") +
 			QLabel::tr("Developers:") +
 			"</h2><p>"
 			"Engine, frontend, net server: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
