@@ -40,11 +40,17 @@ HWNewNet::HWNewNet(GameUIConfig * config, GameCFGWidget* pGameCFGWidget, TeamSel
   loginStep(0),
   netClientState(0)
 {
+// socket stuff
 	connect(&NetSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
 	connect(&NetSocket, SIGNAL(connected()), this, SLOT(OnConnect()));
 	connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
 	connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
 			SLOT(displayError(QAbstractSocket::SocketError)));
+
+// config stuff
+	connect(this, SIGNAL(paramChanged(const QString &, const QStringList &)), pGameCFGWidget, SLOT(setParam(const QString &, const QStringList &)));
+	connect(pGameCFGWidget, SIGNAL(paramChanged(const QString &, const QStringList &)), this, SLOT(onParamChanged(const QString &, const QStringList &)));
+	connect(this, SIGNAL(configAsked()), pGameCFGWidget, SLOT(fullNetConfig()));
 }
 
 HWNewNet::~HWNewNet()

@@ -582,12 +582,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
-// config stuff
-	connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
-	connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
-	connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
-
-
+// disconnect
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
 	
 	hwnet->Connect(hostName, port, nick);
@@ -821,6 +816,7 @@ void HWForm::NetGameMaster()
 	ui.pageNetGame->setMasterMode(true);
 	ui.pageNetGame->restrictJoins->setChecked(false);
 	ui.pageNetGame->restrictTeamAdds->setChecked(false);
+	ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
 	
 	if (hwnet)
 	{

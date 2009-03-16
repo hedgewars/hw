@@ -59,6 +59,7 @@ private slots:
 	void templateFilterChanged(int);
 	void seedChanged(const QString &);
 	void themeChanged(const QString &);
+	void schemeChanged(int);
 
 private:
 	QGridLayout mainLayout;

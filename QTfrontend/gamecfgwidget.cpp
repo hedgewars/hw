@@ -48,6 +48,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	GameSchemes = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(GameSchemes, 0, 1);
+	connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
 	goToSchemePage->setText(tr("Edit schemes"));
@@ -239,4 +240,15 @@ void GameCFGWidget::seedChanged(const QString & value)
 void GameCFGWidget::themeChanged(const QString & value)
 {
 	emit paramChanged("THEME", QStringList(value));
+}
+
+void GameCFGWidget::schemeChanged(int value)
+{
+	QStringList sl;
+
+	int size = GameSchemes->model()->columnCount();
+	for(int i = 0; i < size; ++i)
+		sl << schemeData(i).toString();
+		
+	emit paramChanged("SCHEME", sl);
 }
