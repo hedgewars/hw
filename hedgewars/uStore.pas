@@ -317,10 +317,10 @@ rr.y:= Y;
 rr.w:= r^.w;
 rr.h:= r^.h;
 
-_l:= r^.x / SourceTexture^.w;
-_r:= (r^.x + r^.w) / SourceTexture^.w;
-_t:= r^.y / SourceTexture^.h;
-_b:= (r^.y + r^.h) / SourceTexture^.h;
+_l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
+_r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;
+_t:= r^.y / SourceTexture^.h * SourceTexture^.ry;
+_b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
 
 glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
 
@@ -350,13 +350,13 @@ glBegin(GL_QUADS);
 glTexCoord2f(0, 0);
 glVertex2i(X, Y);
 
-glTexCoord2f(1, 0);
+glTexCoord2f(Texture^.rx, 0);
 glVertex2i(Texture^.w + X, Y);
 
-glTexCoord2f(1, 1);
+glTexCoord2f(Texture^.rx, Texture^.ry);
 glVertex2i(Texture^.w + X, Texture^.h + Y);
 
-glTexCoord2f(0, 1);
+glTexCoord2f(0, Texture^.ry);
 glVertex2i(X, Texture^.h + Y);
 
 glEnd()
@@ -375,8 +375,8 @@ if Dir < 0 then
 else
 	hw:= 16;
 
-ft:= Frame / Frames;
-fb:= (Frame + 1) / Frames;
+ft:= Frame / Frames * Texture^.ry;
+fb:= (Frame + 1) / Frames * Texture^.ry;
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -385,10 +385,10 @@ glBegin(GL_QUADS);
 glTexCoord2f(0, ft);
 glVertex2i(-hw, -16);
 
-glTexCoord2f(1, ft);
+glTexCoord2f(Texture^.rx, ft);
 glVertex2i(hw, -16);
 
-glTexCoord2f(1, fb);
+glTexCoord2f(Texture^.rx, fb);
 glVertex2i(hw, 16);
 
 glTexCoord2f(0, fb);
@@ -440,13 +440,13 @@ glBegin(GL_QUADS);
 glTexCoord2f(0, 0);
 glVertex2i(-hw, -hh);
 
-glTexCoord2f(1, 0);
+glTexCoord2f(Tex^.rx, 0);
 glVertex2i(hw, -hh);
 
-glTexCoord2f(1, 1);
+glTexCoord2f(Tex^.rx, Tex^.ry);
 glVertex2i(hw, hh);
 
-glTexCoord2f(0, 1);
+glTexCoord2f(0, Tex^.ry);
 glVertex2i(-hw, hh);
 
 glEnd();

@@ -141,7 +141,7 @@ var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore, uIO, Math, uRandom, GLU;
+uses uConsole, uStore, uIO, Math, uRandom;
 var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
@@ -283,6 +283,8 @@ begin
 new(NewTexture);
 NewTexture^.w:= width;
 NewTexture^.h:= height;
+NewTexture^.rx:= 1.0;
+NewTexture^.ry:= 1.0;
 
 glGenTextures(1, @NewTexture^.id);
 
@@ -296,8 +298,10 @@ end;
 
 function Surface2Tex(surf: PSDL_Surface): PTexture;
 var mode: LongInt;
-    tw, th: Longword;
-    tmpp: pointer;
+	tw, th, x, y: Longword;
+	tmpp: pointer;
+	fromP4, toP4: PLongWordArray;
+	fromP1, toP1: PByteArray;
 begin
 new(Surface2Tex);
 Surface2Tex^.w:= surf^.w;
@@ -319,21 +323,85 @@ if SDL_MustLock(surf) then
    SDLTry(SDL_LockSurface(surf) >= 0, true);
 
 if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
-   begin
-   tw:= toPowerOf2(Surf^.w);
-   th:= toPowerOf2(Surf^.h);
+	begin
+	tw:= toPowerOf2(Surf^.w);
+	th:= toPowerOf2(Surf^.h);
 
-   GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
+	Surface2Tex^.rx:= Surf^.w / tw;
+	Surface2Tex^.ry:= Surf^.h / th;
+	
+	GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
-   gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE,
-        Surf^.pixels, tw, th, GL_UNSIGNED_BYTE,
-        tmpp);
+	if surf^.format^.BytesPerPixel = 4 then
+		begin
+		fromP4:= Surf^.pixels;
+		toP4:= tmpp;
 
-   glTexImage2D(GL_TEXTURE_2D, 0, mode, tw, th, 0, mode, GL_UNSIGNED_BYTE, tmpp);
+		for y:= 0 to Pred(Surf^.h) do
+			begin
+			for x:= 0 to Pred(Surf^.w) do
+				toP4^[x]:= fromP4^[x];
+			for x:= Surf^.w to Pred(tw) do
+				toP4^[x]:= 0;
+			toP4:= @(toP4^[tw]);
+			fromP4:= @(fromP4^[Surf^.w]);
+			end;
 
-   FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
-   end else
-   glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
+		for y:= Surf^.h to Pred(th) do
+			begin
+			for x:= 0 to Pred(tw) do
+				toP4^[x]:= 0;
+			toP4:= @(toP4^[tw]);
+			end;
+		end
+	else
+		begin
+		fromP1:= Surf^.pixels;
+		toP1:= tmpp;
+
+		for y:= 0 to Pred(Surf^.h) do
+			begin
+			for x:= 0 to Pred(Surf^.w) do
+				begin
+				toP1^[x * 3]:= fromP1^[x * 3];
+				toP1^[x * 3 + 1]:= fromP1^[x * 3 + 1];
+				toP1^[x * 3 + 2]:= fromP1^[x * 3 + 2];
+				end;
+			for x:= Surf^.w to Pred(tw) do
+				begin
+				toP1^[x * 3]:= 0;
+				toP1^[x * 3 + 1]:= 0;
+				toP1^[x * 3 + 2]:= 0;
+				end;
+			toP1:= @(toP1^[tw * 3]);
+			fromP1:= @(fromP1^[Surf^.pitch]);
+			end;
+
+		for y:= Surf^.h to Pred(th) do
+			begin
+			for x:= 0 to Pred(tw) do
+				begin
+				toP1^[x * 3]:= 0;
+				toP1^[x * 3 + 1]:= 0;
+				toP1^[x * 3 + 2]:= 0;
+				end;
+			toP1:= @(toP1^[tw * 3]);
+			end;
+		end;
+
+//   gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE,
+//        Surf^.pixels, tw, th, GL_UNSIGNED_BYTE,
+//        tmpp);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, tw, th, 0, mode, GL_UNSIGNED_BYTE, tmpp);
+	
+	FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
+	end else
+	begin
+	Surface2Tex^.rx:= 1.0;
+	Surface2Tex^.ry:= 1.0;
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
+	end;
 
 if SDL_MustLock(surf) then
    SDL_UnlockSurface(surf);

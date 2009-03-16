@@ -114,6 +114,7 @@ type
 	TTexture = record
 			id: GLuint;
 			w, h: LongInt;
+			rx, ry: GLfloat;
 			end;
 	PTexture = ^TTexture;
 
