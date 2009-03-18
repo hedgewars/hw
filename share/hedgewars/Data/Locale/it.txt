@@ -36,6 +36,7 @@
 00:33=Danno Extra
 00:34=Invulnerabilità
 00:35=Tempo Extra
+00:36=Mirino Laser
 
 01:00=Combattiamo!
 01:01=Round in parità

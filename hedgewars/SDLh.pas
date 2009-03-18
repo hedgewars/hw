@@ -27,9 +27,7 @@ interface
 {$ENDIF}
 
 {$IFDEF UNIX}
-  {$IFDEF DARWIN}
-    {$linklib gcc}
-  {$ELSE}
+  {$IFNDEF DARWIN}
     {$linklib c}
   {$ENDIF}
   {$linklib pthread}
@@ -68,6 +66,7 @@ const {$IFDEF WIN32}
 	  {$linklib SDLmain}
 	  {$linkframework Cocoa}
 	  {$PASCALMAINNAME SDL_main}
+	  {$linklib gcc}
 	{$ELSE}
           SDLLibName = 'libSDL.so';
         {$ENDIF}
