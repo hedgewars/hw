@@ -146,7 +146,6 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageSelectWeapon->pWeapons, SIGNAL(weaponsDeleted()),
 		this, SLOT(GoBack())); // executed third
 
-	connect(ui.pageScheme->BtnSave, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 
@@ -356,6 +355,9 @@ void HWForm::GoBack()
 	if (id == ID_PAGE_NET) {
 		if(hwnet || pnetserver) NetDisconnect();
 	}
+
+	if (curid == ID_PAGE_SCHEME)
+		ammoSchemeModel->Save();
 }
 
 void HWForm::btnExitPressed()
@@ -365,8 +367,6 @@ void HWForm::btnExitPressed()
 
 void HWForm::btnExitClicked()
 {
-	ammoSchemeModel->Save();
-	
 	if (eggTimer.elapsed() < 3000)
 		close();
 	else

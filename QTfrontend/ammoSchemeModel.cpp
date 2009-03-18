@@ -22,8 +22,8 @@
 #include "ammoSchemeModel.h"
 #include "hwconsts.h"
 
-QList<QVariant>	defaultScheme = QList<QVariant>()
-		<< QVariant("Default") // name           0
+QList<QVariant> defaultScheme = QList<QVariant>()
+		<< QVariant("Default")     // name           0
 		<< QVariant(false)         // fortsmode      1
 		<< QVariant(false)         // team divide    2
 		<< QVariant(false)         // solid land     3
@@ -41,14 +41,15 @@ QList<QVariant>	defaultScheme = QList<QVariant>()
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 	QAbstractTableModel(parent),
-	fileConfig(fileName, QSettings::IniFormat)
+	fileConfig(fileName, QSettings::IniFormat),
+	numberOfDefaultSchemes(2)
 {
 	QStringList predefSchemesNames;
 	predefSchemesNames
 		<< "Default"
 		<< "Pro mode";
 	
-QStringList	spNames = QStringList()
+	spNames = QStringList()
 		<< "name"             //  0
 		<< "fortsmode"        //  1
 		<< "divteams"         //  2
@@ -135,7 +136,7 @@ Qt::ItemFlags AmmoSchemeModel::flags(const QModelIndex & index) const
 
 bool AmmoSchemeModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-	if (!index.isValid() || index.row() < 0
+	if (!index.isValid() || index.row() < numberOfDefaultSchemes
 		|| index.row() >= schemes.size()
 		|| index.column() >= defaultScheme.size()
 		|| role != Qt::EditRole)
@@ -157,16 +158,24 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 	schemes.insert(row, newScheme);
 
 	endInsertRows();
+	
+	return true;
 }
 
 bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 {
+	if(count != 1
+		|| row < numberOfDefaultSchemes
+		|| row >= schemes.size())
+		return false;
+		
 	beginRemoveRows(parent, row, row);
 
-	fileConfig.remove(schemes[row][0].toString());
 	schemes.removeAt(row);
 
 	endRemoveRows();
+
+	return true;
 }
 
 QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
@@ -183,13 +192,14 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 
 void AmmoSchemeModel::Save()
 {
-	fileConfig.beginWriteArray("schemes");
+	fileConfig.beginWriteArray("schemes", schemes.size());
+	
 	for (int i = 0; i < schemes.size(); ++i) {
 		fileConfig.setArrayIndex(i);
 
 		QList<QVariant> scheme = schemes[i];
-
-		for (int k = 0; k < spNames.size(); ++k)
+		
+		for (int k = 0; k < scheme.size(); ++k)
 			fileConfig.setValue(spNames[k], scheme[k]);
 	}
 	fileConfig.endArray();

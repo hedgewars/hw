@@ -53,6 +53,8 @@ private:
 	QSettings fileConfig;
 
 	QStringList spNames;
+
+	const int numberOfDefaultSchemes;
 };
 
 class NetAmmoSchemeModel : public QAbstractTableModel

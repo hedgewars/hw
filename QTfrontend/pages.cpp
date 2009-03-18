@@ -925,20 +925,21 @@ PageScheme::PageScheme(QWidget* parent) :
 	mapper = new QDataWidgetMapper(this);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 15, 0, true);
-	BtnNew = addButton(tr("New"), pageLayout, 15, 1);
-	BtnPrev = addButton(tr("Prev"), pageLayout, 15, 2);
-	BtnNext = addButton(tr("Next"), pageLayout, 15, 3);
-	BtnSave = addButton(":/res/Save.png", pageLayout, 15, 4, true);
+	BtnNew = addButton(tr("New"), pageLayout, 15, 2);
+	BtnDelete = addButton(tr("Delete"), pageLayout, 15, 3);
 
-	connect(BtnSave, SIGNAL(clicked()), mapper, SLOT(toFirst()));
+	selectScheme = new QComboBox(this);
+	pageLayout->addWidget(selectScheme, 15, 1);
+
 	connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
-	connect(BtnPrev, SIGNAL(clicked()), mapper, SLOT(toPrevious()));
-	connect(BtnNext, SIGNAL(clicked()), mapper, SLOT(toNext()));
+	connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
+	connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
 }
 
 void PageScheme::setModel(QAbstractItemModel * model)
 {
 	mapper->setModel(model);
+	selectScheme->setModel(model);
 	
 	mapper->addMapping(LE_name, 0);
 	mapper->addMapping(CB_mode_Forts, 1);
@@ -962,5 +963,11 @@ void PageScheme::newRow()
 {
 	QAbstractItemModel * model = mapper->model();
 	model->insertRow(model->rowCount());
-	mapper->toLast();
+	selectScheme->setCurrentIndex(model->rowCount() - 1);
+}
+
+void PageScheme::deleteRow()
+{
+	QAbstractItemModel * model = mapper->model();
+	model->removeRow(selectScheme->currentIndex());
 }

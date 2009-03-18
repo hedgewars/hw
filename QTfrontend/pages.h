@@ -409,8 +409,7 @@ public:
 
 	QPushButton * BtnBack;
 	QPushButton * BtnNew;
-	QPushButton * BtnPrev;
-	QPushButton * BtnNext;
+	QPushButton * BtnDelete;
 	QPushButton * BtnSave;
 
 	void setModel(QAbstractItemModel * model);
@@ -432,9 +431,11 @@ private:
 	QSpinBox * SB_SuddenDeath;
 	FreqSpinBox * SB_CaseProb;
 	QLineEdit * LE_name;
+	QComboBox * selectScheme;
 
 private slots:
 	void newRow();
+	void deleteRow();
 };
 
 #endif // PAGES_H
