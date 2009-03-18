@@ -32,11 +32,11 @@
 00:29=Loptičkový guľomet
 00:30=Napalm
 00:31=Bezpilotný bombardér
-00:32=Low Gravity
-00:33=Extra Damage
-00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
+00:32=Nízka gravitácia
+00:33=Silnejší útok
+00:34=Nesmrteľnosť
+00:35=Extra čas
+00:36=Laserové zameriavanie
 
 01:00=Do boja!
 01:01=Remíza

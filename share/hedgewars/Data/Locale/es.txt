@@ -32,11 +32,11 @@
 00:29=Lanzapelotas
 00:30=Napalm
 00:31=Avión teledirigido
-00:32=Low Gravity
-00:33=Extra Damage
+00:32=Baja gravedad
+00:33=Daño extra
 00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
+00:35=Tiempo extra
+00:36=Mira láser
 
 01:00=Luchad!
 01:01=Empate
