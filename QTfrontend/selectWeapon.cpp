@@ -70,8 +70,8 @@ unsigned char SelWeaponItem::getItemsNum() const
 }
 
 SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
-  m_numItems(numItems),
-  QFrame(parent)
+  QFrame(parent),
+  m_numItems(numItems)
 {
 	wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 

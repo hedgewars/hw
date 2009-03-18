@@ -27,6 +27,8 @@ endif(UNIX)
 # Done
 include_directories(.)
 
+set(CMAKE_CXX_FLAGS "-Wall")
+
 if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
 	set(HEDGEWARS_DATADIR "../share/")

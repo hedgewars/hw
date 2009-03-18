@@ -342,24 +342,46 @@ glEnd()
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
+var VertexBuffer, TextureBuffer: array [0..5] of TVertex2f;
 begin
+glPushMatrix;
+glTranslatef(X, Y, 0);
+
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
-glBegin(GL_QUADS);
+VertexBuffer[0].X:= 0;
+VertexBuffer[0].Y:= 0;
+VertexBuffer[1].X:= Texture^.w;
+VertexBuffer[1].Y:= 0;
+VertexBuffer[2].X:= Texture^.w;
+VertexBuffer[2].Y:= Texture^.h;
+VertexBuffer[3].X:= 0;
+VertexBuffer[3].Y:= Texture^.h;
+VertexBuffer[4]:= VertexBuffer[0];
+VertexBuffer[5]:= VertexBuffer[2];
 
-glTexCoord2f(0, 0);
-glVertex2i(X, Y);
+TextureBuffer[0].X:= 0;
+TextureBuffer[0].Y:= 0;
+TextureBuffer[1].X:= Texture^.rx;
+TextureBuffer[1].Y:= 0;
+TextureBuffer[2].X:= Texture^.rx;
+TextureBuffer[2].Y:= Texture^.ry;
+TextureBuffer[3].X:= 0;
+TextureBuffer[3].Y:= Texture^.ry;
+TextureBuffer[4]:= TextureBuffer[0];
+TextureBuffer[5]:= TextureBuffer[2];
 
-glTexCoord2f(Texture^.rx, 0);
-glVertex2i(Texture^.w + X, Y);
+glEnableClientState(GL_VERTEX_ARRAY);
+glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-glTexCoord2f(Texture^.rx, Texture^.ry);
-glVertex2i(Texture^.w + X, Texture^.h + Y);
+glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+glDrawArrays(GL_TRIANGLES, 0, Length(VertexBuffer));
 
-glTexCoord2f(0, Texture^.ry);
-glVertex2i(X, Texture^.h + Y);
+glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+glDisableClientState(GL_VERTEX_ARRAY);
 
-glEnd()
+glPopMatrix
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);

@@ -660,7 +660,6 @@ void PageNetGame::setMasterMode(bool isMaster)
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 1);
@@ -674,7 +673,6 @@ PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
 
 PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QVBoxLayout * vLayout = new QVBoxLayout(this);
 	QHBoxLayout * topLine = new QHBoxLayout();
 	QHBoxLayout * middleLine = new QHBoxLayout();
@@ -850,6 +848,10 @@ PageConnecting::PageConnecting(QWidget* parent) :
 	AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
+
+	QLabel * lblConnecting = new QLabel(this);
+	lblConnecting->setText(tr("Connecting..."));
+	pageLayout->addWidget(lblConnecting);
 }
 
 PageScheme::PageScheme(QWidget* parent) :

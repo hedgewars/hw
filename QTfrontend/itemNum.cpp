@@ -22,9 +22,8 @@
 #include <QPainter>
 
 ItemNum::ItemNum(const QImage& im, QWidget * parent, unsigned char min, unsigned char max) :
-  m_im(im), QFrame(parent), nonInteractive(false), minItems(min), maxItems(max),
-  numItems(min+2 >= max ? min : min+2),
-  infinityState(false)
+  QFrame(parent), m_im(im), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
+  numItems(min+2 >= max ? min : min+2)
 {
 }
 

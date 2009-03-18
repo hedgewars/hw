@@ -118,7 +118,9 @@ type
 			end;
 	PTexture = ^TTexture;
 
-
+	TVertex2f = record
+		X, Y: GLfloat;
+		end;
 const
 	errmsgCreateSurface   = 'Error creating SDL surface';
 	errmsgTransparentSet  = 'Error setting transparent color';

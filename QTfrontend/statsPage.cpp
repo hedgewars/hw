@@ -34,7 +34,6 @@ void FitGraphicsView::resizeEvent(QResizeEvent * event)
 
 PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 1);

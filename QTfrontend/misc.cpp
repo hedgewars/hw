@@ -54,7 +54,7 @@ QString Hash::md5(QByteArray buf)
 	
 // start hashing
 	
-	quint32 w[16], i, a, b, c, d, f, g, t;
+	quint32 w[16], i, a, b, c, d;
 
 	quint32 h0 = 0x67452301;
 	quint32 h1 = 0xEFCDAB89;

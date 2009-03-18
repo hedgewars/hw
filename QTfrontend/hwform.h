@@ -122,13 +122,13 @@ private:
 		ID_PAGE_SCHEME          = 16
 		};
 	HWGame * game;
+	HWNetServer* pnetserver;
+	HWNetRegisterServer* pRegisterServer;
 	HWTeam * editedTeam;
 	HWNewNet * hwnet;
 	GameUIConfig * config;
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
-	HWNetServer* pnetserver;
-	HWNetRegisterServer* pRegisterServer;
 	QTime eggTimer;
 	SDLInteraction sdli;
 	void OnPageShown(quint8 id, quint8 lastid=0);

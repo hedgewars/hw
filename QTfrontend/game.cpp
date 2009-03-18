@@ -32,8 +32,8 @@
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
-  m_pTeamSelWidget(pTeamSelWidget),
-  ammostr(ammo)
+  ammostr(ammo),
+  m_pTeamSelWidget(pTeamSelWidget)
 {
 	this->config = config;
 	this->gamecfg = gamecfg;
