@@ -93,6 +93,7 @@ private slots:
 	void NetGameSlave();
 	void AsyncNetServerStart();
 	void NetLeftRoom();
+	void selectFirstNetScheme();
 
 private:
 	void _NetConnect(const QString & hostName, quint16 port, const QString & nick);

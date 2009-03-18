@@ -832,7 +832,23 @@ void HWForm::NetGameMaster()
 
 void HWForm::NetGameSlave()
 {
+	if (hwnet)
+	{
+		NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
+		connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)), netAmmo, SLOT(setNetSchemeConfig(QStringList &)));
+		ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
+
+		ui.pageNetGame->pGameCFG->GameSchemes->view()->disconnect(hwnet);
+		connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)),
+				this, SLOT(selectFirstNetScheme()));
+	}
+
 	ui.pageNetGame->setMasterMode(false);
+}
+
+void HWForm::selectFirstNetScheme()
+{
+	ui.pageNetGame->pGameCFG->GameSchemes->setCurrentIndex(0);
 }
 
 void HWForm::NetLeftRoom()

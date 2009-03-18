@@ -50,11 +50,28 @@ protected:
 	QList< QList<QVariant> > schemes;
 
 private:
-	QList<QVariant> defaultScheme;
-
 	QSettings fileConfig;
 
 	QStringList spNames;
+};
+
+class NetAmmoSchemeModel : public QAbstractTableModel
+{
+	Q_OBJECT
+
+public:
+	NetAmmoSchemeModel(QObject * parent);
+
+	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+	int rowCount(const QModelIndex & parent) const;
+	int columnCount(const QModelIndex & parent) const;
+	QVariant data(const QModelIndex &index, int role) const;
+
+public slots:
+	void setNetSchemeConfig(QStringList & cfg);
+
+private:
+	QList<QVariant> netScheme;
 };
 
 #endif // _AMMO_SCHEME_MODEL_INCLUDED

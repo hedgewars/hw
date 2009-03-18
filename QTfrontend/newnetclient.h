@@ -101,6 +101,7 @@ class HWNewNet : public QObject
   void adminAccess(bool);
   void roomMaster(bool);
 
+  void netSchemeConfig(QStringList &);
   void paramChanged(const QString & param, const QStringList & value);
   void configAsked();
 

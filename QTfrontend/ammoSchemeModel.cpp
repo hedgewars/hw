@@ -22,11 +22,33 @@
 #include "ammoSchemeModel.h"
 #include "hwconsts.h"
 
+QList<QVariant>	defaultScheme = QList<QVariant>()
+		<< QVariant("Default") // name           0
+		<< QVariant(false)         // fortsmode      1
+		<< QVariant(false)         // team divide    2
+		<< QVariant(false)         // solid land     3
+		<< QVariant(false)         // border         4
+		<< QVariant(false)         // low gravity    5
+		<< QVariant(false)         // laser sight    6
+		<< QVariant(false)         // invulnerable   7
+		<< QVariant(true)          // add mines      8
+		<< QVariant(100)           // damage modfier 9
+		<< QVariant(45)            // turn time      10
+		<< QVariant(100)           // init health    11
+		<< QVariant(15)            // sudden death   12
+		<< QVariant(5)             // case prob      13
+		;
+
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 	QAbstractTableModel(parent),
 	fileConfig(fileName, QSettings::IniFormat)
 {
-	spNames
+	QStringList predefSchemesNames;
+	predefSchemesNames
+		<< "Default"
+		<< "Pro mode";
+	
+QStringList	spNames = QStringList()
 		<< "name"             //  0
 		<< "fortsmode"        //  1
 		<< "divteams"         //  2
@@ -43,32 +65,9 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "caseprobability"  // 13
 		;
 
-
-	QStringList predefSchemesNames;
-	predefSchemesNames
-		<< tr("Default")
-		<< tr("Pro mode");
-	
-	defaultScheme
-		<< QVariant(tr("Default")) // name           0
-		<< QVariant(false)         // fortsmode      1
-		<< QVariant(false)         // team divide    2
-		<< QVariant(false)         // solid land     3
-		<< QVariant(false)         // border         4
-		<< QVariant(false)         // low gravity    5
-		<< QVariant(false)         // laser sight    6
-		<< QVariant(false)         // invulnerable   7
-		<< QVariant(true)          // add mines      8
-		<< QVariant(100)           // damage modfier 9
-		<< QVariant(45)            // turn time      10
-		<< QVariant(100)           // init health    11
-		<< QVariant(15)            // sudden death   12
-		<< QVariant(5)             // case prob      13
-		;
-
 	QList<QVariant> proMode;
 	proMode
-		<< QVariant(tr("Pro mode"))// name           0
+		<< QVariant("Pro mode")    // name           0
 		<< QVariant(false)         // fortsmode      1
 		<< QVariant(false)         // team divide    2
 		<< QVariant(false)         // solid land     3
@@ -194,4 +193,58 @@ void AmmoSchemeModel::Save()
 			fileConfig.setValue(spNames[k], scheme[k]);
 	}
 	fileConfig.endArray();
+}
+
+
+NetAmmoSchemeModel::NetAmmoSchemeModel(QObject * parent) :
+	QAbstractTableModel(parent)
+{
+	netScheme = defaultScheme;
+}
+
+QVariant NetAmmoSchemeModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+	return QVariant();
+}
+
+int NetAmmoSchemeModel::rowCount(const QModelIndex & parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return 1;
+}
+
+int NetAmmoSchemeModel::columnCount(const QModelIndex & parent) const
+{
+	if (parent.isValid())
+		return 0;
+	else
+		return defaultScheme.size();
+}
+
+QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
+{
+	if (!index.isValid() || index.row() < 0
+		|| index.row() > 1
+		|| index.column() >= defaultScheme.size()
+		|| (role != Qt::EditRole && role != Qt::DisplayRole)
+		)
+		return QVariant();
+
+	return netScheme[index.column()];
+}
+
+void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
+{
+	if(cfg.size() != netScheme.size())
+	{
+		qWarning("Incorrect scheme cfg size");
+		return;
+	}
+
+	for(int i = 0; i < cfg.size(); ++i)
+		netScheme[i] = QVariant(cfg[i]);
+
+	reset();
 }

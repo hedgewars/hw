@@ -473,7 +473,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		QStringList tmp = lst;
 		tmp.removeFirst();
 		tmp.removeFirst();
-		emit paramChanged(lst[1], tmp);
+		if (lst[1] == "SCHEME")
+			emit netSchemeConfig(tmp);
+		else
+			emit paramChanged(lst[1], tmp);
 		return;
 	}
 
