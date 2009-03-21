@@ -120,6 +120,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
 
 	connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), this, SLOT(GoToAdmin()));
 
 	connect(ui.pageInfo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
@@ -147,6 +148,8 @@ HWForm::HWForm(QWidget *parent)
 		this, SLOT(GoBack())); // executed third
 
 	connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
+	connect(ui.pageAdmin->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 
 	ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
@@ -291,6 +294,11 @@ void HWForm::GoToNetServer()
 void HWForm::GoToSchemes()
 {
 	GoToPage(ID_PAGE_SCHEME);
+}
+
+void HWForm::GoToAdmin()
+{
+	GoToPage(ID_PAGE_ADMIN);
 }
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)

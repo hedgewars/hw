@@ -106,4 +106,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageScheme = new PageScheme();
 	Pages->addWidget(pageScheme);
+
+	pageAdmin = new PageAdmin();
+	Pages->addWidget(pageAdmin);
 }

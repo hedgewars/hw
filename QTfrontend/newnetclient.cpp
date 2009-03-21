@@ -19,6 +19,7 @@
 
 #include <QDebug>
 #include <QInputDialog>
+#include <QCryptographicHash>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -86,7 +87,7 @@ void HWNewNet::CreateRoom(const QString & room)
 		return;
 	}
 	
-	RawSendNet(QString("CREATE%1%2").arg(delimeter).arg(room));
+	RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
 	m_pGameCFGWidget->setEnabled(true);
 	m_pTeamSelWidget->setInteractivity(true);
 	isChief = true;
@@ -102,7 +103,7 @@ void HWNewNet::JoinRoom(const QString & room)
 	
 	loginStep++;
 
-	RawSendNet(QString("JOIN%1%2").arg(delimeter).arg(room));
+	RawSendNet(QString("JOIN_ROOM%1%2").arg(delimeter).arg(room));
 	m_pGameCFGWidget->setEnabled(false);
 	m_pTeamSelWidget->setInteractivity(false);
 	isChief = false;
@@ -447,7 +448,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	if (lst[0] == "ASKPASSWORD") {
 		QString password = QInputDialog::getText(0, tr("Password"), tr("Enter your password:"), QLineEdit::Password);
 
-		QString hash = Hash::md5(password.toLatin1());
+		QString hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
 
 		RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
 		return;

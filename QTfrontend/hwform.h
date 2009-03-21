@@ -58,6 +58,7 @@ private slots:
 	void GoToSelectNewWeapon();
 	void GoToNetServer();
 	void GoToSchemes();
+	void GoToAdmin();
 	void GoToPage(quint8 id);
 	void GoBack();
 	void btnExitPressed();
@@ -119,7 +120,8 @@ private:
 		ID_PAGE_INGAME          = 13,
 		ID_PAGE_ROOMSLIST       = 14,
 		ID_PAGE_CONNECTING      = 15,
-		ID_PAGE_SCHEME          = 16
+		ID_PAGE_SCHEME          = 16,
+		ID_PAGE_ADMIN           = 17
 		};
 	HWGame * game;
 	HWNetServer* pnetserver;

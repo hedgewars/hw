@@ -20,18 +20,7 @@
 
 
 #include <QObject>
-#include <QByteArray>
-#include <QString>
 #include <QSpinBox>
-
-class Hash : public QObject
-{
-	Q_OBJECT
-
-public:
-	Hash();
-	static QString md5(QByteArray buf);
-};
 
 class FreqSpinBox : public QSpinBox
 {
@@ -43,7 +32,7 @@ public:
 
 	}
 
-	QString textFromValue ( int value ) const
+	QString textFromValue(int value) const
 	{
 		switch (value)
 		{

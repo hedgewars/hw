@@ -37,6 +37,7 @@ class PageInGame;
 class PageRoomsList;
 class PageConnecting;
 class PageScheme;
+class PageAdmin;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -65,6 +66,7 @@ public:
 	PageRoomsList *pageRoomsList;
 	PageConnecting *pageConnecting;
 	PageScheme *pageScheme;
+	PageAdmin *pageAdmin;
 
 	QStackedLayout *Pages;
 	QFont *font14;

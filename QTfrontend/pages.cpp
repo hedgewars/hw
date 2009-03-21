@@ -973,3 +973,13 @@ void PageScheme::deleteRow()
 	QAbstractItemModel * model = mapper->model();
 	model->removeRow(selectScheme->currentIndex());
 }
+
+/////////////////////////////////////////////////
+
+PageAdmin::PageAdmin(QWidget* parent) :
+	AbstractPage(parent)
+{
+	QGridLayout * pageLayout = new QGridLayout(this);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+}

@@ -438,4 +438,14 @@ private slots:
 	void deleteRow();
 };
 
+class PageAdmin : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageAdmin(QWidget* parent = 0);
+
+	QPushButton * BtnBack;
+};
+
 #endif // PAGES_H

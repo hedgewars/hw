@@ -41,7 +41,7 @@ handleCmd_lobby clID clients _ ["CHAT", msg] =
 		clientNick = nick $ clients IntMap.! clID
 
 
-handleCmd_lobby clID clients rooms ["CREATE", newRoom, roomPassword] =
+handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword] =
 	if haveSameRoom then
 		[Warning "Room exists"]
 	else
@@ -54,11 +54,11 @@ handleCmd_lobby clID clients rooms ["CREATE", newRoom, roomPassword] =
 		haveSameRoom = isJust $ find (\room -> newRoom == name room) $ IntMap.elems rooms
 
 
-handleCmd_lobby clID clients rooms ["CREATE", newRoom] =
-	handleCmd_lobby clID clients rooms ["CREATE", newRoom, ""]
+handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom] =
+	handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, ""]
 
 
-handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
+handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
 	if noSuchRoom then
 		[Warning "No such room"]
 	else if isRestrictedJoins jRoom then
@@ -106,8 +106,8 @@ handleCmd_lobby clID clients rooms ["JOIN", roomName, roomPassword] =
 				answerAllTeams (teams jRoom)
 
 
-handleCmd_lobby clID clients rooms ["JOIN", roomName] =
-	handleCmd_lobby clID clients rooms ["JOIN", roomName, ""]
+handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
+	handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
 
 
 handleCmd_lobby clID clients rooms ["KICK", kickNick] =
