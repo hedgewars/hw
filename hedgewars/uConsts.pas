@@ -86,7 +86,7 @@ type
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
-			sndRideOfTheValkyries);
+			sndRideOfTheValkyries, sndDenied, sndPlaced);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -565,7 +565,9 @@ const
 			(FileName:               'Yoohoo.ogg'; Path: ptSounds),// sndYoohoo
 			(FileName:              'rcplane.ogg'; Path: ptSounds),// sndRCPlane
 			(FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhipCrack
-			(FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds) // sndRideOfTheValkyries
+			(FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds),// sndRideOfTheValkyries
+			(FileName:               'denied.ogg'; Path: ptSounds),// sndDenied
+			(FileName:               'placed.ogg'; Path: ptSounds) // sndPlaced
 			);
 
 	Ammoz: array [TAmmoType] of record

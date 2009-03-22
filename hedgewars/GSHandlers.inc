@@ -1425,22 +1425,26 @@ x:= hwRound(HHGear^.X);
 y:= hwRound(HHGear^.Y);
 
 // use a circle instead?
-if (abs(tx-x) > 256) or 
+if (abs(tx-x) > 256) or
    (abs(ty-y) > 256) or
    not TryPlaceOnLand(tx - SpritesData[sprAmGirder].Width div 2,
                       ty - SpritesData[sprAmGirder].Height div 2,
                       sprAmGirder, Gear^.State, true) then
 	begin
+    PlaySound(sndDenied, false, nil);
+	HHGear^.Message:= HHGear^.Message and not gm_Attack;
+	HHGear^.State:= HHGear^.State and not gstAttacking;
 	HHGear^.State:= HHGear^.State or gstHHChooseTarget;
-	DeleteGear(Gear);
-    isCursorVisible:= true
+	isCursorVisible:= true;
+	DeleteGear(Gear)
 	end
 else begin
+    PlaySound(sndPlaced, false, nil);
 	DeleteGear(Gear);
     OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
-    isCursorVisible:= false
- 	end;
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
+	end;
+
 HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked);
 HHGear^.Message:= HHGear^.Message and not gm_Attack;
 TargetPoint.X:= NoPointX
