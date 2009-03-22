@@ -290,6 +290,30 @@ toPowerOf2:= 1;
 while (toPowerOf2 < i) do toPowerOf2:= toPowerOf2 shl 1
 end;
 
+procedure ResetVertexArrays(texture: PTexture);
+begin
+with texture^ do
+	begin
+	vb[0].X:= 0;
+	vb[0].Y:= 0;
+	vb[1].X:= w;
+	vb[1].Y:= 0;
+	vb[2].X:= w;
+	vb[2].Y:= h;
+	vb[3].X:= 0;
+	vb[3].Y:= h;
+
+	tb[0].X:= 0;
+	tb[0].Y:= 0;
+	tb[1].X:= rx;
+	tb[1].Y:= 0;
+	tb[2].X:= rx;
+	tb[2].Y:= ry;
+	tb[3].X:= 0;
+	tb[3].Y:= ry
+	end;
+end;
+
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
 begin
 new(NewTexture);
@@ -297,6 +321,8 @@ NewTexture^.w:= width;
 NewTexture^.h:= height;
 NewTexture^.rx:= 1.0;
 NewTexture^.ry:= 1.0;
+
+ResetVertexArrays(NewTexture);
 
 glGenTextures(1, @NewTexture^.id);
 
@@ -415,8 +441,10 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
 	end;
 
+ResetVertexArrays(Surface2Tex);
+
 if SDL_MustLock(surf) then
-   SDL_UnlockSurface(surf);
+	SDL_UnlockSurface(surf);
 
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)

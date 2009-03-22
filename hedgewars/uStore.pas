@@ -348,37 +348,18 @@ glEnd()
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
-var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
-VertexBuffer[0].X:= 0;
-VertexBuffer[0].Y:= 0;
-VertexBuffer[1].X:= Texture^.w;
-VertexBuffer[1].Y:= 0;
-VertexBuffer[2].X:= Texture^.w;
-VertexBuffer[2].Y:= Texture^.h;
-VertexBuffer[3].X:= 0;
-VertexBuffer[3].Y:= Texture^.h;
-
-TextureBuffer[0].X:= 0;
-TextureBuffer[0].Y:= 0;
-TextureBuffer[1].X:= Texture^.rx;
-TextureBuffer[1].Y:= 0;
-TextureBuffer[2].X:= Texture^.rx;
-TextureBuffer[2].Y:= Texture^.ry;
-TextureBuffer[3].X:= 0;
-TextureBuffer[3].Y:= Texture^.ry;
-
 glEnableClientState(GL_VERTEX_ARRAY);
 glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
+glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
 
 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY);

@@ -120,16 +120,19 @@ type
 			Pos: LongWord;
 			AmmoType: TAmmoType;
 			end;
-	TTexture = record
-			id: GLuint;
-			w, h: LongInt;
-			rx, ry: GLfloat;
-			end;
-	PTexture = ^TTexture;
 
 	TVertex2f = record
 		X, Y: GLfloat;
 		end;
+			
+	TTexture = record
+			id: GLuint;
+			w, h: LongInt;
+			rx, ry: GLfloat;
+			vb, tb: array [0..3] of TVertex2f;
+			end;
+	PTexture = ^TTexture;
+
 const
 	errmsgCreateSurface   = 'Error creating SDL surface';
 	errmsgTransparentSet  = 'Error setting transparent color';
