@@ -30,6 +30,7 @@
 
 class HWGame;
 class HWTeam;
+class HWNamegen;
 class HWNewNet;
 class GameUIConfig;
 class HWNetRegisterServer;
@@ -129,6 +130,7 @@ private:
 	HWTeam * editedTeam;
 	HWNewNet * hwnet;
 	GameUIConfig * config;
+	HWNamegen * namegen;
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
 	QTime eggTimer;

@@ -104,19 +104,25 @@ void HWGame::SendQuickConfig()
 			.arg((Themes->size() > 0) ? Themes->at(rand() % Themes->size()) : "steel"));
 	HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
-	HWTeam team1(0);
-	team1.difficulty = 0;
-	team1.teamColor = *color1;
-	team1.numHedgehogs = 4;
-	HWProto::addStringListToBuffer(teamscfg,
-			team1.TeamGameConfig(100));
+	HWNamegen namegen;
 
-	HWTeam team2(2);
-	team2.difficulty = 4;
-	team2.teamColor = *color2;
-	team2.numHedgehogs = 4;
+	HWTeam * team1;
+	team1 = new HWTeam;
+	team1->difficulty = 0;
+	team1->teamColor = *color1;
+	team1->numHedgehogs = 4;
+	namegen.TeamRandomNames(team1,TRUE);
 	HWProto::addStringListToBuffer(teamscfg,
-			team2.TeamGameConfig(100));
+			team1->TeamGameConfig(100));
+
+	HWTeam * team2;
+	team2 = new HWTeam;
+	team2->difficulty = 4;
+	team2->teamColor = *color2;
+	team2->numHedgehogs = 4;
+	namegen.TeamRandomNames(team2,TRUE);
+	HWProto::addStringListToBuffer(teamscfg,
+			team2->TeamGameConfig(100));
 
 	HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);
 	HWProto::addStringToBuffer(teamscfg, "eammstore " + *cDefaultAmmoStore);

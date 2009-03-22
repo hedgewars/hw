@@ -36,7 +36,7 @@ class HWTeam
 	public:
 		HWTeam(const QString & teamname);
 		HWTeam(const QStringList& strLst);
-		HWTeam(quint8 num);
+		HWTeam();
 
 		bool isNetTeam() const;
 
@@ -59,22 +59,12 @@ class HWTeam
 		void GetFromPage(HWForm * hwform);
 		QStringList TeamGameConfig(quint32 InitHealth) const;
 
-		void TeamRandomName(const int &i);
-		void TeamRandomNames(bool changeteamname);
-
 		bool operator==(const HWTeam& t1) const;
 		bool operator<(const HWTeam& t1) const;
 	private:
 		bool m_isNetTeam;
 		QString OldTeamName;
-		void RandomNameByHat(const int &i);
 
-		QList<QStringList> TypesTeamnames;
-		QList<QStringList> TypesHatnames;
-		bool TypesAvliable;
-		void TypesLoad();
-		void DictLoad(const QString filename, QStringList &list);
-		void HatCfgLoad(const QString hatname, QStringList &list);
 };
 
 #endif

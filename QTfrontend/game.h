@@ -21,6 +21,7 @@
 
 #include <QString>
 #include "team.h"
+#include "namegen.h"
 
 #include "tcpBase.h"
 

@@ -38,6 +38,7 @@
 #include "hwform.h"
 #include "game.h"
 #include "team.h"
+#include "namegen.h"
 #include "teamselect.h"
 #include "selectWeapon.h"
 #include "gameuiconfig.h"
@@ -63,6 +64,8 @@ HWForm::HWForm(QWidget *parent)
 	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
+	
+	namegen = new HWNamegen();
 
 	UpdateTeamsLists();
 	UpdateWeapons();
@@ -426,14 +429,14 @@ void HWForm::EditTeam()
 void HWForm::RandomNames()
 {
 	editedTeam->GetFromPage(this);
-	editedTeam->TeamRandomNames(FALSE);
+	namegen->TeamRandomNames(editedTeam,FALSE);
 	editedTeam->SetToPage(this);
 }
 
 void HWForm::RandomName(const int &i)
 {
 	editedTeam->GetFromPage(this);
-	editedTeam->TeamRandomName(i);
+	namegen->TeamRandomName(editedTeam,i);
 	editedTeam->SetToPage(this);
 }
 

@@ -49,6 +49,7 @@ set(hwfr_src
 	main.cpp
 	hwform.cpp
 	team.cpp
+	namegen.cpp
 	teamselect.cpp
 	teamselhelper.cpp
 	frameTeam.cpp
