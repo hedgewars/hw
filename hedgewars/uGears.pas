@@ -841,7 +841,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	defaultPos:= false
 	end else
 
-	if (Gear^.Message and (gm_Left or gm_Right) <> 0) then
+	if (Gear^.Message and (gm_Left or gm_Right) <> 0) and (not isCursorVisible) then
 		begin
 		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
