@@ -492,8 +492,8 @@ const
 			Width:  32; Height: 32; saveSurf: false), // sprHandPlane
 			(FileName:    'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false), // sprUtility
-			(FileName:  'Invulnerable'; Path: ptHedgehog;AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 48; Height: 48; saveSurf: false) // sprInvulnerable
+			(FileName:'Invulnerable';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  48; Height: 48; saveSurf: false) // sprInvulnerable
 			);
 
 	Wavez: array [TWave] of record
