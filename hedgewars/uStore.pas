@@ -18,7 +18,13 @@
 
 unit uStore;
 interface
-uses uConsts, uTeams, SDLh, uFloat, GL;
+uses uConsts, uTeams, SDLh, 
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+uFloat;
 {$INCLUDE options.inc}
 
 procedure StoreInit;
@@ -50,7 +56,7 @@ var PixelFormat: PSDL_PixelFormat = nil;
    ConfirmTexture: PTexture;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale, GLU;
+uses uMisc, uConsole, uLand, uLocale;
 
 var
     HHTexture: PTexture;

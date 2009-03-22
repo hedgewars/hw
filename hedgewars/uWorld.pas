@@ -39,7 +39,12 @@ var FollowGear: PGear = nil;
 	WaterColor, DeepWaterColor: TSDL_Color;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, GL,
+uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound,
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
      uAmmos, uVisualGears, uChat, uLandTexture, uLand;
 
 const FPS: Longword = 0;

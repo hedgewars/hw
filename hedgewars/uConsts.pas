@@ -18,7 +18,16 @@
 
 unit uConsts;
 interface
-uses SDLh, GL, uLocale;
+
+uses 
+	SDLh,
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uLocale;
+
 {$INCLUDE options.inc}
 {$INCLUDE proto.inc}
 type

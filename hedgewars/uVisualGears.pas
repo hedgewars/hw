@@ -18,7 +18,13 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts, uFloat, GL;
+uses SDLh, uConsts,
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uFloat;
 {$INCLUDE options.inc}
 const AllInactive: boolean = false;
 

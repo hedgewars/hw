@@ -18,7 +18,13 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, GL, uSound;
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, 
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uSound;
 {$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;

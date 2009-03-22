@@ -23,7 +23,11 @@ WriteLn('Only Freepascal supported');
 program hwengine;
 uses
 	SDLh,
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
 	GL,
+{$ENDIF}
 	uConsts in 'uConsts.pas',
 	uGame in 'uGame.pas',
 	uMisc in 'uMisc.pas',

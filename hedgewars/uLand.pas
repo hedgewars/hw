@@ -18,7 +18,13 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, GL, uConsts;
+uses SDLh, uLandTemplates, uFloat, 
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uConsts;
 {$include options.inc}
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
 	TPreview  = packed array[0..127, 0..31] of byte;

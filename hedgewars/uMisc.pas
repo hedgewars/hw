@@ -18,7 +18,13 @@
 
 unit uMisc;
 interface
-uses uConsts, SDLh, uFloat, GL;
+uses uConsts, SDLh,
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uFloat;
 {$INCLUDE options.inc}
 var
 	isCursorVisible : boolean = false;
@@ -444,7 +450,7 @@ if c < 3 then t:= t - c;
 byte(DecodeBase64[0]):= t - 1
 end;
 
-const GL_BGR = $80E0; // some opengl headers don't have that const (?)
+const GL_BGR = $80E0; // some opengl headers don't have that const (?)'
 procedure MakeScreenshot(s: shortstring);
 const head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
 var p: Pointer;

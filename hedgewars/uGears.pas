@@ -74,7 +74,12 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, GL,
+	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, 
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
 	uStats, uVisualGears;
 
 const MAXROPEPOINTS = 384;
@@ -653,6 +658,7 @@ var t: LongInt;
 	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite`
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
+    VertexBuffer: array [0..1] of TVertex2f;
 begin
 if (Gear^.State and gstHHDeath) <> 0 then
 	begin
@@ -1080,11 +1086,16 @@ with PHedgehog(Gear^.Hedgehog)^ do
 							begin
 							glDisable(GL_TEXTURE_2D);
 							glEnable(GL_LINE_SMOOTH);
-							glBegin(GL_LINES);
+
 							glColor4ub($FF, $00, $00, $C0);
-							glVertex2i(hx + WorldDx, hy + WorldDy);
-							glVertex2i(tx + WorldDx, ty + WorldDy);
-							glEnd();
+							VertexBuffer[0].X:= hx + WorldDx;
+							VertexBuffer[0].Y:= hy + WorldDy;
+							VertexBuffer[1].X:= tx + WorldDx;
+							VertexBuffer[1].Y:= ty + WorldDy;
+							
+							glEnableClientState(GL_VERTEX_ARRAY);
+							glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+							glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
 							glColor4f(1, 1, 1, 1);
 							glEnable(GL_TEXTURE_2D);
 							glDisable(GL_LINE_SMOOTH);

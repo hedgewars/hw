@@ -25,7 +25,13 @@ procedure DrawLand(dX, dY: LongInt);
 procedure FreeLand;
 
 implementation
-uses uMisc, uLand, uStore, GL, uConsts;
+uses uMisc, uLand, uStore, 
+{$IFDEF IPHONE}
+	gles11,
+{$ELSE}
+	GL,
+{$ENDIF}
+	uConsts;
 
 const TEXSIZE = 256;
 	LANDTEXARW = LAND_WIDTH div TEXSIZE;
