@@ -114,6 +114,12 @@ var
 
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
+type HwColor3f = record
+		r, g, b: byte
+		end;
+
+var WaterColorArray: array[0..3] of HwColor3f;
+
 function hwSign(r: hwFloat): LongInt;
 function Min(a, b: LongInt): LongInt;
 function Max(a, b: LongInt): LongInt;

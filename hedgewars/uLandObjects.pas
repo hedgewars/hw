@@ -371,8 +371,10 @@ Reset(f);
 Readln(f, c1.r, c1.g, c1. b);
 Readln(f, c2.r, c2.g, c2. b);
 // read water gradient colors
-Readln(f, WaterColor.r, WaterColor.g, WaterColor. b);
-Readln(f, DeepWaterColor.r, DeepWaterColor.g, DeepWaterColor. b);
+Readln(f, WaterColorArray[0].r, WaterColorArray[0].g, WaterColorArray[0]. b);
+Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2]. b);
+WaterColorArray[1]:= WaterColorArray[0];
+WaterColorArray[3]:= WaterColorArray[2];
 
 glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
 cExplosionBorderColor:= c2.value or $FF000000;

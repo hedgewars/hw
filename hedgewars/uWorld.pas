@@ -184,6 +184,7 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
+    VertexBuffer: array [0..3] of TVertex2f;
 
     procedure DrawRepeated(spr: TSprite; Shift: LongInt);
     var i, w: LongInt;
@@ -227,21 +228,33 @@ DrawLand(WorldDx, WorldDy);
 // Water
 r.y:= WorldDy + cWaterLine + 32;
 if r.y < cScreenHeight then
-   begin
-   if r.y < 0 then r.y:= 0;
+	begin
+	if r.y < 0 then r.y:= 0;
 
-   glDisable(GL_TEXTURE_2D);
-   glBegin(GL_QUADS);
-    glColor3ub(WaterColor.r, WaterColor.g, WaterColor. b); // water color
-    glVertex2i(0, r.y);
-    glVertex2i(cScreenWidth, r.y);
-    glColor3ub(DeepWaterColor.r, DeepWaterColor.g, DeepWaterColor. b); // deep water color
-    glVertex2i(cScreenWidth, cScreenHeight);
-    glVertex2i(0, cScreenHeight);
-   glEnd();
-   glColor4f(1, 1, 1, 1); // disable coloring
-   glEnable(GL_TEXTURE_2D)
-   end;
+	glDisable(GL_TEXTURE_2D);
+	VertexBuffer[0].X:= 0;
+	VertexBuffer[0].Y:= r.y;
+	VertexBuffer[1].X:= cScreenWidth;
+	VertexBuffer[1].Y:= r.y;
+	VertexBuffer[2].X:= cScreenWidth;
+	VertexBuffer[2].Y:= cScreenHeight;
+	VertexBuffer[3].X:= 0;
+	VertexBuffer[3].Y:= cScreenHeight;
+
+	glEnableClientState (GL_COLOR_ARRAY);
+	glColorPointer(3, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+	
+	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	glColor4f(1, 1, 1, 1); // disable coloring
+	glEnable(GL_TEXTURE_2D)
+	end;
 
 // Attack bar
 if CurrentTeam <> nil then
