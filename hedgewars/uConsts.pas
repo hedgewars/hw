@@ -493,7 +493,9 @@ const
 			(FileName:    'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false), // sprUtility
 			(FileName:'Invulnerable';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false) // sprInvulnerable
+			Width:  48; Height: 48; saveSurf: false), // sprInvulnerable
+			(FileName:    'amGirder'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 512; Height:512; saveSurf: false) // sprGirder
 			);
 
 	Wavez: array [TWave] of record
