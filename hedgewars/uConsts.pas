@@ -59,7 +59,7 @@ type
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-			sprPlane, sprHandPlane, sprUtility, sprInvulnerable);
+			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprGirder);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -939,8 +939,7 @@ const
 			NumberInCase: 3;
 			Ammo: (Propz: ammoprop_NoCrosshair or
 							ammoprop_NeedTarget or
-							ammoprop_AttackingPut or
-							ammoprop_DontHold;
+							ammoprop_AttackingPut;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;

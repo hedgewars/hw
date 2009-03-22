@@ -715,7 +715,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						DrawRotated(sprShotgun, hx, hy, hwSign(Gear^.dX), aangle)
 					else
 						DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
-					HatVisible:= true
 				end;
 			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
 			gtBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
@@ -881,6 +880,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
 				defaultPos:= false
 				end;
+			amGirder: DrawSprite(sprGirder, sx-256, sy-256, 0);
 		end;
 
 		case amt of
@@ -1254,6 +1254,7 @@ while Gear<>nil do
                          posCaseUtility: begin
                                         i:= (GameTicks shr 6) mod 70;
                                         if i > 23 then i:= 0;
+                                        i:= i mod 12;
                                         DrawSprite(sprUtility, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
                          end;

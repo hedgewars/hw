@@ -1414,24 +1414,35 @@ end;
 
 procedure doStepGirder(Gear: PGear);
 var HHGear: PGear;
+    x, y, tx, ty: LongInt;
 begin
 AllInactive:= false;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
-                      TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
+tx:= TargetPoint.X;
+ty:= TargetPoint.Y;
+x:= hwRound(HHGear^.X);
+y:= hwRound(HHGear^.Y);
+
+// use a circle instead?
+if (abs(tx-x) > 256) or 
+   (abs(ty-y) > 256) or
+   not TryPlaceOnLand(tx - SpritesData[sprAmGirder].Width div 2,
+                      ty - SpritesData[sprAmGirder].Height div 2,
                       sprAmGirder, Gear^.State, true) then
 	begin
-	HHGear^.Message:= HHGear^.Message and not gm_Attack;
-	HHGear^.State:= HHGear^.State and not gstAttacking;
 	HHGear^.State:= HHGear^.State or gstHHChooseTarget;
 	DeleteGear(Gear);
-	isCursorVisible:= true
+    isCursorVisible:= true
 	end
 else begin
 	DeleteGear(Gear);
-	AfterAttack
-	end;
+    OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+    ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+    isCursorVisible:= false
+ 	end;
+HHGear^.State:= HHGear^.State and not (gstAttacking or gstAttacked);
+HHGear^.Message:= HHGear^.Message and not gm_Attack;
 TargetPoint.X:= NoPointX
 end;
 
