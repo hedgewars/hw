@@ -497,7 +497,11 @@ head[7]:= cScreenHeight;
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
+{$IFDEF IPHONE}
+//since opengl es operates on a single surface GL_FRONT is implied, but how to test that?
+{$ELSE}
 glReadBuffer(GL_FRONT);
+{$ENDIF}
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 
 {$I-}
