@@ -178,13 +178,48 @@ end;
 
 procedure MoveCamera; forward;
 
+procedure DrawWater;
+var VertexBuffer: array [0..3] of TVertex2f;
+    r: TSDL_Rect;
+begin
+// Water
+r.y:= WorldDy + cWaterLine + 32;
+if r.y < cScreenHeight then
+	begin
+	if r.y < 0 then r.y:= 0;
+
+	glDisable(GL_TEXTURE_2D);
+	VertexBuffer[0].X:= 0;
+	VertexBuffer[0].Y:= r.y;
+	VertexBuffer[1].X:= cScreenWidth;
+	VertexBuffer[1].Y:= r.y;
+	VertexBuffer[2].X:= cScreenWidth;
+	VertexBuffer[2].Y:= cScreenHeight;
+	VertexBuffer[3].X:= 0;
+	VertexBuffer[3].Y:= cScreenHeight;
+
+	glEnableClientState (GL_COLOR_ARRAY);
+	glColorPointer(3, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+	
+	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+	glEnableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
+	glColor4f(1, 1, 1, 1); // disable coloring
+	glEnable(GL_TEXTURE_2D)
+	end
+end;
+
 procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
-    VertexBuffer: array [0..3] of TVertex2f;
 
     procedure DrawRepeated(spr: TSprite; Shift: LongInt);
     var i, w: LongInt;
@@ -225,36 +260,8 @@ if not cReducedQuality then
 
 
 DrawLand(WorldDx, WorldDy);
-// Water
-r.y:= WorldDy + cWaterLine + 32;
-if r.y < cScreenHeight then
-	begin
-	if r.y < 0 then r.y:= 0;
 
-	glDisable(GL_TEXTURE_2D);
-	VertexBuffer[0].X:= 0;
-	VertexBuffer[0].Y:= r.y;
-	VertexBuffer[1].X:= cScreenWidth;
-	VertexBuffer[1].Y:= r.y;
-	VertexBuffer[2].X:= cScreenWidth;
-	VertexBuffer[2].Y:= cScreenHeight;
-	VertexBuffer[3].X:= 0;
-	VertexBuffer[3].Y:= cScreenHeight;
-
-	glEnableClientState (GL_COLOR_ARRAY);
-	glColorPointer(3, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
-
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-	
-	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-	glEnableClientState(GL_COLOR_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
-
-	glColor4f(1, 1, 1, 1); // disable coloring
-	glEnable(GL_TEXTURE_2D)
-	end;
+DrawWater;
 
 // Attack bar
 if CurrentTeam <> nil then

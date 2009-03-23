@@ -1414,21 +1414,19 @@ end;
 
 procedure doStepGirder(Gear: PGear);
 var HHGear: PGear;
-    x, y, tx, ty: LongInt;
+    x, y, tx, ty: hwFloat;
 begin
 AllInactive:= false;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-tx:= TargetPoint.X;
-ty:= TargetPoint.Y;
-x:= hwRound(HHGear^.X);
-y:= hwRound(HHGear^.Y);
+tx:= int2hwFloat(TargetPoint.X);
+ty:= int2hwFloat(TargetPoint.Y);
+x:= HHGear^.X;
+y:= HHGear^.Y;
 
-// use a circle instead?
-if (abs(tx-x) > 256) or
-   (abs(ty-y) > 256) or
-   not TryPlaceOnLand(tx - SpritesData[sprAmGirder].Width div 2,
-                      ty - SpritesData[sprAmGirder].Height div 2,
+if (Distance(tx - x, ty - y) > _256) or
+   not TryPlaceOnLand(TargetPoint.X - SpritesData[sprAmGirder].Width div 2,
+                      TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
                       sprAmGirder, Gear^.State, true) then
 	begin
     PlaySound(sndDenied, false, nil);
