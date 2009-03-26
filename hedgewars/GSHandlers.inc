@@ -29,7 +29,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
     skipAngle:= _1 + _0_9;  // these should perhaps also be constants, once work out what proper values are
     skipDecay:= _0_87;  // this could perhaps be a tiny bit higher.
     if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
-        (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY) then
+        (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
        begin
        Gear^.dY.isNegative:= true;
        Gear^.dY:= Gear^.dY * skipDecay;
