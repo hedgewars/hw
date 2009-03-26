@@ -28,12 +28,12 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
     skipSpeed:= _0_25;  // was 0.36 - couldn't manage baseball bat. Tiy's build is 0.36...
     skipAngle:= _1 + _0_9;  // these should perhaps also be constants, once work out what proper values are
     skipDecay:= _0_87;  // this could perhaps be a tiny bit higher.
-    if  ((Gear^.dX*Gear^.dX+Gear^.dY*Gear^.dY) > skipSpeed) and
-        (hwAbs(Gear^.dX/Gear^.dY) > skipAngle) then
+    if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) and
+        (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY) then
        begin
        Gear^.dY.isNegative:= true;
-       Gear^.dY:=Gear^.dY*skipDecay;
-       Gear^.dX:=Gear^.dX*skipDecay;
+       Gear^.dY:= Gear^.dY * skipDecay;
+       Gear^.dX:= Gear^.dX * skipDecay;
        CheckGearDrowning:= false
        end
     else
