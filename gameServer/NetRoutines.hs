@@ -12,10 +12,7 @@ import Data.Time
 -----------------------------
 import CoreTypes
 import ClientIO
-
-sockAddr2String :: SockAddr -> IO String
-sockAddr2String (SockAddrInet _ hostAddr) = inet_ntoa hostAddr
-sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) = return (foldr1 (\a b -> a ++ ":" ++ b) [show a, show b, show c, show d])
+import Utils
 
 acceptLoop :: Socket -> Chan CoreMessage -> Int -> IO ()
 acceptLoop servSock coreChan clientCounter = do

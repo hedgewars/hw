@@ -6,10 +6,21 @@ import Data.Char
 import Data.Word
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
+import Numeric
+import Network.Socket
+import qualified Data.List as List
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
 import qualified Codec.Binary.UTF8.String as UTF8
 import CoreTypes
+
+
+sockAddr2String :: SockAddr -> IO String
+sockAddr2String (SockAddrInet _ hostAddr) = inet_ntoa hostAddr
+sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
+	return $ (foldr1 (.)
+		$ List.intersperse (\a -> ':':a)
+		$ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
 
 toEngineMsg :: String -> String
 toEngineMsg msg = Base64.encode (fromIntegral (length msg) : (UTF8.encode msg))
