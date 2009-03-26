@@ -18,6 +18,7 @@ data Action =
 	| AnswerThisRoom [String]
 	| AnswerOthersInRoom [String]
 	| AnswerLobby [String]
+	| SendServerMessage
 	| RoomAddThisClient Int -- roomID
 	| RoomRemoveThisClient
 	| RemoveTeam String
@@ -87,6 +88,11 @@ processAction (clID, serverInfo, clients, rooms) (AnswerLobby msg) = do
 	where
 		roomClients = IntSet.elems $ playersIDs room
 		room = rooms ! 0
+
+
+processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
+	writeChan (sendChan $ clients ! clID) $ ["SERVER_MESSAGE", serverMessage serverInfo]
+	return (clID, serverInfo, clients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) (ProtocolError msg) = do
@@ -264,6 +270,7 @@ processAction (clID, serverInfo, clients, rooms) (Dump) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
+	processAction (clID, serverInfo, clients, rooms) SendServerMessage
 	case info of
 		HasAccount passwd isAdmin -> do
 			infoM "Clients" $ show clID ++ " has account"
