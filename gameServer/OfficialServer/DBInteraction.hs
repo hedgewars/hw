@@ -15,12 +15,14 @@ import System.Log.Logger
 ------------------------
 import CoreTypes
 
+localAddressList = ["127.0.0.1", "0:0:0:0:0:0:0:1", "0:0:0:0:0:ffff:7f00:1"]
 
 fakeDbConnection serverInfo = do
 	q <- readChan $ dbQueries serverInfo
 	case q of
-		CheckAccount clID name -> do
-			writeChan (coreChan serverInfo) $ ClientAccountInfo clID Guest
+		CheckAccount client -> do
+			writeChan (coreChan serverInfo) $ ClientAccountInfo (clientUID client) $
+				if host client `elem` localAddressList then Admin else Guest
 
 	fakeDbConnection serverInfo
 
@@ -40,21 +42,21 @@ dbQueryString =
 dbInteractionLoop queries coreChan dbConn = do
 	q <- readChan queries
 	case q of
-		CheckAccount clID name -> do
+		CheckAccount client -> do
 				statement <- prepare dbConn dbQueryString
-				execute statement [SqlString name]
+				execute statement [SqlString $ nick client]
 				passAndRole <- fetchRow statement
 				finish statement
 				if isJust passAndRole then
 					writeChan coreChan $
-							ClientAccountInfo clID $
+							ClientAccountInfo (clientUID client) $
 								HasAccount
 									(fromSql $ head $ fromJust $ passAndRole)
 									((fromSql $ last $ fromJust $ passAndRole) == (3 :: Int))
 					else
-					writeChan coreChan $ ClientAccountInfo clID Guest
+					writeChan coreChan $ ClientAccountInfo (clientUID client) Guest
 			`onException`
-				(unGetChan queries $ CheckAccount clID name)
+				(unGetChan queries q)
 
 	dbInteractionLoop queries coreChan dbConn
 

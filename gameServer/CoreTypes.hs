@@ -142,6 +142,7 @@ newServerInfo = (
 data AccountInfo =
 	HasAccount String Bool
 	| Guest
+	| Admin
 
 data CoreMessage =
 	Accept ClientInfo
@@ -151,7 +152,7 @@ data CoreMessage =
 	-- | TimerTick
 
 data DBQuery =
-	CheckAccount Int String
+	CheckAccount ClientInfo
 
 
 type Clients = IntMap.IntMap ClientInfo

@@ -29,8 +29,8 @@ data Action =
 	| ByeClient String
 	| KickClient Int -- clID
 	| KickRoomClient Int -- clID
-	| RemoveClientTeams Int -- clID
 	| BanClient String -- nick
+	| RemoveClientTeams Int -- clID
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| AddRoom String String
@@ -252,7 +252,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
-	writeChan (dbQueries serverInfo) $ CheckAccount clID (nick client)
+	writeChan (dbQueries serverInfo) $ CheckAccount client
 	return (clID, serverInfo, clients, rooms)
 	where
 		client = clients ! clID
@@ -272,6 +272,9 @@ processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
 		Guest -> do
 			infoM "Clients" $ show clID ++ " is guest"
 			processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True}) clID clients, rooms) MoveToLobby
+		Admin -> do
+			infoM "Clients" $ show clID ++ " is admin"
+			foldM processAction (clID, serverInfo, adjust (\cl -> cl{logonPassed = True, isAdministrator = True}) clID clients, rooms) [MoveToLobby, AnswerThisClient ["ADMIN_ACCESS"]]
 
 
 processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
@@ -289,6 +292,9 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 
 processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
 	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
+
+processAction (clID, serverInfo, clients, rooms) (BanClient banNick) = do
+	return (clID, serverInfo, clients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) (KickRoomClient kickID) = do

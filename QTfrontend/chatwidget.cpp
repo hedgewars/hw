@@ -167,6 +167,6 @@ void HWChatWidget::adminAccess(bool b)
 	if(b)
 	{
 		chatNicks->insertAction(0, acKick);
-		chatNicks->insertAction(0, acBan);
+//		chatNicks->insertAction(0, acBan);
 	}
 }

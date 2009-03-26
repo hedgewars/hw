@@ -143,6 +143,8 @@ void GameCFGWidget::fullNetConfig()
 	templateFilterChanged(pMapContainer->getTemplateFilter());
 	themeChanged(pMapContainer->getCurrentTheme());
 
+	schemeChanged(GameSchemes->currentIndex());
+
 	// map must be the last
 	QString map = pMapContainer->getCurrentMap();
 	if (map.size())
@@ -166,38 +168,6 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 			pMapContainer->setTheme(value);
 			return;
 		}
-		if (param == "HEALTH") {
-//			SB_InitHealth->setValue(value.toUInt());
-			return;
-		}
-		if (param == "TURNTIME") {
-//			SB_TurnTime->setValue(value.toUInt());
-			return;
-		}
-		if (param == "SD_TURNS") {
-//			SB_SuddenDeath->setValue(value.toUInt());
-			return;
-		}
-		if (param == "CASEFACTOR") {
-//			SB_CaseProb->setValue(value.toUInt());
-			return;
-		}
-		if (param == "FORTSMODE") {
-//			CB_mode_Forts->setChecked(value.toUInt() != 0);
-			return;
-		}
-		if (param == "DIVIDETEAMS") {
-//			CB_teamsDivide->setChecked(value.toUInt() != 0);
-			return;
-		}
-		if (param == "SOLIDLAND") {
-//			CB_solid->setChecked(value.toUInt() != 0);
-			return;
-		}
-		if (param == "BORDER") {
-//			CB_border->setChecked(value.toUInt() != 0);
-			return;
-		}
 		if (param == "TEMPLATE") {
 			pMapContainer->setTemplateFilter(value.toUInt());
 			return;
@@ -211,6 +181,8 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 			return;
 		}
 	}
+	
+	qWarning("Got bad config param from net");
 }
 
 void GameCFGWidget::ammoChanged(int index)
