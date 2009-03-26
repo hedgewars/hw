@@ -127,6 +127,7 @@ with Gear^,
            StopSound(sndThrowPowerUp);
            PlaySound(sndThrowRelease, false, nil);
            end;
+
         xx:= SignAs(AngleSin(Angle), dX);
         yy:= -AngleCos(Angle);
 

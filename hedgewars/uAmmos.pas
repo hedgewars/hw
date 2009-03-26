@@ -27,8 +27,9 @@ procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
+procedure ApplyAngleBounds(var Hedgehog: THedgehog);
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
-procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
+procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 
@@ -158,7 +159,7 @@ with Hedgehog do
 			if Count = 0 then
 				begin
 				PackAmmo(Ammo, CurSlot);
-				SwitchNotHoldedAmmo(Hedgehog)
+				SwitchNotHeldAmmo(Hedgehog)
 				end
 			end
 	end
@@ -179,51 +180,63 @@ while (ami <= cMaxSlotAmmoIndex) do
 HHHasAmmo:= false
 end;
 
+procedure ApplyAngleBounds(var Hedgehog: THedgehog);
+begin
+with Hedgehog do
+	with Ammo^[CurSlot, CurAmmo] do
+		begin
+		CurMinAngle:= Ammoz[AmmoType].minAngle;
+		if Ammoz[AmmoType].maxAngle <> 0 then
+			CurMaxAngle:= Ammoz[AmmoType].maxAngle
+		else
+			CurMaxAngle:= cMaxAngle;
+
+		with Hedgehog.Gear^ do
+			begin
+			if Angle < CurMinAngle then Angle:= CurMinAngle;
+			if Angle > CurMaxAngle then Angle:= CurMaxAngle;
+			end
+		end
+end;
+
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
 TargetPoint.X:= NoPointX;
 
 with Hedgehog do
-     begin
-     if (Ammo^[CurSlot, CurAmmo].Count = 0) then
-        begin
-        CurAmmo:= 0;
-        CurSlot:= 0;
-        while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
-        end;
+	begin
+	if (Ammo^[CurSlot, CurAmmo].Count = 0) then
+		begin
+		CurAmmo:= 0;
+		CurSlot:= 0;
+		while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
+		end;
 
-with Ammo^[CurSlot, CurAmmo] do
-     begin
-     CurMinAngle:= Ammoz[AmmoType].minAngle;
-     if Ammoz[AmmoType].maxAngle <> 0 then CurMaxAngle:= Ammoz[AmmoType].maxAngle
-                                      else CurMaxAngle:= cMaxAngle;
-     with Hedgehog.Gear^ do
-        begin
-        if Angle < CurMinAngle then Angle:= CurMinAngle;
-        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
-        end;
+	ApplyAngleBounds(Hedgehog);
 
-     s:= trammo[Ammoz[AmmoType].NameId];
-     if Count <> AMMO_INFINITE then
-        s:= s + ' (' + IntToStr(Count) + ')';
-     if (Propz and ammoprop_Timerable) <> 0 then
-        s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-     AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
-     if (Propz and ammoprop_NeedTarget) <> 0
-        then begin
-        Gear^.State:= Gear^.State or      gstHHChooseTarget;
-        isCursorVisible:= true
-        end else begin
-        Gear^.State:= Gear^.State and not gstHHChooseTarget;
-        isCursorVisible:= false
-        end;
-     ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
-     end
-     end
+	with Ammo^[CurSlot, CurAmmo] do
+		begin
+		s:= trammo[Ammoz[AmmoType].NameId];
+		if Count <> AMMO_INFINITE then
+			s:= s + ' (' + IntToStr(Count) + ')';
+		if (Propz and ammoprop_Timerable) <> 0 then
+			s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
+		AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
+		if (Propz and ammoprop_NeedTarget) <> 0
+			then begin
+			Gear^.State:= Gear^.State or      gstHHChooseTarget;
+			isCursorVisible:= true
+			end else begin
+			Gear^.State:= Gear^.State and not gstHHChooseTarget;
+			isCursorVisible:= false
+			end;
+		ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
+		end
+	end
 end;
 
-procedure SwitchNotHoldedAmmo(var Hedgehog: THedgehog);
+procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
      if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or

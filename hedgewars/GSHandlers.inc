@@ -771,7 +771,7 @@ Gear^.dY:= mdY;
 ////
 
 
-haveDivided:= false;
+	haveDivided:= false;
 	// check whether rope needs dividing
 	len:= _1 / Distance(ropeDx, ropeDy); // old rope pos
 	nx:= ropeDx * len;
@@ -849,7 +849,11 @@ if len > _0_8 then
 
 if (Gear^.Message and gm_Attack) <> 0 then
 	if (Gear^.State and gsttmpFlag) <> 0 then
-		WaitCollision
+		with PHedgehog(Gear^.Hedgehog)^ do
+			if Ammo^[CurSlot, CurAmmo].AmmoType = amRope then
+				WaitCollision
+			else
+				DeleteMe
 	else
 else
 	if (Gear^.State and gsttmpFlag) = 0 then

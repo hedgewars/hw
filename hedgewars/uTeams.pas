@@ -206,7 +206,7 @@ end;
 procedure AfterSwitchHedgehog;
 var g: PGear;
 begin
-SwitchNotHoldedAmmo(CurrentHedgehog^);
+SwitchNotHeldAmmo(CurrentHedgehog^);
 with CurrentHedgehog^ do
 	begin
 	with Gear^ do
