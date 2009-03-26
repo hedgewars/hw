@@ -510,6 +510,7 @@ case step of
 	stChDmg: if CheckNoDamage then inc(step) else step:= stDelay;
 	stSweep: if SweepDirty then
 				begin
+				SetAllToActive;
 				step:= stChDmg
 				end else inc(step);
 	stTurnReact: begin

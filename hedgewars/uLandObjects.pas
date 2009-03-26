@@ -179,8 +179,8 @@ repeat
 		repeat
 		inc(x2, 2);
 		k:= CountNonZeroz(x2, y)
-		until (x2 > (rightX-150)) or (k = 0) or (k = 16) or (x2 > i);
-		if (x2 < (rightX-150)) and (k = 16) and (x2 - x1 > 250)
+		until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
+		if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
 			and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
 		end;
 x1:= 0;

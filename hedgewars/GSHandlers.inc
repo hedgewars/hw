@@ -19,14 +19,32 @@
 procedure doStepDrowningGear(Gear: PGear); forward;
 
 function CheckGearDrowning(Gear: PGear): boolean;
+var skipSpeed, skipAngle, skipDecay: hwFloat;
 begin
+// probably needs tweaking. might need to be in a case statement based upon gear type
+//(not Gear^.dY.isNegative) and  this should not be necessary
 if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
-	begin
-	CheckGearDrowning:= true;
-	Gear^.State:= gstDrowning;
-	Gear^.doStep:= @doStepDrowningGear;
-	PlaySound(sndSplash, false, nil)
-	end else
+    begin
+    skipSpeed:= _0_25;  // was 0.36 - couldn't manage baseball bat. Tiy's build is 0.36...
+    skipAngle:= _1 + _0_9;  // these should perhaps also be constants, once work out what proper values are
+    skipDecay:= _0_87;  // this could perhaps be a tiny bit higher.
+    if  ((Gear^.dX*Gear^.dX+Gear^.dY*Gear^.dY) > skipSpeed) and
+        (hwAbs(Gear^.dX/Gear^.dY) > skipAngle) then
+       begin
+       Gear^.dY.isNegative:= true;
+       Gear^.dY:=Gear^.dY*skipDecay;
+       Gear^.dX:=Gear^.dX*skipDecay;
+       CheckGearDrowning:= false
+       end
+    else
+        begin
+        CheckGearDrowning:= true;
+        Gear^.State:= gstDrowning;
+        Gear^.doStep:= @doStepDrowningGear;
+        end;
+    PlaySound(sndSplash, false, nil)
+    end
+    else
 	CheckGearDrowning:= false
 end;
 
