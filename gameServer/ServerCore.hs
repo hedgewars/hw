@@ -29,11 +29,8 @@ mainLoop serverInfo clients rooms = do
 	(newServerInfo, mClients, mRooms) <-
 		case r of
 			Accept ci -> do
-				let updatedClients = IntMap.insert (clientUID ci) ci clients
-				infoM "Clients" ("New client: id " ++ (show $ clientUID ci))
 				liftM firstAway $ processAction
-					(clientUID ci, serverInfo, updatedClients, rooms)
-					(AnswerThisClient ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"])
+					(clientUID ci, serverInfo, clients, rooms) (AddClient ci)
 
 			ClientMessage (clID, cmd) -> do
 				debugM "Clients" $ (show clID) ++ ": " ++ (show cmd)
@@ -79,6 +76,3 @@ startServer serverInfo coreChan serverSocket = do
 	startDBConnection $ serverInfo
 
 	mainLoop serverInfo IntMap.empty (IntMap.singleton 0 newRoom)
-
-
-

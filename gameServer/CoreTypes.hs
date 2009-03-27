@@ -8,6 +8,7 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.IntSet as IntSet
 import Data.Sequence(Seq, empty)
+import Data.Time
 import Network
 
 
@@ -18,6 +19,7 @@ data ClientInfo =
 		sendChan :: Chan [String],
 		clientHandle :: Handle,
 		host :: String,
+		connectTime :: UTCTime,
 		nick :: String,
 		webPassword :: String,
 		logonPassed :: Bool,
@@ -119,6 +121,7 @@ data ServerInfo =
 		dbHost :: String,
 		dbLogin :: String,
 		dbPassword :: String,
+		lastLogins :: [(String, UTCTime)],
 		stats :: TMVar StatisticsInfo,
 		coreChan :: Chan CoreMessage,
 		dbQueries :: Chan DBQuery
@@ -137,6 +140,7 @@ newServerInfo = (
 		""
 		""
 		""
+		[]
 	)
 
 data AccountInfo =

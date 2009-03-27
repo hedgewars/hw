@@ -7,6 +7,8 @@ import qualified Data.IntSet as IntSet
 import qualified Data.Sequence as Seq
 import System.Log.Logger
 import Monad
+import Data.Time
+import Maybe
 -----------------------------
 import CoreTypes
 import Utils
@@ -39,6 +41,7 @@ data Action =
 	| CheckRegistered
 	| ProcessAccountInfo AccountInfo
 	| Dump
+	| AddClient ClientInfo
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
 
@@ -108,7 +111,7 @@ processAction (clID, serverInfo, clients, rooms) (Warning msg) = do
 
 processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 	mapM_ (processAction (clID, serverInfo, clients, rooms)) $ answerOthersQuit ++ answerInformRoom
-	writeChan (sendChan $ clients ! clID) ["BYE"]
+	writeChan (sendChan $ clients ! clID) ["BYE", msg]
 	return (
 			0,
 			serverInfo,
@@ -305,6 +308,7 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 processAction (clID, serverInfo, clients, rooms) (KickClient kickID) = do
 	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ ByeClient "Kicked")
 
+
 processAction (clID, serverInfo, clients, rooms) (BanClient banNick) = do
 	return (clID, serverInfo, clients, rooms)
 
@@ -322,3 +326,16 @@ processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) =
 		room = rooms ! (roomID client)
 		teamsToRemove = Prelude.filter (\t -> teamowner t == nick client) $ teams room
 		removeTeamsActions = Prelude.map (RemoveTeam . teamname) teamsToRemove
+
+
+processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
+	let updatedClients = insert (clientUID client) client clients
+	infoM "Clients" ((show $ clientUID client) ++ ": new client. Time: " ++ (show $ connectTime client))
+	writeChan (sendChan $ client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
+
+	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 20) $ lastLogins serverInfo
+
+	if isJust $ host client `Prelude.lookup` newLogins then
+		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
+		else
+		return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)

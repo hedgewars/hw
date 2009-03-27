@@ -26,7 +26,6 @@ acceptLoop servSock coreChan clientCounter = do
 		clientHost <- sockAddr2String sockAddr
 
 		currentTime <- getCurrentTime
-		--putStrLn $ (show currentTime) ++ " new client id: " ++ (show nextID)
 		
 		sendChan <- newChan
 
@@ -36,7 +35,7 @@ acceptLoop servSock coreChan clientCounter = do
 					sendChan
 					cHandle
 					clientHost
-					--currentTime
+					currentTime
 					""
 					""
 					False
