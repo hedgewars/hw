@@ -446,6 +446,19 @@ public:
 	PageAdmin(QWidget* parent = 0);
 
 	QPushButton * BtnBack;
+
+private:
+	QLineEdit * leServerMessage;
+	QPushButton * pbSetSM;
+
+private slots:
+	void smChanged();
+
+public slots:
+	void serverMessage(const QString & str);
+
+signals:
+	void setServerMessage(const QString & str);
 };
 
 #endif // PAGES_H

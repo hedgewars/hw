@@ -593,6 +593,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 	connect(hwnet, SIGNAL(teamColorChanged(const HWTeam&)),
 		ui.pageNetGame->pNetTeamsWidget, SLOT(changeTeamColor(const HWTeam&)));
 
+// admin stuff
+	connect(hwnet, SIGNAL(serverMessage(const QString&)), ui.pageAdmin, SLOT(serverMessage(const QString &)));
+
 // disconnect
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
 	

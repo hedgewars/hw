@@ -981,5 +981,25 @@ PageAdmin::PageAdmin(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
+	QLabel * lblSM = new QLabel(this);
+	lblSM->setText(tr("Server message:"));
+	pageLayout->addWidget(lblSM, 0, 0);
+
+	leServerMessage = new QLineEdit(this);
+	pageLayout->addWidget(leServerMessage, 0, 1);
+
+	pbSetSM = addButton(tr("Set message"), pageLayout, 0, 2);
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+
+	connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
+}
+
+void PageAdmin::smChanged()
+{
+	emit setServerMessage(leServerMessage->text());
+}
+
+void PageAdmin::serverMessage(const QString & str)
+{
+	leServerMessage->setText(str);
 }

@@ -55,7 +55,6 @@ acceptLoop servSock coreChan clientCounter = do
 		forkIO $ clientSendLoop cHandle coreChan sendChan nextID
 		return ()
 
-	yield -- hm?
 	acceptLoop servSock coreChan nextID
 	where
 		nextID = clientCounter + 1
