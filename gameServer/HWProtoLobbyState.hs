@@ -137,4 +137,13 @@ handleCmd_lobby clID clients rooms ["BAN", banNick] =
 		client = clients IntMap.! clID
 
 
+handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", newMessage] =
+	if not $ isAdministrator client then
+		[]
+	else
+		[ModifyServerInfo (\si -> si{serverMessage = newMessage})]
+	where
+		client = clients IntMap.! clID
+
+
 handleCmd_lobby clID _ _ _ = [ProtocolError "Incorrect command (state: in lobby)"]

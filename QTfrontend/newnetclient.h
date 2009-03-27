@@ -130,6 +130,8 @@ class HWNewNet : public QObject
   void onHedgehogsNumChanged(const HWTeam& team);
   void onTeamColorChanged(const HWTeam& team);
   void onParamChanged(const QString & param, const QStringList & value);
+  
+  void newServerMessage(const QString &);
 
 
   void JoinRoom(const QString & room);

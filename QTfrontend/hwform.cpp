@@ -595,6 +595,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 // admin stuff
 	connect(hwnet, SIGNAL(serverMessage(const QString&)), ui.pageAdmin, SLOT(serverMessage(const QString &)));
+	connect(ui.pageAdmin, SIGNAL(setServerMessage(const QString&)), hwnet, SLOT(newServerMessage(const QString &)));
 
 // disconnect
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);

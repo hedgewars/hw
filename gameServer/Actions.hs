@@ -34,6 +34,7 @@ data Action =
 	| RemoveClientTeams Int -- clID
 	| ModifyClient (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
+	| ModifyServerInfo (ServerInfo -> ServerInfo)
 	| AddRoom String String
 	| CheckRegistered
 	| ProcessAccountInfo AccountInfo
@@ -148,6 +149,10 @@ processAction (clID, serverInfo, clients, rooms) (ModifyRoom func) = do
 	return (clID, serverInfo, clients, adjust func rID rooms)
 	where
 		rID = roomID $ clients ! clID
+
+
+processAction (clID, serverInfo, clients, rooms) (ModifyServerInfo func) = do
+	return (clID, func serverInfo, clients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) = do

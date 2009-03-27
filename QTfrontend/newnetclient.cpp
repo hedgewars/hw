@@ -657,3 +657,8 @@ bool HWNewNet::isInRoom()
 {
 	return netClientState > 2;
 }
+
+void HWNewNet::newServerMessage(const QString & msg)
+{
+	RawSendNet(QString("SET_SERVER_MESSAGE%1%2").arg(delimeter).arg(msg));
+}
