@@ -343,8 +343,14 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 
 
 processAction (clID, serverInfo, clients, rooms) PingAll = do
+	(_, _, newClients, newRooms) <- foldM kickTimeouted (clID, serverInfo, clients, rooms) $ elems clients
 	processAction (clID,
 		serverInfo,
-		map (\cl -> cl{pingsQueue = pingsQueue cl + 1}) clients,
-		rooms) $ AnswerAll ["PING"]
-
+		Data.IntMap.map (\cl -> cl{pingsQueue = pingsQueue cl + 1}) newClients,
+		newRooms) $ AnswerAll ["PING"]
+	where
+		kickTimeouted (clID, serverInfo, clients, rooms) client =
+			if pingsQueue client > 0 then
+				processAction (clientUID client, serverInfo, clients, rooms) $ ByeClient "Ping timeout"
+				else
+				return (clID, serverInfo, clients, rooms)

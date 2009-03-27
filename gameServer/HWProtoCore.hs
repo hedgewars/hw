@@ -24,6 +24,15 @@ handleCmd clID clients rooms ("QUIT" : xs) =
 		msg = if not $ null xs then head xs else ""
 
 
+handleCmd clID clients _ ["PONG"] =
+	if pingsQueue client == 0 then
+		[ProtocolError "Protocol violation"]
+	else
+		[ModifyClient (\cl -> cl{pingsQueue = pingsQueue cl - 1})]
+	where
+		client = clients IntMap.! clID
+
+
 handleCmd clID clients rooms cmd =
 	if not $ logonPassed client then
 		handleCmd_NotEntered clID clients rooms cmd
