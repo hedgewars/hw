@@ -16,6 +16,11 @@ import Actions
 import OfficialServer.DBInteraction
 
 
+timerLoop :: Chan CoreMessage -> IO()
+timerLoop messagesChan = forever $ do
+	threadDelay (30 * 10^6) -- 30 seconds
+	writeChan messagesChan TimerAction
+
 firstAway (_, a, b, c) = (a, b, c)
 
 reactCmd :: ServerInfo -> Int -> [String] -> Clients -> Rooms -> IO (ServerInfo, Clients, Rooms)
@@ -50,6 +55,11 @@ mainLoop serverInfo clients rooms = do
 					do
 					debugM "Clients" "Got info for dead client"
 					return (serverInfo, clients, rooms)
+
+			TimerAction ->
+				liftM firstAway $ processAction
+						(0, serverInfo, clients, rooms)
+						PingAll
 			
 
 	{-			let hadRooms = (not $ null rooms) && (null mrooms)
@@ -58,20 +68,19 @@ mainLoop serverInfo clients rooms = do
 
 	mainLoop newServerInfo mClients mRooms
 
-startServer :: ServerInfo -> Chan CoreMessage -> Socket -> IO ()
-startServer serverInfo coreChan serverSocket = do
+startServer :: ServerInfo -> Socket -> IO ()
+startServer serverInfo serverSocket = do
 	putStrLn $ "Listening on port " ++ show (listenPort serverInfo)
 
 	forkIO $
 		acceptLoop
 			serverSocket
-			coreChan
+			(coreChan serverInfo)
 			0
 
 	return ()
 	
-{-	forkIO $ messagesLoop messagesChan
-	forkIO $ timerLoop messagesChan-}
+	forkIO $ timerLoop $ coreChan serverInfo
 
 	startDBConnection $ serverInfo
 

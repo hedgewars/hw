@@ -25,6 +25,7 @@ data ClientInfo =
 		logonPassed :: Bool,
 		clientProto :: Word16,
 		roomID :: Int,
+		pingsQueue :: Word,
 		isMaster :: Bool,
 		isReady :: Bool,
 		isAdministrator :: Bool,
@@ -152,8 +153,7 @@ data CoreMessage =
 	Accept ClientInfo
 	| ClientMessage (Int, [String])
 	| ClientAccountInfo Int AccountInfo
-	-- | CoreMessage String
-	-- | TimerTick
+	| TimerAction
 
 data DBQuery =
 	CheckAccount ClientInfo

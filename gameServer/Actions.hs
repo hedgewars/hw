@@ -42,6 +42,7 @@ data Action =
 	| ProcessAccountInfo AccountInfo
 	| Dump
 	| AddClient ClientInfo
+	| PingAll
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
 
@@ -56,7 +57,7 @@ processAction (clID, serverInfo, clients, rooms) (AnswerThisClient msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerAll msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) (keys clients)
+	mapM_ (\cl -> writeChan (sendChan cl) msg) (elems clients)
 	return (clID, serverInfo, clients, rooms)
 
 
@@ -330,7 +331,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) =
 
 processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 	let updatedClients = insert (clientUID client) client clients
-	infoM "Clients" ((show $ clientUID client) ++ ": new client. Time: " ++ (show $ connectTime client))
+	infoM "Clients" ((show $ clientUID client) ++ ": New client. Time: " ++ (show $ connectTime client))
 	writeChan (sendChan $ client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
 	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 20) $ lastLogins serverInfo
@@ -339,3 +340,11 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
 		else
 		return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
+
+
+processAction (clID, serverInfo, clients, rooms) PingAll = do
+	processAction (clID,
+		serverInfo,
+		map (\cl -> cl{pingsQueue = pingsQueue cl + 1}) clients,
+		rooms) $ AnswerAll ["PING"]
+
