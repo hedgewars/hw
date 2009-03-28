@@ -205,8 +205,7 @@ handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
 			if (kickID == clID) || (roomID client /= roomID kickClient) then
 				[]
 			else
-				[RemoveClientTeams kickID,
-				KickRoomClient kickID]
+				[KickRoomClient kickID]
 	where
 		client = clients IntMap.! clID
 		maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients

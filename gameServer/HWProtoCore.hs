@@ -16,11 +16,8 @@ handleCmd, handleCmd_loggedin :: CmdHandler
 handleCmd clID _ _ ["PING"] = [AnswerThisClient ["PONG"]]
 
 handleCmd clID clients rooms ("QUIT" : xs) =
-	(if isMaster client then [RemoveRoom] else [RemoveClientTeams clID])
-	++ [ByeClient msg]
+	[ByeClient msg]
 	where
-		client = clients IntMap.! clID
-		clientNick = nick client
 		msg = if not $ null xs then head xs else ""
 
 

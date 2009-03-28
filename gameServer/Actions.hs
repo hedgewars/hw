@@ -111,17 +111,21 @@ processAction (clID, serverInfo, clients, rooms) (Warning msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
-	mapM_ (processAction (clID, serverInfo, clients, rooms)) $ answerOthersQuit ++ answerInformRoom
+	(_, _, newClients, newRooms) <-
+			processAction  (clID, serverInfo, clients, rooms)
+					(if isMaster client then RemoveRoom else RemoveClientTeams clID)
+
+	mapM_ (processAction (clID, serverInfo, newClients, newRooms)) $ answerOthersQuit ++ answerInformRoom
 	writeChan (sendChan $ clients ! clID) ["BYE", msg]
 	return (
 			0,
 			serverInfo,
-			delete clID clients,
+			delete clID newClients,
 			adjust (\r -> r{
 					playersIDs = IntSet.delete clID (playersIDs r),
 					playersIn = (playersIn r) - 1,
 					readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
-					}) rID rooms
+					}) rID newRooms
 			)
 	where
 		client = clients ! clID
@@ -180,7 +184,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient) = do
 	return (
 		clID,
 		serverInfo,
-		adjust (\cl -> cl{roomID = 0}) clID clients,
+		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False}) clID clients,
 		adjust (\r -> r{
 				playersIDs = IntSet.delete clID (playersIDs r),
 				playersIn = (playersIn r) - 1,

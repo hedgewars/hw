@@ -241,7 +241,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "PING") {
-		RawSendNet(QString("PONG"));
+		if (lst.size() > 1)
+			RawSendNet(QString("PONG%1%2").arg(delimeter).arg(lst[1]));
+		else
+			RawSendNet(QString("PONG"));
 		return;
 	}
 
