@@ -342,10 +342,10 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 
 	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 20) $ lastLogins serverInfo
 
---	if isJust $ host client `Prelude.lookup` newLogins then
---		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
---		else
-	return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
+	if isJust $ host client `Prelude.lookup` newLogins then
+		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
+		else
+		return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) PingAll = do
