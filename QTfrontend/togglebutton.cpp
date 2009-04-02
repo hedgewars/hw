@@ -32,6 +32,8 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 	pmChecked.load(img);
 	pmDisabled.load(img);
 
+	pbMain->setMaximumWidth(pmChecked.width() + 6);
+
 	l->addWidget(pbMain);
 
 	painter->begin(&pmDisabled);
@@ -44,7 +46,8 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 	connect(pbMain, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
 
 	lbMain = new QLabel(this);
-	lbMain->setFixedHeight(32);
+	lbMain->setWordWrap(true);
+//	lbMain->setFixedHeight(32);
 
 	l->addWidget(lbMain);
 }

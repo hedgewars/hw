@@ -922,6 +922,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Damage Modifier"));
+	l->setWordWrap(true);
 	glBSLayout->addWidget(l,0,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
@@ -936,6 +937,7 @@ PageScheme::PageScheme(QWidget* parent) :
 
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Turn Time"));
+	l->setWordWrap(true);
 	glBSLayout->addWidget(l,1,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
@@ -950,6 +952,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Initial Health"));
+	l->setWordWrap(true);
 	glBSLayout->addWidget(l,2,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
@@ -964,6 +967,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Sudden Death Timeout"));
+	l->setWordWrap(true);
 	glBSLayout->addWidget(l,3,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
@@ -978,6 +982,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Case Probability"));
+	l->setWordWrap(true);
 	glBSLayout->addWidget(l,4,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
