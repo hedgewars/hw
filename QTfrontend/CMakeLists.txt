@@ -86,6 +86,7 @@ set(hwfr_src
 	statsPage.cpp
 	misc.cpp
 	ammoSchemeModel.cpp
+	togglebutton.cpp
 	)
 
 if(MINGW)
@@ -135,6 +136,7 @@ set(hwfr_moc_hdrs
 	statsPage.h
 	misc.h
 	ammoSchemeModel.h
+	togglebutton.h
 	)
 
 set(hwfr_hdrs

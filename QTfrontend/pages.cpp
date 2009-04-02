@@ -59,6 +59,7 @@
 #include "igbox.h"
 #include "hats.h"
 #include "misc.h"
+#include "togglebutton.h"
 
 PageMain::PageMain(QWidget* parent) : 
   AbstractPage(parent)
@@ -467,7 +468,7 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	pageLayout->addWidget(BtnNetSvrStart, 4, 2);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-
+	
 	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
 	pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
@@ -858,71 +859,144 @@ PageScheme::PageScheme(QWidget* parent) :
 	AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
+	QGroupBox * gb = new QGroupBox(QGroupBox::tr("Scheme options"), this);
+	
+	QGridLayout * gl = new QGridLayout();
+	gb->setLayout(gl);
 
-	CB_mode_Forts = new QCheckBox(this);
-	CB_mode_Forts->setText(QCheckBox::tr("Forts mode"));
-	pageLayout->addWidget(CB_mode_Forts, 0, 0, 1, 2);
+	pageLayout->addWidget(gb, 1,0,13,4);
+	
+	QGroupBox * gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
+	QGroupBox * gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
+	
+	gl->addWidget(gbGameModes,0,0,1,1);
+	gl->addWidget(gbBasicSettings,0,1,1,1);
+	
+	QGridLayout * glGMLayout = new QGridLayout(gbGameModes);
+	QGridLayout * glBSLayout = new QGridLayout(gbBasicSettings);
+	gbGameModes->setLayout(glGMLayout);
+	gbBasicSettings->setLayout(glBSLayout);
+	// Left
+	
+	TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts.png");
+	TBW_mode_Forts->setText(ToggleButtonWidget::tr("Fort Mode"));
+	glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
 
-	CB_teamsDivide = new QCheckBox(this);
-	CB_teamsDivide->setText(QCheckBox::tr("Divide teams"));
-	pageLayout->addWidget(CB_teamsDivide, 1, 0, 1, 2);
+	TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide.png");
+	TBW_teamsDivide->setText(ToggleButtonWidget::tr("Divide Teams"));
+	glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
+	//pageLayout->addWidget(TBW_teamsDivide, 1, 0, 1, 2);
 
-	CB_solid = new QCheckBox(this);
-	CB_solid->setText(QCheckBox::tr("Solid land"));
-	pageLayout->addWidget(CB_solid, 2, 0, 1, 2);
+	TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid.png");
+	TBW_solid->setText(ToggleButtonWidget::tr("Solid Land"));
+	glGMLayout->addWidget(TBW_solid,0,2,1,1);
+	//pageLayout->addWidget(TBW_solid, 2, 0, 1, 2);
 
-	CB_border = new QCheckBox(this);
-	CB_border->setText(QCheckBox::tr("Add Border"));
-	pageLayout->addWidget(CB_border, 3, 0, 1, 2);
+	TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
+	TBW_border->setText(ToggleButtonWidget::tr("Add Border"));
+	glGMLayout->addWidget(TBW_border,0,3,1,1);
+	//pageLayout->addWidget(TBW_border, 3, 0, 1, 2);
 
-	CB_lowGravity = new QCheckBox(this);
-	CB_lowGravity->setText(QCheckBox::tr("Low Gravity"));
-	pageLayout->addWidget(CB_lowGravity, 4, 0, 1, 2);
+	TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
+	TBW_lowGravity->setText(ToggleButtonWidget::tr("Low Gravity"));
+	glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
+	//pageLayout->addWidget(TBW_lowGravity, 4, 0, 1, 2);
 
-	CB_laserSight = new QCheckBox(this);
-	CB_laserSight->setText(QCheckBox::tr("Laser Sight"));
-	pageLayout->addWidget(CB_laserSight, 5, 0, 1, 2);
+	TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
+	TBW_laserSight->setText(ToggleButtonWidget::tr("Laser Sight"));
+	glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
+	//pageLayout->addWidget(TBW_laserSight, 5, 0, 1, 2);
 
-	CB_invulnerable = new QCheckBox(this);
-	CB_invulnerable->setText(QCheckBox::tr("Invulnerable"));
-	pageLayout->addWidget(CB_invulnerable, 6, 0, 1, 2);
+	TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvurnable.png");
+	TBW_invulnerable->setText(ToggleButtonWidget::tr("Invulnerable"));
+	glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
+	//pageLayout->addWidget(TBW_invulnerable, 6, 0, 1, 2);
 
-	CB_mines = new QCheckBox(this);
-	CB_mines->setText(QCheckBox::tr("Add Mines"));
-	pageLayout->addWidget(CB_mines, 7, 0, 1, 2);
+	TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
+	TBW_mines->setText(ToggleButtonWidget::tr("Add Mines"));
+	glGMLayout->addWidget(TBW_mines,1,3,1,1);
+	//pageLayout->addWidget(TBW_mines, 7, 0, 1, 2);
 
-	SB_DamageModifier = new QSpinBox(this);
+	// Right
+	QLabel * l;
+	
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Damage Modifier"));
+	glBSLayout->addWidget(l,0,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconDamage.png"));
+	glBSLayout->addWidget(l,0,2,1,1);
+	
+	SB_DamageModifier = new QSpinBox(gbBasicSettings);
 	SB_DamageModifier->setRange(10, 300);
 	SB_DamageModifier->setValue(100);
 	SB_DamageModifier->setSingleStep(25);
+	glBSLayout->addWidget(SB_DamageModifier,0,1,1,1);
+
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Turn Time"));
+	glBSLayout->addWidget(l,1,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconTime.png"));
+	glBSLayout->addWidget(l,1,2,1,1);
 	
-	SB_TurnTime = new QSpinBox(this);
+	SB_TurnTime = new QSpinBox(gbBasicSettings);
 	SB_TurnTime->setRange(1, 99);
 	SB_TurnTime->setValue(45);
 	SB_TurnTime->setSingleStep(15);
+	glBSLayout->addWidget(SB_TurnTime,1,1,1,1);
 	
-	SB_InitHealth = new QSpinBox(this);
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Initial Health"));
+	glBSLayout->addWidget(l,2,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconHealth.png"));
+	glBSLayout->addWidget(l,2,2,1,1);
+	
+	SB_InitHealth = new QSpinBox(gbBasicSettings);
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
+	glBSLayout->addWidget(SB_InitHealth,2,1,1,1);
 	
-	SB_SuddenDeath = new QSpinBox(this);
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Sudden Death Timeout"));
+	glBSLayout->addWidget(l,3,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
+	glBSLayout->addWidget(l,3,2,1,1);
+
+	SB_SuddenDeath = new QSpinBox(gbBasicSettings);
 	SB_SuddenDeath->setRange(0, 50);
 	SB_SuddenDeath->setValue(15);
 	SB_SuddenDeath->setSingleStep(3);
+	glBSLayout->addWidget(SB_SuddenDeath,3,1,1,1);
 	
-	SB_CaseProb = new FreqSpinBox(this);
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Case Probability"));
+	glBSLayout->addWidget(l,4,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconBox.png"));
+	glBSLayout->addWidget(l,4,2,1,1);
+
+	SB_CaseProb = new FreqSpinBox(gbBasicSettings);
 	SB_CaseProb->setRange(0, 9);
 	SB_CaseProb->setValue(5);
+	glBSLayout->addWidget(SB_CaseProb,4,1,1,1);
+
+
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Scheme Name:"));
 
 	LE_name = new QLineEdit(this);
-
-	pageLayout->addWidget(SB_DamageModifier, 8, 1);
-	pageLayout->addWidget(SB_TurnTime, 9, 1);
-	pageLayout->addWidget(SB_InitHealth, 10, 1);
-	pageLayout->addWidget(SB_SuddenDeath, 11, 1);
-	pageLayout->addWidget(SB_CaseProb, 12, 1);
-	pageLayout->addWidget(LE_name, 13, 1);
+	
+	gl->addWidget(LE_name,14,1,1,1);
+	gl->addWidget(l,14,0,1,1);
 
 	mapper = new QDataWidgetMapper(this);
 
@@ -944,14 +1018,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	selectScheme->setModel(model);
 	
 	mapper->addMapping(LE_name, 0);
-	mapper->addMapping(CB_mode_Forts, 1);
-	mapper->addMapping(CB_teamsDivide, 2);
-	mapper->addMapping(CB_solid, 3);
-	mapper->addMapping(CB_border, 4);
-	mapper->addMapping(CB_lowGravity, 5);
-	mapper->addMapping(CB_laserSight, 6);
-	mapper->addMapping(CB_invulnerable, 7);
-	mapper->addMapping(CB_mines, 8);
+	mapper->addMapping(TBW_mode_Forts->button(), 1);
+	mapper->addMapping(TBW_teamsDivide->button(), 2);
+	mapper->addMapping(TBW_solid->button(), 3);
+	mapper->addMapping(TBW_border->button(), 4);
+	mapper->addMapping(TBW_lowGravity->button(), 5);
+	mapper->addMapping(TBW_laserSight->button(), 6);
+	mapper->addMapping(TBW_invulnerable->button(), 7);
+	mapper->addMapping(TBW_mines->button(), 8);
 	mapper->addMapping(SB_DamageModifier, 9);
 	mapper->addMapping(SB_TurnTime, 10);
 	mapper->addMapping(SB_InitHealth, 11);

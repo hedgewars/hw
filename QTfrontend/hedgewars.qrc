@@ -44,6 +44,19 @@
     <file>res/spin_down.png</file>
     <file>res/PlaySound.png</file>
     <file>res/hh_small.png</file>
-    <file>res/dice.png</file>
+    <file>res/btnDisabled.png</file>
+    <file>res/btnForts.png</file>
+    <file>res/btnBorder.png</file>
+    <file>res/btnInvurnable.png</file>
+    <file>res/btnLaserSight.png</file>
+    <file>res/btnLowGravity.png</file>
+    <file>res/btnMines.png</file>
+    <file>res/btnTeamsDivide.png</file>
+    <file>res/btnSolid.png</file>
+    <file>res/iconBox.png</file>
+    <file>res/iconHealth.png</file>
+    <file>res/iconSuddenDeath.png</file>
+    <file>res/iconDamage.png</file>
+    <file>res/iconTime.png</file>
 </qresource>
 </RCC>

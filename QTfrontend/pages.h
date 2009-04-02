@@ -27,6 +27,7 @@
 
 #include "binds.h"
 #include "mapContainer.h"
+#include "togglebutton.h"
 
 class QPushButton;
 class QGroupBox;
@@ -416,14 +417,14 @@ public:
 
 private:
 	QDataWidgetMapper * mapper;
-	QCheckBox * CB_mode_Forts;
-	QCheckBox * CB_teamsDivide;
-	QCheckBox * CB_solid;
-	QCheckBox * CB_border;
-	QCheckBox * CB_lowGravity;
-	QCheckBox * CB_laserSight;
-	QCheckBox * CB_invulnerable;
-	QCheckBox * CB_mines;
+	ToggleButtonWidget * TBW_mode_Forts;
+	ToggleButtonWidget * TBW_teamsDivide;
+	ToggleButtonWidget * TBW_solid;
+	ToggleButtonWidget * TBW_border;
+	ToggleButtonWidget * TBW_lowGravity;
+	ToggleButtonWidget * TBW_laserSight;
+	ToggleButtonWidget * TBW_invulnerable;
+	ToggleButtonWidget * TBW_mines;
 
 	QSpinBox * SB_DamageModifier;
 	QSpinBox * SB_TurnTime;
