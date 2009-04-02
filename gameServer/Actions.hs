@@ -112,8 +112,11 @@ processAction (clID, serverInfo, clients, rooms) (Warning msg) = do
 
 processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 	(_, _, newClients, newRooms) <-
-			processAction  (clID, serverInfo, clients, rooms)
+			if roomID client /= 0 then
+				processAction  (clID, serverInfo, clients, rooms)
 					(if isMaster client then RemoveRoom else RemoveClientTeams clID)
+				else
+					return (clID, serverInfo, clients, rooms)
 
 	mapM_ (processAction (clID, serverInfo, newClients, newRooms)) $ answerOthersQuit ++ answerInformRoom
 	writeChan (sendChan $ clients ! clID) ["BYE", msg]
@@ -125,11 +128,10 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 					playersIDs = IntSet.delete clID (playersIDs r),
 					playersIn = (playersIn r) - 1,
 					readyPlayers = if isReady client then readyPlayers r - 1 else readyPlayers r
-					}) rID newRooms
+					}) (roomID $ newClients ! clID) newRooms
 			)
 	where
 		client = clients ! clID
-		rID = roomID client
 		clientNick = nick client
 		answerInformRoom =
 			if roomID client /= 0 then
@@ -340,10 +342,10 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 
 	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 20) $ lastLogins serverInfo
 
-	if isJust $ host client `Prelude.lookup` newLogins then
-		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
-		else
-		return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
+--	if isJust $ host client `Prelude.lookup` newLogins then
+--		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"
+--		else
+	return (clID, serverInfo{lastLogins = (host client, connectTime client) : newLogins}, updatedClients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) PingAll = do
