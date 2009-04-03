@@ -656,7 +656,7 @@ end;
 procedure DrawHH(Gear: PGear);
 var t: LongInt;
 	amt: TAmmoType;
-	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite`
+	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
@@ -881,7 +881,15 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
 				defaultPos:= false
 				end;
-			amGirder: DrawSprite(sprGirder, sx-256, sy-256, 0);
+			amGirder: begin
+                DrawSpriteClipped(sprGirder, 
+                                  sx-256, 
+                                  sy-256, 
+                                  LongInt(topY)+WorldDy, 
+                                  LongInt(rightX)+WorldDx, 
+                                  cWaterLine+WorldDy,
+                                  LongInt(leftX)+WorldDx);
+                end;
 		end;
 
 		case amt of
@@ -1714,7 +1722,10 @@ repeat
 	repeat
 		inc(x, Delta);
 		cnt:= 0;
-		y:= -Gear^.Radius * 2;
+        if topY > 1024 then
+		    y:= 1024-Gear^.Radius * 2
+        else 
+		    y:= topY-Gear^.Radius * 2;
 		while y < LAND_HEIGHT do
 			begin
 			repeat

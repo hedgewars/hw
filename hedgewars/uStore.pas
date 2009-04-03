@@ -33,6 +33,7 @@ procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
@@ -267,6 +268,8 @@ LoadGraves;
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
 	with SpritesData[ii] do
+        if (not cReducedQuality) or 
+           ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 			begin
 			if AltPath = ptNone then
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, true, true)
@@ -505,6 +508,30 @@ r.w:= SpritesData[Sprite].Width;
 r.y:= Frame * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+end;
+
+procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
+var r: TSDL_Rect;
+begin
+r.x:= 0;
+r.y:= 0;
+r.w:= SpritesData[Sprite].Width;
+r.h:= SpritesData[Sprite].Height;
+
+if (X < LeftX) then
+    r.x:= LeftX - X;
+if (Y < TopY) then
+    r.y:= TopY - Y;
+
+if (Y + SpritesData[Sprite].Height > BottomY) then
+    r.h:= BottomY - Y + 1;
+if (X + SpritesData[Sprite].Width > RightX) then
+    r.w:= RightX - X + 1;
+
+dec(r.h, r.y);
+dec(r.w, r.x);
+
+DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
