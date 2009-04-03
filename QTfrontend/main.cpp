@@ -178,9 +178,6 @@ int main(int argc, char *argv[])
 			"QComboBox::down-arrow {"
 				"image: url(\":/res/dropdown.png\");"
 			"}"
-			"QComboBox QAbstractItemView {"
-				"border: solid transparent;"
-			"}"
 			
 			"VertScrArea {"
 				"background-image: url(\":/res/panelbg.png\");"

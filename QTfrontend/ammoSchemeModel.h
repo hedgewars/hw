@@ -40,6 +40,8 @@ public:
 	bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
 	QVariant data(const QModelIndex &index, int role) const;
 
+	const int numberOfDefaultSchemes;
+
 public slots:
 	void Save();
 
@@ -53,8 +55,6 @@ private:
 	QSettings fileConfig;
 
 	QStringList spNames;
-
-	const int numberOfDefaultSchemes;
 };
 
 class NetAmmoSchemeModel : public QAbstractTableModel

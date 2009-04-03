@@ -41,8 +41,8 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 	QAbstractTableModel(parent),
-	fileConfig(fileName, QSettings::IniFormat),
-	numberOfDefaultSchemes(2)
+	numberOfDefaultSchemes(2),
+	fileConfig(fileName, QSettings::IniFormat)
 {
 	QStringList predefSchemesNames;
 	predefSchemesNames
