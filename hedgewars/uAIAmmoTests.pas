@@ -288,14 +288,18 @@ TestMortar:= Result
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+const
+  MIN_RANGE =  80;
+  MAX_RANGE = 400;
 var Vx, Vy, x, y: hwFloat;
     rx, ry, Result: LongInt;
+    range: integer;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
-if Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y) < 80 then
-   exit(BadTurn);
+range:= Metric(hwRound(Me^.X), hwRound(Me^.Y), Targ.X, Targ.Y);
+if ( range < MIN_RANGE ) or ( range > MAX_RANGE ) then exit(BadTurn);
 Vx:= (int2hwFloat(Targ.X) - Me^.X) * _1div1024;
 Vy:= (int2hwFloat(Targ.Y) - Me^.Y) * _1div1024;
 x:= Me^.X;
@@ -315,7 +319,7 @@ repeat
                    else dec(Result, Level * 4000);
      exit(Result)
      end
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x < _0) or (y < _0) or (x > _2048) or (y > _1024);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT);
 TestShotgun:= BadTurn
 end;
 
@@ -336,12 +340,14 @@ x:= Me^.X;
 y:= Me^.Y;
 ap.Angle:= DxDy2AttackAngle(Vx, -Vy);
 d:= 0;
+
 repeat
   x:= x + vX;
   y:= y + vY;
   if ((hwRound(x) and LAND_WIDTH_MASK) = 0)and((hwRound(y) and LAND_HEIGHT_MASK) = 0)
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
-until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x < _0) or (y < _0) or (x > _2048) or (y > _1024) or (d > 200);
+until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT) or (d > 200);
+
 if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then Result:= max(0, (4 - d div 50) * 7 * 1024)
                                                            else Result:= BadTurn;
 TestDesertEagle:= Result

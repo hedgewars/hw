@@ -237,6 +237,8 @@ RateShove:= Result * 1024
 end;
 
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
+const
+  REUSE_BONUS = 1.35;
 var i, dmg, Result: LongInt;
 begin
 Result:= 0;
@@ -252,14 +254,12 @@ for i:= 0 to Targets.Count do
     with Targets.ar[i] do
          begin
          dmg:= min(cHHRadius + cShotgunRadius - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
+         dmg := round(dmg * REUSE_BONUS);
          if dmg > 0 then
             begin
-            if dmg >= abs(Score) then
-               if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * friendlyfactor div 100)
-            else
-               if Score > 0 then inc(Result, dmg)
-                            else dec(Result, dmg * friendlyfactor div 100)
+                if dmg >= abs(Score) then dmg := KillScore;
+                if Score > 0 then inc(Result, dmg)
+                else dec(Result, dmg * friendlyfactor div 100);
             end;
          end;
 RateShotgun:= Result * 1024
