@@ -2,6 +2,23 @@
 <!DOCTYPE TS><TS version="1.1" language="ru">
 <defaultcodec></defaultcodec>
 <context>
+    <name>FreqSpinBox</name>
+    <message>
+        <location filename="../../../../QTfrontend/misc.h" line="38"/>
+        <source>Never</source>
+        <translation>Никогда</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../../../../QTfrontend/misc.h" line="40"/>
+        <source>Every %1 turn</source>
+        <translation>
+            <numerusform>Каждый ход</numerusform>
+            <numerusform>Каждые %1 хода</numerusform>
+            <numerusform>Каждые %1 ходов</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>GameCFGWidget</name>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
@@ -291,12 +308,12 @@
 <context>
     <name>PageAdmin</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1059"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1069"/>
         <source>Server message:</source>
         <translation>Сообщение сервера:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1065"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1075"/>
         <source>Set message</source>
         <translation>Установить сообщение</translation>
     </message>
@@ -572,12 +589,12 @@
 <context>
     <name>PageScheme</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1004"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1014"/>
         <source>New</source>
         <translation>Новая</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1005"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1015"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
@@ -889,15 +906,15 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="862"/>
         <source>Scheme options</source>
-        <translation>Настройки схемы</translation>
+        <translation type="obsolete">Настройки схемы</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="869"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="872"/>
         <source>Game Modifiers</source>
         <translation>Модификаторы игры</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="870"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="873"/>
         <source>Basic Settings</source>
         <translation>Основные настройки</translation>
     </message>
@@ -1063,34 +1080,39 @@
         <translation>Начальная громкость</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="924"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
         <source>Damage Modifier</source>
         <translation>Модификатор урона</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="944"/>
         <source>Turn Time</source>
         <translation>Время хода</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="952"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="959"/>
         <source>Initial Health</source>
         <translation>Начальное здоровье</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="966"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="974"/>
         <source>Sudden Death Timeout</source>
         <translation>Время до скорой смерти</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="980"/>
         <source>Case Probability</source>
-        <translation>Вероятность бонуса</translation>
+        <translation type="obsolete">Вероятность бонуса</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="994"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1004"/>
         <source>Scheme Name:</source>
         <translation>Название схемы:</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="989"/>
+        <source>Crate Drops</source>
+        <translation>Бонус выпадает</translation>
     </message>
 </context>
 <context>
@@ -1121,12 +1143,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="266"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="263"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="269"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="266"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1413,42 +1435,42 @@ Please check your installation</source>
 <context>
     <name>ToggleButtonWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="882"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="894"/>
         <source>Fort Mode</source>
         <translation>Режим фортов</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="886"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
         <source>Divide Teams</source>
         <translation>Разделить команды</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="891"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="902"/>
         <source>Solid Land</source>
         <translation>Неразрушаемая земля</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="896"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="906"/>
         <source>Add Border</source>
         <translation>Добавить границу</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="901"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="910"/>
         <source>Low Gravity</source>
         <translation>Низкая гравитация</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="906"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="914"/>
         <source>Laser Sight</source>
         <translation>Лазерный прицел</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="911"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
         <source>Invulnerable</source>
         <translation>Неуязвимость</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="916"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="922"/>
         <source>Add Mines</source>
         <translation>Добавить мины</translation>
     </message>

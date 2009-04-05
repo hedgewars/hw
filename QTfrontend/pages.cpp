@@ -859,18 +859,30 @@ PageScheme::PageScheme(QWidget* parent) :
 	AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	QGroupBox * gb = new QGroupBox(QGroupBox::tr("Scheme options"), this);
+	QGroupBox * gb = new QGroupBox(this);
 	
 	QGridLayout * gl = new QGridLayout();
 	gb->setLayout(gl);
+	QSizePolicy sp;
+	sp.setVerticalPolicy(QSizePolicy::MinimumExpanding);
+	sp.setHorizontalPolicy(QSizePolicy::Expanding);
 
 	pageLayout->addWidget(gb, 1,0,13,4);
 	
 	QGroupBox * gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
 	QGroupBox * gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
-	
-	gl->addWidget(gbGameModes,0,0,1,1);
-	gl->addWidget(gbBasicSettings,0,1,1,1);
+
+	gbGameModes->setStyleSheet(".QGroupBox {"
+			"background-color: #130f2c; background-image:url();"
+			"}");
+	gbBasicSettings->setStyleSheet(".QGroupBox {"
+			"background-color: #130f2c; background-image:url();"
+			"}");
+
+	gbGameModes->setSizePolicy(sp);
+	gbBasicSettings->setSizePolicy(sp);
+	gl->addWidget(gbGameModes,0,0,1,3,Qt::AlignTop);
+	gl->addWidget(gbBasicSettings,0,3,1,3,Qt::AlignTop);
 	
 	QGridLayout * glGMLayout = new QGridLayout(gbGameModes);
 	QGridLayout * glBSLayout = new QGridLayout(gbBasicSettings);
@@ -885,37 +897,30 @@ PageScheme::PageScheme(QWidget* parent) :
 	TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide.png");
 	TBW_teamsDivide->setText(ToggleButtonWidget::tr("Divide Teams"));
 	glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
-	//pageLayout->addWidget(TBW_teamsDivide, 1, 0, 1, 2);
 
 	TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid.png");
 	TBW_solid->setText(ToggleButtonWidget::tr("Solid Land"));
 	glGMLayout->addWidget(TBW_solid,0,2,1,1);
-	//pageLayout->addWidget(TBW_solid, 2, 0, 1, 2);
 
 	TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
 	TBW_border->setText(ToggleButtonWidget::tr("Add Border"));
 	glGMLayout->addWidget(TBW_border,0,3,1,1);
-	//pageLayout->addWidget(TBW_border, 3, 0, 1, 2);
 
 	TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
 	TBW_lowGravity->setText(ToggleButtonWidget::tr("Low Gravity"));
 	glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
-	//pageLayout->addWidget(TBW_lowGravity, 4, 0, 1, 2);
 
 	TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
 	TBW_laserSight->setText(ToggleButtonWidget::tr("Laser Sight"));
 	glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
-	//pageLayout->addWidget(TBW_laserSight, 5, 0, 1, 2);
 
 	TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvurnable.png");
 	TBW_invulnerable->setText(ToggleButtonWidget::tr("Invulnerable"));
 	glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
-	//pageLayout->addWidget(TBW_invulnerable, 6, 0, 1, 2);
 
 	TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
 	TBW_mines->setText(ToggleButtonWidget::tr("Add Mines"));
 	glGMLayout->addWidget(TBW_mines,1,3,1,1);
-	//pageLayout->addWidget(TBW_mines, 7, 0, 1, 2);
 
 	// Right
 	QLabel * l;
@@ -927,13 +932,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconDamage.png"));
-	glBSLayout->addWidget(l,0,2,1,1);
+	glBSLayout->addWidget(l,0,1,1,1);
 	
 	SB_DamageModifier = new QSpinBox(gbBasicSettings);
 	SB_DamageModifier->setRange(10, 300);
 	SB_DamageModifier->setValue(100);
 	SB_DamageModifier->setSingleStep(25);
-	glBSLayout->addWidget(SB_DamageModifier,0,1,1,1);
+	glBSLayout->addWidget(SB_DamageModifier,0,2,1,1);
 
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Turn Time"));
@@ -942,13 +947,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconTime.png"));
-	glBSLayout->addWidget(l,1,2,1,1);
+	glBSLayout->addWidget(l,1,1,1,1);
 	
 	SB_TurnTime = new QSpinBox(gbBasicSettings);
 	SB_TurnTime->setRange(1, 99);
 	SB_TurnTime->setValue(45);
 	SB_TurnTime->setSingleStep(15);
-	glBSLayout->addWidget(SB_TurnTime,1,1,1,1);
+	glBSLayout->addWidget(SB_TurnTime,1,2,1,1);
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Initial Health"));
@@ -957,13 +962,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconHealth.png"));
-	glBSLayout->addWidget(l,2,2,1,1);
+	glBSLayout->addWidget(l,2,1,1,1);
 	
 	SB_InitHealth = new QSpinBox(gbBasicSettings);
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
-	glBSLayout->addWidget(SB_InitHealth,2,1,1,1);
+	glBSLayout->addWidget(SB_InitHealth,2,2,1,1);
 	
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Sudden Death Timeout"));
@@ -972,27 +977,27 @@ PageScheme::PageScheme(QWidget* parent) :
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconSuddenDeath.png"));
-	glBSLayout->addWidget(l,3,2,1,1);
+	glBSLayout->addWidget(l,3,1,1,1);
 
 	SB_SuddenDeath = new QSpinBox(gbBasicSettings);
 	SB_SuddenDeath->setRange(0, 50);
 	SB_SuddenDeath->setValue(15);
 	SB_SuddenDeath->setSingleStep(3);
-	glBSLayout->addWidget(SB_SuddenDeath,3,1,1,1);
+	glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
 	
 	l = new QLabel(gbBasicSettings);
-	l->setText(QLabel::tr("Case Probability"));
+	l->setText(QLabel::tr("Crate Drops"));
 	l->setWordWrap(true);
 	glBSLayout->addWidget(l,4,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconBox.png"));
-	glBSLayout->addWidget(l,4,2,1,1);
+	glBSLayout->addWidget(l,4,1,1,1);
 
 	SB_CaseProb = new FreqSpinBox(gbBasicSettings);
 	SB_CaseProb->setRange(0, 9);
 	SB_CaseProb->setValue(5);
-	glBSLayout->addWidget(SB_CaseProb,4,1,1,1);
+	glBSLayout->addWidget(SB_CaseProb,4,2,1,1);
 
 
 	l = new QLabel(gbBasicSettings);
@@ -1000,7 +1005,7 @@ PageScheme::PageScheme(QWidget* parent) :
 
 	LE_name = new QLineEdit(this);
 	
-	gl->addWidget(LE_name,14,1,1,1);
+	gl->addWidget(LE_name,14,1,1,5);
 	gl->addWidget(l,14,0,1,1);
 
 	mapper = new QDataWidgetMapper(this);

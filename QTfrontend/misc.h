@@ -34,12 +34,10 @@ public:
 
 	QString textFromValue(int value) const
 	{
-		switch (value)
-		{
-			case 0 : return tr("Never");
-			case 1 : return tr("Every turn");
-			default : return tr("Each %1 turn").arg(value);
-		}
+		if (!value)
+			return tr("Never");
+		else
+			return tr("Every %1 turn", "", value).arg(value);
 	}
 };
 

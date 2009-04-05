@@ -47,7 +47,8 @@ HEADERS += binds.h \
 		input_ip.h \
 		igbox.h \
 		weaponItem.h \
-		statsPage.h
+		statsPage.h \
+		misc.h
 
 SOURCES += binds.cpp \
 		game.cpp \
@@ -84,7 +85,8 @@ SOURCES += binds.cpp \
 		input_ip.cpp \
 		igbox.cpp \
 		weaponItem.cpp \
-		statsPage.cpp
+		statsPage.cpp \
+		misc.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts
