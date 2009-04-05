@@ -16,6 +16,8 @@ foreach(dir
 	Snow
 	cheese
 	Underwater
+	Castle
+	Halloween
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
