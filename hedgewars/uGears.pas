@@ -1634,6 +1634,8 @@ if (cCaseFactor = 0) or
    (CountGears(gtCase) >= 5) or
    (getrandom(cCaseFactor) <> 0) then exit;
 
+FollowGear:= nil;
+
 case getrandom(20) of
      0..6: begin
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
