@@ -8,12 +8,12 @@
         <translation type="unfinished">Mai</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/misc.h" line="40"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.h" line="49"/>
         <source>Every turn</source>
         <translation type="obsolete">Ogni turno</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/misc.h" line="41"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.h" line="50"/>
         <source>Each %1 turn</source>
         <translation type="obsolete">Ogni %1 turni</translation>
     </message>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
         <source>Edit schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica schemi</translation>
     </message>
 </context>
 <context>
@@ -206,17 +206,17 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="357"/>
         <source>You got kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Sei stato espulso</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Enter your password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci la tua password:</translation>
     </message>
 </context>
 <context>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1069"/>
         <source>Server message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Messaggio del server:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1075"/>
         <source>Set message</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci messaggio</translation>
     </message>
 </context>
 <context>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="854"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Connessione in corso...</translation>
     </message>
 </context>
 <context>
@@ -503,7 +503,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="775"/>
         <source>Admin features</source>
-        <translation type="unfinished"></translation>
+        <translation>Opzioni amministratore</translation>
     </message>
 </context>
 <context>
@@ -511,12 +511,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1014"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nuovo</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1015"/>
         <source>Delete</source>
-        <translation type="unfinished">Elimina</translation>
+        <translation>Elimina</translation>
     </message>
 </context>
 <context>
@@ -625,7 +625,7 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Ban</source>
-        <translation type="unfinished"></translation>
+        <translation>Ban</translation>
     </message>
 </context>
 <context>
@@ -812,14 +812,19 @@
         <translation>Squadre in gioco</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="862"/>
+        <source>Scheme options</source>
+        <translation type="obsolete">Opzioni di schema</translation>
+    </message>
+    <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="872"/>
         <source>Game Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificatori di gioco</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="873"/>
         <source>Basic Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni di base</translation>
     </message>
 </context>
 <context>
@@ -947,27 +952,32 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
         <source>Damage Modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Modificatore di danno</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="944"/>
         <source>Turn Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Durata del turno</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="959"/>
         <source>Initial Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Salute iniziale</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="974"/>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Timeout del sudden death</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="980"/>
+        <source>Case Probability</source>
+        <translation type="obsolete">Probabilità di casse</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1004"/>
         <source>Scheme Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome dello schema:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="989"/>
@@ -1228,42 +1238,42 @@ Controllare la propria installazione</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="894"/>
         <source>Fort Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Modalità fortino</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
         <source>Divide Teams</source>
-        <translation type="unfinished"></translation>
+        <translation>Dividi le squadre</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="902"/>
         <source>Solid Land</source>
-        <translation type="unfinished"></translation>
+        <translation>Terreno solido</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="906"/>
         <source>Add Border</source>
-        <translation type="unfinished">Aggiungi bordo</translation>
+        <translation>Aggiungi bordo</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="910"/>
         <source>Low Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Gravità zero</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="914"/>
         <source>Laser Sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Vista laser</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
         <source>Invulnerable</source>
-        <translation type="unfinished"></translation>
+        <translation>Invulnerabilità</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="922"/>
         <source>Add Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Aggiungi mine</translation>
     </message>
 </context>
 <context>

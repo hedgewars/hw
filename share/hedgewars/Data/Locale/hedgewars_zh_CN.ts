@@ -25,12 +25,12 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
         <source>Illegal ammo scheme</source>
-        <translation>不合理的弹夹框架</translation>
+        <translation>无法使用此弹药设置</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
         <source>Edit schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>修改游戏设置</translation>
     </message>
 </context>
 <context>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="474"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="" line="0"/>
@@ -157,37 +157,37 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="93"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>过滤</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="97"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="98"/>
         <source>Small</source>
-        <translation type="unfinished"></translation>
+        <translation>小型</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="99"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>中型</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="100"/>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>大型</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="101"/>
         <source>Cavern</source>
-        <translation type="unfinished"></translation>
+        <translation>洞穴</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="102"/>
         <source>Wacky</source>
-        <translation type="unfinished"></translation>
+        <translation>疯狂</translation>
     </message>
 </context>
 <context>
@@ -284,17 +284,17 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="357"/>
         <source>You got kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>被踢出去了</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>密码</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Enter your password:</source>
-        <translation type="unfinished"></translation>
+        <translation>输入你的密码：</translation>
     </message>
 </context>
 <context>
@@ -311,12 +311,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1069"/>
         <source>Server message:</source>
-        <translation type="unfinished"></translation>
+        <translation>服务器信息：</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1075"/>
         <source>Set message</source>
-        <translation type="unfinished"></translation>
+        <translation>设定信息</translation>
     </message>
 </context>
 <context>
@@ -324,7 +324,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="854"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>连接中...</translation>
     </message>
 </context>
 <context>
@@ -517,7 +517,7 @@
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="113"/>
@@ -570,7 +570,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="836"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>确认</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="835"/>
@@ -580,7 +580,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="775"/>
         <source>Admin features</source>
-        <translation type="unfinished"></translation>
+        <translation>管理员功能</translation>
     </message>
 </context>
 <context>
@@ -588,12 +588,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1014"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>新游戏</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1015"/>
         <source>Delete</source>
-        <translation type="unfinished">删除</translation>
+        <translation>删除</translation>
     </message>
 </context>
 <context>
@@ -715,7 +715,7 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Ban</source>
-        <translation type="unfinished"></translation>
+        <translation>屏蔽</translation>
     </message>
 </context>
 <context>
@@ -743,7 +743,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="438"/>
         <source>Alternative damage show</source>
-        <translation>伤害显示（可选）</translation>
+        <translation>另一种伤害显示方式</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="419"/>
@@ -763,7 +763,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="442"/>
         <source>Append date and time to record file name</source>
-        <translation>记录名称中包含确切时间</translation>
+        <translation>记录名称中包含具体时间日期</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="869"/>
@@ -773,7 +773,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="403"/>
         <source>Reduce Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>降低质量</translation>
     </message>
 </context>
 <context>
@@ -897,14 +897,19 @@
         <translation>武器</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="862"/>
+        <source>Scheme options</source>
+        <translation type="obsolete">游戏设定</translation>
+    </message>
+    <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="872"/>
         <source>Game Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation>游戏修改</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="873"/>
         <source>Basic Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>基本设置</translation>
     </message>
 </context>
 <context>
@@ -1077,32 +1082,37 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="424"/>
         <source>Initial sound volume</source>
-        <translation type="unfinished"></translation>
+        <translation>初始音量</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
         <source>Damage Modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>伤害修改</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="944"/>
         <source>Turn Time</source>
-        <translation type="unfinished"></translation>
+        <translation>回合时间</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="959"/>
         <source>Initial Health</source>
-        <translation type="unfinished"></translation>
+        <translation>初始生命值</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="974"/>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>死亡模式倒计时</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="980"/>
+        <source>Case Probability</source>
+        <translation type="obsolete">箱子掉落几率</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1004"/>
         <source>Scheme Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>设置名称：</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="989"/>
@@ -1203,7 +1213,7 @@ Please check your installation</source>
     <message>
         <location filename="../../../../QTfrontend/main.cpp" line="37"/>
         <source>OK</source>
-        <translation>ОК</translation>
+        <translation>确认</translation>
     </message>
 </context>
 <context>
@@ -1448,32 +1458,32 @@ Please check your installation</source>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="894"/>
         <source>Fort Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>城堡模式</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
         <source>Divide Teams</source>
-        <translation type="unfinished"></translation>
+        <translation>团体行动</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="902"/>
         <source>Solid Land</source>
-        <translation type="unfinished"></translation>
+        <translation>固实地面</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="906"/>
         <source>Add Border</source>
-        <translation type="unfinished"></translation>
+        <translation>添加边界</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="910"/>
         <source>Low Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>低重力</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="914"/>
         <source>Laser Sight</source>
-        <translation type="unfinished"></translation>
+        <translation>激光瞄准</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
@@ -1483,7 +1493,7 @@ Please check your installation</source>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="922"/>
         <source>Add Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>布置地雷</translation>
     </message>
 </context>
 <context>
