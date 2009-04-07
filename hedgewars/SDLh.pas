@@ -36,23 +36,18 @@ interface
 {$PACKRECORDS C}
 
 {$IFDEF DARWIN}
+	  {$PASCALMAINNAME SDL_main}
 {$IFNDEF IPHONE}
-{$linklib libpng}
-{$linklib libz}
-{$linklib libjpeg}
-{$linklib libtiff}
-{$linklib libfreetype}
-{$linklib libsmpeg}
-{$linklib libvorbis}
-{$linklib libvorbisfile}
-{$linklib libogg}
-
-{$linkframework Carbon}
-{$linkframework OpenGL}
-{$linkframework AudioUnit}
-{$linkframework Quicktime}
-{$linkframework IOKit}
-{add ForceFeedback and CoreAudio frameworks when you use SDL-1.3}
+	  {$linkframework Cocoa}
+	  {$linkframework SDL}
+	  {$linkframework SDL_mixer}
+	  {$linkframework SDL_net}
+	  {$linkframework SDL_image}
+	  {$linkframework SDL_ttf}
+	  {$linkframework Vorbis}
+	  {$linkframework Ogg}
+	  {$linklib SDLmain}
+	  {$linklib gcc}
 {$ENDIF}
 {$ENDIF}
 
@@ -63,15 +58,6 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
 	  SDLLibName = 'libSDL.a';
-{$IFNDEF IPHONE}
-	  {$linklib libSDL}
-	  {$linklib SDLmain}
-	  {$linkframework Cocoa}
-{$ENDIF}
-	  {$PASCALMAINNAME SDL_main}
-{$IFNDEF IPHONE}
-	  {$linklib gcc}
-{$ENDIF}
 	{$ELSE}
           SDLLibName = 'libSDL.so';
         {$ENDIF}
@@ -303,9 +289,6 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
 	  SDL_TTFLibName = 'libSDL_ttf.a';
-{$IFNDEF IPHONE}
-	  {$linklib libSDL_ttf}
-{$ENDIF}
 	{$ELSE}
           SDL_TTFLibName = 'libSDL_ttf.so';
         {$ENDIF}
@@ -340,9 +323,6 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
 	  SDL_MixerLibName = 'libSDL_mixer.a';
-{$IFNDEF IPHONE}
-	  {$linklib libSDL_mixer}
-{$ENDIF}
 	{$ELSE}
           SDL_MixerLibName = 'libSDL_mixer.so';
 	{$ENDIF}
@@ -408,9 +388,6 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
 	  SDL_ImageLibName = 'libSDL_image.a';
-{$IFNDEF IPHONE}
-	  {$linklib libSDL_image}
-{$ENDIF}
 	{$ELSE}
            SDL_ImageLibName = 'libSDL_image.so';
 	{$ENDIF}
@@ -426,9 +403,6 @@ const {$IFDEF WIN32}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
 	  SDL_NetLibName = 'libSDL_net.a';
-{$IFNDEF IPHONE}
-	  {$linklib libSDL_net}
-{$ENDIF}
 	{$ELSE}
           SDL_NetLibName = 'libSDL_net.so';
 	{$ENDIF}
