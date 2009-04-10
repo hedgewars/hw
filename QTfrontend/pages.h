@@ -286,8 +286,8 @@ public:
 	QPushButton *BtnBack;
 	QPushButton *BtnGo;
 	QPushButton *BtnMaster;
+	QPushButton *BtnStart;
 	
-	QAction * startGame;
 	QAction * restrictJoins;
 	QAction * restrictTeamAdds;
 

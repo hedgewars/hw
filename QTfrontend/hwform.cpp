@@ -95,7 +95,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
-	connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(PlayDemo()));
+	connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)), this, SLOT(PlayDemo()));
 
 	connect(ui.pageOptions->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
@@ -118,6 +118,8 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
+	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
+		ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
 
@@ -844,10 +846,10 @@ void HWForm::NetGameMaster()
 	if (hwnet)
 	{
 		// disconnect connections first to ensure their inexistance and not to connect twice
-		ui.pageNetGame->startGame->disconnect(hwnet);
+		ui.pageNetGame->BtnStart->disconnect(hwnet);
 		ui.pageNetGame->restrictJoins->disconnect(hwnet);
 		ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
-		connect(ui.pageNetGame->startGame, SIGNAL(triggered()), hwnet, SLOT(startGame()));
+		connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));
 		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
 		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
 	}

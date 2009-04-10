@@ -590,7 +590,6 @@ void PageNetServer::setDefaultPort()
 
 PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
 	//pageLayout->setSpacing(1);
@@ -616,27 +615,27 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
 	
 	BtnGo = new QPushButton(this);
-	BtnGo->setFont(*font14);
 	BtnGo->setToolTip(QPushButton::tr("Ready"));
 	BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 	BtnGo->setIconSize(QSize(25, 34));
 	BtnGo->setMinimumWidth(50);
 	BtnGo->setMinimumHeight(50);
-	bottomLayout->addWidget(BtnGo, 2);
+	bottomLayout->addWidget(BtnGo, 4);
 
 
-	BtnMaster = addButton(tr("Control"), bottomLayout, 3);
+	BtnMaster = addButton(tr("Control"), bottomLayout, 2);
 	QMenu * menu = new QMenu(BtnMaster);
-	startGame = new QAction(QAction::tr("Start"), menu);
 	restrictJoins = new QAction(QAction::tr("Restrict Joins"), menu);
 	restrictJoins->setCheckable(true);
 	restrictTeamAdds = new QAction(QAction::tr("Restrict Team Additions"), menu);
 	restrictTeamAdds->setCheckable(true);
-	menu->addAction(startGame);
+	//menu->addAction(startGame);
 	menu->addAction(restrictJoins);
 	menu->addAction(restrictTeamAdds);
 	
 	BtnMaster->setMenu(menu);
+
+	BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
 
 	bottomLayout->insertStretch(1, 100);
 }
@@ -652,6 +651,7 @@ void PageNetGame::setReadyStatus(bool isReady)
 void PageNetGame::setMasterMode(bool isMaster)
 {
 	BtnMaster->setVisible(isMaster);
+	BtnStart->setVisible(isMaster);
 }
 
 PageInfo::PageInfo(QWidget* parent) : AbstractPage(parent)
