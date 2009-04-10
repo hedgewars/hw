@@ -38,6 +38,7 @@ class PageRoomsList;
 class PageConnecting;
 class PageScheme;
 class PageAdmin;
+class PageNetType;
 class QStackedLayout;
 class QFont;
 class QWidget;
@@ -67,6 +68,7 @@ public:
 	PageConnecting *pageConnecting;
 	PageScheme *pageScheme;
 	PageAdmin *pageAdmin;
+	PageNetType *pageNetType;
 
 	QStackedLayout *Pages;
 	QFont *font14;

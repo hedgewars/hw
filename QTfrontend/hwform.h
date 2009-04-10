@@ -53,6 +53,7 @@ private slots:
 	void GoToSaves();
 	void GoToDemos();
 	void GoToNet();
+	void GoToNetType();
 	void GoToInfo();
 	void GoToTraining();
 	void GoToSelectWeapon();
@@ -122,7 +123,8 @@ private:
 		ID_PAGE_ROOMSLIST       = 14,
 		ID_PAGE_CONNECTING      = 15,
 		ID_PAGE_SCHEME          = 16,
-		ID_PAGE_ADMIN           = 17
+		ID_PAGE_ADMIN           = 17,
+		ID_PAGE_NETTYPE         = 18
 		};
 	HWGame * game;
 	HWNetServer* pnetserver;

@@ -242,7 +242,6 @@ public:
 	QPushButton * BtnNetConnect;
 	QPushButton * BtnNetSvrStart;
 	QPushButton * BtnSpecifyServer;
-	QPushButton * BtnOfficialServer;
 
 private:
 	QGroupBox * ConnGroupBox;
@@ -460,6 +459,19 @@ public slots:
 
 signals:
 	void setServerMessage(const QString & str);
+};
+
+
+class PageNetType : public AbstractPage
+{
+	Q_OBJECT
+
+public:
+	PageNetType(QWidget* parent = 0);
+
+	QPushButton * BtnBack;
+	QPushButton * BtnLAN;
+	QPushButton * BtnOfficialServer;
 };
 
 #endif // PAGES_H

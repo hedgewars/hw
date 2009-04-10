@@ -75,7 +75,7 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageMain->BtnSinglePlayer, SIGNAL(clicked()), this, SLOT(GoToSinglePlayer()));
 	connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), this, SLOT(GoToSetup()));
-	connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNet()));
+	connect(ui.pageMain->BtnNet, SIGNAL(clicked()), this, SLOT(GoToNetType()));
 	connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), this, SLOT(GoToInfo()));
 	connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
 	connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
@@ -93,15 +93,15 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 	connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
 
-	connect(ui.pagePlayDemo->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pagePlayDemo->BtnPlayDemo,	SIGNAL(clicked()),	this, SLOT(PlayDemo()));
-	connect(ui.pagePlayDemo->DemosList,	SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(PlayDemo()));
+	connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
+	connect(ui.pagePlayDemo->DemosList, SIGNAL(doubleClicked (const QModelIndex &)),	this, SLOT(PlayDemo()));
 
-	connect(ui.pageOptions->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageOptions->BtnNewTeam,	SIGNAL(clicked()),	this, SLOT(NewTeam()));
-	connect(ui.pageOptions->BtnEditTeam,	SIGNAL(clicked()),	this, SLOT(EditTeam()));
-	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	config, SLOT(SaveOptions()));
-	connect(ui.pageOptions->BtnSaveOptions,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageOptions->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageOptions->BtnNewTeam, SIGNAL(clicked()), this, SLOT(NewTeam()));
+	connect(ui.pageOptions->BtnEditTeam, SIGNAL(clicked()), this, SLOT(EditTeam()));
+	connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), config, SLOT(SaveOptions()));
+	connect(ui.pageOptions->BtnSaveOptions, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 	connect(ui.pageOptions->WeaponEdit, SIGNAL(clicked()), this, SLOT(GoToSelectWeapon()));
 	connect(ui.pageOptions->WeaponsButt, SIGNAL(clicked()), this, SLOT(GoToSelectNewWeapon()));
@@ -109,14 +109,13 @@ HWForm::HWForm(QWidget *parent)
 
 	connect(ui.pageNet->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
-	connect(ui.pageNet->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(GoToNetServer()));
 	connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
 	
-	connect(ui.pageNetServer->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
-	connect(ui.pageNetServer->BtnStart,	SIGNAL(clicked()),	this, SLOT(NetStartServer()));
+	connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
-	connect(ui.pageNetGame->BtnBack,	SIGNAL(clicked()),	this, SLOT(GoBack()));
+	connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(setEnabledGameStart(bool)),
 		ui.pageNetGame->BtnGo, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
@@ -153,6 +152,10 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageScheme->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 
 	connect(ui.pageAdmin->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+
+	connect(ui.pageNetType->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
+	connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
+	connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
 
 
 	ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
@@ -287,6 +290,11 @@ void HWForm::GoToNet()
 	ui.pageNet->updateServersList();
 
 	GoToPage(ID_PAGE_NET);
+}
+
+void HWForm::GoToNetType()
+{
+	GoToPage(ID_PAGE_NETTYPE);
 }
 
 void HWForm::GoToNetServer()

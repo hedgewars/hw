@@ -496,11 +496,6 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	BtnSpecifyServer->setText(QPushButton::tr("Specify"));
 	GBClayout->addWidget(BtnSpecifyServer, 2, 1);
 
-	BtnOfficialServer = new QPushButton(ConnGroupBox);
-	BtnOfficialServer->setFont(*font14);
-	BtnOfficialServer->setText(QPushButton::tr("Join official server"));
-	GBClayout->addWidget(BtnOfficialServer, 3, 0, 1, 3);
-
 	connect(BtnNetConnect, SIGNAL(clicked()), this, SLOT(slotConnect()));
 }
 
@@ -709,7 +704,6 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 
 PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 {
-	QFont * font14 = new QFont("MS Shell Dlg", 14);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setColumnStretch(0, 1);
 	pageLayout->setColumnStretch(1, 2);
@@ -1086,4 +1080,18 @@ void PageAdmin::smChanged()
 void PageAdmin::serverMessage(const QString & str)
 {
 	leServerMessage->setText(str);
+}
+
+/////////////////////////////////////////////////
+
+PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
+{
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->setRowStretch(0, 10);
+	pageLayout->setRowStretch(2, 10);
+
+	BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 0);
+	BtnOfficialServer = addButton(tr("Official server"), pageLayout, 1, 1);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
 }

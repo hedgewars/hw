@@ -109,4 +109,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
 	pageAdmin = new PageAdmin();
 	Pages->addWidget(pageAdmin);
+
+	pageNetType = new PageNetType();
+	Pages->addWidget(pageNetType);
 }
