@@ -65,5 +65,6 @@ protoNumber2ver 22 = "0.9.9-dev"
 protoNumber2ver 23 = "0.9.9"
 protoNumber2ver 24 = "0.9.10-dev"
 protoNumber2ver 25 = "0.9.10"
+protoNumber2ver 26 = "0.9.11-dev"
 protoNumber2ver _ = "Unknown"
 

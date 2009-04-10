@@ -96,8 +96,14 @@ processAction (clID, serverInfo, clients, rooms) (AnswerLobby msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
-	writeChan (sendChan $ clients ! clID) $ ["SERVER_MESSAGE", serverMessage serverInfo]
+	writeChan (sendChan $ clients ! clID) $ ["SERVER_MESSAGE", message serverInfo]
 	return (clID, serverInfo, clients, rooms)
+	where
+		client = clients ! clID
+		message = if clientProto client < 25 then
+			serverMessageForOldVersions
+			else
+			serverMessageForOldVersions
 
 
 processAction (clID, serverInfo, clients, rooms) (ProtocolError msg) = do

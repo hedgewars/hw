@@ -116,6 +116,7 @@ data ServerInfo =
 	{
 		isDedicated :: Bool,
 		serverMessage :: String,
+		serverMessageForOldVersions :: String,
 		listenPort :: PortNumber,
 		loginsNumber :: Int,
 		nextRoomID :: Int,
@@ -135,6 +136,7 @@ newServerInfo = (
 	ServerInfo
 		True
 		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
+		"<font color=yellow><h3>Hedgewars 0.9.10 is out! Please, update. Support for previous versions IS DROPPED</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><h4>New features are:</h4><ul><li></li><li></li><li></li><li>...</li></ul></font>"
 		46631
 		0
 		0
