@@ -5,7 +5,7 @@
     <message>
         <location filename="../../../../QTfrontend/misc.h" line="38"/>
         <source>Never</source>
-        <translation type="unfinished">Nie</translation>
+        <translation>Nie</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/misc.h" line="40"/>
@@ -20,9 +20,9 @@
     <message numerus="yes">
         <location filename="../../../../QTfrontend/misc.h" line="40"/>
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Jede Runde</numerusform>
+            <numerusform>Jede %1. Runde</numerusform>
         </translation>
     </message>
 </context>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
         <source>Edit schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffenzusammenstellungen bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -206,17 +206,17 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="357"/>
         <source>You got kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Du wurdest herausgeworfen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Enter your password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte Passwort eingeben:</translation>
     </message>
 </context>
 <context>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1063"/>
         <source>Server message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Nachricht:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1069"/>
         <source>Set message</source>
-        <translation type="unfinished"></translation>
+        <translation>Servernachricht festlegen</translation>
     </message>
 </context>
 <context>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="848"/>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinde...</translation>
     </message>
 </context>
 <context>
@@ -397,12 +397,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1093"/>
         <source>LAN game</source>
-        <translation type="unfinished"></translation>
+        <translation>LAN Spiel</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1094"/>
         <source>Official server</source>
-        <translation type="unfinished"></translation>
+        <translation>Offizieller Server</translation>
     </message>
 </context>
 <context>
@@ -516,7 +516,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
         <source>Admin features</source>
-        <translation type="unfinished"></translation>
+        <translation>Administratorfunktionen</translation>
     </message>
 </context>
 <context>
@@ -524,12 +524,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1008"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1009"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -638,7 +638,7 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Ban</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbannen</translation>
     </message>
 </context>
 <context>
@@ -767,7 +767,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="126"/>
         <source>Team Members</source>
-        <translation>Team Mitglieder</translation>
+        <translation>Team-Mitglieder</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="236"/>
@@ -797,7 +797,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="384"/>
         <source>Audio/Graphic options</source>
-        <translation>Audio/Grafik Einstellungen</translation>
+        <translation>Audio-/Grafik-Einstellungen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="370"/>
@@ -827,12 +827,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="866"/>
         <source>Game Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielmodifikatoren</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="867"/>
         <source>Basic Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundeinstellungen</translation>
     </message>
 </context>
 <context>
@@ -910,7 +910,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="398"/>
         <source>FPS limit</source>
-        <translation>FPS Limit</translation>
+        <translation>FPS-Limit</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="353"/>
@@ -965,32 +965,32 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="923"/>
         <source>Damage Modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Schadensmodifikatoren</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
         <source>Turn Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Rundenzeit</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="953"/>
         <source>Initial Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Anfangslebenspunkte</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="968"/>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Runden bis Sudden Death</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="998"/>
         <source>Scheme Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofil:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="983"/>
         <source>Crate Drops</source>
-        <translation type="unfinished"></translation>
+        <translation>Kistenabwurf</translation>
     </message>
 </context>
 <context>
@@ -1124,7 +1124,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="496"/>
         <source>Specify</source>
-        <translation>Einstellen</translation>
+        <translation>Verbinden zu ...</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="42"/>
@@ -1246,42 +1246,42 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="888"/>
         <source>Fort Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Festungs-Modus</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="892"/>
         <source>Divide Teams</source>
-        <translation type="unfinished"></translation>
+        <translation>Teams getrennt aufstellen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="896"/>
         <source>Solid Land</source>
-        <translation type="unfinished"></translation>
+        <translation>Unzerstörbares Terrain</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="900"/>
         <source>Add Border</source>
-        <translation type="unfinished">Randbegrenzung einfügen</translation>
+        <translation>Randbegrenzung einfügen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="904"/>
         <source>Low Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Verringerte Schwerkraft</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
         <source>Laser Sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Laservisier</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="912"/>
         <source>Invulnerable</source>
-        <translation type="unfinished"></translation>
+        <translation>Unverwundbarkeit</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="916"/>
         <source>Add Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Minen hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -1289,42 +1289,42 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="23"/>
         <source>up</source>
-        <translation>hoch</translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="24"/>
         <source>left</source>
-        <translation>links</translation>
+        <translation>Links</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="25"/>
         <source>right</source>
-        <translation>rechts</translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="26"/>
         <source>down</source>
-        <translation>runter</translation>
+        <translation>Runter</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
-        <translation>springen</translation>
+        <translation>Springen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="29"/>
         <source>attack</source>
-        <translation>angreifen</translation>
+        <translation>Angreifen</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="31"/>
         <source>put</source>
-        <translation>platzieren</translation>
+        <translation>Platzieren</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="32"/>
         <source>switch</source>
-        <translation>wechseln</translation>
+        <translation>Wechseln</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="33"/>
@@ -1429,7 +1429,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="56"/>
         <source>capture</source>
-        <translation>erobern</translation>
+        <translation>Erobern</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="57"/>
@@ -1446,12 +1446,12 @@ Statistik</translation>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="49"/>
         <source>chat</source>
-        <translation>chatten</translation>
+        <translation>Chatten</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="50"/>
         <source>chat history</source>
-        <translation>Chat-Historie</translation>
+        <translation>Chatverlauf</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/binds.cpp" line="52"/>
