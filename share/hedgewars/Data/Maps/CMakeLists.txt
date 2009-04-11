@@ -1,15 +1,19 @@
 foreach(dir
 	Bamboo
 	BambooPlinko
+	Basketball
 	Bath
 	Blox
+	Bubbleflow
 	Cake
 	Castle
+	cave
 	cheese
 	Cogs
 	CrazyMission
 	EarthRise
 	Eyes
+	Hammock
 	HedgeFortress
 	Hedgelove
 	Hedgewars
@@ -19,8 +23,10 @@ foreach(dir
 	mushrooms
 	PirateFlag
 	Plane
+	Ropes
 	Sheep
 	Trash
+	Tree
 	)
 
 add_subdirectory(${dir})
