@@ -41,13 +41,14 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 	QAbstractTableModel(parent),
-	numberOfDefaultSchemes(2),
+	numberOfDefaultSchemes(3),
 	fileConfig(fileName, QSettings::IniFormat)
 {
 	QStringList predefSchemesNames;
 	predefSchemesNames
 		<< "Default"
-		<< "Pro mode";
+		<< "Pro mode"
+		<< "Shoppa";
 	
 	spNames = QStringList()
 		<< "name"             //  0
@@ -68,7 +69,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 
 	QList<QVariant> proMode;
 	proMode
-		<< QVariant("Pro mode")    // name           0
+		<< predefSchemesNames[1]   // name           0
 		<< QVariant(false)         // fortsmode      1
 		<< QVariant(false)         // team divide    2
 		<< QVariant(false)         // solid land     3
@@ -84,8 +85,27 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(0)             // case prob      13
 		;
 
+	QList<QVariant> shoppa;
+	shoppa
+		<< predefSchemesNames[2]   // name           0
+		<< QVariant(false)         // fortsmode      1
+		<< QVariant(false)         // team divide    2
+		<< QVariant(true)          // solid land     3
+		<< QVariant(true)          // border         4
+		<< QVariant(false)         // low gravity    5
+		<< QVariant(false)         // laser sight    6
+		<< QVariant(false)         // invulnerable   7
+		<< QVariant(false)         // add mines      8
+		<< QVariant(100)           // damage modfier 9
+		<< QVariant(30)            // turn time      10
+		<< QVariant(100)           // init health    11
+		<< QVariant(50)            // sudden death   12
+		<< QVariant(0)             // case prob      13
+		;
+
 	schemes.append(defaultScheme);
 	schemes.append(proMode);
+	schemes.append(shoppa);
 
 
 	int size = fileConfig.beginReadArray("schemes");
