@@ -75,7 +75,8 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 {
 	wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 
-	wconf->setValue("Default", *cDefaultAmmoStore);
+	for(int i = 0; i < cDefaultAmmos.size(); ++i)
+		wconf->setValue(cDefaultAmmos[i].first, cDefaultAmmos[i].second);
 
 	QStringList keys = wconf->allKeys();
 	for(int i = 0; i < keys.size(); i++)
