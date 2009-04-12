@@ -36,8 +36,7 @@ onException io what = io `catch` \e -> do what                   --
 -------------------------------------------------------------------
 
 dbQueryString =
-	"SELECT users.pass, users_roles.rid FROM `users`, users_roles "
-	++ "WHERE users.name = ? AND users_roles.uid = users.uid"
+	"select users.pass, users_roles.rid from users left join users_roles on users.uid = users_roles.uid where users.name = ?"
 
 dbInteractionLoop queries coreChan dbConn = do
 	q <- readChan queries
