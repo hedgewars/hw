@@ -106,6 +106,8 @@ procedure doStepHedgehogMoving(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
+procedure HHSetWeapon(Gear: PGear); forward;
+
 
 {$INCLUDE GSHandlers.inc}
 {$INCLUDE HHHandlers.inc}

@@ -27,7 +27,7 @@ procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
 procedure PackAmmo(Ammo: PHHAmmo; Slot: LongInt);
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
-procedure ApplyAngleBounds(var Hedgehog: THedgehog);
+procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
@@ -180,23 +180,22 @@ while (ami <= cMaxSlotAmmoIndex) do
 HHHasAmmo:= false
 end;
 
-procedure ApplyAngleBounds(var Hedgehog: THedgehog);
+procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
 begin
 with Hedgehog do
-	with Ammo^[CurSlot, CurAmmo] do
-		begin
-		CurMinAngle:= Ammoz[AmmoType].minAngle;
-		if Ammoz[AmmoType].maxAngle <> 0 then
-			CurMaxAngle:= Ammoz[AmmoType].maxAngle
-		else
-			CurMaxAngle:= cMaxAngle;
+	begin
+	CurMinAngle:= Ammoz[AmmoType].minAngle;
+	if Ammoz[AmmoType].maxAngle <> 0 then
+		CurMaxAngle:= Ammoz[AmmoType].maxAngle
+	else
+		CurMaxAngle:= cMaxAngle;
 
-		with Hedgehog.Gear^ do
-			begin
-			if Angle < CurMinAngle then Angle:= CurMinAngle;
-			if Angle > CurMaxAngle then Angle:= CurMaxAngle;
-			end
+	with Hedgehog.Gear^ do
+		begin
+		if Angle < CurMinAngle then Angle:= CurMinAngle;
+		if Angle > CurMaxAngle then Angle:= CurMaxAngle;
 		end
+	end
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
@@ -213,7 +212,7 @@ with Hedgehog do
 		while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
 		end;
 
-	ApplyAngleBounds(Hedgehog);
+	ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
 
 	with Ammo^[CurSlot, CurAmmo] do
 		begin

@@ -683,6 +683,9 @@ if (Gear^.Message and gm_Attack) <> 0 then
 	begin
 	Gear^.X:= HHGear^.X;
 	Gear^.Y:= HHGear^.Y;
+
+	ApplyAngleBounds(PHedgehog(Gear^.Hedgehog)^, amRope);
+	
 	Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
 	Gear^.dY:= -AngleCos(HHGear^.Angle);
 	Gear^.Friction:= _450;
@@ -850,7 +853,7 @@ if len > _0_8 then
 if (Gear^.Message and gm_Attack) <> 0 then
 	if (Gear^.State and gsttmpFlag) <> 0 then
 		with PHedgehog(Gear^.Hedgehog)^ do
-			if Ammo^[CurSlot, CurAmmo].AmmoType = amRope then
+			if Ammo^[CurSlot, CurAmmo].AmmoType <> amParachute then
 				WaitCollision
 			else
 				DeleteMe
@@ -869,9 +872,9 @@ var HHGear: PGear;
 	if (Gear^.State and gstAttacked) = 0 then
 		begin
 		OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
-		ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 		Gear^.State:= Gear^.State or gstAttacked
-		end
+		end;
+	ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
 	end;
 	
 begin

@@ -13,10 +13,7 @@ import Utils
 options :: [OptDescr (ServerInfo -> ServerInfo)]
 options = [
 	Option ['p'] ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
-	Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)",
-	Option []    ["db-login"] (ReqArg readDbLogin "STRING") "database access login",
-	Option []    ["db-password"] (ReqArg readDbPassword "STRING") "database access password",
-	Option []    ["db-host"] (ReqArg readDbHost "STRING") "database host"
+	Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
 	]
 
 readListenPort,

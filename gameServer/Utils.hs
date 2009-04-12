@@ -8,6 +8,7 @@ import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import Numeric
 import Network.Socket
+import System.IO
 import qualified Data.List as List
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
@@ -68,3 +69,8 @@ protoNumber2ver 25 = "0.9.10"
 protoNumber2ver 26 = "0.9.11-dev"
 protoNumber2ver _ = "Unknown"
 
+askFromConsole :: String -> IO String
+askFromConsole msg = do
+	putStr msg
+	hFlush stdout
+	getLine

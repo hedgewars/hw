@@ -13,6 +13,7 @@ import Opts
 import CoreTypes
 import OfficialServer.DBInteraction
 import ServerCore
+import Utils
 
 
 #if !defined(mingw32_HOST_OS)
@@ -34,8 +35,17 @@ main = withSocketsDo $ do
 	stats <- atomically $ newTMVar (StatisticsInfo 0 0)
 	dbQueriesChan <- newChan
 	coreChan <- newChan
-	serverInfo <- getOpts $ newServerInfo stats coreChan dbQueriesChan
+	serverInfo' <- getOpts $ newServerInfo stats coreChan dbQueriesChan
 	
+#if defined(OFFICIAL_SERVER)
+	dbHost' <- askFromConsole "DB host: "
+	dbLogin' <- askFromConsole "login: "
+	dbPassword' <- askFromConsole "password: "
+	let serverInfo = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
+#else
+	let serverInfo = serverInfo'
+#endif
+
 	bracket
 		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
 		(sClose)
