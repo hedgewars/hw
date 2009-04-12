@@ -256,7 +256,7 @@ int main(int argc, char *argv[])
 		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
 		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
 	}
-	cfgdir->cd("/Library/Application Support/Hedgewars");
+	cfgdir->cd("Library/Application Support/Hedgewars");
 #else
 	if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
 	{
