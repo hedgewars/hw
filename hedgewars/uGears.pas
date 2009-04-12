@@ -1638,7 +1638,14 @@ if (cCaseFactor = 0) or
 
 FollowGear:= nil;
 
-case getrandom(20) of
+t:= getrandom(20);  // TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
+if shoppa then
+    t:= 7
+else
+    t:= getrandom(20);
+
+//case getrandom(20) of
+case t of
      0..6: begin
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         FollowGear^.Health:= 25;

@@ -118,7 +118,7 @@ if Gear^.IntersectGear <> nil then
            IntersectGear:= nil;
            TestWord:= 0
            end else
-           TestWord:= COLOR_LAND - 1
+           TestWord:= 255
    else TestWord:= 0;
 
 x:= hwRound(Gear^.X);
@@ -149,7 +149,7 @@ if Gear^.IntersectGear <> nil then
            IntersectGear:= nil;
            TestWord:= 0
            end else
-           TestWord:= COLOR_LAND - 1
+           TestWord:= 255
    else TestWord:= 0;
 
 y:= hwRound(Gear^.Y);
@@ -182,7 +182,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
    i:= y + Gear^.Radius * 2 - 2;
    repeat
      if (y and LAND_HEIGHT_MASK) = 0 then
-           if Land[y, x] = COLOR_LAND then exit(true)
+           if Land[y, x] > 255 then exit(true)
            else if Land[y, x] <> 0 then flag:= true;
      inc(y)
    until (y > i);
@@ -233,7 +233,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
    repeat
      if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
-           if Land[y, x] = COLOR_LAND then exit(true)
+           if Land[y, x] > 255 then exit(true)
            else if Land[y, x] <> 0 then flag:= true;
      inc(x)
    until (x > i);
@@ -291,7 +291,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
    i:= x + Gear^.Radius * 2 - 2;
    repeat
      if (x and LAND_WIDTH_MASK) = 0 then
-        if Land[y, x] = COLOR_LAND then exit(true);
+        if Land[y, x] > 255 then exit(true);
      inc(x)
    until (x > i);
    end;

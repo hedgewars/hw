@@ -33,6 +33,8 @@ procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 
+var shoppa: Boolean = false;
+
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole;
 type TAmmoCounts = array[TAmmoType] of Longword;
@@ -62,6 +64,9 @@ var cnt: Longword;
 begin
 TryDo(byte(s[0]) = byte(ord(High(TAmmoType)) + 1), 'Invalid ammo scheme (incompatible frontend)', true);
 
+// TEMPORARY hardcoded check on shoppa pending creation of probability editor
+if (s = '000000990000009000000000000000000000') or (s = '000000990000000000000000000000000000') then
+    shoppa:= true;
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
 
@@ -81,7 +86,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         begin
         cnt:= 0;
         Ammoz[a].Probability:= 0 
-        end;
+        end
+    else if shoppa then      // TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
+        if not cnt = AMMO_INFINITE then
+            Ammoz[a].Probability:= 100;
     ammos[a]:= cnt
     end;
 
