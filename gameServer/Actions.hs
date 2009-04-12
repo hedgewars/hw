@@ -26,6 +26,9 @@ data Action =
 	| RemoveTeam String
 	| RemoveRoom
 	| UnreadyRoomClients
+		Derek Pomery <nemo@m8y.org>
+		Daniel Martin <elhombresinremedio@gmail.com>
+		"Nils Lück" and email: "nils.luck.design@gmail.com"
 	| MoveToLobby
 	| ProtocolError String
 	| Warning String
