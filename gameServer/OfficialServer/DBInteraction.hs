@@ -51,7 +51,7 @@ dbInteractionLoop queries coreChan dbConn = do
 							ClientAccountInfo (clientUID client) $
 								HasAccount
 									(fromSql $ head $ fromJust $ passAndRole)
-									((fromSql $ last $ fromJust $ passAndRole) == (3 :: Int))
+									((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
 					else
 					writeChan coreChan $ ClientAccountInfo (clientUID client) Guest
 			`onException`
