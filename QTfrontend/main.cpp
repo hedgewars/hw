@@ -250,12 +250,21 @@ int main(int argc, char *argv[])
 	bindir->cd("bin"); // workaround over NSIS installer
 
 	cfgdir->setPath(cfgdir->homePath());
+#ifdef __APPLE__
+	if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
+	{
+		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
+		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
+	}
+	cfgdir->cd("/Library/Application Support/Hedgewars");
+#else
 	if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
 	{
 		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
 		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
 	}
 	cfgdir->cd(".hedgewars");
+#endif
 
 	datadir->cd(bindir->absolutePath());
 	datadir->cd(*cDataDir);
