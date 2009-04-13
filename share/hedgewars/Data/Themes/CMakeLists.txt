@@ -3,21 +3,21 @@ foreach(dir
 	Bath
 	Blox
 	Cake
+	Castle
+	cheese
 	City
 	CrazyMission
 	EarthRise
 	Eyes
 	Freeway
+	Halloween
 	hell
 	Island
 	nature
 	Planes
 	Sheep
 	Snow
-	cheese
 	Underwater
-	Castle
-	Halloween
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
