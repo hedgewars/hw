@@ -103,7 +103,7 @@ processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
 		message = if clientProto client < 25 then
 			serverMessageForOldVersions
 			else
-			serverMessageForOldVersions
+			serverMessage
 
 
 processAction (clID, serverInfo, clients, rooms) (ProtocolError msg) = do
