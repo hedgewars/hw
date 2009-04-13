@@ -61,8 +61,12 @@ About::About(QWidget * parent) :
 			"</h2><p>"
 			"Engine, frontend, net server: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Many frontend improvements: Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;<br>"
+			"Many engine and frontend improvements: Derek Pomery&lt;<a href=\"mailto:nemo@m8y.org\">nemo@m8y.org</a>&gt;<br>"
 			"Drill rocket, Ballgun, RC Plane weapons: Martin Boze &lt;<a href=\"mailto:afffect@gmail.com\">afffect@gmail.com</a>&gt;"
 			"</p><h2>" +
+			
+//		Daniel Martin <elhombresinremedio@gmail.com>
+//		"Nils Lück" and email: "nils.luck.design@gmail.com"
 			
 			QLabel::tr("Art:") + "</h2>"
 			+ QString::fromUtf8(

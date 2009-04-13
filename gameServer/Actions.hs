@@ -26,9 +26,6 @@ data Action =
 	| RemoveTeam String
 	| RemoveRoom
 	| UnreadyRoomClients
-		Derek Pomery <nemo@m8y.org>
-		Daniel Martin <elhombresinremedio@gmail.com>
-		"Nils Lück" and email: "nils.luck.design@gmail.com"
 	| MoveToLobby
 	| ProtocolError String
 	| Warning String
@@ -191,17 +188,26 @@ processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient) = do
-	when (rID /= 0) $ (processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["LEFT", nick client, "part"]) >> return ()
+	(_, _, newClients, newRooms) <-
+			if roomID client /= 0 then
+				foldM
+					processAction
+						(clID, serverInfo, clients, rooms)
+						[AnswerOthersInRoom ["LEFT", nick client, "part"],
+						RemoveClientTeams clID]
+				else
+					return (clID, serverInfo, clients, rooms)
+	
 	return (
 		clID,
 		serverInfo,
-		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False}) clID clients,
+		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False}) clID newClients,
 		adjust (\r -> r{
 				playersIDs = IntSet.delete clID (playersIDs r),
 				playersIn = (playersIn r) - 1,
 				readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
 				}) rID $
-			adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r)}) 0 rooms
+			adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r)}) 0 newRooms
 		)
 	where
 		rID = roomID client
@@ -349,7 +355,7 @@ processAction (clID, serverInfo, clients, rooms) (AddClient client) = do
 	infoM "Clients" ((show $ clientUID client) ++ ": New client. Time: " ++ (show $ connectTime client))
 	writeChan (sendChan $ client) ["CONNECTED", "Hedgewars server http://www.hedgewars.org/"]
 
-	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 20) $ lastLogins serverInfo
+	let newLogins = takeWhile (\(_ , time) -> (connectTime client) `diffUTCTime` time <= 11) $ lastLogins serverInfo
 
 	if isJust $ host client `Prelude.lookup` newLogins then
 		processAction (clID, serverInfo{lastLogins = newLogins}, updatedClients, rooms) $ ByeClient "Reconnected too fast"

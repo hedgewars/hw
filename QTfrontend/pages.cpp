@@ -1088,10 +1088,14 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setRowStretch(0, 10);
-	pageLayout->setRowStretch(2, 10);
+	pageLayout->setRowStretch(3, 10);
 
-	BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 0);
-	BtnOfficialServer = addButton(tr("Official server"), pageLayout, 1, 1);
+	pageLayout->setColumnStretch(1, 10);
+	pageLayout->setColumnStretch(2, 20);
+	pageLayout->setColumnStretch(3, 10);
 
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 3, 0, true);
+	BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 2);
+	BtnOfficialServer = addButton(tr("Official server"), pageLayout, 2, 2);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }

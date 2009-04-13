@@ -822,7 +822,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						0,
 						4,
 						0);
-				defaultPos:= false
+				defaultPos:= false;
+				HatVisible:= true
 			end
 		end
 	end else
