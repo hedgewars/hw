@@ -50,6 +50,9 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	GBoxOptionsLayout->addWidget(GameSchemes, 0, 1);
 	connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), GBoxOptions), 0, 0);
+
+
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
 	goToSchemePage->setText(tr("Edit schemes"));
 	GBoxOptionsLayout->addWidget(goToSchemePage, 1, 0, 1, 2);

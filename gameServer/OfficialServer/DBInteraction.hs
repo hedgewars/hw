@@ -1,11 +1,15 @@
+{-# LANGUAGE CPP #-}
 module OfficialServer.DBInteraction
 (
 	startDBConnection
 ) where
 
-import Prelude hiding (catch);
+#if defined(OFFICIAL_SERVER)
 import Database.HDBC
 import Database.HDBC.MySQL
+#endif
+
+import Prelude hiding (catch);
 import System.IO
 import Control.Concurrent
 import Control.Exception
@@ -35,6 +39,7 @@ onException io what = io `catch` \e -> do what                   --
 -- to be deleted --------------------------------------------------
 -------------------------------------------------------------------
 
+#if defined(OFFICIAL_SERVER)
 dbQueryString =
 	"select users.pass, users_roles.rid from users left join users_roles on users.uid = users_roles.uid where users.name = ?"
 
@@ -68,6 +73,9 @@ dbConnectionLoop serverInfo = do
 
 	threadDelay (5 * 10^6)
 	dbConnectionLoop serverInfo
+#else
+dbConnectionLoop = fakeDbConnection
+#endif
 
 startDBConnection serverInfo =
 	if (not . null $ dbHost serverInfo) then

@@ -24,7 +24,7 @@ set(HEDGEWARS_PROTO_VER 24)
 
 if(WITH_SERVER)
 	set(HAVE_NETSERVER true)
-	add_subdirectory(netserver)
+	add_subdirectory(gameServer)
 else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
