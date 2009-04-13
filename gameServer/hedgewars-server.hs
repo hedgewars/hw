@@ -23,7 +23,7 @@ import System.Posix
 
 setupLoggers =
 	updateGlobalLogger "Clients"
-		(setLevel DEBUG)
+		(setLevel INFO)
 
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
