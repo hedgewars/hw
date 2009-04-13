@@ -18,17 +18,17 @@
 <context>
     <name>GameCFGWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Illegal ammo scheme</source>
         <translation>ammo調略は不規則</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="57"/>
         <source>Edit schemes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -700,7 +700,7 @@
         <translation type="obsolete">初めの健康ポイント</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="58"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="61"/>
         <source>Weapons</source>
         <translation>兵器</translation>
     </message>
@@ -772,6 +772,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="983"/>
         <source>Crate Drops</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="53"/>
+        <source>Game scheme</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

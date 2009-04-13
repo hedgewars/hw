@@ -29,14 +29,14 @@
 00:26=Karpuz Bombası
 00:27=Şeytani El Bombası
 00:28=Matkaplı Roket
-00:29=Top Silahı
+00:29=Top Tabancası
 00:30=Napalm
 00:31=Uzaktan Kumandalı Uçak
-00:32=Low Gravity
-00:33=Extra Damage
-00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
+00:32=Azaltılmış Yerçekimi
+00:33=Arttırılmış Hasar
+00:34=Ölümsüzlük
+00:35=Arttırılmış Zaman
+00:36=Lazer Görüşü
 
 01:00=Savaş başlasın!
 01:01=Beraberlik

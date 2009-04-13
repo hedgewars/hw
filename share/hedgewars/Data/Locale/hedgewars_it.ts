@@ -29,17 +29,17 @@
 <context>
     <name>GameCFGWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Illegal ammo scheme</source>
         <translation>Schema armi non valido</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="57"/>
         <source>Edit schemes</source>
         <translation>Modifica schemi</translation>
     </message>
@@ -883,7 +883,7 @@
         <translation type="obsolete">Salute iniziale</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="58"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="61"/>
         <source>Weapons</source>
         <translation>Armi</translation>
     </message>
@@ -996,6 +996,11 @@
         <location filename="../../../../QTfrontend/pages.cpp" line="983"/>
         <source>Crate Drops</source>
         <translation>Caduta Casse</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="53"/>
+        <source>Game scheme</source>
+        <translation type="unfinished">Schema di gioco</translation>
     </message>
 </context>
 <context>

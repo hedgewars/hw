@@ -19,19 +19,19 @@
 <context>
     <name>GameCFGWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="129"/>
         <source>Illegal ammo scheme</source>
         <translation>Uygunsuz cephane düzeni</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="57"/>
         <source>Edit schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzeni değiştir</translation>
     </message>
 </context>
 <context>
@@ -100,37 +100,37 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="93"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="97"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tümü</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="98"/>
         <source>Small</source>
-        <translation type="unfinished"></translation>
+        <translation>Küçük</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="99"/>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Orta</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="100"/>
         <source>Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Büyük</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="101"/>
         <source>Cavern</source>
-        <translation type="unfinished"></translation>
+        <translation>Mağara</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="102"/>
         <source>Wacky</source>
-        <translation type="unfinished"></translation>
+        <translation>Uçuk Kaçık</translation>
     </message>
 </context>
 <context>
@@ -196,17 +196,17 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="357"/>
         <source>You got kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>Kovuldunuz</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Parola</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
         <source>Enter your password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Parolanızı girin:</translation>
     </message>
 </context>
 <context>
@@ -431,7 +431,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
         <source>Admin features</source>
-        <translation type="unfinished"></translation>
+        <translation>Yönetici görevleri</translation>
     </message>
 </context>
 <context>
@@ -439,7 +439,17 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1008"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeni</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
+        <source>Prev</source>
+        <translation type="obsolete">Önce</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="930"/>
+        <source>Next</source>
+        <translation type="obsolete">Sonra</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1009"/>
@@ -518,7 +528,7 @@
     <message>
         <location filename="../../../../QTfrontend/chatwidget.cpp" line="64"/>
         <source>Ban</source>
-        <translation type="unfinished"></translation>
+        <translation>Yasakla</translation>
     </message>
 </context>
 <context>
@@ -574,9 +584,34 @@
         <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="873"/>
+        <source>Add Border</source>
+        <translation type="obsolete">Sınır Ekle</translation>
+    </message>
+    <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="403"/>
         <source>Reduce Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaliteyi Düşür</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="877"/>
+        <source>Low Gravity</source>
+        <translation type="obsolete">Azaltılmış Yerçekimi</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="881"/>
+        <source>Laser Sight</source>
+        <translation type="obsolete">Lazer Görüşü</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="885"/>
+        <source>Invulnerable</source>
+        <translation type="obsolete">Ölümsüzlük</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="889"/>
+        <source>Add Mines</source>
+        <translation type="obsolete">Mayın Ekle</translation>
     </message>
 </context>
 <context>
@@ -703,7 +738,7 @@
         <translation type="obsolete">Başlangıç sağlığı</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="58"/>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="61"/>
         <source>Weapons</source>
         <translation>Silahlar</translation>
     </message>
@@ -745,6 +780,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="424"/>
         <source>Initial sound volume</source>
+        <translation>Başlangıçtaki ses seviyesi</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="53"/>
+        <source>Game scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -768,13 +808,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="998"/>
-        <source>Scheme Name:</source>
+        <location filename="../../../../QTfrontend/pages.cpp" line="983"/>
+        <source>Crate Drops</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="983"/>
-        <source>Crate Drops</source>
+        <location filename="../../../../QTfrontend/pages.cpp" line="998"/>
+        <source>Scheme Name:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -897,7 +937,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Elle Belirt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="501"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="500"/>
         <source>Join official server</source>
         <translation type="obsolete">Resmi sunucuya bağlan</translation>
     </message>
@@ -1021,27 +1061,27 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="900"/>
         <source>Add Border</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sınır Ekle</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="904"/>
         <source>Low Gravity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Azaltılmış Yerçekimi</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
         <source>Laser Sight</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lazer Görüşü</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="912"/>
         <source>Invulnerable</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ölümsüzlük</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="916"/>
         <source>Add Mines</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mayın Ekle</translation>
     </message>
 </context>
 <context>
