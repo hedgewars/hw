@@ -18,7 +18,7 @@
 
 unit uStore;
 interface
-uses uConsts, uTeams, SDLh, 
+uses uConsts, uTeams, SDLh,
 {$IFDEF IPHONE}
 	gles11,
 {$ELSE}
@@ -655,6 +655,7 @@ function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 var w, h: LongInt;
     Result: PSDL_Surface;
 begin
+if length(s) = 0 then s:= ' ';
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
 
 Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
