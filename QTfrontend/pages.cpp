@@ -863,8 +863,8 @@ PageScheme::PageScheme(QWidget* parent) :
 
 	pageLayout->addWidget(gb, 1,0,13,4);
 	
-	QGroupBox * gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
-	QGroupBox * gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
+	gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
+	gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
 
 	gbGameModes->setStyleSheet(".QGroupBox {"
 			"background-color: #130f2c; background-image:url();"
@@ -1014,6 +1014,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	connect(BtnNew, SIGNAL(clicked()), this, SLOT(newRow()));
 	connect(BtnDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
 	connect(selectScheme, SIGNAL(currentIndexChanged(int)), mapper, SLOT(setCurrentIndex(int)));
+	connect(selectScheme, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeSelected(int)));
 }
 
 void PageScheme::setModel(QAbstractItemModel * model)
@@ -1050,6 +1051,13 @@ void PageScheme::deleteRow()
 {
 	QAbstractItemModel * model = mapper->model();
 	model->removeRow(selectScheme->currentIndex());
+}
+
+void PageScheme::schemeSelected(int n)
+{
+	gbGameModes->setEnabled(n >= 4); // FIXME: derive number from model
+	gbBasicSettings->setEnabled(n >= 4);
+	LE_name->setEnabled(n >= 4);
 }
 
 /////////////////////////////////////////////////

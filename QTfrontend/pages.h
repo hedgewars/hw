@@ -433,9 +433,13 @@ private:
 	QLineEdit * LE_name;
 	QComboBox * selectScheme;
 
+	QGroupBox * gbGameModes;
+	QGroupBox * gbBasicSettings;
+
 private slots:
 	void newRow();
 	void deleteRow();
+	void schemeSelected(int);
 };
 
 class PageAdmin : public AbstractPage
