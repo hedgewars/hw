@@ -480,12 +480,12 @@
 <context>
     <name>PageNetType</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1093"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1097"/>
         <source>LAN game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1094"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1098"/>
         <source>Official server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1006,17 +1006,17 @@
         <translation>開發者：</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="67"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="71"/>
         <source>Art:</source>
         <translation>美術：</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="87"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="91"/>
         <source>Translations:</source>
         <translation>翻譯：</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="107"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="111"/>
         <source>Special thanks:</source>
         <translation>特別感謝：</translation>
     </message>
@@ -1056,7 +1056,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="79"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="83"/>
         <source>Sounds:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1125,7 +1125,7 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="263"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="272"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
@@ -1149,27 +1149,27 @@ _請檢查安裝程序</translation>
         <translation type="unfinished">伺服器連結被斷            </translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>武器</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <source>Can not delete default weapon set</source>
         <translation>無法刪除預設武器設定</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Really delete this weapon set?</source>
         <translation>確定要刪除這武器設定？</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
         <source>Can not edit default weapon set</source>
         <translation type="unfinished">無法更改預設武器設定</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="266"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="275"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>

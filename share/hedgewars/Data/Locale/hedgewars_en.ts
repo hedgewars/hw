@@ -320,12 +320,12 @@
 <context>
     <name>PageNetType</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1093"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1097"/>
         <source>LAN game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1094"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1098"/>
         <source>Official server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -673,22 +673,22 @@
         <translation>Developers:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="67"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="71"/>
         <source>Art:</source>
         <translation>Art:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="79"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="83"/>
         <source>Sounds:</source>
         <translation>Sounds:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="87"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="91"/>
         <source>Translations:</source>
         <translation>Translations:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="107"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="111"/>
         <source>Special thanks:</source>
         <translation>Special thanks:</translation>
     </message>
@@ -807,12 +807,12 @@
         <translation>Connection to server is lost</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="263"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="272"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="266"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="275"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -821,22 +821,22 @@ Please check your installation</source>
 Please check your installation</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Weapons</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
         <source>Can not edit default weapon set</source>
         <translation>Can not edit default weapon set</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="164"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <source>Can not delete default weapon set</source>
         <translation>Can not delete default weapon set</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="169"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Really delete this weapon set?</source>
         <translation>Really delete this weapon set?</translation>
     </message>
