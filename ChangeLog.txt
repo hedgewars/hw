@@ -1,6 +1,31 @@
 + features
 * bugfixes
 
+0.9.9 -> 0.9.10:
+ + Many new hats, maps, themes, updates on existing ones
+ + Remove small pixels left by fire
+ + Double possible land dimensions, allow up to 48 hedgehogs in game
+ + Brand new net server
+ + Cave mode
+ + Initial sound volume option
+ + Increase rendering speed and overall graphics performance
+ + New game options
+ + Game schemes
+ + New voicepack
+ + Reduced quality mode for better performance on old computers
+ + Random teams generator
+ + Many utilities
+ + Templates filter
+ + Water bouncing
+ * Fix underwater theme soundtrack
+ * Fix blowtorch delete condition
+ * Fix crash when attackbar wasn't deleted, but hedgehog gear was
+ * Fix spectating when one of players left the game
+ * Fix accidental rope removing from ammo in some cases
+ * Prevent engine crash when not enough place for all hedgehogs
+ * Fix bug with not working toggles 'rectrict joins' and 'restrict team adding'
+ + Fix engine slowdown when trying to switch ammo while firing bazooka
+
 0.9.8 -> 0.9.9:
  + Voicepacks
  + Teams health graphic on statistics page
