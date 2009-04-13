@@ -2,6 +2,7 @@ foreach(dir
 	Default
 	Pirate
 	Robot
+	Russian
 	Singer
 	Surfer
 	)
