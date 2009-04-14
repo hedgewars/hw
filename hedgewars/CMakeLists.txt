@@ -64,6 +64,22 @@ if (${testnoexecstack})
 set (noexecstack_flags "")
 endif (${testnoexecstack})
 
+IF(APPLE)
+	FIND_PACKAGE(SDL)
+	if (SDL_FOUND)
+		exec_program(gcc
+			     ARGS  -c -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o  ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR})
+		exec_program(${CMAKE_AR} 
+			     ARGS -r ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o)
+		exec_program(${CMAKE_RANLIB}
+			     ARGS ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a)
+	else (SDL_FOUND)
+		message(FATAL_ERROR "No SDL framework found!")
+	endif (SDL_FOUND)
+
+ENDIF(APPLE)
+
+
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 if (fpc_version)
 	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
@@ -74,11 +90,7 @@ if (fpc_version)
 		message("Minimum required version of FreePascal is 2.2.0")
 	else (fpc_ver LESS "020200")
 		set(pascal_compiler ${fpc_executable})
-		IF(APPLE)
-			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Cs2000000" "-vwi" "-O2" "-Fl/opt/local/lib" ${hwengine_project})
-		ELSE(APPLE)
-			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
-		ENDIF(APPLE)
+		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
 	endif (fpc_ver LESS "020200")
 endif (fpc_version)
 

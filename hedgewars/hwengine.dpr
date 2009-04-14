@@ -26,7 +26,7 @@ WriteLn('Only Freepascal supported');
 // "cdecl; export;" (see the fpclogo.pas unit for an example), and then add C-declarations for
 // these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
 // to make these functions available in the C/C++/Objective-C source files
-// (add "#include PascalImports.h" near the top of these files if it's not there yet)
+// (add "#include PascalImports.h" near the top of these files if it is not there yet)
 //Library PascalLibrary;
 program hwengine;
 uses

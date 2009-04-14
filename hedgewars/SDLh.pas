@@ -51,7 +51,7 @@ interface
 {$ENDIF}
 {$ENDIF}
 
-(*  SDL *)
+(*  SDL  *)
 const {$IFDEF WIN32}
       SDLLibName = 'SDL.dll';
       {$ENDIF}
@@ -315,7 +315,7 @@ function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longw
 function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
-(*  SDL_mixer *)
+(*  SDL_mixer  *)
 
 const {$IFDEF WIN32}
       SDL_MixerLibName = 'SDL_mixer.dll';
@@ -380,7 +380,7 @@ function  Mix_PauseMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLi
 function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
-(*  SDL_image *)
+(*  SDL_image  *)
 
 const {$IFDEF WIN32}
       SDL_ImageLibName = 'SDL_image.dll';
@@ -395,7 +395,7 @@ const {$IFDEF WIN32}
 
 function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 
-(*  SDL_net *)
+(*  SDL_net  *)
 
 const {$IFDEF WIN32}
       SDL_NetLibName = 'SDL_net.dll';
