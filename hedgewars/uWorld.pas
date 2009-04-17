@@ -417,7 +417,9 @@ if cShowFPS then
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
       if fpsTexture <> nil then FreeTexture(fpsTexture);
+{$IFNDEF IPHONE}
       tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+{$ENDIF}
       fpsTexture:= Surface2Tex(tmpSurface);
       SDL_FreeSurface(tmpSurface)
       end;

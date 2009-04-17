@@ -8,6 +8,9 @@ win32 {
 	RC_FILE	= ./res/hedgewars.rc
 }
 
+macx{
+	CONFIG += x86
+}
 QT += network svg xml
 
 HEADERS += binds.h \
@@ -109,4 +112,8 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += hedgewars.qrc
 
+!macx{
 LIBS += libSDL
+}else{
+LIBS += -framework SDL -framework SDL_mixer -framework Ogg -framework Vorbis
+}
