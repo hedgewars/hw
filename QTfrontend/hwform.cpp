@@ -373,9 +373,7 @@ void HWForm::GoBack()
 		if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
 			GoBack();
 
-	if (id == ID_PAGE_NET) {
-		if(hwnet || pnetserver) NetDisconnect();
-	}
+	if (curid == ID_PAGE_ROOMSLIST) NetDisconnect();
 
 	if (curid == ID_PAGE_SCHEME)
 		ammoSchemeModel->Save();
