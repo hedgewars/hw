@@ -452,8 +452,11 @@ end;
 
 procedure FreeTexture(tex: PTexture);
 begin
-glDeleteTextures(1, @tex^.id);
-dispose(tex)
+if tex <> nil then
+	begin
+	glDeleteTextures(1, @tex^.id);
+	dispose(tex)
+	end
 end;
 
 function DecodeBase64(s: shortstring): shortstring;
