@@ -117,6 +117,7 @@ processAction (clID, serverInfo, clients, rooms) (Warning msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
+	infoM "Clients" ((show $ clientUID client) ++ " quits: " ++ msg)
 	(_, _, newClients, newRooms) <-
 			if roomID client /= 0 then
 				processAction  (clID, serverInfo, clients, rooms)

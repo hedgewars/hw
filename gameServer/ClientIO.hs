@@ -8,18 +8,21 @@ import System.IO
 ----------------
 import CoreTypes
 
-listenLoop :: Handle -> [String] -> Chan CoreMessage -> Int -> IO ()
-listenLoop handle buf chan clientID = do
+listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> Int -> IO ()
+listenLoop handle linesNumber buf chan clientID = do
 	str <- hGetLine handle
-	if str == "" then do
-		writeChan chan $ ClientMessage (clientID, buf)
-		listenLoop handle [] chan clientID
+	if (linesNumber > 50) || (length str > 450) then
+		writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
 		else
-		listenLoop handle (buf ++ [str]) chan clientID
+		if str == "" then do
+			writeChan chan $ ClientMessage (clientID, buf)
+			listenLoop handle 0 [] chan clientID
+			else
+			listenLoop handle (linesNumber + 1) (buf ++ [str]) chan clientID
 
 clientRecvLoop :: Handle -> Chan CoreMessage -> Int -> IO ()
 clientRecvLoop handle chan clientID =
-	listenLoop handle [] chan clientID
+	listenLoop handle 0 [] chan clientID
 		`catch` (\e -> (clientOff $ show e) >> return ())
 	where clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
 
