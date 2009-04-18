@@ -9,11 +9,12 @@ win32 {
 }
 
 macx{
-	CONFIG += x86
+	CONFIG += x86 ppc
 }
+
 QT += network svg xml
 
-HEADERS += binds.h \
+HEADERS += 	binds.h \
 		game.h \
 		hwform.h \
 		sdlkeys.h \
@@ -51,9 +52,14 @@ HEADERS += binds.h \
 		igbox.h \
 		weaponItem.h \
 		statsPage.h \
-		misc.h
+		misc.h \
+		ammoSchemeModel.h \
+		togglebutton.h \
+		namegen.h \
+		netregister.h \
+		hats.h
 
-SOURCES += binds.cpp \
+SOURCES +=	binds.cpp \
 		game.cpp \
 		main.cpp \
 		hwform.cpp \
@@ -89,7 +95,12 @@ SOURCES += binds.cpp \
 		igbox.cpp \
 		weaponItem.cpp \
 		statsPage.cpp \
-		misc.cpp
+		misc.cpp \
+		ammoSchemeModel.cpp \
+		togglebutton.cpp \
+		namegen.cpp \
+		netregister.cpp \
+		hats.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts
@@ -113,7 +124,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 RESOURCES += hedgewars.qrc
 
 !macx{
-LIBS += libSDL
+	LIBS += libSDL
 }else{
-LIBS += -framework SDL -framework SDL_mixer -framework Ogg -framework Vorbis
+	LIBS += -framework SDL -framework SDL_mixer -framework Ogg -framework Vorbis
 }

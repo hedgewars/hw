@@ -66,9 +66,14 @@ endif (${testnoexecstack})
 
 IF(APPLE)
 	FIND_PACKAGE(SDL)
+	if(CMAKE_OSX_ARCHITECTURES)
+		set (arch_to_build "-arch i386 -arch ppc7400")
+	else(CMAKE_OSX_ARCHITECTURES)
+		set (arch_to build "")
+	endif(CMAKE_OSX_ARCHITECTURES)
 	if (SDL_FOUND)
 		exec_program(gcc
-			     ARGS  -c -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o  ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR})
+			     ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o -c ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR})
 		exec_program(${CMAKE_AR} 
 			     ARGS -r ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o)
 		exec_program(${CMAKE_RANLIB}
@@ -98,6 +103,9 @@ if (NOT pascal_compiler)
 	message(FATAL_ERROR "No Pascal compiler found!")
 endif (NOT pascal_compiler)
 
+
+IF(NOT CMAKE_OSX_ARCHITECTURES)
+#here is the standard command for any system
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"
 		ARGS ${pascal_compiler_flags}
@@ -105,6 +113,35 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		DEPENDS ${engine_sources}
 		)
 
+ELSE(NOT CMAKE_OSX_ARCHITECTURES)
+#these are the two dependencies for building a universal binary on Mac OS X
+
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386"
+		COMMAND "ppc386" 
+		ARGS ${pascal_compiler_flags} -ohwengine.386
+		MAIN_DEPENDENCY ${hwengine_project}
+		DEPENDS ${engine_sources}
+		)
+add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386")
+
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc"
+		COMMAND "ppcppc"
+		ARGS ${pascal_compiler_flags} -ohwengine.ppc
+		MAIN_DEPENDENCY ${hwengine_project}
+		DEPENDS ${engine_sources}
+		)
+add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc")
+
+#this is the command that bundles the two executables into one
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
+		COMMAND "lipo"
+		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}
+		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc" 
+		)
+ENDIF(NOT CMAKE_OSX_ARCHITECTURES)
+
+
 add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
+

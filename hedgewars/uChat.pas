@@ -166,7 +166,7 @@ if Key <> 0 then
 		{Esc}
 		27: SetLine(InputStr, '', true);
 		{Return}
-		13, 271: begin
+		3, 13, 271: begin
 			if Length(InputStr.s) > 0 then
 				begin
 				AcceptChatString(InputStr.s);

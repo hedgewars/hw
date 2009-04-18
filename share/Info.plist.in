@@ -4,17 +4,27 @@
 <dict>
 	<key>CFBundleExecutable</key>
 	<string>hedgewars</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Hedgewars, a Worms-like game</string>
 	<key>CFBundleIconFile</key>
 	<string>Icon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.hedgewars</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>10.5.0</string>
 	<key>CFBundleSignature</key>
 	<string>Hedge</string>
 	<key>CFBundleVersion</key>
 	<string>${HEDGEWARS_VERSION}</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>GPL</string>
+	<key>NSAppleScriptEnabled</key>
+	<false/>
+	<key>LSExecutableArchitectures</key>
+   	<string>i386, ppc</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.4.0</string>
+	<key>LSRequiresNativeExecution</key>
+        <true/>
 </dict>
 </plist>
