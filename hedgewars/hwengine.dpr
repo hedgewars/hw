@@ -333,8 +333,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('-= Hedgewars ' + cVersionString + ' =-');
-WriteLnToConsole('   -= by unC0Rr =-   ');
+WriteLnToConsole('Hedgewars ' + cVersionString + ' engine');
 GetParams;
 Randomize;
 { /home/nemo/games/bin/hwengine /home/nemo/games/hedgewars/Data ~/.hedgewars/Saves/2009-03-22_19-54.hws_24 480 320 32 0 1 en.txt 128 33 0 1 1 0}
