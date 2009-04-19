@@ -15,7 +15,7 @@ import Network
 data ClientInfo =
  ClientInfo
 	{
-		clientUID :: Int,
+		clientUID :: !Int,
 		sendChan :: Chan [String],
 		clientHandle :: Handle,
 		host :: String,
@@ -23,18 +23,18 @@ data ClientInfo =
 		nick :: String,
 		webPassword :: String,
 		logonPassed :: Bool,
-		clientProto :: Word16,
-		roomID :: Int,
-		pingsQueue :: Word,
+		clientProto :: !Word16,
+		roomID :: !Int,
+		pingsQueue :: !Word,
 		isMaster :: Bool,
 		isReady :: Bool,
-		isAdministrator :: Bool,
-		forceQuit :: Bool,
-		partRoom :: Bool
+		isAdministrator :: Bool
 	}
 
 instance Show ClientInfo where
-	show ci = show $ clientUID ci
+	show ci = (show $ clientUID ci)
+			++ " nick: " ++ (nick ci)
+			++ " host: " ++ (host ci)
 
 instance Eq ClientInfo where
 	a1 == a2 = clientHandle a1 == clientHandle a2
@@ -59,14 +59,14 @@ data TeamInfo =
 data RoomInfo =
 	RoomInfo
 	{
-		roomUID :: Int,
+		roomUID :: !Int,
 		name :: String,
 		password :: String,
 		roomProto :: Word16,
 		teams :: [TeamInfo],
 		gameinprogress :: Bool,
 		playersIn :: !Int,
-		readyPlayers :: Int,
+		readyPlayers :: !Int,
 		playersIDs :: IntSet.IntSet,
 		isRestrictedJoins :: Bool,
 		isRestrictedTeams :: Bool,
@@ -118,7 +118,6 @@ data ServerInfo =
 		serverMessage :: String,
 		serverMessageForOldVersions :: String,
 		listenPort :: PortNumber,
-		loginsNumber :: Int,
 		nextRoomID :: Int,
 		dbHost :: String,
 		dbLogin :: String,
@@ -130,7 +129,7 @@ data ServerInfo =
 	}
 
 instance Show ServerInfo where
-	show si = "Logins: " ++ (show $ loginsNumber si)
+	show si = "Server Info"
 
 newServerInfo = (
 	ServerInfo
@@ -138,7 +137,6 @@ newServerInfo = (
 		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
 		"<font color=yellow><h3>Hedgewars 0.9.10 is out! Please, update. Support for previous versions IS DROPPED</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><h4>New features are:</h4><ul><li>Large maps</li><li>New game options</li><li>Utilities</li><li>...</li></ul></font>"
 		46631
-		0
 		0
 		""
 		""
