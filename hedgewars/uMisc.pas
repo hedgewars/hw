@@ -55,8 +55,8 @@ var
 	cScreenHeight    : LongInt = 768;
 	cInitWidth       : LongInt = 1024;
 	cInitHeight      : LongInt = 768;
-	cBits            : LongInt = 16;
-	cBitsStr         : string[2] = '16';
+	cBits            : LongInt = 32;
+	cBitsStr         : string[2] = '32';
 	cTagsMask        : byte = 7;
 
 	cWaterLine       : LongInt = LAND_HEIGHT;
@@ -73,7 +73,7 @@ var
 	cColorNearBlack       : Longword = $FF000010;
 	cExplosionBorderColor : LongWord = $808080;
 
-	cShowFPS      : boolean = true;
+	cShowFPS      : boolean = false;
 	cCaseFactor   : Longword = 5;  {0..9}
 	cLandAdditions: Longword = 4;
 	cFullScreen   : boolean = false;
@@ -82,7 +82,7 @@ var
 	cSeed         : shortstring = '';
 	cInitVolume   : LongInt = 128;
 	cVolumeDelta  : LongInt = 0;
-	cTimerInterval   : Longword = 5;
+	cTimerInterval   : Longword = 8;
 	cHasFocus     : boolean = true;
 	cInactDelay   : Longword = 1250;
 
@@ -551,13 +551,21 @@ cLaserSighting:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}
-if ParamCount > 0 then
+if ParamCount >= 0 then
+ //this check prevents a crash in Mac OS X
+ if ParamCount = 0 then
+ begin
+	Assign(f, '/tmp/debug.txt');
+    rewrite(f);
+ end else
+ begin
   for i:= 0 to 7 do
     begin
     Assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
     rewrite(f);
     if IOResult = 0 then break
     end;
+ end;
 {$I+}
 
 finalization

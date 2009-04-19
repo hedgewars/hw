@@ -27,7 +27,7 @@ WriteLn('Only Freepascal supported');
 // these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
 // to make these functions available in the C/C++/Objective-C source files
 // (add "#include PascalImports.h" near the top of these files if it is not there yet)
-//Library PascalLibrary;
+
 program hwengine;
 uses
 	SDLh in 'SDLh.pas',
@@ -64,7 +64,7 @@ uses
 	uFloat in 'uFloat.pas',
 	uStats in 'uStats.pas',
 	uChat in 'uChat.pas',
-	uLandTexture;
+	uLandTexture in 'uLandTexture.pas';
 
 {$INCLUDE options.inc}
 
@@ -186,6 +186,23 @@ IPCCheckSock
 until isTerminated
 end;
 
+/////////////////////
+procedure DisplayUsage;
+begin
+	WriteLn('Wrong argument format: correct configurations is');
+	WriteLn();
+	WriteLn('  hwengine <path to data folder> <path to replay file> [option]');
+	WriteLn();
+	WriteLn('where [option] must be specified either as');
+	WriteLn(' --set-video [screen height] [screen width] [color dept]');
+	WriteLn(' --set-audio [volume] [enable music] [enable sounds]');
+	WriteLn(' --set-other [language file] [full screen] [show FPS]');
+	WriteLn(' --set-multimedia [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
+	WriteLn(' --set-everything [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+	WriteLn();
+	WriteLn('Read documentation online at http://www.hedgewars.org/ for more information');
+end;
+
 ////////////////////
 procedure GetParams;
 var
@@ -228,30 +245,98 @@ case ParamCount of
      GameType:= gmtLandPreview;
      if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
      end;
- 14: begin
-     PathPrefix:= ParamStr(1);
-     recordFileName:= ParamStr(2);
-     val(ParamStr(3), cScreenWidth);
-     val(ParamStr(4), cScreenHeight);
-     cInitWidth:= cScreenWidth;
-     cInitHeight:= cScreenHeight;
-     cBitsStr:= ParamStr(5);
-     val(cBitsStr, cBits);
-     cFullScreen:= ParamStr(6) = '1';
-     isSoundEnabled:= ParamStr(7) = '1';
-     cLocaleFName:= ParamStr(8);
-     val(ParamStr(9), cInitVolume);
-     val(ParamStr(10), cTimerInterval);
-     cShowFPS:= ParamStr(11) = '1';
-     cAltDamage:= ParamStr(12) = '1';
-     isMusicEnabled:= ParamStr(13) = '1';
-     cReducedQuality:= ParamStr(14) = '1';
-     for p:= Succ(Low(TPathType)) to High(TPathType) do
-         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-     end;
-   else
-   OutError(errmsgShouldntRun, true)
-   end
+  2: begin
+		PathPrefix:= ParamStr(1);
+		recordFileName:= ParamStr(2);
+	 
+		for p:= Succ(Low(TPathType)) to High(TPathType) do
+			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+	end;
+  6: begin
+		PathPrefix:= ParamStr(1);
+		recordFileName:= ParamStr(2);
+	 
+		if ParamStr(3) = '--set-video'	then
+		begin
+			val(ParamStr(4), cScreenWidth);
+			val(ParamStr(5), cScreenHeight);
+			cInitWidth:= cScreenWidth;
+			cInitHeight:= cScreenHeight;
+			cBitsStr:= ParamStr(6);
+			val(cBitsStr, cBits);
+		end
+		else
+		begin
+			if ParamStr(3) = '--set-audio' then
+			begin
+				val(ParamStr(4), cInitVolume);
+				isMusicEnabled:= ParamStr(5) = '1';
+				isSoundEnabled:= ParamStr(6) = '1';
+			end
+			else
+			begin
+				if ParamStr(3) = '--set-other' then
+				begin
+					cLocaleFName:= ParamStr(4);
+					cFullScreen:= ParamStr(5) = '1';
+					cShowFPS:= ParamStr(6) = '1';
+				end
+				else DisplayUsage;
+			end
+		end;
+		
+		for p:= Succ(Low(TPathType)) to High(TPathType) do
+			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+	end;
+ 11: begin
+		PathPrefix:= ParamStr(1);
+		recordFileName:= ParamStr(2);
+	
+		if ParamStr(3) = '--set-multimedia' then
+		begin
+			val(ParamStr(4), cScreenWidth);
+			val(ParamStr(5), cScreenHeight);
+			cInitWidth:= cScreenWidth;
+			cInitHeight:= cScreenHeight;
+			cBitsStr:= ParamStr(6);
+			val(cBitsStr, cBits);
+			val(ParamStr(7), cInitVolume);
+			isMusicEnabled:= ParamStr(8) = '1';
+			isSoundEnabled:= ParamStr(9) = '1';
+			cLocaleFName:= ParamStr(10);
+			cFullScreen:= ParamStr(11) = '1';
+		end
+		else DisplayUsage;
+		
+		for p:= Succ(Low(TPathType)) to High(TPathType) do
+			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+	end;
+ 15: begin
+		if ParamStr(3) = '--set-everything' then
+		begin
+			val(ParamStr(4), cScreenWidth);
+			val(ParamStr(5), cScreenHeight);
+			cInitWidth:= cScreenWidth;
+			cInitHeight:= cScreenHeight;
+			cBitsStr:= ParamStr(6);
+			val(cBitsStr, cBits);
+			val(ParamStr(7), cInitVolume);
+			isMusicEnabled:= ParamStr(8) = '1';
+			isSoundEnabled:= ParamStr(9) = '1';
+			cLocaleFName:= ParamStr(10);
+			cFullScreen:= ParamStr(11) = '1';
+			cAltDamage:= ParamStr(12) = '1';
+			cShowFPS:= ParamStr(13) = '1';
+			val(ParamStr(14), cTimerInterval);
+			cReducedQuality:= ParamStr(15) = '1';
+		end
+		else DisplayUsage;
+		
+		for p:= Succ(Low(TPathType)) to High(TPathType) do
+			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+	end;
+	else DisplayUsage;
+	end;
 end;
 
 procedure ShowMainWindow;
@@ -336,7 +421,8 @@ begin
 WriteLnToConsole('Hedgewars ' + cVersionString + ' engine');
 GetParams;
 Randomize;
-{ /home/nemo/games/bin/hwengine /home/nemo/games/hedgewars/Data ~/.hedgewars/Saves/2009-03-22_19-54.hws_24 480 320 32 0 1 en.txt 128 33 0 1 1 0}
+
 if GameType = gmtLandPreview then GenLandPreview
                              else Game
 end.
+

@@ -115,6 +115,7 @@ for i:= 4 to cKeyMaxIndex do
 DefaultBinds[ 27]:= 'quit';
 DefaultBinds[ 48]:= '+volup';
 DefaultBinds[ 57]:= '+voldown';
+DefaultBinds[ 44]:= 'history';	// , instead of `
 DefaultBinds[ 96]:= 'history';
 DefaultBinds[ 99]:= 'capture';
 DefaultBinds[104]:= 'findhh';

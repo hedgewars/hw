@@ -5,7 +5,7 @@
 	<key>CFBundleExecutable</key>
 	<string>hedgewars</string>
 	<key>CFBundleGetInfoString</key>
-	<string>Hedgewars, a Worms-like game</string>
+	<string>http://www.hedgewars.org</string>
 	<key>CFBundleIconFile</key>
 	<string>Icon.icns</string>
 	<key>CFBundleIdentifier</key>
