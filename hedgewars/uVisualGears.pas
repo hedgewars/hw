@@ -39,6 +39,7 @@ type PVisualGear = ^TVisualGear;
 		dX: hwFloat;
 		dY: hwFloat;
 		mdY: QWord;
+		Timer: Longword;
 		Angle, dAngle: real;
 		Kind: TVisualGearType;
 		doStep: TVGearStepProcedure;
@@ -57,7 +58,7 @@ var VisualGearsList: PVisualGear = nil;
 	vobVelocity, vobFallSpeed: LongInt;
 
 implementation
-uses uWorld, uMisc, uStore;
+uses uWorld, uMisc, uStore, uTeams;
 const cExplFrameTicks = 110;
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
@@ -160,6 +161,85 @@ else
 	dec(Gear^.FrameTicks, Steps)
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+const cSorterWorkTime = 640;
+var thexchar: array[0..cMaxTeams] of
+			record
+			dy, ny, dw: LongInt;
+			team: PTeam;
+			SortFactor: QWord;
+			end;
+    currsorter: PVisualGear = nil;
+
+procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
+var i, t: LongInt;
+begin
+for t:= 1 to Steps do
+	begin
+	dec(Gear^.Timer);
+	if (Gear^.Timer and 15) = 0 then
+		for i:= 0 to Pred(TeamsCount) do
+			with thexchar[i] do
+				begin
+				{$WARNINGS OFF}
+				team^.DrawHealthY:= ny + dy * Gear^.Timer div 640;
+				team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * Gear^.Timer div cSorterWorkTime;
+				{$WARNINGS ON}
+				end;
+
+	if (Gear^.Timer = 0) or (currsorter <> Gear) then
+		begin
+		if currsorter = Gear then currsorter:= nil;
+		DeleteVisualGear(Gear);
+		exit
+		end
+	end
+end;
+
+procedure doStepTeamHealthSorter(Gear: PVisualGear; Steps: Longword);
+var i: Longword;
+	b: boolean;
+	t: LongInt;
+begin
+for t:= 0 to Pred(TeamsCount) do
+	with thexchar[t] do
+		begin
+		dy:= TeamsArray[t]^.DrawHealthY;
+		dw:= TeamsArray[t]^.TeamHealthBarWidth - TeamsArray[t]^.NewTeamHealthBarWidth;
+		team:= TeamsArray[t];
+		SortFactor:= TeamsArray[t]^.Clan^.ClanHealth;
+		SortFactor:= (SortFactor shl  3) + TeamsArray[t]^.Clan^.ClanIndex;
+		SortFactor:= (SortFactor shl 30) + TeamsArray[t]^.TeamHealth;
+		end;
+
+if TeamsCount > 1 then
+	repeat
+	b:= true;
+	for t:= 0 to TeamsCount - 2 do
+		if (thexchar[t].SortFactor > thexchar[Succ(t)].SortFactor) then
+			begin
+			thexchar[cMaxTeams]:= thexchar[t];
+			thexchar[t]:= thexchar[Succ(t)];
+			thexchar[Succ(t)]:= thexchar[cMaxTeams];
+			b:= false
+			end
+	until b;
+
+t:= - 4;
+for i:= 0 to Pred(TeamsCount) do
+	with thexchar[i] do
+		begin
+		dec(t, team^.HealthTex^.h + 2);
+		ny:= t;
+		dy:= dy - ny
+		end;
+
+Gear^.Timer:= cSorterWorkTime;
+Gear^.doStep:= @doStepTeamHealthSorterWork;
+currsorter:= Gear;
+//doStepTeamHealthSorterWork(Gear, Steps)
+end;
+
 // ==================================================================
 const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 		(
@@ -168,7 +248,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepExpl,
 			@doStepExpl,
 			@doStepFire,
-			@doStepSmallDamage
+			@doStepSmallDamage,
+			@doStepTeamHealthSorter
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;

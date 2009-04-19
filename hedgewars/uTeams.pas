@@ -105,7 +105,7 @@ function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat, uVisualGears;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;
@@ -356,7 +356,7 @@ with team^ do
 
 RecountClanHealth(team^.Clan);
 
-AddGear(0, 0, gtTeamHealthSorter, 0, _0, _0, 0)
+AddVisualGear(0, 0, vgtTeamHealthSorter)
 end;
 
 procedure RestoreTeamsFromSave;

@@ -128,7 +128,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepCase,
 			@doStepDEagleShot,
 			@doStepDynamite,
-			@doStepTeamHealthSorter,
 			@doStepBomb,
 			@doStepCluster,
 			@doStepShover,
