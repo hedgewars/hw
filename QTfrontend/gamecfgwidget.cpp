@@ -58,17 +58,28 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	GBoxOptionsLayout->addWidget(goToSchemePage, 1, 0, 1, 2);
 	connect(goToSchemePage, SIGNAL(clicked()), this, SIGNAL(goToSchemes()));
 	
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 8, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 2, 0);
 
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 8, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 2, 1);
 	
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
+	
+	QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
+	goToWeaponPage->setText(tr("Edit weapons"));
+	GBoxOptionsLayout->addWidget(goToWeaponPage, 3, 0, 1, 2);
+
+	connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
 	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
 	connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
+}
+
+void GameCFGWidget::jumpToWeapons()
+{
+	emit goToWeapons(WeaponsName->currentText());
 }
 
 QVariant GameCFGWidget::schemeData(int column) const

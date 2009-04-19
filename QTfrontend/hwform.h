@@ -57,6 +57,7 @@ private slots:
 	void GoToInfo();
 	void GoToTraining();
 	void GoToSelectWeapon();
+	void GoToSelectWeaponSet(const QString & name);
 	void GoToSelectNewWeapon();
 	void GoToNetServer();
 	void GoToSchemes();

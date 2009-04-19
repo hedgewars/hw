@@ -52,6 +52,7 @@ public slots:
 signals:
 	void paramChanged(const QString & param, const QStringList & value);
 	void goToSchemes();
+	void goToWeapons(const QString & name);
 
 private slots:
 	void ammoChanged(int index);
@@ -60,6 +61,7 @@ private slots:
 	void seedChanged(const QString &);
 	void themeChanged(const QString &);
 	void schemeChanged(int);
+	void jumpToWeapons();
 
 private:
 	QGridLayout mainLayout;

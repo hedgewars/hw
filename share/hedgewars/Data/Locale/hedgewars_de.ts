@@ -41,7 +41,7 @@
     <message>
         <location filename="../../../../QTfrontend/gamecfgwidget.cpp" line="57"/>
         <source>Edit schemes</source>
-        <translation>Waffenzusammenstellungen bearbeiten</translation>
+        <translation>Spielprofile bearbeiten</translation>
     </message>
 </context>
 <context>

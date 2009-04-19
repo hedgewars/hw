@@ -92,6 +92,7 @@ HWForm::HWForm(QWidget *parent)
 		ui.pageMultiplayer->BtnStartMPGame, SLOT(setEnabled(bool)));
 	connect(ui.pageMultiplayer->teamsSelect, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 	connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
+	connect(ui.pageMultiplayer->gameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
 
 	connect(ui.pagePlayDemo->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pagePlayDemo->BtnPlayDemo, SIGNAL(clicked()), this, SLOT(PlayDemo()));
@@ -122,6 +123,7 @@ HWForm::HWForm(QWidget *parent)
 		ui.pageNetGame->BtnStart, SLOT(setEnabled(bool)));
 	connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(SetupClicked()), this, SLOT(IntermediateSetup()));
 	connect(ui.pageNetGame->pGameCFG, SIGNAL(goToSchemes()), this, SLOT(GoToSchemes()));
+	connect(ui.pageNetGame->pGameCFG, SIGNAL(goToWeapons(const QString &)), this, SLOT(GoToSelectWeaponSet(const QString &)));
 
 	connect(ui.pageRoomsList->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageRoomsList->BtnAdmin, SIGNAL(clicked()), this, SLOT(GoToAdmin()));
@@ -260,6 +262,12 @@ void HWForm::GoToSelectNewWeapon()
 void HWForm::GoToSelectWeapon()
 {
 	ui.pageSelectWeapon->pWeapons->setWeaponsName(ui.pageOptions->WeaponsName->currentText());
+	GoToPage(ID_PAGE_SELECTWEAPON);
+}
+
+void HWForm::GoToSelectWeaponSet(const QString & name)
+{
+	ui.pageSelectWeapon->pWeapons->setWeaponsName(name);
 	GoToPage(ID_PAGE_SELECTWEAPON);
 }
 
