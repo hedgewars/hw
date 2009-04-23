@@ -27,6 +27,7 @@
 #include "game.h"
 #include "ui_hwform.h"
 #include "SDLs.h"
+#include "bgwidget.h"
 
 class HWGame;
 class HWTeam;
@@ -105,6 +106,7 @@ private:
 	void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
 	void closeEvent(QCloseEvent *event);
 	void CustomizePalettes();
+	void resizeEvent(QResizeEvent * event);
 	
 	enum PageIDs {
 		ID_PAGE_SETUP_TEAM      =  0,
@@ -138,6 +140,7 @@ private:
 	QStack<quint8> PagesStack;
 	QTime eggTimer;
 	SDLInteraction sdli;
+	BGWidget * wBackground;
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };
 

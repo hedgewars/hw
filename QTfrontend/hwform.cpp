@@ -53,6 +53,7 @@
 #include "playrecordpage.h"
 #include "input_ip.h"
 #include "ammoSchemeModel.h"
+#include "bgwidget.h"
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
@@ -165,6 +166,12 @@ HWForm::HWForm(QWidget *parent)
 	ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");
 	ui.pageScheme->setModel(ammoSchemeModel);
 	ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
+
+	wBackground = new BGWidget(this);
+	wBackground->setFixedSize(this->width(), this->height());
+	wBackground->lower();
+	wBackground->init();
+	wBackground->startAnimation();
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
@@ -731,6 +738,7 @@ void HWForm::GameStateChanged(GameState gameState)
 	switch(gameState) {
 		case gsStarted: {
 			Music(false);
+			if (wBackground) wBackground->stopAnimation();	
 			GoToPage(ID_PAGE_INGAME);
 			ui.pageGameStats->clear();
 			if (pRegisterServer)
@@ -743,6 +751,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		case gsFinished: {
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
+			if (wBackground) wBackground->startAnimation();	
 			GoToPage(ID_PAGE_GAMESTATS);
 			if (hwnet) hwnet->gameFinished();
 			break;
@@ -752,6 +761,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
 				Music(ui.pageOptions->CBEnableMusic->isChecked());
+				if (wBackground) wBackground->startAnimation();	
 				if (hwnet) hwnet->gameFinished();
 			}
 		};
@@ -891,4 +901,12 @@ void HWForm::NetLeftRoom()
 		GoBack();
 	else
 		qWarning("Left room while not in room");
+}
+
+void HWForm::resizeEvent(QResizeEvent * event)
+{
+	int w = event->size().width();
+	int h = event->size().height();
+	wBackground->setFixedSize(w, h);
+	wBackground->move(0, 0);
 }

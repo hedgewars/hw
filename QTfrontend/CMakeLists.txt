@@ -6,6 +6,7 @@ set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
 set(QT_USE_QTSVG TRUE)
 set(QT_USE_QTXML TRUE)
+# set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
@@ -87,6 +88,7 @@ set(hwfr_src
 	misc.cpp
 	ammoSchemeModel.cpp
 	togglebutton.cpp
+	bgwidget.cpp
 	)
 
 if(MINGW)
@@ -137,6 +139,7 @@ set(hwfr_moc_hdrs
 	misc.h
 	ammoSchemeModel.h
 	togglebutton.h
+	bgwidget.h
 	)
 
 set(hwfr_hdrs

@@ -59,5 +59,6 @@
     <file>res/iconDamage.png</file>
     <file>res/iconTime.png</file>
     <file>res/dice.png</file>
+    <file>res/Star.png</file>
 </qresource>
 </RCC>
