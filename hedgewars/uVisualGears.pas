@@ -264,7 +264,7 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're 
 		exit
 		end;
 
-if cReducedQuality then
+if cReducedQuality and (Kind <> vgtTeamHealthSorter) then
 	begin
 	AddVisualGear:= nil;
 	exit
