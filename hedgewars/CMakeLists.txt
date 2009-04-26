@@ -65,19 +65,37 @@ set (noexecstack_flags "")
 endif (${testnoexecstack})
 
 IF(APPLE)
+
 	FIND_PACKAGE(SDL)
-	if(CMAKE_OSX_ARCHITECTURES)
-		set (arch_to_build "-arch i386 -arch ppc7400")
-	else(CMAKE_OSX_ARCHITECTURES)
-		set (arch_to build "")
-	endif(CMAKE_OSX_ARCHITECTURES)
+
 	if (SDL_FOUND)
-		exec_program(gcc
-			     ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o -c ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR})
-		exec_program(${CMAKE_AR} 
-			     ARGS -r ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o)
+		#removing previous version of library
+		exec_program(rm
+			ARGS -f ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o
+			OUTPUT_VARIABLE noout
+			RETURN_VALUE testnoexecstack
+			)
+
+		#get what architectures to build
+		if(universal_build MATCHES "1")
+			set (arch_to_build "-arch i386 -arch ppc7400")
+		else(universal_build MATCHES "1")
+			set (arch_to_build "")
+		endif(universal_build MATCHES "1")
+
+		#build, archive and make lib
+		exec_program(${CMAKE_C_COMPILER}
+			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o -c ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR} -O2
+			OUTPUT_VARIABLE noout
+			)
+		exec_program(${CMAKE_AR}
+			ARGS -rvu ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o
+			OUTPUT_VARIABLE noout
+			)
 		exec_program(${CMAKE_RANLIB}
-			     ARGS ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a)
+			ARGS ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a
+			OUTPUT_VARIABLE noout
+			)
 	else (SDL_FOUND)
 		message(FATAL_ERROR "No SDL framework found!")
 	endif (SDL_FOUND)

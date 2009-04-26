@@ -332,6 +332,7 @@ case ParamCount of
 	end;
 end;
 
+/////////////////////////
 procedure ShowMainWindow;
 begin
 if cFullScreen then ParseCommand('fullscr 1', true)
