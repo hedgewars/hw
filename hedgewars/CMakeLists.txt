@@ -104,7 +104,7 @@ if (NOT pascal_compiler)
 endif (NOT pascal_compiler)
 
 
-IF(NOT CMAKE_OSX_ARCHITECTURES)
+IF(NOT APPLE OR NOT universal_build MATCHES "1")
 #here is the standard command for any system
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"
@@ -113,9 +113,9 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		DEPENDS ${engine_sources}
 		)
 
-ELSE(NOT CMAKE_OSX_ARCHITECTURES)
-#these are the two dependencies for building a universal binary on Mac OS X
+ELSE(NOT APPLE OR NOT universal_build MATCHES "1")
 
+#these are the two dependencies for building a universal binary on Mac OS X
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386"
 		COMMAND "ppc386" 
 		ARGS ${pascal_compiler_flags} -ohwengine.386
@@ -138,10 +138,17 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}
 		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc" 
 		)
-ENDIF(NOT CMAKE_OSX_ARCHITECTURES)
+ENDIF(NOT APPLE OR NOT universal_build MATCHES "1")
 
 
 add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
+
+if(APPLE)
+	set (target_dir ".")
+else(APPLE)
+	set (target_dir "bin")
+endif(APPLE)
+
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 

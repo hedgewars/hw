@@ -28,7 +28,7 @@ endif(UNIX)
 # Done
 include_directories(.)
 
-set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
 
 if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
@@ -192,4 +192,11 @@ endif(WIN32 AND NOT UNIX)
 target_link_libraries(hedgewars
 	${HW_LINK_LIBS})
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
+
+if(APPLE)
+	set (target_dir ".")
+else(APPLE)
+	set (target_dir "bin")
+endif(APPLE)
+
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})

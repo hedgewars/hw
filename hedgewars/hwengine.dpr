@@ -20,14 +20,6 @@
 WriteLn('Only Freepascal supported');
 {$ENDIF}
 
-// Add all your Pascal units to the "uses" clause below to add them to the program.
-
-// Mark all Pascal procedures/functions that you wish to call from C/C++/Objective-C code using
-// "cdecl; export;" (see the fpclogo.pas unit for an example), and then add C-declarations for
-// these procedures/functions to the PascalImports.h file (also in the "Pascal Sources" group)
-// to make these functions available in the C/C++/Objective-C source files
-// (add "#include PascalImports.h" near the top of these files if it is not there yet)
-
 program hwengine;
 uses
 	SDLh in 'SDLh.pas',
@@ -200,7 +192,8 @@ begin
 	WriteLn(' --set-multimedia [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
 	WriteLn(' --set-everything [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
 	WriteLn();
-	WriteLn('Read documentation online at http://www.hedgewars.org/ for more information');
+	WriteLn('Read documentation online at http://www.hedgewars.org/node/1465 for more information');
+	halt(1);
 end;
 
 ////////////////////
