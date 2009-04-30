@@ -737,7 +737,7 @@ if (length(s) > 20) then
 
 textWidth:=((textWidth-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
 textHeight:=(((numlines * h)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth+edgeWidth;
-addfilelog(inttostr(textHeight)+'=========== '+inttostr(numlines)+' x '+inttostr(h));
+
 //textWidth:=max(textWidth,SpritesData[tail].Width);
 rect.x:= 0;
 rect.y:= 0;
@@ -963,8 +963,6 @@ procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
 var srcX, srcY, i, j, maxDest: LongInt;
     srcPixels, destPixels: PLongWordArray;
 begin
-addfilelog('copyToXY: src surf (w, h) = ('+inttostr(src^.w)+', '+inttostr(src^.h)+')');
-addfilelog('copyToXY: dest(X, Y) = ('+inttostr(destX)+', '+inttostr(destY)+')');
 maxDest:= (dest^.pitch div 4) * dest^.h;
 srcPixels:= src^.pixels;
 destPixels:= dest^.pixels;
