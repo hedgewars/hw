@@ -424,6 +424,8 @@ private:
 	ToggleButtonWidget * TBW_laserSight;
 	ToggleButtonWidget * TBW_invulnerable;
 	ToggleButtonWidget * TBW_mines;
+	ToggleButtonWidget * TBW_vampiric;
+	ToggleButtonWidget * TBW_karma;
 
 	QSpinBox * SB_DamageModifier;
 	QSpinBox * SB_TurnTime;

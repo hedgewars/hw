@@ -73,6 +73,7 @@ const {$IFDEF WIN32}
       SDL_HWACCEL     = $00000100;
       SDL_SRCCOLORKEY = $00001000;
       SDL_RLEACCEL    = $00004000;
+      SDL_SRCALPHA    = $00010000;
 
       SDL_NOEVENT     = 0;
       SDL_ACTIVEEVENT = 1;
@@ -247,6 +248,7 @@ function  SDL_CreateRGBSurface(flags: Longword; Width, Height, Depth: LongInt; R
 function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch: LongInt; RMask, GMask, BMask, AMask: Longword): PSDL_Surface; cdecl; external SDLLibName;
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
+function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): LongInt; cdecl; external SDLLibName;

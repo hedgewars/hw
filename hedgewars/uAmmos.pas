@@ -61,12 +61,17 @@ procedure AddAmmoStore(s: shortstring);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
+    substr: shortstring; // TEMPORARY
 begin
 TryDo(byte(s[0]) = byte(ord(High(TAmmoType)) + 1), 'Invalid ammo scheme (incompatible frontend)', true);
 
 // TEMPORARY hardcoded check on shoppa pending creation of probability editor
-if (s = '000000990000009000000000000000000000') or (s = '000000990000000000000000000000000000') then
+substr:= Copy(s,1,15);
+if (substr = '000000990000009') or 
+   (substr = '000000990000000') then
     shoppa:= true;
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    if (ord(a) > 14) and (s[ord(a)+1] <> '0') then shoppa:= false;  // TEMPORARY etc - this just avoids updating every time new wep is added
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
 
@@ -82,7 +87,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         end;
     if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
        ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
-       ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) then
+       ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
+       ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0)) then
         begin
         cnt:= 0;
         Ammoz[a].Probability:= 0 

@@ -37,6 +37,7 @@
 00:34=Invulnérable
 00:35=Extra Time
 00:36=Laser Sight
+00:37=Vampirism
 
 01:00=C'est parti!
 01:01=Round ex aequo

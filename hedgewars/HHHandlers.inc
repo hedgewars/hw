@@ -100,6 +100,7 @@ end;
 
 procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
+    tmpGear: PGear;
 begin
 with Gear^,
      PHedgehog(Gear^.Hedgehog)^ do
@@ -189,9 +190,19 @@ with Gear^,
                       amInvulnerable: Invulnerable:= true;
                       amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
                       amLaserSight: cLaserSighting:= true;
+                      amVampiric: cVampiric:= true;
                   end;
 
         uStats.AmmoUsed(Ammo^[CurSlot, CurAmmo].AmmoType);
+
+        if not (SpeechText = '') then
+            begin
+            tmpGear:= AddGear(0, 0, gtSpeechBubble, 0, _0, _0, 0);
+            tmpGear^.Text:= SpeechText;
+            tmpGear^.Hedgehog:= CurrentHedgehog;
+            tmpGear^.State:= SpeechType;
+            SpeechText:= ''
+            end;
 
         Power:= 0;
         if (CurAmmoGear <> nil)
@@ -386,6 +397,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
       end;
 
+   // ARTILLERY HERE
    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
    SetAllHHToActive;
 
@@ -504,6 +516,7 @@ if (not isFalling) and
 if (Gear^.State and gstMoving) <> 0 then
    begin
    Gear^.State:= Gear^.State and not gstAnimation;
+// ARTILLERY but not being moved by explosions
    Gear^.X:= Gear^.X + Gear^.dX;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (not Gear^.dY.isNegative) and

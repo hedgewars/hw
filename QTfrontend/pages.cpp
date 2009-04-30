@@ -916,6 +916,14 @@ PageScheme::PageScheme(QWidget* parent) :
 	TBW_mines->setText(ToggleButtonWidget::tr("Add Mines"));
 	glGMLayout->addWidget(TBW_mines,1,3,1,1);
 
+	TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
+	TBW_vampiric->setText(ToggleButtonWidget::tr("Vampirism"));
+	glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
+
+	TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma.png");
+	TBW_karma->setText(ToggleButtonWidget::tr("Karma"));
+	glGMLayout->addWidget(TBW_karma,2,1,1,1);
+
 	// Right
 	QLabel * l;
 	
@@ -1031,11 +1039,13 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_laserSight->button(), 6);
 	mapper->addMapping(TBW_invulnerable->button(), 7);
 	mapper->addMapping(TBW_mines->button(), 8);
-	mapper->addMapping(SB_DamageModifier, 9);
-	mapper->addMapping(SB_TurnTime, 10);
-	mapper->addMapping(SB_InitHealth, 11);
-	mapper->addMapping(SB_SuddenDeath, 12);
-	mapper->addMapping(SB_CaseProb, 13);
+	mapper->addMapping(TBW_vampiric->button(), 9);
+	mapper->addMapping(TBW_karma->button(), 10);
+	mapper->addMapping(SB_DamageModifier, 11);
+	mapper->addMapping(SB_TurnTime, 12);
+	mapper->addMapping(SB_InitHealth, 13);
+	mapper->addMapping(SB_SuddenDeath, 14);
+	mapper->addMapping(SB_CaseProb, 15);
 
 	mapper->toFirst();
 }

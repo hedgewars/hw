@@ -262,6 +262,7 @@ RegisterVariable('history' , vtCommand, @chHistory      , true );
 RegisterVariable('chat'    , vtCommand, @chChat         , true );
 RegisterVariable('newgrave', vtCommand, @chNewGrave     , false);
 RegisterVariable('say'     , vtCommand, @chSay          , true );
+RegisterVariable('hogsay'  , vtCommand, @chHogSay       , true );
 RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
 RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
 RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);

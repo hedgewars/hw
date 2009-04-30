@@ -132,6 +132,40 @@ end;
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
 begin
+// "Make hedgehog say something"
+if (s[1] = '"') and (s[Length(s)] = '"') then 
+    begin
+    ParseCommand('/hogsay '+#1+copy(s, 2, Length(s)-2), true);
+    exit
+    end;
+// 'Make hedgehog think something'
+if (s[1] = '''') and (s[Length(s)] = '''') then 
+    begin
+    ParseCommand('/hogsay '+#2+copy(s, 2, Length(s)-2), true);
+    exit
+    end;
+// -Make hedgehog yell something-
+if (s[1] = '-') and (s[Length(s)] = '-') then 
+    begin
+    ParseCommand('/hogsay '+#3+copy(s, 2, Length(s)-2), true);
+    exit
+    end;
+// These 3 are same as above, only are to make the hedgehog say it on next attack
+if (s[1] = '/') and (copy(s, 1, 5) = '/hsa ') then
+    begin
+    ParseCommand('/hogsay '+#4+copy(s, 6, Length(s)-5), true);
+    exit
+    end;
+if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
+    begin
+    ParseCommand('/hogsay '+#5+copy(s, 6, Length(s)-5), true);
+    exit
+    end;
+if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
+    begin
+    ParseCommand('/hogsay '+#6+copy(s, 6, Length(s)-5), true);
+    exit
+    end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 	begin
 	if CurrentTeam^.ExtDriven then exit;
@@ -143,8 +177,11 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 			exit
 			end;
 	if (s = '/newgrave') then
+        begin
 	    ParseCommand('/newgrave', true);
-	end
+        exit
+        end;
+    end
 	else
 		ParseCommand('/say ' + s, true);
 end;

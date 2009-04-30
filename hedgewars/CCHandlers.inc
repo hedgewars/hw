@@ -390,6 +390,35 @@ with CurrentHedgehog^.Gear^ do
      end
 end;
 
+procedure chHogSay(var s: shortstring);
+var Gear: PGear;
+    text: shortstring;
+begin
+text:= copy(s, 2, Length(s)-1);
+if CheckNoTeamOrHH or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
+    begin
+    chSay(text);
+    exit
+    end;
+
+if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
+if byte(s[1]) < 4 then
+    begin
+    Gear:= AddGear(0, 0, gtSpeechBubble, 0, _0, _0, 0);
+    Gear^.Text:= text;
+    Gear^.Hedgehog:= CurrentHedgehog;
+    Gear^.State:= byte(s[1]);
+    end
+else
+    begin
+    // If I knew how to add a gear without it becoming immediately active, I'd
+    // just create/attach the hedgehog SpeechGear here, then activate it where
+    // SpeechType/SpeechText are activated
+    SpeechType:= byte(s[1]);
+    SpeechText:= text
+    end;
+end;
+
 procedure chNewGrave;
 begin
 if CheckNoTeamOrHH then exit;

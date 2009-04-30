@@ -54,11 +54,13 @@ type PGear = ^TGear;
 			IntersectGear: PGear;
 			TriggerId: Longword;
 			uid: Longword;
+            Text: shortstring;
 			end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure ResetUtilities;
+procedure ApplyDamage(Gear: PGear; Damage: Longword);
 procedure SetAllToActive;
 procedure SetAllHHToActive;
 procedure DrawGears;
@@ -71,6 +73,9 @@ procedure RemoveGearFromList(Gear: PGear);
 var CurAmmoGear: PGear = nil;
     GearsList: PGear = nil;
     KilledHHs: Longword = 0;
+    SuddenDeathDmg: Boolean = false;
+    SpeechType: Longword = 1;
+    SpeechText: shortstring;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -157,7 +162,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepDrill,
 			@doStepBallgun,
 			@doStepBomb,
-			@doStepRCPlane
+			@doStepRCPlane,
+			@doStepSpeechBubble
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -248,7 +254,10 @@ gtAmmo_Grenade: begin
                 end;
    gtHealthTag: begin
                 Result^.Timer:= 1500;
-                Result^.Z:= 2001;
+                Result^.Z:= 2002;
+                end;
+   gtSpeechBubble: begin
+                Result^.Z:= 2003;
                 end;
        gtGrave: begin
                 Result^.Radius:= 10;
@@ -440,9 +449,6 @@ while Gear <> nil do
 		if (Gear^.Damage <> 0) and
 		(not Gear^.Invulnerable) then
 			begin
-            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
-               (Gear^.Damage <> int(cHealthDecrease)) then
-                Gear^.State:= Gear^.State or gstLoser;
 			CheckNoDamage:= false;
 			uStats.HedgehogDamaged(Gear);
 			dmg:= Gear^.Damage;
@@ -450,6 +456,10 @@ while Gear <> nil do
 				Gear^.Health:= 0
 			else
 				dec(Gear^.Health, dmg);
+
+            if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
+                not SuddenDeathDmg then
+                Gear^.State:= Gear^.State or gstLoser;
 
 			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) - cHHRadius - 12,
 					gtHealthTag, dmg, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
@@ -462,6 +472,7 @@ while Gear <> nil do
 		end;
 	Gear:= Gear^.NextGear
 	end;
+SuddenDeathDmg:= false;
 end;
 
 procedure HealthMachine;
@@ -562,6 +573,7 @@ case step of
 			else begin
 				bBetweenTurns:= true;
 				HealthMachine;
+                SuddenDeathDmg:= true;
 				step:= stChDmg
 				end
 			end;
@@ -612,8 +624,13 @@ end;
 procedure ResetUtilities;
 var  i: LongInt;
 begin
+    SpeechText:= ''; // in case it hasn't been consumed
+
     if (GameFlags and gfLowGravity) = 0 then
         cGravity:= cMaxWindSpeed;
+
+    if (GameFlags and gfVampiric) = 0 then
+        cVampiric:= false;
 
     cDamageModifier:= _1;
 
@@ -628,6 +645,50 @@ begin
                  with Hedgehogs[i] do
                      if (Gear <> nil) then
                          Gear^.Invulnerable:= false;
+end;
+procedure ApplyDamage(Gear: PGear; Damage: Longword);
+var s: shortstring;
+    vampDmg: Longword;
+begin
+	inc(Gear^.Damage, Damage);
+	if Gear^.Kind = gtHedgehog then
+    begin
+	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
+    Damage:= min(Damage, Gear^.Health);
+    if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (Damage >= 1) then
+        begin
+        if cVampiric then
+            begin
+            vampDmg:= hwRound(int2hwFloat(Damage)*_0_8);
+            // was considering pulsing on attack, Tiy thinks it should be permanent while in play
+            //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
+            inc(CurrentHedgehog^.Gear^.Health,vampDmg);
+            str(vampDmg, s);
+            s:= '+' + s;
+            AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+            RenderHealth(CurrentHedgehog^);
+            RecountTeamHealth(CurrentHedgehog^.Team);
+            end;
+        if ((GameFlags and gfKarma) <> 0) and 
+           ((GameFlags and gfInvulnerable) = 0) and
+           not CurrentHedgehog^.Gear^.Invulnerable then
+           begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
+           if CurrentHedgehog^.Gear^.Health < int(Damage) then
+           begin
+               // Add damage to trigger normal resolution
+               CurrentHedgehog^.Gear^.Health := 0;
+               inc(CurrentHedgehog^.Gear^.Damage);
+           end
+           else
+               dec(CurrentHedgehog^.Gear^.Health, Damage);
+           AddGear(hwRound(Gear^.X), 
+                   hwRound(Gear^.Y), 
+                   gtHealthTag, Damage, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
+           RenderHealth(CurrentHedgehog^);
+           RecountTeamHealth(CurrentHedgehog^.Team);
+           end;
+        end;
+    end;
 end;
 
 procedure SetAllToActive;
@@ -841,6 +902,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			1,
 			1,
 			0);
+	HatVisible:= true;
 	defaultPos:= false
 	end else
 
@@ -950,7 +1012,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
 end else // not gstHHDriven
 	begin
 	if (Gear^.Damage > 0)
-	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
+	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) 
+// ARTILLERY
+//and (1=0)
+then
 		begin
 		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
@@ -1123,9 +1188,15 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	end;
 
 if Gear^.Invulnerable then
-     begin
-     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
-     end;
+    begin
+    DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
+    end;
+if cVampiric and
+   (CurrentHedgehog^.Gear <> nil) and 
+   (CurrentHedgehog^.Gear = Gear) then
+    begin
+    DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
+    end;
 end;
 
 procedure DrawGears;
@@ -1216,6 +1287,8 @@ while Gear<>nil do
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
        
        gtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
+
+       gtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
            
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex);
              
@@ -1328,6 +1401,9 @@ if ((GameFlags and gfForts) = 0) and ((GameFlags and gfMines) <> 0) then
 if (GameFlags and gfLowGravity) <> 0 then
     cGravity:= cMaxWindSpeed / 2;
 
+if (GameFlags and gfVampiric) <> 0 then
+    cVampiric:= true;
+
 Gear:= GearsList;
 if (GameFlags and gfInvulnerable) <> 0 then
    while Gear <> nil do
@@ -1372,11 +1448,7 @@ while Gear <> nil do
 						if (Mask and EXPLNoDamage) = 0 then
 							begin
 							if not Gear^.Invulnerable then
-								begin
-							    inc(Gear^.Damage, dmg);
-							    if Gear^.Kind = gtHedgehog then
-								    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
-                                end
+                                ApplyDamage(Gear, dmg)
                             else
                                 Gear^.State:= Gear^.State or gstWinner;
 							end;
@@ -1423,11 +1495,7 @@ while t <> nil do
 			gtCase,
 			gtTarget: begin
                     if (not t^.Invulnerable) then
-                        begin
-					    inc(t^.Damage, dmg);
-					    if t^.Kind = gtHedgehog then
-						    AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), dmg, PHedgehog(t^.Hedgehog)^.Team^.Clan^.Color);
-                        end
+                        ApplyDamage(t, dmg)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
 
@@ -1468,12 +1536,7 @@ while i > 0 do
 			gtCase: begin
 					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not t^.ar[i]^.Invulnerable) then
-                        begin
-					    inc(t^.ar[i]^.Damage, Damage);
-
-                        if (t^.ar[i]^.Kind = gtHedgehog) and (Damage > 0) then
-                            AddDamageTag(hwRound(t^.ar[i]^.X), hwRound(t^.ar[i]^.Y), Damage, PHedgehog(t^.ar[i]^.Hedgehog)^.Team^.Clan^.Color);
-                        end
+                        ApplyDamage(t^.ar[i], Damage)
                     else
                         t^.ar[i]^.State:= t^.ar[i]^.State or gstWinner;
 
@@ -1587,7 +1650,7 @@ while t <> nil do
 	if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
 		if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2) then
 			begin
-			inc(t^.Damage, 5);
+            ApplyDamage(t, 5);
 			t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
 			t^.dY:= - _0_25;
 			t^.Active:= true;
@@ -1638,8 +1701,7 @@ if (cCaseFactor = 0) or
 
 FollowGear:= nil;
 
-t:= getrandom(20);  // TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
-if shoppa then
+if shoppa then  // TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
     t:= 7
 else
     t:= getrandom(20);

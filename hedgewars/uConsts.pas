@@ -59,7 +59,10 @@ type
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprGirder);
+			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder, 
+            sprSpeechCorner, sprSpeechEdge, sprSpeechTail, 
+            sprThoughtCorner, sprThoughtEdge, sprThoughtTail, 
+            sprShoutCorner, sprShoutEdge, sprShoutTail);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -69,7 +72,7 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSpeechBubble);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter);
@@ -93,7 +96,7 @@ type
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
-            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, amLaserSight);
+            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, amLaserSight, amVampiric);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -203,6 +206,8 @@ const
 	gfLaserSight   = $00000040;
 	gfInvulnerable = $00000080;
 	gfMines        = $00000100;
+	gfVampiric     = $00000200;
+	gfKarma        = $00000400;
 	gfOneClanMode  = $10000000;
 
 	gstDrowning       = $00000001;
@@ -497,8 +502,28 @@ const
 			Width:  48; Height: 48; saveSurf: false), // sprUtility
 			(FileName:'Invulnerable';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false), // sprInvulnerable
+			(FileName:'Vampiric';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  48; Height: 48; saveSurf: false), // sprVampiric
 			(FileName:    'amGirder'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 512; Height:512; saveSurf: false) // sprGirder
+			Width: 512; Height:512; saveSurf: false), // sprGirder
+			(FileName:'SpeechCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  12; Height: 9; saveSurf: true), // sprSpeechCorner
+			(FileName:'SpeechEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  25; Height: 9; saveSurf: true), // sprSpeechEdge
+			(FileName:'SpeechTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  25; Height: 26; saveSurf: true), // sprSpeechTail
+			(FileName:'ThoughtCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  49; Height: 37; saveSurf: true), // sprThoughtCorner
+			(FileName:'ThoughtEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  23; Height: 16; saveSurf: true), // sprThoughtEdge
+			(FileName:'ThoughtTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  45; Height: 65; saveSurf: true), // sprThoughtTail
+			(FileName:'ShoutCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  34; Height: 23; saveSurf: true), // sprShoutCorner
+			(FileName:'ShoutEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  30; Height: 20; saveSurf: true), // sprShoutEdge
+			(FileName:'ShoutTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  30; Height: 37; saveSurf: true) // sprShoutTail
 			);
 
 	Wavez: array [TWave] of record
@@ -1294,6 +1319,27 @@ const
 					Pos: 0;
 					AmmoType: amLaserSight);
 			Slot: 7;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidVampiric;
+			NameTex: nil;
+			Probability: 15;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amVampiric);
+			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
 			maxAngle: 0;

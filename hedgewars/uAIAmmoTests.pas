@@ -73,14 +73,15 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
 			(proc: nil;              flags: 0), // amBanana
 			(proc: nil;              flags: 0), // amHellishBomb
 			(proc: nil;              flags: 0), // amNapalm
-			(proc: nil;              flags: 0),  // amDrill
-			(proc: nil;              flags: 0),  // amBallgun
+			(proc: nil;              flags: 0), // amDrill
+			(proc: nil;              flags: 0), // amBallgun
 			(proc: nil;              flags: 0), // amRCPlane
 			(proc: nil;              flags: 0), // amLowGravity
 			(proc: nil;              flags: 0), // amExtraDamage
 			(proc: nil;              flags: 0), // amInvulnerable
 			(proc: nil;              flags: 0), // amExtraTime
-			(proc: nil;              flags: 0) // amLaserSight
+			(proc: nil;              flags: 0), // amLaserSight
+			(proc: nil;              flags: 0)  // amVampiric
 			);
 
 const BadTurn = Low(LongInt) div 4;

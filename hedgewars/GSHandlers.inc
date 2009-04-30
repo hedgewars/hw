@@ -67,8 +67,7 @@ if _0_4 < Gear^.dY then
 		PlaySound(sndOw1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
 	dmg:= modifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70));
-	inc(Gear^.Damage, dmg);
-	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, dmg, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
+    ApplyDamage(Gear, dmg);
 	end
 end;
 
@@ -255,7 +254,7 @@ Gear^.Y:= Gear^.Y + Gear^.dY;
 
 if Gear^.Timer = 0 then
 	begin
-	if Gear^.Kind = gtHealthTag then
+	if (Gear^.Kind = gtHealthTag) and (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
 		PHedgehog(Gear^.Hedgehog)^.Gear^.Active:= true; // to let current hh die
 	DeleteGear(Gear)
 	end
@@ -284,6 +283,44 @@ if hwRound(Gear^.Y) < cWaterLine then
 	Gear^.doStep:= @doStepHealthTagWork
 else
 	Gear^.doStep:= @doStepHealthTagWorkUnderWater;
+
+Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
+end;
+
+procedure doStepSpeechBubbleWork(Gear: PGear);
+begin
+dec(Gear^.Timer);
+
+if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
+    begin
+    Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X+int2hwFloat(Gear^.Tex^.w div 2  - Gear^.State);
+    Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y-int2hwFloat(16+Gear^.Tex^.h);
+    end;
+
+if Gear^.Timer = 0 then
+    begin
+    CurrentHedgehog^.SpeechGear:= nil;
+	DeleteGear(Gear)
+    end;
+end;
+
+procedure doStepSpeechBubble(Gear: PGear);
+begin
+if (CurrentHedgehog^.SpeechGear <> nil) then DeleteGear(CurrentHedgehog^.SpeechGear);
+CurrentHedgehog^.SpeechGear:= Gear;
+
+Gear^.Timer:= max(Length(Gear^.Text)*150,3000);
+
+Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.State, fnt16);
+
+// Arbitrary offsets added to the widths based on shape of current tails
+case Gear^.State of
+    1: Gear^.State:= SpritesData[sprSpeechTail].Width-28;
+    2: Gear^.State:= SpritesData[sprThoughtTail].Width-20;
+    3: Gear^.State:= SpritesData[sprShoutTail].Width-10;
+    end;
+
+Gear^.doStep:= @doStepSpeechBubbleWork;
 
 Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
 end;

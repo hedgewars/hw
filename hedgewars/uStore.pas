@@ -18,7 +18,7 @@
 
 unit uStore;
 interface
-uses uConsts, uTeams, SDLh,
+uses sysutils, uConsts, uTeams, SDLh,
 {$IFDEF IPHONE}
 	gles11,
 {$ELSE}
@@ -45,6 +45,11 @@ procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
+function  RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
+procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
+//procedure rotateSurface(Surface: PSDL_Surface);
+procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
@@ -672,6 +677,176 @@ RenderStringTex:= Surface2Tex(Result);
 SDL_FreeSurface(Result)
 end;
 
+function RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
+var textWidth, textHeight, x, y, w, h, i, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
+    Result, tmpsurf, rotatedEdge: PSDL_Surface;
+    rect: TSDL_Rect;
+    chars: TSysCharSet = [#9,' ','.',';',':','?','!',','];
+    substr: shortstring;
+    edge, corner, tail: TSPrite;
+begin
+
+case SpeechType of
+    1: begin; 
+       edge:= sprSpeechEdge; 
+       corner:= sprSpeechCorner;
+       tail:= sprSpeechTail;
+       end;
+    2: begin; 
+       edge:= sprThoughtEdge;
+       corner:= sprThoughtCorner; 
+       tail:= sprThoughtTail;
+       end;
+    3: begin; 
+       edge:= sprShoutEdge;
+       corner:= sprShoutCorner;
+       tail:= sprShoutTail;
+       end;
+    end;
+edgeHeight:= SpritesData[edge].Height;
+edgeWidth:= SpritesData[edge].Width;
+cornerWidth:= SpritesData[corner].Width;
+cornerHeight:= SpritesData[corner].Height;
+// This one screws it up
+s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
+// This one doesn't
+//s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And theyll just go on singing it forever just because... This is the song that never ends... ';
+// Also screws up, but only action
+//s:= 'This is the song that never ends.  cause it goes on and on .';
+// ok in all
+// s:= 'This is the song that never ends.  cause it goes on .';
+numLines:= 1;
+
+if length(s) = 0 then s:= '...';
+
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
+textWidth:= w;
+textHeight:= h;
+if (length(s) > 20) then
+    begin
+    i:= round(Sqrt(length(s)) * 2);
+    s:= WrapText(s, #1, chars, i);
+    for pos:= 1 to length(s) do
+        if (s[pos] = #1) or (pos = length(s)) then
+            inc(numLines);
+
+    // TODO - find out why this calc doesn't do what I expect
+    if numLines = 2 then textWidth:= w div 2
+    else if numlines > 2 then textWidth:= w div (numLines-1);
+    end;
+
+textWidth:=((textWidth-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
+textHeight:=(((numlines * h)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth+edgeWidth;
+addfilelog(inttostr(textHeight)+'=========== '+inttostr(numlines)+' x '+inttostr(h));
+//textWidth:=max(textWidth,SpritesData[tail].Width);
+rect.x:= 0;
+rect.y:= 0;
+rect.w:= textWidth + cornerWidth * 2;
+rect.h:= textHeight + cornerHeight * 2 - edgeHeight + SpritesData[tail].Height;
+//s:= inttostr(h) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h) + ' ' + s;
+
+Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
+
+TryDo(Result <> nil, 'RenderString: fail to create surface', true);
+
+//////////////////////////////// CORNERS ///////////////////////////////
+copyToXY(SpritesData[corner].Surface, Result, 0, 0); /////////////////// NW
+
+flipSurface(SpritesData[corner].Surface, true); // store all 4 versions in memory to avoid repeated flips?
+x:= 0;
+y:= textHeight + cornerHeight -1;
+copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// SW
+
+flipSurface(SpritesData[corner].Surface, false);
+x:= rect.w-cornerWidth-1;
+y:= textHeight + cornerHeight -1;
+copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// SE
+
+flipSurface(SpritesData[corner].Surface, true);
+x:= rect.w-cornerWidth-1;
+y:= 0;
+copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// NE
+flipSurface(SpritesData[corner].Surface, false); // restore original position
+//////////////////////////////// END CORNERS ///////////////////////////////
+
+//////////////////////////////// EDGES //////////////////////////////////////
+x:= cornerWidth;
+y:= 0;
+while x < rect.w-cornerWidth-1 do
+    begin
+    copyToXY(SpritesData[edge].Surface, Result, x, y); ///////////////// top edge
+    inc(x,edgeWidth);
+    end;
+flipSurface(SpritesData[edge].Surface, true);
+x:= cornerWidth;
+y:= textHeight + cornerHeight*2 - edgeHeight-1;
+while x < rect.w-cornerWidth-1 do
+    begin
+    copyToXY(SpritesData[edge].Surface, Result, x, y); ///////////////// bottom edge
+    inc(x,edgeWidth);
+    end;
+flipSurface(SpritesData[edge].Surface, true); // restore original position
+
+rotatedEdge:= SDL_CreateRGBSurface(SDL_SWSURFACE, edgeHeight, edgeWidth, 32, RMask, GMask, BMask, AMask);
+x:= rect.w - edgeHeight - 1;
+y:= cornerHeight;
+//// initially was going to rotate in place, but the SDL spec claims width/height are read only
+copyRotatedSurface(SpritesData[edge].Surface,rotatedEdge);
+while y < textHeight + cornerHeight do
+    begin
+    copyToXY(rotatedEdge, Result, x, y);
+    inc(y,edgeWidth);
+    end;
+flipSurface(rotatedEdge, false); // restore original position
+x:= 0;
+y:= cornerHeight;
+while y < textHeight + cornerHeight do
+    begin
+    copyToXY(rotatedEdge, Result, x, y);
+    inc(y,edgeWidth);
+    end;
+//////////////////////////////// END EDGES //////////////////////////////////////
+
+x:= cornerWidth;
+y:= textHeight + cornerHeight * 2 - edgeHeight - 1;
+copyToXY(SpritesData[tail].Surface, Result, x, y);
+
+rect.x:= edgeHeight;
+rect.y:= edgeHeight;
+rect.w:= rect.w - edgeHeight * 2;
+rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
+SDL_FillRect(Result, @rect, cWhiteColor);
+
+pos:= 1; prevpos:= 0; line:= 0;
+while pos <= length(s) do
+    begin
+    if (s[pos] = #1) or (pos = length(s)) then
+        begin
+        if s[pos] <> #1 then inc(pos);
+        while s[prevpos+1] = ' 'do inc(prevpos);
+        substr:= copy(s, prevpos+1, pos-prevpos-1);
+        if Length(substr) <> 0 then
+           begin
+           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cColorNearBlack);
+           rect.x:= edgeHeight;
+           rect.y:= edgeHeight + line * h;
+           SDLTry(tmpsurf <> nil, true);
+           SDL_UpperBlit(tmpsurf, nil, Result, @rect);
+           SDL_FreeSurface(tmpsurf);
+           inc(line);
+           prevpos:= pos;
+           end;
+        end;
+    inc(pos);
+    end;
+
+//TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+RenderSpeechBubbleTex:= Surface2Tex(Result);
+
+SDL_FreeSurface(rotatedEdge);
+SDL_FreeSurface(Result)
+end;
+
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
@@ -753,6 +928,75 @@ procedure FinishProgress;
 begin
 WriteLnToConsole('Freeing progress surface... ');
 FreeTexture(ProgrTex)
+end;
+
+procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
+var y, x, i, j: LongInt;
+    tmpPixel: Longword;
+    pixels: PLongWordArray;
+begin
+TryDo(Surface^.format^.BytesPerPixel = 4, 'flipSurface failed, expecting 32 bit surface', true);
+pixels:= Surface^.pixels;
+if Vertical then
+   for y := 0 to (Surface^.h div 2) - 1 do
+       for x := 0 to Surface^.w - 1 do
+           begin
+           i:= y * Surface^.w + x;
+           j:= (Surface^.h - y - 1) * Surface^.w + x;
+           tmpPixel:= pixels^[i];
+           pixels^[i]:= pixels^[j];
+           pixels^[j]:= tmpPixel;
+           end
+else
+   for x := 0 to (Surface^.w div 2) - 1 do
+       for y := 0 to Surface^.h -1 do
+           begin
+           i:= y*Surface^.w + x;
+           j:= y*Surface^.w + (Surface^.w - x - 1);
+           tmpPixel:= pixels^[i];
+           pixels^[i]:= pixels^[j];
+           pixels^[j]:= tmpPixel;
+           end;
+end;
+
+procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
+var srcX, srcY, i, j, maxDest: LongInt;
+    srcPixels, destPixels: PLongWordArray;
+begin
+addfilelog('copyToXY: src surf (w, h) = ('+inttostr(src^.w)+', '+inttostr(src^.h)+')');
+addfilelog('copyToXY: dest(X, Y) = ('+inttostr(destX)+', '+inttostr(destY)+')');
+maxDest:= (dest^.pitch div 4) * dest^.h;
+srcPixels:= src^.pixels;
+destPixels:= dest^.pixels;
+
+for srcX:= 0 to src^.w - 1 do
+   for srcY:= 0 to src^.h - 1 do
+      begin
+      i:= (destY + srcY) * (dest^.pitch div 4) + destX + srcX;
+      j:= srcY * (src^.pitch div 4) + srcX;
+      // basic skip of transparent pixels - cleverness would be to do true alpha
+      if (i < maxDest) and ($FF000000 and srcPixels^[j] <> 0) then destPixels^[i]:= srcPixels^[j];
+      end;
+end;
+
+procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL, apparently
+var y, x, i, j: LongInt;
+    srcPixels, destPixels: PLongWordArray;
+begin
+TryDo(src^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+TryDo(dest^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+
+srcPixels:= src^.pixels;
+destPixels:= dest^.pixels;
+
+j:= 0;
+for x := 0 to src^.w - 1 do
+    for y := 0 to src^.h - 1 do
+        begin
+        i:= (src^.h - 1 - y) * (src^.pitch div 4) + x;
+        destPixels^[j]:= srcPixels^[i];
+        inc(j)
+        end;
 end;
 
 end.

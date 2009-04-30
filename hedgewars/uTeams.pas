@@ -37,6 +37,7 @@ type PHHAmmo = ^THHAmmo;
 	THedgehog = record
 			Name: string[MAXNAMELEN];
 			Gear: PGear;
+			SpeechGear: PGear;
 			NameTagTex,
 			HealthTagTex,
 			HatTex: PTexture;

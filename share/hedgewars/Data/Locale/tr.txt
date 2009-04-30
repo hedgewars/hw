@@ -37,6 +37,7 @@
 00:34=Ölümsüzlük
 00:35=Arttırılmış Zaman
 00:36=Lazer Görüşü
+00:37=Vampirism
 
 01:00=Savaş başlasın!
 01:01=Beraberlik

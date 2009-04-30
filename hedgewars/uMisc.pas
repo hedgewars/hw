@@ -105,6 +105,7 @@ var
 	cGravity: hwFloat;
 	cDamageModifier: hwFloat;
 	cLaserSighting: boolean;
+	cVampiric: boolean;
 
 	flagMakeCapture: boolean = false;
 
@@ -382,7 +383,7 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 			for x:= Surf^.w to Pred(tw) do
 				toP4^[x]:= 0;
 			toP4:= @(toP4^[tw]);
-			fromP4:= @(fromP4^[Surf^.w]);
+			fromP4:= @(fromP4^[Surf^.pitch div 4]);
 			end;
 
 		for y:= Surf^.h to Pred(th) do
@@ -548,6 +549,7 @@ cWindSpeed.QWordValue:=     429496;// 0.0001
 cGravity:= cMaxWindSpeed;
 cDamageModifier:= _1;
 cLaserSighting:= false;
+cVampiric:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}
