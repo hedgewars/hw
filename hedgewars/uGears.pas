@@ -718,11 +718,13 @@ end;
 procedure DrawHH(Gear: PGear);
 var t: LongInt;
 	amt: TAmmoType;
-	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite
+	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
 begin
+m:= 1;
+if (Gear^.State and gstHHHJump) <> 0 then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
 	begin
 	DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);
@@ -890,18 +892,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
 
 	if ((Gear^.State and gstHHJumping) <> 0) then
 	begin
-	if ((Gear^.State and gstHHHJump) <> 0) then
-		DrawHedgehog(sx, sy,
-			- hwSign(Gear^.dX),
-			1,
-			1,
-			0)
-		else
-		DrawHedgehog(sx, sy,
-			hwSign(Gear^.dX),
-			1,
-			1,
-			0);
+    DrawHedgehog(sx, sy,
+        hwSign(Gear^.dX)*m,
+        1,
+        1,
+        0);
+	HatVisible:= true;
 	HatVisible:= true;
 	defaultPos:= false
 	end else
@@ -1027,19 +1023,12 @@ then
 
 	if ((Gear^.State and gstHHJumping) <> 0) then
 		begin
-		if ((Gear^.State and gstHHHJump) <> 0) then
-			DrawHedgehog(sx, sy,
-				- hwSign(Gear^.dX),
-				1,
-				1,
-				0)
-			else
-			DrawHedgehog(sx, sy,
-				hwSign(Gear^.dX),
-				1,
-				1,
-				0);
-			defaultPos:= false
+		DrawHedgehog(sx, sy,
+			hwSign(Gear^.dX)*m,
+			1,
+			1,
+			0);
+		defaultPos:= false
 		end;
 	end;
 
@@ -1080,7 +1069,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 				sx,
 				hwRound(Gear^.Y) - 8 + WorldDy,
 				0,
-				hwSign(Gear^.dX),
+				hwSign(Gear^.dX)*m,
 				32);
 	end;
 
@@ -1125,7 +1114,6 @@ with PHedgehog(Gear^.Hedgehog)^ do
    3: I need to extend the beam beyond land. 
    This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
 *)
-					if ((Gear^.State and gstHHHJump) <> 0) then m:= -1 else m:= 1;
 					dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
 					dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
 					if cLaserSighting then
