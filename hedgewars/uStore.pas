@@ -708,14 +708,14 @@ edgeWidth:= SpritesData[edge].Width;
 cornerWidth:= SpritesData[corner].Width;
 cornerHeight:= SpritesData[corner].Height;
 // This one screws it up
-s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
+//s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
 // This one doesn't
 //s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And theyll just go on singing it forever just because... This is the song that never ends... ';
 // Also screws up, but only action
 //s:= 'This is the song that never ends.  cause it goes on and on .';
 // ok in all
 // s:= 'This is the song that never ends.  cause it goes on .';
-numLines:= 1;
+numLines:= 0;
 
 if length(s) = 0 then s:= '...';
 
@@ -730,19 +730,18 @@ if (length(s) > 20) then
         if (s[pos] = #1) or (pos = length(s)) then
             inc(numLines);
 
-    // TODO - find out why this calc doesn't do what I expect
-    if numLines = 2 then textWidth:= w div 2
-    else if numlines > 2 then textWidth:= w div (numLines-1);
+    textWidth:= round(w/(numLines)) + 12;
     end;
 
 textWidth:=((textWidth-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
-textHeight:=(((numlines * h)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth+edgeWidth;
+textHeight:=(((numlines * h + 2)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth;
 
+textHeight:=max(textHeight,edgeWidth);
 //textWidth:=max(textWidth,SpritesData[tail].Width);
 rect.x:= 0;
 rect.y:= 0;
-rect.w:= textWidth + cornerWidth * 2;
-rect.h:= textHeight + cornerHeight * 2 - edgeHeight + SpritesData[tail].Height;
+rect.w:= textWidth + (cornerWidth * 2);
+rect.h:= textHeight + cornerHeight*2 - edgeHeight + SpritesData[tail].Height;
 //s:= inttostr(h) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h) + ' ' + s;
 
 Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
@@ -828,8 +827,9 @@ while pos <= length(s) do
         if Length(substr) <> 0 then
            begin
            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cColorNearBlack);
-           rect.x:= edgeHeight;
-           rect.y:= edgeHeight + line * h;
+           rect.x:= edgeHeight+4;
+           // trying to more evenly position the text, vertically
+           rect.y:= max(edgeHeight,3+(rect.h-(numLines*h)) div 2) + line * h;
            SDLTry(tmpsurf <> nil, true);
            SDL_UpperBlit(tmpsurf, nil, Result, @rect);
            SDL_FreeSurface(tmpsurf);

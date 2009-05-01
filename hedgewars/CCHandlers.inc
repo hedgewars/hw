@@ -414,7 +414,7 @@ else
     // If I knew how to add a gear without it becoming immediately active, I'd
     // just create/attach the hedgehog SpeechGear here, then activate it where
     // SpeechType/SpeechText are activated
-    SpeechType:= byte(s[1]);
+    SpeechType:= byte(s[1])-3;
     SpeechText:= text
     end;
 end;
