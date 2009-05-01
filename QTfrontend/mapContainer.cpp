@@ -229,6 +229,13 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
 
 void HWMapContainer::changeImage()
 {
+	if (pMap)
+	{
+		disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+		disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
+		pMap = 0;
+	}
+
 	pMap = new HWMap();
 	connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
 	connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
@@ -293,13 +300,14 @@ void HWMapContainer::setMap(const QString & map)
 	
 	int id = chooseMap->findText(map);
 	if(id > 0) {
-		chooseMap->setCurrentIndex(id);
-		loadMap(id);
 		if (pMap)
 		{
 			disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+			disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
 			pMap = 0;
 		}
+		chooseMap->setCurrentIndex(id);
+		loadMap(id);
 	}
 }
 
@@ -331,7 +339,7 @@ void HWMapContainer::setTemplateFilter(int filter)
 
 void HWMapContainer::templateFilterChanged(int filter)
 {
-	changeImage();
 	emit newTemplateFilter(filter);
+	changeImage();
 }
 
