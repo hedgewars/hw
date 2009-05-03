@@ -171,7 +171,7 @@ HWForm::HWForm(QWidget *parent)
 	wBackground->setFixedSize(this->width(), this->height());
 	wBackground->lower();
 	wBackground->init();
-	//wBackground->startAnimation();
+	wBackground->startAnimation();
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
@@ -751,7 +751,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		case gsFinished: {
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
-			//if (wBackground) wBackground->startAnimation();	
+			if (wBackground) wBackground->startAnimation();	
 			GoToPage(ID_PAGE_GAMESTATS);
 			if (hwnet) hwnet->gameFinished();
 			break;
@@ -761,7 +761,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
 				Music(ui.pageOptions->CBEnableMusic->isChecked());
-				//if (wBackground) wBackground->startAnimation();	
+				if (wBackground) wBackground->startAnimation();	
 				if (hwnet) hwnet->gameFinished();
 			}
 		};

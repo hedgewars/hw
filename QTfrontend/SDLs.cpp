@@ -26,10 +26,10 @@ SDLInteraction::SDLInteraction()
 	music = NULL;
 
 	SDL_Init(SDL_INIT_VIDEO);
-//	SDL_Init(SDL_INIT_AUDIO);
-//	Mix_OpenAudio(22050, 0x8010, 2, 512);
-	
-//	Mix_VolumeMusic(33);
+	SDL_Init(SDL_INIT_AUDIO);
+	Mix_OpenAudio(22050, 0x8010, 2, 512);
+  
+	Mix_VolumeMusic(33);
 }
 
 SDLInteraction::~SDLInteraction()
@@ -59,15 +59,13 @@ QStringList SDLInteraction::getResolutions() const
 }
 void SDLInteraction::StartMusic()
 {
-/*
 	if (!music)
 		music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 
 	Mix_FadeInMusic(music, -1, 3000);
-*/
 }
 
 void SDLInteraction::StopMusic()
 {
-//	Mix_FadeOutMusic(2000);
+	Mix_FadeOutMusic(2000);
 }
