@@ -773,8 +773,7 @@ var HHGear: PGear;
 	with HHGear^ do
 		begin
 		Message:= Message and not gm_Attack;
-		State:= State or gstMoving;
-		State:= State and not gstWinner;
+		State:= (State or gstMoving) and not gstWinner;
 		end;
 	DeleteGear(Gear)
 	end;
@@ -954,7 +953,7 @@ if TestCollisionYwithGear(HHGear, 1) then
 	begin
 	CheckHHDamage(HHGear);
 	HHGear^.dY:= _0;
-	HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping);
+	HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping or gstHHHJump);
 	end else
 	begin
 	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
