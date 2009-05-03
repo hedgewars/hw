@@ -886,46 +886,57 @@ PageScheme::PageScheme(QWidget* parent) :
 	
 	TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts.png");
 	TBW_mode_Forts->setText(ToggleButtonWidget::tr("Fort Mode"));
+    TBW_mode_Forts->setToolTip(tr("Defend your fort and destroy the opponents, two team colours max!"));
 	glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
 
 	TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide.png");
 	TBW_teamsDivide->setText(ToggleButtonWidget::tr("Divide Teams"));
+    TBW_teamsDivide->setToolTip(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
 	glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
 
 	TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid.png");
 	TBW_solid->setText(ToggleButtonWidget::tr("Solid Land"));
+    TBW_solid->setToolTip(tr("Land can not be destroyed!"));
 	glGMLayout->addWidget(TBW_solid,0,2,1,1);
 
 	TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
 	TBW_border->setText(ToggleButtonWidget::tr("Add Border"));
+    TBW_border->setToolTip(tr("Add an indestructable border around the terrain"));
 	glGMLayout->addWidget(TBW_border,0,3,1,1);
 
 	TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
 	TBW_lowGravity->setText(ToggleButtonWidget::tr("Low Gravity"));
+    TBW_lowGravity->setToolTip(tr("Lower gravity"));
 	glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
 
 	TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
 	TBW_laserSight->setText(ToggleButtonWidget::tr("Laser Sight"));
+    TBW_laserSight->setToolTip(tr("Assisted aiming with laser sight"));
 	glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
 
-	TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvurnable.png");
+	TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable.png");
 	TBW_invulnerable->setText(ToggleButtonWidget::tr("Invulnerable"));
+    TBW_invulnerable->setToolTip(tr("All hogs have a personal forcefield"));
 	glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
 
 	TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
 	TBW_mines->setText(ToggleButtonWidget::tr("Add Mines"));
+    TBW_mines->setToolTip(tr("Enable random mines"));
 	glGMLayout->addWidget(TBW_mines,1,3,1,1);
 
 	TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
 	TBW_vampiric->setText(ToggleButtonWidget::tr("Vampirism"));
+    TBW_vampiric->setToolTip(tr("Gain 80% of the damage you do back in health"));
 	glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
 
 	TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma.png");
 	TBW_karma->setText(ToggleButtonWidget::tr("Karma"));
+    TBW_karma->setToolTip(tr("Share your opponents pain, share their damage"));
 	glGMLayout->addWidget(TBW_karma,2,1,1,1);
 
 	TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery.png");
 	TBW_artillery->setText(ToggleButtonWidget::tr("Artillery"));
+    TBW_artillery->setToolTip(tr("Your hogs are unable to move, put your artillery skills to the test"));
 	glGMLayout->addWidget(TBW_artillery,2,2,1,1);
 
 	// Right
