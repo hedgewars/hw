@@ -348,7 +348,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          or   TestCollisionYwithGear(Gear, -1)) then
          begin
          Gear^.dY:= -_0_15;
-         Gear^.dX:= SignAs(_0_15, Gear^.dX);
+         if not cArtillery then Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
          PlaySound(sndJump1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
          exit
@@ -632,7 +632,7 @@ if (Gear^.State and gstMoving) <> 0 then
 	
 	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
-	if wasJumping and
+	if (not cArtillery) and wasJumping and
 		TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
 
 	doStepHedgehogMoving(Gear);

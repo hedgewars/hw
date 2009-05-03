@@ -495,22 +495,27 @@ end;
 
 procedure doStepSniperRifleShot(Gear: PGear);
 begin
+cArtillery:= true;
 if not cLaserSighting then // game doesn't have default laser sight. turn it on and give them a chance to aim
     begin
     cLaserSighting:= true;
-    cArtillery:= true;
 	DeleteGear(Gear);
 	AfterAttack;
-    dec(CurrentHedgehog^.AttacksNum);
     exit 
-    end;
+    end
+else
+    inc(CurrentHedgehog^.AttacksNum); // burn up a shot, Tiy wants only a single shot
 
 if (PHedgehog(Gear^.Hedgehog)^.Gear^.Message and gm_Attack) <> 0 then
     begin
 	Gear^.State:= Gear^.State or gstAnimation;
     PlaySound(sndGun, false, nil);
     Gear^.doStep:= @doStepBulletWork
-    end
+    end;
+
+if (Gear^.Ammo^.NumPerTurn < CurrentHedgehog^.AttacksNum) and
+   ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
