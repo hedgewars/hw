@@ -106,6 +106,7 @@ var
 	cDamageModifier: hwFloat;
 	cLaserSighting: boolean;
 	cVampiric: boolean;
+	cArtillery: boolean;
 
 	flagMakeCapture: boolean = false;
 
@@ -550,6 +551,7 @@ cGravity:= cMaxWindSpeed;
 cDamageModifier:= _1;
 cLaserSighting:= false;
 cVampiric:= false;
+cArtillery:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}

@@ -150,6 +150,7 @@ with Gear^,
                                  PlaySound(sndLaugh, false, CurrentTeam^.voicepack)
                                  end;
                        amDEagle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
+                  amSniperRifle: CurAmmoGear:= AddGear(hwRound(X + xx * cHHRadius), hwRound(Y + yy * cHHRadius), gtSniperRifleShot, 0, xx * _0_5, yy * _0_5, 0);
                      amDynamite: begin
                                  AddGear(hwRound(X) + hwSign(dX) * 7, hwRound(Y), gtDynamite, 0, SignAs(_0_03, dX), _0, 5000);
                                  PlaySound(sndLaugh, false, CurrentTeam^.voicepack)
@@ -185,8 +186,6 @@ with Gear^,
                         amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
                       amLowGravity: cGravity:= cMaxWindSpeed / 2;
                       amExtraDamage: cDamageModifier:= _1_5;
-                      //this flag unfortunately gets cleared too often for true invulnerability, although it seemed like the natural choice
-                      //amInvulnerable: State:= State or gstNoDamage;
                       amInvulnerable: Invulnerable:= true;
                       amExtraTime: TurnTimeLeft:= TurnTimeLeft + 30000;
                       amLaserSight: cLaserSighting:= true;
@@ -397,8 +396,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
       end;
 
-   // ARTILLERY HERE
-   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
+   if (not cArtillery) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then
@@ -628,7 +626,7 @@ if (Gear^.State and gstMoving) <> 0 then
 			begin
 			Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
 			Gear^.dY:= -_0_25;
-			Gear^.dX:= -SignAs(_0_02, Gear^.dX);
+			if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
 			PlaySound(sndJump2, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 			end;
 	

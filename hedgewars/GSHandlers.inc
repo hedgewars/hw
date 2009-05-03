@@ -451,7 +451,7 @@ if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) or (hwRound(Gear^.Y) and LAND_HEI
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDEagleShotWork(Gear: PGear);
+procedure doStepBulletWork(Gear: PGear);
 var i, x, y: LongWord;
     oX, oY: hwFloat;
 begin
@@ -467,7 +467,11 @@ repeat
   y:= hwRound(Gear^.Y);
   if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
      and (Land[y, x] <> 0) then inc(Gear^.Damage);
-  if Gear^.Damage > 5 then AmmoShove(Gear, 7, 20);
+  if Gear^.Damage > 5 then
+      if Gear^.Ammo^.AmmoType = amDEagle then
+          AmmoShove(Gear, 7, 20)
+      else
+          AmmoShove(Gear, Gear^.Timer*2, 20);
   dec(i)
 until (i = 0) or (Gear^.Damage > Gear^.Health);
 if Gear^.Damage > 0 then
@@ -486,7 +490,27 @@ end;
 procedure doStepDEagleShot(Gear: PGear);
 begin
 PlaySound(sndGun, false, nil);
-Gear^.doStep:= @doStepDEagleShotWork
+Gear^.doStep:= @doStepBulletWork
+end;
+
+procedure doStepSniperRifleShot(Gear: PGear);
+begin
+if not cLaserSighting then // game doesn't have default laser sight. turn it on and give them a chance to aim
+    begin
+    cLaserSighting:= true;
+    cArtillery:= true;
+	DeleteGear(Gear);
+	AfterAttack;
+    dec(CurrentHedgehog^.AttacksNum);
+    exit 
+    end;
+
+if (PHedgehog(Gear^.Hedgehog)^.Gear^.Message and gm_Attack) <> 0 then
+    begin
+	Gear^.State:= Gear^.State or gstAnimation;
+    PlaySound(sndGun, false, nil);
+    Gear^.doStep:= @doStepBulletWork
+    end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

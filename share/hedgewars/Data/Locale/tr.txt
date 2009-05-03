@@ -38,6 +38,7 @@
 00:35=Arttırılmış Zaman
 00:36=Lazer Görüşü
 00:37=Vampirism
+00:38=Sniper Rifle
 
 01:00=Savaş başlasın!
 01:01=Beraberlik

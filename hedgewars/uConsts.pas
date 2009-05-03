@@ -62,7 +62,8 @@ type
 			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder, 
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail, 
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail, 
-            sprShoutCorner, sprShoutEdge, sprShoutTail);
+            sprShoutCorner, sprShoutEdge, sprShoutTail,
+            sprSniperRifle);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -72,7 +73,7 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSpeechBubble);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSpeechBubble, gtSniperRifleShot);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter);
@@ -96,7 +97,8 @@ type
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
-            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, amLaserSight, amVampiric);
+            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
+            amLaserSight, amVampiric, amSniperRifle);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -208,6 +210,7 @@ const
 	gfMines        = $00000100;
 	gfVampiric     = $00000200;
 	gfKarma        = $00000400;
+	gfArtillery    = $00000800;
 	gfOneClanMode  = $10000000;
 
 	gstDrowning       = $00000001;
@@ -523,7 +526,9 @@ const
 			(FileName:'ShoutEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  30; Height: 20; saveSurf: true), // sprShoutEdge
 			(FileName:'ShoutTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  30; Height: 37; saveSurf: true) // sprShoutTail
+			Width:  30; Height: 37; saveSurf: true), // sprShoutTail
+			(FileName:'amSniperRifle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  128; Height: 32; saveSurf: false) // sprSniperRifle
 			);
 
 	Wavez: array [TWave] of record
@@ -1344,6 +1349,24 @@ const
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidSniperRifle;
+			NameTex: nil;
+			Probability: 20;
+			NumberInCase: 2;
+			Ammo: (Propz: 0;
+					Count: 2;
+					NumPerTurn: 1;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amSniperRifle);
+			Slot: 2;
+			TimeAfterTurn: 3000;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
 			SkipTurns: 0;
 			PosCount: 1;
 			PosSprite: sprWater)

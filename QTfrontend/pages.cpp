@@ -924,6 +924,10 @@ PageScheme::PageScheme(QWidget* parent) :
 	TBW_karma->setText(ToggleButtonWidget::tr("Karma"));
 	glGMLayout->addWidget(TBW_karma,2,1,1,1);
 
+	TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery.png");
+	TBW_artillery->setText(ToggleButtonWidget::tr("Artillery"));
+	glGMLayout->addWidget(TBW_artillery,2,2,1,1);
+
 	// Right
 	QLabel * l;
 	
@@ -1041,11 +1045,12 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_mines->button(), 8);
 	mapper->addMapping(TBW_vampiric->button(), 9);
 	mapper->addMapping(TBW_karma->button(), 10);
-	mapper->addMapping(SB_DamageModifier, 11);
-	mapper->addMapping(SB_TurnTime, 12);
-	mapper->addMapping(SB_InitHealth, 13);
-	mapper->addMapping(SB_SuddenDeath, 14);
-	mapper->addMapping(SB_CaseProb, 15);
+	mapper->addMapping(TBW_artillery->button(), 11);
+	mapper->addMapping(SB_DamageModifier, 12);
+	mapper->addMapping(SB_TurnTime, 13);
+	mapper->addMapping(SB_InitHealth, 14);
+	mapper->addMapping(SB_SuddenDeath, 15);
+	mapper->addMapping(SB_CaseProb, 16);
 
 	mapper->toFirst();
 }

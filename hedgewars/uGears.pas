@@ -163,7 +163,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBallgun,
 			@doStepBomb,
 			@doStepRCPlane,
-			@doStepSpeechBubble
+			@doStepSpeechBubble,
+			@doStepSniperRifleShot
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -304,6 +305,10 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_3
                 end;
   gtDEagleShot: begin
+                Result^.Radius:= 1;
+                Result^.Health:= 50
+                end;
+  gtSniperRifleShot: begin
                 Result^.Radius:= 1;
                 Result^.Health:= 50
                 end;
@@ -636,15 +641,21 @@ begin
 
     if (GameFlags and gfLaserSight) = 0 then
         cLaserSighting:= false;
-    // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
 
-   if (GameFlags and gfInvulnerable) = 0 then
-       if (CurrentTeam <> nil) then
-          with CurrentTeam^ do
-             for i:= 0 to cMaxHHIndex do
-                 with Hedgehogs[i] do
-                     if (Gear <> nil) then
-                         Gear^.Invulnerable:= false;
+    if (GameFlags and gfArtillery) = 0 then
+        cArtillery:= false;
+
+    // have to sweep *all* current team hedgehogs since it is theoretically possible if you have enough invulnerabilities and switch turns to make your entire team invulnerable
+    if (CurrentTeam <> nil) then
+       with CurrentTeam^ do
+          for i:= 0 to cMaxHHIndex do
+              with Hedgehogs[i] do
+                  begin
+                  if (SpeechGear <> nil) then DeleteGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
+                  if (Gear <> nil) then
+                     if (GameFlags and gfInvulnerable) = 0 then
+                        Gear^.Invulnerable:= false;
+                  end;
 end;
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
@@ -716,7 +727,7 @@ while t <> nil do
 end;
 
 procedure DrawHH(Gear: PGear);
-var t: LongInt;
+var i, t: LongInt;
 	amt: TAmmoType;
 	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
@@ -782,6 +793,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 				end;
 			gtDEagleShot: DrawRotated(sprDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			gtSniperRifleShot: begin
+					if (CurAmmoGear^.State and gstAnimation <> 0) then
+			            DrawRotatedF(sprSniperRifle, hx, hy, 1, hwSign(Gear^.dX), aangle)
+					else
+			            DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle)
+				end;
 			gtBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
 			gtRCPlane: begin
 				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
@@ -791,16 +808,16 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				if Gear^.X < CurAmmoGear^.X then
 					begin
 					dAngle:= 0;
-					m:= 1
+					i:= 1
 					end else
 					begin
 					dAngle:= 180;
-					m:= -1
+					i:= -1
 					end;
                 sx:= hwRound(Gear^.X) + WorldDx;
                 sy:= hwRound(Gear^.Y) + WorldDy;
 				DrawHedgehog(sx, sy,
-						m,
+						i,
 						1,
 						0,
 						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
@@ -878,6 +895,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		case CurAmmoGear^.Kind of
 			gtShotgunShot,
 			gtDEagleShot,
+			gtSniperRifleShot,
 			gtShover: begin
 				DrawHedgehog(sx, sy,
 						hwSign(Gear^.dX),
@@ -936,6 +954,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
 			amShotgun: DrawRotated(sprHandShotgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
+			amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
 			amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
 			amRCPlane: begin
 				DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
@@ -1401,7 +1420,10 @@ if (GameFlags and gfInvulnerable) <> 0 then
        end;
 
 if (GameFlags and gfLaserSight) <> 0 then
-    cLaserSighting:= true
+    cLaserSighting:= true;
+
+if (GameFlags and gfArtillery) <> 0 then
+    cArtillery:= true
 end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);

@@ -38,6 +38,7 @@
 00:35=Tiempo extra
 00:36=Mira láser
 00:37=Vampirism
+00:38=Sniper Rifle
 
 01:00=Luchad!
 01:01=Empate

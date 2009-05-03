@@ -451,8 +451,11 @@ procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
-glRotatef(Angle, 0, 0, 1);
 
+if Dir < 0 then
+   glRotatef(Angle, 0, 0, -1)
+else
+   glRotatef(Angle, 0, 0,  1);
 if Dir < 0 then glScalef(-1.0, 1.0, 1.0);
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
@@ -678,7 +681,7 @@ SDL_FreeSurface(Result)
 end;
 
 function RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
-var textWidth, textHeight, x, y, w, h, i, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
+var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     Result, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
     chars: TSysCharSet = [#9,' ','.',';',':','?','!',','];
@@ -707,33 +710,42 @@ edgeHeight:= SpritesData[edge].Height;
 edgeWidth:= SpritesData[edge].Width;
 cornerWidth:= SpritesData[corner].Width;
 cornerHeight:= SpritesData[corner].Height;
-// This one screws it up
+// This one screws up WrapText
 //s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
 // This one doesn't
-//s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And theyll just go on singing it forever just because... This is the song that never ends... ';
-// Also screws up, but only action
-//s:= 'This is the song that never ends.  cause it goes on and on .';
-// ok in all
-// s:= 'This is the song that never ends.  cause it goes on .';
+//s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they will go on singing it forever just because... This is the song that never ends... ';
+
 numLines:= 0;
 
 if length(s) = 0 then s:= '...';
-
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
-textWidth:= w;
-textHeight:= h;
+j:= 0;
 if (length(s) > 20) then
     begin
+    w:= 0;
     i:= round(Sqrt(length(s)) * 2);
     s:= WrapText(s, #1, chars, i);
-    for pos:= 1 to length(s) do
+    pos:= 1; prevpos:= 0; line:= 0;
+// Find the longest line for the purposes of centring the text.  Font dependant.
+    while pos <= length(s) do
+        begin
         if (s[pos] = #1) or (pos = length(s)) then
-            inc(numLines);
+            begin
+            inc(numlines);
+            if s[pos] <> #1 then inc(pos);
+            while s[prevpos+1] = ' ' do inc(prevpos);
+            substr:= copy(s, prevpos+1, pos-prevpos-1);
+            i:= 0; j:= 0;
+            TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), i, j);
+            if i > w then w:= i;
+            prevpos:= pos;
+            end;
+        inc(pos);
+        end;
+    end
+else numLines := 1;
 
-    textWidth:= round(w/(numLines)) + 12;
-    end;
-
-textWidth:=((textWidth-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
+textWidth:=((w-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
 textHeight:=(((numlines * h + 2)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth;
 
 textHeight:=max(textHeight,edgeWidth);
@@ -742,7 +754,7 @@ rect.x:= 0;
 rect.y:= 0;
 rect.w:= textWidth + (cornerWidth * 2);
 rect.h:= textHeight + cornerHeight*2 - edgeHeight + SpritesData[tail].Height;
-//s:= inttostr(h) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h) + ' ' + s;
+//s:= inttostr(w) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h);
 
 Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
 
@@ -814,6 +826,8 @@ rect.x:= edgeHeight;
 rect.y:= edgeHeight;
 rect.w:= rect.w - edgeHeight * 2;
 rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
+i:= rect.w;
+j:= rect.h;
 SDL_FillRect(Result, @rect, cWhiteColor);
 
 pos:= 1; prevpos:= 0; line:= 0;
@@ -827,9 +841,9 @@ while pos <= length(s) do
         if Length(substr) <> 0 then
            begin
            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cColorNearBlack);
-           rect.x:= edgeHeight+4;
+           rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
-           rect.y:= max(edgeHeight,3+(rect.h-(numLines*h)) div 2) + line * h;
+           rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
            SDLTry(tmpsurf <> nil, true);
            SDL_UpperBlit(tmpsurf, nil, Result, @rect);
            SDL_FreeSurface(tmpsurf);

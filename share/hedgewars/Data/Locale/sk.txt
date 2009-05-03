@@ -38,6 +38,7 @@
 00:35=Extra čas
 00:36=Laserové zameriavanie
 00:37=Vampirism
+00:38=Sniper Rifle
 
 01:00=Do boja!
 01:01=Remíza
