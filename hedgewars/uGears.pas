@@ -756,7 +756,6 @@ if (Gear^.State and gstDrowning) <> 0 then
 			0);
 	defaultPos:= false
 	end else
-
 if ((Gear^.State and gstWinner) <> 0) and 
    ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
 	begin
@@ -779,6 +778,74 @@ if (Gear^.State and gstLoser) <> 0 then // for now using the jackhammer for its 
 
 if (Gear^.State and gstHHDriven) <> 0 then
 	begin
+	if ((Gear^.State and gstHHThinking) = 0) and 
+       ShowCrosshair and 
+       ((Gear^.State and (gstAttacked or gstAnimation)) = 0) then
+		begin
+(* These calculations are a little complex for a few reasons:
+   1: I need to draw the laser from weapon origin to nearest land
+   2: I need to start the beam outside the hedgie for attractiveness. 
+   3: I need to extend the beam beyond land. 
+   This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
+*)
+		dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
+		dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
+		if cLaserSighting then
+			begin
+			lx:= hwRound(Gear^.X);
+			ly:= hwRound(Gear^.Y);
+			lx:= lx + dx * 16;
+			ly:= ly + dy * 16;
+
+			ax:= dx * 4;
+			ay:= dy * 4;
+
+			tx:= round(lx);
+			ty:= round(ly);
+			hx:= tx;
+			hy:= ty;
+			while ((ty and LAND_HEIGHT_MASK) = 0) and
+				((tx and LAND_WIDTH_MASK) = 0) and
+				(Land[ty, tx] = 0) do
+				begin
+				lx:= lx + ax;
+				ly:= ly + ay;
+				tx:= round(lx);
+				ty:= round(ly)
+				end;
+			// reached edge of land. assume infinite beam. Extend it way out past camera
+			if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
+				begin
+				tx:= round(lx + ax * (LAND_WIDTH div 4));
+				ty:= round(ly + ay * (LAND_WIDTH div 4));
+				end;
+			
+			//if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
+				begin
+				glDisable(GL_TEXTURE_2D);
+				glEnable(GL_LINE_SMOOTH);
+
+				glColor4ub($FF, $00, $00, $C0);
+				VertexBuffer[0].X:= hx + WorldDx;
+				VertexBuffer[0].Y:= hy + WorldDy;
+				VertexBuffer[1].X:= tx + WorldDx;
+				VertexBuffer[1].Y:= ty + WorldDy;
+				
+				glEnableClientState(GL_VERTEX_ARRAY);
+				glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+				glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
+				glColor4f(1, 1, 1, 1);
+				glEnable(GL_TEXTURE_2D);
+				glDisable(GL_LINE_SMOOTH);
+				end;
+			end;
+		// draw crosshair
+		cx:= Round(hwRound(Gear^.X) + dx * 80);
+		cy:= Round(hwRound(Gear^.Y) + dy * 80);
+		DrawRotatedTex(PHedgehog(Gear^.Hedgehog)^.Team^.CrosshairTex,
+				12, 12, cx + WorldDx, cy + WorldDy, 0,
+				hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
+		end;
 	hx:= hwRound(Gear^.X) + 1 + 8 * hwSign(Gear^.dX) + WorldDx;
 	hy:= hwRound(Gear^.Y) - 2 + WorldDy;
 	aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
@@ -1027,10 +1094,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 end else // not gstHHDriven
 	begin
 	if (Gear^.Damage > 0)
-	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) 
-// ARTILLERY
-//and (1=0)
-then
+	and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
 		begin
 		DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
@@ -1124,74 +1188,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		if (Gear^.State and gstDrowning) = 0 then
 			if (Gear^.State and gstHHThinking) <> 0 then
 				DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
-				else
-				if ShowCrosshair and ((Gear^.State and (gstAttacked or gstAnimation)) = 0) then
-					begin
-(* These calculations are a little complex for a few reasons:
-   1: I need to draw the laser from weapon origin to nearest land
-   2: I need to start the beam outside the hedgie for attractiveness. 
-   3: I need to extend the beam beyond land. 
-   This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
-*)
-					dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
-					dy:= - Cos(Gear^.Angle * pi / cMaxAngle);
-					if cLaserSighting then
-						begin
-						lx:= hwRound(Gear^.X);
-						ly:= hwRound(Gear^.Y);
-						lx:= lx + dx * 16;
-						ly:= ly + dy * 16;
-
-						ax:= dx * 4;
-						ay:= dy * 4;
-
-						tx:= round(lx);
-						ty:= round(ly);
-						hx:= tx;
-						hy:= ty;
-						while ((ty and LAND_HEIGHT_MASK) = 0) and
-							((tx and LAND_WIDTH_MASK) = 0) and
-							(Land[ty, tx] = 0) do
-							begin
-							lx:= lx + ax;
-							ly:= ly + ay;
-							tx:= round(lx);
-							ty:= round(ly)
-							end;
-						// reached edge of land. assume infinite beam. Extend it way out past camera
-						if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
-							begin
-							tx:= round(lx + ax * (LAND_WIDTH div 4));
-							ty:= round(ly + ay * (LAND_WIDTH div 4));
-							end;
-						
-						//if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
-							begin
-							glDisable(GL_TEXTURE_2D);
-							glEnable(GL_LINE_SMOOTH);
-
-							glColor4ub($FF, $00, $00, $C0);
-							VertexBuffer[0].X:= hx + WorldDx;
-							VertexBuffer[0].Y:= hy + WorldDy;
-							VertexBuffer[1].X:= tx + WorldDx;
-							VertexBuffer[1].Y:= ty + WorldDy;
-							
-							glEnableClientState(GL_VERTEX_ARRAY);
-							glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-							glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-							glColor4f(1, 1, 1, 1);
-							glEnable(GL_TEXTURE_2D);
-							glDisable(GL_LINE_SMOOTH);
-							end;
-						end;
-					// draw crosshair
-					cx:= Round(hwRound(Gear^.X) + dx * 80);
-					cy:= Round(hwRound(Gear^.Y) + dy * 80);
-					DrawRotatedTex(Team^.CrosshairTex,
-							12, 12, cx + WorldDx, cy + WorldDy, 0,
-							hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
-					end
-			end
+		end
 	end;
 
 if Gear^.Invulnerable then
