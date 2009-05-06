@@ -739,7 +739,12 @@ if ((HHGear^.State and gstHHDriven) = 0)
 
 HedgehogChAngle(HHGear);
 
-if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
+if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+	begin
+	{$IFDEF DEBUGFILE}if HHGear^.dX.QWordValue > 1 then AddFileLog('Stopping hedgehog after rope attack due to wall collision');{$ENDIF}
+	SetLittle(HHGear^.dX);
+	end;
+
 if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY:= _0;
 HHGear^.X:= HHGear^.X + HHGear^.dX;
 HHGear^.Y:= HHGear^.Y + HHGear^.dY;
