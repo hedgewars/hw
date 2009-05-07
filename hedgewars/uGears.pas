@@ -298,7 +298,10 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 2;
                 Result^.Elasticity:= _0_55;
                 Result^.Friction:= _0_995;
-                Result^.Timer:= 3000;
+                if cMinesTime < 0 then
+                    Result^.Timer:= getrandom(3)*1000
+                else
+                    Result^.Timer:= cMinesTime*1;
                 end;
         gtCase: begin
                 Result^.Radius:= 16;

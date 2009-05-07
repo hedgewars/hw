@@ -129,6 +129,8 @@ QStringList GameCFGWidget::getFullConfig() const
 	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
 	sl.append(QString("e$damagepct %1").arg(schemeData(12).toInt()));
 	sl.append(QString("e$turntime %1").arg(schemeData(13).toInt() * 1000));
+	sl.append(QString("e$minestime %1").arg(schemeData(17).toInt() * 1000));
+	sl.append(QString("e$landadds %1").arg(schemeData(18).toInt()));
 	sl.append(QString("e$sd_turns %1").arg(schemeData(15).toInt()));
 	sl.append(QString("e$casefreq %1").arg(schemeData(16).toInt()));
 	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));

@@ -433,6 +433,8 @@ private:
 	QSpinBox * SB_InitHealth;
 	QSpinBox * SB_SuddenDeath;
 	FreqSpinBox * SB_CaseProb;
+	QSpinBox * SB_MinesTime;
+	QSpinBox * SB_Mines;
 	QLineEdit * LE_name;
 	QComboBox * selectScheme;
 

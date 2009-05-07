@@ -48,6 +48,7 @@ var
 	cTemplateFilter : LongInt = 0;
 
 	cHedgehogTurnTime: Longword = 45000;
+	cMinesTime     : LongInt = 3000;
 	cMaxAIThinkTime  : Longword = 9000;
 
 	cCloudsNumber    : LongInt = 9;

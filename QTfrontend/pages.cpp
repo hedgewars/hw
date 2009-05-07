@@ -1016,6 +1016,35 @@ PageScheme::PageScheme(QWidget* parent) :
 	SB_CaseProb->setValue(5);
 	glBSLayout->addWidget(SB_CaseProb,4,2,1,1);
 
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Mines Time"));
+	l->setWordWrap(true);
+	glBSLayout->addWidget(l,5,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+	glBSLayout->addWidget(l,5,1,1,1);
+	SB_MinesTime = new QSpinBox(gbBasicSettings);
+	SB_MinesTime->setRange(-1, 3);
+	SB_MinesTime->setValue(3);
+	SB_MinesTime->setSingleStep(1);
+	SB_MinesTime->setSpecialValueText(tr("Random"));
+	SB_MinesTime->setSuffix(" "+ tr("Seconds"));
+	glBSLayout->addWidget(SB_MinesTime,5,2,1,1);
+
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Mines"));
+	l->setWordWrap(true);
+	glBSLayout->addWidget(l,6,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+	glBSLayout->addWidget(l,6,1,1,1);
+	SB_Mines = new QSpinBox(gbBasicSettings);
+	SB_Mines->setRange(1, 25);
+	SB_Mines->setValue(1);
+	SB_Mines->setSingleStep(5);
+	glBSLayout->addWidget(SB_Mines,6,2,1,1);
 
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Scheme Name:"));
@@ -1062,6 +1091,8 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(SB_InitHealth, 14);
 	mapper->addMapping(SB_SuddenDeath, 15);
 	mapper->addMapping(SB_CaseProb, 16);
+	mapper->addMapping(SB_MinesTime, 17);
+	mapper->addMapping(SB_Mines, 18);
 
 	mapper->toFirst();
 }

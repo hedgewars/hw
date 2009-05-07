@@ -471,7 +471,7 @@ repeat
       if Gear^.Ammo^.AmmoType = amDEagle then
           AmmoShove(Gear, 7, 20)
       else
-          AmmoShove(Gear, Gear^.Timer*2, 20);
+          AmmoShove(Gear, Gear^.Timer, 20);
   dec(i)
 until (i = 0) or (Gear^.Damage > Gear^.Health);
 if Gear^.Damage > 0 then
@@ -484,7 +484,12 @@ if Gear^.Damage > 0 then
 if (Gear^.Health <= 0)
 	or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
 	or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
+    begin
+    if (GameFlags and gfLaserSight) = 0 then cLaserSighting:= false;
+    if (Gear^.Ammo^.NumPerTurn < CurrentHedgehog^.AttacksNum) and
+       ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
 	Gear^.doStep:= @doStepShotIdle
+    end;
 end;
 
 procedure doStepDEagleShot(Gear: PGear);
@@ -494,27 +499,30 @@ Gear^.doStep:= @doStepBulletWork
 end;
 
 procedure doStepSniperRifleShot(Gear: PGear);
+var HHGear: PGear;
 begin
 cArtillery:= true;
+HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear^.State:= HHGear^.State or gstNotKickable;
 if not cLaserSighting then // game doesn't have default laser sight. turn it on and give them a chance to aim
     begin
     cLaserSighting:= true;
-	DeleteGear(Gear);
-	AfterAttack;
-    exit 
-    end
-else
-    inc(CurrentHedgehog^.AttacksNum); // burn up a shot, Tiy wants only a single shot
-
-if (PHedgehog(Gear^.Hedgehog)^.Gear^.Message and gm_Attack) <> 0 then
-    begin
-	Gear^.State:= Gear^.State or gstAnimation;
-    PlaySound(sndGun, false, nil);
-    Gear^.doStep:= @doStepBulletWork
+    HHGear^.Message:= 0;
+    dec(HHGear^.Angle,32)
     end;
 
-if (Gear^.Ammo^.NumPerTurn < CurrentHedgehog^.AttacksNum) and
-   ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
+if (HHGear^.Message and gm_Attack) <> 0 then
+    begin
+	Gear^.State:= Gear^.State or gstAnimation;
+    Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
+    Gear^.dY:= -AngleCos(HHGear^.Angle) * _0_5;
+    PlaySound(sndGun, false, nil);
+    Gear^.doStep:= @doStepBulletWork;
+    end
+else
+    if (GameTicks mod 32) = 0 then
+        if (GameTicks mod 4096) < 2048 then inc(HHGear^.Angle)
+        else dec(HHGear^.Angle);
 
 end;
 

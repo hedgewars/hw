@@ -40,6 +40,8 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 		<< QVariant(100)           // init health    14
 		<< QVariant(15)            // sudden death   15
 		<< QVariant(5)             // case prob      16
+		<< QVariant(3)             //  mines time    17
+		<< QVariant(4)             //  landadds      18
 		;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -72,6 +74,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "health"           // 14
 		<< "suddendeath"      // 15
 		<< "caseprobability"  // 16
+		<< "minestime"        // 17
+		<< "landadds"         // 18
 		;
 
 	QList<QVariant> proMode;
@@ -93,6 +97,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(100)           // init health    14
 		<< QVariant(15)            // sudden death   15
 		<< QVariant(0)             // case prob      16
+		<< QVariant(3)             //  mines time    17
+		<< QVariant(4)             //  landadds      18
 		;
 
 	QList<QVariant> shoppa;
@@ -114,6 +120,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(100)           // init health    14
 		<< QVariant(50)            // sudden death   15
 		<< QVariant(1)             // case prob      16
+		<< QVariant(3)             //  mines time    17
+		<< QVariant(4)             //  landadds      18
 		;
 
 	QList<QVariant> basketball;
@@ -135,6 +143,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(100)           // init health    14
 		<< QVariant(15)            // sudden death   15
 		<< QVariant(0)             // case prob      16
+		<< QVariant(3)             //  mines time    17
+		<< QVariant(4)             //  landadds      18
 		;
 
 	schemes.append(defaultScheme);
