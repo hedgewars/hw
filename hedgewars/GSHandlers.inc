@@ -486,7 +486,7 @@ if (Gear^.Health <= 0)
 	or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
     begin
     if (GameFlags and gfLaserSight) = 0 then cLaserSighting:= false;
-    if (Gear^.Ammo^.NumPerTurn < CurrentHedgehog^.AttacksNum) and
+    if (Gear^.Ammo^.NumPerTurn <= CurrentHedgehog^.AttacksNum) and
        ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
 	Gear^.doStep:= @doStepShotIdle
     end;
@@ -504,6 +504,7 @@ begin
 cArtillery:= true;
 HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNotKickable;
+HedgehogChAngle(HHGear);
 if not cLaserSighting then // game doesn't have default laser sight. turn it on and give them a chance to aim
     begin
     cLaserSighting:= true;
