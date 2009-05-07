@@ -37,8 +37,8 @@
 00:34=Niezniszczalność
 00:35=Dodatkowy czas
 00:36=Celownik laserowy
-00:37=Vampirism
-00:38=Sniper Rifle
+00:37=Wampiryzm
+00:38=Karabin Snajperski
 
 01:00=Walczmy!
 01:01=Remis
