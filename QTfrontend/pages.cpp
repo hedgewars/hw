@@ -1038,7 +1038,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	glBSLayout->addWidget(l,6,0,1,1);
 	l = new QLabel(gbBasicSettings);
 	l->setFixedSize(32,32);
-	l->setPixmap(QPixmap(":/res/iconTime.png")); // TODO: icon
+	l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
 	glBSLayout->addWidget(l,6,1,1,1);
 	SB_Mines = new QSpinBox(gbBasicSettings);
 	SB_Mines->setRange(1, 25);
