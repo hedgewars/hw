@@ -50,13 +50,15 @@ int main(int argc, char *argv[])
     QMap<QString, QString> parsedArgs;
     {
         QList<QString>::iterator i = arguments.begin();
-        while(++i != arguments.end()) {
+        while(i != arguments.end()) {
             QString arg = *i;
 
             QRegExp opt("--(\\S+)=(.+)");
             if(opt.exactMatch(arg)) {
                 parsedArgs[opt.cap(1)] = opt.cap(2);
-                arguments.erase(i);
+                i = arguments.erase(i);
+            } else {
+              ++i;
             }
         }
     }
