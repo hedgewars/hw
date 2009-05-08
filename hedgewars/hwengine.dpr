@@ -361,6 +361,8 @@ InitKbdKeyTable;
 if recordFileName = '' then InitIPC;
 WriteLnToConsole(msgGettingConfig);
 
+if cLocaleFName <> 'en.txt' then
+	LoadLocale(Pathz[ptLocale] + '/en.txt');
 LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 
 if recordFileName = '' then
