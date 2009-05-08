@@ -32,6 +32,13 @@
 00:29=Luftgevär
 00:30=Napalm
 00:31=Radiostyrt flygplan
+00:32=Low Gravity
+00:33=Extra Damage
+00:34=Invulnerable
+00:35=Extra Time
+00:36=Laser Sight
+00:37=Vampirism
+00:38=Sniper Rifle
 
 01:00=Nu kör vi!
 01:01=Oavgjort
