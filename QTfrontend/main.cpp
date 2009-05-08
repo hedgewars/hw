@@ -21,6 +21,8 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QPlastiqueStyle>
+#include <QRegExp>
+#include <QMap>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -43,6 +45,29 @@ bool checkForDir(const QString & dir)
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);
+
+    QStringList arguments = app.arguments();
+    QMap<QString, QString> parsedArgs;
+    {
+        QList<QString>::iterator i = arguments.begin();
+        while(++i != arguments.end()) {
+            QString arg = *i;
+
+            QRegExp opt("--(\\S+)=(.+)");
+            if(opt.exactMatch(arg)) {
+                parsedArgs[opt.cap(1)] = opt.cap(2);
+                arguments.erase(i);
+            }
+        }
+    }
+
+    if(parsedArgs.contains("data-dir")) {
+        QFileInfo f(parsedArgs["data-dir"]);
+        if(!f.exists()) {
+            qWarning() << "WARNING: Cannot open DATA_PATH=" << f.absoluteFilePath();
+        }
+        *cDataDir = f.absoluteFilePath();
+    }
 
 	app.setStyle(new QPlastiqueStyle);
 	
