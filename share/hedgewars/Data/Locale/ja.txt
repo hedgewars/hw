@@ -31,6 +31,14 @@
 00:28=錐ロケット
 00:29=Ballガン
 00:30=ナパーム
+00:31=RC Plane
+00:32=Low Gravity
+00:33=Extra Damage
+00:34=Invulnerable
+00:35=Extra Time
+00:36=Laser Sight
+00:37=Vampirism
+00:38=Sniper Rifle
 
 01:00=ヨシ、ファイト！
 01:01=ドロー！
