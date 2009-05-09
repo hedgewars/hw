@@ -712,6 +712,11 @@ if (Gear^.Message and gm_Destroy) <> 0 then
 	exit
 	end;
 
-if (Gear^.State and gstHHDriven) = 0 then doStepHedgehogFree(Gear)
-                                     else doStepHedgehogDriven(Gear)
+if (Gear^.State and gstHHDriven) = 0 then
+	doStepHedgehogFree(Gear)
+else
+	begin
+	TeamGoneEffect(PHedgehog(Gear^.Hedgehog)^.Team^);
+	doStepHedgehogDriven(Gear)
+	end
 end;

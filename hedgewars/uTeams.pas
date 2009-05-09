@@ -104,6 +104,7 @@ procedure RecountTeamHealth(team: PTeam);
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGone(s: shortstring);
+procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat, uVisualGears;
@@ -197,9 +198,9 @@ repeat
 					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
 				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
 				end
-		until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasGone)) or (PrevTeam = CurrTeam);
+		until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
 		end
-until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (not CurrentTeam^.hasGone);
+until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
 end;
@@ -368,7 +369,7 @@ for t:= 0 to Pred(TeamsCount) do
 end;
 
 procedure TeamGone(s: shortstring);
-var i, t: LongInt;
+var t: LongInt;
 begin
 t:= 0;
 while (t < cMaxTeams)
@@ -379,20 +380,20 @@ if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 with TeamsArray[t]^ do
 	begin
 	AddChatString('** '+ TeamName + ' is gone');
-	for i:= 0 to cMaxHHIndex do
-		with Hedgehogs[i] do
-			if Gear <> nil then
-				begin
-				if Gear^.State and gstAttacking <> 0 then
-					AttackBar:= 0;
-					
-				Gear^.State:= Gear^.State and not gstHHDriven
-				end;
-
 	hasGone:= true
 	end;
 	
 RecountTeamHealth(TeamsArray[t])
+end;
+
+procedure TeamGoneEffect(var Team: TTeam);
+var i: LongInt;
+begin
+with Team do
+	for i:= 0 to cMaxHHIndex do
+		with Hedgehogs[i] do
+			if Gear <> nil then
+				Gear^.Damage:= Gear^.Health
 end;
 
 initialization
