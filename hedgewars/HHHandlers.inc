@@ -716,7 +716,8 @@ if (Gear^.State and gstHHDriven) = 0 then
 	doStepHedgehogFree(Gear)
 else
 	begin
-	TeamGoneEffect(PHedgehog(Gear^.Hedgehog)^.Team^);
+	with PHedgehog(Gear^.Hedgehog)^ do
+		if Team^.hasGone then TeamGoneEffect(Team^);
 	doStepHedgehogDriven(Gear)
 	end
 end;
