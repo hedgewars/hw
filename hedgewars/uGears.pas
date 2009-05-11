@@ -591,7 +591,7 @@ case step of
 			ParseCommand('/nextturn', true);
 			SwitchHedgehog;
 
-			inc(step);
+			inc(step); // FIXME wtf is that, it overflows step, and does nothing
 
 			AfterSwitchHedgehog;
 			bBetweenTurns:= false
@@ -649,12 +649,18 @@ begin
           for i:= 0 to cMaxHHIndex do
               with Hedgehogs[i] do
                   begin
-                  if (SpeechGear <> nil) then DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
+                  if (SpeechGear <> nil) then
+                     begin
+                     DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
+                     SpeechGear:= nil
+                     end;
+
                   if (Gear <> nil) then
                      if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
                   end;
 end;
+
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
     vampDmg: Longword;

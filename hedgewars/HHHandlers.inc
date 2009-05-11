@@ -198,7 +198,7 @@ with Gear^,
             begin
             tmpGear:= AddVisualGear(0, 0, vgtSpeechBubble);
             tmpGear^.Text:= SpeechText;
-            tmpGear^.Hedgehog:= CurrentHedgehog;
+            tmpGear^.Hedgehog:= Gear^.Hedgehog;
             tmpGear^.FrameTicks:= SpeechType;
             SpeechText:= ''
             end;

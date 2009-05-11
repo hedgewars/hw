@@ -26,7 +26,6 @@ uses SDLh, uConsts,
 {$ENDIF}
 	uFloat;
 {$INCLUDE options.inc}
-const AllInactive: boolean = false;
 
 type PVisualGear = ^TVisualGear;
 	TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
@@ -254,15 +253,15 @@ if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
 
 if Gear^.Timer = 0 then
 	begin
-	CurrentHedgehog^.SpeechGear:= nil;
+	PHedgehog(Gear^.Hedgehog)^.SpeechGear:= nil;
 	DeleteVisualGear(Gear)
 	end;
 end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
-if (CurrentHedgehog^.SpeechGear <> nil) then DeleteVisualGear(CurrentHedgehog^.SpeechGear);
-CurrentHedgehog^.SpeechGear:= Gear;
+if (PHedgehog(Gear^.Hedgehog)^.SpeechGear <> nil) then DeleteVisualGear(PHedgehog(Gear^.Hedgehog)^.SpeechGear);
+PHedgehog(Gear^.Hedgehog)^.SpeechGear:= Gear;
 
 Gear^.Timer:= max(Length(Gear^.Text)*150,3000);
 
