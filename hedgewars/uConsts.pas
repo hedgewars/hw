@@ -73,10 +73,10 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSpeechBubble, gtSniperRifleShot);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSniperRifleShot);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
-			vgtSmallDamageTag, vgtTeamHealthSorter);
+			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble);
 
 	TGearsType = set of TGearType;
 

@@ -100,7 +100,7 @@ end;
 
 procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
-    tmpGear: PGear;
+    tmpGear: PVisualGear;
 begin
 with Gear^,
      PHedgehog(Gear^.Hedgehog)^ do
@@ -196,10 +196,10 @@ with Gear^,
 
         if not (SpeechText = '') then
             begin
-            tmpGear:= AddGear(0, 0, gtSpeechBubble, 0, _0, _0, 0);
+            tmpGear:= AddVisualGear(0, 0, vgtSpeechBubble);
             tmpGear^.Text:= SpeechText;
             tmpGear^.Hedgehog:= CurrentHedgehog;
-            tmpGear^.State:= SpeechType;
+            tmpGear^.FrameTicks:= SpeechType;
             SpeechText:= ''
             end;
 

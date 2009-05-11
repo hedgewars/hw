@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, 
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, 
 {$IFDEF IPHONE}
 	gles11,
 {$ELSE}
@@ -37,7 +37,7 @@ type PHHAmmo = ^THHAmmo;
 	THedgehog = record
 			Name: string[MAXNAMELEN];
 			Gear: PGear;
-			SpeechGear: PGear;
+			SpeechGear: PVisualGear;
 			NameTagTex,
 			HealthTagTex,
 			HatTex: PTexture;
@@ -107,7 +107,7 @@ procedure TeamGone(s: shortstring);
 procedure TeamGoneEffect(var Team: TTeam);
 
 implementation
-uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat, uVisualGears;
+uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
 const MaxTeamHealth: LongInt = 0;
 
 procedure FreeTeamsList; forward;

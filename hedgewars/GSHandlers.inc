@@ -287,44 +287,6 @@ else
 Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
 end;
 
-procedure doStepSpeechBubbleWork(Gear: PGear);
-begin
-dec(Gear^.Timer);
-
-if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
-    begin
-    Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X+int2hwFloat(Gear^.Tex^.w div 2  - Gear^.State);
-    Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y-int2hwFloat(16+Gear^.Tex^.h);
-    end;
-
-if Gear^.Timer = 0 then
-    begin
-    CurrentHedgehog^.SpeechGear:= nil;
-	DeleteGear(Gear)
-    end;
-end;
-
-procedure doStepSpeechBubble(Gear: PGear);
-begin
-if (CurrentHedgehog^.SpeechGear <> nil) then DeleteGear(CurrentHedgehog^.SpeechGear);
-CurrentHedgehog^.SpeechGear:= Gear;
-
-Gear^.Timer:= max(Length(Gear^.Text)*150,3000);
-
-Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.State, fnt16);
-
-// Arbitrary offsets added to the widths based on shape of current tails
-case Gear^.State of
-    1: Gear^.State:= SpritesData[sprSpeechTail].Width-28;
-    2: Gear^.State:= SpritesData[sprThoughtTail].Width-20;
-    3: Gear^.State:= SpritesData[sprShoutTail].Width-10;
-    end;
-
-Gear^.doStep:= @doStepSpeechBubbleWork;
-
-Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
-end;
-
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepGrave(Gear: PGear);
 begin

@@ -44,6 +44,8 @@ type PVisualGear = ^TVisualGear;
 		Kind: TVisualGearType;
 		doStep: TVGearStepProcedure;
 		Tex: PTexture;
+        Hedgehog: pointer;
+        Text: shortstring
 		end;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -240,6 +242,47 @@ currsorter:= Gear;
 //doStepTeamHealthSorterWork(Gear, Steps)
 end;
 
+procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
+var t: LongWord;
+begin
+for t:= 1 to Steps do
+    begin
+    dec(Gear^.Timer);
+
+    if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
+        begin
+        Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X+int2hwFloat(Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+        Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y-int2hwFloat(16+Gear^.Tex^.h);
+        end;
+
+    if Gear^.Timer = 0 then
+        begin
+        CurrentHedgehog^.SpeechGear:= nil;
+        DeleteVisualGear(Gear)
+        end;
+    end
+end;
+
+procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
+begin
+if (CurrentHedgehog^.SpeechGear <> nil) then DeleteVisualGear(CurrentHedgehog^.SpeechGear);
+CurrentHedgehog^.SpeechGear:= Gear;
+
+Gear^.Timer:= max(Length(Gear^.Text)*150,3000);
+
+Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
+
+case Gear^.FrameTicks of
+    1: Gear^.FrameTicks:= SpritesData[sprSpeechTail].Width-28;
+    2: Gear^.FrameTicks:= SpritesData[sprThoughtTail].Width-20;
+    3: Gear^.FrameTicks:= SpritesData[sprShoutTail].Width-10;
+    end;
+
+Gear^.doStep:= @doStepSpeechBubbleWork;
+
+Gear^.Y:= Gear^.Y - int2hwFloat(Gear^.Tex^.h)
+end;
+
 // ==================================================================
 const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 		(
@@ -249,7 +292,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepExpl,
 			@doStepFire,
 			@doStepSmallDamage,
-			@doStepTeamHealthSorter
+			@doStepTeamHealthSorter,
+			@doStepSpeechBubble
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -264,7 +308,7 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're 
 		exit
 		end;
 
-if cReducedQuality and (Kind <> vgtTeamHealthSorter) then
+if cReducedQuality and (Kind <> vgtTeamHealthSorter) and (Kind <> vgtSpeechBubble) then
 	begin
 	AddVisualGear:= nil;
 	exit
@@ -382,6 +426,7 @@ case Layer of
 			vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
 			vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
 			vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
+            vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
 			end;
 		Gear:= Gear^.NextGear
 		end

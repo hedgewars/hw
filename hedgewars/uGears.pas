@@ -53,8 +53,7 @@ type PGear = ^TGear;
 			Z: Longword;
 			IntersectGear: PGear;
 			TriggerId: Longword;
-			uid: Longword;
-            Text: shortstring;
+			uid: Longword
 			end;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -163,7 +162,6 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBallgun,
 			@doStepBomb,
 			@doStepRCPlane,
-			@doStepSpeechBubble,
 			@doStepSniperRifleShot
 			);
 
@@ -256,9 +254,6 @@ gtAmmo_Grenade: begin
    gtHealthTag: begin
                 Result^.Timer:= 1500;
                 Result^.Z:= 2002;
-                end;
-   gtSpeechBubble: begin
-                Result^.Z:= 2003;
                 end;
        gtGrave: begin
                 Result^.Radius:= 10;
@@ -654,7 +649,7 @@ begin
           for i:= 0 to cMaxHHIndex do
               with Hedgehogs[i] do
                   begin
-                  if (SpeechGear <> nil) then DeleteGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
+                  if (SpeechGear <> nil) then DeleteVisualGear(SpeechGear);  // remove to restore persisting beyond end of turn. Tiy says was too much of a gameplay issue
                   if (Gear <> nil) then
                      if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
@@ -1295,8 +1290,6 @@ while Gear<>nil do
        
        gtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
 
-       gtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
-           
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex);
              
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4);
