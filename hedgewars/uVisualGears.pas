@@ -243,24 +243,20 @@ currsorter:= Gear;
 end;
 
 procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
-var t: LongWord;
 begin
-for t:= 1 to Steps do
-    begin
-    dec(Gear^.Timer);
+if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
-    if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
-        begin
-        Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X+int2hwFloat(Gear^.Tex^.w div 2  - Gear^.FrameTicks);
-        Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y-int2hwFloat(16+Gear^.Tex^.h);
-        end;
+if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
+	begin
+	Gear^.X:= PHedgehog(Gear^.Hedgehog)^.Gear^.X + int2hwFloat(Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+	Gear^.Y:= PHedgehog(Gear^.Hedgehog)^.Gear^.Y - int2hwFloat(16 + Gear^.Tex^.h);
+	end;
 
-    if Gear^.Timer = 0 then
-        begin
-        CurrentHedgehog^.SpeechGear:= nil;
-        DeleteVisualGear(Gear)
-        end;
-    end
+if Gear^.Timer = 0 then
+	begin
+	CurrentHedgehog^.SpeechGear:= nil;
+	DeleteVisualGear(Gear)
+	end;
 end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
