@@ -51,6 +51,7 @@
       <filetype>*.hs</filetype>
       <filetype>*.pro</filetype>
       <filetype>Find*.cmake</filetype>
+      <filetype>*.cfg</filetype>
     </filetypes>
     <blacklist/>
     <general>

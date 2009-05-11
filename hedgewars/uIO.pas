@@ -249,6 +249,7 @@ begin
 tmpflag:= true;
 
 while (headcmd <> nil)
+	and tmpflag
 	and ((GameTicks = headcmd^.Time)
 		or (headcmd^.cmd = 's')
 		or (headcmd^.cmd = 'F')) do
@@ -310,6 +311,7 @@ if (headcmd <> nil) then
 			true);
 
 isInLag:= (headcmd = nil) and tmpflag and not CurrentTeam^.hasGone;
+
 if isInLag then fastUntilLag:= false
 end;
 
