@@ -303,7 +303,10 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're 
 		exit
 		end;
 
-if cReducedQuality and (Kind <> vgtTeamHealthSorter) and (Kind <> vgtSpeechBubble) then
+if cReducedQuality and 
+   (Kind <> vgtTeamHealthSorter) and 
+   (Kind <> vgtSmallDamageTag) and 
+   (Kind <> vgtSpeechBubble) then
 	begin
 	AddVisualGear:= nil;
 	exit
@@ -416,13 +419,16 @@ case Layer of
 		end;
 	1: while Gear <> nil do
 		begin
-		case Gear^.Kind of
-			vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
-			vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
-			vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
-			vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
+        if not cReducedQuality then
+            case Gear^.Kind of
+                vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+                vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+                vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+            end;
+        case Gear^.Kind of
+            vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
             vgtSpeechBubble: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
-			end;
+        end;
 		Gear:= Gear^.NextGear
 		end
 	end

@@ -287,7 +287,7 @@ if CurrentTeam <> nil then
 
 DrawGears;
 
-if not cReducedQuality then DrawVisualGears(1);
+DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}
