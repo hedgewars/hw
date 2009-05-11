@@ -314,7 +314,7 @@ end;
 procedure chNextTurn(var s: shortstring);
 begin
 TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
-if CurrentTeam^.ExtDriven then addfilelog('CurrentTeam^.ExtDriven') else addfilelog('not CurrentTeam^.ExtDriven');
+
 if not CurrentTeam^.ExtDriven then SendIPC('N');
 TickTrigger(trigTurns);
 {$IFDEF DEBUGFILE}AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));{$ENDIF}
