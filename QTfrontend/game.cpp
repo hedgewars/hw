@@ -134,7 +134,7 @@ void HWGame::SendTrainingConfig()
 	QByteArray traincfg;
 	HWProto::addStringToBuffer(traincfg, "TL");
 
-	HWTeam team1(0);
+	HWTeam team1;
 	team1.difficulty = 0;
 	team1.teamColor = *color1;
 	team1.numHedgehogs = 1;
