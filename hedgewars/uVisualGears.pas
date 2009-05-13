@@ -253,17 +253,20 @@ if (PHedgehog(Gear^.Hedgehog)^.Gear <> nil) then
 
 if Gear^.Timer = 0 then
 	begin
-	PHedgehog(Gear^.Hedgehog)^.SpeechGear:= nil;
+	if PHedgehog(Gear^.Hedgehog)^.SpeechGear = Gear then
+		PHedgehog(Gear^.Hedgehog)^.SpeechGear:= nil;
 	DeleteVisualGear(Gear)
 	end;
 end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
-if (PHedgehog(Gear^.Hedgehog)^.SpeechGear <> nil) then DeleteVisualGear(PHedgehog(Gear^.Hedgehog)^.SpeechGear);
+with PHedgehog(Gear^.Hedgehog)^ do
+    if SpeechGear <> nil then SpeechGear^.Timer:= 0;
+
 PHedgehog(Gear^.Hedgehog)^.SpeechGear:= Gear;
 
-Gear^.Timer:= max(Length(Gear^.Text)*150,3000);
+Gear^.Timer:= max(Length(Gear^.Text) * 150, 3000);
 
 Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
 
