@@ -774,8 +774,8 @@ if (Gear^.State and gstLoser) <> 0 then // for now using the jackhammer for its 
 	begin
 	DrawHedgehog(sx, sy,
 			hwSign(Gear^.dX),
-			1,
 			2,
+			3,
 			0);
 	defaultPos:= false
 	end else
