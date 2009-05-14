@@ -471,7 +471,7 @@ if not cLaserSighting then // game doesn't have default laser sight. turn it on 
     begin
     cLaserSighting:= true;
     HHGear^.Message:= 0;
-    dec(HHGear^.Angle,32)
+    if(HHGear^.Angle - 32 >= 0) then dec(HHGear^.Angle,32)
     end;
 
 if (HHGear^.Message and gm_Attack) <> 0 then
@@ -484,9 +484,14 @@ if (HHGear^.Message and gm_Attack) <> 0 then
     end
 else
     if (GameTicks mod 32) = 0 then
-        if (GameTicks mod 4096) < 2048 then inc(HHGear^.Angle)
-        else dec(HHGear^.Angle);
+        if (GameTicks mod 4096) < 2048 then 
+            begin
+            if(HHGear^.Angle + 1 <= cMaxAngle) then inc(HHGear^.Angle)
+            end
+        else
+            if(HHGear^.Angle - 1 >= 0) then dec(HHGear^.Angle);
 
+if (TurnTimeLeft > 0) then dec(TurnTimeLeft)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
