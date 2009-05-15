@@ -665,11 +665,10 @@ procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
     vampDmg: Longword;
 begin
-	inc(Gear^.Damage, Damage);
 	if Gear^.Kind = gtHedgehog then
     begin
 	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
-    Damage:= min(Damage, Gear^.Health);
+    Damage:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
     if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (Damage >= 1) then
         begin
         if cVampiric then
@@ -704,6 +703,7 @@ begin
            end;
         end;
     end;
+	inc(Gear^.Damage, Damage);
 end;
 
 procedure SetAllToActive;
