@@ -496,7 +496,8 @@ if (TurnTimeLeft > 0) then
 else
     begin
 	DeleteGear(Gear);
-	AfterAttack
+	AfterAttack;
+    TurnTimeLeft:= 0
     end;
 end;
 
