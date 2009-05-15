@@ -717,6 +717,7 @@ if ((HHGear^.State and gstHHDriven) = 0)
 	or TestCollisionYwithGear(HHGear, 1) then
 	begin
 	DeleteGear(Gear);
+	isCursorVisible:= false;
 	exit
 	end;
 
@@ -1309,6 +1310,7 @@ if TestCollisionYwithGear(HHGear, 1)
 		State:= State or gstMoving;
 		end;
 	DeleteGear(Gear);
+	isCursorVisible:= false;
 	exit
 	end;
 
