@@ -55,7 +55,7 @@ type
 			sprHandBlowTorch, sprBlowTorch, sprTeleport, sprHHDeath,
 			sprShotgun, sprDEagle, sprHHIdle, sprMortar, sprTurnsLeft,
 			sprKamikaze, sprWhip, sprKowtow, sprSad, sprWave,
-			sprHurrah, sprLemonade, sprExplPart, sprExplPart2,
+			sprHurrah, sprLemonade, sprShrug, sprJuggle, sprExplPart, sprExplPart2,
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
@@ -107,7 +107,7 @@ type
 	TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
 			siClanHealth);
 
-	TWave = (waveRollup, waveSad,waveWave, waveHurrah, waveLemonade);
+	TWave = (waveRollup, waveSad,waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
 	THHFont = record
 			Handle: PTTF_Font;
@@ -467,6 +467,10 @@ const
 			Width:  32; Height: 32; saveSurf: false),// sprHurrah
 			(FileName:'ILoveLemonade';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 128; Height: 32; saveSurf: false),// sprLemonade
+			(FileName:'Shrug';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 32;  Height: 32; saveSurf: false),// sprShrug
+			(FileName:'Juggle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 32;  Height: 32; saveSurf: false),// sprJuggle
 			(FileName:   'ExplPart'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprExplPart
 			(FileName:  'ExplPart2'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -534,13 +538,16 @@ const
 	Wavez: array [TWave] of record
 			Sprite: TSprite;
 			FramesCount: Longword;
+			Interval: Longword;
 			cmd: String[20];
 			end = (
-			(Sprite:   sprKowtow; FramesCount: 12; cmd: '/rollup'),
-			(Sprite:      sprSad; FramesCount: 14; cmd: '/sad'),
-			(Sprite:     sprWave; FramesCount: 16; cmd: '/wave'),
-			(Sprite:   sprHurrah; FramesCount: 14; cmd: '/hurrah'),
-			(Sprite: sprLemonade; FramesCount: 24; cmd: '/ilovelotsoflemonade')
+			(Sprite:   sprKowtow; FramesCount: 12; Interval: 125; cmd: '/rollup'),
+			(Sprite:      sprSad; FramesCount: 14; Interval: 125; cmd: '/sad'),
+			(Sprite:     sprWave; FramesCount: 16; Interval: 125; cmd: '/wave'),
+			(Sprite:   sprHurrah; FramesCount: 14; Interval: 125; cmd: '/hurrah'),
+			(Sprite: sprLemonade; FramesCount: 24; Interval: 125; cmd: '/ilovelotsoflemonade'),
+			(Sprite:    sprShrug; FramesCount: 24; Interval: 125; cmd: '/shrug'),
+			(Sprite:   sprJuggle; FramesCount: 49; Interval: 38; cmd: '/juggle')
 			);
 
 	Soundz: array[TSound] of record

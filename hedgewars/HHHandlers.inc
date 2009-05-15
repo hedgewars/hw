@@ -554,7 +554,7 @@ if (Gear^.State and gstAnimation) <> 0 then
 	begin
 	Gear^.Message:= 0;
 	inc(Gear^.Timer);
-	if Gear^.Timer = 125 then
+	if Gear^.Timer = Wavez[TWave(Gear^.Tag)].Interval then
 		begin
 		Gear^.Timer:= 0;
 		inc(Gear^.Pos);
