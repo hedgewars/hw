@@ -491,7 +491,13 @@ else
         else
             if(HHGear^.Angle - 1 >= 0) then dec(HHGear^.Angle);
 
-if (TurnTimeLeft > 0) then dec(TurnTimeLeft)
+if (TurnTimeLeft > 0) then 
+    dec(TurnTimeLeft)
+else
+    begin
+	DeleteGear(Gear);
+	AfterAttack
+    end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
