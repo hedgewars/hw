@@ -303,7 +303,7 @@ while (headcmd <> nil)
 	RemoveCmd
 	end;
 
-if (headcmd <> nil) then
+if (headcmd <> nil) and (not tmpflag) then
 	TryDo(GameTicks < headcmd^.Time,
 			'oops, queue error. in buffer: ' + headcmd^.cmd +
 			' (' + inttostr(GameTicks) + ' > ' +
