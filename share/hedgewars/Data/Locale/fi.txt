@@ -32,13 +32,13 @@
 00:29=Palloase
 00:30=Napalmi
 00:31=Kauko-ohjattava lentokone
-00:32=Low Gravity
-00:33=Extra Damage
-00:34=Invulnerable
-00:35=Extra Time
-00:36=Laser Sight
-00:37=Vampirism
-00:38=Sniper Rifle
+00:32=Matala painovoima
+00:33=Ylimääräinen vahinko
+00:34=Kuolemattomuus
+00:35=Ylimääräistä aikaa
+00:36=Lasertähtäin
+00:37=Vampyrismi
+00:38=Tarkkuuskivääri
 
 01:00=Taistelu alkakoon!
 01:01=Tasapeli

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="fr">
+<!DOCTYPE TS><TS version="1.1" language="fr">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -51,18 +50,22 @@
 <context>
     <name>GameUIConfig</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Cannot create directory %1</source>
         <translation type="obsolete">Не могу создать папку %1</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Quit</source>
         <translation type="obsolete">Выйти</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Cannot save options to file %1</source>
         <translation type="obsolete">Ошибка при сохранении настроек в файл %1</translation>
     </message>
@@ -70,12 +73,12 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="498"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="655"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Please, select demo from the list above</source>
         <translation type="obsolete">Выберите демо из списка</translation>
     </message>
@@ -85,6 +88,7 @@
         <translation>OK</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Please, select server from the list above</source>
         <translation type="obsolete">Выберите сервер из списка</translation>
     </message>
@@ -112,10 +116,12 @@
 <context>
     <name>HWGame</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Unable to start the server: %1.</source>
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
@@ -125,10 +131,12 @@
         <translation>fr.txt</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Cannot save demo to file %1</source>
         <translation type="obsolete">Ошибка сохранения демо в файл %1</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Quit</source>
         <translation type="obsolete">Выход</translation>
     </message>
@@ -138,6 +146,7 @@
         <translation>Erreur lors de l&apos;ouverture du fichier de démonstration %1</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Unable to run engine: %1 (</source>
         <translation type="obsolete">Ошибка запуска движка: %1 (</translation>
     </message>
@@ -198,14 +207,17 @@
 <context>
     <name>HWNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation type="obsolete">Ошибка подключения. Проверьте имя сервера и номер порта.</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Connection refused</source>
         <translation type="obsolete">Отказано в соединении</translation>
     </message>
@@ -213,10 +225,12 @@
 <context>
     <name>HWNetServer</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Ошибка</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Unable to start the server: %1.</source>
         <translation type="obsolete">Ошибка запуска сервера: %1.</translation>
     </message>
@@ -242,6 +256,7 @@
 <context>
     <name>HWNewNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Erreur</translation>
     </message>
@@ -256,19 +271,16 @@
         <translation>Connexion refusée</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 a rejoint la partie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 a quitté la partie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 a quitté la partie (%2)</translation>
@@ -302,7 +314,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="28"/>
+        <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf à retourné une erreur pendant l&apos;affichage du texte, c&apos;est sûrement un bug de freetype2. Il est recommandé de mettre à jour votre librairie freetype.</translation>
     </message>
@@ -331,10 +343,12 @@
 <context>
     <name>PageEditTeam</name>
     <message>
+        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Annuler</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Sauver</translation>
     </message>
@@ -352,7 +366,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Le prix du meilleur tir revient à &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; points.&lt;/p&gt;</translation>
     </message>
@@ -376,34 +390,42 @@
 <context>
     <name>PageMain</name>
     <message>
+        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Multijoueur</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Un joueur</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Jeu en réseau</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Parties sauvées</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Démos</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Setup</source>
         <translation type="obsolete">Configuration</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">A propos</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Quitter</translation>
     </message>
@@ -421,6 +443,7 @@
 <context>
     <name>PageMultiplayer</name>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Retour</translation>
     </message>
@@ -433,10 +456,12 @@
 <context>
     <name>PageNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Local</source>
         <translation type="obsolete">Local</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Internet</source>
         <translation type="obsolete">Internet</translation>
     </message>
@@ -485,10 +510,12 @@
         <translation>Éditer Équipe</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Sauver</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Retour</translation>
     </message>
@@ -506,21 +533,16 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Sélectionnez une partie dans la liste</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -564,7 +586,6 @@
         <translation>Rafraichir</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="817"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
         <source>Error</source>
         <translation>Erreur</translation>
@@ -575,7 +596,6 @@
         <translation>Veuillez saisir le nom du salon</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="819"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="830"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -672,6 +692,7 @@
 <context>
     <name>PageSelectWeapon</name>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Retour</translation>
     </message>
@@ -686,6 +707,7 @@
         <translation>Supprimer</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Sauver</translation>
     </message>
@@ -693,10 +715,12 @@
 <context>
     <name>PageSimpleGame</name>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Назад</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Быстрый старт</translation>
     </message>
@@ -704,10 +728,12 @@
 <context>
     <name>PageSinglePlayer</name>
     <message>
+        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Entrainement</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Parties sauvées</translation>
     </message>
@@ -783,6 +809,7 @@
         <translation>Plein écran</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Mode forts</translation>
     </message>
@@ -807,6 +834,7 @@
         <translation type="unfinished">Occuper tout l&apos;écran</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">Séparer les équipes</translation>
     </message>
@@ -816,6 +844,7 @@
         <translation>Ajouter date et heure au nom du fichier</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">Paysages indestructibles</translation>
     </message>
@@ -838,22 +867,27 @@
         <translation>Humain</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 5</source>
         <translation type="obsolete">Niveau 5</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 4</source>
         <translation type="obsolete">Niveau 4</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 3</source>
         <translation type="obsolete">Niveau 3</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 2</source>
         <translation type="obsolete">Niveau 2</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 1</source>
         <translation type="obsolete">Niveau 1</translation>
     </message>
@@ -881,6 +915,7 @@
         <translation>Fort</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Grave</source>
         <translation type="obsolete">Tombe</translation>
     </message>
@@ -900,18 +935,22 @@
         <translation>Options Audio/Graphismes</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net nick</source>
         <translation type="obsolete">Имя игрока</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net options</source>
         <translation type="obsolete">Options Réseau</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Landscape</source>
         <translation type="obsolete">Paysage</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Game scheme</source>
         <translation type="obsolete">Paramètres de jeu</translation>
     </message>
@@ -921,6 +960,7 @@
         <translation>Équipes participantes</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Team level</source>
         <translation type="obsolete">Niveau équipe</translation>
     </message>
@@ -930,6 +970,7 @@
         <translation>Partie réseau</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Servers list</source>
         <translation type="obsolete">Liste serveurs</translation>
     </message>
@@ -957,71 +998,87 @@
         <translation>Pseudo réseau</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Server address</source>
         <translation type="obsolete">Адрес сервера</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;div align=&quot;center&quot;&gt;&lt;h1&gt;Hedgewars&lt;/h1&gt;&lt;h3&gt;Version 0.8&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://www.hedgewars.org/&quot;&gt;http://www.hedgewars.org/&lt;/a&gt;&lt;/p&gt;&lt;br&gt;This program is distributed under the GNU General Public License&lt;/div&gt;</source>
         <translation type="obsolete">&lt;div align=&quot;center&quot;&gt;&lt;h1&gt;Hedgewars&lt;/h1&gt;&lt;h3&gt;Версия 0.8&lt;/h3&gt;&lt;p&gt;&lt;a href=&quot;http://www.hedgewars.org/&quot;&gt;http://www.hedgewars.org/&lt;/a&gt;&lt;/p&gt;&lt;br&gt;Эта программа распространяется под лицензией GNU (the GNU General Public License)&lt;/div&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;&lt;p&gt;Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Igor Ulyanov &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Translations:&lt;/h2&gt;english: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;russian: Andrey Korotaev &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</source>
         <translation type="obsolete">&lt;h2&gt;Разработчики:&lt;/h2&gt;&lt;p&gt;Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;Игорь Ульянов &amp;lt;&lt;a href=&quot;mailto:iulyanov@gmail.com&quot;&gt;iulyanov@gmail.com&lt;/a&gt;&amp;gt;&lt;/p&gt;&lt;h2&gt;Перевод:&lt;/h2&gt;английский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;&lt;br&gt;русский: Андрей Коротаев &amp;lt;&lt;a href=&quot;mailto:unC0Rr@gmail.com&quot;&gt;unC0Rr@gmail.com&lt;/a&gt;&amp;gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>difficulty:</source>
         <translation type="obsolete">Уровень игры:</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.8&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Версия 0.8&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Ce programme est distribué sous licence GNU General Public License</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;</source>
         <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;Developers:&lt;/h2&gt;</source>
         <translation type="obsolete">&lt;h2&gt;Разработчики:&lt;/h2&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;Translations:&lt;/h2&gt;&lt;p&gt;</source>
         <translation type="obsolete">&lt;h2&gt;Переводы:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;Special thanks:&lt;/h2&gt;&lt;p&gt;</source>
         <translation type="obsolete">&lt;h2&gt;Особая благодарность:&lt;/h2&gt;&lt;p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.8.1&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Версия 0.8.1&lt;/h3&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</source>
         <translation type="obsolete">&lt;h2&gt;&lt;/h2&gt;&lt;p&gt;&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">Temps du tour</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">Vie initiale</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Le prix du meilleur tir revient à &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; points.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; Hérisson(s) ont été tués pendant ce round.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Версия 0.9&lt;/h3&gt;</translation>
     </message>
@@ -1036,7 +1093,7 @@
         <translation>Limite de FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
         <source>Developers:</source>
         <translation>Développeurs:</translation>
     </message>
@@ -1081,6 +1138,7 @@
         <translation>Armes</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Версия 0.9.2&lt;/h3&gt;</translation>
     </message>
@@ -1090,6 +1148,7 @@
         <translation>Version</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Le prix du meilleur tir revient à &lt;br&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; morts.&lt;/p&gt;</translation>
     </message>
@@ -1152,7 +1211,6 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="52"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="358"/>
         <source>unnamed</source>
         <translation>sansnom</translation>
@@ -1161,10 +1219,12 @@
 <context>
     <name>QMainWindow</name>
     <message>
+        <location filename="" line="0"/>
         <source>-= by unC0Rr =-</source>
         <translation type="obsolete">-= by unC0Rr =-</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Hedgewars</source>
         <translation type="obsolete">Hedgewars</translation>
     </message>
@@ -1177,12 +1237,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="272"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="299"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="273"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="302"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1201,8 +1261,6 @@ Vérifier votre installation</translation>
         <translation>La connexion au serveur à été perdue</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Armes</translation>
@@ -1226,21 +1284,22 @@ Vérifier votre installation</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="35"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="37"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="36"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="38"/>
         <source>Cannot create directory %1</source>
         <translation>Impossible de créer le dossier %1</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Quit</source>
         <translation type="obsolete">Выйти</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="37"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="39"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1248,18 +1307,22 @@ Vérifier votre installation</translation>
 <context>
     <name>QPushButton</name>
     <message>
+        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Одиночная игра</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Схватка</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Сетевая игра</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Демки</translation>
     </message>
@@ -1269,36 +1332,42 @@ Vérifier votre installation</translation>
         <translation>Configuration</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Выход</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Retour</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Jeu simple</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Отменить</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Сохранить</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Jouer démo</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>New team</source>
         <translation type="obsolete">Новая команда</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Edit team</source>
         <translation type="obsolete">Изменить</translation>
     </message>
@@ -1308,18 +1377,22 @@ Vérifier votre installation</translation>
         <translation>Connecter</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Disconnect</source>
         <translation type="obsolete">Разъединить</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Join</source>
         <translation type="obsolete">Присоединиться</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Create</source>
         <translation type="obsolete">Создать</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Add Team</source>
         <translation type="obsolete">Добавить команду</translation>
     </message>
@@ -1334,6 +1407,7 @@ Vérifier votre installation</translation>
         <translation>Démarrer</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">О программе</translation>
     </message>
@@ -1348,6 +1422,7 @@ Vérifier votre installation</translation>
         <translation>Mise à jour</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Waiting</source>
         <translation type="obsolete">Attente</translation>
     </message>
@@ -1357,10 +1432,12 @@ Vérifier votre installation</translation>
         <translation>Charger</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Weapons scheme</source>
         <translation type="obsolete">Схема оружия</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Entrainement</translation>
     </message>
@@ -1370,7 +1447,6 @@ Vérifier votre installation</translation>
         <translation>Spécifier</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="580"/>
         <source>default</source>
         <translation>défaut</translation>
@@ -1396,6 +1472,7 @@ Vérifier votre installation</translation>
         <translation>Supprimer</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Joindre le serveur officiel</translation>
     </message>
@@ -1418,7 +1495,7 @@ Vérifier votre installation</translation>
         <translation>Nombre de joueurs</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="789"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="790"/>
         <source>Round in progress</source>
         <translation>Round en cours</translation>
     </message>
@@ -1449,18 +1526,17 @@ Vérifier votre installation</translation>
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
         <source>Unable to start the server: %1.</source>
         <translation>Impossible de démarrer le serveur: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Impossible de démarrer le moteur: %1 (</translation>
     </message>
@@ -1546,7 +1622,6 @@ Vérifier votre installation</translation>
         <translation>bas</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>saut</translation>

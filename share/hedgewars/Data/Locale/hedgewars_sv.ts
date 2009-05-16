@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0">
+<!DOCTYPE TS><TS version="1.1">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -17,10 +16,12 @@
         <translation type="unfinished">Aldrig</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Every turn</source>
         <translation type="obsolete">Varje omgång</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Each %1 turn</source>
         <translation type="obsolete">Var %1 omgång</translation>
     </message>
@@ -58,7 +59,6 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="498"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="655"/>
         <source>Error</source>
         <translation>Fel</translation>
@@ -176,6 +176,7 @@
 <context>
     <name>HWNewNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Fel</translation>
     </message>
@@ -190,19 +191,16 @@
         <translation>Kontakt vägrades</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 anslöt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 lämnade</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 lämnade (%2)</translation>
@@ -236,7 +234,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="28"/>
+        <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>Fel uppstod då SDL_ttf skulle rendera text. Det beror högst troligen på felet i freetype2. Du rekommenderas att uppdatera ditt freetype-bibliotek.</translation>
     </message>
@@ -265,10 +263,12 @@
 <context>
     <name>PageEditTeam</name>
     <message>
+        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Förkasta</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Spara</translation>
     </message>
@@ -286,7 +286,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som fick &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
     </message>
@@ -312,34 +312,42 @@
 <context>
     <name>PageMain</name>
     <message>
+        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Enspelarläge</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Flerspelarläge</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Internetspel</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Sparade spel</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Demor</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Setup</source>
         <translation type="obsolete">Inställningar</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">Tack till</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Avsluta</translation>
     </message>
@@ -357,6 +365,7 @@
 <context>
     <name>PageMultiplayer</name>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Tillbaka</translation>
     </message>
@@ -369,10 +378,12 @@
 <context>
     <name>PageNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Local</source>
         <translation type="obsolete">Lokal</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Internet</source>
         <translation type="obsolete">Internet</translation>
     </message>
@@ -421,10 +432,12 @@
         <translation>Redigera lag</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Spara</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Tillbaka</translation>
     </message>
@@ -442,21 +455,16 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Var god välj inspelning från listan</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -500,7 +508,6 @@
         <translation>Uppdatera</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="817"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
         <source>Error</source>
         <translation>Fel</translation>
@@ -511,7 +518,6 @@
         <translation>Var god skriv rummets namn</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="819"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="830"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -608,6 +614,7 @@
 <context>
     <name>PageSelectWeapon</name>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Tillbaka</translation>
     </message>
@@ -622,6 +629,7 @@
         <translation>Radera</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Spara</translation>
     </message>
@@ -690,6 +698,7 @@
 <context>
     <name>QCheckBox</name>
     <message>
+        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Visa fort</translation>
     </message>
@@ -719,6 +728,7 @@
         <translation>Aktivera musik</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">Dela upp lag</translation>
     </message>
@@ -733,10 +743,12 @@
         <translation>Bifoga datum och tid till namnet på inspelningsfilen</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">Fast mark</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Add Border</source>
         <translation type="obsolete">Lägg till kant</translation>
     </message>
@@ -759,22 +771,27 @@
         <translation>Människa</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 5</source>
         <translation type="obsolete">Nivå 5</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 4</source>
         <translation type="obsolete">Nivå 4</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 3</source>
         <translation type="obsolete">Nivå 3</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 2</source>
         <translation type="obsolete">Nivå 2</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Level 1</source>
         <translation type="obsolete">Nivå 1</translation>
     </message>
@@ -787,10 +804,12 @@
 <context>
     <name>QGroupBox</name>
     <message>
+        <location filename="" line="0"/>
         <source>Landscape</source>
         <translation type="obsolete">Landskap</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Game scheme</source>
         <translation type="obsolete">Spelupplägg</translation>
     </message>
@@ -810,10 +829,12 @@
         <translation>Tangentbindningar</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Grave</source>
         <translation type="obsolete">Grav</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Team level</source>
         <translation type="obsolete">Lagnivå</translation>
     </message>
@@ -838,10 +859,12 @@
         <translation>Vapen</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Net options</source>
         <translation type="obsolete">Internetinställningar</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Servers list</source>
         <translation type="obsolete">Serverlista</translation>
     </message>
@@ -869,16 +892,17 @@
 <context>
     <name>QLabel</name>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Detta program distribueras under GNU General Public License</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
         <source>Developers:</source>
         <translation>Utvecklare:</translation>
     </message>
@@ -898,10 +922,12 @@
         <translation>Särskilt tack till:</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">Tid per drag</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">Hälsa vid start</translation>
     </message>
@@ -911,10 +937,12 @@
         <translation>Vapen</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som fick &lt;b&gt;%2&lt;/b&gt; poäng.&lt;/p&gt;</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Totalt dog &lt;b&gt;%1&lt;/b&gt; igelkott(ar) under denna omgång.&lt;/p&gt;</translation>
     </message>
@@ -959,6 +987,7 @@
         <translation>Version</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Priset för bästa skott går till &lt;b&gt;%1&lt;/b&gt; som dödade &lt;b&gt;%2&lt;/b&gt; igelkottar.&lt;/p&gt;</translation>
     </message>
@@ -968,10 +997,12 @@
         <translation>Ljudeffekter:</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turns before SD</source>
         <translation type="obsolete">Antal omgångar före SD</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Crate drops</source>
         <translation type="obsolete">Crate drops</translation>
     </message>
@@ -1029,7 +1060,6 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="52"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="358"/>
         <source>unnamed</source>
         <translation>onämnd</translation>
@@ -1038,6 +1068,7 @@
 <context>
     <name>QMainWindow</name>
     <message>
+        <location filename="" line="0"/>
         <source>Hedgewars</source>
         <translation type="obsolete">Hedgewars</translation>
     </message>
@@ -1060,12 +1091,12 @@
         <translation>Kontakten med servern förlorades</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="272"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="299"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="273"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="302"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1074,8 +1105,6 @@ Please check your installation</source>
 Var god kontrollera din installation</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Vapen</translation>
@@ -1099,17 +1128,17 @@ Var god kontrollera din installation</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="35"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="37"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="36"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="38"/>
         <source>Cannot create directory %1</source>
         <translation>Kan inte skapa katalog %1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="37"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="39"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -1117,6 +1146,7 @@ Var god kontrollera din installation</translation>
 <context>
     <name>QPushButton</name>
     <message>
+        <location filename="" line="0"/>
         <source>Waiting</source>
         <translation type="obsolete">Väntar</translation>
     </message>
@@ -1126,7 +1156,6 @@ Var god kontrollera din installation</translation>
         <translation>Kör!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="580"/>
         <source>default</source>
         <translation>standard</translation>
@@ -1162,6 +1191,7 @@ Var god kontrollera din installation</translation>
         <translation>Ange</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Tillbaka</translation>
     </message>
@@ -1171,15 +1201,16 @@ Var god kontrollera din installation</translation>
         <translation>Starta</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Enkelt spel</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Träning</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Spela upp demo</translation>
@@ -1205,6 +1236,7 @@ Var god kontrollera din installation</translation>
         <translation>Inställningar</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Anslut till officiell server</translation>
     </message>
@@ -1227,7 +1259,7 @@ Var god kontrollera din installation</translation>
         <translation>Spelarnas nummer</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="789"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="790"/>
         <source>Round in progress</source>
         <translation>Pågående omgång</translation>
     </message>
@@ -1258,18 +1290,17 @@ Var god kontrollera din installation</translation>
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
         <source>Unable to start the server: %1.</source>
         <translation>Kunde inte starta servern: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Kunde inte köra motorn: %1 (</translation>
     </message>
@@ -1355,7 +1386,6 @@ Var god kontrollera din installation</translation>
         <translation>ned</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>hoppa</translation>
