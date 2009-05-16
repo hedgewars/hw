@@ -979,15 +979,17 @@ if TestCollisionYwithGear(HHGear, 1) then
 CheckCollision(Gear);
 
 if (Gear^.State and gstCollision) <> 0 then
-	begin
-	Gear^.doStep:= @doStepRopeWork;
-	with HHGear^ do State:= State and not (gstAttacking or gstHHHJump);
-
-	RemoveFromAmmo;
-	
 	if Gear^.Elasticity < _10 then
-		Gear^.Elasticity:= _10000;
-	end;
+		Gear^.Elasticity:= _10000
+	else
+		begin
+		Gear^.doStep:= @doStepRopeWork;
+		with HHGear^ do State:= State and not (gstAttacking or gstHHHJump);
+
+		RemoveFromAmmo;
+		
+		exit
+		end;
 
 if (Gear^.Elasticity > Gear^.Friction)
 or ((Gear^.Message and gm_Attack) = 0)
