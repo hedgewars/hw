@@ -310,7 +310,7 @@ if (headcmd <> nil) and tmpflag then
 			inttostr(headcmd^.Time) + ')',
 			true);
 
-isInLag:= (headcmd = nil) and tmpflag and not CurrentTeam^.hasGone;
+isInLag:= ((headcmd = nil) or (not tmpflag)) and (not CurrentTeam^.hasGone);
 
 if isInLag then fastUntilLag:= false
 end;
