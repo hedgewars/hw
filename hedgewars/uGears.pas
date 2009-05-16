@@ -663,41 +663,44 @@ end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
-    vampDmg: Longword;
+    vampDmg, tmpDmg: Longword;
 begin
 	if Gear^.Kind = gtHedgehog then
     begin
 	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
-    Damage:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
-    if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (Damage >= 1) then
+    tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
+    if (Gear <> CurrentHedgehog^.Gear) and (CurrentHedgehog^.Gear <> nil) and (tmpDmg >= 1) then
         begin
         if cVampiric then
             begin
-            vampDmg:= hwRound(int2hwFloat(Damage)*_0_8);
-            // was considering pulsing on attack, Tiy thinks it should be permanent while in play
-            //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
-            inc(CurrentHedgehog^.Gear^.Health,vampDmg);
-            str(vampDmg, s);
-            s:= '+' + s;
-            AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
-            RenderHealth(CurrentHedgehog^);
-            RecountTeamHealth(CurrentHedgehog^.Team);
+            vampDmg:= hwRound(int2hwFloat(tmpDmg)*_0_8);
+            if vampDmg >= 1 then
+                begin
+                // was considering pulsing on attack, Tiy thinks it should be permanent while in play
+                //CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstVampiric;
+                inc(CurrentHedgehog^.Gear^.Health,vampDmg);
+                str(vampDmg, s);
+                s:= '+' + s;
+                AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                RenderHealth(CurrentHedgehog^);
+                RecountTeamHealth(CurrentHedgehog^.Team);
+                end
             end;
         if ((GameFlags and gfKarma) <> 0) and 
            ((GameFlags and gfInvulnerable) = 0) and
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
-           if CurrentHedgehog^.Gear^.Health < int(Damage) then
+           if CurrentHedgehog^.Gear^.Health < int(tmpDmg) then
            begin
                // Add damage to trigger normal resolution
                CurrentHedgehog^.Gear^.Health := 0;
                inc(CurrentHedgehog^.Gear^.Damage);
            end
            else
-               dec(CurrentHedgehog^.Gear^.Health, Damage);
-           AddGear(hwRound(Gear^.X), 
-                   hwRound(Gear^.Y), 
-                   gtHealthTag, Damage, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
+               dec(CurrentHedgehog^.Gear^.Health, tmpDmg);
+           AddGear(hwRound(CurrentHedgehog^.Gear^.X), 
+                   hwRound(CurrentHedgehog^.Gear^.Y), 
+                   gtHealthTag, tmpDmg, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
            RenderHealth(CurrentHedgehog^);
            RecountTeamHealth(CurrentHedgehog^.Team);
            end;
