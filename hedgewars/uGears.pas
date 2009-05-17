@@ -665,7 +665,7 @@ procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
     vampDmg, tmpDmg: Longword;
 begin
-	if Gear^.Kind = gtHedgehog then
+	if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
     begin
 	AddDamageTag(hwRound(Gear^.X), hwRound(Gear^.Y), Damage, PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.Color);
     tmpDmg:= min(Damage, max(0,Gear^.Health-Gear^.Damage));
