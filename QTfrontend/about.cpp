@@ -81,6 +81,8 @@ About::About(QWidget * parent) :
 			"Joshua O'Sullivan &lt;<a href=\"mailto:battysausage@hotmail.co.uk\">battysausage@hotmail.co.uk</a>&gt;"
 			"<br>"
 			"Nils Lück &lt;<a href=\"mailto:nils.luck.design@gmail.com\">nils.luck.design@gmail.com</a>&gt;"
+			"<br>"
+			"Hats: Trey Perry &lt;<a href=\"mailto:tx.perry@gmail.com\">tx.perry@gmail.com</a>&gt;"
 			"</p><h2>") +
 			QLabel::tr("Sounds:") + "</h2>"
 			"Hedgehogs voice: Stephen Alexander &lt;<a href=\"mailto:ArmagonNo1@gmail.com\">ArmagonNo1@gmail.com</a>&gt;"
