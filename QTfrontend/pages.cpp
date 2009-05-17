@@ -64,6 +64,7 @@
 PageMain::PageMain(QWidget* parent) : 
   AbstractPage(parent)
 {
+    setAttribute(Qt::WA_NoSystemBackground, true);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	//pageLayout->setColumnStretch(0, 1);
 	//pageLayout->setColumnStretch(1, 2);

@@ -65,6 +65,7 @@ void SpritePosition::init()
 
 BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 {
+    setAttribute(Qt::WA_NoSystemBackground, true);
 	sprite.load(":/res/Star.png");
 	
 	setAutoFillBackground(false);
