@@ -25,6 +25,8 @@
 
 IconedGroupBox::IconedGroupBox(QWidget * parent)
 {
+// Has issues with border-radius on children
+//    setAttribute(Qt::WA_PaintOnScreen, true);
 	titleLeftPadding = 82;
     contentTopPadding = 22;
 }

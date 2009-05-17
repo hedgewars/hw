@@ -133,8 +133,12 @@ int main(int argc, char *argv[])
 				"background-color: #040200;"
 				"padding: 6px;"
 			"}"
-
-			"IconedGroupBox, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{"
+/*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well
+			"IconedGroupBox QComboBox, IconedGroupBox QPushButton, IconedGroupBox QLineEdit, "
+            "IconedGroupBox QSpinBox {"
+				"border-radius: 0;"
+			"}" */
+			"IconedGroupBox, IconedGroupBox *, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{"
 				"background-color: #130f2c;"
 			"}"
 
@@ -270,6 +274,9 @@ int main(int argc, char *argv[])
 			
 			":disabled{"
 				"color: #a0a0a0;"
+			"}"
+            "SquareLabel, ItemNum {"
+				"background-color: #000000;"
 			"}"
 			)
 		);

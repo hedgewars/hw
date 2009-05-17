@@ -23,7 +23,7 @@
 SquareLabel::SquareLabel(QWidget * parent) :
 	QWidget(parent)
 {
-
+    setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 void SquareLabel::paintEvent(QPaintEvent * event)

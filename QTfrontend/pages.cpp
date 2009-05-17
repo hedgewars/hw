@@ -208,6 +208,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	FortPreview = new SquareLabel(GBoxFort);
 	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	FortPreview->setPixmap(QPixmap());
+    // perhaps due to handling its own paintevents, SquareLabel doesn't play nice with the stars
+    //FortPreview->setAttribute(Qt::WA_PaintOnScreen, true);
 	GBFLayout->addWidget(FortPreview, 1, 0);
 	vbox3->addWidget(GBoxFort);
 
@@ -331,6 +333,7 @@ PageOptions::PageOptions(QWidget* parent) :
 	gbTBLayout->setSpacing(0);
 	{
 		teamsBox = new IconedGroupBox(this);
+        //teamsBox->setAttribute(Qt::WA_PaintOnScreen, true);
 		teamsBox->setIcon(QIcon(":/res/teamicon.png"));
 		teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 		teamsBox->setTitle(QGroupBox::tr("Teams"));
