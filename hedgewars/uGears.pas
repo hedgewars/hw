@@ -1222,7 +1222,7 @@ var Gear, HHGear: PGear;
     begin
     if (X1 = X2) and (Y1 = Y2) then
        begin
-       OutError('WARNING: zero length rope line!', false);
+       //OutError('WARNING: zero length rope line!', false);
        exit
        end;
     eX:= 0;
