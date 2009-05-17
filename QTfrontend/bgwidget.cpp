@@ -80,13 +80,12 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 
 		QPainter p;
 		p.begin(rotatedSprites[i]);
-		p.setRenderHint(QPainter::Antialiasing);
+	//	p.setRenderHint(QPainter::Antialiasing);
 		p.setRenderHint(QPainter::SmoothPixmapTransform);
 		p.translate(translate.x(), translate.y());
 		p.rotate(i);
 		p.translate(-1*translate.x(), -1*translate.y());
 		p.drawImage(0, 0, sprite);
-
 	}
 
 	timerAnimation = new QTimer();
@@ -116,9 +115,10 @@ void BGWidget::paintEvent(QPaintEvent *event)
 
 void BGWidget::animate()
 {
-	repaint();
 	for (int i = 0; i < SPRITE_MAX; i++)
 	{
+        // bottom edge of star *seems* clipped, but in fact, if I switch to just plain old repaint()/update() it is still clipped - artifact of transform?  As for 5, is arbitrary number. 4 was noticeably clipping, 5 seemed same as update() - I assume extra room is due to rotation and value really should be calculated proportional to width/height
+        update(spritePositions[i]->pos().x(),spritePositions[i]->pos().y(), sprite.width()+5, sprite.height()+5);
 		spritePositions[i]->move();
 	}
 }
