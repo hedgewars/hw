@@ -412,11 +412,11 @@ if Gear^.Kind = gtHedgehog then
 		end
 	else
 		begin
-		if not (hwRound(Gear^.Y) < cWaterLine) then
+		if (hwRound(Gear^.Y) >= cWaterLine) then
 			begin
 			t:= max(Gear^.Damage, Gear^.Health);
 			Gear^.Damage:= t;
-			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
+			AddGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 			uStats.HedgehogDamaged(Gear)
 			end;
 	
