@@ -137,8 +137,9 @@ int main(int argc, char *argv[])
 			"IconedGroupBox QComboBox, IconedGroupBox QPushButton, IconedGroupBox QLineEdit, "
             "IconedGroupBox QSpinBox {"
 				"border-radius: 0;"
-			"}" */
-			"IconedGroupBox, IconedGroupBox *, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{"
+			"}"
+			"IconedGroupBox, IconedGroupBox *, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{" */
+			"IconedGroupBox, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{"
 				"background-color: #130f2c;"
 			"}"
 
