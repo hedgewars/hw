@@ -282,7 +282,7 @@ if CheckNoTeamOrHH then exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
      begin
-     {$IFDEF DEBUGFILE}AddFileLog('/+attack: Gear^.State = '+inttostr(State));{$ENDIF}
+     {$IFDEF DEBUGFILE}AddFileLog('/+attack: hedgehog''s Gear^.State = '+inttostr(State));{$ENDIF}
      if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;

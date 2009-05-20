@@ -404,7 +404,7 @@ if Gear^.Tex <> nil then
 	end;
 
 if Gear^.Kind = gtHedgehog then
-	if CurAmmoGear <> nil then
+	if (CurAmmoGear <> nil) and (CurrentHedgehog^.Gear = Gear) then
 		begin
 		Gear^.Message:= gm_Destroy;
 		CurAmmoGear^.Message:= gm_Destroy;
