@@ -871,6 +871,11 @@ void HWForm::NetGameMaster()
 		connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));
 		connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
 		connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
+		connect(ui.pageNetGame->pGameCFG->GameSchemes->model(),
+				SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
+				ui.pageNetGame->pGameCFG,
+				SLOT(resendSchemeData())
+				);
 	}
 }
 

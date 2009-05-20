@@ -246,3 +246,8 @@ void GameCFGWidget::schemeChanged(int value)
 		
 	emit paramChanged("SCHEME", sl);
 }
+
+void GameCFGWidget::resendSchemeData()
+{
+	schemeChanged(GameSchemes->currentIndex());
+}

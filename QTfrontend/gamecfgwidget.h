@@ -48,6 +48,7 @@ public:
 public slots:
 	void setParam(const QString & param, const QStringList & value);
 	void fullNetConfig();
+	void resendSchemeData();
 
 signals:
 	void paramChanged(const QString & param, const QStringList & value);
