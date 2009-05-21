@@ -1,6 +1,7 @@
 install(FILES
 	Border.png
 	Flake.png
+	Girder.png
 	horizont.png
 	icon.png
 	LandTex.png
