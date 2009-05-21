@@ -238,12 +238,12 @@
 <context>
     <name>PageAdmin</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1128"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1132"/>
         <source>Server message:</source>
         <translation>Palvelimen viesti:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1134"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1138"/>
         <source>Set message</source>
         <translation>Aseta viesti</translation>
     </message>
@@ -251,7 +251,7 @@
 <context>
     <name>PageConnecting</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="848"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="852"/>
         <source>Connecting...</source>
         <translation>Yhdistetään...</translation>
     </message>
@@ -259,12 +259,12 @@
 <context>
     <name>PageEditTeam</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="106"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="107"/>
         <source>General</source>
         <translation>Yleiset</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="107"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="108"/>
         <source>Advanced</source>
         <translation>Lisäasetukset</translation>
     </message>
@@ -296,12 +296,12 @@
 <context>
     <name>PageMain</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="81"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="82"/>
         <source>Local Game (Play a game on a single computer)</source>
         <translation>Paikallinen peli (Pelaa yhdellä tietokoneella)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="85"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="86"/>
         <source>Network Game (Play a game across a network)</source>
         <translation>Verkkopeli (Pelaa verkon yli)</translation>
     </message>
@@ -309,7 +309,7 @@
 <context>
     <name>PageMultiplayer</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="309"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="312"/>
         <source>Start</source>
         <translation>Aloita</translation>
     </message>
@@ -317,12 +317,12 @@
 <context>
     <name>PageNet</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="520"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="524"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="520"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="524"/>
         <source>Please, select server from the list above</source>
         <translation>Ole hyvä, ja valitse palvelin ylläolevasta listasta</translation>
     </message>
@@ -330,7 +330,7 @@
 <context>
     <name>PageNetGame</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="626"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="630"/>
         <source>Control</source>
         <translation>Säädöt</translation>
     </message>
@@ -338,12 +338,12 @@
 <context>
     <name>PageNetType</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1162"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1166"/>
         <source>LAN game</source>
         <translation>Lähiverkkopeli</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1163"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1167"/>
         <source>Official server</source>
         <translation>Virallinen palvelin</translation>
     </message>
@@ -351,22 +351,22 @@
 <context>
     <name>PageOptions</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="344"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="348"/>
         <source>New team</source>
         <translation>Uusi joukkue</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="345"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="349"/>
         <source>Edit team</source>
         <translation>Muokkaa joukkuetta</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="373"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="377"/>
         <source>Weapons set</source>
         <translation>Uusi asesetti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="376"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="380"/>
         <source>Edit</source>
         <translation>Muokkaa</translation>
     </message>
@@ -412,42 +412,42 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="764"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="768"/>
         <source>Create</source>
         <translation>Luo</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="765"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
         <source>Join</source>
         <translation>Liity</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="766"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="770"/>
         <source>Refresh</source>
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="832"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="818"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="822"/>
         <source>Please, enter room name</source>
         <translation>Ole hyvä ja syötä huoneen nimi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="830"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="834"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="829"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="833"/>
         <source>Please, select room from the list</source>
         <translation>Ole hyvä, ja valitse huone listalta</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="773"/>
         <source>Admin features</source>
         <translation>Ylläpitäjän ominaisuudet</translation>
     </message>
@@ -455,77 +455,77 @@
 <context>
     <name>PageScheme</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="889"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="893"/>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
         <translation>Puolusta linnaasi ja tuhoa vastustajasi, maksimissaan kaksi joukkueväriä!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="894"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
         <translation>Joukkueet aloittavat kartan vastakkaisista päistä, maksimissaan kaksi joukkueväriä!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="899"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="903"/>
         <source>Land can not be destroyed!</source>
         <translation>Maata ei voi tuhota!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="904"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
         <source>Add an indestructable border around the terrain</source>
         <translation>Lisää tuhoutumattomat reunat kartan ympärille</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="909"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="913"/>
         <source>Lower gravity</source>
         <translation>Matalampi painovoima</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="914"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
         <source>Assisted aiming with laser sight</source>
         <translation>Lasertähtäimellä avustettu tähtäys</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="919"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="923"/>
         <source>All hogs have a personal forcefield</source>
         <translation>Kaikilla siileillä on oma suojakenttänsä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="924"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="928"/>
         <source>Enable random mines</source>
         <translation>Lisää miinoja satunnaisesti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="933"/>
         <source>Gain 80% of the damage you do back in health</source>
         <translation>Saa 80% aiheuttamastasi vahingosta takaisin omaan terveyteesi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="934"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
         <source>Share your opponents pain, share their damage</source>
         <translation>Jaa vastuastajasi tuska, jaa heidän vahinkonsa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="939"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="943"/>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation>Kaikki siilit ovat liikkumattomia, testaa tykistötaitojasi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1031"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1035"/>
         <source>Random</source>
         <translation>Satunnainen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1032"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1036"/>
         <source>Seconds</source>
         <translation>Sekuntia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1060"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1064"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1061"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1065"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -533,12 +533,12 @@
 <context>
     <name>PageSelectWeapon</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="729"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="733"/>
         <source>Default</source>
         <translation>Oletus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="730"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="734"/>
         <source>Delete</source>
         <translation>Poista</translation>
     </message>
@@ -546,27 +546,27 @@
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="685"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="689"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
         <translation>Yksinkertainen peli (pikapeli tietokonetta vastaan, asetukset valitaan puolestasi)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="688"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="692"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
         <translation>Moninpeli (pelaa samalla koneella kavereitasi tai tekoälyä vastaan)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="693"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="697"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
         <translation>Harjoittelu (Harjoita taitojasi harjoitustasoissa). KEHITYKSEN ALLA</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="699"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="703"/>
         <source>Demos (Watch recorded demos)</source>
         <translation>Demot (Katso nauhoitettuja demoja)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="702"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="706"/>
         <source>Load (Load a previously saved game)</source>
         <translation>Lataa (Lataa aikaisemmin tallennettu peli)</translation>
     </message>
@@ -584,17 +584,17 @@
         <translation>Tietoja</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="638"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="642"/>
         <source>Start</source>
         <translation>Aloita</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="628"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="632"/>
         <source>Restrict Joins</source>
         <translation>Rajoita liittymisiä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="630"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="634"/>
         <source>Restrict Team Additions</source>
         <translation>Rajoita joukkuelisäyksiä</translation>
     </message>
@@ -622,42 +622,42 @@
         <translation type="obsolete">Tuhoutumaton maa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="407"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="411"/>
         <source>Fullscreen</source>
         <translation>Koko ruutu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="411"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="415"/>
         <source>Frontend fullscreen</source>
         <translation>Koko ruutu käyttöliittymälle</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="415"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="419"/>
         <source>Enable sound</source>
         <translation>Äänet päälle</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="419"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="423"/>
         <source>Enable music</source>
         <translation>Musiikki päälle</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="434"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="438"/>
         <source>Show FPS</source>
         <translation>Näytä FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="438"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="442"/>
         <source>Alternative damage show</source>
         <translation>Vaihtoehtoinen vahingon näyttäminen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="442"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="446"/>
         <source>Append date and time to record file name</source>
         <translation>Lisää päivämäärä ja aika nauhoitusten tiedostonimeen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="403"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="407"/>
         <source>Reduce Quality</source>
         <translation>Vähennä laatua</translation>
     </message>
@@ -670,12 +670,12 @@
         <translation>generoitu kartta...</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="171"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="172"/>
         <source>Human</source>
         <translation>Ihminen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="175"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="176"/>
         <source>Level</source>
         <translation>Taso</translation>
     </message>
@@ -683,32 +683,32 @@
 <context>
     <name>QGroupBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="127"/>
         <source>Team Members</source>
         <translation>Joukkueen jäsenet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="161"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="162"/>
         <source>Team</source>
         <translation>Joukkue</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="202"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="203"/>
         <source>Fort</source>
         <translation>Linnake</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="236"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="239"/>
         <source>Key binds</source>
         <translation>Näppäinasettelut</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="335"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="339"/>
         <source>Teams</source>
         <translation>Joukkueet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="370"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="374"/>
         <source>Weapons</source>
         <translation>Aseet</translation>
     </message>
@@ -718,7 +718,7 @@
         <translation type="obsolete">Audio/Graphic options</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="473"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="477"/>
         <source>Net game</source>
         <translation>Verkkopeli</translation>
     </message>
@@ -728,17 +728,17 @@
         <translation>Pelaavat joukkueet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="384"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="388"/>
         <source>Audio/Graphic options</source>
         <translation>Ääni/grafiikka-asetukset</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="866"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="870"/>
         <source>Game Modifiers</source>
         <translation>Pelimuuttujat</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="867"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="871"/>
         <source>Basic Settings</source>
         <translation>Perusasetukset</translation>
     </message>
@@ -746,12 +746,12 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1020"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1024"/>
         <source>Mines Time</source>
         <translation>Miinojen aika</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1036"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1040"/>
         <source>Mines</source>
         <translation>Miinat</translation>
     </message>
@@ -776,17 +776,17 @@
         <translation>Taide:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="85"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="87"/>
         <source>Sounds:</source>
         <translation>Äänet:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="95"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="97"/>
         <source>Translations:</source>
         <translation>Käännökset:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="115"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="117"/>
         <source>Special thanks:</source>
         <translation>Erikoiskiitokset:</translation>
     </message>
@@ -816,62 +816,62 @@
         <translation>Portti:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="353"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="357"/>
         <source>Net nick</source>
         <translation>Verkkopeli-nimimerkki</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="389"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="393"/>
         <source>Resolution</source>
         <translation>Resoluutio</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="398"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="402"/>
         <source>FPS limit</source>
         <translation>FPS-raja</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="564"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="568"/>
         <source>Server name:</source>
         <translation>Palvelimen nimi:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="571"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Server port:</source>
         <translation>Palvelimen portti:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="424"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="428"/>
         <source>Initial sound volume</source>
         <translation>Alkuperäinen äänten voimakkuus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="946"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="950"/>
         <source>Damage Modifier</source>
         <translation>Vahinkomuuttuja</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="961"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="965"/>
         <source>Turn Time</source>
         <translation>Vuoron aika</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="976"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="980"/>
         <source>Initial Health</source>
         <translation>Aloitusterveys</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="991"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="995"/>
         <source>Sudden Death Timeout</source>
         <translation>Äkkikuoleman ajastus</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1050"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1054"/>
         <source>Scheme Name:</source>
         <translation>Kaavan nimi:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1006"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1010"/>
         <source>Crate Drops</source>
         <translation>Laatikkojen pudotukset</translation>
     </message>
@@ -884,7 +884,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="358"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
         <source>unnamed</source>
         <translation>nimetön</translation>
     </message>
@@ -910,12 +910,12 @@
         <translation>Yhteys palvelimeen katosi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="299"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="307"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="302"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -965,7 +965,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="580"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="584"/>
         <source>default</source>
         <translation>oletus</translation>
     </message>
@@ -980,22 +980,22 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <translation>Peruuta</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="466"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="470"/>
         <source>Start server</source>
         <translation>Käynnistä palvelin</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="482"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="486"/>
         <source>Connect</source>
         <translation>Yhdistä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="491"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="495"/>
         <source>Update</source>
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="496"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="500"/>
         <source>Specify</source>
         <translation>Määritä</translation>
     </message>
@@ -1005,12 +1005,12 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <translation type="obsolete">Liity viralliselle palvelimelle</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="544"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="548"/>
         <source>Start</source>
         <translation>Käynnistä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="714"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
         <source>Go!</source>
         <translation>Aloita!</translation>
     </message>
@@ -1040,7 +1040,7 @@ Ole hyvä ja tarkista asennuksesi</translation>
         <translation>Asetukset</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="618"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="622"/>
         <source>Ready</source>
         <translation>Valmis</translation>
     </message>
@@ -1048,17 +1048,17 @@ Ole hyvä ja tarkista asennuksesi</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="787"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="791"/>
         <source>Room name</source>
         <translation>Huoneen nimi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="788"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="792"/>
         <source>Players number</source>
         <translation>Pelaajien määrä</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="790"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="794"/>
         <source>Round in progress</source>
         <translation>Erä kesken</translation>
     </message>
@@ -1066,22 +1066,22 @@ Ole hyvä ja tarkista asennuksesi</translation>
 <context>
     <name>QToolBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="242"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="245"/>
         <source>Actions</source>
         <translation>Toiminnat</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="244"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="247"/>
         <source>Weapons</source>
         <translation>Aseet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="246"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="249"/>
         <source>Weapon properties</source>
         <translation>Ase-ominaisuudet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="248"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="251"/>
         <source>Other</source>
         <translation>Muu</translation>
     </message>
@@ -1107,57 +1107,57 @@ Ole hyvä ja tarkista asennuksesi</translation>
 <context>
     <name>ToggleButtonWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="928"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="932"/>
         <source>Vampirism</source>
         <translation>Vampyrismi</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="933"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="937"/>
         <source>Karma</source>
         <translation>Karma</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="942"/>
         <source>Artillery</source>
         <translation>Tykistö</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="888"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="892"/>
         <source>Fort Mode</source>
         <translation>Linnoitustila</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="893"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="897"/>
         <source>Divide Teams</source>
         <translation>Jaa joukkueet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="902"/>
         <source>Solid Land</source>
         <translation>Tuhoutumaton maa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="903"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="907"/>
         <source>Add Border</source>
         <translation>Lisää reunat</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="912"/>
         <source>Low Gravity</source>
         <translation>Matala painovoima</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="913"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="917"/>
         <source>Laser Sight</source>
         <translation>Lasertähtäin</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="922"/>
         <source>Invulnerable</source>
         <translation>Vahingoittumaton</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="923"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="927"/>
         <source>Add Mines</source>
         <translation>Lisää miinat</translation>
     </message>

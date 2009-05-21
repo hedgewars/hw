@@ -242,12 +242,12 @@
 <context>
     <name>PageAdmin</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1128"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1132"/>
         <source>Server message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1134"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1138"/>
         <source>Set message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -255,7 +255,7 @@
 <context>
     <name>PageConnecting</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="848"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="852"/>
         <source>Connecting...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,12 +273,12 @@
         <translation type="obsolete">Uložiť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="106"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="107"/>
         <source>General</source>
         <translation>Všeobecné</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="107"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="108"/>
         <source>Advanced</source>
         <translation>Pokročilé</translation>
     </message>
@@ -350,12 +350,12 @@
         <translation type="obsolete">Ukončiť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="81"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="82"/>
         <source>Local Game (Play a game on a single computer)</source>
         <translation>Miestna hra (Hrať hru proti počítaču)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="85"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="86"/>
         <source>Network Game (Play a game across a network)</source>
         <translation>Sieťová hra (Hrať hru proti súperom na sieti)</translation>
     </message>
@@ -368,7 +368,7 @@
         <translation type="obsolete">Späť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="309"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="312"/>
         <source>Start</source>
         <translation>Štart</translation>
     </message>
@@ -386,12 +386,12 @@
         <translation type="obsolete">Internet</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="520"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="524"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="520"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="524"/>
         <source>Please, select server from the list above</source>
         <translation>Prosím, vyberte server zo zoznamu vyššie</translation>
     </message>
@@ -399,7 +399,7 @@
 <context>
     <name>PageNetGame</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="626"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="630"/>
         <source>Control</source>
         <translation>Ovládanie</translation>
     </message>
@@ -407,12 +407,12 @@
 <context>
     <name>PageNetType</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1162"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1166"/>
         <source>LAN game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1163"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1167"/>
         <source>Official server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -420,12 +420,12 @@
 <context>
     <name>PageOptions</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="344"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="348"/>
         <source>New team</source>
         <translation>Nový team</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="345"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="349"/>
         <source>Edit team</source>
         <translation>Upraviť team</translation>
     </message>
@@ -440,12 +440,12 @@
         <translation type="obsolete">Späť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="373"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="377"/>
         <source>Weapons set</source>
         <translation>Sada zbraní</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="376"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="380"/>
         <source>Edit</source>
         <translation>Úpravy</translation>
     </message>
@@ -491,42 +491,42 @@
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="764"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="768"/>
         <source>Create</source>
         <translation>Vytvoriť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="765"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
         <source>Join</source>
         <translation>Pripojiť sa</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="766"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="770"/>
         <source>Refresh</source>
         <translation>Obnoviť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="832"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="818"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="822"/>
         <source>Please, enter room name</source>
         <translation>Prosím, zadajte názov miestnosti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="830"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="834"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="829"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="833"/>
         <source>Please, select room from the list</source>
         <translation>Prosím, vyberte miestnosť zo zoznamu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="769"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="773"/>
         <source>Admin features</source>
         <translation>Vlastnosti pre admina</translation>
     </message>
@@ -534,37 +534,37 @@
 <context>
     <name>PageScheme</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="924"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="928"/>
         <source>Enable random mines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="929"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="933"/>
         <source>Gain 80% of the damage you do back in health</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="934"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
         <source>Share your opponents pain, share their damage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="939"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="943"/>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1031"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1035"/>
         <source>Random</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1032"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1036"/>
         <source>Seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1060"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1064"/>
         <source>New</source>
         <translation>Nová</translation>
     </message>
@@ -579,42 +579,42 @@
         <translation type="obsolete">Ďalšia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1061"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1065"/>
         <source>Delete</source>
         <translation type="unfinished">Vymazať</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="889"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="893"/>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="894"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="899"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="903"/>
         <source>Land can not be destroyed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="904"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
         <source>Add an indestructable border around the terrain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="909"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="913"/>
         <source>Lower gravity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="914"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
         <source>Assisted aiming with laser sight</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="919"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="923"/>
         <source>All hogs have a personal forcefield</source>
         <translation type="unfinished"></translation>
     </message>
@@ -627,12 +627,12 @@
         <translation type="obsolete">Späť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="729"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="733"/>
         <source>Default</source>
         <translation>Východzie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="730"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="734"/>
         <source>Delete</source>
         <translation>Vymazať</translation>
     </message>
@@ -670,27 +670,27 @@
         <translation type="obsolete">Demá</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="685"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="689"/>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
         <translation>Jednoduchá hra (rýchla hra proti počítaču, s preddefinovanými nastaveniami)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="688"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="692"/>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
         <translation>Multiplayer (hrať hru, pri ktorej sa striedate s hráčmi pri počítači alebo proti počítačovým teamom)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="693"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="697"/>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
         <translation>Tréningový režim (vylepšujte si svoje zručnosti v rade tréningových misií). VO VÝVOJI</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="699"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="703"/>
         <source>Demos (Watch recorded demos)</source>
         <translation>Demá (prehrávanie natočených demonahrávok)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="702"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="706"/>
         <source>Load (Load a previously saved game)</source>
         <translation>Načítať (načíta v minulosti uloženú hru)</translation>
     </message>
@@ -703,17 +703,17 @@
         <translation>Vykopnúť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="638"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="642"/>
         <source>Start</source>
         <translation>Spustiť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="628"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="632"/>
         <source>Restrict Joins</source>
         <translation>Obmedziť pripojenia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="630"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="634"/>
         <source>Restrict Team Additions</source>
         <translation>Obmedziť pripojenie k teamu</translation>
     </message>
@@ -736,32 +736,32 @@
         <translation type="obsolete">Režim pevností</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="407"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="411"/>
         <source>Fullscreen</source>
         <translation>Celá obrazovka</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="415"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="419"/>
         <source>Enable sound</source>
         <translation>Povoliť zvuky</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="434"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="438"/>
         <source>Show FPS</source>
         <translation>Zobrazovať FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="438"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="442"/>
         <source>Alternative damage show</source>
         <translation>Iný spôsob zobrazovania škody</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="411"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="415"/>
         <source>Frontend fullscreen</source>
         <translation>Frontend na celú obrazovku</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="419"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="423"/>
         <source>Enable music</source>
         <translation>Povoliť hudbu</translation>
     </message>
@@ -771,7 +771,7 @@
         <translation type="obsolete">Rozdeliť teamy</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="442"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="446"/>
         <source>Append date and time to record file name</source>
         <translation>Pripojiť dátum a čas k súboru so záznamom</translation>
     </message>
@@ -786,7 +786,7 @@
         <translation type="obsolete">Pridať okraj</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="403"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="407"/>
         <source>Reduce Quality</source>
         <translation>Znížiť kvalitu</translation>
     </message>
@@ -819,7 +819,7 @@
         <translation>vygenerovaná mapa...</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="171"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="172"/>
         <source>Human</source>
         <translation>Človek</translation>
     </message>
@@ -849,7 +849,7 @@
         <translation type="obsolete">Úroveň 1</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="175"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="176"/>
         <source>Level</source>
         <translation>Úroveň</translation>
     </message>
@@ -867,17 +867,17 @@
         <translation type="obsolete">Schéma hry</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="161"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="162"/>
         <source>Team</source>
         <translation>Team</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="126"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="127"/>
         <source>Team Members</source>
         <translation>Členovia teamu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="236"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="239"/>
         <source>Key binds</source>
         <translation>Nastavenia kláves</translation>
     </message>
@@ -892,22 +892,22 @@
         <translation type="obsolete">Úroveň teamu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="202"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="203"/>
         <source>Fort</source>
         <translation>Pevnosť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="335"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="339"/>
         <source>Teams</source>
         <translation>Teamy</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="384"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="388"/>
         <source>Audio/Graphic options</source>
         <translation>Nastavenia zvuku/grafiky</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="370"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="374"/>
         <source>Weapons</source>
         <translation>Zbrane</translation>
     </message>
@@ -922,7 +922,7 @@
         <translation type="obsolete">Zoznam serverov</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="473"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="477"/>
         <source>Net game</source>
         <translation>Sieťová hra</translation>
     </message>
@@ -932,12 +932,12 @@
         <translation>Hrajúce teamy</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="866"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="870"/>
         <source>Game Modifiers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="867"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="871"/>
         <source>Basic Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -945,12 +945,12 @@
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1020"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1024"/>
         <source>Mines Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1036"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1040"/>
         <source>Mines</source>
         <translation type="unfinished"></translation>
     </message>
@@ -975,12 +975,12 @@
         <translation>Grafika:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="95"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="97"/>
         <source>Translations:</source>
         <translation>Preklady:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="115"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="117"/>
         <source>Special thanks:</source>
         <translation>Osobitné poďakovanie:</translation>
     </message>
@@ -1020,27 +1020,27 @@
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="389"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="393"/>
         <source>Resolution</source>
         <translation>Rozlíšenie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="398"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="402"/>
         <source>FPS limit</source>
         <translation>Limit FPS</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="353"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="357"/>
         <source>Net nick</source>
         <translation>Sieťový nick</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="564"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="568"/>
         <source>Server name:</source>
         <translation>Názov servera:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="571"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="575"/>
         <source>Server port:</source>
         <translation>Port servera:</translation>
     </message>
@@ -1060,7 +1060,7 @@
         <translation>Verzia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="85"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="87"/>
         <source>Sounds:</source>
         <translation>Zvuky:</translation>
     </message>
@@ -1075,7 +1075,7 @@
         <translation type="obsolete">Zhadzovanie krabíc</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="424"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="428"/>
         <source>Initial sound volume</source>
         <translation>Úvodná hlasitosť zvuku</translation>
     </message>
@@ -1085,32 +1085,32 @@
         <translation type="unfinished">Schéma hry</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="946"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="950"/>
         <source>Damage Modifier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="961"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="965"/>
         <source>Turn Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="976"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="980"/>
         <source>Initial Health</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="991"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="995"/>
         <source>Sudden Death Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1006"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1010"/>
         <source>Crate Drops</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1050"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1054"/>
         <source>Scheme Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1118,7 +1118,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="358"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
         <source>unnamed</source>
         <translation>beznázvu</translation>
     </message>
@@ -1149,12 +1149,12 @@
         <translation>Spojenie so serverom bolo prerušené</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="299"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="307"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="302"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1209,12 +1209,12 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation type="obsolete">Čakám</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="714"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="718"/>
         <source>Go!</source>
         <translation>Choď!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="580"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="584"/>
         <source>default</source>
         <translation>východzie</translation>
     </message>
@@ -1229,22 +1229,22 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="466"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="470"/>
         <source>Start server</source>
         <translation>Spustiť server</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="482"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="486"/>
         <source>Connect</source>
         <translation>Spojiť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="491"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="495"/>
         <source>Update</source>
         <translation>Obnoviť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="496"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="500"/>
         <source>Specify</source>
         <translation>Nastaviť</translation>
     </message>
@@ -1254,7 +1254,7 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation type="obsolete">Späť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="544"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="548"/>
         <source>Start</source>
         <translation>Spustiť</translation>
     </message>
@@ -1299,7 +1299,7 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation type="obsolete">Pripojiť sa k oficiálnemu serveru</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="618"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="622"/>
         <source>Ready</source>
         <translation>Pripravený</translation>
     </message>
@@ -1307,17 +1307,17 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="787"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="791"/>
         <source>Room name</source>
         <translation>Názov miestnosti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="788"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="792"/>
         <source>Players number</source>
         <translation>Počet hráčov</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="790"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="794"/>
         <source>Round in progress</source>
         <translation>Hra prebieha</translation>
     </message>
@@ -1325,22 +1325,22 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>QToolBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="242"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="245"/>
         <source>Actions</source>
         <translation>Akcie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="244"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="247"/>
         <source>Weapons</source>
         <translation>Výzbroj</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="246"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="249"/>
         <source>Weapon properties</source>
         <translation>Vlastnosti zbraní</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="248"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="251"/>
         <source>Other</source>
         <translation>Iné</translation>
     </message>
@@ -1366,57 +1366,57 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>ToggleButtonWidget</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="928"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="932"/>
         <source>Vampirism</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="933"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="937"/>
         <source>Karma</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="938"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="942"/>
         <source>Artillery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="888"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="892"/>
         <source>Fort Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="893"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="897"/>
         <source>Divide Teams</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="898"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="902"/>
         <source>Solid Land</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="903"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="907"/>
         <source>Add Border</source>
         <translation type="unfinished">Pridať okraj</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="908"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="912"/>
         <source>Low Gravity</source>
         <translation type="unfinished">Nízka gravitácia</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="913"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="917"/>
         <source>Laser Sight</source>
         <translation type="unfinished">Laserové zameriavanie</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="918"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="922"/>
         <source>Invulnerable</source>
         <translation type="unfinished">Nesmrteľnosť</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="923"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="927"/>
         <source>Add Mines</source>
         <translation type="unfinished">Pridať míny</translation>
     </message>
