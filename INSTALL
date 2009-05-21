@@ -6,8 +6,7 @@ To compile and install you need:
  - SDL_mixer >= 1.2
  - SDL_image >= 1.2
  - SDL_ttf >= 2.0
- - CMake >= 2.4.4
- - QCA2 library
+ - CMake >= 2.6.0
 
 1. Configure:
 $ cmake .
