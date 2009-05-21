@@ -37,8 +37,8 @@
 00:34=Invulnerabilità
 00:35=Tempo Extra
 00:36=Mirino Laser
-00:37=Vampirism
-00:38=Sniper Rifle
+00:37=Vampirismo
+00:38=Fucile di precisione
 
 01:00=Combattiamo!
 01:01=Round in parità
@@ -47,6 +47,7 @@
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
 01:06=Sudden death!
+
 
 
 

@@ -37,16 +37,17 @@
 00:34=Unverwundbarkeit
 00:35=Zusatzzeit
 00:36=Laservisier
-00:37=Vampirism
-00:38=Sniper Rifle
+00:37=Vampirismus
+00:38=Scharfschützengewehr
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
 01:02=%1 gewinnt!
 01:03=Lautstärke %1%
 01:04=Pausiert
-01:05=Wirklich beenden (Y/Esc)?
+01:05=Wirklich beenden (Z/Esc)?
 01:06=Sudden death!
+
 
 
 
