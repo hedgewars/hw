@@ -447,7 +447,7 @@ if (Gear^.Health <= 0)
 	or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
 	or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
     begin
-    if (GameFlags and gfLaserSight) = 0 then cLaserSighting:= false;
+    if (Gear^.Kind = gtSniperRifleShot) and ((GameFlags and gfLaserSight) = 0) then cLaserSighting:= false;
     if (Gear^.Ammo^.NumPerTurn <= CurrentHedgehog^.AttacksNum) and
        ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
 	Gear^.doStep:= @doStepShotIdle
