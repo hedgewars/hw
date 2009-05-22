@@ -1,6 +1,26 @@
 + features
 * bugfixes
 
+
+0.9.10 -> 0.9.11:
+ + Speech bubbles
+ + Many new hats, new graves
+ + New taunts
+ + Animated stars in frontend's background
+ + New music
+ + Vampirism weapon and game mode, karma mode
+ + Artillery mode
+ + Sniper rifle
+ + Options for mine delay/quantity
+ * Fix disconnection from server not been performed correctly
+ * Don't crash engine after round in reduced quality mode
+ * Fix game desync when oneof players quits
+ * Hedgehogs don't take hat off when jumping
+ * Fix initial room map config desync
+ * Fix team name in training
+ * Fix crash in parachute/rope if drowning with active girder/teleport
+ * Fix rope disappearing bug
+
 0.9.9 -> 0.9.10:
  + Many new hats, maps, themes, updates on existing ones
  + Remove small pixels left by fire
