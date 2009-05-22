@@ -1267,7 +1267,8 @@ if not (HHGear^.dY.isNegative) then
 	AfterAttack;
 	exit
 	end;
-HHGear^.Y:= HHGear^.Y + HHGear^.dY
+
+if Land[hwRound(HHGear^.Y + HHGear^.dY), hwRound(HHGear^.X)] <> COLOR_INDESTRUCTIBLE then HHGear^.Y:= HHGear^.Y + HHGear^.dY
 end;
 
 procedure doStepFirePunch(Gear: PGear);
