@@ -162,7 +162,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // vampiric       9
 		<< QVariant(false)         // karma          10
 		<< QVariant(false)         // artillery      11
-		<< QVariant(200)           // damage modfier 12
+		<< QVariant(150)           // damage modfier 12
 		<< QVariant(30)            // turn time      13
 		<< QVariant(50)            // init health    14
 		<< QVariant(15)            // sudden death   15

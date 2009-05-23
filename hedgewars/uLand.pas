@@ -609,7 +609,7 @@ var tmpsurf: PSDL_Surface;
 begin
 // For now, defining a fort's playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it'll give a bit more maneuvering room.
 playHeight:= 1200;
-playWidth:= 3072;
+playWidth:= 2560;
 leftX:= (LAND_WIDTH - playWidth) div 2;
 rightX:= ((playWidth + (LAND_WIDTH - playWidth) div 2) - 1);
 topY:= LAND_HEIGHT - playHeight;
