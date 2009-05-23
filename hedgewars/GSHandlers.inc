@@ -564,8 +564,11 @@ if (Gear^.Timer mod 47) = 0 then
 		DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
 		inc(i, 1)
 		end;
-	Gear^.X:= Gear^.X + Gear^.dX;
-	Gear^.Y:= Gear^.Y + _1_9;
+    if Land[hwRound(Gear^.Y + _1_9) , hwRound(Gear^.X + Gear^.dX)] <> COLOR_INDESTRUCTIBLE then
+        begin
+        Gear^.X:= Gear^.X + Gear^.dX;
+        Gear^.Y:= Gear^.Y + _1_9;
+        end;
 	SetAllHHToActive;
 	end;
 if TestCollisionYwithGear(Gear, 1) then
@@ -660,10 +663,11 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 		begin
 		HHGear^.State:= HHGear^.State and not gstAttacking;
 		prevX:= hwRound(HHGear^.X);
+	
+// why the call to HedgehogStep then a further increment of X?	
+		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_1, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HedgehogStep(HHGear);
 		
-		HedgehogStep(HHGear);
-		
-		if (prevX = hwRound(HHGear^.X)) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
+		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_1, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
 		HHGear^.State:= HHGear^.State or gstAttacking
 		end;
 
@@ -671,8 +675,11 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 	if BTSteps = 7 then
 		begin
 		BTSteps:= 0;
+        if Land[hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)) , hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC))] <> COLOR_INDESTRUCTIBLE then
+            begin
 		Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
 		Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
+            end;
 		HHGear^.State:= HHGear^.State or gstNoDamage;
 		AmmoShove(Gear, 2, 15);
 		HHGear^.State:= HHGear^.State and not gstNoDamage
@@ -684,7 +691,7 @@ if b then
               Gear^.dX, Gear^.dY,
               cHHRadius * 5, cHHRadius * 2 + 7);
 
-if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) or (Land[hwRound(HHGear^.Y), hwRound(HHGear^.X + Gear^.dX * 32)] = COLOR_INDESTRUCTIBLE) then
+if (Gear^.Timer = 0) or ((HHGear^.Message and gm_Attack) <> 0) then
 	begin
 	HHGear^.Message:= 0;
 	HHGear^.State:= HHGear^.State and (not gstNotKickable);
