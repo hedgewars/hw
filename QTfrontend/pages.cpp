@@ -1116,9 +1116,9 @@ void PageScheme::deleteRow()
 
 void PageScheme::schemeSelected(int n)
 {
-	gbGameModes->setEnabled(n >= 4); // FIXME: derive number from model
-	gbBasicSettings->setEnabled(n >= 4);
-	LE_name->setEnabled(n >= 4);
+	gbGameModes->setEnabled(n >= 5); // FIXME: derive number from model
+	gbBasicSettings->setEnabled(n >= 5);
+	LE_name->setEnabled(n >= 5);
 }
 
 /////////////////////////////////////////////////

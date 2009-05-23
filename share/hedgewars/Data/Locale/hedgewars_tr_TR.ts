@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="tr_TR">
+<!DOCTYPE TS>
+<TS version="2.0" language="tr_TR">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -55,6 +56,7 @@
         <translation>yeni</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="498"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="655"/>
         <source>Error</source>
         <translation>Hata</translation>
@@ -167,7 +169,6 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Hata</translation>
     </message>
@@ -187,16 +188,19 @@
         <translation>Oda kapatıldı</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 katıldı</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 gitti</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 gitti (%2)</translation>
@@ -225,7 +229,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="32"/>
+        <location filename="../../../../QTfrontend/KB.h" line="28"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf yazıyı yorumlarken hata verdi. Bu büyük ihtimalle freetype2&apos;deki bir hatadan kaynaklanıyor. Freetype kurulumunuzu güncellemenizi öneririz.</translation>
     </message>
@@ -267,7 +271,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;En iyi atış ödülünü &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt; kazandı.&lt;/p&gt;</translation>
     </message>
@@ -369,16 +373,21 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Lütfen listeden kaydı seçin</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>Tamam</translation>
@@ -422,6 +431,7 @@
         <translation>Tazele</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="821"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="832"/>
         <source>Error</source>
         <translation>Hata</translation>
@@ -432,6 +442,7 @@
         <translation>Lütfen oda ismini girin</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="823"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="834"/>
         <source>OK</source>
         <translation>Tamam</translation>
@@ -520,12 +531,10 @@
         <translation>Yeni</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Prev</source>
         <translation type="obsolete">Önce</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next</source>
         <translation type="obsolete">Sonra</translation>
     </message>
@@ -612,17 +621,14 @@
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Kaleler modu</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">Takımları böl</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">Parçalanmaz yüzey</translation>
     </message>
@@ -662,7 +668,6 @@
         <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add Border</source>
         <translation type="obsolete">Sınır Ekle</translation>
     </message>
@@ -672,22 +677,18 @@
         <translation>Kaliteyi Düşür</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Low Gravity</source>
         <translation type="obsolete">Azaltılmış Yerçekimi</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Laser Sight</source>
         <translation type="obsolete">Lazer Görüşü</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Invulnerable</source>
         <translation type="obsolete">Ölümsüzlük</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add Mines</source>
         <translation type="obsolete">Mayın Ekle</translation>
     </message>
@@ -786,12 +787,12 @@
         <translation>Sürüm</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Bu program GNU Genel Kamu Lisansı&apos;yla dağıtılmaktadır</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
         <source>Developers:</source>
         <translation>Geliştiriciler:</translation>
     </message>
@@ -816,12 +817,10 @@
         <translation>Özel teşekkür:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">Tur süresi</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">Başlangıç sağlığı</translation>
     </message>
@@ -909,6 +908,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
+        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="52"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
         <source>unnamed</source>
         <translation>isimsiz</translation>
@@ -940,7 +940,7 @@
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="308"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -949,6 +949,8 @@ Please check your installation</source>
 Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Silahlar</translation>
@@ -990,6 +992,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
 <context>
     <name>QPushButton</name>
     <message>
+        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="584"/>
         <source>default</source>
         <translation>öntanımlı</translation>
@@ -1025,7 +1028,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Elle Belirt</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Resmi sunucuya bağlan</translation>
     </message>
@@ -1040,6 +1042,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Hadi!</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Kayıtlı oyunu oynat</translation>
@@ -1083,7 +1086,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Oyuncu sayısı</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="794"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="793"/>
         <source>Round in progress</source>
         <translation>Oyun başlamış</translation>
     </message>
@@ -1114,17 +1117,18 @@ Lütfen kurulumunuzu kontrol edin</translation>
 <context>
     <name>TCPBase</name>
     <message>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
         <source>Unable to start the server: %1.</source>
         <translation>Sunucu başlatılamadı: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Oyun motoru çalıştırılamadı: %1 (</translation>
     </message>
@@ -1210,6 +1214,7 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>aşağı</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>zıpla</translation>

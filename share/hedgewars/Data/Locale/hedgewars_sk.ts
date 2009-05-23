@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -16,12 +17,10 @@
         <translation type="unfinished">Nikdy</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Every turn</source>
         <translation type="obsolete">Každý ťah</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Each %1 turn</source>
         <translation type="obsolete">Každý %1 ťah</translation>
     </message>
@@ -59,6 +58,7 @@
 <context>
     <name>HWForm</name>
     <message>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="498"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="655"/>
         <source>Error</source>
         <translation>Chyba</translation>
@@ -176,7 +176,6 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Chyba</translation>
     </message>
@@ -191,16 +190,19 @@
         <translation>Spojenie odmietnuté</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 sa pripojil(a)</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 odišiel(la)</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 odišiel(a) (%2)</translation>
@@ -234,7 +236,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="32"/>
+        <location filename="../../../../QTfrontend/KB.h" line="28"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf vrátil chybu počas renderovania textu, s najväčšou pravdepodobnosťou sa jedná o chybu vo freetype2. Doporučujeme aktualizovať vašu knižnicu freetype.</translation>
     </message>
@@ -263,12 +265,10 @@
 <context>
     <name>PageEditTeam</name>
     <message>
-        <location filename="" line="0"/>
         <source>Discard</source>
         <translation type="obsolete">Zahodiť</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Uložiť</translation>
     </message>
@@ -286,7 +286,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Ocenenie za najlepší zásah vyhral(a) &lt;b&gt;%1&lt;/b&gt; so ziskom &lt;b&gt;%2&lt;/b&gt; bodov.&lt;/p&gt;</translation>
     </message>
@@ -310,42 +310,34 @@
 <context>
     <name>PageMain</name>
     <message>
-        <location filename="" line="0"/>
         <source>Single Player</source>
         <translation type="obsolete">Hra jedného hráča</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Viac hráčov</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net game</source>
         <translation type="obsolete">Sieťová hra</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Uložené hry</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Demá</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Setup</source>
         <translation type="obsolete">Nastavenia</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>About</source>
         <translation type="obsolete">O programe</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Exit</source>
         <translation type="obsolete">Ukončiť</translation>
     </message>
@@ -363,7 +355,6 @@
 <context>
     <name>PageMultiplayer</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Späť</translation>
     </message>
@@ -376,12 +367,10 @@
 <context>
     <name>PageNet</name>
     <message>
-        <location filename="" line="0"/>
         <source>Local</source>
         <translation type="obsolete">Lokálna</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Internet</source>
         <translation type="obsolete">Internet</translation>
     </message>
@@ -430,12 +419,10 @@
         <translation>Upraviť team</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Uložiť</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Späť</translation>
     </message>
@@ -453,16 +440,21 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Prosím, vyberte záznam zo zoznamu</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -506,6 +498,7 @@
         <translation>Obnoviť</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="821"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="832"/>
         <source>Error</source>
         <translation>Chyba</translation>
@@ -516,6 +509,7 @@
         <translation>Prosím, zadajte názov miestnosti</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="823"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="834"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -569,12 +563,10 @@
         <translation>Nová</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Prev</source>
         <translation type="obsolete">Predch</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Next</source>
         <translation type="obsolete">Ďalšia</translation>
     </message>
@@ -622,7 +614,6 @@
 <context>
     <name>PageSelectWeapon</name>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Späť</translation>
     </message>
@@ -637,7 +628,6 @@
         <translation>Vymazať</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Save</source>
         <translation type="obsolete">Uložiť</translation>
     </message>
@@ -645,27 +635,22 @@
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Jednoduchá hra</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Tréning</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Multiplayer</source>
         <translation type="obsolete">Viac hráčov</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Saved games</source>
         <translation type="obsolete">Uložené hry</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Demos</source>
         <translation type="obsolete">Demá</translation>
     </message>
@@ -731,7 +716,6 @@
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Režim pevností</translation>
     </message>
@@ -766,7 +750,6 @@
         <translation>Povoliť hudbu</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">Rozdeliť teamy</translation>
     </message>
@@ -776,12 +759,10 @@
         <translation>Pripojiť dátum a čas k súboru so záznamom</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">Nezničiteľná zem</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add Border</source>
         <translation type="obsolete">Pridať okraj</translation>
     </message>
@@ -791,22 +772,18 @@
         <translation>Znížiť kvalitu</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Low Gravity</source>
         <translation type="obsolete">Nízka gravitácia</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Laser Sight</source>
         <translation type="obsolete">Laserové zameriavanie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Invulnerable</source>
         <translation type="obsolete">Nesmrteľnosť</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Add Mines</source>
         <translation type="obsolete">Pridať míny</translation>
     </message>
@@ -824,27 +801,22 @@
         <translation>Človek</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 5</source>
         <translation type="obsolete">Úroveň 5</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 4</source>
         <translation type="obsolete">Úroveň 4</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 3</source>
         <translation type="obsolete">Úroveň 3</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 2</source>
         <translation type="obsolete">Úroveň 2</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Level 1</source>
         <translation type="obsolete">Úroveň 1</translation>
     </message>
@@ -857,12 +829,10 @@
 <context>
     <name>QGroupBox</name>
     <message>
-        <location filename="" line="0"/>
         <source>Landscape</source>
         <translation type="obsolete">Terén</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Game scheme</source>
         <translation type="obsolete">Schéma hry</translation>
     </message>
@@ -882,12 +852,10 @@
         <translation>Nastavenia kláves</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Grave</source>
         <translation type="obsolete">Náhrobok</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Team level</source>
         <translation type="obsolete">Úroveň teamu</translation>
     </message>
@@ -912,12 +880,10 @@
         <translation>Zbrane</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Net options</source>
         <translation type="obsolete">Nastavenia siete</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Servers list</source>
         <translation type="obsolete">Zoznam serverov</translation>
     </message>
@@ -955,17 +921,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.2&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.2&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Tento program je distribuovaný podľa podmienok GNU General Publice License</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
         <source>Developers:</source>
         <translation>Vývojári:</translation>
     </message>
@@ -985,12 +950,10 @@
         <translation>Osobitné poďakovanie:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">Čas na ťah</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">Úvodné zdravie</translation>
     </message>
@@ -1000,12 +963,10 @@
         <translation>Výzbroj</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Ocenenie za najlepší zásah vyhral(a) &lt;b&gt;%1&lt;/b&gt; (&lt;b&gt;%2&lt;/b&gt; bodov).&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; Hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Celkovo bolo zabitých &lt;b&gt;%1&lt;/b&gt; ježkov počas tohto kola.&lt;/p&gt;</translation>
     </message>
@@ -1045,12 +1006,10 @@
         <translation>Port servera:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;h3&gt;Version 0.9.3&lt;/h3&gt;</source>
         <translation type="obsolete">&lt;h3&gt;Wersja 0.9.3&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills.&lt;/p&gt;</source>
         <translation type="obsolete">&lt;p&gt;Ocenenie za najlepší zásah získal(a) &lt;b&gt;%1&lt;/b&gt;, zabil ním &lt;b&gt;%2&lt;/b&gt; nepriateľov.&lt;/p&gt;</translation>
     </message>
@@ -1065,12 +1024,10 @@
         <translation>Zvuky:</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Turns before SD</source>
         <translation type="obsolete">Počet ťahov pred RS</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Crate drops</source>
         <translation type="obsolete">Zhadzovanie krabíc</translation>
     </message>
@@ -1118,6 +1075,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
+        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="52"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="362"/>
         <source>unnamed</source>
         <translation>beznázvu</translation>
@@ -1126,7 +1084,6 @@
 <context>
     <name>QMainWindow</name>
     <message>
-        <location filename="" line="0"/>
         <source>Hedgewars</source>
         <translation type="obsolete">Hedgewars</translation>
     </message>
@@ -1154,7 +1111,7 @@
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="308"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1163,6 +1120,8 @@ Please check your installation</source>
 Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Zbrane</translation>
@@ -1204,7 +1163,6 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="" line="0"/>
         <source>Waiting</source>
         <translation type="obsolete">Čakám</translation>
     </message>
@@ -1214,6 +1172,7 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Choď!</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="584"/>
         <source>default</source>
         <translation>východzie</translation>
@@ -1249,7 +1208,6 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Nastaviť</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Back</source>
         <translation type="obsolete">Späť</translation>
     </message>
@@ -1259,16 +1217,15 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Spustiť</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Simple Game</source>
         <translation type="obsolete">Jednoduchá hra</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Training</source>
         <translation type="obsolete">Tréning</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Prehrať demo</translation>
@@ -1294,7 +1251,6 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Nastavenie</translation>
     </message>
     <message>
-        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Pripojiť sa k oficiálnemu serveru</translation>
     </message>
@@ -1317,7 +1273,7 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>Počet hráčov</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="794"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="793"/>
         <source>Round in progress</source>
         <translation>Hra prebieha</translation>
     </message>
@@ -1348,17 +1304,18 @@ Skontrolujte si vašu inštaláciu</translation>
 <context>
     <name>TCPBase</name>
     <message>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
         <source>Unable to start the server: %1.</source>
         <translation>Nie je možné spustiť server: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Nie je možné spustiť engine: %1 (</translation>
     </message>
@@ -1444,6 +1401,7 @@ Skontrolujte si vašu inštaláciu</translation>
         <translation>dole</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>skok</translation>

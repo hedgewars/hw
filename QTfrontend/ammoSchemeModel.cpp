@@ -54,7 +54,8 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "Default"
 		<< "Pro mode"
 		<< "Shoppa"
-		<< "Basketball";
+		<< "Basketball"
+		<< "Minefield";
 	
 	spNames = QStringList()
 		<< "name"             //  0
@@ -147,10 +148,34 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(4)             //  landadds      18
 		;
 
+	QList<QVariant> minefield;
+	minefield
+		<< predefSchemesNames[4]   // name           0
+		<< QVariant(false)         // fortsmode      1
+		<< QVariant(false)         // team divide    2
+		<< QVariant(false)         // solid land     3
+		<< QVariant(false)         // border         4
+		<< QVariant(false)         // low gravity    5
+		<< QVariant(false)         // laser sight    6
+		<< QVariant(false)         // invulnerable   7
+		<< QVariant(true)          // add mines      8
+		<< QVariant(false)         // vampiric       9
+		<< QVariant(false)         // karma          10
+		<< QVariant(false)         // artillery      11
+		<< QVariant(200)           // damage modfier 12
+		<< QVariant(30)            // turn time      13
+		<< QVariant(50)            // init health    14
+		<< QVariant(15)            // sudden death   15
+		<< QVariant(0)             // case prob      16
+		<< QVariant(0)             //  mines time    17
+		<< QVariant(50)            //  landadds      18
+		;
+
 	schemes.append(defaultScheme);
 	schemes.append(proMode);
 	schemes.append(shoppa);
 	schemes.append(basketball);
+	schemes.append(minefield);
 
 
 	int size = fileConfig.beginReadArray("schemes");
