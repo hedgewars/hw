@@ -1,5 +1,6 @@
 foreach(dir
 	Default
+	Mobster
 	Pirate
 	Robot
 	Russian
