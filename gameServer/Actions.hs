@@ -100,7 +100,7 @@ processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
 	return (clID, serverInfo, clients, rooms)
 	where
 		client = clients ! clID
-		message = if clientProto client < 25 then
+		message = if clientProto client < 27 then
 			serverMessageForOldVersions
 			else
 			serverMessage

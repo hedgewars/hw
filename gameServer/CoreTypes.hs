@@ -135,7 +135,7 @@ newServerInfo = (
 	ServerInfo
 		True
 		"<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-		"<font color=yellow><h3>Hedgewars 0.9.10 is out! Please, update. Support for previous versions IS DROPPED</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><h4>New features are:</h4><ul><li>Large maps</li><li>New game options</li><li>Utilities</li><li>...</li></ul></font>"
+		"<font color=yellow><h3>Hedgewars 0.9.11 is out! Please, update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></p><h4>New features are:</h4><ul><li>Speech bubbles</li><li>New game modes</li><li>Sniper rifle</li><li>...</li></ul></font>"
 		46631
 		0
 		""
