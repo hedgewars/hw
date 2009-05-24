@@ -112,7 +112,7 @@ void TeamSelWidget::changeTeamColor(const HWTeam& team)
 
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
-	qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
+	//qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
 	for(;;) {
 		QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 		if(itPlay==curPlayingTeams.end())

@@ -6,7 +6,7 @@
  + Speech bubbles
  + Many new hats, new graves
  + New taunts
- + New voice pack
+ + New voice pack, new default voice
  + Animated stars in frontend's background
  + New music
  + Vampirism weapon and game mode, karma mode
