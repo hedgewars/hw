@@ -13,7 +13,7 @@ $ cmake .
 or
 $ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir" .
 
-add -DWITH_SERVER=1 to compile net server (requires Glasgow Haskell Compiler)
+add -DWITH_SERVER=1 to compile net server (requires Glasgow Haskell Compiler 6.8.3)
 
 2. Compile:
 $ make
