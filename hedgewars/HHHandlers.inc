@@ -197,9 +197,12 @@ with Gear^,
         if not (SpeechText = '') then
             begin
             tmpGear:= AddVisualGear(0, 0, vgtSpeechBubble);
-            tmpGear^.Text:= SpeechText;
-            tmpGear^.Hedgehog:= Gear^.Hedgehog;
-            tmpGear^.FrameTicks:= SpeechType;
+            if tmpGear <> nil then
+               begin
+               tmpGear^.Text:= SpeechText;
+               tmpGear^.Hedgehog:= Gear^.Hedgehog;
+               tmpGear^.FrameTicks:= SpeechType;
+               end;
             SpeechText:= ''
             end;
 
