@@ -95,14 +95,14 @@ void GameUIConfig::SaveOptions()
 
 	setValue("video/frontendeffects", isFrontendEffects());
 
-	bool ffscr=isFrontendFullscreen();
+	bool ffscr = isFrontendFullscreen();
 	setValue("video/frontendfullscreen", ffscr);
 	emit frontendFullscreen(ffscr);
 	if (!ffscr) {
 	  setValue("window/width", Form->width());
 	  setValue("window/height", Form->height());
 	} else {
-	  resizeToConfigValues();
+	  //resizeToConfigValues(); // TODO: why this has been made?
 	}
 
 	setValue("audio/sound", isSoundEnabled());
