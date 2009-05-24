@@ -406,9 +406,12 @@ if not CurrentTeam^.ExtDriven then SendIPC('h' + s);
 if byte(s[1]) < 4 then
     begin
     Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
-    Gear^.Hedgehog:= CurrentHedgehog;
-    Gear^.Text:= text;
-    Gear^.FrameTicks:= byte(s[1])
+    if Gear <> nil then
+       begin
+       Gear^.Hedgehog:= CurrentHedgehog;
+       Gear^.Text:= text;
+       Gear^.FrameTicks:= byte(s[1])
+       end
     end
 else
     begin
