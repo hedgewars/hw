@@ -113,7 +113,7 @@ type
 			Handle: PTTF_Font;
 			Height: LongInt;
 			style: LongInt;
-			Name: string[19];
+			Name: string[21];
 			end;
 
 	PAmmo = ^TAmmo;
@@ -295,6 +295,21 @@ const
 			Height: 10;
 			style: TTF_STYLE_NORMAL;
 			Name: 'DejaVuSans-Bold.ttf')
+			);
+
+	FontzCJK: array[THWFont] of THHFont = (
+			(Handle: nil;
+			Height: 12;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DroidSansFallback.ttf'),
+			(Handle: nil;
+			Height: 24;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DroidSansFallback.ttf'),
+			(Handle: nil;
+			Height: 10;
+			style: TTF_STYLE_NORMAL;
+			Name: 'DroidSansFallback.ttf')
 			);
 
 	FontBorder = 2;
