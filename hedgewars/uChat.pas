@@ -163,25 +163,25 @@ if (s[1] = '-') and (s[Length(s)] = '-') then
 if (s[1] = '/') and (copy(s, 1, 5) = '/hsa ') then
     begin
     if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
+        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#4 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#4 + copy(s, 6, Length(s)-5), true);
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
     begin
     if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
+        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#5 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#5 + copy(s, 6, Length(s)-5), true);
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     begin
     if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
+        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
     else
-        ParseCommand('/hogsay '#6 + copy(s, 2, Length(s)-2), true);
+        ParseCommand('/hogsay '#6 + copy(s, 6, Length(s)-5), true);
     exit
     end;
 
