@@ -45,7 +45,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
 	Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
-	Form->ui.pageOptions->CBFrontendEffects->setChecked(value("video/frontendeffects", true).toBool());
+	Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
