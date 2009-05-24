@@ -91,7 +91,7 @@ About::About(QWidget * parent) :
 			"<br>"
 			"Jonatan Nilsson &lt;<a href=\"mailto:jonatanfan@gmail.com\">jonatanfan@gmail.com</a>&gt;"
 			"<br>"
-			"Daniel Martin &lt;<a href=\"mailto:jelhombresinremedio@gmail.com\">elhombresinremedio@gmail.com</a>&gt;"
+			"Daniel Martin &lt;<a href=\"mailto:elhombresinremedio@gmail.com\">elhombresinremedio@gmail.com</a>&gt;"
 			"</p><h2>" +
 			
 			QLabel::tr("Translations:") + "</h2><p>"
