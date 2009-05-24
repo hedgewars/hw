@@ -683,7 +683,7 @@ void HWForm::AsyncNetServerStart()
 
 void HWForm::NetDisconnect()
 {
-	qDebug("NetDisconnect");
+	//qDebug("NetDisconnect");
 	if(hwnet) {
 		hwnet->Disconnect();
 		delete hwnet;

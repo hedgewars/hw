@@ -215,6 +215,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return ;
 	}
 
+	if (lst[0] == "PROTO")
+		return ;
+
 	if (lst[0] == "ERROR") {
 		if (lst.size() == 2)
 			emit showMessage("Error: " + lst[1]);
