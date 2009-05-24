@@ -395,8 +395,7 @@ var Gear: PVisualGear;
 begin
 text:= copy(s, 2, Length(s)-1);
 if CheckNoTeamOrHH
-  or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0)
-  or CurrentTeam^.ExtDriven then
+  or ((CurrentHedgehog^.Gear^.State and gstHHDriven) = 0) then
     begin
     chSay(text);
     exit
