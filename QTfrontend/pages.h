@@ -227,6 +227,7 @@ public:
 	QSpinBox * volumeBox;
 	QLineEdit *editNetNick;
 	QCheckBox *CBReduceQuality;
+	QCheckBox *CBFrontendEffects;
 };
 
 class PageNet : public AbstractPage

@@ -17,6 +17,7 @@
  */
  
 #include "itemNum.h"
+#include "hwform.h"
 
 #include <QMouseEvent>
 #include <QPainter>
@@ -25,7 +26,7 @@ ItemNum::ItemNum(const QImage& im, QWidget * parent, unsigned char min, unsigned
   QFrame(parent), m_im(im), infinityState(false), nonInteractive(false), minItems(min), maxItems(max),
   numItems(min+2 >= max ? min : min+2)
 {
-    setAttribute(Qt::WA_PaintOnScreen, true);
+    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 ItemNum::~ItemNum()

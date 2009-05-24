@@ -19,11 +19,12 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include "SquareLabel.h"
+#include "hwform.h"
 
 SquareLabel::SquareLabel(QWidget * parent) :
 	QWidget(parent)
 {
-    setAttribute(Qt::WA_PaintOnScreen, true);
+    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 void SquareLabel::paintEvent(QPaintEvent * event)

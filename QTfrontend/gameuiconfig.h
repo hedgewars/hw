@@ -45,6 +45,7 @@ public:
 	quint8 bitDepth();
 	QString netNick();
 	bool isReducedQuality() const;
+	bool isFrontendEffects() const;
 	bool isFrontendFullscreen() const;
 	void resizeToConfigValues();
 

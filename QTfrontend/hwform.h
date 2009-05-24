@@ -38,6 +38,8 @@ class HWNetRegisterServer;
 class QCloseEvent;
 class AmmoSchemeModel;
 
+extern bool frontendEffects;
+
 class HWForm : public QMainWindow
 {
 	Q_OBJECT

@@ -60,11 +60,12 @@
 #include "hats.h"
 #include "misc.h"
 #include "togglebutton.h"
+#include "hwform.h"
 
 PageMain::PageMain(QWidget* parent) : 
   AbstractPage(parent)
 {
-    setAttribute(Qt::WA_NoSystemBackground, true);
+    if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
 	QGridLayout * pageLayout = new QGridLayout(this);
 	//pageLayout->setColumnStretch(0, 1);
 	//pageLayout->setColumnStretch(1, 2);
@@ -406,6 +407,10 @@ PageOptions::PageOptions(QWidget* parent) :
 		CBReduceQuality = new QCheckBox(AGGroupBox);
 		CBReduceQuality->setText(QCheckBox::tr("Reduce Quality"));
 		GBAlayout->addWidget(CBReduceQuality);
+
+		CBFrontendEffects = new QCheckBox(AGGroupBox);
+		CBFrontendEffects->setText(QCheckBox::tr("Frontend Effects (Requires Restart)"));
+		GBAlayout->addWidget(CBFrontendEffects);
 
 		CBFullscreen = new QCheckBox(AGGroupBox);
 		CBFullscreen->setText(QCheckBox::tr("Fullscreen"));

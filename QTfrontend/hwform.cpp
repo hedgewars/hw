@@ -55,9 +55,16 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 
+// I started handing this down to each place it touches, but it was getting ridiculous
+// and this one flag does not warrant a static class
+bool frontendEffects = true;
+
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
+    QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
+    frontendEffects = settings.value("video/frontendeffects", true).toBool();
+
 	ui.setupUi(this);
 
 	CustomizePalettes();
@@ -167,11 +174,14 @@ HWForm::HWForm(QWidget *parent)
 	ui.pageScheme->setModel(ammoSchemeModel);
 	ui.pageMultiplayer->gameCFG->GameSchemes->setModel(ammoSchemeModel);
 
-	wBackground = new BGWidget(this);
-	wBackground->setFixedSize(this->width(), this->height());
-	wBackground->lower();
-	wBackground->init();
-	wBackground->startAnimation();
+    wBackground = NULL;
+    if (config->isFrontendEffects()) {
+       wBackground = new BGWidget(this);
+       wBackground->setFixedSize(this->width(), this->height());
+       wBackground->lower();
+       wBackground->init();
+       wBackground->startAnimation();
+    }
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
@@ -912,6 +922,8 @@ void HWForm::resizeEvent(QResizeEvent * event)
 {
 	int w = event->size().width();
 	int h = event->size().height();
-	wBackground->setFixedSize(w, h);
-	wBackground->move(0, 0);
+    if (wBackground) {
+        wBackground->setFixedSize(w, h);
+        wBackground->move(0, 0);
+    }
 }
