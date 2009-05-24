@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="ja">
+<!DOCTYPE TS><TS version="1.1" language="ja">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -55,7 +54,6 @@
         <translation>作成</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="508"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="665"/>
         <source>Error</source>
         <translation>エラー</translation>
@@ -168,6 +166,7 @@
 <context>
     <name>HWNewNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">エラー</translation>
     </message>
@@ -187,19 +186,16 @@
         <translation>ルームが崩壊した</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 が来た</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 退出</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1　は(%2)から 退出</translation>
@@ -228,7 +224,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="28"/>
+        <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</translation>
     </message>
@@ -270,7 +266,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt; &lt;b&gt;%2&lt;/b&gt; で　&lt;b&gt;%1&lt;/b&gt; が一番良いショットの賞をもらった　&lt;/p&gt;</translation>
     </message>
@@ -370,21 +366,16 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>録画を選択下さい</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>オケ</translation>
@@ -428,7 +419,6 @@
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="826"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="837"/>
         <source>Error</source>
         <translation>エラー</translation>
@@ -439,7 +429,6 @@
         <translation>ルーム名を入力してください</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="839"/>
         <source>OK</source>
         <translation>オケ</translation>
@@ -610,19 +599,17 @@
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="412"/>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Forts モード</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">チームを振り分け</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">壊れない陸地</translation>
     </message>
@@ -664,6 +651,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="408"/>
         <source>Reduce Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="412"/>
+        <source>Frontend Effects (Requires Restart)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -761,12 +753,12 @@
         <translation>バーション</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>This program is distributed under the GNU General Public License</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
         <source>Developers:</source>
         <translation>開発者:</translation>
     </message>
@@ -791,10 +783,12 @@
         <translation>特別感謝:</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">ターヌ タイム</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">初めの健康ポイント</translation>
     </message>
@@ -882,7 +876,6 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="53"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="363"/>
         <source>unnamed</source>
         <translation>無名</translation>
@@ -914,7 +907,7 @@
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="308"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -923,8 +916,6 @@ Please check your installation</source>
 インストールをチェックしてください</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>兵器</translation>
@@ -966,7 +957,6 @@ Please check your installation</source>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="589"/>
         <source>default</source>
         <translation>デフォールト</translation>
@@ -1002,6 +992,7 @@ Please check your installation</source>
         <translation>Specify</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Join official server</translation>
     </message>
@@ -1016,7 +1007,6 @@ Please check your installation</source>
         <translation>GO!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>デモを再生</translation>
@@ -1060,7 +1050,7 @@ Please check your installation</source>
         <translation>プレイヤー数</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="798"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="799"/>
         <source>Round in progress</source>
         <translation>ラウンド中</translation>
     </message>
@@ -1091,18 +1081,17 @@ Please check your installation</source>
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
         <source>Unable to start the server: %1.</source>
         <translation>サーバー%1の起動は出来なかった</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
         <source>Unable to run engine: %1 (</source>
         <translation>エンジン%1の起動は出来なかった</translation>
     </message>
@@ -1188,7 +1177,6 @@ Please check your installation</source>
         <translation>下</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>ジャンプ</translation>

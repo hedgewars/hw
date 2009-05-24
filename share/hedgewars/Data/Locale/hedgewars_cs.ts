@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="cs">
+<!DOCTYPE TS><TS version="1.1" language="cs">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -17,10 +16,12 @@
         <translation type="unfinished">Nikdy</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Every turn</source>
         <translation type="obsolete">Každý tah</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Each %1 turn</source>
         <translation type="obsolete">Každý %1 tah</translation>
     </message>
@@ -65,7 +66,6 @@
         <translation>nový</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="508"/>
         <location filename="../../../../QTfrontend/hwform.cpp" line="665"/>
         <source>Error</source>
         <translation>Chyba</translation>
@@ -178,6 +178,7 @@
 <context>
     <name>HWNewNet</name>
     <message>
+        <location filename="" line="0"/>
         <source>Error</source>
         <translation type="obsolete">Chyba</translation>
     </message>
@@ -197,19 +198,16 @@
         <translation>Místnost zničena.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="380"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
         <source>*** %1 joined</source>
         <translation>*** %1 se připojil</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="415"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
         <source>*** %1 left</source>
         <translation>*** %1 odešel</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="417"/>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 odešel (%2)</translation>
@@ -238,7 +236,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="28"/>
+        <location filename="../../../../QTfrontend/KB.h" line="32"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf vyhodil chybu v renderování textu, s největší pravděpodobností je to spojeno s chybou ve freetype2. Je doporučeno aktualizovat Vaši freetype knihovnu.</translation>
     </message>
@@ -280,7 +278,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Cenu za nejlepší zásah vyhrál &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; body.&lt;/p&gt;</translation>
     </message>
@@ -384,21 +382,16 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Prosím, vyberte záznam ze seznamu</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -442,7 +435,6 @@
         <translation>Obnovit</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="826"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="837"/>
         <source>Error</source>
         <translation>Chyba</translation>
@@ -453,7 +445,6 @@
         <translation>Prosím, zadejte jméno místnosti</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="839"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -624,19 +615,17 @@
 <context>
     <name>QCheckBox</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="412"/>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
+        <location filename="" line="0"/>
         <source>Forts mode</source>
         <translation type="obsolete">Mód pevností</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Divide teams</source>
         <translation type="obsolete">Dělit týmy</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Solid land</source>
         <translation type="obsolete">Pevná zem</translation>
     </message>
@@ -678,6 +667,11 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="408"/>
         <source>Reduce Quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="412"/>
+        <source>Frontend Effects (Requires Restart)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -765,12 +759,12 @@
         <translation>Verze</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Tento program je poskytovaný pod GNU General Public licencí</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
         <source>Developers:</source>
         <translation>Vývojáři:</translation>
     </message>
@@ -795,18 +789,22 @@
         <translation>Speciální poděkování:</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turn time</source>
         <translation type="obsolete">Čas kola</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Initial health</source>
         <translation type="obsolete">Počáteční zdraví</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Turns before SD</source>
         <translation type="obsolete">Kol před náhlou smrtí</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Bonus factor</source>
         <translation type="obsolete">Bonusový faktor</translation>
     </message>
@@ -904,7 +902,6 @@
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="53"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="363"/>
         <source>unnamed</source>
         <translation>nepojmenovaný</translation>
@@ -936,7 +933,7 @@
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="308"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -945,8 +942,6 @@ Please check your installation</source>
 Prosím zkontorlujte vaši instalaci</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
-        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Zbraně</translation>
@@ -988,7 +983,6 @@ Prosím zkontorlujte vaši instalaci</translation>
 <context>
     <name>QPushButton</name>
     <message>
-        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="589"/>
         <source>default</source>
         <translation>základní</translation>
@@ -1024,6 +1018,7 @@ Prosím zkontorlujte vaši instalaci</translation>
         <translation>Upřesnit</translation>
     </message>
     <message>
+        <location filename="" line="0"/>
         <source>Join official server</source>
         <translation type="obsolete">Připojit se na oficiální server</translation>
     </message>
@@ -1043,7 +1038,6 @@ Prosím zkontorlujte vaši instalaci</translation>
         <translation>Jedem!</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Přehrát záznam</translation>
@@ -1082,7 +1076,7 @@ Prosím zkontorlujte vaši instalaci</translation>
         <translation>Čísla hráčů</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="798"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="799"/>
         <source>Round in progress</source>
         <translation>Hra běží</translation>
     </message>
@@ -1113,18 +1107,17 @@ Prosím zkontorlujte vaši instalaci</translation>
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
         <source>Unable to start the server: %1.</source>
         <translation>Nemohu spustit server: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Nemohu spustit engine: %1 (</translation>
     </message>
@@ -1210,7 +1203,6 @@ Prosím zkontorlujte vaši instalaci</translation>
         <translation>dolů</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>skok</translation>
