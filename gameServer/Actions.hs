@@ -301,7 +301,6 @@ processAction (clID, serverInfo, clients, rooms) (Dump) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (ProcessAccountInfo info) = do
-	processAction (clID, serverInfo, clients, rooms) SendServerMessage
 	case info of
 		HasAccount passwd isAdmin -> do
 			infoM "Clients" $ show clID ++ " has account"
@@ -319,6 +318,8 @@ processAction (clID, serverInfo, clients, rooms) (MoveToLobby) = do
 	foldM processAction (clID, serverInfo, clients, rooms) $
 		(RoomAddThisClient 0)
 		: answerLobbyNicks
+		++ [SendServerMessage]
+
 		-- ++ (answerServerMessage client clients)
 	where
 		lobbyNicks = Prelude.map nick $ Prelude.filter logonPassed $ elems clients
