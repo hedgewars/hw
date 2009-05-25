@@ -1,6 +1,6 @@
 module Main where
 
-import Prelude hiding (catch);
+import Prelude hiding (catch)
 import Control.Monad
 import Control.Exception
 import System.IO

@@ -10,6 +10,7 @@ import System.IO
 import Control.Concurrent
 import Control.Exception
 import Control.Monad
+import qualified Data.Map as Map
 import Monad
 import Maybe
 import System.Log.Logger
@@ -39,26 +40,39 @@ onException io what = io `catch` \e -> do what                   --
 -------------------------------------------------------------------
 
 
-pipeDbConnectionLoop queries coreChan hIn hOut = do
+pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 	q <- readChan queries
-	do
-		hPutStrLn hIn $ show q
-		hFlush hIn
-	
-		response <- hGetLine hOut >>= (maybeException . maybeRead)
+	updatedCache <- case q of
+		CheckAccount clUid clNick _ -> do
+			let cacheEntry = clNick `Map.lookup` accountsCache
+			if isNothing cacheEntry then
+				do
+					hPutStrLn hIn $ show q
+					hFlush hIn
 
-		writeChan coreChan $ ClientAccountInfo response
-		`onException`
-			(unGetChan queries q)
+					(clId, accountInfo) <- hGetLine hOut >>= (maybeException . maybeRead)
+
+					writeChan coreChan $ ClientAccountInfo (clId, accountInfo)
+
+					return $ Map.insert clNick accountInfo accountsCache
+				`onException`
+					(unGetChan queries q)
+				else
+				do
+					writeChan coreChan $ ClientAccountInfo (clUid, fromJust cacheEntry)
+					return accountsCache
+	
+	return updatedCache
 	where
 		maybeException (Just a) = return a
 		maybeException Nothing = ioError (userError "Can't read")
 
 
-pipeDbConnection serverInfo = forever $ do
-	Control.Exception.handle (\e -> warningM "Database" $ show e) $ do
+pipeDbConnection accountsCache serverInfo = do
+	updatedCache <-
+		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
 			(Just hIn, Just hOut, _, _) <-
-				createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe }
+				createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe}
 
 			hSetBuffering hIn LineBuffering
 			hSetBuffering hOut LineBuffering
@@ -66,12 +80,12 @@ pipeDbConnection serverInfo = forever $ do
 			hPutStrLn hIn $ dbHost serverInfo
 			hPutStrLn hIn $ dbLogin serverInfo
 			hPutStrLn hIn $ dbPassword serverInfo
-			pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut
+			pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
 
 	threadDelay (5 * 10^6)
+	pipeDbConnection updatedCache serverInfo
 
-
-dbConnectionLoop = pipeDbConnection
+dbConnectionLoop = pipeDbConnection Map.empty
 #else
 dbConnectionLoop = fakeDbConnection
 #endif
@@ -81,4 +95,4 @@ startDBConnection serverInfo =
 		forkIO $ dbConnectionLoop serverInfo
 		else
 		--forkIO $ fakeDbConnection serverInfo
-		forkIO $ pipeDbConnection serverInfo
+		forkIO $ pipeDbConnection Map.empty serverInfo
