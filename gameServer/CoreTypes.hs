@@ -148,16 +148,17 @@ data AccountInfo =
 	HasAccount String Bool
 	| Guest
 	| Admin
+	deriving (Show, Read)
+
+data DBQuery =
+	CheckAccount Int String String
+	deriving (Show, Read)
 
 data CoreMessage =
 	Accept ClientInfo
 	| ClientMessage (Int, [String])
-	| ClientAccountInfo Int AccountInfo
+	| ClientAccountInfo (Int, AccountInfo)
 	| TimerAction
-
-data DBQuery =
-	CheckAccount ClientInfo
-
 
 type Clients = IntMap.IntMap ClientInfo
 type Rooms = IntMap.IntMap RoomInfo

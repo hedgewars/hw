@@ -46,7 +46,7 @@ mainLoop serverInfo clients rooms = do
 					debugM "Clients" "Message from dead client"
 					return (serverInfo, clients, rooms)
 
-			ClientAccountInfo clID info ->
+			ClientAccountInfo (clID, info) ->
 				if clID `IntMap.member` clients then
 					liftM firstAway $ processAction
 						(clID, serverInfo, clients, rooms)
