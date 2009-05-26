@@ -294,7 +294,7 @@ gtAmmo_Grenade: begin
                 Result^.Elasticity:= _0_55;
                 Result^.Friction:= _0_995;
                 if cMinesTime < 0 then
-                    Result^.Timer:= getrandom(3)*1000
+                    Result^.Timer:= getrandom(4)*1000
                 else
                     Result^.Timer:= cMinesTime*1;
                 end;
