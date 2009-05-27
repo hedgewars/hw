@@ -75,7 +75,7 @@ pipeDbConnection accountsCache serverInfo = do
 		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ 
 			bracket
 				(createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe})
-				(\(_, _, _, processHandle) -> getProcessExitCode processHandle >> return (accountsCache))
+				(\(_, _, _, processHandle) -> return accountsCache)
 				(\(Just hIn, Just hOut, _, _) -> do
 				hSetBuffering hIn LineBuffering
 				hSetBuffering hOut LineBuffering
