@@ -95,10 +95,12 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         end
     else if shoppa then      // TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
         if cnt <> AMMO_INFINITE then
+            begin
             if a = amGirder then
                 Ammoz[a].Probability:= 0
             else
                 Ammoz[a].Probability:= 100;
+            end;
     ammos[a]:= cnt
     end;
 
