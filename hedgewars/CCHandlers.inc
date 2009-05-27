@@ -338,7 +338,6 @@ begin
 SendIPC('b' + s);
 
 text:= copy(s, 2, Length(s)-1);
-text:= UserNick + ': ' + text;
 
 AddChatString(text)
 end;
