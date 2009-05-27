@@ -24,7 +24,7 @@ handleCmd_inRoom clID clients rooms ["PART"] =
 	if isMaster client then
 		[RemoveRoom]
 	else
-		[RoomRemoveThisClient]
+		[RoomRemoveThisClient "part"]
 	where
 		client = clients IntMap.! clID
 

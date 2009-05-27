@@ -45,7 +45,7 @@ handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword] =
 	if haveSameRoom then
 		[Warning "Room exists"]
 	else
-		[RoomRemoveThisClient, -- leave lobby
+		[RoomRemoveThisClient "", -- leave lobby
 		AddRoom newRoom roomPassword,
 		AnswerThisClient ["NOT_READY", clientNick]
 		]
@@ -66,7 +66,7 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
 	else if roomPassword /= password jRoom then
 		[Warning "Wrong password"]
 	else
-		[RoomRemoveThisClient, -- leave lobby
+		[RoomRemoveThisClient "", -- leave lobby
 		RoomAddThisClient rID] -- join room
 		++ answerNicks
 		++ answerReady

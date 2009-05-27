@@ -48,13 +48,15 @@ handleCmd_loggedin clID clients rooms ["INFO", asknick] =
 			nick client,
 			"[" ++ host client ++ "]",
 			protoNumber2ver $ clientProto client,
-			roomInfo]]
+			"[" ++ roomInfo ++ "]"]]
 	where
 		maybeClient = find (\cl -> asknick == nick cl) clients
 		noSuchClient = isNothing maybeClient
 		client = fromJust maybeClient
 		room = rooms IntMap.! roomID client
-		roomInfo = if roomID client /= 0 then "room " ++ (name room) else "lobby"
+		roomInfo = if roomID client /= 0 then roomMasterSign ++ "room " ++ (name room) else adminSign ++ "lobby"
+		roomMasterSign = if isMaster client then "@" else ""
+		adminSign = if isAdministrator client then "@" else ""
 
 
 handleCmd_loggedin clID clients rooms cmd =

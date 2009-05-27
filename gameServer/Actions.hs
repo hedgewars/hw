@@ -22,7 +22,7 @@ data Action =
 	| AnswerLobby [String]
 	| SendServerMessage
 	| RoomAddThisClient Int -- roomID
-	| RoomRemoveThisClient
+	| RoomRemoveThisClient String
 	| RemoveTeam String
 	| RemoveRoom
 	| UnreadyRoomClients
@@ -188,13 +188,13 @@ processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) = do
 				AnswerThisRoom ["JOINED", nick client]
 
 
-processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient) = do
+processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 	(_, _, newClients, newRooms) <-
 			if roomID client /= 0 then
 				foldM
 					processAction
 						(clID, serverInfo, clients, rooms)
-						[AnswerOthersInRoom ["LEFT", nick client, "part"],
+						[AnswerOthersInRoom ["LEFT", nick client, msg],
 						RemoveClientTeams clID]
 				else
 					return (clID, serverInfo, clients, rooms)
@@ -339,7 +339,7 @@ processAction (clID, serverInfo, clients, rooms) (BanClient banNick) = do
 
 processAction (clID, serverInfo, clients, rooms) (KickRoomClient kickID) = do
 	writeChan (sendChan $ clients ! kickID) ["KICKED"]
-	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ RoomRemoveThisClient)
+	liftM2 replaceID (return clID) (processAction (kickID, serverInfo, clients, rooms) $ RoomRemoveThisClient "kicked")
 
 
 processAction (clID, serverInfo, clients, rooms) (RemoveClientTeams teamsClID) = do

@@ -14,6 +14,7 @@ import qualified Data.Map as Map
 import Monad
 import Maybe
 import System.Log.Logger
+import Data.Time
 ------------------------
 import CoreTypes
 import Utils
@@ -45,7 +46,8 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 	updatedCache <- case q of
 		CheckAccount clUid clNick _ -> do
 			let cacheEntry = clNick `Map.lookup` accountsCache
-			if isNothing cacheEntry then
+			currentTime <- getCurrentTime
+			if (isNothing cacheEntry) || (currentTime `diffUTCTime` (fst . fromJust) cacheEntry > 2 * 24 * 60 * 60) then
 				do
 					hPutStrLn hIn $ show q
 					hFlush hIn
@@ -54,12 +56,12 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 
 					writeChan coreChan $ ClientAccountInfo (clId, accountInfo)
 
-					return $ Map.insert clNick accountInfo accountsCache
+					return $ Map.insert clNick (currentTime, accountInfo) accountsCache
 				`onException`
 					(unGetChan queries q)
 				else
 				do
-					writeChan coreChan $ ClientAccountInfo (clUid, fromJust cacheEntry)
+					writeChan coreChan $ ClientAccountInfo (clUid, snd $ fromJust cacheEntry)
 					return accountsCache
 	
 	return updatedCache
@@ -70,26 +72,28 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 
 pipeDbConnection accountsCache serverInfo = do
 	updatedCache <-
-		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
-			(Just hIn, Just hOut, _, _) <-
-				createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe}
-
-			hSetBuffering hIn LineBuffering
-			hSetBuffering hOut LineBuffering
-
-			hPutStrLn hIn $ dbHost serverInfo
-			hPutStrLn hIn $ dbLogin serverInfo
-			hPutStrLn hIn $ dbPassword serverInfo
-			pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
+		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ 
+			bracket
+				(createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe})
+				(\(_, _, _, processHandle) -> getProcessExitCode processHandle >> return (accountsCache))
+				(\(Just hIn, Just hOut, _, _) -> do
+				hSetBuffering hIn LineBuffering
+				hSetBuffering hOut LineBuffering
+	
+				hPutStrLn hIn $ dbHost serverInfo
+				hPutStrLn hIn $ dbLogin serverInfo
+				hPutStrLn hIn $ dbPassword serverInfo
+				pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
+				)
 
 	threadDelay (5 * 10^6)
 	pipeDbConnection updatedCache serverInfo
 
-dbConnectionLoop =
+dbConnectionLoop serverInfo =
 		if (not . null $ dbHost serverInfo) then
-			pipeDbConnection Map.empty
+			pipeDbConnection Map.empty serverInfo
 		else
-			fakeDbConnection
+			fakeDbConnection serverInfo
 #else
 dbConnectionLoop = fakeDbConnection
 #endif

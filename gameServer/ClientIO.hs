@@ -43,4 +43,5 @@ clientSendLoop handle coreChan chan clientID = do
 
 	where
 		sendQuit e = writeChan coreChan $ ClientMessage (clientID, ["QUIT", show e])
-		isQuit answer = head answer == "BYE"
+		isQuit ("BYE":xs) = True
+		isQuit _ = False
