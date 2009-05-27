@@ -85,14 +85,14 @@ pipeDbConnection accountsCache serverInfo = do
 	threadDelay (5 * 10^6)
 	pipeDbConnection updatedCache serverInfo
 
-dbConnectionLoop = pipeDbConnection Map.empty
+dbConnectionLoop =
+		if (not . null $ dbHost serverInfo) then
+			pipeDbConnection Map.empty
+		else
+			fakeDbConnection
 #else
 dbConnectionLoop = fakeDbConnection
 #endif
 
 startDBConnection serverInfo =
-	if (not . null $ dbHost serverInfo) then
-		forkIO $ dbConnectionLoop serverInfo
-		else
-		--forkIO $ fakeDbConnection serverInfo
-		forkIO $ pipeDbConnection Map.empty serverInfo
+	forkIO $ dbConnectionLoop serverInfo
