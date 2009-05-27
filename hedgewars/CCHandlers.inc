@@ -332,6 +332,17 @@ else
 AddChatString(s)
 end;
 
+procedure chTeamSay(var s: shortstring);
+var text: shortstring;
+begin
+SendIPC('b' + s);
+
+text:= copy(s, 2, Length(s)-1);
+text:= UserNick + ': ' + text;
+
+AddChatString(text)
+end;
+
 procedure chTimer(var s: shortstring);
 begin
 if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or (CurrentTeam = nil) then exit;

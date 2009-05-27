@@ -93,6 +93,7 @@ var CurrentTeam: PTeam = nil;
 	TeamsCount: Longword = 0;
 	ClansArray: array[0..Pred(cMaxTeams)] of PClan;
 	ClansCount: Longword = 0;
+	LocalClan: Longword = 0;  // first non-bot, non-extdriven clan
 	CurMinAngle, CurMaxAngle: Longword;
 
 function  AddTeam(TeamColor: Longword): PTeam;
@@ -307,6 +308,8 @@ begin
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
+      if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
+          LocalClan:= Clan^.ClanIndex + 1;
       th:= 0;
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then

@@ -252,6 +252,7 @@ while (headcmd <> nil)
 	and tmpflag
 	and ((GameTicks = headcmd^.Time)
 		or (headcmd^.cmd = 's')
+		or (headcmd^.cmd = 'b')
 		or (headcmd^.cmd = 'F')) do
 	begin
 	case headcmd^.cmd of
@@ -295,6 +296,12 @@ while (headcmd <> nil)
 		't': ParseCommand('taunt ' + headcmd^.str[2], true);
 		'g': ParseCommand('newgrave', true);
 		'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+		'b': if LocalClan = byte(headcmd^.str[2]) then
+               begin
+               s:= copy(headcmd^.str, 3, Pred(headcmd^.len));
+               AddChatString(s);
+               WriteLnToConsole(s)
+               end;
 		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
 		#128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
 		else

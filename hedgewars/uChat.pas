@@ -131,6 +131,7 @@ end;
 
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
+
 begin
 // "Make hedgehog say something"
 if (s[1] = '"') and (s[Length(s)] = '"') then 
@@ -185,6 +186,12 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     exit
     end;
 
+if copy(s, 1, 4) = '/ts ' then
+    begin
+    AddFileLog('attempting teamsay: '+s);
+    ParseCommand('/teamsay ' + char(LocalClan) + copy(s, 5, Length(s)-4), true);
+    exit
+    end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 	begin
 	if CurrentTeam^.ExtDriven then exit;
