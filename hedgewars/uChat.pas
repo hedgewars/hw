@@ -186,10 +186,9 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     exit
     end;
 
-if copy(s, 1, 4) = '/ts ' then
+if copy(s, 1, 6) = '/team ' then
     begin
-    AddFileLog('attempting teamsay: '+s);
-    ParseCommand('/teamsay ' + char(LocalClan) + UserNick + ': '+copy(s, 5, Length(s)-4), true);
+    ParseCommand('/team ' + char(LocalClan) + UserNick + ': '+copy(s, 7, Length(s)-6), true);
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then

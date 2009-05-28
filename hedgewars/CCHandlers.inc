@@ -46,6 +46,17 @@ if GameState = gsConfirm then
 	SendIPC('Q');
 	GameState:= gsExit
 	end
+else
+    begin
+    GameState:= gsChat;
+    KeyPressChat(27);
+    KeyPressChat(47);
+    KeyPressChat(116);
+    KeyPressChat(101);
+    KeyPressChat(97);
+    KeyPressChat(109);
+    KeyPressChat(32)
+    end
 end;
 
 procedure chCheckProto(var s: shortstring);
