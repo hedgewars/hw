@@ -188,7 +188,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
 
 if copy(s, 1, 6) = '/team ' then
     begin
-    ParseCommand('/team ' + char(LocalClan) + UserNick + ': '+copy(s, 7, Length(s)-6), true);
+    ParseCommand('/team ' + char(LocalClan) + UserNick + '(team): '+copy(s, 7, Length(s)-6), true);
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
