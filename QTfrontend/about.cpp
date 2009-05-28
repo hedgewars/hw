@@ -63,6 +63,7 @@ About::About(QWidget * parent) :
 			"Many frontend improvements: Igor Ulyanov &lt;<a href=\"mailto:disinbox@gmail.com\">disinbox@gmail.com</a>&gt;<br>"
 			"Many engine and frontend improvements: Derek Pomery &lt;<a href=\"mailto:nemo@m8y.org\">nemo@m8y.org</a>&gt;<br>"
 			"Drill rocket, Ballgun, RC Plane weapons: Martin Boze &lt;<a href=\"mailto:afffect@gmail.com\">afffect@gmail.com</a>&gt;<br>"
+			"Mine number and time game settings: David A. Cuadrado &lt;<a href=\"mailto:krawek@gmail.com\">krawek@gmail.com</a>&gt;<br>"
 			"Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
 			"Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
 			"Mac OS X port: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;"
