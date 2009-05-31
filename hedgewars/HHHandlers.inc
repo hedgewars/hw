@@ -627,9 +627,13 @@ if (Gear^.State and gstMoving) <> 0 then
 		((Gear^.State and gstHHHJump) = 0) then
 		if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
 			begin
-			Gear^.State:= Gear^.State or gstHHHJump or gstMoving;
 			Gear^.dY:= -_0_25;
-			if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
+			if not cArtillery then
+				begin
+				Gear^.State:= Gear^.State or gstHHHJump;
+				Gear^.dX:= -SignAs(_0_02, Gear^.dX)
+				end;
+			
 			PlaySound(sndJump2, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 			end;
 	
