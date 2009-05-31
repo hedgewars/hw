@@ -46,7 +46,7 @@ type PGear = ^TGear;
 			Friction  : hwFloat;
 			Message, MsgParam : Longword;
 			Hedgehog: pointer;
-			Health, Damage: LongInt;
+			Health, Damage, Karma: LongInt;
 			CollisionIndex: LongInt;
 			Tag: LongInt;
 			Tex: PTexture;
@@ -449,6 +449,7 @@ while Gear <> nil do
 	begin
 	if Gear^.Kind = gtHedgehog then
 		begin
+		if (not isInMultiShoot) then inc(Gear^.Damage, Gear^.Karma);
 		if (Gear^.Damage <> 0) and
 		(not Gear^.Invulnerable) then
 			begin
@@ -461,6 +462,7 @@ while Gear <> nil do
 				dec(Gear^.Health, dmg);
 
             if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
+               (Gear^.Damage <> Gear^.Karma) and
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
@@ -471,7 +473,8 @@ while Gear <> nil do
 			RecountTeamHealth(PHedgehog(Gear^.Hedgehog)^.Team);
 
 			end;
-		Gear^.Damage:= 0;
+		if (not isInMultiShoot) then Gear^.Karma:= 0;
+		Gear^.Damage:= 0
 		end;
 	Gear:= Gear^.NextGear
 	end;
@@ -692,19 +695,10 @@ begin
            ((GameFlags and gfInvulnerable) = 0) and
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
-           if CurrentHedgehog^.Gear^.Health < int(tmpDmg) then
-           begin
-               // Add damage to trigger normal resolution
-               CurrentHedgehog^.Gear^.Health := 0;
-               inc(CurrentHedgehog^.Gear^.Damage);
-           end
-           else
-               dec(CurrentHedgehog^.Gear^.Health, tmpDmg);
+           inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
            AddGear(hwRound(CurrentHedgehog^.Gear^.X), 
                    hwRound(CurrentHedgehog^.Gear^.Y), 
                    gtHealthTag, tmpDmg, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
-           RenderHealth(CurrentHedgehog^);
-           RecountTeamHealth(CurrentHedgehog^.Team);
            end;
         end;
     end;
