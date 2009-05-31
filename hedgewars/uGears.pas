@@ -738,7 +738,7 @@ var i, t: LongInt;
     VertexBuffer: array [0..1] of TVertex2f;
 begin
 m:= 1;
-if (Gear^.State and gstHHHJump) <> 0 then m:= -1;
+if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
 	begin
 	DrawSprite(sprHHDeath, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 26 + WorldDy, Gear^.Pos);

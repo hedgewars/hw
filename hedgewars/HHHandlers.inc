@@ -470,7 +470,7 @@ if isFalling then
       begin
       CheckHHDamage(Gear);
 
-      if ((Gear^.State and gstHHHJump) <> 0) and
+      if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) and
          (Gear^.dX.QWordValue < _0_02.QWordValue) then Gear^.dX.isNegative:= not Gear^.dX.isNegative; // landing after high jump
 
       Gear^.State:= Gear^.State and not (gstHHJumping or gstHHHJump);
@@ -627,13 +627,9 @@ if (Gear^.State and gstMoving) <> 0 then
 		((Gear^.State and gstHHHJump) = 0) then
 		if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
 			begin
+			Gear^.State:= Gear^.State or gstHHHJump;
 			Gear^.dY:= -_0_25;
-			if not cArtillery then
-				begin
-				Gear^.State:= Gear^.State or gstHHHJump;
-				Gear^.dX:= -SignAs(_0_02, Gear^.dX)
-				end;
-			
+			if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
 			PlaySound(sndJump2, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 			end;
 	
