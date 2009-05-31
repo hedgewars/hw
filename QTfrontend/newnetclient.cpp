@@ -452,9 +452,15 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "ASKPASSWORD") {
-		QString password = QInputDialog::getText(0, tr("Password"), tr("Enter your password:"), QLineEdit::Password);
+        int passLength = config->value("net/passwordlength", 0).toInt();
+        QString hash = config->value("net/passwordhash", "").toString();       
+		QString password = QInputDialog::getText(0, tr("Password"), tr("Enter your password:"), QLineEdit::Password, passLength==0?NULL:QString(passLength,'\0'));
 
-		QString hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+        if (!passLength || password!=QString(passLength, '\0')) {
+            hash = QCryptographicHash::hash(password.toLatin1(), QCryptographicHash::Md5).toHex();
+            config->setValue("net/passwordhash", hash);
+            config->setValue("net/passwordlength", password.size());
+        }
 
 		RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
 		return;
