@@ -102,7 +102,8 @@ type
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
-	TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpNetSay, capgrpVolume);
+	TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
+			capgrpMessage);
 
 	TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
 			siClanHealth);

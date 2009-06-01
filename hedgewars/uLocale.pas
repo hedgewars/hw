@@ -33,10 +33,10 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
 			
 	TEventId = (eidDied, eidDrowned, eidRoundStart);
 
+const MAX_EVENT_STRINGS = 100;
+
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
-	trevt: array[TEventId] of array[1..100] of string;
-	trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: string);
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
@@ -44,16 +44,20 @@ function Format(fmt: shortstring; var arg: shortstring): shortstring;
 function GetEventString(e: TEventId): string;
 
 implementation
-uses uMisc;
+uses uMisc, uRandom;
+
+var	trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of string;
+	trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: string);
 var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
+    e: TEventId;
 begin
 
 // clear event locales
-for a:= 0 to ord(High(TEventId)) do trevt_n[TEventId(a)]:= 0;
+for e:= Low(TEventId) to High(TEventId) do trevt_n[e]:= 0;
 
 {$I-}
 Assign(f, FileName);
@@ -76,8 +80,9 @@ while not eof(f) do
 		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
 		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
 		2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-			inc(trevt_n[TEventId(b)]);
+			TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings', true);
 			trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
+			inc(trevt_n[TEventId(b)]);
 			end;
 		end;
 	end;
@@ -90,7 +95,7 @@ begin
 	if trevt_n[e] = 0 then // no messages for this event type?
 		GetEventString:= '*missing translation*'
 	else
-		GetEventString:= trevt[e][Random(trevt_n[e]) + 1]; // Pick a random message and return it
+		GetEventString:= trevt[e][GetRandom(trevt_n[e])]; // Pick a random message and return it
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;

@@ -685,7 +685,7 @@ if (Gear^.Health = 0) then
 		AllInactive:= false;
 
 		// Death message
-		AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpGameState);
+		AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpMessage);
 		end;
 	exit
 	end;

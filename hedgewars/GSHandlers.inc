@@ -41,7 +41,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
         CheckGearDrowning:= true;
         Gear^.State:= gstDrowning;
         Gear^.doStep:= @doStepDrowningGear;
-		if Gear^.Kind = gtHedgehog then AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpGameState);
+		if Gear^.Kind = gtHedgehog then AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpMessage);
         end;
     PlaySound(sndSplash, false, nil)
     end

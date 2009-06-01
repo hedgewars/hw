@@ -446,11 +446,16 @@ end;
 
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 begin
-if Group in [capgrpGameState, capgrpNetSay] then WriteLnToConsole(s);
+//if Group in [capgrpGameState] then WriteLnToConsole(s);
 if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
 
 Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
-Captions[Group].EndTime:= RealTicks + 1500
+
+case Group of
+	capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
+	else
+	Captions[Group].EndTime:= RealTicks + 1570
+	end;
 end;
 
 procedure MoveCamera;
