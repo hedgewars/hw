@@ -495,6 +495,7 @@ if (TurnTimeLeft > 0) then
     dec(TurnTimeLeft)
 else
     begin
+    PHedgehog(Gear^.Hedgehog)^.AttacksNum:= Gear^.Ammo^.NumPerTurn+1;
 	DeleteGear(Gear);
 	AfterAttack;
     TurnTimeLeft:= 0

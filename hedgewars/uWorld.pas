@@ -74,7 +74,7 @@ prevPoint.X:= cScreenWidth div 2;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
 //WorldDy:=  - (LAND_HEIGHT div 2) + cScreenHeight div 2;
-WorldDy:=  -playHeight + cScreenHeight div 2;
+WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMxShift:= 210
 end;
 
