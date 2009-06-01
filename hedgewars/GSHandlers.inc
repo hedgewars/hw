@@ -1710,6 +1710,8 @@ var CakePoints: array[0..Pred(cakeh)] of record x, y: hwFloat; end;
 
 procedure doStepCakeExpl(Gear: PGear);
 begin
+AllInactive:= false;
+
 inc(Gear^.Tag);
 if Gear^.Tag < 2250 then exit;
 
@@ -1764,6 +1766,8 @@ var xx, yy, xxn, yyn: LongInt;
 	end;
 	
 begin
+AllInactive:= false;
+
 inc(Gear^.Tag);
 if Gear^.Tag < 7 then exit;
 

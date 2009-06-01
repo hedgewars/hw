@@ -7,13 +7,17 @@ To compile and install you need:
  - SDL_image >= 1.2
  - SDL_ttf >= 2.0
  - CMake >= 2.6.0
+For server:
+ - Glasgow Haskell Compiler 6.8.3
+ - dataenc package
+ - hslogger package
 
 1. Configure:
 $ cmake .
 or
 $ cmake -DCMAKE_CXX_FLAGS="flags" -DCMAKE_INSTALL_PREFIX="install prefix" -DDATA_INSTALL_DIR="data dir" .
 
-add -DWITH_SERVER=1 to compile net server (requires Glasgow Haskell Compiler 6.8.3)
+add -DWITH_SERVER=1 to compile net server
 
 2. Compile:
 $ make
