@@ -682,7 +682,10 @@ if (Gear^.Health = 0) then
 		Gear^.doStep:= @doStepHedgehogDead;
 		FollowGear:= Gear;
 		PrvInactive:= false;
-		AllInactive:= false
+		AllInactive:= false;
+
+		// Death message
+		AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpGameState);
 		end;
 	exit
 	end;

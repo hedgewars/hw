@@ -46,8 +46,25 @@
 01:03=Lautstärke %1%
 01:04=Pausiert
 01:05=Wirklich beenden (Z/Esc)?
-01:06=Sudden death!
+01:06=Sudden Death!
 
-
-
+; Event messages
+; Hog (%1) died
+02:00=%1 hat den Löffel abgegeben!
+02:00=%1 steht wohl nicht mehr auf!
+02:00=%1 hat's nicht geschafft!
+02:00=%1 stellt sich tot!
+02:00=%1 scheint schon bessere Tage gesehen zu haben!
+; Hog (%1) drowned
+02:01=%1 geht auf Tauchstation!
+02:01=%1 sucht nach der Titanic!
+02:01=%1 hat ein nasses Grab gefunden!
+02:01=%1 schwimmt wie ein Stein!
+02:01=%1 hats ich nass gemacht!
+02:01=%1 versagt beim Seepferdchen!
+; Match starts
+02:02=Auf in die Schlacht!
+02:02=Geladen und entsichert!
+02:02=Jetzt geht's rund!
+02:02=Los geht's!
 

@@ -30,12 +30,18 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
 
 	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
 			sidConfirm, sidSuddenDeath);
+			
+	TEventId = (eidDied, eidDrowned, eidRoundStart);
 
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
+	trevt: array[TEventId] of array[1..100] of string;
+	trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: string);
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
+
+function GetEventString(e: TEventId): string;
 
 implementation
 uses uMisc;
@@ -45,6 +51,10 @@ var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
 begin
+
+// clear event locales
+for a:= 0 to ord(High(TEventId)) do trevt_n[TEventId(a)]:= 0;
+
 {$I-}
 Assign(f, FileName);
 reset(f);
@@ -65,10 +75,22 @@ while not eof(f) do
 	case a of
 		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
 		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
+		2: if (b >=0) and (b <= ord(High(TEventId))) then begin
+			inc(trevt_n[TEventId(b)]);
+			trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
+			end;
 		end;
 	end;
 Close(f)
 {$I+}
+end;
+
+function GetEventString(e: TEventId): string;
+begin
+	if trevt_n[e] = 0 then // no messages for this event type?
+		GetEventString:= '*missing translation*'
+	else
+		GetEventString:= trevt[e][Random(trevt_n[e]) + 1]; // Pick a random message and return it
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
