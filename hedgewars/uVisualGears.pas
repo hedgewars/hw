@@ -140,22 +140,14 @@ if Gear^.FrameTicks <= Steps then
 end;
 
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
-var i: Integer;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravity * (Steps * Steps);
 Gear^.dY:= Gear^.dY + cGravity * Steps;
 
-if (Gear^.FrameTicks <= Steps) or (hwRound(Gear^.Y) > cWaterLine) then
-	begin
-	if hwRound(Gear^.Y) > cWaterLine then for i:= 0 to 3 do
-		begin
-		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
-		PlaySound(sndVaporize, false, nil);
-		end;
-	DeleteVisualGear(Gear);
-	end
+if Gear^.FrameTicks <= Steps then
+       DeleteVisualGear(Gear)
 else
 	dec(Gear^.FrameTicks, Steps)
 end;
