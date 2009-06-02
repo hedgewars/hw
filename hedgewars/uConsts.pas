@@ -73,10 +73,12 @@ type
 			gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, gtGirder, // 27
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
-			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSniperRifleShot);
+			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
+			gtSniperRifleShot);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
-			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble, vgtSteam);
+			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
+			vgtSteam);
 
 	TGearsType = set of TGearType;
 
@@ -483,9 +485,9 @@ const
 			Width:  32; Height: 32; saveSurf: false),// sprHurrah
 			(FileName:'ILoveLemonade';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 128; Height: 32; saveSurf: false),// sprLemonade
-			(FileName:'Shrug';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:      'Shrug'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 32;  Height: 32; saveSurf: false),// sprShrug
-			(FileName:'Juggle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:     'Juggle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 32;  Height: 32; saveSurf: false),// sprJuggle
 			(FileName:   'ExplPart'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; saveSurf: false),// sprExplPart
@@ -525,31 +527,31 @@ const
 			Width:  48; Height: 48; saveSurf: false), // sprUtility
 			(FileName:'Invulnerable';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false), // sprInvulnerable
-			(FileName:'Vampiric';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:   'Vampiric'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; saveSurf: false), // sprVampiric
-			(FileName:    'amGirder'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:   'amGirder'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 512; Height:512; saveSurf: false), // sprGirder
 			(FileName:'SpeechCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  12; Height: 9; saveSurf: true), // sprSpeechCorner
-			(FileName:'SpeechEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  25; Height: 9; saveSurf: true), // sprSpeechEdge
-			(FileName:'SpeechTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  12; Height: 9; saveSurf:  true), // sprSpeechCorner
+			(FileName: 'SpeechEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  25; Height: 9; saveSurf:  true), // sprSpeechEdge
+			(FileName: 'SpeechTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  25; Height: 26; saveSurf: true), // sprSpeechTail
 			(FileName:'ThoughtCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  49; Height: 37; saveSurf: true), // sprThoughtCorner
-			(FileName:'ThoughtEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:'ThoughtEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  23; Height: 16; saveSurf: true), // sprThoughtEdge
-			(FileName:'ThoughtTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:'ThoughtTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  45; Height: 65; saveSurf: true), // sprThoughtTail
-			(FileName:'ShoutCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:'ShoutCorner'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  34; Height: 23; saveSurf: true), // sprShoutCorner
-			(FileName:'ShoutEdge';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:  'ShoutEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  30; Height: 20; saveSurf: true), // sprShoutEdge
-			(FileName:'ShoutTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:  'ShoutTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  30; Height: 37; saveSurf: true), // sprShoutTail
 			(FileName:'amSniperRifle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  128; Height: 32; saveSurf: false), // sprSniperRifle
-			(FileName:     'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 128; Height: 32; saveSurf: false), // sprSniperRifle
+			(FileName:    'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; saveSurf: false) // sprBubbles
 			);
 
@@ -565,7 +567,7 @@ const
 			(Sprite:   sprHurrah; FramesCount: 14; Interval: 125; cmd: '/hurrah'),
 			(Sprite: sprLemonade; FramesCount: 24; Interval: 125; cmd: '/ilovelotsoflemonade'),
 			(Sprite:    sprShrug; FramesCount: 24; Interval: 125; cmd: '/shrug'),
-			(Sprite:   sprJuggle; FramesCount: 49; Interval: 38; cmd: '/juggle')
+			(Sprite:   sprJuggle; FramesCount: 49; Interval:  38; cmd: '/juggle')
 			);
 
 	Soundz: array[TSound] of record
@@ -600,7 +602,7 @@ const
 			(FileName:               'Nutter.ogg'; Path: ptVoices),// sndNutter
 			(FileName:       'Reinforcements.ogg'; Path: ptVoices),// sndReinforce
 			(FileName:              'Traitor.ogg'; Path: ptVoices),// sndTraitor
-			(FileName:       'Youllregretthat.ogg';Path: ptVoices),// sndRegret
+			(FileName:      'Youllregretthat.ogg'; Path: ptVoices),// sndRegret
 			(FileName:            'Enemydown.ogg'; Path: ptVoices),// sndEnemyDown
 			(FileName:               'Coward.ogg'; Path: ptVoices),// sndCoward
 			(FileName:                'Hurry.ogg'; Path: ptVoices),// sndHurry

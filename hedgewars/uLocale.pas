@@ -54,12 +54,10 @@ var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
 	first: array[TEventId] of boolean;
+	e: TEventId;
 begin
 
-// clear event locales
-//for a:= 0 to ord(High(TEventId)) do trevt_n[TEventId(a)]:= 0;
-
-for a:= ord(Low(TEventId)) to ord(High(TEventId)) do first[TEventId(a)]:= true;
+for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
 {$I-}
 Assign(f, FileName);
