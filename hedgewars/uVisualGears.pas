@@ -59,7 +59,7 @@ var VisualGearsList: PVisualGear = nil;
 	vobVelocity, vobFallSpeed: LongInt;
 
 implementation
-uses uWorld, uMisc, uStore, uTeams;
+uses uWorld, uMisc, uStore, uTeams, uSound;
 const cExplFrameTicks = 110;
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
@@ -140,14 +140,22 @@ if Gear^.FrameTicks <= Steps then
 end;
 
 procedure doStepFire(Gear: PVisualGear; Steps: Longword);
+var i: Integer;
 begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
 Gear^.Y:= Gear^.Y + Gear^.dY * Steps;// + cGravity * (Steps * Steps);
 Gear^.dY:= Gear^.dY + cGravity * Steps;
 
-if Gear^.FrameTicks <= Steps then
-	DeleteVisualGear(Gear)
+if (Gear^.FrameTicks <= Steps) or (hwRound(Gear^.Y) > cWaterLine) then
+	begin
+	if hwRound(Gear^.Y) > cWaterLine then for i:= 0 to 3 do
+		begin
+		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
+		PlaySound(sndVaporize, false, nil);
+		end;
+	DeleteVisualGear(Gear);
+	end
 else
 	dec(Gear^.FrameTicks, Steps)
 end;
@@ -160,6 +168,32 @@ if Gear^.FrameTicks <= Steps then
 	DeleteVisualGear(Gear)
 else
 	dec(Gear^.FrameTicks, Steps)
+end;
+
+procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
+begin
+	Gear^.X:= Gear^.X + (cWindSpeed * 100 + Gear^.dX) * Steps;
+	Gear^.Y:= Gear^.Y - cDrownSpeed * Steps;
+	
+	if (Gear^.FrameTicks <= Steps) or (hwRound(Gear^.Y) < cWaterLine) then
+		DeleteVisualGear(Gear)
+	else
+		dec(Gear^.FrameTicks, Steps)
+end;
+
+procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
+begin
+	Gear^.X:= Gear^.X + (cWindSpeed * 100 + Gear^.dX) * Steps;
+	Gear^.Y:= Gear^.Y - cDrownSpeed * Steps;
+
+	if Gear^.FrameTicks <= Steps then
+		if Gear^.Frame = 0 then DeleteVisualGear(Gear)
+		else
+			begin
+			if Random(2) = 0 then dec(Gear^.Frame);
+			Gear^.FrameTicks:= cExplFrameTicks
+			end
+		else dec(Gear^.FrameTicks, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -291,7 +325,9 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepFire,
 			@doStepSmallDamage,
 			@doStepTeamHealthSorter,
-			@doStepSpeechBubble
+			@doStepSpeechBubble,
+			@doStepBubble,
+			@doStepSteam
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -366,6 +402,26 @@ with Result^ do
 	vgtSmallDamageTag: begin
 				Result^.FrameTicks:= 1100
 				end;
+	vgtBubble: begin
+				t:= random(1024);
+				sp:= _0_001 * (random(85) + 95);
+				dx.isNegative:= random(2) = 0;
+				dx.QWordValue:= random(100000000);
+				dy:= sp;
+				dy.isNegative:= false;
+				FrameTicks:= 250 + random(1751);
+				Frame:= random(5)
+				end;
+	vgtSteam: begin
+				t:= random(1024);
+				sp:= _0_001 * (random(95) + 70);
+				dx.isNegative:= random(2) = 0;
+				dx.QWordValue:= random(100000000);
+				dy:= sp;
+				dy.isNegative:= false;
+				Frame:= 7 - random(3);
+				FrameTicks:= cExplFrameTicks * 2;
+				end;
 		end;
 
 if VisualGearsList <> nil then
@@ -427,6 +483,8 @@ case Layer of
                 vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
                 vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
                 vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+				vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+				vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);

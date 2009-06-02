@@ -31,10 +31,10 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
 	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
 			sidConfirm, sidSuddenDeath);
 			
-	TEventId = (eidDied, eidDrowned, eidRoundStart);
+	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
+			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf);
 
 const MAX_EVENT_STRINGS = 100;
-
 var trammo: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
 
@@ -53,11 +53,13 @@ procedure LoadLocale(FileName: string);
 var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
-    e: TEventId;
+	first: array[TEventId] of boolean;
 begin
 
 // clear event locales
-for e:= Low(TEventId) to High(TEventId) do trevt_n[e]:= 0;
+//for a:= 0 to ord(High(TEventId)) do trevt_n[TEventId(a)]:= 0;
+
+for a:= ord(Low(TEventId)) to ord(High(TEventId)) do first[TEventId(a)]:= true;
 
 {$I-}
 Assign(f, FileName);
@@ -80,7 +82,12 @@ while not eof(f) do
 		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
 		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
 		2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-			TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings', true);
+			TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);
+			if first[TEventId(b)] then
+				begin
+				trevt_n[TEventId(b)]:= 0;
+				first[TEventId(b)]:= false;
+				end;
 			trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
 			inc(trevt_n[TEventId(b)]);
 			end;

@@ -1719,7 +1719,8 @@ case t of
      0..6: begin
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         FollowGear^.Health:= 25;
-        FollowGear^.Pos:= posCaseHealth
+        FollowGear^.Pos:= posCaseHealth;
+		AddCaption(GetEventString(eidNewHealthPack), $FFFFFF, capgrpGameState);
         end;
      7..13: begin
         t:= 0;
@@ -1740,7 +1741,8 @@ case t of
                   dec(t, Ammoz[i].Probability)
               end;
             FollowGear^.Pos:= posCaseAmmo;
-            FollowGear^.State:= Longword(i)
+            FollowGear^.State:= Longword(i);
+			AddCaption(GetEventString(eidNewAmmoPack), $FFFFFF, capgrpGameState);
             end
         end;
      14..19: begin
@@ -1762,7 +1764,8 @@ case t of
                   dec(t, Ammoz[i].Probability)
               end;
             FollowGear^.Pos:= posCaseUtility;
-            FollowGear^.State:= Longword(i)
+            FollowGear^.State:= Longword(i);
+			AddCaption(GetEventString(eidNewUtilityPack), $FFFFFF, capgrpGameState);
             end
         end;
      end;

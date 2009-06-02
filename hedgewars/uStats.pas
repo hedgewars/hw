@@ -43,7 +43,7 @@ var
 	FinishedTurnsTotal: LongInt = -1;
 
 implementation
-uses uTeams, uSound, uMisc;
+uses uTeams, uSound, uMisc, uLocale, uWorld;
 var DamageGiven : Longword = 0;
 	DamageClan  : Longword = 0;
 	DamageTotal : Longword = 0;
@@ -106,8 +106,10 @@ if FinishedTurnsTotal <> 0 then
 		PlaySound(sndFirstBlood, false, CurrentTeam^.voicepack)
 
 	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
-		PlaySound(sndStupid, false, PreviousTeam^.voicepack)
-
+		begin
+		PlaySound(sndStupid, false, PreviousTeam^.voicepack);
+		if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), $FFFFFF, capgrpGameState);
+		end
 	else if DamageClan <> 0 then
 		if DamageTotal > DamageClan then
 			if random(2) = 0 then
@@ -119,7 +121,6 @@ if FinishedTurnsTotal <> 0 then
 				PlaySound(sndSameTeam, false, vpHurtSameClan)
 			else
 				PlaySound(sndTraitor, false, vpHurtSameClan)
-
 	else if DamageGiven <> 0 then
 		if Kills > 0 then
 			PlaySound(sndEnemyDown, false, CurrentTeam^.voicepack)
@@ -131,7 +132,10 @@ if FinishedTurnsTotal <> 0 then
 	else if (AmmoUsedCount > 0) and not isTurnSkipped then
 		// nothing ?
 	else if isTurnSkipped then
-		PlaySound(sndBoring, false, PreviousTeam^.voicepack)
+		begin
+		PlaySound(sndBoring, false, PreviousTeam^.voicepack);
+		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), $FFFFFF, capgrpGameState);
+		end
 	else
 		PlaySound(sndCoward, false, PreviousTeam^.voicepack);
 	end;

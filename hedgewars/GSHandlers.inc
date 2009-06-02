@@ -92,7 +92,9 @@ procedure doStepDrowningGear(Gear: PGear);
 begin
 AllInactive:= false;
 Gear^.Y:= Gear^.Y + cDrownSpeed;
-if hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear)
+if hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear);
+// Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
+if Random(1000) < 10 then AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1207,6 +1209,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFlame(Gear: PGear);
+var i: Integer;
 begin
 AllInactive:= false;
 
@@ -1221,8 +1224,13 @@ if not TestCollisionYwithGear(Gear, 1) then
 	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 640;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	
-	if not (hwRound(Gear^.Y) < cWaterLine) then
+	if (hwRound(Gear^.Y) > cWaterLine) then
 		begin
+		for i:= 0 to 3 do
+			begin
+			AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
+			PlaySound(sndVaporize, false, nil);
+			end;
 		DeleteGear(Gear);
 		exit
 		end

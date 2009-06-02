@@ -1,4 +1,4 @@
-; German locale
+﻿; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -55,16 +55,39 @@
 02:00=%1 hat's nicht geschafft!
 02:00=%1 stellt sich tot!
 02:00=%1 scheint schon bessere Tage gesehen zu haben!
+02:00=%1 sieht tote Igel!
+02:00=%1 hat ins Gras gebissen!
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
 02:01=%1 sucht nach der Titanic!
 02:01=%1 hat ein nasses Grab gefunden!
 02:01=%1 schwimmt wie ein Stein!
-02:01=%1 hats ich nass gemacht!
+02:01=%1 hat sich nass gemacht!
 02:01=%1 versagt beim Seepferdchen!
-; Match starts
+02:01=%1 ist ein Opfer der Gezeiten!
+; Round starts
 02:02=Auf in die Schlacht!
 02:02=Geladen und entsichert!
 02:02=Jetzt geht's rund!
 02:02=Los geht's!
-
+02:02=Alles angetreten!
+; Round ends (win; unused atm)
+02:03=...
+; Round ends (draw; unused atm)
+02:04=...
+; New health crate
+02:05=Alles Gute kommt von oben!
+02:05=Der Arzt hat's verschrieben ...
+; New ammo crate
+02:06=Nachschub!
+02:06=Zeit zum Nachladen!
+; New utility crate
+02:07=Nützliches?
+02:07=Tooltime!
+; Hog (%1) skips his turn
+02:08=%1 ist so ein Langeweiler ...
+; Hog (%1) hurts himself only
+02:09=%1 sollte besser Zielen üben!
+02:09=%1 scheint sich zu hassen.
+02:09=%1 steht auf der falschen Seite!
+02:09=%1 lebt gefährlich!

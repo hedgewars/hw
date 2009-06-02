@@ -63,7 +63,7 @@ type
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail, 
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail, 
             sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle);
+            sprSniperRifle, sprBubbles);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -76,7 +76,7 @@ type
 			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane, gtSniperRifleShot);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
-			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble);
+			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble, vgtSteam);
 
 	TGearsType = set of TGearType;
 
@@ -90,7 +90,7 @@ type
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
-			sndRideOfTheValkyries, sndDenied, sndPlaced);
+			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, sndVaporize);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -548,7 +548,9 @@ const
 			(FileName:'ShoutTail';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  30; Height: 37; saveSurf: true), // sprShoutTail
 			(FileName:'amSniperRifle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  128; Height: 32; saveSurf: false) // sprSniperRifle
+			Width:  128; Height: 32; saveSurf: false), // sprSniperRifle
+			(FileName:     'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  16; Height: 16; saveSurf: false) // sprBubbles
 			);
 
 	Wavez: array [TWave] of record
@@ -620,7 +622,9 @@ const
 			(FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhipCrack
 			(FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds),// sndRideOfTheValkyries
 			(FileName:               'denied.ogg'; Path: ptSounds),// sndDenied
-			(FileName:               'placed.ogg'; Path: ptSounds) // sndPlaced
+			(FileName:               'placed.ogg'; Path: ptSounds),// sndPlaced
+			(FileName:          'baseballbat.ogg'; Path: ptSounds),// sndBaseballBat
+			(FileName:                'steam.ogg'; Path: ptSounds) // sndVaporize
 			);
 
 	Ammoz: array [TAmmoType] of record

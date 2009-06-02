@@ -160,7 +160,10 @@ with Gear^,
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
                                  PlaySound(sndWhipCrack, false, nil)
                                  end;
-                  amBaseballBat: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0);
+                  amBaseballBat: begin
+								 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0);
+								 PlaySound(sndBaseballBat, false, nil);
+								 end;
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);
                    amMineStrike: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 1, _0, _0, 0);
@@ -725,5 +728,5 @@ else
 	with PHedgehog(Gear^.Hedgehog)^ do
 		if Team^.hasGone then TeamGoneEffect(Team^);
 	doStepHedgehogDriven(Gear)
-	end
+	end;
 end;

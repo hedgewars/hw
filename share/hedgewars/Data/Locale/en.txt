@@ -57,6 +57,22 @@
 02:01=%1 plays submarine!
 02:01=%1 mimics the Titanic!
 02:01=%1 swims like a stone!
-; Match starts
+; Round starts
 02:02=Let's fight!
 02:02=Armed and ready!
+; Round ends (win; unused atm)
+02:03=...
+; Round ends (draw; unused atm)
+02:04=...
+; New health crate
+02:05=Incomming aid!
+; New ammo crate
+02:06=More weapons!
+; New utility crate
+02:07=Tooltime!
+; Hog (%1) skips his turn
+02:08=%1 is sooo boring...
+; Hog (%1) hurts himself only
+02:09=%1 should practice aiming!
+02:09=%1 seems to hate himself.
+02:09=%1 is standing on the wrong side!
