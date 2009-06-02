@@ -65,7 +65,7 @@ var cnt: Longword;
 begin
 TryDo(byte(s[0]) = byte(ord(High(TAmmoType)) + 1), 'Invalid ammo scheme (incompatible frontend)', true);
 
-// TEMPORARY hardcoded check on shoppa pending creation of probability editor
+// FIXME - TEMPORARY hardcoded check on shoppa pending creation of probability editor
 substr:= Copy(s,1,15);
 if (substr = '000000990000009') or 
    (substr = '000000990000000') then
@@ -93,7 +93,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         cnt:= 0;
         Ammoz[a].Probability:= 0 
         end
-    else if shoppa then      // TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
+    else if shoppa then      // FIXME - TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
         if cnt <> AMMO_INFINITE then
             begin
             if a = amGirder then

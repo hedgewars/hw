@@ -1709,7 +1709,7 @@ if (cCaseFactor = 0) or
 
 FollowGear:= nil;
 
-if shoppa then  // TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
+if shoppa then  // FIXME -  TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
     t:= 7
 else
     t:= getrandom(20);

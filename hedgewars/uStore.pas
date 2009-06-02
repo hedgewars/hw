@@ -273,7 +273,8 @@ LoadGraves;
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
 	with SpritesData[ii] do
-        if (not cReducedQuality) or 
+        // FIXME - add a sprite attribute
+        if (not cReducedQuality) or
            ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 			begin
 			if AltPath = ptNone then
