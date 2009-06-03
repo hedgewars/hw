@@ -52,7 +52,7 @@
 ; Hog (%1) died
 02:00=%1 has kicked the bucket!
 02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+02:00=%1 never saw that coming!
 ; Hog (%1) drowned
 02:01=%1 plays submarine!
 02:01=%1 mimics the Titanic!
@@ -65,7 +65,7 @@
 ; Round ends (draw; unused atm)
 02:04=...
 ; New health crate
-02:05=Incomming aid!
+02:05=Incoming aid!
 ; New ammo crate
 02:06=More weapons!
 ; New utility crate
