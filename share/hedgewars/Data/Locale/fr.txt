@@ -5,14 +5,14 @@
 00:02=Bazooka
 00:03=O.V.N.I.
 00:04=Fusil
-00:05=Marteau Piqueur
+00:05=Marteau-piqueur
 00:06=Passer
 00:07=Corde ninja
 00:08=Mine
-00:09=Desert Eagle
+00:09=Révolver
 00:10=Dynamite
 00:11=Batte de baseball
-00:12=Punch en feu
+00:12=Poing de feu
 00:13=sec
 00:14=Parachute
 00:15=Attaque aérienne
@@ -20,43 +20,65 @@
 00:17=Chalumeau
 00:18=Poutre
 00:19=Téléportation
-00:20=Changer de Hérisson
+00:20=Changer de hérisson
 00:21=Mortier
 00:22=Fouet
 00:23=Kamikaze
-00:24=Gateau
-00:25=Seduction
+00:24=Gâteau
+00:25=Séduction
 00:26=Bombe pastèque
 00:27=Grenade infernale
 00:28=Roquette perforante
-00:29=Ballgun
+00:29=Canon à billes
 00:30=Napalm
 00:31=Avion télécommandé
-00:32=La Faible Gravité
-00:33=Plus de Dégâts
+00:32=Faible gravité
+00:33=Plus de dégâts
 00:34=Invulnérable
-00:35=Extra Time
-00:36=Laser Sight
-00:37=Vampirism
-00:38=Sniper Rifle
+00:35=Temps supplémentaire
+00:36=Visée laser
+00:37=Vampirisme
+00:38=Fusil de sniper
 
-01:00=C'est parti!
-01:01=Round ex aequo
-01:02=%1 gagne!
+01:00=C'est parti !
+01:01=Round ex-aequo
+01:02=%1 gagne !
 01:03=Volume %1%
 01:04=Pause
-01:05=Quitter (Y/Esc)?
-01:06=Match à mort!
+01:05=Quitter (Y/Esc) ?
+01:06=Mort subite !
 
 ; Event messages
 ; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+02:00=%1 a vu la lumière !
+02:00=%1 ne l'a pas vu venir !
+02:00=%1 a mordu la poussière !
+02:00=%1 a rejoint ses ancêtres !
+02:00=%1 a connu des jours meilleurs...
 ; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
+02:01=%1 joue au sous-marin !
+02:01=%1 imite le Titanic !
+02:01=%1 nage comme une pierre !
+02:01=%1 va chercher des algues...
+02:01=%1 va saluer les hyppocampes...
+02:01=%1 prend son dernier bain !
 ; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+02:02=Aux armes !
+02:02=Prêts à combattre !
+02:02=C'est parti !
+; Round ends (win; unused atm)
+02:03=...
+; Round ends (draw; unused atm)
+02:04=...
+; New health crate
+02:05=Pharmacie !
+; New ammo crate
+02:06=Des armes !
+; New utility crate
+02:07=Boite à outils !
+; Hog (%1) skips his turn
+02:08=%1 est une lopette...
+; Hog (%1) hurts himself only
+02:09=%1 devrait apprendre à viser !
+02:09=%1 s'en veut.
+02:09=%1 joue contre son camp !
