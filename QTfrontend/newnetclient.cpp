@@ -161,7 +161,8 @@ void HWNewNet::RawSendNet(const QByteArray & buf)
 void HWNewNet::ClientRead()
 {
 	while (NetSocket.canReadLine()) {
-		QString s = QString::fromUtf8(NetSocket.readLine().trimmed());
+		QString s = QString::fromUtf8(NetSocket.readLine());
+		if (s.endsWith('\n')) s.chop(1);
 
 		if (s.size() == 0) {
 			ParseCmd(cmdbuf);
