@@ -44,6 +44,8 @@ handleCmd_lobby clID clients _ ["CHAT", msg] =
 handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword] =
 	if haveSameRoom then
 		[Warning "Room exists"]
+	else if illegalName newRoom then
+		[Warning "Illegal room name"]
 	else
 		[RoomRemoveThisClient "", -- leave lobby
 		AddRoom newRoom roomPassword,

@@ -57,6 +57,9 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
 		else
 			t : replaceTeam team teams
 
+illegalName :: String -> Bool
+illegalName str = all isSpace str
+
 protoNumber2ver :: Word16 -> String
 protoNumber2ver 17 = "0.9.7-dev"
 protoNumber2ver 19 = "0.9.7"
