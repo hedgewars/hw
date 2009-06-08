@@ -50,13 +50,35 @@
 
 ; Event messages
 ; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+02:00=%1 si è ricongiunto ai suoi antenati!
+02:00=%1 ha visto giorni migliori...
+02:00=%1 ha visto la luce!
+02:00=%1 non ha capito cosa stesse succedendo!
 ; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
+02:01=%1 gioca a fare il sottomarino!
+02:01=%1 imita il Titanic!
+02:01=%1 nuota a stile pietra!
+02:01=%1 va a raccogliere alghe...
+02:01=%1 porta i suoi saluti alla sirenetta...
 ; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+02:02=Combattiamo!
+02:02=Armato e pronto!
+02:02=Alle armi!
+; Round ends (win; unused atm)
+02:03=...
+; Round ends (draw; unused atm)
+02:04=...
+; New health crate
+02:05=Pronto soccorso in arrivo!
+; New ammo crate
+02:06=Altre armi!
+; New utility crate
+02:07=Attrezzi per tutti!
+; Hog (%1) skips his turn
+02:08=%1 è così noioso...
+; Hog (%1) hurts himself only
+02:09=%1 dovrebbe migliorare la sua mira!
+02:09=%1 sembra odiarsi...
+02:09=%1 ha manie suicide...
+
+
