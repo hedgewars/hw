@@ -153,6 +153,7 @@ const
 	msgLoading           = 'Loading ';
 	msgOK                = 'ok';
 	msgFailed            = 'failed';
+	msgFailedSize        = 'failed due to size';
 	msgGettingConfig     = 'Getting game config...';
 
 const

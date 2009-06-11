@@ -66,6 +66,7 @@ uses uMisc, uConsole, uLand, uLocale;
 
 var
     HHTexture: PTexture;
+	MaxTextureSize: Integer;
 
 procedure StoreInit;
 begin
@@ -886,18 +887,25 @@ if tmpsurf = nil then
    end;
 
 if tmpsurf = nil then
-   if critical then OutError(msgFailed, true)
-      else begin
-      WriteLnToConsole(msgFailed);
-      exit(nil)
-      end;
+	begin
+	OutError(msgFailed, critical);
+	exit(nil)
+	end;
+
+if (tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize) then
+	begin
+	SDL_FreeSurface(tmpsurf);
+	OutError(msgFailedSize, critical);
+	exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask))
+	end;
 
 if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 //if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
 //            else Result:= SDL_DisplayFormat(tmpsurf);
-{$IFDEF DEBUGFILE}WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');{$ENDIF}
+WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
 WriteLnToConsole(msgOK);
-LoadImage:= tmpsurf//Result
+
+LoadImage:= tmpsurf //Result
 end;
 
 procedure SetupOpenGL;
@@ -907,7 +915,12 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
 glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
 glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-glMatrixMode(GL_MODELVIEW)
+glMatrixMode(GL_MODELVIEW);
+
+glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+{$IFDEF DEBUGFILE}
+AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
+{$ENDIF}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
