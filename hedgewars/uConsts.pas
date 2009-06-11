@@ -21,7 +21,7 @@ interface
 
 uses 
 	SDLh,
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

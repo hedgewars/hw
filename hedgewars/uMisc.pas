@@ -19,7 +19,7 @@
 unit uMisc;
 interface
 uses uConsts, SDLh,
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,
@@ -507,7 +507,7 @@ head[7]:= cScreenHeight;
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
-{$IFDEF IPHONE}
+{$IFDEF IPHONEOS}
 //since opengl es operates on a single surface GL_FRONT is implied, but how to test that?
 {$ELSE}
 glReadBuffer(GL_FRONT);

@@ -23,7 +23,7 @@ WriteLn('Only Freepascal supported');
 program hwengine;
 uses
 	SDLh in 'SDLh.pas',
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

@@ -19,7 +19,7 @@
 unit uStore;
 interface
 uses sysutils, uConsts, uTeams, SDLh,
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

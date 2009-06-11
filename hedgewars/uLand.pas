@@ -19,7 +19,7 @@
 unit uLand;
 interface
 uses SDLh, uLandTemplates, uFloat, 
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,
@@ -34,7 +34,7 @@ var  Land: TLandArray;
      LandPixels: TLandArray;
      LandDirty: TDirtyTag;
      hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
-     hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands don't need? It might be better to tweak the girder code based upon space above.  dunno.
+     hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands do not need? It might be better to tweak the girder code based upon space above.  dunno.
      playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.  Maybe not a good idea, but, for now?  Could also be used to prevent placing a girder outside play area on maps with hasBorder = true
 
 // in your coding style, it appears to be "isXXXX" for a verb, and "FooBar" for everything else - should be PlayHeight ?
@@ -77,7 +77,11 @@ AddFileLog('CheckLandDigest: ' + s);
 if digest = '' then
    digest:= s
 else
+{$IFDEF IPHONEOS}
+   //TryDo(s = digest, 'Different maps generated, sorry', false)
+{$ELSE}
    TryDo(s = digest, 'Different maps generated, sorry', true)
+{$ENDIF}
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);

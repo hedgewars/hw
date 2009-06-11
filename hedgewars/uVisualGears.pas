@@ -19,7 +19,7 @@
 unit uVisualGears;
 interface
 uses SDLh, uConsts,
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

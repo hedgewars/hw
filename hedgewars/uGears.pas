@@ -79,7 +79,7 @@ var CurAmmoGear: PGear = nil;
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
 	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, 
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

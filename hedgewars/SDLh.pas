@@ -37,7 +37,7 @@ interface
 
 {$IFDEF DARWIN}
 	  {$PASCALMAINNAME SDL_main}
-{$IFNDEF IPHONE}
+{$IFNDEF IPHONEOS}
 	  {$linkframework Cocoa}
 	  {$linkframework SDL}
 	  {$linkframework SDL_mixer}
@@ -57,7 +57,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDLLibName = 'libSDL.a';
+	  SDLLibName = 'SDL';
 	{$ELSE}
           SDLLibName = 'libSDL.so';
         {$ENDIF}
@@ -264,7 +264,11 @@ function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; ex
 function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDLLibName;
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
+{$IFDEF SDL13}
+function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
+{$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
+{$ENDIF}
 function  SDL_GetMouseState(x, y: PInteger): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
@@ -290,7 +294,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_TTFLibName = 'libSDL_ttf.a';
+	  SDL_TTFLibName = 'SDL_ttf';
 	{$ELSE}
           SDL_TTFLibName = 'libSDL_ttf.so';
         {$ENDIF}
@@ -324,7 +328,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_MixerLibName = 'libSDL_mixer.a';
+	  SDL_MixerLibName = 'SDL_mixer';
 	{$ELSE}
           SDL_MixerLibName = 'libSDL_mixer.so';
 	{$ENDIF}
@@ -389,7 +393,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_ImageLibName = 'libSDL_image.a';
+	  SDL_ImageLibName = 'SDL_image';
 	{$ELSE}
            SDL_ImageLibName = 'libSDL_image.so';
 	{$ENDIF}
@@ -404,7 +408,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
       {$IFDEF UNIX}
 	{$IFDEF DARWIN}
-	  SDL_NetLibName = 'libSDL_net.a';
+	  SDL_NetLibName = 'SDL_net';
 	{$ELSE}
           SDL_NetLibName = 'libSDL_net.so';
 	{$ENDIF}

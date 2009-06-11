@@ -26,7 +26,7 @@ procedure FreeLand;
 
 implementation
 uses uMisc, uLand, uStore, 
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

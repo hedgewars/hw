@@ -28,7 +28,7 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, 
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

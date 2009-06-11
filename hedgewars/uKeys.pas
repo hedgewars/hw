@@ -62,11 +62,21 @@ Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
 
+{$IFDEF SDL13}
+pkbd:= SDL_GetKeyboardState(nil);
+{$ELSE}
 pkbd:= SDL_GetKeyState(nil);
+{$ENDIF}
 i:= SDL_GetMouseState(nil, nil);
 pkbd^[1]:= (i and 1);
 pkbd^[2]:= ((i shr 1) and 1);
+{$IFDEF DARWIN}
+//    normal right click     ||      ctrl (left/right) + left click	  
+pkbd^[3]:= ((i shr 2) and 1) or ((i and 1) and (pkbd^[306] or pkbd^[305]));
+{$ELSE}
 pkbd^[3]:= ((i shr 2) and 1);
+{$ENDIF}
+
 for i:= 1 to cKeyMaxIndex do
 if CurrentBinds[i][0] <> #0 then
 	begin
@@ -88,7 +98,11 @@ procedure ResetKbd;
 var i, t: LongInt;
     pkbd: PByteArray;
 begin
+{$IFDEF SDL13}
+pkbd:= PByteArray(SDL_GetKeyboardState(@i));
+{$ELSE}
 pkbd:= PByteArray(SDL_GetKeyState(@i));
+{$ENDIF}
 TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
 for t:= 0 to Pred(i) do
     tkbd[i]:= pkbd^[i]

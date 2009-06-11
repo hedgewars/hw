@@ -19,7 +19,7 @@
 unit uTeams;
 interface
 uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, 
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,

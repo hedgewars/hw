@@ -40,7 +40,7 @@ var FollowGear: PGear = nil;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound,
-{$IFDEF IPHONE}
+{$IFDEF GLES11}
 	gles11,
 {$ELSE}
 	GL,
@@ -417,7 +417,7 @@ if cShowFPS then
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
       if fpsTexture <> nil then FreeTexture(fpsTexture);
-{$IFNDEF IPHONE}
+{$IFNDEF IPHONEOS}
       tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
 {$ENDIF}
       fpsTexture:= Surface2Tex(tmpSurface);
