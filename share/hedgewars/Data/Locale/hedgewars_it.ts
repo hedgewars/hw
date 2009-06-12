@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1" language="it_IT">
+<!DOCTYPE TS>
+<TS version="2.0" language="it_IT">
 <defaultcodec></defaultcodec>
 <context>
     <name>AmmoSchemeModel</name>
@@ -59,7 +60,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="665"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="508"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
@@ -74,12 +76,12 @@
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="666"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="667"/>
         <source>Unable to start the server</source>
         <translation>Impossibile avviare il server</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="823"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="824"/>
         <source>Cannot save record to file %1</source>
         <translation>Impossibile salvare il record al file %1</translation>
     </message>
@@ -180,52 +182,55 @@
         <translation type="obsolete">Errore</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="192"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="193"/>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Host non trovato. Controllare impostazioni di nome host e porta.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="195"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="196"/>
         <source>Connection refused</source>
         <translation>Connessione rifiutata</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="402"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="384"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="406"/>
         <source>*** %1 joined</source>
         <translation>*** %1 è entrato</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="439"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="419"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="443"/>
         <source>*** %1 left</source>
         <translation>*** %1 è uscito</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="441"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="421"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="445"/>
         <source>*** %1 left (%2)</source>
         <translation>*** %1 è uscito(%2)</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="531"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="541"/>
         <source>Quit reason: </source>
         <translation>Quit reason:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="350"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="354"/>
         <source>Room destroyed</source>
         <translation>Room distrutta</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="357"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="361"/>
         <source>You got kicked</source>
         <translation>Sei stato espulso</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="458"/>
         <source>Password</source>
         <translation>Password</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/newnetclient.cpp" line="452"/>
+        <location filename="../../../../QTfrontend/newnetclient.cpp" line="458"/>
         <source>Enter your password:</source>
         <translation>Inserisci la tua password:</translation>
     </message>
@@ -233,7 +238,7 @@
 <context>
     <name>KB</name>
     <message>
-        <location filename="../../../../QTfrontend/KB.h" line="32"/>
+        <location filename="../../../../QTfrontend/KB.h" line="28"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation>SDL_ttf ha ritornato un errore durante l&apos;esecuzione del testo, probabilmente relativo ad un bug in freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
     </message>
@@ -249,6 +254,11 @@
         <location filename="../../../../QTfrontend/pages.cpp" line="1143"/>
         <source>Set message</source>
         <translation>Inserisci messaggio</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1144"/>
+        <source>Clear Accounts Cache</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -283,7 +293,7 @@
 <context>
     <name>PageGameStats</name>
     <message>
-        <location filename="../../../../QTfrontend/statsPage.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/statsPage.cpp" line="100"/>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; punti.&lt;/p&gt;</translation>
     </message>
@@ -393,12 +403,12 @@
 <context>
     <name>PageNetType</name>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1171"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1173"/>
         <source>LAN game</source>
         <translation>Gioco in LAN</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="1172"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="1174"/>
         <source>Official server</source>
         <translation>Server ufficiale</translation>
     </message>
@@ -437,16 +447,21 @@
 <context>
     <name>PagePlayDemo</name>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="102"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="124"/>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="136"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="149"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
         <translation>Seleziona un record dalla lista</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="104"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="138"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -490,6 +505,7 @@
         <translation>Aggiorna</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="826"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="837"/>
         <source>Error</source>
         <translation>Errore</translation>
@@ -500,6 +516,7 @@
         <translation>Inserisci il nome della room</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/pages.cpp" line="828"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="839"/>
         <source>OK</source>
         <translation>OK</translation>
@@ -900,27 +917,27 @@
         <translation type="obsolete">&lt;h3&gt;Versione 0.9.2&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="46"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="45"/>
         <source>This program is distributed under the GNU General Public License</source>
         <translation>Questo programma è distribuito sotto licenza GNUGeneral Public License</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="61"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="60"/>
         <source>Developers:</source>
         <translation>Sviluppatori:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="71"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="72"/>
         <source>Art:</source>
         <translation>Grafica:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="97"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="98"/>
         <source>Translations:</source>
         <translation>Traduzioni:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="117"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="118"/>
         <source>Special thanks:</source>
         <translation>Ringraziamenti speciali:</translation>
     </message>
@@ -990,7 +1007,7 @@
         <translation type="obsolete">&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; hedgehog uccisi.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/about.cpp" line="87"/>
+        <location filename="../../../../QTfrontend/about.cpp" line="88"/>
         <source>Sounds:</source>
         <translation>Suoni:</translation>
     </message>
@@ -1050,6 +1067,7 @@
 <context>
     <name>QLineEdit</name>
     <message>
+        <location filename="../../../../QTfrontend/gameuiconfig.cpp" line="53"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="363"/>
         <source>unnamed</source>
         <translation>senza nome</translation>
@@ -1070,12 +1088,12 @@
 <context>
     <name>QMessageBox</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="711"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="712"/>
         <source>Network</source>
         <translation>Rete</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="712"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="713"/>
         <source>Connection to server is lost</source>
         <translation>Connessione con il server persa</translation>
     </message>
@@ -1085,7 +1103,7 @@
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="310"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="308"/>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
@@ -1094,6 +1112,8 @@ Please check your installation</source>
 Controllare la propria installazione</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="127"/>
+        <location filename="../../../../QTfrontend/selectWeapon.cpp" line="165"/>
         <location filename="../../../../QTfrontend/selectWeapon.cpp" line="170"/>
         <source>Weapons</source>
         <translation>Armi</translation>
@@ -1144,6 +1164,7 @@ Controllare la propria installazione</translation>
         <translation>Gioca!</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/input_ip.cpp" line="48"/>
         <location filename="../../../../QTfrontend/pages.cpp" line="589"/>
         <source>default</source>
         <translation>default</translation>
@@ -1196,6 +1217,7 @@ Controllare la propria installazione</translation>
         <translation type="obsolete">Allenamento</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/playrecordpage.cpp" line="44"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="75"/>
         <source>Play demo</source>
         <translation>Visualizza demo</translation>
@@ -1243,7 +1265,7 @@ Controllare la propria installazione</translation>
         <translation>Numero di giocatori</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/pages.cpp" line="799"/>
+        <location filename="../../../../QTfrontend/pages.cpp" line="798"/>
         <source>Round in progress</source>
         <translation>Round in corso</translation>
     </message>
@@ -1274,17 +1296,18 @@ Controllare la propria installazione</translation>
 <context>
     <name>TCPBase</name>
     <message>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="43"/>
         <location filename="../../../../QTfrontend/tcpBase.cpp" line="99"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="45"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="44"/>
         <source>Unable to start the server: %1.</source>
         <translation>Impossibile avviare il server: %1.</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/tcpBase.cpp" line="101"/>
+        <location filename="../../../../QTfrontend/tcpBase.cpp" line="100"/>
         <source>Unable to run engine: %1 (</source>
         <translation>Impossibile eseguire il motore: %1 (</translation>
     </message>
@@ -1370,6 +1393,7 @@ Controllare la propria installazione</translation>
         <translation>giù</translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/binds.cpp" line="27"/>
         <location filename="../../../../QTfrontend/binds.cpp" line="28"/>
         <source>jump</source>
         <translation>salta</translation>
@@ -1666,4 +1690,3 @@ hedgehogs</translation>
     </message>
 </context>
 </TS>
-
