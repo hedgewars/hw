@@ -660,6 +660,11 @@ void HWNewNet::toggleRestrictTeamAdds()
 	RawSendNet(QString("TOGGLE_RESTRICT_TEAMS"));
 }
 
+void HWNewNet::clearAccountsCache()
+{
+	RawSendNet(QString("CLEAR_ACCOUNTS_CACHE"));
+}
+
 void HWNewNet::partRoom()
 {
 	netClientState = 2;

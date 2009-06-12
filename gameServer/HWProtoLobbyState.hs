@@ -111,6 +111,8 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
 	handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
 
+	---------------------------
+	-- Administrator's stuff --
 
 handleCmd_lobby clID clients rooms ["KICK", kickNick] =
 	if not $ isAdministrator client then
@@ -144,6 +146,15 @@ handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", newMessage] =
 		[]
 	else
 		[ModifyServerInfo (\si -> si{serverMessage = newMessage})]
+	where
+		client = clients IntMap.! clID
+
+
+handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
+	if not $ isAdministrator client then
+		[]
+	else
+		[ClearAccountsCache]
 	where
 		client = clients IntMap.! clID
 

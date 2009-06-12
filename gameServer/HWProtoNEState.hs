@@ -55,8 +55,8 @@ handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
 		adminNotice = if isAdministrator client then [AnswerThisClient ["ADMIN_ACCESS"]] else []
 
 
-handleCmd_NotEntered _ _ _ ["DUMP"] =
-	[Dump]
+--handleCmd_NotEntered _ _ _ ["DUMP"] =
+--	[Dump]
 
 
 handleCmd_NotEntered clID _ _ _ = [ProtocolError "Incorrect command (state: not entered)"]

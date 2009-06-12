@@ -456,6 +456,7 @@ public:
 	PageAdmin(QWidget* parent = 0);
 
 	QPushButton * BtnBack;
+	QPushButton * pbClearAccountsCache;
 
 private:
 	QLineEdit * leServerMessage;

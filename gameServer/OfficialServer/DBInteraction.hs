@@ -27,6 +27,7 @@ fakeDbConnection serverInfo = do
 		CheckAccount clUid _ clHost -> do
 			writeChan (coreChan serverInfo) $ ClientAccountInfo (clUid,
 				if clHost `elem` localAddressList then Admin else Guest)
+		ClearCache -> return ()
 
 	fakeDbConnection serverInfo
 
@@ -63,6 +64,8 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 				do
 					writeChan coreChan $ ClientAccountInfo (clUid, snd $ fromJust cacheEntry)
 					return accountsCache
+
+		ClearCache -> return Map.empty
 	
 	return updatedCache
 	where

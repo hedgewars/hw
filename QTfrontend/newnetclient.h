@@ -145,6 +145,7 @@ class HWNewNet : public QObject
   void toggleRestrictJoins();
   void toggleRestrictTeamAdds();
   void partRoom();
+  void clearAccountsCache();
 
  private slots:
   void ClientRead();

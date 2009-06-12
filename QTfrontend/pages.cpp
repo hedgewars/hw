@@ -1141,7 +1141,9 @@ PageAdmin::PageAdmin(QWidget* parent) :
 	pageLayout->addWidget(leServerMessage, 0, 1);
 
 	pbSetSM = addButton(tr("Set message"), pageLayout, 0, 2);
-	BtnBack = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
+	pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 1, 0);
+
+	BtnBack = addButton(":/res/Exit.png", pageLayout, 2, 0, true);
 
 	connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
 }

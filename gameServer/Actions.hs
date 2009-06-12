@@ -39,6 +39,7 @@ data Action =
 	| ModifyServerInfo (ServerInfo -> ServerInfo)
 	| AddRoom String String
 	| CheckRegistered
+	| ClearAccountsCache
 	| ProcessAccountInfo AccountInfo
 	| Dump
 	| AddClient ClientInfo
@@ -290,6 +291,13 @@ processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
 
 processAction (clID, serverInfo, clients, rooms) (CheckRegistered) = do
 	writeChan (dbQueries serverInfo) $ CheckAccount (clientUID client) (nick client) (host client)
+	return (clID, serverInfo, clients, rooms)
+	where
+		client = clients ! clID
+
+
+processAction (clID, serverInfo, clients, rooms) (ClearAccountsCache) = do
+	writeChan (dbQueries serverInfo) $ ClearCache
 	return (clID, serverInfo, clients, rooms)
 	where
 		client = clients ! clID
