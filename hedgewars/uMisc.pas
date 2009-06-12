@@ -536,10 +536,6 @@ end;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 begin
-{$IFDEF IPHONEOS}
-//we are not able (and it is useless) to write a file on device, so we will print on the computer console instead
-f:=stderr;
-{$ENDIF}
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
 end;
@@ -564,13 +560,13 @@ cArtillery:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}
-f:=stderr;
+f:= stderr;
 rewrite(f);
 {$IFNDEF IPHONEOS}
 if ParamCount <> 0 then
    for i:= 0 to 7 do
-    begin 
-	  assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+    begin
+      assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
       rewrite(f);
       if IOResult = 0 then break
     end;
