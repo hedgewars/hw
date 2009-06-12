@@ -29,6 +29,7 @@ type TSHA1Context = packed record
 
 procedure SHA1Init(var Context: TSHA1Context);
 procedure SHA1Update(var Context: TSHA1Context; Buf: PByteArray; Length: LongWord);
+procedure SHA1UpdateLongwords(var Context: TSHA1Context; Buf: PLongwordArray; Length: LongWord);
 function  SHA1Final(Context: TSHA1Context): TSHA1Digest;
 
 implementation
@@ -107,6 +108,22 @@ for i:= 0 to Pred(Length) do
     begin
     Context.Buf[Context.CurrLength]:= Buf^[i];
     inc(Context.CurrLength);
+    if Context.CurrLength = 64 then
+       begin
+       SHA1Hash(Context);
+       inc(Context.Length, 512);
+       Context.CurrLength:= 0
+       end
+    end
+end;
+
+procedure SHA1UpdateLongwords(var Context: TSHA1Context; Buf: PLongwordArray; Length: LongWord);
+var i: Longword;
+begin
+for i:= 0 to Pred(Length div 4) do
+    begin
+    SDLNet_Write32(Buf^[i], @Context.Buf[Context.CurrLength]);
+    inc(Context.CurrLength, 4);
     if Context.CurrLength = 64 then
        begin
        SHA1Hash(Context);

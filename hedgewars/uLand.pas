@@ -57,7 +57,7 @@ var ctx: TSHA1Context;
     s: shortstring;
 begin
 SHA1Init(ctx);
-SHA1Update(ctx, @Land, sizeof(Land));
+SHA1UpdateLongwords(ctx, @Land, sizeof(Land) div 4);
 dig:= SHA1Final(ctx);
 s:='M{'+inttostr(dig[0])+':'
        +inttostr(dig[1])+':'
@@ -77,11 +77,7 @@ AddFileLog('CheckLandDigest: ' + s);
 if digest = '' then
    digest:= s
 else
-{$IFDEF IPHONEOS}
-   //TryDo(s = digest, 'Different maps generated, sorry', false)  FIXME - digest calc needs endian handling
-{$ELSE}
    TryDo(s = digest, 'Different maps generated, sorry', true)
-{$ENDIF}
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
