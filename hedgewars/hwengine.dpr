@@ -305,6 +305,8 @@ case ParamCount of
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
 	end;
  15: begin
+		PathPrefix:= ParamStr(1);
+		recordFileName:= ParamStr(2);
 		if ParamStr(3) = '--set-everything' then
 		begin
 			val(ParamStr(4), cScreenWidth);
@@ -368,7 +370,9 @@ LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 if recordFileName = '' then
 	SendIPCAndWaitReply('C')        // ask for game config
 else
+ begin
 	LoadRecordFromFile(recordFileName);
+ end;
 
 s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version

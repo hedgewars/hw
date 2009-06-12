@@ -536,6 +536,10 @@ end;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 begin
+{$IFDEF IPHONEOS}
+//we are not able (and it is useless) to write a file on device, so we will print on the computer console instead
+f:=stderr;
+{$ENDIF}
 writeln(f, GameTicks: 6, ': ', s);
 flush(f)
 end;
@@ -560,28 +564,26 @@ cArtillery:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}
-if ParamCount >= 0 then
- //this check prevents a crash in Mac OS X
- if ParamCount = 0 then
- begin
-	Assign(f, '/tmp/debug.txt');
-    rewrite(f);
- end else
- begin
-  for i:= 0 to 7 do
-    begin
-    Assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
-    rewrite(f);
-    if IOResult = 0 then break
+f:=stderr;
+rewrite(f);
+{$IFNDEF IPHONEOS}
+if ParamCount <> 0 then
+   for i:= 0 to 7 do
+    begin 
+	  assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+      rewrite(f);
+      if IOResult = 0 then break
     end;
- end;
+{$ENDIF}
 {$I+}
 
 finalization
 //uRandom.DumpBuffer;
-writeln(f, '-= halt at ',GameTicks,' ticks =-');
-Flush(f);
+
+writeln(f, 'halt at ',GameTicks,' ticks');
+flush(f);
 close(f)
+
 {$ENDIF}
 
 end.

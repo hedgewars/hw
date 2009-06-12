@@ -714,7 +714,7 @@ cornerWidth:= SpritesData[corner].Width;
 cornerHeight:= SpritesData[corner].Height;
 // This one screws up WrapText
 //s:= 'This is the song that never ends.  ''cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they''ll just go on singing it forever just because... This is the song that never ends...';
-// This one doesn't
+// This one does not
 //s:= 'This is the song that never ends.  cause it goes on and on my friends. Some people, started singing it not knowing what it was. And they will go on singing it forever just because... This is the song that never ends... ';
 
 numLines:= 0;

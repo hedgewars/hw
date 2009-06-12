@@ -256,7 +256,7 @@ while (headcmd <> nil)
 		or (headcmd^.cmd = 'F')) do
 	begin
 	case headcmd^.cmd of
-		'+': ; // do nothing - it's just empty packet
+		'+': ; // do nothing - it is just empty packet
 		'L': ParseCommand('+left', true);
 		'l': ParseCommand('-left', true);
 		'R': ParseCommand('+right', true);

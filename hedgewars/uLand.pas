@@ -78,7 +78,7 @@ if digest = '' then
    digest:= s
 else
 {$IFDEF IPHONEOS}
-   //TryDo(s = digest, 'Different maps generated, sorry', false)
+   //TryDo(s = digest, 'Different maps generated, sorry', false)  FIXME - digest calc needs endian handling
 {$ELSE}
    TryDo(s = digest, 'Different maps generated, sorry', true)
 {$ENDIF}
@@ -632,8 +632,8 @@ end;
 // Hi unC0Rr.
 // This is a function that Tiy assures me would not be good for gameplay.
 // It allows the setting of arbitrary portions of landscape as indestructible, or regular, or even blank.
-// He said I could add it here only when I swore it wouldn't impact gameplay.  Which, as far as I can tell, is true.
-// I'd just like to play with it with my friends if you don't mind.
+// He said I could add it here only when I swore it would not impact gameplay.  Which, as far as I can tell, is true.
+// I would just like to play with it with my friends if you do not mind.
 // Can allow for amusing maps.
 procedure LoadMask;
 var tmpsurf: PSDL_Surface;
@@ -677,7 +677,7 @@ AddProgress;
 tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
-// unC0Rr - should this be passed from the GUI? I'm not sure which layer does what
+// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
 s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
 Assign(f, s);
