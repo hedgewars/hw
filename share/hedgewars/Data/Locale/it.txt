@@ -54,31 +54,62 @@
 02:00=%1 ha visto giorni migliori...
 02:00=%1 ha visto la luce!
 02:00=%1 non ha capito cosa stesse succedendo!
+02:00=%1 non sapeva con chi aveva a che fare!
+02:00=%1 ha un appuntamento col Tristo Mietitore.
+02:00=%1 puzza di cadavere!
+02:00=%1 ha un grande futuro dietro le spalle.
+02:00=%1 è ormai mangime per vermi.
+02:00=L'orrore...l'orrore!
+02:00=%1 rende l'anima!
+02:00=%1 passa nel mondo dei più!
+02:00=Ciao %1, ti dimenticheremo presto!
 ; Hog (%1) drowned
 02:01=%1 gioca a fare il sottomarino!
 02:01=%1 imita il Titanic!
 02:01=%1 nuota a stile pietra!
 02:01=%1 va a raccogliere alghe...
 02:01=%1 porta i suoi saluti alla sirenetta...
+02:01=Nessuno ha mai insegnato a %1 come nuotare...
+02:01=%1 ha dimenticato a casa le branchie!
+02:01=%1 fa tante bollicine, ma non è champagne!
 ; Match starts
 02:02=Combattiamo!
 02:02=Armato e pronto!
 02:02=Alle armi!
+02:02=Armiamoci... e partite!
+02:02=Al mio segnale, scatenate l'inferno!
+02:02=È il momento di fare casino...C A S I...no?Mi dispiace,lo facciamo!
 ; Round ends (win; unused atm)
 02:03=...
 ; Round ends (draw; unused atm)
 02:04=...
 ; New health crate
 02:05=Pronto soccorso in arrivo!
+02:05=Chi ha bisogno di cure?
+02:05=Già fatto?!?
+02:05=Sembra talco ma non è, serve a darti l'allegria!
+02:05=In scena non ci vai se la grana non ce l'hai!
 ; New ammo crate
 02:06=Altre armi!
+02:06=È qui la festa?!
+02:06=Rifornimenti!
+02:06=Armi!Armi!Armi!
+02:06=È ora di ravvivare la serata!
 ; New utility crate
 02:07=Attrezzi per tutti!
+02:07=Nuovi accessori per la casa!
+02:07=Finalmente il mio kit di bricolage!
 ; Hog (%1) skips his turn
 02:08=%1 è così noioso...
+02:08=%1 deve riordinare le idee.
+02:08=%1, se non volevi giocare lo potevi anche dire prima!
+02:08=Che grande esempio di coraggio, %1!
+02:08=Già stanco, %1?!
 ; Hog (%1) hurts himself only
 02:09=%1 dovrebbe migliorare la sua mira!
 02:09=%1 sembra odiarsi...
 02:09=%1 ha manie suicide...
-
+02:09=%1 avrebbe bisogno di un disegnino per capire chi sono i nemici
+02:09=%1 è un po' confuso...
+02:09=%1 abbraccia la moda emo...
 
