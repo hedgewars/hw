@@ -50,13 +50,13 @@
 
 ; Event messages
 ; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+02:00=%1 kopnął w kalendarz!
+02:00=%1 ujrzał światło
+02:00=%1 nie zdążył tego zauważyć!
 ; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
+02:01=%1 robi za łódź podwodną!
+02:01=%1 udaje Titanica!
+02:01=%1 pływa jak kamień!
 ; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+02:02=Walczmy!
+02:02=Uzbrojony i gotowy!
