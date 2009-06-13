@@ -448,7 +448,7 @@ if SoundTimerTicks >= 50 then
 
 if GameState = gsConfirm then DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
 
-SetScale(1.5);
+SetScale(zoom);
 
 glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
@@ -479,6 +479,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible))
 	and cHasFocus then
 	begin
 	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+	CursorPoint.X:= CursorPoint.X - cScreenWidth div 2;
 //	CursorPoint.X:= round((CursorPoint.X - cScreenWidth / 2) * 2 / cScaleFactor);
 //	CursorPoint.Y:= round(CursorPoint.Y * 2 / cScaleFactor);
 	end;
@@ -547,11 +548,11 @@ if isCursorVisible or (FollowGear <> nil) then
       begin
       WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
       WorldDy:= WorldDy - CursorPoint.Y + prevPoint.Y;
-      CursorPoint.X:= (cScreenWidth  shr 1);
-      CursorPoint.Y:= (cScreenHeight shr 1);
+      CursorPoint.X:= 0;
+      CursorPoint.Y:= cScreenHeight div 2;
       end;
 
-if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, CursorPoint.Y);
 prevPoint:= CursorPoint;
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;

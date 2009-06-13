@@ -258,6 +258,8 @@ RegisterVariable('quit'    , vtCommand, @chQuit         , true );
 RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
 RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
 RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
+RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
+RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
 RegisterVariable('skip'    , vtCommand, @chSkip         , false);
 RegisterVariable('history' , vtCommand, @chHistory      , true );
 RegisterVariable('chat'    , vtCommand, @chChat         , true );

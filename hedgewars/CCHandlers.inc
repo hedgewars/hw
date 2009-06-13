@@ -665,6 +665,16 @@ begin
 isSpeed:= false
 end;
 
+procedure chZoomIn(var s: shortstring);
+begin
+if zoom < 4.0 then zoom:= zoom + 0.25;
+end;
+
+procedure chZoomOut(var s: shortstring);
+begin
+if zoom > 0.25 then zoom:= zoom - 0.25;
+end;
+
 procedure chChat(var s: shortstring);
 begin
 GameState:= gsChat;
