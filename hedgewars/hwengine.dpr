@@ -97,6 +97,7 @@ case GameState of
 				end;
 			FinishProgress;
 			PlayMusic;
+			SetScale(1.5);
 			GameState:= gsGame
 			end;
 	gsConfirm,

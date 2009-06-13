@@ -55,14 +55,17 @@ procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
 procedure SetupOpenGL;
+procedure SetScale(f: GLfloat);
+
 
 var PixelFormat: PSDL_PixelFormat = nil;
  SDLPrimSurface: PSDL_Surface = nil;
    PauseTexture,
    ConfirmTexture: PTexture;
+   cScaleFactor: GLfloat = 2.0;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale;
+uses uMisc, uConsole, uLand, uLocale, uWorld;
 
 var
     HHTexture: PTexture;
@@ -910,10 +913,7 @@ end;
 
 procedure SetupOpenGL;
 begin
-glLoadIdentity;
-glViewport(0, 0, cScreenWidth, cScreenHeight);
-glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
+SetScale(2.0);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 glMatrixMode(GL_MODELVIEW);
 
@@ -921,6 +921,18 @@ glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 {$IFDEF DEBUGFILE}
 AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
+end;
+
+procedure SetScale(f: GLfloat);
+begin
+cScaleFactor:= f;
+cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
+
+glLoadIdentity;
+glViewport(0, 0, cScreenWidth, cScreenHeight);
+glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+//glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
+glTranslatef(0, -cScreenHeight / 2, 0);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -945,7 +957,7 @@ r.x:= 0;
 r.w:= ProgrTex^.w;
 r.h:= ProgrTex^.w;
 r.y:= (Step mod (ProgrTex^.h div ProgrTex^.w)) * ProgrTex^.w;
-DrawFromRect((cScreenWidth - ProgrTex^.w) div 2,
+DrawFromRect( -ProgrTex^.w div 2,
              (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex);
 glDisable(GL_TEXTURE_2D);
 SDL_GL_SwapBuffers();

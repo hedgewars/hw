@@ -93,7 +93,7 @@ cnt:= 0;
 t:= 0;
 i:= lastStr;
 
-r.x:= 6;
+r.x:= 6 - cScreenWidth div 2;
 r.y:= (visibleCount - t) * 16 + 10;
 r.h:= 16;
 
@@ -102,7 +102,7 @@ if (GameState = gsChat)
 	begin
 	r.w:= InputStr.Width;
 	DrawFillRect(r);
-	DrawTexture(8, visibleCount * 16 + 10, InputStr.Tex);
+	DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
 	end;
 
 dec(r.y, 16);
@@ -118,7 +118,7 @@ while
 	begin
 	r.w:= Strs[i].Width;
 	DrawFillRect(r);
-	DrawTexture(8, (visibleCount - t) * 16 - 6, Strs[i].Tex);
+	DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
 	dec(r.y, 16);
 	
 	if i = 0 then i:= MaxStrIndex else dec(i);

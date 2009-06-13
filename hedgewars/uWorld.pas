@@ -37,6 +37,7 @@ var FollowGear: PGear = nil;
 	bShowFinger: boolean = false;
 	Frames: Longword = 0;
 	WaterColor, DeepWaterColor: TSDL_Color;
+	cWaterSprCount: LongInt;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound,
@@ -57,7 +58,7 @@ type TCaptionStr = record
                    EndTime: LongWord;
                    end;
 
-var cWaterSprCount, cWaveWidth, cWaveHeight: LongInt;
+var cWaveWidth, cWaveHeight: LongInt;
 	Captions: array[TCapGroup] of TCaptionStr;
 	AMxShift, SlotsNum: LongInt;
 	tmpSurface: PSDL_Surface;
@@ -67,7 +68,6 @@ procedure InitWorld;
 begin
 cWaveWidth:= SpritesData[sprWater].Width;
 cWaveHeight:= SpritesData[sprWater].Height;
-cWaterSprCount:= 1 + cScreenWidth div cWaveWidth;
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= cScreenWidth div 2;
@@ -113,7 +113,7 @@ with CurrentHedgehog^ do
 	begin
 	if Ammo = nil then exit;
 	SlotsNum:= 0;
-	x:= cScreenWidth - 210 + AMxShift;
+	x:= cScreenWidth div 2 - 210 + AMxShift;
 	y:= cScreenHeight - 40;
 	dec(y);
 	DrawSprite(sprAMBorders, x, y, 0);
@@ -157,7 +157,7 @@ with CurrentHedgehog^ do
 	if (Pos >= 0) then
 		if Ammo^[Slot, Pos].Count > 0 then
 		begin
-		DrawTexture(cScreenWidth - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 		
 		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
 			DrawTexture(cScreenWidth + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
@@ -181,22 +181,25 @@ procedure MoveCamera; forward;
 procedure DrawWater;
 var VertexBuffer: array [0..3] of TVertex2f;
     r: TSDL_Rect;
+    lw, lh: GLfloat;
 begin
+lw:= cScreenWidth / cScaleFactor;
+lh:= cScreenHeight * 2 / cScaleFactor;
 // Water
 r.y:= WorldDy + cWaterLine + 32;
-if r.y < cScreenHeight then
+if r.y < cScreenHeight * 2 / cScaleFactor then
 	begin
 	if r.y < 0 then r.y:= 0;
 
 	glDisable(GL_TEXTURE_2D);
-	VertexBuffer[0].X:= 0;
+	VertexBuffer[0].X:= -lw;
 	VertexBuffer[0].Y:= r.y;
-	VertexBuffer[1].X:= cScreenWidth;
+	VertexBuffer[1].X:= lw;
 	VertexBuffer[1].Y:= r.y;
-	VertexBuffer[2].X:= cScreenWidth;
-	VertexBuffer[2].Y:= cScreenHeight;
-	VertexBuffer[3].X:= 0;
-	VertexBuffer[3].Y:= cScreenHeight;
+	VertexBuffer[2].X:= lw;
+	VertexBuffer[2].Y:= lh;
+	VertexBuffer[3].X:= -lw;
+	VertexBuffer[3].Y:= lh;
 
 	glEnableClientState (GL_COLOR_ARRAY);
 	glColorPointer(3, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
@@ -222,15 +225,18 @@ var i, t: LongInt;
     s: string[15];
 
     procedure DrawRepeated(spr: TSprite; Shift: LongInt);
-    var i, w: LongInt;
+    var i, w, sw: LongInt;
     begin
+    sw:= round(cScreenWidth / cScaleFactor);
     w:= SpritesData[spr].Width;
     i:= Shift mod w;
     if i > 0 then dec(i, w);
+    dec(i, sw);
+    //addfilelog(inttostr(sw));
     repeat
       DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
       inc(i, w)
-    until i > cScreenWidth
+    until i > sw
     end;
 
 begin
@@ -253,8 +259,8 @@ if not cReducedQuality then
 
     // Waves
     {$WARNINGS OFF}
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight*2), 0);
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
+//    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight*2), 0);
+//    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
     {$WARNINGS ON}
     end;
 
@@ -291,10 +297,17 @@ DrawVisualGears(1);
 
 // Waves
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth), cWaterLine + WorldDy - cWaveHeight, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth), cWaterLine + WorldDy     , 0);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth), cWaterLine + WorldDy - cWaveHeight, 0);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
+//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth), cWaterLine + WorldDy     , 0);
+
+
+// Target
+if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
+
 {$WARNINGS ON}
+SetScale(2.0);
+
 // Turn time
 if TurnTimeLeft <> 0 then
    begin
@@ -302,20 +315,15 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, t, cScreenHeight - 48, 1);
+   DrawSprite(sprFrame, -cScreenWidth div 2 + t, cScreenHeight - 48, 1);
    while i > 0 do
          begin
          dec(t, 32);
-         DrawSprite(sprBigDigit, t, cScreenHeight - 48, i mod 10);
+         DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, cScreenHeight - 48, i mod 10);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, t - 4, cScreenHeight - 48, 0);
+   DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, cScreenHeight - 48, 0);
    end;
-
-// Target
-if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
-
-//glPopMatrix;
 
 // Captions
 i:= 8;
@@ -323,7 +331,7 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
          if Tex <> nil then
             begin
-            DrawCentered(cScreenWidth div 2, i, Tex);
+            DrawCentered(0, i, Tex);
             inc(i, Tex^.h + 2);
             if EndTime <= RealTicks then
                begin
@@ -337,30 +345,30 @@ for grp:= Low(TCapGroup) to High(TCapGroup) do
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
-      DrawTexture(cScreenWidth div 2 - NameTagTex^.w - 3, cScreenHeight + DrawHealthY, NameTagTex);
+      DrawTexture(- NameTagTex^.w - 3, cScreenHeight + DrawHealthY, NameTagTex);
 
       r.x:= 0;
       r.y:= 0;
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthTex^.h;
 
-      DrawFromRect(cScreenWidth div 2,
+      DrawFromRect(0,
                         cScreenHeight + DrawHealthY,
                         @r, HealthTex);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
-      DrawFromRect(cScreenWidth div 2 + TeamHealthBarWidth + 2,
+      DrawFromRect(TeamHealthBarWidth + 2,
                         cScreenHeight + DrawHealthY,
                         @r, HealthTex);
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32, 32, (RealTicks shr 7) mod 12);
+if isInLag then DrawSprite(sprLag, 32 - cScreenWidth div 2, 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
-DrawSprite(sprWindBar, cScreenWidth - 180, cScreenHeight - 30, 0);
+DrawSprite(sprWindBar, cScreenWidth div 2 - 180, cScreenHeight - 30, 0);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -369,7 +377,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, cScreenWidth - 103, cScreenHeight - 28, 13, 0);
+   DrawSpriteFromRect(sprWindR, r, cScreenWidth div 2 - 103, cScreenHeight - 28, 13, 0);
    end else
  if WindBarWidth < 0 then
    begin
@@ -379,7 +387,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, cScreenWidth - 106 + WindBarWidth, cScreenHeight - 28, 13, 0);
+   DrawSpriteFromRect(sprWindL, r, cScreenWidth div 2 - 106 + WindBarWidth, cScreenHeight - 28, 13, 0);
    end;
 
 // AmmoMenu
@@ -424,7 +432,7 @@ if cShowFPS then
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then
-      DrawTexture(cScreenWidth - 50, 10, fpsTexture);
+      DrawTexture(cScreenWidth div 2 - 50, 10, fpsTexture);
    end;
 
 inc(SoundTimerTicks, Lag);
@@ -438,7 +446,9 @@ if SoundTimerTicks >= 50 then
       end
    end;
 
-if GameState = gsConfirm then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, ConfirmTexture);
+if GameState = gsConfirm then DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
+
+SetScale(1.5);
 
 glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
@@ -460,10 +470,18 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
-var EdgesDist: LongInt;
+var EdgesDist, cw: LongInt;
 begin
+cw:= round(cScreenWidth / cScaleFactor);
+
+
 if (not (CurrentTeam^.ExtDriven and isCursorVisible))
-	and cHasFocus then SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+	and cHasFocus then
+	begin
+	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+//	CursorPoint.X:= round((CursorPoint.X - cScreenWidth / 2) * 2 / cScaleFactor);
+//	CursorPoint.Y:= round(CursorPoint.Y * 2 / cScaleFactor);
+	end;
 
 if (FollowGear <> nil) and (not isCursorVisible) then
 	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
@@ -504,14 +522,14 @@ if isCursorVisible or (FollowGear <> nil) then
    begin
    if isCursorVisible then EdgesDist:= cCursorEdgesDist
                       else EdgesDist:= cGearScrEdgesDist;
-   if CursorPoint.X < EdgesDist then
+   if CursorPoint.X < - cw + EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X + EdgesDist;
+         WorldDx:= WorldDx - CursorPoint.X - cw + EdgesDist;
          CursorPoint.X:= EdgesDist
          end else
-      if CursorPoint.X > cScreenWidth - EdgesDist then
+      if CursorPoint.X > cw - EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth - EdgesDist;
+         WorldDx:= WorldDx - CursorPoint.X + cw - EdgesDist;
          CursorPoint.X:= cScreenWidth - EdgesDist
          end;
       if CursorPoint.Y < EdgesDist then
@@ -521,7 +539,7 @@ if isCursorVisible or (FollowGear <> nil) then
          end else
       if CursorPoint.Y > cScreenHeight - EdgesDist then
          begin
-         WorldDy:= WorldDy - CursorPoint.Y + cScreenHeight - EdgesDist;
+         WorldDy:= WorldDy - CursorPoint.Y + round(cScreenHeight * 2 / cScaleFactor) - EdgesDist;
          CursorPoint.Y:= cScreenHeight - EdgesDist
          end;
    end else
@@ -537,8 +555,8 @@ if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
 prevPoint:= CursorPoint;
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
-if WorldDx < -LAND_WIDTH then WorldDx:= -LAND_WIDTH;
-if WorldDx > cScreenWidth then WorldDx:= cScreenWidth;
+if WorldDx < -round(LAND_WIDTH * 2 / cScaleFactor) then WorldDx:= -round(LAND_WIDTH * 2 / cScaleFactor);
+if WorldDx > cw then WorldDx:= cw;
 end;
 
 initialization
