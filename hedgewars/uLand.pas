@@ -77,7 +77,10 @@ AddFileLog('CheckLandDigest: ' + s);
 if digest = '' then
    digest:= s
 else
+{$IFNDEF IPHONEOS}
+//HACK & FIXME!!!
    TryDo(s = digest, 'Different maps generated, sorry', true)
+{$ENDIF}
 end;
 
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);

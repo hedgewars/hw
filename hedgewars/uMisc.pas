@@ -150,7 +150,10 @@ function  Surface2Tex(surf: PSDL_Surface): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
+{$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
+{$ENDIF}
+
 function modifyDamage(dmg: Longword): Longword;
 
 var CursorPoint: TPoint;
@@ -331,8 +334,11 @@ ResetVertexArrays(NewTexture);
 glGenTextures(1, @NewTexture^.id);
 
 glBindTexture(GL_TEXTURE_2D, NewTexture^.id);
-
+{$IFDEF IPHONEOS}
+glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, buf);
+{$ELSE}
 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
+{$ENDIF}
 
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -341,7 +347,8 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
 function Surface2Tex(surf: PSDL_Surface): PTexture;
-var mode: LongInt;
+var modeIntFormat: LongInt;
+    modeFormat: LongInt;
 	tw, th, x, y: Longword;
 	tmpp: pointer;
 	fromP4, toP4: PLongWordArray;
@@ -351,8 +358,26 @@ new(Surface2Tex);
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
-if (surf^.format^.BytesPerPixel = 3) then mode:= GL_RGB else
-if (surf^.format^.BytesPerPixel = 4) then mode:= GL_RGBA else
+if (surf^.format^.BytesPerPixel = 3) then 
+	begin
+		modeIntFormat:= GL_RGB;
+		{$IFDEF IPHONEOS}
+		modeFormat:= GL_BGR;
+		{$ELSE}
+		modeFormat:=modeIntFormat;
+		{$ENDIF}
+	end
+else
+if (surf^.format^.BytesPerPixel = 4) then
+	begin
+		modeIntFormat:= GL_RGBA;
+		{$IFDEF IPHONEOS}
+		modeFormat:=GL_BGRA;
+		{$ELSE}
+		modeFormat:=modeIntFormat;
+		{$ENDIF}
+	end
+else
    begin
    TryDo(false, 'Surface2Tex: BytesPerPixel not in [3, 4]', true);
    Surface2Tex^.id:= 0;
@@ -433,18 +458,17 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 			end;
 		end;
 
-//   gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE,
-//        Surf^.pixels, tw, th, GL_UNSIGNED_BYTE,
-//        tmpp);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, mode, tw, th, 0, mode, GL_UNSIGNED_BYTE, tmpp);
+//	legacy resizing function
+//	gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE, Surf^.pixels, tw, th, GL_UNSIGNED_BYTE, tmpp);
+	
+	glTexImage2D(GL_TEXTURE_2D, 0, modeIntFormat, tw, th, 0, modeFormat, GL_UNSIGNED_BYTE, tmpp);
 	
 	FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
 	end else
 	begin
 	Surface2Tex^.rx:= 1.0;
 	Surface2Tex^.ry:= 1.0;
-	glTexImage2D(GL_TEXTURE_2D, 0, mode, surf^.w, surf^.h, 0, mode, GL_UNSIGNED_BYTE, surf^.pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, modeIntFormat, surf^.w, surf^.h, 0, modeFormat, GL_UNSIGNED_BYTE, surf^.pixels);
 	end;
 
 ResetVertexArrays(Surface2Tex);
@@ -495,7 +519,7 @@ if c < 3 then t:= t - c;
 byte(DecodeBase64[0]):= t - 1
 end;
 
-const GL_BGR = $80E0; // some opengl headers don't have that const (?)'
+{$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 const head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
 var p: Pointer;
@@ -508,11 +532,9 @@ head[7]:= cScreenHeight;
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
-{$IFDEF IPHONEOS}
-//since opengl es operates on a single surface GL_FRONT is implied, but how to test that?
-{$ELSE}
+
+//remember that opengles operates on a single surface, so GL_FRONT *should* be implied
 glReadBuffer(GL_FRONT);
-{$ENDIF}
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 
 {$I-}
@@ -528,6 +550,7 @@ if IOResult = 0 then
 
 FreeMem(p)
 end;
+{$ENDIF}
 
 function modifyDamage(dmg: Longword): Longword;
 begin

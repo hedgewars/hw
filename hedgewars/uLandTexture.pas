@@ -95,7 +95,11 @@ else
 					begin
 					shouldUpdate:= false;
 					glBindTexture(GL_TEXTURE_2D, tex^.id);
+					{$IFDEF IPHONEOS}
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, TEXSIZE, TEXSIZE, GL_BGRA, GL_UNSIGNED_BYTE, Pixels(x, y));
+					{$ELSE}
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, TEXSIZE, TEXSIZE, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x, y));
+					{$ENDIF}
 					end
 end;
 

@@ -67,7 +67,12 @@ pkbd:= SDL_GetKeyboardState(nil);
 {$ELSE}
 pkbd:= SDL_GetKeyState(nil);
 {$ENDIF}
-i:= SDL_GetMouseState(nil, nil);
+{$IFDEF IPHONEOS}
+//SDL_GetMouseState currently broken in sdl13
+i:=1;
+{$ELSE}
+i:=SDL_GetMouseState(nil, nil);
+{$ENDIF}
 pkbd^[1]:= (i and 1);
 pkbd^[2]:= ((i shr 1) and 1);
 {$IFDEF DARWIN}
