@@ -439,7 +439,7 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy: LongInt;
-    Result, updateBlock: boolean;
+    Result, updateBlock, resweep: boolean;
 begin
 Result:= false;
 
@@ -451,13 +451,19 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
 		if LandDirty[y, x] <> 0 then
 			begin
 			updateBlock:= false;
-			for yy:= y * 32 to y * 32 + 31 do
-				for xx:= x * 32 to x * 32 + 31 do
-					if Despeckle(xx, yy) then
-						begin
-						Result:= true;
-						updateBlock:= true;
-						end;
+            resweep:= true;
+            while(resweep) do
+                begin
+                resweep:= false;
+                for yy:= y * 32 to y * 32 + 31 do
+                    for xx:= x * 32 to x * 32 + 31 do
+                        if Despeckle(xx, yy) then
+                            begin
+                            Result:= true;
+                            updateBlock:= true;
+                            resweep:= true;
+                            end;
+                end;
 			if updateBlock then UpdateLandTexture(x * 32, 32, y * 32, 32);
 			LandDirty[y, x]:= 0;
 			end;
