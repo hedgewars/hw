@@ -67,18 +67,25 @@
 ;02:02=Armed and ready!
 02:02=準備好上戰場!
 ; Round ends (win; unused atm)
-02:03=...
+02:03=回合勝利...
 ; Round ends (draw; unused atm)
-02:04=...
+02:04=打成平手...
 ; New health crate
-02:05=Incoming aid!
+;02:05=Incoming aid!
+02:05=醫療救援來了!
 ; New ammo crate
-02:06=More weapons!
+;02:06=More weapons!
+02:06=武器彈藥援助來了!
 ; New utility crate
-02:07=Tooltime!
+;02:07=Tooltime!
+02:07=工具來了!
 ; Hog (%1) skips his turn
-02:08=%1 is sooo boring...
+;02:08=%1 is sooo boring...
+02:08=%1 太無聊了...
 ; Hog (%1) hurts himself only
-02:09=%1 should practice aiming!
-02:09=%1 seems to hate himself.
-02:09=%1 is standing on the wrong side!
+;02:09=%1 should practice aiming!
+02:09=%1 要多練習瞄準!
+;02:09=%1 seems to hate himself.
+02:09=%1 不要太怨恨自己囉!
+;02:09=%1 is standing on the wrong side!
+02:09=%1 選錯邊打了吧!
