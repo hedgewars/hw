@@ -37,6 +37,8 @@
 00:34=刀枪不入
 00:35=加时
 00:36=激光瞄准
+00:37=吸血鬼
+00:38=狙擊槍
 
 01:00=战斗啦!
 01:01=平手
@@ -48,13 +50,44 @@
 
 ; Event messages
 ; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
+;02:00=%1 has kicked the bucket!
+02:00=%1 已經被屠宰了!
+;02:00=%1 has seen the light!
+02:00=%1 已經蒙主寵召!
+;02:00=%1 never saw that comming!
+02:00=%1 從沒想過有這麼一天!
 ; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
+;02:01=%1 plays submarine!
+02:01=%1 淹死了!
+;02:01=%1 mimics the Titanic!
+02:01=%1 跟Titanic一起長眠海底了!
+;02:01=%1 swims like a stone!
+02:01=%1 石沈大海了!
 ; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+;02:02=Let's fight!
+02:02=開戰了!
+;02:02=Armed and ready!
+02:02=準備好上戰場!
+; Round ends (win; unused atm)
+02:03=回合勝利...
+; Round ends (draw; unused atm)
+02:04=打成平手...
+; New health crate
+;02:05=Incoming aid!
+02:05=醫療救援來了!
+; New ammo crate
+;02:06=More weapons!
+02:06=武器彈藥援助來了!
+; New utility crate
+;02:07=Tooltime!
+02:07=工具來了!
+; Hog (%1) skips his turn
+;02:08=%1 is sooo boring...
+02:08=%1 太無聊了...
+; Hog (%1) hurts himself only
+;02:09=%1 should practice aiming!
+02:09=%1 要多練習瞄準!
+;02:09=%1 seems to hate himself.
+02:09=%1 不要太怨恨自己囉!
+;02:09=%1 is standing on the wrong side!
+02:09=%1 選錯邊打了吧!
