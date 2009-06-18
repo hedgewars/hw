@@ -424,7 +424,7 @@ const
 			(FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; saveSurf: false),// sprAirBomb
 			(FileName:   'Airplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 125; Height: 42; saveSurf: false),// sprAirplane
+			Width: 254; Height: 101; saveSurf: false),// sprAirplane
 			(FileName: 'amAirplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 32; saveSurf: false),// sprAmAirplane
 			(FileName:   'amGirder'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
