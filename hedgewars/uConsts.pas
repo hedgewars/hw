@@ -157,24 +157,23 @@ const
 	msgGettingConfig     = 'Getting game config...';
 
 const
+	ifNone        = $00000000;
+	ifAlpha       = $00000001;
+	ifCritical    = $00000002;
+	ifTransparent = $00000004;
+	ifIgnoreCaps  = $00000008;
+	
+const
 	cMaxPower     = 1500;
 	cMaxAngle     = 2048;
 	cPowerDivisor = 1500;
 
 	MAXNAMELEN = 192;
 
-{$IFDEF IPHONEOS}
-//gotta rework this for compatibility; is it really needed anyway?
-	LAND_WIDTH = 1024;
-    LAND_HEIGHT = 512;
-    LAND_WIDTH_MASK  = $FFFFFC00;
-    LAND_HEIGHT_MASK = $FFFFFE00;
-{$ELSE}
     LAND_WIDTH = 4096;
     LAND_HEIGHT = 2048;
     LAND_WIDTH_MASK  = $FFFFF000;
     LAND_HEIGHT_MASK = $FFFFF800;
-{$ENDIF}
 
 	COLOR_LAND           = $FFFFFFFF;  // white
 	COLOR_INDESTRUCTIBLE = $FF0000FF;  // red

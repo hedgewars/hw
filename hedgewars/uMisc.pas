@@ -118,11 +118,11 @@ var
 
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-type HwColor3f = record
-		r, g, b: byte
+type HwColor4f = record
+		r, g, b, a: byte
 		end;
 
-var WaterColorArray: array[0..3] of HwColor3f;
+var WaterColorArray: array[0..3] of HwColor4f;
 
 function hwSign(r: hwFloat): LongInt;
 function Min(a, b: LongInt): LongInt;
@@ -364,7 +364,7 @@ if (surf^.format^.BytesPerPixel = 3) then
 		{$IFDEF IPHONEOS}
 		modeFormat:= GL_BGR;
 		{$ELSE}
-		modeFormat:=modeIntFormat;
+		modeFormat:= modeIntFormat;
 		{$ENDIF}
 	end
 else
@@ -372,9 +372,9 @@ if (surf^.format^.BytesPerPixel = 4) then
 	begin
 		modeIntFormat:= GL_RGBA;
 		{$IFDEF IPHONEOS}
-		modeFormat:=GL_BGRA;
+		modeFormat:= GL_BGRA;
 		{$ELSE}
-		modeFormat:=modeIntFormat;
+		modeFormat:= modeIntFormat;
 		{$ENDIF}
 	end
 else

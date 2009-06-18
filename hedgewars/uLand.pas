@@ -315,21 +315,26 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', false, true, false);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
 r.y:= 0;
 while r.y < LAND_HEIGHT do
 	begin
 	r.x:= 0;
 	while r.x < LAND_WIDTH do
 		begin
+		{$IFDEF IPHONEOS}
+		//does not draw border with SDL_UpperBlit function, so we will use our own copy
+		copyToXY(tmpsurf,Surface, r.x,r.y);
+		{$ELSE}
 		SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+		{$ENDIF}
 		inc(r.x, tmpsurf^.w)
 		end;
 	inc(r.y, tmpsurf^.h)
 	end;
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', false, true, true);
+tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
 for x:= 0 to LAND_WIDTH - 1 do
 	begin
 	yd:= LAND_HEIGHT - 1;
@@ -610,7 +615,7 @@ end;
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
-// For now, defining a fort's playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it'll give a bit more maneuvering room.
+// For now, defining a fort is playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it will give a bit more maneuvering room.
 playHeight:= 1200;
 playWidth:= 2560;
 leftX:= (LAND_WIDTH - playWidth) div 2;
@@ -619,11 +624,11 @@ topY:= LAND_HEIGHT - playHeight;
 
 WriteLnToConsole('Generating forts land...');
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', true, true, true);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', true, true, true);
+tmpsurf:= LoadImage(Pathz[ptForts] + '/' + ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
@@ -639,7 +644,7 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', true, false, true);
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
 	cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
@@ -673,7 +678,7 @@ var tmpsurf: PSDL_Surface;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', true, true, true);
+tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
 TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimensions too big!', true);
 
 // unC0Rr - should this be passed from the GUI? I am not sure which layer does what

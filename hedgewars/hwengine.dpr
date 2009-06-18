@@ -118,6 +118,8 @@ case GameState of
 	end;
 
 SDL_GL_SwapBuffers();
+{$IFNDEF IPHONEOS}
+//not going to make captures on the iPhone
 if flagMakeCapture then
 	begin
 	flagMakeCapture:= false;
@@ -126,6 +128,7 @@ if flagMakeCapture then
 	MakeScreenshot(s);
 //	SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
 	end;
+{$ENDIF}
 end;
 
 ////////////////////
@@ -138,7 +141,10 @@ FreeLand;
 SendKB;
 CloseIPC;
 TTF_Quit;
+{$IFNDEF IPHONEOS}
+//i know it is not clean but it is better than a crash
 SDL_Quit;
+{$ENDIF}
 halt
 end;
 

@@ -53,7 +53,7 @@ procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
-function  LoadImage(const filename: string; hasAlpha, critical, setTransparent: boolean): PSDL_Surface;
+function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 
@@ -174,7 +174,7 @@ var s: string;
 					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
 					if Hat <> 'NoHat' then
 						begin
-						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, false, false, false);
+						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
 						if texsurf <> nil then
 							begin
 							HatTex:= Surface2Tex(texsurf);
@@ -191,7 +191,7 @@ var s: string;
 		Color, i: Longword;
 	begin
 	s:= Pathz[ptGraphics] + '/' + cCHFileName;
-	tmpsurf:= LoadImage(s, true, true, false);
+	tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
 
 	for t:= 0 to Pred(TeamsCount) do
 		with TeamsArray[t]^ do
@@ -246,7 +246,7 @@ var s: string;
 		with TeamsArray[t]^ do
 			begin
 			if GraveName = '' then GraveName:= 'Simple';
-			texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, false, true, true);
+			texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
 			GraveTex:= Surface2Tex(texsurf);
 			SDL_FreeSurface(texsurf)
 			end
@@ -282,11 +282,11 @@ for ii:= Low(TSprite) to High(TSprite) do
            ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 			begin
 			if AltPath = ptNone then
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, true, true)
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
 			else begin
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, true, false, true);
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
-					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, true, true, true)
+					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifALpha or ifCritical or ifTransparent)
 				end;
 			if Width = 0 then Width:= tmpsurf^.w;
 			if Height = 0 then Height:= tmpsurf^.h;
@@ -296,7 +296,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 
 AddProgress;
 
-tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, true, true, true);
+tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
 HHTexture:= Surface2Tex(tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
@@ -874,7 +874,8 @@ if Hedgehog.HealthTagTex <> nil then FreeTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-function  LoadImage(const filename: string; hasAlpha: boolean; critical, setTransparent: boolean): PSDL_Surface;
+// hasAlpha: boolean; critical, setTransparent: boolean
+function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     //Result: PSDL_Surface;
     s: shortstring;
@@ -891,19 +892,19 @@ if tmpsurf = nil then
 
 if tmpsurf = nil then
 	begin
-	OutError(msgFailed, critical);
+	OutError(msgFailed, (imageFlags and ifCritical) <> 0);
 	exit(nil)
 	end;
 
-if (tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize) then
+if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 	begin
 	SDL_FreeSurface(tmpsurf);
-	OutError(msgFailedSize, critical);
+	OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
 	exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask))
 	end;
 
-if setTransparent then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-//if hasAlpha then Result:= SDL_DisplayFormatAlpha(tmpsurf)
+if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+//if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf)
 //            else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
 WriteLnToConsole(msgOK);
@@ -946,7 +947,7 @@ begin
 if Step = 0 then
    begin
    WriteToConsole(msgLoading + 'progress sprite: ');
-   texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', false, true, true);
+   texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
    ProgrTex:= Surface2Tex(texsurf);
    SDL_FreeSurface(texsurf)
    end;

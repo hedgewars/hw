@@ -189,8 +189,8 @@ until y > (LAND_HEIGHT-125);
 if x1 > 0 then
 	begin
 	Result:= true;
-	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', false, false, true);
-	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', false, true, true);
+	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 	
 	rr.x:= x1;
 	while rr.x < x2 do
@@ -371,8 +371,10 @@ Reset(f);
 Readln(f, c1.r, c1.g, c1. b);
 Readln(f, c2.r, c2.g, c2. b);
 // read water gradient colors
-Readln(f, WaterColorArray[0].r, WaterColorArray[0].g, WaterColorArray[0]. b);
-Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2]. b);
+Readln(f, WaterColorArray[0].r, WaterColorArray[0].g, WaterColorArray[0].b);
+Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2].b);
+WaterColorArray[0].a := 255;
+WaterColorArray[2].a := 255;
 WaterColorArray[1]:= WaterColorArray[0];
 WaterColorArray[3]:= WaterColorArray[2];
 
@@ -393,7 +395,7 @@ for i:= 0 to Pred(ThemeObjects.Count) do
 	Readln(f, s); // filename
 	with ThemeObjects.objs[i] do
 			begin
-			Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
+			Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
 			Width:= Surf^.w;
 			Height:= Surf^.h;
 			with inland do
@@ -420,7 +422,7 @@ for i:= 0 to Pred(SprayObjects.Count) do
     Readln(f, s); // filename
     with SprayObjects.objs[i] do
          begin
-         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, false, true, true);
+         Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
          Width:= Surf^.w;
          Height:= Surf^.h;
          ReadLn(f, Maxcnt)

@@ -266,10 +266,11 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 
 {$IFDEF SDL13}
 function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
+function  SDL_GetMouseState(index: LongInt; x, y: PInteger): Byte; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
-{$ENDIF}
 function  SDL_GetMouseState(x, y: PInteger): Byte; cdecl; external SDLLibName;
+{$ENDIF}
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 

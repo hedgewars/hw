@@ -202,11 +202,11 @@ if r.y < cScreenHeight * 2 / cScaleFactor then
 	VertexBuffer[3].Y:= lh;
 
 	glEnableClientState (GL_COLOR_ARRAY);
-	glColorPointer(3, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-	
+
 	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -425,9 +425,7 @@ if cShowFPS then
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
       if fpsTexture <> nil then FreeTexture(fpsTexture);
-{$IFNDEF IPHONEOS}
       tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
-{$ENDIF}
       fpsTexture:= Surface2Tex(tmpSurface);
       SDL_FreeSurface(tmpSurface)
       end;
@@ -472,13 +470,16 @@ procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var EdgesDist, cw: LongInt;
 begin
+
 cw:= round(cScreenWidth / cScaleFactor);
 
-
-if (not (CurrentTeam^.ExtDriven and isCursorVisible))
-	and cHasFocus then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 	begin
+{$IFDEF SDL13}
+	SDL_GetMouseState(0, @CursorPoint.X, @CursorPoint.Y);
+{$ELSE}
 	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+{$ENDIF}
 	CursorPoint.X:= CursorPoint.X - cScreenWidth div 2;
 //	CursorPoint.X:= round((CursorPoint.X - cScreenWidth / 2) * 2 / cScaleFactor);
 //	CursorPoint.Y:= round(CursorPoint.Y * 2 / cScaleFactor);

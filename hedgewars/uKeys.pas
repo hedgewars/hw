@@ -63,18 +63,16 @@ Trusted:= (CurrentTeam <> nil)
           and (CurrentHedgehog^.BotLevel = 0);
 
 {$IFDEF SDL13}
-pkbd:= SDL_GetKeyboardState(nil);
+pkbd := SDL_GetKeyboardState(nil);
+i	 := SDL_GetMouseState(0, nil, nil);
 {$ELSE}
-pkbd:= SDL_GetKeyState(nil);
+pkbd := SDL_GetKeyState(nil);
+i	 := SDL_GetMouseState(nil, nil);
 {$ENDIF}
-{$IFDEF IPHONEOS}
-//SDL_GetMouseState currently broken in sdl13
-i:=1;
-{$ELSE}
-i:=SDL_GetMouseState(nil, nil);
-{$ENDIF}
+
 pkbd^[1]:= (i and 1);
 pkbd^[2]:= ((i shr 1) and 1);
+
 {$IFDEF DARWIN}
 //    normal right click     ||      ctrl (left/right) + left click	  
 pkbd^[3]:= ((i shr 2) and 1) or ((i and 1) and (pkbd^[306] or pkbd^[305]));
@@ -103,14 +101,17 @@ procedure ResetKbd;
 var i, t: LongInt;
     pkbd: PByteArray;
 begin
+
 {$IFDEF SDL13}
 pkbd:= PByteArray(SDL_GetKeyboardState(@i));
 {$ELSE}
 pkbd:= PByteArray(SDL_GetKeyState(@i));
 {$ENDIF}
 TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
+
 for t:= 0 to Pred(i) do
     tkbd[i]:= pkbd^[i]
+
 end;
 
 procedure InitKbdKeyTable;
