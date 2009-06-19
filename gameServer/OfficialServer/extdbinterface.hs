@@ -40,7 +40,7 @@ dbInteractionLoop dbConn = forever $ do
 
 		SendStats clients rooms -> do
 				statement <- prepare dbConn dbQueryStats
-				execute statement [SqlInt32 $ fromIntegral rooms, SqlInt32 $ fromIntegral clients]
+				execute statement [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms]
 				finish statement
 
 	hFlush stdout
