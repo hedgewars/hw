@@ -160,7 +160,7 @@ data CoreMessage =
 	Accept ClientInfo
 	| ClientMessage (Int, [String])
 	| ClientAccountInfo (Int, AccountInfo)
-	| TimerAction
+	| TimerAction Int
 
 type Clients = IntMap.IntMap ClientInfo
 type Rooms = IntMap.IntMap RoomInfo

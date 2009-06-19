@@ -16,10 +16,11 @@ import Actions
 import OfficialServer.DBInteraction
 
 
-timerLoop :: Chan CoreMessage -> IO()
-timerLoop messagesChan = forever $ do
+timerLoop :: Int -> Chan CoreMessage -> IO()
+timerLoop tick messagesChan = do
 	threadDelay (30 * 10^6) -- 30 seconds
-	writeChan messagesChan TimerAction
+	writeChan messagesChan $ TimerAction tick
+	timerLoop (tick + 1) messagesChan
 
 firstAway (_, a, b, c) = (a, b, c)
 
@@ -56,10 +57,10 @@ mainLoop serverInfo clients rooms = do
 					debugM "Clients" "Got info for dead client"
 					return (serverInfo, clients, rooms)
 
-			TimerAction ->
+			TimerAction tick ->
 				liftM firstAway $
-					foldM processAction (0, serverInfo, clients, rooms)
-						[PingAll, StatsAction]
+					foldM processAction (0, serverInfo, clients, rooms) $
+						PingAll : if even tick then [StatsAction] else []
 
 
 	{-			let hadRooms = (not $ null rooms) && (null mrooms)
@@ -80,7 +81,7 @@ startServer serverInfo serverSocket = do
 
 	return ()
 	
-	forkIO $ timerLoop $ coreChan serverInfo
+	forkIO $ timerLoop 0 $ coreChan serverInfo
 
 	startDBConnection $ serverInfo
 
