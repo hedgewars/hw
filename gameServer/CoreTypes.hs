@@ -153,6 +153,7 @@ data AccountInfo =
 data DBQuery =
 	CheckAccount Int String String
 	| ClearCache
+	| SendStats Int Int
 	deriving (Show, Read)
 
 data CoreMessage =

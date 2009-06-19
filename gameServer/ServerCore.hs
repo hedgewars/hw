@@ -57,10 +57,10 @@ mainLoop serverInfo clients rooms = do
 					return (serverInfo, clients, rooms)
 
 			TimerAction ->
-				liftM firstAway $ processAction
-						(0, serverInfo, clients, rooms)
-						PingAll
-			
+				liftM firstAway $
+					foldM processAction (0, serverInfo, clients, rooms)
+						[PingAll, StatsAction]
+
 
 	{-			let hadRooms = (not $ null rooms) && (null mrooms)
 					in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $

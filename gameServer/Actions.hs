@@ -44,6 +44,7 @@ data Action =
 	| Dump
 	| AddClient ClientInfo
 	| PingAll
+	| StatsAction
 
 type CmdHandler = Int -> Clients -> Rooms -> [String] -> [Action]
 
@@ -385,3 +386,8 @@ processAction (clID, serverInfo, clients, rooms) PingAll = do
 				processAction (clientUID client, serverInfo, clients, rooms) $ ByeClient "Ping timeout"
 				else
 				return (clID, serverInfo, clients, rooms)
+
+
+processAction (clID, serverInfo, clients, rooms) (StatsAction) = do
+	writeChan (dbQueries serverInfo) $ SendStats (size clients) (size rooms - 1)
+	return (clID, serverInfo, clients, rooms)

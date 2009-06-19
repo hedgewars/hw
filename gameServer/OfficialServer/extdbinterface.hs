@@ -11,29 +11,38 @@ import Database.HDBC.MySQL
 import CoreTypes
 
 
-dbQueryString =
+dbQueryAccount =
 	"select users.pass, users_roles.rid from users left join users_roles on users.uid = users_roles.uid where users.name = ?"
+
+dbQueryStats =
+	"UPDATE gameserver_stats SET players = ?, rooms = ?, last_update = UNIX_TIMESTAMP()"
 
 dbInteractionLoop dbConn = forever $ do
 	q <- (getLine >>= return . read)
 	
-	response <- case q of
+	case q of
 		CheckAccount clUid clNick _ -> do
-				statement <- prepare dbConn dbQueryString
+				statement <- prepare dbConn dbQueryAccount
 				execute statement [SqlString $ clNick]
 				passAndRole <- fetchRow statement
 				finish statement
-				if isJust passAndRole then
-					return $ (
-								clUid,
-								HasAccount
-									(fromSql $ head $ fromJust $ passAndRole)
-									((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
-							)
+				let response =
+					if isJust passAndRole then
+						(
+							clUid,
+							HasAccount
+								(fromSql $ head $ fromJust $ passAndRole)
+								((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
+						)
 					else
-					return $ (clUid, Guest)
+						(clUid, Guest)
+				putStrLn (show response)
 
-	putStrLn (show response)
+		SendStats clients rooms -> do
+				statement <- prepare dbConn dbQueryStats
+				execute statement [SqlInt32 $ fromIntegral rooms, SqlInt32 $ fromIntegral clients]
+				finish statement
+
 	hFlush stdout
 
 dbConnectionLoop mySQLConnectionInfo =

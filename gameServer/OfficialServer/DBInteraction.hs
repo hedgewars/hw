@@ -66,6 +66,10 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 					return accountsCache
 
 		ClearCache -> return Map.empty
+		SendStats {} -> do
+			hPutStrLn hIn $ show q
+			hFlush hIn
+			return accountsCache
 	
 	return updatedCache
 	where
