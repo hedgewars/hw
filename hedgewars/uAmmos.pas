@@ -236,7 +236,7 @@ with Hedgehog do
 	with Ammo^[CurSlot, CurAmmo] do
 		begin
 		s:= trammo[Ammoz[AmmoType].NameId];
-		if Count <> AMMO_INFINITE then
+		if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
 			s:= s + ' (' + IntToStr(Count) + ')';
 		if (Propz and ammoprop_Timerable) <> 0 then
 			s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
