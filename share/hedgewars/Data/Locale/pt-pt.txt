@@ -39,6 +39,7 @@
 00:36=Mira Laser
 00:37=Vampirismo
 00:38=Sniper
+00:39=Jetpack
 
 01:00=Vamos lutar!
 01:01=Ronda empatada

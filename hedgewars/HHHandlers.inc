@@ -186,7 +186,8 @@ with Gear^,
                   amHellishBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtHellishBomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 5000);
                        amNapalm: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 2, _0, _0, 0);
                         amDrill: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                        amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
+                      amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
+                    amJetpack: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtJetpack, 0, _0, _0, 0);
                       amLowGravity: cGravity:= cMaxWindSpeed / 2;
                       amExtraDamage: cDamageModifier:= _1_5;
                       amInvulnerable: Invulnerable:= true;

@@ -39,6 +39,7 @@
 00:36=Laser Sight
 00:37=Vampirism
 00:38=Sniper Rifle
+00:39=Jetpack
 
 01:00=Уперед до перемоги!
 01:01=Нічия

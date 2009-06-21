@@ -2183,3 +2183,68 @@ Gear^.Tag:= hwSign(HHGear^.dX);
 if HHGear^.dX.isNegative then Gear^.Angle:= 4096 - Gear^.Angle;
 Gear^.doStep:= @doStepRCPlaneWork
 end;
+
+procedure doStepJetpackWork(Gear: PGear);
+var HHGear: PGear;
+    fuel: LongInt;
+    move: hwFloat;
+begin
+AllInactive:= false;
+HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
+//dec(Gear^.Timer);
+move:= _0_2;
+fuel:= 50;
+if (HHGear^.Message and gm_Precise) <> 0 then
+    begin
+    move:= _0_02;
+    fuel:= 5;
+    end;
+if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
+
+if (HHGear^.Message and gm_Up) <> 0 then
+    begin
+    HHGear^.dY:= HHGear^.dY - move;
+    dec(Gear^.Health, fuel)
+    end;
+if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
+    begin
+    HHGear^.dX:= HHGear^.dX + (move * _0_2);
+    dec(Gear^.Health, fuel div 5)
+    end;
+if Gear^.Health < 0 then Gear^.Health:= 0;
+if (GameTicks and $3F) = 0 then AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpMessage);
+
+//AddCaption(inttostr(round(Gear^.Health/20))+'% : '+inttostr(round(Gear^.Timer/1000)), $FFFFFF, capgrpMessage);
+
+HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+HHGear^.State:= HHGear^.State and gstMoving and (not gstNotKickable); 
+
+Gear^.X:= HHGear^.X;
+Gear^.Y:= HHGear^.Y;
+doStepHedgehogMoving(HHGear);
+
+if //(Gear^.Timer = 0) or
+   (Gear^.Health = 0) or 
+   ((HHGear^.Message and gm_Attack) <> 0) or
+   (HHGear^.Damage <> 0) then
+	begin
+	HHGear^.Message:= 0;
+	DeleteGear(Gear);
+	AfterAttack;
+    HHGear^.Active:= true;
+	end
+end;
+
+procedure doStepJetpack(Gear: PGear);
+var HHGear: PGear;
+begin
+Gear^.doStep:= @doStepJetpackWork;
+
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+FollowGear:= HHGear;
+with HHGear^ do
+	begin
+	State:= State and not gstAttacking;
+	Message:= Message and not gm_Attack
+	end
+end;

@@ -39,6 +39,7 @@
 00:36=Mirino Laser
 00:37=Vampirismo
 00:38=Fucile di precisione
+00:39=Jetpack
 
 01:00=Combattiamo!
 01:01=Round in parità

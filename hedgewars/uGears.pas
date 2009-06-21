@@ -162,7 +162,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBallgun,
 			@doStepBomb,
 			@doStepRCPlane,
-			@doStepSniperRifleShot
+			@doStepSniperRifleShot,
+			@doStepJetpack
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -385,6 +386,10 @@ gtAmmo_Grenade: begin
                 Result^.Timer:= 15000;
                 Result^.Health:= 3;
                 Result^.Radius:= 8;
+                end;
+     gtJetpack: begin
+                Result^.Timer:= 20000;
+                Result^.Health:= 2000;
                 end;
      end;
 InsertGearToList(Result);

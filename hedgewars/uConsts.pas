@@ -74,7 +74,7 @@ type
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
 			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-			gtSniperRifleShot);
+			gtSniperRifleShot, gtJetpack);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -100,7 +100,7 @@ type
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle);
+            amLaserSight, amVampiric, amSniperRifle, amJetpack);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -465,9 +465,9 @@ const
 			(FileName:     'Hammer'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 64; saveSurf: false),// sprPHammer
 			(FileName: 'amBTorch_i'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandBlowToch
+			Width:  32; Height: 32; saveSurf: false),// sprHandBlowTorch
 			(FileName: 'amBTorch_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprBlowToch
+			Width:  32; Height: 32; saveSurf: false),// sprBlowTorch
 			(FileName:   'Teleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  64; Height: 32; saveSurf: false),// sprTeleport
 			(FileName:    'HHDeath'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -1403,6 +1403,28 @@ const
 					Pos: 0;
 					AmmoType: amSniperRifle);
 			Slot: 2;
+			TimeAfterTurn: 3000;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+			(NameId: sidJetpack;
+			NameTex: nil;
+			Probability: 20;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_ForwMsgs or
+							ammoprop_AttackInMove or
+							ammoprop_NoCrosshair or
+							ammoprop_DontHold or
+							ammoprop_AltAttack;
+					Count: 1;
+					NumPerTurn: 1;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amJetpack);
+			Slot: 3;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
 			maxAngle: 0;
