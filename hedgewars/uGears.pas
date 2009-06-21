@@ -388,7 +388,6 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 8;
                 end;
      gtJetpack: begin
-                Result^.Timer:= 20000;
                 Result^.Health:= 2000;
                 end;
      end;
@@ -1098,7 +1097,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		end;
 
 		defaultPos:= false
-	end
+	end;
+
 end else // not gstHHDriven
 	begin
 	if (Gear^.Damage > 0)
@@ -1163,7 +1163,27 @@ with PHedgehog(Gear^.Hedgehog)^ do
 				hwSign(Gear^.dX)*m,
 				32);
 	end;
-
+if (Gear^.State and gstHHDriven) <> 0 then
+    begin
+    if (CurAmmoGear = nil) then
+        begin
+        amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
+        case amt of
+            amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
+            end
+        end;
+    if CurAmmoGear <> nil then
+        begin
+        case CurAmmoGear^.Kind of
+            gtJetpack: begin
+	                   DrawSprite(sprJetpack, sx-32, sy-32, 0);
+	                   if (CurAmmoGear^.MsgParam and gm_Up) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
+	                   if (CurAmmoGear^.MsgParam and gm_Left) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
+	                   if (CurAmmoGear^.MsgParam and gm_Right) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
+                       end;
+            end;
+        end
+    end;
 
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin

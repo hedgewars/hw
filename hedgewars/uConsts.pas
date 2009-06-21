@@ -63,7 +63,7 @@ type
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail, 
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail, 
             sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle, sprBubbles);
+            sprSniperRifle, sprBubbles, sprJetpack);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -563,7 +563,9 @@ const
 			(FileName:'amSniperRifle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 128; Height: 32; saveSurf: false), // sprSniperRifle
 			(FileName:    'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false) // sprBubbles
+			Width:  16; Height: 16; saveSurf: false), // sprBubbles
+			(FileName:'amJetpack';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 64; Height: 64; saveSurf: false) // sprJetpack
 			);
 
 	Wavez: array [TWave] of record

@@ -2194,23 +2194,35 @@ HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
 //dec(Gear^.Timer);
 move:= _0_2;
 fuel:= 50;
-if (HHGear^.Message and gm_Precise) <> 0 then
+(*if (HHGear^.Message and gm_Precise) <> 0 then
     begin
     move:= _0_02;
     fuel:= 5;
-    end;
+    end;*)
 if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
 
 if (HHGear^.Message and gm_Up) <> 0 then
     begin
     HHGear^.dY:= HHGear^.dY - move;
-    dec(Gear^.Health, fuel)
+    dec(Gear^.Health, fuel);
+    Gear^.MsgParam:= Gear^.MsgParam or gm_Up;
+    Gear^.Timer:= GameTicks
     end;
 if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     begin
     HHGear^.dX:= HHGear^.dX + (move * _0_2);
-    dec(Gear^.Health, fuel div 5)
+    dec(Gear^.Health, fuel div 5);
+    Gear^.MsgParam:= Gear^.MsgParam or (HHGear^.Message and (gm_Left or gm_Right));
+    Gear^.Timer:= GameTicks
     end;
+
+// erases 'em all at once :-/ 
+if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
+    begin
+    Gear^.Timer:= 0;
+    Gear^.MsgParam:= 0
+    end;
+
 if Gear^.Health < 0 then Gear^.Health:= 0;
 if (GameTicks and $3F) = 0 then AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
 
@@ -2237,6 +2249,7 @@ if  (Gear^.Health = 0)
 		end;
 	DeleteGear(Gear);
 	isCursorVisible:= false;
+    AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
 	end
 end;
 
