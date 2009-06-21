@@ -2212,7 +2212,7 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     dec(Gear^.Health, fuel div 5)
     end;
 if Gear^.Health < 0 then Gear^.Health:= 0;
-if (GameTicks and $3F) = 0 then AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpMessage);
+if (GameTicks and $3F) = 0 then AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
 
 //AddCaption(inttostr(round(Gear^.Health/20))+'% : '+inttostr(round(Gear^.Timer/1000)), $FFFFFF, capgrpMessage);
 
@@ -2224,6 +2224,7 @@ Gear^.Y:= HHGear^.Y;
 doStepHedgehogMoving(HHGear);
 
 if  (Gear^.Health = 0)
+    or (HHGear^.Damage <> 0)
 	or CheckGearDrowning(HHGear)
 	or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
