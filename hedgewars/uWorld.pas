@@ -98,7 +98,7 @@ if bShowAmmoMenu then
       CursorPoint.X:= cScreenWidth div 2;
       CursorPoint.Y:= cScreenHeight div 2;
       prevPoint:= CursorPoint;
-      SDL_WarpMouse(CursorPoint.X, CursorPoint.Y)
+      SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, CursorPoint.Y)
       end;
    if cReducedQuality then
        AMxShift:= 210
@@ -494,20 +494,21 @@ if (FollowGear <> nil) and (not isCursorVisible) then
 		exit
 		end
 		else begin
-		CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
-		CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
+		//CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
+		//CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
+		CursorPoint.x:= (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx;
 		end;
 
 if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < 210 then
 	begin
-	if CursorPoint.X < cScreenWidth + AMxShift - 175 then CursorPoint.X:= cScreenWidth + AMxShift - 175;
-	if CursorPoint.X > cScreenWidth + AMxShift - 10 then CursorPoint.X:= cScreenWidth + AMxShift - 10;
+	if CursorPoint.X < cScreenWidth div 2 + AMxShift - 175 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 175;
+	if CursorPoint.X > cScreenWidth div 2 + AMxShift - 10 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 10;
 	if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
 	if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
 	prevPoint:= CursorPoint;
-	if cHasFocus then SDL_WarpMouse(CursorPoint.X, CursorPoint.Y);
+	if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, CursorPoint.Y);
 	exit
 	end;
 
