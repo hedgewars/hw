@@ -42,7 +42,9 @@ onException io what = io `catch` \e -> do what                   --
 -------------------------------------------------------------------
 
 
-pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
+pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
+	Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $
+	do
 	q <- readChan queries
 	updatedCache <- case q of
 		CheckAccount clUid clNick _ -> do
@@ -66,12 +68,13 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 					return accountsCache
 
 		ClearCache -> return Map.empty
-		SendStats {} -> do
-			hPutStrLn hIn $ show q
-			hFlush hIn
-			return accountsCache
-	
-	return updatedCache
+		SendStats {} -> onException (
+				(hPutStrLn hIn $ show q) >>
+				hFlush hIn >>
+				return accountsCache)
+				(unGetChan queries q)
+
+	pipeDbConnectionLoop queries coreChan hIn hOut updatedCache
 	where
 		maybeException (Just a) = return a
 		maybeException Nothing = ioError (userError "Can't read")
@@ -79,21 +82,19 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache = do
 
 pipeDbConnection accountsCache serverInfo = do
 	updatedCache <-
-		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ 
-			bracket
-				(createProcess (proc "./OfficialServer/extdbinterface" []) {std_in = CreatePipe, std_out = CreatePipe})
-				(\(_, _, _, processHandle) -> return accountsCache)
-				(\(Just hIn, Just hOut, _, _) -> do
-				hSetBuffering hIn LineBuffering
-				hSetBuffering hOut LineBuffering
-	
-				hPutStrLn hIn $ dbHost serverInfo
-				hPutStrLn hIn $ dbLogin serverInfo
-				hPutStrLn hIn $ dbPassword serverInfo
-				pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
-				)
+		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
+			(Just hIn, Just hOut, _, _) <- createProcess (proc "./OfficialServer/extdbinterface" [])
+					{std_in = CreatePipe,
+					std_out = CreatePipe}
+			hSetBuffering hIn LineBuffering
+			hSetBuffering hOut LineBuffering
 
-	threadDelay (5 * 10^6)
+			hPutStrLn hIn $ dbHost serverInfo
+			hPutStrLn hIn $ dbLogin serverInfo
+			hPutStrLn hIn $ dbPassword serverInfo
+			pipeDbConnectionLoop (dbQueries serverInfo) (coreChan serverInfo) hIn hOut accountsCache
+
+	threadDelay (3 * 10^6)
 	pipeDbConnection updatedCache serverInfo
 
 dbConnectionLoop serverInfo =

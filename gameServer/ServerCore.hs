@@ -17,10 +17,7 @@ import OfficialServer.DBInteraction
 
 
 timerLoop :: Int -> Chan CoreMessage -> IO()
-timerLoop tick messagesChan = do
-	threadDelay (30 * 10^6) -- 30 seconds
-	writeChan messagesChan $ TimerAction tick
-	timerLoop (tick + 1) messagesChan
+timerLoop tick messagesChan = threadDelay (30 * 10^6) >> (writeChan messagesChan $ TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 firstAway (_, a, b, c) = (a, b, c)
 
@@ -85,4 +82,6 @@ startServer serverInfo serverSocket = do
 
 	startDBConnection $ serverInfo
 
-	mainLoop serverInfo IntMap.empty (IntMap.singleton 0 newRoom)
+	forkIO $ mainLoop serverInfo IntMap.empty (IntMap.singleton 0 newRoom)
+
+	forever $ threadDelay (60 * 60 * 10^6) >> putStrLn "***"

@@ -19,6 +19,7 @@ dbQueryStats =
 
 dbInteractionLoop dbConn = forever $ do
 	q <- (getLine >>= return . read)
+	hPutStrLn stderr $ show q
 	
 	case q of
 		CheckAccount clUid clNick _ -> do
@@ -37,13 +38,11 @@ dbInteractionLoop dbConn = forever $ do
 					else
 						(clUid, Guest)
 				putStrLn (show response)
+				hFlush stdout
 
-		SendStats clients rooms -> do
-				statement <- prepare dbConn dbQueryStats
-				execute statement [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms]
-				finish statement
+		SendStats clients rooms ->
+				run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
 
-	hFlush stdout
 
 dbConnectionLoop mySQLConnectionInfo =
 	Control.Exception.handle (\e -> return ()) $ handleSqlError $
