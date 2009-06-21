@@ -29,7 +29,7 @@ type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack);
 
 	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-			sidConfirm, sidSuddenDeath);
+			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel);
 			
 	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
 			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf);

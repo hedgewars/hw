@@ -459,6 +459,8 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
+if Ammoz[amDEagle].Ammo.NumPerTurn>CurrentHedgehog^.AttacksNum then
+    AddCaption(inttostr(Ammoz[amDEagle].Ammo.NumPerTurn-CurrentHedgehog^.AttacksNum)+' '+trmsg[sidRemaining], $FFFFFF, capgrpAmmostate);
 PlaySound(sndGun, false, nil);
 Gear^.doStep:= @doStepBulletWork
 end;
@@ -2249,7 +2251,7 @@ if  (Gear^.Health = 0)
 		end;
 	DeleteGear(Gear);
 	isCursorVisible:= false;
-    AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
+    AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
 	end
 end;
 

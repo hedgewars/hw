@@ -48,6 +48,8 @@
 01:04=In pausa
 01:05=Vuoi davvero uscire (Y/Esc)?
 01:06=Sudden death!
+01:07=Remaining
+01:08=Fuel
 
 ; Event messages
 ; Hog (%1) died
