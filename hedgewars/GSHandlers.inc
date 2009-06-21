@@ -2223,15 +2223,18 @@ Gear^.X:= HHGear^.X;
 Gear^.Y:= HHGear^.Y;
 doStepHedgehogMoving(HHGear);
 
-if //(Gear^.Timer = 0) or
-   (Gear^.Health = 0) or 
-   ((HHGear^.Message and gm_Attack) <> 0) or
-   (HHGear^.Damage <> 0) then
+if  (Gear^.Health = 0)
+	or CheckGearDrowning(HHGear)
+	or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
-	HHGear^.Message:= 0;
+	with HHGear^ do
+		begin
+		Message:= 0;
+        Active:= true;
+		State:= State or gstMoving
+		end;
 	DeleteGear(Gear);
-	AfterAttack;
-    HHGear^.Active:= true;
+	isCursorVisible:= false;
 	end
 end;
 
@@ -2242,6 +2245,8 @@ Gear^.doStep:= @doStepJetpackWork;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= HHGear;
+OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 with HHGear^ do
 	begin
 	State:= State and not gstAttacking;
