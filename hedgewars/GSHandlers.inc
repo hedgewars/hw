@@ -2267,6 +2267,7 @@ ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
 with HHGear^ do
 	begin
 	State:= State and not gstAttacking;
-	Message:= Message and not gm_Attack
+	Message:= Message and not gm_Attack;
+    dY:= dY - _0_2
 	end
 end;

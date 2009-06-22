@@ -1165,13 +1165,13 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	end;
 if (Gear^.State and gstHHDriven) <> 0 then
     begin
-    if (CurAmmoGear = nil) then
+(*    if (CurAmmoGear = nil) then
         begin
         amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
         case amt of
             amJetpack: DrawSprite(sprJetpack, sx-32, sy-32, 0);
             end
-        end;
+        end; *)
     if CurAmmoGear <> nil then
         begin
         case CurAmmoGear^.Kind of
