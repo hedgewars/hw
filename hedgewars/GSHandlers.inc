@@ -2241,7 +2241,8 @@ if  (Gear^.Health = 0)
     or (HHGear^.Damage <> 0)
 	or CheckGearDrowning(HHGear)
     or (TurnTimeLeft = 0) 
-    or TestCollisionYwithGear(HHGear, 1)
+    // allow brief ground touches - to be fair on this, might need another counter
+    or (((GameTicks and $1FF) = 0) and TestCollisionYwithGear(HHGear, 1))
 	or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
 	with HHGear^ do
