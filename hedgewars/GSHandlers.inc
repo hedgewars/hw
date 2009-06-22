@@ -2201,7 +2201,6 @@ fuel:= 50;
     move:= _0_02;
     fuel:= 5;
     end;*)
-if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
 
 if (HHGear^.Message and gm_Up) <> 0 then
     begin
@@ -2210,6 +2209,7 @@ if (HHGear^.Message and gm_Up) <> 0 then
     Gear^.MsgParam:= Gear^.MsgParam or gm_Up;
     Gear^.Timer:= GameTicks
     end;
+if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
 if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     begin
     HHGear^.dX:= HHGear^.dX + (move * _0_2);
