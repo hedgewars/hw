@@ -3,7 +3,7 @@
 00:00=Granada
 00:01=Bomba de estilhaço
 00:02=Bazooka
-00:03=Disco Voador
+00:03=OVNI
 00:04=Escopeta
 00:05=Cavadeira
 00:06=Pula a Vez
@@ -39,7 +39,7 @@
 00:36=Laser Sight
 00:37=Vampirism
 00:38=Sniper Rifle
-00:39=Jetpack
+00:39=Disco Voador
 
 01:00=Hora de lutar!
 01:01=Partida empatou

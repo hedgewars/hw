@@ -39,7 +39,7 @@
 00:36=Visée laser
 00:37=Vampirisme
 00:38=Fusil de sniper
-00:39=Jetpack
+00:39=Flying Saucer
 
 01:00=C'est parti !
 01:01=Round ex-aequo

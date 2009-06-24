@@ -39,7 +39,7 @@
 00:36=Laserové zameriavanie
 00:37=Režim vampíra
 00:38=Ostreľovačka
-00:39=Jetpack
+00:39=Flying Saucer
 
 01:00=Do boja!
 01:01=Remíza
