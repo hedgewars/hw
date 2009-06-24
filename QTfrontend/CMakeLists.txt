@@ -17,10 +17,11 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
+find_package(OpenAL REQUIRED)
+find_package(OggVorbis REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
-include_directories(${SDLMIXER_INCLUDE_DIR})
+
 if(UNIX)
 	include_directories("/usr/local/include") # HACK: in freebsd cannot find iconv.h included via SDL.h
 endif(UNIX)
@@ -164,13 +165,18 @@ add_executable(hedgewars WIN32
 	${hwfr_moc_srcs}
 	${hwfr_hdrs}
 	${hwfr_rez_src})
-	
+
+find_library(OPENALBRIDGE_LIBRARY libopenalbridge.a PATH ${EXECUTABLE_OUTPUT_PATH} )
+
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
-#	${QCA2_LIBRARIES}
 	${SDL_LIBRARY}
-	${SDLMIXER_LIBRARY}
-	)
+	${OPENAL_LIBRARY}
+	${OGG_LIBRARY}
+	${VORBIS_LIBRARY}
+	${VORBISFILE_LIBRARY}
+	${OPENALBRIDGE_LIBRARY}
+)
 
 if(WIN32 AND NOT UNIX)
 	if(NOT SDL_LIBRARY)

@@ -21,15 +21,27 @@
 
 #include <QStringList>
 
-#include "SDL_mixer.h"
+//#include "SDL_mixer.h"
 
+extern	"C" int		openal_init			(int);
+extern	"C" int		openal_close		(void);
+extern	"C" int		openal_loadfile		(const char*);
+extern	"C" int		openal_toggleloop	(int);
+extern	"C" int		openal_setvolume	(int, unsigned char);
+extern	"C" int		openal_setglobalvolume	(unsigned char);
+extern  "C" int		openal_togglemute	(void);
+extern	"C" int		openal_fadeout		(int, unsigned int);
+extern	"C" int		openal_fadein		(int, unsigned int);
+extern	"C" int		openal_playsound 	(int);
+extern	"C" int		openal_stopsound	(int);
+extern	"C" int		openal_pausesound	(int);
 
 class SDLInteraction : public QObject
 {
 	Q_OBJECT
 
 private:
-	Mix_Music * music;
+	int music;
 
 public:
 	SDLInteraction();

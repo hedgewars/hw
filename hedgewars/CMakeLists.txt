@@ -113,7 +113,7 @@ if (fpc_version)
 		message("Minimum required version of FreePascal is 2.2.0")
 	else (fpc_ver LESS "020200")
 		set(pascal_compiler ${fpc_executable})
-		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
+		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Fl../openalbridge/" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
 	endif (fpc_ver LESS "020200")
 endif (fpc_version)
 
@@ -154,7 +154,7 @@ add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "lipo"
 		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}
-		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc" 
+		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc"
 		)
 ENDIF(NOT APPLE OR NOT universal_build MATCHES "1")
 

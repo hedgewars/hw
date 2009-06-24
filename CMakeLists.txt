@@ -43,6 +43,7 @@ else(WITH_SERVER)
 endif(WITH_SERVER)
 
 add_subdirectory(bin)
+add_subdirectory(openalbridge)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)

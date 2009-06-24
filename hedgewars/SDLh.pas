@@ -40,12 +40,9 @@ interface
 {$IFNDEF IPHONEOS}
 	  {$linkframework Cocoa}
 	  {$linkframework SDL}
-	  {$linkframework SDL_mixer}
 	  {$linkframework SDL_net}
 	  {$linkframework SDL_image}
 	  {$linkframework SDL_ttf}
-	  {$linkframework Vorbis}
-	  {$linkframework Ogg}
 	  {$linklib SDLmain}
 	  {$linklib gcc}
 {$ENDIF}
@@ -322,70 +319,6 @@ function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longw
 function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
-(*  SDL_mixer  *)
-
-const {$IFDEF WIN32}
-      SDL_MixerLibName = 'SDL_mixer.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_MixerLibName = 'SDL_mixer';
-	{$ELSE}
-          SDL_MixerLibName = 'libSDL_mixer.so';
-	{$ENDIF}
-      {$ENDIF}
-
-const MIX_MAX_VOLUME = 128;
-
-type PMixChunk = ^TMixChunk;
-     TMixChunk = record
-                 allocated: Longword;
-                 abuf     : PByte;
-                 alen     : Longword;
-                 volume   : PByte;
-                 end;
-     TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
-     TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
-
-     TMidiSong = record
-               samples : LongInt;
-               events  : pointer;
-               end;
-
-     TMusicUnion = record
-        case Byte of
-             0: ( midi : TMidiSong );
-             1: ( ogg  : pointer);
-             end;
-
-     PMixMusic = ^TMixMusic;
-     TMixMusic = record
-                 end;
-
-function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
-
-function  Mix_Volume(channel: LongInt; volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt;  cdecl; external SDL_MixerLibName;
-function  Mix_VolumeMusic(volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-
-function  Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
-procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
-
-function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: LongInt): PMixChunk; cdecl; external SDL_MixerLibName;
-function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_MixerLibName;
-
-function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_FadeInMusic(music: PMixMusic; loops: LongInt; ms: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-
-function  Mix_PlayChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_PlayMusic(music: PMixMusic; loops: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_PausedMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_PauseMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
 

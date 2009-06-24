@@ -18,14 +18,29 @@
 
 unit uSound;
 interface
-uses SDLh, uConsts;
+
+{$IFDEF DARWIN}
+	{$linkframework OpenAL}
+	{$linkframework Ogg}
+	{$linkframework Vorbis}
+	{$linklib openalbridge}
+{$ELSE}
+	{$linklib openal}
+	{$linklib ogg}
+	{$linklib vorbis}
+	{$linklib vorbisfile}
+{$ENDIF}
+
+uses uConsts;
 {$INCLUDE options.inc}
 
 type PVoicepack = ^TVoicepack;
 	TVoicepack = record
 		name: shortstring;
-		chunks: array [TSound] of PMixChunk;
+		chunks: array [TSound] of LongInt;
 		end;
+
+const OpenALBridge = 'libopenalbridge';
 
 procedure InitSound;
 procedure ReleaseSound;
@@ -36,20 +51,32 @@ procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
-
 function  AskForVoicepack(name: shortstring): Pointer;
+
+
+function openal_init		(memsize: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_close							: boolean; cdecl; external OpenALBridge;
+function openal_loadfile	(filename: PChar)			: LongInt; cdecl; external OpenALBridge;
+function openal_toggleloop	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_setvolume	(index: LongInt; percentage: byte)	: boolean; cdecl; external OpenALBridge; 
+function openal_fadeout		(index: LongInt; quantity: byte)	: boolean; cdecl; external OpenALBridge;
+function openal_fadein		(index: LongInt; quantity: byte)	: boolean; cdecl; external OpenALBridge;
+function openal_playsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_pausesound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_stopsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_setglobalvolume	(percentage: byte)			: boolean; cdecl; external OpenALBridge;
 
 var MusicFN: shortstring = '';
 
 implementation
+
 uses uMisc, uConsole;
 
 const chanTPU = 12;
-var Volume: LongInt;
-	lastChan: array [TSound] of LongInt;
+var	lastChan: array [TSound] of LongInt;
 	voicepacks: array[0..cMaxTeams] of TVoicepack;
 	defVoicepack: PVoicepack;
-	Mus: PMixMusic = nil;
+	Mus: LongInt = 0;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
@@ -66,33 +93,19 @@ AskForVoicepack:= @voicepacks[i]
 end;
 
 procedure InitSound;
+const numSounds = 200;
 begin
 if not isSoundEnabled then exit;
-WriteToConsole('Init sound...');
-isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
-if isSoundEnabled then
-   isSoundEnabled:= Mix_OpenAudio(22050, $8010, 2, 512) = 0;
+WriteToConsole('Init OpenAL sound...');
+isSoundEnabled:= openal_init(numSounds);
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
-Mix_AllocateChannels(Succ(chanTPU));
-if isMusicEnabled then Mix_VolumeMusic(50);
-
-Volume:= 0;
 ChangeVolume(cInitVolume)
 end;
 
 procedure ReleaseSound;
-var i: TSound;
-	t: Longword;
 begin
-for t:= 0 to cMaxTeams do
-	if voicepacks[t].name <> '' then
-		for i:= Low(TSound) to High(TSound) do
-			if voicepacks[t].chunks[i] <> nil then
-				Mix_FreeChunk(voicepacks[t].chunks[i]);
-
-Mix_FreeMusic(Mus);
-Mix_CloseAudio
+openal_close();
 end;
 
 procedure SoundLoad;
@@ -109,8 +122,8 @@ for i:= Low(TSound) to High(TSound) do
 		begin
 		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
-		defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-		TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
+		defVoicepack^.chunks[i]:= openal_loadfile (Str2PChar(s));
+		TryDo(defVoicepack^.chunks[i] >= 0, msgFailed, true);
 		WriteLnToConsole(msgOK);
 		end;
 
@@ -121,11 +134,8 @@ for t:= 0 to cMaxTeams do
 				begin
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
-				{$IFNDEF IPHONEOS}
-				//broken for unknown reasons (most likely poor SDL_Mixer)
-				voicepacks[t].chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-				{$ENDIF}
-				if voicepacks[t].chunks[i] = nil then
+				voicepacks[t].chunks[i]:= openal_loadfile (Str2PChar(s));
+				if voicepacks[t].chunks[i] < 0 then
 					WriteLnToConsole(msgFailed)
 				else
 					WriteLnToConsole(msgOK)
@@ -133,22 +143,28 @@ for t:= 0 to cMaxTeams do
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
-var loops: LongInt;
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
-if infinite then loops:= -1 else loops:= 0;
 
-if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], loops, -1)
+if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then
+begin
+	if infinite then openal_toggleloop(voicepack^.chunks[snd]);
+	openal_playsound(voicepack^.chunks[snd]);
+	lastChan[snd]:=voicepack^.chunks[snd];
+end
 else
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], loops, -1)
+begin
+	if infinite then openal_toggleloop(defVoicepack^.chunks[snd]);
+	openal_playsound(defVoicepack^.chunks[snd]);
+	lastChan[snd]:=defVoicepack^.chunks[snd];
+
+end
 end;
 
 procedure StopSound(snd: TSound);
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(lastChan[snd]) <> 0 then
-	Mix_HaltChannel(lastChan[snd])
+	openal_stopsound(lastChan[snd])
 end;
 
 procedure PlayMusic;
@@ -161,38 +177,30 @@ if (not isSoundEnabled)
 s:= PathPrefix + '/Music/' + MusicFN;
 WriteToConsole(msgLoading + s + ' ');
 
-Mus:= Mix_LoadMUS(Str2PChar(s));
-TryDo(Mus <> nil, msgFailed, false);
+Mus:= openal_loadfile(Str2PChar(s));
+TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
+openal_fadein(Mus, 50);
+openal_toggleloop(Mus);
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
-if not isSoundEnabled then
-	exit(0);
-
-inc(Volume, voldelta);
-if Volume < 0 then Volume:= 0;
-Mix_Volume(-1, Volume);
-Volume:= Mix_Volume(-1, -1);
-if isMusicEnabled then Mix_VolumeMusic(Volume * 4 div 8);
-ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+if not isSoundEnabled then exit(0);
+openal_setglobalvolume(voldelta);
 end;
 
 procedure PauseMusic;
 begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
-
-Mix_PauseMusic(Mus);
+openal_pausesound(Mus);
 end;
 
 procedure ResumeMusic;
 begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
-
-Mix_ResumeMusic(Mus);
+openal_playsound(Mus);
 end;
 
 end.

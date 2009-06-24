@@ -23,14 +23,17 @@
 
 SDLInteraction::SDLInteraction()
 {
-	music = NULL;
+	music = -1;
 
 	SDL_Init(SDL_INIT_VIDEO);
+	openal_init(50);
+
 }
 
 SDLInteraction::~SDLInteraction()
 {
 	SDL_Quit();
+	openal_close();
 }
 
 QStringList SDLInteraction::getResolutions() const
@@ -53,21 +56,18 @@ QStringList SDLInteraction::getResolutions() const
 
 	return result;
 }
+
 void SDLInteraction::StartMusic()
 {
-	if (!music)
-    {
-   	    SDL_Init(SDL_INIT_AUDIO);
-	    Mix_OpenAudio(22050, 0x8010, 2, 512);
-  
-	    Mix_VolumeMusic(33);
-		music = Mix_LoadMUS(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
+	if (music < 0) {
+		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
+		openal_toggleloop(music);
+		openal_setvolume(music,66);
     }
-
-	Mix_FadeInMusic(music, -1, 3000);
+	openal_fadein(music, 50);
 }
 
 void SDLInteraction::StopMusic()
 {
-	Mix_FadeOutMusic(2000);
+	openal_fadeout(music, 50);
 }
