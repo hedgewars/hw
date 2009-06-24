@@ -56,6 +56,7 @@ void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
 			}
 			team->Grave = "Simple"; // Todo: make it semi-random
 			team->Fort = "Island"; // Todo: make it semi-random
+			team->Voicepack = "Default";
 		}
 
 		for(int i = 0; i < 8; i++)

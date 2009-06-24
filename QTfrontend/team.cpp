@@ -82,6 +82,7 @@ HWTeam::HWTeam() :
 
 	Grave = QString("Simple"); // default
 	Fort = QString("Island"); // default
+	Voicepack = "Default";
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{

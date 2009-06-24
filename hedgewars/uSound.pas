@@ -89,6 +89,7 @@ while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
 	end;
 
 voicepacks[i].name:= name;
+addfilelog('================================================ '+inttostr(i));
 AskForVoicepack:= @voicepacks[i]
 end;
 
@@ -157,7 +158,6 @@ begin
 	if infinite then openal_toggleloop(defVoicepack^.chunks[snd]);
 	openal_playsound(defVoicepack^.chunks[snd]);
 	lastChan[snd]:=defVoicepack^.chunks[snd];
-
 end
 end;
 
@@ -202,5 +202,15 @@ begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
 openal_playsound(Mus);
 end;
+
+
+var i: LongInt;
+	c: TSound;
+
+initialization
+for i:= 0 to cMaxTeams do
+	for c:= Low(TSound) to High(TSound) do
+		voicepacks[i].chunks[c]:= -1
+
 
 end.

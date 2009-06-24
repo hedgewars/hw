@@ -69,5 +69,5 @@ void SDLInteraction::StartMusic()
 
 void SDLInteraction::StopMusic()
 {
-	openal_fadeout(music, 50);
+	if (music >= 0) openal_fadeout(music, 50);
 }
