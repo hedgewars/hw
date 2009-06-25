@@ -286,18 +286,16 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 
 void PageEditTeam::testSound()
 {
+	int sound;
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Sounds/voices");
 	tmpdir.cd(CBVoicepack->currentText());
 	QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
 	if (list.size()) {
-	//	printf("%s\n", QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		int tmp =openal_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		openal_playsound(tmp);										   
+		sound = openal_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
+		openal_playsound(sound);										   
 	}
-		
-		//QSound::play(tmpdir.absolutePath() + "/" + list[rand() % list.size()]);
 }
 
 PageMultiplayer::PageMultiplayer(QWidget* parent) :

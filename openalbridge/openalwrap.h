@@ -16,6 +16,21 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "al.h"
+#include "alc.h"
+#include "loaders.h"
+#include "wrappers.h"
+#include "endianness.h"
+
+#ifndef _WIN32
+#include <pthread.h>
+#else
+#include <windows.h>
+#endif
+
 #ifndef _SLEEP_H
 #define _SLEEP_H
 /** 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. * By Wu Yongwei **/

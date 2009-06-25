@@ -16,19 +16,16 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include "al.h"
-#include "alc.h"
 #include "openalwrap.h"
-#include "loaders.h"
-#include "wrappers.h"
-#include "endianness.h"
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
+
+	typedef struct _fade_t {
+		int index;
+		unsigned int quantity;
+	} fade_t;
 	
 	// Sources are points emitting sound.
 	ALuint *Sources;
@@ -275,60 +272,135 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
+#ifndef _WIN32
+	void *helper_fadeout(void* tmp) {
+#else
+	VOID WINAPI helper_fadeout(LPVOID tmp) {	
+#endif
+		ALfloat gain;
+		fade_t *fade;
+		int index; 
+		unsigned int quantity; 
+		
+		fade = tmp;
+		index = fade->index;
+		quantity = fade->quantity;
+		
+		alGetSourcef(Sources[index], AL_GAIN, &gain);
+		
+		for ( ; gain >= 0.00f; gain -= (float) quantity/10000){
+#ifdef DEBUG
+			fprintf(stderr, "Fade-out: Set gain to %f\n", gain);
+#endif
+			alSourcef(Sources[index], AL_GAIN, gain);
+			usleep(10000);
+		}
+		
+		AlGetError("ERROR %d: Setting fade out volume\n");
+		
+		//stop that sound and reset its gain
+		alSourceStop (Sources[index]);
+		alSourcef (Sources[index], AL_GAIN, 1.0f);	
+		
+#ifndef _WIN32
+		pthread_exit(NULL);
+#else
+		ThreadExit();
+#endif
+	}
 	
 	ALint openal_fadeout(int index, unsigned int quantity) {
-		ALfloat gain;
+#ifndef _WIN32
+		pthread_t thread;
+#else
+		HANDLE Thread;
+		DWORD threadID;
+#endif
+		fade_t fade;
 		
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
 			return AL_FALSE;
 		}
 		
-		alGetSourcef(Sources[index], AL_GAIN, &gain);
-
-		for ( ; gain >= 0.00f; gain -= (float) quantity/10000){
-#ifdef DEBUG
-			fprintf(stderr, "Fade-out: Set gain to: %f\n", gain);
+		fade.index = index;
+		fade.quantity = quantity;
+		
+#ifndef _WIN32
+		pthread_create(&thread, NULL, helper_fadeout, (void*) &fade);
+		pthread_detach(thread);
+#else
+		Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) helper_fadeout, (void*) &fade, 0, threadID);
+		CloseHandle(Thread);
 #endif
-			alSourcef(Sources[index], AL_GAIN, gain);
-			usleep(10000);
-		}
 		
-		if (AlGetError("ERROR %d: Setting fade out volume\n") != AL_TRUE)
-			return AL_FALSE;
-		
-		//stop that sound and reset its gain
-		alSourceStop (Sources[index]);
-		alSourcef (Sources[index], AL_GAIN, 1.0f);
-
 		alGetError();  /* clear any AL errors beforehand */
 
 		return AL_TRUE;
 	}
-	
-	
+		
+#ifndef _WIN32
+		void *helper_fadein(void* tmp) 
+#else
+		VOID WINAPI helper_fadein(LPVOID tmp) 
+#endif
+		{
+			ALfloat gain;
+			fade_t *fade;
+			int index; 
+			unsigned int quantity; 
+			
+			fade = tmp;
+			index = fade->index;
+			quantity = fade->quantity;
+			
+			gain = 0.0f;
+			alSourcef(Sources[index], AL_GAIN, gain);
+			alSourcePlay(Sources[index]);
+			
+			for ( ; gain <= 1.00f; gain += (float) quantity/10000){
+#ifdef DEBUG
+				fprintf(stderr, "Fade-in: Set gain to: %f\n", gain);
+#endif
+				alSourcef(Sources[index], AL_GAIN, gain);
+				usleep(10000);
+			}
+			
+			if (AlGetError("ERROR %d: Setting fade in volume\n") != AL_TRUE)
+				return AL_FALSE;
+			
+#ifndef _WIN32
+			pthread_exit(NULL);
+#else
+			ThreadExit();
+#endif
+		}
+			
+		
 	ALint openal_fadein(int index, unsigned int quantity) {
-		ALfloat gain;
+#ifndef _WIN32
+		pthread_t thread;
+#else
+		HANDLE Thread;
+		DWORD threadID;
+#endif
+		fade_t fade;
 		
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
 			return AL_FALSE;
 		}
 		
-		gain = 0.0f;
-		alSourcef(Sources[index], AL_GAIN, gain);
-		alSourcePlay(Sources[index]);
+		fade.index = index;
+		fade.quantity = quantity;
 		
-		for ( ; gain <= 1.00f; gain += (float) quantity/10000){
-#ifdef DEBUG
-			fprintf(stderr, "Fade-in: Set gain to: %f\n", gain);
+#ifndef _WIN32
+		pthread_create(&thread, NULL, helper_fadein, (void*) &fade);
+		pthread_detach(thread);
+#else
+		Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) helper_fadein, (void*) &fade, 0, threadID);
+		CloseHandle(Thread);
 #endif
-			alSourcef(Sources[index], AL_GAIN, gain);
-			usleep(10000);
-		}
-		
-		if (AlGetError("ERROR %d: Setting fade in volume\n") != AL_TRUE)
-			return AL_FALSE;
 		
 		alGetError();  /* clear any AL errors beforehand */
 

@@ -48,7 +48,7 @@ dbConnectionLoop mySQLConnectionInfo =
 	Control.Exception.handle (\e -> return ()) $ handleSqlError $
 		bracket
 			(connectMySQL mySQLConnectionInfo)
-			(disconnect)
+            (return . const)
 			(dbInteractionLoop)
 
 

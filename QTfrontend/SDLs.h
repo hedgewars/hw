@@ -21,8 +21,6 @@
 
 #include <QStringList>
 
-//#include "SDL_mixer.h"
-
 extern	"C" int		openal_init			(int);
 extern	"C" int		openal_close		(void);
 extern	"C" int		openal_loadfile		(const char*);
