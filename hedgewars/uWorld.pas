@@ -70,10 +70,9 @@ cWaveWidth:= SpritesData[sprWater].Width;
 cWaveHeight:= SpritesData[sprWater].Height;
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
-prevPoint.X:= cScreenWidth div 2;
+prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 WorldDx:=  - (LAND_WIDTH div 2) + cScreenWidth div 2;
-//WorldDy:=  - (LAND_HEIGHT div 2) + cScreenHeight div 2;
 WorldDy:=  - (LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 AMxShift:= 210
 end;
@@ -98,7 +97,7 @@ if bShowAmmoMenu then
       CursorPoint.X:= cScreenWidth div 2;
       CursorPoint.Y:= cScreenHeight div 2;
       prevPoint:= CursorPoint;
-      SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, CursorPoint.Y)
+      SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, cScreenHeight - CursorPoint.Y)
       end;
    if cReducedQuality then
        AMxShift:= 210
@@ -124,7 +123,7 @@ with CurrentHedgehog^ do
 	for i:= cMaxSlotIndex downto 0 do
 		if Ammo^[i, 0].Count > 0 then
 			begin
-			if (CursorPoint.Y >= y - 33) and (CursorPoint.Y < y) then Slot:= i;
+			if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
 			dec(y, 33);
 			inc(SlotsNum);
 			DrawSprite(sprAMSlot, x, y, 0);
@@ -173,7 +172,7 @@ with CurrentHedgehog^ do
 	end;
 
 bSelected:= false;
-if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
+if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
 end;
 
 procedure MoveCamera; forward;
@@ -406,10 +405,10 @@ if isCursorVisible then
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
               DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
-                                    CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+                                    cScreenHeight - CursorPoint.Y - SpritesData[PosSprite].Height div 2,
                                     i);
          end;
-   DrawSprite(sprArrow, CursorPoint.X, CursorPoint.Y, (RealTicks shr 6) mod 8)
+   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
    end;
 
 if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
@@ -481,40 +480,38 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 {$ENDIF}
 	CursorPoint.X:= CursorPoint.X - cScreenWidth div 2;
-//	CursorPoint.X:= round((CursorPoint.X - cScreenWidth / 2) * 2 / cScaleFactor);
-//	CursorPoint.Y:= round(CursorPoint.Y * 2 / cScaleFactor);
+	CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
 	end;
 
 if (FollowGear <> nil) and (not isCursorVisible) then
 	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
 		begin
 		FollowGear:= nil;
-		prevPoint.X:= CursorPoint.X;
-		prevPoint.Y:= CursorPoint.Y;
+		prevPoint:= CursorPoint;
 		exit
 		end
 		else begin
-		//CursorPoint.x:= (prevPoint.x * 7 + (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx) div 8;
-		//CursorPoint.y:= (prevPoint.y * 7 + (hwRound(FollowGear^.Y) + WorldDy)) div 8
-		CursorPoint.x:= (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100) + WorldDx;
+		CursorPoint.x:= (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx);
+		//addcaption(inttostr(CursorPoint.X), $AFAFAF, capgrpGameState);
+		CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
 		end;
 
-if ((CursorPoint.X = prevPoint.X)and(CursorPoint.Y = prevpoint.Y)) then exit;
+if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < 210 then
 	begin
 	if CursorPoint.X < cScreenWidth div 2 + AMxShift - 175 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 175;
 	if CursorPoint.X > cScreenWidth div 2 + AMxShift - 10 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 10;
-	if CursorPoint.Y < cScreenHeight - 75 - SlotsNum * 33 then CursorPoint.Y:= cScreenHeight - 75 - SlotsNum * 33;
-	if CursorPoint.Y > cScreenHeight - 76 then CursorPoint.Y:= cScreenHeight - 76;
+	if CursorPoint.Y > 75 + SlotsNum * 33 then CursorPoint.Y:= 75 + SlotsNum * 33;
+	if CursorPoint.Y < 76 then CursorPoint.Y:= 76;
 	prevPoint:= CursorPoint;
-	if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, CursorPoint.Y);
+	if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
 	exit
 	end;
 
 if isCursorVisible then
 	begin
-	if (not CurrentTeam^.ExtDriven)and(GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
+	if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
 		begin
 		SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
 		PrevSentPointTime:= GameTicks
@@ -525,37 +522,37 @@ if isCursorVisible or (FollowGear <> nil) then
    begin
    if isCursorVisible then EdgesDist:= cCursorEdgesDist
                       else EdgesDist:= cGearScrEdgesDist;
-   if CursorPoint.X < - cw + EdgesDist then
+   if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X - cw + EdgesDist;
-         CursorPoint.X:= EdgesDist
+         WorldDx:= WorldDx - CursorPoint.X - cScreenWidth div 2 + EdgesDist;
+         CursorPoint.X:= - cScreenWidth div 2 + EdgesDist
          end else
-      if CursorPoint.X > cw - EdgesDist then
+      if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
          begin
-         WorldDx:= WorldDx - CursorPoint.X + cw - EdgesDist;
-         CursorPoint.X:= cScreenWidth - EdgesDist
+         WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
+         CursorPoint.X:= cScreenWidth + cScreenWidth div 2 - EdgesDist
          end;
       if CursorPoint.Y < EdgesDist then
          begin
-         WorldDy:= WorldDy - CursorPoint.Y + EdgesDist;
+         WorldDy:= WorldDy + CursorPoint.Y - EdgesDist;
          CursorPoint.Y:= EdgesDist
          end else
       if CursorPoint.Y > cScreenHeight - EdgesDist then
          begin
-         WorldDy:= WorldDy - CursorPoint.Y + round(cScreenHeight * 2 / cScaleFactor) - EdgesDist;
+         WorldDy:= WorldDy + CursorPoint.Y - cScreenHeight + EdgesDist;
          CursorPoint.Y:= cScreenHeight - EdgesDist
          end;
    end else
    if cHasFocus then
       begin
       WorldDx:= WorldDx - CursorPoint.X + prevPoint.X;
-      WorldDy:= WorldDy - CursorPoint.Y + prevPoint.Y;
+      WorldDy:= WorldDy + CursorPoint.Y - prevPoint.Y;
       CursorPoint.X:= 0;
       CursorPoint.Y:= cScreenHeight div 2;
       end;
 
-if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, CursorPoint.Y);
 prevPoint:= CursorPoint;
+if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
 if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
 if WorldDx < -round(LAND_WIDTH * 2 / cScaleFactor) then WorldDx:= -round(LAND_WIDTH * 2 / cScaleFactor);
