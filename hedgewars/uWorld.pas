@@ -159,7 +159,7 @@ with CurrentHedgehog^ do
 		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 		
 		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-			DrawTexture(cScreenWidth + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
+			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
 		
 		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
 			begin
@@ -491,7 +491,7 @@ if (FollowGear <> nil) and (not isCursorVisible) then
 		exit
 		end
 		else begin
-		CursorPoint.x:= (hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx);
+		CursorPoint.x:= (prevPoint.x * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
 		//addcaption(inttostr(CursorPoint.X), $AFAFAF, capgrpGameState);
 		CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
 		end;
@@ -530,7 +530,7 @@ if isCursorVisible or (FollowGear <> nil) then
       if CursorPoint.X > cScreenWidth div 2 - EdgesDist then
          begin
          WorldDx:= WorldDx - CursorPoint.X + cScreenWidth div 2 - EdgesDist;
-         CursorPoint.X:= cScreenWidth + cScreenWidth div 2 - EdgesDist
+         CursorPoint.X:= cScreenWidth div 2 - EdgesDist
          end;
       if CursorPoint.Y < EdgesDist then
          begin
