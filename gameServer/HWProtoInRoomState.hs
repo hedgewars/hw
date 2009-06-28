@@ -20,6 +20,12 @@ handleCmd_inRoom clID clients _ ["CHAT", msg] =
 		clientNick = nick $ clients IntMap.! clID
 
 
+handleCmd_inRoom clID clients _ ["TEAM_CHAT", msg] =
+	[AnswerOthersInRoom ["TEAM_CHAT", clientNick, msg]]
+	where
+		clientNick = nick $ clients IntMap.! clID
+
+
 handleCmd_inRoom clID clients rooms ["PART"] =
 	if isMaster client then
 		[RemoveRoom]
