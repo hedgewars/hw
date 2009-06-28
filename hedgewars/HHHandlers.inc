@@ -237,7 +237,10 @@ with CurrentHedgehog^.Gear^,
 		Inc(AttacksNum);
 		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
 		((GameFlags and gfMultiWeapon) <> 0) then
+            begin
+            AddCaption(inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn+1-AttacksNum)+' '+trmsg[sidRemaining], $FFFFFF, capgrpAmmostate);
 			isInMultiShoot:= true
+            end
 		else
 			begin
 			TurnTimeLeft:= Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].TimeAfterTurn;

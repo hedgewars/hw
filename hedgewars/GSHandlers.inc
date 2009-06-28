@@ -459,8 +459,6 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
-if Ammoz[amDEagle].Ammo.NumPerTurn>CurrentHedgehog^.AttacksNum then
-    AddCaption(inttostr(Ammoz[amDEagle].Ammo.NumPerTurn-CurrentHedgehog^.AttacksNum)+' '+trmsg[sidRemaining], $FFFFFF, capgrpAmmostate);
 PlaySound(sndGun, false, nil);
 Gear^.doStep:= @doStepBulletWork
 end;
