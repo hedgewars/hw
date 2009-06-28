@@ -28,11 +28,27 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-
+	
+#ifdef HAVE_BYTESWAP_H
+	/* use byteswap macros from the host system, hopefully optimized ones ;-) */
+#include <byteswap.h>
+#else
+	/* define our own version, simple, stupid, straight-forward... */
+	
+#define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
+	
+#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | \
+					(((x) & 0x00FF0000) >> 8)  | \
+					(((x) & 0x0000FF00) << 8)  | \
+					(((x) & 0x000000FF) << 24) )
+	
+#endif
+	
+	
 #pragma once
-
-int invert_endianness(int number);
-
+	
+	int invert_endianness(int number);
+	
 #ifdef __CPLUSPLUS
 }
 #endif

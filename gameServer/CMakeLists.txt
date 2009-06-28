@@ -29,6 +29,21 @@ set(ghc_flags
 	-odir ${CMAKE_CURRENT_BINARY_DIR}
 	-hidir ${CMAKE_CURRENT_BINARY_DIR})
 
+if( NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
+set(ghc_flags
+	-w
+	-O2
+	${ghc_flags}
+)
+else()
+set(ghc_flags
+	-Wall
+	-debug
+	-dcore-lint
+	${ghc_flags}
+)
+endif()
+
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${ghc_executable}"
 		ARGS ${ghc_flags}
@@ -37,12 +52,5 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXE
 		)
 
 add_custom_target(hedgewars-server ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}")
-
-
-if(APPLE)
-	set (target_dir ".")
-else(APPLE)
-	set (target_dir "bin")
-endif(APPLE)
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})

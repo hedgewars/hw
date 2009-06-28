@@ -69,6 +69,9 @@ IF(APPLE)
 	FIND_PACKAGE(SDL)
 
 	if (SDL_FOUND)
+		set(CMAKE_C_FLAGS "-Wall -pipe")
+		set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
+		set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
 
 		set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 		include_directories(${SDL_INCLUDE_DIR})
@@ -76,13 +79,11 @@ IF(APPLE)
 
 		add_library (SDLmain STATIC SDLMain.m)
 		set(engine_sources SDLmain ${engine_sources})
-
 	else (SDL_FOUND)
 		message(FATAL_ERROR "No SDL framework found!")
 	endif (SDL_FOUND)
 
 ENDIF(APPLE)
-
 
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 if (fpc_version)
@@ -94,7 +95,11 @@ if (fpc_version)
 		message("Minimum required version of FreePascal is 2.2.0")
 	else (fpc_ver LESS "020200")
 		set(pascal_compiler ${fpc_executable})
-		set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Fl../openalbridge/" "-Cs2000000" "-vwi" "-O2" ${hwengine_project})
+		if( NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
+			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "-O2" "-Xs" ${hwengine_project})
+		else()
+			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "-O-" "-gl" ${hwengine_project})			
+		endif()
 	endif (fpc_ver LESS "020200")
 endif (fpc_version)
 
@@ -111,43 +116,34 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS openalbridge ${engine_sources}
 		)
-
-ELSE(NOT APPLE OR NOT universal_build MATCHES "1")
-
+ELSE()
 #these are the two dependencies for building a universal binary on Mac OS X
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386"
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
 		COMMAND "ppc386" 
 		ARGS ${pascal_compiler_flags} -ohwengine.386
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS openalbridge ${engine_sources}
 		)
-add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386")
+add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386")
 
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc"
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
 		COMMAND "ppcppc"
 		ARGS ${pascal_compiler_flags} -ohwengine.ppc
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS openalbridge ${engine_sources}
 		)
-add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc")
+add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
 
 #this is the command that bundles the two executables into one
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
+add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
 		COMMAND "lipo"
-		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}
-		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc"
+		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine
+		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
 		)
-ENDIF(NOT APPLE OR NOT universal_build MATCHES "1")
+ENDIF()
 
 
 add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-
-
-if(APPLE)
-	set (target_dir ".")
-else(APPLE)
-	set (target_dir "bin")
-endif(APPLE)
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 

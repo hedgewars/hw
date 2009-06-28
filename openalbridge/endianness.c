@@ -24,23 +24,7 @@ extern "C" {
 	
 	//from big endian to little endian
 	int invert_endianness(int number){
-		uint8_t n1,n2,n3,n4;
-		uint32_t a1,a2,a3,a4;
-		uint32_t done = 0;
-		
-		n1 = number;
-		n2 = number >> 8;
-		n3 = number >> 16;
-		n4 = number >> 24;
-		
-		//printf("%X, %X, %X, %X\n", n1, n2, n3, n4);
-		a1 = (uint32_t) n1 << 24;
-		a2 = (uint32_t) n2 << 16;
-		a3 = (uint32_t) n3 << 8;
-		a4 = (uint32_t) n4;
-		done = a1 + a2 + a3 + a4;
-		//printf("%08X %08X %08X %08X = %08X\n", a1, a2, a3, a4, done);
-		return done;
+		return bswap_32(number);
 	}
 	
 #ifdef __CPLUSPLUS
