@@ -2224,9 +2224,12 @@ if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
     end;
 
 if Gear^.Health < 0 then Gear^.Health:= 0;
-if (GameTicks and $3F) = 0 then AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
-
-//AddCaption(inttostr(round(Gear^.Health/20))+'% : '+inttostr(round(Gear^.Timer/1000)), $FFFFFF, capgrpMessage);
+if (GameTicks and $3F) = 0 then 
+       begin
+//AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
+       if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+       Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', $FFFFFFFF, fntSmall)
+       end;
 
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
 HHGear^.State:= HHGear^.State or gstMoving; 
@@ -2253,7 +2256,9 @@ if  (Gear^.Health = 0)
 		end;
 	DeleteGear(Gear);
 	isCursorVisible:= false;
-    AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
+//    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+//    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', $FFFFFFFF, fntSmall)
+    //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
 	end
 end;
 

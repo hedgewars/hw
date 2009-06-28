@@ -156,12 +156,12 @@ const
 	msgFailedSize        = 'failed due to size';
 	msgGettingConfig     = 'Getting game config...';
 
-const
-	ifNone        = $00000000;
-	ifAlpha       = $00000001;
-	ifCritical    = $00000002;
-	ifTransparent = $00000004;
-	ifIgnoreCaps  = $00000008;
+const // image flags (for LoadImage())
+    ifNone        = $00000000; // nothing special
+    ifAlpha       = $00000001; // use alpha channel (unused right now?)
+    ifCritical    = $00000002; // image is critical for gameplay (exit game if unable to load)
+    ifTransparent = $00000004; // image uses transparent pixels (color keying)
+    ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image won't be drawn using OpenGL)
 	
 const
 	cMaxPower     = 1500;

@@ -29,6 +29,7 @@ type PGear = ^TGear;
 			NextGear, PrevGear: PGear;
 			Active: Boolean;
 			Invulnerable: Boolean;
+			RenderTimer: Boolean;
 			Ammo : PAmmo;
 			State : Longword;
 			X : hwFloat;
@@ -236,11 +237,13 @@ case Kind of
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
                 Result^.Friction:= _0_96;
+                Result^.RenderTimer:= true
                 end;
   gtWatermelon: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_8;
                 Result^.Friction:= _0_995;
+                Result^.RenderTimer:= true
                 end;
     gtHedgehog: begin
                 Result^.Radius:= cHHRadius;
@@ -251,6 +254,7 @@ case Kind of
                 end;
 gtAmmo_Grenade: begin
                 Result^.Radius:= 4;
+                Result^.RenderTimer:= true
                 end;
    gtHealthTag: begin
                 Result^.Timer:= 1500;
@@ -263,6 +267,7 @@ gtAmmo_Grenade: begin
          gtUFO: begin
                 Result^.Radius:= 5;
                 Result^.Timer:= 500;
+                Result^.RenderTimer:= true;
                 Result^.Elasticity:= _0_9
                 end;
  gtShotgunShot: begin
@@ -317,7 +322,10 @@ gtAmmo_Grenade: begin
                 Result^.Friction:= _0_03;
                 Result^.Timer:= 5000;
                 end;
-     gtCluster: Result^.Radius:= 2;
+     gtCluster: begin
+                Result^.Radius:= 2;
+                Result^.RenderTimer:= true
+                end;
       gtShover: Result^.Radius:= 20;
        gtFlame: begin
                 Result^.Tag:= Counter mod 32;
@@ -339,6 +347,7 @@ gtAmmo_Grenade: begin
    gtBlowTorch: begin
                 Result^.Radius:= cHHRadius + cBlowTorchC;
                 Result^.Timer:= 7500;
+                Result^.RenderTimer:= true
                 end;
     gtSwitcher: begin
                 Result^.Z:= cCurrHHZ
@@ -361,16 +370,19 @@ gtAmmo_Grenade: begin
                 Result^.Health:= 2048;
                 Result^.Radius:= 7;
                 Result^.Z:= cOnHHZ;
+                Result^.RenderTimer:= true;
                 if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
                 end;
  gtHellishBomb: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_5;
                 Result^.Friction:= _0_96;
+                Result^.RenderTimer:= true
                 end;
        gtDrill: begin
                 Result^.Timer:= 5000;
                 Result^.Radius:= 4;
+                Result^.RenderTimer:= true
                 end;
         gtBall: begin
                 Result^.Radius:= 5;
@@ -385,7 +397,7 @@ gtAmmo_Grenade: begin
      gtRCPlane: begin
                 Result^.Timer:= 15000;
                 Result^.Health:= 3;
-                Result^.Radius:= 8;
+                Result^.Radius:= 8
                 end;
      gtJetpack: begin
                 Result^.Health:= 2000;
@@ -515,7 +527,15 @@ while t <> nil do
 	begin
 	Gear:= t;
 	t:= Gear^.NextGear;
-	if Gear^.Active then Gear^.doStep(Gear);
+	if Gear^.Active then 
+        begin
+        if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
+            begin
+            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex); 
+            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), $FFFFFFFF, fntSmall);
+            end;
+        Gear^.doStep(Gear);
+        end
 	end;
 
 if AllInactive then
@@ -1180,6 +1200,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	                   if (CurAmmoGear^.MsgParam and gm_Up) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
 	                   if (CurAmmoGear^.MsgParam and gm_Left) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
 	                   if (CurAmmoGear^.MsgParam and gm_Right) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
+                       if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
                        end;
             end;
         end
@@ -1398,6 +1419,7 @@ while Gear<>nil do
      gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
       gtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
          end;
+      if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear
       end;
 end;
