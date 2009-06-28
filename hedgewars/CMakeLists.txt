@@ -69,33 +69,14 @@ IF(APPLE)
 	FIND_PACKAGE(SDL)
 
 	if (SDL_FOUND)
-		#removing previous version of library
-		exec_program(rm
-			ARGS -f ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o
-			OUTPUT_VARIABLE noout
-			RETURN_VALUE testnoexecstack
-			)
 
-		#get what architectures to build
-		if(universal_build MATCHES "1")
-			set (arch_to_build "-arch i386 -arch ppc7400")
-		else(universal_build MATCHES "1")
-			set (arch_to_build "")
-		endif(universal_build MATCHES "1")
+		set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+		include_directories(${SDL_INCLUDE_DIR})
+		link_libraries(${SDL_LIBRARY})
 
-		#build, archive and make lib
-		exec_program(${CMAKE_C_COMPILER}
-			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o -c ${hedgewars_SOURCE_DIR}/hedgewars/SDLMain.m -I ${SDL_INCLUDE_DIR} -O2
-			OUTPUT_VARIABLE noout
-			)
-		exec_program(${CMAKE_AR}
-			ARGS -rvu ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a ${EXECUTABLE_OUTPUT_PATH}/SDLMain.o
-			OUTPUT_VARIABLE noout
-			)
-		exec_program(${CMAKE_RANLIB}
-			ARGS ${EXECUTABLE_OUTPUT_PATH}/libSDLmain.a
-			OUTPUT_VARIABLE noout
-			)
+		add_library (SDLmain STATIC SDLMain.m)
+		set(engine_sources SDLmain ${engine_sources})
+
 	else (SDL_FOUND)
 		message(FATAL_ERROR "No SDL framework found!")
 	endif (SDL_FOUND)
@@ -128,7 +109,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		COMMAND "${pascal_compiler}"
 		ARGS ${pascal_compiler_flags}
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
+		DEPENDS openalbridge ${engine_sources}
 		)
 
 ELSE(NOT APPLE OR NOT universal_build MATCHES "1")
@@ -138,7 +119,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		COMMAND "ppc386" 
 		ARGS ${pascal_compiler_flags} -ohwengine.386
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
+		DEPENDS openalbridge ${engine_sources}
 		)
 add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.386")
 
@@ -146,7 +127,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		COMMAND "ppcppc"
 		ARGS ${pascal_compiler_flags} -ohwengine.ppc
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
+		DEPENDS openalbridge ${engine_sources}
 		)
 add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}.ppc")
 

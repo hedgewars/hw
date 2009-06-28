@@ -15,6 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
+#include <stdio.h>
+#include <stdlib.h>
+#include "al.h"
+#include "alc.h"
+#include "endianness.h"
+#include "wrappers.h"
+
+#ifndef _WIN32
+#include <stdint.h>
+#else
+#include "winstdint.h"
+#endif
 
 #ifdef __CPLUSPLUS
 extern "C" {

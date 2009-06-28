@@ -36,15 +36,16 @@ interface
 {$PACKRECORDS C}
 
 {$IFDEF DARWIN}
-	  {$PASCALMAINNAME SDL_main}
+	{$PASCALMAINNAME SDL_main}
 {$IFNDEF IPHONEOS}
-	  {$linkframework Cocoa}
-	  {$linkframework SDL}
-	  {$linkframework SDL_net}
-	  {$linkframework SDL_image}
-	  {$linkframework SDL_ttf}
-	  {$linklib SDLmain}
-	  {$linklib gcc}
+	{$linkframework Cocoa}
+	{$linkframework SDL}
+	{$linkframework SDL_net}
+	{$linkframework SDL_image}
+	{$linkframework SDL_ttf}
+	{$linklib openalbridge}
+	{$linklib SDLmain}
+	{$linklib gcc}
 {$ENDIF}
 {$ENDIF}
 

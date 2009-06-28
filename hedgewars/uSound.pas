@@ -19,16 +19,19 @@
 unit uSound;
 interface
 
+
 {$IFDEF DARWIN}
+	{$linklib openalbridge}
 	{$linkframework OpenAL}
 	{$linkframework Ogg}
 	{$linkframework Vorbis}
-	{$linklib openalbridge}
 {$ELSE}
+{$IFDEF UNIX}
 	{$linklib openal}
 	{$linklib ogg}
 	{$linklib vorbis}
 	{$linklib vorbisfile}
+{$ENDIF}
 {$ENDIF}
 
 uses uConsts;
@@ -40,7 +43,7 @@ type PVoicepack = ^TVoicepack;
 		chunks: array [TSound] of LongInt;
 		end;
 
-const OpenALBridge = 'libopenalbridge';
+const OpenALBridge = 'openalbridge';
 
 procedure InitSound;
 procedure ReleaseSound;

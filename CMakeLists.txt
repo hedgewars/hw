@@ -22,7 +22,6 @@ if(CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc7400" OR CMAKE_OSX_ARCHITECTURES MAT
 	set(universal_build "1")
 	message("-- Building a Universal Application")
 endif(CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc7400" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc7400;i386" OR CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc;i386")
-
 endif(APPLE)
 
 if(DEFINED DATA_INSTALL_DIR)
@@ -60,7 +59,7 @@ set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Hedgewars ${HEDGEWARS_VERSION}")
 
 if(WIN32 AND NOT UNIX)
-	set(CPACK_NSIS_DISPLAY_NAME "Hedgewars, a turn-based Worms-like strategy") 
+	set(CPACK_NSIS_DISPLAY_NAME "Hedgewars, a free turn-based strategy game") 
 	set(CPACK_NSIS_HELP_LINK "http://www.hedgewars.org/")
 	set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
 	set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")

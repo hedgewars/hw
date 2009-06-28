@@ -17,8 +17,6 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
-find_package(OpenAL REQUIRED)
-find_package(OggVorbis REQUIRED)
 
 include_directories(${SDL_INCLUDE_DIR})
 
@@ -166,17 +164,28 @@ add_executable(hedgewars WIN32
 	${hwfr_hdrs}
 	${hwfr_rez_src})
 
-find_library(OPENALBRIDGE_LIBRARY libopenalbridge.a PATH ${EXECUTABLE_OUTPUT_PATH} )
-
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
-	${OPENAL_LIBRARY}
-	${OGG_LIBRARY}
-	${VORBIS_LIBRARY}
-	${VORBISFILE_LIBRARY}
-	${OPENALBRIDGE_LIBRARY}
+	openalbridge
 )
+
+#since openalbridge is linked statically in human systems we need to explicitly link dependencies 
+if(UNIX)
+	set(HW_LINK_LIBS
+		${OPENAL_LIBRARY}
+		${OGG_LIBRARY}
+		${VORBIS_LIBRARY}
+		${HW_LINK_LIBS}
+		)
+if(NOT APPLE)
+	set(HW_LINK_LIBS
+		${VORBISFILE_LIBRARY}
+		${HW_LINK_LIBS}
+		)
+endif(NOT APPLE)
+endif(UNIX)
+
 
 if(WIN32 AND NOT UNIX)
 	if(NOT SDL_LIBRARY)

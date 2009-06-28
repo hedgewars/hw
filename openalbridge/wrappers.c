@@ -25,8 +25,10 @@ extern "C" {
 	void *Malloc (size_t nbytes)
 	{
 		void *aptr;
-		if ( (aptr = malloc(nbytes)) == NULL)
+		if ( (aptr = malloc(nbytes)) == NULL) {
 			fprintf(stderr, "ERROR: not enough memory! malloc() failed");
+			exit(-1);
+		}
 		return aptr;
 	}
 	

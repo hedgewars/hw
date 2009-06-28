@@ -18,7 +18,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include "al.h"
 #include "alc.h"
 #include "loaders.h"
@@ -27,8 +26,11 @@
 
 #ifndef _WIN32
 #include <pthread.h>
+#include <stdint.h>
 #else
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include "winstdint.h"
 #endif
 
 #ifndef _SLEEP_H

@@ -1,31 +1,36 @@
 find_package(OpenAL REQUIRED)
+find_package(OggVorbis REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR})
+include_directories(${OGGVORBIS_INCLUDE_DIRS})
 
-#add_library (openalbridge openalwrap.c loaders.c endianness.c wrappers.c)
-exec_program(${CMAKE_C_COMPILER}
-			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/loaders.o -c ${hedgewars_SOURCE_DIR}/openalbridge/loaders.c -I ${OPENAL_INCLUDE_DIR} -O2 -w
-			OUTPUT_VARIABLE noout
-)
-exec_program(${CMAKE_C_COMPILER}
-			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/endianness.o -c ${hedgewars_SOURCE_DIR}/openalbridge/endianness.c -I ${OPENAL_INCLUDE_DIR} -O2 -w
-	OUTPUT_VARIABLE noout
+
+set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+set(openal_src
+	openalwrap.c loaders.c endianness.c wrappers.c
 )
 
-exec_program(${CMAKE_C_COMPILER}
-			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/openalwrap.o -c ${hedgewars_SOURCE_DIR}/openalbridge/openalwrap.c -I ${OPENAL_INCLUDE_DIR} -O2 -w
-			OUTPUT_VARIABLE noout
-)
+#build a static library for human systems
+set (build_type STATIC)
 
-exec_program(${CMAKE_C_COMPILER}
-			ARGS ${arch_to_build} -o ${EXECUTABLE_OUTPUT_PATH}/wrappers.o -c ${hedgewars_SOURCE_DIR}/openalbridge/wrappers.c -I ${OPENAL_INCLUDE_DIR} -O2 -w
-			OUTPUT_VARIABLE noout
-			)
-		exec_program(${CMAKE_AR}
-			ARGS -rvu ${EXECUTABLE_OUTPUT_PATH}/libopenalbridge.a ${EXECUTABLE_OUTPUT_PATH}/loaders.o ${EXECUTABLE_OUTPUT_PATH}/endianness.o ${EXECUTABLE_OUTPUT_PATH}/openalwrap.o ${EXECUTABLE_OUTPUT_PATH}/wrappers.o 
-			OUTPUT_VARIABLE noout
-			)
-		exec_program(${CMAKE_RANLIB}
-			ARGS ${EXECUTABLE_OUTPUT_PATH}/libopenalbridge.a
-			OUTPUT_VARIABLE noout
-			)
 
+if(WIN32)
+#workaround for visualstudio
+	set(openal_src
+		openalwrap.h loaders.h endianness.h wrappers.h winstdint.h ${openal_src}
+	)
+#deps for the shared library
+	link_libraries(${OPENAL_LIBRARY})
+	link_libraries(${OGG_LIBRARY})
+	link_libraries(${VORBIS_LIBRARY})
+	link_libraries(${VORBISFILE_LIBRARY})
+#build a shared library
+	set (build_type SHARED)
+endif(WIN32)
+
+add_library (openalbridge ${build_type} ${openal_src})
+
+if(WIN32)
+	SET_TARGET_PROPERTIES(openalbridge PROPERTIES LINK_FLAGS /DEF:openalbridge.def)
+#install it in the executable directory
+	install(TARGETS openalbridge DESTINATION bin)
+endif(WIN32)

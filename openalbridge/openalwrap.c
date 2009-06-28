@@ -72,7 +72,6 @@ extern "C" {
 		/* This function initializes an OpenAL contex, allocates memory space for data and prepares OpenAL buffers*/
 		ALCcontext *context;
 		ALCdevice *device;
-		ALenum error;
 
 		const ALCchar *default_device;
 		// Position of the listener.
@@ -87,7 +86,7 @@ extern "C" {
 		fprintf(stderr, "Using default device: %s\n", default_device);
 		
 		if ((device = alcOpenDevice(default_device)) == NULL) {
-			fprintf(stderr, "ERROR %d: Failed to open sound device\n", error);
+			fprintf(stderr, "ERROR: Failed to open sound device\n");
 			return AL_FALSE;
 		}
 		context = alcCreateContext(device, NULL);
@@ -273,9 +272,9 @@ extern "C" {
 	}
 	
 #ifndef _WIN32
-	void *helper_fadeout(void* tmp) {
+	void *helper_fadeout(void *tmp) {
 #else
-	VOID WINAPI helper_fadeout(LPVOID tmp) {	
+	void WINAPI helper_fadeout(void *tmp) {	
 #endif
 		ALfloat gain;
 		fade_t *fade;
@@ -305,33 +304,36 @@ extern "C" {
 #ifndef _WIN32
 		pthread_exit(NULL);
 #else
-		ThreadExit();
+		free(fade);
+		_endthread();
 #endif
 	}
 	
 	ALint openal_fadeout(int index, unsigned int quantity) {
 #ifndef _WIN32
 		pthread_t thread;
+		fade_t fade;
+		fade.index = index;
+		fade.quantity = quantity;
 #else
 		HANDLE Thread;
 		DWORD threadID;
+		fade_t *fade = malloc(sizeof(fade_t));
+		fade->index = index;
+		fade->quantity = quantity;
 #endif
-		fade_t fade;
-		
+
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
 			return AL_FALSE;
 		}
 		
-		fade.index = index;
-		fade.quantity = quantity;
 		
 #ifndef _WIN32
 		pthread_create(&thread, NULL, helper_fadeout, (void*) &fade);
 		pthread_detach(thread);
 #else
-		Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) helper_fadeout, (void*) &fade, 0, threadID);
-		CloseHandle(Thread);
+		Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
 #endif
 		
 		alGetError();  /* clear any AL errors beforehand */
@@ -340,9 +342,9 @@ extern "C" {
 	}
 		
 #ifndef _WIN32
-		void *helper_fadein(void* tmp) 
+		void *helper_fadein(void *tmp) 
 #else
-		VOID WINAPI helper_fadein(LPVOID tmp) 
+		void WINAPI helper_fadein(void *tmp) 
 #endif
 		{
 			ALfloat gain;
@@ -372,7 +374,8 @@ extern "C" {
 #ifndef _WIN32
 			pthread_exit(NULL);
 #else
-			ThreadExit();
+			free(fade);
+			_endthread();
 #endif
 		}
 			
@@ -380,26 +383,27 @@ extern "C" {
 	ALint openal_fadein(int index, unsigned int quantity) {
 #ifndef _WIN32
 		pthread_t thread;
+		fade_t fade;
+		fade.index = index;
+		fade.quantity = quantity;
 #else
 		HANDLE Thread;
 		DWORD threadID;
+		fade_t *fade = malloc(sizeof(fade_t));
+		fade->index = index;
+		fade->quantity = quantity;
 #endif
-		fade_t fade;
 		
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
 			return AL_FALSE;
 		}
-		
-		fade.index = index;
-		fade.quantity = quantity;
-		
+				
 #ifndef _WIN32
 		pthread_create(&thread, NULL, helper_fadein, (void*) &fade);
 		pthread_detach(thread);
 #else
-		Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) helper_fadein, (void*) &fade, 0, threadID);
-		CloseHandle(Thread);
+		Thread = _beginthread(&helper_fadein, 0, (void*) fade);
 #endif
 		
 		alGetError();  /* clear any AL errors beforehand */
