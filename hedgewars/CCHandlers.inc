@@ -478,6 +478,7 @@ with CurrentHedgehog^.Gear^,
 			  {$ELSE}
 			  SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
 			  {$ENDIF}
+			  dec(TargetPoint.X, cScreenWidth div 2);
               dec(TargetPoint.X, WorldDx);
               dec(TargetPoint.Y, WorldDy)
               end;
