@@ -346,8 +346,7 @@ gtAmmo_Grenade: begin
                 end;
    gtBlowTorch: begin
                 Result^.Radius:= cHHRadius + cBlowTorchC;
-                Result^.Timer:= 7500;
-                Result^.RenderTimer:= true
+                Result^.Timer:= 7500
                 end;
     gtSwitcher: begin
                 Result^.Z:= cCurrHHZ
@@ -381,8 +380,7 @@ gtAmmo_Grenade: begin
                 end;
        gtDrill: begin
                 Result^.Timer:= 5000;
-                Result^.Radius:= 4;
-                Result^.RenderTimer:= true
+                Result^.Radius:= 4
                 end;
         gtBall: begin
                 Result^.Radius:= 5;

@@ -1822,6 +1822,7 @@ if Gear^.Tag = 0 then
 	end;
 
 dec(Gear^.Health);
+Gear^.Timer:= Gear^.Health*10; // This is not seconds, but at least it is *some* feedback
 if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
 	FollowGear:= Gear;
