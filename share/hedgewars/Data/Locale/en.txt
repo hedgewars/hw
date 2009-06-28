@@ -68,7 +68,7 @@
 02:00=%1 says peace out!
 02:00=%1 will be fondly remembered!
 02:00=%1 has an aneurysm!
-02:00=%1 leaves behind a wife and child!
+02:00=%1 leaves behind a wife and child
 02:00=%1 has launched his last bazooka
 02:00=%1 has tossed his last grenade
 02:00=%1 has baked his last cake
@@ -82,7 +82,7 @@
 02:00=%1 has gone to play a better game
 02:00=%1 has ragequit life
 02:00=%1 fails
-02:00=Poor poor %1 ...
+02:00=Poor poor %1...
 02:00=%1 prefers wormux
 02:00=%1 has been blocking shots with his face
 02:00=%1 is a hero amongst me...err..hogs
@@ -97,7 +97,7 @@
 02:00=Say goodbye to %1
 02:00=No hope left for %1
 02:00=%1 faces the final curtain
-02:00=Smoke'em if you got'em, %1
+02:00=Smoke 'em if you got 'em, %1
 02:00=%1 suffers a Spontaneous Massive Existence Failure
 02:00=%1 has passed on
 02:00=%1 is stone dead
@@ -133,7 +133,7 @@
 02:01=%1 gets a burial at sea
 02:01=%1 has that sinking feeling
 02:01=%1 is practicing his backstroke
-02:01=%1 goes in search of the titanic
+02:01=%1 goes in search of the Titanic
 02:01=%1 is not Jesus
 02:01=%1 is finding Nemo
 02:01=%1 springs a leak
@@ -151,7 +151,7 @@
 02:01=%1 should have brought a jet ski
 02:01=%1 doesn't like watersports
 02:01=%1 is forever blowing bubbles
-02:01=%1 is short of a raft!
+02:01=%1 is short of a raft
 02:01=%1 thinks salt water is good for the skin
 02:01=%1 gets salt water in his wounds
 02:01=%1 has walked the plank
@@ -167,8 +167,8 @@
 02:02=Let's get this party started
 02:02=Last hog standing wins
 02:02=Let's go!
-02:02=Let's Rock!
-02:02=Let's Jam!
+02:02=Let's rock!
+02:02=Let's jam!
 02:02=It's beginning...
 02:02=This is the start of something big
 02:02=Welcome to Hedgewars
@@ -190,7 +190,7 @@
 02:02=The losers do the cleaning up!
 02:02=Let the fight of the millenium begin
 02:02=Let the fight of the century begin
-02:02=Let the fight of the decade  begin
+02:02=Let the fight of the decade begin
 02:02=Let the fight of the year begin
 02:02=Let the fight of the month begin
 02:02=Let the fight of the week begin
@@ -309,13 +309,13 @@
 02:08=%1 has fallen asleep
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
-02:09=%1 seems to hate himself.
+02:09=%1 seems to hate himself
 02:09=%1 is standing on the wrong side!
 02:09=%1 makes like an emo
 02:09=%1 was holding his weapon the wrong way around
 02:09=%1 is a little sadistic
 02:09=%1 is a masochist
-02:09=%1 has no sense of self preservation
+02:09=%1 has no sense of self-preservation
 02:09=%1 messed up
 02:09=%1 screwed up
 02:09=That was a poor shot, %1

@@ -61,8 +61,7 @@
 02:01=%1 mimics the Titanic!
 02:01=%1 swims like a stone!
 ; Round starts
-02:02=Let's fight!
-02:02=Armed and ready!
+02:02=頑張って!
 ; Round ends (win; unused atm)
 02:03=...
 ; Round ends (draw; unused atm)
