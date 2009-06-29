@@ -22,15 +22,15 @@
 extern "C" {
 #endif 
 	
-	// Sources are points emitting sound.
+	/*Sources are points emitting sound*/
 	ALuint *Sources;
-	// Buffers hold sound data.
+	/*Buffers hold sound data*/
 	ALuint *Buffers;
-	//index for Sources and Buffers
+	/*index for Sources and Buffers*/
 	ALuint globalindex, globalsize;
-	// Position of the source sound.
+	/*Position of the source sound*/
 	ALfloat SourcePos[] = { 0.0, 0.0, 0.0 };
-	// Velocity of the source sound.
+	/*Velocity of the source sound*/
 	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
 	
 	int increment;
@@ -63,11 +63,11 @@ extern "C" {
 		ALCdevice *device;
 		const ALCchar *default_device;
 
-		// Position of the listener.
+		/*Position of the listener*/
 		ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
-		// Velocity of the listener.
+		/*Velocity of the listener*/
 		ALfloat ListenerVel[] = { 0.0, 0.0, 0.0 };
-		// Orientation of the listener. (first 3 elements are "at", second 3 are "up")
+		/*Orientation of the listener. (first 3 elements are "at", second 3 are "up")*/
 		ALfloat ListenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 		
 		default_device = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
@@ -85,13 +85,13 @@ extern "C" {
 		if (AlGetError("ERROR %d: Creating a new contex\n") != AL_TRUE)
 			return AL_FALSE;
 		
-		//allocate memory space for buffers and sources
+		/*allocate memory space for buffers and sources*/
 		globalsize = memorysize;
 		increment = memorysize;
 		Buffers = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
 		Sources = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
 		
-		//set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation
+		/*set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation*/
 		alListenerf (AL_GAIN,		 1.0f		);
 		alListenerfv(AL_POSITION,    ListenerPos);
 		alListenerfv(AL_VELOCITY,    ListenerVel);
@@ -146,23 +146,23 @@ extern "C" {
 			return -2;
 		}
 		
-		//prepare the buffers to receive data
+		/*prepare the buffer to receive data*/
 		alGenBuffers(1, &Buffers[globalindex]);
 		
 		if (AlGetError("ERROR %d: Allocating memory for buffers\n") != AL_TRUE)
 			return -3;
 		
-		//prepare the sources to emit sound
+		/*prepare the source to emit sound*/
 		alGenSources(1, &Sources[globalindex]);
 		
 		if (AlGetError("ERROR %d: Allocating memory for sources\n") != AL_TRUE)
 			return -4;
 				
 		
-		if (fileformat == 0x5367674F) //check if ogg
+		if (fileformat == 0x5367674F) /*check if ogg*/
 			error = load_OggVorbis (filename, &format, &data, &bitsize, &freq);
 		else {
-			if (fileformat == 0x46464952) //check if wav
+			if (fileformat == 0x46464952) /*check if wav*/
 				error = load_WavPcm (filename, &format, &data, &bitsize, &freq);
 			else {
 				fprintf(stderr, "ERROR: File format (%08X) not supported!\n", invert_endianness(fileformat));
@@ -170,14 +170,14 @@ extern "C" {
 			}
 		}
 		
-		//copy pcm data in one buffer
+		/*copy pcm data in one buffer*/
 		alBufferData(Buffers[globalindex], format, data, bitsize, freq);
-		free(data);		//deallocate data to save memory
+		free(data);		/*deallocate data to save memory*/
 		
 		if (AlGetError("ERROR %d: Writing data to buffer\n") != AL_TRUE)
 			return -6;
 			
-		//source properties that it will use when it's in playback
+		/*set source properties that it will use when it's in playback*/
 		alSourcei (Sources[globalindex], AL_BUFFER,   Buffers[globalindex]  );
 		alSourcef (Sources[globalindex], AL_PITCH,    1.0f					);
 		alSourcef (Sources[globalindex], AL_GAIN,     1.0f					);
@@ -190,7 +190,7 @@ extern "C" {
 		
 		alGetError();  /* clear any AL errors beforehand */
 		
-		//returns the index of the source you just loaded, increments it and exits
+		/*returns the index of the source you just loaded, increments it and exits*/
 		return globalindex++;
 	}
 	

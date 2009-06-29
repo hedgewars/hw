@@ -75,7 +75,7 @@ extern "C" {
 		fprintf(stderr, "Fade-out: index %d quantity %d\n", index, quantity);
 #endif
 		
-		//save the volume desired after the fade
+		/*save the volume desired after the fade*/
 		alGetSourcef(Sources[index], AL_GAIN, &target_gain);
 		if (target_gain > 1.0f || target_gain <= 0.0f)
 			target_gain = 1.0f;
@@ -133,7 +133,7 @@ extern "C" {
 		
 		AlGetError("ERROR %d: Setting fade out volume\n");
 		
-		//stop that sound and reset its volume
+		/*stop that sound and reset its volume*/
 		alSourceStop (Sources[index]);
 		alSourcef (Sources[index], AL_GAIN, old_gain);	
 		

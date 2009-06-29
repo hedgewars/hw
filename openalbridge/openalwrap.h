@@ -16,22 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "al.h"
-#include "alc.h"
-#include "loaders.h"
-#include "wrappers.h"
-#include "endianness.h"
-
-#ifndef _WIN32
-#include <pthread.h>
-#include <stdint.h>
-#else
-#define WIN32_LEAN_AND_MEAN
-#include <process.h>
-#include "winstdint.h"
-#endif
+#include "globals.h"
 
 
 #ifdef __CPLUSPLUS
@@ -54,8 +39,6 @@ extern "C" {
 	ALint	openal_pausesound		(int index);
 	ALint	openal_stopsound		(int index);
 	
-#define FADE_IN		11
-#define FADE_OUT	12
 #ifdef __CPLUSPLUS
 }
 #endif

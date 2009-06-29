@@ -22,13 +22,6 @@
 extern "C" {
 #endif 
 	
-	extern int ov_open(FILE *f,OggVorbis_File *vf,char *initial,long ibytes);
-	extern long ov_read(OggVorbis_File *vf,char *buffer,int length,int bigendianp,int word,int sgned,int *bitstream);
-	extern ogg_int64_t ov_pcm_total(OggVorbis_File *vf,int i);
-	extern long ov_read(OggVorbis_File *vf,char *buffer,int length,int bigendianp,int word,int sgned,int *bitstream);
-	extern vorbis_info *ov_info(OggVorbis_File *vf,int link);
-	extern vorbis_comment *ov_comment(OggVorbis_File *f, int num);
-	
 	int load_WavPcm (const char *filename, ALenum *format, uint8_t** data, ALsizei *bitsize, ALsizei *freq) {
 		WAV_header_t WAVHeader;
 		FILE *wavfile;
@@ -66,11 +59,11 @@ extern "C" {
 		fprintf(stderr, "BitsPerSample: %d\n", WAVHeader.BitsPerSample);
 #endif
 		
-		do { //remove useless header chunks (plenty room for improvements)
+		do { /*remove useless header chunks (plenty room for improvements)*/
 			t = fread(&WAVHeader.Subchunk2ID, sizeof(uint32_t), 1, wavfile);
 			if (invert_endianness(WAVHeader.Subchunk2ID) == 0x64617461)
 				break;
-			if (t <= 0) { //eof found
+			if (t <= 0) { /*eof*/
 				fprintf(stderr, "ERROR: wrong WAV header\n");
 				return AL_FALSE;
 			}
@@ -84,7 +77,7 @@ extern "C" {
 		
 		*data = (uint8_t*) malloc (sizeof(uint8_t) * WAVHeader.Subchunk2Size);
 		
-		//this could be improved
+		/*this could be improved*/
 		do {
 			n += fread(&((*data)[n]), sizeof(uint8_t), 1, wavfile);
 		} while (n < WAVHeader.Subchunk2Size);
@@ -96,7 +89,7 @@ extern "C" {
 #endif
 		
 		/*remaining parameters*/
-		//Valid formats are AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, and AL_FORMAT_STEREO16. 
+		/*Valid formats are AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, and AL_FORMAT_STEREO16*/
 		if (WAVHeader.NumChannels == 1) {
 			if (WAVHeader.BitsPerSample == 8)
 				*format = AL_FORMAT_MONO8;
@@ -132,21 +125,21 @@ extern "C" {
 	}
 	
 	int load_OggVorbis (const char *filename, ALenum *format, uint8_t**data, ALsizei *bitsize, ALsizei *freq) {
-		//implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153
-		FILE			*oggFile;		// ogg handle
-		OggVorbis_File  oggStream;		// stream handle
-		vorbis_info		*vorbisInfo;	// some formatting data
-		int64_t			pcm_length;		// length of the decoded data
+		/*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
+		FILE			*oggFile;		/*ogg handle*/
+		OggVorbis_File  oggStream;		/*stream handle*/
+		vorbis_info		*vorbisInfo;	/*some formatting data*/
+		int64_t			pcm_length;		/*length of the decoded data*/
 		int size = 0;
 		int section, result;
 #ifdef DEBUG
 		int i;
-		vorbis_comment	*vorbisComment;	// other less useful data
+		vorbis_comment	*vorbisComment;	/*other less useful data*/
 #endif
 		
 		oggFile = Fopen(filename, "rb");
 		result = ov_open(oggFile, &oggStream, NULL, 0);
-		//TODO: check returning value of result
+		/*TODO: check returning value of result*/
 		
 		vorbisInfo = ov_info(&oggStream, -1);
 		pcm_length = ov_pcm_total(&oggStream,-1) << vorbisInfo->channels;	
@@ -167,10 +160,10 @@ extern "C" {
 			fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
 #endif
 		
-		//allocates enough room for the decoded data
+		/*allocates enough room for the decoded data*/
 		*data = (uint8_t*) malloc (sizeof(uint8_t) * pcm_length);
 		
-		//there *should* not be ogg at 8 bits
+		/*there *should* not be ogg at 8 bits*/
 		if (vorbisInfo->channels == 1)
 			*format = AL_FORMAT_MONO16;
 		else {
@@ -183,7 +176,7 @@ extern "C" {
 		}
 		
 		while(size < pcm_length)	{
-			//ov_read decodes the ogg stream and storse the pcm in data 
+			/*ov_read decodes the ogg stream and storse the pcm in data*/
 			result = ov_read (&oggStream, *data + size, pcm_length - size, 0, 2, 1, &section);
 			if(result > 0) {
 				size += result;
@@ -197,7 +190,7 @@ extern "C" {
 			}
 		}
 		
-		//records the last fields
+		/*records the last fields*/
 		*bitsize = size;
 		*freq = vorbisInfo->rate;
 		return AL_TRUE;

@@ -26,12 +26,10 @@ interface
 	{$linkframework Ogg}
 	{$linkframework Vorbis}
 {$ELSE}
-{$IFDEF UNIX}
 	{$linklib openal}
 	{$linklib ogg}
 	{$linklib vorbis}
 	{$linklib vorbisfile}
-{$ENDIF}
 {$ENDIF}
 
 uses uConsts;

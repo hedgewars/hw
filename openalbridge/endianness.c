@@ -22,7 +22,7 @@
 extern "C" {
 #endif 
 	
-	//from big endian to little endian
+	/*from big endian to little endian*/
 	int invert_endianness(int number){
 		return bswap_32(number);
 	}

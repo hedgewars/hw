@@ -172,8 +172,8 @@ set(HW_LINK_LIBS
 	openalbridge
 )
 
-#since openalbridge is linked statically in human systems we need to explicitly link dependencies 
-if(UNIX)
+#since openalbridge is linked statically with non-m$ compilers we need to explicitly link dependencies 
+if(NOT MSVC)
 	set(HW_LINK_LIBS
 		${OPENAL_LIBRARY}
 		${OGG_LIBRARY}
@@ -186,7 +186,7 @@ if(NOT APPLE)
 		${HW_LINK_LIBS}
 		)
 endif(NOT APPLE)
-endif(UNIX)
+endif(NOT MSVC)
 
 
 if(WIN32 AND NOT UNIX)

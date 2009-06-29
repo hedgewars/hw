@@ -19,10 +19,11 @@ set(openal_src
 #build a static library for human systems
 set (build_type STATIC)
 
-if(WIN32)
+#visualstudio doesn't like static linking, so we're building a shared library just for it
+if(MSVC)
 #workaround for visualstudio (wants headers in the source list)
 	set(openal_src
-		openalwrap.h loaders.h endianness.h wrappers.h winstdint.h ${openal_src}
+		openalwrap.h loaders.h endianness.h wrappers.h winstdint.h globals.h ${openal_src}
 	)
 #deps for the shared library
 	link_libraries(${OPENAL_LIBRARY})
@@ -31,7 +32,7 @@ if(WIN32)
 	link_libraries(${VORBISFILE_LIBRARY})
 #build a shared library
 	set (build_type SHARED)
-endif(WIN32)
+endif(MSVC)
 
 #compiles and links actual library
 add_library (openalbridge ${build_type} ${openal_src})
