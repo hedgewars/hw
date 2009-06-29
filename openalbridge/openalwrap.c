@@ -29,14 +29,14 @@ extern "C" {
 	//index for Sources and Buffers
 	ALuint globalindex, globalsize;
 	// Position of the source sound.
-	ALfloat **SourcePos;
+	ALfloat SourcePos[] = { 0.0, 0.0, 0.0 };
 	// Velocity of the source sound.
-	ALfloat **SourceVel;
+	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
 	
+	int increment;
 	
 	ALint openal_close(void) {
 		/* This function stops all the sounds, deallocates all memory and closes OpenAL */
-		int i;
 		ALCcontext *context;
 		ALCdevice  *device;
 		
@@ -44,12 +44,6 @@ extern "C" {
 		alDeleteSources (globalsize, Sources);
 		alDeleteBuffers (globalsize, Buffers);
 		
-		for (i = 0; i < globalsize; i++) {
-			free(SourcePos[i]);
-			free(SourceVel[i]);
-		}
-		free(SourcePos);
-		free(SourceVel);
 		free(Sources);
 		free(Buffers);
 		
@@ -67,8 +61,8 @@ extern "C" {
 		/* This function initializes an OpenAL contex, allocates memory space for data and prepares OpenAL buffers*/
 		ALCcontext *context;
 		ALCdevice *device;
-
 		const ALCchar *default_device;
+
 		// Position of the listener.
 		ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
 		// Velocity of the listener.
@@ -77,13 +71,13 @@ extern "C" {
 		ALfloat ListenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 		
 		default_device = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-		
 		fprintf(stderr, "Using default device: %s\n", default_device);
 		
 		if ((device = alcOpenDevice(default_device)) == NULL) {
 			fprintf(stderr, "ERROR: Failed to open sound device\n");
 			return AL_FALSE;
 		}
+		
 		context = alcCreateContext(device, NULL);
 		alcMakeContextCurrent(context);
 		alcProcessContext(context);
@@ -93,10 +87,9 @@ extern "C" {
 		
 		//allocate memory space for buffers and sources
 		globalsize = memorysize;
-		Buffers   = (ALuint*)   Malloc(sizeof(ALuint  )*globalsize);
-		Sources   = (ALuint*)   Malloc(sizeof(ALuint  )*globalsize);
-		SourcePos = (ALfloat**) Malloc(sizeof(ALfloat*)*globalsize);
-		SourceVel = (ALfloat**) Malloc(sizeof(ALfloat*)*globalsize);
+		increment = memorysize;
+		Buffers = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
+		Sources = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
 		
 		//set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation
 		alListenerf (AL_GAIN,		 1.0f		);
@@ -111,6 +104,21 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
+	int helper_realloc (void) {
+		globalsize += increment;
+#ifdef DEBUG
+		fprintf(stderr, "OpenAL: Realloc in process %d\n", globalsize);
+#endif
+		Buffers = (ALuint*) reallocf(Buffers, sizeof(ALuint)*globalsize);
+		Sources = (ALuint*) reallocf(Sources, sizeof(ALuint)*globalsize);
+		if (Buffers == NULL || Sources == NULL) {
+			fprintf(stderr, "ERROR: not enough memory! realloc() failed\n");
+			exit(-1);
+		} else {
+			return 0;
+		}
+	}
+	
 	
 	int openal_loadfile (const char *filename){
 		/* This function opens a file, loads into memory and allocates the Source buffer for playing*/
@@ -119,9 +127,12 @@ extern "C" {
 		ALsizei freq;
 		uint8_t *data;
 		uint32_t fileformat;
-		int i, error;
+		int error;
 		FILE *fp;
 		
+		
+		if (globalindex == globalsize)
+			helper_realloc();
 		
 		/*detect the file format, as written in the first 4 bytes of the header*/
 		fp = Fopen (filename, "rb");
@@ -165,28 +176,17 @@ extern "C" {
 		
 		if (AlGetError("ERROR %d: Writing data to buffer\n") != AL_TRUE)
 			return -6;
-		
-		//memory allocation for source position and velocity
-		SourcePos[globalindex] = (ALfloat*) Malloc(sizeof(ALfloat)*3);
-		SourceVel[globalindex] = (ALfloat*) Malloc(sizeof(ALfloat)*3);
-		
-		if (SourcePos[globalindex] == NULL || SourceVel[globalindex] == NULL)
-			return -7;
 			
 		//source properties that it will use when it's in playback
-		for (i = 0; i < 3; i++) {
-			SourcePos[globalindex][i] = 0.0;
-			SourceVel[globalindex][i] = 0.1;
-		}	
 		alSourcei (Sources[globalindex], AL_BUFFER,   Buffers[globalindex]  );
 		alSourcef (Sources[globalindex], AL_PITCH,    1.0f					);
 		alSourcef (Sources[globalindex], AL_GAIN,     1.0f					);
-		alSourcefv(Sources[globalindex], AL_POSITION, SourcePos[globalindex]);
-		alSourcefv(Sources[globalindex], AL_VELOCITY, SourceVel[globalindex]);
+		alSourcefv(Sources[globalindex], AL_POSITION, SourcePos				);
+		alSourcefv(Sources[globalindex], AL_VELOCITY, SourceVel				);
 		alSourcei (Sources[globalindex], AL_LOOPING,  0						);
 		
 		if (AlGetError("ERROR %d: Setting source properties\n") != AL_TRUE)
-			return -8;
+			return -7;
 		
 		alGetError();  /* clear any AL errors beforehand */
 		
@@ -200,7 +200,7 @@ extern "C" {
 		ALint loop;
 		
 		if (index >= globalsize) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
 		
@@ -218,7 +218,7 @@ extern "C" {
 	ALint openal_setvolume (int index, unsigned char percentage) {
 		/*Set volume for sound number index*/
 		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
 		
@@ -266,39 +266,8 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
-
-	ALint openal_fadeout(int index, unsigned int quantity) {
-#ifndef _WIN32
-		pthread_t thread;
-#else
-		HANDLE Thread;
-		DWORD threadID;
-#endif
-		fade_t *fade; 
-		
-		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
-			return AL_FALSE;
-		}
-		
-		fade = (fade_t*) Malloc(sizeof(fade_t));
-		fade->index = index;
-		fade->quantity = quantity;
-		
-#ifndef _WIN32
-		pthread_create(&thread, NULL, helper_fadeout, (void*) fade);
-		pthread_detach(thread);
-#else
-		Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
-#endif
-		
-		alGetError();  /* clear any AL errors beforehand */
-
-		return AL_TRUE;
-	}
-		
-		
-	ALint openal_fadein(int index, unsigned int quantity) {
+	
+	ALint openal_fade(int index, unsigned int quantity, char inout) {
 #ifndef _WIN32
 		pthread_t thread;
 #else
@@ -312,27 +281,54 @@ extern "C" {
 		fade->quantity = quantity;
 		
 		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
-				
+		
+		if (inout == FADE_IN)
 #ifndef _WIN32
-		pthread_create(&thread, NULL, helper_fadein, (void*) fade);
-		pthread_detach(thread);
+			pthread_create(&thread, NULL, helper_fadein, (void*) fade);
 #else
-		Thread = _beginthread(&helper_fadein, 0, (void*) fade);
+			Thread = _beginthread(&helper_fadein, 0, (void*) fade);
+#endif
+		else {
+			if (inout == FADE_OUT)
+#ifndef _WIN32
+				pthread_create(&thread, NULL, helper_fadeout, (void*) fade);
+#else
+				Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
+#endif	
+			else {
+				fprintf(stderr, "ERROR: unknown direction for fade (%d)\n", inout);
+				free(fade);
+				return AL_FALSE;
+			}
+		}
+		
+#ifndef _WIN32
+		pthread_detach(thread);
 #endif
 		
 		alGetError();  /* clear any AL errors beforehand */
-
+		
 		return AL_TRUE;
 	}
+
 	
+	ALint openal_fadeout(int index, unsigned int quantity) {
+		return openal_fade(index, quantity, FADE_OUT);
+	}
+		
+		
+	ALint openal_fadein(int index, unsigned int quantity) {
+		return openal_fade(index, quantity, FADE_IN);
+	}
+
 	
 	ALint openal_playsound(int index){
 		/*Play sound number index*/
 		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
 		alSourcePlay(Sources[index]);
@@ -348,7 +344,7 @@ extern "C" {
 	ALint openal_pausesound(int index){
 		/*Pause sound number index*/
 		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
 		alSourcePause(Sources[index]);
@@ -362,7 +358,7 @@ extern "C" {
 	ALint openal_stopsound(int index){
 		/*Stop sound number index*/
 		if (index >= globalindex) {
-			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
 			return AL_FALSE;
 		}
 		alSourceStop(Sources[index]);

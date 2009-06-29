@@ -26,8 +26,8 @@ extern "C" {
 	
 	void *Malloc (size_t nbytes){
 		void *aptr;
-		if ( (aptr = malloc(nbytes)) == NULL) {
-			fprintf(stderr, "ERROR: not enough memory! malloc() failed");
+		if ((aptr = malloc(nbytes)) == NULL) {
+			fprintf(stderr, "ERROR: not enough memory! malloc() failed\n");
 			exit(-1);
 		}
 		return aptr;
@@ -37,7 +37,7 @@ extern "C" {
 	FILE *Fopen (const char *fname, char *mode)	{
 		FILE *fp;
 		if ((fp=fopen(fname,mode)) == NULL)
-			fprintf (stderr, "ERROR: can't open file %s in mode '%s'", fname, mode);
+			fprintf (stderr, "ERROR: can't open file %s in mode '%s'\n", fname, mode);
 		return fp;
 	}
 	

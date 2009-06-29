@@ -17,7 +17,7 @@ ENDIF(VORBIS_INCLUDE_DIR AND OGG_LIBRARY AND VORBIS_LIBRARY AND VORBISFILE_LIBRA
 IF(OGGVORBIS_FOUND)
     MESSAGE(STATUS "Found OggVorbis: ${OGGVORBIS_LIBRARIES}")
 ELSE(OGGVORBIS_FOUND)
-    MESSAGE(FATAL_ERROR "Could NOT find Ogg and/or Vorbis - Visit xiph.org for them")
+    MESSAGE(FATAL_ERROR "Could NOT find Ogg and/or Vorbis - Visit xiph.org and download latest version")
 ENDIF(OGGVORBIS_FOUND)
 
 

@@ -29,7 +29,7 @@
 #include <stdint.h>
 #else
 #define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#include <process.h>
 #include "winstdint.h"
 #endif
 
@@ -49,10 +49,13 @@ extern "C" {
 	ALint	openal_togglemute		(void);
 	ALint	openal_fadeout			(int index, unsigned int quantity);
 	ALint	openal_fadein			(int index, unsigned int quantity);
+	ALint	openal_fade				(int index, unsigned int quantity, char direction);
 	ALint	openal_playsound		(int index);	
 	ALint	openal_pausesound		(int index);
 	ALint	openal_stopsound		(int index);
 	
+#define FADE_IN		11
+#define FADE_OUT	12
 #ifdef __CPLUSPLUS
 }
 #endif

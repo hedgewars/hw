@@ -97,7 +97,7 @@ AskForVoicepack:= @voicepacks[i]
 end;
 
 procedure InitSound;
-const numSounds = 200;
+const numSounds = 80;
 begin
 if not isSoundEnabled then exit;
 WriteToConsole('Init OpenAL sound...');

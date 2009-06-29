@@ -26,7 +26,7 @@ SDLInteraction::SDLInteraction()
 	music = -1;
 
 	SDL_Init(SDL_INIT_VIDEO);
-	openal_init(40);
+	openal_init(5);
 
 }
 
