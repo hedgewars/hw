@@ -82,7 +82,7 @@ var
 	cReducedQuality : boolean = false;
 	cLocaleFName  : shortstring = 'en.txt';
 	cSeed         : shortstring = '';
-	cInitVolume   : LongInt = 128;
+	cInitVolume   : LongInt = 50;
 	cVolumeDelta  : LongInt = 0;
 	cTimerInterval   : Longword = 8;
 	cHasFocus     : boolean = true;

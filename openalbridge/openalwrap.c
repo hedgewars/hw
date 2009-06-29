@@ -21,11 +21,6 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-
-	typedef struct _fade_t {
-		int index;
-		unsigned int quantity;
-	} fade_t;
 	
 	// Sources are points emitting sound.
 	ALuint *Sources;
@@ -169,14 +164,14 @@ extern "C" {
 		free(data);		//deallocate data to save memory
 		
 		if (AlGetError("ERROR %d: Writing data to buffer\n") != AL_TRUE)
-			return -5;
+			return -6;
 		
 		//memory allocation for source position and velocity
 		SourcePos[globalindex] = (ALfloat*) Malloc(sizeof(ALfloat)*3);
 		SourceVel[globalindex] = (ALfloat*) Malloc(sizeof(ALfloat)*3);
 		
 		if (SourcePos[globalindex] == NULL || SourceVel[globalindex] == NULL)
-			return -6;
+			return -7;
 			
 		//source properties that it will use when it's in playback
 		for (i = 0; i < 3; i++) {
@@ -191,7 +186,7 @@ extern "C" {
 		alSourcei (Sources[globalindex], AL_LOOPING,  0						);
 		
 		if (AlGetError("ERROR %d: Setting source properties\n") != AL_TRUE)
-			return -7;
+			return -8;
 		
 		alGetError();  /* clear any AL errors beforehand */
 		
@@ -271,48 +266,7 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
-#ifndef _WIN32
-	void *helper_fadeout(void *tmp) {
-#else
-	void WINAPI helper_fadeout(void *tmp) {	
-#endif
-		ALfloat gain;
-		fade_t *fade;
-		int index; 
-		unsigned int quantity; 
-		
-		fade = tmp;
-		index = fade->index;
-		quantity = fade->quantity;
-		free(fade);
 
-#ifdef DEBUG
-		fprintf(stderr, "Fade-out: index %d quantity %d", index, quantity);
-#endif
-		
-		alGetSourcef(Sources[index], AL_GAIN, &gain);
-		
-		for ( ; gain >= 0.00f; gain -= (float) quantity/10000){
-#ifdef DEBUG
-			fprintf(stderr, "Fade-out: Set gain to %f\n", gain);
-#endif
-			alSourcef(Sources[index], AL_GAIN, gain);
-			usleep(10000);
-		}
-
-		AlGetError("ERROR %d: Setting fade out volume\n");
-		
-		//stop that sound and reset its gain
-		alSourceStop (Sources[index]);
-		alSourcef (Sources[index], AL_GAIN, 1.0f);	
-		
-#ifndef _WIN32
-		pthread_exit(NULL);
-#else
-		_endthread();
-#endif
-	}
-	
 	ALint openal_fadeout(int index, unsigned int quantity) {
 #ifndef _WIN32
 		pthread_t thread;
@@ -343,43 +297,6 @@ extern "C" {
 		return AL_TRUE;
 	}
 		
-#ifndef _WIN32
-		void *helper_fadein(void *tmp) 
-#else
-		void WINAPI helper_fadein(void *tmp) 
-#endif
-		{
-			ALfloat gain;
-			fade_t *fade;
-			int index; 
-			unsigned int quantity; 
-			
-			fade = tmp;
-			index = fade->index;
-			quantity = fade->quantity;
-			free (fade);
-			
-			gain = 0.0f;
-			alSourcef(Sources[index], AL_GAIN, gain);
-			alSourcePlay(Sources[index]);
-			
-			for ( ; gain <= 1.00f; gain += (float) quantity/10000){
-#ifdef DEBUG
-				fprintf(stderr, "Fade-in: Set gain to: %f\n", gain);
-#endif
-				alSourcef(Sources[index], AL_GAIN, gain);
-				usleep(10000);
-			}
-			
-			AlGetError("ERROR %d: Setting fade in volume\n");
-			
-#ifndef _WIN32
-			pthread_exit(NULL);
-#else
-			_endthread();
-#endif
-		}
-			
 		
 	ALint openal_fadein(int index, unsigned int quantity) {
 #ifndef _WIN32

@@ -136,10 +136,13 @@ extern "C" {
 		FILE			*oggFile;		// ogg handle
 		OggVorbis_File  oggStream;		// stream handle
 		vorbis_info		*vorbisInfo;	// some formatting data
-		vorbis_comment	*vorbisComment;	// other less useful data
 		int64_t			pcm_length;		// length of the decoded data
 		int size = 0;
-		int section, result, i;
+		int section, result;
+#ifdef DEBUG
+		int i;
+		vorbis_comment	*vorbisComment;	// other less useful data
+#endif
 		
 		oggFile = Fopen(filename, "rb");
 		result = ov_open(oggFile, &oggStream, NULL, 0);

@@ -104,15 +104,16 @@ WriteToConsole('Init OpenAL sound...');
 isSoundEnabled:= openal_init(numSounds);
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
-ChangeVolume(cInitVolume)
 end;
 
 procedure ReleaseSound;
 begin
+if isMusicEnabled then openal_fadeout(Mus, 30);
 openal_close();
 end;
 
 procedure SoundLoad;
+const volume = 60;
 var i: TSound;
 	s: shortstring;
 	t: Longword;
@@ -127,6 +128,7 @@ for i:= Low(TSound) to High(TSound) do
 		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
 		defVoicepack^.chunks[i]:= openal_loadfile (Str2PChar(s));
+		openal_setvolume(defVoicepack^.chunks[i],volume);
 		TryDo(defVoicepack^.chunks[i] >= 0, msgFailed, true);
 		WriteLnToConsole(msgOK);
 		end;
@@ -139,6 +141,7 @@ for t:= 0 to cMaxTeams do
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
 				voicepacks[t].chunks[i]:= openal_loadfile (Str2PChar(s));
+				openal_setvolume(voicepacks[t].chunks[i],volume);
 				if voicepacks[t].chunks[i] < 0 then
 					WriteLnToConsole(msgFailed)
 				else
@@ -184,7 +187,8 @@ Mus:= openal_loadfile(Str2PChar(s));
 TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-openal_fadein(Mus, 50);
+openal_setvolume(Mus, 60);
+openal_fadein(Mus, 70);
 openal_toggleloop(Mus);
 end;
 

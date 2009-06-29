@@ -161,7 +161,7 @@ const // image flags (for LoadImage())
     ifAlpha       = $00000001; // use alpha channel (unused right now?)
     ifCritical    = $00000002; // image is critical for gameplay (exit game if unable to load)
     ifTransparent = $00000004; // image uses transparent pixels (color keying)
-    ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image won't be drawn using OpenGL)
+    ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
 	
 const
 	cMaxPower     = 1500;

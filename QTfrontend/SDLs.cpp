@@ -26,7 +26,7 @@ SDLInteraction::SDLInteraction()
 	music = -1;
 
 	SDL_Init(SDL_INIT_VIDEO);
-	openal_init(50);
+	openal_init(40);
 
 }
 
@@ -62,12 +62,12 @@ void SDLInteraction::StartMusic()
 	if (music < 0) {
 		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 		openal_toggleloop(music);
-		openal_setvolume(music,66);
-    }
-	openal_fadein(music, 50);
+	}
+	openal_setvolume(music, 60);
+	openal_fadein(music, 70);
 }
 
 void SDLInteraction::StopMusic()
 {
-	if (music >= 0) openal_fadeout(music, 50);
+	if (music >= 0) openal_fadeout(music, 70);
 }
