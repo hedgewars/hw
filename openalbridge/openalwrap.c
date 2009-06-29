@@ -284,6 +284,11 @@ extern "C" {
 		fade = tmp;
 		index = fade->index;
 		quantity = fade->quantity;
+		free(fade);
+
+#ifdef DEBUG
+		fprintf(stderr, "Fade-out: index %d quantity %d", index, quantity);
+#endif
 		
 		alGetSourcef(Sources[index], AL_GAIN, &gain);
 		
@@ -294,7 +299,7 @@ extern "C" {
 			alSourcef(Sources[index], AL_GAIN, gain);
 			usleep(10000);
 		}
-		
+
 		AlGetError("ERROR %d: Setting fade out volume\n");
 		
 		//stop that sound and reset its gain
@@ -304,7 +309,6 @@ extern "C" {
 #ifndef _WIN32
 		pthread_exit(NULL);
 #else
-		free(fade);
 		_endthread();
 #endif
 	}
@@ -312,25 +316,23 @@ extern "C" {
 	ALint openal_fadeout(int index, unsigned int quantity) {
 #ifndef _WIN32
 		pthread_t thread;
-		fade_t fade;
-		fade.index = index;
-		fade.quantity = quantity;
 #else
 		HANDLE Thread;
 		DWORD threadID;
-		fade_t *fade = malloc(sizeof(fade_t));
-		fade->index = index;
-		fade->quantity = quantity;
 #endif
-
+		fade_t *fade; 
+		
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
 			return AL_FALSE;
 		}
 		
+		fade = (fade_t*) Malloc(sizeof(fade_t));
+		fade->index = index;
+		fade->quantity = quantity;
 		
 #ifndef _WIN32
-		pthread_create(&thread, NULL, helper_fadeout, (void*) &fade);
+		pthread_create(&thread, NULL, helper_fadeout, (void*) fade);
 		pthread_detach(thread);
 #else
 		Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
@@ -355,6 +357,7 @@ extern "C" {
 			fade = tmp;
 			index = fade->index;
 			quantity = fade->quantity;
+			free (fade);
 			
 			gain = 0.0f;
 			alSourcef(Sources[index], AL_GAIN, gain);
@@ -368,13 +371,11 @@ extern "C" {
 				usleep(10000);
 			}
 			
-			if (AlGetError("ERROR %d: Setting fade in volume\n") != AL_TRUE)
-				return AL_FALSE;
+			AlGetError("ERROR %d: Setting fade in volume\n");
 			
 #ifndef _WIN32
 			pthread_exit(NULL);
 #else
-			free(fade);
 			_endthread();
 #endif
 		}
@@ -383,16 +384,15 @@ extern "C" {
 	ALint openal_fadein(int index, unsigned int quantity) {
 #ifndef _WIN32
 		pthread_t thread;
-		fade_t fade;
-		fade.index = index;
-		fade.quantity = quantity;
 #else
 		HANDLE Thread;
 		DWORD threadID;
-		fade_t *fade = malloc(sizeof(fade_t));
+#endif
+		fade_t *fade;
+		
+		fade = (fade_t*) Malloc(sizeof(fade_t));
 		fade->index = index;
 		fade->quantity = quantity;
-#endif
 		
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)", index, globalindex);
@@ -400,7 +400,7 @@ extern "C" {
 		}
 				
 #ifndef _WIN32
-		pthread_create(&thread, NULL, helper_fadein, (void*) &fade);
+		pthread_create(&thread, NULL, helper_fadein, (void*) fade);
 		pthread_detach(thread);
 #else
 		Thread = _beginthread(&helper_fadein, 0, (void*) fade);
