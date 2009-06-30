@@ -23,11 +23,9 @@
 #include <stdlib.h>
 
 #ifndef _WIN32
-#include <stdint.h>
 #include <pthread.h>
 #else
 #include <process.h>
-#include "winstdint.h"
 #endif
 
 #include "al.h"
@@ -78,19 +76,19 @@ extern "C" {
 	/*data type for WAV header*/
 #pragma pack(1)
 	typedef struct _WAV_header_t {
-		uint32_t ChunkID;
-		uint32_t ChunkSize;
-		uint32_t Format;
-		uint32_t Subchunk1ID;
-		uint32_t Subchunk1Size;
-		uint16_t AudioFormat;
-		uint16_t NumChannels;
-		uint32_t SampleRate;
-		uint32_t ByteRate;
-		uint16_t BlockAlign;
-		uint16_t BitsPerSample;
-		uint32_t Subchunk2ID;
-		uint32_t Subchunk2Size;
+		int ChunkID;
+		int ChunkSize;
+		int Format;
+		int Subchunk1ID;
+		int Subchunk1Size;
+		short int AudioFormat;
+		short int NumChannels;
+		int SampleRate;
+		int ByteRate;
+		short int BlockAlign;
+		short int BitsPerSample;
+		int Subchunk2ID;
+		int Subchunk2Size;
 	} WAV_header_t;
 #pragma pack()
 	
