@@ -21,18 +21,20 @@
 
 #include <QStringList>
 
-extern "C" int openal_init		(int memorysize);
+extern "C" int openal_init		(unsigned int memorysize);
 extern "C" int openal_close		(void);
+extern "C" int openal_ready		(void);
 extern "C" int openal_loadfile		(const char *filename);
-extern "C" int openal_toggleloop	(int index);
-extern "C" int openal_setvolume		(int index, unsigned char percentage);
+extern "C" int openal_toggleloop	(unsigned int index);
+extern "C" int openal_setvolume		(unsigned int index, unsigned char percentage);
 extern "C" int openal_setglobalvolume	(unsigned char percentage);
 extern "C" int openal_togglemute	(void);
-extern "C" int openal_fadeout		(int index, unsigned int quantity);
-extern "C" int openal_fadein		(int index, unsigned int quantity);
-extern "C" int openal_playsound 	(int index);
-extern "C" int openal_stopsound		(int index);
-extern "C" int openal_pausesound	(int index);
+extern "C" int openal_fadeout		(unsigned int index, unsigned short int quantity);
+extern "C" int openal_fadein		(unsigned int index, unsigned short int quantity);
+extern "C" int openal_fade		(unsigned int index, unsigned short int quantity, unsigned char direction);
+extern "C" int openal_playsound 	(unsigned int index);
+extern "C" int openal_stopsound		(unsigned int index);
+extern "C" int openal_pausesound	(unsigned int index);
 
 class SDLInteraction : public QObject
 {

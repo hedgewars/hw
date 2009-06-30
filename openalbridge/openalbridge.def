@@ -2,6 +2,7 @@ LIBRARY "openalbridge"
 EXPORTS
 	openal_init
 	openal_close
+	openal_ready
 	openal_loadfile
 	openal_toggleloop
 	openal_setvolume

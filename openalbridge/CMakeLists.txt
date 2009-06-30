@@ -23,7 +23,7 @@ set (build_type STATIC)
 if(MSVC)
 #workaround for visualstudio (wants headers in the source list)
 	set(openal_src
-		openalwrap.h loaders.h endianness.h wrappers.h winstdint.h globals.h oggvorbis.h ${openal_src}
+		openalwrap.h loaders.h endianness.h wrappers.h globals.h oggvorbis.h ${openal_src}
 	)
 #deps for the shared library
 	link_libraries(${OPENAL_LIBRARY})

@@ -25,7 +25,8 @@ extern "C" {
 	int load_WavPcm (const char *filename, ALenum *format, char ** data, ALsizei *bitsize, ALsizei *freq) {
 		WAV_header_t WAVHeader;
 		FILE *wavfile;
-		int t, n = 0;
+		int32_t t;
+		uint32_t n = 0;
 		
 		wavfile = Fopen(filename, "rb");
 		
@@ -75,7 +76,7 @@ extern "C" {
 		fprintf(stderr, "Subchunk2Size: %d\n", WAVHeader.Subchunk2Size);
 #endif
 		
-		*data = (char*) malloc (sizeof(char) * WAVHeader.Subchunk2Size);
+		*data = (char*) Malloc (sizeof(char) * WAVHeader.Subchunk2Size);
 		
 		/*this could be improved*/
 		do {
@@ -148,20 +149,20 @@ extern "C" {
 		vorbisComment = ov_comment(&oggStream, -1);
 		fprintf(stderr, "Version: %d\n", vorbisInfo->version);
 		fprintf(stderr, "Channels: %d\n", vorbisInfo->channels);
-		fprintf(stderr, "Rate (Hz): %d\n", vorbisInfo->rate);
-		fprintf(stderr, "Bitrate Upper: %d\n", vorbisInfo->bitrate_upper);
-		fprintf(stderr, "Bitrate Nominal: %d\n", vorbisInfo->bitrate_nominal);
-		fprintf(stderr, "Bitrate Lower: %d\n", vorbisInfo->bitrate_lower);
-		fprintf(stderr, "Bitrate Windows: %d\n", vorbisInfo->bitrate_window);
+		fprintf(stderr, "Rate (Hz): %ld\n", vorbisInfo->rate);
+		fprintf(stderr, "Bitrate Upper: %ld\n", vorbisInfo->bitrate_upper);
+		fprintf(stderr, "Bitrate Nominal: %ld\n", vorbisInfo->bitrate_nominal);
+		fprintf(stderr, "Bitrate Lower: %ld\n", vorbisInfo->bitrate_lower);
+		fprintf(stderr, "Bitrate Windows: %ld\n", vorbisInfo->bitrate_window);
 		fprintf(stderr, "Vendor: %s\n", vorbisComment->vendor);
-		fprintf(stderr, "PCM data size: %d\n", pcm_length);
+		fprintf(stderr, "PCM data size: %ld\n", pcm_length);
 		fprintf(stderr, "# comment: %d\n", vorbisComment->comments);
 		for (i = 0; i < vorbisComment->comments; i++)
 			fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
 #endif
 		
 		/*allocates enough room for the decoded data*/
-		*data = (char*) malloc (sizeof(char) * pcm_length);
+		*data = (char*) Malloc (sizeof(char) * pcm_length);
 		
 		/*there *should* not be ogg at 8 bits*/
 		if (vorbisInfo->channels == 1)

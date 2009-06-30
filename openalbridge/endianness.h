@@ -28,7 +28,7 @@ extern "C" {
 		
 #pragma once
 	
-	int invert_endianness(int number);
+	int invert_endianness(uint32_t number);
 	
 #ifdef __CPLUSPLUS
 }

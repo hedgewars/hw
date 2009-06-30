@@ -80,8 +80,8 @@ extern "C" {
 		ALfloat gain;
 		ALfloat target_gain;
 		fade_t *fade;
-		int index; 
-		unsigned int quantity; 
+		uint32_t index; 
+		uint16_t quantity; 
 		
 		fade = tmp;
 		index = fade->index;
@@ -114,6 +114,7 @@ extern "C" {
 #else
 		_endthread();
 #endif
+		return 0;
 	}
 	
 	
@@ -126,8 +127,8 @@ extern "C" {
 		ALfloat gain;
 		ALfloat old_gain;
 		fade_t *fade;
-		int index; 
-		unsigned int quantity; 
+		uint32_t index; 
+		uint16_t quantity; 
 		
 		fade = tmp;
 		index = fade->index;
@@ -159,6 +160,7 @@ extern "C" {
 #else
 		_endthread();
 #endif
+		return 0;
 	}
 	
 	

@@ -94,10 +94,12 @@ extern "C" {
 #pragma pack()
 	
 	/*data type for passing data between threads*/
+#pragma pack(1)
 	typedef struct _fade_t {
-		int index;
-		unsigned int quantity;
+		uint32_t index;
+		uint16_t quantity;
 	} fade_t;
+#pragma pack()
 	
 	/*other defines*/
 #define FADE_IN		11

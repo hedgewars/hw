@@ -195,6 +195,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		}
 		hbox->addWidget(CBVoicepack, 100);
 		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
+		BtnTestSound->setEnabled(openal_ready());
 		hbox->setStretchFactor(BtnTestSound, 1);
 		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 		GBTLayout->addLayout(hbox);
@@ -425,10 +426,12 @@ PageOptions::PageOptions(QWidget* parent) :
 
 		CBEnableSound = new QCheckBox(AGGroupBox);
 		CBEnableSound->setText(QCheckBox::tr("Enable sound"));
+		CBEnableSound->setEnabled(openal_ready());
 		GBAlayout->addWidget(CBEnableSound);
 
 		CBEnableMusic = new QCheckBox(AGGroupBox);
 		CBEnableMusic->setText(QCheckBox::tr("Enable music"));
+		CBEnableMusic->setEnabled(openal_ready());
 		GBAlayout->addWidget(CBEnableMusic);
 
 		QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
@@ -439,6 +442,7 @@ PageOptions::PageOptions(QWidget* parent) :
 		volumeBox = new QSpinBox(AGGroupBox);
 		volumeBox->setRange(0, 100);
 		volumeBox->setSingleStep(5);
+		volumeBox->setEnabled(openal_ready());
 		GBAvollayout->addWidget(volumeBox);
 		
 
