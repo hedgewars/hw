@@ -29,9 +29,9 @@ extern "C" {
 		
 		wavfile = Fopen(filename, "rb");
 		
-		fread(&WAVHeader.ChunkID, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.ChunkSize, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.Format, sizeof(int), 1, wavfile);
+		fread(&WAVHeader.ChunkID, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.ChunkSize, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.Format, sizeof(uint32_t), 1, wavfile);
 		
 #ifdef DEBUG
 		fprintf(stderr, "ChunkID: %X\n", invert_endianness(WAVHeader.ChunkID));
@@ -39,14 +39,14 @@ extern "C" {
 		fprintf(stderr, "Format: %X\n", invert_endianness(WAVHeader.Format));
 #endif
 		
-		fread(&WAVHeader.Subchunk1ID, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.Subchunk1Size, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.AudioFormat, sizeof(short int), 1, wavfile);
-		fread(&WAVHeader.NumChannels, sizeof(short int), 1, wavfile);
-		fread(&WAVHeader.SampleRate, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.ByteRate, sizeof(int), 1, wavfile);
-		fread(&WAVHeader.BlockAlign, sizeof(short int), 1, wavfile);
-		fread(&WAVHeader.BitsPerSample, sizeof(short int), 1, wavfile);
+		fread(&WAVHeader.Subchunk1ID, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.Subchunk1Size, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.AudioFormat, sizeof(uint16_t), 1, wavfile);
+		fread(&WAVHeader.NumChannels, sizeof(uint16_t), 1, wavfile);
+		fread(&WAVHeader.SampleRate, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.ByteRate, sizeof(uint32_t), 1, wavfile);
+		fread(&WAVHeader.BlockAlign, sizeof(uint16_t), 1, wavfile);
+		fread(&WAVHeader.BitsPerSample, sizeof(uint16_t), 1, wavfile);
 		
 #ifdef DEBUG
 		fprintf(stderr, "Subchunk1ID: %X\n", invert_endianness(WAVHeader.Subchunk1ID));
@@ -60,7 +60,7 @@ extern "C" {
 #endif
 		
 		do { /*remove useless header chunks (plenty room for improvements)*/
-			t = fread(&WAVHeader.Subchunk2ID, sizeof(int), 1, wavfile);
+			t = fread(&WAVHeader.Subchunk2ID, sizeof(uint32_t), 1, wavfile);
 			if (invert_endianness(WAVHeader.Subchunk2ID) == 0x64617461)
 				break;
 			if (t <= 0) { /*eof*/
@@ -68,7 +68,7 @@ extern "C" {
 				return AL_FALSE;
 			}
 		} while (1);
-		fread(&WAVHeader.Subchunk2Size, sizeof(int), 1, wavfile);
+		fread(&WAVHeader.Subchunk2Size, sizeof(uint32_t), 1, wavfile);
 		
 #ifdef DEBUG
 		fprintf(stderr, "Subchunk2ID: %X\n", invert_endianness(WAVHeader.Subchunk2ID));
@@ -79,7 +79,7 @@ extern "C" {
 		
 		/*this could be improved*/
 		do {
-			n += fread(&((*data)[n]), sizeof(char), 1, wavfile);
+			n += fread(&((*data)[n]), sizeof(uint8_t), 1, wavfile);
 		} while (n < WAVHeader.Subchunk2Size);
 		
 		fclose(wavfile);	

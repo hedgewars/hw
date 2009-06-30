@@ -24,19 +24,19 @@
 extern "C" {
 #endif 
 		
-	int openal_init				(int memorysize);
+	int openal_init				(unsigned int memorysize);
 	int openal_close			(void);
 	int openal_loadfile			(const char *filename);
-	int openal_toggleloop		(int index);
-	int openal_setvolume		(int index, unsigned char percentage);
+	int openal_toggleloop		(unsigned int index);
+	int openal_setvolume		(unsigned int index, unsigned char percentage);
 	int openal_setglobalvolume	(unsigned char percentage);
 	int openal_togglemute		(void);
-	int openal_fadeout			(int index, unsigned int quantity);
-	int openal_fadein			(int index, unsigned int quantity);
-	int openal_fade				(int index, unsigned int quantity, char direction);
-	int openal_playsound		(int index);	
-	int openal_pausesound		(int index);
-	int openal_stopsound		(int index);
+	int openal_fadeout			(unsigned int index, unsigned short int quantity);
+	int openal_fadein			(unsigned int index, unsigned short int quantity);
+	int openal_fade				(unsigned int index, unsigned short int quantity, unsigned char direction);
+	int openal_playsound		(unsigned int index);	
+	int openal_pausesound		(unsigned int index);
+	int openal_stopsound		(unsigned int index);
 	
 #ifdef __CPLUSPLUS
 }

@@ -60,7 +60,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_init(int memorysize) {	
+	ALint openal_init(uint32_t memorysize) {	
 		/*Initialize an OpenAL contex and allocate memory space for data and buffers*/
 		ALCcontext *context;
 		ALCdevice *device;
@@ -108,7 +108,7 @@ extern "C" {
 	}
 	
 	
-	int helper_realloc (void) {
+	uint8_t helper_realloc (void) {
 		/*expands allocated memory when loading more sound files than expected*/
 		globalsize += increment;
 #ifdef DEBUG
@@ -121,14 +121,14 @@ extern "C" {
 	}
 	
 	
-	int openal_loadfile (const char *filename){
+	uint32_t openal_loadfile (const char *filename){
 		/*Open a file, load into memory and allocate the Source buffer for playing*/
 		ALenum format;
 		ALsizei bitsize;
 		ALsizei freq;
 		char *data;
 		uint32_t fileformat;
-		int error;
+		ALenum error;
 		FILE *fp;
 		
 		
@@ -197,7 +197,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_toggleloop (int index){
+	ALint openal_toggleloop (uint32_t index){
 		/*Set or unset looping mode*/
 		ALint loop;
 		
@@ -217,7 +217,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_setvolume (int index, unsigned char percentage) {
+	ALint openal_setvolume (uint32_t index, uint8_t percentage) {
 		/*Set volume for sound number index*/
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
@@ -236,7 +236,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_setglobalvolume (unsigned char percentage) {
+	ALint openal_setglobalvolume (uint8_t percentage) {
 		/*Set volume for all sounds*/		
 		if (percentage > 100)
 			percentage = 100;
@@ -269,7 +269,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_fade(int index, unsigned int quantity, char direction) {
+	ALint openal_fade(uint32_t index, uint16_t quantity, uint8_t direction) {
 		/*Fade in or out by calling a helper thread*/
 #ifndef _WIN32
 		pthread_t thread;
@@ -318,19 +318,19 @@ extern "C" {
 	}
 
 	
-	ALint openal_fadeout(int index, unsigned int quantity) {
+	ALint openal_fadeout(uint32_t index, uint16_t quantity) {
 		/*wrapper for fadeout*/
 		return openal_fade(index, quantity, FADE_OUT);
 	}
 		
 		
-	ALint openal_fadein(int index, unsigned int quantity) {
+	ALint openal_fadein(uint32_t index, uint16_t quantity) {
 		/*wrapper for fadein*/
 		return openal_fade(index, quantity, FADE_IN);
 	}
 
 	
-	ALint openal_playsound(int index){
+	ALint openal_playsound(uint32_t index){
 		/*Play sound number index*/
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
@@ -346,7 +346,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_pausesound(int index){
+	ALint openal_pausesound(uint32_t index){
 		/*Pause sound number index*/
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
@@ -360,7 +360,7 @@ extern "C" {
 	}
 	
 	
-	ALint openal_stopsound(int index){
+	ALint openal_stopsound(uint32_t index){
 		/*Stop sound number index*/
 		if (index >= globalindex) {
 			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
