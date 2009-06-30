@@ -107,6 +107,10 @@ if (NOT pascal_compiler)
 	message(FATAL_ERROR "No Pascal compiler found!")
 endif (NOT pascal_compiler)
 
+#special handling of MSVC compiler (no static linking)
+if(MSVC)
+	set(pascal_compiler_flags "-dMSVC" ${pascal_compiler_flags})
+endif(MSVC)
 
 IF(NOT APPLE OR NOT universal_build MATCHES "1")
 #here is the standard command for any system

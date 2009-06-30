@@ -22,7 +22,7 @@
 extern "C" {
 #endif 
 	
-	int load_WavPcm (const char *filename, ALenum *format, uint8_t** data, ALsizei *bitsize, ALsizei *freq) {
+	int load_WavPcm (const char *filename, ALenum *format, char ** data, ALsizei *bitsize, ALsizei *freq) {
 		WAV_header_t WAVHeader;
 		FILE *wavfile;
 		int t, n = 0;
@@ -75,7 +75,7 @@ extern "C" {
 		fprintf(stderr, "Subchunk2Size: %d\n", WAVHeader.Subchunk2Size);
 #endif
 		
-		*data = (uint8_t*) malloc (sizeof(uint8_t) * WAVHeader.Subchunk2Size);
+		*data = (char*) malloc (sizeof(char) * WAVHeader.Subchunk2Size);
 		
 		/*this could be improved*/
 		do {
@@ -124,7 +124,7 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
-	int load_OggVorbis (const char *filename, ALenum *format, uint8_t**data, ALsizei *bitsize, ALsizei *freq) {
+	int load_OggVorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
 		/*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
 		FILE			*oggFile;		/*ogg handle*/
 		OggVorbis_File  oggStream;		/*stream handle*/
@@ -161,7 +161,7 @@ extern "C" {
 #endif
 		
 		/*allocates enough room for the decoded data*/
-		*data = (uint8_t*) malloc (sizeof(uint8_t) * pcm_length);
+		*data = (char*) malloc (sizeof(char) * pcm_length);
 		
 		/*there *should* not be ogg at 8 bits*/
 		if (vorbisInfo->channels == 1)

@@ -16,18 +16,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef _OALB_LOADERS_H
+#define _OALB_LOADERS_H
+
 #include "globals.h"
+#include "wrappers.h"
+#include "oggvorbis.h"
+#include "endianness.h"
 
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-	
-#pragma once
-	
-	int load_WavPcm		(const char *filename, ALenum *format, uint8_t **data, ALsizei *bitsize, ALsizei *freq);
-	int load_OggVorbis	(const char *filename, ALenum *format, uint8_t **data, ALsizei *bitsize, ALsizei *freq);
+		
+	int load_WavPcm		(const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+	int load_OggVorbis	(const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
 	
 #ifdef __CPLUSPLUS
 }
 #endif
+
+#endif /*_OALB_LOADERS_H*/

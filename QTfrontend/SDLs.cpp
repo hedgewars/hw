@@ -64,10 +64,10 @@ void SDLInteraction::StartMusic()
 		openal_toggleloop(music);
 	}
 	openal_setvolume(music, 60);
-	openal_fadein(music, 70);
+	openal_fadein(music, 25);
 }
 
 void SDLInteraction::StopMusic()
 {
-	if (music >= 0) openal_fadeout(music, 70);
+	if (music >= 0) openal_fadeout(music, 40);
 }

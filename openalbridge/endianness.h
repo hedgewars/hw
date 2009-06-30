@@ -16,6 +16,9 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef _OALB_ENDIANNESS_H
+#define _OALB_ENDIANNESS_H
+
 #include "globals.h"
 
 
@@ -30,3 +33,5 @@ extern "C" {
 #ifdef __CPLUSPLUS
 }
 #endif
+
+#endif /*_OALB_ENDIANNESS_H*/

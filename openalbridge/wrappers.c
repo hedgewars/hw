@@ -24,10 +24,27 @@ extern "C" {
 	
 	extern ALint *Sources;
 	
-	void *Malloc (size_t nbytes){
+	void *Malloc (size_t nbytes) {
 		void *aptr;
 		if ((aptr = malloc(nbytes)) == NULL) {
 			fprintf(stderr, "ERROR: not enough memory! malloc() failed\n");
+			exit(-1);
+		}
+		return aptr;
+	}
+	
+	
+	void *Realloc (void *aptr, size_t nbytes) {
+#ifndef _WIN32
+		aptr = reallocf(aptr, nbytes);
+#else
+		aptr = realloc(aptr, nbytes);
+#endif
+		if (aptr == NULL) {
+			fprintf(stderr, "ERROR: not enough memory! realloc() failed\n");
+#ifdef _WIN32
+			free(aptr);
+#endif
 			exit(-1);
 		}
 		return aptr;
@@ -57,7 +74,7 @@ extern "C" {
 #ifndef _WIN32
 	void *helper_fadein(void *tmp) 
 #else
-	void WINAPI helper_fadein(void *tmp) 
+	void *helper_fadein(void *tmp) 
 #endif
 	{
 		ALfloat gain;
@@ -103,7 +120,7 @@ extern "C" {
 #ifndef _WIN32
 	void *helper_fadeout(void *tmp) 
 #else
-	void WINAPI helper_fadeout(void *tmp) 	
+	void *helper_fadeout(void *tmp) 	
 #endif
 	{
 		ALfloat gain;
@@ -143,6 +160,7 @@ extern "C" {
 		_endthread();
 #endif
 	}
+	
 	
 #ifdef __CPLUSPLUS
 }

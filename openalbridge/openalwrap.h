@@ -16,29 +16,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "globals.h"
+#ifndef _OALB_INTERFACE_H
+#define _OALB_INTERFACE_H
 
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-	
-#pragma once
-	
-	ALint	openal_init				(int memorysize);
-	ALint	openal_close			(void);
-	int		openal_loadfile			(const char *filename);
-	ALint	openal_toggleloop		(int index);
-	ALint	openal_setvolume		(int index, unsigned char percentage);
-	ALint	openal_setglobalvolume	(unsigned char percentage);
-	ALint	openal_togglemute		(void);
-	ALint	openal_fadeout			(int index, unsigned int quantity);
-	ALint	openal_fadein			(int index, unsigned int quantity);
-	ALint	openal_fade				(int index, unsigned int quantity, char direction);
-	ALint	openal_playsound		(int index);	
-	ALint	openal_pausesound		(int index);
-	ALint	openal_stopsound		(int index);
+		
+	int openal_init				(int memorysize);
+	int openal_close			(void);
+	int openal_loadfile			(const char *filename);
+	int openal_toggleloop		(int index);
+	int openal_setvolume		(int index, unsigned char percentage);
+	int openal_setglobalvolume	(unsigned char percentage);
+	int openal_togglemute		(void);
+	int openal_fadeout			(int index, unsigned int quantity);
+	int openal_fadein			(int index, unsigned int quantity);
+	int openal_fade				(int index, unsigned int quantity, char direction);
+	int openal_playsound		(int index);	
+	int openal_pausesound		(int index);
+	int openal_stopsound		(int index);
 	
 #ifdef __CPLUSPLUS
 }
 #endif
+
+#endif /*_OALB_INTERFACE_H*/

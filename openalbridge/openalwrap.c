@@ -16,7 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "openalwrap.h"
+#include "globals.h"
+#include "wrappers.h"
+#include "alc.h"
+#include "loaders.h"
+#include "endianness.h"
 
 #ifdef __CPLUSPLUS
 extern "C" {
@@ -27,16 +31,15 @@ extern "C" {
 	/*Buffers hold sound data*/
 	ALuint *Buffers;
 	/*index for Sources and Buffers*/
-	ALuint globalindex, globalsize;
+	ALuint globalindex, globalsize, increment;
 	/*Position of the source sound*/
 	ALfloat SourcePos[] = { 0.0, 0.0, 0.0 };
 	/*Velocity of the source sound*/
 	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
 	
-	int increment;
 	
 	ALint openal_close(void) {
-		/* This function stops all the sounds, deallocates all memory and closes OpenAL */
+		/*Stop all sounds, deallocate all memory and close OpenAL */
 		ALCcontext *context;
 		ALCdevice  *device;
 		
@@ -58,7 +61,7 @@ extern "C" {
 	
 	
 	ALint openal_init(int memorysize) {	
-		/* This function initializes an OpenAL contex, allocates memory space for data and prepares OpenAL buffers*/
+		/*Initialize an OpenAL contex and allocate memory space for data and buffers*/
 		ALCcontext *context;
 		ALCdevice *device;
 		const ALCchar *default_device;
@@ -104,33 +107,32 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
+	
 	int helper_realloc (void) {
+		/*expands allocated memory when loading more sound files than expected*/
 		globalsize += increment;
 #ifdef DEBUG
 		fprintf(stderr, "OpenAL: Realloc in process %d\n", globalsize);
 #endif
-		Buffers = (ALuint*) reallocf(Buffers, sizeof(ALuint)*globalsize);
-		Sources = (ALuint*) reallocf(Sources, sizeof(ALuint)*globalsize);
-		if (Buffers == NULL || Sources == NULL) {
-			fprintf(stderr, "ERROR: not enough memory! realloc() failed\n");
-			exit(-1);
-		} else {
-			return 0;
-		}
+		Buffers = (ALuint*) Realloc(Buffers, sizeof(ALuint)*globalsize);
+		Sources = (ALuint*) Realloc(Sources, sizeof(ALuint)*globalsize);
+		
+		return 0;
 	}
 	
 	
 	int openal_loadfile (const char *filename){
-		/* This function opens a file, loads into memory and allocates the Source buffer for playing*/
+		/*Open a file, load into memory and allocate the Source buffer for playing*/
 		ALenum format;
 		ALsizei bitsize;
 		ALsizei freq;
-		uint8_t *data;
+		char *data;
 		uint32_t fileformat;
 		int error;
 		FILE *fp;
 		
 		
+		/*when the buffers are all used, we can expand memory to accept new files*/
 		if (globalindex == globalsize)
 			helper_realloc();
 		
@@ -224,7 +226,7 @@ extern "C" {
 		
 		if (percentage > 100)
 			percentage = 100;
-		alSourcef (Sources[index], AL_GAIN, (ALfloat) percentage/100.0f);
+		alSourcef (Sources[index], AL_GAIN, (float) percentage/100.0f);
 		if (AlGetError("ERROR %d: Setting volume for last sound\n") != AL_TRUE)
 			return AL_FALSE;
 		
@@ -238,7 +240,7 @@ extern "C" {
 		/*Set volume for all sounds*/		
 		if (percentage > 100)
 			percentage = 100;
-		alListenerf (AL_GAIN, (ALfloat) percentage/100.0f);
+		alListenerf (AL_GAIN, (float) percentage/100.0f);
 		if (AlGetError("ERROR %d: Setting global volume\n") != AL_TRUE)
 			return AL_FALSE;
 		
@@ -267,7 +269,8 @@ extern "C" {
 	}
 	
 	
-	ALint openal_fade(int index, unsigned int quantity, char inout) {
+	ALint openal_fade(int index, unsigned int quantity, char direction) {
+		/*Fade in or out by calling a helper thread*/
 #ifndef _WIN32
 		pthread_t thread;
 #else
@@ -285,21 +288,21 @@ extern "C" {
 			return AL_FALSE;
 		}
 		
-		if (inout == FADE_IN)
+		if (direction == FADE_IN)
 #ifndef _WIN32
 			pthread_create(&thread, NULL, helper_fadein, (void*) fade);
 #else
 			Thread = _beginthread(&helper_fadein, 0, (void*) fade);
 #endif
 		else {
-			if (inout == FADE_OUT)
+			if (direction == FADE_OUT)
 #ifndef _WIN32
 				pthread_create(&thread, NULL, helper_fadeout, (void*) fade);
 #else
 				Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
 #endif	
 			else {
-				fprintf(stderr, "ERROR: unknown direction for fade (%d)\n", inout);
+				fprintf(stderr, "ERROR: unknown direction for fade (%d)\n", direction);
 				free(fade);
 				return AL_FALSE;
 			}
@@ -316,11 +319,13 @@ extern "C" {
 
 	
 	ALint openal_fadeout(int index, unsigned int quantity) {
+		/*wrapper for fadeout*/
 		return openal_fade(index, quantity, FADE_OUT);
 	}
 		
 		
 	ALint openal_fadein(int index, unsigned int quantity) {
+		/*wrapper for fadein*/
 		return openal_fade(index, quantity, FADE_IN);
 	}
 

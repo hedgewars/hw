@@ -16,17 +16,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
+#ifndef _OALB_WRAPPERS_H
+#define _OALB_WRAPPERS_H
+
 #include "globals.h"
 
-#pragma once
 
 void *Malloc (size_t nbytes);
+void *Realloc (void *aptr, size_t nbytes);
 FILE *Fopen (const char *fname, char *mode);
 ALint AlGetError (const char *str);
 #ifndef _WIN32
 void *helper_fadein (void *tmp);
 void *helper_fadeout (void *tmp); 
 #else
-void WINAPI helper_fadein (void *tmp); 
-void WINAPI helper_fadeout (void *tmp); 	
+void *helper_fadein (void *tmp); 
+void *helper_fadeout (void *tmp); 	
 #endif
+
+#endif /*_OALB_WRAPPERS_H*/

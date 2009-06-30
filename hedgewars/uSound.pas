@@ -26,10 +26,12 @@ interface
 	{$linkframework Ogg}
 	{$linkframework Vorbis}
 {$ELSE}
+{$IFNDEF MSVC}
 	{$linklib openal}
 	{$linklib ogg}
 	{$linklib vorbis}
 	{$linklib vorbisfile}
+{$ENDIF}
 {$ENDIF}
 
 uses uConsts;
@@ -186,7 +188,7 @@ TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
 openal_setvolume(Mus, 60);
-openal_fadein(Mus, 70);
+openal_fadein(Mus, 20);
 openal_toggleloop(Mus);
 end;
 
