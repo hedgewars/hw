@@ -1495,7 +1495,7 @@ if Gear^.Timer = 65 then
 	inc(Gear^.Pos);
 	if Gear^.Pos = 11 then
 		Gear^.doStep:= @doStepTeleportAfter
-	end
+	end;
 end;
 
 procedure doStepTeleport(Gear: PGear);
@@ -1524,7 +1524,9 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 		HHGear^.Y:= int2hwFloat(TargetPoint.Y);
 		HHGear^.State:= HHGear^.State or gstMoving
 		end;
-TargetPoint.X:= NoPointX
+TargetPoint.X:= NoPointX;
+playSound(sndWarp, false, nil);
+
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

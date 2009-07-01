@@ -591,7 +591,8 @@ case step of
 			if (TotalRounds = cSuddenDTurns) and (cHealthDecrease = 0) then
 				begin
 				cHealthDecrease:= 5;
-				AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState)
+				AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState);
+				playSound(sndSuddenDeath, false, nil);
 				end;
 
 			if (cHealthDecrease = 0)

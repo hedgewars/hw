@@ -92,7 +92,8 @@ type
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
-			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, sndVaporize);
+			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, 
+			sndVaporize, sndWarp, sndSuddenDeath);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -110,7 +111,7 @@ type
 	TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
 			siClanHealth);
 
-	TWave = (waveRollup, waveSad,waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
+	TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
 	THHFont = record
 			Handle: PTTF_Font;
@@ -178,7 +179,8 @@ const
 	COLOR_LAND           = $FFFFFFFF;  // white
 	COLOR_INDESTRUCTIBLE = $FF0000FF;  // red
 
-    GL_BGR = $80E0; // some opengl headers do not have these macros
+	// some opengl headers do not have these macros
+    	GL_BGR = $80E0;
 	GL_BGRA = $80E1;
 
 	cifRandomize = $00000001;
@@ -639,7 +641,9 @@ const
 			(FileName:               'denied.ogg'; Path: ptSounds),// sndDenied
 			(FileName:               'placed.ogg'; Path: ptSounds),// sndPlaced
 			(FileName:          'baseballbat.ogg'; Path: ptSounds),// sndBaseballBat
-			(FileName:                'steam.ogg'; Path: ptSounds) // sndVaporize
+			(FileName:                'steam.ogg'; Path: ptSounds),// sndVaporize
+			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
+			(FileName:          'suddendeath.ogg'; Path: ptSounds) // sndSuddenDeath
 			);
 
 	Ammoz: array [TAmmoType] of record
