@@ -12,19 +12,20 @@ set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "12-dev")
 
-set(universal_build "0")
+set(universal_build false)
 
 if(APPLE)
-set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/") 
+set(bundle_name Hedgewars.app)
+set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/) 
 set(DATA_INSTALL_DIR "../Resources/")
-set (target_dir ".")
+set(target_dir ".")
 
 if(CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc7400" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc7400;i386" OR CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc;i386")
-	set(universal_build "1")
+	set(universal_build true)
 	message("-- Building a Universal Application")
 endif()
 else(APPLE)
-set (target_dir "bin")
+set(target_dir "bin")
 endif(APPLE)
 
 if(DEFINED DATA_INSTALL_DIR)
@@ -49,7 +50,7 @@ add_subdirectory(openalbridge)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)
-
+add_subdirectory(tools)
 
 # CPack vars
 

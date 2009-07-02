@@ -1,5 +1,4 @@
-configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in 
-	${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
+configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in ${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.dpr)
@@ -65,7 +64,6 @@ set (noexecstack_flags "")
 endif (${testnoexecstack})
 
 IF(APPLE)
-
 	FIND_PACKAGE(SDL)
 
 	if (SDL_FOUND)
@@ -82,7 +80,6 @@ IF(APPLE)
 	else (SDL_FOUND)
 		message(FATAL_ERROR "No SDL framework found!")
 	endif (SDL_FOUND)
-
 ENDIF(APPLE)
 
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
@@ -112,7 +109,7 @@ if(MSVC)
 	set(pascal_compiler_flags "-dMSVC" ${pascal_compiler_flags})
 endif(MSVC)
 
-IF(NOT APPLE OR NOT universal_build MATCHES "1")
+IF(NOT APPLE OR NOT universal_build)
 #here is the standard command for any system
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"

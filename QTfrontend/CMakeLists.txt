@@ -43,8 +43,7 @@ else(WIN32 AND NOT UNIX)
 	endif(DEFINED DATA_INSTALL_DIR)
 endif(WIN32 AND NOT UNIX)
 
-configure_file(${hedgewars_SOURCE_DIR}/QTfrontend/hwconsts.cpp.in 
-	${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
 set(hwfr_src
 	game.cpp
