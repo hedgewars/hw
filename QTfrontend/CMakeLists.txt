@@ -151,8 +151,7 @@ set(hwfr_hdrs
 	hwconsts.h
 )
 
-set(hwfr_rez
-	hedgewars.qrc)
+set(hwfr_rez hedgewars.qrc)
 
 qt4_add_resources(hwfr_rez_src
 	${hwfr_rez})
@@ -166,27 +165,33 @@ add_executable(hedgewars WIN32
 	${hwfr_hdrs}
 	${hwfr_rez_src})
 
+
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
 	openalbridge
 )
 
-#since openalbridge is linked statically with non-m$ compilers we need to explicitly link dependencies 
-if(NOT MSVC)
+#since openalbridge is linked statically with non-m$ compilers we need to explicitly link dependencies
+#moreover in windows they need to be compiled in a particular order
+if(NOT MSVC AND NOT APPLE)
 	set(HW_LINK_LIBS
 		${OPENAL_LIBRARY}
-		${OGG_LIBRARY}
-		${VORBIS_LIBRARY}
-		${HW_LINK_LIBS}
-		)
-if(NOT APPLE)
-	set(HW_LINK_LIBS
 		${VORBISFILE_LIBRARY}
+		${VORBIS_LIBRARY}
+		${OGG_LIBRARY}
 		${HW_LINK_LIBS}
 		)
-endif(NOT APPLE)
-endif(NOT MSVC)
+endif(NOT MSVC AND NOT APPLE)
+#no vorbisfile required here
+if(APPLE)
+	set(HW_LINK_LIBS
+		${OPENAL_LIBRARY}
+		${VORBIS_LIBRARY}
+		${OGG_LIBRARY}
+		${HW_LINK_LIBS}
+		)
+endif(APPLE)
 
 
 if(WIN32 AND NOT UNIX)
@@ -206,7 +211,9 @@ if(WIN32 AND NOT UNIX)
 		)
 endif(WIN32 AND NOT UNIX)
 
-target_link_libraries(hedgewars
-	${HW_LINK_LIBS})
+
+target_link_libraries(hedgewars	${HW_LINK_LIBS})
+
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
+

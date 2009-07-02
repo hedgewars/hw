@@ -35,16 +35,11 @@ extern "C" {
 	
 	
 	void *Realloc (void *aptr, size_t nbytes) {
-#ifndef _WIN32
-		aptr = reallocf(aptr, nbytes);
-#else
 		aptr = realloc(aptr, nbytes);
-#endif
+
 		if (aptr == NULL) {
 			fprintf(stderr, "ERROR: not enough memory! realloc() failed\n");
-#ifdef _WIN32
 			free(aptr);
-#endif
 			exit(-1);
 		}
 		return aptr;
