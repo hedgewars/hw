@@ -74,7 +74,7 @@ var MusicFN: shortstring = '';
 
 implementation
 
-uses uMisc, uConsole;
+uses uMisc, uConsole, uStore;
 
 const chanTPU = 12;
 var	lastChan: array [TSound] of LongInt;
@@ -148,6 +148,8 @@ for t:= 0 to cMaxTeams do
 				else
 					WriteLnToConsole(msgOK)
 				end;
+				
+AddProgress;
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);

@@ -258,6 +258,7 @@ var ii: TSprite;
     tmpsurf: PSDL_Surface;
     i: LongInt;
 begin
+
 for fi:= Low(THWFont) to High(THWFont) do
 	with Fontz[fi] do
 		begin
@@ -268,7 +269,6 @@ for fi:= Low(THWFont) to High(THWFont) do
 		TTF_SetFontStyle(Handle, style);
 		WriteLnToConsole(msgOK)
 		end;
-AddProgress;
 
 WriteNames(fnt16);
 MakeCrossHairs;
@@ -312,7 +312,7 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
 		NameTex:= Surface2Tex(tmpsurf);
 		SDL_FreeSurface(tmpsurf)
 		end;
-
+		
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
 	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), $FFFFFF);
@@ -324,6 +324,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
 SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
 SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
+AddProgress;
 end;
 
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
@@ -515,8 +516,10 @@ end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 var r: TSDL_Rect;
+var flag: integer = 0;
 begin
-r.x:= 0;
+if flag = 0 then r.x:= 0
+else r.x := 0;
 r.w:= SpritesData[Sprite].Width;
 r.y:= Frame * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
@@ -939,7 +942,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 var ProgrTex: PTexture = nil;
     Step: integer = 0;
-
+	squaresize : LongInt;
+	numsquares : integer;
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
@@ -949,21 +953,24 @@ if Step = 0 then
    WriteToConsole(msgLoading + 'progress sprite: ');
    texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
    ProgrTex:= Surface2Tex(texsurf);
-   SDL_FreeSurface(texsurf)
+   SDL_FreeSurface(texsurf);
+   squaresize:= ProgrTex^.w shr 1;
+   numsquares:= ProgrTex^.h div squaresize;
    end;
 
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_TEXTURE_2D);
-r.x:= 0;
-r.w:= ProgrTex^.w;
-r.h:= ProgrTex^.w;
-r.y:= (Step mod (ProgrTex^.h div ProgrTex^.w)) * ProgrTex^.w;
-DrawFromRect( -ProgrTex^.w div 2,
-             (cScreenHeight - ProgrTex^.w) div 2, @r, ProgrTex);
+if Step < numsquares then r.x:= 0
+else r.x:= squaresize;
+r.y:= (Step mod numsquares) * squaresize;
+r.w:= squaresize;
+r.h:= squaresize;
+DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 glDisable(GL_TEXTURE_2D);
 SDL_GL_SwapBuffers();
 inc(Step);
 end;
+
 
 procedure FinishProgress;
 begin

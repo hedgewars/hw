@@ -35,7 +35,7 @@ procedure SetDefaultBinds;
 var KbdKeyPressed: boolean;
 
 implementation
-uses SDLh, uTeams, uConsole, uMisc;
+uses SDLh, uTeams, uConsole, uMisc, uStore;
 const KeyNumber = 1024;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
@@ -110,8 +110,9 @@ pkbd:= PByteArray(SDL_GetKeyState(@i));
 TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
 
 for t:= 0 to Pred(i) do
-    tkbd[i]:= pkbd^[i]
-
+    tkbd[i]:= pkbd^[i];
+	
+	AddProgress;
 end;
 
 procedure InitKbdKeyTable;
