@@ -655,7 +655,7 @@ end;
 procedure ResetUtilities;
 var  i: LongInt;
 begin
-    SpeechText:= ''; // in case it hasn't been consumed
+    SpeechText:= ''; // in case it has not been consumed
 
     if (GameFlags and gfLowGravity) = 0 then
         cGravity:= cMaxWindSpeed;

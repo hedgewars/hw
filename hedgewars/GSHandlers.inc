@@ -2219,7 +2219,7 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     Gear^.Timer:= GameTicks
     end;
 
-// erases 'em all at once :-/ 
+// erases them all at once :-/ 
 if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
     begin
     Gear^.Timer:= 0;

@@ -47,7 +47,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		end else
 		begin
 		i:= 0;
-		// check whether there's ammo in slot
+		// check whether there is ammo in slot
 		while (i <= cMaxSlotAmmoIndex)
 		  and ((Ammo^[slot, i].Count = 0)
 		       or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
@@ -67,7 +67,7 @@ var t: LongInt;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
 
-if PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon isn't activated yet
+if PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon is not activated yet
 
 Gear^.MsgParam:= Ammoz[weap].Slot;
 
@@ -576,7 +576,7 @@ if (Gear^.State and gstAnimation) <> 0 then
 
 if ((Gear^.State and gstMoving) <> 0)
     or (StepTicks = cHHStepTicks)
-	or (CurAmmoGear <> nil) then // we're moving
+	or (CurAmmoGear <> nil) then // we are moving
 	begin
 	with PHedgehog(Gear^.Hedgehog)^ do
 		if (CurAmmoGear = nil)

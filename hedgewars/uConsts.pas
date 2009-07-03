@@ -180,8 +180,8 @@ const
 	COLOR_INDESTRUCTIBLE = $FF0000FF;  // red
 
 	// some opengl headers do not have these macros
-    	GL_BGR = $80E0;
-	GL_BGRA = $80E1;
+    GL_BGR = $80E0;
+    GL_BGRA = $80E1;
 
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;
