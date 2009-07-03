@@ -470,7 +470,7 @@ cArtillery:= true;
 HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.State:= HHGear^.State or gstNotKickable;
 HedgehogChAngle(HHGear);
-if not cLaserSighting then // game doesn't have default laser sight. turn it on and give them a chance to aim
+if not cLaserSighting then // game does not have default laser sight. turn it on and give them a chance to aim
     begin
     cLaserSighting:= true;
     HHGear^.Message:= 0;

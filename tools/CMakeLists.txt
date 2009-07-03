@@ -6,13 +6,8 @@ if(NOT macdeployqt_EXE)
 	message(FATAL_ERROR "The utility macdeployqt is required to create the bundle!")
 endif()
 
-#if(HAVE_NETSERVER)
+#dummy target, we're interested in the postscript
 add_custom_target(bundle)
-#set(deps_list hedgewars "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}")
-#else(HAVE_NETSERVER)
-#add_custom_target(bundle )
-#set(deps_list hedgewars "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-#endif(HAVE_NETSERVER)
 
 set_target_properties(bundle PROPERTIES POST_INSTALL_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
 

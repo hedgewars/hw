@@ -28,6 +28,7 @@ extern "C" {
 	int openal_close			(void);
 	int openal_loadfile			(const char *filename);
 	int openal_toggleloop		(unsigned int index);
+	int openal_setposition		(unsigned int index, float x, float y, float z);
 	int openal_setvolume		(unsigned int index, unsigned char percentage);
 	int openal_setglobalvolume	(unsigned char percentage);
 	int openal_togglemute		(void);

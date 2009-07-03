@@ -386,9 +386,24 @@ extern "C" {
 	}
 
 	
+	ALint openal_setposition(uint32_t index, float x, float y, float z) {
+		if(openalReady == AL_FALSE)	{
+			fprintf(stderr, "ERROR: OpenAL not initialized\n");
+			return AL_FALSE;
+		}
+		if (index >= globalindex) {
+			fprintf(stderr, "ERROR: index out of bounds (got %d, max %d)\n", index, globalindex);
+			return AL_FALSE;
+		}
+		
+		alSource3f(Sources[index], AL_POSITION, x, y, z);
+		if (AlGetError("ERROR %d: setting position for last sound\n") != AL_TRUE)
+			return AL_FALSE;
+		
+		return AL_TRUE;
+	}
 	ALint openal_playsound(uint32_t index){
-		if(openalReady == AL_FALSE)
-		{
+		if(openalReady == AL_FALSE)	{
 			fprintf(stderr, "ERROR: OpenAL not initialized\n");
 			return AL_FALSE;
 		}

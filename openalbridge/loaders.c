@@ -155,7 +155,7 @@ extern "C" {
 		fprintf(stderr, "Bitrate Lower: %ld\n", vorbisInfo->bitrate_lower);
 		fprintf(stderr, "Bitrate Windows: %ld\n", vorbisInfo->bitrate_window);
 		fprintf(stderr, "Vendor: %s\n", vorbisComment->vendor);
-		fprintf(stderr, "PCM data size: %ld\n", pcm_length);
+		fprintf(stderr, "PCM data size: %lld\n", pcm_length);
 		fprintf(stderr, "# comment: %d\n", vorbisComment->comments);
 		for (i = 0; i < vorbisComment->comments; i++)
 			fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
