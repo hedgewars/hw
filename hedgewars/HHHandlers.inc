@@ -106,8 +106,11 @@ with Gear^,
      PHedgehog(Gear^.Hedgehog)^ do
      begin
      if ((State and gstHHDriven) <> 0)and
-        ((State and (gstAttacked or gstHHChooseTarget)) = 0)and
-        (((State and gstMoving) = 0) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0))and
+        ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
+        (((State and gstMoving) = 0) or 
+            // Allow attacks while moving on ammo with AltAttack
+            ((CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)) or 
+            ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AltAttack) <> 0)) and
         ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
         State:= State or gstAttacking;
