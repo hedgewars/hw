@@ -82,7 +82,7 @@ const MENUSPEED = 15;
 var x, y, i, t, l: LongInt;
     Slot, Pos: LongInt;
 begin
-if (TurnTimeLeft = 0) or KbdKeyPressed then bShowAmmoMenu:= false;
+if (TurnTimeLeft = 0) or (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and KbdKeyPressed) then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    if AMxShift = 210 then prevPoint.X:= 0;
