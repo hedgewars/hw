@@ -85,6 +85,7 @@ begin
 if (TurnTimeLeft = 0) or (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and KbdKeyPressed) then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
+   FollowGear:= nil;
    if AMxShift = 210 then prevPoint.X:= 0;
    if cReducedQuality then
        AMxShift:= 0

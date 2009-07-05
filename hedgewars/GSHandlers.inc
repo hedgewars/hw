@@ -2244,7 +2244,7 @@ HHGear^.State:= HHGear^.State or gstMoving;
 Gear^.X:= HHGear^.X;
 Gear^.Y:= HHGear^.Y;
 // For some reason I need to reapply followgear here, something else grabs it otherwise.
-FollowGear:= HHGear;
+if not bShowAmmoMenu then FollowGear:= HHGear;
 doStepHedgehogMoving(HHGear);
 
 if  (Gear^.Health = 0)
