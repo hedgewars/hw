@@ -27,7 +27,12 @@ interface
 	{$linkframework Vorbis}
 {$ELSE}
 {$IFNDEF MSVC}
+	{$linklib openalbridge}
+{$IFNDEF WIN32}
 	{$linklib openal}
+{$ELSE}
+	{$linklib openal32}
+{$ENDIF}
 	{$linklib ogg}
 	{$linklib vorbis}
 	{$linklib vorbisfile}
@@ -43,7 +48,7 @@ type PVoicepack = ^TVoicepack;
 		chunks: array [TSound] of LongInt;
 		end;
 
-const OpenALBridge = 'openalbridge';
+const OpenALBridge = 'libopenalbridge';
 
 procedure InitSound;
 procedure ReleaseSound;
@@ -74,7 +79,7 @@ var MusicFN: shortstring = '';
 
 implementation
 
-uses uMisc, uConsole, uStore;
+uses uMisc, uConsole;
 
 const chanTPU = 12;
 var	lastChan: array [TSound] of LongInt;
@@ -148,8 +153,6 @@ for t:= 0 to cMaxTeams do
 				else
 					WriteLnToConsole(msgOK)
 				end;
-				
-AddProgress;
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);

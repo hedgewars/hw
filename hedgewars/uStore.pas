@@ -526,10 +526,7 @@ end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 var r: TSDL_Rect;
-    numFramesFirstCol: LongInt;
 begin
-numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
-
 r.x:= 0;
 r.y:= 0;
 r.w:= SpritesData[Sprite].Width;
@@ -547,6 +544,7 @@ if (X + SpritesData[Sprite].Width > RightX) then
 
 dec(r.h, r.y);
 dec(r.w, r.x);
+
 DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
 end;
 
