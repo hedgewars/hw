@@ -515,15 +515,8 @@ DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
-var r: TSDL_Rect;
-var flag: integer = 0;
 begin
-if flag = 0 then r.x:= 0
-else r.x := 0;
-r.w:= SpritesData[Sprite].Width;
-r.y:= Frame * SpritesData[Sprite].Height;
-r.h:= SpritesData[Sprite].Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+DrawSprite2 (Sprite, X, Y, 0, Frame);
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);

@@ -1516,7 +1516,8 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 		HHGear^.State:= HHGear^.State and not gstAttacking;
 		HHGear^.State:= HHGear^.State or gstHHChooseTarget;
 		DeleteGear(Gear);
-		isCursorVisible:= true
+		isCursorVisible:= true;
+		PlaySound(sndDenied, false, nil);
 		end
 	else begin
 		DeleteCI(HHGear);
@@ -1526,10 +1527,10 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 		Gear^.Y:= HHGear^.Y;
 		HHGear^.X:= int2hwFloat(TargetPoint.X);
 		HHGear^.Y:= int2hwFloat(TargetPoint.Y);
-		HHGear^.State:= HHGear^.State or gstMoving
+		HHGear^.State:= HHGear^.State or gstMoving;
+		playSound(sndWarp, false, nil);
 		end;
 TargetPoint.X:= NoPointX;
-playSound(sndWarp, false, nil);
 
 end;
 
