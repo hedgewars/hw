@@ -38,7 +38,9 @@ endif()
 add_library (openalbridge ${build_type} ${openal_src})
 
 if(WIN32)
+if(MSVC)
 	SET_TARGET_PROPERTIES(openalbridge PROPERTIES LINK_FLAGS /DEF:openalbridge.def)
+endif(MSVC)
 #install it in the executable directory
 	install(TARGETS openalbridge DESTINATION bin)
 endif(WIN32)
