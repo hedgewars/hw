@@ -357,217 +357,217 @@ const
 			Path, AltPath: TPathType;
 			Texture: PTexture;
 			Surface: PSDL_Surface;
-			Width, Height: LongInt;
+			Width, Height, imageWidth, imageHeight: LongInt;
 			saveSurf: boolean;
 			end = (
 			(FileName:  'BlueWater'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
-			Width: 0; Height: 0; saveSurf: false),// sprWater
+			Width: 0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWater
 			(FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
-			Width: 256; Height:128; saveSurf: false),// sprCloud
+			Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCloud
 			(FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   8; Height:  8; saveSurf: false),// sprBomb
+			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBomb
 			(FileName:  'BigDigits'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprBigDigit
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBigDigit
 			(FileName:      'Frame'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   4; Height: 32; saveSurf: false),// sprFrame
+			Width:   4; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFrame
 			(FileName:        'Lag'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  65; Height: 65; saveSurf: false),// sprLag
+			Width:  65; Height: 65; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprLag
 			(FileName:      'Arrow'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprCursor
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCursor
 			(FileName:    'Grenade'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprGrenade
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprGrenade
 			(FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprTargetP
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprTargetP
 			(FileName:        'UFO'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprUFO
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprUFO
 			(FileName: 'SmokeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprSmokeTrace
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmokeTrace
 			(FileName:   'RopeHook'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprRopeHook
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprRopeHook
 			(FileName:     'Expl50'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprExplosion50
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprExplosion50
 			(FileName:    'MineOff'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   8; Height:  8; saveSurf: false),// sprMineOff
+			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMineOff
 			(FileName:     'MineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   8; Height:  8; saveSurf: false),// sprMineOn
+			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMineOn
 			(FileName:       'Case'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false),// sprCase
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCase
 			(FileName:   'FirstAid'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false),// sprFAid
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFAid
 			(FileName:   'dynamite'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprDynamite
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDynamite
 			(FileName:      'Power'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprPower
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPower
 			(FileName:     'ClBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprClusterBomb
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprClusterBomb
 			(FileName: 'ClParticle'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprClusterParticle
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprClusterParticle
 			(FileName:      'Flame'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprFlame
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFlame
 			(FileName:   'horizont'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   0; Height:  0; saveSurf: false),// sprHorizont
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHorizont
 			(FileName:        'Sky'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   0; Height:  0; saveSurf: false),// sprSky
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSky
 			(FileName:  'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 202; Height:  1; saveSurf: false),// sprAMBorders
+			Width: 202; Height:  1; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMBorders
 			(FileName:       'Slot'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 202; Height: 33; saveSurf: false),// sprAMSlot
+			Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlot
 			(FileName:   'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 202; Height: 33; saveSurf: false),// sprAMSlotName
+			Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotName
 			(FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprAMAmmos
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMAmmos
 			(FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprAMSlotKeys
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotKeys
 			(FileName:  'Selection'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprAMSelection
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSelection
 			(FileName:     'Finger'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 48; saveSurf: false),// sprFinger
+			Width:  32; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFinger
 			(FileName:    'AirBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprAirBomb
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAirBomb
 			(FileName:   'Airplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 254; Height: 101; saveSurf: false),// sprAirplane
+			Width: 254; Height: 101; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAirplane
 			(FileName: 'amAirplane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 32; saveSurf: false),// sprAmAirplane
+			Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAmAirplane
 			(FileName:   'amGirder'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 160; Height:160; saveSurf:  true),// sprAmGirder
+			Width: 160; Height:160; imageWidth: 0; imageHeight: 0; saveSurf:  true),// sprAmGirder
 			(FileName:     'hhMask'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf:  true),// sprHHTelepMask
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf:  true),// sprHHTelepMask
 			(FileName:     'Switch'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprSwitch
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSwitch
 			(FileName:  'Parachute'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false),// sprParachute
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprParachute
 			(FileName:     'Target'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprTarget
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprTarget
 			(FileName:   'RopeNode'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:   6; Height:  6; saveSurf: false),// sprRopeNode
+			Width:   6; Height:  6; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprRopeNode
 			(FileName:   'thinking'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprQuestion
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprQuestion
 			(FileName:   'PowerBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 256; Height: 32; saveSurf: false),// sprPowerBar
+			Width: 256; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPowerBar
 			(FileName:    'WindBar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 151; Height: 17; saveSurf: false),// sprWindBar
+			Width: 151; Height: 17; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWindBar
 			(FileName:      'WindL'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  80; Height: 13; saveSurf: false),// sprWindL
+			Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWindL
 			(FileName:      'WindR'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  80; Height: 13; saveSurf: false),// sprWindR
+			Width:  80; Height: 13; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWindR
 			(FileName:      'Flake'; Path:ptCurrTheme; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprFlake
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFlake
 			(FileName:     'amRope'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandRope
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandRope
 			(FileName:  'amBazooka'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandBazooka
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandBazooka
 			(FileName:  'amShotgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprHandShotgun
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandShotgun
 			(FileName:   'amDEagle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprHandDEagle
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandDEagle
 			(FileName:'amAirAttack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandAirAttack
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandAirAttack
 			(FileName: 'amBaseball'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandBaseball
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandBaseball
 			(FileName:     'Hammer'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 64; saveSurf: false),// sprPHammer
+			Width:  32; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPHammer
 			(FileName: 'amBTorch_i'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandBlowTorch
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandBlowTorch
 			(FileName: 'amBTorch_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprBlowTorch
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBlowTorch
 			(FileName:   'Teleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 32; saveSurf: false),// sprTeleport
+			Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprTeleport
 			(FileName:    'HHDeath'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 64; saveSurf: false),// sprHHDeath
+			Width:  32; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHHDeath
 			(FileName:'amShotgun_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprShotgun
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprShotgun
 			(FileName: 'amDEagle_w'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprDEagle
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDEagle
 			(FileName:       'Idle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHHIdle
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHHIdle
 			(FileName:     'Mortar'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprMortar
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMortar
 			(FileName:  'TurnsLeft'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprTurnsLeft
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprTurnsLeft
 			(FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 256; Height: 32; saveSurf: false),// sprKamikaze
+			Width: 256; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprKamikaze
 			(FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 128; Height: 32; saveSurf: false),// sprWhip
+			Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWhip
 			(FileName:     'Kowtow'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprKowtow
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprKowtow
 			(FileName:        'Sad'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprSad
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSad
 			(FileName:       'Wave'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 32; saveSurf: false),// sprWave
+			Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWave
 			(FileName:     'Hurrah'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHurrah
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHurrah
 			(FileName:'ILoveLemonade';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 128; Height: 32; saveSurf: false),// sprLemonade
+			Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprLemonade
 			(FileName:      'Shrug'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 32;  Height: 32; saveSurf: false),// sprShrug
+			Width: 32;  Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprShrug
 			(FileName:     'Juggle'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 32;  Height: 32; saveSurf: false),// sprJuggle
+			Width: 32;  Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprJuggle
 			(FileName:   'ExplPart'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprExplPart
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprExplPart
 			(FileName:  'ExplPart2'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprExplPart2
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprExplPart2
 			(FileName:  'Cake_walk'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprCakeWalk
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCakeWalk
 			(FileName:  'Cake_down'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprCakeDown
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCakeDown
 			(FileName:   'Ammos_bw'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprAMAmmosBW
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMAmmosBW
 			(FileName: 'Watermelon'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprWatermelon
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWatermelon
 			(FileName:  'EvilTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprEvilTrace
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprEvilTrace
 			(FileName:'HellishBomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprHellishBomb
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHellishBomb
 			(FileName:  'Seduction'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprSeduction
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSeduction
 			(FileName:    'HHDress'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprDress
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDress
 			(FileName:   'Censored'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 16; saveSurf: false),// sprCensored
+			Width:  64; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCensored
 			(FileName:      'Drill'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false),// sprDrill
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDrill
 			(FileName:    'amDrill'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprHandDrill
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandDrill
 			(FileName:  'amBallgun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  64; Height: 64; saveSurf: false),// sprHandBallgun
+			Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandBallgun
 			(FileName:      'Balls'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 20; saveSurf: false),// sprBalls
+			Width:  32; Height: 20; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBalls
 			(FileName:    'RCPlane'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false),// sprPlane
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprPlane
 			(FileName:  'amRCPlane'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; saveSurf: false), // sprHandPlane
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHandPlane
 			(FileName:    'Utility'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false), // sprUtility
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprUtility
 			(FileName:'Invulnerable';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false), // sprInvulnerable
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprInvulnerable
 			(FileName:   'Vampiric'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; saveSurf: false), // sprVampiric
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprVampiric
 			(FileName:   'amGirder'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 512; Height:512; saveSurf: false), // sprGirder
+			Width: 512; Height:512; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprGirder
 			(FileName:'SpeechCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  12; Height: 9; saveSurf:  true), // sprSpeechCorner
+			Width:  12; Height: 9; imageWidth: 0; imageHeight: 0; saveSurf:  true), // sprSpeechCorner
 			(FileName: 'SpeechEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  25; Height: 9; saveSurf:  true), // sprSpeechEdge
+			Width:  25; Height: 9; imageWidth: 0; imageHeight: 0; saveSurf:  true), // sprSpeechEdge
 			(FileName: 'SpeechTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  25; Height: 26; saveSurf: true), // sprSpeechTail
+			Width:  25; Height: 26; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprSpeechTail
 			(FileName:'ThoughtCorner';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  49; Height: 37; saveSurf: true), // sprThoughtCorner
+			Width:  49; Height: 37; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprThoughtCorner
 			(FileName:'ThoughtEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  23; Height: 16; saveSurf: true), // sprThoughtEdge
+			Width:  23; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprThoughtEdge
 			(FileName:'ThoughtTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  45; Height: 65; saveSurf: true), // sprThoughtTail
+			Width:  45; Height: 65; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprThoughtTail
 			(FileName:'ShoutCorner'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  34; Height: 23; saveSurf: true), // sprShoutCorner
+			Width:  34; Height: 23; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprShoutCorner
 			(FileName:  'ShoutEdge'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  30; Height: 20; saveSurf: true), // sprShoutEdge
+			Width:  30; Height: 20; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprShoutEdge
 			(FileName:  'ShoutTail'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  30; Height: 37; saveSurf: true), // sprShoutTail
+			Width:  30; Height: 37; imageWidth: 0; imageHeight: 0; saveSurf: true), // sprShoutTail
 			(FileName:'amSniperRifle';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 128; Height: 32; saveSurf: false), // sprSniperRifle
+			Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSniperRifle
 			(FileName:    'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  16; Height: 16; saveSurf: false), // sprBubbles
+			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprBubbles
 			(FileName:'amJetpack';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 64; Height: 64; saveSurf: false) // sprJetpack
+			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprJetpack
 			);
 
 	Wavez: array [TWave] of record

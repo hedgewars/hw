@@ -278,21 +278,22 @@ AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
 	with SpritesData[ii] do
         // FIXME - add a sprite attribute
-        if (not cReducedQuality) or
-           ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
-			begin
+        if (not cReducedQuality) or ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
+		begin
 			if AltPath = ptNone then
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
-					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifALpha or ifCritical or ifTransparent)
+					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifALpha or ifCritical or ifTransparent);
 				end;
+			if imageWidth = 0 then imageWidth := tmpsurf^.w;
+			if imageHeight = 0 then imageHeight := tmpsurf^.h;
 			if Width = 0 then Width:= tmpsurf^.w;
 			if Height = 0 then Height:= tmpsurf^.h;
 			Texture:= Surface2Tex(tmpsurf);
 			if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
-			end;
+		end;
 
 AddProgress;
 
@@ -515,13 +516,20 @@ DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
+var row, col, numFramesFirstCol: LongInt;
 begin
-DrawSprite2 (Sprite, X, Y, 0, Frame);
+numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+row:= Frame mod numFramesFirstCol;
+col:= Frame div numFramesFirstCol;
+DrawSprite2 (Sprite, X, Y, col, row);
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 var r: TSDL_Rect;
+    numFramesFirstCol: LongInt;
 begin
+numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+
 r.x:= 0;
 r.y:= 0;
 r.w:= SpritesData[Sprite].Width;
@@ -539,7 +547,6 @@ if (X + SpritesData[Sprite].Width > RightX) then
 
 dec(r.h, r.y);
 dec(r.w, r.x);
-
 DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
 end;
 
