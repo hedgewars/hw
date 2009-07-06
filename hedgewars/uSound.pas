@@ -28,14 +28,6 @@ interface
 {$ELSE}
 {$IFNDEF MSVC}
 	{$linklib openalbridge}
-{$IFNDEF WIN32}
-	{$linklib openal}
-{$ELSE}
-	{$linklib openal32}
-{$ENDIF}
-	{$linklib ogg}
-	{$linklib vorbis}
-	{$linklib vorbisfile}
 {$ENDIF}
 {$ENDIF}
 
