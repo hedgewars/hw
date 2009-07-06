@@ -92,6 +92,7 @@ procedure doStepDrowningGear(Gear: PGear);
 begin
 AllInactive:= false;
 Gear^.Y:= Gear^.Y + cDrownSpeed;
+Gear^.X:= Gear^.X + Gear^.dX * cDrownSpeed;
 if hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear);
 // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
 if (GameTicks and $1F) = 0 then
