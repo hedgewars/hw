@@ -342,14 +342,18 @@ UpdateLandTexture(tx, ddx, ty, ddy)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean): boolean;
-var X, Y, bpp, h, w: LongInt;
+var X, Y, bpp, h, w, row, col, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
 begin
+numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
+
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
 Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
 h:= SpritesData[Obj].Height;
+row:= Frame mod numFramesFirstCol;
+col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
    SDLTry(SDL_LockSurface(Image) >= 0, true);
@@ -357,7 +361,8 @@ if SDL_MustLock(Image) then
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
 // Check that sprite fits free space
-p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
+//p:= @(PByteArray(Image^.pixels)^[Image^.pitch * ( col * h + row * w )]);
+p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 - 1 ]);
 case bpp of
      4: for y:= 0 to Pred(h) do
             begin
@@ -386,7 +391,7 @@ if not doPlace then
    end;
 
 // Checked, now place
-p:= @(PByteArray(Image^.pixels)^[Image^.pitch * Frame * h]);
+p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 - 1 ]);
 case bpp of
      4: for y:= 0 to Pred(h) do
             begin
