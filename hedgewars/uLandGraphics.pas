@@ -361,8 +361,7 @@ if SDL_MustLock(Image) then
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
 // Check that sprite fits free space
-//p:= @(PByteArray(Image^.pixels)^[Image^.pitch * ( col * h + row * w )]);
-p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 - 1 ]);
+p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]);
 case bpp of
      4: for y:= 0 to Pred(h) do
             begin
@@ -391,7 +390,7 @@ if not doPlace then
    end;
 
 // Checked, now place
-p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 - 1 ]);
+p:= @(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]);
 case bpp of
      4: for y:= 0 to Pred(h) do
             begin
