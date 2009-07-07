@@ -281,7 +281,11 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (not cReducedQuality) or ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 		begin
 			if AltPath = ptNone then
+{$IFDEF IPHONEOS}
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+{$ELSE}
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
+{$ENDIF}
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then

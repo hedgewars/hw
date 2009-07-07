@@ -169,8 +169,11 @@ var f: file;
 	buf: array[0..255] of byte;
 	s: shortstring absolute buf;
 begin
-assign(f, fileName);
+{$IFDEF IPHONEOS}
+filemode := 0;
+{$ENDIF}
 
+assign(f, fileName);
 reset(f, 1);
 
 repeat

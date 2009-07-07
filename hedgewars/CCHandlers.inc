@@ -577,9 +577,10 @@ AddFileLog('Freeing old primary surface...');
 if SDLPrimSurface <> nil then SDL_FreeSurface(SDLPrimSurface);
 
 {$IFDEF DARWIN}
-{Fix for the Mac titlebar bug}
+//remove the topbar from Mac and iPhone
 flags:= flags or SDL_NOFRAME;
 {$ENDIF}
+
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 SDLTry(SDLPrimSurface <> nil, true);
 

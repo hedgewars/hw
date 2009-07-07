@@ -606,7 +606,6 @@ SDL_FreeSurface(tmpsurf);
 
 AddProgress;
 
-AddProgress
 end;
 
 procedure MakeFortsMap;
