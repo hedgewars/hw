@@ -45,6 +45,15 @@ else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
 
+#set default flags values for all the project
+set(CMAKE_C_FLAGS "-Wall -pipe")
+set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+
+
 add_subdirectory(bin)
 add_subdirectory(openalbridge)
 add_subdirectory(QTfrontend)

@@ -18,18 +18,12 @@ include(${QT_USE_FILE})
 # Configure for SDL
 find_package(SDL REQUIRED)
 
+include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
-
 if(UNIX)
 	include_directories("/usr/local/include") # HACK: in freebsd cannot find iconv.h included via SDL.h
 endif(UNIX)
 
-# Done
-include_directories(.)
-
-set(CMAKE_CXX_FLAGS "-Wall -pipe")
-set(CMAKE_CXX_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g")
 
 if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
@@ -42,6 +36,7 @@ else(WIN32 AND NOT UNIX)
 		set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
 	endif(DEFINED DATA_INSTALL_DIR)
 endif(WIN32 AND NOT UNIX)
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 

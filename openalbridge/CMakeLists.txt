@@ -3,11 +3,6 @@ find_package(OggVorbis REQUIRED)
 include_directories(${OPENAL_INCLUDE_DIR})
 include_directories(${OGGVORBIS_INCLUDE_DIRS})
 
-#set flag configuration for build type
-set(CMAKE_C_FLAGS "-Wall -pipe")
-set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
-
 #set destination directory for library
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 

@@ -67,10 +67,6 @@ IF(APPLE)
 	FIND_PACKAGE(SDL)
 
 	if (SDL_FOUND)
-		set(CMAKE_C_FLAGS "-Wall -pipe")
-		set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-		set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
-
 		set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 		include_directories(${SDL_INCLUDE_DIR})
 		link_libraries(${SDL_LIBRARY})
