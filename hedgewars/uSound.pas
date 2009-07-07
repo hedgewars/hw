@@ -26,7 +26,7 @@ interface
 	{$linkframework Ogg}
 	{$linkframework Vorbis}
 {$ELSE}
-{$IFNDEF WIND32}
+{$IFNDEF WIN32}
     {$linklib openal}
     {$linklib ogg}
     {$linklib vorbis}
