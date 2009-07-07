@@ -19,10 +19,7 @@
 unit SDLh;
 interface
 
-{$IFDEF LINUX}
-{$DEFINE UNIX}
-{$ENDIF}
-{$IFDEF FREEBSD}
+{$IFDEF LINUX or FREEBSD}
 {$DEFINE UNIX}
 {$ENDIF}
 
@@ -54,11 +51,11 @@ const {$IFDEF WIN32}
       SDLLibName = 'SDL.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDLLibName = 'SDL';
-	{$ELSE}
-          SDLLibName = 'libSDL.so';
-        {$ENDIF}
+            {$IFDEF DARWIN}
+            SDLLibName = 'SDL';
+            {$ELSE}
+            SDLLibName = 'libSDL.so';
+            {$ENDIF}
       {$ENDIF}
       SDL_SWSURFACE   = $00000000;
       SDL_HWSURFACE   = $00000001;
@@ -66,21 +63,21 @@ const {$IFDEF WIN32}
       SDL_INIT_VIDEO  = $00000020;
       SDL_INIT_AUDIO  = $00000010;
 
-	  {$IFDEF SDL13}
-	  SDL_ASYNCBLIT   = $08000000;
-	  SDL_ANYFORMAT   = $10000000;
+{$IFDEF SDL13}
+      SDL_ASYNCBLIT   = $08000000;
+      SDL_ANYFORMAT   = $10000000;
       SDL_HWPALETTE   = $00200000;
       SDL_DOUBLEBUF   = $00400000;
       SDL_FULLSCREEN  = $00800000;
       SDL_HWACCEL     = $08000000;
       SDL_SRCCOLORKEY = $00020000;
       SDL_RLEACCEL    = $08000000;
-	  SDL_NOFRAME     = $02000000;
-	  SDL_OPENGL	  = $04000000;
+      SDL_NOFRAME     = $02000000;
+      SDL_OPENGL      = $04000000;
       SDL_RESIZABLE   = $01000000;
-	  {$ELSE}
-	  SDL_ASYNCBLIT   = $00000004;
-	  SDL_ANYFORMAT	  = $00100000;
+{$ELSE}
+      SDL_ASYNCBLIT   = $00000004;
+      SDL_ANYFORMAT   = $00100000;
       SDL_HWPALETTE   = $20000000;
       SDL_DOUBLEBUF   = $40000000;
       SDL_FULLSCREEN  = $80000000;
@@ -88,9 +85,9 @@ const {$IFDEF WIN32}
       SDL_SRCCOLORKEY = $00001000;
       SDL_RLEACCEL    = $00004000;
       SDL_NOFRAME     = $00000020;
-      SDL_OPENGL	  = $00000002;
+      SDL_OPENGL      = $00000002;
       SDL_RESIZABLE   = $00000010;
-	  {$ENDIF}
+{$ENDIF}
 
       SDL_NOEVENT     = 0;
       SDL_ACTIVEEVENT = 1;
@@ -305,11 +302,11 @@ const {$IFDEF WIN32}
       SDL_TTFLibName = 'SDL_ttf.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_TTFLibName = 'SDL_ttf';
-	{$ELSE}
-          SDL_TTFLibName = 'libSDL_ttf.so';
-        {$ENDIF}
+            {$IFDEF DARWIN}
+            SDL_TTFLibName = 'SDL_ttf';
+            {$ELSE}
+            SDL_TTFLibName = 'libSDL_ttf.so';
+            {$ENDIF}
       {$ENDIF}
       TTF_STYLE_NORMAL = 0;
       TTF_STYLE_BOLD   = 1;
@@ -340,11 +337,11 @@ const {$IFDEF WIN32}
       SDL_ImageLibName = 'SDL_image.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_ImageLibName = 'SDL_image';
-	{$ELSE}
-           SDL_ImageLibName = 'libSDL_image.so';
-	{$ENDIF}
+            {$IFDEF DARWIN}
+            SDL_ImageLibName = 'SDL_image';
+            {$ELSE}
+            SDL_ImageLibName = 'libSDL_image.so';
+            {$ENDIF}
       {$ENDIF}
 
 function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
@@ -355,11 +352,11 @@ const {$IFDEF WIN32}
       SDL_NetLibName = 'SDL_net.dll';
       {$ENDIF}
       {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_NetLibName = 'SDL_net';
-	{$ELSE}
-          SDL_NetLibName = 'libSDL_net.so';
-	{$ENDIF}
+            {$IFDEF DARWIN}
+	        SDL_NetLibName = 'SDL_net';
+            {$ELSE}
+            SDL_NetLibName = 'libSDL_net.so';
+            {$ENDIF}
       {$ENDIF}
 
 type TIPAddress = record
@@ -438,3 +435,4 @@ begin
 end;
 
 end.
+

@@ -1,4 +1,4 @@
-file(GLOB MobsterSounds *.ogg *.wav)
+file(GLOB MobsterSounds *.ogg)
 
 install(FILES
 	${MobsterSounds}

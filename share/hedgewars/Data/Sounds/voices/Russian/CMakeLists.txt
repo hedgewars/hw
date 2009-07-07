@@ -1,4 +1,4 @@
-file(GLOB RussianSounds *.ogg *.wav)
+file(GLOB RussianSounds *.ogg)
 
 install(FILES
 	${RussianSounds}
