@@ -569,7 +569,9 @@ begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
 
+{$IFNDEF IPHONEOS}
 var i: LongInt;
+{$ENDIF}
 {$ENDIF}
 
 initialization
@@ -600,7 +602,7 @@ if ParamCount <> 0 then
 finalization
 //uRandom.DumpBuffer;
 
-writeln(f, 'halt at ',GameTicks,' ticks');
+writeln(f, 'halt at ', GameTicks, ' ticks');
 flush(f);
 close(f)
 

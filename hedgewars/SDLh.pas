@@ -96,6 +96,10 @@ const {$IFDEF WIN32}
       SDL_QUITEV      = 12;
       SDL_VIDEORESIZE = 16;
 
+{$IFDEF SDL13}
+      SDL_MOUSEMOTION  = 5;
+{$ENDIF}
+
       SDL_APPINPUTFOCUS = 2;
       SDL_GL_DOUBLEBUFFER = 5;
 
@@ -210,11 +214,23 @@ type PSDL_Rect = ^TSDL_Rect;
                           state: Byte;
                           keysym: TSDL_KeySym;
                           end;
+						  
+	 {$IFDEF SDL13}
+	 TSDL_MouseMotionEvent = record
+							 type_: byte;
+							 which: byte;
+							 state: byte;
+							 x    : LongInt;
+							 y    : LongInt;
+							 xrel : LongInt;
+							 yrel : LongInt;
+							 end;
+	 {$ENDIF}
 
      TSDL_QuitEvent = record
                       type_: Byte;
                       end;
-	TSDL_ResizeEvent = record
+	 TSDL_ResizeEvent = record
 			type_: Byte;
 			w, h: LongInt;
 			end;
@@ -227,7 +243,10 @@ type PSDL_Rect = ^TSDL_Rect;
                        SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
                        SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
-                       end;
+	 {$IFDEF SDL13}
+					   SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+     {$ENDIF}
+	                   end;
 
      PByteArray = ^TByteArray;
      TByteArray = array[0..65535] of Byte;
@@ -274,10 +293,13 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 
 {$IFDEF SDL13}
 function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
-function  SDL_GetMouseState(index: LongInt; x, y: PInteger): Byte; cdecl; external SDLLibName;
+function  SDL_GetMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
+function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_GetRelativeMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
+function  SDL_GetNumMice : LongInt; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
-function  SDL_GetMouseState(x, y: PInteger): Byte; cdecl; external SDLLibName;
+function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 {$ENDIF}
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
