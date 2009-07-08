@@ -171,16 +171,30 @@ const
 
 	MAXNAMELEN = 192;
 
-    LAND_WIDTH = 4096;
+	{*  REFERENCE
+      4096 -> $FFFFF000
+      2048 -> $FFFFF800
+      1024 -> $FFFFFC00
+       512 -> $FFFFFE00  *}
+
+{$IFDEF IPHONEOS or LOWRES}
+    LAND_WIDTH  = 2048;
+    LAND_HEIGHT = 1024;
+    LAND_WIDTH_MASK  = $FFFFF800;
+    LAND_HEIGHT_MASK = $FFFFFC00;
+{$ELSE}
+    LAND_WIDTH  = 4096;
     LAND_HEIGHT = 2048;
     LAND_WIDTH_MASK  = $FFFFF000;
     LAND_HEIGHT_MASK = $FFFFF800;
+{$ENDIF}
 
-	COLOR_LAND           = $FFFFFFFF;  // white
-	COLOR_INDESTRUCTIBLE = $FF0000FF;  // red
+    COLOR_LAND           = $FFFF;  // white
+	COLOR_INDESTRUCTIBLE = $88FF;  // red
 
-	// some opengl headers do not have these macros
-    GL_BGR = $80E0;
+
+    //some opengl headers do not have these macros
+    GL_BGR  = $80E0;
     GL_BGRA = $80E1;
 
 	cifRandomize = $00000001;

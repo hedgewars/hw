@@ -27,10 +27,11 @@ uses SDLh, uLandTemplates, uFloat,
 	uConsts;
 {$include options.inc}
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
+TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
 	TPreview  = packed array[0..127, 0..31] of byte;
 	TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
 
-var  Land: TLandArray;
+var  Land: TCollisionArray;
      LandPixels: TLandArray;
      LandDirty: TDirtyTag;
      hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
@@ -655,8 +656,11 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
             begin
             if (($FF000000 and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
                 Land[cpY + y, cpX + x]:= 0
-            else    
-                Land[cpY + y, cpX + x]:= p^[x];
+            else if p^[x] = $FF0000FF then  
+                Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
+            else if p^[x] = $FFFFFFFF then
+                Land[cpY + y, cpX + x]:= COLOR_LAND;
+
             end;
         p:= @(p^[tmpsurf^.pitch div 4]);
         end;

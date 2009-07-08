@@ -72,7 +72,9 @@ procedure OnDestroy; forward;
 
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
+{$IFNDEF IPHONEOS}
 var s: string;
+{$ENDIF}
 begin
 inc(RealTicks, Lag);
 
@@ -141,7 +143,7 @@ FreeLand;
 SendKB;
 CloseIPC;
 TTF_Quit;
-{$IFNDEF IPHONEOS}
+{$IFNDEF IPHONEOS or DEBUGFILE}
 //i know it is not clean but it is better than a crash
 SDL_Quit;
 {$ENDIF}
@@ -169,8 +171,11 @@ PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
 	case event.type_ of
-		{thinker here for adding touch events}
+	{$IFDEF IPHONEOS}
+		SDL_MOUSEMOTION: WriteLnToConsole('mouse number ' + inttostr(SDL_SelectMouse(event.motion.which)) + ' over ' + inttostr(SDL_GetNumMice()));
+	{$ELSE}
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
+	{$ENDIF}
 		SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
