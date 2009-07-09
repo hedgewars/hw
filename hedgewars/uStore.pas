@@ -281,15 +281,15 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (not cReducedQuality) or ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 		begin
 			if AltPath = ptNone then
-{$IFDEF IPHONEOS}
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
-{$ELSE}
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifCritical or ifTransparent)
-{$ENDIF}
+//{$IFDEF IPHONEOS}
+//				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
+//{$ELSE}
+				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
+//{$ENDIF}
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
-					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifALpha or ifCritical or ifTransparent);
+					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
 				end;
 			if imageWidth = 0 then imageWidth := tmpsurf^.w;
 			if imageHeight = 0 then imageHeight := tmpsurf^.h;
@@ -888,13 +888,31 @@ begin
 WriteToConsole(msgLoading + filename + '... ');
 s:= filename + '.' + cBitsStr + '.png';
 tmpsurf:= IMG_Load(Str2PChar(s));
-
+WriteToConsole(inttostr(imageFlags));
 if tmpsurf = nil then
    begin
    s:= filename + '.png';
    tmpsurf:= IMG_Load(Str2PChar(s));
    end;
 
+if ((imageFlags and ifLowRes) <> 0) then
+	begin
+		s:= filename + '-lowres.png';
+		if (tmpsurf <> nil) then
+		begin 
+			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
+			begin
+				WriteLnToConsole('Image too big, trying to load lowres version: ' + s);
+				tmpsurf:= IMG_Load(Str2PChar(s))
+			end;
+		end
+		else
+		begin
+			WriteLnToConsole('Image not found, trying to load lowres version: ' + s);
+			tmpsurf:= IMG_Load(Str2PChar(s))
+		end;
+	end;
+	
 if tmpsurf = nil then
 	begin
 	OutError(msgFailed, (imageFlags and ifCritical) <> 0);
@@ -903,9 +921,9 @@ if tmpsurf = nil then
 
 if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 	begin
-	SDL_FreeSurface(tmpsurf);
-	OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
-	exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask))
+		SDL_FreeSurface(tmpsurf);
+		OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
+		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
 if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);

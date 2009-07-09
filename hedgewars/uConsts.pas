@@ -163,7 +163,7 @@ const // image flags (for LoadImage())
     ifCritical    = $00000002; // image is critical for gameplay (exit game if unable to load)
     ifTransparent = $00000004; // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
-	
+    ifLowRes      = $00000010; // try loading a low resolution image when it is critical
 const
 	cMaxPower     = 1500;
 	cMaxAngle     = 2048;
@@ -191,7 +191,6 @@ const
 
     COLOR_LAND           = $FFFF;  // white
 	COLOR_INDESTRUCTIBLE = $88FF;  // red
-
 
     //some opengl headers do not have these macros
     GL_BGR  = $80E0;

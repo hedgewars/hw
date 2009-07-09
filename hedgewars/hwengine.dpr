@@ -143,10 +143,7 @@ FreeLand;
 SendKB;
 CloseIPC;
 TTF_Quit;
-{$IFNDEF IPHONEOS or DEBUGFILE}
-//i know it is not clean but it is better than a crash
 SDL_Quit;
-{$ENDIF}
 halt
 end;
 
