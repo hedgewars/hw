@@ -28,6 +28,7 @@ fakeDbConnection serverInfo = do
 			writeChan (coreChan serverInfo) $ ClientAccountInfo (clUid,
 				if clHost `elem` localAddressList then Admin else Guest)
 		ClearCache -> return ()
+		SendStats {} -> return ()
 
 	fakeDbConnection serverInfo
 

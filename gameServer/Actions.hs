@@ -178,7 +178,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) = do
 	processAction (
 		clID,
 		serverInfo,
-		adjust (\cl -> cl{roomID = rID}) clID clients,
+		adjust (\cl -> cl{roomID = rID, teamsInGame = if rID == 0 then teamsInGame cl else 0}) clID clients,
 		adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r), playersIn = (playersIn r) + 1}) rID $
 			adjust (\r -> r{playersIDs = IntSet.delete clID (playersIDs r)}) 0 rooms
 		) joinMsg
@@ -204,7 +204,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 	return (
 		clID,
 		serverInfo,
-		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False}) clID newClients,
+		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined}) clID newClients,
 		adjust (\r -> r{
 				playersIDs = IntSet.delete clID (playersIDs r),
 				playersIn = (playersIn r) - 1,
@@ -244,7 +244,7 @@ processAction (clID, serverInfo, clients, rooms) (RemoveRoom) = do
 	processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["ROOMABANDONED", name room]
 	return (clID,
 		serverInfo,
-		Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False, isReady = False} else cl) clients,
+		Data.IntMap.map (\cl -> if roomID cl == rID then cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined} else cl) clients,
 		delete rID $ adjust (\r -> r{playersIDs = IntSet.union (playersIDs room) (playersIDs r)}) 0 rooms
 		)
 	where

@@ -28,7 +28,8 @@ data ClientInfo =
 		pingsQueue :: !Word,
 		isMaster :: Bool,
 		isReady :: Bool,
-		isAdministrator :: Bool
+		isAdministrator :: Bool,
+		teamsInGame :: Word
 	}
 
 instance Show ClientInfo where

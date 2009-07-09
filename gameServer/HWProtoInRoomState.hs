@@ -58,6 +58,7 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
 		[Warning "restricted"]
 	else
 		[ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
+		ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1}),
 		AnswerThisClient ["TEAM_ACCEPTED", name],
 		AnswerOthersInRoom $ teamToNet newTeam,
 		AnswerOthersInRoom ["TEAM_COLOR", name, color]
@@ -81,7 +82,9 @@ handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName] =
 		if not $ nick client == teamowner team then
 			[ProtocolError "Not team owner!"]
 		else
-			[RemoveTeam teamName]
+			[RemoveTeam teamName,
+			ModifyClient (\c -> c{teamsInGame = teamsInGame c - 1})	
+			]
 	where
 		client = clients IntMap.! clID
 		room = rooms IntMap.! (roomID client)
@@ -155,10 +158,14 @@ handleCmd_inRoom clID clients rooms ["START_GAME"] =
 		enoughClans = not $ null $ drop 1 $ group $ map teamcolor $ teams room
 
 
-handleCmd_inRoom _ _ rooms ["EM", msg] =
-	[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
-	AnswerOthersInRoom ["EM", msg]]
-
+handleCmd_inRoom clID clients rooms ["EM", msg] =
+	if teamsInGame client > 0 then
+		[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
+		AnswerOthersInRoom ["EM", msg]]
+	else
+		[]
+	where
+		client = clients IntMap.! clID
 
 handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
