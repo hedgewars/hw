@@ -190,7 +190,7 @@ const
 {$ENDIF}
 
     COLOR_LAND           = $FFFF;  // white
-	COLOR_INDESTRUCTIBLE = $88FF;  // red
+    COLOR_INDESTRUCTIBLE = $FF88;  // green
 
     //some opengl headers do not have these macros
     GL_BGR  = $80E0;
@@ -199,9 +199,7 @@ const
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;
 	cifMap       = $00000002; // either theme or map (or map+theme)
-	cifAllInited = cifRandomize or
-					cifTheme or
-					cifMap;
+	cifAllInited = cifRandomize or cifTheme or cifMap;
 
 	cTransparentColor: Longword = $000000;
 
