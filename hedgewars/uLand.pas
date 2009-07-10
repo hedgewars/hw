@@ -320,12 +320,7 @@ while r.y < LAND_HEIGHT do
 	r.x:= 0;
 	while r.x < LAND_WIDTH do
 		begin
-		{$IFDEF IPHONEOS}
-		//does not draw border with SDL_UpperBlit function, so we will use our own copy
-		copyToXY(tmpsurf, Surface, r.x, r.y);
-		{$ELSE}
 		SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-		{$ENDIF}
 		inc(r.x, tmpsurf^.w)
 		end;
 	inc(r.y, tmpsurf^.h)

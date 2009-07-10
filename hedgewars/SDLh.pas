@@ -110,8 +110,12 @@ const {$IFDEF WIN32}
 
 type PSDL_Rect = ^TSDL_Rect;
      TSDL_Rect = record
+		    {$IFDEF SDL13}
+                 x, y, w, h: LongInt;
+		    {$ELSE}
                  x, y: SmallInt;
                  w, h: Word;
+            {$ENDIF}
                  end;
 
      TPoint = record
