@@ -281,11 +281,7 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (not cReducedQuality) or ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
 		begin
 			if AltPath = ptNone then
-//{$IFDEF IPHONEOS}
-//				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent)
-//{$ELSE}
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
-//{$ENDIF}
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
@@ -879,11 +875,30 @@ if Hedgehog.HealthTagTex <> nil then FreeTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-// hasAlpha: boolean; critical, setTransparent: boolean
 function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
-    //Result: PSDL_Surface;
     s: shortstring;
+{$IFDEF IPHONEOS}
+    convertedSurf: PSDL_Surface;
+const TestFormat: TSDL_PixelFormat = (
+            palette: nil; 
+            BitsPerPixel : 32;
+            BytesPerPixel: 4;
+            Rloss : 0; 
+            Gloss : 0; 
+            Bloss : 0; 
+            Aloss : 0; 
+			Rshift: 0; 
+            Gshift: 8; 
+            Bshift: 16; 
+            Ashift: 24; 
+            RMask : $000000FF; 
+            GMask : $0000FF00; 
+            BMask : $00FF0000; 
+            AMask : $FF000000; 
+            colorkey: 0;
+            alpha : 255); 
+{$ENDIF}
 begin
 WriteToConsole(msgLoading + filename + '... ');
 s:= filename + '.' + cBitsStr + '.png';
@@ -923,14 +938,20 @@ if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tm
 	begin
 		SDL_FreeSurface(tmpsurf);
 		OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
+		//dummy surface to replace non-critical textures that failed to load due to their size
 		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
 if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-//if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf)
-//            else Result:= SDL_DisplayFormat(tmpsurf);
+//if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf) else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
 WriteLnToConsole(msgOK);
+
+{$IFDEF IPHONEOS}
+//for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7
+convertedSurf:= SDL_ConvertSurface(tmpsurf, @TestFormat, SDL_SWSURFACE);
+tmpsurf:= convertedSurf;
+{$ENDIF}
 
 LoadImage:= tmpsurf //Result
 end;

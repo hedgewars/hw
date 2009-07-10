@@ -190,9 +190,9 @@ const
 {$ENDIF}
 
     COLOR_LAND           = $FFFF;  // white
-    COLOR_INDESTRUCTIBLE = $FF88;  // green
+    COLOR_INDESTRUCTIBLE = $88FF;  // red
 
-    //some opengl headers do not have these macros
+    //some opengl headers do not have these macros (unused)
     GL_BGR  = $80E0;
     GL_BGRA = $80E1;
 

@@ -334,11 +334,7 @@ ResetVertexArrays(NewTexture);
 glGenTextures(1, @NewTexture^.id);
 
 glBindTexture(GL_TEXTURE_2D, NewTexture^.id);
-{$IFDEF IPHONEOS}
-glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, buf);
-{$ELSE}
 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-{$ENDIF}
 
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -361,21 +357,13 @@ Surface2Tex^.h:= surf^.h;
 if (surf^.format^.BytesPerPixel = 3) then 
 	begin
 		modeIntFormat:= GL_RGB;
-		{$IFDEF IPHONEOS}
-		modeFormat:= GL_BGR;
-		{$ELSE}
 		modeFormat:= modeIntFormat;
-		{$ENDIF}
 	end
 else
 if (surf^.format^.BytesPerPixel = 4) then
 	begin
 		modeIntFormat:= GL_RGBA;
-		{$IFDEF IPHONEOS}
-		modeFormat:= GL_BGRA;
-		{$ELSE}
 		modeFormat:= modeIntFormat;
-		{$ENDIF}
 	end
 else
    begin

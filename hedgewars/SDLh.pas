@@ -151,6 +151,7 @@ type PSDL_Rect = ^TSDL_Rect;
                     offset: LongInt;
                     end;
 
+
      PSDL_Color = ^TSDL_Color;
      TSDL_Color = record
                   case byte of
@@ -161,6 +162,7 @@ type PSDL_Rect = ^TSDL_Rect;
                           );
                        1: (value: Longword);
                   end;
+
 
      PSDL_RWops = ^TSDL_RWops;
      TSeek = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
@@ -276,6 +278,7 @@ function  SDL_CreateRGBSurfaceFrom(pixels: Pointer; width, height, depth, pitch:
 procedure SDL_FreeSurface(Surface: PSDL_Surface); cdecl; external SDLLibName;
 function  SDL_SetColorKey(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
 function  SDL_SetAlpha(surface: PSDL_Surface; flag, key: Longword): LongInt; cdecl; external SDLLibName;
+function  SDL_ConvertSurface(src: PSDL_Surface; fmt: PSDL_PixelFormat; flags: LongInt): PSDL_Surface; cdecl; external SDLLibName;
 
 function  SDL_UpperBlit(src: PSDL_Surface; srcrect: PSDL_Rect; dst: PSDL_Surface; dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_FillRect(dst: PSDL_Surface; dstrect: PSDL_Rect; color: Longword): LongInt; cdecl; external SDLLibName;
