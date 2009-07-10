@@ -99,7 +99,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             if a = amGirder then
                 Ammoz[a].Probability:= 0
             else
+                begin
                 Ammoz[a].Probability:= 100;
+                Ammoz[a].NumberInCase:= 1;
+                end
             end;
     ammos[a]:= cnt
     end;
