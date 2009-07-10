@@ -24,7 +24,7 @@ uses
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
-	GL,
+    GL,
 {$ENDIF}
 	uLocale;
 
@@ -195,6 +195,8 @@ const
     //some opengl headers do not have these macros (unused)
     GL_BGR  = $80E0;
     GL_BGRA = $80E1;
+    GL_CLAMP_TO_EDGE = $812F;
+
 
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;
