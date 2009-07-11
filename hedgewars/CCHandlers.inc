@@ -561,7 +561,14 @@ if Length(s) = 0 then cFullScreen:= not cFullScreen
 {$IFDEF DEBUGFILE}
 AddFileLog('Prepare to change video parameters...');
 {$ENDIF}
+
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+{$IFDEF IPHONEOS}
+//remove these if they cause incompatibility
+SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
+SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+{$ENDIF}
 
 flags:= SDL_OPENGL;// or SDL_RESIZABLE;
 if cFullScreen then

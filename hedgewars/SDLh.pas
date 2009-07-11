@@ -219,26 +219,26 @@ type PSDL_Rect = ^TSDL_Rect;
                           state: Byte;
                           keysym: TSDL_KeySym;
                           end;
-     TSDL_GLattr = (
-    SDL_GL_RED_SIZE,
-    SDL_GL_GREEN_SIZE,
-    SDL_GL_BLUE_SIZE,
-    SDL_GL_ALPHA_SIZE,
-    SDL_GL_BUFFER_SIZE,
-    SDL_GL_DOUBLEBUFFER,
-    SDL_GL_DEPTH_SIZE,
-    SDL_GL_STENCIL_SIZE,
-    SDL_GL_ACCUM_RED_SIZE,
-    SDL_GL_ACCUM_GREEN_SIZE,
-    SDL_GL_ACCUM_BLUE_SIZE,
-    SDL_GL_ACCUM_ALPHA_SIZE,
-    SDL_GL_STEREO,
-    SDL_GL_MULTISAMPLEBUFFERS,
-    SDL_GL_MULTISAMPLESAMPLES,
-    SDL_GL_ACCELERATED_VISUAL,
-    SDL_GL_RETAINED_BACKING,
-    SDL_GL_CONTEXT_MAJOR_VERSION,
-    SDL_GL_CONTEXT_MINOR_VERSION );
+                          
+     TSDL_GLattr = ( SDL_GL_RED_SIZE,
+                     SDL_GL_GREEN_SIZE,
+                     SDL_GL_BLUE_SIZE,
+                     SDL_GL_ALPHA_SIZE,
+                     SDL_GL_BUFFER_SIZE,
+                     SDL_GL_DOUBLEBUFFER,
+                     SDL_GL_DEPTH_SIZE,
+                     SDL_GL_STENCIL_SIZE,
+                     SDL_GL_ACCUM_RED_SIZE,
+                     SDL_GL_ACCUM_GREEN_SIZE,
+                     SDL_GL_ACCUM_BLUE_SIZE,
+                     SDL_GL_ACCUM_ALPHA_SIZE,
+                     SDL_GL_STEREO,
+                     SDL_GL_MULTISAMPLEBUFFERS,
+                     SDL_GL_MULTISAMPLESAMPLES,
+                     SDL_GL_ACCELERATED_VISUAL,
+                     SDL_GL_RETAINED_BACKING,
+                     SDL_GL_CONTEXT_MAJOR_VERSION,
+                     SDL_GL_CONTEXT_MINOR_VERSION );
 	  
 {$IFDEF SDL13}
      TSDL_MouseMotionEvent = record
