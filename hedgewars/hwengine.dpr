@@ -243,6 +243,30 @@ case ParamCount of
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;
+	 {$IFDEF IPHONEOS}
+  0: begin
+        PathPrefix:= 'hedgewars/Data';
+		recordFileName:= 'hedgewars/save.hws';
+		val('320', cScreenWidth);
+		val('480', cScreenHeight);
+		cInitWidth:= cScreenWidth;
+		cInitHeight:= cScreenHeight;
+		cBitsStr:= '32';
+		val(cBitsStr, cBits);
+		val('100', cInitVolume);
+		isMusicEnabled:= false;
+		isSoundEnabled:= false;
+		cLocaleFName:= 'en.txt';
+		cFullScreen:= false;
+		cAltDamage:= false;
+		cShowFPS:= false;
+		val('8', cTimerInterval);
+		cReducedQuality:= false;
+
+        for p:= Succ(Low(TPathType)) to High(TPathType) do
+			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+     end;
+	 {$ENDIF}
   3: begin
      val(ParamStr(2), ipcPort);
      GameType:= gmtLandPreview;

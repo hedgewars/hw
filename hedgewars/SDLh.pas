@@ -101,7 +101,6 @@ const {$IFDEF WIN32}
 {$ENDIF}
 
       SDL_APPINPUTFOCUS = 2;
-      SDL_GL_DOUBLEBUFFER = 5;
 
       RMask = $000000FF;
       GMask = $0000FF00;
@@ -220,23 +219,43 @@ type PSDL_Rect = ^TSDL_Rect;
                           state: Byte;
                           keysym: TSDL_KeySym;
                           end;
-						  
-	 {$IFDEF SDL13}
-	 TSDL_MouseMotionEvent = record
-							 type_: byte;
-							 which: byte;
-							 state: byte;
-							 x    : LongInt;
-							 y    : LongInt;
-							 xrel : LongInt;
-							 yrel : LongInt;
-							 end;
-	 {$ENDIF}
+     TSDL_GLattr = (
+    SDL_GL_RED_SIZE,
+    SDL_GL_GREEN_SIZE,
+    SDL_GL_BLUE_SIZE,
+    SDL_GL_ALPHA_SIZE,
+    SDL_GL_BUFFER_SIZE,
+    SDL_GL_DOUBLEBUFFER,
+    SDL_GL_DEPTH_SIZE,
+    SDL_GL_STENCIL_SIZE,
+    SDL_GL_ACCUM_RED_SIZE,
+    SDL_GL_ACCUM_GREEN_SIZE,
+    SDL_GL_ACCUM_BLUE_SIZE,
+    SDL_GL_ACCUM_ALPHA_SIZE,
+    SDL_GL_STEREO,
+    SDL_GL_MULTISAMPLEBUFFERS,
+    SDL_GL_MULTISAMPLESAMPLES,
+    SDL_GL_ACCELERATED_VISUAL,
+    SDL_GL_RETAINED_BACKING,
+    SDL_GL_CONTEXT_MAJOR_VERSION,
+    SDL_GL_CONTEXT_MINOR_VERSION );
+	  
+{$IFDEF SDL13}
+     TSDL_MouseMotionEvent = record
+                             type_: byte;
+                             which: byte;
+                             state: byte;
+                             x    : LongInt;
+                             y    : LongInt;
+                             xrel : LongInt;
+                             yrel : LongInt;
+                             end;
+{$ENDIF}
 
      TSDL_QuitEvent = record
                       type_: Byte;
                       end;
-	 TSDL_ResizeEvent = record
+     TSDL_ResizeEvent = record
 			type_: Byte;
 			w, h: LongInt;
 			end;
@@ -249,10 +268,10 @@ type PSDL_Rect = ^TSDL_Rect;
                        SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
                        SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
-	 {$IFDEF SDL13}
-					   SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-     {$ENDIF}
-	                   end;
+{$IFDEF SDL13}
+                       SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+{$ENDIF}
+     end;
 
      PByteArray = ^TByteArray;
      TByteArray = array[0..65535] of Byte;
@@ -322,7 +341,7 @@ procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';
 function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexV';
 
-function  SDL_GL_SetAttribute(attr: byte; value: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
 
 (*  TTF  *)

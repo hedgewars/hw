@@ -959,6 +959,7 @@ end;
 procedure SetupOpenGL;
 begin
 SetScale(2.0);
+
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 glMatrixMode(GL_MODELVIEW);
 
@@ -966,6 +967,7 @@ glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 {$IFDEF DEBUGFILE}
 AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
+
 end;
 
 procedure SetScale(f: GLfloat);
