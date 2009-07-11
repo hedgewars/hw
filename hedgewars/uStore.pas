@@ -903,7 +903,7 @@ begin
 WriteToConsole(msgLoading + filename + '... ');
 s:= filename + '.' + cBitsStr + '.png';
 tmpsurf:= IMG_Load(Str2PChar(s));
-WriteToConsole(inttostr(imageFlags));
+
 if tmpsurf = nil then
    begin
    s:= filename + '.png';

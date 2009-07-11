@@ -344,6 +344,15 @@ function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibNam
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
 
+{$IFDEF SDL13}
+{$IFDEF IPHONEOS}
+function  SDL_iPhoneKeyboardShow(windowID: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_iPhoneKeyboardHide(windowID: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_iPhoneKeyboardIsShown(windowID: LongInt): boolean; cdecl; external SDLLibName;
+function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external SDLLibName;
+{$ENDIF}
+{$ENDIF}
+
 (*  TTF  *)
 
 const {$IFDEF WIN32}
@@ -364,18 +373,18 @@ type PTTF_Font = ^TTTF_font;
      TTTF_Font = record
                  end;
 
-function TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
+function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 
 
-function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
+function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 (* TSDL_Color -> Longword conversion is workaround over freepascal bug.
    See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
-function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
-function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 
@@ -427,24 +436,24 @@ type TIPAddress = record
                          sockets: PTCPSocket;
                          end;
 
-function SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
 
-function SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
-function SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
+function  SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
 procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
-function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
-function SDLNet_Read16(buf: pointer): Word;
-function SDLNet_Read32(buf: pointer): LongWord;
+function  SDLNet_Read16(buf: pointer): Word;
+function  SDLNet_Read32(buf: pointer): LongWord;
 
 implementation
 
