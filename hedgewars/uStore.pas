@@ -980,6 +980,9 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
 glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
 //glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
 glTranslatef(0, -cScreenHeight / 2, 0);
+
+// glTranslatex(320, 0, 0);
+// glRotatef(90.0, 0.0, 0.0, 1.0);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -57,7 +57,7 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 function  AskForVoicepack(name: shortstring): Pointer;
 
 {*remember: LongInt = 32bit; integer = 16bit; byte = 8bit*}
-function openal_init		(memsize: LongInt)			: boolean; cdecl; external OpenALBridge;
+function openal_init		(memsize: LongInt)                      : boolean; cdecl; external OpenALBridge;
 function openal_close							: boolean; cdecl; external OpenALBridge;
 function openal_loadfile	(const filename: PChar)			: LongInt; cdecl; external OpenALBridge;
 function openal_toggleloop	(index: LongInt)			: boolean; cdecl; external OpenALBridge;

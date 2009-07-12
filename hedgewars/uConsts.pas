@@ -24,7 +24,7 @@ uses
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
-    GL,
+	GL,
 {$ENDIF}
 	uLocale;
 
@@ -164,8 +164,8 @@ const // image flags (for LoadImage())
     ifTransparent = $00000004; // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
     ifLowRes      = $00000010; // try loading a low resolution image when it is critical
-const
-	cMaxPower     = 1500;
+    
+const	cMaxPower     = 1500;
 	cMaxAngle     = 2048;
 	cPowerDivisor = 1500;
 
@@ -199,7 +199,7 @@ const
     COLOR_LAND           = $FFFF;  // white
     COLOR_INDESTRUCTIBLE = $88FF;  // red
 
-    //some opengl headers do not have these macros (unused)
+    //some opengl headers do not have these macros
     GL_BGR  = $80E0;
     GL_BGRA = $80E1;
     GL_CLAMP_TO_EDGE = $812F;
