@@ -125,11 +125,13 @@ extern "C" {
     
     ALboolean helper_realloc (void) {
         /*expands allocated memory when loading more sound files than expected*/
-#ifdef DEBUG
-        fprintf(stderr, "OpenAL: Realloc in process %d\n", globalsize);
-#endif
+        int oldsize = globalsize;
         globalsize += increment;
 
+#ifdef DEBUG
+        fprintf(stderr, "OpenAL: Realloc in process from %d to %d\n", oldsize, globalsize);
+#endif
+        
         Buffers = (ALuint*) Realloc(Buffers, sizeof(ALuint)*globalsize);
         Sources = (ALuint*) Realloc(Sources, sizeof(ALuint)*globalsize);
         
@@ -338,14 +340,14 @@ extern "C" {
 #ifndef _WIN32
             pthread_create(&thread, NULL, helper_fadein, (void*) fade);
 #else
-            Thread = _beginthread(&helper_fadein, 0, (void*) fade);
+        Thread = _beginthread(&helper_fadein, 0, (void*) fade);
 #endif
         else {
             if (direction == FADE_OUT)
 #ifndef _WIN32
                 pthread_create(&thread, NULL, helper_fadeout, (void*) fade);
 #else
-                Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
+            Thread = _beginthread(&helper_fadeout, 0, (void*) fade);
 #endif	
             else {
                 fprintf(stderr, "ERROR: unknown direction for fade (%d)\n", direction);

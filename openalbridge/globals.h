@@ -65,48 +65,46 @@
 
 #define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
 
-#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | \
-(((x) & 0x00FF0000) >> 8)  | \
-(((x) & 0x0000FF00) << 8)  | \
-(((x) & 0x000000FF) << 24) )
+#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
+                         (((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
 
 #endif /* HAVE_BYTESWAP_H */
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-	
-	/*data type for WAV header*/
+    
+    /*data type for WAV header*/
 #pragma pack(1)
-	typedef struct _WAV_header_t {
-		uint32_t ChunkID;
-		uint32_t ChunkSize;
-		uint32_t Format;
-		uint32_t Subchunk1ID;
-		uint32_t Subchunk1Size;
-		uint16_t AudioFormat;
-		uint16_t NumChannels;
-		uint32_t SampleRate;
-		uint32_t ByteRate;
-		uint16_t BlockAlign;
-		uint16_t BitsPerSample;
-		uint32_t Subchunk2ID;
-		uint32_t Subchunk2Size;
-	} WAV_header_t;
+    typedef struct _WAV_header_t {
+        uint32_t ChunkID;
+        uint32_t ChunkSize;
+        uint32_t Format;
+        uint32_t Subchunk1ID;
+        uint32_t Subchunk1Size;
+        uint16_t AudioFormat;
+        uint16_t NumChannels;
+        uint32_t SampleRate;
+        uint32_t ByteRate;
+        uint16_t BlockAlign;
+        uint16_t BitsPerSample;
+        uint32_t Subchunk2ID;
+        uint32_t Subchunk2Size;
+    } WAV_header_t;
 #pragma pack()
-	
-	/*data type for passing data between threads*/
+    
+    /*data type for passing data between threads*/
 #pragma pack(1)
-	typedef struct _fade_t {
-		uint32_t index;
-		uint16_t quantity;
-	} fade_t;
+    typedef struct _fade_t {
+        uint32_t index;
+        uint16_t quantity;
+    } fade_t;
 #pragma pack()
-	
-	/*other defines*/
+    
+    /*other defines*/
 #define FADE_IN	 true
 #define FADE_OUT false
-	
+    
 #ifdef __CPLUSPLUS
 }
 #endif

@@ -132,8 +132,7 @@ extern "C" {
         OggVorbis_File  oggStream;		/*stream handle*/
         vorbis_info	*vorbisInfo;	/*some formatting data*/
         int64_t		pcm_length;		/*length of the decoded data*/
-        int size = 0;
-        int section, result;
+        int             section, result, size = 0;
 #ifdef DEBUG
         int i;
         vorbis_comment	*vorbisComment;	/*other less useful data*/
@@ -141,7 +140,6 @@ extern "C" {
         
         oggFile = Fopen(filename, "rb");
         result = ov_open(oggFile, &oggStream, NULL, 0);	/*TODO: check returning value of result*/
-        fclose(oggFile);
         
         vorbisInfo = ov_info(&oggStream, -1);
         pcm_length = ov_pcm_total(&oggStream, -1) << vorbisInfo->channels;	
@@ -173,6 +171,8 @@ extern "C" {
                 *format = AL_FORMAT_STEREO16;
             else {
                 fprintf(stderr, "ERROR: wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
+                ov_clear (&oggStream);
+                fclose(oggFile);
                 return AL_FALSE;
             }
         }
@@ -187,6 +187,8 @@ extern "C" {
                     break;
                 else { 
                     fprintf(stderr, "ERROR: end of file from OGG stream\n");
+                    ov_clear (&oggStream);
+                    fclose(oggFile);
                     return AL_FALSE;
                 }
             }
@@ -197,6 +199,7 @@ extern "C" {
         *freq    = vorbisInfo->rate;
         
         ov_clear (&oggStream);
+        fclose (oggFile);
         return AL_TRUE;
     }
     
