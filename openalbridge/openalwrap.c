@@ -3,15 +3,15 @@
  * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; version 2 of the License
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
@@ -32,10 +32,6 @@ extern "C" {
 	ALuint *Buffers;
 	/*index for Sources and Buffers*/
 	ALuint globalindex, globalsize, increment;
-	/*Position of the source sound*/
-	ALfloat SourcePos[] = { 0.0, 0.0, 0.0 };
-	/*Velocity of the source sound*/
-	ALfloat SourceVel[] = { 0.0, 0.0, 0.0 };
 	
 	ALint openalReady = AL_FALSE;
 	
@@ -144,6 +140,8 @@ extern "C" {
 	
 	int openal_loadfile (const char *filename){
 		/*Open a file, load into memory and allocate the Source buffer for playing*/
+                ALfloat SourcePos[] = { 0.0, 0.0, 0.0 }; /*Position of the source sound*/
+                ALfloat SourceVel[] = { 0.0, 0.0, 0.0 }; /*Velocity of the source sound*/
 		ALenum format;
 		ALsizei bitsize;
 		ALsizei freq;
@@ -188,10 +186,10 @@ extern "C" {
 				
 		
 		if (fileformat == 0x5367674F) /*check if ogg*/
-			error = load_OggVorbis (filename, &format, &data, &bitsize, &freq);
+			error = load_oggvorbis (filename, &format, &data, &bitsize, &freq);
 		else {
 			if (fileformat == 0x46464952) /*check if wav*/
-				error = load_WavPcm (filename, &format, &data, &bitsize, &freq);
+				error = load_wavpcm (filename, &format, &data, &bitsize, &freq);
 			else {
 				fprintf(stderr, "ERROR: File format (%08X) not supported!\n", invert_endianness(fileformat));
 				return -5;

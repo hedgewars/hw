@@ -3,15 +3,15 @@
  * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; version 2 of the License
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
@@ -22,7 +22,7 @@
 extern "C" {
 #endif 
 	
-	int load_WavPcm (const char *filename, ALenum *format, char ** data, ALsizei *bitsize, ALsizei *freq) {
+	int load_wavpcm (const char *filename, ALenum *format, char ** data, ALsizei *bitsize, ALsizei *freq) {
 		WAV_header_t WAVHeader;
 		FILE *wavfile;
 		int32_t t;
@@ -125,7 +125,8 @@ extern "C" {
 		return AL_TRUE;
 	}
 	
-	int load_OggVorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
+    
+	int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
 		/*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
 		FILE			*oggFile;		/*ogg handle*/
 		OggVorbis_File  oggStream;		/*stream handle*/
@@ -139,11 +140,11 @@ extern "C" {
 #endif
 		
 		oggFile = Fopen(filename, "rb");
-		result = ov_open(oggFile, &oggStream, NULL, 0);
-		/*TODO: check returning value of result*/
-		
+		result = ov_open(oggFile, &oggStream, NULL, 0);	/*TODO: check returning value of result*/
+                fclose(oggFile);
+            
 		vorbisInfo = ov_info(&oggStream, -1);
-		pcm_length = ov_pcm_total(&oggStream,-1) << vorbisInfo->channels;	
+		pcm_length = ov_pcm_total(&oggStream, -1) << vorbisInfo->channels;	
 		
 #ifdef DEBUG
 		vorbisComment = ov_comment(&oggStream, -1);
@@ -176,7 +177,7 @@ extern "C" {
 			}
 		}
 		
-		while(size < pcm_length)	{
+		while(size < pcm_length) {
 			/*ov_read decodes the ogg stream and storse the pcm in data*/
 			result = ov_read (&oggStream, *data + size, pcm_length - size, 0, 2, 1, &section);
 			if(result > 0) {
@@ -193,7 +194,9 @@ extern "C" {
 		
 		/*records the last fields*/
 		*bitsize = size;
-		*freq = vorbisInfo->rate;
+		*freq    = vorbisInfo->rate;
+            
+                ov_clear (&oggStream);
 		return AL_TRUE;
 	}
 	
