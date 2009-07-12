@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
 
 #ifndef _WIN32
 #include <pthread.h>
@@ -102,8 +104,8 @@ extern "C" {
 #pragma pack()
 	
 	/*other defines*/
-#define FADE_IN		11
-#define FADE_OUT	12
+#define FADE_IN	 true
+#define FADE_OUT false
 	
 #ifdef __CPLUSPLUS
 }

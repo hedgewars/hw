@@ -26,12 +26,9 @@ void *Malloc (size_t nbytes);
 void *Realloc (void *aptr, size_t nbytes);
 FILE *Fopen (const char *fname, char *mode);
 ALint AlGetError (const char *str);
-#ifndef _WIN32
+ALint AlGetError2 (const char *str, int num);
 void *helper_fadein (void *tmp);
 void *helper_fadeout (void *tmp); 
-#else
-void *helper_fadein (void *tmp); 
-void *helper_fadeout (void *tmp); 	
-#endif
+
 
 #endif /*_OALB_WRAPPERS_H*/

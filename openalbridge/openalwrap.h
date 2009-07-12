@@ -18,27 +18,27 @@
 
 #ifndef _OALB_INTERFACE_H
 #define _OALB_INTERFACE_H
-
+#include <stdbool.h>
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-		
-	int openal_init				(unsigned int memorysize);
-	int openal_close			(void);
-	int openal_loadfile			(const char *filename);
-	int openal_toggleloop		(unsigned int index);
-	int openal_setposition		(unsigned int index, float x, float y, float z);
-	int openal_setvolume		(unsigned int index, unsigned char percentage);
-	int openal_setglobalvolume	(unsigned char percentage);
-	int openal_togglemute		(void);
-	int openal_fadeout			(unsigned int index, unsigned short int quantity);
-	int openal_fadein			(unsigned int index, unsigned short int quantity);
-	int openal_fade				(unsigned int index, unsigned short int quantity, unsigned char direction);
-	int openal_playsound		(unsigned int index);	
-	int openal_pausesound		(unsigned int index);
-	int openal_stopsound		(unsigned int index);
-	
+    
+    bool openal_init		(unsigned int memorysize);
+    bool openal_close		(void);
+    int  openal_loadfile	(const char *filename);
+    bool openal_toggleloop	(unsigned int index);
+    bool openal_setposition	(unsigned int index, float x, float y, float z);
+    bool openal_setvolume	(unsigned int index, unsigned char percentage);
+    bool openal_setglobalvolume	(unsigned char percentage);
+    bool openal_togglemute	(void);
+    bool openal_fadeout		(unsigned int index, unsigned short int quantity);
+    bool openal_fadein		(unsigned int index, unsigned short int quantity);
+    bool openal_fade		(unsigned int index, unsigned short int quantity, bool direction);
+    bool openal_playsound	(unsigned int index);	
+    bool openal_pausesound	(unsigned int index);
+    bool openal_stopsound	(unsigned int index);
+    
 #ifdef __CPLUSPLUS
 }
 #endif
