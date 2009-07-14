@@ -22,7 +22,7 @@
 00:19=Teleporter
 00:20=Igel wechseln
 00:21=Mörser
-00:22=Stoßen
+00:22=Peitsche
 00:23=Kamikaze
 00:24=Torte
 00:25=Verführung
@@ -94,3 +94,4 @@
 02:09=%1 scheint sich zu hassen.
 02:09=%1 steht auf der falschen Seite!
 02:09=%1 lebt gefährlich!
+

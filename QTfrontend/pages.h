@@ -221,6 +221,10 @@ public:
 	QCheckBox *CBShowFPS;
 	QCheckBox *CBAltDamage;
 	QCheckBox *CBNameWithDate;
+#ifdef __APPLE__
+    QCheckBox *CBAutoUpdate;
+#endif
+    
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 	QLabel *labelNN;

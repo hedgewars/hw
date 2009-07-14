@@ -64,7 +64,12 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
 	Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
-
+    
+#ifdef __APPLE__
+    //autoupdate
+    Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
+#endif
+    
 	depth = QApplication::desktop()->depth();
 	if (depth < 16) depth = 16;
 	else if (depth > 16) depth = 32;
@@ -120,6 +125,11 @@ void GameUIConfig::SaveOptions()
 
 	setValue("misc/altdamage", isAltDamageEnabled());
 	setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
+    
+#ifdef __APPLE__
+    //autoupdate
+    setValue("misc/autoUpdate", isAutoUpdateEnabled());
+#endif 
 }
 
 QRect GameUIConfig::vid_Resolution()
@@ -177,6 +187,14 @@ bool GameUIConfig::appendDateTimeToRecordName()
 {
 	return Form->ui.pageOptions->CBNameWithDate->isChecked();
 }
+
+#ifdef __APPLE__
+//autoupdate
+bool GameUIConfig::isAutoUpdateEnabled()
+{
+    return Form->ui.pageOptions->CBAutoUpdate->isChecked();
+}
+#endif
 
 quint8 GameUIConfig::timerInterval()
 {

@@ -55,6 +55,12 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 
+#ifdef __APPLE__
+//autoupdate
+#include "CocoaInitializer.h"
+#include "SparkleAutoUpdater.h"
+#endif
+
 // I started handing this down to each place it touches, but it was getting ridiculous
 // and this one flag does not warrant a static class
 bool frontendEffects = true;
@@ -74,7 +80,16 @@ HWForm::HWForm(QWidget *parent)
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 	
 	namegen = new HWNamegen();
-
+    
+#ifdef __APPLE__
+        //autoupdate
+        AutoUpdater* updater;
+        CocoaInitializer initializer;
+        updater = new SparkleAutoUpdater("http://files.getdropbox.com/u/24468/appcast.xml"); //this has to change before release!!!
+        if(updater && config->isAutoUpdateEnabled())
+            updater->checkForUpdates();
+#endif
+    
 	UpdateTeamsLists();
 	UpdateWeapons();
 

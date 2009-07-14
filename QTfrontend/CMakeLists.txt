@@ -137,6 +137,12 @@ set(hwfr_moc_hdrs
 	bgwidget.h
 	)
 
+if(APPLE)
+find_package(Sparkle REQUIRED)
+set(hwfr_src ${hwfr_src} AutoUpdater.cpp CocoaInitializer.mm SparkleAutoUpdater.mm)
+#set(hwfr_moc_hdrs ${hwfr_moc_hdrs} AutoUpdater.h CocoaInitializer.h SparkleAutoUpdater.h)
+endif(APPLE)
+
 set(hwfr_hdrs
 	binds.h
 	ui_hwform.h
@@ -183,6 +189,7 @@ if(APPLE)
 		${OGG_LIBRARY}
 		${VORBIS_LIBRARY}
 		${HW_LINK_LIBS}
+		${SPARKLE_LIBRARY}
 		)
 endif(APPLE)
 

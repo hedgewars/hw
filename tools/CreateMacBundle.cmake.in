@@ -1,4 +1,4 @@
-execute_process(COMMAND ${macdeployqt_EXE} ${CMAKE_BINARY_DIR}/${bundle_name} OUTPUT_QUIET)
+execute_process(COMMAND ${macdeployqt_EXE} ${CMAKE_BINARY_DIR}/${bundle_name} OUTPUT_QUIET ERROR_QUIET)
 
 execute_process(COMMAND cp -pPR /Library/Frameworks/SDL.framework/	  ${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL.framework)
 execute_process(COMMAND cp -pPR /Library/Frameworks/SDL_image.framework/  ${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_image.framework)
@@ -6,7 +6,8 @@ execute_process(COMMAND cp -pPR /Library/Frameworks/SDL_net.framework/    ${CMAK
 execute_process(COMMAND cp -pPR /Library/Frameworks/SDL_ttf.framework/    ${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_ttf.framework)
 execute_process(COMMAND cp -pPR /Library/Frameworks/Ogg.framework/  	  ${CMAKE_BINARY_DIR}/${frameworks_dir}/Ogg.framework)
 execute_process(COMMAND cp -pPR /Library/Frameworks/Vorbis.framework/	  ${CMAKE_BINARY_DIR}/${frameworks_dir}/Vorbis.framework)
+execute_process(COMMAND cp -pPR /Library/Frameworks/Sparkle.framework/	  ${CMAKE_BINARY_DIR}/${frameworks_dir}/Sparkle.framework)
 
 if(${HAVE_NETSERVER})
-execute_process(COMMAND cp -pPR /Library/Frameworks/SDL_ttf.framework/ ${CMAKE_BINARY_DIR}/${frameworks_dir}/GMP.framework)
+execute_process(COMMAND cp -pPR /Library/Frameworks/GMP.framework/ ${CMAKE_BINARY_DIR}/${frameworks_dir}/GMP.framework)
 endif()

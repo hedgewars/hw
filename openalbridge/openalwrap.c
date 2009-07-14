@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "globals.h"
+#include "openalwrap.h"
 #include "wrappers.h"
 #include "alc.h"
 #include "loaders.h"
@@ -312,7 +312,7 @@ extern "C" {
     }
     
     
-    ALboolean openal_fade (uint32_t index, uint16_t quantity, bool direction) {
+    ALboolean openal_fade (uint32_t index, uint16_t quantity, ALboolean direction) {
         /*Fade in or out by calling a helper thread*/
 #ifndef _WIN32
         pthread_t thread;

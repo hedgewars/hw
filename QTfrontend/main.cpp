@@ -24,6 +24,8 @@
 #include <QRegExp>
 #include <QMap>
 
+
+
 #include "hwform.h"
 #include "hwconsts.h"
 
@@ -44,7 +46,7 @@ bool checkForDir(const QString & dir)
 
 int main(int argc, char *argv[])
 {
-	QApplication app(argc, argv);
+    QApplication app(argc, argv);
 
     QStringList arguments = app.arguments();
     QMap<QString, QString> parsedArgs;
@@ -286,6 +288,8 @@ int main(int argc, char *argv[])
 
 	cfgdir->setPath(cfgdir->homePath());
 #ifdef __APPLE__
+
+    
 	if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
 	{
 		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
@@ -336,6 +340,8 @@ int main(int argc, char *argv[])
 	mapList = new QStringList(tmpdir.entryList(QStringList("*")));
 
 	HWForm *Form = new HWForm();
+    
+
 	Form->show();
 	return app.exec();
 }

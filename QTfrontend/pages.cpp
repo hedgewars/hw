@@ -389,11 +389,12 @@ PageOptions::PageOptions(QWidget* parent) :
 	{
 		AGGroupBox = new IconedGroupBox(this);
 		AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
-		AGGroupBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+		AGGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
 		AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 
 		QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
 		QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            
 		QLabel * resolution = new QLabel(AGGroupBox);
 		resolution->setText(QLabel::tr("Resolution"));
 		GBAreslayout->addWidget(resolution);
@@ -444,7 +445,6 @@ PageOptions::PageOptions(QWidget* parent) :
 		volumeBox->setSingleStep(5);
 		volumeBox->setEnabled(openal_ready());
 		GBAvollayout->addWidget(volumeBox);
-		
 
 		CBShowFPS = new QCheckBox(AGGroupBox);
 		CBShowFPS->setText(QCheckBox::tr("Show FPS"));
@@ -458,9 +458,16 @@ PageOptions::PageOptions(QWidget* parent) :
 		CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
 		GBAlayout->addWidget(CBNameWithDate);
 
-		fpsedit = new FPSEdit(AGGroupBox);
-		GBAfpslayout->addWidget(fpsedit);
-		gbTBLayout->addWidget(AGGroupBox, 0, 1, 2, 1);
+#ifdef __APPLE__
+            //autoupdate
+		CBAutoUpdate = new QCheckBox(AGGroupBox);
+		CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
+		GBAlayout->addWidget(CBAutoUpdate);
+#endif
+            
+            fpsedit = new FPSEdit(AGGroupBox);
+            GBAfpslayout->addWidget(fpsedit);
+            gbTBLayout->addWidget(AGGroupBox, 0, 1, 2, 1);
 	}
 
 	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 2, 2, true);
