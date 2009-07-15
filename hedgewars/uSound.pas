@@ -55,6 +55,8 @@ procedure ResumeMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 function  AskForVoicepack(name: shortstring): Pointer;
+function  soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
+
 
 {*remember: LongInt = 32bit; integer = 16bit; byte = 8bit*}
 function openal_init		(memsize: LongInt)                      : boolean; cdecl; external OpenALBridge;
@@ -65,7 +67,7 @@ function openal_setvolume	(index: LongInt; percentage: byte)	: boolean; cdecl; e
 function openal_setglobalvolume	(percentage: byte)			: boolean; cdecl; external OpenALBridge;
 function openal_fadeout		(index: LongInt; quantity: integer)	: boolean; cdecl; external OpenALBridge;
 function openal_fadein		(index: LongInt; quantity: integer)	: boolean; cdecl; external OpenALBridge;
-function openal_fade		(index: LongInt; quantity: integer; direction: byte)	: boolean; cdecl; external OpenALBridge;
+function openal_fade		(index: LongInt; quantity: integer; direction: boolean)	: boolean; cdecl; external OpenALBridge;
 function openal_playsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_pausesound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_stopsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
@@ -150,21 +152,34 @@ for t:= 0 to cMaxTeams do
 				end;
 end;
 
+function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
+begin
+if not isSoundEnabled then exit(0);
+if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then openal_fadeout(defVoicepack^.chunks[snd], qt)
+else if (defVoicepack^.chunks[snd] >= 0) then openal_fadeout(defVoicepack^.chunks[snd], qt);
+end;
+
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
 
-if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then
+if (voicepack <> nil) then
 begin
+if voicepack^.chunks[snd] >= 0 then
+	begin
 	if infinite then openal_toggleloop(voicepack^.chunks[snd]);
 	openal_playsound(voicepack^.chunks[snd]);
 	lastChan[snd]:=voicepack^.chunks[snd];
+	end
 end
 else
 begin
+if (defVoicepack^.chunks[snd] >= 0) then
+	begin
 	if infinite then openal_toggleloop(defVoicepack^.chunks[snd]);
 	openal_playsound(defVoicepack^.chunks[snd]);
 	lastChan[snd]:=defVoicepack^.chunks[snd];
+	end
 end
 end;
 

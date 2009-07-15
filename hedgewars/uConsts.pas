@@ -93,15 +93,15 @@ type
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, 
-			sndVaporize, sndWarp, sndSuddenDeath);
+			sndVaporize, sndWarp, sndSuddenDeath, sndMortar);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
-            amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack);
+            		amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
+            		amLaserSight, amVampiric, amSniperRifle, amJetpack);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -663,7 +663,8 @@ const	cMaxPower     = 1500;
 			(FileName:          'baseballbat.ogg'; Path: ptSounds),// sndBaseballBat
 			(FileName:                'steam.ogg'; Path: ptSounds),// sndVaporize
 			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
-			(FileName:          'suddendeath.ogg'; Path: ptSounds) // sndSuddenDeath
+			(FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
+			(FileName:               'mortar.ogg'; Path: ptSounds) // sndMortar
 			);
 
 	Ammoz: array [TAmmoType] of record

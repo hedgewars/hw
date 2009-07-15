@@ -1613,6 +1613,7 @@ doStepFallingGear(Gear);
 if (Gear^.State and gstCollision) <> 0 then
 	begin
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLAutoSound);
+	soundFadeOut(sndMortar,10,nil);
 
 	Gear^.dX.isNegative:= not dxn;
 	Gear^.dY.isNegative:= not dyn;
