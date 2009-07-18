@@ -196,7 +196,7 @@ begin
 	WriteLn('  hwengine <path to data folder> <path to replay file> [option]');
 	WriteLn();
 	WriteLn('where [option] must be specified either as');
-	WriteLn(' --set-video [screen height] [screen width] [color dept]');
+	WriteLn(' --set-video [screen width] [screen height] [color dept]');
 	WriteLn(' --set-audio [volume] [enable music] [enable sounds]');
 	WriteLn(' --set-other [language file] [full screen] [show FPS]');
 	WriteLn(' --set-multimedia [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
