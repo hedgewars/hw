@@ -128,21 +128,19 @@ extern "C" {
 
     int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
         /*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
-        FILE		*oggFile;		/*ogg handle*/
-        OggVorbis_File  oggStream;		/*stream handle*/
+        OggVorbis_File  oggStream;	/*stream handle*/
         vorbis_info	*vorbisInfo;	/*some formatting data*/
-        int64_t		pcm_length;		/*length of the decoded data*/
+        int64_t		pcm_length;	/*length of the decoded data*/
         int             section, result, size = 0;
 #ifdef DEBUG
         int i;
         vorbis_comment	*vorbisComment;	/*other less useful data*/
 #endif
 
-        oggFile = Fopen(filename, "rb");
-	result = ov_open_callbacks(oggFile, &oggStream, NULL, 0, NULL);
+	result = ov_fopen((char*) filename, &oggStream);
 	if (result < 0) {
-		fprintf (stderr, "ERROR: ov_open_callbacks failed with %X", result) 
-		fclose(oggFile);
+		fprintf (stderr, "ERROR: ov_open_callbacks failed with %X", result);
+                ov_clear(&oggStream);
 		return -1;
 	}
 
@@ -177,7 +175,6 @@ extern "C" {
             else {
                 fprintf(stderr, "ERROR: wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
                 ov_clear(&oggStream);
-                fclose(oggFile);
                 return AL_FALSE;
             }
         }
@@ -193,7 +190,6 @@ extern "C" {
                 else { 
                     fprintf(stderr, "ERROR: end of file from OGG stream\n");
                     ov_clear(&oggStream);
-                    fclose(oggFile);
                     return AL_FALSE;
                 }
             }
@@ -205,7 +201,6 @@ extern "C" {
         
 	/*cleaning time*/
         ov_clear(&oggStream);
-	fclose(oggFile);
 
         return AL_TRUE;
     }

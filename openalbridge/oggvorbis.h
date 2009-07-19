@@ -164,12 +164,11 @@ typedef struct OggVorbis_File {
 
 
 extern int ov_open(FILE *f,OggVorbis_File *vf,char *initial,long ibytes);
+extern int ov_fopen(char *path,OggVorbis_File *vf);
 extern long ov_read(OggVorbis_File *vf,char *buffer,int length,int bigendianp,int word,int sgned,int *bitstream);
 extern ogg_int64_t ov_pcm_total(OggVorbis_File *vf,int i);
-extern long ov_read(OggVorbis_File *vf,char *buffer,int length,int bigendianp,int word,int sgned,int *bitstream);
 extern vorbis_info *ov_info(OggVorbis_File *vf,int link);
 extern vorbis_comment *ov_comment(OggVorbis_File *f, int num);
 extern int ov_clear(OggVorbis_File *vf);
-extern int ov_open_callbacks(void *datasource, OggVorbis_File *vf, char *initial, long ibytes, ov_callbacks callbacks);
 
 #endif /*_OGGVORBIS_H*/
