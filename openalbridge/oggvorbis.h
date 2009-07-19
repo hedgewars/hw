@@ -31,8 +31,7 @@ typedef struct vorbis_info{
     int channels;
     long rate;
     /* The below bitrate declarations are *hints*.
-     Combinations of the three values carry the following implications:
-     all three set to the same value: implies a fixed rate bitstream
+     Combinations of the three values carry the following implications: all three set to the same value: implies a fixed rate bitstream
      only nominal set: implies a VBR stream that averages the nominal bitrate.  No hard upper/lower limit
      upper and or lower set: implies a VBR bitstream that obeys the bitrate limits. nominal may also be set to give a nominal rate.
      none set: the coder does not care to speculate. */
@@ -54,10 +53,9 @@ typedef struct {
     long    body_storage;          /* storage elements allocated */
     long    body_fill;             /* elements stored; fill mark */
     long    body_returned;         /* elements of fill returned */
-    int     *lacing_vals;      /* The values that will go to the segment table */
+    int     *lacing_vals;      	   /* The values that will go to the segment table */
     ogg_int64_t *granule_vals; 
-    /* granulepos values for headers. Not compact
-     this way, but it is simple coupled to the lacing fifo */
+    /* granulepos values for headers. Not compact this way, but it is simple coupled to the lacing fifo */
     long    lacing_storage;
     long    lacing_fill;
     long    lacing_packet;
@@ -172,5 +170,6 @@ extern long ov_read(OggVorbis_File *vf,char *buffer,int length,int bigendianp,in
 extern vorbis_info *ov_info(OggVorbis_File *vf,int link);
 extern vorbis_comment *ov_comment(OggVorbis_File *f, int num);
 extern int ov_clear(OggVorbis_File *vf);
+extern int ov_open_callbacks(void *datasource, OggVorbis_File *vf, char *initial, long ibytes, ov_callbacks callbacks);
 
 #endif /*_OGGVORBIS_H*/

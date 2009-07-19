@@ -125,7 +125,7 @@ extern "C" {
         return AL_TRUE;
     }
     
-    
+
     int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
         /*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
         FILE		*oggFile;		/*ogg handle*/
@@ -137,10 +137,15 @@ extern "C" {
         int i;
         vorbis_comment	*vorbisComment;	/*other less useful data*/
 #endif
-        
+
         oggFile = Fopen(filename, "rb");
-        result = ov_open(oggFile, &oggStream, NULL, 0);	/*TODO: check returning value of result*/
-        
+	result = ov_open_callbacks(oggFile, &oggStream, NULL, 0, NULL);
+	if (result < 0) {
+		fprintf (stderr, "ERROR: ov_open_callbacks failed with %X", result) 
+		fclose(oggFile);
+		return -1;
+	}
+
         vorbisInfo = ov_info(&oggStream, -1);
         pcm_length = ov_pcm_total(&oggStream, -1) << vorbisInfo->channels;	
         
@@ -171,35 +176,37 @@ extern "C" {
                 *format = AL_FORMAT_STEREO16;
             else {
                 fprintf(stderr, "ERROR: wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
-                ov_clear (&oggStream);
+                ov_clear(&oggStream);
                 fclose(oggFile);
                 return AL_FALSE;
             }
         }
         
-        while(size < pcm_length) {
+        while (size < pcm_length) {
             /*ov_read decodes the ogg stream and storse the pcm in data*/
             result = ov_read (&oggStream, *data + size, pcm_length - size, 0, 2, 1, &section);
-            if(result > 0) {
+            if (result > 0) {
                 size += result;
             } else {
                 if (result == 0)
                     break;
                 else { 
                     fprintf(stderr, "ERROR: end of file from OGG stream\n");
-                    ov_clear (&oggStream);
+                    ov_clear(&oggStream);
                     fclose(oggFile);
                     return AL_FALSE;
                 }
             }
         }
         
-        /*records the last fields*/
+        /*set the last fields*/
         *bitsize = size;
         *freq    = vorbisInfo->rate;
         
-        ov_clear (&oggStream);
-        fclose (oggFile);
+	/*cleaning time*/
+        ov_clear(&oggStream);
+	fclose(oggFile);
+
         return AL_TRUE;
     }
     
