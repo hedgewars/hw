@@ -573,7 +573,7 @@ if (Gear^.Timer mod 47) = 0 then
 		DrawExplosion(i, hwRound(Gear^.Y) + 3, 3);
 		inc(i, 1)
 		end;
-    if Land[hwRound(Gear^.Y + _1_9) , hwRound(Gear^.X + Gear^.dX)] <> COLOR_INDESTRUCTIBLE then
+    if Land[hwRound(Gear^.Y + _1_9) , hwRound(Gear^.X + Gear^.dX + SignAs(_16,Gear^.dX))] <> COLOR_INDESTRUCTIBLE then
         begin
         Gear^.X:= Gear^.X + Gear^.dX;
         Gear^.Y:= Gear^.Y + _1_9;
@@ -674,9 +674,9 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 		prevX:= hwRound(HHGear^.X);
 	
 // why the call to HedgehogStep then a further increment of X?	
-		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_1, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HedgehogStep(HHGear);
+		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_16, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HedgehogStep(HHGear);
 		
-		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_1, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
+		if (prevX = hwRound(HHGear^.X)) and (Land[hwRound(HHGear^.Y) , hwRound(HHGear^.X + SignAs(_16, HHGear^.dX))] <> COLOR_INDESTRUCTIBLE) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
 		HHGear^.State:= HHGear^.State or gstAttacking
 		end;
 
@@ -684,7 +684,8 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 	if BTSteps = 7 then
 		begin
 		BTSteps:= 0;
-        if Land[hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)) , hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC))] <> COLOR_INDESTRUCTIBLE then
+        if Land[hwRound(HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC)) , hwRound(HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC) + SignAs(_16,Gear^.dX)
+)] <> COLOR_INDESTRUCTIBLE then
             begin
 		Gear^.X:= HHGear^.X + Gear^.dX * (cHHRadius + cBlowTorchC);
 		Gear^.Y:= HHGear^.Y + Gear^.dY * (cHHRadius + cBlowTorchC);
@@ -1290,7 +1291,8 @@ if not (HHGear^.dY.isNegative) then
 	exit
 	end;
 
-if Land[hwRound(HHGear^.Y + HHGear^.dY), hwRound(HHGear^.X)] <> COLOR_INDESTRUCTIBLE then HHGear^.Y:= HHGear^.Y + HHGear^.dY
+if Land[hwRound(HHGear^.Y + HHGear^.dY + SignAs(_16,Gear^.dX)
+), hwRound(HHGear^.X)] <> COLOR_INDESTRUCTIBLE then HHGear^.Y:= HHGear^.Y + HHGear^.dY
 end;
 
 procedure doStepFirePunch(Gear: PGear);
