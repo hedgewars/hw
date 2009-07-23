@@ -179,11 +179,16 @@ end;
 
 procedure MoveCamera; forward;
 
-procedure DrawWater;
+procedure DrawWater(Alpha: byte);
 var VertexBuffer: array [0..3] of TVertex2f;
     r: TSDL_Rect;
     lw, lh: GLfloat;
 begin
+WaterColorArray[0].a := Alpha;
+WaterColorArray[1].a := Alpha;
+WaterColorArray[2].a := Alpha;
+WaterColorArray[3].a := Alpha;
+
 lw:= cScreenWidth / cScaleFactor;
 lh:= cScreenHeight * 2 / cScaleFactor;
 // Water
@@ -268,7 +273,7 @@ if not cReducedQuality then
 
 DrawLand(WorldDx, WorldDy);
 
-DrawWater;
+DrawWater(255);
 
 // Attack bar
 if CurrentTeam <> nil then
@@ -295,6 +300,8 @@ if CurrentTeam <> nil then
 DrawGears;
 
 DrawVisualGears(1);
+
+if not cReducedQuality then DrawWater(128);
 
 // Waves
 {$WARNINGS OFF}
