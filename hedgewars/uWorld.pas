@@ -301,7 +301,7 @@ DrawGears;
 
 DrawVisualGears(1);
 
-if not cReducedQuality then DrawWater(cWaterOpacity);
+DrawWater(cWaterOpacity);
 
 // Waves
 {$WARNINGS OFF}
