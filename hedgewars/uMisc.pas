@@ -122,6 +122,8 @@ type HwColor4f = record
 		r, g, b, a: byte
 		end;
 
+var cWaterOpacity: byte = $80;
+
 var WaterColorArray: array[0..3] of HwColor4f;
 
 function hwSign(r: hwFloat): LongInt;

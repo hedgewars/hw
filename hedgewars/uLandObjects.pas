@@ -372,7 +372,7 @@ Readln(f, c1.r, c1.g, c1. b);
 Readln(f, c2.r, c2.g, c2. b);
 // read water gradient colors
 Readln(f, WaterColorArray[0].r, WaterColorArray[0].g, WaterColorArray[0].b);
-Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2].b);
+Readln(f, WaterColorArray[2].r, WaterColorArray[2].g, WaterColorArray[2].b, cWaterOpacity);
 WaterColorArray[0].a := 255;
 WaterColorArray[2].a := 255;
 WaterColorArray[1]:= WaterColorArray[0];
