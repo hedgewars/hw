@@ -2243,6 +2243,7 @@ if (GameTicks and $3F) = 0 then
        Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', $FFFFFFFF, fntSmall)
        end;
 
+if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
 HHGear^.State:= HHGear^.State or gstMoving; 
 
@@ -2250,7 +2251,8 @@ Gear^.X:= HHGear^.X;
 Gear^.Y:= HHGear^.Y;
 // For some reason I need to reapply followgear here, something else grabs it otherwise.
 if not bShowAmmoMenu then FollowGear:= HHGear;
-doStepHedgehogMoving(HHGear);
+
+if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
 
 if  (Gear^.Health = 0)
     or (HHGear^.Damage <> 0)
@@ -2283,10 +2285,11 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= HHGear;
 OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
 ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+Gear^.State:= Gear^.State or gsttmpFlag;
 with HHGear^ do
 	begin
 	State:= State and not gstAttacking;
-	Message:= Message and not gm_Attack;
+	Message:= Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right);
     dY:= dY - _0_2
 	end
 end;
