@@ -265,8 +265,8 @@ if not cReducedQuality then
 
     // Waves
     {$WARNINGS OFF}
-//    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight*2), 0);
-//    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight*2), 0);
+    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
     {$WARNINGS ON}
     end;
 
@@ -305,9 +305,9 @@ DrawWater(cWaterOpacity);
 
 // Waves
 {$WARNINGS OFF}
-//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth), cWaterLine + WorldDy - cWaveHeight, 0);
-//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
-//for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth), cWaterLine + WorldDy     , 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - cWaveHeight, 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
+for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy     , 0);
 
 
 // Target
