@@ -46,8 +46,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
 	Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
 	Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
-	Form->ui.pageOptions->CBEnableSound->setChecked(openal_ready() && value("audio/sound", true).toBool());
-	Form->ui.pageOptions->CBEnableMusic->setChecked(openal_ready() && value("audio/music", true).toBool());
+	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
+	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
 	Form->ui.pageOptions->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
