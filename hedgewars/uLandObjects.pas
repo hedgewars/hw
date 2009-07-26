@@ -259,6 +259,7 @@ var x, y: Longword;
     Result: boolean;
 begin
 cnt:= 0;
+Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
 with Obj do
      begin
      if Maxcnt = 0 then
@@ -303,6 +304,7 @@ var x, y: Longword;
     Result: boolean;
 begin
 cnt:= 0;
+Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
 with Obj do
 	begin
 	if Maxcnt = 0 then
@@ -328,9 +330,9 @@ with Obj do
 				end
 			end;
 			inc(y, 12);
-		until y > 1023 - Height - 8;
+        until y > LAND_HEIGHT - 1 - Height - 8;
 		inc(x, getrandom(12) + 12)
-	until x > 2047 - Width;
+    until x > LAND_WIDTH - 1 - Width;
 	Result:= cnt <> 0;
 	if Result then
 		begin
@@ -494,7 +496,7 @@ if hasGirders then
         i:=i+int;
     until (i>rightX-int);
     end;
-AddThemeObjects(ThemeObjects, MaxHedgehogs div 2); // MaxHedgehogs should roughly correspond to available surface area.  Was also thinking maybe using playHeight * playWidth div constant   :)
+AddThemeObjects(ThemeObjects, (8 * MaxHedgehogs) div 18); // MaxHedgehogs should roughly correspond to available surface area.  Was also thinking maybe using playHeight * playWidth div constant   :)
 AddProgress;
 FreeRects
 end;
@@ -502,7 +504,8 @@ end;
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 begin
 InitRects;
-AddSprayObjects(Surface, SprayObjects, 12);
+//AddSprayObjects(Surface, SprayObjects, 12);
+AddSprayObjects(Surface, SprayObjects, (2 * MaxHedgehogs) div 3);
 FreeRects
 end;
 
