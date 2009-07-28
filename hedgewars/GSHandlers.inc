@@ -955,41 +955,44 @@ Gear^.Elasticity:= Gear^.Elasticity + _1;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 DeleteCI(HHGear);
 if (HHGear^.State and gstMoving) <> 0 then
-if TestCollisionYwithGear(HHGear, 1) then
 	begin
-	CheckHHDamage(HHGear);
-	HHGear^.dY:= _0;
-	HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping or gstHHHJump);
-	end else
-	begin
-	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 	HHGear^.X:= HHGear^.X + HHGear^.dX;
-	HHGear^.Y:= HHGear^.Y + HHGear^.dY;
 	Gear^.X:= Gear^.X + HHGear^.dX;
-	Gear^.Y:= Gear^.Y + HHGear^.dY;
-	HHGear^.dY:= HHGear^.dY + cGravity;
-	tt:= Gear^.Elasticity;
-	tx:= _0;
-	ty:= _0;
-	while tt > _20 do
+
+	if TestCollisionYwithGear(HHGear, 1) then
 		begin
-		if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
-		or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
+		CheckHHDamage(HHGear);
+		HHGear^.dY:= _0;
+		HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping or gstHHHJump);
+		end else
+		begin
+		if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
+		HHGear^.Y:= HHGear^.Y + HHGear^.dY;
+		Gear^.Y:= Gear^.Y + HHGear^.dY;
+		HHGear^.dY:= HHGear^.dY + cGravity;
+		tt:= Gear^.Elasticity;
+		tx:= _0;
+		ty:= _0;
+		while tt > _20 do
 			begin
-			Gear^.X:= Gear^.X + tx;
-			Gear^.Y:= Gear^.Y + ty;
-			Gear^.Elasticity:= tt;
-			Gear^.doStep:= @doStepRopeWork;
-			with HHGear^ do State:= State and not (gstAttacking or gstMoving or gstHHHJump);
-			
-			RemoveFromAmmo;
-			
-			tt:= _0;
-			exit
+			if  TestCollisionXwithXYShift(Gear, tx, hwRound(ty), -hwSign(Gear^.dX))
+			or TestCollisionYwithXYShift(Gear, hwRound(tx), hwRound(ty), -hwSign(Gear^.dY)) then
+				begin
+				Gear^.X:= Gear^.X + tx;
+				Gear^.Y:= Gear^.Y + ty;
+				Gear^.Elasticity:= tt;
+				Gear^.doStep:= @doStepRopeWork;
+				with HHGear^ do State:= State and not (gstAttacking or gstMoving or gstHHHJump);
+				
+				RemoveFromAmmo;
+				
+				tt:= _0;
+				exit
+				end;
+			tx:= tx + Gear^.dX + Gear^.dX;
+			ty:= ty + Gear^.dY + Gear^.dY;
+			tt:= tt - _2;
 			end;
-		tx:= tx + Gear^.dX + Gear^.dX;
-		ty:= ty + Gear^.dY + Gear^.dY;
-		tt:= tt - _2;
 		end;
 	end;
 
