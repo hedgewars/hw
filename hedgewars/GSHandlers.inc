@@ -742,7 +742,7 @@ HedgehogChAngle(HHGear);
 
 if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
 	begin
-	{$IFDEF DEBUGFILE}if HHGear^.dX.QWordValue > 1 then AddFileLog('Stopping hedgehog after rope attack due to wall collision');{$ENDIF}
+	{$IFDEF DEBUGFILE}if HHGear^.dX.QWordValue > 1 then AddFileLog('1 Stopping hedgehog after rope attack due to wall collision');{$ENDIF}
 	SetLittle(HHGear^.dX);
 	end;
 
@@ -956,6 +956,7 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 DeleteCI(HHGear);
 if (HHGear^.State and gstMoving) <> 0 then
 	begin
+	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 	HHGear^.X:= HHGear^.X + HHGear^.dX;
 	Gear^.X:= Gear^.X + HHGear^.dX;
 
@@ -963,10 +964,9 @@ if (HHGear^.State and gstMoving) <> 0 then
 		begin
 		CheckHHDamage(HHGear);
 		HHGear^.dY:= _0;
-		HHGear^.State:= HHGear^.State and not (gstMoving or gstHHJumping or gstHHHJump);
+		HHGear^.State:= HHGear^.State and not (gstHHJumping or gstHHHJump);
 		end else
 		begin
-		if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 		HHGear^.Y:= HHGear^.Y + HHGear^.dY;
 		Gear^.Y:= Gear^.Y + HHGear^.dY;
 		HHGear^.dY:= HHGear^.dY + cGravity;
