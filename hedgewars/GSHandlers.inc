@@ -1010,6 +1010,7 @@ if (Gear^.State and gstCollision) <> 0 then
 
 if (Gear^.Elasticity > Gear^.Friction)
 or ((Gear^.Message and gm_Attack) = 0)
+or ((HHGear^.State and gstHHDriven) = 0)
 or (HHGear^.Damage > 0) then
 	begin
 	with PHedgehog(Gear^.Hedgehog)^.Gear^ do
