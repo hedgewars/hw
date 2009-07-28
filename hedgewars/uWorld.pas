@@ -69,6 +69,7 @@ begin
 cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
+cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= 0;

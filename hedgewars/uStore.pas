@@ -973,7 +973,8 @@ end;
 procedure SetScale(f: GLfloat);
 begin
 cScaleFactor:= f;
-cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
+if SpritesData[sprWater].Width <> 0 then
+    cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
 
 glLoadIdentity;
 glViewport(0, 0, cScreenWidth, cScreenHeight);
