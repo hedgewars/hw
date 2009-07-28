@@ -110,9 +110,7 @@ pkbd:= PByteArray(SDL_GetKeyState(@i));
 TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
 
 for t:= 0 to Pred(i) do
-    tkbd[i]:= pkbd^[i];
-	
-	AddProgress;
+    tkbd[i]:= pkbd^[i]
 end;
 
 procedure InitKbdKeyTable;

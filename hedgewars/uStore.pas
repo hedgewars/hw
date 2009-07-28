@@ -990,6 +990,7 @@ var ProgrTex: PTexture = nil;
     Step: integer = 0;
 	squaresize : LongInt;
 	numsquares : integer;
+
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
@@ -1003,6 +1004,8 @@ if Step = 0 then
    squaresize:= ProgrTex^.w shr 1;
    numsquares:= ProgrTex^.h div squaresize;
    end;
+
+TryDo(ProgrTex <> nil, 'ProgrTex = nil!', true);
 
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_TEXTURE_2D);
@@ -1021,7 +1024,8 @@ end;
 procedure FinishProgress;
 begin
 WriteLnToConsole('Freeing progress surface... ');
-FreeTexture(ProgrTex)
+FreeTexture(ProgrTex);
+ProgrTex:= nil
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
