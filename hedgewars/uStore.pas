@@ -162,7 +162,7 @@ var s: string;
 		rr:= r;
 		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
 		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-		HealthTex:= Surface2Tex(texsurf);
+		HealthTex:= Surface2Tex(texsurf, false);
 		SDL_FreeSurface(texsurf);
 
 		dec(drY, r.h + 2);
@@ -177,7 +177,7 @@ var s: string;
 						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
 						if texsurf <> nil then
 							begin
-							HatTex:= Surface2Tex(texsurf);
+							HatTex:= Surface2Tex(texsurf, false);
 							SDL_FreeSurface(texsurf)
 							end
 						end
@@ -217,7 +217,7 @@ var s: string;
 		if SDL_MustLock(texsurf) then
 			SDL_UnlockSurface(texsurf);
 
-		CrosshairTex:= Surface2Tex(texsurf);
+		CrosshairTex:= Surface2Tex(texsurf, false);
 		SDL_FreeSurface(texsurf)
 		end;
 
@@ -247,7 +247,7 @@ var s: string;
 			begin
 			if GraveName = '' then GraveName:= 'Simple';
 			texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
-			GraveTex:= Surface2Tex(texsurf);
+			GraveTex:= Surface2Tex(texsurf, false);
 			SDL_FreeSurface(texsurf)
 			end
 	end;
@@ -291,14 +291,17 @@ for ii:= Low(TSprite) to High(TSprite) do
 			if imageHeight = 0 then imageHeight := tmpsurf^.h;
 			if Width = 0 then Width:= tmpsurf^.w;
 			if Height = 0 then Height:= tmpsurf^.h;
-			Texture:= Surface2Tex(tmpsurf);
+            if (ii = sprSky) or (ii = sprWater) then
+			    Texture:= Surface2Tex(tmpsurf, true)
+            else
+			    Texture:= Surface2Tex(tmpsurf, false);
 			if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 		end;
 
 AddProgress;
 
 tmpsurf:= LoadImage(Pathz[ptGraphics] + '/' + cHHFileName, ifAlpha or ifCritical or ifTransparent);
-HHTexture:= Surface2Tex(tmpsurf);
+HHTexture:= Surface2Tex(tmpsurf, false);
 SDL_FreeSurface(tmpsurf);
 
 InitHealth;
@@ -310,14 +313,14 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
 		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), $FFFFFF);
-		NameTex:= Surface2Tex(tmpsurf);
+		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)
 		end;
 		
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
 	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), $FFFFFF);
-	CountTexz[i]:= Surface2Tex(tmpsurf);
+	CountTexz[i]:= Surface2Tex(tmpsurf, false);
 	SDL_FreeSurface(tmpsurf)
 	end;
 
@@ -681,7 +684,7 @@ WriteInRoundRect(Result, 0, 0, Color, font, s);
 
 TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-RenderStringTex:= Surface2Tex(Result);
+RenderStringTex:= Surface2Tex(Result, false);
 
 SDL_FreeSurface(Result)
 end;
@@ -861,7 +864,7 @@ while pos <= length(s) do
     end;
 
 //TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-RenderSpeechBubbleTex:= Surface2Tex(Result);
+RenderSpeechBubbleTex:= Surface2Tex(Result, false);
 
 SDL_FreeSurface(rotatedEdge);
 SDL_FreeSurface(Result)
@@ -1000,7 +1003,7 @@ if Step = 0 then
    begin
    WriteToConsole(msgLoading + 'progress sprite: ');
    texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
-   ProgrTex:= Surface2Tex(texsurf);
+   ProgrTex:= Surface2Tex(texsurf, false);
    SDL_FreeSurface(texsurf);
    squaresize:= ProgrTex^.w shr 1;
    numsquares:= ProgrTex^.h div squaresize;

@@ -430,7 +430,7 @@ if cShowFPS then
       s:= inttostr(FPS) + ' fps';
       if fpsTexture <> nil then FreeTexture(fpsTexture);
       tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
-      fpsTexture:= Surface2Tex(tmpSurface);
+      fpsTexture:= Surface2Tex(tmpSurface, false);
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then

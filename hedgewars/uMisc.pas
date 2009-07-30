@@ -148,7 +148,7 @@ procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
-function  Surface2Tex(surf: PSDL_Surface): PTexture;
+function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
@@ -347,7 +347,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;
 
-function Surface2Tex(surf: PSDL_Surface): PTexture;
+function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var modeIntFormat: LongInt;
     modeFormat: LongInt;
 	tw, th, x, y: Longword;
@@ -469,8 +469,11 @@ ResetVertexArrays(Surface2Tex);
 if SDL_MustLock(surf) then
 	SDL_UnlockSurface(surf);
 
-//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+if enableClamp and not cReducedQuality then
+    begin
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+    end;
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
 end;

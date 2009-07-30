@@ -71,7 +71,7 @@ SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);
 
 cl.Time:= RealTicks + 12500;
-cl.Tex:= Surface2Tex(resSurface);
+cl.Tex:= Surface2Tex(resSurface, false);
 
 SDL_FreeSurface(resSurface)
 end;
