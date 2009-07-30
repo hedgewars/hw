@@ -224,6 +224,16 @@ if r.y < cScreenHeight * 2 / cScaleFactor then
 	end
 end;
 
+procedure DrawWaves(Dir, dX, dY: LongInt);
+var i: LongInt;
+begin
+for i:= -1 to cWaterSprCount do
+	DrawSprite(sprWater,
+		i * cWaveWidth + ((WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) - (cScreenWidth div 2),
+		cWaterLine + WorldDy + dY,
+		0)
+end;
+
 procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
@@ -263,13 +273,11 @@ if not cReducedQuality then
     DrawRepeated(sprHorizont, WorldDx * 3 div 5);
 
     DrawVisualGears(0);
-
-    // Waves
-    {$WARNINGS OFF}
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6)      ) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight*2), 0);
-    for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth + ((WorldDx - (RealTicks shr 6) + 100) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight + cWaveHeight div 2), 0);
-    {$WARNINGS ON}
     end;
+
+// Waves
+DrawWaves( 1,  0, - (cWaveHeight * 2));
+DrawWaves(-1, 100, - (cWaveHeight + cWaveHeight div 2));
 
 
 DrawLand(WorldDx, WorldDy);
@@ -305,12 +313,12 @@ DrawVisualGears(1);
 DrawWater(cWaterOpacity);
 
 // Waves
+DrawWaves( 1, 25, - cWaveHeight);
+DrawWaves(-1, 50, - (cWaveHeight div 2));
+DrawWaves( 1, 75, 0);
+
+
 {$WARNINGS OFF}
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  25) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - cWaveHeight, 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx - (RealTicks shr 6) +  50) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy - (cWaveHeight div 2), 0);
-for i:= -1 to cWaterSprCount do DrawSprite(sprWater,  i * cWaveWidth  + ((WorldDx + (RealTicks shr 6) +  75) mod cWaveWidth) - (cScreenWidth div 2), cWaterLine + WorldDy     , 0);
-
-
 // Target
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
 
