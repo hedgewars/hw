@@ -613,7 +613,10 @@ case step of
 	stNTurn: begin
 			if isInMultiShoot then isInMultiShoot:= false
 			else begin
-            ResetUtilities;
+			ResetUtilities;
+			
+			FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
+			
 			ParseCommand('/nextturn', true);
 			SwitchHedgehog;
 

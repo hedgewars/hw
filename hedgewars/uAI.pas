@@ -48,10 +48,7 @@ if hasThread <> 0 then
 with CurrentHedgehog^ do
      if Gear <> nil then
         if BotLevel <> 0 then
-           begin
-           if (Gear^.Message and gm_Left) <> 0 then ParseCommand('-left', true);
-           if (Gear^.Message and gm_Right) <> 0 then ParseCommand('-right', true);
-           end;
+           StopMessages(Gear^.Message);
 
 BestActions.Count:= 0;
 BestActions.Pos:= 0
