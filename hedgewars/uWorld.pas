@@ -402,24 +402,11 @@ if WindBarWidth > 0 then
 // AmmoMenu
 if (AMxShift < 210) or bShowAmmoMenu then ShowAmmoMenu;
 
-DrawChat;
-
 // Cursor
-if isCursorVisible then
-   begin
-   if not bShowAmmoMenu then
-     with CurrentHedgehog^ do
-       if (Gear^.State and gstHHChooseTarget) <> 0 then
-         begin
-         i:= Ammo^[CurSlot, CurAmmo].Pos;
-         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
-           if PosCount > 1 then
-              DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
-                                    cScreenHeight - CursorPoint.Y - SpritesData[PosSprite].Height div 2,
-                                    i);
-         end;
-   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
-   end;
+if isCursorVisible and bShowAmmoMenu then
+   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
+
+DrawChat;
 
 if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
 
@@ -456,6 +443,24 @@ if SoundTimerTicks >= 50 then
 if GameState = gsConfirm then DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
 
 SetScale(zoom);
+
+// Cursor
+if isCursorVisible then
+   begin
+   if not bShowAmmoMenu then
+     with CurrentHedgehog^ do
+       if (Gear^.State and gstHHChooseTarget) <> 0 then
+         begin
+         i:= Ammo^[CurSlot, CurAmmo].Pos;
+         with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
+           if PosCount > 1 then
+              DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
+                                    cScreenHeight - CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+                                    i);
+         end;
+   DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+   end;
+
 
 glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
