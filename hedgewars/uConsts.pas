@@ -381,7 +381,7 @@ const	cMaxPower     = 1500;
 			saveSurf: boolean;
 			end = (
 			(FileName:  'BlueWater'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
-			Width: 0; Height: 0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWater
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprWater
 			(FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
 			Width: 256; Height:128; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCloud
 			(FileName:       'Bomb'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -586,7 +586,7 @@ const	cMaxPower     = 1500;
 			Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSniperRifle
 			(FileName:    'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprBubbles
-			(FileName:'amJetpack';Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+			(FileName:  'amJetpack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprJetpack
 			);
 

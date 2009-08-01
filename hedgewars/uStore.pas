@@ -291,7 +291,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 			if imageHeight = 0 then imageHeight := tmpsurf^.h;
 			if Width = 0 then Width:= tmpsurf^.w;
 			if Height = 0 then Height:= tmpsurf^.h;
-            if (ii = sprSky) or (ii = sprWater) then
+            if (ii = sprSky) then
 			    Texture:= Surface2Tex(tmpsurf, true)
             else
 			    Texture:= Surface2Tex(tmpsurf, false);
@@ -976,8 +976,6 @@ end;
 procedure SetScale(f: GLfloat);
 begin
 cScaleFactor:= f;
-if SpritesData[sprWater].Width <> 0 then
-    cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
 
 glLoadIdentity;
 glViewport(0, 0, cScreenWidth, cScreenHeight);

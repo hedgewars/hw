@@ -37,7 +37,6 @@ var FollowGear: PGear = nil;
 	bShowFinger: boolean = false;
 	Frames: Longword = 0;
 	WaterColor, DeepWaterColor: TSDL_Color;
-	cWaterSprCount: LongInt;
 
 implementation
 uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound,
@@ -69,7 +68,7 @@ begin
 cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
-cWaterSprCount:= 1 + round(cScreenWidth * 2 / cScaleFactor / SpritesData[sprWater].Width);
+
 cGearScrEdgesDist:= Min(cScreenWidth div 2 - 100, cScreenHeight div 2 - 50);
 SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 prevPoint.X:= 0;
@@ -193,7 +192,7 @@ WaterColorArray[3].a := Alpha;
 lw:= cScreenWidth / cScaleFactor;
 lh:= cScreenHeight * 2 / cScaleFactor;
 // Water
-r.y:= WorldDy + cWaterLine + 32;
+r.y:= WorldDy + cWaterLine + 16;
 if r.y < cScreenHeight * 2 / cScaleFactor then
 	begin
 	if r.y < 0 then r.y:= 0;
@@ -225,13 +224,48 @@ if r.y < cScreenHeight * 2 / cScaleFactor then
 end;
 
 procedure DrawWaves(Dir, dX, dY: LongInt);
-var i: LongInt;
+var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+	lw, waves: GLfloat;
 begin
-for i:= -1 to cWaterSprCount do
+lw:= cScreenWidth / cScaleFactor;
+waves:= lw * 2 / cWaveWidth;
+
+glBindTexture(GL_TEXTURE_2D, SpritesData[sprWater].Texture^.id);
+
+VertexBuffer[0].X:= -lw;
+VertexBuffer[0].Y:= cWaterLine + WorldDy + dY;
+VertexBuffer[1].X:= lw;
+VertexBuffer[1].Y:= VertexBuffer[0].Y;
+VertexBuffer[2].X:= lw;
+VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprWater].Height;
+VertexBuffer[3].X:= -lw;
+VertexBuffer[3].Y:= VertexBuffer[2].Y;
+
+TextureBuffer[0].X:= (( - WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
+TextureBuffer[0].Y:= 0;
+TextureBuffer[1].X:= TextureBuffer[0].X + waves;
+TextureBuffer[1].Y:= 0;
+TextureBuffer[2].X:= TextureBuffer[0].X + waves;
+TextureBuffer[2].Y:= 1;
+TextureBuffer[3].X:= TextureBuffer[0].X;
+TextureBuffer[3].Y:= 1;
+
+glEnableClientState(GL_VERTEX_ARRAY);
+glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+glDisableClientState(GL_VERTEX_ARRAY);
+
+
+{for i:= -1 to cWaterSprCount do
 	DrawSprite(sprWater,
 		i * cWaveWidth + ((WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) - (cScreenWidth div 2),
 		cWaterLine + WorldDy + dY,
-		0)
+		0)}
 end;
 
 procedure DrawWorld(Lag: LongInt);
