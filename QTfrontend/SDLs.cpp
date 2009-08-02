@@ -26,7 +26,6 @@ SDLInteraction::SDLInteraction()
 	music = -1;
 
 	SDL_Init(SDL_INIT_VIDEO);
-	openal_init(5);
 
 }
 
@@ -60,6 +59,7 @@ QStringList SDLInteraction::getResolutions() const
 void SDLInteraction::StartMusic()
 {
 	if (music < 0) {
+	    openal_init(5);
 		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 		openal_toggleloop(music);
 	}
