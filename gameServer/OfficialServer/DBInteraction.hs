@@ -8,7 +8,11 @@ import Prelude hiding (catch);
 import System.Process
 import System.IO
 import Control.Concurrent
-import Control.Exception
+#if defined(NEW_EXCEPTIONS)
+import qualified Control.OldException as Exception
+#else
+import qualified Control.Exception as Exception
+#endif
 import Control.Monad
 import qualified Data.Map as Map
 import Monad
@@ -44,7 +48,7 @@ onException io what = io `catch` \e -> do what                   --
 
 
 pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
-	Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $
+	Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $
 	do
 	q <- readChan queries
 	updatedCache <- case q of
@@ -83,7 +87,7 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
 
 pipeDbConnection accountsCache serverInfo = do
 	updatedCache <-
-		Control.Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
+		Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
 			(Just hIn, Just hOut, _, _) <- createProcess (proc "./OfficialServer/extdbinterface" [])
 					{std_in = CreatePipe,
 					std_out = CreatePipe}

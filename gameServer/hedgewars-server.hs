@@ -6,7 +6,11 @@ import Network.Socket
 import qualified Network
 import Control.Concurrent.STM
 import Control.Concurrent.Chan
-import Control.Exception
+#if defined(NEW_EXCEPTIONS)
+import qualified Control.OldException as Exception
+#else
+import qualified Control.Exception as Exception
+#endif
 import System.Log.Logger
 -----------------------------------
 import Opts
@@ -47,7 +51,7 @@ main = withSocketsDo $ do
 	let serverInfo = serverInfo'
 #endif
 
-	bracket
+	Exception.bracket
 		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
 		(sClose)
 		(startServer serverInfo)
