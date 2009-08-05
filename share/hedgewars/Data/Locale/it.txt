@@ -133,6 +133,8 @@
 02:01=%1 è bagnato bagnato bagnato
 02:01=%1 si è scordato i braccioli da mare!
 02:01=%1 si sta allenando nel nuoto a dorso
+02:01=%1 ha scoperto che l'acqua è bagnata
+02:01=%1 ha perso il battello
 ; Match starts
 02:02=Combattiamo!
 02:02=Armato e pronto!
