@@ -61,10 +61,10 @@
 02:00=%1 poświęcił się dla ogółu!
 02:00=%1 departs this mortal coil!
 02:00=Tak jak liść opuszcza drzewo, tak nas opuszcza %1!
-02:00=%1 has timed out!
+;02:00=%1 has timed out!
 02:00=%1 mówi "Pokój z wami"!
 02:00=%1 na pewno zostanie zapamiętany!
-02:00=%1 has an aneurysm!
+;02:00=%1 has an aneurysm!
 02:00=%1 opuścił żonę i dziecko!
 02:00=%1 wystrzelił ostatnią bazookę w jego życiu...
 02:00=%1 wyrzucił ostatni granat w jego życiu...
@@ -77,10 +77,10 @@
 02:00=%1 przyjął jeden strzał za dużo.
 02:00=A mógł zebrać tą skrzynkę z życiem...
 02:00=%1 poszedł pograć w lepszą grę...
-02:00=%1 has ragequit life
+;02:00=%1 has ragequit life
 ;02:00=%1 demotywuje :D
 02:00=Biedny %1 ...
-02:00=%1 woli wormux
+02:00=%1 woli grać w Wormux
 02:00=%1 blokuje strzały własną twarzą
 ;02:00=%1 is a hero amongst me...err..hogs
 02:00=%1 znajduje miejsce w Valhalli
@@ -120,7 +120,7 @@
 02:01=%1 własnie się umył
 02:01=%1 jest już przemoczony
 02:01=%1 zapomniał o kamizelce ratunkowej
-02:01=%1 goes splish splash splish
+02:01=%1 idzie się popluskać
 02:01=%1 śpi z rybami
 02:01=%1 uważa, że fizyka płynów w tej grze ssie
 02:01=%1 wygląda na spragnionego
@@ -241,7 +241,7 @@
 02:06=W Hedgewars święta są zdecydowanie wcześniej!
 02:06=Prezent!
 02:06=Przesyłka specjalna!
-02:06=It was a nightmare getting this through customs
+;02:06=It was a nightmare getting this through customs
 02:06=Zabawki zniszczenia spadły z nieba
 02:06=Uwaga! Zawartość jest delikatna!!!
 02:06=Zbierz lub rozwal, wybór należy do Ciebie.
@@ -269,7 +269,7 @@
 02:07=Możesz tego potrzebować.
 ; Hog (%1) skips his turn
 02:08=%1 jest taki nudny...
-02:08=%nie powinienem być rozpraszany
+02:08=%1 nie powinienem być rozpraszany
 02:08=%1 jest leniwy
 02:08=%1 jest bezmyślny
 02:08=%1 poddał się.
@@ -278,7 +278,7 @@
 02:08=%1 jest bardzo leniwy
 02:08=%1 potrzebuje więcej motywacji.
 02:08=%1 jest pacyfistą
-02:08=%1 has a breather
+02:08=%1 musi odsapnąć
 02:08=%1 odpoczywa
 02:08=%1 dał sobie na wstrzymanie
 02:08=%1 nie wierzy we własne możliwości.
@@ -289,13 +289,13 @@
 02:08=%1 postanowił nie skorzystać z okazji
 02:08=%1 uważa, że najlepszą rzeczą jaką może zrobić to... nic
 02:08=%1 jest mięczakiem
-02:08= Niuch , Niuch, %1 Śmierdzi tchórzem
+02:08= Niuch, Niuch, %1 śmierdzi tchórzem
 02:08=%1 is looking a little yellow
 02:08=%1 jest tchórzem
 02:08=%1 czeka na nagłą śmierć
 02:08=%1 nie jest walecznym typem
 02:08=%1 przemyśli swój życiowy cel
-02:08=%1 was never much of a good shot anyway
+;02:08=%1 was never much of a good shot anyway
 02:08=%1 nie chciał iść do wojska...
 02:08=Przestań marnować nasz czas, %1
 02:08=Nie jestem z Ciebie zadowolony, %1
@@ -320,7 +320,7 @@
 02:09=%1 powinien rozważyć zmianę kariery.
 02:09=Najgorszy! Strzał! Kiedykolwiek!
 02:09=Źle, źle, źle %1, powinieneś strzelać do WROGA!
-02:09=%1 should only be destroying the enemy
+;02:09=%1 should only be destroying the enemy
 02:09=%1 zbliża się małymi kroczkami do samobójstwa...
 02:09=%1 pomaga wrogowi
 02:09=To było głupie %1
