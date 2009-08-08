@@ -21,7 +21,6 @@
         <source>Every %1 turn</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -285,14 +284,12 @@
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="115"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
             <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
         </translation>
     </message>
