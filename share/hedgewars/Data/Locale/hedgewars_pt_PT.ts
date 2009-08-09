@@ -21,7 +21,7 @@
         <source>Every %1 turn</source>
         <translation>
             <numerusform>A cada %1 turno</numerusform>
-            <numerusform></numerusform>
+            <numerusform>A cada %1 turno%n</numerusform>
         </translation>
     </message>
 </context>
@@ -171,12 +171,12 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="193"/>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>O host não foi encontrado. Verifique o nome do host e as definições de porta</translation>
+        <translation>O host não foi encontrado. Verifique o nome do host e as definições de porta.</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="196"/>
         <source>Connection refused</source>
-        <translation>Ligação terminada</translation>
+        <translation>Ligação rejeitada</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="354"/>
@@ -245,7 +245,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1158"/>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Limpar a cache das contas</translation>
     </message>
 </context>
 <context>
@@ -280,16 +280,16 @@
         <location filename="../../../../QTfrontend/statsPage.cpp" line="115"/>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
-            <numerusform>&lt;p&gt;O melhor assassino é &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num turno.&lt;/p&gt;</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Apenas &lt;b&gt;%1&lt;/b&gt; ouriço foi morto nesta ronda.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriço%n foram mortos nesta ronda.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../../../../QTfrontend/statsPage.cpp" line="108"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;O melhor mercenário é &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num turno.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;O%n melhore%n mercenário%n são &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morte%n num turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -415,7 +415,7 @@
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="103"/>
         <location filename="../../../../QTfrontend/playrecordpage.cpp" line="137"/>
         <source>Please, select record from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor seleccione uma gravação da lista</translation>
     </message>
 </context>
 <context>
@@ -660,12 +660,12 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="417"/>
         <source>Frontend Effects (Requires Restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efeitos no menú (requer reinício)</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="464"/>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Verificar por actualizações no arranque</translation>
     </message>
 </context>
 <context>
