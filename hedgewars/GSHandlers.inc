@@ -2285,11 +2285,14 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= HHGear;
 OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
 ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
-Gear^.State:= Gear^.State or gsttmpFlag;
 with HHGear^ do
 	begin
 	State:= State and not gstAttacking;
 	Message:= Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right);
-    dY:= dY - _0_2
+    if (dY < _0_1) and (dY > -_0_1) then
+        begin
+        Gear^.State:= Gear^.State or gsttmpFlag;
+        dY:= dY - _0_2
+        end
 	end
 end;
