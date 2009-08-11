@@ -273,8 +273,8 @@ end;
 
 function hwRound(const t: hwFloat): LongInt;
 begin
-if t.isNegative then hwRound:= -t.Round
-                else hwRound:= t.Round
+if t.isNegative then hwRound:= -(t.Round and $7FFFFFFF)
+                else hwRound:= t.Round and $7FFFFFFF
 end;
 
 function hwAbs(const t: hwFloat): hwFloat;
