@@ -41,8 +41,9 @@ fakeDbConnection serverInfo = do
 -------------------------------------------------------------------
 -- borrowed from base 4.0.0 ---------------------------------------
 onException :: IO a -> IO b -> IO a
-onException io what = io `Exception.catch` \e -> do what
-                                          Exception.throw (e :: Exception)
+onException io what = io `Exception.catch` \e -> do
+		what
+		Exception.throw (e :: Exception.Exception)
 -- to be deleted --------------------------------------------------
 -------------------------------------------------------------------
 
