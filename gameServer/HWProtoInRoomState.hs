@@ -159,7 +159,7 @@ handleCmd_inRoom clID clients rooms ["START_GAME"] =
 
 
 handleCmd_inRoom clID clients rooms ["EM", msg] =
-	if teamsInGame client > 0 then
+	if (teamsInGame client > 0) && (isLegalNetCommand msg) then
 		[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
 		AnswerOthersInRoom ["EM", msg]]
 	else
