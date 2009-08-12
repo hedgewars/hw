@@ -450,7 +450,7 @@ if isCursorVisible and bShowAmmoMenu then
 
 DrawChat;
 
-if isPaused then DrawCentered(cScreenWidth div 2, cScreenHeight div 2, PauseTexture);
+if isPaused then DrawCentered(0, cScreenHeight div 2, PauseTexture);
 
 inc(Frames);
 if cShowFPS then

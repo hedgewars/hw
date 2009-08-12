@@ -237,13 +237,15 @@ case Kind of
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_6;
                 Result^.Friction:= _0_96;
-                Result^.RenderTimer:= true
+                Result^.RenderTimer:= true;
+                if Result^.Timer = 0 then Result^.Timer:= 3000
                 end;
   gtWatermelon: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_8;
                 Result^.Friction:= _0_995;
-                Result^.RenderTimer:= true
+                Result^.RenderTimer:= true;
+                if Result^.Timer = 0 then Result^.Timer:= 3000
                 end;
     gtHedgehog: begin
                 Result^.Radius:= cHHRadius;
@@ -254,7 +256,8 @@ case Kind of
                 end;
 gtAmmo_Grenade: begin
                 Result^.Radius:= 4;
-                Result^.RenderTimer:= true
+                Result^.RenderTimer:= true;
+                if Result^.Timer = 0 then Result^.Timer:= 3000
                 end;
    gtHealthTag: begin
                 Result^.Timer:= 1500;
@@ -376,7 +379,8 @@ gtAmmo_Grenade: begin
                 Result^.Radius:= 4;
                 Result^.Elasticity:= _0_5;
                 Result^.Friction:= _0_96;
-                Result^.RenderTimer:= true
+                Result^.RenderTimer:= true;
+                Result^.Timer:= 5000
                 end;
        gtDrill: begin
                 Result^.Timer:= 5000;
