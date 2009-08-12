@@ -95,7 +95,6 @@ while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
 	end;
 
 voicepacks[i].name:= name;
-addfilelog('================================================ '+inttostr(i));
 AskForVoicepack:= @voicepacks[i]
 end;
 
