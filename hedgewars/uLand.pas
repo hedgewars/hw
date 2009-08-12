@@ -744,7 +744,7 @@ if hasBorder then
 				Land[y, x]:= COLOR_INDESTRUCTIBLE;
 	// experiment hardcoding cave
 	// also try basing cave dimensions on map/template dimensions, if they exist
-	for w:= 0 to 5 do // width of 3 allowed worms to be knocked through with grenade
+	for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
 		begin
 		for y:= topY to LAND_HEIGHT - 1 do
 			begin
