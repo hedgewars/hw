@@ -41,7 +41,7 @@ isLegalNetCommand msg = test decoded
 		test Nothing = False
 		test (Just (m:ms)) = m `Set.member` legalMessages
 		test _ = False
-		legalMessages = Set.fromList $ "M#+RrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
+		legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
 		slotMessages = ['\128', '\129', '\130', '\131', '\132', '\133', '\134', '\135', '\136', '\137', '\138']
 
 maybeRead :: Read a => String -> Maybe a
