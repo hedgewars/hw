@@ -7,6 +7,7 @@ import Data.Word
 import qualified Data.Map as Map
 import qualified Data.IntMap as IntMap
 import qualified Data.Set as Set
+import Data.ByteString.Internal (w2c)
 import Numeric
 import Network.Socket
 import System.IO
@@ -29,9 +30,9 @@ toEngineMsg :: String -> String
 toEngineMsg msg = Base64.encode (fromIntegral (length msg) : (UTF8.encode msg))
 
 fromEngineMsg :: String -> Maybe String
-fromEngineMsg msg = Base64.decode msg >>= return . UTF8.decode >>= removeLength
+fromEngineMsg msg = Base64.decode msg >>= removeLength >>= return . (map w2c)
 	where
-		removeLength (x:xs) = if length xs == ord x then Just xs else Nothing
+		removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
 		removeLength _ = Nothing
 
 isLegalNetCommand :: String -> Bool
