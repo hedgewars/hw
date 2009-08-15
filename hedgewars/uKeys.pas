@@ -144,9 +144,6 @@ DefaultBinds[116]:= 'chat';
 DefaultBinds[121]:= 'confirm';
 DefaultBinds[127]:= 'rotmask';
 
-DefaultBinds[ 61]:= 'zoomout';
-DefaultBinds[ 45]:= 'zoomin';
-
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
 SetDefaultBinds

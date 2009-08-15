@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#define BINDS_NUMBER 36
+#define BINDS_NUMBER 38
 
 struct BindAction
 {
