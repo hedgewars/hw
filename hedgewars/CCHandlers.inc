@@ -355,10 +355,9 @@ end;
 
 procedure chTimer(var s: shortstring);
 begin
-if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5')
-	or (CurrentTeam = nil)
-	or (CurrentHedgehog^.Gear = nil) then exit;
+if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
 bShowFinger:= false;
+
 if not CurrentTeam^.ExtDriven then SendIPC(s);
 with CurrentHedgehog^.Gear^ do
      begin
