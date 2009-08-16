@@ -315,7 +315,7 @@
 02:09=%1 was holding his weapon the wrong way around
 02:09=%1 is a little sadistic
 02:09=%1 is a masochist
-02:09=%1 has no sense of self-preservation
+02:09=%1 has no instinct of self-preservation
 02:09=%1 messed up
 02:09=%1 screwed up
 02:09=That was a poor shot, %1
@@ -335,7 +335,7 @@
 02:09=%1 is clumsy
 02:09=%1 shows the enemy what he's capable of
 02:09=%1 can't be expected to be perfect all the time
-02:09=Don't worry %1, pobody's nerfect
+02:09=Don't worry %1, nobody's nerfect
 02:09=%1 totally did that on purpose
 02:09=I won't tell anyone if you don't, %1
 02:09=How embarrassing!
