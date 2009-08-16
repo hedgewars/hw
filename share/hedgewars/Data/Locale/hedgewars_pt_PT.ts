@@ -20,8 +20,8 @@
         <location filename="../../../../QTfrontend/misc.h" line="40"/>
         <source>Every %1 turn</source>
         <translation>
-            <numerusform>A cada %1 turno</numerusform>
-            <numerusform>A cada %1 turno%n</numerusform>
+            <numerusform>Em todos os turnos</numerusform>
+            <numerusform>A cada %1 turnos</numerusform>
         </translation>
     </message>
 </context>
@@ -281,7 +281,7 @@
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Apenas &lt;b&gt;%1&lt;/b&gt; ouriço foi morto nesta ronda.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriço%n foram mortos nesta ronda.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços foram mortos nesta ronda.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -289,7 +289,7 @@
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;O melhor mercenário é &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num turno.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;O%n melhore%n mercenário%n são &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morte%n num turno.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Os melhores mercenários são &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
