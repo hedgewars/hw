@@ -254,10 +254,8 @@ case Kind of
                 Result^.Angle:= cMaxAngle div 2;
                 Result^.Z:= cHHZ;
                 end;
-gtAmmo_Grenade: begin
+gtAmmo_Grenade: begin // bazooka
                 Result^.Radius:= 4;
-                Result^.RenderTimer:= true;
-                if Result^.Timer = 0 then Result^.Timer:= 3000
                 end;
    gtHealthTag: begin
                 Result^.Timer:= 1500;
