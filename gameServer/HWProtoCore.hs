@@ -59,7 +59,7 @@ handleCmd_loggedin clID clients rooms ["INFO", asknick] =
 		adminSign = if isAdministrator client then "@" else ""
 		roomStatus =
 			if gameinprogress room
-			then if teamsInGame client > 0 then "(plays)" else "(spectates)"
+			then if teamsInGame client > 0 then "(playing)" else "(spectating)"
 			else ""
 
 
