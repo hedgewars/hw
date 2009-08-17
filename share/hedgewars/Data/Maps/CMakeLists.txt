@@ -3,6 +3,7 @@ foreach(dir
 	BambooPlinko
 	Basketball
 	Bath
+	Battlefield
 	Blox
 	Bubbleflow
 	Cake
