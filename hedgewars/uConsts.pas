@@ -1122,7 +1122,8 @@ const	cMaxPower     = 1500;
 			Probability: 100;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_DontHold;
+							ammoprop_DontHold or
+							ammoprop_AttackInMove;
 					Count: 1;
 					NumPerTurn: 0;
 					Timer: 0;
