@@ -8,7 +8,7 @@ set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 #list of source files for libraries
 set(openal_src
-	openalwrap.c loaders.c endianness.c wrappers.c
+	openalbridge.c loaders.c endianness.c wrappers.c
 )
 
 #build a static library for human systems
@@ -18,7 +18,7 @@ set (build_type STATIC)
 if(WIN32)
 #workaround for visualstudio (wants headers in the source list)
 	set(openal_src
-		openalwrap.h loaders.h endianness.h wrappers.h globals.h oggvorbis.h ${openal_src}
+		openalbridge.h loaders.h endianness.h wrappers.h globals.h oggvorbis.h ${openal_src}
 	)
 #deps for the shared library
 	link_libraries(${OPENAL_LIBRARY})

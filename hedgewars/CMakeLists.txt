@@ -1,7 +1,7 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in ${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
 set(fpc_tryexe fpc)
-set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.dpr)
+set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
 set(engine_sources
 	${hwengine_project}

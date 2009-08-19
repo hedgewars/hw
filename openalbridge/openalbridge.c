@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "openalwrap.h"
+#include "openalbridge.h"
 #include "wrappers.h"
 #include "alc.h"
 #include "loaders.h"
@@ -102,8 +102,11 @@ extern "C" {
             return AL_FALSE;
         
         /*allocate memory space for buffers and sources*/
-        globalsize = memorysize;
-        increment  = memorysize;
+	if (memorysize == 0)
+	    globalsize = 50;
+	else
+	    globalsize = memorysize;
+        increment  = globalsize;
         Buffers = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
         Sources = (ALuint*) Malloc(sizeof(ALuint)*globalsize);
         
