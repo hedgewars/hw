@@ -203,7 +203,6 @@ Mus:= openal_loadfile(Str2PChar(s));
 TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-//openal_setvolume(Mus, cInitVolume-40);
 openal_fadein(Mus, 20);
 openal_toggleloop(Mus);
 end;

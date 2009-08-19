@@ -64,21 +64,22 @@ Trusted:= (CurrentTeam <> nil)
 
 {$IFDEF SDL13}
 pkbd := SDL_GetKeyboardState(nil);
-i	 := SDL_GetMouseState(0, nil, nil);
+i    := SDL_GetMouseState(0, nil, nil);
 {$ELSE}
 pkbd := SDL_GetKeyState(nil);
-i	 := SDL_GetMouseState(nil, nil);
+i    := SDL_GetMouseState(nil, nil);
 {$ENDIF}
 
-pkbd^[1]:= (i and 1);
-pkbd^[2]:= ((i shr 1) and 1);
 
 {$IFDEF DARWIN}
-//    normal right click     ||      ctrl (left/right) + left click	  
-pkbd^[3]:= ((i shr 2) and 1) or ((i and 1) and (pkbd^[306] or pkbd^[305]));
+pkbd^[1]:= ((i and 1) and not (pkbd^[306] or pkbd^[305]));
+pkbd^[3]:= ((i and 1) and (pkbd^[306] or pkbd^[305])) or (i and 4);
 {$ELSE}
+pkbd^[1]:= (i and 1);
 pkbd^[3]:= ((i shr 2) and 1);
 {$ENDIF}
+pkbd^[2]:= ((i shr 1) and 1);
+
 
 for i:= 1 to cKeyMaxIndex do
 if CurrentBinds[i][0] <> #0 then
@@ -131,18 +132,17 @@ for i:= 4 to cKeyMaxIndex do
        end;
     end;
 
-DefaultBinds[ 27]:= 'quit';
-DefaultBinds[ 48]:= '+volup';
-DefaultBinds[ 57]:= '+voldown';
-DefaultBinds[ 44]:= 'history';	// , instead of `
-DefaultBinds[ 96]:= 'history';
-DefaultBinds[ 99]:= 'capture';
-DefaultBinds[104]:= 'findhh';
-DefaultBinds[112]:= 'pause';
-DefaultBinds[115]:= '+speedup';
-DefaultBinds[116]:= 'chat';
-DefaultBinds[121]:= 'confirm';
-DefaultBinds[127]:= 'rotmask';
+DefaultBinds[ 27]:= 'quit';		// esc
+DefaultBinds[ 48]:= '+volup';		// 0
+DefaultBinds[ 57]:= '+voldown';		// 9
+DefaultBinds[ 96]:= 'history';		// `
+DefaultBinds[ 99]:= 'capture';		// c
+DefaultBinds[104]:= 'findhh';		// h
+DefaultBinds[112]:= 'pause';		// p
+DefaultBinds[115]:= '+speedup';		// s
+DefaultBinds[116]:= 'chat';		// t
+DefaultBinds[121]:= 'confirm';		// y
+DefaultBinds[127]:= 'rotmask';		// canc
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
