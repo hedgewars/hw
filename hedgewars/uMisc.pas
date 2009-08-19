@@ -162,7 +162,7 @@ var CursorPoint: TPoint;
     TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
-uses uConsole, uStore, uIO, Math, uRandom;
+uses uConsole, uStore, uIO, Math, uRandom, uSound;
 var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
@@ -522,6 +522,7 @@ var p: Pointer;
 	size: Longword;
 	f: file;
 begin
+playSound(sndShutter, false, nil);
 head[6]:= cScreenWidth;
 head[7]:= cScreenHeight;
 

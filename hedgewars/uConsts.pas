@@ -93,7 +93,7 @@ type
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, 
-			sndVaporize, sndWarp, sndSuddenDeath, sndMortar);
+			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter);
 
 	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -664,7 +664,8 @@ const	cMaxPower     = 1500;
 			(FileName:                'steam.ogg'; Path: ptSounds),// sndVaporize
 			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
 			(FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
-			(FileName:               'mortar.ogg'; Path: ptSounds) // sndMortar
+			(FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
+			(FileName:         'shutterclick.ogg'; Path: ptSounds) // sndShutter			
 			);
 
 	Ammoz: array [TAmmoType] of record

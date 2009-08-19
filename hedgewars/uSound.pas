@@ -79,7 +79,8 @@ implementation
 uses uMisc, uConsole;
 
 const chanTPU = 12;
-var	lastChan: array [TSound] of LongInt;
+var	Volume: LongInt;
+	lastChan: array [TSound] of LongInt;
 	voicepacks: array[0..cMaxTeams] of TVoicepack;
 	defVoicepack: PVoicepack;
 	Mus: LongInt = 0;
@@ -106,6 +107,9 @@ WriteToConsole('Init OpenAL sound...');
 isSoundEnabled:= openal_init(numSounds);
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
+
+Volume:=0;
+ChangeVolume(cInitVolume);
 end;
 
 procedure ReleaseSound;
@@ -115,7 +119,6 @@ openal_close();
 end;
 
 procedure SoundLoad;
-const volume = 60;
 var i: TSound;
 	s: shortstring;
 	t: Longword;
@@ -130,7 +133,6 @@ for i:= Low(TSound) to High(TSound) do
 		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
 		defVoicepack^.chunks[i]:= openal_loadfile (Str2PChar(s));
-		openal_setvolume(defVoicepack^.chunks[i],volume);
 		TryDo(defVoicepack^.chunks[i] >= 0, msgFailed, true);
 		WriteLnToConsole(msgOK);
 		end;
@@ -143,7 +145,6 @@ for t:= 0 to cMaxTeams do
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
 				voicepacks[t].chunks[i]:= openal_loadfile (Str2PChar(s));
-				openal_setvolume(voicepacks[t].chunks[i],volume);
 				if voicepacks[t].chunks[i] < 0 then
 					WriteLnToConsole(msgFailed)
 				else
@@ -202,7 +203,7 @@ Mus:= openal_loadfile(Str2PChar(s));
 TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-openal_setvolume(Mus, 60);
+//openal_setvolume(Mus, cInitVolume-40);
 openal_fadein(Mus, 20);
 openal_toggleloop(Mus);
 end;
@@ -210,7 +211,14 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
 if not isSoundEnabled then exit(0);
-openal_setglobalvolume(voldelta);
+
+inc(Volume, voldelta);
+if Volume < 0 then Volume:= 0;
+if Volume > 100 then Volume:= 100;
+
+openal_setglobalvolume(Volume);
+if isMusicEnabled then openal_setvolume(Mus, Volume shr 1);
+ChangeVolume:= Volume;
 end;
 
 procedure PauseMusic;
