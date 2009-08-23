@@ -953,6 +953,8 @@ DeleteCI(HHGear);
 if (HHGear^.State and gstMoving) <> 0 then
 	begin
 	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
+	if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY:= _0;
+	
 	HHGear^.X:= HHGear^.X + HHGear^.dX;
 	Gear^.X:= Gear^.X + HHGear^.dX;
 
