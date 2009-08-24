@@ -215,7 +215,7 @@ if r.y < cScreenHeight * 2 / cScaleFactor then
 
 	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-	glEnableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 
 	glColor4f(1, 1, 1, 1); // disable coloring
