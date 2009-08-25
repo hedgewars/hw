@@ -28,6 +28,7 @@ type PRangeArray = ^TRangeArray;
 
 function SweepDirty: boolean;
 function Despeckle(X, Y: LongInt): boolean;
+function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
@@ -477,4 +478,9 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
 SweepDirty:= Result
 end;
 
+// Return true if outside of land or not the value tested, used right now for some X/Y movement that does not use normal hedgehog movement in GSHandlers.inc
+function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
+begin
+     CheckLandValue:= ((X and LAND_WIDTH_MASK <> 0) or (Y and LAND_HEIGHT_MASK <> 0)) or (Land[Y, X] <> Color)
+end;
 end.
