@@ -728,6 +728,7 @@ numLines:= 0;
 
 if length(s) = 0 then s:= '...';
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
+if w<8 then w:= 8;
 j:= 0;
 if (length(s) > 20) then
     begin
