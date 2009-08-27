@@ -21,6 +21,7 @@
 #include <QLineEdit>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QInputDialog>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -50,7 +51,15 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
-	Form->ui.pageOptions->editNetNick->setText(value("net/nick", QLineEdit::tr("unnamed")).toString());
+	QString netNick = value("net/nick", "").toString();
+	if (netNick.isEmpty())
+		netNick = QInputDialog::getText(Form,
+				QObject::tr("Nickname"),
+				QObject::tr("Please, enter your nickname"),
+				QLineEdit::Normal,
+				QDir::home().dirName());
+	
+	Form->ui.pageOptions->editNetNick->setText(netNick);
 
 	delete netHost;
 	netHost = new QString(value("net/ip", "").toString());

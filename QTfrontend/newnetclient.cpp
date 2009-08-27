@@ -66,7 +66,7 @@ HWNewNet::~HWNewNet()
 
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
-	mynick = nick;
+	mynick = nick.isEmpty() ? QLineEdit::tr("unnamed") : nick;
 	NetSocket.connectToHost(hostName, port);
 }
 
