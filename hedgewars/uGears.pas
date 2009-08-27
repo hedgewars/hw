@@ -1451,8 +1451,13 @@ if ((GameFlags and gfForts) = 0) and ((GameFlags and gfMines) <> 0) then
 	for i:= 0 to Pred(cLandAdditions) do
 		begin
 		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-		FindPlace(Gear, false, 0, LAND_WIDTH)
-		end;
+		Gear^.TriggerId:= i + 1;
+		FindPlace(Gear, false, 0, LAND_WIDTH);
+{		if(Gear <> nil) then
+			ParseCommand('addtrig s' + inttostr(Gear^.TriggerId) + ' 1 5 11 ' +
+				inttostr(hwRound(Gear^.X)) + ' ' + inttostr(hwRound(Gear^.Y)) +
+				' ' + inttostr(Gear^.TriggerId), true);
+}		end;
 
 if (GameFlags and gfLowGravity) <> 0 then
     cGravity:= cMaxWindSpeed / 2;
