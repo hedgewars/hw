@@ -172,8 +172,8 @@ set(HW_LINK_LIBS
 	openalbridge
 )
 
-#openalbridge is linked statically in unix, dynamically in windows; for static we need to explicitly link dependencies -- if we ever change this remember that in windows library order counts
-if(NOT WIN32 AND NOT APPLE)
+#remember that in windows library order counts
+if(NOT APPLE)
 	set(HW_LINK_LIBS
 		${HW_LINK_LIBS}
 		${OPENAL_LIBRARY}
@@ -181,9 +181,8 @@ if(NOT WIN32 AND NOT APPLE)
 		${VORBIS_LIBRARY}
 		${VORBISFILE_LIBRARY}
 		)
-endif()
+else()
 #no vorbisfile required for MacOS X
-if(APPLE)
 	set(HW_LINK_LIBS
 		${OPENAL_LIBRARY}
 		${OGG_LIBRARY}
@@ -191,7 +190,7 @@ if(APPLE)
 		${HW_LINK_LIBS}
 		${SPARKLE_LIBRARY}
 		)
-endif(APPLE)
+endif()
 
 
 if(WIN32 AND NOT UNIX)
