@@ -964,7 +964,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 		begin
 		CheckHHDamage(HHGear);
 		HHGear^.dY:= _0;
-		HHGear^.State:= HHGear^.State and not (gstHHJumping or gstHHHJump);
+		//HHGear^.State:= HHGear^.State and not (gstHHJumping or gstHHHJump);
 		end else
 		begin
 		HHGear^.Y:= HHGear^.Y + HHGear^.dY;
@@ -982,7 +982,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 				Gear^.Y:= Gear^.Y + ty;
 				Gear^.Elasticity:= tt;
 				Gear^.doStep:= @doStepRopeWork;
-				with HHGear^ do State:= State and not (gstAttacking or gstMoving or gstHHHJump);
+				with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
 				
 				RemoveFromAmmo;
 				
@@ -1004,7 +1004,7 @@ if (Gear^.State and gstCollision) <> 0 then
 	else
 		begin
 		Gear^.doStep:= @doStepRopeWork;
-		with HHGear^ do State:= State and not (gstAttacking or gstHHHJump);
+		with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
 
 		RemoveFromAmmo;
 		
