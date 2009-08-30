@@ -27,9 +27,6 @@ handleCmd_inRoom clID clients _ ["TEAM_CHAT", msg] =
 
 
 handleCmd_inRoom clID clients rooms ["PART"] =
-	if isMaster client then
-		[RemoveRoom]
-	else
 		[RoomRemoveThisClient "part"]
 	where
 		client = clients IntMap.! clID

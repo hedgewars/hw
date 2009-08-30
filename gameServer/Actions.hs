@@ -122,8 +122,7 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 	infoM "Clients" ((show $ clientUID client) ++ " quits: " ++ msg)
 	(_, _, newClients, newRooms) <-
 			if roomID client /= 0 then
-				processAction  (clID, serverInfo, clients, rooms)
-					(if isMaster client then RemoveRoom else RemoveClientTeams clID)
+				processAction  (clID, serverInfo, clients, rooms) $ RoomRemoveThisClient "quit"
 				else
 					return (clID, serverInfo, clients, rooms)
 
@@ -192,29 +191,38 @@ processAction (clID, serverInfo, clients, rooms) (RoomAddThisClient rID) = do
 
 processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 	(_, _, newClients, newRooms) <-
-			if roomID client /= 0 then
+		if roomID client /= 0 then
+			if isMaster client then
+				if gameinprogress room then
+					processAction (clID, serverInfo, clients, rooms) RemoveRoom
+				else -- not in game
+					processAction (clID, serverInfo, clients, rooms) RemoveRoom
+			else -- not master
 				foldM
 					processAction
 						(clID, serverInfo, clients, rooms)
 						[AnswerOthersInRoom ["LEFT", nick client, msg],
 						RemoveClientTeams clID]
-				else
-					return (clID, serverInfo, clients, rooms)
+		else -- in lobby
+			return (clID, serverInfo, clients, rooms)
 	
 	return (
 		clID,
 		serverInfo,
-		adjust (\cl -> cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined}) clID newClients,
-		adjust (\r -> r{
-				playersIDs = IntSet.delete clID (playersIDs r),
-				playersIn = (playersIn r) - 1,
-				readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
-				}) rID $
-			adjust (\r -> r{playersIDs = IntSet.insert clID (playersIDs r)}) 0 newRooms
+		adjust resetClientFlags clID newClients,
+		adjust removeClientFromRoom rID $ adjust insertClientToRoom 0 newRooms
 		)
 	where
 		rID = roomID client
 		client = clients ! clID
+		room = rooms ! rID
+		resetClientFlags cl = cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined}
+		removeClientFromRoom r = r{
+				playersIDs = IntSet.delete clID (playersIDs r),
+				playersIn = (playersIn r) - 1,
+				readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
+				}
+		insertClientToRoom r = r{playersIDs = IntSet.insert clID (playersIDs r)}
 
 
 processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword) = do
