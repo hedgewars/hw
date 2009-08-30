@@ -392,8 +392,43 @@ with Template do
                FillPoints^[i].x:= LAND_WIDTH - 1 - FillPoints^[i].x;
            end;
 
-     if canFlip then
-        if getrandom(2) = 0 then
+(*  Experiment in making this option more useful
+     if ((not isNegative) and (cTemplateFilter = 4)) or 
+        (canFlip and (getrandom(2) = 0)) then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               begin
+               pa.ar[i].y:= LAND_HEIGHT - 1 - pa.ar[i].y + (LAND_HEIGHT - TemplateHeight) * 2;
+               if pa.ar[i].y > LAND_HEIGHT - 1 then
+                   pa.ar[i].y:= LAND_HEIGHT - 1;
+               end;
+           for i:= 0 to pred(FillPointsCount) do
+               begin
+               FillPoints^[i].y:= LAND_HEIGHT - 1 - FillPoints^[i].y + (LAND_HEIGHT - TemplateHeight) * 2;
+               if FillPoints^[i].y > LAND_HEIGHT - 1 then
+                   FillPoints^[i].y:= LAND_HEIGHT - 1;
+               end;
+           end;
+     end 
+*)
+// template recycling.  Pull these off the floor a bit
+     if (not isNegative) and (cTemplateFilter = 4) then
+           begin
+           for i:= 0 to pred(BasePointsCount) do
+               begin
+               dec(pa.ar[i].y, 100);
+               if pa.ar[i].y < 0 then
+                   pa.ar[i].y:= 0;
+               end;
+           for i:= 0 to pred(FillPointsCount) do
+               begin
+               dec(FillPoints^[i].y, 100);
+               if FillPoints^[i].y < 0 then
+                   FillPoints^[i].y:= 0;
+               end;
+           end;
+
+     if (canFlip and (getrandom(2) = 0)) then
            begin
            for i:= 0 to pred(BasePointsCount) do
                pa.ar[i].y:= LAND_HEIGHT - 1 - pa.ar[i].y;
@@ -517,7 +552,8 @@ rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
 
 // force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
-if (Template.canInvert and (getrandom(2) = 0)) or
+if (cTemplateFilter = 4) or 
+   (Template.canInvert and (getrandom(2) = 0)) or
     (not Template.canInvert and Template.isNegative) then 
     begin
     hasBorder:= true;
