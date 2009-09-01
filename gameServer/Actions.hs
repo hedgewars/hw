@@ -193,8 +193,8 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 	(_, _, newClients, newRooms) <-
 		if roomID client /= 0 then
 			if isMaster client then
-				if gameinprogress room then
-					processAction (clID, serverInfo, clients, rooms) RemoveRoom
+				if (gameinprogress room) && (playersIn room > 1) then
+					changeMaster
 				else -- not in game
 					processAction (clID, serverInfo, clients, rooms) RemoveRoom
 			else -- not master
@@ -218,11 +218,22 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 		room = rooms ! rID
 		resetClientFlags cl = cl{roomID = 0, isMaster = False, isReady = False, teamsInGame = undefined}
 		removeClientFromRoom r = r{
-				playersIDs = IntSet.delete clID (playersIDs r),
+				playersIDs = otherPlayersSet,
 				playersIn = (playersIn r) - 1,
 				readyPlayers = if isReady client then (readyPlayers r) - 1 else readyPlayers r
 				}
 		insertClientToRoom r = r{playersIDs = IntSet.insert clID (playersIDs r)}
+		changeMaster = do
+			processAction (newMasterId, serverInfo, clients, rooms) $ AnswerThisClient ["ROOM_CONTROL_ACCESS", "1"]
+			return (
+				clID,
+				serverInfo,
+				adjust (\cl -> cl{isMaster = True}) newMasterId clients,
+				adjust (\r -> r{name = newRoomName}) rID rooms
+				)
+		newRoomName = "abandoned"
+		otherPlayersSet = IntSet.delete clID (playersIDs room)
+		newMasterId = IntSet.findMin otherPlayersSet
 
 
 processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword) = do
