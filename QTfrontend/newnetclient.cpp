@@ -548,6 +548,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		return;
 	}
 
+	if (lst[0] == "ROOM_CONTROL_ACCESS") {
+		if (lst.size() < 2)
+		{
+			qWarning("Net: Bad BYE message");
+			return;
+		}
+		bool b = lst[1] == "0";
+		m_pGameCFGWidget->setEnabled(b);
+		m_pTeamSelWidget->setInteractivity(b);
+		isChief = b;
+	}
+
 	qWarning() << "Net: Unknown message:" << lst;
 }
 
@@ -618,7 +630,7 @@ bool HWNewNet::isRoomChief()
 
 void HWNewNet::gameFinished()
 {
-	netClientState = 3;
+	if (netClientState == 5) netClientState = 3;
 	RawSendNet(QString("ROUNDFINISHED"));
 }
 
