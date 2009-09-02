@@ -233,9 +233,10 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 				adjust (\cl -> cl{isMaster = True}) newMasterId clients,
 				adjust (\r -> r{name = newRoomName}) rID rooms
 				)
-		newRoomName = "abandoned"
+		newRoomName = nick newMasterClient
 		otherPlayersSet = IntSet.delete clID (playersIDs room)
 		newMasterId = IntSet.findMin otherPlayersSet
+		newMasterClient = clients ! newMasterId
 
 
 processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword) = do

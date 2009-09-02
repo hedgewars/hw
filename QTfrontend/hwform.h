@@ -96,8 +96,11 @@ private slots:
 	void UpdateWeapons();
 	void onFrontendFullscreen(bool value);
 	void Music(bool checked);
+
+	void NetGameChangeStatus(bool isMaster);
 	void NetGameMaster();
 	void NetGameSlave();
+	
 	void AsyncNetServerStart();
 	void NetLeftRoom();
 	void selectFirstNetScheme();

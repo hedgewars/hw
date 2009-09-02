@@ -56,8 +56,6 @@ class HWNewNet : public QObject
   QString seed;
   bool m_game_connected;
 
-  void RunGame();
-
   template <typename T>
   void SendCfgStrNet(T a) {
     QByteArray strmsg;

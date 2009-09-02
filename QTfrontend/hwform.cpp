@@ -577,12 +577,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(CreateRoom(const QString&)));
 	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
 		hwnet, SLOT(JoinRoom(const QString&)));
-	connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
-		this, SLOT(NetGameMaster()));
-	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
-		this, SLOT(NetGameSlave()));
+//	connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
+//		this, SLOT(NetGameMaster()));
+//	connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
+//		this, SLOT(NetGameSlave()));
 	connect(ui.pageRoomsList, SIGNAL(askForRoomList()),
 		hwnet, SLOT(askRoomsList()));
+
+// room status stuff
+	connect(hwnet, SIGNAL(roomMaster(bool)),
+		this, SLOT(NetGameChangeStatus(bool)));
 
 // net page stuff
 	connect(hwnet, SIGNAL(chatStringFromNet(const QString&)),
@@ -881,12 +885,22 @@ void HWForm::Music(bool checked)
 		sdli.StopMusic();
 }
 
+void HWForm::NetGameChangeStatus(bool isMaster)
+{
+	if (isMaster)
+		NetGameMaster();
+	else
+		NetGameSlave();
+}
+
 void HWForm::NetGameMaster()
 {
 	ui.pageNetGame->setMasterMode(true);
 	ui.pageNetGame->restrictJoins->setChecked(false);
 	ui.pageNetGame->restrictTeamAdds->setChecked(false);
 	ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
+	ui.pageNetGame->pGameCFG->setEnabled(true);
+	ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
 	
 	if (hwnet)
 	{
@@ -907,6 +921,9 @@ void HWForm::NetGameMaster()
 
 void HWForm::NetGameSlave()
 {
+	ui.pageNetGame->pGameCFG->setEnabled(false);
+	ui.pageNetGame->pNetTeamsWidget->setInteractivity(false);
+	
 	if (hwnet)
 	{
 		NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);

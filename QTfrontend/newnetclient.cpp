@@ -88,8 +88,6 @@ void HWNewNet::CreateRoom(const QString & room)
 	}
 	
 	RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
-	m_pGameCFGWidget->setEnabled(true);
-	m_pTeamSelWidget->setInteractivity(true);
 	isChief = true;
 }
 
@@ -101,11 +99,7 @@ void HWNewNet::JoinRoom(const QString & room)
 		return;
 	}
 	
-	loginStep++;
-
 	RawSendNet(QString("JOIN_ROOM%1%2").arg(delimeter).arg(room));
-	m_pGameCFGWidget->setEnabled(false);
-	m_pTeamSelWidget->setInteractivity(false);
 	isChief = false;
 }
 
@@ -448,7 +442,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
 	if (lst[0] == "RUN_GAME") {
 		netClientState = 5;
-		RunGame();
+		emit AskForRunGame();
 		return;
 	}
 
@@ -558,16 +552,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		m_pGameCFGWidget->setEnabled(b);
 		m_pTeamSelWidget->setInteractivity(b);
 		isChief = b;
+		emit roomMaster(isChief);
 
 		return;
 	}
 
 	qWarning() << "Net: Unknown message:" << lst;
-}
-
-void HWNewNet::RunGame()
-{
-	emit AskForRunGame();
 }
 
 void HWNewNet::onHedgehogsNumChanged(const HWTeam& team)
