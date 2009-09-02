@@ -194,7 +194,9 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 		if roomID client /= 0 then
 			if isMaster client then
 				if (gameinprogress room) && (playersIn room > 1) then
-					changeMaster
+					(changeMaster >>= (\state -> foldM processAction state
+						[AnswerOthersInRoom ["LEFT", nick client, msg],
+						RemoveClientTeams clID]))
 				else -- not in game
 					processAction (clID, serverInfo, clients, rooms) RemoveRoom
 			else -- not master
