@@ -55,11 +55,11 @@
 02:00=%1 nigdy już tego nie zobaczy!
 02:00=%1 macha na pożegnanie!
 02:00=%1 odszedł to piękniejszego świata!
-02:00=%1 spotyka stwórcę!
+02:00=%1 spotkał stwórcę!
 02:00=%1 nie może dłużej wytrzymać!
 02:00=%1 skończył służbę!
 02:00=%1 poświęcił się dla ogółu!
-02:00=%1 departs this mortal coil!
+;02:00=%1 departs this mortal coil!
 02:00=Tak jak liść opuszcza drzewo, tak nas opuszcza %1!
 ;02:00=%1 has timed out!
 02:00=%1 mówi "Pokój z wami"!
@@ -98,7 +98,7 @@
 02:00=%1 cierpi na Spontaniczną Masową Usterkę Życiową
 ;02:00=%1 has passed on
 02:00=%1 jest martwy jak kamień
-02:00=%1 już nie jest
+02:00=%1 już nie istnieje
 02:00=%1 przestał istnieć
 ;02:00=Bereft of life, %1 umiera w pokoju.
 02:00=%1 dołącza do chórków anielskich.
@@ -151,11 +151,11 @@
 02:01=%1 nie ma tratwy
 02:01=%1 uważa, że słona woda dobrze robi na cerę
 02:01=%1 moczy rany w słonej wodzie
-02:01=%1 has walked the plank
+;02:01=%1 has walked the plank
 02:01=%1 bierze kąpiel
 02:01=%1 jest bardzo, bardzo mokry
-02:01=%1 gets his quills wet
-;02:01=It's Davy Jones' locker for %1
+02:01=%1 przemoczy swoje igły
+02:01=Skrzynia Davy'ego Jonesa będzie dla Ciebie, %1
 ; Round starts
 02:02=Walczmy!
 02:02=Uzbrojony i gotowy!
@@ -177,7 +177,7 @@
 02:02=Przegrana nie wchodzi w rachubę.
 ;02:02=Cry havoc! Let loose the hogs of war!
 02:02=Hedgewars, stworzone przez Hedgewars.org
-;02:02=GL HF
+02:02=GL HF
 02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Tiyuri'emu
 02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko unC0Rr'owi
 02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Nemo
@@ -205,9 +205,9 @@
 ;02:02=Rock 'em and sock 'em!
 02:02=Niech się zacznie konkurs fragów
 02:02=Mam nadzieję, że jesteście gotowi na bójkę!
-02:02=Jazda Jazda Jazda!
+02:02=Jazda! Jazda! Jazda!
 02:02=Jeże przybyły!
-02:02=Bring it to them!
+;02:02=Bring it to them!
 02:02=Nie odczuwaj strachu!
 02:02=Bądź odważny i podbijaj!
 ; Round ends (win; unused atm)

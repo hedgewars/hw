@@ -6,7 +6,7 @@
     <message>
         <location filename="../../../../QTfrontend/ammoSchemeModel.cpp" line="246"/>
         <source>new</source>
-        <translation type="unfinished">nowy</translation>
+        <translation>nowy</translation>
     </message>
 </context>
 <context>
@@ -27,7 +27,7 @@
     <message numerus="yes">
         <location filename="../../../../QTfrontend/misc.h" line="40"/>
         <source>Every %1 turn</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Co %1 turę</numerusform>
             <numerusform>Co %1 tury</numerusform>
             <numerusform>Co %1 tur</numerusform>
@@ -154,7 +154,7 @@
     <message>
         <location filename="../../../../QTfrontend/mapContainer.cpp" line="102"/>
         <source>Wacky</source>
-        <translation type="unfinished">Odjechane</translation>
+        <translation>Odjechane</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="541"/>
         <source>Quit reason: </source>
-        <translation type="unfinished">Powód wyjścia:</translation>
+        <translation>Powód wyjścia:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/newnetclient.cpp" line="354"/>
@@ -240,7 +240,7 @@
     <message>
         <location filename="../../../../QTfrontend/KB.h" line="28"/>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="unfinished">SDL_ttf zwrócił problem podczas przetwarzania tekstu, najprawdopodobniej jest to związane z błędem we freetype2. Zaleca się zaktualizowanie biblioteki freetype.</translation>
+        <translation>SDL_ttf zwrócił problem podczas przetwarzania tekstu, najprawdopodobniej jest to związane z błędem we freetype2. Zaleca się zaktualizowanie biblioteki freetype.</translation>
     </message>
 </context>
 <context>
@@ -258,7 +258,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="1158"/>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wyczyść pamięć podręczną</translation>
     </message>
 </context>
 <context>
@@ -301,9 +301,9 @@
         <location filename="../../../../QTfrontend/statsPage.cpp" line="108"/>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą został(a) &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabitymi jeżami na turę.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -719,7 +719,7 @@
     <message>
         <location filename="../../../../QTfrontend/pages.cpp" line="464"/>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sprawdź aktualizacje przy starcie</translation>
     </message>
     <message>
         <source>Forts mode</source>
