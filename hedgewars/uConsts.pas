@@ -803,7 +803,8 @@ const	cMaxPower     = 1500;
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_DontHold;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+							ammoprop_DontHold;
 					Count: AMMO_INFINITE;
 					NumPerTurn: 0;
 					Timer: 0;
