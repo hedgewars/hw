@@ -53,5 +53,5 @@ main = withSocketsDo $ do
 
 	Exception.bracket
 		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
-		(sClose)
+		sClose
 		(startServer serverInfo)

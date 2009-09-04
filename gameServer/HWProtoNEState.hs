@@ -26,22 +26,20 @@ handleCmd_NotEntered clID clients _ ["NICK", newNick] =
 	where
 		client = clients IntMap.! clID
 		haveSameNick = isJust $ find (\cl -> newNick == nick cl) $ IntMap.elems clients
-		checkPassword = if clientProto client /= 0 then [CheckRegistered] else []
+		checkPassword = [CheckRegistered | clientProto client /= 0]
 
 
-handleCmd_NotEntered clID clients _ ["PROTO", protoNum] =
-	if clientProto client > 0 then
-		[ProtocolError "Protocol already known"]
-	else if parsedProto == 0 then
-		[ProtocolError "Bad number"]
-	else
-		[ModifyClient (\c -> c{clientProto = parsedProto}),
+handleCmd_NotEntered clID clients _ ["PROTO", protoNum]
+	| clientProto client > 0 = [ProtocolError "Protocol already known"]
+	| parsedProto == 0 = [ProtocolError "Bad number"]
+	| otherwise =
+		[ModifyClient (\ c -> c{clientProto = parsedProto}),
 		AnswerThisClient ["PROTO", show parsedProto]]
 		++ checkPassword
 	where
 		client = clients IntMap.! clID
 		parsedProto = fromMaybe 0 (maybeRead protoNum :: Maybe Word16)
-		checkPassword = if (not . null) (nick client) then [CheckRegistered] else []
+		checkPassword = [CheckRegistered | (not . null) (nick client)]
 
 
 handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
@@ -52,7 +50,7 @@ handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
 		[ByeClient "Authentication failed"]
 	where
 		client = clients IntMap.! clID
-		adminNotice = if isAdministrator client then [AnswerThisClient ["ADMIN_ACCESS"]] else []
+		adminNotice = [AnswerThisClient ["ADMIN_ACCESS"] | isAdministrator client]
 
 
 --handleCmd_NotEntered _ _ _ ["DUMP"] =

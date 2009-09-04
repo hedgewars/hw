@@ -12,6 +12,7 @@ import Numeric
 import Network.Socket
 import System.IO
 import qualified Data.List as List
+import Control.Monad
 import Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
@@ -30,7 +31,7 @@ toEngineMsg :: String -> String
 toEngineMsg msg = Base64.encode (fromIntegral (length msg) : (UTF8.encode msg))
 
 fromEngineMsg :: String -> Maybe String
-fromEngineMsg msg = Base64.decode msg >>= removeLength >>= return . (map w2c)
+fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)
 	where
 		removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
 		removeLength _ = Nothing
@@ -43,7 +44,7 @@ isLegalNetCommand msg = test decoded
 		test (Just (m:ms)) = m `Set.member` legalMessages
 		test _ = False
 		legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
-		slotMessages = ['\128', '\129', '\130', '\131', '\132', '\133', '\134', '\135', '\136', '\137', '\138']
+		slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of
@@ -74,7 +75,7 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
 			t : replaceTeam team teams
 
 illegalName :: String -> Bool
-illegalName str = all isSpace str
+illegalName = all isSpace
 
 protoNumber2ver :: Word16 -> String
 protoNumber2ver 17 = "0.9.7-dev"

@@ -17,7 +17,7 @@ import OfficialServer.DBInteraction
 
 
 timerLoop :: Int -> Chan CoreMessage -> IO()
-timerLoop tick messagesChan = threadDelay (30 * 10^6) >> (writeChan messagesChan $ TimerAction tick) >> timerLoop (tick + 1) messagesChan
+timerLoop tick messagesChan = threadDelay (30 * 10^6) >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
 firstAway (_, a, b, c) = (a, b, c)
 
@@ -31,7 +31,7 @@ mainLoop serverInfo clients rooms = do
 	
 	(newServerInfo, mClients, mRooms) <-
 		case r of
-			Accept ci -> do
+			Accept ci ->
 				liftM firstAway $ processAction
 					(clientUID ci, serverInfo, clients, rooms) (AddClient ci)
 
@@ -57,7 +57,7 @@ mainLoop serverInfo clients rooms = do
 			TimerAction tick ->
 				liftM firstAway $
 					foldM processAction (0, serverInfo, clients, rooms) $
-						PingAll : if even tick then [StatsAction] else []
+						PingAll : [StatsAction | even tick]
 
 
 	{-			let hadRooms = (not $ null rooms) && (null mrooms)
@@ -80,7 +80,7 @@ startServer serverInfo serverSocket = do
 	
 	forkIO $ timerLoop 0 $ coreChan serverInfo
 
-	startDBConnection $ serverInfo
+	startDBConnection serverInfo
 
 	forkIO $ mainLoop serverInfo IntMap.empty (IntMap.singleton 0 newRoom)
 
