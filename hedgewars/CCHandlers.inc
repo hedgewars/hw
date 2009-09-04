@@ -577,8 +577,9 @@ if cFullScreen then
 	flags:= flags or SDL_FULLSCREEN;
 	cScreenWidth:= cInitWidth;
 	cScreenHeight:= cInitHeight
-	end
-	else SDL_WM_SetCaption('Hedgewars', nil);
+	end;
+
+SDL_WM_SetCaption('Hedgewars', nil);
 {$IFDEF DEBUGFILE}
 AddFileLog('Freeing old primary surface...');
 {$ENDIF}
