@@ -21,10 +21,10 @@ if(WIN32)
 		openalbridge.h loaders.h endianness.h wrappers.h globals.h oggvorbis.h ${openal_src}
 	)
 #deps for the shared library
-	link_libraries(${OPENAL_LIBRARY})
-	link_libraries(${OGG_LIBRARY})
-	link_libraries(${VORBIS_LIBRARY})
 	link_libraries(${VORBISFILE_LIBRARY})
+	link_libraries(${VORBIS_LIBRARY})
+	link_libraries(${OGG_LIBRARY})
+	link_libraries(${OPENAL_LIBRARY})
 #build a shared library
 	set (build_type SHARED)
 endif()
