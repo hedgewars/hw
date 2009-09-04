@@ -23,7 +23,7 @@ listenLoop handle linesNumber buf chan clientID = do
 clientRecvLoop :: Handle -> Chan CoreMessage -> Int -> IO ()
 clientRecvLoop handle chan clientID =
 	listenLoop handle 0 [] chan clientID
-		`catch` (\e -> (clientOff $ show e) >> return ())
+		`catch` (\e -> clientOff (show e) >> return ())
 	where clientOff msg = writeChan chan $ ClientMessage (clientID, ["QUIT", msg]) -- if the client disconnects, we perform as if it sent QUIT message
 
 clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> Int -> IO()
@@ -31,7 +31,7 @@ clientSendLoop handle coreChan chan clientID = do
 	answer <- readChan chan
 	doClose <- Exception.handle
 		(\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
-		forM_ answer (\str -> hPutStrLn handle str)
+		forM_ answer (hPutStrLn handle)
 		hPutStrLn handle ""
 		hFlush handle
 		return $ isQuit answer

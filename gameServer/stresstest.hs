@@ -23,15 +23,15 @@ emulateSession sock s = do
 	hFlush sock
 	threadDelay 225000
 
-testing = Control.Exception.handle (\e -> putStrLn $ show e) $ do
+testing = Control.Exception.handle print $ do
 	putStrLn "Start"
 	sock <- connectTo "127.0.0.1" (PortNumber 46631)
 
 	num1 <- randomRIO (70000::Int, 70100)
 	num2 <- randomRIO (0::Int, 2)
 	num3 <- randomRIO (0::Int, 5)
-	let nick1 = show $ num1
-	let room1 = show $ num2
+	let nick1 = show num1
+	let room1 = show num2
 	case num2 of 
 		0 -> emulateSession sock $ session1 nick1 room1
 		1 -> emulateSession sock $ session2 nick1 room1

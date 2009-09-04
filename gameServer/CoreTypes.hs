@@ -10,6 +10,7 @@ import qualified Data.IntSet as IntSet
 import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
+import Data.Function
 
 
 data ClientInfo =
@@ -33,12 +34,12 @@ data ClientInfo =
 	}
 
 instance Show ClientInfo where
-	show ci = (show $ clientUID ci)
+	show ci = show (clientUID ci)
 			++ " nick: " ++ (nick ci)
 			++ " host: " ++ (host ci)
 
 instance Eq ClientInfo where
-	a1 == a2 = clientHandle a1 == clientHandle a2
+	(==) = (==) `on` clientHandle
 
 data HedgehogInfo =
 	HedgehogInfo String String
@@ -78,13 +79,13 @@ data RoomInfo =
 	}
 
 instance Show RoomInfo where
-	show ri = (show $ roomUID ri)
-			++ ", players ids: " ++ (show $ IntSet.size $ playersIDs ri)
-			++ ", players: " ++ (show $ playersIn ri)
-			++ ", ready: " ++ (show $ readyPlayers ri)
+	show ri = show (roomUID ri)
+			++ ", players ids: " ++ show (IntSet.size $ playersIDs ri)
+			++ ", players: " ++ show (playersIn ri)
+			++ ", ready: " ++ show (readyPlayers ri)
 
 instance Eq RoomInfo where
-	a1 == a2 = roomUID a1 == roomUID a2
+	(==) = (==) `on` roomUID
 
 newRoom = (
 	RoomInfo

@@ -23,14 +23,14 @@ handleCmd_lobby :: CmdHandler
 handleCmd_lobby clID clients rooms ["LIST"] =
 	[AnswerThisClient ("ROOMS" : roomsInfoList)]
 	where
-		roomsInfoList = concatMap roomInfo $ sameProtoRooms
-		sameProtoRooms = filter (\r -> (roomProto r == protocol) && (not $ isRestrictedJoins r)) roomsList
+		roomsInfoList = concatMap roomInfo sameProtoRooms
+		sameProtoRooms = filter (\r -> (roomProto r == protocol) && not (isRestrictedJoins r)) roomsList
 		roomsList = IntMap.elems rooms
 		protocol = clientProto client
 		client = clients IntMap.! clID
 		roomInfo room = [
 				name room,
-				(show $ playersIn room) ++ "(" ++ (show $ length $ teams room) ++ ")",
+				show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
 				show $ gameinprogress room
 				]
 
@@ -41,12 +41,10 @@ handleCmd_lobby clID clients _ ["CHAT", msg] =
 		clientNick = nick $ clients IntMap.! clID
 
 
-handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword] =
-	if haveSameRoom then
-		[Warning "Room exists"]
-	else if illegalName newRoom then
-		[Warning "Illegal room name"]
-	else
+handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, roomPassword]
+	| haveSameRoom = [Warning "Room exists"]
+	| illegalName newRoom = [Warning "Illegal room name"]
+	| otherwise =
 		[RoomRemoveThisClient "", -- leave lobby
 		AddRoom newRoom roomPassword,
 		AnswerThisClient ["NOT_READY", clientNick]
@@ -60,14 +58,11 @@ handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom] =
 	handleCmd_lobby clID clients rooms ["CREATE_ROOM", newRoom, ""]
 
 
-handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
-	if noSuchRoom then
-		[Warning "No such room"]
-	else if isRestrictedJoins jRoom then
-		[Warning "Joining restricted"]
-	else if roomPassword /= password jRoom then
-		[Warning "Wrong password"]
-	else
+handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
+	| noSuchRoom = [Warning "No such room"]
+	| isRestrictedJoins jRoom = [Warning "Joining restricted"]
+	| roomPassword /= password jRoom = [Warning "Wrong password"]
+	| otherwise =
 		[RoomRemoveThisClient "", -- leave lobby
 		RoomAddThisClient rID] -- join room
 		++ answerNicks
@@ -78,18 +73,20 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
 		++ watchRound
 	where
 		noSuchRoom = isNothing mbRoom
-		mbRoom = find (\r -> roomName == name r && roomProto r == clientProto client) $ IntMap.elems rooms 
+		mbRoom = find (\r -> roomName == name r && roomProto r == clientProto client) $ IntMap.elems rooms
 		jRoom = fromJust mbRoom
 		rID = roomUID jRoom
 		client = clients IntMap.! clID
 		roomClientsIDs = IntSet.elems $ playersIDs jRoom
-		answerNicks = if playersIn jRoom /= 0 then
-					[AnswerThisClient $ ["JOINED"] ++ (map (\clID -> nick $ clients IntMap.! clID) $ roomClientsIDs)]
-				else
-					[]
-		answerReady =
-			map (\c -> AnswerThisClient [if isReady c then "READY" else "NOT_READY", nick c]) $
-			map (\clID -> clients IntMap.! clID) roomClientsIDs
+		answerNicks =
+			[AnswerThisClient $ "JOINED" :
+			map (\clID -> nick $ clients IntMap.! clID) roomClientsIDs | playersIn jRoom /= 0]
+		answerReady = map
+			((\ c ->
+				AnswerThisClient
+				[if isReady c then "READY" else "NOT_READY", nick c])
+			. (\ clID -> clients IntMap.! clID))
+			roomClientsIDs
 
 		toAnswer (paramName, paramStrs) = AnswerThisClient $ "CFG" : paramName : paramStrs
 		
@@ -100,7 +97,7 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword] =
 					[]
 				else
 					[AnswerThisClient  ["RUN_GAME"],
-					AnswerThisClient $ "EM" : toEngineMsg "e$spectate 1" : (Foldable.toList $ roundMsgs jRoom)]
+					AnswerThisClient $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs jRoom)]
 
 		answerTeams = if gameinprogress jRoom then
 				answerAllTeams (teamsAtStart jRoom)
@@ -115,16 +112,7 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
 	-- Administrator's stuff --
 
 handleCmd_lobby clID clients rooms ["KICK", kickNick] =
-	if not $ isAdministrator client then
-		[]
-	else
-		if noSuchClient then
-			[]
-		else
-			if kickID == clID then
-				[]
-			else
-				[KickClient kickID]
+		[KickClient kickID | isAdministrator client && (not noSuchClient) && kickID /= clID]
 	where
 		client = clients IntMap.! clID
 		maybeClient = Foldable.find (\cl -> kickNick == nick cl) clients
@@ -142,19 +130,13 @@ handleCmd_lobby clID clients rooms ["BAN", banNick] =
 
 
 handleCmd_lobby clID clients rooms ["SET_SERVER_MESSAGE", newMessage] =
-	if not $ isAdministrator client then
-		[]
-	else
-		[ModifyServerInfo (\si -> si{serverMessage = newMessage})]
+		[ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator client]
 	where
 		client = clients IntMap.! clID
 
 
 handleCmd_lobby clID clients rooms ["CLEAR_ACCOUNTS_CACHE"] =
-	if not $ isAdministrator client then
-		[]
-	else
-		[ClearAccountsCache]
+		[ClearAccountsCache | isAdministrator client]
 	where
 		client = clients IntMap.! clID
 

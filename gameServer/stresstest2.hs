@@ -14,7 +14,7 @@ import System.Random
 import System.Posix
 #endif
 
-testing = Control.Exception.handle (\e -> putStrLn $ show e) $ do
+testing = Control.Exception.handle print $ do
 	delay <- randomRIO (100::Int, 300)
 	threadDelay delay
 	sock <- connectTo "127.0.0.1" (PortNumber 46631)
