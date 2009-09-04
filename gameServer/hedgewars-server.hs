@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, ScopedTypeVariables, PatternSignatures #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 
 module Main where
 

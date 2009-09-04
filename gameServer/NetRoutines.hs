@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP, PatternSignatures #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module NetRoutines where
 
 import Network
@@ -7,11 +7,7 @@ import System.IO
 import Control.Concurrent
 import Control.Concurrent.Chan
 import Control.Concurrent.STM
-#if defined(NEW_EXCEPTIONS)
-import qualified Control.OldException as Exception
-#else
 import qualified Control.Exception as Exception
-#endif
 import Data.Time
 -----------------------------
 import CoreTypes
@@ -21,7 +17,7 @@ import Utils
 acceptLoop :: Socket -> Chan CoreMessage -> Int -> IO ()
 acceptLoop servSock coreChan clientCounter = do
 	Exception.handle
-		(\(_ :: Exception.Exception) -> putStrLn "exception on connect") $
+		(\(_ :: Exception.IOException) -> putStrLn "exception on connect") $
 		do
 		(socket, sockAddr) <- Network.Socket.accept servSock
 

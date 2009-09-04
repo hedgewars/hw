@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Main where
 
 import Prelude hiding (catch)
@@ -45,7 +47,7 @@ dbInteractionLoop dbConn = forever $ do
 
 
 dbConnectionLoop mySQLConnectionInfo =
-	Control.Exception.handle (\e -> return ()) $ handleSqlError $
+	Control.Exception.handle (\(_ :: IOException) -> return ()) $ handleSqlError $
 		bracket
 			(connectMySQL mySQLConnectionInfo)
 			(disconnect)

@@ -1,11 +1,7 @@
-{-# LANGUAGE CPP, PatternSignatures #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 module ClientIO where
 
-#if defined(NEW_EXCEPTIONS)
-import qualified Control.OldException as Exception
-#else
 import qualified Control.Exception as Exception
-#endif
 import Control.Concurrent.Chan
 import Control.Monad
 import System.IO
@@ -34,14 +30,14 @@ clientSendLoop :: Handle -> Chan CoreMessage -> Chan [String] -> Int -> IO()
 clientSendLoop handle coreChan chan clientID = do
 	answer <- readChan chan
 	doClose <- Exception.handle
-		(\(e :: Exception.Exception) -> if isQuit answer then return True else sendQuit e >> return False) $ do
+		(\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
 		forM_ answer (\str -> hPutStrLn handle str)
 		hPutStrLn handle ""
 		hFlush handle
 		return $ isQuit answer
 
 	if doClose then
-		Exception.handle (\(_ :: Exception.Exception) -> putStrLn "error on hClose") $ hClose handle
+		Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on hClose") $ hClose handle
 		else
 		clientSendLoop handle coreChan chan clientID
 
