@@ -375,7 +375,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 					emit configAsked();
 			}
 			emit nickAdded(lst[i]);
-			emit chatStringFromNet(QString(tr("*** %1 joined")).arg(lst[i]));
+			emit chatStringFromNet(QString(tr("[%1 has joined the room]")).arg(lst[i]));
 		}
 		return;
 	}
@@ -397,7 +397,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			}
 
 			emit nickAddedLobby(lst[i]);
-			emit chatStringLobby(QString(tr("*** %1 joined")).arg(lst[i]));
+			emit chatStringLobby(QString(tr("[%1 has joined]")).arg(lst[i]));
 		}
 		return;
 	}
