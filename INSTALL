@@ -8,9 +8,10 @@ To compile and install you need:
  - SDL_ttf >= 2.0
  - CMake >= 2.6.0
 For server:
- - Glasgow Haskell Compiler 6.8.3
+ - Glasgow Haskell Compiler 6.10
  - dataenc package
  - hslogger package
+ - utf8-string package
 
 1. Configure:
 $ cmake .
