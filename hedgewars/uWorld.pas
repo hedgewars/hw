@@ -123,7 +123,7 @@ with CurrentHedgehog^ do
 	dec(y, 33);
 	DrawSprite(sprAMSlotName, x, y, 0);
 	for i:= cMaxSlotIndex downto 0 do
-		if Ammo^[i, 0].Count > 0 then
+		if (Ammo^[i, 0].Count > 0) and (Ammo^[i, 0].AmmoType <> amNothing) then
 			begin
 			if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
 			dec(y, 33);
@@ -137,10 +137,10 @@ with CurrentHedgehog^ do
 
 				if l >= 0 then
 					begin
-					DrawSprite(sprAMAmmosBW, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
+					DrawSprite(sprAMAmmosBW, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
 					DrawSprite(sprTurnsLeft, x + t * 33 + 51, y + 17, l);
 					end else
-					DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType));
+					DrawSprite(sprAMAmmos, x + t * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
 
 				if (Slot = i)
 				and (CursorPoint.X >= x + t * 33 + 35)
@@ -156,7 +156,7 @@ with CurrentHedgehog^ do
 	DrawSprite(sprAMBorders, x, y, 0);
 
 	if (Pos >= 0) then
-		if Ammo^[Slot, Pos].Count > 0 then
+		if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
 		begin
 		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 		

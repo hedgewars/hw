@@ -63,7 +63,7 @@ var cnt: Longword;
     ammos: TAmmoCounts;
     substr: shortstring; // TEMPORARY
 begin
-TryDo(byte(s[0]) = byte(ord(High(TAmmoType)) + 1), 'Invalid ammo scheme (incompatible frontend)', true);
+TryDo(byte(s[0]) = byte(ord(High(TAmmoType))), 'Invalid ammo scheme (incompatible frontend)', true);
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of probability editor
 substr:= Copy(s,1,15);
@@ -71,7 +71,7 @@ if (substr = '000000990000009') or
    (substr = '000000990000000') then
     shoppa:= true;
 for a:= Low(TAmmoType) to High(TAmmoType) do
-    if (ord(a) > 14) and (s[ord(a)+1] <> '0') then shoppa:= false;  // TEMPORARY etc - this just avoids updating every time new wep is added
+    if (ord(a) > 14) and (s[ord(a)] <> '0') then shoppa:= false;  // TEMPORARY etc - this just avoids updating every time new wep is added
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
 
@@ -79,32 +79,35 @@ new(StoresList[Pred(StoreCnt)]);
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
-    cnt:= byte(s[ord(a) + 1]) - byte('0');
-    if cnt = 9 then
+    if a <> amNothing then
         begin
-        cnt:= AMMO_INFINITE;
-        Ammoz[a].Probability:= 0 
-        end;
-    if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
-       ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
-       ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
-       ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0)) then
-        begin
-        cnt:= 0;
-        Ammoz[a].Probability:= 0 
-        end
-    else if shoppa then      // FIXME - TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
-        if cnt <> AMMO_INFINITE then
+        cnt:= byte(s[ord(a)]) - byte('0');
+        if cnt = 9 then
             begin
-            if a = amGirder then
-                Ammoz[a].Probability:= 0
-            else
-                begin
-                Ammoz[a].Probability:= 100;
-                Ammoz[a].NumberInCase:= 1;
-                end
+            cnt:= AMMO_INFINITE;
+            Ammoz[a].Probability:= 0 
             end;
-    ammos[a]:= cnt
+        if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
+           ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
+           ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
+           ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0)) then
+            begin
+            cnt:= 0;
+            Ammoz[a].Probability:= 0 
+            end
+        else if shoppa then      // FIXME - TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
+            if cnt <> AMMO_INFINITE then
+                begin
+                if a = amGirder then
+                    Ammoz[a].Probability:= 0
+                else
+                    begin
+                    Ammoz[a].Probability:= 100;
+                    Ammoz[a].NumberInCase:= 1;
+                    end
+                end;
+        ammos[a]:= cnt
+        end
     end;
 
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
@@ -238,12 +241,15 @@ with Hedgehog do
 
 	with Ammo^[CurSlot, CurAmmo] do
 		begin
-		s:= trammo[Ammoz[AmmoType].NameId];
-		if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
-			s:= s + ' (' + IntToStr(Count) + ')';
-		if (Propz and ammoprop_Timerable) <> 0 then
-			s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-		AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
+        if AmmoType <> amNothing then
+            begin
+		    s:= trammo[Ammoz[AmmoType].NameId];
+		    if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
+			    s:= s + ' (' + IntToStr(Count) + ')';
+		    if (Propz and ammoprop_Timerable) <> 0 then
+			    s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
+		    AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
+            end;
 		if (Propz and ammoprop_NeedTarget) <> 0
 			then begin
 			Gear^.State:= Gear^.State or      gstHHChooseTarget;

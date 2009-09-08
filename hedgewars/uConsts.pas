@@ -95,7 +95,7 @@ type
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, 
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter);
 
-	TAmmoType  = (amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
+	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
@@ -681,6 +681,26 @@ const	cMaxPower     = 1500;
 			PosCount: Longword;
 			PosSprite: TSprite;
 			end = (
+			(NameId: sidNothing;
+			NameTex: nil;
+			Probability: 0;
+			NumberInCase: 0;
+			Ammo: (Propz: ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+                          ammoprop_Utility;
+					Count: AMMO_INFINITE;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amNothing);
+			Slot: 0;
+			TimeAfterTurn: 0;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: false;
+			SkipTurns: 9999;
+			PosCount: 1;
+			PosSprite: sprWater),
 			(NameId: sidGrenade;
 			NameTex: nil;
 			Probability: 0;

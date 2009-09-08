@@ -18,7 +18,7 @@
 
 unit uLocale;
 interface
-type TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
+type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
 			sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
 			sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
 			sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
@@ -56,7 +56,7 @@ var s: shortstring;
 	first: array[TEventId] of boolean;
 	e: TEventId;
 begin
-
+trammo[sidNothing]:= ' ';
 for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
 {$I-}
@@ -77,7 +77,7 @@ while not eof(f) do
 	TryDo(s[6] = '=', 'Load locale: "=" expected', true);
 	Delete(s, 1, 6);
 	case a of
-		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b)]:= s;
+		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
 		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
 		2: if (b >=0) and (b <= ord(High(TEventId))) then begin
 			TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);

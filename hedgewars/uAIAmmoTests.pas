@@ -45,6 +45,7 @@ type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: 
 
 const AmmoTests: array[TAmmoType] of TAmmoTest =
 			(
+			(proc: nil;              flags: 0), // amNothing
 			(proc: @TestGrenade;     flags: 0), // amGrenade
 			(proc: nil;              flags: 0), // amClusterBomb
 			(proc: @TestBazooka;     flags: 0), // amBazooka
