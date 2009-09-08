@@ -285,7 +285,7 @@ const	cMaxPower     = 1500;
 	gmAllStoppable = gm_Left or gm_Right or gm_Up or gm_Down or gm_Attack or gm_Precise;
 
 	cMaxSlotIndex       = 8;
-	cMaxSlotAmmoIndex   = 4;
+	cMaxSlotAmmoIndex   = 5;
 
 	ammoprop_Timerable    = $00000001;
 	ammoprop_Power        = $00000002;

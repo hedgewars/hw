@@ -123,7 +123,7 @@ with CurrentHedgehog^ do
 	dec(y, 33);
 	DrawSprite(sprAMSlotName, x, y, 0);
 	for i:= cMaxSlotIndex downto 0 do
-		if (Ammo^[i, 0].Count > 0) and (Ammo^[i, 0].AmmoType <> amNothing) then
+		if (Ammo^[i, 0].Count > 0) then
 			begin
 			if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
 			dec(y, 33);
@@ -131,7 +131,7 @@ with CurrentHedgehog^ do
 			DrawSprite(sprAMSlot, x, y, 0);
 			DrawSprite(sprAMSlotKeys, x + 2, y + 1, i);
 			t:= 0;
-			while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
+			while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) do
 				begin
 				l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
