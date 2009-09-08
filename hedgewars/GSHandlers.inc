@@ -1841,6 +1841,7 @@ Gear^.Timer:= Gear^.Health*10; // This is not seconds, but at least it is *some*
 if (Gear^.Health = 0) or ((Gear^.Message and gm_Attack) <> 0) then
 	begin
 	FollowGear:= Gear;
+    Gear^.RenderTimer:= false;
 	Gear^.doStep:= @doStepCakeDown
 	end
 end;
