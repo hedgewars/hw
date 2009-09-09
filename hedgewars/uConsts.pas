@@ -844,7 +844,6 @@ const	cMaxPower     = 1500;
 			NumberInCase: 3;
 			Ammo: (Propz: ammoprop_ForwMsgs or
 							ammoprop_AttackInMove or
-							ammoprop_DontHold or
 							ammoprop_AltAttack;
 					Count: 5;
 					NumPerTurn: 0;

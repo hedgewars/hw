@@ -107,7 +107,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
                     end
                 end;
         ammos[a]:= cnt
-        end
+        end else
+            ammos[a]:= AMMO_INFINITE
     end;
 
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
