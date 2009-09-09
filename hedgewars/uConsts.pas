@@ -134,6 +134,10 @@ type
 		X, Y: GLfloat;
 		end;
 			
+	TVertex2i = record
+		X, Y: GLint;
+		end;
+
 	TTexture = record
 			id: GLuint;
 			w, h: LongInt;
