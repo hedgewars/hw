@@ -123,7 +123,7 @@ with CurrentHedgehog^ do
 	dec(y, 33);
 	DrawSprite(sprAMSlotName, x, y, 0);
 	for i:= cMaxSlotIndex downto 0 do
-		if (Ammo^[i, 0].Count > 0) then
+		if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
 			begin
 			if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
 			dec(y, 33);
