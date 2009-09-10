@@ -56,7 +56,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "Shoppa"
 		<< "Basketball"
 		<< "Minefield";
-	
+
 	spNames = QStringList()
 		<< "name"             //  0
 		<< "fortsmode"        //  1
@@ -244,11 +244,11 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
 
 	QList<QVariant> newScheme = defaultScheme;
 	newScheme[0] = QVariant(tr("new"));
-	
+
 	schemes.insert(row, newScheme);
 
 	endInsertRows();
-	
+
 	return true;
 }
 
@@ -258,7 +258,7 @@ bool AmmoSchemeModel::removeRows(int row, int count, const QModelIndex & parent)
 		|| row < numberOfDefaultSchemes
 		|| row >= schemes.size())
 		return false;
-		
+
 	beginRemoveRows(parent, row, row);
 
 	schemes.removeAt(row);
@@ -283,12 +283,12 @@ QVariant AmmoSchemeModel::data(const QModelIndex &index, int role) const
 void AmmoSchemeModel::Save()
 {
 	fileConfig.beginWriteArray("schemes", schemes.size());
-	
+
 	for (int i = 0; i < schemes.size(); ++i) {
 		fileConfig.setArrayIndex(i);
 
 		QList<QVariant> scheme = schemes[i];
-		
+
 		for (int k = 0; k < scheme.size(); ++k)
 			fileConfig.setValue(spNames[k], scheme[k]);
 	}

@@ -147,7 +147,7 @@ void HWGame::SendTrainingConfig()
 		emit ErrorMessage(tr("Error reading training config file"));
 		return;
 	}
-	
+
 	QTextStream stream(&file);
 	while(!stream.atEnd())
 	{

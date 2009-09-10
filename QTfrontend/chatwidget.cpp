@@ -63,7 +63,7 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
 	acBan = new QAction(QAction::tr("Ban"), chatNicks);
 	connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
-	
+
 	chatNicks->insertAction(0, acInfo);
 }
 
@@ -81,9 +81,9 @@ void HWChatWidget::onChatString(const QString& str)
 	QString formattedStr = Qt::escape(str);
 	if (formattedStr.startsWith("***"))
 		formattedStr = QString("<font color=grey>%1</font>").arg(formattedStr);
-	
+
 	chatStrings.append(formattedStr);
-	
+
 	chatText->setHtml(chatStrings.join("<br>"));
 
 	chatText->moveCursor(QTextCursor::End);
@@ -93,9 +93,9 @@ void HWChatWidget::onServerMessage(const QString& str)
 {
 	if (chatStrings.size() > 250)
 		chatStrings.removeFirst();
-	
+
 	chatStrings.append("<hr>" + str + "<hr>");
-	
+
 	chatText->setHtml(chatStrings.join("<br>"));
 
 	chatText->moveCursor(QTextCursor::End);
@@ -163,7 +163,7 @@ void HWChatWidget::adminAccess(bool b)
 {
 	chatNicks->removeAction(acKick);
 	chatNicks->removeAction(acBan);
-	
+
 	if(b)
 	{
 		chatNicks->insertAction(0, acKick);

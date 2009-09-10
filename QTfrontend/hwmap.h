@@ -30,7 +30,7 @@
 class HWMap : public TCPBase
 {
   Q_OBJECT
-    
+
  public:
   HWMap();
   virtual ~HWMap();

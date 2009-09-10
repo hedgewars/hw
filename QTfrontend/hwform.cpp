@@ -78,9 +78,9 @@ HWForm::HWForm(QWidget *parent)
 	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
-	
+
 	namegen = new HWNamegen();
-    
+
 #ifdef __APPLE__
         //autoupdate
         AutoUpdater* updater;
@@ -89,7 +89,7 @@ HWForm::HWForm(QWidget *parent)
         if(updater && config->isAutoUpdateEnabled())
             updater->checkForUpdates();
 #endif
-    
+
 	UpdateTeamsLists();
 	UpdateWeapons();
 
@@ -135,7 +135,7 @@ HWForm::HWForm(QWidget *parent)
 	connect(ui.pageNet->BtnSpecifyServer, SIGNAL(clicked()), this, SLOT(NetConnect()));
 	connect(ui.pageNet->BtnNetSvrStart, SIGNAL(clicked()), this, SLOT(GoToNetServer()));
 	connect(ui.pageNet, SIGNAL(connectClicked(const QString &, quint16)), this, SLOT(NetConnectServer(const QString &, quint16)));
-	
+
 	connect(ui.pageNetServer->BtnBack, SIGNAL(clicked()), this, SLOT(GoBack()));
 	connect(ui.pageNetServer->BtnStart, SIGNAL(clicked()), this, SLOT(NetStartServer()));
 
@@ -236,7 +236,7 @@ void HWForm::UpdateWeapons()
 
 		for(int i = 0; i < names.size(); ++i)
 			(*it)->addItem(names[i], ui.pageSelectWeapon->pWeapons->getWeaponsString(names[i]));
-		
+
 		int pos = (*it)->findText("Default");
 		if (pos != -1) {
 			(*it)->setCurrentIndex(pos);
@@ -357,20 +357,20 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
 		QStringList tmNames = config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
-		
+
 		if(id == ID_PAGE_MULTIPLAYER) {
 		  curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
 		} else {
 		  curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
 		}
-		
+
 		QList<HWTeam> teamsList;
 		for(QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++) {
 		  HWTeam team(*it);
 		  team.LoadFromFile();
 		  teamsList.push_back(team);
 		}
-		
+
 		if(lastid == ID_PAGE_SETUP) { // _TEAM
 		  if (editedTeam) {
 		    curTeamSelWidget->addTeam(*editedTeam);
@@ -402,14 +402,14 @@ void HWForm::GoBack()
 	quint8 curid = ui.Pages->currentIndex();
 	ui.Pages->setCurrentIndex(id);
 	OnPageShown(id, curid);
-	
+
 	if (id == ID_PAGE_CONNECTING)
 		GoBack();
 	if (id == ID_PAGE_NETSERVER)
 		GoBack();
 	if ((!hwnet) && (id == ID_PAGE_ROOMSLIST))
 		GoBack();
-	
+
 	if ((!hwnet) || (!hwnet->isInRoom()))
 		if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
 			GoBack();
@@ -443,13 +443,13 @@ void HWForm::IntermediateSetup()
 {
 	quint8 id=ui.Pages->currentIndex();
 	TeamSelWidget* curTeamSelWidget;
-	
+
 	if(id == ID_PAGE_MULTIPLAYER) {
 		curTeamSelWidget = ui.pageMultiplayer->teamsSelect;
 	} else {
 		curTeamSelWidget = ui.pageNetGame->pNetTeamsWidget;
 	}
-	
+
 	QList<HWTeam> teams = curTeamSelWidget->getDontPlayingTeams();
 	QStringList tmnames;
 	for(QList<HWTeam>::iterator it = teams.begin(); it != teams.end(); ++it) {
@@ -544,9 +544,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		delete hwnet;
 		hwnet=0;
 	}
-	
+
 	ui.pageRoomsList->chatWidget->clear();
-	
+
 	hwnet = new HWNewNet(config, ui.pageNetGame->pGameCFG, ui.pageNetGame->pNetTeamsWidget);
 
 	GoToPage(ID_PAGE_CONNECTING);
@@ -567,7 +567,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageRoomsList, SLOT(setAdmin(bool)));
 	connect(hwnet, SIGNAL(adminAccess(bool)),
 		ui.pageRoomsList->chatWidget, SLOT(adminAccess(bool)));
-	
+
 	connect(hwnet, SIGNAL(serverMessage(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(onServerMessage(const QString&)));
 
@@ -653,7 +653,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 
 // disconnect
 	connect(hwnet, SIGNAL(Disconnected()), this, SLOT(ForcedDisconnect()), Qt::QueuedConnection);
-	
+
 	hwnet->Connect(hostName, port, nick);
 }
 
@@ -728,7 +728,7 @@ void HWForm::ForcedDisconnect()
 		hwnet = 0;
 		QMessageBox::warning(this, QMessageBox::tr("Network"),
 				QMessageBox::tr("Connection to server is lost"));
-	
+
 	}
 	if (ui.Pages->currentIndex() != ID_PAGE_NET) GoBack();
 }
@@ -766,7 +766,7 @@ void HWForm::GameStateChanged(GameState gameState)
 	switch(gameState) {
 		case gsStarted: {
 			Music(false);
-			if (wBackground) wBackground->stopAnimation();	
+			if (wBackground) wBackground->stopAnimation();
 			GoToPage(ID_PAGE_INGAME);
 			ui.pageGameStats->clear();
 			if (pRegisterServer)
@@ -779,7 +779,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		case gsFinished: {
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
-			if (wBackground) wBackground->startAnimation();	
+			if (wBackground) wBackground->startAnimation();
 			GoToPage(ID_PAGE_GAMESTATS);
 			if (hwnet) hwnet->gameFinished();
 			break;
@@ -789,7 +789,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
 				Music(ui.pageOptions->CBEnableMusic->isChecked());
-				if (wBackground) wBackground->startAnimation();	
+				if (wBackground) wBackground->startAnimation();
 				if (hwnet) hwnet->gameFinished();
 			}
 		};
@@ -899,7 +899,7 @@ void HWForm::NetGameMaster()
 	ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
 	ui.pageNetGame->pGameCFG->setEnabled(true);
 	ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
-	
+
 	if (hwnet)
 	{
 		// disconnect connections first to ensure their inexistance and not to connect twice
@@ -921,7 +921,7 @@ void HWForm::NetGameSlave()
 {
 	ui.pageNetGame->pGameCFG->setEnabled(false);
 	ui.pageNetGame->pNetTeamsWidget->setInteractivity(false);
-	
+
 	if (hwnet)
 	{
 		NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);

@@ -76,7 +76,7 @@ void PageGameStats::renderStats()
 		QPainterPath path;
 		if (hps.size())
 			path.moveTo(0, hps[0]);
-		
+
 		for(int t = 1; t < hps.size(); ++t)
 			path.lineTo(t, hps[t]);
 

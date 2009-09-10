@@ -68,7 +68,7 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
 		colorButt->setMaximumWidth(26);
 		colorButt->setMinimumHeight(26);
 		colorButt->setGeometry(0, 0, 26, 26);
-		
+
 		changeTeamColor();
 		connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
 		mainLayout.addWidget(colorButt);
@@ -88,7 +88,7 @@ void TeamShowWidget::setInteractivity(bool interactive)
 	if(m_team.isNetTeam()) {
 		butt->setEnabled(interactive);
 	}
-	
+
 	colorButt->setEnabled(interactive);
 	phhoger->setEnabled(interactive);
 }

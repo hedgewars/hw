@@ -67,11 +67,11 @@ BGWidget::BGWidget(QWidget * parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_NoSystemBackground, true);
 	sprite.load(":/res/Star.png");
-	
+
 	setAutoFillBackground(false);
 
 	for (int i = 0; i < SPRITE_MAX; i++) spritePositions[i] = new SpritePosition(this, sprite.height());
-	
+
 	for (int i = 0; i < 360; i++)
 	{
 		rotatedSprites[i] = new QImage(sprite.width(), sprite.height(), QImage::Format_ARGB32);

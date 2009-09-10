@@ -228,7 +228,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 	setTitle(QGroupBox::tr("Playing teams"));
 	framePlaying = new FrameTeams();
 	frameDontPlaying = new FrameTeams();
-	
+
 	QPalette p;
 	p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
 	addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);

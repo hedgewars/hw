@@ -57,14 +57,14 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	goToSchemePage->setText(tr("Edit schemes"));
 	GBoxOptionsLayout->addWidget(goToSchemePage, 1, 0, 1, 2);
 	connect(goToSchemePage, SIGNAL(clicked()), this, SIGNAL(goToSchemes()));
-	
+
 	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 2, 0);
 
 	WeaponsName = new QComboBox(GBoxOptions);
 	GBoxOptionsLayout->addWidget(WeaponsName, 2, 1);
-	
+
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
-	
+
 	QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
 	goToWeaponPage->setText(tr("Edit weapons"));
 	GBoxOptionsLayout->addWidget(goToWeaponPage, 3, 0, 1, 2);
@@ -160,7 +160,7 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 void GameCFGWidget::fullNetConfig()
 {
 	ammoChanged(WeaponsName->currentIndex());
-	
+
 	seedChanged(pMapContainer->getCurrentSeed());
 	templateFilterChanged(pMapContainer->getTemplateFilter());
 	themeChanged(pMapContainer->getCurrentTheme());
@@ -203,7 +203,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 			return;
 		}
 	}
-	
+
 	qWarning("Got bad config param from net");
 }
 
@@ -243,7 +243,7 @@ void GameCFGWidget::schemeChanged(int value)
 	int size = GameSchemes->model()->columnCount();
 	for(int i = 0; i < size; ++i)
 		sl << schemeData(i).toString();
-		
+
 	emit paramChanged("SCHEME", sl);
 }
 

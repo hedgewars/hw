@@ -42,7 +42,7 @@ SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget*
 	QHBoxLayout* hbLayout = new QHBoxLayout(this);
 	hbLayout->setSpacing(1);
 	hbLayout->setMargin(1);
-	
+
 	QLabel* lbl = new QLabel(this);
 	lbl->setPixmap(QPixmap::fromImage(getAmmoImage(iconNum)));
 	lbl->setMaximumWidth(30);
@@ -97,10 +97,10 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 	p2Layout = new QGridLayout(page2);
 	p2Layout->setSpacing(1);
 	p2Layout->setMargin(1);
-	
+
 	tbw->addTab(page1, tr("Weapon set"));
 	tbw->addTab(page2, tr("Probabilities"));
-	
+
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->addWidget(tbw);
 
@@ -113,11 +113,11 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 		SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), this);
 		weaponItems[i].append(swi);
 		p1Layout->addWidget(swi, j, k % 4);
-		
+
 		SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), this);
 		weaponItems[i].append(pwi);
 		p2Layout->addWidget(pwi, j, k % 4);
-		
+
 		++k;
 	}
 
@@ -149,12 +149,12 @@ void SelWeaponWidget::save()
 		impossible.exec();
 		return;
 	}
-	
+
 	if (m_name->text() == "") return;
-	
+
 	QString state1;
 	QString state2;
-	
+
 	for(int i = 0; i < m_numItems; ++i) {
 		twi::const_iterator it = weaponItems.find(i);
 		int num = it == weaponItems.end() ? 9 : it.value()[0]->getItemsNum(); // 9 is for 'skip turn'
@@ -192,7 +192,7 @@ void SelWeaponWidget::deleteWeaponsName()
 	}
 
 	QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Weapons"), QMessageBox::tr("Really delete this weapon set?"), QMessageBox::Ok | QMessageBox::Cancel);
-	
+
 	if (reallyDelete.exec() == QMessageBox::Ok) {
 		wconf->remove(curWeaponsName);
 		emit weaponsDeleted();

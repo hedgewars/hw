@@ -34,7 +34,7 @@ bool HWNetServer::StartServer(quint16 port)
 	QStringList params;
 	params << QString("--port=%1").arg(port);
 	params << "--dedicated=False";
-	
+
 	process.start(bindir->absolutePath() + "/hedgewars-server", params);
 
 	return process.waitForStarted(5000);

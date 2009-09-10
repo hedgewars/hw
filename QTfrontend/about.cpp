@@ -38,7 +38,7 @@ About::About(QWidget * parent) :
             "<style type=\"text/css\">"
             "a { color: #ffcc00; }"
 //            "a:hover { color: yellow; }"
-            "</style>" 
+            "</style>"
 			"<div align=\"center\"><h1>Hedgewars</h1>"
 			"<h3>" + QLabel::tr("Version") + " " + *cVersionString + "</h3>"
 			"<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p><br>" +
@@ -68,7 +68,7 @@ About::About(QWidget * parent) :
 			"Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
 			"Mac OS X port: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;"
 			"</p><h2>" +
-			
+
 			QLabel::tr("Art:") + "</h2>"
 			+ QString::fromUtf8(
 			"<p>Finn Brice &lt;<a href=\"mailto:tiyuri@gmail.com\">tiyuri@gmail.com</a>&gt;"
@@ -94,7 +94,7 @@ About::About(QWidget * parent) :
 			"<br>"
 			"Daniel Martin &lt;<a href=\"mailto:elhombresinremedio@gmail.com\">elhombresinremedio@gmail.com</a>&gt;"
 			"</p><h2>" +
-			
+
 			QLabel::tr("Translations:") + "</h2><p>"
 			+ QString::fromUtf8(
 			"Brazilian Portuguese: Romulo Fernandes Machado &lt;<a href=\"mailto:abra185@gmail.com\">abra185@gmail.com</a>&gt;<br>"
@@ -114,7 +114,7 @@ About::About(QWidget * parent) :
 			"Swedish: Niklas Grahn &lt;<a href=\"mailto:raewolusjoon@yaoo.com\">raewolusjoon@yaoo.com</a>&gt;<br>"
 			"Ukrainian: Eugene V. Lyubimkin &lt;<a href=\"mailto:jackyf.devel@gmail.com\">jackyf.devel@gmail.com</a>&gt;"
 			"</p><h2>") +
-			
+
 			QLabel::tr("Special thanks:") + "</h2><p>"
 			"Aleksey Andreev &lt;<a href=\"mailto:blaknayabr@gmail.com\">blaknayabr@gmail.com</a>&gt;<br>"
 			"Aleksander Rudalev &lt;<a href=\"mailto:alexv@pomorsu.ru\">alexv@pomorsu.ru</a>&gt;<br>"

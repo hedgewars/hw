@@ -31,10 +31,10 @@ FrameTeams::FrameTeams(QWidget* parent) :
 	newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
 	setPalette(newPalette);
 	setAutoFillBackground(true);
-	
+
 	mainLayout.setSpacing(1);
 	mainLayout.setContentsMargins(4, 4, 4, 4);
-	
+
 	availableColors.push_back(*color1);
 	availableColors.push_back(*color2);
 	availableColors.push_back(*color3);

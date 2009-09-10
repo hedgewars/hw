@@ -75,7 +75,7 @@ void HWNewNet::Disconnect()
 	if (m_game_connected)
 		RawSendNet(QString("QUIT%1%2").arg(delimeter).arg("User quit"));
 	m_game_connected = false;
-	
+
 	NetSocket.disconnectFromHost();
 }
 
@@ -86,7 +86,7 @@ void HWNewNet::CreateRoom(const QString & room)
 		qWarning("Illegal try to create room!");
 		return;
 	}
-	
+
 	RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
 	isChief = true;
 }
@@ -98,7 +98,7 @@ void HWNewNet::JoinRoom(const QString & room)
 		qWarning("Illegal try to join room!");
 		return;
 	}
-	
+
 	RawSendNet(QString("JOIN_ROOM%1%2").arg(delimeter).arg(room));
 	isChief = false;
 }
@@ -179,7 +179,7 @@ void HWNewNet::OnDisconnect()
 void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 {
 	emit Disconnected();
-	
+
 	switch (socketError) {
 		case QAbstractSocket::RemoteHostClosedError:
 			break;
@@ -305,7 +305,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		return;
 	}
-	
+
 	if (lst[0] == "NOT_READY") {
 		if(lst.size() < 2)
 		{
@@ -363,7 +363,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Bad JOINED message");
 			return;
 		}
-		
+
 		for(int i = 1; i < lst.size(); ++i)
 		{
 			if (lst[i] == mynick)
@@ -386,7 +386,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			qWarning("Net: Bad JOINED message");
 			return;
 		}
-		
+
 		for(int i = 1; i < lst.size(); ++i)
 		{
 			if (lst[i] == mynick)

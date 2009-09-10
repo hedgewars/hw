@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     }
 
 	app.setStyle(new QPlastiqueStyle);
-	
+
 	QDateTime now = QDateTime::currentDateTime();
 	QDateTime zero;
 	srand(now.secsTo(zero));
@@ -212,13 +212,13 @@ int main(int argc, char *argv[])
 			"QComboBox::down-arrow {"
 				"image: url(\":/res/dropdown.png\");"
 			"}"
-			
+
 			"VertScrArea {"
 				"background-image: url(\":/res/panelbg.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
 			"}"
-			
+
 			"IconedGroupBox {"
 				"border-radius: 16px;"
 				"padding: 2px;"
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
 			"QCheckBox::indicator:unchecked{"
 				"image: url(\":/res/unchecked.png\");"
 				"}"
-			
+
 			".QWidget{"
 				"background: transparent;"
 				"}"
@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 			"QToolTip{"
 				"background-color: #0d0544;"
 			"}"
-			
+
 			":disabled{"
 				"color: #a0a0a0;"
 			"}"
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
 	cfgdir->setPath(cfgdir->homePath());
 #ifdef __APPLE__
 
-    
+
 	if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
 	{
 		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 	mapList = new QStringList(tmpdir.entryList(QStringList("*")));
 
 	HWForm *Form = new HWForm();
-    
+
 
 	Form->show();
 	return app.exec();

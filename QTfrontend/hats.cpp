@@ -43,7 +43,7 @@ HatsModel::HatsModel(QObject* parent) :
 
 		QPixmap tmppix(32, 37);
 		tmppix.fill(QColor(Qt::transparent));
-		
+
 		QPainter painter(&tmppix);
 		painter.drawPixmap(QPoint(0, 5), hhpix);
 		painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));

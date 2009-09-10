@@ -25,7 +25,7 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 
 	pbMain = new QPushButton(this);
 	pbMain->setCheckable(true);
-	
+
 	QPixmap pm(":/res/btnDisabled.png");
 	QPainter * painter = new QPainter();
 

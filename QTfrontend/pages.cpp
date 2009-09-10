@@ -62,7 +62,7 @@
 #include "hwform.h"
 #include "SDLs.h"
 
-PageMain::PageMain(QWidget* parent) : 
+PageMain::PageMain(QWidget* parent) :
   AbstractPage(parent)
 {
     if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
@@ -111,7 +111,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	BtnTeamDiscard = addButton(":/res/Exit.png", pageLayout, 1, 0, true);
 	BtnTeamSave = addButton(":/res/Save.png", pageLayout, 1, 2, true);;
 	BtnTeamSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
-	
+
 	QHBoxLayout * page1Layout = new QHBoxLayout(page1);
 	page1Layout->setAlignment(Qt::AlignTop);
 	QGridLayout * page2Layout = new QGridLayout(page2);
@@ -123,14 +123,14 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	page1Layout->addLayout(vbox1);
 	page1Layout->addLayout(vbox2);
 	page1Layout->addLayout(vbox3);
-	
+
 	GBoxHedgehogs = new QGroupBox(this);
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
 	GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 	QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
 	signalMapper = new QSignalMapper(this);
-	
+
 	HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
 	for(int i = 0; i < 8; i++)
 	{
@@ -146,7 +146,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		HHNameEdit[i]->setMaxLength(64);
 		HHNameEdit[i]->setMinimumWidth(120);
 		GBHLayout->addWidget(HHNameEdit[i], i, 1);
-		
+
 		randButton[i] = addButton(":/res/dice.png", GBHLayout, i, 3, true);
 
 		connect(randButton[i], SIGNAL(clicked()), signalMapper, SLOT(map()));
@@ -167,7 +167,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	TeamNameEdit->setMaxLength(64);
 	GBTLayout->addWidget(TeamNameEdit);
 	vbox2->addWidget(GBoxTeam);
-	
+
 	CBTeamLvl = new QComboBox(GBoxTeam);
 	CBTeamLvl->setIconSize(QSize(48, 48));
 	CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
@@ -177,7 +177,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 				QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
 				);
 	GBTLayout->addWidget(CBTeamLvl);
-	
+
 	CBGrave = new QComboBox(GBoxTeam);
 	CBGrave->setMaxCount(65535);
 	CBGrave->setIconSize(QSize(32, 32));
@@ -222,7 +222,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
 	connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 	CBFort->addItems(tmpdir.entryList(QStringList("*L.png")).replaceInStrings(QRegExp("^(.*)L\\.png"), "\\1"));
-	
+
 	tmpdir.cd("../Graphics/Graves");
 	QStringList list = tmpdir.entryList(QStringList("*.png"));
 	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
@@ -295,7 +295,7 @@ void PageEditTeam::testSound()
 	QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
 	if (list.size()) {
 		sound = openal_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		openal_playsound(sound);										   
+		openal_playsound(sound);
 	}
 }
 
@@ -354,10 +354,10 @@ PageOptions::PageOptions(QWidget* parent) :
 		BtnEditTeam = addButton(tr("Edit team"), layout1, 1);
 		layout1->setStretchFactor(BtnNewTeam, 100);
 		layout1->setStretchFactor(BtnEditTeam, 100);
-		
+
 		QHBoxLayout * layout2 = new QHBoxLayout;
 		GBTlayout->addLayout(layout2);
-		
+
 		labelNN = new QLabel(teamsBox);
 		labelNN->setText(QLabel::tr("Net nick"));
 		layout2->addWidget(labelNN);
@@ -366,7 +366,7 @@ PageOptions::PageOptions(QWidget* parent) :
 		editNetNick->setMaxLength(20);
 		editNetNick->setText(QLineEdit::tr("unnamed"));
 		layout2->addWidget(editNetNick);
-		
+
 		gbTBLayout->addWidget(teamsBox, 0, 0);
 	}
 
@@ -394,7 +394,7 @@ PageOptions::PageOptions(QWidget* parent) :
 
 		QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
 		QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
-            
+
 		QLabel * resolution = new QLabel(AGGroupBox);
 		resolution->setText(QLabel::tr("Resolution"));
 		GBAreslayout->addWidget(resolution);
@@ -464,7 +464,7 @@ PageOptions::PageOptions(QWidget* parent) :
 		CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
 		GBAlayout->addWidget(CBAutoUpdate);
 #endif
-            
+
             fpsedit = new FPSEdit(AGGroupBox);
             GBAfpslayout->addWidget(fpsedit);
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 2, 1);
@@ -491,7 +491,7 @@ PageNet::PageNet(QWidget* parent) : AbstractPage(parent)
 	pageLayout->addWidget(BtnNetSvrStart, 4, 2);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
-	
+
 	ConnGroupBox = new QGroupBox(this);
 	ConnGroupBox->setTitle(QGroupBox::tr("Net game"));
 	pageLayout->addWidget(ConnGroupBox, 2, 0, 1, 3);
@@ -636,7 +636,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	pageLayout->addLayout(bottomLayout, 3, 0, 1, 2);
 
 	BtnBack = addButton(":/res/Exit.png", bottomLayout, 0, true);
-	
+
 	BtnGo = new QPushButton(this);
 	BtnGo->setToolTip(QPushButton::tr("Ready"));
 	BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
@@ -655,7 +655,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	//menu->addAction(startGame);
 	menu->addAction(restrictJoins);
 	menu->addAction(restrictTeamAdds);
-	
+
 	BtnMaster->setMenu(menu);
 
 	BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
@@ -710,11 +710,11 @@ PageSinglePlayer::PageSinglePlayer(QWidget* parent) : AbstractPage(parent)
 	BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
 	BtnMultiplayer->setToolTip(tr("Multiplayer (play a hotseat game against your friends, or AI teams)"));
 	topLine->addStretch();
-	
+
 
 	BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 0, true);
 	BtnTrainPage->setToolTip(tr("Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT"));
-	
+
 	BtnBack = addButton(":/res/Exit.png", bottomLine, 0, true);
 	bottomLine->addStretch();
 
@@ -744,7 +744,7 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
-	
+
 	pWeapons = new SelWeaponWidget(cAmmoNumber, this);
 	pageLayout->addWidget(pWeapons, 0, 0, 1, 4);
 
@@ -773,7 +773,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomName = new QLineEdit(this);
 	roomName->setMaxLength(60);
 	pageLayout->addWidget(roomName, 0, 0);
-	
+
 	roomsList = new QTableWidget(this);
 	roomsList->setColumnCount(3);
 	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -782,7 +782,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	roomsList->setAlternatingRowColors(true);
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	pageLayout->setRowStretch(2, 100);
-	
+
 	chatWidget = new HWChatWidget(this);
 	pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
 	pageLayout->setRowStretch(4, 350);
@@ -790,7 +790,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	BtnCreate = addButton(tr("Create"), pageLayout, 0, 1);
 	BtnJoin = addButton(tr("Join"), pageLayout, 1, 1);
 	BtnRefresh = addButton(tr("Refresh"), pageLayout, 3, 1);
-	
+
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 5, 0, true);
 	BtnAdmin = addButton(tr("Admin features"), pageLayout, 5, 1);
 
@@ -819,7 +819,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
    roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
    roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
 
-	
+
 	if (list.size() % 3)
 		return;
 
@@ -880,7 +880,7 @@ PageScheme::PageScheme(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	QGroupBox * gb = new QGroupBox(this);
-	
+
 	QGridLayout * gl = new QGridLayout();
 	gb->setLayout(gl);
 	QSizePolicy sp;
@@ -888,7 +888,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	sp.setHorizontalPolicy(QSizePolicy::Expanding);
 
 	pageLayout->addWidget(gb, 1,0,13,4);
-	
+
 	gbGameModes = new QGroupBox(QGroupBox::tr("Game Modifiers"), gb);
 	gbBasicSettings = new QGroupBox(QGroupBox::tr("Basic Settings"), gb);
 
@@ -903,13 +903,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	gbBasicSettings->setSizePolicy(sp);
 	gl->addWidget(gbGameModes,0,0,1,3,Qt::AlignTop);
 	gl->addWidget(gbBasicSettings,0,3,1,3,Qt::AlignTop);
-	
+
 	QGridLayout * glGMLayout = new QGridLayout(gbGameModes);
 	QGridLayout * glBSLayout = new QGridLayout(gbBasicSettings);
 	gbGameModes->setLayout(glGMLayout);
 	gbBasicSettings->setLayout(glBSLayout);
 	// Left
-	
+
 	TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts.png");
 	TBW_mode_Forts->setText(ToggleButtonWidget::tr("Fort Mode"));
     TBW_mode_Forts->setToolTip(tr("Defend your fort and destroy the opponents, two team colours max!"));
@@ -967,7 +967,7 @@ PageScheme::PageScheme(QWidget* parent) :
 
 	// Right
 	QLabel * l;
-	
+
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Damage Modifier"));
 	l->setWordWrap(true);
@@ -976,7 +976,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconDamage.png"));
 	glBSLayout->addWidget(l,0,1,1,1);
-	
+
 	SB_DamageModifier = new QSpinBox(gbBasicSettings);
 	SB_DamageModifier->setRange(10, 300);
 	SB_DamageModifier->setValue(100);
@@ -991,13 +991,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconTime.png"));
 	glBSLayout->addWidget(l,1,1,1,1);
-	
+
 	SB_TurnTime = new QSpinBox(gbBasicSettings);
 	SB_TurnTime->setRange(1, 99);
 	SB_TurnTime->setValue(45);
 	SB_TurnTime->setSingleStep(15);
 	glBSLayout->addWidget(SB_TurnTime,1,2,1,1);
-	
+
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Initial Health"));
 	l->setWordWrap(true);
@@ -1006,13 +1006,13 @@ PageScheme::PageScheme(QWidget* parent) :
 	l->setFixedSize(32,32);
 	l->setPixmap(QPixmap(":/res/iconHealth.png"));
 	glBSLayout->addWidget(l,2,1,1,1);
-	
+
 	SB_InitHealth = new QSpinBox(gbBasicSettings);
 	SB_InitHealth->setRange(50, 200);
 	SB_InitHealth->setValue(100);
 	SB_InitHealth->setSingleStep(25);
 	glBSLayout->addWidget(SB_InitHealth,2,2,1,1);
-	
+
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Sudden Death Timeout"));
 	l->setWordWrap(true);
@@ -1027,7 +1027,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	SB_SuddenDeath->setValue(15);
 	SB_SuddenDeath->setSingleStep(3);
 	glBSLayout->addWidget(SB_SuddenDeath,3,2,1,1);
-	
+
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Crate Drops"));
 	l->setWordWrap(true);
@@ -1076,7 +1076,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	l->setText(QLabel::tr("Scheme Name:"));
 
 	LE_name = new QLineEdit(this);
-	
+
 	gl->addWidget(LE_name,14,1,1,5);
 	gl->addWidget(l,14,0,1,1);
 
@@ -1099,7 +1099,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
 {
 	mapper->setModel(model);
 	selectScheme->setModel(model);
-	
+
 	mapper->addMapping(LE_name, 0);
 	mapper->addMapping(TBW_mode_Forts->button(), 1);
 	mapper->addMapping(TBW_teamsDivide->button(), 2);

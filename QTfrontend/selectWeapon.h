@@ -45,7 +45,7 @@ public:
 class SelWeaponWidget : public QFrame
 {
   Q_OBJECT
-  
+
  public:
   SelWeaponWidget(int numItems, QWidget* parent=0);
   QString getWeaponsString(const QString& name) const;

@@ -100,7 +100,7 @@ private slots:
 	void NetGameChangeStatus(bool isMaster);
 	void NetGameMaster();
 	void NetGameSlave();
-	
+
 	void AsyncNetServerStart();
 	void NetLeftRoom();
 	void selectFirstNetScheme();
@@ -112,7 +112,7 @@ private:
 	void closeEvent(QCloseEvent *event);
 	void CustomizePalettes();
 	void resizeEvent(QResizeEvent * event);
-	
+
 	enum PageIDs {
 		ID_PAGE_SETUP_TEAM      =  0,
 		ID_PAGE_SETUP           =  1,

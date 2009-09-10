@@ -224,7 +224,7 @@ public:
 #ifdef __APPLE__
     QCheckBox *CBAutoUpdate;
 #endif
-    
+
 	FPSEdit *fpsedit;
 	QPushButton *BtnSaveOptions;
 	QLabel *labelNN;
@@ -292,7 +292,7 @@ public:
 	QPushButton *BtnGo;
 	QPushButton *BtnMaster;
 	QPushButton *BtnStart;
-	
+
 	QAction * restrictJoins;
 	QAction * restrictTeamAdds;
 
@@ -381,7 +381,7 @@ public:
 	QPushButton * BtnRefresh;
 	QPushButton * BtnAdmin;
 	HWChatWidget * chatWidget;
-	
+
 public slots:
 	void setRoomsList(const QStringList & list);
 	void setAdmin(bool);
@@ -390,7 +390,7 @@ private slots:
 	void onCreateClick();
 	void onJoinClick();
 	void onRefreshClick();
-	
+
 signals:
 	void askForCreateRoom(const QString &);
 	void askForJoinRoom(const QString &);

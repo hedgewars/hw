@@ -48,12 +48,12 @@ public:
 	bool isFrontendEffects() const;
 	bool isFrontendFullscreen() const;
 	void resizeToConfigValues();
-    
+
 #ifdef __APPLE__
     //autoupdate
     bool isAutoUpdateEnabled();
 #endif
-    
+
  signals:
 	void frontendFullscreen(bool value);
 

@@ -42,12 +42,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 	hhSmall.load(":/res/hh_small.png");
 	hhLimit = 18;
     templateFilter = 0;
-	
+
 	mainLayout.setContentsMargins(QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
 		1,
 		QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
 		QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
-	
+
 	imageButt = new QPushButton(this);
 	imageButt->setObjectName("imageButt");
 	imageButt->setFixedSize(256 + 6, 128 + 6);
@@ -83,7 +83,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 			mapCfgFile.close();
 		}
 	}
-	
+
 	connect(chooseMap, SIGNAL(currentIndexChanged(int)), this, SLOT(mapChanged(int)));
 	mainLayout.addWidget(chooseMap, 1, 1);
 
@@ -111,7 +111,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
 	//gbThemes->setStyleSheet("padding: 0px"); // doesn't work - stylesheet is set with icon
 	mainLayout.addWidget(gbThemes, 0, 2, 3, 1);
-	
+
 	QVBoxLayout * gbTLayout = new QVBoxLayout(gbThemes);
 	gbTLayout->setContentsMargins(0, 0, 0 ,0);
 	gbTLayout->setSpacing(0);
@@ -139,10 +139,10 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 			"}"
 		)
 	);
- 
+
 	gbTLayout->addWidget(lwThemes);
 	lwThemes->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
-	
+
 	mainLayout.setSizeConstraint(QLayout::SetFixedSize);//SetMinimumSize
 
 	setRandomSeed();
@@ -212,7 +212,7 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
 {
 	QPixmap finalImage = QPixmap(image.size());
 	finalImage.fill(QColor(0, 0, 0, 0));
-	
+
 	QPainter p(&finalImage);
 	p.drawPixmap(image.rect(), image);
 	//p.setPen(QColor(0xf4,0x9e,0xe9));
@@ -297,7 +297,7 @@ void HWMapContainer::setMap(const QString & map)
 		changeImage();
 		return;
 	}
-	
+
 	int id = chooseMap->findText(map);
 	if(id > 0) {
 		if (pMap)

@@ -50,7 +50,7 @@ public slots:
 	void GameStats(char type, const QString & info);
 	void clear();
 	void renderStats();
-	
+
 private:
 	void AddStatText(const QString & msg);
 

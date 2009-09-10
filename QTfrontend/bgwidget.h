@@ -41,7 +41,7 @@ private:
 	float fY;
 	float fXMov;
 	float fYMov;
-	int iAngle; 
+	int iAngle;
 	QWidget * wParent;
 	int iSpriteHeight;
 public:
