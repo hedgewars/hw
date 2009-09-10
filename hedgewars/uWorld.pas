@@ -195,10 +195,10 @@ WaterColorArray[2].a := Alpha;
 WaterColorArray[3].a := Alpha;
 
 lw:= cScreenWidth / cScaleFactor;
-lh:= cScreenHeight * 2 / cScaleFactor;
+lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
 // Water
-r.y:= WorldDy + cWaterLine + 16;
-if r.y < cScreenHeight * 2 / cScaleFactor then
+r.y:= WorldDy + cWaterLine;
+if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
 	begin
 	if r.y < 0 then r.y:= 0;
 
