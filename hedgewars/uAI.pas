@@ -290,7 +290,7 @@ begin
 if ((Me^.State and (gstAttacking or gstHHJumping or gstMoving)) <> 0)
    or isInMultiShoot then exit;
 
-//DeleteCI(Me); // this might break demo 
+//DeleteCI(Me); // this might break demo
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;
 

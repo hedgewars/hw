@@ -100,7 +100,7 @@ Gear^.X:= Gear^.X + Gear^.dX * cDrownSpeed;
 if hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear);
 // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
 if (GameTicks and $1F) = 0 then
-    if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then 
+    if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
         AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
     else if Random(12) = 0 then
         AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
@@ -496,14 +496,14 @@ if (HHGear^.Message and gm_Attack) <> 0 then
     end
 else
     if (GameTicks mod 32) = 0 then
-        if (GameTicks mod 4096) < 2048 then 
+        if (GameTicks mod 4096) < 2048 then
             begin
             if(HHGear^.Angle + 1 <= cMaxAngle) then inc(HHGear^.Angle)
             end
         else
             if(HHGear^.Angle - 1 >= 0) then dec(HHGear^.Angle);
 
-if (TurnTimeLeft > 0) then 
+if (TurnTimeLeft > 0) then
     dec(TurnTimeLeft)
 else
     begin
@@ -677,12 +677,12 @@ if Gear^.Timer mod cHHStepTicks = 0 then
 		begin
 		HHGear^.State:= HHGear^.State and not gstAttacking;
 		prevX:= hwRound(HHGear^.X);
-	
-// why the call to HedgehogStep then a further increment of X?	
-        if (prevX = hwRound(HHGear^.X)) and 
+
+// why the call to HedgehogStep then a further increment of X?
+        if (prevX = hwRound(HHGear^.X)) and
            CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y), COLOR_INDESTRUCTIBLE) then HedgehogStep(HHGear);
-		
-        if (prevX = hwRound(HHGear^.X)) and 
+
+        if (prevX = hwRound(HHGear^.X)) and
            CheckLandValue(hwRound(HHGear^.X + SignAs(_6, HHGear^.dX)), hwRound(HHGear^.Y), COLOR_INDESTRUCTIBLE) then HHGear^.X:= HHGear^.X + SignAs(_1, HHGear^.dX);
 		HHGear^.State:= HHGear^.State or gstAttacking
 		end;
@@ -759,7 +759,7 @@ if (Gear^.Message and gm_Attack) <> 0 then
 	Gear^.Y:= HHGear^.Y;
 
 	ApplyAngleBounds(PHedgehog(Gear^.Hedgehog)^, amRope);
-	
+
 	Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX);
 	Gear^.dY:= -AngleCos(HHGear^.Angle);
 	Gear^.Friction:= _450;
@@ -852,7 +852,7 @@ Gear^.dY:= mdY;
 	len:= _1 / Distance(ropeDx, ropeDy); // old rope pos
 	nx:= ropeDx * len;
 	ny:= ropeDy * len;
-	
+
 	len:= Gear^.Elasticity - _0_3x70;
 	while len > _3 do
 			begin
@@ -873,7 +873,7 @@ Gear^.dY:= mdY;
 					X:= hwRound(Gear^.X);
 					Y:= hwRound(Gear^.Y);
 					end;
-				
+
 				Gear^.X:= Gear^.X + nx * len;
 				Gear^.Y:= Gear^.Y + ny * len;
 				inc(RopePoints.Count);
@@ -955,7 +955,7 @@ var HHGear: PGear;
 		end;
 	ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
 	end;
-	
+
 begin
 Gear^.X:= Gear^.X - Gear^.dX;
 Gear^.Y:= Gear^.Y - Gear^.dY;
@@ -966,7 +966,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 	begin
 	if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then SetLittle(HHGear^.dX);
 	if HHGear^.dY.isNegative and TestCollisionYwithGear(HHGear, -1) then HHGear^.dY:= _0;
-	
+
 	HHGear^.X:= HHGear^.X + HHGear^.dX;
 	Gear^.X:= Gear^.X + HHGear^.dX;
 
@@ -993,9 +993,9 @@ if (HHGear^.State and gstMoving) <> 0 then
 				Gear^.Elasticity:= tt;
 				Gear^.doStep:= @doStepRopeWork;
 				with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
-				
+
 				RemoveFromAmmo;
-				
+
 				tt:= _0;
 				exit
 				end;
@@ -1017,7 +1017,7 @@ if (Gear^.State and gstCollision) <> 0 then
 		with HHGear^ do State:= State and not (gstAttacking or gstHHJumping or gstHHHJump);
 
 		RemoveFromAmmo;
-		
+
 		exit
 		end;
 
@@ -1152,7 +1152,7 @@ if Gear^.Damage > 0 then
 	y:= hwRound(Gear^.Y);
 	k:= Gear^.Kind;
 	DeleteGear(Gear); // <-- delete gear!
-	
+
 	if k = gtCase then
 		begin
 		doMakeExplosion(x, y, 25, EXPLAutoSound);
@@ -1240,10 +1240,10 @@ if not TestCollisionYwithGear(Gear, 1) then
 
 	Gear^.dY:= Gear^.dY + cGravity;
 	if hwAbs(Gear^.dY) > _0_2 then Gear^.dY:= Gear^.dY * _0_995;
-	
+
 	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 640;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
-	
+
 	if (hwRound(Gear^.Y) > cWaterLine) then
 		begin
 		for i:= 0 to 3 do
@@ -1305,7 +1305,7 @@ if not (HHGear^.dY.isNegative) then
 	exit
 	end;
 
-if CheckLandValue(hwRound(HHGear^.X), hwRound(HHGear^.Y + HHGear^.dY + SignAs(_6,Gear^.dY)), COLOR_INDESTRUCTIBLE) then 
+if CheckLandValue(hwRound(HHGear^.X), hwRound(HHGear^.Y + HHGear^.dY + SignAs(_6,Gear^.dY)), COLOR_INDESTRUCTIBLE) then
    HHGear^.Y:= HHGear^.Y + HHGear^.dY
 end;
 
@@ -1639,7 +1639,7 @@ if (Gear^.State and gstCollision) <> 0 then
 		dY:= Gear^.dY + (GetRandom - _0_5) * _0_03;
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
 		end;
-	
+
 	DeleteGear(Gear);
 	exit
 	end;
@@ -1679,16 +1679,16 @@ inc(upd);
 if upd > 3 then
 	begin
 	if Gear^.Health < 1500 then Gear^.Pos:= 2;
-	
+
 	AmmoShove(Gear, 30, 40);
-	
+
 	DrawTunnel(HHGear^.X - HHGear^.dX * 10,
 			HHGear^.Y - _2 - HHGear^.dY * 10 + hwAbs(HHGear^.dY) * 2,
 			HHGear^.dX,
 			HHGear^.dY,
 			20 + cHHRadius * 2,
 			cHHRadius * 2 + 6);
-	
+
 	upd:= 0
 	end;
 
@@ -1792,12 +1792,12 @@ var xx, yy, xxn, yyn: LongInt;
 	begin
 	Gear^.Angle:= (LongInt(Gear^.Angle) + 4 - dA) mod 4
 	end;
-	
+
 	procedure NextAngle;
 	begin
 	Gear^.Angle:= (LongInt(Gear^.Angle) + 4 + dA) mod 4
 	end;
-	
+
 begin
 AllInactive:= false;
 
@@ -2045,7 +2045,7 @@ if ((Gear^.State and gstCollision) <> 0) then begin //hit
 		DeleteGear(Gear);
 		exit;
 		end;
-	
+
 	Gear^.doStep:= @doStepDrillDrilling;
 	dec(Gear^.Timer)
 	end
@@ -2064,12 +2064,12 @@ begin
 		begin
 		rx:= rndSign(getRandom * _0_1);
 		ry:= rndSign(getRandom * _0_1);
-		
+
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtBall, 0,
 				SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx,
 				AngleCos(HHGear^.Angle) * ( - _0_8) + ry,
 				0);
-		
+
 		PlaySound(sndGun, false, nil);
 		end;
 
@@ -2177,7 +2177,7 @@ if ((Gear^.State and gstCollision) <> 0)
 	StopSound(sndRCPlane);
 	StopSound(sndRideOfTheValkyries);
 	ResumeMusic;
-	
+
 	if ((Gear^.State and gstCollision) <> 0) then
 		begin
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
@@ -2243,7 +2243,7 @@ if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     Gear^.Timer:= GameTicks
     end;
 
-// erases them all at once :-/ 
+// erases them all at once :-/
 if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
     begin
     Gear^.Timer:= 0;
@@ -2251,7 +2251,7 @@ if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
     end;
 
 if Gear^.Health < 0 then Gear^.Health:= 0;
-if (GameTicks and $3F) = 0 then 
+if (GameTicks and $3F) = 0 then
        begin
 //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
@@ -2260,7 +2260,7 @@ if (GameTicks and $3F) = 0 then
 
 if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
-HHGear^.State:= HHGear^.State or gstMoving; 
+HHGear^.State:= HHGear^.State or gstMoving;
 
 Gear^.X:= HHGear^.X;
 Gear^.Y:= HHGear^.Y;
@@ -2272,7 +2272,7 @@ if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMo
 if  (Gear^.Health = 0)
     or (HHGear^.Damage <> 0)
 	or CheckGearDrowning(HHGear)
-    or (TurnTimeLeft = 0) 
+    or (TurnTimeLeft = 0)
     // allow brief ground touches - to be fair on this, might need another counter
     or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(HHGear, 1))
 	or ((Gear^.Message and gm_Attack) <> 0) then

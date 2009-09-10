@@ -27,7 +27,7 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
-uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, 
+uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -162,7 +162,7 @@ repeat
 	inc(y, 24);
 	x1:= gX;
 	x2:= gX;
-	
+
 	while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
 
 	i:= x1 - 12;
@@ -170,7 +170,7 @@ repeat
 		dec(x1, 2);
 		k:= CountNonZeroz(x1, y)
 	until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
-	
+
 	inc(x1, 2);
 	if k = 16 then
 		begin
@@ -191,7 +191,7 @@ if x1 > 0 then
 	Result:= true;
 	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
 	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
-	
+
 	rr.x:= x1;
 	while rr.x < x2 do
 		begin
@@ -199,7 +199,7 @@ if x1 > 0 then
 		inc(rr.x, tmpsurf^.w);
 		end;
 	SDL_FreeSurface(tmpsurf);
-	
+
 	AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
 	end else Result:= false;
 

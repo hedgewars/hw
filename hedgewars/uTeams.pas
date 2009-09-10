@@ -18,7 +18,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, 
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -33,7 +33,7 @@ type PHHAmmo = ^THHAmmo;
 	PHedgehog = ^THedgehog;
 	PTeam     = ^TTeam;
 	PClan     = ^TClan;
-	
+
 	THedgehog = record
 			Name: string[MAXNAMELEN];
 			Gear: PGear;
@@ -52,7 +52,7 @@ type PHHAmmo = ^THHAmmo;
 			stats: TStatistics;
 			Hat: String;
 			end;
-			
+
 	TTeam = record
 			Clan: PClan;
 			TeamName: string[MAXNAMELEN];
@@ -75,7 +75,7 @@ type PHHAmmo = ^THHAmmo;
 			hasGone: boolean;
 			voicepack: PVoicepack;
 			end;
-			
+
 	TClan = record
 			Color: Longword;
 			Teams: array[0..Pred(cMaxTeams)] of PTeam;
@@ -150,7 +150,7 @@ if AliveCount = 0 then
 					with Hedgehogs[i] do
 						if (Gear <> nil) then
 							Gear^.State:= gstWinner;
-		
+
 		AddCaption(s, $FFFFFF, capgrpGameState);
 		SendStat(siGameResult, s);
 		AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
@@ -295,7 +295,7 @@ end;
 
 procedure RecountAllTeamsHealth;
 var t: LongInt;
-begin 
+begin
 for t:= 0 to Pred(TeamsCount) do
     RecountTeamHealth(TeamsArray[t])
 end;
@@ -344,7 +344,7 @@ begin
 with team^ do
 	begin
 	NewTeamHealthBarWidth:= 0;
-	
+
 	if not hasGone then
 		for i:= 0 to cMaxHHIndex do
 			if Hedgehogs[i].Gear <> nil then
@@ -384,7 +384,7 @@ with TeamsArray[t]^ do
 	AddChatString('** '+ TeamName + ' is gone');
 	hasGone:= true
 	end;
-	
+
 RecountTeamHealth(TeamsArray[t])
 end;
 

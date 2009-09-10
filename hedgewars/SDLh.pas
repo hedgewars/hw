@@ -219,7 +219,7 @@ type PSDL_Rect = ^TSDL_Rect;
                           state: Byte;
                           keysym: TSDL_KeySym;
                           end;
-                          
+
      TSDL_GLattr = ( SDL_GL_RED_SIZE,
                      SDL_GL_GREEN_SIZE,
                      SDL_GL_BLUE_SIZE,
@@ -239,7 +239,7 @@ type PSDL_Rect = ^TSDL_Rect;
                      SDL_GL_RETAINED_BACKING,
                      SDL_GL_CONTEXT_MAJOR_VERSION,
                      SDL_GL_CONTEXT_MINOR_VERSION );
-	  
+
 {$IFDEF SDL13}
      TSDL_MouseMotionEvent = record
                              type_: byte;

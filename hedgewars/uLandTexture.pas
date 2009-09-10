@@ -25,7 +25,7 @@ procedure DrawLand(dX, dY: LongInt);
 procedure FreeLand;
 
 implementation
-uses uMisc, uLand, uStore, 
+uses uMisc, uLand, uStore,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -51,7 +51,7 @@ var ty: Longword;
 begin
 for ty:= 0 to TEXSIZE - 1 do
 	Move(LandPixels[y * TEXSIZE + ty, x * TEXSIZE], tmpPixels[ty, 0], sizeof(Longword) * TEXSIZE);
-	
+
 Pixels:= @tmpPixels
 end;
 
@@ -61,7 +61,7 @@ begin
 for ty:= 0 to TEXSIZE - 1 do
 	for tx:= 0 to TEXSIZE - 1 do
 		tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or $FF000000;
-	
+
 Pixels2:= @tmpPixels
 end;
 

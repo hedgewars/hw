@@ -316,7 +316,7 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
 		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)
 		end;
-		
+
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
 	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), $FFFFFF);
@@ -699,17 +699,17 @@ var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeW
 begin
 
 case SpeechType of
-    1: begin; 
-       edge:= sprSpeechEdge; 
+    1: begin;
+       edge:= sprSpeechEdge;
        corner:= sprSpeechCorner;
        tail:= sprSpeechTail;
        end;
-    2: begin; 
+    2: begin;
        edge:= sprThoughtEdge;
-       corner:= sprThoughtCorner; 
+       corner:= sprThoughtCorner;
        tail:= sprThoughtTail;
        end;
-    3: begin; 
+    3: begin;
        edge:= sprShoutEdge;
        corner:= sprShoutCorner;
        tail:= sprShoutTail;
@@ -885,23 +885,23 @@ var tmpsurf: PSDL_Surface;
 {$IFDEF IPHONEOS}
     convertedSurf: PSDL_Surface;
 const TestFormat: TSDL_PixelFormat = (
-            palette: nil; 
+            palette: nil;
             BitsPerPixel : 32;
             BytesPerPixel: 4;
-            Rloss : 0; 
-            Gloss : 0; 
-            Bloss : 0; 
-            Aloss : 0; 
-			Rshift: 0; 
-            Gshift: 8; 
-            Bshift: 16; 
-            Ashift: 24; 
-            RMask : $000000FF; 
-            GMask : $0000FF00; 
-            BMask : $00FF0000; 
-            AMask : $FF000000; 
+            Rloss : 0;
+            Gloss : 0;
+            Bloss : 0;
+            Aloss : 0;
+			Rshift: 0;
+            Gshift: 8;
+            Bshift: 16;
+            Ashift: 24;
+            RMask : $000000FF;
+            GMask : $0000FF00;
+            BMask : $00FF0000;
+            AMask : $FF000000;
             colorkey: 0;
-            alpha : 255); 
+            alpha : 255);
 {$ENDIF}
 begin
 WriteToConsole(msgLoading + filename + '... ');
@@ -918,7 +918,7 @@ if ((imageFlags and ifLowRes) <> 0) then
 	begin
 		s:= filename + '-lowres.png';
 		if (tmpsurf <> nil) then
-		begin 
+		begin
 			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 			begin
 				WriteLnToConsole('Image too big, trying to load lowres version: ' + s);
@@ -931,7 +931,7 @@ if ((imageFlags and ifLowRes) <> 0) then
 			tmpsurf:= IMG_Load(Str2PChar(s))
 		end;
 	end;
-	
+
 if tmpsurf = nil then
 	begin
 	OutError(msgFailed, (imageFlags and ifCritical) <> 0);

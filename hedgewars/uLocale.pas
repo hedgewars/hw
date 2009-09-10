@@ -24,13 +24,13 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 			sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
 			sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
 			sidKamikaze, sidCake, sidSeduction, sidWatermelon,
-			sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane, 
-            sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime, 
+			sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
+            sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack);
 
 	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
 			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel);
-			
+
 	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
 			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf);
 

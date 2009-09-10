@@ -19,7 +19,7 @@
 unit uConsts;
 interface
 
-uses 
+uses
 	SDLh,
 {$IFDEF GLES11}
 	gles11,
@@ -59,9 +59,9 @@ type
 			sprCakeWalk, sprCakeDown, sprAMAmmosBW, sprWatermelon,
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
-			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder, 
-            sprSpeechCorner, sprSpeechEdge, sprSpeechTail, 
-            sprThoughtCorner, sprThoughtEdge, sprThoughtTail, 
+			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder,
+            sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
+            sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack);
 
@@ -92,14 +92,14 @@ type
 			sndCake, sndOw1, sndOw4, sndFirePunch1, sndFirePunch2,
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
-			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat, 
+			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
-			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun, 
+			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             		amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
             		amLaserSight, amVampiric, amSniperRifle, amJetpack);
 
@@ -133,7 +133,7 @@ type
 	TVertex2f = record
 		X, Y: GLfloat;
 		end;
-			
+
 	TVertex2i = record
 		X, Y: GLint;
 		end;
@@ -168,7 +168,7 @@ const // image flags (for LoadImage())
     ifTransparent = $00000004; // image uses transparent pixels (color keying)
     ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
     ifLowRes      = $00000010; // try loading a low resolution image when it is critical
-    
+
 const	cMaxPower     = 1500;
 	cMaxAngle     = 2048;
 	cPowerDivisor = 1500;
@@ -669,7 +669,7 @@ const	cMaxPower     = 1500;
 			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
 			(FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
 			(FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
-			(FileName:         'shutterclick.ogg'; Path: ptSounds) // sndShutter			
+			(FileName:         'shutterclick.ogg'; Path: ptSounds) // sndShutter
 			);
 
 	Ammoz: array [TAmmoType] of record

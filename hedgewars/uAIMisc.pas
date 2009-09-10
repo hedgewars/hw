@@ -296,7 +296,7 @@ case JumpType of
                  end else exit(Result)
               end
     end;
-    
+
 repeat
 if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then exit(Result);
 if (Gear^.State and gstMoving) <> 0 then
@@ -439,6 +439,6 @@ function AIrndSign(num: LongInt): LongInt;
 begin
 if random(2) = 0 then AIrndSign:=   num
                  else AIrndSign:= - num
-end;  
+end;
 
 end.

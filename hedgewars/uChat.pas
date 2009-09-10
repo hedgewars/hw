@@ -42,7 +42,7 @@ type TChatLine = record
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	lastStr: Longword = 0;
 	visibleCount: Longword = 0;
-	
+
 	InputStr: TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
@@ -120,7 +120,7 @@ while
 	DrawFillRect(r);
 	DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
 	dec(r.y, 16);
-	
+
 	if i = 0 then i:= MaxStrIndex else dec(i);
 	inc(cnt);
 	inc(t)
@@ -134,7 +134,7 @@ var i: TWave;
 
 begin
 // "Make hedgehog say something"
-if (s[1] = '"') and (s[Length(s)] = '"') then 
+if (s[1] = '"') and (s[Length(s)] = '"') then
     begin
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
@@ -143,7 +143,7 @@ if (s[1] = '"') and (s[Length(s)] = '"') then
     exit
     end;
 // 'Make hedgehog think something'
-if (s[1] = '''') and (s[Length(s)] = '''') then 
+if (s[1] = '''') and (s[Length(s)] = '''') then
     begin
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
@@ -152,7 +152,7 @@ if (s[1] = '''') and (s[Length(s)] = '''') then
     exit
     end;
 // -Make hedgehog yell something-
-if (s[1] = '-') and (s[Length(s)] = '-') then 
+if (s[1] = '-') and (s[Length(s)] = '-') then
     begin
     if CurrentTeam^.ExtDriven then
         ParseCommand('/say ' + copy(s, 2, Length(s)-2), true)
@@ -194,7 +194,7 @@ if copy(s, 1, 6) = '/team ' then
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 	begin
 	if CurrentTeam^.ExtDriven then exit;
-	
+
 	for i:= Low(TWave) to High(TWave) do
 		if (s = Wavez[i].cmd) then
 			begin
@@ -251,7 +251,7 @@ if Key <> 0 then
 	else if (Key < $800) then btw:= 2
 	else if (Key < $10000) then btw:= 3
 	else btw:= 4;
-	
+
 	utf8:= '';
 
 	for i:= btw downto 2 do
@@ -259,7 +259,7 @@ if Key <> 0 then
 		utf8:= char((Key or $80) and $BF) + utf8;
 		Key:= Key shr 6
 		end;
-	
+
 	utf8:= char(Key or firstByteMark[btw]) + utf8;
 
 	if byte(InputStr.s[0]) + btw > 240 then exit;

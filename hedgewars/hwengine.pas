@@ -275,14 +275,14 @@ case ParamCount of
   2: begin
 		PathPrefix:= ParamStr(1);
 		recordFileName:= ParamStr(2);
-	 
+
 		for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
 	end;
   6: begin
 		PathPrefix:= ParamStr(1);
 		recordFileName:= ParamStr(2);
-	 
+
 		if ParamStr(3) = '--set-video'	then
 		begin
 			val(ParamStr(4), cScreenWidth);
@@ -311,14 +311,14 @@ case ParamCount of
 				else DisplayUsage;
 			end
 		end;
-		
+
 		for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
 	end;
  11: begin
 		PathPrefix:= ParamStr(1);
 		recordFileName:= ParamStr(2);
-	
+
 		if ParamStr(3) = '--set-multimedia' then
 		begin
 			val(ParamStr(4), cScreenWidth);
@@ -334,7 +334,7 @@ case ParamCount of
 			cFullScreen:= ParamStr(11) = '1';
 		end
 		else DisplayUsage;
-		
+
 		for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
 	end;
@@ -360,7 +360,7 @@ case ParamCount of
 			cReducedQuality:= ParamStr(15) = '1';
 		end
 		else DisplayUsage;
-		
+
 		for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
 	end;

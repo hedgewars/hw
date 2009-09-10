@@ -18,7 +18,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, 
+uses SDLh, uLandTemplates, uFloat,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -112,7 +112,7 @@ if (dX > dY) then d:= dX
 
 x:= X1;
 y:= Y1;
- 
+
 for i:= 0 to d do
     begin
     inc(eX, dX);
@@ -333,16 +333,16 @@ for x:= 0 to LAND_WIDTH - 1 do
 	yd:= LAND_HEIGHT - 1;
 	repeat
 		while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
-		
+
 		if (yd < 0) then yd:= 0;
 
 		while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
 		dec(yd);
 		yu:= yd;
-		
+
 		while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
 		while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
-		
+
 		if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
 			begin
 			rr.x:= x;
@@ -393,7 +393,7 @@ with Template do
            end;
 
 (*  Experiment in making this option more useful
-     if ((not isNegative) and (cTemplateFilter = 4)) or 
+     if ((not isNegative) and (cTemplateFilter = 4)) or
         (canFlip and (getrandom(2) = 0)) then
            begin
            for i:= 0 to pred(BasePointsCount) do
@@ -409,7 +409,7 @@ with Template do
                    FillPoints^[i].y:= LAND_HEIGHT - 1;
                end;
            end;
-     end 
+     end
 *)
 // template recycling.  Pull these off the floor a bit
      if (not isNegative) and (cTemplateFilter = 4) then
@@ -552,9 +552,9 @@ rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
 topY:= LAND_HEIGHT - playHeight;
 
 // force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
-if (cTemplateFilter = 4) or 
+if (cTemplateFilter = 4) or
    (Template.canInvert and (getrandom(2) = 0)) or
-    (not Template.canInvert and Template.isNegative) then 
+    (not Template.canInvert and Template.isNegative) then
     begin
     hasBorder:= true;
     for y:= 0 to LAND_HEIGHT - 1 do
@@ -610,7 +610,7 @@ for y:= 0 to LAND_HEIGHT - 1 do
 	begin
 	for x:= 0 to LAND_WIDTH - 1 do
 		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or $FF000000;
-		
+
 	p:= @(p^[Surface^.pitch div 4]);
 	end;
 
@@ -679,7 +679,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
 	cpY:= LAND_HEIGHT - tmpsurf^.h;
     if SDL_MustLock(tmpsurf) then
        SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
-  
+
     p:= tmpsurf^.pixels;
     for y:= 0 to Pred(tmpsurf^.h) do
         begin
@@ -687,7 +687,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
             begin
             if (($FF000000 and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
                 Land[cpY + y, cpX + x]:= 0
-            else if p^[x] = $FF0000FF then  
+            else if p^[x] = $FF0000FF then
                 Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
             else if p^[x] = $FFFFFFFF then
                 Land[cpY + y, cpX + x]:= COLOR_LAND;
@@ -695,7 +695,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
             end;
         p:= @(p^[tmpsurf^.pitch div 4]);
         end;
-  
+
     if SDL_MustLock(tmpsurf) then
        SDL_UnlockSurface(tmpsurf);
     SDL_FreeSurface(tmpsurf);

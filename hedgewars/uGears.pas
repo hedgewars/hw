@@ -79,7 +79,7 @@ var CurAmmoGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers, 
+	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -436,11 +436,11 @@ if Gear^.Kind = gtHedgehog then
 			AddGear(hwRound(Gear^.X), min(hwRound(Gear^.Y),cWaterLine+cVisibleWater+32), gtHealthTag, t, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
 			uStats.HedgehogDamaged(Gear)
 			end;
-	
+
 		team:= PHedgehog(Gear^.Hedgehog)^.Team;
 		if CurrentHedgehog^.Gear = Gear then
 			FreeActionsList; // to avoid ThinkThread on drawned gear
-		
+
 		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
 		inc(KilledHHs);
 		RecountTeamHealth(team)
@@ -528,11 +528,11 @@ while t <> nil do
 	begin
 	Gear:= t;
 	t:= Gear^.NextGear;
-	if Gear^.Active then 
+	if Gear^.Active then
         begin
         if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
             begin
-            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex); 
+            if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
             Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), $FFFFFFFF, fntSmall);
             end;
         Gear^.doStep(Gear);
@@ -617,9 +617,9 @@ case step of
 			if isInMultiShoot then isInMultiShoot:= false
 			else begin
 			ResetUtilities;
-			
+
 			FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
-			
+
 			ParseCommand('/nextturn', true);
 			SwitchHedgehog;
 
@@ -720,13 +720,13 @@ begin
                 RecountTeamHealth(CurrentHedgehog^.Team);
                 end
             end;
-        if ((GameFlags and gfKarma) <> 0) and 
+        if ((GameFlags and gfKarma) <> 0) and
            ((GameFlags and gfInvulnerable) = 0) and
            not CurrentHedgehog^.Gear^.Invulnerable then
            begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
            inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
-           AddGear(hwRound(CurrentHedgehog^.Gear^.X), 
-                   hwRound(CurrentHedgehog^.Gear^.Y), 
+           AddGear(hwRound(CurrentHedgehog^.Gear^.X),
+                   hwRound(CurrentHedgehog^.Gear^.Y),
                    gtHealthTag, tmpDmg, _0, _0, 0)^.Hedgehog:= CurrentHedgehog;
            end;
         end;
@@ -788,7 +788,7 @@ if (Gear^.State and gstDrowning) <> 0 then
 			0);
 	defaultPos:= false
 	end else
-if ((Gear^.State and gstWinner) <> 0) and 
+if ((Gear^.State and gstWinner) <> 0) and
    ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
 	begin
 	DrawHedgehog(sx, sy,
@@ -810,14 +810,14 @@ if (Gear^.State and gstLoser) <> 0 then // for now using the jackhammer for its 
 
 if (Gear^.State and gstHHDriven) <> 0 then
 	begin
-	if ((Gear^.State and gstHHThinking) = 0) and 
-       ShowCrosshair and 
+	if ((Gear^.State and gstHHThinking) = 0) and
+       ShowCrosshair and
        ((Gear^.State and (gstAttacked or gstAnimation)) = 0) then
 		begin
 (* These calculations are a little complex for a few reasons:
    1: I need to draw the laser from weapon origin to nearest land
-   2: I need to start the beam outside the hedgie for attractiveness. 
-   3: I need to extend the beam beyond land. 
+   2: I need to start the beam outside the hedgie for attractiveness.
+   3: I need to extend the beam beyond land.
    This routine perhaps should be pushed into uStore or somesuch instead of continuuing the increase in size of this function.
 *)
 		dx:= hwSign(Gear^.dX) * m * Sin(Gear^.Angle * pi / cMaxAngle);
@@ -851,20 +851,20 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				tx:= round(lx + ax * (LAND_WIDTH div 4));
 				ty:= round(ly + ay * (LAND_WIDTH div 4));
 				end;
-			
+
 			//if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
 				begin
 				glDisable(GL_TEXTURE_2D);
 				glEnable(GL_LINE_SMOOTH);
 
 				glLineWidth(1.0);
-				
+
 				glColor4ub($FF, $00, $00, $C0);
 				VertexBuffer[0].X:= hx + WorldDx;
 				VertexBuffer[0].Y:= hy + WorldDy;
 				VertexBuffer[1].X:= tx + WorldDx;
 				VertexBuffer[1].Y:= ty + WorldDy;
-				
+
 				glEnableClientState(GL_VERTEX_ARRAY);
 				glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 				glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
@@ -1062,11 +1062,11 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				defaultPos:= false
 				end;
 			amGirder: begin
-                DrawSpriteClipped(sprGirder, 
-                                  sx-256, 
-                                  sy-256, 
-                                  LongInt(topY)+WorldDy, 
-                                  LongInt(rightX)+WorldDx, 
+                DrawSpriteClipped(sprGirder,
+                                  sx-256,
+                                  sy-256,
+                                  LongInt(topY)+WorldDy,
+                                  LongInt(rightX)+WorldDx,
                                   cWaterLine+WorldDy,
                                   LongInt(leftX)+WorldDx);
                 end;
@@ -1103,7 +1103,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				0,
 				4,
 				0);
-			
+
 			HatVisible:= true;
 			with PHedgehog(Gear^.Hedgehog)^ do
 				if (HatTex <> nil)
@@ -1170,7 +1170,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	else
 		if HatVisibility > 0.0 then
 			HatVisibility:= HatVisibility - 0.2;
-	
+
 	if (HatTex <> nil)
 	and (HatVisibility > 0) then
 		if DefaultPos then
@@ -1252,7 +1252,7 @@ if Gear^.Invulnerable then
     DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
     end;
 if cVampiric and
-   (CurrentHedgehog^.Gear <> nil) and 
+   (CurrentHedgehog^.Gear <> nil) and
    (CurrentHedgehog^.Gear = Gear) then
     begin
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
@@ -1277,7 +1277,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	glPushMatrix;
 
 	glTranslatef(WorldDx, WorldDy, 0);
-	
+
 	glLineWidth(4.0);
 
 	glColor3ub($B0, $B0, $B0);
@@ -1288,7 +1288,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	glColor4f(1, 1, 1, 1);
 
 	glPopMatrix;
-	
+
 	glEnable(GL_TEXTURE_2D);
 	//glDisable(GL_LINE_SMOOTH)
 	end
@@ -1406,21 +1406,21 @@ while Gear<>nil do
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
                   else
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,0,DxDy2Angle(Gear^.dY, Gear^.dX));
-       
+
        gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, DxDy2Angle(Gear^.dY, Gear^.dX));
-       
+
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-        
+
         gtHedgehog: DrawHH(Gear);
-    
+
     gtAmmo_Grenade: DrawRotated(sprGrenade, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
-       
+
        gtHealthTag: if Gear^.Tex <> nil then DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
 
            gtGrave: DrawSurfSprite(hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 32, (GameTicks shr 7) and 7, PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex);
-             
+
              gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4);
-      
+
       gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 50 + LongInt(((GameTicks shr 5) and 1) * 2) + WorldDy, 0);
             gtRope: DrawRope(Gear);
       gtSmokeTrace: if Gear^.State < 8 then DrawSprite(sprSmokeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
@@ -1668,7 +1668,7 @@ while i > 0 do
 						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -1, hwSign(t^.ar[i]^.dX))
 							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
 						end;
-					
+
 					FollowGear:= t^.ar[i]
 					end;
 		end
@@ -1878,7 +1878,7 @@ case t of
 if (FollowGear <> nil) then
 	begin
 	FindPlace(FollowGear, true, 0, LAND_WIDTH);
-	
+
 	if (FollowGear <> nil) then
 		PlaySound(sndReinforce, false, CurrentTeam^.voicepack)
 	end
@@ -1913,20 +1913,20 @@ repeat
 		cnt:= 0;
         if topY > 1024 then
 		    y:= 1024-Gear^.Radius * 2
-        else 
+        else
 		    y:= topY-Gear^.Radius * 2;
 		while y < LAND_HEIGHT do
 			begin
 			repeat
 				inc(y, 2);
 			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
-			
+
 			sy:= y;
 
 			repeat
 				inc(y);
 			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
-			
+
 			if (y - sy > Gear^.Radius * 2)
 				and (y < LAND_HEIGHT)
 				and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
@@ -1936,10 +1936,10 @@ repeat
 							else ar[cnt].Y:= y - Gear^.Radius;
 				inc(cnt)
 				end;
-			
+
 			inc(y, 45)
 			end;
-		
+
 		if cnt > 0 then
 			with ar[GetRandom(cnt)] do
 				begin
@@ -1948,7 +1948,7 @@ repeat
 				inc(cnt2)
 				end
 	until (x + Delta > Right);
-	
+
 	dec(Delta, 60)
 until (cnt2 > 0) or (Delta < 70);
 

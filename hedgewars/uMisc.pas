@@ -360,7 +360,7 @@ new(Surface2Tex);
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
-if (surf^.format^.BytesPerPixel = 3) then 
+if (surf^.format^.BytesPerPixel = 3) then
 	begin
 		modeIntFormat:= GL_RGB;
 		modeFormat:= modeIntFormat;
@@ -392,7 +392,7 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 
 	Surface2Tex^.rx:= Surf^.w / tw;
 	Surface2Tex^.ry:= Surf^.h / th;
-	
+
 	GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
 	if surf^.format^.BytesPerPixel = 4 then
@@ -454,9 +454,9 @@ if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
 
 //	legacy resizing function
 //	gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE, Surf^.pixels, tw, th, GL_UNSIGNED_BYTE, tmpp);
-	
+
 	glTexImage2D(GL_TEXTURE_2D, 0, modeIntFormat, tw, th, 0, modeFormat, GL_UNSIGNED_BYTE, tmpp);
-	
+
 	FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
 	end else
 	begin

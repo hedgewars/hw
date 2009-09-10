@@ -220,7 +220,7 @@ var Vx, Vy: hwFloat;
 		x:= Me^.X;
 		y:= Me^.Y;
 		dY:= -Vy;
-		
+
 		repeat
 			x:= x + Vx;
 			y:= y + dY;
@@ -228,7 +228,7 @@ var Vx, Vy: hwFloat;
 			EX:= hwRound(x);
 			EY:= hwRound(y);
 		until TestColl(EX, EY, 5) or (EY > 1000);
-		
+
 		if (EY < 1000) and not dY.isNegative then
 			begin
 			Result:= RateExplosion(Me, EX, EY, 91);

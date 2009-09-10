@@ -25,7 +25,7 @@ slot:= Gear^.MsgParam;
 with PHedgehog(Gear^.Hedgehog)^ do
 	begin
 	Gear^.Message:= Gear^.Message and not gm_Slot;
-	
+
 	if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
 		or (AttacksNum > 0)
 		or ((Gear^.State and gstHHDriven) = 0) then exit;
@@ -51,7 +51,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		while (i <= cMaxSlotAmmoIndex)
 		  and ((Ammo^[slot, i].Count = 0)
 		       or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
-		
+
 		if i <= cMaxSlotAmmoIndex then
 			begin
 			CurSlot:= slot;
@@ -107,9 +107,9 @@ with Gear^,
      begin
      if ((State and gstHHDriven) <> 0)and
         ((State and (gstAttacked or gstHHChooseTarget)) = 0) and
-        (((State and gstMoving) = 0) or 
+        (((State and gstMoving) = 0) or
             // Allow attacks while moving on ammo with AltAttack
-            ((CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)) or 
+            ((CurAmmoGear <> nil) and ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) <> 0)) or
             ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackInMove) <> 0)) and
         ((TargetPoint.X <> NoPointX) or ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_NeedTarget) = 0)) then
         begin
@@ -634,7 +634,7 @@ if not isInMultiShoot then
 if (Gear^.State and gstMoving) <> 0 then
 	begin
 	wasJumping:= ((Gear^.State and gstHHJumping) <> 0);
-	
+
 	if ((Gear^.Message and gm_HJump) <> 0) and
 		wasJumping and
 		((Gear^.State and gstHHHJump) = 0) then
@@ -645,7 +645,7 @@ if (Gear^.State and gstMoving) <> 0 then
 			if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
 			PlaySound(sndJump2, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 			end;
-	
+
 	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
 
 	if (not cArtillery) and wasJumping and

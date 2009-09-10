@@ -44,19 +44,19 @@ procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if Land[y + dy, i] <> COLOR_INDESTRUCTIBLE then
             Land[y + dy, i]:= Value;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if Land[y - dy, i] <> COLOR_INDESTRUCTIBLE then
             Land[y - dy, i]:= Value;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
+    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if Land[y + dx, i] <> COLOR_INDESTRUCTIBLE then
             Land[y + dx, i]:= Value;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
+    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if Land[y - dx, i] <> COLOR_INDESTRUCTIBLE then
             Land[y - dx, i]:= Value;
 end;
@@ -81,11 +81,11 @@ if not doSet then
    end else
    begin
    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
           if (Land[y + dy, i] < 256) then
               inc(Land[y + dy, i]);
    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+      for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
           if (Land[y - dy, i] < 256) then
               inc(Land[y - dy, i]);
    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
@@ -143,19 +143,19 @@ procedure FillLandCircleLines0(x, y, dx, dy: LongInt);
 var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if Land[y + dy, i] = COLOR_LAND then
             LandPixels[y + dy, i]:= 0;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do 
+    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
         if Land[y - dy, i] = COLOR_LAND then
              LandPixels[y - dy, i]:= 0;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
+    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if Land[y + dx, i] = COLOR_LAND then
             LandPixels[y + dx, i]:= 0;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do 
+    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
         if Land[y - dx, i] = COLOR_LAND then
              LandPixels[y - dx, i]:= 0;
 end;
@@ -165,7 +165,7 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if Land[y + dy, i] = COLOR_LAND then 
+       if Land[y + dy, i] = COLOR_LAND then
           begin
           LandPixels[y + dy, i]:= cExplosionBorderColor;
 //          Despeckle(y + dy, i);
@@ -450,7 +450,7 @@ Result:= false;
 
 for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	begin
-	
+
 	for x:= 0 to LAND_WIDTH div 32 - 1 do
 		begin
 		if LandDirty[y, x] <> 0 then

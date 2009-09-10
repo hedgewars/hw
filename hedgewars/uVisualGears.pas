@@ -166,7 +166,7 @@ procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
 begin
 	Gear^.X:= Gear^.X + (cWindSpeed * 100 + Gear^.dX) * Steps;
 	Gear^.Y:= Gear^.Y - cDrownSpeed * Steps;
-	
+
 	if (Gear^.FrameTicks <= Steps) or (hwRound(Gear^.Y) < cWaterLine) then
 		DeleteVisualGear(Gear)
 	else
@@ -334,9 +334,9 @@ if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're 
 		exit
 		end;
 
-if cReducedQuality and 
-   (Kind <> vgtTeamHealthSorter) and 
-   (Kind <> vgtSmallDamageTag) and 
+if cReducedQuality and
+   (Kind <> vgtTeamHealthSorter) and
+   (Kind <> vgtSmallDamageTag) and
    (Kind <> vgtSpeechBubble) then
 	begin
 	AddVisualGear:= nil;

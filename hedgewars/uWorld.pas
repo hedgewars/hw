@@ -164,10 +164,10 @@ with CurrentHedgehog^ do
 		if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
 		begin
 		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
-		
+
 		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
 			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
-		
+
 		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
 			begin
 			bShowAmmoMenu:= false;
@@ -306,7 +306,7 @@ if ZoomValue > zoom then
 	zoom:= zoom + 0.001 * Lag;
 	if ZoomValue < zoom then zoom:= ZoomValue
 	end;
-	
+
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
