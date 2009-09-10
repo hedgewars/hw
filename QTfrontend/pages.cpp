@@ -752,7 +752,10 @@ PageSelectWeapon::PageSelectWeapon(QWidget* parent) :
 	BtnDefault = addButton(tr("Default"), pageLayout, 1, 1);
 	BtnDelete = addButton(tr("Delete"), pageLayout, 1, 2);
 	BtnSave = addButton(":/res/Save.png", pageLayout, 1, 3, true);
-	BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");	
+	BtnSave->setStyleSheet("QPushButton{margin: 12px 0px 12px 0px;}");
+
+	connect(BtnDefault, SIGNAL(clicked()), pWeapons, SLOT(setDefault()));
+	connect(BtnSave, SIGNAL(clicked()), pWeapons, SLOT(save()));
 }
 
 PageInGame::PageInGame(QWidget* parent) :
