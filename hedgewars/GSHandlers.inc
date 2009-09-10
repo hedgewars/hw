@@ -850,7 +850,7 @@ Gear^.dY:= mdY;
 	ny:= ropeDy * len;
 	
 	len:= Gear^.Elasticity - _0_3x70;
-	while len > _0_3 do
+	while len > _3 do
 			begin
 			lx:= hwRound(Gear^.X + mdX * len);
 			ly:= hwRound(Gear^.Y + mdY * len);
@@ -864,6 +864,12 @@ Gear^.dY:= mdY;
 					b:= (nx * HHGear^.dY) > (ny * HHGear^.dX);
 					dLen:= len
 					end;
+				with RopePoints.rounded[RopePoints.Count] do
+					begin
+					X:= hwRound(Gear^.X);
+					Y:= hwRound(Gear^.Y);
+					end;
+				
 				Gear^.X:= Gear^.X + nx * len;
 				Gear^.Y:= Gear^.Y + ny * len;
 				inc(RopePoints.Count);

@@ -96,7 +96,7 @@ var RopePoints: record
                                   dLen: hwFloat;
                                   b: boolean;
                                   end;
-                rounded: array[0..MAXROPEPOINTS] of TVertex2i;
+                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2i;
                 end;
 
 procedure DeleteGear(Gear: PGear); forward;
@@ -1260,60 +1260,37 @@ if cVampiric and
 end;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
-var i, cnt: LongInt;
-	px, py: LongInt;
 begin
-// FIXME: store rounded coordinates in second points array
-cnt:= 0;
 with RopePoints do
-	if RopePoints.Count > 0 then
-		begin
-		i:= 0;
-		cnt:= 0;
-		px:= hwRound(ar[0].X) - 1;
-		while i < Count do
-			begin
-			rounded[cnt].X:= hwRound(ar[i].X) + WorldDx;
-			rounded[cnt].Y:= hwRound(ar[i].Y) + WorldDy;
-			// prevent equal points
-			if (px <> rounded[cnt].X) or (py <> rounded[cnt].Y) then
-				begin
-				px:= rounded[cnt].X;
-				py:= rounded[cnt].Y;
-				inc(cnt)
-				end;
-			inc(i)
-			end;
-		rounded[cnt].X:= hwRound(Gear^.X) + WorldDx;
-		rounded[cnt].Y:= hwRound(Gear^.Y) + WorldDy;
-		inc(cnt);
-		rounded[cnt].X:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx;
-		rounded[cnt].Y:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy;
-		end else
-		if Gear^.Elasticity.QWordValue > 0 then
-			begin
-			cnt:= 1;
-			rounded[0].X:= hwRound(Gear^.X) + WorldDx;
-			rounded[0].Y:= hwRound(Gear^.Y) + WorldDy;
-			rounded[1].X:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X) + WorldDx;
-			rounded[1].Y:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y) + WorldDy;
-			end;
+	begin
+	rounded[Count].X:= hwRound(Gear^.X);
+	rounded[Count].Y:= hwRound(Gear^.Y);
+	rounded[Count + 1].X:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.X);
+	rounded[Count + 1].Y:= hwRound(PHedgehog(Gear^.Hedgehog)^.Gear^.Y);
+	end;
 
-if cnt > 0 then
+if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	begin
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LINE_SMOOTH);
+
+	glPushMatrix;
+
+	glTranslatef(WorldDx, WorldDy, 0);
 	
 	glLineWidth(4.0);
 
-	glColor4ub($A0, $A0, $A0, $C0);
+	glColor4ub($B0, $B0, $B0, $D0);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_INT, 0, @RopePoints.rounded[0]);
-	glDrawArrays(GL_LINE_STRIP, 0, cnt + 1);
+	glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
 	glColor4f(1, 1, 1, 1);
+
+	glPopMatrix;
+	
 	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LINE_SMOOTH);
+	glDisable(GL_LINE_SMOOTH)
 	end
 end;
 
