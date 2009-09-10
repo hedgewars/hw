@@ -287,8 +287,7 @@ var i, t: LongInt;
     w:= SpritesData[spr].Width;
     i:= Shift mod w;
     if i > 0 then dec(i, w);
-    dec(i, sw);
-    //addfilelog(inttostr(sw));
+    dec(i, w * (sw div w + 1));
     repeat
       DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
       inc(i, w)

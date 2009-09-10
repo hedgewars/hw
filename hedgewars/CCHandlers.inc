@@ -687,7 +687,7 @@ end;
 
 procedure chZoomOut(var s: shortstring);
 begin
-if ZoomValue > 0.5 then ZoomValue:= ZoomValue - 0.25;
+if ZoomValue > 1.0 then ZoomValue:= ZoomValue - 0.25;
 end;
 
 procedure chChat(var s: shortstring);
