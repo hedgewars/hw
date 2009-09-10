@@ -272,9 +272,9 @@ with Hedgehog do
         begin
         CurAmmo:= 0;
         CurSlot:= 0;
-        while (CurSlot <= cMaxSlotIndex) and 
-              (Ammo^[CurSlot, CurAmmo].Count = 0) and
-              (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0)
+        while (CurSlot <= cMaxSlotIndex) and
+              ((Ammo^[CurSlot, CurAmmo].Count = 0) or
+              (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
               do inc(CurSlot)
         end
 end;
