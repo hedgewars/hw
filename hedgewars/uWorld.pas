@@ -540,7 +540,7 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
-var EdgesDist, cw: LongInt;
+var EdgesDist, cw, wdy: LongInt;
 begin
 
 cw:= round(cScreenWidth / cScaleFactor);
@@ -568,6 +568,9 @@ if (FollowGear <> nil) and (not isCursorVisible) then
 		//addcaption(inttostr(CursorPoint.X), $AFAFAF, capgrpGameState);
 		CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
 		end;
+
+wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
+if WorldDy < wdy then WorldDy:= wdy;
 
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
@@ -626,8 +629,8 @@ if isCursorVisible or (FollowGear <> nil) then
 
 prevPoint:= CursorPoint;
 if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
-if WorldDy < cScreenHeight - cWaterLine - cVisibleWater then WorldDy:= cScreenHeight - cWaterLine - cVisibleWater;
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
+if WorldDy < wdy then WorldDy:= wdy;
 if WorldDx < -round(LAND_WIDTH * 2 / cScaleFactor) then WorldDx:= -round(LAND_WIDTH * 2 / cScaleFactor);
 if WorldDx > cw then WorldDx:= cw;
 end;
