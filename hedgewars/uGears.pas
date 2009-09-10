@@ -1272,7 +1272,7 @@ with RopePoints do
 if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	begin
 	glDisable(GL_TEXTURE_2D);
-	glEnable(GL_LINE_SMOOTH);
+	//glEnable(GL_LINE_SMOOTH);
 
 	glPushMatrix;
 
@@ -1280,7 +1280,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	
 	glLineWidth(4.0);
 
-	glColor4ub($B0, $B0, $B0, $D0);
+	glColor3ub($B0, $B0, $B0);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_INT, 0, @RopePoints.rounded[0]);
@@ -1290,7 +1290,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 	glPopMatrix;
 	
 	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_LINE_SMOOTH)
+	//glDisable(GL_LINE_SMOOTH)
 	end
 end;
 
