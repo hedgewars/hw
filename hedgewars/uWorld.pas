@@ -230,7 +230,7 @@ end;
 
 procedure DrawWaves(Dir, dX, dY: LongInt);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
-	lw, waves: GLfloat;
+	lw, waves, shift: GLfloat;
 begin
 lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
@@ -246,7 +246,8 @@ VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprWater].Height;
 VertexBuffer[3].X:= -lw;
 VertexBuffer[3].Y:= VertexBuffer[2].Y;
 
-TextureBuffer[0].X:= (( - WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
+shift:= - lw / cWaveWidth;
+TextureBuffer[0].X:= shift + (( - WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
 TextureBuffer[0].Y:= 0;
 TextureBuffer[1].X:= TextureBuffer[0].X + waves;
 TextureBuffer[1].Y:= 0;
@@ -298,12 +299,12 @@ begin
 if ZoomValue < zoom then
 	begin
 	zoom:= zoom - 0.001 * Lag;
-	if zoom < ZoomValue then zoom:= ZoomValue
+	if ZoomValue > zoom then zoom:= ZoomValue
 	end else
 if ZoomValue > zoom then
 	begin
 	zoom:= zoom + 0.001 * Lag;
-	if zoom > ZoomValue then zoom:= ZoomValue
+	if ZoomValue < zoom then zoom:= ZoomValue
 	end;
 	
 // Sky
