@@ -1310,7 +1310,7 @@ if cnt > 0 then
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_INT, 0, @RopePoints.rounded[0]);
-	glDrawArrays(GL_LINES, 0, cnt + 1);
+	glDrawArrays(GL_LINE_STRIP, 0, cnt + 1);
 	glColor4f(1, 1, 1, 1);
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_LINE_SMOOTH);
