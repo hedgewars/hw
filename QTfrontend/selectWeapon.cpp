@@ -157,7 +157,7 @@ void SelWeaponWidget::save()
 	
 	for(int i = 0; i < m_numItems; ++i) {
 		twi::const_iterator it = weaponItems.find(i);
-		int num = it == weaponItems.end() ? 0 : it.value()[0]->getItemsNum();
+		int num = it == weaponItems.end() ? 9 : it.value()[0]->getItemsNum(); // 9 is for 'skip turn'
 		state1.append(QString::number(num));
 		int prob = it == weaponItems.end() ? 0 : it.value()[1]->getItemsNum();
 		state2.append(QString::number(prob));
