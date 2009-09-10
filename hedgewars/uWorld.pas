@@ -296,6 +296,17 @@ var i, t: LongInt;
     end;
 
 begin
+if ZoomValue < zoom then
+	begin
+	zoom:= zoom - 0.001 * Lag;
+	if zoom < ZoomValue then zoom:= ZoomValue
+	end else
+if ZoomValue > zoom then
+	begin
+	zoom:= zoom + 0.001 * Lag;
+	if zoom > ZoomValue then zoom:= ZoomValue
+	end;
+	
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);

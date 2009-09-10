@@ -60,6 +60,7 @@ var
 	cBitsStr         : string[2] = '32';
 	cTagsMask        : byte = 7;
 	zoom             : GLfloat = 2.0;
+	ZoomValue        : GLfloat = 2.0;
 
 	cWaterLine       : LongInt = LAND_HEIGHT;
 	cVisibleWater    : LongInt = 128;
