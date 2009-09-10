@@ -34,6 +34,7 @@ extern QStringList * Themes;
 extern QStringList * mapList;
 
 extern QString * cDefaultAmmoStore;
+extern int cAmmoNumber;
 extern QList< QPair<QString, QString> > cDefaultAmmos;
 
 extern QColor * color1;

@@ -28,6 +28,7 @@
 #include <QLineEdit>
 #include <QSettings>
 #include <QMessageBox>
+#include <QTabWidget>
 
 QImage getAmmoImage(int num)
 {
@@ -35,7 +36,7 @@ QImage getAmmoImage(int num)
 	return ammo.copy(0, num*32, 32, 32);
 }
 
-SelWeaponItem::SelWeaponItem(int iconNum, int wNum, QWidget* parent) :
+SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent) :
 	QWidget(parent)
 {
 	QHBoxLayout* hbLayout = new QHBoxLayout(this);
@@ -50,7 +51,7 @@ SelWeaponItem::SelWeaponItem(int iconNum, int wNum, QWidget* parent) :
 
 	item = new WeaponItem(QImage(":/res/ammopic.png"), this);
 	item->setItemsNum(wNum);
-	item->setInfinityState(true);
+	item->setInfinityState(allowInfinite);
 	hbLayout->addWidget(item);
 
 	hbLayout->setStretchFactor(lbl, 1);
@@ -87,23 +88,42 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
 	QString currentState = *cDefaultAmmoStore;
 
-	pLayout = new QGridLayout(this);
-	pLayout->setSpacing(1);
-	pLayout->setMargin(1);
+	QTabWidget * tbw = new QTabWidget(this);
+	QWidget * page1 = new QWidget(this);
+	p1Layout = new QGridLayout(page1);
+	p1Layout->setSpacing(1);
+	p1Layout->setMargin(1);
+	QWidget * page2 = new QWidget(this);
+	p2Layout = new QGridLayout(page2);
+	p2Layout->setSpacing(1);
+	p2Layout->setMargin(1);
+	
+	tbw->addTab(page1, tr("Weapon set"));
+	tbw->addTab(page2, tr("Probabilities"));
+	
+	QGridLayout * pageLayout = new QGridLayout(this);
+	pageLayout->addWidget(tbw);
+
 
 	int j = -1;
 	int i = 0, k = 0;
 	for(; i < m_numItems; ++i) {
 		if (i == 6) continue;
 		if (k % 4 == 0) ++j;
-		weaponItems[i] = new SelWeaponItem(i, currentState[i].digitValue(), this);
-		pLayout->addWidget(weaponItems[i], j, k % 4);
+		SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), this);
+		weaponItems[i].append(swi);
+		p1Layout->addWidget(swi, j, k % 4);
+		
+		SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), this);
+		weaponItems[i].append(pwi);
+		p2Layout->addWidget(pwi, j, k % 4);
+		
 		++k;
 	}
 
 	//pLayout->setRowStretch(5, 100);
 	m_name = new QLineEdit(this);
-	pLayout->addWidget(m_name, i, 0, 1, 5);
+	pageLayout->addWidget(m_name, i, 0, 1, 5);
 }
 
 void SelWeaponWidget::setWeapons(const QString& ammo)
@@ -111,7 +131,8 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 	for(int i = 0; i < m_numItems; ++i) {
 		twi::iterator it = weaponItems.find(i);
 		if (it == weaponItems.end()) continue;
-		it->second->setItemsNum(ammo[i].digitValue());
+		it.value()[0]->setItemsNum(ammo[i].digitValue());
+		it.value()[1]->setItemsNum(ammo[m_numItems + i].digitValue());
 	}
 	update();
 }
@@ -131,25 +152,28 @@ void SelWeaponWidget::save()
 	
 	if (m_name->text() == "") return;
 	
-	QString currentState;
+	QString state1;
+	QString state2;
 	
 	for(int i = 0; i < m_numItems; ++i) {
 		twi::const_iterator it = weaponItems.find(i);
-		int num = it == weaponItems.end() ? 9 : (*this)[i];
-		currentState = QString("%1%2").arg(currentState).arg(num);
+		int num = it == weaponItems.end() ? 0 : it.value()[0]->getItemsNum();
+		state1.append(QString::number(num));
+		int prob = it == weaponItems.end() ? 0 : it.value()[1]->getItemsNum();
+		state2.append(QString::number(prob));
 	}
 	if (curWeaponsName != "") {
 		// remove old entry
 		wconf->remove(curWeaponsName);
 	}
-	wconf->setValue(m_name->text(), currentState);
+	wconf->setValue(m_name->text(), state1 + state2);
 	emit weaponsChanged();
 }
 
 int SelWeaponWidget::operator [] (unsigned int weaponIndex) const
 {
 	twi::const_iterator it = weaponItems.find(weaponIndex);
-	return it == weaponItems.end() ? 9 : it->second->getItemsNum();
+	return it == weaponItems.end() ? 9 : it.value()[0]->getItemsNum();
 }
 
 QString SelWeaponWidget::getWeaponsString(const QString& name) const

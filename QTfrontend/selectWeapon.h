@@ -20,7 +20,8 @@
 #define _SELECT_WEAPON_INCLUDED
 
 #include <QFrame>
-#include <map>
+#include <QMap>
+#include <QList>
 
 class QGridLayout;
 class WeaponItem;
@@ -32,7 +33,7 @@ class SelWeaponItem : public QWidget
   Q_OBJECT
 
 public:
-  SelWeaponItem(int iconNum, int wNum, QWidget* parent=0);
+  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent=0);
 
   unsigned char getItemsNum() const;
   void setItemsNum(const unsigned char num);
@@ -70,10 +71,12 @@ class SelWeaponWidget : public QFrame
 
   const int m_numItems;
   int operator [] (unsigned int weaponIndex) const;
-  
-  typedef std::map<int, SelWeaponItem*> twi;
+
+  typedef QList<SelWeaponItem*> ItemsList;
+  typedef QMap<int, ItemsList> twi;
   twi weaponItems;
-  QGridLayout* pLayout;
+  QGridLayout* p1Layout;
+  QGridLayout* p2Layout;
 };
 
 #endif // _SELECT_WEAPON_INCLUDED

@@ -58,6 +58,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 end;
 
 procedure AddAmmoStore(s: shortstring);
+// [0,20,30,60,100,150,200,400,600]
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
