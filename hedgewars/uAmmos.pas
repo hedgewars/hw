@@ -58,21 +58,13 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 end;
 
 procedure AddAmmoStore(s: shortstring);
-// [0,20,30,60,100,150,200,400,600]
+const probability: array [0..8] of LongWord = (0,20,30,60,100,150,200,400,600);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
-    substr: shortstring; // TEMPORARY
 begin
-TryDo(byte(s[0]) = byte(ord(High(TAmmoType))), 'Invalid ammo scheme (incompatible frontend)', true);
+TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 2, 'Invalid ammo scheme (incompatible frontend)', true);
 
-// FIXME - TEMPORARY hardcoded check on shoppa pending creation of probability editor
-substr:= Copy(s,1,15);
-if (substr = '000000990000009') or 
-   (substr = '000000990000000') then
-    shoppa:= true;
-for a:= Low(TAmmoType) to High(TAmmoType) do
-    if (ord(a) > 14) and (s[ord(a)] <> '0') then shoppa:= false;  // TEMPORARY etc - this just avoids updating every time new wep is added
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
 
@@ -82,34 +74,26 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
     if a <> amNothing then
         begin
+        Ammoz[a].Probability:= probability[byte(s[ord(a) + ord(High(TAmmoType))]) - byte('0')];
         cnt:= byte(s[ord(a)]) - byte('0');
+        // avoid things we already have infinite number
         if cnt = 9 then
             begin
             cnt:= AMMO_INFINITE;
-            Ammoz[a].Probability:= 0 
+            Ammoz[a].Probability:= 0
             end;
+        // avoid things we already have by scheme
         if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
            ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
            ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
            ((a = amVampiric) and ((GameFlags and gfVampiric) <> 0)) then
             begin
             cnt:= 0;
-            Ammoz[a].Probability:= 0 
-            end
-        else if shoppa then      // FIXME - TEMPORARY REMOVE WHEN CRATE PROBABILITY IS ADDED
-            if cnt <> AMMO_INFINITE then
-                begin
-                if a = amGirder then
-                    Ammoz[a].Probability:= 0
-                else
-                    begin
-                    Ammoz[a].Probability:= 100;
-                    Ammoz[a].NumberInCase:= 1;
-                    end
-                end;
+            Ammoz[a].Probability:= 0
+            end;
         ammos[a]:= cnt
         end else
-            ammos[a]:= AMMO_INFINITE
+        ammos[a]:= AMMO_INFINITE
     end;
 
 FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
