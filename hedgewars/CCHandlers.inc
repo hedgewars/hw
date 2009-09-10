@@ -690,6 +690,11 @@ begin
 if ZoomValue > 1.0 then ZoomValue:= ZoomValue - 0.25;
 end;
 
+procedure chZoomReset(var s: shortstring);
+begin
+ZoomValue:= 2.0
+end;
+
 procedure chChat(var s: shortstring);
 begin
 GameState:= gsChat;

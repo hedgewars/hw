@@ -33,6 +33,8 @@ procedure SetBinds(var binds: TBinds);
 procedure SetDefaultBinds;
 
 var KbdKeyPressed: boolean;
+	wheelUp: boolean = false;
+	wheelDown: boolean = false;
 
 implementation
 uses SDLh, uTeams, uConsole, uMisc, uStore;
@@ -70,7 +72,7 @@ pkbd := SDL_GetKeyState(nil);
 i    := SDL_GetMouseState(nil, nil);
 {$ENDIF}
 
-
+// mouse buttons
 {$IFDEF DARWIN}
 pkbd^[1]:= ((i and 1) and not (pkbd^[306] or pkbd^[305]));
 pkbd^[3]:= ((i and 1) and (pkbd^[306] or pkbd^[305])) or (i and 4);
@@ -80,7 +82,13 @@ pkbd^[3]:= ((i shr 2) and 1);
 {$ENDIF}
 pkbd^[2]:= ((i shr 1) and 1);
 
+// mouse wheels (see event loop in project file)
+pkbd^[4]:= ord(wheelDown);
+pkbd^[5]:= ord(wheelUp);
+wheelUp:= false;
+wheelDown:= false;
 
+// now process strokes
 for i:= 1 to cKeyMaxIndex do
 if CurrentBinds[i][0] <> #0 then
 	begin
@@ -121,9 +129,13 @@ begin
 KeyNames[1]:= 'mousel';
 KeyNames[2]:= 'mousem';
 KeyNames[3]:= 'mouser';
-for i:= 4 to cKeyMaxIndex do
+KeyNames[4]:= 'wheelup';
+KeyNames[5]:= 'wheeldown';
+
+for i:= 6 to cKeyMaxIndex do
     begin
     s:= SDL_GetKeyName(i);
+	//addfilelog(inttostr(i) + ' ' + s);
     if s = 'unknown key' then KeyNames[i]:= ''
        else begin
        for t:= 1 to Length(s) do
@@ -132,17 +144,18 @@ for i:= 4 to cKeyMaxIndex do
        end;
     end;
 
-DefaultBinds[ 27]:= 'quit';		// esc
-DefaultBinds[ 48]:= '+volup';		// 0
-DefaultBinds[ 57]:= '+voldown';		// 9
-DefaultBinds[ 96]:= 'history';		// `
-DefaultBinds[ 99]:= 'capture';		// c
-DefaultBinds[104]:= 'findhh';		// h
-DefaultBinds[112]:= 'pause';		// p
-DefaultBinds[115]:= '+speedup';		// s
-DefaultBinds[116]:= 'chat';		// t
-DefaultBinds[121]:= 'confirm';		// y
-DefaultBinds[127]:= 'rotmask';		// canc
+DefaultBinds[ 27]:= 'quit';
+DefaultBinds[ 96]:= 'history';
+DefaultBinds[127]:= 'rotmask';
+
+DefaultBinds[KeyNameToCode('0')]:= '+volup';
+DefaultBinds[KeyNameToCode('9')]:= '+voldown';
+DefaultBinds[KeyNameToCode('c')]:= 'capture';
+DefaultBinds[KeyNameToCode('h')]:= 'findhh';
+DefaultBinds[KeyNameToCode('p')]:= 'pause';
+DefaultBinds[KeyNameToCode('s')]:= '+speedup';
+DefaultBinds[KeyNameToCode('t')]:= 'chat';
+DefaultBinds[KeyNameToCode('y')]:= 'confirm';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 

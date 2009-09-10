@@ -48,197 +48,211 @@ interface
 
 (*  SDL  *)
 const {$IFDEF WIN32}
-      SDLLibName = 'SDL.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-            {$IFDEF DARWIN}
-            SDLLibName = 'SDL';
-            {$ELSE}
-            SDLLibName = 'libSDL.so';
-            {$ENDIF}
-      {$ENDIF}
-      SDL_SWSURFACE   = $00000000;
-      SDL_HWSURFACE   = $00000001;
-      SDL_SRCALPHA    = $00010000;
-      SDL_INIT_VIDEO  = $00000020;
-      SDL_INIT_AUDIO  = $00000010;
+	SDLLibName = 'SDL.dll';
+	{$ENDIF}
+	{$IFDEF UNIX}
+			{$IFDEF DARWIN}
+			SDLLibName = 'SDL';
+			{$ELSE}
+			SDLLibName = 'libSDL.so';
+			{$ENDIF}
+	{$ENDIF}
+	SDL_SWSURFACE   = $00000000;
+	SDL_HWSURFACE   = $00000001;
+	SDL_SRCALPHA    = $00010000;
+	SDL_INIT_VIDEO  = $00000020;
+	SDL_INIT_AUDIO  = $00000010;
 
 {$IFDEF SDL13}
-      SDL_ASYNCBLIT   = $08000000;
-      SDL_ANYFORMAT   = $10000000;
-      SDL_HWPALETTE   = $00200000;
-      SDL_DOUBLEBUF   = $00400000;
-      SDL_FULLSCREEN  = $00800000;
-      SDL_HWACCEL     = $08000000;
-      SDL_SRCCOLORKEY = $00020000;
-      SDL_RLEACCEL    = $08000000;
-      SDL_NOFRAME     = $02000000;
-      SDL_OPENGL      = $04000000;
-      SDL_RESIZABLE   = $01000000;
+	SDL_ASYNCBLIT   = $08000000;
+	SDL_ANYFORMAT   = $10000000;
+	SDL_HWPALETTE   = $00200000;
+	SDL_DOUBLEBUF   = $00400000;
+	SDL_FULLSCREEN  = $00800000;
+	SDL_HWACCEL     = $08000000;
+	SDL_SRCCOLORKEY = $00020000;
+	SDL_RLEACCEL    = $08000000;
+	SDL_NOFRAME     = $02000000;
+	SDL_OPENGL      = $04000000;
+	SDL_RESIZABLE   = $01000000;
 {$ELSE}
-      SDL_ASYNCBLIT   = $00000004;
-      SDL_ANYFORMAT   = $00100000;
-      SDL_HWPALETTE   = $20000000;
-      SDL_DOUBLEBUF   = $40000000;
-      SDL_FULLSCREEN  = $80000000;
-      SDL_HWACCEL     = $00000100;
-      SDL_SRCCOLORKEY = $00001000;
-      SDL_RLEACCEL    = $00004000;
-      SDL_NOFRAME     = $00000020;
-      SDL_OPENGL      = $00000002;
-      SDL_RESIZABLE   = $00000010;
+	SDL_ASYNCBLIT   = $00000004;
+	SDL_ANYFORMAT   = $00100000;
+	SDL_HWPALETTE   = $20000000;
+	SDL_DOUBLEBUF   = $40000000;
+	SDL_FULLSCREEN  = $80000000;
+	SDL_HWACCEL     = $00000100;
+	SDL_SRCCOLORKEY = $00001000;
+	SDL_RLEACCEL    = $00004000;
+	SDL_NOFRAME     = $00000020;
+	SDL_OPENGL      = $00000002;
+	SDL_RESIZABLE   = $00000010;
 {$ENDIF}
 
-      SDL_NOEVENT     = 0;
-      SDL_ACTIVEEVENT = 1;
-      SDL_KEYDOWN     = 2;
-      SDL_KEYUP       = 3;
-      SDL_QUITEV      = 12;
-      SDL_VIDEORESIZE = 16;
+	SDL_NOEVENT     = 0;
+	SDL_ACTIVEEVENT = 1;
+	SDL_KEYDOWN     = 2;
+	SDL_KEYUP       = 3;
+	SDL_MOUSEBUTTONDOWN = 5;
+	SDL_MOUSEBUTTONUP   = 6;
+	SDL_QUITEV      = 12;
+	SDL_VIDEORESIZE = 16;
 
 {$IFDEF SDL13}
-      SDL_MOUSEMOTION  = 5;
+	SDL_MOUSEMOTION  = 5;
 {$ENDIF}
 
-      SDL_APPINPUTFOCUS = 2;
+	SDL_APPINPUTFOCUS = 2;
+	SDL_BUTTON_WHEELDUP = 4;
+	SDL_BUTTON_WHEELDOWN = 5;
 
-      RMask = $000000FF;
-      GMask = $0000FF00;
-      BMask = $00FF0000;
-      AMask = $FF000000;
+	RMask = $000000FF;
+	GMask = $0000FF00;
+	BMask = $00FF0000;
+	AMask = $FF000000;
 
 type PSDL_Rect = ^TSDL_Rect;
-     TSDL_Rect = record
-		    {$IFDEF SDL13}
-                 x, y, w, h: LongInt;
-		    {$ELSE}
-                 x, y: SmallInt;
-                 w, h: Word;
-            {$ENDIF}
-                 end;
+	TSDL_Rect = record
+	{$IFDEF SDL13}
+		x, y, w, h: LongInt;
+	{$ELSE}
+		x, y: SmallInt;
+		w, h: Word;
+	{$ENDIF}
+		end;
 
-     TPoint = record
-              X: LongInt;
-              Y: LongInt;
-              end;
+	TPoint = record
+		X: LongInt;
+		Y: LongInt;
+		end;
 
-     PSDL_PixelFormat = ^TSDL_PixelFormat;
-     TSDL_PixelFormat = record
-                        palette: Pointer;
-                        BitsPerPixel : Byte;
-                        BytesPerPixel: Byte;
-                        Rloss : Byte;
-                        Gloss : Byte;
-                        Bloss : Byte;
-                        Aloss : Byte;
-                        Rshift: Byte;
-                        Gshift: Byte;
-                        Bshift: Byte;
-                        Ashift: Byte;
-                        RMask : Longword;
-                        GMask : Longword;
-                        BMask : Longword;
-                        AMask : Longword;
-                        colorkey: Longword;
-                        alpha : Byte;
-                        end;
-
-
-     PSDL_Surface = ^TSDL_Surface;
-     TSDL_Surface = record
-                    flags : Longword;
-                    format: PSDL_PixelFormat;
-                    w, h  : LongInt;
-                    pitch : Word;
-                    pixels: Pointer;
-                    offset: LongInt;
-                    end;
+	PSDL_PixelFormat = ^TSDL_PixelFormat;
+	TSDL_PixelFormat = record
+		palette: Pointer;
+		BitsPerPixel : Byte;
+		BytesPerPixel: Byte;
+		Rloss : Byte;
+		Gloss : Byte;
+		Bloss : Byte;
+		Aloss : Byte;
+		Rshift: Byte;
+		Gshift: Byte;
+		Bshift: Byte;
+		Ashift: Byte;
+		RMask : Longword;
+		GMask : Longword;
+		BMask : Longword;
+		AMask : Longword;
+		colorkey: Longword;
+		alpha : Byte;
+		end;
 
 
-     PSDL_Color = ^TSDL_Color;
-     TSDL_Color = record
-                  case byte of
-                       0: (r: Byte;
-                           g: Byte;
-                           b: Byte;
-                           unused: Byte;
-                          );
-                       1: (value: Longword);
-                  end;
+	PSDL_Surface = ^TSDL_Surface;
+	TSDL_Surface = record
+		flags : Longword;
+		format: PSDL_PixelFormat;
+		w, h  : LongInt;
+		pitch : Word;
+		pixels: Pointer;
+		offset: LongInt;
+		end;
 
 
-     PSDL_RWops = ^TSDL_RWops;
-     TSeek = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
-     TRead = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
-     TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
-     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
+	PSDL_Color = ^TSDL_Color;
+	TSDL_Color = record
+		case byte of
+			0: (r: Byte;
+				g: Byte;
+				b: Byte;
+				unused: Byte;
+				);
+			1: (value: Longword);
+		end;
 
-     TStdio = record
-              autoclose: LongInt;
-              fp: pointer;
-              end;
 
-     TMem = record
-            base: PByte;
-            here: PByte;
-            stop: PByte;
-            end;
+	PSDL_RWops = ^TSDL_RWops;
+	TSeek = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
+	TRead = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
+	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
+	TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 
-     TUnknown = record
-                data1: Pointer;
-                end;
+	TStdio = record
+		autoclose: LongInt;
+		fp: pointer;
+		end;
 
-     TSDL_RWops = record
-                  seek: TSeek;
-                  read: TRead;
-                  write: TWrite;
-                  close: TClose;
-                  type_: Longword;
-                  case Byte of
-                       0: (stdio: TStdio);
-                       1: (mem: TMem);
-                       2: (unknown: TUnknown);
-                       end;
+	TMem = record
+		base: PByte;
+		here: PByte;
+		stop: PByte;
+		end;
 
-     TSDL_KeySym = record
-                   scancode: Byte;
-                   sym: Longword;
-                   modifier: Longword;
-                   unicode: Word;
-                   end;
+	TUnknown = record
+		data1: Pointer;
+		end;
 
-     TSDL_ActiveEvent = record
-	                type_: byte;
-                    gain: byte;
-                    state: byte;
-                    end;
+	TSDL_RWops = record
+		seek: TSeek;
+		read: TRead;
+		write: TWrite;
+		close: TClose;
+		type_: Longword;
+		case Byte of
+			0: (stdio: TStdio);
+			1: (mem: TMem);
+			2: (unknown: TUnknown);
+			end;
 
-     TSDL_KeyboardEvent = record
-                          type_: Byte;
-                          which: Byte;
-                          state: Byte;
-                          keysym: TSDL_KeySym;
-                          end;
+	TSDL_KeySym = record
+		scancode: Byte;
+		sym: Longword;
+		modifier: Longword;
+		unicode: Word;
+		end;
 
-     TSDL_GLattr = ( SDL_GL_RED_SIZE,
-                     SDL_GL_GREEN_SIZE,
-                     SDL_GL_BLUE_SIZE,
-                     SDL_GL_ALPHA_SIZE,
-                     SDL_GL_BUFFER_SIZE,
-                     SDL_GL_DOUBLEBUFFER,
-                     SDL_GL_DEPTH_SIZE,
-                     SDL_GL_STENCIL_SIZE,
-                     SDL_GL_ACCUM_RED_SIZE,
-                     SDL_GL_ACCUM_GREEN_SIZE,
-                     SDL_GL_ACCUM_BLUE_SIZE,
-                     SDL_GL_ACCUM_ALPHA_SIZE,
-                     SDL_GL_STEREO,
-                     SDL_GL_MULTISAMPLEBUFFERS,
-                     SDL_GL_MULTISAMPLESAMPLES,
-                     SDL_GL_ACCELERATED_VISUAL,
-                     SDL_GL_RETAINED_BACKING,
-                     SDL_GL_CONTEXT_MAJOR_VERSION,
-                     SDL_GL_CONTEXT_MINOR_VERSION );
+	TSDL_ActiveEvent = record
+		type_: byte;
+		gain: byte;
+		state: byte;
+		end;
+
+	TSDL_KeyboardEvent = record
+		type_: Byte;
+		which: Byte;
+		state: Byte;
+		keysym: TSDL_KeySym;
+		end;
+
+	TSDL_MouseButtonEvent = record
+		_type,
+		which,
+		button,
+		state: byte;
+		x, y: word;
+		end;
+
+	TSDL_GLattr = (
+		SDL_GL_RED_SIZE,
+		SDL_GL_GREEN_SIZE,
+		SDL_GL_BLUE_SIZE,
+		SDL_GL_ALPHA_SIZE,
+		SDL_GL_BUFFER_SIZE,
+		SDL_GL_DOUBLEBUFFER,
+		SDL_GL_DEPTH_SIZE,
+		SDL_GL_STENCIL_SIZE,
+		SDL_GL_ACCUM_RED_SIZE,
+		SDL_GL_ACCUM_GREEN_SIZE,
+		SDL_GL_ACCUM_BLUE_SIZE,
+		SDL_GL_ACCUM_ALPHA_SIZE,
+		SDL_GL_STEREO,
+		SDL_GL_MULTISAMPLEBUFFERS,
+		SDL_GL_MULTISAMPLESAMPLES,
+		SDL_GL_ACCELERATED_VISUAL,
+		SDL_GL_RETAINED_BACKING,
+		SDL_GL_CONTEXT_MAJOR_VERSION,
+		SDL_GL_CONTEXT_MINOR_VERSION
+		);
 
 {$IFDEF SDL13}
      TSDL_MouseMotionEvent = record
@@ -268,6 +282,8 @@ type PSDL_Rect = ^TSDL_Rect;
                        SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
                        SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+                       SDL_MOUSEBUTTONDOWN,
+                       SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
 {$IFDEF SDL13}
                        SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
 {$ENDIF}

@@ -21,6 +21,8 @@ char sdlkeys[][2][16] =
 	{"mousel",	"mousel"},
 	{"mousem",	"mousem"},
 	{"mouser",	"mouser"},
+	{"wheelup",	"wheelup"},
+	{"wheeldown",	"wheeldown"},
 	{"backspace",	"backspace"},
 	{"tab",	"tab"},
 	{"clear",	"clear"},

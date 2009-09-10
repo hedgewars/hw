@@ -134,27 +134,27 @@ with CurrentHedgehog^ do
             g:= 0;
 			while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
 				begin
-                if (Ammo^[i, t].AmmoType <> amNothing) then
-                   begin
-                   l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
+				if (Ammo^[i, t].AmmoType <> amNothing) then
+					begin
+					l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
-                   if l >= 0 then
-                       begin
-                       DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-                       DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
-                       end else
-                       DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+					if l >= 0 then
+						begin
+						DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+						DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
+						end else
+						DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
 
-                   if (Slot = i)
-                   and (CursorPoint.X >= x + g * 33 + 35)
-                   and (CursorPoint.X < x + g * 33 + 68) then
-                       begin
-                       if (l < 0) then DrawSprite(sprAMSelection, x + g * 33 + 35, y + 1, 0);
-                       Pos:= t;
-                       end;
-                   inc(g)
-                   end;
-                   inc(t)
+					if (Slot = i)
+					and (CursorPoint.X >= x + g * 33 + 35)
+					and (CursorPoint.X < x + g * 33 + 68) then
+						begin
+						if (l < 0) then DrawSprite(sprAMSelection, x + g * 33 + 35, y + 1, 0);
+						Pos:= t;
+						end;
+					inc(g)
+					end;
+					inc(t)
 				end
 			end;
 	dec(y, 1);
@@ -298,12 +298,12 @@ var i, t: LongInt;
 begin
 if ZoomValue < zoom then
 	begin
-	zoom:= zoom - 0.001 * Lag;
+	zoom:= zoom - 0.002 * Lag;
 	if ZoomValue > zoom then zoom:= ZoomValue
 	end else
 if ZoomValue > zoom then
 	begin
-	zoom:= zoom + 0.001 * Lag;
+	zoom:= zoom + 0.002 * Lag;
 	if ZoomValue < zoom then zoom:= ZoomValue
 	end;
 
