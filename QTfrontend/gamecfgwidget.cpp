@@ -144,11 +144,12 @@ QStringList GameCFGWidget::getFullConfig() const
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
-	if (ammo.size() != cDefaultAmmoStore->size())
+	bool illegal = ammo.size() != cDefaultAmmoStore->size();
+	if (illegal)
 		QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
 
 	int pos = WeaponsName->findText(name);
-	if (pos == -1) {
+	if ((pos == -1) || illegal) { // prevent from overriding schemes with bad ones
 		WeaponsName->addItem(name, ammo);
 		WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
 	} else {

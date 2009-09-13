@@ -79,7 +79,7 @@ void HWChatWidget::onChatString(const QString& str)
 		chatStrings.removeFirst();
 
 	QString formattedStr = Qt::escape(str);
-	if (formattedStr.startsWith("***"))
+	if (formattedStr.startsWith("["))
 		formattedStr = QString("<font color=grey>%1</font>").arg(formattedStr);
 
 	chatStrings.append(formattedStr);
