@@ -36,13 +36,13 @@ fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)
 		removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
 		removeLength _ = Nothing
 
-isLegalNetCommand :: String -> Bool
-isLegalNetCommand msg = test decoded
+checkNetCmd :: String -> (Bool, Bool)
+checkNetCmd msg = check decoded
 	where
 		decoded = fromEngineMsg msg
-		test Nothing = False
-		test (Just (m:ms)) = m `Set.member` legalMessages
-		test _ = False
+		check Nothing = (False, False)
+		check (Just (m:ms)) = (m `Set.member` legalMessages, m == '+')
+		check _ = (False, False)
 		legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
 		slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 

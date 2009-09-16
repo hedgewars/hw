@@ -140,13 +140,13 @@ handleCmd_inRoom clID clients rooms ["START_GAME"] =
 
 
 handleCmd_inRoom clID clients rooms ["EM", msg] =
-	if (teamsInGame client > 0) && (isLegalNetCommand msg) then
-		[ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}),
-		AnswerOthersInRoom ["EM", msg]]
+	if (teamsInGame client > 0) && isLegal then
+		(AnswerOthersInRoom ["EM", msg]) : [ModifyRoom (\r -> r{roundMsgs = roundMsgs r |> msg}) | not isKeepAlive]
 	else
 		[]
 	where
 		client = clients IntMap.! clID
+		(isLegal, isKeepAlive) = checkNetCmd msg
 
 handleCmd_inRoom clID clients rooms ["ROUNDFINISHED"] =
 	if isMaster client then
