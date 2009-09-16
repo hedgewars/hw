@@ -209,7 +209,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			return;
 		}
 		case 'i': {
-			int size = msg.size();
 			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
 			break;
 		}
