@@ -99,9 +99,8 @@ var
 {$WARNINGS ON}
 
 var
-	cSendEmptyPacketTime : LongWord = 2000;
 	cSendCursorPosTime   : LongWord = 50;
-	ShowCrosshair  : boolean;
+	ShowCrosshair : boolean;
 	cDrownSpeed,
 	cMaxWindSpeed,
 	cWindSpeed,
@@ -275,8 +274,10 @@ end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 const stc: array [TStatInfoType] of char = 'rDkKH';
+var buf: shortstring;
 begin
-SendIPC('i' + stc[sit] + s)
+buf:= 'i' + stc[sit] + s;
+SendIPCRaw(@buf[0], length(buf) + 1)
 end;
 
 function Str2PChar(const s: shortstring): PChar;

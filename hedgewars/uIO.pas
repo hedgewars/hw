@@ -28,6 +28,7 @@ procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
 procedure SendIPCTimeInc;
+procedure SendKeepAliveMessage(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
@@ -52,11 +53,15 @@ type PCmd = ^TCmd;
             2: (str: shortstring);
             end;
 
-var  IPCSock: PTCPSocket = nil;
-     fds: PSDLNet_SocketSet;
+var
+	IPCSock: PTCPSocket = nil;
+	fds: PSDLNet_SocketSet;
 
-     headcmd: PCmd = nil;
-     lastcmd: PCmd = nil;
+	headcmd: PCmd = nil;
+	lastcmd: PCmd = nil;
+
+	SendEmptyPacketTicks: LongWord = 0;
+
 
 function AddCmd(Time: Longword; str: shortstring): PCmd;
 var Result: PCmd;
@@ -196,13 +201,14 @@ end;
 procedure SendIPC(s: shortstring);
 begin
 if IPCSock <> nil then
-   begin
-   if s[0]>#251 then s[0]:= #251;
-   SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-   {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s[1]);{$ENDIF}
-   inc(s[0], 2);
-   SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
-   end
+	begin
+	SendEmptyPacketTicks:= 0;
+	if s[0]>#251 then s[0]:= #251;
+	SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
+	{$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s[1]);{$ENDIF}
+	inc(s[0], 2);
+	SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+	end
 end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -243,6 +249,13 @@ begin
 SendIPC(s);
 SendIPC('?');
 IPCWaitPongEvent
+end;
+
+procedure SendKeepAliveMessage(Lag: Longword);
+begin
+inc(SendEmptyPacketTicks, Lag);
+if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
+	SendIPC('+')
 end;
 
 procedure NetGetNextCmd;

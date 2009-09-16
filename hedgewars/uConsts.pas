@@ -169,7 +169,8 @@ const // image flags (for LoadImage())
     ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
     ifLowRes      = $00000010; // try loading a low resolution image when it is critical
 
-const	cMaxPower     = 1500;
+const
+	cMaxPower     = 1500;
 	cMaxAngle     = 2048;
 	cPowerDivisor = 1500;
 
@@ -238,6 +239,8 @@ const	cMaxPower     = 1500;
 	cKeyMaxIndex = 1023;
 
 	cMaxCaptions = 4;
+
+	cSendEmptyPacketTime = 1000;
 
 	gfForts        = $00000001;
 	gfMultiWeapon  = $00000002;

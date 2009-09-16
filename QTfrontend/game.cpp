@@ -164,6 +164,7 @@ void HWGame::SendNetConfig()
 
 void HWGame::ParseMessage(const QByteArray & msg)
 {
+qDebug() << msg;
 	switch(msg.at(1)) {
 		case '?': {
 			SendIPC("!");
@@ -210,7 +211,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
 		}
 		case 'i': {
 			int size = msg.size();
-			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3).left(size - 5)));
+			emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
 			break;
 		}
 		case 'Q': {
