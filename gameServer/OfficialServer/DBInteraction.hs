@@ -75,7 +75,7 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
 
 pipeDbConnection accountsCache serverInfo = do
 	updatedCache <-
-		Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $ do
+		Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return accountsCache) $ do
 			(Just hIn, Just hOut, _, _) <- createProcess (proc "./OfficialServer/extdbinterface" [])
 					{std_in = CreatePipe,
 					std_out = CreatePipe}
