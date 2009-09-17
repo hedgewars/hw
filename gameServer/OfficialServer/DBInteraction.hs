@@ -8,11 +8,7 @@ import Prelude hiding (catch);
 import System.Process
 import System.IO
 import Control.Concurrent
-#if defined(NEW_EXCEPTIONS)
-import qualified Control.OldException as Exception
-#else
 import qualified Control.Exception as Exception
-#endif
 import Control.Monad
 import qualified Data.Map as Map
 import Monad
@@ -38,18 +34,8 @@ fakeDbConnection serverInfo = do
 
 
 #if defined(OFFICIAL_SERVER)
--------------------------------------------------------------------
--- borrowed from base 4.0.0 ---------------------------------------
-onException :: IO a -> IO b -> IO a
-onException io what = io `Exception.catch` \e -> do
-		what
-		Exception.throw (e :: Exception.Exception)
--- to be deleted --------------------------------------------------
--------------------------------------------------------------------
-
-
 pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
-	Exception.handle (\e -> warningM "Database" (show e) >> return accountsCache) $
+	Exception.handle (\(e :: Exception.IOException) -> warningM "Database" (show e) >> return accountsCache) $
 	do
 	q <- readChan queries
 	updatedCache <- case q of
