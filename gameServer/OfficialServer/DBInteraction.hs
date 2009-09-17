@@ -1,4 +1,4 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP, ScopedTypeVariables #-}
 module OfficialServer.DBInteraction
 (
 	startDBConnection
@@ -52,7 +52,7 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
 					writeChan coreChan $ ClientAccountInfo (clId, accountInfo)
 
 					return $ Map.insert clNick (currentTime, accountInfo) accountsCache
-				`onException`
+				`Exception.onException`
 					(unGetChan queries q)
 				else
 				do
@@ -60,10 +60,11 @@ pipeDbConnectionLoop queries coreChan hIn hOut accountsCache =
 					return accountsCache
 
 		ClearCache -> return Map.empty
-		SendStats {} -> onException (
+		SendStats {} -> (
 				(hPutStrLn hIn $ show q) >>
 				hFlush hIn >>
 				return accountsCache)
+				`Exception.onException`
 				(unGetChan queries q)
 
 	pipeDbConnectionLoop queries coreChan hIn hOut updatedCache
