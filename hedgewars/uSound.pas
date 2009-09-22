@@ -59,7 +59,7 @@ function  soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt
 
 
 {*remember: LongInt = 32bit; integer = 16bit; byte = 8bit*}
-function openal_init		(memsize: LongInt)                      : boolean; cdecl; external OpenALBridge;
+function openal_init		(hardware: LongInt; memsize: LongInt): boolean; cdecl; external OpenALBridge;
 function openal_close							: boolean; cdecl; external OpenALBridge;
 function openal_loadfile	(const filename: PChar)			: LongInt; cdecl; external OpenALBridge;
 function openal_toggleloop	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
@@ -106,7 +106,7 @@ if not isSoundEnabled then exit;
 {*sound works in ipodtouch only if LAND_WIDTH  = 1024;   LAND_HEIGHT = 512; 
 or if ogg are loaded in stream or if sound is loaded by demand*}
 WriteToConsole('Init OpenAL sound...');
-isSoundEnabled:= openal_init(numSounds);
+if isSoundHardware then isSoundEnabled:= openal_init(1, numSounds) else isSoundEnabled:= openal_init(0, numSounds);
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 

@@ -276,6 +276,7 @@ QStringList HWGame::setArguments()
 	arguments << QString("%1").arg(ipc_port);
 	arguments << (config->vid_Fullscreen() ? "1" : "0");
 	arguments << (config->isSoundEnabled() ? "1" : "0");
+	arguments << (config->isSoundHardware() ? "1" : "0");
 	arguments << tr("en.txt");
 	arguments << QString::number(config->volume()); // sound volume
 	arguments << QString::number(config->timerInterval());

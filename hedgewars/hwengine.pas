@@ -227,7 +227,7 @@ for i:= 0 to ParamCount do
 {$ENDIF}
 
 case ParamCount of
- 16: begin
+ 17: begin
      val(ParamStr(2), cScreenWidth);
      val(ParamStr(3), cScreenHeight);
      cInitWidth:= cScreenWidth;
@@ -237,15 +237,16 @@ case ParamCount of
      val(ParamStr(5), ipcPort);
      cFullScreen:= ParamStr(6) = '1';
      isSoundEnabled:= ParamStr(7) = '1';
-     cLocaleFName:= ParamStr(8);
-     val(ParamStr(9), cInitVolume);
-     val(ParamStr(10), cTimerInterval);
-     PathPrefix:= ParamStr(11);
-     cShowFPS:= ParamStr(12) = '1';
-     cAltDamage:= ParamStr(13) = '1';
-     UserNick:= DecodeBase64(ParamStr(14));
-     isMusicEnabled:= ParamStr(15) = '1';
-     cReducedQuality:= ParamStr(16) = '1';
+	 isSoundHardware:= ParamStr(8) = '1';
+     cLocaleFName:= ParamStr(9);
+     val(ParamStr(10), cInitVolume);
+     val(ParamStr(11), cTimerInterval);
+     PathPrefix:= ParamStr(12);
+     cShowFPS:= ParamStr(13) = '1';
+     cAltDamage:= ParamStr(14) = '1';
+     UserNick:= DecodeBase64(ParamStr(15));
+     isMusicEnabled:= ParamStr(16) = '1';
+     cReducedQuality:= ParamStr(17) = '1';
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;

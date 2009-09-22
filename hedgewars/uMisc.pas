@@ -32,6 +32,7 @@ var
 	isInLag         : boolean = false;
 	isPaused        : boolean = false;
 	isSoundEnabled  : boolean = true;
+	isSoundHardware : boolean = false;
 	isMusicEnabled  : boolean = false;
 	isSEBackup      : boolean = true;
 	isInMultiShoot  : boolean = false;

@@ -36,6 +36,7 @@ public:
 	QRect vid_Resolution();
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
+	bool isSoundHardware();
 	bool isMusicEnabled();
 	bool isShowFPSEnabled();
 	bool isAltDamageEnabled();

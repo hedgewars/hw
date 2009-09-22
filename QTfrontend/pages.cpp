@@ -425,6 +425,11 @@ PageOptions::PageOptions(QWidget* parent) :
 		CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
 		GBAlayout->addWidget(CBFrontendFullscreen);
 
+		CBHardwareSound = new QCheckBox(AGGroupBox);
+		CBHardwareSound->setText(QCheckBox::tr("Use hardware sound (if available; requires restart)"));
+		//CBHardwareSound->setEnabled(openal_ready());
+		GBAlayout->addWidget(CBHardwareSound);
+
 		CBEnableSound = new QCheckBox(AGGroupBox);
 		CBEnableSound->setText(QCheckBox::tr("Enable sound"));
 		//CBEnableSound->setEnabled(openal_ready());
@@ -443,7 +448,7 @@ PageOptions::PageOptions(QWidget* parent) :
 		volumeBox = new QSpinBox(AGGroupBox);
 		volumeBox->setRange(0, 100);
 		volumeBox->setSingleStep(5);
-		volumeBox->setEnabled(openal_ready());
+		//volumeBox->setEnabled(openal_ready());
 		GBAvollayout->addWidget(volumeBox);
 
 		CBShowFPS = new QCheckBox(AGGroupBox);

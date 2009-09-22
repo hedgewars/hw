@@ -56,15 +56,16 @@ QStringList SDLInteraction::getResolutions() const
 	return result;
 }
 
-void SDLInteraction::StartMusic()
+void SDLInteraction::StartMusic(bool hardware)
 {
 	if (music < 0) {
-	    openal_init(5);
+		openal_init(hardware ? 1 : 0, 5);
 		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 		openal_toggleloop(music);
+	
 	}
 	openal_setvolume(music, 60);
-	openal_fadein(music, 25);
+	openal_fadein(music, 30);
 }
 
 void SDLInteraction::StopMusic()

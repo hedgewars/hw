@@ -878,7 +878,7 @@ void HWForm::closeEvent(QCloseEvent *event)
 void HWForm::Music(bool checked)
 {
 	if (checked)
-		sdli.StartMusic();
+		sdli.StartMusic(ui.pageOptions->CBHardwareSound->isChecked());
 	else
 		sdli.StopMusic();
 }

@@ -48,6 +48,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
 	Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
+	Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
@@ -120,6 +121,7 @@ void GameUIConfig::SaveOptions()
 	}
 
 	setValue("audio/sound", isSoundEnabled());
+	setValue("audio/hardware", isSoundHardware());
 	setValue("audio/music", isMusicEnabled());
 	setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
@@ -175,6 +177,11 @@ bool GameUIConfig::isFrontendFullscreen() const
 bool GameUIConfig::isSoundEnabled()
 {
 	return Form->ui.pageOptions->CBEnableSound->isChecked();
+}
+
+bool GameUIConfig::isSoundHardware()
+{
+	return Form->ui.pageOptions->CBHardwareSound->isChecked();
 }
 
 bool GameUIConfig::isMusicEnabled()

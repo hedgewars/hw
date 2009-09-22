@@ -21,7 +21,7 @@
 
 #include <QStringList>
 
-extern "C" bool openal_init		(unsigned int memorysize);
+extern "C" bool openal_init		(unsigned int usehardware, unsigned int memorysize);
 extern "C" bool openal_close		(void);
 extern "C" bool openal_ready		(void);
 extern "C" int  openal_loadfile		(const char *filename);
@@ -47,7 +47,7 @@ public:
 	SDLInteraction();
 	~SDLInteraction();
 	QStringList getResolutions() const;
-	void StartMusic();
+	void StartMusic(bool);
 	void StopMusic();
 };
 

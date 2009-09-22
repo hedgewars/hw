@@ -25,7 +25,7 @@
 extern "C" {
 #endif 
     
-    ALboolean openal_init		(unsigned int memorysize);
+    ALboolean openal_init		(unsigned int usehardware, unsigned int memorysize);
     ALboolean openal_close		(void);
     ALint     openal_loadfile           (const char *filename);
     ALboolean openal_toggleloop         (unsigned int index);

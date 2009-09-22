@@ -68,7 +68,7 @@ extern "C" {
         return openalReady;
     }
     
-    ALboolean openal_init(uint32_t memorysize) {	
+    ALboolean openal_init(uint32_t usehardware, uint32_t memorysize) {	
         /*Initialize an OpenAL contex and allocate memory space for data and buffers*/
         ALCcontext *context;
         ALCdevice *device;
@@ -85,14 +85,22 @@ extern "C" {
             fprintf(stderr, "ERROR: OpenAL already initialized\n");
             return AL_FALSE;
         }
-        
-        default_device = alcGetString(NULL, ALC_DEFAULT_DEVICE_SPECIFIER);
-        fprintf(stderr, "Using default device: %s\n", default_device);
-        
-        if ((device = alcOpenDevice(default_device)) == NULL) {
-            fprintf(stderr, "ERROR: Failed to open sound device\n");
-            return AL_FALSE;
-        }
+
+		if(usehardware)
+		{
+			if ((device = alcOpenDevice(NULL)) == NULL) {
+				fprintf(stderr, "ERROR: Failed to open sound device\n");
+				return AL_FALSE;
+			}
+		}
+		else
+		{
+			if ((device = alcOpenDevice("Generic Software")) == NULL) {
+				fprintf(stderr, "ERROR: Failed to open sound device\n");
+				return AL_FALSE;
+			}
+		}
+		fprintf(stderr, "Using default device: %s\n", alcGetString(device, ALC_DEVICE_SPECIFIER));
         
         context = alcCreateContext(device, NULL);
         alcMakeContextCurrent(context);

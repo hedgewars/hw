@@ -215,6 +215,7 @@ public:
 	IconedGroupBox *AGGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
+	QCheckBox *CBHardwareSound;
 	QCheckBox *CBEnableMusic;
 	QCheckBox *CBFullscreen;
 	QCheckBox *CBFrontendFullscreen;
