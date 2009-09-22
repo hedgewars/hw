@@ -372,7 +372,8 @@ gtAmmo_Grenade: begin // bazooka
                 Result^.Radius:= 7;
                 Result^.Z:= cOnHHZ;
                 Result^.RenderTimer:= true;
-                if hwSign(dX) > 0 then Result^.Angle:= 1 else Result^.Angle:= 3
+                Result^.dX.QWordValue:= 1;
+                if not dX.isNegative then Result^.Angle:= 1 else Result^.Angle:= 3
                 end;
  gtHellishBomb: begin
                 Result^.Radius:= 4;
