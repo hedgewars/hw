@@ -170,7 +170,8 @@ var f: textfile;
 
 function hwSign(r: hwFloat): LongInt;
 begin
-if r.isNegative and (r.QWordValue > 0) then hwSign:= -1 else hwSign:= 1
+// yes, we have negative zero for a reason
+if r.isNegative then hwSign:= -1 else hwSign:= 1
 end;
 
 function Min(a, b: LongInt): LongInt;
