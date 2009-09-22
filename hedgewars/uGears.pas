@@ -96,7 +96,7 @@ var RopePoints: record
                                   dLen: hwFloat;
                                   b: boolean;
                                   end;
-                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2i;
+                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
                 end;
 
 procedure DeleteGear(Gear: PGear); forward;
@@ -1280,8 +1280,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
 	glLineWidth(4.0);
 
-//	glColor3ub($B0, $B0, $B0);
-	glColor4f(176.0, 176.0, 176.0, 1.0);
+	glColor4f(0.8, 0.8, 0.8, 1);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
