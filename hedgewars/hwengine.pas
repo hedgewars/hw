@@ -168,16 +168,20 @@ PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
 	case event.type_ of
-	{$IFDEF IPHONEOS}
+{$IFDEF IPHONEOS}
 		SDL_MOUSEMOTION: WriteLnToConsole('mouse number ' + inttostr(SDL_SelectMouse(event.motion.which)) + ' over ' + inttostr(SDL_GetNumMice()));
-	{$ELSE}
+                SDL_WINDOWEVENT:
+{$ELSE}
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
-	{$ENDIF}
-		SDL_ACTIVEEVENT: if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+                SDL_ACTIVEEVENT:
+{$ENDIF}
+                        if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
+{$IFNDEF IPHONEOS}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
+{$ENDIF}
 		SDL_QUITEV: isTerminated:= true
 		end;
 CurrTime:= SDL_GetTicks;
@@ -245,7 +249,7 @@ case ParamCount of
      for p:= Succ(Low(TPathType)) to High(TPathType) do
          if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;
-	 {$IFDEF IPHONEOS}
+{$IFDEF IPHONEOS}
   0: begin
         PathPrefix:= 'hedgewars/Data';
 		recordFileName:= 'hedgewars/save.hws';
@@ -268,7 +272,7 @@ case ParamCount of
         for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;
-	 {$ENDIF}
+{$ENDIF}
   3: begin
      val(ParamStr(2), ipcPort);
      GameType:= gmtLandPreview;

@@ -103,6 +103,8 @@ procedure InitSound;
 const numSounds = 80;
 begin
 if not isSoundEnabled then exit;
+{*sound works in ipodtouch only if LAND_WIDTH  = 1024;   LAND_HEIGHT = 512; 
+or if ogg are loaded in stream or if sound is loaded by demand*}
 WriteToConsole('Init OpenAL sound...');
 isSoundEnabled:= openal_init(numSounds);
 if isSoundEnabled then WriteLnToConsole(msgOK)

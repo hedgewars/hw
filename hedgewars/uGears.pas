@@ -1280,10 +1280,11 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
 	glLineWidth(4.0);
 
-	glColor3ub($B0, $B0, $B0);
+//	glColor3ub($B0, $B0, $B0);
+	glColor4f(176.0, 176.0, 176.0, 1.0);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_INT, 0, @RopePoints.rounded[0]);
+	glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
 	glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
 	glColor4f(1, 1, 1, 1);
 

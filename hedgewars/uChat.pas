@@ -237,15 +237,6 @@ if Key <> 0 then
 			FreezeEnterKey;
 			GameState:= gsGame
 			end;
-		{missing Mac keys}
-		{*
-			63272 is canc
-			63232 is UP
-			63234 is LEFT
-			63235 is RIGHT
-			63233 is DOWN
-		*}
-		63272, 63232, 36233, 36234, 36235: Key:= 28;
 	else
 	if (Key < $80) then btw:= 1
 	else if (Key < $800) then btw:= 2

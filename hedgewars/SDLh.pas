@@ -47,21 +47,24 @@ interface
 {$ENDIF}
 
 (*  SDL  *)
-const {$IFDEF WIN32}
-	SDLLibName = 'SDL.dll';
-	{$ENDIF}
-	{$IFDEF UNIX}
-			{$IFDEF DARWIN}
-			SDLLibName = 'SDL';
-			{$ELSE}
-			SDLLibName = 'libSDL.so';
-			{$ENDIF}
-	{$ENDIF}
+const
+{$IFDEF WIN32}
+        SDLLibName = 'SDL.dll';
+{$ENDIF}
+{$IFDEF UNIX}
+	{$IFDEF DARWIN}
+                SDLLibName = 'SDL';
+        {$ELSE}
+		SDLLibName = 'libSDL.so';
+        {$ENDIF}
+{$ENDIF}
 	SDL_SWSURFACE   = $00000000;
 	SDL_HWSURFACE   = $00000001;
 	SDL_SRCALPHA    = $00010000;
 	SDL_INIT_VIDEO  = $00000020;
 	SDL_INIT_AUDIO  = $00000010;
+
+	SDL_APPINPUTFOCUS=$00000010;
 
 {$IFDEF SDL13}
 	SDL_ASYNCBLIT   = $08000000;
@@ -89,22 +92,28 @@ const {$IFDEF WIN32}
 	SDL_RESIZABLE   = $00000010;
 {$ENDIF}
 
+{*begin sdl_event binding*}
 	SDL_NOEVENT     = 0;
-	SDL_ACTIVEEVENT = 1;
 	SDL_KEYDOWN     = 2;
 	SDL_KEYUP       = 3;
-	SDL_MOUSEBUTTONDOWN = 5;
-	SDL_MOUSEBUTTONUP   = 6;
 	SDL_QUITEV      = 12;
 	SDL_VIDEORESIZE = 16;
 
 {$IFDEF SDL13}
+        SDL_WINDOWEVENT = 1;
+        SDL_TEXTINPUT = 4;
 	SDL_MOUSEMOTION  = 5;
-{$ENDIF}
-
-	SDL_APPINPUTFOCUS = 2;
-	SDL_BUTTON_WHEELDUP = 4;
+        SDL_MOUSEBUTTONDOWN = 6;
+	SDL_MOUSEBUTTONUP   = 7;
+        SDL_MOUSEWHEEL = 8;  //different handling, should create SDL_MouseWheelEvent type
+{$ELSE}
+        SDL_ACTIVEEVENT = 1;
+       	SDL_MOUSEBUTTONDOWN = 5;
+	SDL_MOUSEBUTTONUP   = 6;
+        SDL_BUTTON_WHEELDUP = 4;
 	SDL_BUTTON_WHEELDOWN = 5;
+{$ENDIF}
+{*end sdl_event binding*}
 
 	RMask = $000000FF;
 	GMask = $0000FF00;
@@ -113,12 +122,12 @@ const {$IFDEF WIN32}
 
 type PSDL_Rect = ^TSDL_Rect;
 	TSDL_Rect = record
-	{$IFDEF SDL13}
+{$IFDEF SDL13}
 		x, y, w, h: LongInt;
-	{$ELSE}
+{$ELSE}
 		x, y: SmallInt;
 		w, h: Word;
-	{$ENDIF}
+{$ENDIF}
 		end;
 
 	TPoint = record
@@ -277,15 +286,25 @@ type PSDL_Rect = ^TSDL_Rect;
      PSDL_Event = ^TSDL_Event;
      TSDL_Event = record
                   case Byte of
+{$IFDEF SDL13}
+                        //doublecheck the type of WINDOWEVENT TEXTINPUT
+                        SDL_NOEVENT: (type_: byte);
+                        SDL_WINDOWEVENT: (active: TSDL_ActiveEvent);
+                        SDL_KEYDOWN,
+                        SDL_KEYUP: (key: TSDL_KeyboardEvent);
+                        SDL_TEXTINPUT: (txtin: byte);
+                        SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+                        SDL_MOUSEBUTTONDOWN,
+                        SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+{$ELSE}
                        SDL_NOEVENT: (type_: byte);
                        SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
-                       SDL_KEYDOWN, SDL_KEYUP: (key: TSDL_KeyboardEvent);
+                       SDL_KEYDOWN,
+                       SDL_KEYUP: (key: TSDL_KeyboardEvent);
                        SDL_QUITEV: (quit: TSDL_QuitEvent);
                        SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
                        SDL_MOUSEBUTTONDOWN,
                        SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-{$IFDEF SDL13}
-                       SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
 {$ENDIF}
      end;
 
