@@ -25,6 +25,8 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
 	<key>LSRequiresNativeExecution</key>
+	<string>SUPublicDSAKeyFile</string>
+	<key>dsa_pub.pem</key>
         <true/>
 </dict>
 </plist>

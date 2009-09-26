@@ -6,4 +6,6 @@ IF(APPLE)
 		DESTINATION ../)
 	install(PROGRAMS "${hedgewars_SOURCE_DIR}/misc/Icon.icns"
 		DESTINATION ../Resources/)
+	install(PROGRAMS "${hedgewars_SOURCE_DIR}/misc/dsa_pub.pem"
+		DESTINATION ../Resources/)
 ENDIF(APPLE)
