@@ -75,9 +75,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
 	Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
 
-#ifdef __APPLE__
-    //autoupdate
-    Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
+#ifdef SPARKLE_ENABLED
+        Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
 #endif
 
 	depth = QApplication::desktop()->depth();
@@ -90,15 +89,15 @@ QStringList GameUIConfig::GetTeamsList()
 	QStringList teamslist = cfgdir->entryList(QStringList("*.cfg"));
 	QStringList cleanedList;
 	for (QStringList::Iterator it = teamslist.begin(); it != teamslist.end(); ++it ) {
-	  QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.cfg$"), "\\1");
-	  cleanedList.push_back(tmpTeamStr);
+            QString tmpTeamStr=(*it).replace(QRegExp("^(.*)\\.cfg$"), "\\1");
+            cleanedList.push_back(tmpTeamStr);
 	}
 	return cleanedList;
 }
 
 void GameUIConfig::resizeToConfigValues()
 {
-  Form->resize(value("window/width", 720).toUInt(), value("window/height", 450).toUInt());
+        Form->resize(value("window/width", 720).toUInt(), value("window/height", 450).toUInt());
 }
 
 void GameUIConfig::SaveOptions()
@@ -137,9 +136,8 @@ void GameUIConfig::SaveOptions()
 	setValue("misc/altdamage", isAltDamageEnabled());
 	setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
 
-#ifdef __APPLE__
-    //autoupdate
-    setValue("misc/autoUpdate", isAutoUpdateEnabled());
+#ifdef SPARKLE_ENABLED
+        setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
 }
 
@@ -204,8 +202,7 @@ bool GameUIConfig::appendDateTimeToRecordName()
 	return Form->ui.pageOptions->CBNameWithDate->isChecked();
 }
 
-#ifdef __APPLE__
-//autoupdate
+#ifdef SPARKLE_ENABLED
 bool GameUIConfig::isAutoUpdateEnabled()
 {
     return Form->ui.pageOptions->CBAutoUpdate->isChecked();

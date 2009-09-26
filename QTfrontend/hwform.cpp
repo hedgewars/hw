@@ -55,8 +55,7 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 
-#ifdef __APPLE__
-//autoupdate
+#ifdef SPARKLE_ENABLED
 #include "CocoaInitializer.h"
 #include "SparkleAutoUpdater.h"
 #endif
@@ -81,8 +80,7 @@ HWForm::HWForm(QWidget *parent)
 
 	namegen = new HWNamegen();
 
-#ifdef __APPLE__
-        //autoupdate
+#ifdef SPARKLE_ENABLED
         AutoUpdater* updater;
         CocoaInitializer initializer;
         updater = new SparkleAutoUpdater("http://files.getdropbox.com/u/24468/appcast.xml"); //this has to change before release!!!

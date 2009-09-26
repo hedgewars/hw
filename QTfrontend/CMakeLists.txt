@@ -17,6 +17,7 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
+find_package(Sparkle)
 
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
@@ -137,11 +138,10 @@ set(hwfr_moc_hdrs
 	bgwidget.h
 	)
 
-if(APPLE)
-find_package(Sparkle REQUIRED)
+if(APPLE AND SPARKLE_FOUND)
 set(hwfr_src ${hwfr_src} AutoUpdater.cpp CocoaInitializer.mm SparkleAutoUpdater.mm)
 #set(hwfr_moc_hdrs ${hwfr_moc_hdrs} AutoUpdater.h CocoaInitializer.h SparkleAutoUpdater.h)
-endif(APPLE)
+endif()
 
 set(hwfr_hdrs
 	binds.h
@@ -188,8 +188,11 @@ else()
 		${OGG_LIBRARY}
 		${VORBIS_LIBRARY}
 		${HW_LINK_LIBS}
-		${SPARKLE_LIBRARY}
 		)
+        if (SPARKLE_FOUND)
+                set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})
+                set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS} "-DSPARKLE_ENABLED")
+        endif()
 endif()
 
 

@@ -1,19 +1,17 @@
-### SuperTux - Removed unused vorbisenc library
+### Hedgewars
 
-# - Try to find the OggVorbis libraries
+# - Try to find the Sparkle framework
 # Once done this will define
 #
-#  OGGVORBIS_FOUND - system has OggVorbis
-#  OGGVORBIS_VERSION - set either to 1 or 2
-#  OGGVORBIS_INCLUDE_DIR - the OggVorbis include directory
-#  OGGVORBIS_LIBRARIES - The libraries needed to use OggVorbis
-#  OGG_LIBRARY         - The Ogg library
-#  VORBIS_LIBRARY      - The Vorbis library
-#  VORBISFILE_LIBRARY  - The VorbisFile library
-# Copyright (c) 2006, Richard Laerkaeng, <richard@goteborg.utfors.se>
+#  SPARKLE_FOUND - system has Sparkle
+#  SPARKLE_INCLUDE_DIR - the Sparkle include directory
+#  SPARKLE_LIBRARY - The library needed to use Sparkle
+# Copyright (c) 2009, Vittorio Giovara, <vittorio.giovara@gmail.com>
 #
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# Redistribution and use is allowed according to the terms of a Creative Commons license.
+# For details see http://creativecommons.org/licenses/by-sa/3.0/
+# original version of this module was derived from Richard Laerkaeng, <richard@goteborg.utfors.se>
+
 
 include (CheckLibraryExists)
 find_path(SPARKLE_INCLUDE_DIR Sparkle.h)
@@ -32,9 +30,10 @@ if (SPARKLE_FOUND)
 else ()
    if (Sparkle_FIND_REQUIRED)
       message(FATAL_ERROR "Could NOT find Sparkle framework")
-   endif ()
-   if (NOT Sparkle_FIND_QUIETLY)
-      message(STATUS "Could NOT find Sparkle framework")
+   else ()
+      if (NOT Sparkle_FIND_QUIETLY)
+         message(STATUS "Could NOT find Sparkle framework, autoupdate feature will be disabled")
+      endif()
    endif ()
 endif ()
 

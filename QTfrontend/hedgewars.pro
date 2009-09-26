@@ -8,11 +8,6 @@ win32 {
 	RC_FILE	= ./res/hedgewars.rc
 }
 
-macx{
-	CONFIG += x86
- 	#CONFIG += x86 ppc x86_64 ppc64
-}
-
 QT += network svg xml
 
 HEADERS += 	KB.h SDLs.h SquareLabel.h \
@@ -77,9 +72,13 @@ RESOURCES += hedgewars.qrc
 !macx{
 	LIBS += -lSDL -lopenalbridge
 }else{
-	LIBS += -framework SDL -framework OpenAL -framework Ogg -framework Vorbis -lopenalbridge -framework Sparkle
+	LIBS += -framework SDL -framework OpenAL -framework Ogg -framework Vorbis -lopenalbridge 
 	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers
-	SOURCES += AutoUpdater.cpp CocoaInitializer.mm SparkleAutoUpdater.mm
-	HEADERS += AutoUpdater.h CocoaInitializer.h SparkleAutoUpdater.h
-	
+	CONFIG += warn_on x86
+
+	#-framework Sparkle
+	#SOURCES += AutoUpdater.cpp CocoaInitializer.mm SparkleAutoUpdater.mm
+	#HEADERS += AutoUpdater.h CocoaInitializer.h SparkleAutoUpdater.h
+
+ 	#CONFIG += x86 ppc x86_64 ppc64
 }
