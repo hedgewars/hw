@@ -336,21 +336,20 @@ begin
 SendIPC('s' + s);
 
 if copy(s, 1, 4) = '/me ' then
-	s:= '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
+	s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
 else
-	s:= UserNick + ': ' + s;
+	s:= #1 + UserNick + ': ' + s;
 
 AddChatString(s)
 end;
 
 procedure chTeamSay(var s: shortstring);
-var text: shortstring;
 begin
 SendIPC('b' + s);
 
-text:= copy(s, 2, Length(s)-1);
+s[1]:= #4;
 
-AddChatString(text)
+AddChatString(s)
 end;
 
 procedure chTimer(var s: shortstring);

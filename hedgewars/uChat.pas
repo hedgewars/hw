@@ -46,16 +46,34 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	InputStr: TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
+const colors: array[#1..#4] of Longword = (
+	$FFFFFF, // chat message
+	$FF00FF, // action message
+	$00B000, // join/leave message
+	$AFFFAF  // team message
+	);
+
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
 	w, h: LongInt;
+	color: Longword;
 begin
 if cl.Tex <> nil then
 	FreeTexture(cl.Tex);
 
+
 cl.s:= str;
 
-if isInput then str:= UserNick + '> ' + str + '_';
+if isInput then
+	begin
+	color:= $00FFFF;
+	str:= UserNick + '> ' + str + '_'
+	end
+	else begin
+	color:= colors[str[1]];
+	delete(str, 1, 1)
+	end;
+
 
 TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
 
@@ -65,7 +83,7 @@ resSurface:= SDL_CreateRGBSurface(0,
 		32,
 		RMask, GMask, BMask, AMask);
 
-strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), $FFFFFF);
+strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), color);
 cl.Width:= w + 4;
 SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);

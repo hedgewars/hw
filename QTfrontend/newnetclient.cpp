@@ -375,7 +375,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 					emit configAsked();
 			}
 			emit nickAdded(lst[i]);
-			emit chatStringFromNet(QString(tr("[ %1 has joined the room ]")).arg(lst[i]));
+			emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
 		}
 		return;
 	}
@@ -397,7 +397,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			}
 
 			emit nickAddedLobby(lst[i]);
-			emit chatStringLobby(QString(tr("[ %1 has joined ]")).arg(lst[i]));
+			emit chatStringLobby(tr("%1 *** %2 has joined").arg('\x03').arg(lst[i]));
 		}
 		return;
 	}
@@ -410,9 +410,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		emit nickRemoved(lst[1]);
 		if (lst.size() < 3)
-			emit chatStringFromNet(QString(tr("[ %1 has left ]")).arg(lst[1]));
+			emit chatStringFromNet(tr("%1 *** %2 has left ]").arg('\x03').arg(lst[1]));
 		else
-			emit chatStringFromNet(QString(tr("[ %1 has left (%2) ]")).arg(lst[1], lst[2]));
+			emit chatStringFromNet(tr("%1 *** %2 has left (%3) ]").arg('\x03').arg(lst[1], lst[2]));
 		return;
 	}
 
@@ -434,9 +434,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		emit nickRemovedLobby(lst[1]);
 		if (lst.size() < 3)
-			emit chatStringLobby(QString(tr("[ %1 has left ]")).arg(lst[1]));
+			emit chatStringLobby(tr("%1 *** %2 has left ]").arg('\x03').arg(lst[1]));
 		else
-			emit chatStringLobby(QString(tr("[ %1 has left (%2) ]")).arg(lst[1], lst[2]));
+			emit chatStringLobby(tr("%1 *** %2 has left (%3) ]").arg('\x03').arg(lst[1], lst[2]));
 		return;
 	}
 
@@ -629,9 +629,9 @@ void HWNewNet::gameFinished()
 QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
 {
 	if(msg.left(4) == "/me ")
-		return QString("* %1 %2").arg(nick).arg(msg.mid(4));
+		return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
 	else
-		return QString("%1: %2").arg(nick).arg(msg);
+		return QString("\x01%1: %2").arg(nick).arg(msg);
 }
 
 void HWNewNet::banPlayer(const QString & nick)

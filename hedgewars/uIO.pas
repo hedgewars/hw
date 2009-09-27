@@ -315,7 +315,7 @@ while (headcmd <> nil)
 		'b': if LocalClan = byte(headcmd^.str[2]) then
                begin
                s:= copy(headcmd^.str, 3, Pred(headcmd^.len));
-               AddChatString(s);
+               AddChatString(#4 + s);
                WriteLnToConsole(s)
                end;
 		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
