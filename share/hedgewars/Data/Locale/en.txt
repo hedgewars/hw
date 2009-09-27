@@ -50,6 +50,7 @@
 01:06=Sudden Death!
 01:07=Remaining
 01:08=Fuel
+01:09=Synchronizing...
 
 ; Event messages
 ; Hog (%1) died

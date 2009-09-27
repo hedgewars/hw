@@ -466,6 +466,7 @@ if isCursorVisible and bShowAmmoMenu then
 
 DrawChat;
 
+if fastUntilLag then DrawCentered(0, cScreenHeight div 2, SyncTexture);
 if isPaused then DrawCentered(0, cScreenHeight div 2, PauseTexture);
 
 inc(Frames);
@@ -556,7 +557,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 	CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
 	end;
 
-if (FollowGear <> nil) and (not isCursorVisible) then
+if (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
 	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
 		begin
 		FollowGear:= nil;

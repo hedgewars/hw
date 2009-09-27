@@ -49,8 +49,8 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 const colors: array[#1..#4] of Longword = (
 	$FFFFFF, // chat message
 	$FF00FF, // action message
-	$00B000, // join/leave message
-	$AFFFAF  // team message
+	$00FF00, // join/leave message
+	$A0FFFF  // team message
 	);
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
@@ -66,7 +66,7 @@ cl.s:= str;
 
 if isInput then
 	begin
-	color:= $00FFFF;
+	color:= $FFFF00;
 	str:= UserNick + '> ' + str + '_'
 	end
 	else begin

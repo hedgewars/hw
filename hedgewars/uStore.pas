@@ -61,6 +61,7 @@ procedure SetScale(f: GLfloat);
 var PixelFormat: PSDL_PixelFormat = nil;
  SDLPrimSurface: PSDL_Surface = nil;
    PauseTexture,
+   SyncTexture,
    ConfirmTexture: PTexture;
    cScaleFactor: GLfloat = 2.0;
 
@@ -308,6 +309,7 @@ InitHealth;
 
 PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], $FFFF00, fntBig);
+SyncTexture:= RenderStringTex(trmsg[sidSync], $FFFF00, fntBig);
 
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
