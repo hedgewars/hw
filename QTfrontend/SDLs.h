@@ -44,10 +44,10 @@ private:
 	int music;
 
 public:
-	SDLInteraction();
+	SDLInteraction(bool);
 	~SDLInteraction();
 	QStringList getResolutions() const;
-	void StartMusic(bool);
+	void StartMusic();
 	void StopMusic();
 };
 

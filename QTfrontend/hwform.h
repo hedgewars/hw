@@ -144,7 +144,7 @@ private:
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
 	QTime eggTimer;
-	SDLInteraction sdli;
+	SDLInteraction * sdli;
 	BGWidget * wBackground;
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };

@@ -21,11 +21,12 @@
 #include "SDL.h"
 #include "hwconsts.h"
 
-SDLInteraction::SDLInteraction()
+SDLInteraction::SDLInteraction(bool hardware_snd)
 {
 	music = -1;
 
 	SDL_Init(SDL_INIT_VIDEO);
+        openal_init(hardware_snd ? 1 : 0, 5);
 
 }
 
@@ -56,10 +57,9 @@ QStringList SDLInteraction::getResolutions() const
 	return result;
 }
 
-void SDLInteraction::StartMusic(bool hardware)
+void SDLInteraction::StartMusic()
 {
 	if (music < 0) {
-		openal_init(hardware ? 1 : 0, 5);
 		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 		openal_toggleloop(music);
 	

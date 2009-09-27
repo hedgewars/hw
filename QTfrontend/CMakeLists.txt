@@ -191,7 +191,7 @@ else()
 		)
         if (SPARKLE_FOUND)
                 set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})
-                set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS} "-DSPARKLE_ENABLED")
+                set(CMAKE_CXX_FLAGS -DSPARKLE_ENABLED)
         endif()
 endif()
 
