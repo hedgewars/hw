@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleName</key>
+	<string>Hedgewars</string>
 	<key>CFBundleExecutable</key>
 	<string>hedgewars</string>
 	<key>CFBundleGetInfoString</key>
@@ -25,8 +27,8 @@
 	<key>LSMinimumSystemVersion</key>
 	<string>10.4.0</string>
 	<key>LSRequiresNativeExecution</key>
-	<string>SUPublicDSAKeyFile</string>
-	<key>dsa_pub.pem</key>
         <true/>
+	<key>SUPublicDSAKeyFile</key>
+	<string>dsa_pub.pem</string>
 </dict>
 </plist>

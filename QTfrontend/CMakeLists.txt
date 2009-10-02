@@ -194,17 +194,14 @@ else()
 		)
         if (SPARKLE_FOUND)
                 set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})
-                set(CMAKE_CXX_FLAGS -DSPARKLE_ENABLED)
+                add_definitions(-DSPARKLE_ENABLED)
         endif()
 endif()
 
 
 if(WIN32 AND NOT UNIX)
 	if(NOT SDL_LIBRARY)
-		set(HW_LINK_LIBS 
-			${HW_LINK_LIBS}
-			SDL
-			)
+		set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
 	endif(NOT SDL_LIBRARY)
 
 	set(HW_LINK_LIBS 

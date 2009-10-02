@@ -22,7 +22,7 @@ set(target_dir ".")
 
 if(CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc7400" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc7400;i386" OR CMAKE_OSX_ARCHITECTURES MATCHES "i386;ppc" OR CMAKE_OSX_ARCHITECTURES MATCHES "ppc;i386")
 	set(universal_build true)
-	message("-- Building a Universal Application")
+	message(STATUS "Building a Universal Application")
 endif()
 else(APPLE)
 set(target_dir "bin")

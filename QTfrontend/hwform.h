@@ -29,7 +29,7 @@
 #include "SDLs.h"
 #include "bgwidget.h"
 
-#ifdef __APPLE
+#ifdef __APPLE__
 #include "InstallController.h"
 #endif
 

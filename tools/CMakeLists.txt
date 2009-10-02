@@ -13,6 +13,8 @@ set_target_properties(bundle PROPERTIES POST_INSTALL_SCRIPT ${CMAKE_CURRENT_BINA
 
 set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
 
+string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
 
-endif()
+endif(APPLE AND BUNDLE)

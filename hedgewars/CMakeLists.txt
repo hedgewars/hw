@@ -1,5 +1,10 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in ${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
+find_package(SDL REQUIRED)
+find_package(SDL_IMAGE REQUIRED)
+find_package(SDL_NET REQUIRED)
+find_package(SDL_TTF REQUIRED)
+
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
@@ -64,28 +69,24 @@ set (noexecstack_flags "")
 endif (${testnoexecstack})
 
 IF(APPLE)
-	FIND_PACKAGE(SDL)
+#let's build sdlmain, which is absent from the framework
+	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+	include_directories(${SDL_INCLUDE_DIR})
+	link_libraries(${SDL_LIBRARY})
 
-	if (SDL_FOUND)
-		set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-		include_directories(${SDL_INCLUDE_DIR})
-		link_libraries(${SDL_LIBRARY})
-
-		add_library (SDLmain STATIC SDLMain.m)
-		set(engine_sources SDLmain ${engine_sources})
-	else (SDL_FOUND)
-		message(FATAL_ERROR "No SDL framework found!")
-	endif (SDL_FOUND)
+	add_library (SDLmain STATIC SDLMain.m)
+	set(engine_sources SDLmain ${engine_sources})
 ENDIF(APPLE)
 
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
+
 if (fpc_version)
 	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
-	string(REGEX REPLACE "[0-9]+\\.([0-9])+\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
+	string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
 	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
 	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
 	if (fpc_ver LESS "020200")
-		message("Minimum required version of FreePascal is 2.2.0")
+		message(STATUS "Minimum required version of FreePascal is 2.2.0")
 	else (fpc_ver LESS "020200")
 		set(pascal_compiler ${fpc_executable})
 		if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")

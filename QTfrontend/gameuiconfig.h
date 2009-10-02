@@ -50,8 +50,10 @@ public:
 	bool isFrontendFullscreen() const;
 	void resizeToConfigValues();
 
-#ifdef __APPLE__ and SPARKLE_ENABLED
-    bool isAutoUpdateEnabled();
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
+	bool isAutoUpdateEnabled();
+#endif
 #endif
 
  signals:

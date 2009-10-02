@@ -1,8 +1,12 @@
 find_program(ghc_executable ghc)
 
-if (NOT ghc_executable)
+if(NOT ghc_executable)
 	message(FATAL_ERROR "Cannot find GHC")
 endif(NOT ghc_executable)
+
+if(APPLE)
+	find_package(GMP REQUIRED)
+endif(APPLE)
 
 set(hwserver_sources
 	OfficialServer/DBInteraction.hs
@@ -29,7 +33,7 @@ set(ghc_flags
 	-odir ${CMAKE_CURRENT_BINARY_DIR}
 	-hidir ${CMAKE_CURRENT_BINARY_DIR})
 
-if( NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
+if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
 set(ghc_flags
 	-w
 	-O2
