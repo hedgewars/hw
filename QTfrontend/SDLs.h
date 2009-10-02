@@ -51,4 +51,6 @@ public:
 	void StopMusic();
 };
 
+void OpenAL_Init();
+
 #endif

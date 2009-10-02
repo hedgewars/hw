@@ -289,6 +289,9 @@ void PageEditTeam::testSound()
 {
 	int sound;
 	QDir tmpdir;
+
+	OpenAL_Init();
+	
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Sounds/voices");
 	tmpdir.cd(CBVoicepack->currentText());

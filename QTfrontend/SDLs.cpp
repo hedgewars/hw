@@ -21,13 +21,13 @@
 #include "SDL.h"
 #include "hwconsts.h"
 
+bool hardware;
+
 SDLInteraction::SDLInteraction(bool hardware_snd)
 {
 	music = -1;
-
+	hardware = hardware_snd;
 	SDL_Init(SDL_INIT_VIDEO);
-        openal_init(hardware_snd ? 1 : 0, 5);
-
 }
 
 SDLInteraction::~SDLInteraction()
@@ -59,6 +59,7 @@ QStringList SDLInteraction::getResolutions() const
 
 void SDLInteraction::StartMusic()
 {
+	OpenAL_Init();
 	if (music < 0) {
 		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 		openal_toggleloop(music);
@@ -72,3 +73,12 @@ void SDLInteraction::StopMusic()
 {
 	if (music >= 0) openal_fadeout(music, 40);
 }
+
+//we need thjs wrapper because of some issues with windows drivers
+//beware that this cause a slight delay when playing the first sound
+void OpenAL_Init()
+{
+	if (!openal_ready())
+        	openal_init(hardware ? 1 : 0, 5);
+}
+
