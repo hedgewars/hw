@@ -55,9 +55,12 @@
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
 
-#ifdef SPARKLE_ENABLED
+#ifdef __APPLE__
 #include "CocoaInitializer.h"
+#include "M3Panel.h"
+#ifdef SPARKLE_ENABLED
 #include "SparkleAutoUpdater.h"
+#endif
 #endif
 
 // I started handing this down to each place it touches, but it was getting ridiculous
@@ -82,12 +85,15 @@ HWForm::HWForm(QWidget *parent)
 
 	namegen = new HWNamegen();
 
+#ifdef __APPLE__
+        panel = new M3Panel;
 #ifdef SPARKLE_ENABLED
         AutoUpdater* updater;
         CocoaInitializer initializer;
         updater = new SparkleAutoUpdater("http://files.getdropbox.com/u/24468/appcast.xml"); //this has to change before release!!!
         if(updater && config->isAutoUpdateEnabled())
             updater->checkForUpdates();
+#endif        
 #endif
 
 	UpdateTeamsLists();
@@ -427,9 +433,13 @@ void HWForm::btnExitPressed()
 
 void HWForm::btnExitClicked()
 {
-	if (eggTimer.elapsed() < 3000)
+	if (eggTimer.elapsed() < 3000){
+#ifdef __APPLE__
+                panel->showInstallController();
+#endif
 		close();
-	else
+	}
+        else
 	{
 		QPushButton * btn = findChild<QPushButton *>("imageButt");
 		if (btn)

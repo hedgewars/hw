@@ -138,9 +138,11 @@ set(hwfr_moc_hdrs
 	bgwidget.h
 	)
 
-if(APPLE AND SPARKLE_FOUND)
-set(hwfr_src ${hwfr_src} AutoUpdater.cpp CocoaInitializer.mm SparkleAutoUpdater.mm)
-#set(hwfr_moc_hdrs ${hwfr_moc_hdrs} AutoUpdater.h CocoaInitializer.h SparkleAutoUpdater.h)
+if(APPLE)
+set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
+if(SPARKLE_FOUND)
+set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
+endif()
 endif()
 
 set(hwfr_hdrs
@@ -188,6 +190,7 @@ else()
 		${OGG_LIBRARY}
 		${VORBIS_LIBRARY}
 		${HW_LINK_LIBS}
+		IOKit
 		)
         if (SPARKLE_FOUND)
                 set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})

@@ -29,6 +29,10 @@
 #include "SDLs.h"
 #include "bgwidget.h"
 
+#ifdef __APPLE
+#include "InstallController.h"
+#endif
+
 class HWGame;
 class HWTeam;
 class HWNamegen;
@@ -146,6 +150,11 @@ private:
 	QTime eggTimer;
 	SDLInteraction * sdli;
 	BGWidget * wBackground;
+        
+#ifdef __APPLE__
+        InstallController * panel;
+#endif
+        
 	void OnPageShown(quint8 id, quint8 lastid=0);
 };
 
