@@ -224,9 +224,16 @@ void HWGame::ParseMessage(const QByteArray & msg)
 			int size = msg.size();
 			QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
 			emit SendChat(msgbody);
-			QByteArray buf;
-			HWProto::addStringToBuffer(buf, QString("s%1: %2\x20\x20").arg(config->netNick()).arg(msgbody));
-			demo.append(buf);
+			// FIXME: /me command doesn't work here
+			//QByteArray buf;
+			//HWProto::addStringToBuffer(buf, QString("s\x01%1: %2\x20\x20").arg(config->netNick()).arg(msgbody));
+			//demo.append(buf);
+			break;
+		}
+		case 'b': {
+			int size = msg.size();
+			QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
+			emit SendTeamMessage(msgbody);
 			break;
 		}
 		default: {

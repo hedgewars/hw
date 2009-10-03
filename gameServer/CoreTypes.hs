@@ -30,6 +30,7 @@ data ClientInfo =
 		isMaster :: Bool,
 		isReady :: Bool,
 		isAdministrator :: Bool,
+		clientClan :: String,
 		teamsInGame :: Word
 	}
 
@@ -47,6 +48,7 @@ data HedgehogInfo =
 data TeamInfo =
 	TeamInfo
 	{
+		teamownerId :: !Int,
 		teamowner :: String,
 		teamname :: String,
 		teamcolor :: String,

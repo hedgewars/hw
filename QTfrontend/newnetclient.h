@@ -122,6 +122,7 @@ class HWNewNet : public QObject
   void ToggleReady();
   void chatLineToNet(const QString& str);
   void chatLineToLobby(const QString& str);
+  void SendTeamMessage(const QString& str);
   void SendNet(const QByteArray & buf);
   void AddTeam(const HWTeam & team);
   void RemoveTeam(const HWTeam& team);

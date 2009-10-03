@@ -294,6 +294,11 @@ while (headcmd <> nil)
 			AddChatString(s);
 			WriteLnToConsole(s)
 			end;
+		'b': begin
+			s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+			AddChatString(#4 + s);
+			WriteLnToConsole(s)
+			end;
 		'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
 		'N': begin
 			tmpflag:= false;
@@ -312,12 +317,6 @@ while (headcmd <> nil)
 		't': ParseCommand('taunt ' + headcmd^.str[2], true);
 		'g': ParseCommand('newgrave', true);
 		'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
-		'b': if LocalClan = byte(headcmd^.str[2]) then
-               begin
-               s:= copy(headcmd^.str, 3, Pred(headcmd^.len));
-               AddChatString(#4 + s);
-               WriteLnToConsole(s)
-               end;
 		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
 		#128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
 		else

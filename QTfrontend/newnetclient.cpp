@@ -605,6 +605,11 @@ void HWNewNet::chatLineToLobby(const QString& str)
 	}
 }
 
+void HWNewNet::SendTeamMessage(const QString& str)
+{
+	RawSendNet(QString("TEAMCHAT") + delimeter + str);
+}
+
 void HWNewNet::askRoomsList()
 {
 	if(netClientState != 2)

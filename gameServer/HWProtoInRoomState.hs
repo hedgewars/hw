@@ -6,6 +6,7 @@ import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
 import Maybe
+import qualified Codec.Binary.UTF8.String as UTF8
 --------------------------------------
 import CoreTypes
 import Actions
@@ -49,7 +50,7 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
 	| isRestrictedTeams room = [Warning "restricted"]
 	| otherwise =
 		[ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
-		ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1}),
+		ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = color}),
 		AnswerThisClient ["TEAM_ACCEPTED", name],
 		AnswerOthersInRoom $ teamToNet newTeam,
 		AnswerOthersInRoom ["TEAM_COLOR", name, color]
@@ -59,7 +60,7 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
 		room = rooms IntMap.! (roomID client)
 		canAddNumber = 48 - (sum . map hhnum $ teams room)
 		findTeam = find (\t -> name == teamname t) $ teams room
-		newTeam = (TeamInfo (nick client) name color grave fort voicepack difficulty newTeamHHNum (hhsList hhsInfo))
+		newTeam = (TeamInfo clID (nick client) name color grave fort voicepack difficulty newTeamHHNum (hhsList hhsInfo))
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
@@ -101,7 +102,8 @@ handleCmd_inRoom clID clients rooms ["TEAM_COLOR", teamName, newColor]
 	| not $ isMaster client = [ProtocolError "Not room master"]
 	| noSuchTeam = []
 	| otherwise = [ModifyRoom $ modifyTeam team{teamcolor = newColor},
-			AnswerOthersInRoom ["TEAM_COLOR", teamName, newColor]]
+			AnswerOthersInRoom ["TEAM_COLOR", teamName, newColor],
+			ModifyClient2 (teamownerId team) (\c -> c{clientClan = newColor})]
 	where
 		noSuchTeam = isNothing findTeam
 		team = fromJust findTeam
@@ -190,5 +192,15 @@ handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
 		kickClient = fromJust maybeClient
 		kickID = clientUID kickClient
 
+
+handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
+	if (teamsInGame client > 0) then
+		[AnswerSameClan ["EM", engineMsg]]
+	else
+		[]
+	where
+		client = clients IntMap.! clID
+		engineMsg = toEngineMsg $ 'b' : (nick client ++ "(team): " ++ decodedMsg ++ "\x20\x20")
+		decodedMsg = UTF8.decodeString msg
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]

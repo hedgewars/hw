@@ -28,7 +28,9 @@ sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
 		$ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
 
 toEngineMsg :: String -> String
-toEngineMsg msg = Base64.encode (fromIntegral (length msg) : (UTF8.encode msg))
+toEngineMsg msg = Base64.encode (fromIntegral (length encodedMsg) : encodedMsg)
+	where
+	encodedMsg = UTF8.encode msg
 
 fromEngineMsg :: String -> Maybe String
 fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)

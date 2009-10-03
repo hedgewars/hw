@@ -60,6 +60,7 @@ public:
 signals:
 	void SendNet(const QByteArray & msg);
 	void SendChat(const QString & msg);
+	void SendTeamMessage(const QString & msg);
 	void GameStateChanged(GameState gameState);
 	void GameStats(char type, const QString & info);
 	void HaveRecord(bool isDemo, const QByteArray & record);

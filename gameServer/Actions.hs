@@ -19,6 +19,7 @@ data Action =
 	| AnswerAllOthers [String]
 	| AnswerThisRoom [String]
 	| AnswerOthersInRoom [String]
+	| AnswerSameClan [String]
 	| AnswerLobby [String]
 	| SendServerMessage
 	| RoomAddThisClient Int -- roomID
@@ -35,6 +36,7 @@ data Action =
 	| BanClient String -- nick
 	| RemoveClientTeams Int -- clID
 	| ModifyClient (ClientInfo -> ClientInfo)
+	| ModifyClient2 Int (ClientInfo -> ClientInfo)
 	| ModifyRoom (RoomInfo -> RoomInfo)
 	| ModifyServerInfo (ServerInfo -> ServerInfo)
 	| AddRoom String String
@@ -64,13 +66,13 @@ processAction (clID, serverInfo, clients, rooms) (AnswerAll msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerAllOthers msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) $
+	mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) $
 		Prelude.filter (\id' -> (id' /= clID) && logonPassed (clients ! id')) (keys clients)
 	return (clID, serverInfo, clients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerThisRoom msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) roomClients
+	mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) roomClients
 	return (clID, serverInfo, clients, rooms)
 	where
 		roomClients = IntSet.elems $ playersIDs room
@@ -80,7 +82,7 @@ processAction (clID, serverInfo, clients, rooms) (AnswerThisRoom msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerOthersInRoom msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) $ Prelude.filter (/= clID) roomClients
+	mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) $ Prelude.filter (/= clID) roomClients
 	return (clID, serverInfo, clients, rooms)
 	where
 		roomClients = IntSet.elems $ playersIDs room
@@ -90,11 +92,23 @@ processAction (clID, serverInfo, clients, rooms) (AnswerOthersInRoom msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerLobby msg) = do
-	mapM_ (\id -> writeChan (sendChan $ clients ! id) msg) roomClients
+	mapM_ (\id' -> writeChan (sendChan $ clients ! id') msg) roomClients
 	return (clID, serverInfo, clients, rooms)
 	where
 		roomClients = IntSet.elems $ playersIDs room
 		room = rooms ! 0
+
+
+processAction (clID, serverInfo, clients, rooms) (AnswerSameClan msg) = do
+	mapM_ (\cl -> writeChan (sendChan cl) msg) sameClanClients
+	return (clID, serverInfo, clients, rooms)
+	where
+		otherRoomClients = Prelude.map ((!) clients) $ IntSet.elems $ clID `IntSet.delete` (playersIDs room)
+		sameClanClients = Prelude.filter (\cl -> teamsInGame cl > 0 && clientClan cl == thisClan) otherRoomClients
+		thisClan = clientClan client
+		room = rooms ! rID
+		rID = roomID client
+		client = clients ! clID
 
 
 processAction (clID, serverInfo, clients, rooms) SendServerMessage = do
@@ -161,6 +175,10 @@ processAction (clID, serverInfo, clients, rooms) (ByeClient msg) = do
 
 processAction (clID, serverInfo, clients, rooms) (ModifyClient func) =
 	return (clID, serverInfo, adjust func clID clients, rooms)
+
+
+processAction (clID, serverInfo, clients, rooms) (ModifyClient2 cl2ID func) =
+	return (clID, serverInfo, adjust func cl2ID clients, rooms)
 
 
 processAction (clID, serverInfo, clients, rooms) (ModifyRoom func) =
