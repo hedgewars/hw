@@ -1,9 +1,9 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in ${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
 find_package(SDL REQUIRED)
-find_package(SDL_IMAGE REQUIRED)
-find_package(SDL_NET REQUIRED)
-find_package(SDL_TTF REQUIRED)
+find_package(SDL_image REQUIRED)
+find_package(SDL_net REQUIRED)
+find_package(SDL_ttf REQUIRED)
 
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
