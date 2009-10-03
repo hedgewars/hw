@@ -39,3 +39,11 @@ QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList 
 		addStringToBuffer(buf, strList[i]);
 	return buf;
 }
+
+QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
+{
+	if(msg.left(4) == "/me ")
+		return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
+	else
+		return QString("\x01%1: %2").arg(nick).arg(msg);
+}

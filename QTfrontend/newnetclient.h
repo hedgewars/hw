@@ -80,7 +80,6 @@ class HWNewNet : public QObject
   void RawSendNet(const QString & buf);
   void RawSendNet(const QByteArray & buf);
   void ParseCmd(const QStringList & lst);
-  QString formatChatMsg(const QString & nick, const QString & msg);
 
   int loginStep;
   int netClientState;

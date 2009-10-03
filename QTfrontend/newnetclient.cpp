@@ -270,9 +270,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 			return;
 		}
 		if (netClientState == 2)
-			emit chatStringLobby(formatChatMsg(lst[1], lst[2]));
+			emit chatStringLobby(HWProto::formatChatMsg(lst[1], lst[2]));
 		else
-			emit chatStringFromNet(formatChatMsg(lst[1], lst[2]));
+			emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
 		return;
 	}
 
@@ -593,7 +593,7 @@ void HWNewNet::chatLineToNet(const QString& str)
 {
 	if(str != "") {
 		RawSendNet(QString("CHAT") + delimeter + str);
-		emit(chatStringFromMe(formatChatMsg(mynick, str)));
+		emit(chatStringFromMe(HWProto::formatChatMsg(mynick, str)));
 	}
 }
 
@@ -601,7 +601,7 @@ void HWNewNet::chatLineToLobby(const QString& str)
 {
 	if(str != "") {
 		RawSendNet(QString("CHAT") + delimeter + str);
-		emit(chatStringFromMeLobby(formatChatMsg(mynick, str)));
+		emit(chatStringFromMeLobby(HWProto::formatChatMsg(mynick, str)));
 	}
 }
 
@@ -629,14 +629,6 @@ void HWNewNet::gameFinished()
 {
 	if (netClientState == 5) netClientState = 3;
 	RawSendNet(QString("ROUNDFINISHED"));
-}
-
-QString HWNewNet::formatChatMsg(const QString & nick, const QString & msg)
-{
-	if(msg.left(4) == "/me ")
-		return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
-	else
-		return QString("\x01%1: %2").arg(nick).arg(msg);
 }
 
 void HWNewNet::banPlayer(const QString & nick)

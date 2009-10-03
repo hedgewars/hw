@@ -32,6 +32,7 @@ public:
 	HWProto();
 	static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
 	static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
+	static QString formatChatMsg(const QString & nick, const QString & msg);
 };
 
 #endif // _PROTO_H
