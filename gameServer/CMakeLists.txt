@@ -33,20 +33,20 @@ set(ghc_flags
 	-odir ${CMAKE_CURRENT_BINARY_DIR}
 	-hidir ${CMAKE_CURRENT_BINARY_DIR})
 
-if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
+if(OPTIMIZATIONS)
 set(ghc_flags
 	-w
 	-O2
 	${ghc_flags}
 )
-else()
+else(OPTIMIZATIONS)
 set(ghc_flags
 	-Wall
 	-debug
 	-dcore-lint
 	${ghc_flags}
 )
-endif()
+endif(OPTIMIZATIONS)
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${ghc_executable}"

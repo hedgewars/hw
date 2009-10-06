@@ -5,6 +5,8 @@ find_package(SDL_image REQUIRED)
 find_package(SDL_net REQUIRED)
 find_package(SDL_ttf REQUIRED)
 
+
+#SOURCE AND PROGRAMS SECTION 
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
@@ -68,6 +70,50 @@ if (${testnoexecstack})
 set (noexecstack_flags "")
 endif (${testnoexecstack})
 
+
+#PASCAL DETECTION SECTION
+string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
+
+if (fpc_version)
+	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
+	string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
+	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
+	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
+	if (fpc_ver LESS "020200")
+		message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
+	else()
+		set(pascal_compiler ${fpc_executable})
+	endif ()
+endif (fpc_version)
+
+if (NOT pascal_compiler)
+	message(FATAL_ERROR "No Pascal compiler found!")
+endif (NOT pascal_compiler)
+
+
+#PASCAL FLAG SECTION
+set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "-fPIC" ${hwengine_project})
+
+if(OPTIMIZATIONS)
+	set(pascal_compiler_flags "-O2" "-Xs" "-Nu" ${pascal_compiler_flags})
+	if(APPLE AND NOT universal_build)
+		set(pascal_compiler_flags "-CfSSE2" ${pascal_compiler_flags})	#instruction set for ppc is 7400
+	endif()			
+else(OPTIMIZATIONS)
+	set(pascal_compiler_flags "-O-" "-gl" "-dDEBUGFILE" "-pg" "-va" ${pascal_compiler_flags})
+endif(OPTIMIZATIONS)
+
+if(LOWRES)
+	set(pascal_compiler_flags "-dLOWRES" ${pascal_compiler_flags} ${hwengine_project})
+endif(LOWRES)
+
+#special handling of MSVC compiler (no static linking)
+if(MSVC)
+	set(pascal_compiler_flags "-dMSVC" ${pascal_compiler_flags})
+endif(MSVC)
+
+
+#DEPENDECIES AND EXECUTABLES SECTION
 IF(APPLE)
 #let's build sdlmain, which is absent from the framework
 	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
@@ -77,37 +123,6 @@ IF(APPLE)
 	add_library (SDLmain STATIC SDLMain.m)
 	set(engine_sources SDLmain ${engine_sources})
 ENDIF(APPLE)
-
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
-
-if (fpc_version)
-	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
-	string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
-	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
-	if (fpc_ver LESS "020200")
-		message(STATUS "Minimum required version of FreePascal is 2.2.0")
-	else (fpc_ver LESS "020200")
-		set(pascal_compiler ${fpc_executable})
-		if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
-			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "-O2" "-Xs" ${hwengine_project})
-		else()
-			set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "-O-" "-gl" "-dDEBUGFILE" ${hwengine_project})
-		endif()
-		if(LOWRES)
-			set(pascal_compiler_flags "-dLOWRES" ${pascal_compiler_flags} ${hwengine_project})
-		endif(LOWRES)
-	endif (fpc_ver LESS "020200")
-endif (fpc_version)
-
-if (NOT pascal_compiler)
-	message(FATAL_ERROR "No Pascal compiler found!")
-endif (NOT pascal_compiler)
-
-#special handling of MSVC compiler (no static linking)
-if(MSVC)
-	set(pascal_compiler_flags "-dMSVC" ${pascal_compiler_flags})
-endif(MSVC)
 
 IF(NOT APPLE OR NOT universal_build)
 #here is the standard command for any system
@@ -121,7 +136,7 @@ ELSE()
 #these are the two dependencies for building a universal binary on Mac OS X
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
 		COMMAND "ppc386" 
-		ARGS ${pascal_compiler_flags} -ohwengine.386
+		ARGS ${pascal_compiler_flags} -ohwengine.386 -CfSSE2
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS openalbridge ${engine_sources}
 		)

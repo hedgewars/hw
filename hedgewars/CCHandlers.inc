@@ -473,11 +473,11 @@ with CurrentHedgehog^.Gear^,
               TargetPoint.Y:= putY
               end else
               begin
-			  {$IFDEF SDL13}
+{$IFDEF SDL13}
               SDL_GetMouseState(0, @TargetPoint.X, @TargetPoint.Y);
-			  {$ELSE}
+{$ELSE}
 			  SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
-			  {$ENDIF}
+{$ENDIF}
 			  dec(TargetPoint.X, cScreenWidth div 2);
               dec(TargetPoint.X, WorldDx);
               dec(TargetPoint.Y, WorldDy)
