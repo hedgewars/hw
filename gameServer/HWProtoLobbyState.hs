@@ -28,12 +28,22 @@ handleCmd_lobby clID clients rooms ["LIST"] =
 		roomsList = IntMap.elems rooms
 		protocol = clientProto client
 		client = clients IntMap.! clID
-		roomInfo room = [
+		roomInfo room
+			| clientProto client < 28 = [
 				name room,
 				show (playersIn room) ++ "(" ++ show (length $ teams room) ++ ")",
 				show $ gameinprogress room
 				]
-
+			| otherwise = [
+				show $ gameinprogress room,
+				name room,
+				show $ playersIn room,
+				show $ length $ teams room,
+				nick $ clients IntMap.! (masterID room),
+				head (Map.findWithDefault ["+gen+"] "MAP" (params room)),
+				head (Map.findWithDefault ["Default"] "SCHEME" (params room)),
+				head (Map.findWithDefault ["Default"] "AMMO" (params room))
+				]
 
 handleCmd_lobby clID clients _ ["CHAT", msg] =
 	[AnswerOthersInRoom ["CHAT", clientNick, msg]]

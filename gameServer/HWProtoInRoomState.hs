@@ -34,6 +34,7 @@ handleCmd_inRoom clID clients rooms ["PART"] =
 
 
 handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
+	| null paramStrs = [ProtocolError "Empty config entry"]
 	| isMaster client =
 		[ModifyRoom (\r -> r{params = Map.insert paramName paramStrs (params r)}),
 		AnswerOthersInRoom ("CFG" : paramName : paramStrs)]

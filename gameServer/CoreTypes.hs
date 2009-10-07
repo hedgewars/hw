@@ -64,6 +64,7 @@ data RoomInfo =
 	RoomInfo
 	{
 		roomUID :: !Int,
+		masterID :: !Int,
 		name :: String,
 		password :: String,
 		roomProto :: Word16,
@@ -91,6 +92,7 @@ instance Eq RoomInfo where
 
 newRoom = (
 	RoomInfo
+		0
 		0
 		""
 		""

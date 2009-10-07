@@ -250,7 +250,7 @@ processAction (clID, serverInfo, clients, rooms) (RoomRemoveThisClient msg) = do
 				clID,
 				serverInfo,
 				adjust (\cl -> cl{isMaster = True}) newMasterId clients,
-				adjust (\r -> r{name = newRoomName}) rID rooms
+				adjust (\r -> r{masterID = newMasterId, name = newRoomName}) rID rooms
 				)
 		newRoomName = nick newMasterClient
 		otherPlayersSet = IntSet.delete clID (playersIDs room)
@@ -262,6 +262,7 @@ processAction (clID, serverInfo, clients, rooms) (AddRoom roomName roomPassword)
 	let newServerInfo = serverInfo {nextRoomID = newID}
 	let room = newRoom{
 			roomUID = newID,
+			masterID = clID,
 			name = roomName,
 			password = roomPassword,
 			roomProto = (clientProto client)
