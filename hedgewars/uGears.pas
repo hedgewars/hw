@@ -1296,7 +1296,7 @@ end;
 
 procedure DrawRope(Gear: PGear);
 var roplen: LongInt;
-	i: LongInt;
+	i: Longword;
 
 	procedure DrawRopeLine(X1, Y1, X2, Y2: LongInt);
 	var  eX, eY, dX, dY: LongInt;

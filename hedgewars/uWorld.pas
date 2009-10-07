@@ -566,7 +566,6 @@ if (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
 		end
 		else begin
 		CursorPoint.x:= (prevPoint.x * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-		//addcaption(inttostr(CursorPoint.X), $AFAFAF, capgrpGameState);
 		CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
 		end;
 
@@ -590,7 +589,7 @@ if isCursorVisible then
 	begin
 	if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
 		begin
-		SendIPCXY('P', CursorPoint.X - WorldDx, CursorPoint.Y - WorldDy);
+		SendIPCXY('P', CursorPoint.X - WorldDx, cScreenHeight - CursorPoint.Y - WorldDy);
 		PrevSentPointTime:= GameTicks
 		end;
 	end;

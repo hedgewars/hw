@@ -455,39 +455,36 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH then exit;
 if bShowAmmoMenu then
-   begin
-   bSelected:= true;
-   exit
-   end;
+	begin
+	bSelected:= true;
+	exit
+	end;
 
 with CurrentHedgehog^.Gear^,
-     CurrentHedgehog^ do
-     if (State and gstHHChooseTarget) <> 0 then
-        begin
-        isCursorVisible:= false;
-        if not CurrentTeam^.ExtDriven then
-           begin
-           if fromAI then
-              begin
-              TargetPoint.X:= putX;
-              TargetPoint.Y:= putY
-              end else
-              begin
-{$IFDEF SDL13}
-              SDL_GetMouseState(0, @TargetPoint.X, @TargetPoint.Y);
-{$ELSE}
-			  SDL_GetMouseState(@TargetPoint.X, @TargetPoint.Y);
-{$ENDIF}
-			  dec(TargetPoint.X, cScreenWidth div 2);
-              dec(TargetPoint.X, WorldDx);
-              dec(TargetPoint.Y, WorldDy)
-              end;
-           SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
-           end;
-        State:= State and not gstHHChooseTarget;
-        if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
-           Message:= Message or gm_Attack;
-        end else if CurrentTeam^.ExtDriven then OutError('got /put while not being in choose target mode', false)
+	CurrentHedgehog^ do
+	if (State and gstHHChooseTarget) <> 0 then
+		begin
+		isCursorVisible:= false;
+		if not CurrentTeam^.ExtDriven then
+			begin
+			if fromAI then
+				begin
+				TargetPoint.X:= putX;
+				TargetPoint.Y:= putY
+				end else
+				begin
+				TargetPoint.X:= CursorPoint.X - WorldDx;
+				TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
+				end;
+			SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
+			end;
+		State:= State and not gstHHChooseTarget;
+		if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
+			Message:= Message or gm_Attack;
+		end
+	else
+		if CurrentTeam^.ExtDriven then
+			OutError('got /put while not being in choose target mode', false)
 end;
 
 procedure chPut(var s: shortstring);
