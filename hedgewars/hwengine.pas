@@ -264,9 +264,9 @@ case ParamCount of
 		isMusicEnabled:= false;
 		isSoundEnabled:= false;
 		cLocaleFName:= 'en.txt';
-		cFullScreen:= false;
+		cFullScreen:= true; //T or F is is the same here
 		cAltDamage:= false;
-		cShowFPS:= false;
+		cShowFPS:= true;
 		val('8', cTimerInterval);
 		cReducedQuality:= false;
 

@@ -10,9 +10,6 @@ execute_process(COMMAND cp -pPR ${OGG_LIBRARY}	 	${CMAKE_BINARY_DIR}/${framework
 execute_process(COMMAND cp -pPR ${VORBIS_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/Vorbis.framework)
 
 if(SPARKLE_FOUND)
-execute_process(COMMAND cp -pPR ${SPARKLE_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/Sparkle.framework)
+	execute_process(COMMAND cp -pPR ${SPARKLE_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/Sparkle.framework)
 endif()
 
-if(${HAVE_NETSERVER})
-execute_process(COMMAND cp -pPR ${GMP_LIBRARY} 		${CMAKE_BINARY_DIR}/${frameworks_dir}/GMP.framework)
-endif()

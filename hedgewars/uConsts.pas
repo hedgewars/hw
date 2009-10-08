@@ -154,6 +154,7 @@ const
 	errmsgIncorrectUse    = 'Incorrect use';
 	errmsgShouldntRun     = 'This program shouldn''t be run manually';
 	errmsgWrongNumber     = 'Wrong parameters number';
+        errmsgSlotsOverflow   = 'CurSlot overflowed';
 
 	msgLoading           = 'Loading ';
 	msgOK                = 'ok';

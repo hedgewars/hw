@@ -4,9 +4,6 @@ if(NOT ghc_executable)
 	message(FATAL_ERROR "Cannot find GHC")
 endif(NOT ghc_executable)
 
-if(APPLE)
-	find_package(GMP REQUIRED)
-endif(APPLE)
 
 set(hwserver_sources
 	OfficialServer/DBInteraction.hs

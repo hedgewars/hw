@@ -216,13 +216,16 @@ TargetPoint.X:= NoPointX;
 
 with Hedgehog do
 	begin
+
 	if (Ammo^[CurSlot, CurAmmo].Count = 0) then
 		begin
 		CurAmmo:= 0;
 		CurSlot:= 0;
-		while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot)
+		while (CurSlot < cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do 
+                        inc(CurSlot)
 		end;
-
+                
+        //bad things could happen here in case CurSlot is overflowing
 	ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
 
 	with Ammo^[CurSlot, CurAmmo] do
@@ -257,7 +260,7 @@ with Hedgehog do
         begin
         CurAmmo:= 0;
         CurSlot:= 0;
-        while (CurSlot <= cMaxSlotIndex) and
+        while (CurSlot < cMaxSlotIndex) and
               ((Ammo^[CurSlot, CurAmmo].Count = 0) or
               (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
               do inc(CurSlot)

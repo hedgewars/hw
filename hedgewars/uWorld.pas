@@ -32,7 +32,11 @@ var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
 	WindBarWidth: LongInt = 0;
-	bShowAmmoMenu: boolean = false;
+{$IFDEF IPHONEOS}
+	bShowAmmoMenu: boolean = true;
+{$ELSE}
+       	bShowAmmoMenu: boolean = false;
+{$ENDIF}
 	bSelected: boolean = false;
 	bShowFinger: boolean = false;
 	Frames: Longword = 0;
@@ -419,16 +423,12 @@ for t:= 0 to Pred(TeamsCount) do
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthTex^.h;
 
-      DrawFromRect(0,
-                        cScreenHeight + DrawHealthY,
-                        @r, HealthTex);
+      DrawFromRect(0, cScreenHeight + DrawHealthY, @r, HealthTex);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
-      DrawFromRect(TeamHealthBarWidth + 2,
-                        cScreenHeight + DrawHealthY,
-                        @r, HealthTex);
+      DrawFromRect(TeamHealthBarWidth + 2, cScreenHeight + DrawHealthY, @r, HealthTex);
       end;
 
 // Lag alert
