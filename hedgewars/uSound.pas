@@ -65,9 +65,9 @@ function openal_loadfile	(const filename: PChar)			: LongInt; cdecl; external Op
 function openal_toggleloop	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_setvolume	(index: LongInt; percentage: byte)	: boolean; cdecl; external OpenALBridge;
 function openal_setglobalvolume	(percentage: byte)			: boolean; cdecl; external OpenALBridge;
-function openal_fadeout		(index: LongInt; quantity: integer)	: boolean; cdecl; external OpenALBridge;
-function openal_fadein		(index: LongInt; quantity: integer)	: boolean; cdecl; external OpenALBridge;
-function openal_fade		(index: LongInt; quantity: integer; direction: boolean)	: boolean; cdecl; external OpenALBridge;
+function openal_fadeout		(index: LongInt; quantity: SmallInt)	: boolean; cdecl; external OpenALBridge;
+function openal_fadein		(index: LongInt; quantity: SmallInt)	: boolean; cdecl; external OpenALBridge;
+function openal_fade		(index: LongInt; quantity: SmallInt; direction: boolean)	: boolean; cdecl; external OpenALBridge;
 function openal_playsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_pausesound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_stopsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
@@ -85,7 +85,7 @@ var	Volume: LongInt;
 	defVoicepack: PVoicepack;
 	Mus: LongInt = 0;
 
-function  AskForVoicepack(name: shortstring): Pointer;
+function  AskForVoicepack(name: shortstring): PVoicepack;
 var i: Longword;
 begin
 i:= 0;
@@ -187,7 +187,7 @@ end;
 
 procedure StopSound(snd: TSound);
 begin
-if not isSoundEnabled then exit;
+if isSoundEnabled then
 	openal_stopsound(lastChan[snd])
 end;
 
