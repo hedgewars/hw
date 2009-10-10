@@ -53,13 +53,13 @@ procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
-function  ChangeVolume(voldelta: LongInt): LongInt;
-function  AskForVoicepack(name: shortstring): PVoicepack;
-function  soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
 
+function ChangeVolume(voldelta: LongInt): LongInt;
+function AskForVoicepack(name: shortstring): PVoicepack;
+function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
 
 {*remember: LongInt = 32bit; integer = 16bit; byte = 8bit*}
-function openal_init		(hardware: LongInt; memsize: LongInt): boolean; cdecl; external OpenALBridge;
+function openal_init		(hardware: LongInt; memsize: LongInt)	: boolean; cdecl; external OpenALBridge;
 function openal_close							: boolean; cdecl; external OpenALBridge;
 function openal_loadfile	(const filename: PChar)			: LongInt; cdecl; external OpenALBridge;
 function openal_toggleloop	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
@@ -67,7 +67,8 @@ function openal_setvolume	(index: LongInt; percentage: byte)	: boolean; cdecl; e
 function openal_setglobalvolume	(percentage: byte)			: boolean; cdecl; external OpenALBridge;
 function openal_fadeout		(index: LongInt; quantity: SmallInt)	: boolean; cdecl; external OpenALBridge;
 function openal_fadein		(index: LongInt; quantity: SmallInt)	: boolean; cdecl; external OpenALBridge;
-function openal_fade		(index: LongInt; quantity: SmallInt; direction: boolean)	: boolean; cdecl; external OpenALBridge;
+function openal_fade		(index: LongInt; quantity: SmallInt;
+				 direction: boolean)			: boolean; cdecl; external OpenALBridge;
 function openal_playsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_pausesound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;
 function openal_stopsound	(index: LongInt)			: boolean; cdecl; external OpenALBridge;

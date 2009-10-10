@@ -32,11 +32,7 @@ var cntTicks: LongWord;
 {$ENDIF}
 var FollowGear: PGear = nil;
 	WindBarWidth: LongInt = 0;
-{$IFDEF IPHONEOS}
-	bShowAmmoMenu: boolean = true;
-{$ELSE}
        	bShowAmmoMenu: boolean = false;
-{$ENDIF}
 	bSelected: boolean = false;
 	bShowFinger: boolean = false;
 	Frames: Longword = 0;

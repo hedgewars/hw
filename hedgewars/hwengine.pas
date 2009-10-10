@@ -237,7 +237,7 @@ case ParamCount of
      val(ParamStr(5), ipcPort);
      cFullScreen:= ParamStr(6) = '1';
      isSoundEnabled:= ParamStr(7) = '1';
-	 isSoundHardware:= ParamStr(8) = '1';
+     isSoundHardware:= ParamStr(8) = '1';
      cLocaleFName:= ParamStr(9);
      val(ParamStr(10), cInitVolume);
      val(ParamStr(11), cTimerInterval);
