@@ -54,7 +54,7 @@ procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
-function  AskForVoicepack(name: shortstring): Pointer;
+function  AskForVoicepack(name: shortstring): PVoicepack;
 function  soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
 
 
