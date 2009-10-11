@@ -143,14 +143,14 @@ extern "C" {
     
 
     int load_oggvorbis (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq) {
-        /*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
-        OggVorbis_File  oggStream;	/*stream handle*/
-        vorbis_info	*vorbisInfo;	/*some formatting data*/
-        int64_t		pcm_length;	/*length of the decoded data*/
-        int             section, result, size = 0;
+            /*implementation inspired from http://www.devmaster.net/forums/showthread.php?t=1153 */
+            OggVorbis_File  oggStream; /*stream handle*/
+            vorbis_info	*vorbisInfo;   /*some formatting data*/
+            int64_t pcm_length;	       /*length of the decoded data*/
+            int section, result, size, endianness;
 #ifdef DEBUG
-        int i;
-        vorbis_comment	*vorbisComment;	/*other less useful data*/
+            int i;
+            vorbis_comment *vorbisComment; /*other less useful data*/
 #endif
 
 	result = ov_fopen((char*) filename, &oggStream);
@@ -160,6 +160,7 @@ extern "C" {
 		return -1;
 	}
 
+        /*load OGG header and determine the decoded data size*/
         vorbisInfo = ov_info(&oggStream, -1);
         pcm_length = ov_pcm_total(&oggStream, -1) << vorbisInfo->channels;	
         
@@ -179,25 +180,31 @@ extern "C" {
                 fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
 #endif
         
-        /*allocates enough room for the decoded data*/
-        *data = (char*) Malloc (sizeof(char) * pcm_length);
+            /*allocates enough room for the decoded data*/
+            *data = (char*) Malloc (sizeof(char) * pcm_length);
         
-        /*there *should* not be ogg at 8 bits*/
-        if (vorbisInfo->channels == 1)
-            *format = AL_FORMAT_MONO16;
-        else {
-            if (vorbisInfo->channels == 2)
-                *format = AL_FORMAT_STEREO16;
+            /*there *should* not be ogg at 8 bits*/
+            if (vorbisInfo->channels == 1)
+                    *format = AL_FORMAT_MONO16;
             else {
-                fprintf(stderr, "ERROR 'load_oggvorbis()': wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
-                ov_clear(&oggStream);
-                return AL_FALSE;
+                    if (vorbisInfo->channels == 2)
+                            *format = AL_FORMAT_STEREO16;
+                    else {
+                            fprintf(stderr, "ERROR 'load_oggvorbis()': wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
+                            ov_clear(&oggStream);
+                            return AL_FALSE;
+                    }
             }
-        }
         
+            size = 0;
+#ifdef __LITTLE_ENDIAN__
+            endianness = 0;
+#elif __BIG_ENDIAN__
+            endianness = 1;
+#endif
         while (size < pcm_length) {
             /*ov_read decodes the ogg stream and storse the pcm in data*/
-            result = ov_read (&oggStream, *data + size, pcm_length - size, 0, 2, 1, &section);
+            result = ov_read (&oggStream, *data + size, pcm_length - size, endianness, 2, 1, &section);
             if (result > 0) {
                 size += result;
             } else {
