@@ -58,9 +58,33 @@
 #endif /* _SLEEP_H */
 
 
+/* check compiler requirements */
+#if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
+#error Do not know the endianess of this architecture
+#endif
 
+/* use byteswap macros from the host system, hopefully optimized ones ;-) 
+ * or define our own version, simple, stupid, straight-forward... */
+#ifdef HAVE_BYTESWAP_H
+#include <byteswap.h>
+#else        
+#define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
+#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
+(((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
+#endif /* HAVE_BYTESWAP_H */
 
-
+/* swap numbers accordingly to architecture automatically */
+#ifdef __LITTLE_ENDIAN__
+#define ENDIAN_LITTLE_32(x) x
+#define ENDIAN_BIG_32(x)    bswap_32(x)
+#define ENDIAN_LITTLE_16(x) x
+#define ENDIAN_BIG_16(x)    bswap_16(x)
+#elif __BIG_ENDIAN__
+#define ENDIAN_LITTLE_32(x) bswap_32(x)
+#define ENDIAN_BIG_32(x)    x
+#define ENDIAN_LITTLE_16(x) bswap_16(x)
+#define ENDIAN_BIG_16(x)    x    
+#endif
 
 
 #ifdef __CPLUSPLUS
