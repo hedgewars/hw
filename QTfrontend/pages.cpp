@@ -776,12 +776,17 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
+	QHBoxLayout * newRoomLayout = new QHBoxLayout(this);
+	QLabel * roomNameLabel = new QLabel(this);
+	roomNameLabel->setText(tr("Room Name:"));
 	roomName = new QLineEdit(this);
 	roomName->setMaxLength(60);
-	pageLayout->addWidget(roomName, 0, 0);
+	newRoomLayout->addWidget(roomNameLabel);
+	newRoomLayout->addWidget(roomName);
+	pageLayout->addLayout(newRoomLayout, 0, 0);
 
 	roomsList = new QTableWidget(this);
-	roomsList->setColumnCount(3);
+	roomsList->setColumnCount(7);
 	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
 	roomsList->verticalHeader()->setVisible(false);
 	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
@@ -816,28 +821,86 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 	roomsList->clear();
 	roomsList->setHorizontalHeaderLabels(
 			QStringList() <<
-			QTableWidget::tr("Room name") <<
-			QTableWidget::tr("Players number") <<
-			QTableWidget::tr("Round in progress")
+			QTableWidget::tr("Room Name") <<
+			QTableWidget::tr("C") <<
+			QTableWidget::tr("T") <<
+			QTableWidget::tr("Owner") <<
+			QTableWidget::tr("Map") <<
+			QTableWidget::tr("Rules") <<
+			QTableWidget::tr("Weapons")
 			);
 
-   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+	// set resize modes
+	roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+	roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
 
-
-	if (list.size() % 3)
+	if (list.size() % 8)
 		return;
 
-	roomsList->setRowCount(list.size() / 3);
-	for(int i = 0; i < list.size(); i += 3)
-		for(int t = 0; t < 3; t++)
+	roomsList->setRowCount(list.size() / 8);
+	for(int i = 0, r = 0; i < list.size(); i += 8, r++)
+	{
+		QTableWidgetItem * item;
+		item = new QTableWidgetItem(list[i + 1]); // room name
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		
+		// pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
+		if(list[i].compare("True"))
 		{
-			QTableWidgetItem * item = new QTableWidgetItem(list[i + t]);
-			item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
-			roomsList->setItem(i / 3, t, item);
+			item->setIcon(QIcon(":/res/iconTime.png"));// game is in lobby
+			item->setToolTip(tr("This game is in lobby.\nYou may join and start playing once the game starts."));
 		}
-	//roomsList->resizeColumnsToContents();
+		else
+		{
+			item->setIcon(QIcon(":/res/iconDamage.png"));// game has started
+			item->setToolTip(tr("This game is in progress.\nYou may join and spectate now but you'll have to wait for the game to end to start playing."));
+		}
+
+		roomsList->setItem(r, 0, item);
+
+		item = new QTableWidgetItem(list[i + 2]); // number of clients
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setTextAlignment(Qt::AlignCenter);
+		item->setToolTip(tr("There are %1 clients connected to this room.").arg(list[i + 2]));
+		roomsList->setItem(r, 1, item);
+
+		item = new QTableWidgetItem(list[i + 3]); // number of teams
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setTextAlignment(Qt::AlignCenter);
+		item->setToolTip(tr("There are %1 teams participating in this room.").arg(list[i + 3]));
+		roomsList->setItem(r, 2, item);
+
+		item = new QTableWidgetItem(list[i + 4]); // name of host
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setToolTip(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
+		roomsList->setItem(r, 3, item);
+
+		if(list[i + 5].compare("+rnd+"))
+			item = new QTableWidgetItem(list[i + 5]); // selected map
+		else
+			item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
+		
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setToolTip(tr("Games may be played on precreated or randomized maps."));
+		roomsList->setItem(r, 4, item);
+
+		item = new QTableWidgetItem(list[i + 6]); // selected game scheme
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
+		roomsList->setItem(r, 5, item);
+
+		item = new QTableWidgetItem(list[i + 7]); // selected weapon scheme
+		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+		item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
+		roomsList->setItem(r, 6, item);
+
+	}
+	roomsList->resizeColumnsToContents();
 }
 
 void PageRoomsList::onCreateClick()
