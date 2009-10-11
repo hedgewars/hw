@@ -22,6 +22,7 @@
 #include "hwconsts.h"
 
 bool hardware;
+extern char *programname;
 
 SDLInteraction::SDLInteraction(bool hardware_snd)
 {
@@ -79,6 +80,6 @@ void SDLInteraction::StopMusic()
 void OpenAL_Init()
 {
 	if (!openal_ready())
-        	openal_init(hardware ? 1 : 0, 5);
+        	openal_init(programname, hardware ? 1 : 0, 5);
 }
 

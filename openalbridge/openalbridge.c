@@ -17,10 +17,7 @@
  */
 
 #include "openalbridge.h"
-#include "wrappers.h"
-#include "alc.h"
-#include "loaders.h"
-#include "endianness.h"
+
 
 #ifdef __CPLUSPLUS
 extern "C" {
@@ -36,15 +33,16 @@ extern "C" {
     ALboolean openalReady = AL_FALSE;
     
     ALboolean openal_close (void) {
-        /*Stop all sounds, deallocate all memory and close OpenAL */
-        ALCcontext *context;
-        ALCdevice  *device;
-        
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR: OpenAL not initialized\n");
-            return AL_FALSE;
-        }
-        
+            /*Stop all sounds, deallocate all memory and close OpenAL */
+            ALCcontext *context;
+            ALCdevice  *device;
+            
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
+            
         alSourceStopv	(globalsize, Sources);
         alDeleteSources (globalsize, Sources);
         alDeleteBuffers (globalsize, Buffers);
@@ -68,12 +66,15 @@ extern "C" {
         return openalReady;
     }
     
-    ALboolean openal_init(uint32_t usehardware, uint32_t memorysize) {	
+    ALboolean openal_init(char* programname, ALboolean usehardware, uint32_t memorysize) {	
         /*Initialize an OpenAL contex and allocate memory space for data and buffers*/
         ALCcontext *context;
         ALCdevice *device;
         const ALCchar *default_device;
-        
+
+            prog = programname;
+
+
         /*Position of the listener*/
         ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
         /*Velocity of the listener*/
@@ -81,32 +82,29 @@ extern "C" {
         /*Orientation of the listener. (first 3 elements are "at", second 3 are "up")*/
         ALfloat ListenerOri[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
         
-        if(openalReady == AL_TRUE) {
-            fprintf(stderr, "ERROR 'openal_init()': OpenAL already initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_TRUE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL already initialized", prog);
+                    return AL_FALSE;
+            }
 
-		if(usehardware)
-		{
-			if ((device = alcOpenDevice(NULL)) == NULL) {
-				fprintf(stderr, "ERROR 'openal_init()': Failed to open sound device\n");
-				return AL_FALSE;
-			}
-		}
-		else
-		{
-			if ((device = alcOpenDevice("Generic Software")) == NULL) {
-				fprintf(stderr, "ERROR 'openal_init()': Failed to open sound device\n");
-				return AL_FALSE;
-			}
-		}
-		fprintf(stderr, "Using default device: %s\n", alcGetString(device, ALC_DEVICE_SPECIFIER));
-        
-        context = alcCreateContext(device, NULL);
-        alcMakeContextCurrent(context);
-        alcProcessContext(context);
-        
-        if (AlGetError("ERROR %d in 'openal_init()': Creating a new contex\n") != AL_TRUE)
+            if (usehardware)
+                    device = alcOpenDevice(NULL);
+            else
+                    device = alcOpenDevice("Generic Software");
+            
+            if (device == NULL) {
+                    errno = ENODEV;                
+                    err_ret("(%s) WARN - Failed to open sound device", prog);
+                    return AL_FALSE;
+            }
+            err_msg("(%s) INFO - output device: %s", prog, alcGetString(device, ALC_DEVICE_SPECIFIER));
+            
+            context = alcCreateContext(device, NULL);
+            alcMakeContextCurrent(context);
+            alcProcessContext(context);
+            
+        if (AlGetError("(%s) WARN - Failed to create a new contex") != AL_TRUE)
             return AL_FALSE;
         
         /*allocate memory space for buffers and sources*/
@@ -125,7 +123,7 @@ extern "C" {
         alListenerfv(AL_VELOCITY,    ListenerVel);
         alListenerfv(AL_ORIENTATION, ListenerOri);
         
-        if (AlGetError("ERROR %d: Setting Listener properties\n") != AL_TRUE)
+        if (AlGetError("(%s) WARN - Failed to set Listener properties") != AL_TRUE)
             return AL_FALSE;
         
         openalReady = AL_TRUE;
@@ -141,7 +139,7 @@ extern "C" {
         globalsize += increment;
 
 #ifdef DEBUG
-        fprintf(stderr, "OpenALBridge: Realloc in process from %d to %d\n", oldsize, globalsize);
+        err_msg("(%s) INFO - Realloc in process from %d to %d\n", prog, oldsize, globalsize);
 #endif
         
         Buffers = (ALuint*) Realloc(Buffers, sizeof(ALuint)*globalsize);
@@ -162,10 +160,11 @@ extern "C" {
         ALenum error;
         FILE *fp;
         
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_loadfile()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*when the buffers are all used, we can expand memory to accept new files*/
         if (globalindex == globalsize)
@@ -173,26 +172,29 @@ extern "C" {
         
         /*detect the file format, as written in the first 4 bytes of the header*/
         fp = Fopen (filename, "rb");
+            
         if (fp == NULL)
             return -1;
+            
         error = fread (&fileformat, sizeof(uint32_t), 1, fp);
         fclose (fp);
         
         if (error < 0) {
-            fprintf(stderr, "ERROR 'openal_loadfile()': file %s is too short \n", filename);
-            return -2;
+                errno = EIO;
+                err_ret("(%s) ERROR - file %s is too short", prog, filename);
+                return -2;
         }
         
         /*prepare the buffer to receive data*/
         alGenBuffers(1, &Buffers[globalindex]);
         
-        if (AlGetError("ERROR %d in 'openal_loadfile()': Allocating memory for buffers\n") != AL_TRUE)
+        if (AlGetError("(%s) ERROR - allocating memory for buffers") != AL_TRUE)
             return -3;
         
         /*prepare the source to emit sound*/
         alGenSources(1, &Sources[globalindex]);
         
-        if (AlGetError("ERROR %d in 'openal_loadfile()': Allocating memory for sources\n") != AL_TRUE)
+        if (AlGetError("(%s) ERROR - allocating memory for sources") != AL_TRUE)
             return -4;
         
         
@@ -204,7 +206,8 @@ extern "C" {
                         error = load_wavpcm (filename, &format, &data, &bitsize, &freq);
                         break;
                 default:
-                        fprintf(stderr, "ERROR 'openal_loadfile()': File format (%08X) not supported!\n", ENDIAN_BIG_32(fileformat));
+                        errno = EINVAL;
+                        err_ret ("(%s) ERROR - File format (%08X) not supported", prog, ENDIAN_BIG_32(fileformat));
                         return -5;
                         break;
         }
@@ -214,7 +217,7 @@ extern "C" {
         alBufferData(Buffers[globalindex], format, data, bitsize, freq);
         free(data);		/*deallocate data to save memory*/
         
-        if (AlGetError("ERROR %d in 'openal_loadfile()': Writing data to buffer\n") != AL_TRUE)
+        if (AlGetError("(%s) ERROR - writing data to buffers") != AL_TRUE)
             return -6;
         
         /*set source properties that it will use when it's in playback*/
@@ -225,7 +228,7 @@ extern "C" {
         alSourcefv(Sources[globalindex], AL_VELOCITY, SourceVel             );
         alSourcei (Sources[globalindex], AL_LOOPING,  0                     );
         
-        if (AlGetError("ERROR %d in 'openal_loadfile()': Setting source properties\n") != AL_TRUE)
+        if (AlGetError("(%s) ERROR - setting Source properties") != AL_TRUE)
             return -7;
         
         alGetError();  /* clear any AL errors beforehand */
@@ -239,19 +242,21 @@ extern "C" {
         /*Set or unset looping mode*/
         ALint loop;
         
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_toggleloop()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         if (index >= globalsize) {
-            fprintf(stderr, "ERROR 'openal_toggleloop()': index out of bounds (got %d, max %d)\n", index, globalindex);
-            return AL_FALSE;
+                errno = EINVAL;
+                err_ret("(%s) ERROR - index out of bounds (got %d, max %d)", prog, index, globalindex);
+                return AL_FALSE;
         }
         
         alGetSourcei (Sources[index], AL_LOOPING, &loop);
         alSourcei (Sources[index], AL_LOOPING, !((uint8_t) loop) & 0x00000001);
-        if (AlGetError("ERROR %d in 'openal_toggleloop()': Getting or setting loop property\n") != AL_TRUE)
+        if (AlGetError("(%s) ERROR - getting or setting loop property") != AL_TRUE)
             return AL_FALSE;
         
         alGetError();  /* clear any AL errors beforehand */
@@ -261,10 +266,11 @@ extern "C" {
     
     
     ALboolean openal_setvolume (uint32_t index, uint8_t percentage) {
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_setvolume()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*Set volume for sound number index*/
         if (index >= globalindex) {
@@ -285,10 +291,11 @@ extern "C" {
     
     
     ALboolean openal_setglobalvolume (uint8_t percentage) {
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_setglobalvolume()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*Set volume for all sounds*/		
         if (percentage > 100)
@@ -307,10 +314,11 @@ extern "C" {
         /*Mute or unmute sound*/
         ALfloat mute;
         
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_togglemute()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         alGetListenerf (AL_GAIN, &mute);
         if (mute > 0) 
@@ -337,10 +345,11 @@ extern "C" {
 #endif
         fade_t *fade;
         
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_fade()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         fade = (fade_t*) Malloc(sizeof(fade_t));
         fade->index = index;
@@ -396,10 +405,11 @@ extern "C" {
     
     
     ALboolean openal_setposition (uint32_t index, float x, float y, float z) {
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_setposition()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         if (index >= globalindex) {
             fprintf(stderr, "ERROR 'openal_setposition()': index out of bounds (got %d, max %d)\n", index, globalindex);
@@ -415,10 +425,11 @@ extern "C" {
     
     
     ALboolean openal_playsound (uint32_t index){
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_playsound()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*Play sound number index*/
         if (index >= globalindex) {
@@ -436,10 +447,11 @@ extern "C" {
     
     
     ALboolean openal_pausesound(uint32_t index){
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_pausesound()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*Pause sound number index*/
         if (index >= globalindex) {
@@ -455,10 +467,11 @@ extern "C" {
     
     
     ALboolean openal_stopsound(uint32_t index){
-        if(openalReady == AL_FALSE) {
-            fprintf(stderr, "ERROR 'openal_stopsound()': OpenAL not initialized\n");
-            return AL_FALSE;
-        }
+            if (openalReady == AL_FALSE) {
+                    errno = EPERM;                
+                    err_ret("(%s) WARN - OpenAL not initialized", prog);
+                    return AL_FALSE;
+            }
         
         /*Stop sound number index*/
         if (index >= globalindex) {

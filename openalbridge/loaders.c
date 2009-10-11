@@ -18,6 +18,7 @@
 
 #include "loaders.h"
 
+
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
@@ -80,7 +81,8 @@ extern "C" {
                 
                 if (t <= 0) { 
                         /*eof*/
-                        fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header\n");
+                        errno = EILSEQ;
+                        err_ret("(%s) ERROR - wrong WAV header", prog);
                         return AL_FALSE;
                 }
         } while (1);
@@ -157,7 +159,7 @@ extern "C" {
 	if (result < 0) {
 		fprintf (stderr, "ERROR 'load_oggvorbis()': ov_fopen failed with %X", result);
                 ov_clear(&oggStream);
-		return -1;
+		return AL_FALSE;
 	}
 
         /*load OGG header and determine the decoded data size*/
@@ -190,7 +192,8 @@ extern "C" {
                     if (vorbisInfo->channels == 2)
                             *format = AL_FORMAT_STEREO16;
                     else {
-                            fprintf(stderr, "ERROR 'load_oggvorbis()': wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
+                            errno = EILSEQ;
+                            err_ret("(%s) ERROR - wrong OGG header [channel %d]", prog, vorbisInfo->channels);
                             ov_clear(&oggStream);
                             return AL_FALSE;
                     }

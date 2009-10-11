@@ -22,7 +22,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdarg.h>
+#include <syslog.h>
 #include <string.h>
+#include <errno.h>
 
 #ifndef _WIN32
 #include <pthread.h>
@@ -31,7 +34,14 @@
 #endif
 
 #include "al.h"
+#include "errlib.h"
 
+
+#ifdef TRACE
+#ifndef DEBUG
+#define DEBUG
+#endif
+#endif
 
 /** 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. [Wu Yongwei] **/
 #ifndef _SLEEP_H
@@ -126,8 +136,10 @@ extern "C" {
       
 
 /*other defines*/
-#define FADE_IN	 0
+#define FADE_IN  0
 #define FADE_OUT 1
+
+        char *prog;
         
 #ifdef __CPLUSPLUS
 }

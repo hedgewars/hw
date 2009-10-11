@@ -24,7 +24,7 @@
 #include <QRegExp>
 #include <QMap>
 
-
+char *programname;
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -44,8 +44,10 @@ bool checkForDir(const QString & dir)
 	return true;
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
+        
+       programname = argv[0];
+        
     QApplication app(argc, argv);
 
     QStringList arguments = app.arguments();
@@ -287,9 +289,8 @@ int main(int argc, char *argv[])
 	bindir->cd("bin"); // workaround over NSIS installer
 
 	cfgdir->setPath(cfgdir->homePath());
+        
 #ifdef __APPLE__
-
-
 	if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
 	{
 		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");

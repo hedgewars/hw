@@ -20,12 +20,16 @@
 #define _OALB_INTERFACE_H
 
 #include "globals.h"
+#include "wrappers.h"
+#include "alc.h"
+#include "loaders.h"
+
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
     
-    ALboolean openal_init		(unsigned int usehardware, unsigned int memorysize);
+    ALboolean openal_init		(char* programname, ALboolean usehardware, unsigned int memorysize);
     ALboolean openal_close		(void);
     ALboolean openal_ready		(void);
     ALint     openal_loadfile           (const char *filename);

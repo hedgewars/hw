@@ -22,7 +22,6 @@
 #include "globals.h"
 #include "wrappers.h"
 #include "oggvorbis.h"
-#include "endianness.h"
 
 
 #ifdef __CPLUSPLUS
