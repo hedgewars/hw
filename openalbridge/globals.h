@@ -32,9 +32,10 @@
 
 #include "al.h"
 
+
+/** 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. [Wu Yongwei] **/
 #ifndef _SLEEP_H
 #define _SLEEP_H
-/** 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. * By Wu Yongwei **/
 #ifdef _WIN32
 # if defined(_NEED_SLEEP_ONLY) && (defined(_MSC_VER) || defined(__MINGW32__))
 #  include <stdlib.h>
@@ -56,54 +57,54 @@
 #endif
 #endif /* _SLEEP_H */
 
-#ifdef HAVE_BYTESWAP_H
-/* use byteswap macros from the host system, hopefully optimized ones ;-) */
-#include <byteswap.h>
-#else
-/* define our own version, simple, stupid, straight-forward... */
 
-#define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
 
-#define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
-                         (((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
 
-#endif /* HAVE_BYTESWAP_H */
+
+
 
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-    
-    /*data type for WAV header*/
+        
+/*data type for WAV header*/
 #pragma pack(1)
-    typedef struct _WAV_header_t {
-        uint32_t ChunkID;
-        uint32_t ChunkSize;
-        uint32_t Format;
-        uint32_t Subchunk1ID;
-        uint32_t Subchunk1Size;
-        uint16_t AudioFormat;
-        uint16_t NumChannels;
-        uint32_t SampleRate;
-        uint32_t ByteRate;
-        uint16_t BlockAlign;
-        uint16_t BitsPerSample;
-        uint32_t Subchunk2ID;
-        uint32_t Subchunk2Size;
-    } WAV_header_t;
+        typedef struct _WAV_header_t {
+                uint32_t ChunkID;
+                uint32_t ChunkSize;
+                uint32_t Format;
+                uint32_t Subchunk1ID;
+                uint32_t Subchunk1Size;
+                uint16_t AudioFormat;
+                uint16_t NumChannels;
+                uint32_t SampleRate;
+                uint32_t ByteRate;
+                uint16_t BlockAlign;
+                uint16_t BitsPerSample;
+                uint32_t Subchunk2ID;
+                uint32_t Subchunk2Size;
+        } WAV_header_t;
 #pragma pack()
-    
-    /*data type for passing data between threads*/
+        
+/*data type for passing data between threads*/
 #pragma pack(1)
-    typedef struct _fade_t {
-        uint32_t index;
-        uint16_t quantity;
-    } fade_t;
+        typedef struct _fade_t {
+                uint32_t index;
+                uint16_t quantity;
+        } fade_t;
 #pragma pack()
-    
-    /*other defines*/
-#define FADE_IN	 AL_TRUE
-#define FADE_OUT AL_FALSE
-    
+
+        
+/*file format defines*/
+#define OGG_FILE_FORMAT 0x4F676753
+#define WAV_FILE_FORMAT 0x52494646
+#define WAV_HEADER_SUBCHUNK2ID 0x64617461
+      
+
+/*other defines*/
+#define FADE_IN	 0
+#define FADE_OUT 1
+        
 #ifdef __CPLUSPLUS
 }
 #endif

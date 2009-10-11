@@ -21,12 +21,9 @@
 #ifdef __CPLUSPLUS
 extern "C" {
 #endif 
-    
-    /*from big endian to little endian*/
-    int invert_endianness(uint32_t number){
-        return bswap_32(number);
-    }
-    
+
+
+        
 #ifdef __CPLUSPLUS
 }
 #endif

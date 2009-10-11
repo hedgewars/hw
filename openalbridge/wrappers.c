@@ -26,8 +26,9 @@ extern "C" {
     
     void *Malloc (size_t nbytes) {
         void *aptr;
+            
         if ((aptr = malloc(nbytes)) == NULL) {
-            fprintf(stderr, "ERROR: not enough memory! malloc() failed\n");
+            fprintf(stderr, "ERROR 'malloc()': not enough memory\n");
             exit(-1);
         }
         return aptr;
@@ -38,7 +39,7 @@ extern "C" {
         aptr = realloc(aptr, nbytes);
         
         if (aptr == NULL) {
-            fprintf(stderr, "ERROR: not enough memory! realloc() failed\n");
+            fprintf(stderr, "ERROR 'realloc()': not enough memory\n");
             free(aptr);
             exit(-1);
         }
@@ -49,11 +50,11 @@ extern "C" {
     FILE *Fopen (const char *fname, char *mode)	{
         FILE *fp;
         if ((fp=fopen(fname,mode)) == NULL)
-            fprintf (stderr, "ERROR: can't open file %s in mode '%s'\n", fname, mode);
+            fprintf (stderr, "ERROR 'fopen()': can't open file %s in mode '%s'\n", fname, mode);
         return fp;
     }
     
-    
+    /*TODO make a proper error reporting routine*/
     ALint AlGetError (const char *str) {
         ALenum error;
         
@@ -76,12 +77,7 @@ extern "C" {
             return AL_TRUE;
     }
     
-#ifndef _WIN32
-    void *helper_fadein(void *tmp) 
-#else
-    void *helper_fadein(void *tmp) 
-#endif
-    {
+    void *helper_fadein(void *tmp) {
         ALfloat gain;
         ALfloat target_gain;
         fade_t *fade;
@@ -94,7 +90,7 @@ extern "C" {
         free (fade);
         
 #ifdef DEBUG
-        fprintf(stderr, "Fade-out: index %d quantity %d\n", index, quantity);
+        fprintf(stderr, "Fade-in: index %d quantity %d\n", index, quantity);
 #endif
         
         /*save the volume desired after the fade*/
@@ -106,13 +102,13 @@ extern "C" {
         
         for (gain = 0.0f ; gain <= target_gain; gain += (float) quantity/10000) {
 #ifdef DEBUG
-            fprintf(stderr, "Fade-in: Set gain to: %f\n", gain);
+            fprintf(stderr, "Fade-in: set gain to: %f\n", gain);
 #endif
             alSourcef(Sources[index], AL_GAIN, gain);
             usleep(10000);
         }
         
-        AlGetError("ERROR %d: Setting fade in volume\n");
+        AlGetError("ERROR %d in 'helper_fadein()': Setting fade in volume\n");
         
 #ifndef _WIN32
         pthread_exit(NULL);
@@ -122,13 +118,7 @@ extern "C" {
         return 0;
     }
     
-    
-#ifndef _WIN32
-    void *helper_fadeout(void *tmp) 
-#else
-    void *helper_fadeout(void *tmp) 	
-#endif
-    {
+    void *helper_fadeout(void *tmp) {
         ALfloat gain;
         ALfloat old_gain;
         fade_t *fade;
@@ -154,7 +144,7 @@ extern "C" {
             usleep(10000);
         }
         
-        AlGetError("ERROR %d: Setting fade out volume\n");
+        AlGetError("ERROR %d in 'helper_fadeout()': Setting fade out volume\n");
         
         /*stop that sound and reset its volume*/
         alSourceStop (Sources[index]);

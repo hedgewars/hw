@@ -27,20 +27,21 @@ extern "C" {
         FILE *wavfile;
         int32_t t;
         uint32_t n = 0;
+        uint8_t sub0, sub1, sub2, sub3;
         
         wavfile = Fopen(filename, "rb");
         
-        fread(&WAVHeader.ChunkID, sizeof(uint32_t), 1, wavfile);
+        fread(&WAVHeader.ChunkID, sizeof(uint32_t), 1, wavfile);                /*RIFF*/
         fread(&WAVHeader.ChunkSize, sizeof(uint32_t), 1, wavfile);
-        fread(&WAVHeader.Format, sizeof(uint32_t), 1, wavfile);
+        fread(&WAVHeader.Format, sizeof(uint32_t), 1, wavfile);                 /*WAVE*/
         
 #ifdef DEBUG
-        fprintf(stderr, "ChunkID: %X\n", invert_endianness(WAVHeader.ChunkID));
-        fprintf(stderr, "ChunkSize: %d\n", WAVHeader.ChunkSize);
-        fprintf(stderr, "Format: %X\n", invert_endianness(WAVHeader.Format));
+        fprintf(stderr, "ChunkID: %X\n", ENDIAN_BIG_32(WAVHeader.ChunkID));
+        fprintf(stderr, "ChunkSize: %d\n", ENDIAN_LITTLE_32(WAVHeader.ChunkSize));
+        fprintf(stderr, "Format: %X\n", ENDIAN_BIG_32(WAVHeader.Format));
 #endif
         
-        fread(&WAVHeader.Subchunk1ID, sizeof(uint32_t), 1, wavfile);
+        fread(&WAVHeader.Subchunk1ID, sizeof(uint32_t), 1, wavfile);            /*fmt */
         fread(&WAVHeader.Subchunk1Size, sizeof(uint32_t), 1, wavfile);
         fread(&WAVHeader.AudioFormat, sizeof(uint16_t), 1, wavfile);
         fread(&WAVHeader.NumChannels, sizeof(uint16_t), 1, wavfile);
@@ -50,78 +51,93 @@ extern "C" {
         fread(&WAVHeader.BitsPerSample, sizeof(uint16_t), 1, wavfile);
         
 #ifdef DEBUG
-        fprintf(stderr, "Subchunk1ID: %X\n", invert_endianness(WAVHeader.Subchunk1ID));
-        fprintf(stderr, "Subchunk1Size: %d\n", WAVHeader.Subchunk1Size);
-        fprintf(stderr, "AudioFormat: %d\n", WAVHeader.AudioFormat);
-        fprintf(stderr, "NumChannels: %d\n", WAVHeader.NumChannels);
-        fprintf(stderr, "SampleRate: %d\n", WAVHeader.SampleRate);
-        fprintf(stderr, "ByteRate: %d\n", WAVHeader.ByteRate);
-        fprintf(stderr, "BlockAlign: %d\n", WAVHeader.BlockAlign);
-        fprintf(stderr, "BitsPerSample: %d\n", WAVHeader.BitsPerSample);
+        fprintf(stderr, "Subchunk1ID: %X\n", ENDIAN_BIG_32(WAVHeader.Subchunk1ID));
+        fprintf(stderr, "Subchunk1Size: %d\n", ENDIAN_LITTLE_32(WAVHeader.Subchunk1Size));
+        fprintf(stderr, "AudioFormat: %d\n", ENDIAN_LITTLE_16(WAVHeader.AudioFormat));
+        fprintf(stderr, "NumChannels: %d\n", ENDIAN_LITTLE_16(WAVHeader.NumChannels));
+        fprintf(stderr, "SampleRate: %d\n", ENDIAN_LITTLE_32(WAVHeader.SampleRate));
+        fprintf(stderr, "ByteRate: %d\n", ENDIAN_LITTLE_32(WAVHeader.ByteRate));
+        fprintf(stderr, "BlockAlign: %d\n", ENDIAN_LITTLE_16(WAVHeader.BlockAlign));
+        fprintf(stderr, "BitsPerSample: %d\n", ENDIAN_LITTLE_16(WAVHeader.BitsPerSample));
 #endif
-        
-        do { /*remove useless header chunks (plenty room for improvements)*/
-            t = fread(&WAVHeader.Subchunk2ID, sizeof(uint32_t), 1, wavfile);
-            if (invert_endianness(WAVHeader.Subchunk2ID) == 0x64617461)
-                break;
-            if (t <= 0) { /*eof*/
-                fprintf(stderr, "ERROR: wrong WAV header\n");
-                return AL_FALSE;
-            }
+
+        /*remove useless header chunks by looking for the WAV_HEADER_SUBCHUNK2ID integer */
+        do {
+                t = fread(&sub0, sizeof(uint8_t), 1, wavfile);
+                if(sub0 == 0x64) {
+                        t = fread(&sub1, sizeof(uint8_t), 1, wavfile);
+                        if(sub1 == 0x61) {
+                                t = fread(&sub2, sizeof(uint8_t), 1, wavfile);
+                                if(sub2 == 0x74) {
+                                        t = fread(&sub3, sizeof(uint8_t), 1, wavfile);
+                                        if(sub3 == 0x61) {
+                                                WAVHeader.Subchunk2ID = WAV_HEADER_SUBCHUNK2ID;
+                                                break;                                                
+                                        } 
+                                }       
+                        }
+                }
+                
+                if (t <= 0) { 
+                        /*eof*/
+                        fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header\n");
+                        return AL_FALSE;
+                }
         } while (1);
+            
         fread(&WAVHeader.Subchunk2Size, sizeof(uint32_t), 1, wavfile);
         
 #ifdef DEBUG
-        fprintf(stderr, "Subchunk2ID: %X\n", invert_endianness(WAVHeader.Subchunk2ID));
-        fprintf(stderr, "Subchunk2Size: %d\n", WAVHeader.Subchunk2Size);
+        fprintf(stderr, "Subchunk2ID: %X\n", ENDIAN_LITTLE_32(WAVHeader.Subchunk2ID));
+        fprintf(stderr, "Subchunk2Size: %d\n", ENDIAN_LITTLE_32(WAVHeader.Subchunk2Size));
 #endif
         
-        *data = (char*) Malloc (sizeof(char) * WAVHeader.Subchunk2Size);
+        *data = (char*) Malloc (sizeof(char) * ENDIAN_LITTLE_32(WAVHeader.Subchunk2Size));
         
-        /*this could be improved*/
+        /*read the actual sound data*/
         do {
-            n += fread(&((*data)[n]), sizeof(uint8_t), 1, wavfile);
-        } while (n < WAVHeader.Subchunk2Size);
+                n += fread(&((*data)[n]), sizeof(uint8_t), 4, wavfile);
+        } while (n < ENDIAN_LITTLE_32(WAVHeader.Subchunk2Size));
         
         fclose(wavfile);	
-        
+            
 #ifdef DEBUG
-        fprintf(stderr, "Last two bytes of data: %X%X\n", (*data)[n-2], (*data)[n-1]);
+        fprintf(stderr, "WAV data loaded\n");
 #endif
-        
-        /*remaining parameters*/
+            
+        /*set parameters for OpenAL*/
         /*Valid formats are AL_FORMAT_MONO8, AL_FORMAT_MONO16, AL_FORMAT_STEREO8, and AL_FORMAT_STEREO16*/
-        if (WAVHeader.NumChannels == 1) {
-            if (WAVHeader.BitsPerSample == 8)
+        if (ENDIAN_LITTLE_16(WAVHeader.NumChannels) == 1) {
+            if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 8)
                 *format = AL_FORMAT_MONO8;
             else {
-                if (WAVHeader.BitsPerSample == 16)
+                if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                     *format = AL_FORMAT_MONO16;
                 else {
-                    fprintf(stderr, "ERROR: wrong WAV header - bitsample value\n");
+                    fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - bitsample value\n");
                     return AL_FALSE;
                 }
             } 
         } else {
-            if (WAVHeader.NumChannels == 2) {
-                if (WAVHeader.BitsPerSample == 8)
+            if (ENDIAN_LITTLE_16(WAVHeader.NumChannels) == 2) {
+                if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 8)
                     *format = AL_FORMAT_STEREO8;
                 else {
-                    if (WAVHeader.BitsPerSample == 16)
+                    if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                         *format = AL_FORMAT_STEREO16;
                     else {
-                        fprintf(stderr, "ERROR: wrong WAV header - bitsample value\n");
+                        fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - bitsample value\n");
                         return AL_FALSE;
                     }				
                 }
             } else {
-                fprintf(stderr, "ERROR: wrong WAV header - format value\n");
+                fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - format value\n");
                 return AL_FALSE;
             }
         }
         
-        *bitsize = WAVHeader.Subchunk2Size;
-        *freq = WAVHeader.SampleRate;
+        *bitsize = ENDIAN_LITTLE_32(WAVHeader.Subchunk2Size);
+        *freq    = ENDIAN_LITTLE_32(WAVHeader.SampleRate);
         return AL_TRUE;
     }
     
@@ -139,7 +155,7 @@ extern "C" {
 
 	result = ov_fopen((char*) filename, &oggStream);
 	if (result < 0) {
-		fprintf (stderr, "ERROR: ov_open_callbacks failed with %X", result);
+		fprintf (stderr, "ERROR 'load_oggvorbis()': ov_fopen failed with %X", result);
                 ov_clear(&oggStream);
 		return -1;
 	}
@@ -160,7 +176,7 @@ extern "C" {
         fprintf(stderr, "PCM data size: %lld\n", pcm_length);
         fprintf(stderr, "# comment: %d\n", vorbisComment->comments);
         for (i = 0; i < vorbisComment->comments; i++)
-            fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
+                fprintf(stderr, "\tComment %d: %s\n", i, vorbisComment->user_comments[i]);
 #endif
         
         /*allocates enough room for the decoded data*/
@@ -173,7 +189,7 @@ extern "C" {
             if (vorbisInfo->channels == 2)
                 *format = AL_FORMAT_STEREO16;
             else {
-                fprintf(stderr, "ERROR: wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
+                fprintf(stderr, "ERROR 'load_oggvorbis()': wrong OGG header - channel value (%d)\n", vorbisInfo->channels);
                 ov_clear(&oggStream);
                 return AL_FALSE;
             }
@@ -188,7 +204,7 @@ extern "C" {
                 if (result == 0)
                     break;
                 else { 
-                    fprintf(stderr, "ERROR: end of file from OGG stream\n");
+                    fprintf(stderr, "ERROR 'load_oggvorbis()': end of file from OGG stream\n");
                     ov_clear(&oggStream);
                     return AL_FALSE;
                 }
