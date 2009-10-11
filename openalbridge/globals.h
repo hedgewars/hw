@@ -67,11 +67,11 @@
 #endif
 #endif /* _SLEEP_H */
 
-#ifdef __APPLE__
-/* check compiler requirements */
+/* check compiler requirements */    /*FIXME*/
 #if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
-#error Do not know the endianess of this architecture
-#endif
+#warning __BIG_ENDIAN__ or __LITTLE_ENDIAN__ not found, going to set __LITTLE_ENDIAN__ as default
+#define __LITTLE_ENDIAN__ 1
+//#error Do not know the endianess of this architecture
 #endif
 
 /* use byteswap macros from the host system, hopefully optimized ones ;-) 
@@ -81,7 +81,7 @@
 #else        
 #define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
 #define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
-(((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
+                         (((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
 #endif /* HAVE_BYTESWAP_H */
 
 /* swap numbers accordingly to architecture automatically */

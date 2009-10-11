@@ -104,7 +104,7 @@ extern "C" {
         fclose(wavfile);	
             
 #ifdef DEBUG
-        fprintf(stderr, "WAV data loaded\n");
+    err_msg("(%s) INFO - WAV data loaded", prog);
 #endif
             
         /*set parameters for OpenAL*/
@@ -116,8 +116,9 @@ extern "C" {
                 if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                     *format = AL_FORMAT_MONO16;
                 else {
-                    fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - bitsample value\n");
-                    return AL_FALSE;
+                        errno = EILSEQ;
+                        err_ret("(%s) ERROR - wrong WAV header [bitsample value]", prog);
+                        return AL_FALSE;
                 }
             } 
         } else {
@@ -128,13 +129,15 @@ extern "C" {
                     if (ENDIAN_LITTLE_16(WAVHeader.BitsPerSample) == 16)
                         *format = AL_FORMAT_STEREO16;
                     else {
-                        fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - bitsample value\n");
+                            errno = EILSEQ;
+                            err_ret("(%s) ERROR - wrong WAV header [bitsample value]", prog);
                         return AL_FALSE;
                     }				
                 }
             } else {
-                fprintf(stderr, "ERROR 'load_wavpcm()': wrong WAV header - format value\n");
-                return AL_FALSE;
+                    errno = EILSEQ;
+                    err_ret("(%s) ERROR - wrong WAV header [format value]", prog); 
+                    return AL_FALSE;
             }
         }
         
@@ -157,7 +160,8 @@ extern "C" {
 
 	result = ov_fopen((char*) filename, &oggStream);
 	if (result < 0) {
-		fprintf (stderr, "ERROR 'load_oggvorbis()': ov_fopen failed with %X", result);
+                errno = EINVAL;
+                err_ret("(%s) ERROR - ov_fopen() failed with %X", prog, result);
                 ov_clear(&oggStream);
 		return AL_FALSE;
 	}
@@ -214,7 +218,8 @@ extern "C" {
                 if (result == 0)
                     break;
                 else { 
-                    fprintf(stderr, "ERROR 'load_oggvorbis()': end of file from OGG stream\n");
+                        errno = EILSEQ;
+                        err_ret("(%s) ERROR - End of file from OGG stream", prog);
                     ov_clear(&oggStream);
                     return AL_FALSE;
                 }

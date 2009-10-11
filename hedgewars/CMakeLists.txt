@@ -1,9 +1,9 @@
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/proto.inc.in ${CMAKE_CURRENT_BINARY_DIR}/proto.inc)
 
-find_package(SDL REQUIRED)
-find_package(SDL_image REQUIRED)
-find_package(SDL_net REQUIRED)
-find_package(SDL_ttf REQUIRED)
+find_package(SDL)
+find_package(SDL_image)
+find_package(SDL_net)
+find_package(SDL_ttf)
 
 
 #SOURCE AND PROGRAMS SECTION 
@@ -116,6 +116,8 @@ endif(MSVC)
 #DEPENDECIES AND EXECUTABLES SECTION
 IF(APPLE)
 #let's build sdlmain, which is absent from the framework
+	find_package(SDL REQUIRED)
+
 	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 	include_directories(${SDL_INCLUDE_DIR})
 	link_libraries(${SDL_LIBRARY})
