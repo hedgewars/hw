@@ -67,10 +67,11 @@
 #endif
 #endif /* _SLEEP_H */
 
-
+#ifdef __APPLE__
 /* check compiler requirements */
 #if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
 #error Do not know the endianess of this architecture
+#endif
 #endif
 
 /* use byteswap macros from the host system, hopefully optimized ones ;-) 
@@ -101,7 +102,7 @@
 extern "C" {
 #endif 
         
-/*data type for WAV header*/
+        /*data type for WAV header*/
 #pragma pack(1)
         typedef struct _WAV_header_t {
                 uint32_t ChunkID;
@@ -120,25 +121,25 @@ extern "C" {
         } WAV_header_t;
 #pragma pack()
         
-/*data type for passing data between threads*/
+        /*data type for passing data between threads*/
 #pragma pack(1)
         typedef struct _fade_t {
                 uint32_t index;
                 uint16_t quantity;
         } fade_t;
 #pragma pack()
-
         
-/*file format defines*/
+        
+        /*file format defines*/
 #define OGG_FILE_FORMAT 0x4F676753
 #define WAV_FILE_FORMAT 0x52494646
 #define WAV_HEADER_SUBCHUNK2ID 0x64617461
-      
-
-/*other defines*/
+        
+        
+        /*other defines*/
 #define FADE_IN  0
 #define FADE_OUT 1
-
+        
         char *prog;
         
 #ifdef __CPLUSPLUS

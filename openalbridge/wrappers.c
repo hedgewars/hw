@@ -51,6 +51,7 @@ extern "C" {
                 fp = fopen(fname,mode);
                 if (fp == NULL)
                         err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
+                
                 return fp;
         }
         
@@ -71,8 +72,8 @@ extern "C" {
                 
                 error = alGetError();
                 if (error != AL_NO_ERROR) {
-                        fprintf(stderr, str, error, num);
-                        return -2;
+                        err_msg(str, prog, num);
+                        return error;
                 } else 
                         return AL_TRUE;
         }
