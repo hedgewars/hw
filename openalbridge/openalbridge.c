@@ -74,7 +74,6 @@ extern "C" {
                 
                 prog = programname;
                 
-                
                 /*Position of the listener*/
                 ALfloat ListenerPos[] = { 0.0, 0.0, 0.0 };
                 /*Velocity of the listener*/
@@ -88,7 +87,7 @@ extern "C" {
                         return AL_FALSE;
                 }
                 
-                if (usehardware)
+                if (usehardware = AL_TRUE)
                         device = alcOpenDevice(NULL);
                 else
                         device = alcOpenDevice("Generic Software");
@@ -273,8 +272,9 @@ extern "C" {
                 }
                 
                 /*Set volume for sound number index*/
-                if (index >= globalindex) {
-                        fprintf(stderr, "ERROR 'openal_setvolume()': index out of bounds (got %d, max %d)\n", index, globalindex);
+                if (index >= globalsize) {
+                        errno = EINVAL;
+                        err_ret("(%s) ERROR - Index out of bounds (got %d, max %d)", prog, index, globalindex);
                         return AL_FALSE;
                 }
                 

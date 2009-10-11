@@ -23,20 +23,24 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdarg.h>
-#include <syslog.h>
 #include <string.h>
 #include <errno.h>
 
 #ifndef _WIN32
 #include <pthread.h>
+#include <syslog.h>
 #else
 #include <process.h>
+#define syslog(x,y) fprintf(stderr,y)
+#define LOG_INFO 6
+#define LOG_ERR 3
 #endif
 
 #include "al.h"
 #include "errlib.h"
 
 
+/*control debug verbosity*/
 #ifdef TRACE
 #ifndef DEBUG
 #define DEBUG
@@ -67,6 +71,7 @@
 #endif
 #endif /* _SLEEP_H */
 
+
 /* check compiler requirements */    /*FIXME*/
 #if !defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__)
 #warning __BIG_ENDIAN__ or __LITTLE_ENDIAN__ not found, going to set __LITTLE_ENDIAN__ as default
@@ -81,7 +86,7 @@
 #else        
 #define bswap_16(x)	((((x) & 0xFF00) >> 8) | (((x) & 0x00FF) << 8))
 #define bswap_32(x)	((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >> 8)  | \
-                         (((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
+(((x) & 0x0000FF00) << 8)  | (((x) & 0x000000FF) << 24) )
 #endif /* HAVE_BYTESWAP_H */
 
 /* swap numbers accordingly to architecture automatically */

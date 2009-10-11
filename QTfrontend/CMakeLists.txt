@@ -17,7 +17,6 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
-find_package(Sparkle)
 
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
@@ -139,6 +138,8 @@ set(hwfr_moc_hdrs
 	)
 
 if(APPLE)
+find_package(Sparkle)
+
 set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
 if(SPARKLE_FOUND)
 set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
