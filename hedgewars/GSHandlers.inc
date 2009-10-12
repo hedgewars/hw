@@ -2311,6 +2311,8 @@ fuel:= 50;
 
 if (HHGear^.Message and gm_Up) <> 0 then
     begin
+    if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
+        HHGear^.dY:= HHGear^.dY - move;
     HHGear^.dY:= HHGear^.dY - move;
     dec(Gear^.Health, fuel);
     Gear^.MsgParam:= Gear^.MsgParam or gm_Up;
