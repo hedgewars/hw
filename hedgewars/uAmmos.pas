@@ -75,6 +75,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if a <> amNothing then
         begin
         Ammoz[a].Probability:= probability[byte(s[ord(a) + ord(High(TAmmoType))]) - byte('0')];
+		if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
         cnt:= byte(s[ord(a)]) - byte('0');
         // avoid things we already have infinite number
         if cnt = 9 then

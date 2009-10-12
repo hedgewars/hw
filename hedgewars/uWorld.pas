@@ -138,8 +138,6 @@ with CurrentHedgehog^ do
 					begin
 					l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
-					if (TrainingFlags and tfIgnoreDelays) <> 0 then l:= -1;
-
 					if l >= 0 then
 						begin
 						DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
@@ -170,7 +168,7 @@ with CurrentHedgehog^ do
 		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
 			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
 
-		if bSelected and (((TrainingFlags and tfIgnoreDelays) <> 0) or (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0)) then
+		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
 			begin
 			bShowAmmoMenu:= false;
 			SetWeapon(Ammo^[Slot, Pos].AmmoType);

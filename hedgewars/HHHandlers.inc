@@ -43,14 +43,14 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			inc(i);
 			TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
 			end;
-		until (Ammo^[slot, CurAmmo].Count > 0) and ((Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, CurAmmo].AmmoType].SkipTurns) or ((TrainingFlags and tfIgnoreDelays) <> 0))
+		until (Ammo^[slot, CurAmmo].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, CurAmmo].AmmoType].SkipTurns)
 		end else
 		begin
 		i:= 0;
 		// check whether there is ammo in slot
 		while (i <= cMaxSlotAmmoIndex)
 		  and ((Ammo^[slot, i].Count = 0)
-		       or ((Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns) and ((TrainingFlags and tfIgnoreDelays) = 0))) do inc(i);
+		       or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
 
 		if i <= cMaxSlotAmmoIndex then
 			begin
@@ -67,7 +67,7 @@ var t: LongInt;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
 
-if (PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns) and ((TrainingFlags and tfIgnoreDelays) = 0) then exit; // weapon is not activated yet
+if PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon is not activated yet
 
 Gear^.MsgParam:= Ammoz[weap].Slot;
 
