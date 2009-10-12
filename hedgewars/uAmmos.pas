@@ -209,6 +209,32 @@ with Hedgehog do
 	end
 end;
 
+procedure SwitchToFirstLegalAmmo(var Hedgehog: THedgehog);
+begin
+with Hedgehog do
+	begin
+	CurAmmo:= 0;
+	CurSlot:= 0;
+	while (CurSlot <= cMaxSlotIndex) and
+		((Ammo^[CurSlot, CurAmmo].Count = 0) or
+		(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+		do
+		begin
+		while (CurAmmo <= cMaxSlotAmmoIndex) and
+			((Ammo^[CurSlot, CurAmmo].Count = 0) or
+			(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+			do inc(CurAmmo);
+
+		if (CurAmmo > cMaxSlotAmmoIndex) then
+			begin
+			CurAmmo:= 0;
+			inc(CurSlot)
+			end
+		end;
+	TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
+	end
+end;
+
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
@@ -218,12 +244,7 @@ with Hedgehog do
 	begin
 
 	if (Ammo^[CurSlot, CurAmmo].Count = 0) then
-		begin
-		CurAmmo:= 0;
-		CurSlot:= 0;
-		while (CurSlot <= cMaxSlotIndex) and (Ammo^[CurSlot, CurAmmo].Count = 0) do inc(CurSlot);
-		TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
-		end;
+		SwitchToFirstLegalAmmo(Hedgehog);
 
         //bad things could happen here in case CurSlot is overflowing
 	ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
@@ -257,16 +278,7 @@ begin
 with Hedgehog do
 	if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or
 		(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
-		begin
-		CurAmmo:= 0;
-		CurSlot:= 0;
-		while (CurSlot <= cMaxSlotIndex) and
-			((Ammo^[CurSlot, CurAmmo].Count = 0) or
-			(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-			do
-			inc(CurSlot);
-		TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
-        end
+		SwitchToFirstLegalAmmo(Hedgehog);
 end;
 
 procedure SetWeapon(weap: TAmmoType);
