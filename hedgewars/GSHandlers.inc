@@ -40,6 +40,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
         begin
         CheckGearDrowning:= true;
         Gear^.State:= gstDrowning;
+        Gear^.RenderTimer:= false;
         Gear^.doStep:= @doStepDrowningGear;
 		if Gear^.Kind = gtHedgehog then
 			begin
