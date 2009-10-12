@@ -45,7 +45,8 @@ type
 			sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
 			sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
 			sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
-			sprSky, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
+			sprHorizontL, sprHorizontR, sprSky, sprSkyL,
+			sprSkyR, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
 			sprAMSlotKeys, sprAMSelection, sprFinger, sprAirBomb,
 			sprAirplane, sprAmAirplane, sprAmGirder, sprHHTelepMask,
 			sprSwitch, sprParachute, sprTarget, sprRopeNode,
@@ -100,8 +101,8 @@ type
 			amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
-            		amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            		amLaserSight, amVampiric, amSniperRifle, amJetpack);
+			amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
+			amLaserSight, amVampiric, amSniperRifle, amJetpack);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -434,7 +435,15 @@ const
 			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprFlame
 			(FileName:   'horizont'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHorizont
+			(FileName:  'horizontL'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHorizont
+			(FileName:  'horizontR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHorizont
 			(FileName:        'Sky'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSky
+			(FileName:       'SkyL'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSky
+			(FileName:       'SkyR'; Path: ptCurrTheme;AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSky
 			(FileName:  'BrdrLines'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 202; Height:  1; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMBorders

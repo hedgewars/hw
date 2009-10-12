@@ -279,24 +279,33 @@ AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
 	with SpritesData[ii] do
         // FIXME - add a sprite attribute
-        if (not cReducedQuality) or ((ii <> sprSky) and (ii <> sprHorizont) and (ii <> sprFlake)) then
+        if (not cReducedQuality) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake])) then // FIXME: hack
 		begin
 			if AltPath = ptNone then
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
+				if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
+					tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifLowRes)
+				else
+					tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
-					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
+						tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
 				end;
-			if imageWidth = 0 then imageWidth := tmpsurf^.w;
-			if imageHeight = 0 then imageHeight := tmpsurf^.h;
-			if Width = 0 then Width:= tmpsurf^.w;
-			if Height = 0 then Height:= tmpsurf^.h;
-            if (ii = sprSky) then
-			    Texture:= Surface2Tex(tmpsurf, true)
-            else
-			    Texture:= Surface2Tex(tmpsurf, false);
-			if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+
+			if tmpsurf <> nil then
+				begin
+				if imageWidth = 0 then imageWidth := tmpsurf^.w;
+				if imageHeight = 0 then imageHeight := tmpsurf^.h;
+				if Width = 0 then Width:= tmpsurf^.w;
+				if Height = 0 then Height:= tmpsurf^.h;
+				if (ii = sprSky) then
+					Texture:= Surface2Tex(tmpsurf, true)
+				else
+					Texture:= Surface2Tex(tmpsurf, false);
+				if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+				end
+			else
+				Surface:= nil
 		end;
 
 AddProgress;
@@ -907,14 +916,9 @@ const TestFormat: TSDL_PixelFormat = (
 {$ENDIF}
 begin
 WriteToConsole(msgLoading + filename + '... ');
-s:= filename + '.' + cBitsStr + '.png';
-tmpsurf:= IMG_Load(Str2PChar(s));
 
-if tmpsurf = nil then
-   begin
-   s:= filename + '.png';
-   tmpsurf:= IMG_Load(Str2PChar(s));
-   end;
+s:= filename + '.png';
+tmpsurf:= IMG_Load(Str2PChar(s));
 
 if ((imageFlags and ifLowRes) <> 0) then
 	begin
@@ -923,6 +927,7 @@ if ((imageFlags and ifLowRes) <> 0) then
 		begin
 			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 			begin
+				SDL_FreeSurface(tmpsurf);
 				WriteLnToConsole('Image too big, trying to load lowres version: ' + s);
 				tmpsurf:= IMG_Load(Str2PChar(s))
 			end;

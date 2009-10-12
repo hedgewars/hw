@@ -274,27 +274,51 @@ glDisableClientState(GL_VERTEX_ARRAY);
 		0)}
 end;
 
+procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift: LongInt);
+var i, w, sw: LongInt;
+begin
+sw:= round(cScreenWidth / cScaleFactor);
+if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
+	begin
+	w:= SpritesData[spr].Width;
+	i:= Shift mod w;
+	if i > 0 then dec(i, w);
+	dec(i, w * (sw div w + 1));
+	repeat
+		DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+		inc(i, w)
+	until i > sw
+	end else
+	begin
+	w:= SpritesData[spr].Width;
+	dec(Shift, w div 2);
+	DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+
+	sw:= round(cScreenWidth / cScaleFactor);
+	
+	i:= Shift - SpritesData[sprL].Width;
+	while i >= -sw - SpritesData[sprL].Width do
+		begin
+		DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height, 0);
+		dec(i, SpritesData[sprL].Width);
+		end;
+		
+	i:= Shift + w;
+	while i <= sw do
+		begin
+		DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height, 0);
+		inc(i, SpritesData[sprR].Width)
+		end
+	end
+end;
+
+
 procedure DrawWorld(Lag: LongInt);
 var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
-
-    procedure DrawRepeated(spr: TSprite; Shift: LongInt);
-    var i, w, sw: LongInt;
-    begin
-    sw:= round(cScreenWidth / cScaleFactor);
-    w:= SpritesData[spr].Width;
-    i:= Shift mod w;
-    if i > 0 then dec(i, w);
-    dec(i, w * (sw div w + 1));
-    repeat
-      DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
-      inc(i, w)
-    until i > sw
-    end;
-
 begin
 if ZoomValue < zoom then
 	begin
@@ -319,8 +343,8 @@ if not isPaused then MoveCamera;
 if not cReducedQuality then
     begin
     // background
-    DrawRepeated(sprSky, WorldDx * 3 div 8);
-    DrawRepeated(sprHorizont, WorldDx * 3 div 5);
+    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8);
+    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5);
 
     DrawVisualGears(0);
     end;
@@ -627,8 +651,8 @@ prevPoint:= CursorPoint;
 if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
 if WorldDy < wdy then WorldDy:= wdy;
-if WorldDx < -round(LAND_WIDTH * 2 / cScaleFactor) then WorldDx:= -round(LAND_WIDTH * 2 / cScaleFactor);
-if WorldDx > cw then WorldDx:= cw;
+if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
+if WorldDx > 1024 then WorldDx:= 1024;
 end;
 
 initialization
