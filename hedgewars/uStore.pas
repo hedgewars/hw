@@ -970,7 +970,11 @@ end;
 
 function glLoadExtension(extension : string) : boolean;
 begin
+{$IFNDEF IPHONEOS}
 	glLoadExtension:= glext_LoadExtension(extension);
+{$ELSE}
+        glLoadExtension:= false;
+{$ENDIF}
 	if not glLoadExtension then
 		WriteLnToConsole('OpenGL: "' + extension + '" failed to load')
 	else
@@ -984,7 +988,7 @@ glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
-{$IFNDEF GLES11}
+{$IFNDEF IPHONEOS}
 SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 {$ENDIF}
 
@@ -1004,7 +1008,7 @@ end;
 
 procedure SetScale(f: GLfloat);
 begin
-// leave immediately if scale factor didn't change
+// leave immediately if scale factor did not change
 if f = cScaleFactor then exit;
 
 if f = 2.0 then // default scaling

@@ -240,7 +240,7 @@ for i:= 6 to cKeyMaxIndex do
     end;
 
 {$IFDEF SDL13}
-PByteArray(SDL_GetKeyboardState(@i);
+PByteArray(SDL_GetKeyboardState(@i));
 {$ELSE}
 SDL_GetKeyState(@i);
 {$ENDIF}
