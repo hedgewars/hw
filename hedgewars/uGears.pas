@@ -330,7 +330,7 @@ gtAmmo_Grenade: begin // bazooka
                 end;
       gtShover: Result^.Radius:= 20;
        gtFlame: begin
-                Result^.Tag:= Counter mod 32;
+                Result^.Tag:= GetRandom(32);
                 Result^.Radius:= 1;
                 Result^.Health:= 5;
                 if (Result^.dY.QWordValue = 0) and (Result^.dX.QWordValue = 0) then
@@ -1631,6 +1631,7 @@ end;
 
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
+    Gear: PGear;
     i: LongInt;
 begin
 t:= CheckGearsCollision(Ammo);
@@ -1641,39 +1642,41 @@ Damage:= modifyDamage(Damage);
 while i > 0 do
 	begin
 	dec(i);
-	if (t^.ar[i]^.State and gstNoDamage) = 0 then
-		case t^.ar[i]^.Kind of
+    Gear:= t^.ar[i];
+    if (Gear^.State and gstNoDamage) = 0 then
+        case Gear^.Kind of
 			gtHedgehog,
 			gtMine,
 			gtTarget,
 			gtCase: begin
 					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
-                    if (not t^.ar[i]^.Invulnerable) then
-                        ApplyDamage(t^.ar[i], Damage)
+                    if (Ammo^.Kind = gtFlame) then Ammo^.Health:= 0;
+                    if (not Gear^.Invulnerable) then
+                        ApplyDamage(Gear, Damage)
                     else
-                        t^.ar[i]^.State:= t^.ar[i]^.State or gstWinner;
+                        Gear^.State:= Gear^.State or gstWinner;
 
-					DeleteCI(t^.ar[i]);
-					t^.ar[i]^.dX:= Ammo^.dX * Power * _0_01;
-					t^.ar[i]^.dY:= Ammo^.dY * Power * _0_01;
-					t^.ar[i]^.Active:= true;
-					t^.ar[i]^.State:= t^.ar[i]^.State or gstMoving;
+					DeleteCI(Gear);
+					Gear^.dX:= Ammo^.dX * Power * _0_01;
+					Gear^.dY:= Ammo^.dY * Power * _0_01;
+					Gear^.Active:= true;
+					Gear^.State:= Gear^.State or gstMoving;
 
-					if TestCollisionXwithGear(t^.ar[i], hwSign(t^.ar[i]^.dX)) then
+					if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
 						begin
-						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -3, hwSign(t^.ar[i]^.dX))
-							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
-						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -2, hwSign(t^.ar[i]^.dX))
-							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
-						if not (TestCollisionXwithXYShift(t^.ar[i], _0, -1, hwSign(t^.ar[i]^.dX))
-							or TestCollisionYwithGear(t^.ar[i], -1)) then t^.ar[i]^.Y:= t^.ar[i]^.Y - _1;
+						if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
+							or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+						if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
+							or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
+						if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
+							or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
 						end;
-
-					FollowGear:= t^.ar[i]
+					
+					FollowGear:= Gear
 					end;
 		end
 	end;
-SetAllToActive
+if i <> 0 then SetAllToActive
 end;
 
 procedure AssignHHCoords;

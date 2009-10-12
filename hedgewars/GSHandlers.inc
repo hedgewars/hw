@@ -1231,7 +1231,7 @@ end;
 procedure doStepFlame(Gear: PGear);
 var i: Integer;
 begin
-AllInactive:= false;
+    if (Gear^.State and gsttmpFlag) = 0 then AllInactive:= false;
 
 if not TestCollisionYwithGear(Gear, 1) then
 	begin
@@ -1254,21 +1254,35 @@ if not TestCollisionYwithGear(Gear, 1) then
 		DeleteGear(Gear);
 		exit
 		end
-	end else begin
-	if Gear^.Timer > 0 then dec(Gear^.Timer)
-		else begin
-		Gear^.Radius:= 9;
-		AmmoShove(Gear, 4, 100);
-		Gear^.Radius:= 1;
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
-		dec(Gear^.Health);
-		Gear^.Timer:= 450 - Gear^.Tag * 8
-		end
-	end;
-
-//if (((GameTicks div 8) mod 64) = Gear^.Tag) then
-//	AmmoFlameWork(Gear);
-
+    end else begin
+        if (Gear^.State and gsttmpFlag) <> 0 then 
+            begin
+            Gear^.Radius:= 9;
+            AmmoShove(Gear, 4, 100);
+            Gear^.Radius:= 1
+            end;
+	    if Gear^.Timer > 0 then dec(Gear^.Timer)
+        else begin
+// Standard fire
+            if (Gear^.State and gsttmpFlag) = 0 then
+                begin
+                Gear^.Radius:= 9;
+                AmmoShove(Gear, 4, 100);
+                Gear^.Radius:= 1;
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
+                if Gear^.Health > 0 then dec(Gear^.Health);
+                Gear^.Timer:= 450 - Gear^.Tag * 8
+                end
+                else begin
+// Modified fire
+                if ((GameTicks and $1FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
+                    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4);
+                // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
+        	    Gear^.Timer:= 100 - Gear^.Tag * 3;
+                if ((GameTicks and $FF) = 0) then Gear^.Health:= 0
+                end
+            end
+        end;
 if Gear^.Health = 0 then
 	DeleteGear(Gear)
 end;
