@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="pl_PL">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -21,7 +23,7 @@
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished">Niepoprawny schemat amunicji</translation>
+        <translation>Niepoprawny schemat amunicji</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -29,7 +31,7 @@
     </message>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished">Edytuj uzbrojenie</translation>
+        <translation>Edytuj uzbrojenie</translation>
     </message>
 </context>
 <context>
@@ -132,7 +134,7 @@
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation type="unfinished">Serwer nie został znaleziony. Sprawdź nazwę hosta i ustawienia portu.</translation>
+        <translation>Serwer nie został znaleziony. Sprawdź nazwę hosta i ustawienia portu.</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -156,26 +158,29 @@
     </message>
     <message>
         <source>[ %1 has joined the room ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ %1 dołączył do pokoju ]</translation>
     </message>
     <message>
         <source>[ %1 has joined ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ %1 dołączył ]</translation>
     </message>
     <message>
         <source>[ %1 has left ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ %1 wyszedł ]</translation>
     </message>
     <message>
         <source>[ %1 has left (%2) ]</source>
-        <translation type="unfinished"></translation>
+        <translation>[ %1 wyszedł (%2) ]</translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Twój nick %1 jest
+zarejestrowany na Hedgewars.org
+Proszę podać twoje hasło 
+bądź wybierz inny nick:</translation>
     </message>
 </context>
 <context>
@@ -229,18 +234,18 @@ or pick another nickname:</source>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished">Gra lokalna (graj na jednym komputerze)</translation>
+        <translation>Gra lokalna (graj na jednym komputerze)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished">Gra sieciowa (graj przez internet lub LAN)</translation>
+        <translation>Gra sieciowa (graj przez internet lub LAN)</translation>
     </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Start</translation>
+        <translation>Start</translation>
     </message>
 </context>
 <context>
@@ -251,7 +256,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Please, select server from the list above</source>
-        <translation type="unfinished">Wybierz serwer z listy powyżej</translation>
+        <translation>Wybierz serwer z listy powyżej</translation>
     </message>
 </context>
 <context>
@@ -354,7 +359,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Admin features</source>
-        <translation type="unfinished">Ustawienia admińskie</translation>
+        <translation type="unfinished">Ustawienia admina</translation>
     </message>
 </context>
 <context>
@@ -369,7 +374,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished">Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn !</translation>
+        <translation type="unfinished">Broń swojego fortu i zniszcz przeciwników. Maksymalnie dwa kolory drużyn!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -385,19 +390,19 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation type="unfinished">Niższa grawitacja</translation>
+        <translation>Niższa grawitacja</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation type="unfinished">Laserowe wspomaganie celowania</translation>
+        <translation>Laserowe wspomaganie celowania</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation type="unfinished">Wszystkie jeże posiadają pole siłowe</translation>
+        <translation type="unfinished">Wszystkie jeże posiadają osobiste pole siłowe</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation type="unfinished">Dodaj losowe miny</translation>
+        <translation type="unfinished">Dodaj miny przeciwpiechotne</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -409,7 +414,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation type="unfinished">Twoje jeże nie potrafią sie ruszać, więc przetestuj swoje strzeleckie umiejętności</translation>
+        <translation type="unfinished">Twoje jeże nie mogą się poruszać, więc przetestuj swoje strzeleckie umiejętności</translation>
     </message>
     <message>
         <source>Random</source>
@@ -485,7 +490,7 @@ or pick another nickname:</source>
     <name>QCheckBox</name>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished">Sprawdź aktualizacje przy starcie</translation>
+        <translation>Sprawdź aktualizacje przy starcie</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -521,11 +526,11 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Frontend Effects (Requires Restart)</source>
-        <translation type="unfinished">Efekty w menu (wymaga restartu)</translation>
+        <translation>Efekty w menu (wymaga restartu)</translation>
     </message>
     <message>
         <source>Use hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj sprz. odt. dźwięku (jeśli dostępny; wymaga restartu)</translation>
     </message>
 </context>
 <context>
@@ -571,7 +576,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Uzbrojenie</translation>
+        <translation>Uzbrojenie</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -650,7 +655,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Sounds:</source>
-        <translation>Dźwięki</translation>
+        <translation type="unfinished">Dźwięki:</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -762,11 +767,11 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nick</translation>
     </message>
     <message>
         <source>Please, enter your nickname</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podaj swój nick</translation>
     </message>
 </context>
 <context>
@@ -870,11 +875,11 @@ Sprawdź poprawność instalacji</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Amunicja</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawdobodobieństwo</translation>
     </message>
 </context>
 <context>
@@ -1085,15 +1090,15 @@ jeży</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">przybliż</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">oddal</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">zeruj przybliżenie</translation>
     </message>
 </context>
 <context>
