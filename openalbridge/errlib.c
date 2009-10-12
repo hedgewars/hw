@@ -34,7 +34,7 @@ extern "C" {
                         syslog (level, buf);
                 else {
                         fflush (stdout);
-                        fputs (buf, stderr);
+                        fprintf (stderr, buf);
                         fflush (stderr);
                 }
                 

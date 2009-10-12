@@ -87,7 +87,7 @@ extern "C" {
                         return AL_FALSE;
                 }
                 
-                if (usehardware = AL_TRUE)
+                if (usehardware == AL_TRUE)
                         device = alcOpenDevice(NULL);
                 else
                         device = alcOpenDevice("Generic Software");

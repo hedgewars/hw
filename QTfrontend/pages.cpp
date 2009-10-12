@@ -417,15 +417,15 @@ PageOptions::PageOptions(QWidget* parent) :
             GBAreslayout->addWidget(CBResolution);
             GBAlayout->addLayout(GBAreslayout);
 
-            CBFullscreen = new QCheckBox(AGGroupBox);
-            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAlayout->addWidget(CBFullscreen);
-
             QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
             QLabel * maxfps = new QLabel(AGGroupBox);
             maxfps->setText(QLabel::tr("FPS limit"));
             GBAfpslayout->addWidget(maxfps);
             GBAlayout->addLayout(GBAfpslayout);
+
+            CBFullscreen = new QCheckBox(AGGroupBox);
+            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
+            GBAlayout->addWidget(CBFullscreen);
 
             CBReduceQuality = new QCheckBox(AGGroupBox);
             CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));

@@ -19,9 +19,13 @@
 include (CheckLibraryExists)
 find_path(VORBIS_INCLUDE_DIR vorbis/vorbisfile.h)
 #  [koda] (for Hedgewars) added libraries with capital names for compatibility with Mac frameworks
+if(APPLE)
+set(CMAKE_FIND_FRAMEWORK "FIRST")
+endif(APPLE)
 find_library(OGG_LIBRARY NAMES ogg Ogg)
 find_library(VORBIS_LIBRARY NAMES vorbis Vorbis)
 find_library(VORBISFILE_LIBRARY NAMES vorbisfile Vorbis)
+
 if (OGG_LIBRARY AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY)
    set(OGGVORBIS_FOUND TRUE)
 #  [sommer] (for SuperTux) reversed order of libraries, so that cmake 2.4.5 for Windows generates an MSYS Makefile that will link correctly
@@ -37,7 +41,7 @@ if (OGG_LIBRARY AND VORBIS_LIBRARY AND VORBISFILE_LIBRARY)
       set (OGGVORBIS_VERSION 1)
    endif (HAVE_LIBVORBISENC2)
 else ()
-   set (OGGVORBIS_VERSION)
+   set(OGGVORBIS_VERSION)
    set(OGGVORBIS_FOUND FALSE)
 endif ()
 if (OGGVORBIS_FOUND)

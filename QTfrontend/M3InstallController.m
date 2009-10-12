@@ -46,7 +46,7 @@
 							   alternateButton:NSLocalizedString(@"Don't Install", @"Don't Install")
 								   otherButton:nil
 					 informativeTextWithFormat:body] retain];
-		[alert setShowsSuppressionButton:YES];
+		//[alert setShowsSuppressionButton:YES];
 	}
 	return self;
 }
