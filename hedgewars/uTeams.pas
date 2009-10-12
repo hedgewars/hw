@@ -208,7 +208,10 @@ end;
 procedure AfterSwitchHedgehog;
 var g: PGear;
 begin
+inc(CurrentTeam^.Clan^.TurnNumber);
+
 SwitchNotHeldAmmo(CurrentHedgehog^);
+
 with CurrentHedgehog^ do
 	begin
 	with Gear^ do
@@ -221,8 +224,6 @@ with CurrentHedgehog^ do
 	InsertGearToList(Gear);
 	FollowGear:= Gear
 	end;
-
-inc(CurrentTeam^.Clan^.TurnNumber);
 
 ResetKbd;
 
