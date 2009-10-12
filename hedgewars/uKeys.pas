@@ -58,7 +58,7 @@ uses SDLh, uTeams, uConsole, uMisc, uStore;
 const KeyNumber = 1024;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
-var tkbd: TKeyboardState;
+var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     DefaultBinds, CurrentBinds: TBinds;
 
@@ -70,14 +70,12 @@ while (Result > 0) and (KeyNames[Result] <> name) do dec(Result);
 KeyNameToCode:= Result
 end;
 
-
 procedure ProcessKbd;
 var  i, j, k: LongInt;
+     s: shortstring;
      pkbd: PByteArray;
      Trusted: boolean;
-     s: shortstring;
 begin
-
 hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
@@ -86,70 +84,75 @@ Trusted:= (CurrentTeam <> nil)
 // move cursor/camera
 // TODO: Scale on screen dimensions and/or axis value (game controller)?
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
+		  
 {$IFDEF SDL13}
-pkbd := SDL_GetKeyboardState(nil);
-i    := SDL_GetMouseState(0, nil, nil);
+pkbd := SDL_GetKeyboardState(@j);
+k    := SDL_GetMouseState(0, nil, nil);
 {$ELSE}
-pkbd := SDL_GetKeyState(nil);
-i    := SDL_GetMouseState(nil, nil);
+pkbd := SDL_GetKeyState(@j);
+k    := SDL_GetMouseState(nil, nil);
 {$ENDIF}
+
+for i:= 6 to pred(j) do // first 6 will be overwritten
+	tkbdn[i]:= pkbd^[i];
+
 // mouse buttons
 {$IFDEF DARWIN}
-pkbd^[1]:= ((i and 1) and not (pkbd^[306] or pkbd^[305]));
-pkbd^[3]:= ((i and 1) and (pkbd^[306] or pkbd^[305])) or (i and 4);
+tkbdn[1]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
+tkbdn[3]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
 {$ELSE}
-pkbd^[1]:= (i and 1);
-pkbd^[3]:= ((i shr 2) and 1);
+tkbdn[1]:= (k and 1);
+tkbdn[3]:= ((k shr 2) and 1);
 {$ENDIF}
-pkbd^[2]:= ((i shr 1) and 1);
+tkbdn[2]:= ((k shr 1) and 1);
 
 // mouse wheels (see event loop in project file)
-pkbd^[4]:= ord(wheelDown);
-pkbd^[5]:= ord(wheelUp);
+tkbdn[4]:= ord(wheelDown);
+tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
 // Controller(s)
-k:= 500; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
+k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
 	begin
 	for i:= 0 to Pred(ControllerNumAxes[j]) do
 		begin
-		if ControllerAxes[j][i] > 20000 then pkbd^[k + 0]:= 1 else pkbd^[k + 0]:= 0;
-		if ControllerAxes[j][i] < -20000 then pkbd^[k + 1]:= 1 else pkbd^[k + 1]:= 0;
+		if ControllerAxes[j][i] > 20000 then tkbdn[k + 0]:= 1 else tkbdn[k + 0]:= 0;
+		if ControllerAxes[j][i] < -20000 then tkbdn[k + 1]:= 1 else tkbdn[k + 1]:= 0;
 		inc(k, 2);
 		end;
 	for i:= 0 to Pred(ControllerNumHats[j]) do
 		begin
-		pkbd^[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
-		pkbd^[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
-		pkbd^[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
-		pkbd^[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
+		tkbdn[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
+		tkbdn[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
+		tkbdn[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
+		tkbdn[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
 		inc(k, 4);
 		end;
 	for i:= 0 to Pred(ControllerNumButtons[j]) do
 		begin
-		pkbd^[k]:= ControllerButtons[j][i];
+		tkbdn[k]:= ControllerButtons[j][i];
 		inc(k, 1);
 		end;
 	end;
 
 // now process strokes
-for i:= 1 to cKeyMaxIndex do
+for i:= 0 to cKeyMaxIndex do
 if CurrentBinds[i][0] <> #0 then
 	begin
-	if (i > 3) and (pkbd^[i] <> 0) and not (hideAmmoMenu or (CurrentBinds[i] = 'put') or (CurrentBinds[i] = 'ammomenu') or (CurrentBinds[i] = '+cur_u') or (CurrentBinds[i] = '+cur_d') or (CurrentBinds[i] = '+cur_l') or (CurrentBinds[i] = '+cur_r')) then hideAmmoMenu:= true;
-	if (tkbd[i] = 0) and (pkbd^[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted)
+	if (i > 3) and (tkbdn[i] <> 0) and not ((CurrentBinds[i] = 'put') or (CurrentBinds[i] = 'ammomenu') or (CurrentBinds[i] = '+cur_u') or (CurrentBinds[i] = '+cur_d') or (CurrentBinds[i] = '+cur_l') or (CurrentBinds[i] = '+cur_r')) then hideAmmoMenu:= true;
+	if (tkbd[i] = 0) and (tkbdn[i] <> 0) then ParseCommand(CurrentBinds[i], Trusted)
 	else if (CurrentBinds[i][1] = '+')
-			and (pkbd^[i] = 0)
+			and (tkbdn[i] = 0)
 			and (tkbd[i] <> 0) then
 			begin
 			s:= CurrentBinds[i];
 			s[1]:= '-';
 			ParseCommand(s, Trusted)
 			end;
-	tkbd[i]:= pkbd^[i]
-	end;
+	tkbd[i]:= tkbdn[i]
+	end
 end;
 
 procedure ResetKbd;
@@ -158,38 +161,60 @@ var i, j, k, t: LongInt;
 begin
 
 {$IFDEF SDL13}
-pkbd:= PByteArray(SDL_GetKeyboardState(@i));
+pkbd:= SDL_GetKeyboardState(@j);
+k    := SDL_GetMouseState(0, nil, nil);
 {$ELSE}
-pkbd:= PByteArray(SDL_GetKeyState(@i));
+pkbd:= SDL_GetKeyState(@j);
+k    := SDL_GetMouseState(nil, nil);
 {$ENDIF}
-TryDo(i < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(i) + ')', true);
+TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 
-k:= 500;
+for i:= 1 to pred(j) do
+	tkbdn[i]:= pkbd^[i];
+
+// mouse buttons
+{$IFDEF DARWIN}
+tkbdn[1]:= ((k and 1) and not (tkbdn[306] or tkbdn[305]));
+tkbdn[3]:= ((k and 1) and (tkbdn[306] or tkbdn[305])) or (k and 4);
+{$ELSE}
+tkbdn[1]:= (k and 1);
+tkbdn[3]:= ((k shr 2) and 1);
+{$ENDIF}
+tkbdn[2]:= ((k shr 1) and 1);
+
+// mouse wheels (see event loop in project file)
+tkbdn[4]:= ord(wheelDown);
+tkbdn[5]:= ord(wheelUp);
+wheelUp:= false;
+wheelDown:= false;
+
+// Controller(s)
+k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
 for j:= 0 to Pred(ControllerNumControllers) do
 	begin
 	for i:= 0 to Pred(ControllerNumAxes[j]) do
 		begin
-		pkbd^[k + 0]:= 0;
-		pkbd^[k + 1]:= 0;
+		if ControllerAxes[j][i] > 20000 then tkbdn[k + 0]:= 1 else tkbdn[k + 0]:= 0;
+		if ControllerAxes[j][i] < -20000 then tkbdn[k + 1]:= 1 else tkbdn[k + 1]:= 0;
 		inc(k, 2);
 		end;
 	for i:= 0 to Pred(ControllerNumHats[j]) do
 		begin
-		pkbd^[k + 0]:= 0;
-		pkbd^[k + 1]:= 0;
-		pkbd^[k + 2]:= 0;
-		pkbd^[k + 3]:= 0;
+		tkbdn[k + 0]:= ControllerHats[j][i] and SDL_HAT_UP;
+		tkbdn[k + 1]:= ControllerHats[j][i] and SDL_HAT_RIGHT;
+		tkbdn[k + 2]:= ControllerHats[j][i] and SDL_HAT_DOWN;
+		tkbdn[k + 3]:= ControllerHats[j][i] and SDL_HAT_LEFT;
 		inc(k, 4);
 		end;
 	for i:= 0 to Pred(ControllerNumButtons[j]) do
 		begin
-		pkbd^[k]:= 0;
+		tkbdn[k]:= ControllerButtons[j][i];
 		inc(k, 1);
 		end;
 	end;
-
-for t:= 0 to Pred(i) do
-    tkbd[i]:= pkbd^[i]
+	
+for t:= 0 to cKeyMaxIndex do
+    tkbd[i]:= tkbdn[i]
 end;
 
 procedure InitKbdKeyTable;
@@ -214,8 +239,14 @@ for i:= 6 to cKeyMaxIndex do
        end;
     end;
 
+{$IFDEF SDL13}
+PByteArray(SDL_GetKeyboardState(@i);
+{$ELSE}
+SDL_GetKeyState(@i);
+{$ENDIF}
+
 // Controller(s)
-k:= 500;
+k:= i;
 for j:= 0 to Pred(ControllerNumControllers) do
 	begin
 	for i:= 0 to Pred(ControllerNumAxes[j]) do
