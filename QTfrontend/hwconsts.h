@@ -25,6 +25,7 @@
 extern QString * cProtoVer;
 extern QString * cVersionString;
 extern QString * cDataDir;
+extern QString * cConfigDir;
 
 extern QDir * bindir;
 extern QDir * cfgdir;

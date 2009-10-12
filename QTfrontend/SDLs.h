@@ -44,9 +44,11 @@ private:
 	int music;
 
 public:
-	SDLInteraction(bool);
+	SDLInteraction();
 	~SDLInteraction();
+	void setHardwareSound(bool hardware_snd);
 	QStringList getResolutions() const;
+	void addGameControllerKeys() const;
 	void StartMusic();
 	void StopMusic();
 };

@@ -54,6 +54,7 @@ type PGear = ^TGear;
 			Z: Longword;
 			IntersectGear: PGear;
 			TriggerId: Longword;
+			FlightTime: Longword;
 			uid: Longword
 			end;
 
@@ -76,6 +77,7 @@ var CurAmmoGear: PGear = nil;
     SuddenDeathDmg: Boolean = false;
     SpeechType: Longword = 1;
     SpeechText: shortstring;
+	TrainingTargetGear: PGear = nil;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -224,6 +226,7 @@ Result^.doStep:= doStepHandlers[Kind];
 Result^.CollisionIndex:= -1;
 Result^.Timer:= Timer;
 Result^.Z:= cUsualZ;
+Result^.FlightTime:= 0;
 Result^.uid:= Counter;
 
 if CurrentTeam <> nil then
@@ -697,7 +700,8 @@ end;
 
 procedure ApplyDamage(Gear: PGear; Damage: Longword);
 var s: shortstring;
-    vampDmg, tmpDmg: Longword;
+    vampDmg, tmpDmg, i: Longword;
+	vg: PVisualGear;
 begin
 	if (Gear^.Kind = gtHedgehog) and (Damage>=1) then
     begin
@@ -718,6 +722,13 @@ begin
                 AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                 RenderHealth(CurrentHedgehog^);
                 RecountTeamHealth(CurrentHedgehog^.Team);
+				i:= 0;
+				while i < vampDmg do
+					begin
+					vg:= AddVisualGear(hwRound(CurrentHedgehog^.Gear^.X), hwRound(CurrentHedgehog^.Gear^.Y), vgtHealth);
+					if vg <> nil then vg^.Frame:= 10;
+					inc(i, 5);
+					end;
                 end
             end;
         if ((GameFlags and gfKarma) <> 0) and
@@ -1249,13 +1260,17 @@ with PHedgehog(Gear^.Hedgehog)^ do
 
 if Gear^.Invulnerable then
     begin
-    DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
+    glColor4f(1, 1, 1, 0.25 + abs(1 - ((RealTicks div 2) mod 1500) / 750));
+	DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
+	glColor4f(1, 1, 1, 1);
     end;
 if cVampiric and
    (CurrentHedgehog^.Gear <> nil) and
    (CurrentHedgehog^.Gear = Gear) then
     begin
+    glColor4f(1, 1, 1, 0.25 + abs(1 - (RealTicks mod 1500) / 750));
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
+	glColor4f(1, 1, 1, 1);
     end;
 end;
 
@@ -1402,11 +1417,14 @@ while Gear<>nil do
 	case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
-       gtRCPlane: if (Gear^.Tag = -1) then
+       gtRCPlane: begin
+                  if (Gear^.Tag = -1) then
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, -1,  DxDy2Angle(Gear^.dX, Gear^.dY) + 90)
                   else
                      DrawRotated(sprPlane, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy,0,DxDy2Angle(Gear^.dY, Gear^.dX));
-
+                  if ((TrainingFlags and tfRCPlane) <> 0) and (TrainingTargetGear <> nil) and ((Gear^.State and gstDrowning) = 0) then
+					 DrawRotatedf(sprFinger, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, GameTicks div 32 mod 16, 0, DxDy2Angle(Gear^.X - TrainingTargetGear^.X, TrainingTargetGear^.Y - Gear^.Y));
+                  end;
        gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
@@ -1495,6 +1513,12 @@ var i: LongInt;
 	Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
+
+if (TrainingFlags and tfSpawnTargets) <> 0 then
+	begin
+	TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
+	FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
+	end;
 
 if ((GameFlags and gfForts) = 0) and ((GameFlags and gfMines) <> 0) then
 	for i:= 0 to Pred(cLandAdditions) do
@@ -1642,9 +1666,12 @@ Damage:= modifyDamage(Damage);
 while i > 0 do
 	begin
 	dec(i);
-    Gear:= t^.ar[i];
-    if (Gear^.State and gstNoDamage) = 0 then
-        case Gear^.Kind of
+	Gear:= t^.ar[i];
+	if (Gear^.State and gstNoDamage) = 0 then
+		begin
+		if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) then Gear^.FlightTime:= 1;
+		
+		case Gear^.Kind of
 			gtHedgehog,
 			gtMine,
 			gtTarget,
@@ -1675,6 +1702,7 @@ while i > 0 do
 					FollowGear:= Gear
 					end;
 		end
+		end;
 	end;
 if i <> 0 then SetAllToActive
 end;

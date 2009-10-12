@@ -75,11 +75,15 @@ int main(int argc, char *argv[]) {
         *cDataDir = f.absoluteFilePath();
     }
 
+    if(parsedArgs.contains("config-dir")) {
+        QFileInfo f(parsedArgs["config-dir"]);
+        *cConfigDir = f.absoluteFilePath();
+    }
+
 	app.setStyle(new QPlastiqueStyle);
 
 	QDateTime now = QDateTime::currentDateTime();
-	QDateTime zero;
-	srand(now.secsTo(zero));
+	srand(now.toTime_t());
 	rand();
 
 	Q_INIT_RESOURCE(hedgewars);
@@ -288,23 +292,37 @@ int main(int argc, char *argv[]) {
 
 	bindir->cd("bin"); // workaround over NSIS installer
 
-	cfgdir->setPath(cfgdir->homePath());
-        
+	if(cConfigDir->length() == 0)
+		cfgdir->setPath(cfgdir->homePath());
+	else
+		cfgdir->setPath(*cConfigDir);
+
+	if(cConfigDir->length() == 0)
+	{
 #ifdef __APPLE__
-	if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
-	{
-		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
-		checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
-	}
-	cfgdir->cd("Library/Application Support/Hedgewars");
+		if (checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars"))
+		{
+			checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Demos");
+			checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars/Saves");
+		}
+		cfgdir->cd("Library/Application Support/Hedgewars");
 #else
-	if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
-	{
-		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
-		checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
-	}
-	cfgdir->cd(".hedgewars");
+		if (checkForDir(cfgdir->absolutePath() + "/.hedgewars"))
+		{
+			checkForDir(cfgdir->absolutePath() + "/.hedgewars/Demos");
+			checkForDir(cfgdir->absolutePath() + "/.hedgewars/Saves");
+		}
+		cfgdir->cd(".hedgewars");
 #endif
+	}
+	else
+	{
+		if (checkForDir(cfgdir->absolutePath()))
+		{
+			checkForDir(cfgdir->absolutePath() + "/Demos");
+			checkForDir(cfgdir->absolutePath() + "/Saves");
+		}
+	}
 
 	datadir->cd(bindir->absolutePath());
 	datadir->cd(*cDataDir);

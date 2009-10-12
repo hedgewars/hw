@@ -22,7 +22,7 @@ uses sysutils, uConsts, uTeams, SDLh,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
-	GL,
+	GL, GLext,
 {$ENDIF}
 uFloat;
 {$INCLUDE options.inc}
@@ -64,6 +64,7 @@ var PixelFormat: PSDL_PixelFormat = nil;
    SyncTexture,
    ConfirmTexture: PTexture;
    cScaleFactor: GLfloat = 2.0;
+   SupportNPOTT: Boolean = false;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld;
@@ -347,7 +348,7 @@ var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-if SourceTexture^.h = 0 then exit;
+if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
 rr.x:= X;
 rr.y:= Y;
 rr.w:= r^.w;
@@ -967,32 +968,56 @@ tmpsurf:= convertedSurf;
 LoadImage:= tmpsurf //Result
 end;
 
+function glLoadExtension(extension : string) : boolean;
+begin
+	glLoadExtension:= glext_LoadExtension(extension);
+	if not glLoadExtension then
+		WriteLnToConsole('OpenGL: "' + extension + '" failed to load')
+	else
+		WriteLnToConsole('OpenGL: "' + extension + '" loaded');
+end;
+
 procedure SetupOpenGL;
 begin
-SetScale(2.0);
-
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-glMatrixMode(GL_MODELVIEW);
-
 glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 {$IFDEF DEBUGFILE}
 AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
+{$IFNDEF GLES11}
+SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
+{$ENDIF}
+
+// set view port to whole window
+glViewport(0, 0, cScreenWidth, cScreenHeight);
+
+glMatrixMode(GL_MODELVIEW);
+// prepare default translation/scaling
+glLoadIdentity;
+glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+glTranslatef(0, -cScreenHeight / 2, 0);
+
+// enable alpha blending
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 end;
 
 procedure SetScale(f: GLfloat);
 begin
+// leave immediately if scale factor didn't change
+if f = cScaleFactor then exit;
+
+if f = 2.0 then // default scaling
+	glPopMatrix // "return" to default scaling
+else // other scaling
+	begin
+	glPushMatrix; // save default scaling
+	glLoadIdentity;
+	glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+	glTranslatef(0, -cScreenHeight / 2, 0);
+	end;
+
 cScaleFactor:= f;
-
-glLoadIdentity;
-glViewport(0, 0, cScreenWidth, cScreenHeight);
-glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-//glTranslatef(-cScreenWidth / 2, -cScreenHeight / 2, 0);
-glTranslatef(0, -cScreenHeight / 2, 0);
-
-// glTranslatex(320, 0, 0);
-// glRotatef(90.0, 0.0, 0.0, 1.0);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

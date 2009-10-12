@@ -2130,7 +2130,9 @@ var HHGear: PGear;
 begin
 AllInactive:= false;
 
-if Gear^.Timer > 0 then dec(Gear^.Timer);
+if ((TrainingFlags and tfRCPlane) = 0) and (Gear^.Timer > 0) then dec(Gear^.Timer);
+
+if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (TimeTrialStartTime = 0) then TimeTrialStartTime:= RealTicks;
 
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 FollowGear:= Gear;
@@ -2172,37 +2174,87 @@ if fChanged then
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 
-if (GameTicks and $FF) = 0 then
-	if Gear^.Timer < 3500 then
-		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0)
-	else
+if (TrainingFlags and tfRCPlane) = 0 then
+	begin
+	if (GameTicks and $FF) = 0 then
+		if Gear^.Timer < 3500 then
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEvilTrace, 0, _0, _0, 0)
+		else
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
+
+	if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
+		begin
+		HHGear^.Message := HHGear^.Message and not gm_Attack;
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY * _0_5, 0);
+		dec(Gear^.Health)
+		end;
+
+	if ((HHGear^.Message and gm_LJump) <> 0)
+		and ((Gear^.State and gsttmpFlag) = 0) then
+		begin
+		Gear^.State:= Gear^.State or gsttmpFlag;
+		PauseMusic;
+		playSound(sndRideOfTheValkyries, false, nil);
+		end;
+
+	// pickup bonuses
+	t:= CheckGearNear(Gear, gtCase, 36, 36);
+	if t <> nil then
+		PickUp(HHGear, t);
+	end
+else
+	begin
+	if (GameTicks and $FF) = 0 then
 		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0);
 
-if ((HHGear^.Message and gm_Attack) <> 0) and (Gear^.Health <> 0) then
-	begin
-	HHGear^.Message := HHGear^.Message and not gm_Attack;
-	AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY * _0_5, 0);
-	dec(Gear^.Health)
-    end;
+	// pickup targets
+	t:= CheckGearNear(Gear, gtTarget, 36, 36);
+	if t <> nil then
+		begin;
+		// TODO: Sound!
+		PlaySound(sndGraveImpact, false, nil);
+		DeleteGear(t);
+		TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
+		FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
+		inc(TurnTimeLeft, TrainingTimeInc);
+		
+		if TrainingTimeInc > TrainingTimeInM then
+			dec(TrainingTimeInc, TrainingTimeInD);
+		if TurnTimeLeft > TrainingTimeMax then TurnTimeLeft:= TrainingTimeMax;
+		end;
 
-if ((HHGear^.Message and gm_LJump) <> 0)
-	and ((Gear^.State and gsttmpFlag) = 0) then
-    begin
-    Gear^.State:= Gear^.State or gsttmpFlag;
-    PauseMusic;
-    playSound(sndRideOfTheValkyries, false, nil);
-    end;
+	if (TurnTimeLeft > 0) then 
+		dec(TurnTimeLeft)
+	else
+		begin
+		if ((TrainingFlags and tfTimeTrial) <>0) and (TimeTrialStopTime = 0) then TimeTrialStopTime:= RealTicks;
+		StopSound(sndRCPlane);
+		ResumeMusic;
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+		for i:= 0 to 32 do
+			begin
+			dX:= AngleCos(i * 64) * _0_5 * (GetRandom + _1);
+			dY:= AngleSin(i * 64) * _0_5 * (GetRandom + _1);
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+			end;
+		DeleteGear(Gear);
+		AfterAttack;
+		TurnTimeLeft:= 0;
+		CurAmmoGear:= nil;
+		HHGear^.Message:= 0;
+		ParseCommand('/taunt '#1, true);
+		exit;
+		end;
 
-// pickup bonuses
-t:= CheckGearNear(Gear, gtCase, 36, 36);
-if t <> nil then
-	PickUp(HHGear, t);
-
+	end;
+		
 CheckCollision(Gear);
 
 if ((Gear^.State and gstCollision) <> 0)
 	or CheckGearDrowning(Gear) then
 	begin
+	if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (TimeTrialStopTime = 0) then TimeTrialStopTime:= RealTicks;
 	StopSound(sndRCPlane);
 	StopSound(sndRideOfTheValkyries);
 	ResumeMusic;

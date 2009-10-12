@@ -21,14 +21,19 @@
 
 #include <QString>
 
-#define BINDS_NUMBER 39
+#ifdef _WIN32
+#define BINDS_NUMBER 42
+#else
+#define BINDS_NUMBER 43
+#endif
 
 struct BindAction
 {
 	QString action;
 	QString strbind;
 	const char * name;
-	bool chwidget;
+	const char * category;
+	const char * description;
 };
 
 extern const BindAction cbinds[BINDS_NUMBER];

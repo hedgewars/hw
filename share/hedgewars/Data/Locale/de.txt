@@ -7,9 +7,9 @@
 00:04=Schrotflinte
 00:05=Presslufthammer
 00:06=Runde überspringen
-00:07=Seil
+00:07=Enterhaken
 00:08=Mine
-00:09=DEagle
+00:09=Desert Eagle
 00:10=Dynamit
 00:11=Baseballschläger
 00:12=Feuerfaust
@@ -31,7 +31,7 @@
 00:28=Bohrkopfrakete
 00:29=Ballpistole
 00:30=Napalm
-00:31=RC Flugzeug
+00:31=RC-Flugzeug
 00:32=Schwerkraft verringern
 00:33=Zusatzschaden
 00:34=Unverwundbarkeit
@@ -39,17 +39,18 @@
 00:36=Laservisier
 00:37=Vampirismus
 00:38=Scharfschützengewehr
-00:39=Flying Saucer
+00:39=Fliegende Untertasse
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
 01:02=%1 gewinnt!
-01:03=Lautstärke %1%
+01:03=Lautstärke: %1 %
 01:04=Pausiert
 01:05=Wirklich beenden (Z/Esc)?
 01:06=Sudden Death!
-01:07=Remaining
-01:08=Fuel
+01:07=verbleibend
+01:08=Treibstoff
+01:09=Synchronisiere ...
 
 ; Event messages
 ; Hog (%1) died
@@ -57,9 +58,19 @@
 02:00=%1 steht wohl nicht mehr auf!
 02:00=%1 hat's nicht geschafft!
 02:00=%1 stellt sich tot!
-02:00=%1 scheint schon bessere Tage gesehen zu haben!
+02:00=%1 hat schon bessere Tage gesehen!
 02:00=%1 sieht tote Igel!
 02:00=%1 hat ins Gras gebissen!
+02:00=%1 ist Futter für die Würmer!
+02:00=Das war's wohl, %1!
+02:00=%1 hat's hinter sich!
+02:00=%1 kann schon das Licht sehen!
+02:00=Für %1 gehen alle Lichter aus!
+02:00=%1 kommt wieder!
+02:00=%1 ist urlaubsreif!
+02:00=%1 trifft seine Ahnen.
+02:00=%1 war nicht hartnäckig genug!
+
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
 02:01=%1 sucht nach der Titanic!
@@ -68,30 +79,72 @@
 02:01=%1 hat sich nass gemacht!
 02:01=%1 versagt beim Seepferdchen!
 02:01=%1 ist ein Opfer der Gezeiten!
+02:01=%1 findet Nemo!
+02:01=%1 taucht unter ...
+02:01=Atlantis wartet, %1!
+02:01=%1 nimmt ein entspannendes Bad.
+02:01=%1 hat nie das Seepferdchen gemacht!
+02:01=%1 ist Fischfutter!
+02:01=%1 im Rausch der Tiefe!
+02:01=Was für ein feuchtes Erlebnis!
+02:01=%1 geht unter die Perlentaucher!
+02:01=Igel über Bord!
+02:01=%1 verlässt das sinkende Schiff.
+02:01=%1 überschätzt seinen Auftrieb!
+02:01=%1 erliegt dem Sog der Tiefe!
+02:01=%1 geht der Sache auf den Grund!
+
 ; Round starts
 02:02=Auf in die Schlacht!
 02:02=Geladen und entsichert!
 02:02=Jetzt geht's rund!
 02:02=Los geht's!
 02:02=Alles angetreten!
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; New health crate
 02:05=Alles Gute kommt von oben!
-02:05=Der Arzt hat's verschrieben ...
+02:05=Linderung in Sicht!
+02:05=Das kommt gelegen!
+02:05=Jemand denkt an euch!
+02:05=Mit Liebe verpackt?
+
 ; New ammo crate
 02:06=Nachschub!
 02:06=Zeit zum Nachladen!
+02:06=Was wohl darin ist?
+02:06=Bringt das die Wende?
+02:06=Tod aus der Luft!
+
 ; New utility crate
 02:07=Nützliches?
 02:07=Tooltime!
+02:07=Was wohl darin ist?
+02:07=Lieferung frei Haus!
+02:07=Mehr als nur eine Kiste!
+
 ; Hog (%1) skips his turn
 02:08=%1 ist so ein Langeweiler ...
+02:08=%1 denkt weiter nach ...
+02:08=Das war öde, %1!
+02:08=%1 führt etwas im Schilde!
+02:08=%1 setzt aus.
+02:08=%1 ist ein Drückeberger.
+02:08=%1 überdenkt die Situation.
+02:08=%1 kann sich nicht entscheiden.
+
 ; Hog (%1) hurts himself only
 02:09=%1 sollte besser Zielen üben!
 02:09=%1 scheint sich zu hassen.
 02:09=%1 steht auf der falschen Seite!
 02:09=%1 lebt gefährlich!
 
+; Hog (%1) shot an home run (using the bat and another hog)
+02:10=Home Run!
+02:10=Ein Vogel, ein Flugzeug, ...
+02:10=Der verleiht Flügel!

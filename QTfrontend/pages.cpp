@@ -243,39 +243,42 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 	BindsBox = new QToolBox(GBoxBinds);
 	BindsBox->setLineWidth(0);
 	GBBLayout->addWidget(BindsBox);
-	page_A = new QWidget(this);
-	BindsBox->addItem(page_A, QToolBox::tr("Actions"));
-	page_W = new QWidget(this);
-	BindsBox->addItem(page_W, QToolBox::tr("Weapons"));
-	page_WP = new QWidget(this);
-	BindsBox->addItem(page_WP, QToolBox::tr("Weapon properties"));
-	page_O = new QWidget(this);
-	BindsBox->addItem(page_O, QToolBox::tr("Other"));
 	page2Layout->addWidget(GBoxBinds, 0, 0);
 
-	QStringList binds;
-	for(int i = 0; strlen(sdlkeys[i][1]) > 0; i++)
-	{
-		binds << sdlkeys[i][1];
-	}
-
 	quint16 widind = 0, i = 0;
+	quint16 num = 0;
+	QWidget * curW = NULL;
+	QGridLayout * pagelayout = NULL;
+	QLabel* l = NULL;
 	while (i < BINDS_NUMBER) {
-		quint16 num = 0;
-		QWidget * curW = BindsBox->widget(widind);
-		QGridLayout * pagelayout = new QGridLayout(curW);
-		do {
-			LBind[i] = new QLabel(curW);
-			LBind[i]->setText(QApplication::translate("binds", cbinds[i].name));
-			LBind[i]->setAlignment(Qt::AlignRight);
-			pagelayout->addWidget(LBind[i], num, 0);
-			CBBind[i] = new QComboBox(curW);
-			CBBind[i]->addItems(binds);
-			pagelayout->addWidget(CBBind[i], num, 1);
-			num++;
-		} while (!cbinds[i++].chwidget);
-		pagelayout->addWidget(new QWidget(curW), num, 0, 1, 2);
-		widind++;
+		if(cbinds[i].category != NULL)
+		{
+			if(curW != NULL)
+			{
+				l = new QLabel(curW);
+				l->setText("");
+				pagelayout->addWidget(l, num++, 0, 1, 2);
+			}
+			curW = new QWidget(this);
+			BindsBox->addItem(curW, QApplication::translate("binds (categories)", cbinds[i].category));
+			pagelayout = new QGridLayout(curW);
+			num = 0;
+		}
+		if(cbinds[i].description != NULL)
+		{
+			l = new QLabel(curW);
+			l->setText((num > 0 ? QString("\n") : QString("")) + QApplication::translate("binds (descriptions)", cbinds[i].description));
+			pagelayout->addWidget(l, num++, 0, 1, 2);
+		}
+
+		l = new QLabel(curW);
+		l->setText(QApplication::translate("binds", cbinds[i].name));
+		l->setAlignment(Qt::AlignRight);
+		pagelayout->addWidget(l, num, 0);
+		CBBind[i] = new QComboBox(curW);
+		for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
+			CBBind[i]->addItem(QApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? QApplication::translate("binds (keys)", sdlkeys[j][1]) : QApplication::translate("binds (keys)", "Keyboard") + QString(": ") + QApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
+		pagelayout->addWidget(CBBind[i++], num++, 1);
 	}
 }
 
@@ -398,6 +401,14 @@ PageOptions::PageOptions(QWidget* parent) :
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
 
+            CBFrontendFullscreen = new QCheckBox(AGGroupBox);
+            CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
+            GBAlayout->addWidget(CBFrontendFullscreen);
+
+            CBFrontendEffects = new QCheckBox(AGGroupBox);
+            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects (requires restart)"));
+            GBAlayout->addWidget(CBFrontendEffects);
+
             QLabel * resolution = new QLabel(AGGroupBox);
             resolution->setText(QLabel::tr("Resolution"));
             GBAreslayout->addWidget(resolution);
@@ -406,6 +417,10 @@ PageOptions::PageOptions(QWidget* parent) :
             GBAreslayout->addWidget(CBResolution);
             GBAlayout->addLayout(GBAreslayout);
 
+            CBFullscreen = new QCheckBox(AGGroupBox);
+            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
+            GBAlayout->addWidget(CBFullscreen);
+
             QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
             QLabel * maxfps = new QLabel(AGGroupBox);
             maxfps->setText(QLabel::tr("FPS limit"));
@@ -413,23 +428,11 @@ PageOptions::PageOptions(QWidget* parent) :
             GBAlayout->addLayout(GBAfpslayout);
 
             CBReduceQuality = new QCheckBox(AGGroupBox);
-            CBReduceQuality->setText(QCheckBox::tr("Reduce Quality"));
+            CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
             GBAlayout->addWidget(CBReduceQuality);
 
-            CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Frontend Effects (Requires Restart)"));
-            GBAlayout->addWidget(CBFrontendEffects);
-
-            CBFullscreen = new QCheckBox(AGGroupBox);
-            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAlayout->addWidget(CBFullscreen);
-
-            CBFrontendFullscreen = new QCheckBox(AGGroupBox);
-            CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
-            GBAlayout->addWidget(CBFrontendFullscreen);
-
             CBHardwareSound = new QCheckBox(AGGroupBox);
-            CBHardwareSound->setText(QCheckBox::tr("Use hardware sound (if available; requires restart)"));
+            CBHardwareSound->setText(QCheckBox::tr("Hardware sound (if available; requires restart)"));
             //CBHardwareSound->setEnabled(openal_ready());
             GBAlayout->addWidget(CBHardwareSound);
 
@@ -776,7 +779,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 
-	QHBoxLayout * newRoomLayout = new QHBoxLayout(this);
+	QHBoxLayout * newRoomLayout = new QHBoxLayout();
 	QLabel * roomNameLabel = new QLabel(this);
 	roomNameLabel->setText(tr("Room Name:"));
 	roomName = new QLineEdit(this);

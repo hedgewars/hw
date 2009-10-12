@@ -77,9 +77,9 @@ HWForm::HWForm(QWidget *parent)
 
 	CustomizePalettes();
         
-        sdli = new SDLInteraction(ui.pageOptions->CBHardwareSound->isChecked());
+    sdli.setHardwareSound(ui.pageOptions->CBHardwareSound->isChecked());
         
-	ui.pageOptions->CBResolution->addItems(sdli->getResolutions());
+	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
 
@@ -784,9 +784,11 @@ void HWForm::GameStateChanged(GameState gameState)
 				pRegisterServer->unregister();
 				pRegisterServer = 0;
 			}
+			setVisible(false);
 			break;
 		}
 		case gsFinished: {
+			setVisible(true);
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
 			if (wBackground) wBackground->startAnimation();
@@ -795,6 +797,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			break;
 		}
 		default: {
+			setVisible(true);
 			quint8 id = ui.Pages->currentIndex();
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
@@ -889,9 +892,9 @@ void HWForm::closeEvent(QCloseEvent *event)
 void HWForm::Music(bool checked)
 {
 	if (checked)
-		sdli->StartMusic();
+		sdli.StartMusic();
 	else
-		sdli->StopMusic();
+		sdli.StopMusic();
 }
 
 void HWForm::NetGameChangeStatus(bool isMaster)

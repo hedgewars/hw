@@ -63,6 +63,7 @@ const
 	SDL_SRCALPHA    = $00010000;
 	SDL_INIT_VIDEO  = $00000020;
 	SDL_INIT_AUDIO  = $00000010;
+	SDL_INIT_JOYSTICK = $00000200;
 
 	SDL_APPINPUTFOCUS=$00000010;
 
@@ -96,8 +97,8 @@ const
 	SDL_NOEVENT     = 0;
 	SDL_KEYDOWN     = 2;
 	SDL_KEYUP       = 3;
-	SDL_QUITEV      = 12;
-	SDL_VIDEORESIZE = 16;
+	//SDL_QUITEV      = 12;
+	SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
 
 {$IFDEF SDL13}
         SDL_WINDOWEVENT = 1;
@@ -106,12 +107,22 @@ const
         SDL_MOUSEBUTTONDOWN = 6;
 	SDL_MOUSEBUTTONUP   = 7;
         SDL_MOUSEWHEEL = 8;  //different handling, should create SDL_MouseWheelEvent type
+	SDL_JOYAXIS = 10;
+	SDL_JOYHAT = 12;
+	SDL_JOYBUTTONDOWN = 13;
+	SDL_JOYBUTTONUP = 14;
+	SDL_QUITEV      = 15;
 {$ELSE}
         SDL_ACTIVEEVENT = 1;
        	SDL_MOUSEBUTTONDOWN = 5;
 	SDL_MOUSEBUTTONUP   = 6;
         SDL_BUTTON_WHEELDUP = 4;
 	SDL_BUTTON_WHEELDOWN = 5;
+	SDL_JOYAXIS = 7;
+	SDL_JOYHAT = 9;
+	SDL_JOYBUTTONDOWN = 10;
+	SDL_JOYBUTTONUP = 11;
+	SDL_QUITEV      = 12;
 {$ENDIF}
 {*end sdl_event binding*}
 
@@ -283,7 +294,28 @@ type PSDL_Rect = ^TSDL_Rect;
 			w, h: LongInt;
 			end;
 
-     PSDL_Event = ^TSDL_Event;
+     TSDL_JoyAxisEvent = record
+			type_: Byte;
+			which: Byte;
+			axis: Byte;
+			value: LongInt;
+			end;
+			
+     TSDL_JoyHatEvent = record
+			type_: Byte;
+			which: Byte;
+			hat: Byte;
+			value: Byte;
+			end;
+	
+     TSDL_JoyButtonEvent = record
+			type_: Byte;
+			which: Byte;
+			button: Byte;
+			state: Byte;
+			end;
+	 
+	 PSDL_Event = ^TSDL_Event;
      TSDL_Event = record
                   case Byte of
 {$IFDEF SDL13}
@@ -306,6 +338,10 @@ type PSDL_Rect = ^TSDL_Rect;
                        SDL_MOUSEBUTTONDOWN,
                        SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
 {$ENDIF}
+						SDL_JOYAXIS: (jaxis: TSDL_JoyAxisEvent);
+						SDL_JOYHAT: (jhat: TSDL_JoyHatEvent);
+						SDL_JOYBUTTONDOWN,
+						SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
      end;
 
      PByteArray = ^TByteArray;
@@ -365,6 +401,7 @@ function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
+procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
@@ -489,6 +526,37 @@ procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
+
+// Joystick/Controller support
+type PSDLJoystick = ^TSDLJoystick;
+     TSDLJoystick = record
+	                end;
+
+function SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
+function SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function SDL_JoystickOpen(idx: LongInt): PSDLJoystick; cdecl; external SDLLibName;
+function SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickIndex(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickNumAxes(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickNumBalls(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickNumHats(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickNumButtons(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+procedure SDL_JoystickUpdate; cdecl; external SDLLibName;
+function SDL_JoystickEventState(state: LongInt): LongInt; cdecl; external SDLLibName;
+function SDL_JoystickGetAxis(joy: PSDLJoystick; axis: LongInt): Word; cdecl; external SDLLibName;
+const SDL_HAT_CENTERED  = $00;
+      SDL_HAT_UP        = $01;
+	  SDL_HAT_RIGHT     = $02;
+	  SDL_HAT_DOWN      = $04;
+	  SDL_HAT_LEFT      = $08;
+	  SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
+	  SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
+	  SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
+	  SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
+function SDL_JoystickGetBall(joy: PSDLJoystick; ball: LongInt; dx: PInteger; dy: PInteger): Word; cdecl; external SDLLibName;
+function SDL_JoystickGetHat(joy: PSDLJoystick; hat: LongInt): Byte; cdecl; external SDLLibName;
+function SDL_JoystickGetButton(joy: PSDLJoystick; button: LongInt): Byte; cdecl; external SDLLibName;
+procedure SDL_JoystickClose(joy: PSDLJoystick); cdecl; external SDLLibName;
 
 implementation
 

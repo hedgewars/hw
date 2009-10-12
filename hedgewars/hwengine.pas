@@ -89,7 +89,7 @@ case GameState of
 			AssignHHCoords;
 			AddMiscGears;
 			StoreLoad;
-            InitWorld;
+			InitWorld;
 			ResetKbd;
 			SoundLoad;
 			if GameType = gmtSave then
@@ -182,6 +182,10 @@ while SDL_PollEvent(@event) <> 0 do
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
 {$ENDIF}
+		SDL_JOYAXIS: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
+		SDL_JOYHAT: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
+		SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
+		SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
 		SDL_QUITEV: isTerminated:= true
 		end;
 CurrTime:= SDL_GetTicks;
@@ -388,7 +392,7 @@ procedure Game;
 var s: shortstring;
 begin
 WriteToConsole('Init SDL... ');
-SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
+SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_JOYSTICK) >= 0, true);
 WriteLnToConsole(msgOK);
 
 SDL_EnableUNICODE(1);
@@ -399,6 +403,7 @@ WriteLnToConsole(msgOK);
 
 ShowMainWindow;
 
+ControllerInit; // has to happen before InitKbdKeyTable to map keys
 InitKbdKeyTable;
 
 if recordFileName = '' then InitIPC;
@@ -431,7 +436,8 @@ TryDo(InitStepsFlags = cifAllInited,
       'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
       true);
 
-MainLoop
+MainLoop;
+ControllerClose
 end;
 
 /////////////////////////

@@ -83,7 +83,7 @@ const MENUSPEED = 15;
 var x, y, i, t, l, g: LongInt;
     Slot, Pos: LongInt;
 begin
-if (TurnTimeLeft = 0) or (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and KbdKeyPressed) then bShowAmmoMenu:= false;
+if (TurnTimeLeft = 0) or (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu) then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    FollowGear:= nil;
@@ -138,6 +138,8 @@ with CurrentHedgehog^ do
 					begin
 					l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
+					if (TrainingFlags and tfIgnoreDelays) <> 0 then l:= -1;
+
 					if l >= 0 then
 						begin
 						DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
@@ -168,7 +170,7 @@ with CurrentHedgehog^ do
 		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
 			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
 
-		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
+		if bSelected and (((TrainingFlags and tfIgnoreDelays) <> 0) or (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0)) then
 			begin
 			bShowAmmoMenu:= false;
 			SetWeapon(Ammo^[Slot, Pos].AmmoType);
@@ -416,8 +418,53 @@ if TurnTimeLeft <> 0 then
    DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, cScreenHeight - 48, 0);
    end;
 
+// Timetrial
+if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
+	begin
+	if TimeTrialStopTime = 0 then i:= RealTicks - TimeTrialStartTime else i:= TimeTrialStopTime - TimeTrialStartTime;
+	t:= 272;
+	// right frame
+	DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
+    dec(t, 32);
+	// 1 ms
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10); 
+    dec(t, 32);
+	i:= i div 10;
+	// 10 ms
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
+    dec(t, 32);
+	i:= i div 10;
+	// 100 ms
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
+	dec(t, 16);
+	// Point
+	DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 11);
+    dec(t, 32);
+	i:= i div 10;
+	// 1 s
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
+    dec(t, 32);
+	i:= i div 10;
+	// 10s
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 6);
+	dec(t, 16);
+	// Point
+	DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 10);
+    dec(t, 32);
+	i:= i div 6;
+	// 1 m
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
+    dec(t, 32);
+	i:= i div 10;
+	// 10 m
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
+	// left frame
+	DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, 8, 0);
+	end;
+   
 // Captions
-i:= 8;
+if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then i:= 48 else i:= 8;
+
 for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
          if Tex <> nil then
@@ -561,11 +608,8 @@ end;
 
 procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
-var EdgesDist, cw, wdy: LongInt;
+var EdgesDist,  wdy: LongInt;
 begin
-
-cw:= round(cScreenWidth / cScaleFactor);
-
 if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 	begin
 {$IFDEF SDL13}

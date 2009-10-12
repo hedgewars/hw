@@ -64,7 +64,7 @@ type
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle, sprBubbles, sprJetpack);
+            sprSniperRifle, sprBubbles, sprJetpack, sprHealth);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -79,7 +79,7 @@ type
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-			vgtSteam);
+			vgtSteam, vgtHealth);
 
 	TGearsType = set of TGearType;
 
@@ -94,7 +94,8 @@ type
 			sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6,
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
-			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter);
+			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
+			sndHomerun);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -244,6 +245,13 @@ const
 
 	cSendEmptyPacketTime = 1000;
 
+	// Training Flags
+	tfNone         = $00000000;
+	tfTimeTrial    = $00000001;
+	tfRCPlane      = $00000002;
+	tfSpawnTargets = $00000004;
+	tfIgnoreDelays = $00000008;
+	
 	gfForts        = $00000001;
 	gfMultiWeapon  = $00000002;
 	gfSolidLand    = $00000004;
@@ -604,7 +612,9 @@ const
 			(FileName:    'Bubbles'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprBubbles
 			(FileName:  'amJetpack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprJetpack
+			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprJetpack
+			(FileName:  'Health'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHealth
 			);
 
 	Wavez: array [TWave] of record
@@ -682,7 +692,8 @@ const
 			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
 			(FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
 			(FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
-			(FileName:         'shutterclick.ogg'; Path: ptSounds) // sndShutter
+			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter			
+			(FileName:              'homerun.ogg'; Path: ptSounds) // sndHomerun
 			);
 
 	Ammoz: array [TAmmoType] of record

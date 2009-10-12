@@ -159,10 +159,6 @@ public:
 	QComboBox *CBVoicepack;
 	QGroupBox *GBoxBinds;
 	QToolBox *BindsBox;
-	QWidget *page_A;
-	QWidget *page_W;
-	QWidget *page_WP;
-	QWidget *page_O;
 	QPushButton *BtnTeamDiscard;
 	QPushButton *BtnTeamSave;
 	QPushButton * BtnTestSound;
@@ -175,9 +171,6 @@ public:
 
 public slots:
 	void CBFort_activated(const QString & gravename);
-
-private:
-	QLabel * LBind[BINDS_NUMBER];
 
 private slots:
 	void testSound();

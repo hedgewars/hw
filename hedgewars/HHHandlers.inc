@@ -43,14 +43,14 @@ with PHedgehog(Gear^.Hedgehog)^ do
 			inc(i);
 			TryDo(i < 2, 'Engine bug: no ammo in current slot', true)
 			end;
-		until (Ammo^[slot, CurAmmo].Count > 0) and (Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, CurAmmo].AmmoType].SkipTurns)
+		until (Ammo^[slot, CurAmmo].Count > 0) and ((Team^.Clan^.TurnNumber > Ammoz[Ammo^[slot, CurAmmo].AmmoType].SkipTurns) or ((TrainingFlags and tfIgnoreDelays) <> 0))
 		end else
 		begin
 		i:= 0;
 		// check whether there is ammo in slot
 		while (i <= cMaxSlotAmmoIndex)
 		  and ((Ammo^[slot, i].Count = 0)
-		       or (Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns)) do inc(i);
+		       or ((Team^.Clan^.TurnNumber <= Ammoz[Ammo^[slot, i].AmmoType].SkipTurns) and ((TrainingFlags and tfIgnoreDelays) = 0))) do inc(i);
 
 		if i <= cMaxSlotAmmoIndex then
 			begin
@@ -67,7 +67,7 @@ var t: LongInt;
 begin
 weap:= TAmmoType(Gear^.MsgParam);
 
-if PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns then exit; // weapon is not activated yet
+if (PHedgehog(Gear^.Hedgehog)^.Team^.Clan^.TurnNumber <= Ammoz[weap].SkipTurns) and ((TrainingFlags and tfIgnoreDelays) = 0) then exit; // weapon is not activated yet
 
 Gear^.MsgParam:= Ammoz[weap].Slot;
 
@@ -164,7 +164,7 @@ with Gear^,
                                  PlaySound(sndWhipCrack, false, nil)
                                  end;
                   amBaseballBat: begin
-								 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, 0, xx * _0_5, yy * _0_5, 0);
+								 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
 								 PlaySound(sndBaseballBat, false, nil);
 								 end;
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
@@ -297,6 +297,7 @@ end;
 procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
+	i: Integer;
 begin
 Gear^.Message:= gm_Destroy;
 case Gear^.Pos of
@@ -318,7 +319,14 @@ case Gear^.Pos of
                     s:= '+' + s;
                     AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(PHedgehog(HH^.Hedgehog)^);
-                    RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team)
+                    RecountTeamHealth(PHedgehog(HH^.Hedgehog)^.Team);
+
+					i:= 0;
+					while i < Gear^.Health do
+						begin
+						AddVisualGear(hwRound(HH^.X), hwRound(HH^.Y), vgtHealth);
+						inc(i, 5);
+						end;
                     end;
      end
 end;
@@ -543,7 +551,22 @@ if (Gear^.State and gstMoving) <> 0 then
       end;
    CheckGearDrowning(Gear);
    if (Gear^.State and gstDrowning) <> 0 then isCursorVisible:= false
-   end
+   end;
+
+if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) then
+    begin
+    inc(Gear^.FlightTime, 1);
+	if Gear^.FlightTime = 2000 then
+		begin
+		AddCaption(GetEventString(eidHomerun), $FFFFFF, capgrpMessage);
+		PlaySound(sndHomerun, false, nil)
+		end;
+	end
+else
+    begin
+    Gear^.FlightTime:= 0;
+	end;
+
 end;
 
 procedure doStepHedgehogDriven(Gear: PGear);

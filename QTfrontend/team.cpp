@@ -214,7 +214,7 @@ void HWTeam::SetToPage(HWForm * hwform)
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
-		hwform->ui.pageEditTeam->CBBind[i]->setCurrentIndex(hwform->ui.pageEditTeam->CBBind[i]->findText(binds[i].strbind));
+		hwform->ui.pageEditTeam->CBBind[i]->setCurrentIndex(hwform->ui.pageEditTeam->CBBind[i]->findData(binds[i].strbind));
 	}
 }
 
@@ -233,7 +233,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	Voicepack = hwform->ui.pageEditTeam->CBVoicepack->currentText();
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
-		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->currentText();
+		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->itemData(hwform->ui.pageEditTeam->CBBind[i]->currentIndex()).toString();
 	}
 }
 
@@ -251,7 +251,8 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 
 	if (!m_isNetTeam)
 		for(int i = 0; i < BINDS_NUMBER; i++)
-			sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
+			if(!binds[i].strbind.isEmpty())
+				sl.push_back(QString("ebind " + binds[i].strbind + " " + binds[i].action));
 
 	for (int t = 0; t < numHedgehogs; t++)
 	{

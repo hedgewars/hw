@@ -43,6 +43,7 @@ var
 	GameState     : TGameState = Low(TGameState);
 	GameType      : TGameType = gmtLocal;
 	GameFlags     : Longword = 0;
+	TrainingFlags : Longword = 0;
 	TurnTimeLeft  : Longword = 0;
 	cSuddenDTurns : LongInt = 15;
 	cDamagePercent : LongInt = 100;
@@ -71,7 +72,14 @@ var
 	cAltDamage       : boolean = true;
 
 	GameTicks     : LongWord = 0;
+	TrainingTimeInc: Longword = 10000;
+	TrainingTimeInD: Longword = 250;
+	TrainingTimeInM: Longword = 5000;
+	TrainingTimeMax: Longword = 90000;
 
+	TimeTrialStartTime: Longword = 0;
+	TimeTrialStopTime: Longword = 0;
+	
 	cSkyColor     : Longword = 0;
 	cWhiteColor   : Longword = $FFFFFFFF;
 	cColorNearBlack       : Longword = $FF000010;
@@ -102,6 +110,8 @@ var
 var
 	cSendCursorPosTime   : LongWord = 50;
 	ShowCrosshair : boolean;
+	CursorMovementX : Integer = 0;
+	CursorMovementY : Integer = 0;
 	cDrownSpeed,
 	cMaxWindSpeed,
 	cWindSpeed,
@@ -127,6 +137,7 @@ var cWaterOpacity: byte = $80;
 
 var WaterColorArray: array[0..3] of HwColor4f;
 
+procedure movecursor(dx, dy: Integer);
 function hwSign(r: hwFloat): LongInt;
 function Min(a, b: LongInt): LongInt;
 function Max(a, b: LongInt): LongInt;
@@ -168,6 +179,20 @@ var KBnum: Longword = 0;
 {$IFDEF DEBUGFILE}
 var f: textfile;
 {$ENDIF}
+
+procedure movecursor(dx, dy: Integer);
+var x, y: LongInt;
+begin
+if (dx = 0) and (dy = 0) then exit;
+{$IFDEF SDL13}
+SDL_GetMouseState(0, @x, @y);
+{$ELSE}
+SDL_GetMouseState(@x, @y);
+{$ENDIF}
+Inc(x, dx);
+Inc(y, dy);
+SDL_WarpMouse(x, y);
+end;
 
 function hwSign(r: hwFloat): LongInt;
 begin
@@ -388,7 +413,7 @@ glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 if SDL_MustLock(surf) then
    SDLTry(SDL_LockSurface(surf) >= 0, true);
 
-if not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h)) then
+if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
 	begin
 	tw:= toPowerOf2(Surf^.w);
 	th:= toPowerOf2(Surf^.h);

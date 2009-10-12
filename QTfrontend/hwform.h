@@ -148,7 +148,7 @@ private:
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
 	QTime eggTimer;
-	SDLInteraction * sdli;
+	SDLInteraction sdli;
 	BGWidget * wBackground;
         
 #ifdef __APPLE__

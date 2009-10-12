@@ -32,7 +32,8 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync);
 
 	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf);
+			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
+			eidHomerun);
 
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of string;

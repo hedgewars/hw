@@ -173,6 +173,17 @@ begin
 		dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepHealth(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+Gear^.Y:= Gear^.Y - Gear^.dY * Steps;
+
+if Gear^.FrameTicks <= Steps then
+	DeleteVisualGear(Gear)
+else
+	dec(Gear^.FrameTicks, Steps);
+end;
+
 procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
 begin
 	Gear^.X:= Gear^.X + (cWindSpeed * 100 + Gear^.dX) * Steps;
@@ -319,7 +330,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepTeamHealthSorter,
 			@doStepSpeechBubble,
 			@doStepBubble,
-			@doStepSteam
+			@doStepSteam,
+			@doStepHealth
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -395,24 +407,27 @@ with Result^ do
 				Result^.FrameTicks:= 1100
 				end;
 	vgtBubble: begin
-				t:= random(1024);
-				sp:= _0_001 * (random(85) + 95);
 				dx.isNegative:= random(2) = 0;
 				dx.QWordValue:= random(100000000);
-				dy:= sp;
+				dy:= _0_001 * (random(85) + 95);
 				dy.isNegative:= false;
 				FrameTicks:= 250 + random(1751);
 				Frame:= random(5)
 				end;
 	vgtSteam: begin
-				t:= random(1024);
-				sp:= _0_001 * (random(95) + 70);
 				dx.isNegative:= random(2) = 0;
 				dx.QWordValue:= random(100000000);
-				dy:= sp;
+				dy:= _0_001 * (random(85) + 95);
 				dy.isNegative:= false;
 				Frame:= 7 - random(3);
 				FrameTicks:= cExplFrameTicks * 2;
+				end;
+	vgtHealth: begin
+				dx:= _0_001 * random(45);
+				dx.isNegative:= random(2) = 0;
+				dy:= _0_001 * (random(20) + 25);
+				Frame:= 0;
+				FrameTicks:= random(750) + 1250;
 				end;
 		end;
 
@@ -472,11 +487,19 @@ case Layer of
 		begin
         if not cReducedQuality then
             case Gear^.Kind of
-                vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
-                vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
-                vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
-				vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
-				vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 7 - Gear^.Frame);
+                vgtExplPart: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtExplPart2: DrawSprite(sprExplPart2, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
+				vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+				vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+				vgtHealth:  begin
+							case Gear^.Frame div 10 of
+								0:glColor4f(0, 1, 0, Gear^.FrameTicks / 1000);
+								1:glColor4f(1, 0, 0, Gear^.FrameTicks / 1000);
+							end;
+							DrawSprite(sprHealth, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, 0);
+							glColor4f(1, 1, 1, 1);
+							end;
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);

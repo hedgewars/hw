@@ -107,6 +107,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 void HWChatWidget::nickAdded(const QString& nick)
 {
 	QListWidgetItem * item = new QListWidgetItem(nick);
+	item->setIcon(QIcon(":/res/hh_small.png"));
 	chatNicks->addItem(item);
 }
 

@@ -184,6 +184,46 @@ if b = 0 then OutError(errmsgUnknownVariable + ' "' + id + '"', false)
          else CurrentTeam^.Binds[b]:= s
 end;
 
+procedure chCurU_p(var s: shortstring);
+begin
+CursorMovementY:= -1;
+end;
+
+procedure chCurU_m(var s: shortstring);
+begin
+CursorMovementY:= 0;
+end;
+
+procedure chCurD_p(var s: shortstring);
+begin
+CursorMovementY:= 1;
+end;
+
+procedure chCurD_m(var s: shortstring);
+begin
+CursorMovementY:= 0;
+end;
+
+procedure chCurL_p(var s: shortstring);
+begin
+CursorMovementX:= -1;
+end;
+
+procedure chCurL_m(var s: shortstring);
+begin
+CursorMovementX:= 0;
+end;
+
+procedure chCurR_p(var s: shortstring);
+begin
+CursorMovementX:= 1;
+end;
+
+procedure chCurR_m(var s: shortstring);
+begin
+CursorMovementX:= 0;
+end;
+
 procedure chLeft_p(var s: shortstring);
 begin
 if CheckNoTeamOrHH then exit;
@@ -576,10 +616,13 @@ if cFullScreen then
 	end;
 
 SDL_WM_SetCaption('Hedgewars', nil);
-{$IFDEF DEBUGFILE}
-AddFileLog('Freeing old primary surface...');
-{$ENDIF}
-if SDLPrimSurface <> nil then SDL_FreeSurface(SDLPrimSurface);
+if SDLPrimSurface <> nil then
+	begin
+	{$IFDEF DEBUGFILE}
+	AddFileLog('Freeing old primary surface...');
+	{$ENDIF}
+	SDL_FreeSurface(SDLPrimSurface);
+	end;
 
 {$IFDEF DARWIN}
 //remove the topbar from Mac and iPhone
