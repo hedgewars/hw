@@ -2301,7 +2301,7 @@ begin
 AllInactive:= false;
 HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
 //dec(Gear^.Timer);
-move:= _0_2;
+move:= _0_1;
 fuel:= 50;
 (*if (HHGear^.Message and gm_Precise) <> 0 then
     begin
