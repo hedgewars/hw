@@ -217,7 +217,7 @@ void oalb_setvolume (const uint32_t iIndex,  const char cPercentage) {
         /*Set volume for sound number index*/
         if(iIndex < 0 || iIndex >= iNumSounds) {
                 errno = EINVAL;
-                err_ret("(%s) ERROR - Index out of bounds (got %d, max %d)", prog, index, globalindex);
+                err_ret("(%s) ERROR - Index (%d) out of bounds", prog, iIndex);
                 return;
         }
         

@@ -17,13 +17,14 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "openalbridge.h"
+#include "ssound.h"
+#include "loaders.h"
 
 extern ALuint sources[MAX_SOURCES];
 extern const ALfloat NV[3];
 extern const ALfloat LO[6];
 
-char *prog;
+extern char *prog;
 
 /*SSOUND STUFF HERE*/
 

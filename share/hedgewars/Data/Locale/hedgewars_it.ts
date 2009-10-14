@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="it">
+<!DOCTYPE TS><TS version="1.1" language="it">
+<defaultcodec></defaultcodec>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -17,8 +17,8 @@
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Ogni %1 turno</numerusform>
+            <numerusform>Ogni %1 turni</numerusform>
         </translation>
     </message>
 </context>
@@ -413,7 +413,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mappa casuale</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
@@ -600,15 +600,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Effetti del Frontend (richiede riavvio)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualità ridotta</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Usa accelerazione Hardware per il suono (se disponibile; richiede riavvio)</translation>
     </message>
 </context>
 <context>
