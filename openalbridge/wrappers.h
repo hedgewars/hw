@@ -19,7 +19,7 @@
 #ifndef _OALB_WRAPPERS_H
 #define _OALB_WRAPPERS_H
 
-#include "globals.h"
+#include "common.h"
 
 
 #ifdef __CPLUSPLUS

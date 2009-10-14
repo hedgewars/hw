@@ -18,6 +18,7 @@
 
 #include "wrappers.h"
 
+extern char *prog;
 
 #ifdef __CPLUSPLUS
 extern "C" {
@@ -78,7 +79,7 @@ extern "C" {
                         return AL_TRUE;
         }
         
-        void *helper_fadein(void *tmp) {
+ /*       void *helper_fadein(void *tmp) {
                 ALfloat gain;
                 ALfloat target_gain;
                 fade_t *fade;
@@ -94,7 +95,7 @@ extern "C" {
                 err_msg("(%s) INFO - Fade-in in progress [index %d quantity %d]", prog, index, quantity);
 #endif
                 
-                /*save the volume desired after the fade*/
+                /*save the volume desired after the fade
                 alGetSourcef(Sources[index], AL_GAIN, &target_gain);
                 if (target_gain > 1.0f || target_gain <= 0.0f)
                         target_gain = 1.0f;
@@ -147,7 +148,7 @@ extern "C" {
                 
                 AlGetError("(%s) WARN - Failed to set fade-out volume level");
                 
-                /*stop that sound and reset its volume*/
+                /*stop that sound and reset its volume
                 alSourceStop (Sources[index]);
                 alSourcef (Sources[index], AL_GAIN, old_gain);	
                 
@@ -159,7 +160,7 @@ extern "C" {
                 return 0;
         }
         
-        
+        */
 #ifdef __CPLUSPLUS
 }
 #endif

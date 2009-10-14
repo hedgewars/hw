@@ -20,21 +20,7 @@
 #define SDLS_H
 
 #include <QStringList>
-
-extern "C" bool openal_init		(char *programname, bool usehardware, unsigned int memorysize);
-extern "C" bool openal_close		(void);
-extern "C" bool openal_ready		(void);
-extern "C" int  openal_loadfile		(const char *filename);
-extern "C" bool openal_toggleloop	(unsigned int index);
-extern "C" bool openal_setvolume	(unsigned int index, unsigned char percentage);
-extern "C" bool openal_setglobalvolume	(unsigned char percentage);
-extern "C" bool openal_togglemute	(void);
-extern "C" bool openal_fadeout		(unsigned int index, unsigned short int quantity);
-extern "C" bool openal_fadein		(unsigned int index, unsigned short int quantity);
-extern "C" bool openal_fade		(unsigned int index, unsigned short int quantity, bool direction);
-extern "C" bool openal_playsound 	(unsigned int index);
-extern "C" bool openal_stopsound	(unsigned int index);
-extern "C" bool openal_pausesound	(unsigned int index);
+#include "openalbridge.h"
 
 class SDLInteraction : public QObject
 {

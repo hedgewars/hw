@@ -20,8 +20,12 @@ find_package(SDL REQUIRED)
 
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
+include_directories(${OPENAL_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/openalbridge/)
+
 if(UNIX)
-	include_directories("/usr/local/include") # HACK: in freebsd cannot find iconv.h included via SDL.h
+	# HACK: in freebsd cannot find iconv.h included via SDL.h
+	include_directories("/usr/local/include")
 endif(UNIX)
 
 

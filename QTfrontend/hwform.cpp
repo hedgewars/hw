@@ -77,7 +77,9 @@ HWForm::HWForm(QWidget *parent)
 
 	CustomizePalettes();
         
+#ifdef _WIN32
     sdli.setHardwareSound(settings.value("audio/hardware", false).toBool());
+#endif
         
 	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 

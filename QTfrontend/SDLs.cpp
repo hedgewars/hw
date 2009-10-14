@@ -28,13 +28,17 @@ extern char xb360buttons[][128];
 extern char xb360dpad[128];
 extern char xbox360axes[][128];
 
+#ifdef _WIN32
 bool hardware;
+#endif
 extern char *programname;
 
 SDLInteraction::SDLInteraction()
 {
 	music = -1;
+#ifdef _WIN32
 	hardware = false;
+#endif
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
 
 
@@ -46,13 +50,15 @@ SDLInteraction::SDLInteraction()
 SDLInteraction::~SDLInteraction()
 {
 	SDL_Quit();
-	openal_close();
+	oalb_close();
 }
 
+#ifdef _WIN32
 void SDLInteraction::setHardwareSound(bool hardware_snd)
 {
 	hardware = hardware_snd;
 }
+#endif
 
 QStringList SDLInteraction::getResolutions() const
 {
@@ -68,7 +74,7 @@ QStringList SDLInteraction::getResolutions() const
 	} else
 	{
 		for(int i = 0; modes[i]; ++i)
-			if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
+			if ((modes[i]->w >= 640) && (modes[i]->h >= 480) && (modes[i]->h <= 1200))
 				result << QString("%1x%2").arg(modes[i]->w).arg(modes[i]->h);
 	}
 
@@ -160,24 +166,28 @@ void SDLInteraction::StartMusic()
 {
 	OpenAL_Init();
 	if (music < 0) {
-		music = openal_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
-		openal_toggleloop(music);
+		music = oalb_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 	
 	}
-	openal_setvolume(music, 60);
-	openal_fadein(music, 30);
+	oalb_playsound(music, 1);
+	oalb_setvolume(music, 60);
 }
 
 void SDLInteraction::StopMusic()
 {
-	if (music >= 0) openal_fadeout(music, 40);
+//	if (music >= 0) openal_fadeout(music, 40);
+	oalb_stopsound(music);
 }
 
 //we need thjs wrapper because of some issues with windows drivers
 //beware that this cause a slight delay when playing the first sound
 void OpenAL_Init()
 {
-	if (!openal_ready())
-        	openal_init(programname, hardware ? 1 : 0, 5);
+	if (!oalb_ready())
+#ifdef _WIN32
+        	oalb_init(programname, hardware ? 1 : 0);
+#else
+		oalb_init(programname, 0);
+#endif
 }
 

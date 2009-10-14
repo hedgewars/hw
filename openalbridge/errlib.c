@@ -9,7 +9,7 @@
  */
 
 #include "errlib.h"
-
+#include <stdarg.h>
 
 #define MAXLINE 4095
 

@@ -195,7 +195,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		}
 		hbox->addWidget(CBVoicepack, 100);
 		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
-		//BtnTestSound->setEnabled(openal_ready());
+		//BtnTestSound->setEnabled(oalb_ready());
 		hbox->setStretchFactor(BtnTestSound, 1);
 		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 		GBTLayout->addLayout(hbox);
@@ -300,8 +300,8 @@ void PageEditTeam::testSound()
 	tmpdir.cd(CBVoicepack->currentText());
 	QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
 	if (list.size()) {
-		sound = openal_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		openal_playsound(sound);
+		sound = oalb_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
+		oalb_playsound(sound, 0);
 	}
 }
 
@@ -431,18 +431,20 @@ PageOptions::PageOptions(QWidget* parent) :
             CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
             GBAlayout->addWidget(CBReduceQuality);
 
+#ifdef _WIN32
             CBHardwareSound = new QCheckBox(AGGroupBox);
             CBHardwareSound->setText(QCheckBox::tr("Hardware sound (if available; requires restart)"));
-            //CBHardwareSound->setEnabled(openal_ready());
+            //CBHardwareSound->setEnabled(oalb_ready());
             GBAlayout->addWidget(CBHardwareSound);
+#endif
 
             CBEnableSound = new QCheckBox(AGGroupBox);
             CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-            //CBEnableSound->setEnabled(openal_ready());
+            //CBEnableSound->setEnabled(oalb_ready());
             GBAlayout->addWidget(CBEnableSound);
             CBEnableMusic = new QCheckBox(AGGroupBox);
             CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-            //CBEnableMusic->setEnabled(openal_ready());
+            //CBEnableMusic->setEnabled(oalb_ready());
             GBAlayout->addWidget(CBEnableMusic);
 
             QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
@@ -453,7 +455,7 @@ PageOptions::PageOptions(QWidget* parent) :
             volumeBox = new QSpinBox(AGGroupBox);
             volumeBox->setRange(0, 100);
             volumeBox->setSingleStep(5);
-            //volumeBox->setEnabled(openal_ready());
+            //volumeBox->setEnabled(oalb_ready());
             GBAvollayout->addWidget(volumeBox);
 
             CBShowFPS = new QCheckBox(AGGroupBox);
@@ -789,7 +791,6 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	pageLayout->addLayout(newRoomLayout, 0, 0);
 
 	roomsList = new QTableWidget(this);
-	roomsList->setColumnCount(7);
 	roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
 	roomsList->verticalHeader()->setVisible(false);
 	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
@@ -822,6 +823,7 @@ void PageRoomsList::setAdmin(bool flag)
 void PageRoomsList::setRoomsList(const QStringList & list)
 {
 	roomsList->clear();
+	roomsList->setColumnCount(7);
 	roomsList->setHorizontalHeaderLabels(
 			QStringList() <<
 			QTableWidget::tr("Room Name") <<
@@ -903,7 +905,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		roomsList->setItem(r, 6, item);
 
 	}
-	roomsList->resizeColumnsToContents();
+	//roomsList->resizeColumnsToContents();
 }
 
 void PageRoomsList::onCreateClick()

@@ -208,7 +208,9 @@ public:
 	IconedGroupBox *AGGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
+#ifdef _WIN32
 	QCheckBox *CBHardwareSound;
+#endif
 	QCheckBox *CBEnableMusic;
 	QCheckBox *CBFullscreen;
 	QCheckBox *CBFrontendFullscreen;

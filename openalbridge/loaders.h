@@ -1,6 +1,7 @@
 /*
  * OpenAL Bridge - a simple portable library for OpenAL interface
- * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>,
+ *                    Mario Liebisch <mario.liebisch+hw@googlemail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,10 +20,10 @@
 #ifndef _OALB_LOADERS_H
 #define _OALB_LOADERS_H
 
-#include "globals.h"
+#include "common.h"
 #include "wrappers.h"
 #include "oggvorbis.h"
-
+extern char *prog;
 
 #ifdef __CPLUSPLUS
 extern "C" {

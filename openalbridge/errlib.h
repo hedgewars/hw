@@ -11,7 +11,7 @@
 #ifndef _ERRLIB_H
 #define _ERRLIB_H
 
-#include "globals.h"
+#include "common.h"
 
 #ifdef __CPLUSPLUS
 extern "C" {
