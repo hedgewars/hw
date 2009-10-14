@@ -22,6 +22,7 @@
 #include "common.h"
 #include "wrappers.h"
 #include "loaders.h"
+#include "ssound.h"
 #include "alc.h"
 
 
@@ -44,10 +45,7 @@ extern "C" {
         ALboolean   openal_fadeout           (unsigned int index, unsigned short int quantity);
         ALboolean   openal_fadein            (unsigned int index, unsigned short int quantity);
         ALboolean   openal_fade              (unsigned int index, unsigned short int quantity, ALboolean direction);
-        ALboolean   openal_pausesound        (unsigned int index);
         */
-        
-
         
 #ifdef __cplusplus
 }
