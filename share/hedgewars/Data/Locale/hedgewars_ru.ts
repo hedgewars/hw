@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="ru_RU">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -16,8 +16,10 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Каждый %1 ход</numerusform>
+            <numerusform>Каждый %1 ход</numerusform>
+            <numerusform>Каждый %1 ход</numerusform>
         </translation>
     </message>
 </context>
@@ -167,23 +169,30 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш псевдоним %1 уже
+зарегистрирован на сайте Hedgewars.org
+Пожалуйста, укажите ваш пароль
+или выберите другой псевдоним:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 вошёл в комнату</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 вошёл</translation>
     </message>
     <message>
-        <source>%1 *** %2 has left ]</source>
-        <translation type="unfinished"></translation>
+        <source>%1 *** %2 has left </source>
+        <translation type="obsolete">%1 *** %2 ушёл</translation>
     </message>
     <message>
-        <source>%1 *** %2 has left (%3) ]</source>
-        <translation type="unfinished"></translation>
+        <source>%1 *** %2 has left (%3)</source>
+        <translation>%1 *** %2 ушёл (%3)</translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has left</source>
+        <translation>%1 *** %2 ушёл</translation>
     </message>
 </context>
 <context>
@@ -205,7 +214,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить кэш учётных записей</translation>
     </message>
 </context>
 <context>
@@ -234,14 +243,18 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение этой игры.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжа были убиты в течение этой игры.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжей были убиты в течение этой игры.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -378,45 +391,55 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Название комнаты:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой комнате игра ещё не запущена.
+Вы можете зайти и присоединиться к игре.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой комнате происходит игра.
+Вы можете зайти и наблюдать. Чтобы играть, придётся подождать окончания текущей игры.</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>В этой комнате %1 игрок.</numerusform>
+            <numerusform>В этой комнате %1 игрока.</numerusform>
+            <numerusform>В этой комнате %1 игроков.</numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished"></translation>
+        <translation>
+            <numerusform>В этой комнате %1 команда.</numerusform>
+            <numerusform>В этой комнате %1 команды.</numerusform>
+            <numerusform>В этой комнате %1 команд.</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 управляет комнатой. Он может изменять настройки и запускать игру.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайная карта</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Можно играть на нарисованных или сгенерированных картах.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема игры определяет общие настройки, такие как время хода или вампиризм.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема оружия определяет доступное оружие и число снарядов.</translation>
     </message>
 </context>
 <context>
@@ -547,7 +570,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <name>QCheckBox</name>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверять обновления при запуске</translation>
     </message>
     <message>
         <source>Enable sound</source>
@@ -587,15 +610,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Эффекты фронтенда (необходим перезапуск)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Пониженное качество</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Аппаратный звук (если доступен; необходим перезапуск)</translation>
     </message>
 </context>
 <context>
@@ -832,11 +855,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним</translation>
     </message>
     <message>
         <source>Please, enter your nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, введите ваш псевдоним</translation>
     </message>
 </context>
 <context>
@@ -918,31 +941,31 @@ Please check your installation</source>
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>И</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>К</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Главный</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Карта</translation>
+        <translation>Карта</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Правила</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Оружие</translation>
+        <translation>Оружие</translation>
     </message>
 </context>
 <context>
@@ -968,11 +991,11 @@ Please check your installation</source>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Набор оружия</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Вероятности</translation>
     </message>
 </context>
 <context>
@@ -1183,42 +1206,42 @@ info</source>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>увеличить</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>уменьшить</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>сбросить увеличение</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>прыжок в длину</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>прыжок в высоту</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Основное управление</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Управление оружием</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Управление камерой и курсором</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Разное</translation>
+        <translation>Разное</translation>
     </message>
 </context>
 <context>

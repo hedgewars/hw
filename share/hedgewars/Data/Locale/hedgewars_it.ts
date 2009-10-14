@@ -179,11 +179,11 @@ or pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has left ]</source>
+        <source>%1 *** %2 has left (%3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has left (%3) ]</source>
+        <source>%1 *** %2 has left</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -393,13 +393,19 @@ You may join and start playing once the game starts.</source>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>

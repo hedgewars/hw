@@ -410,9 +410,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		emit nickRemoved(lst[1]);
 		if (lst.size() < 3)
-			emit chatStringFromNet(tr("%1 *** %2 has left ]").arg('\x03').arg(lst[1]));
+			emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
 		else
-			emit chatStringFromNet(tr("%1 *** %2 has left (%3) ]").arg('\x03').arg(lst[1], lst[2]));
+			emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
 		return;
 	}
 
@@ -434,9 +434,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		}
 		emit nickRemovedLobby(lst[1]);
 		if (lst.size() < 3)
-			emit chatStringLobby(tr("%1 *** %2 has left ]").arg('\x03').arg(lst[1]));
+			emit chatStringLobby(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
 		else
-			emit chatStringLobby(tr("%1 *** %2 has left (%3) ]").arg('\x03').arg(lst[1], lst[2]));
+			emit chatStringLobby(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
 		return;
 	}
 

@@ -869,13 +869,13 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		item = new QTableWidgetItem(list[i + 2]); // number of clients
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		item->setTextAlignment(Qt::AlignCenter);
-		item->setToolTip(tr("There are %1 clients connected to this room.").arg(list[i + 2]));
+		item->setToolTip(tr("There are %1 clients connected to this room.", "", list[i + 2].toInt()).arg(list[i + 2]));
 		roomsList->setItem(r, 1, item);
 
 		item = new QTableWidgetItem(list[i + 3]); // number of teams
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		item->setTextAlignment(Qt::AlignCenter);
-		item->setToolTip(tr("There are %1 teams participating in this room.").arg(list[i + 3]));
+		item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
 		roomsList->setItem(r, 2, item);
 
 		item = new QTableWidgetItem(list[i + 4]); // name of host
