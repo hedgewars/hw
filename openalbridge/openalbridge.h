@@ -29,33 +29,26 @@
 extern "C" {
 #endif 
         
-        char      oalb_init               (const char* programname, const char usehardware);
-        void      oalb_close              (void);
-        char      oalb_ready              (void);
-        int32_t   oalb_loadfile           (const char* cFilename);
-        void      oalb_playsound          (const uint32_t iIndex, const char bLoop);
-        void      oalb_pausesound         (const uint32_t iIndex);
-        void      oalb_stopsound          (const uint32_t iIndex);
-        void      oalb_setvolume          (const uint32_t iIndex, const char cPercentage);
-        void      oalb_setglobalvolume    (const char cPercentage);
-        
+        const char      oalb_init               (const char* programname, const char usehardware);
+        void            oalb_close              (void);
+        char            oalb_ready              (void);
+        const int32_t   oalb_loadfile           (const char* cFilename);
+        void            oalb_playsound          (const uint32_t iIndex, const char bLoop);
+        void            oalb_pausesound         (const uint32_t iIndex);
+        void            oalb_stopsound          (const uint32_t iIndex);
+        void            oalb_setvolume          (const uint32_t iIndex, const char cPercentage);
+        void            oalb_setglobalvolume    (const char cPercentage);
+        void            oalb_togglemute         (void);
        /*
-        ALboolean   openal_toggleloop        (unsigned int index);
         ALboolean   openal_setposition       (unsigned int index, float x, float y, float z);
-        ALboolean   openal_togglemute        (void);
         ALboolean   openal_fadeout           (unsigned int index, unsigned short int quantity);
         ALboolean   openal_fadein            (unsigned int index, unsigned short int quantity);
         ALboolean   openal_fade              (unsigned int index, unsigned short int quantity, ALboolean direction);
         ALboolean   openal_pausesound        (unsigned int index);
         */
         
-        char SSound_load        (SSound_t* pSound, const char* cFilename);
-        void SSound_close       (SSound_t* pSound);
-        void SSound_play        (SSound_t* pSound, const char bLoop);
-        void SSound_pause       (const SSound_t* pSound);
-        void SSound_continue    (const SSound_t* pSound);
-        void SSound_stop        (SSound_t* pSound);
-        void SSound_volume      (const SSound_t* pSound, const float fPercentage);
+
+        
 #ifdef __cplusplus
 }
 #endif

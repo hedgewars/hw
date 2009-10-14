@@ -20,66 +20,62 @@
 
 extern char *prog;
 
-#ifdef __CPLUSPLUS
-extern "C" {
-#endif 
+//extern ALint *Sources;
+
+void *Malloc (size_t nbytes) {
+        void *aptr;
         
-        extern ALint *Sources;
+        if ((aptr = malloc(nbytes)) == NULL)
+                err_dump("(%s) FATAL - not enough memory");
         
-        void *Malloc (size_t nbytes) {
-                void *aptr;
-                
-                if ((aptr = malloc(nbytes)) == NULL)
-                        err_dump("(%s) FATAL - not enough memory");
-                
-                return aptr;
-        }
+        return aptr;
+}
+
+
+void *Realloc (void *aptr, size_t nbytes) {
+        aptr = realloc(aptr, nbytes);
         
+        if (aptr == NULL) 
+                err_dump("(%s) FATAL - not enough memory");
         
-        void *Realloc (void *aptr, size_t nbytes) {
-                aptr = realloc(aptr, nbytes);
-                
-                if (aptr == NULL) 
-                        err_dump("(%s) FATAL - not enough memory");
-                
-                return aptr;
-        }
+        return aptr;
+}
+
+
+FILE *Fopen (const char *fname, char *mode)	{
+        FILE *fp;
         
+        fp = fopen(fname,mode);
+        if (fp == NULL)
+                err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
         
-        FILE *Fopen (const char *fname, char *mode)	{
-                FILE *fp;
-                
-                fp = fopen(fname,mode);
-                if (fp == NULL)
-                        err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
-                
-                return fp;
-        }
+        return fp;
+}
+
+/*TODO make a proper error reporting routine*/
+ALint AlGetError (const char *str) {
+        ALenum error;
         
-        /*TODO make a proper error reporting routine*/
-        ALint AlGetError (const char *str) {
-                ALenum error;
-                
-                error = alGetError();
-                if (error != AL_NO_ERROR) {
-                        err_msg(str, prog);
-                        return error;
-                } else 
-                        return AL_TRUE;
-        }
+        error = alGetError();
+        if (error != AL_NO_ERROR) {
+                err_msg(str, prog);
+                return error;
+        } else 
+                return AL_TRUE;
+}
+
+ALint AlGetError2 (const char *str, int num) {
+        ALenum error;
         
-        ALint AlGetError2 (const char *str, int num) {
-                ALenum error;
-                
-                error = alGetError();
-                if (error != AL_NO_ERROR) {
-                        err_msg(str, prog, num);
-                        return error;
-                } else 
-                        return AL_TRUE;
-        }
-        
- /*       void *helper_fadein(void *tmp) {
+        error = alGetError();
+        if (error != AL_NO_ERROR) {
+                err_msg(str, prog, num);
+                return error;
+        } else 
+                return AL_TRUE;
+}
+
+/*       void *helper_fadein(void *tmp) {
                 ALfloat gain;
                 ALfloat target_gain;
                 fade_t *fade;
@@ -161,6 +157,3 @@ extern "C" {
         }
         
         */
-#ifdef __CPLUSPLUS
-}
-#endif

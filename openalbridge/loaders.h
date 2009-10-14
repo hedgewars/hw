@@ -23,17 +23,10 @@
 #include "common.h"
 #include "wrappers.h"
 #include "oggvorbis.h"
+
 extern char *prog;
 
-#ifdef __CPLUSPLUS
-extern "C" {
-#endif 
-        
-        int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
-        int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
-        
-#ifdef __CPLUSPLUS
-}
-#endif
+int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
 
 #endif /*_OALB_LOADERS_H*/

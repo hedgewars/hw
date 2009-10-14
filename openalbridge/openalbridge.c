@@ -40,8 +40,13 @@ ALCcontext *context;
 ALCdevice *device;
 ALuint sources[MAX_SOURCES];
 
-
-
+char SSound_load        (SSound_t* pSound, const char* cFilename);
+void SSound_close       (SSound_t* pSound);
+void SSound_play        (SSound_t* pSound, const char bLoop);
+void SSound_pause       (const SSound_t* pSound);
+void SSound_continue    (const SSound_t* pSound);
+void SSound_stop        (SSound_t* pSound);
+void SSound_volume      (const SSound_t* pSound, const float fPercentage);
 
 
 /**
@@ -57,7 +62,7 @@ ALuint sources[MAX_SOURCES];
  * 2 error
  */
 
-char oalb_init (const char* programname, const char usehardware) {                
+const char oalb_init (const char* programname, const char usehardware) {                
         prog = (char *) programname;
         
         if (oalbReady == AL_TRUE) {
@@ -98,7 +103,6 @@ char oalb_init (const char* programname, const char usehardware) {
         if (AlGetError("(%s) WARN - Failed to create a new contex") != AL_TRUE)
                 return AL_FALSE;
         
-        
         /*set the listener gain, position (on xyz axes), velocity (one value for each axe) and orientation*/
         alListenerf (AL_GAIN,        1.0f);
         alListenerfv(AL_POSITION,    NV);
@@ -120,18 +124,17 @@ char oalb_init (const char* programname, const char usehardware) {
 
 
 /**
- * void oalb_close(void) 
+ * void oalb_close (void) 
  *
  *  ARGUMENTS
  * -
  *  DESCRIPTION
- *
+ * Stop all sounds, deallocate all memory and close OpenAL
  *  RETURN
  * -
  */
 
-void oalb_close(void) {
-        /*Stop all sounds, deallocate all memory and close OpenAL */
+void oalb_close (void) {
         int i;
         
         if (oalbReady == 0) {
@@ -157,7 +160,18 @@ void oalb_close(void) {
         return;
 }
 
-char oalb_ready(void) {
+/**
+ * char oalb_ready (void)  
+ *
+ *  ARGUMENTS
+ * -
+ *  DESCRIPTION
+ *
+ *  RETURN
+ * -
+ */
+
+char oalb_ready (void) {
         return oalbReady;
 }
 
@@ -172,7 +186,7 @@ char oalb_ready(void) {
  * -
  */
 
-int32_t oalb_loadfile (const char *filename) {
+const int32_t oalb_loadfile (const char *filename) {
         int i;
         
         if (oalbReady == 0) {
@@ -198,33 +212,6 @@ int32_t oalb_loadfile (const char *filename) {
         
 }
 
-/*    
- ALboolean openal_toggleloop (uint32_t index){
- /*Set or unset looping mode
- ALint loop;
- 
- if (oalbReady == AL_FALSE) {
- errno = EPERM;                
- err_ret("(%s) WARN - OpenAL not initialized", prog);
- return AL_FALSE;
- }
- 
- if (index >= globalsize) {
- errno = EINVAL;
- err_ret("(%s) ERROR - Index out of bounds (got %d, max %d)", prog, index, globalindex);
- return AL_FALSE;
- }
- 
- alGetSourcei (Sources[index], AL_LOOPING, &loop);
- alSourcei (Sources[index], AL_LOOPING, !((uint8_t) loop) & 0x00000001);
- if (AlGetError("(%s) ERROR - Failed to get or set loop property") != AL_TRUE)
- return AL_FALSE;
- 
- alGetError();  /* clear any AL errors beforehand 
- 
- return AL_TRUE;
- }
- */
 
 void oalb_setvolume (const uint32_t iIndex,  const char cPercentage) {
         if (oalbReady == 0) {
@@ -275,31 +262,33 @@ void oalb_setglobalvolume (const char cPercentage) {
         return;
 }
 
-/*     
- ALboolean openal_togglemute () {
- /*Mute or unmute sound
- ALfloat mute;
- 
- if (oalbReady == AL_FALSE) {
- errno = EPERM;                
- err_ret("(%s) WARN - OpenAL not initialized", prog);
- return AL_FALSE;
- }
- 
- alGetListenerf (AL_GAIN, &mute);
- if (mute > 0) 
- mute = 0;
- else
- mute = 1.0;
- alListenerf (AL_GAIN, mute);
- if (AlGetError("(%s) ERROR -  Failed to set mute property") != AL_TRUE)
- return AL_FALSE;
- 
- alGetError();  /* clear any AL errors beforehand 
- 
- return AL_TRUE;
- }
- 
+    
+void oalb_togglemute (void) {
+        /*Mute or unmute sound*/
+        ALfloat mute;
+        
+        if (oalbReady == AL_FALSE) {
+                errno = EPERM;                
+                err_ret("(%s) WARN - OpenAL not initialized", prog);
+                return;
+        }
+        
+        alGetListenerf (AL_GAIN, &mute);
+        if (mute > 0) 
+                mute = 0;
+        else
+                mute = 1.0;
+        
+        alListenerf (AL_GAIN, mute);
+        
+        if (AlGetError("(%s) ERROR -  Failed to set mute property") != AL_TRUE)
+                return;
+        
+        alGetError();  /* clear any AL errors beforehand */
+        
+        return;
+}
+ /*
  
  ALboolean openal_fade (uint32_t index, uint16_t quantity, ALboolean direction) {
  /*Fade in or out by calling a helper thread
