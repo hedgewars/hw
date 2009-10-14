@@ -17,9 +17,9 @@
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Co %1 turę</numerusform>
+            <numerusform>Co %1 tury</numerusform>
+            <numerusform>Co %1 tury</numerusform>
         </translation>
     </message>
 </context>
@@ -192,19 +192,19 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 *** %2 dołączył do pokoju</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 *** %2 dołączył </translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 *** %2 wyszedł (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 *** %2 wyszedł</translation>
     </message>
 </context>
 <context>
@@ -256,17 +256,17 @@ bądź wybierz inny nick:</translation>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -403,53 +403,55 @@ bądź wybierz inny nick:</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa pokoju:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ta gra jest w poczekalni.
+Możesz dołaczyć i zacząć grać gdy gra się rozpocznie.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ta gra jest w toku.
+Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż gra się skończy.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
+            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
+            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
+            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
+            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
         </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 jest właścicielem. On może zmienić ustawienia i rozpocząć grę.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Losowa mapa</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gry mogą być rozgrywane na losowych lub uprzednio stworznychh mapach.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schemat określa ustawnienia i preferencje takie jak Czas trwania rundy, Nagłą śmierć lub Wampiryzm.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schemat uzbrojenia określa dostępną broń oraz ilość amunicji.</translation>
     </message>
 </context>
 <context>
@@ -624,15 +626,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Efekty w menu (wymaga restartu)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Obniż jakość</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Użyj sprz. odt. dźwięku (jeśli dostępny; wymaga restartu)</translation>
     </message>
 </context>
 <context>
@@ -955,19 +957,19 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nazwa pokoju</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kli</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Druż</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Właśc.</translation>
     </message>
     <message>
         <source>Map</source>
@@ -975,7 +977,7 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schemat</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -1195,8 +1197,7 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>hedgehogs
 info</source>
-        <translation>statystyki
-jeży</translation>
+        <translation type="unfinished">opisy jeży</translation>
     </message>
     <message>
         <source>quit</source>
@@ -1232,26 +1233,26 @@ jeży</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">daleki skok</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">wysoki skok</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Podstawowe</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Broń</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kamera i kursor</translation>
     </message>
     <message>
         <source>Other</source>
@@ -1262,386 +1263,386 @@ jeży</translation>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Poruszanie się jeżem i strzelanie:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Omiń dziury i przeszkody, skacząc:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wystrzel z broni lub użyj narzędzi:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wybierz broń bądź cel za pomocą kursora:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień swojego aktywnego jeża (jeśli możliwe):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zbierz broń lub narzędzie:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw timer w bombach i inych broniach z zapalnikiem:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ustaw kamerę na aktywnym jeżu:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przesuń kursor bądź kamerę bez użycia myszki:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień poziom przybliżenia:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Porozmawiaj z drużyną bądź wszystkimi graczami:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wstrzymaj, kontynuuj lub opuść grę:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zmień głośność w czasie gry:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przełącz do pełnego ekranu:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zrób zrzut ekranu:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przełączaj pomiiędzy opisami nad jeżami:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Oś</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Góra)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Dół)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Czapka</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Lewo)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Prawo)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Przycisk</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Klawiatura</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy przycisk myszy</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Środkowy przycisk myszy</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy przycisk myszy</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kółko myszki w górę</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kółko myszki w dół</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Backspace</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tab</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Enter</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Spacja</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Usuń</translation>
+        <translation type="unfinished">Delete</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Numpad Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Znak równości</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Góra</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dół</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawo</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewo</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy Shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy Shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy CTRL</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy CTRL</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy Alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy META</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy META</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk Y</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk LB</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk RB</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk Back</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Przycisk Start</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy grzybek</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy grzybek</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewa gałka (Prawo)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewa gałka (Lewo)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewa gałka (Dół)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewa gałka (Góra)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy trigger</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy trigger</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawa gałka (Dół)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawa gałka (Góra)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawa gałka (Prawo)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawa gałka (Lewo)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">DPad</translation>
     </message>
 </context>
 <context>

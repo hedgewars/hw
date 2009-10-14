@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="de_DE">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -16,8 +16,9 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Jede Runde</numerusform>
+            <numerusform>Jede %1. Runde</numerusform>
         </translation>
     </message>
 </context>
@@ -167,23 +168,27 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dein Spitzname &apos;%1&apos; wurde
+auf Hedgewars.org registriert.
+
+Bitte gib dein Passwort ein oder
+wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 hat den Raum betreten</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ist beigetreten</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ist gegangen (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ist gegangen</translation>
     </message>
 </context>
 <context>
@@ -197,7 +202,7 @@ or pick another nickname:</source>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation>Server Nachricht:</translation>
+        <translation>Servernachricht:</translation>
     </message>
     <message>
         <source>Set message</source>
@@ -205,14 +210,14 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Zwischenspeicher leeren</translation>
     </message>
 </context>
 <context>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>Verbinde...</translation>
+        <translation>Verbinde ...</translation>
     </message>
 </context>
 <context>
@@ -234,14 +239,16 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Der Preis für die meisten Tötungen geht an &lt;b&gt;%1&lt;/b&gt; mit nur &lt;b&gt;einem&lt;/b&gt; Todesstoß in einer Runde.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Der Preis für die meisten Tötungen geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Todesstößen in einer Runde.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Insgesamt ließ &lt;b&gt;ein&lt;/b&gt; Igel sein Leben in dieser Runde.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Insgesamt ließen &lt;b&gt;%1&lt;/b&gt; Igel ihre Leben in dieser Runde.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -285,7 +292,7 @@ or pick another nickname:</source>
     <name>PageNetType</name>
     <message>
         <source>LAN game</source>
-        <translation>LAN Spiel</translation>
+        <translation>Eigener Server (LAN oder Internet)</translation>
     </message>
     <message>
         <source>Official server</source>
@@ -374,53 +381,57 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Admin features</source>
-        <translation>Administratorfunktionen</translation>
+        <translation>Verwalten</translation>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumname:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Spiel wartet im Augenblick auf Mitspieler.
+Du kannst beitreten und mitspielen oder zusehen, sobald das Spiel beginnt.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieses Spiel läuft gerade.
+Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende ist.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Ein Spieler ist in diesem Raum.</numerusform>
+            <numerusform>%1 Spieler sind in diesem Raum.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Ein Team nimmt in diesem Raum teil.</numerusform>
+            <numerusform>%1 Teams nehmen in diesem Raum teil.</numerusform>
         </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ist der Besitzer dieses Raums und kann die Einstellungen anpassen und die Runde starten.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Zufallskarte</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spiele können  auf vorgefertigten oder zufälligen Karten stattfinden.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>Spielprofile geben allgemeine Dinge einer Runde vor, etwa die Rundenzeit, Sudden Death oder Vampirismus.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffenzusammenstellungen bestimmen, welche Waffen wann und in welchen Mengen zur Verfügung stehen.</translation>
     </message>
 </context>
 <context>
@@ -583,19 +594,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Beim Start nach neuen Versionen suchen</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frontendeffekte (erfordert Neustart)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Niedrige Qualität</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Hardware-Sound (erfordert Neustart)</translation>
     </message>
 </context>
 <context>
@@ -832,11 +843,11 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Spitzname</translation>
     </message>
     <message>
         <source>Please, enter your nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte gib deinen Spitznamen ein</translation>
     </message>
 </context>
 <context>
@@ -918,31 +929,31 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumname</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>Sp.</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T.</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Besitzer</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Karte</translation>
+        <translation>Karte</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Regeln</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Waffen</translation>
+        <translation>Waffen</translation>
     </message>
 </context>
 <context>
@@ -968,11 +979,11 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewaffnung</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Nachschub</translation>
     </message>
 </context>
 <context>
@@ -1153,7 +1164,7 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>capture</source>
-        <translation>Erobern</translation>
+        <translation>Bildschirmfoto</translation>
     </message>
     <message>
         <source>hedgehogs
@@ -1183,428 +1194,428 @@ Statistik</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Vergrößern</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Verkleinern</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Zurücksetzen</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Weiter Sprung</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoher Sprung</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Grundsteuerung</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Waffensteuerung</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamera- und Zeigersteuerung</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Andere</translation>
+        <translation>Andere</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewege und ziele mit deinen Igeln:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Überwinde Abgründe und Hindernisse mit Sprüngen:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze deine gewählte Waffe oder Werkzeug:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle eine Waffe oder einen Zielpunkt mit dem Cursor:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle den zu steuernden Igel (falls möglich):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wähle eine Waffe oder Werkzeug aus:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Setze den Zeitzünder von verschiedenen Waffen:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"></translation>
+        <translation> Bewege die Kamera zum aktiven Igel:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewege den Zeiger oder die Kamera ohne die Maus:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Verändere den Bildausschnitt:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spreche mit anderen Spielern:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausiere oder verlasse das Spiel:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändere die Lautstärke im Spiel:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Schalte den Vollbildmodus um:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstelle ein Bildschirmfoto:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ändere die Informationen über Igeln:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Achse</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Hoch)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Runter)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Cooliehat</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Links)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Rechts)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Taste</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastatur</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus: Linke Taste</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus: Mittlere Taste</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus: Rechte Taste</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus: Mausrad hoch</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Maus: Mausrad runter</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Rückstelltaste</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabulator</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingabetaste</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Leertaste</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Entf</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock ,</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Ziffernblock Gleich</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoch</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Runter</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechts</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Links</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfg</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Pos1</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>Ende</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild hoch</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild runter</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Num-Taste</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Feststelltaste</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Rollen-Taste</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Umschalttaste rechts</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Umschalttaste links</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg rechts</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg links</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt Gr</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Meta rechts</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Meta links</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation>A-Taste</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation>B-Taste</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation>X-Taste</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation>Y-Taste</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Linke Schultertaste</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechte Schultertaste</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished"></translation>
+        <translation>Back-Taste</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished"></translation>
+        <translation>Start-Taste</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Analogstick (drücken)</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Analogstick (drücken)</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Analogstick (Rechts)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Analogstick (Links)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Analogstick (Runter)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Analogstick (Hoch)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Auslöser</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Auslöser</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Analogstick (Runter)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Analogstick (Hoch)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Analogstick (Rechts)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Analogstick (Links)</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation>Steuerkreuz</translation>
     </message>
 </context>
 <context>

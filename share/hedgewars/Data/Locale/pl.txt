@@ -39,6 +39,7 @@
 00:36=Celownik laserowy
 00:37=Wampiryzm
 00:38=Karabin Snajperski
+00:39=Latający Talerz
 
 01:00=Walczmy!
 01:01=Remis
@@ -47,6 +48,9 @@
 01:04=Gra wstrzymana
 01:05=Na pewno wyjść (Y/Esc)?
 01:06=Nagła śmierć!
+01:07=strzały pozostał(y)
+01:08=Paliwo
+01:09=Synchronizuję...
 
 ; Event messages
 ; Hog (%1) died
@@ -245,7 +249,7 @@
 02:06=Uwaga! Zawartość jest delikatna!!!
 02:06=Zbierz lub rozwal, wybór należy do Ciebie.
 02:06=Coś dobrego!
-02:06=Mmmmm Amunicja
+02:06=Mmmmm... Amunicja!
 02:06=Skrzynka z niszczącą mocą
 02:06=Poczta powietrzna!
 02:06=Cokolwiek jest w tej skrzyni, z pewnością nie jest to pizza.
@@ -259,7 +263,7 @@
 02:07=To może się przydać...
 02:07=Narzędzia!
 02:07=Użyj tej skrzynki
-02:07=uważaj na siebie tam na dole
+02:07=Adam Słodowy by się ucieszył
 02:07=Więcej narzędzi!
 02:07=Narzędzia dla ciebie!
 02:07=To powinno być dobre!

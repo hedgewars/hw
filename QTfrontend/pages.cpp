@@ -835,14 +835,17 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 			QTableWidget::tr("Weapons")
 			);
 
+	// set minimum sizes
+	roomsList->horizontalHeader()->resizeSection(0, 200);
+	roomsList->horizontalHeader()->resizeSection(1, 50);
+	roomsList->horizontalHeader()->resizeSection(2, 50);
+	roomsList->horizontalHeader()->resizeSection(3, 100);
+	roomsList->horizontalHeader()->resizeSection(4, 100);
+	roomsList->horizontalHeader()->resizeSection(5, 100);
+	roomsList->horizontalHeader()->resizeSection(6, 100);
+
 	// set resize modes
-	roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-	roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-	roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-	roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-	roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-	roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-	roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
 
 	if (list.size() % 8)
 		return;

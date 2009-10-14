@@ -179,7 +179,7 @@ var s: string;
 						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
 						if texsurf <> nil then
 							begin
-							HatTex:= Surface2Tex(texsurf, false);
+							HatTex:= Surface2Tex(texsurf, true);
 							SDL_FreeSurface(texsurf)
 							end
 						end
@@ -299,10 +299,14 @@ for ii:= Low(TSprite) to High(TSprite) do
 				if imageHeight = 0 then imageHeight := tmpsurf^.h;
 				if Width = 0 then Width:= tmpsurf^.w;
 				if Height = 0 then Height:= tmpsurf^.h;
-				if (ii = sprSky) then
+				if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake]) then
 					Texture:= Surface2Tex(tmpsurf, true)
 				else
+					begin
 					Texture:= Surface2Tex(tmpsurf, false);
+					if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					end;
 				if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 				end
 			else
@@ -877,7 +881,7 @@ while pos <= length(s) do
     end;
 
 //TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-RenderSpeechBubbleTex:= Surface2Tex(Result, false);
+RenderSpeechBubbleTex:= Surface2Tex(Result, true);
 
 SDL_FreeSurface(rotatedEdge);
 SDL_FreeSurface(Result)

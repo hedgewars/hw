@@ -247,6 +247,17 @@ begin
 FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
+procedure SetTextureParameters(enableClamp: Boolean);
+begin
+if enableClamp and not cReducedQuality then
+    begin
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+    end;
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+end;
+
 function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
 var dY, dX: Extended;
 begin
@@ -367,13 +378,7 @@ glGenTextures(1, @NewTexture^.id);
 glBindTexture(GL_TEXTURE_2D, NewTexture^.id);
 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
 
-if not cReducedQuality then
-    begin
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-    end;
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+SetTextureParameters(true);
 end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
@@ -498,13 +503,7 @@ ResetVertexArrays(Surface2Tex);
 if SDL_MustLock(surf) then
 	SDL_UnlockSurface(surf);
 
-if enableClamp and not cReducedQuality then
-    begin
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
-    end;
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+SetTextureParameters(enableClamp);
 end;
 
 procedure FreeTexture(tex: PTexture);
