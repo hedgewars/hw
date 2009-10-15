@@ -78,3 +78,7 @@
 02:09=%1 should practice aiming!
 02:09=%1 seems to hate himself.
 02:09=%1 is standing on the wrong side!
+; Hog shot an home run (using the bat and another hog)
+02:10=Home Run!
+02:10=A bird, a plane, ...
+02:10=That one is out!

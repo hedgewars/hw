@@ -63,3 +63,7 @@
 ; Match starts
 02:02=Let's fight!
 02:02=Armed and ready!
+; Hog shot an home run (using the bat and another hog)
+02:10=Home Run!
+02:10=A bird, a plane, ...
+02:10=That one is out!

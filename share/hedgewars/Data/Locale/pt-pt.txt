@@ -342,3 +342,7 @@
 02:09=Tenho a certeza que ninguém viu isso, %1
 02:09=%1 precisa de reler o seu manual de campo
 02:09=A arma de %1 funcionou mal obviamente
+; Hog shot an home run (using the bat and another hog)
+02:10=Home Run!
+02:10=A bird, a plane, ...
+02:10=That one is out!
