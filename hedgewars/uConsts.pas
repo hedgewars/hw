@@ -246,11 +246,12 @@ const
 	cSendEmptyPacketTime = 1000;
 
 	// Training Flags
-	tfNone         = $00000000;
-	tfTimeTrial    = $00000001;
-	tfRCPlane      = $00000002;
-	tfSpawnTargets = $00000004;
-	tfIgnoreDelays = $00000008;
+	tfNone          = $00000000;
+	tfTimeTrial     = $00000001;
+	tfRCPlane       = $00000002;
+	tfSpawnTargets  = $00000004;
+	tfIgnoreDelays  = $00000008;
+	tfTargetRespawn = $00000010;
 	
 	gfForts        = $00000001;
 	gfMultiWeapon  = $00000002;

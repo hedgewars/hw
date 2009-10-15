@@ -621,6 +621,9 @@ case step of
 	stNTurn: begin
 			if isInMultiShoot then isInMultiShoot:= false
 			else begin
+			// delayed till after 0.9.12
+			// reset to default zoom
+			//ZoomValue:= ZoomDefault;
 			ResetUtilities;
 
 			FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn

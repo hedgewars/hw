@@ -743,6 +743,16 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 	pageLayout->setColumnStretch(1, 2);
 	pageLayout->setColumnStretch(2, 1);
 
+	CBSelect = new QComboBox(this);
+
+	QDir tmpdir;
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Trainings");
+	tmpdir.setFilter(QDir::Files);
+	CBSelect->addItems(tmpdir.entryList(QStringList("*.txt")).replaceInStrings(QRegExp("^(.*)\\.txt"), "\\1"));
+
+	pageLayout->addWidget(CBSelect, 1, 1);
+	
 	BtnStartTrain = new QPushButton(this);
 	BtnStartTrain->setFont(*font14);
 	BtnStartTrain->setText(QPushButton::tr("Go!"));

@@ -1,16 +1,20 @@
 install(FILES
-	Axe.png
-	BlueWater.png
-	Border.png
-	Clouds.png
-	Flake.png
-	Girder.png
-	LandTex.png
-	Shield.png
-	Sky.png
-	Spear.png
-	Sword.png
-	horizont.png
-	icon.png
-	theme.cfg
-	DESTINATION ${SHAREPATH}Data/Themes/Castle)
+    Axe.png
+    BlueWater.png
+    Border.png
+    Clouds.png
+    Flake.png
+    Girder.png
+    horizont-lowres.png
+    horizont.png
+    icon.png
+    LandTex.png
+    Shield.png
+    Sky-lowres.png
+    SkyL.png
+    Sky.png
+    SkyR.png
+    Spear.png
+    Sword.png
+    theme.cfg
+    DESTINATION ${SHAREPATH}Data/Themes/Castle)

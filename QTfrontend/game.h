@@ -50,7 +50,7 @@ public:
 	void StartLocal();
 	void StartQuick();
 	void StartNet();
-	void StartTraining();
+	void StartTraining(const QString & file);
 
  protected:
 	virtual QStringList setArguments();

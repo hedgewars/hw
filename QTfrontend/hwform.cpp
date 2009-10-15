@@ -864,7 +864,7 @@ void HWForm::StartTraining()
 {
 	CreateGame(0, 0, 0);
 
-	game->StartTraining();
+	game->StartTraining(ui.pageTraining->CBSelect->currentText());
 }
 
 void HWForm::CreateNetGame()

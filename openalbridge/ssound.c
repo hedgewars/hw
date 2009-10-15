@@ -20,10 +20,11 @@
 #include "ssound.h"
 #include "loaders.h"
 
+extern SSound_t aSounds[MAX_SOUNDS];
 extern ALuint sources[MAX_SOURCES];
 extern const ALfloat NV[3];
 extern const ALfloat LO[6];
-
+extern int iNumSounds;
 extern char *prog;
 
 char SSound_load (SSound_t* pSound, const char* cFilename) {
@@ -90,11 +91,10 @@ void SSound_close(SSound_t* pSound)
 }
 
 void SSound_play(SSound_t* pSound, const char bLoop) {
-        int i;
+        int i, j;
         
         if(pSound->source == -1) // need a new source
         {
-                int i;
                 for(i = 0; i < MAX_SOURCES; i++)
                 {
                         ALint state;
@@ -106,6 +106,11 @@ void SSound_play(SSound_t* pSound, const char bLoop) {
 #endif
                                 alSourceStop(sources[pSound->source]);
                                 alGetError();
+
+								// lookup buffers associated with this source and reset them
+								for(j = 0; j < iNumSounds; j++)
+									if(aSounds[j].source == i)
+										aSounds[j].source = -1;
                                 break;
                         }
                 }

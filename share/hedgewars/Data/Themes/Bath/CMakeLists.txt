@@ -1,17 +1,21 @@
 install(FILES
-	Border.png
-	Bubble.png
-	Clouds.png
-	Duck.png
-	Duck2.png
-	Flake.png
-	Girder.png
-	LandTex.png
-	Sky.png
-	Toothbrush.png
-	Toothbrush_b.png
-	Toothbrush_g.png
-	horizont.png
-	icon.png
-	theme.cfg
-	DESTINATION ${SHAREPATH}Data/Themes/Bath)
+    Border.png
+    Bubble.png
+    Clouds.png
+    Duck2.png
+    Duck.png
+    Flake.png
+    Girder.png
+    horizont-lowres.png
+    HorizontL.png
+    horizont.png
+    HorizontR.png
+    icon.png
+    LandTex.png
+    Sky-lowres.png
+    Sky.png
+    Toothbrush_b.png
+    Toothbrush_g.png
+    Toothbrush.png
+    theme.cfg
+    DESTINATION ${SHAREPATH}Data/Themes/Bath)

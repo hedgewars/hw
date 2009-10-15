@@ -338,6 +338,7 @@ public:
 
 	QPushButton *BtnStartTrain;
 	QPushButton *BtnBack;
+	QComboBox   *CBSelect;
 };
 
 class PageSelectWeapon : public AbstractPage

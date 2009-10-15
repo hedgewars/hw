@@ -1,6 +1,6 @@
 file(GLOB images *.png)
 
 install(FILES
-	theme.cfg
-	${images}
-	DESTINATION ${SHAREPATH}Data/Themes/cheese)
+    theme.cfg
+    ${images}
+    DESTINATION ${SHAREPATH}Data/Themes/cheese)

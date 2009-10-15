@@ -228,10 +228,16 @@ begin
 	if (Gear^.State and gstCollision) <> 0 then begin
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
 		for i:= 0 to 40 do begin
-			dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
-			dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-			Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
-			Fire^.State:= Fire^.State or gsttmpFlag;
+				dX:= AngleCos(i * 2) * ((_0_08*(i mod 10))) * (GetRandom + _1);
+				dY:= AngleSin(i * 8) * _0_5 * (GetRandom + _1);
+				Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+				Fire^.State:= Fire^.State or gsttmpFlag;
+				Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+				Fire^.State:= Fire^.State or gsttmpFlag;
+				Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, -dX, dY, 0);
+				Fire^.State:= Fire^.State or gsttmpFlag;
+				Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, -dX, -dY, 0);
+				Fire^.State:= Fire^.State or gsttmpFlag;
 		end;
 		DeleteGear(Gear);
 		exit
@@ -1215,19 +1221,28 @@ if (Gear^.Timer = 0) and (Gear^.Tag = 0) then
 if (Gear^.Tag = 0) and (Gear^.Timer < 1000) then
 	inc(Gear^.Timer)
 else if Gear^.Tag = 1 then
-	if Gear^.Timer > 0 then
-		dec(Gear^.Timer)
-	else
-		begin
-			TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
-			FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
+	begin
+		Gear^.Tag:= 2;
+		if (TrainingFlags and tfTimeTrial) <> 0 then
+			begin
 			inc(TurnTimeLeft, TrainingTimeInc);
 			
 			if TrainingTimeInc > TrainingTimeInM then
 				dec(TrainingTimeInc, TrainingTimeInD);
 			if TurnTimeLeft > TrainingTimeMax then
 				TurnTimeLeft:= TrainingTimeMax;
-			
+			end;
+	end
+else if Gear^.Tag = 2 then
+	if Gear^.Timer > 0 then
+		dec(Gear^.Timer)
+	else
+		begin
+			if (TrainingFlags and tfTargetRespawn) <> 0 then
+				begin
+				TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
+				FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
+				end;
 			DeleteGear(Gear);
 			exit;
 		end;
@@ -1291,10 +1306,11 @@ if not TestCollisionYwithGear(Gear, 1) then
 	begin
 	if hwAbs(Gear^.dX) > _0_01 then
 		Gear^.dX:= Gear^.dX * _0_995;
-
+	 if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY:= Gear^.dY + _2*cGravity else
 	Gear^.dY:= Gear^.dY + cGravity;
 	if hwAbs(Gear^.dY) > _0_2 then Gear^.dY:= Gear^.dY * _0_995;
 
+	if (Gear^.State and gsttmpFlag) <> 0 then Gear^.X:= Gear^.X + Gear^.dX else
 	Gear^.X:= Gear^.X + Gear^.dX + cWindSpeed * 640;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 
@@ -2252,7 +2268,7 @@ else
 	t:= CheckGearNear(Gear, gtTarget, 36, 36);
 	if t <> nil then
 		begin
-		if t^.Tag = 1 then // collect it only once
+		if t^.Tag <> 0 then // collect it only once
 			exit;
 		PlaySound(sndShotgunReload, false, nil);
 		t^.Tag:= 1;
@@ -2262,33 +2278,11 @@ else
 
 	if (TurnTimeLeft > 0) then 
 		dec(TurnTimeLeft)
-	else
-		begin
-		if ((TrainingFlags and tfTimeTrial) <>0) and (TimeTrialStopTime = 0) then TimeTrialStopTime:= RealTicks;
-		StopSound(sndRCPlane);
-		ResumeMusic;
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
-		for i:= 0 to 32 do
-			begin
-			dX:= AngleCos(i * 64) * _0_5 * (GetRandom + _1);
-			dY:= AngleSin(i * 64) * _0_5 * (GetRandom + _1);
-			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
-			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
-			end;
-		DeleteGear(Gear);
-		AfterAttack;
-		TurnTimeLeft:= 0;
-		CurAmmoGear:= nil;
-		HHGear^.Message:= 0;
-		ParseCommand('/taunt '#1, true);
-		exit;
-		end;
-
 	end;
 		
 CheckCollision(Gear);
 
-if ((Gear^.State and gstCollision) <> 0)
+if ((Gear^.State and gstCollision) <> 0) or (((TrainingFlags and tfRCPlane) <> 0) and (TurnTimeLeft = 0))
 	or CheckGearDrowning(Gear) then
 	begin
 	if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (TimeTrialStopTime = 0) then TimeTrialStopTime:= RealTicks;
@@ -2296,7 +2290,7 @@ if ((Gear^.State and gstCollision) <> 0)
 	StopSound(sndRideOfTheValkyries);
 	ResumeMusic;
 
-	if ((Gear^.State and gstCollision) <> 0) then
+	if ((Gear^.State and gstCollision) <> 0) or (((TrainingFlags and tfRCPlane) <> 0) and (TurnTimeLeft = 0)) then
 		begin
 		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
 		for i:= 0 to 32 do
@@ -2312,6 +2306,10 @@ if ((Gear^.State and gstCollision) <> 0)
 	AfterAttack;
 	CurAmmoGear:= nil;
 	TurnTimeLeft:= 14 * 125;
+	
+	if (TrainingFlags and tfRCPlane) <> 0 then
+		TurnTimeLeft:= 0; // HACK: RCPlane training allows unlimited plane starts in last 2 seconds
+
 	HHGear^.Message:= 0;
 	ParseCommand('/taunt '#1, true)
 	end

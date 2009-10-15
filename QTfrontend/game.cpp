@@ -30,6 +30,8 @@
 
 #include <QTextStream>
 
+QString training; // TODO: Cleaner solution?
+
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
   TCPBase(true),
   ammostr(ammo),
@@ -141,7 +143,7 @@ void HWGame::SendTrainingConfig()
 	HWProto::addStringListToBuffer(traincfg,
 			team1.TeamGameConfig(100));
 
-	QFile file(datadir->absolutePath() + "/Trainings/003_RCPlane.txt");
+	QFile file(datadir->absolutePath() + "/Trainings/" + training + ".txt");
 	if(!file.open(QFile::ReadOnly))
 	{
 		emit ErrorMessage(tr("Error reading training config file"));
@@ -350,9 +352,10 @@ void HWGame::StartQuick()
 	SetGameState(gsStarted);
 }
 
-void HWGame::StartTraining()
+void HWGame::StartTraining(const QString & file)
 {
 	gameType = gtTraining;
+	training = file;
 	demo.clear();
 	Start();
 	SetGameState(gsStarted);
