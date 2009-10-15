@@ -66,7 +66,8 @@ About::About(QWidget * parent) :
 			"Mine number and time game settings: David A. Cuadrado &lt;<a href=\"mailto:krawek@gmail.com\">krawek@gmail.com</a>&gt;<br>"
 			"Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
 			"Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
-			"Mac OS X port: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;"
+			"Mac OS X port, OpenAL wrapper library: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
+			"Gamepad support and additional effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch+hw@googlemail.com\">mario.liebisch+hw@googlemail.com</a>&gt;"
 			"</p><h2>" +
 
 			QLabel::tr("Art:") + "</h2>"
@@ -106,7 +107,7 @@ About::About(QWidget * parent) :
 			"French: Antoine Turmel &lt;<a href=\"mailto:geekshadow@gmail.com\">geekshadow@gmail.com</a>&gt;<br>"
 			"German: Peter Hüwe &lt;<a href=\"mailto:PeterHuewe@gmx.de\">PeterHuewe@gmx.de</a>&gt;<br>"
 			"Italian: Luca Bonora &lt;<a href=\"mailto:bonora.luca@gmail.com\">bonora.luca@gmail.com</a>&gt;<br>"
-			"Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com></a>&gt;<br>"
+			"Japanese: ADAM Etienne &lt;<a href=\"mailto:etienne.adam@gmail.com\">etienne.adam@gmail.com</a>&gt;<br>"
 			"Polish: Maciej Mroziński &lt;<a href=\"mailto:mynick2@o2.pl\">mynick2@o2.pl</a>&gt;, Wojciech Latkowski &lt;<a href=\"mailto:magik_15l@poczta.fm\">magik_15l@poczta.fm</a>&gt;, Maciej Górny<br>"
 			"Russian: Andrey Korotaev &lt;<a href=\"mailto:unC0Rr@gmail.com\">unC0Rr@gmail.com</a>&gt;<br>"
 			"Slovak: Jose Riha<br>"

@@ -151,7 +151,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepGirder,
 			@doStepTeleport,
 			@doStepSwitcher,
-			@doStepCase,
+			@doStepTarget,
 			@doStepMortar,
 			@doStepWhip,
 			@doStepKamikaze,
@@ -358,8 +358,9 @@ gtAmmo_Grenade, gtMolotov: begin // bazooka
                 Result^.Z:= cCurrHHZ
                 end;
       gtTarget: begin
-                Result^.Radius:= 16;
-                Result^.Elasticity:= _0_3
+                Result^.Radius:= 10;
+                Result^.Elasticity:= _0_3;
+				Result^.Timer:= 0
                 end;
       gtMortar: begin
                 Result^.Radius:= 4;
@@ -1481,7 +1482,11 @@ while Gear<>nil do
                     DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
-          gtTarget: DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+          gtTarget: begin
+					glColor4f(1, 1, 1, Gear^.Timer / 1000);
+					DrawSprite(sprTarget, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, 0);
+					glColor4f(1, 1, 1, 1);
+					end;
           gtMortar: DrawRotated(sprMortar, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
           gtCake: if Gear^.Pos = 6 then
                      DrawRotatedf(sprCakeWalk, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 40) mod 6, hwSign(Gear^.dX), Gear^.DirAngle * hwSign(Gear^.dX) + 90)

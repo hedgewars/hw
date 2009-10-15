@@ -1206,6 +1206,36 @@ if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+
+procedure doStepTarget(Gear: PGear);
+begin
+if (Gear^.Timer = 0) and (Gear^.Tag = 0) then
+	PlaySound(sndWarp, false, nil);
+
+if (Gear^.Tag = 0) and (Gear^.Timer < 1000) then
+	inc(Gear^.Timer)
+else if Gear^.Tag = 1 then
+	if Gear^.Timer > 0 then
+		dec(Gear^.Timer)
+	else
+		begin
+			TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
+			FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
+			inc(TurnTimeLeft, TrainingTimeInc);
+			
+			if TrainingTimeInc > TrainingTimeInM then
+				dec(TrainingTimeInc, TrainingTimeInD);
+			if TurnTimeLeft > TrainingTimeMax then
+				TurnTimeLeft:= TrainingTimeMax;
+			
+			DeleteGear(Gear);
+			exit;
+		end;
+
+doStepCase(Gear)
+end;
+
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepIdle(Gear: PGear);
 begin
 AllInactive:= false;
@@ -2219,17 +2249,13 @@ else
 	// pickup targets
 	t:= CheckGearNear(Gear, gtTarget, 36, 36);
 	if t <> nil then
-		begin;
-		// TODO: Sound!
-		PlaySound(sndGraveImpact, false, nil);
-		DeleteGear(t);
-		TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
-		FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
-		inc(TurnTimeLeft, TrainingTimeInc);
-		
-		if TrainingTimeInc > TrainingTimeInM then
-			dec(TrainingTimeInc, TrainingTimeInD);
-		if TurnTimeLeft > TrainingTimeMax then TurnTimeLeft:= TrainingTimeMax;
+		begin
+		if t^.Tag = 1 then // collect it only once
+			exit;
+		PlaySound(sndShotgunReload, false, nil);
+		t^.Tag:= 1;
+		TrainingTargetGear:= nil; // remove target cursor
+		exit;
 		end;
 
 	if (TurnTimeLeft > 0) then 

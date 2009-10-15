@@ -73,9 +73,9 @@ var
 
 	GameTicks     : LongWord = 0;
 	TrainingTimeInc: Longword = 10000;
-	TrainingTimeInD: Longword = 250;
+	TrainingTimeInD: Longword = 500;
 	TrainingTimeInM: Longword = 5000;
-	TrainingTimeMax: Longword = 90000;
+	TrainingTimeMax: Longword = 60000;
 
 	TimeTrialStartTime: Longword = 0;
 	TimeTrialStopTime: Longword = 0;
