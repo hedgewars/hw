@@ -26,8 +26,6 @@ extern const ALfloat LO[6];
 
 extern char *prog;
 
-/*SSOUND STUFF HERE*/
-
 char SSound_load (SSound_t* pSound, const char* cFilename) {
         uint32_t magic;
         ALenum format;
@@ -88,6 +86,7 @@ void SSound_close(SSound_t* pSound)
 {
         SSound_stop(pSound);
         alDeleteBuffers(1, &pSound->Buffer);
+        return;
 }
 
 void SSound_play(SSound_t* pSound, const char bLoop) {
@@ -138,6 +137,8 @@ void SSound_play(SSound_t* pSound, const char bLoop) {
 #ifdef DEBUG
         fprintf(stderr, "play %s%s [%d]\n", pSound->Filename, bLoop ? " forever" : " once", pSound->source);
 #endif
+        usleep(0);
+        return;
 }
 
 void SSound_pause(const SSound_t* pSound) {
@@ -147,6 +148,7 @@ void SSound_pause(const SSound_t* pSound) {
 #ifdef DEBUG
         fprintf(stderr, "pause %s\n", pSound->Filename);
 #endif
+        return;
 }
 
 void SSound_continue(const SSound_t* pSound) {
@@ -156,6 +158,7 @@ void SSound_continue(const SSound_t* pSound) {
 #ifdef DEBUG
         fprintf(stderr, "pause %s\n", pSound->Filename);
 #endif
+        return;
 }
 
 void SSound_stop(SSound_t* pSound) {
@@ -166,10 +169,12 @@ void SSound_stop(SSound_t* pSound) {
 #ifdef DEBUG
         fprintf(stderr, "stop %s\n", pSound->Filename);
 #endif
+        return;
 }
 
 void SSound_volume(const SSound_t* pSound, const float fPercentage) {
         if(pSound->source == -1) // not playing
                 return;
         alSourcef(sources[pSound->source], AL_GAIN, fPercentage);
+        return;
 }    

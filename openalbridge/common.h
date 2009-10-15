@@ -17,8 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef COMMON_H
-#define COMMON_H
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,6 +37,9 @@
 #define LOG_INFO 6
 #define LOG_ERR 3
 #endif
+
+#ifndef COMMON_H
+#define COMMON_H
 
 /* magics */
 #define OGG_FILE_FORMAT 0x4F676753
@@ -76,6 +78,30 @@
 #define ENDIAN_LITTLE_16(x) bswap_16(x)
 #define ENDIAN_BIG_16(x)    x    
 #endif
+
+/** 1.0 02/03/10 - Defines cross-platform sleep, usleep, etc. [Wu Yongwei] **/
+#ifndef _SLEEP_H
+#define _SLEEP_H
+#ifdef _WIN32
+# if defined(_NEED_SLEEP_ONLY) && (defined(_MSC_VER) || defined(__MINGW32__))
+#  include <stdlib.h>
+#  define sleep(t) _sleep((t) * 1000)
+# else
+#  define WIN32_LEAN_AND_MEAN
+#  include <windows.h>
+#  define sleep(t)  Sleep((t) * 1000)
+# endif
+# ifndef _NEED_SLEEP_ONLY
+#  define msleep(t) Sleep(t)
+#  define usleep(t) Sleep((t) / 1000)
+# endif
+#else
+# include <unistd.h>
+# ifndef _NEED_SLEEP_ONLY
+#  define msleep(t) usleep((t) * 1000)
+# endif
+#endif
+#endif /* _SLEEP_H */
 
 #pragma pack(1)
 typedef struct _WAV_header_t {
