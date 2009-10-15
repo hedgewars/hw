@@ -109,19 +109,15 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
-var isFalling, isCollV, isCollH: boolean;
-tmp: QWord;
+var isFalling: boolean;
 begin
 Gear^.State:= Gear^.State and not gstCollision;
-isCollV:= false; 
-isCollH:= false;
 
 if Gear^.dY.isNegative then
 	begin
 	isFalling:= true;
 	if TestCollisionYwithGear(Gear, -1) then
 		begin
-		isCollV:= true;
 		Gear^.dX:=   Gear^.dX * Gear^.Friction;
 		Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
 		Gear^.State:= Gear^.State or gstCollision
@@ -129,7 +125,6 @@ if Gear^.dY.isNegative then
 	end else
 	if TestCollisionYwithGear(Gear, 1) then
 		begin
-		isCollV:= true;
 		isFalling:= false;
 		Gear^.dX:=   Gear^.dX * Gear^.Friction;
 		Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
@@ -138,19 +133,9 @@ if Gear^.dY.isNegative then
 
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
 	begin
-	isCollH:= true;
 	Gear^.dX:= - Gear^.dX * Gear^.Elasticity;
 	Gear^.dY:=   Gear^.dY * Gear^.Elasticity;
 	Gear^.State:= Gear^.State or gstCollision
-	end else
-	if TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then
-		isCollH:= true;
-
-if isCollV and isCollH then
-	begin
-	tmp:= Gear^.dX.QWordValue;
-	Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
-	Gear^.dY.QWordValue:= tmp;
 	end;
 
 if isFalling then Gear^.dY:= Gear^.dY + cGravity;
