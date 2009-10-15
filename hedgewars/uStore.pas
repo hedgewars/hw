@@ -299,7 +299,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 				if imageHeight = 0 then imageHeight := tmpsurf^.h;
 				if Width = 0 then Width:= tmpsurf^.w;
 				if Height = 0 then Height:= tmpsurf^.h;
-				if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake]) then
+				if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
 					Texture:= Surface2Tex(tmpsurf, true)
 				else
 					begin
