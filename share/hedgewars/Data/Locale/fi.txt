@@ -40,6 +40,7 @@
 00:37=Vampyrismi
 00:38=Tarkkuuskivääri
 00:39=Flying Saucer
+00:40=Molotov
 
 01:00=Taistelu alkakoon!
 01:01=Tasapeli

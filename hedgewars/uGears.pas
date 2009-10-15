@@ -167,7 +167,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBomb,
 			@doStepRCPlane,
 			@doStepSniperRifleShot,
-			@doStepJetpack
+			@doStepJetpack,
+			@doStepMolotov
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -258,7 +259,7 @@ case Kind of
                 Result^.Angle:= cMaxAngle div 2;
                 Result^.Z:= cHHZ;
                 end;
-gtAmmo_Grenade: begin // bazooka
+gtAmmo_Grenade, gtMolotov: begin // bazooka
                 Result^.Radius:= 4;
                 end;
    gtHealthTag: begin
@@ -1061,6 +1062,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 		case amt of
 			amBazooka,
 			amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+			amMolotov: DrawRotated(sprHandMolotov, hx, hy, hwSign(Gear^.dX), aangle);
 			amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
 			amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
 			amRope: DrawRotated(sprHandRope, hx, hy, hwSign(Gear^.dX), aangle);
@@ -1416,6 +1418,7 @@ while Gear<>nil do
 	begin
 	case Gear^.Kind of
        gtAmmo_Bomb: DrawRotated(sprBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
+	gtMolotov: DrawRotated(sprMolotov, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
 
        gtRCPlane: begin
                   if (Gear^.Tag = -1) then

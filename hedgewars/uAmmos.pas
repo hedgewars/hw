@@ -99,7 +99,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             cnt:= 0;
             Ammoz[a].Probability:= 0
             end;
-        ammos[a]:= cnt
+        ammos[a]:= cnt;
+        if shoppa then Ammoz[a].NumberInCase:= 1;  // FIXME - TEMPORARY remove when crate number in case editor is added
         end else
         ammos[a]:= AMMO_INFINITE
     end;

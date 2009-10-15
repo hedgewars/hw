@@ -40,6 +40,7 @@
 00:37=Wampiryzm
 00:38=Karabin Snajperski
 00:39=Latający Talerz
+00:40=Molotov
 
 01:00=Walczmy!
 01:01=Remis

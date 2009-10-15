@@ -40,6 +40,7 @@
 00:37=Režim vampíra
 00:38=Ostreľovačka
 00:39=Flying Saucer
+00:40=Molotov
 
 01:00=Do boja!
 01:01=Remíza

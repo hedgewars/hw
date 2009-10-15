@@ -40,6 +40,7 @@
 00:37=Vampirismus
 00:38=Scharfschützengewehr
 00:39=Fliegende Untertasse
+00:40=Molotov
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden

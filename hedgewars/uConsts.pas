@@ -64,7 +64,7 @@ type
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle, sprBubbles, sprJetpack, sprHealth);
+            sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -75,7 +75,7 @@ type
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
 			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-			gtSniperRifleShot, gtJetpack);
+			gtSniperRifleShot, gtJetpack, gtMolotov);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -103,7 +103,7 @@ type
 			amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
 			amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
 			amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-			amLaserSight, amVampiric, amSniperRifle, amJetpack);
+			amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov);
 
 	THWFont = (fnt16, fntBig, fntSmall);
 
@@ -614,7 +614,12 @@ const
 			(FileName:  'amJetpack'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprJetpack
 			(FileName:  'Health'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprHealth
+			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHealth
+
+			(FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
+			Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), //sprHandMolotov
+			(FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width: 8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprMolotov
 			);
 
 	Wavez: array [TWave] of record
@@ -1506,6 +1511,26 @@ const
 			minAngle: 0;
 			maxAngle: 0;
 			isDamaging: false;
+			SkipTurns: 0;
+			PosCount: 1;
+			PosSprite: sprWater),
+
+			(NameId: sidMolotov;
+			NameTex: nil;
+			Probability: 0;
+			NumberInCase: 1;
+			Ammo: (Propz: ammoprop_Power or
+							ammoprop_AltUse;
+					Count: AMMO_INFINITE;
+					NumPerTurn: 0;
+					Timer: 3000;
+					Pos: 0;
+					AmmoType: amMolotov);
+			Slot: 1;
+			TimeAfterTurn: 3000;
+			minAngle: 0;
+			maxAngle: 0;
+			isDamaging: true;
 			SkipTurns: 0;
 			PosCount: 1;
 			PosSprite: sprWater)

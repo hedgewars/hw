@@ -214,6 +214,29 @@ if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) t
 	   (hwAbs(Gear^.dY) > _0_1) then
 		PlaySound(sndGrenadeImpact, false, nil)
 end;
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepMolotov(Gear: PGear);
+var i: LongInt;
+    dX, dY: hwFloat;
+	Fire: PGear;
+begin
+	AllInactive:= false;
+	
+	doStepFallingGear(Gear);
+	CalcRotationDirAngle(Gear);
+
+	if (Gear^.State and gstCollision) <> 0 then begin
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
+		for i:= 0 to 40 do begin
+			dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
+			dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
+			Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+			Fire^.State:= Fire^.State or gsttmpFlag;
+		end;
+		DeleteGear(Gear);
+		exit
+	end;
+end;
 
 procedure doStepWatermelon(Gear: PGear);
 begin
