@@ -342,3 +342,7 @@
 02:09=Jestem pewny, że nikt nie widział %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
 02:09=Wiesz co %1? Twoja broń z pewnością była uszkodzona!
+; Hog shot an home run (using the bat and another hog)
+02:10=Home Run!
+02:10=To ptak? To samolot?
+02:10=Ten jeż wypił Red Bulla.
