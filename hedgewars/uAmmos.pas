@@ -91,6 +91,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             Ammoz[a].Probability:= 0
             end;
         // avoid things we already have by scheme
+        // merge this into DisableSomeWeapons ?
         if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
            ((a = amInvulnerable) and ((GameFlags and gfInvulnerable) <> 0)) or
            ((a = amLaserSight) and ((GameFlags and gfLaserSight) <> 0)) or
