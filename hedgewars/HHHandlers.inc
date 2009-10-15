@@ -301,7 +301,7 @@ var s: shortstring;
 	i: Integer;
 begin
 Gear^.Message:= gm_Destroy;
-PlaySound(sndShotgunReload, false, nil)
+PlaySound(sndShotgunReload, false, nil);
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
