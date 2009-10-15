@@ -1960,7 +1960,7 @@ repeat
 
 			if (y - sy > Gear^.Radius * 2)
 				and (y < LAND_HEIGHT)
-				and (CheckGearsNear(x, y - Gear^.Radius, [gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
+				and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
 				begin
 				ar[cnt].X:= x;
 				if withFall then ar[cnt].Y:= sy + Gear^.Radius
