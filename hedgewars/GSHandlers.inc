@@ -2075,6 +2075,7 @@ or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
 and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
 or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] = COLOR_INDESTRUCTIBLE) then
 	begin //out of time or exited ground
+    StopSound(sndPickhammer);
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
 	DeleteGear(Gear);
 	exit
@@ -2114,6 +2115,7 @@ if ((Gear^.State and gstCollision) <> 0) then begin //hit
 		exit;
 		end;
 
+    PlaySound(sndPickhammer, true, nil);
 	Gear^.doStep:= @doStepDrillDrilling;
 	dec(Gear^.Timer)
 	end
