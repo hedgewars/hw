@@ -18,6 +18,8 @@
  */
 
 
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,14 +40,13 @@
 #define LOG_ERR 3
 #endif
 
-#ifndef COMMON_H
-#define COMMON_H
 
 /* magics */
 #define OGG_FILE_FORMAT 0x4F676753
 #define WAV_FILE_FORMAT 0x52494646
 #define WAV_HEADER_SUBCHUNK2ID 0x64617461
 
+/* max allocations */
 #define MAX_SOUNDS 1024
 #define MAX_SOURCES 16
 

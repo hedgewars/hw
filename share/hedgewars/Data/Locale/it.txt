@@ -281,8 +281,8 @@
 02:09=Sono sicuro che nessuno ti ha visto %1
 02:09=%1 dovrebbe riguardarsi qualche manuale
 02:09=Chiaramente è l'arma di %1 che non funziona
-
 ; Hog shot an home run (using the bat and another hog)
-02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+02:10=Un fuori campo!
+02:10=E' un uccello, è un aereo, ...
+02:10=Quello lì è fuori!
+
