@@ -29,11 +29,14 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QTabWidget>
+#include <math.h>
 
 QImage getAmmoImage(int num)
 {
 	static QImage ammo(":Ammos.png");
-	return ammo.copy(0, num*32, 32, 32);
+    int x = floor((num * 32) / ammo.height()) * 32;
+    if(x) x--;
+	return ammo.copy(x, num*32, 32, 32);
 }
 
 SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent) :
