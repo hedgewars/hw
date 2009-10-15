@@ -138,7 +138,7 @@ with Gear^,
         if ((Gear^.State and gstHHHJump) <> 0) then xx:= - xx;
              case Ammo^[CurSlot, CurAmmo].AmmoType of
                       amGrenade: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
-			amMolotov: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMolotov,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                      amMolotov: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                   amClusterBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
                       amBazooka: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                           amUFO: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);

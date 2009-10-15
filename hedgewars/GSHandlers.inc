@@ -226,7 +226,8 @@ begin
 	CalcRotationDirAngle(Gear);
 
 	if (Gear^.State and gstCollision) <> 0 then begin
-		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
+		PlaySound(sndMolotov, false, nil);
+		//doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
 		for i:= 0 to 40 do begin
 				dX:= AngleCos(i * 2) * ((_0_08*(i mod 10))) * (GetRandom + _1);
 				dY:= AngleSin(i * 8) * _0_5 * (GetRandom + _1);

@@ -95,7 +95,7 @@ type
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
-			sndHomerun);
+			sndHomerun, sndMolotov);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -698,8 +698,9 @@ const
 			(FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
 			(FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
 			(FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
-			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter			
-			(FileName:              'homerun.ogg'; Path: ptSounds) // sndHomerun
+			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
+			(FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
+			(FileName:              'molotov.ogg'; Path: ptSounds) // sndMolotov
 			);
 
 	Ammoz: array [TAmmoType] of record
