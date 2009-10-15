@@ -62,8 +62,15 @@ const probability: array [0..8] of LongWord = (0,20,30,60,100,150,200,400,600);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
+    substr: shortstring; // TEMPORARY
 begin
 TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 2, 'Invalid ammo scheme (incompatible frontend)', true);
+
+// FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
+substr:= Copy(s,1,15);
+if (substr = '000000990000009') or 
+   (substr = '000000990000000') then
+    shoppa:= true;
 
 inc(StoreCnt);
 TryDo(StoreCnt <= cMaxHHs, 'Ammo stores overflow', true);
