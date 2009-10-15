@@ -40,7 +40,7 @@
 00:37=Vampirism
 00:38=Sniper Rifle
 00:39=Flying Saucer
-00:40=Molotov
+00:40=Molotov Cocktail
 
 01:00=Savaş başlasın!
 01:01=Beraberlik
