@@ -415,7 +415,7 @@ void oalb_fade (uint32_t iIndex, uint16_t quantity, ALboolean direction) {
                         break;
                 default:
                         errno = EINVAL;
-                        err_ret("(%s) ERROR - Unknown direction for fading", prog, index);
+                        err_ret("(%s) ERROR - Unknown direction for fading", prog, iIndex);
                         free(fade);
                         return;
                         break;
