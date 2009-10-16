@@ -5,9 +5,14 @@
   custom hedgewars map 
  
 :: VERSION 
-  RC1
+  RC2
 
 :: CHANGELOG
+  : since RC1
+   - brighter bubbles
+   - darker bubbleborders
+   - preview fixed
+   - right eye of mommy octo fixed
   : since beta4
    - bubbles rework
    - tiny minor fixes
@@ -27,5 +32,4 @@
   jesse/jessor - http://geekosphere.org
  
 :: RIGHTZ
-  Octopod Vector Art: http://iconicon.net/ 
-  Bubbleflow by Josh: http://hedgewars.org/user/946
+  Octopod Vector Art: http://iconicon.net/
