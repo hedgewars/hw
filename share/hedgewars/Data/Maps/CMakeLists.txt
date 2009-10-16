@@ -23,6 +23,7 @@ foreach(dir
     Islands
 	Lonely_Island
 	mushrooms
+    Octorama
 	PirateFlag
 	Plane
 	Ropes

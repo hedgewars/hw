@@ -1,0 +1,31 @@
+:: NAME
+  octorama
+
+:: TYPE
+  custom hedgewars map 
+ 
+:: VERSION 
+  RC1
+
+:: CHANGELOG
+  : since beta4
+   - bubbles rework
+   - tiny minor fixes
+   - rename to octorama
+  : since beta3
+   - more paddins everywhere (nemo)
+   - no more traps (dead spawns)
+   - big octopuss is now a cross-eyed girl *g* (rbaleksandar)
+   - shades on upper left bubbles are now correct
+   - removed the theme for now since the theme didn't
+     bring anything new but the music (tiyuri)
+ 
+:: DESCRIPTION 
+  just a fun map similar to bubbleflow 
+ 
+:: CREATOR 
+  jesse/jessor - http://geekosphere.org
+ 
+:: RIGHTZ
+  Octopod Vector Art: http://iconicon.net/ 
+  Bubbleflow by Josh: http://hedgewars.org/user/946
