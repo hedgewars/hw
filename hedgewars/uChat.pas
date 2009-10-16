@@ -49,7 +49,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 const colors: array[#1..#4] of Longword = (
 	$FFFFFF, // chat message
 	$FF00FF, // action message
-	$00FF00, // join/leave message
+	$90FF90, // join/leave message
 	$A0FFFF  // team message
 	);
 
