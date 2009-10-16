@@ -20,6 +20,7 @@ foreach(dir
 	Hedgewars
 	Hogville
 	Hydrant
+    Islands
 	Lonely_Island
 	mushrooms
 	PirateFlag
