@@ -259,7 +259,7 @@ case Kind of
                 Result^.Angle:= cMaxAngle div 2;
                 Result^.Z:= cHHZ;
                 end;
-gtAmmo_Grenade, gtMolotov: begin // bazooka
+gtAmmo_Grenade: begin // bazooka
                 Result^.Radius:= 4;
                 end;
    gtHealthTag: begin
@@ -407,6 +407,9 @@ gtAmmo_Grenade, gtMolotov: begin // bazooka
                 end;
      gtJetpack: begin
                 Result^.Health:= 2000;
+                end;
+     gtMolotov: begin 
+                Result^.Radius:= 8;
                 end;
      end;
 InsertGearToList(Result);
