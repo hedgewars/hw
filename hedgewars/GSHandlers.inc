@@ -1329,10 +1329,14 @@ if not TestCollisionYwithGear(Gear, 1) then
         if (Gear^.State and gsttmpFlag) <> 0 then 
             begin
             Gear^.Radius:= 9;
-            AmmoShove(Gear, 4, 100);
+            AmmoShove(Gear, 2, 100);
             Gear^.Radius:= 1
             end;
-	    if Gear^.Timer > 0 then dec(Gear^.Timer)
+	    if Gear^.Timer > 0 then
+            begin
+            dec(Gear^.Timer);
+            inc(Gear^.Damage)
+            end
         else begin
 // Standard fire
             if (Gear^.State and gsttmpFlag) = 0 then
@@ -1346,11 +1350,11 @@ if not TestCollisionYwithGear(Gear, 1) then
                 end
                 else begin
 // Modified fire
-                if ((GameTicks and $1FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
+                if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
                     DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4);
                 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
         	    Gear^.Timer:= 100 - Gear^.Tag * 3;
-                if ((GameTicks and $FF) = 0) then Gear^.Health:= 0
+                if (Gear^.Damage > 3000+Gear^.Tag*1500) then Gear^.Health:= 0
                 end
             end
         end;
