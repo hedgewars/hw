@@ -59,6 +59,7 @@
 #include "CocoaInitializer.h"
 #include "M3Panel.h"
 #ifdef SPARKLE_ENABLED
+#define SPARKLE_APPCAST_URL "http://www.hedgewars.org/download/appcast.xml"
 #include "SparkleAutoUpdater.h"
 #endif
 #endif
@@ -92,8 +93,8 @@ HWForm::HWForm(QWidget *parent)
 #ifdef SPARKLE_ENABLED
         AutoUpdater* updater;
         CocoaInitializer initializer;
-        updater = new SparkleAutoUpdater("http://files.getdropbox.com/u/24468/appcast.xml"); //this has to change before release!!!
-        if(updater && config->isAutoUpdateEnabled())
+        updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+	if(updater && config->isAutoUpdateEnabled())
             updater->checkForUpdates();
 #endif        
 #endif
