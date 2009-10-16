@@ -14,4 +14,6 @@ install(FILES
     horizont.png
     icon.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Underwater)

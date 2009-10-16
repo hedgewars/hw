@@ -5,4 +5,6 @@ install(FILES
     Sky.png
     horizont.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Eyes)

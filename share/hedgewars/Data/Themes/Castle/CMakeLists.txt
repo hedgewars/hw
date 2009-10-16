@@ -5,16 +5,16 @@ install(FILES
     Clouds.png
     Flake.png
     Girder.png
-    horizont-lowres.png
     horizont.png
     icon.png
     LandTex.png
     Shield.png
-    Sky-lowres.png
     SkyL.png
     Sky.png
     SkyR.png
     Spear.png
     Sword.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Castle)

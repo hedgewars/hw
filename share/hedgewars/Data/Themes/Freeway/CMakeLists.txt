@@ -13,4 +13,6 @@ install(FILES
     TireDirt.png
     horizont.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Freeway)

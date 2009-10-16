@@ -1,11 +1,11 @@
 install(FILES
     BlueWater.png
     Flake.png
-    horizont-lowres.png
     horizont.png
-    Sky-lowres.png
     SkyL.png
     Sky.png
     SkyR.png
     theme.cfg
+    Sky-lowres.png
+    horizont-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/CrazyMission)

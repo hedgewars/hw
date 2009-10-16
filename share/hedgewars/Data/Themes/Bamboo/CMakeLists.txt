@@ -7,13 +7,13 @@ install(FILES
     Flake.png
     Flower.png
     Girder.png
-    horizont-lowres.png
     horizont.png
     icon.png
     LandTex.png
-    Sky-lowres.png
     SkyL.png
     Sky.png
     SkyR.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Bamboo)

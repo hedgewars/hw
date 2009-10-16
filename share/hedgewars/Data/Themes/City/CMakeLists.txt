@@ -11,4 +11,6 @@ install(FILES
     plant4.png
     Sky.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/City)

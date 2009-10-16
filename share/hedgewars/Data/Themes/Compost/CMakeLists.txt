@@ -21,4 +21,6 @@ install(FILES
     Onion2.png
     Sky.png
     theme.cfg
+    Sky-lowres.png
+    horizont-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Compost)

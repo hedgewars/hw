@@ -10,4 +10,5 @@ install(FILES
     plant3.png
     plant4.png
     theme.cfg
+    horizont-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Blox)

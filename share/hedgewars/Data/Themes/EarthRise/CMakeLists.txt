@@ -2,7 +2,6 @@ install(FILES
     Border.png
     Clouds.png
     Flake.png
-    horizont-lowres.png
     horizontL.png
     horizont.png
     horizontR.png
@@ -10,9 +9,10 @@ install(FILES
     LandTex.png
     Rock.png
     RockShort.png
-    Sky-lowres.png
     SkyL.png
     Sky.png
     SkyR.png
     theme.cfg
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/EarthRise)

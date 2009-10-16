@@ -23,4 +23,6 @@ install(FILES
     fleurland.png
     fleur.png
     Clouds.png
+    horizont-lowres.png
+    Sky-lowres.png
     DESTINATION ${SHAREPATH}Data/Themes/Sheep)
