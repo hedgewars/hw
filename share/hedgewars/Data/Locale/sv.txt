@@ -49,7 +49,7 @@
 01:04=Pausat
 01:05=Vill du verkligen avsluta (Y/Esc)?
 01:06=Sudden death!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages

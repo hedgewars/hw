@@ -49,7 +49,7 @@
 01:04=Tauko
 01:05=Poistutaanko (Y/Esc)?
 01:06=Äkkikuolema!
-01:07=Jäljellä
+01:07=%1 Jäljellä
 01:08=Polttoaine
 
 ; Event messages

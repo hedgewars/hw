@@ -49,7 +49,7 @@
 01:04=Duraklatıldı
 01:05=Çıkılsın mı (Y/Esc)?
 01:06=Ani ölüm!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages

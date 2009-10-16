@@ -49,7 +49,7 @@
 01:04=暫停
 01:05=真的要離開嗎 (Y/Esc)?
 01:06=出現緊急狀況!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages

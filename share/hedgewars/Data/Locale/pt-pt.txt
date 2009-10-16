@@ -49,7 +49,7 @@
 01:04=Pausado
 01:05=Deseja realmente sair (Y/Esc)?
 01:06=Morte súbita!
-01:07=Restante
+01:07=%1 Restante
 01:08=Combustível
 01:09=A sincronizar...
 

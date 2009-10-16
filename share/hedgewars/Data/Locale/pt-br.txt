@@ -49,7 +49,7 @@
 01:04=Pausado
 01:05=Realmente sair (Y/Esc)?
 01:06=Morte Súbita!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages

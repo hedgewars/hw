@@ -49,7 +49,7 @@
 01:04=Pauza
 01:05=Naozaj skončiť (Y/Esc)?
 01:06=Rýchla smrť!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages

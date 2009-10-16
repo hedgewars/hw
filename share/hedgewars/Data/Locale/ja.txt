@@ -49,7 +49,7 @@
 01:04=休憩
 01:05=本当にやめるの (Y/Esc)?
 01:06=急に死ぬ!
-01:07=Remaining
+01:07=%1 Remaining
 01:08=Fuel
 
 ; Event messages
