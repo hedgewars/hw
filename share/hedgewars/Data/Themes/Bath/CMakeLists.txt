@@ -7,9 +7,9 @@ install(FILES
     Flake.png
     Girder.png
     horizont-lowres.png
-    HorizontL.png
+    horizontL.png
     horizont.png
-    HorizontR.png
+    horizontR.png
     icon.png
     LandTex.png
     Sky-lowres.png

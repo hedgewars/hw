@@ -3,9 +3,9 @@ install(FILES
     Clouds.png
     Flake.png
     horizont-lowres.png
-    HorizontL.png
+    horizontL.png
     horizont.png
-    HorizontR.png
+    horizontR.png
     icon.png
     LandTex.png
     Rock.png
