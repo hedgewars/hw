@@ -1677,6 +1677,7 @@ i:= t^.Count;
 
 Damage:= modifyDamage(Damage);
 
+if (Ammo^.Kind = gtFlame) and (i > 0) then Ammo^.Health:= 0;
 while i > 0 do
 	begin
 	dec(i);
@@ -1691,7 +1692,6 @@ while i > 0 do
 			gtTarget,
 			gtCase: begin
 					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
-                    if (Ammo^.Kind = gtFlame) then Ammo^.Health:= 0;
                     if (not Gear^.Invulnerable) then
                         ApplyDamage(Gear, Damage)
                     else
