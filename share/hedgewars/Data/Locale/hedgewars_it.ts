@@ -379,23 +379,23 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è l&apos;host. Può modificare le impostazioni e far partire il gioco.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Mappa casuale</translation>
+        <translation>Mappa casuale</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le partite possono essere giocate su mappe statiche o casuali.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lo Schema di Gioco definisce le opzioni generali e le prefernze come Tempo di Round, Sudden Death o Vampirismo.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lo Schema delle Armi definisce le armi disponibili le loro munizioni.</translation>
     </message>
 </context>
 <context>
@@ -1161,7 +1161,7 @@ hedgehogs</translation>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>Muovi i tuoi ricci e punta:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
@@ -1181,7 +1181,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Scegli un&apos;arma o uno strumento:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
@@ -1197,7 +1197,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica il livello di zoom:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
