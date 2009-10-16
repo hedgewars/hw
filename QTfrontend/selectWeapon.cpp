@@ -34,9 +34,10 @@
 QImage getAmmoImage(int num)
 {
 	static QImage ammo(":Ammos.png");
-    int x = floor((num * 32) / ammo.height()) * 32;
-    if(x) x--;
-	return ammo.copy(x, num*32, 32, 32);
+    int x = floor(num/(ammo.height()/32));
+    int y = (num-((ammo.height()/32)*x))*32;
+    x*=32;
+	return ammo.copy(x, y, 32, 32);
 }
 
 SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent) :
