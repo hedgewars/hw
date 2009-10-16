@@ -3,7 +3,7 @@
 3. Check copyright headers
 4. Changelog
 5. Turn debug stuff off (frontend console output)
-6. Update message in net server
+6. Update message in game server, update check for client version
 7. Make a branch
 8. Make packages
 9. Test packages
