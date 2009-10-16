@@ -1684,7 +1684,7 @@ while i > 0 do
 	Gear:= t^.ar[i];
 	if (Gear^.State and gstNoDamage) = 0 then
 		begin
-		if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) then Gear^.FlightTime:= 1;
+		if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind <> gtFlame) then Gear^.FlightTime:= 1;
 		
 		case Gear^.Kind of
 			gtHedgehog,
