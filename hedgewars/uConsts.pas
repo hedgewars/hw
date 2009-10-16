@@ -620,7 +620,7 @@ const
 			(FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
 			Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), //sprHandMolotov
 			(FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprMolotov
+			Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprMolotov
 			);
 
 	Wavez: array [TWave] of record
