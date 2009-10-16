@@ -247,7 +247,7 @@ VertexBuffer[3].X:= -lw;
 VertexBuffer[3].Y:= VertexBuffer[2].Y;
 
 shift:= - lw / cWaveWidth;
-TextureBuffer[0].X:= shift + (( - WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
+TextureBuffer[0].X:= shift + (( - WorldDx + LongInt(RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
 TextureBuffer[0].Y:= 0;
 TextureBuffer[1].X:= TextureBuffer[0].X + waves;
 TextureBuffer[1].Y:= TextureBuffer[0].Y;
