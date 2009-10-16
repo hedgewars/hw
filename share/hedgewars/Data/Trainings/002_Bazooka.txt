@@ -1,15 +1,17 @@
 seed 0
 $gmflags 268435462
-$turntime 60000
+$turntime 25000
 $casefreq 0
 $landadds 0
 $delay 0
-map Volcano
-theme Volcano
+map Bamboo
+theme Bamboo
 ammstore 00900000000000000000000000000000000000000000000000000000000000000000000000000000
-hhcoords 1710 765
-addtrig s2147483649 1 1 33 1150 650 1
-addtrig s1 1 1 33 1770 650 2
-addtrig s2 1 1 33 635 215 7
+hhcoords 1960 1190
+addtrig s2147483649 1 1 30 1150 1500 1
+addtrig s1 1 1 30 2735 1000 3
+addtrig s1 1 1 30 1770 1500 3
+addtrig s1 1 1 30 2350 1500 3
+addtrig s3 3 1 30 2870 1500 7
 addtrig C7 1 1
 addtrig F2147483649 2 1
