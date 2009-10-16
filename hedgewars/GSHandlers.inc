@@ -229,7 +229,7 @@ begin
 		PlaySound(sndMolotov, false, nil);
 		//doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
 		for i:= 0 to 20 do begin
-				dX:= AngleCos(i * 2) * ((_0_08*(i div 6))) * (GetRandom + _1);
+				dX:= AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
 				dY:= AngleSin(i * 8) * _0_5 * (GetRandom + _1);
 				Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
 				Fire^.State:= Fire^.State or gsttmpFlag;
