@@ -18,6 +18,7 @@ foreach(dir
 	Sheep
 	Snow
 	Underwater
+    Compost
 	)
 	add_subdirectory(${dir})
 endforeach(dir)

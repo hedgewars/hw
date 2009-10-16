@@ -20,4 +20,5 @@ install(FILES
     Onion1.png
     Onion2.png
     Sky.png
+    theme.cfg
     DESTINATION ${SHAREPATH}Data/Themes/Compost)
