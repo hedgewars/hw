@@ -1329,7 +1329,7 @@ if not TestCollisionYwithGear(Gear, 1) then
         if (Gear^.State and gsttmpFlag) <> 0 then 
             begin
             Gear^.Radius:= 9;
-            AmmoShove(Gear, 2, 100);
+            AmmoShove(Gear, 2, 30);
             Gear^.Radius:= 1
             end;
 	    if Gear^.Timer > 0 then
