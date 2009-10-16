@@ -555,7 +555,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>réduire la qualité</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
