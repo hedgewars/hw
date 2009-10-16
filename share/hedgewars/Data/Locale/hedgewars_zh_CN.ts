@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,12 +11,6 @@
     <message>
         <source>Never</source>
         <translation>从不</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -232,18 +224,6 @@ or pick another nickname:</source>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;最佳射手是&lt;b&gt;%1&lt;/b&gt;。伤害 &lt;b&gt;%2&lt;/b&gt;点。&lt;/p&gt;</translation>
     </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -389,18 +369,6 @@ You may join and start playing once the game starts.</source>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -580,14 +548,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Append date and time to record file name</source>
         <translation>记录名称中包含具体时间日期</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">降低质量</translation>
-    </message>
-    <message>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="obsolete">前端效果（需要重新启动）</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -909,18 +869,6 @@ Please check your installation</source>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">房间名称</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">玩家数量</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">回合数</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -947,25 +895,6 @@ Please check your installation</source>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">武器</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">行动</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">武器</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">武器选项</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">其他</translation>
     </message>
 </context>
 <context>
@@ -1058,10 +987,6 @@ Please check your installation</source>
     <message>
         <source>down</source>
         <translation>下</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">跳</translation>
     </message>
     <message>
         <source>attack</source>

@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,12 +11,6 @@
     <message>
         <source>Never</source>
         <translation>Nunca</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -232,18 +224,6 @@ or pick another nickname:</source>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;El premio al mejor disparo es para &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; puntos.&lt;/p&gt;</translation>
     </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -389,18 +369,6 @@ You may join and start playing once the game starts.</source>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -576,10 +544,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Append date and time to record file name</source>
         <translation>Agregar fecha y hora al nombre de fichero</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Reducir calidad</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
@@ -905,18 +869,6 @@ Verifique su instalación</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Nombre de la sala</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Jugadores</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Ronda en progreso</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -943,25 +895,6 @@ Verifique su instalación</translation>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">Armas</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Acciones</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armas</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Propiedades del arma</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Otros</translation>
     </message>
 </context>
 <context>
@@ -1054,10 +987,6 @@ Verifique su instalación</translation>
     <message>
         <source>down</source>
         <translation>abajo</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">saltar</translation>
     </message>
     <message>
         <source>attack</source>

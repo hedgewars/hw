@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,14 +11,6 @@
     <message>
         <source>Never</source>
         <translation>Никогда</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation>
-            <numerusform>Каждый %1 ход</numerusform>
-            <numerusform>Каждый %1 ход</numerusform>
-            <numerusform>Каждый %1 ход</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -183,10 +173,6 @@ or pick another nickname:</source>
         <translation>%1 *** %2 вошёл</translation>
     </message>
     <message>
-        <source>%1 *** %2 has left </source>
-        <translation type="obsolete">%1 *** %2 ушёл</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has left (%3)</source>
         <translation>%1 *** %2 ушёл (%3)</translation>
     </message>
@@ -240,22 +226,6 @@ or pick another nickname:</source>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Лучший киллер &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит в течение этой игры.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжа были убиты в течение этой игры.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжей были убиты в течение этой игры.&lt;/p&gt;</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -404,22 +374,6 @@ You may join and start playing once the game starts.</source>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation>В этой комнате происходит игра.
 Вы можете зайти и наблюдать. Чтобы играть, придётся подождать окончания текущей игры.</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation>
-            <numerusform>В этой комнате %1 игрок.</numerusform>
-            <numerusform>В этой комнате %1 игрока.</numerusform>
-            <numerusform>В этой комнате %1 игроков.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation>
-            <numerusform>В этой комнате %1 команда.</numerusform>
-            <numerusform>В этой комнате %1 команды.</numerusform>
-            <numerusform>В этой комнате %1 команд.</numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -599,14 +553,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Append date and time to record file name</source>
         <translation>Указывать дату и время в названиях демок и сейвов</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Снизить качество</translation>
-    </message>
-    <message>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="obsolete">Эффекты фронтенда (необходим перезапуск)</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -928,18 +874,6 @@ Please check your installation</source>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Название комнаты</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Кол-во игроков</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Идёт раунд</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation>Название</translation>
     </message>
@@ -966,25 +900,6 @@ Please check your installation</source>
     <message>
         <source>Weapons</source>
         <translation>Оружие</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Действия</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Оружие</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Настройки оружия</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Разное</translation>
     </message>
 </context>
 <context>
@@ -1077,10 +992,6 @@ Please check your installation</source>
     <message>
         <source>down</source>
         <translation>вниз</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">прыжок</translation>
     </message>
     <message>
         <source>attack</source>

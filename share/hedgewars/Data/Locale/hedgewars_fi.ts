@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,12 +11,6 @@
     <message>
         <source>Never</source>
         <translation>Ei koskaan</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation>
-            <numerusform>Joka %1. vuoro</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -181,12 +173,12 @@ tai valitse toinen nimimerkki:</translation>
         <translation>%1 *** %2 liittyi</translation>
     </message>
     <message>
-        <source>%1 *** %2 has left ]</source>
-        <translation>%1 *** %2 poistui ]</translation>
+        <source>%1 *** %2 has left</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has left (%3) ]</source>
-        <translation>%1 *** %2 poistui (%3) ]</translation>
+        <source>%1 *** %2 has left (%3)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -234,18 +226,6 @@ tai valitse toinen nimimerkki:</translation>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Paras laukaus -mitalin voitti &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; pisteellä&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Paras tappaja oli &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; tapolla vuorossa</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Yhteensä &lt;b&gt;%1&lt;/b&gt; siili(ä) tapettiin tällä kierroksella.&lt;/p&gt;</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -394,14 +374,6 @@ Voit liittyä ja alkaa pelaamaan sitten kun peli alkaa.</translation>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation>Tämä peli on menossa.
 Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä päästäksesi pelaamaan.</translation>
-    </message>
-    <message>
-        <source>There are %1 clients connected to this room.</source>
-        <translation>%1 asiakasta on liittyneenä tähän huoneeseen.</translation>
-    </message>
-    <message>
-        <source>There are %1 teams participating in this room.</source>
-        <translation>%1 joukkuetta on osallistuneena tässä huoneessa.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -581,10 +553,6 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>Append date and time to record file name</source>
         <translation>Lisää päivämäärä ja aika nauhoitusten tiedostonimeen</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Vähennä laatua</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -906,18 +874,6 @@ Ole hyvä ja tarkista asennuksesi</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Huoneen nimi</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Pelaajien määrä</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Erä kesken</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation>Huoneen nimi</translation>
     </message>
@@ -944,25 +900,6 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>Weapons</source>
         <translation>Aseet</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Toiminnat</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Aseet</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Ase-ominaisuudet</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Muu</translation>
     </message>
 </context>
 <context>
@@ -1055,10 +992,6 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>down</source>
         <translation>alas</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">hyppy</translation>
     </message>
     <message>
         <source>attack</source>
@@ -1286,7 +1219,7 @@ tiedot</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Vaihda siilien yläpuolella näkyviä "leimoja":</translation>
+        <translation>Vaihda siilien yläpuolella näkyviä &quot;leimoja&quot;:</translation>
     </message>
 </context>
 <context>

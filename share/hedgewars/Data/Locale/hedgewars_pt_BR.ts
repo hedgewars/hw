@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,12 +11,6 @@
     <message>
         <source>Never</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -232,18 +224,6 @@ or pick another nickname:</source>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;O prêmio de melhor disparo foi ganho por &lt;b&gt;%1&lt;/b&gt; , com &lt;b&gt;%2&lt;/b&gt; pontos.&lt;/p&gt;</translation>
     </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -389,18 +369,6 @@ You may join and start playing once the game starts.</source>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -930,25 +898,6 @@ Por favor verifique sua instalação</translation>
     </message>
 </context>
 <context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Ações</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armas</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Propriedades da arma</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Outros</translation>
-    </message>
-</context>
-<context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
@@ -1038,10 +987,6 @@ Por favor verifique sua instalação</translation>
     <message>
         <source>down</source>
         <translation>abaixo</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">pular</translation>
     </message>
     <message>
         <source>attack</source>

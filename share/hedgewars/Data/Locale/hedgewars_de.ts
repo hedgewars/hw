@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,13 +11,6 @@
     <message>
         <source>Never</source>
         <translation>Nie</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation>
-            <numerusform>Jede Runde</numerusform>
-            <numerusform>Jede %1. Runde</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -237,20 +228,6 @@ wähle einen anderen Spitznamen:</translation>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Der Preis für den besten Schuss geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Punkten.&lt;/p&gt;</translation>
     </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Der Preis für die meisten Tötungen geht an &lt;b&gt;%1&lt;/b&gt; mit nur &lt;b&gt;einem&lt;/b&gt; Todesstoß in einer Runde.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Der Preis für die meisten Tötungen geht an &lt;b&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Todesstößen in einer Runde.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Insgesamt ließ &lt;b&gt;ein&lt;/b&gt; Igel sein Leben in dieser Runde.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Insgesamt ließen &lt;b&gt;%1&lt;/b&gt; Igel ihre Leben in dieser Runde.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -398,20 +375,6 @@ Du kannst beitreten und mitspielen oder zusehen, sobald das Spiel beginnt.</tran
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation>Dieses Spiel läuft gerade.
 Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende ist.</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation>
-            <numerusform>Ein Spieler ist in diesem Raum.</numerusform>
-            <numerusform>%1 Spieler sind in diesem Raum.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation>
-            <numerusform>Ein Team nimmt in diesem Raum teil.</numerusform>
-            <numerusform>%1 Teams nehmen in diesem Raum teil.</numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -587,10 +550,6 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Append date and time to record file name</source>
         <translation>Datum und Uhrzeit an Aufnahmedatei anhängen</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Qualität herabsetzen</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
@@ -916,18 +875,6 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Raumname</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Anzahl Spieler</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Runde läuft</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation>Raumname</translation>
     </message>
@@ -954,25 +901,6 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Weapons</source>
         <translation>Waffen</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Aktionen</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Waffen</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Waffen-Eigenschaften</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Andere</translation>
     </message>
 </context>
 <context>
@@ -1065,10 +993,6 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>down</source>
         <translation>Runter</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">Springen</translation>
     </message>
     <message>
         <source>attack</source>

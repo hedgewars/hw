@@ -14,13 +14,6 @@
         <source>Never</source>
         <translation>Mai</translation>
     </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform>Ogni %1 turno</numerusform>
-            <numerusform>Ogni %1 turni</numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>GameCFGWidget</name>
@@ -168,23 +161,26 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Il nickname %1 è
+registrato su Hedgewars.org
+Per favore inserisci la tua password
+o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 è entrato nella stanza</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 *** %2 si è unito</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ha lasciato (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 se ne è andato</translation>
     </message>
 </context>
 <context>
@@ -232,20 +228,6 @@ or pick another nickname:</source>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; punti.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -381,31 +363,19 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome stanza:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Questa partita è nella lobby.
+Puoi entrare e iniziare a giocare quando la partita inzia.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
+        <translation type="unfinished">Questa partita è in corso.
+You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -585,18 +555,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Append date and time to record file name</source>
         <translation>Concatena data e ora di registrazione al nome file</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Riduci qualità</translation>
-    </message>
-    <message>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="obsolete">Effetti del frontend (Richiede riavvio)</translation>
-    </message>
-    <message>
-        <source>Use hardware sound (if available; requires restart)</source>
-        <translation type="obsolete">Usa suono hardware (se disponibile; richiede riavvio)</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -918,63 +876,32 @@ Controllare la propria installazione</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Nome della room</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Numero di giocatori</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Round in corso</translation>
-    </message>
-    <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome Stanza</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Creata da</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mappa</translation>
+        <translation>Mappa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Regole</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Armi</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Azioni</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armi</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Proprietà delle armi</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Altro</translation>
+        <translation>Armi</translation>
     </message>
 </context>
 <context>
@@ -1067,10 +994,6 @@ Controllare la propria installazione</translation>
     <message>
         <source>down</source>
         <translation>giù</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">salta</translation>
     </message>
     <message>
         <source>attack</source>
@@ -1208,22 +1131,22 @@ hedgehogs</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>salto lungo</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>salto alto</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlli di base</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlli per le armi</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
@@ -1231,7 +1154,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Altro</translation>
+        <translation>Altro</translation>
     </message>
 </context>
 <context>
@@ -1305,87 +1228,87 @@ hedgehogs</translation>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Assi</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Su)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Giù)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Cappello</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Sinistra)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Destra)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>(Pulsante)</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>(Tastiera)</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouse: Tasto sinistro</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouse: Tasto centrale</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouse: Tasto destro</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouse: Scroll in su</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouse: Scroll in giù</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Invio</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Esc</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Spazio</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Elimina</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <source>Numpad 0</source>
@@ -1449,35 +1372,35 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Invio</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Uguale</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Su</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Giù</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Destra</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinistra</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>End</source>

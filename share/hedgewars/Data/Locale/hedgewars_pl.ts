@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="pl_PL">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -13,14 +11,6 @@
     <message>
         <source>Never</source>
         <translation>Nigdy</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform>Co %1 turę</numerusform>
-            <numerusform>Co %1 tury</numerusform>
-            <numerusform>Co %1 tury</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -165,22 +155,6 @@
         <translation>Hasło</translation>
     </message>
     <message>
-        <source>[ %1 has joined the room ]</source>
-        <translation type="obsolete">[ %1 dołączył do pokoju ]</translation>
-    </message>
-    <message>
-        <source>[ %1 has joined ]</source>
-        <translation type="obsolete">[ %1 dołączył ]</translation>
-    </message>
-    <message>
-        <source>[ %1 has left ]</source>
-        <translation type="obsolete">[ %1 wyszedł ]</translation>
-    </message>
-    <message>
-        <source>[ %1 has left (%2) ]</source>
-        <translation type="obsolete">[ %1 wyszedł (%2) ]</translation>
-    </message>
-    <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password
@@ -252,22 +226,6 @@ bądź wybierz inny nick:</translation>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;Odznaczenie za najlepszy strzał przyznano &lt;b&gt;%1&lt;/b&gt;, zadał(a) on(a) &lt;b&gt;%2&lt;/b&gt; punktów obrażeń.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w jednej turze.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeż(y) zostało zabitych podczas tej rundy.&lt;/p&gt;</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -416,22 +374,6 @@ Możesz dołaczyć i zacząć grać gdy gra się rozpocznie.</translation>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished">Ta gra jest w toku.
 Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż gra się skończy.</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
-            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
-            <numerusform>W tym pokojku znajduje się %1 graczy.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
-            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
-            <numerusform>W tym pokoju znajdują się %1 drużyny.</numerusform>
-        </translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -611,18 +553,6 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Append date and time to record file name</source>
         <translation>Dodaj czas i datę do nazwy pliku</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Obniż jakość</translation>
-    </message>
-    <message>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="obsolete">Efekty w menu (wymaga restartu)</translation>
-    </message>
-    <message>
-        <source>Use hardware sound (if available; requires restart)</source>
-        <translation type="obsolete">Użyj sprz. odt. dźwięku (jeśli dostępny; wymaga restartu)</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -944,18 +874,6 @@ Sprawdź poprawność instalacji</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Nazwa pokoju</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Liczba graczy</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Gra w toku</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation type="unfinished">Nazwa pokoju</translation>
     </message>
@@ -982,25 +900,6 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">Uzbrojenie</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Ruchy</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Uzbrojenie</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Ustawienia uzbrojenia</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Inne</translation>
     </message>
 </context>
 <context>
@@ -1093,10 +992,6 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>down</source>
         <translation>dół</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">skok</translation>
     </message>
     <message>
         <source>attack</source>
