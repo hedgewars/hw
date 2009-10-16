@@ -18,8 +18,8 @@
  */
 
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef _COMMON_H
+#define _COMMON_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -124,11 +124,22 @@ typedef struct _WAV_header_t {
 
 #pragma pack(1)
 typedef struct _SSound_t {
-        int source;
-        char Filename[256];
+        int isLoaded;
+        int sourceIndex;
+        char *filename;
         ALuint Buffer;
 } SSound_t;
 #pragma pack()
 
-#endif
+/*data type for passing data between threads*/
+#pragma pack(1)
+typedef struct _fade_t {
+        uint32_t index;
+        uint16_t quantity;
+} fade_t;
+#pragma pack()
 
+#define FADE_IN  0
+#define FADE_OUT 1
+
+#endif /* _COMMON_H*/

@@ -58,15 +58,18 @@ function ChangeVolume(voldelta: LongInt): LongInt;
 function AskForVoicepack(name: shortstring): PVoicepack;
 function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
 
-function oalb_init(const app: PChar; const usehardware: Byte): Byte; cdecl; external OpenALBridge;
+
 procedure oalb_close; cdecl; external OpenALBridge;
-function oalb_loadfile(const filename: PChar): LongInt; cdecl; external OpenALBridge;
-procedure oalb_playsound(const idx: LongInt; const loop: Byte); cdecl; external OpenALBridge;
-procedure oalb_stopsound(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_pausesound(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_continuesound(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_setvolume(const idx: LongInt; const percentage: Byte); cdecl; external OpenALBridge;
-procedure oalb_setglobalvolume(const percentage: Byte); cdecl; external OpenALBridge;
+function oalb_init		(const app: PChar; const usehardware: Byte): Byte; cdecl; external OpenALBridge;
+function oalb_loadfile		(const filename: PChar): LongInt; cdecl; external OpenALBridge;
+procedure oalb_playsound	(const idx: LongInt; const loop: Byte); cdecl; external OpenALBridge;
+procedure oalb_stopsound	(const idx: LongInt); cdecl; external OpenALBridge;
+procedure oalb_pausesound	(const idx: LongInt); cdecl; external OpenALBridge;
+procedure oalb_continuesound	(const idx: LongInt); cdecl; external OpenALBridge;
+procedure oalb_setvolume	(const idx: LongInt; const percentage: Byte); cdecl; external OpenALBridge;
+procedure oalb_setglobalvolume	(const percentage: Byte); cdecl; external OpenALBridge;
+procedure oalb_fadein		(const idx: LongInt; quantity: Integer); cdecl; external OpenALBridge;
+procedure oalb_fadeout		(const idx: LongInt; quantity: Integer); cdecl; external OpenALBridge;
 
 
 var MusicFN: shortstring = '';
@@ -103,7 +106,7 @@ if not isSoundEnabled then exit;
 or if ogg are loaded in stream or if sound is loaded by demand*}
 WriteToConsole('Init OpenAL sound...');
 
-isSoundEnabled:= oalb_init('hwengine', Byte(isSoundHardware)) = 1;
+isSoundEnabled:= oalb_init(str2PChar(ParamStr(0)), Byte(isSoundHardware)) = 1;
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 
@@ -113,7 +116,7 @@ end;
 
 procedure ReleaseSound;
 begin
-//if isMusicEnabled then openal_fadeout(Mus, 30);
+if isMusicEnabled then oalb_fadeout(Mus, 30);
 oalb_close();
 end;
 
@@ -154,8 +157,8 @@ end;
 function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
 begin
 if not isSoundEnabled then exit(0);
-//if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then openal_fadeout(defVoicepack^.chunks[snd], qt)
-//else if (defVoicepack^.chunks[snd] >= 0) then openal_fadeout(defVoicepack^.chunks[snd], qt);
+if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then oalb_fadeout(defVoicepack^.chunks[snd], qt)
+else if (defVoicepack^.chunks[snd] >= 0) then oalb_fadeout(defVoicepack^.chunks[snd], qt);
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
@@ -191,9 +194,8 @@ Mus:= oalb_loadfile(Str2PChar(s));
 TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-//openal_fadein(Mus, 20);
-//openal_toggleloop(Mus);
 oalb_playsound(Mus, 1);
+oalb_fadein(Mus, 50);
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;

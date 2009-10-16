@@ -171,11 +171,12 @@ void SDLInteraction::StartMusic()
 	}
 	oalb_playsound(music, 1);
 	oalb_setvolume(music, 60);
+	oalb_fadein(music, 50);	
 }
 
 void SDLInteraction::StopMusic()
 {
-//	if (music >= 0) openal_fadeout(music, 40);
+	if (music >= 0) oalb_fadeout(music, 20);
 	oalb_stopsound(music);
 }
 

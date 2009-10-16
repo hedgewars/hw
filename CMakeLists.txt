@@ -69,7 +69,7 @@ endif(WITH_SERVER)
 #set default flags values for all the project
 set(CMAKE_C_FLAGS "-Wall -pipe")
 set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
 if(APPLE AND NOT universal_build)
 	set(CMAKE_C_FLAGS_RELEASE "-msse2 ${CMAKE_C_FLAGS_RELEASE}")
 endif()

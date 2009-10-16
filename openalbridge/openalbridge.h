@@ -22,7 +22,6 @@
 #include "common.h"
 #include "wrappers.h"
 #include "loaders.h"
-#include "ssound.h"
 #include "alc.h"
 
 
@@ -40,11 +39,12 @@ extern "C" {
         void            oalb_setvolume          (const uint32_t iIndex, const char cPercentage);
         void            oalb_setglobalvolume    (const char cPercentage);
         void            oalb_togglemute         (void);
+        void            oalb_fade               (uint32_t iIndex, uint16_t quantity, ALboolean direction);
+        void            oalb_fadein             (uint32_t iIndex, uint16_t quantity);
+        void            oalb_fadeout            (uint32_t iIndex, uint16_t quantity);
+
        /*
         ALboolean   openal_setposition       (unsigned int index, float x, float y, float z);
-        ALboolean   openal_fadeout           (unsigned int index, unsigned short int quantity);
-        ALboolean   openal_fadein            (unsigned int index, unsigned short int quantity);
-        ALboolean   openal_fade              (unsigned int index, unsigned short int quantity, ALboolean direction);
         */
         
 #ifdef __cplusplus
