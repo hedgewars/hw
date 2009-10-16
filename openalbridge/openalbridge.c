@@ -389,7 +389,7 @@ void oalb_fade (uint32_t iIndex, uint16_t quantity, ALboolean direction) {
         }
         
         fade = (fade_t*) Malloc(sizeof(fade_t));
-        fade->index = iIndex;
+        fade->index = theSounds[iIndex].sourceIndex;
         fade->quantity = quantity;
         
         if(iIndex < 0 || iIndex >= iNumSounds) {

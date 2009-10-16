@@ -195,7 +195,7 @@ TryDo(Mus >= 0, msgFailed, false);
 WriteLnToConsole(msgOK);
 
 oalb_playsound(Mus, 1);
-oalb_fadein(Mus, 50);
+oalb_fadein(Mus, 20);
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
