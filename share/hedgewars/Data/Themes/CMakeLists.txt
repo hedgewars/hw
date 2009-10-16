@@ -5,6 +5,7 @@ foreach(dir
 	Cake
 	Castle
 	cheese
+    deepspace
 	City
 	CrazyMission
 	EarthRise
