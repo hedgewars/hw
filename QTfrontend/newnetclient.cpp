@@ -285,9 +285,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 		QStringList tmp = lst;
 		tmp.removeFirst();
 		if (netClientState == 2)
-			emit chatStringLobby(tmp.join("\n"));
+			emit chatStringLobby(tmp.join("\n").prepend('\x01'));
 		else
-			emit chatStringFromNet(tmp.join("\n"));
+			emit chatStringFromNet(tmp.join("\n").prepend('\x01'));
 		return;
 	}
 
