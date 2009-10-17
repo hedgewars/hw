@@ -98,9 +98,10 @@ PageMain::PageMain(QWidget* parent) :
 	BtnExit = addButton(":/res/Exit.png", pageLayout, 4, 0, 1, 1, true);
 }
 
-PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction & sdli) :
+PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
   AbstractPage(parent)
 {
+    mySdli = sdli;
 	QGridLayout * pageLayout = new QGridLayout(this);
 	QTabWidget * tbw = new QTabWidget(this);
 	QWidget * page1 = new QWidget(this);
@@ -196,7 +197,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction & sdli) :
 		hbox->addWidget(CBVoicepack, 100);
 		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
 		hbox->setStretchFactor(BtnTestSound, 1);
-		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound(sdli)));
+		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 		GBTLayout->addLayout(hbox);
 	}
 
@@ -287,11 +288,11 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 	FortPreview->setPixmap(pix);
 }
 
-void PageEditTeam::testSound(SDLInteraction &sdli)
+void PageEditTeam::testSound()
 {
 	Mix_Music *sound;
 	QDir tmpdir;
-	sdli.SDLMusicInit();
+	mySdli->SDLMusicInit();
 	
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Sounds/voices");

@@ -57,7 +57,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 {
 	Pages = new QStackedLayout(Parent);
 
-	pageEditTeam = new PageEditTeam(Parent, HWForm->sdli);
+	pageEditTeam = new PageEditTeam(Parent, &HWForm->sdli);
 	Pages->addWidget(pageEditTeam);
 
 	pageOptions = new PageOptions();

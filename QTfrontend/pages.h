@@ -148,7 +148,7 @@ class PageEditTeam : public AbstractPage
 	Q_OBJECT
 
 public:
-	PageEditTeam(QWidget* parent, SDLInteraction & sdli);
+	PageEditTeam(QWidget* parent, SDLInteraction * sdli);
 	QSignalMapper* signalMapper;
 	QGroupBox *GBoxHedgehogs;
 	QGroupBox *GBoxTeam;
@@ -170,11 +170,14 @@ public:
 	QComboBox * CBBind[BINDS_NUMBER];
 	QPushButton * randTeamButton;
 
+private:
+    SDLInteraction * mySdli;
+
 public slots:
 	void CBFort_activated(const QString & gravename);
 
 private slots:
-	void testSound(SDLInteraction & sdli);
+	void testSound();
 };
 
 class PageMultiplayer : public AbstractPage
