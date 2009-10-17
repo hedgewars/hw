@@ -8,7 +8,7 @@ set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 #list of source files for libraries
 set(openal_src
-	openalbridge.c loaders.c wrappers.c errlib.c 
+	openalbridge.c loaders.c wrappers.c errlib.c
 )
 
 #build a static library for human systems
@@ -18,7 +18,7 @@ set (build_type STATIC)
 if(WIN32)
 #workaround for visualstudio (wants headers in the source list)
 	set(openal_src
-		openalbridge.h loaders.h wrappers.h common.h oggvorbis.h errlib.h ${openal_src}
+		openalbridge.h loaders.h wrappers.h globals.h oggvorbis.h errlib.h ${openal_src}
 	)
 #deps for the shared library
 	link_libraries(${VORBISFILE_LIBRARY})

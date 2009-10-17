@@ -1,7 +1,6 @@
 /*
  * OpenAL Bridge - a simple portable library for OpenAL interface
- * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>,
- *                    Mario Liebisch <mario.liebisch+hw@googlemail.com>
+ * Copyright (c) 2009 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,13 +19,20 @@
 #ifndef _OALB_LOADERS_H
 #define _OALB_LOADERS_H
 
-#include "common.h"
+#include "globals.h"
 #include "wrappers.h"
 #include "oggvorbis.h"
 
-extern char *prog;
 
-int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
-int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+#ifdef __CPLUSPLUS
+extern "C" {
+#endif 
+        
+        int load_wavpcm     (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+        int load_oggvorbis  (const char *filename, ALenum *format, char **data, ALsizei *bitsize, ALsizei *freq);
+        
+#ifdef __CPLUSPLUS
+}
+#endif
 
 #endif /*_OALB_LOADERS_H*/

@@ -11,15 +11,23 @@
 #ifndef _ERRLIB_H
 #define _ERRLIB_H
 
-#include "common.h"
+#include "globals.h"
+
+#ifdef __CPLUSPLUS
+extern "C" {
+#endif 
         
-extern int daemon_proc;
+        extern int daemon_proc;
         
-void err_msg (const char *fmt, ...);
-void err_quit (const char *fmt, ...);
-void err_ret (const char *fmt, ...);
-void err_sys (const char *fmt, ...);
-void err_dump (const char *fmt, ...);
+        void err_msg (const char *fmt, ...);
+        void err_quit (const char *fmt, ...);
+        void err_ret (const char *fmt, ...);
+        void err_sys (const char *fmt, ...);
+        void err_dump (const char *fmt, ...);
+        
+#ifdef __CPLUSPLUS
+}
+#endif
 
 #endif /*_ERRLIB_H*/
 

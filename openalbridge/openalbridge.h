@@ -19,35 +19,33 @@
 #ifndef _OALB_INTERFACE_H
 #define _OALB_INTERFACE_H
 
-#include "common.h"
+#include "globals.h"
 #include "wrappers.h"
-#include "loaders.h"
 #include "alc.h"
+#include "loaders.h"
 
 
-#ifdef __cplusplus
+#ifdef __CPLUSPLUS
 extern "C" {
 #endif 
         
-        const char      oalb_init               (const char* programname, const char usehardware);
-        void            oalb_close              (void);
-        char            oalb_ready              (void);
-        const int32_t   oalb_loadfile           (const char* cFilename);
-        void            oalb_playsound          (const uint32_t iIndex, const char bLoop);
-        void            oalb_pausesound         (const uint32_t iIndex);
-        void            oalb_stopsound          (const uint32_t iIndex);
-        void            oalb_setvolume          (const uint32_t iIndex, const char cPercentage);
-        void            oalb_setglobalvolume    (const char cPercentage);
-        void            oalb_togglemute         (void);
-        void            oalb_fade               (uint32_t iIndex, uint16_t quantity, ALboolean direction);
-        void            oalb_fadein             (uint32_t iIndex, uint16_t quantity);
-        void            oalb_fadeout            (uint32_t iIndex, uint16_t quantity);
-
-       /*
+        ALboolean   openal_init              (char* programname, ALboolean usehardware, unsigned int memorysize);
+        ALboolean   openal_close             (void);
+        ALboolean   openal_ready             (void);
+        ALint       openal_loadfile          (const char *filename);
+        ALboolean   openal_toggleloop        (unsigned int index);
         ALboolean   openal_setposition       (unsigned int index, float x, float y, float z);
-        */
+        ALboolean   openal_setvolume         (unsigned int index, unsigned char percentage);
+        ALboolean   openal_setglobalvolume   (unsigned char percentage);
+        ALboolean   openal_togglemute        (void);
+        ALboolean   openal_fadeout           (unsigned int index, unsigned short int quantity);
+        ALboolean   openal_fadein            (unsigned int index, unsigned short int quantity);
+        ALboolean   openal_fade              (unsigned int index, unsigned short int quantity, ALboolean direction);
+        ALboolean   openal_playsound         (unsigned int index);	
+        ALboolean   openal_pausesound        (unsigned int index);
+        ALboolean   openal_stopsound         (unsigned int index);
         
-#ifdef __cplusplus
+#ifdef __CPLUSPLUS
 }
 #endif
 

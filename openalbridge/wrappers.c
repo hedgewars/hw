@@ -18,64 +18,67 @@
 
 #include "wrappers.h"
 
-extern char *prog;
 
-extern ALint Sources[MAX_SOURCES];
-
-void *Malloc (size_t nbytes) {
-        void *aptr;
+#ifdef __CPLUSPLUS
+extern "C" {
+#endif 
         
-        if ((aptr = malloc(nbytes)) == NULL)
-                err_dump("(%s) FATAL - not enough memory");
+        extern ALint *Sources;
         
-        return aptr;
-}
-
-
-void *Realloc (void *aptr, size_t nbytes) {
-        aptr = realloc(aptr, nbytes);
+        void *Malloc (size_t nbytes) {
+                void *aptr;
+                
+                if ((aptr = malloc(nbytes)) == NULL)
+                        err_dump("(%s) FATAL - not enough memory");
+                
+                return aptr;
+        }
         
-        if (aptr == NULL) 
-                err_dump("(%s) FATAL - not enough memory");
         
-        return aptr;
-}
-
-
-FILE *Fopen (const char *fname, char *mode)	{
-        FILE *fp;
+        void *Realloc (void *aptr, size_t nbytes) {
+                aptr = realloc(aptr, nbytes);
+                
+                if (aptr == NULL) 
+                        err_dump("(%s) FATAL - not enough memory");
+                
+                return aptr;
+        }
         
-        fp = fopen(fname,mode);
-        if (fp == NULL)
-                err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
         
-        return fp;
-}
-
-/*TODO make a proper error reporting routine*/
-ALint AlGetError (const char *str) {
-        ALenum error;
+        FILE *Fopen (const char *fname, char *mode)	{
+                FILE *fp;
+                
+                fp = fopen(fname,mode);
+                if (fp == NULL)
+                        err_ret("(%s) ERROR - can't open file %s in mode '%s'", prog, fname, mode);
+                
+                return fp;
+        }
         
-        error = alGetError();
-        if (error != AL_NO_ERROR) {
-                err_msg(str, prog);
-                return error;
-        } else 
-                return AL_TRUE;
-}
-
-ALint AlGetError2 (const char *str, int num) {
-        ALenum error;
+        /*TODO make a proper error reporting routine*/
+        ALint AlGetError (const char *str) {
+                ALenum error;
+                
+                error = alGetError();
+                if (error != AL_NO_ERROR) {
+                        err_msg(str, prog);
+                        return error;
+                } else 
+                        return AL_TRUE;
+        }
         
-        error = alGetError();
-        if (error != AL_NO_ERROR) {
-                err_msg(str, prog, num);
-                return error;
-        } else 
-                return AL_TRUE;
-}
-
-       void *helper_fadein(void *tmp) {
+        ALint AlGetError2 (const char *str, int num) {
+                ALenum error;
+                
+                error = alGetError();
+                if (error != AL_NO_ERROR) {
+                        err_msg(str, prog, num);
+                        return error;
+                } else 
+                        return AL_TRUE;
+        }
+        
+        void *helper_fadein(void *tmp) {
                 ALfloat gain;
                 ALfloat target_gain;
                 fade_t *fade;
@@ -93,7 +96,7 @@ ALint AlGetError2 (const char *str, int num) {
                 
                 /*save the volume desired after the fade*/
                 alGetSourcef(Sources[index], AL_GAIN, &target_gain);
-                if (target_gain > 1.0f || target_gain < 0.0f)
+                if (target_gain > 1.0f || target_gain <= 0.0f)
                         target_gain = 1.0f;
                 
                 alSourcePlay(Sources[index]);
@@ -156,3 +159,7 @@ ALint AlGetError2 (const char *str, int num) {
                 return 0;
         }
         
+        
+#ifdef __CPLUSPLUS
+}
+#endif
