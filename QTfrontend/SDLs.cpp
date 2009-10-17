@@ -67,7 +67,7 @@ QStringList SDLInteraction::getResolutions() const
 	} else
 	{
 		for(int i = 0; modes[i]; ++i)
-			if ((modes[i]->w >= 640) && (modes[i]->h >= 480) && (modes[i]->h <= 1200))
+			if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
 				result << QString("%1x%2").arg(modes[i]->w).arg(modes[i]->h);
 	}
 

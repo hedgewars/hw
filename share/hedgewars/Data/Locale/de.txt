@@ -7,13 +7,13 @@
 00:04=Schrotflinte
 00:05=Presslufthammer
 00:06=Runde überspringen
-00:07=Enterhaken
+00:07=Seil
 00:08=Mine
 00:09=Desert Eagle
 00:10=Dynamit
 00:11=Baseballschläger
 00:12=Feuerfaust
-00:13=sek
+00:13=s
 00:14=Fallschirm
 00:15=Luftangriff
 00:16=Minen-Luftangriff
@@ -30,7 +30,7 @@
 00:27=Höllische Handgranate
 00:28=Bohrkopfrakete
 00:29=Ballpistole
-00:30=Napalm
+00:30=Napalm-Luftangriff
 00:31=RC-Flugzeug
 00:32=Schwerkraft verringern
 00:33=Zusatzschaden
@@ -46,7 +46,7 @@
 01:01=Unentschieden
 01:02=%1 gewinnt!
 01:03=Lautstärke: %1 %
-01:04=Pausiert
+01:04=Pause
 01:05=Wirklich beenden (Z/Esc)?
 01:06=Sudden Death!
 01:07=%1 verbleibend
@@ -71,6 +71,9 @@
 02:00=%1 ist urlaubsreif!
 02:00=%1 trifft seine Ahnen.
 02:00=%1 war nicht hartnäckig genug!
+02:00=%1 war einmal.
+02:00=%1 hat wohl versagt.
+02:00=Mach's gut, %1!
 
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
@@ -89,11 +92,12 @@
 02:01=%1 im Rausch der Tiefe!
 02:01=Was für ein feuchtes Erlebnis!
 02:01=%1 geht unter die Perlentaucher!
-02:01=Igel über Bord!
+02:01=%1 über Bord!
 02:01=%1 verlässt das sinkende Schiff.
 02:01=%1 überschätzt seinen Auftrieb!
 02:01=%1 erliegt dem Sog der Tiefe!
 02:01=%1 geht der Sache auf den Grund!
+02:01=%1 wäre fast verdurstet!
 
 ; Round starts
 02:02=Auf in die Schlacht!
@@ -101,6 +105,7 @@
 02:02=Jetzt geht's rund!
 02:02=Los geht's!
 02:02=Alles angetreten!
+02:02=Los, los, los!
 
 ; Round ends (win; unused atm)
 02:03=...

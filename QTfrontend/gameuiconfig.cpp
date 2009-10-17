@@ -49,7 +49,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
 #ifdef _WIN32
-	Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
+//	Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
 #endif
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
@@ -123,7 +123,7 @@ void GameUIConfig::SaveOptions()
 
 	setValue("audio/sound", isSoundEnabled());
 #ifdef _WIN32
-	setValue("audio/hardware", isSoundHardware());
+//	setValue("audio/hardware", isSoundHardware());
 #endif
 	setValue("audio/music", isMusicEnabled());
 	setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
@@ -184,7 +184,8 @@ bool GameUIConfig::isSoundEnabled()
 #ifdef _WIN32
 bool GameUIConfig::isSoundHardware()
 {
-	return Form->ui.pageOptions->CBHardwareSound->isChecked();
+//	return Form->ui.pageOptions->CBHardwareSound->isChecked();
+return false;
 }
 #endif
 
