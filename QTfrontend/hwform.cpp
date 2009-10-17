@@ -77,11 +77,7 @@ HWForm::HWForm(QWidget *parent)
 	ui.setupUi(this);
 
 	CustomizePalettes();
-        
-#ifdef _WIN32
-    sdli.setHardwareSound(settings.value("audio/hardware", false).toBool());
-#endif
-        
+	
 	ui.pageOptions->CBResolution->addItems(sdli.getResolutions());
 
 	config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
