@@ -783,11 +783,11 @@ void HWForm::GameStateChanged(GameState gameState)
 				pRegisterServer->unregister();
 				pRegisterServer = 0;
 			}
-			setVisible(false);
+			//setVisible(false);
 			break;
 		}
 		case gsFinished: {
-			setVisible(true);
+			//setVisible(true);
 			GoBack();
 			Music(ui.pageOptions->CBEnableMusic->isChecked());
 			if (wBackground) wBackground->startAnimation();
@@ -796,7 +796,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			break;
 		}
 		default: {
-			setVisible(true);
+			//setVisible(true);
 			quint8 id = ui.Pages->currentIndex();
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
