@@ -100,10 +100,6 @@ void SDLInteraction::addGameControllerKeys() const
 		// Register entries for missing axes not assigned to sticks of this joystick/gamepad
 		for(int aid = 0; aid < SDL_JoystickNumAxes(joy) && i < 1021; aid++)
 		{
-			// Axis 2 on xbox 360 is left/right trigger but those are used as buttons anyway so skip it
-			if(aid == 2 && isxb)
-				continue;
-
 			// Again store the part of the string not changing for multiple uses
 			QString axis = prefix + QApplication::translate("binds (keys)", "Axis") + QString(" %1 ").arg(aid + 1);
 			
