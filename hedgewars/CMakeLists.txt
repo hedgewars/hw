@@ -133,7 +133,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_
 		COMMAND "${pascal_compiler}"
 		ARGS ${pascal_compiler_flags}
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS openalbridge ${engine_sources}
+		DEPENDS ${engine_sources}
 		)
 ELSE()
 #these are the two dependencies for building a universal binary on Mac OS X
@@ -141,7 +141,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
 		COMMAND "ppc386" 
 		ARGS ${pascal_compiler_flags} -ohwengine.386 -CfSSE2
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS openalbridge ${engine_sources}
+		DEPENDS ${engine_sources}
 		)
 add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386")
 
@@ -149,7 +149,7 @@ add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
 		COMMAND "ppcppc"
 		ARGS ${pascal_compiler_flags} -ohwengine.ppc
 		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS openalbridge ${engine_sources}
+		DEPENDS ${engine_sources}
 		)
 add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
 
