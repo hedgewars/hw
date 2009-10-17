@@ -132,7 +132,12 @@ int main(int argc, char *argv[]) {
             "SelWeaponWidget, QCheckBox, QRadioButton {"
 				"font: bold 14px;"
 			"}"
-
+            "SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {"
+				"background-image: url(\":/res/panelbg.png\");"
+				"background-position: bottom center;"
+				"background-repeat: repeat-x;"
+				"background-color: #040200;"
+			"}"
 			".QGroupBox,GameCFGWidget,TeamSelWidget,SelWeaponWidget {"
 				"background-image: url(\":/res/panelbg.png\");"
 				"background-position: bottom center;"
