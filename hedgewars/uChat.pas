@@ -204,7 +204,7 @@ if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
     exit
     end;
 
-if copy(s, 1, 6) = '/team ' then
+if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
     begin
     ParseCommand(s, true);
     exit
