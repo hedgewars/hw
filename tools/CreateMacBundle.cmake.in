@@ -6,6 +6,7 @@ execute_process(COMMAND cp -pPR ${sdl_dir}		${CMAKE_BINARY_DIR}/${frameworks_dir
 execute_process(COMMAND cp -pPR ${SDLIMAGE_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_image.framework)
 execute_process(COMMAND cp -pPR ${SDLNET_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_net.framework)
 execute_process(COMMAND cp -pPR ${SDLTTF_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_ttf.framework)
+execute_process(COMMAND cp -pPR ${SDLMIXER_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/SDL_mixer.framework)
 execute_process(COMMAND cp -pPR ${OGG_LIBRARY}	 	${CMAKE_BINARY_DIR}/${frameworks_dir}/Ogg.framework)
 execute_process(COMMAND cp -pPR ${VORBIS_LIBRARY}	${CMAKE_BINARY_DIR}/${frameworks_dir}/Vorbis.framework)
 

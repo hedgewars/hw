@@ -24,7 +24,7 @@
 #include <QFrame>
 #include <QDebug>
 
-#include <vertScrollArea.h>
+#include "vertScrollArea.h"
 #include "teamselect.h"
 #include "teamselhelper.h"
 #include "frameTeam.h"
