@@ -17,7 +17,6 @@
  */
 
 #include <QGridLayout>
-#include <QSvgWidget>
 #include <QLabel>
 #include <QTextBrowser>
 #include "about.h"
@@ -27,9 +26,17 @@ About::About(QWidget * parent) :
   QWidget(parent)
 {
 	QGridLayout *mainLayout = new QGridLayout(this);
-	QSvgWidget *hedgehog = new QSvgWidget(":/res/Hedgehog.svg", this);
-	hedgehog->setFixedSize(300, 329);
-	mainLayout->addWidget(hedgehog, 0, 0, 2, 1);
+        QLabel *imageLabel = new QLabel;
+        QImage image(":/res/Hedgehog.png");
+
+        imageLabel->setPixmap(QPixmap::fromImage(image));
+        imageLabel->setScaledContents(true);
+
+        imageLabel->setMinimumWidth(2.8);
+        imageLabel->setMaximumWidth(280);
+        imageLabel->setMinimumHeight(30);
+        imageLabel->setMaximumHeight(300);
+        mainLayout->addWidget(imageLabel, 0, 0, 2, 1);
 
 	QLabel *lbl1 = new QLabel(this);
 

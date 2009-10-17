@@ -41,7 +41,6 @@ interface
 	{$linkframework SDL_image}
 	{$linkframework SDL_ttf}
 	{$linkframework SDL_mixer}
-	{$linklib openalbridge}
 	{$linklib SDLmain}
 	{$linklib gcc}
 {$ENDIF}

@@ -8,7 +8,7 @@ win32 {
 	RC_FILE	= ../QTfrontend/res/hedgewars.rc
 }
 
-QT += network svg xml
+QT += network
 
 HEADERS += ../QTfrontend/*.h
 SOURCES += ../QTfrontend/*.cpp
