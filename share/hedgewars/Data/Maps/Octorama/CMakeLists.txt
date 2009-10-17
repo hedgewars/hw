@@ -1,5 +1,5 @@
 install(FILES
-    info.txt
+	info.txt
 	map.png
 	map.cfg
 	preview.png

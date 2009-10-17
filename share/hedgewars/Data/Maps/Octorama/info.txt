@@ -5,9 +5,12 @@
   custom hedgewars map 
  
 :: VERSION 
-  RC2
+  RC3
 
 :: CHANGELOG
+  : since RC2
+   - max hog count is now 32 instead of 18
+   - preview has eyelashes now ("_")
   : since RC1
    - brighter bubbles
    - darker bubbleborders
@@ -32,4 +35,8 @@
   jesse/jessor - http://geekosphere.org
  
 :: RIGHTZ
-  Octopod Vector Art: http://iconicon.net/
+  Octopod Vector Art: http://iconicon.net/ (CC)
+
+:: THANKS
+  #woot (irc.teranetworks.de) and claymore
+  for endless testing and support. <3 ya
