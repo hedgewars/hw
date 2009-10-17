@@ -101,7 +101,7 @@ if(OPTIMIZATIONS)
 		set(pascal_compiler_flags "-fPIC" "-CfSSE2" ${pascal_compiler_flags})	#instruction set for ppc is 7400
 	endif()			
 else(OPTIMIZATIONS)
-	set(pascal_compiler_flags "-O-" "-gl" "-dDEBUGFILE" "-dDEBUG" "-pg" "-va" ${pascal_compiler_flags})
+	set(pascal_compiler_flags "-O-" "-gl" "-dDEBUGFILE" "-pg" "-va" ${pascal_compiler_flags})
 endif(OPTIMIZATIONS)
 
 if(LOWRES)

@@ -27,6 +27,5 @@ RESOURCES += ../QTfrontend/hedgewars.qrc
 	INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
 	CONFIG += warn_on x86
 
-	hedgewars.commands = echo "REMEMBER TO INSERT hwconst.cpp IN SOURCE DIRECTORY"
  	#CONFIG += x86 ppc x86_64 ppc64
 }

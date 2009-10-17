@@ -24,8 +24,6 @@
 #include <QRegExp>
 #include <QMap>
 
-char *programname;
-
 #include "hwform.h"
 #include "hwconsts.h"
 
@@ -44,10 +42,7 @@ bool checkForDir(const QString & dir)
 	return true;
 }
 
-int main(int argc, char *argv[]) {
-        
-       programname = argv[0];
-        
+int main(int argc, char *argv[]) {        
     QApplication app(argc, argv);
 
     QStringList arguments = app.arguments();
