@@ -98,7 +98,7 @@ PageMain::PageMain(QWidget* parent) :
 	BtnExit = addButton(":/res/Exit.png", pageLayout, 4, 0, 1, 1, true);
 }
 
-PageEditTeam::PageEditTeam(QWidget* parent) :
+PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction & sdli) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -195,9 +195,8 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 		}
 		hbox->addWidget(CBVoicepack, 100);
 		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
-		//BtnTestSound->setEnabled(oalb_ready());
 		hbox->setStretchFactor(BtnTestSound, 1);
-		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
+		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound(sdli)));
 		GBTLayout->addLayout(hbox);
 	}
 
@@ -288,20 +287,19 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 	FortPreview->setPixmap(pix);
 }
 
-void PageEditTeam::testSound()
+void PageEditTeam::testSound(SDLInteraction &sdli)
 {
-	int sound;
+	Mix_Music *sound;
 	QDir tmpdir;
-
-	OpenAL_Init();
+	sdli.SDLMusicInit();
 	
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Sounds/voices");
 	tmpdir.cd(CBVoicepack->currentText());
 	QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
 	if (list.size()) {
-		sound = oalb_loadfile(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		oalb_playsound(sound, 0);
+		sound = Mix_LoadMUS(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
+		Mix_PlayMusic(sound, 0);
 	}
 }
 
@@ -431,20 +429,11 @@ PageOptions::PageOptions(QWidget* parent) :
             CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
             GBAlayout->addWidget(CBReduceQuality);
 
-#ifdef _WIN32
-            CBHardwareSound = new QCheckBox(AGGroupBox);
-            CBHardwareSound->setText(QCheckBox::tr("Hardware sound (if available; requires restart)"));
-            //CBHardwareSound->setEnabled(oalb_ready());
-            GBAlayout->addWidget(CBHardwareSound);
-#endif
-
             CBEnableSound = new QCheckBox(AGGroupBox);
             CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-            //CBEnableSound->setEnabled(oalb_ready());
             GBAlayout->addWidget(CBEnableSound);
             CBEnableMusic = new QCheckBox(AGGroupBox);
             CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-            //CBEnableMusic->setEnabled(oalb_ready());
             GBAlayout->addWidget(CBEnableMusic);
 
             QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
@@ -455,7 +444,6 @@ PageOptions::PageOptions(QWidget* parent) :
             volumeBox = new QSpinBox(AGGroupBox);
             volumeBox->setRange(0, 100);
             volumeBox->setSingleStep(5);
-            //volumeBox->setEnabled(oalb_ready());
             GBAvollayout->addWidget(volumeBox);
 
             CBShowFPS = new QCheckBox(AGGroupBox);

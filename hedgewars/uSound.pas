@@ -18,32 +18,14 @@
 
 unit uSound;
 interface
-
-
-{$IFDEF DARWIN}
-	{$linklib openalbridge}
-	{$linkframework OpenAL}
-	{$linkframework Ogg}
-	{$linkframework Vorbis}
-{$ELSE}
-{$IFNDEF WIN32}
-    {$linklib openal}
-    {$linklib ogg}
-    {$linklib vorbis}
-    {$linklib vorbisfile}
-{$ENDIF}
-{$ENDIF}
-
-uses uConsts;
+uses SDLh, uConsts;
 {$INCLUDE options.inc}
 
 type PVoicepack = ^TVoicepack;
 	TVoicepack = record
 		name: shortstring;
-		chunks: array [TSound] of LongInt;
+		chunks: array [TSound] of PMixChunk;
 		end;
-
-const OpenALBridge = 'libopenalbridge';
 
 procedure InitSound;
 procedure ReleaseSound;
@@ -53,39 +35,23 @@ procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
+function  ChangeVolume(voldelta: LongInt): LongInt;
 
-function ChangeVolume(voldelta: LongInt): LongInt;
-function AskForVoicepack(name: shortstring): PVoicepack;
-function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
-
-
-procedure oalb_close; cdecl; external OpenALBridge;
-function oalb_init		(const app: PChar; const usehardware: Byte): Byte; cdecl; external OpenALBridge;
-function oalb_loadfile		(const filename: PChar): LongInt; cdecl; external OpenALBridge;
-procedure oalb_playsound	(const idx: LongInt; const loop: Byte); cdecl; external OpenALBridge;
-procedure oalb_stopsound	(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_pausesound	(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_continuesound	(const idx: LongInt); cdecl; external OpenALBridge;
-procedure oalb_setvolume	(const idx: LongInt; const percentage: Byte); cdecl; external OpenALBridge;
-procedure oalb_setglobalvolume	(const percentage: Byte); cdecl; external OpenALBridge;
-procedure oalb_fadein		(const idx: LongInt; quantity: Integer); cdecl; external OpenALBridge;
-procedure oalb_fadeout		(const idx: LongInt; quantity: Integer); cdecl; external OpenALBridge;
-
+function  AskForVoicepack(name: shortstring): Pointer;
 
 var MusicFN: shortstring = '';
 
 implementation
-
 uses uMisc, uConsole;
 
 const chanTPU = 12;
-var	Volume: LongInt;
+var Volume: LongInt;
 	lastChan: array [TSound] of LongInt;
 	voicepacks: array[0..cMaxTeams] of TVoicepack;
 	defVoicepack: PVoicepack;
-	Mus: LongInt = 0;
+	Mus: PMixMusic = nil;
 
-function  AskForVoicepack(name: shortstring): PVoicepack;
+function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
 begin
 i:= 0;
@@ -102,22 +68,31 @@ end;
 procedure InitSound;
 begin
 if not isSoundEnabled then exit;
-{*sound works in ipodtouch only if LAND_WIDTH  = 1024;   LAND_HEIGHT = 512; 
-or if ogg are loaded in stream or if sound is loaded by demand*}
-WriteToConsole('Init OpenAL sound...');
-
-isSoundEnabled:= oalb_init(str2PChar(ParamStr(0)), Byte(isSoundHardware)) = 1;
+WriteToConsole('Init sound...');
+isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
+if isSoundEnabled then
+   isSoundEnabled:= Mix_OpenAudio(44100, $8010, 2, 1024) = 0;
 if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
+Mix_AllocateChannels(Succ(chanTPU));
+if isMusicEnabled then Mix_VolumeMusic(50);
 
-Volume:=0;
-ChangeVolume(cInitVolume);
+Volume:= 0;
+ChangeVolume(cInitVolume)
 end;
 
 procedure ReleaseSound;
+var i: TSound;
+	t: Longword;
 begin
-if isMusicEnabled then oalb_fadeout(Mus, 30);
-oalb_close();
+for t:= 0 to cMaxTeams do
+	if voicepacks[t].name <> '' then
+		for i:= Low(TSound) to High(TSound) do
+			if voicepacks[t].chunks[i] <> nil then
+				Mix_FreeChunk(voicepacks[t].chunks[i]);
+
+Mix_FreeMusic(Mus);
+Mix_CloseAudio
 end;
 
 procedure SoundLoad;
@@ -134,8 +109,8 @@ for i:= Low(TSound) to High(TSound) do
 		begin
 		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
-		defVoicepack^.chunks[i]:= oalb_loadfile(Str2PChar(s));
-		TryDo(defVoicepack^.chunks[i] >= 0, msgFailed, true);
+		defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+		TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
 		WriteLnToConsole(msgOK);
 		end;
 
@@ -146,38 +121,34 @@ for t:= 0 to cMaxTeams do
 				begin
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
-				voicepacks[t].chunks[i]:= oalb_loadfile(Str2PChar(s));
-				if voicepacks[t].chunks[i] < 0 then
+			//	{$IFNDEF IPHONEOS}
+				//broken for unknown reasons (most likely poor SDL_Mixer)
+				voicepacks[t].chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+			//	{$ENDIF}
+				if voicepacks[t].chunks[i] = nil then
 					WriteLnToConsole(msgFailed)
 				else
 					WriteLnToConsole(msgOK)
 				end;
 end;
 
-function soundFadeOut(snd: TSound; qt: LongInt; voicepack: PVoicepack): LongInt;
-begin
-if not isSoundEnabled then exit(0);
-if (voicepack <> nil) and (voicepack^.chunks[snd] >= 0) then oalb_fadeout(defVoicepack^.chunks[snd], qt)
-else if (defVoicepack^.chunks[snd] >= 0) then oalb_fadeout(defVoicepack^.chunks[snd], qt);
-end;
-
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
+var loops: LongInt;
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
+if infinite then loops:= -1 else loops:= 0;
 
-if voicepack = nil then voicepack:= defVoicepack;
-
-if voicepack^.chunks[snd] >= 0 then
-	begin
-	oalb_playsound(voicepack^.chunks[snd], Byte(infinite));
-	lastChan[snd]:=voicepack^.chunks[snd];
-	end
+if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], loops, -1)
+else
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], loops, -1)
 end;
 
 procedure StopSound(snd: TSound);
 begin
-if isSoundEnabled then
-	oalb_stopsound(lastChan[snd])
+if not isSoundEnabled then exit;
+if Mix_Playing(lastChan[snd]) <> 0 then
+	Mix_HaltChannel(lastChan[snd])
 end;
 
 procedure PlayMusic;
@@ -190,47 +161,39 @@ if (not isSoundEnabled)
 s:= PathPrefix + '/Music/' + MusicFN;
 WriteToConsole(msgLoading + s + ' ');
 
-Mus:= oalb_loadfile(Str2PChar(s));
-TryDo(Mus >= 0, msgFailed, false);
+Mus:= Mix_LoadMUS(Str2PChar(s));
+TryDo(Mus <> nil, msgFailed, false);
 WriteLnToConsole(msgOK);
 
-oalb_playsound(Mus, 1);
-oalb_fadein(Mus, 20);
+SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
-if not isSoundEnabled then exit(0);
+if not isSoundEnabled then
+	exit(0);
 
 inc(Volume, voldelta);
 if Volume < 0 then Volume:= 0;
-if Volume > 100 then Volume:= 100;
-
-oalb_setglobalvolume(Volume);
-if isMusicEnabled then oalb_setvolume(Mus, Volume shr 1);
-ChangeVolume:= Volume;
+Mix_Volume(-1, Volume);
+Volume:= Mix_Volume(-1, -1);
+if isMusicEnabled then Mix_VolumeMusic(Volume * 4 div 8);
+ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
 end;
 
 procedure PauseMusic;
 begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
-oalb_stopsound(Mus)
+
+Mix_PauseMusic(Mus);
 end;
 
 procedure ResumeMusic;
 begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
-oalb_playsound(Mus, 0)
+
+Mix_ResumeMusic(Mus);
 end;
 
-
-var i: LongInt;
-	c: TSound;
-
-initialization
-for i:= 0 to cMaxTeams do
-	for c:= Low(TSound) to High(TSound) do
-		voicepacks[i].chunks[c]:= -1
-
-
 end.
+

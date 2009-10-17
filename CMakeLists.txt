@@ -79,7 +79,7 @@ set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 
 add_subdirectory(bin)
-add_subdirectory(openalbridge)
+#add_subdirectory(openalbridge)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)

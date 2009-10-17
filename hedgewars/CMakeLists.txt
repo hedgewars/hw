@@ -4,6 +4,7 @@ find_package(SDL)
 find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
+find_package(SDL_mixer)
 
 
 #SOURCE AND PROGRAMS SECTION 

@@ -19,29 +19,25 @@
 #include "SDLs.h"
 
 #include "SDL.h"
+#include "SDL_mixer.h"
 #include "hwconsts.h"
 
 #include <QApplication>
+
 
 extern char sdlkeys[1024][2][128];
 extern char xb360buttons[][128];
 extern char xb360dpad[128];
 extern char xbox360axes[][128];
 
-#ifdef _WIN32
-bool hardware;
-#endif
-extern char *programname;
 
 SDLInteraction::SDLInteraction()
 {
-	music = -1;
-#ifdef _WIN32
-	hardware = false;
-#endif
+
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK);
-
-
+	
+	musicInitialized = 0;
+	music = NULL;
 	if(SDL_NumJoysticks())
 		addGameControllerKeys();
 	SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -49,16 +45,13 @@ SDLInteraction::SDLInteraction()
 
 SDLInteraction::~SDLInteraction()
 {
+	if (musicInitialized == 1) {
+		if (music != NULL)
+			Mix_FreeMusic(music);
+		Mix_CloseAudio();
+	}
 	SDL_Quit();
-	oalb_close();
 }
-
-#ifdef _WIN32
-void SDLInteraction::setHardwareSound(bool hardware_snd)
-{
-	hardware = hardware_snd;
-}
-#endif
 
 QStringList SDLInteraction::getResolutions() const
 {
@@ -162,33 +155,35 @@ void SDLInteraction::addGameControllerKeys() const
 	sdlkeys[i][1][0] = '\0';
 }
 
+void SDLInteraction::SDLMusicInit()
+{
+	if (musicInitialized == 0) {
+		SDL_Init(SDL_INIT_AUDIO);
+		Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
+		musicInitialized = 1;
+	}
+}
+
+
 void SDLInteraction::StartMusic()
 {
-	OpenAL_Init();
-	if (music < 0) {
-		music = oalb_loadfile(QString(datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
+	SDLMusicInit();
+
+	if (music == NULL) {
+		music = Mix_LoadMUS((datadir->absolutePath() + "/Music/main theme.ogg").toLocal8Bit().constData());
 	
 	}
-	oalb_playsound(music, 1);
-	oalb_setvolume(music, 60);
-	oalb_fadein(music, 50);	
+	Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
+	Mix_FadeInMusic(music, -1, 1750);
 }
 
 void SDLInteraction::StopMusic()
 {
-	if (music >= 0) oalb_fadeout(music, 20);
-	oalb_stopsound(music);
-}
-
-//we need thjs wrapper because of some issues with windows drivers
-//beware that this cause a slight delay when playing the first sound
-void OpenAL_Init()
-{
-	if (!oalb_ready())
-#ifdef _WIN32
-        	oalb_init(programname, hardware ? 1 : 0);
-#else
-		oalb_init(programname, 0);
-#endif
+	if (music != NULL) {
+		// fade out music to finish 0,5 seconds from now
+		while(!Mix_FadeOutMusic(1000) && Mix_PlayingMusic()) {
+			SDL_Delay(100);
+		}
+	}
 }
 

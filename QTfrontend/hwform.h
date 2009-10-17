@@ -51,6 +51,7 @@ class HWForm : public QMainWindow
 public:
 	HWForm(QWidget *parent = 0);
 	Ui_HWForm ui;
+	SDLInteraction sdli;
 
 private slots:
 	void GoToMain();
@@ -148,7 +149,6 @@ private:
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;
 	QTime eggTimer;
-	SDLInteraction sdli;
 	BGWidget * wBackground;
         
 #ifdef __APPLE__

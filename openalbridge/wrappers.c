@@ -93,7 +93,7 @@ ALint AlGetError2 (const char *str, int num) {
                 
                 /*save the volume desired after the fade*/
                 alGetSourcef(Sources[index], AL_GAIN, &target_gain);
-                if (target_gain > 1.0f || target_gain <= 0.0f)
+                if (target_gain > 1.0f || target_gain < 0.0f)
                         target_gain = 1.0f;
                 
                 alSourcePlay(Sources[index]);

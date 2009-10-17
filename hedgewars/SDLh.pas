@@ -40,6 +40,7 @@ interface
 	{$linkframework SDL_net}
 	{$linkframework SDL_image}
 	{$linkframework SDL_ttf}
+	{$linkframework SDL_mixer}
 	{$linklib openalbridge}
 	{$linklib SDLmain}
 	{$linklib gcc}
@@ -425,107 +426,7 @@ function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external 
 {$ENDIF}
 {$ENDIF}
 
-(*  TTF  *)
 
-const {$IFDEF WIN32}
-      SDL_TTFLibName = 'SDL_ttf.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-            {$IFDEF DARWIN}
-            SDL_TTFLibName = 'SDL_ttf';
-            {$ELSE}
-            SDL_TTFLibName = 'libSDL_ttf.so';
-            {$ENDIF}
-      {$ENDIF}
-      TTF_STYLE_NORMAL = 0;
-      TTF_STYLE_BOLD   = 1;
-      TTF_STYLE_ITALIC = 2;
-
-type PTTF_Font = ^TTTF_font;
-     TTTF_Font = record
-                 end;
-
-function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
-procedure TTF_Quit; cdecl; external SDL_TTFLibName;
-
-
-function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
-(* TSDL_Color -> Longword conversion is workaround over freepascal bug.
-   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
-function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-
-function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
-procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
-
-
-(*  SDL_image  *)
-
-const {$IFDEF WIN32}
-      SDL_ImageLibName = 'SDL_image.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-            {$IFDEF DARWIN}
-            SDL_ImageLibName = 'SDL_image';
-            {$ELSE}
-            SDL_ImageLibName = 'libSDL_image.so';
-            {$ENDIF}
-      {$ENDIF}
-
-function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
-
-(*  SDL_net  *)
-
-const {$IFDEF WIN32}
-      SDL_NetLibName = 'SDL_net.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-            {$IFDEF DARWIN}
-	        SDL_NetLibName = 'SDL_net';
-            {$ELSE}
-            SDL_NetLibName = 'libSDL_net.so';
-            {$ENDIF}
-      {$ENDIF}
-
-type TIPAddress = record
-                  host: Longword;
-                  port: Word;
-                  end;
-
-     PTCPSocket = ^TTCPSocket;
-     TTCPSocket = record
-                  ready: LongInt;
-                  channel: LongInt;
-                  remoteAddress: TIPaddress;
-                  localAddress: TIPaddress;
-                  sflag: LongInt;
-                  end;
-     PSDLNet_SocketSet = ^TSDLNet_SocketSet;
-     TSDLNet_SocketSet = record
-                         numsockets,
-                         maxsockets: LongInt;
-                         sockets: PTCPSocket;
-                         end;
-
-function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
-procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
-
-function  SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
-function  SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
-function  SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
-function  SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
-function  SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
-function  SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
-procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
-procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
-function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
-function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
-
-procedure SDLNet_Write16(value: Word; buf: pointer);
-procedure SDLNet_Write32(value: LongWord; buf: pointer);
-function  SDLNet_Read16(buf: pointer): Word;
-function  SDLNet_Read32(buf: pointer): LongWord;
 
 // Joystick/Controller support
 type PSDLJoystick = ^TSDLJoystick;
@@ -557,6 +458,172 @@ function SDL_JoystickGetBall(joy: PSDLJoystick; ball: LongInt; dx: PInteger; dy:
 function SDL_JoystickGetHat(joy: PSDLJoystick; hat: LongInt): Byte; cdecl; external SDLLibName;
 function SDL_JoystickGetButton(joy: PSDLJoystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDLJoystick); cdecl; external SDLLibName;
+
+(*  TTF  *)
+
+const {$IFDEF WIN32}
+      SDL_TTFLibName = 'SDL_ttf.dll';
+      {$ENDIF}
+      {$IFDEF UNIX}
+	{$IFDEF DARWIN}
+	  SDL_TTFLibName = 'SDL_ttf';
+	{$ELSE}
+          SDL_TTFLibName = 'libSDL_ttf.so';
+        {$ENDIF}
+      {$ENDIF}
+      TTF_STYLE_NORMAL = 0;
+      TTF_STYLE_BOLD   = 1;
+      TTF_STYLE_ITALIC = 2;
+
+type PTTF_Font = ^TTTF_font;
+     TTTF_Font = record
+                 end;
+
+function TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
+procedure TTF_Quit; cdecl; external SDL_TTFLibName;
+
+
+function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
+(* TSDL_Color -> Longword conversion is workaround over freepascal bug.
+   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
+function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+
+function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
+
+(*  SDL_mixer  *)
+
+const {$IFDEF WIN32}
+      SDL_MixerLibName = 'SDL_mixer.dll';
+      {$ENDIF}
+      {$IFDEF UNIX}
+	{$IFDEF DARWIN}
+	  SDL_MixerLibName = 'SDL_mixer';
+	{$ELSE}
+          SDL_MixerLibName = 'libSDL_mixer.so';
+	{$ENDIF}
+      {$ENDIF}
+
+const MIX_MAX_VOLUME = 128;
+
+type PMixChunk = ^TMixChunk;
+     TMixChunk = record
+                 allocated: Longword;
+                 abuf     : PByte;
+                 alen     : Longword;
+                 volume   : PByte;
+                 end;
+     TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
+     TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
+
+     TMidiSong = record
+               samples : LongInt;
+               events  : pointer;
+               end;
+
+     TMusicUnion = record
+        case Byte of
+             0: ( midi : TMidiSong );
+             1: ( ogg  : pointer);
+             end;
+
+     PMixMusic = ^TMixMusic;
+     TMixMusic = record
+                 end;
+
+function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
+
+function  Mix_Volume(channel: LongInt; volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt;  cdecl; external SDL_MixerLibName;
+function  Mix_VolumeMusic(volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+
+function  Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
+procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
+
+function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: LongInt): PMixChunk; cdecl; external SDL_MixerLibName;
+function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_MixerLibName;
+
+function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_FadeInMusic(music: PMixMusic; loops: LongInt; ms: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+
+function  Mix_PlayChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PlayMusic(music: PMixMusic; loops: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PausedMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_PauseMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerLibName;
+function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+
+(*  SDL_image  *)
+
+const {$IFDEF WIN32}
+      SDL_ImageLibName = 'SDL_image.dll';
+      {$ENDIF}
+      {$IFDEF UNIX}
+	{$IFDEF DARWIN}
+	  SDL_ImageLibName = 'SDL_image';
+	{$ELSE}
+           SDL_ImageLibName = 'libSDL_image.so';
+	{$ENDIF}
+      {$ENDIF}
+
+function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+
+(*  SDL_net  *)
+
+const {$IFDEF WIN32}
+      SDL_NetLibName = 'SDL_net.dll';
+      {$ENDIF}
+      {$IFDEF UNIX}
+	{$IFDEF DARWIN}
+	  SDL_NetLibName = 'SDL_net';
+	{$ELSE}
+          SDL_NetLibName = 'libSDL_net.so';
+	{$ENDIF}
+      {$ENDIF}
+
+type TIPAddress = record
+                  host: Longword;
+                  port: Word;
+                  end;
+
+     PTCPSocket = ^TTCPSocket;
+     TTCPSocket = record
+                  ready: LongInt;
+                  channel: LongInt;
+                  remoteAddress: TIPaddress;
+                  localAddress: TIPaddress;
+                  sflag: LongInt;
+                  end;
+     PSDLNet_SocketSet = ^TSDLNet_SocketSet;
+     TSDLNet_SocketSet = record
+                         numsockets,
+                         maxsockets: LongInt;
+                         sockets: PTCPSocket;
+                         end;
+
+function SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
+procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
+
+function SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
+function SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
+procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
+function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
+function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
+
+procedure SDLNet_Write16(value: Word; buf: pointer);
+procedure SDLNet_Write32(value: LongWord; buf: pointer);
+function SDLNet_Read16(buf: pointer): Word;
+function SDLNet_Read32(buf: pointer): LongWord;
 
 implementation
 

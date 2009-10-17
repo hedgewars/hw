@@ -17,12 +17,11 @@ include(${QT_USE_FILE})
 
 # Configure for SDL
 find_package(SDL REQUIRED)
+find_package(SDL_mixer REQUIRED)
 
 include_directories(.)
 include_directories(${SDL_INCLUDE_DIR})
-include_directories(${OPENAL_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/openalbridge/)
-
+include_directories(${SDLMIXER_INCLUDE_DIR})
 if(UNIX)
 	# HACK: in freebsd cannot find iconv.h included via SDL.h
 	include_directories("/usr/local/include")
@@ -176,24 +175,11 @@ add_executable(hedgewars WIN32
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
-	openalbridge
+	${SDLMIXER_LIBRARY}
 )
 
-#remember that in windows library order counts
-if(NOT APPLE)
+if(APPLE)
 	set(HW_LINK_LIBS
-		${HW_LINK_LIBS}
-		${OPENAL_LIBRARY}
-		${OGG_LIBRARY}
-		${VORBIS_LIBRARY}
-		${VORBISFILE_LIBRARY}
-		)
-else()
-#no vorbisfile required for MacOS X
-	set(HW_LINK_LIBS
-		${OPENAL_LIBRARY}
-		${OGG_LIBRARY}
-		${VORBIS_LIBRARY}
 		${HW_LINK_LIBS}
 		IOKit
 		)

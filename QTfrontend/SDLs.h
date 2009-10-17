@@ -1,3 +1,5 @@
+
+
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Andrey Korotaev <unC0Rr@gmail.com>
@@ -19,26 +21,29 @@
 #ifndef SDLS_H
 #define SDLS_H
 
+
 #include <QStringList>
-#include "openalbridge.h"
+#include "SDL_mixer.h"
+
 
 class SDLInteraction : public QObject
 {
 	Q_OBJECT
 
 private:
-	int music;
+	Mix_Music *music;
+	int musicInitialized;	
 
 public:
 	SDLInteraction();
 	~SDLInteraction();
-	void setHardwareSound(bool hardware_snd);
 	QStringList getResolutions() const;
 	void addGameControllerKeys() const;
 	void StartMusic();
 	void StopMusic();
+	void SDLMusicInit();	
 };
 
-void OpenAL_Init();
 
 #endif
+

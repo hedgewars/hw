@@ -26,6 +26,7 @@
 #include <QSignalMapper>
 
 #include "binds.h"
+#include "hwform.h"
 #include "mapContainer.h"
 #include "togglebutton.h"
 
@@ -147,7 +148,7 @@ class PageEditTeam : public AbstractPage
 	Q_OBJECT
 
 public:
-	PageEditTeam(QWidget* parent = 0);
+	PageEditTeam(QWidget* parent, SDLInteraction & sdli);
 	QSignalMapper* signalMapper;
 	QGroupBox *GBoxHedgehogs;
 	QGroupBox *GBoxTeam;
@@ -173,7 +174,7 @@ public slots:
 	void CBFort_activated(const QString & gravename);
 
 private slots:
-	void testSound();
+	void testSound(SDLInteraction & sdli);
 };
 
 class PageMultiplayer : public AbstractPage

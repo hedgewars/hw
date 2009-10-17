@@ -43,6 +43,7 @@ class QStackedLayout;
 class QFont;
 class QWidget;
 class QMainWindow;
+class HWForm;
 
 class Ui_HWForm
 {
@@ -73,9 +74,9 @@ public:
 	QStackedLayout *Pages;
 	QFont *font14;
 
-	void setupUi(QMainWindow *HWForm);
+	void setupUi(HWForm *HWForm);
 	void SetupFonts();
-	void SetupPages(QWidget *Parent);
+	void SetupPages(QWidget *Parent, HWForm *HWForm);
 	void SetupPageNetChat(QWidget *Parent);
 	void SetupPageNetGame(QWidget *Parent);
 };

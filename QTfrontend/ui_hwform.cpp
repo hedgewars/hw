@@ -22,12 +22,13 @@
 #include <QStackedLayout>
 
 #include "ui_hwform.h"
+#include "hwform.h"
 #include "pages.h"
 #include "statsPage.h"
 #include "playrecordpage.h"
 #include "hwconsts.h"
 
-void Ui_HWForm::setupUi(QMainWindow *HWForm)
+void Ui_HWForm::setupUi(HWForm *HWForm)
 {
 	SetupFonts();
 
@@ -38,7 +39,7 @@ void Ui_HWForm::setupUi(QMainWindow *HWForm)
 	centralWidget = new QWidget(HWForm);
 	centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
 
-	SetupPages(centralWidget);
+	SetupPages(centralWidget, HWForm);
 
 	HWForm->setCentralWidget(centralWidget);
 
@@ -52,11 +53,11 @@ void Ui_HWForm::SetupFonts()
 	font14 = new QFont("MS Shell Dlg", 14);
 }
 
-void Ui_HWForm::SetupPages(QWidget *Parent)
+void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 {
 	Pages = new QStackedLayout(Parent);
 
-	pageEditTeam = new PageEditTeam();
+	pageEditTeam = new PageEditTeam(Parent, HWForm->sdli);
 	Pages->addWidget(pageEditTeam);
 
 	pageOptions = new PageOptions();
