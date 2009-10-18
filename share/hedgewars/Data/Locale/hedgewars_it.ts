@@ -367,8 +367,8 @@ Puoi entrare e iniziare a giocare quando la partita inzia.</translation>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished">Questa partita è in corso.
-You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</translation>
+        <translation>Questa partita è in corso.
+Puoi entrare e fare da spettatore ora, ma dovrai aspettare la fine della partita per iniziare a giocare.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
@@ -1139,7 +1139,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Controlli per il mouse e la visualizzazione</translation>
     </message>
     <message>
         <source>Other</source>
@@ -1154,7 +1154,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Salta e schiva gli ostacoli in questo percorso:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
@@ -1162,7 +1162,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccogli un&apos;arma o raggiungi un luogo selezionato dal mouse:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
@@ -1206,11 +1206,11 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fai uno screenshot:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Attiva/Disattiva le etichete sopra i ricci:</translation>
     </message>
 </context>
 <context>

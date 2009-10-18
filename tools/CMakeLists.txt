@@ -1,7 +1,7 @@
 if (APPLE AND BUNDLE)
 
 find_package(OGGVORBIS REQUIRED)
-find_package(SPARKLE REQUIRED)
+find_package(SPARKLE)
 find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac)
 
 if(NOT macdeployqt_EXE)
