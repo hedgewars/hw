@@ -13,6 +13,8 @@
  + More trainings
  + Implement room control delegation when host's connection fails
  + Colorize chat events in engine
+ + [mac only] Add Sparkle framework to automatically update the program when a new version comes out
+ + [mac only] Add M3InstallController for easy installation
  * Fix crash in replay caused by speechbubbles
  * Fix some desync causes
  * Fix rope bugs
