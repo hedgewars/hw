@@ -34,13 +34,13 @@
 00:31=Avión teledirigido
 00:32=Baja gravedad
 00:33=Daño extra
-00:34=Invulnerable
+00:34=Invulnerabilidad
 00:35=Tiempo extra
 00:36=Mira láser
-00:37=Vampirism
-00:38=Sniper Rifle
-00:39=Flying Saucer
-00:40=Molotov Cocktail
+00:37=Vampirismo
+00:38=Rifle francotirador
+00:39=Platillo volante
+00:40=Cocktail molotov
 
 01:00=Luchad!
 01:01=Empate
@@ -49,22 +49,22 @@
 01:04=Pausa
 01:05=Desea salir (Y/Esc)?
 01:06=Muerte súbita!
-01:07=%1 Remaining
-01:08=Fuel
+01:07=%1 restante
+01:08=Combustible
 
-; Event messages
-; Hog (%1) died
-02:00=%1 has kicked the bucket!
-02:00=%1 has seen the light!
-02:00=%1 never saw that comming!
-; Hog (%1) drowned
-02:01=%1 plays submarine!
-02:01=%1 mimics the Titanic!
-02:01=%1 swims like a stone!
-; Match starts
-02:02=Let's fight!
-02:02=Armed and ready!
+; Eventos
+; El erizo (%1) ha muerto
+02:00=%1 ha estirado la pata!
+02:00=%1 ha visto la luz!
+02:00=%1 no lo vio venir!
+; El erizo (%1) se ha ahogado
+02:01=%1 hace el submarizo!
+02:01=%1 imita al Titanic!
+02:01=%1 nada como una piedra!
+; El combate empieza
+02:02=Luchad!
+02:02=Cargado y listo!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+02:10=Es un pájaro, es un avión...
+02:10=Eliminado!
