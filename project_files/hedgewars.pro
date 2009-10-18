@@ -10,28 +10,28 @@ win32 {
 
 QT += network
 
-HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h
-	../QTfrontend/SquareLabel.h ../QTfrontend/about.h
-	../QTfrontend/ammoSchemeModel.h ../QTfrontend/bgwidget.h
-	../QTfrontend/binds.h ../QTfrontend/chatwidget.h
-	../QTfrontend/fpsedit.h ../QTfrontend/frameTeam.h
-	../QTfrontend/game.h ../QTfrontend/gamecfgwidget.h
-	../QTfrontend/gameuiconfig.h ../QTfrontend/hats.h
-	../QTfrontend/hedgehogerWidget.h ../QTfrontend/hwconsts.h
-	../QTfrontend/hwform.h ../QTfrontend/hwmap.h
-	../QTfrontend/igbox.h ../QTfrontend/input_ip.h
-	../QTfrontend/itemNum.h ../QTfrontend/mapContainer.h
-	../QTfrontend/misc.h ../QTfrontend/namegen.h
-	../QTfrontend/netregister.h ../QTfrontend/netserver.h
-	../QTfrontend/netserverslist.h ../QTfrontend/netudpserver.h
-	../QTfrontend/netudpwidget.h ../QTfrontend/newnetclient.h
-	../QTfrontend/pages.h ../QTfrontend/playrecordpage.h
-	../QTfrontend/predefteams.h ../QTfrontend/proto.h
-	../QTfrontend/sdlkeys.h ../QTfrontend/selectWeapon.h
-	../QTfrontend/statsPage.h ../QTfrontend/tcpBase.h
-	../QTfrontend/team.h ../QTfrontend/teamselect.h
-	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h
-	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h
+HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
+	../QTfrontend/SquareLabel.h ../QTfrontend/about.h \
+	../QTfrontend/ammoSchemeModel.h ../QTfrontend/bgwidget.h \
+	../QTfrontend/binds.h ../QTfrontend/chatwidget.h \
+	../QTfrontend/fpsedit.h ../QTfrontend/frameTeam.h \
+	../QTfrontend/game.h ../QTfrontend/gamecfgwidget.h \
+	../QTfrontend/gameuiconfig.h ../QTfrontend/hats.h \
+	../QTfrontend/hedgehogerWidget.h ../QTfrontend/hwconsts.h \
+	../QTfrontend/hwform.h ../QTfrontend/hwmap.h \
+	../QTfrontend/igbox.h ../QTfrontend/input_ip.h \
+	../QTfrontend/itemNum.h ../QTfrontend/mapContainer.h \
+	../QTfrontend/misc.h ../QTfrontend/namegen.h \
+	../QTfrontend/netregister.h ../QTfrontend/netserver.h \
+	../QTfrontend/netserverslist.h ../QTfrontend/netudpserver.h \
+	../QTfrontend/netudpwidget.h ../QTfrontend/newnetclient.h \
+	../QTfrontend/pages.h ../QTfrontend/playrecordpage.h \
+	../QTfrontend/predefteams.h ../QTfrontend/proto.h \
+	../QTfrontend/sdlkeys.h ../QTfrontend/selectWeapon.h \
+	../QTfrontend/statsPage.h ../QTfrontend/tcpBase.h \
+	../QTfrontend/team.h ../QTfrontend/teamselect.h \
+	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
+	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
 	../QTfrontend/weaponItem.h 
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
