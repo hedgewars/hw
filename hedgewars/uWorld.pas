@@ -252,7 +252,7 @@ TextureBuffer[0].Y:= 0;
 TextureBuffer[1].X:= TextureBuffer[0].X + waves;
 TextureBuffer[1].Y:= TextureBuffer[0].Y;
 TextureBuffer[2].X:= TextureBuffer[1].X;
-TextureBuffer[2].Y:= 1;
+TextureBuffer[2].Y:= SpritesData[sprWater].Texture^.ry;
 TextureBuffer[3].X:= TextureBuffer[0].X;
 TextureBuffer[3].Y:= TextureBuffer[2].Y;
 
