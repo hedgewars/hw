@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="de_DE">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -132,7 +134,7 @@
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>Der Host wurde nicht gefunden. Bitte überprüfen Sie ihre Einstellungen.</translation>
+        <translation>Der Server wurde nicht gefunden. Bitte überprüfe deine Einstellungen.</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -148,7 +150,7 @@
     </message>
     <message>
         <source>You got kicked</source>
-        <translation>Du wurdest herausgeworfen</translation>
+        <translation>Du wurdest hinausgeworfen</translation>
     </message>
     <message>
         <source>Password</source>
