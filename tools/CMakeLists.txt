@@ -1,6 +1,7 @@
 if (APPLE AND BUNDLE)
 
-find_package(OGGVORBIS)
+find_package(OGGVORBIS REQUIRED)
+find_package(SPARKLE REQUIRED)
 find_program(macdeployqt_EXE NAMES macdeployqt macdeployqt-mac)
 
 if(NOT macdeployqt_EXE)
@@ -15,6 +16,12 @@ set_target_properties(bundle PROPERTIES POST_INSTALL_SCRIPT ${CMAKE_CURRENT_BINA
 set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
 
 string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+
+if(SPARKLE_FOUND)
+	set(SPARKLE_FOUND 1)
+else()
+	set(SPARKLE_FOUND 0)
+endif()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
 
