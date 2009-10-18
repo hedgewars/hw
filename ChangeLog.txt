@@ -2,6 +2,22 @@
 * bugfixes
 
 
+0.9.11 -> 0.9.12:
+ + Zoom
+ + New weapons: flying saucer, molotov cocktail
+ + More sounds
+ + New visual effects
+ + Updated graphics
+ + Chat within team only
+ + Remember net password
+ + More trainings
+ + Implement room control delegation when host's connection fails
+ + Colorize chat events in engine
+ * Fix crash in replay caused by speechbubbles
+ * Fix some desync causes
+ * Fix rope bugs
+ * Fix bugs in weapon selection code
+
 0.9.10 -> 0.9.11:
  + Speech bubbles
  + Many new hats, new graves
