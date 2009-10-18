@@ -1713,7 +1713,7 @@ while i > 0 do
 							or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
 						end;
 					
-					FollowGear:= Gear
+                    if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then FollowGear:= Gear
 					end;
 		end
 		end;
