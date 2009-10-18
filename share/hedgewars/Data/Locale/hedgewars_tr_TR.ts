@@ -1,24 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="tr_TR">
+<!DOCTYPE TS><TS>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
         <translation>yeni</translation>
-    </message>
-</context>
-<context>
-    <name>FreqSpinBox</name>
-    <message>
-        <source>Never</source>
-        <translation>Asla</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation>
-            <numerusform>%1 turda bir</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -139,10 +124,6 @@
 <context>
     <name>HWNewNet</name>
     <message>
-        <source>Error</source>
-        <translation type="obsolete">Hata</translation>
-    </message>
-    <message>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Kurucu bilgisayar bulunamadı. Lütfen bilgisayar adı ve portu ayarlarınızı kontrol edin.</translation>
     </message>
@@ -155,18 +136,6 @@
         <translation>Oda kapatıldı</translation>
     </message>
     <message>
-        <source>*** %1 joined</source>
-        <translation type="obsolete">*** %1 katıldı</translation>
-    </message>
-    <message>
-        <source>*** %1 left</source>
-        <translation type="obsolete">*** %1 gitti</translation>
-    </message>
-    <message>
-        <source>*** %1 left (%2)</source>
-        <translation type="obsolete">*** %1 gitti (%2)</translation>
-    </message>
-    <message>
         <source>Quit reason: </source>
         <translation>Çıkma sebebi:</translation>
     </message>
@@ -177,10 +146,6 @@
     <message>
         <source>Password</source>
         <translation>Parola</translation>
-    </message>
-    <message>
-        <source>Enter your password:</source>
-        <translation type="obsolete">Parolanızı girin:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
@@ -251,18 +216,6 @@ or pick another nickname:</source>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;En iyi atış ödülünü &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt; kazandı.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation>
-            <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -410,18 +363,6 @@ You may join and start playing once the game starts.</source>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
         <translation type="unfinished"></translation>
@@ -502,14 +443,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation>Yeni</translation>
     </message>
     <message>
-        <source>Prev</source>
-        <translation type="obsolete">Önce</translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation type="obsolete">Sonra</translation>
-    </message>
-    <message>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
@@ -578,18 +511,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
 <context>
     <name>QCheckBox</name>
     <message>
-        <source>Forts mode</source>
-        <translation type="obsolete">Kaleler modu</translation>
-    </message>
-    <message>
-        <source>Divide teams</source>
-        <translation type="obsolete">Takımları böl</translation>
-    </message>
-    <message>
-        <source>Solid land</source>
-        <translation type="obsolete">Parçalanmaz yüzey</translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
     </message>
@@ -616,34 +537,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Append date and time to record file name</source>
         <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">Sınır Ekle</translation>
-    </message>
-    <message>
-        <source>Reduce Quality</source>
-        <translation type="obsolete">Kaliteyi Düşür</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">Azaltılmış Yerçekimi</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">Lazer Görüşü</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">Ölümsüzlük</translation>
-    </message>
-    <message>
-        <source>Add Mines</source>
-        <translation type="obsolete">Mayın Ekle</translation>
-    </message>
-    <message>
-        <source>Frontend Effects (Requires Restart)</source>
-        <translation type="obsolete">Arayüz Efektleri (Baştan Başlatmayı Gerektirir)</translation>
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
@@ -757,14 +650,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Special thanks:</source>
         <translation>Özel teşekkür:</translation>
-    </message>
-    <message>
-        <source>Turn time</source>
-        <translation type="obsolete">Tur süresi</translation>
-    </message>
-    <message>
-        <source>Initial health</source>
-        <translation type="obsolete">Başlangıç sağlığı</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -938,10 +823,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Elle Belirt</translation>
     </message>
     <message>
-        <source>Join official server</source>
-        <translation type="obsolete">Resmi sunucuya bağlan</translation>
-    </message>
-    <message>
         <source>Start</source>
         <translation>Başla</translation>
     </message>
@@ -977,18 +858,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
 <context>
     <name>QTableWidget</name>
     <message>
-        <source>Room name</source>
-        <translation type="obsolete">Oda ismi</translation>
-    </message>
-    <message>
-        <source>Players number</source>
-        <translation type="obsolete">Oyuncu sayısı</translation>
-    </message>
-    <message>
-        <source>Round in progress</source>
-        <translation type="obsolete">Oyun başlamış</translation>
-    </message>
-    <message>
         <source>Room Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1015,25 +884,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">Silahlar</translation>
-    </message>
-</context>
-<context>
-    <name>QToolBox</name>
-    <message>
-        <source>Actions</source>
-        <translation type="obsolete">Eylemler</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Silahlar</translation>
-    </message>
-    <message>
-        <source>Weapon properties</source>
-        <translation type="obsolete">Silah özellikleri</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Diğer</translation>
     </message>
 </context>
 <context>
@@ -1126,10 +976,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <source>down</source>
         <translation>aşağı</translation>
-    </message>
-    <message>
-        <source>jump</source>
-        <translation type="obsolete">zıpla</translation>
     </message>
     <message>
         <source>attack</source>
@@ -1393,401 +1239,6 @@ bilgileri</translation>
     <message>
         <source>Keyboard</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Backspace</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tab</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Return</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished">Sil</translation>
-    </message>
-    <message>
-        <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>teams</name>
-    <message>
-        <source>Hedgehogs</source>
-        <translation>Kirpiler</translation>
-    </message>
-    <message>
-        <source>hedgehog 1</source>
-        <translation>kirpi 1</translation>
-    </message>
-    <message>
-        <source>hedgehog 2</source>
-        <translation>kirpi 2</translation>
-    </message>
-    <message>
-        <source>hedgehog 3</source>
-        <translation>kirpi 3</translation>
-    </message>
-    <message>
-        <source>hedgehog 4</source>
-        <translation>kirpi 4</translation>
-    </message>
-    <message>
-        <source>hedgehog 5</source>
-        <translation>kirpi 5</translation>
-    </message>
-    <message>
-        <source>hedgehog 6</source>
-        <translation>kirpi 6</translation>
-    </message>
-    <message>
-        <source>hedgehog 7</source>
-        <translation>kirpi 7</translation>
-    </message>
-    <message>
-        <source>hedgehog 8</source>
-        <translation>kirpi 8</translation>
-    </message>
-    <message>
-        <source>Goddess</source>
-        <translation>Tanrıça</translation>
-    </message>
-    <message>
-        <source>Isis</source>
-        <translation>İsis</translation>
-    </message>
-    <message>
-        <source>Astarte</source>
-        <translation>Kibele</translation>
-    </message>
-    <message>
-        <source>Diana</source>
-        <translation>Diana</translation>
-    </message>
-    <message>
-        <source>Aphrodite</source>
-        <translation>Afrodit</translation>
-    </message>
-    <message>
-        <source>Hecate</source>
-        <translation>Hekat</translation>
-    </message>
-    <message>
-        <source>Demeter</source>
-        <translation>Demeter</translation>
-    </message>
-    <message>
-        <source>Kali</source>
-        <translation>Kali</translation>
-    </message>
-    <message>
-        <source>Inanna</source>
-        <translation>İnanna</translation>
-    </message>
-    <message>
-        <source>Fruits</source>
-        <translation>Meyveler</translation>
-    </message>
-    <message>
-        <source>Banana</source>
-        <translation>Muz</translation>
-    </message>
-    <message>
-        <source>Apple</source>
-        <translation>Elma</translation>
-    </message>
-    <message>
-        <source>Orange</source>
-        <translation>Portakal</translation>
-    </message>
-    <message>
-        <source>Lemon</source>
-        <translation>Limon</translation>
-    </message>
-    <message>
-        <source>Pineapple</source>
-        <translation>Ananas</translation>
-    </message>
-    <message>
-        <source>Mango</source>
-        <translation>Mango</translation>
-    </message>
-    <message>
-        <source>Peach</source>
-        <translation>Şeftali</translation>
-    </message>
-    <message>
-        <source>Plum</source>
-        <translation>Erik</translation>
     </message>
 </context>
 </TS>

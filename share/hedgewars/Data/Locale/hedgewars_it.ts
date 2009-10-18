@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="it">
+<!DOCTYPE TS><TS version="1.1" language="it">
+<defaultcodec></defaultcodec>
 <context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
         <translation>nuovo</translation>
-    </message>
-</context>
-<context>
-    <name>FreqSpinBox</name>
-    <message>
-        <source>Never</source>
-        <translation>Mai</translation>
-    </message>
-    <message numerus="yes">
-        <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -236,20 +222,6 @@ o scegli un altro nickname:</translation>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; punti.&lt;/p&gt;</translation>
     </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -418,20 +390,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
         <translation>Lo Schema delle Armi definisce le armi disponibili le loro munizioni.</translation>
     </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
 </context>
 <context>
     <name>PageScheme</name>
@@ -598,10 +556,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Reduced quality</source>
         <translation>Qualità ridotta</translation>
-    </message>
-    <message>
-        <source>Hardware sound (if available; requires restart)</source>
-        <translation type="obsolete">Usa accelerazione Hardware per il suono (se disponibile; richiede riavvio)</translation>
     </message>
 </context>
 <context>
@@ -1204,7 +1158,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Spara con la tua arma selezionata o usa uno strumento:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
@@ -1212,7 +1166,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Scambia il tuo riccio attivo (se possibile):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
@@ -1220,7 +1174,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Configura il timer per le bombe e altre armi esplosive:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
@@ -1236,19 +1190,19 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Parla alla tua squadra o a tutti i giocatori:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa, continua o abbandona la partita:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica il volume del gioco durante la partita:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Attiva/Disattiva schermo intero:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
@@ -1292,401 +1246,6 @@ hedgehogs</translation>
     <message>
         <source>Keyboard</source>
         <translation>(Tastiera)</translation>
-    </message>
-    <message>
-        <source>Mouse: Left button</source>
-        <translation>Mouse: Tasto sinistro</translation>
-    </message>
-    <message>
-        <source>Mouse: Middle button</source>
-        <translation>Mouse: Tasto centrale</translation>
-    </message>
-    <message>
-        <source>Mouse: Right button</source>
-        <translation>Mouse: Tasto destro</translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel up</source>
-        <translation>Mouse: Scroll in su</translation>
-    </message>
-    <message>
-        <source>Mouse: Wheel down</source>
-        <translation>Mouse: Scroll in giù</translation>
-    </message>
-    <message>
-        <source>Backspace</source>
-        <translation>Backspace</translation>
-    </message>
-    <message>
-        <source>Tab</source>
-        <translation>Tab</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>Cancella</translation>
-    </message>
-    <message>
-        <source>Return</source>
-        <translation>Invio</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation>Pausa</translation>
-    </message>
-    <message>
-        <source>Escape</source>
-        <translation>Esc</translation>
-    </message>
-    <message>
-        <source>Space</source>
-        <translation>Spazio</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation>Elimina</translation>
-    </message>
-    <message>
-        <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad .</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad /</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad -</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Numpad +</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter</source>
-        <translation>Invio</translation>
-    </message>
-    <message>
-        <source>Equals</source>
-        <translation>Uguale</translation>
-    </message>
-    <message>
-        <source>Up</source>
-        <translation>Su</translation>
-    </message>
-    <message>
-        <source>Down</source>
-        <translation>Giù</translation>
-    </message>
-    <message>
-        <source>Right</source>
-        <translation>Destra</translation>
-    </message>
-    <message>
-        <source>Left</source>
-        <translation>Sinistra</translation>
-    </message>
-    <message>
-        <source>Insert</source>
-        <translation>Inserisci</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation>Home</translation>
-    </message>
-    <message>
-        <source>End</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Num lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Caps lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left shift</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left alt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left meta</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>teams</name>
-    <message>
-        <source>Hedgehogs</source>
-        <translation>Hedgehogs</translation>
-    </message>
-    <message>
-        <source>hedgehog 1</source>
-        <translation>hedgehog 1</translation>
-    </message>
-    <message>
-        <source>hedgehog 2</source>
-        <translation>hedgehog 2</translation>
-    </message>
-    <message>
-        <source>hedgehog 3</source>
-        <translation>hedgehog 3</translation>
-    </message>
-    <message>
-        <source>hedgehog 4</source>
-        <translation>hedgehog 4</translation>
-    </message>
-    <message>
-        <source>hedgehog 5</source>
-        <translation>hedgehog 5</translation>
-    </message>
-    <message>
-        <source>hedgehog 6</source>
-        <translation>hedgehog 6</translation>
-    </message>
-    <message>
-        <source>hedgehog 7</source>
-        <translation>hedgehog 7</translation>
-    </message>
-    <message>
-        <source>hedgehog 8</source>
-        <translation>hedgehog 8</translation>
-    </message>
-    <message>
-        <source>Goddess</source>
-        <translation>Dea</translation>
-    </message>
-    <message>
-        <source>Isis</source>
-        <translation>Iside</translation>
-    </message>
-    <message>
-        <source>Astarte</source>
-        <translation>Astarte</translation>
-    </message>
-    <message>
-        <source>Diana</source>
-        <translation>Diana</translation>
-    </message>
-    <message>
-        <source>Aphrodite</source>
-        <translation>Afrodite</translation>
-    </message>
-    <message>
-        <source>Hecate</source>
-        <translation>Ecate</translation>
-    </message>
-    <message>
-        <source>Demeter</source>
-        <translation>Demetra</translation>
-    </message>
-    <message>
-        <source>Kali</source>
-        <translation>Kali</translation>
-    </message>
-    <message>
-        <source>Inanna</source>
-        <translation>Inanna</translation>
-    </message>
-    <message>
-        <source>Fruits</source>
-        <translation>Frutta</translation>
-    </message>
-    <message>
-        <source>Banana</source>
-        <translation>Banana</translation>
-    </message>
-    <message>
-        <source>Apple</source>
-        <translation>Mela</translation>
-    </message>
-    <message>
-        <source>Orange</source>
-        <translation>Arancia</translation>
-    </message>
-    <message>
-        <source>Lemon</source>
-        <translation>Limone</translation>
-    </message>
-    <message>
-        <source>Pineapple</source>
-        <translation>Ananas</translation>
-    </message>
-    <message>
-        <source>Mango</source>
-        <translation>Mango</translation>
-    </message>
-    <message>
-        <source>Peach</source>
-        <translation>Pesca</translation>
-    </message>
-    <message>
-        <source>Plum</source>
-        <translation>Prugna</translation>
     </message>
 </context>
 </TS>
