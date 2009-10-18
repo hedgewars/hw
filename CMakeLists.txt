@@ -139,7 +139,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"playlist.inc$"
 	"CPack"
 	"^${PROJECT_SOURCE_DIR}/bin/[a-z]"
-	"^${PROJECT_SOURCE_DIR}/tools"
+	"^${PROJECT_SOURCE_DIR}/tools/templates"
 	"^${PROJECT_SOURCE_DIR}/doc"
 	"^${PROJECT_SOURCE_DIR}/templates"
 	"^${PROJECT_SOURCE_DIR}/Graphics"
