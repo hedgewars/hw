@@ -152,37 +152,40 @@
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Motivo porque saiu:</translation>
+        <translation>Motivo de saída: </translation>
     </message>
     <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>O nome de utilizador %1 está
+registado em Hedgewars.org
+Por favor digite a sua palavra pass
+ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 juntou-se a sala</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 has juntou-se</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 saíu (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 saíu</translation>
     </message>
 </context>
 <context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf devolveu um erro ao render texto, provavelmente está relacionado com o bug em freetype2. É recomendado actualizar a sua libraria freetype.</translation>
+        <translation>SDL_ttf retornou um erro ao renderizar o texto, provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua libraria freetype.</translation>
     </message>
 </context>
 <context>
@@ -222,7 +225,7 @@ or pick another nickname:</source>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;A melhor jogada foi ganha por &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;A título de melhor tiro foi ganho por &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -307,7 +310,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Enter new file name:</source>
-        <translation>Insira o novo nome do ficheiro:</translation>
+        <translation>Insira um novo nome para o ficheiro:</translation>
     </message>
     <message>
         <source>Cannot rename to</source>
@@ -315,7 +318,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Cannot delete file</source>
-        <translation>Não foi possível eliminar o ficheiro</translation>
+        <translation>Não é possível eliminar o ficheiro</translation>
     </message>
     <message>
         <source>Please, select record from the list</source>
@@ -358,37 +361,39 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da Sala</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este jogo está ainda na entrada.
+Pode-se juntar-se e jogar assim que o jogo começe.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Este jogo está em progresso.
+Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder jogar.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 é o anfitrião. Ele mode ajustar as configurações e começar o jogo.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Mapa Aleatório</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>É possivel jogar em mapas pre-criados or aleatóros.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>O Esquema de Jogo define as configurações gerais e preferencias como Tempo da Ronda, Morte súbita ou Vampirismo.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>O Esquema de Armas define que armas estão disponiveis e a quantidade de munições.</translation>
     </message>
 </context>
 <context>
@@ -485,7 +490,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation>Carregar (carregar um jogo salvo previamente</translation>
+        <translation>Carregar (carregar um jogo salvo previamente)</translation>
     </message>
 </context>
 <context>
@@ -551,15 +556,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efeitos de Frontend (requer reinicio)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualidade reduzida</translation>
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Som por Hardware (se disponivel; requer reinicio)</translation>
     </message>
 </context>
 <context>
@@ -796,11 +801,11 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome de utilizador</translation>
     </message>
     <message>
         <source>Please, enter your nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor, insira o seu nome de utilizador</translation>
     </message>
 </context>
 <context>
@@ -870,42 +875,42 @@ Verifique a instalação</translation>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome da Sala</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Anfitrião</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mapa</translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Regras</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Armas</translation>
+        <translation>Armas</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Conjunto de armas</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Probabilidades</translation>
     </message>
 </context>
 <context>
@@ -1112,57 +1117,57 @@ ouriços</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>Aumentar zoom</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>Diminuir zoom</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Reiniciar zoom</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>Salto grande</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>salto alto</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlos basicos</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlos de armas</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controlos de camara e cursor</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Outro</translation>
+        <translation>Outros</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>Movimenta os teus ouriços e aponta:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Atravessa lacunas e obstaculos saltando:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dispara a arma currentemente seleccionada ou utiliza um utilitario:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
@@ -1170,51 +1175,51 @@ ouriços</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Troca de ouriço currentemente seleccionado (se possivel):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Apanha armas ou utilitarios:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Escolhe o tempo nas bombas e armas temporizadas:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Move a camara para o ouriço currentemente activo:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation>Move o cursor ou camara sem usar o rato:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica o nível de zoom da camara:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Fala para os teus membros de equipa ou todos os participantes:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pausa, continua ou abandona o jogo:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifica o volume durante o jogo:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altera para modo de ecrã inteiro:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tira um screenshot:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Altara as etiquetas acima dos ouriços:</translation>
     </message>
 </context>
 <context>
@@ -1225,51 +1230,51 @@ ouriços</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Cima)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Baixo)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Chapéu</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Esquerda)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Direita)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botão</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Teclado</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão esquerdo</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão do meio</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão direito</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Roda para cima</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Roda para baixo</translation>
     </message>
     <message>
         <source>Backspace</source>
@@ -1297,7 +1302,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaço</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1369,23 +1374,23 @@ ouriços</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Igual</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Cima</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Direita</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -1421,27 +1426,27 @@ ouriços</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift direito</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift esquerdo</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl direito</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl esquerdo</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt direito</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt esquerdo</translation>
     </message>
     <message>
         <source>Right meta</source>
