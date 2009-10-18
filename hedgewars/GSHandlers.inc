@@ -154,6 +154,7 @@ end;
 procedure doStepBomb(Gear: PGear);
 var i: LongInt;
     dX, dY: hwFloat;
+    Fire: PGear;
 begin
 AllInactive:= false;
 
@@ -189,8 +190,10 @@ if Gear^.Timer = 0 then
 					begin
 					dX:= AngleCos(i * 16) * _0_5 * (GetRandom + _1);
 					dY:= AngleSin(i * 16) * _0_5 * (GetRandom + _1);
-					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
-					AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+                    Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
+                    if i mod 2 = 0 then Fire^.State:= Fire^.State or gsttmpFlag;
+                    Fire:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
+                    if i mod 2 <> 0 then Fire^.State:= Fire^.State or gsttmpFlag;
 					end
 				end;
 		end;
