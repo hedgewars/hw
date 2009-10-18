@@ -1,4 +1,6 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
@@ -11,6 +13,12 @@
     <message>
         <source>Never</source>
         <translation>Ei koskaan</translation>
+    </message>
+    <message numerus="yes">
+        <source>Every %1 turn</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -227,6 +235,18 @@ tai valitse toinen nimimerkki:</translation>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Paras laukaus -mitalin voitti &lt;b&gt;%1&lt;/b&gt; &lt;b&gt;%2&lt;/b&gt; pisteellä&lt;/p&gt;</translation>
     </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -394,6 +414,18 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
         <translation>Asesuunnitelma määrittelee saatavilla olevat aseet ja niiden panosmäärät.</translation>
+    </message>
+    <message numerus="yes">
+        <source>There are %1 clients connected to this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>There are %1 teams participating in this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -564,7 +596,7 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation>Äänen laitteistokiihdytys (jos saatavilla; vaatii uudelleenkäynnistyksen)</translation>
+        <translation type="obsolete">Äänen laitteistokiihdytys (jos saatavilla; vaatii uudelleenkäynnistyksen)</translation>
     </message>
 </context>
 <context>

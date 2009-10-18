@@ -1,23 +1,31 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="tr_TR">
 <context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation type="unfinished">yeni</translation>
+        <translation>yeni</translation>
     </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Asla</translation>
+    </message>
+    <message numerus="yes">
+        <source>Every %1 turn</source>
+        <translation>
+            <numerusform>%1 turda bir</numerusform>
+        </translation>
     </message>
 </context>
 <context>
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Silahları düzenle</translation>
     </message>
     <message>
         <source>Error</source>
@@ -131,6 +139,10 @@
 <context>
     <name>HWNewNet</name>
     <message>
+        <source>Error</source>
+        <translation type="obsolete">Hata</translation>
+    </message>
+    <message>
         <source>The host was not found. Please check the host name and port settings.</source>
         <translation>Kurucu bilgisayar bulunamadı. Lütfen bilgisayar adı ve portu ayarlarınızı kontrol edin.</translation>
     </message>
@@ -141,6 +153,18 @@
     <message>
         <source>Room destroyed</source>
         <translation>Oda kapatıldı</translation>
+    </message>
+    <message>
+        <source>*** %1 joined</source>
+        <translation type="obsolete">*** %1 katıldı</translation>
+    </message>
+    <message>
+        <source>*** %1 left</source>
+        <translation type="obsolete">*** %1 gitti</translation>
+    </message>
+    <message>
+        <source>*** %1 left (%2)</source>
+        <translation type="obsolete">*** %1 gitti (%2)</translation>
     </message>
     <message>
         <source>Quit reason: </source>
@@ -155,11 +179,8 @@
         <translation>Parola</translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password
-or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <source>Enter your password:</source>
+        <translation type="obsolete">Parolanızı girin:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
@@ -170,11 +191,18 @@ or pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>%1 *** %2 has left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 *** %2 has left (%3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 *** %2 has left</source>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password
+or pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -189,11 +217,11 @@ or pick another nickname:</source>
     <name>PageAdmin</name>
     <message>
         <source>Server message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sunucu iletisi:</translation>
     </message>
     <message>
         <source>Set message</source>
-        <translation type="unfinished"></translation>
+        <translation>İletiyi ayarla</translation>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
@@ -204,7 +232,7 @@ or pick another nickname:</source>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlanıyor...</translation>
     </message>
 </context>
 <context>
@@ -223,6 +251,18 @@ or pick another nickname:</source>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;En iyi atış ödülünü &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt; kazandı.&lt;/p&gt;</translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
+        <translation>
+            <numerusform>&lt;p&gt;En iyi katil bir turda &lt;b&gt;%2&lt;/b&gt; öldürmeyle &lt;b&gt;%1&lt;/b&gt; oldu.&lt;/p&gt;</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
+        <translation>
+            <numerusform>&lt;p&gt;Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.&lt;/p&gt;</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -265,11 +305,11 @@ or pick another nickname:</source>
     <name>PageNetType</name>
     <message>
         <source>LAN game</source>
-        <translation type="unfinished"></translation>
+        <translation>LAN oyunu</translation>
     </message>
     <message>
         <source>Official server</source>
-        <translation type="unfinished"></translation>
+        <translation>Resmi sunucu</translation>
     </message>
 </context>
 <context>
@@ -370,6 +410,18 @@ You may join and start playing once the game starts.</source>
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <source>There are %1 clients connected to this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>There are %1 teams participating in this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
         <translation type="unfinished"></translation>
@@ -395,63 +447,71 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <name>PageScheme</name>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaleni koru ve düşmanları yok et, en fazla iki takım rengi!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation type="unfinished"></translation>
+        <translation>Takımlar bölgenin faklı taraflarında başlarlar, en fazla iki takım rengi!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Zemin yok edilemez!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Bölgenin etrafına yok edilemez bir sınır ekle</translation>
     </message>
     <message>
         <source>Lower gravity</source>
-        <translation type="unfinished"></translation>
+        <translation>Düşük yer çekimi</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation type="unfinished"></translation>
+        <translation>Lazer görüşü destekli nişan alma</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation type="unfinished"></translation>
+        <translation>Tüm kirpilerin kişisel güç kalkanı olur</translation>
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Rastgele mayınlar</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation type="unfinished"></translation>
+        <translation>Verdiğin hasarın %%80&apos;ini sağlık olarak kazan</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation type="unfinished"></translation>
+        <translation>Rakibin acısını paylaş, hasarını paylaş</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirpiler hareket edemez, topçuluk becerini ölç</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation type="unfinished"></translation>
+        <translation>Rastgele</translation>
     </message>
     <message>
         <source>Seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Saniye</translation>
     </message>
     <message>
         <source>New</source>
         <translation>Yeni</translation>
     </message>
     <message>
+        <source>Prev</source>
+        <translation type="obsolete">Önce</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation type="obsolete">Sonra</translation>
+    </message>
+    <message>
         <source>Delete</source>
-        <translation type="unfinished">Sil</translation>
+        <translation>Sil</translation>
     </message>
 </context>
 <context>
@@ -518,8 +578,16 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
 <context>
     <name>QCheckBox</name>
     <message>
-        <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <source>Forts mode</source>
+        <translation type="obsolete">Kaleler modu</translation>
+    </message>
+    <message>
+        <source>Divide teams</source>
+        <translation type="obsolete">Takımları böl</translation>
+    </message>
+    <message>
+        <source>Solid land</source>
+        <translation type="obsolete">Parçalanmaz yüzey</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -550,6 +618,34 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
     </message>
     <message>
+        <source>Add Border</source>
+        <translation type="obsolete">Sınır Ekle</translation>
+    </message>
+    <message>
+        <source>Reduce Quality</source>
+        <translation type="obsolete">Kaliteyi Düşür</translation>
+    </message>
+    <message>
+        <source>Low Gravity</source>
+        <translation type="obsolete">Azaltılmış Yerçekimi</translation>
+    </message>
+    <message>
+        <source>Laser Sight</source>
+        <translation type="obsolete">Lazer Görüşü</translation>
+    </message>
+    <message>
+        <source>Invulnerable</source>
+        <translation type="obsolete">Ölümsüzlük</translation>
+    </message>
+    <message>
+        <source>Add Mines</source>
+        <translation type="obsolete">Mayın Ekle</translation>
+    </message>
+    <message>
+        <source>Frontend Effects (Requires Restart)</source>
+        <translation type="obsolete">Arayüz Efektleri (Baştan Başlatmayı Gerektirir)</translation>
+    </message>
+    <message>
         <source>Frontend effects (requires restart)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -558,7 +654,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hardware sound (if available; requires restart)</source>
+        <source>Check for updates at startup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -617,22 +713,22 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Game Modifiers</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyun Değişkenleri</translation>
     </message>
     <message>
         <source>Basic Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Basit Ayarlar</translation>
     </message>
 </context>
 <context>
     <name>QLabel</name>
     <message>
         <source>Mines Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Mayın Süresi</translation>
     </message>
     <message>
         <source>Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>Mayınlar</translation>
     </message>
     <message>
         <source>Version</source>
@@ -661,6 +757,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Special thanks:</source>
         <translation>Özel teşekkür:</translation>
+    </message>
+    <message>
+        <source>Turn time</source>
+        <translation type="obsolete">Tur süresi</translation>
+    </message>
+    <message>
+        <source>Initial health</source>
+        <translation type="obsolete">Başlangıç sağlığı</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -700,31 +804,31 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Game scheme</source>
-        <translation type="unfinished"></translation>
+        <translation>Oyun teması</translation>
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasar Çarpanı</translation>
     </message>
     <message>
         <source>Turn Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Tur Süresi</translation>
     </message>
     <message>
         <source>Initial Health</source>
-        <translation type="unfinished"></translation>
+        <translation>Başlangıç Sağlığı</translation>
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>Ani Ölüm Süresi</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation type="unfinished"></translation>
+        <translation>Yardım Kasaları</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema Adı:</translation>
     </message>
 </context>
 <context>
@@ -834,6 +938,10 @@ Lütfen kurulumunuzu kontrol edin</translation>
         <translation>Elle Belirt</translation>
     </message>
     <message>
+        <source>Join official server</source>
+        <translation type="obsolete">Resmi sunucuya bağlan</translation>
+    </message>
+    <message>
         <source>Start</source>
         <translation>Başla</translation>
     </message>
@@ -869,6 +977,18 @@ Lütfen kurulumunuzu kontrol edin</translation>
 <context>
     <name>QTableWidget</name>
     <message>
+        <source>Room name</source>
+        <translation type="obsolete">Oda ismi</translation>
+    </message>
+    <message>
+        <source>Players number</source>
+        <translation type="obsolete">Oyuncu sayısı</translation>
+    </message>
+    <message>
+        <source>Round in progress</source>
+        <translation type="obsolete">Oyun başlamış</translation>
+    </message>
+    <message>
         <source>Room Name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -895,6 +1015,25 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">Silahlar</translation>
+    </message>
+</context>
+<context>
+    <name>QToolBox</name>
+    <message>
+        <source>Actions</source>
+        <translation type="obsolete">Eylemler</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="obsolete">Silahlar</translation>
+    </message>
+    <message>
+        <source>Weapon properties</source>
+        <translation type="obsolete">Silah özellikleri</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="obsolete">Diğer</translation>
     </message>
 </context>
 <context>
@@ -927,47 +1066,47 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
-        <translation type="unfinished"></translation>
+        <translation>Vampircilik</translation>
     </message>
     <message>
         <source>Karma</source>
-        <translation type="unfinished"></translation>
+        <translation>Karma</translation>
     </message>
     <message>
         <source>Artillery</source>
-        <translation type="unfinished"></translation>
+        <translation>Topçuluk</translation>
     </message>
     <message>
         <source>Fort Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Kale Modu</translation>
     </message>
     <message>
         <source>Divide Teams</source>
-        <translation type="unfinished"></translation>
+        <translation>Takımları Böl</translation>
     </message>
     <message>
         <source>Solid Land</source>
-        <translation type="unfinished"></translation>
+        <translation>Parçalanmaz Yüzey</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation type="unfinished">Sınır Ekle</translation>
+        <translation>Sınır Ekle</translation>
     </message>
     <message>
         <source>Low Gravity</source>
-        <translation type="unfinished">Azaltılmış Yerçekimi</translation>
+        <translation>Azaltılmış Yerçekimi</translation>
     </message>
     <message>
         <source>Laser Sight</source>
-        <translation type="unfinished">Lazer Görüşü</translation>
+        <translation>Lazer Görüşü</translation>
     </message>
     <message>
         <source>Invulnerable</source>
-        <translation type="unfinished">Ölümsüzlük</translation>
+        <translation>Ölümsüzlük</translation>
     </message>
     <message>
         <source>Add Mines</source>
-        <translation type="unfinished">Mayın Ekle</translation>
+        <translation>Mayın Ekle</translation>
     </message>
 </context>
 <context>
@@ -987,6 +1126,10 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <source>down</source>
         <translation>aşağı</translation>
+    </message>
+    <message>
+        <source>jump</source>
+        <translation type="obsolete">zıpla</translation>
     </message>
     <message>
         <source>attack</source>
@@ -1111,6 +1254,14 @@ bilgileri</translation>
         <translation>çıkış</translation>
     </message>
     <message>
+        <source>long jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>high jump</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>zoom in</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1120,14 +1271,6 @@ bilgileri</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>long jump</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>high jump</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
