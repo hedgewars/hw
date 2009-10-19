@@ -2091,7 +2091,11 @@ if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
 	Gear^.X:= Gear^.X + Gear^.dX;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
 	DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
-	CheckGearDrowning(Gear);
+    if(CheckGearDrowning(Gear)) then
+        begin
+        StopSound(sndPickhammer);
+	    exit
+        end
 	end;
 
 t:= CheckGearsCollision(Gear); //fixes drill not exploding when touching HH bug
