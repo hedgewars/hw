@@ -40,7 +40,7 @@
 00:37=Vampirismo
 00:38=Fucile di precisione
 00:39=Disco Volante
-00:40=Molotov Cocktail
+00:40=Bomba Molotov
 
 01:00=Combattiamo!
 01:01=Round in parità
