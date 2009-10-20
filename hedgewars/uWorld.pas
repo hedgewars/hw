@@ -319,7 +319,9 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
+{$IFDEF IPHONEOS}
     x,y: LongInt;
+{$ENDIF}
     offset: LongInt;
 begin
 if ZoomValue < zoom then

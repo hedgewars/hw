@@ -163,9 +163,11 @@ procedure MainLoop;
 var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
+{$IFDEF IPHONEOS}
     mouseState, whichMouse: byte;
     x, y, x_up, y_up, x_down, y_down: LongInt;
     oldy: LongInt = 240;
+{$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
 repeat
