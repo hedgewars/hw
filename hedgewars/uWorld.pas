@@ -534,7 +534,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, (cScreenWidth shr 1) - 103, cScreenHeight - offset - 2, 13, 0);
+   DrawSpriteFromRect(sprWindR, r, (cScreenWidth shr 1) - 103, cScreenHeight - offset + 2, 13, 0);
    end else
  if WindBarWidth < 0 then
    begin
@@ -544,7 +544,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - 106 + WindBarWidth, cScreenHeight - offset - 2, 13, 0);
+   DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - 106 + WindBarWidth, cScreenHeight - offset + 2, 13, 0);
    end;
 
 // AmmoMenu
