@@ -60,7 +60,7 @@ var
 	cInitHeight      : LongInt = 768;
 	cBits            : LongInt = 32;
 	cBitsStr         : string[2] = '32';
-	cTagsMask        : byte = 7;
+	cTagsMaskIndex   : byte = Low(cTagsMasks);
 	zoom             : GLfloat = 2.0;
 	ZoomValue        : GLfloat = 2.0;
 

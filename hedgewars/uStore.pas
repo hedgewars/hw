@@ -69,13 +69,16 @@ var PixelFormat: PSDL_PixelFormat = nil;
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld;
 
+type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel);
+
 var
     HHTexture: PTexture;
 	MaxTextureSize: Integer;
+	cGPUVendor: TGPUVendor;
 
 procedure StoreInit;
 begin
-
+	cGPUVendor:= gvUnknown;
 end;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
@@ -977,27 +980,56 @@ begin
 {$IFNDEF IPHONEOS}
 	glLoadExtension:= glext_LoadExtension(extension);
 {$ELSE}
-        glLoadExtension:= false;
+    glLoadExtension:= false;
 {$ENDIF}
+{$IFDEF DEBUGFILE}
 	if not glLoadExtension then
-		WriteLnToConsole('OpenGL: "' + extension + '" failed to load')
+		AddFileLog('OpenGL: "' + extension + '" failed to load')
 	else
-		WriteLnToConsole('OpenGL: "' + extension + '" loaded');
+		AddFileLog('OpenGL: "' + extension + '" loaded');
+{$ENDIF}
 end;
 
 procedure SetupOpenGL;
+var vendor: shortstring;
 begin
 glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-//workaround for wan the previous call fails
-if MaxTextureSize = 0 then MaxTextureSize:= 1024;
-
 {$IFDEF DEBUGFILE}
-AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
+AddFileLog('OpenGL: Renderer: ' + glGetString(GL_RENDERER));
+AddFileLog('OpenGL: Vendor: ' + glGetString(GL_VENDOR));
+AddFileLog('OpenGL: Version: ' + glGetString(GL_VERSION));
+AddFileLog('OpenGL: GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
+if MaxTextureSize = 0 then
+	begin
+	MaxTextureSize:= 1024;
+{$IFDEF DEBUGFILE}
+	AddFileLog('OpenGL: Warning - driver didn''t provide any valid max texture size; assuming 1024');
+{$ENDIF}
+	end;
+
+vendor:= LowerCase(glGetString(GL_VENDOR));
+if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
+	cGPUVendor:= gvNVIDIA
+else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
+	cGPUVendor:= gvATI
+else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
+	cGPUVendor:= gvIntel;
+
+	
+	
 {$IFNDEF IPHONEOS}
-SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
+// since ATI seems to be unable to provide proper texture filtering/quality,
+// don't even try to load the extension on ATI cards
+if cGPUVendor <> gvATI then
+	SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two')
+{$IFDEF DEBUGFILE}
+else
+	AddFileLog('OpenGL: Skipped extension GL_ARB_texture_non_power_of_two due to ATI card')
+{$ENDIF}
+; // don't touch this line! :)
 {$ENDIF}
 
 // set view port to whole window

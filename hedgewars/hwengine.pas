@@ -17,7 +17,7 @@
  *)
 
 {$IFNDEF FPC}
-WriteLn('Only Freepascal supported');
+{$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
 program hwengine;

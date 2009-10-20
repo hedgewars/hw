@@ -670,7 +670,11 @@ end;
 procedure chRotateMask(var s: shortstring);
 const map: array[0..7] of byte = (7,4,0,1,2,3,0,5);
 begin
-cTagsMask:= map[cTagsMask]
+inc(cTagsMaskIndex);
+if cTagsMaskIndex > High(cTagsMasks) then cTagsMaskIndex:= Low(cTagsMasks);
+
+// HACK: skip "health only" if all hogs are invulnerable
+if ((GameFlags and gfInvulnerable) <> 0) and ((cTagsMasks[cTagsMaskIndex] and not htTransparent) = htHealth) then chRotateMask(s);
 end;
 
 procedure chAddTrigger(var s: shortstring);

@@ -332,6 +332,24 @@ const
 
 	NoPointX = Low(LongInt);
 
+	// hog tag mask
+	htNone        = $00;
+	htTeamName    = $01;
+	htName        = $02;
+	htHealth      = $04;
+	htTransparent = $80;
+	
+	cTagsMasks       : array[0..7] of byte = (
+											htTeamName or htName or htHealth,
+											htName or htHealth,
+											htHealth,
+											htNone,
+											htTeamName or htName or htHealth or htTransparent,
+											htName or htHealth or htTransparent,
+											htHealth or htTransparent,
+											htNone
+											);
+
 	cHHFileName   = 'Hedgehog';
 	cCHFileName   = 'Crosshair';
 	cThemeCFGFilename = 'theme.cfg';
