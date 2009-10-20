@@ -988,6 +988,10 @@ end;
 procedure SetupOpenGL;
 begin
 glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+
+//workaround for wan the previous call fails
+if MaxTextureSize = 0 then MaxTextureSize:= 1024;
+
 {$IFDEF DEBUGFILE}
 AddFileLog('GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
