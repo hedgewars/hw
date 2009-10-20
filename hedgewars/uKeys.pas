@@ -22,8 +22,9 @@ uses uConsts;
 {$INCLUDE options.inc}
 
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
+type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
-function KeyNameToCode(name: string): word;
+function  KeyNameToCode(name: string): word;
 procedure ProcessKbd;
 procedure ResetKbd;
 procedure FreezeEnterKey;
@@ -41,7 +42,19 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 var hideAmmoMenu: boolean;
 	wheelUp: boolean = false;
 	wheelDown: boolean = false;
+{$IFDEF IPHONEOS}
+        leftClick: boolean = false;
+        middleClick: boolean = false;
+        rightClick: boolean = false;
 
+upKey: boolean = false;
+downKey: boolean = false;
+rightKey: boolean = false;
+leftKey: boolean = false;
+
+spaceKey: boolean = false;
+enterKey: boolean = false;
+{$ENDIF}
 	ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
     ControllerNumAxes: array[0..5] of Integer;
@@ -56,7 +69,6 @@ var hideAmmoMenu: boolean;
 implementation
 uses SDLh, uTeams, uConsole, uMisc, uStore;
 const KeyNumber = 1024;
-type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
@@ -111,6 +123,33 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
+{$IFDEF IPHONEOS}
+tkbdn[1]:= ord(leftClick);
+tkbdn[2]:= ord(middleClick);
+tkbdn[3]:= ord(rightClick);
+leftClick:= false;
+middleClick:= false;
+rightClick:= false;
+
+{*
+//sdl1.3 for these keys is messed up
+tkbdn[273]:= ord(upKey);
+tkbdn[274]:= ord(downKey);
+tkbdn[275]:= ord(rightKey);
+tkbdn[276]:= ord(leftKey);
+
+tkbdn[32]:= ord(spaceKey);
+tkbdn[13]:= ord(enterKey);
+
+upKey:= false;
+downKey:= false;
+rightKey:= false;
+leftKey:= false;
+
+spaceKey:= false;
+enterKey:= false;
+*}
+{$ENDIF}
 
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
@@ -162,10 +201,10 @@ begin
 
 {$IFDEF SDL13}
 pkbd:= SDL_GetKeyboardState(@j);
-k    := SDL_GetMouseState(0, nil, nil);
+k:= SDL_GetMouseState(0, nil, nil);
 {$ELSE}
 pkbd:= SDL_GetKeyState(@j);
-k    := SDL_GetMouseState(nil, nil);
+k:= SDL_GetMouseState(nil, nil);
 {$ENDIF}
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 
@@ -187,6 +226,32 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
+{$IFDEF IPHONEOS}
+tkbdn[1]:= ord(leftClick);
+tkbdn[2]:= ord(middleClick);
+tkbdn[3]:= ord(rightClick);
+leftClick:= false;
+middleClick:= false;
+rightClick:= false;
+
+{*
+tkbdn[273]:= ord(upKey);
+tkbdn[274]:= ord(downKey);
+tkbdn[275]:= ord(rightKey);
+tkbdn[276]:= ord(leftKey);
+
+tkbdn[32]:= ord(spaceKey);
+tkbdn[13]:= ord(enterKey);
+
+upKey:= false;
+downKey:= false;
+rightKey:= false;
+leftKey:= false;
+
+spaceKey:= false;
+enterKey:= false;
+*}
+{$ENDIF}
 
 // Controller(s)
 k:= j; // should we test k for hitting the limit? sounds rather unlikely to ever reach it
@@ -305,7 +370,7 @@ end;
 procedure FreezeEnterKey;
 begin
 tkbd[13]:= 1;
-tkbd[271]:= 1
+tkbd[271]:= 1;
 end;
 
 var Controller: array [0..5] of PSDLJoystick;

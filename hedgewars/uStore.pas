@@ -589,7 +589,7 @@ end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 begin
-DrawTexture(X - Source^.w div 2, Top, Source)
+DrawTexture(X - Source^.w shr 1, Top, Source)
 end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);

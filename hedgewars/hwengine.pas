@@ -163,13 +163,15 @@ procedure MainLoop;
 var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
+    mouseState, whichMouse: byte;
+    x, y, x_up, y_up, x_down, y_down: LongInt;
+    oldy: LongInt = 240;
 begin
 PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
 	case event.type_ of
 {$IFDEF IPHONEOS}
-		SDL_MOUSEMOTION: WriteLnToConsole('mouse number ' + inttostr(SDL_SelectMouse(event.motion.which)) + ' over ' + inttostr(SDL_GetNumMice()));
                 SDL_WINDOWEVENT:
 {$ELSE}
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
@@ -178,7 +180,65 @@ while SDL_PollEvent(@event) <> 0 do
                         if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
-{$IFNDEF IPHONEOS}
+{$IFDEF IPHONEOS}
+        {*MoveCamera is in uWord.pas -- conflicts with other commands*}
+        {*Keys are in uKeys.pas*}
+                SDL_MOUSEBUTTONDOWN: begin
+                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        if x <= 50 then 
+                        begin   
+                                AddFileLog('Wheel -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                {* sliding *}
+                                if oldy - y > 0 then uKeys.wheelUp:= true
+                                else uKeys.wheelDown:= true;
+                                {* update value only if movement is consistent *}
+                               // if (y > oldy - 10 ) or (y > oldy + 10 ) then oldy:= y
+                               // oldy:= y;
+                        end;
+
+                        {* keys *}
+             {*           if (x > 50) then
+                        begin
+                                AddFileLog('Arrow Key -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+
+                                if (y <= 50)  and (x > 135) and (x <= 185) then uKeys.upKey:= true;
+                                if (y > 430)  and (x > 135) and (x <= 185) then uKeys.downKey:= true;
+                                if (x > 270)  and (y > 215) and (y > 265)  then uKeys.rightClick:= true;
+                                if (x <= 100) and (y > 215) and (y > 265)  then uKeys.leftClick:= true;
+                        end;
+                        
+                        if (y > 430) and (x > 50) and (x <= 135) then
+                        begin
+                                AddFileLog('Space -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                uKeys.spaceKey:= true;
+                        end;
+                        if (y > 430) and (x > 185) and (x <= 270) then
+                        begin
+                                AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                uKeys.enterKey:= true;
+                        end;*}
+                end;
+                SDL_MOUSEBUTTONUP: begin
+                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        x_up:= x;
+                        y_up:= y;
+
+                        {* open ammo menu *}
+                        if (y > 430) and (x > 270) then
+                        begin   
+                                AddFileLog('Right Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y) );
+                                uKeys.rightClick:= true;
+                        end;
+                        {* reset zoom *}
+                        if (x > 270) and (y <= 50) then
+                        begin
+                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                uKeys.middleClick:= true;
+                        end;
+                       
+
+                end;
+{$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
 {$ENDIF}

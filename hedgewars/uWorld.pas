@@ -319,6 +319,8 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
+    x,y: LongInt;
+    offset: LongInt;
 begin
 if ZoomValue < zoom then
 	begin
@@ -338,6 +340,11 @@ glEnable(GL_TEXTURE_2D);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
 
+{$IFDEF IPHONEOS}
+{* see the code in MainLoop *}
+SDL_GetMouseState(0, @x, @y);
+if (x > 100) and (x < 220) and (y > 200) and (y < 280) then
+{$ENDIF}
 if not isPaused then MoveCamera;
 
 if not cReducedQuality then
@@ -388,7 +395,7 @@ DrawWater(cWaterOpacity);
 
 // Waves
 DrawWaves( 1, 25, - cWaveHeight);
-DrawWaves(-1, 50, - (cWaveHeight div 2));
+DrawWaves(-1, 50, - (cWaveHeight shr 1));
 DrawWaves( 1, 75, 0);
 
 
@@ -399,6 +406,11 @@ if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx
 {$WARNINGS ON}
 SetScale(2.0);
 
+{$IFDEF IPHONEOS}
+offset:= 465;
+{$ELSE}
+offset:= 48;
+{$ENDIF}
 // Turn time
 if TurnTimeLeft <> 0 then
    begin
@@ -406,16 +418,17 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, -cScreenWidth div 2 + t, cScreenHeight - 48, 1);
+   DrawSprite(sprFrame, -cScreenWidth div 2 + t, cScreenHeight - offset, 1);
    while i > 0 do
          begin
          dec(t, 32);
-         DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, cScreenHeight - 48, i mod 10);
+         DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, cScreenHeight - offset, i mod 10);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, cScreenHeight - 48, 0);
+   DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, cScreenHeight - offset, 0);
    end;
 
+{$IFNDEF IPHONEOS}
 // Timetrial
 if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 	begin
@@ -459,9 +472,14 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 	// left frame
 	DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, 8, 0);
 	end;
-   
+{$ENDIF}
+
 // Captions
+{$IFDEF IPHONEOS}
+i:= 53;
+{$ELSE}
 if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then i:= 48 else i:= 8;
+{$ENDIF}
 
 for grp:= Low(TCapGroup) to High(TCapGroup) do
     with Captions[grp] do
@@ -497,10 +515,15 @@ for t:= 0 to Pred(TeamsCount) do
       end;
 
 // Lag alert
-if isInLag then DrawSprite(sprLag, 32 - cScreenWidth div 2, 32, (RealTicks shr 7) mod 12);
+if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
-DrawSprite(sprWindBar, cScreenWidth div 2 - 180, cScreenHeight - 30, 0);
+{$IFDEF IPHONEOS}
+offset:= 450;
+{$ELSE}
+offset:= 30;
+{$ENDIF}
+DrawSprite(sprWindBar, (cScreenWidth shr 1) - 180, cScreenHeight - offset, 0);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -509,7 +532,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, cScreenWidth div 2 - 103, cScreenHeight - 28, 13, 0);
+   DrawSpriteFromRect(sprWindR, r, (cScreenWidth shr 1) - 103, cScreenHeight - offset - 2, 13, 0);
    end else
  if WindBarWidth < 0 then
    begin
@@ -519,7 +542,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, cScreenWidth div 2 - 106 + WindBarWidth, cScreenHeight - 28, 13, 0);
+   DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - 106 + WindBarWidth, cScreenHeight - offset - 2, 13, 0);
    end;
 
 // AmmoMenu
@@ -529,10 +552,13 @@ if (AMxShift < 210) or bShowAmmoMenu then ShowAmmoMenu;
 if isCursorVisible and bShowAmmoMenu then
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
+{$IFNDEF IPHONEOS}
+{* do not draw the chat because a) no input b) too little space*}
 DrawChat;
+{$ENDIF}
 
-if fastUntilLag then DrawCentered(0, cScreenHeight div 2, SyncTexture);
-if isPaused then DrawCentered(0, cScreenHeight div 2, PauseTexture);
+if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
+if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
 inc(Frames);
 if cShowFPS then
@@ -550,7 +576,7 @@ if cShowFPS then
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then
-      DrawTexture(cScreenWidth div 2 - 50, 10, fpsTexture);
+      DrawTexture((cScreenWidth shr 1) - 50, 10, fpsTexture);
    end;
 
 inc(SoundTimerTicks, Lag);
@@ -615,7 +641,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 {$ELSE}
 	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
 {$ENDIF}
-	CursorPoint.X:= CursorPoint.X - cScreenWidth div 2;
+	CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
 	CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
 	end;
 
@@ -690,7 +716,7 @@ if isCursorVisible or (FollowGear <> nil) then
       end;
 
 prevPoint:= CursorPoint;
-if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
+if cHasFocus then SDL_WarpMouse(CursorPoint.X + (cScreenWidth shr 1), cScreenHeight - CursorPoint.Y);
 if WorldDy > LAND_HEIGHT + 1024 then WorldDy:= LAND_HEIGHT + 1024;
 if WorldDy < wdy then WorldDy:= wdy;
 if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
