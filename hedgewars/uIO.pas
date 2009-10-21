@@ -45,7 +45,7 @@ const isPonged: boolean = false;
 type PCmd = ^TCmd;
      TCmd = packed record
             Next: PCmd;
-            Time: LongWord;
+            loTime: Word;
             case byte of
             1: (len: byte;
                 cmd: Char;
@@ -63,12 +63,12 @@ var
 	SendEmptyPacketTicks: LongWord = 0;
 
 
-function AddCmd(Time: Longword; str: shortstring): PCmd;
+function AddCmd(Time: Word; str: shortstring): PCmd;
 var Result: PCmd;
 begin
 new(Result);
 FillChar(Result^, sizeof(TCmd), 0);
-Result^.Time:= Time;
+Result^.loTime:= Time;
 Result^.str:= str;
 if Result^.cmd <> 'F' then dec(Result^.len, 2); // cut timestamp
 if headcmd = nil then
@@ -121,7 +121,6 @@ begin
 case s[1] of
      '!': begin {$IFDEF DEBUGFILE}AddFileLog('Ping? Pong!');{$ENDIF}isPonged:= true; end;
      '?': SendIPC('!');
-     '#': inc(hiTicks);
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -134,8 +133,8 @@ case s[1] of
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
-     AddCmd(hiTicks shl 16 + loTicks, s);
-     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.Time));{$ENDIF}
+     AddCmd(loTicks, s);
+     {$IFDEF DEBUGFILE}AddFileLog('IPC in: '+s[1]+' ticks '+inttostr(lastcmd^.loTime));{$ENDIF}
      end
 end;
 
@@ -265,14 +264,16 @@ begin
 tmpflag:= true;
 
 while (headcmd <> nil)
-	and tmpflag
-	and ((GameTicks = headcmd^.Time)
-		or (headcmd^.cmd = 's')
-		or (headcmd^.cmd = 'b')
+	and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
+	and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
+		or (headcmd^.cmd = 's') // for these commands time isn't specified
+		or (headcmd^.cmd = '#')
+ 		or (headcmd^.cmd = 'b')
 		or (headcmd^.cmd = 'F')) do
 	begin
 	case headcmd^.cmd of
-		'+': ; // do nothing - it is just empty packet
+		'+': ; // do nothing - it is just an empty packet
+		'#': inc(hiTicks);
 		'L': ParseCommand('+left', true);
 		'l': ParseCommand('-left', true);
 		'R': ParseCommand('+right', true);
@@ -302,7 +303,7 @@ while (headcmd <> nil)
 		'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
 		'N': begin
 			tmpflag:= false;
-			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(headcmd^.Time)){$ENDIF}
+			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
 			end;
 		'p': begin
 			TargetPoint.X:= SDLNet_Read16(@(headcmd^.X));
@@ -311,8 +312,8 @@ while (headcmd <> nil)
 			end;
 		'P': begin
 			// these are equations solved for CursorPoint
-			// SDLNet_Read16(@(headcmd^.X)):= CursorPoint.X - WorldDx;
-			// SDLNet_Read16(@(headcmd^.Y)):= cScreenHeight - CursorPoint.Y - WorldDy;
+			// SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
+			// SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
 			CursorPoint.X:= SDLNet_Read16(@(headcmd^.X)) + WorldDx;
 			CursorPoint.Y:= cScreenHeight - SDLNet_Read16(@(headcmd^.Y)) - WorldDy;
 			end;
@@ -328,11 +329,11 @@ while (headcmd <> nil)
 	RemoveCmd
 	end;
 
-if (headcmd <> nil) and tmpflag then
-	TryDo(GameTicks < headcmd^.Time,
+if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
+	TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
 			'oops, queue error. in buffer: ' + headcmd^.cmd +
 			' (' + inttostr(GameTicks) + ' > ' +
-			inttostr(headcmd^.Time) + ')',
+			inttostr(hiTicks shl 16 + headcmd^.loTime) + ')',
 			true);
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
