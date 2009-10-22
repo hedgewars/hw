@@ -58,14 +58,14 @@ const
 		SDLLibName = 'libSDL.so';
         {$ENDIF}
 {$ENDIF}
-	SDL_SWSURFACE   = $00000000;
-	SDL_HWSURFACE   = $00000001;
-	SDL_SRCALPHA    = $00010000;
-	SDL_INIT_VIDEO  = $00000020;
-	SDL_INIT_AUDIO  = $00000010;
+	SDL_SWSURFACE     = $00000000;
+	SDL_HWSURFACE     = $00000001;
+	SDL_SRCALPHA      = $00010000;
+	SDL_INIT_VIDEO    = $00000020;
+	SDL_INIT_AUDIO    = $00000010;
 	SDL_INIT_JOYSTICK = $00000200;
 
-	SDL_APPINPUTFOCUS=$00000002;
+	SDL_APPINPUTFOCUS = 2;
 
 {$IFDEF SDL13}
 	SDL_ASYNCBLIT   = $08000000;
@@ -94,10 +94,9 @@ const
 {$ENDIF}
 
 {*begin sdl_event binding*}
-	SDL_NOEVENT     = 0;
-	SDL_KEYDOWN     = 2;
-	SDL_KEYUP       = 3;
-	//SDL_QUITEV      = 12;
+	SDL_NOEVENT = 0;
+	SDL_KEYDOWN = 2;
+	SDL_KEYUP = 3;
 	SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
 
 {$IFDEF SDL13}
@@ -111,7 +110,7 @@ const
 	SDL_JOYHAT = 12;
 	SDL_JOYBUTTONDOWN = 13;
 	SDL_JOYBUTTONUP = 14;
-	SDL_QUITEV      = 15;
+	SDL_QUITEV = 15;
 {$ELSE}
         SDL_ACTIVEEVENT = 1;
        	SDL_MOUSEBUTTONDOWN = 5;
@@ -122,28 +121,23 @@ const
 	SDL_JOYHAT = 9;
 	SDL_JOYBUTTONDOWN = 10;
 	SDL_JOYBUTTONUP = 11;
-	SDL_QUITEV      = 12;
+	SDL_QUITEV = 12;
 {$ENDIF}
 {*end sdl_event binding*}
 
-{$IFDEF SDL13}
-{*#define SDL_BUTTON(X)		(1 << ((X)-1))
-#define SDL_BUTTON_LEFT		1
-#define SDL_BUTTON_MIDDLE	2
-#define SDL_BUTTON_RIGHT	3
-#define SDL_BUTTON_X1		4
-#define SDL_BUTTON_X2		5
-#define SDL_BUTTON_LMASK	SDL_BUTTON(SDL_BUTTON_LEFT)
-#define SDL_BUTTON_MMASK	SDL_BUTTON(SDL_BUTTON_MIDDLE)
-#define SDL_BUTTON_RMASK	SDL_BUTTON(SDL_BUTTON_RIGHT)
-#define SDL_BUTTON_X1MASK	SDL_BUTTON(SDL_BUTTON_X1)
-#define SDL_BUTTON_X2MASK	SDL_BUTTON(SDL_BUTTON_X2)*}
-{$ENDIF}
 
+//if little endian 
 	RMask = $000000FF;
 	GMask = $0000FF00;
 	BMask = $00FF0000;
 	AMask = $FF000000;
+//else 	
+//	RMask = $FF000000;
+//	GMask = $00FF0000;
+//	BMask = $0000FF00;
+//	AMask = $000000FF;
+//endif
+
 
 type PSDL_Rect = ^TSDL_Rect;
 	TSDL_Rect = record
@@ -333,30 +327,30 @@ type PSDL_Rect = ^TSDL_Rect;
      TSDL_Event = record
                   case Byte of
 {$IFDEF SDL13}
-                        //doublecheck the type of WINDOWEVENT TEXTINPUT
-                        SDL_NOEVENT: (type_: byte);
-                        SDL_WINDOWEVENT: (active: TSDL_ActiveEvent);
-                        SDL_KEYDOWN,
+			//doublecheck the type of WINDOWEVENT TEXTINPUT
+			SDL_NOEVENT: (type_: byte);
+			SDL_WINDOWEVENT: (active: TSDL_ActiveEvent);
+			SDL_KEYDOWN,
                         SDL_KEYUP: (key: TSDL_KeyboardEvent);
-                        SDL_TEXTINPUT: (txtin: byte);
-                        SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-                        SDL_MOUSEBUTTONDOWN,
-                        SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+			SDL_TEXTINPUT: (txtin: byte);
+			SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+			SDL_MOUSEBUTTONDOWN,
+			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
 {$ELSE}
-                       SDL_NOEVENT: (type_: byte);
-                       SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
-                       SDL_KEYDOWN,
-                       SDL_KEYUP: (key: TSDL_KeyboardEvent);
-                       SDL_QUITEV: (quit: TSDL_QuitEvent);
-                       SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
-                       SDL_MOUSEBUTTONDOWN,
-                       SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+			SDL_NOEVENT: (type_: byte);
+			SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
+			SDL_KEYDOWN,
+			SDL_KEYUP: (key: TSDL_KeyboardEvent);
+			SDL_QUITEV: (quit: TSDL_QuitEvent);
+			SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+			SDL_MOUSEBUTTONDOWN,
+			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
 {$ENDIF}
-						SDL_JOYAXIS: (jaxis: TSDL_JoyAxisEvent);
-						SDL_JOYHAT: (jhat: TSDL_JoyHatEvent);
-						SDL_JOYBUTTONDOWN,
-						SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-     end;
+			SDL_JOYAXIS: (jaxis: TSDL_JoyAxisEvent);
+			SDL_JOYHAT: (jhat: TSDL_JoyHatEvent);
+			SDL_JOYBUTTONDOWN,
+			SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+     		 end;
 
      PByteArray = ^TByteArray;
      TByteArray = array[0..65535] of Byte;
@@ -395,6 +389,7 @@ function  SDL_Flip(Screen: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
 procedure SDL_GetRGB(pixel: Longword; fmt: PSDL_PixelFormat; r, g, b: PByte); cdecl; external SDLLibName;
 function  SDL_MapRGB(format: PSDL_PixelFormat; r, g, b: Byte): Longword; cdecl; external SDLLibName;
+function  SDL_MapRGBA(format: PSDL_PixelFormat; r, g, b, a: Byte): Longword; cdecl; external SDLLibName;
 
 function  SDL_DisplayFormat(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
 function  SDL_DisplayFormatAlpha(Surface: PSDL_Surface): PSDL_Surface; cdecl; external SDLLibName;
@@ -585,7 +580,7 @@ const {$IFDEF WIN32}
       {$ENDIF}
 
 function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
-
+function IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
 (*  SDL_net  *)
 
 const {$IFDEF WIN32}

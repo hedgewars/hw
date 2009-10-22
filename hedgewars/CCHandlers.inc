@@ -624,8 +624,8 @@ if SDLPrimSurface <> nil then
 	SDL_FreeSurface(SDLPrimSurface);
 	end;
 
-{$IFDEF DARWIN}
-//remove the topbar from Mac and iPhone
+{$IFDEF IPHONEOS}
+//remove the topbar from iPhone
 flags:= flags or SDL_NOFRAME;
 {$ENDIF}
 
@@ -640,7 +640,7 @@ SetupOpenGL();
 {$IFDEF DEBUGFILE}
 AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
-PixelFormat:= SDLPrimSurface^.format
+PixelFormat:=@convFormat// SDLPrimSurface^.format
 end;
 
 procedure chVol_p(var s: shortstring);

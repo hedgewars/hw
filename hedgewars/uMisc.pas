@@ -396,13 +396,13 @@ Surface2Tex^.h:= surf^.h;
 if (surf^.format^.BytesPerPixel = 3) then
 	begin
 		modeIntFormat:= GL_RGB;
-		modeFormat:= modeIntFormat;
+		modeFormat:= GL_RGB;
 	end
 else
 if (surf^.format^.BytesPerPixel = 4) then
 	begin
 		modeIntFormat:= GL_RGBA;
-		modeFormat:= modeIntFormat;
+		modeFormat:= GL_RGBA;
 	end
 else
    begin

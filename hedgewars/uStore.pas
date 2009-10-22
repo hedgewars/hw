@@ -901,26 +901,8 @@ end;
 function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-{$IFDEF IPHONEOS}
+{$IFDEF DARWIN}
     convertedSurf: PSDL_Surface;
-const TestFormat: TSDL_PixelFormat = (
-            palette: nil;
-            BitsPerPixel : 32;
-            BytesPerPixel: 4;
-            Rloss : 0;
-            Gloss : 0;
-            Bloss : 0;
-            Aloss : 0;
-			Rshift: 0;
-            Gshift: 8;
-            Bshift: 16;
-            Ashift: 24;
-            RMask : $000000FF;
-            GMask : $0000FF00;
-            BMask : $00FF0000;
-            AMask : $FF000000;
-            colorkey: 0;
-            alpha : 255);
 {$ENDIF}
 begin
 WriteToConsole(msgLoading + filename + '... ');
@@ -961,16 +943,20 @@ if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tm
 		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
+{$IFDEF DARWIN}
+//for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7
+if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
+begin
+	convertedSurf:= SDL_ConvertSurface(tmpsurf, @convFormat, SDL_SWSURFACE);
+	SDL_FreeSurface(tmpsurf);	
+	tmpsurf:= convertedSurf;
+end;
+{$ENDIF}
+
 if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 //if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf) else Result:= SDL_DisplayFormat(tmpsurf);
 WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
 WriteLnToConsole(msgOK);
-
-{$IFDEF IPHONEOS}
-//for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7
-convertedSurf:= SDL_ConvertSurface(tmpsurf, @TestFormat, SDL_SWSURFACE);
-tmpsurf:= convertedSurf;
-{$ENDIF}
 
 LoadImage:= tmpsurf //Result
 end;
@@ -980,13 +966,13 @@ begin
 {$IFNDEF IPHONEOS}
 	glLoadExtension:= glext_LoadExtension(extension);
 {$ELSE}
-    glLoadExtension:= false;
+	glLoadExtension:= false;
 {$ENDIF}
 {$IFDEF DEBUGFILE}
 	if not glLoadExtension then
-		AddFileLog('OpenGL: "' + extension + '" failed to load')
+		AddFileLog('OpenGL - "' + extension + '" failed to load')
 	else
-		AddFileLog('OpenGL: "' + extension + '" loaded');
+		AddFileLog('OpenGL - "' + extension + '" loaded');
 {$ENDIF}
 end;
 
@@ -996,21 +982,25 @@ begin
 glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
 {$IFDEF DEBUGFILE}
-AddFileLog('OpenGL: Renderer: ' + glGetString(GL_RENDERER));
-AddFileLog('OpenGL: Vendor: ' + glGetString(GL_VENDOR));
-AddFileLog('OpenGL: Version: ' + glGetString(GL_VERSION));
-AddFileLog('OpenGL: GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
+AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
+AddFileLog('OpenGL - Vendor: ' + string(pchar(glGetString(GL_VENDOR))));
+AddFileLog('OpenGL - Version: ' + string(pchar(glGetString(GL_VERSION))));
+AddFileLog('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
 if MaxTextureSize = 0 then
 	begin
+{$IFDEF DARWIN}
+	MaxTextureSize:= 2048;
+{$ELSE}
 	MaxTextureSize:= 1024;
+{$ENDIF}
 {$IFDEF DEBUGFILE}
-	AddFileLog('OpenGL: Warning - driver didn''t provide any valid max texture size; assuming 1024');
+	AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
 {$ENDIF}
 	end;
 
-vendor:= LowerCase(glGetString(GL_VENDOR));
+vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
 if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
 	cGPUVendor:= gvNVIDIA
 else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
@@ -1019,17 +1009,21 @@ else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
 	cGPUVendor:= gvIntel;
 
 	
-	
 {$IFNDEF IPHONEOS}
 // since ATI seems to be unable to provide proper texture filtering/quality,
-// don't even try to load the extension on ATI cards
+// do not even try to load the extension on ATI cards
+
+{$IFDEF DARWIN}
+if true then
+{$ELSE}
 if cGPUVendor <> gvATI then
+{$ENDIF}
 	SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two')
 {$IFDEF DEBUGFILE}
 else
 	AddFileLog('OpenGL: Skipped extension GL_ARB_texture_non_power_of_two due to ATI card')
 {$ENDIF}
-; // don't touch this line! :)
+; // do not touch this line! :)
 {$ENDIF}
 
 // set view port to whole window
