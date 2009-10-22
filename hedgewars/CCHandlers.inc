@@ -625,7 +625,7 @@ if SDLPrimSurface <> nil then
 	end;
 
 {$IFDEF IPHONEOS}
-//remove the topbar from iPhone
+//remove the topbar from the iPhone
 flags:= flags or SDL_NOFRAME;
 {$ENDIF}
 
@@ -640,7 +640,7 @@ SetupOpenGL();
 {$IFDEF DEBUGFILE}
 AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
-PixelFormat:=@convFormat// SDLPrimSurface^.format
+PixelFormat:= SDLPrimSurface^.format
 end;
 
 procedure chVol_p(var s: shortstring);

@@ -22,7 +22,7 @@ uses uConsts, SDLh,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
-    GL,
+	GL,
 {$ENDIF}
 	uFloat;
 {$INCLUDE options.inc}
@@ -382,44 +382,31 @@ SetTextureParameters(true);
 end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
-var modeIntFormat: LongInt;
-    modeFormat: LongInt;
-	tw, th, x, y: Longword;
-	tmpp: pointer;
-	fromP4, toP4: PLongWordArray;
-	fromP1, toP1: PByteArray;
+var tw, th, x, y: Longword;
+    tmpp: pointer;
+    fromP4, toP4: PLongWordArray;
 begin
 new(Surface2Tex);
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
-if (surf^.format^.BytesPerPixel = 3) then
-	begin
-		modeIntFormat:= GL_RGB;
-		modeFormat:= GL_RGB;
-	end
-else
-if (surf^.format^.BytesPerPixel = 4) then
-	begin
-		modeIntFormat:= GL_RGBA;
-		modeFormat:= GL_RGBA;
-	end
-else
-   begin
-   TryDo(false, 'Surface2Tex: BytesPerPixel not in [3, 4]', true);
-   Surface2Tex^.id:= 0;
-   exit
-   end;
+if (surf^.format^.BytesPerPixel <> 4) then
+begin
+	TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
+	Surface2Tex^.id:= 0;
+	exit
+end;
+
 
 glGenTextures(1, @Surface2Tex^.id);
 
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
 if SDL_MustLock(surf) then
-   SDLTry(SDL_LockSurface(surf) >= 0, true);
+	SDLTry(SDL_LockSurface(surf) >= 0, true);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
-	begin
+begin
 	tw:= toPowerOf2(Surf^.w);
 	th:= toPowerOf2(Surf^.h);
 
@@ -428,75 +415,33 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
 
 	GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
-	if surf^.format^.BytesPerPixel = 4 then
-		begin
 		fromP4:= Surf^.pixels;
 		toP4:= tmpp;
 
 		for y:= 0 to Pred(Surf^.h) do
-			begin
-			for x:= 0 to Pred(Surf^.w) do
-				toP4^[x]:= fromP4^[x];
-			for x:= Surf^.w to Pred(tw) do
-				toP4^[x]:= 0;
+		begin
+			for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
+			for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
 			toP4:= @(toP4^[tw]);
 			fromP4:= @(fromP4^[Surf^.pitch div 4]);
-			end;
-
-		for y:= Surf^.h to Pred(th) do
-			begin
-			for x:= 0 to Pred(tw) do
-				toP4^[x]:= 0;
-			toP4:= @(toP4^[tw]);
-			end;
-		end
-	else
-		begin
-		fromP1:= Surf^.pixels;
-		toP1:= tmpp;
-
-		for y:= 0 to Pred(Surf^.h) do
-			begin
-			for x:= 0 to Pred(Surf^.w) do
-				begin
-				toP1^[x * 3]:= fromP1^[x * 3];
-				toP1^[x * 3 + 1]:= fromP1^[x * 3 + 1];
-				toP1^[x * 3 + 2]:= fromP1^[x * 3 + 2];
-				end;
-			for x:= Surf^.w to Pred(tw) do
-				begin
-				toP1^[x * 3]:= 0;
-				toP1^[x * 3 + 1]:= 0;
-				toP1^[x * 3 + 2]:= 0;
-				end;
-			toP1:= @(toP1^[tw * 3]);
-			fromP1:= @(fromP1^[Surf^.pitch]);
-			end;
-
-		for y:= Surf^.h to Pred(th) do
-			begin
-			for x:= 0 to Pred(tw) do
-				begin
-				toP1^[x * 3]:= 0;
-				toP1^[x * 3 + 1]:= 0;
-				toP1^[x * 3 + 2]:= 0;
-				end;
-			toP1:= @(toP1^[tw * 3]);
-			end;
 		end;
 
-//	legacy resizing function
-//	gluScaleImage(mode, Surf^.w, Surf^.h, GL_UNSIGNED_BYTE, Surf^.pixels, tw, th, GL_UNSIGNED_BYTE, tmpp);
+		for y:= Surf^.h to Pred(th) do
+		begin
+			for x:= 0 to Pred(tw) do toP4^[x]:= 0;
+			toP4:= @(toP4^[tw]);
+		end;
 
-	glTexImage2D(GL_TEXTURE_2D, 0, modeIntFormat, tw, th, 0, modeFormat, GL_UNSIGNED_BYTE, tmpp);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
 
 	FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
-	end else
-	begin
+end
+else
+begin
 	Surface2Tex^.rx:= 1.0;
 	Surface2Tex^.ry:= 1.0;
-	glTexImage2D(GL_TEXTURE_2D, 0, modeIntFormat, surf^.w, surf^.h, 0, modeFormat, GL_UNSIGNED_BYTE, surf^.pixels);
-	end;
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
+end;
 
 ResetVertexArrays(Surface2Tex);
 
@@ -602,7 +547,7 @@ var i: LongInt;
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06
 cMaxWindSpeed.QWordValue:= 2147484;// 0.0005
-cWindSpeed.QWordValue:=     429496;// 0.0001
+cWindSpeed.QWordValue:= 429496;// 0.0001
 cGravity:= cMaxWindSpeed;
 cDamageModifier:= _1;
 cLaserSighting:= false;
