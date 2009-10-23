@@ -918,13 +918,13 @@ if ((imageFlags and ifLowRes) <> 0) then
 			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 			begin
 				SDL_FreeSurface(tmpsurf);
-				WriteLnToConsole('Image too big, trying to load lowres version: ' + s);
+				AddFileLog('Image too big, trying to load lowres version: ' + s);
 				tmpsurf:= IMG_Load(Str2PChar(s))
 			end;
 		end
 		else
 		begin
-			WriteLnToConsole('Image not found, trying to load lowres version: ' + s);
+			AddFileLog('Image not found, trying to load lowres version: ' + s);
 			tmpsurf:= IMG_Load(Str2PChar(s))
 		end;
 	end;

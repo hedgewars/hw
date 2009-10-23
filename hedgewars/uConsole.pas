@@ -241,12 +241,12 @@ RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
 RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
 RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
 RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
-RegisterVariable('damagepct', vtLongInt, @cDamagePercent, false);
+RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
 RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
 RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);
 RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
-RegisterVariable('minestime', vtLongInt, @cMinesTime, false);
+RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
 RegisterVariable('fort'    , vtCommand, @chFort         , false);
 RegisterVariable('voicepack',vtCommand, @chVoicepack    , false);
 RegisterVariable('grave'   , vtCommand, @chGrave        , false);
@@ -298,14 +298,14 @@ RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
 RegisterVariable('-voldown', vtCommand, @chVol_p        , true );
 RegisterVariable('findhh'  , vtCommand, @chFindhh       , true );
 RegisterVariable('pause'   , vtCommand, @chPause        , true );
-RegisterVariable('+cur_u'   , vtCommand, @chCurU_p      , true );
-RegisterVariable('-cur_u'   , vtCommand, @chCurU_m      , true );
-RegisterVariable('+cur_d'   , vtCommand, @chCurD_p      , true );
-RegisterVariable('-cur_d'   , vtCommand, @chCurD_m      , true );
-RegisterVariable('+cur_l'   , vtCommand, @chCurL_p      , true );
-RegisterVariable('-cur_l'   , vtCommand, @chCurL_m      , true );
-RegisterVariable('+cur_r'   , vtCommand, @chCurR_p      , true );
-RegisterVariable('-cur_r'   , vtCommand, @chCurR_m      , true );
+RegisterVariable('+cur_u'  , vtCommand, @chCurU_p       , true );
+RegisterVariable('-cur_u'  , vtCommand, @chCurU_m       , true );
+RegisterVariable('+cur_d'  , vtCommand, @chCurD_p       , true );
+RegisterVariable('-cur_d'  , vtCommand, @chCurD_m       , true );
+RegisterVariable('+cur_l'  , vtCommand, @chCurL_p       , true );
+RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
+RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
+RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
 
 finalization
 FreeVariablesList
