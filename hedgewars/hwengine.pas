@@ -164,9 +164,10 @@ var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
 {$IFDEF IPHONEOS}
-    mouseState, whichMouse: byte;
-    x, y, x_up, y_up, x_down, y_down: LongInt;
+    mouseState: byte;
+    x, y: LongInt;
     oldy: LongInt = 240;
+oldJoy: LongInt =0;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
@@ -188,8 +189,10 @@ while SDL_PollEvent(@event) <> 0 do
                 SDL_MOUSEBUTTONDOWN: begin
                         mouseState:= SDL_GetMouseState(0, @x, @y);
                         if x <= 50 then 
-                        begin   
+                        begin
+{$IFDEF DEBUGFILE}
                                 AddFileLog('Wheel -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
                                 {* sliding *}
                                 if oldy - y > 0 then uKeys.wheelUp:= true
                                 else uKeys.wheelDown:= true;
@@ -207,47 +210,77 @@ while SDL_PollEvent(@event) <> 0 do
                                 if (y > 430)  and (x > 135) and (x <= 185) then uKeys.downKey:= true;
                                 if (x > 270)  and (y > 215) and (y > 265)  then uKeys.rightClick:= true;
                                 if (x <= 100) and (y > 215) and (y > 265)  then uKeys.leftClick:= true;
-                        end;
+                        end;*}
                         
                         if (y > 430) and (x > 50) and (x <= 135) then
                         begin
+{$IFDEF DEBUGFILE}
                                 AddFileLog('Space -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-                                uKeys.spaceKey:= true;
+{$ENDIF}
+                                ParseCommand('ljump', true);
                         end;
                         if (y > 430) and (x > 185) and (x <= 270) then
                         begin
-                                AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-                                uKeys.enterKey:= true;
-                        end;*}
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                ParseCommand('hjump', true);
+                        end;
+                        if (y <= 50) and (x > 50) and (x <= 270) then
+                        begin
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                //ParseCommand('hjump', true);
+                        end;
                 end;
                 SDL_MOUSEBUTTONUP: begin
                         mouseState:= SDL_GetMouseState(0, @x, @y);
-                        x_up:= x;
-                        y_up:= y;
-
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
-                        begin   
+                        begin
+{$IFDEF DEBUGFILE}
                                 AddFileLog('Right Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y) );
+{$ENDIF}
                                 uKeys.rightClick:= true;
                         end;
                         {* reset zoom *}
                         if (x > 270) and (y <= 50) then
                         begin
+{$IFDEF DEBUGFILE}
                                 AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
                                 uKeys.middleClick:= true;
                         end;
-                       
-
                 end;
+		SDL_JOYAXIS: begin
+                {axis 2 = back and forth;  axis 1 = up and down;  axis 0 = left and right}
+                        //AddFileLog('which: ' + inttostr(event.jaxis.which) + ' axis: ' + inttostr(event.jaxis.axis) + ' value: ' + inttostr(event.jaxis.value));
+                        if (event.jaxis.axis = 0) and (CurrentTeam <> nil) then
+                        begin
+                                if (modulo(event.jaxis.value) > (oldJoy + 400)) or (modulo(event.jaxis.value) < (oldJoy - 400)) then
+                                begin
+                                        if event.jaxis.value > 1500 then ParseCommand('+right', true) else
+                                        if event.jaxis.value <= -1500 then ParseCommand('+left', true) else
+                                        if (event.jaxis.value > 0) and (event.jaxis.value <= 1500) then ParseCommand('-right', true) else
+                                        if (event.jaxis.value <= 0) and (event.jaxis.value > -1500) then ParseCommand('-left', true); 
+{$IFDEF DEBUGFILE}
+                                        AddFileLog('Joystick value: ' + inttostr(event.jaxis.value) + ' oldJoy: ' + inttostr(oldJoy));
+{$ENDIF}
+                                        oldJoy:= modulo(event.jaxis.value);
+                                end;
+                        end;
+                
+                end;
+
 {$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
-{$ENDIF}
 		SDL_JOYAXIS: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
 		SDL_JOYHAT: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
 		SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
 		SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
+{$ENDIF}
 		SDL_QUITEV: isTerminated:= true
 		end;
 CurrTime:= SDL_GetTicks;
