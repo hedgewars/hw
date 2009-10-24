@@ -96,8 +96,8 @@ if bShowAmmoMenu then
    begin
    if AMxShift = 0 then
       begin
-      CursorPoint.X:= cScreenWidth div 2;
-      CursorPoint.Y:= cScreenHeight div 2;
+      CursorPoint.X:= cScreenWidth shr 1;
+      CursorPoint.Y:= cScreenHeight shr 1;
       prevPoint:= CursorPoint;
       SDL_WarpMouse(CursorPoint.X  + cScreenWidth div 2, cScreenHeight - CursorPoint.Y)
       end;
@@ -114,7 +114,7 @@ with CurrentHedgehog^ do
 	begin
 	if Ammo = nil then exit;
 	SlotsNum:= 0;
-	x:= cScreenWidth div 2 - 210 + AMxShift;
+	x:= (cScreenWidth shr 1) - 210 + AMxShift;
 	y:= cScreenHeight - 40;
 	dec(y);
 	DrawSprite(sprAMBorders, x, y, 0);
@@ -345,7 +345,7 @@ glEnable(GL_TEXTURE_2D);
 {$IFDEF IPHONEOS}
 {* see the code in MainLoop *}
 SDL_GetMouseState(0, @x, @y);
-if (x > 100) and (x < 220) and (y > 200) and (y < 280) then
+if ((x > 100) and (x <= 220) and (y > 200) and (y <= 280)) and bShowAmmoMenu <> false then
 {$ENDIF}
 if not isPaused then MoveCamera;
 
@@ -359,8 +359,8 @@ if not cReducedQuality then
     end;
 
 // Waves
-DrawWaves( 1,  0, - (cWaveHeight * 2));
-DrawWaves(-1, 100, - (cWaveHeight + cWaveHeight div 2));
+DrawWaves( 1,  0, - (cWaveHeight shl 1));
+DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)));
 
 
 DrawLand(WorldDx, WorldDy);

@@ -164,10 +164,12 @@ var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
 {$IFDEF IPHONEOS}
-    mouseState: byte;
+type TDirection = (nodir, left, right);
+var mouseState: byte;
     x, y: LongInt;
     oldy: LongInt = 240;
-oldJoy: LongInt =0;
+    oldJoy: LongInt =0;
+    dir: TDirection = nodir;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
@@ -187,7 +189,10 @@ while SDL_PollEvent(@event) <> 0 do
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
         {*Keys are in uKeys.pas*}
                 SDL_MOUSEBUTTONDOWN: begin
+                                AddFileLog('*********************************************       touch down');
+
                         mouseState:= SDL_GetMouseState(0, @x, @y);
+
                         if x <= 50 then 
                         begin
 {$IFDEF DEBUGFILE}
@@ -215,26 +220,37 @@ while SDL_PollEvent(@event) <> 0 do
                         if (y > 430) and (x > 50) and (x <= 135) then
                         begin
 {$IFDEF DEBUGFILE}
-                                AddFileLog('Space -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                                ParseCommand('ljump', true);
+                       uKeys.enterKey:=true;
                         end;
                         if (y > 430) and (x > 185) and (x <= 270) then
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                                ParseCommand('hjump', true);
+                       uKeys.backspaceKey:=true;
+
                         end;
                         if (y <= 50) and (x > 50) and (x <= 270) then
                         begin
 {$IFDEF DEBUGFILE}
-                                AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                AddFileLog('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                                //ParseCommand('hjump', true);
+                        uKeys.spaceKey:= true;
+                        uKeys.isAttacking:= true;
+                        end
+                        else
+                        begin
+                                AddFileLog('Space UP -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                uKeys.isAttacking:= false;
                         end;
                 end;
                 SDL_MOUSEBUTTONUP: begin
+                                AddFileLog('*********************************************       touch up');
+
+                        if bShowAmmoMenu = true then ParseCommand('/put', true);
+
                         mouseState:= SDL_GetMouseState(0, @x, @y);
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
@@ -260,10 +276,23 @@ while SDL_PollEvent(@event) <> 0 do
                         begin
                                 if (modulo(event.jaxis.value) > (oldJoy + 400)) or (modulo(event.jaxis.value) < (oldJoy - 400)) then
                                 begin
-                                        if event.jaxis.value > 1500 then ParseCommand('+right', true) else
-                                        if event.jaxis.value <= -1500 then ParseCommand('+left', true) else
-                                        if (event.jaxis.value > 0) and (event.jaxis.value <= 1500) then ParseCommand('-right', true) else
-                                        if (event.jaxis.value <= 0) and (event.jaxis.value > -1500) then ParseCommand('-left', true); 
+                                        if event.jaxis.value > 1500 then
+                                        begin
+                                                if dir <> right then ParseCommand('-left', true);
+                                                ParseCommand('+right', true);
+                                                dir:= right;
+                                        end
+                                        else
+                                                if event.jaxis.value <= -1500 then
+                                                begin 
+                                                        if dir <> left then ParseCommand('-right', true);
+                                                        ParseCommand('+left', true);
+                                                        dir:= left;
+                                                end
+                                                else
+                                                        if (event.jaxis.value > 0) and (event.jaxis.value <= 1500) then ParseCommand('-right', true)
+                                                else
+                                                                if (event.jaxis.value <= 0) and (event.jaxis.value > -1500) then ParseCommand('-left', true); 
 {$IFDEF DEBUGFILE}
                                         AddFileLog('Joystick value: ' + inttostr(event.jaxis.value) + ' oldJoy: ' + inttostr(oldJoy));
 {$ENDIF}

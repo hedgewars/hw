@@ -402,7 +402,7 @@ function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external S
 function  SDL_GetMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
-function  SDL_GetNumMice : LongInt; cdecl; external SDLLibName;
+function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;

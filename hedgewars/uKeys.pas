@@ -52,8 +52,11 @@ downKey: boolean = false;
 rightKey: boolean = false;
 leftKey: boolean = false;
 
+backspaceKey: boolean = false;
 spaceKey: boolean = false;
 enterKey: boolean = false;
+isAttacking:boolean = false;
+
 {$ENDIF}
 	ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
@@ -105,8 +108,10 @@ pkbd := SDL_GetKeyState(@j);
 k    := SDL_GetMouseState(nil, nil);
 {$ENDIF}
 
+{$IFNDEF IPHONEOS}
 for i:= 6 to pred(j) do // first 6 will be overwritten
 	tkbdn[i]:= pkbd^[i];
+{$ENDIF}
 
 // mouse buttons
 {$IFDEF DARWIN}
@@ -131,24 +136,25 @@ leftClick:= false;
 middleClick:= false;
 rightClick:= false;
 
-{*
 //sdl1.3 for these keys is messed up
-tkbdn[273]:= ord(upKey);
-tkbdn[274]:= ord(downKey);
-tkbdn[275]:= ord(rightKey);
-tkbdn[276]:= ord(leftKey);
+//tkbdn[MYCONST]:= ord(upKey);
+//tkbdn[MYCONST + 1]:= ord(downKey);
+//tkbdn[MYCONST + 2]:= ord(rightKey);
+//tkbdn[MYCONST + 3]:= ord(leftKey);
 
-tkbdn[32]:= ord(spaceKey);
+tkbdn[ 8]:= ord(backspaceKey);
 tkbdn[13]:= ord(enterKey);
+tkbdn[32]:= ord(spaceKey);
 
 upKey:= false;
 downKey:= false;
 rightKey:= false;
 leftKey:= false;
 
-spaceKey:= false;
+if isAttacking = false then spaceKey:= false;
 enterKey:= false;
-*}
+backspaceKey:= false;
+
 {$ENDIF}
 
 // Controller(s)
@@ -195,7 +201,7 @@ if CurrentBinds[i][0] <> #0 then
 end;
 
 procedure ResetKbd;
-var i, j, k, t: LongInt;
+var i, j, k, t,tmp: LongInt;
     pkbd: PByteArray;
 begin
 
@@ -208,8 +214,10 @@ k:= SDL_GetMouseState(nil, nil);
 {$ENDIF}
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 
+{$IFNDEF IPHONEOS}
 for i:= 1 to pred(j) do
 	tkbdn[i]:= pkbd^[i];
+{$ENDIF}
 
 // mouse buttons
 {$IFDEF DARWIN}
@@ -234,23 +242,24 @@ leftClick:= false;
 middleClick:= false;
 rightClick:= false;
 
-{*
-tkbdn[273]:= ord(upKey);
-tkbdn[274]:= ord(downKey);
-tkbdn[275]:= ord(rightKey);
-tkbdn[276]:= ord(leftKey);
+//sdl1.3 for these keys is messed up
+//tkbdn[MYCONST]:= ord(upKey);
+//tkbdn[MYCONST + 1]:= ord(downKey);
+//tkbdn[MYCONST + 2]:= ord(rightKey);
+//tkbdn[MYCONST + 3]:= ord(leftKey);
 
-tkbdn[32]:= ord(spaceKey);
+tkbdn[ 8]:= ord(backspaceKey);
 tkbdn[13]:= ord(enterKey);
+tkbdn[32]:= ord(spaceKey);
 
 upKey:= false;
 downKey:= false;
 rightKey:= false;
 leftKey:= false;
 
-spaceKey:= false;
+if isAttacking = false then spaceKey:= false;
 enterKey:= false;
-*}
+backspaceKey:= false;
 {$ENDIF}
 
 // Controller(s)
@@ -334,6 +343,14 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		inc(k, 1);
 		end;
 	end;
+{$IFDEF IPHONEOS}
+
+DefaultBinds[  3]:= 'ammomenu';
+DefaultBinds[  8]:= 'hjump';
+DefaultBinds[ 13]:= 'ljump';
+DefaultBinds[ 32]:= '+attack';
+
+{$ENDIF}
 	
 DefaultBinds[ 27]:= 'quit';
 DefaultBinds[ 96]:= 'history';
