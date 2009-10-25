@@ -265,7 +265,7 @@ const
 	gfVampiric     = $00000200;
 	gfKarma        = $00000400;
 	gfArtillery    = $00000800;
-	gfOneClanMode  = $10000000;
+	gfOneClanMode  = $00001000;
 
 	gstDrowning       = $00000001;
 	gstHHDriven       = $00000002;
