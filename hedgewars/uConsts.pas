@@ -319,7 +319,7 @@ const
 	ammoprop_NotBorder    = $00000800;
 	ammoprop_Utility      = $00001000;
 
-	AMMO_INFINITE = 9;
+	AMMO_INFINITE = 100;
 
 	EXPLAllDamageInRadius = $00000001;
 	EXPLAutoSound         = $00000002;
@@ -1586,7 +1586,7 @@ const convFormat: TSDL_PixelFormat = (
 );
 			
 
-var CountTexz: array[1..9] of PTexture;
+var CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
 implementation
 
