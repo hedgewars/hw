@@ -343,6 +343,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		inc(k, 1);
 		end;
 	end;
+
 {$IFDEF IPHONEOS}
 DefaultBinds[  1]:= '/put';
 DefaultBinds[  3]:= 'ammomenu';

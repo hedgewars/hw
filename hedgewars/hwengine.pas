@@ -190,6 +190,7 @@ while SDL_PollEvent(@event) <> 0 do
                         AddFileLog('*********************************************       touch down');
 
                         SDL_GetMouseState(0, @x, @y);
+ uKeys.leftClick:= true;
 
                         {* zoom slider *}
                         if (x <= 50) and (y <= 430) then 
@@ -272,7 +273,7 @@ while SDL_PollEvent(@event) <> 0 do
                 SDL_MOUSEBUTTONUP: begin
                         AddFileLog('*********************************************       touch up');
 
-                        if bShowAmmoMenu = true then uKeys.leftClick:= true;
+                      //  if bShowAmmoMenu = true then
 
                         SDL_GetMouseState(0, @x, @y);
                         {* open ammo menu *}
@@ -404,7 +405,7 @@ case ParamCount of
 		cAltDamage:= false;
 		cShowFPS:= true;
 		val('8', cTimerInterval);
-		cReducedQuality:= false;
+		cReducedQuality:= true;
 
         for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]

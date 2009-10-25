@@ -131,7 +131,7 @@ with CurrentHedgehog^ do
 			DrawSprite(sprAMSlot, x, y, 0);
 			DrawSprite(sprAMSlotKeys, x + 2, y + 1, i);
 			t:= 0;
-            g:= 0;
+                        g:= 0;
 			while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
 				begin
 				if (Ammo^[i, t].AmmoType <> amNothing) then
@@ -345,7 +345,7 @@ glEnable(GL_TEXTURE_2D);
 {$IFDEF IPHONEOS}
 {* see the code in MainLoop *}
 SDL_GetMouseState(0, @x, @y);
-//if ((x > 100) and (x <= 220) and (y > 200) and (y <= 280)) and bShowAmmoMenu <> false then
+if ((x > 50) and (x <= 270) and (y > 50) and (y <= 430)) then
 {$ENDIF}
 if not isPaused then MoveCamera;
 

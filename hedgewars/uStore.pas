@@ -943,7 +943,6 @@ if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tm
 		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
-{$IFDEF DARWIN}
 //for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7
 if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
 begin
@@ -951,7 +950,6 @@ begin
 	SDL_FreeSurface(tmpsurf);	
 	tmpsurf:= convertedSurf;
 end;
-{$ENDIF}
 
 if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 //if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf) else Result:= SDL_DisplayFormat(tmpsurf);
