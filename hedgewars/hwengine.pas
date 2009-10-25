@@ -166,13 +166,23 @@ var PrevTime,
 {$IFDEF IPHONEOS}
 type TDirection = (nodir, left, right);
 var x, y: LongInt;
-    oldy_zoom: LongInt = -1;
-    oldy_aim: LongInt = -1;
+        dx, dy, mouseState: LongInt;
+    direction: TDirection = nodir;
+    havetrace: boolean = false;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
+{$IFDEF TOUCHINPUT}
+if direction <> nodir then
+begin
+        uKeys.isWalking:= true;
+        if direction = left then uKeys.leftKey:= true
+        else if direction = right then uKeys.rightKey:= true;
+end
+else uKeys.isWalking:= false;
+{$ENDIF}
 	case event.type_ of
 {$IFDEF SDL13}
                 SDL_WINDOWEVENT:
@@ -184,96 +194,83 @@ while SDL_PollEvent(@event) <> 0 do
 				cHasFocus:= event.active.gain = 1;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
 {$IFDEF TOUCHINPUT}
+                SDL_MOUSEMOTION: begin
+                        AddFileLog('*********************************************       motion');
+                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        SDL_GetRelativeMouseState(0, @dx, @dy);
+                        
+                        direction:= nodir;
+
+                        if boolean(mouseState) then
+                        begin
+                                AddFileLog('x: ' + inttostr(x) + ' y: ' + inttostr(y) + ' dx: ' + inttostr(dx) + ' dy: ' + inttostr(dy));
+
+                                {* zoom slider *}
+                                if (x <= 50) and (y <= 430) and (y > 50) then 
+                                begin
+                                        if (dy > 0) then uKeys.wheelDown:= true
+                                        else if (dy < 0) then uKeys.wheelUp:= true;
+                                end;
+
+                                {* aim slider *}
+                                if (x > 270) and (y > 50) and (y <= 430) then
+                                begin
+                                        if (dy > 0) then uKeys.downKey:= true
+                                        else if (dy < 0) then uKeys.upKey:= true;
+                                end;
+
+                                {* switch *}
+                                if (x > 50) and (x <= 270) and (y > 400) then
+                                begin
+                                        if (dy <> 0) then uKeys.tabKey:= true
+                                end;
+                        end;
+                end;
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
-        {*Keys are in uKeys.pas*}
                 SDL_MOUSEBUTTONDOWN: begin
                         AddFileLog('*********************************************       touch down');
 
-                        SDL_GetMouseState(0, @x, @y);
- uKeys.leftClick:= true;
+                        mouseState:= SDL_GetMouseState(0, @x, @y);                       
 
-                        {* zoom slider *}
-                        if (x <= 50) and (y <= 430) then 
+                        {* attack *}
+                        if (x > 50) and (x <= 270) and (y <= 50) then
                         begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Wheel -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                if oldy_zoom = -1 then oldy_zoom:= y
-                                else
-                                begin
-                                        if oldy_zoom - y > 10 then uKeys.wheelUp:= true
-                                        else if oldy_zoom -y < -10 then uKeys.wheelDown:= true;
-                                        {* update value only if movement is consistent *}
-                                        if (y > oldy_zoom + 20 ) or (y < oldy_zoom - 20 ) then oldy_zoom:= y
-                                end;
+                                AddFileLog('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                uKeys.spaceKey:= true;
+                                uKeys.isAttacking:= true;
                         end;
-                        {* reset zoom *}
-                        if (x <= 50) and (y > 430) then
+
+                        if (x <= 50) and (y <= 50) then
                         begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                uKeys.middleClick:= true;
+                                AddFileLog('Left Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                            //    uKeys.leftKey:= true;
+                            //    uKeys.isWalking:= true;
+                                direction:= left;
                         end;
-                        {* aim slider *}
-                        if (x > 230) and (y <= 430) then 
+                        
+                        if (x > 270) and (y <= 50) then
                         begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Up&Down -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                if oldy_aim = -1 then oldy_aim:= y
-                                else
-                                begin
-                                        if oldy_aim - y > 10 then uKeys.upKey:= true
-                                        else if oldy_aim -y < -10 then uKeys.downKey:= true;
-                                        {* update value only if movement is consistent *}
-                                        if (y > oldy_aim + 20 ) or (y < oldy_aim - 20 ) then oldy_aim:= y
-                                end;
+                                AddFileLog('Right Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                            //    uKeys.rightKey:= true;
+                            //    uKeys.isWalking:= true;
+                                direction:= right;
                         end;
-                        {* reset zoom *}
-                        if (x <= 50) and (y > 430) then
-                        begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                uKeys.middleClick:= true;
-                        end;
-                        {* long jump *}                        
-                        if (y > 430) and (x > 50) and (x <= 135) then
-                        begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                uKeys.enterKey:= true;
-                        end;
+
                         {* high jump *}                        
-                        if (y > 430) and (x > 185) and (x <= 270) then
+                        if (x > 160) and (x <= 270) and (y > 400) then
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
                                 uKeys.backspaceKey:= true;
-
-                        end;
-                        {* attack *}
-                        if (y <= 50) and (x > 50) and (x <= 270) then
-                        begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                uKeys.spaceKey:= true;
-                                uKeys.isAttacking:= true;
-                        end
-                        else
-                        begin
-                                AddFileLog('Space UP -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-                                uKeys.isAttacking:= false;
                         end;
                 end;
                 SDL_MOUSEBUTTONUP: begin
                         AddFileLog('*********************************************       touch up');
 
-                        SDL_GetMouseState(0, @x, @y);
+                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        uKeys.leftClick:= true;
+
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
                         begin
@@ -282,9 +279,35 @@ while SDL_PollEvent(@event) <> 0 do
 {$ENDIF}
                                 uKeys.rightClick:= true;
                         end;
+
+                        {* long jump *}                        
+                        if (x > 50) and (x <= 160) and (y > 400) then
+                        begin
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                uKeys.enterKey:= true;
+                        end;
+
+                        {* reset zoom *}
+                        if (x <= 50) and (y > 430) then
+                        begin
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                uKeys.middleClick:= true;
+                        end;
+
+                        {* end movement and attack *}
+{$IFDEF DEBUGFILE}
+                        AddFileLog('Arrow Keys UP | Space UP -- x: ' + inttostr(x) + ' y: ' + inttostr(y) );
+{$ENDIF}
+                        direction:= nodir;
+                        uKeys.isAttacking:= false;
                 end;
 {$ENDIF}
 {$IFDEF IPHONEOS}
+{* might be masked by above events
 		SDL_JOYAXIS: begin
                 {* axis 0 = left and right;
                    axis 1 = up and down;
@@ -293,24 +316,22 @@ while SDL_PollEvent(@event) <> 0 do
                         begin
                                 if event.jaxis.value > 1500 then
                                 begin
-                                        uKeys.rightKey:= true;
-                                        uKeys.isWalking:= true;
+                                        direction:= right;
                                 end
                                 else
                                         if event.jaxis.value <= -1500 then
                                         begin 
-                                                uKeys.leftKey:= true;
-                                                uKeys.isWalking:= true;
+                                                direction:= left
                                         end
                                         else
-                                                if (event.jaxis.value  > -1500) and (event.jaxis.value <= 1500) then uKeys.isWalking:= false;
+                                                if (event.jaxis.value  > -1500) and (event.jaxis.value <= 1500) then direction:= nodir;
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Joystick value: ' + inttostr(event.jaxis.value));
 {$ENDIF}
                         end;
                 
                 end;
-
+*}
 {$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
@@ -320,7 +341,8 @@ while SDL_PollEvent(@event) <> 0 do
 		SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
 {$ENDIF}
 		SDL_QUITEV: isTerminated:= true
-		end;
+        end;
+
 CurrTime:= SDL_GetTicks;
 if PrevTime + cTimerInterval <= CurrTime then
    begin
@@ -329,6 +351,7 @@ if PrevTime + cTimerInterval <= CurrTime then
    end else SDL_Delay(1);
 IPCCheckSock
 until isTerminated
+
 end;
 
 /////////////////////

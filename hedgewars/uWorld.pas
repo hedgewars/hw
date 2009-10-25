@@ -345,7 +345,7 @@ glEnable(GL_TEXTURE_2D);
 {$IFDEF IPHONEOS}
 {* see the code in MainLoop *}
 SDL_GetMouseState(0, @x, @y);
-if ((x > 50) and (x <= 270) and (y > 50) and (y <= 430)) then
+if ((x > 50) and (x <= 270) and (y > 50) and (y <= 330)) then
 {$ENDIF}
 if not isPaused then MoveCamera;
 

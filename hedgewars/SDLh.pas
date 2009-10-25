@@ -104,10 +104,11 @@ const
 {$IFDEF SDL13}
         SDL_WINDOWEVENT = 1;
         SDL_TEXTINPUT = 4;
-	SDL_MOUSEMOTION  = 5;
-        SDL_MOUSEBUTTONDOWN = 6;
-	SDL_MOUSEBUTTONUP   = 7;
-        SDL_MOUSEWHEEL = 8;  //different handling, should create SDL_MouseWheelEvent type
+        SDL_TEXTEDITING = 5;
+	SDL_MOUSEMOTION  = 6;
+        SDL_MOUSEBUTTONDOWN = 7;
+	SDL_MOUSEBUTTONUP   = 8;
+        SDL_MOUSEWHEEL = 9;  //different handling, should create SDL_MouseWheelEvent type
 	SDL_JOYAXIS = 10;
 	SDL_JOYHAT = 12;
 	SDL_JOYBUTTONDOWN = 13;
@@ -426,6 +427,7 @@ procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
 procedure SDL_PumpEvents; cdecl; external SDLLibName;
 function  SDL_PollEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
+function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 

@@ -55,6 +55,7 @@ leftKey: boolean = false;
 backspaceKey: boolean = false;
 spaceKey: boolean = false;
 enterKey: boolean = false;
+tabKey: boolean = false;
 
 isAttacking: boolean = false;
 isWalking: boolean = false;
@@ -144,6 +145,7 @@ tkbdn[25]:= ord(leftKey);
 tkbdn[26]:= ord(rightKey);
 
 tkbdn[ 8]:= ord(backspaceKey);
+tkbdn[ 9]:= ord(tabKey);
 tkbdn[13]:= ord(enterKey);
 tkbdn[32]:= ord(spaceKey);
 
@@ -153,6 +155,7 @@ if isWalking = false then rightKey:= false;
 if isWalking = false then leftKey:= false;
 
 if isAttacking = false then spaceKey:= false;
+tabKey:= false;
 enterKey:= false;
 backspaceKey:= false;
 
@@ -202,7 +205,7 @@ if CurrentBinds[i][0] <> #0 then
 end;
 
 procedure ResetKbd;
-var i, j, k, t,tmp: LongInt;
+var i, j, k, t: LongInt;
     pkbd: PByteArray;
 begin
 
@@ -249,11 +252,13 @@ tkbdn[25]:= ord(leftKey);
 tkbdn[26]:= ord(rightKey);
 
 tkbdn[ 8]:= ord(backspaceKey);
+tkbdn[ 9]:= ord(tabKey);
 tkbdn[13]:= ord(enterKey);
 tkbdn[32]:= ord(spaceKey);
 
 upKey:= false;
 downKey:= false;
+tabKey:= false;
 if isWalking = false then rightKey:= false;
 if isWalking = false then leftKey:= false;
 
@@ -304,7 +309,7 @@ KeyNames[5]:= 'wheeldown';
 for i:= 6 to cKeyMaxIndex do
     begin
     s:= SDL_GetKeyName(i);
-	//addfilelog(inttostr(i) + ' ' + s);
+//	addfilelog(inttostr(i) + ' ' + s);
     if s = 'unknown key' then KeyNames[i]:= ''
        else begin
        for t:= 1 to Length(s) do
@@ -348,13 +353,13 @@ for j:= 0 to Pred(ControllerNumControllers) do
 DefaultBinds[  1]:= '/put';
 DefaultBinds[  3]:= 'ammomenu';
 DefaultBinds[  8]:= 'hjump';
+DefaultBinds[  9]:= 'switch';
 DefaultBinds[ 13]:= 'ljump';
-DefaultBinds[ 32]:= '+attack';
-
 DefaultBinds[ 23]:= '+up';
 DefaultBinds[ 24]:= '+down';
 DefaultBinds[ 25]:= '+left';
 DefaultBinds[ 26]:= '+right';
+DefaultBinds[ 32]:= '+attack';
 {$ENDIF}
 	
 DefaultBinds[ 27]:= 'quit';
