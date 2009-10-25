@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE options.inc}
+
 unit uAIMisc;
 interface
 uses SDLh, uConsts, uGears, uFloat;
-{$INCLUDE options.inc}
 
 type TTarget = record
                Point: TPoint;

@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE options.inc}
+
 unit uVisualGears;
 interface
 uses SDLh, uConsts,
@@ -25,7 +27,6 @@ uses SDLh, uConsts,
 	GL,
 {$ENDIF}
 	uFloat;
-{$INCLUDE options.inc}
 
 type PVisualGear = ^TVisualGear;
 	TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);

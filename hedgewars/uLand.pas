@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$include options.inc}
+
 unit uLand;
 interface
 uses SDLh, uLandTemplates, uFloat,
@@ -25,7 +27,6 @@ uses SDLh, uLandTemplates, uFloat,
 	GL,
 {$ENDIF}
 	uConsts;
-{$include options.inc}
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
 TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
 	TPreview  = packed array[0..127, 0..31] of byte;

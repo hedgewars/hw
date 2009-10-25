@@ -20,6 +20,8 @@
 {$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
+{$INCLUDE options.inc}
+
 program hwengine;
 uses
 	SDLh in 'SDLh.pas',
@@ -57,8 +59,6 @@ uses
 	uStats in 'uStats.pas',
 	uChat in 'uChat.pas',
 	uLandTexture in 'uLandTexture.pas';
-
-{$INCLUDE options.inc}
 
 // also: GSHandlers.inc
 //       CCHandlers.inc

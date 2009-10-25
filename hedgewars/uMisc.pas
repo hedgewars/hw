@@ -18,6 +18,7 @@
 
 unit uMisc;
 interface
+{$INCLUDE options.inc}
 uses uConsts, SDLh,
 {$IFDEF GLES11}
 	gles11,
@@ -25,7 +26,6 @@ uses uConsts, SDLh,
 	GL,
 {$ENDIF}
 	uFloat;
-{$INCLUDE options.inc}
 var
 	isCursorVisible : boolean = false;
 	isTerminated    : boolean = false;

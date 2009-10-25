@@ -18,6 +18,7 @@
 
 unit uStore;
 interface
+{$INCLUDE options.inc}
 uses sysutils, uConsts, uTeams, SDLh,
 {$IFDEF GLES11}
 	gles11,
@@ -25,7 +26,6 @@ uses sysutils, uConsts, uTeams, SDLh,
 	GL, GLext,
 {$ENDIF}
 uFloat;
-{$INCLUDE options.inc}
 
 procedure StoreInit;
 procedure StoreLoad;

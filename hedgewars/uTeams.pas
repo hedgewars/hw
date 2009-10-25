@@ -16,6 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE options.inc}
+
 unit uTeams;
 interface
 uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears,
@@ -25,7 +27,6 @@ uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears,
 	GL,
 {$ENDIF}
 	uSound;
-{$INCLUDE options.inc}
 
 type PHHAmmo = ^THHAmmo;
 	THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;

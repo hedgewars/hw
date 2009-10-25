@@ -29,14 +29,14 @@ type hwFloat = record
                0: (Frac, Round: Longword);
                1: (QWordValue : QWord);
                end;
-{$else FPC_LITTLE_ENDIAN}
+{$else}
 type hwFloat = record
                isNegative: boolean;
                case byte of
                0: (Round, Frac: Longword);
                1: (QWordValue : QWord);
                end;
-{$endif FPC_LITTLE_ENDIAN}
+{$endif}
 
 function int2hwFloat (const i: LongInt) : hwFloat;
 
