@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
@@ -33,7 +33,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit"/>
+         <widget class="QLineEdit" name="leName"/>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_5">
@@ -43,7 +43,27 @@
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QTextEdit" name="textEdit"/>
+         <widget class="QTextEdit" name="teDescription"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Map</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>Theme</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="leMap"/>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="leTheme"/>
         </item>
        </layout>
       </widget>

@@ -136,13 +136,6 @@ void HWGame::SendTrainingConfig()
 	QByteArray traincfg;
 	HWProto::addStringToBuffer(traincfg, "TL");
 
-	HWTeam team1;
-	team1.difficulty = 0;
-	team1.teamColor = *color1;
-	team1.numHedgehogs = 1;
-	HWProto::addStringListToBuffer(traincfg,
-			team1.TeamGameConfig(100));
-
 	QFile file(datadir->absolutePath() + "/Trainings/" + training + ".txt");
 	if(!file.open(QFile::ReadOnly))
 	{
@@ -153,7 +146,14 @@ void HWGame::SendTrainingConfig()
 	QTextStream stream(&file);
 	while(!stream.atEnd())
 	{
-		HWProto::addStringToBuffer(traincfg, "e" + stream.readLine());
+		QString line = stream.readLine();
+		if(!line.isEmpty() && !line.startsWith("#"))
+			if(line != "<binds>")
+				HWProto::addStringToBuffer(traincfg, "e" + line);
+			else
+				for(int i = 0; i < BINDS_NUMBER; i++)
+					if(!cbinds[i].strbind.isEmpty())
+						HWProto::addStringToBuffer(traincfg, "ebind " + cbinds[i].strbind + " " + cbinds[i].action);
 	}
 
 	RawSendIPC(traincfg);

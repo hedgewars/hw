@@ -7,7 +7,16 @@ $delay 0
 map mushrooms
 theme nature
 ammstore 00009000000000000000000000000000000000000000000000000000000000000000000000000000
+
+addteam 14483456 Team
+<binds>
+grave Simple
+fort Island
+voicepack Default
+addhh 0 100 hedgehog 0
+hat NoHat
 hhcoords 2334 1254
+
 addtrig s2147483649 1 1 30 2154 1274 1
 addtrig s1 1 1 30 2334 1914 2
 addtrig s2 1 1 30 2774 1484 3

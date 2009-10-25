@@ -55,6 +55,12 @@ void editor::load(const QString & fileName)
         if (line.startsWith("seed"))
             ui->leSeed->setText(line.mid(5));
         else
+        if (line.startsWith("map"))
+            ui->leMap->setText(line.mid(4));
+        else
+        if (line.startsWith("theme"))
+            ui->leTheme->setText(line.mid(6));
+        else
         if (line.startsWith("$turntime"))
             ui->sbTurnTime->setValue(line.mid(10).toInt());
         else
