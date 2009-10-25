@@ -431,7 +431,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          or TestCollisionYwithGear(Gear, -1)) then Gear^.Y:= Gear^.Y - _1;
       end;
 
-   if (not cArtillery) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
+   if (not cArtillery) and ((Gear^.Message and gm_Precise) = 0) and (not TestCollisionXwithGear(Gear, hwSign(Gear^.dX))) then
+      Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
+
    SetAllHHToActive;
 
    if not TestCollisionYwithGear(Gear, 1) then
