@@ -64,7 +64,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         end;
                gmtSave: begin
                         RestoreTeamsFromSave;
-{$IFNDEF IPHONEOS}
+{$IFNDEF TOUCHINPUT}
                         SetBinds(CurrentTeam^.Binds);
 {$ENDIF}
                         //CurrentHedgehog^.Gear^.Message:= 0; <- produces bugs with further save restoring and demos

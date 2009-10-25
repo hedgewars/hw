@@ -42,7 +42,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 var hideAmmoMenu: boolean;
 	wheelUp: boolean = false;
 	wheelDown: boolean = false;
-{$IFDEF IPHONEOS}
+{$IFDEF TOUCHINPUT}
         leftClick: boolean = false;
         middleClick: boolean = false;
         rightClick: boolean = false;
@@ -130,7 +130,7 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
-{$IFDEF IPHONEOS}
+{$IFDEF TOUCHINPUT}
 tkbdn[1]:= ord(leftClick);
 tkbdn[2]:= ord(middleClick);
 tkbdn[3]:= ord(rightClick);
@@ -344,7 +344,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		end;
 	end;
 
-{$IFDEF IPHONEOS}
+{$IFDEF TOUCHINPUT}
 DefaultBinds[  1]:= '/put';
 DefaultBinds[  3]:= 'ammomenu';
 DefaultBinds[  8]:= 'hjump';

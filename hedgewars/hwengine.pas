@@ -174,7 +174,7 @@ PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
 	case event.type_ of
-{$IFDEF IPHONEOS}
+{$IFDEF SDL13}
                 SDL_WINDOWEVENT:
 {$ELSE}
 		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
@@ -183,7 +183,7 @@ while SDL_PollEvent(@event) <> 0 do
                         if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
 				cHasFocus:= event.active.gain = 1;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
-{$IFDEF IPHONEOS}
+{$IFDEF TOUCHINPUT}
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
         {*Keys are in uKeys.pas*}
                 SDL_MOUSEBUTTONDOWN: begin
@@ -273,8 +273,6 @@ while SDL_PollEvent(@event) <> 0 do
                 SDL_MOUSEBUTTONUP: begin
                         AddFileLog('*********************************************       touch up');
 
-                      //  if bShowAmmoMenu = true then
-
                         SDL_GetMouseState(0, @x, @y);
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
@@ -285,6 +283,8 @@ while SDL_PollEvent(@event) <> 0 do
                                 uKeys.rightClick:= true;
                         end;
                 end;
+{$ENDIF}
+{$IFDEF IPHONEOS}
 		SDL_JOYAXIS: begin
                 {* axis 0 = left and right;
                    axis 1 = up and down;

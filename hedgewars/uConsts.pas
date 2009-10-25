@@ -1565,17 +1565,17 @@ const convFormat: TSDL_PixelFormat = (
 	Gloss : 0;
 	Bloss : 0;
 	Aloss : 0;
-//if little endian -> bgra
+{$IFDEF ENDIAN_LITTLE}
 	Rshift: 0;
         Gshift: 8;
         Bshift: 16;
         Ashift: 24;
-//else		   -> argb (or rgba?)
-//	Rshift: 24;
-//      Gshift: 16;
-//      Bshift: 8;
-//      Ashift: 0;
-//endif
+{$ELSE}
+	Rshift: 24;
+	Gshift: 16;
+	Bshift: 8;
+	Ashift: 0;
+{$ENDIF}
 	RMask : RMask;
 	GMask : GMask;
 	BMask : BMask;

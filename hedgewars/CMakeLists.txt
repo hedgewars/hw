@@ -96,7 +96,7 @@ endif (NOT pascal_compiler)
 set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" ${hwengine_project})
 
 if(OPTIMIZATIONS)
-	set(pascal_compiler_flags "-O2" "-Xs" "-Nu" ${pascal_compiler_flags})
+	set(pascal_compiler_flags "-O2" "-Xs" "-Nu" "-Si" ${pascal_compiler_flags})
 	if(APPLE AND NOT universal_build)
 		set(pascal_compiler_flags "-fPIC" "-CfSSE2" ${pascal_compiler_flags})	#instruction set for ppc is 7400
 	endif()			

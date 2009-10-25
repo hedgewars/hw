@@ -19,6 +19,8 @@
 unit SDLh;
 interface
 
+{$INCLUDE options.inc}
+
 {$IFDEF LINUX or FREEBSD}
 {$DEFINE UNIX}
 {$ENDIF}
@@ -126,17 +128,17 @@ const
 {*end sdl_event binding*}
 
 
-//if little endian 
+{$IFDEF ENDIAN_LITTLE}
 	RMask = $000000FF;
 	GMask = $0000FF00;
 	BMask = $00FF0000;
 	AMask = $FF000000;
-//else 	
-//	RMask = $FF000000;
-//	GMask = $00FF0000;
-//	BMask = $0000FF00;
-//	AMask = $000000FF;
-//endif
+{$ELSE}
+	RMask = $FF000000;
+	GMask = $00FF0000;
+	BMask = $0000FF00;
+	AMask = $000000FF;
+{$ENDIF}
 
 
 type PSDL_Rect = ^TSDL_Rect;
@@ -281,9 +283,20 @@ type PSDL_Rect = ^TSDL_Rect;
 		SDL_GL_CONTEXT_MAJOR_VERSION,
 		SDL_GL_CONTEXT_MINOR_VERSION
 		);
+	
 
 {$IFDEF SDL13}
-     TSDL_MouseMotionEvent = record
+	TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte 
+		SDL_ARRAYORDER_NONE,
+		SDL_ARRAYORDER_RGB,
+		SDL_ARRAYORDER_RGBA,
+		SDL_ARRAYORDER_ARGB,
+		SDL_ARRAYORDER_BGR,
+		SDL_ARRAYORDER_BGRA,
+		SDL_ARRAYORDER_ABGR
+		);
+
+	TSDL_MouseMotionEvent = record
                              type_: byte;
                              which: byte;
                              state: byte;
@@ -323,8 +336,8 @@ type PSDL_Rect = ^TSDL_Rect;
 			state: Byte;
 			end;
 	 
-	 PSDL_Event = ^TSDL_Event;
-     TSDL_Event = record
+	PSDL_Event = ^TSDL_Event;
+	TSDL_Event = record
                   case Byte of
 {$IFDEF SDL13}
 			//doublecheck the type of WINDOWEVENT TEXTINPUT
@@ -403,6 +416,7 @@ function  SDL_GetMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; extern
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
+function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
