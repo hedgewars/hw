@@ -963,10 +963,10 @@ end;
 
 function glLoadExtension(extension : string) : boolean;
 begin
-{$IFNDEF IPHONEOS}
-	glLoadExtension:= glext_LoadExtension(extension);
-{$ELSE}
+{$IFDEF IPHONEOS}
 	glLoadExtension:= false;
+{$ELSE}
+	glLoadExtension:= glext_LoadExtension(extension);
 {$ENDIF}
 {$IFDEF DEBUGFILE}
 	if not glLoadExtension then

@@ -165,11 +165,9 @@ var PrevTime,
     event: TSDL_Event;
 {$IFDEF IPHONEOS}
 type TDirection = (nodir, left, right);
-var mouseState: byte;
-    x, y: LongInt;
-    oldy: LongInt = 240;
-    oldJoy: LongInt =0;
-    dir: TDirection = nodir;
+var x, y: LongInt;
+    oldy_zoom: LongInt = -1;
+    oldy_aim: LongInt = -1;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
@@ -189,56 +187,81 @@ while SDL_PollEvent(@event) <> 0 do
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
         {*Keys are in uKeys.pas*}
                 SDL_MOUSEBUTTONDOWN: begin
-                                AddFileLog('*********************************************       touch down');
+                        AddFileLog('*********************************************       touch down');
 
-                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        SDL_GetMouseState(0, @x, @y);
 
-                        if x <= 50 then 
+                        {* zoom slider *}
+                        if (x <= 50) and (y <= 430) then 
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Wheel -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                                {* sliding *}
-                                if oldy - y > 0 then uKeys.wheelUp:= true
-                                else uKeys.wheelDown:= true;
-                                {* update value only if movement is consistent *}
-                               // if (y > oldy - 10 ) or (y > oldy + 10 ) then oldy:= y
-                               // oldy:= y;
+                                if oldy_zoom = -1 then oldy_zoom:= y
+                                else
+                                begin
+                                        if oldy_zoom - y > 10 then uKeys.wheelUp:= true
+                                        else if oldy_zoom -y < -10 then uKeys.wheelDown:= true;
+                                        {* update value only if movement is consistent *}
+                                        if (y > oldy_zoom + 20 ) or (y < oldy_zoom - 20 ) then oldy_zoom:= y
+                                end;
                         end;
-
-                        {* keys *}
-             {*           if (x > 50) then
+                        {* reset zoom *}
+                        if (x <= 50) and (y > 430) then
                         begin
-                                AddFileLog('Arrow Key -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-
-                                if (y <= 50)  and (x > 135) and (x <= 185) then uKeys.upKey:= true;
-                                if (y > 430)  and (x > 135) and (x <= 185) then uKeys.downKey:= true;
-                                if (x > 270)  and (y > 215) and (y > 265)  then uKeys.rightClick:= true;
-                                if (x <= 100) and (y > 215) and (y > 265)  then uKeys.leftClick:= true;
-                        end;*}
-                        
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                uKeys.middleClick:= true;
+                        end;
+                        {* aim slider *}
+                        if (x > 230) and (y <= 430) then 
+                        begin
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Up&Down -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                if oldy_aim = -1 then oldy_aim:= y
+                                else
+                                begin
+                                        if oldy_aim - y > 10 then uKeys.upKey:= true
+                                        else if oldy_aim -y < -10 then uKeys.downKey:= true;
+                                        {* update value only if movement is consistent *}
+                                        if (y > oldy_aim + 20 ) or (y < oldy_aim - 20 ) then oldy_aim:= y
+                                end;
+                        end;
+                        {* reset zoom *}
+                        if (x <= 50) and (y > 430) then
+                        begin
+{$IFDEF DEBUGFILE}
+                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+{$ENDIF}
+                                uKeys.middleClick:= true;
+                        end;
+                        {* long jump *}                        
                         if (y > 430) and (x > 50) and (x <= 135) then
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Enter -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                       uKeys.enterKey:=true;
+                                uKeys.enterKey:= true;
                         end;
+                        {* high jump *}                        
                         if (y > 430) and (x > 185) and (x <= 270) then
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Backspace -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                       uKeys.backspaceKey:=true;
+                                uKeys.backspaceKey:= true;
 
                         end;
+                        {* attack *}
                         if (y <= 50) and (x > 50) and (x <= 270) then
                         begin
 {$IFDEF DEBUGFILE}
                                 AddFileLog('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
 {$ENDIF}
-                        uKeys.spaceKey:= true;
-                        uKeys.isAttacking:= true;
+                                uKeys.spaceKey:= true;
+                                uKeys.isAttacking:= true;
                         end
                         else
                         begin
@@ -247,11 +270,11 @@ while SDL_PollEvent(@event) <> 0 do
                         end;
                 end;
                 SDL_MOUSEBUTTONUP: begin
-                                AddFileLog('*********************************************       touch up');
+                        AddFileLog('*********************************************       touch up');
 
-                        if bShowAmmoMenu = true then ParseCommand('/put', true);
+                        if bShowAmmoMenu = true then uKeys.leftClick:= true;
 
-                        mouseState:= SDL_GetMouseState(0, @x, @y);
+                        SDL_GetMouseState(0, @x, @y);
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
                         begin
@@ -260,44 +283,29 @@ while SDL_PollEvent(@event) <> 0 do
 {$ENDIF}
                                 uKeys.rightClick:= true;
                         end;
-                        {* reset zoom *}
-                        if (x > 270) and (y <= 50) then
-                        begin
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Middle Click -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
-                                uKeys.middleClick:= true;
-                        end;
                 end;
 		SDL_JOYAXIS: begin
-                {axis 2 = back and forth;  axis 1 = up and down;  axis 0 = left and right}
-                        //AddFileLog('which: ' + inttostr(event.jaxis.which) + ' axis: ' + inttostr(event.jaxis.axis) + ' value: ' + inttostr(event.jaxis.value));
+                {* axis 0 = left and right;
+                   axis 1 = up and down;
+                   axis 2 = back and forth; *}
                         if (event.jaxis.axis = 0) and (CurrentTeam <> nil) then
                         begin
-                                if (modulo(event.jaxis.value) > (oldJoy + 400)) or (modulo(event.jaxis.value) < (oldJoy - 400)) then
+                                if event.jaxis.value > 1500 then
                                 begin
-                                        if event.jaxis.value > 1500 then
-                                        begin
-                                                if dir <> right then ParseCommand('-left', true);
-                                                ParseCommand('+right', true);
-                                                dir:= right;
+                                        uKeys.rightKey:= true;
+                                        uKeys.isWalking:= true;
+                                end
+                                else
+                                        if event.jaxis.value <= -1500 then
+                                        begin 
+                                                uKeys.leftKey:= true;
+                                                uKeys.isWalking:= true;
                                         end
                                         else
-                                                if event.jaxis.value <= -1500 then
-                                                begin 
-                                                        if dir <> left then ParseCommand('-right', true);
-                                                        ParseCommand('+left', true);
-                                                        dir:= left;
-                                                end
-                                                else
-                                                        if (event.jaxis.value > 0) and (event.jaxis.value <= 1500) then ParseCommand('-right', true)
-                                                else
-                                                                if (event.jaxis.value <= 0) and (event.jaxis.value > -1500) then ParseCommand('-left', true); 
+                                                if (event.jaxis.value  > -1500) and (event.jaxis.value <= 1500) then uKeys.isWalking:= false;
 {$IFDEF DEBUGFILE}
-                                        AddFileLog('Joystick value: ' + inttostr(event.jaxis.value) + ' oldJoy: ' + inttostr(oldJoy));
+                                AddFileLog('Joystick value: ' + inttostr(event.jaxis.value));
 {$ENDIF}
-                                        oldJoy:= modulo(event.jaxis.value);
-                                end;
                         end;
                 
                 end;

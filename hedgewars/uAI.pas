@@ -237,7 +237,7 @@ while (Stack.Count > 0) and not StopThinking do
           begin
           BestActions:= Actions;
           BestRate:= Rate;
-          Me^.State:= Me^.State or gstAttacked // we have better place, go there and don't use ammo
+          Me^.State:= Me^.State or gstAttacked // we have better place, go there and do not use ammo
           end
        else if Rate < BestRate then break;
        if ((Me^.State and gstAttacked) = 0)

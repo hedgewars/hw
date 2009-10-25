@@ -55,7 +55,9 @@ leftKey: boolean = false;
 backspaceKey: boolean = false;
 spaceKey: boolean = false;
 enterKey: boolean = false;
-isAttacking:boolean = false;
+
+isAttacking: boolean = false;
+isWalking: boolean = false;
 
 {$ENDIF}
 	ControllerNumControllers: Integer;
@@ -136,11 +138,10 @@ leftClick:= false;
 middleClick:= false;
 rightClick:= false;
 
-//sdl1.3 for these keys is messed up
-//tkbdn[MYCONST]:= ord(upKey);
-//tkbdn[MYCONST + 1]:= ord(downKey);
-//tkbdn[MYCONST + 2]:= ord(rightKey);
-//tkbdn[MYCONST + 3]:= ord(leftKey);
+tkbdn[23]:= ord(upKey);
+tkbdn[24]:= ord(downKey);
+tkbdn[25]:= ord(leftKey);
+tkbdn[26]:= ord(rightKey);
 
 tkbdn[ 8]:= ord(backspaceKey);
 tkbdn[13]:= ord(enterKey);
@@ -148,8 +149,8 @@ tkbdn[32]:= ord(spaceKey);
 
 upKey:= false;
 downKey:= false;
-rightKey:= false;
-leftKey:= false;
+if isWalking = false then rightKey:= false;
+if isWalking = false then leftKey:= false;
 
 if isAttacking = false then spaceKey:= false;
 enterKey:= false;
@@ -242,11 +243,10 @@ leftClick:= false;
 middleClick:= false;
 rightClick:= false;
 
-//sdl1.3 for these keys is messed up
-//tkbdn[MYCONST]:= ord(upKey);
-//tkbdn[MYCONST + 1]:= ord(downKey);
-//tkbdn[MYCONST + 2]:= ord(rightKey);
-//tkbdn[MYCONST + 3]:= ord(leftKey);
+tkbdn[23]:= ord(upKey);
+tkbdn[24]:= ord(downKey);
+tkbdn[25]:= ord(leftKey);
+tkbdn[26]:= ord(rightKey);
 
 tkbdn[ 8]:= ord(backspaceKey);
 tkbdn[13]:= ord(enterKey);
@@ -254,8 +254,8 @@ tkbdn[32]:= ord(spaceKey);
 
 upKey:= false;
 downKey:= false;
-rightKey:= false;
-leftKey:= false;
+if isWalking = false then rightKey:= false;
+if isWalking = false then leftKey:= false;
 
 if isAttacking = false then spaceKey:= false;
 enterKey:= false;
@@ -344,12 +344,16 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		end;
 	end;
 {$IFDEF IPHONEOS}
-
+DefaultBinds[  1]:= '/put';
 DefaultBinds[  3]:= 'ammomenu';
 DefaultBinds[  8]:= 'hjump';
 DefaultBinds[ 13]:= 'ljump';
 DefaultBinds[ 32]:= '+attack';
 
+DefaultBinds[ 23]:= '+up';
+DefaultBinds[ 24]:= '+down';
+DefaultBinds[ 25]:= '+left';
+DefaultBinds[ 26]:= '+right';
 {$ENDIF}
 	
 DefaultBinds[ 27]:= 'quit';
