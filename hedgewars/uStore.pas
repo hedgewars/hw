@@ -901,9 +901,7 @@ end;
 function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-{$IFDEF DARWIN}
     convertedSurf: PSDL_Surface;
-{$ENDIF}
 begin
 WriteToConsole(msgLoading + filename + '... ');
 
