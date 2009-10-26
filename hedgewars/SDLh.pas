@@ -68,7 +68,42 @@ const
 	SDL_INIT_JOYSTICK = $00000200;
 
 	SDL_APPINPUTFOCUS = 2;
-
+	SDL_BUTTON_WHEELDUP = 4;
+	SDL_BUTTON_WHEELDOWN = 5;
+		
+{*begin sdl_event binding*}
+	SDL_NOEVENT = 0;
+	SDL_KEYDOWN = 2;
+	SDL_KEYUP = 3;
+{$IFDEF SDL13}
+        SDL_WINDOWEVENT = 1;
+        SDL_TEXTINPUT = 4;
+        SDL_TEXTEDITING = 5;
+	SDL_MOUSEMOTION  = 6;
+        SDL_MOUSEBUTTONDOWN = 7;
+	SDL_MOUSEBUTTONUP   = 8;
+        SDL_MOUSEWHEEL = 9;
+	SDL_JOYAXISMOTION = 10;
+	SDL_JOYBALLMOTION = 11;
+	SDL_JOYHATMOTION = 12;
+	SDL_JOYBUTTONDOWN = 13;
+	SDL_JOYBUTTONUP = 14;
+	SDL_QUITEV = 15;
+{$ELSE}
+        SDL_ACTIVEEVENT = 1;
+	SDL_MOUSEMOTION  = 4;
+       	SDL_MOUSEBUTTONDOWN = 5;
+	SDL_MOUSEBUTTONUP   = 6;
+	SDL_JOYAXISMOTION = 7;
+	SDL_JOYBALLMOTION = 8;
+	SDL_JOYHATMOTION = 9;
+	SDL_JOYBUTTONDOWN = 10;
+	SDL_JOYBUTTONUP = 11;
+	SDL_QUITEV = 12;
+	SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
+{$ENDIF}
+{*end sdl_event binding*}
+		
 {$IFDEF SDL13}
 	SDL_ASYNCBLIT   = $08000000;
 	SDL_ANYFORMAT   = $10000000;
@@ -94,39 +129,6 @@ const
 	SDL_OPENGL      = $00000002;
 	SDL_RESIZABLE   = $00000010;
 {$ENDIF}
-
-{*begin sdl_event binding*}
-	SDL_NOEVENT = 0;
-	SDL_KEYDOWN = 2;
-	SDL_KEYUP = 3;
-	SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
-
-{$IFDEF SDL13}
-        SDL_WINDOWEVENT = 1;
-        SDL_TEXTINPUT = 4;
-        SDL_TEXTEDITING = 5;
-	SDL_MOUSEMOTION  = 6;
-        SDL_MOUSEBUTTONDOWN = 7;
-	SDL_MOUSEBUTTONUP   = 8;
-        SDL_MOUSEWHEEL = 9;  //different handling, should create SDL_MouseWheelEvent type
-	SDL_JOYAXIS = 10;
-	SDL_JOYHAT = 12;
-	SDL_JOYBUTTONDOWN = 13;
-	SDL_JOYBUTTONUP = 14;
-	SDL_QUITEV = 15;
-{$ELSE}
-        SDL_ACTIVEEVENT = 1;
-       	SDL_MOUSEBUTTONDOWN = 5;
-	SDL_MOUSEBUTTONUP   = 6;
-        SDL_BUTTON_WHEELDUP = 4;
-	SDL_BUTTON_WHEELDOWN = 5;
-	SDL_JOYAXIS = 7;
-	SDL_JOYHAT = 9;
-	SDL_JOYBUTTONDOWN = 10;
-	SDL_JOYBUTTONUP = 11;
-	SDL_QUITEV = 12;
-{$ENDIF}
-{*end sdl_event binding*}
 
 
 {$IFDEF ENDIAN_LITTLE}
@@ -242,14 +244,45 @@ type PSDL_Rect = ^TSDL_Rect;
 		unicode: Word;
 		end;
 
+
+{* SDL_event type definition *}
+
+{$IFDEF SDL13}
+	TSDL_WindowID = LongInt;
+
+	TSDL_WindowEvent = record
+{$ELSE}
 	TSDL_ActiveEvent = record
+{$ENDIF}
 		type_: byte;
 		gain: byte;
 		state: byte;
+{$IFDEF SDL13}
+		windowID: TSDL_WindowID;
+		data1, data2: LongInt;
+{$ENDIF}
 		end;
+
+//SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
+
+	TSDL_MouseMotionEvent = record
+                             type_: byte;
+                             which: byte;
+                             state: byte;
+{$IFDEF SDL13}
+                             x, y, xrel, yrel : LongInt;
+			     pressure, pressure_max, pressure_min,
+			     rotation, tilt, cursor: LongInt; 
+{$ELSE}
+                             x, y, xrel, yrel : word;
+{$ENDIF}
+                             end;
 
 	TSDL_KeyboardEvent = record
 		type_: Byte;
+{$IFDEF SDL13}
+		windowID: TSDL_WindowID;
+{$ENDIF}
 		which: Byte;
 		state: Byte;
 		keysym: TSDL_KeySym;
@@ -260,8 +293,114 @@ type PSDL_Rect = ^TSDL_Rect;
 		which,
 		button,
 		state: byte;
+{$IFDEF SDL13}
+		x, y: LongInt;
+{$ELSE}
 		x, y: word;
+{$ENDIF}
 		end;
+
+{$IFDEF SDL13}
+	TSDL_MouseWheelEvent = record
+		type_: Byte;
+		windowID: TSDL_WindowID;
+		which: Byte;
+		x, y: LongInt;
+		end;
+{$ENDIF}
+
+     TSDL_JoyAxisEvent = record
+		type_: Byte;
+		which: Byte;
+		axis: Byte;
+{$IFDEF SDL13}
+		value: LongInt;
+{$ELSE}
+		value: word;
+{$ENDIF}	
+		end;
+			
+     TSDL_JoyBallEvent = record
+		type_: Byte;
+		which: Byte;
+		ball: Byte;
+{$IFDEF SDL13}
+		xrel, yrel: LongInt;
+{$ELSE}
+		xrel, yrel: word;
+{$ENDIF}
+		end;
+
+     TSDL_JoyHatEvent = record
+		type_: Byte;
+		which: Byte;
+		hat: Byte;
+		value: Byte;
+		end;
+	
+     TSDL_JoyButtonEvent = record
+		type_: Byte;
+		which: Byte;
+		button: Byte;
+		state: Byte;
+		end;
+
+     TSDL_QuitEvent = record
+                type_: Byte;
+                end;
+
+{$IFNDEF SDL13}
+     TSDL_ResizeEvent = record
+		type_: Byte;
+		w, h: LongInt;
+		end;
+{$ENDIF}
+
+	PSDL_Event = ^TSDL_Event;
+	TSDL_Event = record
+                  case Byte of
+	SDL_NOEVENT: (type_: byte);
+{$IFDEF SDL13}
+	SDL_WINDOWEVENT: (active: TSDL_WindowEvent);
+	SDL_KEYDOWN,
+        SDL_KEYUP: (key: TSDL_KeyboardEvent);
+	SDL_TEXTEDITING,
+	SDL_TEXTINPUT: (txtin: byte);
+	SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+	SDL_MOUSEBUTTONDOWN,
+	SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+        SDL_MOUSEWHEEL: (wheel: TSDL_MouseWheelEvent);
+	SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
+	SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
+	SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
+	SDL_JOYBUTTONDOWN,
+	SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+	SDL_QUITEV: (quit: TSDL_QuitEvent);
+{$ELSE}
+        SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
+	SDL_KEYDOWN,
+        SDL_KEYUP: (key: TSDL_KeyboardEvent);
+	SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+	SDL_MOUSEBUTTONDOWN,
+	SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+	SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
+	SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
+	SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
+	SDL_JOYBUTTONDOWN,
+	SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+	SDL_QUITEV: (quit: TSDL_QuitEvent);
+	//SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
+	//SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+{$ENDIF}
+		end;
+
+     PByteArray = ^TByteArray;
+     TByteArray = array[0..65535] of Byte;
+     PLongWordArray = ^TLongWordArray;
+     TLongWordArray = array[0..16383] of LongWord;
+
+     PSDL_Thread = Pointer;
+     PSDL_mutex = Pointer;
 
 	TSDL_GLattr = (
 		SDL_GL_RED_SIZE,
@@ -284,7 +423,6 @@ type PSDL_Rect = ^TSDL_Rect;
 		SDL_GL_CONTEXT_MAJOR_VERSION,
 		SDL_GL_CONTEXT_MINOR_VERSION
 		);
-	
 
 {$IFDEF SDL13}
 	TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte 
@@ -296,83 +434,7 @@ type PSDL_Rect = ^TSDL_Rect;
 		SDL_ARRAYORDER_BGRA,
 		SDL_ARRAYORDER_ABGR
 		);
-
-	TSDL_MouseMotionEvent = record
-                             type_: byte;
-                             which: byte;
-                             state: byte;
-                             x    : LongInt;
-                             y    : LongInt;
-                             xrel : LongInt;
-                             yrel : LongInt;
-                             end;
 {$ENDIF}
-
-     TSDL_QuitEvent = record
-                      type_: Byte;
-                      end;
-     TSDL_ResizeEvent = record
-			type_: Byte;
-			w, h: LongInt;
-			end;
-
-     TSDL_JoyAxisEvent = record
-			type_: Byte;
-			which: Byte;
-			axis: Byte;
-			value: LongInt;
-			end;
-			
-     TSDL_JoyHatEvent = record
-			type_: Byte;
-			which: Byte;
-			hat: Byte;
-			value: Byte;
-			end;
-	
-     TSDL_JoyButtonEvent = record
-			type_: Byte;
-			which: Byte;
-			button: Byte;
-			state: Byte;
-			end;
-	 
-	PSDL_Event = ^TSDL_Event;
-	TSDL_Event = record
-                  case Byte of
-{$IFDEF SDL13}
-			//doublecheck the type of WINDOWEVENT TEXTINPUT
-			SDL_NOEVENT: (type_: byte);
-			SDL_WINDOWEVENT: (active: TSDL_ActiveEvent);
-			SDL_KEYDOWN,
-                        SDL_KEYUP: (key: TSDL_KeyboardEvent);
-			SDL_TEXTINPUT: (txtin: byte);
-			SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-			SDL_MOUSEBUTTONDOWN,
-			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-{$ELSE}
-			SDL_NOEVENT: (type_: byte);
-			SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
-			SDL_KEYDOWN,
-			SDL_KEYUP: (key: TSDL_KeyboardEvent);
-			SDL_QUITEV: (quit: TSDL_QuitEvent);
-			SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
-			SDL_MOUSEBUTTONDOWN,
-			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-{$ENDIF}
-			SDL_JOYAXIS: (jaxis: TSDL_JoyAxisEvent);
-			SDL_JOYHAT: (jhat: TSDL_JoyHatEvent);
-			SDL_JOYBUTTONDOWN,
-			SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-     		 end;
-
-     PByteArray = ^TByteArray;
-     TByteArray = array[0..65535] of Byte;
-     PLongWordArray = ^TLongWordArray;
-     TLongWordArray = array[0..16383] of LongWord;
-
-     PSDL_Thread = Pointer;
-     PSDL_mutex = Pointer;
 
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
@@ -453,35 +515,36 @@ function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external 
 
 
 // Joystick/Controller support
-type PSDLJoystick = ^TSDLJoystick;
-     TSDLJoystick = record
+type PSDL_Joystick = ^TSDL_Joystick;
+     TSDL_Joystick = record
 	                end;
 
-function SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
-function SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
-function SDL_JoystickOpen(idx: LongInt): PSDLJoystick; cdecl; external SDLLibName;
-function SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickIndex(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickNumAxes(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickNumBalls(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickNumHats(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickNumButtons(joy: PSDLJoystick): LongInt; cdecl; external SDLLibName;
+const	SDL_HAT_CENTERED  = $00;
+	SDL_HAT_UP        = $01;
+	SDL_HAT_RIGHT     = $02;
+	SDL_HAT_DOWN      = $04;
+	SDL_HAT_LEFT      = $08;
+	SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
+	SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
+	SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
+	SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
+
+function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
+function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
+function  SDL_JoystickOpened(idx: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickIndex(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickNumAxes(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickNumBalls(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickNumHats(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickNumButtons(joy: PSDL_Joystick): LongInt; cdecl; external SDLLibName;
 procedure SDL_JoystickUpdate; cdecl; external SDLLibName;
-function SDL_JoystickEventState(state: LongInt): LongInt; cdecl; external SDLLibName;
-function SDL_JoystickGetAxis(joy: PSDLJoystick; axis: LongInt): Word; cdecl; external SDLLibName;
-const SDL_HAT_CENTERED  = $00;
-      SDL_HAT_UP        = $01;
-	  SDL_HAT_RIGHT     = $02;
-	  SDL_HAT_DOWN      = $04;
-	  SDL_HAT_LEFT      = $08;
-	  SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
-	  SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
-	  SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
-	  SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
-function SDL_JoystickGetBall(joy: PSDLJoystick; ball: LongInt; dx: PInteger; dy: PInteger): Word; cdecl; external SDLLibName;
-function SDL_JoystickGetHat(joy: PSDLJoystick; hat: LongInt): Byte; cdecl; external SDLLibName;
-function SDL_JoystickGetButton(joy: PSDLJoystick; button: LongInt): Byte; cdecl; external SDLLibName;
-procedure SDL_JoystickClose(joy: PSDLJoystick); cdecl; external SDLLibName;
+function  SDL_JoystickEventState(state: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickGetAxis(joy: PSDL_Joystick; axis: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_JoystickGetBall(joy: PSDL_Joystick; ball: LongInt; dx: PInteger; dy: PInteger): Word; cdecl; external SDLLibName;
+function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; external SDLLibName;
+function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
+procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
 (*  TTF  *)
 

@@ -18,7 +18,7 @@
 
 unit uKeys;
 interface
-uses uConsts;
+uses uConsts, SDLh;
 {$INCLUDE options.inc}
 
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
@@ -39,7 +39,7 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
-var hideAmmoMenu: boolean;
+var	hideAmmoMenu: boolean;
 	wheelUp: boolean = false;
 	wheelDown: boolean = false;
 {$IFDEF TOUCHINPUT}
@@ -47,24 +47,26 @@ var hideAmmoMenu: boolean;
         middleClick: boolean = false;
         rightClick: boolean = false;
 
-upKey: boolean = false;
-downKey: boolean = false;
-rightKey: boolean = false;
-leftKey: boolean = false;
+	upKey: boolean = false;
+	downKey: boolean = false;
+	rightKey: boolean = false;
+	leftKey: boolean = false;
 
-backspaceKey: boolean = false;
-spaceKey: boolean = false;
-enterKey: boolean = false;
-tabKey: boolean = false;
+	backspaceKey: boolean = false;
+	spaceKey: boolean = false;
+	enterKey: boolean = false;
+	tabKey: boolean = false;
 
-isAttacking: boolean = false;
-isWalking: boolean = false;
-
+	isAttacking: boolean = false;
+	isWalking: boolean = false;
+{$ENDIF}
+{$IFDEF IPHONEOS}
+	theJoystick: PSDL_Joystick;
 {$ENDIF}
 	ControllerNumControllers: Integer;
-    ControllerEnabled: Integer;
-    ControllerNumAxes: array[0..5] of Integer;
-    //ControllerNumBalls: array[0..5] of Integer;
+	ControllerEnabled: Integer;
+	ControllerNumAxes: array[0..5] of Integer;
+	//ControllerNumBalls: array[0..5] of Integer;
 	ControllerNumHats: array[0..5] of Integer;
 	ControllerNumButtons: array[0..5] of Integer;
 	ControllerAxes: array[0..5] of array[0..19] of Integer;
@@ -73,7 +75,7 @@ isWalking: boolean = false;
 	ControllerButtons: array[0..5] of array[0..19] of Byte;
 
 implementation
-uses SDLh, uTeams, uConsole, uMisc, uStore;
+uses uTeams, uConsole, uMisc, uStore;
 const KeyNumber = 1024;
 
 var tkbd, tkbdn: TKeyboardState;
@@ -400,7 +402,7 @@ tkbd[13]:= 1;
 tkbd[271]:= 1;
 end;
 
-var Controller: array [0..5] of PSDLJoystick;
+var Controller: array [0..5] of PSDL_Joystick;
 	
 procedure ControllerInit;
 var i, j: Integer;
@@ -456,6 +458,9 @@ if ControllerNumControllers > 0 then
 	end
 else	
 	WriteLnToConsole('Not using any game controller');
+{$IFDEF IPHONEOS}
+theJoystick:= Controller[0];
+{$ENDIF}
 end;
 
 procedure ControllerClose;

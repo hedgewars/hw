@@ -163,20 +163,21 @@ procedure MainLoop;
 var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
-{$IFDEF IPHONEOS}
+{$IFDEF TOUCHINPUT}
 type TDirection = (nodir, left, right);
-var x, y: LongInt;
-        dx, dy, mouseState: LongInt;
+var x, y, dx, dy, mouseState: LongInt;
+    tiltValue: LongInt;
     direction: TDirection = nodir;
-    havetrace: boolean = false;
+    movedbybuttons: boolean = false;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
 {$IFDEF TOUCHINPUT}
-if direction <> nodir then
+if (direction <> nodir) and (movedbybuttons = true) then
 begin
+	AddFileLog('* Hedgehog moving *');
         uKeys.isWalking:= true;
         if direction = left then uKeys.leftKey:= true
         else if direction = right then uKeys.rightKey:= true;
@@ -243,17 +244,15 @@ else uKeys.isWalking:= false;
                         if (x <= 50) and (y <= 50) then
                         begin
                                 AddFileLog('Left Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-                            //    uKeys.leftKey:= true;
-                            //    uKeys.isWalking:= true;
                                 direction:= left;
+				movedbybuttons:= true;
                         end;
                         
                         if (x > 270) and (y <= 50) then
                         begin
                                 AddFileLog('Right Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
-                            //    uKeys.rightKey:= true;
-                            //    uKeys.isWalking:= true;
                                 direction:= right;
+				movedbybuttons:= true;
                         end;
 
                         {* high jump *}                        
@@ -303,40 +302,46 @@ else uKeys.isWalking:= false;
                         AddFileLog('Arrow Keys UP | Space UP -- x: ' + inttostr(x) + ' y: ' + inttostr(y) );
 {$ENDIF}
                         direction:= nodir;
+			movedbybuttons:= false;
                         uKeys.isAttacking:= false;
-                end;
+		end;
 {$ENDIF}
 {$IFDEF IPHONEOS}
-{* might be masked by above events
-		SDL_JOYAXIS: begin
+		SDL_JOYAXISMOTION: begin
                 {* axis 0 = left and right;
                    axis 1 = up and down;
                    axis 2 = back and forth; *}
-                        if (event.jaxis.axis = 0) and (CurrentTeam <> nil) then
+
+{$IFDEF DEBUGFILE}
+                        AddFileLog('*********************************************       accelerometer');
+{$ENDIF}
+			
+			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick, 0);
+
+                        if (CurrentTeam <> nil) then
                         begin
-                                if event.jaxis.value > 1500 then
+				AddFileLog('Joystick: 0; Axis: 0; Value: ' + inttostr(tiltValue));
+
+                                if tiltValue > 1500 then
                                 begin
-                                        direction:= right;
+					uKeys.rightKey:= true;
+					uKeys.isWalking:= true;
                                 end
                                 else
-                                        if event.jaxis.value <= -1500 then
+                                        if tiltValue <= -1500 then
                                         begin 
-                                                direction:= left
+						uKeys.leftKey:= true;
+						uKeys.isWalking:= true;
                                         end
                                         else
-                                                if (event.jaxis.value  > -1500) and (event.jaxis.value <= 1500) then direction:= nodir;
-{$IFDEF DEBUGFILE}
-                                AddFileLog('Joystick value: ' + inttostr(event.jaxis.value));
-{$ENDIF}
+                                                if (tiltValue  > -1500) and (tiltValue <= 1500) and (movedbybuttons = false) then uKeys.isWalking:= false;  
                         end;
-                
                 end;
-*}
 {$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
-		SDL_JOYAXIS: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
-		SDL_JOYHAT: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
+		SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
+		SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
 		SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
 		SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
 {$ENDIF}
