@@ -62,7 +62,7 @@ var tx, ty: Longword;
 begin
 for ty:= 0 to TEXSIZE - 1 do
 	for tx:= 0 to TEXSIZE - 1 do
-		tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or $FF000000;
+		tmpPixels[ty, tx]:= Land[y * TEXSIZE + ty, x * TEXSIZE + tx] or AMask;
 
 Pixels2:= @tmpPixels
 end;

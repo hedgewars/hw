@@ -610,7 +610,7 @@ p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
 	begin
 	for x:= 0 to LAND_WIDTH - 1 do
-		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or $FF000000;
+		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask;
 
 	p:= @(p^[Surface^.pitch div 4]);
 	end;
@@ -686,11 +686,11 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
         begin
         for x:= 0 to Pred(tmpsurf^.w) do
             begin
-            if (($FF000000 and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
+            if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
                 Land[cpY + y, cpX + x]:= 0
-            else if p^[x] = $FF0000FF then
+            else if p^[x] = (AMask or RMask) then
                 Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
-            else if p^[x] = $FFFFFFFF then
+            else if p^[x] = (AMask or RMask or GMask or BMask) then
                 Land[cpY + y, cpX + x]:= COLOR_LAND;
 
             end;
@@ -788,9 +788,9 @@ if hasBorder then
 			Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
 			Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
 			if (y + w) mod 32 < 16 then
-				c:= $FF000000
+				c:= AMask
 			else
-				c:= $FF00FFFF;
+				c:= AMask or RMask or GMask;
 			LandPixels[y, leftX + w]:= c;
 			LandPixels[y, rightX - w]:= c;
 			end;
@@ -799,9 +799,9 @@ if hasBorder then
 			begin
 			Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
 			if (x + w) mod 32 < 16 then
-				c:= $FF000000
+				c:= AMask
 			else
-				c:= $FF00FFFF;
+				c:= AMask or RMask or GMask;
 			LandPixels[topY + w, x]:= c;
 			end;
 		end;

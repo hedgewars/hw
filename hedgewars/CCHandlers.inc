@@ -81,7 +81,7 @@ if isDeveloperMode then
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
-   Color:= Color or $FF000000;
+   Color:= Color or AMask;
 
    AddTeam(Color);
    CurrentTeam^.TeamName:= ts;

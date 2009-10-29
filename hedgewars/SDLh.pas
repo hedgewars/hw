@@ -660,6 +660,7 @@ const {$IFDEF WIN32}
 
 function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
+
 (*  SDL_net  *)
 
 const {$IFDEF WIN32}

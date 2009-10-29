@@ -90,9 +90,9 @@ for y:= 0 to Pred(Image^.h) do
 		if LandPixels[cpY + y, cpX + x] = 0 then
 			begin
 			LandPixels[cpY + y, cpX + x]:= p^[x];
-			if (p^[x] and $FF000000) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+			if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
 			end;
-	p:= @(p^[Image^.pitch div 4]);
+	p:= @(p^[Image^.pitch shr 2]);
 	end;
 
 if SDL_MustLock(Image) then
@@ -381,7 +381,7 @@ WaterColorArray[1]:= WaterColorArray[0];
 WaterColorArray[3]:= WaterColorArray[2];
 
 glClearColor(c1.r / 255, c1.g / 255, c1.b / 255, 0.99); // sky color
-cExplosionBorderColor:= c2.value or $FF000000;
+cExplosionBorderColor:= c2.value or AMask;
 
 ReadLn(f, s);
 if MusicFN = '' then MusicFN:= s;

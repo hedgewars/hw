@@ -217,7 +217,7 @@ var s: string;
 
 		// make black pixel be alpha-transparent
 		for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-			if PLongwordArray(texsurf^.pixels)^[i] = $FF000000 then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+			if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= 0;
 
 		if SDL_MustLock(texsurf) then
 			SDL_UnlockSurface(texsurf);
@@ -1140,7 +1140,7 @@ for srcX:= 0 to src^.w - 1 do
       i:= (destY + srcY) * (dest^.pitch div 4) + destX + srcX;
       j:= srcY * (src^.pitch div 4) + srcX;
       // basic skip of transparent pixels - cleverness would be to do true alpha
-      if (i < maxDest) and ($FF000000 and srcPixels^[j] <> 0) then destPixels^[i]:= srcPixels^[j];
+      if (i < maxDest) and (AMask and srcPixels^[j] <> 0) then destPixels^[i]:= srcPixels^[j];
       end;
 end;
 
