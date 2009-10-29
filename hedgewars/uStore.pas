@@ -262,6 +262,10 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
     i: LongInt;
+{$IFDEF DARWIN}
+tmpP: PLongWordArray;
+tmpA, tmpR, tmpG, tmpB: LongWord;
+{$ENDIF}
 begin
 
 for fi:= Low(THWFont) to High(THWFont) do
@@ -298,6 +302,34 @@ for ii:= Low(TSprite) to High(TSprite) do
 
 			if tmpsurf <> nil then
 				begin
+{$IFDEF DARWIN}   
+{* this is a workaround for http://bugzilla.libsdl.org/show_bug.cgi?id=868
+   remove this when it's fixed in upstream; it causes problems on ppc *}
+					tmpP := tmpsurf^.pixels;                                             
+					for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
+					begin
+						tmpA:= tmpP^[i] shr 24 and $FF;
+						tmpR:= tmpP^[i] shr 16 and $FF;
+						tmpG:= tmpP^[i] shr 8 and $FF;
+						tmpB:= tmpP^[i] and $FF;
+
+						if tmpA <> 0 then
+						begin
+						tmpR:= round(tmpR * 255/tmpA);
+						tmpG:= round(tmpG * 255/tmpA);
+						tmpB:= round(tmpB * 255/tmpA);
+						end;
+
+						if tmpR > 255 then tmpR:= 255;
+						if tmpG > 255 then tmpG:= 255;
+						if tmpB > 255 then tmpB:= 255;
+
+						tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB; 
+
+						//AddFileLog(inttostr(tmpP^[i*128] shr 24) + ' | ' + inttostr(tmpP^[i*128] shr 16 and $FF) + ' | ' + inttostr(tmpP^[i*128] shr 8 and $FF)+ ' | ' + inttostr(tmpP^[i*128] and $FF));  
+				end;                                                   
+{$ENDIF}
+				
 				if imageWidth = 0 then imageWidth := tmpsurf^.w;
 				if imageHeight = 0 then imageHeight := tmpsurf^.h;
 				if Width = 0 then Width:= tmpsurf^.w;
