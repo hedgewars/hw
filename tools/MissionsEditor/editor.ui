@@ -285,7 +285,61 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
-         <widget class="TeamEdit" name="widget" native="true"/>
+         <widget class="QPushButton" name="pbAddTeam">
+          <property name="text">
+           <string>Add Team</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <widget class="QTabWidget" name="twTeams">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="TeamEdit" name="tab_5">
+           <attribute name="title">
+            <string>Team 1</string>
+           </attribute>
+          </widget>
+          <widget class="TeamEdit" name="tab_6">
+           <attribute name="title">
+            <string>Team 2</string>
+           </attribute>
+          </widget>
+          <widget class="TeamEdit" name="tab_7">
+           <attribute name="title">
+            <string>Team 3</string>
+           </attribute>
+          </widget>
+          <widget class="TeamEdit" name="tab_8">
+           <attribute name="title">
+            <string>Team 4</string>
+           </attribute>
+          </widget>
+          <widget class="TeamEdit" name="tab_9">
+           <attribute name="title">
+            <string>Team 5</string>
+           </attribute>
+          </widget>
+          <widget class="TeamEdit" name="tab_10">
+           <attribute name="title">
+            <string>Team 6</string>
+           </attribute>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>

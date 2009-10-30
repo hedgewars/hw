@@ -24,3 +24,24 @@ void TeamEdit::changeEvent(QEvent *e)
         break;
     }
 }
+
+void TeamEdit::addTeam(const QString & teamName, quint32 color)
+{
+    m_ui->leTeamName->setText(teamName);
+}
+
+void TeamEdit::setFort(const QString & name)
+{
+    m_ui->leFort->setText(name);
+}
+
+void TeamEdit::setGrave(const QString & name)
+{
+    m_ui->leGrave->setText(name);
+}
+
+void TeamEdit::setVoicepack(const QString & name)
+{
+    m_ui->leVoicepack->setText(name);
+}
+

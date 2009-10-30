@@ -13,6 +13,10 @@ public:
     TeamEdit(QWidget *parent = 0);
     ~TeamEdit();
 
+    void addTeam(const QString & teamName = QString(), quint32 color = 0xdd0000);
+    void setFort(const QString & name);
+    void setGrave(const QString & name);
+    void setVoicepack(const QString & name);
 protected:
     void changeEvent(QEvent *e);
 

@@ -1,4 +1,5 @@
 #include <QtGui>
+#include <QObject>
 #include "editor.h"
 #include "ui_editor.h"
 
@@ -39,6 +40,8 @@ void editor::on_actionLoad_triggered()
 
 void editor::load(const QString & fileName)
 {
+    int currTeam = -1;
+
     QFile file(fileName);
 
     if(!file.open(QIODevice::ReadOnly))
@@ -78,6 +81,36 @@ void editor::load(const QString & fileName)
                 cb->setChecked(flags & 1);
                 flags >>= 1;
             }
+        }
+        else
+        if (line.startsWith("addteam") && (currTeam < 5))
+        {
+            ++currTeam;
+            line = line.mid(8);
+            int spacePos = line.indexOf('\x20');
+            quint32 teamColor = line.left(spacePos).toUInt();
+            QString teamName = line.mid(spacePos + 1);
+
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->addTeam(teamName, teamColor);
+        }
+        else
+        if (line.startsWith("fort") && (currTeam >= 0))
+        {
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->setFort(line.mid(5));
+        }
+        else
+        if (line.startsWith("grave") && (currTeam >= 0))
+        {
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->setGrave(line.mid(6));
+        }
+        else
+        if (line.startsWith("voicepack") && (currTeam >= 0))
+        {
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->setVoicepack(line.mid(10));
         }
     }
 }
