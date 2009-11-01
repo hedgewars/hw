@@ -8,6 +8,8 @@ editor::editor(QWidget *parent)
 {
     ui->setupUi(this);
 
+    reset();
+
     cbFlags
         << ui->cbForts
         << ui->cbMultiWeapon
@@ -28,6 +30,15 @@ editor::editor(QWidget *parent)
 editor::~editor()
 {
     delete ui;
+}
+
+void editor::reset()
+{
+    for(int i = 0; i < 6; ++i)
+    {
+        ui->twTeams->setTabEnabled(i, false);
+        ui->twTeams->widget(i)->setEnabled(false);
+    }
 }
 
 void editor::on_actionLoad_triggered()
@@ -86,19 +97,52 @@ void editor::load(const QString & fileName)
         if (line.startsWith("addteam") && (currTeam < 5))
         {
             ++currTeam;
+            ui->twTeams->setTabEnabled(currTeam, true);
+            ui->twTeams->widget(currTeam)->setEnabled(true);
+
             line = line.mid(8);
             int spacePos = line.indexOf('\x20');
             quint32 teamColor = line.left(spacePos).toUInt();
             QString teamName = line.mid(spacePos + 1);
 
             TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
-            te->addTeam(teamName, teamColor);
+            te->setTeam(teamName, teamColor);
+        }
+        else
+        if (line.startsWith("addhh") && (currTeam >= 0))
+        {
+            line = line.mid(6);
+            quint32 level = line.left(1).toUInt();
+            line = line.mid(2);
+            int spacePos = line.indexOf('\x20');
+            quint32 health = line.left(spacePos).toUInt();
+            QString hhName = line.mid(spacePos + 1);
+
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->addHedgehog(level, health, hhName);
         }
         else
         if (line.startsWith("fort") && (currTeam >= 0))
         {
             TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
             te->setFort(line.mid(5));
+        }
+        else
+        if (line.startsWith("hat") && (currTeam >= 0))
+        {
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->setLastHHHat(line.mid(4));
+        }
+        else
+        if (line.startsWith("hhcoords") && (currTeam >= 0))
+        {
+            line = line.mid(9);
+            int spacePos = line.indexOf('\x20');
+            int x = line.left(spacePos).toUInt();
+            int y = line.mid(spacePos + 1).toInt();
+
+            TeamEdit * te = qobject_cast<TeamEdit *>(ui->twTeams->widget(currTeam));
+            te->setLastHHCoords(x, y);
         }
         else
         if (line.startsWith("grave") && (currTeam >= 0))

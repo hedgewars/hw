@@ -23,6 +23,7 @@ private:
     QList<QCheckBox  *> cbFlags;
 
     void load(const QString & fileName);
+    void reset();
 
 private slots:
     void on_actionLoad_triggered();

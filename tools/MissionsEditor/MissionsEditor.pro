@@ -5,8 +5,11 @@ TARGET = MissionsEditor
 TEMPLATE = app
 SOURCES += main.cpp \
     editor.cpp \
-    teamedit.cpp
+    teamedit.cpp \
+    hedgehogedit.cpp
 HEADERS += editor.h \
-    teamedit.h
+    teamedit.h \
+    hedgehogedit.h
 FORMS += editor.ui \
-    teamedit.ui
+    teamedit.ui \
+    hedgehogedit.ui
