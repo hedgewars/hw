@@ -781,7 +781,7 @@ procedure DrawHH(Gear: PGear);
 var i, t: LongInt;
 	amt: TAmmoType;
 	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
-	lx, ly, dx, dy, ax, ay, aAngle, dAngle: real;  // laser, change
+	lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
 begin
@@ -928,10 +928,12 @@ if (Gear^.State and gstHHDriven) <> 0 then
 				if Gear^.X < CurAmmoGear^.X then
 					begin
 					dAngle:= 0;
+					hAngle:= 180;
 					i:= 1
 					end else
 					begin
 					dAngle:= 180;
+					hAngle:= 0;
 					i:= -1
 					end;
                 sx:= hwRound(Gear^.X) + WorldDx;
@@ -941,6 +943,10 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						1,
 						0,
 						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
+			    with PHedgehog(Gear^.Hedgehog)^ do
+                   if (HatTex <> nil) then
+					DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32,
+                        i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
 				defaultPos:= false
 				end;
 			gtBlowTorch: begin
@@ -1035,7 +1041,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
         1,
         1,
         0);
-	HatVisible:= true;
 	HatVisible:= true;
 	defaultPos:= false
 	end else

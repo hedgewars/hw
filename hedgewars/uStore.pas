@@ -37,6 +37,7 @@ procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX:
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
+procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, Frames: LongInt; Angle: real);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -456,7 +457,64 @@ var ft, fb: GLfloat;
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
-glScalef(Scale, Scale, 1.0);
+
+if Dir < 0 then
+	hw:= - 16
+else
+	hw:= 16;
+
+ft:= Frame / Frames * Texture^.ry;
+fb:= (Frame + 1) / Frames * Texture^.ry;
+
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
+
+VertexBuffer[0].X:= -hw;
+VertexBuffer[0].Y:= -16;
+VertexBuffer[1].X:= hw;
+VertexBuffer[1].Y:= -16;
+VertexBuffer[2].X:= hw;
+VertexBuffer[2].Y:= 16;
+VertexBuffer[3].X:= -hw;
+VertexBuffer[3].Y:= 16;
+
+TextureBuffer[0].X:= 0;
+TextureBuffer[0].Y:= ft;
+TextureBuffer[1].X:= Texture^.rx;
+TextureBuffer[1].Y:= ft;
+TextureBuffer[2].X:= Texture^.rx;
+TextureBuffer[2].Y:= fb;
+TextureBuffer[3].X:= 0;
+TextureBuffer[3].Y:= fb;
+
+glEnableClientState(GL_VERTEX_ARRAY);
+glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+glDisableClientState(GL_VERTEX_ARRAY);
+
+
+glPopMatrix
+end;
+
+procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, Frames: LongInt; Angle: real);
+var ft, fb: GLfloat;
+	hw: LongInt;
+    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+begin
+glPushMatrix;
+glTranslatef(X, Y, 0);
+
+if Dir < 0 then
+   glRotatef(Angle, 0, 0, -1)
+else
+   glRotatef(Angle, 0, 0,  1);
+
+glTranslatef(Dir*OffsetX, OffsetY, 0);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 if Dir < 0 then
 	hw:= - 16
