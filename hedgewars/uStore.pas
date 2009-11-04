@@ -457,6 +457,7 @@ var ft, fb: GLfloat;
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
+glScalef(Scale, Scale, 1.0);
 
 if Dir < 0 then
 	hw:= - 16
