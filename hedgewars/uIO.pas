@@ -19,7 +19,7 @@
 unit uIO;
 interface
 uses SDLh;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 const ipcPort: Word = 0;
 

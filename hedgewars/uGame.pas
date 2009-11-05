@@ -19,7 +19,7 @@
 unit uGame;
 interface
 uses uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 procedure DoGameTick(Lag: LongInt);
 

@@ -19,7 +19,7 @@
 unit uSound;
 interface
 uses SDLh, uConsts;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 type PVoicepack = ^TVoicepack;
 	TVoicepack = record

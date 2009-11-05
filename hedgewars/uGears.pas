@@ -19,7 +19,7 @@
 unit uGears;
 interface
 uses SDLh, uConsts, uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const AllInactive: boolean = false;
       PrvInactive: boolean = false;
 
@@ -117,8 +117,8 @@ procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(Gear: PGear); forward;
 
 
-{$INCLUDE GSHandlers.inc}
-{$INCLUDE HHHandlers.inc}
+{$INCLUDE "GSHandlers.inc"}
+{$INCLUDE "HHHandlers.inc"}
 
 const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepBomb,

@@ -19,7 +19,7 @@
 unit uAI;
 interface
 uses uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 procedure ProcessBot;
 procedure FreeActionsList;
 

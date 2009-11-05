@@ -19,9 +19,12 @@
 unit SDLh;
 interface
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
-{$IFDEF LINUX or FREEBSD}
+{$IFDEF LINUX}
+{$DEFINE UNIX}
+{$ENDIF}
+{$IFDEF FREEBSD}
 {$DEFINE UNIX}
 {$ENDIF}
 
@@ -32,7 +35,9 @@ interface
   {$linklib pthread}
 {$ENDIF}
 
+{$IFDEF FPC}
 {$PACKRECORDS C}
+{$ENDIF}
 
 {$IFDEF DARWIN}
 	{$PASCALMAINNAME SDL_main}
@@ -205,8 +210,8 @@ type PSDL_Rect = ^TSDL_Rect;
 
 
 	PSDL_RWops = ^TSDL_RWops;
-	TSeek = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
-	TRead = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
+	TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
+	TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
 	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
 	TClose = function( context: PSDL_RWops ): LongInt; cdecl;
 

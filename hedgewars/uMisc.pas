@@ -18,7 +18,7 @@
 
 unit uMisc;
 interface
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 uses uConsts, SDLh,
 {$IFDEF GLES11}
 	gles11,

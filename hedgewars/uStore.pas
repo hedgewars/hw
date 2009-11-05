@@ -18,7 +18,7 @@
 
 unit uStore;
 interface
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 uses sysutils, uConsts, uTeams, SDLh,
 {$IFDEF GLES11}
 	gles11,

@@ -19,7 +19,7 @@
 unit uCollisions;
 interface
 uses uGears, uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const cMaxGearArrayInd = 255;
 
 type PGearArray = ^TGearArray;

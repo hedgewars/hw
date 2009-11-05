@@ -19,7 +19,7 @@
 unit uLandGraphics;
 interface
 uses uFloat, uConsts;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 type PRangeArray = ^TRangeArray;
      TRangeArray = array[0..31] of record
@@ -292,7 +292,7 @@ for i:= 0 to 7 do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
-        {$include tunsetborder.inc}
+        {$INCLUDE "tunsetborder.inc"}
     nx:= nx - dY;
     ny:= ny + dX;
     end;
@@ -302,7 +302,7 @@ for i:= -HalfWidth to HalfWidth do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= 0 to 7 do
-        {$include tunsetborder.inc}
+        {$INCLUDE "tunsetborder.inc"}
     X:= nx;
     Y:= ny;
     for t:= 0 to ticks do
@@ -319,7 +319,7 @@ for i:= -HalfWidth to HalfWidth do
            end
         end;
     for t:= 0 to 7 do
-        {$include tunsetborder.inc}
+        {$INCLUDE "tunsetborder.inc"}
     nx:= nx - dY;
     ny:= ny + dX;
     end;
@@ -329,7 +329,7 @@ for i:= 0 to 7 do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
-        {$include tunsetborder.inc}
+        {$INCLUDE "tunsetborder.inc"}
     nx:= nx - dY;
     ny:= ny + dX;
     end;

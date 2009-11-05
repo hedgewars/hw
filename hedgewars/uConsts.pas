@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 unit uConsts;
 interface
@@ -30,7 +30,7 @@ uses
 {$ENDIF}
 	uLocale;
 
-{$INCLUDE proto.inc}
+{$INCLUDE "proto.inc"}
 type
 
 	TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);

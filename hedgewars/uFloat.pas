@@ -19,24 +19,24 @@
 unit uFloat;
 interface
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 {$IFDEF FPC}
-{$ifdef FPC_LITTLE_ENDIAN}
+{$IFDEF ENDIAN_LITTLE}
 type hwFloat = record
                isNegative: boolean;
                case byte of
                0: (Frac, Round: Longword);
                1: (QWordValue : QWord);
                end;
-{$else}
+{$ELSE}
 type hwFloat = record
                isNegative: boolean;
                case byte of
                0: (Round, Frac: Longword);
                1: (QWordValue : QWord);
                end;
-{$endif}
+{$ENDIF}
 
 function int2hwFloat (const i: LongInt) : hwFloat;
 
@@ -63,7 +63,9 @@ function AngleSin(const Angle: Longword): hwFloat;
 function AngleCos(const Angle: Longword): hwFloat;
 function SignAs(const num, signum: hwFloat): hwFloat;
 
+{$IFDEF FPC}
 {$J-}
+{$ENDIF}
 {$WARNINGS OFF}
 const  _1div1024: hwFloat = (isNegative: false; QWordValue:     4194304);
       _1div10000: hwFloat = (isNegative: false; QWordValue:      429496);
@@ -333,7 +335,7 @@ SignAs.QWordValue:= num.QWordValue;
 SignAs.isNegative:= signum.isNegative
 end;
 
-{$INCLUDE SinTable.inc}
+{$INCLUDE "SinTable.inc"}
 
 function AngleSin(const Angle: Longword): hwFloat;
 begin

@@ -19,7 +19,7 @@
 unit uAIActions;
 interface
 uses uGears, uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const MAXACTIONS = 96;
       aia_none       = 0;
       aia_Left       = 1;

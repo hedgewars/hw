@@ -20,7 +20,7 @@
 {$ERROR Only Free Pascal supported!}
 {$ENDIF}
 
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 program hwengine;
 uses

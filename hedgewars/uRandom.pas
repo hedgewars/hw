@@ -19,8 +19,8 @@
 unit uRandom;
 interface
 uses uFloat;
-{$INCLUDE options.inc}
-{$INCLUDE proto.inc}
+{$INCLUDE "options.inc"}
+{$INCLUDE "proto.inc"}
 
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;

@@ -19,7 +19,7 @@
 unit uConsole;
 interface
 uses uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const isDeveloperMode: boolean = true;
 type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
@@ -34,7 +34,6 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-{$J+}
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
      uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh, uSound, uVisualGears;
 
@@ -223,7 +222,7 @@ if (Message and gm_Down) <> 0 then ParseCommand('/-down', true) else
 if (Message and gm_Attack) <> 0 then ParseCommand('/-attack', true)
 end;
 
-{$INCLUDE CCHandlers.inc}
+{$INCLUDE "CCHandlers.inc"}
 
 initialization
 InitConsole;

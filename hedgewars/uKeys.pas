@@ -19,7 +19,7 @@
 unit uKeys;
 interface
 uses uConsts, SDLh;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;

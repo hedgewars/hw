@@ -19,7 +19,7 @@
 unit uAmmos;
 interface
 uses uConsts, uTeams;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;

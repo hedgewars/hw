@@ -20,7 +20,7 @@ unit uTriggers;
 
 interface
 uses SDLh, uConsts;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const trigTurns = $80000001;
 
 type TTrigAction = (taSpawnGear, taSuccessFinish, taFailFinish);

@@ -19,7 +19,7 @@
 unit uLandObjects;
 interface
 uses SDLh;
-{$include options.inc}
+{$INCLUDE "options.inc"}
 
 procedure AddObjects();
 procedure LoadThemeConfig;

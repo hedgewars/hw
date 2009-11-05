@@ -19,7 +19,7 @@
 unit uWorld;
 interface
 uses SDLh, uGears, uConsts, uFloat;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 const WorldDx: LongInt = -512;
       WorldDy: LongInt = -256;
 

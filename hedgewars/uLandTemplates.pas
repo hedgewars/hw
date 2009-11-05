@@ -19,7 +19,7 @@
 unit uLandTemplates;
 interface
 uses SDLh;
-{$INCLUDE options.inc}
+{$INCLUDE "options.inc"}
 
 const NTPX = Low(TSDL_Rect.x);
 
@@ -38,7 +38,7 @@ type PPointArray = ^TPointArray;
                      MaxHedgeHogs: Longword;
                      end;
 ///////////////////////// ORIGINAL SET //////////////////////////////
-// Area expanded to 2848x1424 at Tiy's request to move out border ///
+/// Area expanded to 2848x1424 at Tiys request to move out border ///
 /////////////////////////////////////////////////////////////////////
 const Template0Points: array[0..18] of TSDL_Rect =
       (
