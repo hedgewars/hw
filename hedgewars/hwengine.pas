@@ -177,7 +177,7 @@ while SDL_PollEvent(@event) <> 0 do
 {$IFDEF TOUCHINPUT}
 if (direction <> nodir) and (movedbybuttons = true) then
 begin
-	AddFileLog('* Hedgehog moving *');
+	WriteLnToConsole('* Hedgehog moving *');
         uKeys.isWalking:= true;
         if direction = left then uKeys.leftKey:= true
         else if direction = right then uKeys.rightKey:= true;
@@ -196,7 +196,7 @@ else uKeys.isWalking:= false;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
 {$IFDEF TOUCHINPUT}
                 SDL_MOUSEMOTION: begin
-                        AddFileLog('*********************************************       motion');
+                        WriteLnToConsole('*********************************************       motion');
                         mouseState:= SDL_GetMouseState(0, @x, @y);
                         SDL_GetRelativeMouseState(0, @dx, @dy);
                         
@@ -204,7 +204,9 @@ else uKeys.isWalking:= false;
 
                         if boolean(mouseState) then
                         begin
+{$IFDEF DEBUGFILE}		
                                 AddFileLog('x: ' + inttostr(x) + ' y: ' + inttostr(y) + ' dx: ' + inttostr(dx) + ' dy: ' + inttostr(dy));
+{$ENDIF}
 
                                 {* zoom slider *}
                                 if (x <= 50) and (y <= 430) and (y > 50) then 
@@ -229,28 +231,28 @@ else uKeys.isWalking:= false;
                 end;
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
                 SDL_MOUSEBUTTONDOWN: begin
-                        AddFileLog('*********************************************       touch down');
+                        WriteLnToConsole('*********************************************       touch down');
 
                         mouseState:= SDL_GetMouseState(0, @x, @y);                       
 
                         {* attack *}
                         if (x > 50) and (x <= 270) and (y <= 50) then
                         begin
-                                AddFileLog('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                WriteLnToConsole('Space DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
                                 uKeys.spaceKey:= true;
                                 uKeys.isAttacking:= true;
                         end;
 
                         if (x <= 50) and (y <= 50) then
                         begin
-                                AddFileLog('Left Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                WriteLnToConsole('Left Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
                                 direction:= left;
 				movedbybuttons:= true;
                         end;
                         
                         if (x > 270) and (y <= 50) then
                         begin
-                                AddFileLog('Right Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
+                                WriteLnToConsole('Right Arrow Key DOWN -- x: ' + inttostr(x) + ' y: ' + inttostr(y));
                                 direction:= right;
 				movedbybuttons:= true;
                         end;
@@ -312,15 +314,15 @@ else uKeys.isWalking:= false;
                    axis 1 = up and down;
                    axis 2 = back and forth; *}
 
-{$IFDEF DEBUGFILE}
-                        AddFileLog('*********************************************       accelerometer');
-{$ENDIF}
+                        WriteLnToConsole('*********************************************       accelerometer');
 			
 			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick, 0);
 
                         if (CurrentTeam <> nil) then
                         begin
+{$IFDEF DEBUGFILE}
 				AddFileLog('Joystick: 0; Axis: 0; Value: ' + inttostr(tiltValue));
+{$ENDIF}
 
                                 if tiltValue > 1500 then
                                 begin
@@ -577,9 +579,7 @@ LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 if recordFileName = '' then
 	SendIPCAndWaitReply('C')        // ask for game config
 else
- begin
-	LoadRecordFromFile(recordFileName);
- end;
+ 	LoadRecordFromFile(recordFileName);
 
 s:= 'eproto ' + inttostr(cNetProtoVersion);
 SendIPCRaw(@s[0], Length(s) + 1); // send proto version
@@ -587,15 +587,14 @@ SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 InitTeams;
 AssignStores;
 
-if isSoundEnabled then InitSound;
+if isSoundEnabled then
+	InitSound;
 
 StoreInit;
 
 isDeveloperMode:= false;
 
-TryDo(InitStepsFlags = cifAllInited,
-      'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
-      true);
+TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
 MainLoop;
 ControllerClose
@@ -608,9 +607,7 @@ var Preview: TPreview;
 begin
 InitIPC;
 IPCWaitPongEvent;
-TryDo(InitStepsFlags = cifRandomize,
-      'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')',
-      true);
+TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
 Preview:= GenPreview;
 WriteLnToConsole('Sending preview...');

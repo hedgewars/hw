@@ -56,15 +56,31 @@ interface
 (*  SDL  *)
 const
 {$IFDEF WIN32}
-        SDLLibName = 'SDL.dll';
-{$ENDIF}
-{$IFDEF UNIX}
+	SDLLibName = 'SDL.dll';
+	SDL_TTFLibName = 'SDL_ttf.dll';
+	SDL_MixerLibName = 'SDL_mixer.dll';
+	SDL_ImageLibName = 'SDL_image.dll';
+	SDL_NetLibName = 'SDL_net.dll';
+{$ELSE}
 	{$IFDEF DARWIN}
-                SDLLibName = 'SDL';
+		SDLLibName = 'SDL';
+		SDL_TTFLibName = 'SDL_ttf';
+		SDL_MixerLibName = 'SDL_mixer';
+		SDL_ImageLibName = 'SDL_image';
+		SDL_NetLibName = 'SDL_net';
         {$ELSE}
 		SDLLibName = 'libSDL.so';
+		SDL_TTFLibName = 'libSDL_ttf.so';
+		SDL_MixerLibName = 'libSDL_mixer.so';
+		SDL_ImageLibName = 'libSDL_image.so';
+		SDL_NetLibName = 'libSDL_net.so';
         {$ENDIF}
 {$ENDIF}
+
+/////////////////////////////////////////////////////////////////
+/////////////////////  CONSTANT DEFINITIONS /////////////////////
+/////////////////////////////////////////////////////////////////
+
 	SDL_SWSURFACE     = $00000000;
 	SDL_HWSURFACE     = $00000001;
 	SDL_SRCALPHA      = $00010000;
@@ -148,8 +164,32 @@ const
 	AMask = $000000FF;
 {$ENDIF}
 
+	{* SDL_mixer *}
+	MIX_MAX_VOLUME = 128;
 
-type PSDL_Rect = ^TSDL_Rect;
+	{* SDL_TTF *}
+	TTF_STYLE_NORMAL = 0;
+	TTF_STYLE_BOLD   = 1;
+	TTF_STYLE_ITALIC = 2;
+
+	{* SDL Joystick *}
+	SDL_HAT_CENTERED  = $00;
+	SDL_HAT_UP        = $01;
+	SDL_HAT_RIGHT     = $02;
+	SDL_HAT_DOWN      = $04;
+	SDL_HAT_LEFT      = $08;
+	SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
+	SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
+	SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
+	SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
+
+
+/////////////////////////////////////////////////////////////////
+///////////////////////  TYPE DEFINITIONS ///////////////////////
+/////////////////////////////////////////////////////////////////
+
+type 
+	PSDL_Rect = ^TSDL_Rect;
 	TSDL_Rect = record
 {$IFDEF SDL13}
 		x, y, w, h: LongInt;
@@ -210,10 +250,19 @@ type PSDL_Rect = ^TSDL_Rect;
 
 
 	PSDL_RWops = ^TSDL_RWops;
+{$IFDEF FPC}
 	TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
 	TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
 	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
 	TClose = function( context: PSDL_RWops ): LongInt; cdecl;
+{$ELSE}
+	TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt;
+	TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;
+	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt;
+	TClose = function( context: PSDL_RWops ): LongInt;
+
+	PByte = ^Byte;
+{$ENDIF}
 
 	TStdio = record
 		autoclose: LongInt;
@@ -314,7 +363,7 @@ type PSDL_Rect = ^TSDL_Rect;
 		end;
 {$ENDIF}
 
-     TSDL_JoyAxisEvent = record
+	TSDL_JoyAxisEvent = record
 		type_: Byte;
 		which: Byte;
 		axis: Byte;
@@ -325,7 +374,7 @@ type PSDL_Rect = ^TSDL_Rect;
 {$ENDIF}	
 		end;
 			
-     TSDL_JoyBallEvent = record
+	TSDL_JoyBallEvent = record
 		type_: Byte;
 		which: Byte;
 		ball: Byte;
@@ -336,26 +385,26 @@ type PSDL_Rect = ^TSDL_Rect;
 {$ENDIF}
 		end;
 
-     TSDL_JoyHatEvent = record
+	TSDL_JoyHatEvent = record
 		type_: Byte;
 		which: Byte;
 		hat: Byte;
 		value: Byte;
 		end;
 	
-     TSDL_JoyButtonEvent = record
+	TSDL_JoyButtonEvent = record
 		type_: Byte;
 		which: Byte;
 		button: Byte;
 		state: Byte;
 		end;
 
-     TSDL_QuitEvent = record
+	TSDL_QuitEvent = record
                 type_: Byte;
                 end;
 
 {$IFNDEF SDL13}
-     TSDL_ResizeEvent = record
+	TSDL_ResizeEvent = record
 		type_: Byte;
 		w, h: LongInt;
 		end;
@@ -363,49 +412,49 @@ type PSDL_Rect = ^TSDL_Rect;
 
 	PSDL_Event = ^TSDL_Event;
 	TSDL_Event = record
-                  case Byte of
-	SDL_NOEVENT: (type_: byte);
+		case Byte of
+			SDL_NOEVENT: (type_: byte);
 {$IFDEF SDL13}
-	SDL_WINDOWEVENT: (active: TSDL_WindowEvent);
-	SDL_KEYDOWN,
-        SDL_KEYUP: (key: TSDL_KeyboardEvent);
-	SDL_TEXTEDITING,
-	SDL_TEXTINPUT: (txtin: byte);
-	SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-	SDL_MOUSEBUTTONDOWN,
-	SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-        SDL_MOUSEWHEEL: (wheel: TSDL_MouseWheelEvent);
-	SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
-	SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
-	SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
-	SDL_JOYBUTTONDOWN,
-	SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-	SDL_QUITEV: (quit: TSDL_QuitEvent);
+			SDL_WINDOWEVENT: (active: TSDL_WindowEvent);
+			SDL_KEYDOWN,
+			SDL_KEYUP: (key: TSDL_KeyboardEvent);
+			SDL_TEXTEDITING,
+			SDL_TEXTINPUT: (txtin: byte);
+			SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+			SDL_MOUSEBUTTONDOWN,
+			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+			SDL_MOUSEWHEEL: (wheel: TSDL_MouseWheelEvent);
+			SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
+			SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
+			SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
+			SDL_JOYBUTTONDOWN,
+			SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+			SDL_QUITEV: (quit: TSDL_QuitEvent);
 {$ELSE}
-        SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
-	SDL_KEYDOWN,
-        SDL_KEYUP: (key: TSDL_KeyboardEvent);
-	SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
-	SDL_MOUSEBUTTONDOWN,
-	SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
-	SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
-	SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
-	SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
-	SDL_JOYBUTTONDOWN,
-	SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
-	SDL_QUITEV: (quit: TSDL_QuitEvent);
-	//SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
-	//SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
+			SDL_ACTIVEEVENT: (active: TSDL_ActiveEvent);
+			SDL_KEYDOWN,
+			SDL_KEYUP: (key: TSDL_KeyboardEvent);
+			SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
+			SDL_MOUSEBUTTONDOWN,
+			SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
+			SDL_JOYAXISMOTION: (jaxis: TSDL_JoyAxisEvent);
+			SDL_JOYHATMOTION: (jhat: TSDL_JoyHatEvent);
+			SDL_JOYBALLMOTION: (jball: TSDL_JoyBallEvent);
+			SDL_JOYBUTTONDOWN,
+			SDL_JOYBUTTONUP: (jbutton: TSDL_JoyButtonEvent);
+			SDL_QUITEV: (quit: TSDL_QuitEvent);
+			//SDL_SYSWMEVENT,SDL_EVENT_RESERVEDA,SDL_EVENT_RESERVEDB
+			//SDL_VIDEORESIZE: (resize: TSDL_ResizeEvent);
 {$ENDIF}
 		end;
 
-     PByteArray = ^TByteArray;
-     TByteArray = array[0..65535] of Byte;
-     PLongWordArray = ^TLongWordArray;
-     TLongWordArray = array[0..16383] of LongWord;
+	PByteArray = ^TByteArray;
+	TByteArray = array[0..65535] of Byte;
+	PLongWordArray = ^TLongWordArray;
+	TLongWordArray = array[0..16383] of LongWord;
 
-     PSDL_Thread = Pointer;
-     PSDL_mutex = Pointer;
+	PSDL_Thread = Pointer;
+	PSDL_mutex = Pointer;
 
 	TSDL_GLattr = (
 		SDL_GL_RED_SIZE,
@@ -441,6 +490,71 @@ type PSDL_Rect = ^TSDL_Rect;
 		);
 {$ENDIF}
 
+// Joystick/Controller support
+	PSDL_Joystick = ^TSDL_Joystick;
+	TSDL_Joystick = record
+			end;
+
+	{* SDL_TTF *}
+	PTTF_Font = ^TTTF_font;
+	TTTF_Font = record
+		    end;
+
+	{* SDL_mixer *}
+	PMixChunk = ^TMixChunk;
+	TMixChunk = record
+		allocated: Longword;
+		abuf     : PByte;
+		alen     : Longword;
+		volume   : PByte;
+		end;
+	TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
+	TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
+
+	TMidiSong = record
+               samples : LongInt;
+               events  : pointer;
+               end;
+
+	TMusicUnion = record
+		case Byte of
+		     0: ( midi : TMidiSong );
+		     1: ( ogg  : pointer);
+		     end;
+
+	PMixMusic = ^TMixMusic;
+	TMixMusic = record
+                 end;
+
+	{* SDL_net *}
+	TIPAddress = record
+                  host: Longword;
+                  port: Word;
+                  end;
+
+	PTCPSocket = ^TTCPSocket;
+	TTCPSocket = record
+                  ready: LongInt;
+                  channel: LongInt;
+                  remoteAddress: TIPaddress;
+                  localAddress: TIPaddress;
+                  sflag: LongInt;
+                  end;
+	PSDLNet_SocketSet = ^TSDLNet_SocketSet;
+	TSDLNet_SocketSet = record
+                         numsockets,
+                         maxsockets: LongInt;
+                         sockets: PTCPSocket;
+                         end;
+
+
+/////////////////////////////////////////////////////////////////
+/////////////////////  FUNCTION DEFINITIONS /////////////////////
+/////////////////////////////////////////////////////////////////
+
+{$IFDEF FPC}
+
+{* SDL *}
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
 function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
@@ -517,23 +631,6 @@ function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external 
 {$ENDIF}
 {$ENDIF}
 
-
-
-// Joystick/Controller support
-type PSDL_Joystick = ^TSDL_Joystick;
-     TSDL_Joystick = record
-	                end;
-
-const	SDL_HAT_CENTERED  = $00;
-	SDL_HAT_UP        = $01;
-	SDL_HAT_RIGHT     = $02;
-	SDL_HAT_DOWN      = $04;
-	SDL_HAT_LEFT      = $08;
-	SDL_HAT_RIGHTUP   = SDL_HAT_RIGHT or SDL_HAT_UP;
-	SDL_HAT_RIGHTDOWN = SDL_HAT_RIGHT or SDL_HAT_DOWN;
-	SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
-	SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
-
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;
 function  SDL_JoystickOpen(idx: LongInt): PSDL_Joystick; cdecl; external SDLLibName;
@@ -551,80 +648,20 @@ function  SDL_JoystickGetHat(joy: PSDL_Joystick; hat: LongInt): Byte; cdecl; ext
 function  SDL_JoystickGetButton(joy: PSDL_Joystick; button: LongInt): Byte; cdecl; external SDLLibName;
 procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 
-(*  TTF  *)
-
-const {$IFDEF WIN32}
-      SDL_TTFLibName = 'SDL_ttf.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_TTFLibName = 'SDL_ttf';
-	{$ELSE}
-          SDL_TTFLibName = 'libSDL_ttf.so';
-        {$ENDIF}
-      {$ENDIF}
-      TTF_STYLE_NORMAL = 0;
-      TTF_STYLE_BOLD   = 1;
-      TTF_STYLE_ITALIC = 2;
-
-type PTTF_Font = ^TTTF_font;
-     TTTF_Font = record
-                 end;
-
-function TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
+(*  SDL_TTF  *)
+function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
-
-
-function TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
+function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 (* TSDL_Color -> Longword conversion is workaround over freepascal bug.
    See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
-function TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
-function TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
-
-const {$IFDEF WIN32}
-      SDL_MixerLibName = 'SDL_mixer.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_MixerLibName = 'SDL_mixer';
-	{$ELSE}
-          SDL_MixerLibName = 'libSDL_mixer.so';
-	{$ENDIF}
-      {$ENDIF}
-
-const MIX_MAX_VOLUME = 128;
-
-type PMixChunk = ^TMixChunk;
-     TMixChunk = record
-                 allocated: Longword;
-                 abuf     : PByte;
-                 alen     : Longword;
-                 volume   : PByte;
-                 end;
-     TMusic = (MUS_CMD, MUS_WAV, MUS_MOD, MUS_MID, MUS_OGG, MUS_MP3);
-     TMix_Fading = (MIX_NO_FADING, MIX_FADING_OUT, MIX_FADING_IN);
-
-     TMidiSong = record
-               samples : LongInt;
-               events  : pointer;
-               end;
-
-     TMusicUnion = record
-        case Byte of
-             0: ( midi : TMidiSong );
-             1: ( ogg  : pointer);
-             end;
-
-     PMixMusic = ^TMixMusic;
-     TMixMusic = record
-                 end;
-
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
@@ -651,79 +688,35 @@ function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerL
 function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
-
-const {$IFDEF WIN32}
-      SDL_ImageLibName = 'SDL_image.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_ImageLibName = 'SDL_image';
-	{$ELSE}
-           SDL_ImageLibName = 'libSDL_image.so';
-	{$ENDIF}
-      {$ENDIF}
-
-function IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
-function IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
-
-const {$IFDEF WIN32}
-      SDL_NetLibName = 'SDL_net.dll';
-      {$ENDIF}
-      {$IFDEF UNIX}
-	{$IFDEF DARWIN}
-	  SDL_NetLibName = 'SDL_net';
-	{$ELSE}
-          SDL_NetLibName = 'libSDL_net.so';
-	{$ENDIF}
-      {$ENDIF}
-
-type TIPAddress = record
-                  host: Longword;
-                  port: Word;
-                  end;
-
-     PTCPSocket = ^TTCPSocket;
-     TTCPSocket = record
-                  ready: LongInt;
-                  channel: LongInt;
-                  remoteAddress: TIPaddress;
-                  localAddress: TIPaddress;
-                  sflag: LongInt;
-                  end;
-     PSDLNet_SocketSet = ^TSDLNet_SocketSet;
-     TSDLNet_SocketSet = record
-                         numsockets,
-                         maxsockets: LongInt;
-                         sockets: PTCPSocket;
-                         end;
-
-function SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
 
-function SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
-function SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
+function  SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_TCP_Recv(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
 procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
-function SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
-function SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
+{$ELSE}{$ENDIF}
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
-function SDLNet_Read16(buf: pointer): Word;
-function SDLNet_Read32(buf: pointer): LongWord;
+function  SDLNet_Read16(buf: pointer): Word;
+function  SDLNet_Read32(buf: pointer): LongWord;
 
 implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
-SDL_MustLock:= ( surface^.offset <> 0 )
-       or(( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
+  SDL_MustLock:= ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
 end;
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
