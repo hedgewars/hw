@@ -38,12 +38,14 @@ var  Land: TCollisionArray;
      hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
      hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands do not need? It might be better to tweak the girder code based upon space above.  dunno.
      playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.  Maybe not a good idea, but, for now?  Could also be used to prevent placing a girder outside play area on maps with hasBorder = true
+	 LandBackSurface: PSDL_Surface;
 
 // in your coding style, it appears to be "isXXXX" for a verb, and "FooBar" for everything else - should be PlayHeight ?
 
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
+function LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;
@@ -309,6 +311,18 @@ while Stack.Count > 0 do
       end;
 end;
 
+function LandBackPixel(x, y: LongInt): LongWord;
+var p: PLongWordArray;
+begin
+	if LandBackSurface = nil then
+		begin
+		LandBackPixel:= 0;
+		exit;
+		end;
+	p:= LandBackSurface^.pixels;
+	LandBackPixel:= p^[(LandBackSurface^.w) * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
+end;
+
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
@@ -327,6 +341,8 @@ while r.y < LAND_HEIGHT do
 	inc(r.y, tmpsurf^.h)
 	end;
 SDL_FreeSurface(tmpsurf);
+
+LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
 for x:= 0 to LAND_WIDTH - 1 do
@@ -836,5 +852,9 @@ GenPreview:= Preview
 end;
 
 initialization
+LandBackSurface:= nil;
 
+finalization
+if LandBackSurface <> nil then
+	SDL_FreeSurface(LandBackSurface);
 end.

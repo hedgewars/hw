@@ -1,18 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    AppleDirt.png
-    AppleSmall.png
-    Border.png
-    BottleDirt.png
-    Clouds.png
-    FishDirt.png
-    Flake.png
-    icon.png
-    LandTex.png
-    Sky.png
-    Tire.png
-    TireDirt.png
-    horizont.png
     theme.cfg
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Freeway)

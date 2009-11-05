@@ -1,20 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    Axe.png
-    BlueWater.png
-    Border.png
-    Clouds.png
-    Flake.png
-    Girder.png
-    horizont.png
-    icon.png
-    LandTex.png
-    Shield.png
-    SkyL.png
-    Sky.png
-    SkyR.png
-    Spear.png
-    Sword.png
     theme.cfg
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Castle)

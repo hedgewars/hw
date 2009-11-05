@@ -23,5 +23,5 @@
         ty:= hwRound(Y);
         if ((ty and LAND_HEIGHT_MASK) = 0) and
            ((tx and LAND_WIDTH_MASK) = 0) and
-           (Land[ty, tx] = COLOR_LAND) then LandPixels[ty, tx]:= cExplosionBorderColor
+           ((Land[ty, tx] = COLOR_LAND) or (Land[ty, tx] = COLOR_OBJECT)) then LandPixels[ty, tx]:= cExplosionBorderColor
 	end;

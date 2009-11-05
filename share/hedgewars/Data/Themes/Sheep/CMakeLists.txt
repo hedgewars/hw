@@ -1,28 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    icon.png
-    mouton2.png
-    Border.png
-    mouton3.png
-    mouton4.png
-    fleurland2.png
-    grassp.png
-    grass.png
     theme.cfg
-    fleurland3.png
-    grass2.png
-    fleurland4.png
-    Girder.png
-    mouton1.png
-    barriere.png
-    rocher.png
-    Flake.png
-    horizont.png
-    Sky.png
-    LandTex.png
-    grassp2.png
-    fleurland.png
-    fleur.png
-    Clouds.png
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Sheep)

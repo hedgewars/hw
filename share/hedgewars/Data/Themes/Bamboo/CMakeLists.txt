@@ -1,19 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    Bamboo2.png
-    Bamboo3.png
-    Bamboo.png
-    Border.png
-    Clouds.png
-    Flake.png
-    Flower.png
-    Girder.png
-    horizont.png
-    icon.png
-    LandTex.png
-    SkyL.png
-    Sky.png
-    SkyR.png
     theme.cfg
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Bamboo)

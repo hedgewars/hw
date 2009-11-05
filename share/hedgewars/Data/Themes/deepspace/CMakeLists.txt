@@ -1,9 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    BlueWater.png
-    Border.png
-    Clouds.png
-    Flake.png
-    horizont.png
-    Sky.png
     theme.cfg
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/deepspace)

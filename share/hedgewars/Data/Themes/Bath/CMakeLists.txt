@@ -1,21 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    Border.png
-    Bubble.png
-    Clouds.png
-    Duck2.png
-    Duck.png
-    Flake.png
-    Girder.png
-    horizontL.png
-    horizont.png
-    horizontR.png
-    icon.png
-    LandTex.png
-    Sky.png
-    Toothbrush_b.png
-    Toothbrush_g.png
-    Toothbrush.png
     theme.cfg
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Bath)

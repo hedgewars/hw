@@ -1,10 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    BlueWater.png
-    Clouds.png
-    Flake.png
-    Sky.png
-    horizont.png
     theme.cfg
-    horizont-lowres.png
-    Sky-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Eyes)

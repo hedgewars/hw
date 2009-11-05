@@ -1,7 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    Flake.png
-    horizont.png
-    Sky.png
     theme.cfg
-    horizont-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Planes)

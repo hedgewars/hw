@@ -1,26 +1,6 @@
+file(GLOB images *.png)
+
 install(FILES
-    BlueWater.png
-    Border.png
-    Carrot1.png
-    Carrot2.png
-    Carrot3.png
-    Carrot4.png
-    Clouds.png
-    Cucumber1.png
-    Cucumber2.png
-    Cucumber3.png
-    Cucumber4.png
-    Eggshell1.png
-    Eggshell2.png
-    Flake.png
-    Girder.png
-    horizont.png
-    icon.png
-    LandTex.png
-    Onion1.png
-    Onion2.png
-    Sky.png
     theme.cfg
-    Sky-lowres.png
-    horizont-lowres.png
+    ${images}
     DESTINATION ${SHAREPATH}Data/Themes/Compost)
