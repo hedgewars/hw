@@ -84,8 +84,7 @@ type
 
 	TGearsType = set of TGearType;
 
-	TSound = (sndNone,
-			sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
+	TSound = (sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
 			sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
 			sndMineTick, sndPickhammer, sndGun, sndUFO, sndJump1, sndJump2,
 			sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndIncoming,
@@ -97,8 +96,7 @@ type
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
-			sndHomerun, sndMolotov, sndWalking, sndCover, sndUhOh,
-			sndOops, sndNooo, sndHello);
+			sndHomerun, sndMolotov);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -133,7 +131,6 @@ type
 			Timer: LongWord;
 			Pos: LongWord;
 			AmmoType: TAmmoType;
-			AttackVoice: TSound;
 			end;
 
 	TVertex2f = record
@@ -210,7 +207,6 @@ const
 
     COLOR_LAND           = $FFFF;  // white
     COLOR_INDESTRUCTIBLE = $88FF;  // red
-	COLOR_OBJECT         = $44FF;
 
     //some opengl headers do not have these macros
     GL_BGR  = $80E0;
@@ -651,23 +647,20 @@ const
 			FramesCount: Longword;
 			Interval: Longword;
 			cmd: String[20];
-			Voice: TSound;
-			VoiceDelay: ShortInt;
 			end = (
-			(Sprite:   sprKowtow; FramesCount: 12; Interval: 125; cmd: '/rollup'; Voice: sndNone; VoiceDelay: 0),
-			(Sprite:      sprSad; FramesCount: 14; Interval: 125; cmd: '/sad'; Voice: sndNone; VoiceDelay: 0),
-			(Sprite:     sprWave; FramesCount: 16; Interval: 125; cmd: '/wave'; Voice: sndHello; VoiceDelay: 5),
-			(Sprite:   sprHurrah; FramesCount: 14; Interval: 125; cmd: '/hurrah'; Voice: sndNone; VoiceDelay: 0),
-			(Sprite: sprLemonade; FramesCount: 24; Interval: 125; cmd: '/ilovelotsoflemonade'; Voice: sndNone; VoiceDelay: 0),
-			(Sprite:    sprShrug; FramesCount: 24; Interval: 125; cmd: '/shrug'; Voice: sndNone; VoiceDelay: 0),
-			(Sprite:   sprJuggle; FramesCount: 49; Interval:  38; cmd: '/juggle'; Voice: sndNone; VoiceDelay: 0)
+			(Sprite:   sprKowtow; FramesCount: 12; Interval: 125; cmd: '/rollup'),
+			(Sprite:      sprSad; FramesCount: 14; Interval: 125; cmd: '/sad'),
+			(Sprite:     sprWave; FramesCount: 16; Interval: 125; cmd: '/wave'),
+			(Sprite:   sprHurrah; FramesCount: 14; Interval: 125; cmd: '/hurrah'),
+			(Sprite: sprLemonade; FramesCount: 24; Interval: 125; cmd: '/ilovelotsoflemonade'),
+			(Sprite:    sprShrug; FramesCount: 24; Interval: 125; cmd: '/shrug'),
+			(Sprite:   sprJuggle; FramesCount: 49; Interval:  38; cmd: '/juggle')
 			);
 
 	Soundz: array[TSound] of record
 			FileName: String[25];
 			Path    : TPathType;
 			end = (
-			(FileName:                         ''; Path: ptSounds),// sndNone
 			(FileName:        'grenadeimpact.ogg'; Path: ptSounds),// sndGrenadeImpact
 			(FileName:            'explosion.ogg'; Path: ptSounds),// sndExplosion
 			(FileName:         'throwpowerup.ogg'; Path: ptSounds),// sndThrowPowerUp
@@ -726,13 +719,7 @@ const
 			(FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
 			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
 			(FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
-			(FileName:              'molotov.ogg'; Path: ptSounds),// sndMolotov
-			(FileName:              'walking.ogg'; Path: ptSounds),// sndWalking
-			(FileName:            'Takecover.ogg'; Path: ptVoices),// sndCover
-			(FileName:                'Uh-oh.ogg'; Path: ptVoices),// sndUhOh
-			(FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
-			(FileName:                 'Nooo.ogg'; Path: ptVoices),// sndNooo
-			(FileName:                'Hello.ogg'; Path: ptVoices) // sndHello
+			(FileName:              'molotov.ogg'; Path: ptSounds) // sndMolotov
 			);
 
 	Ammoz: array [TAmmoType] of record
@@ -759,8 +746,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amNothing;
-					AttackVoice: sndNone);
+					AmmoType: amNothing);
 			Slot: 0;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -780,8 +766,7 @@ const
 					NumPerTurn: 0;
 					Timer: 3000;
 					Pos: 0;
-					AmmoType: amGrenade;
-					AttackVoice: sndCover);
+					AmmoType: amGrenade);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -801,8 +786,7 @@ const
 					NumPerTurn: 0;
 					Timer: 3000;
 					Pos: 0;
-					AmmoType: amClusterBomb;
-					AttackVoice: sndCover);
+					AmmoType: amClusterBomb);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -821,8 +805,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amBazooka;
-					AttackVoice: sndNone);
+					AmmoType: amBazooka);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -842,8 +825,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amUFO;
-					AttackVoice: sndNone);
+					AmmoType: amUFO);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -861,8 +843,7 @@ const
 					NumPerTurn: 1;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amShotgun;
-					AttackVoice: sndNone);
+					AmmoType: amShotgun);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -883,8 +864,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amPickHammer;
-					AttackVoice: sndNone);
+					AmmoType: amPickHammer);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -903,8 +883,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amSkip;
-					AttackVoice: sndNone);
+					AmmoType: amSkip);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -924,8 +903,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amRope;
-					AttackVoice: sndNone);
+					AmmoType: amRope);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -946,8 +924,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amMine;
-					AttackVoice: sndLaugh);
+					AmmoType: amMine);
 			Slot: 4;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -965,8 +942,7 @@ const
 					NumPerTurn: 3;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amDEagle;
-					AttackVoice: sndNone);
+					AmmoType: amDEagle);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -987,8 +963,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amDynamite;
-					AttackVoice: sndLaugh);
+					AmmoType: amDynamite);
 			Slot: 4;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -1008,8 +983,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amFirePunch;
-					AttackVoice: sndNone);
+					AmmoType: amFirePunch);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			MinAngle: 0;
@@ -1027,8 +1001,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amWhip;
-					AttackVoice: sndNone);
+					AmmoType: amWhip);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			MinAngle: 0;
@@ -1046,8 +1019,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amBaseballBat;
-					AttackVoice: sndNone);
+					AmmoType: amBaseballBat);
 			Slot: 3;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -1069,8 +1041,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amParachute;
-					AttackVoice: sndNone);
+					AmmoType: amParachute);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1092,8 +1063,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amAirAttack;
-					AttackVoice: sndIncoming);
+					AmmoType: amAirAttack);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1115,8 +1085,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amMineStrike;
-					AttackVoice: sndNone);
+					AmmoType: amMineStrike);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1134,8 +1103,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amBlowTorch;
-					AttackVoice: sndNone);
+					AmmoType: amBlowTorch);
 			Slot: 6;
 			TimeAfterTurn: 3000;
 			minAngle: 768;
@@ -1155,8 +1123,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amGirder;
-					AttackVoice: sndNone);
+					AmmoType: amGirder);
 			Slot: 6;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1178,8 +1145,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amTeleport;
-					AttackVoice: sndNone);
+					AmmoType: amTeleport);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1199,8 +1165,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amSwitch;
-					AttackVoice: sndNone);
+					AmmoType: amSwitch);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1218,8 +1183,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amMortar;
-					AttackVoice: sndNone);
+					AmmoType: amMortar);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1239,8 +1203,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amKamikaze;
-					AttackVoice: sndNone);
+					AmmoType: amKamikaze);
 			Slot: 3;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1260,8 +1223,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amCake;
-					AttackVoice: sndLaugh);
+					AmmoType: amCake);
 			Slot: 4;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1279,8 +1241,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amSeduction;
-					AttackVoice: sndNone);
+					AmmoType: amSeduction);
 			Slot: 2;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1300,8 +1261,7 @@ const
 					NumPerTurn: 0;
 					Timer: 3000;
 					Pos: 0;
-					AmmoType: amWatermelon;
-					AttackVoice: sndMelon);
+					AmmoType: amWatermelon);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1320,8 +1280,7 @@ const
 					NumPerTurn: 0;
 					Timer: 5000;
 					Pos: 0;
-					AmmoType: amHellishBomb;
-					AttackVoice: sndNone);
+					AmmoType: amHellishBomb);
 			Slot: 4;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1343,8 +1302,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amNapalm;
-					AttackVoice: sndNone);
+					AmmoType: amNapalm);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1363,8 +1321,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amDrill;
-					AttackVoice: sndNone);
+					AmmoType: amDrill);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1383,8 +1340,7 @@ const
 					NumPerTurn: 0;
 					Timer: 5001;
 					Pos: 0;
-					AmmoType: amBallgun;
-					AttackVoice: sndNone);
+					AmmoType: amBallgun);
 			Slot: 2;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1404,8 +1360,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amRCPlane;
-					AttackVoice: sndNone);
+					AmmoType: amRCPlane);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1426,8 +1381,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amLowGravity;
-					AttackVoice: sndNone);
+					AmmoType: amLowGravity);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1448,8 +1402,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amExtraDamage;
-					AttackVoice: sndNone);
+					AmmoType: amExtraDamage);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1470,8 +1423,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amInvulnerable;
-					AttackVoice: sndNone);
+					AmmoType: amInvulnerable);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1492,8 +1444,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amExtraTime;
-					AttackVoice: sndNone);
+					AmmoType: amExtraTime);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1514,8 +1465,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amLaserSight;
-					AttackVoice: sndNone);
+					AmmoType: amLaserSight);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1536,8 +1486,7 @@ const
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amVampiric;
-					AttackVoice: sndNone);
+					AmmoType: amVampiric);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1555,8 +1504,7 @@ const
 					NumPerTurn: 1;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amSniperRifle;
-					AttackVoice: sndNone);
+					AmmoType: amSniperRifle);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1578,8 +1526,7 @@ const
 					NumPerTurn: 1;
 					Timer: 0;
 					Pos: 0;
-					AmmoType: amJetpack;
-					AttackVoice: sndNone);
+					AmmoType: amJetpack);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1599,8 +1546,7 @@ const
 					NumPerTurn: 0;
 					Timer: 3000;
 					Pos: 0;
-					AmmoType: amMolotov;
-					AttackVoice: sndNone);
+					AmmoType: amMolotov);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;

@@ -628,7 +628,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (protocol version ' + inttostr(cNetProtoVersion) + ')');
+WriteLnToConsole('Hedgewars ' + cVersionString + ' engine');
 GetParams;
 // FIXME -  hack in font with support for CJK
 if (cLocaleFName = 'zh_CN.txt') or (cLocaleFName = 'zh_TW.txt') or (cLocaleFName = 'ja.txt') then
