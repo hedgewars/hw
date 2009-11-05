@@ -35,11 +35,9 @@ TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Wor
 var  Land: TCollisionArray;
      LandPixels: TLandArray;
      LandDirty: TDirtyTag;
-     hasBorder: boolean; // I'm putting this here for now.  I'd like it to be toggleable by user (so user can set a border on a non-cave map) - will turn off air attacks
-     hasGirders: boolean;  // I think should be on template by template basis. some caverns might have open water and large spaces.  Some islands do not need? It might be better to tweak the girder code based upon space above.  dunno.
-     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.  Maybe not a good idea, but, for now?  Could also be used to prevent placing a girder outside play area on maps with hasBorder = true
-
-// in your coding style, it appears to be "isXXXX" for a verb, and "FooBar" for everything else - should be PlayHeight ?
+     hasBorder: boolean; 
+     hasGirders: boolean;  
+     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
 
 procedure GenMap;
 function  GenPreview: TPreview;
