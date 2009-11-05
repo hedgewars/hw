@@ -361,6 +361,8 @@ PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], $FFFF00, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], $FFFF00, fntBig);
 
+AddProgress;
+
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
@@ -377,8 +379,9 @@ for i:= Low(CountTexz) to High(CountTexz) do
 	end;
 
 {$IFDEF DUMP}
-SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
-SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
+//not working anymore, where are LandSurface and StoreSurface defined?
+//SDL_SaveBMP_RW(LandSurface, SDL_RWFromFile('LandSurface.bmp', 'wb'), 1);
+//SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
 AddProgress;
 end;

@@ -196,7 +196,9 @@ else uKeys.isWalking:= false;
 		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
 {$IFDEF TOUCHINPUT}
                 SDL_MOUSEMOTION: begin
-                        WriteLnToConsole('*********************************************       motion');
+{$IFDEF DEBUGFILE}
+                        AddFileLog('*********************************************       motion');
+{$ENDIF}
                         mouseState:= SDL_GetMouseState(0, @x, @y);
                         SDL_GetRelativeMouseState(0, @dx, @dy);
                         
@@ -231,8 +233,9 @@ else uKeys.isWalking:= false;
                 end;
         {*MoveCamera is in uWord.pas -- conflicts with other commands*}
                 SDL_MOUSEBUTTONDOWN: begin
-                        WriteLnToConsole('*********************************************       touch down');
-
+{$IFDEF DEBUGFILE}
+                        AddFileLog('*********************************************       touch down');
+{$ENDIF}
                         mouseState:= SDL_GetMouseState(0, @x, @y);                       
 
                         {* attack *}
@@ -267,7 +270,9 @@ else uKeys.isWalking:= false;
                         end;
                 end;
                 SDL_MOUSEBUTTONUP: begin
+{$IFDEF DEBUGFILE}
                         AddFileLog('*********************************************       touch up');
+{$ENDIF}
 
                         mouseState:= SDL_GetMouseState(0, @x, @y);
                         uKeys.leftClick:= true;
@@ -435,7 +440,7 @@ case ParamCount of
 		cAltDamage:= false;
 		cShowFPS:= true;
 		val('8', cTimerInterval);
-		cReducedQuality:= true;
+		cReducedQuality:= false;
 
         for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
