@@ -37,6 +37,8 @@ interface
 
 {$IFDEF FPC}
   {$PACKRECORDS C}
+{$ELSE}
+  {$DEFINE cdecl attribute(cdecl)}
 {$ENDIF}
 
 {$IFDEF DARWIN}

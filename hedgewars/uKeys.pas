@@ -368,6 +368,10 @@ DefaultBinds[ 27]:= 'quit';
 DefaultBinds[ 96]:= 'history';
 DefaultBinds[127]:= 'rotmask';
 
+//numpad
+//DefaultBinds[265]:= '+volup';
+//DefaultBinds[256]:= '+voldown';
+
 DefaultBinds[KeyNameToCode('0')]:= '+volup';
 DefaultBinds[KeyNameToCode('9')]:= '+voldown';
 DefaultBinds[KeyNameToCode('c')]:= 'capture';
@@ -388,7 +392,7 @@ end;
 
 procedure SetBinds(var binds: TBinds);
 begin
-CurrentBinds:= binds
+CurrentBinds:= binds;
 end;
 
 procedure SetDefaultBinds;

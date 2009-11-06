@@ -32,7 +32,6 @@
 #import "NSWorkspace_RBAdditions.h"
 
 #import <Foundation/Foundation.h>
-#import <Foundation/NSObjCRuntime.h>
 
 @implementation M3InstallController
 

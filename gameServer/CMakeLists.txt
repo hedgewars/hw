@@ -30,20 +30,7 @@ set(ghc_flags
 	-odir ${CMAKE_CURRENT_BINARY_DIR}
 	-hidir ${CMAKE_CURRENT_BINARY_DIR})
 
-if(OPTIMIZATIONS)
-set(ghc_flags
-	-w
-	-O2
-	${ghc_flags}
-)
-else(OPTIMIZATIONS)
-set(ghc_flags
-	-Wall
-	-debug
-	-dcore-lint
-	${ghc_flags}
-)
-endif(OPTIMIZATIONS)
+set(ghc_flags ${haskell_compiler_flags_cmn} ${ghc_flags})
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${ghc_executable}"

@@ -92,26 +92,11 @@ if (NOT pascal_compiler)
 endif (NOT pascal_compiler)
 
 
-#PASCAL FLAG SECTION
-set(pascal_compiler_flags ${noexecstack_flags} "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" ${hwengine_project})
-
-if(OPTIMIZATIONS)
-	set(pascal_compiler_flags "-O2" "-Xs" "-Nu" "-Si" ${pascal_compiler_flags})
-	if(APPLE AND NOT universal_build)
-		set(pascal_compiler_flags "-fPIC" "-CfSSE2" ${pascal_compiler_flags})	#instruction set for ppc is 7400
-	endif()			
-else(OPTIMIZATIONS)
-	set(pascal_compiler_flags "-O-" "-gl" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags})
-endif(OPTIMIZATIONS)
+set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
 
 if(LOWRES)
 	set(pascal_compiler_flags "-dLOWRES" ${pascal_compiler_flags} ${hwengine_project})
 endif(LOWRES)
-
-#special handling of MSVC compiler (no static linking)
-if(MSVC)
-	set(pascal_compiler_flags "-dMSVC" ${pascal_compiler_flags})
-endif(MSVC)
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
@@ -122,6 +107,11 @@ IF(APPLE)
 	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 	include_directories(${SDL_INCLUDE_DIR})
 	link_libraries(${SDL_LIBRARY})
+	
+	if(universal_build)
+		#apparently this variable is not exported here
+		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")		
+	endif()
 
 	add_library (SDLmain STATIC SDLMain.m)
 	set(engine_sources SDLmain ${engine_sources})

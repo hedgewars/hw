@@ -12,41 +12,77 @@ set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "13-dev")
 
-set(universal_build false)
 
 if(APPLE)
-set(bundle_name Hedgewars.app)
-set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/) 
-set(DATA_INSTALL_DIR "../Resources/")
-set(target_dir ".")
-
-if(UNIVERSAL)
-	set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
+	set(CMAKE_FIND_FRAMEWORK "FIRST")
 	set(universal_build true)
-	message(STATUS "Building a Universal Application")
-else(UNIVERSAL)
-	if(UNIVERSAL64)
-		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400;x86_64")
-		set(universal_build true)
-		message(STATUS "Building a Universal 64 bits Application")
-	endif(UNIVERSAL64)
-endif(UNIVERSAL)
 
+	#paths for creating the bundle
+	set(bundle_name Hedgewars.app)
+	set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/) 
+	set(DATA_INSTALL_DIR "../Resources/")
+	set(target_dir ".")
+	
+	#build architecture / os version
+	set(MacVersion $ENV{MACOSX_DEPLOYMENT_TARGET})
+	if(MacVersion MATCHES "10.4")
+		message(STATUS "Target: Mac OS X 10.4 i386/ppc")	
+		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
+		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")		
+	endif()
+	if(MacVersion MATCHES "10.5")
+		message(STATUS "Target: Mac OS X 10.5 i386/ppc")
+		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.5.sdk/")
+		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")		
+	endif()
+	if(MacVersion MATCHES "10.6")
+		message(STATUS "Target: Mac OS X 10.6 i386/ppc/x86_64")	
+		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.6.sdk/")	
+		set(CMAKE_OSX_ARCHITECTURES "i386;x86_64;ppc7400")
+	endif()
+	#else use the default sysroot with default archs
 else(APPLE)
-set(target_dir "bin")
+	set(target_dir "bin")
 endif(APPLE)
 
 
-if(NOT CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE MATCHES "Release")
-	set(CMAKE_BUILD_TYPE "Release")
-	set(OPTIMIZATIONS true)
-	message(STATUS "Building Release")
+#this snippet sets "Release" mode by default
+if (NOT CMAKE_BUILD_TYPE)
+	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: None Debug Release." FORCE)
+endif (NOT CMAKE_BUILD_TYPE)
+
+if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
+	message(STATUS "Building Release")	
+	set(Optz true)
 else()
-	set(CMAKE_BUILD_TYPE "Debug")
-	set(OPTIMIZATIONS false)
-	set(CMAKE_VERBOSE_MAKEFILE true)
 	message(STATUS "Building Debug")	
+	set(CMAKE_VERBOSE_MAKEFILE true)
+	set(Optz false)
 endif()
+
+
+#set default flags values for all the project
+set(CMAKE_C_FLAGS "-Wall -pipe")
+set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
+set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+
+set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi")
+
+if(Optz)
+	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Nu" "-Si" ${pascal_compiler_flags_cmn})
+	set(haskell_compiler_flags_cmn "-w" "-O2")
+	if(APPLE AND NOT universal_build)
+		set(CMAKE_C_FLAGS_RELEASE "-fPIC -msse2 ${CMAKE_C_FLAGS_RELEASE}")
+		set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -msse2 ${CMAKE_CXX_FLAGS_RELEASE}")
+		set(pascal_compiler_flags_cmn "-fPIC" "-CfSSE2" ${pascal_compiler_flags_cmn}) #-CF7400 for ppc
+	endif()
+else(Optz)
+	set(pascal_compiler_flags_cmn "-O-" "-gl" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags_cmn})
+	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint")
+endif(Optz)
 
 
 if(DEFINED DATA_INSTALL_DIR)
@@ -65,17 +101,6 @@ if(WITH_SERVER)
 else(WITH_SERVER)
 	set(HAVE_NETSERVER false)
 endif(WITH_SERVER)
-
-#set default flags values for all the project
-set(CMAKE_C_FLAGS "-Wall -pipe")
-set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
-if(APPLE AND NOT universal_build)
-	set(CMAKE_C_FLAGS_RELEASE "-msse2 ${CMAKE_C_FLAGS_RELEASE}")
-endif()
-set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
-set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
 
 add_subdirectory(bin)
