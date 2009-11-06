@@ -198,7 +198,7 @@ if (Me^.State and gstAttacked) = 0 then TestAmmos(Actions, Me, false);
 BestRate:= RatePlace(Me);
 BaseRate:= max(BestRate, 0);
 
-while (Stack.Count > 0) and not StopThinking do
+while (Stack.Count > 0) and (not StopThinking) and (GameFlags and gfArtillery = 0) do
     begin
     Pop(ticks, Actions, Me^);
 
