@@ -164,7 +164,6 @@ function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
-function modulo(i: LongInt): LongInt;
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
@@ -487,14 +486,6 @@ while i <= length(s) do
 if c < 3 then t:= t - c;
 
 byte(DecodeBase64[0]):= t - 1
-end;
-
-function modulo (i: LongInt): LongInt;
-var result: LongInt;
-begin
-if i < 0 then result:= -i
-else result:= i;
-exit(result);
 end;
 
 {$IFNDEF IPHONEOS}
