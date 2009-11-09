@@ -117,40 +117,59 @@ IF(APPLE)
 	set(engine_sources SDLmain ${engine_sources})
 ENDIF(APPLE)
 
-IF(NOT APPLE OR NOT universal_build)
+IF(build_type MATCHES "standard")
 #here is the standard command for any system
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
+	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"
 		ARGS ${pascal_compiler_flags}
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS ${engine_sources}
 		)
 ELSE()
-#these are the two dependencies for building a universal binary on Mac OS X
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
-		COMMAND "ppc386" 
-		ARGS ${pascal_compiler_flags} -ohwengine.386 -CfSSE2
+#these are the dependencies for building a universal binary on Mac OS X
+	find_program(pascal_x86 NAMES ppc386)
+	find_program(pascal_ppc NAMES ppcppc)
+
+	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
+		COMMAND "${pascal_x86}" 
+		ARGS ${pascal_compiler_flags} -ohwengine.386
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS ${engine_sources}
 		)
-add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386")
+	add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386")
 
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
-		COMMAND "ppcppc"
+	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
+		COMMAND "${pascal_ppc}"
 		ARGS ${pascal_compiler_flags} -ohwengine.ppc
 		MAIN_DEPENDENCY ${hwengine_project}
 		DEPENDS ${engine_sources}
 		)
-add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
+	add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
 
-#this is the command that bundles the two executables into one
-add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
-		COMMAND "lipo"
-		ARGS ${EXECUTABLE_OUTPUT_PATH}/hwengine.386 ${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine
-		DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
-		)
+	IF(build_type MATCHES "universal64")
+		find_program(pascal_x64 NAMES ppcx64)
+		
+		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64"
+			COMMAND "${pascal_x64}" 
+			ARGS ${pascal_compiler_flags} -ohwengine.x64
+			MAIN_DEPENDENCY ${hwengine_project}
+			DEPENDS ${engine_sources}
+			)
+		add_custom_target(hwengine.x64 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64")
+
+		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
+			COMMAND "lipo"
+			ARGS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc" "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64" -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine
+			DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc" "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64"
+			)
+	else()
+		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
+			COMMAND "lipo"
+			ARGS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc" -create -output ${EXECUTABLE_OUTPUT_PATH}/hwengine
+			DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
+			)
+	endif()
 ENDIF()
-
 
 add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
 
