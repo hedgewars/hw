@@ -112,7 +112,7 @@ for i:= 0 to Pred(Targets.Count) do
         if a = High(TAmmoType) then a:= Low(TAmmoType)
                                else inc(a)
        until (a = aa) or
-             (CurrentHedgehog^.AttacksNum > 0) or
+             (CurrentHedgehog^.MultiShootAttacks > 0) or // shooting same weapon
              StopThinking
        end
 end;

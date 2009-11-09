@@ -173,6 +173,7 @@ procedure OnUsedAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
 	begin
+	MultiShootAttacks:= 0;
 	with Ammo^[CurSlot, CurAmmo] do
 		if Count <> AMMO_INFINITE then
 			begin

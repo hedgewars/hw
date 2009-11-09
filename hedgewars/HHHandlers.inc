@@ -27,7 +27,7 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	Gear^.Message:= Gear^.Message and not gm_Slot;
 
 	if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
-		or (AttacksNum > 0)
+		or (MultiShootAttacks > 0)
 		or ((Gear^.State and gstHHDriven) = 0) then exit;
 
 	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
@@ -242,18 +242,18 @@ with CurrentHedgehog^.Gear^,
 	State:= State and not gstAttacking;
 	if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Utility) = 0 then
 		begin
-		Inc(AttacksNum);
+		Inc(MultiShootAttacks);
 		
-		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) then
+		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) then
 			begin
-			s:= inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn + 1 - AttacksNum);
+			s:= inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn + 1 - MultiShootAttacks);
 			AddCaption(format(trmsg[sidRemaining], s),
 				$FFFFFF,
 				capgrpAmmostate);
 			end;
-				
-		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= AttacksNum) or
-		((GameFlags and gfMultiWeapon) <> 0) then
+		
+		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) or
+			((GameFlags and gfMultiWeapon) <> 0) then
 			begin
 			isInMultiShoot:= true
 			end
@@ -265,10 +265,10 @@ with CurrentHedgehog^.Gear^,
 			end;
 		end
 	else
-	begin
-	OnUsedAmmo(CurrentHedgehog^);
-	ApplyAmmoChanges(CurrentHedgehog^);
-	end;
+		begin
+		OnUsedAmmo(CurrentHedgehog^);
+		ApplyAmmoChanges(CurrentHedgehog^);
+		end;
 	AttackBar:= 0;
 	end
 end;

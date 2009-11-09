@@ -622,23 +622,26 @@ case step of
 			inc(step)
 			end;
 	stNTurn: begin
-			if isInMultiShoot then isInMultiShoot:= false
+			if isInMultiShoot then
+				isInMultiShoot:= false
 			else begin
-			// delayed till after 0.9.12
-			// reset to default zoom
-			//ZoomValue:= ZoomDefault;
-			ResetUtilities;
+				// delayed till after 0.9.12
+				// reset to default zoom
+				//ZoomValue:= ZoomDefault;
+				with CurrentHedgehog^ do
+					if ((Gear^.State and gstAttacked) = 0)
+						and (MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
+				
+				ResetUtilities;
 
-			FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
+				FreeActionsList; // could send -left, -right and similar commands, so should be called before /nextturn
 
-			ParseCommand('/nextturn', true);
-			SwitchHedgehog;
+				ParseCommand('/nextturn', true);
+				SwitchHedgehog;
 
-			inc(step); // FIXME wtf is that, it overflows step, and does nothing
-
-			AfterSwitchHedgehog;
-			bBetweenTurns:= false
-			end;
+				AfterSwitchHedgehog;
+				bBetweenTurns:= false
+				end;
 			step:= Low(step)
 			end;
 	end;

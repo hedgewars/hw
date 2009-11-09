@@ -494,7 +494,7 @@ if (Gear^.Health <= 0)
 	or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
     begin
     if (Gear^.Kind = gtSniperRifleShot) and ((GameFlags and gfLaserSight) = 0) then cLaserSighting:= false;
-    if (Gear^.Ammo^.NumPerTurn <= CurrentHedgehog^.AttacksNum) and
+    if (Gear^.Ammo^.NumPerTurn <= CurrentHedgehog^.MultiShootAttacks) and
        ((GameFlags and gfArtillery) = 0) then cArtillery:= false;
 	Gear^.doStep:= @doStepShotIdle
     end;
@@ -541,10 +541,8 @@ if (TurnTimeLeft > 0) then
     dec(TurnTimeLeft)
 else
     begin
-    PHedgehog(Gear^.Hedgehog)^.AttacksNum:= Gear^.Ammo^.NumPerTurn+1;
 	DeleteGear(Gear);
-	AfterAttack;
-    TurnTimeLeft:= 0
+	AfterAttack
     end;
 end;
 

@@ -46,7 +46,7 @@ type PHHAmmo = ^THHAmmo;
 			AmmoStore: Longword;
 			CurSlot, CurAmmo: LongWord;
 			Team: PTeam;
-			AttacksNum: Longword;
+			MultiShootAttacks: Longword;
 			visStepPos: LongWord;
 			BotLevel  : LongWord; // 0 - Human player
 			HatVisibility: GLfloat;
@@ -170,7 +170,7 @@ PreviousTeam:= CurrentTeam;
 with CurrentHedgehog^ do
 	if Gear <> nil then
 		begin
-		AttacksNum:= 0;
+		MultiShootAttacks:= 0;
 		Gear^.Message:= 0;
 		Gear^.Z:= cHHZ;
 		RemoveGearFromList(Gear);
