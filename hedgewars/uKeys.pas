@@ -309,16 +309,18 @@ KeyNames[4]:= 'wheelup';
 KeyNames[5]:= 'wheeldown';
 
 for i:= 6 to cKeyMaxIndex do
-    begin
-    s:= SDL_GetKeyName(i);
-//	addfilelog(inttostr(i) + ' ' + s);
-    if s = 'unknown key' then KeyNames[i]:= ''
-       else begin
-       for t:= 1 to Length(s) do
-           if s[t] = ' ' then s[t]:= '_';
-       KeyNames[i]:= s
-       end;
-    end;
+	begin
+    	s:= string(sdl_getkeyname(i));
+	//writeln(stdout,inttostr(i) + ': ' + s);
+    	if s = 'unknown key' then KeyNames[i]:= ''
+       	else begin
+		for t:= 1 to Length(s) do
+			if s[t] = ' ' then s[t]:= '_';
+       		KeyNames[i]:= s
+       	end;
+end;
+
+//for i:= 0 to cKeyMaxIndex do writeln(stdout,inttostr(i) + ': ' + KeyNames[i]);
 
 {$IFDEF SDL13}
 PByteArray(SDL_GetKeyboardState(@i));
