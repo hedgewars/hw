@@ -263,6 +263,7 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
     i: LongInt;
+(* this is a workaround for http://bugzilla.libsdl.org/show_bug.cgi?id=868 remove this when it's fixed in upstream *)
 {$IFDEF DARWIN}
 tmpP: PLongWordArray;
 tmpA, tmpR, tmpG, tmpB: LongWord;
@@ -350,8 +351,8 @@ for ii:= Low(TSprite) to High(TSprite) do
 					Texture:= Surface2Tex(tmpsurf, false);
 					if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
 						begin
-						tmpP := tmpsurf^.pixels; 
 					(*	REMOVE ME WHEN BUG ABOVE IS FIXED
+						tmpP := tmpsurf^.pixels; 
 						for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do
 						begin
 							tmpA:= tmpP^[i] shr 24 and $FF;
