@@ -298,41 +298,49 @@ for ii:= Low(TSprite) to High(TSprite) do
 			else begin
 				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
 				if tmpsurf = nil then
-						tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
+					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
 				end;
 
 			if tmpsurf <> nil then
 				begin
 {$IFDEF DARWIN}   
 {* this is a workaround for http://bugzilla.libsdl.org/show_bug.cgi?id=868
-   remove this when it's fixed in upstream; it causes problems on ppc *}
-					tmpP := tmpsurf^.pixels;                                             
-					for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
+   remove this when it's fixed in upstream *}
+				tmpP := tmpsurf^.pixels;
+				for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
+				begin
+{$IFDEF ENDIAN_LITTLE}
+					tmpA:= tmpP^[i] shr 24 and $FF;
+					tmpR:= tmpP^[i] shr 16 and $FF;
+					tmpG:= tmpP^[i] shr 8 and $FF;
+					tmpB:= tmpP^[i] and $FF;
+{$ELSE}
+					tmpA:= tmpP^[i] and $FF;
+					tmpR:= tmpP^[i] shr 8 and $FF;
+					tmpG:= tmpP^[i] shr 16 and $FF;
+					tmpB:= tmpP^[i] shr 24 and $FF;
+{$ENDIF}
+					if tmpA <> 0 then
 					begin
-						tmpA:= tmpP^[i] shr 24 and $FF;
-						tmpR:= tmpP^[i] shr 16 and $FF;
-						tmpG:= tmpP^[i] shr 8 and $FF;
-						tmpB:= tmpP^[i] and $FF;
+						tmpR:= round(tmpR * 255 / tmpA);
+						tmpG:= round(tmpG * 255 / tmpA);
+						tmpB:= round(tmpB * 255 / tmpA);
+					end;
 
-						if tmpA <> 0 then
-						begin
-						tmpR:= round(tmpR * 255/tmpA);
-						tmpG:= round(tmpG * 255/tmpA);
-						tmpB:= round(tmpB * 255/tmpA);
-						end;
+					if tmpR > 255 then tmpR:= 255;
+					if tmpG > 255 then tmpG:= 255;
+					if tmpB > 255 then tmpB:= 255;
 
-						if tmpR > 255 then tmpR:= 255;
-						if tmpG > 255 then tmpG:= 255;
-						if tmpB > 255 then tmpB:= 255;
-
-						tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB; 
-
-						//AddFileLog(inttostr(tmpP^[i*128] shr 24) + ' | ' + inttostr(tmpP^[i*128] shr 16 and $FF) + ' | ' + inttostr(tmpP^[i*128] shr 8 and $FF)+ ' | ' + inttostr(tmpP^[i*128] and $FF));  
-				end;                                                   
+{$IFDEF ENDIAN_LITTLE}
+					tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
+{$ELSE}
+					tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
+{$ENDIF}
+				end;
 {$ENDIF}
 				
-				if imageWidth = 0 then imageWidth := tmpsurf^.w;
-				if imageHeight = 0 then imageHeight := tmpsurf^.h;
+				if imageWidth = 0 then imageWidth:= tmpsurf^.w;
+				if imageHeight = 0 then imageHeight:= tmpsurf^.h;
 				if Width = 0 then Width:= tmpsurf^.w;
 				if Height = 0 then Height:= tmpsurf^.h;
 				if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
@@ -341,7 +349,21 @@ for ii:= Low(TSprite) to High(TSprite) do
 					begin
 					Texture:= Surface2Tex(tmpsurf, false);
 					if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
+						begin
+						tmpP := tmpsurf^.pixels; 
+					(*	REMOVE ME WHEN BUG ABOVE IS FIXED
+						for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do
+						begin
+							tmpA:= tmpP^[i] shr 24 and $FF;
+							tmpR:= tmpP^[i] shr 16 and $FF;
+							tmpG:= tmpP^[i] shr 8 and $FF;
+							tmpB:= tmpP^[i] and $FF;
+						
+							writeln(stdout, inttostr(tmpA) + ' | ' + inttostr(tmpR) + ' | ' + inttostr(tmpG)+ ' | ' + inttostr(tmpB));
+						end;
+					*)
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+						end;
 					end;
 				if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 				end
