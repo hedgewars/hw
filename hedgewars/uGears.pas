@@ -629,7 +629,8 @@ case step of
 				// reset to default zoom
 				//ZoomValue:= ZoomDefault;
 				with CurrentHedgehog^ do
-					if ((Gear^.State and gstAttacked) = 0)
+					if (Gear <> nil) 
+                        and ((Gear^.State and gstAttacked) = 0)
 						and (MultiShootAttacks > 0) then OnUsedAmmo(CurrentHedgehog^);
 				
 				ResetUtilities;
