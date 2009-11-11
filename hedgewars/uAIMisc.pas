@@ -41,6 +41,7 @@ procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt);
 function RatePlace(Gear: PGear): LongInt;
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
 function TestColl(x, y, r: LongInt): boolean;
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
@@ -172,6 +173,22 @@ for i:= 0 to Pred(bonuses.Count) do
 			inc(Result, Score * (Radius - r))
 		end;
 	RatePlace:= Result
+end;
+
+// Wrapper to test various approaches.  If it works reasonably, will just replace.
+// Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
+var MeX, MeY: LongInt;
+begin
+    if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
+        begin
+        MeX:= hwRound(Me^.X);
+        MeY:= hwRound(Me^.Y);
+        // We are still inside the hog. Skip radius test
+        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and 
+           ((Land[y, x] and $FF00) = 0) then exit(false);
+        end;
+    exit(TestColl(x, y, r))
 end;
 
 function TestColl(x, y, r: LongInt): boolean;

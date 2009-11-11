@@ -120,7 +120,7 @@ var Vx, Vy, r: hwFloat;
       dX:= dX + cWindSpeed;
       dY:= dY + cGravity;
       dec(t)
-    until TestColl(hwRound(x), hwRound(y), 5) or (t <= 0);
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
     EX:= hwRound(x);
     EY:= hwRound(y);
     Result:= RateExplosion(Me, EX, EY, 101);
@@ -174,7 +174,7 @@ var Vx, Vy, r: hwFloat;
       y:= y + dY;
       dY:= dY + cGravity;
       dec(t)
-    until TestColl(hwRound(x), hwRound(y), 5) or (t = 0);
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
     EX:= hwRound(x);
     EY:= hwRound(y);
     if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 101)
@@ -228,7 +228,7 @@ var Vx, Vy: hwFloat;
 			dY:= dY + cGravity;
 			EX:= hwRound(x);
 			EY:= hwRound(y);
-		until TestColl(EX, EY, 5) or (EY > 1000);
+		until TestCollExcludingMe(Me, EX, EY, 5) or (EY > 1000);
 
 		if (EY < 1000) and not dY.isNegative then
 			begin
@@ -315,7 +315,7 @@ repeat
   y:= y + vY;
   rx:= hwRound(x);
   ry:= hwRound(y);
-  if TestColl(rx, ry, 2) then
+  if TestCollExcludingMe(Me, rx, ry, 2) then
      begin
      x:= x + vX * 8;
      y:= y + vY * 8;
