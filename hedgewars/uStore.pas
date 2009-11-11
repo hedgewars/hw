@@ -263,8 +263,7 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
     i: LongInt;
-(* this is a workaround for http://bugzilla.libsdl.org/show_bug.cgi?id=868 remove this when it's fixed in upstream *)
-{$IFDEF DARWIN}
+{$IFDEF IPHONEOS}
 tmpP: PLongWordArray;
 tmpA, tmpR, tmpG, tmpB: LongWord;
 {$ENDIF}
@@ -304,39 +303,41 @@ for ii:= Low(TSprite) to High(TSprite) do
 
 			if tmpsurf <> nil then
 				begin
-{$IFDEF DARWIN}   
-{* this is a workaround for http://bugzilla.libsdl.org/show_bug.cgi?id=868
-   remove this when it's fixed in upstream *}
-				tmpP := tmpsurf^.pixels;
-				for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
+{$IFDEF IPHONEOS}   
+{* http://bugzilla.libsdl.org/show_bug.cgi?id=868 but patched library doesn't work on ipod, so implementing workaround here *}
+				if (ifAlpha or ifTransparent) > 0 then
 				begin
-{$IFDEF ENDIAN_LITTLE}
-					tmpA:= tmpP^[i] shr 24 and $FF;
-					tmpR:= tmpP^[i] shr 16 and $FF;
-					tmpG:= tmpP^[i] shr 8 and $FF;
-					tmpB:= tmpP^[i] and $FF;
-{$ELSE}
-					tmpA:= tmpP^[i] and $FF;
-					tmpR:= tmpP^[i] shr 8 and $FF;
-					tmpG:= tmpP^[i] shr 16 and $FF;
-					tmpB:= tmpP^[i] shr 24 and $FF;
-{$ENDIF}
-					if tmpA <> 0 then
+					tmpP := tmpsurf^.pixels;
+					for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
 					begin
-						tmpR:= round(tmpR * 255 / tmpA);
-						tmpG:= round(tmpG * 255 / tmpA);
-						tmpB:= round(tmpB * 255 / tmpA);
-					end;
+{$IFDEF ENDIAN_LITTLE}
+						tmpA:= tmpP^[i] shr 24 and $FF;
+						tmpR:= tmpP^[i] shr 16 and $FF;
+						tmpG:= tmpP^[i] shr 8 and $FF;
+						tmpB:= tmpP^[i] and $FF;
+{$ELSE}
+						tmpA:= tmpP^[i] and $FF;
+						tmpR:= tmpP^[i] shr 8 and $FF;
+						tmpG:= tmpP^[i] shr 16 and $FF;
+						tmpB:= tmpP^[i] shr 24 and $FF;
+{$ENDIF}
+						if tmpA <> 0 then
+						begin
+							tmpR:= round(tmpR * 255 / tmpA);
+							tmpG:= round(tmpG * 255 / tmpA);
+							tmpB:= round(tmpB * 255 / tmpA);
+						end;
 
-					if tmpR > 255 then tmpR:= 255;
-					if tmpG > 255 then tmpG:= 255;
-					if tmpB > 255 then tmpB:= 255;
+						if tmpR > 255 then tmpR:= 255;
+						if tmpG > 255 then tmpG:= 255;
+						if tmpB > 255 then tmpB:= 255;
 
 {$IFDEF ENDIAN_LITTLE}
-					tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
+						tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
 {$ELSE}
-					tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
+						tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
 {$ENDIF}
+					end;
 				end;
 {$ENDIF}
 				
@@ -1103,11 +1104,7 @@ AddFileLog('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 
 if MaxTextureSize = 0 then
 	begin
-{$IFDEF DARWIN}
-	MaxTextureSize:= 2048;
-{$ELSE}
 	MaxTextureSize:= 1024;
-{$ENDIF}
 {$IFDEF DEBUGFILE}
 	AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
 {$ENDIF}
