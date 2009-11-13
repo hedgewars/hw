@@ -599,13 +599,16 @@ if Length(s) = 0 then cFullScreen:= not cFullScreen
 AddFileLog('Prepare to change video parameters...');
 {$ENDIF}
 
+{$IFNDEF IPHONEOS}
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-{$IFDEF IPHONEOS}
+{$ELSE}
 // remove these if they cause incompatibility
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
 SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-{$ELSE}
+{$ENDIF}
+
+{$IFNDEF SDL13}
 // this attribute is default in 1.3
 SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 {$ENDIF}
