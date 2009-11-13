@@ -601,10 +601,13 @@ AddFileLog('Prepare to change video parameters...');
 
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$IFDEF IPHONEOS}
-//remove these if they cause incompatibility
+// remove these if they cause incompatibility
 SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
 SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+{$ELSE}
+// this attribute is default in 1.3
+SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 {$ENDIF}
 
 flags:= SDL_OPENGL;// or SDL_RESIZABLE;
