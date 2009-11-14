@@ -1558,7 +1558,7 @@ const
 			);
 
 
-const convFormat: TSDL_PixelFormat = (
+const conversionFormat: TSDL_PixelFormat = (
 	palette: nil;
 	BitsPerPixel : 32;
 	BytesPerPixel: 4;

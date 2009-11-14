@@ -84,6 +84,7 @@ resSurface:= SDL_CreateRGBSurface(0,
 		RMask, GMask, BMask, AMask);
 
 strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), color);
+//strSurface:= doSurfaceConversion(strSurface);
 cl.Width:= w + 4;
 SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);

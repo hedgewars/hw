@@ -541,7 +541,7 @@ while t <> nil do
         if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
             begin
             if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), $FFFFFFFF, fntSmall);
+            Gear^.Tex:= RenderStringTex(inttostr(Gear^.Timer div 1000), cWhiteColor, fntSmall);
             end;
         Gear^.doStep(Gear);
         end
@@ -602,7 +602,7 @@ case step of
 			if (TotalRounds = cSuddenDTurns) and (cHealthDecrease = 0) then
 				begin
 				cHealthDecrease:= 5;
-				AddCaption(trmsg[sidSuddenDeath], $FFFFFF, capgrpGameState);
+				AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
 				playSound(sndSuddenDeath, false, nil);
 				end;
 
@@ -1886,7 +1886,7 @@ case t of
         FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
         FollowGear^.Health:= 25;
         FollowGear^.Pos:= posCaseHealth;
-		AddCaption(GetEventString(eidNewHealthPack), $FFFFFF, capgrpGameState);
+		AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpGameState);
         end;
      7..13: begin
         t:= 0;
@@ -1908,7 +1908,7 @@ case t of
               end;
             FollowGear^.Pos:= posCaseAmmo;
             FollowGear^.State:= Longword(i);
-			AddCaption(GetEventString(eidNewAmmoPack), $FFFFFF, capgrpGameState);
+			AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpGameState);
             end
         end;
      14..19: begin
@@ -1931,7 +1931,7 @@ case t of
               end;
             FollowGear^.Pos:= posCaseUtility;
             FollowGear^.State:= Longword(i);
-			AddCaption(GetEventString(eidNewUtilityPack), $FFFFFF, capgrpGameState);
+			AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpGameState);
             end
         end;
      end;

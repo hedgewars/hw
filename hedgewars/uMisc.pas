@@ -46,11 +46,11 @@ var
 	TrainingFlags : Longword = 0;
 	TurnTimeLeft  : Longword = 0;
 	cSuddenDTurns : LongInt = 15;
-	cDamagePercent : LongInt = 100;
+	cDamagePercent  : LongInt = 100;
 	cTemplateFilter : LongInt = 0;
 
 	cHedgehogTurnTime: Longword = 45000;
-	cMinesTime     : LongInt = 3000;
+	cMinesTime       : LongInt = 3000;
 	cMaxAIThinkTime  : Longword = 9000;
 
 	cCloudsNumber    : LongInt = 9;
@@ -71,14 +71,14 @@ var
 	cTeamHealthWidth : LongInt = 128;
 	cAltDamage       : boolean = true;
 
-	GameTicks     : LongWord = 0;
+	GameTicks      : LongWord = 0;
 	TrainingTimeInc: Longword = 10000;
 	TrainingTimeInD: Longword = 500;
 	TrainingTimeInM: Longword = 5000;
 	TrainingTimeMax: Longword = 60000;
 
 	TimeTrialStartTime: Longword = 0;
-	TimeTrialStopTime: Longword = 0;
+	TimeTrialStopTime : Longword = 0;
 	
 	cSkyColor     : Longword = 0;
 	cWhiteColor   : Longword = $FFFFFFFF;
@@ -94,7 +94,7 @@ var
 	cSeed         : shortstring = '';
 	cInitVolume   : LongInt = 50;
 	cVolumeDelta  : LongInt = 0;
-	cTimerInterval   : Longword = 8;
+	cTimerInterval: Longword = 8;
 	cHasFocus     : boolean = true;
 	cInactDelay   : Longword = 1250;
 
@@ -130,8 +130,8 @@ var
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 type HwColor4f = record
-		r, g, b, a: byte
-		end;
+	r, g, b, a: byte
+	end;
 
 var cWaterOpacity: byte = $80;
 
@@ -164,6 +164,7 @@ function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function DecodeBase64(s: shortstring): shortstring;
+function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
@@ -543,6 +544,19 @@ end;
 var i: LongInt;
 {$ENDIF}
 {$ENDIF}
+
+function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
+{* for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7 *}
+var convertedSurf: PSDL_Surface = nil;
+begin
+	if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
+	begin
+		convertedSurf:= SDL_ConvertSurface(tmpsurf, @conversionFormat, SDL_SWSURFACE);
+		SDL_FreeSurface(tmpsurf);
+		doSurfaceConversion:= convertedSurf
+	end
+	else doSurfaceConversion:= tmpsurf;
+end;
 
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06

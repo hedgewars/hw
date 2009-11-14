@@ -134,7 +134,7 @@ CheckForWin:= true;
 TurnTimeLeft:= 0;
 if AliveCount = 0 then
 	begin // draw
-	AddCaption(trmsg[sidDraw], $FFFFFF, capgrpGameState);
+	AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
 	SendStat(siGameResult, trmsg[sidDraw]);
 	AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
 	end else // win
@@ -152,7 +152,7 @@ if AliveCount = 0 then
 						if (Gear <> nil) then
 							Gear^.State:= gstWinner;
 
-		AddCaption(s, $FFFFFF, capgrpGameState);
+		AddCaption(s, cWhiteColor, capgrpGameState);
 		SendStat(siGameResult, s);
 		AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
 		end;

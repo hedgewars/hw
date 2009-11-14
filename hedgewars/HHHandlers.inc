@@ -247,9 +247,7 @@ with CurrentHedgehog^.Gear^,
 		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) then
 			begin
 			s:= inttostr(Ammo^[CurSlot, CurAmmo].NumPerTurn + 1 - MultiShootAttacks);
-			AddCaption(format(trmsg[sidRemaining], s),
-				$FFFFFF,
-				capgrpAmmostate);
+			AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
 			end;
 		
 		if (Ammo^[CurSlot, CurAmmo].NumPerTurn >= MultiShootAttacks) or
@@ -571,7 +569,7 @@ if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) then
     inc(Gear^.FlightTime, 1);
 	if Gear^.FlightTime = 2000 then
 		begin
-		AddCaption(GetEventString(eidHomerun), $FFFFFF, capgrpMessage);
+		AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
 		PlaySound(sndHomerun, false, nil)
 		end;
 	end
@@ -734,7 +732,7 @@ if (Gear^.Health = 0) then
 		AllInactive:= false;
 
 		// Death message
-		AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpMessage);
+		AddCaption(Format(GetEventString(eidDied), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
 		end;
 	exit
 	end;

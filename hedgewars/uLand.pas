@@ -688,7 +688,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
                 Land[cpY + y, cpX + x]:= 0
             else if p^[x] = (AMask or RMask) then
                 Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
-            else if p^[x] = (AMask or RMask or GMask or BMask) then
+            else if p^[x] = cWhiteColor then
                 Land[cpY + y, cpX + x]:= COLOR_LAND;
 
             end;
@@ -788,7 +788,7 @@ if hasBorder then
 			if (y + w) mod 32 < 16 then
 				c:= AMask
 			else
-				c:= AMask or RMask or GMask;
+				c:= AMask or RMask or GMask; // FF00FFFF
 			LandPixels[y, leftX + w]:= c;
 			LandPixels[y, rightX - w]:= c;
 			end;
@@ -799,7 +799,7 @@ if hasBorder then
 			if (x + w) mod 32 < 16 then
 				c:= AMask
 			else
-				c:= AMask or RMask or GMask;
+				c:= AMask or RMask or GMask; // FF00FFFF
 			LandPixels[topY + w, x]:= c;
 			end;
 		end;

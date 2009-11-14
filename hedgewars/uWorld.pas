@@ -573,7 +573,8 @@ if cShowFPS then
       CountTicks:= 0;
       s:= inttostr(FPS) + ' fps';
       if fpsTexture <> nil then FreeTexture(fpsTexture);
-      tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), $FFFFFF);
+      tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColor);
+	tmpSurface:= doSurfaceConversion(tmpSurface);
       fpsTexture:= Surface2Tex(tmpSurface, false);
       SDL_FreeSurface(tmpSurface)
       end;
@@ -588,7 +589,7 @@ if SoundTimerTicks >= 50 then
    if cVolumeDelta <> 0 then
       begin
       str(ChangeVolume(cVolumeDelta), s);
-      AddCaption(Format(trmsg[sidVolume], s), $FFFFFF, capgrpVolume)
+      AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
       end
    end;
 

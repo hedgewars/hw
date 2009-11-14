@@ -117,26 +117,27 @@ var w, h: LongInt;
     clr: TSDL_Color;
     Result: TSDL_Rect;
 begin
-TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
-Result.x:= X;
-Result.y:= Y;
-Result.w:= w + FontBorder * 2 + 4;
-Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
-clr.r:= Color shr 16;
-clr.g:= (Color shr 8) and $FF;
-clr.b:= Color and $FF;
-tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
-Result.x:= X + FontBorder + 2;
-Result.y:= Y + FontBorder;
-SDLTry(tmpsurf <> nil, true);
-SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
-SDL_FreeSurface(tmpsurf);
-Result.x:= X;
-Result.y:= Y;
-Result.w:= w + FontBorder * 2 + 4;
-Result.h:= h + FontBorder * 2;
-WriteInRoundRect:= Result
+	TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
+	Result.x:= X;
+	Result.y:= Y;
+	Result.w:= w + FontBorder * 2 + 4;
+	Result.h:= h + FontBorder * 2;
+	DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
+	clr.r:= Color shr 16;
+	clr.g:= (Color shr 8) and $FF;
+	clr.b:= Color and $FF;
+	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
+	tmpsurf:= doSurfaceConversion(tmpsurf);
+	Result.x:= X + FontBorder + 2;
+	Result.y:= Y + FontBorder;
+	SDLTry(tmpsurf <> nil, true);
+	SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
+	SDL_FreeSurface(tmpsurf);
+	Result.x:= X;
+	Result.y:= Y;
+	Result.w:= w + FontBorder * 2 + 4;
+	Result.h:= h + FontBorder * 2;
+	WriteInRoundRect:= Result
 end;
 
 procedure StoreLoad;
@@ -390,14 +391,16 @@ AddProgress;
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
-		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), $FFFFFF);
+		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), cWhiteColor);
+		tmpsurf:= doSurfaceConversion(tmpsurf);
 		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)
 		end;
 
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
-	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), $FFFFFF);
+	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColor);
+	tmpsurf:= doSurfaceConversion(tmpsurf);	
 	CountTexz[i]:= Surface2Tex(tmpsurf, false);
 	SDL_FreeSurface(tmpsurf)
 	end;
@@ -988,6 +991,7 @@ while pos <= length(s) do
         if Length(substr) <> 0 then
            begin
            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cColorNearBlack);
+	   tmpsurf:= doSurfaceConversion(tmpsurf);
            rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
            rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
@@ -1019,7 +1023,6 @@ end;
 function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-    convertedSurf: PSDL_Surface;
 begin
 WriteToConsole(msgLoading + filename + '... ');
 
@@ -1059,13 +1062,7 @@ if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tm
 		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
-//for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7
-if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
-begin
-	convertedSurf:= SDL_ConvertSurface(tmpsurf, @convFormat, SDL_SWSURFACE);
-	SDL_FreeSurface(tmpsurf);	
-	tmpsurf:= convertedSurf;
-end;
+tmpsurf:= doSurfaceConversion(tmpsurf);
 
 if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 //if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf) else Result:= SDL_DisplayFormat(tmpsurf);

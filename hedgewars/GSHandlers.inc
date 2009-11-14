@@ -45,7 +45,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
 		if Gear^.Kind = gtHedgehog then
 			begin
 			Gear^.State:= Gear^.State and (not gstHHDriven);
-			AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), $FFFFFF, capgrpMessage);
+			AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
 			end
         end;
     PlaySound(sndSplash, false, nil)
@@ -554,7 +554,7 @@ case Gear^.Kind of
     gtATStartGame: begin
                    AllInactive:= false;
                    if Gear^.Timer = 0 then
-                      AddCaption(trmsg[sidStartFight], $FFFFFF, capgrpGameState);
+                      AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
                    end;
  gtATSmoothWindCh: begin
                    if Gear^.Timer = 0 then
@@ -2383,9 +2383,9 @@ if (Gear^.Timer <> 0) and (GameTicks - Gear^.Timer > 250) then
 if Gear^.Health < 0 then Gear^.Health:= 0;
 if (GameTicks and $3F) = 0 then
        begin
-//AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
+//AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
        if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-       Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', $FFFFFFFF, fntSmall)
+       Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
        end;
 
 if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
@@ -2416,8 +2416,8 @@ if  (Gear^.Health = 0)
 	DeleteGear(Gear);
 	isCursorVisible:= false;
 //    if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
-//    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', $FFFFFFFF, fntSmall)
-    //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', $FFFFFF, capgrpAmmostate);
+//    Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
+    //AddCaption(trmsg[sidFuel]+': '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
 	end
 end;
 
