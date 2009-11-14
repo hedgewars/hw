@@ -117,27 +117,27 @@ var w, h: LongInt;
     clr: TSDL_Color;
     Result: TSDL_Rect;
 begin
-	TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
-	Result.x:= X;
-	Result.y:= Y;
-	Result.w:= w + FontBorder * 2 + 4;
-	Result.h:= h + FontBorder * 2;
-	DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
-	clr.r:= Color shr 16;
-	clr.g:= (Color shr 8) and $FF;
-	clr.b:= Color and $FF;
-	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
-	tmpsurf:= doSurfaceConversion(tmpsurf);
-	Result.x:= X + FontBorder + 2;
-	Result.y:= Y + FontBorder;
-	SDLTry(tmpsurf <> nil, true);
-	SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
-	SDL_FreeSurface(tmpsurf);
-	Result.x:= X;
-	Result.y:= Y;
-	Result.w:= w + FontBorder * 2 + 4;
-	Result.h:= h + FontBorder * 2;
-	WriteInRoundRect:= Result
+TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
+Result.x:= X;
+Result.y:= Y;
+Result.w:= w + FontBorder * 2 + 4;
+Result.h:= h + FontBorder * 2;
+DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
+clr.r:= Color shr 16;
+clr.g:= (Color shr 8) and $FF;
+clr.b:= Color and $FF;
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
+tmpsurf:= doSurfaceConversion(tmpsurf);
+Result.x:= X + FontBorder + 2;
+Result.y:= Y + FontBorder;
+SDLTry(tmpsurf <> nil, true);
+SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
+SDL_FreeSurface(tmpsurf);
+Result.x:= X;
+Result.y:= Y;
+Result.w:= w + FontBorder * 2 + 4;
+Result.h:= h + FontBorder * 2;
+WriteInRoundRect:= Result
 end;
 
 procedure StoreLoad;
