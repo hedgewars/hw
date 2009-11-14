@@ -23,8 +23,6 @@ uses uFloat;
 
 procedure DoGameTick(Lag: LongInt);
 
-var skipFlag: boolean = false;
-
 ////////////////////
    implementation
 ////////////////////
@@ -47,7 +45,6 @@ if (GameType = gmtDemo) and isSpeed then Lag:= Lag * 10;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
-    skipFlag:= false;
     if not CurrentTeam^.ExtDriven then
        begin
        if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;
@@ -74,7 +71,6 @@ while (GameState <> gsExit) and (i <= Lag) do
                end
           else ProcessGears
        end;
-    if skipFlag then TurnTimeLeft:= 0;
     inc(i)
     end
 end;

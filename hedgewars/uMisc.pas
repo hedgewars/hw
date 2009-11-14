@@ -586,7 +586,7 @@ if ParamCount <> 0 then
 finalization
 //uRandom.DumpBuffer;
 
-writeln(f, 'halt at ', GameTicks, ' ticks');
+writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
 flush(f);
 close(f)
 

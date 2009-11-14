@@ -78,6 +78,7 @@ var CurAmmoGear: PGear = nil;
     SpeechType: Longword = 1;
     SpeechText: shortstring;
 	TrainingTargetGear: PGear = nil;
+	skipFlag: boolean = false;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
@@ -658,6 +659,12 @@ if TurnTimeLeft > 0 then
 						PlaySound(sndHurry, false, CurrentTeam^.voicepack);
 				dec(TurnTimeLeft)
 				end;
+
+if skipFlag then
+	begin
+	TurnTimeLeft:= 0;
+	skipFlag:= false
+	end;
 
 if ((GameTicks and $FFFF) = $FFFF) then
 	begin
