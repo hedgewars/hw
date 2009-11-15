@@ -80,10 +80,11 @@ var
 	TimeTrialStartTime: Longword = 0;
 	TimeTrialStopTime : Longword = 0;
 	
-	cSkyColor     : Longword = 0;
-	cWhiteColor   : Longword = $FFFFFFFF;
-	cColorNearBlack       : Longword = $FF000010;
-	cExplosionBorderColor : LongWord = $808080;
+	cSkyColor		: Longword = 0;
+	cWhiteColor		: Longword = $FFFFFFFF;
+	cYellowColor		: Longword = $FFFFFF00;
+	cNearBlackColor		: Longword = $FF000010;
+	cExplosionBorderColor	: LongWord = $FF808080;
 
 	cShowFPS      : boolean = false;
 	cCaseFactor   : Longword = 5;  {0..9}

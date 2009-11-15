@@ -47,10 +47,19 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
 const colors: array[#1..#4] of Longword = (
-	$FFFFFF, // chat message
-	$FF00FF, // action message
-	$90FF90, // join/leave message
-	$A0FFFF  // team message
+{$IFDEF ENDIAN_LITTLE}
+// ABGR
+	$FFFFFFFF, // chat message [White]
+	$FFFF00FF, // action message [Purple]
+	$FF90FF90, // join/leave message [Lime]
+	$FFA0FFFF  // team message [Light Yellow]
+{$ELSE}
+// RGBA
+	$FFFFFFFF, // chat message [White]
+	$FF00FFFF, // action message [Purple]
+	$90FF90FF, // join/leave message [Lime]
+	$FFFFA0FF  // team message [Light Yellow]
+{$ENDIF}
 	);
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
@@ -66,7 +75,12 @@ cl.s:= str;
 
 if isInput then
 	begin
-	color:= $FFFF00;
+	color:=
+{$IFDEF ENDIAN_LITTLE}	
+	$FFFFFF00; // [Yellow abgr]
+{$ELSE}
+	$00FFFFFF; // [Yellow rgba]
+{$ENDIF}	
 	str:= UserNick + '> ' + str + '_'
 	end
 	else begin
@@ -77,14 +91,9 @@ if isInput then
 
 TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
 
-resSurface:= SDL_CreateRGBSurface(0,
-		toPowerOf2(w),
-		toPowerOf2(h),
-		32,
-		RMask, GMask, BMask, AMask);
+resSurface:= SDL_CreateRGBSurface(0, toPowerOf2(w), toPowerOf2(h), 32, RMask, GMask, BMask, AMask);
 
 strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), color);
-//strSurface:= doSurfaceConversion(strSurface);
 cl.Width:= w + 4;
 SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);
