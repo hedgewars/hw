@@ -74,6 +74,10 @@ end;
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts: shortstring;
+{$IFNDEF ENDIAN_LITTLE}
+    tmpA, tmpR, tmpG, tmpB: byte;
+    tmpColor: LongWord = 0;
+{$ENDIF}
 begin
 if isDeveloperMode then
    begin
@@ -81,8 +85,9 @@ if isDeveloperMode then
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
-   Color:= Color or AMask;
-
+   // color is always in ARGB so the mask must be constant
+   Color:= Color or $FF000000;
+ 	
    AddTeam(Color);
    CurrentTeam^.TeamName:= ts;
    if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;

@@ -991,7 +991,13 @@ while pos <= length(s) do
         substr:= copy(s, prevpos+1, pos-prevpos-1);
         if Length(substr) <> 0 then
            begin
-           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColor);
+           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), 
+{$IFDEF ENDIAN_LITTLE}
+		cNearBlackColor
+{$ELSE}
+		$100000FF
+{$ENDIF}
+		); // do not remove me
 	   tmpsurf:= doSurfaceConversion(tmpsurf);
            rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
