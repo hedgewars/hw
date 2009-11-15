@@ -16,9 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uStore;
 interface
-{$INCLUDE "options.inc"}
 uses sysutils, uConsts, uTeams, SDLh,
 {$IFDEF GLES11}
 	gles11,
@@ -122,7 +123,7 @@ Result.x:= X;
 Result.y:= Y;
 Result.w:= w + FontBorder * 2 + 4;
 Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, cColorNearBlack, Surface, true);
+DrawRoundRect(@Result, cWhiteColor, cNearBlackColor, Surface, true);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
@@ -165,7 +166,7 @@ var s: string;
 		TryDo(texsurf <> nil, errmsgCreateSurface, true);
 		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-		DrawRoundRect(@r, cWhiteColor, cColorNearBlack, texsurf, true);
+		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
 		rr:= r;
 		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
 		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
@@ -382,9 +383,9 @@ SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
-PauseTexture:= RenderStringTex(trmsg[sidPaused], $FFFF00, fntBig);
-ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], $FFFF00, fntBig);
-SyncTexture:= RenderStringTex(trmsg[sidSync], $FFFF00, fntBig);
+PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
+ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
+SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
 AddProgress;
 
@@ -990,7 +991,7 @@ while pos <= length(s) do
         substr:= copy(s, prevpos+1, pos-prevpos-1);
         if Length(substr) <> 0 then
            begin
-           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cColorNearBlack);
+           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColor);
 	   tmpsurf:= doSurfaceConversion(tmpsurf);
            rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
