@@ -16,10 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uCollisions;
 interface
 uses uGears, uFloat;
-{$INCLUDE "options.inc"}
+
 const cMaxGearArrayInd = 255;
 
 type PGearArray = ^TGearArray;

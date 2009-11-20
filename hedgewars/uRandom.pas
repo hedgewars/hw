@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uRandom;
 interface
 uses uFloat;
-{$INCLUDE "options.inc"}
 {$INCLUDE "proto.inc"}
 
 procedure SetRandomSeed(Seed: shortstring);

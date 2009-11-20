@@ -16,10 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uConsole;
 interface
 uses uFloat;
-{$INCLUDE "options.inc"}
+
 const isDeveloperMode: boolean = true;
 type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);

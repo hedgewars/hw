@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uLandTemplates;
 interface
 uses SDLh;
-{$INCLUDE "options.inc"}
 
 const NTPX = Low(TSDL_Rect.x);
 

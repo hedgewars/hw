@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uLandGraphics;
 interface
 uses uFloat, uConsts;
-{$INCLUDE "options.inc"}
 
 type PRangeArray = ^TRangeArray;
      TRangeArray = array[0..31] of record

@@ -16,16 +16,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit SDLh;
 interface
 
-{$INCLUDE "options.inc"}
 
 {$IFDEF LINUX}
-{$DEFINE UNIX}
+  {$DEFINE UNIX}
 {$ENDIF}
 {$IFDEF FREEBSD}
-{$DEFINE UNIX}
+  {$DEFINE UNIX}
 {$ENDIF}
 
 {$IFDEF UNIX}
@@ -42,18 +43,19 @@ interface
 {$ENDIF}
 
 {$IFDEF DARWIN}
-	{$PASCALMAINNAME SDL_main}
-{$IFNDEF IPHONEOS}
-	{$linkframework Cocoa}
-	{$linkframework SDL}
-	{$linkframework SDL_net}
-	{$linkframework SDL_image}
-	{$linkframework SDL_ttf}
-	{$linkframework SDL_mixer}
-	{$linklib SDLmain}
-	{$linklib gcc}
+  {$PASCALMAINNAME SDL_main}
+  {$IFNDEF IPHONEOS}
+    {$linkframework Cocoa}
+    {$linkframework SDL}
+    {$linkframework SDL_net}
+    {$linkframework SDL_image}
+    {$linkframework SDL_ttf}
+    {$linkframework SDL_mixer}
+    {$linklib SDLmain}
+    {$linklib gcc}
+  {$ENDIF}
 {$ENDIF}
-{$ENDIF}
+
 
 (*  SDL  *)
 const
@@ -482,7 +484,7 @@ type
 {$ELSE}
 		SDL_GL_SWAP_CONTROL
 {$ENDIF}
-);
+		);
 
 {$IFDEF SDL13}
 	TSDL_ArrayByteOrder = (  // array component order, low byte -> high byte 
@@ -711,6 +713,11 @@ procedure SDLNet_TCP_Close(sock: PTCPsocket); cdecl; external SDL_NetLibName;
 procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_NetLibName;
 function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
+
+{$IFDEF IPHONEOS}
+function  get_documents_path: PChar; cdecl; external 'hwutils';
+{$ENDIF}
+
 {$ELSE}{$ENDIF}
 
 procedure SDLNet_Write16(value: Word; buf: pointer);

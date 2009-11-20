@@ -265,10 +265,6 @@ var ii: TSprite;
     ai: TAmmoType;
     tmpsurf: PSDL_Surface;
     i: LongInt;
-{$IFDEF IPHONEOS}
-tmpP: PLongWordArray;
-tmpA, tmpR, tmpG, tmpB: LongWord;
-{$ENDIF}
 begin
 
 for fi:= Low(THWFont) to High(THWFont) do
@@ -304,45 +300,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 				end;
 
 			if tmpsurf <> nil then
-				begin
-{$IFDEF IPHONEOS}   
-{* http://bugzilla.libsdl.org/show_bug.cgi?id=868 but patched library doesn't work on ipod, so implementing workaround here *}
-				if (ifAlpha or ifTransparent) > 0 then
-				begin
-					tmpP := tmpsurf^.pixels;
-					for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
-					begin
-{$IFDEF ENDIAN_LITTLE}
-						tmpA:= tmpP^[i] shr 24 and $FF;
-						tmpR:= tmpP^[i] shr 16 and $FF;
-						tmpG:= tmpP^[i] shr 8 and $FF;
-						tmpB:= tmpP^[i] and $FF;
-{$ELSE}
-						tmpA:= tmpP^[i] and $FF;
-						tmpR:= tmpP^[i] shr 8 and $FF;
-						tmpG:= tmpP^[i] shr 16 and $FF;
-						tmpB:= tmpP^[i] shr 24 and $FF;
-{$ENDIF}
-						if tmpA <> 0 then
-						begin
-							tmpR:= round(tmpR * 255 / tmpA);
-							tmpG:= round(tmpG * 255 / tmpA);
-							tmpB:= round(tmpB * 255 / tmpA);
-						end;
-
-						if tmpR > 255 then tmpR:= 255;
-						if tmpG > 255 then tmpG:= 255;
-						if tmpB > 255 then tmpB:= 255;
-
-{$IFDEF ENDIAN_LITTLE}
-						tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
-{$ELSE}
-						tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
-{$ENDIF}
-					end;
-				end;
-{$ENDIF}
-				
+			begin
 				if imageWidth = 0 then imageWidth:= tmpsurf^.w;
 				if imageHeight = 0 then imageHeight:= tmpsurf^.h;
 				if Width = 0 then Width:= tmpsurf^.w;
@@ -353,22 +311,10 @@ for ii:= Low(TSprite) to High(TSprite) do
 					begin
 					Texture:= Surface2Tex(tmpsurf, false);
 					if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
-						begin
-					(*	REMOVE ME WHEN BUG ABOVE IS FIXED
-						tmpP := tmpsurf^.pixels; 
-						for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do
-						begin
-							tmpA:= tmpP^[i] shr 24 and $FF;
-							tmpR:= tmpP^[i] shr 16 and $FF;
-							tmpG:= tmpP^[i] shr 8 and $FF;
-							tmpB:= tmpP^[i] and $FF;
-						
-							writeln(stdout, inttostr(tmpA) + ' | ' + inttostr(tmpR) + ' | ' + inttostr(tmpG)+ ' | ' + inttostr(tmpB));
-						end;
-					*)
+					begin
 						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-						end;
 					end;
+				end;
 				if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
 				end
 			else
@@ -1030,13 +976,18 @@ end;
 function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
+{$IFDEF IPHONEOS}
+    tmpP: PLongWordArray;
+    tmpA, tmpR, tmpG, tmpB: LongWord;
+    i: LongInt;
+{$ENDIF}
 begin
-WriteToConsole(msgLoading + filename + '... ');
+	WriteToConsole(msgLoading + filename + '... ');
 
-s:= filename + '.png';
-tmpsurf:= IMG_Load(Str2PChar(s));
+	s:= filename + '.png';
+	tmpsurf:= IMG_Load(Str2PChar(s));
 
-if ((imageFlags and ifLowRes) <> 0) then
+	if (imageFlags and ifLowRes) <> 0 then
 	begin
 		s:= filename + '-lowres.png';
 		if (tmpsurf <> nil) then
@@ -1044,39 +995,90 @@ if ((imageFlags and ifLowRes) <> 0) then
 			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 			begin
 				SDL_FreeSurface(tmpsurf);
-				WriteLnToConsole('Image too big, trying to load lowres version: ' + s);
+				{$IFDEF DEBUGFILE}
+				AddFileLog('...image too big, trying to load lowres version: ' + s + '...');
+				{$ENDIF}
 				tmpsurf:= IMG_Load(Str2PChar(s))
 			end;
 		end
 		else
 		begin
-			WriteLnToConsole('Image not found, trying to load lowres version: ' + s);
+			{$IFDEF DEBUGFILE}
+			AddFileLog('...image not found, trying to load lowres version: ' + s + '...');
+			{$ENDIF}
 			tmpsurf:= IMG_Load(Str2PChar(s))
 		end;
 	end;
 
-if tmpsurf = nil then
+	if tmpsurf = nil then
 	begin
-	OutError(msgFailed, (imageFlags and ifCritical) <> 0);
-	exit(nil)
+		OutError(msgFailed, (imageFlags and ifCritical) <> 0);
+		exit(nil)
 	end;
 
-if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
+	if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
 	begin
 		SDL_FreeSurface(tmpsurf);
 		OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
-		//dummy surface to replace non-critical textures that failed to load due to their size
+		// dummy surface to replace non-critical textures that failed to load due to their size
 		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
 	end;
 
-tmpsurf:= doSurfaceConversion(tmpsurf);
+	tmpsurf:= doSurfaceConversion(tmpsurf);
 
-if (imageFlags and ifTransparent) <> 0 then TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-//if (imageFlags and ifAlpha) <> 0 then Result:= SDL_DisplayFormatAlpha(tmpsurf) else Result:= SDL_DisplayFormat(tmpsurf);
-WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
-WriteLnToConsole(msgOK);
+{$IFDEF IPHONEOS}   
+{* http://bugzilla.libsdl.org/show_bug.cgi?id=868 but patched library doesn't work on ipod, so implementing workaround here *}
+	if imageFlags and (ifAlpha or ifTransparent) > 0 then
+	begin
+		tmpP := tmpsurf^.pixels;
+		for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
+		begin
+{$IFDEF ENDIAN_LITTLE}
+			tmpA:= tmpP^[i] shr 24 and $FF;
+			tmpR:= tmpP^[i] shr 16 and $FF;
+			tmpG:= tmpP^[i] shr 8 and $FF;
+			tmpB:= tmpP^[i] and $FF;
+{$ELSE}
+			tmpA:= tmpP^[i] and $FF;
+			tmpR:= tmpP^[i] shr 8 and $FF;
+			tmpG:= tmpP^[i] shr 16 and $FF;
+			tmpB:= tmpP^[i] shr 24 and $FF;
+{$ENDIF}
+			if tmpA <> 0 then
+			begin
+				tmpR:= round(tmpR * 255 / tmpA);
+				tmpG:= round(tmpG * 255 / tmpA);
+				tmpB:= round(tmpB * 255 / tmpA);
+			end;
 
-LoadImage:= tmpsurf //Result
+			if tmpR > 255 then tmpR:= 255;
+			if tmpG > 255 then tmpG:= 255;
+			if tmpB > 255 then tmpB:= 255;
+
+{$IFDEF ENDIAN_LITTLE}
+			tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
+{$ELSE}
+			tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
+{$ENDIF}
+		end;
+(*		for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do
+		begin
+			tmpA:= tmpP^[i] shr 24 and $FF;
+			tmpR:= tmpP^[i] shr 16 and $FF;
+			tmpG:= tmpP^[i] shr 8 and $FF;
+			tmpB:= tmpP^[i] and $FF;
+			writeln(stdout, inttostr(tmpA) + ' | ' + inttostr(tmpR) + ' | ' + inttostr(tmpG)+ ' | ' + inttostr(tmpB));
+		end; *)
+	end;
+{$ENDIF}
+
+	if (imageFlags and ifTransparent) <> 0 then
+		TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+	WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
+	WriteLnToConsole(msgOK);
+
+	LoadImage:= tmpsurf //Result
 end;
 
 function glLoadExtension(extension : string) : boolean;
@@ -1099,14 +1101,14 @@ var vendor: shortstring;
 begin
 glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
+WriteLnToConsole('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 {$IFDEF DEBUGFILE}
-AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 AddFileLog('OpenGL - Vendor: ' + string(pchar(glGetString(GL_VENDOR))));
 AddFileLog('OpenGL - Version: ' + string(pchar(glGetString(GL_VERSION))));
-AddFileLog('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
+WriteLnToConsole('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 
-if MaxTextureSize = 0 then
+	if MaxTextureSize = 0 then
 	begin
 	MaxTextureSize:= 1024;
 {$IFDEF DEBUGFILE}

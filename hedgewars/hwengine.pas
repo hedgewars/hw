@@ -16,15 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$IFNDEF FPC}
-{$ERROR Only Free Pascal supported!}
-{$ENDIF}
-
 {$INCLUDE "options.inc"}
 
 program hwengine;
-uses
-	SDLh in 'SDLh.pas',
+uses	SDLh in 'SDLh.pas',
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -314,14 +309,14 @@ else uKeys.isWalking:= false;
 		end;
 {$ENDIF}
 {$IFDEF IPHONEOS}
-		SDL_JOYAXISMOTION: begin
+(*		SDL_JOYAXISMOTION: begin
                 {* axis 0 = left and right;
                    axis 1 = up and down;
                    axis 2 = back and forth; *}
 
                         WriteLnToConsole('*********************************************       accelerometer');
 			
-			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick, 0);
+			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick,≤ 0);
 
                         if (CurrentTeam <> nil) then
                         begin
@@ -343,7 +338,7 @@ else uKeys.isWalking:= false;
                                         else
                                                 if (tiltValue  > -1500) and (tiltValue <= 1500) and (movedbybuttons = false) then uKeys.isWalking:= false;  
                         end;
-                end;
+                end;*)
 {$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
 		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
@@ -392,11 +387,6 @@ var
 {$ENDIF}
     p: TPathType;
 begin
-{$IFDEF DEBUGFILE}
-AddFileLog('Prefix: "' + PathPrefix +'"');
-for i:= 0 to ParamCount do
-    AddFileLog(inttostr(i) + ': ' + ParamStr(i));
-{$ENDIF}
 
 case ParamCount of
  17: begin
@@ -425,25 +415,25 @@ case ParamCount of
 {$IFDEF IPHONEOS}
   0: begin
         PathPrefix:= 'hedgewars/Data';
-		recordFileName:= 'hedgewars/save.hws';
-		val('320', cScreenWidth);
-		val('480', cScreenHeight);
-		cInitWidth:= cScreenWidth;
-		cInitHeight:= cScreenHeight;
-		cBitsStr:= '32';
-		val(cBitsStr, cBits);
-		val('100', cInitVolume);
-		isMusicEnabled:= false;
-		isSoundEnabled:= false;
-		cLocaleFName:= 'en.txt';
-		cFullScreen:= true; //T or F is is the same here
-		cAltDamage:= false;
-		cShowFPS:= true;
-		val('8', cTimerInterval);
-		cReducedQuality:= false;
+        recordFileName:= 'hedgewars/save.hws';
+        val('320', cScreenWidth);
+        val('480', cScreenHeight);
+        cInitWidth:= cScreenWidth;
+        cInitHeight:= cScreenHeight;
+        cBitsStr:= '32';
+        val(cBitsStr, cBits);
+        val('100', cInitVolume);
+        isMusicEnabled:= false;
+        isSoundEnabled:= false;
+        cLocaleFName:= 'en.txt';
+        cFullScreen:= true; //T or F is is the same here
+        cAltDamage:= false;
+        cShowFPS:= true;
+        val('8', cTimerInterval);
+        cReducedQuality:= false;
 
         for p:= Succ(Low(TPathType)) to High(TPathType) do
-			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
+                if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
      end;
 {$ENDIF}
   3: begin
@@ -457,7 +447,7 @@ case ParamCount of
 
 		for p:= Succ(Low(TPathType)) to High(TPathType) do
 			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-	end;
+     end;
   6: begin
 		PathPrefix:= ParamStr(1);
 		recordFileName:= ParamStr(2);
@@ -545,6 +535,15 @@ case ParamCount of
 	end;
 	else DisplayUsage;
 	end;
+
+{$IFDEF DEBUGFILE}
+AddFileLog('Prefix: "' + PathPrefix +'"');
+for i:= 0 to ParamCount do
+	AddFileLog(inttostr(i) + ': ' + ParamStr(i));
+{$IFDEF IPHONEOS}
+WriteLnToConsole('Saving debug file at: ' + get_documents_path());
+{$ENDIF}
+{$ENDIF}
 end;
 
 /////////////////////////

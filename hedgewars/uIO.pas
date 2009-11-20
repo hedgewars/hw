@@ -16,10 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uIO;
 interface
 uses SDLh;
-{$INCLUDE "options.inc"}
 
 const ipcPort: Word = 0;
 
@@ -173,9 +174,9 @@ var f: file;
 	buf: array[0..255] of byte;
 	s: shortstring absolute buf;
 begin
-{$IFDEF IPHONEOS}
-filemode := 0;
-{$ENDIF}
+
+// set RDNLY on file open
+filemode:= 0;
 
 assign(f, fileName);
 reset(f, 1);

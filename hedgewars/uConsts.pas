@@ -186,32 +186,26 @@ const
       1024 -> $FFFFFC00
        512 -> $FFFFFE00  *}
 
-{$IFDEF IPHONEOS}
-    LAND_WIDTH  = 2048;
-    LAND_HEIGHT = 1024;
-    LAND_WIDTH_MASK  = $FFFFF800;
-    LAND_HEIGHT_MASK = $FFFFFC00;
-{$ELSE}
 {$IFDEF LOWRES}
-    LAND_WIDTH  = 2048;
-    LAND_HEIGHT = 1024;
-    LAND_WIDTH_MASK  = $FFFFF800;
-    LAND_HEIGHT_MASK = $FFFFFC00;
+	// default for iphone pre 3gs
+	LAND_WIDTH  = 2048;
+	LAND_HEIGHT = 1024;
+	LAND_WIDTH_MASK  = $FFFFF800;
+	LAND_HEIGHT_MASK = $FFFFFC00;
 {$ELSE}
-    LAND_WIDTH  = 4096;
-    LAND_HEIGHT = 2048;
-    LAND_WIDTH_MASK  = $FFFFF000;
-    LAND_HEIGHT_MASK = $FFFFF800;
-{$ENDIF}
+	LAND_WIDTH  = 4096;
+	LAND_HEIGHT = 2048;
+	LAND_WIDTH_MASK  = $FFFFF000;
+	LAND_HEIGHT_MASK = $FFFFF800;
 {$ENDIF}
 
-    COLOR_LAND           = $FFFF;  // white
-    COLOR_INDESTRUCTIBLE = $88FF;  // red
+	COLOR_LAND           = $FFFF;  // white
+	COLOR_INDESTRUCTIBLE = $88FF;  // red
 
-    //some opengl headers do not have these macros
-    GL_BGR  = $80E0;
-    GL_BGRA = $80E1;
-    GL_CLAMP_TO_EDGE = $812F;
+	// some opengl headers do not have these macros
+	GL_BGR  = $80E0;
+	GL_BGRA = $80E1;
+	GL_CLAMP_TO_EDGE = $812F;
 
 
 	cifRandomize = $00000001;
@@ -245,6 +239,9 @@ const
 	cMaxCaptions = 4;
 
 	cSendEmptyPacketTime = 1000;
+
+	// from uTriggers
+	trigTurns = $80000001;
 
 	// Training Flags
 	tfNone          = $00000000;
@@ -341,18 +338,18 @@ const
 	htTransparent = $80;
 	
 	cTagsMasks       : array[0..7] of byte = (
-											htTeamName or htName or htHealth,
-											htName or htHealth,
-											htHealth,
-											htNone,
-											htTeamName or htName or htHealth or htTransparent,
-											htName or htHealth or htTransparent,
-											htHealth or htTransparent,
-											htNone
-											);
+				htTeamName or htName or htHealth,
+				htName or htHealth,
+				htHealth,
+				htNone,
+				htTeamName or htName or htHealth or htTransparent,
+				htName or htHealth or htTransparent,
+				htHealth or htTransparent,
+				htNone
+				);
 
-	cHHFileName   = 'Hedgehog';
-	cCHFileName   = 'Crosshair';
+	cHHFileName = 'Hedgehog';
+	cCHFileName = 'Crosshair';
 	cThemeCFGFilename = 'theme.cfg';
 
 	Fontz: array[THWFont] of THHFont = (
@@ -635,7 +632,6 @@ const
 			Width: 64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprJetpack
 			(FileName:  'Health'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprHealth
-
 			(FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
 			Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), //sprHandMolotov
 			(FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

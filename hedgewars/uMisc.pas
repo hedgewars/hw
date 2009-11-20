@@ -16,9 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+{$INCLUDE "options.inc"}
+
 unit uMisc;
 interface
-{$INCLUDE "options.inc"}
+
 uses uConsts, SDLh,
 {$IFDEF GLES11}
 	gles11,
@@ -129,6 +131,8 @@ var
 	RealTicks: Longword = 0;
 
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+
+var	i: LongInt;
 
 type HwColor4f = record
 	r, g, b, a: byte
@@ -559,6 +563,7 @@ begin
 	else doSurfaceConversion:= tmpsurf;
 end;
 
+
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06
 cMaxWindSpeed.QWordValue:= 2147484;// 0.0005
@@ -571,17 +576,25 @@ cArtillery:= false;
 
 {$IFDEF DEBUGFILE}
 {$I-}
-f:= stderr;
-rewrite(f);
-{$IFNDEF IPHONEOS}
-if ParamCount <> 0 then
-   for i:= 0 to 7 do
-    begin
-      assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
-      rewrite(f);
-      if IOResult = 0 then break
-    end;
+for i:= 0 to 7 do
+begin
+	assign(f, 
+{$IFDEF IPHONEOS}
+	string(get_documents_path())
+{$ELSE}
+	ParamStr(1)
 {$ENDIF}
+	+ '/debug' + inttostr(i) + '.txt');
+	rewrite(f);
+	if IOResult = 5 then
+	begin
+		// prevent writing on a directory you do not have permissions on
+		// should be safe to assume the current directory is writable
+		assign(f, './debug' + inttostr(i) + '.txt');
+		rewrite(f);
+	end;
+	if IOResult = 0 then break
+end;
 {$I+}
 
 finalization
