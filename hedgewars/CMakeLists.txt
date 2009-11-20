@@ -108,16 +108,14 @@ IF(APPLE)
 	include_directories(${SDL_INCLUDE_DIR})
 	link_libraries(${SDL_LIBRARY})
 	
-	if(universal_build)
-		#apparently this variable is not exported here
-		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")		
-	endif()
+	#apparently this variable is not exported here
+	set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")		
 
 	add_library (SDLmain STATIC SDLMain.m)
 	set(engine_sources SDLmain ${engine_sources})
 ENDIF(APPLE)
 
-IF(build_type MATCHES "standard")
+IF(NOT APPLE)
 #here is the standard command for any system
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
 		COMMAND "${pascal_compiler}"

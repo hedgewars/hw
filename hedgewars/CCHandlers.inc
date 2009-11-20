@@ -74,10 +74,6 @@ end;
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts: shortstring;
-{$IFNDEF ENDIAN_LITTLE}
-    tmpA, tmpR, tmpG, tmpB: byte;
-    tmpColor: LongWord = 0;
-{$ENDIF}
 begin
 if isDeveloperMode then
    begin
