@@ -145,7 +145,7 @@
 02:01=%1 is doing his impersonation of a dead fish
 02:01=At least you didn't go down the toilet, %1
 02:01=Sonic couldn't swim and neither can %1
-02:01=%1 wants to play Eccho the dolphin
+02:01=%1 wants to play Ecco the dolphin
 02:01=%1 has gone to visit Aquaria
 02:01=%1 has found the lost city of Atlantis
 02:01=%1 aims for the lead role in Bioshock 3
@@ -278,7 +278,7 @@
 02:08=%1 is one lazy hog
 02:08=%1 is thoughtless
 02:08=%1 gave up
-02:08=You snooze you loose, %1
+02:08=You snooze you lose, %1
 02:08=%1 shamelessly skips
 02:08=%1 is really lazy
 02:08=%1 needs a little more motivation

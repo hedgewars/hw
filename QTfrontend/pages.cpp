@@ -540,7 +540,7 @@ void PageNet::slotConnect()
 	QModelIndex mi = tvServersList->currentIndex();
 	if(!mi.isValid())
 	{
-		QMessageBox::information(this, tr("Error"), tr("Please, select server from the list above"));
+		QMessageBox::information(this, tr("Error"), tr("Please select server from the list above"));
 		return;
 	}
 	QString host = model->index(mi.row(), 1).data().toString();
@@ -917,7 +917,7 @@ void PageRoomsList::onCreateClick()
 	else
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, enter room name"),
+				tr("Please enter room name"),
 				tr("OK"));
 }
 
@@ -928,7 +928,7 @@ void PageRoomsList::onJoinClick()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select room from the list"),
+				tr("Please select room from the list"),
 				tr("OK"));
 		return ;
 	}

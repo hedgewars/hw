@@ -58,7 +58,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	if (netNick.isEmpty())
 		netNick = QInputDialog::getText(Form,
 				QObject::tr("Nickname"),
-				QObject::tr("Please, enter your nickname"),
+				QObject::tr("Please enter your nickname"),
 				QLineEdit::Normal,
 				QDir::home().dirName());
 

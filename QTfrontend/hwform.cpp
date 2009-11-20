@@ -528,7 +528,7 @@ void HWForm::PlayDemo()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select record from the list above"),
+				tr("Please select record from the list above"),
 				tr("OK"));
 		return ;
 	}

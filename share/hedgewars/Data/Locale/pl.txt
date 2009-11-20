@@ -144,7 +144,7 @@
 02:01=%1 pokazuje swoje wyobrażenie martwej ryby...
 02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
 02:01=Sonic nie umiał pływać więc ty także %1
-02:01=%1 chce zagrać delfina Eccho 
+02:01=%1 chce zagrać delfina Ecco 
 02:01=%1 popłyną zwiedzać Aquarię
 02:01=%1 znalazł Atlantydę!
 02:01=%1 chce być główną postacią w Bioshock 3

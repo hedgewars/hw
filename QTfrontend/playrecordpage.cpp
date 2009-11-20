@@ -100,7 +100,7 @@ void PagePlayDemo::renameRecord()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select record from the list"),
+				tr("Please select record from the list"),
 				tr("OK"));
 		return ;
 	}
@@ -134,7 +134,7 @@ void PagePlayDemo::removeRecord()
 	{
 		QMessageBox::critical(this,
 				tr("Error"),
-				tr("Please, select record from the list"),
+				tr("Please select record from the list"),
 				tr("OK"));
 		return ;
 	}

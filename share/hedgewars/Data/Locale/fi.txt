@@ -139,7 +139,7 @@
 02:01=%1 matkii kuollutta kalaa
 02:01=Ainakaan et huuhtoutunut vessanpöntöstä alas, %1
 02:01=Sonic ei osaa uida, eikä myöskään %1
-02:01=%1 haluaa näytellä Eccho-delfiiniä
+02:01=%1 haluaa näytellä Ecco-delfiiniä
 02:01=%1 lähti käymään Aquariassa
 02:01=%1 löysi Atlantiksen kadonneen kaupungin
 02:01=%1 tähtää Bioshock 3:en päärooliin

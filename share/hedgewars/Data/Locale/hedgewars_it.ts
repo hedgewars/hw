@@ -14,6 +14,13 @@
         <source>Never</source>
         <translation>Mai</translation>
     </message>
+    <message numerus="yes">
+        <source>Every %1 turn</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>GameCFGWidget</name>
@@ -42,7 +49,7 @@
     </message>
     <message>
         <source>Please, select record from the list above</source>
-        <translation>Inserisci il record dalla lista sottostante</translation>
+        <translation type="obsolete">Inserisci il record dalla lista sottostante</translation>
     </message>
     <message>
         <source>OK</source>
@@ -59,6 +66,10 @@
     <message>
         <source>new</source>
         <translation>nuovo</translation>
+    </message>
+    <message>
+        <source>Please select record from the list above</source>
+        <translation>Inserisci il record dalla lista sottostante</translation>
     </message>
 </context>
 <context>
@@ -229,6 +240,20 @@ o scegli un altro nickname:</translation>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Il premio per il miglior colpo è stato vinto da &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; punti.&lt;/p&gt;</translation>
     </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageMain</name>
@@ -256,6 +281,10 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Please, select server from the list above</source>
+        <translation type="obsolete">Seleziona il server dalla lista sottostante</translation>
+    </message>
+    <message>
+        <source>Please select server from the list above</source>
         <translation>Seleziona il server dalla lista sottostante</translation>
     </message>
 </context>
@@ -304,7 +333,7 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Please, select record from the list</source>
-        <translation>Seleziona un record dalla lista</translation>
+        <translation type="obsolete">Seleziona un record dalla lista</translation>
     </message>
     <message>
         <source>OK</source>
@@ -325,6 +354,10 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Cannot delete file</source>
         <translation>Impossibile cancellare il file</translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation>Seleziona un record dalla lista</translation>
     </message>
 </context>
 <context>
@@ -347,7 +380,7 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Please, enter room name</source>
-        <translation>Inserisci il nome della room</translation>
+        <translation type="obsolete">Inserisci il nome della room</translation>
     </message>
     <message>
         <source>OK</source>
@@ -355,7 +388,7 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>Please, select room from the list</source>
-        <translation>Seleziona la room dalla lista</translation>
+        <translation type="obsolete">Seleziona la room dalla lista</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -396,6 +429,28 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
         <translation>Lo Schema delle Armi definisce le armi disponibili le loro munizioni.</translation>
+    </message>
+    <message numerus="yes">
+        <source>There are %1 clients connected to this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>There are %1 teams participating in this room.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation>Inserisci il nome della room</translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation>Seleziona la room dalla lista</translation>
     </message>
 </context>
 <context>
@@ -566,7 +621,7 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>Hardware sound (if available; requires restart)</source>
-        <translation>Usa accelerazione Hardware per il suono (se disponibile; richiede riavvio)</translation>
+        <translation type="obsolete">Usa accelerazione Hardware per il suono (se disponibile; richiede riavvio)</translation>
     </message>
 </context>
 <context>
@@ -807,7 +862,11 @@ Controllare la propria installazione</translation>
     </message>
     <message>
         <source>Please, enter your nickname</source>
-        <translation>Per favore, inserisci il tuo nickname</translation>
+        <translation type="obsolete">Per favore, inserisci il tuo nickname</translation>
+    </message>
+    <message>
+        <source>Please enter your nickname</source>
+        <translation>Per favore inserisci il tuo nickname</translation>
     </message>
 </context>
 <context>
