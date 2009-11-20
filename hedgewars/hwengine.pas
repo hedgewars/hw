@@ -116,7 +116,7 @@ case GameState of
 
 SDL_GL_SwapBuffers();
 {$IFNDEF IPHONEOS}
-//not going to make captures on the iPhone
+// not going to make captures on the iPhone
 if flagMakeCapture then
 	begin
 	flagMakeCapture:= false;
@@ -316,7 +316,7 @@ else uKeys.isWalking:= false;
 
                         WriteLnToConsole('*********************************************       accelerometer');
 			
-			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick,≤ 0);
+			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick, 0);
 
                         if (CurrentTeam <> nil) then
                         begin
@@ -541,7 +541,7 @@ AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
 	AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$IFDEF IPHONEOS}
-WriteLnToConsole('Saving debug file at: ' + get_documents_path());
+	WriteLnToConsole('Saving debug file at: ' + get_documents_path());
 {$ENDIF}
 {$ENDIF}
 end;
@@ -549,9 +549,9 @@ end;
 /////////////////////////
 procedure ShowMainWindow;
 begin
-if cFullScreen then ParseCommand('fullscr 1', true)
-               else ParseCommand('fullscr 0', true);
-SDL_ShowCursor(0)
+	if cFullScreen then ParseCommand('fullscr 1', true)
+	else ParseCommand('fullscr 0', true);
+	SDL_ShowCursor(0)
 end;
 
 ///////////////

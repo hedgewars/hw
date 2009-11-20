@@ -1110,9 +1110,9 @@ WriteLnToConsole('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 
 	if MaxTextureSize = 0 then
 	begin
-	MaxTextureSize:= 1024;
+		MaxTextureSize:= 1024;
 {$IFDEF DEBUGFILE}
-	AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
+		AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
 {$ENDIF}
 	end;
 

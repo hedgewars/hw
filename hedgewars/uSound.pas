@@ -122,10 +122,7 @@ for t:= 0 to cMaxTeams do
 				begin
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
-			//	{$IFNDEF IPHONEOS}
-				//broken for unknown reasons (most likely poor SDL_Mixer)
 				voicepacks[t].chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-			//	{$ENDIF}
 				if voicepacks[t].chunks[i] = nil then
 					WriteLnToConsole(msgFailed)
 				else
