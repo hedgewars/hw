@@ -1309,6 +1309,7 @@ begin
 
 if not TestCollisionYwithGear(Gear, 1) then
 	begin
+    AllInactive:= false;
 	if hwAbs(Gear^.dX) > _0_01 then
 		Gear^.dX:= Gear^.dX * _0_995;
 	 if (Gear^.State and gsttmpFlag) <> 0 then Gear^.dY:= Gear^.dY + _2*cGravity else
