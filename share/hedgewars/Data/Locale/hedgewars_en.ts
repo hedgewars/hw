@@ -17,7 +17,8 @@
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>Each turn</numerusform>
+            <numerusform>Every %1 turns</numerusform>
         </translation>
     </message>
 </context>
@@ -242,13 +243,15 @@ or pick another nickname:</translation>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kill in a turn.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog was killed during this round.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehogs were killed during this round.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -428,13 +431,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>There is %1 client connected to this room.</numerusform>
+            <numerusform>There are %1 clients connected to this room.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>There is %1 team participating in this room.</numerusform>
+            <numerusform>There are %1 teams participating in this room.</numerusform>
         </translation>
     </message>
     <message>
