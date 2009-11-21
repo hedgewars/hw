@@ -138,7 +138,7 @@ with CurrentTeam^ do
 	val(s, Gear^.Health);
 	TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
 	PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
-	CurrentHedgehog^.AmmoStore:= TeamsCount - 1; // FIXME HACK to get ammostores work
+	CurrentHedgehog^.AmmoStore:= ClansCount - 1; // FIXME HACK to get ammostores work
 	CurrentHedgehog^.Gear:= Gear;
 	CurrentHedgehog^.Name:= id;
 	inc(HedgehogsNumber)
