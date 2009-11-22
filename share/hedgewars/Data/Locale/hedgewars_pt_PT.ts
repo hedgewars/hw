@@ -52,7 +52,7 @@
     </message>
     <message>
         <source>Please, select record from the list above</source>
-        <translation type="obsolete">Seleccione uma gravação da lista acima</translation>
+        <translation>Seleccione uma gravação da lista acima</translation>
     </message>
     <message>
         <source>OK</source>
@@ -148,7 +148,7 @@
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Ligação rejeitada</translation>
+        <translation>Conexão rejeitada</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -173,7 +173,7 @@ Please provide your password
 or pick another nickname:</source>
         <translation>O nome de utilizador %1 está
 registado em Hedgewars.org
-Por favor digite a sua palavra pass
+Por favor digite a sua palavra passe
 ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
@@ -182,7 +182,7 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 has juntou-se</translation>
+        <translation>%1 *** %2 juntou-se</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -197,7 +197,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf retornou um erro ao renderizar o texto, provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua libraria freetype.</translation>
+        <translation>SDL_ttf retornou um erro ao renderizar o texto, provavelmente está relacionado com o bug no freetype2. É recomendado actualizar a sua livraria freetype.</translation>
     </message>
 </context>
 <context>
@@ -219,7 +219,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>A ligar...</translation>
+        <translation>A conectar...</translation>
     </message>
 </context>
 <context>
@@ -237,7 +237,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;A título de melhor tiro foi ganho por &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;O título de melhor tiro foi ganho por &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
@@ -256,7 +256,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Jogo local (Jogar com apenas um computador)</translation>
+        <translation>Jogo local (Jogar sozinho ou contra o computador)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
@@ -315,7 +315,7 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Set de armas</translation>
+        <translation>Esquema de armas</translation>
     </message>
     <message>
         <source>Edit</source>
@@ -409,7 +409,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation>%1 é o anfitrião. Ele mode ajustar as configurações e começar o jogo.</translation>
+        <translation>%1 é o anfitrião. Ele pode ajustar as configurações e começar o jogo.</translation>
     </message>
     <message>
         <source>Random Map</source>
@@ -417,15 +417,15 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>É possivel jogar em mapas pre-criados or aleatóros.</translation>
+        <translation>É possivel jogar em mapas pré-criados ou aleatórios.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>O Esquema de Jogo define as configurações gerais e preferencias como Tempo da Ronda, Morte súbita ou Vampirismo.</translation>
+        <translation>O Esquema de Jogo define as configurações gerais e preferências como Tempo da Ronda, Morte súbita ou Vampirismo.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation>O Esquema de Armas define que armas estão disponiveis e a quantidade de munições.</translation>
+        <translation>O Esquema de Armas define que armas estão disponíveis e a quantidade de munições.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
@@ -460,11 +460,11 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>O terreno não poderá ser destruído!</translation>
+        <translation>O terreno não pode ser destruído!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation>Adiciona uma barreira indestructível à volta do terreno</translation>
+        <translation>Adiciona uma borda indestrutível à volta do terreno</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -476,7 +476,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation>Todos os ouriços teram um campo de forças pessoal</translation>
+        <translation>Todos os ouriços têm um campo de forças pessoal</translation>
     </message>
     <message>
         <source>Enable random mines</source>
@@ -484,15 +484,15 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>Recupera vida com 80% de danos que realiza</translation>
+        <translation>Converte 80% do dano realizado em vida</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Partilhe o sofrimento dos inimigos, partilhe os danos</translation>
+        <translation>Partilhe o sofrimento dos inimigos, e os danos</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>Os ouriços não poderão andar, testa a tua capacidade em artilharia</translation>
+        <translation>Os ouriços não poderão andar, testa as tuas capacidades em modo artilharia</translation>
     </message>
     <message>
         <source>Random</source>
@@ -576,11 +576,11 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <name>QCheckBox</name>
     <message>
         <source>Fullscreen</source>
-        <translation>Jogo em ecrã completo</translation>
+        <translation>Ecrã completo</translation>
     </message>
     <message>
         <source>Frontend fullscreen</source>
-        <translation>Menú em ecrã completo</translation>
+        <translation>Menu em ecrã completo</translation>
     </message>
     <message>
         <source>Enable sound</source>
@@ -596,7 +596,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Alternative damage show</source>
-        <translation>Mostrador alternativo de danos</translation>
+        <translation>Forma alternativa de mostrar o dano</translation>
     </message>
     <message>
         <source>Append date and time to record file name</source>
@@ -608,7 +608,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Efeitos de Frontend (requer reinicio)</translation>
+        <translation>Efeitos no frontend (requer reinicio)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -685,7 +685,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation>Este programa é distribuido sobre GNU General Public License</translation>
+        <translation>Este programa é distribuído sob a GNU General Public License</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -749,7 +749,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation>Modificador de danos</translation>
+        <translation>Modificador de dano</translation>
     </message>
     <message>
         <source>Turn Time</source>
@@ -765,11 +765,11 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Queda de caixa</translation>
+        <translation>Queda de caixas</translation>
     </message>
     <message>
         <source>Mines Time</source>
-        <translation>Tempo da mina</translation>
+        <translation>Tempo das minas</translation>
     </message>
     <message>
         <source>Mines</source>
@@ -802,7 +802,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Ligação ao servidor perdida</translation>
+        <translation>Conexão com o servidor perdida</translation>
     </message>
     <message>
         <source>Error</source>
@@ -812,9 +812,9 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
-        <translation>Não foi possível abrir o directório data:
+        <translation>Não foi possível abrir o directório:
 %1
-Verifique a instalação</translation>
+Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -822,15 +822,15 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
-        <translation>Não é possível editar o set de armas predefinido</translation>
+        <translation>Não é possível editar o esquema de armas predefinido</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>Não é possível eliminar o set de armas predefinido</translation>
+        <translation>Não é possível eliminar o esquema de armas predefinido</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation>Deseja eliminar este set de armas?</translation>
+        <translation>Deseja eliminar este esquema de armas?</translation>
     </message>
 </context>
 <context>
@@ -880,7 +880,7 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Ligar</translation>
+        <translation>Conectar</translation>
     </message>
     <message>
         <source>Update</source>
@@ -920,7 +920,7 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>Setup</source>
-        <translation>Configuração</translation>
+        <translation>Configurar</translation>
     </message>
 </context>
 <context>
@@ -935,7 +935,7 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translation>E</translation>
     </message>
     <message>
         <source>Owner</source>
@@ -958,7 +958,7 @@ Verifique a instalação</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation>Conjunto de armas</translation>
+        <translation>Esquema de armas</translation>
     </message>
     <message>
         <source>Probabilities</source>
@@ -996,7 +996,7 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>Add Border</source>
-        <translation>Adicionar barreira</translation>
+        <translation>Adicionar borda</translation>
     </message>
     <message>
         <source>Low Gravity</source>
@@ -1067,7 +1067,7 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>ammo menu</source>
-        <translation>menú de armas</translation>
+        <translation>menu de armas</translation>
     </message>
     <message>
         <source>slot 1</source>
@@ -1127,15 +1127,15 @@ Verifique a instalação</translation>
     </message>
     <message>
         <source>chat</source>
-        <translation>chat</translation>
+        <translation>mensagens</translation>
     </message>
     <message>
         <source>chat history</source>
-        <translation>histórico de chat</translation>
+        <translation>histórico de mensagens</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation>pause</translation>
+        <translation>pausa</translation>
     </message>
     <message>
         <source>confirmation</source>
@@ -1169,19 +1169,19 @@ ouriços</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation>Aumentar zoom</translation>
+        <translation>aumentar zoom</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation>Diminuir zoom</translation>
+        <translation>diminuir zoom</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation>Reiniciar zoom</translation>
+        <translation>reiniciar zoom</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation>Salto grande</translation>
+        <translation>salto grande</translation>
     </message>
     <message>
         <source>high jump</source>
@@ -1211,67 +1211,67 @@ ouriços</translation>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation>Movimenta os teus ouriços e aponta:</translation>
+        <translation>Movimentar os teus ouriços e apontar:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation>Atravessa lacunas e obstaculos saltando:</translation>
+        <translation>Ultrapassar fendas e obstaculos saltando:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation>Dispara a arma currentemente seleccionada ou utiliza um utilitario:</translation>
+        <translation>Disparar a arma currentemente seleccionada ou utilizar um utilitario:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar uma arma ou escolher um alvo com o cursor:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>Troca de ouriço currentemente seleccionado (se possivel):</translation>
+        <translation>Trocar de ouriço currentemente seleccionado (se possivel):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation>Apanha armas ou utilitarios:</translation>
+        <translation>Apanhar armas ou utilitarios:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation>Escolhe o tempo nas bombas e armas temporizadas:</translation>
+        <translation>Escolher o tempo nas bombas e outras armas temporizadas:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Move a camara para o ouriço currentemente activo:</translation>
+        <translation>Mover a camara para o ouriço currentemente activo:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation>Move o cursor ou camara sem usar o rato:</translation>
+        <translation>Mover o cursor ou camara sem usar o rato:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation>Modifica o nível de zoom da camara:</translation>
+        <translation>Modificar o nível de zoom da camara:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Fala para os teus membros de equipa ou todos os participantes:</translation>
+        <translation>Escrever para a tua equipa ou todos os participantes:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation>Pausa, continua ou abandona o jogo:</translation>
+        <translation>Pausar, continuar ou abandonar o jogo:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation>Modifica o volume durante o jogo:</translation>
+        <translation>Modificar o volume durante o jogo:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation>Altera para modo de ecrã inteiro:</translation>
+        <translation>Alterar para modo de ecrã inteiro:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation>Tira um screenshot:</translation>
+        <translation>Tirar um screenshot:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Altara as etiquetas acima dos ouriços:</translation>
+        <translation>Alterar as etiquetas acima dos ouriços:</translation>
     </message>
 </context>
 <context>
