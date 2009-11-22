@@ -132,7 +132,7 @@ var
 
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
-var	i: LongInt;
+	i: LongInt;
 
 type HwColor4f = record
 	r, g, b, a: byte
@@ -544,10 +544,6 @@ function RectToStr(Rect: TSDL_Rect): shortstring;
 begin
 RectToStr:= '(x: ' + inttostr(rect.x) + '; y: ' + inttostr(rect.y) + '; w: ' + inttostr(rect.w) + '; h: ' + inttostr(rect.h) + ')'
 end;
-
-{$IFNDEF IPHONEOS}
-var i: LongInt;
-{$ENDIF}
 {$ENDIF}
 
 function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
