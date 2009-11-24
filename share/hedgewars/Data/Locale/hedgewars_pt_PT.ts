@@ -12,12 +12,13 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nunca</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Todos os turnos</numerusform>
+            <numerusform>Cada %1 turnos</numerusform>
         </translation>
     </message>
 </context>
@@ -241,14 +242,16 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+			<numerusform>&lt;p&gt;O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+			<numerusform>&lt;p&gt;Apenas &lt;b&gt;%1&lt;/b&gt; ouriço perdeu a vida durante esta ronda.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços foram perderam a vida durante esta ronda.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -429,14 +432,16 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+			<numerusform>Apenas %1 cliente esta conectado a esta sala.</numerusform>
+            <numerusform>Um total de %1 clientes estão conectados a esta sala.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+			<numerusform>Apenas %1 equipa esta a participar nesta sala.</numerusform>
+            <numerusform>Existem %1 equipas a participar nesta sala.</numerusform>
         </translation>
     </message>
     <message>
@@ -1310,23 +1315,23 @@ ouriços</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão esquerdo</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão do meio</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Botão direito</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Roda para cima</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Rato: Roda para baixo</translation>
     </message>
     <message>
         <source>Backspace</source>
@@ -1354,7 +1359,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Espaço</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1426,23 +1431,23 @@ ouriços</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Igual</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Cima</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Baixo</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Direita</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquerda</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -1478,35 +1483,35 @@ ouriços</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift direito</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift esquerdo</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl direito</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl esquerdo</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt direito</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt esquerdo</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Meta direito</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Meta esquerdo</translation>
     </message>
     <message>
         <source>A button</source>

@@ -38,7 +38,7 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Éditer les sets d&apos;armes</translation>
+        <translation>Éditer les paramètres</translation>
     </message>
 </context>
 <context>
