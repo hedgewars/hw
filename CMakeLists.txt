@@ -12,6 +12,14 @@ set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
 set(CPACK_PACKAGE_VERSION_PATCH "13-dev")
 
+#forbid in-tree building
+#IF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
+#	MESSAGE(STATUS "Please do an out-of-tree build:")
+#	MESSAGE(STATUS "rm CMakeCache.txt; mkdir build; cd build; cmake ..; make")
+#	MESSAGE(FATAL_ERROR "In-tree-build detected!")
+#ENDIF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})
+
+
 if(APPLE)
 	set(CMAKE_FIND_FRAMEWORK "FIRST")
 	
@@ -21,37 +29,44 @@ if(APPLE)
 	set(DATA_INSTALL_DIR "../Resources/")
 	set(target_dir ".")
 	
-	#build architecture / os version
-	set(minimum_os $ENV{MACOSX_DEPLOYMENT_TARGET})
-	if(minimum_os MATCHES "10.4")
-		message(STATUS "Target: Mac OS X 10.4 i386/ppc")	
+	#detect on which system are we
+	EXEC_PROGRAM("/usr/bin/sw_vers" OUTPUT_VARIABLE MACOSX_VERSION_TMP)
+	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
+	STRING(REGEX REPLACE "([0-9][0-9].[0-9]+).[0-9]" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
+
+	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
+
+	if(NOT minimum_macosx)
+		set(minimum_macosx ${current_macosx_version})
+	endif()
+
+	#create universal binaries only when it's time to bundle the application
+	IF(BUNDLE)
+		if(current_macosx_version MATCHES "10.6")
+			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
+			set(build_64_universal TRUE)		
+		else()
+			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
+		endif()
+	ENDIF()	
+
+	message(STATUS "Target system: Mac OS X ${minimum_macosx} for ${CMAKE_OSX_ARCHITECTURES}")	
+
+	if(minimum_macosx MATCHES "10.4")
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
+	else()
+		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${minimum_macosx}.sdk/")
 	endif()
-	if(minimum_os MATCHES "10.5")
-		message(STATUS "Target: Mac OS X 10.5 i386/ppc")
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.5.sdk/")
-		set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
-	endif()
-	if(minimum_os MATCHES "10.6")
-		message(STATUS "Target: Mac OS X 10.6 i386/ppc/x86_64")
-		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.6.sdk/")
-		set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
-		set(build_type "universal64")
-	endif()
-	if(NOT minimum_os)
-	#use the default sysroot with default archs	
-		EXEC_PROGRAM(sw_vers OUTPUT_VARIABLE MACOSX_VERSION)
-		string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION "${MACOSX_VERSION}")
-		STRING(REGEX REPLACE "[0-9][0-9].([0-9]+).[0-9]" "\\1" MACOSX_VERSION ${MACOSX_VERSION})
-		set(minimum_os "10.${MACOSX_VERSION}")
-	endif()
+
 else(APPLE)
 	set(target_dir "bin")
 endif(APPLE)
 
 
 #this snippet sets "Release" mode by default
+#IF (NOT CMAKE_BUILD_TYPE)
+#	SET(CMAKE_BUILD_TYPE "Release")
+#ENDIF (NOT CMAKE_BUILD_TYPE)
 if (NOT CMAKE_BUILD_TYPE)
 	set (CMAKE_BUILD_TYPE RELEASE CACHE STRING "Choose the type of build, options are: None Debug Release." FORCE)
 endif (NOT CMAKE_BUILD_TYPE)
@@ -67,9 +82,9 @@ endif()
 
 
 #set default flags values for all the project
-set(CMAKE_C_FLAGS "-Wall -pipe")
+set(CMAKE_C_FLAGS "-pipe")
 set(CMAKE_C_FLAGS_RELEASE "-w -O2 -fomit-frame-pointer")
-set(CMAKE_C_FLAGS_DEBUG "-O0 -g -DDEBUG")
+set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG")
 set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
@@ -77,14 +92,8 @@ set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi")
 
 if(Optz)
-	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Nu" "-Si" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-w" "-O2")
-	if(APPLE AND NOT universal_build)
-		set(CMAKE_C_FLAGS_RELEASE "-fPIC -msse2 ${CMAKE_C_FLAGS_RELEASE}")
-		set(CMAKE_CXX_FLAGS_RELEASE "-fPIC -msse2 ${CMAKE_CXX_FLAGS_RELEASE}")
-		set(pascal_compiler_flags_cmn "-fPIC" ${pascal_compiler_flags_cmn})
-		#-Cf7400 for ppc, -CfSSE2 for x86 (but none for x86_64)
-	endif()
 else(Optz)
 	set(pascal_compiler_flags_cmn "-O-" "-gl" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint")

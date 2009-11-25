@@ -22,12 +22,16 @@
 	<string>GPL</string>
 	<key>NSAppleScriptEnabled</key>
 	<false/>
-	<key>LSExecutableArchitectures</key>
-   	<string>i386</string>
-	<key>LSMinimumSystemVersion</key>
-	<string>${minimum_os}</string>
 	<key>LSRequiresNativeExecution</key>
         <true/>
+	<key>LSArchitecturePriority</key>
+	<array>
+   	  <string>x86_64</string>
+   	  <string>i386</string>
+   	  <string>ppc</string>
+	</array>
+	<key>LSMinimumSystemVersion</key>
+	<string>${minimum_macosx}</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
 </dict>

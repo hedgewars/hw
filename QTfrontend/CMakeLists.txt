@@ -43,7 +43,7 @@ endif(WIN32 AND NOT UNIX)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
-set(hwfr_src
+set(	hwfr_src
 	game.cpp
 	main.cpp
 	hwform.cpp
@@ -100,7 +100,7 @@ else(MINGW)
 	set(hwfr_src ${hwfr_src} hedgewars.rc)
 endif(MINGW)
 
-set(hwfr_moc_hdrs
+set(	hwfr_moc_hdrs
 	game.h
 	hats.h
 	hwform.h
@@ -141,15 +141,15 @@ set(hwfr_moc_hdrs
 	)
 
 if(APPLE)
-find_package(Sparkle)
+	find_package(Sparkle)
 
-set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-if(SPARKLE_FOUND)
-set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
-endif()
+	set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
+	if(SPARKLE_FOUND)
+		set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
+	endif()
 endif()
 
-set(hwfr_hdrs
+set(	hwfr_hdrs
 	binds.h
 	ui_hwform.h
 	predefteams.h
@@ -159,30 +159,26 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
-qt4_add_resources(hwfr_rez_src
-	${hwfr_rez})
+qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 
-qt4_wrap_cpp(hwfr_moc_srcs
-	${hwfr_moc_hdrs})
+qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 add_executable(hedgewars WIN32
 	${hwfr_src}
 	${hwfr_moc_srcs}
 	${hwfr_hdrs}
-	${hwfr_rez_src})
+	${hwfr_rez_src}
+	)
 
 
 set(HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLMIXER_LIBRARY}
-)
+	)
 
 if(APPLE)
-	set(HW_LINK_LIBS
-		${HW_LINK_LIBS}
-		IOKit
-		)
+	set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
         if (SPARKLE_FOUND)
                 set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})
                 add_definitions(-DSPARKLE_ENABLED)
