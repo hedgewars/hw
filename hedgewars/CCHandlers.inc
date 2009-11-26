@@ -519,6 +519,7 @@ with CurrentHedgehog^.Gear^,
 				end;
 			SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
 			end;
+		{$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
 		State:= State and not gstHHChooseTarget;
 		if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_AttackingPut) <> 0 then
 			Message:= Message or gm_Attack;
