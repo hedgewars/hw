@@ -309,7 +309,7 @@ while (headcmd <> nil)
 		'p': begin
 			TargetPoint.X:= SDLNet_Read16(@(headcmd^.X));
 			TargetPoint.Y:= SDLNet_Read16(@(headcmd^.Y));
-			ParseCommand('put', true)
+			doPut(TargetPoint.X, TargetPoint.Y, true)
 			end;
 		'P': begin
 			// these are equations solved for CursorPoint
