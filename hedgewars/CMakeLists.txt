@@ -85,7 +85,7 @@ if (fpc_version)
 	if (fpc_ver LESS "020200")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
 	else()
-		if (APPLE AND build_64_universal AND fpc_ver LESS "020400")
+		if (APPLE AND build_x86_64 AND fpc_ver LESS "020400")
 			message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications")
 		endif()
 		set(pascal_compiler ${fpc_executable})
@@ -127,7 +127,15 @@ IF(NOT APPLE)
 		)
 ELSE()
 #these are the dependencies for building a universal binary on Mac OS X
-	set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
+	if(build_ppc)
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc" ${lipo_args_list})
+	endif()
+	if(build_i386)
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" ${lipo_args_list})
+	endif()
+	if(build_x86_64)
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64" ${lipo_args_list})
+	endif()
 
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
 		COMMAND "${pascal_compiler}" 
@@ -145,17 +153,13 @@ ELSE()
 		)
 	add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
 
-	IF(build_64_universal)
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64" ${lipo_args_list})
-	
-		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64"
-			COMMAND "${pascal_compiler}" 
-			ARGS ${pascal_compiler_flags} -ohwengine.x64 -Px86_64
-			MAIN_DEPENDENCY ${hwengine_project}
-			DEPENDS ${engine_sources}
-			)
-		add_custom_target(hwengine.x64 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64")
-	ENDIF()
+	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64"
+		COMMAND "${pascal_compiler}" 
+		ARGS ${pascal_compiler_flags} -ohwengine.x64 -Px86_64
+		MAIN_DEPENDENCY ${hwengine_project}
+		DEPENDS ${engine_sources}
+		)
+	add_custom_target(hwengine.x64 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64")
 
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
 		COMMAND "lipo"
