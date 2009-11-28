@@ -518,6 +518,11 @@ with CurrentHedgehog^.Gear^,
 				TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
 				end;
 			SendIPCXY('p', TargetPoint.X, TargetPoint.Y);
+			end
+		else
+			begin
+			TargetPoint.X:= putX;
+			TargetPoint.Y:= putY
 			end;
 		{$IFDEF DEBUGFILE}AddFilelog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));{$ENDIF}
 		State:= State and not gstHHChooseTarget;

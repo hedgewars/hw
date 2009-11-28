@@ -261,6 +261,7 @@ end;
 procedure NetGetNextCmd;
 var tmpflag: boolean;
 	s: shortstring;
+	x16, y16: SmallInt;
 begin
 tmpflag:= true;
 
@@ -307,16 +308,16 @@ while (headcmd <> nil)
 			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
 			end;
 		'p': begin
-			TargetPoint.X:= SDLNet_Read16(@(headcmd^.X));
-			TargetPoint.Y:= SDLNet_Read16(@(headcmd^.Y));
-			doPut(TargetPoint.X, TargetPoint.Y, true)
+			x16:= SDLNet_Read16(@(headcmd^.X));
+			y16:= SDLNet_Read16(@(headcmd^.Y));
+			doPut(x16, y16, false)
 			end;
 		'P': begin
 			// these are equations solved for CursorPoint
 			// SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
 			// SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
-			CursorPoint.X:= SDLNet_Read16(@(headcmd^.X)) + WorldDx;
-			CursorPoint.Y:= cScreenHeight - SDLNet_Read16(@(headcmd^.Y)) - WorldDy;
+			CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
+			CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy;
 			end;
 		'w': ParseCommand('setweap ' + headcmd^.str[2], true);
 		't': ParseCommand('taunt ' + headcmd^.str[2], true);
