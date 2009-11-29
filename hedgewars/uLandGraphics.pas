@@ -30,6 +30,7 @@ type PRangeArray = ^TRangeArray;
 function SweepDirty: boolean;
 function Despeckle(X, Y: LongInt): boolean;
 function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
+procedure Despeckle2(X, Y, Threesold: LongInt);
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
@@ -40,6 +41,44 @@ function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace
 
 implementation
 uses SDLh, uMisc, uLand, uLandTexture;
+
+procedure Despeckle2(X, Y, Threesold: LongInt);
+var
+	i, j: LongInt;
+	x0, x1, y0, y1: LongInt;        
+	c: byte;
+begin
+	// If the pixel has less than Threesold neightbours, it gets erased
+	// Erasing is outwards recursive
+	c := 0;
+
+	x0 := max(X-1, 0);
+	x1 := min(X+1, LAND_WIDTH - 1);
+	y0 := max(Y-1, 0);
+	y1 := min(Y+1, LAND_HEIGHT - 1);
+
+	for i:=x0 to x1 do begin
+		for j:=y0 to y1 do begin
+			if Land[j, i]<>0 then begin
+				c := c+1;
+			end;
+		end;
+	end;
+	
+	if c<Threesold then begin
+		Land[Y, X] := 0;
+		LandPixels[Y, X] := 0;
+		for i:=x0 to x1 do begin
+			for j:=y0 to y1 do begin
+				if Land[j, i]<>0 then begin
+					LandPixels[j, i] := cExplosionBorderColor;
+					Despeckle2(i, j, 5);
+				end;
+			end;
+		end;
+	end;
+    UpdateLandTexture(x0, x1-x0, y0, y1-y0);
+end;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
@@ -169,7 +208,7 @@ if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
        if Land[y + dy, i] = COLOR_LAND then
           begin
           LandPixels[y + dy, i]:= cExplosionBorderColor;
-//          Despeckle(y + dy, i);
+          Despeckle2(i, y + dy, 6);
           LandDirty[(y + dy) div 32, i div 32]:= 1;
           end;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
@@ -177,7 +216,7 @@ if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
        if Land[y - dy, i] = COLOR_LAND then
           begin
           LandPixels[y - dy, i]:= cExplosionBorderColor;
-//          Despeckle(y - dy, i);
+          Despeckle2(i, y - dy, 6);
           LandDirty[(y - dy) div 32, i div 32]:= 1;
           end;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
@@ -185,7 +224,7 @@ if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
        if Land[y + dx, i] = COLOR_LAND then
            begin
            LandPixels[y + dx, i]:= cExplosionBorderColor;
-//           Despeckle(y + dx, i);
+           Despeckle2(i, y + dx, 6);
            LandDirty[(y + dx) div 32, i div 32]:= 1;
            end;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
@@ -193,7 +232,7 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
        if Land[y - dx, i] = COLOR_LAND then
           begin
           LandPixels[y - dx, i]:= cExplosionBorderColor;
-//          Despeckle(y - dx, i);
+          Despeckle2(i, y - dy, 6);
           LandDirty[(y - dx) div 32, i div 32]:= 1;
           end;
 end;
