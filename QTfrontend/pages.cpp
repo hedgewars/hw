@@ -843,14 +843,6 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 //	roomsList->horizontalHeader()->resizeSection(5, 100);
 //	roomsList->horizontalHeader()->resizeSection(6, 100);
 
-   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
-   roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
-
 	// set resize modes
 //	roomsList->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
 
@@ -915,6 +907,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		roomsList->setItem(r, 6, item);
 
 	}
+   roomsList->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
+   roomsList->horizontalHeader()->setResizeMode(1, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(2, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(3, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(4, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(5, QHeaderView::ResizeToContents);
+   roomsList->horizontalHeader()->setResizeMode(6, QHeaderView::ResizeToContents);
+
 //	roomsList->resizeColumnsToContents();
 }
 
