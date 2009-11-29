@@ -16,6 +16,32 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
+procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
+var gi: PGear;
+     d: LongInt;
+begin
+	gi:= GearsList;
+	while gi <> nil do
+		begin
+		d:= r - hwRound(Distance(gi^.X - x, gi^.Y - y));
+		if (d > 1) and (gi^.Kind = gtHedgehog) and not gi^.Invulnerable and (GetRandom(2) = 0) then
+			begin
+			if (CurrentHedgehog^.Gear = gi) then
+				PlaySound(sndOops, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+			else
+				begin
+				if (gi^.State and gstMoving) = 0 then
+					gi^.State:= gi^.State or gstLoser;
+				if d > r div 2 then
+					PlaySound(sndNooo, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+				else
+					PlaySound(sndUhOh, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+				end;
+			end;
+		gi:= gi^.NextGear
+		end;
+end;
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear); forward;
 
 function CheckGearDrowning(Gear: PGear): boolean;
@@ -161,6 +187,13 @@ AllInactive:= false;
 doStepFallingGear(Gear);
 
 dec(Gear^.Timer);
+if Gear^.Timer = 1000 then // might need adjustments
+	case Gear^.Kind of
+		gtAmmo_Bomb: makeHogsWorry(Gear^.X, Gear^.Y, 50);
+		gtClusterBomb: makeHogsWorry(Gear^.X, Gear^.Y, 20);
+		gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
+		gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
+	end;
 if Gear^.Timer = 0 then
 	begin
 	case Gear^.Kind of
@@ -251,7 +284,6 @@ end;
 procedure doStepWatermelon(Gear: PGear);
 begin
 AllInactive:= false;
-PlaySound(sndMelon, false, nil);
 Gear^.doStep:= @doStepBomb
 end;
 
@@ -1157,6 +1189,8 @@ begin
 doStepFallingGear(Gear);
 AllInactive:= false;
 if Gear^.Timer mod 166 = 0 then inc(Gear^.Tag);
+if Gear^.Timer = 1000 then // might need better timing
+	makeHogsWorry(Gear^.X, Gear^.Y, 75);
 if Gear^.Timer = 0 then
 	begin
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 75, EXPLAutoSound);
@@ -1323,10 +1357,8 @@ if not TestCollisionYwithGear(Gear, 1) then
 	if (hwRound(Gear^.Y) > cWaterLine) then
 		begin
 		for i:= 0 to 3 do
-			begin
 			AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
-			PlaySound(sndVaporize, false, nil);
-			end;
+		PlaySound(sndVaporize, false, nil);
 		DeleteGear(Gear);
 		exit
 		end
@@ -1529,7 +1561,6 @@ if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then
 
 Gear^.Health:= 6;
 Gear^.doStep:= @doStepAirAttackWork;
-PlaySound(sndIncoming, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2422,6 +2453,7 @@ if  (Gear^.Health = 0)
 	end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
 procedure doStepJetpack(Gear: PGear);
 var HHGear: PGear;
 begin

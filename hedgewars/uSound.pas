@@ -32,6 +32,7 @@ procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
+procedure LoopSound(snd: TSound; voicepack: PVoicepack);
 procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
@@ -67,6 +68,7 @@ AskForVoicepack:= @voicepacks[i]
 end;
 
 procedure InitSound;
+var i: TSound;
 begin
 if not isSoundEnabled then exit;
 WriteToConsole('Init sound...');
@@ -77,6 +79,9 @@ if isSoundEnabled then WriteLnToConsole(msgOK)
                   else WriteLnToConsole(msgFailed);
 Mix_AllocateChannels(Succ(chanTPU));
 if isMusicEnabled then Mix_VolumeMusic(50);
+
+for i:= Low(TSound) to High(TSound) do
+	lastChan[i]:= -1;
 
 Volume:= 0;
 ChangeVolume(cInitVolume)
@@ -106,7 +111,7 @@ if not isSoundEnabled then exit;
 defVoicepack:= AskForVoicepack('Default');
 
 for i:= Low(TSound) to High(TSound) do
-	if Soundz[i].Path <> ptVoices then
+	if (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
 		begin
 		s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
 		WriteToConsole(msgLoading + s + ' ');
@@ -118,7 +123,7 @@ for i:= Low(TSound) to High(TSound) do
 for t:= 0 to cMaxTeams do
 	if voicepacks[t].name <> '' then
 		for i:= Low(TSound) to High(TSound) do
-			if Soundz[i].Path = ptVoices then
+			if (Soundz[i].Path = ptVoices) and (Soundz[i].FileName <> '') then
 				begin
 				s:= Pathz[Soundz[i].Path] + '/' + voicepacks[t].name + '/' + Soundz[i].FileName;
 				WriteToConsole(msgLoading + s + ' ');
@@ -142,11 +147,25 @@ else
 	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], loops, -1)
 end;
 
+procedure LoopSound(snd: TSound; voicepack: PVoicepack);
+begin
+if (not isSoundEnabled) or fastUntilLag then exit;
+if lastChan[snd] <> -1 then exit;
+
+if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+else
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1)
+end;
+
 procedure StopSound(snd: TSound);
 begin
 if not isSoundEnabled then exit;
-if Mix_Playing(lastChan[snd]) <> 0 then
-	Mix_HaltChannel(lastChan[snd])
+if (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
+	begin
+	Mix_HaltChannel(lastChan[snd]);
+	lastChan[snd]:= -1;
+	end;
 end;
 
 procedure PlayMusic;

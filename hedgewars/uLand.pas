@@ -38,10 +38,12 @@ var  Land: TCollisionArray;
      hasBorder: boolean; 
      hasGirders: boolean;  
      playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+	 LandBackSurface: PSDL_Surface = nil;
 
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
+function LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;
@@ -307,6 +309,18 @@ while Stack.Count > 0 do
       end;
 end;
 
+function LandBackPixel(x, y: LongInt): LongWord;
+var p: PLongWordArray;
+begin
+	if LandBackSurface = nil then
+		LandBackPixel:= 0
+	else
+		begin
+		p:= LandBackSurface^.pixels;
+		LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
+		end
+end;
+
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
@@ -325,6 +339,8 @@ while r.y < LAND_HEIGHT do
 	inc(r.y, tmpsurf^.h)
 	end;
 SDL_FreeSurface(tmpsurf);
+
+LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
 tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
 for x:= 0 to LAND_WIDTH - 1 do
@@ -835,4 +851,7 @@ end;
 
 initialization
 
+finalization
+if LandBackSurface <> nil then
+	SDL_FreeSurface(LandBackSurface);
 end.

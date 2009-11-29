@@ -1126,20 +1126,7 @@ else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
 
 	
 {$IFNDEF IPHONEOS}
-// since ATI seems to be unable to provide proper texture filtering/quality,
-// do not even try to load the extension on ATI cards
-
-{$IFDEF DARWIN}
-if true then
-{$ELSE}
-if cGPUVendor <> gvATI then
-{$ENDIF}
-	SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two')
-{$IFDEF DEBUGFILE}
-else
-	AddFileLog('OpenGL: Skipped extension GL_ARB_texture_non_power_of_two due to ATI card')
-{$ENDIF}
-; // do not touch this line! :)
+//SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 {$ENDIF}
 
 // set view port to whole window

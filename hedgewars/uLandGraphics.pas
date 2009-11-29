@@ -30,7 +30,6 @@ type PRangeArray = ^TRangeArray;
 function SweepDirty: boolean;
 function Despeckle(X, Y: LongInt): boolean;
 function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
-procedure Despeckle2(X, Y, Threesold: LongInt);
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
@@ -41,44 +40,6 @@ function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace
 
 implementation
 uses SDLh, uMisc, uLand, uLandTexture;
-
-procedure Despeckle2(X, Y, Threesold: LongInt);
-var
-	i, j: LongInt;
-	x0, x1, y0, y1: LongInt;        
-	c: byte;
-begin
-	// If the pixel has less than Threesold neightbours, it gets erased
-	// Erasing is outwards recursive
-	c := 0;
-
-	x0 := max(X-1, 0);
-	x1 := min(X+1, LAND_WIDTH - 1);
-	y0 := max(Y-1, 0);
-	y1 := min(Y+1, LAND_HEIGHT - 1);
-
-	for i:=x0 to x1 do begin
-		for j:=y0 to y1 do begin
-			if Land[j, i]<>0 then begin
-				c := c+1;
-			end;
-		end;
-	end;
-	
-	if c<Threesold then begin
-		Land[Y, X] := 0;
-		LandPixels[Y, X] := 0;
-		for i:=x0 to x1 do begin
-			for j:=y0 to y1 do begin
-				if Land[j, i]<>0 then begin
-					LandPixels[j, i] := cExplosionBorderColor;
-					Despeckle2(i, j, 5);
-				end;
-			end;
-		end;
-	end;
-    UpdateLandTexture(x0, x1-x0, y0, y1-y0);
-end;
 
 procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
 var i: LongInt;
@@ -184,20 +145,49 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if Land[y + dy, i] = COLOR_LAND then
+        if (Land[y + dy, i] <> COLOR_INDESTRUCTIBLE) then
             LandPixels[y + dy, i]:= 0;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if Land[y - dy, i] = COLOR_LAND then
+        if (Land[y - dy, i] <> COLOR_INDESTRUCTIBLE) then
              LandPixels[y - dy, i]:= 0;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if Land[y + dx, i] = COLOR_LAND then
+        if (Land[y + dx, i] <> COLOR_INDESTRUCTIBLE) then
             LandPixels[y + dx, i]:= 0;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if Land[y - dx, i] = COLOR_LAND then
+        if (Land[y - dx, i] <> COLOR_INDESTRUCTIBLE) then
              LandPixels[y - dx, i]:= 0;
+end;
+
+procedure FillLandCircleLinesBG(x, y, dx, dy: LongInt);
+var i: LongInt;
+begin
+if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+       if (Land[y + dy, i] = COLOR_LAND) then
+          LandPixels[y + dy, i]:= LandBackPixel(i, y + dy)
+       else
+          if (Land[y + dy, i] = COLOR_OBJECT) then LandPixels[y + dy, i]:= 0;
+if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
+       if (Land[y - dy, i] = COLOR_LAND) then
+          LandPixels[y - dy, i]:= LandBackPixel(i, y - dy)
+       else
+          if (Land[y - dy, i] = COLOR_OBJECT) then LandPixels[y - dy, i]:= 0;
+if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+       if (Land[y + dx, i] = COLOR_LAND) then
+           LandPixels[y + dx, i]:= LandBackPixel(i, y + dx)
+       else
+          if (Land[y + dx, i] = COLOR_OBJECT) then LandPixels[y + dx, i]:= 0;
+if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+   for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
+       if (Land[y - dx, i] = COLOR_LAND) then
+          LandPixels[y - dx, i]:= LandBackPixel(i, y - dx)
+       else
+          if (Land[y - dx, i] = COLOR_OBJECT) then LandPixels[y - dx, i]:= 0;
 end;
 
 procedure FillLandCircleLinesEBC(x, y, dx, dy: LongInt);
@@ -205,34 +195,34 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if Land[y + dy, i] = COLOR_LAND then
+       if (Land[y + dy, i] = COLOR_LAND) or (Land[y + dy, i] = COLOR_OBJECT) then
           begin
           LandPixels[y + dy, i]:= cExplosionBorderColor;
-          Despeckle2(i, y + dy, 6);
+          Despeckle(i, y + dy);
           LandDirty[(y + dy) div 32, i div 32]:= 1;
           end;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-       if Land[y - dy, i] = COLOR_LAND then
+       if (Land[y - dy, i] = COLOR_LAND) or (Land[y - dy, i] = COLOR_OBJECT) then
           begin
           LandPixels[y - dy, i]:= cExplosionBorderColor;
-          Despeckle2(i, y - dy, 6);
+          Despeckle(i, y - dy);
           LandDirty[(y - dy) div 32, i div 32]:= 1;
           end;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if Land[y + dx, i] = COLOR_LAND then
+       if (Land[y + dx, i] = COLOR_LAND) or (Land[y + dx, i] = COLOR_OBJECT) then
            begin
            LandPixels[y + dx, i]:= cExplosionBorderColor;
-           Despeckle2(i, y + dx, 6);
+           Despeckle(i, y + dx);
            LandDirty[(y + dx) div 32, i div 32]:= 1;
            end;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
    for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-       if Land[y - dx, i] = COLOR_LAND then
+       if (Land[y - dx, i] = COLOR_LAND) or (Land[y - dx, i] = COLOR_OBJECT) then
           begin
           LandPixels[y - dx, i]:= cExplosionBorderColor;
-          Despeckle2(i, y - dy, 6);
+          Despeckle(i, y - dy);
           LandDirty[(y - dx) div 32, i div 32]:= 1;
           end;
 end;
@@ -240,39 +230,70 @@ end;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 var dx, dy, ty, tx, d: LongInt;
 begin
-  dx:= 0;
-  dy:= Radius;
-  d:= 3 - 2 * Radius;
-  while (dx < dy) do
-     begin
-     FillLandCircleLines0(x, y, dx, dy);
-     if (d < 0)
-     then d:= d + 4 * dx + 6
-     else begin
-          d:= d + 4 * (dx - dy) + 10;
-          dec(dy)
-          end;
-     inc(dx)
-     end;
-  if (dx = dy) then FillLandCircleLines0(x, y, dx, dy);
+
+// draw background land texture
+	begin
+	dx:= 0;
+	dy:= Radius;
+	d:= 3 - 2 * Radius;
+
+	while (dx < dy) do
+		begin
+		FillLandCircleLinesBG(x, y, dx, dy);
+		if (d < 0)
+		then d:= d + 4 * dx + 6
+		else begin
+			d:= d + 4 * (dx - dy) + 10;
+			dec(dy)
+			end;
+		inc(dx)
+		end;
+	if (dx = dy) then FillLandCircleLinesBG(x, y, dx, dy);
+	end;
+
+// draw a hole in land
+if Radius > 25 then
+	begin
+	dx:= 0;
+	dy:= Radius - 25;
+	d:= 3 - 2 * dy;
+
+	while (dx < dy) do
+		begin
+		FillLandCircleLines0(x, y, dx, dy);
+		if (d < 0)
+		then d:= d + 4 * dx + 6
+		else begin
+			d:= d + 4 * (dx - dy) + 10;
+			dec(dy)
+			end;
+		inc(dx)
+		end;
+	if (dx = dy) then FillLandCircleLines0(x, y, dx, dy);
+	end;
+
   // FillRoundInLand after erasing land pixels to allow Land 0 check for mask.png to function
-  FillRoundInLand(X, Y, Radius, 0);
-  inc(Radius, 4);
-  dx:= 0;
-  dy:= Radius;
-  d:= 3 - 2 * Radius;
-  while (dx < dy) do
-     begin
-     FillLandCircleLinesEBC(x, y, dx, dy);
-     if (d < 0)
-     then d:= d + 4 * dx + 6
-     else begin
-          d:= d + 4 * (dx - dy) + 10;
-          dec(dy)
-          end;
-     inc(dx)
-     end;
-  if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
+	FillRoundInLand(X, Y, Radius, 0);
+
+// draw explosion border
+	begin
+	inc(Radius, 4);
+	dx:= 0;
+	dy:= Radius;
+	d:= 3 - 2 * Radius;
+	while (dx < dy) do
+		begin
+		FillLandCircleLinesEBC(x, y, dx, dy);
+		if (d < 0)
+		then d:= d + 4 * dx + 6
+		else begin
+			d:= d + 4 * (dx - dy) + 10;
+			dec(dy)
+			end;
+		inc(dx)
+		end;
+	if (dx = dy) then FillLandCircleLinesEBC(x, y, dx, dy);
+	end;
 
 tx:= max(X - Radius - 1, 0);
 dx:= min(X + Radius + 1, LAND_WIDTH) - tx;
@@ -285,13 +306,15 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 var tx, ty, i: LongInt;
 begin
 for i:= 0 to Pred(Count) do
-    begin
-    for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
-        for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if Land[ty, tx] = COLOR_LAND then
-                LandPixels[ty, tx]:= 0;
-    inc(y, dY)
-    end;
+	begin
+	for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
+		for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
+			if Land[ty, tx] = COLOR_LAND then
+				LandPixels[ty, tx]:= LandBackPixel(tx, ty)
+			else if Land[ty, tx] = COLOR_OBJECT then
+				LandPixels[ty, tx]:= 0;
+	inc(y, dY)
+	end;
 
 inc(Radius, 4);
 dec(y, Count * dY);
@@ -300,10 +323,10 @@ for i:= 0 to Pred(Count) do
     begin
     for ty:= max(y - Radius, 0) to min(y + Radius, LAND_HEIGHT) do
         for tx:= max(0, ar^[i].Left - Radius) to min(LAND_WIDTH, ar^[i].Right + Radius) do
-            if Land[ty, tx] = COLOR_LAND then
+            if (Land[ty, tx] = COLOR_LAND) or (Land[ty, tx] = COLOR_OBJECT) then
                 begin
                 LandPixels[ty, tx]:= cExplosionBorderColor;
-                LandDirty[trunc((y + dy)/32), trunc(i/32)]:= 1;
+                LandDirty[(y + dy) shr 5, i shr 5]:= 1;
                 end;
     inc(y, dY)
     end;
@@ -352,11 +375,13 @@ for i:= -HalfWidth to HalfWidth do
         tx:= hwRound(X);
         ty:= hwRound(Y);
         if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) then
-         if Land[ty, tx] = COLOR_LAND then
-           begin
-           Land[ty, tx]:= 0;
-           LandPixels[ty, tx]:= 0;
-           end
+            begin
+            if Land[ty, tx] = COLOR_LAND then
+                LandPixels[ty, tx]:= LandBackPixel(tx, ty)
+            else if Land[ty, tx] = COLOR_OBJECT then
+                LandPixels[ty, tx]:= 0;
+            Land[ty, tx]:= 0;
+            end
         end;
     for t:= 0 to 7 do
         {$INCLUDE "tunsetborder.inc"}
@@ -438,7 +463,7 @@ case bpp of
             for x:= 0 to Pred(w) do
                 if PLongword(@(p^[x * 4]))^ <> 0 then
                    begin
-                   Land[cpY + y, cpX + x]:= COLOR_LAND;
+                   Land[cpY + y, cpX + x]:= COLOR_OBJECT;
                    LandPixels[cpY + y, cpX + x]:= PLongword(@(p^[x * 4]))^
                    end;
             p:= @(p^[Image^.pitch]);
@@ -474,7 +499,7 @@ if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y,
 
 	if c < 4 then // 0-3 neighbours
 		begin
-		LandPixels[Y, X]:= 0;
+        LandPixels[Y, X]:= ToggleLongInt(Land[Y, X] = COLOR_LAND, LandBackPixel(X, Y), 0);
 		Land[Y, X]:= 0;
 		exit(true);
 		end;

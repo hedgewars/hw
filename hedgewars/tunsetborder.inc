@@ -16,12 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-        begin
-        X:= X + dX;
-        Y:= Y + dY;
-        tx:= hwRound(X);
-        ty:= hwRound(Y);
-        if ((ty and LAND_HEIGHT_MASK) = 0) and
-           ((tx and LAND_WIDTH_MASK) = 0) and
-           (Land[ty, tx] = COLOR_LAND) then LandPixels[ty, tx]:= cExplosionBorderColor
-	end;
+begin
+X:= X + dX;
+Y:= Y + dY;
+tx:= hwRound(X);
+ty:= hwRound(Y);
+if ((ty and LAND_HEIGHT_MASK) = 0) and
+    ((tx and LAND_WIDTH_MASK) = 0) and
+    ((Land[ty, tx] = COLOR_LAND) or (Land[ty, tx] = COLOR_OBJECT)) then LandPixels[ty, tx]:= cExplosionBorderColor
+end;

@@ -174,6 +174,9 @@ function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
 
+function ToggleLongInt(t: Boolean; a, b: LongInt): LongInt;
+function ToggleString(t: Boolean; a, b: string): string;
+
 function modifyDamage(dmg: Longword): Longword;
 
 var CursorPoint: TPoint;
@@ -559,6 +562,24 @@ begin
 	else doSurfaceConversion:= tmpsurf;
 end;
 
+
+{$inline on}
+function ToggleLongInt(t: Boolean; a, b: LongInt): LongInt;
+begin
+    if t then
+	    ToggleLongInt:= a
+    else
+        ToggleLongInt:= b;
+end;
+
+function ToggleString(t: Boolean; a, b: string): string;
+begin
+    if t then
+	    ToggleString:= a
+    else
+        ToggleString:= b;
+end;
+{$inline off}
 
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06

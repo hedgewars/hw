@@ -91,7 +91,7 @@ for y:= 0 to Pred(Image^.h) do
 		if LandPixels[cpY + y, cpX + x] = 0 then
 			begin
 			LandPixels[cpY + y, cpX + x]:= p^[x];
-			if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_LAND;
+			if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_OBJECT;
 			end;
 	p:= @(p^[Image^.pitch shr 2]);
 	end;
