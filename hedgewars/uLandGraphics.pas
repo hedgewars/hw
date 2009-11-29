@@ -499,7 +499,7 @@ if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y,
 
 	if c < 4 then // 0-3 neighbours
 		begin
-        LandPixels[Y, X]:= ToggleLongInt(Land[Y, X] = COLOR_LAND, LandBackPixel(X, Y), 0);
+        if Land[Y, X] = COLOR_LAND then LandPixels[Y, X]:= LandBackPixel(X, Y) else LandPixels[Y, X]:= 0;
 		Land[Y, X]:= 0;
 		exit(true);
 		end;
