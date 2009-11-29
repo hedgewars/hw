@@ -861,7 +861,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 	for(int i = 0, r = 0; i < list.size(); i += 8, r++)
 	{
 		QTableWidgetItem * item;
-		item = new QTableWidgetItem(list[i + 1]); // room name
+		item = new QTableWidgetItem(list[i + 1].left(30)); // room name
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		
 		// pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
@@ -890,7 +890,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		item->setToolTip(tr("There are %1 teams participating in this room.", "", list[i + 3].toInt()).arg(list[i + 3]));
 		roomsList->setItem(r, 2, item);
 
-		item = new QTableWidgetItem(list[i + 4]); // name of host
+		item = new QTableWidgetItem(list[i + 4].left(15)); // name of host
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		item->setToolTip(tr("%1 is the host. He may adjust settings and start the game.").arg(list[i + 4]));
 		roomsList->setItem(r, 3, item);
@@ -904,12 +904,12 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		item->setToolTip(tr("Games may be played on precreated or randomized maps."));
 		roomsList->setItem(r, 4, item);
 
-		item = new QTableWidgetItem(list[i + 6]); // selected game scheme
+		item = new QTableWidgetItem(list[i + 6].left(20)); // selected game scheme
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		item->setToolTip(tr("The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism."));
 		roomsList->setItem(r, 5, item);
 
-		item = new QTableWidgetItem(list[i + 7]); // selected weapon scheme
+		item = new QTableWidgetItem(list[i + 7].left(20)); // selected weapon scheme
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		item->setToolTip(tr("The Weapon Scheme defines available weapons and their ammunition count."));
 		roomsList->setItem(r, 6, item);
