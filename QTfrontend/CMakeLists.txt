@@ -31,13 +31,13 @@ endif(UNIX)
 if(WIN32 AND NOT UNIX)
 	set(HEDGEWARS_BINDIR ".")
 	set(HEDGEWARS_DATADIR "../share/")
-else(WIN32 AND NOT UNIX)
+else()
 	set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
 	if(DEFINED DATA_INSTALL_DIR)
 		set(HEDGEWARS_DATADIR ${DATA_INSTALL_DIR})
-	else(DEFINED DATA_INSTALL_DIR)
+	else()
 		set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
-	endif(DEFINED DATA_INSTALL_DIR)
+	endif()
 endif(WIN32 AND NOT UNIX)
 
 
@@ -140,28 +140,33 @@ set(	hwfr_moc_hdrs
 	bgwidget.h
 	)
 
-if(APPLE)
-	find_package(Sparkle)
-
-	set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-	if(SPARKLE_FOUND)
-		set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
-	endif()
-endif()
-
 set(	hwfr_hdrs
 	binds.h
 	ui_hwform.h
 	predefteams.h
 	KB.h
 	hwconsts.h
-)
+	)
 
 set(hwfr_rez hedgewars.qrc)
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
+
+
+if(APPLE)
+	set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
+	set(HW_LINK_LIBS IOKit)
+
+	find_package(Sparkle)
+	if(SPARKLE_FOUND)
+                add_definitions(-DSPARKLE_ENABLED)
+		set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
+                set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
+	endif()
+endif()
+
 
 add_executable(hedgewars WIN32
 	${hwfr_src}
@@ -171,27 +176,19 @@ add_executable(hedgewars WIN32
 	)
 
 
-set(HW_LINK_LIBS 
+set(	HW_LINK_LIBS 
 	${QT_LIBRARIES}
 	${SDL_LIBRARY}
 	${SDLMIXER_LIBRARY}
+	${HW_LINK_LIBS}
 	)
-
-if(APPLE)
-	set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
-        if (SPARKLE_FOUND)
-                set(HW_LINK_LIBS ${HW_LINK_LIBS} ${SPARKLE_LIBRARY})
-                add_definitions(-DSPARKLE_ENABLED)
-        endif()
-endif()
-
 
 if(WIN32 AND NOT UNIX)
 	if(NOT SDL_LIBRARY)
 		set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
 	endif(NOT SDL_LIBRARY)
 
-	set(HW_LINK_LIBS 
+	set(	HW_LINK_LIBS 
 		${HW_LINK_LIBS}
 		ole32
 		oleaut32

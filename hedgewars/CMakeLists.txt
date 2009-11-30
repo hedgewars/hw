@@ -73,6 +73,16 @@ if (${testnoexecstack})
 endif (${testnoexecstack})
 
 
+if(APPLE)
+	string(REGEX MATCH "[pP][pP][cC]+" powerpc_build "${CMAKE_OSX_ARCHITECTURES}")
+	string(REGEX MATCH "[iI]386+" i386_build "${CMAKE_OSX_ARCHITECTURES}")
+	string(REGEX MATCH "[xX]86_64+" x86_64_build "${CMAKE_OSX_ARCHITECTURES}")
+
+	if(powerpc_build)
+		set(powerpc_build "powerpc")
+	endif()
+endif(APPLE)
+
 #PASCAL DETECTION SECTION
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 
@@ -82,26 +92,18 @@ if (fpc_version)
 	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
 	message(STATUS "Freepascal version detected: ${fpc_vers_major}.${fpc_vers_minor}.${fpc_vers_patch}")
 	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
+
 	if (fpc_ver LESS "020200")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-	else()
-		if (APPLE AND build_x86_64 AND fpc_ver LESS "020400")
-			message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications")
-		endif()
-		set(pascal_compiler ${fpc_executable})
+	elseif (APPLE AND i386_build AND fpc_ver LESS "020400")
+		message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications!")
 	endif ()
-endif (fpc_version)
-
-if (NOT pascal_compiler)
+else()
 	message(FATAL_ERROR "No Pascal compiler found!")
-endif (NOT pascal_compiler)
+endif ()
 
-
+set(pascal_compiler ${fpc_executable})
 set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
-
-if(LOWRES)
-	set(pascal_compiler_flags "-dLOWRES" ${pascal_compiler_flags} ${hwengine_project})
-endif(LOWRES)
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
@@ -114,7 +116,6 @@ IF(APPLE)
 	link_libraries(${SDL_LIBRARY})
 
 	add_library (SDLmain STATIC SDLMain.m)
-	set(engine_sources SDLmain ${engine_sources})
 ENDIF(APPLE)
 
 IF(NOT APPLE)
@@ -127,39 +128,16 @@ IF(NOT APPLE)
 		)
 ELSE()
 #these are the dependencies for building a universal binary on Mac OS X
-	if(build_ppc)
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc" ${lipo_args_list})
-	endif()
-	if(build_i386)
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.386" ${lipo_args_list})
-	endif()
-	if(build_x86_64)
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64" ${lipo_args_list})
-	endif()
-
-	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.386"
-		COMMAND "${pascal_compiler}" 
-		ARGS ${pascal_compiler_flags} -ohwengine.386 -Pi386
-		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
-		)
-	add_custom_target(hwengine.386 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.386")
-
-	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc"
-		COMMAND "${pascal_compiler}"
-		ARGS ${pascal_compiler_flags} -ohwengine.ppc -Ppowerpc
-		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
-		)
-	add_custom_target(hwengine.ppc ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.ppc")
-
-	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64"
-		COMMAND "${pascal_compiler}" 
-		ARGS ${pascal_compiler_flags} -ohwengine.x64 -Px86_64
-		MAIN_DEPENDENCY ${hwengine_project}
-		DEPENDS ${engine_sources}
-		)
-	add_custom_target(hwengine.x64 ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.x64")
+	foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
+		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
+			COMMAND "${pascal_compiler}"
+			ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
+			MAIN_DEPENDENCY ${hwengine_project}
+			DEPENDS ${engine_sources}
+			)
+		add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
+	endforeach()
 
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine"
 		COMMAND "lipo"
