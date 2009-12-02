@@ -724,7 +724,7 @@ const
 			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
 			(FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
 			(FileName:              'molotov.ogg'; Path: ptSounds),// sndMolotov
-			(FileName:              'walking.ogg'; Path: ptSounds),// sndWalking
+			(FileName:              ''; Path: ptSounds),// sndWalking
 			(FileName:            'Takecover.ogg'; Path: ptVoices),// sndCover
 			(FileName:                'Uh-oh.ogg'; Path: ptVoices),// sndUhOh
 			(FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
