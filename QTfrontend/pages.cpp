@@ -853,7 +853,7 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 	for(int i = 0, r = 0; i < list.size(); i += 8, r++)
 	{
 		QTableWidgetItem * item;
-		item = new QTableWidgetItem(list[i + 1].left(30)); // room name
+		item = new QTableWidgetItem(list[i + 1]); // room name
 		item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 		
 		// pick appropriate room icon and tooltip (game in progress yes/no; later maybe locked rooms etc.)
