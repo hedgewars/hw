@@ -1606,111 +1606,111 @@ hedgehogs</translation>
     <name>teams</name>
     <message>
         <source>Hedgehogs</source>
-        <translation>Hedgehogs</translation>
+        <translation type="obsolete">Hedgehogs</translation>
     </message>
     <message>
         <source>hedgehog 1</source>
-        <translation>hedgehog 1</translation>
+        <translation type="obsolete">hedgehog 1</translation>
     </message>
     <message>
         <source>hedgehog 2</source>
-        <translation>hedgehog 2</translation>
+        <translation type="obsolete">hedgehog 2</translation>
     </message>
     <message>
         <source>hedgehog 3</source>
-        <translation>hedgehog 3</translation>
+        <translation type="obsolete">hedgehog 3</translation>
     </message>
     <message>
         <source>hedgehog 4</source>
-        <translation>hedgehog 4</translation>
+        <translation type="obsolete">hedgehog 4</translation>
     </message>
     <message>
         <source>hedgehog 5</source>
-        <translation>hedgehog 5</translation>
+        <translation type="obsolete">hedgehog 5</translation>
     </message>
     <message>
         <source>hedgehog 6</source>
-        <translation>hedgehog 6</translation>
+        <translation type="obsolete">hedgehog 6</translation>
     </message>
     <message>
         <source>hedgehog 7</source>
-        <translation>hedgehog 7</translation>
+        <translation type="obsolete">hedgehog 7</translation>
     </message>
     <message>
         <source>hedgehog 8</source>
-        <translation>hedgehog 8</translation>
+        <translation type="obsolete">hedgehog 8</translation>
     </message>
     <message>
         <source>Goddess</source>
-        <translation>Dea</translation>
+        <translation type="obsolete">Dea</translation>
     </message>
     <message>
         <source>Isis</source>
-        <translation>Iside</translation>
+        <translation type="obsolete">Iside</translation>
     </message>
     <message>
         <source>Astarte</source>
-        <translation>Astarte</translation>
+        <translation type="obsolete">Astarte</translation>
     </message>
     <message>
         <source>Diana</source>
-        <translation>Diana</translation>
+        <translation type="obsolete">Diana</translation>
     </message>
     <message>
         <source>Aphrodite</source>
-        <translation>Afrodite</translation>
+        <translation type="obsolete">Afrodite</translation>
     </message>
     <message>
         <source>Hecate</source>
-        <translation>Ecate</translation>
+        <translation type="obsolete">Ecate</translation>
     </message>
     <message>
         <source>Demeter</source>
-        <translation>Demetra</translation>
+        <translation type="obsolete">Demetra</translation>
     </message>
     <message>
         <source>Kali</source>
-        <translation>Kali</translation>
+        <translation type="obsolete">Kali</translation>
     </message>
     <message>
         <source>Inanna</source>
-        <translation>Inanna</translation>
+        <translation type="obsolete">Inanna</translation>
     </message>
     <message>
         <source>Fruits</source>
-        <translation>Frutta</translation>
+        <translation type="obsolete">Frutta</translation>
     </message>
     <message>
         <source>Banana</source>
-        <translation>Banana</translation>
+        <translation type="obsolete">Banana</translation>
     </message>
     <message>
         <source>Apple</source>
-        <translation>Mela</translation>
+        <translation type="obsolete">Mela</translation>
     </message>
     <message>
         <source>Orange</source>
-        <translation>Arancia</translation>
+        <translation type="obsolete">Arancia</translation>
     </message>
     <message>
         <source>Lemon</source>
-        <translation>Limone</translation>
+        <translation type="obsolete">Limone</translation>
     </message>
     <message>
         <source>Pineapple</source>
-        <translation>Ananas</translation>
+        <translation type="obsolete">Ananas</translation>
     </message>
     <message>
         <source>Mango</source>
-        <translation>Mango</translation>
+        <translation type="obsolete">Mango</translation>
     </message>
     <message>
         <source>Peach</source>
-        <translation>Pesca</translation>
+        <translation type="obsolete">Pesca</translation>
     </message>
     <message>
         <source>Plum</source>
-        <translation>Prugna</translation>
+        <translation type="obsolete">Prugna</translation>
     </message>
 </context>
 </TS>
