@@ -22,7 +22,7 @@
 #include <QtGlobal>
 
 #define PREDEFTEAMS_COUNT 3
-/*
+
 struct PredefinedTeam
 {
 	const char * TeamName;
@@ -110,5 +110,5 @@ const PredefinedTeam pteams[PREDEFTEAMS_COUNT] =
 		"coffin", "Barrelhouse"
 	}
 };
-*/
+
 #endif // PREDEFTEAMS_H

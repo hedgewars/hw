@@ -18,6 +18,7 @@
         <source>Every %1 turn</source>
         <translation>
             <numerusform>Chaque tour</numerusform>
+            <numerusform>Tous les %1 tours</numerusform>
         </translation>
     </message>
 </context>
@@ -243,12 +244,14 @@ ou choisir un nouveau pseudo:</translation>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Le meilleur tueur est &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; mort en un tour.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Le meilleur tueur est &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; morts en un tour.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; hérisson a été tué pendant cette partie.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; hérissons ont été tués pendant cette partie.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -431,12 +434,14 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>There are %1 clients connected to this room.</source>
         <translation>
             <numerusform>Il y a %1 client connecté à cette salle.</numerusform>
+            <numerusform>Il y a %1 clients connectés à cette salle.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation>
             <numerusform>Il y a %1 équipe participant dans cette salle.</numerusform>
+            <numerusform>Il y a %1 équipes participant dans cette salle.</numerusform>
         </translation>
     </message>
     <message>
@@ -1598,47 +1603,111 @@ zoom</translation>
     <name>teams</name>
     <message>
         <source>Hedgehogs</source>
-        <translation type="obsolete">Hérissons</translation>
+        <translation>Hérissons</translation>
     </message>
     <message>
         <source>hedgehog 1</source>
-        <translation type="obsolete">hérisson 1</translation>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation>hérisson 1</translation>
     </message>
     <message>
         <source>Goddess</source>
-        <translation type="obsolete">Déesse</translation>
+        <translation>Déesse</translation>
     </message>
     <message>
         <source>Isis</source>
-        <translation type="obsolete">Isis</translation>
+        <translation>Isis</translation>
     </message>
     <message>
         <source>Astarte</source>
-        <translation type="obsolete">Astarté</translation>
+        <translation>Astarté</translation>
     </message>
     <message>
         <source>Diana</source>
-        <translation type="obsolete">Diane</translation>
+        <translation>Diane</translation>
     </message>
     <message>
         <source>Aphrodite</source>
-        <translation type="obsolete">Aphrodite</translation>
+        <translation>Aphrodite</translation>
     </message>
     <message>
         <source>Hecate</source>
-        <translation type="obsolete">Hécate</translation>
+        <translation>Hécate</translation>
     </message>
     <message>
         <source>Demeter</source>
-        <translation type="obsolete">Déméter</translation>
+        <translation>Déméter</translation>
     </message>
     <message>
         <source>Kali</source>
-        <translation type="obsolete">Kâlî</translation>
+        <translation>Kâlî</translation>
     </message>
     <message>
         <source>Inanna</source>
-        <translation type="obsolete">Inanna</translation>
+        <translation>Inanna</translation>
+    </message>
+    <message>
+        <source>Fruits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Banana</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pineapple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mango</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Peach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plum</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

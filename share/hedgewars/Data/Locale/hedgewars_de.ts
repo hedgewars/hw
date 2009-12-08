@@ -1594,4 +1594,115 @@ Statistik</translation>
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>teams</name>
+    <message>
+        <source>Hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>hedgehog 8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Goddess</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Isis</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Astarte</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Diana</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Aphrodite</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hecate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demeter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kali</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inanna</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fruits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Banana</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Orange</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pineapple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mango</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Peach</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plum</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
