@@ -18,7 +18,7 @@
         <source>Every %1 turn</source>
         <translation>
             <numerusform>Chaque tour</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Tous les %1 tours</numerusform>
         </translation>
     </message>
 </context>
@@ -244,14 +244,14 @@ ou choisir un nouveau pseudo:</translation>
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Le meilleur tueur est &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; mort en un tour.&lt;/p&gt;</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Le meilleur tueur est &lt;b&gt;%1&lt;/b&gt; avec &lt;b&gt;%2&lt;/b&gt; morts en un tour.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; hérisson a été tué pendant cette partie.&lt;/p&gt;</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Un total de &lt;b&gt;%1&lt;/b&gt; hérissons ont été tués pendant cette partie.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -434,14 +434,14 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>There are %1 clients connected to this room.</source>
         <translation>
             <numerusform>Il y a %1 client connecté à cette salle.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Il y a %1 clients connectés à cette salle.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation>
             <numerusform>Il y a %1 équipe participant dans cette salle.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>Il y a %1 équipes participant dans cette salle.</numerusform>
         </translation>
     </message>
     <message>
