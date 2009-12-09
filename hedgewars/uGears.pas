@@ -1955,14 +1955,18 @@ end;
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
-	function CountNonZeroz(x, y, r: LongInt): LongInt;
+	function CountNonZeroz(x, y, r, c: LongInt): LongInt;
 	var i: LongInt;
 		Result: LongInt;
 	begin
 	Result:= 0;
 	if (y and LAND_HEIGHT_MASK) = 0 then
 		for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
-			if Land[y, i] <> 0 then inc(Result);
+			if Land[y, i] <> 0 then
+               begin
+               inc(Result);
+               if Result = c then exit(Result)
+               end;
 	CountNonZeroz:= Result
 	end;
 
@@ -1988,13 +1992,13 @@ repeat
 			begin
 			repeat
 				inc(y, 2);
-			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) = 0);
+			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) = 0);
 
 			sy:= y;
 
 			repeat
 				inc(y);
-			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1) <> 0);
+			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
 
 			if (y - sy > Gear^.Radius * 2)
 				and (y < LAND_HEIGHT)
