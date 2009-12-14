@@ -100,10 +100,12 @@ processAction (clID, serverInfo, clients, rooms) (AnswerLobby msg) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (AnswerSameClan msg) = do
-	mapM_ (\cl -> writeChan (sendChan cl) msg) sameClanClients
+	mapM_ (\cl -> writeChan (sendChan cl) msg) sameClanOrSpec
 	return (clID, serverInfo, clients, rooms)
 	where
 		otherRoomClients = Prelude.map ((!) clients) $ IntSet.elems $ clID `IntSet.delete` (playersIDs room)
+		sameClanOrSpec = if teamsInGame client > 0 then sameClanClients else spectators
+		spectators = Prelude.filter (\cl -> teamsInGame cl == 0) otherRoomClients
 		sameClanClients = Prelude.filter (\cl -> teamsInGame cl > 0 && clientClan cl == thisClan) otherRoomClients
 		thisClan = clientClan client
 		room = rooms ! rID
