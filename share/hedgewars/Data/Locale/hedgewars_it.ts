@@ -16,9 +16,9 @@
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Ogni turno</numerusform>
+            <numerusform>Ogni %1 turni</numerusform>
         </translation>
     </message>
 </context>
@@ -157,7 +157,7 @@
     </message>
     <message>
         <source>Room destroyed</source>
-        <translation>Room distrutta</translation>
+        <translation>Stanza distrutta</translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -242,16 +242,16 @@ o scegli un altro nickname:</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisione in un turno.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Il miglior killer è &lt;b&gt;%1&lt;/b&gt; con &lt;b&gt;%2&lt;/b&gt; uccisioni in un turno.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Durante questo round è stato ucciso &lt;b&gt;%1&lt;/b&gt; hedgehog in totale.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Un totale di &lt;b&gt;%1&lt;/b&gt; hedgehogs sono stati uccisi durante questo round.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -424,7 +424,7 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation>Lo Schema di Gioco definisce le opzioni generali e le prefernze come Tempo di Round, Sudden Death o Vampirismo.</translation>
+        <translation>Lo Schema di Gioco definisce le opzioni generali e le preferenze come Tempo di Round, Sudden Death o Vampirismo.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
@@ -432,25 +432,25 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>E&apos; presente %1 utente connesso a questa stanza.</numerusform>
+            <numerusform>Sono presenti %1 utenti connessi a questa stanza.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>E&apos; presente %1 squadra partecipante in questa stanza.</numerusform>
+            <numerusform>Sono presenti %1 squadre partecipanti in questa stanza.</numerusform>
         </translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation>Inserisci il nome della room</translation>
+        <translation>Inserisci il nome della stanza</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation>Seleziona la room dalla lista</translation>
+        <translation>Seleziona la stanza dalla lista</translation>
     </message>
 </context>
 <context>
@@ -1551,27 +1551,27 @@ hedgehogs</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva sinistra</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva destra</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva sinistra (Destra)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva sinistra (Sinistra)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva sinistra (Giu)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Leva sinistra (Su)</translation>
     </message>
     <message>
         <source>Left trigger</source>
@@ -1599,7 +1599,7 @@ hedgehogs</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation>DPad</translation>
     </message>
 </context>
 <context>
