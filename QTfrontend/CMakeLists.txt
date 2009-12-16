@@ -38,7 +38,7 @@ else()
 	else()
 		set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
 	endif()
-endif(WIN32 AND NOT UNIX)
+endif()
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
@@ -186,7 +186,7 @@ set(	HW_LINK_LIBS
 if(WIN32 AND NOT UNIX)
 	if(NOT SDL_LIBRARY)
 		set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
-	endif(NOT SDL_LIBRARY)
+	endif()
 
 	set(	HW_LINK_LIBS 
 		${HW_LINK_LIBS}
@@ -195,7 +195,7 @@ if(WIN32 AND NOT UNIX)
 		winspool
 		uuid
 		)
-endif(WIN32 AND NOT UNIX)
+endif()
 
 
 target_link_libraries(hedgewars	${HW_LINK_LIBS})

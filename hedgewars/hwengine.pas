@@ -414,8 +414,8 @@ case ParamCount of
      end;
 {$IFDEF IPHONEOS}
   0: begin
-        PathPrefix:= 'hedgewars/Data';
-        recordFileName:= 'hedgewars/save.hws';
+        PathPrefix:= 'Data';
+        recordFileName:= 'save.hws';
         val('320', cScreenWidth);
         val('480', cScreenHeight);
         cInitWidth:= cScreenWidth;

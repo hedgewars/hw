@@ -21,7 +21,6 @@
 unit SDLh;
 interface
 
-
 {$IFDEF LINUX}
   {$DEFINE UNIX}
 {$ENDIF}
@@ -52,7 +51,6 @@ interface
     {$linkframework SDL_ttf}
     {$linkframework SDL_mixer}
     {$linklib SDLmain}
-    {$linklib gcc}
   {$ENDIF}
 {$ENDIF}
 
@@ -66,19 +64,19 @@ const
 	SDL_ImageLibName = 'SDL_image.dll';
 	SDL_NetLibName = 'SDL_net.dll';
 {$ELSE}
-	{$IFDEF DARWIN}
-		SDLLibName = 'SDL';
-		SDL_TTFLibName = 'SDL_ttf';
-		SDL_MixerLibName = 'SDL_mixer';
-		SDL_ImageLibName = 'SDL_image';
-		SDL_NetLibName = 'SDL_net';
-        {$ELSE}
-		SDLLibName = 'libSDL.so';
-		SDL_TTFLibName = 'libSDL_ttf.so';
-		SDL_MixerLibName = 'libSDL_mixer.so';
-		SDL_ImageLibName = 'libSDL_image.so';
-		SDL_NetLibName = 'libSDL_net.so';
-        {$ENDIF}
+  {$IFDEF DARWIN}
+	SDLLibName = 'SDL';
+	SDL_TTFLibName = 'SDL_ttf';
+	SDL_MixerLibName = 'SDL_mixer';
+	SDL_ImageLibName = 'SDL_image';
+	SDL_NetLibName = 'SDL_net';
+  {$ELSE}
+	SDLLibName = 'libSDL.so';
+	SDL_TTFLibName = 'libSDL_ttf.so';
+	SDL_MixerLibName = 'libSDL_mixer.so';
+	SDL_ImageLibName = 'libSDL_image.so';
+	SDL_NetLibName = 'libSDL_net.so';
+  {$ENDIF}
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////
@@ -106,7 +104,7 @@ const
 	SDL_BUTTON_WHEELDUP  = 4;
 	SDL_BUTTON_WHEELDOWN = 5;
 		
-{*begin sdl_event binding*}
+{*begin SDL_Event binding*}
 	SDL_NOEVENT = 0;
 	SDL_KEYDOWN = 2;
 	SDL_KEYUP = 3;
@@ -137,7 +135,7 @@ const
 	SDL_QUITEV = 12;
 	SDL_VIDEORESIZE = 16; // TODO: outdated? no longer in SDL 1.3?
 {$ENDIF}
-{*end sdl_event binding*}
+{*end SDL_Event binding*}
 		
 {$IFDEF SDL13}
 	SDL_ASYNCBLIT   = $08000000;
@@ -313,38 +311,40 @@ type
 		end;
 
 
-{* SDL_event type definition *}
+{* SDL_Event type definition *}
 
 {$IFDEF SDL13}
 	TSDL_WindowID = LongInt;
 
 	TSDL_WindowEvent = record
-{$ELSE}
-	TSDL_ActiveEvent = record
-{$ENDIF}
 		type_: byte;
 		gain: byte;
 		state: byte;
-{$IFDEF SDL13}
 		windowID: TSDL_WindowID;
 		data1, data2: LongInt;
-{$ENDIF}
 		end;
 
-//SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
+// implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
+{$ELSE}
+	TSDL_ActiveEvent = record
+		type_: byte;
+		gain: byte;
+		state: byte;
+		end;
+{$ENDIF}
 
 	TSDL_MouseMotionEvent = record
-                             type_: byte;
-                             which: byte;
-                             state: byte;
+		type_: byte;
+		which: byte;
+		state: byte;
 {$IFDEF SDL13}
-                             x, y, xrel, yrel : LongInt;
-			     pressure, pressure_max, pressure_min,
-			     rotation, tilt, cursor: LongInt; 
+		x, y, xrel, yrel : LongInt;
+		pressure, pressure_max, pressure_min,
+		rotation, tilt, cursor: LongInt; 
 {$ELSE}
-                             x, y, xrel, yrel : word;
+		x, y, xrel, yrel : word;
 {$ENDIF}
-                             end;
+		end;
 
 	TSDL_KeyboardEvent = record
 		type_: Byte;
@@ -570,7 +570,6 @@ type
 /////////////////////  FUNCTION DEFINITIONS /////////////////////
 /////////////////////////////////////////////////////////////////
 
-{$IFDEF FPC}
 
 {* SDL *}
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
@@ -640,13 +639,11 @@ function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibNam
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
 
-{$IFDEF SDL13}
 {$IFDEF IPHONEOS}
 function  SDL_iPhoneKeyboardShow(windowID: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_iPhoneKeyboardHide(windowID: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_iPhoneKeyboardIsShown(windowID: LongInt): boolean; cdecl; external SDLLibName;
 function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external SDLLibName;
-{$ENDIF}
 {$ENDIF}
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
@@ -724,11 +721,6 @@ procedure SDLNet_FreeSocketSet(_set: PSDLNet_SocketSet); cdecl; external SDL_Net
 function  SDLNet_AddSocket(_set: PSDLNet_SocketSet; sock: PTCPSocket): LongInt; cdecl; external SDL_NetLibName;
 function  SDLNet_CheckSockets(_set: PSDLNet_SocketSet; timeout: LongInt): LongInt; cdecl; external SDL_NetLibName;
 
-{$IFDEF IPHONEOS}
-function  get_documents_path: PChar; cdecl; external 'hwutils';
-{$ENDIF}
-
-{$ELSE}{$ENDIF}
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
@@ -739,32 +731,32 @@ implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;
 begin
-  SDL_MustLock:= ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
+	SDL_MustLock:= ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
 end;
 
 procedure SDLNet_Write16(value: Word; buf: pointer);
 begin
-  PByteArray(buf)^[1]:= value;
-  PByteArray(buf)^[0]:= value shr 8
+	PByteArray(buf)^[1]:= value;
+	PByteArray(buf)^[0]:= value shr 8
 end;
 
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 begin
-  PByteArray(buf)^[3]:= value;
-  PByteArray(buf)^[2]:= value shr  8;
-  PByteArray(buf)^[1]:= value shr 16;
-  PByteArray(buf)^[0]:= value shr 24
+	PByteArray(buf)^[3]:= value;
+	PByteArray(buf)^[2]:= value shr  8;
+	PByteArray(buf)^[1]:= value shr 16;
+	PByteArray(buf)^[0]:= value shr 24
 end;
 
 function SDLNet_Read16(buf: pointer): Word;
 begin
-  SDLNet_Read16:= PByteArray(buf)^[1] or
+	SDLNet_Read16:= PByteArray(buf)^[1] or
                  (PByteArray(buf)^[0] shl 8)
 end;
 
 function SDLNet_Read32(buf: pointer): LongWord;
 begin
-  SDLNet_Read32:=  PByteArray(buf)^[3] or
+	SDLNet_Read32:=  PByteArray(buf)^[3] or
                   (PByteArray(buf)^[2] shl  8) or
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)

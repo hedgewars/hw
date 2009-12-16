@@ -1026,7 +1026,7 @@ begin
 
 	tmpsurf:= doSurfaceConversion(tmpsurf);
 
-{$IFDEF IPHONEOS}   
+{$IFDEF DONTUSE}   // way too slow
 {* http://bugzilla.libsdl.org/show_bug.cgi?id=868 but patched library doesn't work on ipod, so implementing workaround here *}
 	if imageFlags and (ifAlpha or ifTransparent) > 0 then
 	begin
@@ -1136,6 +1136,9 @@ glMatrixMode(GL_MODELVIEW);
 // prepare default translation/scaling
 glLoadIdentity;
 glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+//{$IFDEF IPHONEOS}
+//glRotatef(90, 0, 0, 1);
+//{$ENDIF}
 glTranslatef(0, -cScreenHeight / 2, 0);
 
 // enable alpha blending
@@ -1155,6 +1158,9 @@ else // other scaling
 	glPushMatrix; // save default scaling
 	glLoadIdentity;
 	glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+//{$IFDEF IPHONEOS}
+//	glRotatef(90, 0, 0, 1);
+//{$ENDIF}
 	glTranslatef(0, -cScreenHeight / 2, 0);
 	end;
 

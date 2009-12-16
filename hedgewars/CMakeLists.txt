@@ -11,7 +11,7 @@ find_package(SDL_mixer)
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
-set(engine_sources
+set(	engine_sources
 	${hwengine_project}
 	SDLh.pas
 	uAI.pas
@@ -55,11 +55,11 @@ set(engine_sources
 
 find_program(fpc_executable ${fpc_tryexe})
 
-if (fpc_executable)
+if(fpc_executable)
 	 exec_program(${fpc_executable} ARGS "-h" OUTPUT_VARIABLE fpc_output)
-endif (fpc_executable)
+endif(fpc_executable)
 
-set (noexecstack_flags "-k-z" "-knoexecstack")
+set(noexecstack_flags "-k-z" "-knoexecstack")
 file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
 
 exec_program(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
@@ -68,9 +68,9 @@ exec_program(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
 	RETURN_VALUE testnoexecstack
 	)
 
-if (${testnoexecstack})
+if(${testnoexecstack})
 	set (noexecstack_flags "")
-endif (${testnoexecstack})
+endif(${testnoexecstack})
 
 
 if(APPLE)
@@ -86,21 +86,21 @@ endif(APPLE)
 #PASCAL DETECTION SECTION
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 
-if (fpc_version)
+if(fpc_version)
 	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
 	string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
 	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
 	message(STATUS "Freepascal version detected: ${fpc_vers_major}.${fpc_vers_minor}.${fpc_vers_patch}")
 	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
 
-	if (fpc_ver LESS "020200")
+	if(fpc_ver LESS "020200")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-	elseif (APPLE AND i386_build AND fpc_ver LESS "020400")
+	elseif(APPLE AND i386_build AND fpc_ver LESS "020400")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications!")
-	endif ()
+	endif()
 else()
 	message(FATAL_ERROR "No Pascal compiler found!")
-endif ()
+endif()
 
 set(pascal_compiler ${fpc_executable})
 set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hwengine_project})
@@ -111,6 +111,8 @@ IF(APPLE)
 #let's build sdlmain, which is absent from the framework
 	find_package(SDL REQUIRED)
 
+	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
+	
 	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 	include_directories(${SDL_INCLUDE_DIR})
 	link_libraries(${SDL_LIBRARY})
