@@ -262,19 +262,10 @@ type
 
 
 	PSDL_RWops = ^TSDL_RWops;
-{$IFDEF FPC}
 	TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
 	TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
 	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
 	TClose = function( context: PSDL_RWops ): LongInt; cdecl;
-{$ELSE}
-	TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt;
-	TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;
-	TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt;
-	TClose = function( context: PSDL_RWops ): LongInt;
-
-	PByte = ^Byte;
-{$ENDIF}
 
 	TStdio = record
 		autoclose: LongInt;
@@ -669,9 +660,9 @@ procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 (* TSDL_Color -> Longword conversion is workaround over freepascal bug.
    See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
-function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
 function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;

@@ -48,26 +48,17 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 	InputStr: TChatLine;
 	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
-const colors: array[#1..#4] of Longword = (
-{$IFDEF ENDIAN_LITTLE}
-// ABGR
-	$FFFFFFFF, // chat message [White]
-	$FFFF00FF, // action message [Purple]
-	$FF90FF90, // join/leave message [Lime]
-	$FFA0FFFF  // team message [Light Yellow]
-{$ELSE}
-// RGBA
-	$FFFFFFFF, // chat message [White]
-	$FF00FFFF, // action message [Purple]
-	$90FF90FF, // join/leave message [Lime]
-	$FFFFA0FF  // team message [Light Yellow]
-{$ENDIF}
+const colors: array[#1..#4] of TSDL_Color = (
+	(r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
+	(r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
+	(r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
+	(r:$FF; g:$FF; b:$A0; unused:$FF)  // team message [Light Yellow]
 	);
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
 	w, h: LongInt;
-	color: Longword;
+	color: TSDL_Color;
 begin
 if cl.Tex <> nil then
 	FreeTexture(cl.Tex);
@@ -76,19 +67,19 @@ if cl.Tex <> nil then
 cl.s:= str;
 
 if isInput then
-	begin
-	color:=
-{$IFDEF ENDIAN_LITTLE}	
-	$FFFFFF00; // [Yellow abgr]
-{$ELSE}
-	$00FFFFFF; // [Yellow rgba]
-{$ENDIF}	
+begin
+	// [Light Blue]
+	color.r:= $00;
+	color.g:= $FF;
+	color.b:= $FF;
+	color.unused:= $FF;
 	str:= UserNick + '> ' + str + '_'
-	end
-	else begin
+end
+else
+begin
 	color:= colors[str[1]];
 	delete(str, 1, 1)
-	end;
+end;
 
 
 TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);

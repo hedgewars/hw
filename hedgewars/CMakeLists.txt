@@ -136,7 +136,7 @@ ELSE()
 			COMMAND "${pascal_compiler}"
 			ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
 			MAIN_DEPENDENCY ${hwengine_project}
-			DEPENDS ${engine_sources}
+			DEPENDS ${engine_sources} SDLmain
 			)
 		add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
 	endforeach()
