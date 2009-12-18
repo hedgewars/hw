@@ -123,11 +123,11 @@ Result.x:= X;
 Result.y:= Y;
 Result.w:= w + FontBorder * 2 + 4;
 Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, cNearBlackColor, Surface, true);
+DrawRoundRect(@Result, cWhiteColor, cNearBlackColor.value, Surface, true);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
-tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr.value);
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
 tmpsurf:= doSurfaceConversion(tmpsurf);
 Result.x:= X + FontBorder + 2;
 Result.y:= Y + FontBorder;
@@ -166,7 +166,7 @@ var s: string;
 		TryDo(texsurf <> nil, errmsgCreateSurface, true);
 		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
+		DrawRoundRect(@r, cWhiteColor, cNearBlackColor.value, texsurf, true);
 		rr:= r;
 		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
 		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
@@ -338,16 +338,14 @@ AddProgress;
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
-		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), cWhiteColor);
-		tmpsurf:= doSurfaceConversion(tmpsurf);
+		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
 		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)
 		end;
 
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
-	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColor);
-	tmpsurf:= doSurfaceConversion(tmpsurf);	
+	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
 	CountTexz[i]:= Surface2Tex(tmpsurf, false);
 	SDL_FreeSurface(tmpsurf)
 	end;
@@ -937,14 +935,7 @@ while pos <= length(s) do
         substr:= copy(s, prevpos+1, pos-prevpos-1);
         if Length(substr) <> 0 then
            begin
-           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), 
-{$IFDEF ENDIAN_LITTLE}
-		cNearBlackColor
-{$ELSE}
-		$100000FF
-{$ENDIF}
-		); // do not remove me
-	   tmpsurf:= doSurfaceConversion(tmpsurf);
+           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColor);
            rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
            rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;

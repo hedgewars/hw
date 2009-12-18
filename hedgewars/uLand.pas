@@ -704,7 +704,7 @@ if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGH
                 Land[cpY + y, cpX + x]:= 0
             else if p^[x] = (AMask or RMask) then
                 Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
-            else if p^[x] = cWhiteColor then
+            else if p^[x] = $FFFFFFFF then
                 Land[cpY + y, cpX + x]:= COLOR_LAND;
 
             end;

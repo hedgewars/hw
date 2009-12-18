@@ -658,10 +658,9 @@ procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
 function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
-(* TSDL_Color -> Longword conversion is workaround over freepascal bug.
-   See http://www.freepascal.org/mantis/view.php?id=7613 for details *)
+
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
-function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: Longword): PSDL_Surface; cdecl; external SDL_TTFLibName;
+function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
 function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
@@ -672,7 +671,7 @@ function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chu
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
 function  Mix_Volume(channel: LongInt; volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
-function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt;  cdecl; external SDL_MixerLibName;
+function  Mix_SetDistance(channel: LongInt; distance: Byte): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_VolumeMusic(volume: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 function  Mix_AllocateChannels(numchans: LongInt): LongInt; cdecl; external SDL_MixerLibName;

@@ -82,11 +82,10 @@ var
 	TimeTrialStartTime: Longword = 0;
 	TimeTrialStopTime : Longword = 0;
 	
-	cBlackColor		: TSDL_Color = (r:$00; g:$00; b:$00; unused:$00);
+	cWhiteColorChannels	: TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
+	cNearBlackColor		: TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
 	cWhiteColor		: Longword = $FFFFFFFF;
 	cYellowColor		: Longword = $FFFFFF00;
-//	cYellowColor		: TSDL_Color = (r:$FF; g:$FF; b:$00; unused:$FF);
-	cNearBlackColor		: Longword = $FF000010;
 	cExplosionBorderColor	: LongWord = $FF808080;
 
 	cShowFPS      : boolean = false;
