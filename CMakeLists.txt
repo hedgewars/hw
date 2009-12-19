@@ -46,7 +46,7 @@ if(APPLE)
 		if(current_macosx_version MATCHES "10.6")
 			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")	#;ppc7400
 		else()
-			set(CMAKE_OSX_ARCHITECTURES "i386")	#;ppc7400
+			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
 		endif()
 	ENDIF()	
 
@@ -89,7 +89,7 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi" "/Users/vittorio/hedge.build/trunk/SDLMain.o")
+set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi")
 if(LOWRES)
 	set(pascal_compiler_flags_cmn "-dLOWRES" ${pascal_compiler_flags_cmn})
 	add_definitions(-DLOWRES)

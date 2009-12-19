@@ -355,7 +355,17 @@ for i:= 0 to 7 do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
-        {$INCLUDE "tunsetborder.inc"}
+    begin
+	X:= X + dX;
+	Y:= Y + dY;
+	tx:= hwRound(X);
+	ty:= hwRound(Y);
+	if ((ty and LAND_HEIGHT_MASK) = 0) and
+	   ((tx and LAND_WIDTH_MASK) = 0) and
+	   ((Land[ty, tx] = COLOR_LAND) or 
+	   (Land[ty, tx] = COLOR_OBJECT)) then
+		LandPixels[ty, tx]:= cExplosionBorderColor
+    end;
     nx:= nx - dY;
     ny:= ny + dX;
     end;
@@ -365,7 +375,17 @@ for i:= -HalfWidth to HalfWidth do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= 0 to 7 do
-        {$INCLUDE "tunsetborder.inc"}
+    begin
+	X:= X + dX;
+	Y:= Y + dY;
+	tx:= hwRound(X);
+	ty:= hwRound(Y);
+	if ((ty and LAND_HEIGHT_MASK) = 0) and
+	   ((tx and LAND_WIDTH_MASK) = 0) and
+	   ((Land[ty, tx] = COLOR_LAND) or 
+	   (Land[ty, tx] = COLOR_OBJECT)) then
+		LandPixels[ty, tx]:= cExplosionBorderColor
+    end;
     X:= nx;
     Y:= ny;
     for t:= 0 to ticks do
@@ -384,7 +404,17 @@ for i:= -HalfWidth to HalfWidth do
             end
         end;
     for t:= 0 to 7 do
-        {$INCLUDE "tunsetborder.inc"}
+    begin
+	X:= X + dX;
+	Y:= Y + dY;
+	tx:= hwRound(X);
+	ty:= hwRound(Y);
+	if ((ty and LAND_HEIGHT_MASK) = 0) and
+	   ((tx and LAND_WIDTH_MASK) = 0) and
+	   ((Land[ty, tx] = COLOR_LAND) or 
+	   (Land[ty, tx] = COLOR_OBJECT)) then
+		LandPixels[ty, tx]:= cExplosionBorderColor
+    end;
     nx:= nx - dY;
     ny:= ny + dX;
     end;
@@ -394,7 +424,17 @@ for i:= 0 to 7 do
     X:= nx - dX8;
     Y:= ny - dY8;
     for t:= -8 to ticks + 8 do
-        {$INCLUDE "tunsetborder.inc"}
+    begin
+	X:= X + dX;
+	Y:= Y + dY;
+	tx:= hwRound(X);
+	ty:= hwRound(Y);
+	if ((ty and LAND_HEIGHT_MASK) = 0) and
+	   ((tx and LAND_WIDTH_MASK) = 0) and
+	   ((Land[ty, tx] = COLOR_LAND) or 
+	   (Land[ty, tx] = COLOR_OBJECT)) then
+		LandPixels[ty, tx]:= cExplosionBorderColor
+    end;
     nx:= nx - dY;
     ny:= ny + dX;
     end;

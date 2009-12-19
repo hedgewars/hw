@@ -123,7 +123,7 @@ Result.x:= X;
 Result.y:= Y;
 Result.w:= w + FontBorder * 2 + 4;
 Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, cNearBlackColor.value, Surface, true);
+DrawRoundRect(@Result, cWhiteColor, cNearBlackColorChannels.value, Surface, true);
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
@@ -166,7 +166,7 @@ var s: string;
 		TryDo(texsurf <> nil, errmsgCreateSurface, true);
 		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-		DrawRoundRect(@r, cWhiteColor, cNearBlackColor.value, texsurf, true);
+		DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
 		rr:= r;
 		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
 		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
@@ -935,7 +935,7 @@ while pos <= length(s) do
         substr:= copy(s, prevpos+1, pos-prevpos-1);
         if Length(substr) <> 0 then
            begin
-           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColor);
+           tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
            rect.x:= edgeHeight + 1 + ((i - w) div 2);
            // trying to more evenly position the text, vertically
            rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;

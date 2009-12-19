@@ -50,7 +50,6 @@ set(	engine_sources
 	SinTable.inc
 	options.inc
 	${CMAKE_CURRENT_BINARY_DIR}/proto.inc
-	tunsetborder.inc
 	)
 
 find_program(fpc_executable ${fpc_tryexe})
