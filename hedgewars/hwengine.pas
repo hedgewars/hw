@@ -341,7 +341,7 @@ else uKeys.isWalking:= false;
                 end;*)
 {$ELSE}
 		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELDUP then uKeys.wheelUp:= true;
+		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
 		SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
 		SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
 		SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
@@ -627,7 +627,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (' + inttostr(cNetProtoVersion) + ')');
+WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
 GetParams;
 // FIXME -  hack in font with support for CJK
 if (cLocaleFName = 'zh_CN.txt') or (cLocaleFName = 'zh_TW.txt') or (cLocaleFName = 'ja.txt') then
