@@ -1,12 +1,12 @@
 ; Simplified Chinese locale
 
 00:00=手榴弹
-00:01=子母炸弹
-00:02=火箭炮
-00:03=UFO
-00:04=散弹枪
-00:05=气锤
-00:06=掠过
+00:01=集束炸弹
+00:02=反坦克火箭筒
+00:03=飞碟
+00:04=霰弹枪
+00:05=鹤嘴锤
+00:06=跳
 00:07=绳索
 00:08=地雷
 00:09=沙漠之鹰
@@ -14,88 +14,208 @@
 00:11=球棒
 00:12=升龙拳
 00:13=秒
-00:14=降落伞
+00:14=空降
 00:15=空袭
-00:16=地雷袭击
-00:17=喷灯
-00:18=钢板
+00:16=地雷
+00:17=喷火
+00:18=建造
 00:19=传送
-00:20=切换
+00:20=切换刺猬
 00:21=迫击炮
 00:22=鞭子
 00:23=神风特工队
 00:24=蛋糕
-00:25=吸引
+00:25=引诱
 00:26=西瓜炸弹
-00:27=地狱礼花
+00:27=加强型手榴弹
 00:28=钻地火箭
-00:29=弹珠炮
-00:30=燃烧弹
+00:29=鸟枪
+00:30=汽油弹
 00:31=轰炸机
 00:32=低重力
-00:33=附加伤害
-00:34=刀枪不入
+00:33=额外伤害
+00:34=无敌
 00:35=加时
 00:36=激光瞄准
-00:37=吸血鬼
-00:38=狙擊槍
+00:37=吸血
+00:38=狙击枪
 00:39=飞盘
-00:40=Molotov Cocktail
+00:40=燃烧瓶
 
-01:00=战斗啦!
-01:01=平手
-01:02= %1 胜!
+01:00=开战!
+01:01=平局
+01:02= %1 胜利!
 01:03=音量 %1%
 01:04=暂停
-01:05=退出 (Y/Esc)?
-01:06=出现紧急情况!
+01:05=确定要退出 (是Y/否Esc)?
+01:06=突然死亡!
 01:07=%1 剩余
 01:08=燃料
+01:09=同步中...
 
 ; Event messages
 ; Hog (%1) died
-;02:00=%1 has kicked the bucket!
-02:00=%1 如同篮子里的鸡蛋。。。
-;02:00=%1 has seen the light!
-02:00=%1 见到了可以观赏宇宙星光了!
-;02:00=%1 never saw that comming!
-02:00=%1 没想到会有这一天!
+; 02:00=%1 has kicked the bucket!
+02:00=%1 踢到了炸药桶！
+; 02:00=%1 has seen the light!
+02:00=%1 看到了圣光！
+; 02:00=%1 never saw that coming!
+02:00=%1 没料到会这样。。。
+; 02:00=%1 waves goodbye!
+02:00=%1 向大家挥手道别。。。
+; 02:00=%1 has gone to a better place!
+02:00=%1 去了西方极乐世界！
+; 02:00=%1 meets his maker!
+02:00=%1 去见造物主了！
+; 02:00=%1 can hang on no longer!
+02:00=%1 再也受不了了!
+; 02:00=%1 has done his duty!
+02:00=%1 完成了他的使命！
+; 02:00=%1 makes the ultimate sacrifice!
+02:00=%1 做了最大的牺牲！
+; 02:00=%1 departs this mortal coil!
+02:00=%1 摆脱了命运的束缚！
+; 02:00=%1 makes like a tree and leaves!
+02:00=%1 叶落归根了！
+; 02:00=%1 has timed out!
+02:00=%1 超时了。。。
+; 02:00=%1 says peace out!
+02:00=%1 悄然离场了。。。
+; 02:00=%1 will be fondly remembered!
+02:00=%1 永远活在我们心中！
+; 02:00=%1 has an aneurysm!
+02:00=%1 身患绝症不治而亡。。。
+; 02:00=%1 leaves behind a wife and child
+02:00=%1 留下一家孤儿寡母。。。
+; 02:00=%1 has launched his last bazooka
+02:00=%1 发射了最后一发火箭弹
+; 02:00=%1 has tossed his last grenade
+02:00=%1 扔出了最后一枚手榴弹
+; 02:00=%1 has baked his last cake
+02:00=%1 烘烤了最后一块蛋糕
+; 02:00=%1 has swung on his last rope
+02:00=%1 甩出了最后一根绳索
+; 02:00=%1 has called his last airstrike
+02:00=%1 呼叫了最后一次空袭
+; 02:00=%1 has pumped his last shotgun
+02:00=%1 抽出了最后一把霰弹枪
+; 02:00=%1 has thrown his last melon
+02:00=%1 扔出了最后一个西瓜炸弹
+; 02:00=%1 has drawn his last deagle
+02:00=%1 拔出了最后一把沙鹰
+; 02:00=%1 took one shot too many
+02:00=%1 挨了太多枪了
+; 02:00=%1 could really have used a health crate
+02:00=%1 真该用下医疗包的
+; 02:00=%1 has gone to play a better game
+02:00=%1 去玩更有意思的游戏去了
+; 02:00=%1 has ragequit life
+02:00=%1 拔网线了！
+; 02:00=%1 fails
+02:00=%1 失败了
+; 02:00=Poor poor %1...
+02:00=可怜的 %1...
+; 02:00=%1 prefers wormux
+02:00=%1 更喜欢玩 wormux
+; 02:00=%1 has been blocking shots with his face
+02:00=%1 被爆头了
+; 02:00=%1 is a hero amongst me...err..hogs
+02:00=%1 是我的英雄！
+; 02:00=%1 finds his place in Valhalla
+02:00=%1 在天堂找到房子了
+; 02:00=%1 has left the building
+02:00=%1 离开了这间屋子
+; 02:00=%1 goes the way of the dinosaurs
+02:00=%1 去找恐龙了
+; 02:00=%1 brings hedgehogs one step closer to extinction
+02:00=%1 让刺猬离灭绝更近了一步（他死了。。。）
+; 02:00=%1 brings a tear to my eye
+02:00=%1 让我为他的离去而落泪
+; 02:00=%1 is an ex-hog
+02:00=%1 生前是一只刺猬
+; 02:00=%1 is pushing up the daisies
+02:00=%1 被菊花簇拥
+; 02:00=%1 has ceased to be
+02:00=%1 被“删除”了
+; 02:00=Say goodbye to %1
+02:00=对%1 说永别吧
+; 02:00=No hope left for %1
+02:00=%1 没有幸存的希望了
+; 02:00=%1 faces the final curtain
+02:00=%1 落下了最后的帷幕
+; 02:00=Smoke 'em if you got 'em, %1
+02:00=%1 抓紧时间实现你最后的愿望吧
+; 02:00=%1 suffers a Spontaneous Massive Existence Failure
+02:00=%1 遭遇了自发性大规模故障（出自星河舰队）
+; 02:00=%1 has passed on
+02:00=%1 逝去了
+; 02:00=%1 is stone dead
+02:00=%1 永垂不朽
+; 02:00=%1 is no more
+02:00=%1 不在了
+; 02:00=%1 has expired
+02:00=%1 断气了
+; 02:00=Bereft of life, %1 rests in peace
+02:00=%1 安详地躺着
+; 02:00=%1 joins the choir invisible
+02:00=%1 加入了隐形唱诗班
+; 02:00=Farewell %1, we hardly knew ye!
+02:00=%1 永别了，我们还不认识你呢！
+; 02:00=%1 had a low tolerance for being shot
+02:00=%1 抗枪击能力不足
+; 02:00=%1 could have used an extra life
+02:00=%1 本该用另一条命的
+; 02:00=Is there a doctor in the house?
+02:00=房间里有医生吗？
+
 ; Hog (%1) drowned
-;02:01=%1 plays submarine!
-02:01=%1 淹死了!
-;02:01=%1 mimics the Titanic!
-02:01=%1 跟泰坦尼克一起沉眠了!
-;02:01=%1 swims like a stone!
+; 02:01=%1 plays submarine!
+02:01=%1 以为自己是潜水艇!
+; 02:01=%1 mimics the Titanic!
+02:01=%1 学泰坦尼克去了!
+; 02:01=%1 swims like a stone!
 02:01=%1 石沉大海!
+
 ; Match starts
-;02:02=Let's fight!
+; 02:02=Let's fight!
 02:02=开战!
-;02:02=Armed and ready!
+; 02:02=Armed and ready!
 02:02=准备!
+
 ; Round ends (win; unused atm)
-02:03=回合结束...
+02:03=回合结束（胜利）
+
 ; Round ends (draw; unused atm)
-02:04=回合结束...
+02:04=回合结束（平局）
+
 ; New health crate
-;02:05=Incoming aid!
+; 02:05=Incoming aid!
 02:05=医疗包!
+
 ; New ammo crate
-;02:06=More weapons!
+; 02:06=More weapons!
 02:06=武器!
+
 ; New utility crate
-;02:07=Tooltime!
+; 02:07=Tooltime!
 02:07=工具箱!
+
 ; Hog (%1) skips his turn
-;02:08=%1 is sooo boring...
+; 02:08=%1 is sooo boring...
 02:08=%1 太无聊了...
+
 ; Hog (%1) hurts himself only
-;02:09=%1 should practice aiming!
-02:09=%1 瞄准失败!
-;02:09=%1 seems to hate himself.
-02:09=%1 自我安慰一下。
-;02:09=%1 is standing on the wrong side!
-02:09=%1 站错队了！
+; 02:09=%1 should practice aiming!
+02:09=%1 该练练瞄准了!
+; 02:09=%1 seems to hate himself.
+02:09=%1 似乎看自己很不爽。
+; 02:09=%1 is standing on the wrong side!
+02:09=%1 在表演乌龙！
+
 ; Hog shot an home run (using the bat and another hog)
-02:10=Home Run!
-02:10=A bird, a plane, ...
-02:10=That one is out!
+; 02:10=Home Run!
+02:10=本垒打！
+; 02:10=A bird, a plane, ...
+02:10=看到鸟了！飞机！飞碟！
+; 02:10=That one is out!
+02:10=那一位出界了！
