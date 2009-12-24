@@ -29,22 +29,29 @@ if(APPLE)
 	set(DATA_INSTALL_DIR "../Resources/")
 	set(target_dir ".")
 	
+	#what system are we building for
+	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
+	
 	#detect on which system are we
 	EXEC_PROGRAM("/usr/bin/sw_vers" OUTPUT_VARIABLE MACOSX_VERSION_TMP)
 	STRING(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" MACOSX_VERSION_TMP "${MACOSX_VERSION_TMP}")
 	STRING(REGEX REPLACE "([0-9][0-9].[0-9]+).[0-9]" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
 
-	set(minimum_macosx $ENV{MACOSX_DEPLOYMENT_TARGET})
-
 	if(NOT minimum_macosx)
+		#if nothing is set, we build only for the current system
 		set(minimum_macosx ${current_macosx_version})
 	endif()
 
-	#create universal binaries only when it's time to bundle the application
+	#create universal binaries only when it's time to bundle the application, also build server
 	IF(BUNDLE)
 		set(WITH_SERVER false)
 		if(current_macosx_version MATCHES "10.6")
-			set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")	#;ppc7400
+			if(minimum_macosx MATCHES "10.6")
+				#prevent building ppc for 10.6
+				set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
+			else()
+				set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
+			endif()
 		else()
 			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
 		endif()
@@ -58,6 +65,8 @@ if(APPLE)
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${minimum_macosx}.sdk/")
 	endif()
 
+	set(pascal_compiler_flags_cmn "-k${PROJECT_BINARY_DIR}/bin/libSDLmain.a" "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	
 else(APPLE)
 	set(target_dir "bin")
 endif(APPLE)
@@ -89,7 +98,7 @@ set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
 set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
 set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
 
-set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Fl../bin/" "-Cs2000000" "-vwi")
+set(pascal_compiler_flags_cmn "-B" "-FE../bin" "-Cs2000000" "-vwi" ${pascal_compiler_flags_cmn})
 if(LOWRES)
 	set(pascal_compiler_flags_cmn "-dLOWRES" ${pascal_compiler_flags_cmn})
 	add_definitions(-DLOWRES)
@@ -127,7 +136,6 @@ endif(WITH_SERVER)
 
 
 add_subdirectory(bin)
-#add_subdirectory(openalbridge)
 add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)

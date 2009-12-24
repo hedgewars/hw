@@ -267,6 +267,8 @@ var ii: TSprite;
     i: LongInt;
 begin
 
+AddProgress;
+
 for fi:= Low(THWFont) to High(THWFont) do
 	with Fontz[fi] do
 		begin
@@ -356,6 +358,8 @@ for i:= Low(CountTexz) to High(CountTexz) do
 //SDL_SaveBMP_RW(StoreSurface, SDL_RWFromFile('StoreSurface.bmp', 'wb'), 1);
 {$ENDIF}
 AddProgress;
+
+IMG_Quit();
 end;
 
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);

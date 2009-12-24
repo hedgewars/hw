@@ -82,6 +82,7 @@ if(APPLE)
 	endif()
 endif(APPLE)
 
+
 #PASCAL DETECTION SECTION
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 
@@ -94,7 +95,7 @@ if(fpc_version)
 
 	if(fpc_ver LESS "020200")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-	elseif(APPLE AND i386_build AND fpc_ver LESS "020400")
+	elseif(APPLE AND x86_64_build AND fpc_ver LESS "020400")
 		message(FATAL_ERROR "Minimum required version of FreePascal is 2.4.0 for building 64 bit applications!")
 	endif()
 else()
@@ -106,19 +107,6 @@ set(pascal_compiler_flags ${noexecstack_flags} ${pascal_compiler_flags_cmn} ${hw
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-IF(APPLE)
-#let's build sdlmain, which is absent from the framework
-	find_package(SDL REQUIRED)
-
-	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
-	
-	set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-	include_directories(${SDL_INCLUDE_DIR})
-	link_libraries(${SDL_LIBRARY})
-
-	add_library (SDLmain STATIC SDLMain.m)
-ENDIF(APPLE)
-
 IF(NOT APPLE)
 #here is the standard command for any system
 	add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}"
@@ -128,6 +116,16 @@ IF(NOT APPLE)
 		DEPENDS ${engine_sources}
 		)
 ELSE()
+	#let's build sdlmain, which is absent from the framework
+	find_package(SDL REQUIRED)
+
+	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
+	set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+	include_directories(${SDL_INCLUDE_DIR})
+
+	add_library (SDLmain STATIC SDLMain.m)
+#	set_target_properties(SDLmain PROPERTIES COMPILE_FLAGS "-mmacosx-version-min=${minimum_macosx} --sysroot=${CMAKE_OSX_SYSROOT} ")
+
 #these are the dependencies for building a universal binary on Mac OS X
 	foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
 		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})

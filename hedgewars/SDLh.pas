@@ -50,7 +50,6 @@ interface
     {$linkframework SDL_image}
     {$linkframework SDL_ttf}
     {$linkframework SDL_mixer}
-    {$linklib SDLmain}
   {$ENDIF}
 {$ENDIF}
 
@@ -195,6 +194,10 @@ const
 	SDL_HAT_LEFTUP    = SDL_HAT_LEFT or SDL_HAT_UP;
 	SDL_HAT_LEFTDOWN  = SDL_HAT_LEFT or SDL_HAT_DOWN;
 
+	{* SDL_image *}
+	IMG_INIT_JPG = $00000001;
+	IMG_INIT_PNG = $00000002;
+	IMG_INIT_TIF = $00000004;
 
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
@@ -693,8 +696,10 @@ function  Mix_ResumeMusic(music: PMixMusic): LongInt; cdecl; external SDL_MixerL
 function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
+function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
+procedure IMG_Quit; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
