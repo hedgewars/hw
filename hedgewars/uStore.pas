@@ -123,12 +123,11 @@ Result.x:= X;
 Result.y:= Y;
 Result.w:= w + FontBorder * 2 + 4;
 Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, cNearBlackColorChannels.value, Surface, true);
-clr.r:= Color shr 16;
+DrawRoundRect(@Result, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
+clr.r:= (Color shr 16) and $FF;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
-tmpsurf:= doSurfaceConversion(tmpsurf);
 Result.x:= X + FontBorder + 2;
 Result.y:= Y + FontBorder;
 SDLTry(tmpsurf <> nil, true);
@@ -337,17 +336,21 @@ SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
 AddProgress;
 
+// name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
 		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
+		tmpsurf:= doSurfaceConversion(tmpsurf);
 		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)
 		end;
 
+// number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
 	begin
 	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
+	tmpsurf:= doSurfaceConversion(tmpsurf);
 	CountTexz[i]:= Surface2Tex(tmpsurf, false);
 	SDL_FreeSurface(tmpsurf)
 	end;

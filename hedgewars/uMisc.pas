@@ -169,8 +169,9 @@ function NewTexture(width, height: Longword; buf: Pointer): PTexture;
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
-function DecodeBase64(s: shortstring): shortstring;
-function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
+function  DecodeBase64(s: shortstring): shortstring;
+function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
+function  endian(independent: LongWord): LongWord;
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
@@ -560,6 +561,17 @@ begin
 	else doSurfaceConversion:= tmpsurf;
 end;
 
+function endian(independent: LongWord): LongWord;
+begin
+{$IFDEF ENDIAN_LITTLE}
+endian:= independent;
+{$ELSE}
+endian:= (((independent and $FF000000) shr 24) or
+	  ((independent and $00FF0000) shr 8) or
+	  ((independent and $0000FF00) shl 8) or
+	  ((independent and $000000FF) shl 24))
+{$ENDIF}
+end;
 
 initialization
 cDrownSpeed.QWordValue:= 257698038;// 0.06
