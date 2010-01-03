@@ -90,7 +90,7 @@ if(fpc_version)
 	string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
 	string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
 	string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-	message(STATUS "Freepascal version detected: ${fpc_vers_major}.${fpc_vers_minor}.${fpc_vers_patch}")
+	message(STATUS "Freepascal version detected: ${fpc_vers_major}.${fpc_vers_minor}")
 	math(EXPR fpc_ver "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
 
 	if(fpc_ver LESS "020200")
@@ -120,7 +120,7 @@ ELSE()
 	find_package(SDL REQUIRED)
 
 	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
-	set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+	set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 	include_directories(${SDL_INCLUDE_DIR})
 
 	add_library (SDLmain STATIC SDLMain.m)

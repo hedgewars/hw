@@ -65,7 +65,7 @@ if(APPLE)
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${minimum_macosx}.sdk/")
 	endif()
 
-	set(pascal_compiler_flags_cmn "-k${PROJECT_BINARY_DIR}/bin/libSDLmain.a" "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
 	
 else(APPLE)
 	set(target_dir "bin")
@@ -106,9 +106,9 @@ endif(LOWRES)
 
 if(Optz)
 	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
-	set(haskell_compiler_flags_cmn "-w" "-O2")
+	set(haskell_compiler_flags_cmn "-O2" "-w")
 else(Optz)
-	set(pascal_compiler_flags_cmn "-O-" "-gl" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-O-" "-gh" "-gl" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint")
 endif(Optz)
 

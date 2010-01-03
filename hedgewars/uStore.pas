@@ -28,7 +28,6 @@ uses sysutils, uConsts, uTeams, SDLh,
 {$ENDIF}
 uFloat;
 
-procedure StoreInit;
 procedure StoreLoad;
 procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -55,13 +54,13 @@ procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
-function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
+function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 
 
 var PixelFormat: PSDL_PixelFormat = nil;
- SDLPrimSurface: PSDL_Surface = nil;
+   SDLPrimSurface: PSDL_Surface = nil;
    PauseTexture,
    SyncTexture,
    ConfirmTexture: PTexture;
@@ -73,15 +72,9 @@ uses uMisc, uConsole, uLand, uLocale, uWorld;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel);
 
-var
-    HHTexture: PTexture;
+var	HHTexture: PTexture;
 	MaxTextureSize: Integer;
-	cGPUVendor: TGPUVendor;
-
-procedure StoreInit;
-begin
-	cGPUVendor:= gvUnknown;
-end;
+	{$IFNDEF IPHONEOS}cGPUVendor: TGPUVendor = gvUnknown;{$ENDIF}
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -266,8 +259,6 @@ var ii: TSprite;
     i: LongInt;
 begin
 
-AddProgress;
-
 for fi:= Low(THWFont) to High(THWFont) do
 	with Fontz[fi] do
 		begin
@@ -362,7 +353,10 @@ for i:= Low(CountTexz) to High(CountTexz) do
 {$ENDIF}
 AddProgress;
 
+{$IFNDEF IPHONEOS}
+	// remove this ifndef when updating sdl_image
 IMG_Quit();
+{$ENDIF}
 end;
 
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
@@ -971,16 +965,16 @@ if Hedgehog.HealthTagTex <> nil then FreeTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-function  LoadImage(const filename: string; imageFlags: Integer): PSDL_Surface;
+function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-{$IFDEF IPHONEOS}
+{$IFDEF DONTUSE}
     tmpP: PLongWordArray;
     tmpA, tmpR, tmpG, tmpB: LongWord;
     i: LongInt;
 {$ENDIF}
 begin
-	WriteToConsole(msgLoading + filename + '... ');
+	WriteToConsole(msgLoading + filename + ' [flags: ' + inttostr(imageFlags) + ']... ');
 
 	s:= filename + '.png';
 	tmpsurf:= IMG_Load(Str2PChar(s));
@@ -1097,14 +1091,15 @@ end;
 procedure SetupOpenGL;
 var vendor: shortstring;
 begin
-glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+	glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
 
-WriteLnToConsole('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 {$IFDEF DEBUGFILE}
-AddFileLog('OpenGL - Vendor: ' + string(pchar(glGetString(GL_VENDOR))));
-AddFileLog('OpenGL - Version: ' + string(pchar(glGetString(GL_VERSION))));
+	AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
+	AddFileLog('  |----- Vendor: ' + vendor);
+	AddFileLog('  |----- Version: ' + string(pchar(glGetString(GL_VERSION))));
+	AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
-WriteLnToConsole('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 
 	if MaxTextureSize = 0 then
 	begin
@@ -1114,7 +1109,7 @@ WriteLnToConsole('OpenGL - GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 	end;
 
-vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
+{$IFNDEF IPHONEOS}
 if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
 	cGPUVendor:= gvNVIDIA
 else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
@@ -1122,8 +1117,6 @@ else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
 else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
 	cGPUVendor:= gvIntel;
 
-	
-{$IFNDEF IPHONEOS}
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 {$ENDIF}
 
@@ -1175,15 +1168,22 @@ procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
 begin
-if Step = 0 then
-   begin
-   WriteToConsole(msgLoading + 'progress sprite: ');
-   texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
-   ProgrTex:= Surface2Tex(texsurf, false);
-   SDL_FreeSurface(texsurf);
-   squaresize:= ProgrTex^.w shr 1;
-   numsquares:= ProgrTex^.h div squaresize;
-   end;
+	if Step = 0 then
+	begin
+	{$IFNDEF IPHONEOS}
+	// remove this ifndef when updating sdl_image
+		WriteToConsole('Init SDL_image... ');
+		SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+		WriteLnToConsole(msgOK);
+	{$ENDIF}
+	
+		WriteToConsole(msgLoading + 'progress sprite: ');
+		texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+		ProgrTex:= Surface2Tex(texsurf, false);
+		SDL_FreeSurface(texsurf);
+		squaresize:= ProgrTex^.w shr 1;
+		numsquares:= ProgrTex^.h div squaresize;
+	end;
 
 TryDo(ProgrTex <> nil, 'ProgrTex = nil!', true);
 

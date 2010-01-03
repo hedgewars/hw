@@ -340,7 +340,7 @@ var Result: PVisualGear;
 	t: Longword;
 	sp: hwFloat;
 begin
-if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we're scrolling now
+if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then // we are scrolling now
 	if Kind <> vgtCloud then
 		begin
 		AddVisualGear:= nil;

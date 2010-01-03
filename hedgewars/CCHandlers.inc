@@ -81,7 +81,7 @@ if isDeveloperMode then
    val(s, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
-   // color is always in ARGB so the mask must be constant
+   // color is always little endian so the mask must be constant also in big endian archs
    Color:= Color or $FF000000;
  	
    AddTeam(Color);
@@ -594,13 +594,13 @@ with CurrentTeam^ do
 end;
 
 procedure chFullScr(var s: shortstring);
-var flags: Longword;
+var flags: Longword = 0;
 {$IFDEF DEBUGFILE}
     buf: array[byte] of char;
 {$ENDIF}
 begin
 if Length(s) = 0 then cFullScreen:= not cFullScreen
-                 else cFullScreen:= s = '1';
+	else cFullScreen:= s = '1';
 
 {$IFDEF DEBUGFILE}
 AddFileLog('Prepare to change video parameters...');
@@ -620,11 +620,19 @@ SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
 
 {$IFNDEF SDL13}
-// this attribute is default in 1.3
-SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+// this attribute is default in 1.3 and must be enabled in MacOSX
+{$IFNDEF DARWIN}
+if cVSyncInUse then
+{$ENDIF}
+	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 {$ENDIF}
 
 flags:= SDL_OPENGL;// or SDL_RESIZABLE;
+{$IFDEF IPHONEOS}
+// remove the topbar from the iPhone
+flags:= flags or SDL_NOFRAME;
+{$ENDIF}
+
 if cFullScreen then
 	begin
 	flags:= flags or SDL_FULLSCREEN;
@@ -641,23 +649,16 @@ if SDLPrimSurface <> nil then
 	SDL_FreeSurface(SDLPrimSurface);
 	end;
 
-{$IFDEF IPHONEOS}
-//remove the topbar from the iPhone
-flags:= flags or SDL_NOFRAME;
-{$ENDIF}
-
 SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 SDLTry(SDLPrimSurface <> nil, true);
+PixelFormat:= SDLPrimSurface^.format;
 
 {$IFDEF DEBUGFILE}
 AddFileLog('Setting up OpenGL...');
+AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
 SetupOpenGL();
 
-{$IFDEF DEBUGFILE}
-AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
-{$ENDIF}
-PixelFormat:= SDLPrimSurface^.format
 end;
 
 procedure chVol_p(var s: shortstring);

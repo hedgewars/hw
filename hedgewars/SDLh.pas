@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$INCLUDE "options.inc"}
+{$I "options.inc"}
 
 unit SDLh;
 interface
@@ -177,7 +177,11 @@ const
 
 	{* SDL_mixer *}
 	MIX_MAX_VOLUME = 128;
-
+	MIX_INIT_FLAC = $00000001;
+	MIX_INIT_MOD  = $00000002;
+	MIX_INIT_MP3  = $00000004;
+	MIX_INIT_OGG  = $00000008;
+	
 	{* SDL_TTF *}
 	TTF_STYLE_NORMAL = 0;
 	TTF_STYLE_BOLD   = 1;
@@ -568,6 +572,7 @@ type
 {* SDL *}
 function  SDL_Init(flags: Longword): LongInt; cdecl; external SDLLibName;
 procedure SDL_Quit; cdecl; external SDLLibName;
+
 function  SDL_VideoDriverName(var namebuf; maxlen: LongInt): PChar; cdecl; external SDLLibName;
 procedure SDL_EnableUNICODE(enable: LongInt); cdecl; external SDLLibName;
 
@@ -605,15 +610,14 @@ function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongIn
 
 {$IFDEF SDL13}
 function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
-function  SDL_GetMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
 {$ELSE}
 function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
-function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 {$ENDIF}
+function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
 
@@ -660,6 +664,7 @@ procedure SDL_JoystickClose(joy: PSDL_Joystick); cdecl; external SDLLibName;
 (*  SDL_TTF  *)
 function  TTF_Init: LongInt; cdecl; external SDL_TTFLibName;
 procedure TTF_Quit; cdecl; external SDL_TTFLibName;
+
 function  TTF_SizeUTF8(font: PTTF_Font; const text: PChar; var w, h: LongInt): LongInt; cdecl; external SDL_TTFLibName;
 
 function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
@@ -670,6 +675,9 @@ function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; 
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
+function  Mix_Init(flags: LongInt): LongInt; cdecl; external SDL_MixerLibName;
+procedure Mix_Quit; cdecl; external SDL_MixerLibName;
+
 function  Mix_OpenAudio(frequency: LongInt; format: Word; channels: LongInt; chunksize: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 procedure Mix_CloseAudio; cdecl; external SDL_MixerLibName;
 
@@ -697,16 +705,17 @@ function  Mix_HaltChannel(channel: LongInt): LongInt; cdecl; external SDL_MixerL
 
 (*  SDL_image  *)
 function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
+procedure IMG_Quit; cdecl; external SDL_ImageLibName;
+
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
-procedure IMG_Quit; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;
 procedure SDLNet_Quit; cdecl; external SDL_NetLibName;
 
 function  SDLNet_AllocSocketSet(maxsockets: LongInt): PSDLNet_SocketSet; cdecl; external SDL_NetLibName;
-function  SDLNet_ResolveHost(var address: TIPaddress; host: PCHar; port: Word): LongInt; cdecl; external SDL_NetLibName;
+function  SDLNet_ResolveHost(var address: TIPaddress; host: PChar; port: Word): LongInt; cdecl; external SDL_NetLibName;
 function  SDLNet_TCP_Accept(server: PTCPsocket): PTCPSocket; cdecl; external SDL_NetLibName;
 function  SDLNet_TCP_Open(var ip: TIPaddress): PTCPSocket; cdecl; external SDL_NetLibName;
 function  SDLNet_TCP_Send(sock: PTCPsocket; data: Pointer; len: LongInt): LongInt; cdecl; external SDL_NetLibName;
@@ -721,6 +730,10 @@ procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
+
+{$IFDEF IPHONEOS}
+function get_documents_path: PChar; cdecl; external 'hwutils';
+{$ENDIF}
 
 implementation
 

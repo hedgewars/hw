@@ -364,6 +364,9 @@ var s: string;
 	end;
 
 begin
+
+AddProgress;
+
 s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
@@ -442,7 +445,8 @@ for i:= 0 to Pred(vobCount) do
 
 Close(f);
 {$I+}
-TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
+TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
+AddProgress;
 end;
 
 procedure AddThemeObjects(var ThemeObjects: TThemeObjects; MaxCount: LongInt);

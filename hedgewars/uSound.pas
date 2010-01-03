@@ -70,21 +70,26 @@ end;
 procedure InitSound;
 var i: TSound;
 begin
-if not isSoundEnabled then exit;
-WriteToConsole('Init sound...');
-isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
-if isSoundEnabled then
-   isSoundEnabled:= Mix_OpenAudio(44100, $8010, 2, 1024) = 0;
-if isSoundEnabled then WriteLnToConsole(msgOK)
-                  else WriteLnToConsole(msgFailed);
-Mix_AllocateChannels(Succ(chanTPU));
-if isMusicEnabled then Mix_VolumeMusic(50);
+	if not isSoundEnabled then exit;
+	WriteToConsole('Init sound...');
+	isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
 
-for i:= Low(TSound) to High(TSound) do
-	lastChan[i]:= -1;
+	if isSoundEnabled then
+		isSoundEnabled:= Mix_OpenAudio(44100, $8010, 2, 1024) = 0;
 
-Volume:= 0;
-ChangeVolume(cInitVolume)
+	if isSoundEnabled then
+		WriteLnToConsole(msgOK)
+	else
+		WriteLnToConsole(msgFailed);
+
+	Mix_AllocateChannels(Succ(chanTPU));
+	if isMusicEnabled then
+		Mix_VolumeMusic(50);
+	for i:= Low(TSound) to High(TSound) do
+		lastChan[i]:= -1;
+
+	Volume:= 0;
+	ChangeVolume(cInitVolume)
 end;
 
 procedure ReleaseSound;
@@ -98,7 +103,7 @@ for t:= 0 to cMaxTeams do
 				Mix_FreeChunk(voicepacks[t].chunks[i]);
 
 Mix_FreeMusic(Mus);
-Mix_CloseAudio
+Mix_CloseAudio();
 end;
 
 procedure SoundLoad;
@@ -106,9 +111,13 @@ var i: TSound;
 	s: shortstring;
 	t: Longword;
 begin
-if not isSoundEnabled then exit;
+	if not isSoundEnabled then exit;
 
-defVoicepack:= AskForVoicepack('Default');
+	WriteToConsole('Init SDL_mixer... ');
+	SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
+	WriteLnToConsole(msgOK);
+	
+	defVoicepack:= AskForVoicepack('Default');
 
 for i:= Low(TSound) to High(TSound) do
 	if (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
@@ -133,6 +142,8 @@ for t:= 0 to cMaxTeams do
 				else
 					WriteLnToConsole(msgOK)
 				end;
+	
+	Mix_Quit();
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);

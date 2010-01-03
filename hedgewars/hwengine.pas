@@ -161,7 +161,7 @@ var PrevTime,
 {$IFDEF TOUCHINPUT}
 type TDirection = (nodir, left, right);
 var x, y, dx, dy, mouseState: LongInt;
-    tiltValue: LongInt;
+//    tiltValue: LongInt;
     direction: TDirection = nodir;
     movedbybuttons: boolean = false;
 {$ENDIF}
@@ -194,8 +194,9 @@ else uKeys.isWalking:= false;
 {$IFDEF DEBUGFILE}
                         AddFileLog('*********************************************       motion');
 {$ENDIF}
-                        mouseState:= SDL_GetMouseState(0, @x, @y);
-                        SDL_GetRelativeMouseState(0, @dx, @dy);
+						SDL_SelectMouse(event.motion.which);
+                        mouseState:= SDL_GetMouseState(@x, @y);
+                        SDL_GetRelativeMouseState(event.motion.which, @dx, @dy);
                         
                         direction:= nodir;
 
@@ -231,8 +232,9 @@ else uKeys.isWalking:= false;
 {$IFDEF DEBUGFILE}
                         AddFileLog('*********************************************       touch down');
 {$ENDIF}
-                        mouseState:= SDL_GetMouseState(0, @x, @y);                       
-
+						SDL_SelectMouse(event.motion.which);
+                        mouseState:= SDL_GetMouseState(@x, @y);
+                        SDL_GetRelativeMouseState(event.motion.which, @dx, @dy);
                         {* attack *}
                         if (x > 50) and (x <= 270) and (y <= 50) then
                         begin
@@ -269,8 +271,10 @@ else uKeys.isWalking:= false;
                         AddFileLog('*********************************************       touch up');
 {$ENDIF}
 
-                        mouseState:= SDL_GetMouseState(0, @x, @y);
-                        uKeys.leftClick:= true;
+						SDL_SelectMouse(event.motion.which);
+                        mouseState:= SDL_GetMouseState(@x, @y);
+                        SDL_GetRelativeMouseState(event.motion.which, @dx, @dy);
+						uKeys.leftClick:= true;
 
                         {* open ammo menu *}
                         if (y > 430) and (x > 270) then
@@ -399,7 +403,7 @@ case ParamCount of
      val(ParamStr(5), ipcPort);
      cFullScreen:= ParamStr(6) = '1';
      isSoundEnabled:= ParamStr(7) = '1';
-     isSoundHardware:= ParamStr(8) = '1';
+     cVSyncInUse:= ParamStr(8) = '1';
      cLocaleFName:= ParamStr(9);
      val(ParamStr(10), cInitVolume);
      val(ParamStr(11), cTimerInterval);
@@ -564,15 +568,13 @@ WriteLnToConsole(msgOK);
 
 SDL_EnableUNICODE(1);
 
-WriteToConsole('Init SDL_image... ');
-SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
-WriteLnToConsole(msgOK);
-
 WriteToConsole('Init SDL_ttf... ');
 SDLTry(TTF_Init <> -1, true);
 WriteLnToConsole(msgOK);
 
 ShowMainWindow;
+
+AddProgress;
 
 ControllerInit; // has to happen before InitKbdKeyTable to map keys
 InitKbdKeyTable;
@@ -597,8 +599,6 @@ AssignStores;
 
 if isSoundEnabled then
 	InitSound;
-
-StoreInit;
 
 isDeveloperMode:= false;
 

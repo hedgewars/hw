@@ -34,7 +34,6 @@ var
 	isInLag         : boolean = false;
 	isPaused        : boolean = false;
 	isSoundEnabled  : boolean = true;
-	isSoundHardware : boolean = false;
 	isMusicEnabled  : boolean = false;
 	isSEBackup      : boolean = true;
 	isInMultiShoot  : boolean = false;
@@ -60,6 +59,7 @@ var
 	cScreenHeight    : LongInt = 768;
 	cInitWidth       : LongInt = 1024;
 	cInitHeight      : LongInt = 768;
+	cVSyncInUse	 : boolean = true;	
 	cBits            : LongInt = 32;
 	cBitsStr         : string[2] = '32';
 	cTagsMaskIndex   : byte = Low(cTagsMasks);
@@ -111,7 +111,6 @@ var
 	cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
 {$WARNINGS ON}
 
-var
 	cSendCursorPosTime   : LongWord = 50;
 	ShowCrosshair : boolean;
 	CursorMovementX : Integer = 0;
@@ -192,11 +191,8 @@ procedure movecursor(dx, dy: Integer);
 var x, y: LongInt;
 begin
 if (dx = 0) and (dy = 0) then exit;
-{$IFDEF SDL13}
-SDL_GetMouseState(0, @x, @y);
-{$ELSE}
+
 SDL_GetMouseState(@x, @y);
-{$ENDIF}
 Inc(x, dx);
 Inc(y, dy);
 SDL_WarpMouse(x, y);

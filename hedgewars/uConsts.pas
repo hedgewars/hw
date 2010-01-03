@@ -31,6 +31,7 @@ uses
 	uLocale;
 
 {$INCLUDE "proto.inc"}
+
 type
 
 	TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);

@@ -105,13 +105,12 @@ Trusted:= (CurrentTeam <> nil)
 // move cursor/camera
 // TODO: Scale on screen dimensions and/or axis value (game controller)?
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
-		  
+
+k:= SDL_GetMouseState(nil, nil);
 {$IFDEF SDL13}
-pkbd := SDL_GetKeyboardState(@j);
-k    := SDL_GetMouseState(0, nil, nil);
+pkbd:= SDL_GetKeyboardState(@j);
 {$ELSE}
-pkbd := SDL_GetKeyState(@j);
-k    := SDL_GetMouseState(nil, nil);
+pkbd:= SDL_GetKeyState(@j);
 {$ENDIF}
 
 {$IFNDEF IPHONEOS}
@@ -212,12 +211,11 @@ var i, j, k, t: LongInt;
     pkbd: PByteArray;
 begin
 
+k:= SDL_GetMouseState(nil, nil);
 {$IFDEF SDL13}
 pkbd:= SDL_GetKeyboardState(@j);
-k:= SDL_GetMouseState(0, nil, nil);
 {$ELSE}
 pkbd:= SDL_GetKeyState(@j);
-k:= SDL_GetMouseState(nil, nil);
 {$ENDIF}
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 
@@ -241,6 +239,7 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
+
 {$IFDEF IPHONEOS}
 tkbdn[1]:= ord(leftClick);
 tkbdn[2]:= ord(middleClick);
@@ -323,14 +322,14 @@ end;
 
 //for i:= 0 to cKeyMaxIndex do writeln(stdout,inttostr(i) + ': ' + KeyNames[i]);
 
+// get the size of keyboard array
 {$IFDEF SDL13}
-PByteArray(SDL_GetKeyboardState(@i));
+SDL_GetKeyboardState(@k);
 {$ELSE}
-SDL_GetKeyState(@i);
+SDL_GetKeyState(@k);
 {$ENDIF}
 
 // Controller(s)
-k:= i;
 for j:= 0 to Pred(ControllerNumControllers) do
 	begin
 	for i:= 0 to Pred(ControllerNumAxes[j]) do

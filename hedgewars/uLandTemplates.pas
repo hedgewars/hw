@@ -1325,7 +1325,7 @@ const Template36Points: array[0..18] of TSDL_Rect =
        (x: 2047; y:    0)
       );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
-/// Ok. Tiy doesn't care for these.  Perhaps they could be saved.
+/// Ok. Tiy does not care for these.  Perhaps they could be saved.
 /// For now, just rare.
 //////////////////////////////////////////////////////////////////////////////
 
