@@ -353,8 +353,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
 {$ENDIF}
 AddProgress;
 
-{$IFNDEF IPHONEOS}
-	// remove this ifndef when updating sdl_image
+{$IFDEF SDL_IMAGE_NEWER}
 IMG_Quit();
 {$ENDIF}
 end;
@@ -1170,8 +1169,7 @@ var r: TSDL_Rect;
 begin
 	if Step = 0 then
 	begin
-	{$IFNDEF IPHONEOS}
-	// remove this ifndef when updating sdl_image
+	{$IFDEF SDL_IMAGE_NEWER}
 		WriteToConsole('Init SDL_image... ');
 		SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
 		WriteLnToConsole(msgOK);

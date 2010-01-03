@@ -6,11 +6,22 @@ if(COMMAND cmake_policy)
 	cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+#detect subversion revision (if present)
+set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
+IF (version_suffix MATCHES "-dev" AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.svn) 
+FIND_PACKAGE(Subversion)
+IF(Subversion_FOUND)
+	Subversion_WC_INFO(${CMAKE_HOME_DIRECTORY} Project)
+	MESSAGE(STATUS "Builing revision ${Project_WC_REVISION}")
+	set(version_suffix ".${Project_WC_REVISION}")
+ENDIF(Subversion_FOUND)
+ENDIF()
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "9")
-set(CPACK_PACKAGE_VERSION_PATCH "13-dev")
+set(CPACK_PACKAGE_VERSION_PATCH "13${version_suffix}")
 
 #forbid in-tree building
 #IF (${CMAKE_SOURCE_DIR} MATCHES ${CMAKE_BINARY_DIR})

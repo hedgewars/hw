@@ -113,10 +113,12 @@ var i: TSound;
 begin
 	if not isSoundEnabled then exit;
 
+{$IFDEF SDL_MIXER_NEWER}
 	WriteToConsole('Init SDL_mixer... ');
 	SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
 	WriteLnToConsole(msgOK);
-	
+{$ENDIF}
+
 	defVoicepack:= AskForVoicepack('Default');
 
 for i:= Low(TSound) to High(TSound) do
@@ -142,8 +144,9 @@ for t:= 0 to cMaxTeams do
 				else
 					WriteLnToConsole(msgOK)
 				end;
-	
+{$IFDEF SDL_MIXER_NEWER}
 	Mix_Quit();
+{$ENDIF}	
 end;
 
 procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
