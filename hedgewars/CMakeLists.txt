@@ -8,7 +8,8 @@ find_package(SDL_mixer)
 
 #find which version of SDL_image and SDL_mixer we have (for IMG_Init and Mix_Init)
 #if the headers are not installed, the newer apis won't be activated
-find_file(sdlmixer_h SDL_mixer.h ${SDLMIXER_LIBRARY})
+find_file(sdlmixer_h SDL_mixer.h ${SDLMIXER_INCLUDE_DIR})
+if(sdlmixer_h)
 file(STRINGS ${sdlmixer_h} sdlmixer_version_tmp REGEX "SDL_MIXER_PATCHLEVEL[\t' ']+[0-9]+")
 string(REGEX MATCH ".([0-9]+)" sdlmixer_version "${sdlmixer_version_tmp}")
 
@@ -16,14 +17,17 @@ if(sdlmixer_version GREATER 9)
 message(STATUS "Enabling enhanced SDL_Mixer calls")
 set(pascal_compiler_flags_cmn "-dSDL_MIXER_NEWER" ${pascal_compiler_flags_cmn})
 endif()
+endif()
 
-find_file(sdlimage_h SDL_image.h ${SDLIMAGE_LIBRARY})
+find_file(sdlimage_h SDL_image.h ${SDLIMAGE_INCLUDE_DIR})
+if(sdlimage_h)
 file(STRINGS ${sdlimage_h} sdlimage_version_tmp REGEX "SDL_IMAGE_PATCHLEVEL[\t' ']+[0-9]+")
 string(REGEX MATCH ".([0-9]+)" sdlimage_version "${sdlimage_version_tmp}")
 
 if(sdlimage_version GREATER 7)
 message(STATUS "Enabling enhanced SDL_Image calls")
 set(pascal_compiler_flags_cmn "-dSDL_IMAGE_NEWER" ${pascal_compiler_flags_cmn})
+endif()
 endif()
 
 #SOURCE AND PROGRAMS SECTION 
