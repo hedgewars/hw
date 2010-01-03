@@ -51,10 +51,6 @@
         <translation>エラー</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">下のリストの中でレコードを選択</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>オケ</translation>
     </message>
@@ -274,10 +270,6 @@ or pick another nickname:</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">下のリストの中でサーバーを選択下さい</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>下のリストの中でサーバーを選択下さい</translation>
     </message>
@@ -326,10 +318,6 @@ or pick another nickname:</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">録画を選択下さい</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>オケ</translation>
     </message>
@@ -373,16 +361,8 @@ or pick another nickname:</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">ルーム名を入力してください</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>オケ</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Please, select room from the list</translation>
     </message>
     <message>
         <source>Admin features</source>

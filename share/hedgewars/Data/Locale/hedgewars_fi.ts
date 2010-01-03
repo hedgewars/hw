@@ -52,10 +52,6 @@
         <translation>Virhe</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Ole hyvä ja valitse nauhoite ylläolevasta listasta</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -280,10 +276,6 @@ tai valitse toinen nimimerkki:</translation>
         <translation>Virhe</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Ole hyvä, ja valitse palvelin ylläolevasta listasta</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Ole hyvä ja valitse palvelin ylläolevasta listasta</translation>
     </message>
@@ -332,10 +324,6 @@ tai valitse toinen nimimerkki:</translation>
         <translation>Virhe</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Ole hyvä ja valitse nauhoite listasta</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -379,16 +367,8 @@ tai valitse toinen nimimerkki:</translation>
         <translation>Virhe</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Ole hyvä ja syötä huoneen nimi</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Ole hyvä, ja valitse huone listalta</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -855,10 +835,6 @@ Ole hyvä ja tarkista asennuksesi</translation>
     <message>
         <source>Nickname</source>
         <translation>Nimimerkki</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Ole hyvä, ja syötä nimimerkkisi</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

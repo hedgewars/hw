@@ -1124,7 +1124,7 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
 
 glMatrixMode(GL_MODELVIEW);
 // prepare default translation/scaling
-glLoadIdentity;
+glLoadIdentity();
 glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
 //{$IFDEF IPHONEOS}
 //glRotatef(90, 0, 0, 1);

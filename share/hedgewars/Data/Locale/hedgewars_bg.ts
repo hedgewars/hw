@@ -52,10 +52,6 @@
         <translation>Добре</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Изберете запис от списъка</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Грешка при запис във файл %1</translation>
     </message>
@@ -277,10 +273,6 @@ or pick another nickname:</source>
         <translation>Грешка</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Изберете сървър от списъка</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Изберете сървър от списъка</translation>
     </message>
@@ -327,10 +319,6 @@ or pick another nickname:</source>
     <message>
         <source>Error</source>
         <translation>Грешка</translation>
-    </message>
-    <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Изберете запис от списъка</translation>
     </message>
     <message>
         <source>OK</source>
@@ -380,16 +368,8 @@ or pick another nickname:</source>
         <translation>Грешка</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Моля, въведете име на стая</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>ОК</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Моля, изберете стая от списъка</translation>
     </message>
     <message>
         <source>Room Name:</source>

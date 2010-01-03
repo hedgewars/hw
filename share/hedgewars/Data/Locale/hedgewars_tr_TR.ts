@@ -51,10 +51,6 @@
         <translation>Hata</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Lütfen üstteki listeden kaydı seçin</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
@@ -274,10 +270,6 @@ or pick another nickname:</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Lütfen üstteki listeden bir sunucu seçin</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Lütfen üstteki listeden bir sunucu seçin</translation>
     </message>
@@ -326,10 +318,6 @@ or pick another nickname:</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Lütfen listeden kaydı seçin</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>Tamam</translation>
     </message>
@@ -373,16 +361,8 @@ or pick another nickname:</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Lütfen oda ismini girin</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>Tamam</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Lütfen listeden bir oda seçin</translation>
     </message>
     <message>
         <source>Admin features</source>

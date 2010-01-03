@@ -51,10 +51,6 @@
         <translation>确认</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">请选择一个记录</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>无法录入文件 %1</translation>
     </message>
@@ -277,10 +273,6 @@ or pick another nickname:</source>
         <translation>错误</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">请选择一个服务器</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>请选择一个服务器</translation>
     </message>
@@ -329,10 +321,6 @@ or pick another nickname:</source>
         <translation>错误</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">请从列表选择记录</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>确认</translation>
     </message>
@@ -376,16 +364,8 @@ or pick another nickname:</source>
         <translation>错误</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">请键入房间名</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>确认</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">请从列表选中房间</translation>
     </message>
     <message>
         <source>Admin features</source>

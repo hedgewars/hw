@@ -52,10 +52,6 @@
         <translation>OK</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Veuillez sélectionner une partie dans la liste ci-dessus</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Impossible de sauvegarder la partie dans le fichier %1</translation>
     </message>
@@ -280,10 +276,6 @@ ou choisir un nouveau pseudo:</translation>
         <translation>Erreur</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Veuillez sélectionner un serveur dans la liste ci-dessus</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Veuillez sélectionner un serveur dans la liste ci-dessus</translation>
     </message>
@@ -332,10 +324,6 @@ ou choisir un nouveau pseudo:</translation>
         <translation>Erreur</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Veuillez sélectionner une partie dans cette liste</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -379,16 +367,8 @@ ou choisir un nouveau pseudo:</translation>
         <translation>Erreur</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Veuillez saisir le nom du salon</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Veuillez sélectionner un salon dans la liste</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -855,10 +835,6 @@ Veuillez vérifier votre installation</translation>
     <message>
         <source>Nickname</source>
         <translation>Pseudo</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Veuillez entrer votre pseudo</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
@@ -1597,53 +1573,6 @@ zoom</translation>
     <message>
         <source>DPad</source>
         <translation>DPad</translation>
-    </message>
-</context>
-<context>
-    <name>teams</name>
-    <message>
-        <source>Hedgehogs</source>
-        <translation type="obsolete">Hérissons</translation>
-    </message>
-    <message>
-        <source>hedgehog 1</source>
-        <translation type="obsolete">hérisson 1</translation>
-    </message>
-    <message>
-        <source>Goddess</source>
-        <translation type="obsolete">Déesse</translation>
-    </message>
-    <message>
-        <source>Isis</source>
-        <translation type="obsolete">Isis</translation>
-    </message>
-    <message>
-        <source>Astarte</source>
-        <translation type="obsolete">Astarté</translation>
-    </message>
-    <message>
-        <source>Diana</source>
-        <translation type="obsolete">Diane</translation>
-    </message>
-    <message>
-        <source>Aphrodite</source>
-        <translation type="obsolete">Aphrodite</translation>
-    </message>
-    <message>
-        <source>Hecate</source>
-        <translation type="obsolete">Hécate</translation>
-    </message>
-    <message>
-        <source>Demeter</source>
-        <translation type="obsolete">Déméter</translation>
-    </message>
-    <message>
-        <source>Kali</source>
-        <translation type="obsolete">Kâlî</translation>
-    </message>
-    <message>
-        <source>Inanna</source>
-        <translation type="obsolete">Inanna</translation>
     </message>
 </context>
 </TS>

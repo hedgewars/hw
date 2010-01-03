@@ -53,10 +53,6 @@
         <translation>Так</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Виберіть запис зі списку</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Не можу зберегти запис до файлу %1</translation>
     </message>
@@ -283,10 +279,6 @@ or pick another nickname:</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Выберіть сервер зі списку</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Выберіть сервер зі списку</translation>
     </message>
@@ -335,10 +327,6 @@ or pick another nickname:</source>
         <translation>Помилка</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Выберіть запис зі списку</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>Так</translation>
     </message>
@@ -382,16 +370,8 @@ or pick another nickname:</source>
         <translation type="unfinished">Помилка</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Будь ласка введіть ім&apos;я кімнати</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation type="unfinished">Так</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Будь ласка виберіть кімнату зі списку</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -860,10 +840,6 @@ Please check your installation</source>
     <message>
         <source>Nickname</source>
         <translation type="unfinished">Ім&apos;я</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Будь ласка введіть ваше ім&apos;я</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

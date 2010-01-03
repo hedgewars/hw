@@ -48,10 +48,6 @@
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Por favor, selecione um entrada na lista acima</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -277,10 +273,6 @@ or pick another nickname:</source>
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Por favor, selecione o servidor na lista acima</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Por favor selecione o servidor na lista acima</translation>
     </message>
@@ -327,10 +319,6 @@ or pick another nickname:</source>
     <message>
         <source>Error</source>
         <translation>Erro</translation>
-    </message>
-    <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Por favor, selecione uma entrada da lista</translation>
     </message>
     <message>
         <source>OK</source>

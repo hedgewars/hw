@@ -563,7 +563,7 @@ procedure Game;
 var s: shortstring;
 begin
 WriteToConsole('Init SDL... ');
-SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_JOYSTICK) >= 0, true);
+SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
 WriteLnToConsole(msgOK);
 
 SDL_EnableUNICODE(1);

@@ -53,10 +53,6 @@
         <translation>Chyba</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Prosím, vyberte záznam ze seznamu výše</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -280,10 +276,6 @@ or pick another nickname:</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Prosím, vyberte server ze seznamu výše</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Prosím vyberte server ze seznamu výše</translation>
     </message>
@@ -332,10 +324,6 @@ or pick another nickname:</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Prosím, vyberte záznam ze seznamu</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -379,16 +367,8 @@ or pick another nickname:</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Prosím, zadejte jméno místnosti</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Prosím, vyberte místnost ze seznamu</translation>
     </message>
     <message>
         <source>Admin features</source>

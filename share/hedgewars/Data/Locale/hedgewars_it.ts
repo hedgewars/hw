@@ -48,10 +48,6 @@
         <translation>Errore</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Inserisci il record dalla lista sottostante</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -280,10 +276,6 @@ o scegli un altro nickname:</translation>
         <translation>Errore</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Seleziona il server dalla lista sottostante</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Seleziona il server dalla lista sottostante</translation>
     </message>
@@ -332,10 +324,6 @@ o scegli un altro nickname:</translation>
         <translation>Errore</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Seleziona un record dalla lista</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -379,16 +367,8 @@ o scegli un altro nickname:</translation>
         <translation>Errore</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Inserisci il nome della room</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Seleziona la room dalla lista</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -618,10 +598,6 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     <message>
         <source>Reduced quality</source>
         <translation>Qualità ridotta</translation>
-    </message>
-    <message>
-        <source>Hardware sound (if available; requires restart)</source>
-        <translation type="obsolete">Usa accelerazione Hardware per il suono (se disponibile; richiede riavvio)</translation>
     </message>
 </context>
 <context>
@@ -859,10 +835,6 @@ Controllare la propria installazione</translation>
     <message>
         <source>Nickname</source>
         <translation>Nickname</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Per favore, inserisci il tuo nickname</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
@@ -1600,117 +1572,6 @@ hedgehogs</translation>
     <message>
         <source>DPad</source>
         <translation>DPad</translation>
-    </message>
-</context>
-<context>
-    <name>teams</name>
-    <message>
-        <source>Hedgehogs</source>
-        <translation type="obsolete">Hedgehogs</translation>
-    </message>
-    <message>
-        <source>hedgehog 1</source>
-        <translation type="obsolete">hedgehog 1</translation>
-    </message>
-    <message>
-        <source>hedgehog 2</source>
-        <translation type="obsolete">hedgehog 2</translation>
-    </message>
-    <message>
-        <source>hedgehog 3</source>
-        <translation type="obsolete">hedgehog 3</translation>
-    </message>
-    <message>
-        <source>hedgehog 4</source>
-        <translation type="obsolete">hedgehog 4</translation>
-    </message>
-    <message>
-        <source>hedgehog 5</source>
-        <translation type="obsolete">hedgehog 5</translation>
-    </message>
-    <message>
-        <source>hedgehog 6</source>
-        <translation type="obsolete">hedgehog 6</translation>
-    </message>
-    <message>
-        <source>hedgehog 7</source>
-        <translation type="obsolete">hedgehog 7</translation>
-    </message>
-    <message>
-        <source>hedgehog 8</source>
-        <translation type="obsolete">hedgehog 8</translation>
-    </message>
-    <message>
-        <source>Goddess</source>
-        <translation type="obsolete">Dea</translation>
-    </message>
-    <message>
-        <source>Isis</source>
-        <translation type="obsolete">Iside</translation>
-    </message>
-    <message>
-        <source>Astarte</source>
-        <translation type="obsolete">Astarte</translation>
-    </message>
-    <message>
-        <source>Diana</source>
-        <translation type="obsolete">Diana</translation>
-    </message>
-    <message>
-        <source>Aphrodite</source>
-        <translation type="obsolete">Afrodite</translation>
-    </message>
-    <message>
-        <source>Hecate</source>
-        <translation type="obsolete">Ecate</translation>
-    </message>
-    <message>
-        <source>Demeter</source>
-        <translation type="obsolete">Demetra</translation>
-    </message>
-    <message>
-        <source>Kali</source>
-        <translation type="obsolete">Kali</translation>
-    </message>
-    <message>
-        <source>Inanna</source>
-        <translation type="obsolete">Inanna</translation>
-    </message>
-    <message>
-        <source>Fruits</source>
-        <translation type="obsolete">Frutta</translation>
-    </message>
-    <message>
-        <source>Banana</source>
-        <translation type="obsolete">Banana</translation>
-    </message>
-    <message>
-        <source>Apple</source>
-        <translation type="obsolete">Mela</translation>
-    </message>
-    <message>
-        <source>Orange</source>
-        <translation type="obsolete">Arancia</translation>
-    </message>
-    <message>
-        <source>Lemon</source>
-        <translation type="obsolete">Limone</translation>
-    </message>
-    <message>
-        <source>Pineapple</source>
-        <translation type="obsolete">Ananas</translation>
-    </message>
-    <message>
-        <source>Mango</source>
-        <translation type="obsolete">Mango</translation>
-    </message>
-    <message>
-        <source>Peach</source>
-        <translation type="obsolete">Pesca</translation>
-    </message>
-    <message>
-        <source>Plum</source>
-        <translation type="obsolete">Prugna</translation>
     </message>
 </context>
 </TS>

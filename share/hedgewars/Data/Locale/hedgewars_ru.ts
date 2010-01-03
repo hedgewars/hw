@@ -53,10 +53,6 @@
         <translation>ОК</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Выберите запись из списка</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Не могу сохранить запись в файл %1</translation>
     </message>
@@ -283,10 +279,6 @@ or pick another nickname:</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Выберите сервер из списка</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Выберите сервер из списка</translation>
     </message>
@@ -335,10 +327,6 @@ or pick another nickname:</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Выберите запись из списка</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
@@ -382,16 +370,8 @@ or pick another nickname:</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Введите название комнаты</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>ОК</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Выберите комнату из списка</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -860,10 +840,6 @@ Please check your installation</source>
     <message>
         <source>Nickname</source>
         <translation>Псевдоним</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Пожалуйста, введите ваш псевдоним</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

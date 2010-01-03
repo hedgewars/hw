@@ -52,10 +52,6 @@
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Seleccione uma gravação da lista acima</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -280,10 +276,6 @@ ou escolha outro nome de utilizador:</translation>
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Seleccione um servidor da lista acima</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Seleccione um servidor da lista acima</translation>
     </message>
@@ -352,10 +344,6 @@ ou escolha outro nome de utilizador:</translation>
         <translation>Não é possível eliminar o ficheiro</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Por favor seleccione uma gravação da lista</translation>
-    </message>
-    <message>
         <source>Please select record from the list</source>
         <translation>Por favor seleccione uma gravação da lista</translation>
     </message>
@@ -383,16 +371,8 @@ ou escolha outro nome de utilizador:</translation>
         <translation>Erro</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Insira o nome da sala</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Seleccione uma sala da lista</translation>
     </message>
     <message>
         <source>Room Name:</source>
@@ -855,10 +835,6 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Nickname</source>
         <translation>Nome de utilizador</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Por favor, insira o seu nome de utilizador</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

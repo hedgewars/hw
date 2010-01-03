@@ -72,7 +72,7 @@ var i: TSound;
 begin
 	if not isSoundEnabled then exit;
 	WriteToConsole('Init sound...');
-	isSoundEnabled:= SDL_Init(SDL_INIT_AUDIO) >= 0;
+	isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
 	if isSoundEnabled then
 		isSoundEnabled:= Mix_OpenAudio(44100, $8010, 2, 1024) = 0;

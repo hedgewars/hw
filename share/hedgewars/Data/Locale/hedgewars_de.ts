@@ -48,10 +48,6 @@
         <translation>Fehler</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Bitte wähle einen Eintrag aus der Liste aus</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -281,10 +277,6 @@ wähle einen anderen Spitznamen:</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Bitte einen Server aus der Liste auswählen</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Bitte wähle einen Eintrag aus der Liste aus</translation>
     </message>
@@ -333,10 +325,6 @@ wähle einen anderen Spitznamen:</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Bitte einen Eintrag aus der Liste auswählen</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -380,16 +368,8 @@ wähle einen anderen Spitznamen:</translation>
         <translation>Fehler</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Bitte einen Raumnamen eingeben</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Bitte einen Raum aus der Liste auswählen</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -856,10 +836,6 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Nickname</source>
         <translation>Spitzname</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Bitte gib deinen Spitznamen ein</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

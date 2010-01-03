@@ -48,10 +48,6 @@
         <translation>Fel</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Var god välj inspelning från listan ovanför</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -277,10 +273,6 @@ or pick another nickname:</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Var god välj server från listan ovanför</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Var god välj server från listan ovanför</translation>
     </message>
@@ -329,10 +321,6 @@ or pick another nickname:</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Var god välj inspelning från listan</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -376,16 +364,8 @@ or pick another nickname:</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Var god skriv rummets namn</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Var god välj ett rum från listan</translation>
     </message>
     <message>
         <source>Admin features</source>

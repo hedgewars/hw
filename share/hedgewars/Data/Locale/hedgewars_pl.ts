@@ -49,10 +49,6 @@
         <translation>Błąd</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Wybierz nagranie z listy</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -283,10 +279,6 @@ bądź wybierz inny nick:</translation>
         <translation>Błąd</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Wybierz serwer z listy powyżej</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Wybierz serwer z listy powyżej</translation>
     </message>
@@ -335,10 +327,6 @@ bądź wybierz inny nick:</translation>
         <translation>Błąd</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Wybierz nagranie z listy</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -382,16 +370,8 @@ bądź wybierz inny nick:</translation>
         <translation>Błąd</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Wprowadź nazwę pokoju</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Wybierz pokój z listy</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -860,10 +840,6 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>Nickname</source>
         <translation type="unfinished">Nick</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Podaj swój nick</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

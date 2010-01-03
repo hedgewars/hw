@@ -52,10 +52,6 @@
         <translation>Error</translation>
     </message>
     <message>
-        <source>Please, select record from the list above</source>
-        <translation type="obsolete">Please, select record from the list above</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -280,10 +276,6 @@ or pick another nickname:</translation>
         <translation>Error</translation>
     </message>
     <message>
-        <source>Please, select server from the list above</source>
-        <translation type="obsolete">Please, select server from the list above</translation>
-    </message>
-    <message>
         <source>Please select server from the list above</source>
         <translation>Please select server from the list above</translation>
     </message>
@@ -332,10 +324,6 @@ or pick another nickname:</translation>
         <translation>Error</translation>
     </message>
     <message>
-        <source>Please, select record from the list</source>
-        <translation type="obsolete">Please, select record from the list</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -379,16 +367,8 @@ or pick another nickname:</translation>
         <translation>Error</translation>
     </message>
     <message>
-        <source>Please, enter room name</source>
-        <translation type="obsolete">Please, enter room name</translation>
-    </message>
-    <message>
         <source>OK</source>
         <translation>OK</translation>
-    </message>
-    <message>
-        <source>Please, select room from the list</source>
-        <translation type="obsolete">Please, select room from the list</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -853,10 +833,6 @@ Please check your installation</translation>
     <message>
         <source>Nickname</source>
         <translation>Nickname</translation>
-    </message>
-    <message>
-        <source>Please, enter your nickname</source>
-        <translation type="obsolete">Please, enter your nickname</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>

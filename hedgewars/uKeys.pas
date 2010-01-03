@@ -413,8 +413,10 @@ var Controller: array [0..5] of PSDL_Joystick;
 procedure ControllerInit;
 var i, j: Integer;
 begin
+SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
 ControllerEnabled:= 0;
-ControllerNumControllers:= SDL_NumJoysticks;
+ControllerNumControllers:= SDL_NumJoysticks();
 
 if ControllerNumControllers > 6 then ControllerNumControllers:= 6;
 
