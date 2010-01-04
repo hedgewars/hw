@@ -31,7 +31,7 @@
 00:28=Misil perforador
 00:29=Lanzapelotas
 00:30=Napalm
-00:31=Avión teledirigido
+00:31=Avión tele-dirigido
 00:32=Baja gravedad
 00:33=Daño extra
 00:34=Invulnerabilidad
@@ -40,7 +40,7 @@
 00:37=Vampirismo
 00:38=Rifle francotirador
 00:39=Platillo volante
-00:40=Cocktail molotov
+00:40=Cóctel molotov
 
 01:00=Luchad!
 01:01=Empate
@@ -122,7 +122,7 @@
 02:01=%1 está chorreando
 02:01=%1 olvidó su salvavidas
 02:01=%1 está durmiendo con los peces
-02:01=%1 piensa que la física de fluídos de este juego apesta
+02:01=%1 piensa que la física de fluidos de este juego apesta
 02:01=%1 tenía sed, MUCHA sed
 02:01=El océano reclamó a %1
 02:01=%1 está perdido en el mar
@@ -182,7 +182,7 @@
 02:02=¡Da lo mejor!
 02:02=¡El que pierda, paga!
 02:02=Que empiece la batalla del milenio
-02:02=Que empiece la batalla del sigo
+02:02=Que empiece la batalla del siglo
 02:02=Que empiece la batalla de la década
 02:02=Que empiece la batalla del año
 02:02=Que empiece la batalla del mes
@@ -287,7 +287,7 @@
 02:08=%1 es un cobardica
 02:08=Co-Co-Cococó, %1 es una gallina
 02:08=¡%1 es un cobarde!
-02:08=%1 está esperando a la muerte súbida
+02:08=%1 está esperando a la muerte súbita
 02:08=%1 no se encuentra en forma
 02:08=%1 está reconsiderando el sentido de su vida
 02:08=%1 nunca tuvo mucha puntería, de todas formas
@@ -329,12 +329,13 @@
 02:09=No se puede esperar que %1 sea perfecto todo el tiempo
 02:09=No te preocupes, %1, nabie es ferpecto
 02:09=¡Por supuesto que %1 hizo eso a propósito!
-02:09=No se lo diré a nadie ti tú tampoco lo haces, %1
+02:09=No se lo diré a nadie si tú tampoco lo haces, %1
 02:09=¡Qué vergüenza!
-02:09=Seguro que nadie te vio, %1
+02:09=Seguro que nadie ha visto, %1
 02:09=%1 necesita revisar el manual
 02:09=Las armas de %1 eran obviamente defectuosas
 ; Home run (usando el bate de béisbol)
 02:10=Home Run!
 02:10=Es un pájaro, es un avión...
 02:10=Eliminado!
+
