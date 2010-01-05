@@ -110,7 +110,7 @@ type
 			amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
 			amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov);
 
-	THWFont = (fnt16, fntBig, fntSmall);
+	THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
 	TCapGroup = (capgrpGameState, capgrpAmmoinfo, capgrpVolume,
 			capgrpMessage, capgrpAmmostate);
@@ -370,10 +370,7 @@ const
 			(Handle: nil;
 			Height: 10;
 			style: TTF_STYLE_NORMAL;
-			Name: 'DejaVuSans-Bold.ttf')
-			);
-
-	FontzCJK: array[THWFont] of THHFont = (
+			Name: 'DejaVuSans-Bold.ttf'),
 			(Handle: nil;
 			Height: 12;
 			style: TTF_STYLE_NORMAL;

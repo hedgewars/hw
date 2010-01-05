@@ -633,9 +633,6 @@ end;
 begin
 WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
 GetParams;
-// FIXME -  hack in font with support for CJK
-if (cLocaleFName = 'zh_CN.txt') or (cLocaleFName = 'zh_TW.txt') or (cLocaleFName = 'ja.txt') then
-    Fontz:= FontzCJK;
 
 Randomize;
 

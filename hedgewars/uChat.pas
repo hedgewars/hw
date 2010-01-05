@@ -59,6 +59,7 @@ procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
 	w, h: LongInt;
 	color: TSDL_Color;
+    font: THWFont;
 begin
 if cl.Tex <> nil then
 	FreeTexture(cl.Tex);
@@ -81,12 +82,12 @@ begin
 	delete(str, 1, 1)
 end;
 
-
-TTF_SizeUTF8(Fontz[fnt16].Handle, Str2PChar(str), w, h);
+font:= CheckCJKFont(str, fnt16);
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), w, h);
 
 resSurface:= SDL_CreateRGBSurface(0, toPowerOf2(w), toPowerOf2(h), 32, RMask, GMask, BMask, AMask);
 
-strSurface:= TTF_RenderUTF8_Solid(Fontz[fnt16].Handle, Str2PChar(str), color);
+strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), color);
 cl.Width:= w + 4;
 SDL_UpperBlit(strSurface, nil, resSurface, nil);
 SDL_FreeSurface(strSurface);
