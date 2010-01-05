@@ -1,0 +1,247 @@
+; Galician locale
+
+00:00=Granada
+00:01=Granada de fragmentación
+00:02=Lanzamísiles
+00:03=OVNI
+00:04=Escopeta
+00:05=Taladradora
+00:06=Pasar
+00:07=Corda
+00:08=Mina
+00:09=DEagle
+00:10=Dinamita
+00:11=Bate de béisbol
+00:12=Puñada de lume
+00:13=seg
+00:14=Paracaídas
+00:15=Ataque aéreo
+00:16=Bombardeo de minas
+00:17=Soplete
+00:18=Construción
+00:19=Teleportación
+00:20=Cambiar de ourizo
+00:21=Mortero
+00:22=Látego
+00:23=Suicida
+00:24=Pastel
+00:25=Sedución
+00:26=Sandía bomba
+00:27=Granada infernal
+00:28=Mísil taladrador
+00:29=Lanza bólas
+00:30=Napalm
+00:31=Avión teledirixido
+00:32=Baixa gravidade
+00:33=Dano adicional
+00:34=Invulnerable
+00:35=Tempo adicional
+00:36=Mira láser
+00:37=Vampirismo
+00:38=Francotirador
+00:39=Disco volador
+00:40=Cóctel Molotov
+
+01:00=Á loita!
+01:01=Empate
+01:02=%1 gaña!
+01:03=Volume %1%
+01:04=En pausa
+01:05=Saír (Y/Esc)?
+01:06=Morte súbita!
+01:07=%1 restante
+01:08=Combustible
+01:09=Sincronizando...
+
+; Mensaxes de eventos
+
+; O ourizo (%1) morreu
+02:00=%1 pasou a mellor vida!
+02:00=%1 veu a luz ao final do túnel... e foi canda ela!
+02:00=%1 aborrecía a vida!
+02:00=%1 non ha volver ver a luz do sol!
+02:00=%1 palmouna!
+02:00=%1 estirou a pata!
+02:00=Quen se pide á viúva de %1?
+02:00=%1 cagouna!
+02:00=%1 morreu!
+02:00=%1 foi canda San Pedro!
+02:00=O reloxo de %1 parouse... xunto a el!
+02:00=%1, endexamáis che esqueceremos!
+02:00=%1 alistárase polos cartos!
+02:00=Ese cadáver é de %1?!
+02:00=%1 era un bo ourizo
+02:00=Deica outra, %1!
+02:00=Verémonos na outra vida, %1!
+02:00=%1 faleceu!
+02:00=%1 era tan novo, que desgraza!
+02:00=%1 feneceu!
+02:00=%1 pereceu!
+02:00=O corazón de %1 deixou de latexar!
+02:00=A alma de %1 apagouse lentamente...
+
+; O ourizo (%1) afogouse
+02:01=%1 afundiu!
+02:01=F7, %1 tocado e afundido!
+02:01=%1 pensaba que podería respirar baixo o auga!
+02:01=%1 namorou dunha serea!
+02:01=%1 volve ao mar!
+02:01=%1 foi investigar a Teoría de Placas!
+02:01=%1 veu unha moeda na auga!
+02:01=%1 fai submarinismo!
+02:01=Nunca digas «nesta auga non afogarei», %1
+02:01=%1 cre que é Aquaman!
+02:01=%1 tocou fondo, literalmente...
+02:01=%1 foi buscar a Nemo!
+02:01=Mariñeiro en terra, %1 en auga!
+02:01=Mar 1, %1 0!
+02:01=A avoa de %1 llo dixera, «vas caer...»
+02:01=%1 foi visitar a Costa da Morte!
+02:01=%1 non sabía nadar!
+02:01=%1 esqueceu pór o chaleco salvavidas
+02:01=%1 afondou!
+02:01=%1 non soportou as fortes ondas!
+
+; Round starts
+02:02=Á loita!
+02:02=Ás armas!
+02:02=Preparados!
+02:02=Dadelle!
+02:02=Que comece o espectáculo!
+02:02=Que non quede ningún en pe!
+02:02=Vamos!
+02:02=Está a piques de comezar...
+02:02=O día de hoxe ha pasar á historia!
+02:02=En primeira liña, ourizos!
+02:02=Non deixedes pedra sobre pedra!
+02:02=Que gañe o mellor!
+02:02=Vitoria ou morte!
+02:02=Perder non é unha opción!
+02:02=Cosidérate afortunado de non enfrontarte con Tiyuri
+02:02=Cosidérate afortunado de non enfrontarte con unC0Rr
+02:02=Cosidérate afortunado de non enfrontarte con Nemo
+02:02=Cosidérate afortunado de non enfrontarte con Smaxx
+02:02=Cosidérate afortunado de non enfrontarte con Jessor
+02:02=A dalo todo!
+02:02=Quen perda limpa!
+02:02=Elimina o opoñente
+02:02=Borra aos inimigos da face da terra!
+02:02=Sorte, meu!
+02:02=Pásao ben!
+02:02=Loita como nunca antes loitaras!
+02:02=Xoga limpo
+02:02=Xoga sucio
+02:02=Non te rindas!
+02:02=Nunca te rindas!
+02:02=Que comece a matanza!
+02:02=Dálle! Dálle! Dálle!
+02:02=Dadelle duro!
+02:02=Non temades á morte!
+02:02=Á conquista!
+02:02=Esnaquizádeos!
+02:02=Facédeos bicar o chan!
+02:02=Espetádeos contra o chan!
+02:02=Ourizada!
+
+; Round ends (win; unused atm)
+02:03=...
+
+; Round ends (draw; unused atm)
+02:04=...
+
+; New health crate
+02:05=Haberá aspirinas?
+02:05=Marchando un chute de morfina!
+02:05=Axuda divina!
+02:05=Os da Cruz Vermella lembráronse de nós!
+02:05=A boa vida... agora ben en caixas!
+02:05=Chegou o médico!
+02:05=Cólleo!
+02:05=Xusto o que o corpo precisa
+02:05=Haberá algo aí para a resaca?
+02:05=Envío urxente
+02:05=Quen pediu vida?
+
+; New ammo crate
+02:06=A arma que encarguei!
+02:06=Reforzos!
+02:06=Recargade!
+02:06=Que haberá aí dentro?
+02:06=Munición!
+02:06=O Nadal chegou ao Hedgewars!
+02:06=Un agasaio!
+02:06=Envío especial!
+02:06=Quen pediu un arma de destrucción masiva?
+02:06=Anxos! Vexo anxos!
+02:06=Coidado: material volátil!
+02:06=Nota: non axitar antes de usar!
+02:06=Correo aéreo!
+02:06=Seguro que o que hai edntro non é pizza...
+02:06=Collédeo!
+02:06=Que non nolo collan!
+02:06=Unha caixa misteriosa!
+
+; New utility crate
+02:07=Ferramentas!
+02:07=Vexamos que enviaron da ferretería...
+02:07=Máis ferramentas!
+02:07=Sexa o que sexa, seguro que lle sacamos partido!
+02:07=Ferramentas?! Queremos armas!
+
+; Hog (%1) skips his turn
+02:08=%1 case mexa por riba!
+02:08=%1 está feito un preguiceiro...
+02:08=%1 non dá
+02:08=%1 non sabe que facer
+02:08=A %1 fáltalle4 motivación
+02:08=O %1 vai de pacifista
+02:08=A %1 contratárono os de Green Peace
+02:08=%1 vai botar unha sesta
+02:08=%1 vai botar unha soneca
+02:08=%1 vai descansar
+02:08=%1 aínda ten que pensar a xogada
+02:08=%1 prefire esperar a ver o que fai o inimigo
+02:08=%1 escóndese
+02:08=%1 perdeu a súa oportunidade
+02:08=%1 deixa de ser un ourizo para ser unha galiña
+02:08=%1 é un covarde!
+02:08=Tampouco é que %1 fose facer nada útil...
+02:08=A %1 metérono no exército os pais, xa sabedes
+02:08=Non nos fagas perder o tempo, %1
+02:08=O que faltaba, %1, o que faltaba
+02:08=Veña, %1, non me amoles!
+02:08=%1 está a contar ovellas...
+
+; Hog (%1) dánase a si mesmo
+02:09=%1 non sabe apuntar!
+02:09=%1 parece emo
+02:09=%1 equivocouse de bando!
+02:09=A %1 saíulle o tiro pola culata!
+02:09=%1 é masoquista
+02:09=%1 non ten instinto de supervivencia
+02:09=Penoso, %1
+02:09=%1 debería cambiar de carreira
+02:09=Peor imposible, %1!
+02:09=A ver como cho explico, %1, tes que dispararlle ao inimigo!
+02:09=%1 está pensando no suicidio
+02:09=%1 botoulle unha man ao inimigo
+02:09=%1 é parvo
+02:09=%1 está tonto
+02:09=%1 é estúpido
+02:09=%1 é un idiota
+02:09=%1 é un pánfilo
+02:09=Non hai por onde coller a %1
+02:09=%1 quere entender ás súas vítimas, que será o seguinte?
+02:09=%1 anda a facer o parvo
+02:09=Non te preocupes, %1, ninguén é perfecto
+02:09=Mellor que ninguén se entere do que fixeches, %1
+02:09=Espero que ninguén o vise, %1
+02:09=%1 ten que repasar o capítulo de Barrio Sésamo «Atacar ao inimigo»
+02:09=A arma de %1 non estaba ben. Pero á seguinte non falla!
+
+; Hog shot an home run (using the bat and another hog)
+02:10=Vaia golpe!
+02:10=É un paxaro? É un avión?
+02:10=Zas! En toda a boca!
+02:10=Iso debe de doer...
+02:10=Arranxoulle a cara...
