@@ -17,6 +17,7 @@
  *)
 
 {$INCLUDE "options.inc"}
+{$IFDEF IPHONEOS} {$MODE OBJFPC} {$ENDIF}
 
 unit uKeys;
 interface
@@ -40,13 +41,20 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
+{$IFDEF IPHONEOS}
+procedure HW_click; cdecl; export;
+procedure HW_zoomIn; cdecl; export;
+procedure HW_zoomOut; cdecl; export;
+procedure HW_ammoMenu; cdecl; export;
+{$ENDIF}
+
 var	hideAmmoMenu: boolean;
 	wheelUp: boolean = false;
 	wheelDown: boolean = false;
 {$IFDEF TOUCHINPUT}
-        leftClick: boolean = false;
-        middleClick: boolean = false;
-        rightClick: boolean = false;
+	leftClick: boolean = false;
+	middleClick: boolean = false;
+	rightClick: boolean = false;
 
 	upKey: boolean = false;
 	downKey: boolean = false;
@@ -83,13 +91,45 @@ var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     DefaultBinds, CurrentBinds: TBinds;
 
-function KeyNameToCode(name: string): word;
-var Result: Word;
+{$IFDEF IPHONEOS}
+// these are called by the touch functions present in SDL_uikitview.m
+procedure HW_click; cdecl; export;
 begin
-Result:= cKeyMaxIndex;
-while (Result > 0) and (KeyNames[Result] <> name) do dec(Result);
-KeyNameToCode:= Result
+	WriteLnToConsole('HW - general click');
+	leftClick:= true;
+	exit
 end;
+
+procedure HW_zoomIn; cdecl; export;
+begin
+	WriteLnToConsole('HW - zooming in');
+	wheelUp:= true;
+	exit
+end;
+
+procedure HW_zoomOut; cdecl; export;
+begin
+	WriteLnToConsole('HW - zooming out');
+	wheelDown:= true;
+	exit
+end;
+
+procedure HW_ammoMenu; cdecl; export;
+begin
+	WriteLnToConsole('HW - opening ammomenu');
+	rightClick:= true;
+	exit
+end;
+{$ENDIF}
+	
+function KeyNameToCode(name: string): word;
+var code: Word;
+begin
+	code:= cKeyMaxIndex;
+	while (code > 0) and (KeyNames[code] <> name) do dec(code);
+	KeyNameToCode:= code;
+end;
+
 
 procedure ProcessKbd;
 var  i, j, k: LongInt;
@@ -128,7 +168,7 @@ tkbdn[3]:= ((k shr 2) and 1);
 {$ENDIF}
 tkbdn[2]:= ((k shr 1) and 1);
 
-// mouse wheels (see event loop in project file)
+// mouse wheels
 tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
