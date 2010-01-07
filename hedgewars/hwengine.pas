@@ -160,25 +160,12 @@ var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
 {$IFDEF TOUCHINPUT}
-type TDirection = (nodir, left, right);
 var tiltValue: LongInt;
-    direction: TDirection = nodir;
-    movedbybuttons: boolean = false;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
 repeat
 while SDL_PollEvent(@event) <> 0 do
-{$IFDEF TOUCHINPUT}
-if (direction <> nodir) and (movedbybuttons = true) then
-begin
-	WriteLnToConsole('* Hedgehog moving *');
-        uKeys.isWalking:= true;
-        if direction = left then uKeys.leftKey:= true
-        else if direction = right then uKeys.rightKey:= true;
-end
-else uKeys.isWalking:= false;
-{$ENDIF}
 	case event.type_ of
 {$IFDEF SDL13}
 		SDL_WINDOWEVENT:

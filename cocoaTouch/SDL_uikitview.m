@@ -22,17 +22,17 @@
 
 #include "PascalImports.h"
 #import "SDL_uikitview.h"
+#import "SDL_uikitappdelegate.h"
 
 #if SDL_IPHONE_KEYBOARD
 #import "SDL_keyboard_c.h"
 #import "keyinfotable.h"
 #import "SDL_uikitwindow.h"
-#import "SDL_uikitappdelegate.h"
 #endif
 
 @implementation SDL_uikitview
 
-@synthesize initialDistance;
+@synthesize initialDistance, gestureStartPoint;
 
 - (void)dealloc {
 #if SDL_IPHONE_KEYBOARD
@@ -67,7 +67,6 @@
 
 // we override default touch input to implement our own gestures
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-
 	/*NSEnumerator *enumerator = [touches objectEnumerator];
 	UITouch *touch =(UITouch*)[enumerator nextObject];
 	
@@ -112,7 +111,15 @@
 		SDL_SelectMouse(oldMouse);
 		
 	}	*/
+	
 	UITouch *touch = [touches anyObject];
+	gestureStartPoint = [touch locationInView:self];
+
+	if (1 == [touch tapCount] ) {
+		//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
+		HW_click();
+	}
+	
 	if (2 == [touch tapCount] ) {
 		HW_ammoMenu();
 	}
@@ -127,6 +134,9 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistance = 0;
+	NSLog(@"touches ended, sigh");
+	
+	HW_allKeysUp();
 	/*NSEnumerator *enumerator = [touches objectEnumerator];
 	UITouch *touch=nil;
 	
@@ -158,10 +168,21 @@
 
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch *touch = [touches anyObject];
+	CGPoint currentPosition = [touch locationInView:self];
 	
-//	NSEnumerator *enumerator = [touches objectEnumerator];
-//	UITouch *touch=nil;
-
+	CGFloat deltaX = fabsf(gestureStartPoint.x - currentPosition.x);
+    CGFloat deltaY = fabsf(gestureStartPoint.y - currentPosition.y);
+    
+	if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance) {
+		NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
+		HW_walkLeft();
+    }
+    else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
+		NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
+		HW_walkRight();
+    }
+	
 	if (2 == [touches count]) {
 		NSArray *twoTouches = [touches allObjects];
 		UITouch *first = [twoTouches objectAtIndex:0];
@@ -180,7 +201,8 @@
 		}
 	}
 	
-	/*while(touch = (UITouch *)[enumerator nextObject]) {
+	/*NSEnumerator *enumerator = [touches objectEnumerator];
+	 UITouch *touch=nil;while(touch = (UITouch *)[enumerator nextObject]) {
 		// try to find the mouse associated with this touch 
 		int i, found = NO;
 		for (i=0; i<MAX_SIMULTANEOUS_TOUCHES && !found; i++) {

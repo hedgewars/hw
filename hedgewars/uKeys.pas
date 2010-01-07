@@ -18,6 +18,7 @@
 
 {$INCLUDE "options.inc"}
 {$IFDEF IPHONEOS} {$MODE OBJFPC} {$ENDIF}
+// TODO: insert the above line in options.inc
 
 unit uKeys;
 interface
@@ -46,6 +47,13 @@ procedure HW_click; cdecl; export;
 procedure HW_zoomIn; cdecl; export;
 procedure HW_zoomOut; cdecl; export;
 procedure HW_ammoMenu; cdecl; export;
+procedure HW_allKeysUp; cdecl; export;
+procedure HW_walkLeft; cdecl; export;
+procedure HW_walkRight; cdecl; export;
+procedure HW_aimUp; cdecl; export;
+procedure HW_aimDown; cdecl; export;
+procedure HW_shoot; cdecl; export;
+
 {$ENDIF}
 
 var	hideAmmoMenu: boolean;
@@ -93,9 +101,10 @@ var tkbd, tkbdn: TKeyboardState;
 
 {$IFDEF IPHONEOS}
 // these are called by the touch functions present in SDL_uikitview.m
+// they emulate user interaction from mouse or keyboard
 procedure HW_click; cdecl; export;
 begin
-	WriteLnToConsole('HW - general click');
+	WriteLnToConsole('HW - left click');
 	leftClick:= true;
 	exit
 end;
@@ -116,8 +125,55 @@ end;
 
 procedure HW_ammoMenu; cdecl; export;
 begin
-	WriteLnToConsole('HW - opening ammomenu');
+	WriteLnToConsole('HW - right click');
 	rightClick:= true;
+	exit
+end;
+
+procedure HW_allKeysUp; cdecl; export;
+begin
+	WriteLnToConsole('HW - resetting keyboard');
+
+	upKey:= false;
+	downKey:= false;
+	leftKey:= false;
+	rightKey:= false;
+	spaceKey:= false;
+	exit
+end;
+
+procedure HW_walkLeft; cdecl; export;
+begin
+	WriteLnToConsole('HW - walking left');
+	leftKey:= true;
+	exit
+end;
+
+procedure HW_walkRight; cdecl; export;
+begin
+	WriteLnToConsole('HW - walking right');
+	rightKey:= true;
+	exit
+end;
+
+procedure HW_aimUp; cdecl; export;
+begin
+	WriteLnToConsole('HW - aiming upwards');
+	upKey:= true;
+	exit
+end;
+
+procedure HW_aimDown; cdecl; export;
+begin
+	WriteLnToConsole('HW - aiming downwards');
+	downKey:= true;
+	exit
+end;
+
+procedure HW_shoot; cdecl; export;
+begin
+	WriteLnToConsole('HW - shooting');
+	spaceKey:= true;
 	exit
 end;
 {$ENDIF}
@@ -191,12 +247,6 @@ tkbdn[ 9]:= ord(tabKey);
 tkbdn[13]:= ord(enterKey);
 tkbdn[32]:= ord(spaceKey);
 
-upKey:= false;
-downKey:= false;
-if isWalking = false then rightKey:= false;
-if isWalking = false then leftKey:= false;
-
-if isAttacking = false then spaceKey:= false;
 tabKey:= false;
 enterKey:= false;
 backspaceKey:= false;
@@ -298,13 +348,7 @@ tkbdn[ 9]:= ord(tabKey);
 tkbdn[13]:= ord(enterKey);
 tkbdn[32]:= ord(spaceKey);
 
-upKey:= false;
-downKey:= false;
 tabKey:= false;
-if isWalking = false then rightKey:= false;
-if isWalking = false then leftKey:= false;
-
-if isAttacking = false then spaceKey:= false;
 enterKey:= false;
 backspaceKey:= false;
 {$ENDIF}
