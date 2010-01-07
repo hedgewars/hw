@@ -46,6 +46,7 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 procedure HW_click; cdecl; export;
 procedure HW_zoomIn; cdecl; export;
 procedure HW_zoomOut; cdecl; export;
+procedure HW_zoomReset; cdecl; export;
 procedure HW_ammoMenu; cdecl; export;
 procedure HW_allKeysUp; cdecl; export;
 procedure HW_walkLeft; cdecl; export;
@@ -53,6 +54,7 @@ procedure HW_walkRight; cdecl; export;
 procedure HW_aimUp; cdecl; export;
 procedure HW_aimDown; cdecl; export;
 procedure HW_shoot; cdecl; export;
+procedure HW_whereIsHog; cdecl; export;
 
 {$ENDIF}
 
@@ -123,6 +125,13 @@ begin
 	exit
 end;
 
+procedure HW_zoomReset; cdecl; export;
+begin
+	WriteLnToConsole('HW - reset zoom');
+	middleClick:= true;
+	exit
+end;
+
 procedure HW_ammoMenu; cdecl; export;
 begin
 	WriteLnToConsole('HW - right click');
@@ -174,6 +183,15 @@ procedure HW_shoot; cdecl; export;
 begin
 	WriteLnToConsole('HW - shooting');
 	spaceKey:= true;
+	exit
+end;
+
+procedure HW_whereIsHog; cdecl; export;
+var Xcoord, Ycoord: LongInt;
+begin
+	//Xcoord:= Gear^.dX + WorldDx;
+	WriteLnToConsole('HW - hog is at x: ' + ' y:');
+
 	exit
 end;
 {$ENDIF}

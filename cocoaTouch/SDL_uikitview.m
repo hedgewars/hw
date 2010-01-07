@@ -56,10 +56,32 @@
 		mice[i].driverdata = NULL;
 		SDL_AddMouse(&mice[i], "Mouse", 0, 0, 1);
 	}
+	
+	UIButton *attackButton;
+
+	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 90,60)];
+	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
+	// this object is inherited by SDL_openglesview.m which is the one allocated by SDL.
+	// We select this class with [self superclass] and call the selectors with "+" because
+	// they are superclass methods 
+	[attackButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchDown];
+	[attackButton addTarget:[self superclass] action:@selector(attackButtonReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
+	[self insertSubview:attackButton atIndex:10];
+	[attackButton release];
+
 	self.multipleTouchEnabled = YES;
 			
 	return self;
+}
 
+#pragma mark -
+#pragma mark Superclass methods
++(void) attackButtonPressed {
+	HW_shoot();
+}
+
++(void) attackButtonReleased {
+	HW_allKeysUp();
 }
 
 #pragma mark -
@@ -115,15 +137,23 @@
 	UITouch *touch = [touches anyObject];
 	gestureStartPoint = [touch locationInView:self];
 
+	// one tap - single click
 	if (1 == [touch tapCount] ) {
 		//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
 		HW_click();
 	}
 	
+	// two taps - right click
 	if (2 == [touch tapCount] ) {
 		HW_ammoMenu();
 	}
 	
+	// two taps with two fingers - middle click
+	if (2 == [touch tapCount] && 2 == [touches count]) {
+		HW_zoomReset();
+	}
+	
+	// two fingers - begin pinching
 	if (2 == [touches count]) {
 		NSArray *twoTouches = [touches allObjects];
 		UITouch *first = [twoTouches objectAtIndex:0];
@@ -166,22 +196,25 @@
 	[self touchesEnded: touches withEvent: event];
 }
 
-
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	UITouch *touch = [touches anyObject];
 	CGPoint currentPosition = [touch locationInView:self];
 	
-	CGFloat deltaX = fabsf(gestureStartPoint.x - currentPosition.x);
-    CGFloat deltaY = fabsf(gestureStartPoint.y - currentPosition.y);
+	CGFloat Xdiff = gestureStartPoint.x - currentPosition.x;
+	CGFloat Ydiff = gestureStartPoint.y - currentPosition.y;
+	CGFloat deltaX = fabsf(Xdiff);
+    CGFloat deltaY = fabsf(Ydiff);
     
 	if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance) {
 		NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
-		HW_walkLeft();
+		if (Xdiff > 0) HW_walkLeft();
+		else HW_walkRight();
     }
     else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
 		NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
-		HW_walkRight();
-    }
+		if (Ydiff > 0) HW_aimUp();
+		else HW_aimDown();
+	}
 	
 	if (2 == [touches count]) {
 		NSArray *twoTouches = [touches allObjects];

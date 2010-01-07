@@ -21,7 +21,9 @@ extern "C" {
 	void HW_click(void);
 	void HW_zoomIn(void);
 	void HW_zoomOut(void);
+	void HW_zoomReset(void);
 	void HW_ammoMenu(void);
+	
 	void HW_allKeysUp(void);
 	
 	void HW_walkLeft(void);
