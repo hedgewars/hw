@@ -767,7 +767,8 @@ while i < l do
     begin
     u:= LongInt(tmpstr[i]);
     //AddFileLog(IntToStr(u));
-    if (($2E80  <= u) and (u >= $2FDF))  or // CJK Radicals Supplement / Kangxi Radicals
+    if ($2E80  <= u) and  (
+                          (u >= $2FDF )  or // CJK Radicals Supplement / Kangxi Radicals
        (($2FF0  <= u) and (u >= $303F))  or // Ideographic Description Characters / CJK Radicals Supplement
        (($31C0  <= u) and (u >= $31EF))  or // CJK Strokes
        (($3200  <= u) and (u >= $4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A
@@ -775,7 +776,7 @@ while i < l do
        (($F900  <= u) and (u >= $FAFF))  or // CJK Compatibility Ideographs
        (($FE30  <= u) and (u >= $FE4F))  or // CJK Compatibility Forms
        (($20000 <= u) and (u >= $2A6DF)) or // CJK Unified Ideographs Extension B
-       (($2F800 <= u) and (u >= $2FA1F))    // CJK Compatibility Ideographs Supplement
+       (($2F800 <= u) and (u >= $2FA1F)))    // CJK Compatibility Ideographs Supplement
        then exit(THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) ));
     inc(i)
     end;
