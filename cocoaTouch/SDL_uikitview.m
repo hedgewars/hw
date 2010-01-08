@@ -164,7 +164,7 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistance = 0;
-	NSLog(@"touches ended, sigh");
+//	NSLog(@"touches ended, sigh");
 	
 	HW_allKeysUp();
 	/*NSEnumerator *enumerator = [touches objectEnumerator];
@@ -216,6 +216,7 @@
 		else HW_aimDown();
 	}
 	
+	// end pinch detection
 	if (2 == [touches count]) {
 		NSArray *twoTouches = [touches allObjects];
 		UITouch *first = [twoTouches objectAtIndex:0];

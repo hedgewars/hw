@@ -34,14 +34,14 @@ extern int SDL_main(int argc, char *argv[]);
 static int forward_argc;
 static char **forward_argv;
 
-int main(int argc, char **argv) {
+int main (int argc, char **argv) {
 	int i;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	/* store arguments */
 	forward_argc = argc;
 	forward_argv = (char **)malloc(argc * sizeof(char *));
-	for (i=0; i<argc; i++) {
+	for (i = 0; i < argc; i++) {
 		forward_argv[i] = malloc( (strlen(argv[i])+1) * sizeof(char));
 		strcpy(forward_argv[i], argv[i]);
 	}
@@ -78,8 +78,9 @@ int main(int argc, char **argv) {
 	/* run the user's application, passing argc and argv */
 	NSLog(@"Game is launching");
 	SDL_main(forward_argc, forward_argv);
+	// can't reach here yet
 	NSLog(@"Game exited");
-	
+
 	//[self performSelector:@selector(makeNewView) withObject:nil afterDelay:0.0];
 	/* exit, passing the return status from the user's application */
 	//exit(exit_status);
@@ -99,13 +100,16 @@ int main(int argc, char **argv) {
 -(void) applicationWillTerminate:(UIApplication *)application {
 	/* free the memory we used to hold copies of argc and argv */
 	int i;
-	for (i=0; i<forward_argc; i++) {
+	for (i=0; i < forward_argc; i++) {
 		free(forward_argv[i]);
 	}
 	free(forward_argv);	
 	SDL_SendQuit();
 	 /* hack to prevent automatic termination.  See SDL_uikitevents.m for details */
-	longjmp(*(jump_env()), 1);
+	// have to remove this otherwise game goes on when pushing the home button
+	//longjmp(*(jump_env()), 1);
+	
+	NSLog(@"Closing App...");
 }
 
 -(void) applicationWillResignActive:(UIApplication*)application
