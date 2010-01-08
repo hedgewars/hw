@@ -179,7 +179,7 @@ o scegli un altro nickname:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 si è unito</translation>
+        <translation>%1 *** %2 è entrato</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
