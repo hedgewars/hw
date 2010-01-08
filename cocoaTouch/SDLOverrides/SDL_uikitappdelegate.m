@@ -62,19 +62,8 @@ int main (int argc, char **argv) {
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-/*- (id)init {
-	self = [super init];
-	window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] ;
-	windowID = 0;
-	return self;
-}*/
-
 - (void) startSDLgame {
-	// HACK: remove the current window and let SDL create a new one
-	[self.window release];
-	if (nil != self.window)
-		self.window = nil;
-	
+
 	/* run the user's application, passing argc and argv */
 	NSLog(@"Game is launching");
 	SDL_main(forward_argc, forward_argv);

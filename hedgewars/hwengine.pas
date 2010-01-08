@@ -144,14 +144,17 @@ end;
 procedure OnDestroy;
 begin
 {$IFDEF DEBUGFILE}AddFileLog('Freeing resources...');{$ENDIF}
-if isSoundEnabled then ReleaseSound;
-StoreRelease;
-FreeLand;
-SendKB;
-CloseIPC;
-TTF_Quit;
-SDL_Quit;
-halt
+	if isSoundEnabled then ReleaseSound();
+	StoreRelease();
+	FreeLand();
+	SendKB();
+	CloseIPC();
+	TTF_Quit();
+//{$IFNDEF IPHONEOS}
+	// TODO: don't halt and don't clean, return to the previous view
+	SDL_Quit();
+	halt();
+//{$ENDIF}
 end;
 
 ///////////////////
