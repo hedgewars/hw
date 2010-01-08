@@ -1,17 +1,15 @@
 //
-//  MainMenuViewController.m
+//  SettingsViewController.m
 //  hwengine
 //
 //  Created by Vittorio on 08/01/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "MainMenuViewController.h"
-#import "SDL_uikitappdelegate.h"
+#import "SettingsViewController.h"
 
-@implementation MainMenuViewController
 
-@synthesize passandplayButton, netplayButton, storeButton, versionLabel;
+@implementation SettingsViewController
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -23,12 +21,12 @@
 }
 */
 
-
+/*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
--(void) viewDidLoad {
-	self.versionLabel = @"Hedgewars version 0.9.13-dev";
+- (void)viewDidLoad {
     [super viewDidLoad];
 }
+*/
 
 /*
 // Override to allow orientations other than the default portrait orientation.
@@ -47,34 +45,13 @@
 
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
-	self.passandplayButton = nil;
-	self.netplayButton = nil;
-	self.storeButton = nil;
-	self.versionLabel = nil;
+	// e.g. self.myOutlet = nil;
 }
 
+
 - (void)dealloc {
-	[passandplayButton release];
-	[netplayButton release];
-	[storeButton release];
-	[versionLabel release];
     [super dealloc];
 }
 
--(IBAction) startPlaying {
-	// TODO: support IPC and start a thread
-	
-	[[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
-}
-
--(IBAction) notYetImplemented {
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
-									message:@"Sorry, this feature is not yet implemented"
-									delegate:nil
-									cancelButtonTitle:@"Well, don't worry"
-									otherButtonTitles:nil];
-	[alert show];
-	[alert release];
-}
 
 @end

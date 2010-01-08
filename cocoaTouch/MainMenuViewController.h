@@ -22,4 +22,5 @@
 @property (nonatomic, retain) IBOutlet UILabel *versionLabel;
 
 -(IBAction) startPlaying;
+-(IBAction) notYetImplemented;
 @end
