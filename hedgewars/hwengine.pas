@@ -19,8 +19,7 @@
 {$INCLUDE "options.inc"}
 
 program hwengine;
-uses
-	SDLh in 'SDLh.pas',
+uses	SDLh in 'SDLh.pas',
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -54,7 +53,11 @@ uses
 	uFloat in 'uFloat.pas',
 	uStats in 'uStats.pas',
 	uChat in 'uChat.pas',
-	uLandTexture in 'uLandTexture.pas';
+	uLandTexture in 'uLandTexture.pas'
+	{$IFDEF IPHONEOS}
+	, PascalExports in 'PascalExports.pas'
+	{$ENDIF}
+	;
 
 // also: GSHandlers.inc
 //       CCHandlers.inc
@@ -163,7 +166,7 @@ var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
 {$IFDEF TOUCHINPUT}
-var tiltValue: LongInt;
+//var tiltValue: LongInt;
 {$ENDIF}
 begin
 PrevTime:= SDL_GetTicks;
@@ -411,7 +414,7 @@ AddFileLog('Prefix: "' + PathPrefix +'"');
 for i:= 0 to ParamCount do
 	AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$IFDEF IPHONEOS}
-	WriteLnToConsole('Saving debug file at: ' + get_documents_path());
+	WriteLnToConsole('Saving debug file at: ' + IPH_getDocumentsPath());
 {$ENDIF}
 {$ENDIF}
 end;

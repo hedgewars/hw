@@ -27,7 +27,12 @@ uses uConsts, SDLh,
 {$ELSE}
 	GL,
 {$ENDIF}
-	uFloat;
+	uFloat
+{$IFDEF IPHONEOS}
+	, PascalExports
+{$ENDIF}
+	;
+
 var
 	isCursorVisible : boolean = false;
 	isTerminated    : boolean = false;
@@ -585,7 +590,7 @@ for i:= 0 to 7 do
 begin
 	assign(f, 
 {$IFDEF IPHONEOS}
-	string(get_documents_path())
+	string(IPH_getDocumentsPath())
 {$ELSE}
 	ParamStr(1)
 {$ENDIF}

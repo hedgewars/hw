@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-{$I "options.inc"}
+{$INCLUDE "options.inc"}
 
 unit SDLh;
 interface
@@ -732,12 +732,6 @@ procedure SDLNet_Write16(value: Word; buf: pointer);
 procedure SDLNet_Write32(value: LongWord; buf: pointer);
 function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
-
-{$IFDEF IPHONEOS}
-function  get_documents_path: PChar; cdecl; external 'hwutils';
-procedure IPH_showControls; cdecl; external name 'showControls';
-{$ENDIF}
-
 implementation
 
 function SDL_MustLock(Surface: PSDL_Surface): Boolean;

@@ -42,22 +42,6 @@ procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
 procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
-{$IFDEF IPHONEOS}
-procedure HW_click; cdecl; export;
-procedure HW_zoomIn; cdecl; export;
-procedure HW_zoomOut; cdecl; export;
-procedure HW_zoomReset; cdecl; export;
-procedure HW_ammoMenu; cdecl; export;
-procedure HW_allKeysUp; cdecl; export;
-procedure HW_walkLeft; cdecl; export;
-procedure HW_walkRight; cdecl; export;
-procedure HW_aimUp; cdecl; export;
-procedure HW_aimDown; cdecl; export;
-procedure HW_shoot; cdecl; export;
-procedure HW_whereIsHog; cdecl; export;
-
-{$ENDIF}
-
 var	hideAmmoMenu: boolean;
 	wheelUp: boolean = false;
 	wheelDown: boolean = false;
@@ -100,101 +84,6 @@ const KeyNumber = 1024;
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     DefaultBinds, CurrentBinds: TBinds;
-
-{$IFDEF IPHONEOS}
-// these are called by the touch functions present in SDL_uikitview.m
-// they emulate user interaction from mouse or keyboard
-procedure HW_click; cdecl; export;
-begin
-	WriteLnToConsole('HW - left click');
-	leftClick:= true;
-	exit
-end;
-
-procedure HW_zoomIn; cdecl; export;
-begin
-	WriteLnToConsole('HW - zooming in');
-	wheelUp:= true;
-	exit
-end;
-
-procedure HW_zoomOut; cdecl; export;
-begin
-	WriteLnToConsole('HW - zooming out');
-	wheelDown:= true;
-	exit
-end;
-
-procedure HW_zoomReset; cdecl; export;
-begin
-	WriteLnToConsole('HW - reset zoom');
-	middleClick:= true;
-	exit
-end;
-
-procedure HW_ammoMenu; cdecl; export;
-begin
-	WriteLnToConsole('HW - right click');
-	rightClick:= true;
-	exit
-end;
-
-procedure HW_allKeysUp; cdecl; export;
-begin
-	WriteLnToConsole('HW - resetting keyboard');
-
-	upKey:= false;
-	downKey:= false;
-	leftKey:= false;
-	rightKey:= false;
-	spaceKey:= false;
-	exit
-end;
-
-procedure HW_walkLeft; cdecl; export;
-begin
-	WriteLnToConsole('HW - walking left');
-	leftKey:= true;
-	exit
-end;
-
-procedure HW_walkRight; cdecl; export;
-begin
-	WriteLnToConsole('HW - walking right');
-	rightKey:= true;
-	exit
-end;
-
-procedure HW_aimUp; cdecl; export;
-begin
-	WriteLnToConsole('HW - aiming upwards');
-	upKey:= true;
-	exit
-end;
-
-procedure HW_aimDown; cdecl; export;
-begin
-	WriteLnToConsole('HW - aiming downwards');
-	downKey:= true;
-	exit
-end;
-
-procedure HW_shoot; cdecl; export;
-begin
-	WriteLnToConsole('HW - shooting');
-	spaceKey:= true;
-	exit
-end;
-
-procedure HW_whereIsHog; cdecl; export;
-var Xcoord, Ycoord: LongInt;
-begin
-	//Xcoord:= Gear^.dX + WorldDx;
-	WriteLnToConsole('HW - hog is at x: ' + ' y:');
-
-	exit
-end;
-{$ENDIF}
 	
 function KeyNameToCode(name: string): word;
 var code: Word;

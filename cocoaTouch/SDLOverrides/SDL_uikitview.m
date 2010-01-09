@@ -82,10 +82,15 @@ UIButton *attackButton, *menuButton;
 }
 
 #pragma mark -
-#pragma mark Show and Hide overlaid buttons
+#pragma mark Exported functions for FreePascal
 
-// standard C function to be called from pascal
-void showControls(void) {
+const char* IPH_getDocumentsPath() {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex: 0];
+    return [documentsDirectory UTF8String];
+}
+
+void IPH_showControls (void) {
 	NSLog(@"Showing controls");
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];

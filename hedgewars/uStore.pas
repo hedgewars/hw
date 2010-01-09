@@ -69,7 +69,11 @@ var PixelFormat: PSDL_PixelFormat = nil;
    SupportNPOTT: Boolean = false;
 
 implementation
-uses uMisc, uConsole, uLand, uLocale, uWorld;
+uses uMisc, uConsole, uLand, uLocale, uWorld
+	{$IFDEF IPHONEOS}
+	, PascalExports
+	{$ENDIF}
+	;
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel);
 
