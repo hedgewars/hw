@@ -81,6 +81,9 @@ int main (int argc, char **argv) {
 
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
+//#import "SoundEffect.h"	
+//	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
+//	SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
 	
 	[window addSubview:controller.view];
 	[window makeKeyAndVisible];

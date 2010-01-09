@@ -734,7 +734,8 @@ function  SDLNet_Read16(buf: pointer): Word;
 function  SDLNet_Read32(buf: pointer): LongWord;
 
 {$IFDEF IPHONEOS}
-function get_documents_path: PChar; cdecl; external 'hwutils';
+function  get_documents_path: PChar; cdecl; external 'hwutils';
+procedure IPH_showControls; cdecl; external name 'showControls';
 {$ENDIF}
 
 implementation

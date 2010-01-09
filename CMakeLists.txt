@@ -205,6 +205,8 @@ set(CPACK_SOURCE_IGNORE_FILES
 	"hwconsts.cpp$"
 	"playlist.inc$"
 	"CPack"
+	"^${PROJECT_SOURCE_DIR}/openalbridge"
+	"^${PROJECT_SOURCE_DIR}/cocoaTouch"
 	"^${PROJECT_SOURCE_DIR}/bin/[a-z]"
 	"^${PROJECT_SOURCE_DIR}/tools/templates"
 	"^${PROJECT_SOURCE_DIR}/doc"

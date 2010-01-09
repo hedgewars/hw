@@ -34,16 +34,24 @@
 
 @synthesize initialDistance, gestureStartPoint;
 
+// they have to be global variables to allow showControls() to use them
+UIButton *attackButton, *menuButton;
+
 - (void)dealloc {
 #if SDL_IPHONE_KEYBOARD
 	SDL_DelKeyboard(0);
 	[textField release];
 #endif
+	[menuButton release];
+	[attackButton release];
 	[super dealloc];
 }
 
 - (id)initWithFrame:(CGRect)frame {
-
+	// the addTarget parameter for the buttons below is set like that because
+	// this object is inherited by SDL_openglesview.m which is the one allocated by SDL.
+	// We select this class with [self superclass] and call the selectors with "+" because
+	// they are superclass methods 
 	self = [super initWithFrame: frame];
 	
 #if SDL_IPHONE_KEYBOARD
@@ -56,26 +64,39 @@
 		mice[i].driverdata = NULL;
 		SDL_AddMouse(&mice[i], "Mouse", 0, 0, 1);
 	}
-	
-	UIButton *attackButton;
 
-	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 90,60)];
+	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260,50)];
 	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
-	// this object is inherited by SDL_openglesview.m which is the one allocated by SDL.
-	// We select this class with [self superclass] and call the selectors with "+" because
-	// they are superclass methods 
 	[attackButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchDown];
 	[attackButton addTarget:[self superclass] action:@selector(attackButtonReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	[self insertSubview:attackButton atIndex:10];
-	[attackButton release];
+	[self addSubview:attackButton];
+
+	menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 480, 30,50)];
+	[menuButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
+	[menuButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+	[self addSubview:menuButton];
 
 	self.multipleTouchEnabled = YES;
-			
+
 	return self;
 }
 
 #pragma mark -
+#pragma mark Show and Hide overlaid buttons
+
+// standard C function to be called from pascal
+void showControls(void) {
+	NSLog(@"Showing controls");
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.5];
+	attackButton.frame = CGRectMake(30, 430, 260, 50);
+	menuButton.frame = CGRectMake(0, 430, 30, 50);
+	[UIView commitAnimations];
+}
+
+#pragma mark -
 #pragma mark Superclass methods
+
 +(void) attackButtonPressed {
 	HW_shoot();
 }
