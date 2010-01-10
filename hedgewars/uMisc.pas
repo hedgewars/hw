@@ -595,6 +595,7 @@ begin
 	ParamStr(1)
 {$ENDIF}
 	+ '/debug' + inttostr(i) + '.txt');
+//	f:= stderr;
 	rewrite(f);
 	if IOResult = 5 then
 	begin

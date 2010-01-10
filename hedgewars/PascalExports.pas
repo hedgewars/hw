@@ -15,10 +15,15 @@ unit PascalExports;
 interface
 uses uKeys, uConsole;
 
+{$INCLUDE "proto.inc"}
+
 {$IFDEF IPHONEOS}
 // called by pascal code, they deal with the objc code
 function  IPH_getDocumentsPath: PChar; cdecl; external;
 procedure IPH_showControls; cdecl; external;
+
+// retrieve protocol information
+function  HW_protoVer: LongInt; cdecl; export;
 
 // called by the touch functions (SDL_uikitview.m)
 // they emulate user interaction from mouse or keyboard
@@ -40,6 +45,11 @@ procedure HW_whereIsHog; cdecl; export;
 implementation
 
 {$IFDEF IPHONEOS}
+function HW_protoVer: LongInt; cdecl; export;
+begin
+	HW_protoVer:= cNetProtoVersion;
+end;
+
 procedure HW_click; cdecl; export;
 begin
 	WriteLnToConsole('HW - left click');

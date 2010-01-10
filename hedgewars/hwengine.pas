@@ -236,6 +236,7 @@ end;
 
 /////////////////////
 procedure DisplayUsage;
+var i: LongInt;
 begin
 	WriteLn('Wrong argument format: correct configurations is');
 	WriteLn();
@@ -249,6 +250,9 @@ begin
 	WriteLn(' --set-everything [screen height] [screen width] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
 	WriteLn();
 	WriteLn('Read documentation online at http://www.hedgewars.org/node/1465 for more information');
+	Write('parsed command: ');
+	for i:=0 to ParamCount do Write(ParamStr(i) + ' ');
+	WriteLn();
 	halt(1);
 end;
 

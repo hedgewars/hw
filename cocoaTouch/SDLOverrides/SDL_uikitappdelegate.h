@@ -37,4 +37,6 @@
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;
 
+int forward_argc;
+char **forward_argv;
 @end

@@ -20,19 +20,19 @@
  slouken@libsdl.org, vittorio.giovara@gmail.com
 */
 
+#import <pthread.h>
 #import "SDL_uikitappdelegate.h"
 #import "SDL_uikitopenglview.h"
 #import "SDL_events_c.h"
 #import "jumphack.h"
 #import "SDL_video.h"
+#import "gameSetup.h"
 
 #ifdef main
 #undef main
 #endif
 
 extern int SDL_main(int argc, char *argv[]);
-static int forward_argc;
-static char **forward_argv;
 
 int main (int argc, char **argv) {
 	int i;
@@ -62,10 +62,17 @@ int main (int argc, char **argv) {
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-- (void) startSDLgame {
 
+- (void) startSDLgame {
+	pthread_t threadID;
+
+	pthread_create (&threadID, NULL, (void *) (*engineProtocolThread), NULL);
+	pthread_detach (threadID);
+
+	setupArgsForLocalPlay();
+	
 	/* run the user's application, passing argc and argv */
-	NSLog(@"Game is launching");
+	NSLog(@"Game is launching...");
 	SDL_main(forward_argc, forward_argv);
 	// can't reach here yet
 	NSLog(@"Game exited");
@@ -87,6 +94,9 @@ int main (int argc, char **argv) {
 	
 	[window addSubview:controller.view];
 	[window makeKeyAndVisible];
+	
+	// REMOVE ME when you're done with reverse engineering the protocol
+	[self performSelector:@selector(startSDLgame)];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {

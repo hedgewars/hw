@@ -158,7 +158,7 @@ while SDLNet_CheckSockets(fds, 0) > 0 do
 		begin
 		buf[0]:= i;
 		ss:= ss + s;
-		while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+		while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
 			begin
 			ParseIPCCommand(copy(ss, 2, byte(ss[1])));
 			Delete(ss, 1, Succ(byte(ss[1])))
@@ -205,7 +205,7 @@ if IPCSock <> nil then
 	SendEmptyPacketTicks:= 0;
 	if s[0]>#251 then s[0]:= #251;
 	SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-	{$IFDEF DEBUGFILE}AddFileLog('IPC send: '+s[1]);{$ENDIF}
+	{$IFDEF DEBUGFILE}AddFileLog('IPC send: '+ s[1]);{$ENDIF}
 	inc(s[0], 2);
 	SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
 	end

@@ -18,6 +18,8 @@ extern "C" {
 	 * that you want to use
 	 */
 	
+	int HW_protoVer(void);
+	
 	void HW_click(void);
 	void HW_zoomIn(void);
 	void HW_zoomOut(void);
