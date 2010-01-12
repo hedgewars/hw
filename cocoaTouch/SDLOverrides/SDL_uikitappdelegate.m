@@ -33,6 +33,7 @@
 #endif
 
 extern int SDL_main(int argc, char *argv[]);
+BOOL isServerRunning = NO;
 
 int main (int argc, char **argv) {
 	int i;
@@ -62,20 +63,42 @@ int main (int argc, char **argv) {
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+void preSDL_main(){
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	SDL_main(forward_argc, forward_argv);
+
+	[pool release];
+}
 
 - (void) startSDLgame {
 	pthread_t threadID;
 
-	pthread_create (&threadID, NULL, (void *) (*engineProtocolThread), NULL);
-	pthread_detach (threadID);
+	if (NO == isServerRunning) {
+		// don't start another server because the port is already bound
+		pthread_create (&threadID, NULL, (void *) (*engineProtocolThread), NULL);
+		pthread_detach (threadID);
+		isServerRunning = YES;
+	}
 
 	setupArgsForLocalPlay();
 	
+	// remove the current view to free resources
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:1.5];
+	controller.view.alpha = 0;
+	[UIView commitAnimations];
+	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5];
+	//[controller.view removeFromSuperview];
+	
 	/* run the user's application, passing argc and argv */
 	NSLog(@"Game is launching...");
-	SDL_main(forward_argc, forward_argv);
+	/*pthread_create (&threadID, NULL, (void *) (*preSDL_main), NULL);
+	pthread_detach (threadID);*/
+	int res = SDL_main(forward_argc, forward_argv);
+
 	// can't reach here yet
-	NSLog(@"Game exited");
+	NSLog(@"Game exited with status %d", res);
 
 	//[self performSelector:@selector(makeNewView) withObject:nil afterDelay:0.0];
 	/* exit, passing the return status from the user's application */
@@ -91,12 +114,8 @@ int main (int argc, char **argv) {
 //#import "SoundEffect.h"	
 //	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
 //	SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
-	
 	[window addSubview:controller.view];
 	[window makeKeyAndVisible];
-	
-	// REMOVE ME when you're done with reverse engineering the protocol
-	[self performSelector:@selector(startSDLgame)];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
@@ -107,11 +126,9 @@ int main (int argc, char **argv) {
 	}
 	free(forward_argv);	
 	SDL_SendQuit();
-	 /* hack to prevent automatic termination.  See SDL_uikitevents.m for details */
+	/* hack to prevent automatic termination.  See SDL_uikitevents.m for details */
 	// have to remove this otherwise game goes on when pushing the home button
 	//longjmp(*(jump_env()), 1);
-	
-	NSLog(@"Closing App...");
 }
 
 -(void) applicationWillResignActive:(UIApplication*)application
@@ -132,6 +149,20 @@ int main (int argc, char **argv) {
 	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 */
+
+void IPH_returnFrontend (void) {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[[[SDLUIKitDelegate sharedAppDelegate].window viewWithTag:54867] removeFromSuperview];
+	[[SDLUIKitDelegate sharedAppDelegate].window addSubview:[SDLUIKitDelegate sharedAppDelegate].controller.view];
+//	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
+	NSLog(@"Game exited...");
+//	pthread_exit(NULL);
+	[pool release];
+	exit(0);
+//	while(1);	//prevent exiting	
+}
+
 
 -(void) dealloc {
 	[controller release];

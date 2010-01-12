@@ -17,16 +17,26 @@
 #define BUFFER_SIZE 256
 
 
+//
+TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
+
 @implementation gameSetup
 
+int sendToEngine(NSString *string) {
+	Uint8 length = [string length];
+	
+	SDLNet_TCP_Send(csd, &length , 1);
+	return SDLNet_TCP_Send(csd, [string UTF8String], length);
+}
+
 void engineProtocolThread () {
-	TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
 	IPaddress ip;
 	int idx, eProto;
 	BOOL serverQuit, clientQuit;
 	char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
 	Uint8 msgSize;
 	Uint16 gameTicks;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	if (SDLNet_Init() < 0) {
 		fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
@@ -65,9 +75,88 @@ void engineProtocolThread () {
 			
 			if ('C' == buffer[0]) {
 				NSLog(@"engineProtocolThread - Client found and connected");
+				
+				// send config data data
+				
+				// local game
+				sendToEngine(@"TL");
+				
+				// seed info
+				sendToEngine(@"eseed {232c1b42-7d39-4ee6-adf8-4240e1f1efb8}");
+				
+				// various flags
+				sendToEngine(@"e$gmflags 256"); 
+
+				// various flags
+				sendToEngine(@"e$damagepct 100");
+				
+				// various flags
+				sendToEngine(@"e$turntime 45000");
+				
+				// various flags
+				sendToEngine(@"e$minestime 3000");
+				
+				// various flags
+				sendToEngine(@"e$landadds 4");
+				
+				// various flags
+				sendToEngine(@"e$sd_turns 15");
+												
+				// various flags
+				sendToEngine(@"e$casefreq 5");
+				
+				// various flags
+				sendToEngine(@"e$template_filter 1");
+								
+				// theme info
+				sendToEngine(@"etheme Freeway");
+				
+				// team 1 info
+				sendToEngine(@"eaddteam 4421353 System Cats");
+				
+				// team 1 grave info
+				sendToEngine(@"egrave star");
+				
+				// team 1 fort info
+				sendToEngine(@"efort  Earth");
+								
+				// team 1 voicepack info
+				sendToEngine(@"evoicepack Classic");
+				
+				// team 1 binds (skipped)				
+				// team 1 members info
+				//for (int i=0; i<4; i++) {
+					sendToEngine(@"eaddhh 0 100 Snow Leopard");
+					sendToEngine(@"ehat NoHat");
+				//}
+				// team 1 ammostore
+				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
+
+				// team 2 info
+				sendToEngine(@"eaddteam 4100897 Poke-MAN");
+				
+				// team 2 grave info
+				sendToEngine(@"egrave Badger");
+				
+				// team 2 fort info
+				sendToEngine(@"efort UFO");
+				
+				// team 2 voicepack info
+				sendToEngine(@"evoicepack Classic");
+				
+				// team 2 binds (skipped)
+				// team 2 members info
+			//	for (int i=0; i<4; i++) {
+					sendToEngine(@"eaddhh 0 100 Raichu");
+					sendToEngine(@"ehat Bunny");
+			//	}
+				
+				// team 2 ammostore
+				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
+				
 				clientQuit = NO;
 			} else {
-				NSLog(@"engineProtocolThread - wrong Connected message, closing");
+				NSLog(@"engineProtocolThread - wrong message, closing connection");
 				clientQuit = YES;
 			}
 			
@@ -78,25 +167,24 @@ void engineProtocolThread () {
 				msgSize = 0;
 				memset(buffer, 0, BUFFER_SIZE);
 				memset(string, 0, BUFFER_SIZE);
-				SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8));
-			
-				SDLNet_TCP_Recv(csd, buffer, msgSize);
+				if (SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8)) <= 0)
+					clientQuit = YES;
+				if (SDLNet_TCP_Recv(csd, buffer, msgSize) <=0)
+					clientQuit = YES;
+				
 				gameTicks = SDLNet_Read16(&buffer[msgSize - 2]);
-				NSLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
+				//NSLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
 				
 				switch (buffer[0]) {
 					case '?':
 						NSLog(@"Ping? Pong!");
-						string[idx++] = 0x01;
-						string[idx++] = '!';
-						
-						SDLNet_TCP_Send(csd, string, idx);
+						sendToEngine(@"!");
 						break;
 					case 'E':
 						NSLog(@"ERROR - last console line: [%s]", buffer);
 						clientQuit = YES;
 						break;
-					default:
+					case 'e':
 						sscanf(buffer, "%*s %d", &eProto);
 						if (HW_protoVer() == eProto) {
 							NSLog(@"Setting protocol version %s", buffer);
@@ -104,8 +192,21 @@ void engineProtocolThread () {
 							NSLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
 							clientQuit = YES;
 						}
-						
 						break;
+					default:
+						// empty packet or just statistics
+						break;
+					case 'i':
+						switch (buffer[1]) {
+							case 'r':
+								NSLog(@"Winning team: %s", &buffer[2]);
+								break;
+							case 'k':
+								NSLog(@"Best Hedgehog: %s", &buffer[2]);
+								break;
+						}
+						break;
+					// missing case for exiting
 				} 
 				
 				/*
@@ -131,10 +232,13 @@ void engineProtocolThread () {
 	SDLNet_TCP_Close(sd);
 	SDLNet_Quit();
 
+	[pool release];
 	pthread_exit(NULL);
 }
 
 void setupArgsForLocalPlay() {
+	memset(forward_argv, 0, forward_argc);
+	
 	forward_argc = 18;
 	forward_argv = (char **)realloc(forward_argv, forward_argc * sizeof(char *));
 	//forward_argv[i] = malloc( (strlen(argv[i])+1) * sizeof(char));

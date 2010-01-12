@@ -28,7 +28,7 @@ uses SDLh, uLandTemplates, uFloat,
 {$ENDIF}
 	uConsts;
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
-TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
+	TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
 	TPreview  = packed array[0..127, 0..31] of byte;
 	TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
 
@@ -43,7 +43,7 @@ var  Land: TCollisionArray;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
-function LandBackPixel(x, y: LongInt): LongWord;
+function  LandBackPixel(x, y: LongInt): LongWord;
 
 implementation
 uses uConsole, uStore, uMisc, uRandom, uTeams, uLandObjects, uSHA, uIO, uAmmos, uLandTexture;

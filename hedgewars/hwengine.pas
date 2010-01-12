@@ -146,18 +146,20 @@ end;
 ////////////////////
 procedure OnDestroy;
 begin
-{$IFDEF DEBUGFILE}AddFileLog('Freeing resources...');{$ENDIF}
+	WriteLnToConsole('Freeing resources...');
 	if isSoundEnabled then ReleaseSound();
 	StoreRelease();
 	FreeLand();
+	ControllerClose();
 	SendKB();
 	CloseIPC();
 	TTF_Quit();
-//{$IFNDEF IPHONEOS}
-	// TODO: don't halt and don't clean, return to the previous view
 	SDL_Quit();
+{$IFDEF IPHONEOS}
+	IPH_returnFrontend();
+{$ELSE}
 	halt();
-//{$ENDIF}
+{$ENDIF}
 end;
 
 ///////////////////
@@ -478,7 +480,7 @@ isDeveloperMode:= false;
 TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
 MainLoop;
-ControllerClose
+ControllerClose();
 end;
 
 /////////////////////////
@@ -496,7 +498,7 @@ SendIPCRaw(@Preview, sizeof(Preview));
 h:= MaxHedgehogs;
 SendIPCRaw(@h, sizeof(h));
 WriteLnToConsole('Preview sent, disconnect');
-CloseIPC
+CloseIPC();
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -504,12 +506,13 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
-WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-GetParams;
+	WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
+	GetParams;
 
-Randomize;
+	Randomize;
 
-if GameType = gmtLandPreview then GenLandPreview
-                             else Game
+	if GameType = gmtLandPreview then GenLandPreview
+								 else Game;
+//	ExitCode := 100;
 end.
 

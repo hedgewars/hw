@@ -21,6 +21,7 @@ uses uKeys, uConsole;
 // called by pascal code, they deal with the objc code
 function  IPH_getDocumentsPath: PChar; cdecl; external;
 procedure IPH_showControls; cdecl; external;
+procedure IPH_returnFrontend; cdecl; external; 
 
 // retrieve protocol information
 function  HW_protoVer: LongInt; cdecl; export;
@@ -47,6 +48,7 @@ implementation
 {$IFDEF IPHONEOS}
 function HW_protoVer: LongInt; cdecl; export;
 begin
+	WriteLnToConsole('HW - protocol version');
 	HW_protoVer:= cNetProtoVersion;
 end;
 
