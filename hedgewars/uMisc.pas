@@ -588,14 +588,17 @@ cArtillery:= false;
 {$I-}
 for i:= 0 to 7 do
 begin
-	assign(f, 
-{$IFDEF IPHONEOS}
-	string(IPH_getDocumentsPath())
+{$IFDEF IPHONEDBG}
+	f:= stderr;
 {$ELSE}
-	ParamStr(1)
+	assign(f, 
+  {$IFDEF IPHONEOS}
+	  string(IPH_getDocumentsPath())
+  {$ELSE}
+	  ParamStr(1)
+  {$ENDIF}
+	  + '/debug' + inttostr(i) + '.txt');
 {$ENDIF}
-	+ '/debug' + inttostr(i) + '.txt');
-//	f:= stderr;
 	rewrite(f);
 	if IOResult = 5 then
 	begin

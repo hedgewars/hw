@@ -43,7 +43,7 @@
 				<string key="NSFrameSize">{320, 480}</string>
 				<object class="NSColor" key="IBUIBackgroundColor">
 					<int key="NSColorSpace">1</int>
-					<bytes key="NSRGB">MSAxIDEAA</bytes>
+					<bytes key="NSRGB">MCAwIDAAA</bytes>
 				</object>
 				<bool key="IBUIOpaque">NO</bool>
 				<bool key="IBUIClearsContextBeforeDrawing">NO</bool>
@@ -392,7 +392,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">../../../hedge.build/trunk/cocoaTouch/SDL_uikitappdelegate.h</string>
+						<string key="minorKey">../../../hedge.build/trunk/cocoaTouch/SDLOverrides/SDL_uikitappdelegate.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

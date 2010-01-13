@@ -6,9 +6,8 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <pthread.h>
+#import "GameSetup.h"
 #import "SDL_uikitappdelegate.h"
-#import "gameSetup.h"
 #import "SDL_net.h"
 #import "PascalImports.h"
 
@@ -17,19 +16,38 @@
 #define BUFFER_SIZE 256
 
 
-//
+// they should go in the interface
 TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
-
-@implementation gameSetup
-
-int sendToEngine(NSString *string) {
+int sendToEngine (NSString * string) {
 	Uint8 length = [string length];
 	
 	SDLNet_TCP_Send(csd, &length , 1);
 	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
-void engineProtocolThread () {
+
+@implementation GameSetup
+
+@synthesize locale, engineProtocolStarted;
+
+-(id) init {
+	self = [super init];
+	self.locale = [NSLocale currentLocale];
+	self.engineProtocolStarted = NO;
+	return self;
+}
+
+-(void) startThread: (NSString *) selector {
+	SEL usage = NSSelectorFromString(selector);
+	
+	// do not start the server thread because the port is already bound
+	if (NO == engineProtocolStarted) {
+		engineProtocolStarted = YES;
+		[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
+	}
+}
+
+-(void) engineProtocol {
 	IPaddress ip;
 	int idx, eProto;
 	BOOL serverQuit, clientQuit;
@@ -55,7 +73,7 @@ void engineProtocolThread () {
 		exit(EXIT_FAILURE);
 	}
 	
-	NSLog(@"engineProtocolThread - Waiting for a client");
+	NSLog(@"engineProtocol - Waiting for a client");
 	
 	serverQuit = NO;
 	while (!serverQuit) {
@@ -64,17 +82,17 @@ void engineProtocolThread () {
 		 * If there is one, accept that, and open a new socket for communicating */
 		if ((csd = SDLNet_TCP_Accept(sd))) {
 			
-			NSLog(@"engineProtocolThread - Client found");
+			NSLog(@"engineProtocol - Client found");
 			
 			//first byte of the command alwayas contain the size of the command
 			SDLNet_TCP_Recv(csd, &msgSize, sizeof(Uint8));
 			
 			SDLNet_TCP_Recv(csd, buffer, msgSize);
 			gameTicks = SDLNet_Read16(&buffer[msgSize - 2]);
-			NSLog(@"engineProtocolThread - %d: received [%s]", gameTicks, buffer);
+			//NSLog(@"engineProtocol - %d: received [%s]", gameTicks, buffer);
 			
 			if ('C' == buffer[0]) {
-				NSLog(@"engineProtocolThread - Client found and connected");
+				NSLog(@"engineProtocol - sending game config");
 				
 				// send config data data
 				
@@ -125,10 +143,9 @@ void engineProtocolThread () {
 				
 				// team 1 binds (skipped)				
 				// team 1 members info
-				//for (int i=0; i<4; i++) {
-					sendToEngine(@"eaddhh 0 100 Snow Leopard");
-					sendToEngine(@"ehat NoHat");
-				//}
+				sendToEngine(@"eaddhh 0 100 Snow Leopard");
+				sendToEngine(@"ehat NoHat");
+				
 				// team 1 ammostore
 				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
 
@@ -146,10 +163,8 @@ void engineProtocolThread () {
 				
 				// team 2 binds (skipped)
 				// team 2 members info
-			//	for (int i=0; i<4; i++) {
-					sendToEngine(@"eaddhh 0 100 Raichu");
-					sendToEngine(@"ehat Bunny");
-			//	}
+				sendToEngine(@"eaddhh 0 100 Raichu");
+				sendToEngine(@"ehat Bunny");
 				
 				// team 2 ammostore
 				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
@@ -193,9 +208,6 @@ void engineProtocolThread () {
 							clientQuit = YES;
 						}
 						break;
-					default:
-						// empty packet or just statistics
-						break;
 					case 'i':
 						switch (buffer[1]) {
 							case 'r':
@@ -206,22 +218,11 @@ void engineProtocolThread () {
 								break;
 						}
 						break;
-					// missing case for exiting
+					default:
+						// empty packet or just statistics
+						break;
+					// missing case for exiting right away
 				} 
-				
-				/*
-				 // Terminate this connection 
-				 if(strcmp(buffer, "exit") == 0)	{
-				 quit2 = 1;
-				 printf("Terminate connection\n");
-				 }
-				 // Quit the thread
-				 if(strcmp(buffer, "quit") == 0)	{
-				 quit2 = 1;
-				 quit = 1;
-				 printf("Quit program\n");
-				 }
-				 */
 			}
 		}
 		
@@ -233,10 +234,13 @@ void engineProtocolThread () {
 	SDLNet_Quit();
 
 	[pool release];
-	pthread_exit(NULL);
+	[NSThread exit];
 }
 
-void setupArgsForLocalPlay() {
+-(void) setArgsForLocalPlay {
+	NSString *localeString = [[self.locale localeIdentifier] stringByAppendingString:@".txt"];
+	NSLog(localeString);
+	
 	memset(forward_argv, 0, forward_argc);
 	
 	forward_argc = 18;
@@ -246,11 +250,11 @@ void setupArgsForLocalPlay() {
 	forward_argv[ 2] = "320";			// cScreenWidth (NO EFFECT)
 	forward_argv[ 3] = "480";			// cScreenHeight (NO EFFECT)
 	forward_argv[ 4] = "32";			// cBitsStr
-	forward_argv[ 5] = IPC_PORT_STR;	// ipcPort; <- (MAIN TODO)
+	forward_argv[ 5] = IPC_PORT_STR;	// ipcPort;
 	forward_argv[ 6] = "1";				// cFullScreen (NO EFFECT)
 	forward_argv[ 7] = "0";				// isSoundEnabled (TOSET)
 	forward_argv[ 8] = "1";				// cVSyncInUse (UNUSED)
-	forward_argv[ 9] = "en.txt";		// cLocaleFName (TOSET)
+	forward_argv[ 9] = [localeString UTF8String];		// cLocaleFName
 	forward_argv[10] = "100";			// cInitVolume (TOSET)
 	forward_argv[11] = "8";				// cTimerInterval
 	forward_argv[12] = "Data";			// PathPrefix
@@ -260,7 +264,16 @@ void setupArgsForLocalPlay() {
 	forward_argv[16] = "0";				// isMusicEnabled (TOSET)
 	forward_argv[17] = "0";				// cReducedQuality
 
+fprintf(stderr, forward_argv[9]);
 	return;
 }
+
+
+/*
+ -(void) dealloc {
+	[super dealloc];
+}
+ */
+
 
 @end

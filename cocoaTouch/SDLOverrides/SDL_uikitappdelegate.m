@@ -26,7 +26,7 @@
 #import "SDL_events_c.h"
 #import "jumphack.h"
 #import "SDL_video.h"
-#import "gameSetup.h"
+#import "GameSetup.h"
 
 #ifdef main
 #undef main
@@ -55,7 +55,7 @@ int main (int argc, char **argv) {
 
 @implementation SDLUIKitDelegate
 
-@synthesize window, windowID, controller;
+@synthesize window, windowID, controller, setup;
 
 /* convenience method */
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -63,25 +63,21 @@ int main (int argc, char **argv) {
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
-void preSDL_main(){
+-(void) launchSDL_main{
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
+	
+	// must setup arguments in the same thread
+	[setup setArgsForLocalPlay];
+	
+	// run the user's application, passing argc and argv
 	SDL_main(forward_argc, forward_argv);
 
 	[pool release];
 }
 
-- (void) startSDLgame {
-	pthread_t threadID;
-
-	if (NO == isServerRunning) {
-		// don't start another server because the port is already bound
-		pthread_create (&threadID, NULL, (void *) (*engineProtocolThread), NULL);
-		pthread_detach (threadID);
-		isServerRunning = YES;
-	}
-
-	setupArgsForLocalPlay();
+-(IBAction) startSDLgame {
+	
+	[setup startThread:@"engineProtocol"];
 	
 	// remove the current view to free resources
 	[UIView beginAnimations:nil context:NULL];
@@ -91,24 +87,20 @@ void preSDL_main(){
 	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5];
 	//[controller.view removeFromSuperview];
 	
-	/* run the user's application, passing argc and argv */
 	NSLog(@"Game is launching...");
-	/*pthread_create (&threadID, NULL, (void *) (*preSDL_main), NULL);
-	pthread_detach (threadID);*/
-	int res = SDL_main(forward_argc, forward_argv);
 
-	// can't reach here yet
-	NSLog(@"Game exited with status %d", res);
+	[NSThread detachNewThreadSelector:@selector(launchSDL_main) toTarget:self withObject:nil];
+	
+	//SDL_main(forward_argc, forward_argv);
 
-	//[self performSelector:@selector(makeNewView) withObject:nil afterDelay:0.0];
-	/* exit, passing the return status from the user's application */
-	//exit(exit_status);
+
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
 
+	setup = [[GameSetup alloc] init]; 
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 //#import "SoundEffect.h"	
@@ -149,22 +141,32 @@ void preSDL_main(){
 	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 */
++(void) resetFrontend {
+	[[[SDLUIKitDelegate sharedAppDelegate].window viewWithTag:54867] removeFromSuperview];
+	[[SDLUIKitDelegate sharedAppDelegate].window addSubview:[SDLUIKitDelegate sharedAppDelegate].controller.view];
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:1];
+	[SDLUIKitDelegate sharedAppDelegate].controller.view.alpha = 1;
+	[UIView commitAnimations];
+	
+	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
+}
+
 
 void IPH_returnFrontend (void) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	[[[SDLUIKitDelegate sharedAppDelegate].window viewWithTag:54867] removeFromSuperview];
-	[[SDLUIKitDelegate sharedAppDelegate].window addSubview:[SDLUIKitDelegate sharedAppDelegate].controller.view];
-//	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
+
+	[SDLUIKitDelegate resetFrontend];
 	NSLog(@"Game exited...");
-//	pthread_exit(NULL);
+
 	[pool release];
-	exit(0);
-//	while(1);	//prevent exiting	
+	[NSThread exit];
 }
 
 
 -(void) dealloc {
+	[setup release];
 	[controller release];
 	[window release];
 	[super dealloc];

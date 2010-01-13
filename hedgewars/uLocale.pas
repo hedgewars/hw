@@ -47,7 +47,7 @@ function Format(fmt: shortstring; var arg: shortstring): shortstring;
 function GetEventString(e: TEventId): string;
 
 implementation
-uses uMisc, uRandom;
+uses uMisc, uRandom, uConsole;
 
 var	trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of string;
 	trevt_n: array[TEventId] of integer;
@@ -62,10 +62,19 @@ begin
 trammo[sidNothing]:= ' ';
 for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
-{$I-}
+{$I-} //iochecks off
+filemode:=0; //readonly
 Assign(f, FileName);
 reset(f);
-TryDo(IOResult = 0, 'Cannot load locale "' + FileName + '"', true);
+// if the locale does not exist, fallback to the default one
+if (IOResult <> 0) then
+begin
+	WriteLnToConsole('Warning: Cannot load selected locale "' + FileName + '" fallback to default en.txt');
+	Assign(f, 'en.txt');
+	reset(f);
+end;
+
+TryDo(IOResult = 0, 'Cannot load locale "' + FileName + ' nor en.txt"', true);
 while not eof(f) do
 	begin
 	readln(f, s);
