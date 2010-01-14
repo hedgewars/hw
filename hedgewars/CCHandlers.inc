@@ -17,15 +17,15 @@
  *)
 
 function CheckNoTeamOrHH: boolean;
-var Result: boolean;
+var bRes: boolean;
 begin
-Result:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
+bRes:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 {$IFDEF DEBUGFILE}
-if Result then
+if bRes then
    if CurrentTeam = nil then AddFileLog('CONSOLE: CurTeam = nil')
                         else AddFileLog('CONSOLE: CurTeam <> nil, Gear = nil');
 {$ENDIF}
-CheckNoTeamOrHH:= Result
+CheckNoTeamOrHH:= bRes;
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure chQuit(var s: shortstring);

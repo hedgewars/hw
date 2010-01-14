@@ -549,9 +549,9 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy: LongInt;
-    Result, updateBlock, resweep: boolean;
+    bRes, updateBlock, resweep: boolean;
 begin
-Result:= false;
+bRes:= false;
 
 for y:= 0 to LAND_HEIGHT div 32 - 1 do
 	begin
@@ -569,7 +569,7 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
                     for xx:= x * 32 to x * 32 + 31 do
                         if Despeckle(xx, yy) then
                             begin
-                            Result:= true;
+                            bRes:= true;
                             updateBlock:= true;
                             resweep:= true;
                             end;
@@ -580,7 +580,7 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
 		end;
 	end;
 
-SweepDirty:= Result
+SweepDirty:= bRes;
 end;
 
 // Return true if outside of land or not the value tested, used right now for some X/Y movement that does not use normal hedgehog movement in GSHandlers.inc

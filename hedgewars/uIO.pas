@@ -65,23 +65,23 @@ var
 
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
-var Result: PCmd;
+var command: PCmd;
 begin
-new(Result);
-FillChar(Result^, sizeof(TCmd), 0);
-Result^.loTime:= Time;
-Result^.str:= str;
-if Result^.cmd <> 'F' then dec(Result^.len, 2); // cut timestamp
+new(command);
+FillChar(command^, sizeof(TCmd), 0);
+command^.loTime:= Time;
+command^.str:= str;
+if command^.cmd <> 'F' then dec(command^.len, 2); // cut timestamp
 if headcmd = nil then
    begin
-   headcmd:= Result;
-   lastcmd:= Result
+   headcmd:= command;
+   lastcmd:= command
    end else
    begin
-   lastcmd^.Next:= Result;
-   lastcmd:= Result
+   lastcmd^.Next:= command;
+   lastcmd:= command
    end;
-AddCmd:= Result
+AddCmd:= command;
 end;
 
 procedure RemoveCmd;

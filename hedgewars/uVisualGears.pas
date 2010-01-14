@@ -336,7 +336,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
-var Result: PVisualGear;
+var gear: PVisualGear;
 	t: Longword;
 	sp: hwFloat;
 begin
@@ -356,14 +356,14 @@ if cReducedQuality and
 	exit
 	end;
 
-New(Result);
-FillChar(Result^, sizeof(TVisualGear), 0);
-Result^.X:= int2hwFloat(X);
-Result^.Y:= int2hwFloat(Y);
-Result^.Kind := Kind;
-Result^.doStep:= doStepHandlers[Kind];
+New(gear);
+FillChar(gear^, sizeof(TVisualGear), 0);
+gear^.X:= int2hwFloat(X);
+gear^.Y:= int2hwFloat(Y);
+gear^.Kind := Kind;
+gear^.doStep:= doStepHandlers[Kind];
 
-with Result^ do
+with gear^ do
 	case Kind of
 	vgtFlake: begin
 				FrameTicks:= random(vobFrameTicks);
@@ -405,7 +405,7 @@ with Result^ do
 				Frame:= random(8)
 				end;
 	vgtSmallDamageTag: begin
-				Result^.FrameTicks:= 1100
+				gear^.FrameTicks:= 1100
 				end;
 	vgtBubble: begin
 				dx.isNegative:= random(2) = 0;
@@ -434,12 +434,12 @@ with Result^ do
 
 if VisualGearsList <> nil then
 	begin
-	VisualGearsList^.PrevGear:= Result;
-	Result^.NextGear:= VisualGearsList
+	VisualGearsList^.PrevGear:= gear;
+	gear^.NextGear:= VisualGearsList
 	end;
-VisualGearsList:= Result;
+VisualGearsList:= gear;
 
-AddVisualGear:= Result
+AddVisualGear:= gear;
 end;
 
 procedure DeleteVisualGear(Gear: PVisualGear);

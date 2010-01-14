@@ -17,8 +17,6 @@
  *)
 
 {$INCLUDE "options.inc"}
-{$IFDEF IPHONEOS} {$MODE OBJFPC} {$ENDIF}
-// TODO: insert the above line in options.inc
 
 unit uKeys;
 interface

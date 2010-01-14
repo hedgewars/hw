@@ -209,213 +209,213 @@ end;
 
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 const Counter: Longword = 0;
-var Result: PGear;
+var gear: PGear;
 begin
 inc(Counter);
 {$IFDEF DEBUGFILE}
 AddFileLog('AddGear: #' + inttostr(Counter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
 {$ENDIF}
 
-New(Result);
-FillChar(Result^, sizeof(TGear), 0);
-Result^.X:= int2hwFloat(X);
-Result^.Y:= int2hwFloat(Y);
-Result^.Kind := Kind;
-Result^.State:= State;
-Result^.Active:= true;
-Result^.dX:= dX;
-Result^.dY:= dY;
-Result^.doStep:= doStepHandlers[Kind];
-Result^.CollisionIndex:= -1;
-Result^.Timer:= Timer;
-Result^.Z:= cUsualZ;
-Result^.FlightTime:= 0;
-Result^.uid:= Counter;
+New(gear);
+FillChar(gear^, sizeof(TGear), 0);
+gear^.X:= int2hwFloat(X);
+gear^.Y:= int2hwFloat(Y);
+gear^.Kind := Kind;
+gear^.State:= State;
+gear^.Active:= true;
+gear^.dX:= dX;
+gear^.dY:= dY;
+gear^.doStep:= doStepHandlers[Kind];
+gear^.CollisionIndex:= -1;
+gear^.Timer:= Timer;
+gear^.Z:= cUsualZ;
+gear^.FlightTime:= 0;
+gear^.uid:= Counter;
 
 if CurrentTeam <> nil then
 	begin
-	Result^.Hedgehog:= CurrentHedgehog;
-	Result^.IntersectGear:= CurrentHedgehog^.Gear
+	gear^.Hedgehog:= CurrentHedgehog;
+	gear^.IntersectGear:= CurrentHedgehog^.Gear
 	end;
 
 case Kind of
    gtAmmo_Bomb,
  gtClusterBomb: begin
-                Result^.Radius:= 4;
-                Result^.Elasticity:= _0_6;
-                Result^.Friction:= _0_96;
-                Result^.RenderTimer:= true;
-                if Result^.Timer = 0 then Result^.Timer:= 3000
+                gear^.Radius:= 4;
+                gear^.Elasticity:= _0_6;
+                gear^.Friction:= _0_96;
+                gear^.RenderTimer:= true;
+                if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
   gtWatermelon: begin
-                Result^.Radius:= 4;
-                Result^.Elasticity:= _0_8;
-                Result^.Friction:= _0_995;
-                Result^.RenderTimer:= true;
-                if Result^.Timer = 0 then Result^.Timer:= 3000
+                gear^.Radius:= 4;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_995;
+                gear^.RenderTimer:= true;
+                if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
     gtHedgehog: begin
-                Result^.Radius:= cHHRadius;
-                Result^.Elasticity:= _0_35;
-                Result^.Friction:= _0_999;
-                Result^.Angle:= cMaxAngle div 2;
-                Result^.Z:= cHHZ;
+                gear^.Radius:= cHHRadius;
+                gear^.Elasticity:= _0_35;
+                gear^.Friction:= _0_999;
+                gear^.Angle:= cMaxAngle div 2;
+                gear^.Z:= cHHZ;
                 end;
 gtAmmo_Grenade: begin // bazooka
-                Result^.Radius:= 4;
+                gear^.Radius:= 4;
                 end;
    gtHealthTag: begin
-                Result^.Timer:= 1500;
-                Result^.Z:= 2002;
+                gear^.Timer:= 1500;
+                gear^.Z:= 2002;
                 end;
        gtGrave: begin
-                Result^.Radius:= 10;
-                Result^.Elasticity:= _0_6;
+                gear^.Radius:= 10;
+                gear^.Elasticity:= _0_6;
                 end;
          gtUFO: begin
-                Result^.Radius:= 5;
-                Result^.Timer:= 500;
-                Result^.RenderTimer:= true;
-                Result^.Elasticity:= _0_9
+                gear^.Radius:= 5;
+                gear^.Timer:= 500;
+                gear^.RenderTimer:= true;
+                gear^.Elasticity:= _0_9
                 end;
  gtShotgunShot: begin
-                Result^.Timer:= 900;
-                Result^.Radius:= 2
+                gear^.Timer:= 900;
+                gear^.Radius:= 2
                 end;
   gtPickHammer: begin
-                Result^.Radius:= 10;
-                Result^.Timer:= 4000
+                gear^.Radius:= 10;
+                gear^.Timer:= 4000
                 end;
   gtSmokeTrace,
    gtEvilTrace: begin
-                Result^.X:= Result^.X - _16;
-                Result^.Y:= Result^.Y - _16;
-                Result^.State:= 8;
-                Result^.Z:= cSmokeZ
+                gear^.X:= gear^.X - _16;
+                gear^.Y:= gear^.Y - _16;
+                gear^.State:= 8;
+                gear^.Z:= cSmokeZ
                 end;
         gtRope: begin
-                Result^.Radius:= 3;
-                Result^.Friction:= _450;
+                gear^.Radius:= 3;
+                gear^.Friction:= _450;
                 RopePoints.Count:= 0;
                 end;
    gtExplosion: begin
-                Result^.X:= Result^.X;
-                Result^.Y:= Result^.Y;
+                gear^.X:= gear^.X;
+                gear^.Y:= gear^.Y;
                 end;
         gtMine: begin
-                Result^.State:= Result^.State or gstMoving;
-                Result^.Radius:= 2;
-                Result^.Elasticity:= _0_55;
-                Result^.Friction:= _0_995;
+                gear^.State:= gear^.State or gstMoving;
+                gear^.Radius:= 2;
+                gear^.Elasticity:= _0_55;
+                gear^.Friction:= _0_995;
                 if cMinesTime < 0 then
-                    Result^.Timer:= getrandom(4)*1000
+                    gear^.Timer:= getrandom(4)*1000
                 else
-                    Result^.Timer:= cMinesTime*1;
+                    gear^.Timer:= cMinesTime*1;
                 end;
         gtCase: begin
-                Result^.Radius:= 16;
-                Result^.Elasticity:= _0_3
+                gear^.Radius:= 16;
+                gear^.Elasticity:= _0_3
                 end;
   gtDEagleShot: begin
-                Result^.Radius:= 1;
-                Result^.Health:= 50
+                gear^.Radius:= 1;
+                gear^.Health:= 50
                 end;
   gtSniperRifleShot: begin
-                Result^.Radius:= 1;
-                Result^.Health:= 50
+                gear^.Radius:= 1;
+                gear^.Health:= 50
                 end;
     gtDynamite: begin
-                Result^.Radius:= 3;
-                Result^.Elasticity:= _0_55;
-                Result^.Friction:= _0_03;
-                Result^.Timer:= 5000;
+                gear^.Radius:= 3;
+                gear^.Elasticity:= _0_55;
+                gear^.Friction:= _0_03;
+                gear^.Timer:= 5000;
                 end;
      gtCluster: begin
-                Result^.Radius:= 2;
-                Result^.RenderTimer:= true
+                gear^.Radius:= 2;
+                gear^.RenderTimer:= true
                 end;
-      gtShover: Result^.Radius:= 20;
+      gtShover: gear^.Radius:= 20;
        gtFlame: begin
-                Result^.Tag:= GetRandom(32);
-                Result^.Radius:= 1;
-                Result^.Health:= 5;
-                if (Result^.dY.QWordValue = 0) and (Result^.dX.QWordValue = 0) then
+                gear^.Tag:= GetRandom(32);
+                gear^.Radius:= 1;
+                gear^.Health:= 5;
+                if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                 	begin
-                	Result^.dY:= (getrandom - _0_8) * _0_03;
-                	Result^.dX:= (getrandom - _0_5) * _0_4
+                	gear^.dY:= (getrandom - _0_8) * _0_03;
+                	gear^.dX:= (getrandom - _0_5) * _0_4
                 	end
                 end;
    gtFirePunch: begin
-                Result^.Radius:= 15;
-                Result^.Tag:= Y
+                gear^.Radius:= 15;
+                gear^.Tag:= Y
                 end;
      gtAirBomb: begin
-                Result^.Radius:= 5;
+                gear^.Radius:= 5;
                 end;
    gtBlowTorch: begin
-                Result^.Radius:= cHHRadius + cBlowTorchC;
-                Result^.Timer:= 7500
+                gear^.Radius:= cHHRadius + cBlowTorchC;
+                gear^.Timer:= 7500
                 end;
     gtSwitcher: begin
-                Result^.Z:= cCurrHHZ
+                gear^.Z:= cCurrHHZ
                 end;
       gtTarget: begin
-                Result^.Radius:= 10;
-                Result^.Elasticity:= _0_3;
-				Result^.Timer:= 0
+                gear^.Radius:= 10;
+                gear^.Elasticity:= _0_3;
+				gear^.Timer:= 0
                 end;
       gtMortar: begin
-                Result^.Radius:= 4;
-                Result^.Elasticity:= _0_2;
-                Result^.Friction:= _0_08
+                gear^.Radius:= 4;
+                gear^.Elasticity:= _0_2;
+                gear^.Friction:= _0_08
                 end;
-        gtWhip: Result^.Radius:= 20;
+        gtWhip: gear^.Radius:= 20;
     gtKamikaze: begin
-                Result^.Health:= 2048;
-                Result^.Radius:= 20
+                gear^.Health:= 2048;
+                gear^.Radius:= 20
                 end;
         gtCake: begin
-                Result^.Health:= 2048;
-                Result^.Radius:= 7;
-                Result^.Z:= cOnHHZ;
-                Result^.RenderTimer:= true;
-                if not dX.isNegative then Result^.Angle:= 1 else Result^.Angle:= 3
+                gear^.Health:= 2048;
+                gear^.Radius:= 7;
+                gear^.Z:= cOnHHZ;
+                gear^.RenderTimer:= true;
+                if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
-                Result^.Radius:= 4;
-                Result^.Elasticity:= _0_5;
-                Result^.Friction:= _0_96;
-                Result^.RenderTimer:= true;
-                Result^.Timer:= 5000
+                gear^.Radius:= 4;
+                gear^.Elasticity:= _0_5;
+                gear^.Friction:= _0_96;
+                gear^.RenderTimer:= true;
+                gear^.Timer:= 5000
                 end;
        gtDrill: begin
-                Result^.Timer:= 5000;
-                Result^.Radius:= 4
+                gear^.Timer:= 5000;
+                gear^.Radius:= 4
                 end;
         gtBall: begin
-                Result^.Radius:= 5;
-                Result^.Tag:= random(8);
-                Result^.Timer:= 5000;
-                Result^.Elasticity:= _0_7;
-                Result^.Friction:= _0_995;
+                gear^.Radius:= 5;
+                gear^.Tag:= random(8);
+                gear^.Timer:= 5000;
+                gear^.Elasticity:= _0_7;
+                gear^.Friction:= _0_995;
                 end;
      gtBallgun: begin
-                Result^.Timer:= 5001;
+                gear^.Timer:= 5001;
                 end;
      gtRCPlane: begin
-                Result^.Timer:= 15000;
-                Result^.Health:= 3;
-                Result^.Radius:= 8
+                gear^.Timer:= 15000;
+                gear^.Health:= 3;
+                gear^.Radius:= 8
                 end;
      gtJetpack: begin
-                Result^.Health:= 2000;
+                gear^.Health:= 2000;
                 end;
      gtMolotov: begin 
-                Result^.Radius:= 8;
+                gear^.Radius:= 8;
                 end;
      end;
-InsertGearToList(Result);
-AddGear:= Result
+InsertGearToList(gear);
+AddGear:= gear;
 end;
 
 procedure DeleteGear(Gear: PGear);
@@ -1858,16 +1858,16 @@ end;
 
 function CountGears(Kind: TGearType): Longword;
 var t: PGear;
-    Result: Longword;
+    count: Longword = 0;
 begin
-Result:= 0;
+
 t:= GearsList;
 while t <> nil do
 	begin
-	if t^.Kind = Kind then inc(Result);
+	if t^.Kind = Kind then inc(count);
 	t:= t^.NextGear
 	end;
-CountGears:= Result
+CountGears:= count;
 end;
 
 procedure SpawnBoxOfSmth;
@@ -1957,17 +1957,16 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 	function CountNonZeroz(x, y, r, c: LongInt): LongInt;
 	var i: LongInt;
-		Result: LongInt;
+		count: LongInt = 0;
 	begin
-	Result:= 0;
 	if (y and LAND_HEIGHT_MASK) = 0 then
 		for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
 			if Land[y, i] <> 0 then
                begin
-               inc(Result);
-               if Result = c then exit(Result)
+               inc(count);
+               if count = c then exit(count)
                end;
-	CountNonZeroz:= Result
+	CountNonZeroz:= count;
 	end;
 
 var x: LongInt;

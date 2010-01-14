@@ -65,23 +65,23 @@ with tl do
 end;
 
 function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
-var Result: PVariable;
+var value: PVariable;
 begin
-New(Result);
-TryDo(Result <> nil, 'RegisterVariable: Result = nil', true);
-FillChar(Result^, sizeof(TVariable), 0);
-Result^.Name:= Name;
-Result^.VType:= VType;
-Result^.Handler:= p;
-Result^.Trusted:= Trusted;
+New(value);
+TryDo(value <> nil, 'RegisterVariable: value = nil', true);
+FillChar(value^, sizeof(TVariable), 0);
+value^.Name:= Name;
+value^.VType:= VType;
+value^.Handler:= p;
+value^.Trusted:= Trusted;
 
-if Variables = nil then Variables:= Result
+if Variables = nil then Variables:= value
                    else begin
-                        Result^.Next:= Variables;
-                        Variables:= Result
+                        value^.Next:= Variables;
+                        Variables:= value
                         end;
 
-RegisterVariable:= Result
+RegisterVariable:= value;
 end;
 
 procedure FreeVariablesList;
@@ -201,18 +201,18 @@ case c of
 end;
 
 function GetLastConsoleLine: shortstring;
-var Result: shortstring;
+var valueStr: shortstring;
 	i: LongWord;
 begin
 i:= (CurrLine + cLinesCount - 2) mod cLinesCount;
-Result:= ConsoleLines[i].s;
+valueStr:= ConsoleLines[i].s;
 
-Result:= Result + #10;
+valueStr:= valueStr + #10;
 
 i:= (CurrLine + cLinesCount - 1) mod cLinesCount;
-Result:= Result + ConsoleLines[i].s;
+valueStr:= valueStr + ConsoleLines[i].s;
 
-GetLastConsoleLine:= Result
+GetLastConsoleLine:= valueStr;
 end;
 
 procedure StopMessages(Message: Longword);

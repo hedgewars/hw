@@ -162,17 +162,17 @@ end;
 
 function RatePlace(Gear: PGear): LongInt;
 var i, r: LongInt;
-    Result: LongInt;
+    rate: LongInt;
 begin
-Result:= 0;
+rate:= 0;
 for i:= 0 to Pred(bonuses.Count) do
 	with bonuses.ar[i] do
 		begin
 		r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
 		if r < Radius then
-			inc(Result, Score * (Radius - r))
+			inc(rate, Score * (Radius - r))
 		end;
-	RatePlace:= Result
+	RatePlace:= rate;
 end;
 
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
@@ -204,9 +204,9 @@ TestColl:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0)
 end;
 
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
-var i, dmg, Result: LongInt;
+var i, dmg, rate: LongInt;
 begin
-Result:= 0;
+rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
      begin
@@ -223,20 +223,20 @@ for i:= 0 to Targets.Count do
             begin
             dmg:= min(dmg div 2, r);
             if dmg >= abs(Score) then
-               if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * friendlyfactor div 100)
+               if Score > 0 then inc(rate, KillScore)
+                            else dec(rate, KillScore * friendlyfactor div 100)
             else
-               if Score > 0 then inc(Result, dmg)
-                            else dec(Result, dmg * friendlyfactor div 100)
+               if Score > 0 then inc(rate, dmg)
+                            else dec(rate, dmg * friendlyfactor div 100)
             end;
          end;
-RateExplosion:= Result * 1024
+RateExplosion:= rate * 1024;
 end;
 
 function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
-var i, dmg, Result: LongInt;
+var i, dmg, rate: LongInt;
 begin
-Result:= 0;
+rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
          begin
@@ -244,22 +244,22 @@ for i:= 0 to Pred(Targets.Count) do
          if dmg > 0 then
             begin
             if power >= abs(Score) then
-               if Score > 0 then inc(Result, KillScore)
-                            else dec(Result, KillScore * friendlyfactor div 100)
+               if Score > 0 then inc(rate, KillScore)
+                            else dec(rate, KillScore * friendlyfactor div 100)
             else
-               if Score > 0 then inc(Result, power)
-                            else dec(Result, power * friendlyfactor div 100)
+               if Score > 0 then inc(rate, power)
+                            else dec(rate, power * friendlyfactor div 100)
             end;
          end;
-RateShove:= Result * 1024
+RateShove:= rate * 1024
 end;
 
 function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
 const
   REUSE_BONUS = 1.35;
-var i, dmg, Result: LongInt;
+var i, dmg, rate: LongInt;
 begin
-Result:= 0;
+rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
      begin
@@ -276,31 +276,31 @@ for i:= 0 to Targets.Count do
          if dmg > 0 then
             begin
                 if dmg >= abs(Score) then dmg := KillScore;
-                if Score > 0 then inc(Result, dmg)
-                else dec(Result, dmg * friendlyfactor div 100);
+                if Score > 0 then inc(rate, dmg)
+                else dec(rate, dmg * friendlyfactor div 100);
             end;
          end;
-RateShotgun:= Result * 1024
+RateShotgun:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
 var bX, bY: LongInt;
-    Result: boolean;
+    bRes: boolean;
 begin
-Result:= false;
+bRes:= false;
 GoInfo.Ticks:= 0;
 GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
 bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
 case JumpType of
-     jmpNone: exit(Result);
+     jmpNone: exit(bRes);
     jmpHJump: if not TestCollisionYwithGear(Gear, -1) then
                  begin
                  Gear^.dY:= -_0_2;
                  SetLittle(Gear^.dX);
                  Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-                 end else exit(Result);
+                 end else exit(bRes);
     jmpLJump: begin
               if not TestCollisionYwithGear(Gear, -1) then
                  if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - int2hwFloat(2) else
@@ -311,12 +311,12 @@ case JumpType of
                  Gear^.dY:= -_0_15;
                  Gear^.dX:= SignAs(_0_15, Gear^.dX);
                  Gear^.State:= Gear^.State or gstMoving or gstHHJumping
-                 end else exit(Result)
+                 end else exit(bRes)
               end
     end;
 
 repeat
-if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then exit(Result);
+if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then exit(bRes);
 if (Gear^.State and gstMoving) <> 0 then
    begin
    if (GoInfo.Ticks = 350) then
@@ -329,7 +329,7 @@ if (Gear^.State and gstMoving) <> 0 then
    Gear^.X:= Gear^.X + Gear^.dX;
    inc(GoInfo.Ticks);
    Gear^.dY:= Gear^.dY + cGravity;
-   if Gear^.dY > _0_4 then exit(Result);
+   if Gear^.dY > _0_4 then exit(bRes);
    if (Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if (not Gear^.dY.isNegative)and TestCollisionYwithGear(Gear, 1) then
@@ -339,18 +339,18 @@ if (Gear^.State and gstMoving) <> 0 then
       case JumpType of
            jmpHJump: if bY - hwRound(Gear^.Y) > 5 then
                         begin
-                        Result:= true;
+                        bRes:= true;
                         GoInfo.JumpType:= jmpHJump;
                         inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
                         end;
            jmpLJump: if abs(bX - hwRound(Gear^.X)) > 30 then
                         begin
-                        Result:= true;
+                        bRes:= true;
                         GoInfo.JumpType:= jmpLJump;
                         inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
                         end;
            end;
-      exit(Result)
+      exit(bRes)
       end;
    end;
 until false
@@ -358,9 +358,9 @@ end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY: LongInt;
-    Result: boolean;
+    bRes: boolean;
 begin
-Result:= false;
+bRes:= false;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
@@ -378,7 +378,7 @@ if (Gear^.State and gstMoving) <> 0 then
       begin
       Goinfo.FallPix:= 0;
       HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
-      exit(Result)
+      exit(bRes)
       end;
    Gear^.Y:= Gear^.Y + Gear^.dY;
    if hwRound(Gear^.Y) > pY then inc(GoInfo.FallPix);
@@ -387,14 +387,14 @@ if (Gear^.State and gstMoving) <> 0 then
       inc(GoInfo.Ticks, 410);
       Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
       Gear^.dY:= _0;
-      Result:= true;
+      bRes:= true;
       HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
-      exit(Result)
+      exit(bRes)
       end;
    continue
    end;
    if (Gear^.Message and gm_Left  )<>0 then Gear^.dX:= -cLittle else
-   if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit(Result);
+   if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit(bRes);
    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
       begin
       if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
@@ -450,7 +450,7 @@ if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
    exit(true);
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
 HHJump(AltGear, jmpHJump, GoInfo);
-HHGo:= Result
+HHGo:= bRes;
 end;
 
 function AIrndSign(num: LongInt): LongInt;

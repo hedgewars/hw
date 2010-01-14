@@ -127,34 +127,34 @@ end;
 
 function CheckIntersect(x1, y1, w1, h1: LongInt): boolean;
 var i: Longword;
-    Result: boolean;
+    res: boolean = false;
 begin
-Result:= false;
+
 i:= 0;
 if RectCount > 0 then
    repeat
    with Rects^[i] do
-        Result:= (x < x1 + w1) and (x1 < x + w) and
+        res:= (x < x1 + w1) and (x1 < x + w) and
                  (y < y1 + h1) and (y1 < y + h);
    inc(i)
-   until (i = RectCount) or (Result);
-CheckIntersect:= Result
+   until (i = RectCount) or (res);
+CheckIntersect:= res;
 end;
 
 function AddGirder(gX: LongInt): boolean;
 var tmpsurf: PSDL_Surface;
     x1, x2, y, k, i: LongInt;
     rr: TSDL_Rect;
-    Result: boolean;
+    bRes: boolean;
 
 	function CountNonZeroz(x, y: LongInt): Longword;
 	var i: LongInt;
-		Result: Longword;
+		lRes: Longword;
 	begin
-	Result:= 0;
+	lRes:= 0;
 	for i:= y to y + 15 do
-		if Land[i, x] <> 0 then inc(Result);
-	CountNonZeroz:= Result
+		if Land[i, x] <> 0 then inc(lRes);
+	CountNonZeroz:= lRes;
 	end;
 
 begin
@@ -188,8 +188,8 @@ x1:= 0;
 until y > (LAND_HEIGHT-125);
 
 if x1 > 0 then
-	begin
-	Result:= true;
+begin
+	bRes:= true;
 	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
 	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
@@ -202,54 +202,54 @@ if x1 > 0 then
 	SDL_FreeSurface(tmpsurf);
 
 	AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
-	end else Result:= false;
+end
+else bRes:= false;
 
-AddGirder:= Result
+AddGirder:= bRes;
 end;
 
 function CheckLand(rect: TSDL_Rect; dX, dY, Color: Longword): boolean;
 var i: Longword;
-    Result: boolean;
+    bRes: boolean = true;
 begin
-Result:= true;
 inc(rect.x, dX);
 inc(rect.y, dY);
 i:= 0;
 {$WARNINGS OFF}
-while (i <= rect.w) and Result do
+while (i <= rect.w) and bRes do
       begin
-      Result:= (Land[rect.y, rect.x + i] = Color) and (Land[rect.y + rect.h, rect.x + i] = Color);
+      bRes:= (Land[rect.y, rect.x + i] = Color) and (Land[rect.y + rect.h, rect.x + i] = Color);
       inc(i)
       end;
 i:= 0;
-while (i <= rect.h) and Result do
+while (i <= rect.h) and bRes do
       begin
-      Result:= (Land[rect.y + i, rect.x] = Color) and (Land[rect.y + i, rect.x + rect.w] = Color);
+      bRes:= (Land[rect.y + i, rect.x] = Color) and (Land[rect.y + i, rect.x + rect.w] = Color);
       inc(i)
       end;
 {$WARNINGS ON}
-CheckLand:= Result
+CheckLand:= bRes;
 end;
 
 function CheckCanPlace(x, y: Longword; var Obj: TThemeObject): boolean;
 var i: Longword;
-    Result: boolean;
+    bRes: boolean;
 begin
 with Obj do
      if CheckLand(inland, x, y, COLOR_LAND) then
         begin
-        Result:= true;
+        bRes:= true;
         i:= 1;
-        while Result and (i <= rectcnt) do
+        while bRes and (i <= rectcnt) do
               begin
-              Result:= CheckLand(outland[i], x, y, 0);
+              bRes:= CheckLand(outland[i], x, y, 0);
               inc(i)
               end;
-        if Result then
-           Result:= not CheckIntersect(x, y, Width, Height)
+        if bRes then
+           bRes:= not CheckIntersect(x, y, Width, Height)
         end else
-        Result:= false;
-CheckCanPlace:= Result
+        bRes:= false;
+CheckCanPlace:= bRes;
 end;
 
 function TryPut(var Obj: TThemeObject): boolean; overload;
@@ -257,7 +257,7 @@ const MaxPointsIndex = 2047;
 var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
     cnt, i: Longword;
-    Result: boolean;
+    bRes: boolean;
 begin
 cnt:= 0;
 Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
@@ -284,8 +284,8 @@ with Obj do
          until y > LAND_HEIGHT - 1 - Height;
          inc(x, getrandom(6) + 3)
      until x > LAND_WIDTH - 1 - Width;
-     Result:= cnt <> 0;
-     if Result then
+     bRes:= cnt <> 0;
+     if bRes then
         begin
         i:= getrandom(cnt);
         BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
@@ -293,7 +293,7 @@ with Obj do
         dec(Maxcnt)
         end else Maxcnt:= 0
      end;
-TryPut:= Result
+TryPut:= bRes;
 end;
 
 function TryPut(var Obj: TSprayObject; Surface: PSDL_Surface): boolean; overload;
@@ -302,7 +302,7 @@ var x, y: Longword;
     ar: array[0..MaxPointsIndex] of TPoint;
     cnt, i: Longword;
     r: TSDL_Rect;
-    Result: boolean;
+    bRes: boolean;
 begin
 cnt:= 0;
 Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
@@ -334,8 +334,8 @@ with Obj do
         until y > LAND_HEIGHT - 1 - Height - 8;
 		inc(x, getrandom(12) + 12)
     until x > LAND_WIDTH - 1 - Width;
-	Result:= cnt <> 0;
-	if Result then
+	bRes:= cnt <> 0;
+	if bRes then
 		begin
 		i:= getrandom(cnt);
 		r.x:= ar[i].X;
@@ -347,7 +347,7 @@ with Obj do
 		dec(Maxcnt)
 		end else Maxcnt:= 0
 	end;
-TryPut:= Result
+TryPut:= bRes;
 end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);

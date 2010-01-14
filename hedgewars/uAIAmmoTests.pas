@@ -104,12 +104,12 @@ function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPar
 var Vx, Vy, r: hwFloat;
     rTime: LongInt;
     Score, EX, EY: LongInt;
-    Result: LongInt;
+    valueResult: LongInt;
 
     function CheckTrace: LongInt;
     var x, y, dX, dY: hwFloat;
         t: LongInt;
-        Result: LongInt;
+        value: LongInt;
     begin
     x:= Me^.X;
     y:= Me^.Y;
@@ -125,16 +125,16 @@ var Vx, Vy, r: hwFloat;
     until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t <= 0);
     EX:= hwRound(x);
     EY:= hwRound(y);
-    Result:= RateExplosion(Me, EX, EY, 101);
-    if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
-    CheckTrace:= Result
+    value:= RateExplosion(Me, EX, EY, 101);
+    if value = 0 then value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
+    CheckTrace:= value;
     end;
 
 begin
 ap.Time:= 0;
 rTime:= 350;
 ap.ExplR:= 0;
-Result:= BadTurn;
+valueResult:= BadTurn;
 repeat
   rTime:= rTime + 300 + Level * 50 + random(300);
   Vx:= - cWindSpeed * rTime * _0_5 + (int2hwFloat(Targ.X + AIrndSign(2)) - Me^.X) / int2hwFloat(rTime);
@@ -143,24 +143,24 @@ repeat
   if not (r > _1) then
      begin
      Score:= CheckTrace;
-     if Result <= Score then
+     if valueResult <= Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
         ap.Power:= hwRound(r * cMaxPower) - random((Level - 1) * 17 + 1);
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
-        Result:= Score
+        valueResult:= Score
         end;
      end
 until (rTime > 4250);
-TestBazooka:= Result
+TestBazooka:= valueResult
 end;
 
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 const tDelta = 24;
 var Vx, Vy, r: hwFloat;
-    Score, EX, EY, Result: LongInt;
+    Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
 
     function CheckTrace: LongInt;
@@ -184,7 +184,7 @@ var Vx, Vy, r: hwFloat;
     end;
 
 begin
-Result:= BadTurn;
+valueResult:= BadTurn;
 TestTime:= 0;
 ap.ExplR:= 0;
 repeat
@@ -195,7 +195,7 @@ repeat
   if not (r > _1) then
      begin
      Score:= CheckTrace;
-     if Result < Score then
+     if valueResult < Score then
         begin
         ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15);
@@ -203,22 +203,22 @@ repeat
         ap.ExplR:= 100;
         ap.ExplX:= EX;
         ap.ExplY:= EY;
-        Result:= Score
+        valueResult:= Score
         end;
      end
 until (TestTime = 4000);
-TestGrenade:= Result
+TestGrenade:= valueResult
 end;
 
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 const tDelta = 24;
 var Vx, Vy: hwFloat;
-    Score, EX, EY, Result: LongInt;
+    Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
 
 	function CheckTrace: LongInt;
 	var x, y, dY: hwFloat;
-		Result: LongInt;
+		value: LongInt;
 	begin
 		x:= Me^.X;
 		y:= Me^.Y;
@@ -234,18 +234,18 @@ var Vx, Vy: hwFloat;
 
 		if (EY < 1000) and not dY.isNegative then
 			begin
-			Result:= RateExplosion(Me, EX, EY, 91);
-			if (Result = 0) then
+			value:= RateExplosion(Me, EX, EY, 91);
+			if (value = 0) then
 				if (dY > _0_15) then
-					Result:= - abs(Targ.Y - EY) div 32
+					value:= - abs(Targ.Y - EY) div 32
 				else
-					Result:= BadTurn
-			else if (Result < 0) then Result:= BadTurn
+					value:= BadTurn
+			else if (value < 0) then value:= BadTurn
 			end
 		else
-			Result:= BadTurn;
+			value:= BadTurn;
 
-		CheckTrace:= Result
+		CheckTrace:= value;
 	end;
 
 	function Solve: LongWord;
@@ -268,7 +268,7 @@ var Vx, Vy: hwFloat;
 	end;
 
 begin
-Result:= BadTurn;
+valueResult:= BadTurn;
 ap.ExplR:= 0;
 
 if (Level > 2) then exit(BadTurn);
@@ -281,17 +281,17 @@ if TestTime = 0 then exit(BadTurn);
 	Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
 
 	Score:= CheckTrace;
-	if Result < Score then
+	if valueResult < Score then
 		begin
 		ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
 		ap.Power:= 1;
 		ap.ExplR:= 100;
 		ap.ExplX:= EX;
 		ap.ExplY:= EY;
-		Result:= Score
+		valueResult:= Score
 		end;
 
-TestMortar:= Result
+TestMortar:= valueResult;
 end;
 
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -299,7 +299,7 @@ const
   MIN_RANGE =  80;
   MAX_RANGE = 400;
 var Vx, Vy, x, y: hwFloat;
-    rx, ry, Result: LongInt;
+    rx, ry, valueResult: LongInt;
     range: integer;
 begin
 ap.ExplR:= 0;
@@ -321,10 +321,10 @@ repeat
      begin
      x:= x + vX * 8;
      y:= y + vY * 8;
-     Result:= RateShotgun(Me, rx, ry) * 2;
-     if Result = 0 then Result:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
-                   else dec(Result, Level * 4000);
-     exit(Result)
+     valueResult:= RateShotgun(Me, rx, ry) * 2;
+     if valueResult = 0 then valueResult:= - Metric(Targ.X, Targ.Y, rx, ry) div 64
+                   else dec(valueResult, Level * 4000);
+     exit(valueResult)
      end
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT);
 TestShotgun:= BadTurn
@@ -333,7 +333,7 @@ end;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t: hwFloat;
     d: Longword;
-    Result: LongInt;
+    valueResult: LongInt;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
@@ -355,13 +355,13 @@ repeat
      and (Land[hwRound(y), hwRound(x)] <> 0) then inc(d);
 until (Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 4) or (x.isNegative) or (y.isNegative) or (x.Round > LAND_WIDTH) or (y.Round > LAND_HEIGHT) or (d > 200);
 
-if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then Result:= max(0, (4 - d div 50) * 7 * 1024)
-                                                           else Result:= BadTurn;
-TestDesertEagle:= Result
+if Abs(Targ.X - hwRound(x)) + Abs(Targ.Y - hwRound(y)) < 3 then valueResult:= max(0, (4 - d div 50) * 7 * 1024)
+                                                           else valueResult:= BadTurn;
+TestDesertEagle:= valueResult
 end;
 
 function TestBaseballBat(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var Result: LongInt;
+var valueResult: LongInt;
 begin
 ap.ExplR:= 0;
 if (Level > 2) or (Abs(hwRound(Me^.X) - Targ.X) + Abs(hwRound(Me^.Y) - Targ.Y) > 25) then
@@ -371,13 +371,13 @@ ap.Time:= 0;
 ap.Power:= 1;
 if (Targ.X) - hwRound(Me^.X) >= 0 then ap.Angle:=   cMaxAngle div 4
                                   else ap.Angle:= - cMaxAngle div 4;
-Result:= RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X), hwRound(Me^.Y), 15, 30);
-if Result <= 0 then Result:= BadTurn else inc(Result);
-TestBaseballBat:= Result
+valueResult:= RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X), hwRound(Me^.Y), 15, 30);
+if valueResult <= 0 then valueResult:= BadTurn else inc(valueResult);
+TestBaseballBat:= valueResult;
 end;
 
 function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-var i, Result: LongInt;
+var i, valueResult: LongInt;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
@@ -388,22 +388,22 @@ or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
 	begin
 	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6)
 	and (RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Me^.dX), hwRound(Me^.Y) - 40, 30, 30) = 0) then
-		Result:= Succ(BadTurn)
+		valueResult:= Succ(BadTurn)
 	else
-		Result:= BadTurn;
-	exit(Result)
+		valueResult:= BadTurn;
+	exit(valueResult)
 	end;
 
-Result:= 0;
+valueResult:= 0;
 for i:= 0 to 4 do
-	Result:= Result + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
+	valueResult:= valueResult + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
                                     hwRound(Me^.Y) - 20 * i - 5, 10, 30);
-if Result <= 0 then
-	Result:= BadTurn
+if valueResult <= 0 then
+	valueResult:= BadTurn
 else
-	inc(Result);
+	inc(valueResult);
 
-TestFirePunch:= Result
+TestFirePunch:= valueResult;
 end;
 
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -412,7 +412,7 @@ var X, Y, dY: hwFloat;
     b: array[0..9] of boolean;
     dmg: array[0..9] of LongInt;
     fexit: boolean;
-    i, t, Result: LongInt;
+    i, t, valueResult: LongInt;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
@@ -431,7 +431,7 @@ for i:= 0 to 9 do
     b[i]:= true;
     dmg[i]:= 0
     end;
-Result:= 0;
+valueResult:= 0;
 
 repeat
   X:= X + cBombsSpeed;
@@ -452,23 +452,23 @@ repeat
        end;
 until fexit or (Y > _1024);
 
-for i:= 0 to 5 do inc(Result, dmg[i]);
-t:= Result;
+for i:= 0 to 5 do inc(valueResult, dmg[i]);
+t:= valueResult;
 ap.AttackPutX:= Targ.X - 60;
 
 for i:= 0 to 3 do
     begin
     dec(t, dmg[i]);
     inc(t, dmg[i + 6]);
-    if t > Result then
+    if t > valueResult then
        begin
-       Result:= t;
+       valueResult:= t;
        ap.AttackPutX:= Targ.X - 30 - cShift + i * 30
        end
     end;
 
-if Result <= 0 then Result:= BadTurn;
-TestAirAttack:= Result
+if valueResult <= 0 then valueResult:= BadTurn;
+TestAirAttack:= valueResult;
 end;
 
 end.

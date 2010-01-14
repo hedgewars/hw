@@ -114,28 +114,28 @@ function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
-    Result: TSDL_Rect;
+    finalRect: TSDL_Rect;
 begin
 TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
-Result.x:= X;
-Result.y:= Y;
-Result.w:= w + FontBorder * 2 + 4;
-Result.h:= h + FontBorder * 2;
-DrawRoundRect(@Result, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
+finalRect.x:= X;
+finalRect.y:= Y;
+finalRect.w:= w + FontBorder * 2 + 4;
+finalRect.h:= h + FontBorder * 2;
+DrawRoundRect(@finalRect, cWhiteColor, endian(cNearBlackColorChannels.value), Surface, true);
 clr.r:= (Color shr 16) and $FF;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
-Result.x:= X + FontBorder + 2;
-Result.y:= Y + FontBorder;
+finalRect.x:= X + FontBorder + 2;
+finalRect.y:= Y + FontBorder;
 SDLTry(tmpsurf <> nil, true);
-SDL_UpperBlit(tmpsurf, nil, Surface, @Result);
+SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
 SDL_FreeSurface(tmpsurf);
-Result.x:= X;
-Result.y:= Y;
-Result.w:= w + FontBorder * 2 + 4;
-Result.h:= h + FontBorder * 2;
-WriteInRoundRect:= Result
+finalRect.x:= X;
+finalRect.y:= Y;
+finalRect.w:= w + FontBorder * 2 + 4;
+finalRect.h:= h + FontBorder * 2;
+WriteInRoundRect:= finalRect;
 end;
 
 procedure StoreLoad;
@@ -790,29 +790,29 @@ end;
 
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 var w, h : LongInt;
-    Result: PSDL_Surface;
+    finalSurface: PSDL_Surface;
 begin
 if length(s) = 0 then s:= ' ';
 font:= CheckCJKFont(s, font);
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), w, h);
 
-Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
+finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + FontBorder * 2 + 4, h + FontBorder * 2,
          32, RMask, GMask, BMask, AMask);
 
-TryDo(Result <> nil, 'RenderString: fail to create surface', true);
+TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
 
-WriteInRoundRect(Result, 0, 0, Color, font, s);
+WriteInRoundRect(finalSurface, 0, 0, Color, font, s);
 
-TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-RenderStringTex:= Surface2Tex(Result, false);
+RenderStringTex:= Surface2Tex(finalSurface, false);
 
-SDL_FreeSurface(Result)
+SDL_FreeSurface(finalSurface);
 end;
 
 function RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
 var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
-    Result, tmpsurf, rotatedEdge: PSDL_Surface;
+    finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
     chars: TSysCharSet = [#9,' ','.',';',':','?','!',','];
     substr: shortstring;
@@ -888,27 +888,27 @@ rect.w:= textWidth + (cornerWidth * 2);
 rect.h:= textHeight + cornerHeight*2 - edgeHeight + SpritesData[tail].Height;
 //s:= inttostr(w) + ' ' + inttostr(numlines) + ' ' + inttostr(rect.x) + ' '+inttostr(rect.y) + ' ' + inttostr(rect.w) + ' ' + inttostr(rect.h);
 
-Result:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
+finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, rect.w, rect.h, 32, RMask, GMask, BMask, AMask);
 
-TryDo(Result <> nil, 'RenderString: fail to create surface', true);
+TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
 
 //////////////////////////////// CORNERS ///////////////////////////////
-copyToXY(SpritesData[corner].Surface, Result, 0, 0); /////////////////// NW
+copyToXY(SpritesData[corner].Surface, finalSurface, 0, 0); /////////////////// NW
 
 flipSurface(SpritesData[corner].Surface, true); // store all 4 versions in memory to avoid repeated flips?
 x:= 0;
 y:= textHeight + cornerHeight -1;
-copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// SW
+copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// SW
 
 flipSurface(SpritesData[corner].Surface, false);
 x:= rect.w-cornerWidth-1;
 y:= textHeight + cornerHeight -1;
-copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// SE
+copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// SE
 
 flipSurface(SpritesData[corner].Surface, true);
 x:= rect.w-cornerWidth-1;
 y:= 0;
-copyToXY(SpritesData[corner].Surface, Result, x, y); /////////////////// NE
+copyToXY(SpritesData[corner].Surface, finalSurface, x, y); /////////////////// NE
 flipSurface(SpritesData[corner].Surface, false); // restore original position
 //////////////////////////////// END CORNERS ///////////////////////////////
 
@@ -917,7 +917,7 @@ x:= cornerWidth;
 y:= 0;
 while x < rect.w-cornerWidth-1 do
     begin
-    copyToXY(SpritesData[edge].Surface, Result, x, y); ///////////////// top edge
+    copyToXY(SpritesData[edge].Surface, finalSurface, x, y); ///////////////// top edge
     inc(x,edgeWidth);
     end;
 flipSurface(SpritesData[edge].Surface, true);
@@ -925,7 +925,7 @@ x:= cornerWidth;
 y:= textHeight + cornerHeight*2 - edgeHeight-1;
 while x < rect.w-cornerWidth-1 do
     begin
-    copyToXY(SpritesData[edge].Surface, Result, x, y); ///////////////// bottom edge
+    copyToXY(SpritesData[edge].Surface, finalSurface, x, y); ///////////////// bottom edge
     inc(x,edgeWidth);
     end;
 flipSurface(SpritesData[edge].Surface, true); // restore original position
@@ -937,7 +937,7 @@ y:= cornerHeight;
 copyRotatedSurface(SpritesData[edge].Surface,rotatedEdge);
 while y < textHeight + cornerHeight do
     begin
-    copyToXY(rotatedEdge, Result, x, y);
+    copyToXY(rotatedEdge, finalSurface, x, y);
     inc(y,edgeWidth);
     end;
 flipSurface(rotatedEdge, false); // restore original position
@@ -945,14 +945,14 @@ x:= 0;
 y:= cornerHeight;
 while y < textHeight + cornerHeight do
     begin
-    copyToXY(rotatedEdge, Result, x, y);
+    copyToXY(rotatedEdge, finalSurface, x, y);
     inc(y,edgeWidth);
     end;
 //////////////////////////////// END EDGES //////////////////////////////////////
 
 x:= cornerWidth;
 y:= textHeight + cornerHeight * 2 - edgeHeight - 1;
-copyToXY(SpritesData[tail].Surface, Result, x, y);
+copyToXY(SpritesData[tail].Surface, finalSurface, x, y);
 
 rect.x:= edgeHeight;
 rect.y:= edgeHeight;
@@ -960,7 +960,7 @@ rect.w:= rect.w - edgeHeight * 2;
 rect.h:= textHeight + cornerHeight * 2 - edgeHeight * 2;
 i:= rect.w;
 j:= rect.h;
-SDL_FillRect(Result, @rect, cWhiteColor);
+SDL_FillRect(finalSurface, @rect, cWhiteColor);
 
 pos:= 1; prevpos:= 0; line:= 0;
 while pos <= length(s) do
@@ -977,7 +977,7 @@ while pos <= length(s) do
            // trying to more evenly position the text, vertically
            rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
            SDLTry(tmpsurf <> nil, true);
-           SDL_UpperBlit(tmpsurf, nil, Result, @rect);
+           SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
            SDL_FreeSurface(tmpsurf);
            inc(line);
            prevpos:= pos;
@@ -986,11 +986,11 @@ while pos <= length(s) do
     inc(pos);
     end;
 
-//TryDo(SDL_SetColorKey(Result, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-RenderSpeechBubbleTex:= Surface2Tex(Result, true);
+//TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+RenderSpeechBubbleTex:= Surface2Tex(finalSurface, true);
 
 SDL_FreeSurface(rotatedEdge);
-SDL_FreeSurface(Result)
+SDL_FreeSurface(finalSurface);
 end;
 
 procedure RenderHealth(var Hedgehog: THedgehog);

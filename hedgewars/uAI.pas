@@ -135,10 +135,10 @@ var Stack: record
            end;
 
     function Push(Ticks: Longword; const Actions: TActions; const Me: TGear; Dir: integer): boolean;
-    var Result: boolean;
+    var bRes: boolean;
     begin
-    Result:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
-    if Result then
+    bRes:= (Stack.Count < cBranchStackSize) and (Actions.Count < MAXACTIONS - 5);
+    if bRes then
        with Stack.States[Stack.Count] do
             begin
             WastedTicks:= Ticks;
@@ -147,7 +147,7 @@ var Stack: record
             Hedgehog.Message:= Dir;
             inc(Stack.Count)
             end;
-    Push:= Result
+    Push:= bRes
     end;
 
     procedure Pop(var Ticks: Longword; var Actions: TActions; var Me: TGear);

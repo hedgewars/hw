@@ -249,45 +249,45 @@ TurnTimeLeft:= cHedgehogTurnTime
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
-var Result: PTeam;
+var team: PTeam;
     c: LongInt;
 begin
 TryDo(TeamsCount < cMaxTeams, 'Too many teams', true);
-New(Result);
-TryDo(Result <> nil, 'AddTeam: Result = nil', true);
-FillChar(Result^, sizeof(TTeam), 0);
-Result^.AttackBar:= 2;
-Result^.CurrHedgehog:= cMaxHHIndex;
+New(team);
+TryDo(team <> nil, 'AddTeam: team = nil', true);
+FillChar(team^, sizeof(TTeam), 0);
+team^.AttackBar:= 2;
+team^.CurrHedgehog:= cMaxHHIndex;
 
-TeamsArray[TeamsCount]:= Result;
+TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
 if c < 0 then
    begin
-   new(Result^.Clan);
-   FillChar(Result^.Clan^, sizeof(TClan), 0);
-   ClansArray[ClansCount]:= Result^.Clan;
+   new(team^.Clan);
+   FillChar(team^.Clan^, sizeof(TClan), 0);
+   ClansArray[ClansCount]:= team^.Clan;
    inc(ClansCount);
-   with Result^.Clan^ do
+   with team^.Clan^ do
         begin
         ClanIndex:= Pred(ClansCount);
         Color:= TeamColor
         end
    end else
    begin
-   Result^.Clan:= ClansArray[c];
+   team^.Clan:= ClansArray[c];
    end;
 
-with Result^.Clan^ do
+with team^.Clan^ do
     begin
-    Teams[TeamsNumber]:= Result;
+    Teams[TeamsNumber]:= team;
     inc(TeamsNumber)
     end;
 
-CurrentTeam:= Result;
-AddTeam:= Result
+CurrentTeam:= team;
+AddTeam:= team;
 end;
 
 procedure FreeTeamsList;
@@ -323,12 +323,12 @@ RecountAllTeamsHealth
 end;
 
 function  TeamSize(p: PTeam): Longword;
-var i, Result: Longword;
+var i, value: Longword;
 begin
-Result:= 0;
+value:= 0;
 for i:= 0 to cMaxHHIndex do
-    if p^.Hedgehogs[i].Gear <> nil then inc(Result);
-TeamSize:= Result
+    if p^.Hedgehogs[i].Gear <> nil then inc(value);
+TeamSize:= value;
 end;
 
 procedure RecountClanHealth(clan: PClan);
