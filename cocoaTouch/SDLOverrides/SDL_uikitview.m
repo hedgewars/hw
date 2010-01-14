@@ -76,6 +76,7 @@ UIButton *attackButton, *menuButton;
 	[menuButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 	[self addSubview:menuButton];
 
+	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
 	self.multipleTouchEnabled = YES;
 
 	return self;

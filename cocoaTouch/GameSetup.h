@@ -10,13 +10,14 @@
 
 
 @interface GameSetup : NSObject {
-	NSLocale *locale;
+	NSString *localeString;
+	NSDictionary *systemSettings;
 	BOOL engineProtocolStarted;
 }
 
 
-@property (nonatomic, retain) NSLocale *locale;
-@property (nonatomic) BOOL engineProtocolStarted;
+@property (nonatomic, retain) NSString *localeString;
+@property (retain) NSDictionary *systemSettings;
 
 -(void) setArgsForLocalPlay;
 -(void) engineProtocol;

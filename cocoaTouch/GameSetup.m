@@ -11,13 +11,14 @@
 #import "SDL_net.h"
 #import "PascalImports.h"
 
-#define IPC_PORT 51342
-#define IPC_PORT_STR "51342"
+
 #define BUFFER_SIZE 256
 
 
 // they should go in the interface
 TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
+NSInteger ipcPort;
+
 int sendToEngine (NSString * string) {
 	Uint8 length = [string length];
 	
@@ -28,12 +29,14 @@ int sendToEngine (NSString * string) {
 
 @implementation GameSetup
 
-@synthesize locale, engineProtocolStarted;
+@synthesize localeString, systemSettings;
 
 -(id) init {
 	self = [super init];
-	self.locale = [NSLocale currentLocale];
-	self.engineProtocolStarted = NO;
+	self.localeString = [[[NSLocale currentLocale] localeIdentifier] stringByAppendingString:@".txt"];
+	self.systemSettings = nil;
+	engineProtocolStarted = NO;
+	ipcPort = 51342;
 	return self;
 }
 
@@ -62,7 +65,7 @@ int sendToEngine (NSString * string) {
 	}
 	
 	/* Resolving the host using NULL make network interface to listen */
-	if (SDLNet_ResolveHost(&ip, NULL, IPC_PORT) < 0) {
+	if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
 		fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
 		exit(EXIT_FAILURE);
 	}
@@ -238,42 +241,47 @@ int sendToEngine (NSString * string) {
 }
 
 -(void) setArgsForLocalPlay {
-	NSString *localeString = [[self.locale localeIdentifier] stringByAppendingString:@".txt"];
-	NSLog(localeString);
+	NSString *portNumber = [[NSString alloc] initWithFormat:@"%d",ipcPort];
+	/*for (NSString *theString in [NSLocale ISOLanguageCodes]) {
+		NSLog(theString);
+	}*/
+	
 	
 	memset(forward_argv, 0, forward_argc);
 	
 	forward_argc = 18;
 	forward_argv = (char **)realloc(forward_argv, forward_argc * sizeof(char *));
 	//forward_argv[i] = malloc( (strlen(argv[i])+1) * sizeof(char));
-	forward_argv[ 1] = forward_argv[0];	// (UNUSED)
-	forward_argv[ 2] = "320";			// cScreenWidth (NO EFFECT)
-	forward_argv[ 3] = "480";			// cScreenHeight (NO EFFECT)
-	forward_argv[ 4] = "32";			// cBitsStr
-	forward_argv[ 5] = IPC_PORT_STR;	// ipcPort;
-	forward_argv[ 6] = "1";				// cFullScreen (NO EFFECT)
+	forward_argv[ 1] = forward_argv[0];					// (UNUSED)
+	forward_argv[ 2] = "320";							// cScreenWidth
+	forward_argv[ 3] = "480";							// cScreenHeight
+	forward_argv[ 4] = "16";							// cBitsStr
+	forward_argv[ 5] = [portNumber UTF8String];			// ipcPort;
+	forward_argv[ 6] = "1";								// cFullScreen (NO EFFECT)
 	forward_argv[ 7] = "0";				// isSoundEnabled (TOSET)
-	forward_argv[ 8] = "1";				// cVSyncInUse (UNUSED)
+	forward_argv[ 8] = "1";								// cVSyncInUse (UNUSED)
 	forward_argv[ 9] = [localeString UTF8String];		// cLocaleFName
 	forward_argv[10] = "100";			// cInitVolume (TOSET)
-	forward_argv[11] = "8";				// cTimerInterval
-	forward_argv[12] = "Data";			// PathPrefix
+	forward_argv[11] = "8";								// cTimerInterval
+	forward_argv[12] = "Data";							// PathPrefix
 	forward_argv[13] = "1";				// cShowFPS (TOSET?)
 	forward_argv[14] = "0";				// cAltDamage (TOSET)
 	forward_argv[15] = "Koda";			// UserNick (DecodeBase64(ParamStr(15)) FTW) <- TODO
 	forward_argv[16] = "0";				// isMusicEnabled (TOSET)
-	forward_argv[17] = "0";				// cReducedQuality
+	forward_argv[17] = "0";								// cReducedQuality
 
-fprintf(stderr, forward_argv[9]);
+	[portNumber release];
 	return;
 }
 
 
-/*
- -(void) dealloc {
+
+-(void) dealloc {
+	[self.systemSettings release];
+	[self.localeString autorelease];
 	[super dealloc];
 }
- */
+
 
 
 @end

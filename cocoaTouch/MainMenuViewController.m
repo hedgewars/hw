@@ -26,7 +26,7 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 -(void) viewDidLoad {
-	self.versionLabel = @"Hedgewars version 0.9.13-dev";
+	self.versionLabel.text = @"Hedgewars version 0.9.13-dev";
     [super viewDidLoad];
 }
 
@@ -37,13 +37,14 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 */
-
+/*
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
 	
 	// Release any cached data, images, etc that aren't in use.
 }
+*/
 
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
@@ -61,9 +62,22 @@
     [super dealloc];
 }
 
+// disable the buttons when to prevent launching twice the game
+-(void) viewWillDisappear:(BOOL)animated {
+	passandplayButton.enabled = NO;
+	netplayButton.enabled = NO;
+	storeButton.enabled = NO;
+	[super viewWillDisappear:animated];
+}
+
+-(void) viewWillAppear:(BOOL)animated {
+	passandplayButton.enabled = YES;
+	netplayButton.enabled = YES;
+	storeButton.enabled = YES;
+	[super viewWillAppear:animated];
+}
+
 -(IBAction) startPlaying {
-	// TODO: support IPC and start a thread
-	
 	[[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
 }
 
