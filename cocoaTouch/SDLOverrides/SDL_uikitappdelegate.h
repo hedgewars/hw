@@ -41,6 +41,7 @@
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(void) startSDLgame;
 +(void) resetFrontend;
++(NSString *)dataFilePath:(NSString *)fileName;
 
 int forward_argc;
 char **forward_argv;

@@ -11,21 +11,7 @@
 #import "SDL_net.h"
 #import "PascalImports.h"
 
-
 #define BUFFER_SIZE 256
-
-
-// they should go in the interface
-TCPsocket sd, csd; /* Socket descriptor, Client socket descriptor */
-NSInteger ipcPort;
-
-int sendToEngine (NSString * string) {
-	Uint8 length = [string length];
-	
-	SDLNet_TCP_Send(csd, &length , 1);
-	return SDLNet_TCP_Send(csd, [string UTF8String], length);
-}
-
 
 @implementation GameSetup
 
@@ -40,6 +26,14 @@ int sendToEngine (NSString * string) {
 	return self;
 }
 
+-(void) dealloc {
+	[self.systemSettings release];
+	[self.localeString autorelease];
+	[super dealloc];
+}
+
+#pragma mark -
+#pragma mark Thread/Network relevant code
 -(void) startThread: (NSString *) selector {
 	SEL usage = NSSelectorFromString(selector);
 	
@@ -48,6 +42,13 @@ int sendToEngine (NSString * string) {
 		engineProtocolStarted = YES;
 		[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 	}
+}
+
+-(int) sendToEngine: (NSString *)string {
+	Uint8 length = [string length];
+	
+	SDLNet_TCP_Send(csd, &length , 1);
+	return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
 -(void) engineProtocol {
@@ -100,77 +101,77 @@ int sendToEngine (NSString * string) {
 				// send config data data
 				
 				// local game
-				sendToEngine(@"TL");
+				[self sendToEngine:@"TL"];
 				
 				// seed info
-				sendToEngine(@"eseed {232c1b42-7d39-4ee6-adf8-4240e1f1efb8}");
+				[self sendToEngine:@"eseed {232c1b42-7d39-4ee6-adf8-4240e1f1efb8}"];
 				
 				// various flags
-				sendToEngine(@"e$gmflags 256"); 
+				[self sendToEngine:@"e$gmflags 256"]; 
 
 				// various flags
-				sendToEngine(@"e$damagepct 100");
+				[self sendToEngine:@"e$damagepct 100"];
 				
 				// various flags
-				sendToEngine(@"e$turntime 45000");
+				[self sendToEngine:@"e$turntime 45000"];
 				
 				// various flags
-				sendToEngine(@"e$minestime 3000");
+				[self sendToEngine:@"e$minestime 3000"];
 				
 				// various flags
-				sendToEngine(@"e$landadds 4");
+				[self sendToEngine:@"e$landadds 4"];
 				
 				// various flags
-				sendToEngine(@"e$sd_turns 15");
+				[self sendToEngine:@"e$sd_turns 15"];
 												
 				// various flags
-				sendToEngine(@"e$casefreq 5");
+				[self sendToEngine:@"e$casefreq 5"];
 				
 				// various flags
-				sendToEngine(@"e$template_filter 1");
+				[self sendToEngine:@"e$template_filter 1"];
 								
 				// theme info
-				sendToEngine(@"etheme Freeway");
+				[self sendToEngine:@"etheme Freeway"];
 				
 				// team 1 info
-				sendToEngine(@"eaddteam 4421353 System Cats");
+				[self sendToEngine:@"eaddteam 4421353 System Cats"];
 				
 				// team 1 grave info
-				sendToEngine(@"egrave star");
+				[self sendToEngine:@"egrave star"];
 				
 				// team 1 fort info
-				sendToEngine(@"efort  Earth");
+				[self sendToEngine:@"efort  Earth"];
 								
 				// team 1 voicepack info
-				sendToEngine(@"evoicepack Classic");
+				[self sendToEngine:@"evoicepack Classic"];
 				
-				// team 1 binds (skipped)				
+				// team 1 binds (skipped)			
 				// team 1 members info
-				sendToEngine(@"eaddhh 0 100 Snow Leopard");
-				sendToEngine(@"ehat NoHat");
+				[self sendToEngine:@"eaddhh 0 100 Snow Leopard"];
+				[self sendToEngine:@"ehat NoHat"];
 				
 				// team 1 ammostore
-				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
+				[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
 
 				// team 2 info
-				sendToEngine(@"eaddteam 4100897 Poke-MAN");
+				[self sendToEngine:@"eaddteam 4100897 Poke-MAN"];
 				
 				// team 2 grave info
-				sendToEngine(@"egrave Badger");
+				[self sendToEngine:@"egrave Badger"];
 				
 				// team 2 fort info
-				sendToEngine(@"efort UFO");
+				[self sendToEngine:@"efort UFO"];
 				
 				// team 2 voicepack info
-				sendToEngine(@"evoicepack Classic");
+				[self sendToEngine:@"evoicepack Classic"];
 				
 				// team 2 binds (skipped)
 				// team 2 members info
-				sendToEngine(@"eaddhh 0 100 Raichu");
-				sendToEngine(@"ehat Bunny");
+				[self sendToEngine:@"eaddhh 0 100 Raichu"];
+				[self sendToEngine:@"ehat Bunny"];
 				
 				// team 2 ammostore
-				sendToEngine(@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144");
+				[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
 				
 				clientQuit = NO;
 			} else {
@@ -196,7 +197,7 @@ int sendToEngine (NSString * string) {
 				switch (buffer[0]) {
 					case '?':
 						NSLog(@"Ping? Pong!");
-						sendToEngine(@"!");
+						[self sendToEngine:@"!"];
 						break;
 					case 'E':
 						NSLog(@"ERROR - last console line: [%s]", buffer);
@@ -240,12 +241,35 @@ int sendToEngine (NSString * string) {
 	[NSThread exit];
 }
 
+#pragma mark -
+#pragma mark Settings setup methods
+-(void) loadSettingsFromFile:(NSString *)fileName forKey:(NSString *)objName {
+	NSString *filePath = [SDLUIKitDelegate dataFilePath:fileName];
+	
+	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
+		NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:filePath];
+		[self setValue:dict forKey:objName];
+		[dict release];
+	} else {
+		//TODO create it
+		[NSException raise:@"File NOT found" format:@"The file %@ was not found at %@", fileName, filePath];
+	}
+
+}
+
+-(void) unloadSettings {
+	for (id obj in self)
+		if ([obj isKindOfClass:[NSDictionary class]]) {
+			[obj release];
+		}
+}
+
 -(void) setArgsForLocalPlay {
-	NSString *portNumber = [[NSString alloc] initWithFormat:@"%d",ipcPort];
+	NSString *portNumber = [[NSString alloc] initWithFormat:@"%d", ipcPort];
+	//NSString *username = [[NSString alloc] initWithString:[systemSettings objectForKey:@"username"]];
 	/*for (NSString *theString in [NSLocale ISOLanguageCodes]) {
 		NSLog(theString);
 	}*/
-	
 	
 	memset(forward_argv, 0, forward_argc);
 	
@@ -258,16 +282,16 @@ int sendToEngine (NSString * string) {
 	forward_argv[ 4] = "16";							// cBitsStr
 	forward_argv[ 5] = [portNumber UTF8String];			// ipcPort;
 	forward_argv[ 6] = "1";								// cFullScreen (NO EFFECT)
-	forward_argv[ 7] = "0";				// isSoundEnabled (TOSET)
+	forward_argv[ 7] = [[systemSettings objectForKey:@"effects"] UTF8String];	// isSoundEnabled
 	forward_argv[ 8] = "1";								// cVSyncInUse (UNUSED)
 	forward_argv[ 9] = [localeString UTF8String];		// cLocaleFName
-	forward_argv[10] = "100";			// cInitVolume (TOSET)
+	forward_argv[10] = [[systemSettings objectForKey:@"volume"] UTF8String];	// cInitVolume
 	forward_argv[11] = "8";								// cTimerInterval
 	forward_argv[12] = "Data";							// PathPrefix
-	forward_argv[13] = "1";				// cShowFPS (TOSET?)
-	forward_argv[14] = "0";				// cAltDamage (TOSET)
-	forward_argv[15] = "Koda";			// UserNick (DecodeBase64(ParamStr(15)) FTW) <- TODO
-	forward_argv[16] = "0";				// isMusicEnabled (TOSET)
+	forward_argv[13] = "1";								// cShowFPS (TOSET?)
+	forward_argv[14] = [[systemSettings objectForKey:@"alternate"] UTF8String];	// cAltDamage (TOSET)
+	forward_argv[15] = "Koda";				// UserNick (DecodeBase64(ParamStr(15)) FTW) <- TODO
+	forward_argv[16] = [[systemSettings objectForKey:@"music"] UTF8String];		// isMusicEnabled
 	forward_argv[17] = "0";								// cReducedQuality
 
 	[portNumber release];
@@ -276,11 +300,6 @@ int sendToEngine (NSString * string) {
 
 
 
--(void) dealloc {
-	[self.systemSettings release];
-	[self.localeString autorelease];
-	[super dealloc];
-}
 
 
 

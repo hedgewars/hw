@@ -166,7 +166,7 @@ void IPH_showControls (void) {
 
 	// one tap - single click
 	if (1 == [touch tapCount] ) {
-		//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
+		SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
 		HW_click();
 	}
 	

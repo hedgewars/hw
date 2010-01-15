@@ -28,13 +28,16 @@
 #import "SDL_video.h"
 #import "GameSetup.h"
 
+//#import "SoundEffect.h"	
+//	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
+//	SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
+
+
 #ifdef main
 #undef main
 #endif
 
 extern int SDL_main(int argc, char *argv[]);
-BOOL isServerRunning = NO;
-
 int main (int argc, char **argv) {
 	int i;
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -63,6 +66,13 @@ int main (int argc, char **argv) {
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
 }
 
+-(void) dealloc {
+	[setup release];
+	[controller release];
+	[window release];
+	[super dealloc];
+}
+
 -(void) launchSDL_main{
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
@@ -78,34 +88,29 @@ int main (int argc, char **argv) {
 -(IBAction) startSDLgame {
 	
 	[setup startThread:@"engineProtocol"];
-	
+	[setup loadSettingsFromFile:@"settings.plist" forKey:@"systemSettings"];
+
 	// remove the current view to free resources
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:1.5];
 	controller.view.alpha = 0;
 	[UIView commitAnimations];
 	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5];
-	//[controller.view removeFromSuperview];
-	
+
 	NSLog(@"Game is launching...");
 
 	[NSThread detachNewThreadSelector:@selector(launchSDL_main) toTarget:self withObject:nil];
 	
-	//SDL_main(forward_argc, forward_argv);
-
-
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
 
-	setup = [[GameSetup alloc] init]; 
+	setup = [[GameSetup alloc] init];
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
-//#import "SoundEffect.h"	
-//	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
-//	SoundEffect *selectSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Select" ofType:@"caf"]];
+
 	[window addSubview:controller.view];
 	[window makeKeyAndVisible];
 }
@@ -150,10 +155,12 @@ int main (int argc, char **argv) {
 	[SDLUIKitDelegate sharedAppDelegate].controller.view.alpha = 1;
 	[UIView commitAnimations];
 	
+	[[SDLUIKitDelegate sharedAppDelegate].setup unloadSettings];
 	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
 }
 
-
+#pragma mark -
+#pragma mark Convenience methods
 void IPH_returnFrontend (void) {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
@@ -165,11 +172,10 @@ void IPH_returnFrontend (void) {
 }
 
 
--(void) dealloc {
-	[setup release];
-	[controller release];
-	[window release];
-	[super dealloc];
++(NSString *)dataFilePath: (NSString *)fileName {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:fileName];
 }
 
 @end
