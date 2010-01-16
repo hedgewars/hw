@@ -1074,9 +1074,7 @@ begin
 end;
 
 procedure SetupOpenGL;
-{$IFDEF DEBUGFILE}
 var vendor: shortstring;
-{$ENDIF}
 begin
 {$IFDEF IPHONEOS}
 //these are good performance savers, perhaps we could enable them by default
@@ -1103,9 +1101,8 @@ begin
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-{$IFDEF DEBUGFILE}
 	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
-
+{$IFDEF DEBUGFILE}
 	AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 	AddFileLog('  |----- Vendor: ' + vendor);
 	AddFileLog('  |----- Version: ' + string(pchar(glGetString(GL_VERSION))));
@@ -1168,7 +1165,7 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var Step: LongInt = 0;
+var	Step: LongInt = 0;
 	squaresize : LongInt;
 	numsquares : LongInt;
 {$IFDEF SDL13notworking}

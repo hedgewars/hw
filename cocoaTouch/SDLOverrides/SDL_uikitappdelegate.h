@@ -39,10 +39,7 @@
 @property (nonatomic, retain) GameSetup *setup;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
+-(NSString *)dataFilePath:(NSString *)fileName;
 -(void) startSDLgame;
-+(void) resetFrontend;
-+(NSString *)dataFilePath:(NSString *)fileName;
 
-int forward_argc;
-char **forward_argv;
 @end

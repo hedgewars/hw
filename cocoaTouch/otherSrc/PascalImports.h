@@ -17,11 +17,12 @@ extern "C" {
 	/* add C declarations below for all exported Pascal functions/procedure
 	 * that you want to use
 	 */
-	
-	int HW_protoVer(void);
-	
+
 	void Game(void);
-	
+
+
+	int HW_protoVer(void);
+
 	void HW_click(void);
 	void HW_zoomIn(void);
 	void HW_zoomOut(void);

@@ -18,13 +18,13 @@
 
 {$INCLUDE "options.inc"}
 
-program hwengine;
-uses	SDLh in 'SDLh.pas',
-{$IFDEF GLES11}
-	gles11,
+{$IFDEF IPHONEOS}
+unit hwengine;
+interface
 {$ELSE}
-	GL,
+program hwengine;
 {$ENDIF}
+uses	SDLh in 'SDLh.pas',
 	uConsts in 'uConsts.pas',
 	uGame in 'uGame.pas',
 	uMisc in 'uMisc.pas',
@@ -65,9 +65,18 @@ uses	SDLh in 'SDLh.pas',
 //       SinTable.inc
 //       proto.inc
 
-var recordFileName : shortstring = '';
+{$IFDEF IPHONEOS}
+procedure DoTimer(Lag: LongInt);
+procedure OnDestroy;
+procedure MainLoop;
+procedure ShowMainWindow;
+procedure Game; cdecl; export;
 
+implementation
+
+{$ELSE}
 procedure OnDestroy; forward;
+{$ENDIF}
 
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
@@ -75,71 +84,60 @@ procedure DoTimer(Lag: LongInt);
 var s: string;
 {$ENDIF}
 begin
-inc(RealTicks, Lag);
+	inc(RealTicks, Lag);
 
-case GameState of
-	gsLandGen: begin
-			GenMap;
-			GameState:= gsStart;
-			end;
-	gsStart: begin
-			if HasBorder then DisableSomeWeapons;
-			AddClouds;
-			AssignHHCoords;
-			AddMiscGears;
-			StoreLoad;
-			InitWorld;
-			ResetKbd;
-			SoundLoad;
-			if GameType = gmtSave then
-				begin
-				isSEBackup:= isSoundEnabled;
-				isSoundEnabled:= false
+	case GameState of
+		gsLandGen: begin
+				GenMap;
+				GameState:= gsStart;
 				end;
-			FinishProgress;
-			PlayMusic;
-			SetScale(zoom);
-			GameState:= gsGame;
-			end;
-	gsConfirm,
-	gsGame: begin
-			DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
-			ProcessKbd;
-			DoGameTick(Lag);
-			ProcessVisualGears(Lag);
-			end;
-	gsChat: begin
-			DrawWorld(Lag);
-			DoGameTick(Lag);
-			ProcessVisualGears(Lag);
-			end;
-	gsExit: begin
-			OnDestroy;
-			end;
-	end;
+		gsStart: begin
+				if HasBorder then DisableSomeWeapons;
+				AddClouds;
+				AssignHHCoords;
+				AddMiscGears;
+				StoreLoad;
+				InitWorld;
+				ResetKbd;
+				SoundLoad;
+				if GameType = gmtSave then
+					begin
+					isSEBackup:= isSoundEnabled;
+					isSoundEnabled:= false
+					end;
+				FinishProgress;
+				PlayMusic;
+				SetScale(zoom);
+				GameState:= gsGame;
+				end;
+		gsConfirm,
+		gsGame: begin
+				DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+				ProcessKbd;
+				DoGameTick(Lag);
+				ProcessVisualGears(Lag);
+				end;
+		gsChat: begin
+				DrawWorld(Lag);
+				DoGameTick(Lag);
+				ProcessVisualGears(Lag);
+				end;
+		gsExit: begin
+				isTerminated:= true;
+				end;
+		end;
 
-SDL_GL_SwapBuffers();
+	SDL_GL_SwapBuffers();
 {$IFNDEF IPHONEOS}
-// not going to make captures on the iPhone (nor resizing)
-if flagMakeCapture then
+		// not going to make captures on the iPhone
+	if flagMakeCapture then
 	begin
-	flagMakeCapture:= false;
-	s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
-	WriteLnToConsole('Saving ' + s);
-	MakeScreenshot(s);
-//	SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
+		flagMakeCapture:= false;
+		s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
+		WriteLnToConsole('Saving ' + s);
+		MakeScreenshot(s);
+		//SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
 	end;
-end;
-
-////////////////////////////////
-procedure Resize(w, h: LongInt);
-begin
-cScreenWidth:= w;
-cScreenHeight:= h;
-if cFullScreen then
-	ParseCommand('/fullscr 1', true)
-else
-	ParseCommand('/fullscr 0', true);
 {$ENDIF}
 end;
 
@@ -155,85 +153,170 @@ begin
 	CloseIPC();
 	TTF_Quit();
 	SDL_Quit();
-{$IFDEF IPHONEOS}
-	IPH_returnFrontend();
-{$ELSE}
-	halt();
-{$ENDIF}
+	exit();
 end;
 
 ///////////////////
-procedure MainLoop;
+procedure MainLoop; 
 var PrevTime,
     CurrTime: Longword;
     event: TSDL_Event;
-{$IFDEF TOUCHINPUT}
-//var tiltValue: LongInt;
-{$ENDIF}
 begin
-PrevTime:= SDL_GetTicks;
-repeat
-while SDL_PollEvent(@event) <> 0 do
-	case event.type_ of
+
+	PrevTime:= SDL_GetTicks;
+	repeat
+{$IFNDEF IPHONEOS}
+// have to remove this cycle because otherwise it segfaults at exit
+		while SDL_PollEvent(@event) <> 0 do
+		begin
+			case event.type_ of
+				SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
 {$IFDEF SDL13}
-		SDL_WINDOWEVENT:
+				SDL_WINDOWEVENT:
 {$ELSE}
-		SDL_KEYDOWN: if GameState = gsChat then KeyPressChat(event.key.keysym.unicode);
-		SDL_ACTIVEEVENT:
+				SDL_ACTIVEEVENT:
 {$ENDIF}
-			if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
-				cHasFocus:= event.active.gain = 1;
-		//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
+					if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
+						cHasFocus:= event.active.gain = 1;
+				//SDL_VIDEORESIZE: Resize(max(event.resize.w, 600), max(event.resize.h, 450));
+				SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
+				SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
+				SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
+				SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
+				SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
+				SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
+				SDL_QUITEV: isTerminated:= true
+			end; // end case event.type_ of
+		end; // end while SDL_PollEvent(@event) <> 0 do
+{$ENDIF}
+		CurrTime:= SDL_GetTicks;
+		if PrevTime + cTimerInterval <= CurrTime then
+		begin
+			DoTimer(CurrTime - PrevTime);
+			PrevTime:= CurrTime
+		end else SDL_Delay(1);
+		if isTerminated = false then IPCCheckSock();
+	until isTerminated;
+
+	exit();
+end;
+
+/////////////////////////
+procedure ShowMainWindow;
+begin
+	if cFullScreen then ParseCommand('fullscr 1', true)
+	else ParseCommand('fullscr 0', true);
+	SDL_ShowCursor(0)
+end;
+
+///////////////
+procedure Game;{$IFDEF IPHONEOS}cdecl; export;{$ENDIF}
+var	p: TPathType;
+	s: shortstring;
+begin
 {$IFDEF IPHONEOS}
-(*		SDL_JOYAXISMOTION: begin
-                {* axis 0 = left and right;
-                   axis 1 = up and down;
-                   axis 2 = back and forth; *}
+	Randomize;
 
-			WriteLnToConsole('*********************************************       accelerometer');
-			
-			tiltValue:= SDL_JoystickGetAxis(uKeys.theJoystick, 0);
-
-			if (CurrentTeam <> nil) then
-			begin
-{$IFDEF DEBUGFILE}
-				AddFileLog('Joystick: 0; Axis: 0; Value: ' + inttostr(tiltValue));
+	val('320', cScreenWidth);
+	val('480', cScreenHeight);
+	cInitWidth:= cScreenWidth;
+	cInitHeight:= cScreenHeight;
+	cBitsStr:= '16';
+	val(cBitsStr, cBits);
+	val('51432', ipcPort);
+	cFullScreen:= true;
+	isSoundEnabled:= false;
+	cVSyncInUse:= true;
+	cLocaleFName:= 'en.txt';
+	val('100', cInitVolume);
+	val('8', cTimerInterval);
+	PathPrefix:= 'Data';
+	cShowFPS:= true;
+	cAltDamage:= false;
+	UserNick:= 'Koda'; //DecodeBase64(ParamStr(15));
+	isMusicEnabled:= false;
+	cReducedQuality:= false;
 {$ENDIF}
-					if tiltValue > 1500 then
-					begin
-						uKeys.rightKey:= true;
-						uKeys.isWalking:= true;
-					end
-					else
-						if tiltValue <= -1500 then
-						begin 
-							uKeys.leftKey:= true;
-							uKeys.isWalking:= true;
-						end
-						else
-							if (tiltValue  > -1500) and (tiltValue <= 1500) and (movedbybuttons = false) then uKeys.isWalking:= false;  
-                        end;
-			end;*)
-{$ELSE}
-		SDL_MOUSEBUTTONDOWN: if event.button.button = SDL_BUTTON_WHEELDOWN then uKeys.wheelDown:= true;
-		SDL_MOUSEBUTTONUP: if event.button.button = SDL_BUTTON_WHEELUP then uKeys.wheelUp:= true;
-		SDL_JOYAXISMOTION: ControllerAxisEvent(event.jaxis.which, event.jaxis.axis, event.jaxis.value);
-		SDL_JOYHATMOTION: ControllerHatEvent(event.jhat.which, event.jhat.hat, event.jhat.value);
-		SDL_JOYBUTTONDOWN: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, true);
-		SDL_JOYBUTTONUP: ControllerButtonEvent(event.jbutton.which, event.jbutton.button, false);
-{$ENDIF}
-		SDL_QUITEV: isTerminated:= true
-        end;
 
-CurrTime:= SDL_GetTicks;
-if PrevTime + cTimerInterval <= CurrTime then
-   begin
-   DoTimer(CurrTime - PrevTime);
-   PrevTime:= CurrTime
-   end else SDL_Delay(1);
-IPCCheckSock
-until isTerminated
+	for p:= Succ(Low(TPathType)) to High(TPathType) do
+		if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p];
+		
+	WriteToConsole('Init SDL... ');
+	SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
+	WriteLnToConsole(msgOK);
 
+	SDL_EnableUNICODE(1);
+
+	WriteToConsole('Init SDL_ttf... ');
+	SDLTry(TTF_Init <> -1, true);
+	WriteLnToConsole(msgOK);
+
+	ShowMainWindow;
+
+	AddProgress;
+
+	ControllerInit; // has to happen before InitKbdKeyTable to map keys
+	InitKbdKeyTable;
+
+	if recordFileName = '' then
+		InitIPC;
+	WriteLnToConsole(msgGettingConfig);
+
+	if cLocaleFName <> 'en.txt' then
+		LoadLocale(Pathz[ptLocale] + '/en.txt');
+	LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
+
+	if recordFileName = '' then
+		SendIPCAndWaitReply('C')        // ask for game config
+	else
+		LoadRecordFromFile(recordFileName);
+
+	s:= 'eproto ' + inttostr(cNetProtoVersion);
+	SendIPCRaw(@s[0], Length(s) + 1); // send proto version
+
+	InitTeams;
+	AssignStores;
+
+	if isSoundEnabled then
+		InitSound;
+
+	isDeveloperMode:= false;
+
+	TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+
+	MainLoop();
+	OnDestroy();
+	exit();
+end;
+
+{$IFNDEF IPHONEOS}
+/////////////////////////
+procedure GenLandPreview;
+var Preview: TPreview;
+	h: byte;
+begin
+	InitIPC;
+	IPCWaitPongEvent;
+	TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
+
+	Preview:= GenPreview;
+	WriteLnToConsole('Sending preview...');
+	SendIPCRaw(@Preview, sizeof(Preview));
+	h:= MaxHedgehogs;
+	SendIPCRaw(@h, sizeof(h));
+	WriteLnToConsole('Preview sent, disconnect');
+	CloseIPC();
+end;
+
+////////////////////////////////
+procedure Resize(w, h: LongInt);
+begin
+	cScreenWidth:= w;
+	cScreenHeight:= h;
+	if cFullScreen then
+		ParseCommand('/fullscr 1', true)
+	else
+		ParseCommand('/fullscr 0', true);
 end;
 
 /////////////////////
@@ -253,7 +336,8 @@ begin
 	WriteLn();
 	WriteLn('Read documentation online at http://www.hedgewars.org/node/1465 for more information');
 	Write('parsed command: ');
-	for i:=0 to ParamCount do Write(ParamStr(i) + ' ');
+	for i:=0 to ParamCount do
+		Write(ParamStr(i) + ' ');
 	WriteLn();
 	halt(1);
 end;
@@ -267,239 +351,126 @@ var
     p: TPathType;
 begin
 
-case ParamCount of
- 17: begin
-     val(ParamStr(2), cScreenWidth);
-     val(ParamStr(3), cScreenHeight);
-     cInitWidth:= cScreenWidth;
-     cInitHeight:= cScreenHeight;
-     cBitsStr:= ParamStr(4);
-     val(cBitsStr, cBits);
-     val(ParamStr(5), ipcPort);
-     cFullScreen:= ParamStr(6) = '1';
-     isSoundEnabled:= ParamStr(7) = '1';
-     cVSyncInUse:= ParamStr(8) = '1';
-     cLocaleFName:= ParamStr(9);
-     val(ParamStr(10), cInitVolume);
-     val(ParamStr(11), cTimerInterval);
-     PathPrefix:= ParamStr(12);
-     cShowFPS:= ParamStr(13) = '1';
-     cAltDamage:= ParamStr(14) = '1';
-     UserNick:= DecodeBase64(ParamStr(15));
-     isMusicEnabled:= ParamStr(16) = '1';
-     cReducedQuality:= ParamStr(17) = '1';
-     for p:= Succ(Low(TPathType)) to High(TPathType) do
-         if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-     end;
-{$IFDEF IPHONEOS}
-  0: begin
-        PathPrefix:= 'Data';
-        recordFileName:= 'save.hws';
-        val('320', cScreenWidth);
-        val('480', cScreenHeight);
-        cInitWidth:= cScreenWidth;
-        cInitHeight:= cScreenHeight;
-        cBitsStr:= '32';
-        val(cBitsStr, cBits);
-        val('100', cInitVolume);
-        isMusicEnabled:= false;
-        isSoundEnabled:= false;
-        cLocaleFName:= 'en.txt';
-        cFullScreen:= true; //T or F is is the same here
-        cAltDamage:= false;
-        cShowFPS:= true;
-        val('8', cTimerInterval);
-        cReducedQuality:= false;
-
-        for p:= Succ(Low(TPathType)) to High(TPathType) do
-                if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-     end;
-{$ENDIF}
-  3: begin
-     val(ParamStr(2), ipcPort);
-     GameType:= gmtLandPreview;
-     if ParamStr(3) <> 'landpreview' then OutError(errmsgShouldntRun, true);
-     end;
-  2: begin
-		PathPrefix:= ParamStr(1);
-		recordFileName:= ParamStr(2);
-
-		for p:= Succ(Low(TPathType)) to High(TPathType) do
-			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-     end;
-  6: begin
-		PathPrefix:= ParamStr(1);
-		recordFileName:= ParamStr(2);
-
-		if ParamStr(3) = '--set-video'	then
-		begin
-			val(ParamStr(4), cScreenWidth);
-			val(ParamStr(5), cScreenHeight);
+	case ParamCount of
+		17: begin
+			val(ParamStr(2), cScreenWidth);
+			val(ParamStr(3), cScreenHeight);
 			cInitWidth:= cScreenWidth;
 			cInitHeight:= cScreenHeight;
-			cBitsStr:= ParamStr(6);
+			cBitsStr:= ParamStr(4);
 			val(cBitsStr, cBits);
-		end
-		else
-		begin
-			if ParamStr(3) = '--set-audio' then
+			val(ParamStr(5), ipcPort);
+			cFullScreen:= ParamStr(6) = '1';
+			isSoundEnabled:= ParamStr(7) = '1';
+			cVSyncInUse:= ParamStr(8) = '1';
+			cLocaleFName:= ParamStr(9);
+			val(ParamStr(10), cInitVolume);
+			val(ParamStr(11), cTimerInterval);
+			PathPrefix:= ParamStr(12);
+			cShowFPS:= ParamStr(13) = '1';
+			cAltDamage:= ParamStr(14) = '1';
+			UserNick:= DecodeBase64(ParamStr(15));
+			isMusicEnabled:= ParamStr(16) = '1';
+			cReducedQuality:= ParamStr(17) = '1';
+		end;
+		3: begin
+			val(ParamStr(2), ipcPort);
+			GameType:= gmtLandPreview;
+			if ParamStr(3) <> 'landpreview' then 
+				OutError(errmsgShouldntRun, true);
+		end;
+		2: begin
+			PathPrefix:= ParamStr(1);
+			recordFileName:= ParamStr(2);
+		end;
+		6: begin
+			PathPrefix:= ParamStr(1);
+			recordFileName:= ParamStr(2);
+
+			if ParamStr(3) = '--set-video'	then
 			begin
-				val(ParamStr(4), cInitVolume);
-				isMusicEnabled:= ParamStr(5) = '1';
-				isSoundEnabled:= ParamStr(6) = '1';
+				val(ParamStr(4), cScreenWidth);
+				val(ParamStr(5), cScreenHeight);
+				cInitWidth:= cScreenWidth;
+				cInitHeight:= cScreenHeight;
+				cBitsStr:= ParamStr(6);
+				val(cBitsStr, cBits);
 			end
 			else
 			begin
-				if ParamStr(3) = '--set-other' then
+				if ParamStr(3) = '--set-audio' then
 				begin
-					cLocaleFName:= ParamStr(4);
-					cFullScreen:= ParamStr(5) = '1';
-					cShowFPS:= ParamStr(6) = '1';
+					val(ParamStr(4), cInitVolume);
+					isMusicEnabled:= ParamStr(5) = '1';
+					isSoundEnabled:= ParamStr(6) = '1';
 				end
-				else DisplayUsage;
-			end
+				else
+				begin
+					if ParamStr(3) = '--set-other' then
+					begin
+						cLocaleFName:= ParamStr(4);
+						cFullScreen:= ParamStr(5) = '1';
+						cShowFPS:= ParamStr(6) = '1';
+					end
+					else DisplayUsage;
+				end
+			end;
 		end;
+		11: begin
+			PathPrefix:= ParamStr(1);
+			recordFileName:= ParamStr(2);
 
-		for p:= Succ(Low(TPathType)) to High(TPathType) do
-			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-	end;
- 11: begin
-		PathPrefix:= ParamStr(1);
-		recordFileName:= ParamStr(2);
-
-		if ParamStr(3) = '--set-multimedia' then
-		begin
-			val(ParamStr(4), cScreenWidth);
-			val(ParamStr(5), cScreenHeight);
-			cInitWidth:= cScreenWidth;
-			cInitHeight:= cScreenHeight;
-			cBitsStr:= ParamStr(6);
-			val(cBitsStr, cBits);
-			val(ParamStr(7), cInitVolume);
-			isMusicEnabled:= ParamStr(8) = '1';
-			isSoundEnabled:= ParamStr(9) = '1';
-			cLocaleFName:= ParamStr(10);
-			cFullScreen:= ParamStr(11) = '1';
-		end
+			if ParamStr(3) = '--set-multimedia' then
+			begin
+				val(ParamStr(4), cScreenWidth);
+				val(ParamStr(5), cScreenHeight);
+				cInitWidth:= cScreenWidth;
+				cInitHeight:= cScreenHeight;
+				cBitsStr:= ParamStr(6);
+				val(cBitsStr, cBits);
+				val(ParamStr(7), cInitVolume);
+				isMusicEnabled:= ParamStr(8) = '1';
+				isSoundEnabled:= ParamStr(9) = '1';
+				cLocaleFName:= ParamStr(10);
+				cFullScreen:= ParamStr(11) = '1';
+			end
+			else DisplayUsage;
+		end;
+		15: begin
+			PathPrefix:= ParamStr(1);
+			recordFileName:= ParamStr(2);
+			if ParamStr(3) = '--set-everything' then
+			begin
+				val(ParamStr(4), cScreenWidth);
+				val(ParamStr(5), cScreenHeight);
+				cInitWidth:= cScreenWidth;
+				cInitHeight:= cScreenHeight;
+				cBitsStr:= ParamStr(6);
+				val(cBitsStr, cBits);
+				val(ParamStr(7), cInitVolume);
+				isMusicEnabled:= ParamStr(8) = '1';
+				isSoundEnabled:= ParamStr(9) = '1';
+				cLocaleFName:= ParamStr(10);
+				cFullScreen:= ParamStr(11) = '1';
+				cAltDamage:= ParamStr(12) = '1';
+				cShowFPS:= ParamStr(13) = '1';
+				val(ParamStr(14), cTimerInterval);
+				cReducedQuality:= ParamStr(15) = '1';
+			end
+			else DisplayUsage;
+		end;
 		else DisplayUsage;
-
-		for p:= Succ(Low(TPathType)) to High(TPathType) do
-			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-	end;
- 15: begin
-		PathPrefix:= ParamStr(1);
-		recordFileName:= ParamStr(2);
-		if ParamStr(3) = '--set-everything' then
-		begin
-			val(ParamStr(4), cScreenWidth);
-			val(ParamStr(5), cScreenHeight);
-			cInitWidth:= cScreenWidth;
-			cInitHeight:= cScreenHeight;
-			cBitsStr:= ParamStr(6);
-			val(cBitsStr, cBits);
-			val(ParamStr(7), cInitVolume);
-			isMusicEnabled:= ParamStr(8) = '1';
-			isSoundEnabled:= ParamStr(9) = '1';
-			cLocaleFName:= ParamStr(10);
-			cFullScreen:= ParamStr(11) = '1';
-			cAltDamage:= ParamStr(12) = '1';
-			cShowFPS:= ParamStr(13) = '1';
-			val(ParamStr(14), cTimerInterval);
-			cReducedQuality:= ParamStr(15) = '1';
-		end
-		else DisplayUsage;
-
-		for p:= Succ(Low(TPathType)) to High(TPathType) do
-			if p <> ptMapCurrent then Pathz[p]:= PathPrefix + '/' + Pathz[p]
-	end;
-	else DisplayUsage;
 	end;
 
 {$IFDEF DEBUGFILE}
-AddFileLog('Prefix: "' + PathPrefix +'"');
-for i:= 0 to ParamCount do
-	AddFileLog(inttostr(i) + ': ' + ParamStr(i));
+	AddFileLog('Prefix: "' + PathPrefix +'"');
+	for i:= 0 to ParamCount do
+		AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 {$IFDEF IPHONEOS}
 	WriteLnToConsole('Saving debug file at: ' + IPH_getDocumentsPath());
 {$ENDIF}
 {$ENDIF}
 end;
-
-/////////////////////////
-procedure ShowMainWindow;
-begin
-	if cFullScreen then ParseCommand('fullscr 1', true)
-	else ParseCommand('fullscr 0', true);
-	SDL_ShowCursor(0)
-end;
-
-///////////////
-procedure Game;
-var s: shortstring;
-begin
-WriteToConsole('Init SDL... ');
-SDLTry(SDL_Init(SDL_INIT_VIDEO) >= 0, true);
-WriteLnToConsole(msgOK);
-
-SDL_EnableUNICODE(1);
-
-WriteToConsole('Init SDL_ttf... ');
-SDLTry(TTF_Init <> -1, true);
-WriteLnToConsole(msgOK);
-
-ShowMainWindow;
-
-AddProgress;
-
-ControllerInit; // has to happen before InitKbdKeyTable to map keys
-InitKbdKeyTable;
-
-if recordFileName = '' then InitIPC;
-WriteLnToConsole(msgGettingConfig);
-
-if cLocaleFName <> 'en.txt' then
-	LoadLocale(Pathz[ptLocale] + '/en.txt');
-LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
-
-if recordFileName = '' then
-	SendIPCAndWaitReply('C')        // ask for game config
-else
- 	LoadRecordFromFile(recordFileName);
-
-s:= 'eproto ' + inttostr(cNetProtoVersion);
-SendIPCRaw(@s[0], Length(s) + 1); // send proto version
-
-InitTeams;
-AssignStores;
-
-if isSoundEnabled then
-	InitSound;
-
-isDeveloperMode:= false;
-
-TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-
-MainLoop;
-end;
-
-/////////////////////////
-procedure GenLandPreview;
-var Preview: TPreview;
-	h: byte;
-begin
-InitIPC;
-IPCWaitPongEvent;
-TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-
-Preview:= GenPreview;
-WriteLnToConsole('Sending preview...');
-SendIPCRaw(@Preview, sizeof(Preview));
-h:= MaxHedgehogs;
-SendIPCRaw(@h, sizeof(h));
-WriteLnToConsole('Preview sent, disconnect');
-CloseIPC();
-end;
-
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// m a i n ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -510,8 +481,10 @@ begin
 
 	Randomize;
 
-	if GameType = gmtLandPreview then GenLandPreview
-								 else Game;
+	if GameType = gmtLandPreview	then GenLandPreview
+					else Game;
 //	ExitCode := 100;
+{$ENDIF}
+
 end.
 

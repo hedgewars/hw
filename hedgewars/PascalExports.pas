@@ -21,7 +21,6 @@ uses uKeys, uConsole;
 // called by pascal code, they deal with the objc code
 function  IPH_getDocumentsPath: PChar; cdecl; external;
 procedure IPH_showControls; cdecl; external;
-procedure IPH_returnFrontend; cdecl; external; 
 
 // retrieve protocol information
 function  HW_protoVer: LongInt; cdecl; export;
@@ -48,94 +47,71 @@ implementation
 {$IFDEF IPHONEOS}
 function HW_protoVer: LongInt; cdecl; export;
 begin
-	WriteLnToConsole('HW - protocol version');
 	HW_protoVer:= cNetProtoVersion;
 end;
 
+
 procedure HW_click; cdecl; export;
 begin
-	WriteLnToConsole('HW - left click');
 	leftClick:= true;
-	exit
 end;
 
 procedure HW_zoomIn; cdecl; export;
 begin
-	WriteLnToConsole('HW - zooming in');
 	wheelUp:= true;
-	exit
 end;
 
 procedure HW_zoomOut; cdecl; export;
 begin
-	WriteLnToConsole('HW - zooming out');
 	wheelDown:= true;
-	exit
 end;
 
 procedure HW_zoomReset; cdecl; export;
 begin
-	WriteLnToConsole('HW - reset zoom');
 	middleClick:= true;
-	exit
 end;
 
 procedure HW_ammoMenu; cdecl; export;
 begin
-	WriteLnToConsole('HW - right click');
 	rightClick:= true;
-	exit
 end;
 
 procedure HW_allKeysUp; cdecl; export;
 begin
-	WriteLnToConsole('HW - resetting keyboard');
-
 	upKey:= false;
 	downKey:= false;
 	leftKey:= false;
 	rightKey:= false;
 	spaceKey:= false;
-	exit
 end;
 
 procedure HW_walkLeft; cdecl; export;
 begin
-	WriteLnToConsole('HW - walking left');
 	leftKey:= true;
-	exit
 end;
 
 procedure HW_walkRight; cdecl; export;
 begin
-	WriteLnToConsole('HW - walking right');
 	rightKey:= true;
-	exit
 end;
 
 procedure HW_aimUp; cdecl; export;
 begin
-	WriteLnToConsole('HW - aiming upwards');
 	upKey:= true;
-	exit
 end;
 
 procedure HW_aimDown; cdecl; export;
 begin
-	WriteLnToConsole('HW - aiming downwards');
 	downKey:= true;
-	exit
 end;
 
 procedure HW_shoot; cdecl; export;
 begin
-	WriteLnToConsole('HW - shooting');
 	spaceKey:= true;
-	exit
 end;
 
 procedure HW_whereIsHog; cdecl; export;
-var Xcoord, Ycoord: LongInt;
+//var Xcoord, Ycoord: LongInt;
 begin
 	//Xcoord:= Gear^.dX + WorldDx;
 	WriteLnToConsole('HW - hog is at x: ' + ' y:');

@@ -14,7 +14,7 @@
 @synthesize username, password, musicOn, effectsOn, altDamageOn, volumeSlider, volumeLabel;
 
 -(void) viewDidLoad {
-	NSString *filePath = [SDLUIKitDelegate dataFilePath:@"settings.plist"];
+	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
 		NSUserDefaults *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
@@ -79,7 +79,7 @@
 	[saveArray setObject:tmpAlt forKey:@"alternate"];
 	[saveArray setObject:volumeLabel.text forKey:@"volume"];
 	
-	[saveArray writeToFile:[SDLUIKitDelegate dataFilePath:@"settings.plist"] atomically:YES];
+	[saveArray writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
 	[saveArray release];
 	[super viewWillDisappear:animated];
 }

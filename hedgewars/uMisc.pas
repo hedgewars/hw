@@ -98,6 +98,7 @@ var
 	cYellowColor		: Longword = $FFFFFF00;
 	cExplosionBorderColor	: LongWord = $FF808080;
 
+var recordFileName : shortstring = '';
 	cShowFPS      : boolean = false;
 	cCaseFactor   : Longword = 5;  {0..9}
 	cLandAdditions: Longword = 4;

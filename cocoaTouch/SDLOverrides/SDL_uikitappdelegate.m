@@ -27,6 +27,7 @@
 #import "jumphack.h"
 #import "SDL_video.h"
 #import "GameSetup.h"
+#import "PascalImports.h"
 
 //#import "SoundEffect.h"	
 //	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
@@ -37,23 +38,11 @@
 #undef main
 #endif
 
-extern int SDL_main(int argc, char *argv[]);
-int main (int argc, char **argv) {
-	int i;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	/* store arguments */
-	forward_argc = argc;
-	forward_argv = (char **)malloc(argc * sizeof(char *));
-	for (i = 0; i < argc; i++) {
-		forward_argv[i] = malloc( (strlen(argv[i])+1) * sizeof(char));
-		strcpy(forward_argv[i], argv[i]);
-	}
-
-	/* Give over control to run loop, SDLUIKitDelegate will handle most things from here */
-	UIApplicationMain(argc, argv, NULL, @"SDLUIKitDelegate");
-	
-	[pool release];
+int main(int argc, char *argv[]) {
+    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
+    [pool release];
+    return retVal;
 }
 
 @implementation SDLUIKitDelegate
@@ -73,34 +62,36 @@ int main (int argc, char **argv) {
 	[super dealloc];
 }
 
--(void) launchSDL_main{
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	// must setup arguments in the same thread
-	[setup setArgsForLocalPlay];
-	
-	// run the user's application, passing argc and argv
-	SDL_main(forward_argc, forward_argv);
-
-	[pool release];
-}
-
 -(IBAction) startSDLgame {
 	
 	[setup startThread:@"engineProtocol"];
 	[setup loadSettingsFromFile:@"settings.plist" forKey:@"systemSettings"];
 
 	// remove the current view to free resources
-/*	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1.5];
-	controller.view.alpha = 1;
+	[UIView beginAnimations:@"removing main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	controller.view.alpha = 0;
 	[UIView commitAnimations];
-	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5];
-*/
+	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+
 	NSLog(@"Game is launching...");
 
-	[NSThread detachNewThreadSelector:@selector(launchSDL_main) toTarget:self withObject:nil];
+	// direct execution or thread? check the one that gives most fps
+	// library or call SDL_main? pascal quits at the end of the main
+	Game();
 	
+	NSLog(@"Game is exting...");
+
+	[[window viewWithTag:54867] removeFromSuperview];
+	[setup unloadSettings];
+
+	[window addSubview:controller.view];
+	[window makeKeyAndVisible];
+
+	[UIView beginAnimations:@"inserting main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	controller.view.alpha = 1;
+	[UIView commitAnimations];	
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
@@ -116,26 +107,18 @@ int main (int argc, char **argv) {
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
-	/* free the memory we used to hold copies of argc and argv */
-	int i;
-	for (i=0; i < forward_argc; i++) {
-		free(forward_argv[i]);
-	}
-	free(forward_argv);	
 	SDL_SendQuit();
 	/* hack to prevent automatic termination.  See SDL_uikitevents.m for details */
 	// have to remove this otherwise game goes on when pushing the home button
 	//longjmp(*(jump_env()), 1);
 }
 
--(void) applicationWillResignActive:(UIApplication*)application
-{
+-(void) applicationWillResignActive:(UIApplication*)application {
 //	NSLog(@"%@", NSStringFromSelector(_cmd));
 	SDL_SendWindowEvent(self.windowID, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
 }
 
--(void) applicationDidBecomeActive:(UIApplication*)application
-{
+-(void) applicationDidBecomeActive:(UIApplication*)application {
 //	NSLog(@"%@", NSStringFromSelector(_cmd));
 	SDL_SendWindowEvent(self.windowID, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }
@@ -146,33 +129,8 @@ int main (int argc, char **argv) {
 	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 */
-+(void) resetFrontend {
-	[[[SDLUIKitDelegate sharedAppDelegate].window viewWithTag:54867] removeFromSuperview];
-	[[SDLUIKitDelegate sharedAppDelegate].window addSubview:[SDLUIKitDelegate sharedAppDelegate].controller.view];
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1];
-	[SDLUIKitDelegate sharedAppDelegate].controller.view.alpha = 1;
-	[UIView commitAnimations];
-	
-	[[SDLUIKitDelegate sharedAppDelegate].setup unloadSettings];
-	[[SDLUIKitDelegate sharedAppDelegate].window makeKeyAndVisible];
-}
 
-#pragma mark -
-#pragma mark Convenience methods
-void IPH_returnFrontend (void) {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	[SDLUIKitDelegate resetFrontend];
-	NSLog(@"Game exited...");
-
-	[pool release];
-	[NSThread exit];
-}
-
-
-+(NSString *)dataFilePath: (NSString *)fileName {
+-(NSString *)dataFilePath: (NSString *)fileName {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:fileName];

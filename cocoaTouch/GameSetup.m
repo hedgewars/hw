@@ -22,7 +22,7 @@
 	self.localeString = [[[NSLocale currentLocale] localeIdentifier] stringByAppendingString:@".txt"];
 	self.systemSettings = nil;
 	engineProtocolStarted = NO;
-	ipcPort = 51342;
+	ipcPort = 51432;
 	return self;
 }
 
@@ -100,8 +100,13 @@
 				NSLog(@"engineProtocol - sending game config");
 				
 				// send config data data
-				
-				// local game
+				/*seed is arbitrary string
+				[16:12] unC0Rr:
+				addteam <color> <team name>
+				[16:13] unC0Rr:
+				addhh <level> <health> <hedgehog name>
+				[16:13] unC0Rr:
+				<level> is 0 for human, 1-5 for bots (5 is the most stupid)*/				// local game
 				[self sendToEngine:@"TL"];
 				
 				// seed info
@@ -128,7 +133,7 @@
 				// various flags
 				[self sendToEngine:@"e$casefreq 5"];
 				
-				// various flags
+				// dimension of the map
 				[self sendToEngine:@"e$template_filter 1"];
 								
 				// theme info
@@ -248,7 +253,7 @@
 #pragma mark -
 #pragma mark Settings setup methods
 -(void) loadSettingsFromFile:(NSString *)fileName forKey:(NSString *)objName {
-	NSString *filePath = [SDLUIKitDelegate dataFilePath:fileName];
+	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:fileName];
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
 		NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:filePath];
@@ -262,46 +267,8 @@
 }
 
 -(void) unloadSettings {
-	[systemSettings dealloc];
+	[systemSettings release];
 }
-
--(void) setArgsForLocalPlay {
-	NSString *portNumber = [[NSString alloc] initWithFormat:@"%d", ipcPort];
-	//NSString *username = [[NSString alloc] initWithString:[systemSettings objectForKey:@"username"]];
-	/*for (NSString *theString in [NSLocale ISOLanguageCodes]) {
-		NSLog(theString);
-	}*/
-	
-	memset(forward_argv, 0, forward_argc);
-	
-	forward_argc = 18;
-	forward_argv = (char **)realloc(forward_argv, forward_argc * sizeof(char *));
-	//forward_argv[i] = malloc( (strlen(argv[i])+1) * sizeof(char));
-	forward_argv[ 1] = forward_argv[0];					// (UNUSED)
-	forward_argv[ 2] = "320";							// cScreenWidth
-	forward_argv[ 3] = "480";							// cScreenHeight
-	forward_argv[ 4] = "16";							// cBitsStr
-	forward_argv[ 5] = [portNumber UTF8String];			// ipcPort;
-	forward_argv[ 6] = "1";								// cFullScreen (NO EFFECT)
-	forward_argv[ 7] = [[systemSettings objectForKey:@"effects"] UTF8String];	// isSoundEnabled
-	forward_argv[ 8] = "1";								// cVSyncInUse (UNUSED)
-	forward_argv[ 9] = [localeString UTF8String];		// cLocaleFName
-	forward_argv[10] = [[systemSettings objectForKey:@"volume"] UTF8String];	// cInitVolume
-	forward_argv[11] = "8";								// cTimerInterval
-	forward_argv[12] = "Data";							// PathPrefix
-	forward_argv[13] = "1";								// cShowFPS (TOSET?)
-	forward_argv[14] = [[systemSettings objectForKey:@"alternate"] UTF8String];	// cAltDamage (TOSET)
-	forward_argv[15] = "Koda";				// UserNick (DecodeBase64(ParamStr(15)) FTW) <- TODO
-	forward_argv[16] = [[systemSettings objectForKey:@"music"] UTF8String];		// isMusicEnabled
-	forward_argv[17] = "0";								// cReducedQuality
-
-	[portNumber release];
-	return;
-}
-
-
-
-
 
 
 @end

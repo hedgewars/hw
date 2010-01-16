@@ -23,11 +23,11 @@
 @property (nonatomic, retain) NSString *localeString;
 @property (retain) NSDictionary *systemSettings;
 
--(void) setArgsForLocalPlay;
 -(void) engineProtocol;
 -(void) startThread: (NSString *)selector;
 -(void) loadSettingsFromFile:(NSString *)fileName forKey:(NSString *)objName;
--(int) sendToEngine: (NSString *)string;
+-(int)  sendToEngine: (NSString *)string;
 -(void) unloadSettings;
+
 @end
 
