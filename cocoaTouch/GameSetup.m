@@ -27,7 +27,7 @@
 }
 
 -(void) dealloc {
-	[self.systemSettings release];
+	if (systemSettings) [self.systemSettings release];
 	[self.localeString autorelease];
 	[super dealloc];
 }
@@ -84,7 +84,8 @@
 		
 		/* This check the sd if there is a pending connection.
 		 * If there is one, accept that, and open a new socket for communicating */
-		if ((csd = SDLNet_TCP_Accept(sd))) {
+		csd = SDLNet_TCP_Accept(sd);
+		if (NULL != csd) {
 			
 			NSLog(@"engineProtocol - Client found");
 			
@@ -175,7 +176,7 @@
 				
 				clientQuit = NO;
 			} else {
-				NSLog(@"engineProtocolThread - wrong message, closing connection");
+				NSLog(@"engineProtocolThread - wrong message or client closed connection");
 				clientQuit = YES;
 			}
 			
@@ -226,12 +227,15 @@
 						// empty packet or just statistics
 						break;
 					// missing case for exiting right away
-				} 
+				}
 			}
+			NSLog(@"Client Exited");
+			// wait a little to let the client close cleanly
+			sleep(5);
+			// Close the client socket
+			SDLNet_TCP_Close(csd);
 		}
-		
-		/* Close the client socket */
-		SDLNet_TCP_Close(csd);
+
 	}
 
 	SDLNet_TCP_Close(sd);
@@ -258,10 +262,7 @@
 }
 
 -(void) unloadSettings {
-	for (id obj in self)
-		if ([obj isKindOfClass:[NSDictionary class]]) {
-			[obj release];
-		}
+	[systemSettings dealloc];
 }
 
 -(void) setArgsForLocalPlay {

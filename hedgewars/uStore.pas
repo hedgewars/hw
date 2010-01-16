@@ -1004,11 +1004,6 @@ end;
 function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-{$IFDEF DONTUSE}
-    tmpP: PLongWordArray;
-    tmpA, tmpR, tmpG, tmpB: LongWord;
-    i: LongInt;
-{$ENDIF}
 begin
 	WriteToConsole(msgLoading + filename + ' [flags: ' + inttostr(imageFlags) + ']... ');
 
@@ -1054,52 +1049,6 @@ begin
 
 	tmpsurf:= doSurfaceConversion(tmpsurf);
 
-{$IFDEF DONTUSE}   // way too slow
-{* http://bugzilla.libsdl.org/show_bug.cgi?id=868 but patched library doesn't work on ipod, so implementing workaround here *}
-	if imageFlags and (ifAlpha or ifTransparent) > 0 then
-	begin
-		tmpP := tmpsurf^.pixels;
-		for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do 
-		begin
-{$IFDEF ENDIAN_LITTLE}
-			tmpA:= tmpP^[i] shr 24 and $FF;
-			tmpR:= tmpP^[i] shr 16 and $FF;
-			tmpG:= tmpP^[i] shr 8 and $FF;
-			tmpB:= tmpP^[i] and $FF;
-{$ELSE}
-			tmpA:= tmpP^[i] and $FF;
-			tmpR:= tmpP^[i] shr 8 and $FF;
-			tmpG:= tmpP^[i] shr 16 and $FF;
-			tmpB:= tmpP^[i] shr 24 and $FF;
-{$ENDIF}
-			if tmpA <> 0 then
-			begin
-				tmpR:= round(tmpR * 255 / tmpA);
-				tmpG:= round(tmpG * 255 / tmpA);
-				tmpB:= round(tmpB * 255 / tmpA);
-			end;
-
-			if tmpR > 255 then tmpR:= 255;
-			if tmpG > 255 then tmpG:= 255;
-			if tmpB > 255 then tmpB:= 255;
-
-{$IFDEF ENDIAN_LITTLE}
-			tmpP^[i]:= (tmpA shl 24) or (tmpR shl 16) or (tmpG shl 8) or tmpB;
-{$ELSE}
-			tmpP^[i]:= (tmpA) or (tmpR shl 8) or (tmpG shl 16) or (tmpB shl 24);
-{$ENDIF}
-		end;
-(*		for i:= 0 to (tmpsurf^.pitch shr 2) * tmpsurf^.h - 1 do
-		begin
-			tmpA:= tmpP^[i] shr 24 and $FF;
-			tmpR:= tmpP^[i] shr 16 and $FF;
-			tmpG:= tmpP^[i] shr 8 and $FF;
-			tmpB:= tmpP^[i] and $FF;
-			writeln(stdout, inttostr(tmpA) + ' | ' + inttostr(tmpR) + ' | ' + inttostr(tmpG)+ ' | ' + inttostr(tmpB));
-		end; *)
-	end;
-{$ENDIF}
-
 	if (imageFlags and ifTransparent) <> 0 then
 		TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
@@ -1125,19 +1074,45 @@ begin
 end;
 
 procedure SetupOpenGL;
+{$IFDEF DEBUGFILE}
 var vendor: shortstring;
+{$ENDIF}
 begin
+{$IFDEF IPHONEOS}
+//these are good performance savers, perhaps we could enable them by default
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
+	SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	//SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+{$ELSE}
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+{$ENDIF}
+
+{$IFNDEF SDL13}
+// this attribute is default in 1.3 and must be enabled in MacOSX
+{$IFNDEF DARWIN}
+	if cVSyncInUse then
+{$ENDIF}
+		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+{$ENDIF}
+
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
-	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
 
 {$IFDEF DEBUGFILE}
+	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
+
 	AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 	AddFileLog('  |----- Vendor: ' + vendor);
 	AddFileLog('  |----- Version: ' + string(pchar(glGetString(GL_VERSION))));
 	AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
-	if MaxTextureSize = 0 then
+	if MaxTextureSize <= 0 then
 	begin
 		MaxTextureSize:= 1024;
 {$IFDEF DEBUGFILE}
@@ -1146,59 +1121,61 @@ begin
 	end;
 
 {$IFNDEF IPHONEOS}
-if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
-	cGPUVendor:= gvNVIDIA
-else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
-	cGPUVendor:= gvATI
-else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
-	cGPUVendor:= gvIntel;
-
+	if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
+		cGPUVendor:= gvNVIDIA
+	else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
+		cGPUVendor:= gvATI
+	else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
+		cGPUVendor:= gvIntel;
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 {$ENDIF}
 
-// set view port to whole window
-glViewport(0, 0, cScreenWidth, cScreenHeight);
+	// set view port to whole window
+	glViewport(0, 0, cScreenWidth, cScreenHeight);
 
-glMatrixMode(GL_MODELVIEW);
-// prepare default translation/scaling
-glLoadIdentity();
-glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	// prepare default translation/scaling
+	glLoadIdentity();
+	glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
 {$IFDEF IPHONEOS}
-//glRotatef(90, 0, 0, 1);
+	//glRotatef(90, 0, 0, 1);
 {$ENDIF}
-glTranslatef(0, -cScreenHeight / 2, 0);
+	glTranslatef(0, -cScreenHeight / 2, 0);
 
-// enable alpha blending
-glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	// enable alpha blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 end;
 
 procedure SetScale(f: GLfloat);
 begin
-// leave immediately if scale factor did not change
-if f = cScaleFactor then exit;
+	// leave immediately if scale factor did not change
+	if f = cScaleFactor then exit;
 
-if f = 2.0 then // default scaling
-	glPopMatrix // "return" to default scaling
-else // other scaling
+	if f = 2.0 then glPopMatrix // "return" to default scaling
+	else // other scaling
 	begin
-	glPushMatrix; // save default scaling
-	glLoadIdentity;
-	glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+		glPushMatrix; // save default scaling
+		glLoadIdentity;
+		glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
 {$IFDEF IPHONEOS}
-//	glRotatef(90, 0, 0, 1);
+		//glRotatef(90, 0, 0, 1);
 {$ENDIF}
-	glTranslatef(0, -cScreenHeight / 2, 0);
+		glTranslatef(0, -cScreenHeight / 2, 0);
 	end;
 
-cScaleFactor:= f;
+	cScaleFactor:= f;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var ProgrTex: PTexture = nil;
-    Step: integer = 0;
+var Step: LongInt = 0;
 	squaresize : LongInt;
-	numsquares : integer;
+	numsquares : LongInt;
+{$IFDEF SDL13notworking}
+	ProgrTex: TSDL_TextureID = 0;
+{$ELSE}
+	ProgrTex: PTexture = nil;
+{$ENDIF}
 
 procedure AddProgress;
 var r: TSDL_Rect;
@@ -1206,47 +1183,63 @@ var r: TSDL_Rect;
 begin
 	if Step = 0 then
 	begin
-	{$IFDEF SDL_IMAGE_NEWER}
+{$IFDEF SDL_IMAGE_NEWER}
 		WriteToConsole('Init SDL_image... ');
 		SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
 		WriteLnToConsole(msgOK);
-	{$ENDIF}
+{$ENDIF}
 	
 		WriteToConsole(msgLoading + 'progress sprite: ');
 		texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+{$IFDEF SDL13notworking}
+		ProgrTex:= SDL_CreateTextureFromSurface(0, texsurf);
+{$ELSE}
 		ProgrTex:= Surface2Tex(texsurf, false);
+{$ENDIF}
+		squaresize:= texsurf^.w shr 1;
+		numsquares:= texsurf^.h div squaresize;
 		SDL_FreeSurface(texsurf);
-		squaresize:= ProgrTex^.w shr 1;
-		numsquares:= ProgrTex^.h div squaresize;
 	end;
 
-TryDo(ProgrTex <> nil, 'ProgrTex = nil!', true);
+{$IFDEF SDL13notworking}
+	TryDo(ProgrTex <> 0, 'Error - Progress Texure is 0!', true);
+{$ELSE}
+	TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
+{$ENDIF}
 
-glClear(GL_COLOR_BUFFER_BIT);
-glEnable(GL_TEXTURE_2D);
-if Step < numsquares then r.x:= 0
-else r.x:= squaresize;
-r.y:= (Step mod numsquares) * squaresize;
-r.w:= squaresize;
-r.h:= squaresize;
-DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
-glDisable(GL_TEXTURE_2D);
-SDL_GL_SwapBuffers();
-inc(Step);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_TEXTURE_2D);
+	if Step < numsquares then r.x:= 0
+	else r.x:= squaresize;
+	
+	r.y:= (Step mod numsquares) * squaresize;
+	r.w:= squaresize;
+	r.h:= squaresize;
+	
+{$IFDEF SDL13notworking}
+	SDL_RenderCopy(ProgrTex, nil, @r);
+{$ELSE}	
+	DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+{$ENDIF}
+	glDisable(GL_TEXTURE_2D);
+	SDL_GL_SwapBuffers();
+	inc(Step);
 end;
 
 
 procedure FinishProgress;
 begin
-WriteLnToConsole('Freeing progress surface... ');
-FreeTexture(ProgrTex);
-ProgrTex:= nil;
-
-{$IFDEF IPHONEOS}
-// show overlay buttons
-IPH_showControls;
+	WriteLnToConsole('Freeing progress surface... ');
+{$IFDEF SDL13notworking}
+	SDL_DestroyTexture(ProgrTex);
+{$ELSE}
+	FreeTexture(ProgrTex);
 {$ENDIF}
 
+{$IFDEF IPHONEOS}
+	// show overlay buttons
+	IPH_showControls;
+{$ENDIF}
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);

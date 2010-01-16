@@ -175,6 +175,21 @@ const
 	AMask = $000000FF;
 {$ENDIF}
 
+{$IFDEF SDL13}
+// SDL_WindowFlags (enum)
+    SDL_WINDOW_FULLSCREEN = $00000001;         //*< fullscreen window, implies borderless */
+    SDL_WINDOW_OPENGL = $00000002;             //*< window usable with OpenGL context */
+    SDL_WINDOW_SHOWN = $00000004;              //*< window is visible */
+    SDL_WINDOW_BORDERLESS = $00000008;         //*< no window decoration */
+    SDL_WINDOW_RESIZABLE = $00000010;          //*< window can be resized */
+    SDL_WINDOW_MINIMIZED = $00000020;          //*< window is minimized */
+    SDL_WINDOW_MAXIMIZED = $00000040;          //*< window is maximized */
+    SDL_WINDOW_INPUT_GRABBED = $00000100;      //*< window has grabbed input focus */
+    SDL_WINDOW_INPUT_FOCUS = $00000200;        //*< window has input focus */
+    SDL_WINDOW_MOUSE_FOCUS = $00000400;        //*< window has mouse focus */
+    SDL_WINDOW_FOREIGN = $00000800;            //*< window not created by SDL */
+{$ENDIF}
+
 	{* SDL_mixer *}
 	MIX_MAX_VOLUME = 128;
 	MIX_INIT_FLAC = $00000001;
@@ -313,7 +328,8 @@ type
 
 {$IFDEF SDL13}
 	TSDL_WindowID = LongInt;
-
+	TSDL_TextureID = LongInt;
+	
 	TSDL_WindowEvent = record
 		type_: byte;
 		gain: byte;
@@ -610,9 +626,21 @@ function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDL
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 {$IFDEF SDL13}
+function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): TSDL_WindowID; cdecl; external SDLLibName;
+function  SDL_CreateRenderer(windowID: TSDL_WindowID; index, flags: LongInt): LongInt; cdecl; external SDLLibName;
+function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
+function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
+function  SDL_RenderClear: LongInt; cdecl; external SDLLibName;
+procedure SDL_RenderPresent; cdecl; external SDLLibName;
+function  SDL_RenderCopy(textureID: TSDL_TextureID; srcrect, dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
+
+function  SDL_CreateTextureFromSurface(format: LongInt; surface: PSDL_Surface): TSDL_TextureID; cdecl; external SDLLibName;
+procedure SDL_DestroyTexture(textureID: TSDL_TextureID); cdecl; external SDLLibName;
+
 function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_GetRelativeMouseState(index: LongInt; x, y: PLongInt): Byte; cdecl; external SDLLibName;
+function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
 {$ELSE}
@@ -766,6 +794,16 @@ begin
                   (PByteArray(buf)^[1] shl 16) or
                   (PByteArray(buf)^[0] shl 24)
 end;
+
+{$IFDEF SDL13}
+function SDL_RenderFill(rect: PSDL_Rect): LongInt;
+var res: LongInt;
+begin
+	if (rect <> nil) then res:= SDL_RenderFillRect(rect)
+	else res:= SDL_RenderClear();
+	exit(res);
+end;
+{$ENDIF}
 
 end.
 

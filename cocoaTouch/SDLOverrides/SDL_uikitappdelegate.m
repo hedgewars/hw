@@ -91,12 +91,12 @@ int main (int argc, char **argv) {
 	[setup loadSettingsFromFile:@"settings.plist" forKey:@"systemSettings"];
 
 	// remove the current view to free resources
-	[UIView beginAnimations:nil context:NULL];
+/*	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:1.5];
-	controller.view.alpha = 0;
+	controller.view.alpha = 1;
 	[UIView commitAnimations];
 	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1.5];
-
+*/
 	NSLog(@"Game is launching...");
 
 	[NSThread detachNewThreadSelector:@selector(launchSDL_main) toTarget:self withObject:nil];

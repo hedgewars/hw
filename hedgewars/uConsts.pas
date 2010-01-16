@@ -32,6 +32,9 @@ uses
 
 {$INCLUDE "proto.inc"}
 
+// typed const is a variable despite const qualifier
+// in freepascal you may actually use var for the same purpose
+
 type
 
 	TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
@@ -162,7 +165,7 @@ const
 	errmsgIncorrectUse    = 'Incorrect use';
 	errmsgShouldntRun     = 'This program shouldn''t be run manually';
 	errmsgWrongNumber     = 'Wrong parameters number';
-        errmsgSlotsOverflow   = 'CurSlot overflowed';
+	errmsgSlotsOverflow   = 'CurSlot overflowed';
 
 	msgLoading           = 'Loading ';
 	msgOK                = 'ok';
@@ -408,7 +411,28 @@ const
 			'Sounds/voices',                 // ptVoices
 			'Graphics/Hats'                  // ptHats
 			);
-
+		(*
+	PathzBackup: array[TPathType] of String = (
+			'',                              // ptNone
+			'',                              // ptData
+			'Graphics',                      // ptGraphics
+			'Themes',                        // ptThemes
+			'Themes/avematan',               // ptCurrTheme
+			'Teams',                         // ptTeams
+			'Maps',                          // ptMaps
+			'',                              // ptMapCurrent
+			'Demos',                         // ptDemos
+			'Sounds',                        // ptSounds
+			'Graphics/Graves',               // ptGraves
+			'Fonts',                         // ptFonts
+			'Forts',                         // ptForts
+			'Locale',                        // ptLocale
+			'Graphics/AmmoMenu',             // ptAmmoMenu
+			'Graphics/Hedgehog',             // ptHedgehog
+			'Sounds/voices',                 // ptVoices
+			'Graphics/Hats'                  // ptHats
+			);
+		*)	
 	SpritesData: array[TSprite] of record
 			FileName: String[14];
 			Path, AltPath: TPathType;

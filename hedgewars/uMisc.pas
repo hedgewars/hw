@@ -33,6 +33,10 @@ uses uConsts, SDLh,
 {$ENDIF}
 	;
 
+type HwColor4f = record
+	r, g, b, a: byte
+	end;
+
 var
 	isCursorVisible : boolean = false;
 	isTerminated    : boolean = false;
@@ -64,7 +68,7 @@ var
 	cScreenHeight    : LongInt = 768;
 	cInitWidth       : LongInt = 1024;
 	cInitHeight      : LongInt = 768;
-	cVSyncInUse	 : boolean = true;	
+	cVSyncInUse		 : boolean = true;	
 	cBits            : LongInt = 32;
 	cBitsStr         : string[2] = '32';
 	cTagsMaskIndex   : byte = Low(cTagsMasks);
@@ -138,14 +142,12 @@ var
 	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
 
 	i: LongInt;
+	
+	cWaterOpacity: byte = $80;
+	WaterColorArray: array[0..3] of HwColor4f;
 
-type HwColor4f = record
-	r, g, b, a: byte
-	end;
-
-var cWaterOpacity: byte = $80;
-
-var WaterColorArray: array[0..3] of HwColor4f;
+	CursorPoint: TPoint;
+    TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 procedure movecursor(dx, dy: Integer);
 function hwSign(r: hwFloat): LongInt;
@@ -179,11 +181,8 @@ function  endian(independent: LongWord): LongWord;
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
-
 function modifyDamage(dmg: Longword): Longword;
 
-var CursorPoint: TPoint;
-    TargetPoint: TPoint = (X: NoPointX; Y: 0);
 
 implementation
 uses uConsole, uStore, uIO, Math, uRandom, uSound;

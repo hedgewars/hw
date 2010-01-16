@@ -598,67 +598,59 @@ var flags: Longword = 0;
 {$IFDEF DEBUGFILE}
     buf: array[byte] of char;
 {$ENDIF}
+{$IFDEF SDL13}
+	windowID: TSDL_WindowID;
+{$ENDIF}
 begin
-if Length(s) = 0 then cFullScreen:= not cFullScreen
+	if Length(s) = 0 then cFullScreen:= not cFullScreen
 	else cFullScreen:= s = '1';
 
 {$IFDEF DEBUGFILE}
-AddFileLog('Prepare to change video parameters...');
+	AddFileLog('Prepare to change video parameters...');
 {$ENDIF}
 
+	flags:= SDL_OPENGL;// or SDL_RESIZABLE;
 {$IFDEF IPHONEOS}
-SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
-SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+	// remove the topbar from the iPhone
+	flags:= flags or SDL_NOFRAME;
+{$ENDIF}
+
+	if cFullScreen then
+	begin
+		flags:= flags or SDL_FULLSCREEN;
+		cScreenWidth:= cInitWidth;
+		cScreenHeight:= cInitHeight
+	end;
+
+	SDL_WM_SetCaption('Hedgewars', nil);
+	if SDLPrimSurface <> nil then
+	begin
+{$IFDEF DEBUGFILE}
+		AddFileLog('Freeing old primary surface...');
+{$ENDIF}
+		SDL_FreeSurface(SDLPrimSurface);
+	end;
+	
+{$IFDEF SDL13}
+	windowID:= SDL_CreateWindow(nil, 0, 0, cScreenWidth, cScreenHeight,	SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN 
+				{$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
+    SDL_CreateRenderer(windowID, 0, 0);
+	PixelFormat:=nil;// SDLPrimSurface^.format;
+	
+	SDL_SetRenderDrawColor(0, 0, 0, 255);
+    SDL_RenderFill(nil);
+    SDL_RenderPresent();
 {$ELSE}
-SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+	SDLTry(SDLPrimSurface <> nil, true);
+	PixelFormat:= SDLPrimSurface^.format;
 {$ENDIF}
-
-{$IFNDEF SDL13}
-// this attribute is default in 1.3 and must be enabled in MacOSX
-{$IFNDEF DARWIN}
-if cVSyncInUse then
-{$ENDIF}
-	SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
-{$ENDIF}
-
-flags:= SDL_OPENGL;// or SDL_RESIZABLE;
-{$IFDEF IPHONEOS}
-// remove the topbar from the iPhone
-flags:= flags or SDL_NOFRAME;
-{$ENDIF}
-
-if cFullScreen then
-	begin
-	flags:= flags or SDL_FULLSCREEN;
-	cScreenWidth:= cInitWidth;
-	cScreenHeight:= cInitHeight
-	end;
-
-SDL_WM_SetCaption('Hedgewars', nil);
-if SDLPrimSurface <> nil then
-	begin
-	{$IFDEF DEBUGFILE}
-	AddFileLog('Freeing old primary surface...');
-	{$ENDIF}
-	SDL_FreeSurface(SDLPrimSurface);
-	end;
-
-SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
-SDLTry(SDLPrimSurface <> nil, true);
-PixelFormat:= SDLPrimSurface^.format;
 
 {$IFDEF DEBUGFILE}
-AddFileLog('Setting up OpenGL...');
-AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
+	AddFileLog('Setting up OpenGL...');
+	AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
-SetupOpenGL();
-
+	SetupOpenGL();
 end;
 
 procedure chVol_p(var s: shortstring);

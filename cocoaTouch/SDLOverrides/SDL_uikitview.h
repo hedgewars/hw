@@ -36,7 +36,7 @@
 
 // constants for telling which input has been received
 #define kMinimumPinchDelta		100
-#define kMinimumGestureLength	20
+#define kMinimumGestureLength	10
 #define kMaximumVariance		4
 
 /* *INDENT-OFF* */

@@ -20,6 +20,8 @@ extern "C" {
 	
 	int HW_protoVer(void);
 	
+	void Game(void);
+	
 	void HW_click(void);
 	void HW_zoomIn(void);
 	void HW_zoomOut(void);

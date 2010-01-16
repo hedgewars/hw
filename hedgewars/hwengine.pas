@@ -480,7 +480,6 @@ isDeveloperMode:= false;
 TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
 MainLoop;
-ControllerClose();
 end;
 
 /////////////////////////
