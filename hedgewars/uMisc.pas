@@ -21,175 +21,148 @@
 unit uMisc;
 interface
 
-uses uConsts, SDLh,
+uses	SDLh, uConsts, uFloat,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uFloat
-{$IFDEF IPHONEOS}
-	, PascalExports
-{$ENDIF}
-	;
-
-type HwColor4f = record
-	r, g, b, a: byte
-	end;
 
 var
-	isCursorVisible : boolean = false;
-	isTerminated    : boolean = false;
-	isInLag         : boolean = false;
-	isPaused        : boolean = false;
-	isSoundEnabled  : boolean = true;
-	isMusicEnabled  : boolean = false;
-	isSEBackup      : boolean = true;
-	isInMultiShoot  : boolean = false;
-	isSpeed         : boolean = false;
+	isCursorVisible : boolean;
+	isTerminated    : boolean;
+	isInLag         : boolean;
+	isPaused        : boolean;
+	isSoundEnabled  : boolean;
+	isMusicEnabled  : boolean;
+	isSEBackup      : boolean;
+	isInMultiShoot  : boolean;
+	isSpeed         : boolean;
 
-	fastUntilLag    : boolean = false;
+	fastUntilLag    : boolean;
 
-	GameState     : TGameState = Low(TGameState);
-	GameType      : TGameType = gmtLocal;
-	GameFlags     : Longword = 0;
-	TrainingFlags : Longword = 0;
-	TurnTimeLeft  : Longword = 0;
-	cSuddenDTurns : LongInt = 15;
-	cDamagePercent  : LongInt = 100;
-	cTemplateFilter : LongInt = 0;
+	GameState	: TGameState;
+	GameType	: TGameType;
+	GameFlags	: Longword;
+	TrainingFlags	: Longword;
+	TurnTimeLeft	: Longword;
+	cSuddenDTurns	: LongInt;
+	cDamagePercent	: LongInt;
+	cTemplateFilter	: LongInt;
 
-	cHedgehogTurnTime: Longword = 45000;
-	cMinesTime       : LongInt = 3000;
-	cMaxAIThinkTime  : Longword = 9000;
+	cHedgehogTurnTime: Longword;
+	cMinesTime       : LongInt;
+	cMaxAIThinkTime  : Longword;
 
-	cCloudsNumber    : LongInt = 9;
-	cScreenWidth     : LongInt = 1024;
-	cScreenHeight    : LongInt = 768;
-	cInitWidth       : LongInt = 1024;
-	cInitHeight      : LongInt = 768;
-	cVSyncInUse		 : boolean = true;	
-	cBits            : LongInt = 32;
-	cBitsStr         : string[2] = '32';
-	cTagsMaskIndex   : byte = Low(cTagsMasks);
-	zoom             : GLfloat = 2.0;
-	ZoomValue        : GLfloat = 2.0;
+	cCloudsNumber    : LongInt;
+	cScreenWidth     : LongInt;
+	cScreenHeight    : LongInt;
+	cInitWidth       : LongInt;
+	cInitHeight      : LongInt;
+	cVSyncInUse	 : boolean;	
+	cBits            : LongInt;
+	cBitsStr         : string[2];
+	cTagsMaskIndex   : byte;
+	zoom             : GLfloat;
+	ZoomValue        : GLfloat;
 
-	cWaterLine       : LongInt = LAND_HEIGHT;
-	cVisibleWater    : LongInt = 128;
-	cGearScrEdgesDist: LongInt = 240;
-	cCursorEdgesDist : LongInt = 100;
-	cTeamHealthWidth : LongInt = 128;
-	cAltDamage       : boolean = true;
+	cWaterLine       : LongInt;
+	cGearScrEdgesDist: LongInt;
+	cAltDamage       : boolean;
 
-	GameTicks      : LongWord = 0;
-	TrainingTimeInc: Longword = 10000;
-	TrainingTimeInD: Longword = 500;
-	TrainingTimeInM: Longword = 5000;
-	TrainingTimeMax: Longword = 60000;
+	GameTicks	: LongWord;
+	TrainingTimeInc	: Longword;
+	TrainingTimeInD	: Longword;
+	TrainingTimeInM	: Longword;
+	TrainingTimeMax	: Longword;
 
-	TimeTrialStartTime: Longword = 0;
-	TimeTrialStopTime : Longword = 0;
+	TimeTrialStartTime: Longword;
+	TimeTrialStopTime : Longword;
 	
-	cWhiteColorChannels	: TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
-	cNearBlackColorChannels	: TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
+	recordFileName	: shortstring;
+	cShowFPS	: boolean;
+	cCaseFactor	: Longword;
+	cLandAdditions	: Longword;
+	cFullScreen	: boolean;
+	cReducedQuality	: boolean;
+	cLocaleFName	: shortstring;
+	cSeed		: shortstring;
+	cInitVolume	: LongInt;
+	cVolumeDelta	: LongInt;
+	cTimerInterval	: Longword;
+	cHasFocus	: boolean;
+	cInactDelay	: Longword;
 
-	cWhiteColor		: Longword = $FFFFFFFF;
-	cYellowColor		: Longword = $FFFFFF00;
-	cExplosionBorderColor	: LongWord = $FF808080;
+	bBetweenTurns	: boolean;
+	cHealthDecrease	: LongWord;
+	bWaterRising	: Boolean;
 
-var recordFileName : shortstring = '';
-	cShowFPS      : boolean = false;
-	cCaseFactor   : Longword = 5;  {0..9}
-	cLandAdditions: Longword = 4;
-	cFullScreen   : boolean = false;
-	cReducedQuality : boolean = false;
-	cLocaleFName  : shortstring = 'en.txt';
-	cSeed         : shortstring = '';
-	cInitVolume   : LongInt = 50;
-	cVolumeDelta  : LongInt = 0;
-	cTimerInterval: Longword = 8;
-	cHasFocus     : boolean = true;
-	cInactDelay   : Longword = 1250;
+	ShowCrosshair	: boolean;
+	CursorMovementX : Integer;
+	CursorMovementY : Integer;
+	cDrownSpeed	: hwFloat;
+	cMaxWindSpeed	: hwFloat;
+	cWindSpeed	: hwFloat;
+	cGravity	: hwFloat;
+	cDamageModifier	: hwFloat;
+	cLaserSighting	: boolean;
+	cVampiric	: boolean;
+	cArtillery	: boolean;
 
-	bBetweenTurns: boolean = false;
-	cHealthDecrease: LongWord = 0;
-	bWaterRising   : Boolean = false;
+	flagMakeCapture	: boolean;
 
-{$WARNINGS OFF}
-	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
-	cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
-{$WARNINGS ON}
+	InitStepsFlags	: Longword;
+	RealTicks	: Longword;
+	AttackBar	: LongInt;
 
-	cSendCursorPosTime   : LongWord = 50;
-	ShowCrosshair : boolean;
-	CursorMovementX : Integer = 0;
-	CursorMovementY : Integer = 0;
-	cDrownSpeed,
-	cMaxWindSpeed,
-	cWindSpeed,
-	cGravity: hwFloat;
-	cDamageModifier: hwFloat;
-	cLaserSighting: boolean;
-	cVampiric: boolean;
-	cArtillery: boolean;
+	WaterColorArray	: array[0..3] of HwColor4f;
 
-	flagMakeCapture: boolean = false;
+	CursorPoint	: TPoint;
+	TargetPoint	: TPoint;
 
-	InitStepsFlags: Longword = 0;
 
-	RealTicks: Longword = 0;
-
-	AttackBar: LongInt = 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
-
-	i: LongInt;
-	
-	cWaterOpacity: byte = $80;
-	WaterColorArray: array[0..3] of HwColor4f;
-
-	CursorPoint: TPoint;
-    TargetPoint: TPoint = (X: NoPointX; Y: 0);
-
+procedure init_uMisc;
+procedure free_uMisc;
 procedure movecursor(dx, dy: Integer);
-function hwSign(r: hwFloat): LongInt;
-function Min(a, b: LongInt): LongInt;
-function Max(a, b: LongInt): LongInt;
+function  hwSign(r: hwFloat): LongInt;
+function  Min(a, b: LongInt): LongInt;
+function  Max(a, b: LongInt): LongInt;
 procedure OutError(Msg: String; isFatalError: boolean);
 procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
-function IntToStr(n: LongInt): shortstring;
-function FloatToStr(n: hwFloat): shortstring;
-function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
-function DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
-function DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
+function  IntToStr(n: LongInt): shortstring;
+function  FloatToStr(n: hwFloat): shortstring;
+function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat;
+function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
+function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 procedure AdjustColor(var Color: Longword);
-{$IFDEF DEBUGFILE}
-procedure AddFileLog(s: shortstring);
-function RectToStr(Rect: TSDL_Rect): shortstring;
-{$ENDIF}
 procedure SetKB(n: Longword);
 procedure SendKB;
 procedure SetLittle(var r: hwFloat);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 function  Str2PChar(const s: shortstring): PChar;
-function NewTexture(width, height: Longword; buf: Pointer): PTexture;
+function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
 function  toPowerOf2(i: Longword): Longword;
 function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  endian(independent: LongWord): LongWord;
+function  modifyDamage(dmg: Longword): Longword;
+{$IFDEF DEBUGFILE}
+procedure AddFileLog(s: shortstring);
+function  RectToStr(Rect: TSDL_Rect): shortstring;
+{$ENDIF}
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(s: shortstring);
 {$ENDIF}
-function modifyDamage(dmg: Longword): Longword;
-
 
 implementation
-uses uConsole, uStore, uIO, Math, uRandom, uSound;
-var KBnum: Longword = 0;
+uses Math, uConsole, uStore, uIO, uRandom, uSound;
+
+var KBnum: Longword;
 {$IFDEF DEBUGFILE}
-var f: textfile;
+    f: textfile;
 {$ENDIF}
 
 procedure movecursor(dx, dy: Integer);
@@ -574,50 +547,130 @@ endian:= (((independent and $FF000000) shr 24) or
 {$ENDIF}
 end;
 
-initialization
-cDrownSpeed.QWordValue:= 257698038;// 0.06
-cMaxWindSpeed.QWordValue:= 2147484;// 0.0005
-cWindSpeed.QWordValue:= 429496;// 0.0001
-cGravity:= cMaxWindSpeed;
-cDamageModifier:= _1;
-cLaserSighting:= false;
-cVampiric:= false;
-cArtillery:= false;
+
+procedure init_uMisc;
+var i: LongInt;
+begin
+	cDrownSpeed.QWordValue	:= 257698038;		// 0.06
+	cMaxWindSpeed.QWordValue:= 2147484;		// 0.0005
+	cWindSpeed.QWordValue	:= 429496;		// 0.0001
+	cGravity		:= cMaxWindSpeed;
+	cDamageModifier		:= _1;
+	TargetPoint		:= cTargetPointRef;
+	
+	// int, longint longword and byte
+	CursorMovementX		:= 0;
+	CursorMovementY		:= 0;
+	GameTicks		:= 0;
+	TrainingTimeInc		:= 10000;
+	TrainingTimeInD		:= 500;
+	TrainingTimeInM		:= 5000;
+	TrainingTimeMax		:= 60000;
+	TimeTrialStartTime	:= 0;
+	TimeTrialStopTime	:= 0;
+	cWaterLine		:= LAND_HEIGHT;
+	cGearScrEdgesDist	:= 240;
+	cHealthDecrease		:= 0;
+
+	GameFlags		:= 0;
+	TrainingFlags		:= 0;
+	TurnTimeLeft		:= 0;
+	cSuddenDTurns		:= 15;
+	cDamagePercent		:= 100;
+	cTemplateFilter		:= 0;
+
+	cHedgehogTurnTime	:= 45000;
+	cMinesTime		:= 3000;
+	cMaxAIThinkTime		:= 9000;
+
+	cCloudsNumber		:= 9;
+	cScreenWidth		:= 1024;
+	cScreenHeight		:= 768;
+	cInitWidth		:= cScreenWidth;
+	cInitHeight		:= cScreenHeight;
+	cBits			:= 32;
+	cTagsMaskIndex		:= Low(cTagsMasks);
+	KBnum			:= 0;
+	InitStepsFlags		:= 0;
+	RealTicks		:= 0;
+	AttackBar		:= 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+	
+	// tgametype and glfloat and string
+	GameState		:= Low(TGameState);
+	GameType		:= gmtLocal;
+	zoom			:= 2.0;
+	ZoomValue		:= 2.0;
+	cBitsStr		:= '32';
+
+	// booleans
+	cLaserSighting		:= false;
+	cVampiric		:= false;
+	cArtillery		:= false;
+	flagMakeCapture		:= false;
+	bBetweenTurns		:= false;
+	bWaterRising		:= false;
+	isCursorVisible		:= false;
+	isTerminated		:= false;
+	isInLag			:= false;
+	isPaused		:= false;
+	isMusicEnabled		:= false;
+	isInMultiShoot		:= false;
+	isSpeed			:= false;
+	fastUntilLag		:= false;
+	cVSyncInUse		:= true;	
+	isSoundEnabled		:= true;
+	isSEBackup		:= true;
+	
+	// init flags
+	recordFileName		:= '';
+	cShowFPS		:= false;
+	cCaseFactor		:= 5;  {0..9}
+	cLandAdditions		:= 4;
+	cFullScreen		:= false;
+	cReducedQuality		:= false;
+	cLocaleFName		:= 'en.txt';
+	cSeed			:= '';
+	cInitVolume		:= 50;
+	cVolumeDelta		:= 0;
+	cTimerInterval		:= 8;
+	cHasFocus		:= true;
+	cInactDelay		:= 1250;
+	cAltDamage		:= true;
 
 {$IFDEF DEBUGFILE}
 {$I-}
-for i:= 0 to 7 do
-begin
-{$IFDEF IPHONEDBG}
+{$IFDEF IPHONEOS}
 	f:= stderr;
 {$ELSE}
-	assign(f, 
-  {$IFDEF IPHONEOS}
-	  string(IPH_getDocumentsPath())
-  {$ELSE}
-	  ParamStr(1)
-  {$ENDIF}
-	  + '/debug' + inttostr(i) + '.txt');
-{$ENDIF}
-	rewrite(f);
-	if IOResult = 5 then
+	for i:= 0 to 7 do
 	begin
-		// prevent writing on a directory you do not have permissions on
-		// should be safe to assume the current directory is writable
-		assign(f, './debug' + inttostr(i) + '.txt');
+		assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
 		rewrite(f);
+		if IOResult = 5 then
+		begin
+			// prevent writing on a directory you do not have permissions on
+			// should be safe to assume the current directory is writable
+			assign(f, './debug' + inttostr(i) + '.txt');
+			rewrite(f);
+		end;
+		if IOResult = 0 then break;
 	end;
-	if IOResult = 0 then break
-end;
-{$I+}
+{$ENDIF}
 
-finalization
+{$I+}
+{$ENDIF}
+
+end;
+
+procedure free_uMisc;
+begin
 //uRandom.DumpBuffer;
 
+{$IFDEF DEBUGFILE}
 writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
 flush(f);
-close(f)
-
+close(f);
 {$ENDIF}
+end;
 
 end.

@@ -483,6 +483,5 @@ begin
 	if pressed then ControllerButtons[joy][button]:= 1 else ControllerButtons[joy][button]:= 0;
 end;
 
-initialization
 
 end.

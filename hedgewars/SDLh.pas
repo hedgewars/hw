@@ -634,6 +634,7 @@ function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibNa
 function  SDL_RenderClear: LongInt; cdecl; external SDLLibName;
 procedure SDL_RenderPresent; cdecl; external SDLLibName;
 function  SDL_RenderCopy(textureID: TSDL_TextureID; srcrect, dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
+procedure SDL_VideoQuit; cdecl; external SDLLibName;
 
 function  SDL_CreateTextureFromSurface(format: LongInt; surface: PSDL_Surface): TSDL_TextureID; cdecl; external SDLLibName;
 procedure SDL_DestroyTexture(textureID: TSDL_TextureID); cdecl; external SDLLibName;

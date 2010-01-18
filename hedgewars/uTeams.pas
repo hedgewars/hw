@@ -87,16 +87,18 @@ type PHHAmmo = ^THHAmmo;
 			TurnNumber: LongWord;
 			end;
 
-var CurrentTeam: PTeam = nil;
-	PreviousTeam: PTeam = nil;
-	CurrentHedgehog: PHedgehog = nil;
-	TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
-	TeamsCount: Longword = 0;
-	ClansArray: array[0..Pred(cMaxTeams)] of PClan;
-	ClansCount: Longword = 0;
-	LocalClan: Longword = 0;  // first non-bot, non-extdriven clan
-	CurMinAngle, CurMaxAngle: Longword;
+var CurrentTeam: PTeam;
+    PreviousTeam: PTeam;
+    CurrentHedgehog: PHedgehog;
+    TeamsArray: array[0..Pred(cMaxTeams)] of PTeam;
+    TeamsCount: Longword;
+    ClansArray: array[0..Pred(cMaxTeams)] of PClan;
+    ClansCount: Longword;
+    LocalClan: Longword;  // first non-bot, non-extdriven clan
+    CurMinAngle, CurMaxAngle: Longword;
 
+procedure init_uTeams;
+procedure free_uTeams;
 function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
@@ -402,10 +404,19 @@ with Team do
 				Gear^.Damage:= Gear^.Health
 end;
 
-initialization
+procedure init_uTeams;
+begin
+	CurrentTeam:= nil;
+	PreviousTeam:= nil;
+	CurrentHedgehog:= nil;
+	TeamsCount:= 0;
+	ClansCount:= 0;
+	LocalClan:= 0;  // first non-bot, non-extdriven clan
+end;
 
-finalization
-
-FreeTeamsList
+procedure free_uTeams;
+begin
+	FreeTeamsList()
+end;
 
 end.

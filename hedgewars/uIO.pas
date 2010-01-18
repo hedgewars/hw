@@ -23,7 +23,9 @@ interface
 uses SDLh;
 
 const ipcPort: Word = 0;
+var hiTicks: Word;
 
+procedure init_uIO;
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -37,11 +39,8 @@ procedure InitIPC;
 procedure CloseIPC;
 procedure NetGetNextCmd;
 
-var hiTicks: Word = 0;
-
 implementation
 uses uConsole, uConsts, uWorld, uMisc, uLand, uChat, uTeams;
-const isPonged: boolean = false;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -54,14 +53,14 @@ type PCmd = ^TCmd;
             2: (str: shortstring);
             end;
 
-var
-	IPCSock: PTCPSocket = nil;
+var	IPCSock: PTCPSocket;
 	fds: PSDLNet_SocketSet;
+	isPonged: boolean;
 
-	headcmd: PCmd = nil;
-	lastcmd: PCmd = nil;
+	headcmd: PCmd;
+	lastcmd: PCmd;
 
-	SendEmptyPacketTicks: LongWord = 0;
+	SendEmptyPacketTicks: LongWord;
 
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
@@ -111,9 +110,9 @@ end;
 
 procedure CloseIPC;
 begin
-SDLNet_FreeSocketSet(fds);
-SDLNet_TCP_Close(IPCSock);
-SDLNet_Quit
+	SDLNet_FreeSocketSet(fds);
+	SDLNet_TCP_Close(IPCSock);
+	SDLNet_Quit();
 end;
 
 procedure ParseIPCCommand(s: shortstring);
@@ -341,6 +340,18 @@ if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 
 if isInLag then fastUntilLag:= false
+end;
+
+procedure init_uIO;
+begin
+	IPCSock:= nil;
+
+	headcmd:= nil;
+	lastcmd:= nil;
+	isPonged:= false;	// was const
+
+	hiTicks:= 0;
+	SendEmptyPacketTicks:= 0;
 end;
 
 end.

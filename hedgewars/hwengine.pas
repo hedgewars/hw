@@ -53,6 +53,7 @@ uses	SDLh in 'SDLh.pas',
 	uFloat in 'uFloat.pas',
 	uStats in 'uStats.pas',
 	uChat in 'uChat.pas',
+	uTriggers in 'uTriggers.pas',
 	uLandTexture in 'uLandTexture.pas'
 	{$IFDEF IPHONEOS}
 	, PascalExports in 'PascalExports.pas'
@@ -71,11 +72,14 @@ procedure OnDestroy;
 procedure MainLoop;
 procedure ShowMainWindow;
 procedure Game; cdecl; export;
+procedure initEverything;
+procedure freeEverything;
 
 implementation
 
 {$ELSE}
 procedure OnDestroy; forward;
+procedure freeEverything; forward;
 {$ENDIF}
 
 ////////////////////////////////
@@ -151,7 +155,9 @@ begin
 	ControllerClose();
 	SendKB();
 	CloseIPC();
+	freeEverything();
 	TTF_Quit();
+	{$IFDEF SDL13}SDL_VideoQuit();{$ENDIF}
 	SDL_Quit();
 	exit();
 end;
@@ -215,7 +221,8 @@ var	p: TPathType;
 	s: shortstring;
 begin
 {$IFDEF IPHONEOS}
-	Randomize;
+	initEverything();
+	Randomize();
 
 	val('320', cScreenWidth);
 	val('480', cScreenHeight);
@@ -289,11 +296,40 @@ begin
 	exit();
 end;
 
+procedure initEverything;
+begin
+	init_uConsts();
+	init_uMisc();
+	init_uConsole();	// MUST happen after uMisc
+	init_uStore();
+	init_uTeams();
+	init_uGears();
+	init_uVisualGears();
+	init_uLand();
+	init_uIO();
+	init_uWorld();
+	init_uRandom;
+	init_uTriggers;
+
+end;
+
+procedure freeEverything;
+begin
+	//free_uConts(); not necessary
+	free_uConsole();
+	free_uMisc();
+	free_uTeams();
+	free_uGears();
+	//free_uVisualGears(); not necessary
+	free_uLand();
+	//free_uWorld(); not necessary
+
+end;
 {$IFNDEF IPHONEOS}
 /////////////////////////
 procedure GenLandPreview;
 var Preview: TPreview;
-	h: byte;
+    h: byte;
 begin
 	InitIPC;
 	IPCWaitPongEvent;
@@ -344,11 +380,9 @@ end;
 
 ////////////////////
 procedure GetParams;
-var
 {$IFDEF DEBUGFILE}
-    i: LongInt;
+var i: LongInt;
 {$ENDIF}
-    p: TPathType;
 begin
 
 	case ParamCount of
@@ -476,15 +510,14 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 
 begin
+	initEverything();
 	WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-	GetParams;
+	
+	GetParams();
+	Randomize();
 
-	Randomize;
-
-	if GameType = gmtLandPreview	then GenLandPreview
-					else Game;
-//	ExitCode := 100;
+	if GameType = gmtLandPreview then GenLandPreview()
+	else Game();
+	ExitCode := 0;
 {$ENDIF}
-
 end.
-

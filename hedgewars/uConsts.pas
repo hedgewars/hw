@@ -21,14 +21,13 @@
 unit uConsts;
 interface
 
-uses
-	SDLh,
+uses	SDLh, uFloat, uLocale,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uLocale;
+
 
 {$INCLUDE "proto.inc"}
 
@@ -36,7 +35,10 @@ uses
 // in freepascal you may actually use var for the same purpose
 
 type
-
+	HwColor4f = record
+		r, g, b, a: byte
+		end;
+		
 	TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
 
 	TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
@@ -158,6 +160,7 @@ type
 	PTexture = ^TTexture;
 
 const
+	// message constants
 	errmsgCreateSurface   = 'Error creating SDL surface';
 	errmsgTransparentSet  = 'Error setting transparent color';
 	errmsgUnknownCommand  = 'Unknown command';
@@ -173,20 +176,26 @@ const
 	msgFailedSize        = 'failed due to size';
 	msgGettingConfig     = 'Getting game config...';
 
-const // image flags (for LoadImage())
-    ifNone        = $00000000; // nothing special
-    ifAlpha       = $00000001; // use alpha channel (unused right now?)
-    ifCritical    = $00000002; // image is critical for gameplay (exit game if unable to load)
-    ifTransparent = $00000004; // image uses transparent pixels (color keying)
-    ifIgnoreCaps  = $00000008; // ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
-    ifLowRes      = $00000010; // try loading a low resolution image when it is critical
+	// color constants
+	cWhiteColorChannels	: TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
+	cNearBlackColorChannels	: TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
 
-const
-	cMaxPower     = 1500;
-	cMaxAngle     = 2048;
-	cPowerDivisor = 1500;
+	cWhiteColor		: Longword = $FFFFFFFF;
+	cYellowColor		: Longword = $FFFFFF00;
+	cExplosionBorderColor	: LongWord = $FF808080;
 
-	MAXNAMELEN = 192;
+{$WARNINGS OFF}
+	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
+	cBombsSpeed   : hwFloat = (isNegative: false; QWordValue:    429496729);
+{$WARNINGS ON}
+
+	// image flags (for LoadImage())
+	ifNone        = $00000000;	// nothing special
+	ifAlpha       = $00000001;	// use alpha channel (unused right now?)
+	ifCritical    = $00000002;	// image is critical for gameplay (exit game if unable to load)
+	ifTransparent = $00000004;	// image uses transparent pixels (color keying)
+	ifIgnoreCaps  = $00000008;	// ignore hardware capabilities when loading (i.e. image will not be drawn using OpenGL)
+	ifLowRes      = $00000010;	// try loading a low resolution image when it is critical
 
 	{*  REFERENCE
       4096 -> $FFFFF000
@@ -211,18 +220,29 @@ const
 	COLOR_INDESTRUCTIBLE = $88FF;  // red
 	COLOR_OBJECT         = $44FF;  // no idea
 
+	cMaxPower     = 1500;
+	cMaxAngle     = 2048;
+	cPowerDivisor = 1500;
+
+	MAXNAMELEN = 192;
+	
 	// some opengl headers do not have these macros
-	GL_BGR  = $80E0;
-	GL_BGRA = $80E1;
+	GL_BGR		 = $80E0;
+	GL_BGRA		 = $80E1;
 	GL_CLAMP_TO_EDGE = $812F;
 
+	cSendCursorPosTime	: LongWord = 50;
+	cVisibleWater		: LongInt = 128;
+	cCursorEdgesDist	: LongInt = 100;
+	cTeamHealthWidth	: LongInt = 128;
+	cWaterOpacity		: byte = $80;
 
 	cifRandomize = $00000001;
 	cifTheme     = $00000002;
 	cifMap       = $00000002; // either theme or map (or map+theme)
 	cifAllInited = cifRandomize or cifTheme or cifMap;
 
-	cTransparentColor: Longword = $000000;
+	cTransparentColor: Longword = $00000000;
 
 	cMaxTeams        = 6;
 	cMaxHHIndex      = 7;
@@ -338,6 +358,7 @@ const
 	posCaseUtility = $00000004;
 
 	NoPointX = Low(LongInt);
+	cTargetPointRef	: TPoint = (X: NoPointX; Y: 0);
 
 	// hog tag mask
 	htNone        = $00;
@@ -346,7 +367,14 @@ const
 	htHealth      = $04;
 	htTransparent = $80;
 	
-	cTagsMasks : array[0..7] of byte = (
+	cHHFileName = 'Hedgehog';
+	cCHFileName = 'Crosshair';
+	cThemeCFGFilename = 'theme.cfg';
+	
+	FontBorder = 2;
+var	PathPrefix: string;
+
+const	cTagsMasks : array[0..7] of byte = (
 				htTeamName or htName or htHealth,
 				htName or htHealth,
 				htHealth,
@@ -356,10 +384,6 @@ const
 				htHealth or htTransparent,
 				htNone
 				);
-
-	cHHFileName = 'Hedgehog';
-	cCHFileName = 'Crosshair';
-	cThemeCFGFilename = 'theme.cfg';
 
 	Fontz: array[THWFont] of THHFont = (
 			(Handle: nil;
@@ -388,52 +412,9 @@ const
 			Name: 'DroidSansFallback.ttf')
 			);
 
-	FontBorder = 2;
-
-	PathPrefix: string = './';
-	Pathz: array[TPathType] of String = (
-			'',                              // ptNone
-			'',                              // ptData
-			'Graphics',                      // ptGraphics
-			'Themes',                        // ptThemes
-			'Themes/avematan',               // ptCurrTheme
-			'Teams',                         // ptTeams
-			'Maps',                          // ptMaps
-			'',                              // ptMapCurrent
-			'Demos',                         // ptDemos
-			'Sounds',                        // ptSounds
-			'Graphics/Graves',               // ptGraves
-			'Fonts',                         // ptFonts
-			'Forts',                         // ptForts
-			'Locale',                        // ptLocale
-			'Graphics/AmmoMenu',             // ptAmmoMenu
-			'Graphics/Hedgehog',             // ptHedgehog
-			'Sounds/voices',                 // ptVoices
-			'Graphics/Hats'                  // ptHats
-			);
-		(*
-	PathzBackup: array[TPathType] of String = (
-			'',                              // ptNone
-			'',                              // ptData
-			'Graphics',                      // ptGraphics
-			'Themes',                        // ptThemes
-			'Themes/avematan',               // ptCurrTheme
-			'Teams',                         // ptTeams
-			'Maps',                          // ptMaps
-			'',                              // ptMapCurrent
-			'Demos',                         // ptDemos
-			'Sounds',                        // ptSounds
-			'Graphics/Graves',               // ptGraves
-			'Fonts',                         // ptFonts
-			'Forts',                         // ptForts
-			'Locale',                        // ptLocale
-			'Graphics/AmmoMenu',             // ptAmmoMenu
-			'Graphics/Hedgehog',             // ptHedgehog
-			'Sounds/voices',                 // ptVoices
-			'Graphics/Hats'                  // ptHats
-			);
-		*)	
-	SpritesData: array[TSprite] of record
+var	Pathz: array[TPathType] of String;
+	
+const	SpritesData: array[TSprite] of record
 			FileName: String[14];
 			Path, AltPath: TPathType;
 			Texture: PTexture;
@@ -1634,36 +1615,64 @@ const
 			);
 
 
-const conversionFormat: TSDL_PixelFormat = (
-	palette: nil;
-	BitsPerPixel : 32;
-	BytesPerPixel: 4;
-	Rloss : 0;
-	Gloss : 0;
-	Bloss : 0;
-	Aloss : 0;
+	conversionFormat: TSDL_PixelFormat = (
+		palette: nil;
+		BitsPerPixel : 32;
+		BytesPerPixel: 4;
+		Rloss : 0;
+		Gloss : 0;
+		Bloss : 0;
+		Aloss : 0;
 {$IFDEF ENDIAN_LITTLE}
-	Rshift: 0;
-        Gshift: 8;
-        Bshift: 16;
-        Ashift: 24;
+		Rshift: 0;
+		Gshift: 8;
+		Bshift: 16;
+		Ashift: 24;
 {$ELSE}
-	Rshift: 24;
-	Gshift: 16;
-	Bshift: 8;
-	Ashift: 0;
+		Rshift: 24;
+		Gshift: 16;
+		Bshift: 8;
+		Ashift: 0;
 {$ENDIF}
-	RMask : RMask;
-	GMask : GMask;
-	BMask : BMask;
-	AMask : AMask;
-	colorkey: 0;
-	alpha : 255
-);
+		RMask : RMask;
+		GMask : GMask;
+		BMask : BMask;
+		AMask : AMask;
+		colorkey: 0;
+		alpha : 255
+	);
 			
 
 var CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
+procedure init_uConsts;
+
 implementation
+
+procedure init_uConsts;
+var cPathz: array[TPathType] of String = (
+		'',                              // ptNone
+		'',                              // ptData
+		'Graphics',                      // ptGraphics
+		'Themes',                        // ptThemes
+		'Themes/avematan',               // ptCurrTheme
+		'Teams',                         // ptTeams
+		'Maps',                          // ptMaps
+		'',                              // ptMapCurrent
+		'Demos',                         // ptDemos
+		'Sounds',                        // ptSounds
+		'Graphics/Graves',               // ptGraves
+		'Fonts',                         // ptFonts
+		'Forts',                         // ptForts
+		'Locale',                        // ptLocale
+		'Graphics/AmmoMenu',             // ptAmmoMenu
+		'Graphics/Hedgehog',             // ptHedgehog
+		'Sounds/voices',                 // ptVoices
+		'Graphics/Hats'                  // ptHats
+	);
+begin
+	PathPrefix := './';
+	Pathz:= cPathz;
+end;
 
 end.

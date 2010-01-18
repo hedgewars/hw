@@ -20,14 +20,31 @@
 
 unit uStore;
 interface
-uses sysutils, uConsts, uTeams, SDLh,
+uses sysutils, uConsts, uTeams, SDLh, uFloat,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL, GLext,
+	GL, GLext;
 {$ENDIF}
-uFloat;
 
+
+var PixelFormat: PSDL_PixelFormat;
+    SDLPrimSurface: PSDL_Surface;
+    PauseTexture,
+    SyncTexture,
+    ConfirmTexture: PTexture;
+    cScaleFactor: GLfloat;
+    SupportNPOTT: Boolean;
+    Step: LongInt;
+    squaresize : LongInt;
+    numsquares : LongInt;
+{$IFDEF SDL13notworking}
+    ProgrTex: TSDL_TextureID;
+{$ELSE}
+    ProgrTex: PTexture;
+{$ENDIF}
+
+procedure init_uStore;
 procedure StoreLoad;
 procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -60,26 +77,14 @@ procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 
 
-var PixelFormat: PSDL_PixelFormat = nil;
-   SDLPrimSurface: PSDL_Surface = nil;
-   PauseTexture,
-   SyncTexture,
-   ConfirmTexture: PTexture;
-   cScaleFactor: GLfloat = 2.0;
-   SupportNPOTT: Boolean = false;
-
 implementation
-uses uMisc, uConsole, uLand, uLocale, uWorld
-	{$IFDEF IPHONEOS}
-	, PascalExports
-	{$ENDIF}
-	;
+uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
 
 type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel);
 
-var	HHTexture: PTexture;
-	MaxTextureSize: Integer;
-	{$IFNDEF IPHONEOS}cGPUVendor: TGPUVendor = gvUnknown;{$ENDIF}
+var HHTexture: PTexture;
+    MaxTextureSize: Integer;
+    {$IFNDEF IPHONEOS}cGPUVendor: TGPUVendor;{$ENDIF}
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -1165,15 +1170,6 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-var	Step: LongInt = 0;
-	squaresize : LongInt;
-	numsquares : LongInt;
-{$IFDEF SDL13notworking}
-	ProgrTex: TSDL_TextureID = 0;
-{$ELSE}
-	ProgrTex: PTexture = nil;
-{$ENDIF}
-
 procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
@@ -1304,6 +1300,22 @@ for x := 0 to src^.w - 1 do
         destPixels^[j]:= srcPixels^[i];
         inc(j)
         end;
+end;
+
+procedure init_uStore;
+begin
+	PixelFormat:= nil;
+	SDLPrimSurface:= nil;
+	{$IFNDEF IPHONEOS}cGPUVendor:= gvUnknown;{$ENDIF}
+
+	cScaleFactor:= 2.0;
+	SupportNPOTT:= false;
+	Step:= 0;
+{$IFDEF SDL13notworking}
+	ProgrTex:= 0;
+{$ELSE}
+	ProgrTex:= nil;
+{$ENDIF}
 end;
 
 end.

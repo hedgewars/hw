@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 	[UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	controller.view.alpha = 1;
-	[UIView commitAnimations];	
+	[UIView commitAnimations];
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)

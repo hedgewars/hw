@@ -25,6 +25,7 @@ uses SDLh, uConsts;
 
 type TTrigAction = (taSpawnGear, taSuccessFinish, taFailFinish);
 
+procedure init_uTriggers;
 procedure AddTriggerSpawner(id, Ticks, Lives: Longword; GearType: TGearType; X, Y: LongInt; GearTriggerId: Longword);
 procedure AddTriggerSuccess(id, Ticks, Lives: Longword);
 procedure AddTriggerFail(id, Ticks, Lives: Longword);
@@ -44,7 +45,7 @@ type PTrigger = ^TTrigger;
                 SpawnGearTriggerId: Longword;
                 Next: PTrigger;
                 end;
-var TriggerList: PTrigger = nil;
+var TriggerList: PTrigger;
 
 function AddTrigger(id, Ticks, Lives: Longword): PTrigger;
 var tmp: PTrigger;
@@ -141,6 +142,11 @@ while (t <> nil) do
   pt:= t;
   t:= nt
   end
+end;
+
+procedure init_uTriggers;
+begin
+	TriggerList:= nil;
 end;
 
 end.

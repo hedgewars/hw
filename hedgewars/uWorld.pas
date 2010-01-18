@@ -25,6 +25,7 @@ uses SDLh, uGears, uConsts, uFloat;
 const WorldDx: LongInt = -512;
       WorldDy: LongInt = -256;
 
+procedure init_uWorld;
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
@@ -32,22 +33,21 @@ procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 {$IFDEF COUNTTICKS}
 var cntTicks: LongWord;
 {$ENDIF}
-var FollowGear: PGear = nil;
-	WindBarWidth: LongInt = 0;
-       	bShowAmmoMenu: boolean = false;
-	bSelected: boolean = false;
-	bShowFinger: boolean = false;
-	Frames: Longword = 0;
-	WaterColor, DeepWaterColor: TSDL_Color;
+var FollowGear: PGear;
+    WindBarWidth: LongInt;
+    bShowAmmoMenu: boolean;
+    bSelected: boolean;
+    bShowFinger: boolean;
+    Frames: Longword;
+    WaterColor, DeepWaterColor: TSDL_Color;
 
 implementation
-uses uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound,
+uses	uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-     uAmmos, uVisualGears, uChat, uLandTexture, uLand;
 
 const FPS: Longword = 0;
       CountTicks: Longword = 0;
@@ -60,10 +60,10 @@ type TCaptionStr = record
                    end;
 
 var cWaveWidth, cWaveHeight: LongInt;
-	Captions: array[TCapGroup] of TCaptionStr;
-	AMxShift, SlotsNum: LongInt;
-	tmpSurface: PSDL_Surface;
-	fpsTexture: PTexture = nil;
+    Captions: array[TCapGroup] of TCaptionStr;
+    AMxShift, SlotsNum: LongInt;
+    tmpSurface: PSDL_Surface;
+    fpsTexture: PTexture;
 
 procedure InitWorld;
 begin
@@ -723,7 +723,17 @@ if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
 if WorldDx > 1024 then WorldDx:= 1024;
 end;
 
-initialization
-FillChar(Captions, sizeof(Captions), 0)
+procedure init_uWorld;
+begin
+	fpsTexture:= nil;
+	FollowGear:= nil;
+	WindBarWidth:= 0;
+	bShowAmmoMenu:= false;
+	bSelected:= false;
+	bShowFinger:= false;
+	Frames:= 0;
+	
+	FillChar(Captions, sizeof(Captions), 0)
+end;
 
 end.

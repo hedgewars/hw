@@ -20,26 +20,28 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat,
+uses SDLh, uLandTemplates, uFloat, uConsts,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uConsts;
+
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
 	TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
 	TPreview  = packed array[0..127, 0..31] of byte;
 	TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
 
-var  Land: TCollisionArray;
-     LandPixels: TLandArray;
-     LandDirty: TDirtyTag;
-     hasBorder: boolean; 
-     hasGirders: boolean;  
-     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
-	 LandBackSurface: PSDL_Surface = nil;
+var Land: TCollisionArray;
+    LandPixels: TLandArray;
+    LandDirty: TDirtyTag;
+    hasBorder: boolean; 
+    hasGirders: boolean;  
+    playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
+    LandBackSurface: PSDL_Surface;
 
+procedure init_uLand;
+procedure free_uLand;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
@@ -315,10 +317,10 @@ begin
 	if LandBackSurface = nil then
 		LandBackPixel:= 0
 	else
-		begin
+	begin
 		p:= LandBackSurface^.pixels;
 		LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-		end
+	end
 end;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
@@ -849,9 +851,15 @@ for y:= 0 to 127 do
 GenPreview:= Preview
 end;
 
-initialization
+procedure init_uLand;
+begin
+	LandBackSurface:= nil;
+end;
 
-finalization
-if LandBackSurface <> nil then
-	SDL_FreeSurface(LandBackSurface);
+procedure free_uLand;
+begin
+	if LandBackSurface <> nil then
+		SDL_FreeSurface(LandBackSurface);
+end;
+
 end.

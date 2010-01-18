@@ -20,13 +20,12 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts,
+uses SDLh, uConsts, uFloat,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uFloat;
 
 type PVisualGear = ^TVisualGear;
 	TVGearStepProcedure = procedure (Gear: PVisualGear; Steps: Longword);
@@ -48,6 +47,7 @@ type PVisualGear = ^TVisualGear;
         Text: shortstring
 		end;
 
+procedure init_uVisualGears;
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure DrawVisualGears(Layer: LongWord);
@@ -55,9 +55,9 @@ procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 
-var VisualGearsList: PVisualGear = nil;
-	vobFrameTicks, vobFramesCount: Longword;
-	vobVelocity, vobFallSpeed: LongInt;
+var VisualGearsList: PVisualGear;
+    vobFrameTicks, vobFramesCount: Longword;
+    vobVelocity, vobFallSpeed: LongInt;
 
 implementation
 uses uWorld, uMisc, uStore, uTeams, uSound;
@@ -518,8 +518,10 @@ for i:= 0 to cCloudsNumber - 1 do
     AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
-initialization
+procedure init_uVisualGears;
+begin
+	VisualGearsList:= nil;
+end;
 
-finalization
 
 end.

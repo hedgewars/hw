@@ -59,6 +59,8 @@ type PGear = ^TGear;
 			uid: Longword
 			end;
 
+procedure init_uGears;
+procedure free_uGears;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure ResetUtilities;
@@ -72,24 +74,23 @@ procedure AssignHHCoords;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 
-var CurAmmoGear: PGear = nil;
-    GearsList: PGear = nil;
-    KilledHHs: Longword = 0;
-    SuddenDeathDmg: Boolean = false;
-    SpeechType: Longword = 1;
+var CurAmmoGear: PGear;
+    GearsList: PGear;
+    KilledHHs: Longword;
+    SuddenDeathDmg: Boolean;
+    SpeechType: Longword;
     SpeechText: shortstring;
-	TrainingTargetGear: PGear = nil;
-	skipFlag: boolean = false;
+    TrainingTargetGear: PGear;
+    skipFlag: boolean;
 
 implementation
-uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions,
-	uLand, uIO, uLandGraphics, uAIMisc, uLocale, uAI, uAmmos, uTriggers,
+uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
+	uAIMisc, uLocale, uAI, uAmmos, uTriggers, uStats, uVisualGears,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uStats, uVisualGears;
 
 const MAXROPEPOINTS = 384;
 var RopePoints: record
@@ -2041,9 +2042,20 @@ if cnt2 > 0 then
 	end
 end;
 
-initialization
+procedure init_uGears;
+begin
+	CurAmmoGear:= nil;
+	GearsList:= nil;
+	KilledHHs:= 0;
+	SuddenDeathDmg:= false;
+	SpeechType:= 1;
+	TrainingTargetGear:= nil;
+	skipFlag:= false;
+end;
 
-finalization
-FreeGearsList;
+procedure free_uGears;
+begin
+	FreeGearsList();
+end;
 
 end.

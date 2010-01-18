@@ -23,6 +23,7 @@ interface
 uses uFloat;
 {$INCLUDE "proto.inc"}
 
+procedure init_uRandom;
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
@@ -36,7 +37,7 @@ implementation
 uses uMisc;
 {$ENDIF}
 var cirbuf: array[0..63] of Longword;
-    n: byte = 54;
+    n: byte;
 
 function GetNext: Longword;
 begin
@@ -92,5 +93,10 @@ for i:= 0 to 63 do
 	AddFileLog('[' + inttostr(i) + '] = ' + inttostr(cirbuf[i]))
 end;
 {$ENDIF}
+
+procedure init_uRandom;
+begin
+	n:= 54;
+end;
 
 end.

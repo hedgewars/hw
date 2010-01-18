@@ -27,13 +27,13 @@ procedure DrawLand(dX, dY: LongInt);
 procedure FreeLand;
 
 implementation
-uses uMisc, uLand, uStore,
+uses uMisc, uLand, uStore, uConsts,
 {$IFDEF GLES11}
-	gles11,
+	gles11;
 {$ELSE}
-	GL,
+	GL;
 {$ENDIF}
-	uConsts;
+
 
 const TEXSIZE = 256;
 	LANDTEXARW = LAND_WIDTH div TEXSIZE;

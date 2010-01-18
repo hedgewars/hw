@@ -146,7 +146,7 @@
 				[self sendToEngine:@"egrave star"];
 				
 				// team 1 fort info
-				[self sendToEngine:@"efort  Earth"];
+				[self sendToEngine:@"efort Earth"];
 								
 				// team 1 voicepack info
 				[self sendToEngine:@"evoicepack Classic"];
@@ -236,7 +236,7 @@
 			}
 			NSLog(@"Client Exited");
 			// wait a little to let the client close cleanly
-			sleep(5);
+			sleep(2);
 			// Close the client socket
 			SDLNet_TCP_Close(csd);
 		}
@@ -257,7 +257,8 @@
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
 		NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-		[self setValue:dict forKey:objName];
+		systemSettings = dict;
+		//[self setValue:dict forKey:objName];
 		[dict release];
 	} else {
 		//TODO create it
@@ -267,7 +268,7 @@
 }
 
 -(void) unloadSettings {
-	[systemSettings release];
+	systemSettings = nil;
 }
 
 
