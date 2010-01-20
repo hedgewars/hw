@@ -12,14 +12,14 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nigdy</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Co %1 turę</numerusform>
+            <numerusform>Co %1 tury</numerusform>
+            <numerusform>Co %1 tury</numerusform>
         </translation>
     </message>
 </context>
@@ -240,7 +240,7 @@ bądź wybierz inny nick:</translation>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;Najlepszym zabójcą jest &lt;b&gt;%1&lt;/b&gt; z &lt;b&gt;%2&lt;/b&gt; zabiciami w przeciągu tury.&lt;/p&gt;</numerusform>
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
@@ -248,9 +248,9 @@ bądź wybierz inny nick:</translation>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zastało zabitych w tej walce.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zastało zabitych w tej walce.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;W sumie &lt;b&gt;%1&lt;/b&gt; jeży zastało zabitych w tej walce.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -416,17 +416,17 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Do tego pokoju jest podłączonych %1 klient(ów)</numerusform>
+            <numerusform>Do tego pokoju jest podłączonych %1 klient(ów)</numerusform>
+            <numerusform>Do tego pokoju jest podłączonych %1 klient(ów)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>W tym pokoju uczestniczą %1 drużyny</numerusform>
+            <numerusform>W tym pokoju uczestniczą %1 drużyny</numerusform>
+            <numerusform>W tym pokoju uczestniczą %1 drużyny</numerusform>
         </translation>
     </message>
     <message>
@@ -1295,23 +1295,23 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mysz: Lewy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mysz: Środkowy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mysz: Prawy przycisk</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mysz: Kółko w górę</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mysz:Kółko w dół</translation>
     </message>
     <message>
         <source>Backspace</source>
@@ -1343,7 +1343,7 @@ info</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Usuń</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 0</source>
@@ -1411,23 +1411,23 @@ info</source>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Znak równości</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stzrałka w górę</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stzrałka w dół</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stzrałka w prawo</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Stzrałka w lewo</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -1463,35 +1463,35 @@ info</source>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewt Shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy Alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy Alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prawy kl. WIN</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lewy kl. WIN</translation>
     </message>
     <message>
         <source>A button</source>

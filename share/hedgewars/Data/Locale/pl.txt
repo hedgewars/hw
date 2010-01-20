@@ -66,7 +66,6 @@
 02:00=%1 poświęcił się dla ogółu!
 02:00=%1 zrezygnował z trudu życia!
 02:00=Tak jak liść opuszcza drzewo, tak nas opuszcza %1!
-;02:00=%1 has timed out!
 02:00=%1 mówi "Pokój z wami"!
 02:00=%1 na pewno zostanie zapamiętany!
 02:00=%1 miał tętniaka!
@@ -98,10 +97,9 @@
 02:00=Powiedzmy "Pa Pa" dla %1
 02:00=Nie ma nadziei dla %1
 02:00=%1 spuszcza kurtynę
-;02:00=Smoke'em if you got'em, %1
-;02:00=%1 cierpi na Spontaniczną Masową Usterkę Życiową
+02:00=%1 gryzie piach
 02:00=%1 odszedł
-02:00=%1 jest martwy jak kamień
+02:00=%1 już się do nas nie uśmiechnie
 02:00=%1 już nie istnieje
 02:00=%1 przestał istnieć
 02:00=Nie chcąc dłużej żyć, %1 umiera w pokoju.
@@ -110,6 +108,7 @@
 02:00=%1 ma niską tolerancję na bycie postrzelonym.
 02:00=%1 mógł użyć dodatkowego życia.
 02:00=Czy jest na sali jakiś doktor?
+02:00=To z pewnością był toczeń!
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
 02:01=%1 udaje Titanica!
@@ -159,17 +158,17 @@
 02:01=%1 bierze kąpiel
 02:01=%1 jest bardzo, bardzo mokry
 02:01=%1 przemoczy swoje igły
-02:01=Skrzynia Davy'ego Jonesa będzie dla Ciebie, %1
+02:01=%1 był bardzo spragniony
+02:01=%1 weźmie udział w "Szczękach"... jako przynęta!
 ; Round starts
 02:02=Walczmy!
-02:02=Uzbrojony i gotowy!
+02:02=Cel i pal!
 02:02=Rozpoczynajmy walkę!
 02:02=Jedziemy z koksem!
 02:02=Rozpoczynamy tą imprezę!
 02:02=Ostani żywy jeż wygrywa!
 02:02=Jazda!
 02:02=Rozkręćmy tą imprezę!
-;02:02=Let's Jam!
 02:02=To jest dopiero początek...
 02:02=To jest początek czegoś naprawdę wielkiego!
 02:02=Witamy w Hedgewars.
@@ -179,7 +178,6 @@
 02:02=Zwycięztwo albo śmierć!
 02:02=Zwycięzca zdobywa łup!
 02:02=Przegrana nie wchodzi w rachubę.
-;02:02=Cry havoc! Let loose the hogs of war!
 02:02=Hedgewars, stworzone przez Hedgewars.org
 02:02=GL HF
 02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Tiyuri'emu
@@ -206,12 +204,12 @@
 02:02=Walczcie z honorem
 02:02=Nie poddawaj się
 02:02=Nigdy się nie poddawaj
-;02:02=Rock 'em and sock 'em!
+02:02=To będzie III Wojna Światowa!
 02:02=Niech się zacznie konkurs fragów
 02:02=Mam nadzieję, że jesteście gotowi na bójkę!
 02:02=Jazda! Jazda! Jazda!
 02:02=Jeże przybyły!
-;02:02=Bring it to them!
+02:02=Daj im popalić!
 02:02=Nie odczuwaj strachu!
 02:02=Bądź odważny i podbijaj!
 ; Round ends (win; unused atm)
@@ -235,17 +233,20 @@
 02:05=Dawkowanie: ile tylko znajdziesz!
 02:05=Ważna przesyłka
 02:05=Zapasy!
+02:05=Czy ktoś wzywał doktor Zosię?
+02:05=Oby to nie był Pavulon!
+02:05=Codziena dawka Panadolu!
+02:05=Chyba Goździkowa maczała w tym palce...
 ; New ammo crate
 02:06=Więcej broni!
 02:06=Posiłki!
-02:06=Wycelowane i załadowane!
+02:06=Może tu będzie kop z półobrotu?
 02:06=Ciekawe jaka broń się tam kryje?
 02:06=Zapasy!
 02:06=Co może być w środku?
 02:06=W Hedgewars święta są zdecydowanie wcześniej!
 02:06=Prezent!
 02:06=Przesyłka specjalna!
-;02:06=It was a nightmare getting this through customs
 02:06=Zabawki zniszczenia spadły z nieba
 02:06=Uwaga! Zawartość jest delikatna!!!
 02:06=Zbierz lub rozwal, wybór należy do Ciebie.
@@ -271,6 +272,8 @@
 02:07=Używaj tego mądrze!
 02:07=Oooo. Ta skrzynka jest ciężka.
 02:07=Możesz tego potrzebować.
+02:07=Keczup prosto od MacGyvera!
+02:07=Zestaw Małego Majsterkowicza
 ; Hog (%1) skips his turn
 02:08=%1 jest taki nudny...
 02:08=%1 nie powinienem być rozpraszany
@@ -297,7 +300,8 @@
 02:08=%1 wygląda na słabiaka
 02:08=%1 jest tchórzem
 02:08=%1 czeka na nagłą śmierć
-02:08=%1 nie jest walecznym typem
+02:08=%1 nie jest walecznym typem]
+02:08=Zzz... Chrrr... Hę?
 02:08=%1 przemyśli swój życiowy cel
 02:08=%1 i tak nigdy dobrze nie strzelał.
 02:08=%1 nie chciał iść do wojska...
@@ -314,7 +318,7 @@
 02:09=%1 stoi po złej stronie!
 02:09=%1 przypomina emo.
 02:09=%1 trzymał broń drugą stroną.
-02:09=%1 ma skłonności sadystyczne.
+02:09=%1 ma skłonności masochistyczne.
 02:09=%1 jest masochistą.
 02:09=%1 nie ma instynktu przetrwania
 02:09=%1 zepsuł strzał.
@@ -343,7 +347,10 @@
 02:09=Jestem pewny, że nikt nie widział %1
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
 02:09=Wiesz co %1? Twoja broń z pewnością była uszkodzona!
+02:09=Nie ma takiego strzelania!!!
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Ten jeż wypił Red Bulla.
+02:10=%1 to następca Małysza!
+02:10=IIII LECIIII!!!
