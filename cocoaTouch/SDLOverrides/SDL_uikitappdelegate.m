@@ -38,7 +38,7 @@
 #undef main
 #endif
 
-int main(int argc, char *argv[]) {
+int main (int argc, char *argv[]) {
     NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
     int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
     [pool release];
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 
 @implementation SDLUIKitDelegate
 
-@synthesize window, windowID, controller, setup;
+@synthesize window, windowID, controller;
 
 /* convenience method */
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -56,15 +56,16 @@ int main(int argc, char *argv[]) {
 }
 
 -(void) dealloc {
-	[setup release];
 	[controller release];
 	[window release];
 	[super dealloc];
 }
 
 -(IBAction) startSDLgame {
+	NSAutoreleasePool *internal_pool = [[NSAutoreleasePool alloc] init];
+
+	GameSetup *setup = [[GameSetup alloc] init];
 	[setup startThread:@"engineProtocol"];
-	[setup loadSettingsFromFile:@"settings.plist" forKey:@"systemSettings"];
 
 	// remove the current view to free resources
 	[UIView beginAnimations:@"removing main controller" context:NULL];
@@ -74,18 +75,17 @@ int main(int argc, char *argv[]) {
 	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
 	NSLog(@"Game is launching...");
-
-	NSAutoreleasePool *internal_pool = [[NSAutoreleasePool alloc] init];
-
+	const char **gameArgs = [setup getSettings];
+	
 	// direct execution or thread? check the one that gives most fps
 	// library or call SDL_main? pascal quits at the end of the main
-	Game();
-
-	[internal_pool drain];
+	Game(gameArgs);
+	
+	free(gameArgs);
 	NSLog(@"Game is exting...");
 
 	[[window viewWithTag:54867] removeFromSuperview];
-	[setup unloadSettings];
+	[setup release];
 
 	[window addSubview:controller.view];
 	[window makeKeyAndVisible];
@@ -94,13 +94,37 @@ int main(int argc, char *argv[]) {
 	[UIView setAnimationDuration:1];
 	controller.view.alpha = 1;
 	[UIView commitAnimations];
+	
+	[internal_pool release];
+}
+
+-(BOOL) checkFirstRun {
+	BOOL isFirstRun = NO;
+	
+	NSString *filePath = [self dataFilePath:@"settings.plist"];
+	if (!([[NSFileManager defaultManager] fileExistsAtPath:filePath])) {
+		isFirstRun = YES;
+		// file not present, let's create it
+		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+	
+		[saveDict setObject:@"" forKey:@"username"];
+		[saveDict setObject:@"" forKey:@"password"];
+		[saveDict setObject:@"1" forKey:@"music"];
+		[saveDict setObject:@"1" forKey:@"sounds"];
+		[saveDict setObject:@"0" forKey:@"alternate"];
+		[saveDict setObject:@"100" forKey:@"volume"];
+	
+		[saveDict writeToFile:filePath atomically:YES];
+		[saveDict release];
+	}
+	return isFirstRun;
 }
 
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
 
-	setup = [[GameSetup alloc] init];
+	[self checkFirstRun];
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 

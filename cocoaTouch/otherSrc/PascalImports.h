@@ -18,7 +18,7 @@ extern "C" {
 	 * that you want to use
 	 */
 
-	void Game(void);
+	void Game(const char *args[]);
 
 
 	int HW_protoVer(void);

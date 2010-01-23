@@ -15,20 +15,19 @@
 
 @implementation GameSetup
 
-@synthesize localeString, systemSettings;
+@synthesize systemSettings;
 
 -(id) init {
 	self = [super init];
-	self.localeString = [[[NSLocale currentLocale] localeIdentifier] stringByAppendingString:@".txt"];
-	self.systemSettings = nil;
-	engineProtocolStarted = NO;
-	ipcPort = 51432;
+	srandom(time(NULL));
+	ipcPort = (random() % 64541) + 1024 ;//(arc4random() % ((unsigned)64541)) + 1024;
+		
+	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
+	self.systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
 	return self;
 }
 
 -(void) dealloc {
-	if (systemSettings) [self.systemSettings release];
-	[self.localeString autorelease];
 	[super dealloc];
 }
 
@@ -36,12 +35,7 @@
 #pragma mark Thread/Network relevant code
 -(void) startThread: (NSString *) selector {
 	SEL usage = NSSelectorFromString(selector);
-	
-	// do not start the server thread because the port is already bound
-	if (NO == engineProtocolStarted) {
-		engineProtocolStarted = YES;
-		[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
-	}
+	[NSThread detachNewThreadSelector:usage toTarget:self withObject:nil];
 }
 
 -(int) sendToEngine: (NSString *)string {
@@ -52,33 +46,32 @@
 }
 
 -(void) engineProtocol {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	IPaddress ip;
 	int idx, eProto;
-	BOOL serverQuit, clientQuit;
+	BOOL clientQuit, serverQuit;
 	char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
 	Uint8 msgSize;
 	Uint16 gameTicks;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	if (SDLNet_Init() < 0) {
-		fprintf(stderr, "SDLNet_Init: %s\n", SDLNet_GetError());
+		NSLog(@"SDLNet_Init: %s", SDLNet_GetError());
 		exit(EXIT_FAILURE);
 	}
 	
 	/* Resolving the host using NULL make network interface to listen */
 	if (SDLNet_ResolveHost(&ip, NULL, ipcPort) < 0) {
-		fprintf(stderr, "SDLNet_ResolveHost: %s\n", SDLNet_GetError());
+		NSLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
 		exit(EXIT_FAILURE);
 	}
 	
 	/* Open a connection with the IP provided (listen on the host's port) */
 	if (!(sd = SDLNet_TCP_Open(&ip))) {
-		fprintf(stderr, "SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+		NSLog(@"SDLNet_TCP_Open: %s\n", SDLNet_GetError());
 		exit(EXIT_FAILURE);
 	}
 	
-	NSLog(@"engineProtocol - Waiting for a client");
-	
+	NSLog(@"engineProtocol - Waiting for a client on port %d", ipcPort);
 	serverQuit = NO;
 	while (!serverQuit) {
 		
@@ -100,13 +93,13 @@
 				NSLog(@"engineProtocol - sending game config");
 				
 				// send config data data
-				/*seed is arbitrary string
-				[16:12] unC0Rr:
+				/*
+				seed is arbitrary string
 				addteam <color> <team name>
-				[16:13] unC0Rr:
 				addhh <level> <health> <hedgehog name>
-				[16:13] unC0Rr:
-				<level> is 0 for human, 1-5 for bots (5 is the most stupid)*/				// local game
+				  <level> is 0 for human, 1-5 for bots (5 is the most stupid)
+				 */
+				// local game
 				[self sendToEngine:@"TL"];
 				
 				// seed info
@@ -234,15 +227,15 @@
 					// missing case for exiting right away
 				}
 			}
-			NSLog(@"Client Exited");
+			NSLog(@"Engine exited, closing server");
 			// wait a little to let the client close cleanly
-			sleep(2);
+			[NSThread sleepForTimeInterval:2];
 			// Close the client socket
 			SDLNet_TCP_Close(csd);
+			serverQuit = YES;
 		}
-
 	}
-
+	
 	SDLNet_TCP_Close(sd);
 	SDLNet_Quit();
 
@@ -251,24 +244,23 @@
 }
 
 #pragma mark -
-#pragma mark Settings setup methods
--(void) loadSettingsFromFile:(NSString *)fileName forKey:(NSString *)objName {
-	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:fileName];
+#pragma mark Setting methods
+-(const char **)getSettings {
+	const char **gameArgs = (const char**) malloc(sizeof(char*) * 7);
+	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
+	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] localeIdentifier]];
 	
-	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
-		NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:filePath];
-		systemSettings = dict;
-		//[self setValue:dict forKey:objName];
-		[dict release];
-	} else {
-		//TODO create it
-		[NSException raise:@"File NOT found" format:@"The file %@ was not found at %@", fileName, filePath];
-	}
-
-}
-
--(void) unloadSettings {
-	systemSettings = nil;
+	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
+	gameArgs[1] = [ipcString UTF8String];					//ipcPort
+	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];	//isSoundEnabled
+	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];	//isMusicEnabled
+	gameArgs[4] = [localeString UTF8String];				//cLocaleFName
+	gameArgs[5] = [[systemSettings objectForKey:@"volume"] UTF8String];	//cInitVolume
+	gameArgs[6] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
+	
+	[localeString release];
+	[ipcString release];
+	return gameArgs;
 }
 
 

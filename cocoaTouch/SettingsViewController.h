@@ -13,7 +13,7 @@
 	UITextField *username;
 	UITextField *password;
 	UISwitch *musicSwitch;
-	UISwitch *effectsSwitch;
+	UISwitch *soundsSwitch;
 	UISwitch *altDamageSwitch;
 	UISlider *volumeSlider;
 	UILabel *volumeLabel;
@@ -23,7 +23,7 @@
 @property (nonatomic, retain) IBOutlet UITextField *username;
 @property (nonatomic, retain) IBOutlet UITextField *password;
 @property (nonatomic, retain) UISwitch *musicSwitch;
-@property (nonatomic, retain) UISwitch *effectsSwitch;
+@property (nonatomic, retain) UISwitch *soundsSwitch;
 @property (nonatomic, retain) UISwitch *altDamageSwitch;
 @property (nonatomic, retain) IBOutlet UISlider *volumeSlider;
 @property (nonatomic, retain) IBOutlet UILabel *volumeLabel;

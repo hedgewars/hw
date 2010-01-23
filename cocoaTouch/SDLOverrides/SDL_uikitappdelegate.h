@@ -23,20 +23,16 @@
 #import <UIKit/UIKit.h>
 #import "SDL_video.h"
 
-@class GameSetup;
-
 @interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
     UIWindow *window;
 	SDL_WindowID windowID;
 	UITabBarController *controller;
-	GameSetup *setup;
 }
 
 // the outlets are set in MainWindow.xib
 @property (readwrite, retain) IBOutlet UIWindow *window;
 @property (readwrite, assign) SDL_WindowID windowID;
 @property (nonatomic, retain) IBOutlet UITabBarController *controller;
-@property (nonatomic, retain) GameSetup *setup;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;

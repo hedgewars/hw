@@ -67,11 +67,12 @@ uses	SDLh in 'SDLh.pas',
 //       proto.inc
 
 {$IFDEF IPHONEOS}
+type arrayofpchar = array[0..6] of PChar;
 procedure DoTimer(Lag: LongInt);
 procedure OnDestroy;
 procedure MainLoop;
 procedure ShowMainWindow;
-procedure Game; cdecl; export;
+procedure Game(gameArgs: arrayofpchar); cdecl; export;
 procedure initEverything;
 procedure freeEverything;
 
@@ -133,7 +134,7 @@ begin
 
 	SDL_GL_SwapBuffers();
 {$IFNDEF IPHONEOS}
-		// not going to make captures on the iPhone
+	// not going to make captures on the iPhone
 	if flagMakeCapture then
 	begin
 		flagMakeCapture:= false;
@@ -166,7 +167,7 @@ end;
 procedure MainLoop; 
 var PrevTime,
     CurrTime: Longword;
-    event: TSDL_Event;
+    {$IFNDEF IPHONEOS}event: TSDL_Event;{$ENDIF}
 begin
 
 	PrevTime:= SDL_GetTicks;
@@ -216,7 +217,11 @@ begin
 end;
 
 ///////////////
-procedure Game;{$IFDEF IPHONEOS}cdecl; export;{$ENDIF}
+{$IFDEF IPHONEOS}
+procedure Game(gameArgs: arrayofpchar); cdecl; export;
+{$ELSE}
+procedure Game;cdecl; export;
+{$ENDIF}
 var	p: TPathType;
 	s: shortstring;
 begin
@@ -228,21 +233,22 @@ begin
 	val('480', cScreenHeight);
 	cInitWidth:= cScreenWidth;
 	cInitHeight:= cScreenHeight;
-	cBitsStr:= '16';
+	cBitsStr:= '32';
 	val(cBitsStr, cBits);
-	val('51432', ipcPort);
 	cFullScreen:= true;
-	isSoundEnabled:= false;
 	cVSyncInUse:= true;
-	cLocaleFName:= 'en.txt';
-	val('100', cInitVolume);
 	val('8', cTimerInterval);
 	PathPrefix:= 'Data';
-	cShowFPS:= true;
-	cAltDamage:= false;
-	UserNick:= 'Koda'; //DecodeBase64(ParamStr(15));
-	isMusicEnabled:= false;
 	cReducedQuality:= false;
+	cShowFPS:= true;
+
+	UserNick:= gameArgs[0];
+	val(gameArgs[1], ipcPort);
+	isSoundEnabled:= gameArgs[2] = '1';
+	isMusicEnabled:= gameArgs[3] = '1';
+	cLocaleFName:= gameArgs[4];
+	val(gameArgs[5], cInitVolume);
+	cAltDamage:= gameArgs[6] = '1';
 {$ENDIF}
 
 	for p:= Succ(Low(TPathType)) to High(TPathType) do

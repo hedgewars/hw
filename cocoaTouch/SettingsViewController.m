@@ -11,13 +11,16 @@
 
 @implementation SettingsViewController
 
-@synthesize username, password, musicSwitch, effectsSwitch, altDamageSwitch, volumeSlider, volumeLabel, table, volumeCell;
+@synthesize username, password, musicSwitch, soundsSwitch, altDamageSwitch, volumeSlider, volumeLabel, table, volumeCell;
 
 
 -(void) loadView {
 	self.musicSwitch = [[UISwitch alloc] init];
-	self.effectsSwitch = [[UISwitch alloc] init];
+	self.soundsSwitch = [[UISwitch alloc] init];
 	self.altDamageSwitch = [[UISwitch alloc] init];
+	[self.soundsSwitch addTarget:self action:@selector(sameValueSwitch) forControlEvents:UIControlEventValueChanged];
+	[self.musicSwitch addTarget:self action:@selector(checkValueSwitch) forControlEvents:UIControlEventValueChanged];
+
 	[super loadView];
 }
 
@@ -33,10 +36,10 @@
 		} else {
 			musicSwitch.on = NO;
 		}
-		if (1 == [[data objectForKey:@"effects"] intValue]) {
-			effectsSwitch.on = YES;
+		if (1 == [[data objectForKey:@"sounds"] intValue]) {
+			soundsSwitch.on = YES;
 		} else {
-			effectsSwitch.on = NO;
+			soundsSwitch.on = NO;
 		}
 		if (1 == [[data objectForKey:@"alternate"] intValue]) {
 			altDamageSwitch.on = YES;
@@ -66,7 +69,7 @@
 	self.username = nil;
 	self.password = nil;
 	self.musicSwitch = nil;
-	self.effectsSwitch = nil;
+	self.soundsSwitch = nil;
 	self.altDamageSwitch = nil;
 	self.volumeLabel = nil;
 	self.volumeSlider = nil;
@@ -79,13 +82,13 @@
 -(void) viewWillDisappear:(BOOL)animated {
 	NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
 	NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
-	NSString *tmpEff = (effectsSwitch.on) ? @"1" : @"0";
+	NSString *tmpEff = (soundsSwitch.on) ? @"1" : @"0";
 	NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
 	
 	[saveDict setObject:username.text forKey:@"username"];
 	[saveDict setObject:password.text forKey:@"password"];
 	[saveDict setObject:tmpMus forKey:@"music"];
-	[saveDict setObject:tmpEff forKey:@"effects"];
+	[saveDict setObject:tmpEff forKey:@"sounds"];
 	[saveDict setObject:tmpAlt forKey:@"alternate"];
 	[saveDict setObject:volumeLabel.text forKey:@"volume"];
 	
@@ -93,7 +96,19 @@
 	[saveDict release];
 	[super viewWillDisappear:animated];
 }
- 
+
+-(void) dealloc {
+	[username release];
+	[password release];
+	[musicSwitch release];
+	[soundsSwitch release];
+	[altDamageSwitch release];
+	[volumeLabel release];
+	[volumeSlider release];
+	[table release];
+	[volumeCell release];
+	[super dealloc];
+}
 /*
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -113,6 +128,7 @@
 	[sender resignFirstResponder];
 }
 
+// update the value of the label when slider is updated
 -(IBAction) sliderChanged: (id) sender {
 	UISlider *slider = (UISlider *)sender;
 	int progress = slider.value;
@@ -121,17 +137,18 @@
 	[newLabel release];
 }
 
--(void) dealloc {
-	[username release];
-	[password release];
-	[musicSwitch release];
-	[effectsSwitch release];
-	[altDamageSwitch release];
-	[volumeLabel release];
-	[volumeSlider release];
-	[table release];
-	[volumeCell release];
-	[super dealloc];
+// set music off when sound is turned off
+-(void) sameValueSwitch {
+	if (YES == self.musicSwitch.on) {
+		[musicSwitch setOn:NO animated:YES];
+	}
+}
+
+// don't enable music when sound is off
+-(void) checkValueSwitch {
+	if (NO == self.soundsSwitch.on) {
+		[musicSwitch setOn:!musicSwitch.on animated:YES];
+	}
 }
 
 #pragma mark -
@@ -193,12 +210,12 @@
 		case kAudioFields:
 			switch ([indexPath row]) {
 				case 0:
-					cell.accessoryView = musicSwitch;
-					cell.textLabel.text = NSLocalizedString(@"Music", @"");
+					cell.accessoryView = soundsSwitch;
+					cell.textLabel.text = NSLocalizedString(@"Sound", @"");
 					break;
 				case 1:
-					cell.accessoryView = effectsSwitch;
-					cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"");
+					cell.accessoryView = musicSwitch;
+					cell.textLabel.text = NSLocalizedString(@"Music", @"");
 					break;
 				case 2:
 					cell = volumeCell;
