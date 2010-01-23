@@ -739,7 +739,9 @@ function  IMG_Init(flags: LongInt): LongInt; cdecl; external SDL_ImageLibName;
 procedure IMG_Quit; cdecl; external SDL_ImageLibName;
 
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongInt): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongInt; _type: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;

@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
 }
 
 -(IBAction) startSDLgame {
-	
 	[setup startThread:@"engineProtocol"];
 	[setup loadSettingsFromFile:@"settings.plist" forKey:@"systemSettings"];
 
@@ -76,10 +75,13 @@ int main(int argc, char *argv[]) {
 
 	NSLog(@"Game is launching...");
 
+	NSAutoreleasePool *internal_pool = [[NSAutoreleasePool alloc] init];
+
 	// direct execution or thread? check the one that gives most fps
 	// library or call SDL_main? pascal quits at the end of the main
 	Game();
-	
+
+	[internal_pool drain];
 	NSLog(@"Game is exting...");
 
 	[[window viewWithTag:54867] removeFromSuperview];

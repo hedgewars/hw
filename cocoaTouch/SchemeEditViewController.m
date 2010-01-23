@@ -10,7 +10,7 @@
 
 
 @implementation SchemeEditViewController
-
+@synthesize cell0, table;
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -21,12 +21,12 @@
 }
 */
 
-/*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
+	table.backgroundColor = [UIColor clearColor];
     [super viewDidLoad];
 }
-*/
+
 
 /*
 // Override to allow orientations other than the default portrait orientation.
@@ -52,6 +52,23 @@
 - (void)dealloc {
     [super dealloc];
 }
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+ 
+
+
+        return cell0;
+
+
+
+
+}
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
+	return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+	return 1;
+}
 
 @end

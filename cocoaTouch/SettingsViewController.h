@@ -9,22 +9,26 @@
 #import <UIKit/UIKit.h>
 
 
-@interface SettingsViewController : UIViewController {
+@interface SettingsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
 	UITextField *username;
 	UITextField *password;
-	UISwitch *musicOn;
-	UISwitch *effectsOn;
-	UISwitch *altDamageOn;
+	UISwitch *musicSwitch;
+	UISwitch *effectsSwitch;
+	UISwitch *altDamageSwitch;
 	UISlider *volumeSlider;
 	UILabel *volumeLabel;
+	UITableView *table;
+	UITableViewCell *volumeCell;
 }
 @property (nonatomic, retain) IBOutlet UITextField *username;
 @property (nonatomic, retain) IBOutlet UITextField *password;
-@property (nonatomic, retain) IBOutlet UISwitch *musicOn;
-@property (nonatomic, retain) IBOutlet UISwitch *effectsOn;
-@property (nonatomic, retain) IBOutlet UISwitch *altDamageOn;
+@property (nonatomic, retain) UISwitch *musicSwitch;
+@property (nonatomic, retain) UISwitch *effectsSwitch;
+@property (nonatomic, retain) UISwitch *altDamageSwitch;
 @property (nonatomic, retain) IBOutlet UISlider *volumeSlider;
 @property (nonatomic, retain) IBOutlet UILabel *volumeLabel;
+@property (nonatomic, retain) IBOutlet UITableView *table;
+@property (nonatomic, retain) IBOutlet UITableViewCell *volumeCell;
 
 -(IBAction) sliderChanged: (id)sender;
 -(IBAction) backgroundTap: (id)sender;

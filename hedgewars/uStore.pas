@@ -1108,7 +1108,7 @@ begin
 
 	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
 {$IFDEF DEBUGFILE}
-	AddFileLog('OpenGL - Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
+	AddFileLog('OpenGL-- Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
 	AddFileLog('  |----- Vendor: ' + vendor);
 	AddFileLog('  |----- Version: ' + string(pchar(glGetString(GL_VERSION))));
 	AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));

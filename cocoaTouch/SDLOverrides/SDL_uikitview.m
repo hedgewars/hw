@@ -166,7 +166,7 @@ void IPH_showControls (void) {
 
 	// one tap - single click
 	if (1 == [touch tapCount] ) {
-		SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
+		//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].windowID, gestureStartPoint.x, gestureStartPoint.y);
 		HW_click();
 	}
 	
@@ -230,14 +230,14 @@ void IPH_showControls (void) {
 	CGFloat Xdiff = gestureStartPoint.x - currentPosition.x;
 	CGFloat Ydiff = gestureStartPoint.y - currentPosition.y;
 	CGFloat deltaX = fabsf(Xdiff);
-    CGFloat deltaY = fabsf(Ydiff);
+	CGFloat deltaY = fabsf(Ydiff);
     
 	if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance) {
 		NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
 		if (Xdiff > 0) HW_walkLeft();
 		else HW_walkRight();
-    }
-    else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
+	}
+	else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
 		NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
 		if (Ydiff > 0) HW_aimUp();
 		else HW_aimDown();
@@ -249,7 +249,7 @@ void IPH_showControls (void) {
 		UITouch *first = [twoTouches objectAtIndex:0];
 		UITouch *second = [twoTouches objectAtIndex:1];
 		CGFloat currentDistance = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
-	
+		
 		if (0 == initialDistance) 
 			initialDistance = currentDistance;
 		else if (currentDistance - initialDistance > kMinimumPinchDelta) {

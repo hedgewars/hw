@@ -11,76 +11,86 @@
 
 @implementation SettingsViewController
 
-@synthesize username, password, musicOn, effectsOn, altDamageOn, volumeSlider, volumeLabel;
+@synthesize username, password, musicSwitch, effectsSwitch, altDamageSwitch, volumeSlider, volumeLabel, table, volumeCell;
+
+
+-(void) loadView {
+	self.musicSwitch = [[UISwitch alloc] init];
+	self.effectsSwitch = [[UISwitch alloc] init];
+	self.altDamageSwitch = [[UISwitch alloc] init];
+	[super loadView];
+}
 
 -(void) viewDidLoad {
 	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
 	
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
-		NSUserDefaults *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
+		NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
 		username.text = [data objectForKey:@"username"];
 		password.text = [data objectForKey:@"password"];
 		if (1 == [[data objectForKey:@"music"] intValue]) {
-			musicOn.on = YES;
+			musicSwitch.on = YES;
 		} else {
-			musicOn.on = NO;
+			musicSwitch.on = NO;
 		}
 		if (1 == [[data objectForKey:@"effects"] intValue]) {
-			effectsOn.on = YES;
+			effectsSwitch.on = YES;
 		} else {
-			effectsOn.on = NO;
+			effectsSwitch.on = NO;
 		}
 		if (1 == [[data objectForKey:@"alternate"] intValue]) {
-			altDamageOn.on = YES;
+			altDamageSwitch.on = YES;
 		} else {
-			altDamageOn.on = NO;
+			altDamageSwitch.on = NO;
 		}		
 		
 		[volumeSlider setValue:[[data objectForKey:@"volume"] intValue] animated:NO];
-		
-		NSString *tmpVol = [[NSString alloc] initWithFormat:@"%d", (int) volumeSlider.value];
-		volumeLabel.text = tmpVol;
-		[tmpVol release];
+		[data release];
 	} else {
 		[NSException raise:@"File NOT found" format:@"The file settings.plist was not found at %@", filePath];
 	}
-/*	
-	UIApplication *app = [UIApplication sharedApplication];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(applicationWillTerminate:)
-												 name:UIApplicationWillTerminateNotification
-											   object:app];
-*/
+	
+	NSString *tmpVol = [[NSString alloc] initWithFormat:@"%d", (int) volumeSlider.value];
+	volumeLabel.text = tmpVol;
+	[tmpVol release];
+	
+	username.textColor = [UIColor grayColor];
+	password.textColor = [UIColor grayColor];
+	volumeLabel.textColor = [UIColor grayColor];
+	table.backgroundColor = [UIColor clearColor];
+	table.allowsSelection = NO;
 	[super viewDidLoad];
 }
 
 -(void) viewDidUnload {
 	self.username = nil;
 	self.password = nil;
-	self.musicOn = nil;
-	self.effectsOn = nil;
-	self.altDamageOn = nil;
+	self.musicSwitch = nil;
+	self.effectsSwitch = nil;
+	self.altDamageSwitch = nil;
 	self.volumeLabel = nil;
 	self.volumeSlider = nil;
+	self.table = nil;
+	self.volumeCell = nil;
 	[super viewDidUnload];
 }
 
 //- (void)applicationWillTerminate:(NSNotification *)notification {
 -(void) viewWillDisappear:(BOOL)animated {
-	NSMutableDictionary *saveArray = [[NSMutableDictionary alloc] init];
-	NSString *tmpMus = (musicOn.on) ? @"1" : @"0";
-	NSString *tmpEff = (effectsOn.on) ? @"1" : @"0";
-	NSString *tmpAlt = (altDamageOn.on) ? @"1" : @"0";
+	NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+	NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
+	NSString *tmpEff = (effectsSwitch.on) ? @"1" : @"0";
+	NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
 	
-	[saveArray setObject:username.text forKey:@"username"];
-	[saveArray setObject:password.text forKey:@"password"];
-	[saveArray setObject:tmpMus forKey:@"music"];
-	[saveArray setObject:tmpEff forKey:@"effects"];
-	[saveArray setObject:tmpAlt forKey:@"alternate"];
-	[saveArray setObject:volumeLabel.text forKey:@"volume"];
+	[saveDict setObject:username.text forKey:@"username"];
+	[saveDict setObject:password.text forKey:@"password"];
+	[saveDict setObject:tmpMus forKey:@"music"];
+	[saveDict setObject:tmpEff forKey:@"effects"];
+	[saveDict setObject:tmpAlt forKey:@"alternate"];
+	[saveDict setObject:volumeLabel.text forKey:@"volume"];
 	
-	[saveArray writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
-	[saveArray release];
+	[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
+	[saveDict release];
 	[super viewWillDisappear:animated];
 }
  
@@ -114,12 +124,139 @@
 -(void) dealloc {
 	[username release];
 	[password release];
-	[musicOn release];
-	[effectsOn release];
-	[altDamageOn release];
+	[musicSwitch release];
+	[effectsSwitch release];
+	[altDamageSwitch release];
 	[volumeLabel release];
 	[volumeSlider release];
-    [super dealloc];
+	[table release];
+	[volumeCell release];
+	[super dealloc];
+}
+
+#pragma mark -
+#pragma mark TableView Methods
+#define kNetworkFields 0
+#define kAudioFields 1
+#define kOtherFields 2
+
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+	return 3;
+}
+
+-(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+	switch (section) {
+		case kNetworkFields:
+			return 2;
+			break;
+		case kAudioFields:
+			return 3;
+			break;
+		case kOtherFields:
+			return 1;
+			break;
+		default:
+			NSLog(@"Warning: unset case value for numberOfRowsInSection!");
+			break;
+	}
+	return 0;
+}
+
+-(UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+	static NSString *cellIdentifier = @"systemSettingsCell";
+	
+	UITableViewCell *cell;
+	if ( !(kAudioFields == [indexPath section] && 2 == [indexPath row]) ){
+		cell = [aTableView dequeueReusableCellWithIdentifier:cellIdentifier];
+		if (nil == cell) {
+			cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+						       reuseIdentifier:cellIdentifier] autorelease];
+		}
+	}
+	
+	switch ([indexPath section]) {
+		case kNetworkFields:
+			switch ([indexPath row]) {
+				case 0:
+					cell.textLabel.text = NSLocalizedString(@"Nickname", @"");
+					cell.accessoryView = username;
+					break;
+				case 1:
+					cell.textLabel.text = NSLocalizedString(@"Password", @"");
+					cell.accessoryView = password;
+					break;
+				default:
+					NSLog(@"Warning: unset case value in kNetworkFields section!");
+					break;
+			}
+			break;
+		case kAudioFields:
+			switch ([indexPath row]) {
+				case 0:
+					cell.accessoryView = musicSwitch;
+					cell.textLabel.text = NSLocalizedString(@"Music", @"");
+					break;
+				case 1:
+					cell.accessoryView = effectsSwitch;
+					cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"");
+					break;
+				case 2:
+					cell = volumeCell;
+					break;
+				default:
+					NSLog(@"Warning: unset case value in kAudioFields section!");
+					break;
+			}
+			break;
+		case kOtherFields:
+			cell.accessoryView = altDamageSwitch;
+			cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
+			break;
+		default:
+			break;
+	}
+	
+	return cell;
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	UIView *containerView =	[[[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 50)] autorelease];
+	UILabel *headerLabel = [[[UILabel alloc] initWithFrame:CGRectMake(10, 20, 300, 40)] autorelease];
+	headerLabel.textColor = [UIColor lightGrayColor];
+	headerLabel.shadowColor = [UIColor blackColor];
+	headerLabel.shadowOffset = CGSizeMake(0, 1);
+	headerLabel.font = [UIFont boldSystemFontOfSize:20];
+	headerLabel.backgroundColor = [UIColor clearColor];
+
+	switch (section) {
+		case kNetworkFields:
+			headerLabel.text = NSLocalizedString(@"Network Configuration", @"");
+			break;
+		case kAudioFields:
+			headerLabel.text = NSLocalizedString(@"Audio Preferences", @"");
+			break;
+		case kOtherFields:
+			headerLabel.text = NSLocalizedString(@"Other Settings", @"");
+			break;
+		default:
+			NSLog(@"Warning: unset case value in titleForHeaderInSection!");
+			headerLabel.text = @"!!!";
+			break;
+	}
+	
+	[containerView addSubview:headerLabel];
+	return containerView;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+	if (kAudioFields == [indexPath section] && 2 == [indexPath row])
+		return volumeCell.frame.size.height;
+	else
+		return table.rowHeight;
+}
+
+-(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+	return 57;
 }
 
 
