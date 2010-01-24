@@ -39,26 +39,25 @@
 #include <Foundation/Foundation.h>
 
 static int SetupWindowData(_THIS, SDL_Window *window, UIWindow *uiwindow, SDL_bool created) {
-
-    SDL_WindowData *data;
-		
-    /* Allocate the window data */
-    data = (SDL_WindowData *)SDL_malloc(sizeof(*data));
-    if (!data) {
-        SDL_OutOfMemory();
-        return -1;
-    }
-    data->windowID = window->id;
-    data->uiwindow = uiwindow;
+	SDL_WindowData *data;
+	
+	/* Allocate the window data */
+	data = (SDL_WindowData *)SDL_malloc(sizeof(*data));
+	if (!data) {
+		SDL_OutOfMemory();
+		return -1;
+	}
+	data->window = window;
+	data->uiwindow = uiwindow;
 	data->view = nil;
-		
-    /* Fill in the SDL window with the window data */
+	
+	/* Fill in the SDL window with the window data */
 	{
-        window->x = 0;
-        window->y = 0;
-        window->w = (int)uiwindow.frame.size.width;
-        window->h = (int)uiwindow.frame.size.height;
-    }
+		window->x = 0;
+		window->y = 0;
+		window->w = (int)uiwindow.frame.size.width;
+		window->h = (int)uiwindow.frame.size.height;
+	}
 	
 	window->driverdata = data;
 	
@@ -67,7 +66,7 @@ static int SetupWindowData(_THIS, SDL_Window *window, UIWindow *uiwindow, SDL_bo
 	window->flags |= SDL_WINDOW_FULLSCREEN;		/* window is always fullscreen */
 	window->flags |= SDL_WINDOW_SHOWN;			/* only one window on iPod touch, always shown */
 	window->flags |= SDL_WINDOW_INPUT_FOCUS;	/* always has input focus */	
-
+	
 	/* SDL_WINDOW_BORDERLESS controls whether status bar is hidden */
 	if (window->flags & SDL_WINDOW_BORDERLESS) {
 		[UIApplication sharedApplication].statusBarHidden = YES;
@@ -76,7 +75,7 @@ static int SetupWindowData(_THIS, SDL_Window *window, UIWindow *uiwindow, SDL_bo
 		[UIApplication sharedApplication].statusBarHidden = NO;
 	}
 	
-    return 0;
+	return 0;
 	
 }
 
@@ -91,17 +90,18 @@ int UIKit_CreateWindow(_THIS, SDL_Window *window) {
 	UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];*/
 	
 	// since we handle the window with a NIB, we don't need the initialization above
-	if (SetupWindowData(_this, window, [SDLUIKitDelegate sharedAppDelegate].window, SDL_TRUE) < 0) {
+	if (SetupWindowData(_this, window, [SDLUIKitDelegate sharedAppDelegate].uiwindow, SDL_TRUE) < 0) {
 		SDL_SetError("SetupWindowData() failed");
-        return -1;
-    }	
+		//[uiwindow release];
+		return -1;
+	}	
 	
 	// This saves the main window in the app delegate so event callbacks can do stuff on the window.
 	// This assumes a single window application design and needs to be fixed for multiple windows.
-	[SDLUIKitDelegate sharedAppDelegate].windowID = window->id;
+	[SDLUIKitDelegate sharedAppDelegate].window = window;
 
-/*	[SDLUIKitDelegate sharedAppDelegate].window = uiwindow;
-	[uiwindow release]; /* release the window (the app delegate has retained it) */
+	//[SDLUIKitDelegate sharedAppDelegate].uiwindow = uiwindow;
+	//[uiwindow release]; /* release the window (the app delegate has retained it) */
 	
 	return 1;
 	
@@ -116,8 +116,8 @@ void UIKit_DestroyWindow(_THIS, SDL_Window * window) {
 	}
 
 	/* this will also destroy the window */
-	//[SDLUIKitDelegate sharedAppDelegate].window = nil;
-	[SDLUIKitDelegate sharedAppDelegate].windowID = 0;
+	[SDLUIKitDelegate sharedAppDelegate].window = NULL;
+	//[SDLUIKitDelegate sharedAppDelegate].uiwindow = nil;
 
 }
 

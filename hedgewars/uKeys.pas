@@ -108,11 +108,7 @@ Trusted:= (CurrentTeam <> nil)
 movecursor(5 * CursorMovementX, 5 * CursorMovementY);
 
 k:= SDL_GetMouseState(nil, nil);
-{$IFDEF SDL13}
-pkbd:= SDL_GetKeyboardState(@j);
-{$ELSE}
 pkbd:= SDL_GetKeyState(@j);
-{$ENDIF}
 
 {$IFNDEF IPHONEOS}
 for i:= 6 to pred(j) do // first 6 will be overwritten
@@ -207,11 +203,8 @@ var i, j, k, t: LongInt;
 begin
 
 k:= SDL_GetMouseState(nil, nil);
-{$IFDEF SDL13}
-pkbd:= SDL_GetKeyboardState(@j);
-{$ELSE}
 pkbd:= SDL_GetKeyState(@j);
-{$ENDIF}
+
 TryDo(j < cKeyMaxIndex, 'SDL keys number is more than expected (' + inttostr(j) + ')', true);
 
 {$IFNDEF IPHONEOS}
@@ -312,11 +305,7 @@ end;
 //for i:= 0 to cKeyMaxIndex do writeln(stdout,inttostr(i) + ': ' + KeyNames[i]);
 
 // get the size of keyboard array
-{$IFDEF SDL13}
-SDL_GetKeyboardState(@k);
-{$ELSE}
 SDL_GetKeyState(@k);
-{$ENDIF}
 
 // Controller(s)
 for j:= 0 to Pred(ControllerNumControllers) do

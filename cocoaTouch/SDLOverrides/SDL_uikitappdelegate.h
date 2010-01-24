@@ -23,15 +23,15 @@
 #import <UIKit/UIKit.h>
 #import "SDL_video.h"
 
-@interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
-	UIWindow *window;
-	SDL_WindowID windowID;
+@interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
+	SDL_Window *window;
+	UIWindow *uiwindow;
 	UITabBarController *controller;
 }
 
 // the outlets are set in MainWindow.xib
-@property (readwrite, retain) IBOutlet UIWindow *window;
-@property (readwrite, assign) SDL_WindowID windowID;
+@property (readwrite, assign) SDL_Window *window;
+@property (readwrite, retain) IBOutlet UIWindow *uiwindow;
 @property (nonatomic, retain) IBOutlet UITabBarController *controller;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;

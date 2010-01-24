@@ -327,23 +327,33 @@ type
 {* SDL_Event type definition *}
 
 {$IFDEF SDL13}
-	TSDL_WindowID = LongInt;
-	TSDL_TextureID = LongInt;
+	//UPDATE TSDL_Window AND TSDL_Texture before usage!!!
+	PSDL_Window = ^TSDL_Window;
+	TSDL_Window = LongInt; //not true anymore
+		
+	PSDL_Texture = ^TSDL_Texture;
+	TSDL_Texture = LongInt; //not true anymore
 	
 	TSDL_WindowEvent = record
 		type_: byte;
 		gain: byte;
 		state: byte;
-		windowID: TSDL_WindowID;
+		windowID: LongInt;
 		data1, data2: LongInt;
 		end;
 
 // implement SDL_TextEditingEvent + SDL_TextInputEvent for sdl13
 {$ELSE}
+	//these two are present in sdl1.3 but only for backward compatibility
 	TSDL_ActiveEvent = record
 		type_: byte;
 		gain: byte;
 		state: byte;
+		end;
+
+	TSDL_ResizeEvent = record
+		type_: Byte;
+		w, h: LongInt;
 		end;
 {$ENDIF}
 
@@ -352,6 +362,7 @@ type
 		which: byte;
 		state: byte;
 {$IFDEF SDL13}
+		windowID: LongInt;
 		x, y, xrel, yrel : LongInt;
 		pressure, pressure_max, pressure_min,
 		rotation, tilt, cursor: LongInt; 
@@ -363,7 +374,7 @@ type
 	TSDL_KeyboardEvent = record
 		type_: Byte;
 {$IFDEF SDL13}
-		windowID: TSDL_WindowID;
+		windowID: LongInt;
 {$ENDIF}
 		which: Byte;
 		state: Byte;
@@ -376,6 +387,7 @@ type
 		button,
 		state: byte;
 {$IFDEF SDL13}
+		windowID: LongInt;
 		x, y: LongInt;
 {$ELSE}
 		x, y: word;
@@ -385,7 +397,7 @@ type
 {$IFDEF SDL13}
 	TSDL_MouseWheelEvent = record
 		type_: Byte;
-		windowID: TSDL_WindowID;
+		windowID: LongInt;
 		which: Byte;
 		x, y: LongInt;
 		end;
@@ -430,13 +442,6 @@ type
 	TSDL_QuitEvent = record
                 type_: Byte;
                 end;
-
-{$IFNDEF SDL13}
-	TSDL_ResizeEvent = record
-		type_: Byte;
-		w, h: LongInt;
-		end;
-{$ENDIF}
 
 	PSDL_Event = ^TSDL_Event;
 	TSDL_Event = record
@@ -626,27 +631,19 @@ function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDL
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 {$IFDEF SDL13}
-function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): TSDL_WindowID; cdecl; external SDLLibName;
-function  SDL_CreateRenderer(windowID: TSDL_WindowID; index, flags: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
 function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderClear: LongInt; cdecl; external SDLLibName;
 procedure SDL_RenderPresent; cdecl; external SDLLibName;
-function  SDL_RenderCopy(textureID: TSDL_TextureID; srcrect, dstrect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 procedure SDL_VideoQuit; cdecl; external SDLLibName;
 
-function  SDL_CreateTextureFromSurface(format: LongInt; surface: PSDL_Surface): TSDL_TextureID; cdecl; external SDLLibName;
-procedure SDL_DestroyTexture(textureID: TSDL_TextureID); cdecl; external SDLLibName;
-
-function  SDL_GetKeyboardState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 function  SDL_SelectMouse(index: LongInt): LongInt; cdecl; external SDLLibName;
 function  SDL_GetRelativeMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetNumMice: LongInt; cdecl; external SDLLibName;
 function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt; Rmask, Gmask, Bmask, Amask: PLongInt): boolean; cdecl; external SDLLibName;
-{$ELSE}
-function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName;
 {$ENDIF}
+
+function  SDL_GetKeyState(numkeys: PLongInt): PByteArray; cdecl; external SDLLibName {$IFDEF SDL13} name 'SDL_GetKeyboardState'{$ENDIF};
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: Longword): PChar; cdecl; external SDLLibName;
 procedure SDL_WarpMouse(x, y: Word); cdecl; external SDLLibName;
@@ -667,13 +664,6 @@ function  SDL_UnlockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibNam
 
 function  SDL_GL_SetAttribute(attr: TSDL_GLattr; value: LongInt): LongInt; cdecl; external SDLLibName;
 procedure SDL_GL_SwapBuffers(); cdecl; external SDLLibName;
-
-{$IFDEF IPHONEOS}
-function  SDL_iPhoneKeyboardShow(windowID: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_iPhoneKeyboardHide(windowID: LongInt): LongInt; cdecl; external SDLLibName;
-function  SDL_iPhoneKeyboardIsShown(windowID: LongInt): boolean; cdecl; external SDLLibName;
-function  SDL_iPhoneKeyboardToggle(windowID: LongInt): LongInt; cdecl; external SDLLibName;
-{$ENDIF}
 
 function  SDL_NumJoysticks: LongInt; cdecl; external SDLLibName;
 function  SDL_JoystickName(idx: LongInt): PChar; cdecl; external SDLLibName;

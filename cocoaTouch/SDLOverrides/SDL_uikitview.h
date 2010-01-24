@@ -35,9 +35,9 @@
 #endif
 
 // constants for telling which input has been received
-#define kMinimumPinchDelta		100
+#define kMinimumPinchDelta	100
 #define kMinimumGestureLength	10
-#define kMaximumVariance		4
+#define kMaximumVariance	4
 
 /* *INDENT-OFF* */
 //#if SDL_IPHONE_KEYBOARD

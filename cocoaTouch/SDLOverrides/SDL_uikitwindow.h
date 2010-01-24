@@ -36,7 +36,7 @@ extern void UIKit_DestroyWindow(_THIS, SDL_Window * window);
 
 struct SDL_WindowData
 {
-    SDL_WindowID windowID;
+    SDL_Window *window;
     UIWindow *uiwindow;
     SDL_uikitopenglview *view;
 };

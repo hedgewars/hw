@@ -47,20 +47,30 @@ int main (int argc, char *argv[]) {
 
 @implementation SDLUIKitDelegate
 
-@synthesize window, windowID, controller;
+@synthesize uiwindow, window, controller;
 
 /* convenience method */
 +(SDLUIKitDelegate *)sharedAppDelegate {
-	/* the delegate is set in UIApplicationMain(), which is garaunteed to be called before this method */
+	/* the delegate is set in UIApplicationMain(), which is guaranteed to be called before this method */
 	return (SDLUIKitDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
+-(id) init {
+	self = [super init];
+	self.uiwindow = nil;
+	self.window = NULL;
+	self.controller = nil;
+	return self;
 }
 
 -(void) dealloc {
 	[controller release];
-	[window release];
+	[uiwindow release];
 	[super dealloc];
 }
 
+#pragma mark -
+#pragma mark Custom stuff
 -(IBAction) startSDLgame {
 	NSAutoreleasePool *internal_pool = [[NSAutoreleasePool alloc] init];
 
@@ -84,16 +94,15 @@ int main (int argc, char *argv[]) {
 	free(gameArgs);
 	NSLog(@"Game is exting...");
 
-	[[window viewWithTag:54867] removeFromSuperview];
 	[setup release];
-
-	[window addSubview:controller.view];
-	[window makeKeyAndVisible];
 
 	[UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	controller.view.alpha = 1;
 	[UIView commitAnimations];
+	
+	[uiwindow addSubview:controller.view];
+	[uiwindow makeKeyAndVisible];
 	
 	[internal_pool release];
 }
@@ -120,6 +129,23 @@ int main (int argc, char *argv[]) {
 	return isFirstRun;
 }
 
+-(NSString *)dataFilePath: (NSString *)fileName {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	return [documentsDirectory stringByAppendingPathComponent:fileName];
+}
+
+-(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Running low on memory"
+							message:@"Will try to free some memory but app may crash"
+						       delegate:nil
+					      cancelButtonTitle:@"Ok"
+					      otherButtonTitles:nil ];
+	[alert show];
+	[alert release];
+}
+#pragma mark -
+#pragma mark SDLUIKitDelegate methods
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
@@ -128,8 +154,8 @@ int main (int argc, char *argv[]) {
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 
-	[window addSubview:controller.view];
-	[window makeKeyAndVisible];
+	[uiwindow addSubview:controller.view];
+	[uiwindow makeKeyAndVisible];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
@@ -141,12 +167,12 @@ int main (int argc, char *argv[]) {
 
 -(void) applicationWillResignActive:(UIApplication*)application {
 //	NSLog(@"%@", NSStringFromSelector(_cmd));
-	SDL_SendWindowEvent(self.windowID, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
 }
 
 -(void) applicationDidBecomeActive:(UIApplication*)application {
 //	NSLog(@"%@", NSStringFromSelector(_cmd));
-	SDL_SendWindowEvent(self.windowID, SDL_WINDOWEVENT_RESTORED, 0, 0);
+	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }
 
 /*
@@ -155,11 +181,5 @@ int main (int argc, char *argv[]) {
 	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 */
-
--(NSString *)dataFilePath: (NSString *)fileName {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	return [documentsDirectory stringByAppendingPathComponent:fileName];
-}
 
 @end

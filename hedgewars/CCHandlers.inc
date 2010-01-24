@@ -598,9 +598,6 @@ var flags: Longword = 0;
 {$IFDEF DEBUGFILE}
     buf: array[byte] of char;
 {$ENDIF}
-{$IFDEF SDL13}
-	windowID: TSDL_WindowID;
-{$ENDIF}
 begin
 	if Length(s) = 0 then cFullScreen:= not cFullScreen
 	else cFullScreen:= s = '1';
@@ -631,20 +628,9 @@ begin
 		SDL_FreeSurface(SDLPrimSurface);
 	end;
 	
-{$IFDEF SDL13}
-	windowID:= SDL_CreateWindow(nil, 0, 0, cScreenWidth, cScreenHeight,	SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN 
-				{$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});
-    SDL_CreateRenderer(windowID, 0, 0);
-	PixelFormat:=nil;// SDLPrimSurface^.format;
-	
-	SDL_SetRenderDrawColor(0, 0, 0, 255);
-    SDL_RenderFill(nil);
-    SDL_RenderPresent();
-{$ELSE}
 	SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
 	SDLTry(SDLPrimSurface <> nil, true);
 	PixelFormat:= SDLPrimSurface^.format;
-{$ENDIF}
 
 {$IFDEF DEBUGFILE}
 	AddFileLog('Setting up OpenGL...');
