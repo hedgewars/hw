@@ -646,6 +646,14 @@ void HWNewNet::infoPlayer(const QString & nick)
 	RawSendNet(QString("INFO%1%2").arg(delimeter).arg(nick));
 }
 
+void HWNewNet::followPlayer(const QString & nick)
+{
+	if (!isInRoom()) {
+		RawSendNet(QString("FOLLOW%1%2").arg(delimeter).arg(nick));
+		isChief = false;
+	}
+}
+
 void HWNewNet::startGame()
 {
 	RawSendNet(QString("START_GAME"));

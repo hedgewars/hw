@@ -139,6 +139,7 @@ class HWNewNet : public QObject
   void banPlayer(const QString &);
   void kickPlayer(const QString &);
   void infoPlayer(const QString &);
+  void followPlayer(const QString &);
   void startGame();
   void toggleRestrictJoins();
   void toggleRestrictTeamAdds();

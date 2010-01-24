@@ -63,6 +63,20 @@ handleCmd_loggedin clID clients rooms ["INFO", asknick] =
 			else ""
 
 
+handleCmd_loggedin clID clients rooms ["FOLLOW", asknick] =
+	if inLobby || noSuchClient then
+		[]
+	else
+		handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomname]
+	where
+		maybeClient = find (\cl -> asknick == nick cl) clients
+		noSuchClient = isNothing maybeClient
+		client = fromJust maybeClient
+		room = rooms IntMap.! roomID client
+		roomname = (name room)
+		inLobby = roomname == ""
+
+
 handleCmd_loggedin clID clients rooms cmd =
 	if roomID client == 0 then
 		handleCmd_lobby clID clients rooms cmd

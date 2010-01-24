@@ -18,7 +18,6 @@
  */
 
 #include <QTextBrowser>
-#include <QListWidget>
 #include <QLineEdit>
 #include <QAction>
 #include <QApplication>
@@ -55,6 +54,9 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	chatNicks->setSortingEnabled(true);
 	chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
+	connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
+		this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
+
 	mainLayout.addWidget(chatNicks, 0, 1);
 
 	acInfo = new QAction(QAction::tr("Info"), chatNicks);
@@ -63,8 +65,11 @@ HWChatWidget::HWChatWidget(QWidget* parent) :
 	connect(acKick, SIGNAL(triggered(bool)), this, SLOT(onKick()));
 	acBan = new QAction(QAction::tr("Ban"), chatNicks);
 	connect(acBan, SIGNAL(triggered(bool)), this, SLOT(onBan()));
+	acFollow = new QAction(QAction::tr("Follow"), chatNicks);
+	connect(acFollow, SIGNAL(triggered(bool)), this, SLOT(onFollow()));
 
 	chatNicks->insertAction(0, acInfo);
+	chatNicks->insertAction(0, acFollow);
 }
 
 void HWChatWidget::returnPressed()
@@ -146,6 +151,18 @@ void HWChatWidget::onInfo()
 	QListWidgetItem * curritem = chatNicks->currentItem();
 	if (curritem)
 		emit info(curritem->text());
+}
+
+void HWChatWidget::onFollow()
+{
+	QListWidgetItem * curritem = chatNicks->currentItem();
+	if (curritem)
+		emit follow(curritem->text());
+}
+
+void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
+{
+	if (item) onFollow();
 }
 
 void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)

@@ -617,12 +617,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		hwnet, SLOT(banPlayer(const QString&)));
 	connect(ui.pageNetGame->pChatWidget, SIGNAL(info(const QString&)),
 		hwnet, SLOT(infoPlayer(const QString&)));
+	connect(ui.pageNetGame->pChatWidget, SIGNAL(follow(const QString&)),
+		hwnet, SLOT(followPlayer(const QString&)));
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(kick(const QString&)),
 		hwnet, SLOT(kickPlayer(const QString&)));
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(ban(const QString&)),
 		hwnet, SLOT(banPlayer(const QString&)));
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(info(const QString&)),
 		hwnet, SLOT(infoPlayer(const QString&)));
+	connect(ui.pageRoomsList->chatWidget, SIGNAL(follow(const QString&)),
+		hwnet, SLOT(followPlayer(const QString&)));
 
 // chatting
 	connect(ui.pageRoomsList->chatWidget, SIGNAL(chatLine(const QString&)),

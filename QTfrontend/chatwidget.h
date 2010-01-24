@@ -20,6 +20,7 @@
 #define _CHAT_WIDGET_INCLUDED
 
 #include <QWidget>
+#include <QListWidget>
 #include <QString>
 #include <QGridLayout>
 
@@ -48,6 +49,7 @@ class HWChatWidget : public QWidget
   void kick(const QString & str);
   void ban(const QString & str);
   void info(const QString & str);
+  void follow(const QString &);
 
  private:
   QGridLayout mainLayout;
@@ -58,12 +60,15 @@ class HWChatWidget : public QWidget
   QAction * acInfo;
   QAction * acKick;
   QAction * acBan;
+  QAction * acFollow;
 
  private slots:
   void returnPressed();
   void onBan();
   void onKick();
   void onInfo();
+  void onFollow();
+  void chatNickDoubleClicked(QListWidgetItem * item);
 };
 
 #endif // _CHAT_WIDGET_INCLUDED
