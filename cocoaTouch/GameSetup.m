@@ -48,7 +48,7 @@
 -(void) engineProtocol {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	IPaddress ip;
-	int idx, eProto;
+	int eProto;
 	BOOL clientQuit, serverQuit;
 	char buffer[BUFFER_SIZE], string[BUFFER_SIZE];
 	Uint8 msgSize;
@@ -181,7 +181,6 @@
 			while (!clientQuit){
 				/* Now we can communicate with the client using csd socket
 				 * sd will remain opened waiting other connections */
-				idx = 0;
 				msgSize = 0;
 				memset(buffer, 0, BUFFER_SIZE);
 				memset(string, 0, BUFFER_SIZE);

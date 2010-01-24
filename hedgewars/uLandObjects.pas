@@ -122,7 +122,7 @@ end;
 
 procedure FreeRects;
 begin
-Dispose(rects)
+	Dispose(rects)
 end;
 
 function CheckIntersect(x1, y1, w1, h1: LongInt): boolean;
@@ -502,8 +502,8 @@ if hasGirders then
     until (i>rightX-int);
     end;
 AddThemeObjects(ThemeObjects, (8 * MaxHedgehogs) div 18); // MaxHedgehogs should roughly correspond to available surface area.  Was also thinking maybe using playHeight * playWidth div constant   :)
-AddProgress;
-FreeRects
+AddProgress();
+FreeRects();
 end;
 
 procedure AddOnLandObjects(Surface: PSDL_Surface);

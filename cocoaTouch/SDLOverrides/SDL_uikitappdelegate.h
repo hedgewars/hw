@@ -24,7 +24,7 @@
 #import "SDL_video.h"
 
 @interface SDLUIKitDelegate:NSObject<UIApplicationDelegate> {
-    UIWindow *window;
+	UIWindow *window;
 	SDL_WindowID windowID;
 	UITabBarController *controller;
 }

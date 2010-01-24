@@ -314,8 +314,7 @@ end;
 function LandBackPixel(x, y: LongInt): LongWord;
 var p: PLongWordArray;
 begin
-	if LandBackSurface = nil then
-		LandBackPixel:= 0
+	if LandBackSurface = nil then LandBackPixel:= 0
 	else
 	begin
 		p:= LandBackSurface^.pixels;
@@ -328,61 +327,63 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
-r.y:= 0;
-while r.y < LAND_HEIGHT do
+	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
+	r.y:= 0;
+	while r.y < LAND_HEIGHT do
 	begin
-	r.x:= 0;
-	while r.x < LAND_WIDTH do
+		r.x:= 0;
+		while r.x < LAND_WIDTH do
 		begin
-		SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-		inc(r.x, tmpsurf^.w)
+			SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+			inc(r.x, tmpsurf^.w)
 		end;
-	inc(r.y, tmpsurf^.h)
+		inc(r.y, tmpsurf^.h)
 	end;
-SDL_FreeSurface(tmpsurf);
+	SDL_FreeSurface(tmpsurf);
 
-LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+	// freed in free_uLand() below
+	LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
-tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
-for x:= 0 to LAND_WIDTH - 1 do
+	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
+	for x:= 0 to LAND_WIDTH - 1 do
 	begin
-	yd:= LAND_HEIGHT - 1;
-	repeat
-		while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
+		yd:= LAND_HEIGHT - 1;
+		repeat
+			while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
 
-		if (yd < 0) then yd:= 0;
+			if (yd < 0) then yd:= 0;
 
-		while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
-		dec(yd);
-		yu:= yd;
+			while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
+			dec(yd);
+			yu:= yd;
 
-		while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
-		while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
+			while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
+			while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
 
-		if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
+			if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
 			begin
-			rr.x:= x;
-			rr.y:= yd - 15;
-			r.x:= x mod tmpsurf^.w;
-			r.y:= 16;
-			r.w:= 1;
-			r.h:= 16;
-			SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+				rr.x:= x;
+				rr.y:= yd - 15;
+				r.x:= x mod tmpsurf^.w;
+				r.y:= 16;
+				r.w:= 1;
+				r.h:= 16;
+				SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
 			end;
-		if (yu > 0) then
+			if (yu > 0) then
 			begin
-			rr.x:= x;
-			rr.y:= yu;
-			r.x:= x mod tmpsurf^.w;
-			r.y:= 0;
-			r.w:= 1;
-			r.h:= min(16, yd - yu + 1);
-			SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+				rr.x:= x;
+				rr.y:= yu;
+				r.x:= x mod tmpsurf^.w;
+				r.y:= 0;
+				r.w:= 1;
+				r.h:= min(16, yd - yu + 1);
+				SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
 			end;
-		yd:= yu - 1;
-	until yd < 0;
+			yd:= yu - 1;
+		until yd < 0;
 	end;
+	SDL_FreeSurface(tmpsurf);
 end;
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
@@ -638,23 +639,19 @@ end;
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
 begin
-WriteLnToConsole('Generating land...');
+	WriteLnToConsole('Generating land...');
+	GenBlank(EdgeTemplates[SelectTemplate]);
+	AddProgress();
 
-GenBlank(EdgeTemplates[SelectTemplate]);
+	tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
 
-AddProgress;
+	TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
+	ColorizeLand(tmpsurf);
+	AddOnLandObjects(tmpsurf);
 
-tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
-
-TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
-ColorizeLand(tmpsurf);
-AddOnLandObjects(tmpsurf);
-
-LandSurface2LandPixels(tmpsurf);
-SDL_FreeSurface(tmpsurf);
-
-AddProgress;
-
+	LandSurface2LandPixels(tmpsurf);
+	SDL_FreeSurface(tmpsurf);
+	AddProgress();
 end;
 
 procedure MakeFortsMap;
@@ -689,34 +686,34 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
-    begin
-	cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
-	cpY:= LAND_HEIGHT - tmpsurf^.h;
-    if SDL_MustLock(tmpsurf) then
-       SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+	tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+	if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
+	begin
+		cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
+		cpY:= LAND_HEIGHT - tmpsurf^.h;
+		if SDL_MustLock(tmpsurf) then
+			SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
 
-    p:= tmpsurf^.pixels;
-    for y:= 0 to Pred(tmpsurf^.h) do
-        begin
-        for x:= 0 to Pred(tmpsurf^.w) do
-            begin
-            if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
-                Land[cpY + y, cpX + x]:= 0
-            else if p^[x] = (AMask or RMask) then
-                Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
-            else if p^[x] = $FFFFFFFF then
-                Land[cpY + y, cpX + x]:= COLOR_LAND;
+			p:= tmpsurf^.pixels;
+			for y:= 0 to Pred(tmpsurf^.h) do
+			begin
+				for x:= 0 to Pred(tmpsurf^.w) do
+				begin
+					if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
+						Land[cpY + y, cpX + x]:= 0
+					else if p^[x] = (AMask or RMask) then
+						Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
+					else if p^[x] = $FFFFFFFF then
+						Land[cpY + y, cpX + x]:= COLOR_LAND;
+				end;
+				p:= @(p^[tmpsurf^.pitch div 4]);
+			end;
 
-            end;
-        p:= @(p^[tmpsurf^.pitch div 4]);
-        end;
-
-    if SDL_MustLock(tmpsurf) then
-       SDL_UnlockSurface(tmpsurf);
-    SDL_FreeSurface(tmpsurf);
-    end;
+		if SDL_MustLock(tmpsurf) then
+			SDL_UnlockSurface(tmpsurf);
+	end;
+	if (tmpsurf <> nil) then 
+		SDL_FreeSurface(tmpsurf);
 end;
 
 procedure LoadMap;
@@ -737,7 +734,7 @@ Reset(f);
 Readln(f);
 if not eof(f) then Readln(f, MaxHedgehogs);
 
-if(MaxHedgehogs = 0) then MaxHedgehogs:= 18;
+if (MaxHedgehogs = 0) then MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;

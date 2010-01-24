@@ -67,6 +67,7 @@ UIButton *attackButton, *menuButton;
 
 	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260,50)];
 	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
+	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateHighlighted];
 	[attackButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchDown];
 	[attackButton addTarget:[self superclass] action:@selector(attackButtonReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
 	[self addSubview:attackButton];

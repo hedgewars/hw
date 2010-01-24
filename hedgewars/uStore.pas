@@ -1001,9 +1001,10 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-str(Hedgehog.Gear^.Health, s);
-if Hedgehog.HealthTagTex <> nil then FreeTexture(Hedgehog.HealthTagTex);
-Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
+	str(Hedgehog.Gear^.Health, s);
+	if Hedgehog.HealthTagTex <> nil then
+		FreeTexture(Hedgehog.HealthTagTex);
+	Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;

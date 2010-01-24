@@ -530,9 +530,10 @@ begin
 	begin
 		convertedSurf:= SDL_ConvertSurface(tmpsurf, @conversionFormat, SDL_SWSURFACE);
 		SDL_FreeSurface(tmpsurf);
-		doSurfaceConversion:= convertedSurf
-	end
-	else doSurfaceConversion:= tmpsurf;
+		exit(convertedSurf);
+	end;
+
+	exit(tmpsurf);
 end;
 
 function endian(independent: LongWord): LongWord;
