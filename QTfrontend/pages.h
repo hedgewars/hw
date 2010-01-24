@@ -433,6 +433,7 @@ private:
 	ToggleButtonWidget * TBW_vampiric;
 	ToggleButtonWidget * TBW_karma;
 	ToggleButtonWidget * TBW_artillery;
+	ToggleButtonWidget * TBW_randomorder;
 
 	QSpinBox * SB_DamageModifier;
 	QSpinBox * SB_TurnTime;

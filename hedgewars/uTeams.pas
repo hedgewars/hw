@@ -309,7 +309,18 @@ end;
 procedure InitTeams;
 var i, t: LongInt;
     th: LongInt;
+    cp: PClan;
 begin
+if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
+   for i:= 0 to ClansCount * 8 do
+      begin
+      t:= GetRandom(Pred(ClansCount))+1;
+      cp:= ClansArray[0];
+      ClansArray[0]:= ClansArray[t];
+      ClansArray[t]:= cp;
+      ClansArray[t]^.ClanIndex:= t;
+      ClansArray[0]^.ClanIndex:= 0;
+      end;
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin

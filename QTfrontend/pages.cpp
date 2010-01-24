@@ -1049,6 +1049,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_artillery->setToolTip(tr("Your hogs are unable to move, put your artillery skills to the test"));
 	glGMLayout->addWidget(TBW_artillery,2,2,1,1);
 
+	TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder.png");
+	TBW_randomorder->setText(ToggleButtonWidget::tr("Random Order"));
+    TBW_randomorder->setToolTip(tr("Order of play is random instead of in room order."));
+	glGMLayout->addWidget(TBW_randomorder,2,3,1,1);
+
 	// Right
 	QLabel * l;
 
@@ -1196,13 +1201,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_vampiric->button(), 9);
 	mapper->addMapping(TBW_karma->button(), 10);
 	mapper->addMapping(TBW_artillery->button(), 11);
-	mapper->addMapping(SB_DamageModifier, 12);
-	mapper->addMapping(SB_TurnTime, 13);
-	mapper->addMapping(SB_InitHealth, 14);
-	mapper->addMapping(SB_SuddenDeath, 15);
-	mapper->addMapping(SB_CaseProb, 16);
-	mapper->addMapping(SB_MinesTime, 17);
-	mapper->addMapping(SB_Mines, 18);
+	mapper->addMapping(TBW_randomorder->button(), 12);
+	mapper->addMapping(SB_DamageModifier, 13);
+	mapper->addMapping(SB_TurnTime, 14);
+	mapper->addMapping(SB_InitHealth, 15);
+	mapper->addMapping(SB_SuddenDeath, 16);
+	mapper->addMapping(SB_CaseProb, 17);
+	mapper->addMapping(SB_MinesTime, 18);
+	mapper->addMapping(SB_Mines, 19);
 
 	mapper->toFirst();
 }
