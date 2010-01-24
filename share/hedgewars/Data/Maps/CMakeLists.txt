@@ -27,6 +27,7 @@ foreach(dir
 	PirateFlag
 	Plane
 	Ropes
+    Ruler
 	Sheep
 	Trash
 	Tree
