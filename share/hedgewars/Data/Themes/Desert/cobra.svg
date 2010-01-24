@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="274.41043"
+   height="234.21957"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="cobra.svg"
+   inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/cobra.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3650"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3699"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3734"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3759"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3797"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3820"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3844"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3867"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3946"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3967"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4005"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4036"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4036-2"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4078"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4105"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective4126"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3662"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3683"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3683-4"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3683-6"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3683-69"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3683-7"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="203.05009"
+     inkscape:cy="57.997839"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="952"
+     inkscape:window-x="-8"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-113.61106,-360.89958)">
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#9ebc00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       d="m 263.8236,361.40359 c -0.89129,-0.005 -1.78127,-0.002 -2.6862,0.0147 -12.71504,0.24165 -27.25418,2.7746 -39.8355,8.01434 -14.37787,5.98793 -26.31945,15.57828 -29.65154,29.41539 -3.09351,12.84635 1.60696,25.31578 10.24299,37.03122 8.63648,11.71606 21.23046,22.80815 34.33026,33.19379 0.005,0.005 0.01,0.01 0.0147,0.0147 5.01983,4.29777 10.94033,7.6625 15.51209,12.69305 9.37307,10.35649 13.59719,25.48416 10.71528,39.39271 -0.0499,0.25334 -0.32095,0.441 -0.57562,0.39851 -40.17262,-6.59757 -82.75141,-13.74013 -122.01557,0.78224 -7.0072,2.59171 -14.14692,6.97379 -19.11336,12.75209 -4.96645,5.77828 -7.7793,12.9177 -6.22845,21.13539 1.82834,9.68813 7.67132,16.89958 15.27593,22.1538 7.6046,5.25421 16.97909,8.52647 25.74031,10.25775 23.73629,4.69043 48.19895,7.05431 72.32085,5.47571 29.81289,-1.95104 63.02664,-11.80426 80.89601,-37.41496 2.20378,-3.1585 1.20215,-2.77195 3.41791,-5.11815 10.32748,1.121 41.65152,11.88246 67.08888,13.68775 4.10907,-0.7067 4.21617,-3.00071 1.60724,-5.2711 -18.49196,-10.37969 -37.39184,-22.11388 -61.91536,-27.09058 -0.24218,-0.0497 -0.42512,-0.30036 -0.39857,-0.54614 2.51832,-22.23059 -11.60408,-41.51718 -16.76662,-62.75677 -0.17027,-0.7006 -0.6176,-1.51472 -0.57561,-2.5091 1.35183,-31.98 17.01095,-46.49246 30.97988,-65.88577 1.9574,-2.71745 2.82736,-5.5152 2.67145,-8.22095 -0.15578,-2.70381 -1.31318,-5.25755 -3.14374,-7.61582 -3.66257,-4.7184 -10.01561,-8.77302 -17.56363,-12.22076 -15.09528,-6.89511 -34.96278,-11.28495 -47.70224,-11.71892 -0.86502,-0.0295 -1.75055,-0.0401 -2.64193,-0.0442 l 0,-3e-5 1.6e-4,1.1e-4 z"
+       id="path3630"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="csssscccccssssssscccccsssssssccc" />
+    <path
+       style="opacity:0.40000000000000002;color:#000000;fill:#f2ffb1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 301.50001,395.25972 c 6.16476,5.26378 12.49544,0.31075 18.21727,-3.87961 l 1.34942,-3.71093 c 1.79799,-2.89843 5.15181,-2.29628 7.75921,-3.37357 l -14.50634,-9.78333 -32.7236,-9.446 c -21.0833,-3.55507 -44.22706,-2.89962 -75.5679,14.50634 11.75768,-1.46347 25.85423,-7.99042 34.41039,3.37357 7.70827,10.23785 10.19343,15.01076 23.61497,17.20519 5.95108,-0.23378 12.88087,-1.34432 16.36179,-4.04828 4.02482,-4.38389 15.02214,-4.67131 21.08479,-0.84338 z"
+       id="path3810"
+       sodipodi:nodetypes="cccccccsccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.40000000000000002;color:#000000;fill:#f2ffb1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 231.5825,368.18733 c 11.24919,-3.86505 41.72057,-5.38998 47.77714,2.28126 6.49732,8.22952 -0.6722,11.98879 8.04722,11.47814 8.35673,-0.49458 0.9356,-2.13857 6.95681,-9.43818 3.09505,-3.75218 8.17712,-1.01101 14.5582,0.99165 -45.35434,-20.31527 -68.11185,-8.1326 -77.33937,-5.31287 z"
+       id="path4022"
+       sodipodi:nodetypes="cssscc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(0.61868216,0,0,0.63816351,-10.829503,112.67578)"
+       d="m 472.24632,417.98639 c 0,14.78413 -13.56782,26.76904 -30.30458,26.76904 -16.73675,0 -30.30457,-11.98491 -30.30457,-26.76904 0,-14.78414 13.56782,-26.76904 30.30457,-26.76904 16.73676,0 30.30458,11.9849 30.30458,26.76904 z"
+       sodipodi:ry="26.769043"
+       sodipodi:rx="30.304577"
+       sodipodi:cy="417.98639"
+       sodipodi:cx="441.94174"
+       id="path3673"
+       style="color:#000000;fill:#618000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#ecff0d;fill-opacity:1;stroke:none"
+       d="m 315.19814,408.16858 c -18.62033,10.42776 -52.65741,1.17275 -80.15187,-11.21172 1.01019,0.89846 9.07378,30.05944 16.69831,52.48039 7.62452,22.42094 27.8037,47.17893 30.2955,87.78537 2.49179,40.60643 -77.05076,54.38876 -77.05076,54.38876 28.91426,0.52895 75.43445,-9.64601 99.23564,-31.48823 23.80119,-21.84224 8.37056,-55.4486 -6.67932,-104.24514 -15.04989,-48.79651 11.01436,-34.66198 17.6525,-47.70943 z"
+       id="path3638"
+       sodipodi:nodetypes="cczzczzc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 314.72103,511.22096 c 8.44107,14.475 -0.18198,57.90006 -43.01285,71.31057 -43.16997,13.51668 -83.18843,13.3425 -126.83275,1.44634 -21.8437,-5.95397 -28.62566,-26.71729 -28.62566,-26.71729 20.06741,30.37532 74.09203,30.95775 115.43978,25.62249 42.3739,-10.23664 78.3348,-18.85929 83.03148,-71.66211 z"
+       id="path3749"
+       sodipodi:nodetypes="cssccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 270.96923,414.65773 26.98854,4.89165 15.68709,-7.25315 -18.89198,11.97616 c 0,0 -6.09766,8.28827 -12.22917,8.51826 -23.97118,0.8991 -30.21621,-11.38852 -37.61528,-22.6029 -3.49869,-5.30278 -12.26098,-12.41204 -20.49441,-18.80764 12.11269,7.71554 17.39086,15.34347 46.55521,23.27762 z"
+       id="path4026"
+       sodipodi:nodetypes="ccccsscc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 234.72421,397.41134 c 0,0 26.06497,7.02033 35.11368,8.49207 5.63977,0.91727 11.72074,2.7108 17.12085,0.84339 7.38426,-2.55355 12.23706,-1.86169 17.66184,-0.26998 4.74668,1.39277 6.43796,0.17373 9.54727,-1.93132 5.28842,-3.58035 5.92513,-7.1607 8.35557,-10.74104 0.8262,9.16884 -7.17744,17.89874 -11.96337,20.74798 -11.36535,7.09772 -31.00871,2.31301 -36.04856,1.11735 -19.42423,-5.54079 -29.72325,-11.58853 -40.96802,-17.58373 l 1.18074,-0.67472 z"
+       id="path4095"
+       sodipodi:nodetypes="cssssccccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.15;fill:#000000;stroke:none"
+       d="m 194.43717,410.69783 c 0,0 -1.18489,-20.82342 12.60298,-23.53467 18.95571,-3.72747 25.8468,16.77685 62.664,26.48249 14.67695,3.8691 34.43045,14.06484 48.83364,-6.6698 2.23547,-3.21815 4.28425,-7.08881 7.63351,-9.78044 1.94031,-1.55932 7.15642,-3.5782 7.15642,-3.5782 0,0 -6.36964,15.00895 -12.40446,20.03796 -3.01741,2.51451 -7.68599,2.14398 -10.97317,4.29385 -1.50579,0.98481 -2.23769,2.95432 -3.81675,3.81676 -8.83222,4.82388 -10.66379,10.97345 -10.52501,19.32934 0.12718,7.65891 -9.51997,10.87575 -17.16548,10.40515 -16.77364,-1.03249 -28.28005,-11.02587 -35.76306,-18.76132 -7.96877,-8.23761 -8.94239,-18.08074 -13.83575,-24.57037 -9.46189,-15.71813 -34.22859,-24.03378 -34.40687,2.52925 z"
+       id="path3747"
+       sodipodi:nodetypes="csssscsssssscc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g3914"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       transform="matrix(0.47229934,0,0,0.47229934,59.952635,197.63379)">
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3857"
+         d="m 402.04071,554.35698 c 41.66443,14.94973 74.69202,32.87651 100.51018,-1.01016 -21.78742,43.14289 -63.75997,19.634 -100.51018,1.01016 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 415.40022,587.35358 c 41.16903,9.55531 74.47791,22.89181 95.20258,-12.1071 -15.87554,43.32954 -58.28619,25.69171 -95.20258,12.1071 z"
+         id="path3880"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3882"
+         d="m 431.03161,613.78578 c 38.99273,4.82482 71.19656,13.85461 86.16875,-20.12104 -9.53651,41.1329 -50.61704,29.03479 -86.16875,20.12104 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 435.16721,631.41505 c 38.8501,7.1917 70.54592,18.39727 88.23454,-16.23913 -12.7744,42.40767 -53.16207,27.50867 -88.23454,16.23913 z"
+         id="path3884"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3886"
+         d="m 442.39786,645.22132 c 38.40741,11.88487 68.85315,26.13647 92.65304,-0.80307 -20.08424,34.29814 -58.77569,15.60882 -92.65304,0.80307 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 448.11215,665.57846 c 37.81523,11.88487 67.79154,26.13647 91.22447,-0.80307 -19.77458,34.29814 -57.86946,15.60882 -91.22447,0.80307 z"
+         id="path3888"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3890"
+         d="m 448.82132,680.4747 c 40.17706,16.13092 71.68849,34.58393 98.97914,4.34173 -23.83713,39.08554 -63.84255,14.95698 -98.97914,-4.34173 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 449.89786,712.02182 c 38.70351,12.10379 69.38396,26.61791 93.36732,-0.81786 -20.23907,34.92991 -59.2288,15.89633 -93.36732,0.81786 z"
+         id="path3892"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3894"
+         d="m 442.755,727.9432 c 39.14764,15.16865 70.18017,33.35794 94.43875,-1.02495 -20.47133,43.77466 -59.90848,19.92151 -94.43875,1.02495 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 434.89786,740.07127 c 41.66443,14.94973 74.69202,32.87651 100.51018,-1.01016 -21.78742,43.14289 -63.75997,19.634 -100.51018,1.01016 z"
+         id="path3896"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3898"
+         d="m 426.92814,758.75784 c 42.88189,10.98009 79.12819,31.16059 101.65765,-4.99611 -17.64917,44.99453 -63.3241,20.0946 -101.65765,4.99611 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 417.90945,786.52781 c 39.03855,6.4008 74.91426,17.06832 93.33505,-14.70234 -13.59972,38.85804 -58.17391,24.85139 -93.33505,14.70234 z"
+         id="path3900"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3902"
+         d="m 397.83997,802.01129 c 38.2426,5.0785 73.49586,10.91943 97.51997,-14.68119 -19.77718,31.39156 -62.88583,23.63213 -97.51997,14.68119 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 377.34581,809.79716 c 40.733,4.00115 76.6877,10.06116 102.57046,-13.56988 -20.4646,31.39273 -65.87374,21.19106 -102.57046,13.56988 z"
+         id="path3904"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3906"
+         d="m 349.18357,814.79021 c 39.53073,10.40067 66.99637,18.80842 96.22447,-0.72911 -25.80468,23.7199 -61.40344,13.628 -96.22447,0.72911 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 395.22218,525.96679 c 43.65343,15.66341 78.25771,34.44599 105.3084,-1.05839 -22.82752,45.20248 -66.80379,20.5713 -105.3084,1.05839 z"
+         id="path3908"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3910"
+         d="m 382.47237,486.77888 c 47.73272,21.84318 86.07971,48.43353 116.41689,6.3049 -28.42741,48.31826 -75.26297,17.98526 -116.41689,-6.3049 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <path
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         d="m 370.32538,440.73007 c 55.59332,38.83142 99.41534,84.30656 138.5336,18.55454 -36.85575,71.11304 -90.90106,21.47583 -138.5336,-18.55454 z"
+         id="path3912"
+         sodipodi:nodetypes="ccc" />
+      <path
+         sodipodi:nodetypes="ccc"
+         id="path3980"
+         d="m 385.14681,431.08722 c 51.03856,38.43937 89.31968,61.36244 127.2836,29.98311 -40.60575,38.79161 -79.65106,10.04726 -127.2836,-29.98311 z"
+         style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </g>
+    <path
+       style="color:#000000;fill:#ffff00;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 168.61647,542.85599 c -5.7595,-7.15393 21.72922,-5.48897 34.43571,-5.67174 17.92027,-0.25775 47.59016,5.37691 47.59016,5.37691 0,0 -22.17071,6.43925 -35.39548,6.82736 -17.5049,0.51371 -46.63039,-6.53253 -46.63039,-6.53253 z"
+       id="path3640"
+       sodipodi:nodetypes="cscsc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       sodipodi:nodetypes="cscss"
+       id="path3787"
+       d="m 165.04261,539.82581 c -4.86803,-10.08753 25.02173,-8.77279 37.72821,-8.95554 17.92026,-0.25775 53.10056,5.78714 53.10056,5.78714 1.25396,0.37619 -11.53619,13.91405 -40.62452,12.73111 -17.49797,-0.71158 -47.55102,-4.06469 -50.20425,-9.56271 z"
+       style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       style="opacity:0.15;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 310.78501,550.81981 69.88883,13.4076 c -18.84922,-8.5108 -44.17542,-13.5672 -66.31063,-20.32548 l -3.5782,6.91788 z"
+       id="path3934"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="opacity:0.40000000000000002;color:#000000;fill:#f2ffb1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 260.79624,529.46357 c -3.26698,-0.89486 -40.5664,-7.62656 -56.10279,-8.3469 -22.47079,-1.04188 -60.7986,1.36469 -62.76314,16.67624 -2.062,16.07114 28.36979,16.75767 44.19373,20.2414 46.78527,10.30004 78.70413,-11.91636 80.29088,-19.90404 3.69024,-18.5767 9.0143,-5.55866 8.08954,-0.65135 -6.32364,33.5571 -61.39686,40.38217 -95.12757,35.06173 -19.47527,-3.07191 -54.3964,-12.50833 -49.92877,-31.71153 4.93335,-21.20505 47.96548,-25.92635 74.90798,-24.0981 15.10641,1.02509 51.72466,7.43462 57.72177,9.19702"
+       id="path3834"
+       sodipodi:nodetypes="csssssssss"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.40000000000000002;color:#000000;fill:#f2ffb1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 316.27159,536.62624 c 10.45063,0.42027 23.2186,7.79255 34.8279,11.68883 -11.9672,-2.82303 -24.66746,-7.60091 -35.90135,-8.46845 l 1.07345,-3.22038 z"
+       id="path3936"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#283800;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       d="m 263.8236,360.90177 c -0.89363,-0.005 -1.79052,-0.002 -2.70096,0.0147 -12.77449,0.24277 -27.35783,2.78828 -40.01261,8.0586 -14.46241,6.02315 -26.56311,15.7038 -29.94674,29.75487 -3.13801,13.03115 1.64608,25.66193 10.33156,37.44447 8.68482,11.78166 21.30533,22.90062 34.4188,33.29711 5.06885,4.33975 10.96696,7.69627 15.46781,12.64876 9.25996,10.2315 13.44459,25.20815 10.59722,38.94994 -40.17133,-6.59736 -82.85619,-13.77012 -122.28125,0.81176 -14.1517,5.2342 -28.81435,17.69035 -25.65177,34.44833 3.71233,19.67093 23.77546,29.32733 41.4,32.81005 23.76911,4.69692 48.277,7.07266 72.45368,5.49049 69.20363,-7.90451 81.7552,-37.18486 84.56697,-41.40197 17.90595,2.00225 43.12928,10.52892 68.02869,13.32911 4.87423,-0.62444 4.09586,-4.29165 1.20079,-6.63361 -10.28515,-8.32012 -44.31049,-24.84296 -62.82301,-27.8752 2.54546,-22.47025 -11.4574,-41.44678 -16.5863,-62.54817 -0.19082,-0.7851 -0.59532,-1.561 -0.56085,-2.37625 1.34518,-31.82324 16.88784,-46.16406 30.89133,-65.60534 2.01235,-2.79378 2.92321,-5.71297 2.75999,-8.54566 -0.16295,-2.8282 -1.37143,-5.47992 -3.24705,-7.89626 -3.74904,-4.82977 -10.16957,-8.90329 -17.75552,-12.36833 -15.17314,-6.93067 -35.05781,-11.32594 -47.8941,-11.76321 -0.87272,-0.0297 -1.76306,-0.0399 -2.65668,-0.0442 l 0,-3e-5 0,4e-5 z m -0.0295,3.51272 c 0.86132,0.005 1.7172,0.0159 2.55337,0.0442 8.74597,0.29793 21.62799,2.2365 33.35614,6.43508 3.79708,1.35933 10.44282,6.27374 15.50911,11.81999 5.06631,5.54623 7.79098,11.84069 5.03591,18.09723 -4.52322,10.27186 -12.59174,16.16758 -29.06117,15.65967 -13.37103,-0.41236 -47.64615,-12.59944 -61.26608,-22.28998 -17.88243,-12.72328 -31.65647,-7.91437 -35.12726,3.72272 2.00111,-11.91973 15.18798,-20.48133 27.67379,-25.68129 12.13848,-5.0553 26.3591,-7.55696 38.71378,-7.79294 0.88436,-0.0169 1.7511,-0.0193 2.61241,-0.0147 l 0,5e-5 0,-3e-5 z m 40.30779,7.57155 c -0.91917,-0.62425 7.27705,3.22518 8.81134,3.926 7.30902,3.33856 12.83473,7.03508 15.9556,11.05565 1.50856,2.11082 2.69824,4.93228 2.41819,7.45225 -2.37122,0.33386 -6.23611,1.04635 -8.19704,2.79344 -0.006,-4.68821 -2.71285,-9.01924 -5.99072,-13.06177 -3.27786,-4.04252 -8.96433,-9.42653 -12.99738,-12.16557 l 1e-5,0 z m -95.41923,16.56169 c 16.57192,0.63139 19.95457,9.63128 36.8984,17.60626 18.26205,8.59544 43.65733,14.48391 50.95515,13.46405 -6.35435,16.31302 -3.45517,31.39356 2.19328,51.69851 2.79225,9.11856 6.17333,15.16646 8.1756,20.75074 4.59214,12.80738 10.79893,27.80275 8.18063,41.73722 -5.09396,27.10984 -26.20149,41.51931 -51.83771,49.8154 -33.37894,10.64117 -66.42635,8.61892 -100.37838,3.13976 -17.3687,-2.80294 -40.41808,-10.29164 -45.47223,-29.57337 -3.90604,-14.90166 10.00916,-28.17839 22.49464,-32.98305 17.32198,-6.66586 37.00439,-8.4527 55.46075,-8.39798 22.45717,0.59831 44.12147,4.20116 66.24381,7.87418 -4.87128,19.52354 -23.84272,23.44777 -39.29105,23.58873 -18.25234,0.16655 -37.49286,0.69698 -54.71292,-6.50887 -5.12658,-2.14525 -4.74725,-6.50785 0.38374,-8.25048 -7.36117,1.59406 -5.6645,7.49863 -2.30649,9.41748 12.59708,7.19829 28.35273,8.02445 43.36516,8.01551 18.09887,-0.0107 47.24419,2.54837 54.49339,-23.73524 4.24354,-15.38585 0.65321,-32.46101 -6.24321,-43.02351 -2.69949,-4.1345 -15.39422,-13.64973 -19.09553,-16.72836 -17.32395,-14.4096 -34.93601,-29.06735 -42.65544,-50.99997 -2.57445,-9.69164 0.041,-27.40641 13.14841,-26.90701 z m 122.33871,6.83157 c -0.74391,2.30809 -3.18006,6.94207 -4.39687,8.63136 -13.05865,18.12955 -24.57431,31.73051 -26.93566,57.85985 -3.05068,-14.63572 -6.62421,-28.80594 0.70138,-42.21607 11.14873,-2.62051 20.46727,-10.52152 22.29521,-18.8001 1.64873,-1.8032 5.32183,-3.89943 8.33594,-5.47504 z m -12.55788,139.11806 c 13.13725,1.39814 56.24441,20.84213 62.20109,28.36917 0.86525,3.5294 -50.94018,-10.33567 -66.66616,-12.88345 1.35411,-3.17985 4.12388,-12.75196 4.46507,-15.48572 z"
+       id="path3620"
+       sodipodi:nodetypes="csssscccssscccscsssssssccccsssscscccscsccccsccccscsssccscscsscsscsccscccccccccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path3718"
+       d="m 309.83602,410.9034 c -0.83521,10.20012 -4.27978,16.89284 -6.95833,26.16227 0.18666,-9.23268 0.71171,-15.00533 0.20983,-25.61509 l 6.7485,-0.54718 z"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#ffffff;stroke:none"
+       d="m 308.74778,411.74679 c -0.60133,6.78058 -3.01936,12.42573 -4.77095,18.48741 0.12207,-6.03763 0.68602,-11.19143 0.35782,-18.12959 l 4.41313,-0.35782 z"
+       id="path3714"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       sodipodi:nodetypes="ccscc"
+       id="path3652"
+       d="m 308.74778,411.74679 c -0.60133,6.78058 -3.01936,12.42573 -4.77095,18.48741 0.061,-3.01882 5.09133,-13.41975 0.84776,-13.63335 -1.05571,-0.0531 -0.32584,-1.02716 -0.48994,-4.49624 l 4.41313,-0.35782 z"
+       style="fill:#656565;stroke:none;color:#000000;fill-opacity:0.37327187000000001;fill-rule:nonzero;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    <path
+       style="fill:#d02e87;fill-opacity:1;stroke:none"
+       d="m 299.49461,410.07804 c -0.24507,0.0128 -0.01,0.0899 -0.2166,0.22139 -2.57484,1.02782 -6.26412,1.34779 -8.91886,1.65092 -1.3346,0.1524 -1.62868,0.60464 -0.66628,0.93619 1.27487,0.43921 1.45944,1.44221 2.09162,2.12746 0.63215,0.68524 1.20932,1.7227 1.75635,3.05519 1.09407,2.66496 2.05892,6.4274 3.94075,10.43486 3.76369,8.01492 10.58307,17.25827 30.08594,20.87332 8.44979,1.56624 25.42022,-1.08107 34.75191,-5.8483 6.94501,-3.54797 5.5367,-3.351 17.65219,-6.56791 0.65196,-0.17029 1.12881,-0.85161 1.06558,-1.52247 -0.0632,-0.67085 -0.65897,-1.25107 -1.33125,-1.29657 -4.06164,-0.27665 -7.31591,0.28803 -9.80022,0.78224 0.72978,-0.30947 1.39679,-0.62034 2.31722,-0.92984 2.81281,-0.94577 6.30262,-1.83528 9.41648,-2.56812 0.74188,-0.11983 1.30791,-0.90379 1.18811,-1.64566 -0.11971,-0.7419 -0.90377,-1.30792 -1.64566,-1.18814 -11.58359,1.06441 -16.2415,4.3688 -22.07999,8.11764 -7.85571,5.04408 -19.93728,6.42213 -27.54096,5.78567 -15.10436,-1.26428 -21.68552,-8.8289 -24.97763,-16.44191 -1.64605,-3.80652 -2.52732,-7.62753 -3.29132,-10.65627 -0.38201,-1.51435 -0.72821,-2.81921 -1.19552,-3.91122 -0.4673,-1.09201 -0.87404,-1.03379 -2.17385,-1.36419 -0.13936,-0.0361 -0.28419,-0.051 -0.42801,-0.0442 l 0,-4e-5 0,2e-5 z"
+       id="path3635"
+       sodipodi:nodetypes="ccssssssscsscscscssssssccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#e460a9;fill-opacity:1;stroke:none"
+       d="m 289.69287,412.38289 c -0.54655,0.0877 8.68693,-1.10684 10.12071,-2.02416 4.75693,1.20915 0.49869,30.01721 31.62265,32.62239 7.88691,0.66017 20.14481,-0.67446 28.44858,-6.00622 5.87592,-3.77288 10.07447,-6.55085 21.43413,-7.59468 -6.27013,1.47566 -14.08336,3.5413 -15.32079,5.56352 -2.03196,3.32066 4.21031,-0.72651 13.60156,-0.0869 -12.13096,3.22103 -11.03191,3.86574 -17.92931,7.38938 -8.87143,4.5321 -25.16778,6.81518 -33.0029,5.36287 -38.33121,-7.10509 -28.37451,-33.71515 -38.97463,-35.22628 z"
+       id="path2832"
+       sodipodi:nodetypes="ccsscscssc"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png" />
+    <path
+       sodipodi:nodetypes="ccsscssc"
+       id="path4018"
+       d="m 298.72985,413.59552 2.83274,0.59638 c 1.26646,14.41397 13.05633,26.90735 25.82273,29.0133 7.02668,1.15913 14.45814,1.57607 24.16814,-2.13546 9.48413,-3.62519 16.93773,-10.3197 24.48478,-10.59661 -8.91563,0.99095 -14.44388,8.07251 -23.85365,11.30557 -9.61771,3.30449 -17.68486,3.93891 -25.90149,2.34146 -24.69813,-4.80175 -26.2975,-28.8345 -27.55325,-30.52464 z"
+       style="opacity:0.4;color:#000000;fill:#fff2d5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#ffffde;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3663"
+       sodipodi:cx="441.94174"
+       sodipodi:cy="417.98639"
+       sodipodi:rx="30.304577"
+       sodipodi:ry="26.769043"
+       d="m 472.24632,417.98639 c 0,14.78413 -13.56782,26.76904 -30.30458,26.76904 -16.73675,0 -30.30457,-11.98491 -30.30457,-26.76904 0,-14.78414 13.56782,-26.76904 30.30457,-26.76904 16.73676,0 30.30458,11.9849 30.30458,26.76904 z"
+       transform="matrix(0.58250251,0,0,0.58250251,5.0079839,134.45135)"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="matrix(0.55577471,0,0,0.55577471,5.4473351,146.86809)"
+       d="m 567.20064,419.50162 c 0,14.78413 -11.08039,26.76904 -24.74874,26.76904 -13.66835,0 -24.74873,-11.98491 -24.74873,-26.76904 0,-14.78414 11.08038,-26.76905 24.74873,-26.76905 13.66835,0 24.74874,11.98491 24.74874,26.76905 z"
+       sodipodi:ry="26.769043"
+       sodipodi:rx="24.748737"
+       sodipodi:cy="419.50162"
+       sodipodi:cx="542.4519"
+       id="path3675"
+       style="color:#000000;fill:#618000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       sodipodi:type="arc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#ffffde;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.13681161px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3665"
+       sodipodi:cx="542.4519"
+       sodipodi:cy="419.50162"
+       sodipodi:rx="24.748737"
+       sodipodi:ry="26.769043"
+       d="m 567.20064,419.50162 c 0,14.78413 -11.08039,26.76904 -24.74874,26.76904 -13.66835,0 -24.74873,-11.98491 -24.74873,-26.76904 0,-14.78414 11.08038,-26.76905 24.74873,-26.76905 13.66835,0 24.74874,11.98491 24.74874,26.76905 z"
+       transform="matrix(0.51240024,0,0,0.51240024,28.975884,163.54482)"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3669"
+       sodipodi:cx="420"
+       sodipodi:cy="395.93362"
+       sodipodi:rx="11.785714"
+       sodipodi:ry="10.714286"
+       d="m 431.78571,395.93362 c 0,5.91734 -5.27664,10.71429 -11.78571,10.71429 -6.50907,0 -11.78571,-4.79695 -11.78571,-10.71429 0,-5.91733 5.27664,-10.71428 11.78571,-10.71428 6.50907,0 11.78571,4.79695 11.78571,10.71428 z"
+       transform="matrix(0.47229934,0,0,0.47229934,59.008036,192.9108)"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="path3671"
+       sodipodi:cx="520"
+       sodipodi:cy="399.86218"
+       sodipodi:rx="9.2857141"
+       sodipodi:ry="8.9285717"
+       d="m 529.28571,399.86218 c 0,4.93112 -4.15735,8.92857 -9.28571,8.92857 -5.12836,0 -9.28571,-3.99745 -9.28571,-8.92857 0,-4.93111 4.15735,-8.92857 9.28571,-8.92857 5.12836,0 9.28571,3.99746 9.28571,8.92857 z"
+       transform="matrix(0.47229934,0,0,0.47229934,57.321253,191.73004)"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="cccc"
+       id="path3716"
+       d="m 282.19591,411.31063 c -0.23842,8.99088 4.54449,16.21212 9.02264,24.55982 -0.81347,-9.05517 -1.60074,-16.89232 -0.24986,-23.56667 l -8.77278,-0.99315 z"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:#ffffff;stroke:none"
+       d="m 283.23281,411.92571 c -0.17181,6.47866 3.2139,12.4722 6.44077,18.48741 -0.58617,-6.52499 -1.0927,-12.96235 -0.11933,-17.77179 l -6.32151,-0.71562 z"
+       id="path3712"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;color:#000000;fill:#3d5700;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       d="m 271.44462,409.16411 c 0.57485,0.90975 1.87624,0.85941 2.76362,1.321 4.89692,1.58553 9.89076,3.21731 15.07442,3.43044 2.65087,0.27028 4.84102,-1.40722 7.20019,-2.27756 2.07364,-0.8317 3.95092,0.77467 5.79222,1.47239 2.78646,1.18308 5.73381,-0.1732 8.27664,-1.33312 1.17436,-0.65456 2.5679,-1.0766 3.53985,-2.01532 0.41489,-0.73851 0.0494,-0.83388 -0.73303,-1.00309 -1.31948,0.14998 -2.61725,0.30242 -3.88425,0.7012 -1.72389,0.70973 -3.52117,1.67078 -5.43202,1.49375 -2.33662,-0.57927 -4.34694,-2.48756 -6.89731,-2.09182 -2.87906,0.23282 -5.10378,2.8488 -8.08495,2.49851 -5.44762,-0.43047 -10.48065,-0.64155 -15.61511,-2.41623 -1.21026,-0.5346 -2.16825,-0.95471 -2.00027,0.21985 z"
+       id="path3687"
+       sodipodi:nodetypes="cccccccccccccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.4;color:#000000;fill:#fff2d5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 295.0409,414.13226 2.68365,-0.56655 c 1.09441,14.02682 11.81363,26.03997 26.29982,30.6235 6.83668,2.12358 15.49356,2.41707 25.36088,-0.85327 9.7795,-3.24123 21.39292,-8.34173 25.31971,-8.06204 -4.8625,0.0874 -14.97265,5.76756 -24.68858,8.77099 -9.71594,3.00343 -18.97063,3.07721 -27.09422,1.05926 -22.81997,-5.66858 -26.6011,-29.293 -27.88126,-30.97189 z"
+       id="path3995"
+       sodipodi:nodetypes="cccscssc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:0.40000000000000002;color:#000000;fill:#f2ffb1;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="m 225.50439,562.27007 c -44.42983,1.30749 -93.0001,-1.48156 -89.03775,-28.20821 -7.81719,28.65216 43.09369,37.55841 89.03775,28.20821 z"
+       id="path4024"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/usr/share/hedgewars/Data/Themes/Desert/path3724.png"
+       sodipodi:nodetypes="csccccc"
+       id="path3650"
+       d="m 283.23281,411.92571 c -0.0859,3.23933 -0.76166,4.20488 0.28963,4.32375 6.65014,0.75195 3.1627,6.4998 6.15114,14.16366 -0.58617,-6.52499 -1.0927,-12.96235 -0.11933,-17.77179 l -6.32151,-0.71562 3e-5,0 4e-5,0 z"
+       style="fill:#656565;stroke:none;fill-opacity:0.37327188" />
+  </g>
+</svg>
