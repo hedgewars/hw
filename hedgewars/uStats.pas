@@ -110,7 +110,7 @@ if FinishedTurnsTotal <> 0 then
 	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
 		begin
 		PlaySound(sndStupid, false, PreviousTeam^.voicepack);
-		if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpGameState);
+		if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
 		end
 	else if DamageClan <> 0 then
 		if DamageTotal > DamageClan then
@@ -136,7 +136,7 @@ if FinishedTurnsTotal <> 0 then
 	else if isTurnSkipped then
 		begin
 		PlaySound(sndBoring, false, PreviousTeam^.voicepack);
-		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpGameState);
+		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
 		end
 	else
 		PlaySound(sndCoward, false, PreviousTeam^.voicepack);
