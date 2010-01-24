@@ -20,7 +20,7 @@
 
 unit uWorld;
 interface
-uses SDLh, uGears, uConsts, uFloat;
+uses SDLh, uGears, uConsts, uFloat, uRandom;
 
 const WorldDx: LongInt = -512;
       WorldDy: LongInt = -256;
@@ -66,7 +66,26 @@ var cWaveWidth, cWaveHeight: LongInt;
     fpsTexture: PTexture;
 
 procedure InitWorld;
+var i, t: LongInt;
+    cp: PClan;
 begin
+if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
+   begin
+   for i:= 0 to ClansCount * 4 do
+      begin
+      t:= GetRandom(ClansCount);
+      if t <> 0 then
+         begin
+         cp:= ClansArray[0];
+         ClansArray[0]:= ClansArray[t];
+         ClansArray[t]:= cp;
+         ClansArray[t]^.ClanIndex:= t;
+         ClansArray[0]^.ClanIndex:= 0;
+         end;
+      end;
+   CurrentTeam:= ClansArray[0]^.Teams[0];
+   end;
+
 cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
