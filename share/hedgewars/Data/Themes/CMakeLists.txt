@@ -20,6 +20,7 @@ foreach(dir
 	Snow
 	Underwater
     Compost
+    Olympics
 	)
 	add_subdirectory(${dir})
 endforeach(dir)
