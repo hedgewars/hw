@@ -71,7 +71,8 @@ type
             sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov);
+            sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
+						sprSmoke);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -86,7 +87,7 @@ type
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-			vgtSteam, vgtHealth);
+			vgtSteam, vgtSmoke, vgtHealth);
 
 	TGearsType = set of TGearType;
 
@@ -644,7 +645,9 @@ const	SpritesData: array[TSprite] of record
 			(FileName:  'amMolotov'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil; 
 			Width: 32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), //sprHandMolotov
 			(FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprMolotov
+			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprMolotov
+			(FileName: 'Smoke'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprSmoke
 			);
 
 	Wavez: array [TWave] of record

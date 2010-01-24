@@ -1382,21 +1382,41 @@ if not TestCollisionYwithGear(Gear, 1) then
                 AmmoShove(Gear, 4, 100);
                 Gear^.Radius:= 1;
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4, EXPLNoDamage);
+                if Random(100) > 90 then
+                  for i:= 0 to Random(3) do
+                    AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
                 if Gear^.Health > 0 then dec(Gear^.Health);
                 Gear^.Timer:= 450 - Gear^.Tag * 8
                 end
                 else begin
 // Modified fire
-                if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then
+                if ((GameTicks and $7FF) = 0) and ((GameFlags and gfSolidLand) = 0) then begin
                     DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 4);
+                    
+                    for i:= 0 to Random(3) do
+                      AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+                end;
                 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
         	    Gear^.Timer:= 100 - Gear^.Tag * 3;
                 if (Gear^.Damage > 3000+Gear^.Tag*1500) then Gear^.Health:= 0
                 end
             end
         end;
-if Gear^.Health = 0 then
-	DeleteGear(Gear)
+if Gear^.Health = 0 then begin
+  if (Gear^.State and gsttmpFlag) = 0 then begin
+    if Random(100) > 80 then begin
+      for i:= 0 to Random(3) do begin
+        AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+      end;
+    end;
+  end else begin
+    for i:= 0 to Random(3) do begin
+      AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), hwRound(Gear^.Y) - 2, vgtSmoke);
+    end;
+  end;
+  
+  DeleteGear(Gear)
+  end;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

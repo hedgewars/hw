@@ -200,6 +200,24 @@ begin
 		else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepSmoke(Gear: PVisualGear; Steps: Longword);
+begin
+	Gear^.X:= Gear^.X + (cWindSpeed + Gear^.dX) * Steps;
+	Gear^.Y:= Gear^.Y - (cDrownSpeed + Gear^.dY) * Steps;
+
+	Gear^.dX := Gear^.dX + (cWindSpeed * _0_3 * Steps);
+	//Gear^.dY := Gear^.dY - (cDrownSpeed * _0_995);
+
+	if Gear^.FrameTicks <= Steps then
+		if Gear^.Frame = 0 then DeleteVisualGear(Gear)
+		else
+			begin
+			if Random(2) = 0 then dec(Gear^.Frame);
+			Gear^.FrameTicks:= cExplFrameTicks
+			end
+		else dec(Gear^.FrameTicks, Steps)
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -332,6 +350,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepSpeechBubble,
 			@doStepBubble,
 			@doStepSteam,
+			@doStepSmoke,
 			@doStepHealth
 		);
 
@@ -423,6 +442,14 @@ with gear^ do
 				Frame:= 7 - random(3);
 				FrameTicks:= cExplFrameTicks * 2;
 				end;
+  vgtSmoke: begin
+				dx:= _0_0002 * (random(45) + 10);
+				dx.isNegative:= random(2) = 0;
+				dy:= _0_0002 * (random(45) + 10);
+				dy.isNegative:= false;
+				Frame:= 7 - random(2);
+				FrameTicks:= cExplFrameTicks * 2;
+				end;
 	vgtHealth: begin
 				dx:= _0_001 * random(45);
 				dx.isNegative:= random(2) = 0;
@@ -485,6 +512,14 @@ case Layer of
 		Gear:= Gear^.NextGear
 		end;
 	1: while Gear <> nil do
+		begin
+			if not cReducedQuality then
+				case Gear^.Kind of
+					vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+				end;
+		Gear:= Gear^.NextGear
+		end;
+	2: while Gear <> nil do
 		begin
         if not cReducedQuality then
             case Gear^.Kind of

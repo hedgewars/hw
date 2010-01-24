@@ -409,9 +409,11 @@ if CurrentTeam <> nil then
 				end
 		end;
 
+DrawVisualGears(1);
+
 DrawGears;
 
-DrawVisualGears(1);
+DrawVisualGears(2);
 
 DrawWater(cWaterOpacity);
 
