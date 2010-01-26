@@ -66,44 +66,39 @@ for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 filemode:= 0; // readonly
 Assign(f, FileName);
 reset(f);
-// if the locale does not exist, fallback to the default one
+TryDo(IOResult = 0, 'Cannot load locale "' + FileName + '"', false);
 if (IOResult <> 0) then
-begin
-	WriteLnToConsole('Warning: Cannot load selected locale "' + FileName + '" fallback to default en.txt');
-	Assign(f, 'en.txt');
-	reset(f);
-end;
-
-TryDo(IOResult = 0, 'Cannot load locale "' + FileName + ' nor en.txt"', true);
-while not eof(f) do
-	begin
-	readln(f, s);
-	if Length(s) = 0 then continue;
-	if not (s[1] in ['0'..'9']) then continue;
-	TryDo(Length(s) > 6, 'Load locale: empty string', true);
-	val(s[1]+s[2], a, c);
-	TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
-	TryDo(s[3] = ':', 'Load locale: ":" expected', true);
-	val(s[4]+s[5], b, c);
-	TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
-	TryDo(s[6] = '=', 'Load locale: "=" expected', true);
-	Delete(s, 1, 6);
-	case a of
-		0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
-		1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
-		2: if (b >=0) and (b <= ord(High(TEventId))) then begin
-			TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);
-			if first[TEventId(b)] then
-				begin
-				trevt_n[TEventId(b)]:= 0;
-				first[TEventId(b)]:= false;
-				end;
-			trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
-			inc(trevt_n[TEventId(b)]);
-			end;
-		end;
-	end;
-Close(f)
+   begin
+   while not eof(f) do
+       begin
+       readln(f, s);
+       if Length(s) = 0 then continue;
+       if not (s[1] in ['0'..'9']) then continue;
+       TryDo(Length(s) > 6, 'Load locale: empty string', true);
+       val(s[1]+s[2], a, c);
+       TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
+       TryDo(s[3] = ':', 'Load locale: ":" expected', true);
+       val(s[4]+s[5], b, c);
+       TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
+       TryDo(s[6] = '=', 'Load locale: "=" expected', true);
+       Delete(s, 1, 6);
+       case a of
+           0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammo[TAmmoStrId(b+1)]:= s;
+           1: if (b >=0) and (b <= ord(High(TMsgStrId))) then trmsg[TMsgStrId(b)]:= s;
+           2: if (b >=0) and (b <= ord(High(TEventId))) then begin
+               TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + inttostr(a) + ':' + inttostr(b), false);
+               if first[TEventId(b)] then
+                   begin
+                   trevt_n[TEventId(b)]:= 0;
+                   first[TEventId(b)]:= false;
+                   end;
+               trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
+               inc(trevt_n[TEventId(b)]);
+               end;
+           end;
+       end;
+   Close(f)
+   end
 {$I+}
 end;
 

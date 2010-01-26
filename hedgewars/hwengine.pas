@@ -278,6 +278,7 @@ begin
 
 	if cLocaleFName <> 'en.txt' then
 		LoadLocale(Pathz[ptLocale] + '/en.txt');
+	LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocaleFName,1,2)+'.txt');
 	LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
 
 	if recordFileName = '' then
