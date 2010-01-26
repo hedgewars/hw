@@ -120,6 +120,8 @@ var
 	CursorPoint	: TPoint;
 	TargetPoint	: TPoint;
 
+    TextureList : PTexture;
+
 
 procedure init_uMisc;
 procedure free_uMisc;
@@ -348,6 +350,15 @@ end;
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
 begin
 new(NewTexture);
+NewTexture^.PrevTexture:= nil;
+NewTexture^.NextTexture:= nil;
+if TextureList <> nil then
+    begin
+    TextureList^.PrevTexture:= NewTexture;
+    NewTexture^.NextTexture:= TextureList
+    end;
+TextureList:= NewTexture;
+
 NewTexture^.w:= width;
 NewTexture^.h:= height;
 NewTexture^.rx:= 1.0;
@@ -369,6 +380,15 @@ var tw, th, x, y: Longword;
     fromP4, toP4: PLongWordArray;
 begin
 new(Surface2Tex);
+Surface2Tex^.PrevTexture:= nil;
+Surface2Tex^.NextTexture:= nil;
+if TextureList <> nil then
+    begin
+    TextureList^.PrevTexture:= Surface2Tex;
+    Surface2Tex^.NextTexture:= TextureList
+    end;
+TextureList:= Surface2Tex;
+
 Surface2Tex^.w:= surf^.w;
 Surface2Tex^.h:= surf^.h;
 
@@ -437,8 +457,11 @@ procedure FreeTexture(tex: PTexture);
 begin
 if tex <> nil then
 	begin
+    if tex^.NextTexture <> nil then tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
+    if tex^.PrevTexture <> nil then tex^.PrevTexture^.NextTexture:= tex^.NextTexture
+       else TextureList:= tex^.NextTexture;
 	glDeleteTextures(1, @tex^.id);
-	dispose(tex)
+	Dispose(tex)
 	end
 end;
 
@@ -555,9 +578,10 @@ begin
 	cDrownSpeed.QWordValue	:= 257698038;		// 0.06
 	cMaxWindSpeed.QWordValue:= 2147484;		// 0.0005
 	cWindSpeed.QWordValue	:= 429496;		// 0.0001
-	cGravity		:= cMaxWindSpeed;
-	cDamageModifier		:= _1;
-	TargetPoint		:= cTargetPointRef;
+	cGravity                := cMaxWindSpeed;
+	cDamageModifier         := _1;
+	TargetPoint             := cTargetPointRef;
+    TextureList             := nil;
 	
 	// int, longint longword and byte
 	CursorMovementX		:= 0;
@@ -665,6 +689,7 @@ end;
 
 procedure free_uMisc;
 begin
+while TextureList <> nil do FreeTexture(TextureList);
 //uRandom.DumpBuffer;
 
 {$IFDEF DEBUGFILE}

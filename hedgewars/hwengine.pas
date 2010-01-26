@@ -325,8 +325,9 @@ begin
 	free_uConsole();
 	free_uMisc();
 	free_uTeams();
+	free_uAmmos();
 	free_uGears();
-	//free_uVisualGears(); not necessary
+	free_uVisualGears();
 	free_uLand();
 	//free_uWorld(); not necessary
 

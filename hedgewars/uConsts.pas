@@ -152,13 +152,14 @@ type
 		X, Y: GLint;
 		end;
 
+	PTexture = ^TTexture;
 	TTexture = record
 			id: GLuint;
 			w, h: LongInt;
 			rx, ry: GLfloat;
 			vb, tb: array [0..3] of TVertex2f;
+            PrevTexture, NextTexture: PTexture;
 			end;
-	PTexture = ^TTexture;
 
 const
 	// message constants

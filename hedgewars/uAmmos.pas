@@ -22,6 +22,7 @@ unit uAmmos;
 interface
 uses uConsts, uTeams;
 
+procedure free_uAmmos;
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
@@ -314,6 +315,13 @@ for i:= 0 to Pred(StoreCnt) do
 
 for t:= Low(TAmmoType) to High(TAmmoType) do
 	if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
+end;
+
+procedure free_uAmmos;
+var i: LongWord;
+begin
+for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
+StoreCnt:= 0
 end;
 
 end.

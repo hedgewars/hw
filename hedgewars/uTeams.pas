@@ -114,8 +114,6 @@ implementation
 uses uMisc, uWorld, uAI, uLocale, uConsole, uAmmos, uChat;
 const MaxTeamHealth: LongInt = 0;
 
-procedure FreeTeamsList; forward;
-
 function CheckForWin: boolean;
 var AliveClan: PClan;
     s: shortstring;
@@ -292,13 +290,6 @@ CurrentTeam:= team;
 AddTeam:= team;
 end;
 
-procedure FreeTeamsList;
-var t: LongInt;
-begin
-for t:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[t]);
-TeamsCount:= 0
-end;
-
 procedure RecountAllTeamsHealth;
 var t: LongInt;
 begin
@@ -415,8 +406,12 @@ begin
 end;
 
 procedure free_uTeams;
+var i: LongWord;
 begin
-	FreeTeamsList()
+   for i:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[i]);
+   for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
+   TeamsCount:= 0;
+   ClansCount:= 0
 end;
 
 end.
