@@ -49,6 +49,7 @@ type PVisualGear = ^TVisualGear;
 
 procedure init_uVisualGears;
 procedure free_uVisualGears;
+
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
 procedure DrawVisualGears(Layer: LongWord);
@@ -561,7 +562,7 @@ end;
 
 procedure free_uVisualGears;
 begin
-while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
+	while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
 end;
 
 end.

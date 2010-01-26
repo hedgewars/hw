@@ -115,10 +115,13 @@ end;
 procedure FreeLand;
 var x, y: LongInt;
 begin
-for x:= 0 to LANDTEXARW -1 do
-	for y:= 0 to LANDTEXARH - 1 do
-		with LandTextures[x, y] do
-			FreeTexture(tex)
+	for x:= 0 to LANDTEXARW -1 do
+		for y:= 0 to LANDTEXARH - 1 do
+			with LandTextures[x, y] do
+			begin
+				FreeTexture(tex);
+				tex:= nil;
+			end;
 end;
 
 end.

@@ -21,10 +21,10 @@
 unit uGears;
 interface
 uses SDLh, uConsts, uFloat;
-const AllInactive: boolean = false;
-      PrvInactive: boolean = false;
 
-type PGear = ^TGear;
+    
+type
+	PGear = ^TGear;
 	TGearStepProcedure = procedure (Gear: PGear);
 	TGear = record
 			NextGear, PrevGear: PGear;
@@ -57,8 +57,19 @@ type PGear = ^TGear;
 			TriggerId: Longword;
 			FlightTime: Longword;
 			uid: Longword
-			end;
+		end;
 
+var AllInactive: boolean;
+    PrvInactive: boolean;
+    CurAmmoGear: PGear;
+    GearsList: PGear;
+    KilledHHs: Longword;
+    SuddenDeathDmg: Boolean;
+    SpeechType: Longword;
+    SpeechText: shortstring;
+    TrainingTargetGear: PGear;
+    skipFlag: boolean;
+    
 procedure init_uGears;
 procedure free_uGears;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
@@ -73,15 +84,6 @@ procedure AddMiscGears;
 procedure AssignHHCoords;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
-
-var CurAmmoGear: PGear;
-    GearsList: PGear;
-    KilledHHs: Longword;
-    SuddenDeathDmg: Boolean;
-    SpeechType: Longword;
-    SpeechText: shortstring;
-    TrainingTargetGear: PGear;
-    skipFlag: boolean;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
@@ -1534,13 +1536,13 @@ end;
 procedure FreeGearsList;
 var t, tt: PGear;
 begin
-tt:= GearsList;
-GearsList:= nil;
-while tt <> nil do
+	tt:= GearsList;
+	GearsList:= nil;
+	while tt <> nil do
 	begin
-	t:= tt;
-	tt:= tt^.NextGear;
-	Dispose(t)
+		t:= tt;
+		tt:= tt^.NextGear;
+		Dispose(t)
 	end;
 end;
 
@@ -2051,6 +2053,9 @@ begin
 	SpeechType:= 1;
 	TrainingTargetGear:= nil;
 	skipFlag:= false;
+	
+	AllInactive:= false;
+	PrvInactive:= false;
 end;
 
 procedure free_uGears;

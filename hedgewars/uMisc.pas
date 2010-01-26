@@ -581,7 +581,7 @@ begin
 	cGravity                := cMaxWindSpeed;
 	cDamageModifier         := _1;
 	TargetPoint             := cTargetPointRef;
-    TextureList             := nil;
+	TextureList             := nil;
 	
 	// int, longint longword and byte
 	CursorMovementX		:= 0;
@@ -681,7 +681,6 @@ begin
 		if IOResult = 0 then break;
 	end;
 {$ENDIF}
-
 {$I+}
 {$ENDIF}
 
@@ -689,13 +688,13 @@ end;
 
 procedure free_uMisc;
 begin
-while TextureList <> nil do FreeTexture(TextureList);
-//uRandom.DumpBuffer;
+	//uRandom.DumpBuffer;
+	while TextureList <> nil do FreeTexture(TextureList);
 
 {$IFDEF DEBUGFILE}
-writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
-flush(f);
-close(f);
+	writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
+	flush(f);
+	close(f);
 {$ENDIF}
 end;
 

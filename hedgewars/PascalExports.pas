@@ -19,7 +19,6 @@ uses uKeys, uConsole;
 
 {$IFDEF IPHONEOS}
 // called by pascal code, they deal with the objc code
-procedure IPH_CreateWindowsFromObjc; cdecl; external;
 function  IPH_getDocumentsPath: PChar; cdecl; external;
 procedure IPH_showControls; cdecl; external;
 

@@ -22,7 +22,9 @@ unit uAmmos;
 interface
 uses uConsts, uTeams;
 
+procedure init_uAmmos;
 procedure free_uAmmos;
+
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
 procedure AddAmmo(var Hedgehog: THedgehog; ammo: TAmmoType);
@@ -35,13 +37,14 @@ procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 
-var shoppa: Boolean = false;
+var shoppa: boolean;
 
 implementation
 uses uMisc, uGears, uWorld, uLocale, uConsole;
+
 type TAmmoCounts = array[TAmmoType] of Longword;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
-    StoreCnt: Longword = 0;
+    StoreCnt: Longword;
 
 procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
 var mi: array[0..cMaxSlotIndex] of byte;
@@ -317,11 +320,17 @@ for t:= Low(TAmmoType) to High(TAmmoType) do
 	if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
 end;
 
+procedure init_uAmmos;
+begin
+	shoppa:= false;
+	StoreCnt:= 0
+end;
+
 procedure free_uAmmos;
 var i: LongWord;
 begin
-for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
-StoreCnt:= 0
+	for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
+	StoreCnt:= 0
 end;
 
 end.

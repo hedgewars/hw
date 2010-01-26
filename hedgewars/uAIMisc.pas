@@ -37,6 +37,9 @@ type TTarget = record
                JumpType: TJumpType;
                end;
 
+procedure init_uAIMisc;
+procedure free_uAIMisc;
+
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt);
@@ -54,22 +57,25 @@ var ThinkingHH: PGear;
 
 implementation
 uses uTeams, uMisc, uLand, uCollisions;
-const KillScore = 200;
-      MAXBONUS = 1024;
-      friendlyfactor: LongInt = 300;
 
 type TBonus = record
               X, Y: LongInt;
               Radius: LongInt;
               Score: LongInt;
               end;
-var bonuses: record
-             Count: Longword;
-             ar: array[0..Pred(MAXBONUS)] of TBonus;
-             end;
+
+const KillScore = 200;
+      MAXBONUS = 1024;
+
+var friendlyfactor: LongInt = 300;
     KnownExplosion: record
                     X, Y, Radius: LongInt
                     end = (X: 0; Y: 0; Radius: 0);
+    bonuses: record
+             Count: Longword;
+             ar: array[0..Pred(MAXBONUS)] of TBonus;
+             end;
+
 
 procedure FillTargets;
 var i, t: Longword;
@@ -457,6 +463,19 @@ function AIrndSign(num: LongInt): LongInt;
 begin
 if random(2) = 0 then AIrndSign:=   num
                  else AIrndSign:= - num
+end;
+
+procedure init_uAIMisc;
+begin
+	friendlyfactor:= 300;
+	KnownExplosion.X:= 0;
+	KnownExplosion.Y:= 0;
+	KnownExplosion.Radius:= 0;
+end;
+
+procedure free_uAIMisc;
+begin
+
 end;
 
 end.

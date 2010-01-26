@@ -267,7 +267,11 @@ const
 
 	cKeyMaxIndex = 1023;
 
+{$IFDEF IPHONEOS}
+	cMaxCaptions = 3;
+{$ELSE}
 	cMaxCaptions = 4;
+{$ENDIF}
 
 	cSendEmptyPacketTime = 1000;
 
@@ -376,6 +380,8 @@ const
 	
 	FontBorder = 2;
 var	PathPrefix: string;
+	Pathz: array[TPathType] of String;
+	CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
 const	cTagsMasks : array[0..7] of byte = (
 				htTeamName or htName or htHealth,
@@ -415,9 +421,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			Name: 'DroidSansFallback.ttf')
 			);
 
-var	Pathz: array[TPathType] of String;
-	
-const	SpritesData: array[TSprite] of record
+	SpritesData: array[TSprite] of record
 			FileName: String[14];
 			Path, AltPath: TPathType;
 			Texture: PTexture;
@@ -760,15 +764,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 0;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-                          ammoprop_Utility;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amNothing;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Utility;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amNothing;
+				AttackVoice: sndNone);
 			Slot: 0;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -781,15 +783,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Timerable or
-							ammoprop_Power or
-							ammoprop_AltUse;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 3000;
-					Pos: 0;
-					AmmoType: amGrenade;
-					AttackVoice: sndCover);
+			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 3000;
+				Pos: 0;
+				AmmoType: amGrenade;
+				AttackVoice: sndCover);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -802,15 +802,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 3;
-			Ammo: (Propz: ammoprop_Timerable or
-							ammoprop_Power or
-							ammoprop_AltUse;
-					Count: 5;
-					NumPerTurn: 0;
-					Timer: 3000;
-					Pos: 0;
-					AmmoType: amClusterBomb;
-					AttackVoice: sndCover);
+			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+				Count: 5;
+				NumPerTurn: 0;
+				Timer: 3000;
+				Pos: 0;
+				AmmoType: amClusterBomb;
+				AttackVoice: sndCover);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -823,14 +821,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Power or
-							ammoprop_AltUse;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amBazooka;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amBazooka;
+				AttackVoice: sndNone);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -843,15 +840,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Power or
-							ammoprop_NeedTarget or
-							ammoprop_DontHold;
-					Count: 2;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amUFO;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_Power or	ammoprop_NeedTarget or ammoprop_DontHold;
+				Count: 2;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amUFO;
+				AttackVoice: sndNone);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -865,12 +860,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 0;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 1;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amShotgun;
-					AttackVoice: sndNone);
+				Count: AMMO_INFINITE;
+				NumPerTurn: 1;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amShotgun;
+				AttackVoice: sndNone);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -883,16 +878,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_AttackInMove or
-							ammoprop_NoCrosshair or
-							ammoprop_DontHold;
-					Count: 2;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amPickHammer;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
+				Count: 2;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amPickHammer;
+				AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -905,14 +897,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-							ammoprop_DontHold;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amSkip;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amSkip;
+				AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -925,15 +916,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 3;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_AttackInMove or
-							ammoprop_AltAttack;
-					Count: 5;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amRope;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_AltAttack;
+				Count: 5;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amRope;
+				AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -946,16 +935,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-							ammoprop_AttackInMove or
-							ammoprop_DontHold or
-							ammoprop_AltUse;
-					Count: 2;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amMine;
-					AttackVoice: sndLaugh);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+				Count: 2;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amMine;
+				AttackVoice: sndLaugh);
 			Slot: 4;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -969,12 +955,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 20;
 			NumberInCase: 2;
 			Ammo: (Propz: 0;
-					Count: 3;
-					NumPerTurn: 3;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amDEagle;
-					AttackVoice: sndNone);
+				Count: 3;
+				NumPerTurn: 3;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amDEagle;
+				AttackVoice: sndNone);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -987,16 +973,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-							ammoprop_AttackInMove or
-							ammoprop_DontHold or
-							ammoprop_AltUse;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amDynamite;
-					AttackVoice: sndLaugh);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amDynamite;
+				AttackVoice: sndLaugh);
 			Slot: 4;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -1009,15 +992,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-							ammoprop_ForwMsgs or
-							ammoprop_AttackInMove;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amFirePunch;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amFirePunch;
+				AttackVoice: sndNone);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			MinAngle: 0;
@@ -1031,12 +1012,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 0;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amWhip;
-					AttackVoice: sndNone);
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amWhip;
+				AttackVoice: sndNone);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			MinAngle: 0;
@@ -1050,12 +1031,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 100;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_DontHold;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amBaseballBat;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amBaseballBat;
+				AttackVoice: sndNone);
 			Slot: 3;
 			TimeAfterTurn: 5000;
 			minAngle: 0;
@@ -1073,12 +1054,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_NoCrosshair or
 							ammoprop_DontHold or
 							ammoprop_AltAttack;
-					Count: 2;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amParachute;
-					AttackVoice: sndNone);
+				Count: 2;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amParachute;
+				AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1096,12 +1077,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_AttackingPut or
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amAirAttack;
-					AttackVoice: sndIncoming);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amAirAttack;
+				AttackVoice: sndIncoming);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1119,12 +1100,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_AttackingPut or
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amMineStrike;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amMineStrike;
+				AttackVoice: sndNone);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1138,12 +1119,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 100;
 			NumberInCase: 2;
 			Ammo: (Propz: ammoprop_ForwMsgs;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amBlowTorch;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amBlowTorch;
+				AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 3000;
 			minAngle: 768;
@@ -1156,15 +1137,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 150;
 			NumberInCase: 3;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-							ammoprop_NeedTarget or
-							ammoprop_AttackingPut;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amGirder;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NeedTarget or ammoprop_AttackingPut;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amGirder;
+				AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1182,12 +1161,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_NeedTarget or
 							ammoprop_AttackingPut or
 							ammoprop_DontHold;
-					Count: 2;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amTeleport;
-					AttackVoice: sndNone);
+				Count: 2;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amTeleport;
+				AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1200,15 +1179,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_NoCrosshair or
-							ammoprop_DontHold;
-					Count: 3;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amSwitch;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
+				Count: 3;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amSwitch;
+				AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1222,12 +1199,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 100;
 			NumberInCase: 4;
 			Ammo: (Propz: 0;
-					Count: 4;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amMortar;
-					AttackVoice: sndNone);
+				Count: 4;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amMortar;
+				AttackVoice: sndNone);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1240,15 +1217,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_DontHold or
-							ammoprop_AttackInMove;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amKamikaze;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amKamikaze;
+				AttackVoice: sndNone);
 			Slot: 3;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1261,15 +1236,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
-							ammoprop_NoCrosshair or
-							ammoprop_DontHold;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amCake;
-					AttackVoice: sndLaugh);
+			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amCake;
+				AttackVoice: sndLaugh);
 			Slot: 4;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1283,12 +1256,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 100;
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amSeduction;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amSeduction;
+				AttackVoice: sndNone);
 			Slot: 2;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1301,15 +1274,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 400;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Timerable or
-							ammoprop_Power or
-							ammoprop_AltUse;
-					Count: 0;
-					NumPerTurn: 0;
-					Timer: 3000;
-					Pos: 0;
-					AmmoType: amWatermelon;
-					AttackVoice: sndMelon);
+			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
+				Count: 0;
+				NumPerTurn: 0;
+				Timer: 3000;
+				Pos: 0;
+				AmmoType: amWatermelon;
+				AttackVoice: sndMelon);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1322,14 +1293,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 400;
 			NumberInCase: 1;
-			Ammo: (Propz:  ammoprop_Power or
-							ammoprop_AltUse;
-					Count: 0;
-					NumPerTurn: 0;
-					Timer: 5000;
-					Pos: 0;
-					AmmoType: amHellishBomb;
-					AttackVoice: sndNone);
+			Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
+				Count: 0;
+				NumPerTurn: 0;
+				Timer: 5000;
+				Pos: 0;
+				AmmoType: amHellishBomb;
+				AttackVoice: sndNone);
 			Slot: 4;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1347,12 +1317,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_AttackingPut or
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amNapalm;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amNapalm;
+				AttackVoice: sndNone);
 			Slot: 5;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1365,14 +1335,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 300;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Power or
-							ammoprop_AltUse;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amDrill;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amDrill;
+				AttackVoice: sndNone);
 			Slot: 0;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1385,14 +1354,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 400;
 			NumberInCase: 1;
-			Ammo: (Propz:  ammoprop_ForwMsgs or
-							 ammoprop_DontHold;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 5001;
-					Pos: 0;
-					AmmoType: amBallgun;
-					AttackVoice: sndNone);
+			Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 5001;
+				Pos: 0;
+				AmmoType: amBallgun;
+				AttackVoice: sndNone);
 			Slot: 2;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1408,12 +1376,12 @@ const	SpritesData: array[TSprite] of record
 			Ammo: (Propz: ammoprop_ForwMsgs{ or
 							ammoprop_DontHold or
 							ammoprop_AltAttack};
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amRCPlane;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amRCPlane;
+				AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1426,16 +1394,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 20;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amLowGravity;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amLowGravity;
+				AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1448,16 +1413,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amExtraDamage;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amExtraDamage;
+				AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1470,16 +1432,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 20;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amInvulnerable;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amInvulnerable;
+				AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1492,16 +1451,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 30;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amExtraTime;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amExtraTime;
+				AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1514,16 +1470,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amLaserSight;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amLaserSight;
+				AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1536,16 +1489,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or
-						  ammoprop_DontHold or
-						  ammoprop_AltUse or
-                          ammoprop_Utility;
-					Count: 1;
-					NumPerTurn: 0;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amVampiric;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoCrosshair or  ammoprop_DontHold or  ammoprop_AltUse or ammoprop_Utility;
+				Count: 1;
+				NumPerTurn: 0;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amVampiric;
+				AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1559,12 +1509,12 @@ const	SpritesData: array[TSprite] of record
 			Probability: 20;
 			NumberInCase: 2;
 			Ammo: (Propz: 0;
-					Count: 2;
-					NumPerTurn: 1;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amSniperRifle;
-					AttackVoice: sndNone);
+				Count: 2;
+				NumPerTurn: 1;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amSniperRifle;
+				AttackVoice: sndNone);
 			Slot: 2;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1582,12 +1532,12 @@ const	SpritesData: array[TSprite] of record
 							ammoprop_NoCrosshair or
 							ammoprop_DontHold or
 							ammoprop_AltAttack;
-					Count: 1;
-					NumPerTurn: 1;
-					Timer: 0;
-					Pos: 0;
-					AmmoType: amJetpack;
-					AttackVoice: sndNone);
+				Count: 1;
+				NumPerTurn: 1;
+				Timer: 0;
+				Pos: 0;
+				AmmoType: amJetpack;
+				AttackVoice: sndNone);
 			Slot: 3;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1601,14 +1551,13 @@ const	SpritesData: array[TSprite] of record
 			NameTex: nil;
 			Probability: 0;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_Power or
-							ammoprop_AltUse;
-					Count: AMMO_INFINITE;
-					NumPerTurn: 0;
-					Timer: 3000;
-					Pos: 0;
-					AmmoType: amMolotov;
-					AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
+				Count: AMMO_INFINITE;
+				NumPerTurn: 0;
+				Timer: 3000;
+				Pos: 0;
+				AmmoType: amMolotov;
+				AttackVoice: sndNone);
 			Slot: 1;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1648,9 +1597,8 @@ const	SpritesData: array[TSprite] of record
 	);
 			
 
-var CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
-
 procedure init_uConsts;
+procedure free_uConsts;
 
 implementation
 
@@ -1678,6 +1626,11 @@ var cPathz: array[TPathType] of String = (
 begin
 	PathPrefix := './';
 	Pathz:= cPathz;
+end;
+
+procedure free_uConsts;
+begin
+
 end;
 
 end.

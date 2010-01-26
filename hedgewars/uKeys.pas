@@ -25,6 +25,9 @@ uses uConsts, SDLh;
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
+procedure init_uKeys;
+procedure free_uKeys;
+
 function  KeyNameToCode(name: string): word;
 procedure ProcessKbd;
 procedure ResetKbd;
@@ -41,27 +44,23 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 var	hideAmmoMenu: boolean;
-	wheelUp: boolean = false;
-	wheelDown: boolean = false;
-{$IFDEF TOUCHINPUT}
-	leftClick: boolean = false;
-	middleClick: boolean = false;
-	rightClick: boolean = false;
-
-	upKey: boolean = false;
-	downKey: boolean = false;
-	rightKey: boolean = false;
-	leftKey: boolean = false;
-
-	backspaceKey: boolean = false;
-	spaceKey: boolean = false;
-	enterKey: boolean = false;
-	tabKey: boolean = false;
-
-	isAttacking: boolean = false;
-	isWalking: boolean = false;
-{$ENDIF}
+	wheelUp: boolean;
+	wheelDown: boolean;
 {$IFDEF IPHONEOS}
+	leftClick: boolean;
+	middleClick: boolean;
+	rightClick: boolean;
+
+	upKey: boolean;
+	downKey: boolean;
+	rightKey: boolean;
+	leftKey: boolean;
+
+	backspaceKey: boolean;
+	spaceKey: boolean;
+	enterKey: boolean;
+	tabKey: boolean;
+
 	theJoystick: PSDL_Joystick;
 {$ENDIF}
 	ControllerNumControllers: Integer;
@@ -130,7 +129,7 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
-{$IFDEF TOUCHINPUT}
+{$IFDEF IPHONEOS}
 tkbdn[1]:= ord(leftClick);
 tkbdn[2]:= ord(middleClick);
 tkbdn[3]:= ord(rightClick);
@@ -331,7 +330,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		end;
 	end;
 
-{$IFDEF TOUCHINPUT}
+{$IFDEF IPHONEOS}
 DefaultBinds[  1]:= '/put';
 DefaultBinds[  3]:= 'ammomenu';
 DefaultBinds[  8]:= 'hjump';
@@ -469,8 +468,34 @@ end;
 
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 begin
-	if pressed then ControllerButtons[joy][button]:= 1 else ControllerButtons[joy][button]:= 0;
+	if pressed then ControllerButtons[joy][button]:= 1
+	else ControllerButtons[joy][button]:= 0;
 end;
 
+procedure init_uKeys;
+begin
+	wheelUp:= false;
+	wheelDown:= false;
+{$IFDEF IPHONEOS}
+	leftClick:= false;
+	middleClick:= false;
+	rightClick:= false;
+
+	upKey:= false;
+	downKey:= false;
+	rightKey:= false;
+	leftKey:= false;
+
+	backspaceKey:= false;
+	spaceKey:= false;
+	enterKey:= false;
+	tabKey:= false;
+{$ENDIF}
+end;
+
+procedure free_uKeys;
+begin
+
+end;
 
 end.

@@ -62,8 +62,8 @@ begin
 trammo[sidNothing]:= ' ';
 for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
-{$I-} //iochecks off
-filemode:=0; //readonly
+{$I-} // iochecks off
+filemode:= 0; // readonly
 Assign(f, FileName);
 reset(f);
 // if the locale does not exist, fallback to the default one

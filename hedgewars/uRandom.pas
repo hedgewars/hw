@@ -24,6 +24,8 @@ uses uFloat;
 {$INCLUDE "proto.inc"}
 
 procedure init_uRandom;
+procedure free_uRandom;
+
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;
 function  GetRandom(m: LongWord): LongWord; overload;
@@ -97,6 +99,11 @@ end;
 procedure init_uRandom;
 begin
 	n:= 54;
+end;
+
+procedure free_uRandom;
+begin
+
 end;
 
 end.

@@ -30,21 +30,24 @@ type PGearArray = ^TGearArray;
 			Count: Longword
 			end;
 
+procedure init_uCollisions;
+procedure free_uCollisions;
+
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 
-function CheckGearsCollision(Gear: PGear): PGearArray;
+function  CheckGearsCollision(Gear: PGear): PGearArray;
 
-function TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
-function TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionXwithGear(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionYwithGear(Gear: PGear; Dir: LongInt): boolean;
 
-function TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
-function TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionXKick(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionYKick(Gear: PGear; Dir: LongInt): boolean;
 
-function TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
+function  TestCollisionY(Gear: PGear; Dir: LongInt): boolean;
 
-function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
-function TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
+function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt; Dir: LongInt): boolean;
+function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): boolean;
 
 implementation
 uses uMisc, uConsts, uLand, uLandGraphics, uConsole;
@@ -55,9 +58,9 @@ type TCollisionEntry = record
 			end;
 
 const MAXRECTSINDEX = 511;
-var Count: Longword = 0;
-	cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
-	ga: TGearArray;
+var Count: Longword;
+    cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
+    ga: TGearArray;
 
 procedure AddGearCI(Gear: PGear);
 begin
@@ -307,6 +310,16 @@ Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
 TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir);
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
+end;
+
+procedure init_uCollisions;
+begin
+	Count:= 0;
+end;
+
+procedure free_uCollisions;
+begin
+
 end;
 
 end.

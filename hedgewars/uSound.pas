@@ -28,6 +28,11 @@ type PVoicepack = ^TVoicepack;
 		chunks: array [TSound] of PMixChunk;
 		end;
 
+var MusicFN: shortstring;
+
+procedure init_uSound;
+procedure free_uSound;
+
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
@@ -38,20 +43,18 @@ procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
 function  ChangeVolume(voldelta: LongInt): LongInt;
-
 function  AskForVoicepack(name: shortstring): Pointer;
 
-var MusicFN: shortstring = '';
 
 implementation
 uses uMisc, uConsole;
 
 const chanTPU = 12;
 var Volume: LongInt;
-	lastChan: array [TSound] of LongInt;
-	voicepacks: array[0..cMaxTeams] of TVoicepack;
-	defVoicepack: PVoicepack;
-	Mus: PMixMusic = nil;
+    lastChan: array [TSound] of LongInt;
+    voicepacks: array[0..cMaxTeams] of TVoicepack;
+    defVoicepack: PVoicepack;
+    Mus: PMixMusic = nil;
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
@@ -224,6 +227,16 @@ begin
 if (MusicFN = '') or (not isMusicEnabled) then exit;
 
 Mix_ResumeMusic(Mus);
+end;
+
+procedure init_uSound;
+begin
+	MusicFN:='';
+end;
+
+procedure free_uSound;
+begin
+
 end;
 
 end.

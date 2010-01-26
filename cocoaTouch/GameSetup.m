@@ -20,7 +20,7 @@
 -(id) init {
 	self = [super init];
 	srandom(time(NULL));
-	ipcPort = (random() % 64541) + 1024 ;//(arc4random() % ((unsigned)64541)) + 1024;
+	ipcPort = (random() % 64541) + 1025;
 		
 	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
 	self.systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
@@ -67,7 +67,7 @@
 	
 	/* Open a connection with the IP provided (listen on the host's port) */
 	if (!(sd = SDLNet_TCP_Open(&ip))) {
-		NSLog(@"SDLNet_TCP_Open: %s\n", SDLNet_GetError());
+		NSLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), ipcPort);
 		exit(EXIT_FAILURE);
 	}
 	

@@ -27,9 +27,9 @@ type PRangeArray = ^TRangeArray;
                                    Left, Right: LongInt;
                                    end;
 
-function SweepDirty: boolean;
-function Despeckle(X, Y: LongInt): boolean;
-function CheckLandValue(X, Y: LongInt; Color: Word): boolean;
+function  SweepDirty: boolean;
+function  Despeckle(X, Y: LongInt): boolean;
+function  CheckLandValue(X, Y: LongInt; Color: Word): boolean;
 procedure DrawExplosion(X, Y, Radius: LongInt);
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);

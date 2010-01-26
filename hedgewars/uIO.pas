@@ -22,10 +22,12 @@ unit uIO;
 interface
 uses SDLh;
 
-const ipcPort: Word = 0;
-var hiTicks: Word;
+var ipcPort: Word;
+    hiTicks: Word;
 
 procedure init_uIO;
+procedure free_uIO;
+
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -352,6 +354,12 @@ begin
 
 	hiTicks:= 0;
 	SendEmptyPacketTicks:= 0;
+	ipcPort:= 0;
+end;
+
+procedure free_uIO;
+begin
+
 end;
 
 end.

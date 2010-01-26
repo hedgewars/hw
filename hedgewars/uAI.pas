@@ -22,6 +22,9 @@ unit uAI;
 interface
 uses uFloat;
 
+procedure init_uAI;
+procedure free_uAI;
+
 procedure ProcessBot;
 procedure FreeActionsList;
 
@@ -33,7 +36,7 @@ var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
     ThinkThread: TThreadID;
-    hasThread: LongInt = 0;
+    hasThread: LongInt;
 
 procedure FreeActionsList;
 begin
@@ -340,6 +343,16 @@ with CurrentHedgehog^ do
               end else ProcessAction(BestActions, Gear)
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
                 or (TurnTimeLeft <= cStopThinkTime) then StopThinking:= true
+end;
+
+procedure init_uAI;
+begin
+	hasThread:= 0;
+end;
+
+procedure free_uAI;
+begin
+
 end;
 
 end.

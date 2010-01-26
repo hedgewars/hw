@@ -22,17 +22,7 @@ unit uWorld;
 interface
 uses SDLh, uGears, uConsts, uFloat, uRandom;
 
-const WorldDx: LongInt = -512;
-      WorldDy: LongInt = -256;
 
-procedure init_uWorld;
-procedure InitWorld;
-procedure DrawWorld(Lag: LongInt);
-procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
-
-{$IFDEF COUNTTICKS}
-var cntTicks: LongWord;
-{$ENDIF}
 var FollowGear: PGear;
     WindBarWidth: LongInt;
     bShowAmmoMenu: boolean;
@@ -40,6 +30,18 @@ var FollowGear: PGear;
     bShowFinger: boolean;
     Frames: Longword;
     WaterColor, DeepWaterColor: TSDL_Color;
+    WorldDx: LongInt;
+    WorldDy: LongInt;
+{$IFDEF COUNTTICKS}
+    cntTicks: LongWord;
+{$ENDIF}
+
+procedure init_uWorld;
+procedure free_uWorld;
+
+procedure InitWorld;
+procedure DrawWorld(Lag: LongInt);
+procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
 
 implementation
 uses	uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
@@ -48,11 +50,6 @@ uses	uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisu
 {$ELSE}
 	GL;
 {$ENDIF}
-
-const FPS: Longword = 0;
-      CountTicks: Longword = 0;
-      SoundTimerTicks: Longword = 0;
-      prevPoint: TPoint = (X: 0; Y: 0);
 
 type TCaptionStr = record
                    Tex: PTexture;
@@ -64,6 +61,10 @@ var cWaveWidth, cWaveHeight: LongInt;
     AMxShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
+    FPS: Longword;
+    CountTicks: Longword;
+    SoundTimerTicks: Longword;
+    prevPoint: TPoint;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -505,19 +506,19 @@ i:= 53;
 if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then i:= 48 else i:= 8;
 {$ENDIF}
 
-for grp:= Low(TCapGroup) to High(TCapGroup) do
-    with Captions[grp] do
-         if Tex <> nil then
-            begin
-            DrawCentered(0, i, Tex);
-            inc(i, Tex^.h + 2);
-            if EndTime <= RealTicks then
-               begin
-               FreeTexture(Tex);
-               Tex:= nil;
-               EndTime:= 0
-               end
-            end;
+	for grp:= Low(TCapGroup) to High(TCapGroup) do
+		with Captions[grp] do
+			if Tex <> nil then
+			begin
+				DrawCentered(0, i, Tex);
+				inc(i, Tex^.h + 2);
+				if EndTime <= RealTicks then
+				begin
+					FreeTexture(Tex);
+					Tex:= nil;
+					EndTime:= 0
+				end;
+			end;
 
 // Teams Healths
 for t:= 0 to Pred(TeamsCount) do
@@ -753,8 +754,21 @@ begin
 	bSelected:= false;
 	bShowFinger:= false;
 	Frames:= 0;
+	WorldDx:= -512;
+	WorldDy:= -256;
+    
+	FPS:= 0;
+	CountTicks:= 0;
+	SoundTimerTicks:= 0;
+	prevPoint.X:= 0;
+	prevPoint.Y:= 0;
 	
 	FillChar(Captions, sizeof(Captions), 0)
+end;
+
+procedure free_uWorld;
+begin
+
 end;
 
 end.

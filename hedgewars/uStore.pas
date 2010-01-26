@@ -45,6 +45,8 @@ var PixelFormat: PSDL_PixelFormat;
 {$ENDIF}
 
 procedure init_uStore;
+procedure free_uStore;
+
 procedure StoreLoad;
 procedure StoreRelease;
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -1185,21 +1187,15 @@ begin
 	
 		WriteToConsole(msgLoading + 'progress sprite: ');
 		texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
-{$IFDEF SDL13notworking}
-		ProgrTex:= SDL_CreateTextureFromSurface(0, texsurf);
-{$ELSE}
+
 		ProgrTex:= Surface2Tex(texsurf, false);
-{$ENDIF}
+		
 		squaresize:= texsurf^.w shr 1;
 		numsquares:= texsurf^.h div squaresize;
 		SDL_FreeSurface(texsurf);
 	end;
 
-{$IFDEF SDL13notworking}
-	TryDo(ProgrTex <> 0, 'Error - Progress Texure is 0!', true);
-{$ELSE}
 	TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
-{$ENDIF}
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	glEnable(GL_TEXTURE_2D);
@@ -1210,25 +1206,22 @@ begin
 	r.w:= squaresize;
 	r.h:= squaresize;
 	
-{$IFDEF SDL13notworking}
-	SDL_RenderCopy(ProgrTex, nil, @r);
-{$ELSE}	
 	DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
-{$ENDIF}
+
 	glDisable(GL_TEXTURE_2D);
 	SDL_GL_SwapBuffers();
+{$IFDEF SDL13}
+	SDL_RenderPresent();
+{$ENDIF}
 	inc(Step);
+
 end;
 
 
 procedure FinishProgress;
 begin
 	WriteLnToConsole('Freeing progress surface... ');
-{$IFDEF SDL13notworking}
-	SDL_DestroyTexture(ProgrTex);
-{$ELSE}
 	FreeTexture(ProgrTex);
-{$ENDIF}
 
 {$IFDEF IPHONEOS}
 	// show overlay buttons
@@ -1317,6 +1310,11 @@ begin
 {$ELSE}
 	ProgrTex:= nil;
 {$ENDIF}
+end;
+
+procedure free_uStore;
+begin
+
 end;
 
 end.

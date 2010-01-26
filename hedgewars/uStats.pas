@@ -34,15 +34,17 @@ type TStatistics = record
                    FinishedTurns: Longword;
                    end;
 
+var TotalRounds: LongInt;
+    FinishedTurnsTotal: LongInt;
+
+procedure init_uStats;
+procedure free_uStats;
+
 procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogDamaged(Gear: PGear);
 procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
-
-var
-	TotalRounds: LongInt = -1;
-	FinishedTurnsTotal: LongInt = -1;
 
 implementation
 uses uTeams, uSound, uMisc, uLocale, uWorld;
@@ -215,6 +217,17 @@ if mskcnt = 1 then
 	SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
 if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
+end;
+
+procedure init_uStats;
+begin
+	TotalRounds:= -1;
+	FinishedTurnsTotal:= -1;
+end;
+    
+procedure free_uStats;
+begin
+
 end;
 
 end.

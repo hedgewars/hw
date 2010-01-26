@@ -234,7 +234,7 @@ g^.Tag:= hwRound(cWindSpeed * 72 / cMaxWindSpeed);
 {$IFDEF DEBUGFILE}AddFileLog('Wind = '+FloatToStr(cWindSpeed));{$ENDIF}
 ApplyAmmoChanges(CurrentHedgehog^);
 
-{$IFNDEF TOUCHINPUT}
+{$IFNDEF IPHONEOS}
 if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 {$ENDIF}
 

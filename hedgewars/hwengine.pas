@@ -133,6 +133,9 @@ begin
 		end;
 
 	SDL_GL_SwapBuffers();
+{$IFDEF SDL13}
+	SDL_RenderPresent();
+{$ENDIF}
 {$IFNDEF IPHONEOS}
 	// not going to make captures on the iPhone
 	if flagMakeCapture then
@@ -156,20 +159,18 @@ begin
 	ControllerClose();
 	SendKB();
 	CloseIPC();
-	freeEverything();
 	TTF_Quit();
 	{$IFDEF SDL13}SDL_VideoQuit();{$ENDIF}
 	SDL_Quit();
+	freeEverything();
 	exit();
 end;
 
 ///////////////////
 procedure MainLoop; 
-var PrevTime,
-    CurrTime: Longword;
+var PrevTime, CurrTime: Longword;
     {$IFNDEF IPHONEOS}event: TSDL_Event;{$ENDIF}
 begin
-
 	PrevTime:= SDL_GetTicks;
 	repeat
 {$IFNDEF IPHONEOS}
@@ -235,7 +236,7 @@ begin
 	cInitHeight:= cScreenHeight;
 	cBitsStr:= '32';
 	val(cBitsStr, cBits);
-	cFullScreen:= true;
+	cFullScreen:= false;
 	cVSyncInUse:= true;
 	val('8', cTimerInterval);
 	PathPrefix:= 'Data';
@@ -261,15 +262,15 @@ begin
 	SDL_EnableUNICODE(1);
 
 	WriteToConsole('Init SDL_ttf... ');
-	SDLTry(TTF_Init <> -1, true);
+	SDLTry(TTF_Init() <> -1, true);
 	WriteLnToConsole(msgOK);
 
-	ShowMainWindow;
+	ShowMainWindow();
 
-	AddProgress;
+	AddProgress();
 
-	ControllerInit; // has to happen before InitKbdKeyTable to map keys
-	InitKbdKeyTable;
+	ControllerInit(); // has to happen before InitKbdKeyTable to map keys
+	InitKbdKeyTable();
 
 	if recordFileName = '' then
 		InitIPC;
@@ -287,11 +288,11 @@ begin
 	s:= 'eproto ' + inttostr(cNetProtoVersion);
 	SendIPCRaw(@s[0], Length(s) + 1); // send proto version
 
-	InitTeams;
-	AssignStores;
+	InitTeams();
+	AssignStores();
 
 	if isSoundEnabled then
-		InitSound;
+		InitSound();
 
 	isDeveloperMode:= false;
 
@@ -307,29 +308,69 @@ begin
 	init_uConsts();
 	init_uMisc();
 	init_uConsole();	// MUST happen after uMisc
+	
+	init_uAI();
+	//uAIActions does not need initialization
+	//uAIAmmoTests does not need initialization
+	init_uAIMisc();
+	init_uAmmos();
+	init_uChat();
+	init_uCollisions();
+	//uFloat does not need initialization
+	//uGame does not need initialization
+	init_uGears();
+	init_uIO();
+	init_uKeys();
+	init_uLand();
+	//uLandGraphics does not need initialization
+	//uLandObjects does not need initialization
+	//uLandTemplates does not need initialization
+	//uLandTexture does not need initialization
+	//uLocale does not need initialization
+	init_uRandom();	
+	//uSHA does not need initialization
+	init_uSound();
+	init_uStats();
 	init_uStore();
 	init_uTeams();
-	init_uGears();
+	init_uTriggers();
 	init_uVisualGears();
-	init_uLand();
-	init_uIO();
 	init_uWorld();
-	init_uRandom;
-	init_uTriggers;
-
 end;
 
 procedure freeEverything;
 begin
-	//free_uConts(); not necessary
+	free_uWorld();
+	free_uVisualGears();	//stub
+	free_uTriggers();	//stub
+	free_uTeams();
+	free_uStore();
+	free_uStats();		//stub
+	free_uSound();		//stub
+	//uSHA does not need to be freed
+	free_uRandom();		//stub
+	//uLocale does not need to be freed
+	//uLandTemplates does not need to be freed
+	//uLandTexture does not need to be freed
+	//uLandObjects does not need to be freed
+	//uLandGraphics does not need to be freed
+	free_uLand();
+	free_uKeys();		//stub
+	free_uIO();
+	free_uGears();
+	//uGame does not need to be freed
+	//uFloat does not need to be freed
+	free_uCollisions();
+	free_uChat();
+	free_uAmmos();
+	free_uAIMisc();		//stub
+	//uAIAmmoTests does not need to be freed
+	//uAIActions does not need to be freed
+	free_uAI();		//stub
+
 	free_uConsole();
 	free_uMisc();
-	free_uTeams();
-	free_uAmmos();
-	free_uGears();
-	free_uVisualGears();
-	free_uLand();
-	//free_uWorld(); not necessary
+	free_uConsts();		//stub
 
 end;
 {$IFNDEF IPHONEOS}
@@ -525,6 +566,6 @@ begin
 
 	if GameType = gmtLandPreview then GenLandPreview()
 	else Game();
-	ExitCode := 0;
+	ExitCode:= 0;
 {$ENDIF}
 end.

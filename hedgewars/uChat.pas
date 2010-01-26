@@ -22,12 +22,15 @@ unit uChat;
 
 interface
 
+procedure init_uChat;
+procedure free_uChat;
+
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
-var UserNick: shortstring = '';
-    showAll: boolean = false;
+var UserNick: shortstring;
+    showAll: boolean;
 
 implementation
 uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uTeams;
@@ -42,11 +45,10 @@ type TChatLine = record
 		end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
-	lastStr: Longword = 0;
-	visibleCount: Longword = 0;
-
-	InputStr: TChatLine;
-	InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
+    lastStr: LongWord;
+    visibleCount: LongWord;
+    InputStr: TChatLine;
+    InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
 const colors: array[#1..#4] of TSDL_Color = (
 	(r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
@@ -282,5 +284,17 @@ if Key <> 0 then
 	end
 end;
 
+procedure init_uChat;
+begin
+    lastStr:= 0;
+    visibleCount:= 0;
+    UserNick:= '';
+    showAll:= false;
+end;
+
+procedure free_uChat;
+begin
+
+end;
 
 end.

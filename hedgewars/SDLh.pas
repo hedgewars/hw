@@ -327,12 +327,8 @@ type
 {* SDL_Event type definition *}
 
 {$IFDEF SDL13}
-	//UPDATE TSDL_Window AND TSDL_Texture before usage!!!
-	PSDL_Window = ^TSDL_Window;
-	TSDL_Window = LongInt; //not true anymore
-		
-	PSDL_Texture = ^TSDL_Texture;
-	TSDL_Texture = LongInt; //not true anymore
+	PSDL_Window = pointer;	
+	PSDL_Texture = pointer;
 	
 	TSDL_WindowEvent = record
 		type_: byte;
@@ -631,6 +627,10 @@ function  SDL_RWFromFile(filename, mode: PChar): PSDL_RWops; cdecl; external SDL
 function  SDL_SaveBMP_RW(surface: PSDL_Surface; dst: PSDL_RWops; freedst: LongInt): LongInt; cdecl; external SDLLibName;
 
 {$IFDEF SDL13}
+function  SDL_CreateWindow(title: PChar; x,y,w,h, flags: LongInt): PSDL_Window; cdecl; external SDLLibName; 	 
+function  SDL_CreateRenderer(window: PSDL_Window; index, flags: LongInt): LongInt; cdecl; external SDLLibName; 	 
+function  SDL_SetRenderDrawColor(r,g,b,a: byte): LongInt; cdecl; external SDLLibName;
+
 function  SDL_RenderFill(rect: PSDL_Rect): LongInt;
 function  SDL_RenderFillRect(rect: PSDL_Rect): LongInt; cdecl; external SDLLibName;
 function  SDL_RenderClear: LongInt; cdecl; external SDLLibName;
