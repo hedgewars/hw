@@ -76,7 +76,7 @@
     </message>
     <message>
         <source>en.txt</source>
-        <translation>pt-br.txt</translation>
+        <translation>pt_BR.txt</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
