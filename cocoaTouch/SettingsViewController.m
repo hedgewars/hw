@@ -11,7 +11,8 @@
 
 @implementation SettingsViewController
 
-@synthesize username, password, musicSwitch, soundsSwitch, altDamageSwitch, volumeSlider, volumeLabel, table, volumeCell;
+@synthesize username, password, musicSwitch, soundsSwitch, altDamageSwitch, 
+	    volumeSlider, volumeLabel, table, volumeCell, buttonContainer;
 
 
 -(void) loadView {
@@ -27,6 +28,7 @@
 -(void) viewDidLoad {
 	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
 	
+	needsReset = NO;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
 		NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
 		username.text = [data objectForKey:@"username"];
@@ -62,6 +64,9 @@
 	volumeLabel.textColor = [UIColor grayColor];
 	table.backgroundColor = [UIColor clearColor];
 	table.allowsSelection = NO;
+	buttonContainer.backgroundColor = [UIColor clearColor];
+	table.tableFooterView = buttonContainer;
+	
 	[super viewDidLoad];
 }
 
@@ -75,25 +80,28 @@
 	self.volumeSlider = nil;
 	self.table = nil;
 	self.volumeCell = nil;
+	self.buttonContainer = nil;
 	[super viewDidUnload];
 }
 
 //- (void)applicationWillTerminate:(NSNotification *)notification {
 -(void) viewWillDisappear:(BOOL)animated {
-	NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-	NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
-	NSString *tmpEff = (soundsSwitch.on) ? @"1" : @"0";
-	NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
-	
-	[saveDict setObject:username.text forKey:@"username"];
-	[saveDict setObject:password.text forKey:@"password"];
-	[saveDict setObject:tmpMus forKey:@"music"];
-	[saveDict setObject:tmpEff forKey:@"sounds"];
-	[saveDict setObject:tmpAlt forKey:@"alternate"];
-	[saveDict setObject:volumeLabel.text forKey:@"volume"];
-	
-	[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
-	[saveDict release];
+	if (!needsReset) {
+		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+		NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
+		NSString *tmpEff = (soundsSwitch.on) ? @"1" : @"0";
+		NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
+		
+		[saveDict setObject:username.text forKey:@"username"];
+		[saveDict setObject:password.text forKey:@"password"];
+		[saveDict setObject:tmpMus forKey:@"music"];
+		[saveDict setObject:tmpEff forKey:@"sounds"];
+		[saveDict setObject:tmpAlt forKey:@"alternate"];
+		[saveDict setObject:volumeLabel.text forKey:@"volume"];
+		
+		[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
+		[saveDict release];
+	}
 	[super viewWillDisappear:animated];
 }
 
@@ -107,6 +115,7 @@
 	[volumeSlider release];
 	[table release];
 	[volumeCell release];
+	[buttonContainer release];
 	[super dealloc];
 }
 /*
@@ -148,6 +157,47 @@
 -(void) checkValueSwitch {
 	if (NO == self.soundsSwitch.on) {
 		[musicSwitch setOn:!musicSwitch.on animated:YES];
+	}
+}
+
+#pragma mark -
+#pragma mark UIActionSheet Methods
+-(IBAction) deleteData: (id)sender {
+	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are you reeeeeally sure?"
+								 delegate:self
+							cancelButtonTitle:@"Well, maybe not..."
+						   destructiveButtonTitle:@"Sure, let's start over"
+							otherButtonTitles:nil];
+	[actionSheet showInView:self.view];
+	[actionSheet release];
+}
+
+-(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
+	if ([actionSheet cancelButtonIndex] != buttonIndex) {
+		needsReset = YES;
+		
+		// get the document dirctory
+		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+		NSString *documentsDirectory = [paths objectAtIndex:0];
+		
+		// get the content of the directory
+		NSFileManager *fm = [NSFileManager defaultManager];
+		NSArray *dirContent = [fm directoryContentsAtPath:documentsDirectory];
+		NSError *error;
+		
+		// delete data
+		for (NSString *fileName in dirContent) {
+			[fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:fileName] error:&error];
+		}
+		
+		// force resetting
+		UIAlertView *anAlert = [[UIAlertView alloc] initWithTitle:@"Hit Home Button to Exit" 
+								  message:@"\nEverything is gone!\nNow you need to restart the game..." 
+								 delegate:self
+							cancelButtonTitle:nil
+							otherButtonTitles:nil];
+		[anAlert show];
+		[anAlert release];
 	}
 }
 
@@ -247,7 +297,7 @@
 
 	switch (section) {
 		case kNetworkFields:
-			headerLabel.text = NSLocalizedString(@"Network Configuration", @"");
+			headerLabel.text = NSLocalizedString(@"Network Configuration", @"Network Configuration");
 			break;
 		case kAudioFields:
 			headerLabel.text = NSLocalizedString(@"Audio Preferences", @"");
@@ -273,8 +323,7 @@
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-	return 57;
+	return 57.0;
 }
-
 
 @end

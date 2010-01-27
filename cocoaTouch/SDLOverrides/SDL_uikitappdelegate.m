@@ -137,13 +137,14 @@ int main (int argc, char *argv[]) {
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Running low on memory"
-							message:@"Will try to free some memory but app may crash"
+							message:@"I will try to free some memory but game might slow down a little"
 						       delegate:nil
 					      cancelButtonTitle:@"Ok"
 					      otherButtonTitles:nil ];
 	[alert show];
 	[alert release];
 }
+
 #pragma mark -
 #pragma mark SDLUIKitDelegate methods
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
@@ -151,6 +152,7 @@ int main (int argc, char *argv[]) {
 	[application setStatusBarHidden:YES animated:NO];
 
 	[self checkFirstRun];
+	
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 
