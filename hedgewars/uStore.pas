@@ -1142,9 +1142,6 @@ begin
 	// prepare default translation/scaling
 	glLoadIdentity();
 	glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-{$IFDEF IPHONEOS}
-	//glRotatef(90, 0, 0, 1);
-{$ENDIF}
 	glTranslatef(0, -cScreenHeight / 2, 0);
 
 	// enable alpha blending
@@ -1163,9 +1160,6 @@ begin
 		glPushMatrix; // save default scaling
 		glLoadIdentity;
 		glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-{$IFDEF IPHONEOS}
-		//glRotatef(90, 0, 0, 1);
-{$ENDIF}
 		glTranslatef(0, -cScreenHeight / 2, 0);
 	end;
 

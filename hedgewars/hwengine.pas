@@ -230,8 +230,8 @@ begin
 	initEverything();
 	Randomize();
 
-	val('320', cScreenWidth);
-	val('480', cScreenHeight);
+	val('480', cScreenWidth);
+	val('320', cScreenHeight);
 	cInitWidth:= cScreenWidth;
 	cInitHeight:= cScreenHeight;
 	cBitsStr:= '32';

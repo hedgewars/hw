@@ -163,10 +163,10 @@
 #pragma mark -
 #pragma mark UIActionSheet Methods
 -(IBAction) deleteData: (id)sender {
-	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Are you reeeeeally sure?"
+	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
 								 delegate:self
-							cancelButtonTitle:@"Well, maybe not..."
-						   destructiveButtonTitle:@"Sure, let's start over"
+							cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
+						   destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
 							otherButtonTitles:nil];
 	[actionSheet showInView:self.view];
 	[actionSheet release];
@@ -176,7 +176,7 @@
 	if ([actionSheet cancelButtonIndex] != buttonIndex) {
 		needsReset = YES;
 		
-		// get the document dirctory
+		// get the documents dirctory
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *documentsDirectory = [paths objectAtIndex:0];
 		
@@ -191,8 +191,8 @@
 		}
 		
 		// force resetting
-		UIAlertView *anAlert = [[UIAlertView alloc] initWithTitle:@"Hit Home Button to Exit" 
-								  message:@"\nEverything is gone!\nNow you need to restart the game..." 
+		UIAlertView *anAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Hit Home Button to Exit", @"")
+								  message:NSLocalizedString(@"\nEverything is gone!\nNow you need to restart the game...", @"")
 								 delegate:self
 							cancelButtonTitle:nil
 							otherButtonTitles:nil];
@@ -297,7 +297,7 @@
 
 	switch (section) {
 		case kNetworkFields:
-			headerLabel.text = NSLocalizedString(@"Network Configuration", @"Network Configuration");
+			headerLabel.text = NSLocalizedString(@"Network Configuration", @"");
 			break;
 		case kAudioFields:
 			headerLabel.text = NSLocalizedString(@"Audio Preferences", @"");
@@ -307,7 +307,7 @@
 			break;
 		default:
 			NSLog(@"Warning: unset case value in titleForHeaderInSection!");
-			headerLabel.text = @"!!!";
+			headerLabel.text = @"!";
 			break;
 	}
 	

@@ -39,10 +39,10 @@
 #endif
 
 int main (int argc, char *argv[]) {
-    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
-    [pool release];
-    return retVal;
+	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+	int retVal = UIApplicationMain(argc, argv, nil, @"SDLUIKitDelegate");
+	[pool release];
+	return retVal;
 }
 
 @implementation SDLUIKitDelegate
@@ -93,7 +93,8 @@ int main (int argc, char *argv[]) {
 	
 	free(gameArgs);
 	NSLog(@"Game is exting...");
-
+	
+	[[uiwindow viewWithTag:54321] removeFromSuperview];
 	[setup release];
 
 	[UIView beginAnimations:@"inserting main controller" context:NULL];
@@ -101,7 +102,7 @@ int main (int argc, char *argv[]) {
 	controller.view.alpha = 1;
 	[UIView commitAnimations];
 	
-	[uiwindow addSubview:controller.view];
+	[uiwindow addSubview: controller.view];
 	[uiwindow makeKeyAndVisible];
 	
 	[internal_pool release];
@@ -109,6 +110,8 @@ int main (int argc, char *argv[]) {
 
 -(BOOL) checkFirstRun {
 	BOOL isFirstRun = NO;
+	
+	//use a nssthread a ask the user to wait
 	
 	NSString *filePath = [self dataFilePath:@"settings.plist"];
 	if (!([[NSFileManager defaultManager] fileExistsAtPath:filePath])) {
@@ -136,6 +139,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
+	/* we get too many ones on ipod touch
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Running low on memory"
 							message:@"I will try to free some memory but game might slow down a little"
 						       delegate:nil
@@ -143,6 +147,7 @@ int main (int argc, char *argv[]) {
 					      otherButtonTitles:nil ];
 	[alert show];
 	[alert release];
+	*/
 }
 
 #pragma mark -
@@ -176,12 +181,5 @@ int main (int argc, char *argv[]) {
 //	NSLog(@"%@", NSStringFromSelector(_cmd));
 	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }
-
-/*
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-	NSLog(@"Rotating...");
-	return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-}
-*/
 
 @end
