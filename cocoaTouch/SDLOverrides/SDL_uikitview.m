@@ -32,8 +32,6 @@
 
 @implementation SDL_uikitview
 
-@synthesize initialDistance, gestureStartPoint;
-
 // they have to be global variables to allow showControls() to use them
 UIButton *attackButton, *menuButton;
 
@@ -86,7 +84,6 @@ UIButton *attackButton, *menuButton;
 
 #pragma mark -
 #pragma mark Exported functions for FreePascal
-
 const char* IPH_getDocumentsPath() {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex: 0];
@@ -95,16 +92,15 @@ const char* IPH_getDocumentsPath() {
 
 void IPH_showControls (void) {
 	NSLog(@"Showing controls");
-	[UIView beginAnimations:nil context:NULL];
+	/*[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];
 	attackButton.frame = CGRectMake(30, 430, 260, 50);
 	menuButton.frame = CGRectMake(0, 430, 30, 50);
 	[UIView commitAnimations];
-}
+*/}
 
 #pragma mark -
 #pragma mark Superclass methods
-
 +(void) attackButtonPressed {
 	HW_shoot();
 }
@@ -115,159 +111,181 @@ void IPH_showControls (void) {
 
 #pragma mark -
 #pragma mark Custom SDL_UIView input handling
+#define kMinimumPinchDelta	30
+#define kMinimumGestureLength	10
+#define kMaximumVariance	3
 
 // we override default touch input to implement our own gestures
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	/*NSEnumerator *enumerator = [touches objectEnumerator];
+	/*
+	NSEnumerator *enumerator = [touches objectEnumerator];
 	UITouch *touch =(UITouch*)[enumerator nextObject];
 	
-	/* associate touches with mice, so long as we have slots 
+	// associate touches with mice, so long as we have slots 
 	int i;
 	int found = 0;
 	for(i=0; touch && i < MAX_SIMULTANEOUS_TOUCHES; i++) {
 	
-		/* check if this mouse is already tracking a touch 
+		// check if this mouse is already tracking a touch 
 		if (mice[i].driverdata != NULL) {
 			continue;
 		}
-		/*	
-			mouse not associated with anything right now,
-			associate the touch with this mouse
-		
+			
+		// mouse not associated with anything right now, associate the touch with this mouse
 		found = 1;
 		
-		/* save old mouse so we can switch back 
+		// save old mouse so we can switch back 
 		int oldMouse = SDL_SelectMouse(-1);
 		
-		/* select this slot's mouse 
+		// select this slot's mouse 
 		SDL_SelectMouse(i);
 		CGPoint locationInView = [touch locationInView: self];
 		
-		/* set driver data to touch object, we'll use touch object later 
+		CGFloat oldX = locationInView.x;
+		locationInView.x = locationInView.y;
+		locationInView.y = 320 - oldX;
+		
+		// set driver data to touch object, we'll use touch object later 
 		mice[i].driverdata = [touch retain];
 		
-		/* send moved event 
+		// send moved event 
 		SDL_SendMouseMotion(i, 0, locationInView.x, locationInView.y, 0);
 		
-		/* send mouse down event 
+		// send mouse down event 
 		SDL_SendMouseButton(i, SDL_PRESSED, SDL_BUTTON_LEFT);
 		
-		/* re-calibrate relative mouse motion 
+		// re-calibrate relative mouse motion 
 		SDL_GetRelativeMouseState(i, NULL, NULL);
 		
-		/* grab next touch 
+		// grab next touch 
 		touch = (UITouch*)[enumerator nextObject]; 
 		
-		/* switch back to our old mouse 
+		// switch back to our old mouse 
 		SDL_SelectMouse(oldMouse);
 		
-	}	*/
+	}
+	*/
 	
 	UITouch *touch = [touches anyObject];
-	gestureStartPoint = [touch locationInView:self];
+	
+	switch ([touches count]) {
+		case 1:
+			gestureStartPoint = [touch locationInView:self];
+			initialDistanceForPinching = 0;
+			switch ([touch tapCount]) {
+				case 1:
+					NSLog(@"x:%d y:%d",(int)gestureStartPoint.x,(int)gestureStartPoint.y);
+					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, (int)gestureStartPoint.y - 250, (int)gestureStartPoint.x);
+					HW_click();
+					break;
+				case 2:
+					HW_ammoMenu();
+					break;
+				default:
+					break;
+			}
+			break;
+		case 2:
+			if (2 == [touch tapCount]) {
+				HW_zoomReset();
+			}
+			
+			// pinching
+			NSArray *twoTouches = [touches allObjects];
+			UITouch *first = [twoTouches objectAtIndex:0];
+			UITouch *second = [twoTouches objectAtIndex:1];
+			initialDistanceForPinching = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
+			break;
+		default:
+			break;
+	}
 
-	// one tap - single click
-	if (1 == [touch tapCount] ) {
-		CGFloat oldX = gestureStartPoint.x;
-		gestureStartPoint.x = gestureStartPoint.y;
-		gestureStartPoint.y = 320 - oldX;
-
-		SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, gestureStartPoint.x, gestureStartPoint.y);
-		HW_click();
-	}
-	
-	// two taps - right click
-	if (2 == [touch tapCount] ) {
-		HW_ammoMenu();
-	}
-	
-	// two taps with two fingers - middle click
-	if (2 == [touch tapCount] && 2 == [touches count]) {
-		HW_zoomReset();
-	}
-	
-	// two fingers - begin pinching
-	if (2 == [touches count]) {
-		NSArray *twoTouches = [touches allObjects];
-		UITouch *first = [twoTouches objectAtIndex:0];
-		UITouch *second = [twoTouches objectAtIndex:1];
-		initialDistance = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
-	}
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-	initialDistance = 0;
+	initialDistanceForPinching = 0;
 	
 	HW_allKeysUp();
-	/*NSEnumerator *enumerator = [touches objectEnumerator];
+	/*
+	NSEnumerator *enumerator = [touches objectEnumerator];
 	UITouch *touch=nil;
 	
 	while(touch = (UITouch *)[enumerator nextObject]) {
-		/* search for the mouse slot associated with this touch 
+		// search for the mouse slot associated with this touch 
 		int i, found = NO;
 		for (i=0; i<MAX_SIMULTANEOUS_TOUCHES && !found; i++) {
 			if (mice[i].driverdata == touch) {
-				/* found the mouse associate with the touch 
+				// found the mouse associate with the touch 
 				[(UITouch*)(mice[i].driverdata) release];
 				mice[i].driverdata = NULL;
-				/* send mouse up 
+				// send mouse up 
 				SDL_SendMouseButton(i, SDL_RELEASED, SDL_BUTTON_LEFT);
-				/* discontinue search for this touch 
+				// discontinue search for this touch 
 				found = YES;
 			}
 		}
-	}*/
+	}
+	*/
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	/*
-		this can happen if the user puts more than 5 touches on the screen
-		at once, or perhaps in other circumstances.  Usually (it seems)
-		all active touches are canceled.
-	*/
-	[self touchesEnded: touches withEvent: event];
+	// this can happen if the user puts more than 5 touches on the screen
+	// at once, or perhaps in other circumstances.  Usually (it seems)
+	// all active touches are canceled.
+	[self touchesEnded:touches withEvent:event];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSArray *twoTouches;
+	CGPoint currentPosition;
 	UITouch *touch = [touches anyObject];
-	CGPoint currentPosition = [touch locationInView:self];
-	
-	// remember that we have x and y inverted
-	CGFloat Xdiff = gestureStartPoint.y - currentPosition.y;
-	CGFloat Ydiff = gestureStartPoint.x - currentPosition.x;
-	CGFloat deltaX = fabsf(Xdiff);
-	CGFloat deltaY = fabsf(Ydiff);
-    
-	if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance) {
-		NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
-		if (Xdiff > 0) HW_walkLeft();
-		else HW_walkRight();
-	} else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
-		NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
-		if (Ydiff > 0) HW_aimUp();
-		else HW_aimDown();
+
+	switch ([touches count]) {
+		case 1:
+			currentPosition = [touch locationInView:self];
+			
+			// remember that we have x and y inverted
+			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
+			CGFloat horizDiff = gestureStartPoint.y - currentPosition.y;
+			CGFloat deltaX = fabsf(vertDiff);
+			CGFloat deltaY = fabsf(horizDiff);
+			
+			if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance) {
+				NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
+				if (horizDiff > 0) HW_walkLeft();
+				else HW_walkRight();
+			} else if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance){
+				NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
+				if (vertDiff < 0) HW_aimUp();
+				else HW_aimDown();
+			}
+			break;
+		case 2:
+			twoTouches = [touches allObjects];
+			UITouch *first = [twoTouches objectAtIndex:0];
+			UITouch *second = [twoTouches objectAtIndex:1];
+			CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
+			
+			if (0 == initialDistanceForPinching) 
+				initialDistanceForPinching = currentDistanceOfPinching;
+
+			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta) {
+				NSLog(@"Outward pinch detected");
+				HW_zoomOut();
+			}
+			if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta){
+				NSLog(@"Inward pinch detected");
+				HW_zoomIn();
+			}
+			
+			currentDistanceOfPinching = initialDistanceForPinching;
+			break;
+		default:
+			break;
 	}
 	
-	// end pinch detection
-	if (2 == [touches count]) {
-		NSArray *twoTouches = [touches allObjects];
-		UITouch *first = [twoTouches objectAtIndex:0];
-		UITouch *second = [twoTouches objectAtIndex:1];
-		CGFloat currentDistance = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
-		
-		if (0 == initialDistance) 
-			initialDistance = currentDistance;
-		else if (currentDistance - initialDistance > kMinimumPinchDelta) {
-			NSLog(@"Outward pinch detected");
-			HW_zoomOut();
-		}
-		else if (initialDistance - currentDistance > kMinimumPinchDelta) {
-			NSLog(@"Inward pinch detected");
-			HW_zoomIn();
-		}
-	}
-	
-	/*NSEnumerator *enumerator = [touches objectEnumerator];
+	/*
+	NSEnumerator *enumerator = [touches objectEnumerator];
 	 UITouch *touch=nil;while(touch = (UITouch *)[enumerator nextObject]) {
 		// try to find the mouse associated with this touch 
 		int i, found = NO;
@@ -281,7 +299,8 @@ void IPH_showControls (void) {
 				found = YES;
 			}
 		}
-	}*/
+	}
+	*/
 }
 
 #pragma mark -
