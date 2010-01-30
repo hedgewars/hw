@@ -341,10 +341,8 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
-{$IFDEF IPHONEOS}
-    x,y: LongInt;
-{$ENDIF}
     offset: LongInt;
+    scale: GLfloat;
 begin
 if ZoomValue < zoom then
 	begin
@@ -364,10 +362,6 @@ glEnable(GL_TEXTURE_2D);
 //glPushMatrix;
 //glScalef(1.0, 1.0, 1.0);
 
-{$IFDEF IPHONEOS}
-SDL_GetMouseState(@x, @y);
-//WriteLnToConsole('x; ' + inttostr(x) + ' y: ' + inttostr(y));
-{$ENDIF}
 if not isPaused then MoveCamera;
 
 if not cReducedQuality then
@@ -427,16 +421,18 @@ DrawWaves( 1, 75, 0);
 {$WARNINGS OFF}
 // Target
 if TargetPoint.X <> NoPointX then DrawSprite(sprTargetP, TargetPoint.X + WorldDx - 16, TargetPoint.Y + WorldDy - 16, 0);
-
 {$WARNINGS ON}
-SetScale(2.0);
 
 {$IFDEF IPHONEOS}
-offset:= 465;
+scale:= 1.5;
 {$ELSE}
-offset:= 48;
+scale:= 2.0;
 {$ENDIF}
+SetScale(scale);
+
+
 // Turn time
+offset:= 48;
 if TurnTimeLeft <> 0 then
    begin
    i:= Succ(Pred(TurnTimeLeft) div 1000);
@@ -501,17 +497,18 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 
 // Captions
 {$IFDEF IPHONEOS}
-i:= 53;
+offset:= 49;
 {$ELSE}
-if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then i:= 48 else i:= 8;
+if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then offset:= 48
+else offset:= 8;
 {$ENDIF}
 
 	for grp:= Low(TCapGroup) to High(TCapGroup) do
 		with Captions[grp] do
 			if Tex <> nil then
 			begin
-				DrawCentered(0, i, Tex);
-				inc(i, Tex^.h + 2);
+				DrawCentered(0, offset, Tex);
+				inc(offset, Tex^.h + 2);
 				if EndTime <= RealTicks then
 				begin
 					FreeTexture(Tex);
@@ -544,7 +541,7 @@ if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr
 
 // Wind bar
 {$IFDEF IPHONEOS}
-offset:= 450;
+offset:= 305;
 {$ELSE}
 offset:= 30;
 {$ENDIF}
@@ -577,14 +574,17 @@ if (AMxShift < 210) or bShowAmmoMenu then ShowAmmoMenu;
 if isCursorVisible and bShowAmmoMenu then
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8);
 
-{$IFNDEF IPHONEOS}
-{* do not draw the chat because a) no input b) too little space*}
 DrawChat;
-{$ENDIF}
 
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
+// fps
+{$IFDEF IPHONEOS}
+offset:= 40;
+{$ELSE}
+offset:= 10;
+{$ENDIF}
 inc(Frames);
 if cShowFPS then
    begin
@@ -602,9 +602,10 @@ if cShowFPS then
       SDL_FreeSurface(tmpSurface)
       end;
    if fpsTexture <> nil then
-      DrawTexture((cScreenWidth shr 1) - 50, 10, fpsTexture);
+      DrawTexture((cScreenWidth shr 1) - 50, offset, fpsTexture);
    end;
 
+// lag warning (?)
 inc(SoundTimerTicks, Lag);
 if SoundTimerTicks >= 50 then
    begin
@@ -616,7 +617,8 @@ if SoundTimerTicks >= 50 then
       end
    end;
 
-if GameState = gsConfirm then DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
+if GameState = gsConfirm then
+	DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
 
 SetScale(zoom);
 

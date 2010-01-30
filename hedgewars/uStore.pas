@@ -1136,11 +1136,18 @@ begin
 {$ENDIF}
 
 	// set view port to whole window
+{$IFDEF IPHONEOS}
+	glViewport(0, 0, cScreenHeight, cScreenWidth);
+{$ELSE}
 	glViewport(0, 0, cScreenWidth, cScreenHeight);
+{$ENDIF}
 
 	glMatrixMode(GL_MODELVIEW);
 	// prepare default translation/scaling
 	glLoadIdentity();
+{$IFDEF IPHONEOS}
+	glRotatef(-90, 0, 0, 1);
+{$ENDIF}
 	glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
 	glTranslatef(0, -cScreenHeight / 2, 0);
 
@@ -1150,15 +1157,24 @@ begin
 end;
 
 procedure SetScale(f: GLfloat);
+var
+{$IFDEF IPHONEOS}
+scale: GLfloat = 1.5;
+{$ELSE}
+scale: GLfloat = 2.0;
+{$ENDIF}
 begin
 	// leave immediately if scale factor did not change
 	if f = cScaleFactor then exit;
 
-	if f = 2.0 then glPopMatrix // "return" to default scaling
-	else // other scaling
+	if f = scale then glPopMatrix	// "return" to default scaling
+	else				// other scaling
 	begin
-		glPushMatrix; // save default scaling
+		glPushMatrix;		// save default scaling
 		glLoadIdentity;
+{$IFDEF IPHONEOS}
+		glRotatef(-90, 0, 0, 1);
+{$ENDIF}
 		glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
 		glTranslatef(0, -cScreenHeight / 2, 0);
 	end;

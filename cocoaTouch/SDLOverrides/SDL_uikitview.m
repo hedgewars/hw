@@ -65,6 +65,9 @@ UIButton *attackButton, *menuButton;
 		SDL_AddMouse(&mice[i], "Mouse", 0, 0, 1);
 	}
 
+	self.multipleTouchEnabled = YES;
+
+	// custom code
 	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260,50)];
 	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
 	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateHighlighted];
@@ -77,7 +80,6 @@ UIButton *attackButton, *menuButton;
 	[menuButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 	[self addSubview:menuButton];
 
-	self.multipleTouchEnabled = YES;
 
 	return self;
 }
@@ -166,7 +168,11 @@ void IPH_showControls (void) {
 
 	// one tap - single click
 	if (1 == [touch tapCount] ) {
-		//SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, gestureStartPoint.x, gestureStartPoint.y);
+		CGFloat oldX = gestureStartPoint.x;
+		gestureStartPoint.x = gestureStartPoint.y;
+		gestureStartPoint.y = 320 - oldX;
+
+		SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, gestureStartPoint.x, gestureStartPoint.y);
 		HW_click();
 	}
 	
@@ -191,7 +197,6 @@ void IPH_showControls (void) {
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistance = 0;
-//	NSLog(@"touches ended, sigh");
 	
 	HW_allKeysUp();
 	/*NSEnumerator *enumerator = [touches objectEnumerator];
@@ -227,8 +232,9 @@ void IPH_showControls (void) {
 	UITouch *touch = [touches anyObject];
 	CGPoint currentPosition = [touch locationInView:self];
 	
-	CGFloat Xdiff = gestureStartPoint.x - currentPosition.x;
-	CGFloat Ydiff = gestureStartPoint.y - currentPosition.y;
+	// remember that we have x and y inverted
+	CGFloat Xdiff = gestureStartPoint.y - currentPosition.y;
+	CGFloat Ydiff = gestureStartPoint.x - currentPosition.x;
 	CGFloat deltaX = fabsf(Xdiff);
 	CGFloat deltaY = fabsf(Ydiff);
     
@@ -236,8 +242,7 @@ void IPH_showControls (void) {
 		NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
 		if (Xdiff > 0) HW_walkLeft();
 		else HW_walkRight();
-	}
-	else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
+	} else if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance){
 		NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
 		if (Ydiff > 0) HW_aimUp();
 		else HW_aimDown();

@@ -37,14 +37,14 @@
 // constants for telling which input has been received
 #define kMinimumPinchDelta	100
 #define kMinimumGestureLength	10
-#define kMaximumVariance	4
+#define kMaximumVariance	3
 
 /* *INDENT-OFF* */
-//#if SDL_IPHONE_KEYBOARD
-//@interface SDL_uikitview : UIView<UITextFieldDelegate> {
-//#else
+#if SDL_IPHONE_KEYBOARD
+@interface SDL_uikitview : UIView<UITextFieldDelegate> {
+#else
 @interface SDL_uikitview : UIView {
-//#endif
+#endif
 	SDL_Mouse mice[MAX_SIMULTANEOUS_TOUCHES];
 	CGFloat initialDistance;
 	CGPoint gestureStartPoint;
