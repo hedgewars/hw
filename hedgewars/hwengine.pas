@@ -57,6 +57,8 @@ uses	SDLh in 'SDLh.pas',
 	uLandTexture in 'uLandTexture.pas'
 	{$IFDEF IPHONEOS}
 	, PascalExports in 'PascalExports.pas'
+	{$ELSE}
+	, sysutils
 	{$ENDIF}
 	;
 
@@ -141,8 +143,8 @@ begin
 	if flagMakeCapture then
 	begin
 		flagMakeCapture:= false;
-		s:= 'hw_' + cSeed + '_' + inttostr(GameTicks) + '.tga';
-		WriteLnToConsole('Saving ' + s);
+		s:= 'hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+		WriteLnToConsole('Saving ' + s + '...');
 		MakeScreenshot(s);
 		//SDL_SaveBMP_RW(SDLPrimSurface, SDL_RWFromFile(Str2PChar(s), 'wb'), 1)
 	end;

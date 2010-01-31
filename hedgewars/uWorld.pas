@@ -654,7 +654,7 @@ Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
 case Group of
 	capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
 	else
-	Captions[Group].EndTime:= RealTicks + 1400 + Captions[Group].Tex^.w*3;
+	Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
 	end;
 end;
 

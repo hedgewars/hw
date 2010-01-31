@@ -82,11 +82,11 @@ procedure SetScale(f: GLfloat);
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
 
-type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel);
+type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var HHTexture: PTexture;
     MaxTextureSize: Integer;
-    {$IFNDEF IPHONEOS}cGPUVendor: TGPUVendor;{$ENDIF}
+    cGPUVendor: TGPUVendor;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;
@@ -1133,6 +1133,16 @@ begin
 	else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
 		cGPUVendor:= gvIntel;
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
+{$ELSE}
+	cGPUVendor:= gvApple;
+{$ENDIF}
+
+{$IFDEF DEBUGFILE}
+	if cGPUVendor = gvUnknown then
+		AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
+{$ELSE}
+	// just avoid 'never used' compiler warning for now
+	if cGPUVendor = gvUnknown then cGPUVendor:= gvUnknown;
 {$ENDIF}
 
 	// set view port to whole window

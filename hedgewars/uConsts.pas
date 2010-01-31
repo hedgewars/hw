@@ -106,7 +106,7 @@ type
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
 			sndHomerun, sndMolotov, sndWalking, sndCover, sndUhOh,
 			sndOops, sndNooo, sndHello, sndRopeShot, sndRopeAttach,
-			sndRopeRelease);
+			sndRopeRelease, sndSwitchHog);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -662,7 +662,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			Interval: Longword;
 			cmd: String[20];
 			Voice: TSound;
-			VoiceDelay: ShortInt;
+			VoiceDelay: LongWord;
 			end = (
 			(Sprite:   sprKowtow; FramesCount: 12; Interval: 125; cmd: '/rollup'; Voice: sndNone; VoiceDelay: 0),
 			(Sprite:      sprSad; FramesCount: 14; Interval: 125; cmd: '/sad'; Voice: sndNone; VoiceDelay: 0),
@@ -745,7 +745,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:                'Hello.ogg'; Path: ptVoices),// sndHello
 			(FileName:                         ''; Path: ptSounds),// sndRopeShot
 			(FileName:                         ''; Path: ptSounds),// sndRopeAttach
-			(FileName:                         ''; Path: ptSounds) // sndRopeRelease
+			(FileName:                         ''; Path: ptSounds),// sndRopeRelease
+			(FileName:            'switchhog.ogg'; Path: ptSounds) // sndSwitchHog
 			);
 
 	Ammoz: array [TAmmoType] of record

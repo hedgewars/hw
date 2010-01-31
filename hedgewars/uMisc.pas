@@ -155,7 +155,7 @@ procedure AddFileLog(s: shortstring);
 function  RectToStr(Rect: TSDL_Rect): shortstring;
 {$ENDIF}
 {$IFNDEF IPHONEOS}
-procedure MakeScreenshot(s: shortstring);
+procedure MakeScreenshot(filename: shortstring);
 {$ENDIF}
 
 implementation
@@ -493,26 +493,72 @@ byte(DecodeBase64[0]):= t - 1
 end;
 
 {$IFNDEF IPHONEOS}
-procedure MakeScreenshot(s: shortstring);
-const head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
+procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;
 	size: Longword;
 	f: file;
+{$IFNDEF WIN32}
+	// TGA Header
+	head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
+{$ELSE}
+	// Windows Bitmap Header
+	head: array[0..53] of Byte = (
+	$42, $4D, // identifier ("BM")
+	0, 0, 0, 0, // file size
+	0, 0, 0, 0, // reserved
+	54, 0, 0, 0, // starting offset
+	40, 0, 0, 0, // header size
+	0, 0, 0, 0, // width
+	0, 0, 0, 0, // height
+	1, 0, // color planes
+	24, 0, // bit depth
+	0, 0, 0, 0, // compression method (uncompressed)
+	0, 0, 0, 0, // image size
+	96, 0, 0, 0, // horizontal resolution
+	96, 0, 0, 0, // vertical resolution
+	0, 0, 0, 0, // number of colors (all)
+	0, 0, 0, 0 // number of important colors
+	);
+{$ENDIF}
 begin
 playSound(sndShutter, false, nil);
-head[6]:= cScreenWidth;
-head[7]:= cScreenHeight;
 
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);
 
+// update header information and file name
+{$IFNDEF WIN32}
+filename:= ParamStr(1) + '/' + filename + '.tga';
+
+head[6]:= cScreenWidth;
+head[7]:= cScreenHeight;
+{$ELSE}
+filename:= ParamStr(1) + '/' + filename + '.bmp';
+
+head[$02]:= (size + 54) and $ff;
+head[$03]:= ((size + 54) shr 8) and $ff;
+head[$04]:= ((size + 54) shr 16) and $ff;
+head[$05]:= ((size + 54) shr 24) and $ff;
+head[$12]:= cScreenWidth and $ff;
+head[$13]:= (cScreenWidth shr 8) and $ff;
+head[$14]:= (cScreenWidth shr 16) and $ff;
+head[$15]:= (cScreenWidth shr 24) and $ff;
+head[$16]:= cScreenHeight and $ff;
+head[$17]:= (cScreenHeight shr 8) and $ff;
+head[$18]:= (cScreenHeight shr 16) and $ff;
+head[$19]:= (cScreenHeight shr 24) and $ff;
+head[$22]:= size and $ff;
+head[$23]:= (size shr 8) and $ff;
+head[$24]:= (size shr 16) and $ff;
+head[$25]:= (size shr 24) and $ff;
+{$ENDIF}
 
 //remember that opengles operates on a single surface, so GL_FRONT *should* be implied
 glReadBuffer(GL_FRONT);
 glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 
 {$I-}
-Assign(f, s);
+Assign(f, filename);
 Rewrite(f, 1);
 if IOResult = 0 then
 	begin
