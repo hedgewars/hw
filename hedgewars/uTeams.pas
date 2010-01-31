@@ -312,7 +312,6 @@ if (GameFlags and gfKing) <> 0 then
          King:= true;
          Hat:= 'crown';
          Gear^.Health:= hwRound(int2hwFloat(Gear^.Health)*_1_5);
-         Gear^.Invulnerable:= true
          end
       end;
 

@@ -721,7 +721,7 @@ begin
                      end;
 
                   if (Gear <> nil) then
-                     if ((GameFlags and gfInvulnerable) = 0) and (not King or (TotalRounds >= 0))  then // King is protected for one round
+                     if (GameFlags and gfInvulnerable) = 0 then
                         Gear^.Invulnerable:= false;
                   end;
 end;

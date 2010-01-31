@@ -93,12 +93,14 @@ begin
 if(Gear^.Invulnerable) then exit;
 if _0_4 < Gear^.dY then
 	begin
+	dmg:= ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
+    if dmg < 1 then exit;
+
 	if _0_6 < Gear^.dY then
 		PlaySound(sndOw4, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 	else
 		PlaySound(sndOw1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
-	dmg:= ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
     ApplyDamage(Gear, dmg);
 	end
 end;
