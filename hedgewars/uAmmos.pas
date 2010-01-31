@@ -108,7 +108,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         ammos[a]:= cnt;
         if shoppa then Ammoz[a].NumberInCase:= 1;  // FIXME - TEMPORARY remove when crate number in case editor is added
 
-        if ((GameFlags and gfKing) <> 0) and (a <> amTeleport) then Ammoz[a].SkipTurns:= 1;
+        if ((GameFlags and gfKing) <> 0) and (a <> amTeleport) and (a <> amSkip) then Ammoz[a].SkipTurns:= 1;
         end else
         ammos[a]:= AMMO_INFINITE
     end;
