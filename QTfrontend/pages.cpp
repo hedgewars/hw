@@ -888,7 +888,14 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 		roomsList->setItem(r, 3, item);
 
 		if(list[i + 5].compare("+rnd+"))
+		{
 			item = new QTableWidgetItem(list[i + 5]); // selected map
+			
+			// check to see if we've got this map
+			// not perfect but a start
+			if(!mapList->contains(list[i + 5]))
+				item->setForeground(QBrush(QColor(255, 0, 0)));
+		}
 		else
 			item = new QTableWidgetItem(tr("Random Map")); // selected map (is randomized)
 		

@@ -252,10 +252,10 @@ begin
 	end;
 
 // draw a hole in land
-if Radius > 25 then
+if Radius > 20 then
 	begin
 	dx:= 0;
-	dy:= Radius - 25;
+	dy:= Radius - 15;
 	d:= 3 - 2 * dy;
 
 	while (dx < dy) do
@@ -394,7 +394,7 @@ for i:= -HalfWidth to HalfWidth do
         Y:= Y + dY;
         tx:= hwRound(X);
         ty:= hwRound(Y);
-        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) then
+        if (Land[ty, tx] <> COLOR_INDESTRUCTIBLE) and ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) then
             begin
             if Land[ty, tx] = COLOR_LAND then
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
