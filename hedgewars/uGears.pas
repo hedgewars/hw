@@ -84,6 +84,7 @@ procedure AddMiscGears;
 procedure AssignHHCoords;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
+function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
@@ -423,7 +424,7 @@ end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
-	t: Longword;
+	t,i: Longword;
 begin
 DeleteCI(Gear);
 
@@ -453,6 +454,10 @@ if Gear^.Kind = gtHedgehog then
 		team:= PHedgehog(Gear^.Hedgehog)^.Team;
 		if CurrentHedgehog^.Gear = Gear then
 			FreeActionsList; // to avoid ThinkThread on drawned gear
+
+        if PHedgehog(Gear^.Hedgehog)^.King then
+            for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
+                TeamGoneEffect(team^.Clan^.Teams[i]^);
 
 		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
 		inc(KilledHHs);
@@ -716,7 +721,7 @@ begin
                      end;
 
                   if (Gear <> nil) then
-                     if (GameFlags and gfInvulnerable) = 0 then
+                     if ((GameFlags and gfInvulnerable) = 0) and (not King or (TotalRounds >= 0))  then // King is protected for one round
                         Gear^.Invulnerable:= false;
                   end;
 end;
@@ -1612,7 +1617,7 @@ while Gear <> nil do
 	if (dmg > 1) and
 		((Gear^.State and gstNoDamage) = 0) then
 		begin
-		dmg:= modifyDamage(min(dmg div 2, Radius));
+		dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
 		case Gear^.Kind of
 			gtHedgehog,
 				gtMine,
@@ -1662,7 +1667,7 @@ Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
 	begin
-	dmg:= modifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25));
+	dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25), Gear);
 	if dmg > 0 then
 	case t^.Kind of
 		gtHedgehog,
@@ -1694,18 +1699,17 @@ end;
 procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
 var t: PGearArray;
     Gear: PGear;
-    i: LongInt;
+    i, tmpDmg: LongInt;
 begin
 t:= CheckGearsCollision(Ammo);
 i:= t^.Count;
-
-Damage:= modifyDamage(Damage);
 
 if (Ammo^.Kind = gtFlame) and (i > 0) then Ammo^.Health:= 0;
 while i > 0 do
 	begin
 	dec(i);
 	Gear:= t^.ar[i];
+    tmpDmg:= ModifyDamage(Damage, Gear);
 	if (Gear^.State and gstNoDamage) = 0 then
 		begin
 		if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then Gear^.FlightTime:= 1;
@@ -1717,7 +1721,7 @@ while i > 0 do
 			gtCase: begin
 					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not Gear^.Invulnerable) then
-                        ApplyDamage(Gear, Damage)
+                        ApplyDamage(Gear, tmpDmg)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
 
@@ -2042,6 +2046,18 @@ if cnt2 > 0 then
 	DeleteGear(Gear);
 	Gear:= nil
 	end
+end;
+
+function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
+begin
+(* Invulnerability cannot be placed in here due to still needing kicks
+   Not without a new damage machine.
+   King check should be in here instead of ApplyDamage since Tiy wants them kicked less
+*)
+if (PHedgehog(Gear^.Hedgehog) <> nil) and (PHedgehog(Gear^.Hedgehog)^.King) then
+   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent * _0_5)
+else
+   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent)
 end;
 
 procedure init_uGears;

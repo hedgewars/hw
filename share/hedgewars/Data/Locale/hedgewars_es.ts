@@ -495,6 +495,14 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
         <source>All hogs have a personal forcefield</source>
         <translation>Todos los erizos tienen un campo de fuerza personal</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -555,6 +563,10 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     <message>
         <source>Ban</source>
         <translation>Banear</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1006,6 +1018,14 @@ Verifique su instalación</translation>
     <message>
         <source>Add Mines</source>
         <translation>Añadir minas</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

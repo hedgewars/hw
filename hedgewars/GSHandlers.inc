@@ -98,7 +98,7 @@ if _0_4 < Gear^.dY then
 	else
 		PlaySound(sndOw1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
-	dmg:= modifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70));
+	dmg:= ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
     ApplyDamage(Gear, dmg);
 	end
 end;

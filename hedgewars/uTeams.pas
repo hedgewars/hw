@@ -52,6 +52,7 @@ type PHHAmmo = ^THHAmmo;
 			HatVisibility: GLfloat;
 			stats: TStatistics;
 			Hat: String;
+            King: boolean;  // Flag for a bunch of hedgehog attributes
 			end;
 
 	TTeam = record
@@ -194,7 +195,7 @@ repeat
 			CurrentTeam:= Teams[CurrTeam];
 			with CurrentTeam^ do
 				begin
-				PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn
+				PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
 				repeat
 					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
 				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
@@ -301,6 +302,20 @@ procedure InitTeams;
 var i, t: LongInt;
     th: LongInt;
 begin
+
+// Some initial King buffs
+if (GameFlags and gfKing) <> 0 then
+   for i:= 0 to Pred(ClansCount) do 
+      begin
+      with ClansArray[i]^.Teams[0]^.Hedgehogs[0] do
+         begin
+         King:= true;
+         Hat:= 'crown';
+         Gear^.Health:= hwRound(int2hwFloat(Gear^.Health)*_1_5);
+         Gear^.Invulnerable:= true
+         end
+      end;
+
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
@@ -312,6 +327,7 @@ for t:= 0 to Pred(TeamsCount) do
              inc(th, Hedgehogs[i].Gear^.Health);
       if th > MaxTeamHealth then MaxTeamHealth:= th;
       end;
+
 RecountAllTeamsHealth
 end;
 

@@ -495,6 +495,14 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
         <source>All hogs have a personal forcefield</source>
         <translation>Tutti i ricci hanno un personale campo di forza</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -555,6 +563,10 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
     <message>
         <source>Ban</source>
         <translation>Ban</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1006,6 +1018,14 @@ Controllare la propria installazione</translation>
     <message>
         <source>Add Mines</source>
         <translation>Aggiungi mine</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

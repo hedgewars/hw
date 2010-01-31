@@ -496,6 +496,14 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>All hogs have a personal forcefield</source>
         <translation>Alle Igel haben ein eigenes Schutzschild</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -556,6 +564,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Ban</source>
         <translation>Verbannen</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1007,6 +1019,14 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Add Mines</source>
         <translation>Minen hinzufügen</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

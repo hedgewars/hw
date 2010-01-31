@@ -495,6 +495,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>All hogs have a personal forcefield</source>
         <translation>Všetci ježkovia majú osobné silové pole</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -555,6 +563,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Ban</source>
         <translation>Zakázať</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1006,6 +1018,14 @@ Skontrolujte si vašu inštaláciu</translation>
     <message>
         <source>Add Mines</source>
         <translation>Pridať míny</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

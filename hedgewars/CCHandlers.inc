@@ -149,10 +149,13 @@ procedure chSetHat(var s: shortstring);
 begin
 if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
-	if s = '' then
-		CurrentHedgehog^.Hat:= 'NoHat'
-	else
-		CurrentHedgehog^.Hat:= s
+    begin
+    if not CurrentHedgehog^.King then
+       if (s = '') or (((GameFlags and gfKing) <> 0) and (s = 'crown')) then
+           CurrentHedgehog^.Hat:= 'NoHat'
+       else
+           CurrentHedgehog^.Hat:= s
+    end;
 end;
 
 procedure chSetHHCoords(var x: shortstring);

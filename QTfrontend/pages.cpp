@@ -1054,6 +1054,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_randomorder->setToolTip(tr("Order of play is random instead of in room order."));
 	glGMLayout->addWidget(TBW_randomorder,2,3,1,1);
 
+	TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing.png");
+	TBW_king->setText(ToggleButtonWidget::tr("King"));
+    TBW_king->setToolTip(tr("Play with a King. If he dies, your side dies."));
+	glGMLayout->addWidget(TBW_king,3,0,1,1);
+
 	// Right
 	QLabel * l;
 
@@ -1202,13 +1207,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_karma->button(), 10);
 	mapper->addMapping(TBW_artillery->button(), 11);
 	mapper->addMapping(TBW_randomorder->button(), 12);
-	mapper->addMapping(SB_DamageModifier, 13);
-	mapper->addMapping(SB_TurnTime, 14);
-	mapper->addMapping(SB_InitHealth, 15);
-	mapper->addMapping(SB_SuddenDeath, 16);
-	mapper->addMapping(SB_CaseProb, 17);
-	mapper->addMapping(SB_MinesTime, 18);
-	mapper->addMapping(SB_Mines, 19);
+	mapper->addMapping(TBW_king->button(), 13);
+	mapper->addMapping(SB_DamageModifier, 14);
+	mapper->addMapping(SB_TurnTime, 15);
+	mapper->addMapping(SB_InitHealth, 16);
+	mapper->addMapping(SB_SuddenDeath, 17);
+	mapper->addMapping(SB_CaseProb, 18);
+	mapper->addMapping(SB_MinesTime, 19);
+	mapper->addMapping(SB_Mines, 20);
 
 	mapper->toFirst();
 }

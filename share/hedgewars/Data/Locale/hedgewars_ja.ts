@@ -485,6 +485,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Delete</source>
         <translation type="unfinished">削除</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -544,6 +552,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Ban</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Follow</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -995,6 +1007,14 @@ Please check your installation</source>
     </message>
     <message>
         <source>Add Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

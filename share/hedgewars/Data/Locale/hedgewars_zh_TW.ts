@@ -490,6 +490,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>All hogs have a personal forcefield</source>
         <translation>每個刺蝟都有一個力場</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -550,6 +558,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Ban</source>
         <translation>遮罩</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1001,6 +1013,14 @@ Please check your installation</source>
     <message>
         <source>Add Mines</source>
         <translation>佈置地雷</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -150,7 +150,6 @@ function  toPowerOf2(i: Longword): Longword;
 function  DecodeBase64(s: shortstring): shortstring;
 function  doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 function  endian(independent: LongWord): LongWord;
-function  modifyDamage(dmg: Longword): Longword;
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);
 function  RectToStr(Rect: TSDL_Rect): shortstring;
@@ -526,11 +525,6 @@ if IOResult = 0 then
 FreeMem(p)
 end;
 {$ENDIF}
-
-function modifyDamage(dmg: Longword): Longword;
-begin
-ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent)
-end;
 
 {$IFDEF DEBUGFILE}
 procedure AddFileLog(s: shortstring);

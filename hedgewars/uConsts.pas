@@ -300,6 +300,7 @@ const
 	gfArtillery    = $00000800;
 	gfOneClanMode  = $00001000;
 	gfRandomOrder  = $00002000;
+	gfKing         = $00004000;
 
 	gstDrowning       = $00000001;
 	gstHHDriven       = $00000002;

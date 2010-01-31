@@ -495,6 +495,14 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>All hogs have a personal forcefield</source>
         <translation>Tous les hérissons ont un champ de force personnel</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -555,6 +563,10 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     <message>
         <source>Ban</source>
         <translation>Bannir</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1006,6 +1018,14 @@ Veuillez vérifier votre installation</translation>
     <message>
         <source>Add Mines</source>
         <translation>Ajouter des Mines</translation>
+    </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

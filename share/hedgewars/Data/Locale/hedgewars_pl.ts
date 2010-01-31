@@ -500,6 +500,14 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Seconds</source>
         <translation type="unfinished">Sekundy</translation>
     </message>
+    <message>
+        <source>Order of play is random instead of in room order.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play with a King. If he dies, your side dies.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -560,6 +568,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Ban</source>
         <translation>Zbanuj</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1012,6 +1024,14 @@ Sprawdź poprawność instalacji</translation>
         <source>Add Mines</source>
         <translation>Dodaj miny</translation>
     </message>
+    <message>
+        <source>Random Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>King</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds</name>
@@ -1343,7 +1363,7 @@ info</source>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuń</translation>
     </message>
     <message>
         <source>Numpad 0</source>
