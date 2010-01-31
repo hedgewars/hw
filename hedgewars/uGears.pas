@@ -1667,7 +1667,7 @@ Gear^.Radius:= cShotgunRadius;
 t:= GearsList;
 while t <> nil do
 	begin
-	dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25), Gear);
+	dmg:= ModifyDamage(min(Gear^.Radius + t^.Radius - hwRound(Distance(Gear^.X - t^.X, Gear^.Y - t^.Y)), 25), t);
 	if dmg > 0 then
 	case t^.Kind of
 		gtHedgehog,
