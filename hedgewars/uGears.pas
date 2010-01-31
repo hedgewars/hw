@@ -1726,8 +1726,17 @@ while i > 0 do
                         Gear^.State:= Gear^.State or gstWinner;
 
 					DeleteCI(Gear);
-					Gear^.dX:= Ammo^.dX * Power * _0_01;
-					Gear^.dY:= Ammo^.dY * Power * _0_01;
+                    if (Gear^.Kind = gtHedgehog) and PHedgehog(Gear^.Hedgehog)^.King then
+                        begin
+                        Gear^.dX:= Ammo^.dX * Power * _0_005;
+                        Gear^.dY:= Ammo^.dY * Power * _0_005
+                        end
+                    else
+                        begin
+                        Gear^.dX:= Ammo^.dX * Power * _0_01;
+                        Gear^.dY:= Ammo^.dY * Power * _0_01
+                        end;
+
 					Gear^.Active:= true;
 					Gear^.State:= Gear^.State or gstMoving;
 
@@ -2049,15 +2058,18 @@ if cnt2 > 0 then
 end;
 
 function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
+var i: hwFloat;
 begin
 (* Invulnerability cannot be placed in here due to still needing kicks
    Not without a new damage machine.
    King check should be in here instead of ApplyDamage since Tiy wants them kicked less
 *)
+i:= _1;
+if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then i:= _1_5;
 if (PHedgehog(Gear^.Hedgehog) <> nil) and (PHedgehog(Gear^.Hedgehog)^.King) then
-   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent * _0_5)
+   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
-   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent)
+   ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
 end;
 
 procedure init_uGears;
