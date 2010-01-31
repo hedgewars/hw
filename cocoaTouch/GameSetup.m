@@ -98,7 +98,8 @@
 				addteam <color> <team name>
 				addhh <level> <health> <hedgehog name>
 				  <level> is 0 for human, 1-5 for bots (5 is the most stupid)
-				 */
+				ammostore is one byte/number for each ammocount then one for each probability or so
+				*/
 				// local game
 				[self sendToEngine:@"TL"];
 				
@@ -130,7 +131,7 @@
 				[self sendToEngine:@"e$template_filter 1"];
 								
 				// theme info
-				[self sendToEngine:@"etheme Freeway"];
+				[self sendToEngine:@"etheme Compost"];
 				
 				// team 1 info
 				[self sendToEngine:@"eaddteam 4421353 System Cats"];
@@ -150,7 +151,8 @@
 				[self sendToEngine:@"ehat NoHat"];
 				
 				// team 1 ammostore
-				[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
+				[self sendToEngine:@"eammstore 20501090003040000009000000000000000000010404000441400444645644444774776112211144"];
+				//[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
 
 				// team 2 info
 				[self sendToEngine:@"eaddteam 4100897 Poke-MAN"];

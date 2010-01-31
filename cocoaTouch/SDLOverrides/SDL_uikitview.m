@@ -76,6 +76,7 @@ UIButton *attackButton, *menuButton;
 	menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 480, 30,50)];
 	[menuButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
 	[menuButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+	[menuButton addTarget:[self superclass] action:@selector(attackButtonReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
 	[self addSubview:menuButton];
 
 
@@ -92,12 +93,14 @@ const char* IPH_getDocumentsPath() {
 
 void IPH_showControls (void) {
 	NSLog(@"Showing controls");
-	/*[UIView beginAnimations:nil context:NULL];
+	/*
+	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];
 	attackButton.frame = CGRectMake(30, 430, 260, 50);
 	menuButton.frame = CGRectMake(0, 430, 30, 50);
 	[UIView commitAnimations];
-*/}
+	*/
+}
 
 #pragma mark -
 #pragma mark Superclass methods
@@ -174,8 +177,8 @@ void IPH_showControls (void) {
 			initialDistanceForPinching = 0;
 			switch ([touch tapCount]) {
 				case 1:
-					NSLog(@"x:%d y:%d",(int)gestureStartPoint.x,(int)gestureStartPoint.y);
-					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, (int)gestureStartPoint.y - 250, (int)gestureStartPoint.x);
+					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
+							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
 					HW_click();
 					break;
 				case 2:
@@ -243,9 +246,12 @@ void IPH_showControls (void) {
 	switch ([touches count]) {
 		case 1:
 			currentPosition = [touch locationInView:self];
-			
+			// panning
+			SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
+							(int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
 			// remember that we have x and y inverted
-			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
+			/* temporarily disabling hog movements for camera panning testing
+			 CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
 			CGFloat horizDiff = gestureStartPoint.y - currentPosition.y;
 			CGFloat deltaX = fabsf(vertDiff);
 			CGFloat deltaY = fabsf(horizDiff);
@@ -259,6 +265,7 @@ void IPH_showControls (void) {
 				if (vertDiff < 0) HW_aimUp();
 				else HW_aimDown();
 			}
+			*/
 			break;
 		case 2:
 			twoTouches = [touches allObjects];
@@ -272,12 +279,10 @@ void IPH_showControls (void) {
 			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta) {
 				NSLog(@"Outward pinch detected");
 				HW_zoomOut();
-			}
-			if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta){
+			} else if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta){
 				NSLog(@"Inward pinch detected");
 				HW_zoomIn();
-			}
-			
+			} 			
 			currentDistanceOfPinching = initialDistanceForPinching;
 			break;
 		default:
