@@ -61,7 +61,7 @@
     </message>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation>Não foi possível salvar o registo para o ficheiro %1</translation>
+        <translation>Não foi possível gravar no ficheiro %1</translation>
     </message>
     <message>
         <source>Please select record from the list above</source>
@@ -72,7 +72,7 @@
     <name>HWGame</name>
     <message>
         <source>Error reading training config file</source>
-        <translation>Erro ao ler ficheiro de configuração de treino</translation>
+        <translation>Erro ao ler o ficheiro de configuração de treino</translation>
     </message>
     <message>
         <source>en.txt</source>
@@ -80,7 +80,7 @@
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>Não foi possível abrir ficheiro de demo %1</translation>
+        <translation>Não foi possível abrir o ficheiro %1</translation>
     </message>
 </context>
 <context>
@@ -153,7 +153,7 @@
     </message>
     <message>
         <source>You got kicked</source>
-        <translation>Foi kickado</translation>
+        <translation>Foi expulso</translation>
     </message>
     <message>
         <source>Password</source>
@@ -175,7 +175,7 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation>%1 *** %2 juntou-se a sala</translation>
+        <translation>%1 *** %2 juntou-se à sala</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
@@ -234,7 +234,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;O título de melhor tiro foi ganho por &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;O título de melhor tiro foi para &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; pontos de dano.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
@@ -247,7 +247,7 @@ ou escolha outro nome de utilizador:</translation>
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation>
             <numerusform>&lt;p&gt;Apenas &lt;b&gt;%1&lt;/b&gt; ouriço perdeu a vida durante esta ronda.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços foram perderam a vida durante esta ronda.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Um total de &lt;b&gt;%1&lt;/b&gt; ouriços perderam a vida durante esta ronda.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -382,7 +382,7 @@ ou escolha outro nome de utilizador:</translation>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
         <translation>Este jogo está ainda na entrada.
-Pode-se juntar-se e jogar assim que o jogo começe.</translation>
+Pode-se juntar e jogar assim que o jogo começe.</translation>
     </message>
     <message>
         <source>This game is in progress.
@@ -465,7 +465,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Enable random mines</source>
-        <translation>Activa as minas aleatórias</translation>
+        <translation>Adiciona minas aleatoriamente</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -477,7 +477,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
-        <translation>Os ouriços não poderão andar, testa as tuas capacidades em modo artilharia</translation>
+        <translation>Os teus ouriços serão impossibilidados de se mexer, testa as tuas capacidades no modo artilharia</translation>
     </message>
     <message>
         <source>Random</source>
@@ -616,7 +616,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <name>QComboBox</name>
     <message>
         <source>generated map...</source>
-        <translation>Mapa gerado...</translation>
+        <translation>mapa gerado...</translation>
     </message>
     <message>
         <source>Human</source>
@@ -631,7 +631,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <name>QGroupBox</name>
     <message>
         <source>Team Members</source>
-        <translation>Membros da equipa</translation>
+        <translation>Membros de equipa</translation>
     </message>
     <message>
         <source>Team</source>
@@ -750,7 +750,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Turn Time</source>
-        <translation>Tempo de turno</translation>
+        <translation>Tempo por turno</translation>
     </message>
     <message>
         <source>Initial Health</source>
@@ -758,7 +758,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation>Tempo até morte súbita</translation>
+        <translation>Tempo até Morte Súbita</translation>
     </message>
     <message>
         <source>Crate Drops</source>
@@ -827,7 +827,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation>Deseja eliminar este esquema de armas?</translation>
+        <translation>Deseja mesmo eliminar este esquema de armas?</translation>
     </message>
 </context>
 <context>
