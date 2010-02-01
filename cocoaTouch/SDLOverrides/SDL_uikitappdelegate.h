@@ -26,13 +26,13 @@
 @interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
 	SDL_Window *window;
 	UIWindow *uiwindow;
-	UITabBarController *controller;
+	UIViewController *viewController;
 }
 
 // the outlets are set in MainWindow.xib
 @property (readwrite, assign) SDL_Window *window;
 @property (readwrite, retain) IBOutlet UIWindow *uiwindow;
-@property (nonatomic, retain) IBOutlet UITabBarController *controller;
+@property (nonatomic, retain) IBOutlet UIViewController *viewController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;

@@ -631,8 +631,7 @@ begin
 	end;
 	
 {$IFDEF SDL13}
-	window:= SDL_CreateWindow('Hedgewars', 0, 0,
-		{$IFDEF IPHONEOS}cScreenHeight, cScreenWidth,{$ELSE}cScreenWidth, cScreenHeight,{$ENDIF}
+	window:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
 		SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN 	 
 	        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF}); 	 
 	SDL_CreateRenderer(window, -1, 0); 	 

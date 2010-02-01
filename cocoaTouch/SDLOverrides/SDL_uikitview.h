@@ -58,9 +58,6 @@
 +(void) attackButtonPressed;
 +(void) attackButtonReleased;
 
-@property CGFloat initialDistance;
-@property CGPoint gestureStartPoint;
-
 #if SDL_IPHONE_KEYBOARD
 - (void)showKeyboard;
 - (void)hideKeyboard;

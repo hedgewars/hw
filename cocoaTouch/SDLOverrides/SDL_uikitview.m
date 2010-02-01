@@ -276,13 +276,11 @@ void IPH_showControls (void) {
 			if (0 == initialDistanceForPinching) 
 				initialDistanceForPinching = currentDistanceOfPinching;
 
-			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta) {
-				NSLog(@"Outward pinch detected");
+			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta)
 				HW_zoomOut();
-			} else if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta){
-				NSLog(@"Inward pinch detected");
+			else if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta)
 				HW_zoomIn();
-			} 			
+
 			currentDistanceOfPinching = initialDistanceForPinching;
 			break;
 		default:

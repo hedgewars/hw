@@ -47,7 +47,7 @@ int main (int argc, char *argv[]) {
 
 @implementation SDLUIKitDelegate
 
-@synthesize uiwindow, window, controller;
+@synthesize uiwindow, window, viewController;
 
 /* convenience method */
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -59,12 +59,12 @@ int main (int argc, char *argv[]) {
 	self = [super init];
 	self.uiwindow = nil;
 	self.window = NULL;
-	self.controller = nil;
+	self.viewController = nil;
 	return self;
 }
 
 -(void) dealloc {
-	[controller release];
+	[viewController release];
 	[uiwindow release];
 	[super dealloc];
 }
@@ -80,9 +80,9 @@ int main (int argc, char *argv[]) {
 	// remove the current view to free resources
 	[UIView beginAnimations:@"removing main controller" context:NULL];
 	[UIView setAnimationDuration:1];
-	controller.view.alpha = 0;
+	viewController.view.alpha = 0;
 	[UIView commitAnimations];
-	[controller.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+	[viewController.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
 	NSLog(@"Game is launching...");
 	const char **gameArgs = [setup getSettings];
@@ -94,15 +94,14 @@ int main (int argc, char *argv[]) {
 	free(gameArgs);
 	NSLog(@"Game is exting...");
 	
-	[[uiwindow viewWithTag:54321] removeFromSuperview];
 	[setup release];
 
 	[UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
-	controller.view.alpha = 1;
+	viewController.view.alpha = 1;
 	[UIView commitAnimations];
 	
-	[uiwindow addSubview: controller.view];
+	[uiwindow addSubview: viewController.view];
 	[uiwindow makeKeyAndVisible];
 	
 	[internal_pool release];
@@ -152,16 +151,19 @@ int main (int argc, char *argv[]) {
 
 #pragma mark -
 #pragma mark SDLUIKitDelegate methods
+
+
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
-
+	[application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
+	
 	[self checkFirstRun];
 	
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 
-	[uiwindow addSubview:controller.view];
+	[uiwindow addSubview:viewController.view];
 	[uiwindow makeKeyAndVisible];
 }
 
