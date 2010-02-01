@@ -52,22 +52,29 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), GBoxOptions), 0, 0);
 
-
+	QPixmap pmEdit(":/res/edit.png");
+	
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
-	goToSchemePage->setText(tr("Edit schemes"));
-	GBoxOptionsLayout->addWidget(goToSchemePage, 1, 0, 1, 2);
+	//goToSchemePage->setText(tr("Edit schemes"));
+	goToSchemePage->setIconSize(pmEdit.size());
+	goToSchemePage->setIcon(pmEdit);
+	goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
+	GBoxOptionsLayout->addWidget(goToSchemePage, 0, 2);
 	connect(goToSchemePage, SIGNAL(clicked()), this, SIGNAL(goToSchemes()));
 
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 2, 0);
+	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 1, 0);
 
 	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 2, 1);
+	GBoxOptionsLayout->addWidget(WeaponsName, 1, 1);
 
 	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
 	QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
-	goToWeaponPage->setText(tr("Edit weapons"));
-	GBoxOptionsLayout->addWidget(goToWeaponPage, 3, 0, 1, 2);
+	//goToWeaponPage->setText(tr("Edit weapons"));
+	goToWeaponPage->setIconSize(pmEdit.size());
+	goToWeaponPage->setIcon(pmEdit);
+	goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
+	GBoxOptionsLayout->addWidget(goToWeaponPage, 1, 2);
 
 	connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
