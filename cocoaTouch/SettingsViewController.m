@@ -118,13 +118,13 @@
 	[buttonContainer release];
 	[super dealloc];
 }
-/*
+
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
-*/
+
 
 // makes the keyboard go away when background is tapped
 -(IBAction) backgroundTap: (id)sender {
@@ -163,6 +163,7 @@
 #pragma mark -
 #pragma mark UIActionSheet Methods
 -(IBAction) deleteData: (id)sender {
+	/* temporary commented out
 	UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
 								 delegate:self
 							cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
@@ -170,6 +171,15 @@
 							otherButtonTitles:nil];
 	[actionSheet showInView:self.view];
 	[actionSheet release];
+	 */
+	[UIView beginAnimations:@"Get Back" context:NULL];
+	[UIView setAnimationDuration:3];
+	[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
+	
+	self.view.frame = CGRectMake(0, -480, 480, 320);
+	[UIView commitAnimations];
+	
+	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
 }
 
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {

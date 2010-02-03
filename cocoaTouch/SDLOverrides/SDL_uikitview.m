@@ -93,13 +93,11 @@ const char* IPH_getDocumentsPath() {
 
 void IPH_showControls (void) {
 	NSLog(@"Showing controls");
-	/*
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];
 	attackButton.frame = CGRectMake(30, 430, 260, 50);
 	menuButton.frame = CGRectMake(0, 430, 30, 50);
 	[UIView commitAnimations];
-	*/
 }
 
 #pragma mark -
@@ -114,7 +112,7 @@ void IPH_showControls (void) {
 
 #pragma mark -
 #pragma mark Custom SDL_UIView input handling
-#define kMinimumPinchDelta	30
+#define kMinimumPinchDelta	40
 #define kMinimumGestureLength	10
 #define kMaximumVariance	3
 

@@ -80,9 +80,8 @@ int main (int argc, char *argv[]) {
 	// remove the current view to free resources
 	[UIView beginAnimations:@"removing main controller" context:NULL];
 	[UIView setAnimationDuration:1];
-	viewController.view.alpha = 0;
+	self.viewController.view.alpha = 0;
 	[UIView commitAnimations];
-	[viewController.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
 	NSLog(@"Game is launching...");
 	const char **gameArgs = [setup getSettings];
@@ -96,13 +95,13 @@ int main (int argc, char *argv[]) {
 	
 	[setup release];
 
-	[UIView beginAnimations:@"inserting main controller" context:NULL];
-	[UIView setAnimationDuration:1];
-	viewController.view.alpha = 1;
-	[UIView commitAnimations];
-	
 	[uiwindow addSubview: viewController.view];
 	[uiwindow makeKeyAndVisible];
+	
+	[UIView beginAnimations:@"inserting main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	self.viewController.view.alpha = 1;
+	[UIView commitAnimations];
 	
 	[internal_pool release];
 }
@@ -151,20 +150,23 @@ int main (int argc, char *argv[]) {
 
 #pragma mark -
 #pragma mark SDLUIKitDelegate methods
-
-
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
 	[application setStatusBarOrientation:UIInterfaceOrientationLandscapeRight animated:NO];  
+		
+	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
-	[self checkFirstRun];
+	self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController" bundle:nil];
 	
 	/* Set working directory to resource path */
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 
 	[uiwindow addSubview:viewController.view];
 	[uiwindow makeKeyAndVisible];
+	[uiwindow layoutSubviews];
+	[self checkFirstRun];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {

@@ -11,7 +11,7 @@
 
 @implementation MainMenuViewController
 
-@synthesize passandplayButton, netplayButton, storeButton, versionLabel;
+@synthesize versionLabel, settingsViewController;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -23,70 +23,89 @@
 }
 */
 
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
+	return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
+
+- (void)didReceiveMemoryWarning {
+	// Releases the view if it doesn't have a superview.
+	[super didReceiveMemoryWarning];
+	
+	// Release any cached data, images, etc that aren't in use.
+	if (nil == self.settingsViewController.view.superview) {
+		self.settingsViewController = nil;
+	}
+}
+
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 -(void) viewDidLoad {
-	self.versionLabel.text = @"Hedgewars version 0.9.13-dev";
-    [super viewDidLoad];
+	self.versionLabel.text = @"0.9.13-dev";
+	[super viewDidLoad];
 }
-
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
-	if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) return YES;
-	else return NO;
-}
-
-/*
-- (void)didReceiveMemoryWarning {
-	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
-	// Release any cached data, images, etc that aren't in use.
-}
-*/
 
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
-	self.passandplayButton = nil;
-	self.netplayButton = nil;
-	self.storeButton = nil;
 	self.versionLabel = nil;
 }
 
 - (void)dealloc {
-	[passandplayButton release];
-	[netplayButton release];
-	[storeButton release];
 	[versionLabel release];
-    [super dealloc];
+	[settingsViewController release];
+	[super dealloc];
 }
 
 // disable the buttons when to prevent launching twice the game
 -(void) viewWillDisappear:(BOOL)animated {
-	passandplayButton.enabled = NO;
-	netplayButton.enabled = NO;
-	storeButton.enabled = NO;
+	self.view.userInteractionEnabled = NO;
 	[super viewWillDisappear:animated];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-	passandplayButton.enabled = YES;
-	netplayButton.enabled = YES;
-	storeButton.enabled = YES;
+	self.view.userInteractionEnabled = YES;
 	[super viewWillAppear:animated];
 }
 
+#pragma mark -
+#pragma mark Action buttons
 -(IBAction) startPlaying {
 	[[SDLUIKitDelegate sharedAppDelegate] startSDLgame];
 }
 
 -(IBAction) notYetImplemented {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
-									message:@"Sorry, this feature is not yet implemented"
-									delegate:nil
-									cancelButtonTitle:@"Well, don't worry"
-									otherButtonTitles:nil];
+							message:@"Sorry, this feature is not yet implemented"
+						       delegate:nil
+					      cancelButtonTitle:@"Well, don't worry"
+					      otherButtonTitles:nil];
 	[alert show];
 	[alert release];
+}
+
+-(IBAction) switchViews:(id)sender {
+
+	// view not displayed or not created
+	if (nil == self.settingsViewController.view.superview) {
+		// view not created
+		if (nil == self.settingsViewController) {
+			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController"
+												      bundle:nil];
+			self.settingsViewController = controller;
+			[controller release];
+		}
+		self.settingsViewController.view.frame = CGRectMake(0, -480, 480, 320);
+
+		[UIView beginAnimations:@"View Switch" context:NULL];
+		[UIView setAnimationDuration:3];
+		[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
+		self.settingsViewController.view.frame = CGRectMake(0, 0, 480, 320);
+		
+		// we have the new controller, let's switch
+		[self.view addSubview:settingsViewController.view];
+		[UIView commitAnimations];
+	}
+
 }
 
 @end

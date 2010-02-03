@@ -7,20 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "SettingsViewController.h"
 
 @interface MainMenuViewController : UIViewController {
-	UIButton *passandplayButton;
-	UIButton *netplayButton;
-	UIButton *storeButton;
 	UILabel *versionLabel;
+	SettingsViewController *settingsViewController;
 }
 
-@property (nonatomic, retain) IBOutlet UIButton *passandplayButton;
-@property (nonatomic, retain) IBOutlet UIButton *netplayButton;
-@property (nonatomic, retain) IBOutlet UIButton *storeButton;
 @property (nonatomic, retain) IBOutlet UILabel *versionLabel;
+@property (nonatomic, retain) SettingsViewController *settingsViewController;
 
 -(IBAction) startPlaying;
 -(IBAction) notYetImplemented;
+-(IBAction) switchViews:(id)sender;
 @end

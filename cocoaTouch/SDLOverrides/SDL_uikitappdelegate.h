@@ -22,17 +22,18 @@
 
 #import <UIKit/UIKit.h>
 #import "SDL_video.h"
+#import "MainMenuViewController.h"
 
 @interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
 	SDL_Window *window;
 	UIWindow *uiwindow;
-	UIViewController *viewController;
+	MainMenuViewController *viewController;
 }
 
 // the outlets are set in MainWindow.xib
 @property (readwrite, assign) SDL_Window *window;
-@property (readwrite, retain) IBOutlet UIWindow *uiwindow;
-@property (nonatomic, retain) IBOutlet UIViewController *viewController;
+@property (readwrite, retain) UIWindow *uiwindow;
+@property (nonatomic, retain) MainMenuViewController *viewController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;
