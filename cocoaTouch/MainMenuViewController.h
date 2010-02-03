@@ -11,10 +11,12 @@
 
 @interface MainMenuViewController : UIViewController {
 	UILabel *versionLabel;
+	UIView *mainView;
 	SettingsViewController *settingsViewController;
 }
 
 @property (nonatomic, retain) IBOutlet UILabel *versionLabel;
+@property (nonatomic, retain) IBOutlet UIView *mainView;
 @property (nonatomic, retain) SettingsViewController *settingsViewController;
 
 -(IBAction) startPlaying;

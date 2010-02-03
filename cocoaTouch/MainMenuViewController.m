@@ -11,7 +11,7 @@
 
 @implementation MainMenuViewController
 
-@synthesize versionLabel, settingsViewController;
+@synthesize versionLabel, settingsViewController, mainView;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -58,13 +58,13 @@
 
 // disable the buttons when to prevent launching twice the game
 -(void) viewWillDisappear:(BOOL)animated {
-	self.view.userInteractionEnabled = NO;
+	self.mainView.userInteractionEnabled = NO;
 	[super viewWillDisappear:animated];
 }
 
--(void) viewWillAppear:(BOOL)animated {
-	self.view.userInteractionEnabled = YES;
-	[super viewWillAppear:animated];
+-(void) viewDidAppear:(BOOL)animated {
+	self.mainView.userInteractionEnabled = YES;
+	[super viewDidAppear:animated];
 }
 
 #pragma mark -
@@ -92,16 +92,17 @@
 			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController"
 												      bundle:nil];
 			self.settingsViewController = controller;
+			self.settingsViewController.parentView = self.mainView;
 			[controller release];
 		}
-		self.settingsViewController.view.frame = CGRectMake(0, -480, 480, 320);
+		self.settingsViewController.view.frame = CGRectMake(0, -320, 480, 320);
 
 		[UIView beginAnimations:@"View Switch" context:NULL];
 		[UIView setAnimationDuration:3];
 		[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
 		self.settingsViewController.view.frame = CGRectMake(0, 0, 480, 320);
+		self.mainView.frame = CGRectMake(0, 320, 480, 320);
 		
-		// we have the new controller, let's switch
 		[self.view addSubview:settingsViewController.view];
 		[UIView commitAnimations];
 	}

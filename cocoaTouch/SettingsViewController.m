@@ -12,7 +12,7 @@
 @implementation SettingsViewController
 
 @synthesize username, password, musicSwitch, soundsSwitch, altDamageSwitch, 
-	    volumeSlider, volumeLabel, table, volumeCell, buttonContainer;
+	    settingsTable, buttonContainer, parentView;
 
 
 -(void) loadView {
@@ -48,24 +48,18 @@
 		} else {
 			altDamageSwitch.on = NO;
 		}		
-		
-		[volumeSlider setValue:[[data objectForKey:@"volume"] intValue] animated:NO];
 		[data release];
 	} else {
 		[NSException raise:@"File NOT found" format:@"The file settings.plist was not found at %@", filePath];
 	}
 	
-	NSString *tmpVol = [[NSString alloc] initWithFormat:@"%d", (int) volumeSlider.value];
-	volumeLabel.text = tmpVol;
-	[tmpVol release];
 	
 	username.textColor = [UIColor grayColor];
 	password.textColor = [UIColor grayColor];
-	volumeLabel.textColor = [UIColor grayColor];
-	table.backgroundColor = [UIColor clearColor];
-	table.allowsSelection = NO;
+	settingsTable.backgroundColor = [UIColor clearColor];
+	settingsTable.allowsSelection = NO;
 	buttonContainer.backgroundColor = [UIColor clearColor];
-	table.tableFooterView = buttonContainer;
+	settingsTable.tableFooterView = buttonContainer;
 	
 	[super viewDidLoad];
 }
@@ -76,10 +70,7 @@
 	self.musicSwitch = nil;
 	self.soundsSwitch = nil;
 	self.altDamageSwitch = nil;
-	self.volumeLabel = nil;
-	self.volumeSlider = nil;
-	self.table = nil;
-	self.volumeCell = nil;
+	self.settingsTable = nil;
 	self.buttonContainer = nil;
 	[super viewDidUnload];
 }
@@ -97,7 +88,6 @@
 		[saveDict setObject:tmpMus forKey:@"music"];
 		[saveDict setObject:tmpEff forKey:@"sounds"];
 		[saveDict setObject:tmpAlt forKey:@"alternate"];
-		[saveDict setObject:volumeLabel.text forKey:@"volume"];
 		
 		[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
 		[saveDict release];
@@ -111,10 +101,7 @@
 	[musicSwitch release];
 	[soundsSwitch release];
 	[altDamageSwitch release];
-	[volumeLabel release];
-	[volumeSlider release];
-	[table release];
-	[volumeCell release];
+	[settingsTable release];
 	[buttonContainer release];
 	[super dealloc];
 }
@@ -135,15 +122,6 @@
 // makes the keyboard go away when "Done" is tapped
 -(IBAction) textFieldDoneEditing: (id)sender {
 	[sender resignFirstResponder];
-}
-
-// update the value of the label when slider is updated
--(IBAction) sliderChanged: (id) sender {
-	UISlider *slider = (UISlider *)sender;
-	int progress = slider.value;
-	NSString *newLabel = [[NSString alloc] initWithFormat:@"%d",progress];
-	self.volumeLabel.text = newLabel;
-	[newLabel release];
 }
 
 // set music off when sound is turned off
@@ -176,10 +154,12 @@
 	[UIView setAnimationDuration:3];
 	[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
 	
-	self.view.frame = CGRectMake(0, -480, 480, 320);
+	self.view.frame = CGRectMake(0, -320, 480, 320);
+	self.parentView.frame = CGRectMake(0, 0, 480, 320);
 	[UIView commitAnimations];
-	
+
 	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
+	self.parentView = nil;
 }
 
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
@@ -227,7 +207,7 @@
 			return 2;
 			break;
 		case kAudioFields:
-			return 3;
+			return 2;
 			break;
 		case kOtherFields:
 			return 1;
@@ -277,9 +257,6 @@
 					cell.accessoryView = musicSwitch;
 					cell.textLabel.text = NSLocalizedString(@"Music", @"");
 					break;
-				case 2:
-					cell = volumeCell;
-					break;
 				default:
 					NSLog(@"Warning: unset case value in kAudioFields section!");
 					break;
@@ -325,12 +302,14 @@
 	return containerView;
 }
 
+/*
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	if (kAudioFields == [indexPath section] && 2 == [indexPath row])
 		return volumeCell.frame.size.height;
 	else
 		return table.rowHeight;
 }
+*/
 
 -(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
 	return 57.0;

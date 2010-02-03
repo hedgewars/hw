@@ -69,7 +69,7 @@ uses	SDLh in 'SDLh.pas',
 //       proto.inc
 
 {$IFDEF IPHONEOS}
-type arrayofpchar = array[0..6] of PChar;
+type arrayofpchar = array[0..5] of PChar;
 procedure DoTimer(Lag: LongInt);
 procedure OnDestroy;
 procedure MainLoop;
@@ -232,26 +232,25 @@ begin
 	initEverything();
 	Randomize();
 
-	val('480', cScreenWidth);
-	val('320', cScreenHeight);
+	cScreenWidth:= 480;
+	cScreenHeight:= 320;
 	cInitWidth:= cScreenWidth;
 	cInitHeight:= cScreenHeight;
-	cBitsStr:= '32';
-	val(cBitsStr, cBits);
+	cBits:= 32;
 	cFullScreen:= false;
 	cVSyncInUse:= true;
-	val('8', cTimerInterval);
+	cTimerInterval:= 8;
 	PathPrefix:= 'Data';
 	cReducedQuality:= false;
 	cShowFPS:= true;
+	cInitVolume:= 100;
 
 	UserNick:= gameArgs[0];
 	val(gameArgs[1], ipcPort);
 	isSoundEnabled:= gameArgs[2] = '1';
 	isMusicEnabled:= gameArgs[3] = '1';
 	cLocaleFName:= gameArgs[4];
-	val(gameArgs[5], cInitVolume);
-	cAltDamage:= gameArgs[6] = '1';
+	cAltDamage:= gameArgs[5] = '1';
 {$ENDIF}
 
 	for p:= Succ(Low(TPathType)) to High(TPathType) do

@@ -247,7 +247,7 @@
 #pragma mark -
 #pragma mark Setting methods
 -(const char **)getSettings {
-	const char **gameArgs = (const char**) malloc(sizeof(char*) * 7);
+	const char **gameArgs = (const char**) malloc(sizeof(char*) * 6);
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
 	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] localeIdentifier]];
 	
@@ -256,8 +256,7 @@
 	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];	//isSoundEnabled
 	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];	//isMusicEnabled
 	gameArgs[4] = [localeString UTF8String];				//cLocaleFName
-	gameArgs[5] = [[systemSettings objectForKey:@"volume"] UTF8String];	//cInitVolume
-	gameArgs[6] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
+	gameArgs[5] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
 	
 	[localeString release];
 	[ipcString release];

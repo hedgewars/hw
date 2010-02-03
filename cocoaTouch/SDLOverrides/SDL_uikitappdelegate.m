@@ -80,7 +80,7 @@ int main (int argc, char *argv[]) {
 	// remove the current view to free resources
 	[UIView beginAnimations:@"removing main controller" context:NULL];
 	[UIView setAnimationDuration:1];
-	self.viewController.view.alpha = 0;
+	self.viewController.mainView.alpha = 0;
 	[UIView commitAnimations];
 
 	NSLog(@"Game is launching...");
@@ -100,7 +100,7 @@ int main (int argc, char *argv[]) {
 	
 	[UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
-	self.viewController.view.alpha = 1;
+	self.viewController.mainView.alpha = 1;
 	[UIView commitAnimations];
 	
 	[internal_pool release];
@@ -122,7 +122,6 @@ int main (int argc, char *argv[]) {
 		[saveDict setObject:@"1" forKey:@"music"];
 		[saveDict setObject:@"1" forKey:@"sounds"];
 		[saveDict setObject:@"0" forKey:@"alternate"];
-		[saveDict setObject:@"100" forKey:@"volume"];
 	
 		[saveDict writeToFile:filePath atomically:YES];
 		[saveDict release];
