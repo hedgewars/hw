@@ -67,5 +67,7 @@
     <file>res/iconMine.png</file>
     <file>res/dice.png</file>
     <file>res/Star.png</file>
+	<file>res/file_save.png</file>
+	<file>res/file_demo.png</file>
 </qresource>
 </RCC>

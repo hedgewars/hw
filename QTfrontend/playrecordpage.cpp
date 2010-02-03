@@ -71,25 +71,26 @@ void PagePlayDemo::FillFromDir(RecordType rectype)
 	if (rectype == RT_Demo)
 	{
 		dir.cd("Demos");
-		extension = "hwd_" + *cProtoVer;
+		extension = "hwd";
 		BtnPlayDemo->setText(QPushButton::tr("Play demo"));
 	} else
 	{
 		dir.cd("Saves");
-		extension = "hws_" + *cProtoVer;
+		extension = "hws";
 		BtnPlayDemo->setText(QPushButton::tr("Load"));
 	}
 	dir.setFilter(QDir::Files);
 
-	QStringList sl = dir.entryList(QStringList(QString("*.%1").arg(extension)));
-	sl.replaceInStrings(QRegExp(QString("^(.*)\\.%1$").arg(extension)), "\\1");
+	QStringList sl = dir.entryList(QStringList(QString("*.%2.%1").arg(extension, *cProtoVer)));
+	sl.replaceInStrings(QRegExp(QString("^(.*)\\.%2\\.%1$").arg(extension, *cProtoVer)), "\\1");
 
 	DemosList->clear();
 	DemosList->addItems(sl);
 
 	for (int i = 0; i < DemosList->count(); ++i)
 	{
-		DemosList->item(i)->setData(Qt::UserRole, dir.absoluteFilePath(QString("%1.%2").arg(sl[i], extension)));
+		DemosList->item(i)->setData(Qt::UserRole, dir.absoluteFilePath(QString("%1.%3.%2").arg(sl[i], extension, *cProtoVer)));
+		DemosList->item(i)->setIcon(recType == RT_Demo ? QIcon(":/res/file_demo.png") : QIcon(":/res/file_save.png"));
 	}
 }
 
@@ -110,13 +111,14 @@ void PagePlayDemo::renameRecord()
 
 	bool ok;
 
-	QString newname = QInputDialog::getText(this, tr("Rename dialog"), tr("Enter new file name:"), QLineEdit::Normal, finfo.completeBaseName(), &ok);
+	QString newname = QInputDialog::getText(this, tr("Rename dialog"), tr("Enter new file name:"), QLineEdit::Normal, finfo.completeBaseName().replace("." + *cProtoVer, ""), &ok);
 
 	if(ok && newname.size())
 	{
-		QString newfullname = QString("%1/%2.%3")
+		QString newfullname = QString("%1/%2.%3.%4")
 		                              .arg(finfo.absolutePath())
 		                              .arg(newname)
+									  .arg(*cProtoVer)
 		                              .arg(finfo.suffix());
 
 		ok = rfile.rename(newfullname);
@@ -139,8 +141,6 @@ void PagePlayDemo::removeRecord()
 		return ;
 	}
 	QFile rfile(curritem->data(Qt::UserRole).toString());
-
-	QFileInfo finfo(rfile);
 
 	bool ok;
 

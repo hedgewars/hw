@@ -842,12 +842,12 @@ void HWForm::GetRecord(bool isDemo, const QByteArray & record)
 		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TD"));
 		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TD"));
 		demo.replace(QByteArray("\x02TS"), QByteArray("\x02TD"));
-		filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + ".hwd_" + *cProtoVer;
+		filename = cfgdir->absolutePath() + "/Demos/" + recordFileName + "." + *cProtoVer + ".hwd";
 	} else
 	{
 		demo.replace(QByteArray("\x02TL"), QByteArray("\x02TS"));
 		demo.replace(QByteArray("\x02TN"), QByteArray("\x02TS"));
-		filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + ".hws_" + *cProtoVer;
+		filename = cfgdir->absolutePath() + "/Saves/" + recordFileName + "." + *cProtoVer + ".hws";
 	}
 
 
