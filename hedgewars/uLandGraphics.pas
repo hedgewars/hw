@@ -394,7 +394,7 @@ for i:= -HalfWidth to HalfWidth do
         Y:= Y + dY;
         tx:= hwRound(X);
         ty:= hwRound(Y);
-        if (Land[ty, tx] <> COLOR_INDESTRUCTIBLE) and ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) then
+        if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (Land[ty, tx] <> COLOR_INDESTRUCTIBLE) then
             begin
             if Land[ty, tx] = COLOR_LAND then
                 LandPixels[ty, tx]:= LandBackPixel(tx, ty)
