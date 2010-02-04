@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
 				"background-image: url(\":/res/Background.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
-				"background-color: #870c8f;"
+				"background-color: #141250;"
 				"}"
 
 			"* {"
