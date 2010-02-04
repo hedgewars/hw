@@ -108,25 +108,13 @@
 				
 				// various flags
 				[self sendToEngine:@"e$gmflags 256"]; 
-
-				// various flags
 				[self sendToEngine:@"e$damagepct 100"];
-				
-				// various flags
 				[self sendToEngine:@"e$turntime 45000"];
-				
-				// various flags
 				[self sendToEngine:@"e$minestime 3000"];
-				
-				// various flags
 				[self sendToEngine:@"e$landadds 4"];
-				
-				// various flags
 				[self sendToEngine:@"e$sd_turns 15"];
-												
-				// various flags
 				[self sendToEngine:@"e$casefreq 5"];
-				
+
 				// dimension of the map
 				[self sendToEngine:@"e$template_filter 1"];
 								
@@ -145,11 +133,14 @@
 				// team 1 voicepack info
 				[self sendToEngine:@"evoicepack Classic"];
 				
+				// team 1 flag
+				[self sendToEngine:@"eflag hedgewars"];
+
 				// team 1 binds (skipped)			
 				// team 1 members info
 				[self sendToEngine:@"eaddhh 0 100 Snow Leopard"];
 				[self sendToEngine:@"ehat NoHat"];
-				
+
 				// team 1 ammostore
 				[self sendToEngine:@"eammstore 20501090003040000009000000000000000000010404000441400444645644444774776112211144"];
 				//[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
@@ -165,12 +156,15 @@
 				
 				// team 2 voicepack info
 				[self sendToEngine:@"evoicepack Classic"];
-				
+
+				// team 2 flag
+				[self sendToEngine:@"eflag hedgewars"];
+
 				// team 2 binds (skipped)
 				// team 2 members info
 				[self sendToEngine:@"eaddhh 0 100 Raichu"];
 				[self sendToEngine:@"ehat Bunny"];
-				
+
 				// team 2 ammostore
 				[self sendToEngine:@"eammstore 20501090003040000009000000000000000000010404000441400444645644444774776112211144"];
 				

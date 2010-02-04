@@ -695,6 +695,7 @@ begin
 	zoom			:= 2.0;
 	ZoomValue		:= 2.0;
 	cBitsStr		:= '32';
+	WeaponTooltipTex	:= nil;
 
 	// booleans
 	cLaserSighting		:= false;
@@ -730,7 +731,6 @@ begin
 	cHasFocus		:= true;
 	cInactDelay		:= 1250;
 	cAltDamage		:= true;
-
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

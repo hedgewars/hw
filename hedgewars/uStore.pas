@@ -38,11 +38,7 @@ var PixelFormat: PSDL_PixelFormat;
     Step: LongInt;
     squaresize : LongInt;
     numsquares : LongInt;
-{$IFDEF SDL13notworking}
-    ProgrTex: TSDL_TextureID;
-{$ELSE}
     ProgrTex: PTexture;
-{$ENDIF}
 
 procedure init_uStore;
 procedure free_uStore;
@@ -1485,18 +1481,16 @@ SDL_FreeSurface(tmpsurf)
 end;
 
 procedure RenderWeaponTooltip(atype: TAmmoType);
+{$IFNDEF IPHONEOS}
 var r: TSDL_Rect;
 	i: LongInt;
 	extra: string;
 	extracolor: LongInt;
 begin
-{$IFNDEF IPHONEOS}
 // don't do anything if the window shouldn't be shown
 if not cWeaponTooltips then
 	begin
-{$ENDIF}
 	WeaponTooltipTex:= nil;
-{$IFNDEF IPHONEOS}
 	exit
 	end;
 
@@ -1532,8 +1526,10 @@ else
 
 // render window and return the texture
 WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
-{$ENDIF}
 end;
+{$ELSE}
+begin end;
+{$ENDIF}
 
 procedure ShowWeaponTooltip(x, y: LongInt);
 begin
@@ -1564,11 +1560,7 @@ begin
 	cScaleFactor:= 2.0;
 	SupportNPOTT:= false;
 	Step:= 0;
-{$IFDEF SDL13notworking}
-	ProgrTex:= 0;
-{$ELSE}
 	ProgrTex:= nil;
-{$ENDIF}
 end;
 
 procedure free_uStore;
