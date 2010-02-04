@@ -1549,7 +1549,7 @@ if (Gear^.Health > 0)and(not (Gear^.X < Gear^.dX))and(Gear^.X < Gear^.dX + cAirP
 			0: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, cBombsSpeed * Gear^.Tag, _0, 0);
 			1: FollowGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtMine,    0, cBombsSpeed * Gear^.Tag, _0, 0);
 			2: for i:= -19 to 19 do
-				FollowGear:= AddGear(hwRound(Gear^.X) - (70*Gear^.Tag) + i div 3, hwRound(Gear^.Y), gtFlame, 0, _0_001 * i, _0, 0);
+				FollowGear:= AddGear(hwRound(Gear^.X) + i div 3, hwRound(Gear^.Y), gtFlame, 0, _0_001 * i, _0, 0);
 			end;
 	Gear^.dX:= Gear^.dX + int2hwFloat(30 * Gear^.Tag)
 	end;
@@ -1578,12 +1578,8 @@ else
 Gear^.Y:= int2hwFloat(topY-300);
 Gear^.dX:= int2hwFloat(TargetPoint.X - 5 * Gear^.Tag * 15);
 
-if int2hwFloat(TargetPoint.Y) - Gear^.Y > _0 then
-    if Gear^.State <> 2 then
-	    Gear^.dX:= Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 / cGravity) * Gear^.Tag
-    else
-	    Gear^.dX:= int2hwFloat(TargetPoint.X) * Gear^.Tag;
- 
+if (int2hwFloat(TargetPoint.Y) - Gear^.Y > _0) and (Gear^.State <> 2) then
+	    Gear^.dX:= Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(TargetPoint.Y) - Gear^.Y) * 2 / cGravity) * Gear^.Tag;
 
 Gear^.Health:= 6;
 Gear^.doStep:= @doStepAirAttackWork;
