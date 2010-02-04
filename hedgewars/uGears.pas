@@ -56,7 +56,8 @@ type
 			IntersectGear: PGear;
 			TriggerId: Longword;
 			FlightTime: Longword;
-			uid: Longword
+			uid: Longword;
+			SoundChannel: LongInt
 		end;
 
 var AllInactive: boolean;
@@ -235,6 +236,7 @@ gear^.Timer:= Timer;
 gear^.Z:= cUsualZ;
 gear^.FlightTime:= 0;
 gear^.uid:= Counter;
+gear^.SoundChannel:= -1;
 
 if CurrentTeam <> nil then
 	begin
@@ -613,7 +615,7 @@ case step of
 				begin
 				cHealthDecrease:= 5;
 				AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
-				playSound(sndSuddenDeath, false, nil);
+				playSound(sndSuddenDeath)
 				end;
 
 			if (cHealthDecrease = 0)
@@ -665,7 +667,7 @@ if TurnTimeLeft > 0 then
 				if (TurnTimeLeft = 5000)
 					and (CurrentHedgehog^.Gear <> nil)
 					and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
-						PlaySound(sndHurry, false, CurrentTeam^.voicepack);
+						PlaySound(sndHurry, CurrentTeam^.voicepack);
 				dec(TurnTimeLeft)
 				end;
 
@@ -1603,7 +1605,7 @@ begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
 if (Radius > 10) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
-if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion, false, nil);
+if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
 if (Mask and EXPLAllDamageInRadius) = 0 then
 	dmgRadius:= Radius shl 1
@@ -1965,7 +1967,7 @@ if (FollowGear <> nil) then
 	FindPlace(FollowGear, true, 0, LAND_WIDTH);
 
 	if (FollowGear <> nil) then
-		PlaySound(sndReinforce, false, CurrentTeam^.voicepack)
+		PlaySound(sndReinforce, CurrentTeam^.voicepack)
 	end
 end;
 

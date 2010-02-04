@@ -242,9 +242,9 @@ if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-	PlaySound(sndIllGetYou, false, CurrentTeam^.voicepack)
+	PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
 else
-	PlaySound(sndYesSir, false, CurrentTeam^.voicepack);
+	PlaySound(sndYesSir, CurrentTeam^.voicepack);
 
 TurnTimeLeft:= cHedgehogTurnTime
 end;

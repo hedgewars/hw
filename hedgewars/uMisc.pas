@@ -521,7 +521,7 @@ var p: Pointer;
 	);
 {$ENDIF}
 begin
-playSound(sndShutter, false, nil);
+playSound(sndShutter);
 
 size:= cScreenWidth * cScreenHeight * 3;
 p:= GetMem(size);

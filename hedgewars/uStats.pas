@@ -107,41 +107,41 @@ if FinishedTurnsTotal <> 0 then
 	inc(CurrentHedgehog^.stats.FinishedTurns);
 
 	if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
-		PlaySound(sndFirstBlood, false, CurrentTeam^.voicepack)
+		PlaySound(sndFirstBlood, CurrentTeam^.voicepack)
 
 	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
 		begin
-		PlaySound(sndStupid, false, PreviousTeam^.voicepack);
+		PlaySound(sndStupid, PreviousTeam^.voicepack);
 		if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
 		end
 	else if DamageClan <> 0 then
 		if DamageTotal > DamageClan then
 			if random(2) = 0 then
-				PlaySound(sndNutter, false, CurrentTeam^.voicepack)
+				PlaySound(sndNutter, CurrentTeam^.voicepack)
 			else
-				PlaySound(sndWatchIt, false, vpHurtSameClan)
+				PlaySound(sndWatchIt, vpHurtSameClan)
 		else
 			if random(2) = 0 then
-				PlaySound(sndSameTeam, false, vpHurtSameClan)
+				PlaySound(sndSameTeam, vpHurtSameClan)
 			else
-				PlaySound(sndTraitor, false, vpHurtSameClan)
+				PlaySound(sndTraitor, vpHurtSameClan)
 	else if DamageGiven <> 0 then
 		if Kills > 0 then
-			PlaySound(sndEnemyDown, false, CurrentTeam^.voicepack)
+			PlaySound(sndEnemyDown, CurrentTeam^.voicepack)
 		else
-			PlaySound(sndRegret, false, vpHurtEnemy)
+			PlaySound(sndRegret, vpHurtEnemy)
 
 	else if AmmoDamagingUsed then
-		PlaySound(sndMissed, false, PreviousTeam^.voicepack)
+		PlaySound(sndMissed, PreviousTeam^.voicepack)
 	else if (AmmoUsedCount > 0) and not isTurnSkipped then
 		// nothing ?
 	else if isTurnSkipped then
 		begin
-		PlaySound(sndBoring, false, PreviousTeam^.voicepack);
+		PlaySound(sndBoring, PreviousTeam^.voicepack);
 		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
 		end
 	else
-		PlaySound(sndCoward, false, PreviousTeam^.voicepack);
+		PlaySound(sndCoward, PreviousTeam^.voicepack);
 	end;
 
 

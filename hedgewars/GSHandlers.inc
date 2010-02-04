@@ -27,15 +27,15 @@ begin
 		if (d > 1) and (gi^.Kind = gtHedgehog) and not gi^.Invulnerable and (GetRandom(2) = 0) then
 			begin
 			if (CurrentHedgehog^.Gear = gi) then
-				PlaySound(sndOops, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+				PlaySound(sndOops, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
 			else
 				begin
 				if (gi^.State and gstMoving) = 0 then
 					gi^.State:= gi^.State or gstLoser;
 				if d > r div 2 then
-					PlaySound(sndNooo, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
+					PlaySound(sndNooo, PHedgehog(gi^.Hedgehog)^.Team^.voicepack)
 				else
-					PlaySound(sndUhOh, false, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
+					PlaySound(sndUhOh, PHedgehog(gi^.Hedgehog)^.Team^.voicepack);
 				end;
 			end;
 		gi:= gi^.NextGear
@@ -74,7 +74,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
 			AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
 			end
         end;
-    PlaySound(sndSplash, false, nil)
+    PlaySound(sndSplash)
     end
     else
 	CheckGearDrowning:= false
@@ -97,9 +97,9 @@ if _0_4 < Gear^.dY then
     if dmg < 1 then exit;
 
 	if _0_6 < Gear^.dY then
-		PlaySound(sndOw4, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+		PlaySound(sndOw4, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 	else
-		PlaySound(sndOw1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+		PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
     ApplyDamage(Gear, dmg);
 	end
@@ -240,7 +240,7 @@ CalcRotationDirAngle(Gear);
 
 if Gear^.Kind = gtHellishBomb then
 	begin
-	if Gear^.Timer = 3000 then PlaySound(sndHellish, false, nil);
+	if Gear^.Timer = 3000 then PlaySound(sndHellish);
 
 	if (GameTicks and $3F) = 0 then
 		if (Gear^.State and gstCollision) = 0 then
@@ -250,7 +250,7 @@ if Gear^.Kind = gtHellishBomb then
 if (Gear^.State and (gstCollision or gstMoving)) = (gstCollision or gstMoving) then
 	if (hwAbs(Gear^.dX) > _0_1) or
 	   (hwAbs(Gear^.dY) > _0_1) then
-		PlaySound(sndGrenadeImpact, false, nil)
+		PlaySound(sndGrenadeImpact)
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMolotov(Gear: PGear);
@@ -264,7 +264,7 @@ begin
 	CalcRotationDirAngle(Gear);
 
 	if (Gear^.State and gstCollision) <> 0 then begin
-		PlaySound(sndMolotov, false, nil);
+		PlaySound(sndMolotov);
 		//doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 5, EXPLAutoSound);
 		for i:= 0 to 20 do begin
 				dX:= AngleCos(i * 2) * ((_0_1*(i div 5))) * (GetRandom + _1);
@@ -382,7 +382,7 @@ if not Gear^.dY.isNegative then
          begin
          Gear^.Active:= false;
          exit
-         end else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact, false, nil)
+         end else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact)
       end;
 
 Gear^.Y:= Gear^.Y + Gear^.dY;
@@ -416,7 +416,7 @@ CheckCollision(Gear);
 dec(Gear^.Timer);
 if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
    begin
-   StopSound(sndUFO);
+   StopSound(Gear^.SoundChannel);
    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
    DeleteGear(Gear);
    end;
@@ -438,7 +438,7 @@ if (Gear^.State and gstCollision) <> 0 then
 dec(Gear^.Timer);
 if Gear^.Timer = 0 then
    begin
-   PlaySound(sndUFO, true, nil);
+   Gear^.SoundChannel:= LoopSound(sndUFO);
    Gear^.Timer:= 5000;
    Gear^.doStep:= @doStepUFOWork
    end;
@@ -466,7 +466,7 @@ if ((Gear^.State and gstAnimation) = 0) then
 	dec(Gear^.Timer);
 	if Gear^.Timer = 0 then
 		begin
-		PlaySound(sndShotgunFire, false, nil);
+		PlaySound(sndShotgunFire);
 		Gear^.State:= Gear^.State or gstAnimation
 		end;
 	exit
@@ -536,7 +536,7 @@ end;
 
 procedure doStepDEagleShot(Gear: PGear);
 begin
-PlaySound(sndGun, false, nil);
+PlaySound(sndGun);
 Gear^.doStep:= @doStepBulletWork
 end;
 
@@ -559,7 +559,7 @@ if (HHGear^.Message and gm_Attack) <> 0 then
 	Gear^.State:= Gear^.State or gstAnimation;
     Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
     Gear^.dY:= -AngleCos(HHGear^.Angle) * _0_5;
-    PlaySound(sndGun, false, nil);
+    PlaySound(sndGun);
     Gear^.doStep:= @doStepBulletWork;
     end
 else
@@ -621,7 +621,7 @@ HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 dec(Gear^.Timer);
 if (Gear^.Timer = 0)or((Gear^.Message and gm_Destroy) <> 0)or((HHGear^.State and gstHHDriven) = 0) then
 	begin
-	StopSound(sndPickhammer);
+	StopSound(Gear^.SoundChannel);
 	DeleteGear(Gear);
 	AfterAttack;
 	exit
@@ -696,7 +696,7 @@ DrawHLinesExplosions(@ar, 3, hwRound(Gear^.Y) - cHHRadius * 2, 2, Pred(i));
 Gear^.dY:= HHGear^.dY;
 DeleteCI(HHGear);
 
-PlaySound(sndPickhammer, true, nil);
+Gear^.SoundChannel:= LoopSound(sndPickhammer);
 doStepPickHammerWork(Gear);
 Gear^.doStep:= @doStepPickHammerWork
 end;
@@ -1173,7 +1173,7 @@ if ((Gear^.State and gsttmpFlag) <> 0) then
 		end else // gstAttacking <> 0
 		begin
 		AllInactive:= false;
-		if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick, false, nil);
+		if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
 		if Gear^.Timer = 0 then
 			begin
 			doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
@@ -1243,7 +1243,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 		begin
 		Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
 		if Gear^.dY > - _0_001 then Gear^.dY:= _0
-			else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact, false, nil);
+			else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact);
 		end;
 	CheckGearDrowning(Gear);
 	end;
@@ -1257,7 +1257,7 @@ end;
 procedure doStepTarget(Gear: PGear);
 begin
 if (Gear^.Timer = 0) and (Gear^.Tag = 0) then
-	PlaySound(sndWarp, false, nil);
+	PlaySound(sndWarp);
 
 if (Gear^.Tag = 0) and (Gear^.Timer < 1000) then
 	inc(Gear^.Timer)
@@ -1360,7 +1360,7 @@ if not TestCollisionYwithGear(Gear, 1) then
 		begin
 		for i:= 0 to 3 do
 			AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
-		PlaySound(sndVaporize, false, nil);
+		PlaySound(sndVaporize);
 		DeleteGear(Gear);
 		exit
 		end
@@ -1474,7 +1474,7 @@ Gear^.dY:= - _0_9;
 Gear^.doStep:= @doStepFirePunchWork;
 DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y + _1, _0_5, _0, cHHRadius * 4, 5);
 
-PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), false, PHedgehog(HHGear^.Hedgehog)^.Team^.voicepack)
+PlaySound(TSound(ord(sndFirePunch1) + GetRandom(6)), PHedgehog(HHGear^.Hedgehog)^.Team^.voicepack)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1624,7 +1624,7 @@ if (Distance(tx - x, ty - y) > _256) or
                       TargetPoint.Y - SpritesData[sprAmGirder].Height div 2,
                       sprAmGirder, Gear^.State, true) then
 	begin
-    PlaySound(sndDenied, false, nil);
+    PlaySound(sndDenied);
 	HHGear^.Message:= HHGear^.Message and not gm_Attack;
 	HHGear^.State:= HHGear^.State and not gstAttacking;
 	HHGear^.State:= HHGear^.State or gstHHChooseTarget;
@@ -1632,7 +1632,7 @@ if (Distance(tx - x, ty - y) > _256) or
 	DeleteGear(Gear)
 	end
 else begin
-    PlaySound(sndPlaced, false, nil);
+    PlaySound(sndPlaced);
 	DeleteGear(Gear);
     OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
     ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^)
@@ -1685,7 +1685,7 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 		HHGear^.State:= HHGear^.State or gstHHChooseTarget;
 		DeleteGear(Gear);
 		isCursorVisible:= true;
-		PlaySound(sndDenied, false, nil);
+		PlaySound(sndDenied)
 		end
 	else begin
 		DeleteCI(HHGear);
@@ -1696,7 +1696,7 @@ if not TryPlaceOnLand(TargetPoint.X - SpritesData[sprHHTelepMask].Width div 2,
 		HHGear^.X:= int2hwFloat(TargetPoint.X);
 		HHGear^.Y:= int2hwFloat(TargetPoint.Y);
 		HHGear^.State:= HHGear^.State or gstMoving;
-		playSound(sndWarp, false, nil);
+		playSound(sndWarp)
 		end;
 TargetPoint.X:= NoPointX;
 
@@ -1735,7 +1735,7 @@ if (Gear^.Message and gm_Switch) <> 0 then
 	RemoveGearFromList(HHGear);
 	InsertGearToList(HHGear);
 
-	PlaySound(sndSwitchHog, false, nil);
+	PlaySound(sndSwitchHog);
 	
 	repeat
 		CurrentTeam^.CurrHedgehog:= Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
@@ -1864,7 +1864,7 @@ dec(Gear^.Timer);
 if Gear^.Timer = 0 then
 	begin
 	Gear^.Pos:= 1;
-	PlaySound(sndKamikaze, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+	PlaySound(sndKamikaze, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 	Gear^.doStep:= @doStepKamikazeWork
 	end
 end;
@@ -1929,7 +1929,7 @@ if Gear^.Pos = 0 then
 		gi:= gi^.NextGear
 		end;
 	Gear^.doStep:= @doStepCakeExpl;
-	PlaySound(sndCake, false, nil)
+	PlaySound(sndCake)
 	end else dec(Gear^.Pos)
 end;
 
@@ -2096,7 +2096,7 @@ if Gear^.Timer > 250 then
 	Gear^.Timer:= 0;
 	inc(Gear^.Pos);
 	if Gear^.Pos = 5 then
-		PlaySound(sndYoohoo, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+		PlaySound(sndYoohoo, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 	end;
 
 if Gear^.Pos = 14 then
@@ -2151,7 +2151,7 @@ if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
 	DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
     if(CheckGearDrowning(Gear)) then
         begin
-        StopSound(sndPickhammer);
+        StopSound(Gear^.SoundChannel);
 	    exit
         end
 	end;
@@ -2163,7 +2163,7 @@ or (not TestCollisionYWithGear(Gear, hwSign(Gear^.dY))
 and not TestCollisionXWithGear(Gear, hwSign(Gear^.dX)))
 or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] = COLOR_INDESTRUCTIBLE) then
 	begin //out of time or exited ground
-    StopSound(sndPickhammer);
+    StopSound(Gear^.SoundChannel);
 	doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
 	DeleteGear(Gear);
 	exit
@@ -2203,7 +2203,7 @@ if ((Gear^.State and gstCollision) <> 0) then begin //hit
 		exit;
 		end;
 
-    PlaySound(sndPickhammer, true, nil);
+    Gear^.SoundChannel:= LoopSound(sndPickhammer);
 	Gear^.doStep:= @doStepDrillDrilling;
 	dec(Gear^.Timer)
 	end
@@ -2228,7 +2228,7 @@ begin
 				AngleCos(HHGear^.Angle) * ( - _0_8) + ry,
 				0);
 
-		PlaySound(sndGun, false, nil);
+		PlaySound(sndGun);
 		end;
 
 	if (Gear^.Timer = 0) or (HHGear^.Damage <> 0) then
@@ -2323,7 +2323,7 @@ if (TrainingFlags and tfRCPlane) = 0 then
 		begin
 		Gear^.State:= Gear^.State or gsttmpFlag;
 		PauseMusic;
-		playSound(sndRideOfTheValkyries, false, nil);
+		playSound(sndRideOfTheValkyries);
 		end;
 
 	// pickup bonuses
@@ -2342,7 +2342,7 @@ else
 		begin
 		if t^.Tag <> 0 then // collect it only once
 			exit;
-		PlaySound(sndShotgunReload, false, nil);
+		PlaySound(sndShotgunReload);
 		t^.Tag:= 1;
 		TrainingTargetGear:= nil; // remove target cursor
 		exit;
@@ -2358,7 +2358,7 @@ if ((Gear^.State and gstCollision) <> 0) or (((TrainingFlags and tfRCPlane) <> 0
 	or CheckGearDrowning(Gear) then
 	begin
 	if ((TrainingFlags and tfRCPlane) <> 0) and ((TrainingFlags and tfTimeTrial) <> 0 ) and (TimeTrialStopTime = 0) then TimeTrialStopTime:= RealTicks;
-	StopSound(sndRCPlane);
+	StopSound(Gear^.SoundChannel);
 	StopSound(sndRideOfTheValkyries);
 	ResumeMusic;
 

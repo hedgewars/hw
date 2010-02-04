@@ -36,12 +36,15 @@ procedure free_uSound;
 procedure InitSound;
 procedure ReleaseSound;
 procedure SoundLoad;
-procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
-procedure LoopSound(snd: TSound; voicepack: PVoicepack);
+procedure PlaySound(snd: TSound);
+procedure PlaySound(snd: TSound; voicepack: PVoicepack);
+function LoopSound(snd: TSound): LongInt;
+function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 procedure PlayMusic;
 procedure PauseMusic;
 procedure ResumeMusic;
 procedure StopSound(snd: TSound);
+procedure StopSound(chn: LongInt);
 function  ChangeVolume(voldelta: LongInt): LongInt;
 function  AskForVoicepack(name: shortstring): Pointer;
 
@@ -152,28 +155,34 @@ for t:= 0 to cMaxTeams do
 {$ENDIF}	
 end;
 
-procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
-var loops: LongInt;
+procedure PlaySound(snd: TSound);
 begin
-if (not isSoundEnabled) or fastUntilLag then exit;
-if infinite and (lastChan[snd] <> -1) then exit;
-if infinite then loops:= -1 else loops:= 0;
-
-if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], loops, -1)
-else
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], loops, -1)
+	PlaySound(snd, nil);
 end;
 
-procedure LoopSound(snd: TSound; voicepack: PVoicepack);
+procedure PlaySound(snd: TSound; voicepack: PVoicepack);
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
-if lastChan[snd] <> -1 then exit;
 
 if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], 0, -1)
 else
-	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1)
+	lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
+end;
+
+function LoopSound(snd: TSound): LongInt;
+begin
+	LoopSound:= LoopSound(snd, nil)
+end;
+
+function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+begin
+if (not isSoundEnabled) or fastUntilLag then exit;
+
+if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
+	LoopSound:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+else
+	LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1)
 end;
 
 procedure StopSound(snd: TSound);
@@ -184,6 +193,11 @@ if (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
 	Mix_HaltChannel(lastChan[snd]);
 	lastChan[snd]:= -1;
 	end;
+end;
+
+procedure StopSound(chn: LongInt);
+begin
+	if (chn <> -1) and (Mix_Playing(chn) <> 0) then Mix_HaltChannel(chn);
 end;
 
 procedure PlayMusic;

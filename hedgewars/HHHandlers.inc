@@ -120,7 +120,7 @@ with Gear^,
              if Power = 0 then
                 begin
                 AttackBar:= CurrentTeam^.AttackBar;
-                PlaySound(sndThrowPowerUp, false, nil)
+                PlaySound(sndThrowPowerUp)
                 end;
              inc(Power)
              end;
@@ -129,7 +129,7 @@ with Gear^,
         if (Ammo^[CurSlot, CurAmmo].Propz and ammoprop_Power) <> 0 then
            begin
            StopSound(sndThrowPowerUp);
-           PlaySound(sndThrowRelease, false, nil);
+           PlaySound(sndThrowRelease);
            end;
 
         xx:= SignAs(AngleSin(Angle), dX);
@@ -137,7 +137,7 @@ with Gear^,
 
         if ((Gear^.State and gstHHHJump) <> 0) then xx:= - xx;
         if Ammo^[CurSlot, CurAmmo].AttackVoice <> sndNone then
-           PlaySound(Ammo^[CurSlot, CurAmmo].AttackVoice, false, CurrentTeam^.voicepack);
+           PlaySound(Ammo^[CurSlot, CurAmmo].AttackVoice, CurrentTeam^.voicepack);
              case Ammo^[CurSlot, CurAmmo].AmmoType of
                       amGrenade: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Bomb,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
                       amMolotov: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
@@ -145,7 +145,7 @@ with Gear^,
                       amBazooka: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                           amUFO: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
-                                 PlaySound(sndShotgunReload, false, nil);
+                                 PlaySound(sndShotgunReload);
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);
                                  end;
                    amPickHammer: CurAmmoGear:= AddGear(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius, gtPickHammer, 0, _0, _0, 0);
@@ -158,11 +158,11 @@ with Gear^,
                     amFirePunch: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtFirePunch, 0, xx, _0, 0);
                          amWhip: begin
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtWhip, 0, SignAs(_1, dX), - _0_8, 0);
-                                 PlaySound(sndWhipCrack, false, nil)
+                                 PlaySound(sndWhipCrack)
                                  end;
                   amBaseballBat: begin
 								 CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
-								 PlaySound(sndBaseballBat, false, nil);
+								 PlaySound(sndBaseballBat)
 								 end;
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);
@@ -172,12 +172,12 @@ with Gear^,
                      amTeleport: CurAmmoGear:= AddGear(0, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtSwitcher, 0, _0, _0, 0);
                        amMortar: begin
-				playSound(sndMortar, false, nil);
+				playSound(sndMortar);
 				FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMortar,  0, xx*cMaxPower/cPowerDivisor, yy*cMaxPower/cPowerDivisor, 0);
 				 end;
                       amRCPlane: begin
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtRCPlane,  0, xx * cMaxPower / cPowerDivisor / 4, yy * cMaxPower / cPowerDivisor / 4, 0);
-                                 PlaySound(sndRCPlane, true, nil)
+                                 CurAmmoGear^.SoundChannel:= LoopSound(sndRCPlane, nil)
                                  end;
                        amKamikaze: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtKamikaze, 0, xx * _0_5, yy * _0_5, 0);
                          amCake: CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 3, hwRound(Y), gtCake, 0, xx, _0, 0);
@@ -288,7 +288,7 @@ if Gear^.Timer = 1 then
 	Gear^.Z:= cCurrHHZ;
 	RemoveGearFromList(Gear);
 	InsertGearToList(Gear);
-	PlaySound(sndByeBye, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+	PlaySound(sndByeBye, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 	Gear^.Pos:= 0;
 	Gear^.Timer:= timertime
 	end
@@ -301,7 +301,7 @@ var s: shortstring;
 	i: Integer;
 begin
 Gear^.Message:= gm_Destroy;
-PlaySound(sndShotgunReload, false, nil);
+PlaySound(sndShotgunReload);
 case Gear^.Pos of
        posCaseUtility,
        posCaseAmmo: begin
@@ -376,7 +376,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          Gear^.dY:= -_0_15;
          if not cArtillery then Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-         PlaySound(sndJump1, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+         PlaySound(sndJump1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
          exit
          end;
       end;
@@ -389,7 +389,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       Gear^.dY:= -_0_2;
       SetLittle(Gear^.dX);
       Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-      PlaySound(sndJump3, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+      PlaySound(sndJump3, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
       exit
       end;
 
@@ -563,7 +563,7 @@ if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) then
 	if Gear^.FlightTime = 2000 then
 		begin
 		AddCaption(GetEventString(eidHomerun), cWhiteColor, capgrpMessage);
-		PlaySound(sndHomerun, false, nil)
+		PlaySound(sndHomerun)
 		end;
 	end
 else
@@ -596,7 +596,7 @@ if (TurnTimeLeft = 0) or (Gear^.Damage > 0) then
 if (Gear^.State and gstAnimation) <> 0 then
 	begin
 	Gear^.Message:= 0;
-	if (Gear^.Pos = Wavez[TWave(Gear^.Tag)].VoiceDelay) and (Gear^.Timer = 0) then PlaySound(Wavez[TWave(Gear^.Tag)].Voice, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+	if (Gear^.Pos = Wavez[TWave(Gear^.Tag)].VoiceDelay) and (Gear^.Timer = 0) then PlaySound(Wavez[TWave(Gear^.Tag)].Voice, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 	inc(Gear^.Timer);
 	if Gear^.Timer = Wavez[TWave(Gear^.Tag)].Interval then
 		begin
@@ -671,7 +671,7 @@ if (Gear^.State and gstMoving) <> 0 then
 			Gear^.State:= Gear^.State or gstHHHJump;
 			Gear^.dY:= -_0_25;
 			if not cArtillery then Gear^.dX:= -SignAs(_0_02, Gear^.dX);
-			PlaySound(sndJump2, false, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
+			PlaySound(sndJump2, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 			end;
 
 	Gear^.Message:= Gear^.Message and not (gm_LJump or gm_HJump);
