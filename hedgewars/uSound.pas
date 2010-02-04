@@ -156,6 +156,7 @@ procedure PlaySound(snd: TSound; infinite: boolean; voicepack: PVoicepack);
 var loops: LongInt;
 begin
 if (not isSoundEnabled) or fastUntilLag then exit;
+if infinite and (lastChan[snd] <> -1) then exit;
 if infinite then loops:= -1 else loops:= 0;
 
 if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
