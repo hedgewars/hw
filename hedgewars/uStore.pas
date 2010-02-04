@@ -218,6 +218,12 @@ var s: string;
 
 		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
 
+		// overwrite flag for cpu teams and keep players from using it
+		if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
+			Flag:= 'cpu'
+		else if Flag = 'cpu' then
+			Flag:= 'hedgewars';
+		
 		flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
 		if flagsurf = nil then
 			flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);

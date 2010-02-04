@@ -74,7 +74,7 @@ About::About(QWidget * parent) :
 			"Frontend improvements: Martin Minarik &lt;<a href=\"mailto:ttsmj@pokec.sk\">ttsmj@pokec.sk</a>&gt;<br>"
 			"Frontend improvements: Kristian Lehmann &lt;<a href=\"mailto:email@thexception.net\">email@thexception.net</a>&gt;<br>"
 			"Mac OS X port, OpenAL wrapper library: Vittorio Giovara &lt;<a href=\"mailto:vittorio.giovara@gmail.com\">vittorio.giovara@gmail.com</a>&gt;<br>"
-			"Gamepad support and additional effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch+hw@googlemail.com\">mario.liebisch+hw@googlemail.com</a>&gt;"
+			"Gamepad support and additional effects: Mario Liebisch &lt;<a href=\"mailto:mario.liebisch@googlemail.com\">mario.liebisch@googlemail.com</a>&gt;"
 			"</p><h2>" +
 
 			QLabel::tr("Art:") + "</h2>"
