@@ -65,6 +65,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
     prevPoint: TPoint;
+	amSel: TAmmoType = amNothing;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -183,21 +184,33 @@ with CurrentHedgehog^ do
 	DrawSprite(sprAMBorders, x, y, 0);
 
 	if (Pos >= 0) then
-		if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
 		begin
-		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+		if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
+			if (amSel <> Ammo^[Slot, Pos].AmmoType) or (WeaponTooltipTex = nil) then
+				begin
+				amSel:= Ammo^[Slot, Pos].AmmoType;
+				RenderWeaponTooltip(amSel)
+				end;
+			
+			DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 
-		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
+			if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
+				DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
 
-		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
-			begin
-			bShowAmmoMenu:= false;
-			SetWeapon(Ammo^[Slot, Pos].AmmoType);
-			bSelected:= false;
-			exit
-			end;
-		end;
+			if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
+				begin
+				bShowAmmoMenu:= false;
+				SetWeapon(Ammo^[Slot, Pos].AmmoType);
+				bSelected:= false;
+				FreeWeaponTooltip;
+				exit
+				end;
+		end
+	else
+		FreeWeaponTooltip;
+	
+	if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
+		ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, y);
 	end;
 
 bSelected:= false;
@@ -341,6 +354,7 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
+	highlight: Boolean;
     offset: LongInt;
     scale: GLfloat;
 begin
@@ -518,22 +532,40 @@ else offset:= 8;
 			end;
 
 // Teams Healths
+
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
-      DrawTexture(- NameTagTex^.w - 3, cScreenHeight + DrawHealthY, NameTagTex);
-
+	  highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
+	  
+      if highlight then
+         glColor4f(((Clan^.Color shr 16) and $ff) / $ff, ((Clan^.Color shr 8) and $ff) / $ff, (Clan^.Color and $ff) / $ff, 1);
+      DrawTexture(- NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
+  
       r.x:= 0;
       r.y:= 0;
+	  
+	  r.w:= 26;
+	  r.h:= 19;
+	  DrawFromRect(-14, cScreenHeight + DrawHealthY, @r, FlagTex);
+	   
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthTex^.h;
-
-      DrawFromRect(0, cScreenHeight + DrawHealthY, @r, HealthTex);
+      DrawFromRect(14, cScreenHeight + DrawHealthY, @r, HealthTex);
 
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
 
-      DrawFromRect(TeamHealthBarWidth + 2, cScreenHeight + DrawHealthY, @r, HealthTex);
+      DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
+      if highlight then // if highlighted, draw flag again to keep its colors
+         begin
+         r.x:= 2;
+         r.y:= 2;
+         r.w:= 22;
+         r.h:= 15;
+         glColor4f(1, 1, 1, 1);
+         DrawFromRect(-12, cScreenHeight + DrawHealthY + 2, @r, FlagTex);
+         end;
       end;
 
 // Lag alert

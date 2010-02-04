@@ -156,6 +156,7 @@ public:
 	QComboBox *CBFort;
 	SquareLabel *FortPreview;
 	QComboBox *CBGrave;
+	QComboBox *CBFlag;
 	QComboBox *CBTeamLvl;
 	QComboBox *CBVoicepack;
 	QGroupBox *GBoxBinds;
@@ -200,9 +201,10 @@ class PageOptions : public AbstractPage
 public:
 	PageOptions(QWidget* parent = 0);
 
-	QPushButton* WeaponsButt;
-	QPushButton* WeaponEdit;
-	QComboBox* WeaponsName;
+	QPushButton *WeaponsButt;
+	QPushButton *WeaponEdit;
+	QComboBox *WeaponsName;
+	QCheckBox *WeaponTooltip;
 
 	QPushButton *BtnBack;
 	IconedGroupBox *teamsBox;

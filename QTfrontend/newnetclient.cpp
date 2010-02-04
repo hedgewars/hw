@@ -111,6 +111,7 @@ void HWNewNet::AddTeam(const HWTeam & team)
 	     team.Grave + delimeter +
 	     team.Fort + delimeter +
 	     team.Voicepack + delimeter +
+		 team.Flag + delimeter +
 	     QString::number(team.difficulty);
 
 	for(int i = 0; i < 8; ++i)
@@ -322,7 +323,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 	}
 
 	if (lst[0] == "ADD_TEAM") {
-		if(lst.size() != 23)
+		if(lst.size() != 24)
 		{
 			qWarning("Net: Bad ADDTEAM message");
 			return;

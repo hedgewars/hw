@@ -65,7 +65,9 @@ type PHHAmmo = ^THHAmmo;
 			NameTagTex: PTexture;
 			CrosshairTex,
 			GraveTex,
-			HealthTex: PTexture;
+			HealthTex,
+			FlagTex: PTexture;
+			Flag: string;
 			GraveName: string;
 			FortName: string;
 			TeamHealth: LongInt;
@@ -259,6 +261,7 @@ TryDo(team <> nil, 'AddTeam: team = nil', true);
 FillChar(team^, sizeof(TTeam), 0);
 team^.AttackBar:= 2;
 team^.CurrHedgehog:= cMaxHHIndex;
+team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);

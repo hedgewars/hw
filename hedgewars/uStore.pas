@@ -77,7 +77,9 @@ procedure FinishProgress;
 function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
-
+procedure RenderWeaponTooltip(atype: TAmmoType);
+procedure ShowWeaponTooltip(x, y: LongInt);
+procedure FreeWeaponTooltip;
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
@@ -145,6 +147,32 @@ finalRect.h:= h + FontBorder * 2;
 WriteInRoundRect:= finalRect;
 end;
 
+function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
+var w, h: LongInt;
+    tmpsurf: PSDL_Surface;
+    clr: TSDL_Color;
+    finalRect: TSDL_Rect;
+begin
+TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), w, h);
+finalRect.x:= X + FontBorder + 2;
+finalRect.y:= Y + FontBorder;
+finalRect.w:= w + FontBorder * 2 + 4;
+finalRect.h:= h + FontBorder * 2;
+clr.r:= Color shr 16;
+clr.g:= (Color shr 8) and $FF;
+clr.b:= Color and $FF;
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
+tmpsurf:= doSurfaceConversion(tmpsurf);
+SDLTry(tmpsurf <> nil, true);
+SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
+SDL_FreeSurface(tmpsurf);
+finalRect.x:= X;
+finalRect.y:= Y;
+finalRect.w:= w + FontBorder * 2 + 4;
+finalRect.h:= h + FontBorder * 2;
+WriteInRect:= finalRect
+end;
+
 procedure StoreLoad;
 var s: string;
 
@@ -153,7 +181,7 @@ var s: string;
 		i: LongInt;
 		r, rr: TSDL_Rect;
 		drY: LongInt;
-		texsurf: PSDL_Surface;
+		texsurf, flagsurf: PSDL_Surface;
 	begin
 	r.x:= 0;
 	r.y:= 0;
@@ -177,6 +205,34 @@ var s: string;
 		HealthTex:= Surface2Tex(texsurf, false);
 		SDL_FreeSurface(texsurf);
 
+		r.x:= 0;
+		r.y:= 0;
+		r.w:= 32;
+		r.h:= 32;
+		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
+		TryDo(texsurf <> nil, errmsgCreateSurface, true);
+		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+		r.w:= 26;
+		r.h:= 19;
+
+		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
+
+		flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
+		if flagsurf = nil then
+			flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+		TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+		copyToXY(flagsurf, texsurf, 2, 2);
+		SDL_FreeSurface(flagsurf);
+		
+		// restore black border pixels inside the flag
+		PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
+		PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
+		PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
+		PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
+
+		FlagTex:= Surface2Tex(texsurf, false);
+		
 		dec(drY, r.h + 2);
 		DrawHealthY:= drY;
 		for i:= 0 to 7 do
@@ -1314,6 +1370,183 @@ for x := 0 to src^.w - 1 do
         destPixels^[j]:= srcPixels^[i];
         inc(j)
         end;
+end;
+
+function RenderHelpWindow(caption, subcaption, description, extra: shortstring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+var tmpsurf: PSDL_SURFACE;
+	w, h, i, j: LongInt;
+	font: THWFont;
+	r, r2: TSDL_Rect;
+	wa, ha: LongInt;
+	tmpline, tmpline2, tmpdesc: shortstring;
+begin
+font:= fnt16;
+
+// make sure there is a caption as well as a sub caption - description is optional
+if caption = '' then caption:= '???';
+if subcaption = '' then subcaption:= ' ';
+
+w:= 0;
+h:= 0;
+wa:= FontBorder * 2 + 4;
+ha:= FontBorder * 2;
+
+// TODO: Recheck height/position calculation
+
+// get caption's dimensions
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(caption), i, j);
+// width adds 36 px (image + space)
+w:= i + 36 + wa;
+h:= j + ha;
+
+// get sub caption's dimensions
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(subcaption), i, j);
+// width adds 36 px (image + space)
+if w < (i + 36 + wa) then w:= i + 36 + wa;
+inc(h, j + ha);
+
+// get description's dimensions
+tmpdesc:= description;
+while tmpdesc <> '' do
+	begin
+	tmpline:= tmpdesc;
+	SplitByChar(tmpline, tmpdesc, '|');
+	if tmpline <> '' then
+		begin
+		TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), i, j);
+		if w < (i + wa) then w:= i + wa;
+		inc(h, j + ha)
+		end
+	end;
+
+if extra <> '' then
+	begin
+	// get extra label's dimensions
+	TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), i, j);
+	if w < (i + wa) then w:= i + wa;
+	inc(h, j + ha);
+	end;
+	
+// add borders space
+inc(w, wa);
+inc(h, ha + 8);
+
+tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
+TryDo(tmpsurf <> nil, 'RenderHelpWindow: fail to create surface', true);
+
+// render border and background
+r.x:= 0;
+r.y:= 0;
+r.w:= w;
+r.h:= h;
+DrawRoundRect(@r, cWhiteColor, cNearBlackColor, tmpsurf, true);
+
+// render caption
+r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, ha, $ffffffff, font, caption);
+// render sub caption
+r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
+
+// render all description lines
+tmpdesc:= description;
+while tmpdesc <> '' do
+	begin
+	tmpline:= tmpdesc;
+	SplitByChar(tmpline, tmpdesc, '|');
+	r2:= r;
+	if tmpline <> '' then
+		begin
+		r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
+		
+		// render highlighted caption (if there's a ':')
+		SplitByChar(tmpline, tmpline2, ':');
+		if tmpline2 <> '' then
+			WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
+		end
+	end;
+
+if extra <> '' then
+	r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, extracolor, font, extra);
+
+r.x:= FontBorder + 6;
+r.y:= FontBorder + 4;
+r.w:= 32;
+r.h:= 32;
+SDL_FillRect(tmpsurf, @r, $ffffffff);
+SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
+	
+RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
+SDL_FreeSurface(tmpsurf)
+end;
+
+procedure RenderWeaponTooltip(atype: TAmmoType);
+var r: TSDL_Rect;
+	i: LongInt;
+	extra: string;
+	extracolor: LongInt;
+begin
+{$IFNDEF IPHONEOS}
+// don't do anything if the window shouldn't be shown
+if not cWeaponTooltips then
+	begin
+{$ENDIF}
+	WeaponTooltipTex:= nil;
+{$IFNDEF IPHONEOS}
+	exit
+	end;
+
+// free old texture
+FreeWeaponTooltip;
+
+// image region
+i:= LongInt(atype) - 1;
+r.x:= (i shr 5) * 32;
+r.y:= (i mod 32) * 32;
+r.w:= 32;
+r.h:= 32;
+
+// default (no extra text)
+extra:= '';
+extracolor:= 0;
+
+if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
+	begin
+	extra:= trmsg[sidNotYetAvailable];
+	extracolor:= LongInt($ffc77070);
+	end
+else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapon or utility won't end your turn
+	begin
+	extra:= trmsg[sidNoEndTurn];
+	extracolor:= LongInt($ff70c770);
+	end
+else 
+	begin
+	extra:= '';
+	extracolor:= 0;
+	end;
+
+// render window and return the texture
+WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
+{$ENDIF}
+end;
+
+procedure ShowWeaponTooltip(x, y: LongInt);
+begin
+{$IFNDEF IPHONEOS}
+// draw the texture if it exists
+if WeaponTooltipTex <> nil then
+	DrawTexture(x, y, WeaponTooltipTex)
+{$ENDIF}
+end;
+
+procedure FreeWeaponTooltip;
+begin
+{$IFNDEF IPHONEOS}
+// free the existing texture (if there's any)
+if WeaponTooltipTex = nil then
+	exit;
+FreeTexture(WeaponTooltipTex);
+WeaponTooltipTex:= nil
+{$ENDIF}
 end;
 
 procedure init_uStore;

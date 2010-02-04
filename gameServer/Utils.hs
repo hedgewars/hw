@@ -59,6 +59,7 @@ teamToNet team = [
 		teamgrave team,
 		teamfort team,
 		teamvoicepack team,
+		teamflag team,
 		teamowner team,
 		show $ difficulty team
 		]

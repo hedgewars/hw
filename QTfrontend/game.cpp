@@ -290,6 +290,7 @@ QStringList HWGame::setArguments()
 #else
 	arguments << "0";
 #endif
+	arguments << (config->isWeaponTooltip() ? "1" : "0");
 	arguments << tr("en.txt");
 	arguments << QString::number(config->volume()); // sound volume
 	arguments << QString::number(config->timerInterval());

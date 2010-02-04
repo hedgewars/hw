@@ -31,14 +31,17 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack, sidMolotov);
 
 	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync);
+			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
+			sidNoEndTurn, sidNotYetAvailable);
 
 	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
 			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-			eidHomerun);
+			eidHomerun, eidFrozen);
 
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of string;
+    trammoc: array[TAmmoStrId] of string;
+    trammod: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
 
 procedure LoadLocale(FileName: string);
@@ -65,9 +68,9 @@ trammo[sidNothing]:= ' ';
 for e:= Low(TEventId) to High(TEventId) do first[e]:= true;
 
 {$I-} // iochecks off
-filemode:= 0; // readonly
 Assign(f, FileName);
-reset(f);
+filemode:= 0; // readonly
+Reset(f);
 if IOResult = 0 then loaded:= true;
 TryDo(loaded, 'Cannot load locale "' + FileName + '"', false);
 if loaded then
@@ -98,6 +101,8 @@ if loaded then
                trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
                inc(trevt_n[TEventId(b)]);
                end;
+           3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammoc[TAmmoStrId(b+1)]:= s;
+           4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammod[TAmmoStrId(b+1)]:= s;
            end;
        end;
    Close(f)

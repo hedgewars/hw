@@ -45,7 +45,7 @@ type
 
 	TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
 			ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-			ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats);
+			ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags);
 
 	TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
 			sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
@@ -182,9 +182,10 @@ const
 	cWhiteColorChannels	: TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
 	cNearBlackColorChannels	: TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
 
-	cWhiteColor		: Longword = $FFFFFFFF;
-	cYellowColor		: Longword = $FFFFFF00;
-	cExplosionBorderColor	: LongWord = $FF808080;
+	cWhiteColor		      : Longword = $FFFFFFFF;
+	cYellowColor		  : Longword = $FFFFFF00;
+	cNearBlackColor       : Longword = $FF000010;
+	cExplosionBorderColor : LongWord = $FF808080;
 
 {$WARNINGS OFF}
 	cAirPlaneSpeed: hwFloat = (isNegative: false; QWordValue:   3006477107); // 1.4
@@ -352,7 +353,8 @@ const
 	ammoprop_AltUse       = $00000400;
 	ammoprop_NotBorder    = $00000800;
 	ammoprop_Utility      = $00001000;
-
+	ammoprop_NoRoundEndHint=$10000000;
+	
 	AMMO_INFINITE = 100;
 
 	EXPLAllDamageInRadius = $00000001;
@@ -493,7 +495,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:   'AmmoName'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 202; Height: 33; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotName
 			(FileName:      'Ammos'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMAmmos
+			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: true),// sprAMAmmos
 			(FileName:   'SlotKeys'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprAMSlotKeys
 			(FileName:  'Selection'; Path: ptAmmoMenu; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -918,13 +920,16 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 3;
-			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_AltAttack;
-				Count: 5;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amRope;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_ForwMsgs or
+							ammoprop_AttackInMove or
+							ammoprop_AltAttack;
+					Count: 5;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amRope;
+					AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1051,7 +1056,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_ForwMsgs or
 							ammoprop_AttackInMove or
 							ammoprop_NoCrosshair or
 							ammoprop_DontHold or
@@ -1139,13 +1145,16 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 150;
 			NumberInCase: 3;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_NeedTarget or ammoprop_AttackingPut;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amGirder;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+							ammoprop_NeedTarget or
+							ammoprop_AttackingPut;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amGirder;
+					AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 3000;
 			minAngle: 0;
@@ -1181,13 +1190,16 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 100;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
-				Count: 3;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amSwitch;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_ForwMsgs or
+							ammoprop_NoCrosshair or
+							ammoprop_DontHold;
+					Count: 3;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amSwitch;
+					AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1396,13 +1408,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 20;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amLowGravity;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amLowGravity;
+					AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1415,13 +1431,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amExtraDamage;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amExtraDamage;
+					AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1434,13 +1454,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 20;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amInvulnerable;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amInvulnerable;
+					AttackVoice: sndNone);
 			Slot: 8;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1453,13 +1477,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 30;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amExtraTime;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amExtraTime;
+					AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1472,13 +1500,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amLaserSight;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amLaserSight;
+					AttackVoice: sndNone);
 			Slot: 7;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1491,13 +1523,17 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 15;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_NoCrosshair or  ammoprop_DontHold or  ammoprop_AltUse or ammoprop_Utility;
-				Count: 1;
-				NumPerTurn: 0;
-				Timer: 0;
-				Pos: 0;
-				AmmoType: amVampiric;
-				AttackVoice: sndNone);
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_NoCrosshair or
+						  ammoprop_DontHold or
+						  ammoprop_AltUse or
+                          ammoprop_Utility;
+					Count: 1;
+					NumPerTurn: 0;
+					Timer: 0;
+					Pos: 0;
+					AmmoType: amVampiric;
+					AttackVoice: sndNone);
 			Slot: 6;
 			TimeAfterTurn: 0;
 			minAngle: 0;
@@ -1529,7 +1565,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			NameTex: nil;
 			Probability: 20;
 			NumberInCase: 1;
-			Ammo: (Propz: ammoprop_ForwMsgs or
+			Ammo: (Propz: ammoprop_NoRoundEndHint or
+						  ammoprop_ForwMsgs or
 							ammoprop_AttackInMove or
 							ammoprop_NoCrosshair or
 							ammoprop_DontHold or
@@ -1548,7 +1585,6 @@ const	cTagsMasks : array[0..7] of byte = (
 			SkipTurns: 0;
 			PosCount: 1;
 			PosSprite: sprWater),
-
 			(NameId: sidMolotov;
 			NameTex: nil;
 			Probability: 0;
@@ -1623,7 +1659,8 @@ var cPathz: array[TPathType] of String = (
 		'Graphics/AmmoMenu',             // ptAmmoMenu
 		'Graphics/Hedgehog',             // ptHedgehog
 		'Sounds/voices',                 // ptVoices
-		'Graphics/Hats'                  // ptHats
+		'Graphics/Hats',                 // ptHats
+		'Graphics/Flags'                 // ptFlags
 	);
 begin
 	PathPrefix := './';

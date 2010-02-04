@@ -440,7 +440,7 @@ var i: LongInt;
 begin
 
 	case ParamCount of
-		17: begin
+		18: begin
 			val(ParamStr(2), cScreenWidth);
 			val(ParamStr(3), cScreenHeight);
 			cInitWidth:= cScreenWidth;
@@ -451,15 +451,16 @@ begin
 			cFullScreen:= ParamStr(6) = '1';
 			isSoundEnabled:= ParamStr(7) = '1';
 			cVSyncInUse:= ParamStr(8) = '1';
-			cLocaleFName:= ParamStr(9);
-			val(ParamStr(10), cInitVolume);
-			val(ParamStr(11), cTimerInterval);
-			PathPrefix:= ParamStr(12);
-			cShowFPS:= ParamStr(13) = '1';
-			cAltDamage:= ParamStr(14) = '1';
-			UserNick:= DecodeBase64(ParamStr(15));
-			isMusicEnabled:= ParamStr(16) = '1';
-			cReducedQuality:= ParamStr(17) = '1';
+			cWeaponTooltips:= ParamStr(9) = '1';
+			cLocaleFName:= ParamStr(10);
+			val(ParamStr(11), cInitVolume);
+			val(ParamStr(12), cTimerInterval);
+			PathPrefix:= ParamStr(13);
+			cShowFPS:= ParamStr(14) = '1';
+			cAltDamage:= ParamStr(15) = '1';
+			UserNick:= DecodeBase64(ParamStr(16));
+			isMusicEnabled:= ParamStr(17) = '1';
+			cReducedQuality:= ParamStr(18) = '1';
 		end;
 		3: begin
 			val(ParamStr(2), ipcPort);

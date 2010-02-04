@@ -33,7 +33,6 @@ procedure WriteLnToConsole(s: shortstring);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
 procedure StopMessages(Message: Longword);
 function  GetLastConsoleLine: shortstring;
-procedure SplitBySpace(var a, b: shortstring);
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
@@ -97,19 +96,6 @@ while tt <> nil do
       tt:= tt^.Next;
       Dispose(t)
       end;
-end;
-
-procedure SplitBySpace(var a, b: shortstring);
-var i, t: LongInt;
-begin
-i:= Pos(' ', a);
-if i > 0 then
-	begin
-	for t:= 1 to Pred(i) do
-		if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
-	b:= copy(a, i + 1, Length(a) - i);
-	byte(a[0]):= Pred(i)
-	end else b:= '';
 end;
 
 procedure WriteToConsole(s: shortstring);
@@ -318,6 +304,7 @@ begin
 	RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
 	RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
 	RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
+	RegisterVariable('flag'    , vtCommand, @chFlag         , false);
 end;
 
 procedure free_uConsole;

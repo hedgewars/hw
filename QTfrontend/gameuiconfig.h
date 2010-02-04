@@ -50,6 +50,7 @@ public:
 	bool isReducedQuality() const;
 	bool isFrontendEffects() const;
 	bool isFrontendFullscreen() const;
+	bool isWeaponTooltip() const;
 	void resizeToConfigValues();
 
 #ifdef __APPLE__

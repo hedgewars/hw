@@ -155,7 +155,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 
 	}
 
-	randTeamButton = addButton("Random Team", GBHLayout, 9, false);
+	randTeamButton = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, false);
 
 	vbox1->addWidget(GBoxHedgehogs);
 
@@ -183,6 +183,11 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 	CBGrave->setMaxCount(65535);
 	CBGrave->setIconSize(QSize(32, 32));
 	GBTLayout->addWidget(CBGrave);
+
+	CBFlag = new QComboBox(GBoxTeam);
+	CBFlag->setMaxCount(65535);
+	CBFlag->setIconSize(QSize(22, 15));
+	GBTLayout->addWidget(CBFlag);
 
 	{
 		QHBoxLayout * hbox = new QHBoxLayout();
@@ -230,6 +235,16 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 		QPixmap pix(datadir->absolutePath() + "/Graphics/Graves/" + *it);
 		QIcon icon(pix.copy(0, 0, 32, 32));
 		CBGrave->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+	}
+
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Graphics/Flags");
+	list = tmpdir.entryList(QStringList("*.png"));
+	for (QStringList::Iterator it = list.begin(); it != list.end(); ++it )
+	{
+		QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
+		QIcon icon(pix.copy(0, 0, 22, 15));
+		CBFlag->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
 	}
 
 	vbox1->addStretch();
@@ -388,6 +403,11 @@ PageOptions::PageOptions(QWidget* parent) :
             WeaponsName = new QComboBox(this);
             WeaponsLayout->addWidget(WeaponsName, 0, 0, 1, 2);
             WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 1, 1);
+
+            WeaponTooltip = new QCheckBox(this);
+            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
+            WeaponsLayout->addWidget(WeaponTooltip, 2, 0, 1, 2);
+
             gbTBLayout->addWidget(groupWeapons, 1, 0);
         }
 
@@ -1292,6 +1312,9 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
 
 	BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 2);
 	BtnOfficialServer = addButton(tr("Official server"), pageLayout, 2, 2);
+
+	// hack: temporary deactivated - requires server modifications that aren't backward compatible (yet)
+	BtnOfficialServer->setEnabled(false);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }

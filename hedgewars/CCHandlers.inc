@@ -123,6 +123,14 @@ if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.voicepack:= AskForVoicepack(s)
 end;
 
+procedure chFlag(var s: shortstring);
+begin
+if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/flag"', true);
+if s[1]='"' then Delete(s, 1, 1);
+if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+CurrentTeam^.flag:= s
+end;
+
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;

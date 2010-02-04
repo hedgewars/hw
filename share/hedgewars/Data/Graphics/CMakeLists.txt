@@ -1,4 +1,5 @@
 add_subdirectory(AmmoMenu)
+add_subdirectory(Flags)
 add_subdirectory(Graves)
 add_subdirectory(Hats)
 add_subdirectory(Hedgehog)

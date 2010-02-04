@@ -108,6 +108,8 @@ var
 	cLaserSighting	: boolean;
 	cVampiric	: boolean;
 	cArtillery	: boolean;
+	WeaponTooltipTex : PTexture;
+	cWeaponTooltips: boolean;
 
 	flagMakeCapture	: boolean;
 
@@ -125,6 +127,8 @@ var
 
 procedure init_uMisc;
 procedure free_uMisc;
+procedure SplitBySpace(var a, b: shortstring);
+procedure SplitByChar(var a, b: string; c: char);
 procedure movecursor(dx, dy: Integer);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
@@ -165,6 +169,31 @@ var KBnum: Longword;
 {$IFDEF DEBUGFILE}
     f: textfile;
 {$ENDIF}
+
+// should this include "strtolower()" for the split string?
+procedure SplitBySpace(var a, b: shortstring);
+var i, t: LongInt;
+begin
+i:= Pos(' ', a);
+if i > 0 then
+	begin
+	for t:= 1 to Pred(i) do
+		if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
+	b:= copy(a, i + 1, Length(a) - i);
+	byte(a[0]):= Pred(i)
+	end else b:= '';
+end;
+
+procedure SplitByChar(var a, b: string; c: char);
+var i: LongInt;
+begin
+i:= Pos(c, a);
+if i > 0 then
+	begin
+	b:= copy(a, i + 1, Length(a) - i);
+	byte(a[0]):= Pred(i)
+	end else b:= '';
+end;
 
 procedure movecursor(dx, dy: Integer);
 var x, y: LongInt;

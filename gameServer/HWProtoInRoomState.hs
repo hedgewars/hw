@@ -42,7 +42,7 @@ handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
 	where
 		client = clients IntMap.! clID
 
-handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : difStr : hhsInfo)
+handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
 	| length hhsInfo /= 16 = []
 	| length (teams room) == 6 = [Warning "too many teams"]
 	| canAddNumber <= 0 = [Warning "too many hedgehogs"]
@@ -61,7 +61,7 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
 		room = rooms IntMap.! (roomID client)
 		canAddNumber = 48 - (sum . map hhnum $ teams room)
 		findTeam = find (\t -> name == teamname t) $ teams room
-		newTeam = (TeamInfo clID (nick client) name color grave fort voicepack difficulty newTeamHHNum (hhsList hhsInfo))
+		newTeam = (TeamInfo clID (nick client) name color grave fort voicepack flag difficulty newTeamHHNum (hhsList hhsInfo))
 		difficulty = fromMaybe 0 (maybeRead difStr :: Maybe Int)
 		hhsList [] = []
 		hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs

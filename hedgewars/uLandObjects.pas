@@ -371,6 +371,7 @@ s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
+filemode:= 0; // readonly
 Reset(f);
 
 // read sky and explosion border colors

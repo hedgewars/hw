@@ -39,6 +39,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	//Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
 	resizeToConfigValues();
 
+	Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/WeaponTooltip", true).toBool());
+
 	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
 	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
 	Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
@@ -111,6 +113,8 @@ void GameUIConfig::SaveOptions()
 
 	setValue("video/frontendeffects", isFrontendEffects());
 
+	setValue("misc/WeaponTooltip", isWeaponTooltip());
+
 	bool ffscr = isFrontendFullscreen();
 	setValue("video/frontendfullscreen", ffscr);
 	emit frontendFullscreen(ffscr);
@@ -169,6 +173,11 @@ bool GameUIConfig::isReducedQuality() const
 bool GameUIConfig::isFrontendEffects() const
 {
   return Form->ui.pageOptions->CBFrontendEffects->isChecked();
+}
+
+bool GameUIConfig::isWeaponTooltip() const
+{
+  return Form->ui.pageOptions->WeaponTooltip->isChecked();
 }
 
 bool GameUIConfig::isFrontendFullscreen() const

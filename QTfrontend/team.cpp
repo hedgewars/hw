@@ -42,6 +42,7 @@ HWTeam::HWTeam(const QString & teamname) :
 	Grave = "Statue";
 	Fort = "Plane";
 	Voicepack = "Default";
+	Flag = "hedgewars";
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].action = cbinds[i].action;
@@ -54,17 +55,18 @@ HWTeam::HWTeam(const QStringList& strLst) :
   m_isNetTeam(true)
 {
 	// net teams are configured from QStringList
-	if(strLst.size() != 22) throw HWTeamConstructException();
+	if(strLst.size() != 23) throw HWTeamConstructException();
 	TeamName = strLst[0];
 	Grave = strLst[1];
 	Fort = strLst[2];
 	Voicepack = strLst[3];
-	Owner = strLst[4];
-	difficulty = strLst[5].toUInt();
+	Flag = strLst[4];
+	Owner = strLst[5];
+	difficulty = strLst[6].toUInt();
 	for(int i = 0; i < 8; i++)
 	{
-		HHName[i]=strLst[i * 2 + 6];
-		HHHat[i]=strLst[i * 2 + 7];
+		HHName[i]=strLst[i * 2 + 7];
+		HHHat[i]=strLst[i * 2 + 8];
 	}
 }
 
@@ -83,6 +85,7 @@ HWTeam::HWTeam() :
 	Grave = QString("Simple"); // default
 	Fort = QString("Island"); // default
 	Voicepack = "Default";
+	Flag = "hedgewars";
 
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
@@ -137,6 +140,11 @@ bool HWTeam::LoadFromFile()
 			str.remove(0, 5);
 			Fort = str;
 		} else
+		if (str.startsWith("flag "))
+		{
+			str.remove(0, 5);
+			Flag = str;
+		} else
 		if (str.startsWith("voicepack "))
 		{
 			str.remove(0, 10);
@@ -188,6 +196,7 @@ bool HWTeam::SaveToFile()
 	stream << "grave " << Grave << endl;
 	stream << "fort " << Fort << endl;
 	stream << "voicepack " << Voicepack << endl;
+	stream << "flag " << Flag << endl;
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		stream << "bind " << binds[i].strbind << " " << binds[i].action << endl;
@@ -207,6 +216,7 @@ void HWTeam::SetToPage(HWForm * hwform)
 		hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(HHHat[i], Qt::DisplayRole));
 	}
 	hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
+	hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findText(Flag));
 
 	hwform->ui.pageEditTeam->CBFort->setCurrentIndex(hwform->ui.pageEditTeam->CBFort->findText(Fort));
 	hwform->ui.pageEditTeam->CBVoicepack->setCurrentIndex(hwform->ui.pageEditTeam->CBVoicepack->findText(Voicepack));
@@ -231,6 +241,7 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
 	Fort = hwform->ui.pageEditTeam->CBFort->currentText();
 	Voicepack = hwform->ui.pageEditTeam->CBVoicepack->currentText();
+	Flag = hwform->ui.pageEditTeam->CBFlag->currentText();
 	for(int i = 0; i < BINDS_NUMBER; i++)
 	{
 		binds[i].strbind = hwform->ui.pageEditTeam->CBBind[i]->itemData(hwform->ui.pageEditTeam->CBBind[i]->currentIndex()).toString();
@@ -248,6 +259,7 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
 	sl.push_back(QString("evoicepack " + Voicepack));
+	sl.push_back(QString("eflag " + Flag));
 
 	if (!m_isNetTeam)
 		for(int i = 0; i < BINDS_NUMBER; i++)

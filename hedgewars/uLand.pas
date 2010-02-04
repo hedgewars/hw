@@ -730,6 +730,7 @@ TryDo((tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT), 'Map dimension
 s:= Pathz[ptMapCurrent] + '/map.cfg';
 WriteLnToConsole('Fetching map HH limit');
 Assign(f, s);
+filemode:= 0; // readonly
 Reset(f);
 Readln(f);
 if not eof(f) then Readln(f, MaxHedgehogs);

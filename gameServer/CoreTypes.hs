@@ -55,6 +55,7 @@ data TeamInfo =
 		teamgrave :: String,
 		teamfort :: String,
 		teamvoicepack :: String,
+		teamflag :: String,
 		difficulty :: Int,
 		hhnum :: Int,
 		hedgehogs :: [HedgehogInfo]

@@ -45,6 +45,7 @@ class HWTeam
 		QString HHHat[8];
 		QString Grave;
 		QString Fort;
+		QString Flag;
 		QString Voicepack;
 		QString Owner;
 		unsigned int difficulty;

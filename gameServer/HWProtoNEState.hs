@@ -13,7 +13,7 @@ handleCmd_NotEntered :: CmdHandler
 
 handleCmd_NotEntered clID clients _ ["NICK", newNick]
 	| not . null $ nick client = [ProtocolError "Nickname already chosen"]
-	| haveSameNick = [AnswerThisClient ["WARNING", "Nickname collision"], ByeClient ""]
+	| haveSameNick = [AnswerThisClient ["WARNING", "Nickname already in use"], ByeClient ""]
 	| illegalName newNick = [ByeClient "Illegal nickname"]
 	| otherwise =
 		ModifyClient (\c -> c{nick = newNick}) :
