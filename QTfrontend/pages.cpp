@@ -244,7 +244,8 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 	{
 		QPixmap pix(datadir->absolutePath() + "/Graphics/Flags/" + *it);
 		QIcon icon(pix.copy(0, 0, 22, 15));
-		CBFlag->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
+		if(it->compare("cpu.png")) // skip cpu flag
+			CBFlag->addItem(icon, (*it).replace(QRegExp("^(.*)\\.png"), "\\1"));
 	}
 
 	vbox1->addStretch();
