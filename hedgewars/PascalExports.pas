@@ -39,7 +39,8 @@ procedure HW_aimUp; cdecl; export;
 procedure HW_aimDown; cdecl; export;
 procedure HW_shoot; cdecl; export;
 procedure HW_whereIsHog; cdecl; export;
-
+procedure HW_chat; cdecl; export;
+procedure HW_tab; cdecl; export;
 {$ENDIF}
 
 implementation
@@ -78,11 +79,8 @@ end;
 
 procedure HW_allKeysUp; cdecl; export;
 begin
-	upKey:= false;
-	downKey:= false;
-	leftKey:= false;
-	rightKey:= false;
-	spaceKey:= false;
+	// set all keys to released
+	init_uKeys();
 end;
 
 procedure HW_walkLeft; cdecl; export;
@@ -108,6 +106,16 @@ end;
 procedure HW_shoot; cdecl; export;
 begin
 	spaceKey:= true;
+end;
+
+procedure HW_chat; cdecl; export;
+begin
+	chatAction:= true;
+end;
+
+procedure HW_tab; cdecl; export;
+begin
+	switchAction:= true;
 end;
 
 procedure HW_whereIsHog; cdecl; export;

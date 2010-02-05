@@ -37,6 +37,9 @@ extern "C" {
 	void HW_aimDown(void);
 	void HW_shoot(void);
 	
+	void HW_chat(void);
+	void HW_tab(void);
+	
 #ifdef __cplusplus
 }
 #endif

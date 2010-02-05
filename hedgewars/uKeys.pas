@@ -46,6 +46,18 @@ procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 var	hideAmmoMenu: boolean;
 	wheelUp: boolean;
 	wheelDown: boolean;
+
+	ControllerNumControllers: Integer;
+	ControllerEnabled: Integer;
+	ControllerNumAxes: array[0..5] of Integer;
+	//ControllerNumBalls: array[0..5] of Integer;
+	ControllerNumHats: array[0..5] of Integer;
+	ControllerNumButtons: array[0..5] of Integer;
+	ControllerAxes: array[0..5] of array[0..19] of Integer;
+	//ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
+	ControllerHats: array[0..5] of array[0..19] of Byte;
+	ControllerButtons: array[0..5] of array[0..19] of Byte;
+	
 {$IFDEF IPHONEOS}
 	leftClick: boolean;
 	middleClick: boolean;
@@ -60,20 +72,14 @@ var	hideAmmoMenu: boolean;
 	spaceKey: boolean;
 	enterKey: boolean;
 	tabKey: boolean;
+	
+	chatAction: boolean;
+	switchAction: boolean;
 
 	theJoystick: PSDL_Joystick;
+	
+procedure setiPhoneBinds;
 {$ENDIF}
-	ControllerNumControllers: Integer;
-	ControllerEnabled: Integer;
-	ControllerNumAxes: array[0..5] of Integer;
-	//ControllerNumBalls: array[0..5] of Integer;
-	ControllerNumHats: array[0..5] of Integer;
-	ControllerNumButtons: array[0..5] of Integer;
-	ControllerAxes: array[0..5] of array[0..19] of Integer;
-	//ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
-	ControllerHats: array[0..5] of array[0..19] of Byte;
-	ControllerButtons: array[0..5] of array[0..19] of Byte;
-
 implementation
 uses uTeams, uConsole, uMisc, uStore;
 const KeyNumber = 1024;
@@ -129,28 +135,9 @@ tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
+
 {$IFDEF IPHONEOS}
-tkbdn[1]:= ord(leftClick);
-tkbdn[2]:= ord(middleClick);
-tkbdn[3]:= ord(rightClick);
-leftClick:= false;
-middleClick:= false;
-rightClick:= false;
-
-tkbdn[23]:= ord(upKey);
-tkbdn[24]:= ord(downKey);
-tkbdn[25]:= ord(leftKey);
-tkbdn[26]:= ord(rightKey);
-
-tkbdn[ 8]:= ord(backspaceKey);
-tkbdn[ 9]:= ord(tabKey);
-tkbdn[13]:= ord(enterKey);
-tkbdn[32]:= ord(spaceKey);
-
-tabKey:= false;
-enterKey:= false;
-backspaceKey:= false;
-
+setiPhoneBinds();
 {$ENDIF}
 
 // Controller(s)
@@ -221,33 +208,14 @@ tkbdn[3]:= ((k shr 2) and 1);
 {$ENDIF}
 tkbdn[2]:= ((k shr 1) and 1);
 
-// mouse wheels (see event loop in project file)
+// mouse wheels
 tkbdn[4]:= ord(wheelDown);
 tkbdn[5]:= ord(wheelUp);
 wheelUp:= false;
 wheelDown:= false;
 
 {$IFDEF IPHONEOS}
-tkbdn[1]:= ord(leftClick);
-tkbdn[2]:= ord(middleClick);
-tkbdn[3]:= ord(rightClick);
-leftClick:= false;
-middleClick:= false;
-rightClick:= false;
-
-tkbdn[23]:= ord(upKey);
-tkbdn[24]:= ord(downKey);
-tkbdn[25]:= ord(leftKey);
-tkbdn[26]:= ord(rightKey);
-
-tkbdn[ 8]:= ord(backspaceKey);
-tkbdn[ 9]:= ord(tabKey);
-tkbdn[13]:= ord(enterKey);
-tkbdn[32]:= ord(spaceKey);
-
-tabKey:= false;
-enterKey:= false;
-backspaceKey:= false;
+setiPhoneBinds();
 {$ENDIF}
 
 // Controller(s)
@@ -330,19 +298,6 @@ for j:= 0 to Pred(ControllerNumControllers) do
 		end;
 	end;
 
-{$IFDEF IPHONEOS}
-DefaultBinds[  1]:= '/put';
-DefaultBinds[  3]:= 'ammomenu';
-DefaultBinds[  8]:= 'hjump';
-DefaultBinds[  9]:= 'switch';
-DefaultBinds[ 13]:= 'ljump';
-DefaultBinds[ 23]:= '+up';
-DefaultBinds[ 24]:= '+down';
-DefaultBinds[ 25]:= '+left';
-DefaultBinds[ 26]:= '+right';
-DefaultBinds[ 32]:= '+attack';
-{$ENDIF}
-	
 DefaultBinds[ 27]:= 'quit';
 DefaultBinds[ 96]:= 'history';
 DefaultBinds[127]:= 'rotmask';
@@ -366,18 +321,66 @@ DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
-SetDefaultBinds
+{$IFDEF IPHONEOS}
+DefaultBinds[ 1]:= '/put';
+DefaultBinds[ 3]:= 'ammomenu';
+DefaultBinds[ 8]:= 'hjump';
+DefaultBinds[ 9]:= 'switch';
+DefaultBinds[13]:= 'ljump';
+DefaultBinds[23]:= '+up';
+DefaultBinds[24]:= '+down';
+DefaultBinds[25]:= '+left';
+DefaultBinds[26]:= '+right';
+DefaultBinds[32]:= '+attack';
+DefaultBinds[44]:= 'chat';
+{$ENDIF}
+
+SetDefaultBinds();
 end;
 
 procedure SetBinds(var binds: TBinds);
 begin
-CurrentBinds:= binds;
+	CurrentBinds:= binds;
 end;
 
 procedure SetDefaultBinds;
 begin
-CurrentBinds:= DefaultBinds
+	CurrentBinds:= DefaultBinds;
 end;
+
+{$IFDEF IPHONEOS}
+procedure setiPhoneBinds;
+// set to false the keys that only need one stoke
+begin
+	tkbdn[1]:= ord(leftClick);
+	tkbdn[2]:= ord(middleClick);
+	tkbdn[3]:= ord(rightClick);
+
+	tkbdn[23]:= ord(upKey);
+	tkbdn[24]:= ord(downKey);
+	tkbdn[25]:= ord(leftKey);
+	tkbdn[26]:= ord(rightKey);
+
+	tkbdn[ 8]:= ord(backspaceKey);
+	tkbdn[ 9]:= ord(tabKey);
+	tkbdn[13]:= ord(enterKey);
+	tkbdn[32]:= ord(spaceKey);
+
+	tkbdn[44]:= ord(chatAction);
+	//tkbdn[100]:= ord(switchAction);
+	
+	leftClick:= false;
+	middleClick:= false;
+	rightClick:= false;
+
+	tabKey:= false;
+	enterKey:= false;
+	backspaceKey:= false;
+	
+	chatAction:= false;
+	//switchAction:= false;
+end;
+{$ENDIF}
 
 procedure FreezeEnterKey;
 begin
@@ -451,9 +454,9 @@ end;
 procedure ControllerClose;
 var j: Integer;
 begin
-if ControllerEnabled > 0 then
-	for j:= 0 to pred(ControllerNumControllers) do
-		SDL_JoystickClose(Controller[j]);
+	if ControllerEnabled > 0 then
+		for j:= 0 to pred(ControllerNumControllers) do
+			SDL_JoystickClose(Controller[j]);
 end;
 
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
@@ -477,6 +480,7 @@ begin
 	wheelUp:= false;
 	wheelDown:= false;
 {$IFDEF IPHONEOS}
+	// this function is called by HW_allKeysUp so be careful
 	leftClick:= false;
 	middleClick:= false;
 	rightClick:= false;
@@ -490,6 +494,9 @@ begin
 	spaceKey:= false;
 	enterKey:= false;
 	tabKey:= false;
+	
+	chatAction:= false;
+	switchAction:= false;
 {$ENDIF}
 end;
 

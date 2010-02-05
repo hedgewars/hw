@@ -56,7 +56,12 @@
 
 // see initWithFrame for why "+"
 +(void) attackButtonPressed;
-+(void) attackButtonReleased;
++(void) buttonsReleased;
++(void) walkingLeft;
++(void) walkingRight;
++(void) movingUp;
++(void) movingDown;
++(void) chatBegin;
 
 #if SDL_IPHONE_KEYBOARD
 - (void)showKeyboard;
