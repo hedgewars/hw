@@ -306,24 +306,19 @@ var i, t: LongInt;
     th: LongInt;
 begin
 
-// Some initial King buffs
-if (GameFlags and gfKing) <> 0 then
-   for i:= 0 to Pred(ClansCount) do 
-      begin
-      with ClansArray[i]^.Teams[0]^.Hedgehogs[0] do
-         begin
-         King:= true;
-         Hat:= 'crown';
-         Gear^.Health:= hwRound(int2hwFloat(Gear^.Health)*_1_5);
-         end
-      end;
-
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
       if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
           LocalClan:= Clan^.ClanIndex + 1;
       th:= 0;
+      // Some initial King buffs
+      if (GameFlags and gfKing) <> 0 then
+          begin
+          Hedgehogs[0].King:= true;
+          Hedgehogs[0].Hat:= 'crown';
+          inc(Hedgehogs[0].Gear^.Health, hwRound(int2hwFloat(Hedgehogs[0].Gear^.Health)*_1_5))
+          end;
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then
              inc(th, Hedgehogs[i].Gear^.Health);
