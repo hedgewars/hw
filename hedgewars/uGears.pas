@@ -426,7 +426,8 @@ end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
-	t,i,k: Longword;
+	t,i: Longword;
+    k: boolean;
 begin
 DeleteCI(Gear);
 
@@ -457,18 +458,17 @@ if Gear^.Kind = gtHedgehog then
 		if CurrentHedgehog^.Gear = Gear then
 			FreeActionsList; // to avoid ThinkThread on drawned gear
 
+		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
         if PHedgehog(Gear^.Hedgehog)^.King then
             begin
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
-            k:= 0;
+            k:= false;
             for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then inc(k);
-            if k < 2 then // current dying king is count of 1
+                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then k:= true;
+            if not k then
                 for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
                     TeamGoneEffect(team^.Clan^.Teams[i]^)
             end;
-
-		PHedgehog(Gear^.Hedgehog)^.Gear:= nil;
 		inc(KilledHHs);
 		RecountTeamHealth(team)
 		end;
