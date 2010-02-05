@@ -435,5 +435,5 @@ projectile|that might be influenced by wind.|Attack: Hold to shoot with more pow
 04:36=Well, sometimes you're just too bad in aiming. Get|some assistance using modern day technology.|Attack: Activate
 04:37=Don't fear the daylight. It will just last one turn|but will enable you to absorb the damage you do to|other hogs.|Attack: Activate
 04:38=The sniper rifle can be the most devastating weapon|in your whole arsenal, however it's very ineffective|at close quarters. The damage dealt increases with|the distance to its target.|Attack: Shoot (once)
-04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|bring you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force into one direction
+04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|take you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force into one direction
 04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
