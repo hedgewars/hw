@@ -426,8 +426,7 @@ end;
 
 procedure DeleteGear(Gear: PGear);
 var team: PTeam;
-	t,i: Longword;
-    k: boolean;
+	t,i,k: Longword;
 begin
 DeleteCI(Gear);
 
@@ -461,10 +460,10 @@ if Gear^.Kind = gtHedgehog then
         if PHedgehog(Gear^.Hedgehog)^.King then
             begin
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
-            k:= false;
+            k:= 0;
             for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then k:= true;
-            if not k then
+                if (team^.Clan^.Teams[i]^.Hedgehogs[0].Gear <> nil) then inc(k);
+            if k < 2 then // current dying king is count of 1
                 for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
                     TeamGoneEffect(team^.Clan^.Teams[i]^)
             end;
