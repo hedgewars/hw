@@ -137,6 +137,9 @@ type
 	TAmmo = record
 			Propz: LongWord;
 			Count: LongWord;
+(* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
+For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
+			InitialCount: LongWord; 
 			NumPerTurn: LongWord;
 			Timer: LongWord;
 			Pos: LongWord;
@@ -302,6 +305,7 @@ const
 	gfOneClanMode  = $00001000;
 	gfRandomOrder  = $00002000;
 	gfKing         = $00004000;
+	gfPlaceHog     = $00008000;
 
 	gstDrowning       = $00000001;
 	gstHHDriven       = $00000002;
@@ -770,6 +774,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 0;
 			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Utility;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -789,6 +794,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 3000;
 				Pos: 0;
@@ -808,6 +814,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 3;
 			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
 				Count: 5;
+				InitialCount: 5;
 				NumPerTurn: 0;
 				Timer: 3000;
 				Pos: 0;
@@ -827,6 +834,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -846,6 +854,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Power or	ammoprop_NeedTarget or ammoprop_DontHold;
 				Count: 2;
+				InitialCount: 2;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -865,6 +874,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 1;
 				Timer: 0;
 				Pos: 0;
@@ -884,6 +894,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_AttackInMove or ammoprop_NoCrosshair or ammoprop_DontHold;
 				Count: 2;
+				InitialCount: 2;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -903,6 +914,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -925,6 +937,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_AttackInMove or
 							ammoprop_AltAttack;
 					Count: 5;
+					InitialCount: 5;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -944,6 +957,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
 				Count: 2;
+				InitialCount: 2;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -963,6 +977,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 2;
 			Ammo: (Propz: 0;
 				Count: 3;
+				InitialCount: 3;
 				NumPerTurn: 3;
 				Timer: 0;
 				Pos: 0;
@@ -982,6 +997,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_AttackInMove or ammoprop_DontHold or ammoprop_AltUse;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1001,6 +1017,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_ForwMsgs or ammoprop_AttackInMove;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1020,6 +1037,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_NoCrosshair;
 				Count: AMMO_INFINITE;
+				InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1039,6 +1057,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_DontHold;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1063,6 +1082,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_AltAttack;
 				Count: 2;
+				InitialCount: 2;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1086,6 +1106,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1109,6 +1130,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1128,6 +1150,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 2;
 			Ammo: (Propz: ammoprop_ForwMsgs;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1150,6 +1173,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_NeedTarget or
 							ammoprop_AttackingPut;
 					Count: 1;
+				    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1173,6 +1197,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_AttackingPut or
 							ammoprop_DontHold;
 				Count: 2;
+				InitialCount: 2;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1195,6 +1220,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_NoCrosshair or
 							ammoprop_DontHold;
 					Count: 3;
+				    InitialCount: 3;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1214,6 +1240,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 4;
 			Ammo: (Propz: 0;
 				Count: 4;
+				InitialCount: 4;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1233,6 +1260,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold or ammoprop_AttackInMove;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1252,6 +1280,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_NoCrosshair or ammoprop_DontHold;
 				Count: 1;
+				InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1271,6 +1300,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_ForwMsgs or ammoprop_DontHold;
 				Count: 1;
+                InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1290,6 +1320,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Timerable or ammoprop_Power or ammoprop_AltUse;
 				Count: 0;
+                InitialCount: 0;
 				NumPerTurn: 0;
 				Timer: 3000;
 				Pos: 0;
@@ -1309,6 +1340,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz:  ammoprop_Power or ammoprop_AltUse;
 				Count: 0;
+                InitialCount: 0;
 				NumPerTurn: 0;
 				Timer: 5000;
 				Pos: 0;
@@ -1332,6 +1364,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_NotBorder;
 				Count: 1;
+                InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1351,6 +1384,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
 				Count: AMMO_INFINITE;
+                InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1370,6 +1404,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz:  ammoprop_ForwMsgs or ammoprop_DontHold;
 				Count: AMMO_INFINITE;
+                InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 5001;
 				Pos: 0;
@@ -1391,6 +1426,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_AltAttack};
 				Count: 1;
+                InitialCount: 1;
 				NumPerTurn: 0;
 				Timer: 0;
 				Pos: 0;
@@ -1414,6 +1450,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+                    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1437,6 +1474,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+                    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1460,6 +1498,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+                    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1483,6 +1522,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+					InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1506,6 +1546,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+                    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1529,6 +1570,7 @@ const	cTagsMasks : array[0..7] of byte = (
 						  ammoprop_AltUse or
                           ammoprop_Utility;
 					Count: 1;
+                    InitialCount: 1;
 					NumPerTurn: 0;
 					Timer: 0;
 					Pos: 0;
@@ -1548,6 +1590,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 2;
 			Ammo: (Propz: 0;
 				Count: 2;
+                InitialCount: 2;
 				NumPerTurn: 1;
 				Timer: 0;
 				Pos: 0;
@@ -1572,6 +1615,7 @@ const	cTagsMasks : array[0..7] of byte = (
 							ammoprop_DontHold or
 							ammoprop_AltAttack;
 				Count: 1;
+                InitialCount: 1;
 				NumPerTurn: 1;
 				Timer: 0;
 				Pos: 0;
@@ -1591,6 +1635,7 @@ const	cTagsMasks : array[0..7] of byte = (
 			NumberInCase: 1;
 			Ammo: (Propz: ammoprop_Power or ammoprop_AltUse;
 				Count: AMMO_INFINITE;
+                InitialCount: AMMO_INFINITE;
 				NumPerTurn: 0;
 				Timer: 3000;
 				Pos: 0;

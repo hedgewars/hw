@@ -70,6 +70,7 @@ var AllInactive: boolean;
     SpeechText: shortstring;
     TrainingTargetGear: PGear;
     skipFlag: boolean;
+    PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
     
 procedure init_uGears;
 procedure free_uGears;
@@ -86,6 +87,7 @@ procedure AssignHHCoords;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
+procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
@@ -115,7 +117,6 @@ procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt); forward;
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear; forward;
 procedure SpawnBoxOfSmth; forward;
 procedure AfterAttack; forward;
-procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); forward;
 procedure HedgehogStep(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear); forward;
 procedure HedgehogChAngle(Gear: PGear); forward;
@@ -632,7 +633,7 @@ case step of
 			else begin
 				bBetweenTurns:= true;
 				HealthMachine;
-                SuddenDeathDmg:= true;
+				SuddenDeathDmg:= true;
 				step:= stChDmg
 				end
 			end;
@@ -814,6 +815,7 @@ var i, t: LongInt;
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
 begin
+if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
 m:= 1;
 if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
@@ -1522,7 +1524,7 @@ while Gear<>nil do
          gtAirBomb: DrawRotated(sprAirBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
                     HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
-                    DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, Gear^.Pos, hwSign(HHGear^.dX), 0);
+                    if not PHedgehog(Gear^.Hedgehog)^.Unplaced then DrawRotatedF(sprTeleport, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy, Gear^.Pos, hwSign(HHGear^.dX), 0);
                     DrawRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;
         gtSwitcher: DrawSprite(sprSwitch, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 56 + WorldDy, (GameTicks shr 6) mod 12);
@@ -1785,7 +1787,7 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 						with Hedgehogs[i] do
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
-								FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil
+                                FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil
 								if Gear <> nil then
 									begin
 									Gear^.Pos:= GetRandom(49);
@@ -1796,6 +1798,7 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 		end
 	end else // mix hedgehogs
 	begin
+    if (GameFlags and gfPlaceHog) <> 0 then PlacingHogs:= true;
 	Count:= 0;
 	for p:= 0 to Pred(TeamsCount) do
 		with TeamsArray[p]^ do
@@ -1815,7 +1818,8 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	while (Count > 0) do
 		begin
 		i:= GetRandom(Count);
-		FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH);
+        if PlacingHogs then ar[i]^.Unplaced:= true
+        else FindPlace(ar[i]^.Gear, false, 0, LAND_WIDTH);
 		if ar[i]^.Gear <> nil then
 			begin
 			ar[i]^.Gear^.dX.isNegative:= hwRound(ar[i]^.Gear^.X) > LAND_WIDTH div 2;
@@ -1899,7 +1903,8 @@ procedure SpawnBoxOfSmth;
 var t: LongInt;
     i: TAmmoType;
 begin
-if (cCaseFactor = 0) or
+if (PlacingHogs) or
+   (cCaseFactor = 0) or
    (CountGears(gtCase) >= 5) or
    (getrandom(cCaseFactor) <> 0) then exit;
 

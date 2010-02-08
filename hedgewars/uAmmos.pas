@@ -36,6 +36,7 @@ procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
+procedure ResetWeapons;
 
 var shoppa: boolean;
 
@@ -57,7 +58,12 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
+
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= cnts[a];
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
+
+       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+          Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
        inc(mi[Ammoz[a].Slot])
        end
 end;
@@ -110,6 +116,10 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 
         if ((GameFlags and gfKing) <> 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then 
             Ammoz[a].SkipTurns:= 1;
+
+        if ((GameFlags and gfPlaceHog) <> 0) and
+            (a <> amTeleport) and (a <> amSkip) and 
+            (Ammoz[a].SkipTurns < 10000) then inc(Ammoz[a].SkipTurns,10000)
         end else
         ammos[a]:= AMMO_INFINITE
     end;
@@ -321,6 +331,24 @@ for i:= 0 to Pred(StoreCnt) do
 
 for t:= Low(TAmmoType) to High(TAmmoType) do
 	if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
+end;
+
+// Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
+procedure ResetWeapons;
+var i, slot, a: Longword;
+	t: TAmmoType;
+begin
+for i:= 0 to Pred(StoreCnt) do
+	for slot:= 0 to cMaxSlotIndex do
+		begin
+		for a:= 0 to cMaxSlotAmmoIndex do
+			with StoresList[i]^[slot, a] do
+                if Count <> InitialCount then Count:= InitialCount;
+
+		PackAmmo(StoresList[i], slot)
+		end;
+for t:= Low(TAmmoType) to High(TAmmoType) do
+	if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
 end;
 
 procedure init_uAmmos;

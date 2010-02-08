@@ -167,7 +167,6 @@ with CurrentHedgehog^ do
 						DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
 						end else
 						DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-
 					if (Slot = i)
 					and (CursorPoint.X >= x + g * 33 + 35)
 					and (CursorPoint.X < x + g * 33 + 68) then
@@ -701,7 +700,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
 	CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
 	end;
 
-if (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
+if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
 	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
 		begin
 		FollowGear:= nil;

@@ -1087,6 +1087,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_king->setToolTip(tr("Play with a King. If he dies, your side dies."));
 	glGMLayout->addWidget(TBW_king,3,0,1,1);
 
+	TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog.png");
+	TBW_placehog->setText(ToggleButtonWidget::tr("Place Hedgehogs"));
+    TBW_placehog->setToolTip(tr("Take turns placing your hedgehogs before the start of play."));
+	glGMLayout->addWidget(TBW_placehog,3,1,1,1);
+
 	// Right
 	QLabel * l;
 
@@ -1236,13 +1241,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_artillery->button(), 11);
 	mapper->addMapping(TBW_randomorder->button(), 12);
 	mapper->addMapping(TBW_king->button(), 13);
-	mapper->addMapping(SB_DamageModifier, 14);
-	mapper->addMapping(SB_TurnTime, 15);
-	mapper->addMapping(SB_InitHealth, 16);
-	mapper->addMapping(SB_SuddenDeath, 17);
-	mapper->addMapping(SB_CaseProb, 18);
-	mapper->addMapping(SB_MinesTime, 19);
-	mapper->addMapping(SB_Mines, 20);
+	mapper->addMapping(TBW_placehog->button(), 14);
+	mapper->addMapping(SB_DamageModifier, 15);
+	mapper->addMapping(SB_TurnTime, 16);
+	mapper->addMapping(SB_InitHealth, 17);
+	mapper->addMapping(SB_SuddenDeath, 18);
+	mapper->addMapping(SB_CaseProb, 19);
+	mapper->addMapping(SB_MinesTime, 20);
+	mapper->addMapping(SB_Mines, 21);
 
 	mapper->toFirst();
 }

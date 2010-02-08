@@ -1643,6 +1643,7 @@ end;
 procedure doStepTeleportAfter(Gear: PGear);
 var HHGear: PGear;
 begin
+PHedgehog(Gear^.Hedgehog)^.Unplaced:= false;
 HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 HHGear^.Y:= HHGear^.Y + HHGear^.dY; // hedgehog falling to collect cases
 HHGear^.dY:= HHGear^.dY + cGravity;

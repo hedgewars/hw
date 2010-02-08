@@ -480,6 +480,13 @@ procedure doStepHedgehog(Gear: PGear); forward;
 procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling: boolean;
 begin
+if PHedgehog(Gear^.Hedgehog)^.Unplaced then
+   begin
+   Gear^.dY:= _0;
+   Gear^.dX:= _0;
+   Gear^.State:= Gear^.State and not gstMoving;
+   exit
+   end;
 isFalling:= (Gear^.dY.isNegative) or not TestCollisionYKick(Gear, 1);
 if isFalling then
    begin

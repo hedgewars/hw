@@ -37,13 +37,14 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 		<< QVariant(false)         // artillery      11
 		<< QVariant(true)          // random order   12
 		<< QVariant(false)         // king           13
-		<< QVariant(100)           // damage modfier 14
-		<< QVariant(45)            // turn time      15
-		<< QVariant(100)           // init health    16
-		<< QVariant(15)            // sudden death   17
-		<< QVariant(5)             // case prob      18
-		<< QVariant(3)             //  mines time    19
-		<< QVariant(4)             //  landadds      20
+		<< QVariant(false)         // place hog      14
+		<< QVariant(100)           // damage modfier 15
+		<< QVariant(45)            // turn time      16
+		<< QVariant(100)           // init health    17
+		<< QVariant(15)            // sudden death   18
+		<< QVariant(5)             // case prob      19
+		<< QVariant(3)             //  mines time    20
+		<< QVariant(4)             //  landadds      21
 		;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -74,13 +75,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "artillery"        // 11
 		<< "randomorder"      // 12
 		<< "king"             // 13
-		<< "damagefactor"     // 14
-		<< "turntime"         // 15
-		<< "health"           // 16
-		<< "suddendeath"      // 17
-		<< "caseprobability"  // 18
-		<< "minestime"        // 19
-		<< "landadds"         // 20
+		<< "placehog"         // 14
+		<< "damagefactor"     // 15
+		<< "turntime"         // 16
+		<< "health"           // 17
+		<< "suddendeath"      // 18
+		<< "caseprobability"  // 19
+		<< "minestime"        // 20
+		<< "landadds"         // 21
 		;
 
 	QList<QVariant> proMode;
@@ -99,13 +101,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // artillery      11
 		<< QVariant(true)          // random order   12
 		<< QVariant(false)         // king           13
-		<< QVariant(100)           // damage modfier 14
-		<< QVariant(15)            // turn time      15
-		<< QVariant(100)           // init health    16
-		<< QVariant(15)            // sudden death   17
-		<< QVariant(0)             // case prob      18
-		<< QVariant(3)             //  mines time    19
-		<< QVariant(4)             //  landadds      20
+		<< QVariant(false)         // place hog      14
+		<< QVariant(100)           // damage modfier 15
+		<< QVariant(15)            // turn time      16
+		<< QVariant(100)           // init health    17
+		<< QVariant(15)            // sudden death   18
+		<< QVariant(0)             // case prob      19
+		<< QVariant(3)             //  mines time    20
+		<< QVariant(4)             //  landadds      21
 		;
 
 	QList<QVariant> shoppa;
@@ -124,13 +127,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // artillery      11
 		<< QVariant(true)          // random order   12
 		<< QVariant(false)         // king           13
-		<< QVariant(100)           // damage modfier 14
-		<< QVariant(30)            // turn time      15
-		<< QVariant(100)           // init health    16
-		<< QVariant(50)            // sudden death   17
-		<< QVariant(1)             // case prob      18
-		<< QVariant(3)             //  mines time    19
-		<< QVariant(4)             //  landadds      20
+		<< QVariant(false)         // place hog      14
+		<< QVariant(100)           // damage modfier 15
+		<< QVariant(30)            // turn time      16
+		<< QVariant(100)           // init health    17
+		<< QVariant(50)            // sudden death   18
+		<< QVariant(1)             // case prob      19
+		<< QVariant(3)             //  mines time    20
+		<< QVariant(4)             //  landadds      21
 		;
 
 	QList<QVariant> basketball;
@@ -149,13 +153,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // artillery      11
 		<< QVariant(true)          // random order   12
 		<< QVariant(false)         // king           13
-		<< QVariant(100)           // damage modfier 14
-		<< QVariant(30)            // turn time      15
-		<< QVariant(100)           // init health    16
-		<< QVariant(15)            // sudden death   17
-		<< QVariant(0)             // case prob      18
-		<< QVariant(3)             //  mines time    19
-		<< QVariant(4)             //  landadds      20
+		<< QVariant(false)         // place hog      14
+		<< QVariant(100)           // damage modfier 15
+		<< QVariant(30)            // turn time      16
+		<< QVariant(100)           // init health    17
+		<< QVariant(15)            // sudden death   18
+		<< QVariant(0)             // case prob      19
+		<< QVariant(3)             //  mines time    20
+		<< QVariant(4)             //  landadds      21
 		;
 
 	QList<QVariant> minefield;
@@ -174,13 +179,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // artillery      11
 		<< QVariant(true)          // random order   12
 		<< QVariant(false)         // king           13
-		<< QVariant(150)           // damage modfier 14
-		<< QVariant(30)            // turn time      15
-		<< QVariant(50)            // init health    16
-		<< QVariant(15)            // sudden death   17
-		<< QVariant(0)             // case prob      18
-		<< QVariant(0)             //  mines time    19
-		<< QVariant(50)            //  landadds      20
+		<< QVariant(false)         // place hog      14
+		<< QVariant(150)           // damage modfier 15
+		<< QVariant(30)            // turn time      16
+		<< QVariant(50)            // init health    17
+		<< QVariant(15)            // sudden death   18
+		<< QVariant(0)             // case prob      19
+		<< QVariant(0)             //  mines time    20
+		<< QVariant(50)            //  landadds      21
 		;
 
 	schemes.append(defaultScheme);

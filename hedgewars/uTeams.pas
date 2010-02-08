@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears,
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -53,6 +53,7 @@ type PHHAmmo = ^THHAmmo;
 			stats: TStatistics;
 			Hat: String;
             King: boolean;  // Flag for a bunch of hedgehog attributes
+            Unplaced: boolean;  // Flag for hog placing mode
 			end;
 
 	TTeam = record
@@ -168,9 +169,22 @@ var c: LongWord;
 begin
 TargetPoint.X:= NoPointX;
 TryDo(CurrentTeam <> nil, 'nil Team', true);
+with CurrentHedgehog^ do
+    if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
+        begin
+        Unplaced:= false;
+	    if Gear <> nil then 
+           begin
+           Gear^.CollisionIndex:= -1;
+           FindPlace(Gear, false, 0, LAND_WIDTH);
+           if Gear <> nil then AddGearCI(Gear)
+           end
+		end;
+
 PreviousTeam:= CurrentTeam;
 
 with CurrentHedgehog^ do
+    begin
 	if Gear <> nil then
 		begin
 		MultiShootAttacks:= 0;
@@ -178,14 +192,15 @@ with CurrentHedgehog^ do
 		Gear^.Z:= cHHZ;
 		RemoveGearFromList(Gear);
 		InsertGearToList(Gear)
-		end;
+		end
+    end;
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
 	inc(c);
 	if c = ClansCount then
 		begin
-		inc(TotalRounds);
+        if not PlacingHogs then inc(TotalRounds);
 		c:= 0
 		end;
 
@@ -211,7 +226,24 @@ end;
 
 procedure AfterSwitchHedgehog;
 var g: PGear;
+    i, t: LongInt;
 begin
+if PlacingHogs then
+   begin
+   PlacingHogs:= false;
+   for t:= 0 to Pred(TeamsCount) do
+      for i:= 0 to cMaxHHIndex do
+          if (TeamsArray[t]^.Hedgehogs[i].Gear <> nil) and (TeamsArray[t]^.Hedgehogs[i].Unplaced) then 
+             PlacingHogs:= true;
+
+   if not PlacingHogs then // Reset  various things I mucked with
+      begin
+      for i:= 0 to ClansCount do
+         if ClansArray[i] <> nil then ClansArray[i]^.TurnNumber:= 0;
+      ResetWeapons
+      end
+   end;
+
 inc(CurrentTeam^.Clan^.TurnNumber);
 
 SwitchNotHeldAmmo(CurrentHedgehog^);
@@ -248,7 +280,12 @@ if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
 else
 	PlaySound(sndYesSir, CurrentTeam^.voicepack);
 
-TurnTimeLeft:= cHedgehogTurnTime
+if PlacingHogs then
+   begin
+   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 10000
+   else TurnTimeLeft:= 0
+   end
+else TurnTimeLeft:= cHedgehogTurnTime
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
