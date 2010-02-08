@@ -175,7 +175,7 @@ with CurrentHedgehog^ do
         Unplaced:= false;
 	    if Gear <> nil then 
            begin
-           Gear^.CollisionIndex:= -1;
+           DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
            if Gear <> nil then AddGearCI(Gear)
            end
