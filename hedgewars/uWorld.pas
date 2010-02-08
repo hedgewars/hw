@@ -164,7 +164,7 @@ with CurrentHedgehog^ do
 					if l >= 0 then
 						begin
 						DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-						DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
+                        if l < 100 then DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
 						end else
 						DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
 					if (Slot = i)
