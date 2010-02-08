@@ -1775,6 +1775,7 @@ var i, t, p, j: LongInt;
 	ar: array[0..Pred(cMaxHHs)] of PHedgehog;
 	Count: Longword;
 begin
+if (GameFlags and gfPlaceHog) <> 0 then PlacingHogs:= true;
 if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 	begin
 	t:= 0;
@@ -1788,7 +1789,8 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 						with Hedgehogs[i] do
 							if (Gear <> nil) and (Gear^.X.QWordValue = 0) then
 								begin
-                                FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil
+                                if PlacingHogs then Unplaced:= true
+                                else FindPlace(Gear, false, t, t + LAND_WIDTH div 2);// could make Gear == nil;
 								if Gear <> nil then
 									begin
 									Gear^.Pos:= GetRandom(49);
@@ -1799,7 +1801,6 @@ if (GameFlags and (gfForts or gfDivideTeams)) <> 0 then
 		end
 	end else // mix hedgehogs
 	begin
-    if (GameFlags and gfPlaceHog) <> 0 then PlacingHogs:= true;
 	Count:= 0;
 	for p:= 0 to Pred(TeamsCount) do
 		with TeamsArray[p]^ do
