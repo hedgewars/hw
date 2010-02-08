@@ -54,6 +54,7 @@ begin
 FillChar(mi, sizeof(mi), 0);
 FillChar(Ammo^, sizeof(Ammo^), 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
+    begin
     if cnts[a] > 0 then
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
@@ -63,9 +64,22 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
 
        if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
-          Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
        inc(mi[Ammoz[a].Slot])
        end
+    else if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+       begin
+       TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
+
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= 0;
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
+
+       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+       inc(mi[Ammoz[a].Slot])
+       end
+    end
 end;
 
 procedure AddAmmoStore(s: shortstring);
