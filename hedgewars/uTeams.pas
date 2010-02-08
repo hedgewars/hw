@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions,
+uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, uLand,
 {$IFDEF GLES11}
 	gles11,
 {$ELSE}
@@ -282,7 +282,7 @@ else
 
 if PlacingHogs then
    begin
-   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 10000
+   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 1000 * (MaxHedgehogs div 4) + 1000
    else TurnTimeLeft:= 0
    end
 else TurnTimeLeft:= cHedgehogTurnTime
