@@ -19,13 +19,10 @@
  Sam Lantinga, mods for Hedgewars by Vittorio Giovara
  slouken@libsdl.org, vittorio.giovara@gmail.com
  */
-#include "SDL_config.h"
 
-#ifndef _SDL_uikitwindow_h
-#define _SDL_uikitwindow_h
-
-#include "../SDL_sysvideo.h"
+#import "SDL_config.h"
 #import "SDL_uikitopenglview.h"
+//#import "../SDL_sysvideo.h"
 
 typedef struct SDL_WindowData SDL_WindowData;
 
@@ -40,8 +37,5 @@ struct SDL_WindowData
     UIWindow *uiwindow;
     SDL_uikitopenglview *view;
 };
-
-
-#endif /* _SDL_uikitwindow_h */
 
 /* vi: set ts=4 sw=4 expandtab: */

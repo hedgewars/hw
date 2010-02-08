@@ -22,7 +22,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SDL_video.h"
-#import "MainMenuViewController.h"
+
+@class MainMenuViewController;
 
 @interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
 	SDL_Window *window;

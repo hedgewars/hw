@@ -20,7 +20,8 @@
  slouken@libsdl.org, vittorio.giovara@gmail.com
  */
 
-#include "PascalImports.h"
+#import "PascalImports.h"
+#import "CGPointUtils.h"
 #import "SDL_uikitview.h"
 #import "SDL_uikitappdelegate.h"
 
@@ -64,7 +65,8 @@ UIButton *attackButton, *menuButton;
 	}
 
 	self.multipleTouchEnabled = YES;
-
+	self.exclusiveTouch = YES;
+/*
 	// custom code
 	// the coordinate system is still like in Portrait even though everything is rotated
 	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260, 50)];
@@ -109,7 +111,7 @@ UIButton *attackButton, *menuButton;
 	[chatButton addTarget:[self superclass] action:@selector(chatBegin) forControlEvents:UIControlEventTouchDown];
 	[self insertSubview:chatButton atIndex:0];
 	[chatButton release];
-	
+	*/
 	return self;
 }
 
@@ -123,11 +125,13 @@ const char* IPH_getDocumentsPath() {
 
 void IPH_showControls (void) {
 	NSLog(@"Showing controls");
+	/*
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.5];
 	attackButton.frame = CGRectMake(30, 430, 260, 50);
 	menuButton.frame = CGRectMake(0, 430, 30, 50);
 	[UIView commitAnimations];
+	 */
 }
 
 #pragma mark -
@@ -157,8 +161,7 @@ void IPH_showControls (void) {
 }
 
 +(void) chatBegin {
-	HW_chat();
-	SDL_iPhoneKeyboardShow([SDLUIKitDelegate sharedAppDelegate].uiwindow);
+	//TODO: implement a UITextScroll and put received chat lines in there
 }
 
 #pragma mark -
@@ -169,55 +172,7 @@ void IPH_showControls (void) {
 
 // we override default touch input to implement our own gestures
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	/*
-	NSEnumerator *enumerator = [touches objectEnumerator];
-	UITouch *touch =(UITouch*)[enumerator nextObject];
-	
-	// associate touches with mice, so long as we have slots 
-	int i;
-	int found = 0;
-	for(i=0; touch && i < MAX_SIMULTANEOUS_TOUCHES; i++) {
-	
-		// check if this mouse is already tracking a touch 
-		if (mice[i].driverdata != NULL) {
-			continue;
-		}
-			
-		// mouse not associated with anything right now, associate the touch with this mouse
-		found = 1;
-		
-		// save old mouse so we can switch back 
-		int oldMouse = SDL_SelectMouse(-1);
-		
-		// select this slot's mouse 
-		SDL_SelectMouse(i);
-		CGPoint locationInView = [touch locationInView: self];
-		
-		CGFloat oldX = locationInView.x;
-		locationInView.x = locationInView.y;
-		locationInView.y = 320 - oldX;
-		
-		// set driver data to touch object, we'll use touch object later 
-		mice[i].driverdata = [touch retain];
-		
-		// send moved event 
-		SDL_SendMouseMotion(i, 0, locationInView.x, locationInView.y, 0);
-		
-		// send mouse down event 
-		SDL_SendMouseButton(i, SDL_PRESSED, SDL_BUTTON_LEFT);
-		
-		// re-calibrate relative mouse motion 
-		SDL_GetRelativeMouseState(i, NULL, NULL);
-		
-		// grab next touch 
-		touch = (UITouch*)[enumerator nextObject]; 
-		
-		// switch back to our old mouse 
-		SDL_SelectMouse(oldMouse);
-		
-	}
-	*/
-	
+	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
 	
 	switch ([touches count]) {
@@ -226,7 +181,8 @@ void IPH_showControls (void) {
 			initialDistanceForPinching = 0;
 			switch ([touch tapCount]) {
 				case 1:
-					NSLog(@"X:%d Y:%d", (int) gestureStartPoint.x, gestureStartPoint.y );
+					
+					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
 					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
 							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
 					HW_click();
@@ -244,7 +200,7 @@ void IPH_showControls (void) {
 			}
 			
 			// pinching
-			NSArray *twoTouches = [touches allObjects];
+			twoTouches = [touches allObjects];
 			UITouch *first = [twoTouches objectAtIndex:0];
 			UITouch *second = [twoTouches objectAtIndex:1];
 			initialDistanceForPinching = distanceBetweenPoints([first locationInView:self], [second locationInView:self]);
@@ -257,34 +213,14 @@ void IPH_showControls (void) {
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistanceForPinching = 0;
-	
+	gestureStartPoint.x = 0;
+	gestureStartPoint.y = 0;
 	HW_allKeysUp();
-	/*
-	NSEnumerator *enumerator = [touches objectEnumerator];
-	UITouch *touch=nil;
-	
-	while(touch = (UITouch *)[enumerator nextObject]) {
-		// search for the mouse slot associated with this touch 
-		int i, found = NO;
-		for (i=0; i<MAX_SIMULTANEOUS_TOUCHES && !found; i++) {
-			if (mice[i].driverdata == touch) {
-				// found the mouse associate with the touch 
-				[(UITouch*)(mice[i].driverdata) release];
-				mice[i].driverdata = NULL;
-				// send mouse up 
-				SDL_SendMouseButton(i, SDL_RELEASED, SDL_BUTTON_LEFT);
-				// discontinue search for this touch 
-				found = YES;
-			}
-		}
-	}
-	*/
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-	// this can happen if the user puts more than 5 touches on the screen
-	// at once, or perhaps in other circumstances.  Usually (it seems)
-	// all active touches are canceled.
+	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances.
+	// Usually (it seems) all active touches are canceled.
 	[self touchesEnded:touches withEvent:event];
 }
 
@@ -301,7 +237,7 @@ void IPH_showControls (void) {
 							(int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
 			// remember that we have x and y inverted
 			/* temporarily disabling hog movements for camera panning testing
-			 CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
+			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
 			CGFloat horizDiff = gestureStartPoint.y - currentPosition.y;
 			CGFloat deltaX = fabsf(vertDiff);
 			CGFloat deltaY = fabsf(horizDiff);
@@ -336,47 +272,26 @@ void IPH_showControls (void) {
 		default:
 			break;
 	}
-	
-	/*
-	NSEnumerator *enumerator = [touches objectEnumerator];
-	 UITouch *touch=nil;while(touch = (UITouch *)[enumerator nextObject]) {
-		// try to find the mouse associated with this touch 
-		int i, found = NO;
-		for (i=0; i<MAX_SIMULTANEOUS_TOUCHES && !found; i++) {
-			if (mice[i].driverdata == touch) {
-				// found proper mouse 
-				CGPoint locationInView = [touch locationInView: self];
-				// send moved event 
-				SDL_SendMouseMotion(i, 0, locationInView.x, locationInView.y, 0);
-				// discontinue search 
-				found = YES;
-			}
-		}
-	}
-	*/
 }
 
-#pragma mark -
-#pragma mark default routines
 /*
-	---- Keyboard related functionality below this line ----
-*/
+#pragma mark -
+#pragma mark Keyboard related functionality
 #if SDL_IPHONE_KEYBOARD
-
-/* Is the iPhone virtual keyboard visible onscreen? */
+// Is the iPhone virtual keyboard visible onscreen? 
 - (BOOL)keyboardVisible {
 	return keyboardVisible;
 }
 
-/* Set ourselves up as a UITextFieldDelegate */
+// Set ourselves up as a UITextFieldDelegate
 - (void)initializeKeyboard {
 		
 	textField = [[[UITextField alloc] initWithFrame: CGRectZero] autorelease];
 	textField.delegate = self;
-	/* placeholder so there is something to delete! */
+	// placeholder so there is something to delete!
 	textField.text = @" ";	
 	
-	/* set UITextInputTrait properties, mostly to defaults */
+	// set UITextInputTrait properties, mostly to defaults
 	textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
 	textField.autocorrectionType = UITextAutocorrectionTypeNo;
 	textField.enablesReturnKeyAutomatically = NO;
@@ -387,10 +302,10 @@ void IPH_showControls (void) {
 	
 	textField.hidden = YES;
 	keyboardVisible = NO;
-	/* add the UITextField (hidden) to our view */
+	// add the UITextField (hidden) to our view
 	[self addSubview: textField];
 	
-	/* create our SDL_Keyboard */
+	// create our SDL_Keyboard
 	SDL_Keyboard keyboard;
 	SDL_zero(keyboard);
 	SDL_AddKeyboard(&keyboard, 0);
@@ -400,29 +315,28 @@ void IPH_showControls (void) {
 	
 }
 
-/* reveal onscreen virtual keyboard */
+// reveal onscreen virtual keyboard
 - (void)showKeyboard {
 	keyboardVisible = YES;
 	[textField becomeFirstResponder];
 }
 
-/* hide onscreen virtual keyboard */
+// hide onscreen virtual keyboard
 - (void)hideKeyboard {
 	keyboardVisible = NO;
 	[textField resignFirstResponder];
 }
 
-/* UITextFieldDelegate method.  Invoked when user types something. */
+// UITextFieldDelegate method.  Invoked when user types something.
 - (BOOL)textField:(UITextField *)_textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
 	
 	if ([string length] == 0) {
-		/* it wants to replace text with nothing, ie a delete */
+		// it wants to replace text with nothing, ie a delete
 		SDL_SendKeyboardKey( 0, SDL_PRESSED, SDL_SCANCODE_DELETE);
 		SDL_SendKeyboardKey( 0, SDL_RELEASED, SDL_SCANCODE_DELETE);
 	}
 	else {
-		/* go through all the characters in the string we've been sent
-		   and convert them to key presses */
+		// go through all the characters in the string we've been sent and convert them to key presses
 		int i;
 		for (i=0; i<[string length]; i++) {
 			
@@ -432,43 +346,43 @@ void IPH_showControls (void) {
 			SDL_scancode code;
 			
 			if (c < 127) {
-				/* figure out the SDL_scancode and SDL_keymod for this unichar */
+				// figure out the SDL_scancode and SDL_keymod for this unichar
 				code = unicharToUIKeyInfoTable[c].code;
 				mod  = unicharToUIKeyInfoTable[c].mod;
 			}
 			else {
-				/* we only deal with ASCII right now */
+				// we only deal with ASCII right now
 				code = SDL_SCANCODE_UNKNOWN;
 				mod = 0;
 			}
 			
 			if (mod & KMOD_SHIFT) {
-				/* If character uses shift, press shift down */
+				// If character uses shift, press shift down
 				SDL_SendKeyboardKey( 0, SDL_PRESSED, SDL_SCANCODE_LSHIFT);
 			}
-			/* send a keydown and keyup even for the character */
+			// send a keydown and keyup even for the character
 			SDL_SendKeyboardKey( 0, SDL_PRESSED, code);
 			SDL_SendKeyboardKey( 0, SDL_RELEASED, code);
 			if (mod & KMOD_SHIFT) {
-				/* If character uses shift, press shift back up */
+				// If character uses shift, press shift back up
 				SDL_SendKeyboardKey( 0, SDL_RELEASED, SDL_SCANCODE_LSHIFT);
 			}			
 		}
 	}
-	return NO; /* don't allow the edit! (keep placeholder text there) */
+	return NO; // don't allow the edit! (keep placeholder text there)
 }
 
-/* Terminates the editing session */
+// Terminates the editing session
 - (BOOL)textFieldShouldReturn:(UITextField*)_textField {
 	[self hideKeyboard];
 	return YES;
 }
 
 #endif
-
+*/
 @end
-
-/* iPhone keyboard addition functions */
+/*
+// iPhone keyboard addition functions
 #if SDL_IPHONE_KEYBOARD
 
 int SDL_iPhoneKeyboardShow(SDL_Window *window) {
@@ -565,7 +479,7 @@ int SDL_iPhoneKeyboardToggle(SDL_Window *window) {
 
 #else
 
-/* stubs, used if compiled without keyboard support */
+// stubs, used if compiled without keyboard support
 
 int SDL_iPhoneKeyboardShow(SDL_Window *window) {
 	SDL_SetError("Not compiled with keyboard support");
@@ -585,6 +499,5 @@ int SDL_iPhoneKeyboardToggle(SDL_Window *window) {
 	SDL_SetError("Not compiled with keyboard support");
 	return -1;
 }
-
 
 #endif /* SDL_IPHONE_KEYBOARD */

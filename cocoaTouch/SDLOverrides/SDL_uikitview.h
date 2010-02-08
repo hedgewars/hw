@@ -21,12 +21,10 @@
  */
 
 #import <UIKit/UIKit.h>
-#include "SDL_stdinc.h"
-#include "SDL_mouse.h"
-#include "SDL_mouse_c.h"
-#include "SDL_events.h"
-
-#import "CGPointUtils.h"
+#import "SDL_stdinc.h"
+#import "SDL_mouse.h"
+#import "SDL_mouse_c.h"
+#import "SDL_events.h"
 
 #if SDL_IPHONE_MULTIPLE_MICE
 #define MAX_SIMULTANEOUS_TOUCHES 5

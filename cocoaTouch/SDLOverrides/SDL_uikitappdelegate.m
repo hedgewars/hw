@@ -28,6 +28,7 @@
 #import "SDL_video.h"
 #import "GameSetup.h"
 #import "PascalImports.h"
+#import "MainMenuViewController.h"
 
 //#import "SoundEffect.h"	
 //	SoundEffect *erasingSound = [[SoundEffect alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Erase" ofType:@"caf"]];
@@ -85,15 +86,13 @@ int main (int argc, char *argv[]) {
 
 	NSLog(@"Game is launching...");
 	const char **gameArgs = [setup getSettings];
+	[setup release];
 	
-	// direct execution or thread? check the one that gives most fps
-	// library or call SDL_main? pascal quits at the end of the main
+	// this is the pascal fuction that starts the game
 	Game(gameArgs);
 	
 	free(gameArgs);
 	NSLog(@"Game is exting...");
-	
-	[setup release];
 
 	[uiwindow addSubview: viewController.view];
 	[uiwindow makeKeyAndVisible];
@@ -107,6 +106,7 @@ int main (int argc, char *argv[]) {
 }
 
 -(BOOL) checkFirstRun {
+	//move all this inside the MainMenuViewController
 	BOOL isFirstRun = NO;
 	
 	//use a nssthread a ask the user to wait
