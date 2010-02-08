@@ -269,6 +269,7 @@ procedure doStepHedgehogDead(Gear: PGear);
 const frametime = 200;
       timertime = frametime * 6;
 begin
+if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
 if Gear^.Timer > 1 then
 	begin
 	AllInactive:= false;
