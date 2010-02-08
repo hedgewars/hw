@@ -354,7 +354,7 @@ for t:= 0 to Pred(TeamsCount) do
           begin
           Hedgehogs[0].King:= true;
           Hedgehogs[0].Hat:= 'crown';
-          inc(Hedgehogs[0].Gear^.Health, hwRound(int2hwFloat(Hedgehogs[0].Gear^.Health)*_1_5))
+          inc(Hedgehogs[0].Gear^.Health, hwRound(int2hwFloat(Hedgehogs[0].Gear^.Health)*_0_5))
           end;
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then

@@ -673,6 +673,7 @@ if TurnTimeLeft > 0 then
 				and not isInMultiShoot then
 				begin
 				if (TurnTimeLeft = 5000)
+                    and (not PlacingHogs)
 					and (CurrentHedgehog^.Gear <> nil)
 					and ((CurrentHedgehog^.Gear^.State and gstAttacked) = 0) then
 						PlaySound(sndHurry, CurrentTeam^.voicepack);
