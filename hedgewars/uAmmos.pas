@@ -75,8 +75,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= 0;
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
 
-       if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
-           Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
        inc(mi[Ammoz[a].Slot])
        end
     end
