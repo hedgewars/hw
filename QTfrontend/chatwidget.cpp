@@ -119,7 +119,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick)
 {
-    Mix_Music *sound;
+    Mix_Chunk *sound;
     QDir tmpdir;
 
 	QListWidgetItem * item = new QListWidgetItem(nick);
@@ -130,8 +130,8 @@ void HWChatWidget::nickAdded(const QString& nick)
        sdli->SDLMusicInit();
        tmpdir.cd(datadir->absolutePath());
        tmpdir.cd("Sounds/");
-       sound = Mix_LoadMUS(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
-       Mix_PlayMusic(sound, 0);
+       sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
+       Mix_PlayChannel(-1, sound, 0);
     }
 }
 

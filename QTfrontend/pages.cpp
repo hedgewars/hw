@@ -306,7 +306,7 @@ void PageEditTeam::CBFort_activated(const QString & fortname)
 
 void PageEditTeam::testSound()
 {
-	Mix_Music *sound;
+	Mix_Chunk *sound;
 	QDir tmpdir;
 	mySdli->SDLMusicInit();
 	
@@ -315,8 +315,8 @@ void PageEditTeam::testSound()
 	tmpdir.cd(CBVoicepack->currentText());
 	QStringList list = tmpdir.entryList(QStringList() << "Illgetyou.ogg" << "Incoming.ogg" << "Stupid.ogg" << "Coward.ogg" << "Firstblood.ogg", QDir::Files);
 	if (list.size()) {
-		sound = Mix_LoadMUS(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
-		Mix_PlayMusic(sound, 0);
+		sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/" + list[rand() % list.size()]).toLocal8Bit().constData());
+		Mix_PlayChannel(-1, sound, 0);
 	}
 }
 
