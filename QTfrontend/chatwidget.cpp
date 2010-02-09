@@ -41,9 +41,12 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
        QDir tmpdir;
 
        tmpdir.cd(datadir->absolutePath());
-       tmpdir.cd("Sounds/");
+       tmpdir.cd("Sounds/voices");
        sdli->SDLMusicInit();
-       sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
+       sound[0] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Classic/Hello.ogg").toLocal8Bit().constData());
+       sound[1] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Default/Hello.ogg").toLocal8Bit().constData());
+       sound[2] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Mobster/Hello.ogg").toLocal8Bit().constData());
+       sound[3] = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/Russian/Hello.ogg").toLocal8Bit().constData());
     }
 
 	mainLayout.setSpacing(1);
@@ -133,7 +136,7 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 	chatNicks->addItem(item);
 
     if(notifyNick && notify && gameSettings->value("audio/frontendsound", true).toBool()) {
-       Mix_PlayChannel(-1, sound, 0);
+       Mix_PlayChannel(-1, sound[rand()%4], 0);
     }
 }
 

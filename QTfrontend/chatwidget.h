@@ -67,7 +67,7 @@ class HWChatWidget : public QWidget
   QAction * acFollow;
   QSettings * gameSettings;
   SDLInteraction * sdli;
-  Mix_Chunk *sound;
+  Mix_Chunk *sound[4];
   bool notify;
 
  private slots:
