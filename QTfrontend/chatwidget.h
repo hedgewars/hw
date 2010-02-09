@@ -24,6 +24,8 @@
 #include <QString>
 #include <QGridLayout>
 
+#include "SDLs.h"
+
 class QTextBrowser;
 class QLineEdit;
 class QListWidget;
@@ -35,8 +37,7 @@ class HWChatWidget : public QWidget
   Q_OBJECT
 
  public:
-//  HWChatWidget(QWidget* parent=0);
-    HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli);
+    HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify);
 
  public slots:
   void onChatString(const QString& str);
@@ -66,7 +67,8 @@ class HWChatWidget : public QWidget
   QAction * acFollow;
   QSettings * gameSettings;
   SDLInteraction * sdli;
-
+  Mix_Chunk *sound;
+  bool notify;
 
  private slots:
   void returnPressed();

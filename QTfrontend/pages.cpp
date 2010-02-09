@@ -641,7 +641,7 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
 	pageLayout->setColumnStretch(1, 50);
 
 	// chatwidget
-	pChatWidget = new HWChatWidget(this, gameSettings, sdli);
+	pChatWidget = new HWChatWidget(this, gameSettings, sdli, true);
 	pageLayout->addWidget(pChatWidget, 1, 0, 1, 2);
 	pageLayout->setRowStretch(1, 100);
 
@@ -818,7 +818,7 @@ PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInter
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	pageLayout->setRowStretch(2, 100);
 
-	chatWidget = new HWChatWidget(this, gameSettings, sdli);
+	chatWidget = new HWChatWidget(this, gameSettings, sdli, false);
 	pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
 	pageLayout->setRowStretch(4, 350);
 

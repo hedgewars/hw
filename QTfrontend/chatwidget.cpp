@@ -30,12 +30,21 @@
 #include "gameuiconfig.h"
 #include "chatwidget.h"
 
-HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
+HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify) :
   QWidget(parent),
   mainLayout(this)
 {
     this->gameSettings = gameSettings;
     this->sdli = sdli;
+    this->notify = notify;
+    if(notify && gameSettings->value("audio/sound", true).toBool()) {
+       QDir tmpdir;
+
+       tmpdir.cd(datadir->absolutePath());
+       tmpdir.cd("Sounds/");
+       sdli->SDLMusicInit();
+       sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
+    }
 
 	mainLayout.setSpacing(1);
 	mainLayout.setMargin(1);
@@ -119,18 +128,11 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick)
 {
-    Mix_Chunk *sound;
-    QDir tmpdir;
-
 	QListWidgetItem * item = new QListWidgetItem(nick);
 	item->setIcon(QIcon(":/res/hh_small.png"));
 	chatNicks->addItem(item);
 
-    if(gameSettings->value("audio/sound", true).toBool()) {
-       sdli->SDLMusicInit();
-       tmpdir.cd(datadir->absolutePath());
-       tmpdir.cd("Sounds/");
-       sound = Mix_LoadWAV(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
+    if(notify && gameSettings->value("audio/sound", true).toBool()) {
        Mix_PlayChannel(-1, sound, 0);
     }
 }
