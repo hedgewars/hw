@@ -140,7 +140,7 @@ if FinishedTurnsTotal <> 0 then
 		PlaySound(sndBoring, PreviousTeam^.voicepack);
 		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
 		end
-	else
+	else if not PlacingHogs then
 		PlaySound(sndCoward, PreviousTeam^.voicepack);
 	end;
 
