@@ -42,7 +42,7 @@ class HWChatWidget : public QWidget
  public slots:
   void onChatString(const QString& str);
   void onServerMessage(const QString& str);
-  void nickAdded(const QString& nick, bool isChief);
+  void nickAdded(const QString& nick, bool notifyNick);
   void nickRemoved(const QString& nick);
   void clear();
   void setReadyStatus(const QString & nick, bool isReady);

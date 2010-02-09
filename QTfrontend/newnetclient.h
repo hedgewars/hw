@@ -90,9 +90,9 @@ class HWNewNet : public QObject
   void Disconnected();
   void EnteredGame();
   void LeftRoom();
-  void nickAdded(const QString& nick, bool isChief);
+  void nickAdded(const QString& nick, bool notifyNick);
   void nickRemoved(const QString& nick);
-  void nickAddedLobby(const QString& nick, bool isChief);
+  void nickAddedLobby(const QString& nick, bool notifyNick);
   void nickRemovedLobby(const QString& nick);
   void FromNet(const QByteArray & buf);
   void adminAccess(bool);

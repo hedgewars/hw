@@ -126,13 +126,13 @@ void HWChatWidget::onServerMessage(const QString& str)
 	chatText->moveCursor(QTextCursor::End);
 }
 
-void HWChatWidget::nickAdded(const QString& nick, bool isChief)
+void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
 {
 	QListWidgetItem * item = new QListWidgetItem(nick);
 	item->setIcon(QIcon(":/res/hh_small.png"));
 	chatNicks->addItem(item);
 
-    if(isChief && notify && gameSettings->value("audio/frontendsound", true).toBool()) {
+    if(notifyNick && notify && gameSettings->value("audio/frontendsound", true).toBool()) {
        Mix_PlayChannel(-1, sound, 0);
     }
 }
