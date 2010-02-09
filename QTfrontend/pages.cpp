@@ -454,9 +454,18 @@ PageOptions::PageOptions(QWidget* parent) :
             CBEnableSound = new QCheckBox(AGGroupBox);
             CBEnableSound->setText(QCheckBox::tr("Enable sound"));
             GBAlayout->addWidget(CBEnableSound);
+
+            CBEnableFrontendSound = new QCheckBox(AGGroupBox);
+            CBEnableFrontendSound->setText(QCheckBox::tr("Enable frontend sounds"));
+            GBAlayout->addWidget(CBEnableFrontendSound);
+
             CBEnableMusic = new QCheckBox(AGGroupBox);
             CBEnableMusic->setText(QCheckBox::tr("Enable music"));
             GBAlayout->addWidget(CBEnableMusic);
+
+            CBEnableFrontendMusic = new QCheckBox(AGGroupBox);
+            CBEnableFrontendMusic->setText(QCheckBox::tr("Enable frontend music"));
+            GBAlayout->addWidget(CBEnableFrontendMusic);
 
             QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
             QLabel * vol = new QLabel(AGGroupBox);

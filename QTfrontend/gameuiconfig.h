@@ -36,10 +36,12 @@ public:
 	QRect vid_Resolution();
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
+	bool isFrontendSoundEnabled();
 #ifdef _WIN32
 	bool isSoundHardware();
 #endif
 	bool isMusicEnabled();
+	bool isFrontendMusicEnabled();
 	bool isShowFPSEnabled();
 	bool isAltDamageEnabled();
 	bool appendDateTimeToRecordName();

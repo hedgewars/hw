@@ -215,10 +215,12 @@ public:
 	IconedGroupBox *AGGroupBox;
 	QComboBox *CBResolution;
 	QCheckBox *CBEnableSound;
+	QCheckBox *CBEnableFrontendSound;
 #ifdef _WIN32
 	QCheckBox *CBHardwareSound;
 #endif
 	QCheckBox *CBEnableMusic;
+	QCheckBox *CBEnableFrontendMusic;
 	QCheckBox *CBFullscreen;
 	QCheckBox *CBFrontendFullscreen;
 	QCheckBox *CBShowFPS;

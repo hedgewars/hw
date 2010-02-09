@@ -34,7 +34,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 {
 	Form = FormWidgets;
 
-	connect(Form->ui.pageOptions->CBEnableMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
+	connect(Form->ui.pageOptions->CBEnableFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
 	//Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
 	resizeToConfigValues();
@@ -50,10 +50,12 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
 	Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
 	Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
+	Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("audio/frontendsound", true).toBool());
 #ifdef _WIN32
 //	Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
 #endif
 	Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
+	Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("audio/frontendmusic", true).toBool());
 	Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
 	QString netNick = value("net/nick", "").toString();
@@ -126,10 +128,12 @@ void GameUIConfig::SaveOptions()
 	}
 
 	setValue("audio/sound", isSoundEnabled());
+	setValue("audio/frontendsound", isFrontendSoundEnabled());
 #ifdef _WIN32
 //	setValue("audio/hardware", isSoundHardware());
 #endif
 	setValue("audio/music", isMusicEnabled());
+	setValue("audio/frontendmusic", isFrontendMusicEnabled());
 	setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
 	setValue("net/nick", netNick());
@@ -190,6 +194,10 @@ bool GameUIConfig::isSoundEnabled()
 {
 	return Form->ui.pageOptions->CBEnableSound->isChecked();
 }
+bool GameUIConfig::isFrontendSoundEnabled()
+{
+	return Form->ui.pageOptions->CBEnableFrontendSound->isChecked();
+}
 
 #ifdef _WIN32
 bool GameUIConfig::isSoundHardware()
@@ -202,6 +210,10 @@ return false;
 bool GameUIConfig::isMusicEnabled()
 {
 	return Form->ui.pageOptions->CBEnableMusic->isChecked();
+}
+bool GameUIConfig::isFrontendMusicEnabled()
+{
+	return Form->ui.pageOptions->CBEnableFrontendMusic->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()

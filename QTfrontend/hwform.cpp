@@ -637,12 +637,12 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, const QString &
 		ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)));
 
 // nick list stuff
-	connect(hwnet, SIGNAL(nickAdded(const QString&)),
-		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&)));
+	connect(hwnet, SIGNAL(nickAdded(const QString&, bool)),
+		ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&, bool)));
 	connect(hwnet, SIGNAL(nickRemoved(const QString&)),
 		ui.pageNetGame->pChatWidget, SLOT(nickRemoved(const QString&)));
-	connect(hwnet, SIGNAL(nickAddedLobby(const QString&)),
-		ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&)));
+	connect(hwnet, SIGNAL(nickAddedLobby(const QString&, bool)),
+		ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&, bool)));
 	connect(hwnet, SIGNAL(nickRemovedLobby(const QString&)),
 		ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
 
@@ -793,7 +793,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		case gsFinished: {
 			//setVisible(true);
 			GoBack();
-			Music(ui.pageOptions->CBEnableMusic->isChecked());
+			Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
 			if (wBackground) wBackground->startAnimation();
 			GoToPage(ID_PAGE_GAMESTATS);
 			if (hwnet) hwnet->gameFinished();
@@ -804,7 +804,7 @@ void HWForm::GameStateChanged(GameState gameState)
 			quint8 id = ui.Pages->currentIndex();
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
-				Music(ui.pageOptions->CBEnableMusic->isChecked());
+				Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
 				if (wBackground) wBackground->startAnimation();
 				if (hwnet) hwnet->gameFinished();
 			}
