@@ -340,7 +340,7 @@ end;
 
 procedure InitTeams;
 var i, t: LongInt;
-    th: LongInt;
+    th, h: LongInt;
 begin
 
 for t:= 0 to Pred(TeamsCount) do
@@ -349,17 +349,21 @@ for t:= 0 to Pred(TeamsCount) do
       if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
           LocalClan:= Clan^.ClanIndex + 1;
       th:= 0;
+      for i:= 0 to cMaxHHIndex do
+          if Hedgehogs[i].Gear <> nil then
+             inc(th, Hedgehogs[i].Gear^.Health);
+      if th > MaxTeamHealth then MaxTeamHealth:= th;
       // Some initial King buffs
       if (GameFlags and gfKing) <> 0 then
           begin
           Hedgehogs[0].King:= true;
           Hedgehogs[0].Hat:= 'crown';
-          inc(Hedgehogs[0].Gear^.Health, hwRound(int2hwFloat(Hedgehogs[0].Gear^.Health)*_0_5))
+          h:= Hedgehogs[0].Gear^.Health;
+          Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
+          dec(th, h);
+          inc(th, Hedgehogs[0].Gear^.Health);
+          if th > MaxTeamHealth then MaxTeamHealth:= th
           end;
-      for i:= 0 to cMaxHHIndex do
-          if Hedgehogs[i].Gear <> nil then
-             inc(th, Hedgehogs[i].Gear^.Health);
-      if th > MaxTeamHealth then MaxTeamHealth:= th;
       end;
 
 RecountAllTeamsHealth
