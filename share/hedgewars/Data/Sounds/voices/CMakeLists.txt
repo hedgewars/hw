@@ -1,6 +1,7 @@
 foreach(dir
-	Default
+    British
 	Classic
+	Default
 	Mobster
 	Pirate
 	Robot
