@@ -260,7 +260,6 @@ var x, y: Longword;
     bRes: boolean;
 begin
 cnt:= 0;
-Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
 with Obj do
      begin
      if Maxcnt = 0 then
@@ -405,6 +404,8 @@ for i:= 0 to Pred(ThemeObjects.Count) do
 			Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
 			Width:= Surf^.w;
 			Height:= Surf^.h;
+			Read(f, Maxcnt);
+			if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
 			with inland do
 				begin
 				Read(f, x, y, w, h);
@@ -417,7 +418,6 @@ for i:= 0 to Pred(ThemeObjects.Count) do
 					Read(f, x, y, w, h);
 					CheckRect(Width, Height, x, y, w, h)
 					end;
-			Maxcnt:= 3;
 			ReadLn(f)
 			end;
 	end;
@@ -454,19 +454,23 @@ procedure AddThemeObjects(var ThemeObjects: TThemeObjects; MaxCount: LongInt);
 var i, ii, t: LongInt;
     b: boolean;
 begin
-if ThemeObjects.Count = 0 then exit;
-WriteLnToConsole('Adding theme objects...');
-i:= 1;
-repeat
-    t:= getrandom(ThemeObjects.Count);
-    ii:= t;
-    repeat
-      inc(ii);
-      if ii = ThemeObjects.Count then ii:= 0;
-      b:= TryPut(ThemeObjects.objs[ii])
-    until b or (ii = t);
-    inc(i)
-until (i > MaxCount) or not b;
+	if ThemeObjects.Count = 0 then exit;
+	WriteLnToConsole('Adding theme objects...');
+
+	for i:=0 to ThemeObjects.Count do 
+		ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
+	 
+	t := getrandom(1024);
+	repeat
+		b := false;
+		for i:=0 to ThemeObjects.Count do
+			begin
+			ii := (i+t) mod ThemeObjects.Count;
+			
+			if ThemeObjects.objs[ii].Maxcnt <> 0 then
+				b := b or TryPut(ThemeObjects.objs[ii])
+			end;
+	until not b;
 end;
 
 procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects; MaxCount: Longword);
