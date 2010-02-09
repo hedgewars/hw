@@ -72,7 +72,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 	pageNet = new PageNet();
 	Pages->addWidget(pageNet);
 
-	pageNetGame = new PageNetGame();
+	pageNetGame = new PageNetGame(Parent, HWForm->gameSettings, &HWForm->sdli);
 	Pages->addWidget(pageNetGame);
 
 	pageInfo = new PageInfo();
@@ -99,7 +99,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 	pageInGame = new PageInGame();
 	Pages->addWidget(pageInGame);
 
-	pageRoomsList = new PageRoomsList();
+	pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings, &HWForm->sdli);
 	Pages->addWidget(pageRoomsList);
 
 	pageConnecting = new PageConnecting();

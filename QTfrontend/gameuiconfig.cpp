@@ -147,6 +147,7 @@ void GameUIConfig::SaveOptions()
 #ifdef SPARKLE_ENABLED
         setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
+    Form->gameSettings->sync();
 }
 
 QRect GameUIConfig::vid_Resolution()

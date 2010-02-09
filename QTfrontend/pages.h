@@ -47,6 +47,7 @@ class QTableWidget;
 class QAction;
 class QDataWidgetMapper;
 class QAbstractItemModel;
+class QSettings;
 
 class GameCFGWidget;
 class TeamSelWidget;
@@ -288,7 +289,7 @@ class PageNetGame : public AbstractPage
 	Q_OBJECT
 
 public:
-	PageNetGame(QWidget* parent = 0);
+	PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
 	QPushButton *BtnBack;
 	QPushButton *BtnGo;
@@ -374,7 +375,7 @@ class PageRoomsList : public AbstractPage
 	Q_OBJECT
 
 public:
-	PageRoomsList(QWidget* parent = 0);
+    PageRoomsList(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
 	QLineEdit * roomName;
 	QTableWidget * roomsList;

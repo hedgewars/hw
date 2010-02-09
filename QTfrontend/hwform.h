@@ -41,6 +41,7 @@ class GameUIConfig;
 class HWNetRegisterServer;
 class QCloseEvent;
 class AmmoSchemeModel;
+class QSettings;
 
 extern bool frontendEffects;
 
@@ -52,6 +53,8 @@ public:
 	HWForm(QWidget *parent = 0);
 	Ui_HWForm ui;
 	SDLInteraction sdli;
+	GameUIConfig * config;
+    QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
 
 private slots:
 	void GoToMain();
@@ -144,7 +147,6 @@ private:
 	HWNetRegisterServer* pRegisterServer;
 	HWTeam * editedTeam;
 	HWNewNet * hwnet;
-	GameUIConfig * config;
 	HWNamegen * namegen;
 	AmmoSchemeModel * ammoSchemeModel;
 	QStack<quint8> PagesStack;

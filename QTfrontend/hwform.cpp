@@ -71,8 +71,8 @@ bool frontendEffects = true;
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
-    QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
-    frontendEffects = settings.value("video/frontendeffects", true).toBool();
+    gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
+    frontendEffects = gameSettings->value("video/frontendeffects", true).toBool();
 
 	ui.setupUi(this);
 

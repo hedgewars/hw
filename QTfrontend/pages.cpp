@@ -632,7 +632,7 @@ void PageNetServer::setDefaultPort()
 	sbPort->setValue(46631);
 }
 
-PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
+PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) : AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
@@ -641,7 +641,7 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 	pageLayout->setColumnStretch(1, 50);
 
 	// chatwidget
-	pChatWidget = new HWChatWidget(this);
+	pChatWidget = new HWChatWidget(this, gameSettings, sdli);
 	pageLayout->addWidget(pChatWidget, 1, 0, 1, 2);
 	pageLayout->setRowStretch(1, 100);
 
@@ -796,7 +796,7 @@ PageInGame::PageInGame(QWidget* parent) :
 	label->setText("In game...");
 }
 
-PageRoomsList::PageRoomsList(QWidget* parent) :
+PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
   AbstractPage(parent)
 {
 	QGridLayout * pageLayout = new QGridLayout(this);
@@ -818,7 +818,7 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 	pageLayout->addWidget(roomsList, 1, 0, 3, 1);
 	pageLayout->setRowStretch(2, 100);
 
-	chatWidget = new HWChatWidget(this);
+	chatWidget = new HWChatWidget(this, gameSettings, sdli);
 	pageLayout->addWidget(chatWidget, 4, 0, 1, 2);
 	pageLayout->setRowStretch(4, 350);
 

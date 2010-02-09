@@ -22,13 +22,21 @@
 #include <QAction>
 #include <QApplication>
 #include <QTextDocument>
+#include <QDir>
+#include <QSettings>
 
+#include "hwconsts.h"
+#include "SDLs.h"
+#include "gameuiconfig.h"
 #include "chatwidget.h"
 
-HWChatWidget::HWChatWidget(QWidget* parent) :
+HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli) :
   QWidget(parent),
   mainLayout(this)
 {
+    this->gameSettings = gameSettings;
+    this->sdli = sdli;
+
 	mainLayout.setSpacing(1);
 	mainLayout.setMargin(1);
 	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
@@ -111,9 +119,20 @@ void HWChatWidget::onServerMessage(const QString& str)
 
 void HWChatWidget::nickAdded(const QString& nick)
 {
+    Mix_Music *sound;
+    QDir tmpdir;
+
 	QListWidgetItem * item = new QListWidgetItem(nick);
 	item->setIcon(QIcon(":/res/hh_small.png"));
 	chatNicks->addItem(item);
+
+    if(gameSettings->value("audio/sound", true).toBool()) {
+       sdli->SDLMusicInit();
+       tmpdir.cd(datadir->absolutePath());
+       tmpdir.cd("Sounds/");
+       sound = Mix_LoadMUS(QString(tmpdir.absolutePath() + "/switchhog.ogg").toLocal8Bit().constData());
+       Mix_PlayMusic(sound, 0);
+    }
 }
 
 void HWChatWidget::nickRemoved(const QString& nick)

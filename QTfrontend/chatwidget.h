@@ -27,13 +27,16 @@
 class QTextBrowser;
 class QLineEdit;
 class QListWidget;
+class QSettings;
+class SDLInteraction;
 
 class HWChatWidget : public QWidget
 {
   Q_OBJECT
 
  public:
-  HWChatWidget(QWidget* parent=0);
+//  HWChatWidget(QWidget* parent=0);
+    HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli);
 
  public slots:
   void onChatString(const QString& str);
@@ -61,6 +64,9 @@ class HWChatWidget : public QWidget
   QAction * acKick;
   QAction * acBan;
   QAction * acFollow;
+  QSettings * gameSettings;
+  SDLInteraction * sdli;
+
 
  private slots:
   void returnPressed();
