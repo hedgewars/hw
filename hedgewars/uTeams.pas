@@ -360,9 +360,13 @@ for t:= 0 to Pred(TeamsCount) do
           Hedgehogs[0].Hat:= 'crown';
           h:= Hedgehogs[0].Gear^.Health;
           Hedgehogs[0].Gear^.Health:= hwRound(int2hwFloat(th)*_0_375);
-          dec(th, h);
-          inc(th, Hedgehogs[0].Gear^.Health);
-          if th > MaxTeamHealth then MaxTeamHealth:= th
+          if Hedgehogs[0].Gear^.Health > h then
+              begin
+              dec(th, h);
+              inc(th, Hedgehogs[0].Gear^.Health);
+              if th > MaxTeamHealth then MaxTeamHealth:= th
+              end
+          else Hedgehogs[0].Gear^.Health:= h
           end;
       end;
 
