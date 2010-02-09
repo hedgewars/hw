@@ -106,7 +106,7 @@ type
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
 			sndHomerun, sndMolotov, sndWalking, sndCover, sndUhOh,
 			sndOops, sndNooo, sndHello, sndRopeShot, sndRopeAttach,
-			sndRopeRelease, sndSwitchHog);
+			sndRopeRelease, sndSwitchHog, sndVictory);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -752,7 +752,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:                         ''; Path: ptSounds),// sndRopeShot
 			(FileName:                         ''; Path: ptSounds),// sndRopeAttach
 			(FileName:                         ''; Path: ptSounds),// sndRopeRelease
-			(FileName:            'switchhog.ogg'; Path: ptSounds) // sndSwitchHog
+			(FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
+			(FileName:              'victory.ogg'; Path: ptVoices) // sndSwitchHog
 			);
 
 	Ammoz: array [TAmmoType] of record
