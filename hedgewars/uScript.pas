@@ -185,7 +185,10 @@ end;
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 begin
 	if lua_gettop(L) <> 5 then
-		WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!')
+		begin
+		WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!');
+		//lua_pushnil(L)
+		end
 	else
 		begin
 		ParseCommand('addteam ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
@@ -193,9 +196,10 @@ begin
 		ParseCommand('fort ' + lua_tostring(L, 4), true);
 		ParseCommand('voicepack ' + lua_tostring(L, 5), true);
 		CurrentTeam^.Binds:= DefaultBinds;
-		lua_pushinteger(L, LongInt(CurrentTeam));
+		// fails on x64
+		//lua_pushinteger(L, LongInt(CurrentTeam));
 		end;
-	lc_addteam:= 1;
+	lc_addteam:= 0;//1;
 end;
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
