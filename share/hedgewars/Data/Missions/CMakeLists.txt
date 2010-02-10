@@ -1,9 +1,9 @@
-file(GLOB Trainings t*.txt t*.lua)
-file(GLOB Singleplayer s*.txt s*.lua)
-file(GLOB Cooperative c*.txt c*.lua)
+file(GLOB Trainings *.hwt)
+file(GLOB Singleplayer *.hwm)
+file(GLOB Cooperative *.hwc)
 
 install(FILES
 	${Trainings}
 	${Singleplayer}
 	${Cooperative}
-	DESTINATION ${SHAREPATH}Data/Trainings)
+	DESTINATION ${SHAREPATH}Data/Missions)
