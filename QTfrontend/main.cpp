@@ -94,11 +94,13 @@ int main(int argc, char *argv[]) {
 
 			"* {"
 				"color: #ffcc00;"
+				"selection-background-color: #ffcc00;"
+				"selection-color: #00351d;"
 			"}"
 
 			"QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox, "
             "QComboBox QAbstractItemView, QMenu::item {"
-				"background-color: #0d0544;"
+				"background-color: rgba(13, 5, 68, 70%);"
 			"}"
 
 			"QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView, "
@@ -128,17 +130,15 @@ int main(int argc, char *argv[]) {
 				"font: bold 14px;"
 			"}"
             "SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {"
-				"background-image: url(\":/res/panelbg.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
-				"background-color: #040200;"
+				"background-color: #000000;"
 			"}"
 			".QGroupBox,GameCFGWidget,TeamSelWidget,SelWeaponWidget {"
-				"background-image: url(\":/res/panelbg.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
 				"border-radius: 16px;"
-				"background-color: #040200;"
+				"background-color: rgba(13, 5, 68, 70%);"
 				"padding: 6px;"
 			"}"
 /*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well
@@ -156,7 +156,7 @@ int main(int argc, char *argv[]) {
 				"border-radius: 10px;"
 				"background-origin: margin;"
 				"background-position: top left;"
-				"background-color: #00351d;"
+				"background-color: rgba(18, 42, 5, 70%);"
 			"}"
 
 			"QPushButton:pressed{"
@@ -220,7 +220,6 @@ int main(int argc, char *argv[]) {
 			"}"
 
 			"VertScrArea {"
-				"background-image: url(\":/res/panelbg.png\");"
 				"background-position: bottom center;"
 				"background-repeat: repeat-x;"
 			"}"

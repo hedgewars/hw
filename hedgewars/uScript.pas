@@ -37,6 +37,7 @@ procedure init_uScript;
 procedure free_uScript;
 
 implementation
+{$IFNDEF IPHONEOS}
 uses LuaPas in 'LuaPas.pas',
 	uConsole,
 	uMisc,
@@ -49,7 +50,7 @@ uses LuaPas in 'LuaPas.pas',
 	uTeams,
 	uKeys,
 	typinfo;
-
+	
 var luaState : Plua_State;
 	ScriptAmmoStore : string;
 	ScriptLoaded : boolean;
@@ -525,4 +526,39 @@ begin
 lua_close(luaState);
 end;
 
+{$ELSE}
+procedure ScriptPrintStack;
+begin
+end;
+
+procedure ScriptClearStack;
+begin
+end;
+
+procedure ScriptLoad(name : string);
+begin
+end;
+
+procedure ScriptOnGameInit;
+begin
+end;
+
+procedure ScriptCall(fname : string);
+begin
+end;
+
+function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
+begin
+ScriptCall:= nil
+end;
+
+procedure init_uScript;
+begin
+end;
+
+procedure free_uScript;
+begin
+end;
+
+{$ENDIF}
 end.
