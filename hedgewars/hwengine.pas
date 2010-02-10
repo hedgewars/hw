@@ -288,8 +288,6 @@ begin
 	    LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
         end;
 
-	ScriptCall('onTeamSetup');
-		
 	if recordFileName = '' then
 		SendIPCAndWaitReply('C')        // ask for game config
 	else

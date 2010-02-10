@@ -84,6 +84,7 @@ procedure DrawGears;
 procedure FreeGearsList;
 procedure AddMiscGears;
 procedure AssignHHCoords;
+function GearByUID(uid : Longword) : PGear;
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 function ModifyDamage(dmg: Longword; Gear: PGear): Longword;
@@ -2091,6 +2092,22 @@ if (Gear^.Hedgehog <> nil) and (PHedgehog(Gear^.Hedgehog)^.King) then
    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
    ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
+end;
+
+function GearByUID(uid : Longword) : PGear;
+var gear: PGear;
+begin
+GearByUID:= nil;
+gear:= GearsList;
+while gear <> nil do
+	begin
+	if gear^.uid = uid then
+		begin
+			GearByUID:= gear;
+			exit
+		end;
+	gear:= gear^.NextGear
+	end
 end;
 
 procedure init_uGears;

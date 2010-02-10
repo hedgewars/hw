@@ -125,12 +125,13 @@ begin
 		t:= lua_tointeger(L, 7);
 
 		gear:= AddGear(x, y, gt, s, dx, dy, t);
-		lua_pushnumber(L, LongInt(gear))
+		lua_pushnumber(L, gear^.uid)
 		end;
 	lc_addgear:= 1; // 1 return value
 end;
 
 function lc_getgeartype(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
 begin
 	if lua_gettop(L) <> 1 then
 		begin
@@ -138,7 +139,11 @@ begin
 		lua_pushnil(L); // return value on stack (nil)
 		end
 	else
-		lua_pushinteger(L, ord(PGear(lua_tointeger(L, 1))^.Kind));
+		begin
+		gear:= GearByUID(lua_tointeger(L, 1));
+		if gear <> nil then
+			lua_pushinteger(L, ord(gear^.Kind))
+		end;
 	lc_getgeartype:= 1
 end;
 
@@ -157,11 +162,12 @@ begin
 		AddFileLog('LUA: Wrong number of parameters passed to FindPlace!')
 	else
 		begin
-		gear:= PGear(lua_tointeger(L, 1));
+		gear:= GearByUID(lua_tointeger(L, 1));
 		fall:= lua_toboolean(L, 2);
 		left:= lua_tointeger(L, 3);
 		right:= lua_tointeger(L, 4);
-		FindPlace(gear, fall, left, right)
+		if gear <> nil then
+			FindPlace(gear, fall, left, right)
 		end;
 	lc_findplace:= 0
 end;
@@ -219,9 +225,12 @@ begin
 		end
 	else
 		begin
-		gear:= PGear(lua_tointeger(L, 1));
-		lua_pushinteger(L, hwRound(gear^.X));
-		lua_pushinteger(L, hwRound(gear^.Y))
+		gear:= GearByUID(lua_tointeger(L, 1));
+		if gear <> nil then
+			begin
+			lua_pushinteger(L, hwRound(gear^.X));
+			lua_pushinteger(L, hwRound(gear^.Y))
+			end
 		end;
 	lc_getgearposition:= 2;
 end;
@@ -234,11 +243,14 @@ begin
 		AddFileLog('LUA: Wrong number of parameters passed to SetGearPosition!')
 	else
 		begin
-		gear:= PGear(lua_tointeger(L, 1));
-		x:= lua_tointeger(L, 2);
-		y:= lua_tointeger(L, 3);
-		gear^.X:= int2hwfloat(x);
-		gear^.Y:= int2hwfloat(y);
+		gear:= GearByUID(lua_tointeger(L, 1));
+		if gear <> nil then
+			begin
+			x:= lua_tointeger(L, 2);
+			y:= lua_tointeger(L, 3);
+			gear^.X:= int2hwfloat(x);
+			gear^.Y:= int2hwfloat(y);
+			end
 		end;
 	lc_setgearposition:= 0
 end;
