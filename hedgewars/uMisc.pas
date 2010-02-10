@@ -736,13 +736,18 @@ begin
 {$IFDEF IPHONEOS}
 	f:= stderr;
 {$ELSE}
-	for i:= 0 to 7 do
-	begin
-		assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
-		rewrite(f);
-		if IOResult = 0 then break;
-	end;
-	if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+	if ParamStr(1) <> '' then
+		begin
+		for i:= 0 to 7 do
+		begin
+			assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+			rewrite(f);
+			if IOResult = 0 then break;
+		end;
+		if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+		end
+	else
+		f:= stderr;
 {$ENDIF}
 {$I+}
 {$ENDIF}
