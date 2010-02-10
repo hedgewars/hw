@@ -209,8 +209,7 @@ begin
 		begin
 		ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
 		ParseCommand('hat ' + lua_tostring(L, 4), true);
-		WriteLnToConsole('last hog: ' + inttostr(LongInt(CurrentHedgehog)));
-		lua_pushinteger(L, LongInt(CurrentHedgehog^.Gear));
+		lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
 		end;
 	lc_addhog:= 1;
 end;
