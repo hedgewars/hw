@@ -38,7 +38,7 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
 uses uMisc, uStore, Types, uConsts, uGears, uTeams, uIO, uKeys, uWorld, uLand,
-     uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh, uSound, uVisualGears;
+     uRandom, uAmmos, uTriggers, uStats, uGame, uChat, SDLh, uSound, uVisualGears, uScript;
 
 const cLineWidth: LongInt = 0;
       cLinesCount = 256;
@@ -305,6 +305,7 @@ begin
 	RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
 	RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
 	RegisterVariable('flag'    , vtCommand, @chFlag         , false);
+	RegisterVariable('script'  , vtCommand, @chScript       , false);
 end;
 
 procedure free_uConsole;

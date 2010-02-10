@@ -136,25 +136,7 @@ void HWGame::SendTrainingConfig()
 	QByteArray traincfg;
 	HWProto::addStringToBuffer(traincfg, "TL");
 
-	QFile file(datadir->absolutePath() + "/Trainings/" + training + ".txt");
-	if(!file.open(QFile::ReadOnly))
-	{
-		emit ErrorMessage(tr("Error reading training config file"));
-		return;
-	}
-
-	QTextStream stream(&file);
-	while(!stream.atEnd())
-	{
-		QString line = stream.readLine();
-		if(!line.isEmpty() && !line.startsWith("#"))
-			if(line != "<binds>")
-				HWProto::addStringToBuffer(traincfg, "e" + line);
-			else
-				for(int i = 0; i < BINDS_NUMBER; i++)
-					if(!cbinds[i].strbind.isEmpty())
-						HWProto::addStringToBuffer(traincfg, "ebind " + cbinds[i].strbind + " " + cbinds[i].action);
-	}
+	HWProto::addStringToBuffer(traincfg, "escript " + datadir->absolutePath() + "/Missions/" + training + ".hwt");
 
 	RawSendIPC(traincfg);
 }

@@ -27,7 +27,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
    implementation
 ////////////////////
-uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears, uConsole;
+uses uMisc, uConsts, uWorld, uKeys, uTeams, uIO, uAI, uGears, uConsole, uScript;
 
 procedure DoGameTick(Lag: LongInt);
 var i: LongInt;
@@ -46,6 +46,7 @@ if (GameType = gmtDemo) and isSpeed then Lag:= Lag * 10;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
+	ScriptCall('onGameTick');
     if not CurrentTeam^.ExtDriven then
        begin
        if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;

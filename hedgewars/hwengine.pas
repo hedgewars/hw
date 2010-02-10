@@ -54,11 +54,12 @@ uses	SDLh in 'SDLh.pas',
 	uStats in 'uStats.pas',
 	uChat in 'uChat.pas',
 	uTriggers in 'uTriggers.pas',
-	uLandTexture in 'uLandTexture.pas'
+	uLandTexture in 'uLandTexture.pas',
+	uScript in 'uScript.pas',
 	{$IFDEF IPHONEOS}
-	, PascalExports in 'PascalExports.pas'
+	PascalExports in 'PascalExports.pas',
 	{$ELSE}
-	, sysutils
+	sysutils
 	{$ENDIF}
 	;
 
@@ -115,6 +116,7 @@ begin
 				FinishProgress;
 				PlayMusic;
 				SetScale(zoom);
+				ScriptCall('onGameStart');
 				GameState:= gsGame;
 				end;
 		gsConfirm,
@@ -286,10 +288,14 @@ begin
 	    LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName);
         end;
 
+	ScriptCall('onTeamSetup');
+		
 	if recordFileName = '' then
 		SendIPCAndWaitReply('C')        // ask for game config
 	else
 		LoadRecordFromFile(recordFileName);
+
+	ScriptOnGameInit;
 
 	s:= 'eproto ' + inttostr(cNetProtoVersion);
 	SendIPCRaw(@s[0], Length(s) + 1); // send proto version
@@ -342,6 +348,7 @@ begin
 	init_uTriggers();
 	init_uVisualGears();
 	init_uWorld();
+	init_uScript();
 end;
 
 procedure freeEverything;
@@ -377,7 +384,7 @@ begin
 	free_uConsole();
 	free_uMisc();
 	free_uConsts();		//stub
-
+	free_uScript();
 end;
 {$IFNDEF IPHONEOS}
 /////////////////////////

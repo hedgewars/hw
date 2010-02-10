@@ -1,0 +1,143 @@
+-- Hedgewars Shotgun Training
+-- Scripting Example
+
+-- Lines such as this one are comments - they are ignored
+-- by the game, no matter what kind of text is in there.
+-- It's also possible to place a comment after some real
+-- instruction as you see below. In short, everything
+-- following "--" is ignored.
+
+---------------------------------------------------------------
+
+-- This variable will hold the number of destroyed targets.
+score = 0
+-- This variable represents the number of targets to destroy.
+score_goal = 5
+-- This variable controls how many milliseconds/ticks we'd
+-- like to wait before we end the round once all targets
+-- have been destroyed.
+end_timer = 5000 -- 5000 ms = 5 s
+
+-- This is a custom function to make it easier to
+-- spawn more targets with just one line of code
+-- You may define as many custom functions as you
+-- like.
+function spawnTarget()
+	-- add a new target gear
+	gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
+	
+	-- move it to a random position within 0 and
+	-- LAND_WIDTH - the width of the map
+	FindPlace(gear, true, 0, LAND_WIDTH)
+	
+	-- move the target to a higher vertical position
+	-- to ensure it's not somewhere down below
+	x, y = GetGearPosition(gear)
+	SetGearPosition(gear, x, 500)
+end
+
+-- This function is called before the game loads its
+-- resources.
+-- It's one of the predefined function names that will
+-- be called by the game. They give you entry points
+-- where you're able to call your own code using either
+-- provided instructions or custom functions.
+function onGameInit()
+	-- At first we have to overwrite/set some global variables
+	-- that define the map, the game has to load, as well as
+	-- other things such as the game rules to use, etc.
+	-- Things we don't modify here will use their default values.
+
+	-- The base number for the random number generator
+	Seed = 0
+	-- Game settings and rules
+	GameFlags = gfMultiWeapon + gfOneClanMode
+	-- The time the player has to move each round (in ms)
+	TurnTime = 90000
+	-- The frequency of crate drops
+	CaseFreq = 0
+	-- The number of land objects being placed
+	LandAdds = 0
+	-- The delay between each round
+	Delay = 0
+	-- The map to be played
+	Map = "Bamboo"
+	-- The theme to be used
+	Theme = "Bamboo"
+
+	-- Create the player team
+	AddTeam("Shotgun Team", 14483456, "Simple", "Island", "Default")
+	-- And add a hog to it
+	hog = AddHog("Hunter", 0, 1, "NoHat")
+	SetGearPosition(hog, 1960, 1160);
+end
+
+-- This function is called when the round starts
+-- it spawns the first target that has to be destroyed.
+-- In addition it shows the scenario goal(s).
+function onGameStart()
+	-- Spawn the first target.
+	spawnTarget()
+	
+	-- Show some nice mission goals.
+	-- Parameters are: caption, sub caption, description,
+	-- extra text, icon and time to show.
+	-- A negative icon parameter (-n) represents the n-th weapon icon
+	-- A positive icon paramter (n) represents the (n+1)-th mission icon
+	-- A timeframe of 0 is replaced with the default time to show.
+	ShowMission("Shotgun Training", "Aiming Practice", "Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.", -5, 0);
+end
+
+-- This function is called every game tick.
+-- Note that there are 1000 ticks within one second.
+-- You shouldn't try to calculate too complicated
+-- code here as this might slow down your game.
+function onGameTick()
+	-- If the goal is reached ...
+	if score == score_goal then
+		-- ... check to see if the time we'd like to
+		-- wait has passed and then ...
+		if end_timer == 0 then
+			-- ... end the game ...
+			EndGame()
+		else
+			-- ... or just lower the timer by 1.
+			end_timer = end_timer - 1
+		end
+	end
+end
+
+-- This function is called when the game is initialized
+-- to request the available ammo and probabilities
+function onAmmoStoreInit()
+	-- add an unlimited supply of shotgun ammo
+	SetAmmo(amShotgun, 9, 0)
+	-- add one optional laser sight
+	SetAmmo(amLaserSight, 1, 0)
+end
+
+-- This function is called when a new gear is added.
+-- We don't need it for this training, so we can
+-- keep it empty.
+function onGearAdd(gear)
+end
+
+-- This function is called before a gear is destroyed.
+-- We use it to count the number of targets destroyed.
+function onGearDelete(gear)
+	-- We're only interested in target gears.
+	if GetGearType(gear) == gtTarget then
+		-- Add one point to our score/counter
+		score = score + 1
+		-- If we haven't reached the goal ...
+		if score < score_goal then
+			-- ... spawn another target.
+			spawnTarget()
+		else
+			-- Otherwise show that the goal was accomplished
+			ShowMission("Shotgun Training", "Aiming Practice", "Congratulations! You've eliminated all targets|within the allowed time frame.", 0, 0);
+			-- Also let the hogs shout "victory!"
+			PlaySound(sndVictory)
+		end
+	end
+end

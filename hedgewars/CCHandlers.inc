@@ -131,6 +131,13 @@ if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
 CurrentTeam^.flag:= s
 end;
 
+procedure chScript(var s: shortstring);
+begin
+if s[1]='"' then Delete(s, 1, 1);
+if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+ScriptLoad(s)
+end;
+
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;

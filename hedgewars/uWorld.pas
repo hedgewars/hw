@@ -42,6 +42,8 @@ procedure free_uWorld;
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
 procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
+procedure ShowMission(caption, subcaption, text: string; icon, time : LongInt);
+procedure HideMission;
 
 implementation
 uses	uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
@@ -66,11 +68,15 @@ var cWaveWidth, cWaveHeight: LongInt;
     SoundTimerTicks: Longword;
     prevPoint: TPoint;
 	amSel: TAmmoType = amNothing;
+	missionTex: PTexture;
+	missionTimer: LongInt;
 
 procedure InitWorld;
 var i, t: LongInt;
     cp: PClan;
 begin
+missionTimer:= 0;
+
 if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
    begin
    for i:= 0 to ClansCount * 4 do
@@ -610,6 +616,14 @@ DrawChat;
 if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
+if missionTimer <> 0 then
+	begin
+	if missionTimer > 0 then dec(missionTimer, Lag);
+	if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
+	if missionTex <> nil then
+		DrawCentered(0, (cScreenHeight shr 1) + 100, missionTex);
+	end;
+
 // fps
 {$IFDEF IPHONEOS}
 offset:= 40;
@@ -778,6 +792,35 @@ if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
 if WorldDx > 1024 then WorldDx:= 1024;
 end;
 
+procedure ShowMission(caption, subcaption, text: string; icon, time : LongInt);
+var r: TSDL_Rect;
+begin
+r.w:= 32;
+r.h:= 32;
+
+if time = 0 then time:= 5000;
+missionTimer:= time;
+if missionTex <> nil then FreeTexture(missionTex);
+
+if icon > -1 then
+	begin
+	r.x:= 0;
+	r.y:= icon * 32;
+	missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, MissionIcons, @r)
+	end
+else
+	begin
+	r.x:= ((-icon - 1) shr 5) * 32;
+	r.y:= ((-icon - 1) mod 32) * 32;
+	missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, SpritesData[sprAMAmmos].Surface, @r)
+	end;
+end;
+
+procedure HideMission;
+begin
+missionTimer:= 0
+end;
+
 procedure init_uWorld;
 begin
 	fpsTexture:= nil;
@@ -795,13 +838,14 @@ begin
 	SoundTimerTicks:= 0;
 	prevPoint.X:= 0;
 	prevPoint.Y:= 0;
+	missionTimer:= 0;
 	
 	FillChar(Captions, sizeof(Captions), 0)
 end;
 
 procedure free_uWorld;
 begin
-
+if missionTex <> nil then FreeTexture(missionTex);
 end;
 
 end.

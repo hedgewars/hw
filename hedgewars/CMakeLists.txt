@@ -5,6 +5,7 @@ find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
+find_package(LUA51 REQUIRED)
 
 #find which version of SDL_image and SDL_mixer we have (for IMG_Init and Mix_Init)
 #if the headers are not installed, the newer apis won't be activated
@@ -34,7 +35,7 @@ endif()
 set(fpc_tryexe fpc)
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 
-set(	engine_sources
+set(engine_sources
 	${hwengine_project}
 	SDLh.pas
 	uAI.pas
@@ -59,6 +60,7 @@ set(	engine_sources
 	uLocale.pas
 	uMisc.pas
 	uRandom.pas
+	uScript.pas
 	uSHA.pas
 	uSound.pas
 	uStats.pas

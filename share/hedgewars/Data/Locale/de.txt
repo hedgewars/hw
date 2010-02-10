@@ -1,4 +1,4 @@
-; German locale
+﻿; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -52,6 +52,10 @@
 01:07=%1 verbleibend
 01:08=Treibstoff
 01:09=Synchronisiere ...
+01:10=Benutzung beendet nicht die eigene Runde!
+01:11=Waffe oder Werkzeug noch nicht verfügbar!
+01:10=Benutzung beendet nicht die eigene Runde!
+01:11=Waffe oder Werkzeug noch nicht verfügbar!
 
 ; Event messages
 ; Hog (%1) died
@@ -154,3 +158,89 @@
 02:10=Home Run!
 02:10=Ein Vogel, ein Flugzeug, ...
 02:10=Der verleiht Flügel!
+
+; Weapon Categories
+03:00=Zeitzünder-Granate
+03:01=Zeitzünder-Granate
+03:02=Ballistische Waffe
+03:03=Zielsuchende Waffe
+03:04=Gewehr (mehrere Schüsse)
+03:05=Grabwerkzeug
+03:06=Aktion
+03:07=Fortbewegungsmittel
+03:08=Annäherungsbombe
+03:09=Pistole (mehrere Schüsse)
+03:10=BOOM!
+03:11=Bonk!
+03:12=Kampfkunst
+03:13=UNUSED
+03:14=Fortbewegungsmittel
+03:15=Luftschlag
+03:16=Luftschlag
+03:17=Grabwerkzeug
+03:18=Werkzeug
+03:19=Fortbewegungsmittel
+03:20=Aktion
+03:21=Ballistische Waffe
+03:22=Nenn' mich Indiana!
+03:23=Kampfkunst
+03:24=Der Kuchen ist keine Lüge!
+03:25=Verkleidung
+03:26=Saftige Granate
+03:27=Feurige Granate
+03:28=Ballistische Waffe
+03:29=Ballistische Waffe
+03:30=Luftschlag
+03:31=Ferngesteuerte Bombe
+03:32=Temporärer Effekt
+03:33=Temporärer Effekt
+03:34=Temporärer Effekt
+03:35=Temporärer Effekt
+03:36=Temporärer Effekt
+03:37=Temporärer Effekt
+03:38=Gewehr (ein Schuss)
+03:39=Fortbewegungsmittel
+03:40=Brandbombe
+
+; Weapon Descriptions (use | as line breaks)
+04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
+04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
+04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
+04:03=Launch a guided bomb that while home into|the selected target. Don't shoot with full power|to improve its precision.|Cursor: Pick target|Attack: Hold to shoot with more power
+04:04=Attack your enemy using a shotgun with two shots.|Thanks to its spread you don't need direct hits|to harm your opponents.|Attack: Shoot (multiple times)
+04:05=Move underground! Use the pickhammer to drill|a hole into the ground and reach other areas.|Attack: Start or stop digging
+04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
+04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Long Jump: Drop grenades or similar weapons
+04:08=Keep your enemies away by dropping a mine in|narrow passages or right below their feet. Be|sure to retreat before you trigger it yourself!|Attack: Drop mine next to your feet
+04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to five shots.|Attack: Shoot (multiple times)
+04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
+04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
+04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
+04:13=UNUSED
+04:14=Fear of heights? Better grab a parachute.|It will unfold once|you fall too far and|save your hog from taking fall damage.|Attack: Unfold the parachute
+04:15=Call in an airplane to attack your enemies|using a bombing run.|Left/Right: Determine attack direction|Cursor: Select target region
+04:16=Call in an airplane to drop several mines|in the target area.|Left/Right: Determine attack direction|Cursor: Select target region
+04:17=Need shelter? Use the blow torch to dig|a tunnel into solid ground granting you|cover.|Attack: Start or stop digging
+04:18=Need additional protection or want to pass|unpassable ground? Place some girders as you|like.|Left/Right: Select girder to place|Cursor: Place girder in a valid position
+04:19=Used at the right moment teleportation can|be more powerful than almost all weapons as|it allows you to save hogs from dangerous|situations within seconds.|Cursor: Select target region
+04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs
+04:21=Shoot a grenade-like projectile that will|release multiple bombs upon impact.|Attack: Shoot at full power
+04:22=Not just for Indiana Jones! The whip is an|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
+04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
+04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
+04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
+04:26=Throw this juicy water melon at your enemies. Once|the timer expires, it will split into several|explosive pieces.|Attack: Hold to shoot with more power
+04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
+04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power
+04:29=This is nothing for small kids! The ball gun fires|tons of small colored balls filled with explosives.|Attack: Shoot at full power|Up/Down: Continue aiming
+04:30=Call in an airplane to launch a powerful napalm|strike. With proper aiming this attack can eradicate|huge parts of landscape including unlucky hogs|sitting there.|Left/Right: Determine attack direction|Cursor: Select target region
+04:31=The RC plane is the ideal weapon to collect crates or|attack far away hogs. Either steer it into enemies or|drop some bombs first.|Attack: Launch the plane or drop bombs|Long Jump: Let the valkyries ride into battle|Up/Down: Steer the plane
+04:32=Low gravity is more effective than any diet! Jump|higher and over greater distances or let your enemies|fly even further.|Attack: Activate
+04:33=Sometimes you just need that little extra boost to|deal some more damage.|Attack: Activate
+04:34=Can't touch me!|Attack: Activate
+04:35=Sometimes time's running too fast. Grab some extra|seconds to finish your attack.|Attack: Activate
+04:36=Well, sometimes you're just too bad in aiming. Get|some assistance using modern day technology.|Attack: Activate
+04:37=Don't fear the daylight. It will just last one turn|but will enable you to absorb the damage you do to|other hogs.|Attack: Activate
+04:38=The sniper rifle can be the most devastating weapon|in your whole arsenal, however it's very ineffective|at close quarters. The damage dealt increases with|the distance to its target.|Attack: Shoot (once)
+04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|bring you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force into one direction
+04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power

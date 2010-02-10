@@ -39,6 +39,7 @@ var PixelFormat: PSDL_PixelFormat;
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
+	MissionIcons: PSDL_Surface;
 
 procedure init_uStore;
 procedure free_uStore;
@@ -73,6 +74,7 @@ procedure FinishProgress;
 function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
+function RenderHelpWindow(caption, subcaption, description, extra: shortstring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
@@ -253,6 +255,7 @@ var s: string;
 						end
 					end;
 		end;
+		MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
 	end;
 
 	procedure MakeCrossHairs;
@@ -819,6 +822,7 @@ for ii:= Low(TSprite) to High(TSprite) do
     FreeTexture(SpritesData[ii].Texture);
     if SpritesData[ii].Surface <> nil then SDL_FreeSurface(SpritesData[ii].Surface)
     end;
+SDL_FreeSurface(MissionIcons);
 
 FreeTexture(HHTexture)
 end;

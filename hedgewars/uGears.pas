@@ -91,7 +91,7 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
-	uAIMisc, uLocale, uAI, uAmmos, uTriggers, uStats, uVisualGears,
+	uAIMisc, uLocale, uAI, uAmmos, uTriggers, uStats, uVisualGears, uScript, 
 {$IFDEF GLES11}
 	gles11;
 {$ELSE}
@@ -423,6 +423,8 @@ gtAmmo_Grenade: begin // bazooka
      end;
 InsertGearToList(gear);
 AddGear:= gear;
+
+ScriptCall('onGearAdd', LongInt(gear));
 end;
 
 procedure DeleteGear(Gear: PGear);
@@ -430,6 +432,9 @@ var team: PTeam;
 	t,i: Longword;
     k: boolean;
 begin
+
+ScriptCall('onGearDelete', LongInt(gear));
+
 DeleteCI(Gear);
 
 if Gear^.Tex <> nil then

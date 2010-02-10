@@ -57,7 +57,9 @@ var	hideAmmoMenu: boolean;
 	//ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
 	ControllerHats: array[0..5] of array[0..19] of Byte;
 	ControllerButtons: array[0..5] of array[0..19] of Byte;
-	
+
+	DefaultBinds, CurrentBinds: TBinds;
+
 {$IFDEF IPHONEOS}
 	leftClick: boolean;
 	middleClick: boolean;
@@ -86,7 +88,6 @@ const KeyNumber = 1024;
 
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
-    DefaultBinds, CurrentBinds: TBinds;
 	
 function KeyNameToCode(name: string): word;
 var code: Word;
@@ -321,18 +322,26 @@ DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
-{$IFDEF IPHONEOS}
+
+
 DefaultBinds[ 1]:= '/put';
 DefaultBinds[ 3]:= 'ammomenu';
 DefaultBinds[ 8]:= 'hjump';
 DefaultBinds[ 9]:= 'switch';
 DefaultBinds[13]:= 'ljump';
+DefaultBinds[32]:= '+attack';
+{$IFDEF IPHONEOS}
 DefaultBinds[23]:= '+up';
 DefaultBinds[24]:= '+down';
 DefaultBinds[25]:= '+left';
 DefaultBinds[26]:= '+right';
-DefaultBinds[32]:= '+attack';
 DefaultBinds[44]:= 'chat';
+{$ELSE}
+DefaultBinds[KeyNameToCode('up')]:= '+up';
+DefaultBinds[KeyNameToCode('down')]:= '+down';
+DefaultBinds[KeyNameToCode('left')]:= '+left';
+DefaultBinds[KeyNameToCode('right')]:= '+right';
+DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
 {$ENDIF}
 
 SetDefaultBinds();
