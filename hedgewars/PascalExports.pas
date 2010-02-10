@@ -23,7 +23,7 @@ function  IPH_getDocumentsPath: PChar; cdecl; external;
 procedure IPH_showControls; cdecl; external;
 
 // retrieve protocol information
-function  HW_protoVer: LongInt; cdecl; export;
+procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
 
 // called by the touch functions (SDL_uikitview.m)
 // they emulate user interaction from mouse or keyboard
@@ -46,11 +46,11 @@ procedure HW_tab; cdecl; export;
 implementation
 
 {$IFDEF IPHONEOS}
-function HW_protoVer: LongInt; cdecl; export;
+procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
 begin
-	HW_protoVer:= cNetProtoVersion;
+	if netProto <> nil then netProto^:= cNetProtoVersion;
+	if versionStr <> nil then versionStr^:= string(cVersionString);
 end;
-
 
 procedure HW_click; cdecl; export;
 begin

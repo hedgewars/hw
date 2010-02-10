@@ -21,7 +21,7 @@ extern "C" {
 	void Game(const char *args[]);
 
 
-	int HW_protoVer(void);
+	void HW_versionInfo(short int*, char**);
 
 	void HW_click(void);
 	void HW_zoomIn(void);

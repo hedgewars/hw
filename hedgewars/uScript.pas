@@ -549,7 +549,22 @@ end;
 
 function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-ScriptCall:= nil
+ScriptCall:= 0
+end;
+
+function ScriptCall(fname : string; par1: LongInt) : LongInt;
+begin
+ScriptCall:= 0
+end;
+
+function ScriptCall(fname : string; par1, par2: LongInt) : LongInt;
+begin
+ScriptCall:= 0
+end;
+
+function ScriptCall(fname : string; par1, par2, par3: LongInt) : LongInt;
+begin
+ScriptCall:= 0
 end;
 
 procedure init_uScript;

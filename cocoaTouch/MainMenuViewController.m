@@ -8,6 +8,7 @@
 
 #import "MainMenuViewController.h"
 #import "SDL_uikitappdelegate.h"
+#import "PascalImports.h"
 
 @implementation MainMenuViewController
 
@@ -35,13 +36,16 @@
 	// Release any cached data, images, etc that aren't in use.
 	if (nil == self.settingsViewController.view.superview) {
 		self.settingsViewController = nil;
+		[settingsViewController release];
 	}
 }
 
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 -(void) viewDidLoad {
-	self.versionLabel.text = @"0.9.13-dev";
+	char *ver;
+	HW_versionInfo(NULL, &ver);
+	self.versionLabel.text = [[NSString stringWithUTF8String:ver] autorelease];
 	[super viewDidLoad];
 }
 
@@ -92,14 +96,14 @@
 			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController"
 												      bundle:nil];
 			self.settingsViewController = controller;
-			self.settingsViewController.parentView = self.mainView;
 			[controller release];
 		}
 		self.settingsViewController.view.frame = CGRectMake(0, -320, 480, 320);
+		self.settingsViewController.parentView = self.mainView;
 
 		[UIView beginAnimations:@"View Switch" context:NULL];
-		[UIView setAnimationDuration:3];
-		[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
+		[UIView setAnimationDuration:1];
+		//[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
 		self.settingsViewController.view.frame = CGRectMake(0, 0, 480, 320);
 		self.mainView.frame = CGRectMake(0, 320, 480, 320);
 		

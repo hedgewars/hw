@@ -56,12 +56,8 @@ uses	SDLh in 'SDLh.pas',
 	uTriggers in 'uTriggers.pas',
 	uLandTexture in 'uLandTexture.pas',
 	uScript in 'uScript.pas',
-	{$IFDEF IPHONEOS}
-	PascalExports in 'PascalExports.pas',
-	{$ELSE}
-	sysutils
-	{$ENDIF}
-	;
+	{$IFDEF IPHONEOS}PascalExports in 'PascalExports.pas',{$ENDIF}
+	sysutils;
 
 // also: GSHandlers.inc
 //       CCHandlers.inc

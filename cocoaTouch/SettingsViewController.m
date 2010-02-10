@@ -151,14 +151,14 @@
 	[actionSheet release];
 	 */
 	[UIView beginAnimations:@"Get Back" context:NULL];
-	[UIView setAnimationDuration:3];
-	[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
+	[UIView setAnimationDuration:1];
+	//[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
 	
 	self.view.frame = CGRectMake(0, -320, 480, 320);
 	self.parentView.frame = CGRectMake(0, 0, 480, 320);
 	[UIView commitAnimations];
 
-	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:2];
+	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 	self.parentView = nil;
 }
 

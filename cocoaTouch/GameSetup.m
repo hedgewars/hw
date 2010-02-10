@@ -199,8 +199,11 @@
 						break;
 					case 'e':
 						sscanf(buffer, "%*s %d", &eProto);
-						if (HW_protoVer() == eProto) {
-							NSLog(@"Setting protocol version %s", buffer);
+						short int netProto;
+						char *versionStr;
+						HW_versionInfo(&netProto, &versionStr);
+						if (netProto == eProto) {
+							NSLog(@"Setting protocol version %d (%s)", eProto, versionStr);
 						} else {
 							NSLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
 							clientQuit = YES;
