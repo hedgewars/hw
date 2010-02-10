@@ -166,7 +166,9 @@ begin
 	TTF_Quit();
 	{$IFDEF SDL13}SDL_VideoQuit();{$ENDIF}
 	SDL_Quit();
+	{$IFDEF IPHONEOS}
 	freeEverything();
+	{$ENDIF}
 	exit();
 end;
 
@@ -578,6 +580,7 @@ begin
 
 	if GameType = gmtLandPreview then GenLandPreview()
 	else Game();
+	freeEverything();
 	ExitCode:= 0;
 {$ENDIF}
 end.

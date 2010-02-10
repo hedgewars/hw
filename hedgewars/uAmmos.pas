@@ -372,7 +372,8 @@ end;
 procedure free_uAmmos;
 var i: LongWord;
 begin
-	for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
+	if StoreCnt > 0 then
+		for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
 	StoreCnt:= 0
 end;
 

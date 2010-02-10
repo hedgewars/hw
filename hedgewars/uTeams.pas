@@ -466,8 +466,11 @@ end;
 procedure free_uTeams;
 var i: LongWord;
 begin
-   for i:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[i]);
-   for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
+   if TeamsCount > 0 then
+     begin
+     for i:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[i]);
+     for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
+     end;
    TeamsCount:= 0;
    ClansCount:= 0
 end;

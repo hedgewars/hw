@@ -740,15 +740,9 @@ begin
 	begin
 		assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
 		rewrite(f);
-		if IOResult = 5 then
-		begin
-			// prevent writing on a directory you do not have permissions on
-			// should be safe to assume the current directory is writable
-			assign(f, './debug' + inttostr(i) + '.txt');
-			rewrite(f);
-		end;
 		if IOResult = 0 then break;
 	end;
+	if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
 {$ENDIF}
 {$I+}
 {$ENDIF}
