@@ -425,7 +425,7 @@ gtAmmo_Grenade: begin // bazooka
 InsertGearToList(gear);
 AddGear:= gear;
 
-ScriptCall('onGearAdd', LongInt(gear));
+ScriptCall('onGearAdd', gear^.uid);
 end;
 
 procedure DeleteGear(Gear: PGear);
@@ -434,7 +434,7 @@ var team: PTeam;
     k: boolean;
 begin
 
-ScriptCall('onGearDelete', LongInt(gear));
+ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
 
