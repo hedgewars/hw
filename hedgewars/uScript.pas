@@ -71,7 +71,7 @@ begin
 		WriteLnToConsole('LUA: ' + lua_tostring(L ,1));
 		end
 	else
-		AddFileLog('LUA: Wrong number of parameters passed to WriteLnToConsole!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to WriteLnToConsole!');
 	lc_writelntoconsole:= 0;
 end;
 
@@ -82,7 +82,7 @@ begin
 		ParseCommand(lua_tostring(L ,1), true);
 		end
 	else
-		AddFileLog('LUA: Wrong number of parameters passed to ParseCommand!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to ParseCommand!');
 	lc_parsecommand:= 0;
 end;
 
@@ -93,7 +93,7 @@ begin
 		ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
 		end
 	else
-		AddFileLog('LUA: Wrong number of parameters passed to ShowMission!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to ShowMission!');
 	lc_showmission:= 0;
 end;
 
@@ -111,7 +111,7 @@ var gear : PGear;
 begin
 	if lua_gettop(L) <> 7 then
 		begin
-		AddFileLog('LUA: Wrong number of parameters passed to AddGear!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to AddGear!');
 		lua_pushnil(L); // return value on stack (nil)
 		end
 	else
@@ -135,7 +135,7 @@ var gear : PGear;
 begin
 	if lua_gettop(L) <> 1 then
 		begin
-		AddFileLog('LUA: Wrong number of parameters passed to GetGearType!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearType!');
 		lua_pushnil(L); // return value on stack (nil)
 		end
 	else
@@ -159,7 +159,7 @@ var gear: PGear;
 	left, right: LongInt;
 begin
 	if lua_gettop(L) <> 4 then
-		AddFileLog('LUA: Wrong number of parameters passed to FindPlace!')
+		WriteLnToConsole('LUA: Wrong number of parameters passed to FindPlace!')
 	else
 		begin
 		gear:= GearByUID(lua_tointeger(L, 1));
@@ -175,7 +175,7 @@ end;
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 begin
 	if lua_gettop(L) <> 1 then
-		AddFileLog('LUA: Wrong number of parameters passed to PlaySound!')
+		WriteLnToConsole('LUA: Wrong number of parameters passed to PlaySound!')
 	else
 		PlaySound(TSound(lua_tointeger(L, 1)));
 	lc_playsound:= 0;
@@ -184,7 +184,7 @@ end;
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 begin
 	if lua_gettop(L) <> 5 then
-		AddFileLog('LUA: Wrong number of parameters passed to AddTeam!')
+		WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!')
 	else
 		begin
 		ParseCommand('addteam ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
@@ -201,7 +201,7 @@ function lc_addhog(L : Plua_State) : LongInt; Cdecl;
 begin
 	if lua_gettop(L) <> 4 then
 		begin
-		AddFileLog('LUA: Wrong number of parameters passed to AddHog!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to AddHog!');
 		lua_pushnil(L)
 		end
 	else
@@ -219,7 +219,7 @@ var gear: PGear;
 begin
 	if lua_gettop(L) <> 1 then
 		begin
-		AddFileLog('LUA: Wrong number of parameters passed to GetGearPosition!');
+		WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearPosition!');
 		lua_pushnil(L);
 		lua_pushnil(L)
 		end
@@ -240,7 +240,7 @@ var gear: PGear;
 	x, y: LongInt;
 begin
 	if lua_gettop(L) <> 3 then
-		AddFileLog('LUA: Wrong number of parameters passed to SetGearPosition!')
+		WriteLnToConsole('LUA: Wrong number of parameters passed to SetGearPosition!')
 	else
 		begin
 		gear:= GearByUID(lua_tointeger(L, 1));
@@ -258,7 +258,7 @@ end;
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 begin
 	if lua_gettop(L) <> 3 then
-		AddFileLog('LUA: Wrong number of parameters passed to SetAmmo!')
+		WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
 	else
 		begin
 		ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3));
@@ -271,14 +271,14 @@ procedure ScriptPrintStack;
 var n, i : LongInt;
 begin
 	n:= lua_gettop(luaState);
-	AddFileLog('LUA: Stack (' + inttostr(n) + ' elements):');
+	WriteLnToConsole('LUA: Stack (' + inttostr(n) + ' elements):');
 	for i:= 1 to n do
 		if not lua_isboolean(luaState, i) then
-			AddFileLog('LUA:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
+			WriteLnToConsole('LUA:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
 		else if lua_toboolean(luaState, i) then
-			AddFileLog('LUA:  ' + inttostr(i) + ': true')
+			WriteLnToConsole('LUA:  ' + inttostr(i) + ': true')
 		else
-			AddFileLog('LUA:  ' + inttostr(i) + ': false');
+			WriteLnToConsole('LUA:  ' + inttostr(i) + ': false');
 end;
 
 procedure ScriptClearStack;
@@ -348,10 +348,10 @@ var ret : LongInt;
 begin
 	ret:= luaL_loadfile(luaState, Str2PChar(name));
 	if ret <> 0 then
-		AddFileLog('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
+		WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
 	else
 		begin
-		AddFileLog('LUA: ' + name + ' loaded');
+		WriteLnToConsole('LUA: ' + name + ' loaded');
 		// call the script file
 		lua_pcall(luaState, 0, 0, 0);	
 		end
@@ -362,7 +362,7 @@ begin
 	lua_getglobal(luaState, Str2PChar(fname));
 	if lua_pcall(luaState, 0, 0, 0) <> 0 then
 		begin
-		AddFileLog('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+		WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
 		lua_pop(luaState, 1)
 		end;
 end;
@@ -392,7 +392,7 @@ begin
 	ScriptCall:= 0;
 	if lua_pcall(luaState, 4, 1, 0) <> 0 then
 		begin
-		AddFileLog('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+		WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
 		lua_pop(luaState, 1)
 		end
 	else
