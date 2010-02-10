@@ -52,6 +52,7 @@ uses LuaPas in 'LuaPas.pas',
 
 var luaState : Plua_State;
 	ScriptAmmoStore : string;
+	ScriptLoaded : boolean;
 	
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
@@ -314,29 +315,33 @@ end;
 
 procedure ScriptOnGameInit;
 begin
-		// push game variables so they may be modified by the script
-		ScriptSetInteger('GameFlags', GameFlags);
-		ScriptSetString('Seed', cSeed);
-		ScriptSetInteger('TurnTime', cHedgehogTurnTime);
-		ScriptSetInteger('CaseFreq', cCaseFactor);
-		ScriptSetInteger('LandAdds', cLandAdditions);
-		ScriptSetInteger('Delay', cInactDelay);
-		ScriptSetString('Map', '');
-		ScriptSetString('Theme', '');
+	// not required if there's no script to run
+	if not ScriptLoaded then
+		exit;
+			
+	// push game variables so they may be modified by the script
+	ScriptSetInteger('GameFlags', GameFlags);
+	ScriptSetString('Seed', cSeed);
+	ScriptSetInteger('TurnTime', cHedgehogTurnTime);
+	ScriptSetInteger('CaseFreq', cCaseFactor);
+	ScriptSetInteger('LandAdds', cLandAdditions);
+	ScriptSetInteger('Delay', cInactDelay);
+	ScriptSetString('Map', '');
+	ScriptSetString('Theme', '');
 
-		ScriptCall('onGameInit');
-		
-		// pop game variables
-		ParseCommand('seed ' + ScriptGetString('Seed'), true);
-		ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
-		ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
-		ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
-		ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
-		ParseCommand('$delay ' + ScriptGetString('Delay'), true);
-		if ScriptGetString('Map') <> '' then
-			ParseCommand('map ' + ScriptGetString('Map'), true);
-		if ScriptGetString('Theme') <> '' then
-			ParseCommand('theme ' + ScriptGetString('Theme'), true);	
+	ScriptCall('onGameInit');
+	
+	// pop game variables
+	ParseCommand('seed ' + ScriptGetString('Seed'), true);
+	ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
+	ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
+	ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
+	ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
+	ParseCommand('$delay ' + ScriptGetString('Delay'), true);
+	if ScriptGetString('Map') <> '' then
+		ParseCommand('map ' + ScriptGetString('Map'), true);
+	if ScriptGetString('Theme') <> '' then
+		ParseCommand('theme ' + ScriptGetString('Theme'), true);	
 
 	ScriptPrepareAmmoStore;
 	ScriptCall('onAmmoStoreInit');
@@ -353,12 +358,15 @@ begin
 		begin
 		WriteLnToConsole('LUA: ' + name + ' loaded');
 		// call the script file
-		lua_pcall(luaState, 0, 0, 0);	
+		lua_pcall(luaState, 0, 0, 0);
+		ScriptLoaded:= true
 		end
 end;
 
 procedure ScriptCall(fname : string);
 begin
+	if not ScriptLoaded then
+		exit;
 	lua_getglobal(luaState, Str2PChar(fname));
 	if lua_pcall(luaState, 0, 0, 0) <> 0 then
 		begin
@@ -384,6 +392,9 @@ end;
 
 function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
+	if not ScriptLoaded then
+		exit;
+
 	lua_getglobal(luaState, Str2PChar(fname));
 	lua_pushinteger(luaState, par1);
 	lua_pushinteger(luaState, par2);
@@ -503,6 +514,7 @@ lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
 
 ScriptClearStack; // just to be sure stack is empty
+ScriptLoaded:= false;
 end;
 
 procedure free_uScript;
