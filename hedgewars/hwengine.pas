@@ -18,6 +18,10 @@
 
 {$INCLUDE "options.inc"}
 
+{$IFDEF WIN32}
+{$R hwengine.rc}
+{$ENDIF}
+
 {$IFDEF IPHONEOS}
 unit hwengine;
 interface

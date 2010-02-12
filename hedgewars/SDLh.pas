@@ -654,6 +654,7 @@ function  SDL_WaitEvent(event: PSDL_Event): LongInt; cdecl; external SDLLibName;
 
 function  SDL_ShowCursor(toggle: LongInt): LongInt; cdecl; external SDLLibName;
 
+procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : byte); cdecl; external SDLLibName;
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 

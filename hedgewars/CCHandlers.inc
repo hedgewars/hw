@@ -613,6 +613,7 @@ end;
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
+	ico: PSDL_Surface;
 {$IFDEF DEBUGFILE}
     buf: array[byte] of char;
 {$ENDIF}
@@ -636,7 +637,17 @@ begin
 		cScreenHeight:= cInitHeight
 	end;
 
+	// load window icon
+	ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+	if ico <> nil then
+		begin
+		SDL_WM_SetIcon(ico, 0);
+		SDL_FreeSurface(ico)
+		end;
+	
+	// set window caption
 	SDL_WM_SetCaption('Hedgewars', nil);
+	
 	if SDLPrimSurface <> nil then
 	begin
 {$IFDEF DEBUGFILE}
