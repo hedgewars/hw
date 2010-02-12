@@ -817,6 +817,33 @@ while t <> nil do
 	end
 end;
 
+procedure RenderAltWeapon(Gear: PGear; sx, sy: LongInt);
+var r1, r2: TSDL_Rect;
+begin
+with PHedgehog(Gear^.Hedgehog)^ do
+	begin
+	if ropeIconIndex <> ord(Ammo^[CurSlot, CurAmmo].AmmoType) then
+		begin
+		if ropeIconTex <> nil then
+			FreeTexture(ropeIconTex);
+		r1.x:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) shr 5) * 32;
+		r1.y:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) mod 32) * 32;
+		r1.w:= 32;
+		r1.h:= 32;
+		r2.x:= 2;
+		r2.y:= 2;
+		r2.w:= 32;
+		r2.h:= 32;
+		SDL_UpperBlit(SpritesData[sprAMAmmos].Surface, @r1, ropeIconSurf, @r2);
+		ropeIconTex:= Surface2Tex(ropeIconSurf, true);
+		ropeIconIndex:= ord(Ammo^[CurSlot, CurAmmo].AmmoType)
+		end;
+	// render the rope weapon icon (if weapon is alt useable)
+	if (ropeIconTex <> nil) and ((Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0) then
+		DrawTexture(sx + 16, sy + 16, ropeIconTex)
+	end;
+end;
+
 procedure DrawHH(Gear: PGear);
 var i, t: LongInt;
 	amt: TAmmoType;
@@ -824,7 +851,6 @@ var i, t: LongInt;
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
-	r1, r2: TSDL_Rect;
 begin
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
 m:= 1;
@@ -990,29 +1016,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32,
 							i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
 				
-				// update the rope weapon icon
-				with PHedgehog(Gear^.Hedgehog)^ do
-					begin
-					if ropeIconIndex <> ord(Ammo^[CurSlot, CurAmmo].AmmoType) then
-						begin
-						if ropeIconTex <> nil then
-							FreeTexture(ropeIconTex);
-						r1.x:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) shr 5) * 32;
-						r1.y:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) mod 32) * 32;
-						r1.w:= 32;
-						r1.h:= 32;
-						r2.x:= 2;
-						r2.y:= 2;
-						r2.w:= 32;
-						r2.h:= 32;
-						SDL_UpperBlit(SpritesData[sprAMAmmos].Surface, @r1, ropeIconSurf, @r2);
-						ropeIconTex:= Surface2Tex(ropeIconSurf, true);
-						ropeIconIndex:= ord(Ammo^[CurSlot, CurAmmo].AmmoType)
-						end;
-					// render the rope weapon icon (if weapon is alt useable)
-					if (ropeIconTex <> nil) and ((Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
-						DrawTexture(sx + 16, sy + 16, ropeIconTex)
-					end;
+				RenderAltWeapon(Gear, sx, sy);
 				defaultPos:= false
 				end;
 			gtBlowTorch: begin
@@ -1298,7 +1302,8 @@ if (Gear^.State and gstHHDriven) <> 0 then
 	                   if (CurAmmoGear^.MsgParam and gm_Up) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 1);
 	                   if (CurAmmoGear^.MsgParam and gm_Left) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 2);
 	                   if (CurAmmoGear^.MsgParam and gm_Right) <> 0 then DrawSprite(sprJetpack, sx-32, sy-32, 3);
-                       if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex)
+                       if CurAmmoGear^.Tex <> nil then DrawCentered(sx, sy - 40, CurAmmoGear^.Tex);
+					   RenderAltWeapon(Gear, sx, sy)
                        end;
             end;
         end
@@ -1553,7 +1558,10 @@ while Gear<>nil do
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0);
            gtFlame: DrawTextureF(SpritesData[sprFlame].Texture, 1 / (Gear^.Tag mod 3 + 2), hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks div 128 + LongWord(Gear^.Tag)) mod 8, 1, 8);
-       gtParachute: DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0);
+       gtParachute: begin
+					DrawSprite(sprParachute, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 48 + WorldDy, 0);
+					RenderAltWeapon(Gear, hwRound(Gear^.X) + 1 + WorldDx, hwRound(Gear^.Y) - 3 + WorldDy)
+					end;
        gtAirAttack: if Gear^.Tag > 0 then DrawSprite(sprAirplane, hwRound(Gear^.X) - SpritesData[sprAirplane].Width div 2 + WorldDx, hwRound(Gear^.Y) - SpritesData[sprAirplane].Height div 2 + WorldDy, 0)
                                      else DrawSprite(sprAirplane, hwRound(Gear^.X) - SpritesData[sprAirplane].Width div 2 + WorldDx, hwRound(Gear^.Y) - SpritesData[sprAirplane].Height div 2 + WorldDy, 1);
          gtAirBomb: DrawRotated(sprAirBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
