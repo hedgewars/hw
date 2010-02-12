@@ -39,7 +39,7 @@ var PixelFormat: PSDL_PixelFormat;
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
-	MissionIcons: PSDL_Surface;
+    MissionIcons: PSDL_Surface;
 
 procedure init_uStore;
 procedure free_uStore;
@@ -61,6 +61,7 @@ procedure DrawCentered(X, Top: LongInt; Source: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
+procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 function  CheckCJKFont(s: string; font: THWFont): THWFont;
 function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
 function  RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
@@ -1557,19 +1558,18 @@ end;
 
 procedure init_uStore;
 begin
-	PixelFormat:= nil;
-	SDLPrimSurface:= nil;
-	{$IFNDEF IPHONEOS}cGPUVendor:= gvUnknown;{$ENDIF}
+PixelFormat:= nil;
+SDLPrimSurface:= nil;
+{$IFNDEF IPHONEOS}cGPUVendor:= gvUnknown;{$ENDIF}
 
-	cScaleFactor:= 2.0;
-	SupportNPOTT:= false;
-	Step:= 0;
-	ProgrTex:= nil;
+cScaleFactor:= 2.0;
+SupportNPOTT:= false;
+Step:= 0;
+ProgrTex:= nil;
 end;
 
 procedure free_uStore;
 begin
-
 end;
 
 end.

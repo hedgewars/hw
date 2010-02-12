@@ -110,6 +110,9 @@ var RopePoints: record
                                   end;
                 rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
                 end;
+    ropeIconSurf: PSDL_Surface;
+    ropeIconTex: PTexture;
+    ropeIconIndex: LongInt;
 
 procedure DeleteGear(Gear: PGear); forward;
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord); forward;
@@ -821,6 +824,7 @@ var i, t: LongInt;
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
+	r1, r2: TSDL_Rect;
 begin
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
 m:= 1;
@@ -981,10 +985,34 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						1,
 						0,
 						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
-			    with PHedgehog(Gear^.Hedgehog)^ do
-                   if (HatTex <> nil) then
-					DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32,
-                        i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+				with PHedgehog(Gear^.Hedgehog)^ do
+					if (HatTex <> nil) then
+						DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32,
+							i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+				
+				// update the rope weapon icon
+				with PHedgehog(Gear^.Hedgehog)^ do
+					begin
+					if ropeIconIndex <> ord(Ammo^[CurSlot, CurAmmo].AmmoType) then
+						begin
+						if ropeIconTex <> nil then
+							FreeTexture(ropeIconTex);
+						r1.x:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) shr 5) * 32;
+						r1.y:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) mod 32) * 32;
+						r1.w:= 32;
+						r1.h:= 32;
+						r2.x:= 2;
+						r2.y:= 2;
+						r2.w:= 32;
+						r2.h:= 32;
+						SDL_UpperBlit(SpritesData[sprAMAmmos].Surface, @r1, ropeIconSurf, @r2);
+						ropeIconTex:= Surface2Tex(ropeIconSurf, true);
+						ropeIconIndex:= ord(Ammo^[CurSlot, CurAmmo].AmmoType)
+						end;
+					// render the rope weapon icon (if weapon is alt useable)
+					if (ropeIconTex <> nil) and ((Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
+						DrawTexture(sx + 16, sy + 16, ropeIconTex)
+					end;
 				defaultPos:= false
 				end;
 			gtBlowTorch: begin
@@ -2111,6 +2139,7 @@ while gear <> nil do
 end;
 
 procedure init_uGears;
+var r: TSDL_Rect;
 begin
 	CurAmmoGear:= nil;
 	GearsList:= nil;
@@ -2122,11 +2151,22 @@ begin
 	
 	AllInactive:= false;
 	PrvInactive:= false;
+	
+	ropeIconSurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 36, 36, 32, RMask, GMask, BMask, AMask);
+	r.x:= 0;
+	r.y:= 0;
+	r.w:= 36;
+	r.h:= 36;
+	DrawRoundRect(@r, cWhiteColor, cNearBlackColor, ropeIconSurf, true);
 end;
 
 procedure free_uGears;
 begin
 	FreeGearsList();
+	if ropeIconTex <> nil then
+		FreeTexture(ropeIconTex);
+	if ropeIconSurf <> nil then
+		SDL_FreeSurface(ropeIconSurf);
 end;
 
 end.
