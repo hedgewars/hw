@@ -20,7 +20,6 @@
 	UITableViewCell *volumeCell;
 	UIView *buttonContainer;
 	UIView *parentView;
-	BOOL needsReset;
 }
 
 @property (nonatomic, retain) IBOutlet UITextField *username;

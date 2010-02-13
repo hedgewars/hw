@@ -22,7 +22,7 @@
 {$R hwengine.rc}
 {$ENDIF}
 
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
 unit hwengine;
 interface
 {$ELSE}
@@ -69,7 +69,7 @@ uses	SDLh in 'SDLh.pas',
 //       SinTable.inc
 //       proto.inc
 
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
 type arrayofpchar = array[0..5] of PChar;
 procedure DoTimer(Lag: LongInt);
 procedure OnDestroy;
@@ -224,7 +224,7 @@ begin
 end;
 
 ///////////////
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
 procedure Game(gameArgs: arrayofpchar); cdecl; export;
 {$ELSE}
 procedure Game;cdecl; export;
@@ -232,7 +232,7 @@ procedure Game;cdecl; export;
 var	p: TPathType;
 	s: shortstring;
 begin
-{$IFDEF IPHONEOS}
+{$IFDEF HWLIBRARY}
 	initEverything();
 	Randomize();
 
@@ -386,7 +386,8 @@ begin
 	free_uConsts();		//stub
 	free_uScript();
 end;
-{$IFNDEF IPHONEOS}
+
+{$IFNDEF HWLIBRARY}
 /////////////////////////
 procedure GenLandPreview;
 var Preview: TPreview;

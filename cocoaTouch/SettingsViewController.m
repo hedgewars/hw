@@ -28,7 +28,6 @@
 -(void) viewDidLoad {
 	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
 	
-	needsReset = NO;
 	if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {	
 		NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:filePath];
 		username.text = [data objectForKey:@"username"];
@@ -75,26 +74,6 @@
 	[super viewDidUnload];
 }
 
-//- (void)applicationWillTerminate:(NSNotification *)notification {
--(void) viewWillDisappear:(BOOL)animated {
-	if (!needsReset) {
-		NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
-		NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
-		NSString *tmpEff = (soundsSwitch.on) ? @"1" : @"0";
-		NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
-		
-		[saveDict setObject:username.text forKey:@"username"];
-		[saveDict setObject:password.text forKey:@"password"];
-		[saveDict setObject:tmpMus forKey:@"music"];
-		[saveDict setObject:tmpEff forKey:@"sounds"];
-		[saveDict setObject:tmpAlt forKey:@"alternate"];
-		
-		[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
-		[saveDict release];
-	}
-	[super viewWillDisappear:animated];
-}
-
 -(void) dealloc {
 	[username release];
 	[password release];
@@ -111,7 +90,6 @@
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
 }
-
 
 // makes the keyboard go away when background is tapped
 -(IBAction) backgroundTap: (id)sender {
@@ -139,6 +117,40 @@
 }
 
 #pragma mark -
+#pragma mark Return to mainView
+-(void) flushData {
+	NSLog(@"writing preferences to file");
+
+	NSMutableDictionary *saveDict = [[NSMutableDictionary alloc] init];
+	NSString *tmpMus = (musicSwitch.on) ? @"1" : @"0";
+	NSString *tmpEff = (soundsSwitch.on) ? @"1" : @"0";
+	NSString *tmpAlt = (altDamageSwitch.on) ? @"1" : @"0";
+	
+	[saveDict setObject:username.text forKey:@"username"];
+	[saveDict setObject:password.text forKey:@"password"];
+	[saveDict setObject:tmpMus forKey:@"music"];
+	[saveDict setObject:tmpEff forKey:@"sounds"];
+	[saveDict setObject:tmpAlt forKey:@"alternate"];
+	
+	[saveDict writeToFile:[[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"] atomically:YES];
+	[saveDict release];
+}
+
+-(void) returnMainView {
+	[self flushData];
+
+	[UIView beginAnimations:@"Get Back" context:NULL];
+	[UIView setAnimationDuration:1];
+	
+	self.view.frame = CGRectMake(0, -320, 480, 320);
+	self.parentView.frame = CGRectMake(0, 0, 480, 320);
+	[UIView commitAnimations];
+	
+	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+	self.parentView = nil;
+}
+
+#pragma mark -
 #pragma mark UIActionSheet Methods
 -(IBAction) deleteData: (id)sender {
 	/* temporary commented out
@@ -150,22 +162,11 @@
 	[actionSheet showInView:self.view];
 	[actionSheet release];
 	 */
-	[UIView beginAnimations:@"Get Back" context:NULL];
-	[UIView setAnimationDuration:1];
-	//[UIView setAnimationDuration:UIViewAnimationCurveEaseOut];
-	
-	self.view.frame = CGRectMake(0, -320, 480, 320);
-	self.parentView.frame = CGRectMake(0, 0, 480, 320);
-	[UIView commitAnimations];
-
-	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
-	self.parentView = nil;
+	[self returnMainView];
 }
 
 -(void) actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger) buttonIndex {
 	if ([actionSheet cancelButtonIndex] != buttonIndex) {
-		needsReset = YES;
-		
 		// get the documents dirctory
 		NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *documentsDirectory = [paths objectAtIndex:0];

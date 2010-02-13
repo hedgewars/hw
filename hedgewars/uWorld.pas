@@ -359,8 +359,8 @@ var i, t: LongInt;
     tdx, tdy: Double;
     grp: TCapGroup;
     s: string[15];
-	highlight: Boolean;
-    offset: LongInt;
+    highlight: Boolean;
+    offset, offsetX, offsetY: LongInt;
     scale: GLfloat;
 begin
 if ZoomValue < zoom then
@@ -451,7 +451,11 @@ SetScale(scale);
 
 
 // Turn time
+{$IFDEF IPHONEOS}
+offset:= 313;
+{$ELSE}
 offset:= 48;
+{$ENDIF}
 if TurnTimeLeft <> 0 then
    begin
    i:= Succ(Pred(TurnTimeLeft) div 1000);
@@ -516,7 +520,7 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
 
 // Captions
 {$IFDEF IPHONEOS}
-offset:= 49;
+offset:= 40;
 {$ELSE}
 if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then offset:= 48
 else offset:= 8;
@@ -578,11 +582,13 @@ if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr
 
 // Wind bar
 {$IFDEF IPHONEOS}
-offset:= 305;
+offsetX:= 305;
+offsetY:= 315;
 {$ELSE}
-offset:= 30;
+offsetX:= 30;
+offsetY:= 180;
 {$ENDIF}
-DrawSprite(sprWindBar, (cScreenWidth shr 1) - 180, cScreenHeight - offset, 0);
+DrawSprite(sprWindBar, (cScreenWidth shr 1) - offsetY, cScreenHeight - offsetX, 0);
 if WindBarWidth > 0 then
    begin
    {$WARNINGS OFF}
@@ -591,7 +597,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindR, r, (cScreenWidth shr 1) - 103, cScreenHeight - offset + 2, 13, 0);
+   DrawSpriteFromRect(sprWindR, r, (cScreenWidth shr 1) - offsetY + 77, cScreenHeight - offsetX + 2, 13, 0);
    end else
  if WindBarWidth < 0 then
    begin
@@ -601,7 +607,7 @@ if WindBarWidth > 0 then
    r.y:= 0;
    r.w:= - WindBarWidth;
    r.h:= 13;
-   DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - 106 + WindBarWidth, cScreenHeight - offset + 2, 13, 0);
+   DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
    end;
 
 // AmmoMenu
@@ -626,7 +632,7 @@ if missionTimer <> 0 then
 
 // fps
 {$IFDEF IPHONEOS}
-offset:= 40;
+offset:= 300;
 {$ELSE}
 offset:= 10;
 {$ENDIF}
