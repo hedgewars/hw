@@ -76,6 +76,7 @@ var	hideAmmoMenu: boolean;
 	tabKey: boolean;
 	
 	chatAction: boolean;
+	pauseAction: boolean;
 	switchAction: boolean;
 
 	theJoystick: PSDL_Joystick;
@@ -336,6 +337,7 @@ DefaultBinds[24]:= '+down';
 DefaultBinds[25]:= '+left';
 DefaultBinds[26]:= '+right';
 DefaultBinds[44]:= 'chat';
+DefaultBinds[55]:= 'pause';
 {$ELSE}
 DefaultBinds[KeyNameToCode('up')]:= '+up';
 DefaultBinds[KeyNameToCode('down')]:= '+down';
@@ -376,6 +378,7 @@ begin
 	tkbdn[32]:= ord(spaceKey);
 
 	tkbdn[44]:= ord(chatAction);
+	tkbdn[55]:= ord(pauseAction);
 	//tkbdn[100]:= ord(switchAction);
 	
 	leftClick:= false;
@@ -387,6 +390,7 @@ begin
 	backspaceKey:= false;
 	
 	chatAction:= false;
+	pauseAction:= false;
 	//switchAction:= false;
 end;
 {$ENDIF}
@@ -505,6 +509,7 @@ begin
 	tabKey:= false;
 	
 	chatAction:= false;
+	pauseAction:= false;
 	switchAction:= false;
 {$ENDIF}
 end;

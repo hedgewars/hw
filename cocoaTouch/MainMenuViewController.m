@@ -138,17 +138,17 @@
 			self.settingsViewController = controller;
 			[controller release];
 		}
-		self.settingsViewController.view.frame = CGRectMake(0, -320, 480, 320);
+		self.settingsViewController.view.frame = CGRectMake(0, -257, 480, 278);
 		self.settingsViewController.parentView = self.mainView;
 
-		[UIView beginAnimations:@"View Switch" context:NULL];
+		[UIView beginAnimations:@"Settings SwitchView" context:NULL];
 		[UIView setAnimationDuration:1];
 
-		self.settingsViewController.view.frame = CGRectMake(0, 0, 480, 320);
-		self.mainView.frame = CGRectMake(0, 320, 480, 320);
+		self.settingsViewController.view.frame = CGRectMake(0, 21, 480, 278);
+		self.mainView.frame = CGRectMake(0, 299, 480, 278);
 		[UIView commitAnimations];
 		
-		[self.view addSubview:settingsViewController.view];
+		[self.view insertSubview:settingsViewController.view atIndex:0];
 	}
 
 }

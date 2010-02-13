@@ -31,7 +31,6 @@
 	MainMenuViewController *viewController;
 }
 
-// the outlets are set in MainWindow.xib
 @property (readwrite, assign) SDL_Window *window;
 @property (readwrite, retain) UIWindow *uiwindow;
 @property (nonatomic, retain) MainMenuViewController *viewController;

@@ -42,6 +42,7 @@ procedure HW_aimDown; cdecl; export;
 procedure HW_shoot; cdecl; export;
 procedure HW_whereIsHog; cdecl; export;
 procedure HW_chat; cdecl; export;
+procedure HW_pause; cdecl; export;
 procedure HW_tab; cdecl; export;
 {$ENDIF}
 
@@ -118,6 +119,11 @@ end;
 procedure HW_tab; cdecl; export;
 begin
 	switchAction:= true;
+end;
+
+procedure HW_pause; cdecl; export;
+begin
+	pauseAction:= true;
 end;
 
 procedure HW_whereIsHog; cdecl; export;

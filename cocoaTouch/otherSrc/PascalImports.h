@@ -39,6 +39,7 @@ extern "C" {
 	
 	void HW_chat(void);
 	void HW_tab(void);
+	void HW_pause(void);
 	
 #ifdef __cplusplus
 }

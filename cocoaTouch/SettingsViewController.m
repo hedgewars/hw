@@ -142,8 +142,8 @@
 	[UIView beginAnimations:@"Get Back" context:NULL];
 	[UIView setAnimationDuration:1];
 	
-	self.view.frame = CGRectMake(0, -320, 480, 320);
-	self.parentView.frame = CGRectMake(0, 0, 480, 320);
+	self.view.frame = CGRectMake(0, -257, 480, 278);
+	self.parentView.frame = CGRectMake(0, 21, 480, 278);
 	[UIView commitAnimations];
 	
 	[self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];

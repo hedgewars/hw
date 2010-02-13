@@ -34,15 +34,16 @@
 @implementation SDL_uikitview
 
 // they have to be global variables to allow showControls() to use them
-UIButton *attackButton, *menuButton;
-
+//UIButton *attackButton, *menuButton;
+UIView *menuView;
 -(void) dealloc {
 #if SDL_IPHONE_KEYBOARD
 	SDL_DelKeyboard(0);
 	[textField release];
 #endif
-	[menuButton release];
-	[attackButton release];
+	if (menuView) [menuView release];
+	//[menuButton release];
+	//[attackButton release];
 	[super dealloc];
 }
 
@@ -66,7 +67,9 @@ UIButton *attackButton, *menuButton;
 
 	self.multipleTouchEnabled = YES;
 	self.exclusiveTouch = YES;
-/*
+
+	
+	/*
 	// custom code
 	// the coordinate system is still like in Portrait even though everything is rotated
 	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260, 50)];
@@ -112,8 +115,46 @@ UIButton *attackButton, *menuButton;
 	[self insertSubview:chatButton atIndex:0];
 	[chatButton release];
 	*/
+
+//(0,0) is the lower left corner
+//x:[0-320]
+//y:[0-480]
+	UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(256, 416, 64, 64)];
+	[menuButton addTarget:[self superclass] action:@selector(showMenu) forControlEvents:UIControlEventTouchDown];
+	[menuButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
+	[self insertSubview:menuButton atIndex:0];
+	[menuButton release];
+	
+	menuView = [[UIView alloc] initWithFrame:CGRectMake(320, 480, 150, 100)];
+	menuView.backgroundColor = [UIColor lightGrayColor];
+	[self insertSubview:menuView atIndex:1];
+
 	return self;
 }
+
++(void) showMenu {
+	HW_pause();
+	
+	[UIView beginAnimations:@"show menu" context:NULL];
+	[UIView setAnimationDuration:1];
+	
+	menuView.frame = CGRectMake(170, 380, 150, 100);
+	
+	[UIView commitAnimations];
+}
+
++(void) hideMenu {
+	[UIView beginAnimations:@"hide menu" context:NULL];
+	[UIView setAnimationDuration:1];
+	
+	menuView.frame = CGRectMake(480, -70, 150, 100);
+	
+	[UIView commitAnimations];
+	
+	HW_pause();
+}
+
+
 
 #pragma mark -
 #pragma mark Exported functions for FreePascal
@@ -162,6 +203,10 @@ void IPH_showControls (void) {
 
 +(void) chatBegin {
 	//TODO: implement a UITextScroll and put received chat lines in there
+}
+
++(void) pauseGame {
+	HW_pause();
 }
 
 #pragma mark -
