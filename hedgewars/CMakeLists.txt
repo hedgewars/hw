@@ -5,8 +5,6 @@ find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
-#TODO: exclude for iphone only?
-find_package(Lua51)
 
 #find which version of SDL_image and SDL_mixer we have (for IMG_Init and Mix_Init)
 #if the headers are not installed, the newer apis won't be activated
