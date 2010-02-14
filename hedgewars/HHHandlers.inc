@@ -102,6 +102,7 @@ procedure Attack(Gear: PGear);
 var xx, yy: hwFloat;
     tmpGear: PVisualGear;
 begin
+bShowFinger:= false;
 with Gear^,
      PHedgehog(Gear^.Hedgehog)^ do
      begin
