@@ -21,10 +21,11 @@ type
 
 const
 {$IFDEF UNIX}
-  LuaLibName = 'lua5.1.so';
-{$IFDEF DARWIN}
-    LuaLibName = 'lua5.1.a';
-{$ENDIF}
+  {$IFDEF DARWIN}
+    LuaLibName = 'lua';
+  {$ELSE}
+    LuaLibName = 'lua5.1.so';
+  {$ENDIF}
 {$ELSE}
   LuaLibName = 'lua5.1.dll';
 {$ENDIF}

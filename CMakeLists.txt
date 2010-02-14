@@ -119,7 +119,7 @@ if(Optz)
 	set(pascal_compiler_flags_cmn "-O2" "-Xs" "-Si" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-O2" "-w")
 else(Optz)
-	set(pascal_compiler_flags_cmn "-O-" "-glh" "-dDEBUGFILE" "-pg" "-vv" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-O-" "-glh" "-dDEBUGFILE" "-vv" ${pascal_compiler_flags_cmn})
 	set(haskell_compiler_flags_cmn "-Wall" "-debug" "-dcore-lint")
 endif(Optz)
 
