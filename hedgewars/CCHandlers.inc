@@ -156,6 +156,7 @@ with CurrentTeam^ do
 	CurrentHedgehog^.AmmoStore:= ClansCount - 1; // FIXME HACK to get ammostores work
 	CurrentHedgehog^.Gear:= Gear;
 	CurrentHedgehog^.Name:= id;
+    CurrHedgehog:= HedgehogsNumber;
 	inc(HedgehogsNumber)
 	end
 end;
