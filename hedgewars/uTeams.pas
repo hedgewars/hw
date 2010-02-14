@@ -297,7 +297,7 @@ New(team);
 TryDo(team <> nil, 'AddTeam: team = nil', true);
 FillChar(team^, sizeof(TTeam), 0);
 team^.AttackBar:= 2;
-team^.CurrHedgehog:= cMaxHHIndex;
+team^.CurrHedgehog:= 0;
 team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
