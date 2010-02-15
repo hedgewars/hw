@@ -40,6 +40,7 @@ var PixelFormat: PSDL_PixelFormat;
     numsquares : LongInt;
     ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
+    ropeIconTex: PTexture;
 
 procedure init_uStore;
 procedure free_uStore;
@@ -52,8 +53,8 @@ procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, Frames: LongInt; Angle: real);
+procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
+procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -180,7 +181,7 @@ var s: string;
 		i: LongInt;
 		r, rr: TSDL_Rect;
 		drY: LongInt;
-		texsurf, flagsurf: PSDL_Surface;
+		texsurf, flagsurf, iconsurf: PSDL_Surface;
 	begin
 	r.x:= 0;
 	r.y:= 0;
@@ -256,7 +257,18 @@ var s: string;
 						end
 					end;
 		end;
-		MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+	MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+	iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
+	if iconsurf <> nil then
+		begin
+		r.x:= 0;
+		r.y:= 0;
+		r.w:= 28;
+		r.h:= 28;
+		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
+		ropeIconTex:= Surface2Tex(iconsurf, false);
+		SDL_FreeSurface(iconsurf)
+		end;
 	end;
 
 	procedure MakeCrossHairs;
@@ -499,60 +511,14 @@ glDisableClientState(GL_VERTEX_ARRAY);
 glPopMatrix
 end;
 
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, Frames: LongInt);
-var ft, fb: GLfloat;
-	hw: LongInt;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 begin
-glPushMatrix;
-glTranslatef(X, Y, 0);
-glScalef(Scale, Scale, 1.0);
-
-if Dir < 0 then
-	hw:= - 16
-else
-	hw:= 16;
-
-ft:= Frame / Frames * Texture^.ry;
-fb:= (Frame + 1) / Frames * Texture^.ry;
-
-glBindTexture(GL_TEXTURE_2D, Texture^.id);
-
-VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= -16;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= -16;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= 16;
-VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= 16;
-
-TextureBuffer[0].X:= 0;
-TextureBuffer[0].Y:= ft;
-TextureBuffer[1].X:= Texture^.rx;
-TextureBuffer[1].Y:= ft;
-TextureBuffer[2].X:= Texture^.rx;
-TextureBuffer[2].Y:= fb;
-TextureBuffer[3].X:= 0;
-TextureBuffer[3].Y:= fb;
-
-glEnableClientState(GL_VERTEX_ARRAY);
-glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-glDisableClientState(GL_VERTEX_ARRAY);
-
-
-glPopMatrix
+	DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
 end;
 
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, Frames: LongInt; Angle: real);
-var ft, fb: GLfloat;
-	hw: LongInt;
+procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+var ft, fb, fl, fr: GLfloat;
+    hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 glPushMatrix;
@@ -564,34 +530,41 @@ else
    glRotatef(Angle, 0, 0,  1);
 
 glTranslatef(Dir*OffsetX, OffsetY, 0);
+glScalef(Scale, Scale, 1);
+
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 if Dir < 0 then
-	hw:= - 16
+	hw:= w div -2
 else
-	hw:= 16;
+	hw:= w div 2;
 
-ft:= Frame / Frames * Texture^.ry;
-fb:= (Frame + 1) / Frames * Texture^.ry;
+nx:= round(Texture^.w * Texture^.rx / w);
+ny:= round(Texture^.h * Texture^.ry / h);
+
+ft:= ((Frame mod ny) / ny);
+fb:= (((Frame mod ny) + 1) / ny);
+fl:= ((Frame div ny) / nx) * Texture^.rx;
+fr:= (((Frame div ny) + 1) / nx);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
 VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= -16;
+VertexBuffer[0].Y:= w / -2;
 VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= -16;
+VertexBuffer[1].Y:= w / -2;
 VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= 16;
+VertexBuffer[2].Y:= w / 2;
 VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= 16;
+VertexBuffer[3].Y:= w / 2;
 
-TextureBuffer[0].X:= 0;
+TextureBuffer[0].X:= fl;
 TextureBuffer[0].Y:= ft;
-TextureBuffer[1].X:= Texture^.rx;
+TextureBuffer[1].X:= fr;
 TextureBuffer[1].Y:= ft;
-TextureBuffer[2].X:= Texture^.rx;
+TextureBuffer[2].X:= fr;
 TextureBuffer[2].Y:= fb;
-TextureBuffer[3].X:= 0;
+TextureBuffer[3].X:= fl;
 TextureBuffer[3].Y:= fb;
 
 glEnableClientState(GL_VERTEX_ARRAY);
@@ -824,7 +797,7 @@ for ii:= Low(TSprite) to High(TSprite) do
     if SpritesData[ii].Surface <> nil then SDL_FreeSurface(SpritesData[ii].Surface)
     end;
 SDL_FreeSurface(MissionIcons);
-
+FreeTexture(ropeIconTex);
 FreeTexture(HHTexture)
 end;
 
