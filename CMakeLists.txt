@@ -77,7 +77,6 @@ if(APPLE)
 	endif()
 
 	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
-	
 else(APPLE)
 	set(target_dir "bin")
 endif(APPLE)
@@ -151,6 +150,7 @@ add_subdirectory(QTfrontend)
 add_subdirectory(hedgewars)
 add_subdirectory(share)
 add_subdirectory(tools)
+add_subdirectory(misc/liblua)
 
 # CPack vars
 

@@ -151,8 +151,7 @@ ELSE()
 #	set_target_properties(SDLmain PROPERTIES COMPILE_FLAGS "-mmacosx-version-min=${minimum_macosx} --sysroot=${CMAKE_OSX_SYSROOT} ")
 
 	#let's tell freepacal where to find libraries
-	message("${CMAKE_SOURCE_DIR}/misc")
-	set(pascal_compiler_flags "-k${CMAKE_SOURCE_DIR}/misc/liblua.a" ${pascal_compiler_flags})
+	set(pascal_compiler_flags "-k${CMAKE_BINARY_DIR}/misc/liblua/liblua.a" "-k-lreadline" ${pascal_compiler_flags})
 
 	#these are the dependencies for building a universal binary on Mac OS X
 	foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
@@ -161,7 +160,7 @@ ELSE()
 			COMMAND "${pascal_compiler}"
 			ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}
 			MAIN_DEPENDENCY ${hwengine_project}
-			DEPENDS ${engine_sources} SDLmain
+			DEPENDS ${engine_sources} SDLmain lua
 			)
 		add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
 	endforeach()
