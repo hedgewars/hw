@@ -853,15 +853,6 @@ HatVisible:= false;
 
 sx:= hwRound(Gear^.X) + 1 + WorldDx;
 sy:= hwRound(Gear^.Y) - 3 + WorldDy;
-if (Gear^.State and gstDrowning) <> 0 then
-	begin
-	DrawHedgehog(sx, sy,
-			hwSign(Gear^.dX),
-			1,
-			7,
-			0);
-	defaultPos:= false
-	end else
 if ((Gear^.State and gstWinner) <> 0) and
    ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
 	begin
@@ -869,6 +860,15 @@ if ((Gear^.State and gstWinner) <> 0) and
 			hwSign(Gear^.dX),
 			2,
 			0,
+			0);
+	defaultPos:= false
+	end;
+if (Gear^.State and gstDrowning) <> 0 then
+	begin
+	DrawHedgehog(sx, sy,
+			hwSign(Gear^.dX),
+			1,
+			7,
 			0);
 	defaultPos:= false
 	end else
@@ -993,16 +993,18 @@ if (Gear^.State and gstHHDriven) <> 0 then
 					end;
                 sx:= hwRound(Gear^.X) + WorldDx;
                 sy:= hwRound(Gear^.Y) + WorldDy;
-				DrawHedgehog(sx, sy,
-						i,
-						1,
-						0,
-						DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
-				with PHedgehog(Gear^.Hedgehog)^ do
-					if (HatTex <> nil) then
-						DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
-							i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-				
+               if ((Gear^.State and gstWinner) = 0) then
+                   begin
+                   DrawHedgehog(sx, sy,
+                           i,
+                           1,
+                           0,
+                           DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
+                   with PHedgehog(Gear^.Hedgehog)^ do
+                       if (HatTex <> nil) then
+                           DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
+                               i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
+                   end;
 				DrawAltWeapon(Gear, sx, sy);
 				defaultPos:= false
 				end;
