@@ -22,6 +22,8 @@ local end_timer = 5000 -- 5000 ms = 5 s
 local game_lost = false
 -- This variable will point to the hog's gear
 local player = nil
+-- This variable will grab the time left at the end of the round
+local time_goal = 0
 
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
@@ -107,6 +109,8 @@ function onGameTick()
 		ShowMission("Bazooka Training", "Aiming Practice", "Oh no! Time's up! Just try again.", -amSkip, 0);
 		-- How about killing our poor hog due to his poor performance?
 		SetHealth(player, 0);
+		-- Just to be sure set the goal time to 1 ms
+		time_goal = 1
 	end
 	-- If the goal is reached or we've lost ...
 	if score == score_goal or game_lost then
@@ -118,6 +122,8 @@ function onGameTick()
 		else
 			-- ... or just lower the timer by 1.
 			end_timer = end_timer - 1
+			-- Reset the time left to stop the timer
+			TurnTimeLeft = time_goal
 		end
 	end
 end
@@ -152,6 +158,8 @@ function onGearDelete(gear)
 			ShowMission("Bazooka Training", "Aiming Practice", "Congratulations! You've eliminated all targets|within the allowed time frame.", 0, 0);
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
+			-- Save the time left so we may keep it.
+			time_goal = TurnTimeLeft
 			end
 		end
 	end
