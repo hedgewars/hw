@@ -10,13 +10,18 @@
 ---------------------------------------------------------------
 
 -- This variable will hold the number of destroyed targets.
-score = 0
+local score = 0
 -- This variable represents the number of targets to destroy.
-score_goal = 5
+local score_goal = 5
 -- This variable controls how many milliseconds/ticks we'd
 -- like to wait before we end the round once all targets
 -- have been destroyed.
-end_timer = 5000 -- 5000 ms = 5 s
+local end_timer = 5000 -- 5000 ms = 5 s
+-- This variable is set to true if the game is lost (i.e.
+-- time runs out).
+local game_lost = false
+-- This variable will point to the hog's gear
+local player = nil
 
 -- This is a custom function to make it easier to
 -- spawn more targets with just one line of code
@@ -68,8 +73,8 @@ function onGameInit()
 	-- Create the player team
 	AddTeam("'Zooka Team", 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
-	hog = AddHog("Hunter", 0, 1, "NoHat")
-	SetGearPosition(hog, 1960, 1160);
+	player = AddHog("Hunter", 0, 1, "NoHat")
+	SetGearPosition(player, 1960, 1160);
 end
 
 -- This function is called when the round starts
@@ -93,8 +98,18 @@ end
 -- You shouldn't try to calculate too complicated
 -- code here as this might slow down your game.
 function onGameTick()
-	-- If the goal is reached ...
-	if score == score_goal then
+	-- If time's up, set the game to be lost.
+	-- We actually check the time to be "1 ms" as it
+	-- will be at "0 ms" right at the start of the game.
+	if TurnTimeLeft == 1 then
+		game_lost = true
+		-- ... and show a short message.
+		ShowMission("Bazooka Training", "Aiming Practice", "Oh no! Time's up! Just try again.", -amSkip, 0);
+		-- How about killing our poor hog due to his poor performance?
+		SetHealth(player, 0);
+	end
+	-- If the goal is reached or we've lost ...
+	if score == score_goal or game_lost then
 		-- ... check to see if the time we'd like to
 		-- wait has passed and then ...
 		if end_timer == 0 then
@@ -132,10 +147,12 @@ function onGearDelete(gear)
 			-- ... spawn another target.
 			spawnTarget()
 		else
+			if not game_lost then
 			-- Otherwise show that the goal was accomplished
 			ShowMission("Bazooka Training", "Aiming Practice", "Congratulations! You've eliminated all targets|within the allowed time frame.", 0, 0);
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
+			end
 		end
 	end
 end

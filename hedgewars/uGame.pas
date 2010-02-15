@@ -46,7 +46,7 @@ if (GameType = gmtDemo) and isSpeed then Lag:= Lag * 10;
 i:= 1;
 while (GameState <> gsExit) and (i <= Lag) do
     begin
-	ScriptCall('onGameTick');
+    ScriptCall('onGameTick');
     if not CurrentTeam^.ExtDriven then
        begin
        if CurrentHedgehog^.BotLevel <> 0 then ProcessBot;

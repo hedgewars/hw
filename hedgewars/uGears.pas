@@ -820,14 +820,8 @@ with PHedgehog(Gear^.Hedgehog)^ do
 	begin
 	if not (((Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) and ((Gear^.State and gstAttacked) = 0)) then
 		exit;
-	
-	//r.x:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) shr 5) * 32;
-	//r.y:= ((ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1) mod 32) * 32;
-	//r.w:= 32;
-	//r.h:= 32;
-	DrawTexture(sx + 16, sy + 16, ropeIconTex);
-	//DrawFromRect(sx + 18, sy + 18, @r, SpritesData[sprAMAmmos].Texture);
-	DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1, 1, 32, 32);
+	DrawTexture(round(sx + 16), round(sy + 16), ropeIconTex);
+	DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, round(sx + 30), round(sy + 30), ord(Ammo^[CurSlot, CurAmmo].AmmoType) - 1, 1, 32, 32);
 	end;
 end;
 

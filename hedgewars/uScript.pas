@@ -149,6 +149,21 @@ begin
 	lc_getgeartype:= 1
 end;
 
+function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+	if lua_gettop(L) <> 2 then
+		begin
+		WriteLnToConsole('LUA: Wrong number of parameters passed to SetHealth!');
+		end
+	else
+		begin
+		gear:= GearByUID(lua_tointeger(L, 1));
+		if (gear <> nil) and (gear^.Kind = gtHedgehog) then gear^.Health:= lua_tointeger(L, 2)
+		end;
+	lc_sethealth:= 0
+end;
+
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
 	GameState:= gsExit;
@@ -367,16 +382,28 @@ begin
 		end
 end;
 
+procedure SetGlobals;
+begin
+	ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+end;
+
+procedure GetGlobals;
+begin
+	TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
+end;
+
 procedure ScriptCall(fname : string);
 begin
 	if not ScriptLoaded then
 		exit;
+	SetGlobals;
 	lua_getglobal(luaState, Str2PChar(fname));
 	if lua_pcall(luaState, 0, 0, 0) <> 0 then
 		begin
 		WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
 		lua_pop(luaState, 1)
 		end;
+	GetGlobals;
 end;
 
 function ScriptCall(fname : string; par1: LongInt) : LongInt;
@@ -398,7 +425,7 @@ function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
 	if not ScriptLoaded then
 		exit;
-
+	SetGlobals;
 	lua_getglobal(luaState, Str2PChar(fname));
 	lua_pushinteger(luaState, par1);
 	lua_pushinteger(luaState, par2);
@@ -415,6 +442,7 @@ begin
 		ScriptCall:= lua_tointeger(luaState, -1);
 		lua_pop(luaState, 1)
 		end;
+	GetGlobals;
 end;
 
 procedure ScriptPrepareAmmoStore;
@@ -516,6 +544,7 @@ lua_register(luaState, 'SetAmmo', @lc_setammo);
 lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
+lua_register(luaState, 'SetHealth', @lc_sethealth);
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;
