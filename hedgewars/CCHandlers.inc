@@ -639,7 +639,11 @@ begin
 	end;
 
 	// load window icon
-	ico:= LoadImage(Pathz[ptGraphics] + '/hwengine{$IFDEF DARWIN}_mac{$ENDIF}', ifIgnoreCaps);
+	{$IFNDEF DARWIN}
+	ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+	{$ELSE}
+	ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
+	{$ENDIF}
 	if ico <> nil then
 		begin
 		SDL_WM_SetIcon(ico, 0);
