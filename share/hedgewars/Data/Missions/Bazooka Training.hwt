@@ -58,7 +58,7 @@ function onGameInit()
 	-- Game settings and rules
 	GameFlags = gfMultiWeapon + gfOneClanMode + gfSolidLand
 	-- The time the player has to move each round (in ms)
-	TurnTime = 25000
+	TurnTime = 60000
 	-- The frequency of crate drops
 	CaseFreq = 0
 	-- The number of land objects being placed
@@ -101,7 +101,7 @@ function onGameTick()
 	-- If time's up, set the game to be lost.
 	-- We actually check the time to be "1 ms" as it
 	-- will be at "0 ms" right at the start of the game.
-	if TurnTimeLeft == 1 then
+	if TurnTimeLeft == 1 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
 		ShowMission("Bazooka Training", "Aiming Practice", "Oh no! Time's up! Just try again.", -amSkip, 0);
