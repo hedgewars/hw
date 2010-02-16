@@ -355,7 +355,7 @@ for i:= 0 to Pred(StoreCnt) do
 		begin
 		for a:= 0 to cMaxSlotAmmoIndex do
 			with StoresList[i]^[slot, a] do
-                if Count <> InitialCount then Count:= InitialCount;
+                Count:= InitialCount;
 
 		PackAmmo(StoresList[i], slot)
 		end;
