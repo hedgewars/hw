@@ -32,7 +32,7 @@ HEADERS += ../QTfrontend/KB.h ../QTfrontend/SDLs.h \
 	../QTfrontend/team.h ../QTfrontend/teamselect.h \
 	../QTfrontend/teamselhelper.h ../QTfrontend/togglebutton.h \
 	../QTfrontend/ui_hwform.h ../QTfrontend/vertScrollArea.h \
-	../QTfrontend/weaponItem.h 
+	../QTfrontend/weaponItem.h ../QTFrontend/xfire.h
 
 SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/about.cpp ../QTfrontend/ammoSchemeModel.cpp \
@@ -55,6 +55,7 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
 	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
 	../QTfrontend/vertScrollArea.cpp ../QTfrontend/weaponItem.cpp \
+	../QTfrontend/xfire.cpp
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts 	 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts 	 

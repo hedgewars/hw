@@ -89,6 +89,11 @@ set(	hwfr_src
 	bgwidget.cpp
 	)
 
+#xfire integration
+if(WIN32)
+	set(hwfr_src ${hwfr_src} xfire.cpp xfiregameclient.cpp)
+endif(WIN32)
+
 if(MINGW)
 	# resource compilation for mingw
 	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o

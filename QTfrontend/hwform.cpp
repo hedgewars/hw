@@ -54,6 +54,7 @@
 #include "input_ip.h"
 #include "ammoSchemeModel.h"
 #include "bgwidget.h"
+#include "xfire.h"
 
 #ifdef __APPLE__
 #include "CocoaInitializer.h"
@@ -71,6 +72,7 @@ bool frontendEffects = true;
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
 {
+	xfire_init();
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("video/frontendeffects", true).toBool();
 
@@ -203,6 +205,53 @@ HWForm::HWForm(QWidget *parent)
 
 	PagesStack.push(ID_PAGE_MAIN);
 	GoBack();
+}
+
+void HWForm::updateXfire(void)
+{
+//	xfire_setvalue(XFIRE_ROOM, "None");
+//	xfire_setvalue(XFIRE_GAMEMODE, "Multiplayer");
+//	xfire_setvalue(XFIRE_NICKNAME, ui.pageOptions->editNetNick->text().toAscii());
+//	if(!host.compare("netserver.hedgewars.org"))
+//		xfire_setvalue(XFIRE_SERVER, "Official server");
+//	else
+//		xfire_setvalue(XFIRE_SERVER, "Custom or local LAN server");
+	if(hwnet)
+	{
+		xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare("netserver.hedgewars.org:46631") ? "Official server" : hwnet->getHost().toAscii());
+		switch(hwnet->getClientState())
+		{
+			case 1: // Connecting
+			xfire_setvalue(XFIRE_STATUS, "Connecting");
+			xfire_setvalue(XFIRE_NICKNAME, "-");
+			xfire_setvalue(XFIRE_ROOM, "-");
+			case 2: // In lobby
+			xfire_setvalue(XFIRE_STATUS, "Online");
+			xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
+			xfire_setvalue(XFIRE_ROOM, "In game lobby");
+			break;
+			case 3: // In room
+			xfire_setvalue(XFIRE_STATUS, "Online");
+			xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
+			xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (waiting for players)").toAscii());
+			break;
+			case 5: // In game
+			xfire_setvalue(XFIRE_STATUS, "Online");
+			xfire_setvalue(XFIRE_NICKNAME, hwnet->getNick().toAscii());
+			xfire_setvalue(XFIRE_ROOM, (hwnet->getRoom() + " (playing or spectating)").toAscii());
+			break;
+			default:
+			break;
+		}
+	}
+	else
+	{
+		xfire_setvalue(XFIRE_STATUS, "Offline");
+		xfire_setvalue(XFIRE_NICKNAME, "-");
+		xfire_setvalue(XFIRE_ROOM, "-");
+		xfire_setvalue(XFIRE_SERVER, "-");
+	}
+	xfire_update();
 }
 
 void HWForm::onFrontendFullscreen(bool value)
@@ -359,6 +408,7 @@ void HWForm::GoToAdmin()
 
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
+	updateXfire();
 	if (id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) {
 		QStringList tmNames = config->GetTeamsList();
 		TeamSelWidget* curTeamSelWidget;
@@ -891,6 +941,7 @@ void HWForm::CreateNetGame()
 
 void HWForm::closeEvent(QCloseEvent *event)
 {
+	xfire_free();
 	config->SaveOptions();
 	event->accept();
 }

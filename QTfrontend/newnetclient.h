@@ -44,7 +44,11 @@ class HWNewNet : public QObject
   void Disconnect();
   bool isRoomChief();
   bool isInRoom();
-
+  int getClientState();
+  QString getNick();
+  QString getRoom();
+  QString getHost();
+  
  private:
   GameUIConfig* config;
   GameCFGWidget* m_pGameCFGWidget;
@@ -52,6 +56,8 @@ class HWNewNet : public QObject
 
   bool isChief;
   QString mynick;
+  QString myroom;
+  QString myhost;
   QTcpSocket NetSocket;
   QString seed;
   bool m_game_connected;

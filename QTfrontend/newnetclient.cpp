@@ -67,6 +67,7 @@ HWNewNet::~HWNewNet()
 void HWNewNet::Connect(const QString & hostName, quint16 port, const QString & nick)
 {
 	mynick = nick.isEmpty() ? QLineEdit::tr("unnamed") : nick;
+	myhost = hostName + QString(":%1").arg(port);
 	NetSocket.connectToHost(hostName, port);
 }
 
@@ -87,6 +88,8 @@ void HWNewNet::CreateRoom(const QString & room)
 		return;
 	}
 
+	myroom = room;
+
 	RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
 	isChief = true;
 }
@@ -98,6 +101,8 @@ void HWNewNet::JoinRoom(const QString & room)
 		qWarning("Illegal try to join room!");
 		return;
 	}
+
+	myroom = room;
 
 	RawSendNet(QString("JOIN_ROOM%1%2").arg(delimeter).arg(room));
 	isChief = false;
@@ -619,6 +624,26 @@ void HWNewNet::askRoomsList()
 		return;
 	}
 	RawSendNet(QString("LIST"));
+}
+
+int HWNewNet::getClientState()
+{
+	return netClientState;
+}
+
+QString HWNewNet::getNick()
+{
+	return mynick;
+}
+
+QString HWNewNet::getRoom()
+{
+	return myroom;
+}
+
+QString HWNewNet::getHost()
+{
+	return myhost;
 }
 
 bool HWNewNet::isRoomChief()

@@ -55,6 +55,7 @@ public:
 	SDLInteraction sdli;
 	GameUIConfig * config;
     QSettings * gameSettings; // Same file GameUIConfig points to but without the baggage.  Needs sync() calls if you want to get GameUIConfig changes though
+	void updateXfire();
 
 private slots:
 	void GoToMain();
