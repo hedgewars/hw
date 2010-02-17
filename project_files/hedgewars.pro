@@ -55,7 +55,10 @@ SOURCES += ../QTfrontend/SDLs.cpp ../QTfrontend/SquareLabel.cpp \
 	../QTfrontend/teamselect.cpp ../QTfrontend/teamselhelper.cpp \
 	../QTfrontend/togglebutton.cpp ../QTfrontend/ui_hwform.cpp \
 	../QTfrontend/vertScrollArea.cpp ../QTfrontend/weaponItem.cpp \
-	../QTfrontend/xfire.cpp
+
+win32 {
+SOURCES += ../QTfrontend/xfire.cpp
+}
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_bg.ts 	 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_de.ts 	 

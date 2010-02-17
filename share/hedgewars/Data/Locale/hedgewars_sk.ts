@@ -12,14 +12,14 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Nikdy</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Každý ťah</numerusform>
+            <numerusform>Každé %1 ťahy</numerusform>
+            <numerusform>Každých %1 ťahov</numerusform>
         </translation>
     </message>
 </context>
@@ -169,23 +169,26 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaša prezývka %1 je
+zaregistrovaná na Hedgewars.org
+Prosím, zadajte heslo alebo
+si vyberte inú prezývku:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 prišiel do miestnosti</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 sa pridal</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 odišiel (%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 odišiel</translation>
     </message>
 </context>
 <context>
@@ -207,7 +210,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation type="unfinished"></translation>
+        <translation>Vymazať vyrovnávaciu pamäť účtov</translation>
     </message>
 </context>
 <context>
@@ -236,18 +239,18 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;jedným&lt;/b&gt; zabitím počas ťahu.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Najlepším zabijákom je &lt;b&gt;%1&lt;/b&gt; s &lt;b&gt;%2&lt;/b&gt; zabitiami počas ťahu.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Celkovo bol v tomto kole zabitý &lt;b&gt;jeden&lt;/b&gt; ježko.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Celkovo boli v tomto kole zabití &lt;b&gt;%1&lt;/b&gt; ježkovia.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Celkovo boli v tomto kole zabití &lt;b&gt;%1&lt;/b&gt; ježkovia.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -376,52 +379,54 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Názov miestnosti:</translation>
     </message>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Táto hra je v lobby.
+Môžete sa pridať a začať hru akonáhle hra skončí.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Táto hra práve prebieha.
+Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať na koniec hry.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 je hostiteľom. Može meniť nastavenia a spúšťať hru.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished"></translation>
+        <translation>Náhodná mapa</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hry môžu byť hrané na predvytvorených alebo náhodných mapách.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schéma hry určuje všeobecné voľby ako napríklad Dĺžka kola, Režim rýchlej smrti alebo Vampírizmus.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schémy hry určuje dostupné zbrane a množstvo výzbroje.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>K tejto miestnosti je pripojený jeden klient.</numerusform>
+            <numerusform>K tejto miestnosti sú pripojení %1 klienti.</numerusform>
+            <numerusform>K tejto miestnosti je pripojených %1 klientov.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>V tejto miestnosti je jeden hrajúci team.</numerusform>
+            <numerusform>V tejto miestnosti sú %1 hrajúce teamy.</numerusform>
+            <numerusform>V tejto miestnosti je %1 hrajúcich teamov.</numerusform>
         </translation>
     </message>
     <message>
@@ -497,11 +502,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poradie hrania je náhodné miesto poradia hráčov v miestnosti.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hra s Kráľom. Ak zomrie, vaša strana prehráva.</translation>
     </message>
 </context>
 <context>
@@ -566,14 +571,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Nasledovať</translation>
     </message>
 </context>
 <context>
     <name>QCheckBox</name>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontrolovať aktualizácie pri štarte</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -605,11 +610,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
+        <translation>Efekty frontendu (vyžaduje reštart)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Znížená kvalita</translation>
     </message>
 </context>
 <context>
@@ -846,11 +851,11 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Prezývka</translation>
     </message>
     <message>
         <source>Please enter your nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosím, zadajte vašu prezývku</translation>
     </message>
 </context>
 <context>
@@ -920,42 +925,42 @@ Skontrolujte si vašu inštaláciu</translation>
     <name>QTableWidget</name>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Názov miestnosti</translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished"></translation>
+        <translation>C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished"></translation>
+        <translation>Majiteľ</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Mapa</translation>
+        <translation>Mapa</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravidlá</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished"></translation>
+        <translation>Zbrane</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished"></translation>
+        <translation>Sada zbraní</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravdepodobnosti</translation>
     </message>
 </context>
 <context>
@@ -1021,11 +1026,11 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Náhodné poradie</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation>Kráľ</translation>
     </message>
 </context>
 <context>
@@ -1170,384 +1175,384 @@ ježkov</translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished"></translation>
+        <translation>priblíženie</translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished"></translation>
+        <translation>oddialenie</translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>reštartovať priblíženie</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished"></translation>
+        <translation>dlhý skok</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished"></translation>
+        <translation>vysoký skok</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Basic controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Základné ovládanie</translation>
     </message>
     <message>
         <source>Weapon controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládanie zbraní</translation>
     </message>
     <message>
         <source>Camera and cursor controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovládanie kurzora a kamery</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Iné</translation>
+        <translation>Iné</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>Presun ježka a mierenie:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prekoná priepasti a prekážky skokom:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vypáli vami zvolenú zbraň alebo zapne nástroj:</translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished"></translation>
+        <translation>Položí zbraň alebo vyberie cieľ v mieste pod kurzorom:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepne vášho momentálne vybraného ježka (ak je to možné):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zodvihne zbraň alebo nástroj:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nastaví časovač na bombách a iných zbraniach s časovou rozbuškou:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Presunie kameru na aktívneho ježka:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished"></translation>
+        <translation>Presunie kurzor alebo kameru bez použitia myši:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmeniť stupeň priblíženia kamery:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished"></translation>
+        <translation>Umožní vám rozhovor s vašim teamom alebo všetkými účastníkmi hry:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauza, pokračovanie alebo opustenie hry:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmena hlasitosti v hre počas hrania:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepne celoobrazovkový režim:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Urobí snímok obrazovky:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Prepnúť nápisy nad ježkami:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Os</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Hore)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Dole)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Klobúk</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Vľavo)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Vpravo)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Klávesnica</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Myš: Ľavé tlačidlo</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Myš: Prostredné tlačidlo</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Myš: Pravé tlačidlo</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Myš: Kolečko smerom nahor</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Myš: Kolečko smerom nadol</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabulátor</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Clear</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Medzera</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Vymazať</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad 9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad .</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad /</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad *</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad -</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished"></translation>
+        <translation>Numpad +</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished"></translation>
+        <translation>Rovná sa</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Hore</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Dole</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Vpravo</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Vľavo</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished"></translation>
+        <translation>Insert</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished"></translation>
+        <translation>Home</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished"></translation>
+        <translation>End</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished"></translation>
+        <translation>Page up</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished"></translation>
+        <translation>Page down</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Num lock</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Caps lock</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Scroll lock</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravý shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľavý shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravý ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľavý ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravý alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľavý alt</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravý meta</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľavý meta</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo Y</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo LB</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo RB</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo Back</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tlačidlo Start</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Joystick doľava</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Joystick doprava</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
@@ -1567,11 +1572,11 @@ ježkov</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Ľavý prepínač</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Pravý prepínač</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
@@ -1591,7 +1596,7 @@ ježkov</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation>DPad</translation>
     </message>
 </context>
 </TS>

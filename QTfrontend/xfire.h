@@ -24,6 +24,7 @@
 #define USE_XFIRE
 #endif
 
+#ifdef USE_XFIRE
 enum XFIRE_KEYS
 {
 	XFIRE_STATUS = 0,
@@ -33,16 +34,10 @@ enum XFIRE_KEYS
 	XFIRE_KEY_COUNT,
 };
 
-#ifdef USE_XFIRE
 void xfire_init(void);
 void xfire_free(void);
 void xfire_setvalue(const XFIRE_KEYS status, const char *value);
 void xfire_update(void);
-#else
-#define xfire_init() /*xfire_init()*/
-#define xfire_free() /*xfire_free()*/
-#define xfire_setvalue(a, b) /*xfire_setvalue(a, b)*/
-#define xfire_update() /*xfire_update()*/
 #endif
 
 #endif // XFIRE_H

@@ -49,21 +49,18 @@ if(APPLE)
 	STRING(REGEX REPLACE "([0-9][0-9].[0-9]+).[0-9]" "\\1" current_macosx_version ${MACOSX_VERSION_TMP})
 
 	if(NOT minimum_macosx)
-		#if nothing is set, we build only for the current system
+		#if nothing is set, we deploy only for the current system
 		set(minimum_macosx ${current_macosx_version})
+	endif()
+
+	if(current_macosx_version MATCHES "10.6")
+		set(CMAKE_OSX_ARCHITECTURES "x86_64")
 	endif()
 
 	#create universal binaries only when it's time to bundle the application, also build server
 	IF(BUNDLE)
 		set(WITH_SERVER false)
-		if(current_macosx_version MATCHES "10.6")
-			if(minimum_macosx MATCHES "10.6")
-				#prevent building ppc for 10.6
-				set(CMAKE_OSX_ARCHITECTURES "x86_64;i386")
-			else()
-				set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
-			endif()
-		else()
+		if(minimum_macosx NOT MATCHES "10.6")
 			set(CMAKE_OSX_ARCHITECTURES "i386;ppc7400")
 		endif()
 	ENDIF()	
@@ -76,7 +73,10 @@ if(APPLE)
 		set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${minimum_macosx}.sdk/")
 	endif()
 
-	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	#1.set deployment target; 2.link with libsdlmain.a; 3.link with liblua.a (which requires readline)
+	set(pascal_compiler_flags_cmn "-k-macosx_version_min" "-k${minimum_macosx}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/libSDLmain.a" ${pascal_compiler_flags_cmn})
+	set(pascal_compiler_flags_cmn "-k${CMAKE_BINARY_DIR}/bin/liblua.a" "-k-lreadline" ${pascal_compiler_flags_cmn})
 else(APPLE)
 	set(target_dir "bin")
 endif(APPLE)

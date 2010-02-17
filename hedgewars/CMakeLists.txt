@@ -148,14 +148,11 @@ ELSE()
 	include_directories(${SDL_INCLUDE_DIR})
 
 	add_library (SDLmain STATIC SDLMain.m)
-#	set_target_properties(SDLmain PROPERTIES COMPILE_FLAGS "-mmacosx-version-min=${minimum_macosx} --sysroot=${CMAKE_OSX_SYSROOT} ")
 
-	#let's tell freepacal where to find libraries
-	set(pascal_compiler_flags "-k${CMAKE_BINARY_DIR}/misc/liblua/liblua.a" "-k-lreadline" ${pascal_compiler_flags})
 
 	#these are the dependencies for building a universal binary on Mac OS X
 	foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
 		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
 			COMMAND "${pascal_compiler}"
 			ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}

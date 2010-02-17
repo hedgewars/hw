@@ -24,10 +24,10 @@ const
   {$IFDEF DARWIN}
     LuaLibName = 'lua';
   {$ELSE}
-    LuaLibName = 'lua5.1.so';
+    LuaLibName = 'lua.so';
   {$ENDIF}
 {$ELSE}
-  LuaLibName = 'lua5.1.dll';
+  LuaLibName = 'lua.dll';
 {$ENDIF}
 
 
