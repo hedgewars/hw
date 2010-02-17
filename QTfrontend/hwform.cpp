@@ -788,10 +788,12 @@ void HWForm::GameStateChanged(GameState gameState)
 				pRegisterServer = 0;
 			}
 			//setVisible(false);
+			setFocusPolicy(Qt::NoFocus);
 			break;
 		}
 		case gsFinished: {
 			//setVisible(true);
+			setFocusPolicy(Qt::StrongFocus);
 			GoBack();
 			Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
 			if (wBackground) wBackground->startAnimation();
@@ -801,6 +803,7 @@ void HWForm::GameStateChanged(GameState gameState)
 		}
 		default: {
 			//setVisible(true);
+			setFocusPolicy(Qt::StrongFocus);
 			quint8 id = ui.Pages->currentIndex();
 			if (id == ID_PAGE_INGAME) {
 				GoBack();
