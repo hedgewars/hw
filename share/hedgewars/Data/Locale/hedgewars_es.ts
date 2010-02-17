@@ -65,7 +65,7 @@
     </message>
     <message>
         <source>Please select record from the list above</source>
-        <translation>Por favor seleccione una entrada de la lista</translation>
+        <translation>Por favor, selecciona una entrada de la lista</translation>
     </message>
 </context>
 <context>
@@ -80,7 +80,7 @@
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>No se pudo abrir el fichero de demo %1</translation>
+        <translation>No se pudo abrir la demo %1</translation>
     </message>
 </context>
 <context>
@@ -119,7 +119,7 @@
     </message>
     <message>
         <source>Wacky</source>
-        <translation>Alocado</translation>
+        <translation>Loco</translation>
     </message>
 </context>
 <context>
@@ -141,7 +141,7 @@
     <name>HWNewNet</name>
     <message>
         <source>The host was not found. Please check the host name and port settings.</source>
-        <translation>No se pudo establecer una conexión con el servidor. Por favor, compruebe que el nombre del servidor y el puerto son correctos.</translation>
+        <translation>No se pudo establecer una conexión con el servidor. Por favor, comprueba que el nombre del servidor y el puerto son correctos.</translation>
     </message>
     <message>
         <source>Connection refused</source>
@@ -234,7 +234,7 @@ o elige otro nick:</translation>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;El premio al mejor disparo es para &lt;b&gt;%1&lt;/b&gt; , con &lt;b&gt;%2&lt;/b&gt; puntos.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;El premio al mejor disparo es para &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; puntos.&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
@@ -259,7 +259,7 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Juego en red (Jugar a través de una red)</translation>
+        <translation>Juego en red (Jugar a través de la red)</translation>
     </message>
 </context>
 <context>
@@ -277,14 +277,14 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Please select server from the list above</source>
-        <translation>Por favor seleccione un servidor de la lista</translation>
+        <translation>Por favor, selecciona un servidor de la lista</translation>
     </message>
 </context>
 <context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation>Controles</translation>
+        <translation>Opciones</translation>
     </message>
 </context>
 <context>
@@ -333,7 +333,7 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
-        <translation>Introduzca el nuevo nombre del fichero:</translation>
+        <translation>Introduce el nuevo nombre del fichero:</translation>
     </message>
     <message>
         <source>Cannot rename to</source>
@@ -345,7 +345,7 @@ o elige otro nick:</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation>Por favor seleccione una entrada de la lista</translation>
+        <translation>Por favor, selecciona una entrada de la lista</translation>
     </message>
 </context>
 <context>
@@ -400,7 +400,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation>Las partidas pueden ser jugadas bien en mapas pre-creados o aleatorios.</translation>
+        <translation>Las partidas pueden ser jugadas bien en mapas pre-creados o generados aleatoriamente.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
@@ -426,11 +426,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation>Por favor introduzca un nombre para la sala</translation>
+        <translation>Por favor, introduce un nombre para la sala</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation>Por favor seleccione una sala de la lista</translation>
+        <translation>Por favor, selecciona una sala de la lista</translation>
     </message>
 </context>
 <context>
@@ -469,15 +469,15 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Defiende tu fuerte y destruye el de tus oponentes, 2 colores de equipo como máximo!</translation>
+        <translation>Defiende tu fuerte y destruye el de tus oponentes. 2 facciones como máximo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Los equipos comenzarán en lados opuestos del terreno, 2 colores de equipo como máximo!</translation>
+        <translation>Los equipos comenzarán en lados opuestos del terreno. 2 facciones como máximo!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
-        <translation>El terreno es indestructible!</translation>
+        <translation>¡El terreno es indestructible!</translation>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
@@ -489,19 +489,19 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Puntería asistida con mira láser</translation>
+        <translation>Una mira láser que te ayudará a apuntar</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
-        <translation>Todos los erizos tienen un campo de fuerza personal</translation>
+        <translation>Todos los erizos tienen un campo de fuerza personal que los protege</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>El orden de los equipos en la partida es aleatorio en lugar de tal como se muestran en la sala</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>El primero erizo del equipo es el Rey. Si muere tu equipo pierde, así que protégelo.</translation>
     </message>
 </context>
 <context>
@@ -512,14 +512,14 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Borrar</translation>
     </message>
 </context>
 <context>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation>Partida sencilla (Una partida rápida contra la computadora, los ajustes se eligen automáticamente)</translation>
+        <translation>Partida sencilla (Una partida rápida contra la computadora; los ajustes se eligen automáticamente)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
@@ -550,11 +550,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Restrict Joins</source>
-        <translation>Restringir la entrada</translation>
+        <translation>Impedir que entren más jugadores</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Restringir el añadido de equipos</translation>
+        <translation>Impedir que se añadan más equipos</translation>
     </message>
     <message>
         <source>Info</source>
@@ -566,7 +566,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Vigilar</translation>
     </message>
 </context>
 <context>
@@ -585,7 +585,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Alternative damage show</source>
-        <translation>Mostrar daño de manera alternativa</translation>
+        <translation>Mostrar el daño según ocurre</translation>
     </message>
     <message>
         <source>Enable music</source>
@@ -597,7 +597,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Append date and time to record file name</source>
-        <translation>Agregar fecha y hora al nombre de fichero</translation>
+        <translation>Agregar fecha y hora al nombre de los ficheros</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
@@ -605,11 +605,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Efectos del interfaz (requiere reiniciar)</translation>
+        <translation>Habilitar efectos del interfaz (requiere reiniciar el juego)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
-        <translation>Reducir calidad</translation>
+        <translation>Reducir efectos gráficos (para ordenadores lentos)</translation>
     </message>
 </context>
 <context>
@@ -655,7 +655,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armas</translation>
+        <translation>Sets de armas</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -671,7 +671,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Basic Settings</source>
-        <translation>Opciones</translation>
+        <translation>Opciones básicas</translation>
     </message>
 </context>
 <context>
@@ -698,7 +698,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armas</translation>
+        <translation>Set de armas</translation>
     </message>
     <message>
         <source>Host:</source>
@@ -718,7 +718,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Net nick</source>
-        <translation>Apodo de red</translation>
+        <translation>Apodo</translation>
     </message>
     <message>
         <source>Server name:</source>
@@ -811,11 +811,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
 Please check your installation</source>
         <translation>No de pudo abrir el directorio:
 %1
-Verifique su instalación</translation>
+Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armas</translation>
+        <translation>Sets de armas</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
@@ -823,11 +823,11 @@ Verifique su instalación</translation>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation>No se puede eliminar el set de armas predefinido</translation>
+        <translation>No se puede borrar el set de armas predefinido</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation>¿Realmente desea eliminar este set de armas?</translation>
+        <translation>¿Realmente desea borrar este set de armas?</translation>
     </message>
 </context>
 <context>
@@ -893,7 +893,7 @@ Verifique su instalación</translation>
     </message>
     <message>
         <source>Play demo</source>
-        <translation>Visualizar demo</translation>
+        <translation>Reproducir demo</translation>
     </message>
     <message>
         <source>Rename</source>
@@ -944,14 +944,14 @@ Verifique su instalación</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Armas</translation>
+        <translation>Set de armas</translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation>Set de armas</translation>
+        <translation>Armas</translation>
     </message>
     <message>
         <source>Probabilities</source>
@@ -1021,11 +1021,11 @@ Verifique su instalación</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Orden aleatorio</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation>Rey</translation>
     </message>
 </context>
 <context>
