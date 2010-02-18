@@ -514,6 +514,7 @@ while Gear <> nil do
 
             if (PHedgehog(Gear^.Hedgehog)^.Team = CurrentTeam) and
                (Gear^.Damage <> Gear^.Karma) and
+                not PHedgehog(Gear^.Hedgehog)^.King and
                 not SuddenDeathDmg then
                 Gear^.State:= Gear^.State or gstLoser;
 
@@ -534,13 +535,28 @@ end;
 
 procedure HealthMachine;
 var Gear: PGear;
+    team: PTeam;
+       i: LongWord;
+    flag: Boolean;
 begin
 Gear:= GearsList;
 
 while Gear <> nil do
 	begin
 	if Gear^.Kind = gtHedgehog then
-		Gear^.Damage:= min(cHealthDecrease, Gear^.Health - 1);
+        begin
+		inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
+        if PHedgehog(Gear^.Hedgehog)^.King then
+            begin
+            flag:= false;
+		    team:= PHedgehog(Gear^.Hedgehog)^.Team;
+            for i:= 0 to Pred(team^.HedgehogsNumber) do
+                if (team^.Hedgehogs[i].Gear <> nil) and 
+                   (not team^.Hedgehogs[i].King) and 
+                   (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) then flag:= true;
+            if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
+            end
+        end;
 
 	Gear:= Gear^.NextGear
 	end;
@@ -632,14 +648,13 @@ case step of
 				playSound(sndSuddenDeath)
 				end;
 
-			if (cHealthDecrease = 0)
-				or bBetweenTurns
+			if bBetweenTurns
 				or isInMultiShoot
 				or (TotalRounds = 0) then inc(step)
 			else begin
 				bBetweenTurns:= true;
 				HealthMachine;
-				SuddenDeathDmg:= true;
+                if cHealthDecrease > 0 then SuddenDeathDmg:= true;
 				step:= stChDmg
 				end
 			end;
