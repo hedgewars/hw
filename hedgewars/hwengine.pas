@@ -437,7 +437,6 @@ begin
 	for i:=0 to ParamCount do
 		Write(ParamStr(i) + ' ');
 	WriteLn();
-	halt(1);
 end;
 
 ////////////////////
@@ -509,7 +508,7 @@ begin
 						cFullScreen:= ParamStr(5) = '1';
 						cShowFPS:= ParamStr(6) = '1';
 					end
-					else DisplayUsage;
+					else GameType:= gmtSyntax;
 				end
 			end;
 		end;
@@ -531,7 +530,7 @@ begin
 				cLocaleFName:= ParamStr(10);
 				cFullScreen:= ParamStr(11) = '1';
 			end
-			else DisplayUsage;
+			else GameType:= gmtSyntax;
 		end;
 		15: begin
 			PathPrefix:= ParamStr(1);
@@ -554,9 +553,9 @@ begin
 				val(ParamStr(14), cTimerInterval);
 				cReducedQuality:= ParamStr(15) = '1';
 			end
-			else DisplayUsage;
+			else GameType:= gmtSyntax;
 		end;
-		else DisplayUsage;
+		else GameType:= gmtSyntax;
 	end;
 
 {$IFDEF DEBUGFILE}
@@ -580,8 +579,13 @@ begin
 	Randomize();
 
 	if GameType = gmtLandPreview then GenLandPreview()
+	else if GameType = gmtSyntax then DisplayUsage()
 	else Game();
 	freeEverything();
-	ExitCode:= 0;
+	
+	if GameType = gmtSyntax then
+		ExitCode:= 1
+	else
+		ExitCode:= 0;
 {$ENDIF}
 end.

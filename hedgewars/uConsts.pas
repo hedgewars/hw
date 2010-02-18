@@ -41,7 +41,7 @@ type
 		
 	TGameState = (gsLandGen, gsStart, gsGame, gsChat, gsConfirm, gsExit);
 
-	TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview);
+	TGameType = (gmtLocal, gmtDemo, gmtNet, gmtSave, gmtLandPreview, gmtSyntax);
 
 	TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
 			ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
