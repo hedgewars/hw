@@ -450,7 +450,10 @@ with Team do
 	for i:= 0 to cMaxHHIndex do
 		with Hedgehogs[i] do
 			if Gear <> nil then
+                begin
+                Gear^.Invulnerable:= false;
 				Gear^.Damage:= Gear^.Health
+                end
 end;
 
 procedure init_uTeams;
