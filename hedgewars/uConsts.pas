@@ -72,7 +72,7 @@ type
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-						sprSmoke);
+						sprSmoke, sprShell);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -87,7 +87,7 @@ type
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-			vgtSteam, vgtSmoke, vgtHealth);
+			vgtSteam, vgtSmoke, vgtHealth, vgtShell);
 
 	TGearsType = set of TGearType;
 
@@ -106,7 +106,7 @@ type
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
 			sndHomerun, sndMolotov, sndWalking, sndCover, sndUhOh,
 			sndOops, sndNooo, sndHello, sndRopeShot, sndRopeAttach,
-			sndRopeRelease, sndSwitchHog, sndVictory);
+			sndRopeRelease, sndSwitchHog, sndVictory, sndSniperReload);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -659,7 +659,9 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:  'Molotov'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprMolotov
 			(FileName: 'Smoke'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprSmoke
+			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmoke
+			(FileName: 'Shells'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprShell
 			);
 
 	Wavez: array [TWave] of record
@@ -753,7 +755,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:                         ''; Path: ptSounds),// sndRopeAttach
 			(FileName:                         ''; Path: ptSounds),// sndRopeRelease
 			(FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
-			(FileName:              'victory.ogg'; Path: ptVoices) // sndSwitchHog
+			(FileName:              'victory.ogg'; Path: ptVoices),// sndVictory
+			(FileName:         'sniperreload.ogg'; Path: ptSounds) // sndSniperReload
 			);
 
 	Ammoz: array [TAmmoType] of record

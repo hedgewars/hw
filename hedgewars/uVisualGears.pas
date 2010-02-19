@@ -155,6 +155,21 @@ else
 	dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepShell(Gear: PVisualGear; Steps: Longword);
+begin
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravity * Steps;
+
+Gear^.Angle:= round(Gear^.Angle + Steps) mod cMaxAngle;
+
+if Gear^.FrameTicks <= Steps then
+	DeleteVisualGear(Gear)
+else
+	dec(Gear^.FrameTicks, Steps)
+end;
+
 procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
 begin
 Gear^.Y:= Gear^.Y - _0_02 * Steps;
@@ -353,7 +368,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepBubble,
 			@doStepSteam,
 			@doStepSmoke,
-			@doStepHealth
+			@doStepHealth,
+			@doStepShell
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -425,6 +441,7 @@ with gear^ do
 				FrameTicks:= 650 + random(250);
 				Frame:= random(8)
 				end;
+		vgtShell: FrameTicks:= 500;
 	vgtSmallDamageTag: begin
 				gear^.FrameTicks:= 1100
 				end;
@@ -537,6 +554,13 @@ case Layer of
 							end;
 							DrawSprite(sprHealth, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, 0);
 							glColor4f(1, 1, 1, 1);
+							end;
+				vgtShell: begin
+							if Gear^.FrameTicks < 250 then
+								glColor4f(1, 1, 1, Gear^.FrameTicks / 250);
+							DrawRotatedF(sprShell, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+							if Gear^.FrameTicks < 250 then
+								glColor4f(1, 1, 1, 1);
 							end;
             end;
         case Gear^.Kind of

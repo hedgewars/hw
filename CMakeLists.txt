@@ -155,7 +155,7 @@ add_subdirectory(misc/liblua)
 # CPack vars
 
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a turn-based strategy")
-set(CPACK_PACKAGE_VENDOR "Hedgewars")
+set(CPACK_PACKAGE_VENDOR "Hedgewars Project")
 set(CPACK_PACKAGE_FILE_NAME "hedgewars-${HEDGEWARS_VERSION}")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "hedgewars-src-${HEDGEWARS_VERSION}")
 set(CPACK_SOURCE_GENERATOR "TBZ2")
