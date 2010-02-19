@@ -458,6 +458,7 @@ end;
 
 procedure doStepShotgunShot(Gear: PGear);
 var i: LongWord;
+    shell: PVisualGear;
 begin
 AllInactive:= false;
 
@@ -467,6 +468,10 @@ if ((Gear^.State and gstAnimation) = 0) then
 	if Gear^.Timer = 0 then
 		begin
 		PlaySound(sndShotgunFire);
+		shell:= AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
+		shell^.dX:= gear^.dX / -4;
+		shell^.dY:= gear^.dY / -4;
+		shell^.Frame:= 0;
 		Gear^.State:= Gear^.State or gstAnimation
 		end;
 	exit
@@ -542,6 +547,7 @@ end;
 
 procedure doStepSniperRifleShot(Gear: PGear);
 var HHGear: PGear;
+    shell: PVisualGear;
 begin
 cArtillery:= true;
 HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
@@ -556,7 +562,11 @@ if not cLaserSighting then // game does not have default laser sight. turn it on
 
 if (HHGear^.Message and gm_Attack) <> 0 then
     begin
-	Gear^.State:= Gear^.State or gstAnimation;
+    shell:= AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
+    shell^.dX:= gear^.dX / -2;
+    shell^.dY:= gear^.dY / -2;
+    shell^.Frame:= 1;
+    Gear^.State:= Gear^.State or gstAnimation;
     Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
     Gear^.dY:= -AngleCos(HHGear^.Angle) * _0_5;
     PlaySound(sndGun);
