@@ -91,7 +91,7 @@ set(	hwfr_src
 
 #xfire integration
 if(WIN32)
-	set(hwfr_src ${hwfr_src} xfire.cpp xfiregameclient.cpp)
+	set(hwfr_src ${hwfr_src} xfire.cpp ../misc/xfire/xfiregameclient.cpp)
 endif(WIN32)
 
 if(MINGW)

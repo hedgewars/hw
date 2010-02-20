@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include "xfire.h"
-#include "xfiregameclient.h"
+#include "../misc/xfire/xfiregameclient.h"
 
 // use_xfire: stores if xfire is loaded and functions should do something at all
 bool use_xfire = false;
