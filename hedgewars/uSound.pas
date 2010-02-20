@@ -177,7 +177,11 @@ end;
 
 function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
 begin
-if (not isSoundEnabled) or fastUntilLag then exit;
+if (not isSoundEnabled) or fastUntilLag then
+	begin
+	LoopSound:= -1;
+	exit
+	end;
 
 if (voicepack <> nil) and (voicepack^.chunks[snd] <> nil) then
 	LoopSound:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
@@ -197,7 +201,8 @@ end;
 
 procedure StopSound(chn: LongInt);
 begin
-	if (chn <> -1) and (Mix_Playing(chn) <> 0) then Mix_HaltChannel(chn);
+if not isSoundEnabled then exit;
+if (chn <> -1) and (Mix_Playing(chn) <> 0) then Mix_HaltChannel(chn);
 end;
 
 procedure PlayMusic;
