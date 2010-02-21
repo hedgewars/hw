@@ -95,7 +95,7 @@ if(CMAKE_BUILD_TYPE MATCHES RELEASE OR CMAKE_BUILD_TYPE MATCHES "Release")
 	set(Optz true)
 else()
 	message(STATUS "Building Debug")	
-	set(CMAKE_VERBOSE_MAKEFILE true)
+	#set(CMAKE_VERBOSE_MAKEFILE true)
 	set(Optz false)
 endif()
 
