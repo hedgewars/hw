@@ -55,7 +55,6 @@ FillChar(mi, sizeof(mi), 0);
 FillChar(Ammo^, sizeof(Ammo^), 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
-    Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
     if cnts[a] > 0 then
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
@@ -74,7 +73,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
 
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
-       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= cnts[a];
+       Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].InitialCount:= 0;
 
        inc(mi[Ammoz[a].Slot])
        end
