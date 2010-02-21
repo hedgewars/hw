@@ -113,6 +113,7 @@
 02:00=%1 had a low tolerance for being shot
 02:00=%1 could have used an extra life
 02:00=Is there a doctor in the house?
+
 ; Hog (%1) drowned
 02:01=%1 plays submarine!
 02:01=%1 mimics the Titanic!
@@ -163,6 +164,7 @@
 02:01=%1 is wet wet wet
 02:01=%1 gets his quills wet
 02:01=It's Davy Jones' locker for %1
+
 ; Round starts
 02:02=Let's fight!
 02:02=Armed and ready!
@@ -217,10 +219,13 @@
 02:02=Bring it to them!
 02:02=Have no fear!
 02:02=Be brave and conquer
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; New health crate
 02:05=Incoming aid!
 02:05=Medic!
@@ -238,6 +243,7 @@
 02:05=Correct Dosage: as many as you can find!
 02:05=Urgent delivery
 02:05=Supplies!
+
 ; New ammo crate
 02:06=More weapons!
 02:06=Reinforcements!
@@ -262,6 +268,7 @@
 02:06=Don't let the enemy grab that!
 02:06=Shiny new toys!
 02:06=A mysterious box!
+
 ; New utility crate
 02:07=Tooltime!
 02:07=This could come in handy...
@@ -274,6 +281,7 @@
 02:07=Use this wisely
 02:07=Ooo this box is heavy
 02:07=You might need this
+
 ; Hog (%1) skips his turn
 02:08=%1 is sooo boring...
 02:08=%1 couldn't be bothered
@@ -311,6 +319,7 @@
 02:08=%1 apparently has better things to do
 02:08=%1 is scared stiff
 02:08=%1 has fallen asleep
+
 ; Hog (%1) hurts himself only
 02:09=%1 should practice aiming!
 02:09=%1 seems to hate himself
@@ -346,6 +355,7 @@
 02:09=I'm sure nobody saw that %1
 02:09=%1 needs to review his field manual
 02:09=%1's weapon clearly malfunctioned
+
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=A bird, a plane, ...
@@ -397,8 +407,7 @@
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
 04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
-04:02=Attack your enemies using a ballistic 
-projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
+04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
 04:03=Launch a guided bomb that will lock on|the selected target. Don't shoot with full power|to improve its precision.|Cursor: Pick target|Attack: Hold to shoot with more power
 04:04=Attack your enemy using a shotgun with two shots.|Thanks to its spread you don't need direct hits|to harm your opponents.|Attack: Shoot (multiple times)
 04:05=Move underground! Use the pickhammer to drill|a hole into the ground and reach other areas.|Attack: Start or stop digging
