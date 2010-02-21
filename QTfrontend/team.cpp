@@ -67,6 +67,9 @@ HWTeam::HWTeam(const QStringList& strLst) :
 	{
 		HHName[i]=strLst[i * 2 + 7];
 		HHHat[i]=strLst[i * 2 + 8];
+// Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
+// Checking net teams is probably pointless, but can't hurt.
+        if (HHHat[i].length() == 0) HHHat[i] = "NoHat"; 
 	}
 }
 
@@ -129,6 +132,8 @@ bool HWTeam::LoadFromFile()
 			if ((i < 0) || (i > 7)) continue;
 			str.remove(0, 2);
 			HHHat[i] = str;
+// Somehow claymore managed an empty hat.  Until we figure out how, this should avoid a repeat
+            if (HHHat[i].length() == 0) HHHat[i] = "NoHat"; 
 		} else
 		if (str.startsWith("grave "))
 		{
