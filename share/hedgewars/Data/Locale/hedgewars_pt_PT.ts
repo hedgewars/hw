@@ -216,7 +216,7 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>A conectar...</translation>
+        <translation>A ligar...</translation>
     </message>
 </context>
 <context>
@@ -255,11 +255,11 @@ ou escolha outro nome de utilizador:</translation>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation>Jogo local (Jogar sozinho ou contra o computador)</translation>
+        <translation>Jogo local (Joga Hedgewars apenas com este computador)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation>Jogo em rede (Jogar em rede ou na internet)</translation>
+        <translation>Jogo em rede (Joga em rede ou na internet)</translation>
     </message>
 </context>
 <context>
@@ -497,11 +497,11 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>A ordem de jogo será aleatória em vez de seguir a ordem do quadro.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jogar com um Rei. Se ele morrer, o teu lado morre.</translation>
     </message>
 </context>
 <context>
@@ -566,7 +566,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Seguir</translation>
     </message>
 </context>
 <context>
@@ -605,7 +605,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Efeitos no frontend (requer reinicio)</translation>
+        <translation>Efeitos no frontend (é necessário reiniciar)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -694,7 +694,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Sounds:</source>
-        <translation>Sons:</translation>
+        <translation>Som:</translation>
     </message>
     <message>
         <source>Translations:</source>
@@ -873,7 +873,7 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Conectar</translation>
+        <translation>Ligar</translation>
     </message>
     <message>
         <source>Update</source>
@@ -977,7 +977,7 @@ Por favor verifique a sua instalação</translation>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Fort Mode</source>
-        <translation>Modo de forte</translation>
+        <translation>Modo Forte</translation>
     </message>
     <message>
         <source>Divide Teams</source>
@@ -1021,11 +1021,11 @@ Por favor verifique a sua instalação</translation>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordem Aleatória</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation>Rei</translation>
     </message>
 </context>
 <context>
@@ -1279,7 +1279,7 @@ ouriços</translation>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Eixo</translation>
     </message>
     <message>
         <source>(Up)</source>
@@ -1335,7 +1335,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tabulação</translation>
     </message>
     <message>
         <source>Clear</source>
@@ -1359,7 +1359,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Eliminar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 0</source>
@@ -1511,83 +1511,83 @@ ouriços</translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished"></translation>
+        <translation>A</translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished"></translation>
+        <translation>X</translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished"></translation>
+        <translation>Y</translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished"></translation>
+        <translation>LB</translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished"></translation>
+        <translation>RB</translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished"></translation>
+        <translation>Back</translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished"></translation>
+        <translation>Start</translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick esquerdo</translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick direito</translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick esquerdo (Direita)</translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick esquerdo (Esquerda)</translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick esquerdo (Baixo)</translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick esquerdo (Cima)</translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Gatilho esquerdo</translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished"></translation>
+        <translation>Gatilho direito</translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick direito (Baixo)</translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick direito (Cima)</translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick direito (Direita)</translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>Stick direito (Esquerda)</translation>
     </message>
     <message>
         <source>DPad</source>

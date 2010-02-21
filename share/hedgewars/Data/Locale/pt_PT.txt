@@ -1,7 +1,7 @@
 ; Portuguese locale
 
 00:00=Granada
-00:01=Bomba de fragmentos
+00:01=Bomba de Fragmentos
 00:02=Bazuca
 00:03=OVNI
 00:04=Caçadeira
@@ -9,7 +9,7 @@
 00:06=Saltar o turno
 00:07=Corda
 00:08=Mina
-00:09=Pistola
+00:09=Desert Eagle
 00:10=Dinamite
 00:11=Taco de Basebol
 00:12=Soco de Fogo
@@ -24,7 +24,7 @@
 00:21=Morteiro
 00:22=Chicote
 00:23=Kamikaze
-00:24=Bolo de aniversário
+00:24=Bolo de Aniversário
 00:25=Sedução
 00:26=Melancia
 00:27=Granada Infernal
@@ -52,6 +52,8 @@
 01:07=%1 Restante
 01:08=Combustível
 01:09=A sincronizar...
+01:10=Usar este utilitário não termina o turno!
+01:11=Esta arma ou utilitário ainda não está disponível!
 
 ; Event messages
 ; Hog (%1) died
@@ -67,7 +69,7 @@
 02:00=%1 separa-se da sua forma física!
 02:00=%1 imita um ancinho e "foice"!
 02:00=%1 passou da data de validade!
-02:00=%1 deseja paz no Mundo!
+02:00=%1 deseja paz no mundo!
 02:00=%1 vai ser lembrado carinhosamente!
 02:00=%1 teve um aneurisma!
 02:00=%1 deixa para trás mulher e filhos
@@ -82,14 +84,14 @@
 02:00=%1 levou um grande tiro
 02:00=%1 podia ter usado uma caixa de vida
 02:00=%1 foi jogar um jogo melhor
-02:00=%1 desconectou-se da vida
+02:00=%1 desligou-se da vida
 02:00=%1 falhou
 02:00=Pobrezinho do %1...
 02:00=%1 prefere wormux
 02:00=%1 esteve a bloquear tiros com a tromba
 02:00=%1 é um herói agora... no céu
 02:00=%1 encontrou o seu descanso
-02:00=%1 saiu do edifício
+02:00=%1 abandonou o edifício
 02:00=%1 segue as pisadas dos dinossauros
 02:00=%1 leva os ouriços mais perto da extinção
 02:00=%1 faz-me chorar
@@ -103,12 +105,12 @@
 02:00=%1 desligou-se da Matrix
 02:00=%1 passou à história
 02:00=%1 'tá morto que nem uma pedra
-02:00=%1 não é mais ele
+02:00=%1 foi-se
 02:00=%1 expirou
 02:00=Despojado da vida, %1 descansa em paz
 02:00=%1 junta-se ao coro invisível
 02:00=Adeus %1, nós mal te conhecíamos!
-02:00=%1 teve pouca tolerância ao levar porrada
+02:00=%1 tinha pouca tolerância para ser alvejado
 02:00=Dava jeito a %1 uma vida extra
 02:00=Há algum médico em casa?
 
@@ -132,19 +134,19 @@
 02:01=%1 disse que tinha sede
 02:01=O mar reclama %1
 02:01=%1 está perdido no mar
-02:01=%1 devia ter trazido o equipamento de mergulhador
+02:01=%1 devia ter trazido o equipamento de mergulho
 02:01=%1 vai ter um funeral no mar
 02:01=%1 pensa profundamente fundo
 02:01=%1 pratica costas
 02:01=%1 vai à procura do Titanic
 02:01=%1 não é Jesus
-02:01=%1 vai à procura do Nemo
+02:01=%1 anda à procura do Nemo
 02:01=%1 tinha uma fuga de água
 02:01=%1 não foi o único a afogar-se
 02:01=%1 aumenta o nível da água do mar
 02:01=%1 não se alistou na Marinha
 02:01=%1 está a personificar um peixe morto
-02:01=Pelo menos não foste pela retrete abaixo, %1
+02:01=Pelo menos não foste pela retrete abaixo %1
 02:01=O Sonic não sabia nadar e o %1 também não
 02:01=%1 foi brincar com os golfinhos
 02:01=%1 foi visitar o Oceanário
@@ -158,7 +160,7 @@
 02:01=%1 acha que a água salgada faz bem à pele
 02:01=%1 põe água salgada nas feridas
 02:01=%1 caiu da prancha
-02:01=%1 tomou um banhinho
+02:01=%1 tomou um banhito
 02:01=%1 'tá todo molhado
 02:01=%1 lavou as penas
 02:01=%1 agora vive no Pérola Negra
@@ -180,11 +182,11 @@
 02:02=Esmaga os teus inimigos!
 02:02=Que ganhe o melhor ouriço
 02:02=Vencer ou morrer
-02:02=To the victor goes the spoils
+02:02=O vencedor fica com tudo
 02:02=Perder não é uma opção
 02:02=Piores que o perigo! Os ouriços mercenários!
 02:02=Hedgewars, trazido até si por Hedgewars.org
-02:02=GL HF [Boa sorte e diverte-te]
+02:02=GL HF (Boa sorte e diverte-te)
 02:02=Apenas agradece que não estejas a lutar contra o Tiyuri
 02:02=Apenas agradece que não estejas a lutar contra o unC0Rr
 02:02=Apenas agradece que não estejas a lutar contra o Nemo
@@ -249,7 +251,7 @@
 02:06=Pergunto-me, que arma será?
 02:06=Abastecimentos!
 02:06=O que estará lá dentro?
-02:06=E o Natal chega mais cedo no Hedgewars
+02:06=O Natal chega mais cedo no Hedgewars
 02:06=Um presente!
 02:06=Entrega especial!
 02:06=Deu-me um trabalhão enfiar a arma nesta caixa
@@ -257,10 +259,10 @@
 02:06=Aviso! Conteúdo volátil
 02:06=Agarrar ou rebentar, é contigo
 02:06=Coisas giras!
-02:06=Mmmmm-Munições
+02:06=Mmmmm Munições
 02:06=Uma caixa de poder destrutivo
 02:06=Correio aéreo!
-02:06=Não me parece que seja pizza
+02:06=Não me parece que seja uma pizza
 02:06=Toma lá!
 02:06=Largada de arma iminente
 02:06=Não deixes o inimigo tomar posse disto!
@@ -308,7 +310,7 @@
 02:08=%1 fica à espera da morte súbita
 02:08=%1 não gosta de luta
 02:08=%1 está à procura do sentido da vida
-02:08=%1 não era grande coisa também
+02:08=%1 não valia grande coisa de qualquer maneira
 02:08=%1 não se queria alistar no exército sequer
 02:08=Pára de nos fazer perder tempo, %1
 02:08=Estou desapontado contigo %1
@@ -333,7 +335,7 @@
 02:09=%1 é um descuidado com armas perigosas
 02:09=%1 devia considerar mudar de carreira
 02:09=Pior. Tiro. De sempre!
-02:09=Nã na ni na não %1, tens de acertar no INIMIGO!
+02:09=Não não não %1, tens de acertar no INIMIGO!
 02:09=%1 devia ter destruído só o inimigo
 02:09=%1 aproxima-se do suicídio
 02:09=%1 ajuda o inimigo
@@ -341,7 +343,7 @@
 02:09=%1 vive pelo ditado "sem dor, não há ganho"
 02:09=%1 está confuso
 02:09=%1 magoa-se na sua confusão
-02:09=%1 tem um fraco por se humilhar
+02:09=%1 tem um dom para se humilhar
 02:09=%1 é um desastrado!
 02:09=%1 é um desajeitado
 02:09=%1 mostra ao inimigo do que é capaz
@@ -350,12 +352,97 @@
 02:09=%1 fez de propósito... completamente
 02:09=Não digo a ninguém se não disseres %1
 02:09=Que vergonha!
-02:09=Tenho a certeza que ninguém viu isso, %1
-02:09=%1 precisa de reler o seu manual de campo
+02:09=Tenho a certeza que ninguém viu isso %1
+02:09=%1 precisa de reler o manual
 02:09=A arma de %1 funcionou mal obviamente
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=Será uma ave, um avião, ...
-02:10=Mais um para fora!
+02:10=%1 está fora de jogo!
 
+; Weapon Categories
+03:00=Granada Temporizada
+03:01=Granada Temporizada
+03:02=Arma Balística
+03:03=Arma Teleguiada
+03:04=Arma (multiplos tiros)
+03:05=Ferramenta de Escavação
+03:06=Acção
+03:07=Utilitário de Transporte
+03:08=Bomba de Proximidade
+03:09=Arma (multiplos tiros)
+03:10=BOOM!
+03:11=Bonk!
+03:12=Artes Marciais
+03:13=UNUSED
+03:14=Utilitário de Transporte
+03:15=Ataque Aéreo
+03:16=Ataque Aéreo
+03:17=Ferramenta de Escavação
+03:18=Utilitário
+03:19=Utilitário de Transporte
+03:20=Acção
+03:21=Arma Balística
+03:22=Chama-me Indiana!
+03:23=(Mesmo) Artes Marciais
+03:24=O bolo NÃO é uma mentira!
+03:25=Kit de Vestuário
+03:26=Granada Sumarenta
+03:27=Granada Escaldante
+03:28=Arma Balística
+03:29=Arma Balística
+03:30=Ataque Aéreo
+03:31=Bomba Telecomandada
+03:32=Efeito Temporário
+03:33=Efeito Temporário
+03:34=Efeito Temporário
+03:35=Efeito Temporário
+03:36=Efeito Temporário
+03:37=Efeito Temporário
+03:38=Arma (um tiro)
+03:39=Utilitário de Transporte
+03:40=Granada Incendiária
+
+; Weapon Descriptions (use | as line breaks)
+04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
+04:01=Ataca os teus inimigos usando uma bomba de fragmentos.|Dividir-se-á em pequenas bombas quando o temporizador|chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
+04:02=Ataca os teus inimigos usando um projéctil balístico|que pode ser influenciado pelo vento.|Ataque: Deixa premido para disparar com mais força
+04:03=Lança uma bomba teleguiada que ira perseguir|o alvo seleccionado. Não dispares com muita força|para aumentar a precisão.|Cursor: Escolher o alvo|Ataque: Deixa premido para disparar com mais força
+04:04=Ataca o teu inimigo utilizando uma caçadeira com dois tiros.|Como o tiro se espalha não precisas de acertar em cheio|para magoar os teus oponentes.|Ataque: Disparar (múltiplas vezes)
+04:05=Move-te pelo subsolo! Usa o martelo pneumático para escavar|um buraco no chão e alcançar outras áreas.|Ataque: Começa ou para de escavar
+04:06=Aborrecido? Não tens maneira de atacar? Preferes guardar as munições?|Não há problema! Passa o turno, covarde!|Ataque: Passa o turno
+04:07=Ultrapassa enormes distancias utilizando uns precisos saltos|com a corda. Usa a velocidade adquirida para deslizar contra|outros ouriços ou largar granadas e outras armas em cima deles.|Ataque: Dispara ou solta a corda|Salto Longo: Larga granadas ou armas similares
+04:08=Mantém os teus inimigos bem longe largando uma mina numa|passagem estreita ou mesmo por baixo dos seus pés.|Tem apenas cuidado para não a activares tu mesmo!|Ataque: Larga uma mina aos teus pés
+04:09=Não te estás a sentir confiante na tua pontaria?|Utiliza a Desert Eagle para atacar disparando até cinco tiros.|Ataque: Disparar (múltiplas vezes)
+04:10=Força bruta é sempre uma opção. Larga este clássico|explosivo próximo dos teus inimigos e refugia-te.|Ataque: Larga um dinamite aos teus pés
+04:11=Livra-te de ouriços inimigos atirando-os por cima das bordas|do mapa e para dentro de água. Ou que tal|bater numas minas para os teus amigos?|Ataque: Bater em tudo o que estiver à tua frente
+04:12=Chega-te bem pertinho e solta o poder desta|quase mortal técnica de artes marciais.|Ataque: Faz um Soco de Fogo
+04:13=UNUSED
+04:14=Tens medo de alturas? É melhor agarrares um pára-quedas.|Abrir-se-á assim|que caíres de demasiado alto|salvando o teu ouriço do dano da queda.|Ataque: Abrir o pára-quedas
+04:15=Chama um avião para atacar os teus inimigos|largando bombas sobre eles.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
+04:16=Chama um avião para largar varias minas|na área alvo.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
+04:17=Percisas de um abrigo? Usa o maçarico para escavar|um túnel no terreno criando|cobertura.|Ataque: Começar e parar de escavar
+04:18=Percisas protecção adicional ou queres apenas transpor|terreno impossível? Dispõe algumas vigas como|quiseres.|Esquerda/Direita: Selecciona a viga a dispor|Cursor: Posiciona a viga numa posição valida
+04:19=Usada no momento certo a teletransportação pode|ser mais poderosa que qualquer outra arma pois|permite salvar os teus ouriços de situações perigosas|em segundos.|Cursor: Selecciona a zona alvo
+04:20=Permite jogar neste turno com um|ouriço diferente.|Ataque: Habilita a troca de ouriço
+04:21=Dispara um projéctil tipo-granada que ira|largar múltiplas bombas no impacto.|Ataque: Disparar com a força máxima
+04:22=Não só para o Indiana Jones! O chicote é uma|arma útil em imensas situações. Especialmente|quando te apetece empurrar alguém de um penhasco.|Ataque: Ataca o que estiver à tua frente
+04:23=Se não tens nada a perder, isto pode ser|muito útil. Sacrifica o teu ouriço lançando-o| na direcção desejada destruindo tudo|o que esteja no caminho e explodindo no fim.|Ataque: Lança um devastador e mortífero ataque
+04:24=Feliz aniversário! Lança este bolo, deixa-o caminhar até|aos teus inimigos e oferece-lhes uma festa explosiva.|O bolo pode ser capaz de andar em qualquer terreno|mas é possível que isso o faça detonar mais cedo.|Ataque: Larga o bolo ou pára-o para que expluda
+04:25=Usa este kit de vestuário para fazer os teus inimigos saltar|para o teu ouriço (e para alguma falha ou buraco).|Ataque: Usa este kit e tenta seduzir outro ouriço
+04:26=Atira esta sumarenta melancia aos teus inimigos. Assim|que o tempo termine, dividir-se-à em vários|pedaços explosivos.|Ataque: Deixa premido para disparar com mais força
+04:27=Deixa as chamas do inferno chover sobre os teus oponentes usando|este demoníaco explosivo. Não the chegues demasiado perto|da explosão pois as pequenas chamas podem durar mais.|Ataque: Deixa premido para disparar com mais força
+04:28=Pouco depois de lançares este rocket, ira|começar a escavar através do solo e explodir|assim que o rastilho acabe ou alcance a superfície novamente.|Ataque: Deixa premido para disparar com mais força
+04:29=Esta não é de todo para crianças! A arma de bolas dispara|montes de pequenas e coloridas bolas recheadas de explosivos.|Ataque: Dispara com a força máxima|Cima/Baixo: Continua a apontar
+04:30=Chama um avião para lançar um poderoso ataque de|napalm. Com alguma portaria este ataque pode erradicar|enormes partes da paisagem incluindo ouriços|menos sortudos que por ali andavam.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
+04:31=O avião telecomandado é a ferramenta ideal para recolher caixas ou|atacar ouriços distantes. Espeta-o contras os teus inimigos ou|larga-lhes umas bombas primeiro.|Ataque: Lançar o avião ou largar bombas|Salto Longo: Ride of the Valkyries |Cima/Baixo: Guiar o avião
+04:32=A baixa gravidade é mais funciona melhor que qualquer dieta! Salta|mais alto, enormes distancias ou deixa os teus inimigos|voar ainda mais longe.|Ataque: Activar
+04:33=Por vezes só precisas daquele pequeno impulso|extra para lidar mais dano.|Ataque: Activar
+04:34=Não me podes tocar!|Ataque: Activar
+04:35=Por vezes o tempo passa demasiado depressa. Agarra uns segundos extra|para acabar o teu ataque.|Ataque: Activar
+04:36=Bem, há dias em que a tua pontaria anda simplesmente terrível.|Obtém alguma ajuda utilizando a tecnologia moderna.|Ataque: Activar
+04:37=Não temas a luz do dia. Só vai durar um turno|mas vais poder absorver o dano que fizeres|aos outros ouriços.|Ataque: Activar
+04:38=A sniper pode ser a arma mais devastadora|no teu arsenal, mas é muito pouco eficiente|ao perto. O dano aumenta proporcionalmente|à distancia do alvo.|Ataque: Disparar (uma vez)
+04:39=Voa para outras partes do mapa usando o|disco voador. Este utilitário difícil de controlar é capaz|de te levar a quase qualquer posição no campo de batalha.|Ataque: Activar|Cima/Esquerda/Direita: Aplica força nessa direcção
+04:40=Pôe o chão a arder com esta garrafa cheia|de liquido altamente inflamável.|Ataque: Deixa premido para atirar com mais força
