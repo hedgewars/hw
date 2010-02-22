@@ -807,7 +807,7 @@ var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
 begin
-if font >= CJKfntSmall then exit(font);
+if (font >= CJKfnt16) or (length(s) = 0)  then exit(font);
 
 l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
 i:= 0;
@@ -1360,14 +1360,14 @@ var tmpsurf: PSDL_SURFACE;
 	wa, ha: LongInt;
 	tmpline, tmpline2, tmpdesc: shortstring;
 begin
+// make sure there is a caption as well as a sub caption - description is optional
+if caption = '' then caption:= '???';
+if subcaption = '' then subcaption:= ' ';
+
 font:= CheckCJKFont(caption,fnt16);
 font:= CheckCJKFont(subcaption,font);
 font:= CheckCJKFont(description,font);
 font:= CheckCJKFont(extra,font);
-
-// make sure there is a caption as well as a sub caption - description is optional
-if caption = '' then caption:= '???';
-if subcaption = '' then subcaption:= ' ';
 
 w:= 0;
 h:= 0;
