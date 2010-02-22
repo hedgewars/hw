@@ -51,7 +51,6 @@ procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Positi
 procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture);
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
@@ -691,16 +690,6 @@ r.w:= SpritesData[Sprite].Width;
 r.y:= FrameY * SpritesData[Sprite].Height;
 r.h:= SpritesData[Sprite].Height;
 DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawSurfSprite(X, Y, Height, Frame: LongInt; Source: PTexture);
-var r: TSDL_Rect;
-begin
-r.x:= 0;
-r.w:= Source^.w;
-r.y:= Frame * Height;
-r.h:= Height;
-DrawFromRect(X, Y, @r, Source)
 end;
 
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
