@@ -1360,7 +1360,10 @@ var tmpsurf: PSDL_SURFACE;
 	wa, ha: LongInt;
 	tmpline, tmpline2, tmpdesc: shortstring;
 begin
-font:= fnt16;
+font:= CheckCJKFont(caption,fnt16);
+font:= CheckCJKFont(subcaption,font);
+font:= CheckCJKFont(description,font);
+font:= CheckCJKFont(extra,font);
 
 // make sure there is a caption as well as a sub caption - description is optional
 if caption = '' then caption:= '???';
