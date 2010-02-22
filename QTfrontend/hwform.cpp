@@ -440,6 +440,16 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 	{
 		ui.pageGameStats->renderStats();
 	}
+
+	// load and save ignore/friends lists
+	if(lastid == ID_PAGE_MULTIPLAYER || lastid == ID_PAGE_NETGAME) // leaving a room
+		ui.pageNetGame->pChatWidget->saveLists(ui.pageOptions->editNetNick->text());
+	else if(lastid == ID_PAGE_ROOMSLIST) // leaving the lobby
+		ui.pageRoomsList->chatWidget->saveLists(ui.pageOptions->editNetNick->text());
+	if(id == ID_PAGE_MULTIPLAYER || id == ID_PAGE_NETGAME) // joining a room
+		ui.pageNetGame->pChatWidget->loadLists(ui.pageOptions->editNetNick->text());
+	else if(id == ID_PAGE_ROOMSLIST) // joining the lobby
+		ui.pageRoomsList->chatWidget->loadLists(ui.pageOptions->editNetNick->text());
 }
 
 void HWForm::GoToPage(quint8 id)

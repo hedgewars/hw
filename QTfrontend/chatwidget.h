@@ -37,7 +37,16 @@ class HWChatWidget : public QWidget
   Q_OBJECT
 
  public:
-    HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify);
+  HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInteraction * sdli, bool notify);
+  void loadLists(const QString & nick);
+  void saveLists(const QString & nick);
+  void setShowReady(bool s);
+
+private:
+  void loadList(QStringList & list, const QString & file);
+  void saveList(QStringList & list, const QString & file);
+  void updateIcon(QListWidgetItem *item);
+  void updateIcons();
 
  public slots:
   void onChatString(const QString& str);
@@ -59,16 +68,20 @@ class HWChatWidget : public QWidget
   QGridLayout mainLayout;
   QTextBrowser* chatText;
   QStringList chatStrings;
+  QStringList ignoreList, friendsList;
   QListWidget* chatNicks;
   QLineEdit* chatEditLine;
   QAction * acInfo;
   QAction * acKick;
   QAction * acBan;
   QAction * acFollow;
+  QAction * acIgnore;
+  QAction * acFriend;
   QSettings * gameSettings;
   SDLInteraction * sdli;
   Mix_Chunk *sound[4];
   bool notify;
+  bool showReady;
 
  private slots:
   void returnPressed();
@@ -76,6 +89,8 @@ class HWChatWidget : public QWidget
   void onKick();
   void onInfo();
   void onFollow();
+  void onIgnore();
+  void onFriend();
   void chatNickDoubleClicked(QListWidgetItem * item);
 };
 

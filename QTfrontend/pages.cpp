@@ -651,6 +651,7 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings, SDLInteracti
 
 	// chatwidget
 	pChatWidget = new HWChatWidget(this, gameSettings, sdli, true);
+	pChatWidget->setShowReady(true); // show status bulbs by default
 	pageLayout->addWidget(pChatWidget, 1, 0, 1, 2);
 	pageLayout->setRowStretch(1, 100);
 

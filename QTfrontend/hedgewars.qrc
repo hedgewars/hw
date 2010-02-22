@@ -68,7 +68,16 @@
     <file>res/iconMine.png</file>
     <file>res/dice.png</file>
     <file>res/Star.png</file>
-	<file>res/file_save.png</file>
-	<file>res/file_demo.png</file>
+    <file>res/file_save.png</file>
+    <file>res/file_demo.png</file>
+    <file>res/chat_default.png</file>
+    <file>res/chat_ignore.png</file>
+    <file>res/chat_friend.png</file>
+    <file>res/chat_default_on.png</file>
+    <file>res/chat_ignore_on.png</file>
+    <file>res/chat_friend_on.png</file>
+    <file>res/chat_default_off.png</file>
+    <file>res/chat_ignore_off.png</file>
+    <file>res/chat_friend_off.png</file>
 </qresource>
 </RCC>
