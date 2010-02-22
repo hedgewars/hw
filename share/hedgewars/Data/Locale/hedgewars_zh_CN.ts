@@ -12,12 +12,12 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">从不</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform> %1 每回合</numerusform>
+        <translation type="obsolete">
+            <numerusform>每 %1 个回合</numerusform>
         </translation>
     </message>
 </context>
@@ -33,11 +33,11 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>修改游戏设置</translation>
+        <translation type="obsolete">修改游戏设置</translation>
     </message>
     <message>
         <source>Edit weapons</source>
-        <translation>改变武器设置</translation>
+        <translation type="obsolete">修改武器设置</translation>
     </message>
 </context>
 <context>
@@ -79,7 +79,7 @@
     </message>
     <message>
         <source>Error reading training config file</source>
-        <translation>训练设置文件无法读取</translation>
+        <translation type="obsolete">训练设置文件无法读取</translation>
     </message>
 </context>
 <context>
@@ -167,26 +167,26 @@
 registered on Hedgewars.org
 Please provide your password
 or pick another nickname:</source>
-        <translation type="unfinished">您的昵称%1
+        <translation>您的昵称%1
 在Hedgewars.org已注册
 请输入您的密码
-或选择另一个昵称：</translation>
+或选择另一个昵称:</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation type="unfinished">%1***%2已经进入房间</translation>
+        <translation>%1 *** %2已经进入房间</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation type="unfinished">%1***%2已经进入</translation>
+        <translation>%1 *** %2已经进入</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation type="unfinished">%1***%2已经离开(%3)</translation>
+        <translation>%1 *** %2已经离开(%3)</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation type="unfinished">%1***%2已经离开</translation>
+        <translation>%1 *** %2已经离开</translation>
     </message>
 </context>
 <context>
@@ -233,18 +233,18 @@ or pick another nickname:</source>
     <name>PageGameStats</name>
     <message>
         <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;最佳射手是&lt;b&gt;%1&lt;/b&gt;。伤害 &lt;b&gt;%2&lt;/b&gt;点。&lt;/p&gt;</translation>
+        <translation type="unfinished">&lt;p&gt;最佳射手是 &lt;b&gt;%1&lt;/b&gt;。伤害 &lt;b&gt;%2&lt;/b&gt;点。&lt;/p&gt;</translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform>&lt;p&gt;最佳杀手是&lt;b&gt;%1&lt;/b&gt;一回合杀刺猬数&lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;最佳杀手是 &lt;b&gt;%1&lt;/b&gt;单回合击杀刺猬数:&lt;b&gt;%2&lt;/b&gt;&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
         <translation type="unfinished">
-            <numerusform>&lt;p&gt;本轮总共有&lt;b&gt;%1&lt;/b&gt;只刺猬被杀&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;本轮总共有&lt;b&gt;%1&lt;/b&gt;只刺猬被击杀&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -281,7 +281,7 @@ or pick another nickname:</source>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation>Ctrl</translation>
+        <translation>房间管理</translation>
     </message>
 </context>
 <context>
@@ -373,7 +373,7 @@ or pick another nickname:</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation type="unfinished">房间名：</translation>
+        <translation type="unfinished">房间名:</translation>
     </message>
     <message>
         <source>This game is in lobby.
@@ -389,7 +389,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished">%1是房主，他可以调整设置、开始游戏。</translation>
+        <translation type="unfinished">%1 是房主，他可以调整设置、开始游戏。</translation>
     </message>
     <message>
         <source>Random Map</source>
@@ -410,13 +410,13 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
         <translation type="unfinished">
-            <numerusform>有%1个客户端连接到这个房间。</numerusform>
+            <numerusform>有 %1 个客户端连接到这个房间。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
         <translation type="unfinished">
-            <numerusform>有%1个队伍加入这个房间。</numerusform>
+            <numerusform>有 %1 个队伍加入这个房间。</numerusform>
         </translation>
     </message>
     <message>
@@ -432,7 +432,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <name>PageScheme</name>
     <message>
         <source>New</source>
-        <translation>新游戏</translation>
+        <translation>新模式</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -492,11 +492,15 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>随机出场顺序</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>国王不能死!!</translation>
+    </message>
+    <message>
+        <source>Take turns placing your hedgehogs before the start of play.</source>
+        <translation>在开局前手动放置刺猬</translation>
     </message>
 </context>
 <context>
@@ -561,18 +565,18 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>跟随</translation>
     </message>
 </context>
 <context>
     <name>QCheckBox</name>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished">启动时检查升级程序</translation>
+        <translation>启动时检查程序升级</translation>
     </message>
     <message>
         <source>Enable sound</source>
-        <translation>开启音效</translation>
+        <translation type="unfinished">开启游戏音效</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -588,7 +592,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Enable music</source>
-        <translation>开启音乐</translation>
+        <translation type="unfinished">开启游戏音乐</translation>
     </message>
     <message>
         <source>Frontend fullscreen</source>
@@ -605,6 +609,18 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Reduced quality</source>
         <translation type="unfinished">降低显示效果</translation>
+    </message>
+    <message>
+        <source>Show ammo menu tooltips</source>
+        <translation type="unfinished">显示武器提示信息</translation>
+    </message>
+    <message>
+        <source>Enable frontend sounds</source>
+        <translation type="unfinished">开启菜单音效</translation>
+    </message>
+    <message>
+        <source>Enable frontend music</source>
+        <translation type="unfinished">开启菜单音乐</translation>
     </message>
 </context>
 <context>
@@ -910,6 +926,10 @@ Please check your installation</source>
         <source>Ready</source>
         <translation>准备好了</translation>
     </message>
+    <message>
+        <source>Random Team</source>
+        <translation type="unfinished">随机队伍分配</translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -919,11 +939,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">警</translation>
+        <translation type="unfinished">人数</translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished">匪</translation>
+        <translation type="unfinished">队伍</translation>
     </message>
     <message>
         <source>Owner</source>
@@ -1016,11 +1036,15 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">随机顺序</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">国王模式</translation>
+    </message>
+    <message>
+        <source>Place Hedgehogs</source>
+        <translation type="unfinished">手动放置</translation>
     </message>
 </context>
 <context>
@@ -1115,7 +1139,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>找到 刺猬</translation>
+        <translation>寻找刺猬</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -1306,287 +1330,203 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished">鼠标：左键</translation>
+        <translation type="obsolete">鼠标：左键</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished">鼠标：中键</translation>
+        <translation type="obsolete">鼠标：中键</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished">鼠标：右键</translation>
+        <translation type="obsolete">鼠标：右键</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished">鼠标滚轮：向上</translation>
+        <translation type="obsolete">鼠标滚轮：向上</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished">鼠标滚轮：向下</translation>
+        <translation type="obsolete">鼠标滚轮：向下</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished">退格键</translation>
+        <translation type="obsolete">退格键</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished">制表键</translation>
+        <translation type="obsolete">制表键</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">清除</translation>
+        <translation type="obsolete">清除</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished">返回</translation>
+        <translation type="obsolete">返回</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">暂停键</translation>
+        <translation type="obsolete">暂停键</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished">退出键</translation>
+        <translation type="obsolete">退出键</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished">空格键</translation>
+        <translation type="obsolete">空格键</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">删除键</translation>
+        <translation type="obsolete">删除键</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished">小键盘0</translation>
+        <translation type="obsolete">小键盘0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished">小键盘1</translation>
+        <translation type="obsolete">小键盘1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished">小键盘2</translation>
+        <translation type="obsolete">小键盘2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished">小键盘3</translation>
+        <translation type="obsolete">小键盘3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished">小键盘4</translation>
+        <translation type="obsolete">小键盘4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished">小键盘5</translation>
+        <translation type="obsolete">小键盘5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished">小键盘6</translation>
+        <translation type="obsolete">小键盘6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished">小键盘7</translation>
+        <translation type="obsolete">小键盘7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished">小键盘8</translation>
+        <translation type="obsolete">小键盘8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished">小键盘9</translation>
+        <translation type="obsolete">小键盘9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished">小键盘.</translation>
+        <translation type="obsolete">小键盘.</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished">小键盘/</translation>
+        <translation type="obsolete">小键盘/</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished">小键盘*</translation>
+        <translation type="obsolete">小键盘*</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished">小键盘-</translation>
+        <translation type="obsolete">小键盘-</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished">小键盘+</translation>
+        <translation type="obsolete">小键盘+</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished">回车键</translation>
+        <translation type="obsolete">回车键</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished">等于</translation>
+        <translation type="obsolete">等于</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished">上</translation>
+        <translation type="obsolete">上</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished">下</translation>
+        <translation type="obsolete">下</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished">右</translation>
+        <translation type="obsolete">右</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished">左</translation>
+        <translation type="obsolete">左</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished">插入键</translation>
+        <translation type="obsolete">插入键</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished">Home键</translation>
+        <translation type="obsolete">Home键</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished">End键</translation>
+        <translation type="obsolete">End键</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished">向上翻页键</translation>
+        <translation type="obsolete">向上翻页键</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished">向下翻页键</translation>
+        <translation type="obsolete">向下翻页键</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished">小键盘数字锁</translation>
+        <translation type="obsolete">小键盘数字锁</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished">大小写切换键</translation>
+        <translation type="obsolete">大小写切换键</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished">Scroll Lock键</translation>
+        <translation type="obsolete">Scroll Lock键</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished">右Shift键</translation>
+        <translation type="obsolete">右Shift键</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished">左Shift键</translation>
+        <translation type="obsolete">左Shift键</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished">右Ctrl键</translation>
+        <translation type="obsolete">右Ctrl键</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished">左Ctrl键</translation>
+        <translation type="obsolete">左Ctrl键</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished">右Alt键</translation>
+        <translation type="obsolete">右Alt键</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished">左Alt键</translation>
+        <translation type="obsolete">左Alt键</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished">右meta键</translation>
+        <translation type="obsolete">右meta键</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished">左meta键</translation>
-    </message>
-    <message>
-        <source>A button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>B button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>X button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Y button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>LB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>RB button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Back button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Start button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Left trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right trigger</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Down)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Up)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Right)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Right stick (Left)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>DPad</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">左meta键</translation>
     </message>
 </context>
 </TS>
