@@ -126,9 +126,9 @@ begin
 AllInactive:= false;
 Gear^.Y:= Gear^.Y + cDrownSpeed;
 Gear^.X:= Gear^.X + Gear^.dX * cDrownSpeed;
-if hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater then DeleteGear(Gear);
+if (cWaterOpacity > $FE) or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then DeleteGear(Gear);
 // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
-if (GameTicks and $1F) = 0 then
+if (cWaterOpacity < $FF) and ((GameTicks and $1F) = 0) then
     if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
         AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
     else if Random(12) = 0 then
