@@ -545,35 +545,48 @@ else offset:= 8;
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
-	  highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
-	  
+      highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
+      
       if highlight then
          glColor4f(((Clan^.Color shr 16) and $ff) / $ff, ((Clan^.Color shr 8) and $ff) / $ff, (Clan^.Color and $ff) / $ff, 1);
-      DrawTexture(- NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
-  
+
+      // draw name
+      DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY, NameTagTex);
+      
+      // draw flag
+      DrawTexture(-14, cScreenHeight + DrawHealthY, FlagTex);
+      
+      // draw health bar
       r.x:= 0;
       r.y:= 0;
-	  
-	  r.w:= 26;
-	  r.h:= 19;
-	  DrawFromRect(-14, cScreenHeight + DrawHealthY, @r, FlagTex);
-	   
       r.w:= 2 + TeamHealthBarWidth;
       r.h:= HealthTex^.h;
       DrawFromRect(14, cScreenHeight + DrawHealthY, @r, HealthTex);
 
+      // draw health bar's right border
       inc(r.x, cTeamHealthWidth + 2);
       r.w:= 3;
-
       DrawFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY, @r, HealthTex);
-      if highlight then // if highlighted, draw flag again to keep its colors
+      // if highlighted, draw flag and other contents again to keep their colors
+      // this approach should be faster than drawing all borders one by one tinted or not
+      if highlight then
          begin
+         glColor4f(1, 1, 1, 1);
+
+         // draw name
          r.x:= 2;
          r.y:= 2;
+         r.w:= NameTagTex^.w - 4;
+         r.h:= NameTagTex^.h - 4;
+         DrawFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + 2, @r, NameTagTex);
+         // draw flag
          r.w:= 22;
          r.h:= 15;
-         glColor4f(1, 1, 1, 1);
          DrawFromRect(-12, cScreenHeight + DrawHealthY + 2, @r, FlagTex);
+         // draw health bar
+         r.w:= TeamHealthBarWidth + 1;
+         r.h:= HealthTex^.h - 4;
+         DrawFromRect(16, cScreenHeight + DrawHealthY + 2, @r, HealthTex);
          end;
       end;
 
