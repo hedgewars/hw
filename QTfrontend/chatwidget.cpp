@@ -78,6 +78,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
 	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
 	connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
 		this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
+	connect(chatNicks, SIGNAL(itemClicked(QListWidgetItem *)),
+		this, SLOT(chatNickClicked(QListWidgetItem *)));
 
 	mainLayout.addWidget(chatNicks, 0, 1);
 
@@ -91,7 +93,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
 	connect(acFollow, SIGNAL(triggered(bool)), this, SLOT(onFollow()));
 	acIgnore = new QAction(QAction::tr("Ignore"), chatNicks);
 	connect(acIgnore, SIGNAL(triggered(bool)), this, SLOT(onIgnore()));
-	acFriend = new QAction(QAction::tr("Friend"), chatNicks);
+	acFriend = new QAction(QAction::tr("Add friend"), chatNicks);
 	connect(acFriend, SIGNAL(triggered(bool)), this, SLOT(onFriend()));
 
 	chatNicks->insertAction(0, acInfo);
@@ -181,7 +183,7 @@ void HWChatWidget::returnPressed()
 	emit chatLine(chatEditLine->text());
 	chatEditLine->clear();
 }
-#include <QMessageBox>
+
 void HWChatWidget::onChatString(const QString& str)
 {
 	if (chatStrings.size() > 250)
@@ -328,6 +330,23 @@ void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 	if (item) onFollow();
 }
 
+void HWChatWidget::chatNickClicked(QListWidgetItem * item)
+{
+	if (!item)
+		return;
+
+	// update context menu labels according to possible action
+	if(ignoreList.contains(item->text(), Qt::CaseInsensitive))
+		acIgnore->setText(QAction::tr("Unignore"));
+	else
+		acIgnore->setText(QAction::tr("Ignore"));
+
+	if(friendsList.contains(item->text(), Qt::CaseInsensitive))
+		acFriend->setText(QAction::tr("Remove friend"));
+	else
+		acFriend->setText(QAction::tr("Add friend"));
+}
+
 void HWChatWidget::setShowReady(bool s)
 {
 	showReady = s;
@@ -341,11 +360,6 @@ void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
 		qWarning("Bug: cannot find user in chat");
 		return;
 	}
-
-	/*if(isReady)
-		items[0]->setIcon(QIcon(":/res/lightbulb_on.png"));
-	else
-		items[0]->setIcon(QIcon(":/res/lightbulb_off.png"));*/
 
 	items[0]->setData(Qt::UserRole, isReady); // bulb status
 	updateIcon(items[0]);

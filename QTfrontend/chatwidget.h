@@ -92,6 +92,7 @@ private:
   void onIgnore();
   void onFriend();
   void chatNickDoubleClicked(QListWidgetItem * item);
+  void chatNickClicked(QListWidgetItem * item);
 };
 
 #endif // _CHAT_WIDGET_INCLUDED
