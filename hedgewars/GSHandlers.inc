@@ -88,7 +88,10 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.X)) or TestCollisionYwithGear(Gear,
 end;
 
 procedure CheckHHDamage(Gear: PGear);
-var dmg: Longword;
+var 
+	dmg: Longword;
+	i: LongInt;
+	particle: PVisualGear;
 begin
 if(Gear^.Invulnerable) then exit;
 if _0_4 < Gear^.dY then
@@ -101,7 +104,12 @@ if _0_4 < Gear^.dY then
 	else
 		PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
-    ApplyDamage(Gear, dmg);
+	for i:= min(12, (3 + dmg div 10)) downto 0 do begin
+		particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+		particle^.dX := particle^.dX + (Gear^.dX / 5);
+		end;
+		
+  ApplyDamage(Gear, dmg);
 	end
 end;
 

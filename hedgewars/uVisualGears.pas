@@ -235,6 +235,24 @@ begin
 		else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepDust(Gear: PVisualGear; Steps: Longword);
+begin
+	Gear^.X:= Gear^.X + (cWindSpeed + (cWindSpeed * _0_03 * Steps) + Gear^.dX) * Steps;
+	Gear^.Y:= Gear^.Y - (Gear^.dY) * Steps;
+
+	Gear^.dX := Gear^.dX - (Gear^.dX * _0_005 * Steps);
+	Gear^.dY := Gear^.dY - (cDrownSpeed * _0_001 * Steps);
+
+	if Gear^.FrameTicks <= Steps then
+		if Gear^.Frame = 0 then DeleteVisualGear(Gear)
+		else
+			begin
+			dec(Gear^.Frame);
+			Gear^.FrameTicks:= cExplFrameTicks
+			end
+		else dec(Gear^.FrameTicks, Steps)
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -369,7 +387,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepSteam,
 			@doStepSmoke,
 			@doStepHealth,
-			@doStepShell
+			@doStepShell,
+			@doStepDust
 		);
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -476,6 +495,13 @@ with gear^ do
 				Frame:= 0;
 				FrameTicks:= random(750) + 1250;
 				end;
+  vgtDust: begin
+				dx:= _0_005 * (random(15) + 10);
+				dx.isNegative:= random(2) = 0;
+				dy:= _0_001 * (random(40) + 20);
+				Frame:= 7 - random(2);
+				FrameTicks:= random(20) + 15;
+				end;
 		end;
 
 if VisualGearsList <> nil then
@@ -535,6 +561,7 @@ case Layer of
 			if not cReducedQuality then
 				case Gear^.Kind of
 					vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+					vgtDust: DrawSprite(sprDust, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
 				end;
 		Gear:= Gear^.NextGear
 		end;
