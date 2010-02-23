@@ -63,6 +63,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     AMxShift, SlotsNum: LongInt;
     tmpSurface: PSDL_Surface;
     fpsTexture: PTexture;
+    timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
@@ -650,9 +651,28 @@ offset:= 300;
 offset:= 10;
 {$ENDIF}
 inc(Frames);
+
+if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
+if (GameType = gmtDemo) and (not isSpeed) and (CountTicks >= 1000) then
+   begin
+   i:=GameTicks div 60000;
+   t:=(GameTicks-(i*60000)) div 1000;
+   s:='';
+   if i<10 then s:='0';
+   s:= s+inttostr(i)+':';
+   if t<10 then s:=s+'0';
+   s:= s+inttostr(t);
+   tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
+   tmpSurface:= doSurfaceConversion(tmpSurface);
+   timeTexture:= Surface2Tex(tmpSurface, false);
+   SDL_FreeSurface(tmpSurface)
+   end;
+
+if timeTexture <> nil then
+   DrawTexture((cScreenWidth shr 1) - 10 - timeTexture^.w, offset + timeTexture^.h+5, timeTexture);
+
 if cShowFPS then
    begin
-   inc(CountTicks, Lag);
    if CountTicks >= 1000 then
       begin
       FPS:= Frames;
@@ -668,6 +688,8 @@ if cShowFPS then
    if fpsTexture <> nil then
       DrawTexture((cScreenWidth shr 1) - 50, offset, fpsTexture);
    end;
+
+if CountTicks >= 1000 then CountTicks:= 0;
 
 // lag warning (?)
 inc(SoundTimerTicks, Lag);
