@@ -414,7 +414,7 @@
 04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
 04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Long Jump: Drop grenades or similar weapons
 04:08=Keep your enemies away by dropping a mine in|narrow passages or right below their feet. Be|sure to retreat before you trigger it yourself!|Attack: Drop mine next to your feet
-04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to five shots.|Attack: Shoot (multiple times)
+04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to four shots.|Attack: Shoot (multiple times)
 04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
 04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
 04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
