@@ -653,7 +653,7 @@ offset:= 10;
 inc(Frames);
 
 if cShowFPS or (GameType = gmtDemo) then inc(CountTicks, Lag);
-if (GameType = gmtDemo) and (not isSpeed) and (CountTicks >= 1000) then
+if (GameType = gmtDemo) and (CountTicks >= 1000) then
    begin
    i:=GameTicks div 60000;
    t:=(GameTicks-(i*60000)) div 1000;
@@ -662,6 +662,7 @@ if (GameType = gmtDemo) and (not isSpeed) and (CountTicks >= 1000) then
    s:= s+inttostr(i)+':';
    if t<10 then s:=s+'0';
    s:= s+inttostr(t);
+   if timeTexture <> nil then FreeTexture(timeTexture);
    tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
    tmpSurface:= doSurfaceConversion(tmpSurface);
    timeTexture:= Surface2Tex(tmpSurface, false);
