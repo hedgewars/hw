@@ -312,7 +312,10 @@ case Gear^.Pos of
        posCaseAmmo: begin
                     a:= TAmmoType(Gear^.State);
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
-                    if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven
+// Possibly needs to check shared clan ammo game flag once added.
+// On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
+                    if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven 
+                      or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan-1)
                       or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
                     or (GameType = gmtDemo)  then
                        begin
