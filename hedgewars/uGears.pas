@@ -847,8 +847,10 @@ var i, t: LongInt;
 	hx, hy, cx, cy, tx, ty, sx, sy, m: LongInt;  // hedgehog, crosshair, temp, sprite, direction
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
-    VertexBuffer: array [0..1] of TVertex2f;
+	VertexBuffer: array [0..1] of TVertex2f;
+	stepSounds: boolean;
 begin
+
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
 m:= 1;
 if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
@@ -860,6 +862,7 @@ if (Gear^.State and gstHHDeath) <> 0 then
 
 defaultPos:= true;
 HatVisible:= false;
+stepSounds:= false;
 
 sx:= hwRound(Gear^.X) + 1 + WorldDx;
 sy:= hwRound(Gear^.Y) - 3 + WorldDy;
@@ -1025,6 +1028,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						3,
 						PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 						0);
+				stepSounds:= true;
 				defaultPos:= false
 				end;
 			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
@@ -1121,6 +1125,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			0,
 			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 			0);
+		stepSounds:= true;
 		defaultPos:= false;
 		HatVisible:= true
 		end
@@ -1363,6 +1368,14 @@ if cVampiric and
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
 	glColor4f(1, 1, 1, 1);
     end;
+	
+	if stepSounds and (Gear^.SoundChannel < 0) then
+		Gear^.SoundChannel:= LoopSound(sndSteps)
+	else if not stepSounds and (Gear^.SoundChannel > -1) then
+		begin
+		StopSound(Gear^.SoundChannel);
+		Gear^.SoundChannel:= -1;
+		end;
 end;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
