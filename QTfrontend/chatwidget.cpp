@@ -78,8 +78,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
 	chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
 	connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
 		this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
-	connect(chatNicks, SIGNAL(itemClicked(QListWidgetItem *)),
-		this, SLOT(chatNickClicked(QListWidgetItem *)));
+	connect(chatNicks, SIGNAL(currentRowChanged(int)),
+		this, SLOT(chatNickSelected(int)));
 
 	mainLayout.addWidget(chatNicks, 0, 1);
 
@@ -303,7 +303,8 @@ void HWChatWidget::onIgnore()
 		ignoreList << curritem->text().toLower();
 		onChatString(HWChatWidget::tr("%1 *** %2 has been added to your ignore list").arg('\x03').arg(curritem->text()));
 	}
-	updateIcon(curritem);
+	updateIcon(curritem); // update icon
+	chatNickSelected(0); // update context menu
 }
 
 void HWChatWidget::onFriend()
@@ -322,7 +323,8 @@ void HWChatWidget::onFriend()
 		friendsList << curritem->text().toLower();
 		onChatString(HWChatWidget::tr("%1 *** %2 has been added to your friends list").arg('\x03').arg(curritem->text()));
 	}
-	updateIcon(curritem);
+	updateIcon(curritem); // update icon
+	chatNickSelected(0); // update context menu
 }
 
 void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
@@ -330,8 +332,9 @@ void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
 	if (item) onFollow();
 }
 
-void HWChatWidget::chatNickClicked(QListWidgetItem * item)
+void HWChatWidget::chatNickSelected(int index)
 {
+	QListWidgetItem* item = chatNicks->currentItem();
 	if (!item)
 		return;
 
