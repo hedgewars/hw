@@ -314,9 +314,10 @@ case Gear^.Pos of
                     AddAmmo(PHedgehog(HH^.Hedgehog)^, a);
 // Possibly needs to check shared clan ammo game flag once added.
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
+AddFileLog(inttostr(PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex) + ' --------- ' + inttostr(LocalClan));
                     if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven 
-                      or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan-1)
                       or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
+                    or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
                     or (GameType = gmtDemo)  then
                        begin
                        s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
