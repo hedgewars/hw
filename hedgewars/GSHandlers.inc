@@ -477,9 +477,12 @@ if ((Gear^.State and gstAnimation) = 0) then
 		begin
 		PlaySound(sndShotgunFire);
 		shell:= AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
-		shell^.dX:= gear^.dX / -4;
-		shell^.dY:= gear^.dY / -4;
-		shell^.Frame:= 0;
+        if shell <> nil then
+        begin 
+           shell^.dX:= gear^.dX / -4;
+           shell^.dY:= gear^.dY / -4;
+           shell^.Frame:= 0
+        end;
 		Gear^.State:= Gear^.State or gstAnimation
 		end;
 	exit
