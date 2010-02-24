@@ -90,6 +90,8 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
          ClansArray[t]:= cp;
          ClansArray[t]^.ClanIndex:= t;
          ClansArray[0]^.ClanIndex:= 0;
+         if (LocalClan = t) then LocalClan:= 0
+         else if (LocalClan = 0) then LocalClan:= t
          end;
       end;
    CurrentTeam:= ClansArray[0]^.Teams[0];
@@ -139,7 +141,7 @@ if bShowAmmoMenu then
    end;
 if (CurrentTeam <> nil) and (CurrentHedgehog <> nil) and (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
    Ammo:= CurrentHedgehog^.Ammo
-else 
+else if (LocalAmmo <> -1) then
    Ammo:= GetAmmoByNum(LocalAmmo);
 Slot:= 0;
 Pos:= -1;
