@@ -267,7 +267,7 @@ begin
 	RegisterVariable('say'     , vtCommand, @chSay          , true );
 	RegisterVariable('hogsay'  , vtCommand, @chHogSay       , true );
 	RegisterVariable('team'    , vtCommand, @chTeamSay      , true );
-	RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , false);
+	RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
 	RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
 	RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
 	RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);

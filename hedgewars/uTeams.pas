@@ -98,7 +98,8 @@ var CurrentTeam: PTeam;
     TeamsCount: Longword;
     ClansArray: array[0..Pred(cMaxTeams)] of PClan;
     ClansCount: Longword;
-    LocalClan: Longword;  // first non-bot, non-extdriven clan
+    LocalClan: Longword;  // last non-bot, non-extdriven clan
+    LocalAmmo: Longword;  // last non-bot, non-extdriven clan's first team's ammo index
     CurMinAngle, CurMaxAngle: Longword;
 
 procedure init_uTeams;
@@ -347,7 +348,10 @@ for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
       if (not ExtDriven) and (Hedgehogs[0].BotLevel = 0) then
+          begin
           LocalClan:= Clan^.ClanIndex + 1;
+          LocalAmmo:= Hedgehogs[0].AmmoStore
+          end;
       th:= 0;
       for i:= 0 to cMaxHHIndex do
           if Hedgehogs[i].Gear <> nil then

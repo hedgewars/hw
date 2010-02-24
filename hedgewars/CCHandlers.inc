@@ -602,16 +602,18 @@ end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
-if CheckNoTeamOrHH then exit;
-with CurrentTeam^ do
-     with Hedgehogs[CurrHedgehog] do
-          begin
-          bSelected:= false;
+if CheckNoTeamOrHH then 
+   bShowAmmoMenu:= true
+else
+   with CurrentTeam^ do
+        with Hedgehogs[CurrHedgehog] do
+             begin
+             bSelected:= false;
 
-          if bShowAmmoMenu then bShowAmmoMenu:= false
-          else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (MultiShootAttacks > 0)
-               or ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
-          end
+             if bShowAmmoMenu then bShowAmmoMenu:= false
+             else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or (MultiShootAttacks > 0)
+                  or ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+             end
 end;
 
 procedure chFullScr(var s: shortstring);
