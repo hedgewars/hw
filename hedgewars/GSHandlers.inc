@@ -574,9 +574,12 @@ if not cLaserSighting then // game does not have default laser sight. turn it on
 if (HHGear^.Message and gm_Attack) <> 0 then
     begin
     shell:= AddVisualGear(hwRound(Gear^.x), hwRound(Gear^.y), vgtShell);
-    shell^.dX:= gear^.dX / -2;
-    shell^.dY:= gear^.dY / -2;
-    shell^.Frame:= 1;
+    if shell <> nil then
+       begin
+       shell^.dX:= gear^.dX / -2;
+       shell^.dY:= gear^.dY / -2;
+       shell^.Frame:= 1
+       end;
     Gear^.State:= Gear^.State or gstAnimation;
     Gear^.dX:= SignAs(AngleSin(HHGear^.Angle), HHGear^.dX) * _0_5;
     Gear^.dY:= -AngleCos(HHGear^.Angle) * _0_5;
