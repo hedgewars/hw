@@ -139,6 +139,7 @@ if bShowAmmoMenu then
    else
        if AMxShift < 210 then inc(AMxShift, MENUSPEED);
    end;
+Ammo:= nil;
 if (CurrentTeam <> nil) and (CurrentHedgehog <> nil) and (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
    Ammo:= CurrentHedgehog^.Ammo
 else if (LocalAmmo <> -1) then

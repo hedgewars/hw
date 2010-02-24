@@ -106,7 +106,7 @@ if _0_4 < Gear^.dY then
 
 	for i:= min(12, (3 + dmg div 10)) downto 0 do begin
 		particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-		particle^.dX := particle^.dX + (Gear^.dX / 5);
+        if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5);
 		end;
 		
   ApplyDamage(Gear, dmg);
