@@ -16,45 +16,45 @@ import Utils
 
 acceptLoop :: Socket -> Chan CoreMessage -> Int -> IO ()
 acceptLoop servSock coreChan clientCounter = do
-	Exception.handle
-		(\(_ :: Exception.IOException) -> putStrLn "exception on connect") $
-		do
-		(socket, sockAddr) <- Network.Socket.accept servSock
+    Exception.handle
+        (\(_ :: Exception.IOException) -> putStrLn "exception on connect") $
+        do
+        (socket, sockAddr) <- Network.Socket.accept servSock
 
-		cHandle <- socketToHandle socket ReadWriteMode
-		hSetBuffering cHandle LineBuffering
-		clientHost <- sockAddr2String sockAddr
+        cHandle <- socketToHandle socket ReadWriteMode
+        hSetBuffering cHandle LineBuffering
+        clientHost <- sockAddr2String sockAddr
 
-		currentTime <- getCurrentTime
-		
-		sendChan <- newChan
+        currentTime <- getCurrentTime
+        
+        sendChan <- newChan
 
-		let newClient =
-				(ClientInfo
-					nextID
-					sendChan
-					cHandle
-					clientHost
-					currentTime
-					""
-					""
-					False
-					0
-					0
-					0
-					False
-					False
-					False
-					undefined
-					undefined
-					)
+        let newClient =
+                (ClientInfo
+                    nextID
+                    sendChan
+                    cHandle
+                    clientHost
+                    currentTime
+                    ""
+                    ""
+                    False
+                    0
+                    0
+                    0
+                    False
+                    False
+                    False
+                    undefined
+                    undefined
+                    )
 
-		writeChan coreChan $ Accept newClient
+        writeChan coreChan $ Accept newClient
 
-		forkIO $ clientRecvLoop cHandle coreChan nextID
-		forkIO $ clientSendLoop cHandle coreChan sendChan nextID
-		return ()
+        forkIO $ clientRecvLoop cHandle coreChan nextID
+        forkIO $ clientSendLoop cHandle coreChan sendChan nextID
+        return ()
 
-	acceptLoop servSock coreChan nextID
-	where
-		nextID = clientCounter + 1
+    acceptLoop servSock coreChan nextID
+    where
+        nextID = clientCounter + 1

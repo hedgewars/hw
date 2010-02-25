@@ -26,32 +26,32 @@ import System.Posix
 
 
 setupLoggers =
-	updateGlobalLogger "Clients"
-		(setLevel INFO)
+    updateGlobalLogger "Clients"
+        (setLevel INFO)
 
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
-	installHandler sigPIPE Ignore Nothing;
-	installHandler sigCHLD Ignore Nothing;
+    installHandler sigPIPE Ignore Nothing;
+    installHandler sigCHLD Ignore Nothing;
 #endif
 
-	setupLoggers
+    setupLoggers
 
-	stats <- atomically $ newTMVar (StatisticsInfo 0 0)
-	dbQueriesChan <- newChan
-	coreChan <- newChan
-	serverInfo' <- getOpts $ newServerInfo stats coreChan dbQueriesChan
-	
+    stats <- atomically $ newTMVar (StatisticsInfo 0 0)
+    dbQueriesChan <- newChan
+    coreChan <- newChan
+    serverInfo' <- getOpts $ newServerInfo stats coreChan dbQueriesChan
+    
 #if defined(OFFICIAL_SERVER)
-	dbHost' <- askFromConsole "DB host: "
-	dbLogin' <- askFromConsole "login: "
-	dbPassword' <- askFromConsole "password: "
-	let serverInfo = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
+    dbHost' <- askFromConsole "DB host: "
+    dbLogin' <- askFromConsole "login: "
+    dbPassword' <- askFromConsole "password: "
+    let serverInfo = serverInfo'{dbHost = dbHost', dbLogin = dbLogin', dbPassword = dbPassword'}
 #else
-	let serverInfo = serverInfo'
+    let serverInfo = serverInfo'
 #endif
 
-	Exception.bracket
-		(Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
-		sClose
-		(startServer serverInfo)
+    Exception.bracket
+        (Network.listenOn $ Network.PortNumber $ listenPort serverInfo)
+        sClose
+        (startServer serverInfo)

@@ -23,59 +23,71 @@ import CoreTypes
 sockAddr2String :: SockAddr -> IO String
 sockAddr2String (SockAddrInet _ hostAddr) = inet_ntoa hostAddr
 sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
-	return $ (foldr1 (.)
-		$ List.intersperse (\a -> ':':a)
-		$ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
+    return $ (foldr1 (.)
+        $ List.intersperse (\a -> ':':a)
+        $ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
 
 toEngineMsg :: String -> String
 toEngineMsg msg = Base64.encode (fromIntegral (length encodedMsg) : encodedMsg)
-	where
-	encodedMsg = UTF8.encode msg
+    where
+    encodedMsg = UTF8.encode msg
 
 fromEngineMsg :: String -> Maybe String
 fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)
-	where
-		removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
-		removeLength _ = Nothing
+    where
+        removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
+        removeLength _ = Nothing
 
 checkNetCmd :: String -> (Bool, Bool)
 checkNetCmd msg = check decoded
-	where
-		decoded = fromEngineMsg msg
-		check Nothing = (False, False)
-		check (Just (m:ms)) = (m `Set.member` legalMessages, m == '+')
-		check _ = (False, False)
-		legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
-		slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
+    where
+        decoded = fromEngineMsg msg
+        check Nothing = (False, False)
+        check (Just (m:ms)) = (m `Set.member` legalMessages, m == '+')
+        check _ = (False, False)
+        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sFNpPwtghb12345" ++ slotMessages
+        slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 maybeRead :: Read a => String -> Maybe a
 maybeRead s = case reads s of
-	[(x, rest)] | all isSpace rest -> Just x
-	_         -> Nothing
+    [(x, rest)] | all isSpace rest -> Just x
+    _         -> Nothing
 
-teamToNet team = [
-		"ADD_TEAM",
-		teamname team,
-		teamgrave team,
-		teamfort team,
-		teamvoicepack team,
-		teamflag team,
-		teamowner team,
-		show $ difficulty team
-		]
-		++ hhsInfo
-	where
-		hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
+teamToNet :: Word16 -> TeamInfo -> [String]
+teamToNet protocol team 
+    | protocol < 30 = [
+        "ADD_TEAM",
+        teamname team,
+        teamgrave team,
+        teamfort team,
+        teamvoicepack team,
+        teamowner team,
+        show $ difficulty team
+        ]
+        ++ hhsInfo
+    | otherwise = [
+        "ADD_TEAM",
+        teamname team,
+        teamgrave team,
+        teamfort team,
+        teamvoicepack team,
+        teamflag team,
+        teamowner team,
+        show $ difficulty team
+        ]
+        ++ hhsInfo
+    where
+        hhsInfo = concatMap (\(HedgehogInfo name hat) -> [name, hat]) $ hedgehogs team
 
 modifyTeam :: TeamInfo -> RoomInfo -> RoomInfo
 modifyTeam team room = room{teams = replaceTeam team $ teams room}
-	where
-	replaceTeam _ [] = error "modifyTeam: no such team"
-	replaceTeam team (t:teams) =
-		if teamname team == teamname t then
-			team : teams
-		else
-			t : replaceTeam team teams
+    where
+    replaceTeam _ [] = error "modifyTeam: no such team"
+    replaceTeam team (t:teams) =
+        if teamname team == teamname t then
+            team : teams
+        else
+            t : replaceTeam team teams
 
 illegalName :: String -> Bool
 illegalName = all isSpace
@@ -98,6 +110,6 @@ protoNumber2ver _ = "Unknown"
 
 askFromConsole :: String -> IO String
 askFromConsole msg = do
-	putStr msg
-	hFlush stdout
-	getLine
+    putStr msg
+    hFlush stdout
+    getLine

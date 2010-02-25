@@ -1,6 +1,6 @@
 module Opts
 (
-	getOpts,
+    getOpts,
 ) where
 
 import System
@@ -12,23 +12,23 @@ import Utils
 
 options :: [OptDescr (ServerInfo -> ServerInfo)]
 options = [
-	Option ['p'] ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
-	Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
-	]
+    Option ['p'] ["port"] (ReqArg readListenPort "PORT") "listen on PORT",
+    Option ['d'] ["dedicated"] (ReqArg readDedicated "BOOL") "start as dedicated (True or False)"
+    ]
 
 readListenPort,
-	readDedicated,
-	readDbLogin,
-	readDbPassword,
-	readDbHost :: String -> ServerInfo -> ServerInfo
+    readDedicated,
+    readDbLogin,
+    readDbPassword,
+    readDbHost :: String -> ServerInfo -> ServerInfo
 
 readListenPort str opts = opts{listenPort = readPort}
-	where
-		readPort = fromInteger $ fromMaybe 46631 (maybeRead str :: Maybe Integer)
+    where
+        readPort = fromInteger $ fromMaybe 46631 (maybeRead str :: Maybe Integer)
 
 readDedicated str opts = opts{isDedicated = readDedicated}
-	where
-		readDedicated = fromMaybe True (maybeRead str :: Maybe Bool)
+    where
+        readDedicated = fromMaybe True (maybeRead str :: Maybe Bool)
 
 readDbLogin str opts = opts{dbLogin = str}
 readDbPassword str opts = opts{dbPassword = str}
@@ -36,8 +36,8 @@ readDbHost str opts = opts{dbHost = str}
 
 getOpts :: ServerInfo -> IO ServerInfo
 getOpts opts = do
-	args <- getArgs
-	case getOpt Permute options args of
-		(o, [], []) -> return $ foldr ($) opts o
-		(_,_,errs) -> ioError (userError (concat errs ++ usageInfo header options))
-	where header = "Usage: newhwserv [OPTION...]"
+    args <- getArgs
+    case getOpt Permute options args of
+        (o, [], []) -> return $ foldr ($) opts o
+        (_,_,errs) -> ioError (userError (concat errs ++ usageInfo header options))
+    where header = "Usage: newhwserv [OPTION...]"
