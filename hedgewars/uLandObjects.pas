@@ -304,7 +304,6 @@ var x, y: Longword;
     bRes: boolean;
 begin
 cnt:= 0;
-Obj.Maxcnt:= (Obj.Maxcnt * MaxHedgehogs) div 18;
 with Obj do
 	begin
 	if Maxcnt = 0 then
@@ -450,7 +449,7 @@ TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true)
 AddProgress;
 end;
 
-procedure AddThemeObjects(var ThemeObjects: TThemeObjects; MaxCount: LongInt);
+procedure AddThemeObjects(var ThemeObjects: TThemeObjects);
 var i, ii, t: LongInt;
     b: boolean;
 begin
@@ -460,8 +459,8 @@ begin
 	for i:=0 to ThemeObjects.Count do 
 		ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
 	 
-	t := getrandom(1024);
 	repeat
+		t := getrandom(ThemeObjects.Count);
 		b := false;
 		for i:=0 to ThemeObjects.Count do
 			begin
@@ -473,24 +472,27 @@ begin
 	until not b;
 end;
 
-procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects; MaxCount: Longword);
-var i: Longword;
-    ii, t: LongInt;
+procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects);
+var i, ii, t: LongInt;
     b: boolean;
 begin
-if SprayObjects.Count = 0 then exit;
-WriteLnToConsole('Adding spray objects...');
-i:= 1;
-repeat
-    t:= getrandom(SprayObjects.Count);
-    ii:= t;
-    repeat
-      inc(ii);
-      if ii = SprayObjects.Count then ii:= 0;
-      b:= TryPut(SprayObjects.objs[ii], Surface)
-    until b or (ii = t);
-    inc(i)
-until (i > MaxCount) or not b;
+	if SprayObjects.Count = 0 then exit;
+	WriteLnToConsole('Adding spray objects...');
+
+	for i:=0 to SprayObjects.Count do 
+		SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
+	 
+	repeat
+		t := getrandom(SprayObjects.Count);
+		b := false;
+		for i:=0 to SprayObjects.Count do
+			begin
+			ii := (i+t) mod SprayObjects.Count;
+			
+			if SprayObjects.objs[ii].Maxcnt <> 0 then
+				b := b or TryPut(SprayObjects.objs[ii], Surface)
+			end;
+	until not b;
 end;
 
 procedure AddObjects();
@@ -506,7 +508,7 @@ if hasGirders then
         i:=i+int;
     until (i>rightX-int);
     end;
-AddThemeObjects(ThemeObjects, (8 * MaxHedgehogs) div 18); // MaxHedgehogs should roughly correspond to available surface area.  Was also thinking maybe using playHeight * playWidth div constant   :)
+AddThemeObjects(ThemeObjects);
 AddProgress();
 FreeRects();
 end;
@@ -515,7 +517,7 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 begin
 InitRects;
 //AddSprayObjects(Surface, SprayObjects, 12);
-AddSprayObjects(Surface, SprayObjects, (2 * MaxHedgehogs) div 3);
+AddSprayObjects(Surface, SprayObjects);
 FreeRects
 end;
 
