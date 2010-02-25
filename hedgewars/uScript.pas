@@ -450,7 +450,7 @@ var i: ShortInt;
 begin
 ScriptAmmoStore:= '';
 for i:=1 to ord(High(TAmmoType)) do
-	ScriptAmmoStore:= ScriptAmmoStore + '00';
+	ScriptAmmoStore:= ScriptAmmoStore + '0000';
 end;
 
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte);
