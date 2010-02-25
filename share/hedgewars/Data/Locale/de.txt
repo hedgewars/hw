@@ -1,4 +1,4 @@
-﻿; German locale
+; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -168,7 +168,7 @@
 03:05=Grabwerkzeug
 03:06=Aktion
 03:07=Fortbewegungsmittel
-03:08=Annäherungsbombe
+03:08=Annäherungsmine
 03:09=Pistole (mehrere Schüsse)
 03:10=BOOM!
 03:11=Bonk!
@@ -212,7 +212,7 @@
 04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting
 04:07=Bridge huge distances using timed shots with the|rope. Use your momentum to slide into other hogs|or drop grenades and other weapons on them.|Attack: Shoot or release the rope|Long Jump: Drop grenades or similar weapons
 04:08=Keep your enemies away by dropping a mine in|narrow passages or right below their feet. Be|sure to retreat before you trigger it yourself!|Attack: Drop mine next to your feet
-04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to five shots.|Attack: Shoot (multiple times)
+04:09=Not sure about your aiming? Use the Desert|Eagle to attack using up to four shots.|Attack: Shoot (multiple times)
 04:10=Brute force is always an option. Drop this classic|explosive next to your enemies and retreat.|Attack: Drop dynamite next to your feet
 04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
 04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
@@ -244,3 +244,16 @@
 04:38=The sniper rifle can be the most devastating weapon|in your whole arsenal, however it's very ineffective|at close quarters. The damage dealt increases with|the distance to its target.|Attack: Shoot (once)
 04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|bring you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force into one direction
 04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
+
+; Game goal strings
+05:00=Spielmodifikationen
+05:01=Die folgenden Regeln gelten
+05:02=Festungen: Verteidige deine Festung; vertreibe deine Feinde!
+05:03=Niedrige Schwerkraft: Pass auf, wo du hintrittst
+05:04=Unverwundbarkeit: Igel sind (so gut wie) unkaputtbar
+05:05=Vampirismus: Igel heilen sich um den von ihnen verursachten Schaden
+05:06=Karma: Igel leiden an dem von ihnen verursachten Schaden
+05:07=Schützt den König: Beschütze ihn um jeden Preis!
+05:08=Igel platzieren: Wähle vor dem Spielstart die Positionen deiner Igel
+05:09=Artillerie: Deine Igel können nicht laufen
+05:10=Unzerstörbares Terrain: Die meisten Waffen können den Boden nicht beschädigen
