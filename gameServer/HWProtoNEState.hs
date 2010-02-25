@@ -47,8 +47,8 @@ handleCmd_NotEntered clID clients _ ["PASSWORD", passwd] =
         adminNotice = [AnswerThisClient ["ADMIN_ACCESS"] | isAdministrator client]
 
 
---handleCmd_NotEntered _ _ _ ["DUMP"] =
---	[Dump]
+handleCmd_NotEntered clID clients _ ["DUMP"] =
+    if isAdministrator (clients IntMap.! clID) then [Dump] else []
 
 
 handleCmd_NotEntered clID _ _ _ = [ProtocolError "Incorrect command (state: not entered)"]

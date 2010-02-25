@@ -61,6 +61,11 @@ data TeamInfo =
         hedgehogs :: [HedgehogInfo]
     }
 
+instance Show TeamInfo where
+    show ti = "owner: " ++ (teamowner ti)
+            ++ "name: " ++ (teamname ti)
+            ++ "color: " ++ (teamcolor ti)
+
 data RoomInfo =
     RoomInfo
     {
@@ -87,6 +92,7 @@ instance Show RoomInfo where
             ++ ", players ids: " ++ show (IntSet.size $ playersIDs ri)
             ++ ", players: " ++ show (playersIn ri)
             ++ ", ready: " ++ show (readyPlayers ri)
+            ++ ", teams: " ++ show (teams ri)
 
 instance Eq RoomInfo where
     (==) = (==) `on` roomUID
