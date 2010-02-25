@@ -40,7 +40,7 @@ QImage getAmmoImage(int num)
 	return ammo.copy(x, y, 32, 32);
 }
 
-SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent) :
+SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QWidget* parent) :
 	QWidget(parent)
 {
 	QHBoxLayout* hbLayout = new QHBoxLayout(this);
@@ -53,7 +53,7 @@ SelWeaponItem::SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget*
 	lbl->setGeometry(0, 0, 30, 30);
 	hbLayout->addWidget(lbl);
 
-	item = new WeaponItem(QImage(":/res/ammopic.png"), this);
+	item = new WeaponItem(image, this);
 	item->setItemsNum(wNum);
 	item->setInfinityState(allowInfinite);
 	hbLayout->addWidget(item);
@@ -101,9 +101,19 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 	p2Layout = new QGridLayout(page2);
 	p2Layout->setSpacing(1);
 	p2Layout->setMargin(1);
+	QWidget * page3 = new QWidget(this);
+	p3Layout = new QGridLayout(page3);
+	p3Layout->setSpacing(1);
+	p3Layout->setMargin(1);
+	QWidget * page4 = new QWidget(this);
+	p4Layout = new QGridLayout(page4);
+	p4Layout->setSpacing(1);
+	p4Layout->setMargin(1);
 
 	tbw->addTab(page1, tr("Weapon set"));
 	tbw->addTab(page2, tr("Probabilities"));
+	tbw->addTab(page4, tr("Ammo in boxes"));
+	tbw->addTab(page3, tr("Delays"));
 
 	QGridLayout * pageLayout = new QGridLayout(this);
 	pageLayout->addWidget(tbw);
@@ -114,13 +124,21 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 	for(; i < m_numItems; ++i) {
 		if (i == 6) continue;
 		if (k % 4 == 0) ++j;
-		SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), this);
+		SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), this);
 		weaponItems[i].append(swi);
 		p1Layout->addWidget(swi, j, k % 4);
 
-		SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), this);
+		SelWeaponItem * pwi = new SelWeaponItem(false, i, currentState[numItems + i].digitValue(), QImage(":/res/ammopicbox.png"), this);
 		weaponItems[i].append(pwi);
 		p2Layout->addWidget(pwi, j, k % 4);
+		
+		SelWeaponItem * dwi = new SelWeaponItem(false, i, currentState[numItems*2 + i].digitValue(), QImage(":/res/ammopicdelay.png"), this);
+		weaponItems[i].append(dwi);
+		p3Layout->addWidget(dwi, j, k % 4);
+		
+		SelWeaponItem * awi = new SelWeaponItem(false, i, currentState[numItems*3 + i].digitValue(), QImage(":/res/ammopic.png"), this);
+		weaponItems[i].append(awi);
+		p4Layout->addWidget(awi, j, k % 4);
 
 		++k;
 	}
@@ -137,6 +155,8 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 		if (it == weaponItems.end()) continue;
 		it.value()[0]->setItemsNum(ammo[i].digitValue());
 		it.value()[1]->setItemsNum(ammo[m_numItems + i].digitValue());
+		it.value()[2]->setItemsNum(ammo[m_numItems*2 + i].digitValue());
+		it.value()[3]->setItemsNum(ammo[m_numItems*3 + i].digitValue());
 	}
 	update();
 }
@@ -158,6 +178,8 @@ void SelWeaponWidget::save()
 
 	QString state1;
 	QString state2;
+	QString state3;
+	QString state4;
 
 	for(int i = 0; i < m_numItems; ++i) {
 		twi::const_iterator it = weaponItems.find(i);
@@ -165,12 +187,16 @@ void SelWeaponWidget::save()
 		state1.append(QString::number(num));
 		int prob = it == weaponItems.end() ? 0 : it.value()[1]->getItemsNum();
 		state2.append(QString::number(prob));
+		int del = it == weaponItems.end() ? 0 : it.value()[2]->getItemsNum();
+		state3.append(QString::number(del));
+		int am = it == weaponItems.end() ? 0 : it.value()[3]->getItemsNum();
+		state4.append(QString::number(am));
 	}
 	if (curWeaponsName != "") {
 		// remove old entry
 		wconf->remove(curWeaponsName);
 	}
-	wconf->setValue(m_name->text(), state1 + state2);
+	wconf->setValue(m_name->text(), state1 + state2 + state3 + state4);
 	emit weaponsChanged();
 }
 

@@ -88,7 +88,7 @@ var cnt: Longword;
     ammos: TAmmoCounts;
     substr: shortstring; // TEMPORARY
 begin
-TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 2, 'Invalid ammo scheme (incompatible frontend)', true);
+TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 4, 'Invalid ammo scheme (incompatible frontend)', true);
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
 substr:= Copy(s,1,15);
@@ -106,6 +106,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     if a <> amNothing then
         begin
         Ammoz[a].Probability:= probability[byte(s[ord(a) + ord(High(TAmmoType))]) - byte('0')];
+        Ammoz[a].SkipTurns:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
+        Ammoz[a].NumberInCase:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
 		if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
         cnt:= byte(s[ord(a)]) - byte('0');
         // avoid things we already have infinite number
@@ -114,6 +116,8 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             cnt:= AMMO_INFINITE;
             Ammoz[a].Probability:= 0
             end;
+        if Ammoz[a].NumberInCase = 0 then Ammoz[a].Probability:= 0;
+
         // avoid things we already have by scheme
         // merge this into DisableSomeWeapons ?
         if ((a = amLowGravity) and ((GameFlags and gfLowGravity) <> 0)) or
@@ -125,7 +129,6 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             Ammoz[a].Probability:= 0
             end;
         ammos[a]:= cnt;
-        if shoppa then Ammoz[a].NumberInCase:= 1;  // FIXME - TEMPORARY remove when crate number in case editor is added
 
         if ((GameFlags and gfKing) <> 0) and ((GameFlags and gfPlaceHog) = 0) and (Ammoz[a].SkipTurns = 0) and (a <> amTeleport) and (a <> amSkip) then 
             Ammoz[a].SkipTurns:= 1;

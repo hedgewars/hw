@@ -1969,7 +1969,7 @@ if (PlacingHogs) or
 
 FollowGear:= nil;
 
-if shoppa then  // FIXME -  TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED
+if shoppa then  // FIXME -  TEMPORARY  REMOVE WHEN CRATE PROBABILITY IS ADDED, INCLUDING DISABLING OF HEALTH CRATES
     t:= 7
 else
     t:= getrandom(20);

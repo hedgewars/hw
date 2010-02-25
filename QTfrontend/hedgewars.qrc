@@ -79,5 +79,7 @@
     <file>res/chat_default_off.png</file>
     <file>res/chat_ignore_off.png</file>
     <file>res/chat_friend_off.png</file>
+	<file>res/ammopicbox.png</file>
+	<file>res/ammopicdelay.png</file>
 </qresource>
 </RCC>

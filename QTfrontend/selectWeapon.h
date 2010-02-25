@@ -33,7 +33,7 @@ class SelWeaponItem : public QWidget
   Q_OBJECT
 
 public:
-  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QWidget* parent=0);
+  SelWeaponItem(bool allowInfinite, int iconNum, int wNum, QImage image, QWidget* parent=0);
 
   unsigned char getItemsNum() const;
   void setItemsNum(const unsigned char num);
@@ -77,6 +77,8 @@ class SelWeaponWidget : public QFrame
   twi weaponItems;
   QGridLayout* p1Layout;
   QGridLayout* p2Layout;
+  QGridLayout* p3Layout;
+  QGridLayout* p4Layout;
 };
 
 #endif // _SELECT_WEAPON_INCLUDED
