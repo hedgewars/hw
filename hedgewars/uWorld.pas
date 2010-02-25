@@ -75,6 +75,14 @@ var cWaveWidth, cWaveHeight: LongInt;
 procedure InitWorld;
 var i, t: LongInt;
     cp: PClan;
+    g: ansistring;
+
+    // helper function to create the goal/game mode string
+    function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId): ansistring;
+    begin
+        if (GameFlags and gf) <> 0 then s:= s + trgoal[si] + '|';
+        AddGoal:= s;
+    end;
 begin
 missionTimer:= 0;
 
@@ -96,6 +104,20 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
       end;
    CurrentTeam:= ClansArray[0]^.Teams[0];
    end;
+
+// if special game flags are set, add them to the game mode notice window and then show it
+g:= ''; // no text/things to note yet
+g:= AddGoal(g, gfForts, gidForts); // forts?
+g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
+g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
+g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
+g:= AddGoal(g, gfKarma, gidKarma); // karma?
+g:= AddGoal(g, gfKing, gidKing); // king?
+g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
+g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
+g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+// if the string has been set, show it for (default timeframe) seconds
+if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
 cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;

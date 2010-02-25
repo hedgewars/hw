@@ -38,11 +38,14 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
 			eidHomerun, eidFrozen);
 
+	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable, gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery, gidSolidLand);
+
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of string;
     trammoc: array[TAmmoStrId] of string;
     trammod: array[TAmmoStrId] of string;
     trmsg: array[TMsgStrId] of string;
+    trgoal: array[TGoalStrId] of string;
 
 procedure LoadLocale(FileName: string);
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
@@ -103,6 +106,7 @@ if loaded then
                end;
            3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammoc[TAmmoStrId(b+1)]:= s;
            4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then trammod[TAmmoStrId(b+1)]:= s;
+           5: if (b >=0) and (b <= ord(High(TGoalStrId))) then trgoal[TGoalStrId(b)]:= s;
            end;
        end;
    Close(f)
