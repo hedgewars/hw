@@ -93,23 +93,24 @@ var
 	i: LongInt;
 	particle: PVisualGear;
 begin
-if(Gear^.Invulnerable) then exit;
 if _0_4 < Gear^.dY then
 	begin
 	dmg:= ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
     if dmg < 1 then exit;
+
+	for i:= min(12, (3 + dmg div 10)) downto 0 do begin
+		particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+        if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5);
+		end;
+
+    if(Gear^.Invulnerable) then exit;
 
 	if _0_6 < Gear^.dY then
 		PlaySound(sndOw4, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack)
 	else
 		PlaySound(sndOw1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
 
-	for i:= min(12, (3 + dmg div 10)) downto 0 do begin
-		particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-        if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5);
-		end;
-		
-  ApplyDamage(Gear, dmg);
+    ApplyDamage(Gear, dmg);
 	end
 end;
 
