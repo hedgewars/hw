@@ -247,7 +247,11 @@ var s: string;
 					NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
 					if Hat <> 'NoHat' then
 						begin
-						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
+                        texsurf:= nil;
+                        if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
+						   texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
+                        else
+						   texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
 						if texsurf <> nil then
 							begin
 							HatTex:= Surface2Tex(texsurf, true);

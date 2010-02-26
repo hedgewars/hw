@@ -20,6 +20,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include "hwconsts.h"
+#include "hwform.h"
 #include "hats.h"
 
 HatsModel::HatsModel(QObject* parent) :
@@ -50,6 +51,24 @@ HatsModel::HatsModel(QObject* parent) :
 		painter.end();
 
 		hats.append(qMakePair(str, QIcon(tmppix)));
+	}
+    // Reserved hats
+    tmpdir.cd("Reserved");
+	hatsList = tmpdir.entryList(QStringList(playerHash+"*.png"));
+	for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
+	{
+		QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+		QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/Reserved/" + str + ".png");
+
+		QPixmap tmppix(32, 37);
+		tmppix.fill(QColor(Qt::transparent));
+
+		QPainter painter(&tmppix);
+		painter.drawPixmap(QPoint(0, 5), hhpix);
+		painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+		painter.end();
+
+		hats.append(qMakePair("Reserved "+str.remove(0,32), QIcon(tmppix)));
 	}
 }
 

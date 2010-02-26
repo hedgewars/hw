@@ -34,6 +34,7 @@
 #include <QScrollBar>
 #include <QDataWidgetMapper>
 #include <QTableView>
+#include <QCryptographicHash>
 
 #include "hwform.h"
 #include "game.h"
@@ -68,6 +69,7 @@
 // I started handing this down to each place it touches, but it was getting ridiculous
 // and this one flag does not warrant a static class
 bool frontendEffects = true;
+QString playerHash;
 
 HWForm::HWForm(QWidget *parent)
   : QMainWindow(parent), pnetserver(0), pRegisterServer(0), editedTeam(0), hwnet(0)
@@ -77,6 +79,7 @@ HWForm::HWForm(QWidget *parent)
 #endif
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("video/frontendeffects", true).toBool();
+    playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
 
 	ui.setupUi(this);
 

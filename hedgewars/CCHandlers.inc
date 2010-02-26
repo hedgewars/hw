@@ -73,12 +73,13 @@ end;
 
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
-    ts: shortstring;
+    ts, cs: shortstring;
 begin
 if isDeveloperMode then
    begin
-   SplitBySpace(s, ts);
-   val(s, Color);
+   SplitBySpace(s, cs);
+   SplitBySpace(cs, ts);
+   val(cs, Color);
    TryDo(Color <> 0, 'Error: black team color', true);
 
    // color is always little endian so the mask must be constant also in big endian archs
@@ -86,6 +87,7 @@ if isDeveloperMode then
  	
    AddTeam(Color);
    CurrentTeam^.TeamName:= ts;
+   CurrentTeam^.PlayerHash:= s;
    if GameType in [gmtDemo, gmtSave] then CurrentTeam^.ExtDriven:= true;
 
    CurrentTeam^.voicepack:= AskForVoicepack('Default')
@@ -169,7 +171,9 @@ if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
     begin
     if not CurrentHedgehog^.King then
-       if (s = '') or (((GameFlags and gfKing) <> 0) and (s = 'crown')) then
+       if (s = '') or 
+          (((GameFlags and gfKing) <> 0) and (s = 'crown')) or
+          ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
            CurrentHedgehog^.Hat:= 'NoHat'
        else
            CurrentHedgehog^.Hat:= s

@@ -44,6 +44,7 @@ class AmmoSchemeModel;
 class QSettings;
 
 extern bool frontendEffects;
+extern QString playerHash;
 
 class HWForm : public QMainWindow
 {

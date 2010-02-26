@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QStringList>
 #include <QLineEdit>
+#include <QCryptographicHash>
 #include "team.h"
 #include "hwform.h"
 #include "pages.h"
@@ -217,8 +218,11 @@ void HWTeam::SetToPage(HWForm * hwform)
 	hwform->ui.pageEditTeam->CBTeamLvl->setCurrentIndex(difficulty);
 	for(int i = 0; i < 8; i++)
 	{
-		hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
-		hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(HHHat[i], Qt::DisplayRole));
+         hwform->ui.pageEditTeam->HHNameEdit[i]->setText(HHName[i]);
+         if (HHHat[i].startsWith("Reserved"))
+            hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData("Reserved "+HHHat[i].remove(0,40), Qt::DisplayRole));
+         else
+	        hwform->ui.pageEditTeam->HHHats[i]->setCurrentIndex(hwform->ui.pageEditTeam->HHHats[i]->findData(HHHat[i], Qt::DisplayRole));
 	}
 	hwform->ui.pageEditTeam->CBGrave->setCurrentIndex(hwform->ui.pageEditTeam->CBGrave->findText(Grave));
 	hwform->ui.pageEditTeam->CBFlag->setCurrentIndex(hwform->ui.pageEditTeam->CBFlag->findText(Flag));
@@ -240,7 +244,10 @@ void HWTeam::GetFromPage(HWForm * hwform)
 	for(int i = 0; i < 8; i++)
 	{
 		HHName[i] = hwform->ui.pageEditTeam->HHNameEdit[i]->text();
-		HHHat[i] = hwform->ui.pageEditTeam->HHHats[i]->currentText();
+        if (hwform->ui.pageEditTeam->HHHats[i]->currentText().startsWith("Reserved"))
+		    HHHat[i] = "Reserved"+playerHash+hwform->ui.pageEditTeam->HHHats[i]->currentText().remove(0,9);
+        else
+	        HHHat[i] = hwform->ui.pageEditTeam->HHHats[i]->currentText();
 	}
 
 	Grave = hwform->ui.pageEditTeam->CBGrave->currentText();
@@ -256,10 +263,14 @@ void HWTeam::GetFromPage(HWForm * hwform)
 QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
 {
 	QStringList sl;
-	sl.push_back(QString("eaddteam %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName));
+    if (m_isNetTeam)
+    {
+	    sl.push_back(QString("eaddteam %3 %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName).arg(QString(QCryptographicHash::hash(Owner.toLatin1(), QCryptographicHash::Md5).toHex())));
+		sl.push_back("erdriven");
+    }
+    else sl.push_back(QString("eaddteam %3 %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName).arg(playerHash));
 
 	if (m_isNetTeam)
-		sl.push_back("erdriven");
 
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));

@@ -79,6 +79,7 @@ type PHHAmmo = ^THHAmmo;
 			HedgehogsNumber: Longword;
 			hasGone: boolean;
 			voicepack: PVoicepack;
+            PlayerHash: string;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
 			end;
 
 	TClan = record
