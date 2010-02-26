@@ -1,4 +1,4 @@
 install(FILES
 	DejaVuSans-Bold.ttf
-	DroidSansFallback.ttf
+    wqy-zenhei.ttc
 	DESTINATION ${SHAREPATH}Data/Fonts)

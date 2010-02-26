@@ -244,7 +244,7 @@ var s: string;
 			with Hedgehogs[i] do
 				if Gear <> nil then
 					begin
-					NameTagTex:= RenderStringTex(Name, Clan^.Color, fnt16);
+					NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
 					if Hat <> 'NoHat' then
 						begin
 						texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
@@ -416,7 +416,7 @@ AddProgress;
 for ai:= Low(TAmmoType) to High(TAmmoType) do
 	with Ammoz[ai] do
 		begin
-		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
+		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
 		tmpsurf:= doSurfaceConversion(tmpsurf);
 		NameTex:= Surface2Tex(tmpsurf, false);
 		SDL_FreeSurface(tmpsurf)

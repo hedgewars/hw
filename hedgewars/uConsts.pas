@@ -417,15 +417,15 @@ const	cTagsMasks : array[0..7] of byte = (
 			(Handle: nil;
 			Height: 12;
 			style: TTF_STYLE_NORMAL;
-			Name: 'DroidSansFallback.ttf'),
+			Name: 'wqy-zenhei.ttc'),
 			(Handle: nil;
 			Height: 24;
 			style: TTF_STYLE_NORMAL;
-			Name: 'DroidSansFallback.ttf'),
+			Name: 'wqy-zenhei.ttc'),
 			(Handle: nil;
 			Height: 10;
 			style: TTF_STYLE_NORMAL;
-			Name: 'DroidSansFallback.ttf')
+			Name: 'wqy-zenhei.ttc')
 			);
 
 	SpritesData: array[TSprite] of record
