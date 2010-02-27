@@ -1028,6 +1028,16 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						3,
 						PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 						0);
+                with PHedgehog(Gear^.Hedgehog)^ do
+                    if (HatTex <> nil) then
+                       DrawTextureF(HatTex,
+                           1,
+                           sx,
+                           hwRound(Gear^.Y) - 8 + WorldDy,
+                           0,
+                           hwSign(Gear^.dX),
+                           32,
+                           32);
 				stepSounds:= true;
 				defaultPos:= false
 				end;
@@ -1178,11 +1188,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
 						hwSign(Gear^.dX),
 						1,
 						2,
-						0);
-			amBlowTorch: DrawHedgehog(sx, sy,
-						hwSign(Gear^.dX),
-						1,
-						3,
 						0);
 			amTeleport: DrawRotatedF(sprTeleport, sx, sy, 0, hwSign(Gear^.dX), 0);
 			amKamikaze: DrawHedgehog(sx, sy,
