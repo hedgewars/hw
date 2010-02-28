@@ -311,6 +311,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Y:= gear^.Y;
                 end;
         gtMine: begin
+                gear^.Health:= 10;
                 gear^.State:= gear^.State or gstMoving;
                 gear^.Radius:= 2;
                 gear^.Elasticity:= _0_55;

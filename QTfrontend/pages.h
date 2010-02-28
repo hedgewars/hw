@@ -450,6 +450,7 @@ private:
 	FreqSpinBox * SB_CaseProb;
 	QSpinBox * SB_MinesTime;
 	QSpinBox * SB_Mines;
+	QSpinBox * SB_MineDuds;
 	QLineEdit * LE_name;
 	QComboBox * selectScheme;
 

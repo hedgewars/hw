@@ -46,6 +46,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 		<< QVariant(5)             // case prob      20
 		<< QVariant(3)             //  mines time    21
 		<< QVariant(4)             //  landadds      22
+		<< QVariant(0)             // mine dud pct   23
 		;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -85,6 +86,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "caseprobability"  // 20
 		<< "minestime"        // 21
 		<< "landadds"         // 22
+		<< "minedudpct"       // 23
 		;
 
 	QList<QVariant> proMode;
@@ -112,6 +114,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(0)             // case prob      20
 		<< QVariant(3)             //  mines time    21
 		<< QVariant(4)             //  landadds      22
+		<< QVariant(0)             // mine dud pct   23
 		;
 
 	QList<QVariant> shoppa;
@@ -132,13 +135,14 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(false)         // king           13
 		<< QVariant(false)         // place hog      14
 		<< QVariant(true)          // shared ammo    15
-		<< QVariant(100)           // damage modfier 15
-		<< QVariant(30)            // turn time      16
-		<< QVariant(100)           // init health    17
-		<< QVariant(50)            // sudden death   18
-		<< QVariant(1)             // case prob      19
-		<< QVariant(3)             //  mines time    20
-		<< QVariant(4)             //  landadds      21
+		<< QVariant(100)           // damage modfier 16
+		<< QVariant(30)            // turn time      17
+		<< QVariant(100)           // init health    18
+		<< QVariant(50)            // sudden death   19
+		<< QVariant(1)             // case prob      20
+		<< QVariant(3)             //  mines time    21
+		<< QVariant(4)             //  landadds      22
+		<< QVariant(0)             // mine dud pct   23
 		;
 
 	QList<QVariant> basketball;
@@ -166,6 +170,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(0)             // case prob      20
 		<< QVariant(3)             //  mines time    21
 		<< QVariant(4)             //  landadds      22
+		<< QVariant(0)             // mine dud pct   23
 		;
 
 	QList<QVariant> minefield;
@@ -193,6 +198,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(0)             // case prob      20
 		<< QVariant(0)             //  mines time    21
 		<< QVariant(50)            //  landadds      22
+		<< QVariant(0)             // mine dud pct   23
 		;
 
 	schemes.append(defaultScheme);

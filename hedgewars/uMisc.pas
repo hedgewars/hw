@@ -48,6 +48,7 @@ var
 	TurnTimeLeft	: Longword;
 	cSuddenDTurns	: LongInt;
 	cDamagePercent	: LongInt;
+	cMineDudPercent	: LongInt;
 	cTemplateFilter	: LongInt;
 
 	cHedgehogTurnTime: Longword;
@@ -671,6 +672,7 @@ begin
 	TurnTimeLeft		:= 0;
 	cSuddenDTurns		:= 15;
 	cDamagePercent		:= 100;
+	cMineDudPercent		:= 0;
 	cTemplateFilter		:= 0;
 
 	cHedgehogTurnTime	:= 45000;

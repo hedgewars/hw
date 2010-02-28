@@ -1215,6 +1215,20 @@ PageScheme::PageScheme(QWidget* parent) :
 	glBSLayout->addWidget(SB_Mines,6,2,1,1);
 
 	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("% Dud Mines"));
+	l->setWordWrap(true);
+	glBSLayout->addWidget(l,7,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconMine.png"));
+	glBSLayout->addWidget(l,7,1,1,1);
+	SB_MineDuds = new QSpinBox(gbBasicSettings);
+	SB_MineDuds->setRange(0, 100);
+	SB_MineDuds->setValue(0);
+	SB_MineDuds->setSingleStep(10);
+	glBSLayout->addWidget(SB_MineDuds,7,2,1,1);
+
+	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Scheme Name:"));
 
 	LE_name = new QLineEdit(this);
@@ -1265,6 +1279,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(SB_CaseProb, 20);
 	mapper->addMapping(SB_MinesTime, 21);
 	mapper->addMapping(SB_Mines, 22);
+	mapper->addMapping(SB_MineDuds, 23);
 
 	mapper->toFirst();
 }

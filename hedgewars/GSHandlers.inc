@@ -1190,7 +1190,7 @@ if (Gear^.State and gstMoving) <> 0 then
 	if ((GameTicks and $3F) = 25) then
 		doStepFallingGear(Gear);
 
-if ((Gear^.State and gsttmpFlag) <> 0) then
+if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
 	if ((Gear^.State and gstAttacking) = 0) then
 		begin
 		if ((GameTicks and $1F) = 0) then
@@ -1201,8 +1201,14 @@ if ((Gear^.State and gsttmpFlag) <> 0) then
 		if (Gear^.Timer and $FF) = 0 then PlaySound(sndMineTick);
 		if Gear^.Timer = 0 then
 			begin
-			doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
-			DeleteGear(Gear);
+            if ((Gear^.State and gstWait) <> 0) or 
+               (cMineDudPercent = 0) or
+		       (getRandom(100) > cMineDudPercent) then
+               begin
+			   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
+			   DeleteGear(Gear)
+               end
+            else Gear^.Health:= 0;
 			exit
 			end;
 		dec(Gear^.Timer);
