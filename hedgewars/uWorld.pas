@@ -138,7 +138,7 @@ var x, y, i, t, l, g: LongInt;
     Slot, Pos: LongInt;
     Ammo: PHHAmmo;
 begin
-if (TurnTimeLeft = 0) or (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu) then bShowAmmoMenu:= false;
+if  (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil) or ((CurAmmoGear^.Ammo^.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then bShowAmmoMenu:= false;
 if bShowAmmoMenu then
    begin
    FollowGear:= nil;
