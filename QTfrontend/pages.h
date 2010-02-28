@@ -441,6 +441,7 @@ private:
 	ToggleButtonWidget * TBW_randomorder;
 	ToggleButtonWidget * TBW_king;
 	ToggleButtonWidget * TBW_placehog;
+	ToggleButtonWidget * TBW_sharedammo;
 
 	QSpinBox * SB_DamageModifier;
 	QSpinBox * SB_TurnTime;

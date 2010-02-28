@@ -1102,6 +1102,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_placehog->setToolTip(tr("Take turns placing your hedgehogs before the start of play."));
 	glGMLayout->addWidget(TBW_placehog,3,1,1,1);
 
+	TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo.png");
+	TBW_sharedammo->setText(ToggleButtonWidget::tr("Clan Shares Ammo"));
+    TBW_sharedammo->setToolTip(tr("Ammo is shared between all teams that share a colour."));
+	glGMLayout->addWidget(TBW_sharedammo,3,2,1,1);
+
 	// Right
 	QLabel * l;
 
@@ -1252,13 +1257,14 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_randomorder->button(), 12);
 	mapper->addMapping(TBW_king->button(), 13);
 	mapper->addMapping(TBW_placehog->button(), 14);
-	mapper->addMapping(SB_DamageModifier, 15);
-	mapper->addMapping(SB_TurnTime, 16);
-	mapper->addMapping(SB_InitHealth, 17);
-	mapper->addMapping(SB_SuddenDeath, 18);
-	mapper->addMapping(SB_CaseProb, 19);
-	mapper->addMapping(SB_MinesTime, 20);
-	mapper->addMapping(SB_Mines, 21);
+	mapper->addMapping(TBW_sharedammo->button(), 15);
+	mapper->addMapping(SB_DamageModifier, 16);
+	mapper->addMapping(SB_TurnTime, 17);
+	mapper->addMapping(SB_InitHealth, 18);
+	mapper->addMapping(SB_SuddenDeath, 19);
+	mapper->addMapping(SB_CaseProb, 20);
+	mapper->addMapping(SB_MinesTime, 21);
+	mapper->addMapping(SB_Mines, 22);
 
 	mapper->toFirst();
 }

@@ -155,9 +155,8 @@ with CurrentTeam^ do
 	val(s, Gear^.Health);
 	TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
 	PHedgehog(Gear^.Hedgehog)^.Team:= CurrentTeam;
-// Needs shared clan ammo game flag
-	CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex; // FIXME HACK to get ammostores work
-	//CurrentHedgehog^.AmmoStore:= TeamsCount - 1; // FIXME HACK to get ammostores work
+    if (GameFlags and gfSharedAmmo) <> 0 then CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
+    else CurrentHedgehog^.AmmoStore:= TeamsCount - 1;
 	CurrentHedgehog^.Gear:= Gear;
 	CurrentHedgehog^.Name:= id;
     CurrHedgehog:= HedgehogsNumber;

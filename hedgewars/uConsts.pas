@@ -306,6 +306,7 @@ const
 	gfRandomOrder  = $00002000;
 	gfKing         = $00004000;
 	gfPlaceHog     = $00008000;
+	gfSharedAmmo   = $00010000;
 
 	gstDrowning       = $00000001;
 	gstHHDriven       = $00000002;
