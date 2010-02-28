@@ -1208,7 +1208,12 @@ if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
 			   doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 50, EXPLAutoSound);
 			   DeleteGear(Gear)
                end
-            else Gear^.Health:= 0;
+            else
+               begin
+			   AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSteam);
+		       PlaySound(sndVaporize);
+               Gear^.Health:= 0;
+               end;
 			exit
 			end;
 		dec(Gear^.Timer);
