@@ -270,8 +270,6 @@ QStringList HWTeam::TeamGameConfig(quint32 InitHealth) const
     }
     else sl.push_back(QString("eaddteam %3 %1 %2").arg(teamColor.rgb() & 0xffffff).arg(TeamName).arg(playerHash));
 
-	if (m_isNetTeam)
-
 	sl.push_back(QString("egrave " + Grave));
 	sl.push_back(QString("efort " + Fort));
 	sl.push_back(QString("evoicepack " + Voicepack));
