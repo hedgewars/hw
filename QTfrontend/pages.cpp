@@ -1225,7 +1225,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	SB_MineDuds = new QSpinBox(gbBasicSettings);
 	SB_MineDuds->setRange(0, 100);
 	SB_MineDuds->setValue(0);
-	SB_MineDuds->setSingleStep(10);
+	SB_MineDuds->setSingleStep(5);
 	glBSLayout->addWidget(SB_MineDuds,7,2,1,1);
 
 	l = new QLabel(gbBasicSettings);
