@@ -1210,7 +1210,7 @@ if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
                end
             else
                begin
-			   AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSteam);
+			   AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
 		       PlaySound(sndVaporize);
                Gear^.Health:= 0;
                end;
