@@ -43,6 +43,25 @@
     </message>
 </context>
 <context>
+    <name>HWChatWidget</name>
+    <message>
+        <source>%1 *** %2 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWForm</name>
     <message>
         <source>Error</source>
@@ -73,7 +92,7 @@
     <name>HWGame</name>
     <message>
         <source>Error reading training config file</source>
-        <translation>Błąd podczas przetwarzania pliku konfiguracyjnego treningu</translation>
+        <translation type="obsolete">Błąd podczas przetwarzania pliku konfiguracyjnego treningu</translation>
     </message>
     <message>
         <source>en.txt</source>
@@ -508,6 +527,14 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Play with a King. If he dies, your side dies.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Take turns placing your hedgehogs before the start of play.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ammo is shared between all teams that share a colour.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -573,6 +600,22 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Follow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -615,6 +658,18 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Reduced quality</source>
         <translation type="unfinished">Obniż jakość</translation>
+    </message>
+    <message>
+        <source>Show ammo menu tooltips</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable frontend sounds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -781,6 +836,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Mines</source>
         <translation type="unfinished">Ilość min</translation>
     </message>
+    <message>
+        <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -920,6 +979,10 @@ Sprawdź poprawność instalacji</translation>
         <source>Ready</source>
         <translation>Gotowe</translation>
     </message>
+    <message>
+        <source>Random Team</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -961,6 +1024,14 @@ Sprawdź poprawność instalacji</translation>
     <message>
         <source>Probabilities</source>
         <translation type="unfinished">Prawdobodobieństwo</translation>
+    </message>
+    <message>
+        <source>Ammo in boxes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delays</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1030,6 +1101,14 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>King</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Place Hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clan Shares Ammo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -12,11 +12,11 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="obsolete">從不</translation>
+        <translation type="unfinished">從不</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="obsolete">
+        <translation type="unfinished">
             <numerusform>每 %1 個回合</numerusform>
         </translation>
     </message>
@@ -25,7 +25,7 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation type="obsolete">改變武器設置</translation>
+        <translation type="unfinished">改變武器設置</translation>
     </message>
     <message>
         <source>Error</source>
@@ -37,7 +37,26 @@
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation type="obsolete">修改遊戲設置</translation>
+        <translation type="unfinished">修改遊戲設置</translation>
+    </message>
+</context>
+<context>
+    <name>HWChatWidget</name>
+    <message>
+        <source>%1 *** %2 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -502,6 +521,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Take turns placing your hedgehogs before the start of play.</source>
         <translation>在開局前手動放置刺猬</translation>
     </message>
+    <message>
+        <source>Ammo is shared between all teams that share a colour.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -566,6 +589,22 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Follow</source>
         <translation>跟隨</translation>
+    </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -787,6 +826,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Mines</source>
         <translation>地雷</translation>
     </message>
+    <message>
+        <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -972,6 +1015,14 @@ Please check your installation</source>
         <source>Probabilities</source>
         <translation type="unfinished">幾率</translation>
     </message>
+    <message>
+        <source>Ammo in boxes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delays</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
@@ -1045,6 +1096,10 @@ Please check your installation</source>
     <message>
         <source>Place Hedgehogs</source>
         <translation type="unfinished">手動放置</translation>
+    </message>
+    <message>
+        <source>Clan Shares Ammo</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1330,203 +1385,287 @@ info</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="obsolete">滑鼠：左鍵</translation>
+        <translation type="unfinished">滑鼠：左鍵</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="obsolete">滑鼠：中鍵</translation>
+        <translation type="unfinished">滑鼠：中鍵</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="obsolete">滑鼠：右鍵</translation>
+        <translation type="unfinished">滑鼠：右鍵</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="obsolete">滑鼠滾輪：向上</translation>
+        <translation type="unfinished">滑鼠滾輪：向上</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="obsolete">滑鼠滾輪：向下</translation>
+        <translation type="unfinished">滑鼠滾輪：向下</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="obsolete">倒退鍵</translation>
+        <translation type="unfinished">倒退鍵</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="obsolete">製錶鍵</translation>
+        <translation type="unfinished">製錶鍵</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="obsolete">清除</translation>
+        <translation type="unfinished">清除</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="obsolete">返回</translation>
+        <translation type="unfinished">返回</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="obsolete">暫停鍵</translation>
+        <translation type="unfinished">暫停鍵</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="obsolete">逸出鍵</translation>
+        <translation type="unfinished">逸出鍵</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="obsolete">空白鍵</translation>
+        <translation type="unfinished">空白鍵</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">刪除鍵</translation>
+        <translation type="unfinished">刪除鍵</translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="obsolete">小鍵盤0</translation>
+        <translation type="unfinished">小鍵盤0</translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="obsolete">小鍵盤1</translation>
+        <translation type="unfinished">小鍵盤1</translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="obsolete">小鍵盤2</translation>
+        <translation type="unfinished">小鍵盤2</translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="obsolete">小鍵盤3</translation>
+        <translation type="unfinished">小鍵盤3</translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="obsolete">小鍵盤4</translation>
+        <translation type="unfinished">小鍵盤4</translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="obsolete">小鍵盤5</translation>
+        <translation type="unfinished">小鍵盤5</translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="obsolete">小鍵盤6</translation>
+        <translation type="unfinished">小鍵盤6</translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="obsolete">小鍵盤7</translation>
+        <translation type="unfinished">小鍵盤7</translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="obsolete">小鍵盤8</translation>
+        <translation type="unfinished">小鍵盤8</translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="obsolete">小鍵盤9</translation>
+        <translation type="unfinished">小鍵盤9</translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="obsolete">小鍵盤.</translation>
+        <translation type="unfinished">小鍵盤.</translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="obsolete">小鍵盤/</translation>
+        <translation type="unfinished">小鍵盤/</translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="obsolete">小鍵盤*</translation>
+        <translation type="unfinished">小鍵盤*</translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="obsolete">小鍵盤-</translation>
+        <translation type="unfinished">小鍵盤-</translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="obsolete">小鍵盤+</translation>
+        <translation type="unfinished">小鍵盤+</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="obsolete">回車鍵</translation>
+        <translation type="unfinished">回車鍵</translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="obsolete">等於</translation>
+        <translation type="unfinished">等於</translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="obsolete">上</translation>
+        <translation type="unfinished">上</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="obsolete">下</translation>
+        <translation type="unfinished">下</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="obsolete">右</translation>
+        <translation type="unfinished">右</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="obsolete">左</translation>
+        <translation type="unfinished">左</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="obsolete">插入鍵</translation>
+        <translation type="unfinished">插入鍵</translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="obsolete">Home鍵</translation>
+        <translation type="unfinished">Home鍵</translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="obsolete">End鍵</translation>
+        <translation type="unfinished">End鍵</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="obsolete">向上翻頁鍵</translation>
+        <translation type="unfinished">向上翻頁鍵</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="obsolete">向下翻頁鍵</translation>
+        <translation type="unfinished">向下翻頁鍵</translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="obsolete">小鍵盤數位鎖</translation>
+        <translation type="unfinished">小鍵盤數位鎖</translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="obsolete">大小寫切換鍵</translation>
+        <translation type="unfinished">大小寫切換鍵</translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="obsolete">Scroll Lock鍵</translation>
+        <translation type="unfinished">Scroll Lock鍵</translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="obsolete">右Shift鍵</translation>
+        <translation type="unfinished">右Shift鍵</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="obsolete">左Shift鍵</translation>
+        <translation type="unfinished">左Shift鍵</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="obsolete">右Ctrl鍵</translation>
+        <translation type="unfinished">右Ctrl鍵</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="obsolete">左Ctrl鍵</translation>
+        <translation type="unfinished">左Ctrl鍵</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="obsolete">右Alt鍵</translation>
+        <translation type="unfinished">右Alt鍵</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="obsolete">左Alt鍵</translation>
+        <translation type="unfinished">左Alt鍵</translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="obsolete">右meta鍵</translation>
+        <translation type="unfinished">右meta鍵</translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="obsolete">左meta鍵</translation>
+        <translation type="unfinished">左meta鍵</translation>
+    </message>
+    <message>
+        <source>A button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>B button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>X button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Y button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>LB button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RB button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Back button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left stick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right stick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left stick (Right)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left stick (Left)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left stick (Down)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left stick (Up)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left trigger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right trigger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right stick (Down)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right stick (Up)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right stick (Right)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right stick (Left)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>DPad</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

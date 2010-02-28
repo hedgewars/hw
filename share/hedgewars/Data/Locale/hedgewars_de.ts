@@ -42,6 +42,25 @@
     </message>
 </context>
 <context>
+    <name>HWChatWidget</name>
+    <message>
+        <source>%1 *** %2 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 *** %2 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWForm</name>
     <message>
         <source>Error</source>
@@ -72,7 +91,7 @@
     <name>HWGame</name>
     <message>
         <source>Error reading training config file</source>
-        <translation>Fehler beim Einlesen der Trainings-Konfigurationsdatei</translation>
+        <translation type="obsolete">Fehler beim Einlesen der Trainings-Konfigurationsdatei</translation>
     </message>
     <message>
         <source>en.txt</source>
@@ -504,6 +523,14 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Play with a King. If he dies, your side dies.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Take turns placing your hedgehogs before the start of play.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ammo is shared between all teams that share a colour.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -569,6 +596,22 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Follow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Ignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add friend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unignore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove friend</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QCheckBox</name>
@@ -611,6 +654,18 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Reduced quality</source>
         <translation>Niedrige Qualität</translation>
+    </message>
+    <message>
+        <source>Show ammo menu tooltips</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable frontend sounds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -777,6 +832,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Game scheme</source>
         <translation>Spielprofil</translation>
     </message>
+    <message>
+        <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -916,6 +975,10 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
         <source>Ready</source>
         <translation>Bereit</translation>
     </message>
+    <message>
+        <source>Random Team</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
@@ -957,6 +1020,14 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     <message>
         <source>Probabilities</source>
         <translation>Nachschub</translation>
+    </message>
+    <message>
+        <source>Ammo in boxes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delays</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1026,6 +1097,14 @@ konnte nicht geöffnet werden. Bitte überprüfen Sie Ihre Installation</transla
     </message>
     <message>
         <source>King</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Place Hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clan Shares Ammo</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
