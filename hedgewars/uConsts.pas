@@ -50,7 +50,7 @@ type
 	TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
 			sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
 			sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
-			sprMineOn, sprCase, sprFAid, sprDynamite, sprPower,
+			sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
 			sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
 			sprHorizontL, sprHorizontR, sprSky, sprSkyL,
 			sprSkyR, sprAMBorders, sprAMSlot, sprAMSlotName, sprAMAmmos,
@@ -467,6 +467,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMineOff
 			(FileName:     'MineOn'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMineOn
+			(FileName:     'MineDead'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:   8; Height:  8; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprMineDead
 			(FileName:       'Case'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprCase
 			(FileName:   'FirstAid'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;

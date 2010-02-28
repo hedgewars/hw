@@ -56,6 +56,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 	
 	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
 	//goToSchemePage->setText(tr("Edit schemes"));
+    goToSchemePage->setToolTip(tr("Edit schemes"));
 	goToSchemePage->setIconSize(pmEdit.size());
 	goToSchemePage->setIcon(pmEdit);
 	goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
@@ -71,6 +72,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
 
 	QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
 	//goToWeaponPage->setText(tr("Edit weapons"));
+    goToWeaponPage->setToolTip(tr("Edit weapons"));
 	goToWeaponPage->setIconSize(pmEdit.size());
 	goToWeaponPage->setIcon(pmEdit);
 	goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
