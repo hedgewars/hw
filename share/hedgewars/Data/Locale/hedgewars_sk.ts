@@ -535,6 +535,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable girders when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -653,7 +657,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Efekty frontendu (vyžaduje reštart)</translation>
+        <translation type="obsolete">Efekty frontendu (vyžaduje reštart)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -669,6 +673,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend effects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -691,7 +699,7 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <name>QGroupBox</name>
     <message>
         <source>Team</source>
-        <translation>Team</translation>
+        <translation type="obsolete">Team</translation>
     </message>
     <message>
         <source>Team Members</source>
@@ -732,6 +740,14 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     <message>
         <source>Basic Settings</source>
         <translation>Základné nastavenia</translation>
+    </message>
+    <message>
+        <source>Team Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -838,6 +854,34 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
     </message>
     <message>
         <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart game to apply</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1109,6 +1153,10 @@ Skontrolujte si vašu inštaláciu</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Girders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -530,6 +530,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation>As armas são partilhadas entre todas as equipas da mesma cor.</translation>
     </message>
+    <message>
+        <source>Disable girders when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -648,7 +652,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Efeitos no frontend (é necessário reiniciar)</translation>
+        <translation type="obsolete">Efeitos no frontend (é necessário reiniciar)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -665,6 +669,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Enable frontend music</source>
         <translation>Activar a musica no frontend</translation>
+    </message>
+    <message>
+        <source>Frontend effects</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -690,7 +698,7 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     </message>
     <message>
         <source>Team</source>
-        <translation>Equipa</translation>
+        <translation type="obsolete">Equipa</translation>
     </message>
     <message>
         <source>Fort</source>
@@ -727,6 +735,14 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Playing teams</source>
         <translation>Equipas a jogar</translation>
+    </message>
+    <message>
+        <source>Team Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -834,6 +850,34 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>% Dud Mines</source>
         <translation>% Minas Falsas</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart game to apply</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1105,6 +1149,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Clan Shares Ammo</source>
         <translation>Clãs partilham armamento</translation>
+    </message>
+    <message>
+        <source>Disable Girders</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1438,7 +1486,7 @@ ouriços</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eliminar</translation>
     </message>
     <message>
         <source>Numpad 0</source>

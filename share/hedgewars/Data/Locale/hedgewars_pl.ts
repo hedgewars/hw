@@ -535,6 +535,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable girders when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -653,7 +657,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished">Efekty w menu (wymaga restartu)</translation>
+        <translation type="obsolete">Efekty w menu (wymaga restartu)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -669,6 +673,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend effects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -691,7 +699,7 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <name>QGroupBox</name>
     <message>
         <source>Team</source>
-        <translation>Drużyna</translation>
+        <translation type="obsolete">Drużyna</translation>
     </message>
     <message>
         <source>Team Members</source>
@@ -732,6 +740,14 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     <message>
         <source>Basic Settings</source>
         <translation>Ustawienia podstawowe</translation>
+    </message>
+    <message>
+        <source>Team Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -838,6 +854,34 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
     </message>
     <message>
         <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart game to apply</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1109,6 +1153,10 @@ Sprawdź poprawność instalacji</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Girders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -520,6 +520,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable girders when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -633,10 +637,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <translation>Kayıt dosyasının sonuna tarihi ve saati ekle</translation>
     </message>
     <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Reduced quality</source>
         <translation type="unfinished"></translation>
     </message>
@@ -654,6 +654,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend effects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -680,7 +684,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Team</source>
-        <translation>Takım</translation>
+        <translation type="obsolete">Takım</translation>
     </message>
     <message>
         <source>Fort</source>
@@ -717,6 +721,14 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     <message>
         <source>Basic Settings</source>
         <translation>Basit Ayarlar</translation>
+    </message>
+    <message>
+        <source>Team Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -823,6 +835,34 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart game to apply</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1094,6 +1134,10 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Girders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

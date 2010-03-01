@@ -530,6 +530,10 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>Ammo is shared between all teams that share a colour.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Disable girders when generating random maps.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -648,7 +652,7 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Frontend effects (requires restart)</source>
-        <translation>Effets de l&apos;interface (nécessite de relancer le jeu)</translation>
+        <translation type="obsolete">Effets de l&apos;interface (nécessite de relancer le jeu)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -664,6 +668,10 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Enable frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend effects</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -690,7 +698,7 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>Team</source>
-        <translation>Équipe</translation>
+        <translation type="obsolete">Équipe</translation>
     </message>
     <message>
         <source>Fort</source>
@@ -727,6 +735,14 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     <message>
         <source>Basic Settings</source>
         <translation>Réglages de base</translation>
+    </message>
+    <message>
+        <source>Team Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Misc</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -833,6 +849,34 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
     </message>
     <message>
         <source>% Dud Mines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grave</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Flag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Locale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart game to apply</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1104,6 +1148,10 @@ Veuillez vérifier votre installation</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable Girders</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
