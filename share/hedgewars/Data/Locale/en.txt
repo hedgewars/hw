@@ -431,7 +431,7 @@
 04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
 04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
 04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
-04:26=Throw this juicy water melon at your enemies. Once|the timer expires, it will split into several|explosive pieces.|Attack: Hold to shoot with more power
+04:26=Throw this juicy watermelon at your enemies. Once|the timer expires, it will split into several|explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power
 04:27=Let hellfire rain onto your opponents by using|this fiendish explosive. Don't get too close to|the explosion as smaller fires might last longer.|Attack: Hold to shoot with more power
 04:28=Short time after launching this rocket, it will|start drilling through solid ground and explode|once its fuse is triggered or it resurfaces again.|Attack: Hold to shoot with more power
 04:29=This is nothing for small kids! The ball gun fires|tons of small colored balls filled with explosives.|Attack: Shoot at full power|Up/Down: Continue aiming
