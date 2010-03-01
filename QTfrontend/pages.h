@@ -206,6 +206,7 @@ public:
 	QPushButton *WeaponEdit;
 	QComboBox *WeaponsName;
 	QCheckBox *WeaponTooltip;
+	QComboBox *CBLanguage;
 
 	QPushButton *BtnBack;
 	IconedGroupBox *teamsBox;

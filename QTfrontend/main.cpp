@@ -23,6 +23,7 @@
 #include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
+#include <QSettings>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -321,6 +322,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+
 	datadir->cd(bindir->absolutePath());
 	datadir->cd(*cDataDir);
 	if(!datadir->cd("hedgewars/Data")) {
@@ -331,11 +333,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	QTranslator Translator;
-	Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + QLocale::system().name());
-	app.installTranslator(&Translator);
-
-	Themes = new QStringList();
+	/*Themes = new QStringList();
 	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
 	if (themesfile.open(QIODevice::ReadOnly)) {
 		QTextStream stream(&themesfile);
@@ -347,13 +345,28 @@ int main(int argc, char *argv[]) {
 		themesfile.close();
 	} else {
 		QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
-	}
+	}*/
 
 	QDir tmpdir;
+	tmpdir.cd(datadir->absolutePath());
+	tmpdir.cd("Themes");
+	tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
+	Themes = new QStringList(tmpdir.entryList(QStringList("*")));
+
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Maps");
 	tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
 	mapList = new QStringList(tmpdir.entryList(QStringList("*")));
+
+
+	QTranslator Translator;
+	{
+		QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
+		
+		Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + settings.value("misc/locale", QLocale::system().name()).toString());
+		app.installTranslator(&Translator);
+	}
+
 
 	HWForm *Form = new HWForm();
 

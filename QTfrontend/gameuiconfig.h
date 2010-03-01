@@ -37,6 +37,7 @@ public:
 	bool vid_Fullscreen();
 	bool isSoundEnabled();
 	bool isFrontendSoundEnabled();
+	QString language();
 #ifdef _WIN32
 	bool isSoundHardware();
 #endif

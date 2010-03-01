@@ -435,18 +435,36 @@ PageOptions::PageOptions(QWidget* parent) :
             editNetNick->setText(QLineEdit::tr("unnamed"));
             MiscLayout->addWidget(editNetNick, 0, 1);
 
+            QLabel *labelLanguage = new QLabel(groupMisc);
+            labelLanguage->setText(QLabel::tr("Locale") + " *");
+            MiscLayout->addWidget(labelLanguage, 1, 0);
+
+            CBLanguage = new QComboBox(groupMisc);
+            QDir tmpdir;
+            tmpdir.cd(datadir->absolutePath());
+            tmpdir.cd("Locale");
+            tmpdir.setFilter(QDir::Files);
+            QStringList locs = tmpdir.entryList(QStringList("hedgewars_*.qm"));
+            for(int i = 0; i < locs.count(); i++)
+            {
+                QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
+                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
+            }
+
+            MiscLayout->addWidget(CBLanguage, 1, 1);
+
             CBAltDamage = new QCheckBox(groupMisc);
             CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            MiscLayout->addWidget(CBAltDamage, 1, 0, 1, 2);
+            MiscLayout->addWidget(CBAltDamage, 2, 0, 1, 2);
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            MiscLayout->addWidget(CBNameWithDate, 2, 0, 1, 2);
+            MiscLayout->addWidget(CBNameWithDate, 3, 0, 1, 2);
 
 #ifdef SPARKLE_ENABLED
             CBAutoUpdate = new QCheckBox(groupMisc);
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 3, 0, 1, 2);
+            MiscLayout->addWidget(CBAutoUpdate, 4, 0, 1, 2);
 #endif
 
             gbTBLayout->addWidget(groupMisc, 2, 0);
@@ -467,7 +485,7 @@ PageOptions::PageOptions(QWidget* parent) :
             GBAlayout->addWidget(CBFrontendFullscreen);
 
             CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects (requires restart)"));
+            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects") + " *");
             GBAlayout->addWidget(CBFrontendEffects);
 
             CBEnableFrontendSound = new QCheckBox(AGGroupBox);
@@ -541,6 +559,16 @@ PageOptions::PageOptions(QWidget* parent) :
             CBShowFPS = new QCheckBox(AGGroupBox);
             CBShowFPS->setText(QCheckBox::tr("Show FPS"));
             GBAlayout->addWidget(CBShowFPS);
+
+            hr = new QFrame(AGGroupBox);
+            hr->setFrameStyle(QFrame::HLine);
+            hr->setLineWidth(3);
+            hr->setFixedHeight(12);
+            GBAlayout->addWidget(hr);
+
+	            QLabel *restartNote = new QLabel(this);
+            restartNote->setText(QString("* ") + QLabel::tr("Restart game to apply"));
+            GBAlayout->addWidget(restartNote);
 
             gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }

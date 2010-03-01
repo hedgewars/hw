@@ -39,7 +39,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 	//Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
 	resizeToConfigValues();
 
-	Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/WeaponTooltip", true).toBool());
+	Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltip", true).toBool());
 
 	int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
 	Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
@@ -85,6 +85,8 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
         Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
 #endif
 
+	Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", QLocale::system().name())));
+
 	depth = QApplication::desktop()->depth();
 	if (depth < 16) depth = 16;
 	else if (depth > 16) depth = 32;
@@ -115,7 +117,7 @@ void GameUIConfig::SaveOptions()
 
 	setValue("video/frontendeffects", isFrontendEffects());
 
-	setValue("misc/WeaponTooltip", isWeaponTooltip());
+	setValue("misc/weaponTooltip", isWeaponTooltip());
 
 	bool ffscr = isFrontendFullscreen();
 	setValue("video/frontendfullscreen", ffscr);
@@ -147,11 +149,17 @@ void GameUIConfig::SaveOptions()
 
 	setValue("misc/altdamage", isAltDamageEnabled());
 	setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
+	setValue("misc/locale", language());
 
 #ifdef SPARKLE_ENABLED
         setValue("misc/autoUpdate", isAutoUpdateEnabled());
 #endif
     Form->gameSettings->sync();
+}
+
+QString GameUIConfig::language()
+{
+	return Form->ui.pageOptions->CBLanguage->itemData(Form->ui.pageOptions->CBLanguage->currentIndex()).toString();
 }
 
 QRect GameUIConfig::vid_Resolution()
