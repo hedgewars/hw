@@ -204,7 +204,10 @@ handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
         []
     where
         client = clients IntMap.! clID
-        engineMsg = toEngineMsg $ 'b' : (nick client ++ "(team): " ++ decodedMsg ++ "\x20\x20")
+        -- FIXME: why are those decoded* function used? 
+        -- it would be better to use ByteString instead of String
+        engineMsg = toEngineMsg $ 'b' : (decodedNick ++ "(team): " ++ decodedMsg ++ "\x20\x20")
         decodedMsg = UTF8.decodeString msg
+        decodedNick = UTF8.decodeString $ nick client
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]
