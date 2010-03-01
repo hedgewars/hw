@@ -77,10 +77,22 @@ var i, t: LongInt;
     cp: PClan;
     g: ansistring;
 
-    // helper function to create the goal/game mode string
+    // helper functions to create the goal/game mode string
+    function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId; i: LongInt): ansistring;
+    var t: string;
+    begin
+        if (GameFlags and gf) <> 0 then
+            begin
+            t:= inttostr(i);
+            s:= s + format(trgoal[si], t) + '|'
+            end;
+        AddGoal:= s;
+    end;
+
     function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId): ansistring;
     begin
-        if (GameFlags and gf) <> 0 then s:= s + trgoal[si] + '|';
+        if (GameFlags and gf) <> 0 then
+            s:= s + trgoal[si] + '|';
         AddGoal:= s;
     end;
 begin
@@ -117,6 +129,7 @@ g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
+if cMinesTime <> 3000 then g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000); // changed mine timer?
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
