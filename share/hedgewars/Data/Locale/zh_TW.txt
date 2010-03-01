@@ -52,128 +52,130 @@
 01:07=%1 剩餘
 01:08=燃料
 01:09=同步中...
+01:10=使用本工具不會結束回合!
+01:11=本武器/工具解凍中!
 
 ; Event messages
 ; Hog (%1) died
-;02:00=%1 has kicked the bucket!
+; 02:00=%1 has kicked the bucket!
 02:00=%1 踢到了炸藥桶！
-;02:00=%1 has seen the light!
+; 02:00=%1 has seen the light!
 02:00=%1 看到了聖光！
-;02:00=%1 never saw that coming!
+; 02:00=%1 never saw that coming!
 02:00=%1 沒料到會這樣。。。
-;02:00=%1 waves goodbye!
+; 02:00=%1 waves goodbye!
 02:00=%1 向大家揮手道別。。。
-;02:00=%1 has gone to a better place!
+; 02:00=%1 has gone to a better place!
 02:00=%1 去了西方極樂世界！
-;02:00=%1 meets his maker!
+; 02:00=%1 meets his maker!
 02:00=%1 去見造物主了！
-;02:00=%1 can hang on no longer!
+; 02:00=%1 can hang on no longer!
 02:00=%1 再也受不了了!
-;02:00=%1 has done his duty!
+; 02:00=%1 has done his duty!
 02:00=%1 完成了他的使命！
-;02:00=%1 makes the ultimate sacrifice!
+; 02:00=%1 makes the ultimate sacrifice!
 02:00=%1 做了最大的犧牲！
-;02:00=%1 departs this mortal coil!
+; 02:00=%1 departs this mortal coil!
 02:00=%1 擺脫了命運的束縛！
-;02:00=%1 makes like a tree and leaves!
+; 02:00=%1 makes like a tree and leaves!
 02:00=%1 葉落歸根了！
-;02:00=%1 has timed out!
+; 02:00=%1 has timed out!
 02:00=%1 大限到了。。。
-;02:00=%1 says peace out!
+; 02:00=%1 says peace out!
 02:00=%1 悄然離場了。。。
-;02:00=%1 will be fondly remembered!
+; 02:00=%1 will be fondly remembered!
 02:00=%1 永遠活在我們心中！
-;02:00=%1 has an aneurysm!
+; 02:00=%1 has an aneurysm!
 02:00=%1 身患絕症不治而亡。。。
-;02:00=%1 leaves behind a wife and child
+; 02:00=%1 leaves behind a wife and child
 02:00=%1 留下一家孤兒寡母。。。
-;02:00=%1 has launched his last bazooka
+; 02:00=%1 has launched his last bazooka
 02:00=%1 發射了最後一發火箭彈
-;02:00=%1 has tossed his last grenade
+; 02:00=%1 has tossed his last grenade
 02:00=%1 扔出了最後一枚手榴彈
-;02:00=%1 has baked his last cake
+; 02:00=%1 has baked his last cake
 02:00=%1 烘烤了最後一塊蛋糕
-;02:00=%1 has swung on his last rope
+; 02:00=%1 has swung on his last rope
 02:00=%1 甩出了最後一根繩索
-;02:00=%1 has called his last airstrike
+; 02:00=%1 has called his last airstrike
 02:00=%1 呼叫了最後一次空襲
-;02:00=%1 has pumped his last shotgun
+; 02:00=%1 has pumped his last shotgun
 02:00=%1 抽出了最後一把霰彈槍
-;02:00=%1 has thrown his last melon
+; 02:00=%1 has thrown his last melon
 02:00=%1 扔出了最後一個西瓜炸彈
-;02:00=%1 has drawn his last deagle
+; 02:00=%1 has drawn his last deagle
 02:00=%1 拔出了最後一把沙鷹
-;02:00=%1 took one shot too many
+; 02:00=%1 took one shot too many
 02:00=%1 挨了太多槍了
-;02:00=%1 could really have used a health crate
+; 02:00=%1 could really have used a health crate
 02:00=%1 真該用下醫療包的
-;02:00=%1 has gone to play a better game
+; 02:00=%1 has gone to play a better game
 02:00=%1 去玩更有意思的遊戲去了
-;02:00=%1 has ragequit life
+; 02:00=%1 has ragequit life
 02:00=%1 拔網線了！
-;02:00=%1 fails
+; 02:00=%1 fails
 02:00=%1 失敗了
-;02:00=Poor poor %1...
+; 02:00=Poor poor %1...
 02:00=可憐的 %1...
-;02:00=%1 prefers wormux
+; 02:00=%1 prefers wormux
 02:00=%1 更喜歡玩百戰癲蟲
-;02:00=%1 has been blocking shots with his face
+; 02:00=%1 has been blocking shots with his face
 02:00=%1 被爆頭了
-;02:00=%1 is a hero amongst me...err..hogs
+; 02:00=%1 is a hero amongst me...err..hogs
 02:00=%1 是我的英雄！
-;02:00=%1 finds his place in Valhalla
+; 02:00=%1 finds his place in Valhalla
 02:00=%1 在天堂找到房子了
-;02:00=%1 has left the building
+; 02:00=%1 has left the building
 02:00=%1 離開了這間屋子
-;02:00=%1 goes the way of the dinosaurs
+; 02:00=%1 goes the way of the dinosaurs
 02:00=%1 去找恐龍了
-;02:00=%1 brings hedgehogs one step closer to extinction
+; 02:00=%1 brings hedgehogs one step closer to extinction
 02:00=%1 讓刺蝟物種滅絕更近了一步
-;02:00=%1 brings a tear to my eye
+; 02:00=%1 brings a tear to my eye
 02:00=%1 讓我為他的離去而落淚
-;02:00=%1 is an ex-hog
+; 02:00=%1 is an ex-hog
 02:00=%1 生前是一隻刺蝟
-;02:00=%1 is pushing up the daisies
+; 02:00=%1 is pushing up the daisies
 02:00=%1 被菊花簇擁
-;02:00=%1 has ceased to be
+; 02:00=%1 has ceased to be
 02:00=%1 被「刪除」了
-;02:00=Say goodbye to %1
+; 02:00=Say goodbye to %1
 02:00=對%1 說永別吧
-;02:00=No hope left for %1
+; 02:00=No hope left for %1
 02:00=%1 沒有倖存的希望了
-;02:00=%1 faces the final curtain
+; 02:00=%1 faces the final curtain
 02:00=%1 落下了最後的帷幕
-;02:00=Smoke 'em if you got 'em, %1
+; 02:00=Smoke 'em if you got 'em, %1
 02:00=%1 抓緊時間實現你最後的願望吧
-;02:00=%1 suffers a Spontaneous Massive Existence Failure
+; 02:00=%1 suffers a Spontaneous Massive Existence Failure
 02:00=%1 遭遇了自發性大規模故障（出自星河艦隊）
-;02:00=%1 has passed on
+; 02:00=%1 has passed on
 02:00=%1 逝去了
-;02:00=%1 is stone dead
+; 02:00=%1 is stone dead
 02:00=%1 永垂不朽
-;02:00=%1 is no more
+; 02:00=%1 is no more
 02:00=%1 不在了
-;02:00=%1 has expired
+; 02:00=%1 has expired
 02:00=%1 斷氣了
-;02:00=Bereft of life, %1 rests in peace
+; 02:00=Bereft of life, %1 rests in peace
 02:00=%1 安詳地躺著
-;02:00=%1 joins the choir invisible
+; 02:00=%1 joins the choir invisible
 02:00=%1 加入了隱形唱詩班
-;02:00=Farewell %1, we hardly knew ye!
+; 02:00=Farewell %1, we hardly knew ye!
 02:00=%1 永別了，我們還不認識你呢！
-;02:00=%1 had a low tolerance for being shot
+; 02:00=%1 had a low tolerance for being shot
 02:00=%1 抗打擊能力不足
-;02:00=%1 could have used an extra life
+; 02:00=%1 could have used an extra life
 02:00=%1 本該用另一條命的
-;02:00=Is there a doctor in the house?
-02:00=房間裡有醫生嗎？
+; 02:00=Is there a doctor in the house?
+02:00=快打120!
 
 ; Hog (%1) drowned
-;02:01=%1 plays submarine!
+; 02:01=%1 plays submarine!
 02:01=%1 以為自己是潛水艇!
-;02:01=%1 mimics the Titanic!
+; 02:01=%1 mimics the Titanic!
 02:01=%1 學泰坦尼克去了!
-;02:01=%1 swims like a stone!
+; 02:01=%1 swims like a stone!
 02:01=%1 石沉大海!
 ;02:01=%1 checks out the deep end
 02:01=%1 說要去檢查深水區
@@ -213,7 +215,7 @@
 ;02:01=%1 goes in search of the Titanic
 02:01=%1 去泰坦尼克號尋寶了
 ;02:01=%1 is not Jesus
-02:01=%1 不是耶穌
+02:01=很遺憾 %1 不是耶穌
 ;02:01=%1 is finding Nemo
 02:01=%1 找尼莫去了
 02:01=%1 springs a leak
@@ -245,7 +247,8 @@
 02:01=%1 不喜歡水上運動
 ;02:01=%1 is forever blowing bubbles
 02:01=%1 學會了絕技: 神風吹泡泡
-02:01=%1 is short of a raft
+;02:01=%1 is short of a raft
+02:01=%1 腿太短了
 ;02:01=%1 thinks salt water is good for the skin
 02:01=%1 認為鹽水對皮膚有好處
 ;02:01=%1 gets salt water in his wounds
@@ -258,12 +261,13 @@
 02:01=%1 全身是水
 ;02:01=%1 gets his quills wet
 02:01=%1 把剛毛弄濕了
-02:01=It's Davy Jones' locker for %1
+;02:01=It's Davy Jones' locker for %1
+02:01=深海閻王正在等待 %1
 
-; Match starts
-;02:02=Let's fight!
+; Round starts
+; 02:02=Let's fight!
+; 02:02=Armed and ready!
 02:02=開戰!
-;02:02=Armed and ready!
 02:02=準備!
 ;02:02=Let's get ready to rumble!
 02:02=準備對轟!
@@ -348,8 +352,10 @@
 02:02=教練告訴你: 別放棄
 ;02:02=Never surrender
 02:02=永不屈服!
-02:02=Rock 'em and sock 'em!
-02:02=Let the fragfest begin!
+;02:02=Rock 'em and sock 'em!
+02:02=殺!殺!殺!
+;02:02=Let the fragfest begin!
+02:02=積分賽開始!
 ;02:02=I hope you're ready for a tussle!
 02:02=你準備好惡戰了麼?
 02:02=Go Go Go!
@@ -363,11 +369,12 @@
 02:02=敢於征服!
 ; Round ends (win; unused atm)
 02:03=回合結束（勝利）
+
 ; Round ends (draw; unused atm)
 02:04=回合結束（平局）
 
 ; New health crate
-;02:05=Incoming aid!
+; 02:05=Incoming aid!
 02:05=醫療包!
 ;02:05=Medic!
 02:05=急救包!
@@ -400,11 +407,12 @@
 02:05=補給用品!
 
 ; New ammo crate
-;02:06=More weapons!
+; 02:06=More weapons!
 02:06=武器!
 ;02:06=Reinforcements!
 02:06=增援!
-02:06=Lock and load!
+;02:06=Lock and load!
+02:06=準備!
 ;02:06=I wonder what weapon is in there?
 02:06=我要的那個會在的吧...
 ;02:06=Supplies!
@@ -446,7 +454,7 @@
 ;02:06=A mysterious box!
 02:06=謎的箱子...
 ; New utility crate
-;02:07=Tooltime!
+; 02:07=Tooltime!
 02:07=工具箱!
 ;02:07=This could come in handy...
 02:07=這可能派上用場
@@ -469,7 +477,7 @@
 ;02:07=You might need this
 02:07=會有用的
 ; Hog (%1) skips his turn
-;02:08=%1 is sooo boring...
+; 02:08=%1 is sooo boring...
 02:08=%1 太無聊了...
 ;02:08=%1 couldn't be bothered
 02:08=%1 不想被打擾!
@@ -543,13 +551,14 @@
 02:08=%1 睡著了
 
 ; Hog (%1) hurts himself only
-;02:09=%1 should practice aiming!
+; 02:09=%1 should practice aiming!
 02:09=%1 該練練瞄準了!
-;02:09=%1 seems to hate himself.
+; 02:09=%1 seems to hate himself.
 02:09=%1 似乎看自己很不爽。
-;02:09=%1 is standing on the wrong side!
+; 02:09=%1 is standing on the wrong side!
 02:09=%1 在表演烏龍！
-02:09=%1 makes like an emo
+; 02:09=%1 makes like an emo
+02:09=%1 以為自己無敵
 ; 02:09=%1 was holding his weapon the wrong way around
 02:09=%1 好像把武器拿錯方向了
 ;02:09=%1 is a little sadistic
@@ -611,11 +620,11 @@
 ;02:09=%1's weapon clearly malfunctioned
 02:09=%1 的武器很明顯壞了
 ; Hog shot an home run (using the bat and another hog)
-;02:10=Home Run!
+; 02:10=Home Run!
 02:10=全壘打！
-;02:10=A bird, a plane, ...
+; 02:10=A bird, a plane, ...
 02:10=看到鳥了！飛機！飛碟！
-;02:10=That one is out!
+; 02:10=That one is out!
 02:10=那一位出界了！
 ; Weapon Categories
 03:00=定時手雷
@@ -656,7 +665,7 @@
 03:35=額外效果
 03:36=額外效果
 03:37=額外效果
-03:38=槍 (單發子彈)
+03:38=槍 (多發子彈)
 03:39=移動工具
 03:40=燃燒彈
 ; Weapon Descriptions (use | as line breaks)
@@ -669,7 +678,7 @@
 04:06=悶了? 沒法打? 保存體力? 沒問題!|跳過這回合就可以了, 懦夫!|攻擊鍵: 跳過回合
 04:07=用繩索就可以去很遠的地方.|還能空降到別的刺蝟身上丟手榴彈呢.|攻擊鍵: 發射/收回繩索|長跳鍵: 發射手榴彈或其他武器
 04:08=你能用地雷阻止敵人靠近.|還能靜悄悄的放在敵人腳下.|一定要在爆炸前逃離到安全的地方!|攻擊鍵: 把地雷放在你的腳下
-04:09=自我感覺準頭不行? |沙漠之鷹有5顆子彈呢.|攻擊鍵: 開槍 (可以開多次)
+04:09=自我感覺準頭不行? |沙漠之鷹有4顆子彈呢.|攻擊鍵: 開槍 (可以開幾槍)
 04:10=使用強力炸藥就是一個明智的選擇.|這是最經典的轟炸方式.|攻擊鍵: 把炸藥放在你的腳下
 04:11=把敵人打飛, 飛出地圖或者飛進水裡.|或者把地雷打過去?|攻擊鍵: 敲打你面前的所有東西
 04:12=這就是武術的威力!|致命的氣功!|攻擊鍵: 使用升龍拳
@@ -698,6 +707,6 @@
 04:35=時間流逝得很快, 你也知道|刺蝟腿短.|攻擊鍵: 激活
 04:36=好吧, 你最後還是承認自己眼神不好.|高科技還是能幫你不少的.|攻擊鍵: 激活
 04:37=不用害怕白天.|這只能本回合有效, 可以把造成的傷害變|成自己的血量 .|攻擊鍵: 激活
-04:38=你也知道CS裡狙擊槍的威力,|能打比較遠的地方.|攻擊鍵: 射擊 (只有一次)
+04:38=你也知道CS裡狙擊槍的威力,|能打比較遠的地方.|攻擊鍵: 射擊 (2發子彈)
 04:39=用飛盤可以飛到地圖上的任何角落.|不過這個東西連發明者都|認為很難用.|攻擊鍵: 激活|上/左/右方向鍵: 向某方向飛
 04:40=把地面填滿汽油然後....|攻擊鍵: 按住蓄力.
