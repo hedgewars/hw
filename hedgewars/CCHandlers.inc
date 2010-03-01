@@ -686,7 +686,7 @@ begin
 
 {$IFDEF DEBUGFILE}
 	AddFileLog('Setting up OpenGL...');
-	AddFileLog('SDL video driver: ' + string(SDL_VideoDriverName(buf, sizeof(buf))));
+	AddFileLog('SDL video driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))));
 {$ENDIF}
 	SetupOpenGL();
 end;

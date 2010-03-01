@@ -719,7 +719,7 @@ end;
 
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
-	s: string;
+	s: shortstring;
 	f: textfile;
 begin
 WriteLnToConsole('Loading land from file...');

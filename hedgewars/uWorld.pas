@@ -41,8 +41,8 @@ procedure free_uWorld;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
-procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
-procedure ShowMission(caption, subcaption, text: string; icon, time : LongInt);
+procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
 
 implementation
@@ -79,7 +79,7 @@ var i, t: LongInt;
 
     // helper functions to create the goal/game mode string
     function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId; i: LongInt): ansistring;
-    var t: string;
+    var t: ansistring;
     begin
         if (GameFlags and gf) <> 0 then
             begin
@@ -129,7 +129,15 @@ g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
-if cMinesTime <> 3000 then g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000); // changed mine timer?
+if cMinesTime <> 3000 then // changed mine timer?
+	begin
+	if cMinesTime = 0 then
+		g:= AddGoal(g, gfMines, gidNoMineTimer)
+	else if cMinesTime < 0 then
+		g:= AddGoal(g, gfMines, gidRandomMineTimer)
+	else
+		g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
+	end;
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
@@ -680,7 +688,7 @@ if missionTimer <> 0 then
 	if missionTimer > 0 then dec(missionTimer, Lag);
 	if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
 	if missionTex <> nil then
-		DrawCentered(0, (cScreenHeight shr 1) + 100, missionTex);
+		DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
 	end;
 
 // fps
@@ -770,7 +778,7 @@ glDisable(GL_TEXTURE_2D);
 glDisable(GL_BLEND)
 end;
 
-procedure AddCaption(s: string; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
 //if Group in [capgrpGameState] then WriteLnToConsole(s);
 if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
@@ -873,7 +881,7 @@ if WorldDx < - LAND_WIDTH - 1024 then WorldDx:= - LAND_WIDTH - 1024;
 if WorldDx > 1024 then WorldDx:= 1024;
 end;
 
-procedure ShowMission(caption, subcaption, text: string; icon, time : LongInt);
+procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 var r: TSDL_Rect;
 begin
 r.w:= 32;

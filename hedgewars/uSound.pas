@@ -206,7 +206,7 @@ if (chn <> -1) and (Mix_Playing(chn) <> 0) then Mix_HaltChannel(chn);
 end;
 
 procedure PlayMusic;
-var s: string;
+var s: shortstring;
 begin
 if (not isSoundEnabled)
 	or (MusicFN = '')

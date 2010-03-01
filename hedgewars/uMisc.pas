@@ -129,13 +129,13 @@ var
 procedure init_uMisc;
 procedure free_uMisc;
 procedure SplitBySpace(var a, b: shortstring);
-procedure SplitByChar(var a, b: string; c: char);
+procedure SplitByChar(var a, b: ansistring; c: char);
 procedure movecursor(dx, dy: Integer);
 function  hwSign(r: hwFloat): LongInt;
 function  Min(a, b: LongInt): LongInt;
 function  Max(a, b: LongInt): LongInt;
-procedure OutError(Msg: String; isFatalError: boolean);
-procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
+procedure OutError(Msg: shortstring; isFatalError: boolean);
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 function  IntToStr(n: LongInt): shortstring;
 function  FloatToStr(n: hwFloat): shortstring;
@@ -185,14 +185,14 @@ if i > 0 then
 	end else b:= '';
 end;
 
-procedure SplitByChar(var a, b: string; c: char);
+procedure SplitByChar(var a, b: ansistring; c: char);
 var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
 	begin
 	b:= copy(a, i + 1, Length(a) - i);
-	byte(a[0]):= Pred(i)
+	setlength(a, Pred(i));
 	end else b:= '';
 end;
 
@@ -223,7 +223,7 @@ begin
 if a > b then Max:= a else Max:= b
 end;
 
-procedure OutError(Msg: String; isFatalError: boolean);
+procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
 WriteLnToConsole(Msg);
@@ -235,7 +235,7 @@ if isFatalError then
    end
 end;
 
-procedure TryDo(Assert: boolean; Msg: string; isFatal: boolean);
+procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
 begin
 if not Assert then OutError(Msg, isFatal)
 end;

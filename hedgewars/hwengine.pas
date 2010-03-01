@@ -89,7 +89,7 @@ procedure freeEverything; forward;
 ////////////////////////////////
 procedure DoTimer(Lag: LongInt);
 {$IFNDEF IPHONEOS}
-var s: string;
+var s: shortstring;
 {$ENDIF}
 begin
 	inc(RealTicks, Lag);

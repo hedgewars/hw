@@ -62,9 +62,9 @@ procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
-function  CheckCJKFont(s: string; font: THWFont): THWFont;
-function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
-function  RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
+function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
+function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);
 //procedure rotateSurface(Surface: PSDL_Surface);
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL
@@ -72,10 +72,10 @@ procedure copyToXY(src, dest: PSDL_Surface; destX, destY: Integer);
 procedure RenderHealth(var Hedgehog: THedgehog);
 procedure AddProgress;
 procedure FinishProgress;
-function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
+function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
-function RenderHelpWindow(caption, subcaption, description, extra: shortstring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
@@ -118,7 +118,7 @@ r.h:= rect^.h - 4;
 SDL_FillRect(Surface, @r, FillColor)
 end;
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
@@ -146,7 +146,7 @@ finalRect.h:= h + FontBorder * 2;
 WriteInRoundRect:= finalRect;
 end;
 
-function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: string): TSDL_Rect;
+function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
@@ -173,7 +173,7 @@ WriteInRect:= finalRect
 end;
 
 procedure StoreLoad;
-var s: string;
+var s: shortstring;
 
 	procedure WriteNames(Font: THWFont);
 	var t: LongInt;
@@ -795,7 +795,7 @@ FreeTexture(HHTexture)
 end;
 
 
-function CheckCJKFont(s: string; font: THWFont): THWFont;
+function CheckCJKFont(s: ansistring; font: THWFont): THWFont;
 var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
@@ -824,7 +824,7 @@ exit(font);
        ((#$2F800 <= u) and (u >= #$2FA1F)))   // CJK Compatibility Ideographs Supplement *)
 end;
 
-function  RenderStringTex(s: string; Color: Longword; font: THWFont): PTexture;
+function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
 var w, h : LongInt;
     finalSurface: PSDL_Surface;
 begin
@@ -846,7 +846,7 @@ RenderStringTex:= Surface2Tex(finalSurface, false);
 SDL_FreeSurface(finalSurface);
 end;
 
-function RenderSpeechBubbleTex(s: string; SpeechType: Longword; font: THWFont): PTexture;
+function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
@@ -1038,7 +1038,7 @@ begin
 	Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
-function  LoadImage(const filename: string; imageFlags: LongInt): PSDL_Surface;
+function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
@@ -1095,7 +1095,7 @@ begin
 	LoadImage:= tmpsurf //Result
 end;
 
-function glLoadExtension(extension : string) : boolean;
+function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IFDEF IPHONEOS}
 	glLoadExtension:= false;
@@ -1138,11 +1138,11 @@ begin
 
 	glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-	vendor:= LowerCase(string(pchar(glGetString(GL_VENDOR))));
+	vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFDEF DEBUGFILE}
-	AddFileLog('OpenGL-- Renderer: ' + string(pchar(glGetString(GL_RENDERER))));
+	AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
 	AddFileLog('  |----- Vendor: ' + vendor);
-	AddFileLog('  |----- Version: ' + string(pchar(glGetString(GL_VERSION))));
+	AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
 	AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
@@ -1345,13 +1345,13 @@ for x := 0 to src^.w - 1 do
         end;
 end;
 
-function RenderHelpWindow(caption, subcaption, description, extra: shortstring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 var tmpsurf: PSDL_SURFACE;
 	w, h, i, j: LongInt;
 	font: THWFont;
 	r, r2: TSDL_Rect;
 	wa, ha: LongInt;
-	tmpline, tmpline2, tmpdesc: shortstring;
+	tmpline, tmpline2, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
 if caption = '' then caption:= '???';
@@ -1458,7 +1458,7 @@ procedure RenderWeaponTooltip(atype: TAmmoType);
 {$IFNDEF IPHONEOS}
 var r: TSDL_Rect;
 	i: LongInt;
-	extra: string;
+	extra: ansistring;
 	extracolor: LongInt;
 begin
 // don't do anything if the window shouldn't be shown

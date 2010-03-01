@@ -65,7 +65,7 @@ with tl do
      s:= str;
 end;
 
-function RegisterVariable(Name: string; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
+function RegisterVariable(Name: shortstring; VType: TVariableType; p: pointer; Trusted: boolean): PVariable;
 var value: PVariable;
 begin
 New(value);

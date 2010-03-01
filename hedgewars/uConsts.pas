@@ -391,8 +391,8 @@ const
 	cThemeCFGFilename = 'theme.cfg';
 	
 	FontBorder = 2;
-var	PathPrefix: string;
-	Pathz: array[TPathType] of String;
+var	PathPrefix: shortstring;
+	Pathz: array[TPathType] of shortstring;
 	CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
 const	cTagsMasks : array[0..7] of byte = (
@@ -1700,7 +1700,7 @@ procedure free_uConsts;
 implementation
 
 procedure init_uConsts;
-var cPathz: array[TPathType] of String = (
+var cPathz: array[TPathType] of shortstring = (
 		'',                              // ptNone
 		'',                              // ptData
 		'Graphics',                      // ptGraphics

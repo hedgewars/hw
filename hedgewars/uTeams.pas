@@ -51,7 +51,7 @@ type PHHAmmo = ^THHAmmo;
 			BotLevel  : LongWord; // 0 - Human player
 			HatVisibility: GLfloat;
 			stats: TStatistics;
-			Hat: String;
+			Hat: shortstring;
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
 			end;
@@ -68,9 +68,9 @@ type PHHAmmo = ^THHAmmo;
 			GraveTex,
 			HealthTex,
 			FlagTex: PTexture;
-			Flag: string;
-			GraveName: string;
-			FortName: string;
+			Flag: shortstring;
+			GraveName: shortstring;
+			FortName: shortstring;
 			TeamHealth: LongInt;
 			TeamHealthBarWidth,
 			NewTeamHealthBarWidth: LongInt;
@@ -79,7 +79,7 @@ type PHHAmmo = ^THHAmmo;
 			HedgehogsNumber: Longword;
 			hasGone: boolean;
 			voicepack: PVoicepack;
-            PlayerHash: string;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
+            PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
 			end;
 
 	TClan = record
@@ -147,9 +147,9 @@ if AliveCount = 0 then
 	with AliveClan^ do
 		begin
 		if TeamsNumber = 1 then
-			s:= Format(trmsg[sidWinner], Teams[0]^.TeamName)  // team wins
+			s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
 		else
-			s:= Format(trmsg[sidWinner], Teams[0]^.TeamName); // clan wins
+			s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
 
 		for j:= 0 to Pred(TeamsNumber) do
 			with Teams[j]^ do

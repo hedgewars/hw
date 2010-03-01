@@ -52,7 +52,7 @@ operator / (const z1: hwFloat; const z2: LongInt) z : hwFloat;
 operator < (const z1, z2: hwFloat) b : boolean;
 operator > (const z1, z2: hwFloat) b : boolean;
 
-function cstr(const z: hwFloat): string;
+function cstr(const z: hwFloat): shortstring;
 function hwRound(const t: hwFloat): LongInt;
 function hwAbs(const t: hwFloat): hwFloat;
 function hwSqr(const t: hwFloat): hwFloat;
@@ -261,8 +261,8 @@ else
       b:= (z1.QWordValue > z2.QWordValue) xor z2.isNegative
 end;
 
-function cstr(const z: hwFloat): string;
-var tmpstr: string;
+function cstr(const z: hwFloat): shortstring;
+var tmpstr: shortstring;
 begin
 str(z.Round, cstr);
 if z.Frac <> 0 then

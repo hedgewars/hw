@@ -460,4 +460,6 @@
 05:09=Artillery: Hogs can't walk to change position
 05:10=Indestructible Terrain: Most weapons won't destroy terrain
 05:11=Shared Ammo: All teams of the same color share their ammunition
-05:12=Mine timers: Mines will detonated after %1 second(s)
+05:12=Mine timers: Mines will detonate after %1 second(s)
+05:13=Mine timers: Mines will detonate instantly
+05:14=Mine timers: Mines will detonate after 0 - 4 seconds

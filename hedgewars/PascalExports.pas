@@ -52,7 +52,7 @@ implementation
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
 begin
 	if netProto <> nil then netProto^:= cNetProtoVersion;
-	if versionStr <> nil then versionStr^:= string(cVersionString);
+	if versionStr <> nil then versionStr^:= shortstring(cVersionString);
 end;
 
 procedure HW_click; cdecl; export;

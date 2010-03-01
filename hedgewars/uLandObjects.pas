@@ -349,7 +349,7 @@ TryPut:= bRes;
 end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
-var s: string;
+var s: shortstring;
     f: textfile;
     i, ii: LongInt;
     vobcount: Longword;

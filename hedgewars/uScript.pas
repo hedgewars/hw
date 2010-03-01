@@ -24,14 +24,14 @@ interface
 procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
-procedure ScriptLoad(name : string);
+procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
 
-procedure ScriptCall(fname : string);
-function ScriptCall(fname : string; par1: LongInt) : LongInt;
-function ScriptCall(fname : string; par1, par2: LongInt) : LongInt;
-function ScriptCall(fname : string; par1, par2, par3: LongInt) : LongInt;
-function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
+procedure ScriptCall(fname : shortstring);
+function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 
 procedure init_uScript;
 procedure free_uScript;
@@ -52,7 +52,7 @@ uses LuaPas in 'LuaPas.pas',
 	typinfo;
 	
 var luaState : Plua_State;
-	ScriptAmmoStore : string;
+	ScriptAmmoStore : shortstring;
 	ScriptLoaded : boolean;
 	
 procedure ScriptPrepareAmmoStore; forward;
@@ -306,26 +306,26 @@ begin
 lua_settop(luaState, 0)
 end;
 
-procedure ScriptSetInteger(name : string; value : LongInt);
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
 begin
 lua_pushinteger(luaState, value);
 lua_setglobal(luaState, Str2PChar(name));
 end;
 
-procedure ScriptSetString(name : string; value : string);
+procedure ScriptSetString(name : shortstring; value : shortstring);
 begin
 lua_pushstring(luaState, Str2PChar(value));
 lua_setglobal(luaState, Str2PChar(name));
 end;
 
-function ScriptGetInteger(name : string) : LongInt;
+function ScriptGetInteger(name : shortstring) : LongInt;
 begin
 lua_getglobal(luaState, Str2PChar(name));
 ScriptGetInteger:= lua_tointeger(luaState, -1);
 lua_pop(luaState, 1);
 end;
 
-function ScriptGetString(name : string) : string;
+function ScriptGetString(name : shortstring) : shortstring;
 begin
 lua_getglobal(luaState, Str2PChar(name));
 ScriptGetString:= lua_tostring(luaState, -1);
@@ -367,7 +367,7 @@ begin
 	ScriptApplyAmmoStore;
 end;
 
-procedure ScriptLoad(name : string);
+procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
 begin
 	ret:= luaL_loadfile(luaState, Str2PChar(name));
@@ -392,7 +392,7 @@ begin
 	TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 end;
 
-procedure ScriptCall(fname : string);
+procedure ScriptCall(fname : shortstring);
 begin
 	if not ScriptLoaded then
 		exit;
@@ -406,22 +406,22 @@ begin
 	GetGlobals;
 end;
 
-function ScriptCall(fname : string; par1: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
 ScriptCall:= ScriptCall(fname, par1, 0, 0, 0)
 end;
 
-function ScriptCall(fname : string; par1, par2: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 begin
 ScriptCall:= ScriptCall(fname, par1, par2, 0, 0)
 end;
 
-function ScriptCall(fname : string; par1, par2, par3: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 begin
 ScriptCall:= ScriptCall(fname, par1, par2, par3, 0)
 end;
 
-function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
 	if not ScriptLoaded then
 		exit;
@@ -467,17 +467,17 @@ begin
 end;
 
 // small helper functions making registering enums a lot easier
-function str(const en : TGearType) : string; overload;
+function str(const en : TGearType) : shortstring; overload;
 begin
 str:= GetEnumName(TypeInfo(TGearType), ord(en))
 end;
 
-function str(const en : TSound) : string; overload;
+function str(const en : TSound) : shortstring; overload;
 begin
 str:= GetEnumName(TypeInfo(TSound), ord(en))
 end;
 
-function str(const en : TAmmoType) : string; overload;
+function str(const en : TAmmoType) : shortstring; overload;
 begin
 str:= GetEnumName(TypeInfo(TAmmoType), ord(en))
 end;
@@ -564,7 +564,7 @@ procedure ScriptClearStack;
 begin
 end;
 
-procedure ScriptLoad(name : string);
+procedure ScriptLoad(name : shortstring);
 begin
 end;
 
@@ -572,26 +572,26 @@ procedure ScriptOnGameInit;
 begin
 end;
 
-procedure ScriptCall(fname : string);
+procedure ScriptCall(fname : shortstring);
 begin
 end;
 
-function ScriptCall(fname : string; par1, par2, par3, par4 : LongInt) : LongInt;
-begin
-ScriptCall:= 0
-end;
-
-function ScriptCall(fname : string; par1: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
 ScriptCall:= 0
 end;
 
-function ScriptCall(fname : string; par1, par2: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
 ScriptCall:= 0
 end;
 
-function ScriptCall(fname : string; par1, par2, par3: LongInt) : LongInt;
+function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
+begin
+ScriptCall:= 0
+end;
+
+function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 begin
 ScriptCall:= 0
 end;

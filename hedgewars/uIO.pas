@@ -141,7 +141,7 @@ case s[1] of
 end;
 
 procedure IPCCheckSock;
-const ss: string = '';
+const ss: shortstring = '';
 var i: LongInt;
 	buf: array[0..255] of byte;
 	s: shortstring absolute buf;
@@ -170,7 +170,7 @@ end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
 var f: file;
-	ss: string = '';
+	ss: shortstring = '';
 	i: LongInt;
 	buf: array[0..255] of byte;
 	s: shortstring absolute buf;

@@ -40,27 +40,28 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 
 	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
 			gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-			gidSolidLand, gidSharedAmmo, gidMineTimer);
+			gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer);
 
 const MAX_EVENT_STRINGS = 100;
-var trammo: array[TAmmoStrId] of string;
-    trammoc: array[TAmmoStrId] of string;
-    trammod: array[TAmmoStrId] of string;
-    trmsg: array[TMsgStrId] of string;
-    trgoal: array[TGoalStrId] of string;
+var trammo: array[TAmmoStrId] of ansistring;
+    trammoc: array[TAmmoStrId] of ansistring;
+    trammod: array[TAmmoStrId] of ansistring;
+    trmsg: array[TMsgStrId] of ansistring;
+    trgoal: array[TGoalStrId] of ansistring;
 
-procedure LoadLocale(FileName: string);
+procedure LoadLocale(FileName: shortstring);
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
+function Format(fmt: ansistring; var arg: ansistring): ansistring;
 
-function GetEventString(e: TEventId): string;
+function GetEventString(e: TEventId): ansistring;
 
 implementation
 uses uMisc, uRandom, uConsole;
 
-var	trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of string;
+var	trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
 	trevt_n: array[TEventId] of integer;
 
-procedure LoadLocale(FileName: string);
+procedure LoadLocale(FileName: shortstring);
 var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
@@ -116,7 +117,7 @@ if loaded then
 {$I+}
 end;
 
-function GetEventString(e: TEventId): string;
+function GetEventString(e: TEventId): ansistring;
 begin
 	if trevt_n[e] = 0 then // no messages for this event type?
 		GetEventString:= '*missing translation*'
@@ -125,6 +126,14 @@ begin
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;
+var i: LongInt;
+begin
+i:= Pos('%1', fmt);
+if i = 0 then Format:= fmt
+         else Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
+end;
+
+function Format(fmt: ansistring; var arg: ansistring): ansistring;
 var i: LongInt;
 begin
 i:= Pos('%1', fmt);

@@ -28,7 +28,7 @@ type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 procedure init_uKeys;
 procedure free_uKeys;
 
-function  KeyNameToCode(name: string): word;
+function  KeyNameToCode(name: shortstring): word;
 procedure ProcessKbd;
 procedure ResetKbd;
 procedure FreezeEnterKey;
@@ -90,7 +90,7 @@ const KeyNumber = 1024;
 var tkbd, tkbdn: TKeyboardState;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
 	
-function KeyNameToCode(name: string): word;
+function KeyNameToCode(name: shortstring): word;
 var code: Word;
 begin
 	code:= cKeyMaxIndex;
@@ -261,7 +261,7 @@ KeyNames[5]:= 'wheeldown';
 
 for i:= 6 to cKeyMaxIndex do
 	begin
-    	s:= string(sdl_getkeyname(i));
+    	s:= shortstring(sdl_getkeyname(i));
 	//writeln(stdout,inttostr(i) + ': ' + s);
     	if s = 'unknown key' then KeyNames[i]:= ''
        	else begin
