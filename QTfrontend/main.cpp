@@ -333,7 +333,7 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 
-	/*Themes = new QStringList();
+	Themes = new QStringList();
 	QFile themesfile(datadir->absolutePath() + "/Themes/themes.cfg");
 	if (themesfile.open(QIODevice::ReadOnly)) {
 		QTextStream stream(&themesfile);
@@ -345,14 +345,9 @@ int main(int argc, char *argv[]) {
 		themesfile.close();
 	} else {
 		QMessageBox::critical(0, "Error", "Cannot access themes.cfg", "OK");
-	}*/
+	}
 
 	QDir tmpdir;
-	tmpdir.cd(datadir->absolutePath());
-	tmpdir.cd("Themes");
-	tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
-	Themes = new QStringList(tmpdir.entryList(QStringList("*")));
-
 	tmpdir.cd(datadir->absolutePath());
 	tmpdir.cd("Maps");
 	tmpdir.setFilter(QDir::Dirs | QDir::NoDotAndDotDot);
