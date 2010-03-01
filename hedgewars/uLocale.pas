@@ -38,7 +38,9 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
 			eidHomerun, eidFrozen);
 
-	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable, gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery, gidSolidLand);
+	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+			gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
+			gidSolidLand, gidSharedAmmo);
 
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of string;

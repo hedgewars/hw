@@ -116,6 +116,7 @@ g:= AddGoal(g, gfKing, gidKing); // king?
 g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 

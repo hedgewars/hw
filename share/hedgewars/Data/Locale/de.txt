@@ -257,3 +257,4 @@
 05:08=Igel platzieren: Wähle vor dem Spielstart die Positionen deiner Igel
 05:09=Artillerie: Deine Igel können nicht laufen
 05:10=Unzerstörbares Terrain: Explosionen zerstören den Boden nicht
+05:11=Gemeinsames Arsenal: Alle Teams gleicher Farbe teilen sich ihr Arsenal
