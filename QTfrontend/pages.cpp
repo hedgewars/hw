@@ -120,10 +120,8 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 // ====== Page 1 ======
 	QVBoxLayout * vbox1 = new QVBoxLayout();
 	QVBoxLayout * vbox2 = new QVBoxLayout();
-	QVBoxLayout * vbox3 = new QVBoxLayout();
 	page1Layout->addLayout(vbox1);
 	page1Layout->addLayout(vbox2);
-	page1Layout->addLayout(vbox3);
 
 	GBoxHedgehogs = new QGroupBox(this);
 	GBoxHedgehogs->setTitle(QGroupBox::tr("Team Members"));
@@ -161,12 +159,29 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 
 
 	GBoxTeam = new QGroupBox(this);
-	GBoxTeam->setTitle(QGroupBox::tr("Team"));
+	GBoxTeam->setTitle(QGroupBox::tr("Team Settings"));
 	GBoxTeam->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-	QVBoxLayout * GBTLayout = new QVBoxLayout(GBoxTeam);
+	QGridLayout * GBTLayout = new QGridLayout(GBoxTeam);
+	QLabel * tmpLabel = new QLabel(GBoxTeam);
+	tmpLabel->setText(QLabel::tr("Name"));
+	GBTLayout->addWidget(tmpLabel, 0, 0);
+	tmpLabel = new QLabel(GBoxTeam);
+	tmpLabel->setText(QLabel::tr("Type"));
+	GBTLayout->addWidget(tmpLabel, 1, 0);
+	tmpLabel = new QLabel(GBoxTeam);
+	tmpLabel->setText(QLabel::tr("Grave"));
+	GBTLayout->addWidget(tmpLabel, 2, 0);
+	tmpLabel = new QLabel(GBoxTeam);
+	tmpLabel->setText(QLabel::tr("Flag"));
+	GBTLayout->addWidget(tmpLabel, 3, 0);
+	tmpLabel = new QLabel(GBoxTeam);
+	tmpLabel->setText(QLabel::tr("Voice"));
+	GBTLayout->addWidget(tmpLabel, 4, 0);
+
+
 	TeamNameEdit = new QLineEdit(GBoxTeam);
 	TeamNameEdit->setMaxLength(64);
-	GBTLayout->addWidget(TeamNameEdit);
+	GBTLayout->addWidget(TeamNameEdit, 0, 1);
 	vbox2->addWidget(GBoxTeam);
 
 	CBTeamLvl = new QComboBox(GBoxTeam);
@@ -177,17 +192,17 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 				QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
 				QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
 				);
-	GBTLayout->addWidget(CBTeamLvl);
+	GBTLayout->addWidget(CBTeamLvl, 1, 1);
 
 	CBGrave = new QComboBox(GBoxTeam);
 	CBGrave->setMaxCount(65535);
 	CBGrave->setIconSize(QSize(32, 32));
-	GBTLayout->addWidget(CBGrave);
+	GBTLayout->addWidget(CBGrave, 2, 1);
 
 	CBFlag = new QComboBox(GBoxTeam);
 	CBFlag->setMaxCount(65535);
 	CBFlag->setIconSize(QSize(22, 15));
-	GBTLayout->addWidget(CBFlag);
+	GBTLayout->addWidget(CBFlag, 3, 1);
 
 	{
 		QHBoxLayout * hbox = new QHBoxLayout();
@@ -203,7 +218,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 		BtnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
 		hbox->setStretchFactor(BtnTestSound, 1);
 		connect(BtnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
-		GBTLayout->addLayout(hbox);
+		GBTLayout->addLayout(hbox, 4, 1);
 	}
 
 	GBoxFort = new QGroupBox(this);
@@ -214,11 +229,12 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 	GBFLayout->addWidget(CBFort, 0, 0);
 	FortPreview = new SquareLabel(GBoxFort);
 	FortPreview->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	FortPreview->setMinimumSize(128, 128);
 	FortPreview->setPixmap(QPixmap());
     // perhaps due to handling its own paintevents, SquareLabel doesn't play nice with the stars
     //FortPreview->setAttribute(Qt::WA_PaintOnScreen, true);
 	GBFLayout->addWidget(FortPreview, 1, 0);
-	vbox3->addWidget(GBoxFort);
+	vbox2->addWidget(GBoxFort);
 
 	QDir tmpdir;
 	tmpdir.cd(datadir->absolutePath());
@@ -250,7 +266,6 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 
 	vbox1->addStretch();
 	vbox2->addStretch();
-//	vbox3->addStretch();
 
 // ====== Page 2 ======
 	GBoxBinds = new QGroupBox(this);
@@ -261,7 +276,7 @@ PageEditTeam::PageEditTeam(QWidget* parent, SDLInteraction * sdli) :
 	GBBLayout->addWidget(BindsBox);
 	page2Layout->addWidget(GBoxBinds, 0, 0);
 
-	quint16 widind = 0, i = 0;
+	quint16 i = 0;
 	quint16 num = 0;
 	QWidget * curW = NULL;
 	QGridLayout * pagelayout = NULL;
@@ -357,8 +372,10 @@ PageOptions::PageOptions(QWidget* parent) :
 	QGridLayout * gbTBLayout = new QGridLayout(gbTwoBoxes);
 	gbTBLayout->setMargin(0);
 	gbTBLayout->setSpacing(0);
-	{
+	gbTBLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        {
             teamsBox = new IconedGroupBox(this);
+            //teamsBox->setContentTopPadding(0);
             //teamsBox->setAttribute(Qt::WA_PaintOnScreen, true);
             teamsBox->setIcon(QIcon(":/res/teamicon.png"));
             teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -376,24 +393,12 @@ PageOptions::PageOptions(QWidget* parent) :
             layout1->setStretchFactor(BtnNewTeam, 100);
             layout1->setStretchFactor(BtnEditTeam, 100);
 
-            QHBoxLayout * layout2 = new QHBoxLayout;
-            GBTlayout->addLayout(layout2);
-
-            labelNN = new QLabel(teamsBox);
-            labelNN->setText(QLabel::tr("Net nick"));
-            layout2->addWidget(labelNN);
-
-            editNetNick = new QLineEdit(teamsBox);
-            editNetNick->setMaxLength(20);
-            editNetNick->setText(QLineEdit::tr("unnamed"));
-            layout2->addWidget(editNetNick);
-
             gbTBLayout->addWidget(teamsBox, 0, 0);
-	}
+        }
 
         {
             IconedGroupBox* groupWeapons = new IconedGroupBox(this);
-            groupWeapons->setContentTopPadding(0);
+            //groupWeapons->setContentTopPadding(0);
             groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
             groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
             //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -413,7 +418,43 @@ PageOptions::PageOptions(QWidget* parent) :
         }
 
         {
+            IconedGroupBox* groupMisc = new IconedGroupBox(this);
+            //groupMisc->setContentTopPadding(0);
+            groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+            groupMisc->setIcon(QIcon(":/res/miscicon.png"));
+            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            groupMisc->setTitle(QGroupBox::tr("Misc"));
+            QGridLayout * MiscLayout = new QGridLayout(groupMisc);
+
+            labelNN = new QLabel(groupMisc);
+            labelNN->setText(QLabel::tr("Net nick"));
+            MiscLayout->addWidget(labelNN, 0, 0);
+
+            editNetNick = new QLineEdit(groupMisc);
+            editNetNick->setMaxLength(20);
+            editNetNick->setText(QLineEdit::tr("unnamed"));
+            MiscLayout->addWidget(editNetNick, 0, 1);
+
+            CBAltDamage = new QCheckBox(groupMisc);
+            CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
+            MiscLayout->addWidget(CBAltDamage, 1, 0, 1, 2);
+
+            CBNameWithDate = new QCheckBox(groupMisc);
+            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            MiscLayout->addWidget(CBNameWithDate, 2, 0, 1, 2);
+
+#ifdef SPARKLE_ENABLED
+            CBAutoUpdate = new QCheckBox(groupMisc);
+            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
+            MiscLayout->addWidget(CBAutoUpdate, 3, 0, 1, 2);
+#endif
+
+            gbTBLayout->addWidget(groupMisc, 2, 0);
+        }
+
+        {
             AGGroupBox = new IconedGroupBox(this);
+            //AGGroupBox->setContentTopPadding(0);
             AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
             AGGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
             AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
@@ -429,6 +470,20 @@ PageOptions::PageOptions(QWidget* parent) :
             CBFrontendEffects->setText(QCheckBox::tr("Frontend effects (requires restart)"));
             GBAlayout->addWidget(CBFrontendEffects);
 
+            CBEnableFrontendSound = new QCheckBox(AGGroupBox);
+            CBEnableFrontendSound->setText(QCheckBox::tr("Enable frontend sounds"));
+            GBAlayout->addWidget(CBEnableFrontendSound);
+
+            CBEnableFrontendMusic = new QCheckBox(AGGroupBox);
+            CBEnableFrontendMusic->setText(QCheckBox::tr("Enable frontend music"));
+            GBAlayout->addWidget(CBEnableFrontendMusic);
+
+            QFrame * hr = new QFrame(AGGroupBox);
+            hr->setFrameStyle(QFrame::HLine);
+            hr->setLineWidth(3);
+            hr->setFixedHeight(12);
+            GBAlayout->addWidget(hr);
+
             QLabel * resolution = new QLabel(AGGroupBox);
             resolution->setText(QLabel::tr("Resolution"));
             GBAreslayout->addWidget(resolution);
@@ -436,12 +491,6 @@ PageOptions::PageOptions(QWidget* parent) :
             CBResolution = new QComboBox(AGGroupBox);
             GBAreslayout->addWidget(CBResolution);
             GBAlayout->addLayout(GBAreslayout);
-
-            QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
-            QLabel * maxfps = new QLabel(AGGroupBox);
-            maxfps->setText(QLabel::tr("FPS limit"));
-            GBAfpslayout->addWidget(maxfps);
-            GBAlayout->addLayout(GBAfpslayout);
 
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
@@ -451,21 +500,11 @@ PageOptions::PageOptions(QWidget* parent) :
             CBReduceQuality->setText(QCheckBox::tr("Reduced quality"));
             GBAlayout->addWidget(CBReduceQuality);
 
-            CBEnableSound = new QCheckBox(AGGroupBox);
-            CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-            GBAlayout->addWidget(CBEnableSound);
-
-            CBEnableFrontendSound = new QCheckBox(AGGroupBox);
-            CBEnableFrontendSound->setText(QCheckBox::tr("Enable frontend sounds"));
-            GBAlayout->addWidget(CBEnableFrontendSound);
-
-            CBEnableMusic = new QCheckBox(AGGroupBox);
-            CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-            GBAlayout->addWidget(CBEnableMusic);
-
-            CBEnableFrontendMusic = new QCheckBox(AGGroupBox);
-            CBEnableFrontendMusic->setText(QCheckBox::tr("Enable frontend music"));
-            GBAlayout->addWidget(CBEnableFrontendMusic);
+            hr = new QFrame(AGGroupBox);
+            hr->setFrameStyle(QFrame::HLine);
+            hr->setLineWidth(3);
+            hr->setFixedHeight(12);
+            GBAlayout->addWidget(hr);
 
             QHBoxLayout * GBAvollayout = new QHBoxLayout(0);
             QLabel * vol = new QLabel(AGGroupBox);
@@ -477,27 +516,33 @@ PageOptions::PageOptions(QWidget* parent) :
             volumeBox->setSingleStep(5);
             GBAvollayout->addWidget(volumeBox);
 
+            CBEnableSound = new QCheckBox(AGGroupBox);
+            CBEnableSound->setText(QCheckBox::tr("Enable sound"));
+            GBAlayout->addWidget(CBEnableSound);
+
+            CBEnableMusic = new QCheckBox(AGGroupBox);
+            CBEnableMusic->setText(QCheckBox::tr("Enable music"));
+            GBAlayout->addWidget(CBEnableMusic);
+
+            hr = new QFrame(AGGroupBox);
+            hr->setFrameStyle(QFrame::HLine);
+            hr->setLineWidth(3);
+            hr->setFixedHeight(12);
+            GBAlayout->addWidget(hr);
+
+            QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
+            QLabel * maxfps = new QLabel(AGGroupBox);
+            maxfps->setText(QLabel::tr("FPS limit"));
+            GBAfpslayout->addWidget(maxfps);
+            GBAlayout->addLayout(GBAfpslayout);
+            fpsedit = new FPSEdit(AGGroupBox);
+            GBAfpslayout->addWidget(fpsedit);
+
             CBShowFPS = new QCheckBox(AGGroupBox);
             CBShowFPS->setText(QCheckBox::tr("Show FPS"));
             GBAlayout->addWidget(CBShowFPS);
 
-            CBAltDamage = new QCheckBox(AGGroupBox);
-            CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            GBAlayout->addWidget(CBAltDamage);
-
-            CBNameWithDate = new QCheckBox(AGGroupBox);
-            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            GBAlayout->addWidget(CBNameWithDate);
-
-#ifdef SPARKLE_ENABLED
-            CBAutoUpdate = new QCheckBox(AGGroupBox);
-            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            GBAlayout->addWidget(CBAutoUpdate);
-#endif
-
-            fpsedit = new FPSEdit(AGGroupBox);
-            GBAfpslayout->addWidget(fpsedit);
-            gbTBLayout->addWidget(AGGroupBox, 0, 1, 2, 1);
+            gbTBLayout->addWidget(AGGroupBox, 0, 1, 3, 1);
         }
 
 	BtnSaveOptions = addButton(":/res/Save.png", pageLayout, 2, 2, true);

@@ -229,11 +229,9 @@ int main(int argc, char *argv[]) {
 				"padding: 2px;"
 			"}"
 
-			".QGroupBox::title{"
+			"QGroupBox::title{"
 				"subcontrol-origin: margin;"
 				"subcontrol-position: top left;"
-				//"padding-left: 82px;"
-				//"padding-top: 26px;"
 				"text-align: left;"
 				"}"
 
