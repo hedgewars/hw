@@ -1214,7 +1214,7 @@ PageScheme::PageScheme(QWidget* parent) :
 	l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
 	glBSLayout->addWidget(l,6,1,1,1);
 	SB_Mines = new QSpinBox(gbBasicSettings);
-	SB_Mines->setRange(1, 50);
+	SB_Mines->setRange(1, 80);
 	SB_Mines->setValue(1);
 	SB_Mines->setSingleStep(5);
 	glBSLayout->addWidget(SB_Mines,6,2,1,1);
