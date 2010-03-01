@@ -1,4 +1,4 @@
-﻿; German locale
+; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -261,3 +261,4 @@
 05:12=Minenzünder: Minen explodieren nach %1 Sekunde(n)
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0 - 4 Sekunden
+05:15=Schadensmodifikator: Alle Waffen verursachen %1 % Schaden

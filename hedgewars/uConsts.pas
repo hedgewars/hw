@@ -104,9 +104,9 @@ type
 			sndMelon, sndHellish, sndYoohoo, sndRCPlane, sndWhipCrack,
 			sndRideOfTheValkyries, sndDenied, sndPlaced, sndBaseballBat,
 			sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
-			sndHomerun, sndMolotov, sndWalking, sndCover, sndUhOh,
-			sndOops, sndNooo, sndHello, sndRopeShot, sndRopeAttach,
-			sndRopeRelease, sndSwitchHog, sndVictory, sndSniperReload, sndSteps);
+			sndHomerun, sndMolotov, sndCover, sndUhOh, sndOops,
+			sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
+			sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity);
 
 	TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
 			amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -290,6 +290,7 @@ const
 	tfIgnoreDelays  = $00000008;
 	tfTargetRespawn = $00000010;
 	
+	gfAny            = $FFFFFFFF;
 	gfForts          = $00000001;
 	gfMultiWeapon    = $00000002;
 	gfSolidLand      = $00000004;
@@ -754,7 +755,6 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
 			(FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
 			(FileName:              'molotov.ogg'; Path: ptSounds),// sndMolotov
-			(FileName:              ''; Path: ptSounds),// sndWalking
 			(FileName:            'Takecover.ogg'; Path: ptVoices),// sndCover
 			(FileName:                'Uh-oh.ogg'; Path: ptVoices),// sndUhOh
 			(FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
@@ -766,7 +766,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
 			(FileName:              'victory.ogg'; Path: ptVoices),// sndVictory
 			(FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
-			(FileName:                'steps.ogg'; Path: ptSounds) // sndSteps
+			(FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
+			(FileName:           'lowgravity.ogg'; Path: ptSounds) // sndLowGravity
 			);
 
 	Ammoz: array [TAmmoType] of record

@@ -78,7 +78,7 @@ var i, t: LongInt;
     g: ansistring;
 
     // helper functions to create the goal/game mode string
-    function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId; i: LongInt): ansistring;
+    function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
     var t: ansistring;
     begin
         if (GameFlags and gf) <> 0 then
@@ -89,7 +89,7 @@ var i, t: LongInt;
         AddGoal:= s;
     end;
 
-    function AddGoal(s: ansistring; gf: LongInt; si: TGoalStrId): ansistring;
+    function AddGoal(s: ansistring; gf: longword; si: TGoalStrId): ansistring;
     begin
         if (GameFlags and gf) <> 0 then
             s:= s + trgoal[si] + '|';
@@ -117,8 +117,25 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
    CurrentTeam:= ClansArray[0]^.Teams[0];
    end;
 
-// if special game flags are set, add them to the game mode notice window and then show it
+// if special game flags/settings are changed, add them to the game mode notice window and then show it
 g:= ''; // no text/things to note yet
+
+// modified damage modificator?
+if cDamagePercent <> 100 then
+	g:= AddGoal(g, gfAny, gidDamageModifier, cDamagePercent);
+
+// modified mine timers?
+if cMinesTime <> 3000 then
+	begin
+	if cMinesTime = 0 then
+		g:= AddGoal(g, gfMines, gidNoMineTimer)
+	else if cMinesTime < 0 then
+		g:= AddGoal(g, gfMines, gidRandomMineTimer)
+	else
+		g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
+	end;
+
+// check different game flags
 g:= AddGoal(g, gfForts, gidForts); // forts?
 g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
 g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
@@ -129,15 +146,7 @@ g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
 g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
 g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
 g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
-if cMinesTime <> 3000 then // changed mine timer?
-	begin
-	if cMinesTime = 0 then
-		g:= AddGoal(g, gfMines, gidNoMineTimer)
-	else if cMinesTime < 0 then
-		g:= AddGoal(g, gfMines, gidRandomMineTimer)
-	else
-		g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
-	end;
+
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 

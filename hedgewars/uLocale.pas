@@ -40,7 +40,8 @@ type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, s
 
 	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
 			gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-			gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer);
+			gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
+			gidDamageModifier);
 
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of ansistring;
