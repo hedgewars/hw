@@ -699,7 +699,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Team Members</source>
-        <translation>Team-Mitglieder</translation>
+        <translation>Teammitglieder</translation>
     </message>
     <message>
         <source>Key binds</source>
