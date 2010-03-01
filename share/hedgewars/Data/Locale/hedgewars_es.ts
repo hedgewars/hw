@@ -45,19 +45,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ha sido eliminado de tu lista de ignorados</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 has sido añadido a tu lista de ignorados</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ha sido eliminado de tu lista de amigos</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 ha sido añadido a tu lista de amigos</translation>
     </message>
 </context>
 <context>
@@ -488,11 +488,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Defiende tu fuerte y destruye el de tus oponentes. 2 facciones como máximo!</translation>
+        <translation>Defiende tu fuerte y destruye el de tus oponentes. ¡2 facciones como máximo!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Los equipos comenzarán en lados opuestos del terreno. 2 facciones como máximo!</translation>
+        <translation>Los equipos comenzarán en lados opuestos del terreno. ¡2 facciones como máximo!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -520,19 +520,19 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>El primero erizo del equipo es el Rey. Si muere tu equipo pierde, así que protégelo.</translation>
+        <translation>El primero erizo del equipo es el Rey. Tu equipo pierde el juego si el rey muere, así que protégelo</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Los jugadores posicionan a mano su erizos por turnos antes de empezar a jugar</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation>La munición se comparte entre los equipos de una misma facción</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilita las vigas en los mapas generados aleatoriamente</translation>
     </message>
 </context>
 <context>
@@ -601,19 +601,19 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Bloquear</translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Añadir amigo</translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Desbloquear</translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Eliminar amigo</translation>
     </message>
 </context>
 <context>
@@ -660,19 +660,19 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar globos de ayuda sobre el armamento</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar sonidos del interfaz</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar música del interfaz</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilitar efectos del interfaz</translation>
     </message>
 </context>
 <context>
@@ -738,11 +738,11 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Opciones del equipo</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Otras opciones</translation>
     </message>
 </context>
 <context>
@@ -849,35 +849,35 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>% minas defectuosas</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Lápida</translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandera</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz</translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Requiere reiniciar el juego</translation>
     </message>
 </context>
 <context>
@@ -1020,7 +1020,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Equipo aleatorio</translation>
     </message>
 </context>
 <context>
@@ -1058,19 +1058,19 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation>Armas</translation>
+        <translation>Cantidad inicial</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation>Probabilidades</translation>
+        <translation>Probabilidad</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Munición en las cajas</translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation>Retraso</translation>
     </message>
 </context>
 <context>
@@ -1104,7 +1104,7 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Fort Mode</source>
-        <translation>Modo fuertes</translation>
+        <translation>Fuertes</translation>
     </message>
     <message>
         <source>Divide Teams</source>
@@ -1144,15 +1144,15 @@ Por favor, compruebe que el juego está debidamente instalado</translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Posicionar erizos</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Compartir munición</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation>Deshabilitar vigas</translation>
     </message>
 </context>
 <context>
