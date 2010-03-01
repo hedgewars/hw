@@ -760,7 +760,7 @@ procedure GenMap;
 var x, y, w, c: Longword;
 begin
 hasBorder:= false;
-hasGirders:= true;
+
 LoadThemeConfig;
 
 if (GameFlags and gfForts) = 0 then
@@ -821,6 +821,8 @@ if hasBorder then
 			end;
 		end;
 	end;
+
+if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 
 if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then AddObjects;
 

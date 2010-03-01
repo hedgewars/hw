@@ -61,6 +61,7 @@
     <file>res/btnKing.png</file>
     <file>res/btnPlaceHog.png</file>
     <file>res/btnSharedAmmo.png</file>
+	<file>res/btnDisableGirders.png</file>
     <file>res/iconBox.png</file>
     <file>res/iconHealth.png</file>
     <file>res/iconSuddenDeath.png</file>

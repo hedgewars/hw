@@ -1107,6 +1107,11 @@ PageScheme::PageScheme(QWidget* parent) :
     TBW_sharedammo->setToolTip(tr("Ammo is shared between all teams that share a colour."));
 	glGMLayout->addWidget(TBW_sharedammo,3,2,1,1);
 
+	TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
+	TBW_disablegirders->setText(ToggleButtonWidget::tr("Disable Girders"));
+    TBW_disablegirders->setToolTip(tr("Disable girders when generating random maps."));
+	glGMLayout->addWidget(TBW_disablegirders,3,3,1,1);
+	
 	// Right
 	QLabel * l;
 
@@ -1272,14 +1277,15 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(TBW_king->button(), 13);
 	mapper->addMapping(TBW_placehog->button(), 14);
 	mapper->addMapping(TBW_sharedammo->button(), 15);
-	mapper->addMapping(SB_DamageModifier, 16);
-	mapper->addMapping(SB_TurnTime, 17);
-	mapper->addMapping(SB_InitHealth, 18);
-	mapper->addMapping(SB_SuddenDeath, 19);
-	mapper->addMapping(SB_CaseProb, 20);
-	mapper->addMapping(SB_MinesTime, 21);
-	mapper->addMapping(SB_Mines, 22);
-	mapper->addMapping(SB_MineDuds, 23);
+	mapper->addMapping(TBW_disablegirders->button(), 16);
+	mapper->addMapping(SB_DamageModifier, 17);
+	mapper->addMapping(SB_TurnTime, 18);
+	mapper->addMapping(SB_InitHealth, 19);
+	mapper->addMapping(SB_SuddenDeath, 20);
+	mapper->addMapping(SB_CaseProb, 21);
+	mapper->addMapping(SB_MinesTime, 22);
+	mapper->addMapping(SB_Mines, 23);
+	mapper->addMapping(SB_MineDuds, 24);
 
 	mapper->toFirst();
 }
