@@ -68,11 +68,11 @@ type
 			sprEvilTrace, sprHellishBomb, sprSeduction, sprDress,
 			sprCensored, sprDrill, sprHandDrill, sprHandBallgun, sprBalls,
 			sprPlane, sprHandPlane, sprUtility, sprInvulnerable, sprVampiric, sprGirder,
-            sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
-            sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
-            sprShoutCorner, sprShoutEdge, sprShoutTail,
-            sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-						sprSmoke, sprShell, sprDust);
+			sprSpeechCorner, sprSpeechEdge, sprSpeechTail,
+			sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
+			sprShoutCorner, sprShoutEdge, sprShoutTail,
+			sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
+			sprSmoke, sprShell, sprDust, sprExplosives);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -83,7 +83,7 @@ type
 			gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
 			gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
 			gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-			gtSniperRifleShot, gtJetpack, gtMolotov);
+			gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives);
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -266,6 +266,7 @@ const
 	cCurrHHZ = Succ(cHHZ);
 	cOnHHZ = 2000;
 
+	cBarrelHealth = 75;
 	cShotgunRadius = 22;
 	cBlowTorchC    = 6;
 
@@ -309,6 +310,7 @@ const
 	gfPlaceHog       = $00008000;
 	gfSharedAmmo     = $00010000;
 	gfDisableGirders = $00020000;
+	gfExplosives     = $00040000;
 	// NOTE: When adding new game flags, ask yourself
 	// if a "game start notice" would be useful. If so,
 	// add one in uWorld.pas - look for "AddGoal".
@@ -671,7 +673,9 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName: 'Shells'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprShell
 			(FileName: 'Dust'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprDust
+			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDust
+			(FileName: 'Explosives'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprExplosives
 			);
 
 	Wavez: array [TWave] of record

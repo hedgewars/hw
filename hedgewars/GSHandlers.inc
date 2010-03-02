@@ -1242,7 +1242,11 @@ end;
 procedure doStepCase(Gear: PGear);
 var i, x, y: LongInt;
 	k: TGearType;
+	exBoom: boolean;
+	dX, dY: HWFloat;
 begin
+exBoom:= false;
+
 if (Gear^.Message and gm_Destroy) > 0 then
 	begin
 	DeleteGear(Gear);
@@ -1253,7 +1257,17 @@ if (Gear^.Message and gm_Destroy) > 0 then
 	exit
 	end;
 
-if Gear^.Damage > 0 then
+if Gear^.Kind = gtExplosives then
+	begin
+	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
+		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);
+	dec(Gear^.Health, Gear^.Damage);
+	Gear^.Damage:= 0;
+	if Gear^.Health <= 0 then
+		exBoom:= true;
+	end;
+
+if (Gear^.Damage > 0) or exBoom then
 	begin
 	x:= hwRound(Gear^.X);
 	y:= hwRound(Gear^.Y);
@@ -1265,6 +1279,17 @@ if Gear^.Damage > 0 then
 		doMakeExplosion(x, y, 25, EXPLAutoSound);
 		for i:= 0 to 63 do
 			AddGear(x, y, gtFlame, 0, _0, _0, 0);
+		end
+	else if k = gtExplosives then
+		begin
+		doMakeExplosion(x, y, 25, EXPLAutoSound);
+		for i:= 0 to 31 do
+			begin
+			dX:= AngleCos(i * 64) * _0_5 * (getrandom + _1);
+			dY:= AngleSin(i * 64) * _0_5 * (getrandom + _1);
+			AddGear(x, y, gtFlame, 0, dX, dY, 0);
+			AddGear(x, y, gtFlame, 0, -dX, -dY, 0)^.State:= gsttmpFlag;
+			end
 		end;
 	exit
 	end;

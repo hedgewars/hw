@@ -177,7 +177,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
 			@doStepRCPlane,
 			@doStepSniperRifleShot,
 			@doStepJetpack,
-			@doStepMolotov
+			@doStepMolotov,
+			@doStepCase
 			);
 
 procedure InsertGearToList(Gear: PGear);
@@ -324,6 +325,11 @@ gtAmmo_Grenade: begin // bazooka
         gtCase: begin
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3
+                end;
+  gtExplosives: begin
+                gear^.Radius:= 16;
+                gear^.Elasticity:= _0_3;
+                gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
                 gear^.Radius:= 1;
@@ -1576,6 +1582,11 @@ while Gear<>nil do
                                         DrawSprite(sprUtility, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
                                         end;
                          end;
+      gtExplosives: begin
+                    i:= (GameTicks shr 6) mod 64;
+                    if i > 18 then i:= 0;
+                    DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                    end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
          gtCluster: DrawSprite(sprClusterParticle, hwRound(Gear^.X) - 8 + WorldDx, hwRound(Gear^.Y) - 8 + WorldDy, 0);
@@ -1633,23 +1644,34 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
+// HACK: just for testing explosives!
+if (GameFlags and gfMines) <> 0 then
+	GameFlags:= (GameFlags or gfExplosives) and not gfMines;
+
 if (TrainingFlags and tfSpawnTargets) <> 0 then
 	begin
 	TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
 	FindPlace(TrainingTargetGear, false, 0, LAND_WIDTH);
 	end;
 
-if ((GameFlags and gfForts) = 0) and ((GameFlags and gfMines) <> 0) then
-	for i:= 0 to Pred(cLandAdditions) do
-		begin
-		Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-		Gear^.TriggerId:= i + 1;
-		FindPlace(Gear, false, 0, LAND_WIDTH);
-{		if(Gear <> nil) then
-			ParseCommand('addtrig s' + inttostr(Gear^.TriggerId) + ' 1 5 11 ' +
-				inttostr(hwRound(Gear^.X)) + ' ' + inttostr(hwRound(Gear^.Y)) +
-				' ' + inttostr(Gear^.TriggerId), true);
-}		end;
+if ((GameFlags and gfForts) = 0) then
+	begin
+	// TODO: exclude each other or allow both, mines and explosives, on same map?
+	if ((GameFlags and gfMines) <> 0) then
+		for i:= 0 to Pred(cLandAdditions) do
+			begin
+			Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
+			Gear^.TriggerId:= i + 1;
+			FindPlace(Gear, false, 0, LAND_WIDTH);
+			end;
+	if ((GameFlags and gfExplosives) <> 0) then
+		for i:= 0 to Pred(cLandAdditions) do
+			begin
+			Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
+			Gear^.TriggerId:= i + 1;
+			FindPlace(Gear, false, 0, LAND_WIDTH);
+			end;
+	end;
 
 if (GameFlags and gfLowGravity) <> 0 then
     cGravity:= cMaxWindSpeed / 2;
@@ -1699,7 +1721,8 @@ while Gear <> nil do
 				gtMine,
 				gtCase,
 				gtTarget,
-				gtFlame: begin
+				gtFlame,
+				gtExplosives: begin
 						//{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
 						if (Mask and EXPLNoDamage) = 0 then
 							begin
@@ -1749,7 +1772,8 @@ while t <> nil do
 		gtHedgehog,
 			gtMine,
 			gtCase,
-			gtTarget: begin
+			gtTarget,
+			gtExplosives: begin
                     if (not t^.Invulnerable) then
                         ApplyDamage(t, dmg)
                     else
@@ -1794,7 +1818,8 @@ while i > 0 do
 			gtHedgehog,
 			gtMine,
 			gtTarget,
-			gtCase: begin
+			gtCase,
+			gtExplosives: begin
 					if (Ammo^.Kind = gtDrill) then begin Ammo^.Timer:= 0; exit; end;
                     if (not Gear^.Invulnerable) then
                         ApplyDamage(Gear, tmpDmg)
@@ -2097,7 +2122,7 @@ repeat
 
 			if (y - sy > Gear^.Radius * 2)
 				and (y < LAND_HEIGHT)
-				and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase], 110, 110) = nil) then
+				and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil) then
 				begin
 				ar[cnt].X:= x;
 				if withFall then ar[cnt].Y:= sy + Gear^.Radius
