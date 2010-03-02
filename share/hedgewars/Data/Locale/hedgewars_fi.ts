@@ -689,6 +689,10 @@ Voit liittyä ja seurata sitä, mutta sinun on odotettava pelin päättymistä p
         <source>Level</source>
         <translation>Taso</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

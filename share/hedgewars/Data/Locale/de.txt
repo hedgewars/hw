@@ -182,7 +182,7 @@
 03:19=Fortbewegungsmittel
 03:20=Aktion
 03:21=Ballistische Waffe
-03:22=Nenn' mich Indiana!
+03:22=Nenn mich Indiana!
 03:23=Kampfkunst
 03:24=Der Kuchen ist keine Lüge!
 03:25=Verkleidung

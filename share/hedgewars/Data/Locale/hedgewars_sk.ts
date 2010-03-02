@@ -694,6 +694,10 @@ Môžete sa pridať a sledovať hru, ale ak chcete hrať budete musieť počkať
         <source>Level</source>
         <translation>Úroveň</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

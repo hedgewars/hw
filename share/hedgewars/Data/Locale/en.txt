@@ -9,7 +9,7 @@
 00:06=Skip
 00:07=Rope
 00:08=Mine
-00:09=DEagle
+00:09=Desert Eagle
 00:10=Dynamite
 00:11=Baseball Bat
 00:12=Fire Punch
@@ -379,7 +379,7 @@
 03:14=Transport Utility
 03:15=Airborne Attack
 03:16=Airborne Attack
-03:17=Digging Utility
+03:17=Digging Tool
 03:18=Utility
 03:19=Transport Utility
 03:20=Action
@@ -428,7 +428,7 @@
 04:20=Allows you to play the current turn with|a different hog.|Attack: Enable switching hogs
 04:21=Shoot a grenade-like projectile that will|release multiple bombs upon impact.|Attack: Shoot at full power
 04:22=Not just for Indiana Jones! The whip is an|useful weapon in many situations. Especially|when you'd like to shove someone off a cliff.|Attack: Strike everything in front of you
-04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|it into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
+04:23=If you have nothing to lose, this might be|quite handy. Sacrifice your hog by launching|him into a specific direction hurting everything|on his way and exploding at the end.|Attack: Launch the devastating and deadly attack
 04:24=Happy Birthday! Launch this cake, let it walk right|next to your enemies and let them have an explosive|party. The cake is able to pass almost all terrain|but he might detonate earlier this way.|Attack: Start the cake or let it stop and explode
 04:25=Use this disguise kit to get your enemies to jump|towards your hog (and into some gap or hole).|Attack: Use the kit and try to seduce another hog
 04:26=Throw this juicy watermelon at your enemies. Once|the timer expires, it will split into several|explosive pieces.|1-5: Set watermelon's timer|Attack: Hold to shoot with more power

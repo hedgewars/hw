@@ -689,6 +689,10 @@ Vous pouvez le rejoindre et y assister maintenant mais vous devrez attendre la f
         <source>Level</source>
         <translation>Niveau</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

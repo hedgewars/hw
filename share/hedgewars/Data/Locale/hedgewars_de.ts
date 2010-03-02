@@ -690,6 +690,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
         <source>Level</source>
         <translation>Stufe</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation>(Systemstandard)</translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

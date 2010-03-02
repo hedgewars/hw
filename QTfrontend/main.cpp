@@ -357,8 +357,10 @@ int main(int argc, char *argv[]) {
 	QTranslator Translator;
 	{
 		QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
-		
-		Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + settings.value("misc/locale", QLocale::system().name()).toString());
+		QString cc = settings.value("misc/locale", "").toString();
+		if(!cc.compare(""))
+			cc = QLocale::system().name();
+		Translator.load(datadir->absolutePath() + "/Locale/hedgewars_" + cc);
 		app.installTranslator(&Translator);
 	}
 

@@ -445,6 +445,7 @@ PageOptions::PageOptions(QWidget* parent) :
             tmpdir.cd("Locale");
             tmpdir.setFilter(QDir::Files);
             QStringList locs = tmpdir.entryList(QStringList("hedgewars_*.qm"));
+			CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
             for(int i = 0; i < locs.count(); i++)
             {
                 QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));

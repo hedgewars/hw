@@ -694,6 +694,10 @@ Możesz dołączyć i obserwować grę, ale by móc zagrać musisz poczekać aż
         <source>Level</source>
         <translation>Poziom</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

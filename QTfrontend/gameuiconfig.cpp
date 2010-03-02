@@ -85,7 +85,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
         Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
 #endif
 
-	Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", QLocale::system().name())));
+	Form->ui.pageOptions->CBLanguage->setCurrentIndex(Form->ui.pageOptions->CBLanguage->findData(value("misc/locale", "").toString()));
 
 	depth = QApplication::desktop()->depth();
 	if (depth < 16) depth = 16;

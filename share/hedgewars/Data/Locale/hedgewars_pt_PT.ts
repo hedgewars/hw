@@ -689,6 +689,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>Level</source>
         <translation>Nível</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

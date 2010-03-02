@@ -689,6 +689,10 @@ Puoi entrare come spettatore ma dovrai aspettare la fine della partita per gioca
         <source>Level</source>
         <translation>Livello</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

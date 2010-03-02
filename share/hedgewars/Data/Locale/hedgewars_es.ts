@@ -689,6 +689,10 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
         <source>Level</source>
         <translation>Nivel</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>

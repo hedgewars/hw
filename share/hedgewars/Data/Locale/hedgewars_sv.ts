@@ -680,6 +680,10 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
         <source>Level</source>
         <translation>Bana</translation>
     </message>
+    <message>
+        <source>(System default)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
