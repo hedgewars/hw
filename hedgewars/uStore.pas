@@ -542,13 +542,13 @@ if Dir < 0 then
 else
 	hw:= w div 2;
 
-nx:= round(Texture^.w * Texture^.rx / w);
-ny:= round(Texture^.h * Texture^.ry / h);
+nx:= round(Texture^.w / w); // number of horizontal frames
+ny:= round(Texture^.h / h); // number of vertical frames
 
-ft:= ((Frame mod ny) / ny);
-fb:= (((Frame mod ny) + 1) / ny);
-fl:= ((Frame div ny) / nx) * Texture^.rx;
-fr:= (((Frame div ny) + 1) / nx);
+ft:= (Frame mod ny) * Texture^.ry / ny;
+fb:= ((Frame mod ny) + 1) * Texture^.ry / ny;
+fl:= (Frame div ny) * Texture^.rx / nx;
+fr:= ((Frame div ny) + 1) * Texture^.rx / nx;
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
