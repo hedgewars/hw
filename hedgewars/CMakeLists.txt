@@ -144,7 +144,7 @@ ELSE()
 	#let's build sdlmain, which is absent from the framework
 	find_package(SDL REQUIRED)
 
-	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
+#	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")
 	set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 	include_directories(${SDL_INCLUDE_DIR})
 
@@ -153,7 +153,7 @@ ELSE()
 
 	#these are the dependencies for building a universal binary on Mac OS X
 	foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
-		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
+		set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
 		add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
 			COMMAND "${pascal_compiler}"
 			ARGS ${pascal_compiler_flags} -ohwengine.${build_arch} -P${build_arch}

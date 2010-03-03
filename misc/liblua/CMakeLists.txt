@@ -2,7 +2,7 @@ file(GLOB lua_src *.c *.h)
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 IF(APPLE)
-	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
+#	set(CMAKE_OSX_ARCHITECTURES "x86_64;i386;ppc7400")	
 	
 	set(build_type STATIC)
 	add_definitions(-DLUA_USE_LINUX)
