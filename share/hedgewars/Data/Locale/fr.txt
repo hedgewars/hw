@@ -408,3 +408,9 @@
 05:08=Placez les hérissons : Placez vos hérissons avant le début de la partie 
 05:09=Artillerie : Les hérissons ne peuvent pas se déplacer pour changer de place 
 05:10=Terrain indestructible : La plupart des armes sont incapables de modifier le terrain
+05:11=Munitions partagées : Toutes les équipes de la même couleur partagent leurs munitions
+05:12=Mines à retardement : Les mines exploseront après %1 seconde(s)
+05:13=Mines à retardement : Les mines explosent immédiatement
+05:14=Mines à retardement : Les mines exploseront dans un délai entre 0 et 3 secondes
+05:15=Modificateur de dégâts : Toutes les armes feront  %1% de dégâts
+
