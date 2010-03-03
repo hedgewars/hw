@@ -1,4 +1,4 @@
-/* This file is NOT open source. See "license.txt" to read the full license provided with the Xfire SDK.*/
+/* This file is NOT open source. See "license.txt" to read the full license provided with the Xfire SDK. */
 
 #ifndef __XFIREGAMECLIENT_H__
 #define __XFIREGAMECLIENT_H__

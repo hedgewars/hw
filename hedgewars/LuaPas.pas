@@ -19,17 +19,9 @@ type
   lua_State = record end;
   Plua_State = ^lua_State;
 
-const
-{$IFDEF UNIX}
-  {$IFDEF DARWIN}
-    LuaLibName = 'lua';
-  {$ELSE}
-    LuaLibName = 'lua5.1.so';
-  {$ENDIF}
-{$ELSE}
-  LuaLibName = 'lua.dll';
-{$ENDIF}
-
+// only looking for "lua" might be dangerous but including version numbers
+// unfortunately causes trouble on some linux/unix systems.
+const LuaLibName = 'lua';
 
 (*****************************************************************************)
 (*                               luaconfig.h                                 *)
