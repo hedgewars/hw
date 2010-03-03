@@ -43,7 +43,8 @@ handleCmd_inRoom clID clients rooms ("CFG" : paramName : paramStrs)
         client = clients IntMap.! clID
 
 handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : flag : difStr : hhsInfo)
-    | length hhsInfo /= 16 = []
+    | length hhsInfo == 15 && clientProto client < 30 = handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : " " : flag : difStr : hhsInfo)
+    | length hhsInfo /= 16 = [ProtocolError "Corrupted hedgehogs info"]
     | length (teams room) == 6 = [Warning "too many teams"]
     | canAddNumber <= 0 = [Warning "too many hedgehogs"]
     | isJust findTeam = [Warning "There's already a team with same name in the list"]
@@ -66,10 +67,6 @@ handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : 
         hhsList [] = []
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
         newTeamHHNum = min 4 canAddNumber
-
-handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : difStr : hhsInfo) =
-    handleCmd_inRoom clID clients rooms ("ADD_TEAM" : name : color : grave : fort : voicepack : "" : difStr : hhsInfo)
-
 
 handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
     | noSuchTeam = [Warning "REMOVE_TEAM: no such team"]
