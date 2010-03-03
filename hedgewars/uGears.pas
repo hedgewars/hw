@@ -2120,9 +2120,11 @@ repeat
 				inc(y);
 			until (y >= LAND_HEIGHT) or (CountNonZeroz(x, y, Gear^.Radius - 1, 1) <> 0);
 
+// Flag the check for gtExplosives for reuse by other things that need a solid platform?
 			if (y - sy > Gear^.Radius * 2)
-				and (y < LAND_HEIGHT)
-				and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil) then
+				and (((Gear^.Kind <> gtExplosives) and (y < LAND_HEIGHT)) or ((Gear^.Kind = gtExplosives) and (y < LAND_HEIGHT-1)))
+				and (CheckGearsNear(x, y - Gear^.Radius, [gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives], 110, 110) = nil)
+                and ((Gear^.Kind <> gtExplosives) or (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1) > Gear^.Radius)) then
 				begin
 				ar[cnt].X:= x;
 				if withFall then ar[cnt].Y:= sy + Gear^.Radius
