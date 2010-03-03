@@ -30,14 +30,14 @@ dbInteractionLoop dbConn = forever $ do
                 passAndRole <- fetchRow statement
                 finish statement
                 let response =
-                    if isJust passAndRole then
+                   if isJust passAndRole then
                         (
                             clUid,
                             HasAccount
                                 (fromSql $ head $ fromJust $ passAndRole)
                                 ((fromSql $ last $ fromJust $ passAndRole) == (Just (3 :: Int)))
                         )
-                    else
+                   else
                         (clUid, Guest)
                 putStrLn (show response)
                 hFlush stdout
