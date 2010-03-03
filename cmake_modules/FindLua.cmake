@@ -1,11 +1,15 @@
 # Find the Lua library
 #
 
-IF(UNIX)
-  FIND_LIBRARY(LUA_LIBRARY NAMES lua5.1 lua)
-ELSE(UNIX)
-  IF(WIN32)
-    SET(LUA_LIBRARY lua.dll CACHE FILEPATH "Path to the lua library to be used. This should be set to 'lua.dll' or 'lua' under Win32/Apple to use the bundled copy.")
-  else(WIN32)
-  ENDIF(WIN32)
-ENDIF(UNIX)
+IF(NOT LUA_LIBRARY)
+	IF(WIN32)
+		set(LUA_DEFAULT lua.dll)
+	ELSE(WIN32)
+		IF(APPLE)
+			set(LUA_DEFAULT lua)
+		ELSE(APPLE)
+			set(LUA_DEFAULT lua5.1.so)
+		ENDIF(APPLE)
+	ENDIF(WIN32)
+	SET(LUA_LIBRARY ${LUA_DEFAULT} CACHE STRING "Lua library to link to; file name without path only!")
+ENDIF(NOT LUA_LIBRARY)
