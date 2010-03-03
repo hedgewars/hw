@@ -73,7 +73,7 @@ handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
     | nick client /= teamowner team = [ProtocolError "Not team owner!"]
     | otherwise =
             [RemoveTeam teamName,
-            ModifyClient (\c -> c{teamsInGame = teamsInGame c - 1})
+            ModifyClient (\c -> c{teamsInGame = teamsInGame c - 1, clientClan = if teamsInGame client == 1 then undefined else anotherTeamClan})
             ]
     where
         client = clients IntMap.! clID
@@ -81,6 +81,7 @@ handleCmd_inRoom clID clients rooms ["REMOVE_TEAM", teamName]
         noSuchTeam = isNothing findTeam
         team = fromJust findTeam
         findTeam = find (\t -> teamName == teamname t) $ teams room
+        anotherTeamClan = teamcolor $ fromJust $ find (\t -> teamownerId t == clID) $ teams room
 
 
 handleCmd_inRoom clID clients rooms ["HH_NUM", teamName, numberStr]
