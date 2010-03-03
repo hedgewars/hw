@@ -462,5 +462,5 @@
 05:11=Shared Ammo: All teams of the same color share their ammunition
 05:12=Mine Timers: Mines will detonate after %1 second(s)
 05:13=Mine Timers: Mines will detonate instantly
-05:14=Mine Timers: Mines will detonate after 0 - 4 seconds
+05:14=Mine Timers: Mines will detonate after 0 - 3 seconds
 05:15=Damage Modifier: All weapons will do %1% damage
