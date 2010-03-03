@@ -266,7 +266,7 @@ const
 	cCurrHHZ = Succ(cHHZ);
 	cOnHHZ = 2000;
 
-	cBarrelHealth = 75;
+	cBarrelHealth = 60;
 	cShotgunRadius = 22;
 	cBlowTorchC    = 6;
 
