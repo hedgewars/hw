@@ -29,7 +29,7 @@ uses	SDLh, uFloat, uLocale,
 {$ENDIF}
 
 
-{$INCLUDE "proto.inc"}
+{$INCLUDE "config.inc"}
 
 // typed const is a variable despite const qualifier
 // in freepascal you may actually use var for the same purpose

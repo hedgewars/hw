@@ -21,7 +21,7 @@
 unit uRandom;
 interface
 uses uFloat;
-{$INCLUDE "proto.inc"}
+{$INCLUDE "config.inc"}
 
 procedure init_uRandom;
 procedure free_uRandom;

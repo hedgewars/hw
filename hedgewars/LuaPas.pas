@@ -10,6 +10,7 @@ unit LuaPas;
 interface
 
 {.$DEFINE LUA_GETHOOK}
+{$INCLUDE "config.inc"}
 
 type
   size_t   = type Cardinal;
@@ -20,15 +21,7 @@ type
   Plua_State = ^lua_State;
 
 const
-{$IFDEF UNIX}
-  {$IFDEF DARWIN}
-    LuaLibName = 'lua';
-  {$ELSE}
-    LuaLibName = 'lua5.1.so';
-  {$ENDIF}
-{$ELSE}
-  LuaLibName = 'lua.dll';
-{$ENDIF}
+    LuaLibName = cLuaLibrary;
 
 
 (*****************************************************************************)

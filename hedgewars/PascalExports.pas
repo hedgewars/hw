@@ -15,7 +15,7 @@ unit PascalExports;
 interface
 uses uKeys, uConsole;
 
-{$INCLUDE "proto.inc"}
+{$INCLUDE "config.inc"}
 
 {$IFDEF IPHONEOS}
 // called by pascal code, they deal with the objc code

@@ -207,7 +207,7 @@ begin
 		end
 	else
 		begin
-		ParseCommand('addteam ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
+		ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
 		ParseCommand('grave ' + lua_tostring(L, 3), true);
 		ParseCommand('fort ' + lua_tostring(L, 4), true);
 		ParseCommand('voicepack ' + lua_tostring(L, 5), true);
