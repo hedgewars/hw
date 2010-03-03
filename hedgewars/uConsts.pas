@@ -72,7 +72,7 @@ type
 			sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
 			sprShoutCorner, sprShoutEdge, sprShoutTail,
 			sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-			sprSmoke, sprShell, sprDust, sprExplosives);
+			sprSmoke, sprShell, sprDust, sprExplosives, sprAmTeleport);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -675,7 +675,9 @@ const	cTagsMasks : array[0..7] of byte = (
 			(FileName: 'Dust'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
 			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprDust
 			(FileName: 'Explosives'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprExplosives
+			Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprExplosives
+			(FileName: 'amTeleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprAmTeleport
 			);
 
 	Wavez: array [TWave] of record
@@ -1228,8 +1230,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			maxAngle: 0;
 			isDamaging: false;
 			SkipTurns: 0;
-			PosCount: 1;
-			PosSprite: sprWater),
+			PosCount: 2;
+			PosSprite: sprAmTeleport),
 			(NameId: sidSwitch;
 			NameTex: nil;
 			Probability: 100;
