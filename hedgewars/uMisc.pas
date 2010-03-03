@@ -84,6 +84,7 @@ var
 	cShowFPS	: boolean;
 	cCaseFactor	: Longword;
 	cLandAdditions	: Longword;
+	cExplosives	: Longword;
 	cFullScreen	: boolean;
 	cReducedQuality	: boolean;
 	cLocaleFName	: shortstring;
@@ -723,6 +724,7 @@ begin
 	cShowFPS		:= false;
 	cCaseFactor		:= 5;  {0..9}
 	cLandAdditions		:= 4;
+	cExplosives		:= 2;
 	cFullScreen		:= false;
 	cReducedQuality		:= false;
 	cLocaleFName		:= 'en.txt';

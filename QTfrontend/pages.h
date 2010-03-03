@@ -453,6 +453,7 @@ private:
 	QSpinBox * SB_MinesTime;
 	QSpinBox * SB_Mines;
 	QSpinBox * SB_MineDuds;
+	QSpinBox * SB_Explosives;
 	QLineEdit * LE_name;
 	QComboBox * selectScheme;
 

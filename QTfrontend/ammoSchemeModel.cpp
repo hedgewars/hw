@@ -48,6 +48,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
 		<< QVariant(3)             //  mines time    22
 		<< QVariant(4)             //  landadds      23
 		<< QVariant(0)             // mine dud pct   24
+		<< QVariant(2)             // explosives     25
 		;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -89,6 +90,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< "minestime"        // 22
 		<< "landadds"         // 23
 		<< "minedudpct"       // 24
+		<< "explosives"       // 25
 		;
 
 	QList<QVariant> proMode;
@@ -118,6 +120,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(3)             //  mines time    22
 		<< QVariant(4)             //  landadds      23
 		<< QVariant(0)             // mine dud pct   24
+		<< QVariant(2)             // explosives     25
 		;
 
 	QList<QVariant> shoppa;
@@ -147,6 +150,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(3)             //  mines time    22
 		<< QVariant(4)             //  landadds      23
 		<< QVariant(0)             // mine dud pct   24
+		<< QVariant(0)             // explosives     25
 		;
 
 	QList<QVariant> basketball;
@@ -176,6 +180,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(3)             //  mines time    22
 		<< QVariant(4)             //  landadds      23
 		<< QVariant(0)             // mine dud pct   24
+		<< QVariant(0)             // explosives     25
 		;
 
 	QList<QVariant> minefield;
@@ -205,6 +210,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
 		<< QVariant(0)             //  mines time    22
 		<< QVariant(80)            //  landadds      23
 		<< QVariant(0)             // mine dud pct   24
+		<< QVariant(0)             // explosives     25
 		;
 
 	schemes.append(defaultScheme);

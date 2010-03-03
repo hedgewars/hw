@@ -153,6 +153,7 @@ QStringList GameCFGWidget::getFullConfig() const
 	sl.append(QString("e$sd_turns %1").arg(schemeData(20).toInt()));
 	sl.append(QString("e$casefreq %1").arg(schemeData(21).toInt()));
 	sl.append(QString("e$minedudpct %1").arg(schemeData(24).toInt()));
+	sl.append(QString("e$explosives %1").arg(schemeData(25).toInt()));
 	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
 	QString currentMap = pMapContainer->getCurrentMap();

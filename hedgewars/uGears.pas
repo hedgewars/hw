@@ -1644,10 +1644,6 @@ var i: LongInt;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
-// HACK: just for testing explosives!
-if (GameFlags and gfMines) <> 0 then
-	GameFlags:= (GameFlags or gfExplosives) and not gfMines;
-
 if (TrainingFlags and tfSpawnTargets) <> 0 then
 	begin
 	TrainingTargetGear:= AddGear(0, 0, gtTarget, 0, _0, _0, 0);
@@ -1664,11 +1660,11 @@ if ((GameFlags and gfForts) = 0) then
 			Gear^.TriggerId:= i + 1;
 			FindPlace(Gear, false, 0, LAND_WIDTH);
 			end;
-	if ((GameFlags and gfExplosives) <> 0) then
-		for i:= 0 to Pred(cLandAdditions) do
+//  No game flag for this for now
+//	if ((GameFlags and gfExplosives) <> 0) then
+		for i:= 0 to Pred(cExplosives) do
 			begin
 			Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
-			Gear^.TriggerId:= i + 1;
 			FindPlace(Gear, false, 0, LAND_WIDTH);
 			end;
 	end;

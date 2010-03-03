@@ -1307,6 +1307,22 @@ PageScheme::PageScheme(QWidget* parent) :
 	SB_MineDuds->setSingleStep(5);
 	glBSLayout->addWidget(SB_MineDuds,7,2,1,1);
 
+
+	l = new QLabel(gbBasicSettings);
+	l->setText(QLabel::tr("Explosives"));
+	l->setWordWrap(true);
+	glBSLayout->addWidget(l,8,0,1,1);
+	l = new QLabel(gbBasicSettings);
+	l->setFixedSize(32,32);
+	l->setPixmap(QPixmap(":/res/iconDamage.png"));
+	glBSLayout->addWidget(l,8,1,1,1);
+	SB_Explosives = new QSpinBox(gbBasicSettings);
+	SB_Explosives->setRange(0, 40);
+	SB_Explosives->setValue(0);
+	SB_Explosives->setSingleStep(1);
+	glBSLayout->addWidget(SB_Explosives,8,2,1,1);
+
+
 	l = new QLabel(gbBasicSettings);
 	l->setText(QLabel::tr("Scheme Name:"));
 
@@ -1360,6 +1376,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
 	mapper->addMapping(SB_MinesTime, 22);
 	mapper->addMapping(SB_Mines, 23);
 	mapper->addMapping(SB_MineDuds, 24);
+	mapper->addMapping(SB_Explosives, 25);
 
 	mapper->toFirst();
 }
@@ -1432,7 +1449,7 @@ PageNetType::PageNetType(QWidget* parent) : AbstractPage(parent)
 	BtnOfficialServer = addButton(tr("Official server"), pageLayout, 2, 2);
 
 	// hack: temporary deactivated - requires server modifications that aren't backward compatible (yet)
-	BtnOfficialServer->setEnabled(false);
+	//BtnOfficialServer->setEnabled(false);
 
 	BtnBack = addButton(":/res/Exit.png", pageLayout, 4, 0, true);
 }

@@ -242,6 +242,7 @@ begin
 	RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
 	RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
 	RegisterVariable('landadds', vtLongInt, @cLandAdditions , false);
+	RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
 	RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
 	RegisterVariable('trflags' , vtLongInt, @TrainingFlags  , false);
 	RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);

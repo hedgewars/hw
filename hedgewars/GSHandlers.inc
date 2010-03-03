@@ -1282,7 +1282,7 @@ if (Gear^.Damage > 0) or exBoom then
 		end
 	else if k = gtExplosives then
 		begin
-		doMakeExplosion(x, y, 25, EXPLAutoSound);
+		doMakeExplosion(x, y, 75, EXPLAutoSound);
 		for i:= 0 to 31 do
 			begin
 			dX:= AngleCos(i * 64) * _0_5 * (getrandom + _1);
@@ -1302,10 +1302,14 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0 else
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
+		if Gear^.dY > _0_2 then
+	        for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
+		        AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
 		Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
 		if Gear^.dY > - _0_001 then Gear^.dY:= _0
-			else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact);
+			else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact)
 		end;
+	//if Gear^.dY > - _0_001 then Gear^.dY:= _0
 	CheckGearDrowning(Gear);
 	end;
 
