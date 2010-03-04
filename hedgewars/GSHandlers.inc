@@ -1299,6 +1299,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	AllInactive:= false;
 	Gear^.dY:= Gear^.dY + cGravity;
 	Gear^.Y:= Gear^.Y + Gear^.dY;
+    if (not Gear^.dY.isNegative) and (Gear^.Kind = gtExplosives) then SetAllHHToActive;
 	if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0 else
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
