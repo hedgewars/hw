@@ -776,13 +776,9 @@ if isCursorVisible then
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
-              begin
-              glColor4f(1, 1, 1, abs(1 - (RealTicks mod 1500) / 750));
               DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
                                     cScreenHeight - CursorPoint.Y - SpritesData[PosSprite].Height div 2,
                                     i);
-              glColor4f(1, 1, 1, 1)
-              end;
          end;
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
    end;
