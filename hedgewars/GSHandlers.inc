@@ -1318,7 +1318,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
     if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then SetAllHHToActive;
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
-        if (V > _0_02) and (k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0) then
+        if (V > _0_02) and (k = gtExplosives) then
             inc(Gear^.Damage, hwRound(V * _70));
 
 		if Gear^.dY > _0_2 then
