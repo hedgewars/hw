@@ -1269,7 +1269,7 @@ if k = gtExplosives then
         doStepFallingGear(Gear);
         CalcRotationDirAngle(Gear)
         end;
-	if hwAbs(Gear^.dX) < _0_001 then Gear^.dX:= _0;
+	if hwAbs(Gear^.dX) < _0_0002 then Gear^.dX:= _0;
     
 	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
 		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);
