@@ -1269,7 +1269,7 @@ if k = gtExplosives then
         doStepFallingGear(Gear);
         CalcRotationDirAngle(Gear)
         end;
-	if V < _0_001 then Gear^.dX:= _0;
+	if hwAbs(Gear^.dX) < _0_001 then Gear^.dX:= _0;
     
 	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
 		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);
@@ -1314,7 +1314,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
         Gear^.Y:= Gear^.Y + Gear^.dY;
 	    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0
         end;
-    if V > _0_001 then SetAllHHToActive;
+    if Gear^.dY < _0_001 then SetAllHHToActive;
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
         if (V > _0_02) and (k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0) then
