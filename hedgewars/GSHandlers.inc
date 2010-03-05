@@ -1264,8 +1264,7 @@ if k = gtExplosives then
     V:= hwSqr(Gear^.dX) + hwSqr(Gear^.dY);
     //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
     if hwAbs(Gear^.dX) > _0_15 then Gear^.State:= Gear^.State or gstAnimation;
-    if ((Gear^.State and gstAnimation) = 0) or (hwAbs(Gear^.dX) < _0_001) then Gear^.dX:= _0;
-    if ((Gear^.State and gstAnimation) <> 0) and (Gear^.dX.QWordValue <> 0) and (Gear^.dY.QWordValue <> 0)  then
+    if ((Gear^.State and gstAnimation) <> 0) and ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
         begin
         AllInactive:= false;
         doStepFallingGear(Gear);
@@ -1279,6 +1278,7 @@ if k = gtExplosives then
 	if Gear^.Health <= 0 then
 		exBoom:= true;
 	end;
+if ((Gear^.State and gstAnimation) = 0) or (hwAbs(Gear^.dX) < _0_001) then Gear^.dX:= _0;
 
 if (Gear^.Damage > 0) or exBoom then
 	begin
@@ -1315,7 +1315,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
         Gear^.Y:= Gear^.Y + Gear^.dY;
 	    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0
         end;
-    if Gear^.dY < _0_001 then SetAllHHToActive;
+    if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then SetAllHHToActive;
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
         if (V > _0_02) and (k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0) then
@@ -1332,8 +1332,8 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	CheckGearDrowning(Gear);
 	end;
 
-if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
-	else if (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear)
+if (Gear^.dX.QWordValue = 0) and (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
+	else DeleteCI(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -329,7 +329,7 @@ gtAmmo_Grenade: begin // bazooka
   gtExplosives: begin
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_4;
-                gear^.Friction:= _0_999;
+                gear^.Friction:= _0_995;
                 gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
