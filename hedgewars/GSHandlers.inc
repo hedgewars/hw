@@ -1239,15 +1239,62 @@ dec(Gear^.Timer);
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
+
+(*
+TODO
+Increase damage as barrel smokes?
+Try tweaking friction some more
+*)
+procedure doStepRollingBarrel(Gear: PGear);
+var i: LongInt;
+	particle: PVisualGear;
+begin
+Gear^.State:= Gear^.State or gstAnimation;
+if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
+    begin
+    DeleteCI(Gear);
+    AllInactive:= false;
+    if Gear^.dY.isNegative and (Gear^.dY < -_0_02) and TestCollisionYwithGear(Gear, -1) then
+        inc(Gear^.Damage, hwRound(Gear^.dY * _70) * -1);
+    if not Gear^.dY.isNegative and (Gear^.dY > _0_02) and TestCollisionYwithGear(Gear, 1) then
+        begin
+        inc(Gear^.Damage, hwRound(Gear^.dY * _70));
+	    for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
+            begin
+		    particle:= AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+            if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5)
+            end
+        end;
+    if Gear^.dX.isNegative and (Gear^.dX < -_0_02) and TestCollisionXwithGear(Gear, -1) then
+        inc(Gear^.Damage, hwRound(Gear^.dX * _70)*-1);
+    if not Gear^.dX.isNegative and (Gear^.dX > _0_02) and TestCollisionYwithGear(Gear, 1) then
+        inc(Gear^.Damage, hwRound(Gear^.dX * _70));
+    if Gear^.Damage <> 0 then PlaySound(sndGraveImpact);
+    doStepFallingGear(Gear);
+    CalcRotationDirAngle(Gear);
+	CheckGearDrowning(Gear)
+    end
+else AddGearCI(Gear);
+    
+if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
+    if (cBarrelHealth div Gear^.Health) > 2 then 
+        AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
+    else
+        AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
+dec(Gear^.Health, Gear^.Damage);
+Gear^.Damage:= 0;
+if Gear^.Health <= 0 then Gear^.doStep:= @doStepCase; // Hand off to doStepCase for the explosion
+
+end;
+
 procedure doStepCase(Gear: PGear);
 var i, x, y: LongInt;
 	k: TGearType;
 	exBoom: boolean;
-	dX, dY, V: HWFloat;
+	dX, dY: HWFloat;
 begin
 k:= Gear^.Kind;
 exBoom:= false;
-V:= _0;
 
 if (Gear^.Message and gm_Destroy) > 0 then
 	begin
@@ -1261,24 +1308,19 @@ if (Gear^.Message and gm_Destroy) > 0 then
 
 if k = gtExplosives then
 	begin
-    V:= hwSqr(Gear^.dX) + hwSqr(Gear^.dY);
     //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
-    if hwAbs(Gear^.dX) > _0_15 then Gear^.State:= Gear^.State or gstAnimation;
-    if ((Gear^.State and gstAnimation) <> 0) and ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
-        begin
-        AllInactive:= false;
-        doStepFallingGear(Gear);
-        CalcRotationDirAngle(Gear)
-        end;
+    if hwAbs(Gear^.dX) > _0_15 then Gear^.doStep:= @doStepRollingBarrel;
     
-	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
-		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);
+    if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
+        if (cBarrelHealth div Gear^.Health) > 2 then 
+            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke)
+        else
+            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmokeWhite);
 	dec(Gear^.Health, Gear^.Damage);
 	Gear^.Damage:= 0;
 	if Gear^.Health <= 0 then
 		exBoom:= true;
 	end;
-if ((Gear^.State and gstAnimation) = 0) or (hwAbs(Gear^.dX) < _0_001) then Gear^.dX:= _0;
 
 if (Gear^.Damage > 0) or exBoom then
 	begin
@@ -1309,17 +1351,14 @@ if (Gear^.Damage > 0) or exBoom then
 if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	begin
 	AllInactive:= false;
-    if not ((k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0)) then
-        begin
-        Gear^.dY:= Gear^.dY + cGravity;
-        Gear^.Y:= Gear^.Y + Gear^.dY;
-	    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0
-        end;
+    Gear^.dY:= Gear^.dY + cGravity;
+    Gear^.Y:= Gear^.Y + Gear^.dY;
     if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then SetAllHHToActive;
+	if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0;
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
-        if (V > _0_02) and (k = gtExplosives) then
-            inc(Gear^.Damage, hwRound(V * _70));
+        if (Gear^.dY > _0_02) and (k = gtExplosives) then
+            inc(Gear^.Damage, hwRound(Gear^.dY * _70));
 
 		if Gear^.dY > _0_2 then
 	        for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
@@ -1332,8 +1371,8 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	CheckGearDrowning(Gear);
 	end;
 
-if (Gear^.dX.QWordValue = 0) and (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
-	else DeleteCI(Gear)
+if (Gear^.dY.QWordValue = 0) then AddGearCI(Gear)
+       else if (Gear^.dY.QWordValue <> 0) then DeleteCI(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

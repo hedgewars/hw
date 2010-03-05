@@ -126,6 +126,7 @@ procedure HedgehogChAngle(Gear: PGear); forward;
 procedure ShotgunShot(Gear: PGear); forward;
 procedure PickUp(HH, Gear: PGear); forward;
 procedure HHSetWeapon(Gear: PGear); forward;
+procedure doStepCase(Gear: PGear); forward;
 
 
 {$INCLUDE "GSHandlers.inc"}

@@ -386,6 +386,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
 			@doStepBubble,
 			@doStepSteam,
 			@doStepSmoke,
+			@doStepSmoke,
 			@doStepHealth,
 			@doStepShell,
 			@doStepDust
@@ -480,6 +481,7 @@ with gear^ do
 				Frame:= 7 - random(3);
 				FrameTicks:= cExplFrameTicks * 2;
 				end;
+  vgtSmokeWhite, 
   vgtSmoke: begin
 				dx:= _0_0002 * (random(45) + 10);
 				dx.isNegative:= random(2) = 0;
@@ -561,6 +563,7 @@ case Layer of
 			if not cReducedQuality then
 				case Gear^.Kind of
 					vgtSmoke: DrawSprite(sprSmoke, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
+					vgtSmokeWhite: DrawSprite(sprSmokeWhite, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
 					vgtDust: DrawSprite(sprDust, hwRound(Gear^.X) + WorldDx - 11, hwRound(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
 				end;
 		Gear:= Gear^.NextGear

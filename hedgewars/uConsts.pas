@@ -72,7 +72,7 @@ type
 			sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
 			sprShoutCorner, sprShoutEdge, sprShoutTail,
 			sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-			sprSmoke, sprShell, sprDust, sprExplosives, sprExplosivesRoll, sprAmTeleport);
+			sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll, sprAmTeleport);
 
 	TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
 			gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -87,7 +87,7 @@ type
 
 	TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
 			vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-			vgtSteam, vgtSmoke, vgtHealth, vgtShell, vgtDust);
+			vgtSteam, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell, vgtDust);
 
 	TGearsType = set of TGearType;
 
@@ -670,6 +670,8 @@ const	cTagsMasks : array[0..7] of byte = (
 			Width: 16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprMolotov
 			(FileName: 'Smoke'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmoke
+			(FileName: 'SmokeWhite'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+			Width:  22; Height: 22; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmokeWhite
 			(FileName: 'Shells'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
 			Width:  8; Height: 8; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprShell
 			(FileName: 'Dust'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
