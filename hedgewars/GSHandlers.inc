@@ -1262,7 +1262,8 @@ if (Gear^.Message and gm_Destroy) > 0 then
 if k = gtExplosives then
 	begin
     V:= hwSqr(Gear^.dX) + hwSqr(Gear^.dY);
-    if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
+    //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
+    if hwAbs(Gear^.dX) > _0_15 then Gear^.State:= Gear^.State or gstAnimation;
     if ((Gear^.State and gstAnimation) <> 0) and (Gear^.dX.QWordValue <> 0) and (Gear^.dY.QWordValue <> 0)  then
         begin
         AllInactive:= false;
