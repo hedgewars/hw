@@ -408,6 +408,11 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
    if (Gear^.Message and gm_Left  )<>0 then Gear^.dX:= -cLittle else
    if (Gear^.Message and gm_Right )<>0 then Gear^.dX:=  cLittle else exit;
 
+   if (Gear^.Message and (gm_Left or gm_Right)) <> 0 then
+      begin
+      StepSoundTimer:= cHHStepTicks;
+      end;
+   
    StepTicks:= cHHStepTicks;
    if PrevdX <> hwSign(Gear^.dX) then
       begin

@@ -71,6 +71,8 @@ var AllInactive: boolean;
     TrainingTargetGear: PGear;
     skipFlag: boolean;
     PlacingHogs: boolean; // a convenience flag to indicate placement of hogs is still in progress
+    StepSoundTimer: LongInt;
+    StepSoundChannel: LongInt;
     
 procedure init_uGears;
 procedure free_uGears;
@@ -582,6 +584,21 @@ begin
 PrvInactive:= AllInactive;
 AllInactive:= true;
 
+if (StepSoundTimer > 0) and (StepSoundChannel < 0) then
+	begin
+	WriteLnToConsole('playsteps ...');
+	StepSoundChannel:= LoopSound(sndSteps)
+	end
+else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
+	begin
+	WriteLnToConsole('stopsteps ...');
+	StopSound(StepSoundChannel);
+	StepSoundChannel:= -1;
+	end;
+
+if StepSoundTimer > 0 then
+	dec(StepSoundTimer, 1);
+
 t:= GearsList;
 while t <> nil do
 	begin
@@ -856,7 +873,6 @@ var i, t: LongInt;
 	lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
 	defaultPos, HatVisible: boolean;
 	VertexBuffer: array [0..1] of TVertex2f;
-	stepSounds: boolean;
 begin
 
 if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
@@ -870,7 +886,6 @@ if (Gear^.State and gstHHDeath) <> 0 then
 
 defaultPos:= true;
 HatVisible:= false;
-stepSounds:= false;
 
 sx:= hwRound(Gear^.X) + 1 + WorldDx;
 sy:= hwRound(Gear^.Y) - 3 + WorldDy;
@@ -1046,7 +1061,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
                            hwSign(Gear^.dX),
                            32,
                            32);
-				stepSounds:= true;
 				defaultPos:= false
 				end;
 			gtShover: DrawRotated(sprHandBaseball, hx, hy, hwSign(Gear^.dX), aangle + 180);
@@ -1143,7 +1157,6 @@ if (Gear^.State and gstHHDriven) <> 0 then
 			0,
 			PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
 			0);
-		stepSounds:= true;
 		defaultPos:= false;
 		HatVisible:= true
 		end
@@ -1381,14 +1394,6 @@ if cVampiric and
     DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
 	glColor4f(1, 1, 1, 1);
     end;
-	
-	if stepSounds and (Gear^.SoundChannel < 0) then
-		Gear^.SoundChannel:= LoopSound(sndSteps)
-	else if not stepSounds and (Gear^.SoundChannel > -1) then
-		begin
-		StopSound(Gear^.SoundChannel);
-		Gear^.SoundChannel:= -1;
-		end;
 end;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
