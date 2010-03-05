@@ -1264,13 +1264,13 @@ if k = gtExplosives then
     V:= hwSqr(Gear^.dX) + hwSqr(Gear^.dY);
     //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
     if hwAbs(Gear^.dX) > _0_15 then Gear^.State:= Gear^.State or gstAnimation;
+    if ((Gear^.State and gstAnimation) = 0) or (hwAbs(Gear^.dX) < _0_001) then Gear^.dX:= _0;
     if ((Gear^.State and gstAnimation) <> 0) and (Gear^.dX.QWordValue <> 0) and (Gear^.dY.QWordValue <> 0)  then
         begin
         AllInactive:= false;
         doStepFallingGear(Gear);
         CalcRotationDirAngle(Gear)
         end;
-	if hwAbs(Gear^.dX) < _0_0002 then Gear^.dX:= _0;
     
 	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
 		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);

@@ -1825,6 +1825,7 @@ while i > 0 do
                         ApplyDamage(Gear, tmpDmg)
                     else
                         Gear^.State:= Gear^.State or gstWinner;
+                    if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then ApplyDamage(Gear, tmpDmg * 100); // crank up damage for explosives + blowtorch
 
 					DeleteCI(Gear);
                     if (Gear^.Kind = gtHedgehog) and PHedgehog(Gear^.Hedgehog)^.King then
