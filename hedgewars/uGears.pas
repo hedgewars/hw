@@ -328,7 +328,8 @@ gtAmmo_Grenade: begin // bazooka
                 end;
   gtExplosives: begin
                 gear^.Radius:= 16;
-                gear^.Elasticity:= _0_3;
+                gear^.Elasticity:= _0_4;
+                gear^.Friction:= _1;
                 gear^.Health:= cBarrelHealth
                 end;
   gtDEagleShot: begin
@@ -1585,7 +1586,10 @@ while Gear<>nil do
       gtExplosives: begin
                     i:= (GameTicks shr 6) mod 64;
                     if i > 18 then i:= 0;
-                    DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i);
+                    if Gear^.State and gstAnimation = 0 then
+                        DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i)
+                    else
+                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, i, 0, Gear^.DirAngle);
                     end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);

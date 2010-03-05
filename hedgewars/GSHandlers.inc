@@ -1243,9 +1243,11 @@ procedure doStepCase(Gear: PGear);
 var i, x, y: LongInt;
 	k: TGearType;
 	exBoom: boolean;
-	dX, dY: HWFloat;
+	dX, dY, V: HWFloat;
 begin
+k:= Gear^.Kind;
 exBoom:= false;
+V:= _0;
 
 if (Gear^.Message and gm_Destroy) > 0 then
 	begin
@@ -1257,8 +1259,18 @@ if (Gear^.Message and gm_Destroy) > 0 then
 	exit
 	end;
 
-if Gear^.Kind = gtExplosives then
+if k = gtExplosives then
 	begin
+    V:= hwSqr(Gear^.dX) + hwSqr(Gear^.dY);
+    if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
+    if ((Gear^.State and gstAnimation) <> 0) and (Gear^.dX.QWordValue <> 0) and (Gear^.dY.QWordValue <> 0)  then
+        begin
+        AllInactive:= false;
+        doStepFallingGear(Gear);
+        CalcRotationDirAngle(Gear)
+        end;
+	if V < _0_001 then Gear^.dX:= _0;
+    
 	if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
 		AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 2, vgtSmoke);
 	dec(Gear^.Health, Gear^.Damage);
@@ -1271,7 +1283,6 @@ if (Gear^.Damage > 0) or exBoom then
 	begin
 	x:= hwRound(Gear^.X);
 	y:= hwRound(Gear^.Y);
-	k:= Gear^.Kind;
 	DeleteGear(Gear); // <-- delete gear!
 
 	if k = gtCase then
@@ -1297,12 +1308,18 @@ if (Gear^.Damage > 0) or exBoom then
 if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	begin
 	AllInactive:= false;
-	Gear^.dY:= Gear^.dY + cGravity;
-	Gear^.Y:= Gear^.Y + Gear^.dY;
-    if (not Gear^.dY.isNegative) and (Gear^.Kind = gtExplosives) then SetAllHHToActive;
-	if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0 else
+    if not ((k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0)) then
+        begin
+        Gear^.dY:= Gear^.dY + cGravity;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+	    if (Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, -1) then Gear^.dY:= _0
+        end;
+    if V > _0_001 then SetAllHHToActive;
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
+        if (V > _0_02) and (k = gtExplosives) and ((Gear^.State and gstAnimation) <> 0) then
+            inc(Gear^.Damage, hwRound(V * _70));
+
 		if Gear^.dY > _0_2 then
 	        for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
 		        AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
