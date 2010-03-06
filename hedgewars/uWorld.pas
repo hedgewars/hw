@@ -120,6 +120,21 @@ if (GameFlags and gfRandomOrder) <> 0 then  // shuffle them up a bit
 // if special game flags/settings are changed, add them to the game mode notice window and then show it
 g:= ''; // no text/things to note yet
 
+// check different game flags (goals/game modes first for now)
+g:= AddGoal(g, gfKing, gidKing); // king?
+g:= AddGoal(g, gfTreasureHunt, gidTreasureHunt, cTreasureHuntGoalScore); // treasure hunt?
+
+// other important flags
+g:= AddGoal(g, gfForts, gidForts); // forts?
+g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
+g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
+g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
+g:= AddGoal(g, gfKarma, gidKarma); // karma?
+g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
+g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
+g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
+g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
+
 // modified damage modificator?
 if cDamagePercent <> 100 then
     g:= AddGoal(g, gfAny, gidDamageModifier, cDamagePercent);
@@ -134,18 +149,6 @@ if cMinesTime <> 3000 then
     else
         g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
     end;
-
-// check different game flags
-g:= AddGoal(g, gfForts, gidForts); // forts?
-g:= AddGoal(g, gfLowGravity, gidLowGravity); // low gravity?
-g:= AddGoal(g, gfInvulnerable, gidInvulnerable); // invulnerability?
-g:= AddGoal(g, gfVampiric, gidVampiric); // vampirism?
-g:= AddGoal(g, gfKarma, gidKarma); // karma?
-g:= AddGoal(g, gfKing, gidKing); // king?
-g:= AddGoal(g, gfPlaceHog, gidPlaceHog); // placement?
-g:= AddGoal(g, gfArtillery, gidArtillery); // artillery?
-g:= AddGoal(g, gfSolidLand, gidSolidLand); // solid land?
-g:= AddGoal(g, gfSharedAmmo, gidSharedAmmo); // shared ammo?
 
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);

@@ -58,6 +58,7 @@ procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 procedure DrawCentered(X, Top: LongInt; Source: PTexture);
+procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawFillRect(r: TSDL_Rect);
@@ -448,6 +449,11 @@ IMG_Quit();
 end;
 
 procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+begin
+DrawFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
+end;
+
+procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
@@ -455,8 +461,8 @@ begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
 rr.x:= X;
 rr.y:= Y;
-rr.w:= r^.w;
-rr.h:= r^.h;
+rr.w:= W;
+rr.h:= H;
 
 _l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
 _r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;

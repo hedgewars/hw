@@ -18,7 +18,10 @@
 local caption = {
 	["en"] = "Bazooka Training",
 	["de"] = "Bazooka-Training"
+	-- To add other languages, just add lines similar to the
+	-- existing ones - don't forget the trailing ","!
 	}
+
 local subcaption = {
 	["en"] = "Aiming Practice",
 	["de"] = "Zielübung"
