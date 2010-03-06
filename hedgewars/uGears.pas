@@ -1590,10 +1590,14 @@ while Gear<>nil do
                                         end;
                          end;
       gtExplosives: begin
-                    i:= (GameTicks shr 6 + Gear^.uid*3) mod 64;
-                    if i > 18 then i:= 0;
-                    if Gear^.State and gstAnimation = 0 then
+                    if ((Gear^.State and gstDrowning) <> 0) then
+                        DrawSprite(sprExplosivesRoll, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, 0)
+                    else if Gear^.State and gstAnimation = 0 then
+                        begin
+                        i:= (GameTicks shr 6 + Gear^.uid*3) mod 64;
+                        if i > 18 then i:= 0;
                         DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i)
+                        end
                     else if Gear^.State and gsttmpFlag = 0 then
                         DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 0, 0, Gear^.DirAngle)
                     else
