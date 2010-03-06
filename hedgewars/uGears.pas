@@ -1349,24 +1349,24 @@ with PHedgehog(Gear^.Hedgehog)^ do
 		or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then
 		begin
 		t:= hwRound(Gear^.Y) - cHHRadius - 12 + WorldDy;
-		if (cTagsMasks[cTagsMaskIndex] and htTransparent) <> 0 then
+		if (cTagsMask and htTransparent) <> 0 then
 			glColor4f(1, 1, 1, 0.5);
-		if ((cTagsMasks[cTagsMaskIndex] and htHealth) <> 0) and ((GameFlags and gfInvulnerable) = 0) then
+		if ((cTagsMask and htHealth) <> 0) then
 			begin
 			dec(t, HealthTagTex^.h + 2);
 			DrawCentered(hwRound(Gear^.X) + WorldDx, t, HealthTagTex)
 			end;
-		if (cTagsMasks[cTagsMaskIndex] and htName) <> 0 then
+		if (cTagsMask and htName) <> 0 then
 			begin
 			dec(t, NameTagTex^.h + 2);
 			DrawCentered(hwRound(Gear^.X) + WorldDx, t, NameTagTex)
 			end;
-		if (cTagsMasks[cTagsMaskIndex] and htTeamName) <> 0 then
+		if (cTagsMask and htTeamName) <> 0 then
 			begin
 			dec(t, Team^.NameTagTex^.h + 2);
 			DrawCentered(hwRound(Gear^.X) + WorldDx, t, Team^.NameTagTex)
 			end;
-		if (cTagsMasks[cTagsMaskIndex] and htTransparent) <> 0 then
+		if (cTagsMask and htTransparent) <> 0 then
 			glColor4f(1, 1, 1, 1)
 		end;
 	if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog

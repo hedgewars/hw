@@ -383,31 +383,25 @@ const
 	cTargetPointRef	: TPoint = (X: NoPointX; Y: 0);
 
 	// hog tag mask
-	htNone        = $00;
-	htTeamName    = $01;
-	htName        = $02;
-	htHealth      = $04;
-	htTransparent = $80;
-	
-	cHHFileName = 'Hedgehog';
-	cCHFileName = 'Crosshair';
-	cThemeCFGFilename = 'theme.cfg';
-	
-	FontBorder = 2;
-var	PathPrefix: shortstring;
-	Pathz: array[TPathType] of shortstring;
-	CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
+    // hog tag mask
+    htNone        = $00;
+    htTeamName    = $01;
+    htName        = $02;
+    htHealth      = $04;
+    htTransparent = $08;
+    
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
+    cThemeCFGFilename = 'theme.cfg';
+    
+    FontBorder = 2;
+var PathPrefix: shortstring;
+    Pathz: array[TPathType] of shortstring;
+    CountTexz: array[1..Pred(AMMO_INFINITE)] of PTexture;
 
-const	cTagsMasks : array[0..7] of byte = (
-				htTeamName or htName or htHealth,
-				htName or htHealth,
-				htHealth,
-				htNone,
-				htTeamName or htName or htHealth or htTransparent,
-				htName or htHealth or htTransparent,
-				htHealth or htTransparent,
-				htNone
-				);
+const
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
 	Fontz: array[THWFont] of THHFont = (
 			(Handle: nil;

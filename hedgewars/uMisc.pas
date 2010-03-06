@@ -1,20 +1,20 @@
 (*
- * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- *)
+* Hedgewars, a free turn based strategy game
+* Copyright (c) 2004-2008 Andrey Korotaev <unC0Rr@gmail.com>
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; version 2 of the License
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+*)
 
 {$INCLUDE "options.inc"}
 
@@ -23,106 +23,106 @@ interface
 
 uses	SDLh, uConsts, uFloat,
 {$IFDEF GLES11}
-	gles11;
+    gles11;
 {$ELSE}
-	GL;
+    GL;
 {$ENDIF}
 
 var
-	isCursorVisible : boolean;
-	isTerminated    : boolean;
-	isInLag         : boolean;
-	isPaused        : boolean;
-	isSoundEnabled  : boolean;
-	isMusicEnabled  : boolean;
-	isSEBackup      : boolean;
-	isInMultiShoot  : boolean;
-	isSpeed         : boolean;
+    isCursorVisible : boolean;
+    isTerminated    : boolean;
+    isInLag         : boolean;
+    isPaused        : boolean;
+    isSoundEnabled  : boolean;
+    isMusicEnabled  : boolean;
+    isSEBackup      : boolean;
+    isInMultiShoot  : boolean;
+    isSpeed         : boolean;
 
-	fastUntilLag    : boolean;
+    fastUntilLag    : boolean;
 
-	GameState	: TGameState;
-	GameType	: TGameType;
-	GameFlags	: Longword;
-	TrainingFlags	: Longword;
-	TurnTimeLeft	: Longword;
-	cSuddenDTurns	: LongInt;
-	cDamagePercent	: LongInt;
-	cMineDudPercent	: LongInt;
-	cTemplateFilter	: LongInt;
+    GameState   : TGameState;
+    GameType    : TGameType;
+    GameFlags   : Longword;
+    TrainingFlags   : Longword;
+    TurnTimeLeft    : Longword;
+    cSuddenDTurns   : LongInt;
+    cDamagePercent  : LongInt;
+    cMineDudPercent : LongWord;
+    cTemplateFilter : LongInt;
 
-	cHedgehogTurnTime: Longword;
-	cMinesTime       : LongInt;
-	cMaxAIThinkTime  : Longword;
+    cHedgehogTurnTime: Longword;
+    cMinesTime       : LongInt;
+    cMaxAIThinkTime  : Longword;
 
-	cCloudsNumber    : LongInt;
-	cScreenWidth     : LongInt;
-	cScreenHeight    : LongInt;
-	cInitWidth       : LongInt;
-	cInitHeight      : LongInt;
-	cVSyncInUse	 : boolean;	
-	cBits            : LongInt;
-	cBitsStr         : string[2];
-	cTagsMaskIndex   : byte;
-	zoom             : GLfloat;
-	ZoomValue        : GLfloat;
+    cCloudsNumber    : LongInt;
+    cScreenWidth     : LongInt;
+    cScreenHeight    : LongInt;
+    cInitWidth       : LongInt;
+    cInitHeight      : LongInt;
+    cVSyncInUse      : boolean;
+    cBits            : LongInt;
+    cBitsStr         : string[2];
+    cTagsMask        : byte;
+    zoom             : GLfloat;
+    ZoomValue        : GLfloat;
 
-	cWaterLine       : LongInt;
-	cGearScrEdgesDist: LongInt;
-	cAltDamage       : boolean;
+    cWaterLine       : LongInt;
+    cGearScrEdgesDist: LongInt;
+    cAltDamage       : boolean;
 
-	GameTicks	: LongWord;
-	TrainingTimeInc	: Longword;
-	TrainingTimeInD	: Longword;
-	TrainingTimeInM	: Longword;
-	TrainingTimeMax	: Longword;
+    GameTicks	: LongWord;
+    TrainingTimeInc	: Longword;
+    TrainingTimeInD	: Longword;
+    TrainingTimeInM	: Longword;
+    TrainingTimeMax	: Longword;
 
-	TimeTrialStartTime: Longword;
-	TimeTrialStopTime : Longword;
-	
-	recordFileName	: shortstring;
-	cShowFPS	: boolean;
-	cCaseFactor	: Longword;
-	cLandAdditions	: Longword;
-	cExplosives	: Longword;
-	cFullScreen	: boolean;
-	cReducedQuality	: boolean;
-	cLocaleFName	: shortstring;
-	cSeed		: shortstring;
-	cInitVolume	: LongInt;
-	cVolumeDelta	: LongInt;
-	cTimerInterval	: Longword;
-	cHasFocus	: boolean;
-	cInactDelay	: Longword;
+    TimeTrialStartTime: Longword;
+    TimeTrialStopTime : Longword;
+    
+    recordFileName	: shortstring;
+    cShowFPS	: boolean;
+    cCaseFactor	: Longword;
+    cLandAdditions	: Longword;
+    cExplosives	: Longword;
+    cFullScreen	: boolean;
+    cReducedQuality	: boolean;
+    cLocaleFName	: shortstring;
+    cSeed		: shortstring;
+    cInitVolume	: LongInt;
+    cVolumeDelta	: LongInt;
+    cTimerInterval	: Longword;
+    cHasFocus	: boolean;
+    cInactDelay	: Longword;
 
-	bBetweenTurns	: boolean;
-	cHealthDecrease	: LongWord;
-	bWaterRising	: Boolean;
+    bBetweenTurns	: boolean;
+    cHealthDecrease	: LongWord;
+    bWaterRising	: Boolean;
 
-	ShowCrosshair	: boolean;
-	CursorMovementX : Integer;
-	CursorMovementY : Integer;
-	cDrownSpeed	: hwFloat;
-	cMaxWindSpeed	: hwFloat;
-	cWindSpeed	: hwFloat;
-	cGravity	: hwFloat;
-	cDamageModifier	: hwFloat;
-	cLaserSighting	: boolean;
-	cVampiric	: boolean;
-	cArtillery	: boolean;
-	WeaponTooltipTex : PTexture;
-	cWeaponTooltips: boolean;
+    ShowCrosshair	: boolean;
+    CursorMovementX : Integer;
+    CursorMovementY : Integer;
+    cDrownSpeed	: hwFloat;
+    cMaxWindSpeed	: hwFloat;
+    cWindSpeed	: hwFloat;
+    cGravity	: hwFloat;
+    cDamageModifier	: hwFloat;
+    cLaserSighting	: boolean;
+    cVampiric	: boolean;
+    cArtillery	: boolean;
+    WeaponTooltipTex : PTexture;
+    cWeaponTooltips: boolean;
 
-	flagMakeCapture	: boolean;
+    flagMakeCapture	: boolean;
 
-	InitStepsFlags	: Longword;
-	RealTicks	: Longword;
-	AttackBar	: LongInt;
+    InitStepsFlags	: Longword;
+    RealTicks	: Longword;
+    AttackBar	: LongInt;
 
-	WaterColorArray	: array[0..3] of HwColor4f;
+    WaterColorArray	: array[0..3] of HwColor4f;
 
-	CursorPoint	: TPoint;
-	TargetPoint	: TPoint;
+    CursorPoint	: TPoint;
+    TargetPoint	: TPoint;
 
     TextureList : PTexture;
 
@@ -178,12 +178,12 @@ var i, t: LongInt;
 begin
 i:= Pos(' ', a);
 if i > 0 then
-	begin
-	for t:= 1 to Pred(i) do
-		if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
-	b:= copy(a, i + 1, Length(a) - i);
-	byte(a[0]):= Pred(i)
-	end else b:= '';
+    begin
+    for t:= 1 to Pred(i) do
+        if (a[t] >= 'A')and(a[t] <= 'Z') then Inc(a[t], 32);
+    b:= copy(a, i + 1, Length(a) - i);
+    byte(a[0]):= Pred(i)
+    end else b:= '';
 end;
 
 procedure SplitByChar(var a, b: ansistring; c: char);
@@ -191,10 +191,10 @@ var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
-	begin
-	b:= copy(a, i + 1, Length(a) - i);
-	setlength(a, Pred(i));
-	end else b:= '';
+    begin
+    b:= copy(a, i + 1, Length(a) - i);
+    setlength(a, Pred(i));
+    end else b:= '';
 end;
 
 procedure movecursor(dx, dy: Integer);
@@ -229,11 +229,11 @@ begin
 {$IFDEF DEBUGFILE}AddFileLog(Msg);{$ENDIF}
 WriteLnToConsole(Msg);
 if isFatalError then
-   begin
-   SendIPC('E' + GetLastConsoleLine);
-   SDL_Quit;
-   halt(1)
-   end
+begin
+SendIPC('E' + GetLastConsoleLine);
+SDL_Quit;
+halt(1)
+end
 end;
 
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
@@ -313,10 +313,10 @@ procedure SendKB;
 var s: shortstring;
 begin
 if KBnum <> 0 then
-   begin
-   s:= 'K' + inttostr(KBnum);
-   SendIPCRaw(@s, Length(s) + 1)
-   end
+begin
+s:= 'K' + inttostr(KBnum);
+SendIPCRaw(@s, Length(s) + 1)
+end
 end;
 
 procedure SetLittle(var r: hwFloat);
@@ -356,25 +356,25 @@ end;
 procedure ResetVertexArrays(texture: PTexture);
 begin
 with texture^ do
-	begin
-	vb[0].X:= 0;
-	vb[0].Y:= 0;
-	vb[1].X:= w;
-	vb[1].Y:= 0;
-	vb[2].X:= w;
-	vb[2].Y:= h;
-	vb[3].X:= 0;
-	vb[3].Y:= h;
+    begin
+    vb[0].X:= 0;
+    vb[0].Y:= 0;
+    vb[1].X:= w;
+    vb[1].Y:= 0;
+    vb[2].X:= w;
+    vb[2].Y:= h;
+    vb[3].X:= 0;
+    vb[3].Y:= h;
 
-	tb[0].X:= 0;
-	tb[0].Y:= 0;
-	tb[1].X:= rx;
-	tb[1].Y:= 0;
-	tb[2].X:= rx;
-	tb[2].Y:= ry;
-	tb[3].X:= 0;
-	tb[3].Y:= ry
-	end;
+    tb[0].X:= 0;
+    tb[0].Y:= 0;
+    tb[1].X:= rx;
+    tb[1].Y:= 0;
+    tb[2].X:= rx;
+    tb[2].Y:= ry;
+    tb[3].X:= 0;
+    tb[3].Y:= ry
+    end;
 end;
 
 function NewTexture(width, height: Longword; buf: Pointer): PTexture;
@@ -424,9 +424,9 @@ Surface2Tex^.h:= surf^.h;
 
 if (surf^.format^.BytesPerPixel <> 4) then
 begin
-	TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
-	Surface2Tex^.id:= 0;
-	exit
+    TryDo(false, 'Surface2Tex failed, expecting 32 bit surface', true);
+    Surface2Tex^.id:= 0;
+    exit
 end;
 
 
@@ -435,50 +435,50 @@ glGenTextures(1, @Surface2Tex^.id);
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
 
 if SDL_MustLock(surf) then
-	SDLTry(SDL_LockSurface(surf) >= 0, true);
+    SDLTry(SDL_LockSurface(surf) >= 0, true);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
 begin
-	tw:= toPowerOf2(Surf^.w);
-	th:= toPowerOf2(Surf^.h);
+    tw:= toPowerOf2(Surf^.w);
+    th:= toPowerOf2(Surf^.h);
 
-	Surface2Tex^.rx:= Surf^.w / tw;
-	Surface2Tex^.ry:= Surf^.h / th;
+    Surface2Tex^.rx:= Surf^.w / tw;
+    Surface2Tex^.ry:= Surf^.h / th;
 
-	GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
+    GetMem(tmpp, tw * th * surf^.format^.BytesPerPixel);
 
-		fromP4:= Surf^.pixels;
-		toP4:= tmpp;
+        fromP4:= Surf^.pixels;
+        toP4:= tmpp;
 
-		for y:= 0 to Pred(Surf^.h) do
-		begin
-			for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
-			for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
-			toP4:= @(toP4^[tw]);
-			fromP4:= @(fromP4^[Surf^.pitch div 4]);
-		end;
+        for y:= 0 to Pred(Surf^.h) do
+        begin
+            for x:= 0 to Pred(Surf^.w) do toP4^[x]:= fromP4^[x];
+            for x:= Surf^.w to Pred(tw) do toP4^[x]:= 0;
+            toP4:= @(toP4^[tw]);
+            fromP4:= @(fromP4^[Surf^.pitch div 4]);
+        end;
 
-		for y:= Surf^.h to Pred(th) do
-		begin
-			for x:= 0 to Pred(tw) do toP4^[x]:= 0;
-			toP4:= @(toP4^[tw]);
-		end;
+        for y:= Surf^.h to Pred(th) do
+        begin
+            for x:= 0 to Pred(tw) do toP4^[x]:= 0;
+            toP4:= @(toP4^[tw]);
+        end;
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);
 
-	FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
+    FreeMem(tmpp, tw * th * surf^.format^.BytesPerPixel)
 end
 else
 begin
-	Surface2Tex^.rx:= 1.0;
-	Surface2Tex^.ry:= 1.0;
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
+    Surface2Tex^.rx:= 1.0;
+    Surface2Tex^.ry:= 1.0;
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, surf^.w, surf^.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf^.pixels);
 end;
 
 ResetVertexArrays(Surface2Tex);
 
 if SDL_MustLock(surf) then
-	SDL_UnlockSurface(surf);
+    SDL_UnlockSurface(surf);
 
 SetTextureParameters(enableClamp);
 end;
@@ -486,13 +486,13 @@ end;
 procedure FreeTexture(tex: PTexture);
 begin
 if tex <> nil then
-	begin
+    begin
     if tex^.NextTexture <> nil then tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
     if tex^.PrevTexture <> nil then tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-       else TextureList:= tex^.NextTexture;
-	glDeleteTextures(1, @tex^.id);
-	Dispose(tex)
-	end
+    else TextureList:= tex^.NextTexture;
+    glDeleteTextures(1, @tex^.id);
+    Dispose(tex)
+    end
 end;
 
 function DecodeBase64(s: shortstring): shortstring;
@@ -501,22 +501,22 @@ var i, t, c: Longword;
 begin
 c:= 0;
 for i:= 1 to Length(s) do
-	begin
-	t:= Pos(s[i], table);
-	if s[i] = '=' then inc(c);
-	if t > 0 then byte(s[i]):= t - 1 else byte(s[i]):= 0
-	end;
+    begin
+    t:= Pos(s[i], table);
+    if s[i] = '=' then inc(c);
+    if t > 0 then byte(s[i]):= t - 1 else byte(s[i]):= 0
+    end;
 
 i:= 1;
 t:= 1;
 while i <= length(s) do
-	begin
-	DecodeBase64[t    ]:= char((byte(s[i    ]) shl 2) or (byte(s[i + 1]) shr 4));
-	DecodeBase64[t + 1]:= char((byte(s[i + 1]) shl 4) or (byte(s[i + 2]) shr 2));
-	DecodeBase64[t + 2]:= char((byte(s[i + 2]) shl 6) or (byte(s[i + 3])      ));
-	inc(t, 3);
-	inc(i, 4)
-	end;
+    begin
+    DecodeBase64[t    ]:= char((byte(s[i    ]) shl 2) or (byte(s[i + 1]) shr 4));
+    DecodeBase64[t + 1]:= char((byte(s[i + 1]) shl 4) or (byte(s[i + 2]) shr 2));
+    DecodeBase64[t + 2]:= char((byte(s[i + 2]) shl 6) or (byte(s[i + 3])      ));
+    inc(t, 3);
+    inc(i, 4)
+    end;
 
 if c < 3 then t:= t - c;
 
@@ -526,30 +526,30 @@ end;
 {$IFNDEF IPHONEOS}
 procedure MakeScreenshot(filename: shortstring);
 var p: Pointer;
-	size: Longword;
-	f: file;
+    size: Longword;
+    f: file;
 {$IFNDEF WIN32}
-	// TGA Header
-	head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
+    // TGA Header
+    head: array[0..8] of Word = (0, 2, 0, 0, 0, 0, 0, 0, 24);
 {$ELSE}
-	// Windows Bitmap Header
-	head: array[0..53] of Byte = (
-	$42, $4D, // identifier ("BM")
-	0, 0, 0, 0, // file size
-	0, 0, 0, 0, // reserved
-	54, 0, 0, 0, // starting offset
-	40, 0, 0, 0, // header size
-	0, 0, 0, 0, // width
-	0, 0, 0, 0, // height
-	1, 0, // color planes
-	24, 0, // bit depth
-	0, 0, 0, 0, // compression method (uncompressed)
-	0, 0, 0, 0, // image size
-	96, 0, 0, 0, // horizontal resolution
-	96, 0, 0, 0, // vertical resolution
-	0, 0, 0, 0, // number of colors (all)
-	0, 0, 0, 0 // number of important colors
-	);
+    // Windows Bitmap Header
+    head: array[0..53] of Byte = (
+    $42, $4D, // identifier ("BM")
+    0, 0, 0, 0, // file size
+    0, 0, 0, 0, // reserved
+    54, 0, 0, 0, // starting offset
+    40, 0, 0, 0, // header size
+    0, 0, 0, 0, // width
+    0, 0, 0, 0, // height
+    1, 0, // color planes
+    24, 0, // bit depth
+    0, 0, 0, 0, // compression method (uncompressed)
+    0, 0, 0, 0, // image size
+    96, 0, 0, 0, // horizontal resolution
+    96, 0, 0, 0, // vertical resolution
+    0, 0, 0, 0, // number of colors (all)
+    0, 0, 0, 0 // number of important colors
+    );
 {$ENDIF}
 begin
 playSound(sndShutter);
@@ -592,11 +592,11 @@ glReadPixels(0, 0, cScreenWidth, cScreenHeight, GL_BGR, GL_UNSIGNED_BYTE, p);
 Assign(f, filename);
 Rewrite(f, 1);
 if IOResult = 0 then
-	begin
-	BlockWrite(f, head, sizeof(head));
-	BlockWrite(f, p^, size);
-	Close(f);
-	end;
+    begin
+    BlockWrite(f, head, sizeof(head));
+    BlockWrite(f, p^, size);
+    Close(f);
+    end;
 {$I+}
 
 FreeMem(p)
@@ -620,14 +620,14 @@ function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 {* for more information http://www.idevgames.com/forum/showpost.php?p=85864&postcount=7 *}
 var convertedSurf: PSDL_Surface = nil;
 begin
-	if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
-	begin
-		convertedSurf:= SDL_ConvertSurface(tmpsurf, @conversionFormat, SDL_SWSURFACE);
-		SDL_FreeSurface(tmpsurf);
-		exit(convertedSurf);
-	end;
+    if (tmpsurf^.format^.bitsperpixel = 24) or ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) then
+    begin
+        convertedSurf:= SDL_ConvertSurface(tmpsurf, @conversionFormat, SDL_SWSURFACE);
+        SDL_FreeSurface(tmpsurf);
+        exit(convertedSurf);
+    end;
 
-	exit(tmpsurf);
+    exit(tmpsurf);
 end;
 
 function endian(independent: LongWord): LongWord;
@@ -636,9 +636,9 @@ begin
 endian:= independent;
 {$ELSE}
 endian:= (((independent and $FF000000) shr 24) or
-	  ((independent and $00FF0000) shr 8) or
-	  ((independent and $0000FF00) shl 8) or
-	  ((independent and $000000FF) shl 24))
+    ((independent and $00FF0000) shr 8) or
+    ((independent and $0000FF00) shl 8) or
+    ((independent and $000000FF) shl 24))
 {$ENDIF}
 end;
 
@@ -646,112 +646,112 @@ end;
 procedure init_uMisc;
 {$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}
 begin
-	cDrownSpeed.QWordValue	:= 257698038;		// 0.06
-	cMaxWindSpeed.QWordValue:= 2147484;		// 0.0005
-	cWindSpeed.QWordValue	:= 429496;		// 0.0001
-	cGravity                := cMaxWindSpeed;
-	cDamageModifier         := _1;
-	TargetPoint             := cTargetPointRef;
-	TextureList             := nil;
-	
-	// int, longint longword and byte
-	CursorMovementX		:= 0;
-	CursorMovementY		:= 0;
-	GameTicks		:= 0;
-	TrainingTimeInc		:= 10000;
-	TrainingTimeInD		:= 500;
-	TrainingTimeInM		:= 5000;
-	TrainingTimeMax		:= 60000;
-	TimeTrialStartTime	:= 0;
-	TimeTrialStopTime	:= 0;
-	cWaterLine		:= LAND_HEIGHT;
-	cGearScrEdgesDist	:= 240;
-	cHealthDecrease		:= 0;
+    cDrownSpeed.QWordValue	:= 257698038;		// 0.06
+    cMaxWindSpeed.QWordValue:= 2147484;		// 0.0005
+    cWindSpeed.QWordValue	:= 429496;		// 0.0001
+    cGravity                := cMaxWindSpeed;
+    cDamageModifier         := _1;
+    TargetPoint             := cTargetPointRef;
+    TextureList             := nil;
+    
+    // int, longint longword and byte
+    CursorMovementX		:= 0;
+    CursorMovementY		:= 0;
+    GameTicks		:= 0;
+    TrainingTimeInc		:= 10000;
+    TrainingTimeInD		:= 500;
+    TrainingTimeInM		:= 5000;
+    TrainingTimeMax		:= 60000;
+    TimeTrialStartTime	:= 0;
+    TimeTrialStopTime	:= 0;
+    cWaterLine		:= LAND_HEIGHT;
+    cGearScrEdgesDist	:= 240;
+    cHealthDecrease		:= 0;
 
-	GameFlags		:= 0;
-	TrainingFlags		:= 0;
-	TurnTimeLeft		:= 0;
-	cSuddenDTurns		:= 15;
-	cDamagePercent		:= 100;
-	cMineDudPercent		:= 0;
-	cTemplateFilter		:= 0;
+    GameFlags		:= 0;
+    TrainingFlags		:= 0;
+    TurnTimeLeft		:= 0;
+    cSuddenDTurns		:= 15;
+    cDamagePercent		:= 100;
+    cMineDudPercent		:= 0;
+    cTemplateFilter		:= 0;
 
-	cHedgehogTurnTime	:= 45000;
-	cMinesTime		:= 3000;
-	cMaxAIThinkTime		:= 9000;
+    cHedgehogTurnTime	:= 45000;
+    cMinesTime		:= 3000;
+    cMaxAIThinkTime		:= 9000;
 
-	cCloudsNumber		:= 9;
-	cScreenWidth		:= 1024;
-	cScreenHeight		:= 768;
-	cInitWidth		:= cScreenWidth;
-	cInitHeight		:= cScreenHeight;
-	cBits			:= 32;
-	cTagsMaskIndex		:= Low(cTagsMasks);
-	KBnum			:= 0;
-	InitStepsFlags		:= 0;
-	RealTicks		:= 0;
-	AttackBar		:= 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
-	
-	// tgametype and glfloat and string
-	GameState		:= Low(TGameState);
-	GameType		:= gmtLocal;
-	zoom			:= 2.0;
-	ZoomValue		:= 2.0;
-	cBitsStr		:= '32';
-	WeaponTooltipTex	:= nil;
+    cCloudsNumber		:= 9;
+    cScreenWidth		:= 1024;
+    cScreenHeight		:= 768;
+    cInitWidth		:= cScreenWidth;
+    cInitHeight		:= cScreenHeight;
+    cBits			:= 32;
+    cTagsMask		:= 0;
+    KBnum			:= 0;
+    InitStepsFlags		:= 0;
+    RealTicks		:= 0;
+    AttackBar		:= 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+    
+    // tgametype and glfloat and string
+    GameState		:= Low(TGameState);
+    GameType		:= gmtLocal;
+    zoom			:= 2.0;
+    ZoomValue		:= 2.0;
+    cBitsStr		:= '32';
+    WeaponTooltipTex	:= nil;
 
-	// booleans
-	cLaserSighting		:= false;
-	cVampiric		:= false;
-	cArtillery		:= false;
-	flagMakeCapture		:= false;
-	bBetweenTurns		:= false;
-	bWaterRising		:= false;
-	isCursorVisible		:= false;
-	isTerminated		:= false;
-	isInLag			:= false;
-	isPaused		:= false;
-	isMusicEnabled		:= false;
-	isInMultiShoot		:= false;
-	isSpeed			:= false;
-	fastUntilLag		:= false;
-	cVSyncInUse		:= true;	
-	isSoundEnabled		:= true;
-	isSEBackup		:= true;
-	
-	// init flags
-	recordFileName		:= '';
-	cShowFPS		:= false;
-	cCaseFactor		:= 5;  {0..9}
-	cLandAdditions		:= 4;
-	cExplosives		:= 2;
-	cFullScreen		:= false;
-	cReducedQuality		:= false;
-	cLocaleFName		:= 'en.txt';
-	cSeed			:= '';
-	cInitVolume		:= 50;
-	cVolumeDelta		:= 0;
-	cTimerInterval		:= 8;
-	cHasFocus		:= true;
-	cInactDelay		:= 1250;
-	cAltDamage		:= true;
+    // booleans
+    cLaserSighting		:= false;
+    cVampiric		:= false;
+    cArtillery		:= false;
+    flagMakeCapture		:= false;
+    bBetweenTurns		:= false;
+    bWaterRising		:= false;
+    isCursorVisible		:= false;
+    isTerminated		:= false;
+    isInLag			:= false;
+    isPaused		:= false;
+    isMusicEnabled		:= false;
+    isInMultiShoot		:= false;
+    isSpeed			:= false;
+    fastUntilLag		:= false;
+    cVSyncInUse		:= true;	
+    isSoundEnabled		:= true;
+    isSEBackup		:= true;
+    
+    // init flags
+    recordFileName		:= '';
+    cShowFPS		:= false;
+    cCaseFactor		:= 5;  {0..9}
+    cLandAdditions		:= 4;
+    cExplosives		:= 2;
+    cFullScreen		:= false;
+    cReducedQuality		:= false;
+    cLocaleFName		:= 'en.txt';
+    cSeed			:= '';
+    cInitVolume		:= 50;
+    cVolumeDelta		:= 0;
+    cTimerInterval		:= 8;
+    cHasFocus		:= true;
+    cInactDelay		:= 1250;
+    cAltDamage		:= true;
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}
-	f:= stderr;
+    f:= stderr;
 {$ELSE}
-	if ParamStr(1) <> '' then
-		begin
-		for i:= 0 to 7 do
-		begin
-			assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
-			rewrite(f);
-			if IOResult = 0 then break;
-		end;
-		if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
-		end
-	else
-		f:= stderr;
+    if ParamStr(1) <> '' then
+        begin
+        for i:= 0 to 7 do
+        begin
+            assign(f, ParamStr(1) + '/debug' + inttostr(i) + '.txt');
+            rewrite(f);
+            if IOResult = 0 then break;
+        end;
+        if IOResult <> 0 then f:= stderr; // if everything fails, write to stderr
+        end
+    else
+        f:= stderr;
 {$ENDIF}
 {$I+}
 {$ENDIF}
@@ -760,13 +760,13 @@ end;
 
 procedure free_uMisc;
 begin
-	//uRandom.DumpBuffer;
-	while TextureList <> nil do FreeTexture(TextureList);
+    //uRandom.DumpBuffer;
+    while TextureList <> nil do FreeTexture(TextureList);
 
 {$IFDEF DEBUGFILE}
-	writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
-	flush(f);
-	close(f);
+    writeln(f, 'halt at ', GameTicks, ' ticks. TurnTimeLeft = ', TurnTimeLeft);
+    flush(f);
+    close(f);
 {$ENDIF}
 end;
 
