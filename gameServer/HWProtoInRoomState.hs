@@ -19,13 +19,6 @@ handleCmd_inRoom clID clients _ ["CHAT", msg] =
     where
         clientNick = nick $ clients IntMap.! clID
 
-
-handleCmd_inRoom clID clients _ ["TEAM_CHAT", msg] =
-    [AnswerOthersInRoom ["TEAM_CHAT", clientNick, msg]]
-    where
-        clientNick = nick $ clients IntMap.! clID
-
-
 handleCmd_inRoom clID clients rooms ["PART"] =
     [RoomRemoveThisClient "part"]
     where
@@ -195,10 +188,7 @@ handleCmd_inRoom clID clients rooms ["KICK", kickNick] =
 
 
 handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
-    if (teamsInGame client > 0) then
-        [AnswerSameClan ["EM", engineMsg]]
-    else
-        []
+    [AnswerSameClan ["EM", engineMsg]]
     where
         client = clients IntMap.! clID
         engineMsg = toEngineMsg $ 'b' : ((nick client) ++ "(team): " ++ msg ++ "\x20\x20")
