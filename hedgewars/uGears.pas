@@ -1590,12 +1590,14 @@ while Gear<>nil do
                                         end;
                          end;
       gtExplosives: begin
-                    i:= (GameTicks shr 6 + Gear^.uid) mod 64;
+                    i:= (GameTicks shr 6 + Gear^.uid*3) mod 64;
                     if i > 18 then i:= 0;
                     if Gear^.State and gstAnimation = 0 then
                         DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i)
+                    else if Gear^.State and gsttmpFlag = 0 then
+                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 0, 0, Gear^.DirAngle)
                     else
-                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 0, 0, Gear^.DirAngle);
+                        DrawRotatedF(sprExplosivesRoll, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) +4 + WorldDy, 1, 0, Gear^.DirAngle);
                     end;
         gtDynamite: DrawSprite2(sprDynamite, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 25 + WorldDy, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawRotated(sprClusterBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);

@@ -297,7 +297,7 @@
 02:09=%1 est maladroit
 02:09=%1 montre à l'ennemi de quoi il est capable
 02:09=%1 ne peut pas être parfait tout le temps
-02:09=Ne t'inquiète pas %1, personne n'est parfait
+02:09=Ne t'inquiète pas %1, personne p'est narfait
 02:09=%1 a fait cela totallement intentionnellement
 02:09=Je ne le dirais à personne, %1
 02:09=C'est embarrassant !
