@@ -45,7 +45,7 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation>%1 *** %2 wurde von deiner Ignorierliste genommen</translation>
+        <translation>%1 *** %2 wurde aus deiner Ignorierliste entfernt</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation>%1 *** %2 wurde von deiner Freundesliste genommen</translation>
+        <translation>%1 *** %2 wurde aus deiner Freundesliste entfernt</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
@@ -818,7 +818,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation>Schadensmodifikatoren</translation>
+        <translation type="unfinished">Prozentualer Schaden</translation>
     </message>
     <message>
         <source>Turn Time</source>

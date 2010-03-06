@@ -261,4 +261,4 @@
 05:12=Minenzünder: Minen explodieren nach %1 Sekunde(n)
 05:13=Minenzünder: Minen explodieren sofort
 05:14=Minenzünder: Minen explodieren nach 0 - 3 Sekunden
-05:15=Schadensmodifikator: Alle Waffen verursachen %1 % Schaden
+05:15=Prozentualer Schaden: Alle Waffen verursachen %1 % Schaden

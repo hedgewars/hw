@@ -412,7 +412,7 @@ procedure chTeamSay(var s: shortstring);
 begin
 SendIPC('b' + s);
 
-s:= #4 + UserNick + '(team): ' + s;
+s:= #4 + '[Team] ' + UserNick + ': ' + s;
 
 AddChatString(s)
 end;
