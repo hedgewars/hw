@@ -62,7 +62,7 @@ class FreqSpinBox;
 
 class AbstractPage : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
  public:
 
@@ -132,375 +132,375 @@ class AbstractPage : public QWidget
 
 class PageMain : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageMain(QWidget* parent = 0);
+    PageMain(QWidget* parent = 0);
 
-	QPushButton *BtnSinglePlayer;
-	QPushButton *BtnNet;
-	QPushButton *BtnSetup;
-	QPushButton *BtnInfo;
-	QPushButton *BtnExit;
+    QPushButton *BtnSinglePlayer;
+    QPushButton *BtnNet;
+    QPushButton *BtnSetup;
+    QPushButton *BtnInfo;
+    QPushButton *BtnExit;
 };
 
 class PageEditTeam : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageEditTeam(QWidget* parent, SDLInteraction * sdli);
-	QSignalMapper* signalMapper;
-	QGroupBox *GBoxHedgehogs;
-	QGroupBox *GBoxTeam;
-	QGroupBox *GBoxFort;
-	QComboBox *CBFort;
-	SquareLabel *FortPreview;
-	QComboBox *CBGrave;
-	QComboBox *CBFlag;
-	QComboBox *CBTeamLvl;
-	QComboBox *CBVoicepack;
-	QGroupBox *GBoxBinds;
-	QToolBox *BindsBox;
-	QPushButton *BtnTeamDiscard;
-	QPushButton *BtnTeamSave;
-	QPushButton * BtnTestSound;
-	QLineEdit * TeamNameEdit;
-	QLineEdit * HHNameEdit[8];
-	QComboBox * HHHats[8];
-	QPushButton * randButton[8];
-	QComboBox * CBBind[BINDS_NUMBER];
-	QPushButton * randTeamButton;
+    PageEditTeam(QWidget* parent, SDLInteraction * sdli);
+    QSignalMapper* signalMapper;
+    QGroupBox *GBoxHedgehogs;
+    QGroupBox *GBoxTeam;
+    QGroupBox *GBoxFort;
+    QComboBox *CBFort;
+    SquareLabel *FortPreview;
+    QComboBox *CBGrave;
+    QComboBox *CBFlag;
+    QComboBox *CBTeamLvl;
+    QComboBox *CBVoicepack;
+    QGroupBox *GBoxBinds;
+    QToolBox *BindsBox;
+    QPushButton *BtnTeamDiscard;
+    QPushButton *BtnTeamSave;
+    QPushButton * BtnTestSound;
+    QLineEdit * TeamNameEdit;
+    QLineEdit * HHNameEdit[8];
+    QComboBox * HHHats[8];
+    QPushButton * randButton[8];
+    QComboBox * CBBind[BINDS_NUMBER];
+    QPushButton * randTeamButton;
 
 private:
     SDLInteraction * mySdli;
 
 public slots:
-	void CBFort_activated(const QString & gravename);
+    void CBFort_activated(const QString & gravename);
 
 private slots:
-	void testSound();
+    void testSound();
 };
 
 class PageMultiplayer : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageMultiplayer(QWidget* parent = 0);
+    PageMultiplayer(QWidget* parent = 0);
 
-	QPushButton *BtnBack;
-	GameCFGWidget *gameCFG;
-	TeamSelWidget *teamsSelect;
-	QPushButton *BtnStartMPGame;
+    QPushButton *BtnBack;
+    GameCFGWidget *gameCFG;
+    TeamSelWidget *teamsSelect;
+    QPushButton *BtnStartMPGame;
 };
 
 class PageOptions : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageOptions(QWidget* parent = 0);
+    PageOptions(QWidget* parent = 0);
 
-	QPushButton *WeaponsButt;
-	QPushButton *WeaponEdit;
-	QComboBox *WeaponsName;
-	QCheckBox *WeaponTooltip;
-	QComboBox *CBLanguage;
+    QPushButton *WeaponsButt;
+    QPushButton *WeaponEdit;
+    QComboBox *WeaponsName;
+    QCheckBox *WeaponTooltip;
+    QComboBox *CBLanguage;
 
-	QPushButton *BtnBack;
-	IconedGroupBox *teamsBox;
-	QPushButton *BtnNewTeam;
-	QPushButton *BtnEditTeam;
-	QComboBox *CBTeamName;
-	IconedGroupBox *AGGroupBox;
-	QComboBox *CBResolution;
-	QCheckBox *CBEnableSound;
-	QCheckBox *CBEnableFrontendSound;
+    QPushButton *BtnBack;
+    IconedGroupBox *teamsBox;
+    QPushButton *BtnNewTeam;
+    QPushButton *BtnEditTeam;
+    QComboBox *CBTeamName;
+    IconedGroupBox *AGGroupBox;
+    QComboBox *CBResolution;
+    QCheckBox *CBEnableSound;
+    QCheckBox *CBEnableFrontendSound;
 #ifdef _WIN32
-	QCheckBox *CBHardwareSound;
+    QCheckBox *CBHardwareSound;
 #endif
-	QCheckBox *CBEnableMusic;
-	QCheckBox *CBEnableFrontendMusic;
-	QCheckBox *CBFullscreen;
-	QCheckBox *CBFrontendFullscreen;
-	QCheckBox *CBShowFPS;
-	QCheckBox *CBAltDamage;
-	QCheckBox *CBNameWithDate;
+    QCheckBox *CBEnableMusic;
+    QCheckBox *CBEnableFrontendMusic;
+    QCheckBox *CBFullscreen;
+    QCheckBox *CBFrontendFullscreen;
+    QCheckBox *CBShowFPS;
+    QCheckBox *CBAltDamage;
+    QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
     QCheckBox *CBAutoUpdate;
 #endif
 
-	FPSEdit *fpsedit;
-	QPushButton *BtnSaveOptions;
-	QLabel *labelNN;
-	QSpinBox * volumeBox;
-	QLineEdit *editNetNick;
-	QCheckBox *CBReduceQuality;
-	QCheckBox *CBFrontendEffects;
+    FPSEdit *fpsedit;
+    QPushButton *BtnSaveOptions;
+    QLabel *labelNN;
+    QSpinBox * volumeBox;
+    QLineEdit *editNetNick;
+    QCheckBox *CBReduceQuality;
+    QCheckBox *CBFrontendEffects;
 };
 
 class PageNet : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageNet(QWidget* parent = 0);
+    PageNet(QWidget* parent = 0);
 
-	QPushButton* BtnUpdateSList;
-	QTableView * tvServersList;
-	QPushButton * BtnBack;
-	QPushButton * BtnNetConnect;
-	QPushButton * BtnNetSvrStart;
-	QPushButton * BtnSpecifyServer;
+    QPushButton* BtnUpdateSList;
+    QTableView * tvServersList;
+    QPushButton * BtnBack;
+    QPushButton * BtnNetConnect;
+    QPushButton * BtnNetSvrStart;
+    QPushButton * BtnSpecifyServer;
 
 private:
-	QGroupBox * ConnGroupBox;
-	QGridLayout * GBClayout;
+    QGroupBox * ConnGroupBox;
+    QGridLayout * GBClayout;
 
 private slots:
-	void slotConnect();
+    void slotConnect();
 
 public slots:
-	void updateServersList();
+    void updateServersList();
 
 signals:
-	void connectClicked(const QString & host, quint16 port);
+    void connectClicked(const QString & host, quint16 port);
 };
 
 class PageNetServer : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageNetServer(QWidget* parent = 0);
+    PageNetServer(QWidget* parent = 0);
 
-	QPushButton *BtnBack;
-	QPushButton *BtnStart;
-	QPushButton *BtnDefault;
-	QLabel *labelSD;
-	QLineEdit *leServerDescr;
-	QLabel *labelPort;
-	QSpinBox *sbPort;
+    QPushButton *BtnBack;
+    QPushButton *BtnStart;
+    QPushButton *BtnDefault;
+    QLabel *labelSD;
+    QLineEdit *leServerDescr;
+    QLabel *labelPort;
+    QSpinBox *sbPort;
 
 private slots:
-	void setDefaultPort();
+    void setDefaultPort();
 };
 
 class PageNetGame : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
+    PageNetGame(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
-	QPushButton *BtnBack;
-	QPushButton *BtnGo;
-	QPushButton *BtnMaster;
-	QPushButton *BtnStart;
+    QPushButton *BtnBack;
+    QPushButton *BtnGo;
+    QPushButton *BtnMaster;
+    QPushButton *BtnStart;
 
-	QAction * restrictJoins;
-	QAction * restrictTeamAdds;
+    QAction * restrictJoins;
+    QAction * restrictTeamAdds;
 
-	HWChatWidget* pChatWidget;
+    HWChatWidget* pChatWidget;
 
-	TeamSelWidget* pNetTeamsWidget;
-	GameCFGWidget* pGameCFG;
+    TeamSelWidget* pNetTeamsWidget;
+    GameCFGWidget* pGameCFG;
 
 public slots:
-	void setReadyStatus(bool isReady);
-	void setMasterMode(bool isMaster);
+    void setReadyStatus(bool isReady);
+    void setMasterMode(bool isMaster);
 };
 
 class PageInfo : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageInfo(QWidget* parent = 0);
+    PageInfo(QWidget* parent = 0);
 
-	QPushButton *BtnBack;
-	About *about;
+    QPushButton *BtnBack;
+    About *about;
 };
 
 class PageSinglePlayer : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageSinglePlayer(QWidget* parent = 0);
+    PageSinglePlayer(QWidget* parent = 0);
 
-	QPushButton *BtnSimpleGamePage;
-	QPushButton *BtnTrainPage;
-	QPushButton *BtnMultiplayer;
-	QPushButton *BtnLoad;
-	QPushButton *BtnDemos;
-	QPushButton *BtnBack;
-	GameCFGWidget *gameCFG;
+    QPushButton *BtnSimpleGamePage;
+    QPushButton *BtnTrainPage;
+    QPushButton *BtnMultiplayer;
+    QPushButton *BtnLoad;
+    QPushButton *BtnDemos;
+    QPushButton *BtnBack;
+    GameCFGWidget *gameCFG;
 };
 
 class PageTraining : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageTraining(QWidget* parent = 0);
+    PageTraining(QWidget* parent = 0);
 
-	QPushButton *BtnStartTrain;
-	QPushButton *BtnBack;
-	QComboBox   *CBSelect;
+    QPushButton *BtnStartTrain;
+    QPushButton *BtnBack;
+    QComboBox   *CBSelect;
 };
 
 class PageSelectWeapon : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageSelectWeapon(QWidget* parent = 0);
+    PageSelectWeapon(QWidget* parent = 0);
 
-	QPushButton *BtnSave;
-	QPushButton *BtnDefault;
-	QPushButton *BtnDelete;
-	QPushButton *BtnBack;
-	SelWeaponWidget* pWeapons;
+    QPushButton *BtnSave;
+    QPushButton *BtnDefault;
+    QPushButton *BtnDelete;
+    QPushButton *BtnBack;
+    SelWeaponWidget* pWeapons;
 };
 
 class PageInGame : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageInGame(QWidget* parent = 0);
+    PageInGame(QWidget* parent = 0);
 };
 
 class PageRoomsList : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
     PageRoomsList(QWidget* parent, QSettings * config, SDLInteraction * sdli);
 
-	QLineEdit * roomName;
-	QTableWidget * roomsList;
-	QPushButton * BtnBack;
-	QPushButton * BtnCreate;
-	QPushButton * BtnJoin;
-	QPushButton * BtnRefresh;
-	QPushButton * BtnAdmin;
-	HWChatWidget * chatWidget;
+    QLineEdit * roomName;
+    QTableWidget * roomsList;
+    QPushButton * BtnBack;
+    QPushButton * BtnCreate;
+    QPushButton * BtnJoin;
+    QPushButton * BtnRefresh;
+    QPushButton * BtnAdmin;
+    HWChatWidget * chatWidget;
 
 public slots:
-	void setRoomsList(const QStringList & list);
-	void setAdmin(bool);
+    void setRoomsList(const QStringList & list);
+    void setAdmin(bool);
 
 private slots:
-	void onCreateClick();
-	void onJoinClick();
-	void onRefreshClick();
+    void onCreateClick();
+    void onJoinClick();
+    void onRefreshClick();
 
 signals:
-	void askForCreateRoom(const QString &);
-	void askForJoinRoom(const QString &);
-	void askForRoomList();
+    void askForCreateRoom(const QString &);
+    void askForJoinRoom(const QString &);
+    void askForRoomList();
 };
 
 class PageConnecting : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageConnecting(QWidget* parent = 0);
+    PageConnecting(QWidget* parent = 0);
 };
 
 class PageScheme : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageScheme(QWidget* parent = 0);
+    PageScheme(QWidget* parent = 0);
 
-	QPushButton * BtnBack;
-	QPushButton * BtnNew;
-	QPushButton * BtnDelete;
-	QPushButton * BtnSave;
+    QPushButton * BtnBack;
+    QPushButton * BtnNew;
+    QPushButton * BtnDelete;
+    QPushButton * BtnSave;
 
-	void setModel(QAbstractItemModel * model);
+    void setModel(QAbstractItemModel * model);
 
 private:
-	QDataWidgetMapper * mapper;
-	ToggleButtonWidget * TBW_mode_Forts;
-	ToggleButtonWidget * TBW_teamsDivide;
-	ToggleButtonWidget * TBW_solid;
-	ToggleButtonWidget * TBW_border;
-	ToggleButtonWidget * TBW_lowGravity;
-	ToggleButtonWidget * TBW_laserSight;
-	ToggleButtonWidget * TBW_invulnerable;
-	ToggleButtonWidget * TBW_mines;
-	ToggleButtonWidget * TBW_vampiric;
-	ToggleButtonWidget * TBW_karma;
-	ToggleButtonWidget * TBW_artillery;
-	ToggleButtonWidget * TBW_randomorder;
-	ToggleButtonWidget * TBW_king;
-	ToggleButtonWidget * TBW_placehog;
-	ToggleButtonWidget * TBW_sharedammo;
-	ToggleButtonWidget * TBW_disablegirders;
+    QDataWidgetMapper * mapper;
+    ToggleButtonWidget * TBW_mode_Forts;
+    ToggleButtonWidget * TBW_teamsDivide;
+    ToggleButtonWidget * TBW_solid;
+    ToggleButtonWidget * TBW_border;
+    ToggleButtonWidget * TBW_lowGravity;
+    ToggleButtonWidget * TBW_laserSight;
+    ToggleButtonWidget * TBW_invulnerable;
+    ToggleButtonWidget * TBW_mines;
+    ToggleButtonWidget * TBW_vampiric;
+    ToggleButtonWidget * TBW_karma;
+    ToggleButtonWidget * TBW_artillery;
+    ToggleButtonWidget * TBW_randomorder;
+    ToggleButtonWidget * TBW_king;
+    ToggleButtonWidget * TBW_placehog;
+    ToggleButtonWidget * TBW_sharedammo;
+    ToggleButtonWidget * TBW_disablegirders;
 
-	QSpinBox * SB_DamageModifier;
-	QSpinBox * SB_TurnTime;
-	QSpinBox * SB_InitHealth;
-	QSpinBox * SB_SuddenDeath;
-	FreqSpinBox * SB_CaseProb;
-	QSpinBox * SB_MinesTime;
-	QSpinBox * SB_Mines;
-	QSpinBox * SB_MineDuds;
-	QSpinBox * SB_Explosives;
-	QLineEdit * LE_name;
-	QComboBox * selectScheme;
+    QSpinBox * SB_DamageModifier;
+    QSpinBox * SB_TurnTime;
+    QSpinBox * SB_InitHealth;
+    QSpinBox * SB_SuddenDeath;
+    FreqSpinBox * SB_CaseProb;
+    QSpinBox * SB_MinesTime;
+    QSpinBox * SB_Mines;
+    QSpinBox * SB_MineDuds;
+    QSpinBox * SB_Explosives;
+    QLineEdit * LE_name;
+    QComboBox * selectScheme;
 
-	QGroupBox * gbGameModes;
-	QGroupBox * gbBasicSettings;
+    QGroupBox * gbGameModes;
+    QGroupBox * gbBasicSettings;
 
 private slots:
-	void newRow();
-	void deleteRow();
-	void schemeSelected(int);
+    void newRow();
+    void deleteRow();
+    void schemeSelected(int);
 };
 
 class PageAdmin : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageAdmin(QWidget* parent = 0);
+    PageAdmin(QWidget* parent = 0);
 
-	QPushButton * BtnBack;
-	QPushButton * pbClearAccountsCache;
+    QPushButton * BtnBack;
+    QPushButton * pbClearAccountsCache;
 
 private:
-	QLineEdit * leServerMessage;
-	QPushButton * pbSetSM;
+    QLineEdit * leServerMessage;
+    QPushButton * pbSetSM;
 
 private slots:
-	void smChanged();
+    void smChanged();
 
 public slots:
-	void serverMessage(const QString & str);
+    void serverMessage(const QString & str);
 
 signals:
-	void setServerMessage(const QString & str);
+    void setServerMessage(const QString & str);
 };
 
 
 class PageNetType : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageNetType(QWidget* parent = 0);
+    PageNetType(QWidget* parent = 0);
 
-	QPushButton * BtnBack;
-	QPushButton * BtnLAN;
-	QPushButton * BtnOfficialServer;
+    QPushButton * BtnBack;
+    QPushButton * BtnLAN;
+    QPushButton * BtnOfficialServer;
 };
 
 #endif // PAGES_H

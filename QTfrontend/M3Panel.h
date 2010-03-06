@@ -14,15 +14,15 @@
 
 class M3Panel : public InstallController
         {
-	public:
-		M3Panel(void);
-		~M3Panel();
+    public:
+        M3Panel(void);
+        ~M3Panel();
                 
-		void showInstallController();
+        void showInstallController();
                 
-	private:
-		class Private;
-		Private* c;
+    private:
+        class Private;
+        Private* c;
         };
 
 #endif

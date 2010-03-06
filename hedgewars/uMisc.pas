@@ -21,7 +21,7 @@
 unit uMisc;
 interface
 
-uses	SDLh, uConsts, uFloat,
+uses    SDLh, uConsts, uFloat,
 {$IFDEF GLES11}
     gles11;
 {$ELSE}
@@ -71,58 +71,58 @@ var
     cGearScrEdgesDist: LongInt;
     cAltDamage       : boolean;
 
-    GameTicks	: LongWord;
-    TrainingTimeInc	: Longword;
-    TrainingTimeInD	: Longword;
-    TrainingTimeInM	: Longword;
-    TrainingTimeMax	: Longword;
+    GameTicks   : LongWord;
+    TrainingTimeInc : Longword;
+    TrainingTimeInD : Longword;
+    TrainingTimeInM : Longword;
+    TrainingTimeMax : Longword;
 
     TimeTrialStartTime: Longword;
     TimeTrialStopTime : Longword;
     
-    recordFileName	: shortstring;
-    cShowFPS	: boolean;
-    cCaseFactor	: Longword;
-    cLandAdditions	: Longword;
-    cExplosives	: Longword;
-    cFullScreen	: boolean;
-    cReducedQuality	: boolean;
-    cLocaleFName	: shortstring;
-    cSeed		: shortstring;
-    cInitVolume	: LongInt;
-    cVolumeDelta	: LongInt;
-    cTimerInterval	: Longword;
-    cHasFocus	: boolean;
-    cInactDelay	: Longword;
+    recordFileName  : shortstring;
+    cShowFPS    : boolean;
+    cCaseFactor : Longword;
+    cLandAdditions  : Longword;
+    cExplosives : Longword;
+    cFullScreen : boolean;
+    cReducedQuality : boolean;
+    cLocaleFName    : shortstring;
+    cSeed       : shortstring;
+    cInitVolume : LongInt;
+    cVolumeDelta    : LongInt;
+    cTimerInterval  : Longword;
+    cHasFocus   : boolean;
+    cInactDelay : Longword;
 
-    bBetweenTurns	: boolean;
-    cHealthDecrease	: LongWord;
-    bWaterRising	: Boolean;
+    bBetweenTurns   : boolean;
+    cHealthDecrease : LongWord;
+    bWaterRising    : Boolean;
 
-    ShowCrosshair	: boolean;
+    ShowCrosshair   : boolean;
     CursorMovementX : Integer;
     CursorMovementY : Integer;
-    cDrownSpeed	: hwFloat;
-    cMaxWindSpeed	: hwFloat;
-    cWindSpeed	: hwFloat;
-    cGravity	: hwFloat;
-    cDamageModifier	: hwFloat;
-    cLaserSighting	: boolean;
-    cVampiric	: boolean;
-    cArtillery	: boolean;
+    cDrownSpeed : hwFloat;
+    cMaxWindSpeed   : hwFloat;
+    cWindSpeed  : hwFloat;
+    cGravity    : hwFloat;
+    cDamageModifier : hwFloat;
+    cLaserSighting  : boolean;
+    cVampiric   : boolean;
+    cArtillery  : boolean;
     WeaponTooltipTex : PTexture;
     cWeaponTooltips: boolean;
 
-    flagMakeCapture	: boolean;
+    flagMakeCapture : boolean;
 
-    InitStepsFlags	: Longword;
-    RealTicks	: Longword;
-    AttackBar	: LongInt;
+    InitStepsFlags  : Longword;
+    RealTicks   : Longword;
+    AttackBar   : LongInt;
 
-    WaterColorArray	: array[0..3] of HwColor4f;
+    WaterColorArray : array[0..3] of HwColor4f;
 
-    CursorPoint	: TPoint;
-    TargetPoint	: TPoint;
+    CursorPoint : TPoint;
+    TargetPoint : TPoint;
 
     TextureList : PTexture;
 
@@ -646,95 +646,95 @@ end;
 procedure init_uMisc;
 {$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}
 begin
-    cDrownSpeed.QWordValue	:= 257698038;		// 0.06
-    cMaxWindSpeed.QWordValue:= 2147484;		// 0.0005
-    cWindSpeed.QWordValue	:= 429496;		// 0.0001
+    cDrownSpeed.QWordValue  := 257698038;       // 0.06
+    cMaxWindSpeed.QWordValue:= 2147484;     // 0.0005
+    cWindSpeed.QWordValue   := 429496;      // 0.0001
     cGravity                := cMaxWindSpeed;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
     TextureList             := nil;
     
     // int, longint longword and byte
-    CursorMovementX		:= 0;
-    CursorMovementY		:= 0;
-    GameTicks		:= 0;
-    TrainingTimeInc		:= 10000;
-    TrainingTimeInD		:= 500;
-    TrainingTimeInM		:= 5000;
-    TrainingTimeMax		:= 60000;
-    TimeTrialStartTime	:= 0;
-    TimeTrialStopTime	:= 0;
-    cWaterLine		:= LAND_HEIGHT;
-    cGearScrEdgesDist	:= 240;
-    cHealthDecrease		:= 0;
+    CursorMovementX     := 0;
+    CursorMovementY     := 0;
+    GameTicks       := 0;
+    TrainingTimeInc     := 10000;
+    TrainingTimeInD     := 500;
+    TrainingTimeInM     := 5000;
+    TrainingTimeMax     := 60000;
+    TimeTrialStartTime  := 0;
+    TimeTrialStopTime   := 0;
+    cWaterLine      := LAND_HEIGHT;
+    cGearScrEdgesDist   := 240;
+    cHealthDecrease     := 0;
 
-    GameFlags		:= 0;
-    TrainingFlags		:= 0;
-    TurnTimeLeft		:= 0;
-    cSuddenDTurns		:= 15;
-    cDamagePercent		:= 100;
-    cMineDudPercent		:= 0;
-    cTemplateFilter		:= 0;
+    GameFlags       := 0;
+    TrainingFlags       := 0;
+    TurnTimeLeft        := 0;
+    cSuddenDTurns       := 15;
+    cDamagePercent      := 100;
+    cMineDudPercent     := 0;
+    cTemplateFilter     := 0;
 
-    cHedgehogTurnTime	:= 45000;
-    cMinesTime		:= 3000;
-    cMaxAIThinkTime		:= 9000;
+    cHedgehogTurnTime   := 45000;
+    cMinesTime      := 3000;
+    cMaxAIThinkTime     := 9000;
 
-    cCloudsNumber		:= 9;
-    cScreenWidth		:= 1024;
-    cScreenHeight		:= 768;
-    cInitWidth		:= cScreenWidth;
-    cInitHeight		:= cScreenHeight;
-    cBits			:= 32;
-    cTagsMask		:= 0;
-    KBnum			:= 0;
-    InitStepsFlags		:= 0;
-    RealTicks		:= 0;
-    AttackBar		:= 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
+    cCloudsNumber       := 9;
+    cScreenWidth        := 1024;
+    cScreenHeight       := 768;
+    cInitWidth      := cScreenWidth;
+    cInitHeight     := cScreenHeight;
+    cBits           := 32;
+    cTagsMask       := 0;
+    KBnum           := 0;
+    InitStepsFlags      := 0;
+    RealTicks       := 0;
+    AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
     
     // tgametype and glfloat and string
-    GameState		:= Low(TGameState);
-    GameType		:= gmtLocal;
-    zoom			:= 2.0;
-    ZoomValue		:= 2.0;
-    cBitsStr		:= '32';
-    WeaponTooltipTex	:= nil;
+    GameState       := Low(TGameState);
+    GameType        := gmtLocal;
+    zoom            := 2.0;
+    ZoomValue       := 2.0;
+    cBitsStr        := '32';
+    WeaponTooltipTex    := nil;
 
     // booleans
-    cLaserSighting		:= false;
-    cVampiric		:= false;
-    cArtillery		:= false;
-    flagMakeCapture		:= false;
-    bBetweenTurns		:= false;
-    bWaterRising		:= false;
-    isCursorVisible		:= false;
-    isTerminated		:= false;
-    isInLag			:= false;
-    isPaused		:= false;
-    isMusicEnabled		:= false;
-    isInMultiShoot		:= false;
-    isSpeed			:= false;
-    fastUntilLag		:= false;
-    cVSyncInUse		:= true;	
-    isSoundEnabled		:= true;
-    isSEBackup		:= true;
+    cLaserSighting      := false;
+    cVampiric       := false;
+    cArtillery      := false;
+    flagMakeCapture     := false;
+    bBetweenTurns       := false;
+    bWaterRising        := false;
+    isCursorVisible     := false;
+    isTerminated        := false;
+    isInLag         := false;
+    isPaused        := false;
+    isMusicEnabled      := false;
+    isInMultiShoot      := false;
+    isSpeed         := false;
+    fastUntilLag        := false;
+    cVSyncInUse     := true;    
+    isSoundEnabled      := true;
+    isSEBackup      := true;
     
     // init flags
-    recordFileName		:= '';
-    cShowFPS		:= false;
-    cCaseFactor		:= 5;  {0..9}
-    cLandAdditions		:= 4;
-    cExplosives		:= 2;
-    cFullScreen		:= false;
-    cReducedQuality		:= false;
-    cLocaleFName		:= 'en.txt';
-    cSeed			:= '';
-    cInitVolume		:= 50;
-    cVolumeDelta		:= 0;
-    cTimerInterval		:= 8;
-    cHasFocus		:= true;
-    cInactDelay		:= 1250;
-    cAltDamage		:= true;
+    recordFileName      := '';
+    cShowFPS        := false;
+    cCaseFactor     := 5;  {0..9}
+    cLandAdditions      := 4;
+    cExplosives     := 2;
+    cFullScreen     := false;
+    cReducedQuality     := false;
+    cLocaleFName        := 'en.txt';
+    cSeed           := '';
+    cInitVolume     := 50;
+    cVolumeDelta        := 0;
+    cTimerInterval      := 8;
+    cHasFocus       := true;
+    cInactDelay     := 1250;
+    cAltDamage      := true;
 {$IFDEF DEBUGFILE}
 {$I-}
 {$IFDEF IPHONEOS}

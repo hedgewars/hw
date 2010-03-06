@@ -48,37 +48,37 @@ class HWForm;
 class Ui_HWForm
 {
 public:
-	QWidget *centralWidget;
+    QWidget *centralWidget;
 
-	PageMain *pageMain;
-	PageEditTeam *pageEditTeam;
-	PageMultiplayer *pageMultiplayer;
-	PagePlayDemo *pagePlayDemo;
-	PageOptions *pageOptions;
-	PageNet *pageNet;
-	PageNetServer * pageNetServer;
-	PageNetChat *pageNetChat;
-	PageNetGame *pageNetGame;
-	PageInfo *pageInfo;
-	PageGameStats *pageGameStats;
-	PageSinglePlayer *pageSinglePlayer;
-	PageTraining *pageTraining;
-	PageSelectWeapon *pageSelectWeapon;
-	PageInGame *pageInGame;
-	PageRoomsList *pageRoomsList;
-	PageConnecting *pageConnecting;
-	PageScheme *pageScheme;
-	PageAdmin *pageAdmin;
-	PageNetType *pageNetType;
+    PageMain *pageMain;
+    PageEditTeam *pageEditTeam;
+    PageMultiplayer *pageMultiplayer;
+    PagePlayDemo *pagePlayDemo;
+    PageOptions *pageOptions;
+    PageNet *pageNet;
+    PageNetServer * pageNetServer;
+    PageNetChat *pageNetChat;
+    PageNetGame *pageNetGame;
+    PageInfo *pageInfo;
+    PageGameStats *pageGameStats;
+    PageSinglePlayer *pageSinglePlayer;
+    PageTraining *pageTraining;
+    PageSelectWeapon *pageSelectWeapon;
+    PageInGame *pageInGame;
+    PageRoomsList *pageRoomsList;
+    PageConnecting *pageConnecting;
+    PageScheme *pageScheme;
+    PageAdmin *pageAdmin;
+    PageNetType *pageNetType;
 
-	QStackedLayout *Pages;
-	QFont *font14;
+    QStackedLayout *Pages;
+    QFont *font14;
 
-	void setupUi(HWForm *HWForm);
-	void SetupFonts();
-	void SetupPages(QWidget *Parent, HWForm *HWForm);
-	void SetupPageNetChat(QWidget *Parent);
-	void SetupPageNetGame(QWidget *Parent);
+    void setupUi(HWForm *HWForm);
+    void SetupFonts();
+    void SetupPages(QWidget *Parent, HWForm *HWForm);
+    void SetupPageNetChat(QWidget *Parent);
+    void SetupPageNetGame(QWidget *Parent);
 };
 
 #endif // UI_HWFORM_H

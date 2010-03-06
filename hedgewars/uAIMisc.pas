@@ -85,30 +85,30 @@ Targets.Count:= 0;
 f:= 0;
 e:= 0;
 for t:= 0 to Pred(TeamsCount) do
-	with TeamsArray[t]^ do
-		if not hasGone then
-			begin
-			for i:= 0 to cMaxHHIndex do
-				if (Hedgehogs[i].Gear <> nil)
-				and (Hedgehogs[i].Gear <> ThinkingHH) then
-					begin
-					with Targets.ar[Targets.Count], Hedgehogs[i] do
-						begin
-						Point.X:= hwRound(Gear^.X);
-						Point.Y:= hwRound(Gear^.Y);
-						if Clan <> CurrentTeam^.Clan then
-							begin
-							Score:=  Gear^.Health;
-							inc(e)
-							end else
-							begin
-							Score:= -Gear^.Health;
-							inc(f)
-							end
-						end;
-					inc(Targets.Count)
-					end;
-			end;
+    with TeamsArray[t]^ do
+        if not hasGone then
+            begin
+            for i:= 0 to cMaxHHIndex do
+                if (Hedgehogs[i].Gear <> nil)
+                and (Hedgehogs[i].Gear <> ThinkingHH) then
+                    begin
+                    with Targets.ar[Targets.Count], Hedgehogs[i] do
+                        begin
+                        Point.X:= hwRound(Gear^.X);
+                        Point.Y:= hwRound(Gear^.Y);
+                        if Clan <> CurrentTeam^.Clan then
+                            begin
+                            Score:=  Gear^.Health;
+                            inc(e)
+                            end else
+                            begin
+                            Score:= -Gear^.Health;
+                            inc(f)
+                            end
+                        end;
+                    inc(Targets.Count)
+                    end;
+            end;
 
 if e > f then friendlyfactor:= 300 + (e - f) * 30
 else friendlyfactor:= max(30, 300 - f * 80 div e)
@@ -133,27 +133,27 @@ bonuses.Count:= 0;
 MyClan:= PHedgehog(ThinkingHH^.Hedgehog)^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
-	begin
-	case Gear^.Kind of
-		gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
-		gtMine: if (Gear^.State and gstAttacking) = 0 then
-				AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
-			else
-				AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
-		gtDynamite: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
-		gtHedgehog: begin
-					if Gear^.Damage >= Gear^.Health then
-						AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
-					else
-						if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-							if (MyClan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan) then
-								AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
-							else
-								AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
-					end;
-		end;
-	Gear:= Gear^.NextGear
-	end;
+    begin
+    case Gear^.Kind of
+        gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
+        gtMine: if (Gear^.State and gstAttacking) = 0 then
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
+            else
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+        gtDynamite: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
+        gtHedgehog: begin
+                    if Gear^.Damage >= Gear^.Health then
+                        AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
+                    else
+                        if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
+                            if (MyClan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan) then
+                                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
+                            else
+                                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
+                    end;
+        end;
+    Gear:= Gear^.NextGear
+    end;
 if isAfterAttack and (KnownExplosion.Radius > 0) then
    with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
@@ -172,13 +172,13 @@ var i, r: LongInt;
 begin
 rate:= 0;
 for i:= 0 to Pred(bonuses.Count) do
-	with bonuses.ar[i] do
-		begin
-		r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-		if r < Radius then
-			inc(rate, Score * (Radius - r))
-		end;
-	RatePlace:= rate;
+    with bonuses.ar[i] do
+        begin
+        r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+        if r < Radius then
+            inc(rate, Score * (Radius - r))
+        end;
+    RatePlace:= rate;
 end;
 
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
@@ -467,10 +467,10 @@ end;
 
 procedure init_uAIMisc;
 begin
-	friendlyfactor:= 300;
-	KnownExplosion.X:= 0;
-	KnownExplosion.Y:= 0;
-	KnownExplosion.Radius:= 0;
+    friendlyfactor:= 300;
+    KnownExplosion.X:= 0;
+    KnownExplosion.Y:= 0;
+    KnownExplosion.Radius:= 0;
 end;
 
 procedure free_uAIMisc;

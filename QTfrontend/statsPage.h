@@ -26,35 +26,35 @@
 
 class FitGraphicsView : public QGraphicsView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FitGraphicsView(QWidget* parent = 0);
+    FitGraphicsView(QWidget* parent = 0);
 
 protected:
-	void resizeEvent(QResizeEvent * event);
+    void resizeEvent(QResizeEvent * event);
 };
 
 class PageGameStats : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	PageGameStats(QWidget* parent = 0);
+    PageGameStats(QWidget* parent = 0);
 
-	QPushButton *BtnBack;
-	QLabel *labelGameStats;
-	FitGraphicsView * graphic;
+    QPushButton *BtnBack;
+    QLabel *labelGameStats;
+    FitGraphicsView * graphic;
 
 public slots:
-	void GameStats(char type, const QString & info);
-	void clear();
-	void renderStats();
+    void GameStats(char type, const QString & info);
+    void clear();
+    void renderStats();
 
 private:
-	void AddStatText(const QString & msg);
+    void AddStatText(const QString & msg);
 
-	QMap<quint32, QVector<quint32> > healthPoints;
+    QMap<quint32, QVector<quint32> > healthPoints;
 };
 
 #endif // STATSPAGE_H

@@ -34,42 +34,42 @@
 class SpritePosition
 {
 public:
-	SpritePosition(QWidget * parent, int sh);
-	~SpritePosition();
+    SpritePosition(QWidget * parent, int sh);
+    ~SpritePosition();
 private:
-	float fX;
-	float fY;
-	float fXMov;
-	float fYMov;
-	int iAngle;
-	QWidget * wParent;
-	int iSpriteHeight;
+    float fX;
+    float fY;
+    float fXMov;
+    float fYMov;
+    int iAngle;
+    QWidget * wParent;
+    int iSpriteHeight;
 public:
-	void move();
-	void reset();
-	QPoint pos();
-	int getAngle();
-	void init();
+    void move();
+    void reset();
+    QPoint pos();
+    int getAngle();
+    void init();
 };
 
 class BGWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	BGWidget(QWidget * parent);
-	~BGWidget();
-	void startAnimation();
-	void stopAnimation();
-	void init();
+    BGWidget(QWidget * parent);
+    ~BGWidget();
+    void startAnimation();
+    void stopAnimation();
+    void init();
 private:
-	QImage sprite;
-	QTimer * timerAnimation;
-	SpritePosition * spritePositions[SPRITE_MAX];
-	QImage * rotatedSprites[360];
+    QImage sprite;
+    QTimer * timerAnimation;
+    SpritePosition * spritePositions[SPRITE_MAX];
+    QImage * rotatedSprites[360];
 protected:
-	void paintEvent(QPaintEvent * event);
+    void paintEvent(QPaintEvent * event);
 private slots:
-	void animate();
+    void animate();
 };
 
 #endif // BGWIDGET_H

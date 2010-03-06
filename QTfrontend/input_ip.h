@@ -29,20 +29,20 @@ class QPushButton;
 
 class HWHostPortDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HWHostPortDialog(QWidget* parent = 0);
+    HWHostPortDialog(QWidget* parent = 0);
 
-	QLineEdit* leHost;
-	QSpinBox* sbPort;
+    QLineEdit* leHost;
+    QSpinBox* sbPort;
 
 private:
-	QPushButton* pbOK;
-	QPushButton* pbCancel;
-	QPushButton * pbDefault;
+    QPushButton* pbOK;
+    QPushButton* pbCancel;
+    QPushButton * pbDefault;
 
 private slots:
-	void setDefaultPort();
+    void setDefaultPort();
 };
 
 

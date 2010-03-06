@@ -35,21 +35,21 @@ void TeamSelWidget::addTeam(HWTeam team)
     framePlaying->addTeam(team, true);
     curPlayingTeams.push_back(team);
     connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-		     this, SLOT(netTeamStatusChanged(const HWTeam&)));
+             this, SLOT(netTeamStatusChanged(const HWTeam&)));
     connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
-			    this, SLOT(hhNumChanged(const HWTeam&)));
+                this, SLOT(hhNumChanged(const HWTeam&)));
     dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
     connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
-			    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+                this, SLOT(proxyTeamColorChanged(const HWTeam&)));
   } else {
     frameDontPlaying->addTeam(team, false);
     curDontPlayingTeams.push_back(team);
     if(m_acceptOuter) {
       connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-	      this, SLOT(pre_changeTeamStatus(HWTeam)));
+          this, SLOT(pre_changeTeamStatus(HWTeam)));
     } else {
       connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-	      this, SLOT(changeTeamStatus(HWTeam)));
+          this, SLOT(changeTeamStatus(HWTeam)));
     }
   }
   emit setEnabledGameStart(curPlayingTeams.size()>1);
@@ -57,41 +57,41 @@ void TeamSelWidget::addTeam(HWTeam team)
 
 void TeamSelWidget::setInteractivity(bool interactive)
 {
-	framePlaying->setInteractivity(interactive);
+    framePlaying->setInteractivity(interactive);
 }
 
 void TeamSelWidget::hhNumChanged(const HWTeam& team)
 {
-	QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-	if(itPlay==curPlayingTeams.end())
-	{
-		qWarning() << QString("hhNumChanged: team '%1' not found").arg(team.TeamName);
-		return;
-	}
-	itPlay->numHedgehogs=team.numHedgehogs;
-	emit hhogsNumChanged(team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    if(itPlay==curPlayingTeams.end())
+    {
+        qWarning() << QString("hhNumChanged: team '%1' not found").arg(team.TeamName);
+        return;
+    }
+    itPlay->numHedgehogs=team.numHedgehogs;
+    emit hhogsNumChanged(team);
 }
 
 void TeamSelWidget::proxyTeamColorChanged(const HWTeam& team)
 {
-	QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-	if(itPlay==curPlayingTeams.end())
-	{
-		qWarning() << QString("proxyTeamColorChanged: team '%1' not found").arg(team.TeamName);
-		return;
-	}
-	itPlay->teamColor=team.teamColor;
-	emit teamColorChanged(team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    if(itPlay==curPlayingTeams.end())
+    {
+        qWarning() << QString("proxyTeamColorChanged: team '%1' not found").arg(team.TeamName);
+        return;
+    }
+    itPlay->teamColor=team.teamColor;
+    emit teamColorChanged(team);
 }
 
 void TeamSelWidget::changeHHNum(const HWTeam& team)
 {
   QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-	if(itPlay==curPlayingTeams.end())
-	{
-		qWarning() << QString("changeHHNum: team '%1' not found").arg(team.TeamName);
-		return;
-	}
+    if(itPlay==curPlayingTeams.end())
+    {
+        qWarning() << QString("changeHHNum: team '%1' not found").arg(team.TeamName);
+        return;
+    }
   itPlay->numHedgehogs=team.numHedgehogs;
 
   framePlaying->setHHNum(team);
@@ -99,35 +99,35 @@ void TeamSelWidget::changeHHNum(const HWTeam& team)
 
 void TeamSelWidget::changeTeamColor(const HWTeam& team)
 {
-	QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-	if(itPlay==curPlayingTeams.end())
-	{
-		qWarning() << QString("changeTeamColor: team '%1' not found").arg(team.TeamName);
-		return;
-	}
-	itPlay->teamColor=team.teamColor;
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    if(itPlay==curPlayingTeams.end())
+    {
+        qWarning() << QString("changeTeamColor: team '%1' not found").arg(team.TeamName);
+        return;
+    }
+    itPlay->teamColor=team.teamColor;
 
-	framePlaying->setTeamColor(team);
+    framePlaying->setTeamColor(team);
 }
 
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
-	//qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
-	for(;;) {
-		QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-		if(itPlay==curPlayingTeams.end())
-		{
-			qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.TeamName);
-			break;
-		}
-		if(itPlay->isNetTeam()) {
-			QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
-			framePlaying->removeTeam(team);
-			curPlayingTeams.erase(itPlay);
-			break;
-		}
-	}
-	emit setEnabledGameStart(curPlayingTeams.size()>1);
+    //qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
+    for(;;) {
+        QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+        if(itPlay==curPlayingTeams.end())
+        {
+            qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.TeamName);
+            break;
+        }
+        if(itPlay->isNetTeam()) {
+            QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
+            framePlaying->removeTeam(team);
+            curPlayingTeams.erase(itPlay);
+            break;
+        }
+    }
+    emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
@@ -178,17 +178,17 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
   pRemoveTeams->removeTeam(team);
   if(!team.isNetTeam() && m_acceptOuter && !willBePlaying) {
     connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-	    this, SLOT(pre_changeTeamStatus(HWTeam)));
+        this, SLOT(pre_changeTeamStatus(HWTeam)));
   } else {
     connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-	    this, SLOT(changeTeamStatus(HWTeam)));
+        this, SLOT(changeTeamStatus(HWTeam)));
   }
   if(willBePlaying) {
     connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
-	    this, SLOT(hhNumChanged(const HWTeam&)));
+        this, SLOT(hhNumChanged(const HWTeam&)));
     dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
     connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
-	    this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+        this, SLOT(proxyTeamColorChanged(const HWTeam&)));
     emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
   }
 
@@ -204,39 +204,39 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeight)
 {
-	VertScrArea* area = new VertScrArea(color);
-	area->setWidget(pfteams);
-	mainLayout.addWidget(area, 30);
-	if (fixedHeight > 0)
-	{
-		area->setMinimumHeight(fixedHeight);
-		area->setMaximumHeight(fixedHeight);
-		area->setStyleSheet(
-				"FrameTeams{"
-					"border: solid;"
-					"border-width: 1px;"
-					"border-radius: 16px;"
-					"border-color: #ffcc00;"
-					"}"
-		);
-	}
+    VertScrArea* area = new VertScrArea(color);
+    area->setWidget(pfteams);
+    mainLayout.addWidget(area, 30);
+    if (fixedHeight > 0)
+    {
+        area->setMinimumHeight(fixedHeight);
+        area->setMaximumHeight(fixedHeight);
+        area->setStyleSheet(
+                "FrameTeams{"
+                    "border: solid;"
+                    "border-width: 1px;"
+                    "border-radius: 16px;"
+                    "border-color: #ffcc00;"
+                    "}"
+        );
+    }
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
   QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
 {
-	setTitle(QGroupBox::tr("Playing teams"));
-	framePlaying = new FrameTeams();
-	frameDontPlaying = new FrameTeams();
+    setTitle(QGroupBox::tr("Playing teams"));
+    framePlaying = new FrameTeams();
+    frameDontPlaying = new FrameTeams();
 
-	QPalette p;
-	p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-	addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);
-	addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
-	QPushButton * btnSetup = new QPushButton(this);
-	btnSetup->setText(QPushButton::tr("Setup"));
-	connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
-	mainLayout.addWidget(btnSetup);
+    QPalette p;
+    p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);
+    addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+    QPushButton * btnSetup = new QPushButton(this);
+    btnSetup->setText(QPushButton::tr("Setup"));
+    connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
+    mainLayout.addWidget(btnSetup);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)

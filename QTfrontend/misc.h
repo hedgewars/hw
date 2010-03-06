@@ -24,21 +24,21 @@
 
 class FreqSpinBox : public QSpinBox
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FreqSpinBox(QWidget* parent) : QSpinBox(parent)
-	{
+    FreqSpinBox(QWidget* parent) : QSpinBox(parent)
+    {
 
-	}
+    }
 
-	QString textFromValue(int value) const
-	{
-		if (!value)
-			return tr("Never");
-		else
-			return tr("Every %1 turn", "", value).arg(value);
-	}
+    QString textFromValue(int value) const
+    {
+        if (!value)
+            return tr("Never");
+        else
+            return tr("Every %1 turn", "", value).arg(value);
+    }
 };
 
 

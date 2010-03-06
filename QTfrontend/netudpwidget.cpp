@@ -24,48 +24,48 @@
 HWNetUdpModel::HWNetUdpModel(QObject* parent) :
   HWNetServersModel(parent)
 {
-	pUdpSocket = new QUdpSocket(this);
+    pUdpSocket = new QUdpSocket(this);
 
-	pUdpSocket->bind();
-	connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
+    pUdpSocket->bind();
+    connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
 }
 
 void HWNetUdpModel::updateList()
 {
-	games.clear();
+    games.clear();
 
-	reset();
+    reset();
 
-	pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
+    pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
 }
 
 void HWNetUdpModel::onClientRead()
 {
-	while (pUdpSocket->hasPendingDatagrams()) {
-		QByteArray datagram;
-		datagram.resize(pUdpSocket->pendingDatagramSize());
-		QHostAddress clientAddr;
-		quint16 clientPort;
+    while (pUdpSocket->hasPendingDatagrams()) {
+        QByteArray datagram;
+        datagram.resize(pUdpSocket->pendingDatagramSize());
+        QHostAddress clientAddr;
+        quint16 clientPort;
 
-		pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
+        pUdpSocket->readDatagram(datagram.data(), datagram.size(), &clientAddr, &clientPort);
 
-		if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
-			QStringList sl;
-			sl << "-" << clientAddr.toString() << "46631";
-			games.append(sl);
-		}
-	}
+        if(QString("%1").arg(datagram.data())==QString("hedgewars server")) {
+            QStringList sl;
+            sl << "-" << clientAddr.toString() << "46631";
+            games.append(sl);
+        }
+    }
 
-	reset();
+    reset();
 }
 
 QVariant HWNetUdpModel::data(const QModelIndex &index,
                              int role) const
 {
-	if (!index.isValid() || index.row() < 0
-		|| index.row() >= games.size()
-		|| role != Qt::DisplayRole)
-	return QVariant();
+    if (!index.isValid() || index.row() < 0
+        || index.row() >= games.size()
+        || role != Qt::DisplayRole)
+    return QVariant();
 
-	return games[index.row()][index.column()];
+    return games[index.row()][index.column()];
 }

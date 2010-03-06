@@ -147,7 +147,7 @@ end;
 
 procedure init_uTriggers;
 begin
-	TriggerList:= nil;
+    TriggerList:= nil;
 end;
 
 procedure free_uTriggers;

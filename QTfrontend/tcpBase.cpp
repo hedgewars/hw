@@ -41,8 +41,8 @@ TCPBase::TCPBase(bool demoMode) :
     IPCServer->setMaxPendingConnections(1);
     if (!IPCServer->listen(QHostAddress::LocalHost)) {
       QMessageBox::critical(0, tr("Error"),
-			    tr("Unable to start the server: %1.")
-			    .arg(IPCServer->errorString()));
+                tr("Unable to start the server: %1.")
+                .arg(IPCServer->errorString()));
       exit(0); // FIXME - should be graceful exit here
     }
   }
@@ -97,8 +97,8 @@ void TCPBase::ClientRead()
 void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
   QMessageBox::critical(0, tr("Error"),
-			tr("Unable to run engine: %1 (")
-			.arg(error) + bindir->absolutePath() + "/hwengine)");
+            tr("Unable to run engine: %1 (")
+            .arg(error) + bindir->absolutePath() + "/hwengine)");
 }
 
 void TCPBase::tcpServerReady()
@@ -135,27 +135,27 @@ void TCPBase::SendToClientFirst()
 
 void TCPBase::SendIPC(const QByteArray & buf)
 {
-	if (buf.size() > MAXMSGCHARS) return;
-	quint8 len = buf.size();
-	RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
+    if (buf.size() > MAXMSGCHARS) return;
+    quint8 len = buf.size();
+    RawSendIPC(QByteArray::fromRawData((char *)&len, 1) + buf);
 }
 
 void TCPBase::RawSendIPC(const QByteArray & buf)
 {
-	if (!IPCSocket)
-	{
-		toSendBuf += buf;
-	} else
-	{
-		if (toSendBuf.size() > 0)
-		{
-			IPCSocket->write(toSendBuf);
-			if(m_isDemoMode) demo.append(toSendBuf);
-			toSendBuf.clear();
-		}
-		if(!buf.isEmpty()) {
-		  IPCSocket->write(buf);
-		  if(m_isDemoMode) demo.append(buf);
-		}
-	}
+    if (!IPCSocket)
+    {
+        toSendBuf += buf;
+    } else
+    {
+        if (toSendBuf.size() > 0)
+        {
+            IPCSocket->write(toSendBuf);
+            if(m_isDemoMode) demo.append(toSendBuf);
+            toSendBuf.clear();
+        }
+        if(!buf.isEmpty()) {
+          IPCSocket->write(buf);
+          if(m_isDemoMode) demo.append(buf);
+        }
+    }
 }

@@ -51,88 +51,88 @@ implementation
 {$IFDEF HWLIBRARY}
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
 begin
-	if netProto <> nil then netProto^:= cNetProtoVersion;
-	if versionStr <> nil then versionStr^:= shortstring(cVersionString);
+    if netProto <> nil then netProto^:= cNetProtoVersion;
+    if versionStr <> nil then versionStr^:= shortstring(cVersionString);
 end;
 
 procedure HW_click; cdecl; export;
 begin
-	leftClick:= true;
+    leftClick:= true;
 end;
 
 procedure HW_zoomIn; cdecl; export;
 begin
-	wheelUp:= true;
+    wheelUp:= true;
 end;
 
 procedure HW_zoomOut; cdecl; export;
 begin
-	wheelDown:= true;
+    wheelDown:= true;
 end;
 
 procedure HW_zoomReset; cdecl; export;
 begin
-	middleClick:= true;
+    middleClick:= true;
 end;
 
 procedure HW_ammoMenu; cdecl; export;
 begin
-	rightClick:= true;
+    rightClick:= true;
 end;
 
 procedure HW_allKeysUp; cdecl; export;
 begin
-	// set all keys to released
-	init_uKeys();
+    // set all keys to released
+    init_uKeys();
 end;
 
 procedure HW_walkLeft; cdecl; export;
 begin
-	leftKey:= true;
+    leftKey:= true;
 end;
 
 procedure HW_walkRight; cdecl; export;
 begin
-	rightKey:= true;
+    rightKey:= true;
 end;
 
 procedure HW_aimUp; cdecl; export;
 begin
-	upKey:= true;
+    upKey:= true;
 end;
 
 procedure HW_aimDown; cdecl; export;
 begin
-	downKey:= true;
+    downKey:= true;
 end;
 
 procedure HW_shoot; cdecl; export;
 begin
-	spaceKey:= true;
+    spaceKey:= true;
 end;
 
 procedure HW_chat; cdecl; export;
 begin
-	chatAction:= true;
+    chatAction:= true;
 end;
 
 procedure HW_tab; cdecl; export;
 begin
-	switchAction:= true;
+    switchAction:= true;
 end;
 
 procedure HW_pause; cdecl; export;
 begin
-	pauseAction:= true;
+    pauseAction:= true;
 end;
 
 procedure HW_whereIsHog; cdecl; export;
 //var Xcoord, Ycoord: LongInt;
 begin
-	//Xcoord:= Gear^.dX + WorldDx;
-	WriteLnToConsole('HW - hog is at x: ' + ' y:');
+    //Xcoord:= Gear^.dX + WorldDx;
+    WriteLnToConsole('HW - hog is at x: ' + ' y:');
 
-	exit
+    exit
 end;
 {$ENDIF}
 

@@ -312,7 +312,7 @@ processAction (clID, serverInfo, clients, rooms) (UnreadyRoomClients) = do
 
 
 processAction (clID, serverInfo, clients, rooms) (RemoveTeam teamName) = do
-    newRooms <-	if not $ gameinprogress room then
+    newRooms <- if not $ gameinprogress room then
             do
             processAction (clID, serverInfo, clients, rooms) $ AnswerOthersInRoom ["REMOVE_TEAM", teamName]
             return $

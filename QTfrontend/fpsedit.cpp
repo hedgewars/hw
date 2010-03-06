@@ -19,13 +19,13 @@
 #include "fpsedit.h"
 
 FPSEdit::FPSEdit(QWidget * parent) :
-	QSpinBox(parent)
+    QSpinBox(parent)
 {
-	setRange(1, 34);
-	setValue(27);
+    setRange(1, 34);
+    setValue(27);
 }
 
 QString FPSEdit::textFromValue(int value) const
 {
-	return QString::number(1000 / (35 - value));
+    return QString::number(1000 / (35 - value));
 }

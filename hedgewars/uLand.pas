@@ -22,15 +22,15 @@ unit uLand;
 interface
 uses SDLh, uLandTemplates, uFloat, uConsts,
 {$IFDEF GLES11}
-	gles11;
+    gles11;
 {$ELSE}
-	GL;
+    GL;
 {$ENDIF}
 
 type TLandArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of LongWord;
-	TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
-	TPreview  = packed array[0..127, 0..31] of byte;
-	TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
+    TCollisionArray = packed array[0 .. LAND_HEIGHT - 1, 0 .. LAND_WIDTH - 1] of Word;
+    TPreview  = packed array[0..127, 0..31] of byte;
+    TDirtyTag = packed array[0 .. LAND_HEIGHT div 32 - 1, 0 .. LAND_WIDTH div 32 - 1] of byte;
 
 var Land: TCollisionArray;
     LandPixels: TLandArray;
@@ -314,12 +314,12 @@ end;
 function LandBackPixel(x, y: LongInt): LongWord;
 var p: PLongWordArray;
 begin
-	if LandBackSurface = nil then LandBackPixel:= 0
-	else
-	begin
-		p:= LandBackSurface^.pixels;
-		LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
-	end
+    if LandBackSurface = nil then LandBackPixel:= 0
+    else
+    begin
+        p:= LandBackSurface^.pixels;
+        LandBackPixel:= p^[LandBackSurface^.w * (y mod LandBackSurface^.h) + (x mod LandBackSurface^.w)];// or $FF000000;
+    end
 end;
 
 procedure ColorizeLand(Surface: PSDL_Surface);
@@ -327,63 +327,63 @@ var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
-	r.y:= 0;
-	while r.y < LAND_HEIGHT do
-	begin
-		r.x:= 0;
-		while r.x < LAND_WIDTH do
-		begin
-			SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-			inc(r.x, tmpsurf^.w)
-		end;
-		inc(r.y, tmpsurf^.h)
-	end;
-	SDL_FreeSurface(tmpsurf);
+    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/LandTex', ifCritical or ifIgnoreCaps);
+    r.y:= 0;
+    while r.y < LAND_HEIGHT do
+    begin
+        r.x:= 0;
+        while r.x < LAND_WIDTH do
+        begin
+            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+            inc(r.x, tmpsurf^.w)
+        end;
+        inc(r.y, tmpsurf^.h)
+    end;
+    SDL_FreeSurface(tmpsurf);
 
-	// freed in free_uLand() below
-	LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
+    // freed in free_uLand() below
+    LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
-	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
-	for x:= 0 to LAND_WIDTH - 1 do
-	begin
-		yd:= LAND_HEIGHT - 1;
-		repeat
-			while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
+    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
+    for x:= 0 to LAND_WIDTH - 1 do
+    begin
+        yd:= LAND_HEIGHT - 1;
+        repeat
+            while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
 
-			if (yd < 0) then yd:= 0;
+            if (yd < 0) then yd:= 0;
 
-			while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
-			dec(yd);
-			yu:= yd;
+            while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do inc(yd);
+            dec(yd);
+            yu:= yd;
 
-			while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
-			while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
+            while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
+            while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
 
-			if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
-			begin
-				rr.x:= x;
-				rr.y:= yd - 15;
-				r.x:= x mod tmpsurf^.w;
-				r.y:= 16;
-				r.w:= 1;
-				r.h:= 16;
-				SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-			end;
-			if (yu > 0) then
-			begin
-				rr.x:= x;
-				rr.y:= yu;
-				r.x:= x mod tmpsurf^.w;
-				r.y:= 0;
-				r.w:= 1;
-				r.h:= min(16, yd - yu + 1);
-				SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
-			end;
-			yd:= yu - 1;
-		until yd < 0;
-	end;
-	SDL_FreeSurface(tmpsurf);
+            if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
+            begin
+                rr.x:= x;
+                rr.y:= yd - 15;
+                r.x:= x mod tmpsurf^.w;
+                r.y:= 16;
+                r.w:= 1;
+                r.h:= 16;
+                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+            end;
+            if (yu > 0) then
+            begin
+                rr.x:= x;
+                rr.y:= yu;
+                r.x:= x mod tmpsurf^.w;
+                r.y:= 0;
+                r.w:= 1;
+                r.h:= min(16, yd - yu + 1);
+                SDL_UpperBlit(tmpsurf, @r, Surface, @rr);
+            end;
+            yd:= yu - 1;
+        until yd < 0;
+    end;
+    SDL_FreeSurface(tmpsurf);
 end;
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
@@ -616,42 +616,42 @@ end;
 
 procedure LandSurface2LandPixels(Surface: PSDL_Surface);
 var x, y: LongInt;
-	p: PLongwordArray;
+    p: PLongwordArray;
 begin
 TryDo(Surface <> nil, 'Assert (LandSurface <> nil) failed', true);
 
 if SDL_MustLock(Surface) then
-	SDLTry(SDL_LockSurface(Surface) >= 0, true);
+    SDLTry(SDL_LockSurface(Surface) >= 0, true);
 
 p:= Surface^.pixels;
 for y:= 0 to LAND_HEIGHT - 1 do
-	begin
-	for x:= 0 to LAND_WIDTH - 1 do
-		if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask;
+    begin
+    for x:= 0 to LAND_WIDTH - 1 do
+        if Land[y, x] <> 0 then LandPixels[y, x]:= p^[x] or AMask;
 
-	p:= @(p^[Surface^.pitch div 4]);
-	end;
+    p:= @(p^[Surface^.pitch div 4]);
+    end;
 
 if SDL_MustLock(Surface) then
-	SDL_UnlockSurface(Surface);
+    SDL_UnlockSurface(Surface);
 end;
 
 procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
 begin
-	WriteLnToConsole('Generating land...');
-	GenBlank(EdgeTemplates[SelectTemplate]);
-	AddProgress();
+    WriteLnToConsole('Generating land...');
+    GenBlank(EdgeTemplates[SelectTemplate]);
+    AddProgress();
 
-	tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
+    tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
 
-	TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
-	ColorizeLand(tmpsurf);
-	AddOnLandObjects(tmpsurf);
+    TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
+    ColorizeLand(tmpsurf);
+    AddOnLandObjects(tmpsurf);
 
-	LandSurface2LandPixels(tmpsurf);
-	SDL_FreeSurface(tmpsurf);
-	AddProgress();
+    LandSurface2LandPixels(tmpsurf);
+    SDL_FreeSurface(tmpsurf);
+    AddProgress();
 end;
 
 procedure MakeFortsMap;
@@ -687,40 +687,40 @@ var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
 begin
-	tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-	if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
-	begin
-		cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
-		cpY:= LAND_HEIGHT - tmpsurf^.h;
-		if SDL_MustLock(tmpsurf) then
-			SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
+    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+    if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
+    begin
+        cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
+        cpY:= LAND_HEIGHT - tmpsurf^.h;
+        if SDL_MustLock(tmpsurf) then
+            SDLTry(SDL_LockSurface(tmpsurf) >= 0, true);
 
-			p:= tmpsurf^.pixels;
-			for y:= 0 to Pred(tmpsurf^.h) do
-			begin
-				for x:= 0 to Pred(tmpsurf^.w) do
-				begin
-					if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
-						Land[cpY + y, cpX + x]:= 0
-					else if p^[x] = (AMask or RMask) then
-						Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
-					else if p^[x] = $FFFFFFFF then
-						Land[cpY + y, cpX + x]:= COLOR_LAND;
-				end;
-				p:= @(p^[tmpsurf^.pitch div 4]);
-			end;
+            p:= tmpsurf^.pixels;
+            for y:= 0 to Pred(tmpsurf^.h) do
+            begin
+                for x:= 0 to Pred(tmpsurf^.w) do
+                begin
+                    if ((AMask and p^[x]) = 0) then  // Tiy was having trouble generating transparent black
+                        Land[cpY + y, cpX + x]:= 0
+                    else if p^[x] = (AMask or RMask) then
+                        Land[cpY + y, cpX + x]:= COLOR_INDESTRUCTIBLE
+                    else if p^[x] = $FFFFFFFF then
+                        Land[cpY + y, cpX + x]:= COLOR_LAND;
+                end;
+                p:= @(p^[tmpsurf^.pitch div 4]);
+            end;
 
-		if SDL_MustLock(tmpsurf) then
-			SDL_UnlockSurface(tmpsurf);
-	end;
-	if (tmpsurf <> nil) then 
-		SDL_FreeSurface(tmpsurf);
+        if SDL_MustLock(tmpsurf) then
+            SDL_UnlockSurface(tmpsurf);
+    end;
+    if (tmpsurf <> nil) then 
+        SDL_FreeSurface(tmpsurf);
 end;
 
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
-	s: shortstring;
-	f: textfile;
+    s: shortstring;
+    f: textfile;
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
@@ -747,10 +747,10 @@ topY:= LAND_HEIGHT - playHeight;
 TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Map should be 32bit', true);
 
 BlitImageAndGenerateCollisionInfo(
-	(LAND_WIDTH - tmpsurf^.w) div 2,
-	LAND_HEIGHT - tmpsurf^.h,
-	tmpsurf^.w,
-	tmpsurf);
+    (LAND_WIDTH - tmpsurf^.w) div 2,
+    LAND_HEIGHT - tmpsurf^.h,
+    tmpsurf^.w,
+    tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
 LoadMask;
@@ -789,38 +789,38 @@ else
                 end;
 
 if hasBorder then
-	begin
-	for y:= 0 to LAND_HEIGHT - 1 do
-		for x:= 0 to LAND_WIDTH - 1 do
-			if (y < topY) or (x < leftX) or (x > rightX) then
-				Land[y, x]:= COLOR_INDESTRUCTIBLE;
-	// experiment hardcoding cave
-	// also try basing cave dimensions on map/template dimensions, if they exist
-	for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
-		begin
-		for y:= topY to LAND_HEIGHT - 1 do
-			begin
-			Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
-			Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
-			if (y + w) mod 32 < 16 then
-				c:= AMask
-			else
-				c:= AMask or RMask or GMask; // FF00FFFF
-			LandPixels[y, leftX + w]:= c;
-			LandPixels[y, rightX - w]:= c;
-			end;
+    begin
+    for y:= 0 to LAND_HEIGHT - 1 do
+        for x:= 0 to LAND_WIDTH - 1 do
+            if (y < topY) or (x < leftX) or (x > rightX) then
+                Land[y, x]:= COLOR_INDESTRUCTIBLE;
+    // experiment hardcoding cave
+    // also try basing cave dimensions on map/template dimensions, if they exist
+    for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
+        begin
+        for y:= topY to LAND_HEIGHT - 1 do
+            begin
+            Land[y, leftX + w]:= COLOR_INDESTRUCTIBLE;
+            Land[y, rightX - w]:= COLOR_INDESTRUCTIBLE;
+            if (y + w) mod 32 < 16 then
+                c:= AMask
+            else
+                c:= AMask or RMask or GMask; // FF00FFFF
+            LandPixels[y, leftX + w]:= c;
+            LandPixels[y, rightX - w]:= c;
+            end;
 
-		for x:= leftX to rightX do
-			begin
-			Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
-			if (x + w) mod 32 < 16 then
-				c:= AMask
-			else
-				c:= AMask or RMask or GMask; // FF00FFFF
-			LandPixels[topY + w, x]:= c;
-			end;
-		end;
-	end;
+        for x:= leftX to rightX do
+            begin
+            Land[topY + w, x]:= COLOR_INDESTRUCTIBLE;
+            if (x + w) mod 32 < 16 then
+                c:= AMask
+            else
+                c:= AMask or RMask or GMask; // FF00FFFF
+            LandPixels[topY + w, x]:= c;
+            end;
+        end;
+    end;
 
 if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 
@@ -854,13 +854,13 @@ end;
 
 procedure init_uLand;
 begin
-	LandBackSurface:= nil;
+    LandBackSurface:= nil;
 end;
 
 procedure free_uLand;
 begin
-	if LandBackSurface <> nil then
-		SDL_FreeSurface(LandBackSurface);
+    if LandBackSurface <> nil then
+        SDL_FreeSurface(LandBackSurface);
 end;
 
 end.

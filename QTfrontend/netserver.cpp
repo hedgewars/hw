@@ -24,25 +24,25 @@
 
 HWNetServer::~HWNetServer()
 {
-	StopServer();
+    StopServer();
 }
 
 bool HWNetServer::StartServer(quint16 port)
 {
-	ds_port = port;
+    ds_port = port;
 
-	QStringList params;
-	params << QString("--port=%1").arg(port);
-	params << "--dedicated=False";
+    QStringList params;
+    params << QString("--port=%1").arg(port);
+    params << "--dedicated=False";
 
-	process.start(bindir->absolutePath() + "/hedgewars-server", params);
+    process.start(bindir->absolutePath() + "/hedgewars-server", params);
 
-	return process.waitForStarted(5000);
+    return process.waitForStarted(5000);
 }
 
 void HWNetServer::StopServer()
 {
-	process.close();
+    process.close();
 }
 
 

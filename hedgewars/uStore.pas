@@ -22,9 +22,9 @@ unit uStore;
 interface
 uses sysutils, uConsts, uTeams, SDLh, uFloat,
 {$IFDEF GLES11}
-	gles11;
+    gles11;
 {$ELSE}
-	GL, GLext;
+    GL, GLext;
 {$ENDIF}
 
 
@@ -175,171 +175,171 @@ end;
 procedure StoreLoad;
 var s: shortstring;
 
-	procedure WriteNames(Font: THWFont);
-	var t: LongInt;
-		i: LongInt;
-		r, rr: TSDL_Rect;
-		drY: LongInt;
-		texsurf, flagsurf, iconsurf: PSDL_Surface;
-	begin
-	r.x:= 0;
-	r.y:= 0;
-	drY:= - 4;
-	for t:= 0 to Pred(TeamsCount) do
-		with TeamsArray[t]^ do
-		begin
-		NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
+    procedure WriteNames(Font: THWFont);
+    var t: LongInt;
+        i: LongInt;
+        r, rr: TSDL_Rect;
+        drY: LongInt;
+        texsurf, flagsurf, iconsurf: PSDL_Surface;
+    begin
+    r.x:= 0;
+    r.y:= 0;
+    drY:= - 4;
+    for t:= 0 to Pred(TeamsCount) do
+        with TeamsArray[t]^ do
+        begin
+        NameTagTex:= RenderStringTex(TeamName, Clan^.Color, Font);
 
-		r.w:= cTeamHealthWidth + 5;
-		r.h:= NameTagTex^.h;
+        r.w:= cTeamHealthWidth + 5;
+        r.h:= NameTagTex^.h;
 
-		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-		TryDo(texsurf <> nil, errmsgCreateSurface, true);
-		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
+        TryDo(texsurf <> nil, errmsgCreateSurface, true);
+        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-		DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
-		rr:= r;
-		inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-		DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-		HealthTex:= Surface2Tex(texsurf, false);
-		SDL_FreeSurface(texsurf);
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColorChannels.value, texsurf, true);
+        rr:= r;
+        inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
+        DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
+        HealthTex:= Surface2Tex(texsurf, false);
+        SDL_FreeSurface(texsurf);
 
-		r.x:= 0;
-		r.y:= 0;
-		r.w:= 32;
-		r.h:= 32;
-		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-		TryDo(texsurf <> nil, errmsgCreateSurface, true);
-		TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        r.x:= 0;
+        r.y:= 0;
+        r.w:= 32;
+        r.h:= 32;
+        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
+        TryDo(texsurf <> nil, errmsgCreateSurface, true);
+        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-		r.w:= 26;
-		r.h:= 19;
+        r.w:= 26;
+        r.h:= 19;
 
-		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
 
-		// overwrite flag for cpu teams and keep players from using it
-		if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
-			Flag:= 'cpu'
-		else if Flag = 'cpu' then
-			Flag:= 'hedgewars';
-		
-		flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
-		if flagsurf = nil then
-			flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
-		TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
-		copyToXY(flagsurf, texsurf, 2, 2);
-		SDL_FreeSurface(flagsurf);
-		
-		// restore black border pixels inside the flag
-		PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
-		PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
-		PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
-		PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
+        // overwrite flag for cpu teams and keep players from using it
+        if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
+            Flag:= 'cpu'
+        else if Flag = 'cpu' then
+            Flag:= 'hedgewars';
+        
+        flagsurf:= LoadImage(Pathz[ptFlags] + '/' + Flag, ifNone);
+        if flagsurf = nil then
+            flagsurf:= LoadImage(Pathz[ptFlags] + '/hedgewars', ifNone);
+        TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
+        copyToXY(flagsurf, texsurf, 2, 2);
+        SDL_FreeSurface(flagsurf);
+        
+        // restore black border pixels inside the flag
+        PLongwordArray(texsurf^.pixels)^[32 * 2 +  2]:= cNearBlackColor;
+        PLongwordArray(texsurf^.pixels)^[32 * 2 + 23]:= cNearBlackColor;
+        PLongwordArray(texsurf^.pixels)^[32 * 16 +  2]:= cNearBlackColor;
+        PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
 
-		FlagTex:= Surface2Tex(texsurf, false);
-		
-		dec(drY, r.h + 2);
-		DrawHealthY:= drY;
-		for i:= 0 to 7 do
-			with Hedgehogs[i] do
-				if Gear <> nil then
-					begin
-					NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
-					if Hat <> 'NoHat' then
-						begin
+        FlagTex:= Surface2Tex(texsurf, false);
+        
+        dec(drY, r.h + 2);
+        DrawHealthY:= drY;
+        for i:= 0 to 7 do
+            with Hedgehogs[i] do
+                if Gear <> nil then
+                    begin
+                    NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
+                    if Hat <> 'NoHat' then
+                        begin
                         texsurf:= nil;
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-						   texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
+                           texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
                         else
-						   texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
-						if texsurf <> nil then
-							begin
-							HatTex:= Surface2Tex(texsurf, true);
-							SDL_FreeSurface(texsurf)
-							end
-						end
-					end;
-		end;
-	MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
-	iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
-	if iconsurf <> nil then
-		begin
-		r.x:= 0;
-		r.y:= 0;
-		r.w:= 28;
-		r.h:= 28;
-		DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
-		ropeIconTex:= Surface2Tex(iconsurf, false);
-		SDL_FreeSurface(iconsurf)
-		end;
-	end;
+                           texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
+                        if texsurf <> nil then
+                            begin
+                            HatTex:= Surface2Tex(texsurf, true);
+                            SDL_FreeSurface(texsurf)
+                            end
+                        end
+                    end;
+        end;
+    MissionIcons:= LoadImage(Pathz[ptGraphics] + '/missions', ifCritical);
+    iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
+    if iconsurf <> nil then
+        begin
+        r.x:= 0;
+        r.y:= 0;
+        r.w:= 28;
+        r.h:= 28;
+        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, iconsurf, true);
+        ropeIconTex:= Surface2Tex(iconsurf, false);
+        SDL_FreeSurface(iconsurf)
+        end;
+    end;
 
-	procedure MakeCrossHairs;
-	var t: LongInt;
-		tmpsurf, texsurf: PSDL_Surface;
-		Color, i: Longword;
-	begin
-	s:= Pathz[ptGraphics] + '/' + cCHFileName;
-	tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
+    procedure MakeCrossHairs;
+    var t: LongInt;
+        tmpsurf, texsurf: PSDL_Surface;
+        Color, i: Longword;
+    begin
+    s:= Pathz[ptGraphics] + '/' + cCHFileName;
+    tmpsurf:= LoadImage(s, ifAlpha or ifCritical);
 
-	for t:= 0 to Pred(TeamsCount) do
-		with TeamsArray[t]^ do
-		begin
-		texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
-		TryDo(texsurf <> nil, errmsgCreateSurface, true);
+    for t:= 0 to Pred(TeamsCount) do
+        with TeamsArray[t]^ do
+        begin
+        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
+        TryDo(texsurf <> nil, errmsgCreateSurface, true);
 
-		Color:= Clan^.Color;
-		Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
-		SDL_FillRect(texsurf, nil, Color);
+        Color:= Clan^.Color;
+        Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
+        SDL_FillRect(texsurf, nil, Color);
 
-		SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
+        SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
 
-		TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
+        TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
 
-		if SDL_MustLock(texsurf) then
-			SDLTry(SDL_LockSurface(texsurf) >= 0, true);
+        if SDL_MustLock(texsurf) then
+            SDLTry(SDL_LockSurface(texsurf) >= 0, true);
 
-		// make black pixel be alpha-transparent
-		for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-			if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= 0;
+        // make black pixel be alpha-transparent
+        for i:= 0 to texsurf^.w * texsurf^.h - 1 do
+            if PLongwordArray(texsurf^.pixels)^[i] = AMask then PLongwordArray(texsurf^.pixels)^[i]:= 0;
 
-		if SDL_MustLock(texsurf) then
-			SDL_UnlockSurface(texsurf);
+        if SDL_MustLock(texsurf) then
+            SDL_UnlockSurface(texsurf);
 
-		CrosshairTex:= Surface2Tex(texsurf, false);
-		SDL_FreeSurface(texsurf)
-		end;
+        CrosshairTex:= Surface2Tex(texsurf, false);
+        SDL_FreeSurface(texsurf)
+        end;
 
-	SDL_FreeSurface(tmpsurf)
-	end;
+    SDL_FreeSurface(tmpsurf)
+    end;
 
-	procedure InitHealth;
-	var i, t: LongInt;
-	begin
-	for t:= 0 to Pred(TeamsCount) do
-		if TeamsArray[t] <> nil then
-			with TeamsArray[t]^ do
-				begin
-				for i:= 0 to cMaxHHIndex do
-					if Hedgehogs[i].Gear <> nil then
-						RenderHealth(Hedgehogs[i]);
-				end
-	end;
+    procedure InitHealth;
+    var i, t: LongInt;
+    begin
+    for t:= 0 to Pred(TeamsCount) do
+        if TeamsArray[t] <> nil then
+            with TeamsArray[t]^ do
+                begin
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        RenderHealth(Hedgehogs[i]);
+                end
+    end;
 
-	procedure LoadGraves;
-	var t: LongInt;
-		texsurf: PSDL_Surface;
-	begin
-	for t:= 0 to Pred(TeamsCount) do
-	if TeamsArray[t] <> nil then
-		with TeamsArray[t]^ do
-			begin
-			if GraveName = '' then GraveName:= 'Simple';
-			texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
-			GraveTex:= Surface2Tex(texsurf, false);
-			SDL_FreeSurface(texsurf)
-			end
-	end;
+    procedure LoadGraves;
+    var t: LongInt;
+        texsurf: PSDL_Surface;
+    begin
+    for t:= 0 to Pred(TeamsCount) do
+    if TeamsArray[t] <> nil then
+        with TeamsArray[t]^ do
+            begin
+            if GraveName = '' then GraveName:= 'Simple';
+            texsurf:= LoadImage(Pathz[ptGraves] + '/' + GraveName, ifCritical or ifTransparent);
+            GraveTex:= Surface2Tex(texsurf, false);
+            SDL_FreeSurface(texsurf)
+            end
+    end;
 
 var ii: TSprite;
     fi: THWFont;
@@ -349,15 +349,15 @@ var ii: TSprite;
 begin
 
 for fi:= Low(THWFont) to High(THWFont) do
-	with Fontz[fi] do
-		begin
-		s:= Pathz[ptFonts] + '/' + Name;
-		WriteToConsole(msgLoading + s + '... ');
-		Handle:= TTF_OpenFont(Str2PChar(s), Height);
-		SDLTry(Handle <> nil, true);
-		TTF_SetFontStyle(Handle, style);
-		WriteLnToConsole(msgOK)
-		end;
+    with Fontz[fi] do
+        begin
+        s:= Pathz[ptFonts] + '/' + Name;
+        WriteToConsole(msgLoading + s + '... ');
+        Handle:= TTF_OpenFont(Str2PChar(s), Height);
+        SDLTry(Handle <> nil, true);
+        TTF_SetFontStyle(Handle, style);
+        WriteLnToConsole(msgOK)
+        end;
 
 WriteNames(fnt16);
 MakeCrossHairs;
@@ -365,42 +365,42 @@ LoadGraves;
 
 AddProgress;
 for ii:= Low(TSprite) to High(TSprite) do
-	with SpritesData[ii] do
+    with SpritesData[ii] do
         // FIXME - add a sprite attribute
         if (not cReducedQuality) or (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR, sprFlake])) then // FIXME: hack
-		begin
-			if AltPath = ptNone then
-				if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
-					tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifLowRes)
-				else
-					tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
-			else begin
-				tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
-				if tmpsurf = nil then
-					tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
-				end;
+        begin
+            if AltPath = ptNone then
+                if ii in [sprHorizontL, sprHorizontR, sprSkyL, sprSkyR] then // FIXME: hack
+                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifLowRes)
+                else
+                    tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent or ifCritical or ifLowRes)
+            else begin
+                tmpsurf:= LoadImage(Pathz[Path] + '/' + FileName, ifAlpha or ifTransparent);
+                if tmpsurf = nil then
+                    tmpsurf:= LoadImage(Pathz[AltPath] + '/' + FileName, ifAlpha or ifCritical or ifTransparent);
+                end;
 
-			if tmpsurf <> nil then
-			begin
-				if imageWidth = 0 then imageWidth:= tmpsurf^.w;
-				if imageHeight = 0 then imageHeight:= tmpsurf^.h;
-				if Width = 0 then Width:= tmpsurf^.w;
-				if Height = 0 then Height:= tmpsurf^.h;
-				if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
-					Texture:= Surface2Tex(tmpsurf, true)
-				else
-					begin
-					Texture:= Surface2Tex(tmpsurf, false);
-					if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
-					begin
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					end;
-				end;
-				if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
-				end
-			else
-				Surface:= nil
-		end;
+            if tmpsurf <> nil then
+            begin
+                if imageWidth = 0 then imageWidth:= tmpsurf^.w;
+                if imageHeight = 0 then imageHeight:= tmpsurf^.h;
+                if Width = 0 then Width:= tmpsurf^.w;
+                if Height = 0 then Height:= tmpsurf^.h;
+                if (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]) then
+                    Texture:= Surface2Tex(tmpsurf, true)
+                else
+                    begin
+                    Texture:= Surface2Tex(tmpsurf, false);
+                    if (ii = sprWater) and not cReducedQuality then // HACK: We should include some sprite attribute to define the texture wrap directions
+                    begin
+                        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                    end;
+                end;
+                if saveSurf then Surface:= tmpsurf else SDL_FreeSurface(tmpsurf)
+                end
+            else
+                Surface:= nil
+        end;
 
 AddProgress;
 
@@ -418,22 +418,22 @@ AddProgress;
 
 // name of weapons in ammo menu
 for ai:= Low(TAmmoType) to High(TAmmoType) do
-	with Ammoz[ai] do
-		begin
-		tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
-		tmpsurf:= doSurfaceConversion(tmpsurf);
-		NameTex:= Surface2Tex(tmpsurf, false);
-		SDL_FreeSurface(tmpsurf)
-		end;
+    with Ammoz[ai] do
+        begin
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
+        tmpsurf:= doSurfaceConversion(tmpsurf);
+        NameTex:= Surface2Tex(tmpsurf, false);
+        SDL_FreeSurface(tmpsurf)
+        end;
 
 // number of weapons in ammo menu
 for i:= Low(CountTexz) to High(CountTexz) do
-	begin
-	tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
-	tmpsurf:= doSurfaceConversion(tmpsurf);
-	CountTexz[i]:= Surface2Tex(tmpsurf, false);
-	SDL_FreeSurface(tmpsurf)
-	end;
+    begin
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
+    tmpsurf:= doSurfaceConversion(tmpsurf);
+    CountTexz[i]:= Surface2Tex(tmpsurf, false);
+    SDL_FreeSurface(tmpsurf)
+    end;
 
 {$IFDEF DUMP}
 //not working anymore, where are LandSurface and StoreSurface defined?
@@ -516,7 +516,7 @@ end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 begin
-	DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
+    DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
 end;
 
 procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
@@ -538,9 +538,9 @@ glScalef(Scale, Scale, 1);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 if Dir < 0 then
-	hw:= w div -2
+    hw:= w div -2
 else
-	hw:= w div 2;
+    hw:= w div 2;
 
 nx:= round(Texture^.w / w); // number of horizontal frames
 ny:= round(Texture^.h / h); // number of vertical frames
@@ -587,9 +587,9 @@ end;
 procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 begin
 DrawRotatedTex(SpritesData[Sprite].Texture,
-		SpritesData[Sprite].Width,
-		SpritesData[Sprite].Height,
-		X, Y, Dir, Angle)
+        SpritesData[Sprite].Width,
+        SpritesData[Sprite].Height,
+        X, Y, Dir, Angle)
 end;
 
 procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
@@ -703,10 +703,10 @@ end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 const VertexBuffer: array [0..3] of TVertex2f = (
-		(x: -16; y: -16),
-		(x:  16; y: -16),
-		(x:  16; y:  16),
-		(x: -16; y:  16));
+        (x: -16; y: -16),
+        (x:  16; y: -16),
+        (x:  16; y:  16),
+        (x: -16; y:  16));
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
@@ -1032,81 +1032,81 @@ end;
 procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
-	str(Hedgehog.Gear^.Health, s);
-	if Hedgehog.HealthTagTex <> nil then
-		FreeTexture(Hedgehog.HealthTagTex);
-	Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
+    str(Hedgehog.Gear^.Health, s);
+    if Hedgehog.HealthTagTex <> nil then
+        FreeTexture(Hedgehog.HealthTagTex);
+    Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
 begin
-	WriteToConsole(msgLoading + filename + ' [flags: ' + inttostr(imageFlags) + ']... ');
+    WriteToConsole(msgLoading + filename + ' [flags: ' + inttostr(imageFlags) + ']... ');
 
-	s:= filename + '.png';
-	tmpsurf:= IMG_Load(Str2PChar(s));
+    s:= filename + '.png';
+    tmpsurf:= IMG_Load(Str2PChar(s));
 
-	if (imageFlags and ifLowRes) <> 0 then
-	begin
-		s:= filename + '-lowres.png';
-		if (tmpsurf <> nil) then
-		begin
-			if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-			begin
-				SDL_FreeSurface(tmpsurf);
-				{$IFDEF DEBUGFILE}
-				AddFileLog('...image too big, trying to load lowres version: ' + s + '...');
-				{$ENDIF}
-				tmpsurf:= IMG_Load(Str2PChar(s))
-			end;
-		end
-		else
-		begin
-			{$IFDEF DEBUGFILE}
-			AddFileLog('...image not found, trying to load lowres version: ' + s + '...');
-			{$ENDIF}
-			tmpsurf:= IMG_Load(Str2PChar(s))
-		end;
-	end;
+    if (imageFlags and ifLowRes) <> 0 then
+    begin
+        s:= filename + '-lowres.png';
+        if (tmpsurf <> nil) then
+        begin
+            if ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
+            begin
+                SDL_FreeSurface(tmpsurf);
+                {$IFDEF DEBUGFILE}
+                AddFileLog('...image too big, trying to load lowres version: ' + s + '...');
+                {$ENDIF}
+                tmpsurf:= IMG_Load(Str2PChar(s))
+            end;
+        end
+        else
+        begin
+            {$IFDEF DEBUGFILE}
+            AddFileLog('...image not found, trying to load lowres version: ' + s + '...');
+            {$ENDIF}
+            tmpsurf:= IMG_Load(Str2PChar(s))
+        end;
+    end;
 
-	if tmpsurf = nil then
-	begin
-		OutError(msgFailed, (imageFlags and ifCritical) <> 0);
-		exit(nil)
-	end;
+    if tmpsurf = nil then
+    begin
+        OutError(msgFailed, (imageFlags and ifCritical) <> 0);
+        exit(nil)
+    end;
 
-	if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-	begin
-		SDL_FreeSurface(tmpsurf);
-		OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
-		// dummy surface to replace non-critical textures that failed to load due to their size
-		exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
-	end;
+    if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
+    begin
+        SDL_FreeSurface(tmpsurf);
+        OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
+        // dummy surface to replace non-critical textures that failed to load due to their size
+        exit(SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32, 32, RMask, GMask, BMask, AMask));
+    end;
 
-	tmpsurf:= doSurfaceConversion(tmpsurf);
+    tmpsurf:= doSurfaceConversion(tmpsurf);
 
-	if (imageFlags and ifTransparent) <> 0 then
-		TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+    if (imageFlags and ifTransparent) <> 0 then
+        TryDo(SDL_SetColorKey(tmpsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-	WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
-	WriteLnToConsole(msgOK);
+    WriteLnToConsole('(' + inttostr(tmpsurf^.w) + ',' + inttostr(tmpsurf^.h) + ') ');
+    WriteLnToConsole(msgOK);
 
-	LoadImage:= tmpsurf //Result
+    LoadImage:= tmpsurf //Result
 end;
 
 function glLoadExtension(extension : shortstring) : boolean;
 begin
 {$IFDEF IPHONEOS}
-	glLoadExtension:= false;
+    glLoadExtension:= false;
 {$ELSE}
-	glLoadExtension:= glext_LoadExtension(extension);
+    glLoadExtension:= glext_LoadExtension(extension);
 {$ENDIF}
 {$IFDEF DEBUGFILE}
-	if not glLoadExtension then
-		AddFileLog('OpenGL - "' + extension + '" failed to load')
-	else
-		AddFileLog('OpenGL - "' + extension + '" loaded');
+    if not glLoadExtension then
+        AddFileLog('OpenGL - "' + extension + '" failed to load')
+    else
+        AddFileLog('OpenGL - "' + extension + '" loaded');
 {$ENDIF}
 end;
 
@@ -1115,84 +1115,84 @@ var vendor: shortstring;
 begin
 {$IFDEF IPHONEOS}
 //these are good performance savers, perhaps we could enable them by default
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
-	SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
-	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
-	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-	//SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
+    SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+    //SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
 {$ELSE}
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
 
 {$IFNDEF SDL13}
 // this attribute is default in 1.3 and must be enabled in MacOSX
 {$IFNDEF DARWIN}
-	if cVSyncInUse then
+    if cVSyncInUse then
 {$ENDIF}
-		SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+        SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
 {$ENDIF}
 
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
 
-	vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
+    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
 {$IFDEF DEBUGFILE}
-	AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
-	AddFileLog('  |----- Vendor: ' + vendor);
-	AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
-	AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
+    AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
+    AddFileLog('  |----- Vendor: ' + vendor);
+    AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
+    AddFileLog('  \----- GL_MAX_TEXTURE_SIZE: ' + inttostr(MaxTextureSize));
 {$ENDIF}
 
-	if MaxTextureSize <= 0 then
-	begin
-		MaxTextureSize:= 1024;
+    if MaxTextureSize <= 0 then
+    begin
+        MaxTextureSize:= 1024;
 {$IFDEF DEBUGFILE}
-		AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
+        AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
 {$ENDIF}
-	end;
+    end;
 
 {$IFNDEF IPHONEOS}
-	if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
-		cGPUVendor:= gvNVIDIA
-	else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
-		cGPUVendor:= gvATI
-	else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
-		cGPUVendor:= gvIntel;
+    if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
+        cGPUVendor:= gvNVIDIA
+    else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
+        cGPUVendor:= gvATI
+    else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
+        cGPUVendor:= gvIntel;
 //SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
 {$ELSE}
-	cGPUVendor:= gvApple;
+    cGPUVendor:= gvApple;
 {$ENDIF}
 
 {$IFDEF DEBUGFILE}
-	if cGPUVendor = gvUnknown then
-		AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
+    if cGPUVendor = gvUnknown then
+        AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
 {$ELSE}
-	// just avoid 'never used' compiler warning for now
-	if cGPUVendor = gvUnknown then cGPUVendor:= gvUnknown;
+    // just avoid 'never used' compiler warning for now
+    if cGPUVendor = gvUnknown then cGPUVendor:= gvUnknown;
 {$ENDIF}
 
-	// set view port to whole window
+    // set view port to whole window
 {$IFDEF IPHONEOS}
-	glViewport(0, 0, cScreenHeight, cScreenWidth);
+    glViewport(0, 0, cScreenHeight, cScreenWidth);
 {$ELSE}
-	glViewport(0, 0, cScreenWidth, cScreenHeight);
+    glViewport(0, 0, cScreenWidth, cScreenHeight);
 {$ENDIF}
 
-	glMatrixMode(GL_MODELVIEW);
-	// prepare default translation/scaling
-	glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    // prepare default translation/scaling
+    glLoadIdentity();
 {$IFDEF IPHONEOS}
-	glRotatef(-90, 0, 0, 1);
+    glRotatef(-90, 0, 0, 1);
 {$ENDIF}
-	glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-	glTranslatef(0, -cScreenHeight / 2, 0);
+    glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+    glTranslatef(0, -cScreenHeight / 2, 0);
 
-	// enable alpha blending
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // enable alpha blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 end;
 
 procedure SetScale(f: GLfloat);
@@ -1203,22 +1203,22 @@ scale: GLfloat = 1.5;
 scale: GLfloat = 2.0;
 {$ENDIF}
 begin
-	// leave immediately if scale factor did not change
-	if f = cScaleFactor then exit;
+    // leave immediately if scale factor did not change
+    if f = cScaleFactor then exit;
 
-	if f = scale then glPopMatrix	// "return" to default scaling
-	else				// other scaling
-	begin
-		glPushMatrix;		// save default scaling
-		glLoadIdentity;
+    if f = scale then glPopMatrix   // "return" to default scaling
+    else                // other scaling
+    begin
+        glPushMatrix;       // save default scaling
+        glLoadIdentity;
 {$IFDEF IPHONEOS}
-		glRotatef(-90, 0, 0, 1);
+        glRotatef(-90, 0, 0, 1);
 {$ENDIF}
-		glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-		glTranslatef(0, -cScreenHeight / 2, 0);
-	end;
+        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+        glTranslatef(0, -cScreenHeight / 2, 0);
+    end;
 
-	cScaleFactor:= f;
+    cScaleFactor:= f;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1226,55 +1226,55 @@ procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
 begin
-	if Step = 0 then
-	begin
+    if Step = 0 then
+    begin
 {$IFDEF SDL_IMAGE_NEWER}
-		WriteToConsole('Init SDL_image... ');
-		SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
-		WriteLnToConsole(msgOK);
+        WriteToConsole('Init SDL_image... ');
+        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+        WriteLnToConsole(msgOK);
 {$ENDIF}
-	
-		WriteToConsole(msgLoading + 'progress sprite: ');
-		texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
+    
+        WriteToConsole(msgLoading + 'progress sprite: ');
+        texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 
-		ProgrTex:= Surface2Tex(texsurf, false);
-		
-		squaresize:= texsurf^.w shr 1;
-		numsquares:= texsurf^.h div squaresize;
-		SDL_FreeSurface(texsurf);
-	end;
+        ProgrTex:= Surface2Tex(texsurf, false);
+        
+        squaresize:= texsurf^.w shr 1;
+        numsquares:= texsurf^.h div squaresize;
+        SDL_FreeSurface(texsurf);
+    end;
 
-	TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
+    TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
 
-	glClear(GL_COLOR_BUFFER_BIT);
-	glEnable(GL_TEXTURE_2D);
-	if Step < numsquares then r.x:= 0
-	else r.x:= squaresize;
-	
-	r.y:= (Step mod numsquares) * squaresize;
-	r.w:= squaresize;
-	r.h:= squaresize;
-	
-	DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glEnable(GL_TEXTURE_2D);
+    if Step < numsquares then r.x:= 0
+    else r.x:= squaresize;
+    
+    r.y:= (Step mod numsquares) * squaresize;
+    r.w:= squaresize;
+    r.h:= squaresize;
+    
+    DrawFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
 
-	glDisable(GL_TEXTURE_2D);
-	SDL_GL_SwapBuffers();
+    glDisable(GL_TEXTURE_2D);
+    SDL_GL_SwapBuffers();
 {$IFDEF SDL13}
-	SDL_RenderPresent();
+    SDL_RenderPresent();
 {$ENDIF}
-	inc(Step);
+    inc(Step);
 
 end;
 
 
 procedure FinishProgress;
 begin
-	WriteLnToConsole('Freeing progress surface... ');
-	FreeTexture(ProgrTex);
+    WriteLnToConsole('Freeing progress surface... ');
+    FreeTexture(ProgrTex);
 
 {$IFDEF IPHONEOS}
-	// show overlay buttons
-	IPH_showControls;
+    // show overlay buttons
+    IPH_showControls;
 {$ENDIF}
 end;
 
@@ -1347,11 +1347,11 @@ end;
 
 function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 var tmpsurf: PSDL_SURFACE;
-	w, h, i, j: LongInt;
-	font: THWFont;
-	r, r2: TSDL_Rect;
-	wa, ha: LongInt;
-	tmpline, tmpline2, tmpdesc: ansistring;
+    w, h, i, j: LongInt;
+    font: THWFont;
+    r, r2: TSDL_Rect;
+    wa, ha: LongInt;
+    tmpline, tmpline2, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
 if caption = '' then caption:= '???';
@@ -1384,25 +1384,25 @@ inc(h, j + ha);
 // get description's dimensions
 tmpdesc:= description;
 while tmpdesc <> '' do
-	begin
-	tmpline:= tmpdesc;
-	SplitByChar(tmpline, tmpdesc, '|');
-	if tmpline <> '' then
-		begin
-		TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), i, j);
-		if w < (i + wa) then w:= i + wa;
-		inc(h, j + ha)
-		end
-	end;
+    begin
+    tmpline:= tmpdesc;
+    SplitByChar(tmpline, tmpdesc, '|');
+    if tmpline <> '' then
+        begin
+        TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), i, j);
+        if w < (i + wa) then w:= i + wa;
+        inc(h, j + ha)
+        end
+    end;
 
 if extra <> '' then
-	begin
-	// get extra label's dimensions
-	TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), i, j);
-	if w < (i + wa) then w:= i + wa;
-	inc(h, j + ha);
-	end;
-	
+    begin
+    // get extra label's dimensions
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), i, j);
+    if w < (i + wa) then w:= i + wa;
+    inc(h, j + ha);
+    end;
+    
 // add borders space
 inc(w, wa);
 inc(h, ha + 8);
@@ -1425,23 +1425,23 @@ r:= WriteInRect(tmpsurf, 36 + FontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcap
 // render all description lines
 tmpdesc:= description;
 while tmpdesc <> '' do
-	begin
-	tmpline:= tmpdesc;
-	SplitByChar(tmpline, tmpdesc, '|');
-	r2:= r;
-	if tmpline <> '' then
-		begin
-		r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
-		
-		// render highlighted caption (if there's a ':')
-		SplitByChar(tmpline, tmpline2, ':');
-		if tmpline2 <> '' then
-			WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
-		end
-	end;
+    begin
+    tmpline:= tmpdesc;
+    SplitByChar(tmpline, tmpdesc, '|');
+    r2:= r;
+    if tmpline <> '' then
+        begin
+        r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
+        
+        // render highlighted caption (if there's a ':')
+        SplitByChar(tmpline, tmpline2, ':');
+        if tmpline2 <> '' then
+            WriteInRect(tmpsurf, FontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
+        end
+    end;
 
 if extra <> '' then
-	r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, extracolor, font, extra);
+    r:= WriteInRect(tmpsurf, FontBorder + 2, r.y + r.h, extracolor, font, extra);
 
 r.x:= FontBorder + 6;
 r.y:= FontBorder + 4;
@@ -1449,7 +1449,7 @@ r.w:= 32;
 r.h:= 32;
 SDL_FillRect(tmpsurf, @r, $ffffffff);
 SDL_UpperBlit(iconsurf, iconrect, tmpsurf, @r);
-	
+    
 RenderHelpWindow:=  Surface2Tex(tmpsurf, true);
 SDL_FreeSurface(tmpsurf)
 end;
@@ -1457,16 +1457,16 @@ end;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 {$IFNDEF IPHONEOS}
 var r: TSDL_Rect;
-	i: LongInt;
-	extra: ansistring;
-	extracolor: LongInt;
+    i: LongInt;
+    extra: ansistring;
+    extracolor: LongInt;
 begin
 // don't do anything if the window shouldn't be shown
 if not cWeaponTooltips then
-	begin
-	WeaponTooltipTex:= nil;
-	exit
-	end;
+    begin
+    WeaponTooltipTex:= nil;
+    exit
+    end;
 
 // free old texture
 FreeWeaponTooltip;
@@ -1483,20 +1483,20 @@ extra:= '';
 extracolor:= 0;
 
 if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
-	begin
-	extra:= trmsg[sidNotYetAvailable];
-	extracolor:= LongInt($ffc77070);
-	end
+    begin
+    extra:= trmsg[sidNotYetAvailable];
+    extracolor:= LongInt($ffc77070);
+    end
 else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEndHint) <> 0 then // weapon or utility won't end your turn
-	begin
-	extra:= trmsg[sidNoEndTurn];
-	extracolor:= LongInt($ff70c770);
-	end
+    begin
+    extra:= trmsg[sidNoEndTurn];
+    extracolor:= LongInt($ff70c770);
+    end
 else 
-	begin
-	extra:= '';
-	extracolor:= 0;
-	end;
+    begin
+    extra:= '';
+    extracolor:= 0;
+    end;
 
 // render window and return the texture
 WeaponTooltipTex:= RenderHelpWindow(trammo[Ammoz[atype].NameId], trammoc[Ammoz[atype].NameId], trammod[Ammoz[atype].NameId], extra, extracolor, SpritesData[sprAMAmmos].Surface, @r)
@@ -1510,7 +1510,7 @@ begin
 {$IFNDEF IPHONEOS}
 // draw the texture if it exists
 if WeaponTooltipTex <> nil then
-	DrawTexture(x, y, WeaponTooltipTex)
+    DrawTexture(x, y, WeaponTooltipTex)
 {$ENDIF}
 end;
 
@@ -1519,7 +1519,7 @@ begin
 {$IFNDEF IPHONEOS}
 // free the existing texture (if there's any)
 if WeaponTooltipTex = nil then
-	exit;
+    exit;
 FreeTexture(WeaponTooltipTex);
 WeaponTooltipTex:= nil
 {$ENDIF}

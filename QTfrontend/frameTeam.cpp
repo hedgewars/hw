@@ -27,32 +27,32 @@
 FrameTeams::FrameTeams(QWidget* parent) :
   QFrame(parent), maxHedgehogsPerGame(48), overallHedgehogs(0), mainLayout(this), nonInteractive(false)
 {
-	QPalette newPalette = palette();
-	newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-	setPalette(newPalette);
-	setAutoFillBackground(true);
+    QPalette newPalette = palette();
+    newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+    setPalette(newPalette);
+    setAutoFillBackground(true);
 
-	mainLayout.setSpacing(1);
-	mainLayout.setContentsMargins(4, 4, 4, 4);
+    mainLayout.setSpacing(1);
+    mainLayout.setContentsMargins(4, 4, 4, 4);
 
-	availableColors.push_back(*color1);
-	availableColors.push_back(*color2);
-	availableColors.push_back(*color3);
-	availableColors.push_back(*color4);
-	availableColors.push_back(*color5);
-	availableColors.push_back(*color6);
+    availableColors.push_back(*color1);
+    availableColors.push_back(*color2);
+    availableColors.push_back(*color3);
+    availableColors.push_back(*color4);
+    availableColors.push_back(*color5);
+    availableColors.push_back(*color6);
 
-	resetColors();
+    resetColors();
 }
 
 void FrameTeams::setInteractivity(bool interactive)
 {
-	nonInteractive = !interactive;
-	for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
-		TeamShowWidget* pts = dynamic_cast<TeamShowWidget*>(it.value());
-		if(!pts) throw;
-		pts->setInteractivity(interactive);
-	}
+    nonInteractive = !interactive;
+    for(tmapTeamToWidget::iterator it=teamToWidget.begin(); it!=teamToWidget.end(); ++it) {
+        TeamShowWidget* pts = dynamic_cast<TeamShowWidget*>(it.value());
+        if(!pts) throw;
+        pts->setInteractivity(interactive);
+    }
 }
 
 void FrameTeams::resetColors()

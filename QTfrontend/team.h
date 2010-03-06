@@ -33,38 +33,38 @@ class HWTeamConstructException
 
 class HWTeam
 {
-	public:
-		HWTeam(const QString & teamname);
-		HWTeam(const QStringList& strLst);
-		HWTeam();
+    public:
+        HWTeam(const QString & teamname);
+        HWTeam(const QStringList& strLst);
+        HWTeam();
 
-		bool isNetTeam() const;
+        bool isNetTeam() const;
 
-		QString TeamName;
-		QString HHName[8];
-		QString HHHat[8];
-		QString Grave;
-		QString Fort;
-		QString Flag;
-		QString Voicepack;
-		QString Owner;
-		unsigned int difficulty;
-		BindAction binds[BINDS_NUMBER];
+        QString TeamName;
+        QString HHName[8];
+        QString HHHat[8];
+        QString Grave;
+        QString Fort;
+        QString Flag;
+        QString Voicepack;
+        QString Owner;
+        unsigned int difficulty;
+        BindAction binds[BINDS_NUMBER];
 
-		unsigned char numHedgehogs;
-		QColor teamColor;
+        unsigned char numHedgehogs;
+        QColor teamColor;
 
-		bool LoadFromFile();
-		bool SaveToFile();
-		void SetToPage(HWForm * hwform);
-		void GetFromPage(HWForm * hwform);
-		QStringList TeamGameConfig(quint32 InitHealth) const;
+        bool LoadFromFile();
+        bool SaveToFile();
+        void SetToPage(HWForm * hwform);
+        void GetFromPage(HWForm * hwform);
+        QStringList TeamGameConfig(quint32 InitHealth) const;
 
-		bool operator==(const HWTeam& t1) const;
-		bool operator<(const HWTeam& t1) const;
-	private:
-		bool m_isNetTeam;
-		QString OldTeamName;
+        bool operator==(const HWTeam& t1) const;
+        bool operator<(const HWTeam& t1) const;
+    private:
+        bool m_isNetTeam;
+        QString OldTeamName;
 
 };
 

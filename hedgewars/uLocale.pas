@@ -21,27 +21,27 @@
 unit uLocale;
 interface
 type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
-			sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
-			sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
-			sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
-			sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
-			sidKamikaze, sidCake, sidSeduction, sidWatermelon,
-			sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
+            sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
+            sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
+            sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,
+            sidGirder, sidTeleport, sidSwitch, sidMortar, sidWhip,
+            sidKamikaze, sidCake, sidSeduction, sidWatermelon,
+            sidHellishBomb, sidDrill, sidBallgun, sidNapalm, sidRCPlane,
             sidLowGravity, sidExtraDamage, sidInvulnerable, sidExtraTime,
             sidLaserSight, sidVampiric, sidSniperRifle, sidJetpack, sidMolotov);
 
-	TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
-			sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
-			sidNoEndTurn, sidNotYetAvailable);
+    TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
+            sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
+            sidNoEndTurn, sidNotYetAvailable);
 
-	TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
-			eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
-			eidHomerun, eidFrozen);
+    TEventId = (eidDied, eidDrowned, eidRoundStart, eidRoundWin, eidRoundDraw,
+            eidNewHealthPack, eidNewAmmoPack, eidNewUtilityPack, eidTurnSkipped, eidHurtSelf,
+            eidHomerun, eidFrozen);
 
-	TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
-			gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-			gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
-			gidDamageModifier);
+    TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
+            gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
+            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, gidRandomMineTimer,
+            gidDamageModifier);
 
 const MAX_EVENT_STRINGS = 100;
 var trammo: array[TAmmoStrId] of ansistring;
@@ -59,15 +59,15 @@ function GetEventString(e: TEventId): ansistring;
 implementation
 uses uMisc, uRandom, uConsole;
 
-var	trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
-	trevt_n: array[TEventId] of integer;
+var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
+    trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
 var s: shortstring;
     f: textfile;
     a, b, c: LongInt;
-	first: array[TEventId] of boolean;
-	e: TEventId;
+    first: array[TEventId] of boolean;
+    e: TEventId;
     loaded: boolean;
 begin
 loaded:= false;
@@ -120,10 +120,10 @@ end;
 
 function GetEventString(e: TEventId): ansistring;
 begin
-	if trevt_n[e] = 0 then // no messages for this event type?
-		GetEventString:= '*missing translation*'
-	else
-		GetEventString:= trevt[e][GetRandom(trevt_n[e])]; // Pick a random message and return it
+    if trevt_n[e] = 0 then // no messages for this event type?
+        GetEventString:= '*missing translation*'
+    else
+        GetEventString:= trevt[e][GetRandom(trevt_n[e])]; // Pick a random message and return it
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;

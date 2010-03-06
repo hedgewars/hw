@@ -27,24 +27,24 @@
 
 class ToggleButtonWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	ToggleButtonWidget(QWidget * parent, QString img);
-	~ToggleButtonWidget();
-	bool isChecked();
-	void setChecked(bool checked);
-	void setText(QString s);
-	QPushButton * button()
-	{
-		return pbMain;
-	}
+    ToggleButtonWidget(QWidget * parent, QString img);
+    ~ToggleButtonWidget();
+    bool isChecked();
+    void setChecked(bool checked);
+    void setText(QString s);
+    QPushButton * button()
+    {
+        return pbMain;
+    }
 private:
-	QLabel * lbMain;
-	QPushButton * pbMain;
-	QPixmap pmChecked;
-	QPixmap pmDisabled;
+    QLabel * lbMain;
+    QPushButton * pbMain;
+    QPixmap pmChecked;
+    QPixmap pmDisabled;
 private slots:
-	void eventToggled(bool checked);
+    void eventToggled(bool checked);
 };
 
 #endif // TOGGLEBUTTONWIDGET_H

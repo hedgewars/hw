@@ -28,30 +28,30 @@ class QListWidget;
 
 class PagePlayDemo : public AbstractPage
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	enum RecordType {
-		RT_Demo,
-		RT_Save
-	};
+    enum RecordType {
+        RT_Demo,
+        RT_Save
+    };
 
-	PagePlayDemo(QWidget* parent = 0);
+    PagePlayDemo(QWidget* parent = 0);
 
-	void FillFromDir(RecordType rectype);
+    void FillFromDir(RecordType rectype);
 
-	QPushButton *BtnBack;
-	QPushButton *BtnPlayDemo;
-	QPushButton *BtnRenameRecord;
-	QPushButton *BtnRemoveRecord;
-	QListWidget *DemosList;
+    QPushButton *BtnBack;
+    QPushButton *BtnPlayDemo;
+    QPushButton *BtnRenameRecord;
+    QPushButton *BtnRemoveRecord;
+    QListWidget *DemosList;
 
 private:
-	RecordType recType;
+    RecordType recType;
 
 private slots:
-	void renameRecord();
-	void removeRecord();
+    void renameRecord();
+    void removeRecord();
 };
 
 

@@ -25,10 +25,10 @@ const ulong KBmsgsCount = 1;
 
 const QString KBMessages[KBmsgsCount] =
 {
-	QT_TRANSLATE_NOOP("KB", "SDL_ttf returned error while rendering text, "
-							"most propably it is related to the bug "
-							"in freetype2. It's recommended to update your "
-							"freetype lib.")
+    QT_TRANSLATE_NOOP("KB", "SDL_ttf returned error while rendering text, "
+                            "most propably it is related to the bug "
+                            "in freetype2. It's recommended to update your "
+                            "freetype lib.")
 };
 
 #endif // KB_H

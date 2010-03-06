@@ -27,10 +27,10 @@
 
 
 HWNamegen::HWNamegen() :
-	TypesAvliable(false)
+    TypesAvliable(false)
 {
 
-	TypesLoad();
+    TypesLoad();
 }
 
 HWNamegen::~HWNamegen()
@@ -41,46 +41,46 @@ HWNamegen::~HWNamegen()
 
 void HWNamegen::TeamRandomName(HWTeam*& team, const int &i)
 {
-	RandomNameByHat(team,i);
+    RandomNameByHat(team,i);
 }
 
 void HWNamegen::TeamRandomNames(HWTeam*& team, const bool changeteamname)
 {
-	if ((TypesHatnames.size() > 0) && TypesAvliable){
+    if ((TypesHatnames.size() > 0) && TypesAvliable){
 
-		int kind = (rand()%(TypesHatnames.size()));
+        int kind = (rand()%(TypesHatnames.size()));
 
-		if (changeteamname){
-			if (TypesTeamnames[kind].size() > 0){
-				team->TeamName = TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
-			}
-			team->Grave = "Simple"; // Todo: make it semi-random
-			team->Fort = "Island"; // Todo: make it semi-random
-			team->Voicepack = "Default";
-		}
+        if (changeteamname){
+            if (TypesTeamnames[kind].size() > 0){
+                team->TeamName = TypesTeamnames[kind][rand()%(TypesTeamnames[kind].size())];
+            }
+            team->Grave = "Simple"; // Todo: make it semi-random
+            team->Fort = "Island"; // Todo: make it semi-random
+            team->Voicepack = "Default";
+        }
 
-		for(int i = 0; i < 8; i++)
-		{
-			if ((TypesHatnames[kind].size()) > 0){
-				team->HHHat[i] = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
-			}
-			RandomNameByHat(team,i);
-		}
+        for(int i = 0; i < 8; i++)
+        {
+            if ((TypesHatnames[kind].size()) > 0){
+                team->HHHat[i] = TypesHatnames[kind][rand()%(TypesHatnames[kind].size())];
+            }
+            RandomNameByHat(team,i);
+        }
 
-	}
+    }
 
 }
 
 
 void HWNamegen::RandomNameByHat(HWTeam*& team, const int &i)
 {
-	QStringList Dictionaries;
-	HatCfgLoad(team->HHHat[i],Dictionaries);
+    QStringList Dictionaries;
+    HatCfgLoad(team->HHHat[i],Dictionaries);
 
-	QStringList Dictionary;
-	DictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
+    QStringList Dictionary;
+    DictLoad(Dictionaries[rand()%(Dictionaries.size())],Dictionary);
 
-	team->HHName[i] = Dictionary[rand()%(Dictionary.size())];
+    team->HHName[i] = Dictionary[rand()%(Dictionary.size())];
 }
 
 void HWNamegen::DictLoad(const QString filename, QStringList &list)

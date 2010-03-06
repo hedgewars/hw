@@ -29,11 +29,11 @@
 
 struct BindAction
 {
-	QString action;
-	QString strbind;
-	const char * name;
-	const char * category;
-	const char * description;
+    QString action;
+    QString strbind;
+    const char * name;
+    const char * category;
+    const char * description;
 };
 
 extern const BindAction cbinds[BINDS_NUMBER];

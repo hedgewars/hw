@@ -33,46 +33,46 @@ class QTableView;
 
 class GameCFGWidget : public QGroupBox
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	GameCFGWidget(QWidget* parent, bool externalControl=false);
-	quint32 getGameFlags() const;
-	quint32 getInitHealth() const;
-	QStringList getFullConfig() const;
-	QComboBox * GameSchemes;
-	QComboBox * WeaponsName;
-	HWMapContainer* pMapContainer;
-	QTableView * tv;
+    GameCFGWidget(QWidget* parent, bool externalControl=false);
+    quint32 getGameFlags() const;
+    quint32 getInitHealth() const;
+    QStringList getFullConfig() const;
+    QComboBox * GameSchemes;
+    QComboBox * WeaponsName;
+    HWMapContainer* pMapContainer;
+    QTableView * tv;
 
 public slots:
-	void setParam(const QString & param, const QStringList & value);
-	void fullNetConfig();
-	void resendSchemeData();
+    void setParam(const QString & param, const QStringList & value);
+    void fullNetConfig();
+    void resendSchemeData();
 
 signals:
-	void paramChanged(const QString & param, const QStringList & value);
-	void goToSchemes();
-	void goToWeapons(const QString & name);
+    void paramChanged(const QString & param, const QStringList & value);
+    void goToSchemes();
+    void goToWeapons(const QString & name);
 
 private slots:
-	void ammoChanged(int index);
-	void mapChanged(const QString &);
-	void templateFilterChanged(int);
-	void seedChanged(const QString &);
-	void themeChanged(const QString &);
-	void schemeChanged(int);
-	void jumpToWeapons();
+    void ammoChanged(int index);
+    void mapChanged(const QString &);
+    void templateFilterChanged(int);
+    void seedChanged(const QString &);
+    void themeChanged(const QString &);
+    void schemeChanged(int);
+    void jumpToWeapons();
 
 private:
-	QGridLayout mainLayout;
+    QGridLayout mainLayout;
 
-	QString curNetAmmoName;
-	QString curNetAmmo;
+    QString curNetAmmoName;
+    QString curNetAmmo;
 
-	void setNetAmmo(const QString& name, const QString& ammo);
+    void setNetAmmo(const QString& name, const QString& ammo);
 
-	QVariant schemeData(int column) const;
+    QVariant schemeData(int column) const;
 };
 
 #endif // GAMECONFIGWIDGET_H

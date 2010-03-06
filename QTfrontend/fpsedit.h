@@ -23,13 +23,13 @@
 
 class FPSEdit : public QSpinBox
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FPSEdit(QWidget * parent = 0);
+    FPSEdit(QWidget * parent = 0);
 
 protected:
-	 QString textFromValue (int value) const;
+     QString textFromValue (int value) const;
 };
 
 #endif // _FPSEDIT_H

@@ -30,87 +30,87 @@
 
 void Ui_HWForm::setupUi(HWForm *HWForm)
 {
-	SetupFonts();
+    SetupFonts();
 
-	HWForm->setObjectName(QString::fromUtf8("HWForm"));
-	HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
-	HWForm->setMinimumSize(QSize(720, 450));
-	HWForm->setWindowTitle(QMainWindow::tr("Hedgewars %1").arg(*cVersionString));
-	centralWidget = new QWidget(HWForm);
-	centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+    HWForm->setObjectName(QString::fromUtf8("HWForm"));
+    HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
+    HWForm->setMinimumSize(QSize(720, 450));
+    HWForm->setWindowTitle(QMainWindow::tr("Hedgewars %1").arg(*cVersionString));
+    centralWidget = new QWidget(HWForm);
+    centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
 
-	SetupPages(centralWidget, HWForm);
+    SetupPages(centralWidget, HWForm);
 
-	HWForm->setCentralWidget(centralWidget);
+    HWForm->setCentralWidget(centralWidget);
 
-	Pages->setCurrentIndex(0);
+    Pages->setCurrentIndex(0);
 
-	QMetaObject::connectSlotsByName(HWForm);
+    QMetaObject::connectSlotsByName(HWForm);
 }
 
 void Ui_HWForm::SetupFonts()
 {
-	font14 = new QFont("MS Shell Dlg", 14);
+    font14 = new QFont("MS Shell Dlg", 14);
 }
 
 void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 {
-	Pages = new QStackedLayout(Parent);
+    Pages = new QStackedLayout(Parent);
 
-	pageEditTeam = new PageEditTeam(Parent, &HWForm->sdli);
-	Pages->addWidget(pageEditTeam);
+    pageEditTeam = new PageEditTeam(Parent, &HWForm->sdli);
+    Pages->addWidget(pageEditTeam);
 
-	pageOptions = new PageOptions();
-	Pages->addWidget(pageOptions);
+    pageOptions = new PageOptions();
+    Pages->addWidget(pageOptions);
 
-	pageMultiplayer = new PageMultiplayer();
-	Pages->addWidget(pageMultiplayer);
+    pageMultiplayer = new PageMultiplayer();
+    Pages->addWidget(pageMultiplayer);
 
-	pagePlayDemo = new PagePlayDemo();
-	Pages->addWidget(pagePlayDemo);
+    pagePlayDemo = new PagePlayDemo();
+    Pages->addWidget(pagePlayDemo);
 
-	pageNet = new PageNet();
-	Pages->addWidget(pageNet);
+    pageNet = new PageNet();
+    Pages->addWidget(pageNet);
 
-	pageNetGame = new PageNetGame(Parent, HWForm->gameSettings, &HWForm->sdli);
-	Pages->addWidget(pageNetGame);
+    pageNetGame = new PageNetGame(Parent, HWForm->gameSettings, &HWForm->sdli);
+    Pages->addWidget(pageNetGame);
 
-	pageInfo = new PageInfo();
-	Pages->addWidget(pageInfo);
+    pageInfo = new PageInfo();
+    Pages->addWidget(pageInfo);
 
-	pageMain = new PageMain();
-	Pages->addWidget(pageMain);
+    pageMain = new PageMain();
+    Pages->addWidget(pageMain);
 
-	pageGameStats = new PageGameStats();
-	Pages->addWidget(pageGameStats);
+    pageGameStats = new PageGameStats();
+    Pages->addWidget(pageGameStats);
 
-	pageSinglePlayer = new PageSinglePlayer();
-	Pages->addWidget(pageSinglePlayer);
+    pageSinglePlayer = new PageSinglePlayer();
+    Pages->addWidget(pageSinglePlayer);
 
-	pageTraining = new PageTraining();
-	Pages->addWidget(pageTraining);
+    pageTraining = new PageTraining();
+    Pages->addWidget(pageTraining);
 
-	pageSelectWeapon = new PageSelectWeapon();
-	Pages->addWidget(pageSelectWeapon);
+    pageSelectWeapon = new PageSelectWeapon();
+    Pages->addWidget(pageSelectWeapon);
 
-	pageNetServer = new PageNetServer();
-	Pages->addWidget(pageNetServer);
+    pageNetServer = new PageNetServer();
+    Pages->addWidget(pageNetServer);
 
-	pageInGame = new PageInGame();
-	Pages->addWidget(pageInGame);
+    pageInGame = new PageInGame();
+    Pages->addWidget(pageInGame);
 
-	pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings, &HWForm->sdli);
-	Pages->addWidget(pageRoomsList);
+    pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings, &HWForm->sdli);
+    Pages->addWidget(pageRoomsList);
 
-	pageConnecting = new PageConnecting();
-	Pages->addWidget(pageConnecting);
+    pageConnecting = new PageConnecting();
+    Pages->addWidget(pageConnecting);
 
-	pageScheme = new PageScheme();
-	Pages->addWidget(pageScheme);
+    pageScheme = new PageScheme();
+    Pages->addWidget(pageScheme);
 
-	pageAdmin = new PageAdmin();
-	Pages->addWidget(pageAdmin);
+    pageAdmin = new PageAdmin();
+    Pages->addWidget(pageAdmin);
 
-	pageNetType = new PageNetType();
-	Pages->addWidget(pageNetType);
+    pageNetType = new PageNetType();
+    Pages->addWidget(pageNetType);
 }

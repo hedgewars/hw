@@ -29,35 +29,35 @@ HWMap::~HWMap()
 
 void HWMap::getImage(std::string seed, int filter)
 {
-	m_seed = seed;
-	templateFilter = filter;
-	Start();
+    m_seed = seed;
+    templateFilter = filter;
+    Start();
 }
 
 QStringList HWMap::setArguments()
 {
-	QStringList arguments;
-	arguments << cfgdir->absolutePath();
-	arguments << QString("%1").arg(ipc_port);
-	arguments << "landpreview";
-	return arguments;
+    QStringList arguments;
+    arguments << cfgdir->absolutePath();
+    arguments << QString("%1").arg(ipc_port);
+    arguments << "landpreview";
+    return arguments;
 }
 
 void HWMap::onClientDisconnect()
 {
-	if (readbuffer.size() == 128 * 32 + 1)
-	{
-		quint8 *buf = (quint8*) readbuffer.constData();
-		QImage im(buf, 256, 128, QImage::Format_Mono);
-		im.setNumColors(2);
-		emit HHLimitReceived(buf[128 * 32]);
-		emit ImageReceived(im);
-	}
+    if (readbuffer.size() == 128 * 32 + 1)
+    {
+        quint8 *buf = (quint8*) readbuffer.constData();
+        QImage im(buf, 256, 128, QImage::Format_Mono);
+        im.setNumColors(2);
+        emit HHLimitReceived(buf[128 * 32]);
+        emit ImageReceived(im);
+    }
 }
 
 void HWMap::SendToClientFirst()
 {
-	SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
-	SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
-	SendIPC("!");
+    SendIPC(QString("eseed %1").arg(m_seed.c_str()).toLatin1());
+    SendIPC(QString("e$template_filter %1").arg(templateFilter).toLatin1());
+    SendIPC("!");
 }

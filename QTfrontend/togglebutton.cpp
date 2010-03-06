@@ -20,60 +20,60 @@
 
 ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 {
-	QVBoxLayout * l = new QVBoxLayout(this);
-	setLayout(l);
+    QVBoxLayout * l = new QVBoxLayout(this);
+    setLayout(l);
 
-	pbMain = new QPushButton(this);
-	pbMain->setCheckable(true);
+    pbMain = new QPushButton(this);
+    pbMain->setCheckable(true);
 
-	QPixmap pm(":/res/btnDisabled.png");
-	QPainter * painter = new QPainter();
+    QPixmap pm(":/res/btnDisabled.png");
+    QPainter * painter = new QPainter();
 
-	pmChecked.load(img);
-	pmDisabled.load(img);
+    pmChecked.load(img);
+    pmDisabled.load(img);
 
-	pbMain->setMaximumWidth(pmChecked.width() + 6);
+    pbMain->setMaximumWidth(pmChecked.width() + 6);
 
-	l->addWidget(pbMain);
+    l->addWidget(pbMain);
 
-	painter->begin(&pmDisabled);
-	painter->drawPixmap(pmDisabled.rect(), pm);
-	painter->end();
+    painter->begin(&pmDisabled);
+    painter->drawPixmap(pmDisabled.rect(), pm);
+    painter->end();
 
-	pbMain->setIconSize(pmDisabled.size());
-	pbMain->setIcon(pmDisabled);
+    pbMain->setIconSize(pmDisabled.size());
+    pbMain->setIcon(pmDisabled);
 
-	connect(pbMain, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
+    connect(pbMain, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
 
-	lbMain = new QLabel(this);
-	lbMain->setWordWrap(true);
-//	lbMain->setFixedHeight(32);
+    lbMain = new QLabel(this);
+    lbMain->setWordWrap(true);
+//  lbMain->setFixedHeight(32);
 
-	l->addWidget(lbMain);
+    l->addWidget(lbMain);
 }
 
 ToggleButtonWidget::~ToggleButtonWidget()
 {
-	delete pbMain;
-	delete lbMain;
+    delete pbMain;
+    delete lbMain;
 }
 
 bool ToggleButtonWidget::isChecked()
 {
-	return pbMain->isChecked();
+    return pbMain->isChecked();
 }
 
 void ToggleButtonWidget::setChecked(bool checked)
 {
-	pbMain->setChecked(checked);
+    pbMain->setChecked(checked);
 }
 
 void ToggleButtonWidget::setText(QString s)
 {
-	lbMain->setText(s);
+    lbMain->setText(s);
 }
 
 void ToggleButtonWidget::eventToggled(bool checked)
 {
-	if (checked) pbMain->setIcon(pmChecked); else pbMain->setIcon(pmDisabled);
+    if (checked) pbMain->setIcon(pmChecked); else pbMain->setIcon(pmDisabled);
 }

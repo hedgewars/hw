@@ -7,13 +7,13 @@
 
 class CocoaInitializer
 {
-	public:
-		CocoaInitializer();
-		~CocoaInitializer();
+    public:
+        CocoaInitializer();
+        ~CocoaInitializer();
 
-	private:
-		class Private;
-		Private* d;
+    private:
+        class Private;
+        Private* d;
                 Private* c;
 };
 

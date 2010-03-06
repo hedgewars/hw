@@ -30,9 +30,9 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 implementation
 uses uLand, uStore, uConsts, uMisc, uConsole, uRandom, uVisualGears, uFloat, uSound, uWorld,
 {$IFDEF GLES11}
-	gles11;
+    gles11;
 {$ELSE}
-	GL;
+    GL;
 {$ENDIF}
 
 const MaxRects = 512;
@@ -86,15 +86,15 @@ if Width = 0 then Width:= Image^.w;
 
 p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
-	begin
-	for x:= 0 to Pred(Width) do
-		if LandPixels[cpY + y, cpX + x] = 0 then
-			begin
-			LandPixels[cpY + y, cpX + x]:= p^[x];
-			if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_OBJECT;
-			end;
-	p:= @(p^[Image^.pitch shr 2]);
-	end;
+    begin
+    for x:= 0 to Pred(Width) do
+        if LandPixels[cpY + y, cpX + x] = 0 then
+            begin
+            LandPixels[cpY + y, cpX + x]:= p^[x];
+            if (p^[x] and AMask) <> 0 then Land[cpY + y, cpX + x]:= COLOR_OBJECT;
+            end;
+    p:= @(p^[Image^.pitch shr 2]);
+    end;
 
 if SDL_MustLock(Image) then
    SDL_UnlockSurface(Image);
@@ -122,7 +122,7 @@ end;
 
 procedure FreeRects;
 begin
-	Dispose(rects)
+    Dispose(rects)
 end;
 
 function CheckIntersect(x1, y1, w1, h1: LongInt): boolean;
@@ -147,61 +147,61 @@ var tmpsurf: PSDL_Surface;
     rr: TSDL_Rect;
     bRes: boolean;
 
-	function CountNonZeroz(x, y: LongInt): Longword;
-	var i: LongInt;
-		lRes: Longword;
-	begin
-	lRes:= 0;
-	for i:= y to y + 15 do
-		if Land[i, x] <> 0 then inc(lRes);
-	CountNonZeroz:= lRes;
-	end;
+    function CountNonZeroz(x, y: LongInt): Longword;
+    var i: LongInt;
+        lRes: Longword;
+    begin
+    lRes:= 0;
+    for i:= y to y + 15 do
+        if Land[i, x] <> 0 then inc(lRes);
+    CountNonZeroz:= lRes;
+    end;
 
 begin
 y:= topY+150;
 repeat
-	inc(y, 24);
-	x1:= gX;
-	x2:= gX;
+    inc(y, 24);
+    x1:= gX;
+    x2:= gX;
 
-	while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
+    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do dec(x1, 2);
 
-	i:= x1 - 12;
-	repeat
-		dec(x1, 2);
-		k:= CountNonZeroz(x1, y)
-	until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
+    i:= x1 - 12;
+    repeat
+        dec(x1, 2);
+        k:= CountNonZeroz(x1, y)
+    until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
 
-	inc(x1, 2);
-	if k = 16 then
-		begin
-		while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
-		i:= x2 + 12;
-		repeat
-		inc(x2, 2);
-		k:= CountNonZeroz(x2, y)
-		until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
-		if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
-			and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
-		end;
+    inc(x1, 2);
+    if k = 16 then
+        begin
+        while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do inc(x2, 2);
+        i:= x2 + 12;
+        repeat
+        inc(x2, 2);
+        k:= CountNonZeroz(x2, y)
+        until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
+        if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
+            and not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144) then break;
+        end;
 x1:= 0;
 until y > (LAND_HEIGHT-125);
 
 if x1 > 0 then
 begin
-	bRes:= true;
-	tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
-	if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    bRes:= true;
+    tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Girder', ifTransparent or ifIgnoreCaps);
+    if tmpsurf = nil then tmpsurf:= LoadImage(Pathz[ptGraphics] + '/Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
-	rr.x:= x1;
-	while rr.x < x2 do
-		begin
-		BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
-		inc(rr.x, tmpsurf^.w);
-		end;
-	SDL_FreeSurface(tmpsurf);
+    rr.x:= x1;
+    while rr.x < x2 do
+        begin
+        BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
+        inc(rr.x, tmpsurf^.w);
+        end;
+    SDL_FreeSurface(tmpsurf);
 
-	AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
+    AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
 end
 else bRes:= false;
 
@@ -305,46 +305,46 @@ var x, y: Longword;
 begin
 cnt:= 0;
 with Obj do
-	begin
-	if Maxcnt = 0 then
-		exit(false);
-	x:= 0;
-	r.x:= 0;
-	r.y:= 0;
-	r.w:= Width;
-	r.h:= Height + 16;
-	repeat
-		y:= 8;
-		repeat
-			if CheckLand(r, x, y - 8, COLOR_LAND)
-			and not CheckIntersect(x, y, Width, Height) then
-			begin
-			ar[cnt].x:= x;
-			ar[cnt].y:= y;
-			inc(cnt);
-			if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
-				begin
-				y:= 5000;
-				x:= 5000;
-				end
-			end;
-			inc(y, 12);
+    begin
+    if Maxcnt = 0 then
+        exit(false);
+    x:= 0;
+    r.x:= 0;
+    r.y:= 0;
+    r.w:= Width;
+    r.h:= Height + 16;
+    repeat
+        y:= 8;
+        repeat
+            if CheckLand(r, x, y - 8, COLOR_LAND)
+            and not CheckIntersect(x, y, Width, Height) then
+            begin
+            ar[cnt].x:= x;
+            ar[cnt].y:= y;
+            inc(cnt);
+            if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
+                begin
+                y:= 5000;
+                x:= 5000;
+                end
+            end;
+            inc(y, 12);
         until y > LAND_HEIGHT - 1 - Height - 8;
-		inc(x, getrandom(12) + 12)
+        inc(x, getrandom(12) + 12)
     until x > LAND_WIDTH - 1 - Width;
-	bRes:= cnt <> 0;
-	if bRes then
-		begin
-		i:= getrandom(cnt);
-		r.x:= ar[i].X;
-		r.y:= ar[i].Y;
-		r.w:= Width;
-		r.h:= Height;
-		SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
-		AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
-		dec(Maxcnt)
-		end else Maxcnt:= 0
-	end;
+    bRes:= cnt <> 0;
+    if bRes then
+        begin
+        i:= getrandom(cnt);
+        r.x:= ar[i].X;
+        r.y:= ar[i].Y;
+        r.w:= Width;
+        r.h:= Height;
+        SDL_UpperBlit(Obj.Surf, nil, Surface, @r);
+        AddRect(ar[i].x - 32, ar[i].y - 32, Width + 64, Height + 64);
+        dec(Maxcnt)
+        end else Maxcnt:= 0
+    end;
 TryPut:= bRes;
 end;
 
@@ -355,11 +355,11 @@ var s: shortstring;
     vobcount: Longword;
     c1, c2: TSDL_Color;
 
-	procedure CheckRect(Width, Height, x, y, w, h: LongWord);
-	begin
-	if (x + w > Width) then OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
-	if (y + h > Height) then OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
-	end;
+    procedure CheckRect(Width, Height, x, y, w, h: LongWord);
+    begin
+    if (x + w > Width) then OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
+    if (y + h > Height) then OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
+    end;
 
 begin
 
@@ -396,30 +396,30 @@ cCloudsNumber:= cCloudsNumber * (LAND_WIDTH div 2048);
 
 Readln(f, ThemeObjects.Count);
 for i:= 0 to Pred(ThemeObjects.Count) do
-	begin
-	Readln(f, s); // filename
-	with ThemeObjects.objs[i] do
-			begin
-			Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
-			Width:= Surf^.w;
-			Height:= Surf^.h;
-			Read(f, Maxcnt);
-			if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
-			with inland do
-				begin
-				Read(f, x, y, w, h);
-				CheckRect(Width, Height, x, y, w, h)
-				end;
-			Read(f, rectcnt);
-			for ii:= 1 to rectcnt do
-				with outland[ii] do
-					begin
-					Read(f, x, y, w, h);
-					CheckRect(Width, Height, x, y, w, h)
-					end;
-			ReadLn(f)
-			end;
-	end;
+    begin
+    Readln(f, s); // filename
+    with ThemeObjects.objs[i] do
+            begin
+            Surf:= LoadImage(Pathz[ptCurrTheme] + '/' + s, ifCritical or ifTransparent or ifIgnoreCaps);
+            Width:= Surf^.w;
+            Height:= Surf^.h;
+            Read(f, Maxcnt);
+            if (Maxcnt < 1) or (Maxcnt > MAXTHEMEOBJECTS) then OutError('Object''s max count should be between 1 and '+ inttostr(MAXTHEMEOBJECTS) +' (it was '+ inttostr(Maxcnt) +').', true);
+            with inland do
+                begin
+                Read(f, x, y, w, h);
+                CheckRect(Width, Height, x, y, w, h)
+                end;
+            Read(f, rectcnt);
+            for ii:= 1 to rectcnt do
+                with outland[ii] do
+                    begin
+                    Read(f, x, y, w, h);
+                    CheckRect(Width, Height, x, y, w, h)
+                    end;
+            ReadLn(f)
+            end;
+    end;
 
 // sprays
 Readln(f, SprayObjects.Count);
@@ -453,46 +453,46 @@ procedure AddThemeObjects(var ThemeObjects: TThemeObjects);
 var i, ii, t: LongInt;
     b: boolean;
 begin
-	if ThemeObjects.Count = 0 then exit;
-	WriteLnToConsole('Adding theme objects...');
+    if ThemeObjects.Count = 0 then exit;
+    WriteLnToConsole('Adding theme objects...');
 
-	for i:=0 to ThemeObjects.Count do 
-		ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-	 
-	repeat
-		t := getrandom(ThemeObjects.Count);
-		b := false;
-		for i:=0 to ThemeObjects.Count do
-			begin
-			ii := (i+t) mod ThemeObjects.Count;
-			
-			if ThemeObjects.objs[ii].Maxcnt <> 0 then
-				b := b or TryPut(ThemeObjects.objs[ii])
-			end;
-	until not b;
+    for i:=0 to ThemeObjects.Count do 
+        ThemeObjects.objs[i].Maxcnt := max(1, (ThemeObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
+     
+    repeat
+        t := getrandom(ThemeObjects.Count);
+        b := false;
+        for i:=0 to ThemeObjects.Count do
+            begin
+            ii := (i+t) mod ThemeObjects.Count;
+            
+            if ThemeObjects.objs[ii].Maxcnt <> 0 then
+                b := b or TryPut(ThemeObjects.objs[ii])
+            end;
+    until not b;
 end;
 
 procedure AddSprayObjects(Surface: PSDL_Surface; var SprayObjects: TSprayObjects);
 var i, ii, t: LongInt;
     b: boolean;
 begin
-	if SprayObjects.Count = 0 then exit;
-	WriteLnToConsole('Adding spray objects...');
+    if SprayObjects.Count = 0 then exit;
+    WriteLnToConsole('Adding spray objects...');
 
-	for i:=0 to SprayObjects.Count do 
-		SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
-	 
-	repeat
-		t := getrandom(SprayObjects.Count);
-		b := false;
-		for i:=0 to SprayObjects.Count do
-			begin
-			ii := (i+t) mod SprayObjects.Count;
-			
-			if SprayObjects.objs[ii].Maxcnt <> 0 then
-				b := b or TryPut(SprayObjects.objs[ii], Surface)
-			end;
-	until not b;
+    for i:=0 to SprayObjects.Count do 
+        SprayObjects.objs[i].Maxcnt := max(1, (SprayObjects.objs[i].Maxcnt * MaxHedgehogs) div 18); // Maxcnt is proportional to map size, but allow objects to span even if we're on a tiny map
+     
+    repeat
+        t := getrandom(SprayObjects.Count);
+        b := false;
+        for i:=0 to SprayObjects.Count do
+            begin
+            ii := (i+t) mod SprayObjects.Count;
+            
+            if SprayObjects.objs[ii].Maxcnt <> 0 then
+                b := b or TryPut(SprayObjects.objs[ii], Surface)
+            end;
+    until not b;
 end;
 
 procedure AddObjects();

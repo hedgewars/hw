@@ -49,41 +49,41 @@ procedure SendStats;
 implementation
 uses uTeams, uSound, uMisc, uLocale, uWorld;
 var DamageGiven : Longword = 0;
-	DamageClan  : Longword = 0;
-	DamageTotal : Longword = 0;
-	KillsClan   : LongWord = 0;
-	Kills       : LongWord = 0;
-	KillsTotal  : LongWord = 0;
-	AmmoUsedCount : Longword = 0;
-	AmmoDamagingUsed : boolean = false;
-	SkippedTurns: LongWord = 0;
-	isTurnSkipped: boolean = false;
-	vpHurtSameClan: PVoicepack = nil;
-	vpHurtEnemy: PVoicepack = nil;
+    DamageClan  : Longword = 0;
+    DamageTotal : Longword = 0;
+    KillsClan   : LongWord = 0;
+    Kills       : LongWord = 0;
+    KillsTotal  : LongWord = 0;
+    AmmoUsedCount : Longword = 0;
+    AmmoDamagingUsed : boolean = false;
+    SkippedTurns: LongWord = 0;
+    isTurnSkipped: boolean = false;
+    vpHurtSameClan: PVoicepack = nil;
+    vpHurtEnemy: PVoicepack = nil;
 
 procedure HedgehogDamaged(Gear: PGear);
 begin
 if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then
-	vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
+    vpHurtSameClan:= CurrentHedgehog^.Team^.voicepack
 else
-	vpHurtEnemy:= PHedgehog(Gear^.Hedgehog)^.Team^.voicepack;
+    vpHurtEnemy:= PHedgehog(Gear^.Hedgehog)^.Team^.voicepack;
 
 if bBetweenTurns then exit;
 
 //////////////////////////
 
 if Gear <> CurrentHedgehog^.Gear then
-	inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
+    inc(CurrentHedgehog^.stats.StepDamageGiven, Gear^.Damage);
 
 if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(DamageClan, Gear^.Damage);
 
 if Gear^.Health <= Gear^.Damage then
-	begin
-	inc(CurrentHedgehog^.stats.StepKills);
-	inc(Kills);
-	inc(KillsTotal);
-	if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
-	end;
+    begin
+    inc(CurrentHedgehog^.stats.StepKills);
+    inc(Kills);
+    inc(KillsTotal);
+    if CurrentHedgehog^.Team^.Clan = PHedgehog(Gear^.Hedgehog)^.Team^.Clan then inc(KillsClan);
+    end;
 
 inc(PHedgehog(Gear^.Hedgehog)^.stats.StepDamageRecv, Gear^.Damage);
 inc(DamageGiven, Gear^.Damage);
@@ -103,68 +103,68 @@ TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then
-	begin
-	inc(CurrentHedgehog^.stats.FinishedTurns);
+    begin
+    inc(CurrentHedgehog^.stats.FinishedTurns);
 
-	if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
-		PlaySound(sndFirstBlood, CurrentTeam^.voicepack)
+    if (DamageGiven = DamageTotal) and (DamageTotal > 0) then
+        PlaySound(sndFirstBlood, CurrentTeam^.voicepack)
 
-	else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
-		begin
-		PlaySound(sndStupid, PreviousTeam^.voicepack);
-		if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
-		end
-	else if DamageClan <> 0 then
-		if DamageTotal > DamageClan then
-			if random(2) = 0 then
-				PlaySound(sndNutter, CurrentTeam^.voicepack)
-			else
-				PlaySound(sndWatchIt, vpHurtSameClan)
-		else
-			if random(2) = 0 then
-				PlaySound(sndSameTeam, vpHurtSameClan)
-			else
-				PlaySound(sndTraitor, vpHurtSameClan)
-	else if DamageGiven <> 0 then
-		if Kills > 0 then
-			PlaySound(sndEnemyDown, CurrentTeam^.voicepack)
-		else
-			PlaySound(sndRegret, vpHurtEnemy)
+    else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
+        begin
+        PlaySound(sndStupid, PreviousTeam^.voicepack);
+        if DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        end
+    else if DamageClan <> 0 then
+        if DamageTotal > DamageClan then
+            if random(2) = 0 then
+                PlaySound(sndNutter, CurrentTeam^.voicepack)
+            else
+                PlaySound(sndWatchIt, vpHurtSameClan)
+        else
+            if random(2) = 0 then
+                PlaySound(sndSameTeam, vpHurtSameClan)
+            else
+                PlaySound(sndTraitor, vpHurtSameClan)
+    else if DamageGiven <> 0 then
+        if Kills > 0 then
+            PlaySound(sndEnemyDown, CurrentTeam^.voicepack)
+        else
+            PlaySound(sndRegret, vpHurtEnemy)
 
-	else if AmmoDamagingUsed then
-		PlaySound(sndMissed, PreviousTeam^.voicepack)
-	else if (AmmoUsedCount > 0) and not isTurnSkipped then
-		// nothing ?
-	else if isTurnSkipped then
-		begin
-		PlaySound(sndBoring, PreviousTeam^.voicepack);
-		AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
-		end
-	else if not PlacingHogs then
-		PlaySound(sndCoward, PreviousTeam^.voicepack);
-	end;
+    else if AmmoDamagingUsed then
+        PlaySound(sndMissed, PreviousTeam^.voicepack)
+    else if (AmmoUsedCount > 0) and not isTurnSkipped then
+        // nothing ?
+    else if isTurnSkipped then
+        begin
+        PlaySound(sndBoring, PreviousTeam^.voicepack);
+        AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        end
+    else if not PlacingHogs then
+        PlaySound(sndCoward, PreviousTeam^.voicepack);
+    end;
 
 
 for t:= 0 to Pred(TeamsCount) do // send even on zero turn
-	with TeamsArray[t]^ do
-		for i:= 0 to cMaxHHIndex do
-			with Hedgehogs[i].stats do
-				begin
-				inc(DamageRecv, StepDamageRecv);
-				inc(DamageGiven, StepDamageGiven);
-				if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
-				if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
-				if StepKills > MaxStepKills then MaxStepKills:= StepKills;
-				StepKills:= 0;
-				StepDamageRecv:= 0;
-				StepDamageGiven:= 0
-				end;
+    with TeamsArray[t]^ do
+        for i:= 0 to cMaxHHIndex do
+            with Hedgehogs[i].stats do
+                begin
+                inc(DamageRecv, StepDamageRecv);
+                inc(DamageGiven, StepDamageGiven);
+                if StepDamageRecv > MaxStepDamageRecv then MaxStepDamageRecv:= StepDamageRecv;
+                if StepDamageGiven > MaxStepDamageGiven then MaxStepDamageGiven:= StepDamageGiven;
+                if StepKills > MaxStepKills then MaxStepKills:= StepKills;
+                StepKills:= 0;
+                StepDamageRecv:= 0;
+                StepDamageGiven:= 0
+                end;
 
 for t:= 0 to Pred(ClansCount) do
-	with ClansArray[t]^ do
-		begin
-		SendStat(siClanHealth, inttostr(Color) + ' ' + inttostr(ClanHealth));
-		end;
+    with ClansArray[t]^ do
+        begin
+        SendStat(siClanHealth, inttostr(Color) + ' ' + inttostr(ClanHealth));
+        end;
 
 Kills:= 0;
 KillsClan:= 0;
@@ -191,38 +191,38 @@ msk:= 0; mskhh:= nil;
 mskcnt:= 0;
 
 for t:= 0 to Pred(TeamsCount) do
-	with TeamsArray[t]^ do
-		begin
-		for i:= 0 to cMaxHHIndex do
-			begin
-			if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
-				begin
-				msdhh:= @Hedgehogs[i];
-				msd:= Hedgehogs[i].stats.MaxStepDamageGiven
-				end;
-			if Hedgehogs[i].stats.MaxStepKills >= msk then
-				if Hedgehogs[i].stats.MaxStepKills = msk then
-					inc(mskcnt)
-				else
-					begin
-					mskcnt:= 1;
-					mskhh:= @Hedgehogs[i];
-					msk:= Hedgehogs[i].stats.MaxStepKills
-					end;
-			end
-		end;
+    with TeamsArray[t]^ do
+        begin
+        for i:= 0 to cMaxHHIndex do
+            begin
+            if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
+                begin
+                msdhh:= @Hedgehogs[i];
+                msd:= Hedgehogs[i].stats.MaxStepDamageGiven
+                end;
+            if Hedgehogs[i].stats.MaxStepKills >= msk then
+                if Hedgehogs[i].stats.MaxStepKills = msk then
+                    inc(mskcnt)
+                else
+                    begin
+                    mskcnt:= 1;
+                    mskhh:= @Hedgehogs[i];
+                    msk:= Hedgehogs[i].stats.MaxStepKills
+                    end;
+            end
+        end;
 if msdhh <> nil then
-	SendStat(siMaxStepDamage, inttostr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepDamage, inttostr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
 if mskcnt = 1 then
-	SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+    SendStat(siMaxStepKills, inttostr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
 if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 
 procedure init_uStats;
 begin
-	TotalRounds:= -1;
-	FinishedTurnsTotal:= -1;
+    TotalRounds:= -1;
+    FinishedTurnsTotal:= -1;
 end;
     
 procedure free_uStats;

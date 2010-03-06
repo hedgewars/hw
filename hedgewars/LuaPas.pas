@@ -90,7 +90,7 @@ procedure lua_freeline(L : Plua_State; b : PChar);
 */
 #include <io.h>
 #include <stdio.h>
-#define lua_stdin_is_tty()	_isatty(_fileno(stdin))
+#define lua_stdin_is_tty()  _isatty(_fileno(stdin))
 *)
 const
   lua_stdin_is_tty = TRUE;
@@ -165,7 +165,7 @@ const
   LUA_TSTRING        = 4;
   LUA_TTABLE         = 5;
   LUA_TFUNCTION      = 6;
-  LUA_TUSERDATA	     = 7;
+  LUA_TUSERDATA      = 7;
   LUA_TTHREAD        = 8;
 
   (* minimum Lua stack available to a C function *)
@@ -360,7 +360,7 @@ const
   LUA_GCRESTART    = 1;
   LUA_GCCOLLECT    = 2;
   LUA_GCCOUNT      = 3;
-  LUA_GCCOUNTB	   = 4;
+  LUA_GCCOUNTB     = 4;
   LUA_GCSTEP       = 5;
   LUA_GCSETPAUSE   = 6;
   LUA_GCSETSTEPMUL = 7;

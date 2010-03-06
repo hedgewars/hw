@@ -60,7 +60,7 @@ mainLoop serverInfo clients rooms = do
                         PingAll : [StatsAction | even tick]
 
 
-    {-			let hadRooms = (not $ null rooms) && (null mrooms)
+    {-          let hadRooms = (not $ null rooms) && (null mrooms)
                     in unless ((not $ isDedicated serverInfo) && ((null clientsIn) || hadRooms)) $
                         mainLoop serverInfo acceptChan messagesChan clientsIn mrooms -}
 

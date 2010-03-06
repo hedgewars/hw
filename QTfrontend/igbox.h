@@ -24,21 +24,21 @@
 
 class IconedGroupBox : public QGroupBox
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	IconedGroupBox(QWidget * parent = 0);
+    IconedGroupBox(QWidget * parent = 0);
 
-	void setIcon(const QIcon & icon);
-	void setTitleTextPadding(int px);
-	void setContentTopPadding(int px);
+    void setIcon(const QIcon & icon);
+    void setTitleTextPadding(int px);
+    void setContentTopPadding(int px);
 protected:
-	virtual void paintEvent(QPaintEvent * event);
+    virtual void paintEvent(QPaintEvent * event);
 
 private:
-	QIcon icon;
-	int titleLeftPadding;
-	int contentTopPadding;
+    QIcon icon;
+    int titleLeftPadding;
+    int contentTopPadding;
 };
 
 #endif // _IGBOX_H

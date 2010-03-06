@@ -34,11 +34,11 @@ var i: LongInt;
 begin
 if isPaused then exit;
 if (not CurrentTeam^.ExtDriven) then
-	begin
-	NetGetNextCmd; // its for the case of receiving "/say" message
-	isInLag:= false;
-	SendKeepAliveMessage(Lag)
-	end;
+    begin
+    NetGetNextCmd; // its for the case of receiving "/say" message
+    isInLag:= false;
+    SendKeepAliveMessage(Lag)
+    end;
 if Lag > 100 then Lag:= 100
 else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then Lag:= 2500;
 if (GameType = gmtDemo) and isSpeed then Lag:= Lag * 10;

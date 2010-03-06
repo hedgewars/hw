@@ -24,10 +24,10 @@
 
 class About : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	About(QWidget * parent = 0);
+    About(QWidget * parent = 0);
 };
 
 #endif // _ABOUT_H

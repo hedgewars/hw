@@ -39,22 +39,22 @@ procedure free_uScript;
 implementation
 {$IFNDEF IPHONEOS}
 uses LuaPas in 'LuaPas.pas',
-	uConsole,
-	uMisc,
-	uConsts,
-	uGears,
-	uFloat,
-	uWorld,
-	uAmmos,
-	uSound,
-	uTeams,
-	uKeys,
-	typinfo;
-	
+    uConsole,
+    uMisc,
+    uConsts,
+    uGears,
+    uFloat,
+    uWorld,
+    uAmmos,
+    uSound,
+    uTeams,
+    uKeys,
+    typinfo;
+    
 var luaState : Plua_State;
-	ScriptAmmoStore : shortstring;
-	ScriptLoaded : boolean;
-	
+    ScriptAmmoStore : shortstring;
+    ScriptLoaded : boolean;
+    
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte); forward;
@@ -68,237 +68,237 @@ procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte); forward;
 
 function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) = 1 then
-		begin
-		WriteLnToConsole('LUA: ' + lua_tostring(L ,1));
-		end
-	else
-		WriteLnToConsole('LUA: Wrong number of parameters passed to WriteLnToConsole!');
-	lc_writelntoconsole:= 0;
+    if lua_gettop(L) = 1 then
+        begin
+        WriteLnToConsole('LUA: ' + lua_tostring(L ,1));
+        end
+    else
+        WriteLnToConsole('LUA: Wrong number of parameters passed to WriteLnToConsole!');
+    lc_writelntoconsole:= 0;
 end;
 
 function lc_parsecommand(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) = 1 then
-		begin
-		ParseCommand(lua_tostring(L ,1), true);
-		end
-	else
-		WriteLnToConsole('LUA: Wrong number of parameters passed to ParseCommand!');
-	lc_parsecommand:= 0;
+    if lua_gettop(L) = 1 then
+        begin
+        ParseCommand(lua_tostring(L ,1), true);
+        end
+    else
+        WriteLnToConsole('LUA: Wrong number of parameters passed to ParseCommand!');
+    lc_parsecommand:= 0;
 end;
 
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) = 5 then
-		begin
-		ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
-		end
-	else
-		WriteLnToConsole('LUA: Wrong number of parameters passed to ShowMission!');
-	lc_showmission:= 0;
+    if lua_gettop(L) = 5 then
+        begin
+        ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        end
+    else
+        WriteLnToConsole('LUA: Wrong number of parameters passed to ShowMission!');
+    lc_showmission:= 0;
 end;
 
 function lc_hidemission(L : Plua_State) : LongInt; Cdecl;
 begin
-	HideMission;
-	lc_hidemission:= 0;
+    HideMission;
+    lc_hidemission:= 0;
 end;
 
 function lc_addgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
-	x, y, s, t: LongInt;
-	dx, dy: hwFloat;
-	gt: TGearType;
+    x, y, s, t: LongInt;
+    dx, dy: hwFloat;
+    gt: TGearType;
 begin
-	if lua_gettop(L) <> 7 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to AddGear!');
-		lua_pushnil(L); // return value on stack (nil)
-		end
-	else
-		begin
-		x:= lua_tointeger(L, 1);
-		y:= lua_tointeger(L, 2);
-		gt:= TGearType(lua_tointeger(L, 3));
-		s:= lua_tointeger(L, 4);
-		dx:= int2hwFloat(round(lua_tonumber(L, 5) * 1000)) / 1000;
-		dy:= int2hwFloat(round(lua_tonumber(L, 6) * 1000)) / 1000;
-		t:= lua_tointeger(L, 7);
+    if lua_gettop(L) <> 7 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to AddGear!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        x:= lua_tointeger(L, 1);
+        y:= lua_tointeger(L, 2);
+        gt:= TGearType(lua_tointeger(L, 3));
+        s:= lua_tointeger(L, 4);
+        dx:= int2hwFloat(round(lua_tonumber(L, 5) * 1000)) / 1000;
+        dy:= int2hwFloat(round(lua_tonumber(L, 6) * 1000)) / 1000;
+        t:= lua_tointeger(L, 7);
 
-		gear:= AddGear(x, y, gt, s, dx, dy, t);
-		lua_pushnumber(L, gear^.uid)
-		end;
-	lc_addgear:= 1; // 1 return value
+        gear:= AddGear(x, y, gt, s, dx, dy, t);
+        lua_pushnumber(L, gear^.uid)
+        end;
+    lc_addgear:= 1; // 1 return value
 end;
 
 function lc_getgeartype(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-	if lua_gettop(L) <> 1 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearType!');
-		lua_pushnil(L); // return value on stack (nil)
-		end
-	else
-		begin
-		gear:= GearByUID(lua_tointeger(L, 1));
-		if gear <> nil then
-			lua_pushinteger(L, ord(gear^.Kind))
-		end;
-	lc_getgeartype:= 1
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearType!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, ord(gear^.Kind))
+        end;
+    lc_getgeartype:= 1
 end;
 
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-	if lua_gettop(L) <> 2 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to SetHealth!');
-		end
-	else
-		begin
-		gear:= GearByUID(lua_tointeger(L, 1));
-		if (gear <> nil) and (gear^.Kind = gtHedgehog) then gear^.Health:= lua_tointeger(L, 2)
-		end;
-	lc_sethealth:= 0
+    if lua_gettop(L) <> 2 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to SetHealth!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) then gear^.Health:= lua_tointeger(L, 2)
+        end;
+    lc_sethealth:= 0
 end;
 
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
-	GameState:= gsExit;
-	lc_endgame:= 0
+    GameState:= gsExit;
+    lc_endgame:= 0
 end;
 
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
-	fall: boolean;
-	left, right: LongInt;
+    fall: boolean;
+    left, right: LongInt;
 begin
-	if lua_gettop(L) <> 4 then
-		WriteLnToConsole('LUA: Wrong number of parameters passed to FindPlace!')
-	else
-		begin
-		gear:= GearByUID(lua_tointeger(L, 1));
-		fall:= lua_toboolean(L, 2);
-		left:= lua_tointeger(L, 3);
-		right:= lua_tointeger(L, 4);
-		if gear <> nil then
-			FindPlace(gear, fall, left, right)
-		end;
-	lc_findplace:= 0
+    if lua_gettop(L) <> 4 then
+        WriteLnToConsole('LUA: Wrong number of parameters passed to FindPlace!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        fall:= lua_toboolean(L, 2);
+        left:= lua_tointeger(L, 3);
+        right:= lua_tointeger(L, 4);
+        if gear <> nil then
+            FindPlace(gear, fall, left, right)
+        end;
+    lc_findplace:= 0
 end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) <> 1 then
-		WriteLnToConsole('LUA: Wrong number of parameters passed to PlaySound!')
-	else
-		PlaySound(TSound(lua_tointeger(L, 1)));
-	lc_playsound:= 0;
+    if lua_gettop(L) <> 1 then
+        WriteLnToConsole('LUA: Wrong number of parameters passed to PlaySound!')
+    else
+        PlaySound(TSound(lua_tointeger(L, 1)));
+    lc_playsound:= 0;
 end;
 
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) <> 5 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!');
-		//lua_pushnil(L)
-		end
-	else
-		begin
-		ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
-		ParseCommand('grave ' + lua_tostring(L, 3), true);
-		ParseCommand('fort ' + lua_tostring(L, 4), true);
-		ParseCommand('voicepack ' + lua_tostring(L, 5), true);
-		CurrentTeam^.Binds:= DefaultBinds;
-		// fails on x64
-		//lua_pushinteger(L, LongInt(CurrentTeam));
-		end;
-	lc_addteam:= 0;//1;
+    if lua_gettop(L) <> 5 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to AddTeam!');
+        //lua_pushnil(L)
+        end
+    else
+        begin
+        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
+        ParseCommand('grave ' + lua_tostring(L, 3), true);
+        ParseCommand('fort ' + lua_tostring(L, 4), true);
+        ParseCommand('voicepack ' + lua_tostring(L, 5), true);
+        CurrentTeam^.Binds:= DefaultBinds;
+        // fails on x64
+        //lua_pushinteger(L, LongInt(CurrentTeam));
+        end;
+    lc_addteam:= 0;//1;
 end;
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) <> 4 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to AddHog!');
-		lua_pushnil(L)
-		end
-	else
-		begin
-		ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
-		ParseCommand('hat ' + lua_tostring(L, 4), true);
-		lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
-		end;
-	lc_addhog:= 1;
+    if lua_gettop(L) <> 4 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to AddHog!');
+        lua_pushnil(L)
+        end
+    else
+        begin
+        ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
+        ParseCommand('hat ' + lua_tostring(L, 4), true);
+        lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
+        end;
+    lc_addhog:= 1;
 end;
 
 function lc_getgearposition(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-	if lua_gettop(L) <> 1 then
-		begin
-		WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearPosition!');
-		lua_pushnil(L);
-		lua_pushnil(L)
-		end
-	else
-		begin
-		gear:= GearByUID(lua_tointeger(L, 1));
-		if gear <> nil then
-			begin
-			lua_pushinteger(L, hwRound(gear^.X));
-			lua_pushinteger(L, hwRound(gear^.Y))
-			end
-		end;
-	lc_getgearposition:= 2;
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetGearPosition!');
+        lua_pushnil(L);
+        lua_pushnil(L)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            lua_pushinteger(L, hwRound(gear^.X));
+            lua_pushinteger(L, hwRound(gear^.Y))
+            end
+        end;
+    lc_getgearposition:= 2;
 end;
 
 function lc_setgearposition(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
-	x, y: LongInt;
+    x, y: LongInt;
 begin
-	if lua_gettop(L) <> 3 then
-		WriteLnToConsole('LUA: Wrong number of parameters passed to SetGearPosition!')
-	else
-		begin
-		gear:= GearByUID(lua_tointeger(L, 1));
-		if gear <> nil then
-			begin
-			x:= lua_tointeger(L, 2);
-			y:= lua_tointeger(L, 3);
-			gear^.X:= int2hwfloat(x);
-			gear^.Y:= int2hwfloat(y);
-			end
-		end;
-	lc_setgearposition:= 0
+    if lua_gettop(L) <> 3 then
+        WriteLnToConsole('LUA: Wrong number of parameters passed to SetGearPosition!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            begin
+            x:= lua_tointeger(L, 2);
+            y:= lua_tointeger(L, 3);
+            gear^.X:= int2hwfloat(x);
+            gear^.Y:= int2hwfloat(y);
+            end
+        end;
+    lc_setgearposition:= 0
 end;
 
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 begin
-	if lua_gettop(L) <> 3 then
-		WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
-	else
-		begin
-		ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3));
-		end;
-	lc_setammo:= 0
+    if lua_gettop(L) <> 3 then
+        WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
+    else
+        begin
+        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3));
+        end;
+    lc_setammo:= 0
 end;
 ///////////////////
 
 procedure ScriptPrintStack;
 var n, i : LongInt;
 begin
-	n:= lua_gettop(luaState);
-	WriteLnToConsole('LUA: Stack (' + inttostr(n) + ' elements):');
-	for i:= 1 to n do
-		if not lua_isboolean(luaState, i) then
-			WriteLnToConsole('LUA:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
-		else if lua_toboolean(luaState, i) then
-			WriteLnToConsole('LUA:  ' + inttostr(i) + ': true')
-		else
-			WriteLnToConsole('LUA:  ' + inttostr(i) + ': false');
+    n:= lua_gettop(luaState);
+    WriteLnToConsole('LUA: Stack (' + inttostr(n) + ' elements):');
+    for i:= 1 to n do
+        if not lua_isboolean(luaState, i) then
+            WriteLnToConsole('LUA:  ' + inttostr(i) + ': ' + lua_tostring(luaState, i))
+        else if lua_toboolean(luaState, i) then
+            WriteLnToConsole('LUA:  ' + inttostr(i) + ': true')
+        else
+            WriteLnToConsole('LUA:  ' + inttostr(i) + ': false');
 end;
 
 procedure ScriptClearStack;
@@ -334,76 +334,76 @@ end;
 
 procedure ScriptOnGameInit;
 begin
-	// not required if there's no script to run
-	if not ScriptLoaded then
-		exit;
-			
-	// push game variables so they may be modified by the script
-	ScriptSetInteger('GameFlags', GameFlags);
-	ScriptSetString('Seed', cSeed);
-	ScriptSetInteger('TurnTime', cHedgehogTurnTime);
-	ScriptSetInteger('CaseFreq', cCaseFactor);
-	ScriptSetInteger('LandAdds', cLandAdditions);
-	ScriptSetInteger('Delay', cInactDelay);
-	ScriptSetString('Map', '');
-	ScriptSetString('Theme', '');
+    // not required if there's no script to run
+    if not ScriptLoaded then
+        exit;
+            
+    // push game variables so they may be modified by the script
+    ScriptSetInteger('GameFlags', GameFlags);
+    ScriptSetString('Seed', cSeed);
+    ScriptSetInteger('TurnTime', cHedgehogTurnTime);
+    ScriptSetInteger('CaseFreq', cCaseFactor);
+    ScriptSetInteger('LandAdds', cLandAdditions);
+    ScriptSetInteger('Delay', cInactDelay);
+    ScriptSetString('Map', '');
+    ScriptSetString('Theme', '');
 
-	ScriptCall('onGameInit');
-	
-	// pop game variables
-	ParseCommand('seed ' + ScriptGetString('Seed'), true);
-	ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
-	ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
-	ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
-	ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
-	ParseCommand('$delay ' + ScriptGetString('Delay'), true);
-	if ScriptGetString('Map') <> '' then
-		ParseCommand('map ' + ScriptGetString('Map'), true);
-	if ScriptGetString('Theme') <> '' then
-		ParseCommand('theme ' + ScriptGetString('Theme'), true);	
+    ScriptCall('onGameInit');
+    
+    // pop game variables
+    ParseCommand('seed ' + ScriptGetString('Seed'), true);
+    ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
+    ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
+    ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
+    ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
+    ParseCommand('$delay ' + ScriptGetString('Delay'), true);
+    if ScriptGetString('Map') <> '' then
+        ParseCommand('map ' + ScriptGetString('Map'), true);
+    if ScriptGetString('Theme') <> '' then
+        ParseCommand('theme ' + ScriptGetString('Theme'), true);    
 
-	ScriptPrepareAmmoStore;
-	ScriptCall('onAmmoStoreInit');
-	ScriptApplyAmmoStore;
+    ScriptPrepareAmmoStore;
+    ScriptCall('onAmmoStoreInit');
+    ScriptApplyAmmoStore;
 end;
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
 begin
-	ret:= luaL_loadfile(luaState, Str2PChar(name));
-	if ret <> 0 then
-		WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
-	else
-		begin
-		WriteLnToConsole('LUA: ' + name + ' loaded');
-		// call the script file
-		lua_pcall(luaState, 0, 0, 0);
-		ScriptLoaded:= true
-		end
+    ret:= luaL_loadfile(luaState, Str2PChar(name));
+    if ret <> 0 then
+        WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
+    else
+        begin
+        WriteLnToConsole('LUA: ' + name + ' loaded');
+        // call the script file
+        lua_pcall(luaState, 0, 0, 0);
+        ScriptLoaded:= true
+        end
 end;
 
 procedure SetGlobals;
 begin
-	ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+    ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 end;
 
 procedure GetGlobals;
 begin
-	TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
+    TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 end;
 
 procedure ScriptCall(fname : shortstring);
 begin
-	if not ScriptLoaded then
-		exit;
-	SetGlobals;
-	lua_getglobal(luaState, Str2PChar(fname));
-	if lua_pcall(luaState, 0, 0, 0) <> 0 then
-		begin
-		WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
-		lua_pop(luaState, 1)
-		end;
-	GetGlobals;
+    if not ScriptLoaded then
+        exit;
+    SetGlobals;
+    lua_getglobal(luaState, Str2PChar(fname));
+    if lua_pcall(luaState, 0, 0, 0) <> 0 then
+        begin
+        WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+        lua_pop(luaState, 1)
+        end;
+    GetGlobals;
 end;
 
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -423,26 +423,26 @@ end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-	if not ScriptLoaded then
-		exit;
-	SetGlobals;
-	lua_getglobal(luaState, Str2PChar(fname));
-	lua_pushinteger(luaState, par1);
-	lua_pushinteger(luaState, par2);
-	lua_pushinteger(luaState, par3);
-	lua_pushinteger(luaState, par4);
-	ScriptCall:= 0;
-	if lua_pcall(luaState, 4, 1, 0) <> 0 then
-		begin
-		WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
-		lua_pop(luaState, 1)
-		end
-	else
-		begin
-		ScriptCall:= lua_tointeger(luaState, -1);
-		lua_pop(luaState, 1)
-		end;
-	GetGlobals;
+    if not ScriptLoaded then
+        exit;
+    SetGlobals;
+    lua_getglobal(luaState, Str2PChar(fname));
+    lua_pushinteger(luaState, par1);
+    lua_pushinteger(luaState, par2);
+    lua_pushinteger(luaState, par3);
+    lua_pushinteger(luaState, par4);
+    ScriptCall:= 0;
+    if lua_pcall(luaState, 4, 1, 0) <> 0 then
+        begin
+        WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+        lua_pop(luaState, 1)
+        end
+    else
+        begin
+        ScriptCall:= lua_tointeger(luaState, -1);
+        lua_pop(luaState, 1)
+        end;
+    GetGlobals;
 end;
 
 procedure ScriptPrepareAmmoStore;
@@ -450,20 +450,20 @@ var i: ShortInt;
 begin
 ScriptAmmoStore:= '';
 for i:=1 to ord(High(TAmmoType)) do
-	ScriptAmmoStore:= ScriptAmmoStore + '0000';
+    ScriptAmmoStore:= ScriptAmmoStore + '0000';
 end;
 
 procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte);
 begin
 if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) then
-	exit;
+    exit;
 ScriptAmmoStore[ord(ammo)]:= inttostr(count)[1];
 ScriptAmmoStore[ord(ammo) + ord(high(TAmmoType))]:= inttostr(propability)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
 begin
-	AddAmmoStore(ScriptAmmoStore);
+    AddAmmoStore(ScriptAmmoStore);
 end;
 
 // small helper functions making registering enums a lot easier
@@ -485,8 +485,8 @@ end;
 
 procedure init_uScript;
 var at : TGearType;
-	am : TAmmoType;
-	st : TSound;
+    am : TAmmoType;
+    st : TSound;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -519,16 +519,16 @@ ScriptSetInteger('gfKing',gfKing);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
-	ScriptSetInteger(str(at), ord(at));
+    ScriptSetInteger(str(at), ord(at));
 
 // register sounds
 for st:= Low(TSound) to High(TSound) do
-	ScriptSetInteger(str(st), ord(st));
+    ScriptSetInteger(str(st), ord(st));
 
 // register ammo types
 for am:= Low(TAmmoType) to High(TAmmoType) do
-	ScriptSetInteger(str(am), ord(am));
-	
+    ScriptSetInteger(str(am), ord(am));
+    
 // register functions
 lua_register(luaState, 'AddGear', @lc_addgear);
 lua_register(luaState, 'WriteLnToConsole', @lc_writelntoconsole);

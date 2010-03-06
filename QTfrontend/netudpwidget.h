@@ -29,18 +29,18 @@ class HWNetUdpModel : public HWNetServersModel
   Q_OBJECT
 
 public:
-	HWNetUdpModel(QObject *parent = 0);
+    HWNetUdpModel(QObject *parent = 0);
 
-	QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
 public slots:
-	void updateList();
+    void updateList();
 
 private slots:
-	void onClientRead();
+    void onClientRead();
 
 private:
-	QUdpSocket* pUdpSocket;
+    QUdpSocket* pUdpSocket;
 };
 
 #endif // _NET_UDPWIDGET_INCLUDED

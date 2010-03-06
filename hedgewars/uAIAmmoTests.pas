@@ -24,11 +24,11 @@ uses SDLh, uGears, uConsts, uFloat;
 const amtest_OnTurn = $00000001;
 
 type TAttackParams = record
-			Time: Longword;
-			Angle, Power: LongInt;
-			ExplX, ExplY, ExplR: LongInt;
-			AttackPutX, AttackPutY: LongInt;
-			end;
+            Time: Longword;
+            Angle, Power: LongInt;
+            ExplX, ExplY, ExplR: LongInt;
+            AttackPutX, AttackPutY: LongInt;
+            end;
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -40,55 +40,55 @@ function TestFirePunch(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackP
 function TestAirAttack(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-	TAmmoTest = record
-			proc: TAmmoTestProc;
-			flags: Longword;
-			end;
+    TAmmoTest = record
+            proc: TAmmoTestProc;
+            flags: Longword;
+            end;
 
 const AmmoTests: array[TAmmoType] of TAmmoTest =
-			(
-			(proc: nil;              flags: 0), // amNothing
-			(proc: @TestGrenade;     flags: 0), // amGrenade
-			(proc: nil;              flags: 0), // amClusterBomb
-			(proc: @TestBazooka;     flags: 0), // amBazooka
-			(proc: nil;              flags: 0), // amUFO
-			(proc: @TestShotgun;     flags: 0), // amShotgun
-			(proc: nil;              flags: 0), // amPickHammer
-			(proc: nil;              flags: 0), // amSkip
-			(proc: nil;              flags: 0), // amRope
-			(proc: nil;              flags: 0), // amMine
-			(proc: @TestDesertEagle; flags: 0), // amDEagle
-			(proc: nil;              flags: 0), // amDynamite
-			(proc: @TestFirePunch;   flags: 0), // amFirePunch
-			(proc: nil;              flags: 0), // amWhip
-			(proc: @TestBaseballBat; flags: 0), // amBaseballBat
-			(proc: nil;              flags: 0), // amParachute
-			(proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
-			(proc: nil;              flags: 0), // amMineStrike
-			(proc: nil;              flags: 0), // amBlowTorch
-			(proc: nil;              flags: 0), // amGirder
-			(proc: nil;              flags: amtest_OnTurn), // amTeleport
-			(proc: nil;              flags: 0), // amSwitch
-			(proc: @TestMortar;      flags: 0), // amMortar
-			(proc: nil;              flags: 0), // amKamikaze
-			(proc: nil;              flags: 0), // amCake
-			(proc: nil;              flags: 0), // amSeduction
-			(proc: nil;              flags: 0), // amBanana
-			(proc: nil;              flags: 0), // amHellishBomb
-			(proc: nil;              flags: 0), // amNapalm
-			(proc: nil;              flags: 0), // amDrill
-			(proc: nil;              flags: 0), // amBallgun
-			(proc: nil;              flags: 0), // amRCPlane
-			(proc: nil;              flags: 0), // amLowGravity
-			(proc: nil;              flags: 0), // amExtraDamage
-			(proc: nil;              flags: 0), // amInvulnerable
-			(proc: nil;              flags: 0), // amExtraTime
-			(proc: nil;              flags: 0), // amLaserSight
-			(proc: nil;              flags: 0), // amVampiric
-			(proc: nil;              flags: 0), // amSniperRifle
-			(proc: nil;              flags: 0),  // amJetpack
-			(proc: nil;              flags: 0)  // amMolotov
-			);
+            (
+            (proc: nil;              flags: 0), // amNothing
+            (proc: @TestGrenade;     flags: 0), // amGrenade
+            (proc: nil;              flags: 0), // amClusterBomb
+            (proc: @TestBazooka;     flags: 0), // amBazooka
+            (proc: nil;              flags: 0), // amUFO
+            (proc: @TestShotgun;     flags: 0), // amShotgun
+            (proc: nil;              flags: 0), // amPickHammer
+            (proc: nil;              flags: 0), // amSkip
+            (proc: nil;              flags: 0), // amRope
+            (proc: nil;              flags: 0), // amMine
+            (proc: @TestDesertEagle; flags: 0), // amDEagle
+            (proc: nil;              flags: 0), // amDynamite
+            (proc: @TestFirePunch;   flags: 0), // amFirePunch
+            (proc: nil;              flags: 0), // amWhip
+            (proc: @TestBaseballBat; flags: 0), // amBaseballBat
+            (proc: nil;              flags: 0), // amParachute
+            (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
+            (proc: nil;              flags: 0), // amMineStrike
+            (proc: nil;              flags: 0), // amBlowTorch
+            (proc: nil;              flags: 0), // amGirder
+            (proc: nil;              flags: amtest_OnTurn), // amTeleport
+            (proc: nil;              flags: 0), // amSwitch
+            (proc: @TestMortar;      flags: 0), // amMortar
+            (proc: nil;              flags: 0), // amKamikaze
+            (proc: nil;              flags: 0), // amCake
+            (proc: nil;              flags: 0), // amSeduction
+            (proc: nil;              flags: 0), // amBanana
+            (proc: nil;              flags: 0), // amHellishBomb
+            (proc: nil;              flags: 0), // amNapalm
+            (proc: nil;              flags: 0), // amDrill
+            (proc: nil;              flags: 0), // amBallgun
+            (proc: nil;              flags: 0), // amRCPlane
+            (proc: nil;              flags: 0), // amLowGravity
+            (proc: nil;              flags: 0), // amExtraDamage
+            (proc: nil;              flags: 0), // amInvulnerable
+            (proc: nil;              flags: 0), // amExtraTime
+            (proc: nil;              flags: 0), // amLaserSight
+            (proc: nil;              flags: 0), // amVampiric
+            (proc: nil;              flags: 0), // amSniperRifle
+            (proc: nil;              flags: 0),  // amJetpack
+            (proc: nil;              flags: 0)  // amMolotov
+            );
 
 const BadTurn = Low(LongInt) div 4;
 
@@ -216,56 +216,56 @@ var Vx, Vy: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
 
-	function CheckTrace: LongInt;
-	var x, y, dY: hwFloat;
-		value: LongInt;
-	begin
-		x:= Me^.X;
-		y:= Me^.Y;
-		dY:= -Vy;
+    function CheckTrace: LongInt;
+    var x, y, dY: hwFloat;
+        value: LongInt;
+    begin
+        x:= Me^.X;
+        y:= Me^.Y;
+        dY:= -Vy;
 
-		repeat
-			x:= x + Vx;
-			y:= y + dY;
-			dY:= dY + cGravity;
-			EX:= hwRound(x);
-			EY:= hwRound(y);
-		until TestCollExcludingMe(Me, EX, EY, 5) or (EY > 1000);
+        repeat
+            x:= x + Vx;
+            y:= y + dY;
+            dY:= dY + cGravity;
+            EX:= hwRound(x);
+            EY:= hwRound(y);
+        until TestCollExcludingMe(Me, EX, EY, 5) or (EY > 1000);
 
-		if (EY < 1000) and not dY.isNegative then
-			begin
-			value:= RateExplosion(Me, EX, EY, 91);
-			if (value = 0) then
-				if (dY > _0_15) then
-					value:= - abs(Targ.Y - EY) div 32
-				else
-					value:= BadTurn
-			else if (value < 0) then value:= BadTurn
-			end
-		else
-			value:= BadTurn;
+        if (EY < 1000) and not dY.isNegative then
+            begin
+            value:= RateExplosion(Me, EX, EY, 91);
+            if (value = 0) then
+                if (dY > _0_15) then
+                    value:= - abs(Targ.Y - EY) div 32
+                else
+                    value:= BadTurn
+            else if (value < 0) then value:= BadTurn
+            end
+        else
+            value:= BadTurn;
 
-		CheckTrace:= value;
-	end;
+        CheckTrace:= value;
+    end;
 
-	function Solve: LongWord;
-	var A, B, D, T: hwFloat;
-		C: LongInt;
-	begin
-		A:= hwSqr(cGravity) * _0_25;
-		B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
-		C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
-		D:= hwSqr(B) - (A * C * 4);
-		if D.isNegative = false then
-			begin
-			D:= ( - B + hwSqrt(D)) * _0_5 / A;
-			if D.isNegative = false then
-				T:= hwSqrt(D)
-			else
-				T:= _0;
-			Solve:= hwRound(T)
-			end else Solve:= 0
-	end;
+    function Solve: LongWord;
+    var A, B, D, T: hwFloat;
+        C: LongInt;
+    begin
+        A:= hwSqr(cGravity) * _0_25;
+        B:= - cGravity * (Targ.Y - hwRound(Me^.Y)) - _1;
+        C:= sqr(Targ.Y - hwRound(Me^.Y)) + sqr(Targ.X - hwRound(Me^.X));
+        D:= hwSqr(B) - (A * C * 4);
+        if D.isNegative = false then
+            begin
+            D:= ( - B + hwSqrt(D)) * _0_5 / A;
+            if D.isNegative = false then
+                T:= hwSqrt(D)
+            else
+                T:= _0;
+            Solve:= hwRound(T)
+            end else Solve:= 0
+    end;
 
 begin
 valueResult:= BadTurn;
@@ -277,19 +277,19 @@ TestTime:= Solve;
 
 if TestTime = 0 then exit(BadTurn);
 
-	Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
-	Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
+    Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
+    Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
 
-	Score:= CheckTrace;
-	if valueResult < Score then
-		begin
-		ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
-		ap.Power:= 1;
-		ap.ExplR:= 100;
-		ap.ExplX:= EX;
-		ap.ExplY:= EY;
-		valueResult:= Score
-		end;
+    Score:= CheckTrace;
+    if valueResult < Score then
+        begin
+        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Power:= 1;
+        ap.ExplR:= 100;
+        ap.ExplX:= EX;
+        ap.ExplY:= EY;
+        valueResult:= Score
+        end;
 
 TestMortar:= valueResult;
 end;
@@ -385,23 +385,23 @@ ap.Power:= 1;
 ap.Angle:= 0;
 if (Abs(hwRound(Me^.X) - Targ.X) > 25)
 or (Abs(hwRound(Me^.Y) - 50 - Targ.Y) > 50) then
-	begin
-	if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6)
-	and (RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Me^.dX), hwRound(Me^.Y) - 40, 30, 30) = 0) then
-		valueResult:= Succ(BadTurn)
-	else
-		valueResult:= BadTurn;
-	exit(valueResult)
-	end;
+    begin
+    if TestColl(hwRound(Me^.Y), hwRound(Me^.Y) - 16, 6)
+    and (RateShove(Me, hwRound(Me^.X) + 10 * hwSign(Me^.dX), hwRound(Me^.Y) - 40, 30, 30) = 0) then
+        valueResult:= Succ(BadTurn)
+    else
+        valueResult:= BadTurn;
+    exit(valueResult)
+    end;
 
 valueResult:= 0;
 for i:= 0 to 4 do
-	valueResult:= valueResult + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
+    valueResult:= valueResult + RateShove(Me, hwRound(Me^.X) + 10 * hwSign(int2hwFloat(Targ.X) - Me^.X),
                                     hwRound(Me^.Y) - 20 * i - 5, 10, 30);
 if valueResult <= 0 then
-	valueResult:= BadTurn
+    valueResult:= BadTurn
 else
-	inc(valueResult);
+    inc(valueResult);
 
 TestFirePunch:= valueResult;
 end;

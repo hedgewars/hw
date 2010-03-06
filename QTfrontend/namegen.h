@@ -27,21 +27,21 @@ class HWTeam;
 class HWNamegen
 {
 public:
-	HWNamegen();
-	~HWNamegen();
+    HWNamegen();
+    ~HWNamegen();
 
-	void TeamRandomName(HWTeam*& team, const int &i);
-	void TeamRandomNames(HWTeam*& team, const bool changeteamname);
-	void RandomNameByHat(HWTeam*& team, const int &i);
+    void TeamRandomName(HWTeam*& team, const int &i);
+    void TeamRandomNames(HWTeam*& team, const bool changeteamname);
+    void RandomNameByHat(HWTeam*& team, const int &i);
 
 private:
 
-		QList<QStringList> TypesTeamnames;
-		QList<QStringList> TypesHatnames;
-		bool TypesAvliable;
-		void TypesLoad();
-		void DictLoad(const QString filename, QStringList &list);
-		void HatCfgLoad(const QString hatname, QStringList &list);
+        QList<QStringList> TypesTeamnames;
+        QList<QStringList> TypesHatnames;
+        bool TypesAvliable;
+        void TypesLoad();
+        void DictLoad(const QString filename, QStringList &list);
+        void HatCfgLoad(const QString hatname, QStringList &list);
 };
 
 

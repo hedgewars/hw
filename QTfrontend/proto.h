@@ -26,13 +26,13 @@
 
 class HWProto : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	HWProto();
-	static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
-	static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
-	static QString formatChatMsg(const QString & nick, const QString & msg);
+    HWProto();
+    static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
+    static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
+    static QString formatChatMsg(const QString & nick, const QString & msg);
 };
 
 #endif // _PROTO_H

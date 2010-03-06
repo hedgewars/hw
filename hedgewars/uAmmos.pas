@@ -108,7 +108,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
         Ammoz[a].Probability:= probability[byte(s[ord(a) + ord(High(TAmmoType))]) - byte('0')];
         Ammoz[a].SkipTurns:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
         Ammoz[a].NumberInCase:= (byte(s[ord(a) + ord(High(TAmmoType)) + ord(High(TAmmoType)) + ord(High(TAmmoType))]) - byte('0'));
-		if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
+        if (TrainingFlags and tfIgnoreDelays) <> 0 then Ammoz[a].SkipTurns:= 0;
         cnt:= byte(s[ord(a)]) - byte('0');
         // avoid things we already have infinite number
         if cnt = 9 then
@@ -206,19 +206,19 @@ end;
 procedure OnUsedAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-	begin
-	MultiShootAttacks:= 0;
-	with Ammo^[CurSlot, CurAmmo] do
-		if Count <> AMMO_INFINITE then
-			begin
-			dec(Count);
-			if Count = 0 then
-				begin
-				PackAmmo(Ammo, CurSlot);
-				SwitchNotHeldAmmo(Hedgehog)
-				end
-			end
-	end
+    begin
+    MultiShootAttacks:= 0;
+    with Ammo^[CurSlot, CurAmmo] do
+        if Count <> AMMO_INFINITE then
+            begin
+            dec(Count);
+            if Count = 0 then
+                begin
+                PackAmmo(Ammo, CurSlot);
+                SwitchNotHeldAmmo(Hedgehog)
+                end
+            end
+    end
 end;
 
 function  HHHasAmmo(var Hedgehog: THedgehog; Ammo: TAmmoType): boolean;
@@ -239,45 +239,45 @@ end;
 procedure ApplyAngleBounds(var Hedgehog: THedgehog; AmmoType: TAmmoType);
 begin
 with Hedgehog do
-	begin
-	CurMinAngle:= Ammoz[AmmoType].minAngle;
-	if Ammoz[AmmoType].maxAngle <> 0 then
-		CurMaxAngle:= Ammoz[AmmoType].maxAngle
-	else
-		CurMaxAngle:= cMaxAngle;
+    begin
+    CurMinAngle:= Ammoz[AmmoType].minAngle;
+    if Ammoz[AmmoType].maxAngle <> 0 then
+        CurMaxAngle:= Ammoz[AmmoType].maxAngle
+    else
+        CurMaxAngle:= cMaxAngle;
 
-	with Hedgehog.Gear^ do
-		begin
-		if Angle < CurMinAngle then Angle:= CurMinAngle;
-		if Angle > CurMaxAngle then Angle:= CurMaxAngle;
-		end
-	end
+    with Hedgehog.Gear^ do
+        begin
+        if Angle < CurMinAngle then Angle:= CurMinAngle;
+        if Angle > CurMaxAngle then Angle:= CurMaxAngle;
+        end
+    end
 end;
 
 procedure SwitchToFirstLegalAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-	begin
-	CurAmmo:= 0;
-	CurSlot:= 0;
-	while (CurSlot <= cMaxSlotIndex) and
-		((Ammo^[CurSlot, CurAmmo].Count = 0) or
-		(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-		do
-		begin
-		while (CurAmmo <= cMaxSlotAmmoIndex) and
-			((Ammo^[CurSlot, CurAmmo].Count = 0) or
-			(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
-			do inc(CurAmmo);
+    begin
+    CurAmmo:= 0;
+    CurSlot:= 0;
+    while (CurSlot <= cMaxSlotIndex) and
+        ((Ammo^[CurSlot, CurAmmo].Count = 0) or
+        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+        do
+        begin
+        while (CurAmmo <= cMaxSlotAmmoIndex) and
+            ((Ammo^[CurSlot, CurAmmo].Count = 0) or
+            (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0))
+            do inc(CurAmmo);
 
-		if (CurAmmo > cMaxSlotAmmoIndex) then
-			begin
-			CurAmmo:= 0;
-			inc(CurSlot)
-			end
-		end;
-	TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
-	end
+        if (CurAmmo > cMaxSlotAmmoIndex) then
+            begin
+            CurAmmo:= 0;
+            inc(CurSlot)
+            end
+        end;
+    TryDo(CurSlot <= cMaxSlotIndex, 'Ammo slot index overflow', true)
+    end
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
@@ -286,44 +286,44 @@ begin
 TargetPoint.X:= NoPointX;
 
 with Hedgehog do
-	begin
+    begin
 
-	if (Ammo^[CurSlot, CurAmmo].Count = 0) then
-		SwitchToFirstLegalAmmo(Hedgehog);
+    if (Ammo^[CurSlot, CurAmmo].Count = 0) then
+        SwitchToFirstLegalAmmo(Hedgehog);
 
         //bad things could happen here in case CurSlot is overflowing
-	ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
+    ApplyAngleBounds(Hedgehog, Ammo^[CurSlot, CurAmmo].AmmoType);
 
-	with Ammo^[CurSlot, CurAmmo] do
-		begin
+    with Ammo^[CurSlot, CurAmmo] do
+        begin
         if AmmoType <> amNothing then
             begin
-		    s:= trammo[Ammoz[AmmoType].NameId];
-		    if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
-			    s:= s + ' (' + IntToStr(Count) + ')';
-		    if (Propz and ammoprop_Timerable) <> 0 then
-			    s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
-		    AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
+            s:= trammo[Ammoz[AmmoType].NameId];
+            if (Count <> AMMO_INFINITE) and not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0)) then
+                s:= s + ' (' + IntToStr(Count) + ')';
+            if (Propz and ammoprop_Timerable) <> 0 then
+                s:= s + ', ' + inttostr(Timer div 1000) + ' ' + trammo[sidSeconds];
+            AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
             end;
-		if (Propz and ammoprop_NeedTarget) <> 0
-			then begin
-			Gear^.State:= Gear^.State or      gstHHChooseTarget;
-			isCursorVisible:= true
-			end else begin
-			Gear^.State:= Gear^.State and not gstHHChooseTarget;
-			isCursorVisible:= false
-			end;
-		ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
-		end
-	end
+        if (Propz and ammoprop_NeedTarget) <> 0
+            then begin
+            Gear^.State:= Gear^.State or      gstHHChooseTarget;
+            isCursorVisible:= true
+            end else begin
+            Gear^.State:= Gear^.State and not gstHHChooseTarget;
+            isCursorVisible:= false
+            end;
+        ShowCrosshair:= (Propz and ammoprop_NoCrosshair) = 0
+        end
+    end
 end;
 
 procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 begin
 with Hedgehog do
-	if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or
-		(Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
-		SwitchToFirstLegalAmmo(Hedgehog);
+    if ((Ammo^[CurSlot, CurAmmo].Propz and ammoprop_DontHold) <> 0) or
+        (Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber >= 0) then
+        SwitchToFirstLegalAmmo(Hedgehog);
 end;
 
 procedure SetWeapon(weap: TAmmoType);
@@ -333,52 +333,52 @@ end;
 
 procedure DisableSomeWeapons;
 var i, slot, a: Longword;
-	t: TAmmoType;
+    t: TAmmoType;
 begin
 for i:= 0 to Pred(StoreCnt) do
-	for slot:= 0 to cMaxSlotIndex do
-		begin
-		for a:= 0 to cMaxSlotAmmoIndex do
-			with StoresList[i]^[slot, a] do
-				if (Propz and ammoprop_NotBorder) <> 0 then Count:= 0;
+    for slot:= 0 to cMaxSlotIndex do
+        begin
+        for a:= 0 to cMaxSlotAmmoIndex do
+            with StoresList[i]^[slot, a] do
+                if (Propz and ammoprop_NotBorder) <> 0 then Count:= 0;
 
-		PackAmmo(StoresList[i], slot)
-		end;
+        PackAmmo(StoresList[i], slot)
+        end;
 
 for t:= Low(TAmmoType) to High(TAmmoType) do
-	if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
+    if (Ammoz[t].Ammo.Propz and ammoprop_NotBorder) <> 0 then Ammoz[t].Probability:= 0
 end;
 
 // Restore indefinitely disabled weapons and initial weapon counts.  Only used for hog placement right now
 procedure ResetWeapons;
 var i, slot, a: Longword;
-	t: TAmmoType;
+    t: TAmmoType;
 begin
 for i:= 0 to Pred(StoreCnt) do
-	for slot:= 0 to cMaxSlotIndex do
-		begin
-		for a:= 0 to cMaxSlotAmmoIndex do
-			with StoresList[i]^[slot, a] do
+    for slot:= 0 to cMaxSlotIndex do
+        begin
+        for a:= 0 to cMaxSlotAmmoIndex do
+            with StoresList[i]^[slot, a] do
                 Count:= InitialCount;
 
-		PackAmmo(StoresList[i], slot)
-		end;
+        PackAmmo(StoresList[i], slot)
+        end;
 for t:= Low(TAmmoType) to High(TAmmoType) do
-	if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
+    if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
 end;
 
 procedure init_uAmmos;
 begin
-	shoppa:= false;
-	StoreCnt:= 0
+    shoppa:= false;
+    StoreCnt:= 0
 end;
 
 procedure free_uAmmos;
 var i: LongWord;
 begin
-	if StoreCnt > 0 then
-		for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
-	StoreCnt:= 0
+    if StoreCnt > 0 then
+        for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
+    StoreCnt:= 0
 end;
 
 end.

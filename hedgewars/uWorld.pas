@@ -46,11 +46,11 @@ procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongIn
 procedure HideMission;
 
 implementation
-uses	uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
+uses    uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
 {$IFDEF GLES11}
-	gles11;
+    gles11;
 {$ELSE}
-	GL;
+    GL;
 {$ENDIF}
 
 type TCaptionStr = record
@@ -68,9 +68,9 @@ var cWaveWidth, cWaveHeight: LongInt;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
     prevPoint: TPoint;
-	amSel: TAmmoType = amNothing;
-	missionTex: PTexture;
-	missionTimer: LongInt;
+    amSel: TAmmoType = amNothing;
+    missionTex: PTexture;
+    missionTimer: LongInt;
 
 procedure InitWorld;
 var i, t: LongInt;
@@ -122,18 +122,18 @@ g:= ''; // no text/things to note yet
 
 // modified damage modificator?
 if cDamagePercent <> 100 then
-	g:= AddGoal(g, gfAny, gidDamageModifier, cDamagePercent);
+    g:= AddGoal(g, gfAny, gidDamageModifier, cDamagePercent);
 
 // modified mine timers?
 if cMinesTime <> 3000 then
-	begin
-	if cMinesTime = 0 then
-		g:= AddGoal(g, gfMines, gidNoMineTimer)
-	else if cMinesTime < 0 then
-		g:= AddGoal(g, gfMines, gidRandomMineTimer)
-	else
-		g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
-	end;
+    begin
+    if cMinesTime = 0 then
+        g:= AddGoal(g, gfMines, gidNoMineTimer)
+    else if cMinesTime < 0 then
+        g:= AddGoal(g, gfMines, gidRandomMineTimer)
+    else
+        g:= AddGoal(g, gfMines, gidMineTimer, cMinesTime div 1000);
+    end;
 
 // check different game flags
 g:= AddGoal(g, gfForts, gidForts); // forts?
@@ -210,70 +210,70 @@ DrawSprite(sprAMBorders, x, y, 1);
 dec(y, 33);
 DrawSprite(sprAMSlotName, x, y, 0);
 for i:= cMaxSlotIndex downto 0 do
-	if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
-		begin
-		if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
-		dec(y, 33);
-		inc(SlotsNum);
-		DrawSprite(sprAMSlot, x, y, 0);
-		DrawSprite(sprAMSlotKeys, x + 2, y + 1, i);
-		t:= 0;
+    if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
+        begin
+        if (cScreenHeight - CursorPoint.Y >= y - 33) and (cScreenHeight - CursorPoint.Y < y) then Slot:= i;
+        dec(y, 33);
+        inc(SlotsNum);
+        DrawSprite(sprAMSlot, x, y, 0);
+        DrawSprite(sprAMSlotKeys, x + 2, y + 1, i);
+        t:= 0;
                     g:= 0;
-		while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
-			begin
-			if (Ammo^[i, t].AmmoType <> amNothing) then
-				begin
-				l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
+        while (t <= cMaxSlotAmmoIndex) and (Ammo^[i, t].Count > 0) do
+            begin
+            if (Ammo^[i, t].AmmoType <> amNothing) then
+                begin
+                l:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
 
-				if l >= 0 then
-					begin
-					DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+                if l >= 0 then
+                    begin
+                    DrawSprite(sprAMAmmosBW, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
                     if l < 100 then DrawSprite(sprTurnsLeft, x + g * 33 + 51, y + 17, l);
-					end else
-					DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
-				if (Slot = i)
-				and (CursorPoint.X >= x + g * 33 + 35)
-				and (CursorPoint.X < x + g * 33 + 68) then
-					begin
-					if (l < 0) then DrawSprite(sprAMSelection, x + g * 33 + 35, y + 1, 0);
-					Pos:= t;
-					end;
-				inc(g)
-				end;
-				inc(t)
-			end
-		end;
+                    end else
+                    DrawSprite(sprAMAmmos, x + g * 33 + 35, y + 1, LongInt(Ammo^[i, t].AmmoType)-1);
+                if (Slot = i)
+                and (CursorPoint.X >= x + g * 33 + 35)
+                and (CursorPoint.X < x + g * 33 + 68) then
+                    begin
+                    if (l < 0) then DrawSprite(sprAMSelection, x + g * 33 + 35, y + 1, 0);
+                    Pos:= t;
+                    end;
+                inc(g)
+                end;
+                inc(t)
+            end
+        end;
 dec(y, 1);
 DrawSprite(sprAMBorders, x, y, 0);
 
 if (Pos >= 0) then
-	begin
-	if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
-		if (amSel <> Ammo^[Slot, Pos].AmmoType) or (WeaponTooltipTex = nil) then
-			begin
-			amSel:= Ammo^[Slot, Pos].AmmoType;
-			RenderWeaponTooltip(amSel)
-			end;
-		
-		DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
+    begin
+    if (Ammo^[Slot, Pos].Count > 0) and (Ammo^[Slot, Pos].AmmoType <> amNothing) then
+        if (amSel <> Ammo^[Slot, Pos].AmmoType) or (WeaponTooltipTex = nil) then
+            begin
+            amSel:= Ammo^[Slot, Pos].AmmoType;
+            RenderWeaponTooltip(amSel)
+            end;
+        
+        DrawTexture(cScreenWidth div 2 - 200 + AMxShift, cScreenHeight - 68, Ammoz[Ammo^[Slot, Pos].AmmoType].NameTex);
 
-		if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
-			DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
+        if Ammo^[Slot, Pos].Count < AMMO_INFINITE then
+            DrawTexture(cScreenWidth div 2 + AMxShift - 35, cScreenHeight - 68, CountTexz[Ammo^[Slot, Pos].Count]);
 
-		if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
-			begin
-			bShowAmmoMenu:= false;
-			SetWeapon(Ammo^[Slot, Pos].AmmoType);
-			bSelected:= false;
-			FreeWeaponTooltip;
-			exit
-			end;
-	end
+        if bSelected and (Ammoz[Ammo^[Slot, Pos].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber < 0) then
+            begin
+            bShowAmmoMenu:= false;
+            SetWeapon(Ammo^[Slot, Pos].AmmoType);
+            bSelected:= false;
+            FreeWeaponTooltip;
+            exit
+            end;
+    end
 else
-	FreeWeaponTooltip;
+    FreeWeaponTooltip;
 
 if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
-	ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, y);
+    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, y);
 
 bSelected:= false;
 if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
@@ -296,38 +296,38 @@ lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
 // Water
 r.y:= WorldDy + cWaterLine;
 if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
-	begin
-	if r.y < 0 then r.y:= 0;
+    begin
+    if r.y < 0 then r.y:= 0;
 
-	glDisable(GL_TEXTURE_2D);
-	VertexBuffer[0].X:= -lw;
-	VertexBuffer[0].Y:= r.y;
-	VertexBuffer[1].X:= lw;
-	VertexBuffer[1].Y:= r.y;
-	VertexBuffer[2].X:= lw;
-	VertexBuffer[2].Y:= lh;
-	VertexBuffer[3].X:= -lw;
-	VertexBuffer[3].Y:= lh;
+    glDisable(GL_TEXTURE_2D);
+    VertexBuffer[0].X:= -lw;
+    VertexBuffer[0].Y:= r.y;
+    VertexBuffer[1].X:= lw;
+    VertexBuffer[1].Y:= r.y;
+    VertexBuffer[2].X:= lw;
+    VertexBuffer[2].Y:= lh;
+    VertexBuffer[3].X:= -lw;
+    VertexBuffer[3].Y:= lh;
 
-	glEnableClientState (GL_COLOR_ARRAY);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
+    glEnableClientState (GL_COLOR_ARRAY);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 
-	glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
 
-	glColor4f(1, 1, 1, 1); // disable coloring
-	glEnable(GL_TEXTURE_2D)
-	end
+    glColor4f(1, 1, 1, 1); // disable coloring
+    glEnable(GL_TEXTURE_2D)
+    end
 end;
 
 procedure DrawWaves(Dir, dX, dY: LongInt);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
-	lw, waves, shift: GLfloat;
+    lw, waves, shift: GLfloat;
 begin
 lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
@@ -365,10 +365,10 @@ glDisableClientState(GL_VERTEX_ARRAY);
 
 
 {for i:= -1 to cWaterSprCount do
-	DrawSprite(sprWater,
-		i * cWaveWidth + ((WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) - (cScreenWidth div 2),
-		cWaterLine + WorldDy + dY,
-		0)}
+    DrawSprite(sprWater,
+        i * cWaveWidth + ((WorldDx + (RealTicks shr 6) * Dir + dX) mod cWaveWidth) - (cScreenWidth div 2),
+        cWaterLine + WorldDy + dY,
+        0)}
 end;
 
 procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift: LongInt);
@@ -376,37 +376,37 @@ var i, w, sw: LongInt;
 begin
 sw:= round(cScreenWidth / cScaleFactor);
 if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
-	begin
-	w:= SpritesData[spr].Width;
-	i:= Shift mod w;
-	if i > 0 then dec(i, w);
-	dec(i, w * (sw div w + 1));
-	repeat
-		DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
-		inc(i, w)
-	until i > sw
-	end else
-	begin
-	w:= SpritesData[spr].Width;
-	dec(Shift, w div 2);
-	DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+    begin
+    w:= SpritesData[spr].Width;
+    i:= Shift mod w;
+    if i > 0 then dec(i, w);
+    dec(i, w * (sw div w + 1));
+    repeat
+        DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+        inc(i, w)
+    until i > sw
+    end else
+    begin
+    w:= SpritesData[spr].Width;
+    dec(Shift, w div 2);
+    DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
 
-	sw:= round(cScreenWidth / cScaleFactor);
-	
-	i:= Shift - SpritesData[sprL].Width;
-	while i >= -sw - SpritesData[sprL].Width do
-		begin
-		DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height, 0);
-		dec(i, SpritesData[sprL].Width);
-		end;
-		
-	i:= Shift + w;
-	while i <= sw do
-		begin
-		DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height, 0);
-		inc(i, SpritesData[sprR].Width)
-		end
-	end
+    sw:= round(cScreenWidth / cScaleFactor);
+    
+    i:= Shift - SpritesData[sprL].Width;
+    while i >= -sw - SpritesData[sprL].Width do
+        begin
+        DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height, 0);
+        dec(i, SpritesData[sprL].Width);
+        end;
+        
+    i:= Shift + w;
+    while i <= sw do
+        begin
+        DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height, 0);
+        inc(i, SpritesData[sprR].Width)
+        end
+    end
 end;
 
 
@@ -421,15 +421,15 @@ var i, t: LongInt;
     scale: GLfloat;
 begin
 if ZoomValue < zoom then
-	begin
-	zoom:= zoom - 0.002 * Lag;
-	if ZoomValue > zoom then zoom:= ZoomValue
-	end else
+    begin
+    zoom:= zoom - 0.002 * Lag;
+    if ZoomValue > zoom then zoom:= ZoomValue
+    end else
 if ZoomValue > zoom then
-	begin
-	zoom:= zoom + 0.002 * Lag;
-	if ZoomValue < zoom then zoom:= ZoomValue
-	end;
+    begin
+    zoom:= zoom + 0.002 * Lag;
+    if ZoomValue < zoom then zoom:= ZoomValue
+    end;
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
@@ -460,25 +460,25 @@ DrawWater(255);
 
 // Attack bar
 if CurrentTeam <> nil then
-	case AttackBar of
+    case AttackBar of
 (*        1: begin
-		r:= StuffPoz[sPowerBar];
-		{$WARNINGS OFF}
-		r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-		{$WARNINGS ON}
-		DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-		end;*)
-		2: with CurrentHedgehog^ do
-				begin
-				tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-				tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-				for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-					DrawSprite(sprPower,
-							hwRound(Gear^.X) + round(WorldDx + tdx * (24 + i * 2)) - 16,
-							hwRound(Gear^.Y) + round(WorldDy + tdy * (24 + i * 2)) - 12,
-							i)
-				end
-		end;
+        r:= StuffPoz[sPowerBar];
+        {$WARNINGS OFF}
+        r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
+        {$WARNINGS ON}
+        DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
+        end;*)
+        2: with CurrentHedgehog^ do
+                begin
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower,
+                            hwRound(Gear^.X) + round(WorldDx + tdx * (24 + i * 2)) - 16,
+                            hwRound(Gear^.Y) + round(WorldDy + tdy * (24 + i * 2)) - 12,
+                            i)
+                end
+        end;
 
 DrawVisualGears(1);
 
@@ -497,7 +497,7 @@ DrawWaves( 1, 75, 0);
 {$WARNINGS OFF}
 // Target
 if TargetPoint.X <> NoPointX then
-	DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
+    DrawRotatedF(sprTargetP, TargetPoint.X + WorldDx, TargetPoint.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360);
 {$WARNINGS ON}
 
 {$IFDEF IPHONEOS}
@@ -533,47 +533,47 @@ if TurnTimeLeft <> 0 then
 {$IFNDEF IPHONEOS}
 // Timetrial
 if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then
-	begin
-	if TimeTrialStopTime = 0 then i:= RealTicks - TimeTrialStartTime else i:= TimeTrialStopTime - TimeTrialStartTime;
-	t:= 272;
-	// right frame
-	DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
+    begin
+    if TimeTrialStopTime = 0 then i:= RealTicks - TimeTrialStartTime else i:= TimeTrialStopTime - TimeTrialStartTime;
+    t:= 272;
+    // right frame
+    DrawSprite(sprFrame, -cScreenWidth div 2 + t, 8, 1);
     dec(t, 32);
-	// 1 ms
+    // 1 ms
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10); 
     dec(t, 32);
-	i:= i div 10;
-	// 10 ms
+    i:= i div 10;
+    // 10 ms
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
     dec(t, 32);
-	i:= i div 10;
-	// 100 ms
+    i:= i div 10;
+    // 100 ms
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-	dec(t, 16);
-	// Point
-	DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 11);
+    dec(t, 16);
+    // Point
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 11);
     dec(t, 32);
-	i:= i div 10;
-	// 1 s
+    i:= i div 10;
+    // 1 s
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
     dec(t, 32);
-	i:= i div 10;
-	// 10s
+    i:= i div 10;
+    // 10s
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 6);
-	dec(t, 16);
-	// Point
-	DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 10);
+    dec(t, 16);
+    // Point
+    DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, 10);
     dec(t, 32);
-	i:= i div 6;
-	// 1 m
+    i:= i div 6;
+    // 1 m
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
     dec(t, 32);
-	i:= i div 10;
-	// 10 m
+    i:= i div 10;
+    // 10 m
     DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, 8, i mod 10);
-	// left frame
-	DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, 8, 0);
-	end;
+    // left frame
+    DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, 8, 0);
+    end;
 {$ENDIF}
 
 // Captions
@@ -584,19 +584,19 @@ if ((TrainingFlags and tfTimeTrial) <> 0) and (TimeTrialStartTime > 0) then offs
 else offset:= 8;
 {$ENDIF}
 
-	for grp:= Low(TCapGroup) to High(TCapGroup) do
-		with Captions[grp] do
-			if Tex <> nil then
-			begin
-				DrawCentered(0, offset, Tex);
-				inc(offset, Tex^.h + 2);
-				if EndTime <= RealTicks then
-				begin
-					FreeTexture(Tex);
-					Tex:= nil;
-					EndTime:= 0
-				end;
-			end;
+    for grp:= Low(TCapGroup) to High(TCapGroup) do
+        with Captions[grp] do
+            if Tex <> nil then
+            begin
+                DrawCentered(0, offset, Tex);
+                inc(offset, Tex^.h + 2);
+                if EndTime <= RealTicks then
+                begin
+                    FreeTexture(Tex);
+                    Tex:= nil;
+                    EndTime:= 0
+                end;
+            end;
 
 // Teams Healths
 
@@ -694,12 +694,12 @@ if fastUntilLag then DrawCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then DrawCentered(0, (cScreenHeight shr 1), PauseTexture);
 
 if missionTimer <> 0 then
-	begin
-	if missionTimer > 0 then dec(missionTimer, Lag);
-	if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
-	if missionTex <> nil then
-		DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
-	end;
+    begin
+    if missionTimer > 0 then dec(missionTimer, Lag);
+    if missionTimer < 0 then missionTimer:= 0; // avoid subtracting below 0
+    if missionTex <> nil then
+        DrawCentered(0, min((cScreenHeight shr 1) + 100, cScreenHeight - 48 - missionTex^.h), missionTex);
+    end;
 
 // fps
 {$IFDEF IPHONEOS}
@@ -762,7 +762,7 @@ if SoundTimerTicks >= 50 then
    end;
 
 if GameState = gsConfirm then
-	DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
+    DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
 
 SetScale(zoom);
 
@@ -796,10 +796,10 @@ if Captions[Group].Tex <> nil then FreeTexture(Captions[Group].Tex);
 Captions[Group].Tex:= RenderStringTex(s, Color, fntBig);
 
 case Group of
-	capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
-	else
-	Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
-	end;
+    capgrpGameState: Captions[Group].EndTime:= RealTicks + 2200
+    else
+    Captions[Group].EndTime:= RealTicks + 1400 + LongWord(Captions[Group].Tex^.w) * 3;
+    end;
 end;
 
 procedure MoveCamera;
@@ -807,23 +807,23 @@ const PrevSentPointTime: LongWord = 0;
 var EdgesDist,  wdy: LongInt;
 begin
 if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
-	begin
-	SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
-	CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
-	CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
-	end;
+    begin
+    SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
+    CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
+    CursorPoint.Y:= cScreenHeight - CursorPoint.Y;
+    end;
 
 if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not fastUntilLag) then
-	if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
-		begin
-		FollowGear:= nil;
-		prevPoint:= CursorPoint;
-		exit
-		end
-		else begin
-		CursorPoint.x:= (prevPoint.x * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-		CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
-		end;
+    if abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y) > 4 then
+        begin
+        FollowGear:= nil;
+        prevPoint:= CursorPoint;
+        exit
+        end
+        else begin
+        CursorPoint.x:= (prevPoint.x * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
+        CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
 if WorldDy < wdy then WorldDy:= wdy;
@@ -831,24 +831,24 @@ if WorldDy < wdy then WorldDy:= wdy;
 if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then exit;
 
 if AMxShift < 210 then
-	begin
-	if CursorPoint.X < cScreenWidth div 2 + AMxShift - 175 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 175;
-	if CursorPoint.X > cScreenWidth div 2 + AMxShift - 10 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 10;
-	if CursorPoint.Y > 75 + SlotsNum * 33 then CursorPoint.Y:= 75 + SlotsNum * 33;
-	if CursorPoint.Y < 76 then CursorPoint.Y:= 76;
-	prevPoint:= CursorPoint;
-	if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
-	exit
-	end;
+    begin
+    if CursorPoint.X < cScreenWidth div 2 + AMxShift - 175 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 175;
+    if CursorPoint.X > cScreenWidth div 2 + AMxShift - 10 then CursorPoint.X:= cScreenWidth div 2 + AMxShift - 10;
+    if CursorPoint.Y > 75 + SlotsNum * 33 then CursorPoint.Y:= 75 + SlotsNum * 33;
+    if CursorPoint.Y < 76 then CursorPoint.Y:= 76;
+    prevPoint:= CursorPoint;
+    if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
+    exit
+    end;
 
 if isCursorVisible then
-	begin
-	if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
-		begin
-		SendIPCXY('P', CursorPoint.X - WorldDx, cScreenHeight - CursorPoint.Y - WorldDy);
-		PrevSentPointTime:= GameTicks
-		end;
-	end;
+    begin
+    if (not CurrentTeam^.ExtDriven) and (GameTicks >= PrevSentPointTime + cSendCursorPosTime) then
+        begin
+        SendIPCXY('P', CursorPoint.X - WorldDx, cScreenHeight - CursorPoint.Y - WorldDy);
+        PrevSentPointTime:= GameTicks
+        end;
+    end;
 
 if isCursorVisible or (FollowGear <> nil) then
    begin
@@ -902,17 +902,17 @@ missionTimer:= time;
 if missionTex <> nil then FreeTexture(missionTex);
 
 if icon > -1 then
-	begin
-	r.x:= 0;
-	r.y:= icon * 32;
-	missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, MissionIcons, @r)
-	end
+    begin
+    r.x:= 0;
+    r.y:= icon * 32;
+    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, MissionIcons, @r)
+    end
 else
-	begin
-	r.x:= ((-icon - 1) shr 5) * 32;
-	r.y:= ((-icon - 1) mod 32) * 32;
-	missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, SpritesData[sprAMAmmos].Surface, @r)
-	end;
+    begin
+    r.x:= ((-icon - 1) shr 5) * 32;
+    r.y:= ((-icon - 1) mod 32) * 32;
+    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, SpritesData[sprAMAmmos].Surface, @r)
+    end;
 end;
 
 procedure HideMission;
@@ -922,24 +922,24 @@ end;
 
 procedure init_uWorld;
 begin
-	fpsTexture:= nil;
-	FollowGear:= nil;
-	WindBarWidth:= 0;
-	bShowAmmoMenu:= false;
-	bSelected:= false;
-	bShowFinger:= false;
-	Frames:= 0;
-	WorldDx:= -512;
-	WorldDy:= -256;
+    fpsTexture:= nil;
+    FollowGear:= nil;
+    WindBarWidth:= 0;
+    bShowAmmoMenu:= false;
+    bSelected:= false;
+    bShowFinger:= false;
+    Frames:= 0;
+    WorldDx:= -512;
+    WorldDy:= -256;
     
-	FPS:= 0;
-	CountTicks:= 0;
-	SoundTimerTicks:= 0;
-	prevPoint.X:= 0;
-	prevPoint.Y:= 0;
-	missionTimer:= 0;
-	
-	FillChar(Captions, sizeof(Captions), 0)
+    FPS:= 0;
+    CountTicks:= 0;
+    SoundTimerTicks:= 0;
+    prevPoint.X:= 0;
+    prevPoint.Y:= 0;
+    missionTimer:= 0;
+    
+    FillChar(Captions, sizeof(Captions), 0)
 end;
 
 procedure free_uWorld;

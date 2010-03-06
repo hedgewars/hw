@@ -12,10 +12,10 @@
 
 class InstallController
         {
-	public:
-		virtual ~InstallController();
+    public:
+        virtual ~InstallController();
                 
-		virtual void showInstallController() = 0;
+        virtual void showInstallController() = 0;
         };
 
 #endif

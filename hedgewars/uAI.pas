@@ -347,7 +347,7 @@ end;
 
 procedure init_uAI;
 begin
-	hasThread:= 0;
+    hasThread:= 0;
 end;
 
 procedure free_uAI;

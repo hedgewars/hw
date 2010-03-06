@@ -27,18 +27,18 @@
 
 class HatsModel : public QAbstractListModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	HatsModel(QObject *parent = 0);
+    HatsModel(QObject *parent = 0);
 
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	int rowCount(const QModelIndex & parent) const;
-	//int columnCount(const QModelIndex & parent) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    int rowCount(const QModelIndex & parent) const;
+    //int columnCount(const QModelIndex & parent) const;
 
-	QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const;
 protected:
-	QVector<QPair<QString, QIcon> > hats;
+    QVector<QPair<QString, QIcon> > hats;
 };
 
 #endif // _HATS_INCLUDED

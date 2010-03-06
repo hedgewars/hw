@@ -24,20 +24,20 @@
 
 class HWNetServersModel : public QAbstractTableModel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	HWNetServersModel(QObject *parent = 0);
+    HWNetServersModel(QObject *parent = 0);
 
-	QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-	int rowCount(const QModelIndex & parent) const;
-	int columnCount(const QModelIndex & parent) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    int rowCount(const QModelIndex & parent) const;
+    int columnCount(const QModelIndex & parent) const;
 
 public slots:
-	virtual void updateList();
+    virtual void updateList();
 
 protected:
-	QList<QStringList> games;
+    QList<QStringList> games;
 };
 
 #endif // _NET_SERVERSLIST_INCLUDED

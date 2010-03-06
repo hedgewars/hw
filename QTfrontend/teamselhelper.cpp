@@ -35,62 +35,62 @@ TeamShowWidget::TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent) :
   QWidget(parent), mainLayout(this), m_team(team), m_isPlaying(isPlaying), phhoger(0),
   colorButt(0)
 {
-	QPalette newPalette = palette();
-	newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-	setPalette(newPalette);
-	setAutoFillBackground(true);
+    QPalette newPalette = palette();
+    newPalette.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+    setPalette(newPalette);
+    setAutoFillBackground(true);
 
-	mainLayout.setSpacing(3);
-	mainLayout.setMargin(0);
-	this->setMaximumHeight(38);
-	this->setMinimumHeight(38);
-	QIcon difficultyIcon=team.isNetTeam() ?
-		QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
-		: QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
+    mainLayout.setSpacing(3);
+    mainLayout.setMargin(0);
+    this->setMaximumHeight(38);
+    this->setMinimumHeight(38);
+    QIcon difficultyIcon=team.isNetTeam() ?
+        QIcon(QString(":/res/botlevels/net%1.png").arg(m_team.difficulty))
+        : QIcon(QString(":/res/botlevels/%1.png").arg(m_team.difficulty));
 
-	butt = new QPushButton(difficultyIcon, team.TeamName, this);
-	butt->setFlat(true);
-	butt->setToolTip(team.Owner);
-	mainLayout.addWidget(butt);
-	butt->setStyleSheet("QPushButton{"
-			"icon-size: 48px;"
-			"text-align: left;"
-			"background-color: #0d0544;"
-			"color: orange;"
-			"font: bold;"
-			"border-width: 2px;"
-			"margin: 6px 0px 6px 0px;"
-			"}");
+    butt = new QPushButton(difficultyIcon, team.TeamName, this);
+    butt->setFlat(true);
+    butt->setToolTip(team.Owner);
+    mainLayout.addWidget(butt);
+    butt->setStyleSheet("QPushButton{"
+            "icon-size: 48px;"
+            "text-align: left;"
+            "background-color: #0d0544;"
+            "color: orange;"
+            "font: bold;"
+            "border-width: 2px;"
+            "margin: 6px 0px 6px 0px;"
+            "}");
 
-	if(m_isPlaying) {
-		// team color
-		colorButt = new QPushButton(this);
-		colorButt->setMaximumWidth(26);
-		colorButt->setMinimumHeight(26);
-		colorButt->setGeometry(0, 0, 26, 26);
+    if(m_isPlaying) {
+        // team color
+        colorButt = new QPushButton(this);
+        colorButt->setMaximumWidth(26);
+        colorButt->setMinimumHeight(26);
+        colorButt->setGeometry(0, 0, 26, 26);
 
-		changeTeamColor();
-		connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
-		mainLayout.addWidget(colorButt);
+        changeTeamColor();
+        connect(colorButt, SIGNAL(clicked()), this, SLOT(changeTeamColor()));
+        mainLayout.addWidget(colorButt);
 
-		phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), this);
-		connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
-		mainLayout.addWidget(phhoger);
-	} else {
-	}
+        phhoger = new CHedgehogerWidget(QImage(":/res/hh25x25.png"), this);
+        connect(phhoger, SIGNAL(hedgehogsNumChanged()), this, SLOT(hhNumChanged()));
+        mainLayout.addWidget(phhoger);
+    } else {
+    }
 
-	QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
-	//QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
+    QObject::connect(butt, SIGNAL(clicked()), this, SLOT(activateTeam()));
+    //QObject::connect(bText, SIGNAL(clicked()), this, SLOT(activateTeam()));
 }
 
 void TeamShowWidget::setInteractivity(bool interactive)
 {
-	if(m_team.isNetTeam()) {
-		butt->setEnabled(interactive);
-	}
+    if(m_team.isNetTeam()) {
+        butt->setEnabled(interactive);
+    }
 
-	colorButt->setEnabled(interactive);
-	phhoger->setEnabled(interactive);
+    colorButt->setEnabled(interactive);
+    phhoger->setEnabled(interactive);
 }
 
 void TeamShowWidget::setHHNum(unsigned int num)
@@ -120,30 +120,30 @@ void TeamShowWidget::activateTeam()
 
 void TeamShowWidget::changeTeamColor(QColor color)
 {
-	FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
-	if(!color.isValid()) {
-		if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
-			pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
-		}
-		color=*pOurFrameTeams->currentColor;
-	} else {
-		// set according color iterator
-		pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(),
-				pOurFrameTeams->availableColors.end(), color);
-		if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
-			// error condition
-			pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
-		}
-	}
+    FrameTeams* pOurFrameTeams=dynamic_cast<FrameTeams*>(parentWidget());
+    if(!color.isValid()) {
+        if(++pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
+            pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+        }
+        color=*pOurFrameTeams->currentColor;
+    } else {
+        // set according color iterator
+        pOurFrameTeams->currentColor=std::find(pOurFrameTeams->availableColors.begin(),
+                pOurFrameTeams->availableColors.end(), color);
+        if(pOurFrameTeams->currentColor==pOurFrameTeams->availableColors.end()) {
+            // error condition
+            pOurFrameTeams->currentColor=pOurFrameTeams->availableColors.begin();
+        }
+    }
 
-	colorButt->setStyleSheet(QString("QPushButton{"
-			"background-color: %1;"
-			"border-width: 1px;"
-			"border-radius: 2px;"
-			"}").arg(pOurFrameTeams->currentColor->name()));
+    colorButt->setStyleSheet(QString("QPushButton{"
+            "background-color: %1;"
+            "border-width: 1px;"
+            "border-radius: 2px;"
+            "}").arg(pOurFrameTeams->currentColor->name()));
 
-	m_team.teamColor=color;
-	emit teamColorChanged(m_team);
+    m_team.teamColor=color;
+    emit teamColorChanged(m_team);
 }
 
 HWTeam TeamShowWidget::getTeam() const

@@ -30,71 +30,71 @@ class GameCFGWidget;
 class TeamSelWidget;
 
 enum GameState {
-	gsNotStarted = 0,
-	gsStarted  = 1,
-	gsInterrupted = 2,
-	gsFinished = 3,
-	gsStopped = 4,
-	gsDestroyed = 5
+    gsNotStarted = 0,
+    gsStarted  = 1,
+    gsInterrupted = 2,
+    gsFinished = 3,
+    gsStopped = 4,
+    gsDestroyed = 5
 };
 
 
 class HWGame : public TCPBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget = 0);
-	virtual ~HWGame();
-	void AddTeam(const QString & team);
-	void PlayDemo(const QString & demofilename);
-	void StartLocal();
-	void StartQuick();
-	void StartNet();
-	void StartTraining(const QString & file);
+    HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget = 0);
+    virtual ~HWGame();
+    void AddTeam(const QString & team);
+    void PlayDemo(const QString & demofilename);
+    void StartLocal();
+    void StartQuick();
+    void StartNet();
+    void StartTraining(const QString & file);
 
  protected:
-	virtual QStringList setArguments();
-	virtual void onClientRead();
-	virtual void onClientDisconnect();
+    virtual QStringList setArguments();
+    virtual void onClientRead();
+    virtual void onClientDisconnect();
 
 signals:
-	void SendNet(const QByteArray & msg);
-	void SendChat(const QString & msg);
-	void SendTeamMessage(const QString & msg);
-	void GameStateChanged(GameState gameState);
-	void GameStats(char type, const QString & info);
-	void HaveRecord(bool isDemo, const QByteArray & record);
-	void ErrorMessage(const QString &);
+    void SendNet(const QByteArray & msg);
+    void SendChat(const QString & msg);
+    void SendTeamMessage(const QString & msg);
+    void GameStateChanged(GameState gameState);
+    void GameStats(char type, const QString & info);
+    void HaveRecord(bool isDemo, const QByteArray & record);
+    void ErrorMessage(const QString &);
 
 public slots:
-	void FromNet(const QByteArray & msg);
-	void FromNetChat(const QString & msg);
+    void FromNet(const QByteArray & msg);
+    void FromNetChat(const QString & msg);
 
 private:
-	enum GameType {
-		gtLocal    = 1,
-		gtQLocal   = 2,
-		gtDemo     = 3,
-		gtNet      = 4,
-		gtTraining = 5
+    enum GameType {
+        gtLocal    = 1,
+        gtQLocal   = 2,
+        gtDemo     = 3,
+        gtNet      = 4,
+        gtTraining = 5
     };
-	char msgbuf[MAXMSGCHARS];
-	QString teams[5];
-	QString ammostr;
-	int TeamCount;
-	GameUIConfig * config;
-	GameCFGWidget * gamecfg;
-	TeamSelWidget* m_pTeamSelWidget;
-	GameType gameType;
-	GameState gameState;
+    char msgbuf[MAXMSGCHARS];
+    QString teams[5];
+    QString ammostr;
+    int TeamCount;
+    GameUIConfig * config;
+    GameCFGWidget * gamecfg;
+    TeamSelWidget* m_pTeamSelWidget;
+    GameType gameType;
+    GameState gameState;
 
-	void commonConfig();
-	void SendConfig();
-	void SendQuickConfig();
-	void SendNetConfig();
-	void SendTrainingConfig();
-	void ParseMessage(const QByteArray & msg);
-	void SetGameState(GameState state);
+    void commonConfig();
+    void SendConfig();
+    void SendQuickConfig();
+    void SendNetConfig();
+    void SendTrainingConfig();
+    void ParseMessage(const QByteArray & msg);
+    void SetGameState(GameState state);
 };
 
 #endif

@@ -55,14 +55,14 @@ type PCmd = ^TCmd;
             2: (str: shortstring);
             end;
 
-var	IPCSock: PTCPSocket;
-	fds: PSDLNet_SocketSet;
-	isPonged: boolean;
+var IPCSock: PTCPSocket;
+    fds: PSDLNet_SocketSet;
+    isPonged: boolean;
 
-	headcmd: PCmd;
-	lastcmd: PCmd;
+    headcmd: PCmd;
+    lastcmd: PCmd;
 
-	SendEmptyPacketTicks: LongWord;
+    SendEmptyPacketTicks: LongWord;
 
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
@@ -112,9 +112,9 @@ end;
 
 procedure CloseIPC;
 begin
-	SDLNet_FreeSocketSet(fds);
-	SDLNet_TCP_Close(IPCSock);
-	SDLNet_Quit();
+    SDLNet_FreeSocketSet(fds);
+    SDLNet_TCP_Close(IPCSock);
+    SDLNet_Quit();
 end;
 
 procedure ParseIPCCommand(s: shortstring);
@@ -143,8 +143,8 @@ end;
 procedure IPCCheckSock;
 const ss: shortstring = '';
 var i: LongInt;
-	buf: array[0..255] of byte;
-	s: shortstring absolute buf;
+    buf: array[0..255] of byte;
+    s: shortstring absolute buf;
 begin
 if IPCSock = nil then
    exit;
@@ -153,27 +153,27 @@ fds^.numsockets:= 0;
 SDLNet_AddSocket(fds, IPCSock);
 
 while SDLNet_CheckSockets(fds, 0) > 0 do
-	begin
-	i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
-	if i > 0 then
-		begin
-		buf[0]:= i;
-		ss:= ss + s;
-		while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
-			begin
-			ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-			Delete(ss, 1, Succ(byte(ss[1])))
-			end
-		end else OutError('IPC connection lost', true)
-	end;
+    begin
+    i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
+    if i > 0 then
+        begin
+        buf[0]:= i;
+        ss:= ss + s;
+        while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
+            begin
+            ParseIPCCommand(copy(ss, 2, byte(ss[1])));
+            Delete(ss, 1, Succ(byte(ss[1])))
+            end
+        end else OutError('IPC connection lost', true)
+    end;
 end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
 var f: file;
-	ss: shortstring = '';
-	i: LongInt;
-	buf: array[0..255] of byte;
-	s: shortstring absolute buf;
+    ss: shortstring = '';
+    i: LongInt;
+    buf: array[0..255] of byte;
+    s: shortstring absolute buf;
 begin
 
 // set RDNLY on file open
@@ -183,17 +183,17 @@ assign(f, fileName);
 reset(f, 1);
 
 repeat
-	BlockRead(f, buf[1], 255 - Length(ss), i);
-	if i > 0 then
-		begin
-		buf[0]:= i;
-		ss:= ss + s;
-		while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
-			begin
-			ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-			Delete(ss, 1, Succ(byte(ss[1])))
-			end
-		end
+    BlockRead(f, buf[1], 255 - Length(ss), i);
+    if i > 0 then
+        begin
+        buf[0]:= i;
+        ss:= ss + s;
+        while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
+            begin
+            ParseIPCCommand(copy(ss, 2, byte(ss[1])));
+            Delete(ss, 1, Succ(byte(ss[1])))
+            end
+        end
 until i = 0;
 
 close(f)
@@ -202,14 +202,14 @@ end;
 procedure SendIPC(s: shortstring);
 begin
 if IPCSock <> nil then
-	begin
-	SendEmptyPacketTicks:= 0;
-	if s[0]>#251 then s[0]:= #251;
-	SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-	{$IFDEF DEBUGFILE}AddFileLog('IPC send: '+ s[1]);{$ENDIF}
-	inc(s[0], 2);
-	SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
-	end
+    begin
+    SendEmptyPacketTicks:= 0;
+    if s[0]>#251 then s[0]:= #251;
+    SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
+    {$IFDEF DEBUGFILE}AddFileLog('IPC send: '+ s[1]);{$ENDIF}
+    inc(s[0], 2);
+    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+    end
 end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -256,88 +256,88 @@ procedure SendKeepAliveMessage(Lag: Longword);
 begin
 inc(SendEmptyPacketTicks, Lag);
 if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-	SendIPC('+')
+    SendIPC('+')
 end;
 
 procedure NetGetNextCmd;
 var tmpflag: boolean;
-	s: shortstring;
-	x16, y16: SmallInt;
+    s: shortstring;
+    x16, y16: SmallInt;
 begin
 tmpflag:= true;
 
 while (headcmd <> nil)
-	and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
-	and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
-		or (headcmd^.cmd = 's') // for these commands time is not specified
-		or (headcmd^.cmd = '#')
- 		or (headcmd^.cmd = 'b')
-		or (headcmd^.cmd = 'F')) do
-	begin
-	case headcmd^.cmd of
-		'+': ; // do nothing - it is just an empty packet
-		'#': inc(hiTicks);
-		'L': ParseCommand('+left', true);
-		'l': ParseCommand('-left', true);
-		'R': ParseCommand('+right', true);
-		'r': ParseCommand('-right', true);
-		'U': ParseCommand('+up', true);
-		'u': ParseCommand('-up', true);
-		'D': ParseCommand('+down', true);
-		'd': ParseCommand('-down', true);
-		'Z': ParseCommand('+precise', true);
-		'z': ParseCommand('-precise', true);
-		'A': ParseCommand('+attack', true);
-		'a': ParseCommand('-attack', true);
-		'S': ParseCommand('switch', true);
-		'j': ParseCommand('ljump', true);
-		'J': ParseCommand('hjump', true);
-		',': ParseCommand('skip', true);
-		's': begin
-			s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-			AddChatString(s);
-			WriteLnToConsole(s)
-			end;
-		'b': begin
-			s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-			AddChatString(#4 + s);
-			WriteLnToConsole(s)
-			end;
-		'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
-		'N': begin
-			tmpflag:= false;
-			{$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
-			end;
-		'p': begin
-			x16:= SDLNet_Read16(@(headcmd^.X));
-			y16:= SDLNet_Read16(@(headcmd^.Y));
-			doPut(x16, y16, false)
-			end;
-		'P': begin
-			// these are equations solved for CursorPoint
-			// SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
-			// SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
-			CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
-			CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy;
-			end;
-		'w': ParseCommand('setweap ' + headcmd^.str[2], true);
-		't': ParseCommand('taunt ' + headcmd^.str[2], true);
-		'g': ParseCommand('newgrave', true);
-		'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
-		'1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
-		#128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
-		else
-			OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
-		end;
-	RemoveCmd
-	end;
+    and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
+    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
+        or (headcmd^.cmd = 's') // for these commands time is not specified
+        or (headcmd^.cmd = '#')
+        or (headcmd^.cmd = 'b')
+        or (headcmd^.cmd = 'F')) do
+    begin
+    case headcmd^.cmd of
+        '+': ; // do nothing - it is just an empty packet
+        '#': inc(hiTicks);
+        'L': ParseCommand('+left', true);
+        'l': ParseCommand('-left', true);
+        'R': ParseCommand('+right', true);
+        'r': ParseCommand('-right', true);
+        'U': ParseCommand('+up', true);
+        'u': ParseCommand('-up', true);
+        'D': ParseCommand('+down', true);
+        'd': ParseCommand('-down', true);
+        'Z': ParseCommand('+precise', true);
+        'z': ParseCommand('-precise', true);
+        'A': ParseCommand('+attack', true);
+        'a': ParseCommand('-attack', true);
+        'S': ParseCommand('switch', true);
+        'j': ParseCommand('ljump', true);
+        'J': ParseCommand('hjump', true);
+        ',': ParseCommand('skip', true);
+        's': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            AddChatString(s);
+            WriteLnToConsole(s)
+            end;
+        'b': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            AddChatString(#4 + s);
+            WriteLnToConsole(s)
+            end;
+        'F': TeamGone(copy(headcmd^.str, 2, Pred(headcmd^.len)));
+        'N': begin
+            tmpflag:= false;
+            {$IFDEF DEBUGFILE}AddFileLog('got cmd "N": time '+inttostr(hiTicks shl 16 + headcmd^.loTime)){$ENDIF}
+            end;
+        'p': begin
+            x16:= SDLNet_Read16(@(headcmd^.X));
+            y16:= SDLNet_Read16(@(headcmd^.Y));
+            doPut(x16, y16, false)
+            end;
+        'P': begin
+            // these are equations solved for CursorPoint
+            // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
+            // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
+            CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
+            CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy;
+            end;
+        'w': ParseCommand('setweap ' + headcmd^.str[2], true);
+        't': ParseCommand('taunt ' + headcmd^.str[2], true);
+        'g': ParseCommand('newgrave', true);
+        'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
+        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
+        else
+            OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
+        end;
+    RemoveCmd
+    end;
 
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-	TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
-			'oops, queue error. in buffer: ' + headcmd^.cmd +
-			' (' + inttostr(GameTicks) + ' > ' +
-			inttostr(hiTicks shl 16 + headcmd^.loTime) + ')',
-			true);
+    TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
+            'oops, queue error. in buffer: ' + headcmd^.cmd +
+            ' (' + inttostr(GameTicks) + ' > ' +
+            inttostr(hiTicks shl 16 + headcmd^.loTime) + ')',
+            true);
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 
@@ -346,15 +346,15 @@ end;
 
 procedure init_uIO;
 begin
-	IPCSock:= nil;
+    IPCSock:= nil;
 
-	headcmd:= nil;
-	lastcmd:= nil;
-	isPonged:= false;	// was const
+    headcmd:= nil;
+    lastcmd:= nil;
+    isPonged:= false;   // was const
 
-	hiTicks:= 0;
-	SendEmptyPacketTicks:= 0;
-	ipcPort:= 0;
+    hiTicks:= 0;
+    SendEmptyPacketTicks:= 0;
+    ipcPort:= 0;
 end;
 
 procedure free_uIO;

@@ -22,75 +22,75 @@ unit uTeams;
 interface
 uses SDLh, uConsts, uKeys, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, uLand,
 {$IFDEF GLES11}
-	gles11,
+    gles11,
 {$ELSE}
-	GL,
+    GL,
 {$ENDIF}
-	uSound;
+    uSound;
 
 type PHHAmmo = ^THHAmmo;
-	THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
+    THHAmmo = array[0..cMaxSlotIndex, 0..cMaxSlotAmmoIndex] of TAmmo;
 
-	PHedgehog = ^THedgehog;
-	PTeam     = ^TTeam;
-	PClan     = ^TClan;
+    PHedgehog = ^THedgehog;
+    PTeam     = ^TTeam;
+    PClan     = ^TClan;
 
-	THedgehog = record
-			Name: string[MAXNAMELEN];
-			Gear: PGear;
-			SpeechGear: PVisualGear;
-			NameTagTex,
-			HealthTagTex,
-			HatTex: PTexture;
-			Ammo: PHHAmmo;
-			AmmoStore: Longword;
-			CurSlot, CurAmmo: LongWord;
-			Team: PTeam;
-			MultiShootAttacks: Longword;
-			visStepPos: LongWord;
-			BotLevel  : LongWord; // 0 - Human player
-			HatVisibility: GLfloat;
-			stats: TStatistics;
-			Hat: shortstring;
+    THedgehog = record
+            Name: string[MAXNAMELEN];
+            Gear: PGear;
+            SpeechGear: PVisualGear;
+            NameTagTex,
+            HealthTagTex,
+            HatTex: PTexture;
+            Ammo: PHHAmmo;
+            AmmoStore: Longword;
+            CurSlot, CurAmmo: LongWord;
+            Team: PTeam;
+            MultiShootAttacks: Longword;
+            visStepPos: LongWord;
+            BotLevel  : LongWord; // 0 - Human player
+            HatVisibility: GLfloat;
+            stats: TStatistics;
+            Hat: shortstring;
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
-			end;
+            end;
 
-	TTeam = record
-			Clan: PClan;
-			TeamName: string[MAXNAMELEN];
-			ExtDriven: boolean;
-			Binds: TBinds;
-			Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
-			CurrHedgehog: LongWord;
-			NameTagTex: PTexture;
-			CrosshairTex,
-			GraveTex,
-			HealthTex,
-			FlagTex: PTexture;
-			Flag: shortstring;
-			GraveName: shortstring;
-			FortName: shortstring;
-			TeamHealth: LongInt;
-			TeamHealthBarWidth,
-			NewTeamHealthBarWidth: LongInt;
-			DrawHealthY: LongInt;
-			AttackBar: LongWord;
-			HedgehogsNumber: Longword;
-			hasGone: boolean;
-			voicepack: PVoicepack;
+    TTeam = record
+            Clan: PClan;
+            TeamName: string[MAXNAMELEN];
+            ExtDriven: boolean;
+            Binds: TBinds;
+            Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
+            CurrHedgehog: LongWord;
+            NameTagTex: PTexture;
+            CrosshairTex,
+            GraveTex,
+            HealthTex,
+            FlagTex: PTexture;
+            Flag: shortstring;
+            GraveName: shortstring;
+            FortName: shortstring;
+            TeamHealth: LongInt;
+            TeamHealthBarWidth,
+            NewTeamHealthBarWidth: LongInt;
+            DrawHealthY: LongInt;
+            AttackBar: LongWord;
+            HedgehogsNumber: Longword;
+            hasGone: boolean;
+            voicepack: PVoicepack;
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
-			end;
+            end;
 
-	TClan = record
-			Color: Longword;
-			Teams: array[0..Pred(cMaxTeams)] of PTeam;
-			TeamsNumber: Longword;
-			CurrTeam: LongWord;
-			ClanHealth: LongInt;
-			ClanIndex: LongInt;
-			TurnNumber: LongWord;
-			end;
+    TClan = record
+            Color: Longword;
+            Teams: array[0..Pred(cMaxTeams)] of PTeam;
+            TeamsNumber: Longword;
+            CurrTeam: LongWord;
+            ClanHealth: LongInt;
+            ClanIndex: LongInt;
+            TurnNumber: LongWord;
+            end;
 
 var CurrentTeam: PTeam;
     PreviousTeam: PTeam;
@@ -127,11 +127,11 @@ var AliveClan: PClan;
 begin
 AliveCount:= 0;
 for t:= 0 to Pred(ClansCount) do
-	if ClansArray[t]^.ClanHealth > 0 then
-		begin
-		inc(AliveCount);
-		AliveClan:= ClansArray[t]
-		end;
+    if ClansArray[t]^.ClanHealth > 0 then
+        begin
+        inc(AliveCount);
+        AliveClan:= ClansArray[t]
+        end;
 
 if (AliveCount > 1)
 or ((AliveCount = 1) and ((GameFlags and gfOneClanMode) <> 0)) then exit(false);
@@ -139,29 +139,29 @@ CheckForWin:= true;
 
 TurnTimeLeft:= 0;
 if AliveCount = 0 then
-	begin // draw
-	AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-	SendStat(siGameResult, trmsg[sidDraw]);
-	AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-	end else // win
-	with AliveClan^ do
-		begin
-		if TeamsNumber = 1 then
-			s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
-		else
-			s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
+    begin // draw
+    AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
+    SendStat(siGameResult, trmsg[sidDraw]);
+    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+    end else // win
+    with AliveClan^ do
+        begin
+        if TeamsNumber = 1 then
+            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
+        else
+            s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
 
-		for j:= 0 to Pred(TeamsNumber) do
-			with Teams[j]^ do
-				for i:= 0 to cMaxHHIndex do
-					with Hedgehogs[i] do
-						if (Gear <> nil) then
-							Gear^.State:= gstWinner;
+        for j:= 0 to Pred(TeamsNumber) do
+            with Teams[j]^ do
+                for i:= 0 to cMaxHHIndex do
+                    with Hedgehogs[i] do
+                        if (Gear <> nil) then
+                            Gear^.State:= gstWinner;
 
-		AddCaption(s, cWhiteColor, capgrpGameState);
-		SendStat(siGameResult, s);
-		AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
-		end;
+        AddCaption(s, cWhiteColor, capgrpGameState);
+        SendStat(siGameResult, s);
+        AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
+        end;
 SendStats
 end;
 
@@ -175,52 +175,52 @@ with CurrentHedgehog^ do
     if (PreviousTeam <> nil) and PlacingHogs and Unplaced then
         begin
         Unplaced:= false;
-	    if Gear <> nil then 
+        if Gear <> nil then 
            begin
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
            if Gear <> nil then AddGearCI(Gear)
            end
-		end;
+        end;
 
 PreviousTeam:= CurrentTeam;
 
 with CurrentHedgehog^ do
     begin
-	if Gear <> nil then
-		begin
-		MultiShootAttacks:= 0;
-		Gear^.Message:= 0;
-		Gear^.Z:= cHHZ;
-		RemoveGearFromList(Gear);
-		InsertGearToList(Gear)
-		end
+    if Gear <> nil then
+        begin
+        MultiShootAttacks:= 0;
+        Gear^.Message:= 0;
+        Gear^.Z:= cHHZ;
+        RemoveGearFromList(Gear);
+        InsertGearToList(Gear)
+        end
     end;
 
 c:= CurrentTeam^.Clan^.ClanIndex;
 repeat
-	inc(c);
-	if c = ClansCount then
-		begin
+    inc(c);
+    if c = ClansCount then
+        begin
         if not PlacingHogs then inc(TotalRounds);
-		c:= 0
-		end;
+        c:= 0
+        end;
 
-	with ClansArray[c]^ do
-		begin
-		PrevTeam:= CurrTeam;
-		repeat
-			CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
-			CurrentTeam:= Teams[CurrTeam];
-			with CurrentTeam^ do
-				begin
-				PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
-				repeat
-					CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-				until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
-				end
-		until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
-		end
+    with ClansArray[c]^ do
+        begin
+        PrevTeam:= CurrTeam;
+        repeat
+            CurrTeam:= Succ(CurrTeam) mod TeamsNumber;
+            CurrentTeam:= Teams[CurrTeam];
+            with CurrentTeam^ do
+                begin
+                PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
+                repeat
+                    CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
+                until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
+                end
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam);
+        end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
 
 CurrentHedgehog:= @(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog])
@@ -251,17 +251,17 @@ inc(CurrentTeam^.Clan^.TurnNumber);
 SwitchNotHeldAmmo(CurrentHedgehog^);
 
 with CurrentHedgehog^ do
-	begin
-	with Gear^ do
-		begin
-		Z:= cCurrHHZ;
-		State:= gstHHDriven;
-		Active:= true
-		end;
-	RemoveGearFromList(Gear);
-	InsertGearToList(Gear);
-	FollowGear:= Gear
-	end;
+    begin
+    with Gear^ do
+        begin
+        Z:= cCurrHHZ;
+        State:= gstHHDriven;
+        Active:= true
+        end;
+    RemoveGearFromList(Gear);
+    InsertGearToList(Gear);
+    FollowGear:= Gear
+    end;
 
 ResetKbd;
 
@@ -278,9 +278,9 @@ if not CurrentTeam^.ExtDriven then SetBinds(CurrentTeam^.Binds);
 bShowFinger:= true;
 
 if (CurrentTeam^.ExtDriven or (CurrentHedgehog^.BotLevel > 0)) then
-	PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
+    PlaySound(sndIllGetYou, CurrentTeam^.voicepack)
 else
-	PlaySound(sndYesSir, CurrentTeam^.voicepack);
+    PlaySound(sndYesSir, CurrentTeam^.voicepack);
 
 if PlacingHogs then
    begin
@@ -402,21 +402,21 @@ procedure RecountTeamHealth(team: PTeam);
 var i: LongInt;
 begin
 with team^ do
-	begin
-	NewTeamHealthBarWidth:= 0;
+    begin
+    NewTeamHealthBarWidth:= 0;
 
-	if not hasGone then
-		for i:= 0 to cMaxHHIndex do
-			if Hedgehogs[i].Gear <> nil then
-				inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
+    if not hasGone then
+        for i:= 0 to cMaxHHIndex do
+            if Hedgehogs[i].Gear <> nil then
+                inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health);
 
-	TeamHealth:= NewTeamHealthBarWidth;
-	if NewTeamHealthBarWidth > MaxTeamHealth then
-		begin
-		MaxTeamHealth:= NewTeamHealthBarWidth;
-		RecountAllTeamsHealth;
-		end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
-	end;
+    TeamHealth:= NewTeamHealthBarWidth;
+    if NewTeamHealthBarWidth > MaxTeamHealth then
+        begin
+        MaxTeamHealth:= NewTeamHealthBarWidth;
+        RecountAllTeamsHealth;
+        end else NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+    end;
 
 RecountClanHealth(team^.Clan);
 
@@ -435,15 +435,15 @@ var t: LongInt;
 begin
 t:= 0;
 while (t < cMaxTeams)
-	and (TeamsArray[t] <> nil)
-	and (TeamsArray[t]^.TeamName <> s) do inc(t);
+    and (TeamsArray[t] <> nil)
+    and (TeamsArray[t]^.TeamName <> s) do inc(t);
 if (t = cMaxTeams) or (TeamsArray[t] = nil) then exit;
 
 with TeamsArray[t]^ do
-	begin
-	AddChatString('** '+ TeamName + ' is gone');
-	hasGone:= true
-	end;
+    begin
+    AddChatString('** '+ TeamName + ' is gone');
+    hasGone:= true
+    end;
 
 RecountTeamHealth(TeamsArray[t])
 end;
@@ -452,24 +452,24 @@ procedure TeamGoneEffect(var Team: TTeam);
 var i: LongInt;
 begin
 with Team do
-	for i:= 0 to cMaxHHIndex do
-		with Hedgehogs[i] do
-			if Gear <> nil then
+    for i:= 0 to cMaxHHIndex do
+        with Hedgehogs[i] do
+            if Gear <> nil then
                 begin
                 Gear^.Invulnerable:= false;
-				Gear^.Damage:= Gear^.Health
+                Gear^.Damage:= Gear^.Health
                 end
 end;
 
 procedure init_uTeams;
 begin
-	CurrentTeam:= nil;
-	PreviousTeam:= nil;
-	CurrentHedgehog:= nil;
-	TeamsCount:= 0;
-	ClansCount:= 0;
-	LocalClan:= -1;
-	LocalAmmo:= -1;
+    CurrentTeam:= nil;
+    PreviousTeam:= nil;
+    CurrentHedgehog:= nil;
+    TeamsCount:= 0;
+    ClansCount:= 0;
+    LocalClan:= -1;
+    LocalAmmo:= -1;
 end;
 
 procedure free_uTeams;

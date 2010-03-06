@@ -92,13 +92,13 @@ procedure DumpBuffer;
 var i: LongInt;
 begin
 for i:= 0 to 63 do
-	AddFileLog('[' + inttostr(i) + '] = ' + inttostr(cirbuf[i]))
+    AddFileLog('[' + inttostr(i) + '] = ' + inttostr(cirbuf[i]))
 end;
 {$ENDIF}
 
 procedure init_uRandom;
 begin
-	n:= 54;
+    n:= 54;
 end;
 
 procedure free_uRandom;

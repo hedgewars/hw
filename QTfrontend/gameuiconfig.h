@@ -28,49 +28,49 @@ class QSettings;
 
 class GameUIConfig : public QSettings
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	GameUIConfig(HWForm * FormWidgets, const QString & fileName);
-	QStringList GetTeamsList();
-	QRect vid_Resolution();
-	bool vid_Fullscreen();
-	bool isSoundEnabled();
-	bool isFrontendSoundEnabled();
-	QString language();
+    GameUIConfig(HWForm * FormWidgets, const QString & fileName);
+    QStringList GetTeamsList();
+    QRect vid_Resolution();
+    bool vid_Fullscreen();
+    bool isSoundEnabled();
+    bool isFrontendSoundEnabled();
+    QString language();
 #ifdef _WIN32
-	bool isSoundHardware();
+    bool isSoundHardware();
 #endif
-	bool isMusicEnabled();
-	bool isFrontendMusicEnabled();
-	bool isShowFPSEnabled();
-	bool isAltDamageEnabled();
-	bool appendDateTimeToRecordName();
-	quint8 volume();
-	quint8 timerInterval();
-	quint8 bitDepth();
-	QString netNick();
-	bool isReducedQuality() const;
-	bool isFrontendEffects() const;
-	bool isFrontendFullscreen() const;
-	bool isWeaponTooltip() const;
-	void resizeToConfigValues();
+    bool isMusicEnabled();
+    bool isFrontendMusicEnabled();
+    bool isShowFPSEnabled();
+    bool isAltDamageEnabled();
+    bool appendDateTimeToRecordName();
+    quint8 volume();
+    quint8 timerInterval();
+    quint8 bitDepth();
+    QString netNick();
+    bool isReducedQuality() const;
+    bool isFrontendEffects() const;
+    bool isFrontendFullscreen() const;
+    bool isWeaponTooltip() const;
+    void resizeToConfigValues();
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
-	bool isAutoUpdateEnabled();
+    bool isAutoUpdateEnabled();
 #endif
 #endif
 
  signals:
-	void frontendFullscreen(bool value);
+    void frontendFullscreen(bool value);
 
 public slots:
-	void SaveOptions();
+    void SaveOptions();
 
 private:
-	HWForm * Form;
-	quint8 depth;
+    HWForm * Form;
+    quint8 depth;
 };
 
 #endif

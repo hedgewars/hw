@@ -23,13 +23,13 @@
 
 class HWNetRegisterServer : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port);
+    HWNetRegisterServer(QObject *parent, const QString & descr, quint16 port);
 
 public slots:
-	virtual void unregister();
+    virtual void unregister();
 };
 
 #endif // _NET_REGISTER_INCLUDED

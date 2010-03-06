@@ -34,242 +34,242 @@
 GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
   QGroupBox(parent), mainLayout(this)
 {
-	mainLayout.setMargin(0);
-//	mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
+    mainLayout.setMargin(0);
+//  mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
 
-	pMapContainer = new HWMapContainer(this);
-	mainLayout.addWidget(pMapContainer, 0, 0);
+    pMapContainer = new HWMapContainer(this);
+    mainLayout.addWidget(pMapContainer, 0, 0);
 
-	IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
-	GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-	mainLayout.addWidget(GBoxOptions);
+    IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
+    GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    mainLayout.addWidget(GBoxOptions);
 
-	QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
+    QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
 
-	GameSchemes = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(GameSchemes, 0, 1);
-	connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
+    GameSchemes = new QComboBox(GBoxOptions);
+    GBoxOptionsLayout->addWidget(GameSchemes, 0, 1);
+    connect(GameSchemes, SIGNAL(currentIndexChanged(int)), this, SLOT(schemeChanged(int)));
 
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), GBoxOptions), 0, 0);
+    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Game scheme"), GBoxOptions), 0, 0);
 
-	QPixmap pmEdit(":/res/edit.png");
-	
-	QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
-	//goToSchemePage->setText(tr("Edit schemes"));
+    QPixmap pmEdit(":/res/edit.png");
+    
+    QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
+    //goToSchemePage->setText(tr("Edit schemes"));
     goToSchemePage->setToolTip(tr("Edit schemes"));
-	goToSchemePage->setIconSize(pmEdit.size());
-	goToSchemePage->setIcon(pmEdit);
-	goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
-	GBoxOptionsLayout->addWidget(goToSchemePage, 0, 2);
-	connect(goToSchemePage, SIGNAL(clicked()), this, SIGNAL(goToSchemes()));
+    goToSchemePage->setIconSize(pmEdit.size());
+    goToSchemePage->setIcon(pmEdit);
+    goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
+    GBoxOptionsLayout->addWidget(goToSchemePage, 0, 2);
+    connect(goToSchemePage, SIGNAL(clicked()), this, SIGNAL(goToSchemes()));
 
-	GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 1, 0);
+    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Weapons"), GBoxOptions), 1, 0);
 
-	WeaponsName = new QComboBox(GBoxOptions);
-	GBoxOptionsLayout->addWidget(WeaponsName, 1, 1);
+    WeaponsName = new QComboBox(GBoxOptions);
+    GBoxOptionsLayout->addWidget(WeaponsName, 1, 1);
 
-	connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
+    connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
-	QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
-	//goToWeaponPage->setText(tr("Edit weapons"));
+    QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
+    //goToWeaponPage->setText(tr("Edit weapons"));
     goToWeaponPage->setToolTip(tr("Edit weapons"));
-	goToWeaponPage->setIconSize(pmEdit.size());
-	goToWeaponPage->setIcon(pmEdit);
-	goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
-	GBoxOptionsLayout->addWidget(goToWeaponPage, 1, 2);
+    goToWeaponPage->setIconSize(pmEdit.size());
+    goToWeaponPage->setIcon(pmEdit);
+    goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
+    GBoxOptionsLayout->addWidget(goToWeaponPage, 1, 2);
 
-	connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
+    connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
-	connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
-	connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
+    connect(pMapContainer, SIGNAL(seedChanged(const QString &)), this, SLOT(seedChanged(const QString &)));
+    connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
+    connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
+    connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
 }
 
 void GameCFGWidget::jumpToWeapons()
 {
-	emit goToWeapons(WeaponsName->currentText());
+    emit goToWeapons(WeaponsName->currentText());
 }
 
 QVariant GameCFGWidget::schemeData(int column) const
 {
-	return GameSchemes->model()->data(GameSchemes->model()->index(GameSchemes->currentIndex(), column));
+    return GameSchemes->model()->data(GameSchemes->model()->index(GameSchemes->currentIndex(), column));
 }
 
 quint32 GameCFGWidget::getGameFlags() const
 {
-	quint32 result = 0;
+    quint32 result = 0;
 
-	if (schemeData(1).toBool())
-		result |= 0x01;
-	if (schemeData(2).toBool())
-		result |= 0x10;
-	if (schemeData(3).toBool())
-		result |= 0x04;
-	if (schemeData(4).toBool())
-		result |= 0x08;
-	if (schemeData(5).toBool())
-		result |= 0x20;
-	if (schemeData(6).toBool())
-		result |= 0x40;
-	if (schemeData(7).toBool())
-		result |= 0x80;
-	if (schemeData(8).toBool())
-		result |= 0x100;
-	if (schemeData(9).toBool())
-		result |= 0x200;
-	if (schemeData(10).toBool())
-		result |= 0x400;
-	if (schemeData(11).toBool())
-		result |= 0x800;
-	if (schemeData(12).toBool())
-		result |= 0x2000;
-	if (schemeData(13).toBool())
-		result |= 0x4000;
-	if (schemeData(14).toBool())
-		result |= 0x8000;
-	if (schemeData(15).toBool())
-		result |= 0x10000;
-	if (schemeData(16).toBool())
-		result |= 0x20000;
+    if (schemeData(1).toBool())
+        result |= 0x01;
+    if (schemeData(2).toBool())
+        result |= 0x10;
+    if (schemeData(3).toBool())
+        result |= 0x04;
+    if (schemeData(4).toBool())
+        result |= 0x08;
+    if (schemeData(5).toBool())
+        result |= 0x20;
+    if (schemeData(6).toBool())
+        result |= 0x40;
+    if (schemeData(7).toBool())
+        result |= 0x80;
+    if (schemeData(8).toBool())
+        result |= 0x100;
+    if (schemeData(9).toBool())
+        result |= 0x200;
+    if (schemeData(10).toBool())
+        result |= 0x400;
+    if (schemeData(11).toBool())
+        result |= 0x800;
+    if (schemeData(12).toBool())
+        result |= 0x2000;
+    if (schemeData(13).toBool())
+        result |= 0x4000;
+    if (schemeData(14).toBool())
+        result |= 0x8000;
+    if (schemeData(15).toBool())
+        result |= 0x10000;
+    if (schemeData(16).toBool())
+        result |= 0x20000;
 
-	return result;
+    return result;
 }
 
 quint32 GameCFGWidget::getInitHealth() const
 {
-	return schemeData(19).toInt();
+    return schemeData(19).toInt();
 }
 
 QStringList GameCFGWidget::getFullConfig() const
 {
-	QStringList sl;
-	sl.append("eseed " + pMapContainer->getCurrentSeed());
-	sl.append(QString("e$gmflags %1").arg(getGameFlags()));
-	sl.append(QString("e$damagepct %1").arg(schemeData(17).toInt()));
-	sl.append(QString("e$turntime %1").arg(schemeData(18).toInt() * 1000));
-	sl.append(QString("e$minestime %1").arg(schemeData(22).toInt() * 1000));
-	sl.append(QString("e$landadds %1").arg(schemeData(23).toInt()));
-	sl.append(QString("e$sd_turns %1").arg(schemeData(20).toInt()));
-	sl.append(QString("e$casefreq %1").arg(schemeData(21).toInt()));
-	sl.append(QString("e$minedudpct %1").arg(schemeData(24).toInt()));
-	sl.append(QString("e$explosives %1").arg(schemeData(25).toInt()));
-	sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
+    QStringList sl;
+    sl.append("eseed " + pMapContainer->getCurrentSeed());
+    sl.append(QString("e$gmflags %1").arg(getGameFlags()));
+    sl.append(QString("e$damagepct %1").arg(schemeData(17).toInt()));
+    sl.append(QString("e$turntime %1").arg(schemeData(18).toInt() * 1000));
+    sl.append(QString("e$minestime %1").arg(schemeData(22).toInt() * 1000));
+    sl.append(QString("e$landadds %1").arg(schemeData(23).toInt()));
+    sl.append(QString("e$sd_turns %1").arg(schemeData(20).toInt()));
+    sl.append(QString("e$casefreq %1").arg(schemeData(21).toInt()));
+    sl.append(QString("e$minedudpct %1").arg(schemeData(24).toInt()));
+    sl.append(QString("e$explosives %1").arg(schemeData(25).toInt()));
+    sl.append(QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()));
 
-	QString currentMap = pMapContainer->getCurrentMap();
-	if (currentMap.size() > 0)
-		sl.append("emap " + currentMap);
-	sl.append("etheme " + pMapContainer->getCurrentTheme());
-	return sl;
+    QString currentMap = pMapContainer->getCurrentMap();
+    if (currentMap.size() > 0)
+        sl.append("emap " + currentMap);
+    sl.append("etheme " + pMapContainer->getCurrentTheme());
+    return sl;
 }
 
 void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
 {
-	bool illegal = ammo.size() != cDefaultAmmoStore->size();
-	if (illegal)
-		QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
+    bool illegal = ammo.size() != cDefaultAmmoStore->size();
+    if (illegal)
+        QMessageBox::critical(this, tr("Error"), tr("Illegal ammo scheme"));
 
-	int pos = WeaponsName->findText(name);
-	if ((pos == -1) || illegal) { // prevent from overriding schemes with bad ones
-		WeaponsName->addItem(name, ammo);
-		WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
-	} else {
-		WeaponsName->setItemData(pos, ammo);
-		WeaponsName->setCurrentIndex(pos);
-	}
+    int pos = WeaponsName->findText(name);
+    if ((pos == -1) || illegal) { // prevent from overriding schemes with bad ones
+        WeaponsName->addItem(name, ammo);
+        WeaponsName->setCurrentIndex(WeaponsName->count() - 1);
+    } else {
+        WeaponsName->setItemData(pos, ammo);
+        WeaponsName->setCurrentIndex(pos);
+    }
 }
 
 void GameCFGWidget::fullNetConfig()
 {
-	ammoChanged(WeaponsName->currentIndex());
+    ammoChanged(WeaponsName->currentIndex());
 
-	seedChanged(pMapContainer->getCurrentSeed());
-	templateFilterChanged(pMapContainer->getTemplateFilter());
-	themeChanged(pMapContainer->getCurrentTheme());
+    seedChanged(pMapContainer->getCurrentSeed());
+    templateFilterChanged(pMapContainer->getTemplateFilter());
+    themeChanged(pMapContainer->getCurrentTheme());
 
-	schemeChanged(GameSchemes->currentIndex());
+    schemeChanged(GameSchemes->currentIndex());
 
-	// map must be the last
-	QString map = pMapContainer->getCurrentMap();
-	if (map.size())
-		mapChanged(map);
+    // map must be the last
+    QString map = pMapContainer->getCurrentMap();
+    if (map.size())
+        mapChanged(map);
 }
 
 void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
 {
-	if (slValue.size() == 1)
-	{
-		QString value = slValue[0];
-		if (param == "MAP") {
-			pMapContainer->setMap(value);
-			return;
-		}
-		if (param == "SEED") {
-			pMapContainer->setSeed(value);
-			return;
-		}
-		if (param == "THEME") {
-			pMapContainer->setTheme(value);
-			return;
-		}
-		if (param == "TEMPLATE") {
-			pMapContainer->setTemplateFilter(value.toUInt());
-			return;
-		}
-	}
+    if (slValue.size() == 1)
+    {
+        QString value = slValue[0];
+        if (param == "MAP") {
+            pMapContainer->setMap(value);
+            return;
+        }
+        if (param == "SEED") {
+            pMapContainer->setSeed(value);
+            return;
+        }
+        if (param == "THEME") {
+            pMapContainer->setTheme(value);
+            return;
+        }
+        if (param == "TEMPLATE") {
+            pMapContainer->setTemplateFilter(value.toUInt());
+            return;
+        }
+    }
 
-	if (slValue.size() == 2)
-	{
-		if (param == "AMMO") {
-			setNetAmmo(slValue[0], slValue[1]);
-			return;
-		}
-	}
+    if (slValue.size() == 2)
+    {
+        if (param == "AMMO") {
+            setNetAmmo(slValue[0], slValue[1]);
+            return;
+        }
+    }
 
-	qWarning("Got bad config param from net");
+    qWarning("Got bad config param from net");
 }
 
 void GameCFGWidget::ammoChanged(int index)
 {
-	if (index >= 0)
-		emit paramChanged(
-			"AMMO",
-			QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
-		);
+    if (index >= 0)
+        emit paramChanged(
+            "AMMO",
+            QStringList() << WeaponsName->itemText(index) << WeaponsName->itemData(index).toString()
+        );
 }
 
 void GameCFGWidget::mapChanged(const QString & value)
 {
-	emit paramChanged("MAP", QStringList(value));
+    emit paramChanged("MAP", QStringList(value));
 }
 
 void GameCFGWidget::templateFilterChanged(int value)
 {
-	emit paramChanged("TEMPLATE", QStringList(QString::number(value)));
+    emit paramChanged("TEMPLATE", QStringList(QString::number(value)));
 }
 
 void GameCFGWidget::seedChanged(const QString & value)
 {
-	emit paramChanged("SEED", QStringList(value));
+    emit paramChanged("SEED", QStringList(value));
 }
 
 void GameCFGWidget::themeChanged(const QString & value)
 {
-	emit paramChanged("THEME", QStringList(value));
+    emit paramChanged("THEME", QStringList(value));
 }
 
 void GameCFGWidget::schemeChanged(int value)
 {
-	QStringList sl;
+    QStringList sl;
 
-	int size = GameSchemes->model()->columnCount();
-	for(int i = 0; i < size; ++i)
-		sl << schemeData(i).toString();
+    int size = GameSchemes->model()->columnCount();
+    for(int i = 0; i < size; ++i)
+        sl << schemeData(i).toString();
 
-	emit paramChanged("SCHEME", sl);
+    emit paramChanged("SCHEME", sl);
 }
 
 void GameCFGWidget::resendSchemeData()
 {
-	schemeChanged(GameSchemes->currentIndex());
+    schemeChanged(GameSchemes->currentIndex());
 }

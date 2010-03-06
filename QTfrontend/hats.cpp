@@ -26,84 +26,84 @@
 HatsModel::HatsModel(QObject* parent) :
   QAbstractListModel(parent)
 {
-	QPixmap hhpix = QPixmap(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
+    QPixmap hhpix = QPixmap(datadir->absolutePath() + "/Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
 
-	QDir tmpdir;
-	tmpdir.cd(datadir->absolutePath());
-	tmpdir.cd("Graphics");
-	tmpdir.cd("Hats");
+    QDir tmpdir;
+    tmpdir.cd(datadir->absolutePath());
+    tmpdir.cd("Graphics");
+    tmpdir.cd("Hats");
 
-	tmpdir.setFilter(QDir::Files);
+    tmpdir.setFilter(QDir::Files);
 
 
-	QStringList hatsList = tmpdir.entryList(QStringList("*.png"));
-	for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
-	{
-		QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-		QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/" + str + ".png");
+    QStringList hatsList = tmpdir.entryList(QStringList("*.png"));
+    for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
+    {
+        QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+        QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/" + str + ".png");
 
-		QPixmap tmppix(32, 37);
-		tmppix.fill(QColor(Qt::transparent));
+        QPixmap tmppix(32, 37);
+        tmppix.fill(QColor(Qt::transparent));
 
-		QPainter painter(&tmppix);
-		painter.drawPixmap(QPoint(0, 5), hhpix);
-		painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
-		painter.end();
+        QPainter painter(&tmppix);
+        painter.drawPixmap(QPoint(0, 5), hhpix);
+        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+        painter.end();
 
-		hats.append(qMakePair(str, QIcon(tmppix)));
-	}
+        hats.append(qMakePair(str, QIcon(tmppix)));
+    }
     // Reserved hats
     tmpdir.cd("Reserved");
-	hatsList = tmpdir.entryList(QStringList(playerHash+"*.png"));
-	for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
-	{
-		QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
-		QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/Reserved/" + str + ".png");
+    hatsList = tmpdir.entryList(QStringList(playerHash+"*.png"));
+    for (QStringList::Iterator it = hatsList.begin(); it != hatsList.end(); ++it )
+    {
+        QString str = (*it).replace(QRegExp("^(.*)\\.png"), "\\1");
+        QPixmap pix(datadir->absolutePath() + "/Graphics/Hats/Reserved/" + str + ".png");
 
-		QPixmap tmppix(32, 37);
-		tmppix.fill(QColor(Qt::transparent));
+        QPixmap tmppix(32, 37);
+        tmppix.fill(QColor(Qt::transparent));
 
-		QPainter painter(&tmppix);
-		painter.drawPixmap(QPoint(0, 5), hhpix);
-		painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
-		painter.end();
+        QPainter painter(&tmppix);
+        painter.drawPixmap(QPoint(0, 5), hhpix);
+        painter.drawPixmap(QPoint(0, 0), pix.copy(0, 0, 32, 32));
+        painter.end();
 
-		hats.append(qMakePair("Reserved "+str.remove(0,32), QIcon(tmppix)));
-	}
+        hats.append(qMakePair("Reserved "+str.remove(0,32), QIcon(tmppix)));
+    }
 }
 
 QVariant HatsModel::headerData(int section,
             Qt::Orientation orientation, int role) const
 {
-	return QVariant();
+    return QVariant();
 }
 
 int HatsModel::rowCount(const QModelIndex &parent) const
 {
-	if (parent.isValid())
-		return 0;
-	else
-		return hats.size();
+    if (parent.isValid())
+        return 0;
+    else
+        return hats.size();
 }
 
 /*int HatsModel::columnCount(const QModelIndex & parent) const
 {
-	if (parent.isValid())
-		return 0;
-	else
-		return 2;
+    if (parent.isValid())
+        return 0;
+    else
+        return 2;
 }
 */
 QVariant HatsModel::data(const QModelIndex &index,
                          int role) const
 {
-	if (!index.isValid() || index.row() < 0
-		|| index.row() >= hats.size()
-		|| (role != Qt::DisplayRole && role != Qt::DecorationRole))
-		return QVariant();
+    if (!index.isValid() || index.row() < 0
+        || index.row() >= hats.size()
+        || (role != Qt::DisplayRole && role != Qt::DecorationRole))
+        return QVariant();
 
-	if (role == Qt::DisplayRole)
-		return hats.at(index.row()).first;
-	else // role == Qt::DecorationRole
-		return hats.at(index.row()).second;
+    if (role == Qt::DisplayRole)
+        return hats.at(index.row()).first;
+    else // role == Qt::DecorationRole
+        return hats.at(index.row()).second;
 }

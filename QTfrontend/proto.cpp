@@ -25,25 +25,25 @@ HWProto::HWProto()
 
 QByteArray & HWProto::addStringToBuffer(QByteArray & buf, const QString & string)
 {
-	QByteArray strmsg = string.toUtf8();
-	strmsg = strmsg.left(250);
-	quint8 sz = strmsg.size();
-	buf.append(QByteArray((char *)&sz, 1));
-	buf.append(strmsg);
-	return buf;
+    QByteArray strmsg = string.toUtf8();
+    strmsg = strmsg.left(250);
+    quint8 sz = strmsg.size();
+    buf.append(QByteArray((char *)&sz, 1));
+    buf.append(strmsg);
+    return buf;
 }
 
 QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList & strList)
 {
-	for (int i = 0; i < strList.size(); i++)
-		addStringToBuffer(buf, strList[i]);
-	return buf;
+    for (int i = 0; i < strList.size(); i++)
+        addStringToBuffer(buf, strList[i]);
+    return buf;
 }
 
 QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
 {
-	if(msg.left(4) == "/me ")
-		return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
-	else
-		return QString("\x01%1: %2").arg(nick).arg(msg);
+    if(msg.left(4) == "/me ")
+        return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
+    else
+        return QString("\x01%1: %2").arg(nick).arg(msg);
 }

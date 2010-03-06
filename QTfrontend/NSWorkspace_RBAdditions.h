@@ -24,11 +24,11 @@ extern NSString* NSWorkspace_RBserverURL;
 //- NSWorkspace_RBfstypename: will always be present.Shows the filesystem type (usually "hfs"), from statfs.
 //- NSWorkspace_RBmntonname: will always be present. Shows the volume mount point.
 //- NSWorkspace_RBmntfromname: will always be present. Shows the BSD device path for local volumes; info for
-//		remote volumes depends on the filesystem type.
+//      remote volumes depends on the filesystem type.
 //- NSWorkspace_RBconnectiontype: should always be present for local volumes. Shows the connection type ("SATA", "USB", etc.).
 //- NSWorkspace_RBpartitionscheme: should always be present for local volumes. Shows the partition scheme.
 //- NSWorkspace_RBdeviceinfo: should always be present for local volumes. Shows some information about the
-//		physical device; varies widely.
+//      physical device; varies widely.
 //- NSWorkspace_RBimagefilepath: should be present for disk images only. Shows the path of the disk image file.
 //- NSWorkspace_RBserverURL: should be present for remote volumes only. Shows the server URL.
 

@@ -38,11 +38,11 @@ uses uMisc, uStore, uConsts, SDLh, uConsole, uKeys, uTeams;
 const MaxStrIndex = 27;
 
 type TChatLine = record
-		Tex: PTexture;
-		Time: Longword;
-		Width: LongInt;
-		s: shortstring;
-		end;
+        Tex: PTexture;
+        Time: Longword;
+        Width: LongInt;
+        s: shortstring;
+        end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     lastStr: LongWord;
@@ -51,37 +51,37 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
 
 const colors: array[#1..#4] of TSDL_Color = (
-	(r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
-	(r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
-	(r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
-	(r:$FF; g:$FF; b:$A0; unused:$FF)  // team message [Light Yellow]
-	);
+    (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
+    (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
+    (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
+    (r:$FF; g:$FF; b:$A0; unused:$FF)  // team message [Light Yellow]
+    );
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
-	w, h: LongInt;
-	color: TSDL_Color;
+    w, h: LongInt;
+    color: TSDL_Color;
     font: THWFont;
 begin
 if cl.Tex <> nil then
-	FreeTexture(cl.Tex);
+    FreeTexture(cl.Tex);
 
 
 cl.s:= str;
 
 if isInput then
 begin
-	// [Light Blue]
-	color.r:= $00;
-	color.g:= $FF;
-	color.b:= $FF;
-	color.unused:= $FF;
-	str:= UserNick + '> ' + str + '_'
+    // [Light Blue]
+    color.r:= $00;
+    color.g:= $FF;
+    color.b:= $FF;
+    color.unused:= $FF;
+    str:= UserNick + '> ' + str + '_'
 end
 else
 begin
-	color:= colors[str[1]];
-	delete(str, 1, 1)
+    color:= colors[str[1]];
+    delete(str, 1, 1)
 end;
 
 font:= CheckCJKFont(str, fnt16);
@@ -111,7 +111,7 @@ end;
 
 procedure DrawChat;
 var i, t, cnt: Longword;
-	r: TSDL_Rect;
+    r: TSDL_Rect;
 begin
 cnt:= 0;
 t:= 0;
@@ -122,33 +122,33 @@ r.y:= (visibleCount - t) * 16 + 10;
 r.h:= 16;
 
 if (GameState = gsChat)
-	and (InputStr.Tex <> nil) then
-	begin
-	r.w:= InputStr.Width;
-	DrawFillRect(r);
-	DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
-	end;
+    and (InputStr.Tex <> nil) then
+    begin
+    r.w:= InputStr.Width;
+    DrawFillRect(r);
+    DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
+    end;
 
 dec(r.y, 16);
 
 while
-	(
-			((t < 7) and (Strs[i].Time > RealTicks))
-		or
-			((t < MaxStrIndex) and showAll)
-	)
-	and
-		(Strs[i].Tex <> nil) do
-	begin
-	r.w:= Strs[i].Width;
-	DrawFillRect(r);
-	DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
-	dec(r.y, 16);
+    (
+            ((t < 7) and (Strs[i].Time > RealTicks))
+        or
+            ((t < MaxStrIndex) and showAll)
+    )
+    and
+        (Strs[i].Tex <> nil) do
+    begin
+    r.w:= Strs[i].Width;
+    DrawFillRect(r);
+    DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
+    dec(r.y, 16);
 
-	if i = 0 then i:= MaxStrIndex else dec(i);
-	inc(cnt);
-	inc(t)
-	end;
+    if i = 0 then i:= MaxStrIndex else dec(i);
+    inc(cnt);
+    inc(t)
+    end;
 
 visibleCount:= cnt;
 end;
@@ -216,23 +216,23 @@ if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
     exit
     end;
 if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
-	begin
-	if CurrentTeam^.ExtDriven then exit;
+    begin
+    if CurrentTeam^.ExtDriven then exit;
 
-	for i:= Low(TWave) to High(TWave) do
-		if (s = Wavez[i].cmd) then
-			begin
-			ParseCommand('/taunt ' + char(i), true);
-			exit
-			end;
-	if (s = '/newgrave') then
+    for i:= Low(TWave) to High(TWave) do
+        if (s = Wavez[i].cmd) then
+            begin
+            ParseCommand('/taunt ' + char(i), true);
+            exit
+            end;
+    if (s = '/newgrave') then
         begin
-	    ParseCommand('/newgrave', true);
+        ParseCommand('/newgrave', true);
         exit
         end;
     end
-	else
-		ParseCommand('/say ' + s, true);
+    else
+        ParseCommand('/say ' + s, true);
 end;
 
 procedure KeyPressChat(Key: Longword);
@@ -242,46 +242,46 @@ var i, btw: integer;
 begin
 
 if Key <> 0 then
-	case Key of
-		{Backspace}
-		8, 127: if Length(InputStr.s) > 0 then
-				begin
-				InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-				SetLine(InputStr, InputStr.s, true)
-				end;
-		{Esc}
-		27: SetLine(InputStr, '', true);
-		{Return}
-		3, 13, 271: begin
-			if Length(InputStr.s) > 0 then
-				begin
-				AcceptChatString(InputStr.s);
-				SetLine(InputStr, '', false)
-				end;
-			FreezeEnterKey;
-			GameState:= gsGame
-			end;
-	else
-	if (Key < $80) then btw:= 1
-	else if (Key < $800) then btw:= 2
-	else if (Key < $10000) then btw:= 3
-	else btw:= 4;
+    case Key of
+        {Backspace}
+        8, 127: if Length(InputStr.s) > 0 then
+                begin
+                InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
+                SetLine(InputStr, InputStr.s, true)
+                end;
+        {Esc}
+        27: SetLine(InputStr, '', true);
+        {Return}
+        3, 13, 271: begin
+            if Length(InputStr.s) > 0 then
+                begin
+                AcceptChatString(InputStr.s);
+                SetLine(InputStr, '', false)
+                end;
+            FreezeEnterKey;
+            GameState:= gsGame
+            end;
+    else
+    if (Key < $80) then btw:= 1
+    else if (Key < $800) then btw:= 2
+    else if (Key < $10000) then btw:= 3
+    else btw:= 4;
 
-	utf8:= '';
+    utf8:= '';
 
-	for i:= btw downto 2 do
-		begin
-		utf8:= char((Key or $80) and $BF) + utf8;
-		Key:= Key shr 6
-		end;
+    for i:= btw downto 2 do
+        begin
+        utf8:= char((Key or $80) and $BF) + utf8;
+        Key:= Key shr 6
+        end;
 
-	utf8:= char(Key or firstByteMark[btw]) + utf8;
+    utf8:= char(Key or firstByteMark[btw]) + utf8;
 
-	if byte(InputStr.s[0]) + btw > 240 then exit;
+    if byte(InputStr.s[0]) + btw > 240 then exit;
 
-	InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-	SetLine(InputStr, InputStr.s + utf8, true)
-	end
+    InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
+    SetLine(InputStr, InputStr.s + utf8, true)
+    end
 end;
 
 procedure init_uChat;

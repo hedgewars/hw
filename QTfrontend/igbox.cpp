@@ -27,50 +27,50 @@ IconedGroupBox::IconedGroupBox(QWidget * parent)
 {
 // Has issues with border-radius on children
 //    setAttribute(Qt::WA_PaintOnScreen, true);
-	titleLeftPadding = 82;
+    titleLeftPadding = 82;
     contentTopPadding = 22;
 }
 
 void IconedGroupBox::setIcon(const QIcon & icon)
 {
-	if (this->icon.isNull())
-		setStyleSheet(QString(
-			"IconedGroupBox{"
-				"margin-top: 46px;"
-				"margin-left: 12px;"
+    if (this->icon.isNull())
+        setStyleSheet(QString(
+            "IconedGroupBox{"
+                "margin-top: 46px;"
+                "margin-left: 12px;"
                 "padding: %1px 2px 5px 2px;"
-				"}"
-			"IconedGroupBox::title{"
-				"subcontrol-origin: margin;"
-				"subcontrol-position: top left;"
-				"padding-left: %2px;"
-				"padding-top: 25px;"
-				"text-align: left;"
-				"}"
-				).arg(contentTopPadding).arg(titleLeftPadding)
-		);
+                "}"
+            "IconedGroupBox::title{"
+                "subcontrol-origin: margin;"
+                "subcontrol-position: top left;"
+                "padding-left: %2px;"
+                "padding-top: 25px;"
+                "text-align: left;"
+                "}"
+                ).arg(contentTopPadding).arg(titleLeftPadding)
+        );
 
-	this->icon = icon;
-	repaint();
+    this->icon = icon;
+    repaint();
 }
 
 void IconedGroupBox::paintEvent(QPaintEvent * event)
 {
-	QStylePainter painter(this);
+    QStylePainter painter(this);
 
-	QStyleOptionGroupBox option;
-	initStyleOption(&option);
-	painter.drawComplexControl(QStyle::CC_GroupBox, option);
+    QStyleOptionGroupBox option;
+    initStyleOption(&option);
+    painter.drawComplexControl(QStyle::CC_GroupBox, option);
 
-	icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
+    icon.paint(&painter, QRect(QPoint(0, 0), icon.actualSize(size())));
 }
 
 void IconedGroupBox::setTitleTextPadding(int px)
 {
-	titleLeftPadding = px;
+    titleLeftPadding = px;
 }
 
 void IconedGroupBox::setContentTopPadding(int px)
 {
-	contentTopPadding = px;
+    contentTopPadding = px;
 }

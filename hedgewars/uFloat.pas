@@ -291,9 +291,9 @@ function hwSqr(const t: hwFloat): hwFloat;
 begin
 hwSqr.isNegative:= false;
 hwSqr.QWordValue:=
-	  ((QWord(t.Round) * t.Round) shl 32)
-	+ QWord(t.Round) * t.Frac * 2
-	+ ((QWord(t.Frac) * t.Frac) shr 32);
+      ((QWord(t.Round) * t.Round) shl 32)
+    + QWord(t.Round) * t.Frac * 2
+    + ((QWord(t.Frac) * t.Frac) shr 32);
 end;
 
 function hwSqrt(const t: hwFloat): hwFloat;

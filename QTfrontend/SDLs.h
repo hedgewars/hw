@@ -28,20 +28,20 @@
 
 class SDLInteraction : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private:
-	Mix_Music *music;
-	int musicInitialized;	
+    Mix_Music *music;
+    int musicInitialized;   
 
 public:
-	SDLInteraction();
-	~SDLInteraction();
-	QStringList getResolutions() const;
-	void addGameControllerKeys() const;
-	void StartMusic();
-	void StopMusic();
-	void SDLMusicInit();	
+    SDLInteraction();
+    ~SDLInteraction();
+    QStringList getResolutions() const;
+    void addGameControllerKeys() const;
+    void StartMusic();
+    void StopMusic();
+    void SDLMusicInit();    
 };
 
 

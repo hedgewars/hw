@@ -28,7 +28,7 @@ interface
 {$ELSE}
 program hwengine;
 {$ENDIF}
-uses	SDLh in 'SDLh.pas',
+uses    SDLh in 'SDLh.pas',
     uConsts in 'uConsts.pas',
     uGame in 'uGame.pas',
     uMisc in 'uMisc.pas',
@@ -229,7 +229,7 @@ procedure Game(gameArgs: arrayofpchar); cdecl; export;
 {$ELSE}
 procedure Game;cdecl; export;
 {$ENDIF}
-var	p: TPathType;
+var p: TPathType;
     s: shortstring;
 begin
 {$IFDEF HWLIBRARY}
@@ -321,7 +321,7 @@ procedure initEverything;
 begin
     init_uConsts();
     init_uMisc();
-    init_uConsole();	// MUST happen after uMisc
+    init_uConsole();    // MUST happen after uMisc
     
     init_uAI();
     //uAIActions does not need initialization
@@ -341,7 +341,7 @@ begin
     //uLandTemplates does not need initialization
     //uLandTexture does not need initialization
     //uLocale does not need initialization
-    init_uRandom();	
+    init_uRandom(); 
     //uSHA does not need initialization
     init_uSound();
     init_uStats();
@@ -356,21 +356,21 @@ end;
 procedure freeEverything;
 begin
     free_uWorld();
-    free_uVisualGears();	//stub
-    free_uTriggers();	//stub
+    free_uVisualGears();    //stub
+    free_uTriggers();   //stub
     free_uTeams();
     free_uStore();
-    free_uStats();		//stub
-    free_uSound();		//stub
+    free_uStats();      //stub
+    free_uSound();      //stub
     //uSHA does not need to be freed
-    free_uRandom();		//stub
+    free_uRandom();     //stub
     //uLocale does not need to be freed
     //uLandTemplates does not need to be freed
     //uLandTexture does not need to be freed
     //uLandObjects does not need to be freed
     //uLandGraphics does not need to be freed
     free_uLand();
-    free_uKeys();		//stub
+    free_uKeys();       //stub
     free_uIO();
     free_uGears();
     //uGame does not need to be freed
@@ -378,14 +378,14 @@ begin
     free_uCollisions();
     free_uChat();
     free_uAmmos();
-    free_uAIMisc();		//stub
+    free_uAIMisc();     //stub
     //uAIAmmoTests does not need to be freed
     //uAIActions does not need to be freed
-    free_uAI();		//stub
+    free_uAI();     //stub
 
     free_uConsole();
     free_uMisc();
-    free_uConsts();		//stub
+    free_uConsts();     //stub
     free_uScript();
 end;
 
@@ -485,7 +485,7 @@ begin
             PathPrefix:= ParamStr(1);
             recordFileName:= ParamStr(2);
 
-            if ParamStr(3) = '--set-video'	then
+            if ParamStr(3) = '--set-video'  then
             begin
                 val(ParamStr(4), cScreenWidth);
                 val(ParamStr(5), cScreenHeight);
