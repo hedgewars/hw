@@ -117,6 +117,19 @@ handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, roomPassword]
 
 handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName] =
     handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName, ""]
+    
+
+handleCmd_lobby clID clients rooms ["FOLLOW", asknick] =
+    if noSuchClient || roomID followClient == 0 then
+        []
+    else
+        handleCmd_lobby clID clients rooms ["JOIN_ROOM", roomName]
+    where
+        maybeClient = Foldable.find (\cl -> asknick == nick cl) clients
+        noSuchClient = isNothing maybeClient
+        followClient = fromJust maybeClient
+        roomName = name $ rooms IntMap.! roomID followClient
+
 
     ---------------------------
     -- Administrator's stuff --
