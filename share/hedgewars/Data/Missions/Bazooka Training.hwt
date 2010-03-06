@@ -14,6 +14,7 @@
 -- The language to be used is stored in the global variable
 -- 'L' that is set by the game (string).
 -- Text may then be accessed using "arrayname[L]".
+
 local caption = {
 	["en"] = "Bazooka Training",
 	["de"] = "Bazooka-Training"
@@ -47,6 +48,16 @@ local hogname = {
 	["en"] = "Hunter",
 	["de"] = "Jäger"
 	}
+
+-- To handle missing texts we define a small wrapper function that
+-- we'll use to retrieve text.
+local function loc(text)
+	if text == nil then return "**missing**"
+	elseif text[L] == nil then return text["en"]
+	else return text[L]
+	end
+end
+
 ---------------------------------------------------------------
 
 -- This variable will hold the number of destroyed targets.
@@ -113,9 +124,9 @@ function onGameInit()
 	Theme = "Bamboo"
 
 	-- Create the player team
-	AddTeam(teamname[L], 14483456, "Simple", "Island", "Default")
+	AddTeam(loc(teamname), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
-	player = AddHog(hogname[L], 0, 1, "NoHat")
+	player = AddHog(loc(hogname), 0, 1, "NoHat")
 	SetGearPosition(player, 1960, 1160);
 end
 
@@ -132,7 +143,7 @@ function onGameStart()
 	-- A negative icon parameter (-n) represents the n-th weapon icon
 	-- A positive icon paramter (n) represents the (n+1)-th mission icon
 	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(caption[L], subcaption[L], goal[L], -amBazooka, 0);
+	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBazooka, 0);
 end
 
 -- This function is called every game tick.
@@ -146,7 +157,7 @@ function onGameTick()
 	if TurnTimeLeft == 1 and score < score_goal then
 		game_lost = true
 		-- ... and show a short message.
-		ShowMission(caption[L], subcaption[L], timeout[L], -amSkip, 0);
+		ShowMission(loc(caption), loc(subcaption), loc(timeout), -amSkip, 0);
 		-- How about killing our poor hog due to his poor performance?
 		SetHealth(player, 0);
 		-- Just to be sure set the goal time to 1 ms
@@ -195,7 +206,7 @@ function onGearDelete(gear)
 		else
 			if not game_lost then
 			-- Otherwise show that the goal was accomplished
-			ShowMission(caption[L], subcaption[L], success[L], 0, 0);
+			ShowMission(loc(caption), loc(subcaption), loc(success), 0, 0);
 			-- Also let the hogs shout "victory!"
 			PlaySound(sndVictory)
 			-- Save the time left so we may keep it.
