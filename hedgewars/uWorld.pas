@@ -122,7 +122,6 @@ g:= ''; // no text/things to note yet
 
 // check different game flags (goals/game modes first for now)
 g:= AddGoal(g, gfKing, gidKing); // king?
-g:= AddGoal(g, gfTreasureHunt, gidTreasureHunt, cTreasureHuntGoalScore); // treasure hunt?
 
 // other important flags
 g:= AddGoal(g, gfForts, gidForts); // forts?
