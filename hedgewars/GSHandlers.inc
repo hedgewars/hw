@@ -1254,27 +1254,45 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     begin
     DeleteCI(Gear);
     AllInactive:= false;
-    if Gear^.dY.isNegative and (Gear^.dY < -_0_02) and TestCollisionYwithGear(Gear, -1) then
-        inc(Gear^.Damage, hwRound(Gear^.dY * _70) * -1);
-    if not Gear^.dY.isNegative and (Gear^.dY > _0_02) and TestCollisionYwithGear(Gear, 1) then
+    if not Gear^.dY.isNegative and (Gear^.dY > _0_03) and TestCollisionYwithGear(Gear, 1) then
         begin
-        inc(Gear^.Damage, hwRound(Gear^.dY * _70));
+        inc(Gear^.Damage, hwRound(Gear^.dY * _30));
 	    for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
             begin
 		    particle:= AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
             if particle <> nil then particle^.dX := particle^.dX + (Gear^.dX / 5)
             end
-        end;
-    if Gear^.dX.isNegative and (Gear^.dX < -_0_02) and TestCollisionXwithGear(Gear, -1) then
-        inc(Gear^.Damage, hwRound(Gear^.dX * _70)*-1);
-    if not Gear^.dX.isNegative and (Gear^.dX > _0_02) and TestCollisionYwithGear(Gear, 1) then
-        inc(Gear^.Damage, hwRound(Gear^.dX * _70));
+        end
+    else if not Gear^.dX.isNegative and (Gear^.dX > _0_03) and TestCollisionXwithGear(Gear, 1) then
+        inc(Gear^.Damage, hwRound(Gear^.dX * _30))
+    else if Gear^.dY.isNegative and (Gear^.dY < -_0_03) and TestCollisionYwithGear(Gear, -1) then
+        inc(Gear^.Damage, hwRound(Gear^.dY * -_30))
+    else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1) then
+        inc(Gear^.Damage, hwRound(Gear^.dX * -_30));
     if Gear^.Damage <> 0 then PlaySound(sndGraveImpact);
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
 	CheckGearDrowning(Gear)
     end
 else AddGearCI(Gear);
+(*
+Attempt to make a barrel knock itself over an edge.  Would need more checks to avoid issues like burn damage
+    begin
+    x:= hwRound(Gear^.X);
+    y:= hwRound(Gear^.Y);
+    if (((y+1) and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) then
+	    if (Land[y+1, x] = 0) then
+            begin
+            if (((y+1) and LAND_HEIGHT_MASK) = 0) and (((x+Gear^.Radius-2) and LAND_WIDTH_MASK) = 0) and (Land[y+1, x+Gear^.Radius-2] = 0) then
+                Gear^.dX:= -_0_08
+            else if (((y+1 and LAND_HEIGHT_MASK)) = 0) and (((x-(Gear^.Radius-2)) and LAND_WIDTH_MASK) = 0) and (Land[y+1, x-(Gear^.Radius-2)] = 0) then
+                Gear^.dX:= _0_08;
+            end;
+    if Gear^.dX.QWordValue = 0 then AddGearCI(Gear)
+    end; *)
+
+if not Gear^.dY.isNegative and (Gear^.dY < _0_001) and TestCollisionYwithGear(Gear, 1) then Gear^.dY:= _0;
+if hwAbs(Gear^.dX) < _0_001 then Gear^.dX:= _0;
     
 if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
     if (cBarrelHealth div Gear^.Health) > 2 then 
@@ -1358,7 +1376,7 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
 	if (not Gear^.dY.isNegative) and TestCollisionYwithGear(Gear, 1) then
 		begin
         if (Gear^.dY > _0_02) and (k = gtExplosives) then
-            inc(Gear^.Damage, hwRound(Gear^.dY * _70));
+            inc(Gear^.Damage, hwRound(Gear^.dY * _30));
 
 		if Gear^.dY > _0_2 then
 	        for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
