@@ -519,7 +519,7 @@ end;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
 if CheckNoTeamOrHH then exit;
-if bShowAmmoMenu then
+if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin
     bSelected:= true;
     exit

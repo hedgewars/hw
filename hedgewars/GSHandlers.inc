@@ -1275,7 +1275,11 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     CalcRotationDirAngle(Gear);
     CheckGearDrowning(Gear)
     end
-else AddGearCI(Gear);
+else 
+    begin
+    Gear^.State:= Gear^.State or gsttmpFlag;
+    AddGearCI(Gear)
+    end;
 (*
 Attempt to make a barrel knock itself over an edge.  Would need more checks to avoid issues like burn damage
     begin
