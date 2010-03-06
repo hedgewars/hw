@@ -12,14 +12,14 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation type="unfinished"></translation>
+        <translation>Никогда</translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Каждый %1 ход</numerusform>
+            <numerusform>Каждые %1 хода</numerusform>
+            <numerusform>Каждые %1 ходов</numerusform>
         </translation>
     </message>
 </context>
@@ -46,19 +46,19 @@
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 был удалён из вашего списка игнорирования</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 был добавлен в ваш список игнорирования</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 был удалён из вашего списка друзей</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 *** %2 был добавлен в ваш список друзей</translation>
     </message>
 </context>
 <context>
@@ -258,18 +258,18 @@ or pick another nickname:</source>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Лучший киллер ‒ это &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитым за ход.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Лучший киллер ‒ это &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Лучший киллер ‒ это &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; убитыми за ход.&lt;/p&gt;</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёж был убит за этот поединок.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжа были убиты за этот поединок.&lt;/p&gt;</numerusform>
+            <numerusform>&lt;p&gt;Всего &lt;b&gt;%1&lt;/b&gt; ёжей были убиты за этот поединок.&lt;/p&gt;</numerusform>
         </translation>
     </message>
 </context>
@@ -434,18 +434,18 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Всего %1 игрок находится в этой комнате.</numerusform>
+            <numerusform>Всего %1 игрока находятся в этой комнате.</numerusform>
+            <numerusform>Всего %1 игроков находятся в этой комнате.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Всего %1 команда участвует в игре в этой комнате.</numerusform>
+            <numerusform>Всего %1 команды участвуют в игре в этой комнате.</numerusform>
+            <numerusform>Всего %1 команд участвуют в игре в этой комнате.</numerusform>
         </translation>
     </message>
     <message>
@@ -521,23 +521,23 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished"></translation>
+        <translation>Порядок ходов случаен, а не является порядком команд в списке</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть с Королём. Если он умирает, ваша сторона проигрывает.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Расставить ежей вручную перед игрой.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished"></translation>
+        <translation>Оружие совместно используется всеми командами с одним цветом.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Убрать балки из генерируемых карт.</translation>
     </message>
 </context>
 <context>
@@ -602,23 +602,23 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished"></translation>
+        <translation>Следовать</translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать</translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить в друзья</translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Убрать игнорирование</translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished"></translation>
+        <translation>Убирать из списка друзей</translation>
     </message>
 </context>
 <context>
@@ -665,19 +665,19 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать подсказки к оружию</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить звуки в меню</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить музыку в меню</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Эффекты в меню</translation>
     </message>
 </context>
 <context>
@@ -696,7 +696,7 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Системный по умолчанию)</translation>
     </message>
 </context>
 <context>
@@ -747,11 +747,11 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки команды</translation>
     </message>
     <message>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Разное</translation>
     </message>
 </context>
 <context>
@@ -858,35 +858,35 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished"></translation>
+        <translation>% невзрывающихся мин</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип</translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished"></translation>
+        <translation>Надгробие</translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Флаг</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Голос</translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished"></translation>
+        <translation>Язык</translation>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished"></translation>
+        <translation>Перезапустите игру для применения</translation>
     </message>
 </context>
 <context>
@@ -1029,7 +1029,7 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайная команда</translation>
     </message>
 </context>
 <context>
@@ -1075,11 +1075,11 @@ Please check your installation</source>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished"></translation>
+        <translation>Оружие в ящиках</translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished"></translation>
+        <translation>Задержки</translation>
     </message>
 </context>
 <context>
@@ -1145,23 +1145,23 @@ Please check your installation</source>
     </message>
     <message>
         <source>Random Order</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный порядок</translation>
     </message>
     <message>
         <source>King</source>
-        <translation type="unfinished"></translation>
+        <translation>Король</translation>
     </message>
     <message>
         <source>Place Hedgehogs</source>
-        <translation type="unfinished"></translation>
+        <translation>Расставить ежей</translation>
     </message>
     <message>
         <source>Clan Shares Ammo</source>
-        <translation type="unfinished"></translation>
+        <translation>Общее оружие в клане</translation>
     </message>
     <message>
         <source>Disable Girders</source>
-        <translation type="unfinished"></translation>
+        <translation>Убрать балки</translation>
     </message>
 </context>
 <context>
@@ -1348,11 +1348,11 @@ info</source>
     <name>binds (descriptions)</name>
     <message>
         <source>Move your hogs and aim:</source>
-        <translation type="unfinished"></translation>
+        <translation>Передвижение ежа и прицеливание:</translation>
     </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished"></translation>
+        <translation>Прохождение оврагов и препятствий прыжками:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
@@ -1364,7 +1364,7 @@ info</source>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключение вашего активного ежа (если возможно):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
@@ -1372,11 +1372,11 @@ info</source>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка таймера на бомбы и оружие с таймером:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Передвижение камеры на активного ежа:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -1384,7 +1384,7 @@ info</source>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменение уровня увеличения камеры:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
@@ -1396,7 +1396,7 @@ info</source>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменение громкости в течение игры:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
@@ -1404,98 +1404,98 @@ info</source>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished"></translation>
+        <translation>Создание скриншота:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished"></translation>
+        <translation>Переключение меток над ежами:</translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished"></translation>
+        <translation>Ось</translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Вверх)</translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Вниз)</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Шляпа</translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Влево)</translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Вправо)</translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка</translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Клавиатура</translation>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished"></translation>
+        <translation>Мышь: Левая кнопка</translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Мышь: Средняя кнопка</translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished"></translation>
+        <translation>Мышь: Правая кнопка</translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished"></translation>
+        <translation>Мышь: Колесо вверх</translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished"></translation>
+        <translation>Мышь: Колесо вниз</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Забой</translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished"></translation>
+        <translation>Tab</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished"></translation>
+        <translation>Return</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished"></translation>
+        <translation>Escape</translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Пробел</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Удалить</translation>
+        <translation>Delete</translation>
     </message>
     <message>
         <source>Numpad 0</source>
@@ -1567,19 +1567,19 @@ info</source>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished"></translation>
+        <translation>Вверх</translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished"></translation>
+        <translation>Вниз</translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Вправо</translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Влево</translation>
     </message>
     <message>
         <source>Insert</source>
@@ -1615,27 +1615,27 @@ info</source>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый shift</translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый shift</translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый ctrl</translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый ctrl</translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Правый alt</translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished"></translation>
+        <translation>Левый alt</translation>
     </message>
     <message>
         <source>Right meta</source>
