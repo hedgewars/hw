@@ -1590,7 +1590,7 @@ while Gear<>nil do
                                         end;
                          end;
       gtExplosives: begin
-                    i:= (GameTicks shr 6) mod 64;
+                    i:= (GameTicks shr 6 + Gear^.uid) mod 64;
                     if i > 18 then i:= 0;
                     if Gear^.State and gstAnimation = 0 then
                         DrawSprite(sprExplosives, hwRound(Gear^.X) - 24 + WorldDx, hwRound(Gear^.Y) - 24 + WorldDy, i)
