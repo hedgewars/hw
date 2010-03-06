@@ -16,7 +16,8 @@ import Control.Monad
 import Maybe
 -------------------------------------------------
 import qualified Codec.Binary.Base64 as Base64
-import qualified Codec.Binary.UTF8.String as UTF8
+import qualified Data.ByteString.UTF8 as BUTF8
+import qualified Data.ByteString as B
 import CoreTypes
 
 
@@ -28,9 +29,9 @@ sockAddr2String (SockAddrInet6 _ _ (a, b, c, d) _) =
         $ concatMap (\n -> (\(a, b) -> [showHex a, showHex b]) $ divMod n 65536) [a, b, c, d]) []
 
 toEngineMsg :: String -> String
-toEngineMsg msg = Base64.encode (fromIntegral (length encodedMsg) : encodedMsg)
+toEngineMsg msg = Base64.encode (fromIntegral (B.length encodedMsg) : (B.unpack encodedMsg))
     where
-    encodedMsg = UTF8.encode msg
+    encodedMsg = BUTF8.fromString msg
 
 fromEngineMsg :: String -> Maybe String
 fromEngineMsg msg = liftM (map w2c) (Base64.decode msg >>= removeLength)

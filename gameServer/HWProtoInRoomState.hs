@@ -6,7 +6,6 @@ import qualified Data.Map as Map
 import Data.Sequence(Seq, (|>), (><), fromList, empty)
 import Data.List
 import Maybe
-import qualified Codec.Binary.UTF8.String as UTF8
 --------------------------------------
 import CoreTypes
 import Actions
@@ -202,10 +201,6 @@ handleCmd_inRoom clID clients _ ["TEAMCHAT", msg] =
         []
     where
         client = clients IntMap.! clID
-        -- FIXME: why are those decoded* function used? 
-        -- it would be better to use ByteString instead of String
-        engineMsg = toEngineMsg $ 'b' : (decodedNick ++ "(team): " ++ decodedMsg ++ "\x20\x20")
-        decodedMsg = UTF8.decodeString msg
-        decodedNick = UTF8.decodeString $ nick client
+        engineMsg = toEngineMsg $ 'b' : ((nick client) ++ "(team): " ++ msg ++ "\x20\x20")
 
 handleCmd_inRoom clID _ _ _ = [ProtocolError "Incorrect command (state: in room)"]

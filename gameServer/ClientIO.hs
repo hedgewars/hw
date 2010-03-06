@@ -6,12 +6,14 @@ import Control.Concurrent.Chan
 import Control.Concurrent
 import Control.Monad
 import System.IO
+import qualified Data.ByteString.UTF8 as BUTF8
+import qualified Data.ByteString as B
 ----------------
 import CoreTypes
 
 listenLoop :: Handle -> Int -> [String] -> Chan CoreMessage -> Int -> IO ()
 listenLoop handle linesNumber buf chan clientID = do
-    str <- hGetLine handle
+    str <- liftM BUTF8.toString $ B.hGetLine handle
     if (linesNumber > 50) || (length str > 450) then
         writeChan chan $ ClientMessage (clientID, ["QUIT", "Protocol violation"])
         else
@@ -33,8 +35,7 @@ clientSendLoop handle coreChan chan clientID = do
     answer <- readChan chan
     doClose <- Exception.handle
         (\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
-        forM_ answer (hPutStrLn handle)
-        hPutStrLn handle ""
+        B.hPutStrLn handle $ BUTF8.fromString $ unlines (answer ++ [""])
         hFlush handle
         return $ isQuit answer
 
