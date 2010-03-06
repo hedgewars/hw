@@ -718,7 +718,6 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 if ((GameFlags and gfInvulnerable) = 0) then cTagsMask:= cTagsMasks[cTagsMask] else cTagsMask:= cTagsMasksNoHealth[cTagsMask];
-addfilelog('tagmask = ' + inttostr(ctagsmask));
 end;
 
 procedure chAddTrigger(var s: shortstring);
