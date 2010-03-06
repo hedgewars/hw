@@ -35,9 +35,9 @@ clientSendLoop handle coreChan chan clientID = do
     answer <- readChan chan
     doClose <- Exception.handle
         (\(e :: Exception.IOException) -> if isQuit answer then return True else sendQuit e >> return False) $ do
-        B.hPutStrLn handle $ BUTF8.fromString $ unlines (answer ++ [""])
-        hFlush handle
-        return $ isQuit answer
+            B.hPutStrLn handle $ BUTF8.fromString $ unlines answer
+            hFlush handle
+            return $ isQuit answer
 
     if doClose then
         Exception.handle (\(_ :: Exception.IOException) -> putStrLn "error on hClose") $ hClose handle
