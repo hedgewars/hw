@@ -333,77 +333,83 @@ lua_pop(luaState, 1);
 end;
 
 procedure ScriptOnGameInit;
+var s, t : ansistring;
 begin
-    // not required if there's no script to run
-    if not ScriptLoaded then
-        exit;
-            
-    // push game variables so they may be modified by the script
-    ScriptSetInteger('GameFlags', GameFlags);
-    ScriptSetString('Seed', cSeed);
-    ScriptSetInteger('TurnTime', cHedgehogTurnTime);
-    ScriptSetInteger('CaseFreq', cCaseFactor);
-    ScriptSetInteger('LandAdds', cLandAdditions);
-    ScriptSetInteger('Delay', cInactDelay);
-    ScriptSetString('Map', '');
-    ScriptSetString('Theme', '');
+// not required if there's no script to run
+if not ScriptLoaded then
+    exit;
+        
+// push game variables so they may be modified by the script
+ScriptSetInteger('GameFlags', GameFlags);
+ScriptSetString('Seed', cSeed);
+ScriptSetInteger('TurnTime', cHedgehogTurnTime);
+ScriptSetInteger('CaseFreq', cCaseFactor);
+ScriptSetInteger('LandAdds', cLandAdditions);
+ScriptSetInteger('Delay', cInactDelay);
+ScriptSetString('Map', '');
+ScriptSetString('Theme', '');
 
-    ScriptCall('onGameInit');
-    
-    // pop game variables
-    ParseCommand('seed ' + ScriptGetString('Seed'), true);
-    ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
-    ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
-    ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
-    ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
-    ParseCommand('$delay ' + ScriptGetString('Delay'), true);
-    if ScriptGetString('Map') <> '' then
-        ParseCommand('map ' + ScriptGetString('Map'), true);
-    if ScriptGetString('Theme') <> '' then
-        ParseCommand('theme ' + ScriptGetString('Theme'), true);    
+// import locale
+s:= cLocaleFName;
+SplitByChar(s, t, '.');
+ScriptSetString('L', s);
 
-    ScriptPrepareAmmoStore;
-    ScriptCall('onAmmoStoreInit');
-    ScriptApplyAmmoStore;
+ScriptCall('onGameInit');
+
+// pop game variables
+ParseCommand('seed ' + ScriptGetString('Seed'), true);
+ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
+ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
+ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
+ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
+ParseCommand('$delay ' + ScriptGetString('Delay'), true);
+if ScriptGetString('Map') <> '' then
+    ParseCommand('map ' + ScriptGetString('Map'), true);
+if ScriptGetString('Theme') <> '' then
+    ParseCommand('theme ' + ScriptGetString('Theme'), true);    
+
+ScriptPrepareAmmoStore;
+ScriptCall('onAmmoStoreInit');
+ScriptApplyAmmoStore;
 end;
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
 begin
-    ret:= luaL_loadfile(luaState, Str2PChar(name));
-    if ret <> 0 then
-        WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
-    else
-        begin
-        WriteLnToConsole('LUA: ' + name + ' loaded');
-        // call the script file
-        lua_pcall(luaState, 0, 0, 0);
-        ScriptLoaded:= true
-        end
+ret:= luaL_loadfile(luaState, Str2PChar(name));
+if ret <> 0 then
+    WriteLnToConsole('LUA: Failed to load ' + name + '(error ' + IntToStr(ret) + ')')
+else
+    begin
+    WriteLnToConsole('LUA: ' + name + ' loaded');
+    // call the script file
+    lua_pcall(luaState, 0, 0, 0);
+    ScriptLoaded:= true
+    end
 end;
 
 procedure SetGlobals;
 begin
-    ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 end;
 
 procedure GetGlobals;
 begin
-    TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
+TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 end;
 
 procedure ScriptCall(fname : shortstring);
 begin
-    if not ScriptLoaded then
-        exit;
-    SetGlobals;
-    lua_getglobal(luaState, Str2PChar(fname));
-    if lua_pcall(luaState, 0, 0, 0) <> 0 then
-        begin
-        WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
-        lua_pop(luaState, 1)
-        end;
-    GetGlobals;
+if not ScriptLoaded then
+    exit;
+SetGlobals;
+lua_getglobal(luaState, Str2PChar(fname));
+if lua_pcall(luaState, 0, 0, 0) <> 0 then
+    begin
+    WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    lua_pop(luaState, 1)
+    end;
+GetGlobals;
 end;
 
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -423,26 +429,26 @@ end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-    if not ScriptLoaded then
-        exit;
-    SetGlobals;
-    lua_getglobal(luaState, Str2PChar(fname));
-    lua_pushinteger(luaState, par1);
-    lua_pushinteger(luaState, par2);
-    lua_pushinteger(luaState, par3);
-    lua_pushinteger(luaState, par4);
-    ScriptCall:= 0;
-    if lua_pcall(luaState, 4, 1, 0) <> 0 then
-        begin
-        WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
-        lua_pop(luaState, 1)
-        end
-    else
-        begin
-        ScriptCall:= lua_tointeger(luaState, -1);
-        lua_pop(luaState, 1)
-        end;
-    GetGlobals;
+if not ScriptLoaded then
+    exit;
+SetGlobals;
+lua_getglobal(luaState, Str2PChar(fname));
+lua_pushinteger(luaState, par1);
+lua_pushinteger(luaState, par2);
+lua_pushinteger(luaState, par3);
+lua_pushinteger(luaState, par4);
+ScriptCall:= 0;
+if lua_pcall(luaState, 4, 1, 0) <> 0 then
+    begin
+    WriteLnToConsole('LUA: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    lua_pop(luaState, 1)
+    end
+else
+    begin
+    ScriptCall:= lua_tointeger(luaState, -1);
+    lua_pop(luaState, 1)
+    end;
+GetGlobals;
 end;
 
 procedure ScriptPrepareAmmoStore;
@@ -501,21 +507,25 @@ ScriptSetInteger('LAND_WIDTH', LAND_WIDTH);
 ScriptSetInteger('LAND_HEIGHT', LAND_HEIGHT);
 
 // import game flags
-ScriptSetInteger('gfForts',gfForts);
-ScriptSetInteger('gfMultiWeapon',gfMultiWeapon);
-ScriptSetInteger('gfSolidLand',gfSolidLand);
-ScriptSetInteger('gfBorder',gfBorder);
-ScriptSetInteger('gfDivideTeams',gfDivideTeams);
-ScriptSetInteger('gfLowGravity',gfLowGravity);
-ScriptSetInteger('gfLaserSight',gfLaserSight);
-ScriptSetInteger('gfInvulnerable',gfInvulnerable);
-ScriptSetInteger('gfMines',gfMines);
-ScriptSetInteger('gfVampiric',gfVampiric);
-ScriptSetInteger('gfKarma',gfKarma);
-ScriptSetInteger('gfArtillery',gfArtillery);
-ScriptSetInteger('gfOneClanMode',gfOneClanMode);
-ScriptSetInteger('gfRandomOrder',gfRandomOrder);
-ScriptSetInteger('gfKing',gfKing);
+ScriptSetInteger('gfForts', gfForts);
+ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);
+ScriptSetInteger('gfSolidLand', gfSolidLand);
+ScriptSetInteger('gfBorder', gfBorder);
+ScriptSetInteger('gfDivideTeams', gfDivideTeams);
+ScriptSetInteger('gfLowGravity', gfLowGravity);
+ScriptSetInteger('gfLaserSight', gfLaserSight);
+ScriptSetInteger('gfInvulnerable', gfInvulnerable);
+ScriptSetInteger('gfMines', gfMines);
+ScriptSetInteger('gfVampiric', gfVampiric);
+ScriptSetInteger('gfKarma', gfKarma);
+ScriptSetInteger('gfArtillery', gfArtillery);
+ScriptSetInteger('gfOneClanMode', gfOneClanMode);
+ScriptSetInteger('gfRandomOrder', gfRandomOrder);
+ScriptSetInteger('gfKing', gfKing);
+ScriptSetInteger('gfPlaceHog', gfPlaceHog);
+ScriptSetInteger('gfSharedAmmo', gfSharedAmmo);
+ScriptSetInteger('gfDisableGirders', gfDisableGirders);
+ScriptSetInteger('gfExplosives', gfExplosives);
 
 // register gear types
 for at:= Low(TGearType) to High(TGearType) do
