@@ -1270,7 +1270,7 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
         inc(Gear^.Damage, hwRound(Gear^.dY * -_40))
     else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1) then
         inc(Gear^.Damage, hwRound(Gear^.dX * -_40));
-    if Gear^.Damage <> 0 then PlaySound(sndGraveImpact);
+    if Gear^.Damage <> 0 then PlaySound(sndGrenadeImpact);
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
     CheckGearDrowning(Gear)
@@ -1332,7 +1332,7 @@ if (Gear^.Message and gm_Destroy) > 0 then
 if k = gtExplosives then
     begin
     //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
-    if hwAbs(Gear^.dX) > _0_15 then Gear^.doStep:= @doStepRollingBarrel;
+    if (hwAbs(Gear^.dX) > _0_15) or ((hwAbs(Gear^.dY) > _0_15) and (hwAbs(Gear^.dX) > _0_02)) then Gear^.doStep:= @doStepRollingBarrel;
     
     if ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
         if (cBarrelHealth div Gear^.Health) > 2 then 
@@ -1388,7 +1388,11 @@ if (Gear^.dY.QWordValue <> 0) or (not TestCollisionYwithGear(Gear, 1)) then
                 AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
         if Gear^.dY > - _0_001 then Gear^.dY:= _0
-            else if Gear^.dY < - _0_03 then PlaySound(sndGraveImpact)
+            else if Gear^.dY < - _0_03 then
+                if Gear^.Kind = gtExplosives then
+                    PlaySound(sndGrenadeImpact)
+                else
+                    PlaySound(sndGraveImpact);
         end;
     //if Gear^.dY > - _0_001 then Gear^.dY:= _0
     CheckGearDrowning(Gear);
