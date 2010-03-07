@@ -40,4 +40,4 @@ getOpts opts = do
     case getOpt Permute options args of
         (o, [], []) -> return $ foldr ($) opts o
         (_,_,errs) -> ioError (userError (concat errs ++ usageInfo header options))
-    where header = "Usage: newhwserv [OPTION...]"
+    where header = "Usage: hedgewars-server [OPTION...]"
