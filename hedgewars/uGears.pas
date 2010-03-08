@@ -430,7 +430,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Health:= 2000;
                 end;
      gtMolotov: begin 
-                gear^.Radius:= 8;
+                gear^.Radius:= 6;
                 end;
      end;
 InsertGearToList(gear);
