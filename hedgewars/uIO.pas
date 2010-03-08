@@ -317,8 +317,11 @@ while (headcmd <> nil)
             // these are equations solved for CursorPoint
             // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
-            CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
-            CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy;
+            if not (CurrentTeam^.ExtDriven and bShowAmmoMenu) then
+               begin
+               CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
+               CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy
+               end
             end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
         't': ParseCommand('taunt ' + headcmd^.str[2], true);
