@@ -201,7 +201,11 @@ else if (LocalAmmo <> -1) then
    Ammo:= GetAmmoByNum(LocalAmmo);
 Slot:= 0;
 Pos:= -1;
-if Ammo = nil then exit;
+if Ammo = nil then
+    begin
+    bShowAmmoMenu:= false;
+    exit
+    end;
 SlotsNum:= 0;
 x:= (cScreenWidth shr 1) - 210 + AMxShift;
 y:= cScreenHeight - 40;
