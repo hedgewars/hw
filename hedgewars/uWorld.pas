@@ -808,7 +808,7 @@ procedure MoveCamera;
 const PrevSentPointTime: LongWord = 0;
 var EdgesDist,  wdy: LongInt;
 begin
-if (not (CurrentTeam^.ExtDriven and isCursorVisible)) and cHasFocus then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and not bShowAmmoMenu)) and cHasFocus then
     begin
     SDL_GetMouseState(@CursorPoint.X, @CursorPoint.Y);
     CursorPoint.X:= CursorPoint.X - (cScreenWidth shr 1);
@@ -823,8 +823,8 @@ if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not 
         exit
         end
         else begin
-        CursorPoint.x:= (prevPoint.x * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
-        CursorPoint.y:= (prevPoint.y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
+        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * 100 + WorldDx) div 8;
+        CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8;
         end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
