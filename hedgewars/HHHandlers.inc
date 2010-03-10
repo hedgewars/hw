@@ -307,6 +307,7 @@ procedure PickUp(HH, Gear: PGear);
 var s: shortstring;
     a: TAmmoType;
     i: Integer;
+    vga: PVisualGear;
 begin
 Gear^.Message:= gm_Destroy;
 PlaySound(sndShotgunReload);
@@ -319,12 +320,18 @@ case Gear^.Pos of
 // On the other hand, no obvious reason that clan members shouldn't know what ammo another clan member picked up
                     if (not (PHedgehog(HH^.Hedgehog)^.Team^.ExtDriven 
                       or (PHedgehog(HH^.Hedgehog)^.BotLevel > 0)))
-                    or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
-                    or (GameType = gmtDemo)  then
-                       begin
-                       s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
-                       AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
-                       end
+                      or (PHedgehog(HH^.Hedgehog)^.Team^.Clan^.ClanIndex = LocalClan)
+                      or (GameType = gmtDemo)  then
+                        begin
+                        s:= trammo[Ammoz[a].NameId] + '(+' + IntToStr(Ammoz[a].NumberInCase) + ')';
+                        AddCaption(s, PHedgehog(HH^.Hedgehog)^.Team^.Clan^.Color, capgrpAmmoinfo);
+
+                        // show ammo icon
+                        vga:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtAmmo);
+                        if vga <> nil then
+                            vga^.Frame:= Longword(a);
+                        end;
+
                     end;
      posCaseHealth: begin
                     inc(HH^.Health, Gear^.Health);

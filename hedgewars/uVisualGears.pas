@@ -43,6 +43,7 @@ type PVisualGear = ^TVisualGear;
         Kind: TVisualGearType;
         doStep: TVGearStepProcedure;
         Tex: PTexture;
+        alpha, scale: GLfloat;
         Hedgehog: pointer;
         Text: shortstring
         end;
@@ -217,6 +218,16 @@ begin
         else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepAmmo(Gear: PVisualGear; Steps: Longword);
+begin
+    Gear^.Y:= Gear^.Y - cDrownSpeed * Steps;
+
+    Gear^.scale:= Gear^.scale + 0.0025 * Steps;
+    Gear^.alpha:= Gear^.alpha - 0.0015 * Steps;
+
+    if Gear^.alpha < 0 then DeleteVisualGear(Gear)
+end;
+
 procedure doStepSmoke(Gear: PVisualGear; Steps: Longword);
 begin
     Gear^.X:= Gear^.X + (cWindSpeed + Gear^.dX) * Steps;
@@ -385,6 +396,7 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepSpeechBubble,
             @doStepBubble,
             @doStepSteam,
+            @doStepAmmo,
             @doStepSmoke,
             @doStepSmoke,
             @doStepHealth,
@@ -480,6 +492,10 @@ with gear^ do
                 dy.isNegative:= false;
                 Frame:= 7 - random(3);
                 FrameTicks:= cExplFrameTicks * 2;
+                end;
+    vgtAmmo: begin
+                alpha:= 1.0;
+                scale:= 1.0
                 end;
   vgtSmokeWhite, 
   vgtSmoke: begin
@@ -577,6 +593,12 @@ case Layer of
                 vgtFire: DrawSprite(sprFlame, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy, (RealTicks div 64 + Gear^.Frame) mod 8);
                 vgtBubble: DrawSprite(sprBubbles, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
                 vgtSteam: DrawSprite(sprExplPart, hwRound(Gear^.X) + WorldDx - 16, hwRound(Gear^.Y) + WorldDy - 16, 7 - Gear^.Frame);
+                vgtAmmo: begin
+                        glColor4f(1, 1, 1, Gear^.alpha);
+                        DrawTextureF(ropeIconTex, Gear^.scale, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 32, 32);
+                        DrawTextureF(SpritesData[sprAMAmmos].Texture, Gear^.scale * 0.90, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame - 1, 1, 32, 32);
+                        glColor4f(1, 1, 1, 1);
+                        end;
                 vgtHealth:  begin
                             case Gear^.Frame div 10 of
                                 0:glColor4f(0, 1, 0, Gear^.FrameTicks / 1000);

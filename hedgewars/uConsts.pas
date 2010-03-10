@@ -87,7 +87,7 @@ type
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-            vgtSteam, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell, vgtDust);
+            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell, vgtDust);
 
     TGearsType = set of TGearType;
 
