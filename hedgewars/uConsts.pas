@@ -72,7 +72,8 @@ type
             sprThoughtCorner, sprThoughtEdge, sprThoughtTail,
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
-            sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll, sprAmTeleport);
+            sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll,
+            sprAmTeleport, sprSplash);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -87,7 +88,8 @@ type
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
-            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell, vgtDust);
+            vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
+            vgtDust, vgtSplash);
 
     TGearsType = set of TGearType;
 
@@ -675,7 +677,9 @@ const
             (FileName: 'ExplosivesRoll'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  48; Height: 48; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprExplosivesRoll
             (FileName: 'amTeleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprAmTeleport
+            Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprAmTeleport
+            (FileName: 'Splash'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:  128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprSplash
             );
 
     Wavez: array [TWave] of record

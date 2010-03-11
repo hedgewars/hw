@@ -74,7 +74,8 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             AddCaption(Format(GetEventString(eidDrowned), PHedgehog(Gear^.Hedgehog)^.Name), cWhiteColor, capgrpMessage);
             end
         end;
-    PlaySound(sndSplash)
+    PlaySound(sndSplash);
+    AddVisualGear(hwRound(Gear^.X), LAND_HEIGHT, vgtSplash);
     end
     else
     CheckGearDrowning:= false

@@ -264,6 +264,14 @@ begin
         else dec(Gear^.FrameTicks, Steps)
 end;
 
+procedure doStepSplash(Gear: PVisualGear; Steps: Longword);
+begin
+  if Gear^.FrameTicks <= Steps then
+      DeleteVisualGear(Gear)
+  else
+      dec(Gear^.FrameTicks, Steps);
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -401,7 +409,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepSmoke,
             @doStepHealth,
             @doStepShell,
-            @doStepDust
+            @doStepDust,
+            @doStepSplash
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -520,6 +529,13 @@ with gear^ do
                 Frame:= 7 - random(2);
                 FrameTicks:= random(20) + 15;
                 end;
+  vgtSplash: begin
+                dx:= _0;
+                dx.isNegative:= false;
+                dy:= _0;
+                FrameTicks:= 740;
+                Frame:= 19;
+                end;
         end;
 
 if VisualGearsList <> nil then
@@ -614,6 +630,7 @@ case Layer of
                             if Gear^.FrameTicks < 250 then
                                 glColor4f(1, 1, 1, 1);
                             end;
+                vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 64, hwRound(Gear^.Y) + WorldDy - 72, 19 - (Gear^.FrameTicks div 37));
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);
