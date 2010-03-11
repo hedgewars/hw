@@ -32,6 +32,7 @@ type TAttackParams = record
 
 function TestBazooka(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestWatermelon(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -73,7 +74,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amKamikaze
             (proc: nil;              flags: 0), // amCake
             (proc: nil;              flags: 0), // amSeduction
-            (proc: nil;              flags: 0), // amBanana
+            (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
             (proc: nil;              flags: 0), // amNapalm
             (proc: nil;              flags: 0), // amDrill
@@ -182,7 +183,6 @@ var Vx, Vy, r: hwFloat;
     if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 101)
               else CheckTrace:= BadTurn
     end;
-
 begin
 valueResult:= BadTurn;
 TestTime:= 0;
@@ -208,6 +208,58 @@ repeat
      end
 until (TestTime = 4000);
 TestGrenade:= valueResult
+end;
+
+function TestWatermelon(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+const tDelta = 24;
+var Vx, Vy, r: hwFloat;
+    Score, EX, EY, valueResult: LongInt;
+    TestTime: Longword;
+
+    function CheckTrace: LongInt;
+    var x, y, dY: hwFloat;
+        t: LongInt;
+    begin
+    x:= Me^.X;
+    y:= Me^.Y;
+    dY:= -Vy;
+    t:= TestTime;
+    repeat
+      x:= x + Vx;
+      y:= y + dY;
+      dY:= dY + cGravity;
+      dec(t)
+    until TestCollExcludingMe(Me, hwRound(x), hwRound(y), 5) or (t = 0);
+    EX:= hwRound(x);
+    EY:= hwRound(y);
+    if t < 50 then CheckTrace:= RateExplosion(Me, EX, EY, 301)
+              else CheckTrace:= BadTurn
+    end;
+begin
+valueResult:= BadTurn;
+TestTime:= 0;
+ap.ExplR:= 0;
+repeat
+  inc(TestTime, 1000);
+  Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime + tDelta);
+  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  r:= Distance(Vx, Vy);
+  if not (r > _1) then
+     begin
+     Score:= CheckTrace;
+     if valueResult < Score then
+        begin
+        ap.Angle:= DxDy2AttackAngle(Vx, Vy) + AIrndSign(random(Level));
+        ap.Power:= hwRound(r * cMaxPower) + AIrndSign(random(Level) * 15)+50;
+        ap.Time:= TestTime;
+        ap.ExplR:= 300;
+        ap.ExplX:= EX;
+        ap.ExplY:= EY;
+        valueResult:= Score
+        end;
+     end
+until (TestTime = 4000);
+TestWatermelon:= valueResult
 end;
 
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
