@@ -16,7 +16,7 @@
    width="128"
    height="48"
    sodipodi:docname="BlueWater.svg"
-   inkscape:export-filename="/mnt/y/src/hedge/trunk/share/hedgewars/Data/Themes/deepspace/BlueWater.png"
+   inkscape:export-filename="/mnt/y/src/hedge/trunk/share/hedgewars/Data/Themes/Eyes/BlueWater.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <metadata
@@ -144,7 +144,7 @@
        gradientTransform="translate(0,-3)" />
   </defs>
   <sodipodi:namedview
-     pagecolor="#ffffff"
+     pagecolor="#2a2a2a"
      bordercolor="#666666"
      borderopacity="1"
      objecttolerance="10"
@@ -156,15 +156,15 @@
      inkscape:window-height="765"
      id="namedview4"
      showgrid="false"
-     inkscape:zoom="2"
-     inkscape:cx="12.631431"
-     inkscape:cy="93.292098"
+     inkscape:zoom="8"
+     inkscape:cx="45.284083"
+     inkscape:cy="35.476608"
      inkscape:window-x="33"
      inkscape:window-y="111"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg2" />
   <path
-     style="color:#000000;fill:#2a2a2a;fill-opacity:1;fill-rule:nonzero;stroke:#9aa3dc;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="color:#000000;fill:#2a2a2a;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      d="M 64,2 C 38.959039,2 19.996219,14 0,14 l 0,15.5 c 20.035226,0 38.95904,-12 64,-12 25.04096,0 43.56704,12 64,12 L 128,14 C 107.44342,14 89.04096,2 64,2 z"
      id="path3595" />
   <path
