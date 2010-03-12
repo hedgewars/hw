@@ -1,0 +1,951 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		6179928B114AE0C800BA94A9 /* UpdateDataFolder */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 61799290114AE0CD00BA94A9 /* Build configuration list for PBXAggregateTarget "UpdateDataFolder" */;
+			buildPhases = (
+				6179928A114AE0C800BA94A9 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = UpdateDataFolder;
+			productName = UpdateDataFolder;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
+		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD14FF0DC6FC520079059D /* OpenGLES.framework */; };
+		28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FD15070DC6FC5B0079059D /* QuartzCore.framework */; };
+		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
+		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
+		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
+		6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987ED114AA34C00BA94A9 /* SDLh.pas */; };
+		6179881F114AA34C00BA94A9 /* uAI.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F1114AA34C00BA94A9 /* uAI.pas */; };
+		61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F2114AA34C00BA94A9 /* uAIActions.pas */; };
+		61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */; };
+		61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F4114AA34C00BA94A9 /* uAIMisc.pas */; };
+		61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F5114AA34C00BA94A9 /* uAmmos.pas */; };
+		61798824114AA34C00BA94A9 /* uChat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F6114AA34C00BA94A9 /* uChat.pas */; };
+		61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F7114AA34C00BA94A9 /* uCollisions.pas */; };
+		61798826114AA34C00BA94A9 /* uConsole.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F8114AA34C00BA94A9 /* uConsole.pas */; };
+		61798827114AA34C00BA94A9 /* uConsts.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987F9114AA34C00BA94A9 /* uConsts.pas */; };
+		61798828114AA34C00BA94A9 /* uFloat.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FA114AA34C00BA94A9 /* uFloat.pas */; };
+		61798829114AA34C00BA94A9 /* uGame.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FB114AA34C00BA94A9 /* uGame.pas */; };
+		6179882A114AA34C00BA94A9 /* uGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FC114AA34C00BA94A9 /* uGears.pas */; };
+		6179882B114AA34C00BA94A9 /* uIO.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FD114AA34C00BA94A9 /* uIO.pas */; };
+		6179882C114AA34C00BA94A9 /* uKeys.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FE114AA34C00BA94A9 /* uKeys.pas */; };
+		6179882D114AA34C00BA94A9 /* uLand.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987FF114AA34C00BA94A9 /* uLand.pas */; };
+		6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798800114AA34C00BA94A9 /* uLandGraphics.pas */; };
+		6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798801114AA34C00BA94A9 /* uLandObjects.pas */; };
+		61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798802114AA34C00BA94A9 /* uLandTemplates.pas */; };
+		61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798803114AA34C00BA94A9 /* uLandTexture.pas */; };
+		61798832114AA34C00BA94A9 /* uLocale.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798804114AA34C00BA94A9 /* uLocale.pas */; };
+		61798833114AA34C00BA94A9 /* uMisc.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798805114AA34C00BA94A9 /* uMisc.pas */; };
+		61798834114AA34C00BA94A9 /* uRandom.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798806114AA34C00BA94A9 /* uRandom.pas */; };
+		61798835114AA34C00BA94A9 /* uScript.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798807114AA34C00BA94A9 /* uScript.pas */; };
+		61798836114AA34C00BA94A9 /* uSHA.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798808114AA34C00BA94A9 /* uSHA.pas */; };
+		61798837114AA34C00BA94A9 /* uSound.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61798809114AA34C00BA94A9 /* uSound.pas */; };
+		61798838114AA34C00BA94A9 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
+		61798839114AA34C00BA94A9 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
+		6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880C114AA34C00BA94A9 /* uTeams.pas */; };
+		6179883B114AA34C00BA94A9 /* uTriggers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880D114AA34C00BA94A9 /* uTriggers.pas */; };
+		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
+		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
+		6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798856114AA48A00BA94A9 /* CGPointUtils.c */; };
+		6179885D114AA48A00BA94A9 /* IMG_png.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798858114AA48A00BA94A9 /* IMG_png.c */; };
+		6179885E114AA48A00BA94A9 /* IMG.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798859114AA48A00BA94A9 /* IMG.c */; };
+		61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */; };
+		6179886A114AA4AA00BA94A9 /* SDL_uikitview.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798866114AA4AA00BA94A9 /* SDL_uikitview.m */; };
+		6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */; };
+		6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179886F114AA4D000BA94A9 /* MainMenuViewController.m */; };
+		6179887E114AA4D000BA94A9 /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798870114AA4D000BA94A9 /* MainMenuViewController.xib */; };
+		6179887F114AA4D000BA94A9 /* SchemeEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798872114AA4D000BA94A9 /* SchemeEditViewController.m */; };
+		61798880114AA4D000BA94A9 /* SchemeEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */; };
+		61798881114AA4D000BA94A9 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798875114AA4D000BA94A9 /* SettingsViewController.m */; };
+		61798882114AA4D000BA94A9 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798876114AA4D000BA94A9 /* SettingsViewController.xib */; };
+		61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798878114AA4D000BA94A9 /* TeamEditViewController.m */; };
+		61798884114AA4D000BA94A9 /* TeamEditViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61798879114AA4D000BA94A9 /* TeamEditViewController.xib */; };
+		61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */; };
+		61798886114AA4D000BA94A9 /* TeamMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */; };
+		61798889114AA4E600BA94A9 /* GameSetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 61798888114AA4E600BA94A9 /* GameSetup.m */; };
+		617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */; };
+		6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798916114AAF2100BA94A9 /* libfreetype_arm.a */; };
+		6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798917114AAF2100BA94A9 /* libfreetype_x86.a */; };
+		6179891D114AAF2100BA94A9 /* libpng_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798918114AAF2100BA94A9 /* libpng_arm.a */; };
+		6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798919114AAF2100BA94A9 /* libpng_x86.a */; };
+		6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
+		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
+		61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798993114AB3FA00BA94A9 /* libSDL_mixer.a */; };
+		617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617989BB114AB47500BA94A9 /* libSDL_net.a */; };
+		61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798A13114AB65600BA94A9 /* libSDL_ttf.a */; };
+		61798A2C114ADD2600BA94A9 /* backgroundBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A1E114ADD2600BA94A9 /* backgroundBottom.png */; };
+		61798A2D114ADD2600BA94A9 /* backgroundCenter.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A1F114ADD2600BA94A9 /* backgroundCenter.png */; };
+		61798A2E114ADD2600BA94A9 /* backgroundLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A20114ADD2600BA94A9 /* backgroundLeft.png */; };
+		61798A2F114ADD2600BA94A9 /* backgroundRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A21114ADD2600BA94A9 /* backgroundRight.png */; };
+		61798A30114ADD2600BA94A9 /* backgroundTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A22114ADD2600BA94A9 /* backgroundTop.png */; };
+		61798A31114ADD2600BA94A9 /* borderBottom.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A23114ADD2600BA94A9 /* borderBottom.png */; };
+		61798A32114ADD2600BA94A9 /* borderTop.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A24114ADD2600BA94A9 /* borderTop.png */; };
+		61798A33114ADD2600BA94A9 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A25114ADD2600BA94A9 /* Default.png */; };
+		61798A34114ADD2600BA94A9 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A26114ADD2600BA94A9 /* Icon.png */; };
+		61798A35114ADD2600BA94A9 /* networkButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A27114ADD2600BA94A9 /* networkButton.png */; };
+		61798A36114ADD2600BA94A9 /* playButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A28114ADD2600BA94A9 /* playButton.png */; };
+		61798A37114ADD2600BA94A9 /* settingsButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A29114ADD2600BA94A9 /* settingsButton.png */; };
+		61798A38114ADD2600BA94A9 /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2A114ADD2600BA94A9 /* storeButton.png */; };
+		61798A39114ADD2600BA94A9 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2B114ADD2600BA94A9 /* title.png */; };
+		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
+		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		9283015B0F10E46D00CC5A3C /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.pascal;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_SOURCES_DIR)-$(CURRENT_VARIANT)/$(CURRENT_ARCH)/$(INPUT_FILE_BASE).s",
+			);
+			script = "#!/bin/bash\n\n# Xcode's up-to-date checks are overzealous for us: a different SDK does not necessarily\n# mean we recompile all sources, because we do not have different units for different SDK\n# versions yet (and even if we did, not necessarily all files would be recompiled)...\n\ndestdir=\"${DERIVED_SOURCES_DIR}-${CURRENT_VARIANT}/${CURRENT_ARCH}\"\nif [ ! -f \"$destdir/compilefailed\" ]; then\n  # check whether the assembler code is newer than the source code\n  if [ \"$destdir/${INPUT_FILE_BASE}.s\" -nt \"$INPUT_FILE_PATH\" ]; then\n    # in this case we're ok, just touch the assembler file to avoid us getting here again next time\n    echo Updating assembler time stamp of \"$destdir/${INPUT_FILE_BASE}.s\"\n    touch \"$destdir/${INPUT_FILE_BASE}.s\"\n    exit 0\n  fi\n\n  echo File not found or not up-to-date: $destdir/${INPUT_FILE_BASE}.s\n  echo \"$INPUT_FILE_PATH:1: error: 1: \\\"$INPUT_FILE_PATH\\\" was not (re)compiled. If it is no longer used, please remove it from the \\\"Compile Sources\\\" phase of the \\\"$TARGETNAME\\\" target.\"\n  exit 1\nfi";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FD6526630DE8FCCB002AD96B /* libSDLiPhoneOS.a */;
+			remoteInfo = StaticLibiPhoneOS;
+		};
+		61798992114AB3FA00BA94A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE1FA95407AF96B2004B6283 /* libSDL_mixer.a */;
+			remoteInfo = "Static Library";
+		};
+		617989BA114AB47500BA94A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA /* libSDL_net.a */;
+			remoteInfo = "Static Library";
+		};
+		61798A12114AB65600BA94A9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA /* libSDL_ttf.a */;
+			remoteInfo = "Static Library";
+		};
+		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 928301160F10CAFC00CC5A3C;
+			remoteInfo = fpc;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HedgewarsMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		28FD14FF0DC6FC520079059D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
+		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
+		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
+		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
+		617987E7114AA34C00BA94A9 /* hwengine.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwengine.pas; path = ../../hedgewars/hwengine.pas; sourceTree = SOURCE_ROOT; };
+		617987E9114AA34C00BA94A9 /* hwLibrary.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwLibrary.pas; path = ../../hedgewars/hwLibrary.pas; sourceTree = SOURCE_ROOT; };
+		617987EB114AA34C00BA94A9 /* options.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = options.inc; path = ../../hedgewars/options.inc; sourceTree = SOURCE_ROOT; };
+		617987EC114AA34C00BA94A9 /* PascalExports.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = PascalExports.pas; path = ../../hedgewars/PascalExports.pas; sourceTree = SOURCE_ROOT; };
+		617987ED114AA34C00BA94A9 /* SDLh.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = SDLh.pas; path = ../../hedgewars/SDLh.pas; sourceTree = SOURCE_ROOT; };
+		617987F0114AA34C00BA94A9 /* SinTable.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = SinTable.inc; path = ../../hedgewars/SinTable.inc; sourceTree = SOURCE_ROOT; };
+		617987F1114AA34C00BA94A9 /* uAI.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAI.pas; path = ../../hedgewars/uAI.pas; sourceTree = SOURCE_ROOT; };
+		617987F2114AA34C00BA94A9 /* uAIActions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAIActions.pas; path = ../../hedgewars/uAIActions.pas; sourceTree = SOURCE_ROOT; };
+		617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAIAmmoTests.pas; path = ../../hedgewars/uAIAmmoTests.pas; sourceTree = SOURCE_ROOT; };
+		617987F4114AA34C00BA94A9 /* uAIMisc.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAIMisc.pas; path = ../../hedgewars/uAIMisc.pas; sourceTree = SOURCE_ROOT; };
+		617987F5114AA34C00BA94A9 /* uAmmos.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAmmos.pas; path = ../../hedgewars/uAmmos.pas; sourceTree = SOURCE_ROOT; };
+		617987F6114AA34C00BA94A9 /* uChat.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uChat.pas; path = ../../hedgewars/uChat.pas; sourceTree = SOURCE_ROOT; };
+		617987F7114AA34C00BA94A9 /* uCollisions.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCollisions.pas; path = ../../hedgewars/uCollisions.pas; sourceTree = SOURCE_ROOT; };
+		617987F8114AA34C00BA94A9 /* uConsole.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uConsole.pas; path = ../../hedgewars/uConsole.pas; sourceTree = SOURCE_ROOT; };
+		617987F9114AA34C00BA94A9 /* uConsts.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uConsts.pas; path = ../../hedgewars/uConsts.pas; sourceTree = SOURCE_ROOT; };
+		617987FA114AA34C00BA94A9 /* uFloat.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uFloat.pas; path = ../../hedgewars/uFloat.pas; sourceTree = SOURCE_ROOT; };
+		617987FB114AA34C00BA94A9 /* uGame.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGame.pas; path = ../../hedgewars/uGame.pas; sourceTree = SOURCE_ROOT; };
+		617987FC114AA34C00BA94A9 /* uGears.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGears.pas; path = ../../hedgewars/uGears.pas; sourceTree = SOURCE_ROOT; };
+		617987FD114AA34C00BA94A9 /* uIO.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uIO.pas; path = ../../hedgewars/uIO.pas; sourceTree = SOURCE_ROOT; };
+		617987FE114AA34C00BA94A9 /* uKeys.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uKeys.pas; path = ../../hedgewars/uKeys.pas; sourceTree = SOURCE_ROOT; };
+		617987FF114AA34C00BA94A9 /* uLand.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLand.pas; path = ../../hedgewars/uLand.pas; sourceTree = SOURCE_ROOT; };
+		61798800114AA34C00BA94A9 /* uLandGraphics.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGraphics.pas; path = ../../hedgewars/uLandGraphics.pas; sourceTree = SOURCE_ROOT; };
+		61798801114AA34C00BA94A9 /* uLandObjects.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandObjects.pas; path = ../../hedgewars/uLandObjects.pas; sourceTree = SOURCE_ROOT; };
+		61798802114AA34C00BA94A9 /* uLandTemplates.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandTemplates.pas; path = ../../hedgewars/uLandTemplates.pas; sourceTree = SOURCE_ROOT; };
+		61798803114AA34C00BA94A9 /* uLandTexture.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandTexture.pas; path = ../../hedgewars/uLandTexture.pas; sourceTree = SOURCE_ROOT; };
+		61798804114AA34C00BA94A9 /* uLocale.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLocale.pas; path = ../../hedgewars/uLocale.pas; sourceTree = SOURCE_ROOT; };
+		61798805114AA34C00BA94A9 /* uMisc.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMisc.pas; path = ../../hedgewars/uMisc.pas; sourceTree = SOURCE_ROOT; };
+		61798806114AA34C00BA94A9 /* uRandom.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uRandom.pas; path = ../../hedgewars/uRandom.pas; sourceTree = SOURCE_ROOT; };
+		61798807114AA34C00BA94A9 /* uScript.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uScript.pas; path = ../../hedgewars/uScript.pas; sourceTree = SOURCE_ROOT; };
+		61798808114AA34C00BA94A9 /* uSHA.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSHA.pas; path = ../../hedgewars/uSHA.pas; sourceTree = SOURCE_ROOT; };
+		61798809114AA34C00BA94A9 /* uSound.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uSound.pas; path = ../../hedgewars/uSound.pas; sourceTree = SOURCE_ROOT; };
+		6179880A114AA34C00BA94A9 /* uStats.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStats.pas; path = ../../hedgewars/uStats.pas; sourceTree = SOURCE_ROOT; };
+		6179880B114AA34C00BA94A9 /* uStore.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStore.pas; path = ../../hedgewars/uStore.pas; sourceTree = SOURCE_ROOT; };
+		6179880C114AA34C00BA94A9 /* uTeams.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTeams.pas; path = ../../hedgewars/uTeams.pas; sourceTree = SOURCE_ROOT; };
+		6179880D114AA34C00BA94A9 /* uTriggers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTriggers.pas; path = ../../hedgewars/uTriggers.pas; sourceTree = SOURCE_ROOT; };
+		6179880E114AA34C00BA94A9 /* uVisualGears.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGears.pas; path = ../../hedgewars/uVisualGears.pas; sourceTree = SOURCE_ROOT; };
+		6179880F114AA34C00BA94A9 /* uWorld.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uWorld.pas; path = ../../hedgewars/uWorld.pas; sourceTree = SOURCE_ROOT; };
+		61798852114AA44900BA94A9 /* config.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = config.inc; path = ../../hedgewars/config.inc; sourceTree = SOURCE_ROOT; };
+		61798856114AA48A00BA94A9 /* CGPointUtils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = CGPointUtils.c; path = ../../cocoaTouch/otherSrc/CGPointUtils.c; sourceTree = SOURCE_ROOT; };
+		61798857114AA48A00BA94A9 /* CGPointUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CGPointUtils.h; path = ../../cocoaTouch/otherSrc/CGPointUtils.h; sourceTree = SOURCE_ROOT; };
+		61798858114AA48A00BA94A9 /* IMG_png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = IMG_png.c; path = ../../cocoaTouch/otherSrc/IMG_png.c; sourceTree = SOURCE_ROOT; };
+		61798859114AA48A00BA94A9 /* IMG.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = IMG.c; path = ../../cocoaTouch/otherSrc/IMG.c; sourceTree = SOURCE_ROOT; };
+		6179885A114AA48A00BA94A9 /* PascalImports.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PascalImports.h; path = ../../cocoaTouch/otherSrc/PascalImports.h; sourceTree = SOURCE_ROOT; };
+		6179885B114AA48A00BA94A9 /* SDL_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_image.h; path = ../../cocoaTouch/otherSrc/SDL_image.h; sourceTree = SOURCE_ROOT; };
+		61798863114AA4AA00BA94A9 /* SDL_uikitappdelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitappdelegate.h; path = ../../cocoaTouch/SDLOverrides/SDL_uikitappdelegate.h; sourceTree = SOURCE_ROOT; };
+		61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitappdelegate.m; path = ../../cocoaTouch/SDLOverrides/SDL_uikitappdelegate.m; sourceTree = SOURCE_ROOT; };
+		61798865114AA4AA00BA94A9 /* SDL_uikitview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitview.h; path = ../../cocoaTouch/SDLOverrides/SDL_uikitview.h; sourceTree = SOURCE_ROOT; };
+		61798866114AA4AA00BA94A9 /* SDL_uikitview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitview.m; path = ../../cocoaTouch/SDLOverrides/SDL_uikitview.m; sourceTree = SOURCE_ROOT; };
+		61798867114AA4AA00BA94A9 /* SDL_uikitwindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_uikitwindow.h; path = ../../cocoaTouch/SDLOverrides/SDL_uikitwindow.h; sourceTree = SOURCE_ROOT; };
+		61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDL_uikitwindow.m; path = ../../cocoaTouch/SDLOverrides/SDL_uikitwindow.m; sourceTree = SOURCE_ROOT; };
+		6179886E114AA4D000BA94A9 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainMenuViewController.h; path = ../../cocoaTouch/MainMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		6179886F114AA4D000BA94A9 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainMenuViewController.m; path = ../../cocoaTouch/MainMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		61798870114AA4D000BA94A9 /* MainMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenuViewController.xib; path = ../../cocoaTouch/MainMenuViewController.xib; sourceTree = SOURCE_ROOT; };
+		61798871114AA4D000BA94A9 /* SchemeEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SchemeEditViewController.h; path = ../../cocoaTouch/SchemeEditViewController.h; sourceTree = SOURCE_ROOT; };
+		61798872114AA4D000BA94A9 /* SchemeEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SchemeEditViewController.m; path = ../../cocoaTouch/SchemeEditViewController.m; sourceTree = SOURCE_ROOT; };
+		61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SchemeEditViewController.xib; path = ../../cocoaTouch/SchemeEditViewController.xib; sourceTree = SOURCE_ROOT; };
+		61798874114AA4D000BA94A9 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = ../../cocoaTouch/SettingsViewController.h; sourceTree = SOURCE_ROOT; };
+		61798875114AA4D000BA94A9 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = ../../cocoaTouch/SettingsViewController.m; sourceTree = SOURCE_ROOT; };
+		61798876114AA4D000BA94A9 /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../../cocoaTouch/SettingsViewController.xib; sourceTree = SOURCE_ROOT; };
+		61798877114AA4D000BA94A9 /* TeamEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamEditViewController.h; path = ../../cocoaTouch/TeamEditViewController.h; sourceTree = SOURCE_ROOT; };
+		61798878114AA4D000BA94A9 /* TeamEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamEditViewController.m; path = ../../cocoaTouch/TeamEditViewController.m; sourceTree = SOURCE_ROOT; };
+		61798879114AA4D000BA94A9 /* TeamEditViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TeamEditViewController.xib; path = ../../cocoaTouch/TeamEditViewController.xib; sourceTree = SOURCE_ROOT; };
+		6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TeamMenuViewController.h; path = ../../cocoaTouch/TeamMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TeamMenuViewController.m; path = ../../cocoaTouch/TeamMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = TeamMenuViewController.xib; path = ../../cocoaTouch/TeamMenuViewController.xib; sourceTree = SOURCE_ROOT; };
+		61798887114AA4E600BA94A9 /* GameSetup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameSetup.h; path = ../../cocoaTouch/GameSetup.h; sourceTree = SOURCE_ROOT; };
+		61798888114AA4E600BA94A9 /* GameSetup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameSetup.m; path = ../../cocoaTouch/GameSetup.m; sourceTree = SOURCE_ROOT; };
+		617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDLiPhoneOS.xcodeproj; path = "../../../Library/SDL-1.3/SDL/Xcode-iPhoneOS/SDL/SDLiPhoneOS.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61798916114AAF2100BA94A9 /* libfreetype_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype_arm.a; sourceTree = "<group>"; };
+		61798917114AAF2100BA94A9 /* libfreetype_x86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype_x86.a; sourceTree = "<group>"; };
+		61798918114AAF2100BA94A9 /* libpng_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng_arm.a; sourceTree = "<group>"; };
+		61798919114AAF2100BA94A9 /* libpng_x86.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng_x86.a; sourceTree = "<group>"; };
+		6179891A114AAF2100BA94A9 /* libvorbis_arm.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbis_arm.a; sourceTree = "<group>"; };
+		61798934114AB25F00BA94A9 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_mixer.xcodeproj; path = "../../../Library/SDL-1.3/SDL_mixer/Xcode-iPhoneOS/SDL_mixer.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_net.xcodeproj; path = "../../../Library/SDL-1.3/SDL_net/Xcode-iPhoneOS/SDL_net.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL_ttf.xcodeproj; path = "../../../Library/SDL-1.3/SDL_ttf/Xcode-iPhoneOS/SDL_ttf.xcodeproj"; sourceTree = SOURCE_ROOT; };
+		61798A1E114ADD2600BA94A9 /* backgroundBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundBottom.png; path = ../../cocoaTouch/resources/backgroundBottom.png; sourceTree = SOURCE_ROOT; };
+		61798A1F114ADD2600BA94A9 /* backgroundCenter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundCenter.png; path = ../../cocoaTouch/resources/backgroundCenter.png; sourceTree = SOURCE_ROOT; };
+		61798A20114ADD2600BA94A9 /* backgroundLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundLeft.png; path = ../../cocoaTouch/resources/backgroundLeft.png; sourceTree = SOURCE_ROOT; };
+		61798A21114ADD2600BA94A9 /* backgroundRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundRight.png; path = ../../cocoaTouch/resources/backgroundRight.png; sourceTree = SOURCE_ROOT; };
+		61798A22114ADD2600BA94A9 /* backgroundTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backgroundTop.png; path = ../../cocoaTouch/resources/backgroundTop.png; sourceTree = SOURCE_ROOT; };
+		61798A23114ADD2600BA94A9 /* borderBottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = borderBottom.png; path = ../../cocoaTouch/resources/borderBottom.png; sourceTree = SOURCE_ROOT; };
+		61798A24114ADD2600BA94A9 /* borderTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = borderTop.png; path = ../../cocoaTouch/resources/borderTop.png; sourceTree = SOURCE_ROOT; };
+		61798A25114ADD2600BA94A9 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../cocoaTouch/resources/Default.png; sourceTree = SOURCE_ROOT; };
+		61798A26114ADD2600BA94A9 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../cocoaTouch/resources/Icon.png; sourceTree = SOURCE_ROOT; };
+		61798A27114ADD2600BA94A9 /* networkButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = networkButton.png; path = ../../cocoaTouch/resources/networkButton.png; sourceTree = SOURCE_ROOT; };
+		61798A28114ADD2600BA94A9 /* playButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = playButton.png; path = ../../cocoaTouch/resources/playButton.png; sourceTree = SOURCE_ROOT; };
+		61798A29114ADD2600BA94A9 /* settingsButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = settingsButton.png; path = ../../cocoaTouch/resources/settingsButton.png; sourceTree = SOURCE_ROOT; };
+		61798A2A114ADD2600BA94A9 /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = ../../cocoaTouch/resources/storeButton.png; sourceTree = SOURCE_ROOT; };
+		61798A2B114ADD2600BA94A9 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = ../../cocoaTouch/resources/title.png; sourceTree = SOURCE_ROOT; };
+		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1D60588F0D05DD3D006BFB54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61798A14114AB65C00BA94A9 /* libSDL_ttf.a in Frameworks */,
+				617989BE114AB47A00BA94A9 /* libSDL_net.a in Frameworks */,
+				617988DB114AAA4200BA94A9 /* libSDLiPhoneOS.a in Frameworks */,
+				61798996114AB3FF00BA94A9 /* libSDL_mixer.a in Frameworks */,
+				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
+				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
+				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
+				28FD15000DC6FC520079059D /* OpenGLES.framework in Frameworks */,
+				28FD15080DC6FC5B0079059D /* QuartzCore.framework in Frameworks */,
+				6179891B114AAF2100BA94A9 /* libfreetype_arm.a in Frameworks */,
+				6179891C114AAF2100BA94A9 /* libfreetype_x86.a in Frameworks */,
+				6179891D114AAF2100BA94A9 /* libpng_arm.a in Frameworks */,
+				6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */,
+				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
+				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				61798887114AA4E600BA94A9 /* GameSetup.h */,
+				61798888114AA4E600BA94A9 /* GameSetup.m */,
+				6179886C114AA4B900BA94A9 /* Frontend */,
+				61798860114AA49D00BA94A9 /* SDLOverrides */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */,
+				928301170F10CAFC00CC5A3C /* libfpc.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
+			isa = PBXGroup;
+			children = (
+				9283015C0F10E48900CC5A3C /* Pascal Sources */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = CustomTemplate;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				61798856114AA48A00BA94A9 /* CGPointUtils.c */,
+				61798857114AA48A00BA94A9 /* CGPointUtils.h */,
+				61798858114AA48A00BA94A9 /* IMG_png.c */,
+				61798859114AA48A00BA94A9 /* IMG.c */,
+				6179885A114AA48A00BA94A9 /* PascalImports.h */,
+				6179885B114AA48A00BA94A9 /* SDL_image.h */,
+				32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				61798A5E114AE08600BA94A9 /* Data */,
+				61798A1E114ADD2600BA94A9 /* backgroundBottom.png */,
+				61798A1F114ADD2600BA94A9 /* backgroundCenter.png */,
+				61798A20114ADD2600BA94A9 /* backgroundLeft.png */,
+				61798A21114ADD2600BA94A9 /* backgroundRight.png */,
+				61798A22114ADD2600BA94A9 /* backgroundTop.png */,
+				61798A23114ADD2600BA94A9 /* borderBottom.png */,
+				61798A24114ADD2600BA94A9 /* borderTop.png */,
+				61798A25114ADD2600BA94A9 /* Default.png */,
+				61798A26114ADD2600BA94A9 /* Icon.png */,
+				61798A27114ADD2600BA94A9 /* networkButton.png */,
+				61798A28114ADD2600BA94A9 /* playButton.png */,
+				61798A29114ADD2600BA94A9 /* settingsButton.png */,
+				61798A2A114ADD2600BA94A9 /* storeButton.png */,
+				61798A2B114ADD2600BA94A9 /* title.png */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */,
+				617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */,
+				6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */,
+				617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */,
+				28FD15070DC6FC5B0079059D /* QuartzCore.framework */,
+				28FD14FF0DC6FC520079059D /* OpenGLES.framework */,
+				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				1D30AB110D05D00D00671497 /* Foundation.framework */,
+				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
+				61798916114AAF2100BA94A9 /* libfreetype_arm.a */,
+				61798917114AAF2100BA94A9 /* libfreetype_x86.a */,
+				61798918114AAF2100BA94A9 /* libpng_arm.a */,
+				61798919114AAF2100BA94A9 /* libpng_x86.a */,
+				6179891A114AAF2100BA94A9 /* libvorbis_arm.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
+			isa = PBXGroup;
+			children = (
+				61798863114AA4AA00BA94A9 /* SDL_uikitappdelegate.h */,
+				61798864114AA4AA00BA94A9 /* SDL_uikitappdelegate.m */,
+				61798865114AA4AA00BA94A9 /* SDL_uikitview.h */,
+				61798866114AA4AA00BA94A9 /* SDL_uikitview.m */,
+				61798867114AA4AA00BA94A9 /* SDL_uikitwindow.h */,
+				61798868114AA4AA00BA94A9 /* SDL_uikitwindow.m */,
+			);
+			name = SDLOverrides;
+			sourceTree = "<group>";
+		};
+		6179886C114AA4B900BA94A9 /* Frontend */ = {
+			isa = PBXGroup;
+			children = (
+				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
+				6179886F114AA4D000BA94A9 /* MainMenuViewController.m */,
+				61798870114AA4D000BA94A9 /* MainMenuViewController.xib */,
+				61798871114AA4D000BA94A9 /* SchemeEditViewController.h */,
+				61798872114AA4D000BA94A9 /* SchemeEditViewController.m */,
+				61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */,
+				61798874114AA4D000BA94A9 /* SettingsViewController.h */,
+				61798875114AA4D000BA94A9 /* SettingsViewController.m */,
+				61798876114AA4D000BA94A9 /* SettingsViewController.xib */,
+				61798877114AA4D000BA94A9 /* TeamEditViewController.h */,
+				61798878114AA4D000BA94A9 /* TeamEditViewController.m */,
+				61798879114AA4D000BA94A9 /* TeamEditViewController.xib */,
+				6179887A114AA4D000BA94A9 /* TeamMenuViewController.h */,
+				6179887B114AA4D000BA94A9 /* TeamMenuViewController.m */,
+				6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */,
+			);
+			name = Frontend;
+			sourceTree = "<group>";
+		};
+		61798892114AA56300BA94A9 /* inc */ = {
+			isa = PBXGroup;
+			children = (
+				61798852114AA44900BA94A9 /* config.inc */,
+				617987E1114AA34C00BA94A9 /* CCHandlers.inc */,
+				617987E4114AA34C00BA94A9 /* GSHandlers.inc */,
+				617987E5114AA34C00BA94A9 /* HHHandlers.inc */,
+				617987EB114AA34C00BA94A9 /* options.inc */,
+				617987F0114AA34C00BA94A9 /* SinTable.inc */,
+			);
+			name = inc;
+			sourceTree = "<group>";
+		};
+		617988D4114AAA3900BA94A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6179898C114AB3FA00BA94A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61798993114AB3FA00BA94A9 /* libSDL_mixer.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		617989B4114AB47500BA94A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				617989BB114AB47500BA94A9 /* libSDL_net.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		61798A0C114AB65600BA94A9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				61798A13114AB65600BA94A9 /* libSDL_ttf.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
+			isa = PBXGroup;
+			children = (
+				61798892114AA56300BA94A9 /* inc */,
+				617987E7114AA34C00BA94A9 /* hwengine.pas */,
+				617987E9114AA34C00BA94A9 /* hwLibrary.pas */,
+				617987EC114AA34C00BA94A9 /* PascalExports.pas */,
+				617987ED114AA34C00BA94A9 /* SDLh.pas */,
+				617987F1114AA34C00BA94A9 /* uAI.pas */,
+				617987F2114AA34C00BA94A9 /* uAIActions.pas */,
+				617987F3114AA34C00BA94A9 /* uAIAmmoTests.pas */,
+				617987F4114AA34C00BA94A9 /* uAIMisc.pas */,
+				617987F5114AA34C00BA94A9 /* uAmmos.pas */,
+				617987F6114AA34C00BA94A9 /* uChat.pas */,
+				617987F7114AA34C00BA94A9 /* uCollisions.pas */,
+				617987F8114AA34C00BA94A9 /* uConsole.pas */,
+				617987F9114AA34C00BA94A9 /* uConsts.pas */,
+				617987FA114AA34C00BA94A9 /* uFloat.pas */,
+				617987FB114AA34C00BA94A9 /* uGame.pas */,
+				617987FC114AA34C00BA94A9 /* uGears.pas */,
+				617987FD114AA34C00BA94A9 /* uIO.pas */,
+				617987FE114AA34C00BA94A9 /* uKeys.pas */,
+				617987FF114AA34C00BA94A9 /* uLand.pas */,
+				61798800114AA34C00BA94A9 /* uLandGraphics.pas */,
+				61798801114AA34C00BA94A9 /* uLandObjects.pas */,
+				61798802114AA34C00BA94A9 /* uLandTemplates.pas */,
+				61798803114AA34C00BA94A9 /* uLandTexture.pas */,
+				61798804114AA34C00BA94A9 /* uLocale.pas */,
+				61798805114AA34C00BA94A9 /* uMisc.pas */,
+				61798806114AA34C00BA94A9 /* uRandom.pas */,
+				61798807114AA34C00BA94A9 /* uScript.pas */,
+				61798808114AA34C00BA94A9 /* uSHA.pas */,
+				61798809114AA34C00BA94A9 /* uSound.pas */,
+				6179880A114AA34C00BA94A9 /* uStats.pas */,
+				6179880B114AA34C00BA94A9 /* uStore.pas */,
+				6179880C114AA34C00BA94A9 /* uTeams.pas */,
+				6179880D114AA34C00BA94A9 /* uTriggers.pas */,
+				6179880E114AA34C00BA94A9 /* uVisualGears.pas */,
+				6179880F114AA34C00BA94A9 /* uWorld.pas */,
+			);
+			name = "Pascal Sources";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1D6058900D05DD3D006BFB54 /* HedgewarsMobile */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "HedgewarsMobile" */;
+			buildPhases = (
+				1D60588D0D05DD3D006BFB54 /* Resources */,
+				1D60588E0D05DD3D006BFB54 /* Sources */,
+				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				61798A54114ADD5E00BA94A9 /* ShellScript */,
+			);
+			buildRules = (
+				9283015B0F10E46D00CC5A3C /* PBXBuildRule */,
+			);
+			dependencies = (
+				9283015A0F10E41300CC5A3C /* PBXTargetDependency */,
+			);
+			name = HedgewarsMobile;
+			productName = HedgewarsMobile;
+			productReference = 1D6058910D05DD3D006BFB54 /* HedgewarsMobile.app */;
+			productType = "com.apple.product-type.application";
+		};
+		928301160F10CAFC00CC5A3C /* fpc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9283011C0F10CB4B00CC5A3C /* Build configuration list for PBXNativeTarget "fpc" */;
+			buildPhases = (
+				9283011B0F10CB2D00CC5A3C /* Build libfpc.a */,
+				928301560F10E04C00CC5A3C /* Compile Pascal Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = fpc;
+			productName = fpc;
+			productReference = 928301170F10CAFC00CC5A3C /* libfpc.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "HedgewarsMobile" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 6179898C114AB3FA00BA94A9 /* Products */;
+					ProjectRef = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
+				},
+				{
+					ProductGroup = 617989B4114AB47500BA94A9 /* Products */;
+					ProjectRef = 617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */;
+				},
+				{
+					ProductGroup = 61798A0C114AB65600BA94A9 /* Products */;
+					ProjectRef = 61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */;
+				},
+				{
+					ProductGroup = 617988D4114AAA3900BA94A9 /* Products */;
+					ProjectRef = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				1D6058900D05DD3D006BFB54 /* HedgewarsMobile */,
+				928301160F10CAFC00CC5A3C /* fpc */,
+				6179928B114AE0C800BA94A9 /* UpdateDataFolder */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		617988DA114AAA3900BA94A9 /* libSDLiPhoneOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDLiPhoneOS.a;
+			remoteRef = 617988D9114AAA3900BA94A9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		61798993114AB3FA00BA94A9 /* libSDL_mixer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_mixer.a;
+			remoteRef = 61798992114AB3FA00BA94A9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		617989BB114AB47500BA94A9 /* libSDL_net.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_net.a;
+			remoteRef = 617989BA114AB47500BA94A9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		61798A13114AB65600BA94A9 /* libSDL_ttf.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL_ttf.a;
+			remoteRef = 61798A12114AB65600BA94A9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1D60588D0D05DD3D006BFB54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6179887E114AA4D000BA94A9 /* MainMenuViewController.xib in Resources */,
+				61798880114AA4D000BA94A9 /* SchemeEditViewController.xib in Resources */,
+				61798882114AA4D000BA94A9 /* SettingsViewController.xib in Resources */,
+				61798884114AA4D000BA94A9 /* TeamEditViewController.xib in Resources */,
+				61798886114AA4D000BA94A9 /* TeamMenuViewController.xib in Resources */,
+				61798A2C114ADD2600BA94A9 /* backgroundBottom.png in Resources */,
+				61798A2D114ADD2600BA94A9 /* backgroundCenter.png in Resources */,
+				61798A2E114ADD2600BA94A9 /* backgroundLeft.png in Resources */,
+				61798A2F114ADD2600BA94A9 /* backgroundRight.png in Resources */,
+				61798A30114ADD2600BA94A9 /* backgroundTop.png in Resources */,
+				61798A31114ADD2600BA94A9 /* borderBottom.png in Resources */,
+				61798A32114ADD2600BA94A9 /* borderTop.png in Resources */,
+				61798A33114ADD2600BA94A9 /* Default.png in Resources */,
+				61798A34114ADD2600BA94A9 /* Icon.png in Resources */,
+				61798A35114ADD2600BA94A9 /* networkButton.png in Resources */,
+				61798A36114ADD2600BA94A9 /* playButton.png in Resources */,
+				61798A37114ADD2600BA94A9 /* settingsButton.png in Resources */,
+				61798A38114ADD2600BA94A9 /* storeButton.png in Resources */,
+				61798A39114ADD2600BA94A9 /* title.png in Resources */,
+				61799289114AE08700BA94A9 /* Data in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		61798A54114ADD5E00BA94A9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export CODESIGN_ALLOCATE=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ]; then\n\t${PROJECT_SOURCE}/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\n\tcodesign -f -s \"iPhone developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
+		};
+		6179928A114AE0C800BA94A9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n";
+		};
+		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			comments = "The current FPC runtime is distributed as (a massive) collection of .o files. This run script combines the .o files into an archive, making linking (a lot) easier since we don't have to think about what to link with (i.e the linker will extract what's needed from the archive).";
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build libfpc.a";
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/libfpc.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Build libfpc.a\n# 9 July 2006 (Jonas Maebe)\n#   * original version\n# 15 September 2006 (Erling Johansen)\n#   * simplified\n# 26 April 2007 (Jonas Maebe)\n#  * added support for ppc64/x86_64 (future proofing)\n# 4 August 2007 (Jonas Maebe)\n#  * call ranlib after ar so the toc of the library is up-to-date\n# 3 January 2009 (Jonas Maebe)\n#  * support for ARM\n# 24 October 2009 (Jonas Maebe)\n#  * don't hardcode version 2.3.1 anymore under certain circumstances\n#  * use the FPC_RTL_UNITS_BASE setting\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nrm -f \"$TARGET_TEMP_DIR\"/*.a\nnarch=\n\nfor arch in $ARCHS\ndo\n\tcase $arch in\n\t\tppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n\t\ti386) fpc_arch=386; fpc_rtl=i386 ;;\n\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t*) continue\n\tesac\n\tif test -e \"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch}\n\tthen\n\t\tupath=\"$FPC_RTL_UNITS_BASE\"/`\"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch} -iV`/units/${fpc_rtl}-darwin\n\t\tar -q \"$TARGET_TEMP_DIR\"/libfpc${narch}.a `ls \"$upath\"/*/*.o | grep -v 'darwin/fv/'`\n\t\tranlib \"$TARGET_TEMP_DIR\"/libfpc${narch}.a\n\t\tnarch=${narch}x\n\telse\n\t\techo error: can\\'t build libfpc.a for $arch \\(${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch} not found, derived from FPC_COMPILER_BINARY_DIR project setting\\)\n\tfi\ndone\n\nif test ${#narch} -gt 1\nthen\n\tlipo -create \"$TARGET_TEMP_DIR\"/libfpc*.a -output \"$TARGET_BUILD_DIR\"/libfpc.a\n\trm -f \"$TARGET_TEMP_DIR\"/*.a\nelse\n\tmv \"$TARGET_TEMP_DIR\"/libfpc.a \"$TARGET_BUILD_DIR\"\nfi\n";
+		};
+		928301560F10E04C00CC5A3C /* Compile Pascal Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			comments = "This run script compiles (all) pascal sources into assembler by calling FPC with the main program (only) as argument. FPC will in turn compile dependent units as necessary. The Compile Sources build phase will detect the outdated .o files and assemble the modified sources (because the Pascal source files rule states that output from pascal compilation is assembler files in derived source folders).   ";
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Compile Pascal Sources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Compile Pascal Sources\n# 15sep06,ejo  written.\n# 26 April 2007 - Jonas Maebe\n#  * support for ppc64 and x86_64\n#  * don't run when cleaning (in case running scripts when cleaning is ever fixed by Apple)\n#  * split the options in FPC_COMMON_FLAGS (common to all configurations) and FPC_CFG_SPECIFIC_FLAGS (per configuration)\n# 4 January 2009 - Jonas Maebe\n#  * support for ARM\n# 24 October 2009 - Jonas Maebe\n#  * don't hardcode 2.3.1 in some cases anymore\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nif [ x\"$ACTION\" != \"xbuild\" ]; then\n  # in case running scripts during cleaning gets fixed\n  exit 0\nfi\n\nif test ! -e \"$FPC_MAIN_FILE\"\nthen\n\techo error: FPC_MAIN_FILE not found \\($FPC_MAIN_FILE\\)\n\texit 2\nfi\n\nfor variant in $BUILD_VARIANTS\ndo\n\tfor arch in $ARCHS\n\tdo\n\t\tcase $arch in\n\t\t\tppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n\t\t\ti386) fpc_arch=386; fpc_rtl=i386 ;;\n\t\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n\t\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n\t\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t\t*) continue\n\t\tesac\n\n\t\tapp_target_temp_dir=$CONFIGURATION_TEMP_DIR/`basename \"$PROJECT_TEMP_DIR\"`\n\t\tout_dir=$app_target_temp_dir/`basename \"$DERIVED_SOURCES_DIR\"`-$variant/$arch\n\t\tfpccompiler=\"${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch}\"\n\t\tif test -e \"$fpccompiler\"\n\t\tthen\n\t\t\tfpcversion=`\"$fpccompiler\" -iV`\n\t\t\tmainunitdir=\"$FPC_RTL_UNITS_BASE/$fpcversion/units/${fpc_rtl}-darwin/\"\n\t\t\tmkdir -p \"$out_dir\"\n\t\t\tcd \"$out_dir\"\n\t\t\techo \"Compiling to $out_dir\"\n\t\t\trm -f compilefailed\n\t\n\t\t\t# delete any ppu files for which the \".s\" file was somehow deleted (Xcode does that sometimes in case of errors),\n\t\t\t# so that FPC will recompile the unit\n\t\t\tfor file in *.ppu\n\t\t\tdo\n\t\t\t\tasmname=`basename \"$file\" ppu`s\n\t\t\t\tif [ ! -f \"$asmname\" ]; then\n\t\t\t\t\t# can fail in case there are no .ppu files, since then it will try to erase the file with name '*.ppu'\n\t\t\t\t\t# -> use -f so it won't give an error message\n\t\t\t\t\trm -f \"$file\"\n\t\t\t\tfi\n\t\t\tdone\n\n\t\t\techo $fpccompiler -n -l -viwn -a -s -vbr -FE. $FPC_COMMON_OPTIONS $FPC_SPECIFIC_OPTIONS '\\' >ppccmd.sh\n\t\t\techo -Fi\\\"`dirname \"$FPC_MAIN_FILE\"`\\\" '\\' >>ppccmd.sh\n\t\t\techo -Fu\"$mainunitdir/*\" -Fu\"$mainunitdir/rtl\" '\\' >>ppccmd.sh\n\t\t\t# allow FPC_UNIT_PATHS to override default search directory\n\t\t\techo $FPC_UNIT_PATHS '\\' >>ppccmd.sh\n\t\t\techo \\\"$FPC_MAIN_FILE\\\" >>ppccmd.sh\n\t\t\t# cat ppccmd.sh\n\n\t\t\t/bin/sh ppccmd.sh\n\t\t\tif [ $? != 0 ]; then\n\t\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\t\texit 1\n\t\t\tfi\n\t\telse\n\t\t\ttouch \"$out_dir\"/compilefailed\n\t\t\techo $FPC_MAIN_FILE:1: error: 1: can\\'t compile for $arch \\(ppc${fpc_arch} not found\\)\n\t\t\texit 2\n\t\tfi\n\tdone\ndone\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1D60588E0D05DD3D006BFB54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61798816114AA34C00BA94A9 /* hwengine.pas in Sources */,
+				61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */,
+				6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */,
+				6179881C114AA34C00BA94A9 /* SDLh.pas in Sources */,
+				6179881F114AA34C00BA94A9 /* uAI.pas in Sources */,
+				61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */,
+				61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */,
+				61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */,
+				61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */,
+				61798824114AA34C00BA94A9 /* uChat.pas in Sources */,
+				61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */,
+				61798826114AA34C00BA94A9 /* uConsole.pas in Sources */,
+				61798827114AA34C00BA94A9 /* uConsts.pas in Sources */,
+				61798828114AA34C00BA94A9 /* uFloat.pas in Sources */,
+				61798829114AA34C00BA94A9 /* uGame.pas in Sources */,
+				6179882A114AA34C00BA94A9 /* uGears.pas in Sources */,
+				6179882B114AA34C00BA94A9 /* uIO.pas in Sources */,
+				6179882C114AA34C00BA94A9 /* uKeys.pas in Sources */,
+				6179882D114AA34C00BA94A9 /* uLand.pas in Sources */,
+				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
+				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
+				61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */,
+				61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */,
+				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
+				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
+				61798834114AA34C00BA94A9 /* uRandom.pas in Sources */,
+				61798835114AA34C00BA94A9 /* uScript.pas in Sources */,
+				61798836114AA34C00BA94A9 /* uSHA.pas in Sources */,
+				61798837114AA34C00BA94A9 /* uSound.pas in Sources */,
+				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
+				61798839114AA34C00BA94A9 /* uStore.pas in Sources */,
+				6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */,
+				6179883B114AA34C00BA94A9 /* uTriggers.pas in Sources */,
+				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
+				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
+				6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */,
+				6179885D114AA48A00BA94A9 /* IMG_png.c in Sources */,
+				6179885E114AA48A00BA94A9 /* IMG.c in Sources */,
+				61798869114AA4AA00BA94A9 /* SDL_uikitappdelegate.m in Sources */,
+				6179886A114AA4AA00BA94A9 /* SDL_uikitview.m in Sources */,
+				6179886B114AA4AA00BA94A9 /* SDL_uikitwindow.m in Sources */,
+				6179887D114AA4D000BA94A9 /* MainMenuViewController.m in Sources */,
+				6179887F114AA4D000BA94A9 /* SchemeEditViewController.m in Sources */,
+				61798881114AA4D000BA94A9 /* SettingsViewController.m in Sources */,
+				61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */,
+				61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */,
+				61798889114AA4E600BA94A9 /* GameSetup.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9283015A0F10E41300CC5A3C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 928301160F10CAFC00CC5A3C /* fpc */;
+			targetProxy = 928301590F10E41300CC5A3C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1D6058940D05DD3E006BFB54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = HedgewarsMobile;
+			};
+			name = Debug;
+		};
+		1D6058950D05DD3E006BFB54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = HedgewarsMobile_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				PRODUCT_NAME = HedgewarsMobile;
+			};
+			name = Release;
+		};
+		6179928C114AE0C800BA94A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = UpdateDataFolder;
+			};
+			name = Debug;
+		};
+		6179928D114AE0C800BA94A9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = UpdateDataFolder;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		928301180F10CAFD00CC5A3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PREBINDING = NO;
+				PRODUCT_NAME = fpc;
+			};
+			name = Debug;
+		};
+		928301190F10CAFD00CC5A3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PREBINDING = NO;
+				PRODUCT_NAME = fpc;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -vwi -B  -Sgix";
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
+				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
+				FPC_SPECIFIC_OPTIONS = "-ghttt  -gw2 -O-";
+				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+				);
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-Wl,-no_order_inits",
+				);
+				PREBINDING = NO;
+				SDKROOT = iphonesimulator3.0;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FPC_COMMON_OPTIONS = "-Mmacpas -Sgix -Cfvfpv2";
+				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/PascalLibrary.pas";
+				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs";
+				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_THUMB_SUPPORT = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/include\"/**",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL/src\"/**",
+					"\"$(SRCROOT)/../../../Library/lpng141\"",
+					"\"$(SRCROOT)/../../../Library/SDL-1.3/SDL_net\"",
+				);
+				OTHER_LDFLAGS = (
+					"-lz",
+					"-Wl,-no_order_inits",
+				);
+				PREBINDING = NO;
+				SDKROOT = iphoneos3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "HedgewarsMobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1D6058940D05DD3E006BFB54 /* Debug */,
+				1D6058950D05DD3E006BFB54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		61799290114AE0CD00BA94A9 /* Build configuration list for PBXAggregateTarget "UpdateDataFolder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6179928C114AE0C800BA94A9 /* Debug */,
+				6179928D114AE0C800BA94A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9283011C0F10CB4B00CC5A3C /* Build configuration list for PBXNativeTarget "fpc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				928301180F10CAFD00CC5A3C /* Debug */,
+				928301190F10CAFD00CC5A3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "HedgewarsMobile" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
