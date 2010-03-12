@@ -59,7 +59,7 @@
 ; Hog (%1) died
 02:00=%1 kopnął w kalendarz!
 02:00=%1 ujrzał światło!
-02:00=%1 nigdy już tego nie zobaczy!
+02:00=%1 nie zobaczy już niczego więcej!
 02:00=%1 macha na pożegnanie!
 02:00=%1 odszedł to piękniejszego świata!
 02:00=%1 spotkał stwórcę!
@@ -84,7 +84,7 @@
 02:00=A mógł zebrać tą skrzynkę z życiem...
 02:00=%1 poszedł pograć w lepszą grę...
 02:00=%1 przytupnął nóżką i umarł
-02:00=%1 odnosi totalną porażkę.
+02:00=%1 ponosi całkowitą klęskę.
 02:00=Biedny %1 ...
 02:00=%1 woli grać w Wormux
 02:00=%1 blokuje strzały własną twarzą
@@ -95,7 +95,7 @@
 02:00=%1 powoduje, że chce mi się płakać
 02:00=%1 to ex-jeż
 02:00=%1 wącha kwiatki... od spodu
-02:00=%1 skończył egzystencję
+02:00=%1 zakończył egzystencję
 02:00=Powiedzmy "Pa Pa" dla %1
 02:00=Nie ma nadziei dla %1
 02:00=%1 spuszcza kurtynę
@@ -111,6 +111,8 @@
 02:00=%1 mógł użyć dodatkowego życia.
 02:00=Czy jest na sali jakiś doktor?
 02:00=To z pewnością był toczeń!
+02:00=Ale Urwał!!!
+02:00=Ale to było dobre!!!
 ; Hog (%1) drowned
 02:01=%1 robi za łódź podwodną!
 02:01=%1 udaje Titanica!
@@ -146,7 +148,7 @@
 02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
 02:01=Sonic nie umiał pływać więc ty także %1
 02:01=%1 chce zagrać delfina Ecco 
-02:01=%1 popłyną zwiedzać Aquarię
+02:01=%1 szuka rybek do akwarium!
 02:01=%1 znalazł Atlantydę!
 02:01=%1 chce być główną postacią w Bioshock 3
 02:01=Trzeba było się uczyć pływać...
@@ -164,7 +166,7 @@
 02:01=%1 weźmie udział w "Szczękach"... jako przynęta!
 ; Round starts
 02:02=Walczmy!
-02:02=Cel i pal!
+02:02=Cel! Pal!
 02:02=Rozpoczynajmy walkę!
 02:02=Jedziemy z koksem!
 02:02=Rozpoczynamy tą imprezę!
@@ -182,11 +184,11 @@
 02:02=Przegrana nie wchodzi w rachubę.
 02:02=Hedgewars, stworzone przez Hedgewars.org
 02:02=GL HF
-02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Tiyuri'emu
-02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko unC0Rr'owi
-02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Nemo
-02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Smaxx'owi
-02:02=Możesz uważać się za szczęśliwca jeżeli nie jesteś przeciwko Jessor'owi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Tiyuri'emu
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko unC0Rr'owi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Nemo
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Smaxx'owi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Jessor'owi
 02:02=Dajcie z siebie wszystko!
 02:02=Przegrany sprząta teren.
 02:02=Niech rozpocznie się walka millenium 
@@ -239,6 +241,8 @@
 02:05=Oby to nie był Pavulon!
 02:05=Codziena dawka Panadolu!
 02:05=Chyba Goździkowa maczała w tym palce...
+02:05=Gdzie jest Doktor Queen?
+02:05=U mnie to jak u lekarza!
 ; New ammo crate
 02:06=Więcej broni!
 02:06=Posiłki!
@@ -262,8 +266,9 @@
 02:06=Nie pozwól przeciwnikowi tego zebrać!
 02:06=Nowe, błyszczące zabawki!
 02:06=Tajemnicza skrzynia!
+02:06=KABUM! KABUM! KABUM!
 ; New utility crate
-02:07=Czas narzędzi!
+02:07=Czas na narzędzia!
 02:07=To może się przydać...
 02:07=Narzędzia!
 02:07=Użyj tej skrzynki
@@ -302,7 +307,7 @@
 02:08=%1 wygląda na słabiaka
 02:08=%1 jest tchórzem
 02:08=%1 czeka na nagłą śmierć
-02:08=%1 nie jest walecznym typem]
+02:08=%1 nie jest walecznym typem
 02:08=Zzz... Chrrr... Hę?
 02:08=%1 przemyśli swój życiowy cel
 02:08=%1 i tak nigdy dobrze nie strzelał.
@@ -314,6 +319,8 @@
 02:08=%1 ma najwidoczniej inne rzeczy do roboty
 02:08=%1 stoi jak wryty
 02:08=%1 usnął
+02:08=NIE SPAĆ!!! ZWIEDZAĆ!!!
+02:08=%1 stracił kontakt z bazą...
 ; Hog (%1) hurts himself only
 02:09=%1 powinien potrenować celowanie!
 02:09=%1 najwidoczniej nienawidzi samego siebie..
@@ -322,13 +329,13 @@
 02:09=%1 trzymał broń drugą stroną.
 02:09=%1 ma skłonności masochistyczne.
 02:09=%1 jest masochistą.
-02:09=%1 nie ma instynktu przetrwania
+02:09=%1 nie ma instynktu samozachowawczego
 02:09=%1 zepsuł strzał.
 02:09=%1 musiał to zepsuć
 02:09=To był marny strzał, %1
 02:09=%1 jest trochę za bardzo nieostrożny przy używaniu silnych broni.
 02:09=%1 powinien rozważyć zmianę kariery.
-02:09=Najgorszy! Strzał! Kiedykolwiek!
+02:09=Najgorszy strzał! Kiedykolwiek!
 02:09=Źle, źle, źle %1, powinieneś strzelać do WROGA!
 02:09=%1 powinien celować w przeciwnika
 02:09=%1 zbliża się małymi kroczkami do samobójstwa...
@@ -350,12 +357,13 @@
 02:09=%1 powinien przejrzeć podręcznik walki na froncie...
 02:09=Wiesz co %1? Twoja broń z pewnością była uszkodzona!
 02:09=Nie ma takiego strzelania!!!
+02:09=%1 miał ciężki weekend.
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Ten jeż wypił Red Bulla.
 02:10=%1 to następca Małysza!
-02:10=IIII LECIIII!!!
+02:10=Iiii Leciiii...
 ; Weapon Categories
 03:00=Granat czasowy
 03:01=Granat czasowy
@@ -365,7 +373,7 @@
 03:05=Narzędzie wiertnicze
 03:06=Akcja
 03:07=Środek transportu
-03:08=Mina lądowa
+03:08=Mina przeciwpiechotna
 03:09=Pistolet (kilka strzałów)
 03:10=BUMM!
 03:11=Bonk!
@@ -381,7 +389,7 @@
 03:21=Broń balistyczna
 03:22=Mów do mnie Indiana!
 03:23=(Prawdziwe) Sztuki walki
-03:24=The cake is NOT a lie!
+03:24=Niespodziewajka
 03:25=Strój kostiumowy
 03:26=Smaczny granat
 03:27=Piekielny granat
@@ -397,7 +405,7 @@
 03:37=Tymczasowy efekt
 03:38=Karabin (kilka strzałów)
 03:39=Środek transportu
-03:40=Palący granat
+03:40=Płonący granat
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy czas detonatora wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
 04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy jego czas|wyniesie zero.|1-5: Ustawia czas granatu|Atak: Przytrzymaj by rzucić z większą siłą
@@ -406,8 +414,8 @@
 04:04=Atakuj przeciwników strzelbą z dwoma strzałami.|Działa obszarowo, więc nie musisz dokładnie|celować by zranić przeciwników.|Atak: Strzel (kilka razy)
 04:05=Schowaj się pod ziemię! Użyj młota pneumatycznego|do wywiercenia dziury w podłożu i dostania się do|innych miejsc.|Attack: Zacznij/Zakończ kopać 
 04:06=Znudzony? Brak motywacji do ataku? Oszczędzasz broń?|No problemo! Po prostu pomiń turę, tchórzu!|Atak: Pomiń turę bez walki
-04:07=Skróć wielkie odległości używając liny. Rozpędź się| by wślizgnąć się w inne jeże lub|upuścić na nich granat albo inną broń.|Atak: Rozwiń albo odłącz linę|Długi skok: Upuść granat lub podobną broń      
-04:08=Zachowaj dystans od przeciwników przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. I nie|zapomnij ucieć zanim się włączy!|Atak: Upuść minę obok siebie
+04:07=Skróć wielkie odległości używając liny. Rozpędź się|by wślizgnąć się w inne jeże lub upuścić na nich|granat albo inną broń.|Atak: Rozwiń albo odłącz linę|Długi skok: Upuść granat lub podobną broń      
+04:08=Trzymaj przeciwników na dystans przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. I nie|zapomnij ucieć zanim się włączy!|Atak: Upuść minę obok siebie
 04:09=Niepewny co do umiejętności w celowaniu? Weź|pistolet i strzel do czterech razy.|Atak: Strzel (kilka razy)
 04:10=Brutalna siła zawsze jest rozwiązaniem. Upuść ten|klasyczny materiał wybuchowy obok przeciwnika i|uciekaj gdzie pieprz rośnie.|Attack: Upuść dynamit obok siebie
 04:11=Uwolnij się od przeciwników poprzez spałowanie|ich poza mapę albo do wody. A co powiesz o|strąceniu min w swoich wrogów?|Atak: Spałuj wszystko co jest przed tobą
@@ -417,29 +425,29 @@
 04:15=Wezwij samolot, żeby zrzucił bomby na|twoich przeciwników.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
 04:16=Wezwij samolot, żeby zrzucił kilka min w|określonym miejscu.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz cel
 04:17=Potrzebny schron? Użyj palnika by|wydrążyć tunel w stałym podłożu|co całkowicie cię zakryje.|Atak: Zacznij/Zakończ kopać
-04:18=Potrzebujesz dodatkowej ochrony albo chcesz|przejść przez teren nie do prejścia? Umieść|konstrukcje gdzie chcesz.|Lewo/Prawo: Wybierz konstrukcję do umieszczenia|Kursor: Umieść konstrukcję w odpowiednim miejscu
-04:19=Użyty w odpowiednim momencie, teleport staje|się potężniejszy niż prawie każda inna broń,|ponieważ potrafi wyzwolić jeża z tarapatów|w przeciągu sekund.|Kursor: Wybierz region
+04:18=Potrzebujesz dodatkowej ochrony albo chcesz|przejść przez teren nie do przejścia? Umieść|konstrukcje gdzie chcesz.|Lewo/Prawo: Wybierz konstrukcję do umieszczenia|Kursor: Umieść konstrukcję w odpowiednim miejscu
+04:19=Teleport użyty w odpowiednim momencie, staje|się potężniejszy niż prawie każda inna broń,|ponieważ potrafi wyzwolić jeża z tarapatów|w przeciągu sekund.|Kursor: Wybierz region
 04:20=Pozwala w tej turze zagrać innym jeżem.|Atak: Uaktywnij wybieranie jeża
 04:21=Odpal moździerz, który po uderzeniu|wypuści kilka bomb.|Atak: Strzel z całą mocą      
 04:22=Nie tylko dla Indiana Jones! Ten bicz może|być użyteczny w wielu wypadkach. Szczególnie|kiedy chcesz kogoś zrzucić z urwiska.|Atak: Zbiczuj wszystko co jest przed tobą
 04:23=Jeśli nie masz nic do stracenia, ten atak może być|całkiem użyteczny. Poświęć swojego jeża i poślij|go w odpowiednim kierunku, raniąc wszystkich po|drodze i eksplodując na końcu.|Atak: Odpal tę niszczycielską i zabójczą technikę
-04:24=Sto lat! Uruchom ciasto i pozwól mu pójść w stronę|twoich przeciwników dając im wybuchowe przyjęcie.|Może chodzić po prawie wszystkim, ale wtedy może|wcześniej eksplodować.|Atak: Odpal ciasto albo zatrzymaj je, by wybuchło
-04:25=Użyj kostiumu by sprawić, żeby twój wróg poleciał|na ciebie (i na przepaść lub dziurę).|Atak: Użyj kostiumu i uwiedź jeża
-04:26=Rzuć tego smacznego arbuza w przeciwników. Kiedy jego|czas wyniesie zero, podzieli się na  mniejsze kawałki.|1-5: Ustawia czas arbuza|Atak: Przytrzymaj by rzucić z większą siłą
+04:24=Sto lat! Uruchom ciasto i pozwól mu pójść w stronę|twoich przeciwników dając im wybuchowe przyjęcie.|Może chodzić prawie po wszystkim, ale wtedy może|wcześniej eksplodować.|Atak: Odpal ciasto albo zatrzymaj je, by wybuchło
+04:25=Użyj kostiumu by sprawić, żeby twój wróg poleciał|na ciebie (i w przepaść lub dziurę).|Atak: Użyj kostiumu i uwiedź jeża
+04:26=Rzuć tego smacznego arbuza w przeciwników. Kiedy jego|czas wyniesie zero, podzieli się na mniejsze kawałki.|1-5: Ustawia czas arbuza|Atak: Przytrzymaj by rzucić z większą siłą
 04:27=Niech ognie piekielne ogarną twoich przeciwników!|Nie podchodź zbyt blisko po wybuchu, gdyż ogień|pali się przez dłuższy czas|Atak: Przytrzymaj by rzucić z większą siłą
-04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić|tunel w ziemi i eksploduje gdy zapalnik zostanie uruchomiony lub|jeśli pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą   
-04:29=Tego nie powinny używać dzieci! Pistolet na kulki wystrzeliwuje|tony małych kolorowych kulek wypełnionych materiałem|wybuchowym.|Atak: Strzel z całą mocą|Góra/Dół: Kontynuuj celowanie      
-04:30=Wezwij samolot, żeby odpalić potężny atak|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz region
-04:31=Radiowy samolocik to idealna broń na zbieranie skrzynek,|bądź atakowanie dalekich przeciwników. Skieruj to w prze-|ciwników albo wypuść wcześniej bomby.|Długi skok: Niech walkirie wkroczą na pole bitwy|Góra/Dół: Steruj samolotem
+04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić tunel w ziemi|i eksploduje gdy zapalnik zostanie uruchomiony lub|jeśli pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą   
+04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwujetony małych|kolorowych kulek wypełnionych materiałem wybuchowym.|Atak: Strzel z całą mocą|Góra/Dół: Kontynuuj celowanie      
+04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz region
+04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech walkirie wkroczą na pole bitwy!
 04:32=Niska grawitacja jest lepsza niż diety! Skacz|wyżej i dalej albo pozwól przeciwnikom lecieć|daleko.|Atak: Aktywuj
 04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia.|Atak: Aktywuj
 04:34=Nie dotkniesz mnie!|Atak: Aktywuj
 04:35=Czasami bywa, że czas pędzi za szybko. Weź kilka|dodatkowych sekund by dokończyć swój atak.|Atak: Aktywuj
-04:36=Czasami z celowaniem u ciebie jest kiepsko. Weź|użytek ze zdobyczy współczesnej technologii.|Attack: Aktywuj
+04:36=Czasami z celowaniem u ciebie jest kiepsko.|Zrób użytek ze zdobyczy współczesnej technologii.|Attack: Aktywuj
 04:37=Nie bój się słońca. To potrwa tylko jedną turę,|ale pozwoli pochłonąć część obrażeń, które|zadałeś innym.|Atak: Aktywuj
-04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieefektywny|na małe odległości. Obrażenia zwiększają się wraz z odległością.|Atak: Strzel (dwa strzały)
+04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieskuteczny|na małe odległości. Obrażenia zwiększają się wraz z odległością.|Atak: Strzel (dwa strzały)
 04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
-04:40=Wznieć ogień używając koktajlu z palącym się płynem.|Atak: Przytrzymaj by rzucić z większą siłą
+04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
 ; Game goal strings
 05:00=Ustawienia gry
 05:01=Obowiązują następujące zasady:
