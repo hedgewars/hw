@@ -145,19 +145,19 @@ var i: LongInt;
 begin
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if (Land[y + dy, i] <> COLOR_INDESTRUCTIBLE) then
+        if (not isMap and (Land[y + dy, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y + dy, i] = COLOR_LAND) then
             LandPixels[y + dy, i]:= 0;
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dx, 0) to min(x + dx, LAND_WIDTH - 1) do
-        if (Land[y - dy, i] <> COLOR_INDESTRUCTIBLE) then
+        if (not isMap and (Land[y - dy, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y - dy, i] = COLOR_LAND) then
              LandPixels[y - dy, i]:= 0;
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if (Land[y + dx, i] <> COLOR_INDESTRUCTIBLE) then
+        if (not isMap and (Land[y + dx, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y + dx, i] = COLOR_LAND) then
             LandPixels[y + dx, i]:= 0;
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     for i:= max(x - dy, 0) to min(x + dy, LAND_WIDTH - 1) do
-        if (Land[y - dx, i] <> COLOR_INDESTRUCTIBLE) then
+        if (not isMap and (Land[y - dx, i] <> COLOR_INDESTRUCTIBLE)) or (Land[y - dx, i] = COLOR_LAND) then
              LandPixels[y - dx, i]:= 0;
 end;
 
@@ -523,7 +523,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c: LongInt;
 begin
-if (Land[Y, X] <> 0) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y, X] = cExplosionBorderColor)then // check neighbours
+if (Land[Y, X] > 255) and (Land[Y, X] <> COLOR_INDESTRUCTIBLE) and (LandPixels[Y, X] = cExplosionBorderColor)then // check neighbours
     begin
     c:= 0;
     for i:= -1 to 1 do

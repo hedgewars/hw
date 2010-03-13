@@ -37,6 +37,7 @@ var Land: TCollisionArray;
     LandDirty: TDirtyTag;
     hasBorder: boolean; 
     hasGirders: boolean;  
+    isMap: boolean;  
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
 
@@ -722,6 +723,7 @@ var tmpsurf: PSDL_Surface;
     s: shortstring;
     f: textfile;
 begin
+isMap:= true;
 WriteLnToConsole('Loading land from file...');
 AddProgress;
 tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
@@ -762,7 +764,7 @@ begin
 hasBorder:= false;
 
 LoadThemeConfig;
-
+isMap:= false;
 if (GameFlags and gfForts) = 0 then
    if Pathz[ptMapCurrent] <> '' then LoadMap
                                 else GenLandSurface
