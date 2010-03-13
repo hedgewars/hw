@@ -46,6 +46,8 @@ procedure doStepDrowningGear(Gear: PGear); forward;
 
 function CheckGearDrowning(Gear: PGear): boolean;
 var skipSpeed, skipAngle, skipDecay: hwFloat;
+    i, maxDrops: LongInt;
+    particle: PVisualGear;
 begin
 // probably needs tweaking. might need to be in a case statement based upon gear type
 //(not Gear^.dY.isNegative) and  this should not be necessary
@@ -75,7 +77,22 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             end
         end;
     PlaySound(sndSplash);
-    AddVisualGear(hwRound(Gear^.X), LAND_HEIGHT, vgtSplash);
+    
+    if not cReducedQuality then 
+        begin
+        AddVisualGear(hwRound(Gear^.X), LAND_HEIGHT, vgtSplash);
+       
+        maxDrops := (Gear^.Radius div 2) + hwRound(Gear^.dX * Gear^.Radius * 2) + hwRound(Gear^.dY * Gear^.Radius * 2);
+        for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do 
+            begin
+            particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), LAND_HEIGHT, vgtDroplet);
+            if particle <> nil then
+                begin
+                particle^.dX := particle^.dX + (Gear^.dX / 5);
+                particle^.dY := particle^.dY - (Gear^.dY / 5)
+                end
+            end
+        end;
     end
     else
     CheckGearDrowning:= false

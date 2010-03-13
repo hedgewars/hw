@@ -272,6 +272,19 @@ begin
       dec(Gear^.FrameTicks, Steps);
 end;
 
+procedure doStepDroplet(Gear: PVisualGear; Steps: Longword);
+begin
+  Gear^.X:= Gear^.X + Gear^.dX * Steps;
+
+  Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+  Gear^.dY:= Gear^.dY + cGravity * Steps;
+
+  if hwRound(Gear^.Y) > cWaterLine then begin
+    DeleteVisualGear(Gear);
+    PlaySound(TSound(ord(sndDroplet1) + Random(3)));
+    end;
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -410,7 +423,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepHealth,
             @doStepShell,
             @doStepDust,
-            @doStepSplash
+            @doStepSplash,
+            @doStepDroplet
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -536,6 +550,14 @@ with gear^ do
                 FrameTicks:= 740;
                 Frame:= 19;
                 end;
+    vgtDroplet: begin
+                dx:= _0_001 * (random(75) + 15);
+                dx.isNegative:= random(2) = 0;
+                dy:= _0_001 * (random(80) + 120);
+                dy.isNegative:= true;
+                FrameTicks:= 250 + random(1751);
+                Frame:= random(3)
+                end;
         end;
 
 if VisualGearsList <> nil then
@@ -631,6 +653,7 @@ case Layer of
                                 glColor4f(1, 1, 1, 1);
                             end;
                 vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 64, hwRound(Gear^.Y) + WorldDy - 72, 19 - (Gear^.FrameTicks div 37));
+                vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);

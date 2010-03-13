@@ -73,7 +73,7 @@ type
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
             sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll,
-            sprAmTeleport, sprSplash);
+            sprAmTeleport, sprSplash, sprDroplet);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -89,7 +89,7 @@ type
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
-            vgtDust, vgtSplash);
+            vgtDust, vgtSplash, vgtDroplet);
 
     TGearsType = set of TGearType;
 
@@ -108,7 +108,8 @@ type
             sndVaporize, sndWarp, sndSuddenDeath, sndMortar, sndShutter,
             sndHomerun, sndMolotov, sndCover, sndUhOh, sndOops,
             sndNooo, sndHello, sndRopeShot, sndRopeAttach, sndRopeRelease,
-            sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity);
+            sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
+            sndDroplet1, sndDroplet2, sndDroplet3);
 
     TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
@@ -679,7 +680,9 @@ const
             (FileName: 'amTeleport'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprAmTeleport
             (FileName: 'Splash'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprSplash
+            Width:  128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSplash
+            (FileName: 'Droplet'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprDroplet
             );
 
     Wavez: array [TWave] of record
@@ -775,7 +778,10 @@ const
             (FileName:              'victory.ogg'; Path: ptVoices),// sndVictory
             (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
             (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
-            (FileName:           'lowgravity.ogg'; Path: ptSounds) // sndLowGravity
+            (FileName:           'lowgravity.ogg'; Path: ptSounds),// sndLowGravity
+            (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndDroplet1
+            (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
+            (FileName:             'Droplet3.ogg'; Path: ptSounds) // sndDroplet3
             );
 
     Ammoz: array [TAmmoType] of record
