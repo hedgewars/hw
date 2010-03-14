@@ -2718,7 +2718,7 @@ var HHGear: PGear;
     fuel: LongInt;
     move: hwFloat;
 begin
-HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
+HHGear:= CurrentHedgehog^.Gear;
 
 move:= _0_1;
 fuel:= 50;
@@ -2790,21 +2790,22 @@ end;
 procedure doStepBirdyDescend(Gear: PGear);
 var HHGear: PGear;
 begin
-HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
 AllInactive:= false;
 if Gear^.Timer > 0 then
     dec(Gear^.Timer, 1)
 else if CurrentHedgehog = nil then
     begin
     Gear^.doStep:= @doStepBirdyVanish;
+    exit
     end;
+HHGear:= CurrentHedgehog^.Gear;
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
 if abs(hwRound(HHGear^.Y - Gear^.Y)) > 32 then
     begin
-    if Gear^.Pos = 0 then
+    if Gear^.Timer = 0 then
         Gear^.Y:= Gear^.Y + _0_1
     end
-else
+else if Gear^.Timer = 0 then
     begin
     Gear^.doStep:= @doStepBirdyFly;
     HHGear^.dY:= -_0_2
@@ -2816,7 +2817,14 @@ procedure doStepBirdy(Gear: PGear);
 var HHGear: PGear;
 begin
 Gear^.doStep:= @doStepBirdyDescend;
-HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+if CurrentHedgehog = nil then
+    begin
+    DeleteGear(Gear);
+    exit
+    end;
+
+HHGear:= CurrentHedgehog^.Gear;
+
 if HHGear^.dX.isNegative then
     Gear^.Tag:= -1
 else
