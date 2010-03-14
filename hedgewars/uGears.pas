@@ -914,7 +914,7 @@ if (Gear^.State and gstDrowning) <> 0 then
             0);
     defaultPos:= false
     end else
-if (Gear^.State and gstLoser) <> 0 then // for now using the jackhammer for its kind of bemused "oops" look
+if (Gear^.State and gstLoser) <> 0 then
     begin
     DrawHedgehog(sx, sy,
             hwSign(Gear^.dX),

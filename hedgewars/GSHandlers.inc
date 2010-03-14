@@ -69,7 +69,8 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
         CheckGearDrowning:= true;
         Gear^.State:= gstDrowning;
         Gear^.RenderTimer:= false;
-        Gear^.doStep:= @doStepDrowningGear;
+        if (Gear^.Kind <> gtSniperRifleShot) and (Gear^.Kind <> gtShotgunShot) and (Gear^.Kind <> gtDEagleShot) then
+          Gear^.doStep:= @doStepDrowningGear;
         if Gear^.Kind = gtHedgehog then
             begin
             Gear^.State:= Gear^.State and (not gstHHDriven);
@@ -88,7 +89,7 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
             particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), LAND_HEIGHT, vgtDroplet);
             if particle <> nil then
                 begin
-                particle^.dX := particle^.dX + (Gear^.dX / 5);
+                particle^.dX := particle^.dX - (Gear^.dX / 10);
                 particle^.dY := particle^.dY - (Gear^.dY / 5)
                 end
             end
@@ -536,6 +537,13 @@ if (Gear^.State and gstCollision) <> 0 then
     Gear^.doStep:= @doStepShotIdle;
     exit
     end;
+
+CheckGearDrowning(Gear);
+if (Gear^.State and gstDrowning) <> 0 then
+    begin
+    Gear^.doStep:= @doStepShotIdle;
+    exit
+    end;
 dec(i)
 until i = 0;
 if (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0) or (hwRound(Gear^.Y) and LAND_HEIGHT_MASK <> 0) then
@@ -564,14 +572,25 @@ repeat
           AmmoShove(Gear, 7, 20)
       else
           AmmoShove(Gear, Gear^.Timer, 20);
+  CheckGearDrowning(Gear);
   dec(i)
-until (i = 0) or (Gear^.Damage > Gear^.Health);
+until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
 if Gear^.Damage > 0 then
    begin
    DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 82 - i, 1);
    dec(Gear^.Health, Gear^.Damage);
    Gear^.Damage:= 0
    end;
+if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and (cWaterOpacity < $FF) then
+    begin
+    for i:=(Gear^.Health - Gear^.Damage) * 4 downto 0 do
+        begin
+        if Random(6) = 0 then
+            AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
+        Gear^.X:= Gear^.X + Gear^.dX;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        end;
+    end;
 
 if (Gear^.Health <= 0)
     or (hwRound(Gear^.X) and LAND_WIDTH_MASK <> 0)
