@@ -687,29 +687,29 @@ const
             (FileName: 'Birdy'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  75; Height: 75; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprBirdy
             (FileName:  'amCake'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandCake
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandCake
             (FileName:  'amConstruction'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandConstruction
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandConstruction
             (FileName:  'amGrenade'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandGrenade
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandGrenade
             (FileName:  'amMelon'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandMelon
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandMelon
             (FileName:  'amMortar'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandMortar
             (FileName:  'amSkip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSkip
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSkip
             (FileName:  'amCluster'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandCluster
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandCluster
             (FileName:  'amDynamite'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandDynamite
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandDynamite
             (FileName:  'amHellish'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandHellish
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandHellish
             (FileName:  'amMine'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandMine
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandMine
             (FileName:  'amSeduction'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSeduction
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSeduction
             (FileName:  'amVamp'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprHandVamp
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprHandVamp
             );
 
     Wavez: array [TWave] of record

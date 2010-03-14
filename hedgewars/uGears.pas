@@ -29,6 +29,7 @@ type
     TGear = record
             NextGear, PrevGear: PGear;
             Active: Boolean;
+            AdvBounce: Boolean;
             Invulnerable: Boolean;
             RenderTimer: Boolean;
             Ammo : PAmmo;
@@ -254,6 +255,7 @@ if CurrentTeam <> nil then
 case Kind of
    gtAmmo_Bomb,
  gtClusterBomb: begin
+                gear^.AdvBounce:= true;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
@@ -261,6 +263,7 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
   gtWatermelon: begin
+                gear^.AdvBounce:= true;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_995;
@@ -268,6 +271,7 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 3000
                 end;
     gtHedgehog: begin
+                gear^.AdvBounce:= true;
                 gear^.Radius:= cHHRadius;
                 gear^.Elasticity:= _0_35;
                 gear^.Friction:= _0_999;
@@ -402,6 +406,7 @@ gtAmmo_Grenade: begin // bazooka
                 if not dX.isNegative then gear^.Angle:= 1 else gear^.Angle:= 3
                 end;
  gtHellishBomb: begin
+                gear^.AdvBounce:= true;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_5;
                 gear^.Friction:= _0_96;
@@ -413,6 +418,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 4
                 end;
         gtBall: begin
+                gear^.AdvBounce:= true;
                 gear^.Radius:= 5;
                 gear^.Tag:= random(8);
                 gear^.Timer:= 5000;
