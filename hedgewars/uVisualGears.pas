@@ -106,7 +106,14 @@ with Gear^ do
     if hwRound(X) > cScreenWidth + LAND_WIDTH then X:= int2hwFloat(-cScreenWidth - 64);
     // if hwRound(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + int2hwFloat(25); // For if flag is set for flakes rising upwards?
     if hwRound(Y) > (LAND_HEIGHT + 75) then Y:= Y - int2hwFloat(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
-    if (Timer > 0) and (Timer-Steps > 0) then dec(Timer, Steps)
+    if (Timer > 0) and (Timer-Steps > 0) then
+        begin
+        tdX:= tdX - _0_005*Steps;
+        tdY:= tdY - _0_005*Steps;
+        if tdX < _0 then tdX:= _0;
+        if tdY < _0 then tdY:= _0;
+        dec(Timer, Steps)
+        end
     else
         begin
         Timer:= 0;
@@ -622,12 +629,12 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+          dmg:= min(100,dmgRadius*2  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y))));
           if dmg > 1 then
               begin
               Gear^.tdX:= Gear^.dX + SignAs(_0_01 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
               Gear^.tdY:= Gear^.dY + SignAs(_0_01 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-              Gear^.Timer:= 100
+              Gear^.Timer:= 200
               end
           end;
       t:= Gear^.NextGear
