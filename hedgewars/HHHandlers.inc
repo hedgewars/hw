@@ -395,6 +395,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
          if not cArtillery then Gear^.dX:= SignAs(_0_15, Gear^.dX);
          Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
          PlaySound(sndJump1, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+         Gear^.Timer:= 10;
          exit
          end;
       end;
@@ -408,6 +409,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
       SetLittle(Gear^.dX);
       Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
       PlaySound(sndJump3, PHedgehog(Gear^.Hedgehog)^.Team^.voicepack);
+      Gear^.Timer:= 10;
       exit
       end;
 
