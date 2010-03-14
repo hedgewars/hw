@@ -37,6 +37,8 @@ type PVisualGear = ^TVisualGear;
         Y : hwFloat;
         dX: hwFloat;
         dY: hwFloat;
+        tdX: hwFloat;
+        tdY: hwFloat;
         mdY: QWord;
         Timer: Longword;
         Angle, dAngle: real;
@@ -53,6 +55,7 @@ procedure free_uVisualGears;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
+procedure KickFlakes(dmgRadius, X, Y: LongInt);
 procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
@@ -94,17 +97,24 @@ with Gear^ do
         dec(FrameTicks, vobFrameTicks);
         inc(Frame);
         if Frame = vobFramesCount then Frame:= 0
-        end
+        end;
+    X:= X + (cWindSpeed * 200 + dX + tdX) * Steps;
+    Y:= Y + (dY + tdY + cGravity * vobFallSpeed) * Steps;
+    Angle:= Angle + dAngle * Steps;
+  
+    if hwRound(X) < -cScreenWidth - 64 then X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
+    if hwRound(X) > cScreenWidth + LAND_WIDTH then X:= int2hwFloat(-cScreenWidth - 64);
+    // if hwRound(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + int2hwFloat(25); // For if flag is set for flakes rising upwards?
+    if hwRound(Y) > (LAND_HEIGHT + 75) then Y:= Y - int2hwFloat(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
+    if (Timer > 0) and (Timer-Steps > 0) then dec(Timer, Steps)
+    else
+        begin
+        Timer:= 0;
+        tdX:= _0;
+        tdY:= _0
+        end;
     end;
 
-Gear^.X:= Gear^.X + (cWindSpeed * 200 + Gear^.dX) * Steps;
-Gear^.Y:= Gear^.Y + (Gear^.dY + cGravity * vobFallSpeed) * Steps;
-Gear^.Angle:= Gear^.Angle + Gear^.dAngle * Steps;
-
-if hwRound(Gear^.X) < -cScreenWidth - 64 then Gear^.X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
-if hwRound(Gear^.X) > cScreenWidth + LAND_WIDTH then Gear^.X:= int2hwFloat(-cScreenWidth - 64);
-// if hwRound(Gear^.Y) < (LAND_HEIGHT - 1024 - 75) then Gear^.Y:= Gear^.Y + int2hwFloat(25); // For if flag is set for flakes rising upwards?
-if hwRound(Gear^.Y) > (LAND_HEIGHT + 75) then Gear^.Y:= Gear^.Y - int2hwFloat(1024 + 150) // TODO - configure in theme (jellies for example could use limited range)
 end;
 
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
@@ -458,6 +468,9 @@ gear^.doStep:= doStepHandlers[Kind];
 with gear^ do
     case Kind of
     vgtFlake: begin
+                Timer:= 0;
+                tdX:= _0;
+                tdY:= _0;
                 FrameTicks:= random(vobFrameTicks);
                 Frame:= random(vobFramesCount);
                 Angle:= random * 360;
@@ -593,6 +606,31 @@ while t <> nil do
       Gear:= t;
       t:= Gear^.NextGear;
       Gear^.doStep(Gear, Steps)
+      end
+end;
+
+procedure KickFlakes(dmgRadius, X, Y: LongInt);
+var Gear, t: PVisualGear;
+    dmg: LongInt;
+begin
+if dmgRadius = 0 then exit;
+
+t:= VisualGearsList;
+while t <> nil do
+      begin
+      Gear:= t;
+      if Gear^.Kind = vgtFlake then
+          begin
+          // Damage calc from doMakeExplosion
+          dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+          if dmg > 1 then
+              begin
+              Gear^.tdX:= Gear^.dX + SignAs(_0_01 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
+              Gear^.tdY:= Gear^.dY + SignAs(_0_01 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+              Gear^.Timer:= 100
+              end
+          end;
+      t:= Gear^.NextGear
       end
 end;
 

@@ -1723,6 +1723,8 @@ if (Mask and EXPLAllDamageInRadius) = 0 then
 else
     dmgRadius:= Radius;
 
+KickFlakes(dmgRadius, X, Y);
+
 Gear:= GearsList;
 while Gear <> nil do
     begin
