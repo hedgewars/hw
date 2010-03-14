@@ -589,20 +589,17 @@ const delay: LongWord = 0;
     step: (stDelay, stChDmg, stSweep, stTurnReact,
             stAfterDelay, stChWin, stWater, stChWin2, stHealth,
             stSpawn, stNTurn) = stDelay;
-var StoppedSteps: boolean;
 var Gear, t: PGear;
 begin
 PrvInactive:= AllInactive;
 AllInactive:= true;
-StoppedSteps:= false;
 
 if (StepSoundTimer > 0) and (StepSoundChannel < 0) then
     StepSoundChannel:= LoopSound(sndSteps)
 else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
     begin
     StopSound(StepSoundChannel);
-    StepSoundChannel:= -1;
-    StoppedSteps:= true
+    StepSoundChannel:= -1
     end;
 
 if StepSoundTimer > 0 then
@@ -613,7 +610,6 @@ while t <> nil do
     begin
     Gear:= t;
     t:= Gear^.NextGear;
-    if (Gear = CurrentHedgehog^.Gear) and (StoppedSteps) then Gear^.Timer:= 10;
     if Gear^.Active then
         begin
         if Gear^.RenderTimer and (Gear^.Timer > 500) and ((Gear^.Timer mod 1000) = 0) then
