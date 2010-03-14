@@ -1180,8 +1180,9 @@ if (Gear^.State and gstHHDriven) <> 0 then
     begin
         amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
         case amt of
-            amBazooka,
-            amMortar: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+//, sprHandCake, sprHandConstruction, sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster, sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp
+            amBazooka: DrawRotated(sprHandBazooka, hx, hy, hwSign(Gear^.dX), aangle);
+            amMortar: DrawRotated(sprHandMortar, hx, hy, hwSign(Gear^.dX), aangle);
             amMolotov: DrawRotated(sprHandMolotov, hx, hy, hwSign(Gear^.dX), aangle);
             amBallgun: DrawRotated(sprHandBallgun, hx, hy, hwSign(Gear^.dX), aangle);
             amDrill: DrawRotated(sprHandDrill, hx, hy, hwSign(Gear^.dX), aangle);
@@ -1190,18 +1191,29 @@ if (Gear^.State and gstHHDriven) <> 0 then
             amDEagle: DrawRotated(sprHandDEagle, hx, hy, hwSign(Gear^.dX), aangle);
             amSniperRifle: DrawRotatedF(sprSniperRifle, hx, hy, 0, hwSign(Gear^.dX), aangle);
             amBlowTorch: DrawRotated(sprHandBlowTorch, hx, hy, hwSign(Gear^.dX), aangle);
+            amCake: DrawRotated(sprHandCake, hx, hy, hwSign(Gear^.dX), aangle);
+            amGrenade: DrawRotated(sprHandGrenade, hx, hy, hwSign(Gear^.dX), aangle);
+            amWatermelon: DrawRotated(sprHandMelon, hx, hy, hwSign(Gear^.dX), aangle);
+            amSkip: DrawRotated(sprHandSkip, hx, hy, hwSign(Gear^.dX), aangle);
+            amClusterBomb: DrawRotated(sprHandCluster, hx, hy, hwSign(Gear^.dX), aangle);
+            amDynamite: DrawRotated(sprHandDynamite, hx, hy, hwSign(Gear^.dX), aangle);
+            amHellishBomb: DrawRotated(sprHandHellish, hx, hy, hwSign(Gear^.dX), aangle);
+            amMine: DrawRotated(sprHandMine, hx, hy, hwSign(Gear^.dX), aangle);
+            amSeduction: DrawRotated(sprHandSeduction, hx, hy, hwSign(Gear^.dX), aangle);
+            amVampiric: DrawRotated(sprHandVamp, hx, hy, hwSign(Gear^.dX), aangle);
             amRCPlane: begin
                 DrawRotated(sprHandPlane, hx, hy, hwSign(Gear^.dX), 0);
                 defaultPos:= false
                 end;
             amGirder: begin
+                DrawRotated(sprHandConstruction, hx, hy, hwSign(Gear^.dX), aangle);
                 DrawSpriteClipped(sprGirder,
                                   sx-256,
                                   sy-256,
                                   LongInt(topY)+WorldDy,
                                   LongInt(rightX)+WorldDx,
                                   cWaterLine+WorldDy,
-                                  LongInt(leftX)+WorldDx);
+                                  LongInt(leftX)+WorldDx)
                 end;
         end;
 
