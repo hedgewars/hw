@@ -57,7 +57,7 @@ var luaState : Plua_State;
     
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte); forward;
+procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay: Byte); forward;
 
 // wrapped calls //
 
@@ -211,7 +211,7 @@ begin
         ParseCommand('grave ' + lua_tostring(L, 3), true);
         ParseCommand('fort ' + lua_tostring(L, 4), true);
         ParseCommand('voicepack ' + lua_tostring(L, 5), true);
-        CurrentTeam^.Binds:= DefaultBinds;
+        CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
         end;
@@ -277,11 +277,11 @@ end;
 
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 3 then
+    if lua_gettop(L) <> 4 then
         WriteLnToConsole('LUA: Wrong number of parameters passed to SetAmmo!')
     else
         begin
-        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3));
+        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4));
         end;
     lc_setammo:= 0
 end;
@@ -345,6 +345,7 @@ ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
 ScriptSetInteger('CaseFreq', cCaseFactor);
 ScriptSetInteger('LandAdds', cLandAdditions);
+ScriptSetInteger('Explosives', cExplosives);
 ScriptSetInteger('Delay', cInactDelay);
 ScriptSetString('Map', '');
 ScriptSetString('Theme', '');
@@ -362,6 +363,7 @@ ParseCommand('$gmflags ' + ScriptGetString('GameFlags'), true);
 ParseCommand('$turntime ' + ScriptGetString('TurnTime'), true);
 ParseCommand('$casefreq ' + ScriptGetString('CaseFreq'), true);
 ParseCommand('$landadds ' + ScriptGetString('LandAdds'), true);
+ParseCommand('$explosives ' + ScriptGetString('Explosives'), true);
 ParseCommand('$delay ' + ScriptGetString('Delay'), true);
 if ScriptGetString('Map') <> '' then
     ParseCommand('map ' + ScriptGetString('Map'), true);
@@ -370,6 +372,11 @@ if ScriptGetString('Theme') <> '' then
 
 ScriptPrepareAmmoStore;
 ScriptCall('onAmmoStoreInit');
+ScriptApplyAmmoStore; // doing 6 times - this is just temporary for now
+ScriptApplyAmmoStore;
+ScriptApplyAmmoStore;
+ScriptApplyAmmoStore;
+ScriptApplyAmmoStore;
 ScriptApplyAmmoStore;
 end;
 
@@ -459,12 +466,13 @@ for i:=1 to ord(High(TAmmoType)) do
     ScriptAmmoStore:= ScriptAmmoStore + '0000';
 end;
 
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability: Byte);
+procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay: Byte);
 begin
-if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) then
+if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9)then
     exit;
 ScriptAmmoStore[ord(ammo)]:= inttostr(count)[1];
 ScriptAmmoStore[ord(ammo) + ord(high(TAmmoType))]:= inttostr(propability)[1];
+ScriptAmmoStore[ord(ammo) + 2 * ord(high(TAmmoType))]:= inttostr(delay)[1];
 end;
 
 procedure ScriptApplyAmmoStore;

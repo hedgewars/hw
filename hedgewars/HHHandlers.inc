@@ -166,7 +166,7 @@ with Gear^,
                                  end;
                   amBaseballBat: begin
                                  CurAmmoGear:= AddGear(hwRound(X) + hwSign(dX) * 10, hwRound(Y), gtShover, gsttmpFlag, xx * _0_5, yy * _0_5, 0);
-                                 PlaySound(sndBaseballBat)
+                                 PlaySound(sndBaseballBat) // TODO: Only play if something is hit?
                                  end;
                     amParachute: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtParachute, 0, _0, _0, 0);
                     amAirAttack: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 0, _0, _0, 0);

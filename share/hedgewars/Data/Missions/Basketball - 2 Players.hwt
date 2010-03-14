@@ -1,0 +1,103 @@
+-- Hedgewars - Basketball for 2 Players
+
+local caption = {
+	["en"] = "Hedgewars-Basketball",
+	["de"] = "Hedgewars-Basketball"
+	}
+
+local subcaption = {
+	["en"] = "2 Player Match",
+	["de"] = "2-Spieler-Turnier"
+	}
+
+local goal = {
+	["en"] = "Bat your opponents through the|baskets and out of the map!",
+	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!"
+	}
+
+local scored = {
+	["en"] = " scored a point!",
+	["de"] = " haben gepunktet!"
+	}
+
+local sscore = {
+	["en"] = "Score",
+	["de"] = "Punktestand"
+	}
+
+	local teams = {}
+teams[0] = {
+	["en"] = "The Hogville Wizards",
+	["de"] = "Die Igeldorf-Zauberer"
+	}
+teams[1] = {
+	["en"] = "The Hogmore Ravens",
+	["de"] = "Die Igelmoor-Raben"
+	}
+
+local hognames = {}
+hognames[0] = {"Michael", "Jason", "Mike", "Tom"}
+hognames[1] = {"Diego", "Sam", "Jay", "Hank"}
+
+-- To handle missing texts we define a small wrapper function that
+-- we'll use to retrieve text.
+local function loc(text)
+	if text == nil then return "**missing**"
+	elseif text[L] == nil then return text["en"]
+	else return text[L]
+	end
+end
+
+---------------------------------------------------------------
+
+local hogs = {}
+hogs[0] = {nil, nil, nil, nil}
+hogs[1] = {nil, nil, nil, nil}
+
+function onGameInit()
+	Seed = 0
+	GameFlags = gfSolidLand + gfBorder + gfInvulnerable + gfRandomOrder + gfLowGravity
+	TurnTime = 15000
+	CaseFreq = 0
+	LandAdds = 0
+	Explosives = 0
+	Delay = 0
+	Map = "basketball"
+	Theme = "Freeway"
+
+	AddTeam(loc(teams[0]), 0xff0000, "Simple", "Island", "Default")
+	hogs[0][1] = AddHog(hognames[0][1], 0, 1, "NoHat")
+	hogs[0][2] = AddHog(hognames[0][2], 0, 1, "NoHat")
+	hogs[0][3] = AddHog(hognames[0][3], 0, 1, "NoHat")
+	hogs[0][4] = AddHog(hognames[0][4], 0, 1, "NoHat")
+	AddTeam(loc(teams[1]), 0x0000ff, "Simple", "Island", "Default")
+	hogs[1][1] = AddHog(hognames[1][1], 0, 1, "NoHat")
+	hogs[1][2] = AddHog(hognames[1][2], 0, 1, "NoHat")
+	hogs[1][3] = AddHog(hognames[1][3], 0, 1, "NoHat")
+	hogs[1][4] = AddHog(hognames[1][4], 0, 1, "NoHat")
+end
+
+function onGameStart()
+	ShowMission(loc(caption), loc(subcaption), loc(goal), -amBaseballBat, 0);
+end
+
+function onGameTick()
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amBaseballBat, 9, 0, 0)
+end
+
+function onGearAdd(gear)
+end
+
+local score = {0, 0}
+function onGearDelete(gear)
+	if gear == hogs[0][1] or gear == hogs[0][2] or gear == hogs[0][3] or gear == hogs[0][4] then
+		score[2] = score[2] + 1
+		ShowMission(loc(caption), loc(subcaption), loc(teams[1]) .. " " .. loc(scored) .. "|" .. loc(sscore) .. ": " .. score[1] .. " - " .. score[2], -amBaseballBat, 0);
+	elseif gear == hogs[1][1] or gear == hogs[1][2] or gear == hogs[1][3] or gear == hogs[1][4] then
+		score[1] = score[1] + 1
+		ShowMission(loc(caption), loc(subcaption), loc(teams[0]) .. " " .. loc(scored) .. "|" .. loc(sscore) .. ": " .. score[1] .. " - " .. score[2], -amBaseballBat, 0);
+	end
+end
