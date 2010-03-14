@@ -181,7 +181,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepSniperRifleShot,
             @doStepJetpack,
             @doStepMolotov,
-            @doStepCase
+            @doStepCase,
+            @doStepBirdy
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -432,6 +433,11 @@ gtAmmo_Grenade: begin // bazooka
      gtMolotov: begin 
                 gear^.Radius:= 6;
                 end;
+       gtBirdy: begin
+                gear^.Radius:= 16; // todo: check
+                gear^.Timer:= 500;
+                gear^.Health:= 2000;
+                end;
      end;
 InsertGearToList(gear);
 AddGear:= gear;
@@ -586,13 +592,9 @@ PrvInactive:= AllInactive;
 AllInactive:= true;
 
 if (StepSoundTimer > 0) and (StepSoundChannel < 0) then
-    begin
-    WriteLnToConsole('playsteps ...');
     StepSoundChannel:= LoopSound(sndSteps)
-    end
 else if (StepSoundTimer = 0) and (StepSoundChannel > -1) then
     begin
-    WriteLnToConsole('stopsteps ...');
     StopSound(StepSoundChannel);
     StepSoundChannel:= -1;
     end;
@@ -1635,6 +1637,7 @@ while Gear<>nil do
       gtMelonPiece: DrawRotatedf(sprWatermelon, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 1, 0, Gear^.DirAngle);
      gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
       gtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
+           gtBirdy: DrawTextureF(SpritesData[sprBirdy].Texture, 1 - Gear^.Timer / 500, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear

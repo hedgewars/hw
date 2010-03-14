@@ -73,7 +73,7 @@ type
             sprShoutCorner, sprShoutEdge, sprShoutTail,
             sprSniperRifle, sprBubbles, sprJetpack, sprHealth, sprHandMolotov, sprMolotov,
             sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll,
-            sprAmTeleport, sprSplash, sprDroplet);
+            sprAmTeleport, sprSplash, sprDroplet, sprBirdy);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -84,7 +84,7 @@ type
             gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives);
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -386,7 +386,6 @@ const
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
 
     // hog tag mask
-    // hog tag mask
     htNone        = $00;
     htTeamName    = $01;
     htName        = $02;
@@ -682,7 +681,9 @@ const
             (FileName: 'Splash'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:  128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprSplash
             (FileName: 'Droplet'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprDroplet
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false), // sprDroplet
+            (FileName: 'Birdy'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  75; Height: 75; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprBirdy
             );
 
     Wavez: array [TWave] of record

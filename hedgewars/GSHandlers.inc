@@ -2667,3 +2667,134 @@ with HHGear^ do
         end
     end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBirdyVanish(Gear: PGear);
+begin
+Gear^.Pos:= 0;
+if Gear^.Timer < 500 then
+    inc(Gear^.Timer, 1)
+else
+    DeleteGear(Gear);
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBirdyFly(Gear: PGear);
+var HHGear: PGear;
+    fuel: LongInt;
+    move: hwFloat;
+begin
+HHGear:=PHedgehog(Gear^.Hedgehog)^.Gear;
+
+move:= _0_1;
+fuel:= 50;
+
+if Gear^.Pos > 0 then
+    dec(Gear^.Pos, 1)
+else if (HHGear^.Message and (gm_Left or gm_Right or gm_Up)) <> 0 then
+    Gear^.Pos:= 500;
+
+if HHGear^.dX.isNegative then
+    Gear^.Tag:= -1
+else
+    Gear^.Tag:= 1;
+
+if (HHGear^.Message and gm_Up) <> 0 then
+    begin
+    if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
+        HHGear^.dY:= HHGear^.dY - move;
+    HHGear^.dY:= HHGear^.dY - move;
+    dec(Gear^.Health, fuel);
+    Gear^.MsgParam:= Gear^.MsgParam or gm_Up;
+    end;
+if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
+if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
+    begin
+    HHGear^.dX:= HHGear^.dX + (move * _0_2);
+    dec(Gear^.Health, fuel div 5);
+    Gear^.MsgParam:= Gear^.MsgParam or (HHGear^.Message and (gm_Left or gm_Right));
+    end;
+
+if Gear^.Health < 0 then Gear^.Health:= 0;
+if (GameTicks and $3F) = 0 then
+       begin
+       if Gear^.Tex <> nil then FreeTexture(Gear^.Tex);
+       Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
+       end;
+
+if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
+HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+HHGear^.State:= HHGear^.State or gstMoving;
+
+Gear^.X:= HHGear^.X;
+Gear^.Y:= HHGear^.Y - int2hwFloat(32);
+// For some reason I need to reapply followgear here, something else grabs it otherwise.
+if not bShowAmmoMenu then FollowGear:= HHGear;
+
+if ((Gear^.State and gsttmpFlag) = 0) or (HHGear^.dY < _0) then doStepHedgehogMoving(HHGear);
+
+if  (Gear^.Health = 0)
+    or (HHGear^.Damage <> 0)
+    or CheckGearDrowning(HHGear)
+    or (TurnTimeLeft = 0)
+    // allow brief ground touches - to be fair on this, might need another counter
+    or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and TestCollisionYwithGear(HHGear, 1))
+    or ((Gear^.Message and gm_Attack) <> 0) then
+    begin
+    with HHGear^ do
+        begin
+        Message:= 0;
+        Active:= true;
+        State:= State or gstMoving
+        end;
+    Gear^.doStep:= @doStepBirdyVanish;
+    isCursorVisible:= false;
+    end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBirdyDescend(Gear: PGear);
+var HHGear: PGear;
+begin
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+AllInactive:= false;
+if Gear^.Timer > 0 then
+    dec(Gear^.Timer, 1)
+else if CurrentHedgehog = nil then
+    begin
+    Gear^.doStep:= @doStepBirdyVanish;
+    end;
+HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
+if abs(hwRound(HHGear^.Y - Gear^.Y)) > 32 then
+    begin
+    if Gear^.Pos = 0 then
+        Gear^.Y:= Gear^.Y + _0_1
+    end
+else
+    begin
+    Gear^.doStep:= @doStepBirdyFly;
+    HHGear^.dY:= -_0_2
+    end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBirdy(Gear: PGear);
+var HHGear: PGear;
+begin
+Gear^.doStep:= @doStepBirdyDescend;
+HHGear:= PHedgehog(Gear^.Hedgehog)^.Gear;
+if HHGear^.dX.isNegative then
+    Gear^.Tag:= -1
+else
+    Gear^.Tag:= 1;
+Gear^.Pos:= 0;
+AllInactive:= false;
+FollowGear:= HHGear;
+OnUsedAmmo(PHedgehog(HHGear^.Hedgehog)^);
+ApplyAmmoChanges(PHedgehog(HHGear^.Hedgehog)^);
+with HHGear^ do
+    begin
+    State:= State and not gstAttacking;
+    Message:= Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right)
+    end
+end;
