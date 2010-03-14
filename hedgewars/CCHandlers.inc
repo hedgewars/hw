@@ -392,7 +392,6 @@ begin
 TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
 if not CurrentTeam^.ExtDriven then SendIPC('N');
-TickTrigger(trigTurns);
 {$IFDEF DEBUGFILE}AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));{$ENDIF}
 end;
 
@@ -718,42 +717,6 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 if ((GameFlags and gfInvulnerable) = 0) then cTagsMask:= cTagsMasks[cTagsMask] else cTagsMask:= cTagsMasksNoHealth[cTagsMask];
-end;
-
-procedure chAddTrigger(var s: shortstring);
-const MAXPARAMS = 16;
-var params: array[0..Pred(MAXPARAMS)] of Longword;
-    i: LongInt;
-    c: char;
-    tmp: shortstring;
-begin
-c:= s[1];
-Delete(s, 1, 1);
-
-i:= 0;
-while (i < MAXPARAMS) and
-    (Length(s) > 0) do
-    begin
-    SplitBySpace(s, tmp);
-    val(s, params[i]);
-    s:= tmp;
-    inc(i)
-    end;
-
-case c of
-'s': begin // sTYPE TICKS LIVES GEARTYPE X Y GEARTRIGGER
-    TryDo(i = 7, errmsgWrongNumber, true);
-    AddTriggerSpawner(params[0], params[1], params[2], TGearType(params[3]), params[4], params[5], params[6]);
-    end;
-'C': begin
-    TryDo(i = 3, errmsgWrongNumber, true);
-    AddTriggerSuccess(params[0], params[1], params[2]);
-    end;
-'F': begin
-    TryDo(i = 3, errmsgWrongNumber, true);
-    AddTriggerFail(params[0], params[1], params[2]);
-    end;
-end
 end;
 
 procedure chSpeedup_p(var s: shortstring);

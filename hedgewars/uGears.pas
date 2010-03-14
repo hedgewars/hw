@@ -55,7 +55,6 @@ type
             Tex: PTexture;
             Z: Longword;
             IntersectGear: PGear;
-            TriggerId: Longword;
             FlightTime: Longword;
             uid: Longword;
             SoundChannel: LongInt
@@ -95,7 +94,7 @@ procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt);
 
 implementation
 uses uWorld, uMisc, uStore, uConsole, uSound, uTeams, uRandom, uCollisions, uLand, uIO, uLandGraphics,
-    uAIMisc, uLocale, uAI, uAmmos, uTriggers, uStats, uVisualGears, uScript, 
+    uAIMisc, uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, 
 {$IFDEF GLES11}
     gles11;
 {$ELSE}
@@ -507,7 +506,6 @@ if Gear^.Kind = gtHedgehog then
 with Gear^ do AddFileLog('Delete: #' + inttostr(uid) + ' (' + inttostr(hwRound(x)) + ',' + inttostr(hwRound(y)) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + inttostr(ord(Kind)));
 {$ENDIF}
 
-if Gear^.TriggerId <> 0 then TickTrigger(Gear^.TriggerId);
 if CurAmmoGear = Gear then CurAmmoGear:= nil;
 if FollowGear = Gear then FollowGear:= nil;
 RemoveGearFromList(Gear);
@@ -1694,7 +1692,6 @@ if ((GameFlags and gfForts) = 0) then
         for i:= 0 to Pred(cLandAdditions) do
             begin
             Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
-            Gear^.TriggerId:= i + 1;
             FindPlace(Gear, false, 0, LAND_WIDTH);
             end;
 //  No game flag for this for now

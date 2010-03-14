@@ -57,7 +57,6 @@ uses    SDLh in 'SDLh.pas',
     uFloat in 'uFloat.pas',
     uStats in 'uStats.pas',
     uChat in 'uChat.pas',
-    uTriggers in 'uTriggers.pas',
     uLandTexture in 'uLandTexture.pas',
     uScript in 'uScript.pas',
     {$IFDEF IPHONEOS}PascalExports in 'PascalExports.pas',{$ENDIF}
@@ -347,7 +346,6 @@ begin
     init_uStats();
     init_uStore();
     init_uTeams();
-    init_uTriggers();
     init_uVisualGears();
     init_uWorld();
     init_uScript();
@@ -357,7 +355,6 @@ procedure freeEverything;
 begin
     free_uWorld();
     free_uVisualGears();    //stub
-    free_uTriggers();   //stub
     free_uTeams();
     free_uStore();
     free_uStats();      //stub

@@ -191,7 +191,7 @@ with Gear^,
                        amNapalm: AddGear(Ammo^[CurSlot, CurAmmo].Pos, 0, gtAirAttack, 2, _0, _0, 0);
                         amDrill: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtDrill, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amBallgun: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBallgun,  0, xx * _0_5, yy * _0_5, 0);
-                    amJetpack: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtJetpack, 0, _0, _0, 0);
+                    amJetpack: CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtBirdy, 0, _0, _0, 0);
                       amLowGravity: begin
                                     PlaySound(sndLowGravity);
                                     cGravity:= cMaxWindSpeed / 2

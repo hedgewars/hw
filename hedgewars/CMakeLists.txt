@@ -66,7 +66,6 @@ set(engine_sources
 	uStats.pas
 	uStore.pas
 	uTeams.pas
-	uTriggers.pas
 	uVisualGears.pas
 	uWorld.pas
 	CCHandlers.inc
