@@ -372,11 +372,6 @@ if ScriptGetString('Theme') <> '' then
 
 ScriptPrepareAmmoStore;
 ScriptCall('onAmmoStoreInit');
-ScriptApplyAmmoStore; // doing 6 times - this is just temporary for now
-ScriptApplyAmmoStore;
-ScriptApplyAmmoStore;
-ScriptApplyAmmoStore;
-ScriptApplyAmmoStore;
 ScriptApplyAmmoStore;
 end;
 
@@ -476,7 +471,9 @@ ScriptAmmoStore[ord(ammo) + 2 * ord(high(TAmmoType))]:= inttostr(delay)[1];
 end;
 
 procedure ScriptApplyAmmoStore;
+var i : LongInt;
 begin
+for i:= 0 to Pred(TeamsCount) do
     AddAmmoStore(ScriptAmmoStore);
 end;
 
