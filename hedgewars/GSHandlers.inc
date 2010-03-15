@@ -167,10 +167,13 @@ end;
 procedure doStepFallingGear(Gear: PGear);
 var isFalling, isCollV, isCollH: boolean;
     tmp: QWord;
+    tdX, tdY: hwFloat;
 begin
 Gear^.State:= Gear^.State and not gstCollision;
 isCollV:= false; 
 isCollH:= false;
+tdX:= Gear^.dX;
+tdY:= Gear^.dY;
 
 if Gear^.dY.isNegative then
     begin
@@ -204,9 +207,11 @@ else if Gear^.AdvBounce and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then
 
 if isCollV and isCollH and Gear^.AdvBounce then
        begin
-       tmp:= Gear^.dX.QWordValue;
-       Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
-       Gear^.dY.QWordValue:= tmp;
+       Gear^.dX:= hwAbs(tdY)*hwSign(Gear^.dX)*Gear^.Elasticity*Gear^.Friction;
+       Gear^.dY:= hwAbs(tdX)*hwSign(Gear^.dY)*Gear^.Elasticity;
+       //tmp:= Gear^.dX.QWordValue;
+       //Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
+       //Gear^.dY.QWordValue:= tmp;
        end;
 
 if isFalling then Gear^.dY:= Gear^.dY + cGravity;
