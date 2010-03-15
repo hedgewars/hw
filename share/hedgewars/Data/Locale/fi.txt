@@ -52,6 +52,8 @@
 01:07=%1 Jäljellä
 01:08=Polttoaine
 01:09=Synkronoidaan...
+01:10=Tämän apuvälineen käyttäminen ei päätä vuoroasi!
+01:11=Tämä ase tai apuväline ei ole vielä käytettävissä!
 
 ; Event messages
 ; Hog (%1) died
@@ -84,7 +86,7 @@
 02:00=%1 raivopoistui elämästä
 02:00=%1 ei vain osaa
 02:00=Voi %1 parkaa...
-02:00=%1 tykkää enemmän Wormuxista
+02:00=%1 pitää enemmän Wormuxista
 02:00=%1 on pysäyttänyt luoteja kasvoillaan
 02:00=%1 on sankari ih...siilien joukossa
 02:00=%1 löytää paikkansa Valhallasta
@@ -107,6 +109,7 @@
 02:00=%1 ei kestänyt ammutuksi joutumista
 02:00=%1 olisi tarvinnut ylimääräistä elämää
 02:00=Onko lääkäriä lähellä?
+
 ; Hog (%1) drowned
 02:01=%1 leikkii sukellusvenettä!
 02:01=%1 matkii Titanicia!
@@ -153,6 +156,7 @@
 02:01=%1 käy kylvyssä
 02:01=%1 on märkämärkämärkä
 02:01=%1 kasteli sulkansa
+
 ; Round starts
 02:02=Taistelu alkakoon!
 02:02=Ladattu ja valmiina!
@@ -199,10 +203,13 @@
 02:02=Siilit, eteenpäin!
 02:02=Älkää pelatko!
 02:02=Olkaa urheita ja valloittakaa
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; New health crate
 02:05=Apua tulossa!
 02:05=Lääkäri!
@@ -219,6 +226,7 @@
 02:05=Oikea annostus: Niin monta kuin löydät!
 02:05=Kiireellinen lähetys
 02:05=Varusteita!
+
 ; New ammo crate
 02:06=Lisää aseita!
 02:06=Vahvistuksia!
@@ -243,6 +251,7 @@
 02:06=Älä anna vihollisesi poimia tuota!
 02:06=Uuden karheita leluja!
 02:06=Mysteterilaatikko!
+
 ; New utility crate
 02:07=Työkaluaika!
 02:07=Tämä voisi olla hyödyllinen...
@@ -255,6 +264,7 @@
 02:07=Käytä tätä viisaasti
 02:07=Ui, tämä laatikko on painava
 02:07=Saatat tarvita tätä
+
 ; Hog (%1) skips his turn
 02:08=%1 on niin tylsä...
 02:08=%1:ää ei voisi vähempää kiinnostaa
@@ -292,6 +302,7 @@
 02:08=%1:llä on ilmeisesti parempaakin tekemistä
 02:08=%1 on kangistunut pelosta
 02:08=%1 on nukahtanut
+
 ; Hog (%1) hurts himself only
 02:09=%1:n pitäisi harjoitella tähtäämistä
 02:09=%1 vihaa itseään
@@ -319,13 +330,119 @@
 02:09=%1 näyttää vastustajalleen mihin pystyy
 02:09=%1:n ei voida olettaa olevan aina täydellinen
 02:09=Ei hätää %1, kukaan ei ole täydellinen
+02:09=Ei hätää %1, kukaan ei ole tädelinen
 02:09=%1 teki tuon tarkoituksella
 02:09=En kerro kenellekkään jos sinä et kerro, %1
 02:09=Miten noloa!
 02:09=Olen varma ettei kukaan nähnyt tuota, %1
 02:09=%1:n täytyy lukea taisteluohjeet uudelleen
 02:09=%1:n ase on selvästi epäkunnossa
+
 ; Hog shot an home run (using the bat and another hog)
 02:10=Kotijuoksu!
 02:10=Lintu, eiku lentokone, eiku...
 02:10=Se lensi pitkälle!
+
+; Weapon Categories
+03:00=Ajastettu kranaatti
+03:01=Ajastettu kranaatti
+03:02=Ballistinen ase
+03:03=Ohjattu ase
+03:04=Ase (useita laukauksia)
+03:05=Kaivuutyökalu
+03:06=Toiminta
+03:07=Kuljetusväline
+03:08=Läheisyyspommi
+03:09=Ase (useita laukauksia)
+03:10=BOOM!
+03:11=Bonk!
+03:12=Kamppailulaji
+03:13=UNUSED
+03:14=Kuljetusväline
+03:15=Ilmahyökkäys
+03:16=Ilmahyökkäys
+03:17=Kaivuutyökalu
+03:18=Työkalu
+03:19=Kuljetusväline
+03:20=Toiminta
+03:21=Ballistinen ase
+03:22=Kutsu minua Indianaksi!
+03:23=(Tosi) kamppailulaji
+03:24=Kakku EI ole valhe!
+03:25=Naamiaisasuste
+03:26=Mehukas kranaatti
+03:27=Liekehtivä kranaatti
+03:28=Ballistinen ase
+03:29=Ballistinen ase
+03:30=Ilmahyökkäys
+03:31=Kauko-ohjattava pommi
+03:32=Väliaikainen vaikutus
+03:33=Väliaikainen vaikutus
+03:34=Väliaikainen vaikutus
+03:35=Väliaikainen vaikutus
+03:36=Väliaikainen vaikutus
+03:37=Väliaikainen vaikutus
+03:38=Ase (useita laukauksia)
+03:39=Kuljetusväline
+03:40=Polttava kranaatti
+
+; Weapon Descriptions (use | as line breaks)
+04:00=Hyökkää yksinkertaisella kranaatilla.|Se räjähtää kun ajastimesta loppuu aika.|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
+04:01=Hyökkää sirpalepommilla.|Se jakaantuu pienemmiksi pommeiksi ajan|loppuessa ajastimesta|1-5: Säädä kranaatin ajastin|Hyökkää: Pidä pohjassa lisätäksesi heittovoimaa
+04:02=Hyökkää ballistisella ammuksella|johon tuuli saattaa vaikuttaa|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+04:03=Laukaise ohjattu pommi joka lukittuu|valittuun kohteeseen. Älä ammu täydellä voimalla|lisätäksesi tarkkuutta|Kursori: Valitse kohde|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+04:04=Ammu vihollisiasi kahdesti laukeavalla haulikolla.|Kiitos leviämisen sinun ei tarvitse tähdätä suoraan|vahingoittaeksi vihollisiasi.|Hyökkää: Ammu (useita kertoja)                   
+04:05=Siirry maan alle! Käytä maaporaa porataksesi|reiän maahan päästäksesi muille alueille.|Hyökkää: Aloita ja lopeta kaivaminen
+04:06=Tylsää? Ei mitään tapaa hyökätä? Säästät ammuksiasi?|Ei hätää! Jätä vuoro väliin, pelkuri!|Hyökkää: Jätä vuorosi väliin ilman tappelua
+04:07=Ylitä pitkiä välimatkoja|hyvin ajoitetuilla laukauksilla ja köydellä.|Käytä momenttiasi liukuaksesi muiden siilien sekaan|tai pudota kranaatteja ja muita aseita niiden päälle.|Hyökkää: Ammu ja irroita köysi|Pitkä hyppy: Pudota kranaatteja ja vastaavia aseita
+04:08=Pidä viholliset kaukana pudottamalla miina|kapeille käytäville tai suoraan niiden jalkojen juureen.|Pakene ennen kuin aktivoit sen itse!|Hyökkää: Pudota miina viereesi
+04:09=Oletko epävarma tähtäyksestäsi? Käytä Desert|Eaglea hyökätäksesi neljällä laukauksella| Hyökkää: Ammu (useita kertoja)
+04:10=Raaka voima on aina vaihtoehto. Käytä tätä klassista|räjähdettä vihollisiis ja pakene.|Hyökkää: Pudota dynamiitti viereesi                                                             
+04:11=Hankkiudu vihollissiileistä eroon lyömällä ne mailalla|kartan ulkopuolelle tai veteen. Tai miten olisi|muutaman miinan lyöminen kavereillesi?|Hyökkää: Lyö kaikkia edessä olevia
+04:12=Mene henkilökohtaisuuksiin vapauttamalla|tämän melkein tappavan kamppailulajitekniikan voimat.|Hyökkää: Suorita Fire Punch                                                                           
+04:13=UNUSED                                                                                                                                                                                             
+04:14=Korkean paikan kammo? Parempi ottaa laskuvarjo.|Se avautuu kun putoat liian kauas|ja pelastaa siilen putoamisvaurioilta.|Hyökkää: Avaa laskuvarjo
+04:15=Kutsu lentokone hyökkäämään vihollisiasi päin|pommituslennolla|Vasen/Oikea: Valitse suunta|Osoitin: Valitse kohdealue                                                              
+04:16=Kutsu lentokone pudottaaman useita miinoja kohdealueelle|Vasen/Oikea: Valitse hyökkäyssuunta|Osoitin: Valitse kohdealue
+04:17=Tarvitsetko suojaa? Käytä puhalluslamppua kaivaaksesi|tunnelin maahan saadaksesi suojaa|Hyökkää: Aloita ja lopeta kaivaminen
+04:18=Tarvitsetko suojaa vai haluatko ylittää|ylittämättömän maa-alueen? Sijoita muutamia palkkeja kuten haluat|Vasen/Oikea: Valitse asetettava palkki|Osoitin: Sijoita palkki sallittuun kohtaan
+04:19=Oikealla hetkellä käytettynä kaukosiirto|voi olla voimakkaampi kuin melkein mikään tahansa muu ase|koska se antaa sinun pelastaa siilesi vaarallisista tilanteista sekunneissa.|Osoitin: Valitse kohdealue
+04:20=Antaa sinun vaihtaa vuoro toiselle siilelle|Hyökkää: Laita siilen vaihto -tila päälle
+04:21=Ammu kranaatin kaltainen ammus|joka vapauttaa useita pommeja osuessaan|Hyökkää: Ammu täydellä voimalla
+04:22=Ei vain Indiana Jonesille! Piiska on hyödyllinen ase|useissa tilanteissa. Erityisesti|jos haluat sysätä jonkun alas kielekkeeltä|Hyökkää: Iske kaikkea edessäsi olevaa
+04:23=Jos sinulla ei ole mitään menettävää|tämä saattaa olla melko kätevä.|Uhraa siilesi laukaisemalla se|valittuun suuntan vahingottaen kaikkea tiellä olevaa räjähtäen lopussa|Hyökkää: Laukaise tuhoisa ja tappava hyökkäys
+04:24=Hyvää syntymäpäivää! Laukaise tämä kakku ja anna sen kävellä|vihollistesi viereen ja järjestä heille räjähtävät kekkerit.|Tämä kakku voi ylittää melkein minkä tahansa maaston|Mutta se saattaa räjähtää matkalla|Hyökkää: Laukaise kakku tai anna sen pysähtyä ja räjähtää                                      
+04:25=Käytä tätä naamioitumispakkausta saadaksesi vihollisesi|hyppäämään halatakseen (ja sitten putoamaan kuoppaan tai reikään).|Hyökkää: Käytä pakkausta ja yritä vietellä toinen siili
+04:26=Heitä tämä mehukas vesimeloni vihollsiasi kohti|Kun ajastimesta loppuu aika, se hajoaa useiksi|räjähtäviksi palasiksi.|1-5: säädä vesimelonin ajastinta|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+04:27=Anna helvetin tulen sataa vihollistesi päälle käyttämällä tätä|pirullista räjähdettä. Älä mene liian lähelle tätä räjähdettä|koska pienemmät tulet saattavat kestää pitempään.|Hyökkää: Pidä pohjassa ampuaksesi voimakkaammin
+04:28=Hetken kuluttua tämän raketin laukaisusta|se alkaa porautumaan maan läpi ja räjähtää|kun sen sytytyslanka palaa loppuun tai kun se päätyy maan pinnalle.|Hyökkää: Pidä pohjassa ampuaksesi voimakkaammin
+04:29=Tämä ei ole pienille lapsille! Tämä palloase ampuu|tonneittain pieniä räjähtäviä värikkäitä palloja.|Hyökkää: Ammu täydellä teholla|Ylös/Alas: Jatka tähtäämist
+04:30=Kutsu lentokone laukaisemaan tehokas napalmi-isku.|Oikein tähdättynä tämä hyökkäys voi hävittää|suuria palasia maastosta epäonnisine siileineen.|Vasen/Oikea: Valitse hyökkäyssuunta|Osoitin: Valitse kohdealue
+04:31=Kauko-ohjattava lentokone on ihannease laatikkojen keräämiseen|ja kaukaisten siilien kimppuun hyökkäämiseen.|Ohjaa se suoraan vihollisia päin|tai pudota muutama pommi ensin.|Hyökkää: Laukaise lentokone tai pudota pommeja|Ylös/Alas: Ohjaa lentokonetta
+04:32=Matala painovoima on tehokkaampi kuin mikään laihdutuskeino!|Hyppää korkeammalle ja pitemmälle tai anna vihollistesi|lentää entistä pitemmälle|Hyökkää: Aktivoi
+04:33=Joskus tarvitset vähän lisätehoa tehdäksesi enemmän vahinkoa|Hyökkää: Aktivoi
+04:34=Koskemattomuus!|Hyökkää: Aktivoi
+04:35=Joskus aika kuluu liian nopeasti. Nappaa muutama lisäsekunti|viimeistelläksi hyöykkäyksesi.|Hyökkää: Aktivoi
+04:36=No, joskus olet vain liian huono thähtäämään.|Hanki vähän apua nykyteknologiasta.|Hyökkää: Aktivoi
+04:37=Älä pelkää päivänvaloa. Se kestää vain yhden vuoron|mutta se imee vahingon jonka teet muille siileille|Hyökkää: Aktivoi
+04:38=Tarkkuuskivääri on tuhoisin ase arsenaalissasi,|mutta tehoton lähietäisyydellä.|Tehty vahinko lisääntyy etäisyyden mukaan|Hyökkää: Ammu (kahdesti)
+04:39=Lennä kartan muihin osiin lentävällä lautasella|Tämä vaikeasti omaksuttava apuväline vie sinut melkein minne tahansa|Hyökkää: Aktivoi|Ylös/Vasen/Oikea: Liiku tiettyyn suuntaan
+04:40=Sytytä maa tuleen tällä pullolla (kohta) palavaa nestettä|Hyökkää: Pidä pohjassa lisätäksesi voimaa
+
+; Game goal strings
+05:00=Pelimoodit
+05:01=Seuraavat säännöt ovat voimassa
+05:02=Linnoitukset: Puolusta linnoitustasi; kukista vastustajasi!
+05:03=Matala painovoima: Varo askeliasi
+05:04=Kuolemattomuus: Siilet ovat (melkein) vahingoittumattomia
+05:05=Vampyrismi: Siilet paranevat sen verran kuin ne vahingoittavat
+05:06=Karma: Siilet vahingoittuvat itse saman verran kuin tekevät vahinkoa
+05:07=Puolusta kunginasta: Älä anna kuninkaasi kuolla!|Sijoita kunginas: Valitse suojattu aloituspiste kuninkaallesi
+05:08=Sijoita siilet: Sijoita siilesi ennen pelin alkua
+05:09=Tykistö: Siilet eivät voi vaihtaa sijaintiaan
+05:10=Vahingoittumaton maasto: Useimmat aseet eivät tuhoa maastoa
+05:11=Jaetut paonkset: Kaikki saman värin joukkueet jakavat ammuksensa
+05:12=Miinojen ajastimet: Miinat räjähtävät %1 sekunnin kuluttua
+05:13=Miinojen ajastimet: Miinat räjähtävät välittömästi
+05:14=Miinojen ajastimet: Miinat räjähtävät 0 - 3 sekunnin kuluttua
+05:15=Vahinkokerroin: Kaikki aseet tekevät %1% vahinkopistettä
