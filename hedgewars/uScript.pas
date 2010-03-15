@@ -32,6 +32,7 @@ function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
+function ScriptExists(fname : shortstring) : boolean;
 
 procedure init_uScript;
 procedure free_uScript;
@@ -145,8 +146,52 @@ begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
             lua_pushinteger(L, ord(gear^.Kind))
+        else
+            lua_pushnil(L);
         end;
     lc_getgeartype:= 1
+end;
+
+function lc_gethogclan(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetHogClan!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
+            lua_pushinteger(L, PHedgehog(gear^.Hedgehog)^.Team^.Clan^.ClanIndex)
+            end
+        else
+            lua_pushnil(L);
+        end;
+    lc_gethogclan:= 1
+end;
+
+function lc_gethogname(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetHogName!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
+            lua_pushstring(L, str2pchar(PHedgehog(gear^.Hedgehog)^.Name))
+            end
+        else
+            lua_pushnil(L);
+        end;
+    lc_gethogname:= 1
 end;
 
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
@@ -338,7 +383,7 @@ begin
 // not required if there's no script to run
 if not ScriptLoaded then
     exit;
-        
+
 // push game variables so they may be modified by the script
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
@@ -370,9 +415,14 @@ if ScriptGetString('Map') <> '' then
 if ScriptGetString('Theme') <> '' then
     ParseCommand('theme ' + ScriptGetString('Theme'), true);    
 
-ScriptPrepareAmmoStore;
-ScriptCall('onAmmoStoreInit');
-ScriptApplyAmmoStore;
+if ScriptExists('onAmmoStoreInit') then
+    begin
+    ScriptPrepareAmmoStore;
+    ScriptCall('onAmmoStoreInit');
+    ScriptApplyAmmoStore
+    end;
+
+ScriptSetInteger('ClansCount', ClansCount)
 end;
 
 procedure ScriptLoad(name : shortstring);
@@ -402,7 +452,7 @@ end;
 
 procedure ScriptCall(fname : shortstring);
 begin
-if not ScriptLoaded then
+if not ScriptLoaded or not ScriptExists(fname) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
@@ -431,7 +481,7 @@ end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-if not ScriptLoaded then
+if not ScriptLoaded or not ScriptExists(fname) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
@@ -453,9 +503,24 @@ else
 GetGlobals;
 end;
 
+function ScriptExists(fname : shortstring) : boolean;
+begin
+if not ScriptLoaded then
+    begin
+    ScriptExists:= false;
+    exit
+    end;
+lua_getglobal(luaState, Str2PChar(fname));
+ScriptExists:= not lua_isnoneornil(luaState, -1);
+lua_pop(luaState, -1)
+end;
+
 procedure ScriptPrepareAmmoStore;
 var i: ShortInt;
 begin
+// reset ammostore (quite unclean, but works?)
+free_uAmmos;
+init_uAmmos;
 ScriptAmmoStore:= '';
 for i:=1 to ord(High(TAmmoType)) do
     ScriptAmmoStore:= ScriptAmmoStore + '0000';
@@ -560,6 +625,8 @@ lua_register(luaState, 'PlaySound', @lc_playsound);
 lua_register(luaState, 'AddTeam', @lc_addteam);
 lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
+lua_register(luaState, 'GetHogClan', @lc_gethogclan);
+lua_register(luaState, 'GetHogName', @lc_gethogname);
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;
@@ -609,6 +676,11 @@ end;
 function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 begin
 ScriptCall:= 0
+end;
+
+function ScriptExists(fname : shortstring) : boolean;
+begin
+ScriptExists:= false
 end;
 
 procedure init_uScript;

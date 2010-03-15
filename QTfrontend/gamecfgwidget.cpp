@@ -158,7 +158,15 @@ QStringList GameCFGWidget::getFullConfig() const
 
     QString currentMap = pMapContainer->getCurrentMap();
     if (currentMap.size() > 0)
+    {
         sl.append("emap " + currentMap);
+        QFile mapLuaFile(
+                QString("%1/Maps/%2/map.lua")
+                .arg(datadir->absolutePath())
+                .arg(currentMap));
+        if(mapLuaFile.exists())
+            sl.append(QString("escript %1").arg(mapLuaFile.fileName()));
+    }
     sl.append("etheme " + pMapContainer->getCurrentTheme());
     return sl;
 }

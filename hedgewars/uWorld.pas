@@ -279,7 +279,7 @@ else
     FreeWeaponTooltip;
 
 if (WeaponTooltipTex <> nil) and (AMxShift = 0) then
-    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, y);
+    ShowWeaponTooltip(x - WeaponTooltipTex^.w - 3, min(y, cScreenHeight - WeaponTooltipTex^.h - 40));
 
 bSelected:= false;
 if AMxShift = 0 then DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)

@@ -63,7 +63,7 @@ var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s: shortstring;
+var s: ansistring;
     f: textfile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;
