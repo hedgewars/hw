@@ -351,6 +351,12 @@ begin
 lua_settop(luaState, 0)
 end;
 
+procedure ScriptSetNil(name : shortstring);
+begin
+lua_pushnil(luaState);
+lua_setglobal(luaState, Str2PChar(name));
+end;
+
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
 begin
 lua_pushinteger(luaState, value);
@@ -443,6 +449,10 @@ end;
 procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
+if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+    ScriptSetInteger('CurrentHedgehog', CurrentHedgehog^.Gear^.UID)
+else
+    ScriptSetNil('CurrentHedgehog');
 end;
 
 procedure GetGlobals;

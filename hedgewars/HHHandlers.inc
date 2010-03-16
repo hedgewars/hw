@@ -588,7 +588,7 @@ if (Gear^.State and gstMoving) <> 0 then
    if (Gear^.State and gstDrowning) <> 0 then isCursorVisible:= false
    end;
 
-if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) then
+if (hwAbs(Gear^.dY) > _0) and (Gear^.FlightTime > 0) and ((GameFlags and gfLowGravity) = 0) then
     begin
     inc(Gear^.FlightTime, 1);
     if Gear^.FlightTime = 2000 then

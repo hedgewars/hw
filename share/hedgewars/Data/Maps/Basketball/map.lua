@@ -20,7 +20,12 @@ local scored = {
 	["de"] = " erhält einen Punkt!"
 	}
 
-local sscore = {
+local failed = {
+	["en"] = " scored a penalty!",
+	["de"] = " erhält eine Strafe!"
+	}
+
+	local sscore = {
 	["en"] = "Score",
 	["de"] = "Punktestand"
 	}
@@ -46,12 +51,12 @@ end
 local score = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0}
 
 function onGameInit()
-	GameFlags = gfSolidLand + gfBorder + gfInvulnerable + gfRandomOrder + gfLowGravity
+	GameFlags = gfSolidLand + gfBorder + gfInvulnerable + gfLowGravity
 	TurnTime = 20000
 	CaseFreq = 0
 	LandAdds = 0
 	Explosives = 0
-	Delay = 0
+	Delay = 500
 end
 
 function onGameStart()
@@ -63,17 +68,25 @@ end
 
 function onAmmoStoreInit()
 	SetAmmo(amBaseballBat, 9, 0, 0)
+	SetAmmo(amSkip, 9, 0, 0)
 end
 
 function onGearAdd(gear)
 end
 
 function onGearDelete(gear)
-	if GetGearType(gear) == gtHedgehog then
-		local clan = GetHogClan(gear)
-		score[clan] = score[clan] + 1
-		local s = loc(sscore) .. ": " .. score[0]
+	if (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then
+		local clan = GetHogClan(CurrentHedgehog)
+		local s = GetHogName(gear) .. " " .. loc(drowning) .. "|" .. loc(team) .. " " .. (clan + 1) .. " "
+		if GetHogClan(CurrentHedgehog) ~= GetHogClan(gear) then
+			score[clan] = score[clan] + 1
+			s = s .. loc(scored)
+		else
+			score[clan] = score[clan] - 1
+			s = s .. loc(failed)
+		end
+		s = s .. "| |" .. loc(sscore) .. ": " .. score[0]
 		for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
-		ShowMission(loc(caption), loc(subcaption), GetHogName(gear) .. " " .. loc(drowning) .. "|" .. loc(team) .. " " .. (clan + 1) .. " " .. loc(scored) .. "| |" .. s, -amBaseballBat, 0)
+		ShowMission(loc(caption), loc(subcaption), s, -amBaseballBat, 0)
 	end
 end
