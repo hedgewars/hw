@@ -165,13 +165,14 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
-var isFalling, isCollV, isCollH: boolean;
+var isFalling: boolean;
     tmp: QWord;
     tdX, tdY: hwFloat;
+    collV, collH: LongInt;
 begin
 Gear^.State:= Gear^.State and not gstCollision;
-isCollV:= false; 
-isCollH:= false;
+collV:= 0; 
+collH:= 0;
 tdX:= Gear^.dX;
 tdY:= Gear^.dY;
 
@@ -180,7 +181,7 @@ if Gear^.dY.isNegative then
     isFalling:= true;
     if TestCollisionYwithGear(Gear, -1) then
         begin
-        isCollV:= true;
+        collV:= -1;
         Gear^.dX:=   Gear^.dX * Gear^.Friction;
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
         Gear^.State:= Gear^.State or gstCollision
@@ -188,7 +189,7 @@ if Gear^.dY.isNegative then
     end else
     if TestCollisionYwithGear(Gear, 1) then
         begin
-        isCollV:= true;
+        collV:= 1;
         isFalling:= false;
         Gear^.dX:=   Gear^.dX * Gear^.Friction;
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
@@ -198,21 +199,24 @@ if Gear^.dY.isNegative then
 
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
     begin
-    isCollH:= true;
+    collH:= hwSign(Gear^.dX);
     Gear^.dX:= - Gear^.dX * Gear^.Elasticity;
     Gear^.dY:=   Gear^.dY * Gear^.Elasticity;
     Gear^.State:= Gear^.State or gstCollision
     end 
-else if Gear^.AdvBounce and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then isCollH:= true;
+else if Gear^.AdvBounce and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then collH:= -hwSign(Gear^.dX);
 
-if isCollV and isCollH and Gear^.AdvBounce then
-       begin
-       Gear^.dX:= hwAbs(tdY)*hwSign(Gear^.dX)*Gear^.Elasticity*Gear^.Friction;
-       Gear^.dY:= hwAbs(tdX)*hwSign(Gear^.dY)*Gear^.Elasticity;
-       //tmp:= Gear^.dX.QWordValue;
-       //Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
-       //Gear^.dY.QWordValue:= tmp;
-       end;
+if (collV <>0) and (collH <> 0) and Gear^.AdvBounce then
+    begin
+    Gear^.dX:= tdY*Gear^.Elasticity*Gear^.Friction;
+    Gear^.dY:= tdX*Gear^.Elasticity*Gear^.Friction;
+    if ((collV > 0) and (collH > 0)) or ((collV < 0) and (collH < 0)) then Gear^.dX.isNegative:=not tdY.isNegative
+    else if (collV < 0) and (collH > 0) then Gear^.dY.isNegative:= not tdX.isNegative;
+
+    //tmp:= Gear^.dX.QWordValue;
+    //Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
+    //Gear^.dY.QWordValue:= tmp;
+    end;
 
 if isFalling then Gear^.dY:= Gear^.dY + cGravity;
 
