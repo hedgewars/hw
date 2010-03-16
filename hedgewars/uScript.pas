@@ -194,6 +194,101 @@ begin
     lc_gethogname:= 1
 end;
 
+function lc_getx(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetX!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushnumber(L, hwRound(gear^.X))
+        else
+            lua_pushnil(L);
+        end;
+    lc_getx:= 1
+end;
+
+function lc_gety(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetY!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushnumber(L, hwRound(gear^.Y))
+        else
+            lua_pushnil(L);
+        end;
+    lc_gety:= 1
+end;
+
+function lc_copypv(L : Plua_State) : LongInt; Cdecl;
+var gears, geard : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to CopyPV!');
+        end
+    else
+        begin
+        gears:= GearByUID(lua_tointeger(L, 1));
+        geard:= GearByUID(lua_tointeger(L, 2));
+        if (gears <> nil) and (geard <> nil) then
+            begin
+            geard^.X:= gears^.X;
+            geard^.Y:= gears^.Y;
+            geard^.dX:= gears^.dX;
+            geard^.dY:= gears^.dY;
+            end
+        end;
+    lc_copypv:= 1
+end;
+
+function lc_copypv2(L : Plua_State) : LongInt; Cdecl;
+var gears, geard : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to CopyPV2!');
+        end
+    else
+        begin
+        gears:= GearByUID(lua_tointeger(L, 1));
+        geard:= GearByUID(lua_tointeger(L, 2));
+        if (gears <> nil) and (geard <> nil) then
+            begin
+            geard^.X:= gears^.X;
+            geard^.Y:= gears^.Y;
+            geard^.dX:= gears^.dX * 2;
+            geard^.dY:= gears^.dY * 2;
+            end
+        end;
+    lc_copypv2:= 1
+end;
+
+function lc_followgear(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        WriteLnToConsole('LUA: Wrong number of parameters passed to FollowGear!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then FollowGear:= gear
+        end;
+    lc_followgear:= 0
+end;
+
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -204,9 +299,57 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) then gear^.Health:= lua_tointeger(L, 2)
+        if gear <> nil then gear^.Health:= lua_tointeger(L, 2)
         end;
     lc_sethealth:= 0
+end;
+
+function lc_setstate(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to SetState!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then gear^.State:= lua_tointeger(L, 2)
+        end;
+    lc_setstate:= 0
+end;
+
+function lc_getstate(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetState!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.State)
+        else
+            lua_pushnil(L)
+        end;
+    lc_getstate:= 1
+end;
+
+function lc_settag(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to SetTag!');
+        end
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then gear^.Tag:= lua_tointeger(L, 2)
+        end;
+    lc_settag:= 0
 end;
 
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
@@ -637,6 +780,15 @@ lua_register(luaState, 'AddHog', @lc_addhog);
 lua_register(luaState, 'SetHealth', @lc_sethealth);
 lua_register(luaState, 'GetHogClan', @lc_gethogclan);
 lua_register(luaState, 'GetHogName', @lc_gethogname);
+lua_register(luaState, 'GetX', @lc_getx);
+lua_register(luaState, 'GetY', @lc_gety);
+lua_register(luaState, 'CopyPV', @lc_copypv);
+lua_register(luaState, 'CopyPV2', @lc_copypv2);
+lua_register(luaState, 'FollowGear', @lc_followgear);
+lua_register(luaState, 'SetState', @lc_setstate);
+lua_register(luaState, 'GetState', @lc_getstate);
+lua_register(luaState, 'SetTag', @lc_settag);
+
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;

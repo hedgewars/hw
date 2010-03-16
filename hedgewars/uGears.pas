@@ -1573,7 +1573,7 @@ while Gear<>nil do
                   if ((TrainingFlags and tfRCPlane) <> 0) and (TrainingTargetGear <> nil) and ((Gear^.State and gstDrowning) = 0) then
                      DrawRotatedf(sprFinger, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, GameTicks div 32 mod 16, 0, DxDy2Angle(Gear^.X - TrainingTargetGear^.X, TrainingTargetGear^.Y - Gear^.Y));
                   end;
-       gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, DxDy2Angle(Gear^.dY, Gear^.dX));
+       gtBall: DrawRotatedf(sprBalls, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag,0, Gear^.DirAngle);
 
        gtDrill: DrawRotated(sprDrill, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
@@ -1736,7 +1736,7 @@ var Gear: PGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
-if (Radius > 10) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
+if (Radius > 10) and ((Mask and EXPLNoGfx) = 0) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
 if (Mask and EXPLAllDamageInRadius) = 0 then

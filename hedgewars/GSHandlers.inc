@@ -249,6 +249,14 @@ if Gear^.Timer = 1000 then // might need adjustments
         gtWatermelon: makeHogsWorry(Gear^.X, Gear^.Y, 75);
         gtHellishBomb: makeHogsWorry(Gear^.X, Gear^.Y, 90);
     end;
+
+if (Gear^.Kind = gtBall) and ((Gear^.State and gstTmpFlag) <> 0) then
+    begin
+    CheckCollision(Gear);
+    if (Gear^.State and gstCollision) <> 0 then
+        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, EXPLDontDraw or EXPLNoGfx);
+    end;
+
 if Gear^.Timer = 0 then
     begin
     case Gear^.Kind of
@@ -353,7 +361,7 @@ if (Gear^.State and gstCollision) <> 0 then
     exit
     end;
 
-if Gear^.Kind = gtMelonPiece then
+if (Gear^.Kind = gtMelonPiece) or (Gear^.Kind = gtBall) then
     CalcRotationDirAngle(Gear)
 else
     if (GameTicks and $1F) = 0 then

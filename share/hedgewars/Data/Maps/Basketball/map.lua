@@ -1,4 +1,4 @@
--- Hedgewars - Basketball for 2 Players
+-- Hedgewars - Basketball for 2+ Players
 
 local caption = {
 	["en"] = "Hedgewars-Basketball",

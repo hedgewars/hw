@@ -379,6 +379,7 @@ const
     EXPLNoDamage          = $00000004;
     EXPLDoNotTouchHH      = $00000008;
     EXPLDontDraw          = $00000010;
+    EXPLNoGfx             = $00000020;
 
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;
