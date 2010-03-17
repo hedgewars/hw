@@ -66,6 +66,10 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
                 QString("%1/Maps/%2/map.cfg")
                 .arg(datadir->absolutePath())
                 .arg(map));
+        QFile mapLuaFile(
+                QString("%1/Maps/%2/map.lua")
+                .arg(datadir->absolutePath())
+                .arg(map));
 
         if (mapCfgFile.open(QFile::ReadOnly)) {
             QString theme;
@@ -74,12 +78,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
             QTextStream input(&mapCfgFile);
             input >> theme;
             input >> limit;
+            mapInfo.push_back(map);
             mapInfo.push_back(theme);
             if (limit)
                 mapInfo.push_back(limit);
             else
                 mapInfo.push_back(18);
-            chooseMap->addItem(map, mapInfo);
+            mapInfo.push_back(mapLuaFile.exists());
+            chooseMap->addItem(mapLuaFile.exists() ? (QComboBox::tr("Mission") + ": " + map) : map, mapInfo);
             mapCfgFile.close();
         }
     }
@@ -183,27 +189,27 @@ void HWMapContainer::mapChanged(int index)
         lblFilter->show();
         CB_TemplateFilter->show();
         emit mapChanged("+rnd+");
-        emit themeChanged(chooseMap->itemData(0).toList()[0].toString());
+        emit themeChanged(chooseMap->itemData(0).toList()[1].toString());
     } else
     {
         loadMap(index);
         gbThemes->hide();
         lblFilter->hide();
         CB_TemplateFilter->hide();
-        emit mapChanged(chooseMap->currentText());
+        emit mapChanged(chooseMap->itemData(0).toList()[0].toString());
     }
 }
 
 void HWMapContainer::loadMap(int index)
 {
     QPixmap mapImage;
-    if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->currentText() + "/preview.png")) {
+    if(!mapImage.load(datadir->absolutePath() + "/Maps/" + chooseMap->itemData(index).toList()[0].toString() + "/preview.png")) {
         changeImage();
         chooseMap->setCurrentIndex(0);
         return;
     }
 
-    hhLimit = chooseMap->itemData(index).toList()[1].toInt();
+    hhLimit = chooseMap->itemData(index).toList()[2].toInt();
     addInfoToPreview(mapImage);
 }
 
@@ -246,6 +252,7 @@ void HWMapContainer::themeSelected(int currentRow)
 {
     QString theme = Themes->at(currentRow);
     QList<QVariant> mapInfo;
+    mapInfo.push_back(QString("+rnd+"));
     mapInfo.push_back(theme);
     mapInfo.push_back(18);
     chooseMap->setItemData(0, mapInfo);
@@ -261,12 +268,18 @@ QString HWMapContainer::getCurrentSeed() const
 QString HWMapContainer::getCurrentMap() const
 {
     if(!chooseMap->currentIndex()) return QString();
-    return chooseMap->currentText();
+    return chooseMap->itemData(chooseMap->currentIndex()).toList()[0].toString();
 }
 
 QString HWMapContainer::getCurrentTheme() const
 {
-    return chooseMap->itemData(chooseMap->currentIndex()).toList()[0].toString();
+    return chooseMap->itemData(chooseMap->currentIndex()).toList()[1].toString();
+}
+
+bool HWMapContainer::getCurrentIsMission() const
+{
+    if(!chooseMap->currentIndex()) return false;
+    return chooseMap->itemData(chooseMap->currentIndex()).toList()[3].toBool();
 }
 
 int HWMapContainer::getCurrentHHLimit() const
@@ -298,7 +311,14 @@ void HWMapContainer::setMap(const QString & map)
         return;
     }
 
-    int id = chooseMap->findText(map);
+    int id = 0;
+    for(int i = 0; i < chooseMap->count(); i++)
+        if(chooseMap->itemData(i).toList()[0].toString() == map)
+        {
+            id = i;
+            break;
+        }
+
     if(id > 0) {
         if (pMap)
         {

@@ -160,12 +160,10 @@ QStringList GameCFGWidget::getFullConfig() const
     if (currentMap.size() > 0)
     {
         sl.append("emap " + currentMap);
-        QFile mapLuaFile(
-                QString("%1/Maps/%2/map.lua")
+        if(pMapContainer->getCurrentIsMission())
+            sl.append(QString("escript %1/Maps/%2/map.lua")
                 .arg(datadir->absolutePath())
                 .arg(currentMap));
-        if(mapLuaFile.exists())
-            sl.append(QString("escript %1").arg(mapLuaFile.fileName()));
     }
     sl.append("etheme " + pMapContainer->getCurrentTheme());
     return sl;
@@ -248,6 +246,18 @@ void GameCFGWidget::ammoChanged(int index)
 
 void GameCFGWidget::mapChanged(const QString & value)
 {
+    if(pMapContainer->getCurrentIsMission())
+    {
+        GameSchemes->setCurrentIndex(0);
+        WeaponsName->setCurrentIndex(0);
+        GameSchemes->setEnabled(false);
+        WeaponsName->setEnabled(false);
+    }
+    else
+    {
+        GameSchemes->setEnabled(true);
+        WeaponsName->setEnabled(true);
+    }
     emit paramChanged("MAP", QStringList(value));
 }
 

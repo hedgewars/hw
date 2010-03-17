@@ -45,6 +45,7 @@ class HWMapContainer : public QWidget
   QString getCurrentTheme() const;
   int     getCurrentHHLimit() const;
   quint32 getTemplateFilter() const;
+  bool getCurrentIsMission() const;
 
  public slots:
   void changeImage();
