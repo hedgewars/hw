@@ -136,7 +136,7 @@ void HWGame::SendTrainingConfig()
     QByteArray traincfg;
     HWProto::addStringToBuffer(traincfg, "TL");
 
-    HWProto::addStringToBuffer(traincfg, "escript " + datadir->absolutePath() + "/Missions/" + training + ".hwt");
+    HWProto::addStringToBuffer(traincfg, "escript " + datadir->absolutePath() + "/Missions/Training/" + training + ".lua");
 
     RawSendIPC(traincfg);
 }

@@ -841,9 +841,9 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
 
     QDir tmpdir;
     tmpdir.cd(datadir->absolutePath());
-    tmpdir.cd("Missions");
+    tmpdir.cd("Missions/Training");
     tmpdir.setFilter(QDir::Files);
-    CBSelect->addItems(tmpdir.entryList(QStringList("*.hwt")).replaceInStrings(QRegExp("^(.*)\\.hwt"), "\\1"));
+    CBSelect->addItems(tmpdir.entryList(QStringList("*.lua")).replaceInStrings(QRegExp("^(.*)\\.lua"), "\\1"));
 
     pageLayout->addWidget(CBSelect, 1, 1);
     
