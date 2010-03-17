@@ -48,19 +48,9 @@
 #endif
 }
 
-		
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 -(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
-
-// see initWithFrame for why "+"
-+(void) attackButtonPressed;
-+(void) buttonsReleased;
-+(void) walkingLeft;
-+(void) walkingRight;
-+(void) movingUp;
-+(void) movingDown;
-+(void) chatBegin;
 
 #if SDL_IPHONE_KEYBOARD
 - (void)showKeyboard;

@@ -29,6 +29,7 @@
 #import "GameSetup.h"
 #import "PascalImports.h"
 #import "MainMenuViewController.h"
+#import "overlayViewController.h"
 
 #ifdef main
 #undef main
@@ -43,7 +44,7 @@ int main (int argc, char *argv[]) {
 
 @implementation SDLUIKitDelegate
 
-@synthesize uiwindow, window, viewController;
+@synthesize uiwindow, window, viewController, overlayController;
 
 // convenience method
 +(SDLUIKitDelegate *)sharedAppDelegate {
@@ -67,6 +68,16 @@ int main (int argc, char *argv[]) {
 
 #pragma mark -
 #pragma mark Custom stuff
+-(void) showMenuAfterwards {
+    // draws the controller overlay after the sdl window has taken control
+    [uiwindow bringSubviewToFront:overlayController.view];
+
+	[UIView beginAnimations:@"showing overlay" context:NULL];
+	[UIView setAnimationDuration:1];
+	self. overlayController.view.alpha = 1;
+	[UIView commitAnimations];
+}
+
 -(IBAction) startSDLgame {
 	NSAutoreleasePool *internal_pool = [[NSAutoreleasePool alloc] init];
 
@@ -79,15 +90,24 @@ int main (int argc, char *argv[]) {
 	self.viewController.mainView.alpha = 0;
 	[UIView commitAnimations];
 
-	NSLog(@"Game is launching...");
+	NSLog(@"...Game is launching...");
 	const char **gameArgs = [setup getSettings];
 	[setup release];
-	
-	// this is the pascal fuction that starts the game
-	Game(gameArgs);
-	
+    
+    // overlay with controls
+    overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController" bundle:nil];
+    overlayController.view.alpha = 0;
+    [uiwindow addSubview: overlayController.view];
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
+    
+	Game(gameArgs); // this is the pascal fuction that starts the game
+    
+    // let's clean memory
 	free(gameArgs);
-	NSLog(@"Game is exting...");
+    [overlayController.view removeFromSuperview];
+    [overlayController release];
+    
+	NSLog(@"...Game is exting...");
 
 	[uiwindow addSubview: viewController.view];
 	[uiwindow makeKeyAndVisible];

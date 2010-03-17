@@ -645,16 +645,21 @@ begin
     end;
 
     // load window icon
-    {$IFNDEF DARWIN}
-    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
-    {$ELSE}
+{$IFDEF SDL_IMAGE_NEWER}
+    WriteToConsole('Init SDL_image... ');
+    SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+    WriteLnToConsole(msgOK);
+{$ENDIF}
+{$IFDEF DARWIN}
     ico:= LoadImage(Pathz[ptGraphics] + '/hwengine_mac', ifIgnoreCaps);
-    {$ENDIF}
+{$ELSE}
+    ico:= LoadImage(Pathz[ptGraphics] + '/hwengine', ifIgnoreCaps);
+{$ENDIF}
     if ico <> nil then
-        begin
+    begin
         SDL_WM_SetIcon(ico, 0);
         SDL_FreeSurface(ico)
-        end;
+    end;
     
     // set window caption
     SDL_WM_SetCaption('Hedgewars', nil);
@@ -670,8 +675,8 @@ begin
 {$IFDEF SDL13}
     window:= SDL_CreateWindow('Hedgewars', 0, 0, cScreenWidth, cScreenHeight,
         SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN    
-            {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
-    SDL_CreateRenderer(window, -1, 0);   
+        {$IFDEF IPHONEOS} or SDL_WINDOW_BORDERLESS{$ENDIF});     
+    SDL_CreateRenderer(window, -1, 0);
     PixelFormat:= nil;   
         
     SDL_SetRenderDrawColor(0, 0, 0, 255);    

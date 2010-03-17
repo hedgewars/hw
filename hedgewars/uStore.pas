@@ -1234,12 +1234,6 @@ var r: TSDL_Rect;
 begin
     if Step = 0 then
     begin
-{$IFDEF SDL_IMAGE_NEWER}
-        WriteToConsole('Init SDL_image... ');
-        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
-        WriteLnToConsole(msgOK);
-{$ENDIF}
-    
         WriteToConsole(msgLoading + 'progress sprite: ');
         texsurf:= LoadImage(Pathz[ptGraphics] + '/Progress', ifCritical or ifTransparent);
 

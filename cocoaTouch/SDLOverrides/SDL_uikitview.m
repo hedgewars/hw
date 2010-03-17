@@ -41,17 +41,10 @@ UIView *menuView;
 	SDL_DelKeyboard(0);
 	[textField release];
 #endif
-	if (menuView) [menuView release];
-	//[menuButton release];
-	//[attackButton release];
 	[super dealloc];
 }
 
-- (id)initWithFrame:(CGRect)frame {
-	// the addTarget parameter for the buttons below is set like that because
-	// this object is inherited by SDL_openglesview.m which is the one allocated by SDL.
-	// We select this class with [self superclass] and call the selectors with "+" because
-	// they are superclass methods 
+-(id) initWithFrame:(CGRect)frame {
 	self = [super initWithFrame:frame];
 	
 #if SDL_IPHONE_KEYBOARD
@@ -68,70 +61,27 @@ UIView *menuView;
 	self.multipleTouchEnabled = YES;
 	self.exclusiveTouch = YES;
 
-	
-	/*
-	// custom code
-	// the coordinate system is still like in Portrait even though everything is rotated
-	attackButton = [[UIButton alloc] initWithFrame:CGRectMake(30, 480, 260, 50)];
-	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
-	[attackButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateHighlighted];
-	[attackButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchDown];
-	[attackButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	//[self addSubview:attackButton];
-
-	menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 480, 30, 50)];
-	[menuButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
-	[menuButton addTarget:[self superclass] action:@selector(attackButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-	[menuButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	//[self addSubview:menuButton];
-
-	UIButton *walkLeftButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-	[walkLeftButton addTarget:[self superclass] action:@selector(walkingLeft) forControlEvents:UIControlEventTouchDown];
-	[walkLeftButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	[self insertSubview:walkLeftButton atIndex:0];
-	[walkLeftButton release];
-	
-	UIButton *walkRightButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 380, 320, 100)];
-	[walkRightButton addTarget:[self superclass] action:@selector(walkingRight) forControlEvents:UIControlEventTouchDown];
-	[walkRightButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	[self insertSubview:walkRightButton atIndex:0];
-	[walkRightButton release];
-
-	UIButton *moveDownButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 100, 70, 280)];
-	[moveDownButton addTarget:[self superclass] action:@selector(movingDown) forControlEvents:UIControlEventTouchDown];
-	[moveDownButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	[self insertSubview:moveDownButton atIndex:0];
-	[moveDownButton release];
-	
-	UIButton *moveUpButton = [[UIButton alloc] initWithFrame:CGRectMake(250, 100, 70, 280)];
-	[moveUpButton addTarget:[self superclass] action:@selector(movingUp) forControlEvents:UIControlEventTouchDown];
-	[moveUpButton addTarget:[self superclass] action:@selector(buttonsReleased) forControlEvents:UIControlEventTouchUpInside|UIControlEventTouchUpOutside];
-	[self insertSubview:moveUpButton atIndex:0];
-	[moveUpButton release];
-	
-	//dummy button used to test chat
-	UIButton *chatButton = [[UIButton alloc] initWithFrame:CGRectMake(70, 100, 250, 280)];
-	[chatButton addTarget:[self superclass] action:@selector(chatBegin) forControlEvents:UIControlEventTouchDown];
-	[self insertSubview:chatButton atIndex:0];
-	[chatButton release];
-	*/
-
 //(0,0) is the lower left corner
 //x:[0-320]
 //y:[0-480]
-	UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(256, 416, 64, 64)];
-	[menuButton addTarget:[self superclass] action:@selector(showMenu) forControlEvents:UIControlEventTouchDown];
-	[menuButton setBackgroundImage:[UIImage imageNamed:@"Default.png"] forState:UIControlStateNormal];
-	[self insertSubview:menuButton atIndex:0];
-	[menuButton release];
+    
+    // TO BE MOVED somewhere
+    /*
+	UIButton *menuCorner = [[UIButton alloc] initWithFrame:CGRectMake(256, 416, 64, 64)];
+	[menuCorner addTarget:[self superclass] action:@selector(showMenu) forControlEvents:UIControlEventTouchDown];
+	[menuCorner setBackgroundImage:[UIImage imageNamed:@"menuCorner.png"] forState:UIControlStateNormal];
+	[self insertSubview:menuCorner atIndex:0];
+	[menuCorner release];
 	
 	menuView = [[UIView alloc] initWithFrame:CGRectMake(320, 480, 150, 100)];
 	menuView.backgroundColor = [UIColor lightGrayColor];
 	[self insertSubview:menuView atIndex:1];
-
+    */
 	return self;
 }
 
+/*
+ TO BE MOVED IN overlayViewController ASAP
 +(void) showMenu {
 	HW_pause();
 	
@@ -154,7 +104,7 @@ UIView *menuView;
 	HW_pause();
 }
 
-
+*/
 
 #pragma mark -
 #pragma mark Exported functions for FreePascal
@@ -166,57 +116,16 @@ const char* IPH_getDocumentsPath() {
 
 void IPH_showControls (void) {
 	NSLog(@"Showing controls");
-	/*
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.5];
-	attackButton.frame = CGRectMake(30, 430, 260, 50);
-	menuButton.frame = CGRectMake(0, 430, 30, 50);
-	[UIView commitAnimations];
-	 */
-}
-
-#pragma mark -
-#pragma mark Superclass methods to call Pascal code
-+(void) attackButtonPressed {
-	HW_shoot();
-}
-
-+(void) buttonsReleased {
-	HW_allKeysUp();
-}
-
-+(void) walkingLeft {
-	HW_walkLeft();
-}
-
-+(void) walkingRight {
-	HW_walkRight();
-}
-
-+(void) movingUp {
-	HW_aimUp();
-}
-
-+(void) movingDown {
-	HW_aimDown();
-}
-
-+(void) chatBegin {
-	//TODO: implement a UITextScroll and put received chat lines in there
-}
-
-+(void) pauseGame {
-	HW_pause();
 }
 
 #pragma mark -
 #pragma mark Custom SDL_UIView input handling
-#define kMinimumPinchDelta	50
+#define kMinimumPinchDelta      50
 #define kMinimumGestureLength	10
-#define kMaximumVariance	3
+#define kMaximumVariance        3
 
 // we override default touch input to implement our own gestures
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	UITouch *touch = [touches anyObject];
 	
@@ -226,7 +135,6 @@ void IPH_showControls (void) {
 			initialDistanceForPinching = 0;
 			switch ([touch tapCount]) {
 				case 1:
-					
 					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
 					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
 							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
@@ -256,20 +164,20 @@ void IPH_showControls (void) {
 
 }
 
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 	initialDistanceForPinching = 0;
 	gestureStartPoint.x = 0;
 	gestureStartPoint.y = 0;
 	HW_allKeysUp();
 }
 
-- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances.
 	// Usually (it seems) all active touches are canceled.
 	[self touchesEnded:touches withEvent:event];
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSArray *twoTouches;
 	CGPoint currentPosition;
 	UITouch *touch = [touches anyObject];

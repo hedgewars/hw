@@ -57,7 +57,6 @@
 		61798838114AA34C00BA94A9 /* uStats.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880A114AA34C00BA94A9 /* uStats.pas */; };
 		61798839114AA34C00BA94A9 /* uStore.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880B114AA34C00BA94A9 /* uStore.pas */; };
 		6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880C114AA34C00BA94A9 /* uTeams.pas */; };
-		6179883B114AA34C00BA94A9 /* uTriggers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880D114AA34C00BA94A9 /* uTriggers.pas */; };
 		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */ = {isa = PBXBuildFile; fileRef = 61798856114AA48A00BA94A9 /* CGPointUtils.c */; };
@@ -102,6 +101,14 @@
 		61798A38114ADD2600BA94A9 /* storeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2A114ADD2600BA94A9 /* storeButton.png */; };
 		61798A39114ADD2600BA94A9 /* title.png in Resources */ = {isa = PBXBuildFile; fileRef = 61798A2B114ADD2600BA94A9 /* title.png */; };
 		61799289114AE08700BA94A9 /* Data in Resources */ = {isa = PBXBuildFile; fileRef = 61798A5E114AE08600BA94A9 /* Data */; };
+		6179934F114BD5AB00BA94A9 /* menuCorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179934E114BD5AB00BA94A9 /* menuCorner.png */; };
+		6179936B11501D3D00BA94A9 /* arrowDown.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936711501D3D00BA94A9 /* arrowDown.png */; };
+		6179936C11501D3D00BA94A9 /* arrowLeft.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936811501D3D00BA94A9 /* arrowLeft.png */; };
+		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
+		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
+		617993A01150226700BA94A9 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
+		6179942711502BDD00BA94A9 /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6179942611502BDD00BA94A9 /* overlayViewController.xib */; };
+		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -123,28 +130,28 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 617988D3114AAA3900BA94A9 /* SDLiPhoneOS.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = FD6526630DE8FCCB002AD96B /* libSDLiPhoneOS.a */;
+			remoteGlobalIDString = FD6526630DE8FCCB002AD96B;
 			remoteInfo = StaticLibiPhoneOS;
 		};
 		61798992114AB3FA00BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6179898B114AB3FA00BA94A9 /* SDL_mixer.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE1FA95407AF96B2004B6283 /* libSDL_mixer.a */;
+			remoteGlobalIDString = BE1FA95407AF96B2004B6283;
 			remoteInfo = "Static Library";
 		};
 		617989BA114AB47500BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 617989B3114AB47500BA94A9 /* SDL_net.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA /* libSDL_net.a */;
+			remoteGlobalIDString = BE48FF6F07AFA9A900BB41DA;
 			remoteInfo = "Static Library";
 		};
 		61798A12114AB65600BA94A9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61798A0B114AB65600BA94A9 /* SDL_ttf.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA /* libSDL_ttf.a */;
+			remoteGlobalIDString = BE48FD6E07AFA17000BB41DA;
 			remoteInfo = "Static Library";
 		};
 		928301590F10E41300CC5A3C /* PBXContainerItemProxy */ = {
@@ -200,7 +207,6 @@
 		6179880A114AA34C00BA94A9 /* uStats.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStats.pas; path = ../../hedgewars/uStats.pas; sourceTree = SOURCE_ROOT; };
 		6179880B114AA34C00BA94A9 /* uStore.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uStore.pas; path = ../../hedgewars/uStore.pas; sourceTree = SOURCE_ROOT; };
 		6179880C114AA34C00BA94A9 /* uTeams.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTeams.pas; path = ../../hedgewars/uTeams.pas; sourceTree = SOURCE_ROOT; };
-		6179880D114AA34C00BA94A9 /* uTriggers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uTriggers.pas; path = ../../hedgewars/uTriggers.pas; sourceTree = SOURCE_ROOT; };
 		6179880E114AA34C00BA94A9 /* uVisualGears.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGears.pas; path = ../../hedgewars/uVisualGears.pas; sourceTree = SOURCE_ROOT; };
 		6179880F114AA34C00BA94A9 /* uWorld.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uWorld.pas; path = ../../hedgewars/uWorld.pas; sourceTree = SOURCE_ROOT; };
 		61798852114AA44900BA94A9 /* config.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = config.inc; path = ../../hedgewars/config.inc; sourceTree = SOURCE_ROOT; };
@@ -258,6 +264,15 @@
 		61798A2A114ADD2600BA94A9 /* storeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = storeButton.png; path = ../../cocoaTouch/resources/storeButton.png; sourceTree = SOURCE_ROOT; };
 		61798A2B114ADD2600BA94A9 /* title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = title.png; path = ../../cocoaTouch/resources/title.png; sourceTree = SOURCE_ROOT; };
 		61798A5E114AE08600BA94A9 /* Data */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Data; sourceTree = "<group>"; };
+		6179934E114BD5AB00BA94A9 /* menuCorner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuCorner.png; path = ../../cocoaTouch/resources/menuCorner.png; sourceTree = SOURCE_ROOT; };
+		6179936711501D3D00BA94A9 /* arrowDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDown.png; path = ../../cocoaTouch/resources/arrowDown.png; sourceTree = SOURCE_ROOT; };
+		6179936811501D3D00BA94A9 /* arrowLeft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowLeft.png; path = ../../cocoaTouch/resources/arrowLeft.png; sourceTree = SOURCE_ROOT; };
+		6179936911501D3D00BA94A9 /* arrowRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowRight.png; path = ../../cocoaTouch/resources/arrowRight.png; sourceTree = SOURCE_ROOT; };
+		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
+		6179939D1150226700BA94A9 /* overlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overlayViewController.h; path = ../../cocoaTouch/overlayViewController.h; sourceTree = SOURCE_ROOT; };
+		6179939E1150226700BA94A9 /* overlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = overlayViewController.m; path = ../../cocoaTouch/overlayViewController.m; sourceTree = SOURCE_ROOT; };
+		6179942611502BDD00BA94A9 /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -295,6 +310,9 @@
 				61798888114AA4E600BA94A9 /* GameSetup.m */,
 				6179886C114AA4B900BA94A9 /* Frontend */,
 				61798860114AA49D00BA94A9 /* SDLOverrides */,
+				6179939D1150226700BA94A9 /* overlayViewController.h */,
+				6179939E1150226700BA94A9 /* overlayViewController.m */,
+				6179942611502BDD00BA94A9 /* overlayViewController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -314,8 +332,8 @@
 				9283015C0F10E48900CC5A3C /* Pascal Sources */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
-				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
@@ -338,20 +356,13 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6179937011501D5800BA94A9 /* buttons */,
+				6179936F11501D4100BA94A9 /* back panels */,
+				6179936611501D1E00BA94A9 /* joystick */,
 				61798A5E114AE08600BA94A9 /* Data */,
-				61798A1E114ADD2600BA94A9 /* backgroundBottom.png */,
-				61798A1F114ADD2600BA94A9 /* backgroundCenter.png */,
-				61798A20114ADD2600BA94A9 /* backgroundLeft.png */,
-				61798A21114ADD2600BA94A9 /* backgroundRight.png */,
-				61798A22114ADD2600BA94A9 /* backgroundTop.png */,
-				61798A23114ADD2600BA94A9 /* borderBottom.png */,
-				61798A24114ADD2600BA94A9 /* borderTop.png */,
+				6179934E114BD5AB00BA94A9 /* menuCorner.png */,
 				61798A25114ADD2600BA94A9 /* Default.png */,
 				61798A26114ADD2600BA94A9 /* Icon.png */,
-				61798A27114ADD2600BA94A9 /* networkButton.png */,
-				61798A28114ADD2600BA94A9 /* playButton.png */,
-				61798A29114ADD2600BA94A9 /* settingsButton.png */,
-				61798A2A114ADD2600BA94A9 /* storeButton.png */,
 				61798A2B114ADD2600BA94A9 /* title.png */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
@@ -459,6 +470,43 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6179936611501D1E00BA94A9 /* joystick */ = {
+			isa = PBXGroup;
+			children = (
+				617995311150403800BA94A9 /* joyPush.png */,
+				6179936711501D3D00BA94A9 /* arrowDown.png */,
+				6179936811501D3D00BA94A9 /* arrowLeft.png */,
+				6179936911501D3D00BA94A9 /* arrowRight.png */,
+				6179936A11501D3D00BA94A9 /* arrowUp.png */,
+			);
+			name = joystick;
+			sourceTree = "<group>";
+		};
+		6179936F11501D4100BA94A9 /* back panels */ = {
+			isa = PBXGroup;
+			children = (
+				61798A1E114ADD2600BA94A9 /* backgroundBottom.png */,
+				61798A1F114ADD2600BA94A9 /* backgroundCenter.png */,
+				61798A20114ADD2600BA94A9 /* backgroundLeft.png */,
+				61798A21114ADD2600BA94A9 /* backgroundRight.png */,
+				61798A22114ADD2600BA94A9 /* backgroundTop.png */,
+				61798A23114ADD2600BA94A9 /* borderBottom.png */,
+				61798A24114ADD2600BA94A9 /* borderTop.png */,
+			);
+			name = "back panels";
+			sourceTree = "<group>";
+		};
+		6179937011501D5800BA94A9 /* buttons */ = {
+			isa = PBXGroup;
+			children = (
+				61798A27114ADD2600BA94A9 /* networkButton.png */,
+				61798A28114ADD2600BA94A9 /* playButton.png */,
+				61798A29114ADD2600BA94A9 /* settingsButton.png */,
+				61798A2A114ADD2600BA94A9 /* storeButton.png */,
+			);
+			name = buttons;
+			sourceTree = "<group>";
+		};
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -495,7 +543,6 @@
 				6179880A114AA34C00BA94A9 /* uStats.pas */,
 				6179880B114AA34C00BA94A9 /* uStore.pas */,
 				6179880C114AA34C00BA94A9 /* uTeams.pas */,
-				6179880D114AA34C00BA94A9 /* uTriggers.pas */,
 				6179880E114AA34C00BA94A9 /* uVisualGears.pas */,
 				6179880F114AA34C00BA94A9 /* uWorld.pas */,
 			);
@@ -634,6 +681,13 @@
 				61798A38114ADD2600BA94A9 /* storeButton.png in Resources */,
 				61798A39114ADD2600BA94A9 /* title.png in Resources */,
 				61799289114AE08700BA94A9 /* Data in Resources */,
+				6179934F114BD5AB00BA94A9 /* menuCorner.png in Resources */,
+				6179936B11501D3D00BA94A9 /* arrowDown.png in Resources */,
+				6179936C11501D3D00BA94A9 /* arrowLeft.png in Resources */,
+				6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */,
+				6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */,
+				6179942711502BDD00BA94A9 /* overlayViewController.xib in Resources */,
+				617995321150403800BA94A9 /* joyPush.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -651,7 +705,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export CODESIGN_ALLOCATE=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ]; then\n\t${PROJECT_SOURCE}/gen_entitlements.py \"my.company.${PROJECT_NAME}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\n\tcodesign -f -s \"iPhone developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
+			shellScript = "export CODESIGN_ALLOCATE=/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/codesign_allocate\nif [ \"${PLATFORM_NAME}\" == \"iphoneos\" ]; then\n\t${PROJECT_DIR}/gen_entitlements.py \"com.kodahedge.${PRODUCT_NAME:identifier}\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\";\n\tcodesign -f -s \"iPhone developer\" --entitlements \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/${PROJECT_NAME}.xcent\" \"${BUILT_PRODUCTS_DIR}/${WRAPPER_NAME}/\"\nfi";
 		};
 		6179928A114AE0C800BA94A9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -664,7 +718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n";
+			shellScript = "#let's clean our build first\nrm -rf ${PROJECT_DIR}/build\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n";
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -736,7 +790,6 @@
 				61798838114AA34C00BA94A9 /* uStats.pas in Sources */,
 				61798839114AA34C00BA94A9 /* uStore.pas in Sources */,
 				6179883A114AA34C00BA94A9 /* uTeams.pas in Sources */,
-				6179883B114AA34C00BA94A9 /* uTriggers.pas in Sources */,
 				6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */,
 				6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */,
 				6179885C114AA48A00BA94A9 /* CGPointUtils.c in Sources */,
@@ -751,6 +804,7 @@
 				61798883114AA4D000BA94A9 /* TeamEditViewController.m in Sources */,
 				61798885114AA4D000BA94A9 /* TeamMenuViewController.m in Sources */,
 				61798889114AA4E600BA94A9 /* GameSetup.m in Sources */,
+				617993A01150226700BA94A9 /* overlayViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,10 +934,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FPC_COMMON_OPTIONS = "-Mmacpas -Sgix -Cfvfpv2";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -vwi -B  -Sgix -Cfvfpv2";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
-				FPC_MAIN_FILE = "$(PROJECT_DIR)/PascalLibrary.pas";
+				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
 				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
@@ -902,6 +957,8 @@
 					"-Wl,-no_order_inits",
 				);
 				PREBINDING = NO;
+				PROVISIONING_PROFILE = "";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos3.0;
 			};
 			name = Release;

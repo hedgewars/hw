@@ -24,19 +24,22 @@
 #import "SDL_video.h"
 
 @class MainMenuViewController;
+@class overlayViewController;
 
 @interface SDLUIKitDelegate:NSObject <UIApplicationDelegate> {
 	SDL_Window *window;
 	UIWindow *uiwindow;
 	MainMenuViewController *viewController;
+    overlayViewController *overlayController;
 }
 
 @property (readwrite, assign) SDL_Window *window;
 @property (readwrite, retain) UIWindow *uiwindow;
 @property (nonatomic, retain) MainMenuViewController *viewController;
+@property (nonatomic, retain) overlayViewController *overlayController;
 
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;
 -(void) startSDLgame;
-
+-(void) showMenuAfterwards;
 @end

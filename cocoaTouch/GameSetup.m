@@ -95,7 +95,7 @@
 				// send config data data
 				/*
 				seed is arbitrary string
-				addteam <color> <team name>
+				addteam <32charsMD5hash> <color> <team name>
 				addhh <level> <health> <hedgehog name>
 				  <level> is 0 for human, 1-5 for bots (5 is the most stupid)
 				ammostore is one byte/number for each ammocount then one for each probability or so
@@ -122,7 +122,7 @@
 				[self sendToEngine:@"etheme Compost"];
 				
 				// team 1 info
-				[self sendToEngine:@"eaddteam 4421353 System Cats"];
+				[self sendToEngine:@"eaddteam 0 4421353 System Cats"];
 				
 				// team 1 grave info
 				[self sendToEngine:@"egrave star"];
@@ -142,11 +142,10 @@
 				[self sendToEngine:@"ehat NoHat"];
 
 				// team 1 ammostore
-				[self sendToEngine:@"eammstore 20501090003040000009000000000000000000010404000441400444645644444774776112211144"];
-				//[self sendToEngine:@"eammstore 93919294221991210322351110012010000002110404000441400444645644444774776112211144"];
-
+				[self sendToEngine:@"eammstore 9391929422199121032235111001201000000211040400044140044464564444477477611221114400000000000002055000000400070040000000001311111312111111123114111111111111111211"];
+				
 				// team 2 info
-				[self sendToEngine:@"eaddteam 4100897 Poke-MAN"];
+				[self sendToEngine:@"eaddteam 0 4100897 Poke-MAN"];
 				
 				// team 2 grave info
 				[self sendToEngine:@"egrave Badger"];
@@ -166,7 +165,7 @@
 				[self sendToEngine:@"ehat Bunny"];
 
 				// team 2 ammostore
-				[self sendToEngine:@"eammstore 20501090003040000009000000000000000000010404000441400444645644444774776112211144"];
+				[self sendToEngine:@"eammstore 9391929422199121032235111001201000000211040400044140044464564444477477611221114400000000000002055000000400070040000000001311111312111111123114111111111111111211"];
 				
 				clientQuit = NO;
 			} else {
@@ -201,13 +200,15 @@
 						sscanf(buffer, "%*s %d", &eProto);
 						short int netProto;
 						char *versionStr;
-						HW_versionInfo(&netProto, &versionStr);
+						/*
+                        HW_versionInfo(&netProto, &versionStr);
 						if (netProto == eProto) {
 							NSLog(@"Setting protocol version %d (%s)", eProto, versionStr);
 						} else {
 							NSLog(@"ERROR - wrong protocol number: [%s] - expecting %d", buffer, eProto);
 							clientQuit = YES;
 						}
+                        */
 						break;
 					case 'i':
 						switch (buffer[1]) {
@@ -246,13 +247,13 @@
 -(const char **)getSettings {
 	const char **gameArgs = (const char**) malloc(sizeof(char*) * 6);
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
-	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] localeIdentifier]];
+	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
 	
 	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
-	gameArgs[1] = [ipcString UTF8String];					//ipcPort
-	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];	//isSoundEnabled
-	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];	//isMusicEnabled
-	gameArgs[4] = [localeString UTF8String];				//cLocaleFName
+	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
+	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];     //isSoundEnabled
+	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];      //isMusicEnabled
+	gameArgs[4] = [localeString UTF8String];                                //cLocaleFName
 	gameArgs[5] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
 	
 	[localeString release];

@@ -38,8 +38,8 @@
 -(void) viewDidLoad {
 	[NSThread detachNewThreadSelector:@selector(checkFirstRun) toTarget:self withObject:nil];
 	
-	char *ver;
-	HW_versionInfo(NULL, &ver);
+	char *ver="test";
+	//HW_versionInfo(NULL, &ver);
 	self.versionLabel.text = [[NSString stringWithUTF8String:ver] autorelease];
 	[super viewDidLoad];
 }
