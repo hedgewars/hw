@@ -196,7 +196,7 @@ void HWMapContainer::mapChanged(int index)
         gbThemes->hide();
         lblFilter->hide();
         CB_TemplateFilter->hide();
-        emit mapChanged(chooseMap->itemData(0).toList()[0].toString());
+        emit mapChanged(chooseMap->itemData(index).toList()[0].toString());
     }
 }
 
@@ -255,6 +255,7 @@ void HWMapContainer::themeSelected(int currentRow)
     mapInfo.push_back(QString("+rnd+"));
     mapInfo.push_back(theme);
     mapInfo.push_back(18);
+    mapInfo.push_back(false);
     chooseMap->setItemData(0, mapInfo);
     gbThemes->setIcon(QIcon(QString("%1/Themes/%2/icon.png").arg(datadir->absolutePath()).arg(theme)));
     emit themeChanged(theme);
