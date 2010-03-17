@@ -1,4 +1,5 @@
 ; Spanish locale
+; Revision 3059
 
 00:00=Granada
 00:01=Granada de frag.
@@ -109,6 +110,7 @@
 02:00=%1 habría necesitado una vida extra
 02:00=¿Hay algún médico en la sala?
 02:00=¡Zas! ¡En toda la boca!
+
 ; El erizo (%1) se ha ahogado
 02:01=¡%1 hace el submarino!
 02:01=¡%1 imita al Titanic!
@@ -162,6 +164,7 @@
 02:01=No olvides el jabón, %1
 02:01=¡No salpiques, %1!
 02:01=¿Estaba fría el agua?
+
 ; El combate empieza
 02:02=¡Luchad!
 02:02=¡Armado y listo!
@@ -212,10 +215,13 @@
 02:02=Tropas, ¡avanzad!
 02:02=¡Dadles caña!
 02:02=¡No temáis!
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; Botiquín
 02:05=¡Ayuda en camino!
 02:05=¡Médico!
@@ -234,6 +240,7 @@
 02:05=Posología: ¡tantos como puedas conseguir!
 02:05=Envío urgente
 02:05=¡Víveres!
+
 ; Caja de armamento
 02:06=¡Más armas!
 02:06=¡Refuerzos!
@@ -259,6 +266,7 @@
 02:06=¡No dejes que el enemigo te lo quite!
 02:06=¡Nuevos juguetitos!
 02:06=¡Una caja misteriosa!
+
 ; Caja de herramientas
 02:07=¡La hora de la herramienta!
 02:07=Esto podría ser útil...
@@ -271,6 +279,7 @@
 02:07=Úsalo correctamente
 02:07=Guau, esta caja es pesada
 02:07=Podrías necesitarlo
+
 ; El erizo %1 pasa su turno
 02:08=%1 es un muermo...
 02:08=%1 ni se molesta
@@ -309,6 +318,7 @@
 02:08=Por lo visto %1 tiene mejores cosas que hacer
 02:08=%1 está paralizado de terror
 02:08=%1 se ha dormido
+
 ; El erizo %1 se daña únicamente a sí mismo
 02:09=¡%1 debería ir al campo de tiro a practicar!
 02:09=%1 se odia a sí mismo
@@ -344,6 +354,7 @@
 02:09=Seguro que nadie te ha visto, %1
 02:09=%1 necesita revisar el manual
 02:09=Las armas de %1 eran obviamente defectuosas
+
 ; Home run (usando el bate de béisbol)
 02:10=¡Home Run!
 02:10=Es un pájaro, es un avión...
@@ -445,5 +456,10 @@
 05:06=Karma: compartirás parte del daño que inflijas
 05:07=Rey: ¡no permitas que tu rey muera!|Posicionar el rey: elige un buen cobijo para tu rey
 05:08=Posicionar erizos: los jugadores posicionan a mano su erizos por turnos antes de empezar a jugar
-05:09=Artillería: los erizos no pueden moverse para cambiar de posición
-05:10=Terreno indestructible: la mayoría de armas no pueden dañar el terreno
+05:09=Artillería: afina tu puntería, los erizos no pueden moverse
+05:10=Terreno indestructible: la mayoría de armas no pueden dañar el terreno de juego
+05:11=Munición compartida: los equipos del mismo color comparten la munición
+05:12=Minas: las minas detonarán a cabo de %1 segundo(s)
+05:13=Minas: las minas detonarán al instante
+05:14=Minas: las minas detonarán aleatoriamente al cabo de 0 - 3 segundos
+05:15=Modificador al daño: las armas harán un %1% de su daño habitual

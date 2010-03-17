@@ -17,39 +17,46 @@
 
 local caption = {
 	["en"] = "Bazooka Training",
-	["de"] = "Bazooka-Training"
+	["de"] = "Bazooka-Training",
+	["es"] = "Entrenamiento con escopeta"
 	-- To add other languages, just add lines similar to the
 	-- existing ones - don't forget the trailing ","!
 	}
 
 local subcaption = {
 	["en"] = "Aiming Practice",
-	["de"] = "Zielübung"
+	["de"] = "Zielübung",
+	["es"] = "Practica tu puntería"
 	}
 
 local goal = {
 	["en"] = "Eliminate all targets before your time runs out.|You have unlimited ammo for this mission.",
-	["de"] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition."
+	["de"] = "Eliminiere alle Ziele bevor die Zeit ausläuft.|Du hast in dieser Mission unbegrenzte Munition.",
+	["es"] = "Destruye todos los objetivos antes de que se agote el tiempo.|La munición en esta misión es ilimitada."
 	}
 
 local timeout = {
 	["en"] = "Oh no! Time's up! Just try again.",
-	["de"] = "Oh nein! Die Zeit ist um! Versuche es nochmal."
+	["de"] = "Oh nein! Die Zeit ist um! Versuche es nochmal.",
+	["es"] = "¡Oh, no, se te acabó el tiempo! ¿Por qué no lo intentas de nuevo?"
 	}
 
 local success = {
 	["en"] = "Congratulations! You've eliminated all targets|within the allowed time frame.",
-	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet."
+	["de"] = "Gratulation! Du hast alle Ziele innerhalb der|verfügbaren Zeit ausgeschaltet.",
+	["es"] = "¡Felicidades! Has destruido todos los objectivos|dentro del tiempo establecido."
 	}
 
 local teamname = {
 	["en"] = "Shotgun Team",
-	["de"] = "Die Knalltüten"
+	["de"] = "Die Knalltüten",
+	["es"] = "Escopeteros"
 	}
 
 local hogname = {
 	["en"] = "Hunter",
-	["de"] = "Jäger"
+	["de"] = "Jäger",
+	["es"] = "Cazador"
 	}
 
 -- To handle missing texts we define a small wrapper function that

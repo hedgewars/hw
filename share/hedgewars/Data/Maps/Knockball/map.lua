@@ -2,41 +2,32 @@
 
 local caption = {
 	["en"] = "Hedgewars-Knockball",
-	["de"] = "Hedgewars-Knockball"
+	["de"] = "Hedgewars-Knockball",
+	["es"] = "Hedgewars-Knockball"
 	}
 
 local subcaption = {
 	["en"] = "Not So Friendly Match",
-	["de"] = "Kein-so-Freundschaftsspiel"
+	["de"] = "Kein-so-Freundschaftsspiel",
+	["es"] = "Partido no-tan-amistoso"
 	}
 
 local goal = {
 	["en"] = "Bat balls at your enemies and|push them into the sea!",
-	["de"] = "Schlage Bälle auf deine Widersacher|und lass sie ins Meer fallen!"
+	["de"] = "Schlage Bälle auf deine Widersacher|und lass sie ins Meer fallen!",
+	["es"] = "¡Batea pelotas hacia tus enemigos|y hazlos caer al agua!"
 	}
 
 local scored = {
-	["en"] = " scored a point!",
-	["de"] = " erhält einen Punkt!"
+	["en"] = "%s is out and Team %d|scored a point!| |Score:",
+	["de"] = "%s ist draußen und Team %d|erhält einen Punkt!| |Punktestand:",
+	["es"] = "¡%s cayó y Equipo %d|anotó un tanto!| |Puntuación:"
 	}
 
 local failed = {
-	["en"] = " scored a penalty!",
-	["de"] = " erhält eine Strafe!"
-	}
-
-	local sscore = {
-	["en"] = "Score",
-	["de"] = "Punktestand"
-	}
-
-local team = {
-	["en"] = "Team"
-	}
-
-local drowning = {
-	["en"] = "is out and",
-	["de"] = "ist draußen und"
+	["en"] = "%s is out and Team %d|scored a penalty!| |Score:",
+	["de"] = "%s ist draußen und Team %d|erhält eine Strafe!| |Punktestand:",
+	["es"] = "¡%s cayó y Equipo %d|anotó una falta!| |Puntuación:"
 	}
 
 local function loc(text)
@@ -90,15 +81,15 @@ function onGearDelete(gear)
 		ball = nil
 	elseif (GetGearType(gear) == gtHedgehog) and CurrentHedgehog ~= nil then
 		local clan = GetHogClan(CurrentHedgehog)
-		local s = GetHogName(gear) .. " " .. loc(drowning) .. "|" .. loc(team) .. " " .. (clan + 1) .. " "
+		local s
 		if GetHogClan(CurrentHedgehog) ~= GetHogClan(gear) then
 			score[clan] = score[clan] + 1
-			s = s .. loc(scored)
+			s = string.format(loc(scored), GetHogName(gear), clan + 1)
 		else
 			score[clan] = score[clan] - 1
-			s = s .. loc(failed)
+			s = string.format(loc(failed), GetHogName(gear), clan + 1)
 		end
-		s = s .. "| |" .. loc(sscore) .. ": " .. score[0]
+		s = s .. " " .. score[0]
 		for i = 1, ClansCount - 1 do s = s .. " - " .. score[i] end
 		ShowMission(loc(caption), loc(subcaption), s, -amBaseballBat, 0)
 	end

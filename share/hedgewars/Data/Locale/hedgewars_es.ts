@@ -691,7 +691,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Predeterminado del sistema)</translation>
     </message>
 </context>
 <context>
@@ -817,7 +817,7 @@ Puedes unirte como espectador, pero tendrás que esperar a que el juego termine 
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation>Modificador de daño</translation>
+        <translation>Modificador al daño</translation>
     </message>
     <message>
         <source>Turn Time</source>
