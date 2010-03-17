@@ -185,10 +185,10 @@
 02:02=Hedgewars, stworzone przez Hedgewars.org
 02:02=GL HF
 02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Tiyuri'emu
-02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko unC0Rr'owi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko unC0Rrowi
 02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Nemo
-02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Smaxx'owi
-02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Jessor'owi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Smaxxowi
+02:02=Możesz uważać się za szczęśliwca jeżeli nie grasz przeciwko Jessorowi
 02:02=Dajcie z siebie wszystko!
 02:02=Przegrany sprząta teren.
 02:02=Niech rozpocznie się walka millenium 
@@ -362,7 +362,7 @@
 02:10=Home Run!
 02:10=To ptak? To samolot?
 02:10=Ten jeż wypił Red Bulla.
-02:10=%1 to następca Małysza!
+02:10=Małysz idzie w odstawkę!
 02:10=Iiii Leciiii...
 ; Weapon Categories
 03:00=Granat czasowy

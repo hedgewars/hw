@@ -459,3 +459,8 @@
 05:08=Posicionar Ouriços: Posiciona os teus ouriços antes do jogo começar
 05:09=Artilharia: Os ouriços não podem andar ou mudar de posição
 05:10=Terreno Indestrutível: A maioria das armas não destrói o terreno
+05:11=Armas Partilhadas: Todas as equipas da mesma cor partilham as armas
+05:12=Tempo das minas: As minas detonam passado %1 segundo(s)
+05:13=Tempo das minas: As minas detonam instantaneamente
+05:14=Tempo das minas: As minas detonam passado 0 - 3 segundos
+05:15=Modificador de Dano: Todas as armas fazem %1% de dano
