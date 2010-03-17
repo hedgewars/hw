@@ -246,8 +246,18 @@ void GameCFGWidget::ammoChanged(int index)
 
 void GameCFGWidget::mapChanged(const QString & value)
 {
-    GameSchemes->setEnabled(pMapContainer->getCurrentIsMission());
-    WeaponsName->setEnabled(pMapContainer->getCurrentIsMission());
+    if(pMapContainer->getCurrentIsMission())
+    {
+        GameSchemes->setEnabled(false);
+        WeaponsName->setEnabled(false);
+        GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+        WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+    }
+    else
+    {
+        GameSchemes->setEnabled(true);
+        WeaponsName->setEnabled(true);
+    }
     emit paramChanged("MAP", QStringList(value));
 }
 
