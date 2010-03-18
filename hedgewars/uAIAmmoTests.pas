@@ -161,7 +161,6 @@ TestBazooka:= valueResult
 end;
 
 function TestMolotov(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
-const tDelta = 24;
 var Vx, Vy, r: hwFloat;
     Score, EX, EY, valueResult: LongInt;
     TestTime: Longword;
@@ -190,9 +189,9 @@ valueResult:= BadTurn;
 TestTime:= 0;
 ap.ExplR:= 0;
 repeat
-  inc(TestTime, 1000);
-  Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime + tDelta);
-  Vy:= cGravity * ((TestTime + tDelta) div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime + tDelta);
+  inc(TestTime, 300);
+  Vx:= (int2hwFloat(Targ.X) - Me^.X) / int2hwFloat(TestTime);
+  Vy:= cGravity * (TestTime div 2) - (int2hwFloat(Targ.Y) - Me^.Y) / int2hwFloat(TestTime);
   r:= Distance(Vx, Vy);
   if not (r > _1) then
      begin
@@ -208,7 +207,7 @@ repeat
         valueResult:= Score
         end;
      end
-until (TestTime = 4000);
+until (TestTime > 4250);
 TestMolotov:= valueResult
 end;
 
