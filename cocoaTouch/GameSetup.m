@@ -248,14 +248,19 @@
 	const char **gameArgs = (const char**) malloc(sizeof(char*) * 6);
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
 	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
-	
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    NSString *wSize = [[[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width] autorelease];
+    NSString *hSize = [[[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height] autorelease];
+    
 	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
 	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
 	gameArgs[2] = [[systemSettings objectForKey:@"sounds"] UTF8String];     //isSoundEnabled
 	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];      //isMusicEnabled
 	gameArgs[4] = [localeString UTF8String];                                //cLocaleFName
 	gameArgs[5] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
-	
+	gameArgs[6] = [wSize UTF8String];
+    gameArgs[7] = [hSize UTF8String];
+    
 	[localeString release];
 	[ipcString release];
 	return gameArgs;

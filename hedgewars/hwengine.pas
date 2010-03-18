@@ -69,17 +69,12 @@ uses    SDLh in 'SDLh.pas',
 //       proto.inc
 
 {$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..5] of PChar;
-procedure DoTimer(Lag: LongInt);
-procedure OnDestroy;
-procedure MainLoop;
-procedure ShowMainWindow;
-procedure Game(gameArgs: arrayofpchar); cdecl; export;
+type arrayofpchar = array[0..7] of PChar;
+
 procedure initEverything;
 procedure freeEverything;
 
 implementation
-
 {$ELSE}
 procedure OnDestroy; forward;
 procedure freeEverything; forward;
@@ -235,10 +230,6 @@ begin
     initEverything();
     Randomize();
 
-    cScreenWidth:= 480;
-    cScreenHeight:= 320;
-    cInitWidth:= cScreenWidth;
-    cInitHeight:= cScreenHeight;
     cBits:= 32;
     cFullScreen:= false;
     cVSyncInUse:= true;
@@ -254,6 +245,10 @@ begin
     isMusicEnabled:= gameArgs[3] = '1';
     cLocaleFName:= gameArgs[4];
     cAltDamage:= gameArgs[5] = '1';
+    val(gameArgs[6], cScreenHeight);
+    val(gameArgs[7], cScreenWidth);
+    cInitHeight:= cScreenHeight;
+    cInitWidth:= cScreenWidth;
 {$ENDIF}
 
     for p:= Succ(Low(TPathType)) to High(TPathType) do
@@ -357,8 +352,8 @@ begin
     free_uVisualGears();    //stub
     free_uTeams();
     free_uStore();
-    free_uStats();      //stub
-    free_uSound();      //stub
+    free_uStats();          //stub
+    free_uSound();          //stub
     //uSHA does not need to be freed
     free_uRandom();     //stub
     //uLocale does not need to be freed
@@ -367,7 +362,7 @@ begin
     //uLandObjects does not need to be freed
     //uLandGraphics does not need to be freed
     free_uLand();
-    free_uKeys();       //stub
+    free_uKeys();           //stub
     free_uIO();
     free_uGears();
     //uGame does not need to be freed
@@ -375,18 +370,17 @@ begin
     free_uCollisions();
     free_uChat();
     free_uAmmos();
-    free_uAIMisc();     //stub
+    free_uAIMisc();         //stub
     //uAIAmmoTests does not need to be freed
     //uAIActions does not need to be freed
-    free_uAI();     //stub
+    free_uAI();             //stub
 
     free_uConsole();
     free_uMisc();
-    free_uConsts();     //stub
+    free_uConsts();         //stub
     free_uScript();
 end;
 
-{$IFNDEF HWLIBRARY}
 /////////////////////////
 procedure GenLandPreview;
 var Preview: TPreview;
@@ -405,6 +399,7 @@ begin
     CloseIPC();
 end;
 
+{$IFNDEF HWLIBRARY}
 ////////////////////////////////
 procedure Resize(w, h: LongInt);
 begin
@@ -561,15 +556,12 @@ begin
     AddFileLog('Prefix: "' + PathPrefix +'"');
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
-{$IFDEF IPHONEOS}
-    WriteLnToConsole('Saving debug file at: ' + IPH_getDocumentsPath());
-{$ENDIF}
 {$ENDIF}
 end;
+
 ////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////// m a i n ////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
 begin
     initEverything();
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');

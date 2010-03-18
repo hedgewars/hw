@@ -718,7 +718,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#let's clean our build first\nrm -rf ${PROJECT_DIR}/build\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n";
+			shellScript = "#let's clean our build first\nrm -rf ${PROJECT_DIR}/build\n\n#copy new stuff over old stuff\nsvn export --force ${PROJECT_DIR}/../../share/hedgewars/Data ${PROJECT_DIR}/Data\n\n#delete all CMakeLists.txt\nfind ${PROJECT_DIR}/Data -name CMakeLists.txt -delete\n\n#delete desktop frontend translation\nrm -rf ${PROJECT_DIR}/Data/Locale/hedgewars_*\n\n#the following ones must be removed when their support is implemented\n\n#delete all sound files\nrm -rf ${PROJECT_DIR}/Data/Sounds/*\nrm -rf ${PROJECT_DIR}/Data/Music/*\n\n#delete all names\nrm -rf ${PROJECT_DIR}/Data/Names/*\n\n#delete all missions\nrm -rf ${PROJECT_DIR}/Data/Missions/*\n\n#delete all forts\nrm -rf ${PROJECT_DIR}/Data/Forts/*\n";
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
 			isa = PBXShellScriptBuildPhase;
