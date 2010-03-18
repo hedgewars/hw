@@ -136,6 +136,8 @@ while Gear <> nil do
     begin
     case Gear^.Kind of
         gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
+        gtFlame: if (Gear^.State and gsttmpFlag) <> 0 then
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
         gtMine: if (Gear^.State and gstAttacking) = 0 then
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
             else
