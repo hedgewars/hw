@@ -861,6 +861,7 @@ end;
 
 procedure free_uLand;
 begin
+    FillChar(LandPixels, sizeof(TLandArray), 0);
     if LandBackSurface <> nil then
         SDL_FreeSurface(LandBackSurface);
 end;
