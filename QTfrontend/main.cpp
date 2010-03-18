@@ -121,14 +121,14 @@ int main(int argc, char *argv[]) {
 
             "QLineEdit, QListWidget,QTableView, QTextBrowser, "
             "QSpinBox, QToolBox { "
-                "border-radius: 12px;"
+                "border-radius: 10px;"
             "}"
 
             "QLineEdit, QLabel, QHeaderView, QListWidget, QTableView, "
             "QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView, "
             "IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget, "
-            "SelWeaponWidget, QCheckBox, QRadioButton {"
-                "font: bold 14px;"
+            "SelWeaponWidget, QCheckBox, QRadioButton, QPushButton {"
+                "font: bold 13px;"
             "}"
             "SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {"
                 "background-position: bottom center;"
@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
 
 
             "QPushButton {"
-                "border-radius: 10px;"
+                "border-radius: 8px;"
                 "background-origin: margin;"
                 "background-position: top left;"
                 "background-color: rgba(18, 42, 5, 70%);"
@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) {
             "}"
 
             "QComboBox {"
-                "border-radius: 15px;"
+                "border-radius: 10px;"
                 "padding: 3px;"
             "}"
             "QComboBox:pressed{"
@@ -277,6 +277,7 @@ int main(int argc, char *argv[]) {
 
             "QToolTip{"
                 "background-color: #0d0544;"
+                "border: 1px solid #ffcc00;"
             "}"
 
             ":disabled{"

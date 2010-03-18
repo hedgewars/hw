@@ -625,7 +625,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Enable sound</source>
-        <translation>Sound an</translation>
+        <translation>Klänge im Spiel</translation>
     </message>
     <message>
         <source>Show FPS</source>
@@ -637,7 +637,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Enable music</source>
-        <translation>Musik an</translation>
+        <translation>Musik im Spiel</translation>
     </message>
     <message>
         <source>Frontend fullscreen</source>
@@ -661,19 +661,19 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation>Hilfefenster für Waffen anzeigen</translation>
+        <translation type="unfinished">Kurzinfos für Waffen anzeigen</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
-        <translation>Musik an (Frontend)</translation>
+        <translation>Klänge im Frontend</translation>
     </message>
     <message>
         <source>Enable frontend music</source>
-        <translation>Sounds an (Frontend)</translation>
+        <translation>Musik im Frontend</translation>
     </message>
     <message>
         <source>Frontend effects</source>
-        <translation>Frontendeffekte</translation>
+        <translation>Animationen im Frontend</translation>
     </message>
 </context>
 <context>
@@ -818,7 +818,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Damage Modifier</source>
-        <translation type="unfinished">Prozentualer Schaden</translation>
+        <translation>Prozentualer Schaden</translation>
     </message>
     <message>
         <source>Turn Time</source>

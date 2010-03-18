@@ -27,8 +27,8 @@ IconedGroupBox::IconedGroupBox(QWidget * parent)
 {
 // Has issues with border-radius on children
 //    setAttribute(Qt::WA_PaintOnScreen, true);
-    titleLeftPadding = 82;
-    contentTopPadding = 22;
+    titleLeftPadding = 49;
+    contentTopPadding = 15;
 }
 
 void IconedGroupBox::setIcon(const QIcon & icon)
@@ -44,7 +44,7 @@ void IconedGroupBox::setIcon(const QIcon & icon)
                 "subcontrol-origin: margin;"
                 "subcontrol-position: top left;"
                 "padding-left: %2px;"
-                "padding-top: 25px;"
+                "padding-top: %1px;"
                 "text-align: left;"
                 "}"
                 ).arg(contentTopPadding).arg(titleLeftPadding)

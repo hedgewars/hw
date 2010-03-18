@@ -78,10 +78,11 @@ HWForm::HWForm(QWidget *parent)
     xfire_init();
 #endif
     gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
-    frontendEffects = gameSettings->value("video/frontendeffects", true).toBool();
+    frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toLatin1(), QCryptographicHash::Md5).toHex());
 
     ui.setupUi(this);
+    setMinimumSize(800, 600);
 
     CustomizePalettes();
     

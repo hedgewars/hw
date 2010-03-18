@@ -36,26 +36,26 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     connect(Form->ui.pageOptions->CBEnableFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
-    //Form->resize(value("window/width", 640).toUInt(), value("window/height", 450).toUInt());
+    //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
 
-    Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltip", true).toBool());
+    Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
     int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 0 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
-    bool ffscr=value("video/frontendfullscreen", false).toBool();
+    bool ffscr=value("frontend/fullscreen", false).toBool();
     Form->ui.pageOptions->CBFrontendFullscreen->setChecked(ffscr);
 
     Form->ui.pageOptions->CBReduceQuality->setChecked(value("video/reducequality", false).toBool());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(frontendEffects);
     Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("audio/frontendsound", true).toBool());
+    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
 #ifdef _WIN32
 //  Form->ui.pageOptions->CBHardwareSound->setChecked(value("audio/hardware", false).toBool());
 #endif
     Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("audio/frontendmusic", true).toBool());
+    Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("frontend/music", true).toBool());
     Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
@@ -76,7 +76,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     Form->ui.pageNetServer->sbPort->setValue(value("net/serverport", 46631).toUInt());
 
     Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
-    Form->ui.pageOptions->fpsedit->setValue(value("fps/interval", 27).toUInt());
+    Form->ui.pageOptions->fpsedit->setValue(value("fps/limit", 27).toUInt());
 
     Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
     Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
@@ -105,7 +105,7 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::resizeToConfigValues()
 {
-        Form->resize(value("window/width", 720).toUInt(), value("window/height", 450).toUInt());
+        Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
 }
 
 void GameUIConfig::SaveOptions()
@@ -115,27 +115,27 @@ void GameUIConfig::SaveOptions()
 
     setValue("video/reducequality", isReducedQuality());
 
-    setValue("video/frontendeffects", isFrontendEffects());
+    setValue("frontend/effects", isFrontendEffects());
 
-    setValue("misc/weaponTooltip", isWeaponTooltip());
+    setValue("misc/weaponTooltips", isWeaponTooltip());
 
     bool ffscr = isFrontendFullscreen();
-    setValue("video/frontendfullscreen", ffscr);
+    setValue("frontend/fullscreen", ffscr);
     emit frontendFullscreen(ffscr);
     if (!ffscr) {
-      setValue("window/width", Form->width());
-      setValue("window/height", Form->height());
+      setValue("frontend/width", Form->width());
+      setValue("frontend/height", Form->height());
     } else {
       //resizeToConfigValues(); // TODO: why this has been made?
     }
 
     setValue("audio/sound", isSoundEnabled());
-    setValue("audio/frontendsound", isFrontendSoundEnabled());
+    setValue("frontend/sound", isFrontendSoundEnabled());
 #ifdef _WIN32
 //  setValue("audio/hardware", isSoundHardware());
 #endif
     setValue("audio/music", isMusicEnabled());
-    setValue("audio/frontendmusic", isFrontendMusicEnabled());
+    setValue("frontend/music", isFrontendMusicEnabled());
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
     setValue("net/nick", netNick());
@@ -145,7 +145,7 @@ void GameUIConfig::SaveOptions()
     setValue("net/serverport", Form->ui.pageNetServer->sbPort->value());
 
     setValue("fps/show", isShowFPSEnabled());
-    setValue("fps/interval", Form->ui.pageOptions->fpsedit->value());
+    setValue("fps/limit", Form->ui.pageOptions->fpsedit->value());
 
     setValue("misc/altdamage", isAltDamageEnabled());
     setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());

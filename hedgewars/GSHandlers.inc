@@ -166,7 +166,6 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
 var isFalling: boolean;
-    tmp: QWord;
     tdX, tdY: hwFloat;
     collV, collH: LongInt;
 begin

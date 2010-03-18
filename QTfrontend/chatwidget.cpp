@@ -39,7 +39,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, SDLInterac
     this->gameSettings = gameSettings;
     this->sdli = sdli;
     this->notify = notify;
-    if(notify && gameSettings->value("audio/frontendsound", true).toBool()) {
+    if(notify && gameSettings->value("frontend/sound", true).toBool()) {
        QDir tmpdir;
 
        tmpdir.cd(datadir->absolutePath());
@@ -238,7 +238,7 @@ void HWChatWidget::nickAdded(const QString& nick, bool notifyNick)
     updateIcon(item);
     chatNicks->addItem(item);
 
-    if(notifyNick && notify && gameSettings->value("audio/frontendsound", true).toBool()) {
+    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
        Mix_PlayChannel(-1, sound[rand()%4], 0);
     }
 }
