@@ -81,12 +81,12 @@ if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
     
     if not cReducedQuality then 
         begin
-        AddVisualGear(hwRound(Gear^.X), LAND_HEIGHT, vgtSplash);
+        AddVisualGear(hwRound(Gear^.X), cWaterLine, vgtSplash);
        
         maxDrops := (Gear^.Radius div 2) + hwRound(Gear^.dX * Gear^.Radius * 2) + hwRound(Gear^.dY * Gear^.Radius * 2);
         for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do 
             begin
-            particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), LAND_HEIGHT, vgtDroplet);
+            particle := AddVisualGear(hwRound(Gear^.X) - 3 + Random(6), cWaterLine, vgtDroplet);
             if particle <> nil then
                 begin
                 particle^.dX := particle^.dX - (Gear^.dX / 10);
@@ -166,6 +166,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
 var isFalling: boolean;
+    //tmp: QWord;
     tdX, tdY: hwFloat;
     collV, collH: LongInt;
 begin
@@ -1578,7 +1579,7 @@ if not TestCollisionYwithGear(Gear, 1) then
     if (hwRound(Gear^.Y) > cWaterLine) then
         begin
         for i:= 0 to 3 do
-            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), hwRound(Gear^.Y) - 16 + Random(16), vgtSteam);
+            AddVisualGear(hwRound(Gear^.X) - 16 + Random(32), cWaterLine - 16 + Random(16), vgtSteam);
         PlaySound(sndVaporize);
         DeleteGear(Gear);
         exit
