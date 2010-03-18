@@ -36,6 +36,8 @@ extern "C" {
 	void HW_aimUp(void);
 	void HW_aimDown(void);
 	void HW_shoot(void);
+	void HW_jump(void);
+	void HW_backjump(void);
 	
 	void HW_chat(void);
 	void HW_tab(void);

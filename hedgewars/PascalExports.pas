@@ -111,6 +111,16 @@ begin
     spaceKey:= true;
 end;
 
+procedure HW_jump; cdecl; export;
+begin
+    enterKey:= true;
+end;
+
+procedure HW_backjump; cdecl; export;
+begin
+    backspaceKey:= true;
+end;
+
 procedure HW_chat; cdecl; export;
 begin
     chatAction:= true;

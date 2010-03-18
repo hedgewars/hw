@@ -10,8 +10,10 @@
 
 
 @interface overlayViewController : UIViewController {
-
+    NSTimer *dimTimer;
 }
+
+@property (nonatomic,retain) NSTimer *dimTimer;
 
 -(IBAction) buttonReleased:(id) sender;
 -(IBAction) buttonPressed:(id) sender;
