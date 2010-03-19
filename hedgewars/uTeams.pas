@@ -284,7 +284,7 @@ else
 
 if PlacingHogs then
    begin
-   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 1000 * (MaxHedgehogs div 4) + 1000
+   if CurrentHedgehog^.Unplaced then TurnTimeLeft:= 1000 * (MaxHedgehogs div 2) + 1000
    else TurnTimeLeft:= 0
    end
 else TurnTimeLeft:= cHedgehogTurnTime
