@@ -106,12 +106,9 @@
 		6100DACA115446B000F455E0 /* libpng_x86.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798919114AAF2100BA94A9 /* libpng_x86.a */; };
 		6100DACB115446B000F455E0 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
 		6100DACC115446B000F455E0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
-		6100DB2011544EA300F455E0 /* MainMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB1B11544EA300F455E0 /* MainMenuViewController-iPad.xib */; };
-		6100DB2111544EA300F455E0 /* SchemeEditViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB1C11544EA300F455E0 /* SchemeEditViewController-iPad.xib */; };
-		6100DB2211544EA300F455E0 /* SettingsViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB1D11544EA300F455E0 /* SettingsViewController-iPad.xib */; };
-		6100DB2311544EA300F455E0 /* TeamEditViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB1E11544EA300F455E0 /* TeamEditViewController-iPad.xib */; };
-		6100DB2411544EA300F455E0 /* TeamMenuViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB1F11544EA300F455E0 /* TeamMenuViewController-iPad.xib */; };
-		6100DB2611544EB500F455E0 /* overlayViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6100DB2511544EB500F455E0 /* overlayViewController-iPad.xib */; };
+		611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD990115590E700C2203D /* MainMenuViewController.xib */; };
+		611FD994115590E700C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD991115590E700C2203D /* overlayViewController.xib */; };
+		611FD995115590E700C2203D /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD992115590E700C2203D /* SettingsViewController.xib */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -274,12 +271,9 @@
 		28FD15070DC6FC5B0079059D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
 		6100DAD2115446B000F455E0 /* iHedgewars.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iHedgewars.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		6100DB1B11544EA300F455E0 /* MainMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainMenuViewController-iPad.xib"; path = "../../cocoaTouch/MainMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6100DB1C11544EA300F455E0 /* SchemeEditViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "SchemeEditViewController-iPad.xib"; path = "../../cocoaTouch/SchemeEditViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6100DB1D11544EA300F455E0 /* SettingsViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "SettingsViewController-iPad.xib"; path = "../../cocoaTouch/SettingsViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6100DB1E11544EA300F455E0 /* TeamEditViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TeamEditViewController-iPad.xib"; path = "../../cocoaTouch/TeamEditViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6100DB1F11544EA300F455E0 /* TeamMenuViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "TeamMenuViewController-iPad.xib"; path = "../../cocoaTouch/TeamMenuViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		6100DB2511544EB500F455E0 /* overlayViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "overlayViewController-iPad.xib"; path = "../../cocoaTouch/overlayViewController-iPad.xib"; sourceTree = SOURCE_ROOT; };
+		611FD990115590E700C2203D /* MainMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenuViewController.xib; path = ../../cocoaTouch/iPad/MainMenuViewController.xib; sourceTree = SOURCE_ROOT; };
+		611FD991115590E700C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/iPad/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		611FD992115590E700C2203D /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../../cocoaTouch/iPad/SettingsViewController.xib; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -442,8 +436,6 @@
 				61798860114AA49D00BA94A9 /* SDLOverrides */,
 				6179939D1150226700BA94A9 /* overlayViewController.h */,
 				6179939E1150226700BA94A9 /* overlayViewController.m */,
-				6179942611502BDD00BA94A9 /* overlayViewController.xib */,
-				6100DB2511544EB500F455E0 /* overlayViewController-iPad.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -489,6 +481,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6100DB1711544E8400F455E0 /* XIB */,
 				6179937011501D5800BA94A9 /* buttons */,
 				6179936F11501D4100BA94A9 /* back panels */,
 				6179936611501D1E00BA94A9 /* joystick */,
@@ -526,6 +519,9 @@
 		6100DAD4115446B000F455E0 /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				611FD990115590E700C2203D /* MainMenuViewController.xib */,
+				611FD992115590E700C2203D /* SettingsViewController.xib */,
+				611FD991115590E700C2203D /* overlayViewController.xib */,
 			);
 			name = "Resources-iPad";
 			sourceTree = "<group>";
@@ -533,18 +529,15 @@
 		6100DB1711544E8400F455E0 /* XIB */ = {
 			isa = PBXGroup;
 			children = (
-				6100DB1B11544EA300F455E0 /* MainMenuViewController-iPad.xib */,
-				6100DB1C11544EA300F455E0 /* SchemeEditViewController-iPad.xib */,
-				6100DB1D11544EA300F455E0 /* SettingsViewController-iPad.xib */,
-				6100DB1E11544EA300F455E0 /* TeamEditViewController-iPad.xib */,
-				6100DB1F11544EA300F455E0 /* TeamMenuViewController-iPad.xib */,
 				61798870114AA4D000BA94A9 /* MainMenuViewController.xib */,
 				61798873114AA4D000BA94A9 /* SchemeEditViewController.xib */,
 				61798876114AA4D000BA94A9 /* SettingsViewController.xib */,
 				61798879114AA4D000BA94A9 /* TeamEditViewController.xib */,
 				6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */,
+				6179942611502BDD00BA94A9 /* overlayViewController.xib */,
 			);
 			name = XIB;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		61798860114AA49D00BA94A9 /* SDLOverrides */ = {
@@ -561,7 +554,6 @@
 		6179886C114AA4B900BA94A9 /* Frontend */ = {
 			isa = PBXGroup;
 			children = (
-				6100DB1711544E8400F455E0 /* XIB */,
 				6179886E114AA4D000BA94A9 /* MainMenuViewController.h */,
 				6179886F114AA4D000BA94A9 /* MainMenuViewController.m */,
 				61798871114AA4D000BA94A9 /* SchemeEditViewController.h */,
@@ -887,12 +879,9 @@
 				6100DA89115446B000F455E0 /* arrowRight.png in Resources */,
 				6100DA8A115446B000F455E0 /* arrowUp.png in Resources */,
 				6100DA8C115446B000F455E0 /* joyPush.png in Resources */,
-				6100DB2011544EA300F455E0 /* MainMenuViewController-iPad.xib in Resources */,
-				6100DB2111544EA300F455E0 /* SchemeEditViewController-iPad.xib in Resources */,
-				6100DB2211544EA300F455E0 /* SettingsViewController-iPad.xib in Resources */,
-				6100DB2311544EA300F455E0 /* TeamEditViewController-iPad.xib in Resources */,
-				6100DB2411544EA300F455E0 /* TeamMenuViewController-iPad.xib in Resources */,
-				6100DB2611544EB500F455E0 /* overlayViewController-iPad.xib in Resources */,
+				611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */,
+				611FD994115590E700C2203D /* overlayViewController.xib in Resources */,
+				611FD995115590E700C2203D /* SettingsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

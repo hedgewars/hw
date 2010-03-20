@@ -95,7 +95,7 @@ int main (int argc, char *argv[]) {
 	[setup release];
     
     // overlay with controls
-    overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController-iPad" bundle:nil];
+    overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController" bundle:nil];
     overlayController.view.alpha = 0;
     [uiwindow addSubview: overlayController.view];
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
@@ -136,7 +136,7 @@ int main (int argc, char *argv[]) {
 	self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
-	self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController-iPad" bundle:nil];
+	self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController" bundle:nil];
 	
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];

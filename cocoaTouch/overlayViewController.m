@@ -9,8 +9,8 @@
 #import "overlayViewController.h"
 #import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
-#import "SDL_mouse.h"
 #import "CGPointUtils.h"
+#import "SDL_mouse.h"
 
 @implementation overlayViewController
 @synthesize dimTimer;
