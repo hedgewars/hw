@@ -11,9 +11,16 @@
 
 @interface overlayViewController : UIViewController {
     NSTimer *dimTimer;
+    CGFloat initialDistanceForPinching;
+    CGPoint gestureStartPoint;
 }
 
 @property (nonatomic,retain) NSTimer *dimTimer;
+
+
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 
 -(IBAction) buttonReleased:(id) sender;
 -(IBAction) buttonPressed:(id) sender;

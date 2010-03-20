@@ -133,7 +133,7 @@
 	if (nil == self.settingsViewController.view.superview) {
 		// view not created
 		if (nil == self.settingsViewController) {
-			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController"
+			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController-iPad"
 												      bundle:nil];
 			self.settingsViewController = controller;
 			[controller release];

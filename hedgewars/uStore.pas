@@ -1271,11 +1271,6 @@ procedure FinishProgress;
 begin
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
-
-{$IFDEF IPHONEOS}
-    // show overlay buttons
-    IPH_showControls;
-{$ENDIF}
 end;
 
 procedure flipSurface(Surface: PSDL_Surface; Vertical: Boolean);

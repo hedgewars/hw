@@ -7,7 +7,10 @@
 //
 
 #import "overlayViewController.h"
+#import "SDL_uikitappdelegate.h"
 #import "PascalImports.h"
+#import "SDL_mouse.h"
+#import "CGPointUtils.h"
 
 @implementation overlayViewController
 @synthesize dimTimer;
@@ -93,6 +96,116 @@
             break;
     }
 }
+
+#pragma mark -
+#pragma mark Custom SDL_UIView input handling
+#define kMinimumPinchDelta      50
+#define kMinimumGestureLength	10
+#define kMaximumVariance        3
+
+// we override default touch input to implement our own gestures
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSArray *twoTouches;
+	UITouch *touch = [touches anyObject];
+	
+	switch ([touches count]) {
+		case 1:
+			gestureStartPoint = [touch locationInView:self.view];
+			initialDistanceForPinching = 0;
+			switch ([touch tapCount]) {
+				case 1:
+					NSLog(@"X:%d Y:%d", (int)gestureStartPoint.x, (int)gestureStartPoint.y );
+					SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
+							      (int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+					HW_click();
+					break;
+				case 2:
+					HW_ammoMenu();
+					break;
+				default:
+					break;
+			}
+			break;
+		case 2:
+			if (2 == [touch tapCount]) {
+				HW_zoomReset();
+			}
+			
+			// pinching
+			twoTouches = [touches allObjects];
+			UITouch *first = [twoTouches objectAtIndex:0];
+			UITouch *second = [twoTouches objectAtIndex:1];
+			initialDistanceForPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+			break;
+		default:
+			break;
+	}
+
+}
+
+-(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	initialDistanceForPinching = 0;
+	gestureStartPoint.x = 0;
+	gestureStartPoint.y = 0;
+	HW_allKeysUp();
+}
+
+-(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances.
+	// Usually (it seems) all active touches are canceled.
+	[self touchesEnded:touches withEvent:event];
+}
+
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSArray *twoTouches;
+	CGPoint currentPosition;
+	UITouch *touch = [touches anyObject];
+
+	switch ([touches count]) {
+		case 1:
+			currentPosition = [touch locationInView:self.view];
+			// panning
+			SDL_WarpMouseInWindow([SDLUIKitDelegate sharedAppDelegate].window, 
+							(int)gestureStartPoint.y, 320 - (int)gestureStartPoint.x);
+			// remember that we have x and y inverted
+			/* temporarily disabling hog movements for camera panning testing
+			CGFloat vertDiff = gestureStartPoint.x - currentPosition.x;
+			CGFloat horizDiff = gestureStartPoint.y - currentPosition.y;
+			CGFloat deltaX = fabsf(vertDiff);
+			CGFloat deltaY = fabsf(horizDiff);
+			
+			if (deltaY >= kMinimumGestureLength && deltaX <= kMaximumVariance) {
+				NSLog(@"Horizontal swipe detected, begX:%f curX:%f", gestureStartPoint.x, currentPosition.x);
+				if (horizDiff > 0) HW_walkLeft();
+				else HW_walkRight();
+			} else if (deltaX >= kMinimumGestureLength && deltaY <= kMaximumVariance){
+				NSLog(@"Vertical swipe detected, begY:%f curY:%f", gestureStartPoint.y, currentPosition.y);
+				if (vertDiff < 0) HW_aimUp();
+				else HW_aimDown();
+			}
+			*/
+			break;
+		case 2:
+			twoTouches = [touches allObjects];
+			UITouch *first = [twoTouches objectAtIndex:0];
+			UITouch *second = [twoTouches objectAtIndex:1];
+			CGFloat currentDistanceOfPinching = distanceBetweenPoints([first locationInView:self.view], [second locationInView:self.view]);
+			
+			if (0 == initialDistanceForPinching) 
+				initialDistanceForPinching = currentDistanceOfPinching;
+
+			if (currentDistanceOfPinching < initialDistanceForPinching + kMinimumPinchDelta)
+				HW_zoomOut();
+			else if (currentDistanceOfPinching > initialDistanceForPinching + kMinimumPinchDelta)
+				HW_zoomIn();
+
+			currentDistanceOfPinching = initialDistanceForPinching;
+			break;
+		default:
+			break;
+	}
+}
+
 
 
 @end

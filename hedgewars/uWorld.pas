@@ -516,9 +516,9 @@ SetScale(scale);
 
 // Turn time
 {$IFDEF IPHONEOS}
-offset:= 313;
+offsetX:= cScreenHeight - 13;
 {$ELSE}
-offset:= 48;
+offsetX:= 48;
 {$ENDIF}
 if TurnTimeLeft <> 0 then
    begin
@@ -526,14 +526,14 @@ if TurnTimeLeft <> 0 then
    if i>99 then t:= 112
       else if i>9 then t:= 96
                   else t:= 80;
-   DrawSprite(sprFrame, -cScreenWidth div 2 + t, cScreenHeight - offset, 1);
+   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t, cScreenHeight - offsetX, 1);
    while i > 0 do
          begin
          dec(t, 32);
-         DrawSprite(sprBigDigit, -cScreenWidth div 2 + t, cScreenHeight - offset, i mod 10);
+         DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t, cScreenHeight - offsetX, i mod 10);
          i:= i div 10
          end;
-   DrawSprite(sprFrame, -cScreenWidth div 2 + t - 4, cScreenHeight - offset, 0);
+   DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4, cScreenHeight - offsetX, 0);
    end;
 
 {$IFNDEF IPHONEOS}
@@ -605,7 +605,6 @@ else offset:= 8;
             end;
 
 // Teams Healths
-
 for t:= 0 to Pred(TeamsCount) do
    with TeamsArray[t]^ do
       begin
@@ -659,8 +658,8 @@ if isInLag then DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr
 
 // Wind bar
 {$IFDEF IPHONEOS}
-offsetX:= 305;
-offsetY:= 315;
+offsetX:= cScreenHeight - 13;
+offsetY:= (cScreenWidth shr 1) + 74;
 {$ELSE}
 offsetX:= 30;
 offsetY:= 180;
@@ -709,7 +708,7 @@ if missionTimer <> 0 then
 
 // fps
 {$IFDEF IPHONEOS}
-offset:= 300;
+offset:= 8;
 {$ELSE}
 offset:= 10;
 {$ENDIF}
@@ -768,7 +767,7 @@ if SoundTimerTicks >= 50 then
    end;
 
 if GameState = gsConfirm then
-    DrawCentered(0, cScreenHeight div 2, ConfirmTexture);
+    DrawCentered(0, (cScreenHeight shr 1), ConfirmTexture);
 
 SetScale(zoom);
 
@@ -782,8 +781,8 @@ if isCursorVisible then
          i:= Ammo^[CurSlot, CurAmmo].Pos;
          with Ammoz[Ammo^[CurSlot, CurAmmo].AmmoType] do
            if PosCount > 1 then
-              DrawSprite(PosSprite, CursorPoint.X - SpritesData[PosSprite].Width div 2,
-                                    cScreenHeight - CursorPoint.Y - SpritesData[PosSprite].Height div 2,
+              DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1),
+                                    cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),
                                     i);
          end;
    DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
@@ -923,7 +922,7 @@ end;
 
 procedure HideMission;
 begin
-missionTimer:= 0
+    missionTimer:= 0
 end;
 
 procedure init_uWorld;
@@ -950,7 +949,7 @@ end;
 
 procedure free_uWorld;
 begin
-if missionTex <> nil then FreeTexture(missionTex);
+    if missionTex <> nil then FreeTexture(missionTex);
 end;
 
 end.
