@@ -20,7 +20,7 @@
 
 unit uVisualGears;
 interface
-uses SDLh, uConsts, uFloat,
+uses SDLh, uConsts, uFloat, Math,
 {$IFDEF GLES11}
     gles11;
 {$ELSE}
@@ -302,6 +302,17 @@ begin
     end;
 end;
 
+procedure doStepSmokeRing(Gear: PVisualGear; Steps: Longword);
+begin
+inc(Gear^.Timer, Steps);
+if Gear^.Timer >= Gear^.FrameTicks then DeleteVisualGear(Gear)
+else
+    begin
+    Gear^.scale := 1.25 * (-power(2, -7 * Int(Gear^.Timer)/Gear^.FrameTicks) + 1) + 0.4;
+    Gear^.alpha := 1.0 * (power(2, -3 * (Gear^.Timer - 350)/350));
+    end;
+end;
+
 ////////////////////////////////////////////////////////////////////////////////
 const cSorterWorkTime = 640;
 var thexchar: array[0..cMaxTeams] of
@@ -441,7 +452,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepShell,
             @doStepDust,
             @doStepSplash,
-            @doStepDroplet
+            @doStepDroplet,
+            @doStepSmokeRing
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -578,6 +590,18 @@ with gear^ do
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
+    vgtSmokeRing: begin
+                dx:= _0;
+                dx.isNegative:= false;
+                dy:= _0;
+                dy.isNegative:= false;
+                FrameTicks:= 600;
+                Timer:= 0;
+                Frame:= 0;
+                scale:= 0.6;
+                alpha:= 1;
+                angle:= random(360);
+                end;
         end;
 
 if VisualGearsList <> nil then
@@ -699,6 +723,11 @@ case Layer of
                             end;
                 vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 64, hwRound(Gear^.Y) + WorldDy - 72, 19 - (Gear^.FrameTicks div 37));
                 vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                vgtSmokeRing: begin
+                            glColor4f(1, 1, 1, Gear^.alpha);
+                            DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);
+                            glColor4f(1, 1, 1, 1);
+                            end;
             end;
         case Gear^.Kind of
             vgtSmallDamageTag: DrawCentered(hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tex);

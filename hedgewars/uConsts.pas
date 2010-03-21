@@ -75,7 +75,8 @@ type
             sprSmoke, sprSmokeWhite, sprShell, sprDust, sprExplosives, sprExplosivesRoll,
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
-            sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp);
+            sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
+            sprBigExplosion, sprSmokeRing);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
             gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
@@ -86,12 +87,13 @@ type
             gtTeleport, gtSwitcher, gtTarget, gtMortar, // 31
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy);
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
+            gtBigExplosion);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
-            vgtDust, vgtSplash, vgtDroplet);
+            vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing);
 
     TGearsType = set of TGearType;
 
@@ -710,7 +712,11 @@ const
             (FileName:  'amSeduction'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandSeduction
             (FileName:  'amVamp'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprHandVamp
+            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprHandVamp
+            (FileName:  'BigExplosion'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  385; Height: 385; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBigExplosion
+            (FileName:  'SmokeRing'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  200; Height: 200; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprSmokeRing
             );
 
     Wavez: array [TWave] of record

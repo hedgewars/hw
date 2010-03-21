@@ -2858,3 +2858,26 @@ with HHGear^ do
     Message:= Message and not (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right)
     end
 end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepBigExplosionWork(Gear: PGear);
+var maxMovement: LongInt;
+begin
+inc(Gear^.Timer);
+if (Gear^.Timer and 5) = 0 then
+    begin
+    maxMovement := max(1, 13 - ((Gear^.Timer * 15) div 250));
+    ShakeCamera(maxMovement);
+    end;
+if Gear^.Timer > 250 then DeleteGear(Gear);
+end;
+
+procedure doStepBigExplosion(Gear: PGear);
+var i: LongWord;
+begin
+AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeRing);
+for i:= 0 to 46 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
+for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
+for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
+Gear^.doStep:= @doStepBigExplosionWork
+end;

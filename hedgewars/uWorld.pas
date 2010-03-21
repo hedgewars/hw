@@ -44,6 +44,7 @@ procedure DrawWorld(Lag: LongInt);
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 procedure HideMission;
+procedure ShakeCamera(amount: LongWord);
 
 implementation
 uses    uStore, uMisc, uTeams, uIO, uConsole, uKeys, uLocale, uSound, uAmmos, uVisualGears, uChat, uLandTexture, uLand,
@@ -923,6 +924,13 @@ end;
 procedure HideMission;
 begin
     missionTimer:= 0
+end;
+
+procedure ShakeCamera(amount: LongWord);
+begin
+    amount:= max(1, amount);
+    WorldDx:= WorldDx - amount + LongInt(getRandom(1 + amount * 2));
+    WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
 end;
 
 procedure init_uWorld;

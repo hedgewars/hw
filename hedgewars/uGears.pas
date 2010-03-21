@@ -20,7 +20,7 @@
 
 unit uGears;
 interface
-uses SDLh, uConsts, uFloat;
+uses SDLh, uConsts, uFloat, Math;
 
     
 type
@@ -182,7 +182,8 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepJetpack,
             @doStepMolotov,
             @doStepCase,
-            @doStepBirdy
+            @doStepBirdy,
+            @doStepBigExplosion
             );
 
 procedure InsertGearToList(Gear: PGear);
@@ -442,6 +443,11 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 16; // todo: check
                 gear^.Timer:= 500;
                 gear^.Health:= 2000;
+                end;
+gtBigExplosion: begin
+                gear^.X:= gear^.X;
+                gear^.Y:= gear^.Y;
+                gear^.Angle:= random(360);
                 end;
      end;
 InsertGearToList(gear);
@@ -1661,6 +1667,11 @@ while Gear<>nil do
      gtHellishBomb: DrawRotated(sprHellishBomb, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, Gear^.DirAngle);
       gtEvilTrace: if Gear^.State < 8 then DrawSprite(sprEvilTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.State);
            gtBirdy: DrawTextureF(SpritesData[sprBirdy].Texture, 1 - Gear^.Timer / 500, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+    gtBigExplosion: begin
+                    glColor4f(1, 1, 1, 1.0 * (power(2, -5 * (Gear^.Timer-200)/200)));
+                    DrawRotatedTextureF(SpritesData[sprBigExplosion].Texture, 0.85 * (-power(2, -4 * Int(Gear^.Timer)/250) + 1) + 0.4, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 385, 385, Gear^.Angle);
+                    glColor4f(1, 1, 1, 1);
+                    end;
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then DrawCentered(hwRound(Gear^.X) + 8 + WorldDx, hwRound(Gear^.Y) + 8 + WorldDy, Gear^.Tex);
       Gear:= Gear^.NextGear
@@ -1737,7 +1748,11 @@ var Gear: PGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
-if (Radius > 10) and ((Mask and EXPLNoGfx) = 0) then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
+if ((Mask and EXPLNoGfx) = 0) then
+    begin
+    if Radius > 50 then AddGear(X, Y, gtBigExplosion, 0, _0, _0, 0)
+    else if Radius > 10 then AddGear(X, Y, gtExplosion, 0, _0, _0, 0);
+    end;
 if (Mask and EXPLAutoSound) <> 0 then PlaySound(sndExplosion);
 
 if (Mask and EXPLAllDamageInRadius) = 0 then
