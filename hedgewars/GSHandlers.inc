@@ -1327,7 +1327,7 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
     if not Gear^.dY.isNegative and (Gear^.dY > _0_03) and TestCollisionYwithGear(Gear, 1) then
         begin
         Gear^.State:= Gear^.State or gsttmpFlag;
-        inc(Gear^.Damage, hwRound(Gear^.dY * _40));
+        inc(Gear^.Damage, hwRound(Gear^.dY * _50));
         for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do 
             begin
             particle:= AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
@@ -1335,11 +1335,11 @@ if ((Gear^.dX.QWordValue <> 0) or (Gear^.dY.QWordValue <> 0))  then
             end
         end
     else if not Gear^.dX.isNegative and (Gear^.dX > _0_03) and TestCollisionXwithGear(Gear, 1) then
-        inc(Gear^.Damage, hwRound(Gear^.dX * _40))
+        inc(Gear^.Damage, hwRound(Gear^.dX * _50))
     else if Gear^.dY.isNegative and (Gear^.dY < -_0_03) and TestCollisionYwithGear(Gear, -1) then
-        inc(Gear^.Damage, hwRound(Gear^.dY * -_40))
+        inc(Gear^.Damage, hwRound(Gear^.dY * -_50))
     else if Gear^.dX.isNegative and (Gear^.dX < -_0_03) and TestCollisionXwithGear(Gear, -1) then
-        inc(Gear^.Damage, hwRound(Gear^.dX * -_40));
+        inc(Gear^.Damage, hwRound(Gear^.dX * -_50));
     if Gear^.Damage <> 0 then PlaySound(sndGrenadeImpact);
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
