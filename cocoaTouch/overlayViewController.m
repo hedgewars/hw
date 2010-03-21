@@ -34,6 +34,8 @@
                                          repeats:YES];
     
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
+    
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
 }
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -45,7 +47,7 @@
 }
 
 -(void) dealloc {
-    [dimTimer release];
+    // dimTimer is autoreleased
     [super dealloc];
 }
 
@@ -167,7 +169,6 @@
 
 -(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
 	// this can happen if the user puts more than 5 touches on the screen at once, or perhaps in other circumstances.
-	// Usually (it seems) all active touches are canceled.
 	[self touchesEnded:touches withEvent:event];
 }
 

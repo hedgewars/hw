@@ -76,10 +76,10 @@
 		
 		// show a popup with an indicator to make the user wait
 		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"One-time Preferences Configuration",@"")
-								message:nil
-							       delegate:nil
-						      cancelButtonTitle:nil
-						      otherButtonTitles:nil];
+                                                        message:nil
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:nil];
 		[alert show];
 		
 		UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] 
@@ -112,6 +112,7 @@
 }
 
 -(void) appear {
+    [[SDLUIKitDelegate sharedAppDelegate].uiwindow addSubview:self.view];
     [UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;
@@ -123,6 +124,7 @@
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 0;
 	[UIView commitAnimations];
+    [self.view removeFromSuperview];
 }
 
 #pragma mark -
@@ -133,16 +135,16 @@
 
 -(IBAction) notYetImplemented {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
-							message:@"Sorry, this feature is not yet implemented"
-						       delegate:nil
-					      cancelButtonTitle:@"Well, don't worry"
-					      otherButtonTitles:nil];
+                                                    message:@"Sorry, this feature is not yet implemented"
+                                                   delegate:nil
+                                          cancelButtonTitle:@"Well, don't worry"
+                                          otherButtonTitles:nil];
 	[alert show];
 	[alert release];
 }
 
+/*
 -(IBAction) switchViews:(id)sender {
-
 	// view not displayed or not created
 	if (nil == self.settingsViewController.view.superview) {
 		// view not created
@@ -164,7 +166,7 @@
 		
 		[self.view insertSubview:settingsViewController.view atIndex:0];
 	}
-
 }
+*/
 
 @end

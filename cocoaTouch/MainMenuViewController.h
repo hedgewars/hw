@@ -24,5 +24,5 @@
 
 -(IBAction) startPlaying;
 -(IBAction) notYetImplemented;
--(IBAction) switchViews:(id)sender;
+//-(IBAction) switchViews:(id)sender;
 @end

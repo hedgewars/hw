@@ -158,11 +158,8 @@ begin
     SendKB();
     CloseIPC();
     TTF_Quit();
-    {$IFDEF SDL13}SDL_VideoQuit();{$ENDIF}
     SDL_Quit();
-    {$IFDEF IPHONEOS}
     freeEverything();
-    {$ENDIF}
     exit();
 end;
 

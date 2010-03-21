@@ -41,5 +41,5 @@
 +(SDLUIKitDelegate *)sharedAppDelegate;
 -(NSString *)dataFilePath:(NSString *)fileName;
 -(void) startSDLgame;
--(void) showMenuAfterwards;
+
 @end

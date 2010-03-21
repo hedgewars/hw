@@ -23,11 +23,12 @@
 	ipcPort = (random() % 64541) + 1025;
 		
 	NSString *filePath = [[SDLUIKitDelegate sharedAppDelegate] dataFilePath:@"settings.plist"];
-	self.systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
+	systemSettings = [[NSDictionary alloc] initWithContentsOfFile:filePath]; //should check it exists
 	return self;
 }
 
 -(void) dealloc {
+    [systemSettings release];
 	[super dealloc];
 }
 
@@ -249,8 +250,8 @@
 	NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", ipcPort];
 	NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    NSString *wSize = [[[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width] autorelease];
-    NSString *hSize = [[[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height] autorelease];
+    NSString *wSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.width];
+    NSString *hSize = [[NSString alloc] initWithFormat:@"%d", (int) screenBounds.size.height];
     
 	gameArgs[0] = [[systemSettings objectForKey:@"username"] UTF8String];	//UserNick
 	gameArgs[1] = [ipcString UTF8String];                                   //ipcPort
@@ -258,9 +259,11 @@
 	gameArgs[3] = [[systemSettings objectForKey:@"music"] UTF8String];      //isMusicEnabled
 	gameArgs[4] = [localeString UTF8String];                                //cLocaleFName
 	gameArgs[5] = [[systemSettings objectForKey:@"alternate"] UTF8String];	//cAltDamage
-	gameArgs[6] = [wSize UTF8String];
-    gameArgs[7] = [hSize UTF8String];
+	gameArgs[6] = [wSize UTF8String];                                       //cScreenHeight
+    gameArgs[7] = [hSize UTF8String];                                       //cScreenWidth
     
+    [wSize release];
+    [hSize release];
 	[localeString release];
 	[ipcString release];
 	return gameArgs;

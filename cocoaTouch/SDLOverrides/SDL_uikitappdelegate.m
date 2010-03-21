@@ -66,44 +66,36 @@ int main (int argc, char *argv[]) {
 	[super dealloc];
 }
 
-#pragma mark -
-#pragma mark Custom stuff
+// main routine for calling the actual game engine
 -(IBAction) startSDLgame {
+    [viewController disappear];
+
+    // pull out useful configuration info from various files
 	GameSetup *setup = [[GameSetup alloc] init];
 	[setup startThread:@"engineProtocol"];
-
-    [viewController disappear];
-    [viewController.view removeFromSuperview];
-    
 	const char **gameArgs = [setup getSettings];
 	[setup release];
     
     // overlay with controls, become visible after 2 seconds
     overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController" bundle:nil];
     [uiwindow addSubview:overlayController.view];
-    [NSTimer scheduledTimerWithTimeInterval:2 target:overlayController selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
     
 	Game(gameArgs); // this is the pascal fuction that starts the game
     
-    // let's clean memory
-	free(gameArgs);
+    free(gameArgs);
     [overlayController.view removeFromSuperview];
     [overlayController release];
     
-	[uiwindow addSubview:viewController.view];
-	[uiwindow makeKeyAndVisible];
-	
     [viewController appear];
 }
 
--(NSString *)dataFilePath: (NSString *)fileName {
+// get a path-to-file string
+-(NSString *)dataFilePath:(NSString *)fileName {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
 	return [documentsDirectory stringByAppendingPathComponent:fileName];
 }
 
-#pragma mark -
-#pragma mark SDLUIKitDelegate methods
 // override the direct execution of SDL_main to allow us to implement the frontend (even using a nib)
 -(void) applicationDidFinishLaunching:(UIApplication *)application {
 	[application setStatusBarHidden:YES animated:NO];
@@ -129,12 +121,12 @@ int main (int argc, char *argv[]) {
 	//longjmp(*(jump_env()), 1);
 }
 
--(void) applicationWillResignActive:(UIApplication*)application {
+-(void) applicationWillResignActive:(UIApplication *)application {
 	//NSLog(@"%@", NSStringFromSelector(_cmd));
 	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
 }
 
--(void) applicationDidBecomeActive:(UIApplication*)application {
+-(void) applicationDidBecomeActive:(UIApplication *)application {
 	//NSLog(@"%@", NSStringFromSelector(_cmd));
 	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }
