@@ -293,7 +293,8 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 5;
                 gear^.Timer:= 500;
                 gear^.RenderTimer:= true;
-                gear^.Elasticity:= _0_9
+                gear^.Elasticity:= _0_9;
+                gear^.Tag:= getRandom(32);
                 end;
  gtShotgunShot: begin
                 gear^.Timer:= 900;
@@ -1592,7 +1593,7 @@ while Gear<>nil do
 
            gtGrave: DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 7) and 7, 1, 32, 32);
 
-             gtUFO: DrawSprite(sprUFO, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, (GameTicks shr 7) mod 4);
+             gtUFO: DrawRotatedF(sprUFO, hwRound(Gear^.X) -16 + WorldDx, hwRound(Gear^.Y) - 16 + WorldDy, Gear^.Tag, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
       gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 50 + LongInt(((GameTicks shr 5) and 1) * 2) + WorldDy, 0);
             gtRope: DrawRope(Gear);
