@@ -44,7 +44,7 @@ type
             Radius: LongInt;
             Angle, Power : Longword;
             DirAngle: real;
-            Timer, Timer2 : LongWord;
+            Timer : LongWord;
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Message, MsgParam : Longword;
@@ -879,9 +879,10 @@ var i, t: LongInt;
     lx, ly, dx, dy, ax, ay, aAngle, dAngle, hAngle: real;  // laser, change
     defaultPos, HatVisible: boolean;
     VertexBuffer: array [0..1] of TVertex2f;
+    HH: PHedgehog;
 begin
-
-if PHedgehog(Gear^.Hedgehog)^.Unplaced then exit;
+HH:= PHedgehog(Gear^.Hedgehog);
+if HH^.Unplaced then exit;
 m:= 1;
 if ((Gear^.State and gstHHHJump) <> 0) and not cArtillery then m:= -1;
 if (Gear^.State and gstHHDeath) <> 0 then
@@ -992,7 +993,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
         // draw crosshair
         cx:= Round(hwRound(Gear^.X) + dx * 80);
         cy:= Round(hwRound(Gear^.Y) + dy * 80);
-        DrawRotatedTex(PHedgehog(Gear^.Hedgehog)^.Team^.CrosshairTex,
+        DrawRotatedTex(HH^.Team^.CrosshairTex,
                 12, 12, cx + WorldDx, cy + WorldDy, 0,
                 hwSign(Gear^.dX) * (Gear^.Angle * 180.0) / cMaxAngle);
         end;
@@ -1042,7 +1043,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                            1,
                            0,
                            DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
-                   with PHedgehog(Gear^.Hedgehog)^ do
+                   with HH^ do
                        if (HatTex <> nil) then
                            DrawRotatedTextureF(HatTex, 1.0, -1.0, -6.0, sx, sy, 0, i, 32, 32,
                                i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
@@ -1055,9 +1056,9 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 DrawHedgehog(sx, sy,
                         hwSign(Gear^.dX),
                         3,
-                        PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
+                        HH^.visStepPos div 2,
                         0);
-                with PHedgehog(Gear^.Hedgehog)^ do
+                with HH^ do
                     if (HatTex <> nil) then
                        DrawTextureF(HatTex,
                            1,
@@ -1161,7 +1162,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
         DrawHedgehog(sx, sy,
             hwSign(Gear^.dX),
             0,
-            PHedgehog(Gear^.Hedgehog)^.visStepPos div 2,
+            HH^.visStepPos div 2,
             0);
         defaultPos:= false;
         HatVisible:= true
@@ -1181,13 +1182,13 @@ if (Gear^.State and gstHHDriven) <> 0 then
     else
     if ((Gear^.State and gstAttacked) = 0) then
         begin
-        if Gear^.Timer2 > 0 then
+        if HH^.Timer > 0 then
             begin
             // There must be a tidier way to do this. Anyone?
             if aangle <= 90 then aangle:= aangle+360;
-            if Gear^.dX > _0 then aangle:= aangle-((aangle-240)*Gear^.Timer2/10)
-            else aangle:= aangle+((240-aangle)*Gear^.Timer2/10);
-            dec(Gear^.Timer2)
+            if Gear^.dX > _0 then aangle:= aangle-((aangle-240)*HH^.Timer/10)
+            else aangle:= aangle+((240-aangle)*HH^.Timer/10);
+            dec(HH^.Timer)
             end;
         amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
         case amt of
@@ -1255,7 +1256,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
                 0);
 
             HatVisible:= true;
-            with PHedgehog(Gear^.Hedgehog)^ do
+            with HH^ do
                 if (HatTex <> nil)
                 and (HatVisibility > 0) then
                     DrawTextureF(HatTex,
@@ -1301,7 +1302,7 @@ end else // not gstHHDriven
         end;
     end;
 
-with PHedgehog(Gear^.Hedgehog)^ do
+with HH^ do
     begin
     if defaultPos then
         begin
@@ -1367,7 +1368,7 @@ if (Gear^.State and gstHHDriven) <> 0 then
         end
     end;
 
-with PHedgehog(Gear^.Hedgehog)^ do
+with HH^ do
     begin
     if ((Gear^.State and not gstWinner) = 0)
         or (bShowFinger and ((Gear^.State and gstHHDriven) <> 0)) then

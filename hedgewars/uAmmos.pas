@@ -287,7 +287,7 @@ TargetPoint.X:= NoPointX;
 
 with Hedgehog do
     begin
-    Gear^.Timer2:= 10;
+    Timer:= 10;
 
     if (Ammo^[CurSlot, CurAmmo].Count = 0) then
         SwitchToFirstLegalAmmo(Hedgehog);

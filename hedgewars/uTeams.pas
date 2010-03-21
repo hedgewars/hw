@@ -54,6 +54,7 @@ type PHHAmmo = ^THHAmmo;
             Hat: shortstring;
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
+            Timer: Longword;
             end;
 
     TTeam = record
