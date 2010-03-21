@@ -83,7 +83,7 @@ end;
 procedure HW_allKeysUp; cdecl; export;
 begin
     // set all keys to released
-    init_uKeys();
+    uKeys.initModule;
 end;
 
 procedure HW_walkLeft; cdecl; export;
