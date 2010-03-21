@@ -44,7 +44,7 @@ type
             Radius: LongInt;
             Angle, Power : Longword;
             DirAngle: real;
-            Timer : LongWord;
+            Timer, Timer2 : LongWord;
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Message, MsgParam : Longword;
@@ -1181,13 +1181,13 @@ if (Gear^.State and gstHHDriven) <> 0 then
     else
     if ((Gear^.State and gstAttacked) = 0) then
         begin
-        if Gear^.Timer > 0 then
+        if Gear^.Timer2 > 0 then
             begin
             // There must be a tidier way to do this. Anyone?
             if aangle <= 90 then aangle:= aangle+360;
-            if Gear^.dX > _0 then aangle:= aangle-((aangle-240)*Gear^.Timer/10)
-            else aangle:= aangle+((240-aangle)*Gear^.Timer/10);
-            dec(Gear^.Timer)
+            if Gear^.dX > _0 then aangle:= aangle-((aangle-240)*Gear^.Timer2/10)
+            else aangle:= aangle+((240-aangle)*Gear^.Timer2/10);
+            dec(Gear^.Timer2)
             end;
         amt:= CurrentHedgehog^.Ammo^[CurrentHedgehog^.CurSlot, CurrentHedgehog^.CurAmmo].AmmoType;
         case amt of
