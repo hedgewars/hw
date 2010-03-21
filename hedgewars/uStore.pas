@@ -217,7 +217,7 @@ var s: shortstring;
         r.h:= 19;
 
         DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-
+        
         // overwrite flag for cpu teams and keep players from using it
         if (Hedgehogs[0].Gear <> nil) and (Hedgehogs[0].BotLevel > 0) then
             Flag:= 'cpu'
@@ -238,7 +238,9 @@ var s: shortstring;
         PLongwordArray(texsurf^.pixels)^[32 * 16 + 23]:= cNearBlackColor;
 
         FlagTex:= Surface2Tex(texsurf, false);
-        
+        SDL_FreeSurface(texsurf);
+        texsurf:= nil;
+
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
         for i:= 0 to 7 do
@@ -248,11 +250,10 @@ var s: shortstring;
                     NameTagTex:= RenderStringTex(Name, Clan^.Color, CheckCJKFont(Name,fnt16));
                     if Hat <> 'NoHat' then
                         begin
-                        texsurf:= nil;
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-                           texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
+                            texsurf:= LoadImage(Pathz[ptHats] + '/Reserved/' + Copy(Hat,9,Length(s)-8), ifNone)
                         else
-                           texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
+                            texsurf:= LoadImage(Pathz[ptHats] + '/' + Hat, ifNone);
                         if texsurf <> nil then
                             begin
                             HatTex:= Surface2Tex(texsurf, true);
