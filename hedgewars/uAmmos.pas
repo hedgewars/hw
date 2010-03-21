@@ -20,7 +20,7 @@
 
 unit uAmmos;
 interface
-uses uConsts, uTeams;
+uses uConsts, uTeams, uStats;
 
 procedure init_uAmmos;
 procedure free_uAmmos;
@@ -68,7 +68,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
            Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]].Count:= AMMO_INFINITE;
        inc(mi[Ammoz[a].Slot])
        end
-    else if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    else if (TotalRounds < 0) and ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
        begin
        TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
