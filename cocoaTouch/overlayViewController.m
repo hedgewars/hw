@@ -25,6 +25,10 @@
 
 -(void) viewDidLoad {
     self.view.alpha = 0;
+    
+    // needed for rotation to work on os < 3.2
+    self.view.center = CGPointMake(self.view.frame.size.height/2.0, self.view.frame.size.width/2.0);
+    self.view.transform = CGAffineTransformRotate(self.view.transform, (M_PI/2.0));
 
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
@@ -38,7 +42,7 @@
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(showMenuAfterwards) userInfo:nil repeats:NO];
 }
 
--(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 

@@ -529,7 +529,7 @@ end;
 procedure ScriptOnGameInit;
 var s, t : ansistring;
 begin
-// not required if there's no script to run
+// not required if there is no script to run
 if not ScriptLoaded then
     exit;
 

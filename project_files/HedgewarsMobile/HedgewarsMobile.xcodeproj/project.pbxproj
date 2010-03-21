@@ -197,6 +197,8 @@
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617993A01150226700BA94A9 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
+		61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0838911567C83005D474F /* CoreGraphics.framework */; };
+		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
 
@@ -385,6 +387,8 @@
 		6179939D1150226700BA94A9 /* overlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overlayViewController.h; path = ../../cocoaTouch/overlayViewController.h; sourceTree = SOURCE_ROOT; };
 		6179939E1150226700BA94A9 /* overlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = overlayViewController.m; path = ../../cocoaTouch/overlayViewController.m; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
+		61C0838911567C83005D474F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		61E2F06811567CC7002D33C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -409,6 +413,7 @@
 				6179891E114AAF2100BA94A9 /* libpng_x86.a in Frameworks */,
 				6179891F114AAF2100BA94A9 /* libvorbis_arm.a in Frameworks */,
 				61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */,
+				61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +436,7 @@
 				6100DACA115446B000F455E0 /* libpng_x86.a in Frameworks */,
 				6100DACB115446B000F455E0 /* libvorbis_arm.a in Frameworks */,
 				6100DACC115446B000F455E0 /* AudioToolbox.framework in Frameworks */,
+				61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -522,6 +528,8 @@
 				61798918114AAF2100BA94A9 /* libpng_arm.a */,
 				61798919114AAF2100BA94A9 /* libpng_x86.a */,
 				6179891A114AAF2100BA94A9 /* libvorbis_arm.a */,
+				61C0838911567C83005D474F /* CoreGraphics.framework */,
+				61E2F06811567CC7002D33C1 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

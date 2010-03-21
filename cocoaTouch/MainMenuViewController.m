@@ -143,14 +143,12 @@
 	[alert release];
 }
 
-/*
 -(IBAction) switchViews:(id)sender {
 	// view not displayed or not created
 	if (nil == self.settingsViewController.view.superview) {
 		// view not created
 		if (nil == self.settingsViewController) {
-			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController"
-												      bundle:nil];
+			SettingsViewController *controller = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
 			self.settingsViewController = controller;
 			[controller release];
 		}
@@ -167,6 +165,5 @@
 		[self.view insertSubview:settingsViewController.view atIndex:0];
 	}
 }
-*/
 
 @end
