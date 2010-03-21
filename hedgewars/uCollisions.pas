@@ -30,8 +30,8 @@ type PGearArray = ^TGearArray;
             Count: Longword
             end;
 
-procedure init_uCollisions;
-procedure free_uCollisions;
+procedure initModule;
+procedure freeModule;
 
 procedure AddGearCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
@@ -312,12 +312,12 @@ Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
-procedure init_uCollisions;
+procedure initModule;
 begin
     Count:= 0;
 end;
 
-procedure free_uCollisions;
+procedure freeModule;
 begin
 
 end;

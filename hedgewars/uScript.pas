@@ -34,8 +34,8 @@ function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
 
-procedure init_uScript;
-procedure free_uScript;
+procedure initModule;
+procedure freeModule;
 
 implementation
 {$IFNDEF IPHONEOS}
@@ -672,8 +672,8 @@ procedure ScriptPrepareAmmoStore;
 var i: ShortInt;
 begin
 // reset ammostore (quite unclean, but works?)
-free_uAmmos;
-init_uAmmos;
+uAmmos.freeModule;
+uAmmos.initModule;
 ScriptAmmoStore:= '';
 for i:=1 to ord(High(TAmmoType)) do
     ScriptAmmoStore:= ScriptAmmoStore + '0000';
@@ -712,7 +712,7 @@ str:= GetEnumName(TypeInfo(TAmmoType), ord(en))
 end;
 ///////////////////
 
-procedure init_uScript;
+procedure initModule;
 var at : TGearType;
     am : TAmmoType;
     st : TSound;
@@ -794,7 +794,7 @@ ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;
 end;
 
-procedure free_uScript;
+procedure freeModule;
 begin
 lua_close(luaState);
 end;
@@ -845,11 +845,11 @@ begin
 ScriptExists:= false
 end;
 
-procedure init_uScript;
+procedure initModule;
 begin
 end;
 
-procedure free_uScript;
+procedure freeModule;
 begin
 end;
 

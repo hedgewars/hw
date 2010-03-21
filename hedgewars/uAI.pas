@@ -22,8 +22,8 @@ unit uAI;
 interface
 uses uFloat;
 
-procedure init_uAI;
-procedure free_uAI;
+procedure initModule;
+procedure freeModule;
 
 procedure ProcessBot;
 procedure FreeActionsList;
@@ -345,12 +345,12 @@ with CurrentHedgehog^ do
                 or (TurnTimeLeft <= cStopThinkTime) then StopThinking:= true
 end;
 
-procedure init_uAI;
+procedure initModule;
 begin
     hasThread:= 0;
 end;
 
-procedure free_uAI;
+procedure freeModule;
 begin
 
 end;

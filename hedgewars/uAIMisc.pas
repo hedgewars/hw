@@ -37,8 +37,8 @@ type TTarget = record
                JumpType: TJumpType;
                end;
 
-procedure init_uAIMisc;
-procedure free_uAIMisc;
+procedure initModule;
+procedure freeModule;
 
 procedure FillTargets;
 procedure FillBonuses(isAfterAttack: boolean);
@@ -467,7 +467,7 @@ if random(2) = 0 then AIrndSign:=   num
                  else AIrndSign:= - num
 end;
 
-procedure init_uAIMisc;
+procedure initModule;
 begin
     friendlyfactor:= 300;
     KnownExplosion.X:= 0;
@@ -475,7 +475,7 @@ begin
     KnownExplosion.Radius:= 0;
 end;
 
-procedure free_uAIMisc;
+procedure freeModule;
 begin
 
 end;

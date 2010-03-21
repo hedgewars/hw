@@ -104,8 +104,8 @@ var CurrentTeam: PTeam;
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index
     CurMinAngle, CurMaxAngle: Longword;
 
-procedure init_uTeams;
-procedure free_uTeams;
+procedure initModule;
+procedure freeModule;
 function  AddTeam(TeamColor: Longword): PTeam;
 procedure SwitchHedgehog;
 procedure AfterSwitchHedgehog;
@@ -462,7 +462,7 @@ with Team do
                 end
 end;
 
-procedure init_uTeams;
+procedure initModule;
 begin
     CurrentTeam:= nil;
     PreviousTeam:= nil;
@@ -473,7 +473,7 @@ begin
     LocalAmmo:= -1;
 end;
 
-procedure free_uTeams;
+procedure freeModule;
 var i: LongWord;
 begin
    if TeamsCount > 0 then

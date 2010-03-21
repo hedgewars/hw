@@ -22,8 +22,8 @@ unit uAmmos;
 interface
 uses uConsts, uTeams, uStats;
 
-procedure init_uAmmos;
-procedure free_uAmmos;
+procedure initModule;
+procedure freeModule;
 
 procedure AddAmmoStore(s: shortstring);
 procedure AssignStores;
@@ -368,13 +368,13 @@ for t:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[t].SkipTurns >= 10000 then dec(Ammoz[t].SkipTurns,10000);
 end;
 
-procedure init_uAmmos;
+procedure initModule;
 begin
     shoppa:= false;
     StoreCnt:= 0
 end;
 
-procedure free_uAmmos;
+procedure freeModule;
 var i: LongWord;
 begin
     if StoreCnt > 0 then

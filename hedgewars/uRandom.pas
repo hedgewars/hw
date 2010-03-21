@@ -23,8 +23,8 @@ interface
 uses uFloat;
 {$INCLUDE "config.inc"}
 
-procedure init_uRandom;
-procedure free_uRandom;
+procedure initModule;
+procedure freeModule;
 
 procedure SetRandomSeed(Seed: shortstring);
 function  GetRandom: hwFloat; overload;
@@ -96,12 +96,12 @@ for i:= 0 to 63 do
 end;
 {$ENDIF}
 
-procedure init_uRandom;
+procedure initModule;
 begin
     n:= 54;
 end;
 
-procedure free_uRandom;
+procedure freeModule;
 begin
 
 end;

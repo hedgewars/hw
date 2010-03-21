@@ -50,8 +50,8 @@ type PVisualGear = ^TVisualGear;
         Text: shortstring
         end;
 
-procedure init_uVisualGears;
-procedure free_uVisualGears;
+procedure initModule;
+procedure freeModule;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
@@ -745,12 +745,12 @@ for i:= 0 to cCloudsNumber - 1 do
     AddVisualGear( - cScreenWidth + i * ((cScreenWidth * 2 + (LAND_WIDTH+256)) div (cCloudsNumber + 1)), LAND_HEIGHT-1184, vgtCloud)
 end;
 
-procedure init_uVisualGears;
+procedure initModule;
 begin
     VisualGearsList:= nil;
 end;
 
-procedure free_uVisualGears;
+procedure freeModule;
 begin
     while VisualGearsList <> nil do DeleteVisualGear(VisualGearsList);
 end;

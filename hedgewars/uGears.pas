@@ -74,8 +74,8 @@ var AllInactive: boolean;
     StepSoundTimer: LongInt;
     StepSoundChannel: LongInt;
     
-procedure init_uGears;
-procedure free_uGears;
+procedure initModule;
+procedure freeModule;
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure ProcessGears;
 procedure ResetUtilities;
@@ -2254,7 +2254,7 @@ while gear <> nil do
     end
 end;
 
-procedure init_uGears;
+procedure initModule;
 begin
     CurAmmoGear:= nil;
     GearsList:= nil;
@@ -2268,7 +2268,7 @@ begin
     PrvInactive:= false;
 end;
 
-procedure free_uGears;
+procedure freeModule;
 begin
     FreeGearsList();
 end;

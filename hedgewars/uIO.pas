@@ -25,8 +25,8 @@ uses SDLh;
 var ipcPort: Word;
     hiTicks: Word;
 
-procedure init_uIO;
-procedure free_uIO;
+procedure initModule;
+procedure freeModule;
 
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
@@ -347,7 +347,7 @@ isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 if isInLag then fastUntilLag:= false
 end;
 
-procedure init_uIO;
+procedure initModule;
 begin
     IPCSock:= nil;
 
@@ -360,7 +360,7 @@ begin
     ipcPort:= 0;
 end;
 
-procedure free_uIO;
+procedure freeModule;
 begin
 
 end;

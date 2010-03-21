@@ -310,72 +310,72 @@ end;
 
 procedure initEverything;
 begin
-    init_uConsts();
-    init_uMisc();
-    init_uConsole();    // MUST happen after uMisc
+    uConsts.initModule;
+    uMisc.initModule;
+    uConsole.initModule;    // MUST happen after uMisc
     
-    init_uAI();
+    uAI.initModule;
     //uAIActions does not need initialization
     //uAIAmmoTests does not need initialization
-    init_uAIMisc();
-    init_uAmmos();
-    init_uChat();
-    init_uCollisions();
+    uAIMisc.initModule;
+    uAmmos.initModule;
+    uChat.initModule;
+    uCollisions.initModule;
     //uFloat does not need initialization
     //uGame does not need initialization
-    init_uGears();
-    init_uIO();
-    init_uKeys();
-    init_uLand();
+    uGears.initModule;
+    uIO.initModule;
+    uKeys.initModule;
+    uLand.initModule;
     //uLandGraphics does not need initialization
     //uLandObjects does not need initialization
     //uLandTemplates does not need initialization
     //uLandTexture does not need initialization
     //uLocale does not need initialization
-    init_uRandom(); 
+    uRandom.initModule; 
     //uSHA does not need initialization
-    init_uSound();
-    init_uStats();
-    init_uStore();
-    init_uTeams();
-    init_uVisualGears();
-    init_uWorld();
-    init_uScript();
+    uSound.initModule;
+    uStats.initModule;
+    uStore.initModule;
+    uTeams.initModule;
+    uVisualGears.initModule;
+    uWorld.initModule;
+    uScript.initModule;
 end;
 
 procedure freeEverything;
 begin
-    free_uWorld();
-    free_uVisualGears();    //stub
-    free_uTeams();
-    free_uStore();
-    free_uStats();          //stub
-    free_uSound();          //stub
+    uWorld.freeModule;
+    uVisualGears.freeModule;    //stub
+    uTeams.freeModule;
+    uStore.freeModule;
+    uStats.freeModule;          //stub
+    uSound.freeModule;          //stub
     //uSHA does not need to be freed
-    free_uRandom();     //stub
+    uRandom.freeModule;     //stub
     //uLocale does not need to be freed
     //uLandTemplates does not need to be freed
     //uLandTexture does not need to be freed
     //uLandObjects does not need to be freed
     //uLandGraphics does not need to be freed
-    free_uLand();
-    free_uKeys();           //stub
-    free_uIO();
-    free_uGears();
+    uLand.freeModule;
+    uKeys.freeModule;           //stub
+    uIO.freeModule;
+    uGears.freeModule;
     //uGame does not need to be freed
     //uFloat does not need to be freed
-    free_uCollisions();
-    free_uChat();
-    free_uAmmos();
-    free_uAIMisc();         //stub
+    uCollisions.freeModule;
+    uChat.freeModule;
+    uAmmos.freeModule;
+    uAIMisc.freeModule;         //stub
     //uAIAmmoTests does not need to be freed
     //uAIActions does not need to be freed
-    free_uAI();             //stub
+    uAI.freeModule;             //stub
 
-    free_uConsole();
-    free_uMisc();
-    free_uConsts();         //stub
-    free_uScript();
+    uConsole.freeModule;
+    uMisc.freeModule;
+    uConsts.freeModule;         //stub
+    uScript.freeModule;
 end;
 
 /////////////////////////

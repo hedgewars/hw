@@ -127,8 +127,8 @@ var
     TextureList : PTexture;
 
 
-procedure init_uMisc;
-procedure free_uMisc;
+procedure initModule;
+procedure freeModule;
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: ansistring; c: char);
 procedure movecursor(dx, dy: Integer);
@@ -643,7 +643,7 @@ endian:= (((independent and $FF000000) shr 24) or
 end;
 
 
-procedure init_uMisc;
+procedure initModule;
 {$IFNDEF IPHONEOS}var i: LongInt;{$ENDIF}
 begin
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
@@ -758,7 +758,7 @@ begin
 
 end;
 
-procedure free_uMisc;
+procedure freeModule;
 begin
     //uRandom.DumpBuffer;
     while TextureList <> nil do FreeTexture(TextureList);

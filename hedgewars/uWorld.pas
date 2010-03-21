@@ -36,8 +36,8 @@ var FollowGear: PGear;
     cntTicks: LongWord;
 {$ENDIF}
 
-procedure init_uWorld;
-procedure free_uWorld;
+procedure initModule;
+procedure freeModule;
 
 procedure InitWorld;
 procedure DrawWorld(Lag: LongInt);
@@ -933,7 +933,7 @@ begin
     WorldDy:= WorldDy - amount + LongInt(getRandom(1 + amount * 2));
 end;
 
-procedure init_uWorld;
+procedure initModule;
 begin
     fpsTexture:= nil;
     FollowGear:= nil;
@@ -955,7 +955,7 @@ begin
     FillChar(Captions, sizeof(Captions), 0)
 end;
 
-procedure free_uWorld;
+procedure freeModule;
 begin
     if missionTex <> nil then FreeTexture(missionTex);
 end;

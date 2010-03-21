@@ -1756,12 +1756,12 @@ const
     );
             
 
-procedure init_uConsts;
-procedure free_uConsts;
+procedure initModule;
+procedure freeModule;
 
 implementation
 
-procedure init_uConsts;
+procedure initModule;
 var cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
         '',                              // ptData
@@ -1788,7 +1788,7 @@ begin
     Pathz:= cPathz;
 end;
 
-procedure free_uConsts;
+procedure freeModule;
 begin
 
 end;

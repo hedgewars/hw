@@ -26,8 +26,8 @@ var isDeveloperMode: boolean;
 type TVariableType = (vtCommand, vtLongInt, vthwFloat, vtBoolean);
      TCommandHandler = procedure (var params: shortstring);
 
-procedure init_uConsole;
-procedure free_uConsole;
+procedure initModule;
+procedure freeModule;
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
 procedure ParseCommand(CmdStr: shortstring; TrustedSource: boolean);
@@ -211,7 +211,7 @@ if (Message and gm_Attack) <> 0 then ParseCommand('/-attack', true)
 end;
 
 {$INCLUDE "CCHandlers.inc"}
-procedure init_uConsole;
+procedure initModule;
 var i: LongInt;
 begin
     CurrLine:= 0;
@@ -309,7 +309,7 @@ begin
     RegisterVariable('script'  , vtCommand, @chScript       , false);
 end;
 
-procedure free_uConsole;
+procedure freeModule;
 begin
     FreeVariablesList();
 end;

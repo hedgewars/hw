@@ -42,8 +42,8 @@ var PixelFormat: PSDL_PixelFormat;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
 
-procedure init_uStore;
-procedure free_uStore;
+procedure initModule;
+procedure freeModule;
 
 procedure StoreLoad;
 procedure StoreRelease;
@@ -1520,7 +1520,7 @@ WeaponTooltipTex:= nil
 {$ENDIF}
 end;
 
-procedure init_uStore;
+procedure initModule;
 begin
 PixelFormat:= nil;
 SDLPrimSurface:= nil;
@@ -1532,7 +1532,7 @@ Step:= 0;
 ProgrTex:= nil;
 end;
 
-procedure free_uStore;
+procedure freeModule;
 begin
 end;
 

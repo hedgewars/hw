@@ -22,8 +22,8 @@ unit uChat;
 
 interface
 
-procedure init_uChat;
-procedure free_uChat;
+procedure initModule;
+procedure freeModule;
 
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
@@ -284,7 +284,7 @@ if Key <> 0 then
     end
 end;
 
-procedure init_uChat;
+procedure initModule;
 begin
     lastStr:= 0;
     visibleCount:= 0;
@@ -292,7 +292,7 @@ begin
     showAll:= false;
 end;
 
-procedure free_uChat;
+procedure freeModule;
 begin
 
 end;

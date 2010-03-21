@@ -41,8 +41,8 @@ var Land: TCollisionArray;
     playHeight, playWidth, leftX, rightX, topY, MaxHedgehogs: Longword;  // idea is that a template can specify height/width.  Or, a map, a height/width by the dimensions of the image.  If the map has pixels near top of image, it triggers border.
     LandBackSurface: PSDL_Surface;
 
-procedure init_uLand;
-procedure free_uLand;
+procedure initModule;
+procedure freeModule;
 procedure GenMap;
 function  GenPreview: TPreview;
 procedure CheckLandDigest(s: shortstring);
@@ -342,7 +342,7 @@ begin
     end;
     SDL_FreeSurface(tmpsurf);
 
-    // freed in free_uLand() below
+    // freed in freeModule() below
     LandBackSurface:= LoadImage(Pathz[ptCurrTheme] + '/LandBackTex', ifIgnoreCaps or ifTransparent);
 
     tmpsurf:= LoadImage(Pathz[ptCurrTheme] + '/Border', ifCritical or ifIgnoreCaps or ifTransparent);
@@ -854,12 +854,12 @@ for y:= 0 to 127 do
 GenPreview:= Preview
 end;
 
-procedure init_uLand;
+procedure initModule;
 begin
     LandBackSurface:= nil;
 end;
 
-procedure free_uLand;
+procedure freeModule;
 begin
     FillChar(LandPixels, sizeof(TLandArray), 0);
     if LandBackSurface <> nil then

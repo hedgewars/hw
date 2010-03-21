@@ -37,8 +37,8 @@ type TStatistics = record
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
 
-procedure init_uStats;
-procedure free_uStats;
+procedure initModule;
+procedure freeModule;
 
 procedure AmmoUsed(am: TAmmoType);
 procedure HedgehogDamaged(Gear: PGear);
@@ -219,13 +219,13 @@ if mskcnt = 1 then
 if KilledHHs > 0 then SendStat(siKilledHHs, inttostr(KilledHHs));
 end;
 
-procedure init_uStats;
+procedure initModule;
 begin
     TotalRounds:= -1;
     FinishedTurnsTotal:= -1;
 end;
     
-procedure free_uStats;
+procedure freeModule;
 begin
 
 end;

@@ -25,8 +25,8 @@ uses uConsts, SDLh;
 type TBinds = array[0..cKeyMaxIndex] of shortstring;
 type TKeyboardState = array[0..cKeyMaxIndex] of Byte;
 
-procedure init_uKeys;
-procedure free_uKeys;
+procedure initModule;
+procedure freeModule;
 
 function  KeyNameToCode(name: shortstring): word;
 procedure ProcessKbd;
@@ -488,7 +488,7 @@ begin
     else ControllerButtons[joy][button]:= 0;
 end;
 
-procedure init_uKeys;
+procedure initModule;
 begin
     wheelUp:= false;
     wheelDown:= false;
@@ -514,7 +514,7 @@ begin
 {$ENDIF}
 end;
 
-procedure free_uKeys;
+procedure freeModule;
 begin
 
 end;

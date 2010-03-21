@@ -30,8 +30,8 @@ type PVoicepack = ^TVoicepack;
 
 var MusicFN: shortstring;
 
-procedure init_uSound;
-procedure free_uSound;
+procedure initModule;
+procedure freeModule;
 
 procedure InitSound;
 procedure ReleaseSound;
@@ -249,12 +249,12 @@ if (MusicFN = '') or (not isMusicEnabled) then exit;
 Mix_ResumeMusic(Mus);
 end;
 
-procedure init_uSound;
+procedure initModule;
 begin
     MusicFN:='';
 end;
 
-procedure free_uSound;
+procedure freeModule;
 begin
 
 end;
