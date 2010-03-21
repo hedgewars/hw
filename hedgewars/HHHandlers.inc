@@ -241,7 +241,7 @@ with CurrentHedgehog^.Gear^,
         CurrentHedgehog^ do
     begin
     State:= State and not gstAttacking;
-    if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Utility) = 0 then
+    if ((Ammo^[CurSlot, CurAmmo].Propz) and ammoprop_Effect) = 0 then
         begin
         Inc(MultiShootAttacks);
         

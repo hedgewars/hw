@@ -372,6 +372,7 @@ const
     ammoprop_AltUse       = $00000400;
     ammoprop_NotBorder    = $00000800;
     ammoprop_Utility      = $00001000;
+    ammoprop_Effect       = $00002000;
     ammoprop_NoRoundEndHint=$10000000;
     
     AMMO_INFINITE = 100;
@@ -835,7 +836,7 @@ const
             NameTex: nil;
             Probability: 0;
             NumberInCase: 0;
-            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Utility;
+            Ammo: (Propz: ammoprop_NoCrosshair or ammoprop_DontHold or ammoprop_Effect;
                 Count: AMMO_INFINITE;
                 InitialCount: AMMO_INFINITE;
                 NumPerTurn: 0;
@@ -997,8 +998,9 @@ const
             NumberInCase: 3;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_ForwMsgs or
-                            ammoprop_AttackInMove or
-                            ammoprop_AltAttack;
+                          ammoprop_AttackInMove or
+                          ammoprop_Utility or
+                          ammoprop_AltAttack;
                     Count: 5;
                     InitialCount: 5;
                     NumPerTurn: 0;
@@ -1140,10 +1142,11 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_ForwMsgs or
-                            ammoprop_AttackInMove or
-                            ammoprop_NoCrosshair or
-                            ammoprop_DontHold or
-                            ammoprop_AltAttack;
+                          ammoprop_AttackInMove or
+                          ammoprop_NoCrosshair or
+                          ammoprop_DontHold or
+                          ammoprop_Utility or
+                          ammoprop_AltAttack;
                 Count: 2;
                 InitialCount: 2;
                 NumPerTurn: 0;
@@ -1233,8 +1236,9 @@ const
             NumberInCase: 3;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut;
+                          ammoprop_NeedTarget or
+                          ammoprop_Utility or
+                          ammoprop_AttackingPut;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1255,10 +1259,11 @@ const
             Probability: 200;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
-                            ammoprop_NoCrosshair or
-                            ammoprop_NeedTarget or
-                            ammoprop_AttackingPut or
-                            ammoprop_DontHold;
+                          ammoprop_NoCrosshair or
+                          ammoprop_NeedTarget or
+                          ammoprop_AttackingPut or
+                          ammoprop_Utility or
+                          ammoprop_DontHold;
                 Count: 2;
                 InitialCount: 2;
                 NumPerTurn: 0;
@@ -1280,8 +1285,9 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_ForwMsgs or
-                            ammoprop_NoCrosshair or
-                            ammoprop_DontHold;
+                          ammoprop_NoCrosshair or
+                          ammoprop_Utility or
+                          ammoprop_DontHold;
                     Count: 3;
                     InitialCount: 3;
                     NumPerTurn: 0;
@@ -1511,7 +1517,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1535,7 +1542,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1559,7 +1567,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1583,7 +1592,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1607,7 +1617,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1631,7 +1642,8 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_AltUse or
-                          ammoprop_Utility;
+                          ammoprop_Utility or
+                          ammoprop_Effect;
                     Count: 1;
                     InitialCount: 1;
                     NumPerTurn: 0;
@@ -1673,10 +1685,11 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_ForwMsgs or
-                            ammoprop_AttackInMove or
-                            ammoprop_NoCrosshair or
-                            ammoprop_DontHold or
-                            ammoprop_AltAttack;
+                          ammoprop_AttackInMove or
+                          ammoprop_NoCrosshair or
+                          ammoprop_DontHold or
+                          ammoprop_Utility or
+                          ammoprop_AltAttack;
                 Count: 1;
                 InitialCount: 1;
                 NumPerTurn: 1;
