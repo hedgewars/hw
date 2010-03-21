@@ -84,10 +84,10 @@ int UIKit_CreateWindow(_THIS, SDL_Window *window) {
 	if (nil != [SDLUIKitDelegate sharedAppDelegate].window) {
 		SDL_SetError("Window already exists, no multi-window support.");
 		return -1;
-	}
+	}*/
 	
 	// ignore the size user requested, and make a fullscreen window 
-	UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];*/
+	//UIWindow *uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
 	// since we handle the window with a NIB, we don't need the initialization above
 	if (SetupWindowData(_this, window, [SDLUIKitDelegate sharedAppDelegate].uiwindow, SDL_TRUE) < 0) {

@@ -24,6 +24,8 @@
 }
 
 -(void) viewDidLoad {
+    self.view.alpha = 0;
+
     dimTimer = [[NSTimer alloc] initWithFireDate:[NSDate dateWithTimeIntervalSinceNow:6]
                                         interval:1000
                                           target:self
@@ -32,6 +34,10 @@
                                          repeats:YES];
     
     [[NSRunLoop currentRunLoop] addTimer:dimTimer forMode:NSDefaultRunLoopMode];
+}
+
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
 -(void) viewDidUnload {
@@ -43,6 +49,15 @@
     [super dealloc];
 }
 
+// draws the controller overlay after the sdl window has taken control
+-(void) showMenuAfterwards {
+    [[SDLUIKitDelegate sharedAppDelegate].uiwindow bringSubviewToFront:self.view];
+
+	[UIView beginAnimations:@"showing overlay" context:NULL];
+	[UIView setAnimationDuration:1];
+	self.view.alpha = 1;
+	[UIView commitAnimations];
+}
 
 // dim the overlay when there's no more input for a certain amount of time
 -(IBAction) buttonReleased:(id) sender {

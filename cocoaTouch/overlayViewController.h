@@ -26,5 +26,6 @@
 -(IBAction) buttonPressed:(id) sender;
 
 -(void) dimOverlay;
+-(void) showMenuAfterwards;
 
 @end

@@ -111,6 +111,20 @@
 	[NSThread exit];
 }
 
+-(void) appear {
+    [UIView beginAnimations:@"inserting main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	self.view.alpha = 1;
+	[UIView commitAnimations];
+}
+
+-(void) disappear {
+    [UIView beginAnimations:@"removing main controller" context:NULL];
+	[UIView setAnimationDuration:1];
+	self.view.alpha = 0;
+	[UIView commitAnimations];
+}
+
 #pragma mark -
 #pragma mark Action buttons
 -(IBAction) startPlaying {

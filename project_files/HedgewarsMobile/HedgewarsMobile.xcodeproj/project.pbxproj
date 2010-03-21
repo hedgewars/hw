@@ -107,8 +107,14 @@
 		6100DACB115446B000F455E0 /* libvorbis_arm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6179891A114AAF2100BA94A9 /* libvorbis_arm.a */; };
 		6100DACC115446B000F455E0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
 		611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD990115590E700C2203D /* MainMenuViewController.xib */; };
-		611FD994115590E700C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD991115590E700C2203D /* overlayViewController.xib */; };
 		611FD995115590E700C2203D /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FD992115590E700C2203D /* SettingsViewController.xib */; };
+		611FD9C91155A1F200C2203D /* Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9C81155A1F200C2203D /* Background.png */; };
+		611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */; };
+		611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9CF1155A40700C2203D /* NetworkPlay.png */; };
+		611FD9D21155A41000C2203D /* Multiplayer.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FD9D11155A41000C2203D /* Multiplayer.png */; };
+		611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB3B1155BB9E00C2203D /* overlayViewController.xib */; };
+		611FDB5E1155BDE400C2203D /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB5D1155BDE400C2203D /* overlayViewController.xib */; };
+		611FDB641155BFFF00C2203D /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 611FDB631155BFFF00C2203D /* Default.png */; };
 		61798816114AA34C00BA94A9 /* hwengine.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E7114AA34C00BA94A9 /* hwengine.pas */; };
 		61798818114AA34C00BA94A9 /* hwLibrary.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987E9114AA34C00BA94A9 /* hwLibrary.pas */; };
 		6179881B114AA34C00BA94A9 /* PascalExports.pas in Sources */ = {isa = PBXBuildFile; fileRef = 617987EC114AA34C00BA94A9 /* PascalExports.pas */; };
@@ -190,7 +196,6 @@
 		6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936911501D3D00BA94A9 /* arrowRight.png */; };
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617993A01150226700BA94A9 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
-		6179942711502BDD00BA94A9 /* overlayViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6179942611502BDD00BA94A9 /* overlayViewController.xib */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 /* End PBXBuildFile section */
@@ -272,8 +277,14 @@
 		32CA4F630368D1EE00C91783 /* HedgewarsMobile_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HedgewarsMobile_Prefix.pch; sourceTree = "<group>"; };
 		6100DAD2115446B000F455E0 /* iHedgewars.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iHedgewars.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		611FD990115590E700C2203D /* MainMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = MainMenuViewController.xib; path = ../../cocoaTouch/iPad/MainMenuViewController.xib; sourceTree = SOURCE_ROOT; };
-		611FD991115590E700C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/iPad/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		611FD992115590E700C2203D /* SettingsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = ../../cocoaTouch/iPad/SettingsViewController.xib; sourceTree = SOURCE_ROOT; };
+		611FD9C81155A1F200C2203D /* Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Background.png; path = ../../QTfrontend/res/Background.png; sourceTree = SOURCE_ROOT; };
+		611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HedgewarsTitle.png; path = ../../QTfrontend/res/HedgewarsTitle.png; sourceTree = SOURCE_ROOT; };
+		611FD9CF1155A40700C2203D /* NetworkPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = NetworkPlay.png; path = ../../QTfrontend/res/NetworkPlay.png; sourceTree = SOURCE_ROOT; };
+		611FD9D11155A41000C2203D /* Multiplayer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Multiplayer.png; path = ../../QTfrontend/res/Multiplayer.png; sourceTree = SOURCE_ROOT; };
+		611FDB3B1155BB9E00C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/iPad/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		611FDB5D1155BDE400C2203D /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
+		611FDB631155BFFF00C2203D /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../../cocoaTouch/iPad/Default.png; sourceTree = SOURCE_ROOT; };
 		617987E1114AA34C00BA94A9 /* CCHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = CCHandlers.inc; path = ../../hedgewars/CCHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E5114AA34C00BA94A9 /* HHHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = HHHandlers.inc; path = ../../hedgewars/HHHandlers.inc; sourceTree = SOURCE_ROOT; };
@@ -373,7 +384,6 @@
 		6179936A11501D3D00BA94A9 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUp.png; path = ../../cocoaTouch/resources/arrowUp.png; sourceTree = SOURCE_ROOT; };
 		6179939D1150226700BA94A9 /* overlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overlayViewController.h; path = ../../cocoaTouch/overlayViewController.h; sourceTree = SOURCE_ROOT; };
 		6179939E1150226700BA94A9 /* overlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = overlayViewController.m; path = ../../cocoaTouch/overlayViewController.m; sourceTree = SOURCE_ROOT; };
-		6179942611502BDD00BA94A9 /* overlayViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = overlayViewController.xib; path = ../../cocoaTouch/overlayViewController.xib; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -519,9 +529,14 @@
 		6100DAD4115446B000F455E0 /* Resources-iPad */ = {
 			isa = PBXGroup;
 			children = (
+				611FDB631155BFFF00C2203D /* Default.png */,
+				611FD9C81155A1F200C2203D /* Background.png */,
+				611FD9CB1155A28C00C2203D /* HedgewarsTitle.png */,
+				611FD9D11155A41000C2203D /* Multiplayer.png */,
+				611FD9CF1155A40700C2203D /* NetworkPlay.png */,
 				611FD990115590E700C2203D /* MainMenuViewController.xib */,
 				611FD992115590E700C2203D /* SettingsViewController.xib */,
-				611FD991115590E700C2203D /* overlayViewController.xib */,
+				611FDB3B1155BB9E00C2203D /* overlayViewController.xib */,
 			);
 			name = "Resources-iPad";
 			sourceTree = "<group>";
@@ -534,7 +549,7 @@
 				61798876114AA4D000BA94A9 /* SettingsViewController.xib */,
 				61798879114AA4D000BA94A9 /* TeamEditViewController.xib */,
 				6179887C114AA4D000BA94A9 /* TeamMenuViewController.xib */,
-				6179942611502BDD00BA94A9 /* overlayViewController.xib */,
+				611FDB5D1155BDE400C2203D /* overlayViewController.xib */,
 			);
 			name = XIB;
 			path = Classes;
@@ -850,8 +865,8 @@
 				6179936C11501D3D00BA94A9 /* arrowLeft.png in Resources */,
 				6179936D11501D3D00BA94A9 /* arrowRight.png in Resources */,
 				6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */,
-				6179942711502BDD00BA94A9 /* overlayViewController.xib in Resources */,
 				617995321150403800BA94A9 /* joyPush.png in Resources */,
+				611FDB5E1155BDE400C2203D /* overlayViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -880,8 +895,13 @@
 				6100DA8A115446B000F455E0 /* arrowUp.png in Resources */,
 				6100DA8C115446B000F455E0 /* joyPush.png in Resources */,
 				611FD993115590E700C2203D /* MainMenuViewController.xib in Resources */,
-				611FD994115590E700C2203D /* overlayViewController.xib in Resources */,
 				611FD995115590E700C2203D /* SettingsViewController.xib in Resources */,
+				611FD9C91155A1F200C2203D /* Background.png in Resources */,
+				611FD9CC1155A28C00C2203D /* HedgewarsTitle.png in Resources */,
+				611FD9D01155A40700C2203D /* NetworkPlay.png in Resources */,
+				611FD9D21155A41000C2203D /* Multiplayer.png in Resources */,
+				611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */,
+				611FDB641155BFFF00C2203D /* Default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

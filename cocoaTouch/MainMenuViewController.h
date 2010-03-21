@@ -19,6 +19,9 @@
 @property (nonatomic, retain) IBOutlet UIView *mainView;
 @property (nonatomic, retain) SettingsViewController *settingsViewController;
 
+-(void) appear;
+-(void) disappear;
+
 -(IBAction) startPlaying;
 -(IBAction) notYetImplemented;
 -(IBAction) switchViews:(id)sender;
