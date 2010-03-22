@@ -226,7 +226,7 @@ var p: TPathType;
     s: shortstring;
 begin
 {$IFDEF HWLIBRARY}
-    // initEverything();
+    initEverything();
     Randomize();
 
     cBits:= 32;
