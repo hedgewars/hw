@@ -226,7 +226,7 @@ var p: TPathType;
     s: shortstring;
 begin
 {$IFDEF HWLIBRARY}
-    initEverything();
+    // initEverything();
     Randomize();
 
     cBits:= 32;
@@ -572,11 +572,8 @@ begin
 
     if GameType = gmtLandPreview then
         begin
-{$IFDEF HWLIBRARY}
-        // initEverything();   TODO - Koda, please check to see if this is appropriate here
-{$ENDIF}
         GenLandPreview();
-        // freeEverything()    TODO - Koda, please check if this is also needed here. 
+        // freeEverything()    TODO - Koda, please check if this is needed here. 
         end
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
