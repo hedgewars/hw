@@ -570,10 +570,16 @@ begin
     GetParams();
     Randomize();
 
-    if GameType = gmtLandPreview then GenLandPreview()
+    if GameType = gmtLandPreview then
+        begin
+{$IFDEF HWLIBRARY}
+        // initEverything();   TODO - Koda, please check to see if this is appropriate here
+{$ENDIF}
+        GenLandPreview();
+        // freeEverything()    TODO - Koda, please check if this is also needed here. 
+        end
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
-    freeEverything();
     
     if GameType = gmtSyntax then
         ExitCode:= 1
