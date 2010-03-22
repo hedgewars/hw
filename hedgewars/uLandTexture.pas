@@ -122,6 +122,9 @@ begin
                 FreeTexture(tex);
                 tex:= nil;
             end;
+
+if LandBackSurface <> nil then
+    SDL_FreeSurface(LandBackSurface);
 end;
 
 end.

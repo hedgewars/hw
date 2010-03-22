@@ -923,7 +923,8 @@ end;
 
 procedure HideMission;
 begin
-    missionTimer:= 0
+    missionTimer:= 0;
+    if missionTex <> nil then FreeTexture(missionTex);
 end;
 
 procedure ShakeCamera(amount: LongWord);
@@ -957,7 +958,6 @@ end;
 
 procedure freeModule;
 begin
-    if missionTex <> nil then FreeTexture(missionTex);
 end;
 
 end.

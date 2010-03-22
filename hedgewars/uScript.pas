@@ -719,6 +719,7 @@ var at : TGearType;
 begin
 // initialize lua
 luaState:= lua_open;
+TryDo(luaState <> nil, 'lua_open failed', true);
 
 // open internal libraries
 luaopen_base(luaState);

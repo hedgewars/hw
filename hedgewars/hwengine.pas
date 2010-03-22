@@ -153,13 +153,15 @@ begin
     WriteLnToConsole('Freeing resources...');
     if isSoundEnabled then ReleaseSound();
     StoreRelease();
+    FreeGearsList();
+    FreeVisualGears;
     FreeLand();
     ControllerClose();
     SendKB();
     CloseIPC();
+    freeEverything();
     TTF_Quit();
     SDL_Quit();
-    freeEverything();
     exit();
 end;
 

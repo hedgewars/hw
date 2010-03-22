@@ -2271,7 +2271,7 @@ end;
 
 procedure freeModule;
 begin
-    FreeGearsList();
+
 end;
 
 end.
