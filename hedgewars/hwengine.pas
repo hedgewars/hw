@@ -348,11 +348,11 @@ begin
     uWorld.freeModule;
     uVisualGears.freeModule;    //stub
     uTeams.freeModule;
-    uStore.freeModule;
+    uStore.freeModule;          //stub
     uStats.freeModule;          //stub
     uSound.freeModule;          //stub
     //uSHA does not need to be freed
-    uRandom.freeModule;     //stub
+    uRandom.freeModule;         //stub
     //uLocale does not need to be freed
     //uLandTemplates does not need to be freed
     //uLandTexture does not need to be freed
@@ -360,12 +360,12 @@ begin
     //uLandGraphics does not need to be freed
     uLand.freeModule;
     uKeys.freeModule;           //stub
-    uIO.freeModule;
+    uIO.freeModule;             //stub
     uGears.freeModule;
     //uGame does not need to be freed
     //uFloat does not need to be freed
-    uCollisions.freeModule;
-    uChat.freeModule;
+    uCollisions.freeModule;     //stub
+    uChat.freeModule;           //stub
     uAmmos.freeModule;
     uAIMisc.freeModule;         //stub
     //uAIAmmoTests does not need to be freed
@@ -373,9 +373,11 @@ begin
     uAI.freeModule;             //stub
 
     uConsole.freeModule;
-    uMisc.freeModule;
     uConsts.freeModule;         //stub
     uScript.freeModule;
+// uMisc closes the debug log.
+    uMisc.freeModule;
+
 end;
 
 /////////////////////////
