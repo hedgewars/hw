@@ -20,14 +20,15 @@ foreach(dir
 	Hedgewars
 	Hogville
 	Hydrant
-    Islands
+	Islands
+	Knockball
 	Lonely_Island
 	mushrooms
-    Octorama
+	Octorama
 	PirateFlag
 	Plane
 	Ropes
-    Ruler
+	Ruler
 	Sheep
 	Trash
 	Tree

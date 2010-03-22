@@ -2,41 +2,49 @@
 
 local caption = {
 	["en"] = "Hedgewars-Basketball",
-	["de"] = "Hedgewars-Basketball"
+	["de"] = "Hedgewars-Basketball",
+	["es"] = "Hedgewars-Baloncesto"
 	}
 
 local subcaption = {
 	["en"] = "Not So Friendly Match",
-	["de"] = "Kein-so-Freundschaftsspiel"
+	["de"] = "Kein-so-Freundschaftsspiel",
+	["es"] = "Partido no-tan-amistoso"
 	}
 
 local goal = {
 	["en"] = "Bat your opponents through the|baskets and out of the map!",
-	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!"
+	["de"] = "Schlage deine Widersacher durch|die Körbe und aus der Karte hinaus!",
+	["es"] = "¡Batea a tus oponentes fuera del mapa a través de la canasta!"
 	}
 
 local scored = {
 	["en"] = " scored a point!",
-	["de"] = " erhält einen Punkt!"
+	["de"] = " erhält einen Punkt!",
+	["es"] = " anotó un tanto!"
 	}
 
 local failed = {
 	["en"] = " scored a penalty!",
-	["de"] = " erhält eine Strafe!"
+	["de"] = " erhält eine Strafe!",
+	["es"] = " anotó una falta!"
 	}
 
 	local sscore = {
 	["en"] = "Score",
-	["de"] = "Punktestand"
+	["de"] = "Punktestand",
+	["es"] = "Puntuación"
 	}
 
 local team = {
-	["en"] = "Team"
+	["en"] = "Team",
+	["es"] = "Equipo"
 	}
 
 local drowning = {
 	["en"] = "is out and",
-	["de"] = "ist draußen und"
+	["de"] = "ist draußen und",
+	["es"] = "cayó y"
 	}
 
 local function loc(text)
