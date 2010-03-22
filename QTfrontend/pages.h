@@ -204,6 +204,7 @@ public:
 
     QPushButton *WeaponsButt;
     QPushButton *WeaponEdit;
+    QPushButton *WeaponDelete;
     QComboBox *WeaponsName;
     QCheckBox *WeaponTooltip;
     QComboBox *CBLanguage;
@@ -212,6 +213,7 @@ public:
     IconedGroupBox *teamsBox;
     QPushButton *BtnNewTeam;
     QPushButton *BtnEditTeam;
+    QPushButton *BtnDeleteTeam;
     QComboBox *CBTeamName;
     IconedGroupBox *AGGroupBox;
     QComboBox *CBResolution;

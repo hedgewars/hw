@@ -373,6 +373,11 @@ PageOptions::PageOptions(QWidget* parent) :
     gbTBLayout->setMargin(0);
     gbTBLayout->setSpacing(0);
     gbTBLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+    QPixmap pmNew(":/res/new.png");
+    QPixmap pmEdit(":/res/edit.png");
+    QPixmap pmDelete(":/res/delete.png");
+
         {
             teamsBox = new IconedGroupBox(this);
             //teamsBox->setContentTopPadding(0);
@@ -381,22 +386,40 @@ PageOptions::PageOptions(QWidget* parent) :
             teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
             teamsBox->setTitle(QGroupBox::tr("Teams"));
 
-            QVBoxLayout * GBTlayout = new QVBoxLayout(teamsBox);
+            QGridLayout * GBTlayout = new QGridLayout(teamsBox);
 
             CBTeamName = new QComboBox(teamsBox);
-            GBTlayout->addWidget(CBTeamName);
+            GBTlayout->addWidget(CBTeamName, 0, 0);
 
-            QHBoxLayout * layout1 = new QHBoxLayout;
-            GBTlayout->addLayout(layout1);
-            BtnNewTeam = addButton(tr("New team"), layout1, 0);
-            BtnEditTeam = addButton(tr("Edit team"), layout1, 1);
-            layout1->setStretchFactor(BtnNewTeam, 100);
-            layout1->setStretchFactor(BtnEditTeam, 100);
+            BtnNewTeam = new QPushButton(teamsBox);
+            BtnNewTeam->setToolTip(tr("New team"));
+            BtnNewTeam->setIconSize(pmNew.size());
+            BtnNewTeam->setIcon(pmNew);
+            BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
+            GBTlayout->addWidget(BtnNewTeam, 0, 1);
+
+            BtnEditTeam = new QPushButton(teamsBox);
+            BtnEditTeam->setToolTip(tr("Edit team"));
+            BtnEditTeam->setIconSize(pmEdit.size());
+            BtnEditTeam->setIcon(pmEdit);
+            BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
+            GBTlayout->addWidget(BtnEditTeam, 0, 2);
+
+            BtnDeleteTeam = new QPushButton(teamsBox);
+            BtnDeleteTeam->setToolTip(tr("Delete team"));
+            BtnDeleteTeam->setIconSize(pmDelete.size());
+            BtnDeleteTeam->setIcon(pmDelete);
+            BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
+            BtnDeleteTeam->setEnabled(false);
+            BtnDeleteTeam->setVisible(false); // hide for now
+            GBTlayout->addWidget(BtnDeleteTeam, 0, 3);
 
             gbTBLayout->addWidget(teamsBox, 0, 0);
         }
 
         {
+            // TODO: This box should contain controls for all schemes: game modes and weapons
+
             IconedGroupBox* groupWeapons = new IconedGroupBox(this);
             //groupWeapons->setContentTopPadding(0);
             groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -405,14 +428,35 @@ PageOptions::PageOptions(QWidget* parent) :
             groupWeapons->setTitle(QGroupBox::tr("Weapons"));
             QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
 
-            WeaponsButt = addButton(tr("Weapons set"), WeaponsLayout, 1, 0);
-            WeaponsName = new QComboBox(this);
-            WeaponsLayout->addWidget(WeaponsName, 0, 0, 1, 2);
-            WeaponEdit = addButton(tr("Edit"), WeaponsLayout, 1, 1);
+            WeaponsName = new QComboBox(groupWeapons);
+            WeaponsLayout->addWidget(WeaponsName, 0, 0);
+
+            WeaponsButt = new QPushButton(groupWeapons);
+            WeaponsButt->setToolTip(tr("New weapon scheme"));
+            WeaponsButt->setIconSize(pmNew.size());
+            WeaponsButt->setIcon(pmNew);
+            WeaponsButt->setMaximumWidth(pmNew.width() + 6);
+            WeaponsLayout->addWidget(WeaponsButt, 0, 1);
+
+            WeaponEdit = new QPushButton(groupWeapons);
+            WeaponEdit->setToolTip(tr("Edit weapon scheme"));
+            WeaponEdit->setIconSize(pmEdit.size());
+            WeaponEdit->setIcon(pmEdit);
+            WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
+            WeaponsLayout->addWidget(WeaponEdit, 0, 2);
+
+            WeaponDelete = new QPushButton(groupWeapons);
+            WeaponDelete->setToolTip(tr("Delete weapon scheme"));
+            WeaponDelete->setIconSize(pmDelete.size());
+            WeaponDelete->setIcon(pmDelete);
+            WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
+            WeaponDelete->setEnabled(false);
+            WeaponDelete->setVisible(false); // hide for now
+            WeaponsLayout->addWidget(WeaponDelete, 0, 3);
 
             WeaponTooltip = new QCheckBox(this);
             WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            WeaponsLayout->addWidget(WeaponTooltip, 2, 0, 1, 2);
+            WeaponsLayout->addWidget(WeaponTooltip, 1, 0, 1, 3);
 
             gbTBLayout->addWidget(groupWeapons, 1, 0);
         }

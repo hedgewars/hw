@@ -55,7 +55,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     QPixmap pmEdit(":/res/edit.png");
     
     QPushButton * goToSchemePage = new QPushButton(GBoxOptions);
-    //goToSchemePage->setText(tr("Edit schemes"));
     goToSchemePage->setToolTip(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());
     goToSchemePage->setIcon(pmEdit);
@@ -71,7 +70,6 @@ GameCFGWidget::GameCFGWidget(QWidget* parent, bool externalControl) :
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
     QPushButton * goToWeaponPage = new QPushButton(GBoxOptions);
-    //goToWeaponPage->setText(tr("Edit weapons"));
     goToWeaponPage->setToolTip(tr("Edit weapons"));
     goToWeaponPage->setIconSize(pmEdit.size());
     goToWeaponPage->setIcon(pmEdit);

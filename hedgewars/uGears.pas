@@ -1409,7 +1409,7 @@ with HH^ do
 
         if (Gear^.State and gstDrowning) = 0 then
             if (Gear^.State and gstHHThinking) <> 0 then
-                DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, 0)
+                DrawSprite(sprQuestion, hwRound(Gear^.X) - 10 + WorldDx, hwRound(Gear^.Y) - cHHRadius - 34 + WorldDy, (RealTicks shr 9) mod 8)
         end
     end;
 

@@ -330,11 +330,27 @@ wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Waffen-Set</translation>
+        <translation type="obsolete">Waffen-Set</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Bearbeiten</translation>
+        <translation type="obsolete">Bearbeiten</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation>Team löschen</translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation>Neue Waffenzusammenstellung</translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation>Waffenzusammenstellung bearbeiten</translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation>Waffenzusammenstellung löschen</translation>
     </message>
 </context>
 <context>
@@ -661,7 +677,7 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">Kurzinfos für Waffen anzeigen</translation>
+        <translation>Kurzinfos für Waffen anzeigen</translation>
     </message>
     <message>
         <source>Enable frontend sounds</source>
@@ -693,6 +709,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>(System default)</source>
         <translation>(Systemstandard)</translation>
+    </message>
+    <message>
+        <source>Mission</source>
+        <translation>Mission</translation>
     </message>
 </context>
 <context>
@@ -883,6 +903,10 @@ Du kannst beitreten und zusehen oder du wartest bis die aktuelle Runde zu Ende i
     <message>
         <source>Restart game to apply</source>
         <translation>Spiel neu starten, um Änderungen zu übernehmen</translation>
+    </message>
+    <message>
+        <source>Explosives</source>
+        <translation>Pulverfässer</translation>
     </message>
 </context>
 <context>
