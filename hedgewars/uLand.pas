@@ -861,9 +861,7 @@ end;
 
 procedure freeModule;
 begin
-    FillChar(LandPixels, sizeof(TLandArray), 0);
-    // TODO - Find out why unc0rr removed this since it will leak
-    if LandBackSurface <> nil then SDL_FreeSurface(LandBackSurface);
+    FillChar(LandPixels, sizeof(TLandArray), 0)
 end;
 
 end.
