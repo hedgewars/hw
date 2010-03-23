@@ -474,7 +474,15 @@ begin
 end;
 
 procedure freeModule;
+var i: LongWord;
 begin
+   if TeamsCount > 0 then
+     begin
+     for i:= 0 to Pred(TeamsCount) do Dispose(TeamsArray[i]);
+     for i:= 0 to Pred(ClansCount) do Dispose(ClansArray[i]);
+     end;
+   TeamsCount:= 0;
+   ClansCount:= 0
 end;
 
 end.
