@@ -23,6 +23,7 @@ interface
 uses SDLh;
 
 procedure AddObjects();
+procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
@@ -524,6 +525,17 @@ end;
 procedure LoadThemeConfig;
 begin
 ReadThemeInfo(ThemeObjects, SprayObjects)
+end;
+
+procedure FreeLandObjects();
+var i: Longword;
+begin
+for i:= 0 to Pred(ThemeObjects.Count) do
+    with ThemeObjects.objs[i] do
+        if Surf <> nil then SDL_FreeSurface(Surf);
+for i:= 0 to Pred(SprayObjects.Count) do
+    with SprayObjects.objs[i] do
+        if Surf <> nil then SDL_FreeSurface(Surf);
 end;
 
 end.

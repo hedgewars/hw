@@ -154,7 +154,8 @@ begin
     if isSoundEnabled then ReleaseSound();
     StoreRelease();
     FreeGearsList();
-    FreeVisualGears;
+    FreeVisualGears();
+    FreeLandObjects();
     FreeLand();
     ControllerClose();
     SendKB();
