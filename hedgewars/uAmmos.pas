@@ -378,8 +378,7 @@ procedure freeModule;
 var i: LongWord;
 begin
     if StoreCnt > 0 then
-        for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i]);
-    StoreCnt:= 0
+        for i:= 0 to Pred(StoreCnt) do Dispose(StoresList[i])
 end;
 
 end.

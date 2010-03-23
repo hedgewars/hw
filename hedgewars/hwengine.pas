@@ -159,10 +159,8 @@ begin
     ControllerClose();
     SendKB();
     CloseIPC();
-    freeEverything();
     TTF_Quit();
     SDL_Quit();
-    exit();
 end;
 
 ///////////////////
@@ -204,8 +202,6 @@ begin
         end else SDL_Delay(1);
         if isTerminated = false then IPCCheckSock();
     until isTerminated;
-
-    exit();
 end;
 
 /////////////////////////
@@ -307,7 +303,6 @@ begin
 
     MainLoop();
     OnDestroy();
-    exit();
 end;
 
 procedure initEverything;
@@ -578,6 +573,7 @@ begin
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
     
+    freeEverything;
     if GameType = gmtSyntax then
         ExitCode:= 1
     else
