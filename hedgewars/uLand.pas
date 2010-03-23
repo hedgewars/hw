@@ -857,11 +857,12 @@ end;
 procedure initModule;
 begin
     LandBackSurface:= nil;
+    FillChar(LandPixels, sizeof(TLandArray), 0);
 end;
 
 procedure freeModule;
 begin
-    FillChar(LandPixels, sizeof(TLandArray), 0)
+
 end;
 
 end.
