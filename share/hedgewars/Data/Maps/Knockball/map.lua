@@ -57,7 +57,7 @@ function onGameStart()
 end
 
 function onGameTick()
-	if ball ~= nil then FollowGear(ball) end
+	if ball ~= nil and GetFollowGear() ~= nil then FollowGear(ball) end
 end
 
 function onAmmoStoreInit()
@@ -72,6 +72,7 @@ function onGearAdd(gear)
 			CopyPV2(gear, ball)
 			SetState(ball, 0x200) -- temporary - might change!
 			SetTag(ball, 8) -- baseball skin
+			FollowGear(ball)
 		end
 	end
 end

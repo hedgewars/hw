@@ -133,6 +133,21 @@ begin
     lc_addgear:= 1; // 1 return value
 end;
 
+function lc_getfollowgear(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        begin
+        WriteLnToConsole('LUA: Wrong number of parameters passed to GetFollowGear!');
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        if FollowGear = nil then
+            lua_pushnil(L)
+        else
+            lua_pushnumber(L, FollowGear^.uid);
+    lc_getfollowgear:= 1; // 1 return value
+end;
+
 function lc_getgeartype(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -786,6 +801,7 @@ lua_register(luaState, 'GetY', @lc_gety);
 lua_register(luaState, 'CopyPV', @lc_copypv);
 lua_register(luaState, 'CopyPV2', @lc_copypv2);
 lua_register(luaState, 'FollowGear', @lc_followgear);
+lua_register(luaState, 'GetFollowGear', @lc_getfollowgear);
 lua_register(luaState, 'SetState', @lc_setstate);
 lua_register(luaState, 'GetState', @lc_getstate);
 lua_register(luaState, 'SetTag', @lc_settag);

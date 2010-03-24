@@ -120,7 +120,8 @@ void HWChatWidget::loadList(QStringList & list, const QString & file)
             continue;
         list << str.trimmed();
     }
-    list.removeDuplicates();
+    //readd once we require newer Qt than 4.4
+    //list.removeDuplicates();
     txt.close();
 }
 

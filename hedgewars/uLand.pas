@@ -828,6 +828,8 @@ if (GameFlags and gfDisableGirders) <> 0 then hasGirders:= false;
 
 if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then AddObjects;
 
+FreeLandObjects;
+
 UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT);
 end;
 

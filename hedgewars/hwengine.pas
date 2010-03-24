@@ -155,7 +155,6 @@ begin
     StoreRelease();
     FreeGearsList();
     FreeVisualGears();
-    FreeLandObjects();
     FreeLand();
     ControllerClose();
     SendKB();
