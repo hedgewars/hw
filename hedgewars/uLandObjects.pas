@@ -530,12 +530,12 @@ end;
 procedure FreeLandObjects();
 var i: Longword;
 begin
-for i:= 0 to Pred(ThemeObjects.Count) do
-    with ThemeObjects.objs[i] do
-        if Surf <> nil then SDL_FreeSurface(Surf);
-for i:= 0 to Pred(SprayObjects.Count) do
-    with SprayObjects.objs[i] do
-        if Surf <> nil then SDL_FreeSurface(Surf);
+for i:= 0 to Pred(MAXTHEMEOBJECTS) do
+    if ThemeObjects.objs[i].Surf <> nil then
+        SDL_FreeSurface(ThemeObjects.objs[i].Surf);
+for i:= 0 to Pred(MAXTHEMEOBJECTS) do
+    if SprayObjects.objs[i].Surf <> nil then
+        SDL_FreeSurface(SprayObjects.objs[i].Surf);
 end;
 
 end.
