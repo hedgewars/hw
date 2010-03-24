@@ -20,11 +20,7 @@
 
 ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
 {
-    QVBoxLayout * l = new QVBoxLayout(this);
-    setLayout(l);
-
-    pbMain = new QPushButton(this);
-    pbMain->setCheckable(true);
+    setCheckable(true);
 
     QPixmap pm(":/res/btnDisabled.png");
     QPainter * painter = new QPainter();
@@ -32,48 +28,23 @@ ToggleButtonWidget::ToggleButtonWidget(QWidget * parent, QString img)
     pmChecked.load(img);
     pmDisabled.load(img);
 
-    pbMain->setMaximumWidth(pmChecked.width() + 6);
-
-    l->addWidget(pbMain);
+    setMaximumWidth(pmChecked.width() + 6);
 
     painter->begin(&pmDisabled);
     painter->drawPixmap(pmDisabled.rect(), pm);
     painter->end();
 
-    pbMain->setIconSize(pmDisabled.size());
-    pbMain->setIcon(pmDisabled);
+    setIconSize(pmDisabled.size());
+    setIcon(pmDisabled);
 
-    connect(pbMain, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
-
-    lbMain = new QLabel(this);
-    lbMain->setWordWrap(true);
-//  lbMain->setFixedHeight(32);
-
-    l->addWidget(lbMain);
+    connect(this, SIGNAL(toggled(bool)), this, SLOT(eventToggled(bool)));
 }
 
 ToggleButtonWidget::~ToggleButtonWidget()
 {
-    delete pbMain;
-    delete lbMain;
-}
-
-bool ToggleButtonWidget::isChecked()
-{
-    return pbMain->isChecked();
-}
-
-void ToggleButtonWidget::setChecked(bool checked)
-{
-    pbMain->setChecked(checked);
-}
-
-void ToggleButtonWidget::setText(QString s)
-{
-    lbMain->setText(s);
 }
 
 void ToggleButtonWidget::eventToggled(bool checked)
 {
-    if (checked) pbMain->setIcon(pmChecked); else pbMain->setIcon(pmDisabled);
+    setIcon(checked ? pmChecked : pmDisabled);
 }

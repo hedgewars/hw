@@ -1151,83 +1151,67 @@ PageScheme::PageScheme(QWidget* parent) :
     // Left
 
     TBW_mode_Forts = new ToggleButtonWidget(gbGameModes, ":/res/btnForts.png");
-    TBW_mode_Forts->setText(ToggleButtonWidget::tr("Fort Mode"));
-    TBW_mode_Forts->setToolTip(tr("Defend your fort and destroy the opponents, two team colours max!"));
+    TBW_mode_Forts->setToolTip("<b>" + ToggleButtonWidget::tr("Fort Mode") + "</b>:<br />" + tr("Defend your fort and destroy the opponents, two team colours max!"));
     glGMLayout->addWidget(TBW_mode_Forts,0,0,1,1);
 
     TBW_teamsDivide = new ToggleButtonWidget(gbGameModes, ":/res/btnTeamsDivide.png");
-    TBW_teamsDivide->setText(ToggleButtonWidget::tr("Divide Teams"));
-    TBW_teamsDivide->setToolTip(tr("Teams will start on opposite sides of the terrain, two team colours max!"));
+    TBW_teamsDivide->setToolTip("<b>" + ToggleButtonWidget::tr("Divide Teams") + "</b>:<br />" + tr("Teams will start on opposite sides of the terrain, two team colours max!"));
     glGMLayout->addWidget(TBW_teamsDivide,0,1,1,1);
 
     TBW_solid = new ToggleButtonWidget(gbGameModes, ":/res/btnSolid.png");
-    TBW_solid->setText(ToggleButtonWidget::tr("Solid Land"));
-    TBW_solid->setToolTip(tr("Land can not be destroyed!"));
+    TBW_solid->setToolTip("<b>" + ToggleButtonWidget::tr("Solid Land") + "</b>:<br />" + tr("Land can not be destroyed!"));
     glGMLayout->addWidget(TBW_solid,0,2,1,1);
 
     TBW_border = new ToggleButtonWidget(gbGameModes, ":/res/btnBorder.png");
-    TBW_border->setText(ToggleButtonWidget::tr("Add Border"));
-    TBW_border->setToolTip(tr("Add an indestructable border around the terrain"));
+    TBW_border->setToolTip("<b>" + ToggleButtonWidget::tr("Add Border") + "</b>:<br />" + tr("Add an indestructable border around the terrain"));
     glGMLayout->addWidget(TBW_border,0,3,1,1);
 
     TBW_lowGravity = new ToggleButtonWidget(gbGameModes, ":/res/btnLowGravity.png");
-    TBW_lowGravity->setText(ToggleButtonWidget::tr("Low Gravity"));
-    TBW_lowGravity->setToolTip(tr("Lower gravity"));
+    TBW_lowGravity->setToolTip("<b>" + ToggleButtonWidget::tr("Low Gravity") + "</b>:<br />" + tr("Lower gravity"));
     glGMLayout->addWidget(TBW_lowGravity,1,0,1,1);
 
     TBW_laserSight = new ToggleButtonWidget(gbGameModes, ":/res/btnLaserSight.png");
-    TBW_laserSight->setText(ToggleButtonWidget::tr("Laser Sight"));
-    TBW_laserSight->setToolTip(tr("Assisted aiming with laser sight"));
+    TBW_laserSight->setToolTip("<b>" + ToggleButtonWidget::tr("Laser Sight") + "</b>:<br />" + tr("Assisted aiming with laser sight"));
     glGMLayout->addWidget(TBW_laserSight,1,1,1,1);
 
     TBW_invulnerable = new ToggleButtonWidget(gbGameModes, ":/res/btnInvulnerable.png");
-    TBW_invulnerable->setText(ToggleButtonWidget::tr("Invulnerable"));
-    TBW_invulnerable->setToolTip(tr("All hogs have a personal forcefield"));
+    TBW_invulnerable->setToolTip("<b>" + ToggleButtonWidget::tr("Invulnerable") + "</b>:<br />" + tr("All hogs have a personal forcefield"));
     glGMLayout->addWidget(TBW_invulnerable,1,2,1,1);
 
     TBW_mines = new ToggleButtonWidget(gbGameModes, ":/res/btnMines.png");
-    TBW_mines->setText(ToggleButtonWidget::tr("Add Mines"));
-    TBW_mines->setToolTip(tr("Enable random mines"));
+    TBW_mines->setToolTip("<b>" + ToggleButtonWidget::tr("Add Mines") + "</b>:<br />" + tr("Enable random mines"));
     glGMLayout->addWidget(TBW_mines,1,3,1,1);
 
     TBW_vampiric = new ToggleButtonWidget(gbGameModes, ":/res/btnVampiric.png");
-    TBW_vampiric->setText(ToggleButtonWidget::tr("Vampirism"));
-    TBW_vampiric->setToolTip(tr("Gain 80% of the damage you do back in health"));
+    TBW_vampiric->setToolTip("<b>" + ToggleButtonWidget::tr("Vampirism") + "</b>:<br />" + tr("Gain 80% of the damage you do back in health"));
     glGMLayout->addWidget(TBW_vampiric,2,0,1,1);
 
     TBW_karma = new ToggleButtonWidget(gbGameModes, ":/res/btnKarma.png");
-    TBW_karma->setText(ToggleButtonWidget::tr("Karma"));
-    TBW_karma->setToolTip(tr("Share your opponents pain, share their damage"));
+    TBW_karma->setToolTip("<b>" + ToggleButtonWidget::tr("Karma") + "</b>:<br />" + tr("Share your opponents pain, share their damage"));
     glGMLayout->addWidget(TBW_karma,2,1,1,1);
 
     TBW_artillery = new ToggleButtonWidget(gbGameModes, ":/res/btnArtillery.png");
-    TBW_artillery->setText(ToggleButtonWidget::tr("Artillery"));
-    TBW_artillery->setToolTip(tr("Your hogs are unable to move, put your artillery skills to the test"));
+    TBW_artillery->setToolTip("<b>" + ToggleButtonWidget::tr("Artillery") + "</b>:<br />" + tr("Your hogs are unable to move, put your artillery skills to the test"));
     glGMLayout->addWidget(TBW_artillery,2,2,1,1);
 
     TBW_randomorder = new ToggleButtonWidget(gbGameModes, ":/res/btnRandomOrder.png");
-    TBW_randomorder->setText(ToggleButtonWidget::tr("Random Order"));
-    TBW_randomorder->setToolTip(tr("Order of play is random instead of in room order."));
+    TBW_randomorder->setToolTip("<b>" + ToggleButtonWidget::tr("Random Order") + "</b>:<br />" + tr("Order of play is random instead of in room order."));
     glGMLayout->addWidget(TBW_randomorder,2,3,1,1);
 
     TBW_king = new ToggleButtonWidget(gbGameModes, ":/res/btnKing.png");
-    TBW_king->setText(ToggleButtonWidget::tr("King"));
-    TBW_king->setToolTip(tr("Play with a King. If he dies, your side dies."));
+    TBW_king->setToolTip("<b>" + ToggleButtonWidget::tr("King") + "</b>:<br />" + tr("Play with a King. If he dies, your side dies."));
     glGMLayout->addWidget(TBW_king,3,0,1,1);
 
     TBW_placehog = new ToggleButtonWidget(gbGameModes, ":/res/btnPlaceHog.png");
-    TBW_placehog->setText(ToggleButtonWidget::tr("Place Hedgehogs"));
-    TBW_placehog->setToolTip(tr("Take turns placing your hedgehogs before the start of play."));
+    TBW_placehog->setToolTip("<b>" + ToggleButtonWidget::tr("Place Hedgehogs") + "</b>:<br />" + tr("Take turns placing your hedgehogs before the start of play."));
     glGMLayout->addWidget(TBW_placehog,3,1,1,1);
 
     TBW_sharedammo = new ToggleButtonWidget(gbGameModes, ":/res/btnSharedAmmo.png");
-    TBW_sharedammo->setText(ToggleButtonWidget::tr("Clan Shares Ammo"));
-    TBW_sharedammo->setToolTip(tr("Ammo is shared between all teams that share a colour."));
+    TBW_sharedammo->setToolTip("<b>" + ToggleButtonWidget::tr("Clan Shares Ammo") + "</b>:<br />" + tr("Ammo is shared between all teams that share a colour."));
     glGMLayout->addWidget(TBW_sharedammo,3,2,1,1);
 
     TBW_disablegirders = new ToggleButtonWidget(gbGameModes, ":/res/btnDisableGirders.png");
-    TBW_disablegirders->setText(ToggleButtonWidget::tr("Disable Girders"));
-    TBW_disablegirders->setToolTip(tr("Disable girders when generating random maps."));
+    TBW_disablegirders->setToolTip("<b>" + ToggleButtonWidget::tr("Disable Girders") + "</b>:<br />" + tr("Disable girders when generating random maps."));
     glGMLayout->addWidget(TBW_disablegirders,3,3,1,1);
     
     // Right
@@ -1343,7 +1327,7 @@ PageScheme::PageScheme(QWidget* parent) :
     glBSLayout->addWidget(l,7,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconMine.png"));
+    l->setPixmap(QPixmap(":/res/iconDud.png"));
     glBSLayout->addWidget(l,7,1,1,1);
     SB_MineDuds = new QSpinBox(gbBasicSettings);
     SB_MineDuds->setRange(0, 100);
@@ -1396,22 +1380,22 @@ void PageScheme::setModel(QAbstractItemModel * model)
     selectScheme->setModel(model);
 
     mapper->addMapping(LE_name, 0);
-    mapper->addMapping(TBW_mode_Forts->button(), 1);
-    mapper->addMapping(TBW_teamsDivide->button(), 2);
-    mapper->addMapping(TBW_solid->button(), 3);
-    mapper->addMapping(TBW_border->button(), 4);
-    mapper->addMapping(TBW_lowGravity->button(), 5);
-    mapper->addMapping(TBW_laserSight->button(), 6);
-    mapper->addMapping(TBW_invulnerable->button(), 7);
-    mapper->addMapping(TBW_mines->button(), 8);
-    mapper->addMapping(TBW_vampiric->button(), 9);
-    mapper->addMapping(TBW_karma->button(), 10);
-    mapper->addMapping(TBW_artillery->button(), 11);
-    mapper->addMapping(TBW_randomorder->button(), 12);
-    mapper->addMapping(TBW_king->button(), 13);
-    mapper->addMapping(TBW_placehog->button(), 14);
-    mapper->addMapping(TBW_sharedammo->button(), 15);
-    mapper->addMapping(TBW_disablegirders->button(), 16);
+    mapper->addMapping(TBW_mode_Forts, 1);
+    mapper->addMapping(TBW_teamsDivide, 2);
+    mapper->addMapping(TBW_solid, 3);
+    mapper->addMapping(TBW_border, 4);
+    mapper->addMapping(TBW_lowGravity, 5);
+    mapper->addMapping(TBW_laserSight, 6);
+    mapper->addMapping(TBW_invulnerable, 7);
+    mapper->addMapping(TBW_mines, 8);
+    mapper->addMapping(TBW_vampiric, 9);
+    mapper->addMapping(TBW_karma, 10);
+    mapper->addMapping(TBW_artillery, 11);
+    mapper->addMapping(TBW_randomorder, 12);
+    mapper->addMapping(TBW_king, 13);
+    mapper->addMapping(TBW_placehog, 14);
+    mapper->addMapping(TBW_sharedammo, 15);
+    mapper->addMapping(TBW_disablegirders, 16);
     mapper->addMapping(SB_DamageModifier, 17);
     mapper->addMapping(SB_TurnTime, 18);
     mapper->addMapping(SB_InitHealth, 19);

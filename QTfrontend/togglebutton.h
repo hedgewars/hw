@@ -25,22 +25,13 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
-class ToggleButtonWidget : public QWidget
+class ToggleButtonWidget : public QPushButton
 {
     Q_OBJECT
 public:
     ToggleButtonWidget(QWidget * parent, QString img);
     ~ToggleButtonWidget();
-    bool isChecked();
-    void setChecked(bool checked);
-    void setText(QString s);
-    QPushButton * button()
-    {
-        return pbMain;
-    }
 private:
-    QLabel * lbMain;
-    QPushButton * pbMain;
     QPixmap pmChecked;
     QPixmap pmDisabled;
 private slots:
