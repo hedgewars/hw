@@ -67,10 +67,10 @@ uses    SDLh in 'SDLh.pas',
 //       SinTable.inc
 //       proto.inc
 
-{$IFDEF HWLIBRARY}
-type arrayofpchar = array[0..7] of PChar;
 var isTerminated: boolean = false;
     alsoShutdownFrontend: boolean = false;
+{$IFDEF HWLIBRARY}
+type arrayofpchar = array[0..7] of PChar;
 
 procedure initEverything;
 procedure freeEverything;
@@ -223,7 +223,7 @@ end;
 {$IFDEF HWLIBRARY}
 procedure Game(gameArgs: arrayofpchar); cdecl; export;
 {$ELSE}
-procedure Game;cdecl; export;
+procedure Game;
 {$ENDIF}
 var p: TPathType;
     s: shortstring;
