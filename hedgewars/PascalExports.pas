@@ -13,42 +13,14 @@
 unit PascalExports;
 
 interface
-uses uKeys, uConsole;
+uses uKeys, uConsole, hwengine;
 
 {$INCLUDE "config.inc"}
-
-{$IFDEF IPHONEOS}
-// called by pascal code, they deal with the objc code
-function  IPH_getDocumentsPath: PChar; cdecl; external;
-procedure IPH_showControls; cdecl; external;
-{$ENDIF}
-
-{$IFDEF HWLIBRARY}
-// retrieve protocol information
-procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
-
-// called by the touch functions (SDL_uikitview.m)
-// they emulate user interaction from mouse or keyboard
-procedure HW_click; cdecl; export;
-procedure HW_zoomIn; cdecl; export;
-procedure HW_zoomOut; cdecl; export;
-procedure HW_zoomReset; cdecl; export;
-procedure HW_ammoMenu; cdecl; export;
-procedure HW_allKeysUp; cdecl; export;
-procedure HW_walkLeft; cdecl; export;
-procedure HW_walkRight; cdecl; export;
-procedure HW_aimUp; cdecl; export;
-procedure HW_aimDown; cdecl; export;
-procedure HW_shoot; cdecl; export;
-procedure HW_whereIsHog; cdecl; export;
-procedure HW_chat; cdecl; export;
-procedure HW_pause; cdecl; export;
-procedure HW_tab; cdecl; export;
-{$ENDIF}
 
 implementation
 
 {$IFDEF HWLIBRARY}
+// retrieve protocol information
 procedure HW_versionInfo(netProto: PShortInt; versionStr: PString); cdecl; export;
 begin
     if netProto <> nil then netProto^:= cNetProtoVersion;
@@ -143,6 +115,12 @@ begin
     WriteLnToConsole('HW - hog is at x: ' + ' y:');
 
     exit
+end;
+
+procedure HW_terminate(closeFrontend: boolean); cdecl; export;
+begin
+    isTerminated:= true;
+    if closeFrontend then alsoShutdownFrontend:= true;
 end;
 {$ENDIF}
 

@@ -59,7 +59,6 @@ uses    SDLh in 'SDLh.pas',
     uChat in 'uChat.pas',
     uLandTexture in 'uLandTexture.pas',
     uScript in 'uScript.pas',
-    {$IFDEF IPHONEOS}PascalExports in 'PascalExports.pas',{$ENDIF}
     sysutils;
 
 // also: GSHandlers.inc
@@ -70,6 +69,8 @@ uses    SDLh in 'SDLh.pas',
 
 {$IFDEF HWLIBRARY}
 type arrayofpchar = array[0..7] of PChar;
+var isTerminated: boolean = false;
+    alsoShutdownFrontend: boolean = false;
 
 procedure initEverything;
 procedure freeEverything;
@@ -161,6 +162,7 @@ begin
     CloseIPC();
     TTF_Quit();
     SDL_Quit();
+    isTerminated:= false;
 end;
 
 ///////////////////
@@ -169,7 +171,8 @@ var PrevTime, CurrTime: Longword;
     {$IFNDEF IPHONEOS}event: TSDL_Event;{$ENDIF}
 begin
     PrevTime:= SDL_GetTicks;
-    repeat
+    while isTerminated = false do
+    begin
 {$IFNDEF IPHONEOS}
 // have to remove this cycle because otherwise it segfaults at exit
         while SDL_PollEvent(@event) <> 0 do
@@ -194,14 +197,18 @@ begin
             end; // end case event.type_ of
         end; // end while SDL_PollEvent(@event) <> 0 do
 {$ENDIF}
-        CurrTime:= SDL_GetTicks;
-        if PrevTime + cTimerInterval <= CurrTime then
+        if isTerminated = false then
         begin
-            DoTimer(CurrTime - PrevTime);
-            PrevTime:= CurrTime
-        end else SDL_Delay(1);
-        if isTerminated = false then IPCCheckSock();
-    until isTerminated;
+            CurrTime:= SDL_GetTicks;
+            if PrevTime + cTimerInterval <= CurrTime then
+            begin
+                DoTimer(CurrTime - PrevTime);
+                PrevTime:= CurrTime
+            end 
+            else SDL_Delay(1);
+            IPCCheckSock();
+        end;
+    end;
 end;
 
 /////////////////////////
@@ -303,6 +310,11 @@ begin
 
     MainLoop();
     OnDestroy();
+    if alsoShutdownFrontend then
+    begin
+        alsoShutdownFrontend:= false;
+        halt;
+    end;
 end;
 
 procedure initEverything;
@@ -568,7 +580,7 @@ begin
     if GameType = gmtLandPreview then
         begin
         GenLandPreview();
-        // freeEverything()    TODO - Koda, please check if this is needed here. 
+        freeEverything(); 
         end
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();

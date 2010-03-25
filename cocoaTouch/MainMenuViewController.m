@@ -113,6 +113,8 @@
 
 -(void) appear {
     [[SDLUIKitDelegate sharedAppDelegate].uiwindow addSubview:self.view];
+    [self release];
+    
     [UIView beginAnimations:@"inserting main controller" context:NULL];
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 1;
@@ -124,6 +126,8 @@
 	[UIView setAnimationDuration:1];
 	self.view.alpha = 0;
 	[UIView commitAnimations];
+    
+    [self retain];
     [self.view removeFromSuperview];
 }
 

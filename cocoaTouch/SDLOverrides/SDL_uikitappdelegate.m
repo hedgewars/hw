@@ -57,11 +57,11 @@ int main (int argc, char *argv[]) {
 	self.window = NULL;
 	self.viewController = nil;
     self.overlayController = nil;
+    isInGame = NO;
 	return self;
 }
 
 -(void) dealloc {
-	[viewController release];
 	[uiwindow release];
 	[super dealloc];
 }
@@ -79,12 +79,14 @@ int main (int argc, char *argv[]) {
     // overlay with controls, become visible after 2 seconds
     overlayController = [[overlayViewController alloc] initWithNibName:@"overlayViewController" bundle:nil];
     [uiwindow addSubview:overlayController.view];
-    
+    [overlayController release];
+
+    isInGame = YES;
 	Game(gameArgs); // this is the pascal fuction that starts the game
+    isInGame = NO;
     
     free(gameArgs);
     [overlayController.view removeFromSuperview];
-    [overlayController release];
     
     [viewController appear];
 }
@@ -105,30 +107,35 @@ int main (int argc, char *argv[]) {
 	self.uiwindow.backgroundColor = [UIColor blackColor];
 	
 	self.viewController = [[MainMenuViewController alloc] initWithNibName:@"MainMenuViewController" bundle:nil];
+	[uiwindow addSubview:viewController.view];
+    [viewController release];
 	
 	// Set working directory to resource path
 	[[NSFileManager defaultManager] changeCurrentDirectoryPath: [[NSBundle mainBundle] resourcePath]];
 
-	[uiwindow addSubview:viewController.view];
 	[uiwindow makeKeyAndVisible];
 	[uiwindow layoutSubviews];
 }
 
 -(void) applicationWillTerminate:(UIApplication *)application {
 	SDL_SendQuit();
-	// hack to prevent automatic termination.  See SDL_uikitevents.m for details
-	// have to remove this otherwise game goes on when pushing the home button
-	//longjmp(*(jump_env()), 1);
+    if (isInGame) {
+        HW_terminate(YES);
+        // hack to prevent automatic termination.  See SDL_uikitevents.m for details
+        longjmp(*(jump_env()), 1);
+    }
 }
 
 -(void) applicationWillResignActive:(UIApplication *)application {
-	//NSLog(@"%@", NSStringFromSelector(_cmd));
-	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+    if (isInGame) HW_pause();
+	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_MINIMIZED, 0, 0);
 }
 
 -(void) applicationDidBecomeActive:(UIApplication *)application {
-	//NSLog(@"%@", NSStringFromSelector(_cmd));
-	SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
+	NSLog(@"%@", NSStringFromSelector(_cmd));
+    if (isInGame) HW_pause();
+	//SDL_SendWindowEvent(self.window, SDL_WINDOWEVENT_RESTORED, 0, 0);
 }
 
 @end

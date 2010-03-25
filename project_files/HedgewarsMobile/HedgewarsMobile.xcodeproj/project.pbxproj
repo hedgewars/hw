@@ -197,6 +197,8 @@
 		6179936E11501D3D00BA94A9 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 6179936A11501D3D00BA94A9 /* arrowUp.png */; };
 		617993A01150226700BA94A9 /* overlayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6179939E1150226700BA94A9 /* overlayViewController.m */; };
 		617995321150403800BA94A9 /* joyPush.png in Resources */ = {isa = PBXBuildFile; fileRef = 617995311150403800BA94A9 /* joyPush.png */; };
+		618AFBEF115BE8AE003D411B /* popupMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 618AFBEE115BE8AE003D411B /* popupMenuViewController.m */; };
+		618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */; };
 		61C0838A11567C83005D474F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61C0838911567C83005D474F /* CoreGraphics.framework */; };
 		61E2F06911567CC7002D33C1 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61E2F06811567CC7002D33C1 /* CoreGraphics.framework */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
@@ -387,6 +389,9 @@
 		6179939D1150226700BA94A9 /* overlayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = overlayViewController.h; path = ../../cocoaTouch/overlayViewController.h; sourceTree = SOURCE_ROOT; };
 		6179939E1150226700BA94A9 /* overlayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = overlayViewController.m; path = ../../cocoaTouch/overlayViewController.m; sourceTree = SOURCE_ROOT; };
 		617995311150403800BA94A9 /* joyPush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = joyPush.png; path = ../../cocoaTouch/resources/joyPush.png; sourceTree = SOURCE_ROOT; };
+		618AFBED115BE8AE003D411B /* popupMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = popupMenuViewController.h; path = ../../cocoaTouch/popupMenuViewController.h; sourceTree = SOURCE_ROOT; };
+		618AFBEE115BE8AE003D411B /* popupMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = popupMenuViewController.m; path = ../../cocoaTouch/popupMenuViewController.m; sourceTree = SOURCE_ROOT; };
+		618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = popupMenuViewController.xib; path = ../../cocoaTouch/iPad/popupMenuViewController.xib; sourceTree = SOURCE_ROOT; };
 		61C0838911567C83005D474F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		61E2F06811567CC7002D33C1 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -452,6 +457,8 @@
 				61798860114AA49D00BA94A9 /* SDLOverrides */,
 				6179939D1150226700BA94A9 /* overlayViewController.h */,
 				6179939E1150226700BA94A9 /* overlayViewController.m */,
+				618AFBED115BE8AE003D411B /* popupMenuViewController.h */,
+				618AFBEE115BE8AE003D411B /* popupMenuViewController.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -545,6 +552,7 @@
 				611FD990115590E700C2203D /* MainMenuViewController.xib */,
 				611FD992115590E700C2203D /* SettingsViewController.xib */,
 				611FDB3B1155BB9E00C2203D /* overlayViewController.xib */,
+				618AFBF0115BE8B6003D411B /* popupMenuViewController.xib */,
 			);
 			name = "Resources-iPad";
 			sourceTree = "<group>";
@@ -910,6 +918,7 @@
 				611FD9D21155A41000C2203D /* Multiplayer.png in Resources */,
 				611FDB3C1155BB9E00C2203D /* overlayViewController.xib in Resources */,
 				611FDB641155BFFF00C2203D /* Default.png in Resources */,
+				618AFBF1115BE8B6003D411B /* popupMenuViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1092,6 +1101,7 @@
 				6100DABA115446B000F455E0 /* TeamMenuViewController.m in Sources */,
 				6100DABB115446B000F455E0 /* GameSetup.m in Sources */,
 				6100DABC115446B000F455E0 /* overlayViewController.m in Sources */,
+				618AFBEF115BE8AE003D411B /* popupMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1230,13 +1240,17 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -vwi -B  -Sgix";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-ghttt  -gw2 -O-";
+				FPC_SPECIFIC_OPTIONS = "-dDEBUGFILE -O- -gl -gw2 -gs -godwarfsets -gt -ghttt -Xs-";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_FAST_MATH = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -1262,13 +1276,16 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Don't Code Sign";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -vwi -B  -Sgix -Cfvfpv2";
+				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.5.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -O-2 -Xs  -Cfvfpv2";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_FAST_MATH = YES;
+				GCC_OPTIMIZATION_LEVEL = 2;
 				GCC_THUMB_SUPPORT = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

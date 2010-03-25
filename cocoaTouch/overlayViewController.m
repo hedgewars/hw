@@ -11,6 +11,8 @@
 #import "PascalImports.h"
 #import "CGPointUtils.h"
 #import "SDL_mouse.h"
+#import "SettingsViewController.h"
+#import "popupMenuViewController.h"
 
 @implementation overlayViewController
 @synthesize dimTimer;
@@ -89,7 +91,7 @@
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
 
-    UIButton *theButton = (UIButton*)sender;
+    UIButton *theButton = (UIButton *)sender;
     switch (theButton.tag) {
         case 0:
            	HW_walkLeft();
@@ -112,11 +114,54 @@
         case 6:
             HW_backjump();
             break;
+        case 7:
+            HW_pause();
+            break;
+        case 8:
+            HW_chat();
+            break;
         default:
+            NSLog(@"Nope");
             // HW_chat() HW_tab() HW_pause()
             break;
     }
 }
+
+-(IBAction) showPopover{
+    //UIViewController *content = [[UIViewController alloc]  initWithNibName: nil bundle:nil];
+    //CGRect rectArea = CGRectMake(0, 0, 320, 480);
+    //content.view.frame = rectArea;
+    //settings.view.frame = rectArea;
+    popupMenuViewController *popupMenu = [[UIViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
+    
+    UIButton *buttonPause = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    buttonPause.tag = 7;
+    buttonPause.frame = CGRectMake(100, 170, 170, 30);
+    [buttonPause setTitle:@"Pause Game" forState:UIControlStateNormal];
+    [buttonPause addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [popupMenu.view addSubview:buttonPause];
+    
+    UIButton *buttonChat = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    buttonChat.tag = 8;
+    buttonChat.frame = CGRectMake(100, 220, 170, 30);
+    [buttonChat setTitle:@"Chat" forState:UIControlStateNormal];
+    [buttonChat addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [popupMenu.view addSubview: buttonChat];
+
+    
+    UIPopoverController* aPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
+        //[aPopover setPopoverContentSize:CGSizeMake(320, 480) animated:YES];
+
+    [aPopover presentPopoverFromRect: CGRectMake(1024, 0, 320, 480) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+    //UIBarButtonItem *sender = [[useless items] objectAtIndex:1];
+    //[self.popoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+    //aPopover.popoverContentSize = CGSizeMake(320, 480);
+
+    /*SettingsViewController *settings = [[SettingsViewController alloc] initWithNibName:@"SettingsViewController" bundle:nil];
+    UIPopoverController *popover = [[UIPopoverController alloc] initWithContentViewController:settings];
+    [self.view addSubview:popover.contentViewController.view];*/
+}
+
 
 #pragma mark -
 #pragma mark Custom SDL_UIView input handling

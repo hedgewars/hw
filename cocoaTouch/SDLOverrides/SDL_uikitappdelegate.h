@@ -31,6 +31,7 @@
 	UIWindow *uiwindow;
 	MainMenuViewController *viewController;
     overlayViewController *overlayController;
+    BOOL isInGame;
 }
 
 @property (readwrite, assign) SDL_Window *window;
