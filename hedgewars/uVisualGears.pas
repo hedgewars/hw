@@ -103,11 +103,10 @@ with Gear^ do
     Y:= Y + (dY + tdY + cGravity * vobFallSpeed) * Steps;
     Angle:= Angle + dAngle * Steps;
   
-    if hwRound(X) < -cScreenWidth - 64 then X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
-    if hwRound(X) > cScreenWidth + LAND_WIDTH then X:= int2hwFloat(-cScreenWidth - 64);
-    // if hwRound(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + int2hwFloat(25); // For if flag is set for flakes rising upwards?
-    if hwRound(Y) > (LAND_HEIGHT + 75) then Y:= Y - int2hwFloat(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
-    if (Timer > 0) and (Timer-Steps > 0) then
+    if (hwRound(X) >= -cScreenWidth - 64) and
+       (hwRound(X) <= cScreenWidth + LAND_WIDTH) and
+       (hwRound(Y) <= (LAND_HEIGHT + 75)) and 
+       (Timer > 0) and (Timer-Steps > 0) then
         begin
         tdX:= tdX - _0_005*Steps;
         tdY:= tdY - _0_005*Steps;
@@ -117,6 +116,10 @@ with Gear^ do
         end
     else
         begin
+        if hwRound(X) < -cScreenWidth - 64 then X:= int2hwFloat(cScreenWidth + LAND_WIDTH) else
+        if hwRound(X) > cScreenWidth + LAND_WIDTH then X:= int2hwFloat(-cScreenWidth - 64);
+        // if hwRound(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + int2hwFloat(25); // For if flag is set for flakes rising upwards?
+        if hwRound(Y) > (LAND_HEIGHT + 75) then Y:= Y - int2hwFloat(1024 + 150); // TODO - configure in theme (jellies for example could use limited range)
         Timer:= 0;
         tdX:= _0;
         tdY:= _0
