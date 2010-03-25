@@ -2774,7 +2774,15 @@ if (GameTicks and $3F) = 0 then
        Gear^.Tex:= RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(round(Gear^.Health / 20)) + '%', cWhiteColor, fntSmall)
        end;
 
-if HHGear^.Message and (gm_Attack or gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
+if (HHGear^.Message and gm_Attack <> 0) then begin
+        HHGear^.Message := HHGear^.Message and not gm_Attack;
+		if Gear^.FlightTime > 0 then begin
+			AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtEgg, 0, Gear^.dX * _0_5, Gear^.dY, 0);
+			dec(Gear^.FlightTime)
+		end;
+end;
+
+if HHGear^.Message and (gm_Up or gm_Precise or gm_Left or gm_Right) <> 0 then Gear^.State:= Gear^.State and not gsttmpFlag;
 HHGear^.Message:= HHGear^.Message and not (gm_Up or gm_Precise or gm_Left or gm_Right);
 HHGear^.State:= HHGear^.State or gstMoving;
 
@@ -2880,4 +2888,20 @@ for i:= 0 to 46 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire);
 for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart);
 for i:= 0 to 15 do AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepEggWork(Gear: PGear);
+begin
+	AllInactive:= false;
+	Gear^.dX:= Gear^.dX + cWindSpeed;
+	doStepFallingGear(Gear);
+	if (Gear^.State and gstCollision) <> 0 then
+	begin
+		doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 25, EXPLAutoSound);
+		DeleteGear(Gear);
+		exit
+	end;
+	if (GameTicks and $3F) = 0 then
+		AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtSmokeTrace, 0, _0, _0, 0)
 end;

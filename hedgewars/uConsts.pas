@@ -88,7 +88,7 @@ type
             gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 37
             gtHellishBomb, gtEvilTrace, gtWaterUp, gtDrill, gtBallGun, gtBall,gtRCPlane,
             gtSniperRifleShot, gtJetpack, gtMolotov, gtExplosives, gtBirdy, 
-            gtBigExplosion);
+            gtBigExplosion, gtEgg);
 
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
@@ -1689,6 +1689,7 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
+                          //ammoprop_Utility;
                           ammoprop_AltAttack;
                 Count: 1;
                 InitialCount: 1;
