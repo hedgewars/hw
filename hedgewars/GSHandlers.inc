@@ -186,15 +186,21 @@ if Gear^.dY.isNegative then
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
         Gear^.State:= Gear^.State or gstCollision
         end
-    end else
-    if TestCollisionYwithGear(Gear, 1) then
-        begin
-        collV:= 1;
-        isFalling:= false;
-        Gear^.dX:=   Gear^.dX * Gear^.Friction;
-        Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
-        Gear^.State:= Gear^.State or gstCollision
-        end else isFalling:= true;
+    end 
+else if TestCollisionYwithGear(Gear, 1) then
+    begin
+    collV:= 1;
+    isFalling:= false;
+    Gear^.dX:=   Gear^.dX * Gear^.Friction;
+    Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
+    Gear^.State:= Gear^.State or gstCollision
+    end
+else
+    begin
+    isFalling:= true;
+    if Gear^.AdvBounce and Gear^.dY.isNegative and TestCollisionYwithGear(Gear, 1) then collV:= 1
+    else if Gear^.AdvBounce and not Gear^.dY.isNegative and TestCollisionYwithGear(Gear, -1) then collV:= -1;
+    end;
 
 
 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
@@ -206,17 +212,14 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
     end 
 else if Gear^.AdvBounce and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then collH:= -hwSign(Gear^.dX);
 
-if (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) and Gear^.AdvBounce then
+//if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
+if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue) then
     begin
     Gear^.dX:= tdY*Gear^.Elasticity*Gear^.Friction;
     Gear^.dY:= tdX*Gear^.Elasticity;//*Gear^.Friction;
     if ((collV > 0) and (collH > 0)) or ((collV < 0) and (collH < 0)) then Gear^.dX.isNegative:=not tdY.isNegative
     else if (collV < 0) and (collH > 0) then Gear^.dY.isNegative:= not tdX.isNegative;
     isFalling:= false;
-
-    //tmp:= Gear^.dX.QWordValue;
-    //Gear^.dX.QWordValue:= Gear^.dY.QWordValue;
-    //Gear^.dY.QWordValue:= tmp;
     end;
 
 if isFalling then Gear^.dY:= Gear^.dY + cGravity;
@@ -224,7 +227,8 @@ if isFalling then Gear^.dY:= Gear^.dY + cGravity;
 Gear^.X:= Gear^.X + Gear^.dX;
 Gear^.Y:= Gear^.Y + Gear^.dY;
 CheckGearDrowning(Gear);
-if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
+//if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
+if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) and
     (not isFalling) then
     Gear^.State:= Gear^.State and not gstMoving
 else
