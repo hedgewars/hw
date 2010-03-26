@@ -8,8 +8,8 @@ foreach(dir
 	Bubbleflow
 	Cake
 	Castle
-	cave
-	cheese
+	Cave
+	Cheese
 	Cogs
 	CrazyMission
 	EarthRise
@@ -23,7 +23,7 @@ foreach(dir
 	Islands
 	Knockball
 	Lonely_Island
-	mushrooms
+	Mushrooms
 	Octorama
 	PirateFlag
 	Plane

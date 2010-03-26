@@ -4,17 +4,17 @@ foreach(dir
 	Blox
 	Cake
 	Castle
-	cheese
-    deepspace
+	Cheese
+    Deepspace
 	City
 	CrazyMission
 	EarthRise
 	Eyes
 	Freeway
 	Halloween
-	hell
+	Hell
 	Island
-	nature
+	Nature
 	Planes
 	Sheep
 	Snow
