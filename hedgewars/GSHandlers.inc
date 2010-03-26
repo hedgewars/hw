@@ -2745,7 +2745,7 @@ var HHGear: PGear;
 begin
 HHGear:= CurrentHedgehog^.Gear;
 
-move:= _0_1 * _0_5;
+move:= _0_1;
 fuel:= 50;
 
 if Gear^.Pos > 0 then
@@ -2769,7 +2769,7 @@ if (HHGear^.Message and gm_Up) <> 0 then
 if (HHGear^.Message and gm_Left) <> 0 then move.isNegative:= true;
 if (HHGear^.Message and (gm_Left or gm_Right)) <> 0 then
     begin
-    HHGear^.dX:= HHGear^.dX + (move * _0_5);
+    HHGear^.dX:= HHGear^.dX + (move * _0_2);
     dec(Gear^.Health, fuel div 5);
     Gear^.MsgParam:= Gear^.MsgParam or (HHGear^.Message and (gm_Left or gm_Right));
     end;
