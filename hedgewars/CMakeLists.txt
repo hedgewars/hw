@@ -1,11 +1,11 @@
-configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
-
 find_package(SDL)
 find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 find_package(Lua)
+
+configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #find which version of SDL_image and SDL_mixer we have (for IMG_Init and Mix_Init)
 #if the headers are not installed, the newer apis won't be activated
