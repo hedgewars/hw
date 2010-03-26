@@ -79,3 +79,4 @@ QString * netHost = new QString();
 quint16 netPort = 46631;
 
 bool haveServer = ${HAVE_NETSERVER};
+bool isDevBuild = ${HW_DEV};

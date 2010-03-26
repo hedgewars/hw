@@ -87,6 +87,14 @@ PageMain::PageMain(QWidget* parent) :
     BtnNet->setToolTip(tr("Network Game (Play a game across a network)"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
 
+    if(isDevBuild)
+    {
+        QLabel* devNote = new QLabel(this);
+        devNote->setText(QLabel::tr("This SVN build is 'work in progress' and may not be compatible with other versions of the game.\nSome features might be broken or incomplete. Use at your own risk!"));
+        devNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        pageLayout->addWidget(devNote, 4, 1, 1, 2);
+    }
+
     BtnSetup = addButton(":/res/Settings.png", pageLayout, 4, 3, true);
 
     //BtnInfo = addButton(":/res/About.png", pageLayout, 3, 1, 1, 2, true);

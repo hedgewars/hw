@@ -49,3 +49,4 @@ extern QString * netHost;
 extern quint16 netPort;
 
 extern bool haveServer;
+extern bool isDevBuild;
