@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
-@interface overlayViewController : UIViewController {
+@interface overlayViewController : UIViewController <UIActionSheetDelegate> {
     NSTimer *dimTimer;
     
     CGFloat initialDistanceForPinching;
