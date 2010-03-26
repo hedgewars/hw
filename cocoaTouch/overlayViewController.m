@@ -90,8 +90,9 @@
 // issue certain action based on the tag of the button 
 -(IBAction) buttonPressed:(id) sender {
     [self activateOverlay];
-
+    UIActionSheet *actionSheet;
     UIButton *theButton = (UIButton *)sender;
+    
     switch (theButton.tag) {
         case 0:
             HW_walkLeft();
@@ -120,20 +121,20 @@
         case 8:
             HW_chat();
             break;
-	case 9:
-	    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
-								 delegate:self
-							cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
-						   destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
-							otherButtonTitles:nil];
-	    [actionSheet showInView:self.view];
-	    [actionSheet release];
+        case 9:
+            actionSheet = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Are you reeeeeally sure?", @"")
+                                                      delegate:self
+                                             cancelButtonTitle:NSLocalizedString(@"Well, maybe not...", @"")
+                                        destructiveButtonTitle:NSLocalizedString(@"As sure as I can be!", @"")
+                                             otherButtonTitles:nil];
+            [actionSheet showInView:self.view];
+            [actionSheet release];
 
             HW_pause();
 	    break;
-	case 10:
-	    HW_tab();
-	    break;
+        case 10:
+            HW_tab();
+            break;
         default:
             NSLog(@"Nope");
             break;
@@ -154,9 +155,9 @@
     //settings.view.frame = rectArea;
     //popupMenuViewController *popupMenu = [[UIViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
     
-    UIViewController *popupMenu = [[UIViewController alloc] init];
+    popupMenuViewController *popupMenu = [[popupMenuViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
 
-    UIButton *buttonPause = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    /*UIButton *buttonPause = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     buttonPause.tag = 7;
     buttonPause.frame = CGRectMake(100, 170, 170, 30);
     [buttonPause setTitle:@"Pause Game" forState:UIControlStateNormal];
@@ -176,9 +177,9 @@
     [buttonEnd setTitle:@"End Game" forState:UIControlStateNormal];
     [buttonEnd addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [popupMenu.view addSubview:buttonEnd];
-    
+*/    
     UIPopoverController* aPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
-    [aPopover setPopoverContentSize:CGSizeMake(220, 480) animated:YES];
+    [aPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
 
     [aPopover presentPopoverFromRect:CGRectMake(1024, 0, 320, 480) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
     //UIBarButtonItem *sender = [[useless items] objectAtIndex:1];
