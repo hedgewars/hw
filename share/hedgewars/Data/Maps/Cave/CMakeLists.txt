@@ -2,4 +2,4 @@ install(FILES
 	map.png
 	map.cfg
 	preview.png
-	DESTINATION ${SHAREPATH}Data/Maps/cave)
+	DESTINATION ${SHAREPATH}Data/Maps/Cave)

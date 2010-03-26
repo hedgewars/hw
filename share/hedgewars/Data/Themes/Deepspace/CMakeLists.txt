@@ -3,4 +3,4 @@ file(GLOB images *.png)
 install(FILES
     theme.cfg
     ${images}
-    DESTINATION ${SHAREPATH}Data/Themes/deepspace)
+    DESTINATION ${SHAREPATH}Data/Themes/Deepspace)

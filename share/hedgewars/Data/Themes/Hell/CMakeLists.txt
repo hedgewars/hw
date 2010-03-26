@@ -3,4 +3,4 @@ file(GLOB images *.png)
 install(FILES
     theme.cfg
     ${images}
-    DESTINATION ${SHAREPATH}Data/Themes/hell)
+    DESTINATION ${SHAREPATH}Data/Themes/Hell)

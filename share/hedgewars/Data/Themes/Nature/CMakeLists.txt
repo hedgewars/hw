@@ -3,4 +3,4 @@ file(GLOB images *.png)
 install(FILES
     theme.cfg
     ${images}
-    DESTINATION ${SHAREPATH}Data/Themes/nature)
+    DESTINATION ${SHAREPATH}Data/Themes/Nature)
