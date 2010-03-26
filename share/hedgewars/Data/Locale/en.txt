@@ -404,6 +404,7 @@
 03:38=Gun (multiple shots)
 03:39=Transport Utility
 03:40=Incinerating Grenade
+03:41=Huge fan of Squawks
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -420,7 +421,7 @@
 04:11=Get rid of enemy hogs by batting them over|the map borders or into water. Or how about|knocking some mines to your friends?|Attack: Bat everything in front of you
 04:12=Get close and personal to unleash the power of|this almost deadly martial arts technique.|Attack: Perform the Fire Punch
 04:13=UNUSED
-04:14=Fear of heights? Better grab a parachute.|It will unfold once|you fall too far and|save your hog from taking fall damage.|Attack: Unfold the parachute
+04:14=Fear of heights? Better grab a parachute.|It will unfold once|you fall too far and|save your hog from taking fall damage.|Attack: Unfold the parachute|Long Jump: Drop grenades or similar weapons
 04:15=Call in an airplane to attack your enemies|using a bombing run.|Left/Right: Determine attack direction|Cursor: Select target region
 04:16=Call in an airplane to drop several mines|in the target area.|Left/Right: Determine attack direction|Cursor: Select target region
 04:17=Need shelter? Use the blow torch to dig|a tunnel into solid ground granting you|cover.|Attack: Start or stop digging
@@ -445,8 +446,9 @@
 04:36=Well, sometimes you're just too bad in aiming. Get|some assistance using modern day technology.|Attack: Activate
 04:37=Don't fear the daylight. It will just last one turn|but will enable you to absorb the damage you do to|other hogs.|Attack: Activate
 04:38=The sniper rifle can be the most devastating weapon|in your whole arsenal, however it's very ineffective|at close quarters. The damage dealt increases with|the distance to its target.|Attack: Shoot (twice)
-04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|take you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force into one direction
+04:39=Fly to other parts of the map using the flying|saucer. This hard to master utility is able to|take you to almost any position on the battlefield.|Attack: Activate|Up/Left/Right: Apply force in one direction|Long Jump: Drop grenades or similar weapons
 04:40=Set some ground on fire using this bottle filled|with (soon to be) burning liquid.|Attack: Hold to shoot with more power
+04:41=The evidence nature might even top the flying|saucer. Birdy can carry your hog around and|drop eggs on your enemies!|Attack: Activate and drop eggs|Up/Left/Right: Flap in one direction
 
 ; Game goal strings
 05:00=Game Modes

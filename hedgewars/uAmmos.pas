@@ -88,7 +88,7 @@ var cnt: Longword;
     ammos: TAmmoCounts;
     substr: shortstring; // TEMPORARY
 begin
-TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 4, 'Invalid ammo scheme (incompatible frontend)', true);
+TryDo(byte(s[0]) = byte(ord(High(TAmmoType))) * 4, 'Invalid ammo scheme (incompatible frontend; got: ' + inttostr(byte(s[0]) div 4) + ', expected: ' + inttostr(ord(High(TAmmoType))) + ')', true);
 
 // FIXME - TEMPORARY hardcoded check on shoppa pending creation of crate *type* probability editor
 substr:= Copy(s,1,15);

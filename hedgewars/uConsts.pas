@@ -1315,7 +1315,7 @@ const
                 Pos: 0;
                 AmmoType: amMortar;
                 AttackVoice: sndNone);
-            Slot: 1;
+            Slot: 0;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
@@ -1375,7 +1375,7 @@ const
                 Pos: 0;
                 AmmoType: amSeduction;
                 AttackVoice: sndNone);
-            Slot: 2;
+            Slot: 3;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1415,7 +1415,7 @@ const
                 Pos: 0;
                 AmmoType: amHellishBomb;
                 AttackVoice: sndNone);
-            Slot: 4;
+            Slot: 1;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
@@ -1501,7 +1501,7 @@ const
                 Pos: 0;
                 AmmoType: amRCPlane;
                 AttackVoice: sndNone);
-            Slot: 6;
+            Slot: 4;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1551,7 +1551,7 @@ const
                     Pos: 0;
                     AmmoType: amExtraDamage;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 0;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1576,7 +1576,7 @@ const
                     Pos: 0;
                     AmmoType: amInvulnerable;
                     AttackVoice: sndNone);
-            Slot: 8;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1601,7 +1601,7 @@ const
                     Pos: 0;
                     AmmoType: amExtraTime;
                     AttackVoice: sndNone);
-            Slot: 7;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1626,7 +1626,7 @@ const
                     Pos: 0;
                     AmmoType: amLaserSight;
                     AttackVoice: sndNone);
-            Slot: 7;
+            Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1651,7 +1651,7 @@ const
                     Pos: 0;
                     AmmoType: amVampiric;
                     AttackVoice: sndNone);
-            Slot: 6;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -1697,7 +1697,7 @@ const
                 Pos: 0;
                 AmmoType: amJetpack;
                 AttackVoice: sndNone);
-            Slot: 3;
+            Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
@@ -1729,8 +1729,7 @@ const
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoRoundEndHint or
-                          ammoprop_ForwMsgs or
+            Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold;
                 Count: 1;
@@ -1740,7 +1739,7 @@ const
                 Pos: 0;
                 AmmoType: amBirdy;
                 AttackVoice: sndNone);
-            Slot: 5;
+            Slot: 7;
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;

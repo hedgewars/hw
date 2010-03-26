@@ -41,6 +41,7 @@
 00:38=Scharfschützengewehr
 00:39=Fliegende Untertasse
 00:40=Molotov-Cocktail
+00:41=Birdy
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
@@ -201,6 +202,7 @@
 03:38=Gewehr (mehrere Schüsse)
 03:39=Fortbewegungsmittel
 03:40=Brandbombe
+03:41=Riesiger Squawks-Fan
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -217,7 +219,7 @@
 04:11=Beseitige Feinde, indem du diese mit dem|Baseballschläger einfach von der Karte fegst.|Oder wie wäre es, wenn du deinen Freunden ein|paar Minen vor die Beine schlägst?|Angriff: Alles vor dem Igel schlagen
 04:12=Rücke mit deinen Feinden näher zusammen und|entfessle die Kraft dieser so gut wie tödlichen|Kampftechnik.|Angriff: Feuerfaust einsetzen
 04:13=UNUSED
-04:14=Höhenangst? Greif besser zum Fallschirm.|Er wird sich von alleine entfalten, wenn du|zu lange oder zu tief fällst, und so deinem|Igel den Hals retten.|Angriff: Fallschirm lösen
+04:14=Höhenangst? Greif besser zum Fallschirm.|Er wird sich von alleine entfalten, wenn du|zu lange oder zu tief fällst, und so deinem|Igel den Hals retten.|Angriff: Fallschirm öffnen|Weiter Sprung: Waffe benutzen
 04:15=Rufe ein Flugzeug, um deine Feinde mit einem|Bombenteppich einzudecken.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
 04:16=Rufe ein Flugzeug, um mehrere Minen im|Zielgebiet abwerfen zu lassen.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
 04:17=Unterschlupf gefällig? Benutze den Schweißbrenner,|um einen Tunnel in festen Untergrund zu graben|oder einem Feind eine heiße Bekanntschaft machen|zu lassen.|Angriff: Brenner ein- oder ausschalten
@@ -244,6 +246,7 @@
 04:38=Das Scharfschützengewehr kann die vernichtendste|Waffe im gesamten Arsenal sein, allerdings ist|es auf kurze Distanz sehr ineffektiv. Der|verursachte Schaden nimmt mit der Distanz zu.|Angriff: Feuern (mehrfach)
 04:39=Fliege mit der fliegenden Untertasse in andere|Teile der Karte. Sie ist schwer zu beherrschen,|bringt dich aber an so gut wie jeden Ort.|Angriff: Aktivieren|Hoch/Links/Rechts: Beschleunigen|Weiter Sprung: Waffe benutzen
 04:40=Entzünde einen Teil der Landschaft oder auch etwas|mehr mit dieser (schon bald) brennenden Flüssigkeit.|Angriff: Halten, um mit mehr Kraft zu werfen
+04:41=Der Beweis, dass die Natur sogar die fliegende|Untertasse übertreffen könnte. Birdy kann|deinen Igel herumtragen und zudem Eier auf|deine Feinde fallen lassen.|Angriff: Aktivieren und Eier fallen lassen|Hoch/Links/Rechts: In eine Richtung flattern
 
 ; Game goal strings
 05:00=Spielmodifikationen
