@@ -1759,6 +1759,8 @@ var Gear: PGear;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
+if Radius > 25 then KickFlakes(Radius, X, Y);
+
 if ((Mask and EXPLNoGfx) = 0) then
     begin
     if Radius > 50 then AddGear(X, Y, gtBigExplosion, 0, _0, _0, 0)
@@ -1770,8 +1772,6 @@ if (Mask and EXPLAllDamageInRadius) = 0 then
     dmgRadius:= Radius shl 1
 else
     dmgRadius:= Radius;
-
-KickFlakes(dmgRadius, X, Y);
 
 Gear:= GearsList;
 while Gear <> nil do

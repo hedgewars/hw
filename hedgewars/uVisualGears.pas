@@ -55,7 +55,7 @@ procedure freeModule;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
 procedure ProcessVisualGears(Steps: Longword);
-procedure KickFlakes(dmgRadius, X, Y: LongInt);
+procedure KickFlakes(Radius, X, Y: LongInt);
 procedure DrawVisualGears(Layer: LongWord);
 procedure DeleteVisualGear(Gear: PVisualGear);
 procedure AddClouds;
@@ -63,7 +63,7 @@ procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 procedure FreeVisualGears;
 
 var VisualGearsList: PVisualGear;
-    vobFrameTicks, vobFramesCount: Longword;
+    vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
 
 implementation
@@ -657,12 +657,11 @@ while t <> nil do
       end
 end;
 
-procedure KickFlakes(dmgRadius, X, Y: LongInt);
+procedure KickFlakes(Radius, X, Y: LongInt);
 var Gear, t: PVisualGear;
     dmg: LongInt;
 begin
-if dmgRadius = 0 then exit;
-
+if (vobCount = 0) or (vobCount > 200) then exit;
 t:= VisualGearsList;
 while t <> nil do
       begin
@@ -670,7 +669,7 @@ while t <> nil do
       if Gear^.Kind = vgtFlake then
           begin
           // Damage calc from doMakeExplosion
-          dmg:= min(100,dmgRadius*2  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y))));
+          dmg:= min(100,Radius*2  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y))));
           if dmg > 1 then
               begin
               Gear^.tdX:= Gear^.dX + SignAs(_0_01 * dmg + cHHKick, Gear^.X - int2hwFloat(X));

@@ -353,7 +353,6 @@ procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSpra
 var s: shortstring;
     f: textfile;
     i, ii: LongInt;
-    vobcount: Longword;
     c1, c2: TSDL_Color;
 
     procedure CheckRect(Width, Height, x, y, w, h: LongWord);
