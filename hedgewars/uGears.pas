@@ -317,10 +317,6 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Friction:= _450;
                 RopePoints.Count:= 0;
                 end;
-   gtExplosion: begin
-                gear^.X:= gear^.X;
-                gear^.Y:= gear^.Y;
-                end;
         gtMine: begin
                 gear^.Health:= 10;
                 gear^.State:= gear^.State or gstMoving;
@@ -448,8 +444,6 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.FlightTime := 2;
                 end;
 gtBigExplosion: begin
-                gear^.X:= gear^.X;
-                gear^.Y:= gear^.Y;
                 gear^.Angle:= random(360);
                 end;
 		 gtEgg: begin 
