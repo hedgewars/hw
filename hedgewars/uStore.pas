@@ -80,6 +80,7 @@ function RenderHelpWindow(caption, subcaption, description, extra: ansistring; e
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
+procedure Tint(r, g, b, a: Single);
 
 implementation
 uses uMisc, uConsole, uLand, uLocale, uWorld{$IFDEF IPHONEOS}, PascalExports{$ENDIF};
@@ -89,6 +90,11 @@ type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 var HHTexture: PTexture;
     MaxTextureSize: Integer;
     cGPUVendor: TGPUVendor;
+
+procedure Tint(r, g, b, a: Single);
+begin
+glColor4f(r, g, b, a);
+end;
 
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 var r: TSDL_Rect;

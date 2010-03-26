@@ -1,4 +1,4 @@
-﻿; German locale
+; German locale
 
 00:00=Granate
 00:01=Splittergranate
@@ -164,7 +164,7 @@
 03:00=Zeitzünder-Granate
 03:01=Zeitzünder-Granate
 03:02=Ballistische Waffe
-03:03=Zielsuchende Waffe
+03:03=Vorsicht, sticht!
 03:04=Gewehr (mehrere Schüsse)
 03:05=Grabwerkzeug
 03:06=Aktion

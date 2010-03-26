@@ -1737,7 +1737,7 @@ const
                           ammoprop_DontHold;
                 Count: 1;
                 InitialCount: 1;
-                NumPerTurn: 1;
+                NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
                 AmmoType: amBirdy;
@@ -1746,7 +1746,7 @@ const
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
-            isDamaging: false;
+            isDamaging: true;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater)
