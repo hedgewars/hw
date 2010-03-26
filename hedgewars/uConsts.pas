@@ -1732,8 +1732,7 @@ const
             Ammo: (Propz: ammoprop_NoRoundEndHint or
                           ammoprop_ForwMsgs or
                           ammoprop_NoCrosshair or
-                          ammoprop_DontHold or
-                          ammoprop_Utility;
+                          ammoprop_DontHold;
                 Count: 1;
                 InitialCount: 1;
                 NumPerTurn: 1;
