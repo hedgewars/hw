@@ -577,15 +577,11 @@ begin
     GetParams();
     Randomize();
 
-    if GameType = gmtLandPreview then
-        begin
-        GenLandPreview();
-        freeEverything(); 
-        end
+    if GameType = gmtLandPreview then GenLandPreview()
     else if GameType = gmtSyntax then DisplayUsage()
     else Game();
     
-    freeEverything;
+    freeEverything();
     if GameType = gmtSyntax then
         ExitCode:= 1
     else
