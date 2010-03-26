@@ -20,7 +20,7 @@
 
 unit uLocale;
 interface
-type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidUFO, sidShotgun,
+type TAmmoStrId = (sidNothing, sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
             sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
             sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,
             sidParachute, sidAirAttack, sidMineStrike, sidBlowTorch,

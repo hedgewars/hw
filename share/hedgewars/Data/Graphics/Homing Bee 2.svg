@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="Homing Bee 2.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2415"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-224.28571"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1916"
+     inkscape:window-height="1174"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:none;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:4.38115311;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3338"
+       width="440.61887"
+       height="440.61887"
+       x="-226.02373"
+       y="337.76709"
+       inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\bee1.png"
+       inkscape:export-xdpi="12.943819"
+       inkscape:export-ydpi="12.943819" />
+    <g
+       id="g3340"
+       transform="translate(373.9046,-483.67376)"
+       inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\bee1.png"
+       inkscape:export-xdpi="12.943819"
+       inkscape:export-ydpi="12.943819">
+      <g
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="matrix(0.5373274,-0.5267324,0.5267324,0.5373274,14.9781,534.75115)"
+         id="g3280">
+        <path
+           style="fill:#333333;fill-rule:evenodd;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -742.85714,-119.06639 C -619.04879,-95.569305 -580.07367,54.658724 -625.71429,160.93361 C -699.07652,292.19185 -834.58235,276.08887 -960,298.07647 C -1050.5279,354.45469 -1051.0518,305.90967 -1048.5714,223.79075 C -1048.9456,25.913861 -939.57734,-125.01768 -742.85714,-119.06639 z"
+           id="path2387"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -1008.7188,36.25 C -1035.0792,89.643814 -1048.6949,153.75823 -1048.5625,223.78125 C -1051.0429,305.90017 -1050.5279,354.44071 -960,298.0625 C -904.43335,288.32083 -846.90148,286.07251 -793.65625,275.15625 C -937.83173,272.65708 -988.19938,164.09632 -1008.7188,36.25 z"
+           id="path2421" />
+        <path
+           style="fill:#333333;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -1043.4375,150.78125 C -1046.8959,174.20833 -1048.6101,198.60833 -1048.5625,223.78125 C -1051.0429,305.90017 -1050.5279,354.44071 -960,298.0625 C -955.57454,297.28665 -951.1349,296.59539 -946.6875,295.90625 C -947.41914,294.57966 -948.0717,293.3566 -948.5625,292.375 C -1001.0345,269.55102 -1033.9488,207.66396 -1043.4375,150.78125 z"
+           id="path2411" />
+        <path
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -756.53125,-119.21875 C -808.0292,-118.85989 -853.2435,-107.47473 -891.75,-87.15625 C -995.47774,79.856163 -712.03496,305.6611 -614.1875,126.34375 C -589.17166,24.623646 -631.98482,-98.023029 -742.84375,-119.0625 C -747.45438,-119.20198 -752.01688,-119.25021 -756.53125,-119.21875 z"
+           id="path2427" />
+        <path
+           style="fill:#333333;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -756.53125,-119.21875 C -773.88171,-119.09785 -790.52952,-117.73221 -806.4375,-115.1875 C -906.26155,23.620716 -623.37843,160.5035 -617.15625,3.78125 C -616.82934,3.8902204 -616.48512,4.0197616 -616.15625,4.15625 C -633.36424,-56.079086 -675.55678,-106.29238 -742.84375,-119.0625 C -747.45438,-119.20198 -752.01688,-119.25021 -756.53125,-119.21875 z"
+           id="path2429" />
+        <path
+           style="fill:#000000;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -609.03125,39.46875 C -610.78383,42.352089 -612.52824,44.903234 -614.28125,46.65625 C -621.25809,53.63309 -623.036,73.050252 -625.71875,83.78125 C -629.24237,97.875742 -638.5015,112.25299 -642.84375,120.9375 C -649.85707,134.96409 -656.46284,145.30068 -662.84375,158.0625 C -667.83104,168.03703 -679.66594,174.88469 -685.71875,180.9375 C -696.65409,191.87284 -713.90835,196.45418 -728.5625,203.78125 C -744.81696,211.90846 -770.53069,212.375 -788.5625,212.375 C -806.01506,212.375 -818.35952,214.08206 -834.28125,218.0625 C -850.98516,222.23846 -864.96384,219.13817 -880,226.65625 C -894.04758,233.68004 -902.15154,237.90507 -914.28125,240.9375 C -927.51791,244.24667 -938.94689,256.12969 -948.5625,260.9375 C -959.61043,266.46145 -974.35651,281.01276 -980,286.65625 C -986.35692,293.01317 -998.77455,298.49051 -1008.5625,300.9375 C -1019.6699,303.71431 -1026.1878,308.82683 -1039.5938,312.25 C -1028.6176,328.26279 -1005.8568,326.62079 -960,298.0625 C -834.58235,276.0749 -699.08098,292.19574 -625.71875,160.9375 C -609.60785,123.42303 -604.04545,80.429266 -609.03125,39.46875 z"
+           id="path2461" />
+        <path
+           style="fill:#ffffff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -1011.4285,95.219328 C -1005.7728,118.09477 -924.34464,-28.155018 -862.85715,-70.49496 C -922.1315,-98.431075 -995.69596,35.582698 -1011.4285,95.219328 z"
+           id="path3240"
+           sodipodi:nodetypes="ccc" />
+      </g>
+      <path
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="matrix(1.4247788,0,0,1.4247788,-116.00505,100.56422)"
+         d="M -191.42857,550.93359 A 34.285713,35.714287 0 1 1 -259.99999,550.93359 A 34.285713,35.714287 0 1 1 -191.42857,550.93359 z"
+         sodipodi:ry="35.714287"
+         sodipodi:rx="34.285713"
+         sodipodi:cy="550.93359"
+         sodipodi:cx="-225.71428"
+         id="path2471"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="matrix(1.4247788,0,0,1.4247788,2.048042,98.528854)"
+         d="M -191.42857,550.93359 A 34.285713,35.714287 0 1 1 -259.99999,550.93359 A 34.285713,35.714287 0 1 1 -191.42857,550.93359 z"
+         sodipodi:ry="35.714287"
+         sodipodi:rx="34.285713"
+         sodipodi:cy="550.93359"
+         sodipodi:cx="-225.71428"
+         id="path2473"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="matrix(-0.9562218,0,0,0.7968514,-1445.0049,431.12435)"
+         d="M -1040,552.36218 A 7.1428571,8.5714283 0 1 1 -1054.2857,552.36218 A 7.1428571,8.5714283 0 1 1 -1040,552.36218 z"
+         sodipodi:ry="8.5714283"
+         sodipodi:rx="7.1428571"
+         sodipodi:cy="552.36218"
+         sodipodi:cx="-1047.1428"
+         id="path2475"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <path
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="matrix(-0.9562218,0,0,0.7968514,-1305.7763,460.47962)"
+         d="M -1040,552.36218 A 7.1428571,8.5714283 0 1 1 -1054.2857,552.36218 A 7.1428571,8.5714283 0 1 1 -1040,552.36218 z"
+         sodipodi:ry="8.5714283"
+         sodipodi:rx="7.1428571"
+         sodipodi:cy="552.36218"
+         sodipodi:cx="-1047.1428"
+         id="path2479"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <g
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         transform="translate(-22.857143,17.142857)"
+         id="g3285">
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -386.56156,969.01911 C -436.94419,980.77066 -481.35482,1033.067 -491.45526,1090.2572"
+           id="path3342"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -388.63173,969.89431 C -439.01436,981.64585 -444.7387,1042.0003 -454.83913,1099.1905"
+           id="path3344"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:#000000;stroke-width:7.49995518;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -388.73443,965.58871 C -457.06207,950.86429 -584.74784,1089.8181 -469.56297,1145.2106 C -390.9813,1146.5341 -376.51156,1043.6262 -388.73443,965.58871 z"
+           id="path3338"
+           sodipodi:nodetypes="ccc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+      </g>
+      <g
+         inkscape:export-ydpi="6.6582885"
+         inkscape:export-xdpi="6.6582885"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBa.png"
+         id="g3290"
+         transform="matrix(-1.0015262,0,0,1.0015262,-737.17371,15.532954)">
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="cc"
+           id="path3292"
+           d="M -386.56156,969.01911 C -436.94419,980.77066 -481.35482,1033.067 -491.45526,1090.2572"
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="cc"
+           id="path3294"
+           d="M -388.63173,969.89431 C -439.01436,981.64585 -444.7387,1042.0003 -454.83913,1099.1905"
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="ccc"
+           id="path3296"
+           d="M -388.73443,965.58871 C -457.06207,950.86429 -584.74784,1089.8181 -469.56297,1145.2106 C -390.9813,1146.5341 -376.51156,1043.6262 -388.73443,965.58871 z"
+           style="fill:#c0c0ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:#000000;stroke-width:7.49995518;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+    </g>
+    <g
+       id="g3362"
+       transform="translate(399.74348,-493.52246)"
+       inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\bee2.png"
+       inkscape:export-xdpi="12.943819"
+       inkscape:export-ydpi="12.943819">
+      <g
+         id="g3298"
+         transform="matrix(0.5373274,-0.5267324,0.5267324,0.5373274,572.12096,540.46544)"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-ydpi="6.6941533">
+        <path
+           sodipodi:nodetypes="ccccc"
+           id="path3300"
+           d="M -742.85714,-119.06639 C -619.04879,-95.569305 -580.07367,54.658724 -625.71429,160.93361 C -699.07652,292.19185 -834.58235,276.08887 -960,298.07647 C -1050.5279,354.45469 -1051.0518,305.90967 -1048.5714,223.79075 C -1048.9456,25.913861 -939.57734,-125.01768 -742.85714,-119.06639 z"
+           style="fill:#333333;fill-rule:evenodd;stroke:#000000;stroke-width:20;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           id="path3302"
+           d="M -1008.7188,36.25 C -1035.0792,89.643814 -1048.6949,153.75823 -1048.5625,223.78125 C -1051.0429,305.90017 -1050.5279,354.44071 -960,298.0625 C -904.43335,288.32083 -846.90148,286.07251 -793.65625,275.15625 C -937.83173,272.65708 -988.19938,164.09632 -1008.7188,36.25 z"
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           id="path3304"
+           d="M -1043.4375,150.78125 C -1046.8959,174.20833 -1048.6101,198.60833 -1048.5625,223.78125 C -1051.0429,305.90017 -1050.5279,354.44071 -960,298.0625 C -955.57454,297.28665 -951.1349,296.59539 -946.6875,295.90625 C -947.41914,294.57966 -948.0717,293.3566 -948.5625,292.375 C -1001.0345,269.55102 -1033.9488,207.66396 -1043.4375,150.78125 z"
+           style="fill:#333333;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           id="path3306"
+           d="M -756.53125,-119.21875 C -808.0292,-118.85989 -853.2435,-107.47473 -891.75,-87.15625 C -995.47774,79.856163 -712.03496,305.6611 -614.1875,126.34375 C -589.17166,24.623646 -631.98482,-98.023029 -742.84375,-119.0625 C -747.45438,-119.20198 -752.01688,-119.25021 -756.53125,-119.21875 z"
+           style="fill:#ffcc00;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           id="path3308"
+           d="M -756.53125,-119.21875 C -773.88171,-119.09785 -790.52952,-117.73221 -806.4375,-115.1875 C -906.26155,23.620716 -623.37843,160.5035 -617.15625,3.78125 C -616.82934,3.8902204 -616.48512,4.0197616 -616.15625,4.15625 C -633.36424,-56.079086 -675.55678,-106.29238 -742.84375,-119.0625 C -747.45438,-119.20198 -752.01688,-119.25021 -756.53125,-119.21875 z"
+           style="fill:#333333;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           id="path3310"
+           d="M -609.03125,39.46875 C -610.78383,42.352089 -612.52824,44.903234 -614.28125,46.65625 C -621.25809,53.63309 -623.036,73.050252 -625.71875,83.78125 C -629.24237,97.875742 -638.5015,112.25299 -642.84375,120.9375 C -649.85707,134.96409 -656.46284,145.30068 -662.84375,158.0625 C -667.83104,168.03703 -679.66594,174.88469 -685.71875,180.9375 C -696.65409,191.87284 -713.90835,196.45418 -728.5625,203.78125 C -744.81696,211.90846 -770.53069,212.375 -788.5625,212.375 C -806.01506,212.375 -818.35952,214.08206 -834.28125,218.0625 C -850.98516,222.23846 -864.96384,219.13817 -880,226.65625 C -894.04758,233.68004 -902.15154,237.90507 -914.28125,240.9375 C -927.51791,244.24667 -938.94689,256.12969 -948.5625,260.9375 C -959.61043,266.46145 -974.35651,281.01276 -980,286.65625 C -986.35692,293.01317 -998.77455,298.49051 -1008.5625,300.9375 C -1019.6699,303.71431 -1026.1878,308.82683 -1039.5938,312.25 C -1028.6176,328.26279 -1005.8568,326.62079 -960,298.0625 C -834.58235,276.0749 -699.08098,292.19574 -625.71875,160.9375 C -609.60785,123.42303 -604.04545,80.429266 -609.03125,39.46875 z"
+           style="fill:#000000;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="ccc"
+           id="path3312"
+           d="M -1011.4285,95.219328 C -1005.7728,118.09477 -924.34464,-28.155018 -862.85715,-70.49496 C -922.1315,-98.431075 -995.69596,35.582698 -1011.4285,95.219328 z"
+           style="fill:#ffffff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      </g>
+      <path
+         sodipodi:type="arc"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3314"
+         sodipodi:cx="-225.71428"
+         sodipodi:cy="550.93359"
+         sodipodi:rx="34.285713"
+         sodipodi:ry="35.714287"
+         d="M -191.42857,550.93359 A 34.285713,35.714287 0 1 1 -259.99999,550.93359 A 34.285713,35.714287 0 1 1 -191.42857,550.93359 z"
+         transform="matrix(1.4247788,0,0,1.4247788,441.13781,106.27851)"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-ydpi="6.6941533" />
+      <path
+         sodipodi:type="arc"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3316"
+         sodipodi:cx="-225.71428"
+         sodipodi:cy="550.93359"
+         sodipodi:rx="34.285713"
+         sodipodi:ry="35.714287"
+         d="M -191.42857,550.93359 A 34.285713,35.714287 0 1 1 -259.99999,550.93359 A 34.285713,35.714287 0 1 1 -191.42857,550.93359 z"
+         transform="matrix(1.4247788,0,0,1.4247788,559.1909,104.24314)"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-ydpi="6.6941533" />
+      <path
+         sodipodi:type="arc"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3318"
+         sodipodi:cx="-1047.1428"
+         sodipodi:cy="552.36218"
+         sodipodi:rx="7.1428571"
+         sodipodi:ry="8.5714283"
+         d="M -1040,552.36218 A 7.1428571,8.5714283 0 1 1 -1054.2857,552.36218 A 7.1428571,8.5714283 0 1 1 -1040,552.36218 z"
+         transform="matrix(-0.9562218,0,0,0.7968514,-887.86204,436.83864)"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-ydpi="6.6941533" />
+      <path
+         sodipodi:type="arc"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3320"
+         sodipodi:cx="-1047.1428"
+         sodipodi:cy="552.36218"
+         sodipodi:rx="7.1428571"
+         sodipodi:ry="8.5714283"
+         d="M -1040,552.36218 A 7.1428571,8.5714283 0 1 1 -1054.2857,552.36218 A 7.1428571,8.5714283 0 1 1 -1040,552.36218 z"
+         transform="matrix(-0.9562218,0,0,0.7968514,-748.63344,466.19391)"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-ydpi="6.6941533" />
+      <g
+         inkscape:export-ydpi="6.6941533"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:transform-center-y="74.979853"
+         inkscape:transform-center-x="87.795171"
+         id="g3322"
+         transform="matrix(0.9566587,0.2912115,-0.2912115,0.9566587,797.54838,175.49363)">
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="cc"
+           id="path3324"
+           d="M -386.56156,969.01911 C -436.94419,980.77066 -481.35482,1033.067 -491.45526,1090.2572"
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="cc"
+           id="path3326"
+           d="M -388.63173,969.89431 C -439.01436,981.64585 -444.7387,1042.0003 -454.83913,1099.1905"
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           inkscape:export-ydpi="6.5580039"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           sodipodi:nodetypes="ccc"
+           id="path3328"
+           d="M -388.73443,965.58871 C -457.06207,950.86429 -584.74784,1089.8181 -469.56297,1145.2106 C -390.9813,1146.5341 -376.51156,1043.6262 -388.73443,965.58871 z"
+           style="fill:#c0c0ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:#000000;stroke-width:7.49995518;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <g
+         inkscape:export-ydpi="6.6941533"
+         inkscape:export-xdpi="6.6941533"
+         inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\HBb.png"
+         inkscape:transform-center-y="75.336748"
+         inkscape:transform-center-x="-87.776213"
+         transform="matrix(-0.9590286,0.28865,0.28865,0.9590286,-441.15408,172.09673)"
+         id="g3330">
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -386.56156,969.01911 C -436.94419,980.77066 -481.35482,1033.067 -491.45526,1090.2572"
+           id="path3332"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:3.74997759;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -388.63173,969.89431 C -439.01436,981.64585 -444.7387,1042.0003 -454.83913,1099.1905"
+           id="path3334"
+           sodipodi:nodetypes="cc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+        <path
+           style="fill:#c0c0ff;fill-opacity:0.50196078;fill-rule:evenodd;stroke:#000000;stroke-width:7.49995518;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="M -388.73443,965.58871 C -457.06207,950.86429 -584.74784,1089.8181 -469.56297,1145.2106 C -390.9813,1146.5341 -376.51156,1043.6262 -388.73443,965.58871 z"
+           id="path3336"
+           sodipodi:nodetypes="ccc"
+           inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\Homing Bee 2.png"
+           inkscape:export-xdpi="6.5580039"
+           inkscape:export-ydpi="6.5580039" />
+      </g>
+    </g>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:0.25098039;fill-rule:evenodd;stroke:#c0c0ff;stroke-width:4.38115311;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3384"
+       width="440.61887"
+       height="440.61887"
+       x="356.83344"
+       y="333.63269"
+       inkscape:export-filename="C:\Users\Mario\Desktop\My Dropbox\bee2.png"
+       inkscape:export-xdpi="12.943819"
+       inkscape:export-ydpi="12.943819" />
+  </g>
+</svg>

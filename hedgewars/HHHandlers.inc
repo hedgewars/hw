@@ -144,7 +144,7 @@ with Gear^,
                       amMolotov: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtMolotov,      0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                   amClusterBomb: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtClusterBomb,  0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, Ammo^[CurSlot, CurAmmo].Timer);
                       amBazooka: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtAmmo_Grenade, 0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
-                          amUFO: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtUFO,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
+                          amBee: FollowGear:= AddGear(hwRound(X), hwRound(Y), gtBee,          0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                       amShotgun: begin
                                  PlaySound(sndShotgunReload);
                                  CurAmmoGear:= AddGear(hwRound(X), hwRound(Y), gtShotgunShot,  0, xx * _0_5, yy * _0_5, 0);

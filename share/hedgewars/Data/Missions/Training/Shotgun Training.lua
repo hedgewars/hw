@@ -131,9 +131,9 @@ function onGameInit()
 	-- The delay between each round
 	Delay = 0
 	-- The map to be played
-	Map = "mushrooms"
+	Map = "Mushrooms"
 	-- The theme to be used
-	Theme = "nature"
+	Theme = "Nature"
 
 	-- Create the player team
 	AddTeam(loc(teamname), 14483456, "Simple", "Island", "Default")

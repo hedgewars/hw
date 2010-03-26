@@ -1,9 +1,9 @@
-; German locale
+﻿; German locale
 
 00:00=Granate
 00:01=Splittergranate
 00:02=Bazooka
-00:03=UFO
+00:03=Zielsuchende Biene
 00:04=Schrotflinte
 00:05=Presslufthammer
 00:06=Runde überspringen
@@ -208,7 +208,7 @@
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
 04:01=Greife deine Feinde mit Splittergranaten an.|Der Zeitzünder wird die Granate in mehrere|kleine Bomben zerspringen lassen.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
 04:02=Greife deine Feinde mit einem ballistischen|Projektil an, das vom Wind beeinflusst wird.|Angriff: Halten, um mit mehr Kraft zu feuern
-04:03=Starte eine gelenkte Bombe, die auf ein gewähltes|Ziel zusteuern wird. Feuere nicht mit voller Kraft,|um die Zielgenauigkeit zu verbessern.|Cursor: Ziel wählen|Angriff: Halten, um mit mehr Kraft zu feuern
+04:03=Starte eine explosive Biene, die auf ein gewähltes|Ziel zusteuern wird. Feuere nicht mit voller Kraft,|um die Zielgenauigkeit zu verbessern.|Cursor: Ziel wählen|Angriff: Halten, um mit mehr Kraft zu feuern
 04:04=Greife deine Feinde mit einer Schrotflinte und|zwei Schüssen an. Durch die Streuung musst du|nicht genau zielen, um trotzdem zu treffen.|Angriff: Feuern (mehrfach)
 04:05=Ab in den Untergrund! Benutze den Presslufthammer,|um einen Schacht nach unten zu graben und so|andere Gebiete zu erreichen.|Angriff: Presslufthammer ein- oder ausschalten
 04:06=Gelangweilt? Keine Optionen? Munition sparen?|Kein Problem! Passe einfach diese Runde, Feigling!|Angriff: Runde ohne Angriff aussetzen

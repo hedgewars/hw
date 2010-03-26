@@ -138,7 +138,7 @@ const doStepHandlers: array[TGearType] of TGearStepProcedure = (
             @doStepGrenade,
             @doStepHealthTag,
             @doStepGrave,
-            @doStepUFO,
+            @doStepBee,
             @doStepShotgunShot,
             @doStepPickHammer,
             @doStepRope,
@@ -290,7 +290,7 @@ gtAmmo_Grenade: begin // bazooka
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_6;
                 end;
-         gtUFO: begin
+         gtBee: begin
                 gear^.Radius:= 5;
                 gear^.Timer:= 500;
                 gear^.RenderTimer:= true;
@@ -1602,7 +1602,7 @@ while Gear<>nil do
 
            gtGrave: DrawTextureF(PHedgehog(Gear^.Hedgehog)^.Team^.GraveTex, 1, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 7) and 7, 1, 32, 32);
 
-             gtUFO: DrawRotatedF(sprUFO, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Tag, 0, DxDy2Angle(Gear^.dX, Gear^.dY) - GameTicks div 2);
+             gtBee: DrawRotatedF(sprBee, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, (GameTicks shr 5) mod 2, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
 
       gtPickHammer: DrawSprite(sprPHammer, hwRound(Gear^.X) - 16 + WorldDx, hwRound(Gear^.Y) - 50 + LongInt(((GameTicks shr 5) and 1) * 2) + WorldDy, 0);
             gtRope: DrawRope(Gear);

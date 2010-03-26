@@ -128,6 +128,14 @@ with Gear^ do
 
 end;
 
+procedure doStepBeeTrace(Gear: PVisualGear; Steps: Longword);
+begin
+if Gear^.FrameTicks > Steps then
+    dec(Gear^.FrameTicks, Steps)
+else
+    DeleteVisualGear(Gear);
+end;
+
 procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var i: Longword;
 begin
@@ -457,7 +465,8 @@ const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepDust,
             @doStepSplash,
             @doStepDroplet,
-            @doStepSmokeRing
+            @doStepSmokeRing,
+            @doStepBeeTrace
         );
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear;
@@ -594,6 +603,10 @@ with gear^ do
                 FrameTicks:= 250 + random(1751);
                 Frame:= random(3)
                 end;
+   vgtBeeTrace: begin
+                FrameTicks:= 1000;
+                Frame:= random(16);
+                end;
     vgtSmokeRing: begin
                 dx:= _0;
                 dx.isNegative:= false;
@@ -727,6 +740,14 @@ case Layer of
                             end;
                 vgtSplash: DrawSprite(sprSplash, hwRound(Gear^.X) + WorldDx - 64, hwRound(Gear^.Y) + WorldDy - 72, 19 - (Gear^.FrameTicks div 37));
                 vgtDroplet: DrawSprite(sprDroplet, hwRound(Gear^.X) + WorldDx - 8, hwRound(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+               vgtBeeTrace: begin
+                            if Gear^.FrameTicks < 250 then
+                                glColor4f(1, 1, 1, Gear^.FrameTicks / 500)
+                            else
+                                glColor4f(1, 1, 1, 0.5);
+                            DrawRotatedF(sprBeeTrace, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, Gear^.Frame, 1, (RealTicks shr 4) mod cMaxAngle);
+                            glColor4f(1, 1, 1, 1);
+                            end;
                 vgtSmokeRing: begin
                             glColor4f(1, 1, 1, Gear^.alpha);
                             DrawRotatedTextureF(SpritesData[sprSmokeRing].Texture, Gear^.scale, 0, 0, hwRound(Gear^.X) + WorldDx, hwRound(Gear^.Y) + WorldDy, 0, 1, 200, 200, Gear^.Angle);

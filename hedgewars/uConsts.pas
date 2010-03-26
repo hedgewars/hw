@@ -48,7 +48,7 @@ type
             ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags);
 
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
-            sprLag, sprArrow, sprGrenade, sprTargetP, sprUFO,
+            sprLag, sprArrow, sprGrenade, sprTargetP, sprBee,
             sprSmokeTrace, sprRopeHook, sprExplosion50, sprMineOff,
             sprMineOn, sprMineDead, sprCase, sprFAid, sprDynamite, sprPower,
             sprClusterBomb, sprClusterParticle, sprFlame, sprHorizont,
@@ -76,10 +76,10 @@ type
             sprAmTeleport, sprSplash, sprDroplet, sprBirdy, sprHandCake, sprHandConstruction,
             sprHandGrenade, sprHandMelon, sprHandMortar, sprHandSkip, sprHandCluster,
             sprHandDynamite, sprHandHellish, sprHandMine, sprHandSeduction, sprHandVamp,
-            sprBigExplosion, sprSmokeRing);
+            sprBigExplosion, sprSmokeRing, sprBeeTrace);
 
     TGearType = (gtAmmo_Bomb, gtHedgehog, gtAmmo_Grenade, gtHealthTag, // 3
-            gtGrave, gtUFO, gtShotgunShot, gtPickHammer, gtRope, // 8
+            gtGrave, gtBee, gtShotgunShot, gtPickHammer, gtRope, // 8
             gtSmokeTrace, gtExplosion, gtMine, gtCase, gtDEagleShot, gtDynamite, // 14
             gtClusterBomb, gtCluster, gtShover, gtFlame, // 18
             gtFirePunch, gtATStartGame, gtATSmoothWindCh, gtATFinishGame, // 24
@@ -93,14 +93,14 @@ type
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
             vgtSmallDamageTag, vgtTeamHealthSorter, vgtSpeechBubble, vgtBubble,
             vgtSteam, vgtAmmo, vgtSmoke, vgtSmokeWhite, vgtHealth, vgtShell,
-            vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing);
+            vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace);
 
     TGearsType = set of TGearType;
 
     TSound = (sndNone,
             sndGrenadeImpact, sndExplosion, sndThrowPowerUp, sndThrowRelease,
             sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
-            sndMineTick, sndPickhammer, sndGun, sndUFO, sndJump1, sndJump2,
+            sndMineTick, sndPickhammer, sndGun, sndBee, sndJump1, sndJump2,
             sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndIncoming,
             sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
             sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
@@ -115,7 +115,7 @@ type
             sndSwitchHog, sndVictory, sndSniperReload, sndSteps, sndLowGravity,
             sndDroplet1, sndDroplet2, sndDroplet3);
 
-    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amUFO, amShotgun, amPickHammer,
+    TAmmoType  = (amNothing, amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amPickHammer,
             amSkip, amRope, amMine, amDEagle, amDynamite, amFirePunch, amWhip,
             amBaseballBat, amParachute, amAirAttack, amMineStrike, amBlowTorch,
             amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
@@ -465,8 +465,8 @@ const
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprGrenade
             (FileName:    'Targetp'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprTargetP
-            (FileName:        'UFO'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprUFO
+            (FileName:        'Bee'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBee
             (FileName: 'SmokeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmokeTrace
             (FileName:   'RopeHook'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -718,7 +718,9 @@ const
             (FileName:  'BigExplosion'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  385; Height: 385; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprBigExplosion
             (FileName:  'SmokeRing'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  200; Height: 200; imageWidth: 0; imageHeight: 0; saveSurf: false)// sprSmokeRing
+            Width:  200; Height: 200; imageWidth: 0; imageHeight: 0; saveSurf: false),// sprSmokeRing
+            (FileName:  'BeeTrace'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false) // sprBeeTrace
             );
 
     Wavez: array [TWave] of record
@@ -754,7 +756,7 @@ const
             (FileName:             'minetick.ogg'; Path: ptSounds),// sndMineTicks
             (FileName:           'pickhammer.ogg'; Path: ptSounds),// sndPickhammer
             (FileName:                  'gun.ogg'; Path: ptSounds),// sndGun
-            (FileName:                  'ufo.ogg'; Path: ptSounds),// sndUFO
+            (FileName:                  'bee.ogg'; Path: ptSounds),// sndBee
             (FileName:                'Jump1.ogg'; Path: ptVoices),// sndJump1
             (FileName:                'Jump2.ogg'; Path: ptVoices),// sndJump2
             (FileName:                'Jump3.ogg'; Path: ptVoices),// sndJump3
@@ -913,7 +915,7 @@ const
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater),
-            (NameId: sidUFO;
+            (NameId: sidBee;
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
@@ -923,7 +925,7 @@ const
                 NumPerTurn: 0;
                 Timer: 0;
                 Pos: 0;
-                AmmoType: amUFO;
+                AmmoType: amBee;
                 AttackVoice: sndNone);
             Slot: 0;
             TimeAfterTurn: 3000;

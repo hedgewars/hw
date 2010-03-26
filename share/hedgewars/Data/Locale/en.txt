@@ -3,7 +3,7 @@
 00:00=Grenade
 00:01=ClusterBomb
 00:02=Bazooka
-00:03=UFO
+00:03=Homing Bee
 00:04=Shotgun
 00:05=PickHammer
 00:06=Skip
@@ -410,7 +410,7 @@
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
 04:01=Attack your enemies using a cluster bomb.|It will split into smaller bombs once its timer|reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
 04:02=Attack your enemies using a ballistic projectile|that might be influenced by wind.|Attack: Hold to shoot with more power
-04:03=Launch a guided bomb that will lock on|the selected target. Don't shoot with full power|to improve its precision.|Cursor: Pick target|Attack: Hold to shoot with more power
+04:03=Launch an explosive bee that will lock on|the selected target. Don't shoot with full power|to improve its precision.|Cursor: Pick target|Attack: Hold to shoot with more power
 04:04=Attack your enemy using a shotgun with two shots.|Thanks to its spread you don't need direct hits|to harm your opponents.|Attack: Shoot (multiple times)
 04:05=Move underground! Use the pickhammer to drill|a hole into the ground and reach other areas.|Attack: Start or stop digging
 04:06=Bored? No way to attack? Save your ammo?|No problem! Just skip your turn, coward!|Attack: Skip your turn without fighting

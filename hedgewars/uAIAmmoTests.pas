@@ -54,7 +54,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestGrenade;     flags: 0), // amGrenade
             (proc: @TestClusterBomb; flags: 0), // amClusterBomb
             (proc: @TestBazooka;     flags: 0), // amBazooka
-            (proc: nil;              flags: 0), // amUFO
+            (proc: nil;              flags: 0), // amBee
             (proc: @TestShotgun;     flags: 0), // amShotgun
             (proc: nil;              flags: 0), // amPickHammer
             (proc: nil;              flags: 0), // amSkip

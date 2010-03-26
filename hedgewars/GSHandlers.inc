@@ -458,14 +458,14 @@ Gear^.dY:= Gear^.dY + cGravity
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepUFOWork(Gear: PGear);
+procedure doStepBeeWork(Gear: PGear);
 var t: hwFloat;
-    y: LongInt;
 begin
 AllInactive:= false;
 t:= Distance(Gear^.dX, Gear^.dY);
 Gear^.dX:= Gear^.Elasticity * (Gear^.dX + _0_000004 * (TargetPoint.X - hwRound(Gear^.X)));
 Gear^.dY:= Gear^.Elasticity * (Gear^.dY + _0_000004 * (TargetPoint.Y - hwRound(Gear^.Y)));
+
 t:= t / Distance(Gear^.dX, Gear^.dY);
 Gear^.dX:= Gear^.dX * t;
 Gear^.dY:= Gear^.dY * t;
@@ -474,9 +474,7 @@ Gear^.Y:= Gear^.Y + Gear^.dY;
 
 if (GameTicks and $3F) = 0 then
    begin
-   y:= hwRound(Gear^.Y);
-   if y + Gear^.Radius < cWaterLine then
-      AddGear(hwRound(Gear^.X), y, gtSmokeTrace, 0, _0, _0, 0);
+      AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBeeTrace);
    end;
 
 CheckCollision(Gear);
@@ -489,7 +487,7 @@ if ((Gear^.State and gstCollision) <> 0) or (Gear^.Timer = 0) then
    end;
 end;
 
-procedure doStepUFO(Gear: PGear);
+procedure doStepBee(Gear: PGear);
 begin
 AllInactive:= false;
 Gear^.X:= Gear^.X + Gear^.dX;
@@ -505,9 +503,9 @@ if (Gear^.State and gstCollision) <> 0 then
 dec(Gear^.Timer);
 if Gear^.Timer = 0 then
    begin
-   Gear^.SoundChannel:= LoopSound(sndUFO);
+   Gear^.SoundChannel:= LoopSound(sndBee);
    Gear^.Timer:= 5000;
-   Gear^.doStep:= @doStepUFOWork
+   Gear^.doStep:= @doStepBeeWork
    end;
 end;
 
