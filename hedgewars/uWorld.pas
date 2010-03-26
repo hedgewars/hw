@@ -332,12 +332,19 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
     end
 end;
 
-procedure DrawWaves(Dir, dX, dY: LongInt);
+procedure DrawWaves(Dir, dX, dY: LongInt; Tint: GLfloat);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves, shift: GLfloat;
 begin
 lw:= cScreenWidth / cScaleFactor;
 waves:= lw * 2 / cWaveWidth;
+
+glColor4f(
+      (Tint * WaterColorArray[2].r / 255) + (1-Tint)
+    , (Tint * WaterColorArray[2].g / 255) + (1-Tint)
+    , (Tint * WaterColorArray[2].b / 255) + (1-Tint)
+    , 1
+);
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprWater].Texture^.id);
 
@@ -369,6 +376,7 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 glDisableClientState(GL_VERTEX_ARRAY);
+glColor4f(1, 1, 1, 1);
 
 
 {for i:= -1 to cWaterSprCount do
@@ -378,7 +386,7 @@ glDisableClientState(GL_VERTEX_ARRAY);
         0)}
 end;
 
-procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift: LongInt);
+procedure DrawRepeated(spr, sprL, sprR: TSprite; Shift, OffsetY: LongInt);
 var i, w, sw: LongInt;
 begin
 sw:= round(cScreenWidth / cScaleFactor);
@@ -389,28 +397,28 @@ if (SpritesData[sprL].Texture = nil) or (SpritesData[sprR].Texture = nil) then
     if i > 0 then dec(i, w);
     dec(i, w * (sw div w + 1));
     repeat
-        DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+        DrawSprite(spr, i, WorldDy + LAND_HEIGHT - SpritesData[spr].Height - OffsetY, 0);
         inc(i, w)
     until i > sw
     end else
     begin
     w:= SpritesData[spr].Width;
     dec(Shift, w div 2);
-    DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height, 0);
+    DrawSprite(spr, Shift, WorldDy + LAND_HEIGHT - SpritesData[spr].Height - OffsetY, 0);
 
     sw:= round(cScreenWidth / cScaleFactor);
     
     i:= Shift - SpritesData[sprL].Width;
     while i >= -sw - SpritesData[sprL].Width do
         begin
-        DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height, 0);
+        DrawSprite(sprL, i, WorldDy + LAND_HEIGHT - SpritesData[sprL].Height - OffsetY, 0);
         dec(i, SpritesData[sprL].Width);
         end;
         
     i:= Shift + w;
     while i <= sw do
         begin
-        DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height, 0);
+        DrawSprite(sprR, i, WorldDy + LAND_HEIGHT - SpritesData[sprR].Height - OffsetY, 0);
         inc(i, SpritesData[sprR].Width)
         end
     end
@@ -424,7 +432,7 @@ var i, t: LongInt;
     grp: TCapGroup;
     s: string[15];
     highlight: Boolean;
-    offset, offsetX, offsetY: LongInt;
+    offset, offsetX, offsetY, screenBottom: LongInt;
     scale: GLfloat;
 begin
 if ZoomValue < zoom then
@@ -438,6 +446,8 @@ if ZoomValue > zoom then
     if ZoomValue < zoom then zoom:= ZoomValue
     end;
 
+screenBottom:= WorldDy - trunc(cScreenHeight/zoom) - (cScreenHeight div 2) + cWaterLine;
+
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
 glEnable(GL_BLEND);
@@ -450,15 +460,18 @@ if not isPaused then MoveCamera;
 if not cReducedQuality then
     begin
     // background
-    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8);
-    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5);
+    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, - cWaveHeight - screenBottom div 20);
+    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, 0);
 
     DrawVisualGears(0);
     end;
 
 // Waves
-DrawWaves( 1,  0, - (cWaveHeight shl 1));
-DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)));
+offsetY:= 10 * min(0, -128 - screenBottom);
+DrawWaves( 1,  0 + WorldDx div 90, - cWaveHeight + offsetY div 35, 0.25);
+DrawWaves( -1,  25 + WorldDx div 80, - cWaveHeight + offsetY div 38, 0.19);
+DrawWaves( 1,  75 + WorldDx div 70, - cWaveHeight + offsetY div 45, 0.14);
+DrawWaves(-1, 100 + WorldDx div 60, - cWaveHeight + offsetY div 70, 0.09);
 
 
 DrawLand(WorldDx, WorldDy);
@@ -496,9 +509,10 @@ DrawVisualGears(2);
 DrawWater(cWaterOpacity);
 
 // Waves
-DrawWaves( 1, 25, - cWaveHeight);
-DrawWaves(-1, 50, - (cWaveHeight shr 1));
-DrawWaves( 1, 75, 0);
+DrawWaves( 1, 25 + WorldDx div 50, - cWaveHeight, 0.05);
+DrawWaves(-1, 50 + WorldDx div 40, 1 - cWaveHeight - offsetY div 40, 0.03);
+DrawWaves( 1, 75 + WorldDx div 20, 3- cWaveHeight - offsetY div 20, 0.01);
+DrawWaves( -1, 25 + WorldDx div 10, 5 - cWaveHeight - offsetY div 10, 0);
 
 
 {$WARNINGS OFF}
