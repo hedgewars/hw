@@ -121,7 +121,7 @@ type
             amGirder, amTeleport, amSwitch, amMortar, amKamikaze, amCake,
             amSeduction, amWatermelon, amHellishBomb, amNapalm, amDrill, amBallgun,
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime,
-            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov);
+            amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy);
 
     THWFont = (fnt16, fntBig, fntSmall, CJKfnt16, CJKfntBig, CJKfntSmall);
 
@@ -1689,7 +1689,6 @@ const
                           ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
-                          //ammoprop_Utility;
                           ammoprop_AltAttack;
                 Count: 1;
                 InitialCount: 1;
@@ -1723,6 +1722,30 @@ const
             minAngle: 0;
             maxAngle: 0;
             isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater),
+            (NameId: sidBirdy;
+            NameTex: nil;
+            Probability: 20;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoRoundEndHint or
+                          ammoprop_ForwMsgs or
+                          ammoprop_NoCrosshair or
+                          ammoprop_DontHold or
+                          ammoprop_Utility;
+                Count: 1;
+                InitialCount: 1;
+                NumPerTurn: 1;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amBirdy;
+                AttackVoice: sndNone);
+            Slot: 5;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater)

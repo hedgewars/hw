@@ -41,6 +41,7 @@
 00:38=Sniper Rifle
 00:39=Flying Saucer
 00:40=Molotov Cocktail
+00:41=Birdy
 
 01:00=Let's fight!
 01:01=Round draw

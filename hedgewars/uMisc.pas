@@ -657,18 +657,18 @@ begin
     // int, longint longword and byte
     CursorMovementX     := 0;
     CursorMovementY     := 0;
-    GameTicks       := 0;
+    GameTicks           := 0;
     TrainingTimeInc     := 10000;
     TrainingTimeInD     := 500;
     TrainingTimeInM     := 5000;
     TrainingTimeMax     := 60000;
     TimeTrialStartTime  := 0;
     TimeTrialStopTime   := 0;
-    cWaterLine      := LAND_HEIGHT;
+    cWaterLine          := LAND_HEIGHT;
     cGearScrEdgesDist   := 240;
     cHealthDecrease     := 0;
 
-    GameFlags       := 0;
+    GameFlags           := 0;
     TrainingFlags       := 0;
     TurnTimeLeft        := 0;
     cSuddenDTurns       := 15;
@@ -677,7 +677,7 @@ begin
     cTemplateFilter     := 0;
 
     cHedgehogTurnTime   := 45000;
-    cMinesTime      := 3000;
+    cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
 
     cCloudsNumber       := 9;
@@ -688,7 +688,7 @@ begin
     cBits           := 32;
     cTagsMask       := 0;
     KBnum           := 0;
-    InitStepsFlags      := 0;
+    InitStepsFlags  := 0;
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - like in WWP
     
@@ -698,40 +698,40 @@ begin
     zoom            := 2.0;
     ZoomValue       := 2.0;
     cBitsStr        := '32';
-    WeaponTooltipTex    := nil;
+    WeaponTooltipTex:= nil;
 
     // booleans
-    cLaserSighting      := false;
+    cLaserSighting  := false;
     cVampiric       := false;
     cArtillery      := false;
-    flagMakeCapture     := false;
-    bBetweenTurns       := false;
-    bWaterRising        := false;
-    isCursorVisible     := false;
-    isTerminated        := false;
+    flagMakeCapture := false;
+    bBetweenTurns   := false;
+    bWaterRising    := false;
+    isCursorVisible := false;
+    isTerminated    := false;
     isInLag         := false;
     isPaused        := false;
-    isMusicEnabled      := false;
-    isInMultiShoot      := false;
+    isMusicEnabled  := false;
+    isInMultiShoot  := false;
     isSpeed         := false;
-    fastUntilLag        := false;
+    fastUntilLag    := false;
     cVSyncInUse     := true;    
-    isSoundEnabled      := true;
+    isSoundEnabled  := true;
     isSEBackup      := true;
     
     // init flags
-    recordFileName      := '';
+    recordFileName  := '';
     cShowFPS        := false;
     cCaseFactor     := 5;  {0..9}
-    cLandAdditions      := 4;
+    cLandAdditions  := 4;
     cExplosives     := 2;
     cFullScreen     := false;
-    cReducedQuality     := false;
-    cLocaleFName        := 'en.txt';
+    cReducedQuality := false;
+    cLocaleFName    := 'en.txt';
     cSeed           := '';
     cInitVolume     := 50;
-    cVolumeDelta        := 0;
-    cTimerInterval      := 8;
+    cVolumeDelta    := 0;
+    cTimerInterval  := 8;
     cHasFocus       := true;
     cInactDelay     := 1250;
     cAltDamage      := true;
