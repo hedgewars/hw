@@ -186,6 +186,7 @@ if Gear^.dY.isNegative then
         Gear^.dY:= - Gear^.dY * Gear^.Elasticity;
         Gear^.State:= Gear^.State or gstCollision
         end
+    else if (Gear^.AdvBounce=1) and TestCollisionYwithGear(Gear, 1) then collV:= 1;
     end 
 else if TestCollisionYwithGear(Gear, 1) then
     begin
@@ -198,8 +199,7 @@ else if TestCollisionYwithGear(Gear, 1) then
 else
     begin
     isFalling:= true;
-    if Gear^.AdvBounce and Gear^.dY.isNegative and TestCollisionYwithGear(Gear, 1) then collV:= 1
-    else if Gear^.AdvBounce and not Gear^.dY.isNegative and TestCollisionYwithGear(Gear, -1) then collV:= -1;
+    if (Gear^.AdvBounce=1) and not Gear^.dY.isNegative and TestCollisionYwithGear(Gear, -1) then collV:= -1;
     end;
 
 
@@ -210,17 +210,19 @@ if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
     Gear^.dY:=   Gear^.dY * Gear^.Elasticity;
     Gear^.State:= Gear^.State or gstCollision
     end 
-else if Gear^.AdvBounce and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then collH:= -hwSign(Gear^.dX);
+else if (Gear^.AdvBounce=1) and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then collH:= -hwSign(Gear^.dX);
 
 //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
-if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue) then
+if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue) then
     begin
     Gear^.dX:= tdY*Gear^.Elasticity*Gear^.Friction;
     Gear^.dY:= tdX*Gear^.Elasticity;//*Gear^.Friction;
-    if ((collV > 0) and (collH > 0)) or ((collV < 0) and (collH < 0)) then Gear^.dX.isNegative:=not tdY.isNegative
-    else if (collV < 0) and (collH > 0) then Gear^.dY.isNegative:= not tdX.isNegative;
+    Gear^.dY.isNegative:= not tdY.isNegative;
     isFalling:= false;
+    Gear^.AdvBounce:= 10;
     end;
+
+if Gear^.AdvBounce > 1 then dec(Gear^.AdvBounce);
 
 if isFalling then Gear^.dY:= Gear^.dY + cGravity;
 
