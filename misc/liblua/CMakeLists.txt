@@ -6,14 +6,14 @@ IF(APPLE)
 	
 	set(build_type STATIC)
 	add_definitions(-DLUA_USE_LINUX)
+	add_library (lua ${build_type} ${lua_src})
 ENDIF(APPLE)
 
 IF(WIN32)
 	set(build_type SHARED)
 	add_definitions(-DLUA_BUILD_AS_DLL)
+	add_library (lua ${build_type} ${lua_src})
 ENDIF(WIN32)
-
-add_library (lua ${build_type} ${lua_src})
 
 if(WIN32)
 	SET_TARGET_PROPERTIES(lua PROPERTIES PREFIX "")
