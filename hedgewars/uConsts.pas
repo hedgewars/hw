@@ -383,6 +383,7 @@ const
     EXPLDoNotTouchHH      = $00000008;
     EXPLDontDraw          = $00000010;
     EXPLNoGfx             = $00000020;
+	EXPLPoisoned          = $00000040;
 
     posCaseAmmo    = $00000001;
     posCaseHealth  = $00000002;
