@@ -29,16 +29,16 @@
         <translation>Editar esquemas</translation>
     </message>
     <message>
-        <source>Edit weapons</source>
-        <translation>Editar armas</translation>
-    </message>
-    <message>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
         <source>Illegal ammo scheme</source>
         <translation>Esquema de armas inválido</translation>
+    </message>
+	<message>
+		<source>Edit weapons</source>
+        <translation>Editar armas</translation>
     </message>
 </context>
 <context>
@@ -109,6 +109,10 @@
         <translation>Mapa</translation>
     </message>
     <message>
+        <source>Themes</source>
+        <translation>Temas</translation>
+    </message>
+    <message>
         <source>Filter</source>
         <translation>Filtro</translation>
     </message>
@@ -135,10 +139,6 @@
     <message>
         <source>Wacky</source>
         <translation>Invulgar</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation>Temas</translation>
     </message>
 </context>
 <context>
@@ -171,16 +171,16 @@
         <translation>Sala destruída</translation>
     </message>
     <message>
+        <source>Quit reason: </source>
+        <translation>Motivo de saída: </translation>
+    </message>
+    <message>
         <source>You got kicked</source>
         <translation>Foi expulso</translation>
     </message>
     <message>
         <source>Password</source>
         <translation>Password</translation>
-    </message>
-    <message>
-        <source>Quit reason: </source>
-        <translation>Motivo de saída: </translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -329,11 +329,27 @@ ou escolha outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Weapons set</source>
-        <translation>Esquema de armas</translation>
+        <translation type="obsolete">Esquema de armas</translation>
     </message>
     <message>
         <source>Edit</source>
-        <translation>Editar</translation>
+        <translation type="obsolete">Editar</translation>
+    </message>
+    <message>
+        <source>Delete team</source>
+        <translation>Apagar equipa</translation>
+    </message>
+    <message>
+        <source>New weapon scheme</source>
+        <translation>Novo esquema de armas</translation>
+    </message>
+    <message>
+        <source>Edit weapon scheme</source>
+        <translation>Editar esquema de armas</translation>
+    </message>
+    <message>
+        <source>Delete weapon scheme</source>
+        <translation>Apagar esquema de armas</translation>
     </message>
 </context>
 <context>
@@ -382,16 +398,16 @@ ou escolha outro nome de utilizador:</translation>
         <translation>Actualizar</translation>
     </message>
     <message>
-        <source>Admin features</source>
-        <translation>Recursos de administrador</translation>
-    </message>
-    <message>
         <source>Error</source>
         <translation>Erro</translation>
     </message>
     <message>
         <source>OK</source>
         <translation>OK</translation>
+    </message>
+    <message>
+        <source>Admin features</source>
+        <translation>Recursos de administrador</translation>
     </message>
     <message>
         <source>Room Name:</source>
@@ -572,16 +588,16 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
 <context>
     <name>QAction</name>
     <message>
+        <source>Kick</source>
+        <translation>Expulsar</translation>
+    </message>
+    <message>
         <source>Info</source>
         <translation>Informação</translation>
     </message>
     <message>
-        <source>Kick</source>
-        <translation>Kickar</translation>
-    </message>
-    <message>
-        <source>Ban</source>
-        <translation>Banir</translation>
+        <source>Start</source>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
@@ -592,8 +608,8 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <translation>Restringir adição de equipas</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation>Iniciar</translation>
+        <source>Ban</source>
+        <translation>Banir</translation>
     </message>
     <message>
         <source>Follow</source>
@@ -618,6 +634,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
 </context>
 <context>
     <name>QCheckBox</name>
+    <message>
+        <source>Check for updates at startup</source>
+        <translation>Verificar por actualizações no arranque</translation>
+    </message>
     <message>
         <source>Fullscreen</source>
         <translation>Ecrã completo</translation>
@@ -645,14 +665,6 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Append date and time to record file name</source>
         <translation>Adicionar data e hora ao nome do ficheiro de gravação</translation>
-    </message>
-    <message>
-        <source>Check for updates at startup</source>
-        <translation>Verificar por actualizações no arranque</translation>
-    </message>
-    <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Efeitos no frontend (é necessário reiniciar)</translation>
     </message>
     <message>
         <source>Reduced quality</source>
@@ -693,6 +705,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <source>(System default)</source>
         <translation>(Definições por omissão)</translation>
     </message>
+    <message>
+        <source>Mission</source>
+        <translation>Missão</translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -729,16 +745,16 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <translation>Jogo em rede</translation>
     </message>
     <message>
+        <source>Playing teams</source>
+        <translation>Equipas a jogar</translation>
+    </message>
+    <message>
         <source>Game Modifiers</source>
         <translation>Modificadores de jogo</translation>
     </message>
     <message>
         <source>Basic Settings</source>
         <translation>Definições básicas</translation>
-    </message>
-    <message>
-        <source>Playing teams</source>
-        <translation>Equipas a jogar</translation>
     </message>
     <message>
         <source>Team Settings</source>
@@ -751,6 +767,14 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
 </context>
 <context>
     <name>QLabel</name>
+    <message>
+        <source>Mines Time</source>
+        <translation>Tempo das minas</translation>
+    </message>
+    <message>
+        <source>Mines</source>
+        <translation>Minas</translation>
+    </message>
     <message>
         <source>Version</source>
         <translation>Versão</translation>
@@ -780,10 +804,6 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <translation>Agradecimentos especiais:</translation>
     </message>
     <message>
-        <source>Game scheme</source>
-        <translation>Esquema de jogo</translation>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Armas</translation>
     </message>
@@ -808,16 +828,16 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <translation>Limite de FPS</translation>
     </message>
     <message>
-        <source>Initial sound volume</source>
-        <translation>Volume de som inicial</translation>
-    </message>
-    <message>
         <source>Server name:</source>
         <translation>Nome do servidor:</translation>
     </message>
     <message>
         <source>Server port:</source>
         <translation>Porta do servidor:</translation>
+    </message>
+    <message>
+        <source>Initial sound volume</source>
+        <translation>Volume de som inicial</translation>
     </message>
     <message>
         <source>Damage Modifier</source>
@@ -836,20 +856,16 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
         <translation>Tempo até Morte Súbita</translation>
     </message>
     <message>
+        <source>Scheme Name:</source>
+        <translation>Nome do esquema:</translation>
+    </message>
+    <message>
         <source>Crate Drops</source>
         <translation>Queda de caixas</translation>
     </message>
     <message>
-        <source>Mines Time</source>
-        <translation>Tempo das minas</translation>
-    </message>
-    <message>
-        <source>Mines</source>
-        <translation>Minas</translation>
-    </message>
-    <message>
-        <source>Scheme Name:</source>
-        <translation>Nome do esquema:</translation>
+        <source>Game scheme</source>
+        <translation>Esquema de jogo</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
@@ -882,6 +898,10 @@ Pode-se juntar e observar, mas vai ter de esperar que o jogo termine para poder 
     <message>
         <source>Restart game to apply</source>
         <translation>Reiniciar o jogo para aplicar as definições</translation>
+    </message>
+    <message>
+        <source>Explosives</source>
+        <translation>Explosivos</translation>
     </message>
 </context>
 <context>
@@ -995,10 +1015,6 @@ Por favor verifique a sua instalação</translation>
         <translation>Iniciar</translation>
     </message>
     <message>
-        <source>Ready</source>
-        <translation>Preparado</translation>
-    </message>
-    <message>
         <source>Go!</source>
         <translation>Ir!</translation>
     </message>
@@ -1021,6 +1037,10 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Setup</source>
         <translation>Configurar</translation>
+    </message>
+    <message>
+        <source>Ready</source>
+        <translation>Preparado</translation>
     </message>
     <message>
         <source>Random Team</source>
@@ -1095,6 +1115,18 @@ Por favor verifique a sua instalação</translation>
 <context>
     <name>ToggleButtonWidget</name>
     <message>
+        <source>Vampirism</source>
+        <translation>Vampirismo</translation>
+    </message>
+    <message>
+        <source>Karma</source>
+        <translation>Karma</translation>
+    </message>
+    <message>
+        <source>Artillery</source>
+        <translation>Artilharia</translation>
+    </message>
+    <message>
         <source>Fort Mode</source>
         <translation>Modo Forte</translation>
     </message>
@@ -1125,18 +1157,6 @@ Por favor verifique a sua instalação</translation>
     <message>
         <source>Add Mines</source>
         <translation>Adicionar minas</translation>
-    </message>
-    <message>
-        <source>Vampirism</source>
-        <translation>Vampirismo</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation>Karma</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation>Artilharia</translation>
     </message>
     <message>
         <source>Random Order</source>

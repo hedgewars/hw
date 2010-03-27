@@ -202,47 +202,6 @@
 			<key>Content</key>
 			<dict>
 				<key>PBXProjectModuleGUID</key>
-				<string>61FA7482115D731F00DA6ED0</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>popupMenuViewController.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>61FA7483115D731F00DA6ED0</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>popupMenuViewController.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>61FA7537115D7DFD00DA6ED0</string>
-						<key>history</key>
-						<array>
-							<string>61FA7528115D7D8500DA6ED0</string>
-							<string>61FA7529115D7D8500DA6ED0</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {927, 748}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>966 356 927 789 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
 				<string>61FA743B115D6C1900DA6ED0</string>
 				<key>PBXProjectModuleLabel</key>
 				<string>overlayViewController.m</string>
@@ -257,11 +216,11 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>61FA7538115D7DFD00DA6ED0</string>
+						<string>61FA75BA115D8A9400DA6ED0</string>
 						<key>history</key>
 						<array>
 							<string>61FA74B7115D74BE00DA6ED0</string>
-							<string>61FA74B8115D74BE00DA6ED0</string>
+							<string>61FA756E115D887200DA6ED0</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -277,48 +236,7 @@
 				<key>PBXModuleWindowStatusBarHidden2</key>
 				<false/>
 				<key>RubberWindowFrame</key>
-				<string>828 401 927 662 0 0 1920 1178 </string>
-			</dict>
-		</dict>
-		<dict>
-			<key>Content</key>
-			<dict>
-				<key>PBXProjectModuleGUID</key>
-				<string>61FA7490115D739000DA6ED0</string>
-				<key>PBXProjectModuleLabel</key>
-				<string>SettingsViewController.m</string>
-				<key>PBXSplitModuleInNavigatorKey</key>
-				<dict>
-					<key>Split0</key>
-					<dict>
-						<key>PBXProjectModuleGUID</key>
-						<string>61FA7491115D739000DA6ED0</string>
-						<key>PBXProjectModuleLabel</key>
-						<string>SettingsViewController.m</string>
-						<key>_historyCapacity</key>
-						<integer>0</integer>
-						<key>bookmark</key>
-						<string>61FA7539115D7DFD00DA6ED0</string>
-						<key>history</key>
-						<array>
-							<string>61FA7492115D739000DA6ED0</string>
-							<string>61FA7493115D739000DA6ED0</string>
-						</array>
-					</dict>
-					<key>SplitCount</key>
-					<string>1</string>
-				</dict>
-				<key>StatusBarVisibility</key>
-				<true/>
-			</dict>
-			<key>Geometry</key>
-			<dict>
-				<key>Frame</key>
-				<string>{{0, 20}, {927, 748}}</string>
-				<key>PBXModuleWindowStatusBarHidden2</key>
-				<false/>
-				<key>RubberWindowFrame</key>
-				<string>38 363 927 789 0 0 1920 1178 </string>
+				<string>456 125 927 662 0 0 1920 1178 </string>
 			</dict>
 		</dict>
 	</array>
@@ -399,7 +317,7 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>9</integer>
+									<integer>8</integer>
 									<integer>2</integer>
 									<integer>0</integer>
 								</array>
@@ -440,7 +358,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CE0B20306471E060097A5F4</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>popupMenuViewController.h</string>
+								<string>popupMenuViewController.m</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -448,11 +366,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>1CE0B20406471E060097A5F4</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>popupMenuViewController.h</string>
+										<string>popupMenuViewController.m</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>61FA7536115D7DFD00DA6ED0</string>
+										<string>61FA75B9115D8A9400DA6ED0</string>
 										<key>history</key>
 										<array>
 											<string>6179889C114AA5BD00BA94A9</string>
@@ -509,13 +427,13 @@
 											<string>618AFC06115BE92A003D411B</string>
 											<string>618AFC07115BE92A003D411B</string>
 											<string>618AFC14115BEA91003D411B</string>
-											<string>61FA7438115D6C1900DA6ED0</string>
-											<string>61FA747D115D731F00DA6ED0</string>
-											<string>61FA747E115D731F00DA6ED0</string>
 											<string>61FA748B115D739000DA6ED0</string>
 											<string>61FA74C4115D76A000DA6ED0</string>
 											<string>61FA74C5115D76A000DA6ED0</string>
-											<string>6107A1C0115C232E00BAD238</string>
+											<string>61FA755F115D87C200DA6ED0</string>
+											<string>61FA7561115D87C200DA6ED0</string>
+											<string>61FA756B115D887200DA6ED0</string>
+											<string>61FA756C115D887200DA6ED0</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -713,16 +631,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>61FA753A115D7DFD00DA6ED0</string>
+		<string>61FA75BB115D8A9400DA6ED0</string>
 		<string>61FA7450115D6C3A00DA6ED0</string>
 		<string>61FA7446115D6C1900DA6ED0</string>
 		<string>1CD10A99069EF8BA00B06720</string>
 		<string>61798848114AA42600BA94A9</string>
-		<string>61FA7490115D739000DA6ED0</string>
-		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 		<string>1C78EAAD065D492600B07095</string>
+		<string>/Users/vittorio/hedgewars/trunk/project_files/HedgewarsMobile/HedgewarsMobile.xcodeproj</string>
 		<string>61FA743B115D6C1900DA6ED0</string>
-		<string>61FA7482115D731F00DA6ED0</string>
 	</array>
 	<key>WindowString</key>
 	<string>760 364 801 617 0 0 1920 1178 </string>

@@ -149,39 +149,16 @@
 }
 
 -(IBAction) showPopover{
-    //UIViewController *content = [[UIViewController alloc]  initWithNibName: nil bundle:nil];
-    //CGRect rectArea = CGRectMake(0, 0, 320, 480);
-    //content.view.frame = rectArea;
-    //settings.view.frame = rectArea;
-    //popupMenuViewController *popupMenu = [[UIViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
-    
     popupMenuViewController *popupMenu = [[popupMenuViewController alloc] initWithNibName:@"popupMenuViewController" bundle:nil];
-
-    /*UIButton *buttonPause = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    buttonPause.tag = 7;
-    buttonPause.frame = CGRectMake(100, 170, 170, 30);
-    [buttonPause setTitle:@"Pause Game" forState:UIControlStateNormal];
-    [buttonPause addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [popupMenu.view addSubview:buttonPause];
-    
-    UIButton *buttonChat = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    buttonChat.tag = 8;
-    buttonChat.frame = CGRectMake(100, 220, 170, 30);
-    [buttonChat setTitle:@"Chat" forState:UIControlStateNormal];
-    [buttonChat addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [popupMenu.view addSubview:buttonChat];
-    
-    UIButton *buttonEnd = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    buttonEnd.tag = 9;
-    buttonEnd.frame = CGRectMake(100, 270, 170, 30);
-    [buttonEnd setTitle:@"End Game" forState:UIControlStateNormal];
-    [buttonEnd addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [popupMenu.view addSubview:buttonEnd];
-*/    
     UIPopoverController* aPopover = [[UIPopoverController alloc] initWithContentViewController:popupMenu];
     [aPopover setPopoverContentSize:CGSizeMake(220, 170) animated:YES];
 
-    [aPopover presentPopoverFromRect:CGRectMake(1024, 0, 320, 480) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
+    /*UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    button.frame= CGRectMake(960, 0, 64, 64);
+    button.titleLabel.text=@"UUUUUUUF";
+    [self.view addSubview:button];*/
+    
+    [aPopover presentPopoverFromRect:CGRectMake(960, 0, 220, 32) inView:self.view permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     //UIBarButtonItem *sender = [[useless items] objectAtIndex:1];
     //[self.popoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionDown animated:YES];
 }

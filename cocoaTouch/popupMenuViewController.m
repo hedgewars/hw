@@ -10,7 +10,7 @@
 #import "PascalImports.h"
 
 @implementation popupMenuViewController
-@synthesize menuTable;
+@synthesize menuTable, menuList;
 
 /*
  // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
@@ -30,13 +30,13 @@
 */
 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+-(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Overriden to allow any orientation.
     return YES;
 }
 
 
-- (void)didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
     
@@ -47,11 +47,13 @@
 -(void) viewDidLoad {
     isPaused = NO;
     menuTable.allowsSelection = YES;
+    menuList = [[NSArray alloc] initWithObjects:NSLocalizedString(@"Pause Game", @""), NSLocalizedString(@"Chat", @""), NSLocalizedString(@"End Game", @""),nil];
     [super viewDidLoad];
 }
 
 
-- (void)dealloc {
+-(void) dealloc {
+    [menuList release];
     [menuTable release];
     [super dealloc];
 }
@@ -73,29 +75,13 @@
     if (nil == cell) {
 		cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                        reuseIdentifier:cellIdentifier] autorelease];
+        cell.textLabel.text = [menuList objectAtIndex:[indexPath row]];
 	}
-	
-	switch ([indexPath row]) {
-		case 0:
-            cell.textLabel.text = NSLocalizedString(@"Pause Game", @"");
-            //cell.accessoryView = username;
-            break;
-        case 1:
-			cell.textLabel.text = NSLocalizedString(@"Chat", @"");
-            //cell.accessoryView = password;
-            break;
-        case 2:
-			cell.textLabel.text = NSLocalizedString(@"End Game", @"");
-            break;
-        default:
-			NSLog(@"Warning: unset case value in kNetworkFields section!");
-			break;
-    }
 	
 	return cell;
 }
 
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     UIActionSheet *actionSheet;
     
     switch ([indexPath row]) {
@@ -124,7 +110,7 @@
     }
 }
 
-- (void)tableView:(UITableView *)aTableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)aTableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     [aTableView deselectRowAtIndexPath: indexPath animated:YES];
 }
 

@@ -11,8 +11,10 @@
 
 @interface popupMenuViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate> {
 	UITableView *menuTable;
+    NSArray *menuList;
     BOOL isPaused;
 }
-@property (nonatomic, retain) IBOutlet UITableView * menuTable;
+@property (nonatomic,retain) IBOutlet UITableView * menuTable;
+@property (nonatomic,retain) NSArray *menuList;
 
 @end

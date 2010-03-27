@@ -3,7 +3,7 @@
 00:00=Granada
 00:01=Bomba de Fragmentos
 00:02=Bazuca
-00:03=OVNI
+00:03=Abelha Teleguiada
 00:04=Caçadeira
 00:05=Martelo Pneumático
 00:06=Saltar o turno
@@ -41,6 +41,7 @@
 00:38=Sniper
 00:39=Disco Voador
 00:40=Coquetail Molotov
+00:41=Passarito
 
 01:00=Vamos lutar!
 01:01=Ronda empatada
@@ -403,12 +404,13 @@
 03:38=Arma (multiplos tiro)
 03:39=Utilitário de Transporte
 03:40=Granada Incendiária
+03:41=Enorme fã do Squawks
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
 04:01=Ataca os teus inimigos usando uma bomba de fragmentos.|Dividir-se-á em pequenas bombas quando o temporizador|chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
 04:02=Ataca os teus inimigos usando um projéctil balístico|que pode ser influenciado pelo vento.|Ataque: Deixa premido para disparar com mais força
-04:03=Lança uma bomba teleguiada que ira perseguir o|alvo seleccionado. Não dispares com muita força|para aumentar a precisão.|Cursor: Escolher o alvo|Ataque: Deixa premido para disparar com mais força
+04:03=Lança uma abelha teleguiada que ira perseguir o|alvo seleccionado. Não dispares com muita força|para aumentar a precisão.|Cursor: Escolher o alvo|Ataque: Deixa premido para disparar com mais força
 04:04=Ataca o teu inimigo utilizando uma caçadeira com dois tiros.|Como o tiro se espalha não precisas de acertar em cheio|para magoar os teus oponentes.|Ataque: Disparar (múltiplas vezes)
 04:05=Move-te pelo subsolo! Usa o martelo pneumático para|escavar um buraco no chão e alcançar outras áreas.|Ataque: Começar ou parar de escavar
 04:06=Aborrecido? Não tens maneira de atacar?|Preferes guardar as munições?|Não há problema! Passa o turno, covarde!|Ataque: Passa o turno
@@ -419,7 +421,7 @@
 04:11=Livra-te de ouriços inimigos atirando-os por cima das|bordas do mapa e para dentro de água. Ou que tal|bater numas minas para os teus amigos?|Ataque: Bater em tudo o que estiver à tua frente
 04:12=Chega-te bem pertinho e solta o poder desta|quase mortal técnica de artes marciais.|Ataque: Faz um Soco de Fogo
 04:13=UNUSED
-04:14=Tens medo de alturas? É melhor agarrares um pára-quedas.|Abrir-se-á assim que caíres de demasiado alto salvando o|teu ouriço do dano da queda.|Ataque: Abrir o pára-quedas
+04:14=Tens medo de alturas? É melhor agarrares um pára-quedas.|Abrir-se-á assim que caíres de demasiado alto salvando o|teu ouriço do dano da queda.|Ataque: Abrir o pára-quedas|Saltar: Larga granadas ou armas similares
 04:15=Chama um avião para atacar os teus inimigos|largando bombas sobre eles.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
 04:16=Chama um avião para largar varias minas na|área alvo.|Esquerda/Direita: Determina a direcção do ataque|Cursor: Selecciona a zona alvo
 04:17=Percisas de um abrigo? Usa o maçarico para|escavar um túnel no terreno criando cobertura.|Ataque: Começar ou parar de escavar
@@ -444,8 +446,9 @@
 04:36=Há dias em que a tua pontaria anda simplesmente terrível.|Obtém alguma ajuda utilizando a tecnologia moderna.|Ataque: Activar
 04:37=Não temas a luz do dia. Só vai durar um turno|mas vais poder absorver o dano que fizeres|aos outros ouriços.|Ataque: Activar
 04:38=A sniper pode ser a arma mais devastadora no teu|arsenal, mas é muito pouco eficiente ao perto.|O dano aumenta proporcionalmente à distancia do alvo.|Ataque: Disparar (duas vezes)
-04:39=Voa para outras partes do mapa usando o disco voador.|Este utilitário difícil de controlar é capaz de te levar|a quase qualquer posição no campo de batalha.|Ataque: Activar|Cima/Esquerda/Direita: Aplica força nessa direcção
+04:39=Voa para outras partes do mapa usando o disco voador.|Este utilitário difícil de controlar é capaz de te levar|a quase qualquer posição no campo de batalha.|Ataque: Activar|Cima/Esquerda/Direita: Aplica força nessa direcção|Saltar: Larga granadas ou armas similares
 04:40=Pôe o chão a arder com esta garrafa cheia de|liquido altamente inflamável.|Ataque: Deixa premido para atirar com mais força
+04:41=Prova que a natureza está mais avançada que o que|poderiam imaginar. Este passarito consegue transportar o teu ouriço|e largar ovos nos teus enimigos!|Attack: Activar e largar ovos|Cima/Esquerda/Direita: Bater as asas nessa direcção
 
 ; Game goal strings
 05:00=Modos de Jogo
