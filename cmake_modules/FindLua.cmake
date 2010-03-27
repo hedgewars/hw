@@ -10,7 +10,7 @@ IF(NOT LUA_LIBRARY)
 		ELSE(APPLE)
 			#locate the system's lua library
 			FIND_LIBRARY(LUA_DEFAULT NAMES lua51 lua5.1 lua-5.1 lua PATHS /lib /usr/lib /usr/local/lib /usr/pkg/lib)
-			IF(LUA_DEFAULT EQUALS "LUA_FEDAULT-NOTFOUND")
+			IF(${LUA_DEFAULT} EQUALS "LUA_DEFAULT-NOTFOUND")
 				UNSET(LUA_DEFAULT)
 				MESSAGE(FATAL_ERROR "Couldn't find Lua 5.1 library!")
 			ENDIF()
