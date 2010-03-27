@@ -1758,7 +1758,7 @@ end;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; Mask: LongWord);
 var Gear: PGear;
-    dmg, dmgRadius: LongInt;
+    dmg, dmgRadius, dmgBase: LongInt;
 begin
 TargetPoint.X:= NoPointX;
 {$IFDEF DEBUGFILE}if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');{$ENDIF}
@@ -1775,15 +1775,15 @@ if (Mask and EXPLAllDamageInRadius) = 0 then
     dmgRadius:= Radius shl 1
 else
     dmgRadius:= Radius;
-
+dmgBase:= dmgRadius + cHHRadius div 2;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-    if (dmg > 1) and
-        ((Gear^.State and gstNoDamage) = 0) then
+    dmg:= 0;
+    //dmg:= dmgRadius  + cHHRadius div 2 - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+    //if (dmg > 1) and
+    if (Gear^.State and gstNoDamage) = 0 then
         begin
-        dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
         case Gear^.Kind of
             gtHedgehog,
                 gtMine,
@@ -1791,29 +1791,43 @@ while Gear <> nil do
                 gtTarget,
                 gtFlame,
                 gtExplosives: begin
-                        //{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
-                        if (Mask and EXPLNoDamage) = 0 then
+// Run the calcs only once we know we have a type that will need damage
+                        if hwRound(hwAbs(Gear^.X-int2hwFloat(X))+hwAbs(Gear^.Y-int2hwFloat(Y))) < dmgBase then
+                            dmg:= dmgBase - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+                        if dmg > 1 then
                             begin
-                            if not Gear^.Invulnerable then
-                                ApplyDamage(Gear, dmg)
-                            else
-                                Gear^.State:= Gear^.State or gstWinner;
-                            end;
-                        if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
-                            begin
-                            DeleteCI(Gear);
-                            Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
-                            Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
-                            Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
-                            if not Gear^.Invulnerable then
-                                Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
-                            Gear^.Active:= true;
-                            FollowGear:= Gear
-                            end;
+                            dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
+                            //{$IFDEF DEBUGFILE}AddFileLog('Damage: ' + inttostr(dmg));{$ENDIF}
+                            if (Mask and EXPLNoDamage) = 0 then
+                                begin
+                                if not Gear^.Invulnerable then
+                                    ApplyDamage(Gear, dmg)
+                                else
+                                    Gear^.State:= Gear^.State or gstWinner;
+                                end;
+                            if ((Mask and EXPLDoNotTouchHH) = 0) or (Gear^.Kind <> gtHedgehog) then
+                                begin
+                                DeleteCI(Gear);
+                                Gear^.dX:= Gear^.dX + SignAs(_0_005 * dmg + cHHKick, Gear^.X - int2hwFloat(X));
+                                Gear^.dY:= Gear^.dY + SignAs(_0_005 * dmg + cHHKick, Gear^.Y - int2hwFloat(Y));
+                                Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
+                                if not Gear^.Invulnerable then
+                                    Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
+                                Gear^.Active:= true;
+                                FollowGear:= Gear
+                                end
+                            end
                         end;
                 gtGrave: begin
-                        Gear^.dY:= - _0_004 * dmg;
-                        Gear^.Active:= true;
+// Run the calcs only once we know we have a type that will need damage
+                        if hwRound(hwAbs(Gear^.X-int2hwFloat(X))+hwAbs(Gear^.Y-int2hwFloat(Y))) < dmgBase then
+                            dmg:= dmgBase - hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
+                        if dmg > 1 then
+                            begin
+                            dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
+                            Gear^.dY:= - _0_004 * dmg;
+                            Gear^.Active:= true
+                            end
                         end;
             end;
         end;
