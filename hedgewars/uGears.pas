@@ -585,22 +585,20 @@ begin
 	begin
 		if Gear^.Kind = gtHedgehog then
 			begin
-        if PHedgehog(Gear^.Hedgehog)^.Poisoned then
-          inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
-				inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
-				if PHedgehog(Gear^.Hedgehog)^.King then
-				begin
-					flag:= false;
-					team:= PHedgehog(Gear^.Hedgehog)^.Team;
-					for i:= 0 to Pred(team^.HedgehogsNumber) do
-						if (team^.Hedgehogs[i].Gear <> nil) and 
-							(not team^.Hedgehogs[i].King) and 
-							(team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) 
-						then begin
-								flag:= true;
-						end;
-					if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
-				end;
+            if PHedgehog(Gear^.Hedgehog)^.Poisoned then
+                inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)));
+            inc(Gear^.Damage, min(cHealthDecrease, max(0,Gear^.Health - 1 - Gear^.Damage)));
+            if PHedgehog(Gear^.Hedgehog)^.King then
+                begin
+                flag:= false;
+                team:= PHedgehog(Gear^.Hedgehog)^.Team;
+                for i:= 0 to Pred(team^.HedgehogsNumber) do
+                    if (team^.Hedgehogs[i].Gear <> nil) and 
+                        (not team^.Hedgehogs[i].King) and 
+                        (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) 
+                    then flag:= true;
+                if not flag then inc(Gear^.Damage, min(5, max(0,Gear^.Health - 1 - Gear^.Damage)))
+                end;
 			end;
 
 		Gear:= Gear^.NextGear
@@ -705,7 +703,7 @@ case step of
 
             if bBetweenTurns
                 or isInMultiShoot
-                or (TotalRounds = 0) then inc(step)
+                or (TotalRounds = -1) then inc(step)
             else begin
                 bBetweenTurns:= true;
                 HealthMachine;
