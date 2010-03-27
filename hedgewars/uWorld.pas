@@ -446,7 +446,7 @@ if ZoomValue > zoom then
     if ZoomValue < zoom then zoom:= ZoomValue
     end;
 
-screenBottom:= WorldDy - trunc(cScreenHeight/zoom) - (cScreenHeight div 2) + cWaterLine;
+screenBottom:= WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine;
 
 // Sky
 glClear(GL_COLOR_BUFFER_BIT);
@@ -460,18 +460,18 @@ if not isPaused then MoveCamera;
 if not cReducedQuality then
     begin
     // background
-    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, - cWaveHeight - screenBottom div 20);
-    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, 0);
+    DrawRepeated(sprSky, sprSkyL, sprSkyR, (WorldDx + LAND_WIDTH div 2) * 3 div 8, 0);
+    DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5,  - cWaveHeight - screenBottom div 10);
 
     DrawVisualGears(0);
     end;
 
 // Waves
-offsetY:= 10 * min(0, -128 - screenBottom);
-DrawWaves( 1,  0 + WorldDx div 90, - cWaveHeight + offsetY div 35, 0.25);
-DrawWaves( -1,  25 + WorldDx div 80, - cWaveHeight + offsetY div 38, 0.19);
-DrawWaves( 1,  75 + WorldDx div 70, - cWaveHeight + offsetY div 45, 0.14);
-DrawWaves(-1, 100 + WorldDx div 60, - cWaveHeight + offsetY div 70, 0.09);
+offsetY:= 10 * min(0, -145 - screenBottom);
+DrawWaves( 1,  0 + WorldDx div 32, - cWaveHeight + offsetY div 35, 0.25);
+DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 0.19);
+DrawWaves( 1,  75 + WorldDx div 19, - cWaveHeight + offsetY div 45, 0.14);
+DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 0.09);
 
 
 DrawLand(WorldDx, WorldDy);
@@ -509,10 +509,10 @@ DrawVisualGears(2);
 DrawWater(cWaterOpacity);
 
 // Waves
-DrawWaves( 1, 25 + WorldDx div 50, - cWaveHeight, 0.05);
-DrawWaves(-1, 50 + WorldDx div 40, 1 - cWaveHeight - offsetY div 40, 0.03);
-DrawWaves( 1, 75 + WorldDx div 20, 3- cWaveHeight - offsetY div 20, 0.01);
-DrawWaves( -1, 25 + WorldDx div 10, 5 - cWaveHeight - offsetY div 10, 0);
+DrawWaves( 1, 25 + WorldDx div 9, - cWaveHeight, 0.05);
+DrawWaves(-1, 50 + WorldDx div 6, 1 - cWaveHeight - offsetY div 40, 0.03);
+DrawWaves( 1, 75 + WorldDx div 4, 3- cWaveHeight - offsetY div 20, 0.01);
+DrawWaves( -1, 25 + WorldDx div 3, 5 - cWaveHeight - offsetY div 10, 0);
 
 
 {$WARNINGS OFF}
